@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "count": 177,
+  "suites": [
+    {
+      "name": "test_action_log_016",
+      "count": 8,
+      "passed": true
+    },
+    {
+      "name": "test_admin_state_017",
+      "count": 35,
+      "passed": true
+    },
+    {
+      "name": "test_compact_shell_019",
+      "count": 22,
+      "passed": true
+    },
+    {
+      "name": "test_grid_state_012",
+      "count": 18,
+      "passed": true
+    },
+    {
+      "name": "test_design_state_018",
+      "count": 31,
+      "passed": true
+    },
+    {
+      "name": "test_fill_state_014",
+      "count": 14,
+      "passed": true
+    },
+    {
+      "name": "test_table_toolbar_013",
+      "count": 19,
+      "passed": true
+    },
+    {
+      "name": "test_ui_state_015",
+      "count": 30,
+      "passed": true
+    }
+  ]
+}

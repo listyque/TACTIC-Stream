@@ -1,0 +1,28 @@
+{
+  "stream_version": "0.112.117",
+  "handler_help_version": "0.6.0.70",
+  "fixture": "Disposable SQLite, 1000 roots/children/leaves/snapshots/files, 500 unrelated connections",
+  "timing": "Seven unprofiled authenticated native dispatch samples per case",
+  "responses_and_sql_counts_match": true,
+  "schema_tel_read_suite": {
+    "run": 106,
+    "passed": 100,
+    "skipped_postgresql": 6,
+    "failures": 0,
+    "errors": 0
+  },
+  "self_instance_write_suite": {
+    "run": 6,
+    "passed": 6,
+    "failures": 0,
+    "errors": 0
+  },
+  "new_regressions_proven_against_pre_change_methods": 3,
+  "frontend_build": "Passed; existing RelatedObjects ineffective dynamic import warning",
+  "help": "Matching engine maintenance paragraphs in source/built Stream and Handler, English/Russian",
+  "limits": [
+    "Real PostgreSQL checks skipped: service and Docker engine unavailable",
+    "Complete desktop sync over a real repository/network not measured",
+    "Running server workers were not restarted"
+  ]
+}

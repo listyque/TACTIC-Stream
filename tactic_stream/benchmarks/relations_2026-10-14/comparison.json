@@ -1,0 +1,20 @@
+{
+  "tree_files": {
+    "before_ms": 370.3486000013072,
+    "after_ms": 86.36069999920437,
+    "speedup": 4.288392752776659,
+    "same_response_and_sql": true
+  },
+  "get_1000_roots": {
+    "before_ms": 166.3191999978153,
+    "after_ms": 20.65980000043055,
+    "speedup": 8.050378028555418,
+    "same_response_and_sql": true
+  },
+  "inherited_1000": {
+    "before_ms": 134.86399999965215,
+    "after_ms": 13.065800001641037,
+    "speedup": 10.321909104893196,
+    "same_response_and_sql": true
+  }
+}

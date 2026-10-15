@@ -1,0 +1,107 @@
+{
+  "test_backend": "original handlers, actual Collection/Select/staging, TEST schema/check-in/DB collaborators",
+  "transport": "Python HTTP bridge; URL/storage/history and SHA adapter",
+  "scenarios": [
+    {
+      "scenario": "Original admin hierarchy survives without hard-coded collection menu entries",
+      "passed": true
+    },
+    {
+      "scenario": "CollectionLayoutWdg from widget_config opens native collection browser",
+      "passed": true
+    },
+    {
+      "scenario": "Original nested collection and object memberships are visible",
+      "passed": true
+    },
+    {
+      "scenario": "Native add dialog links existing record through original command",
+      "passed": true
+    },
+    {
+      "scenario": "Removing collection member removes only junction relationship",
+      "passed": true
+    },
+    {
+      "scenario": "Nested collection navigation reads its own contents, not parent records",
+      "passed": true
+    },
+    {
+      "scenario": "Ancestor cycle is rejected by server and shown without data loss",
+      "passed": true
+    },
+    {
+      "scenario": "Collection creation form uses edit_collection with fixed marker omitted",
+      "passed": true
+    },
+    {
+      "scenario": "Configured form creates nested collection and original instance link",
+      "passed": true
+    },
+    {
+      "scenario": "Collection deletion has explicit scope confirmation and removes only that container",
+      "passed": true
+    },
+    {
+      "scenario": "Member object remains in source table after its collection is deleted",
+      "passed": true
+    },
+    {
+      "scenario": "Generic configured table exposes collections only for supported source schema",
+      "passed": true
+    },
+    {
+      "scenario": "File panel displays first 40 of 125 server-side versions",
+      "passed": true
+    },
+    {
+      "scenario": "Browser can reach versions beyond previous 100-row cap",
+      "passed": true
+    },
+    {
+      "scenario": "Current selection previews prior version and delegates original mutation",
+      "passed": true
+    },
+    {
+      "scenario": "Context filter runs server-side and resets pagination",
+      "passed": true
+    },
+    {
+      "scenario": "Native upload queue is attached to original record, no standalone upload app",
+      "passed": true
+    },
+    {
+      "scenario": "Reopened queue shows disk-confirmed offset without browser file state",
+      "passed": true
+    },
+    {
+      "scenario": "Full-file block fingerprint rejects wrong resumed content, even unchanged name/size",
+      "passed": true
+    },
+    {
+      "scenario": "Matching file resumes remaining chunks and does not create snapshot before confirmation",
+      "passed": true
+    },
+    {
+      "scenario": "Explicit final check-in returns receipt and refreshes original version list",
+      "passed": true
+    },
+    {
+      "scenario": "Receipt survives closing/reopening widget and does not repeat check-in",
+      "passed": true
+    },
+    {
+      "scenario": "Files and upload queue remain within mobile viewport",
+      "passed": true
+    },
+    {
+      "scenario": "Native configured flows have no uncaught JS errors or legacy HTML calls",
+      "passed": true
+    },
+    {
+      "scenario": "Logout closes upload widgets and invalidates API session",
+      "passed": true
+    }
+  ],
+  "js_errors": []
+}

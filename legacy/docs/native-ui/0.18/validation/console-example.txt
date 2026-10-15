@@ -1,0 +1,3 @@
+2026-10-04T09:31:48+0000 [w1:7303] admin@native11test START POST RUN SAVED SCRIPT req=08d5ca790e8f act=ui_slow_saved_script_018 target=admin_views/project_admin/script_editor state=queued
+2026-10-04T09:31:53+0000 [w1:7303] admin@native11test RUNNING POST RUN SAVED SCRIPT req=08d5ca790e8f act=ui_slow_saved_script_018 target=admin_views/project_admin/script_editor widget=ShelfEditWdg render=script-editor state=executing commands=NativeUiCommand,PythonCmd elapsed=5018.3ms
+2026-10-04T09:31:54+0000 [w1:7303] admin@native11test END POST RUN SAVED SCRIPT req=08d5ca790e8f act=ui_slow_saved_script_018 target=admin_views/project_admin/script_editor widget=ShelfEditWdg render=script-editor state=completed commands=NativeUiCommand,PythonCmd -> 200 6064.2ms

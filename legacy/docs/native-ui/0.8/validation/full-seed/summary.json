@@ -1,0 +1,29 @@
+{
+  "original_seed": true,
+  "sql_mocks": false,
+  "licence_boundary_substituted": true,
+  "full_startup_tested": false,
+  "cases": [
+    {
+      "case": "clean-seed",
+      "passed": true,
+      "completed_original_methods": 402,
+      "sql_errors": 0,
+      "required_structure_ready": true,
+      "custom_widget_config_preserved": true,
+      "original_backups_hash_verified": true,
+      "repeat_completed_methods": 0
+    },
+    {
+      "case": "partially-applied-falsely-stamped",
+      "passed": true,
+      "completed_original_methods": 402,
+      "sql_errors": 0,
+      "required_structure_ready": true,
+      "custom_widget_config_preserved": true,
+      "original_backups_hash_verified": true,
+      "repeat_completed_methods": 0
+    }
+  ],
+  "passed": true
+}

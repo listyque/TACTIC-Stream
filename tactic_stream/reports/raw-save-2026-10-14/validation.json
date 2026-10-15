@@ -1,0 +1,14 @@
+{
+  "stream_version": "0.112.119",
+  "handler_version": "0.6.0.72",
+  "backend_checks_passed": 8,
+  "actual_handler_qml_checks_passed": 12,
+  "native_xmlrpc_and_json_transport_checks_passed": 2,
+  "actual_vue_save_flow": "Passed: sparse cells/rows, background update, target conflict, deletion and creation",
+  "qml_regression_against_pre_change_save_method": "Failed as expected",
+  "server_procedures": "Handler and Stream raw_database_request ASTs match; unchanged",
+  "help": "Shared English/Russian sparse-save paragraph matches source/built Stream and Handler",
+  "frontend_build": "Passed",
+  "existing_warnings": ["AppSelect option child compiler warning", "RelatedObjects ineffective dynamic import"],
+  "limits": ["Private test data only; no production writes", "Live PostgreSQL not exercised", "Running Handler/Stream processes not restarted"]
+}

@@ -1,0 +1,180 @@
+{
+  "tables": {
+    "transaction_log": "CREATE TABLE transaction_log (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"transaction\" text,\n    \"login\" character varying(100) NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    description text,\n    command character varying(100),\n    title text,\n    \"type\" character varying(30),\n    namespace character varying(100),\n    CONSTRAINT \"transaction_log_code_idx\" UNIQUE (code)\n)",
+    "transaction_state": "CREATE TABLE transaction_state (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    ticket character varying(100),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    data text,\n    CONSTRAINT \"transaction_state_ticket_idx\" UNIQUE (ticket)\n)",
+    "sobject_log": "CREATE TABLE sobject_log (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    search_type character varying(100) NOT NULL,\n    search_id integer NOT NULL,\n    data text,\n    \"login\" character varying(100) NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    transaction_log_id integer\n)",
+    "retire_log": "CREATE TABLE retire_log (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    search_type character varying(100),\n    search_id character varying(100),\n    login character varying(100) NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    CONSTRAINT \"retire_log_code_idx\" UNIQUE (code)\n)",
+    "change_timestamp": "CREATE TABLE \"change_timestamp\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"search_type\" character varying(256),\n    \"search_code\" character varying(256),\n    \"changed_on\" text,\n    \"changed_by\" text,\n    \"project_code\" character varying(256),\n    \"transaction_code\" character varying(256)\n)"
+  },
+  "registry": [
+    {
+      "id": 10,
+      "code": "sthpw/retire_log",
+      "search_type": "sthpw/retire_log",
+      "namespace": "sthpw",
+      "description": "Retire SObject log",
+      "database": "sthpw",
+      "table_name": "retire_log",
+      "class_name": "pyasm.search.RetireLog",
+      "title": "Retire SObject log",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 18,
+      "code": "sthpw/transaction_state",
+      "search_type": "sthpw/transaction_state",
+      "namespace": "sthpw",
+      "description": "XMLRPC State",
+      "database": "sthpw",
+      "table_name": "transaction_state",
+      "class_name": "pyasm.search.TransactionState",
+      "title": "transaction_state",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 30,
+      "code": "sthpw/transaction_log",
+      "search_type": "sthpw/transaction_log",
+      "namespace": "sthpw",
+      "description": null,
+      "database": "sthpw",
+      "table_name": "transaction_log",
+      "class_name": "pyasm.search.TransactionLog",
+      "title": "Transaction Log",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 31,
+      "code": "sthpw/sobject_log",
+      "search_type": "sthpw/sobject_log",
+      "namespace": "sthpw",
+      "description": "Log of actions on an sobject",
+      "database": "sthpw",
+      "table_name": "sobject_log",
+      "class_name": "pyasm.search.SObject",
+      "title": "SObject Log",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 1,
+      "code": "sthpw/change_timestamp",
+      "search_type": "sthpw/change_timestamp",
+      "namespace": "sthpw",
+      "description": "Change Timestamp",
+      "database": "sthpw",
+      "table_name": "change_timestamp",
+      "class_name": "pyasm.search.SObject",
+      "title": "Change Timestamp",
+      "schema": "public",
+      "color": null
+    }
+  ],
+  "columns": [
+    {
+      "table": "transaction_log",
+      "column": "ticket",
+      "sql": "ALTER TABLE transaction_log ADD COLUMN ticket varchar(256);",
+      "source_method": "upgrade_v4_0_0_a01_018"
+    },
+    {
+      "table": "transaction_log",
+      "column": "state",
+      "sql": "ALTER TABLE transaction_log ADD COLUMN state varchar(256);",
+      "source_method": "upgrade_v4_0_0_a01_019"
+    },
+    {
+      "table": "transaction_log",
+      "column": "server_code",
+      "sql": "ALTER TABLE transaction_log ADD COLUMN server_code varchar(256);",
+      "source_method": "upgrade_v4_0_0_a01_022"
+    },
+    {
+      "table": "sobject_log",
+      "column": "search_code",
+      "sql": "ALTER TABLE sobject_log ADD COLUMN search_code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_006"
+    },
+    {
+      "table": "sobject_log",
+      "column": "code",
+      "sql": "ALTER TABLE sobject_log ADD \"code\" VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_rc02_002"
+    },
+    {
+      "table": "sobject_log",
+      "column": "parent_type",
+      "sql": "ALTER TABLE sobject_log ADD COLUMN parent_type varchar(256);",
+      "source_method": "upgrade_v4_5_0_a01_002"
+    },
+    {
+      "table": "sobject_log",
+      "column": "parent_code",
+      "sql": "ALTER TABLE sobject_log ADD COLUMN parent_code varchar(256);",
+      "source_method": "upgrade_v4_5_0_a01_003"
+    },
+    {
+      "table": "sobject_log",
+      "column": "action",
+      "sql": "ALTER TABLE sobject_log ADD COLUMN action varchar(128);",
+      "source_method": "upgrade_v4_5_0_a01_004"
+    },
+    {
+      "table": "change_timestamp",
+      "column": "timestamp",
+      "sql": "ALTER TABLE change_timestamp ADD COLUMN \"timestamp\" timestamp;",
+      "source_method": "critical_v4_5_0_a01_006"
+    },
+    {
+      "table": "retire_log",
+      "column": "search_code",
+      "sql": "ALTER TABLE \"retire_log\" ADD COLUMN search_code varchar(256);",
+      "source_method": "upgrade_v4_6_0_a02_001"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "transaction_log_timestamp_idx",
+      "sql": "CREATE INDEX \"transaction_log_timestamp_idx\" ON \"transaction_log\" (\"timestamp\");"
+    },
+    {
+      "name": "transaction_log_idx",
+      "sql": "CREATE INDEX \"transaction_log_idx\" ON \"transaction_log\" (\"login\", \"namespace\", \"type\");"
+    },
+    {
+      "name": "change_timestamp_object_idx",
+      "sql": "CREATE INDEX \"change_timestamp_object_idx\" ON \"change_timestamp\" (\"search_type\", \"search_code\");"
+    },
+    {
+      "name": "change_timestamp_timestamp_idx",
+      "sql": "CREATE INDEX \"change_timestamp_timestamp_idx\" ON \"change_timestamp\" (\"timestamp\");"
+    },
+    {
+      "name": "change_timestamp_project_timestamp_idx",
+      "sql": "CREATE INDEX \"change_timestamp_project_timestamp_idx\" ON \"change_timestamp\" (\"project_code\", \"timestamp\");"
+    },
+    {
+      "name": "change_timestamp_type_timestamp_idx",
+      "sql": "CREATE INDEX \"change_timestamp_type_timestamp_idx\" ON \"change_timestamp\" (\"search_type\", \"timestamp\");"
+    },
+    {
+      "name": "sobject_log_object_timestamp_idx",
+      "sql": "CREATE INDEX \"sobject_log_object_timestamp_idx\" ON \"sobject_log\" (\"search_type\", \"search_id\", \"timestamp\", \"id\");"
+    },
+    {
+      "name": "sobject_log_type_id_idx",
+      "sql": "CREATE INDEX \"sobject_log_type_id_idx\" ON \"sobject_log\" (\"search_type\", \"id\");"
+    },
+    {
+      "name": "sobject_log_transaction_idx",
+      "sql": "CREATE INDEX \"sobject_log_transaction_idx\" ON \"sobject_log\" (\"transaction_log_id\");"
+    },
+    {
+      "name": "sobject_log_code_idx",
+      "sql": "CREATE INDEX \"sobject_log_code_idx\" ON \"sobject_log\" (\"code\");"
+    }
+  ]
+}

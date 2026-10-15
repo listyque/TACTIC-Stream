@@ -1,0 +1,146 @@
+[
+  {
+    "phase": "wizard",
+    "actions": [
+      {
+        "type": "click",
+        "id": "definitionRow_WIDGET001"
+      }
+    ]
+  },
+  {
+    "phase": "title-draft",
+    "actions": [
+      {
+        "type": "reveal",
+        "id": "definitionCatalogTitle",
+        "viewport": "definitionCatalogForm"
+      },
+      {
+        "type": "text",
+        "id": "definitionCatalogTitle",
+        "value": "Asset code"
+      }
+    ]
+  },
+  {
+    "phase": "width",
+    "actions": [
+      {
+        "type": "reveal",
+        "id": "definitionCatalogWidthInput",
+        "viewport": "definitionCatalogForm"
+      },
+      {
+        "type": "text",
+        "id": "definitionCatalogWidthInput",
+        "value": "224"
+      }
+    ]
+  },
+  {
+    "phase": "widget",
+    "actions": [
+      {
+        "type": "reveal",
+        "id": "definitionCatalogWidget",
+        "viewport": "definitionCatalogForm"
+      },
+      {
+        "type": "choose",
+        "id": "definitionCatalogWidget",
+        "value": "expression"
+      }
+    ]
+  },
+  {
+    "phase": "visibility",
+    "actions": [
+      {
+        "type": "reveal",
+        "id": "definitionCatalogVisible",
+        "viewport": "definitionCatalogForm"
+      },
+      {
+        "type": "click",
+        "id": "definitionCatalogVisible"
+      }
+    ]
+  },
+  {
+    "phase": "xml",
+    "actions": [
+      {
+        "type": "click",
+        "id": "definitionCatalogMode_xml"
+      }
+    ]
+  },
+  {
+    "phase": "save-confirmation",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminSaveDocument"
+      }
+    ]
+  },
+  {
+    "phase": "discard-confirmation",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminCancelSave"
+      },
+      {
+        "type": "click",
+        "id": "adminDiscardDocument"
+      }
+    ]
+  },
+  {
+    "phase": "discarded",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminConfirmSave"
+      }
+    ]
+  },
+  {
+    "phase": "wizard-return",
+    "actions": [
+      {
+        "type": "click",
+        "id": "definitionCatalogMode_simple"
+      }
+    ]
+  },
+  {
+    "phase": "readonly",
+    "actions": [
+      {
+        "type": "state",
+        "value": "readonly"
+      }
+    ]
+  },
+  {
+    "phase": "uncertain",
+    "actions": [
+      {
+        "type": "state",
+        "value": "uncertain"
+      }
+    ]
+  },
+  {
+    "phase": "busy",
+    "actions": [
+      {
+        "type": "state",
+        "value": "busy"
+      }
+    ]
+  }
+]

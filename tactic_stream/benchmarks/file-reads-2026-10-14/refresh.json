@@ -1,0 +1,37 @@
+{
+  "scope": "Owned native-API fixture, one new file, one selected+expanded pending changelist. Original read sequence and former helper implementations reconstructed; no network delay. Request caches disabled only for the original sequence.",
+  "runs": [
+    {
+      "mode": "original_read_sequence",
+      "rpc": 16,
+      "selects": 521,
+      "file_table_selects": {
+        "chunk": 18,
+        "workspace": 6,
+        "stream": 22,
+        "depot": 1,
+        "sync": 2,
+        "change": 7,
+        "page": 9,
+        "checkout": 2
+      },
+      "elapsed_ms": 175.09
+    },
+    {
+      "mode": "workspace_snapshot",
+      "rpc": 1,
+      "selects": 58,
+      "file_table_selects": {
+        "chunk": 3,
+        "stream": 1,
+        "workspace": 1,
+        "depot": 1,
+        "sync": 1,
+        "change": 1,
+        "page": 2,
+        "checkout": 1
+      },
+      "elapsed_ms": 23.18
+    }
+  ]
+}

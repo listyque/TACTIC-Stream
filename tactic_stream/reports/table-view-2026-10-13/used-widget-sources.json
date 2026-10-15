@@ -1,0 +1,4312 @@
+{
+  "tactic.ui.table.ButtonElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\client_trigger-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\plugin-conf.xml",
+      "options": [
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\plugin-conf.xml",
+      "options": [
+        "cbjs_action",
+        "icon"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\url-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\db_resource-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pipeline-conf.xml",
+      "options": [
+        "cbjs_action",
+        "icon"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\plugin-conf.xml",
+      "options": [
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\plugin-conf.xml",
+      "options": [
+        "cbjs_action",
+        "icon"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\schema-conf.xml",
+      "options": [
+        "cbjs_action",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/login/definition",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "script_path",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "script_path",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "script_path",
+        "hint",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/login/definition",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "icon",
+        "cbjs_action"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "script_path",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "script_path",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "script_path",
+        "hint",
+        "icon"
+      ]
+    }
+  ],
+  "WikiElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\custom_script-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\cut_sequence-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\plate-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\custom_script-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\note-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\notification_log-conf.xml",
+      "options": [
+        "replace_tag"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\notification_log-conf.xml",
+      "options": [
+        "replace_tag"
+      ]
+    }
+  ],
+  "UpdateWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\naming-conf.xml",
+      "options": [
+        "delete"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\layer-conf.xml",
+      "options": [
+        "delete"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\render-conf.xml",
+      "options": [
+        "insert"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": [
+        "edit_view",
+        "insert_view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\storyboard-conf.xml",
+      "options": [
+        "delete"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": [
+        "width"
+      ]
+    }
+  ],
+  "tactic.ui.table.FormatElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\naming-conf.xml",
+      "options": [
+        "format"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\naming-conf.xml",
+      "options": [
+        "format"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\naming-conf.xml",
+      "options": [
+        "format"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": [
+        "format"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\work_hour-conf.xml",
+      "options": [
+        "type",
+        "total_summary",
+        "format"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\work_hour-conf.xml",
+      "options": [
+        "type",
+        "total_summary",
+        "format"
+      ]
+    },
+    {
+      "source": "cg-template:cg/shot/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg-template:cg/shot/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg-template:cg/shot/definition",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "cg-template:cg/shot/table",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "type",
+        "fps",
+        "format"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/shot/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/shot/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/shot/definition",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/shot/table",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "type",
+        "fps",
+        "format"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "type",
+        "format"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "type"
+      ]
+    }
+  ],
+  "TextWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\naming-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\process-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\prod_setting-conf.xml",
+      "options": [
+        "size",
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\trigger-conf.xml",
+      "options": [
+        "size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\trigger-conf.xml",
+      "options": [
+        "hint",
+        "size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\widget_config-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "required"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "required"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\prod_setting-conf.xml",
+      "options": [
+        "size",
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\render-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\db_resource-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\db_resource-conf.xml",
+      "options": [
+        "size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\db_resource-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\notification-conf.xml",
+      "options": [
+        "size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pipeline-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pipeline-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pipeline-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": [
+        "hint",
+        "required"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": [
+        "required"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": [
+        "size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\queue-conf.xml",
+      "options": [
+        "edit_all"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\queue-conf.xml",
+      "options": [
+        "edit_all",
+        "default"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\search_object-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\search_object-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\search_type-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\search_type-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\trigger-conf.xml",
+      "options": [
+        "size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\trigger-conf.xml",
+      "options": [
+        "hint",
+        "size"
+      ]
+    },
+    {
+      "source": "cg-template:cg/shot/edit_definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/shot/edit_definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/shot/edit_definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/assets/edit_definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:sthpw/login/edit_user",
+      "options": [
+        "read_only"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/shot/edit_definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/shot/edit_definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/shot/edit_definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/assets/edit_definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:sthpw/login/edit_user",
+      "options": [
+        "read_only"
+      ]
+    }
+  ],
+  "HiddenRowToggleWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\pipeline-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_row_select",
+        "show_gear",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\plugin-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_row_select",
+        "show_gear",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\trigger-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "show_search_limit",
+        "show_insert",
+        "show_row_select",
+        "show_gear"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "dynamic_class"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\layer-conf.xml",
+      "options": [
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": [
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": [
+        "title_icon",
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "title_icon",
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "title_icon",
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "dynamic_class"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "mode",
+        "do_search"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot_instance-conf.xml",
+      "options": [
+        "dynamic_class",
+        "asset_search_type",
+        "search_type"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot_instance-conf.xml",
+      "options": [
+        "dynamic_class"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": [
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": [
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_gear",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": [
+        "title_icon",
+        "dynamic"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\milestone-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "mode",
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pipeline-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_row_select",
+        "show_gear",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\plugin-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_row_select",
+        "show_gear",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\queue-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_select",
+        "show_gear",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\sobject_log-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_row_select",
+        "show_gear",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\template-conf.xml",
+      "options": [
+        "dynamic"
+      ]
+    }
+  ],
+  "XmlWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\pipeline-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\plugin-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\url-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\widget_config-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\access_rule-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\notification-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pipeline-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\plugin-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\schema-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\sync_server-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\transaction_log-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.ExpressionElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\pipeline-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\process-conf.xml",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "group_bottom",
+        "expression",
+        "inline_styles",
+        "bottom"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "group_bottom",
+        "expression",
+        "inline_styles",
+        "bottom"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "group_bottom",
+        "expression",
+        "inline_styles",
+        "bottom"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "group_bottom",
+        "bottom",
+        "expression",
+        "inline_styles",
+        "display_expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "expression",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "group_bottom",
+        "display_format",
+        "expression",
+        "inline_styles",
+        "bottom"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "group_bottom",
+        "expression",
+        "display_expression",
+        "bottom"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot_instance-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot_instance-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\notification_log-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pipeline-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "expression",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "expression",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "expression",
+        "display_format"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "expression",
+        "mode",
+        "rowcss_background-color"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\sobject_list-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\sobject_list-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\sobject_log-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\status_log-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "expression",
+        "calc_mode",
+        "order_by"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets_in_scenes/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg-template:cg/texture/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg-template:cg/texture_in_assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg-template:cg/texture_in_assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "expression",
+        "order_by",
+        "display_expression",
+        "calc_mode",
+        "justify"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "expression",
+        "show_retired",
+        "justify"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets_in_assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets_in_assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets_in_scenes/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/texture/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/texture_in_assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/texture_in_assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "expression",
+        "order_by",
+        "display_expression",
+        "calc_mode",
+        "justify"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "expression",
+        "show_retired",
+        "justify"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "expression"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets_in_assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets_in_assets/definition",
+      "options": [
+        "expression",
+        "calc_mode"
+      ]
+    }
+  ],
+  "tactic.ui.table.DropElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\plugin-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "css_background-color",
+        "accepted_drop_type",
+        "cbjs_drop_action"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "css_background-color",
+        "instance_type",
+        "accepted_drop_type"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": [
+        "instance_type",
+        "accepted_drop_type"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\notification-conf.xml",
+      "options": [
+        "css_background-color",
+        "instance_type",
+        "accepted_drop_type"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\plugin-conf.xml",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "instance_type",
+        "accepted_drop_type",
+        "display_expr",
+        "css_background-color"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "instance_type",
+        "accepted_drop_type",
+        "display_expr",
+        "css_background-color"
+      ]
+    }
+  ],
+  "tactic.ui.table.JsonElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\config\\process-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\sync_job-conf.xml",
+      "options": []
+    }
+  ],
+  "ThumbWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\art_reference-conf.xml",
+      "options": [
+        "filename",
+        "original",
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\art_reference-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\camera-conf.xml",
+      "options": [
+        "context"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\composite-conf.xml",
+      "options": [
+        "filename"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\cut_sequence-conf.xml",
+      "options": [
+        "image_link_order",
+        "context"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size",
+        "latest_icon",
+        "detail"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\plate-conf.xml",
+      "options": [
+        "context"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\render-conf.xml",
+      "options": [
+        "context"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\script-conf.xml",
+      "options": [
+        "file_type"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot_instance-conf.xml",
+      "options": [
+        "icon_size",
+        "redirect"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": [
+        "filename",
+        "detail",
+        "image_link_order",
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\file-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\queue-conf.xml",
+      "options": [
+        "icon_size",
+        "redirect"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "icon_size",
+        "detail"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "detail"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/snapshot/definition",
+      "options": [
+        "icon_size",
+        "protocol",
+        "original",
+        "detail"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "show_resize_scroll",
+        "icon_context",
+        "detail",
+        "include_mako",
+        "latest_icon",
+        "icon_size",
+        "view"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "detail"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/snapshot/definition",
+      "options": [
+        "icon_size",
+        "protocol",
+        "original",
+        "detail"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "show_resize_scroll",
+        "icon_context",
+        "detail",
+        "include_mako",
+        "latest_icon",
+        "icon_size",
+        "view"
+      ]
+    }
+  ],
+  "SObjectConnectionElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\art_reference-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.GeneralPublishElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\art_reference-conf.xml",
+      "options": [
+        "preview"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "preview"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\script-conf.xml",
+      "options": [
+        "preview"
+      ]
+    }
+  ],
+  "pyasm.widget.CheckboxColWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\art_reference-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.AssetInfoWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "width"
+      ]
+    }
+  ],
+  "pyasm.widget.SObjectTaskTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "width",
+        "simple_date",
+        "bid_edit"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "supe",
+        "width",
+        "bid_edit"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "width",
+        "bid_edit",
+        "simple_date"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "width",
+        "bid_edit",
+        "process_filter",
+        "simple_date"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "width",
+        "supe",
+        "bid_edit",
+        "process_filter"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "width",
+        "bid_edit",
+        "simple_date",
+        "supe"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "width",
+        "bid_edit",
+        "simple_date",
+        "supe"
+      ]
+    }
+  ],
+  "tacic.ui.widget.DiscussionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "sticky"
+      ]
+    }
+  ],
+  "tactic.ui.cgapp.LoaderElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "search_type",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "search_type",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "search_type",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "search_type",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot_instance-conf.xml",
+      "options": [
+        "search_type",
+        "shot_search_type",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot_instance-conf.xml",
+      "options": [
+        "search_type",
+        "shot_search_type",
+        "mode"
+      ]
+    }
+  ],
+  "SubmissionLinkTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "DiscussionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "append_setting",
+        "scroll",
+        "include_submission"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "setting",
+        "scroll",
+        "include_submission"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "append_setting",
+        "scroll",
+        "include_submission"
+      ]
+    }
+  ],
+  "TaskCompletionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "width"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.CondensedAssetInfoWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "css"
+      ]
+    }
+  ],
+  "ParallelStatusWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "label_format",
+        "bar_height",
+        "report"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "label_format",
+        "bar_height",
+        "report"
+      ]
+    }
+  ],
+  "pyasm.prod.web.AssetCheckboxWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "persist_on_submit"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.TasksInSObjectWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.AssignedShotWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.RenderTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.widget.ThumbWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": [
+        "icon_size"
+      ]
+    },
+    {
+      "source": "cg-template:None/custom_col",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:None/custom_col",
+      "options": []
+    }
+  ],
+  "pyasm.widget.AuxDataWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.SessionVersionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.LatestVersionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\asset-conf.xml",
+      "options": []
+    }
+  ],
+  "PublishTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\camera-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\cut_sequence-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.CompLayerTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\composite-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.common.SimpleTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "css_background"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": [
+        "css_background"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\exception_log-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pipeline-conf.xml",
+      "options": [
+        "column"
+      ]
+    },
+    {
+      "source": "cg-template:cg/shot/definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:cg/texture/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg-template:cg/texture/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "expression",
+        "use_cache",
+        "return",
+        "calc_mode",
+        "justify"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": []
+    },
+    {
+      "source": "cg-template:niki_friends/th_knowledge_article/definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/shot/definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/texture/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/texture/definition",
+      "options": [
+        "type"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "expression",
+        "use_cache",
+        "return",
+        "calc_mode",
+        "justify"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:niki_friends/th_knowledge_article/definition",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.FrameRangeWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.DeleteElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.SObjectDetailElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": [
+        "use_parent"
+      ]
+    }
+  ],
+  "tactic.ui.table.HiddenRowElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon",
+        "dynamic_class"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "dynamic_class"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "dynamic_class"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "title_icon",
+        "dynamic_class"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "title_icon",
+        "dynamic_class",
+        "search_type",
+        "view",
+        "show_search_limit",
+        "show_gear"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "title_icon",
+        "dynamic_class",
+        "search_type",
+        "show_shelf",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "icon",
+        "show_gear",
+        "show_search_limit",
+        "show_search",
+        "show_shelf",
+        "show_insert"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "expression",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "icon_tip",
+        "search_type",
+        "width",
+        "dynamic_class",
+        "show_shelf",
+        "view",
+        "expression",
+        "show_select",
+        "icon"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\db_resource-conf.xml",
+      "options": [
+        "class_name",
+        "search_type",
+        "view",
+        "show_shelf",
+        "width"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_row_select",
+        "show_gear",
+        "view"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "dynamic_class",
+        "icon"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\sync_server-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_row_select",
+        "show_gear",
+        "view",
+        "mode"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\transaction_log-conf.xml",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "show_search_limit",
+        "show_insert",
+        "show_select",
+        "show_gear",
+        "view",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "search_type",
+        "expression",
+        "dynamic_class",
+        "show_shelf",
+        "view"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "search_type",
+        "expression",
+        "dynamic_class",
+        "show_shelf",
+        "view"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "search_type",
+        "expression",
+        "dynamic_class",
+        "show_shelf",
+        "view"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "show_gear",
+        "show_search_limit",
+        "search_type",
+        "show_insert",
+        "dynamic_class",
+        "show_search",
+        "view",
+        "show_shelf",
+        "init_load_num",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "dynamic_class",
+        "use_parent",
+        "title_icon"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets_category/definition",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets_category/definition",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg-template:None/columns.hidden_row",
+      "options": [
+        "show_gear",
+        "process",
+        "show_context_menu",
+        "dynamic_class",
+        "show_drop_shadow",
+        "allow_drag",
+        "expand_mode",
+        "hide_checkbox",
+        "scale",
+        "show_search",
+        "show_shelf",
+        "layout",
+        "checkin_context",
+        "search_key",
+        "show_column_manager",
+        "width",
+        "show_insert",
+        "show_help",
+        "show_refresh",
+        "show_select",
+        "show_layout_switcher",
+        "show_expand",
+        "show_keyword_search",
+        "show_search_limit",
+        "search_type",
+        "show_border",
+        "mode",
+        "no_results_mode",
+        "gallery_align"
+      ]
+    },
+    {
+      "source": "cg-template:cg/texture/definition",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "dynamic_class",
+        "include_mako",
+        "view"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "expression",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "element_names",
+        "label",
+        "search_type",
+        "dynamic_class",
+        "view",
+        "show_shelf",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "dynamic_class",
+        "show_resize_scroll",
+        "include_mako",
+        "icon",
+        "view"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "show_layout_switcher",
+        "show_column_manager",
+        "show_keyword_search",
+        "show_header",
+        "show_search_limit",
+        "search_type",
+        "group_elements",
+        "no_results_msg",
+        "dynamic_class",
+        "min_height",
+        "show_border",
+        "mode",
+        "label",
+        "show_select",
+        "view",
+        "expression",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "process",
+        "checkin_type",
+        "hide_checkbox",
+        "show_context_menu",
+        "dynamic_class",
+        "show_search",
+        "show_shelf",
+        "allow_drag",
+        "scale",
+        "layout",
+        "checkin_context",
+        "search_key",
+        "show_column_manager",
+        "show_insert",
+        "expand_mode",
+        "show_help",
+        "show_refresh",
+        "show_select",
+        "icon",
+        "show_layout_switcher",
+        "show_expand",
+        "show_keyword_search",
+        "show_search_limit",
+        "search_type",
+        "show_border",
+        "show_drop_shadow",
+        "mode",
+        "no_results_mode",
+        "gallery_align"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "show_search_limit",
+        "search_type",
+        "show_insert",
+        "dynamic_class",
+        "show_search",
+        "view",
+        "show_shelf",
+        "init_load_num",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "process",
+        "show_context_menu",
+        "dynamic_class",
+        "show_search",
+        "show_shelf",
+        "layout",
+        "checkin_context",
+        "search_key",
+        "show_column_manager",
+        "width",
+        "show_insert",
+        "show_help",
+        "show_refresh",
+        "show_select",
+        "show_layout_switcher",
+        "show_expand",
+        "show_keyword_search",
+        "show_search_limit",
+        "search_type",
+        "show_border",
+        "mode",
+        "no_results_mode",
+        "gallery_align"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "process",
+        "checkin_type",
+        "hide_checkbox",
+        "show_context_menu",
+        "dynamic_class",
+        "show_search",
+        "show_shelf",
+        "allow_drag",
+        "scale",
+        "layout",
+        "checkin_context",
+        "search_key",
+        "show_column_manager",
+        "show_insert",
+        "expand_mode",
+        "show_help",
+        "show_refresh",
+        "show_select",
+        "icon",
+        "show_layout_switcher",
+        "show_expand",
+        "show_keyword_search",
+        "show_search_limit",
+        "search_type",
+        "show_border",
+        "show_drop_shadow",
+        "mode",
+        "no_results_mode",
+        "gallery_align"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "checkin_action",
+        "dynamic_class",
+        "checkout_action"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "search_type",
+        "expression",
+        "dynamic_class",
+        "show_shelf",
+        "view"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "search_type",
+        "expression",
+        "dynamic_class",
+        "show_shelf",
+        "view"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "search_type",
+        "expression",
+        "dynamic_class",
+        "show_shelf",
+        "view"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "show_gear",
+        "show_search_limit",
+        "search_type",
+        "show_insert",
+        "dynamic_class",
+        "show_search",
+        "view",
+        "show_shelf",
+        "init_load_num",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "dynamic_class",
+        "use_parent",
+        "title_icon"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets_category/definition",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets_category/definition",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg_test.db:None/columns.hidden_row",
+      "options": [
+        "show_gear",
+        "process",
+        "show_context_menu",
+        "dynamic_class",
+        "show_drop_shadow",
+        "allow_drag",
+        "expand_mode",
+        "hide_checkbox",
+        "scale",
+        "show_search",
+        "show_shelf",
+        "layout",
+        "checkin_context",
+        "search_key",
+        "show_column_manager",
+        "width",
+        "show_insert",
+        "show_help",
+        "show_refresh",
+        "show_select",
+        "show_layout_switcher",
+        "show_expand",
+        "show_keyword_search",
+        "show_search_limit",
+        "search_type",
+        "show_border",
+        "mode",
+        "no_results_mode",
+        "gallery_align"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/texture/definition",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "dynamic_class",
+        "include_mako",
+        "view"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "dynamic_class",
+        "search_type",
+        "view",
+        "expression",
+        "show_shelf"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "element_names",
+        "label",
+        "search_type",
+        "dynamic_class",
+        "view",
+        "show_shelf",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "dynamic_class",
+        "show_resize_scroll",
+        "include_mako",
+        "icon",
+        "view"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "show_layout_switcher",
+        "show_column_manager",
+        "show_keyword_search",
+        "show_header",
+        "show_search_limit",
+        "search_type",
+        "group_elements",
+        "no_results_msg",
+        "dynamic_class",
+        "min_height",
+        "show_border",
+        "mode",
+        "label",
+        "show_select",
+        "view",
+        "expression",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "process",
+        "checkin_type",
+        "hide_checkbox",
+        "show_context_menu",
+        "dynamic_class",
+        "show_search",
+        "show_shelf",
+        "allow_drag",
+        "scale",
+        "layout",
+        "checkin_context",
+        "search_key",
+        "show_column_manager",
+        "show_insert",
+        "expand_mode",
+        "show_help",
+        "show_refresh",
+        "show_select",
+        "icon",
+        "show_layout_switcher",
+        "show_expand",
+        "show_keyword_search",
+        "show_search_limit",
+        "search_type",
+        "show_border",
+        "show_drop_shadow",
+        "mode",
+        "no_results_mode",
+        "gallery_align"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "show_search_limit",
+        "search_type",
+        "show_insert",
+        "dynamic_class",
+        "show_search",
+        "view",
+        "show_shelf",
+        "init_load_num",
+        "icon"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "process",
+        "show_context_menu",
+        "dynamic_class",
+        "show_search",
+        "show_shelf",
+        "layout",
+        "checkin_context",
+        "search_key",
+        "show_column_manager",
+        "width",
+        "show_insert",
+        "show_help",
+        "show_refresh",
+        "show_select",
+        "show_layout_switcher",
+        "show_expand",
+        "show_keyword_search",
+        "show_search_limit",
+        "search_type",
+        "show_border",
+        "mode",
+        "no_results_mode",
+        "gallery_align"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "show_gear",
+        "process",
+        "checkin_type",
+        "hide_checkbox",
+        "show_context_menu",
+        "dynamic_class",
+        "show_search",
+        "show_shelf",
+        "allow_drag",
+        "scale",
+        "layout",
+        "checkin_context",
+        "search_key",
+        "show_column_manager",
+        "show_insert",
+        "expand_mode",
+        "show_help",
+        "show_refresh",
+        "show_select",
+        "icon",
+        "show_layout_switcher",
+        "show_expand",
+        "show_keyword_search",
+        "show_search_limit",
+        "search_type",
+        "show_border",
+        "show_drop_shadow",
+        "mode",
+        "no_results_mode",
+        "gallery_align"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "checkin_action",
+        "dynamic_class",
+        "checkout_action"
+      ]
+    }
+  ],
+  "tactic.ui.table.CheckinButtonElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "width"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": [
+        "mode",
+        "width"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "transfer_mode",
+        "show_links",
+        "process",
+        "lock_process",
+        "sobject_mode",
+        "width",
+        "show_context",
+        "subcontext",
+        "mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "transfer_mode",
+        "show_links",
+        "process",
+        "lock_process",
+        "sobject_mode",
+        "width",
+        "show_context",
+        "subcontext",
+        "mode"
+      ]
+    }
+  ],
+  "DependencyLink": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.widget.DiscussionElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": [
+        "process"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": [
+        "process"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "use_parent"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "use_parent"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "use_parent",
+        "show_fullscreen_button",
+        "note_format",
+        "show_note_status",
+        "show_context_notes",
+        "note_expandable",
+        "allow_email",
+        "show_task_process",
+        "mode",
+        "dialog_position"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "use_parent",
+        "show_fullscreen_button",
+        "note_format",
+        "show_note_status",
+        "show_context_notes",
+        "note_expandable",
+        "allow_email",
+        "show_task_process",
+        "mode",
+        "dialog_position"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "use_parent",
+        "show_fullscreen_button",
+        "note_format",
+        "show_note_status",
+        "show_context_notes",
+        "note_expandable",
+        "allow_email",
+        "show_task_process",
+        "dialog_position"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "use_parent",
+        "show_fullscreen_button",
+        "note_format",
+        "show_note_status",
+        "show_context_notes",
+        "note_expandable",
+        "allow_email",
+        "show_task_process",
+        "mode",
+        "dialog_position"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "use_parent",
+        "show_fullscreen_button",
+        "note_format",
+        "show_note_status",
+        "show_context_notes",
+        "note_expandable",
+        "allow_email",
+        "show_task_process",
+        "mode",
+        "dialog_position"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "use_parent",
+        "show_fullscreen_button",
+        "note_format",
+        "show_note_status",
+        "show_context_notes",
+        "note_expandable",
+        "allow_email",
+        "show_task_process",
+        "dialog_position"
+      ]
+    }
+  ],
+  "tactic.ui.table.MetadataElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.SObjectSummaryElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.RowAddElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.TaskElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "layout",
+        "status_color",
+        "bg_color",
+        "show_assigned",
+        "show_dates",
+        "edit",
+        "edit_status",
+        "edit_assigned",
+        "show_filler_tasks"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "layout",
+        "status_color",
+        "show_assigned",
+        "show_dates",
+        "edit",
+        "edit_status",
+        "edit_assigned",
+        "show_filler_tasks"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "layout",
+        "bg_color",
+        "show_assigned",
+        "show_dates",
+        "edit",
+        "edit_status",
+        "edit_assigned",
+        "edit_assigned"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "layout",
+        "status_color",
+        "show_assigned",
+        "show_dates",
+        "edit",
+        "edit_status",
+        "edit_assigned"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "show_labels",
+        "task_filter",
+        "show_filler_tasks",
+        "show_assigned",
+        "layout",
+        "show_add_task",
+        "show_current_pipeline_only",
+        "edit_status",
+        "show_processes_in_title",
+        "edit_assigned",
+        "bg_color",
+        "show_task_edit",
+        "show_border",
+        "panel_width",
+        "show_bid",
+        "font_size",
+        "show_status",
+        "show_process",
+        "collate_columns",
+        "status_color",
+        "show_dates"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "layout",
+        "status_color",
+        "show_assigned",
+        "show_dates",
+        "edit",
+        "edit_status",
+        "edit_assigned",
+        "show_filler_tasks"
+      ]
+    },
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": [
+        "show_labels",
+        "task_filter",
+        "show_filler_tasks",
+        "show_assigned",
+        "layout",
+        "show_add_task",
+        "show_current_pipeline_only",
+        "edit_status",
+        "show_processes_in_title",
+        "edit_assigned",
+        "bg_color",
+        "show_task_edit",
+        "show_border",
+        "panel_width",
+        "show_bid",
+        "font_size",
+        "show_status",
+        "show_process",
+        "collate_columns",
+        "status_color",
+        "show_dates"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "bg_color",
+        "status_color",
+        "panel_width",
+        "font_size",
+        "show_process",
+        "show_status",
+        "show_assigned",
+        "show_bid",
+        "show_dates",
+        "show_track",
+        "show_labels",
+        "show_border",
+        "show_current_pipeline_only",
+        "collate_columns",
+        "show_add_task",
+        "show_link_task_menu",
+        "show_processes_in_title",
+        "show_task_edit",
+        "task_edit_view",
+        "task_filter",
+        "layout",
+        "show_filler_tasks",
+        "edit_status",
+        "edit_assigned",
+        "edit"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "bg_color",
+        "status_color",
+        "panel_width",
+        "font_size",
+        "show_process",
+        "show_status",
+        "show_assigned",
+        "show_bid",
+        "show_dates",
+        "show_track",
+        "show_labels",
+        "show_border",
+        "show_current_pipeline_only",
+        "collate_columns",
+        "show_add_task",
+        "show_link_task_menu",
+        "show_processes_in_title",
+        "show_task_edit",
+        "task_edit_view",
+        "task_filter",
+        "layout",
+        "show_filler_tasks",
+        "edit_status",
+        "edit_assigned",
+        "edit"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "show_labels",
+        "task_filter",
+        "show_filler_tasks",
+        "show_assigned",
+        "layout",
+        "show_add_task",
+        "show_current_pipeline_only",
+        "edit_status",
+        "show_processes_in_title",
+        "edit_assigned",
+        "bg_color",
+        "show_task_edit",
+        "show_border",
+        "panel_width",
+        "show_bid",
+        "font_size",
+        "show_status",
+        "show_process",
+        "collate_columns",
+        "status_color",
+        "show_dates"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "layout",
+        "status_color",
+        "show_assigned",
+        "show_dates",
+        "edit",
+        "edit_status",
+        "edit_assigned",
+        "show_filler_tasks"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": [
+        "show_labels",
+        "task_filter",
+        "show_filler_tasks",
+        "show_assigned",
+        "layout",
+        "show_add_task",
+        "show_current_pipeline_only",
+        "edit_status",
+        "show_processes_in_title",
+        "edit_assigned",
+        "bg_color",
+        "show_task_edit",
+        "show_border",
+        "panel_width",
+        "show_bid",
+        "font_size",
+        "show_status",
+        "show_process",
+        "collate_columns",
+        "status_color",
+        "show_dates"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "bg_color",
+        "status_color",
+        "panel_width",
+        "font_size",
+        "show_process",
+        "show_status",
+        "show_assigned",
+        "show_bid",
+        "show_dates",
+        "show_track",
+        "show_labels",
+        "show_border",
+        "show_current_pipeline_only",
+        "collate_columns",
+        "show_add_task",
+        "show_link_task_menu",
+        "show_processes_in_title",
+        "show_task_edit",
+        "task_edit_view",
+        "task_filter",
+        "layout",
+        "show_filler_tasks",
+        "edit_status",
+        "edit_assigned",
+        "edit"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "bg_color",
+        "status_color",
+        "panel_width",
+        "font_size",
+        "show_process",
+        "show_status",
+        "show_assigned",
+        "show_bid",
+        "show_dates",
+        "show_track",
+        "show_labels",
+        "show_border",
+        "show_current_pipeline_only",
+        "collate_columns",
+        "show_add_task",
+        "show_link_task_menu",
+        "show_processes_in_title",
+        "show_task_edit",
+        "task_edit_view",
+        "task_filter",
+        "layout",
+        "show_filler_tasks",
+        "edit_status",
+        "edit_assigned",
+        "edit"
+      ]
+    }
+  ],
+  "tactic.ui.table.TaskSummaryElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "mode"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "mode"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "mode"
+      ]
+    }
+  ],
+  "tactic.ui.table.TaskCompletionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "width"
+      ]
+    }
+  ],
+  "tactic.ui.table.TaskGroupCompletionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "width"
+      ]
+    }
+  ],
+  "tactic.ui.table.ExplorerElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.SObjectTaskStatusElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.GanttElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "options"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": [
+        "options"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": [
+        "options"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "show_title",
+        "options"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "options"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "color_mode",
+        "year_display",
+        "week_display",
+        "overlap",
+        "week_start",
+        "show_title",
+        "options"
+      ]
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "options",
+        "date_mode",
+        "year_display",
+        "overlap",
+        "week_display",
+        "week_start",
+        "bar_height",
+        "color_mode"
+      ]
+    },
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": [
+        "options",
+        "date_mode",
+        "year_display",
+        "overlap",
+        "week_display",
+        "week_start",
+        "bar_height",
+        "color_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "color_mode",
+        "year_display",
+        "week_display",
+        "overlap",
+        "week_start",
+        "show_title",
+        "options"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "options",
+        "date_mode",
+        "year_display",
+        "overlap",
+        "week_display",
+        "week_start",
+        "bar_height",
+        "color_mode"
+      ]
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": [
+        "options",
+        "date_mode",
+        "year_display",
+        "overlap",
+        "week_display",
+        "week_start",
+        "bar_height",
+        "color_mode"
+      ]
+    }
+  ],
+  "tactic.ui.table.SObjectFilesElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.CustomLayoutElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "include_mako",
+        "view"
+      ]
+    },
+    {
+      "source": "cg-template:None/columns.thumb_view",
+      "options": [
+        "icon_size",
+        "view",
+        "show_resize_scroll",
+        "include_mako"
+      ]
+    },
+    {
+      "source": "cg_test.db:None/columns.thumb_view",
+      "options": [
+        "icon_size",
+        "view",
+        "show_resize_scroll",
+        "include_mako"
+      ]
+    }
+  ],
+  "pyasm.prod.web.NumSObjectInstancesWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": []
+    }
+  ],
+  "Htactic.ui.table.HiddenRowElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": [
+        "title_icon",
+        "dynamic"
+      ]
+    }
+  ],
+  "pyasm.prod.web.SObjectCheckboxWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "ParallelStatusEditWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.RenderLinkTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\layer-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.ExploreTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\layer-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.ThumbPublishWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.FrameCompletionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.EpisodeCompletionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": [
+        "width"
+      ]
+    }
+  ],
+  "pyasm.prod.web.ShotCheckboxWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": [
+        "persist_on_submit"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "persist_on_submit"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "persist_on_submit"
+      ]
+    }
+  ],
+  "pyasm.prod.web.NumSequenceInstanceWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\sequence-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.ShotInfoWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.widget.DiscussionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": [
+        "sticky"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.CondensedShotInfoWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.NumTasksWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.AssetsInShotWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.LayerTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.cgapp.PublishElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\shot_instance-conf.xml",
+      "options": [
+        "search_type"
+      ]
+    }
+  ],
+  "pyasm.prod.web.BinTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.prod.web.SubmissionDataTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\prod\\submission-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.ParentGroupTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\note-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\work_hour-conf.xml",
+      "options": []
+    }
+  ],
+  "SearchTypeElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "ArrayTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": []
+    }
+  ],
+  "WeekTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\DEFAULT-conf.xml",
+      "options": [
+        "width"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": [
+        "width"
+      ]
+    }
+  ],
+  "GanttWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login-conf.xml",
+      "options": [
+        "handlers"
+      ]
+    }
+  ],
+  "tactic.ui.panel.SecurityManagerButtonWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\login_group-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.app.MessageTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\message_log-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.MilestoneCompletionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\milestone-conf.xml",
+      "options": [
+        "width"
+      ]
+    }
+  ],
+  "pyasm.widget.SearchTypeElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\note-conf.xml",
+      "options": [
+        "filename"
+      ]
+    }
+  ],
+  "SimpleTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\note-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\note-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\search_object-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\search_type-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.NotificationTriggerElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\notification-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.RecipientElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\notification_log-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.PreferenceDescriptionWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pref_list-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.PreferenceEditWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\pref_list-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.ProjectWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.ProjectTemplateUpdateWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": [
+        "icon"
+      ]
+    }
+  ],
+  "MyTacticSummaryWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\project-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.app.SearchTypeHasTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\search_object-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\search_type-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.SnapshotVersionElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "FileAppendLinkTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "RenderLinkTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.CheckoutButtonElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.SnapshotFileElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.SnapshotServerElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.widget.TaskStatusElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    },
+    {
+      "source": "cg-template:sthpw/task/definition",
+      "options": [
+        "edit_scope"
+      ]
+    },
+    {
+      "source": "cg_test.db:sthpw/task/definition",
+      "options": [
+        "edit_scope"
+      ]
+    }
+  ],
+  "pyasm.prod.web.SnapshotInfoWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "AuxDataWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\snapshot-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.ProcessElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.widget.TaskParentSpacingTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.SubContextElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.input.LoginTableElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.WorkHoursElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.WorkElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": [
+        "transfer_mode",
+        "icon"
+      ]
+    }
+  ],
+  "tactic.ui.table.TaskDaysDueElementWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\task-conf.xml",
+      "options": []
+    }
+  ],
+  "TimecardInfoTableElement": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": []
+    }
+  ],
+  "pyasm.widget.TextWdg": [
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": [
+        "hint"
+      ]
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": []
+    },
+    {
+      "source": "src\\tactic_stream\\config\\search_type\\widget\\sthpw\\timecard-conf.xml",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.RelatedElementWdg": [
+    {
+      "source": "cg-template:cg/assets/definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/assets/definition",
+      "options": []
+    }
+  ],
+  "tactic.ui.table.LinkElementWdg": [
+    {
+      "source": "cg-template:cg/scenes/definition",
+      "options": []
+    },
+    {
+      "source": "cg_test.db:cg/scenes/definition",
+      "options": []
+    }
+  ]
+}

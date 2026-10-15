@@ -1,0 +1,212 @@
+[
+  {
+    "path": "src/tactic/ui_api/collection_service.py",
+    "line": 15,
+    "code": "'collection_type'",
+    "message_expression": "'Поддержаны коллекции проектных SearchType'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/collection_service.py",
+    "line": 19,
+    "code": "'collection_schema'",
+    "message_expression": "'SearchType не включает штатную поддержку коллекций'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/collection_service.py",
+    "line": 21,
+    "code": "'collection_schema'",
+    "message_expression": "'Отсутствует исходная таблица связей коллекций'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/collection_service.py",
+    "line": 24,
+    "code": "'collection_options'",
+    "message_expression": "'Expression/parent-scoped коллекции требуют отдельного переноса'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/config_backend.py",
+    "line": 221,
+    "code": "'expression_view'",
+    "message_expression": "'Этот view использует expression для выборки; адаптер выражений ещё не перенесён'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/config_backend.py",
+    "line": 249,
+    "code": "'parent_filter'",
+    "message_expression": "'Выборка по произвольному parent_key пока не перенесена'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/config_backend.py",
+    "line": 261,
+    "code": "'configured_sort'",
+    "message_expression": "spec['sort_error']",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/config_backend.py",
+    "line": 349,
+    "code": "'form_defaults'",
+    "message_expression": "'Default для скрытого/неперенесённого поля требует отдельного action adapter'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/csv_service.py",
+    "line": 44,
+    "code": "'csv_widget'",
+    "message_expression": "'Не перенесён get_text_value для колонки: ' + name",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/csv_service.py",
+    "line": 83,
+    "code": "'configured_sort'",
+    "message_expression": "spec['sort_error']",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/csv_service.py",
+    "line": 53,
+    "code": "'csv_widget'",
+    "message_expression": "'Составной виджет нельзя незаметно заменить строкой JSON: ' + name",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/global_admin_service.py",
+    "line": 215,
+    "code": "'select_query'",
+    "message_expression": "'SelectWdg query_filter/SQL expressions require their own adapter'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/global_admin_service.py",
+    "line": 77,
+    "code": "'license_format'",
+    "message_expression": "'Через native UI принимается только подписанная XML-лицензия v2; legacy v1 требует отдельной процедуры.'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/global_admin_service.py",
+    "line": 267,
+    "code": "'cell_handler'",
+    "message_expression": "'This HiddenRow dynamic_class is not implemented'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/global_admin_service.py",
+    "line": 269,
+    "code": "'cell_expression'",
+    "message_expression": "'HiddenRow expression adapter is required'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/history_service.py",
+    "line": 54,
+    "code": "'history_schema'",
+    "message_expression": "'В retire_log нет ключа для безопасного отбора истории объекта'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/relationship_service.py",
+    "line": 30,
+    "code": "'self_instance'",
+    "message_expression": "'Самоссылочная instance-связь требует выбора направления; автоматическое направление не угадывается'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/table_edit_service.py",
+    "line": 33,
+    "code": "'table_save_adapter'",
+    "message_expression": "'Таблица требует отдельного адаптера: ' + name",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/table_edit_service.py",
+    "line": 90,
+    "code": "'cell_action'",
+    "message_expression": "'Не перенесён input-контракт action: ' + type(handler).__name__",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/table_edit_service.py",
+    "line": 94,
+    "code": "'cell_action_expression'",
+    "message_expression": "'Вычисляемый action требует отдельного адаптера'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/table_edit_service.py",
+    "line": 135,
+    "code": "'cell_action'",
+    "message_expression": "'Action требует отдельного адаптера: ' + action",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/tactic_backend.py",
+    "line": 136,
+    "code": "'missing_search_key'",
+    "message_expression": "'TACTIC вернул запись без __search_key__'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/tactic_backend.py",
+    "line": 120,
+    "code": "'project_scope'",
+    "message_expression": "'Нельзя безопасно ограничить системную таблицу проектом'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/timeline_service.py",
+    "line": 42,
+    "code": "'configured_sort'",
+    "message_expression": "spec['sort_error']",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/upload_service.py",
+    "line": 84,
+    "code": "'checkin_custom_policy'",
+    "message_expression": "'Не удалось разрешить процесс исходного check-in'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/upload_service.py",
+    "line": 87,
+    "code": "'checkin_custom_policy'",
+    "message_expression": "'Эта конфигурация требует ещё не перенесённого check-in обработчика. Пользовательские проверки не будут пропущены.'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/version_service.py",
+    "line": 60,
+    "code": "'legacy_snapshot'",
+    "message_expression": "'У версии отсутствует search_code; исходный set_current требует отдельной проверки'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/widget_service.py",
+    "line": 57,
+    "code": "'form_ticket'",
+    "message_expression": "'Устаревший ticket EditWdg не поддержан'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/widget_service.py",
+    "line": 83,
+    "code": "'form_mode'",
+    "message_expression": "'Режим EditWdg ещё не поддержан: ' + str(mode)",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  },
+  {
+    "path": "src/tactic/ui_api/widget_service.py",
+    "line": 87,
+    "code": "'form_action'",
+    "message_expression": "'Этот EditWdg требует ещё не перенесённого parent/connect/custom callback/layout adapter'",
+    "meaning": "Explicit not-implemented/unsupported guard; not all gaps have HTTP 501."
+  }
+]

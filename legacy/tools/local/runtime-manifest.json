@@ -1,0 +1,17 @@
+{
+  "python": {
+    "version": "3.13.15",
+    "architecture": "amd64",
+    "url": "https://www.python.org/ftp/python/3.13.15/python-3.13.15-embed-amd64.zip",
+    "sha256": "d1f04d990aee1253d8569e8e5104e30fa9f5fa830899f14843448872d936a2cf",
+    "release_source": "https://www.python.org/downloads/release/python-31315/"
+  },
+  "pip": {
+    "version": "26.2.1",
+    "url": "https://bootstrap.pypa.io/pip/zipapp/pip-26.2.1.pyz",
+    "source": "https://pip.pypa.io/en/stable/installation/#standalone-zip-application",
+    "hash_policy": "HTTPS official PyPA; download hash recorded, not a pre-pinned trust proof",
+    "directory": "https://bootstrap.pypa.io/pip/zipapp/"
+  },
+  "format": 1
+}

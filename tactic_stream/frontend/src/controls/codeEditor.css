@@ -1,0 +1,34 @@
+.code-editor { display:flex; flex-direction:column; height:100%; min-height:0; min-width:0; padding:4px; border:1px solid var(--outline-variant); border-radius:12px; overflow:hidden; background:var(--surface); }
+.code-source-toolbar { display:flex; align-items:center; gap:2px; padding:0 4px; min-height:28px; height:28px; flex-shrink:0; overflow-x:auto; border-bottom:1px solid var(--outline-variant); }
+.code-source-toolbar > span:not(.app-icon) { margin-right:auto; font-size:var(--text-body); text-align:left; flex:1; }
+.code-source-toolbar > .app-icon { color:var(--primary); }
+.code-source-toolbar .icon-button { width:26px; height:26px; min-height:0; min-width:26px; }
+.code-source-toolbar .app-icon { font-size:16px; }
+.code-source-toolbar summary { display:grid; place-items:center; padding:0; }
+.code-search { display:flex; flex-wrap:wrap; align-items:center; gap:4px; padding:4px; border-bottom:1px solid var(--outline-variant); }
+.code-search input { width:160px; min-width:0; height:28px; min-height:0; padding:0 6px; }
+.code-search .app-button { min-height:26px; height:26px; padding:0 8px; }
+.code-search .app-switch { font-size:var(--text-label); }
+.code-buffer { position:relative; display:flex; flex:1; min-height:0; min-width:0; overflow:hidden; border-radius:8px; background:var(--surface-high); }
+.code-line-numbers { width:34px; flex-shrink:0; overflow:hidden; background:var(--surface); border-right:1px solid var(--outline-variant); text-align:right; color:var(--muted); }
+.code-buffer pre, .code-buffer textarea { font-family:Consolas,monospace; font-size:var(--code-size); line-height:1.5; tab-size:4; white-space:pre; letter-spacing:normal; font-weight:normal; font-variant-ligatures:none; }
+.code-line-numbers pre { margin:0; padding:8px 8px 8px 0; }
+.code-input-area { flex:1; position:relative; min-width:0; overflow:hidden; }
+.code-highlight { position:absolute; left:0; top:0; padding:8px; margin:0; border:0; color:var(--on-surface); pointer-events:none; min-width:100%; }
+.code-input-area textarea { position:absolute; inset:0; width:100%; height:100%; border:0; border-radius:0; padding:8px; margin:0; resize:none; background:transparent; color:transparent; caret-color:var(--on-surface); overflow:auto; -webkit-text-fill-color:transparent; }
+.code-input-area textarea:focus { outline:0; box-shadow:none; }
+.code-input-area textarea::selection { background:var(--selected); -webkit-text-fill-color:var(--on-selected); }
+.syntax-occurrence { background:var(--syntax-occurrence); }
+.syntax-search { background:var(--syntax-search); }
+.code-completions { position:absolute; z-index:3; top:12px; right:8px; display:flex; flex-direction:column; max-height:270px; width:min(560px,calc(100% - 16px)); min-width:0; overflow:auto; padding:5px; border-radius:var(--item-radius); background:var(--surface-high); box-shadow:2px 6px 16px var(--shadow-color); }
+.code-completions .app-button { justify-content:flex-start; min-height:34px; height:34px; padding:0 10px; gap:8px; flex-shrink:0; border:0; border-radius:var(--item-radius); background:transparent; color:var(--on-surface); font-weight:400; }
+.code-completions .app-button[aria-selected="true"], .code-completions .app-button:hover { background:var(--hover); }
+.code-completions .app-button.detailed { height:46px; min-height:46px; }
+.code-completions .app-icon { color:var(--primary); font-size:14px; flex-shrink:0; }
+.code-completions .app-button > span:not(.app-icon) { display:flex; flex-direction:column; min-width:0; flex:1; text-align:left; }
+.code-completions strong { font:normal var(--text-body) Consolas,monospace; }
+.code-completions strong, .code-completions small { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.code-completions small { color:var(--muted); font-size:var(--text-caption); font-weight:400; }
+.code-completion-kind { width:62px; height:20px; flex-shrink:0; border-radius:var(--item-radius); background:var(--surface-high); padding:3px 4px; text-transform:uppercase; }
+.code-editor:has(.code-input-area textarea:focus) { border-color:var(--primary); }
+.syntax-module { color:var(--syntax-self); font-weight:600; }

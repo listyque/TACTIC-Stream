@@ -1,0 +1,30 @@
+PASS Login using real CherryPy API, not injected UI state
+PASS Actual shipped admin hierarchy, no hard-coded replacement menu
+PASS Original users widget_config resolves table columns
+PASS Same configured records in card view
+PASS Shared context action opens record detail
+PASS Discussion posts through HTTP and renders note as text, not HTML
+PASS Snapshot-owned file links include object/version/file identifiers
+PASS Declared relationship opens an independent related-record view
+PASS Inline cell edits use original form contract + revisioned update
+PASS Explicit current-page grouping over the same configured rows
+PASS Saved search creates a real-shaped personal sidebar XML override
+PASS View designer label is persisted and reprojected to table
+PASS Source is_visible changes default visibility after reloading view
+PASS Configured task dates activate native timeline without alternate task database
+PASS Calendar is an explicit projection of current task result page
+PASS Original pipeline XML resolves nodes and connections
+PASS Rename updates edges while preserving unknown XML attributes
+PASS Add process and persist graph through revision checked endpoint
+PASS Add a real named process connection rather than canvas-only decoration
+PASS Graph undo restores local operation batch
+PASS Schema editor inserts existing SearchType into original graph
+PASS Configured manage_users screen edits only explicit writable user fields
+PASS Group permission XML available in configured admin screen
+PASS Original sidebar ordering still editable in widget_config after deeper UI migration
+PASS Original app.ProjectCreateWdg now resolves native project command form
+PASS Unported license screen is explicit, not silently replaced by generic table
+PASS Mobile shell has no page-width overflow
+PASS No uncaught JS errors in tested source-configured flows
+PASS No old get_widget rendering calls in tested Vue flows
+PASS Logout invalidates session and closes configured UI

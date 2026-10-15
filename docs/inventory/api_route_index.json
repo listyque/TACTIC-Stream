@@ -1,0 +1,1569 @@
+{
+  "prefix": "/api/ui/v2",
+  "warning": "Extracted literal routes; verbs and policy must be read in Api.dispatch and service.operation. POST balance only /query, irrespective of read-like names elsewhere.",
+  "routes": [
+    {
+      "path": "/bulk-records",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 169
+        },
+        {
+          "path": "src/tactic/ui_api/record_service.py",
+          "line": 54
+        }
+      ]
+    },
+    {
+      "path": "/catalog",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 179
+        }
+      ]
+    },
+    {
+      "path": "/cell-editor",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 146
+        },
+        {
+          "path": "src/tactic/ui_api/table_edit_service.py",
+          "line": 153
+        }
+      ]
+    },
+    {
+      "path": "/chat-users",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 185
+        },
+        {
+          "path": "src/tactic/ui_api/message_service.py",
+          "line": 208
+        }
+      ]
+    },
+    {
+      "path": "/chats",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 185
+        },
+        {
+          "path": "src/tactic/ui_api/message_service.py",
+          "line": 221
+        }
+      ]
+    },
+    {
+      "path": "/client-events",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/action_log.py",
+          "line": 106
+        },
+        {
+          "path": "src/tactic/ui_api/action_log.py",
+          "line": 184
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 163
+        }
+      ]
+    },
+    {
+      "path": "/collection-change",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/collection_service.py",
+          "line": 143
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 153
+        }
+      ]
+    },
+    {
+      "path": "/collection-members",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/collection_service.py",
+          "line": 99
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 153
+        }
+      ]
+    },
+    {
+      "path": "/collections",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/collection_service.py",
+          "line": 74
+        },
+        {
+          "path": "src/tactic/ui_api/collection_service.py",
+          "line": 119
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 153
+        }
+      ]
+    },
+    {
+      "path": "/config",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 479
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 491
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 510
+        }
+      ]
+    },
+    {
+      "path": "/configs",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 473
+        }
+      ]
+    },
+    {
+      "path": "/context-menu",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 150
+        }
+      ]
+    },
+    {
+      "path": "/design-catalog",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/design_service.py",
+          "line": 102
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 135
+        }
+      ]
+    },
+    {
+      "path": "/embedded-form",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 151
+        }
+      ]
+    },
+    {
+      "path": "/export-csv",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 205
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 207
+        },
+        {
+          "path": "src/tactic/ui_api/widget_service.py",
+          "line": 100
+        }
+      ]
+    },
+    {
+      "path": "/file",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 169
+        },
+        {
+          "path": "src/tactic/ui_api/record_service.py",
+          "line": 126
+        }
+      ]
+    },
+    {
+      "path": "/file-versions",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 154
+        },
+        {
+          "path": "src/tactic/ui_api/version_service.py",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "path": "/form",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 217
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 446
+        },
+        {
+          "path": "src/tactic/ui_api/menu_service.py",
+          "line": 39
+        }
+      ]
+    },
+    {
+      "path": "/form-preview",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 156
+        }
+      ]
+    },
+    {
+      "path": "/graph",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 550
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 164
+        }
+      ]
+    },
+    {
+      "path": "/health",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/action_log.py",
+          "line": 43
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 117
+        }
+      ]
+    },
+    {
+      "path": "/history",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 162
+        },
+        {
+          "path": "src/tactic/ui_api/history_service.py",
+          "line": 38
+        }
+      ]
+    },
+    {
+      "path": "/layout-document",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/design_service.py",
+          "line": 94
+        },
+        {
+          "path": "src/tactic/ui_api/design_service.py",
+          "line": 132
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 135
+        }
+      ]
+    },
+    {
+      "path": "/layout-preview",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/design_service.py",
+          "line": 94
+        },
+        {
+          "path": "src/tactic/ui_api/design_service.py",
+          "line": 96
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 135
+        }
+      ]
+    },
+    {
+      "path": "/license",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 148
+        },
+        {
+          "path": "src/tactic/ui_api/global_admin_service.py",
+          "line": 44
+        },
+        {
+          "path": "src/tactic/ui_api/global_admin_service.py",
+          "line": 61
+        }
+      ]
+    },
+    {
+      "path": "/memberships",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 397
+        }
+      ]
+    },
+    {
+      "path": "/message-history",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 185
+        },
+        {
+          "path": "src/tactic/ui_api/message_service.py",
+          "line": 206
+        }
+      ]
+    },
+    {
+      "path": "/message-send",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 185
+        },
+        {
+          "path": "src/tactic/ui_api/message_service.py",
+          "line": 231
+        }
+      ]
+    },
+    {
+      "path": "/messages",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 185
+        },
+        {
+          "path": "src/tactic/ui_api/message_service.py",
+          "line": 204
+        }
+      ]
+    },
+    {
+      "path": "/notes",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 169
+        },
+        {
+          "path": "src/tactic/ui_api/record_service.py",
+          "line": 103
+        }
+      ]
+    },
+    {
+      "path": "/open",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 183
+        }
+      ]
+    },
+    {
+      "path": "/pipeline-positions",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 559
+        }
+      ]
+    },
+    {
+      "path": "/project-create",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/admin_service.py",
+          "line": 22
+        },
+        {
+          "path": "src/tactic/ui_api/admin_service.py",
+          "line": 42
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 144
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 167
+        },
+        {
+          "path": "src/tactic/ui_api/project_service.py",
+          "line": 61
+        },
+        {
+          "path": "src/tactic/ui_api/project_service.py",
+          "line": 72
+        }
+      ]
+    },
+    {
+      "path": "/project-preflight",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 144
+        },
+        {
+          "path": "src/tactic/ui_api/project_service.py",
+          "line": 69
+        }
+      ]
+    },
+    {
+      "path": "/projects",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 156
+        }
+      ]
+    },
+    {
+      "path": "/query",
+      "get_balanced": true,
+      "post_balanced": true,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 215
+        },
+        {
+          "path": "src/tactic/ui_api/widget_service.py",
+          "line": 100
+        }
+      ]
+    },
+    {
+      "path": "/record",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 203
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 219
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 225
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 231
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 233
+        },
+        {
+          "path": "src/tactic/ui_api/widget_service.py",
+          "line": 104
+        },
+        {
+          "path": "src/tactic/ui_api/widget_service.py",
+          "line": 124
+        }
+      ]
+    },
+    {
+      "path": "/record-state",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 162
+        },
+        {
+          "path": "src/tactic/ui_api/history_service.py",
+          "line": 27
+        }
+      ]
+    },
+    {
+      "path": "/record-subscription",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 185
+        },
+        {
+          "path": "src/tactic/ui_api/message_service.py",
+          "line": 201
+        }
+      ]
+    },
+    {
+      "path": "/relation-candidates",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 160
+        },
+        {
+          "path": "src/tactic/ui_api/relationship_service.py",
+          "line": 59
+        }
+      ]
+    },
+    {
+      "path": "/relations",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 169
+        },
+        {
+          "path": "src/tactic/ui_api/record_service.py",
+          "line": 81
+        }
+      ]
+    },
+    {
+      "path": "/relationship",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 160
+        },
+        {
+          "path": "src/tactic/ui_api/relationship_service.py",
+          "line": 55
+        },
+        {
+          "path": "src/tactic/ui_api/relationship_service.py",
+          "line": 87
+        }
+      ]
+    },
+    {
+      "path": "/resolved-view",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 205
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 209
+        },
+        {
+          "path": "src/tactic/ui_api/widget_service.py",
+          "line": 95
+        }
+      ]
+    },
+    {
+      "path": "/retire",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 239
+        }
+      ]
+    },
+    {
+      "path": "/saved-view",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 166
+        }
+      ]
+    },
+    {
+      "path": "/script",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 152
+        },
+        {
+          "path": "src/tactic/ui_api/script_service.py",
+          "line": 179
+        },
+        {
+          "path": "src/tactic/ui_api/script_service.py",
+          "line": 196
+        }
+      ]
+    },
+    {
+      "path": "/script-check",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 152
+        },
+        {
+          "path": "src/tactic/ui_api/script_service.py",
+          "line": 114
+        }
+      ]
+    },
+    {
+      "path": "/script-diff",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 152
+        },
+        {
+          "path": "src/tactic/ui_api/script_service.py",
+          "line": 116
+        }
+      ]
+    },
+    {
+      "path": "/script-run",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 152
+        },
+        {
+          "path": "src/tactic/ui_api/script_service.py",
+          "line": 123
+        }
+      ]
+    },
+    {
+      "path": "/scripts",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 152
+        },
+        {
+          "path": "src/tactic/ui_api/script_service.py",
+          "line": 149
+        }
+      ]
+    },
+    {
+      "path": "/search-types",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 391
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 436
+        }
+      ]
+    },
+    {
+      "path": "/security",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/admin_service.py",
+          "line": 21
+        },
+        {
+          "path": "src/tactic/ui_api/admin_service.py",
+          "line": 94
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 167
+        }
+      ]
+    },
+    {
+      "path": "/security-matrix",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 136
+        }
+      ]
+    },
+    {
+      "path": "/session",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/action_log.py",
+          "line": 102
+        },
+        {
+          "path": "src/tactic/ui_api/action_log.py",
+          "line": 107
+        },
+        {
+          "path": "src/tactic/ui_api/action_log.py",
+          "line": 185
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 125
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 148
+        }
+      ]
+    },
+    {
+      "path": "/sidebar",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 181
+        }
+      ]
+    },
+    {
+      "path": "/sidebar-editor",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 141
+        }
+      ]
+    },
+    {
+      "path": "/sidebar-order",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/config_backend.py",
+          "line": 522
+        }
+      ]
+    },
+    {
+      "path": "/snapshot-current",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 154
+        },
+        {
+          "path": "src/tactic/ui_api/version_service.py",
+          "line": 55
+        }
+      ]
+    },
+    {
+      "path": "/snapshots",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 242
+        }
+      ]
+    },
+    {
+      "path": "/stype-dependencies",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 139
+        }
+      ]
+    },
+    {
+      "path": "/stype-editor",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 138
+        }
+      ]
+    },
+    {
+      "path": "/stype-import",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 140
+        }
+      ]
+    },
+    {
+      "path": "/subscriptions",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 185
+        },
+        {
+          "path": "src/tactic/ui_api/message_service.py",
+          "line": 251
+        }
+      ]
+    },
+    {
+      "path": "/system",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/admin_service.py",
+          "line": 22
+        },
+        {
+          "path": "src/tactic/ui_api/admin_service.py",
+          "line": 25
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 167
+        }
+      ]
+    },
+    {
+      "path": "/system-config",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 148
+        },
+        {
+          "path": "src/tactic/ui_api/global_admin_service.py",
+          "line": 44
+        },
+        {
+          "path": "src/tactic/ui_api/global_admin_service.py",
+          "line": 46
+        }
+      ]
+    },
+    {
+      "path": "/table-changes",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 146
+        },
+        {
+          "path": "src/tactic/ui_api/table_edit_service.py",
+          "line": 174
+        }
+      ]
+    },
+    {
+      "path": "/table-fill-preview",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 146
+        },
+        {
+          "path": "src/tactic/ui_api/table_edit_service.py",
+          "line": 150
+        }
+      ]
+    },
+    {
+      "path": "/task-change",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 158
+        },
+        {
+          "path": "src/tactic/ui_api/task_service.py",
+          "line": 156
+        },
+        {
+          "path": "src/tactic/ui_api/task_service.py",
+          "line": 168
+        }
+      ]
+    },
+    {
+      "path": "/task-form",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 158
+        },
+        {
+          "path": "src/tactic/ui_api/task_service.py",
+          "line": 156
+        },
+        {
+          "path": "src/tactic/ui_api/task_service.py",
+          "line": 166
+        }
+      ]
+    },
+    {
+      "path": "/task-form-preview",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 158
+        },
+        {
+          "path": "src/tactic/ui_api/task_service.py",
+          "line": 156
+        },
+        {
+          "path": "src/tactic/ui_api/task_service.py",
+          "line": 159
+        }
+      ]
+    },
+    {
+      "path": "/task-generate",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 158
+        },
+        {
+          "path": "src/tactic/ui_api/task_service.py",
+          "line": 125
+        }
+      ]
+    },
+    {
+      "path": "/task-hours",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 155
+        }
+      ]
+    },
+    {
+      "path": "/tasks",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 188
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 158
+        },
+        {
+          "path": "src/tactic/ui_api/task_service.py",
+          "line": 104
+        }
+      ]
+    },
+    {
+      "path": "/timeline",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 213
+        },
+        {
+          "path": "src/tactic/ui_api/widget_service.py",
+          "line": 100
+        }
+      ]
+    },
+    {
+      "path": "/ui-state",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/action_log.py",
+          "line": 43
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 142
+        }
+      ]
+    },
+    {
+      "path": "/upload",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 159
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 244
+        },
+        {
+          "path": "src/tactic/ui_api/mount.py",
+          "line": 41
+        }
+      ]
+    },
+    {
+      "path": "/upload-chunk",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 123
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 159
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 177
+        },
+        {
+          "path": "src/tactic/ui_api/mount.py",
+          "line": 41
+        },
+        {
+          "path": "src/tactic/ui_api/upload_service.py",
+          "line": 60
+        }
+      ]
+    },
+    {
+      "path": "/upload-finish",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 177
+        },
+        {
+          "path": "src/tactic/ui_api/upload_service.py",
+          "line": 64
+        }
+      ]
+    },
+    {
+      "path": "/upload-status",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/action_log.py",
+          "line": 43
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 177
+        },
+        {
+          "path": "src/tactic/ui_api/upload_service.py",
+          "line": 58
+        }
+      ]
+    },
+    {
+      "path": "/uploads",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 177
+        },
+        {
+          "path": "src/tactic/ui_api/upload_service.py",
+          "line": 47
+        },
+        {
+          "path": "src/tactic/ui_api/upload_service.py",
+          "line": 51
+        },
+        {
+          "path": "src/tactic/ui_api/upload_service.py",
+          "line": 62
+        }
+      ]
+    },
+    {
+      "path": "/user-groups",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 137
+        }
+      ]
+    },
+    {
+      "path": "/users",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/admin_service.py",
+          "line": 21
+        },
+        {
+          "path": "src/tactic/ui_api/admin_service.py",
+          "line": 44
+        },
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 189
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 167
+        }
+      ]
+    },
+    {
+      "path": "/view",
+      "get_balanced": false,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 211
+        },
+        {
+          "path": "src/tactic/ui_api/widget_service.py",
+          "line": 95
+        }
+      ]
+    },
+    {
+      "path": "/view-config",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 165
+        }
+      ]
+    },
+    {
+      "path": "/view-document",
+      "get_balanced": true,
+      "post_balanced": false,
+      "references": [
+        {
+          "path": "src/tactic/ui_api/api.py",
+          "line": 187
+        },
+        {
+          "path": "src/tactic/ui_api/design_service.py",
+          "line": 132
+        },
+        {
+          "path": "src/tactic/ui_api/extended_backend.py",
+          "line": 135
+        }
+      ]
+    }
+  ]
+}

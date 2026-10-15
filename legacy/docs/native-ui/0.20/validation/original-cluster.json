@@ -1,0 +1,260 @@
+{
+  "passed": true,
+  "scenarios": [
+    {
+      "name": "Original staged migrations",
+      "passed": true
+    },
+    {
+      "name": "prepare-original exit",
+      "passed": true
+    },
+    {
+      "name": "prepare-grid exit",
+      "passed": true
+    },
+    {
+      "name": "Three original worker PIDs healthy",
+      "passed": true
+    },
+    {
+      "name": "Only primary registers original periodic scheduler",
+      "passed": true
+    },
+    {
+      "name": "Direct internal port denied without secret",
+      "passed": true
+    },
+    {
+      "name": "Gateway reports three healthy workers",
+      "passed": true
+    },
+    {
+      "name": "Original XML-RPC login and ping work through primary",
+      "passed": true
+    },
+    {
+      "name": "Untrusted public host blocked",
+      "passed": true
+    },
+    {
+      "name": "Original password authentication routed to writer",
+      "passed": true
+    },
+    {
+      "name": "Same authenticated cookie works on all three PIDs",
+      "passed": true
+    },
+    {
+      "name": "Original user query balanced over all workers",
+      "passed": true
+    },
+    {
+      "name": "Twelve concurrent original queries complete on three workers",
+      "passed": true
+    },
+    {
+      "name": "Save uses writer and original EditMultipleCmd",
+      "passed": true
+    },
+    {
+      "name": "Read-after-write on worker 2 sample 0",
+      "passed": true
+    },
+    {
+      "name": "Read-after-write on worker 3 sample 1",
+      "passed": true
+    },
+    {
+      "name": "Read-after-write on worker 1 sample 2",
+      "passed": true
+    },
+    {
+      "name": "Read-after-write on worker 2 sample 3",
+      "passed": true
+    },
+    {
+      "name": "Read-after-write on worker 3 sample 4",
+      "passed": true
+    },
+    {
+      "name": "Read-after-write on worker 1 sample 5",
+      "passed": true
+    },
+    {
+      "name": "Client cannot inject internal gateway credential",
+      "passed": true
+    },
+    {
+      "name": "Dead read worker automatically replaced",
+      "passed": true
+    },
+    {
+      "name": "Session survives read worker replacement",
+      "passed": true
+    },
+    {
+      "name": "Dead writer replaced without changing lane",
+      "passed": true
+    },
+    {
+      "name": "Session survives writer replacement",
+      "passed": true
+    },
+    {
+      "name": "Logout revokes shared session on all workers",
+      "passed": true
+    },
+    {
+      "name": "table-http exit",
+      "passed": true
+    },
+    {
+      "name": "fill-http exit",
+      "passed": true
+    },
+    {
+      "name": "globals-http exit",
+      "passed": true
+    },
+    {
+      "name": "state-project-http exit",
+      "passed": true
+    },
+    {
+      "name": "diagnostics-http exit",
+      "passed": true
+    },
+    {
+      "name": "administration-http exit",
+      "passed": true
+    },
+    {
+      "name": "design-http exit",
+      "passed": true
+    },
+    {
+      "name": "Original persisted state readable on worker sample 0",
+      "passed": true
+    },
+    {
+      "name": "Original persisted state readable on worker sample 1",
+      "passed": true
+    },
+    {
+      "name": "Original persisted state readable on worker sample 2",
+      "passed": true
+    },
+    {
+      "name": "Original persisted state readable on worker sample 3",
+      "passed": true
+    },
+    {
+      "name": "Original persisted state readable on worker sample 4",
+      "passed": true
+    },
+    {
+      "name": "Original persisted state readable on worker sample 5",
+      "passed": true
+    },
+    {
+      "name": "Settings reads actually balanced over three workers",
+      "passed": true
+    },
+    {
+      "name": "New project SObject visible on worker sample 0",
+      "passed": true
+    },
+    {
+      "name": "New project SObject visible on worker sample 1",
+      "passed": true
+    },
+    {
+      "name": "New project SObject visible on worker sample 2",
+      "passed": true
+    },
+    {
+      "name": "New project SObject visible on worker sample 3",
+      "passed": true
+    },
+    {
+      "name": "New project SObject visible on worker sample 4",
+      "passed": true
+    },
+    {
+      "name": "New project SObject visible on worker sample 5",
+      "passed": true
+    },
+    {
+      "name": "New project propagates to all workers without restart",
+      "passed": true
+    },
+    {
+      "name": "All three real workers produce safe action records",
+      "passed": true
+    },
+    {
+      "name": "Log includes resolved pipeline and schema renderers",
+      "passed": true
+    },
+    {
+      "name": "Log includes actual original pipeline save command",
+      "passed": true
+    },
+    {
+      "name": "Log includes original table multi-edit command",
+      "passed": true
+    },
+    {
+      "name": "Log includes correlated failed and completed requests",
+      "passed": true
+    },
+    {
+      "name": "Administrative matrix commands are traced",
+      "passed": true
+    },
+    {
+      "name": "Physical column creation traced through original command",
+      "passed": true
+    },
+    {
+      "name": "No passwords tickets field bodies or filter operands in action records",
+      "passed": true
+    },
+    {
+      "name": "Membership request has action user project duration and target",
+      "passed": true
+    },
+    {
+      "name": "Normal native single-site requests do not print empty-site warning",
+      "passed": true
+    },
+    {
+      "name": "Console emits START RUNNING END during original saved Python",
+      "passed": true
+    },
+    {
+      "name": "Long request stays correlated and has one successful end",
+      "passed": true
+    },
+    {
+      "name": "END phase identifies actual completed state",
+      "passed": true
+    },
+    {
+      "name": "Design XML code CSV and parameters absent from safe logs",
+      "passed": true
+    },
+    {
+      "name": "Clean stop terminates all worker processes",
+      "passed": true
+    },
+    {
+      "name": "Clean stop removes transport session secrets",
+      "passed": true
+    }
+  ],
+  "signature_isolated": true,
+  "browser_run": false,
+  "seconds": 91.49
+}

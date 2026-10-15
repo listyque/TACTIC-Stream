@@ -1,0 +1,76 @@
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00001""")
+insert.set_value('description', """Determines whether icons are in complete separate directories""")
+insert.set_value('key', """use_icon_separation""")
+insert.set_value('type', """string""")
+insert.set_value('value', """false""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00002""")
+insert.set_value('description', """Note Statuses""")
+insert.set_value('key', """note_status""")
+insert.set_value('search_type', """sthpw/note""")
+insert.set_value('type', """map""")
+insert.set_value('value', """new:N|read:R|old:O|:""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00003""")
+insert.set_value('key', """versionless_mode""")
+insert.set_value('type', """string""")
+insert.set_value('value', """symlink""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00004""")
+insert.set_value('description', """Determines whether Telegram notificationsEnabled or not""")
+insert.set_value('key', """telegram_notifications_enabled""")
+insert.set_value('type', """string""")
+insert.set_value('value', """0""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00005""")
+insert.set_value('key', """web_file_size""")
+insert.set_value('type', """string""")
+insert.set_value('value', """640""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00006""")
+insert.set_value('key', """admin/bar_position""")
+insert.set_value('type', """string""")
+insert.set_value('value', """relative""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00007""")
+insert.set_value('key', """feature/css_library""")
+insert.set_value('type', """string""")
+insert.set_value('value', """bootstrap_material""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00008""")
+insert.set_value('key', """feature/remove_bvr_attrs""")
+insert.set_value('type', """string""")
+insert.set_value('value', """true""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/prod_setting')
+insert.set_value('code', """PROD_SETTING00009""")
+insert.set_value('key', """checkin/calculate_md5""")
+insert.set_value('type', """string""")
+insert.set_value('value', """false""")
+#-- End Entry --#
+

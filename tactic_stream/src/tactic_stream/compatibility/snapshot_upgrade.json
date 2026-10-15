@@ -1,0 +1,126 @@
+{
+  "tables": {
+    "snapshot": "CREATE TABLE snapshot (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    search_type character varying(100) NOT NULL,\n    search_id integer NOT NULL,\n    column_name character varying(100) NOT NULL,\n    snapshot text NOT NULL,\n    description text,\n    process varchar(256),\n    \"login\" character varying(100) NOT NULL,\n    \"lock_login\" character varying(100),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    lock_date timestamp,\n    context character varying(256),\n    version integer,\n    s_status character varying(30),\n    snapshot_type character varying(30),\n    code character varying(30),\n    repo character varying(30),\n    is_current boolean,\n    label character varying(100),\n    revision smallint,\n    level_type character varying(256),\n    level_id integer,\n    metadata text,\n    is_latest boolean,\n    status character varying(256),\n    project_code character varying(256),\n    search_code character varying(256),\n    is_synced boolean,\n    CONSTRAINT \"snapshot_code_idx\" UNIQUE (code)\n)",
+    "file": "CREATE TABLE file (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    file_name character varying(512) NOT NULL,\n    search_type character varying(100) NOT NULL,\n    search_id integer NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    st_size bigint,\n    file_range text,\n    code character varying(30),\n    snapshot_code character varying(30),\n    project_code character varying(100),\n    md5 character varying(32),\n    checkin_dir text,\n    source_path text,\n    relative_dir text,\n    \"type\" character varying(256),\n    base_type character varying(256),\n    metadata text,\n    metadata_search text, \n    repo_type varchar(256), \n    \"base_dir_alias\" character varying(256),\n    \n    CONSTRAINT \"file_code_idx\" UNIQUE (code)\n)",
+    "spt_naming": "CREATE TABLE \"spt_naming\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"search_type\" character varying(100),\n    \"dir_naming\" text,\n    \"file_naming\" text,\n    \"sandbox_dir_naming\" text,\n    \"snapshot_type\" character varying(256),\n    \"context\" character varying(256),\n    \"code\" character varying(256),\n    \"latest_versionless\" boolean,\n    \"current_versionless\" boolean,\n    \"manual_version\" boolean,\n    \"ingest_rule_code\" character varying(256),\n    \"condition\" text,\n    \"class_name\" text, \n    \"script_path\" text,\n    \"checkin_type\" character varying(256),\n    \"base_dir_alias\" character varying(256),\n    \"sandbox_dir_alias\" character varying(256),\n    CONSTRAINT \"spt_naming_code_idx\" UNIQUE (\"code\")\n)"
+  },
+  "registry": [
+    {
+      "id": 21,
+      "code": "sthpw/file",
+      "search_type": "sthpw/file",
+      "namespace": "sthpw",
+      "description": "A record of all files that are tracked",
+      "database": "sthpw",
+      "table_name": "file",
+      "class_name": "pyasm.biz.file.File",
+      "title": "File",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 27,
+      "code": "sthpw/snapshot",
+      "search_type": "sthpw/snapshot",
+      "namespace": "sthpw",
+      "description": "All versions of snapshots of assets",
+      "database": "sthpw",
+      "table_name": "snapshot",
+      "class_name": "pyasm.biz.Snapshot",
+      "title": "Snapshot",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 1,
+      "code": "config/naming",
+      "search_type": "config/naming",
+      "namespace": "config",
+      "description": "Naming",
+      "database": "{project}",
+      "table_name": "{public}.spt_naming",
+      "class_name": "pyasm.biz.Naming",
+      "title": "",
+      "schema": "public",
+      "color": null
+    }
+  ],
+  "columns": [
+    {
+      "table": "snapshot",
+      "column": "data",
+      "sql": "ALTER TABLE \"snapshot\" ADD COLUMN data jsonb;",
+      "source_method": "upgrade_v4_9_0_a01_003"
+    },
+    {
+      "table": "search_object",
+      "column": "metadata_parser",
+      "sql": "ALTER TABLE \"search_object\" ADD \"metadata_parser\" varchar(256);",
+      "source_method": "upgrade_v4_2_0_a01_005"
+    },
+    {
+      "table": "snapshot",
+      "column": "server",
+      "sql": "ALTER TABLE snapshot ADD COLUMN server varchar(256);",
+      "source_method": "upgrade_v4_0_0_a01_029"
+    },
+    {
+      "table": "snapshot",
+      "column": "search_code",
+      "sql": "ALTER TABLE snapshot ADD COLUMN search_code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_004"
+    },
+    {
+      "table": "file",
+      "column": "search_code",
+      "sql": "ALTER TABLE file ADD COLUMN search_code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_003"
+    }
+  ],
+  "nullable": [
+    {
+      "table": "file",
+      "column": "code",
+      "source_method": "upgrade_v4_4_0_v01_006"
+    },
+    {
+      "table": "snapshot",
+      "column": "search_id",
+      "source_method": "upgrade_v4_1_0_a01_013"
+    },
+    {
+      "table": "file",
+      "column": "file_name",
+      "source_method": "upgrade_v4_1_0_a01_010"
+    },
+    {
+      "table": "file",
+      "column": "search_id",
+      "source_method": "upgrade_v4_0_0_a09_002"
+    },
+    {
+      "table": "snapshot",
+      "column": "column_name",
+      "source_method": "upgrade_v4_0_0_a01_026"
+    },
+    {
+      "table": "snapshot",
+      "column": "lock_login",
+      "source_method": "upgrade_v3_5_0_v01_002"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "snapshot_parent_code_idx",
+      "sql": "CREATE INDEX \"snapshot_parent_code_idx\" ON \"snapshot\" (\"search_type\", \"search_code\", \"context\", \"version\");"
+    },
+    {
+      "name": "snapshot_parent_id_idx",
+      "sql": "CREATE INDEX \"snapshot_parent_id_idx\" ON \"snapshot\" (\"search_type\", \"search_id\", \"context\", \"version\");"
+    },
+    {
+      "name": "file_path_idx",
+      "sql": "CREATE INDEX \"file_path_idx\" ON \"file\" (\"relative_dir\", \"file_name\");"
+    }
+  ]
+}

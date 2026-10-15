@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tactic-stream"
+version = "0.112.143"
+description = "TACTIC Stream: a TACTIC kernel with a Vue admin and a tracked legacy API contract"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = ["fastapi==0.141.1", "uvicorn==0.52.4", "python-dateutil==2.9.0.post0", "six==1.17.0", "Mako==1.3.12", "Pillow==12.3.0", "quickjs-ng==0.17.0.1"]
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]==3.3.6"]
+
+[project.scripts]
+tactic-stream = "tactic_stream.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+tactic_stream = ["shared_ui/*.mjs", "compatibility/*.json", "compatibility/*.sql", "config/*.xml", "config/*.json", "config/search_type/widget/*/*.xml", "config/search_type/widget/*.xml", "config/layouts/*.xml", "web/*.html", "web/*.txt", "web/assets/*.js", "web/assets/*.js.map", "web/assets/*.css", "web/assets/*.ttf", "web/assets/*.png", "web/licenses/icon-fonts/*.txt", "web/licenses/icon-fonts/*.md", "web/help/*.json", "web/help/*.md", "web/help/media/*.png", "web/help/media/*.jpg", "web/help/media/*.jpeg", "web/help/media/*.webp"]
+
+"tactic_client_lib" = ["VERSION", "VERSION_API"]
+"pyasm.common" = ["js/*.js"]

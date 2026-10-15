@@ -1,0 +1,308 @@
+[
+  {
+    "path": "CONFIGURE_NATIVE.bat",
+    "old_sha256": null,
+    "sha256": "9170ebf3b157a1fd50f2b1bc1eb87d995681de803445d929b4316051e2da22ac",
+    "bytes": 540
+  },
+  {
+    "path": "NATIVE_UI_VERSION",
+    "old_sha256": "5717e7c840171019a4eeab5b79a7f894a4986eaff93d04ec5b12c9a189f594bf",
+    "sha256": "1523e9e982ff804c6d979e1bb2c6f3d7bae35307e8ce458bffc0d12a442b98da",
+    "bytes": 4
+  },
+  {
+    "path": "README_VUE_RU.md",
+    "old_sha256": "c9284df2f69802c5bff7b44576ab2df08cc23b729373c4b8f19250d6ef8630a9",
+    "sha256": "6d6fbe619475d752df3ed1bdcb3da9e68e5154384f118eb88b113bd5b30f14a7",
+    "bytes": 26731
+  },
+  {
+    "path": "START_HERE_RU.md",
+    "old_sha256": "620d6335997e47f694d01887cff58fef3cd4ac92ab8417d16d095574cc269b34",
+    "sha256": "6eb8cfea8965856d3a79c30ecd2d851abb791384037c962372332d3487436389",
+    "bytes": 2487
+  },
+  {
+    "path": "frontend/src/App.vue",
+    "old_sha256": "b7a6da0a8d0316a2f79064b1b002414c5b317fddfda204773a719b317e625486",
+    "sha256": "32094bc76f8d0556307d316c22c068efd0e8d3bc84afacbc8d8219dcd05a74ad",
+    "bytes": 30145
+  },
+  {
+    "path": "frontend/src/components/AdminPanel.vue",
+    "old_sha256": "96d677f215ebb158f72d3f5a70818ff90b4d5ad64a60eb21236c1fd042474463",
+    "sha256": "84607aa9f3bc39e703ba1b7bcd34a73edf75ed0e2789968a9bba4b3021c27e1c",
+    "bytes": 12249
+  },
+  {
+    "path": "frontend/src/components/ConfiguredForm.vue",
+    "old_sha256": "29aa7b22041d4944356d25b2c224f5bb579b4aa7b0e87fa93371d49fb3b813b5",
+    "sha256": "94bdb01a3ffb22e77227bc32a25b24851e869e7b0ceef61b5f97ce67f91255db",
+    "bytes": 5152
+  },
+  {
+    "path": "frontend/src/components/ConfiguredTable.vue",
+    "old_sha256": "e9d8a57a9bb83ce3f6a3317efff958b33d4a6b2db160f088f769d849f9f82316",
+    "sha256": "b08d3cadf7b578974963d9387147f668fb6d511e747c770a076f47b4445fa397",
+    "bytes": 13201
+  },
+  {
+    "path": "frontend/src/components/FieldInput.vue",
+    "old_sha256": "383974487d9859d0d3200dab321af31fecc759ab4f1b124d5ae82744751f0440",
+    "sha256": "cd22c10f0bf6eb21476eed1f48712204f039dbb839947f59b654f9921a5b35d8",
+    "bytes": 1775
+  },
+  {
+    "path": "frontend/src/components/GlobalSettings.vue",
+    "old_sha256": null,
+    "sha256": "bea236c631fcf3ed9c638a82c6304de6494cefb9d0be64cdc02010d1e8bf4417",
+    "bytes": 5006
+  },
+  {
+    "path": "frontend/src/components/GraphEditor.vue",
+    "old_sha256": "fd3112066deb70410b0141dd076b6237796981b4f451148b42d80fbac5c5dba9",
+    "sha256": "a051c2c82051332b64892ebf9c51456befd328f70024e561011dfd99156d45ff",
+    "bytes": 16679
+  },
+  {
+    "path": "frontend/src/components/GroupMembership.vue",
+    "old_sha256": "a56ad34819e95778c3151d056ed061bcf4c60e1f147f73a02fcb58afa770dd4a",
+    "sha256": "8e6871d0b140cb9724dd4c8f0298309ac28355309fe59a9cd954d377296e7704",
+    "bytes": 3066
+  },
+  {
+    "path": "frontend/src/components/WidgetCell.vue",
+    "old_sha256": "bffa60478a06c6eed9b1a42fc5590f96b82d8ad58354ada69ae35aef591794a6",
+    "sha256": "341a814ec04f6b4d80c92dec6f3904d219b6061d0255f263ac0572ccaa26f065",
+    "bytes": 1249
+  },
+  {
+    "path": "frontend/src/components/WidgetHost.vue",
+    "old_sha256": "563b177a60af449079e897984142a1d6bdd64f676f3bd58038033756c0a5e9c0",
+    "sha256": "19a3fd451bbe9892b4ca84dfd24855c6d4f5bf7c6b97e8c974ac899957000a24",
+    "bytes": 5585
+  },
+  {
+    "path": "frontend/src/components/WidgetTable.vue",
+    "old_sha256": "a80a8205e66691d2ab285eb64bdaecc62db7145fde89faedb8f293ad2f1ebde1",
+    "sha256": "95acdd7ecdcfd1f1d593674189edfd5a5f7505524f0063fcbceb8048e1a60d8c",
+    "bytes": 9000
+  },
+  {
+    "path": "frontend/src/styles.css",
+    "old_sha256": "f43738961d651edc2bd2a40a6ff09419989d0235df450fd6cf00d667a5e49509",
+    "sha256": "8ea73c794bb102ea3357f88882f941ef69b8ecfccd4cc9307e034829f34a5ae5",
+    "bytes": 49564
+  },
+  {
+    "path": "src/tactic/core/config_model.py",
+    "old_sha256": "6dafa4fc64ca267b57b775c4e6593810dd198af897d00bf9bcfbae86ef670b20",
+    "sha256": "565e14c39c4b1b00fb872923b15173280453d78f9a78811a6d7bf1174068babd",
+    "bytes": 15310
+  },
+  {
+    "path": "src/tactic/core/license_commands.py",
+    "old_sha256": null,
+    "sha256": "98945a86c0ddc74fd4ca11e3cfb91373884275ec2a709d949229c0045f828253",
+    "bytes": 1700
+  },
+  {
+    "path": "src/tactic/core/native_edit.py",
+    "old_sha256": "e8c27bb2da397dd4f66e33952a26b77cdfd570f0f220b57eeb783ce04642bee2",
+    "sha256": "6e160e182a1af2f473f6084b0a3ead8502d17faa87d7d99481a3bc535cfcfcb5",
+    "bytes": 4470
+  },
+  {
+    "path": "src/tactic/core/native_settings.py",
+    "old_sha256": null,
+    "sha256": "8e3eaba61c12b489aa5ef4225fdaf15c69332d42844ee30fdf12bd3864f16bdb",
+    "bytes": 2152
+  },
+  {
+    "path": "src/tactic/core/sqlite_upgrade.py",
+    "old_sha256": "39cac11d9a6ae37a9dd5bedfca08cb55ae29d1216214bc128dc9258974930db5",
+    "sha256": "a493fb531096b583b210be38a64a3cafb84241156c88d3a9e62e77d4801eb4a2",
+    "bytes": 25973
+  },
+  {
+    "path": "src/tactic/core/system_config_model.py",
+    "old_sha256": null,
+    "sha256": "2937a98d0f31cf903438f9314026f5b1e1e5f7bada075eee93100e87c8899f40",
+    "bytes": 6318
+  },
+  {
+    "path": "src/tactic/ui/app/license_manager_wdg.py",
+    "old_sha256": "6900a8aa401c7a3fd1d2e2fdde5c6e043de1aebbcc06fe1a9f2af88ce9541967",
+    "sha256": "c4be34bee2d13ea8acc364c4bef902f2e087e57e4f4c723b2538e98f406f6726",
+    "bytes": 9819
+  },
+  {
+    "path": "src/tactic/ui_api/admin_service.py",
+    "old_sha256": "3d66cf4d11f495a46401aa90d1ef3e89c414c3e1eb372cca07db5a8a5a979423",
+    "sha256": "9df13a8aa818bb2167febe24705bef6a47a84363fb279380bff39204aba37055",
+    "bytes": 12537
+  },
+  {
+    "path": "src/tactic/ui_api/api.py",
+    "old_sha256": "943f2cbdcb3fa496ee620535098811989d7ebaef10642d41f1bbf21787c8e278",
+    "sha256": "2a909e7117678e5354dd4ea4065ffb08c88b94f25e3a5c2fb35d201f8a6cb83f",
+    "bytes": 14801
+  },
+  {
+    "path": "src/tactic/ui_api/config_backend.py",
+    "old_sha256": "a6687113311f8dba05ed692d631a21e07fe0329bddf922abbd3d5c684e367c71",
+    "sha256": "4afd341feae86ff241b3a1c50a728102e82685ad02f2d706d9ad8699b71ddc4a",
+    "bytes": 38754
+  },
+  {
+    "path": "src/tactic/ui_api/contracts.py",
+    "old_sha256": "7657108c0491c45f77ee70083398466318ace3612bdd9c44556f74f519d65c21",
+    "sha256": "167b5098550eb54404533791fec416a7dca23f5a2d78822ee775b340cedb9eb9",
+    "bytes": 9553
+  },
+  {
+    "path": "src/tactic/ui_api/extended_backend.py",
+    "old_sha256": "000594e98c939863a43f554748246c4bb738178741083daac8e2c6bb714294f0",
+    "sha256": "dd9616d72dc918c21c2383f3e2b2ff5b5b8fc4e20d3071c3b392ee7d682ed7cd",
+    "bytes": 28882
+  },
+  {
+    "path": "src/tactic/ui_api/global_admin_service.py",
+    "old_sha256": null,
+    "sha256": "330e8578e64f61703a42c5bbafb5c2ebd91d8b83d6f3ceb790e07a9d4761a040",
+    "bytes": 23527
+  },
+  {
+    "path": "src/tactic/ui_api/graph_service.py",
+    "old_sha256": "7eac79d0a52c4dea457d7191684c69ea90f7625ff92e42015cecb3e0ab5e853d",
+    "sha256": "c4fbeb8e4f8e49e19e8513a8f7a80c7c40822b2cde1a0f44c4b378f578f2e83a",
+    "bytes": 22110
+  },
+  {
+    "path": "src/tactic/ui_api/mount.py",
+    "old_sha256": "915c97a75d4509e9b55d333adfe4c88ef155e908f8d027520b20121acf77d1c9",
+    "sha256": "dc59cf0b8e0f86227d8f4c6d1bd9a12819b2cc88952eeeae7ca2b601c9b363a8",
+    "bytes": 4950
+  },
+  {
+    "path": "src/tactic/ui_api/record_service.py",
+    "old_sha256": "57eb252a214e2665625ed956a2f33501a781eeef33e206734cc04e9143e53cba",
+    "sha256": "623d0ee73eb0b1dffa69b91e95246c16f4261e164a4c45c4ae060c7d1e4171e6",
+    "bytes": 11102
+  },
+  {
+    "path": "src/tactic/ui_api/tactic_backend.py",
+    "old_sha256": "4fc2851a8d21b69e4db0f70618a3fd671c397750061acd8ff8fa4a2868740e8f",
+    "sha256": "d04bfa68344fd36b3c9a20d5f87b518a2311bc049c28cfe3788c616df8092db0",
+    "bytes": 8433
+  },
+  {
+    "path": "src/tactic/ui_api/web/app.js",
+    "old_sha256": "b793010cd86c380509306fb795457f27d1ad8945001d113c6c67e41f58e62e95",
+    "sha256": "83f8a5e67529a94e7946f2851e3a135986e3db45698f73be5b1e90e202bb25ea",
+    "bytes": 439521
+  },
+  {
+    "path": "src/tactic/ui_api/web/build-manifest.json",
+    "old_sha256": "a755134ac833bcb1a8fb3e1dc359ff22d5b00dbc7f47f9e792109de3bb058808",
+    "sha256": "b8eb92669f7e7cd9a2a558118b5b7f6c162ace421642a7e277008adfa4a51c63",
+    "bytes": 1258
+  },
+  {
+    "path": "src/tactic/ui_api/web/styles.css",
+    "old_sha256": "f43738961d651edc2bd2a40a6ff09419989d0235df450fd6cf00d667a5e49509",
+    "sha256": "8ea73c794bb102ea3357f88882f941ef69b8ecfccd4cc9307e034829f34a5ae5",
+    "bytes": 49564
+  },
+  {
+    "path": "tests/native_ui/fixture_10.py",
+    "old_sha256": "4b3e163559544b93373469288227e32bb0cbdf406324ddfce4fd4a4fd017916e",
+    "sha256": "bc2a6de68ca50e3e984c55ca8cafb42091af3e83c4cd15d6dbd6609d3f937c27",
+    "bytes": 8489
+  },
+  {
+    "path": "tests/native_ui/real_server_11.py",
+    "old_sha256": null,
+    "sha256": "d41e5e6720f81349aac6e241db9b6ab2bd9af0ee6fcff8fa5bad227156f6e4e4",
+    "bytes": 3186
+  },
+  {
+    "path": "tests/native_ui/run_browser_03.py",
+    "old_sha256": "9174d00edef14c39bb2706f310259a63c03a8bfa9a60f2af3ab82db80f28f82e",
+    "sha256": "7c7cda5f500ac000a12fc6fa178812e47e8b30a7d0a72bc0b7ca5301df0faa26",
+    "bytes": 15847
+  },
+  {
+    "path": "tests/native_ui/run_browser_10.py",
+    "old_sha256": "029346422d4140b924078ee66285134d4c4db4314849301b6d9e2f95b722c952",
+    "sha256": "0906cd88040dd893ccd946d5d9376b6542f2affe54946f85d7708227d5e6908a",
+    "bytes": 14415
+  },
+  {
+    "path": "tests/native_ui/run_browser_11.py",
+    "old_sha256": null,
+    "sha256": "e6402ab627de887ba561d0f88042d969d6d6edfa1fdd3fc41ba197b43f8e5bc1",
+    "bytes": 10496
+  },
+  {
+    "path": "tests/native_ui/run_http_11.py",
+    "old_sha256": null,
+    "sha256": "76ef913ae0c5ef01bff03d68078bbff471f54cb6c163c0fa99babd5750b4df45",
+    "bytes": 12035
+  },
+  {
+    "path": "tests/native_ui/run_identity_upgrade_11.py",
+    "old_sha256": null,
+    "sha256": "9f5b03265f1c7d1822d4556213753eb6f3af507182d918098d2ec161175948b8",
+    "bytes": 4861
+  },
+  {
+    "path": "tests/native_ui/run_original_11.py",
+    "old_sha256": null,
+    "sha256": "b3070165e5cb52e172255342ad3e87f0f2a192cedfe0c36e0edb4bbc313496d9",
+    "bytes": 4168
+  },
+  {
+    "path": "tests/native_ui/run_validation_11.py",
+    "old_sha256": null,
+    "sha256": "5cdf638e95be304a5e96dc2168c24d183e2d242109047b3792689c2a70dacfef",
+    "bytes": 7555
+  },
+  {
+    "path": "tests/native_ui/test_final_regressions.py",
+    "old_sha256": "cf5661353364bccb8c9ce39732c4c3399e6be3a97884853bdbdacf1c4bc71eb1",
+    "sha256": "595a814d315589410594883a7026f5d730ad06d24c4838626c151ef75e06d219",
+    "bytes": 1373
+  },
+  {
+    "path": "tests/native_ui/test_globals_11.py",
+    "old_sha256": null,
+    "sha256": "8dfd7f8afe47dfcfa0975b0c85f18d7b99ddb74e2742e8c345616a14ef3ebacc",
+    "bytes": 9331
+  },
+  {
+    "path": "tools/local/configure_native.py",
+    "old_sha256": null,
+    "sha256": "a97218f831c9402834d932978c8b102625c994ab56e6d6ced60430b2b6714c0e",
+    "bytes": 2311
+  },
+  {
+    "path": "tools/local/managed_sqlite.py",
+    "old_sha256": "d150e101236aa529775e865fe9501e0dd29362e0da5668a8b5673936b0e53d43",
+    "sha256": "21160b758db3f83d72665967aaeaed35a72d1fc5e9dd951711fcd1513adb7725",
+    "bytes": 13856
+  },
+  {
+    "path": "tools/local/sqlite_worker.py",
+    "old_sha256": "9e6f755c6a7e61df100ec5a834bb1160ddde03f2eace7a1610205c651a4c99d0",
+    "sha256": "5bbe40954cf416000a4e03d41c8efe934e222665368229fc64c8dd9ecc697411",
+    "bytes": 4910
+  },
+  {
+    "path": "tools/native_ui/build.cjs",
+    "old_sha256": "7be41fa42dcbb30918cc7dae1f46434a015b5a498c057bb35ab2d05cf568f4b3",
+    "sha256": "e124615e4129c14cfe8b631543486adf0812d31ec7dbde26ca8a86671f9c99d0",
+    "bytes": 4672
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "sample": 0,
+    "new_paths": 1000,
+    "distinct_payloads": 1000,
+    "bytes": 492800,
+    "upload_seconds": 2.2829221000429243,
+    "edit_seconds": 0.9395444998517632,
+    "submit_seconds": 0.02116510015912354,
+    "uploaded_to_commit_seconds": 0.9607096000108868,
+    "network_included": false,
+    "peak_mib": 77.14
+  },
+  {
+    "sample": 1,
+    "new_paths": 1000,
+    "distinct_payloads": 1000,
+    "bytes": 492800,
+    "upload_seconds": 2.2440741998143494,
+    "edit_seconds": 0.8643427002243698,
+    "submit_seconds": 0.020573799964040518,
+    "uploaded_to_commit_seconds": 0.8849165001884103,
+    "network_included": false,
+    "peak_mib": 80.96
+  },
+  {
+    "sample": 2,
+    "new_paths": 1000,
+    "distinct_payloads": 1000,
+    "bytes": 492800,
+    "upload_seconds": 2.2413381000515074,
+    "edit_seconds": 0.8594414000399411,
+    "submit_seconds": 0.019458800088614225,
+    "uploaded_to_commit_seconds": 0.8789002001285553,
+    "network_included": false,
+    "peak_mib": 80.96
+  },
+  {
+    "sample": 3,
+    "new_paths": 1000,
+    "distinct_payloads": 1000,
+    "bytes": 492800,
+    "upload_seconds": 2.2617508999537677,
+    "edit_seconds": 0.8580487000290304,
+    "submit_seconds": 0.019672999856993556,
+    "uploaded_to_commit_seconds": 0.877721699886024,
+    "network_included": false,
+    "peak_mib": 81.79
+  },
+  {
+    "sample": 4,
+    "new_paths": 1000,
+    "distinct_payloads": 1000,
+    "bytes": 492800,
+    "upload_seconds": 2.2232315000146627,
+    "edit_seconds": 0.8705893999431282,
+    "submit_seconds": 0.06698070000857115,
+    "uploaded_to_commit_seconds": 0.9375700999516994,
+    "network_included": false,
+    "peak_mib": 84.75
+  }
+]

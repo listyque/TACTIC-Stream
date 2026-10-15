@@ -1,0 +1,201 @@
+{
+  "passed": true,
+  "scenarios": [
+    {
+      "name": "Anonymous layout endpoint denied",
+      "passed": true
+    },
+    {
+      "name": "All four original entry handlers resolve",
+      "passed": true
+    },
+    {
+      "name": "Layout operations reject an unrelated table",
+      "passed": true
+    },
+    {
+      "name": "Original widget_config stores new category layout",
+      "passed": true
+    },
+    {
+      "name": "Section edits preserve exact saved Mako and behavior",
+      "passed": true
+    },
+    {
+      "name": "Saved HTML style is kept in original html/style format",
+      "passed": true
+    },
+    {
+      "name": "Stale layout save conflicts",
+      "passed": true
+    },
+    {
+      "name": "Saved layout is a specialized widget",
+      "passed": true
+    },
+    {
+      "name": "Nested widget resolved from original element config",
+      "passed": true
+    },
+    {
+      "name": "Nested table receives actual resolved view",
+      "passed": true
+    },
+    {
+      "name": "Nested table loads original SObjects",
+      "passed": true
+    },
+    {
+      "name": "Forged hidden/out-of-range layout target denied",
+      "passed": true
+    },
+    {
+      "name": "Preview never executes stored code",
+      "passed": true
+    },
+    {
+      "name": "XML external entity input rejected",
+      "passed": true
+    },
+    {
+      "name": "Cannot create another user personal layout",
+      "passed": true
+    },
+    {
+      "name": "Explicit copy keeps source unchanged",
+      "passed": true
+    },
+    {
+      "name": "Deletion requires explicit confirmation",
+      "passed": true
+    },
+    {
+      "name": "Deleted override is not returned as still-existing",
+      "passed": true
+    },
+    {
+      "name": "Named layout reference uses original same-view definition",
+      "passed": true
+    },
+    {
+      "name": "display_class shorthand creates native table with options",
+      "passed": true
+    },
+    {
+      "name": "load none child cannot be requested directly",
+      "passed": true
+    },
+    {
+      "name": "Named-definition child executes original table query",
+      "passed": true
+    },
+    {
+      "name": "Original SearchType created with column and config",
+      "passed": true
+    },
+    {
+      "name": "Manage Views lists inherited definitions",
+      "passed": true
+    },
+    {
+      "name": "Inherited view carries resolved source revision",
+      "passed": true
+    },
+    {
+      "name": "View copy creates actual personal widget_config",
+      "passed": true
+    },
+    {
+      "name": "View XML edit persists",
+      "passed": true
+    },
+    {
+      "name": "View conflict preserves saved version",
+      "passed": true
+    },
+    {
+      "name": "Opened managed view remains original configured table",
+      "passed": true
+    },
+    {
+      "name": "SearchType views opens original specialized path",
+      "passed": true
+    },
+    {
+      "name": "SearchType insert opens original specialized path",
+      "passed": true
+    },
+    {
+      "name": "SearchType workflow opens original specialized path",
+      "passed": true
+    },
+    {
+      "name": "SearchType schema opens original specialized path",
+      "passed": true
+    },
+    {
+      "name": "SearchType selection persisted in original WidgetSettings",
+      "passed": true
+    },
+    {
+      "name": "Unknown type rejected from persisted editor state",
+      "passed": true
+    },
+    {
+      "name": "Dependency inspector is honest about destructive limits",
+      "passed": true
+    },
+    {
+      "name": "CSV mapper permits ordinary fields only",
+      "passed": true
+    },
+    {
+      "name": "CSV preview uses original trimming without creating rows",
+      "passed": true
+    },
+    {
+      "name": "Preview leaves real table empty",
+      "passed": true
+    },
+    {
+      "name": "CSV requires preview matching exact submitted content",
+      "passed": true
+    },
+    {
+      "name": "Original CsvImportCmd imports two rows",
+      "passed": true
+    },
+    {
+      "name": "Original model reads imported values",
+      "passed": true
+    },
+    {
+      "name": "CSV cannot update existing IDs",
+      "passed": true
+    },
+    {
+      "name": "Script catalog exposes explicit execution policy",
+      "passed": true
+    },
+    {
+      "name": "Server compares draft to exact saved script",
+      "passed": true
+    },
+    {
+      "name": "Script execution requires saved revision",
+      "passed": true
+    },
+    {
+      "name": "Script execution rejects request-supplied source",
+      "passed": true
+    },
+    {
+      "name": "Original execute_python_script evaluates saved source",
+      "passed": true
+    },
+    {
+      "name": "Long original script completes without timeout/retry",
+      "passed": true
+    }
+  ]
+}

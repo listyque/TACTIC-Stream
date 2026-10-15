@@ -1,0 +1,1572 @@
+{
+  "excluded_patterns": [
+    ".git",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".runtime",
+    "__pycache__",
+    "local_data",
+    "node_modules",
+    "*.pyc",
+    "*.pyo",
+    "*.part",
+    "font files"
+  ],
+  "upstream_seeds": "unchanged, hash verified",
+  "production_config": "unchanged: writes/uploads disabled",
+  "nested_archives_scanned_for_fonts": [
+    "3rd_party/ace-0.2.0.zip",
+    "3rd_party/ckeditor_3.6.tar.gz",
+    "3rd_party/python-dateutil-1.4.1.tar.gz",
+    "3rd_party/python2/site-packages/dateutil/zoneinfo/zoneinfo-2008e.tar.gz",
+    "3rd_party/python3.6/site-packages/CherryPy-18.5.0.tar.gz",
+    "3rd_party/python3.6/site-packages/cheroot-8.2.1.tar.gz",
+    "3rd_party/python3.6/site-packages/dateutil/zoneinfo/dateutil-zoneinfo.tar.gz",
+    "3rd_party/python3/site-packages/CherryPy-18.8.0.tar.gz",
+    "3rd_party/python3/site-packages/cheroot-8.2.1.tar.gz",
+    "3rd_party/python3/site-packages/dateutil/zoneinfo/dateutil-zoneinfo.tar.gz",
+    "src/install/start/templates/game-1.0.0.zip",
+    "src/install/start/templates/vfx-1.0.0.zip"
+  ],
+  "font_findings": [],
+  "excluded_file_count": 384,
+  "excluded_files": [
+    {
+      "path": ".runtime/local-db-check.json",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tools/native_ui/__pycache__/audit_config_parity.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tools/local/__pycache__/local_lock.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tools/local/__pycache__/managed_sqlite.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tools/local/__pycache__/launch.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tools/local/__pycache__/sqlite_worker.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tools/local/__pycache__/validate_pip_zipapp.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/__pycache__/tactic_server_stub.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/interpreter/__pycache__/handler.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/interpreter/__pycache__/interpreter.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/interpreter/__pycache__/examples.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/interpreter/__pycache__/pipeline.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/interpreter/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/common/__pycache__/common.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/common/__pycache__/upload_multipart.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/client/tactic_client_lib/common/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/access_manager.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/ldap_ad_authenticate.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/drupal_password_hasher.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/external_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/authenticate.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/crypto_key.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/security.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/batch.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/access_rule.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/security/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/status_trigger.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/workflow.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/scheduler.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/command.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/csv_import_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/add_user_to_group_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/edit_wdg_action.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/trigger.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/database_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/undo_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/edit_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/email_trigger.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/csv_export_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/email_handler.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/kronos.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/delete_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/file_upload.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/sign_out_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/site_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/widget_settings_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/pickup_trigger.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/subprocess_trigger.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/command/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/web/__pycache__/prod_context.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/web/__pycache__/shot_navigator_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/web/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/prod_setting.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/texture.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/prod_file_naming.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/naming.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/sequence.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/submission.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/prod_dir_naming.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/prod_app_naming.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/asset.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/shot.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/render.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/session.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/episode.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/prod/biz/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/web_container.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/cache_startup.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/web_environment.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/web_tools.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/monitor.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/web_state.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/event_container.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/palette.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/web_app.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/app_server.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/command_delegator.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/widget.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/web_init.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/callback.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/html_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/simple_app_server.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/url_security.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/web_login_cmd.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/widget_app_server.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/web/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/database_impl.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/sobject_log.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/sql.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/transaction.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/exception_log.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/widget_db_config.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/db_introspect.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/sobject_config.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/sobject_default_config.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/sql_dumper.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/transaction_state.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/search.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/sobject_mapping.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/transaction_log.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/__pycache__/upgrade_db.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/__pycache__/sql_convert.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/config_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/simple_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/prod_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/design_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/game_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/sthpw_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/default_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/unittest_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/base_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/effects_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/sqlite/__pycache__/sql_convert.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/sqlite/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/checkin/__pycache__/snapshot_builder.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/checkin/__pycache__/metadata.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/checkin/__pycache__/file_checkin.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/checkin/__pycache__/repo.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/checkin/__pycache__/snapshot_checkin.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/checkin/__pycache__/checkin.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/checkin/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/snapshot.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/plugin_util.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/prod_setting.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/expression.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/command_trigger.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/project.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/code_naming.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/status_attr.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/custom_script.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/translation.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/template.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/dir_naming.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/naming.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/note.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/csv_import.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/repo_handler.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/preference.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/subscription.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/work_hour.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/task.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/cache.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/debug_log.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/custom_property.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/notification.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/file.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/simple_status_attr.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/pipeline.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/sobject_instance.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/clipboard.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/hierarchical_status_attr.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/sobject_connection.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/schema.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/status.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/file_naming.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/biz/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/annotate_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/parallel_status.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/custom_info_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/icon_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/search_limit_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/statistic_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/applet.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/menu.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/web_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/creator_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/input_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/table_element_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/filter_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/header_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/timecard_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/task_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/layout_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/error_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/widget_config.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/dynamic_loader_page.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/file_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/serial_status.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/shadowbox_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/clipboard_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/widget/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/environment.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/zip_util.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/js_wrapper.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/common_exception.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/format_value.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/date.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/directory.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/config.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/container.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/spt_date.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/common.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/encrypt_util.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/base.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/system.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/lxml_wrapper.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/timecode.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/watch_folder.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/pyasm/common/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/tools/__pycache__/pipeline_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/tools/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/input/__pycache__/task_input_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/input/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/filter/__pycache__/filter_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/filter/__pycache__/filter_data.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/filter/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/startup/__pycache__/db_config_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/startup/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/panel/__pycache__/layout_util.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/panel/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/cgapp/__pycache__/introspect.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/cgapp/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/sync/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/widget/__pycache__/upload_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/widget/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/table/__pycache__/table_element_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/table/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/common/__pycache__/widget_class_handler.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/common/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/app/__pycache__/tactic_branding_wdg.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui/app/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/api.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/tactic_backend.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/graph_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/version.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/history_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/file_payload.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/routing.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/contracts.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/upload_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/timeline_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/view_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/system_diagnostics.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/version_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/collection_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/admin_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/column_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/upload_store.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/relationship_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/task_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/csv_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/config_backend.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/message_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/session.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/work_hour_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/record_service.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/extended_backend.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/mount.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/ui_api/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/schema_health.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/schema_commands.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/sqlite_upgrade.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/work_hours.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/edit_commands.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/config_model.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/checkin_policy.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/notification_filters.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/config_commands.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/config_options.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/search_filters.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/security_commands.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/task_choices.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/timeline_model.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/format_value.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/field_policy.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/message_commands.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/native_edit.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/view_resolution.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/search_code_migration.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/query_model.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/view_edits.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/widget_config.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/context_actions.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/sidebar_config.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/collection_commands.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/filter_data.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/bootstrap.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/messaging.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/table_settings.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/graph_model.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "src/tactic/core/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/__pycache__/portend.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/zc/lockfile/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/jaraco/__pycache__/functools.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/jaraco/__pycache__/collections.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/jaraco/__pycache__/context.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/jaraco/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/jaraco/text/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/__pycache__/_compat.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/__pycache__/wsgi.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/__pycache__/connections.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/__pycache__/makefile.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/__pycache__/server.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/__pycache__/errors.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/workers/__pycache__/threadpool.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cheroot/workers/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cpserver.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cpdispatch.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_json.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cpchecker.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cpconfig.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cperror.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cpcompat.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cplogging.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cpwsgi.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cptools.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cpreqbody.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cprequest.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cptree.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_helper.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/_cpwsgi_server.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/auth_basic.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/caching.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/locking.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/xmlrpcutil.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/httputil.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/cptools.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/static.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/jsontools.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/encoding.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/auth_digest.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/reprconf.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/sessions.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/process/__pycache__/servers.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/process/__pycache__/win32.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/process/__pycache__/wspbus.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/process/__pycache__/plugins.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/process/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/tempora/__pycache__/timing.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/tempora/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/common/site-packages/tzlocal_olson/__pycache__/unix.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/common/site-packages/tzlocal_olson/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/common/site-packages/more_itertools/__pycache__/more.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/common/site-packages/more_itertools/__pycache__/recipes.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "3rd_party/common/site-packages/more_itertools/__pycache__/__init__.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_semantics_04.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_checkin_policy_06.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/fixture_08.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_transport.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_original_resolver.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/fixture_backend.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_query_04.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/fixture_06.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/collection_test_store.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_columns_07.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_sqlite_migration_08.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/message_test_store.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/fixture_04.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_config.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_final_regressions.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_timeline_05.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_uploads_06.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_source_commands.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/managed_seed_08.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_source_provenance_04.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_search_code_fix_08.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/fixture_07.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_csv_07.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_admin_services.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_versions_06.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_collections_06.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/fixture_deep.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_task_form_04.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_config_parity_07.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/fixture_05.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_native_deep.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_work_hours_04.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_sql_builder_04.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_domain_services_04.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_messages_05.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/test_runtime_diagnostics_08.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/timeline_test_store.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    },
+    {
+      "path": "tests/native_ui/__pycache__/column_test_store_07.cpython-313.pyc",
+      "reason": "local runtime/cache/private data"
+    }
+  ],
+  "test_reports": "Final 0.8 reports plus historical 0.2–0.7; failed native navigation is separately labeled"
+}

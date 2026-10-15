@@ -1,0 +1,48 @@
+{
+  "columns": [
+    {
+      "table": "login",
+      "column": "upn",
+      "sql": "ALTER TABLE \"login\" ADD \"upn\" varchar(256) NULL;",
+      "source_method": "upgrade_v4_4_0_v01_001",
+      "after_add_sql": "UPDATE login set upn = login where upn is NULL;",
+      "after_add_source_method": "upgrade_v4_4_0_v01_002"
+    },
+    {
+      "table": "login",
+      "column": "display_name",
+      "sql": "ALTER TABLE login ADD display_name varchar(256);",
+      "source_method": "upgrade_v3_9_0_rc02_001"
+    },
+    {
+      "table": "login_group",
+      "column": "name",
+      "sql": "ALTER TABLE \"login_group\" ADD \"name\" text;",
+      "source_method": "upgrade_v4_5_0_a01_011"
+    },
+    {
+      "table": "login_group",
+      "column": "is_default",
+      "sql": "ALTER TABLE \"login_group\" ADD \"is_default\" boolean;",
+      "source_method": "upgrade_v4_5_0_a01_010"
+    },
+    {
+      "table": "login",
+      "column": "data",
+      "sql": "ALTER TABLE \"login\" ADD COLUMN data json;",
+      "source_method": "upgrade_v4_6_0_a03_006"
+    },
+    {
+      "table": "login_group",
+      "column": "data",
+      "sql": "ALTER TABLE \"login_group\" ADD COLUMN data json;",
+      "source_method": "upgrade_v4_6_0_a03_007"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "login_in_group_login_idx",
+      "sql": "CREATE INDEX \"login_in_group_login_idx\" ON \"login_in_group\" (\"login\");"
+    }
+  ]
+}

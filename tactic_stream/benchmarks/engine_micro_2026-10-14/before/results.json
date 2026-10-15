@@ -1,0 +1,217 @@
+{
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+    "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "D:\\code\\TACTIC_VUE\\tactic_stream\\.venv\\Scripts\\python.exe",
+    "loaded_api_source": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic_stream\\server\\api.py",
+    "gil_enabled": true,
+    "free_threaded_build": 0,
+    "jit_available": true,
+    "jit_enabled": false,
+    "sqlite": "3.50.4",
+    "optimization_level": 0,
+    "build_config": {
+      "CONFIG_ARGS": null,
+      "PY_CFLAGS": null,
+      "PY_LDFLAGS": null,
+      "Py_DEBUG": 0
+    },
+    "dependencies": {
+      "fastapi": "0.141.1",
+      "uvicorn": "0.52.4",
+      "starlette": "1.6.0",
+      "anyio": "4.14.2",
+      "pydantic": "2.13.5",
+      "pydantic-core": "2.46.5",
+      "python-dateutil": "2.9.0.post0",
+      "Pillow": "12.3.0",
+      "Mako": "1.3.12",
+      "psycopg": "3.3.6",
+      "psycopg-binary": "3.3.6",
+      "numpy": null,
+      "numba": null,
+      "Cython": null,
+      "nuitka": null
+    },
+    "memory": {
+      "rss_kib": 109328.0,
+      "peak_rss_kib": 325240.0
+    }
+  },
+  "rows": 10000,
+  "repeats": 7,
+  "timing": "Full native dispatch, fresh authentication, INFO file log; no profiler/tracemalloc",
+  "cold_scope": "First call per scenario in this process; excludes fixture and interpreter startup",
+  "scenarios": {
+    "query_10": {
+      "cold_ms": 11.767700001655612,
+      "median_ms": 8.588900000177091,
+      "min_ms": 8.435300002020085,
+      "max_ms": 9.197499999572756,
+      "p90_ms": 8.891100002074381,
+      "samples_ms": [
+        9.197499999572756,
+        8.493699999235105,
+        8.549800000764662,
+        8.588900000177091,
+        8.891100002074381,
+        8.435300002020085,
+        8.841099999699509
+      ],
+      "python_peak_kib": 138.9814453125,
+      "python_retained_kib": 99.154296875,
+      "memory_before": {
+        "rss_kib": 50392.0,
+        "peak_rss_kib": 51236.0
+      },
+      "memory_after": {
+        "rss_kib": 50796.0,
+        "peak_rss_kib": 51236.0
+      },
+      "result_bytes": 4972,
+      "result_count": 10,
+      "sha256": "8d5e5640bbd3ddec50b5f3e5f0f946a297e1e14e713ddd73e6dd8aa990ba618f",
+      "sql_statement_counts": {
+        "PRAGMA": 8,
+        "SELECT": 21
+      }
+    },
+    "query_1000": {
+      "cold_ms": 20.540799996524584,
+      "median_ms": 18.849200001568533,
+      "min_ms": 18.20930000030785,
+      "max_ms": 20.28730000165524,
+      "p90_ms": 19.494899999699555,
+      "samples_ms": [
+        18.56440000119619,
+        18.938699999125674,
+        20.28730000165524,
+        18.849200001568533,
+        18.20930000030785,
+        19.494899999699555,
+        18.80709999750252
+      ],
+      "python_peak_kib": 2836.9169921875,
+      "python_retained_kib": 2406.91015625,
+      "memory_before": {
+        "rss_kib": 64028.0,
+        "peak_rss_kib": 65700.0
+      },
+      "memory_after": {
+        "rss_kib": 64140.0,
+        "peak_rss_kib": 68608.0
+      },
+      "result_bytes": 500783,
+      "result_count": 1000,
+      "sha256": "0bff550694650c571275c3722c9c64edc1f27b6ac75bc21adf4fffc2364831c2",
+      "sql_statement_counts": {
+        "PRAGMA": 8,
+        "SELECT": 21
+      }
+    },
+    "query_all": {
+      "cold_ms": 125.2621999992698,
+      "median_ms": 112.32279999967432,
+      "min_ms": 109.16830000132904,
+      "max_ms": 160.84509999927832,
+      "p90_ms": 158.43159999712952,
+      "samples_ms": [
+        111.12879999927827,
+        112.32279999967432,
+        158.43159999712952,
+        113.84190000171657,
+        111.28359999929671,
+        160.84509999927832,
+        109.16830000132904
+      ],
+      "python_peak_kib": 29659.2060546875,
+      "python_retained_kib": 24129.900390625,
+      "memory_before": {
+        "rss_kib": 120008.0,
+        "peak_rss_kib": 141344.0
+      },
+      "memory_after": {
+        "rss_kib": 120668.0,
+        "peak_rss_kib": 158460.0
+      },
+      "result_bytes": 5020294,
+      "result_count": 10000,
+      "sha256": "df35c930ef64bb1d37546fa9a864158ea889b370a3be52a8602fbccfd0b7c066",
+      "sql_statement_counts": {
+        "PRAGMA": 8,
+        "SELECT": 21
+      }
+    },
+    "filter_sort_50": {
+      "cold_ms": 13.754199997492833,
+      "median_ms": 11.806599999545142,
+      "min_ms": 11.429999998654239,
+      "max_ms": 12.729499998386018,
+      "p90_ms": 12.381799999275245,
+      "samples_ms": [
+        12.729499998386018,
+        12.25239999985206,
+        12.381799999275245,
+        11.806599999545142,
+        11.707300000125542,
+        11.786000002757646,
+        11.429999998654239
+      ],
+      "python_peak_kib": 163.6240234375,
+      "python_retained_kib": 100.91796875,
+      "memory_before": {
+        "rss_kib": 100992.0,
+        "peak_rss_kib": 325240.0
+      },
+      "memory_after": {
+        "rss_kib": 101136.0,
+        "peak_rss_kib": 325240.0
+      },
+      "result_bytes": 5895,
+      "result_count": 50,
+      "sha256": "a83bc546c373f8a20d22fd39a358d64cf20957967e7651a5386cbf20acf7e58d",
+      "sql_statement_counts": {
+        "PRAGMA": 8,
+        "SELECT": 21
+      }
+    },
+    "eval_names": {
+      "cold_ms": 103.12100000010105,
+      "median_ms": 104.45599999729893,
+      "min_ms": 103.26089999944088,
+      "max_ms": 162.3647999986133,
+      "p90_ms": 150.78340000036405,
+      "samples_ms": [
+        150.78340000036405,
+        104.41820000050939,
+        103.73360000085086,
+        105.35449999952107,
+        162.3647999986133,
+        104.45599999729893,
+        103.26089999944088
+      ],
+      "python_peak_kib": 15668.87890625,
+      "python_retained_kib": 14030.5703125,
+      "memory_before": {
+        "rss_kib": 109400.0,
+        "peak_rss_kib": 325240.0
+      },
+      "memory_after": {
+        "rss_kib": 109868.0,
+        "peak_rss_kib": 325240.0
+      },
+      "result_bytes": 218500,
+      "result_count": 9500,
+      "sha256": "9e9988d512c8af114a0089022b0b2a73055300ffe1168d9647fa29c2a7c39236",
+      "sql_statement_counts": {
+        "PRAGMA": 9,
+        "SELECT": 26
+      }
+    }
+  },
+  "executors": false,
+  "workers": 4,
+  "tasks": 16,
+  "index_filter": false
+}

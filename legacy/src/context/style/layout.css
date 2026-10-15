@@ -1,0 +1,144 @@
+/* *********************************************************
+ *
+ * Copyright (c) 2005, Southpaw Technology
+ *                     All Rights Reserved
+ * 
+ * PROPRIETARY INFORMATION.  This software is proprietary to
+ * Southpaw Technology, and is not to be reproduced, transmitted,
+ * or disclosed in any way without written permission.
+ * 
+ * 
+ */ 
+
+
+/*
+ * This css file is meant for styles that define the layout of TACTIC and how
+ * it functions and not it's skin.  Skins are all elements that are defined in
+ * main.css.
+
+ * If you change the contents of this file, it is not guaranteed that TACTIC
+ * will work properly.
+ */
+
+/* Set some standard properties for various elements. */
+
+
+/*.checkbox label input[type=checkbox], label.checkbox-inline input[type=checkbox] {
+    position: unset;
+    left: unset;
+    z-index: unset;
+    width: unset;
+    height: unset;
+    margin: unset;
+    overflow: unset;
+    pointer-events: unset;
+    opacity: unset;
+}
+*/
+
+.radio label input[type=radio], label.radio-inline input[type=radio] {
+    position: unset;
+    left: unset;
+    z-index: unset;
+    width: unset;
+    height: unset;
+    margin: unset;
+    overflow: unset;
+    pointer-events: unset;
+    opacity: unset;
+}
+
+
+body {
+    font-size: 0.75rem;
+}
+
+
+table {
+    font-size: .75rem;
+}
+
+
+select option {
+    padding: 3px 5px;
+}
+
+
+
+.hand
+{
+    cursor: pointer;
+}
+
+.move
+{
+    cursor: move;
+}
+
+
+/* smenu look styles -- dark text on light background version ... */
+
+.look_smenu {
+    border-color: #000000;
+    background-color: #c2c2c2;
+    color: #000000;
+}
+
+.look_smenu_hilite {
+    background-color: #336699;
+    color: #c2c2c2;
+}
+
+.look_smenu_btn_icon {
+    border-color: #000000;
+    background-color: #949494;
+}
+
+.look_smenu_icon_column {
+    background-color: #949494;
+    opacity: .5;
+    filter: alpha(opacity=50);
+}
+
+.look_smenu_disabled {
+    opacity: .2;
+    filter: alpha(opacity=20);
+}
+
+.look_smenu_icon_disabled {
+    opacity: .4;
+    filter: alpha(opacity=40);
+}
+
+.look_smenu_separator {
+    color: #656565;
+    background-color: #656565;
+    height: 1px;
+}
+
+.look_smenu_title {
+    color: #c2c2c2;
+    background-color: #434343;
+}
+
+
+
+
+.maq_select_td_unchecked
+{
+    background-image: url('/context/icons/common/checkbox_unchecked.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: default;
+}
+
+.maq_select_td_checked
+{
+    background-image: url('/context/icons/common/checkbox_checked.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: default;
+}
+
+
+

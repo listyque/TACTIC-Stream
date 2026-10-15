@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config version="2">
+  <install>
+    <hostname>192.168.2.55</hostname>
+    <!-- Empty means the owned data directory's temp folder. -->
+    <tmp_dir></tmp_dir>
+    <log_type>file</log_type>
+  </install>
+  <services>
+    <enable>tactic|queue</enable>
+    <start_port>8081</start_port>
+    <process_count>3</process_count>
+    <thread_count>50</thread_count>
+    <!-- Seconds. A heartbeat needs both the event loop and a free request thread. -->
+    <check_interval>1</check_interval>
+    <worker_timeout>120</worker_timeout>
+    <startup_timeout>60</startup_timeout>
+    <shutdown_timeout>10</shutdown_timeout>
+    <restart_delay>1</restart_delay>
+  </services>
+  <database>
+    <vendor>Sqlite</vendor>
+    <sobject_database>sthpw</sobject_database>
+  </database>
+  <security>
+    <authenticate_class>pyasm.security.TacticAuthenticate</authenticate_class>
+    <ticket_expiry>10 hour</ticket_expiry>
+    <api_require_password>true</api_require_password>
+  </security>
+  <checkin>
+    <!-- From original install/template/config/tactic_linux-conf_python3.xml.
+         Copyright (c) 2005 Southpaw Technology. See LICENSE.TACTIC.
+         The installer fills the asset root with the owned data directory. -->
+    <asset_base_dir></asset_base_dir>
+    <web_base_dir>/assets</web_base_dir>
+    <win32_local_base_dir>C:/spt</win32_local_base_dir>
+    <linux_local_base_dir>/tmp/sthpw</linux_local_base_dir>
+    <win32_sandbox_dir>C:/spt/sandbox</win32_sandbox_dir>
+    <linux_sandbox_dir>/tmp/sthpw/sandbox</linux_sandbox_dir>
+    <win32_client_repo_dir></win32_client_repo_dir>
+    <linux_client_repo_dir></linux_client_repo_dir>
+    <win32_client_handoff_dir></win32_client_handoff_dir>
+    <linux_client_handoff_dir></linux_client_handoff_dir>
+    <win32_server_handoff_dir></win32_server_handoff_dir>
+    <linux_server_handoff_dir></linux_server_handoff_dir>
+    <sudo_no_password>false</sudo_no_password>
+    <version_padding>3</version_padding>
+  </checkin>
+</config>

@@ -1,0 +1,106 @@
+{
+  "passed": true,
+  "platform": "linux",
+  "scenarios": [
+    {
+      "name": "wrapped-check-db exit",
+      "passed": true
+    },
+    {
+      "name": "Read-only delegate preserves every seed/config file",
+      "passed": true
+    },
+    {
+      "name": "direct-check-db exit",
+      "passed": true
+    },
+    {
+      "name": "Wrapped/direct original reports identical",
+      "passed": true
+    },
+    {
+      "name": "show-permissions exit",
+      "passed": true
+    },
+    {
+      "name": "Showing settings does not enable writes",
+      "passed": true
+    },
+    {
+      "name": "noninteractive-enable-refused exit",
+      "passed": true
+    },
+    {
+      "name": "Original ENABLE confirmation still mandatory",
+      "passed": true
+    },
+    {
+      "name": "noninteractive-restore-refused exit",
+      "passed": true
+    },
+    {
+      "name": "Original RESTORE confirmation still mandatory",
+      "passed": true
+    },
+    {
+      "name": "dry-start exit",
+      "passed": true
+    },
+    {
+      "name": "Dry plan contains exact selected path: start",
+      "passed": true
+    },
+    {
+      "name": "dry-start-single exit",
+      "passed": true
+    },
+    {
+      "name": "Dry plan contains exact selected path: start --single",
+      "passed": true
+    },
+    {
+      "name": "dry-start-legacy exit",
+      "passed": true
+    },
+    {
+      "name": "Dry plan contains exact selected path: start --legacy",
+      "passed": true
+    },
+    {
+      "name": "dry-db-init exit",
+      "passed": true
+    },
+    {
+      "name": "Dry plan contains exact selected path: db init",
+      "passed": true
+    },
+    {
+      "name": "dry-db-upgrade exit",
+      "passed": true
+    },
+    {
+      "name": "Dry plan contains exact selected path: db upgrade",
+      "passed": true
+    },
+    {
+      "name": "dry-db-restore exit",
+      "passed": true
+    },
+    {
+      "name": "Dry plan contains exact selected path: db restore",
+      "passed": true
+    },
+    {
+      "name": "All dry runs leave databases untouched",
+      "passed": true
+    },
+    {
+      "name": "help-before-runtime exit",
+      "passed": true
+    },
+    {
+      "name": "No automatic background processes by plans",
+      "passed": true
+    }
+  ]
+}

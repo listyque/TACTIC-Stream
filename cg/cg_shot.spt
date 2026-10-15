@@ -1,0 +1,35 @@
+#-- Start Entry --#
+insert = SearchType.create('sthpw/search_object')
+insert.set_value('class_name', """pyasm.search.SObject""")
+insert.set_value('code', """cg/shot""")
+insert.set_value('color', """#dede6f""")
+insert.set_value('database', """{project}""")
+insert.set_value('default_layout', """table""")
+insert.set_value('namespace', """cg""")
+insert.set_value('schema', """public""")
+insert.set_value('search_type', """cg/shot""")
+insert.set_value('table_name', """shot""")
+insert.set_value('title', """Shot""")
+insert.set_value('type', """production""")
+#-- End Entry --#
+
+#-- Start Entry --#
+table = CreateTable('cg/shot')
+table.add('code',                     'varchar', length='256' )
+table.add('description',              'text' )
+table.add('end_frame',                'integer' )
+table.add('id',                       'serial', primary_key=True)
+table.add('keywords',                 'text' )
+table.add('login',                    'varchar', length='256' )
+table.add('name',                     'varchar', length='256' )
+table.add('parent_code',              'varchar', length='256' )
+table.add('pipeline_code',            'varchar', length='256' )
+table.add('rendered',                 'boolean' )
+table.add('s_status',                 'varchar', length='256' )
+table.add('scenes',                   'varchar', length='256' )
+table.add('scenes_code',              'varchar', length='256' )
+table.add('start_frame',              'integer' )
+table.add('timestamp',                'timestamp' )
+table.add_constraint(["code"], mode="UNIQUE")
+#-- End Entry --#
+

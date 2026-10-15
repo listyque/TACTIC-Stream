@@ -1,0 +1,13 @@
+[
+ {"phase":"profile","actions":[]},
+ {"phase":"account","actions":[{"type":"click","id":"segmentedButtonSegment_account"}]},
+ {"phase":"groups","actions":[{"type":"click","id":"segmentedButtonSegment_groups"}]},
+ {"phase":"dirty","actions":[{"type":"click","id":"userGroupMembership_Artists"}]},
+ {"phase":"confirm","actions":[{"type":"click","id":"adminSaveDocument"}]},
+ {"phase":"retired","actions":[{"type":"click","id":"adminCancelSave"},{"type":"click","id":"adminDiscardDocument"},{"type":"click","id":"adminConfirmSave"},{"type":"click","id":"adminShowRetiredUsers"},{"type":"text","id":"adminUserSearch","value":"artist79@"},{"type":"click","id":"adminUser_user_79"}]},
+ {"phase":"empty-search","actions":[{"type":"text","id":"adminUserSearch","value":"no_such_user"}]},
+ {"phase":"new","actions":[{"type":"click","id":"adminCreateDocument"}]},
+ {"phase":"readonly","actions":[{"type":"state","value":"readonly"}]},
+ {"phase":"uncertain","actions":[{"type":"state","value":"uncertain"}]},
+ {"phase":"busy","actions":[{"type":"state","value":"busy"}]}
+]

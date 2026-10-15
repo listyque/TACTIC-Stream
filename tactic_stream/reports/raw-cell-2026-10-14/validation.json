@@ -1,0 +1,20 @@
+{
+  "stream_version": "0.112.126",
+  "handler_version": "0.6.0.77",
+  "native_qml_checks_passed": 14,
+  "parser_and_sqlite_scalar_round_trip_checks_passed": 3,
+  "backend_raw_crud_security_conflict_checks_passed": 8,
+  "native_xmlrpc_json_transport_checks_passed": 2,
+  "shared_conversion_vectors": { "valid": 26, "invalid": 13, "python_and_javascript": "passed" },
+  "vue_browser_flow": "Passed: separate editor, plain text, Cancel/Apply, F2/Escape, NULL/empty/literal, exact integer, sparse save, background update and target conflict",
+  "layout_comparisons": "Eight matched language/size/theme cases on identical selected values: 596/436 x 216px field, 612/452 x 32px selector",
+  "frontend_build": "Passed",
+  "help_and_translations": "Shared EN/RU editor workflow and labels verified",
+  "limits": [
+    "Private fixture data only; no production database writes",
+    "Live PostgreSQL and higher-DPI native Windows interaction not exercised",
+    "OS/browser window chrome and font rasterization remain platform-specific",
+    "Browser phones use shared full-screen window behavior; no native phone counterpart",
+    "Existing AppSelect compiler and RelatedObjects dynamic import warnings remain"
+  ]
+}

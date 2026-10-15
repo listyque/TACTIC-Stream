@@ -1,0 +1,69 @@
+{
+  "scope": "Owned native API fixture, paired method/cache replays versus current code; no network delay. Polling uses a deterministic simulated clock.",
+  "runs": [
+    {
+      "operation": "refresh",
+      "mode": "before_metadata_sharing_replay",
+      "rpc": 1,
+      "selects": 58,
+      "elapsed_ms": 37.87
+    },
+    {
+      "operation": "refresh",
+      "mode": "after",
+      "rpc": 1,
+      "selects": 35,
+      "elapsed_ms": 25.85
+    },
+    {
+      "operation": "history_30",
+      "mode": "previous_method_replay",
+      "selects": 113,
+      "version_selects": 30,
+      "change_selects": 30,
+      "elapsed_ms": 76.25,
+      "returned": 30
+    },
+    {
+      "operation": "history_30",
+      "mode": "after",
+      "selects": 56,
+      "version_selects": 2,
+      "change_selects": 1,
+      "elapsed_ms": 34.79,
+      "returned": 30
+    },
+    {
+      "operation": "idle_poll_30_seconds",
+      "mode": "previous_interval_replay",
+      "rpc": 121,
+      "completion_seen_at_seconds": 30.0,
+      "clock": "simulated deterministic"
+    },
+    {
+      "operation": "idle_poll_30_seconds",
+      "mode": "after",
+      "rpc": 20,
+      "completion_seen_at_seconds": 31.2,
+      "clock": "simulated deterministic"
+    }
+  ],
+  "checked_separately": {
+    "reconcile_50_renames": {
+      "before_source_reads": 50,
+      "after_source_reads": 1
+    },
+    "preview": {
+      "before_rpc": 2,
+      "after_rpc": 1
+    },
+    "changelist_tab": {
+      "before_rpc": 2,
+      "after_rpc": 1
+    },
+    "task_status": {
+      "before_rpc": 2,
+      "after_rpc": 1
+    }
+  }
+}

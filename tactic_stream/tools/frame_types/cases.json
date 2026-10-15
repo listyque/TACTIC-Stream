@@ -1,0 +1,226 @@
+[
+  {
+    "phase": "catalog",
+    "actions": []
+  },
+  {
+    "phase": "summary",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminSearchType_demo/asset"
+      }
+    ]
+  },
+  {
+    "phase": "workflow",
+    "actions": [
+      {
+        "type": "page",
+        "selector": "searchTypePages",
+        "value": "workflow"
+      }
+    ]
+  },
+  {
+    "phase": "details",
+    "actions": [
+      {
+        "type": "page",
+        "selector": "searchTypePages",
+        "value": "details"
+      }
+    ]
+  },
+  {
+    "phase": "title",
+    "actions": [
+      {
+        "type": "text",
+        "id": "adminSearchTypeTitle",
+        "value": "Frame Assets"
+      }
+    ]
+  },
+  {
+    "phase": "fields",
+    "actions": [
+      {
+        "type": "page",
+        "selector": "searchTypePages",
+        "value": "fields"
+      }
+    ]
+  },
+  {
+    "phase": "invalid-field",
+    "actions": [
+      {
+        "type": "reveal",
+        "viewport": "adminSearchTypeForm",
+        "id": "adminNewColumnName"
+      },
+      {
+        "type": "text",
+        "id": "adminNewColumnName",
+        "value": "Wrong Name"
+      },
+      {
+        "type": "reveal",
+        "viewport": "adminSearchTypeForm",
+        "id": "adminStageColumn"
+      },
+      {
+        "type": "click",
+        "id": "adminStageColumn"
+      }
+    ]
+  },
+  {
+    "phase": "field-staged",
+    "actions": [
+      {
+        "type": "reveal",
+        "viewport": "adminSearchTypeForm",
+        "id": "adminNewColumnName"
+      },
+      {
+        "type": "text",
+        "id": "adminNewColumnName",
+        "value": "duration_minutes"
+      },
+      {
+        "type": "choose",
+        "id": "adminNewColumnType",
+        "value": "integer"
+      },
+      {
+        "type": "reveal",
+        "viewport": "adminSearchTypeForm",
+        "id": "adminStageColumn"
+      },
+      {
+        "type": "click",
+        "id": "adminStageColumn"
+      }
+    ]
+  },
+  {
+    "phase": "delete-field",
+    "actions": [
+      {
+        "type": "reveal",
+        "viewport": "adminSearchTypeForm",
+        "id": "typeExistingFields"
+      },
+      {
+        "type": "reveal",
+        "viewport": "typeExistingFields",
+        "id": "adminDeleteColumn_description"
+      },
+      {
+        "type": "click",
+        "id": "adminDeleteColumn_description"
+      }
+    ]
+  },
+  {
+    "phase": "save-confirmation",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminSaveDocument"
+      }
+    ]
+  },
+  {
+    "phase": "discard-confirmation",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminCancelSave"
+      },
+      {
+        "type": "click",
+        "id": "adminDiscardDocument"
+      }
+    ]
+  },
+  {
+    "phase": "discarded",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminConfirmSave"
+      }
+    ]
+  },
+  {
+    "phase": "create-details",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminCreateDocument"
+      }
+    ]
+  },
+  {
+    "phase": "create-invalid",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminTypeWizardNext"
+      }
+    ]
+  },
+  {
+    "phase": "create-fields",
+    "actions": [
+      {
+        "type": "text",
+        "id": "adminSearchTypeTitle",
+        "value": "Episodes"
+      },
+      {
+        "type": "click",
+        "id": "adminTypeWizardNext"
+      }
+    ]
+  },
+  {
+    "phase": "create-ready",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminTypeWizardNext"
+      }
+    ]
+  },
+  {
+    "phase": "readonly",
+    "actions": [
+      {
+        "type": "state",
+        "value": "readonly"
+      }
+    ]
+  },
+  {
+    "phase": "unknown",
+    "actions": [
+      {
+        "type": "state",
+        "value": "uncertain"
+      }
+    ]
+  },
+  {
+    "phase": "busy",
+    "actions": [
+      {
+        "type": "state",
+        "value": "busy"
+      }
+    ]
+  }
+]

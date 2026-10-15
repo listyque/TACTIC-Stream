@@ -1,0 +1,44 @@
+<config>
+  <continuous_example layout="sobject-layout" collection="tree" flow="contents">
+    <element name="preview" title="Preview" tag="span" role="preview"><display class="image"><bind>node.preview.image</bind></display></element>
+    <element name="copy" title="Object information" role="copy" flow="contents"><display class="group"/></element>
+    <element name="heading" title="Heading" parent="copy" role="title-line" flow="contents"><display class="group"/></element>
+    <element name="title" title="Title" parent="heading" tag="strong"><display class="title"><bind>node.title</bind></display></element>
+    <element name="quick" title="Snapshot actions" parent="heading" tag="span" role="title-actions" when="tree not-branch"><display class="quick-actions"/></element>
+    <element name="offline" title="File Offline" parent="heading" tag="span" role="file-offline" when="tree snapshot"><display class="file-offline"/></element>
+    <element name="description" title="Description" parent="copy" tag="span" role="description" when="description"><display class="description"><bind>node.subtitle</bind></display></element>
+    <element name="metadata" title="Metadata" parent="copy" role="metadata" when="object"><display class="metadata"/></element>
+    <element name="snapshot" title="Snapshot details" parent="copy" when="tree snapshot"><display class="snapshot-details"/></element>
+    <element name="snapshot_summary" title="Snapshot summary" parent="copy" tag="small" tone="muted" when="not-tree snapshot"><display class="snapshot-summary"/></element>
+    <element name="summary" title="Branch summary" parent="copy" tag="small" when="mobile branch"><display class="branch-summary"/></element>
+    <element name="actions" title="Actions" role="actions" flow="contents"><display class="group"/></element>
+    <element name="hover" title="Related objects" parent="actions" role="hover-actions" flow="contents" when="desktop tree object"><display class="group"/></element>
+    <element name="relations" title="Related and child objects" parent="hover"><display class="button"><action>relations</action><icon>FAS_SITEMAP</icon></display></element>
+    <element name="relation_actions" title="Relationship actions" parent="actions" when="desktop relation"><display class="relations"/></element>
+    <element name="knowledge" title="Knowledge Base" parent="actions" when="desktop"><display class="knowledge"/></element>
+    <element name="communication" title="Tasks and notes" parent="actions" role="communication" flow="contents" when="desktop object-or-process"><display class="group"/></element>
+    <element name="tasks" title="Tasks" parent="communication" role="task-button"><display class="button"><action>tasks</action><icon>FAR_CALENDAR_CHECK</icon><badge>node.task_count</badge></display></element>
+    <element name="notes" title="Notes" parent="communication" role="note-button"><display class="button"><action>notes</action><icon>FAS_COMMENT_ALT</icon><badge>node.note_count</badge></display></element>
+    <element name="size" title="File size" parent="actions" tag="span" when="tree snapshot"><display class="snapshot-size"/></element>
+    <element name="mobile_actions" title="Mobile actions" parent="actions" role="mobile-actions" flow="contents" when="mobile mobile-upload"><display class="group"/></element>
+    <element name="mobile_tasks" title="Tasks" parent="mobile_actions" when="object-or-process"><display class="button"><action>tasks</action><icon>FAR_CALENDAR_CHECK</icon><badge>node.task_count</badge></display></element>
+    <element name="mobile_notes" title="Notes" parent="mobile_actions" when="object-or-process"><display class="button"><action>notes</action><icon>FAS_COMMENT_ALT</icon><badge>node.note_count</badge></display></element>
+    <element name="mobile_upload" title="Add files" parent="mobile_actions"><display class="button"><action>upload</action><icon>upload</icon></display></element>
+    <element name="menu" title="Item actions" parent="actions" when="mobile"><display class="item-menu"/></element>
+  </continuous_example>
+  <table_example layout="sobject-layout" collection="table" columns="12">
+    <element name="preview" title="Preview" column="1" span="2" height="40"><display class="image"><bind>node.preview.image</bind></display></element>
+    <element name="title" title="Title" column="3" span="3"><display class="title"><bind>node.title</bind></display></element>
+    <element name="description" title="Description" column="6" span="4"><display class="text"><bind>record.description</bind></display></element>
+    <element name="tasks" title="Tasks" column="10" span="1"><display class="button"><action>tasks</action><badge>node.task_count</badge><icon>FAR_CALENDAR_CHECK</icon></display></element>
+    <element name="notes" title="Notes" column="11" span="1"><display class="button"><action>notes</action><badge>node.note_count</badge><icon>FAS_COMMENT_ALT</icon></display></element>
+    <element name="details" title="Object details" column="12" span="1"><display class="button"><action>inspect</action><icon>MDI_INFORMATION_OUTLINE</icon></display></element>
+  </table_example>
+  <cards_example layout="sobject-layout" collection="grid" columns="12" card_width="280">
+    <element name="image" title="Preview" row="1" height="160"><display class="image"><bind>node.preview.image</bind></display></element>
+    <element name="title" title="Title" row="2"><display class="title"><bind>node.title</bind></display></element>
+    <element name="description" title="Description" row="3"><display class="description"><bind>record.description</bind></display></element>
+    <element name="details" title="Object details" row="4" span="6"><display class="button"><action>inspect</action><text>Object details</text><icon>MDI_INFORMATION_OUTLINE</icon></display></element>
+    <element name="notes" title="Notes" row="4" column="7" span="6"><display class="button"><text>Notes</text><action>notes</action><badge>node.note_count</badge><icon>FAS_COMMENT_ALT</icon></display></element>
+  </cards_example>
+</config>

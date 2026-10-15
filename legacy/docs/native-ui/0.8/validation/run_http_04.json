@@ -1,0 +1,190 @@
+{
+  "transport": "real requests HTTP to bundled CherryPy",
+  "backend": "TEST fixture; actual TACTIC Select for queries only, not a TACTIC database",
+  "scenarios": [
+    {
+      "scenario": "Session for new feature contracts",
+      "passed": true
+    },
+    {
+      "scenario": "Project links from XML configuration",
+      "passed": true
+    },
+    {
+      "scenario": "New arbitrary SearchType resolved from config",
+      "passed": true
+    },
+    {
+      "scenario": "Active result excludes one archived object",
+      "passed": true
+    },
+    {
+      "scenario": "NULL is not conflated with empty string",
+      "passed": true
+    },
+    {
+      "scenario": "Original empty semantics include NULL and empty text",
+      "passed": true
+    },
+    {
+      "scenario": "Actual Select emits IS NOT NULL rather than IS NULL",
+      "passed": true
+    },
+    {
+      "scenario": "Nested OR inside AND with numeric zero",
+      "passed": true
+    },
+    {
+      "scenario": "Unknown predicate column rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Predicate complexity limit enforced",
+      "passed": true
+    },
+    {
+      "scenario": "Numeric SQL injection rejected before query",
+      "passed": true
+    },
+    {
+      "scenario": "Search saved in legacy FilterData format",
+      "passed": true
+    },
+    {
+      "scenario": "Reopened personal sidebar view repeats predicate result",
+      "passed": true
+    },
+    {
+      "scenario": "Unrepresentable literal wildcard saved query rejected explicitly",
+      "passed": true
+    },
+    {
+      "scenario": "Instance relation reports junction type",
+      "passed": true
+    },
+    {
+      "scenario": "Candidates identify already-linked objects",
+      "passed": true
+    },
+    {
+      "scenario": "Link operation changes membership, not object copies",
+      "passed": true
+    },
+    {
+      "scenario": "Stale membership revision rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Wrong junction deletion count rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Unlink removes junction only in command contract",
+      "passed": true
+    },
+    {
+      "scenario": "All tag objects remain after unlink",
+      "passed": true
+    },
+    {
+      "scenario": "Related view reads the updated schema membership",
+      "passed": true
+    },
+    {
+      "scenario": "Tasks are separated by their own task pipelines",
+      "passed": true
+    },
+    {
+      "scenario": "Status update uses revisioned task endpoint",
+      "passed": true
+    },
+    {
+      "scenario": "Stale task revision cannot overwrite newer status",
+      "passed": true
+    },
+    {
+      "scenario": "Dependent selector preview flags incompatible current status",
+      "passed": true
+    },
+    {
+      "scenario": "Preview performs no persistent task mutation",
+      "passed": true
+    },
+    {
+      "scenario": "Cannot persist new pipeline with foreign status",
+      "passed": true
+    },
+    {
+      "scenario": "Compatible dependent fields save together",
+      "passed": true
+    },
+    {
+      "scenario": "Task from a different parent is denied",
+      "passed": true
+    },
+    {
+      "scenario": "Weekly work-hour changed cells through HTTP",
+      "passed": true
+    },
+    {
+      "scenario": "Stale work-hour range is rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Regular and overtime returned separately",
+      "passed": true
+    },
+    {
+      "scenario": "Zero clears only corresponding hour category",
+      "passed": true
+    },
+    {
+      "scenario": "Zero hours did not remove task",
+      "passed": true
+    },
+    {
+      "scenario": "Generation preview exposes pipeline process choices",
+      "passed": true
+    },
+    {
+      "scenario": "Explicit process generation endpoint",
+      "passed": true
+    },
+    {
+      "scenario": "Archive returns non-deletion contract",
+      "passed": true
+    },
+    {
+      "scenario": "Archived record leaves active results",
+      "passed": true
+    },
+    {
+      "scenario": "Archive query explicitly includes retired records",
+      "passed": true
+    },
+    {
+      "scenario": "Record history can be loaded after retirement",
+      "passed": true
+    },
+    {
+      "scenario": "Reactivate restores active record",
+      "passed": true
+    },
+    {
+      "scenario": "Preview also requires CSRF for POST",
+      "passed": true
+    },
+    {
+      "scenario": "Hour mutation rejects foreign Origin",
+      "passed": true
+    },
+    {
+      "scenario": "Anonymous task query denied",
+      "passed": true
+    },
+    {
+      "scenario": "No arbitrary command dispatch endpoint",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "rows_per_table": 50000,
+  "repeats": 21,
+  "lookups": {
+    "preferences": {
+      "result_hash": "b0968aec73ab6dd06b814db5c838f4c60f9dec2a66af30789818f4859877aee1",
+      "before_ms": 2.234600000520004,
+      "before_plan": [
+        "SCAN pref_setting"
+      ],
+      "after_ms": 0.06329999814624898,
+      "after_plan": [
+        "SEARCH pref_setting USING INDEX pref_setting_scope_idx (login=? AND project_code=?)"
+      ],
+      "results_match": true,
+      "speedup": 35.30173879874626
+    },
+    "global_search_code": {
+      "result_hash": "2f00f346aa208d81a9ea42ec95243837f40fceabc83ce137483c2a499d6704df",
+      "before_ms": 4.47849999909522,
+      "before_plan": [
+        "SCAN sobject_list USING INDEX sqlite_autoindex_sobject_list_1"
+      ],
+      "after_ms": 0.06190000203787349,
+      "after_plan": [
+        "SEARCH sobject_list USING INDEX sobject_list_parent_code_idx (search_type=? AND search_code=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "results_match": true,
+      "speedup": 72.35056303156584
+    },
+    "global_search_id": {
+      "result_hash": "2f00f346aa208d81a9ea42ec95243837f40fceabc83ce137483c2a499d6704df",
+      "before_ms": 4.0402999984507915,
+      "before_plan": [
+        "SCAN sobject_list USING INDEX sqlite_autoindex_sobject_list_1"
+      ],
+      "after_ms": 0.06209999992279336,
+      "after_plan": [
+        "SEARCH sobject_list USING INDEX sobject_list_parent_id_idx (search_type=? AND search_id=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "results_match": true,
+      "speedup": 65.0611916823502
+    },
+    "snapshot_code": {
+      "result_hash": "b5ff9c3e3fa84bb33b7320b26aeb59e7bb1f41238ba7a4d62ba16e34f3652890",
+      "before_ms": 5.459399999381276,
+      "before_plan": [
+        "SCAN snapshot",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "after_ms": 0.06599999687750824,
+      "after_plan": [
+        "SEARCH snapshot USING INDEX snapshot_parent_code_idx (search_type=? AND search_code=? AND context=?)",
+        "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+      ],
+      "results_match": true,
+      "speedup": 82.71818572224439
+    },
+    "snapshot_id": {
+      "result_hash": "b5ff9c3e3fa84bb33b7320b26aeb59e7bb1f41238ba7a4d62ba16e34f3652890",
+      "before_ms": 3.8917000019864645,
+      "before_plan": [
+        "SCAN snapshot",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "after_ms": 0.06519999806187116,
+      "after_plan": [
+        "SEARCH snapshot USING INDEX snapshot_parent_id_idx (search_type=? AND search_id=? AND context=?)",
+        "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+      ],
+      "results_match": true,
+      "speedup": 59.68865211151477
+    },
+    "file_path": {
+      "result_hash": "ef41efa9b75303a8750b8904463b8e4951af6f8336dd76f690d5a8c8474ff742",
+      "before_ms": 3.8346999972418416,
+      "before_plan": [
+        "SCAN file",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "after_ms": 0.061400001868605614,
+      "after_plan": [
+        "SEARCH file USING INDEX file_path_idx (relative_dir=? AND file_name=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "results_match": true,
+      "speedup": 62.454395448521296
+    },
+    "connections_out": {
+      "result_hash": "487797edbf334ae7c6a47ebd58768e068e1d2862a839eade31dbc3b983db1640",
+      "before_ms": 3.74770000053104,
+      "before_plan": [
+        "SCAN connection",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "after_ms": 0.058099998568650335,
+      "after_plan": [
+        "SEARCH connection USING INDEX connection_src_idx (src_search_type=? AND src_search_id=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "results_match": true,
+      "speedup": 64.50430452425567
+    },
+    "connections_in": {
+      "result_hash": "487797edbf334ae7c6a47ebd58768e068e1d2862a839eade31dbc3b983db1640",
+      "before_ms": 3.7344999982451554,
+      "before_plan": [
+        "SCAN connection",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "after_ms": 0.06130000110715628,
+      "after_plan": [
+        "SEARCH connection USING INDEX connection_dst_idx (dst_search_type=? AND dst_search_id=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ],
+      "results_match": true,
+      "speedup": 60.92169544527435
+    },
+    "group_membership": {
+      "result_hash": "6f4fcc06c392fdb183b3c1b4fd11164d67b9c65f8ab5b44528070473d80157e6",
+      "before_ms": 1.9130000000586733,
+      "before_plan": [
+        "SCAN login_in_group"
+      ],
+      "after_ms": 0.05700000110664405,
+      "after_plan": [
+        "SEARCH login_in_group USING INDEX login_in_group_login_idx (login=?)"
+      ],
+      "results_match": true,
+      "speedup": 33.5614028582131
+    }
+  },
+  "write_batch_1000_per_table_ms": {
+    "before": 11.05190000089351,
+    "after": 13.723899999604328
+  }
+}

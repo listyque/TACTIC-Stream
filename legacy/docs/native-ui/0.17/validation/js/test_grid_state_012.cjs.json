@@ -1,0 +1,77 @@
+{
+  "tests": [
+    {
+      "name": "Large integer differences are not rounded away",
+      "passed": true
+    },
+    {
+      "name": "Decimal precision is not rounded away",
+      "passed": true
+    },
+    {
+      "name": "Equivalent decimal spellings compare equal",
+      "passed": true
+    },
+    {
+      "name": "Negative zero numeric spellings compare equal",
+      "passed": true
+    },
+    {
+      "name": "NULL is not empty string",
+      "passed": true
+    },
+    {
+      "name": "Staging does not mutate original row",
+      "passed": true
+    },
+    {
+      "name": "Several cells share a record draft and revision",
+      "passed": true
+    },
+    {
+      "name": "Several rows remain in one grid buffer",
+      "passed": true
+    },
+    {
+      "name": "Changing value back removes only its pending cell",
+      "passed": true
+    },
+    {
+      "name": "No-op editing leaves no dirty data",
+      "passed": true
+    },
+    {
+      "name": "Explicit NULL remains a pending update",
+      "passed": true
+    },
+    {
+      "name": "Malformed JSON keeps editor without staging",
+      "passed": true
+    },
+    {
+      "name": "Pending outside page tracked without discarding",
+      "passed": true
+    },
+    {
+      "name": "Stock tab action opens a main tab, not a modal",
+      "passed": true
+    },
+    {
+      "name": "Ordinary cell popups remain popups",
+      "passed": true
+    },
+    {
+      "name": "HiddenRow cell remains inside its parent row",
+      "passed": true
+    },
+    {
+      "name": "One Save Changes sends one batch and clears only on success",
+      "passed": true
+    },
+    {
+      "name": "Server conflict preserves values, revision and per-row error",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

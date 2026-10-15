@@ -1,0 +1,104 @@
+{
+  "scenarios": [
+    {
+      "scenario": "Unauthenticated fill rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Two original user records available",
+      "passed": true
+    },
+    {
+      "scenario": "Fill resolves each original CellEdit definition",
+      "passed": true
+    },
+    {
+      "scenario": "Preview explicitly reports no writes",
+      "passed": true
+    },
+    {
+      "scenario": "Preview did not change either original row",
+      "passed": true
+    },
+    {
+      "scenario": "Missing table revision rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Missing row revision rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Duplicate row keys rejected",
+      "passed": true
+    },
+    {
+      "scenario": "More than 100 selected rows rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Empty selection rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Unknown configured field rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Protected identity cannot be filled",
+      "passed": true
+    },
+    {
+      "scenario": "Password cannot be filled",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid input type rejected before staging",
+      "passed": true
+    },
+    {
+      "scenario": "Explicit NULL supported by per-row nullable rules",
+      "passed": true
+    },
+    {
+      "scenario": "Pending fields used in per-row validation",
+      "passed": true
+    },
+    {
+      "scenario": "Pending input did not persist from preview",
+      "passed": true
+    },
+    {
+      "scenario": "Conflict in later row rejects entire preview",
+      "passed": true
+    },
+    {
+      "scenario": "No prefix of conflict preview was committed",
+      "passed": true
+    },
+    {
+      "scenario": "Stale editor config rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Accepted fill saves through original EditMultipleCmd",
+      "passed": true
+    },
+    {
+      "scenario": "Both rows persist only after Save Changes",
+      "passed": true
+    },
+    {
+      "scenario": "Preview is not an authority to overwrite newer rows",
+      "passed": true
+    },
+    {
+      "scenario": "All mutations and preview routed to writer",
+      "passed": true
+    },
+    {
+      "scenario": "Preview needs CSRF",
+      "passed": true
+    }
+  ]
+}

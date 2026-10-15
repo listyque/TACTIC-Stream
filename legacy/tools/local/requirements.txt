@@ -1,0 +1,16 @@
+# Install into this project's .runtime/python/Lib/site-packages only.
+# Compatible ranges; the exact resolved versions and hashes are recorded by pip
+# in .runtime/install-report.json. This is not an offline/reproducible lockfile.
+# CherryPy/cheroot are the ORIGINAL TACTIC vendor versions, not replaced by pip.
+legacy-cgi>=2.6.4,<3; python_version >= "3.13"
+pycryptodomex>=3.23,<4
+lxml>=5.3,<7
+six>=1.17,<2
+requests>=2.32.5,<3
+Pillow>=11.3,<13
+python-dateutil>=2.9,<3
+pytz>=2025.2
+PyYAML>=6.0.2,<7
+psycopg2-binary>=2.9.10,<3
+setuptools>=80.9,<81
+packaging>=25,<27

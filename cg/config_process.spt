@@ -1,0 +1,1125 @@
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00217""")
+insert.set_value('color', """#5c9660""")
+insert.set_value('pipeline_code', """cg/shot""")
+insert.set_value('process', """layout""")
+insert.set_value('sort_order', 1)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00152""")
+insert.set_value('color', """#c2b84c""")
+insert.set_value('pipeline_code', """cg/shot""")
+insert.set_value('process', """animation""")
+insert.set_value('sort_order', 2)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00151""")
+insert.set_value('color', """#b36230""")
+insert.set_value('pipeline_code', """cg/shot""")
+insert.set_value('process', """light""")
+insert.set_value('sort_order', 3)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00213""")
+insert.set_value('color', """#99398b""")
+insert.set_value('pipeline_code', """cg/shot""")
+insert.set_value('process', """cache""")
+insert.set_value('sort_order', 4)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00163""")
+insert.set_value('color', """#e45858""")
+insert.set_value('pipeline_code', """niki_friends/assets""")
+insert.set_value('process', """model""")
+insert.set_value('sort_order', 1)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"color": "#e45858", "action": "script_path", "mapping": "Approved", "process": "model", "duration": "5", "node_type": "manual", "completion": "20", "properties": {"color": "#e45858", "group": "", "duration": "5", "completion": "20", "task_number": "", "bid_duration": "40", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "modeller", "autocreate_task": "", "supervisor_group": "supervisor"}, "description": "", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "40", "execute_mode": "same process,same transaction", "pipeline_code": "niki_friends/assets", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "modeller", "autocreate_task": false, "supervisor_group": "supervisor", "script_path_title": "SPT_PROCESS00163", "script_path_folder": "telegram/assets_tasks_handle"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00165""")
+insert.set_value('color', """#575cea""")
+insert.set_value('pipeline_code', """niki_friends/assets""")
+insert.set_value('process', """rig""")
+insert.set_value('sort_order', 2)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"color": "#575cea", "process": "rig", "duration": "10", "node_type": "manual", "completion": "60", "properties": {"color": "#575cea", "group": "", "duration": "10", "completion": "60", "task_number": "", "bid_duration": "80", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "rigger", "autocreate_task": "", "supervisor_group": "supervisor"}, "description": "", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "80", "pipeline_code": "niki_friends/assets", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "rigger", "autocreate_task": false, "supervisor_group": "supervisor"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00166""")
+insert.set_value('color', """#44d8fd""")
+insert.set_value('pipeline_code', """niki_friends/assets""")
+insert.set_value('process', """publish""")
+insert.set_value('sort_order', 3)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"process": "publish", "duration": "1", "node_type": "manual", "completion": "100", "properties": {"color": "#44d8fd", "group": "", "duration": "1", "completion": "100", "task_number": "", "bid_duration": "8", "task_creation": "on", "task_pipeline": "niki_friends/publish", "assigned_group": "supervisor", "autocreate_task": "", "supervisor_group": ""}, "description": "", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "8", "pipeline_code": "niki_friends/assets", "task_creation": true, "task_pipeline": "niki_friends/publish", "assigned_group": "supervisor", "autocreate_task": false, "supervisor_group": ""}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00238""")
+insert.set_value('color', """#4d3e2e""")
+insert.set_value('pipeline_code', """niki_friends/assets""")
+insert.set_value('process', """cache""")
+insert.set_value('sort_order', 4)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"color": "#4d3e2e", "process": "cache", "node_type": "manual", "completion": "80", "properties": {"color": "#4d3e2e", "group": "", "duration": "", "completion": "80", "task_number": "", "bid_duration": "", "task_creation": "on", "task_pipeline": "niki_friends_render", "assigned_group": "", "autocreate_task": "", "supervisor_group": ""}, "description": "", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "pipeline_code": "niki_friends/assets", "task_creation": true, "task_pipeline": "niki_friends_render", "assigned_group": "", "autocreate_task": false, "supervisor_group": ""}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00264""")
+insert.set_value('color', """#b54f3e""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """script""")
+insert.set_value('sort_order', 1)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b54f3e", "duration": "3", "completion": "10", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "scriptwriter", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00265""")
+insert.set_value('color', """#b5cc60""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """storyboard""")
+insert.set_value('sort_order', 2)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b5cc60", "duration": "2", "completion": "20", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "storyboard", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00266""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """assets""")
+insert.set_value('sort_order', 3)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"scope": "local", "process": "publish", "search_type": "cg/assets", "trigger_code": "SPT_TRIGGER00014", "pipeline_code": "niki_friends/assets"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00267""")
+insert.set_value('color', """#b37d52""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """layout""")
+insert.set_value('sort_order', 4)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b37d52", "duration": "14", "completion": "30", "task_number": "1", "bid_duration": "112", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00268""")
+insert.set_value('color', """#b89d63""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """voice""")
+insert.set_value('sort_order', 5)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b89d63", "duration": "7", "completion": "40", "task_number": "1", "bid_duration": "56", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "sound", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00269""")
+insert.set_value('color', """#abb33d""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """animation""")
+insert.set_value('sort_order', 6)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#abb33d", "duration": "14", "completion": "50", "task_number": "1", "bid_duration": "112", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00270""")
+insert.set_value('color', """#543cab""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """light""")
+insert.set_value('sort_order', 7)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#543cab", "duration": "8", "completion": "60", "task_number": "1", "bid_duration": "64", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "lighter", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00271""")
+insert.set_value('color', """#30a65d""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """render""")
+insert.set_value('sort_order', 8)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#30a65d", "duration": "3", "completion": "70", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends_render", "assigned_group": "lighter", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00272""")
+insert.set_value('color', """#216b31""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """compose""")
+insert.set_value('sort_order', 9)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#216b31", "duration": "2", "completion": "80", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "composer", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00273""")
+insert.set_value('color', """#368578""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """sound""")
+insert.set_value('sort_order', 10)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#368578", "duration": "2", "completion": "90", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "sound", "autocreate_task": "on", "supervisor_group": "sound"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00274""")
+insert.set_value('color', """#56c932""")
+insert.set_value('pipeline_code', """niki_friends/dialog""")
+insert.set_value('process', """publish""")
+insert.set_value('sort_order', 11)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#56c932", "duration": "1", "completion": "100", "task_number": "1", "bid_duration": "8", "task_creation": "on", "task_pipeline": "niki_friends/publish", "assigned_group": "supervisor", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00239""")
+insert.set_value('color', """#4b742f""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """Готов к работе""")
+insert.set_value('sort_order', 1)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00191""")
+insert.set_value('color', """#735f36""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """Назначен""")
+insert.set_value('sort_order', 2)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"mapping": "Assignment"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00193""")
+insert.set_value('color', """#483f69""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """В работе""")
+insert.set_value('sort_order', 3)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"mapping": "In Progress"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00194""")
+insert.set_value('color', """#3d6d82""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """На паузе""")
+insert.set_value('sort_order', 4)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"mapping": "Waiting"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00195""")
+insert.set_value('color', """#824882""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """Нужна помощь""")
+insert.set_value('sort_order', 5)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"mapping": "Need Assistance"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00196""")
+insert.set_value('color', """#993928""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """Пересмотр""")
+insert.set_value('sort_order', 6)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00232""")
+insert.set_value('color', """#8a2222""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """Отклонен""")
+insert.set_value('sort_order', 7)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00198""")
+insert.set_value('color', """#3441c9""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """На проверке""")
+insert.set_value('sort_order', 8)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00199""")
+insert.set_value('color', """#206947""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """Принят""")
+insert.set_value('sort_order', 9)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"status": "\\u041d\\u0430\\u0437\\u043d\\u0430\\u0447\\u0435\\u043d", "direction": "output"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00200""")
+insert.set_value('color', """#05691b""")
+insert.set_value('pipeline_code', """cg/light""")
+insert.set_value('process', """Оплачен""")
+insert.set_value('sort_order', 10)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00204""")
+insert.set_value('color', """#483f69""")
+insert.set_value('pipeline_code', """cg/publish""")
+insert.set_value('process', """В работе""")
+insert.set_value('sort_order', 1)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00216""")
+insert.set_value('color', """#3441c9""")
+insert.set_value('pipeline_code', """cg/publish""")
+insert.set_value('process', """На проверке""")
+insert.set_value('sort_order', 2)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00205""")
+insert.set_value('color', """#993928""")
+insert.set_value('pipeline_code', """cg/publish""")
+insert.set_value('process', """Пересмотр""")
+insert.set_value('sort_order', 3)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00206""")
+insert.set_value('color', """#05691b""")
+insert.set_value('pipeline_code', """cg/publish""")
+insert.set_value('process', """Опубликован""")
+insert.set_value('sort_order', 4)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"mapping": "Complete"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """multi_file""")
+insert.set_value('code', """SPT_PROCESS00159""")
+insert.set_value('color', """#b54f3e""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """script""")
+insert.set_value('sort_order', 1)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"action": "script_path", "command": {"action": "command", "execute_mode": "same process,same transaction", "on_action_class": "tactic.command.PipelineTaskCreateTrigger"}, "process": "script", "assigned": "akaley", "duration": "3", "node_type": "manual", "completion": "10", "properties": {"color": "#b54f3e", "group": "", "duration": "3", "completion": "10", "task_number": "1", "bid_duration": "20", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "scriptwriter", "autocreate_task": "on", "supervisor_group": "supervisor"}, "supervisor": "akaley", "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "20", "execute_mode": "same process,same transaction", "pipeline_code": "niki_friends/scenes", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "scriptwriter", "autocreate_task": true, "supervisor_group": "supervisor", "script_path_title": "SPT_PROCESS00159", "script_path_folder": "tasks/create_task_if_necessary"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """multi_file""")
+insert.set_value('code', """SPT_PROCESS00236""")
+insert.set_value('color', """#b5cc60""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """storyboard""")
+insert.set_value('sort_order', 2)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"process": "storyboard", "duration": "2", "node_type": "manual", "completion": "20", "properties": {"color": "#b5cc60", "group": "", "duration": "2", "completion": "20", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "storyboard", "autocreate_task": "on", "supervisor_group": "supervisor"}, "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "16", "pipeline_code": "niki_friends/scenes", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "storyboard", "autocreate_task": true, "supervisor_group": "supervisor"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00162""")
+insert.set_value('color', """#346634""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """assets""")
+insert.set_value('sort_order', 3)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"scope": "local", "process": "publish", "search_type": "cg/assets", "trigger_code": "SPT_TRIGGER00014", "pipeline_code": "niki_friends/assets"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00160""")
+insert.set_value('color', """#b37d52""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """layout""")
+insert.set_value('sort_order', 4)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"action": "script_path", "command": {"action": "command", "execute_mode": "same process,same transaction", "on_action_class": "tactic.command.PipelineTaskStatusTrigger"}, "process": "layout", "duration": "7", "node_type": "manual", "completion": "30", "properties": {"color": "#b37d52", "group": "", "duration": "7", "completion": "30", "task_number": "1", "bid_duration": "56", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": "on", "supervisor_group": "supervisor"}, "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "56", "execute_mode": "same process,same transaction", "pipeline_code": "niki_friends/scenes", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": true, "supervisor_group": "supervisor", "script_path_title": "SPT_PROCESS00160", "script_path_folder": "telegram/animation_task_handle"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00128""")
+insert.set_value('color', """#abb33d""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """animation""")
+insert.set_value('sort_order', 5)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"action": "script_path", "command": {"action": "command", "execute_mode": "same process,same transaction", "on_action_class": "tactic.command.PipelineTaskCreateTrigger"}, "process": "animation", "duration": "7", "node_type": "manual", "completion": "50", "properties": {"color": "#abb33d", "group": "", "duration": "7", "completion": "50", "task_number": "1", "bid_duration": "56", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": "on", "supervisor_group": "supervisor"}, "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "56", "execute_mode": "same process,same transaction", "pipeline_code": "niki_friends/scenes", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": true, "supervisor_group": "supervisor", "script_path_title": "SPT_PROCESS00128", "script_path_folder": "telegram/animation_task_handle"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00127""")
+insert.set_value('color', """#543cab""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """light""")
+insert.set_value('sort_order', 6)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"action": "script_path", "command": {"action": "command", "execute_mode": "same process,same transaction", "on_action_class": "tactic.command.PipelineTaskCreateTrigger"}, "process": "light", "duration": "3", "node_type": "manual", "completion": "70", "properties": {"color": "#543cab", "group": "", "duration": "3", "completion": "70", "task_number": "1", "bid_duration": "20", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "lighter", "autocreate_task": "on", "supervisor_group": "supervisor"}, "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "20", "execute_mode": "same process,same transaction", "pipeline_code": "niki_friends/scenes", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "lighter", "autocreate_task": true, "supervisor_group": "supervisor", "script_path_title": "SPT_PROCESS00127", "script_path_folder": "telegram/light_task_handle"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00189""")
+insert.set_value('color', """#30a65d""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """render""")
+insert.set_value('sort_order', 7)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"command": {"action": "command", "execute_mode": "same process,same transaction", "on_action_class": "tactic.command.PipelineTaskCreateTrigger"}, "process": "render", "duration": "2", "node_type": "manual", "completion": "80", "properties": {"color": "#30a65d", "group": "", "duration": "2", "completion": "80", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends_render", "assigned_group": "lighter", "autocreate_task": "on", "supervisor_group": "supervisor"}, "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "16", "pipeline_code": "niki_friends/scenes", "task_creation": true, "task_pipeline": "niki_friends_render", "assigned_group": "lighter", "autocreate_task": true, "supervisor_group": "supervisor"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00190""")
+insert.set_value('color', """#216b31""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """compose""")
+insert.set_value('sort_order', 8)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"action": "script_path", "command": {"action": "command", "execute_mode": "same process,same transaction", "on_action_class": "tactic.command.PipelineTaskStatusTrigger"}, "process": "compose", "duration": "2", "node_type": "manual", "completion": "90", "properties": {"color": "#216b31", "group": "", "duration": "2", "completion": "90", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "composer", "autocreate_task": "on", "supervisor_group": "supervisor"}, "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "16", "execute_mode": "same process,same transaction", "pipeline_code": "niki_friends/scenes", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "composer", "autocreate_task": true, "supervisor_group": "supervisor", "script_path_title": "SPT_PROCESS00190", "script_path_folder": "telegram/compose_task_handle"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """file""")
+insert.set_value('code', """SPT_PROCESS00161""")
+insert.set_value('color', """#368578""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """sound""")
+insert.set_value('sort_order', 9)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"action": "script_path", "command": {"action": "command", "execute_mode": "same process,same transaction", "on_action_class": "tactic.command.PipelineTaskCreateTrigger"}, "process": "sound", "duration": "2", "node_type": "manual", "completion": "100", "properties": {"color": "#368578", "group": "", "duration": "2", "completion": "100", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "sound", "autocreate_task": "on", "supervisor_group": "supervisor"}, "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "16", "execute_mode": "same process,same transaction", "pipeline_code": "niki_friends/scenes", "task_creation": true, "task_pipeline": "niki_friends/light", "assigned_group": "sound", "autocreate_task": true, "supervisor_group": "supervisor", "script_path_title": "SPT_PROCESS00161", "script_path_folder": "telegram/compose_task_handle"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('checkin_mode', """multi_file""")
+insert.set_value('code', """SPT_PROCESS00186""")
+insert.set_value('color', """#56c932""")
+insert.set_value('context_options', """preview|final""")
+insert.set_value('pipeline_code', """niki_friends/scenes""")
+insert.set_value('process', """publish""")
+insert.set_value('sort_order', 10)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"process": "publish", "duration": "1", "node_type": "manual", "completion": "100", "properties": {"color": "#56c932", "group": "", "duration": "1", "completion": "100", "task_number": "1", "bid_duration": "8", "task_creation": "on", "task_pipeline": "cg/publish", "assigned_group": "supervisor", "autocreate_task": "on", "supervisor_group": "supervisor"}, "description": "", "task_number": "1", "_cbk_classes": ["tactic.ui.tools.PipelinePropertyCbk"], "bid_duration": "8", "pipeline_code": "cg/scenes", "task_creation": true, "task_pipeline": "cg/publish", "assigned_group": "supervisor", "autocreate_task": true, "supervisor_group": "supervisor"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00240""")
+insert.set_value('color', """#b54f3e""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """script""")
+insert.set_value('sort_order', 1)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b54f3e", "duration": "2", "completion": "10", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "scriptwriter", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00242""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """assets""")
+insert.set_value('sort_order', 2)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"scope": "local", "process": "publish", "search_type": "cg/assets", "trigger_code": "SPT_TRIGGER00014", "pipeline_code": "niki_friends/assets"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00243""")
+insert.set_value('color', """#b37d52""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """layout""")
+insert.set_value('sort_order', 3)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b37d52", "duration": "3", "completion": "20", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00245""")
+insert.set_value('color', """#abb33d""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """animation""")
+insert.set_value('sort_order', 4)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#abb33d", "duration": "3", "completion": "30", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00246""")
+insert.set_value('color', """#543cab""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """light""")
+insert.set_value('sort_order', 5)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#543cab", "duration": "2", "completion": "60", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "lighter", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00247""")
+insert.set_value('color', """#30a65d""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """render""")
+insert.set_value('sort_order', 6)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#30a65d", "duration": "1", "completion": "70", "task_number": "1", "bid_duration": "8", "task_creation": "on", "task_pipeline": "niki_friends_render", "assigned_group": "lighter", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00248""")
+insert.set_value('color', """#216b31""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """compose""")
+insert.set_value('sort_order', 7)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#216b31", "duration": "1", "completion": "80", "task_number": "1", "bid_duration": "8", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "composer", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00249""")
+insert.set_value('color', """#368578""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """sound""")
+insert.set_value('sort_order', 8)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#368578", "duration": "2", "completion": "90", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "sound", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00250""")
+insert.set_value('color', """#56c932""")
+insert.set_value('pipeline_code', """niki_friends/shorts""")
+insert.set_value('process', """publish""")
+insert.set_value('sort_order', 9)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#56c932", "duration": "1", "completion": "100", "task_number": "1", "bid_duration": "8", "task_creation": "on", "task_pipeline": "niki_friends/publish", "assigned_group": "supervisor", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00251""")
+insert.set_value('color', """#b54f3e""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """script""")
+insert.set_value('sort_order', 1)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b54f3e", "duration": "3", "completion": "10", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "scriptwriter", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00252""")
+insert.set_value('color', """#b5cc60""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """storyboard""")
+insert.set_value('sort_order', 2)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b5cc60", "duration": "2", "completion": "20", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "storyboard", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00253""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """assets""")
+insert.set_value('sort_order', 3)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"scope": "local", "process": "publish", "search_type": "cg/assets", "trigger_code": "SPT_TRIGGER00014", "pipeline_code": "niki_friends/assets"}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00262""")
+insert.set_value('color', """#af4646""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """arrangement""")
+insert.set_value('sort_order', 4)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#af4646", "duration": "3", "completion": "30", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "supervisor", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00254""")
+insert.set_value('color', """#b37d52""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """layout""")
+insert.set_value('sort_order', 5)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#b37d52", "duration": "14", "completion": "40", "task_number": "1", "bid_duration": "112", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00263""")
+insert.set_value('color', """#4e72c6""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """vocal""")
+insert.set_value('sort_order', 6)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#4e72c6", "duration": "3", "completion": "35", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "supervisor", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00256""")
+insert.set_value('color', """#abb33d""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """animation""")
+insert.set_value('sort_order', 7)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#abb33d", "duration": "14", "completion": "50", "task_number": "1", "bid_duration": "112", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "animator", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00257""")
+insert.set_value('color', """#543cab""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """light""")
+insert.set_value('sort_order', 8)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#543cab", "duration": "3", "completion": "60", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "lighter", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00258""")
+insert.set_value('color', """#30a65d""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """render""")
+insert.set_value('sort_order', 9)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#30a65d", "duration": "3", "completion": "70", "task_number": "1", "bid_duration": "24", "task_creation": "on", "task_pipeline": "niki_friends_render", "assigned_group": "lighter", "autocreate_task": "on", "supervisor_group": "lighter"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00259""")
+insert.set_value('color', """#216b31""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """compose""")
+insert.set_value('sort_order', 10)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#216b31", "duration": "2", "completion": "80", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "composer", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00260""")
+insert.set_value('color', """#368578""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """sound""")
+insert.set_value('sort_order', 11)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#368578", "duration": "2", "completion": "90", "task_number": "1", "bid_duration": "16", "task_creation": "on", "task_pipeline": "niki_friends/light", "assigned_group": "sound", "autocreate_task": "on", "supervisor_group": "sound"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00261""")
+insert.set_value('color', """#56c932""")
+insert.set_value('pipeline_code', """niki_friends/songs""")
+insert.set_value('process', """publish""")
+insert.set_value('sort_order', 12)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#56c932", "duration": "1", "completion": "100", "task_number": "1", "bid_duration": "8", "task_creation": "on", "task_pipeline": "niki_friends/publish", "assigned_group": "supervisor", "autocreate_task": "on", "supervisor_group": "supervisor"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00220""")
+insert.set_value('color', """#1f57cf""")
+insert.set_value('pipeline_code', """niki_friends_render""")
+insert.set_value('process', """Рендер""")
+insert.set_value('sort_order', 2)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00221""")
+insert.set_value('color', """#476978""")
+insert.set_value('pipeline_code', """niki_friends_render""")
+insert.set_value('process', """В очереди""")
+insert.set_value('sort_order', 3)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00208""")
+insert.set_value('color', """#483f69""")
+insert.set_value('pipeline_code', """niki_friends_render""")
+insert.set_value('process', """Рендерится""")
+insert.set_value('sort_order', 4)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00209""")
+insert.set_value('color', """#8a2222""")
+insert.set_value('pipeline_code', """niki_friends_render""")
+insert.set_value('process', """Ошибки""")
+insert.set_value('sort_order', 5)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00210""")
+insert.set_value('color', """#206947""")
+insert.set_value('pipeline_code', """niki_friends_render""")
+insert.set_value('process', """Готов""")
+insert.set_value('sort_order', 6)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00211""")
+insert.set_value('color', """#05691b""")
+insert.set_value('pipeline_code', """niki_friends_render""")
+insert.set_value('process', """Проверен""")
+insert.set_value('sort_order', 7)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+insert.set_value('workflow', """{}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00077""")
+insert.set_value('color', """#6c573a""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """Assignment""")
+insert.set_value('sort_order', 1)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00078""")
+insert.set_value('color', """#3c5d65""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """Pending""")
+insert.set_value('sort_order', 2)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00079""")
+insert.set_value('color', """#69663c""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """In Progress""")
+insert.set_value('sort_order', 3)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00080""")
+insert.set_value('color', """#40294f""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """Waiting""")
+insert.set_value('sort_order', 4)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00081""")
+insert.set_value('color', """#40294f""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """Need Assistance""")
+insert.set_value('sort_order', 5)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00082""")
+insert.set_value('color', """#682122""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """Revise""")
+insert.set_value('sort_order', 6)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00083""")
+insert.set_value('color', """#682122""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """Reject""")
+insert.set_value('sort_order', 7)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00084""")
+insert.set_value('color', """#42593b""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """Complete""")
+insert.set_value('sort_order', 8)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00085""")
+insert.set_value('color', """#42593b""")
+insert.set_value('pipeline_code', """task""")
+insert.set_value('process', """Approved""")
+insert.set_value('sort_order', 9)
+insert.set_value('timestamp', """2024-01-20 17:41:20.243628""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00437""")
+insert.set_value('color', """#4b742f""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """Готов к работе""")
+insert.set_value('sort_order', 1)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00438""")
+insert.set_value('color', """#735f36""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """Назначен""")
+insert.set_value('sort_order', 2)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00439""")
+insert.set_value('color', """#483f69""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """В работе""")
+insert.set_value('sort_order', 3)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00440""")
+insert.set_value('color', """#3441c9""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """На проверке""")
+insert.set_value('sort_order', 4)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00441""")
+insert.set_value('color', """#3d6d82""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """На паузе""")
+insert.set_value('sort_order', 5)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00442""")
+insert.set_value('color', """#824882""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """Нужна помощь""")
+insert.set_value('sort_order', 6)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00443""")
+insert.set_value('color', """#993928""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """Пересмотр""")
+insert.set_value('sort_order', 7)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00444""")
+insert.set_value('color', """#206947""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """На оплате""")
+insert.set_value('sort_order', 8)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00445""")
+insert.set_value('color', """#05691b""")
+insert.set_value('pipeline_code', """niki_friends/light""")
+insert.set_value('process', """Оплачен""")
+insert.set_value('sort_order', 9)
+insert.set_value('timestamp', """2024-01-22 23:59:58.572071""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00447""")
+insert.set_value('color', """#735f36""")
+insert.set_value('pipeline_code', """niki_friends_render""")
+insert.set_value('process', """Подготовлен""")
+insert.set_value('sort_order', 1)
+insert.set_value('timestamp', """2024-01-23 00:09:15.014036""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00448""")
+insert.set_value('color', """#44d8fd""")
+insert.set_value('pipeline_code', """niki_friends/assets_2D""")
+insert.set_value('process', """publish""")
+insert.set_value('sort_order', 1)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-01-23 23:27:49.140687""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#44d8fd", "completion": "0", "task_creation": "on", "task_pipeline": "niki_friends/publish"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00449""")
+insert.set_value('pipeline_code', """niki_friends/complex/shot""")
+insert.set_value('process', """layout""")
+insert.set_value('sort_order', 1)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-02-25 11:00:38.727022""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#000000", "task_creation": "on", "task_pipeline": "niki_friends/light"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00450""")
+insert.set_value('pipeline_code', """niki_friends/complex/shot""")
+insert.set_value('process', """animation""")
+insert.set_value('sort_order', 2)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-02-25 11:00:38.727022""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#000000", "task_creation": "on", "task_pipeline": "niki_friends/light"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00451""")
+insert.set_value('pipeline_code', """niki_friends/complex/shot""")
+insert.set_value('process', """light""")
+insert.set_value('sort_order', 3)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-02-25 11:00:38.727022""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#000000", "task_creation": "on", "task_pipeline": "niki_friends/light"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00452""")
+insert.set_value('pipeline_code', """niki_friends/complex/shot""")
+insert.set_value('process', """cache""")
+insert.set_value('sort_order', 4)
+insert.set_value('subcontext_options', """(main)""")
+insert.set_value('timestamp', """2024-02-25 11:00:38.727022""")
+insert.set_value('workflow', """{"version": 2, "node_type": "manual", "properties": {"color": "#000000", "task_creation": "on", "task_pipeline": "niki_friends/light"}}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00453""")
+insert.set_value('color', """#483f69""")
+insert.set_value('pipeline_code', """niki_friends/publish""")
+insert.set_value('process', """В работе""")
+insert.set_value('sort_order', 1)
+insert.set_value('timestamp', """2024-09-02 21:03:35.441250""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00454""")
+insert.set_value('color', """#3441c9""")
+insert.set_value('pipeline_code', """niki_friends/publish""")
+insert.set_value('process', """На проверке""")
+insert.set_value('sort_order', 2)
+insert.set_value('timestamp', """2024-09-02 21:03:35.441250""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00455""")
+insert.set_value('color', """#993928""")
+insert.set_value('pipeline_code', """niki_friends/publish""")
+insert.set_value('process', """Пересмотр""")
+insert.set_value('sort_order', 3)
+insert.set_value('timestamp', """2024-09-02 21:03:35.441250""")
+insert.set_value('workflow', """{"version": 2}""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/process')
+insert.set_value('code', """SPT_PROCESS00456""")
+insert.set_value('color', """#05691b""")
+insert.set_value('pipeline_code', """niki_friends/publish""")
+insert.set_value('process', """Опубликован""")
+insert.set_value('sort_order', 4)
+insert.set_value('timestamp', """2024-09-02 21:03:35.441250""")
+insert.set_value('workflow', """{"mapping": "Approved"}""")
+#-- End Entry --#
+

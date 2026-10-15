@@ -1,0 +1,71 @@
+         73299 function calls (73230 primitive calls) in 0.034 seconds
+
+   Ordered by: cumulative time
+   List reduced from 469 to 35 due to restriction <35>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.034    0.034 performance_probe.py:230(invoke)
+        1    0.000    0.000    0.034    0.034 api.py:649(dispatch)
+        1    0.000    0.000    0.034    0.034 api.py:679(_dispatch)
+        1    0.000    0.000    0.026    0.026 command.py:107(execute_cmd)
+        1    0.000    0.000    0.026    0.026 api.py:777(<lambda>)
+        1    0.001    0.001    0.026    0.026 api.py:1280(query)
+        6    0.001    0.000    0.011    0.002 search.py:3970(get_sobjects)
+     1000    0.000    0.000    0.008    0.000 search.py:635(get_search_key)
+     1000    0.001    0.000    0.007    0.000 keys.py:153(get_by_sobject)
+     1011    0.002    0.000    0.007    0.000 search.py:2295(fast_create_from_class_path)
+        6    0.000    0.000    0.007    0.001 search.py:2899(__init__)
+        1    0.000    0.000    0.005    0.005 authenticator.py:124(bind_security)
+        1    0.000    0.000    0.005    0.005 batch.py:85(__init__)
+        1    0.000    0.000    0.005    0.005 batch.py:93(_do_login)
+       29    0.005    0.000    0.005    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+        1    0.000    0.000    0.004    0.004 security.py:1316(login_with_ticket)
+     1018    0.002    0.000    0.004    0.000 search.py:81(__init__)
+     3072    0.003    0.000    0.004    0.000 keys.py:88(_get_data)
+     2021    0.000    0.000    0.004    0.000 search.py:628(get_base_search_type)
+       45    0.000    0.000    0.004    0.000 storage.py:330(resolve)
+        1    0.000    0.000    0.004    0.004 api.py:1088(_search)
+     2072    0.001    0.000    0.004    0.000 keys.py:124(extract_base_search_type)
+    77/69    0.000    0.000    0.003    0.000 {built-in method builtins.next}
+    29/25    0.000    0.000    0.003    0.000 contextlib.py:136(__enter__)
+       44    0.000    0.000    0.003    0.000 storage.py:64(connection)
+     1000    0.000    0.000    0.002    0.000 search.py:631(get_project_code)
+    24/22    0.000    0.000    0.002    0.000 search.py:2353(get_column_info)
+        4    0.000    0.000    0.002    0.001 sql.py:2388(get)
+        4    0.000    0.000    0.002    0.000 sql.py:2400(get_connection_pool_sql)
+     1000    0.000    0.000    0.002    0.000 keys.py:134(extract_project)
+        6    0.000    0.000    0.002    0.000 storage.py:392(columns)
+     1002    0.001    0.000    0.002    0.000 spt_date.py:62(convert)
+        1    0.000    0.000    0.002    0.002 authenticator.py:89(validate)
+        2    0.000    0.000    0.002    0.001 sql.py:1234(connect)
+        1    0.000    0.000    0.002    0.002 security.py:1028(get_by_valid_key)
+
+
+         73299 function calls (73230 primitive calls) in 0.034 seconds
+
+   Ordered by: internal time
+   List reduced from 469 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       29    0.005    0.000    0.005    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+     3072    0.003    0.000    0.004    0.000 keys.py:88(_get_data)
+     1018    0.002    0.000    0.004    0.000 search.py:81(__init__)
+     1011    0.002    0.000    0.007    0.000 search.py:2295(fast_create_from_class_path)
+       17    0.002    0.000    0.002    0.000 {built-in method builtins.repr}
+     1000    0.001    0.000    0.007    0.000 keys.py:153(get_by_sobject)
+        6    0.001    0.000    0.011    0.002 search.py:3970(get_sobjects)
+    11209    0.001    0.000    0.001    0.000 {method 'split' of 'str' objects}
+       12    0.001    0.000    0.001    0.000 {method 'fetchall' of 'sqlite3.Cursor' objects}
+     9650    0.001    0.000    0.001    0.000 {method 'get' of 'dict' objects}
+1064/1063    0.001    0.000    0.001    0.000 search.py:158(get_value)
+     7983    0.001    0.000    0.001    0.000 {built-in method builtins.isinstance}
+        1    0.001    0.001    0.026    0.026 api.py:1280(query)
+       10    0.001    0.000    0.001    0.000 {built-in method nt._getfinalpathname}
+        6    0.001    0.000    0.001    0.000 {built-in method _sqlite3.connect}
+     1002    0.001    0.000    0.002    0.000 spt_date.py:62(convert)
+     2072    0.001    0.000    0.004    0.000 keys.py:124(extract_base_search_type)
+     2021    0.000    0.000    0.004    0.000 search.py:628(get_base_search_type)
+     1103    0.000    0.000    0.000    0.000 {method 'fullmatch' of 're.Pattern' objects}
+     1029    0.000    0.000    0.001    0.000 common.py:237(breakup_class_path)
+
+

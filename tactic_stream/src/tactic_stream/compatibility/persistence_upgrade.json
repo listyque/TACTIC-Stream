@@ -1,0 +1,38 @@
+{
+  "tables": {
+    "sobject_list": "CREATE TABLE sobject_list (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code varchar(256),\n    search_type varchar(256),\n    search_id integer,\n    keywords text,\n    timestamp timestamp default CURRENT_TIMESTAMP,\n    project_code varchar(256),\n    CONSTRAINT \"sobject_list_code_idx\" UNIQUE (code)\n)"
+  },
+  "registry": [
+    {
+      "id": 60,
+      "code": "sthpw/sobject_list",
+      "search_type": "sthpw/sobject_list",
+      "namespace": "sthpw",
+      "description": "SObject List",
+      "database": "sthpw",
+      "table_name": "sobject_list",
+      "class_name": "pyasm.search.SObject",
+      "title": "SObjectList",
+      "schema": "public",
+      "color": null
+    }
+  ],
+  "columns": [
+    {
+      "table": "sobject_list",
+      "column": "search_code",
+      "sql": "ALTER TABLE sobject_list ADD COLUMN search_code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a02_001"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "sobject_list_parent_code_idx",
+      "sql": "CREATE INDEX \"sobject_list_parent_code_idx\" ON \"sobject_list\" (\"search_type\", \"search_code\");"
+    },
+    {
+      "name": "sobject_list_parent_id_idx",
+      "sql": "CREATE INDEX \"sobject_list_parent_id_idx\" ON \"sobject_list\" (\"search_type\", \"search_id\");"
+    }
+  ]
+}

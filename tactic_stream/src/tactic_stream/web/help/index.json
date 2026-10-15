@@ -1,0 +1,450 @@
+[
+  {
+    "id": "activity_feed",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "administration",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "api_compatibility",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "appearance",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "checkin",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "commit_queue",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "common_controls",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "communication",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "configuration",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "configuration.cache",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "configuration.checkin",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "configuration.global",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "configuration.projects",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "configuration.tasks",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "connections",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "core_model",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "debug_log",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "deleting_objects",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "delivery",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.advanced_search",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.commit_queue",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.cost_reports",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.db_table",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.description",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.drop_plate",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.knowledge",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.notes",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.results",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.snapshot",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.task_calendar",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.tasks",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.timesheet",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "dock.work_reports",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "duplicating_objects",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "errors",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "file_workspace",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "getting_started",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "html_api",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "mobile",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "objects",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "overview",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "project_creation",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "repositories",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "repository_configuration",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "script_editor",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "script_shelf",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "search",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "search_filters",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "search_select",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "server_configuration",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "shortcuts",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "sidebar_editor",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "site_context",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "sobject_editor",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "sobject_info",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "tasks",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "timestamp_filters",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "ui_performance",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "windows",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "item_layouts",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "widget_database",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "table_widget_examples",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "table_widget_checklist",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "table_view",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  }
+]

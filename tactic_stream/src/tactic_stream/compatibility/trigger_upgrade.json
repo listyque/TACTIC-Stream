@@ -1,0 +1,34 @@
+{
+  "tables": {
+    "trigger": "CREATE TABLE \"trigger\" (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    class_name character varying(256),\n    script_path character varying(256),\n    description text,\n    event character varying(256),\n    mode character varying(256),\n    project_code character varying(256),\n    s_status character varying(256),\n    process varchar(256),\n    CONSTRAINT \"trigger_code_idx\" UNIQUE (code)\n)",
+    "notification": "CREATE TABLE notification (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(30),\n    event character varying(256),\n    listen_event character varying(256),\n    data text,\n    description text,\n    process varchar(256),\n    \"type\" character varying(30) NOT NULL,\n    search_type character varying(100),\n    project_code character varying(30),\n    rules text,\n    subject text,\n    message text,\n    email_handler_cls character varying(200),\n    mail_to text,\n    mail_cc text,\n    mail_bcc text,\n    s_status character varying(30),\n    title varchar(256),\n    CONSTRAINT \"notification_code_idx\" UNIQUE (code)\n)"
+  },
+  "registry": [
+    {
+      "id": 5,
+      "code": "sthpw/trigger",
+      "search_type": "sthpw/trigger",
+      "namespace": "sthpw",
+      "description": "Triggers",
+      "database": "sthpw",
+      "table_name": "trigger",
+      "class_name": "pyasm.biz.TriggerSObj",
+      "title": "Triggers",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 6,
+      "code": "sthpw/notification",
+      "search_type": "sthpw/notification",
+      "namespace": "sthpw",
+      "description": "Different types of Notification",
+      "database": "sthpw",
+      "table_name": "notification",
+      "class_name": "pyasm.biz.Notification",
+      "title": "Notification",
+      "schema": "public",
+      "color": null
+    }
+  ]
+}

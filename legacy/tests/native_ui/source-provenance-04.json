@@ -1,0 +1,61 @@
+{
+  "input": "TACTIC_5_Vue_Source_Fork_0.3.zip",
+  "input_sha256": "7c6056f7081706383fcb7901468f859f0b4ad70fb829550a45f0561763b150fa",
+  "normalizations": {
+    "GeneralFilterWdg": "OriginalColumnFilter",
+    "WorkHoursElementWdg": "WorkHoursSemantics"
+  },
+  "scope": "Only listed methods; AST equality is not runtime/database/workflow equivalence. Hashes were extracted from the 0.3 input baseline before changes.",
+  "methods": [
+    {
+      "original_file": "src/tactic/ui/filter/filter_wdg.py",
+      "original_class": "GeneralFilterWdg",
+      "original_file_sha256": "0e0533ecfd2c6abc42fdbc39b838f93621e1cccc8b2a4b24cd83b6113ec9f543",
+      "file": "src/tactic/core/search_filters.py",
+      "class": "OriginalColumnFilter",
+      "method": "_add_time_filter",
+      "normalized_ast_sha256": "ac6d34e43c6f57b9b4d4ce4f88d1c6cff94d52f2bcf04c17a6b9540e1196357a",
+      "archive_member": "TACTIC-5.0/src/tactic/ui/filter/filter_wdg.py"
+    },
+    {
+      "original_file": "src/tactic/ui/filter/filter_wdg.py",
+      "original_class": "GeneralFilterWdg",
+      "original_file_sha256": "0e0533ecfd2c6abc42fdbc39b838f93621e1cccc8b2a4b24cd83b6113ec9f543",
+      "file": "src/tactic/core/search_filters.py",
+      "class": "OriginalColumnFilter",
+      "method": "_evaluate_value",
+      "normalized_ast_sha256": "b0315d72f446baae3653e6204ad888615f96e99f6622d30e23eb33329b9a411a",
+      "archive_member": "TACTIC-5.0/src/tactic/ui/filter/filter_wdg.py"
+    },
+    {
+      "original_file": "src/tactic/ui/filter/filter_wdg.py",
+      "original_class": "GeneralFilterWdg",
+      "original_file_sha256": "0e0533ecfd2c6abc42fdbc39b838f93621e1cccc8b2a4b24cd83b6113ec9f543",
+      "file": "src/tactic/core/search_filters.py",
+      "class": "OriginalColumnFilter",
+      "method": "alter_sobject_search",
+      "normalized_ast_sha256": "0b68b84815736c9b156e6ccf400e12ed9c66852bdbf25f390920fbd01de90ba2",
+      "archive_member": "TACTIC-5.0/src/tactic/ui/filter/filter_wdg.py"
+    },
+    {
+      "original_file": "src/tactic/ui/filter/filter_wdg.py",
+      "original_class": "GeneralFilterWdg",
+      "original_file_sha256": "0e0533ecfd2c6abc42fdbc39b838f93621e1cccc8b2a4b24cd83b6113ec9f543",
+      "file": "src/tactic/core/search_filters.py",
+      "class": "OriginalColumnFilter",
+      "method": "add_ops",
+      "normalized_ast_sha256": "3026494b6a3452d98d85abab7629fd96f734b75c23c1f1dd264df70ab8960f6f",
+      "archive_member": "TACTIC-5.0/src/tactic/ui/filter/filter_wdg.py"
+    },
+    {
+      "original_file": "src/tactic/ui/table/work_hours_element_wdg.py",
+      "original_class": "WorkHoursElementAction",
+      "original_file_sha256": "7082738afcd39d0ba72550c7f56249c6879f4fe3c4ab879203c62096ccf90ed8",
+      "file": "src/tactic/core/work_hours.py",
+      "class": "WorkHoursElementAction",
+      "method": "execute",
+      "normalized_ast_sha256": "b761ac944dd1c4a62bbb2b6b9270440388dfcb7d4de54a7ab3761e3090ec9630",
+      "archive_member": "TACTIC-5.0/src/tactic/ui/table/work_hours_element_wdg.py"
+    }
+  ]
+}

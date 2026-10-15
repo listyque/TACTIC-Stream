@@ -1,0 +1,64 @@
+#-- Start Entry --#
+insert = SearchType.create('config/url')
+insert.set_value('code', """SPT_URL00002""")
+insert.set_value('timestamp', """2019-09-06 09:21:18""")
+insert.set_value('url', """/episodes/{code}""")
+insert.set_value('widget', """<element admin='false' sidebar='false' palette='dark'>
+<display class='tactic.ui.panel.CustomLayoutWdg'>
+<view>my_view</view>
+<search_type>cg/scenes</search_type>
+</display>
+</element>""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/url')
+insert.set_value('code', """SPT_URL00004""")
+insert.set_value('description', """All Animators Episodes""")
+insert.set_value('timestamp', """2021-12-09 23:54:04""")
+insert.set_value('url', """/animators_ep""")
+insert.set_value('widget', """<element>
+  <display class="tactic.ui.report.YearlyEpisodesPerAnimatorReport">
+  </display>
+</element>
+""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/url')
+insert.set_value('code', """SPT_URL00005""")
+insert.set_value('description', """All Participants per Episodes""")
+insert.set_value('timestamp', """2021-12-14 23:05:49""")
+insert.set_value('url', """/ep_participants_report""")
+insert.set_value('widget', """<element>
+  <display class="tactic.ui.report.YearlyUsersPerEpisodeReport">
+  </display>
+</element>
+""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/url')
+insert.set_value('code', """SPT_URL00006""")
+insert.set_value('description', """All users Current Work""")
+insert.set_value('timestamp', """2022-02-12 14:58:16""")
+insert.set_value('url', """/users_work""")
+insert.set_value('widget', """<element>
+  <display class="tactic.ui.report.CurrentUsersWork">
+  </display>
+</element>
+""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/url')
+insert.set_value('code', """SPT_URL00007""")
+insert.set_value('timestamp', """2022-03-12 12:55:32""")
+insert.set_value('url', """/zombie_assets""")
+insert.set_value('widget', """<element>
+  <display class="tactic.ui.report.ZombieAssets">
+  </display>
+</element>
+""")
+#-- End Entry --#
+

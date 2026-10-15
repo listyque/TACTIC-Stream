@@ -1,0 +1,63 @@
+{
+  "version": "0.20",
+  "passed": true,
+  "utc": "2026-10-04T16:05:16.860634+00:00",
+  "baseline": "0.19",
+  "root_bat_files": [
+    "MANAGE_TACTIC.bat",
+    "SETUP_ENV.bat",
+    "START_TACTIC.bat"
+  ],
+  "python_unit": 1304,
+  "javascript_tests": 177,
+  "controller_subprocess_checks": 25,
+  "original_http": 352,
+  "original_cluster_checks": 63,
+  "vue_components": 50,
+  "checks": [
+    {
+      "name": "python-unit",
+      "status": "passed",
+      "tests_run": 1304
+    },
+    {
+      "name": "javascript",
+      "status": "passed",
+      "tests_run": 177
+    },
+    {
+      "name": "controller-real-subprocess",
+      "status": "passed",
+      "tests_run": 25
+    },
+    {
+      "name": "original-cluster-http",
+      "status": "passed",
+      "tests_run": 352
+    },
+    {
+      "name": "original-cluster-orchestration",
+      "status": "passed",
+      "tests_run": 63
+    },
+    {
+      "name": "vue-build-and-hashes",
+      "status": "passed",
+      "components": 50
+    },
+    {
+      "name": "xml-parity",
+      "status": "passed"
+    }
+  ],
+  "not_run": [
+    "Windows BAT / Windows PowerShell 5.1",
+    "Actual environment downloads",
+    "Browser scenarios in this iteration",
+    "PostgreSQL/MySQL",
+    "Network filesystem locks"
+  ],
+  "test_boundary": "Linux controller subprocess, real read-only seed check; original TACTIC HTTP cluster with temporary full SQLite and explicit test-only licence-signature isolation. Windows wrappers not executed.",
+  "interruption": "First draft contained one BAT. After user correction it was replaced by three; stale one-BAT test expectations updated and full Python checks rerun. All final counts are from completed suites.",
+  "split_run": "The combined test driver was terminated at its tool deadline after several completed suites. The remaining ui_state JS, Vue build and parity were rerun separately and completed successfully."
+}

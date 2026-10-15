@@ -1,0 +1,38 @@
+         2172946 function calls (2171774 primitive calls) in 0.452 seconds
+
+   Ordered by: cumulative time
+   List reduced from 653 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.452    0.452 relation_performance_probe.py:84(invoke)
+        1    0.000    0.000    0.452    0.452 api.py:649(dispatch)
+        1    0.000    0.000    0.451    0.451 api.py:679(_dispatch)
+      2/1    0.000    0.000    0.442    0.442 command.py:107(execute_cmd)
+        1    0.000    0.000    0.442    0.442 api.py:777(<lambda>)
+        1    0.000    0.000    0.442    0.442 api.py:1024(execute_python_script)
+        1    0.000    0.000    0.442    0.442 python_cmd.py:175(execute)
+        1    0.000    0.000    0.442    0.442 python_cmd.py:94(get_results)
+        1    0.000    0.000    0.438    0.438 template.py:420(render)
+        1    0.000    0.000    0.438    0.438 runtime.py:860(_render)
+        1    0.000    0.000    0.438    0.438 runtime.py:908(_render_context)
+        1    0.000    0.000    0.438    0.438 runtime.py:923(_exec_template)
+        1    0.000    0.000    0.438    0.438 memory:0x26a43e23ed0:15(render_body)
+        1    0.000    0.000    0.438    0.438 memory:0x26a43e23ed0:19(spt_run_code)
+        1    0.000    0.000    0.438    0.438 memory:0x26a43e23ed0:35(render_spt_run_code)
+2000/1000    0.232    0.000    0.435    0.000 schema.py:188(get_relationship_attrs)
+  2055010    0.150    0.000    0.150    0.000 {method 'get' of 'xml.etree.ElementTree.Element' objects}
+     5016    0.025    0.000    0.025    0.000 {method 'findall' of 'xml.etree.ElementTree.Element' objects}
+1020/1012    0.002    0.000    0.015    0.000 search.py:2154(get)
+     2000    0.002    0.000    0.009    0.000 search.py:2450(column_exists)
+     1052    0.002    0.000    0.009    0.000 storage.py:331(resolve)
+2026/2022    0.001    0.000    0.007    0.000 search.py:2353(get_column_info)
+       36    0.006    0.000    0.006    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+     6368    0.002    0.000    0.005    0.000 container.py:28(get)
+        1    0.000    0.000    0.005    0.005 authenticator.py:124(bind_security)
+        1    0.000    0.000    0.005    0.005 batch.py:85(__init__)
+        1    0.000    0.000    0.005    0.005 batch.py:93(_do_login)
+        1    0.000    0.000    0.005    0.005 security.py:1316(login_with_ticket)
+     3081    0.001    0.000    0.004    0.000 container.py:74(get_full_dict)
+        7    0.000    0.000    0.004    0.001 search.py:2899(__init__)
+
+

@@ -1,0 +1,22 @@
+[
+  {"phase":"initial","actions":[]},
+  {"phase":"move","actions":[{"type":"drag","target":"sthpw/task?id=1-bar","days":2}]},
+  {"phase":"resize-end","actions":[{"type":"drag","target":"sthpw/task?id=1-end","days":2}]},
+  {"phase":"resize-start","actions":[{"type":"drag","target":"sthpw/task?id=1-start","days":1}]},
+  {"phase":"progress","actions":[{"type":"drag","target":"sthpw/task?id=1-progress","dx":22}]},
+  {"phase":"keyboard-progress","actions":[{"type":"key","target":"sthpw/task?id=1-progress","code":"ArrowLeft"}]},
+  {"phase":"cancel","actions":[{"type":"drag","target":"sthpw/task?id=1-bar","days":2,"cancel":true}]},
+  {"phase":"batch","actions":[{"type":"click","target":"sthpw/task?id=1-check"},{"type":"click","target":"working-days"},{"type":"click","target":"shift-left"}]},
+  {"phase":"undo","actions":[{"type":"click","target":"undo"}]},
+  {"phase":"redo","actions":[{"type":"click","target":"redo"}]},
+  {"phase":"schedule","actions":[{"type":"click","target":"sthpw/task?id=4-schedule"}]},
+  {"phase":"collapse","actions":[{"type":"click","target":"group-texture-label"}]},
+  {"phase":"scroll-y","actions":[{"type":"drag","target":"vthumb","dy":45}]},
+  {"phase":"days","actions":[{"type":"click","target":"days"},{"type":"click","target":"today"}]},
+  {"phase":"overview","actions":[{"type":"drag","target":"overview-thumb","dx":85}]},
+  {"phase":"weeks","actions":[{"type":"click","target":"weeks"},{"type":"click","target":"zoom-in"}]},
+  {"phase":"select-all","actions":[{"type":"click","target":"select-all"}]},
+  {"phase":"wheel-y","actions":[{"type":"wheel","dy":-120}]},
+  {"phase":"wheel-x","actions":[{"type":"wheel","dy":120,"shift":true}]},
+  {"phase":"wheel-zoom","actions":[{"type":"wheel","dy":120,"ctrl":true}]}
+]

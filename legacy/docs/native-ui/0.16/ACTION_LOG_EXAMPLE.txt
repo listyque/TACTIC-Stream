@@ -1,0 +1,27 @@
+# Actual diagnostic records from the completed ORIGINAL TACTIC / temporary SQLite cluster test.
+ # Signature validation isolated only in tests. Native browser transport used explicit HTTP bridge.
+2026-10-02T17:16:04+0000 [w2:6361] admin@admin GET OPEN req=6458b72ff554 target=admin_views/project_admin/project_workflow widget=PipelineToolWdg render=pipeline -> 200 51.1ms
+2026-10-02T17:16:05+0000 [w2:6361] admin@admin GET GRAPH req=18f3afb3c7a5 target=admin_views/project_admin/project_workflow widget=PipelineToolWdg render=pipeline -> 200 51.4ms
+2026-10-02T17:16:05+0000 [w2:6361] admin@admin GET GRAPH req=912c1d1be9cc target=admin_views/project_admin/project_schema widget=SchemaToolWdg render=schema -> 200 60.5ms
+2026-10-02T17:16:06+0000 [w2:6361] admin@admin GET GRAPH req=cb88f93eae19 target=project_essentials/sthpw_schema/~cell widget=SchemaToolWdg render=schema rows=1 -> 200 85.4ms
+2026-10-02T17:16:07+0000 [w2:6361] admin@admin GET GRAPH req=9dcc30bd4d0a target=admin_views/project_admin/project_workflow widget=PipelineToolWdg render=pipeline rows=2 -> 200 63.3ms
+2026-10-02T17:13:50+0000 [w3:6317] admin@admin GET GROUP MEMBERSHIP req=15b1ec8700f1 target=admin_views/global_admin/users_in_groups widget=CustomLayoutWdg render=group-membership type=sthpw/login_group rows=0 -> 200 52.6ms
+2026-10-02T17:13:56+0000 [w3:6317] admin@admin GET GROUP MEMBERSHIP req=2ed465345992 target=admin_views/global_admin/users_in_groups widget=CustomLayoutWdg render=group-membership type=sthpw/login_group -> 200 46.8ms
+2026-10-02T17:13:56+0000 [w3:6317] admin@admin GET GROUP MEMBERSHIP req=6ae97bd7e1d9 target=global_admin/groups/~cell widget=UserAssignWdg render=group-membership -> 200 78.1ms
+2026-10-02T17:13:59+0000 [w3:6317] admin@native11test GET GRAPH req=d3671104ba61 target=admin_views/project_admin/project_schema widget=SchemaToolWdg render=schema -> 200 59.7ms
+2026-10-02T17:14:00+0000 [w3:6317] admin@native11test GET GRAPH req=bc3f3668df94 target=admin_views/project_admin/project_workflow widget=PipelineToolWdg render=pipeline -> 200 55.2ms
+2026-10-02T17:14:13+0000 [w3:6317] admin@admin GET GRAPH req=eb227506b76f target=project_essentials/sthpw_pipelines/~cell widget=PipelineToolWdg render=pipeline -> 200 75.2ms
+2026-10-02T17:14:14+0000 [w3:6317] admin@native11test GET GRAPH req=218cbcff6f7a target=admin_views/project_admin/project_schema widget=SchemaToolWdg render=schema rows=1 -> 200 64.5ms
+2026-10-02T17:14:14+0000 [w3:6317] admin@admin GET OPEN req=2606d96b7be5 target=project_essentials/sthpw_schema/~cell widget=SchemaToolWdg render=schema -> 200 75.2ms
+2026-10-02T17:15:55+0000 [w3:6317] admin@admin GET OPEN req=e238a3e1419f act=ui_mur85dw0_3_68al0i target=admin_views/project_admin/project_workflow widget=PipelineToolWdg render=pipeline -> 200 45.2ms
+2026-10-02T17:15:55+0000 [w3:6317] admin@admin GET GRAPH req=376f2ff86bd6 act=ui_mur85eg8_4_m6ixxd target=admin_views/project_admin/project_workflow widget=PipelineToolWdg render=pipeline -> 200 53.2ms
+2026-10-02T17:15:56+0000 [w3:6317] admin@admin GET GRAPH req=9550904fd43e act=ui_mur85ej4_5_sakok6 target=admin_views/project_admin/project_schema widget=SchemaToolWdg render=schema -> 200 50.0ms
+2026-10-02T17:15:58+0000 [w3:6317] admin@admin GET GRAPH req=dde8ee24bc7a act=ui_mur85fxn_8_y1akzj target=project_essentials/sthpw_pipelines/~cell widget=PipelineToolWdg render=pipeline rows=2 -> 200 71.5ms
+2026-10-02T17:15:59+0000 [w3:6317] admin@admin GET GRAPH req=70698c4d9669 target=project_essentials/sthpw_pipelines/~cell widget=PipelineToolWdg render=pipeline -> 200 67.5ms
+2026-10-02T17:15:59+0000 [w3:6317] admin@admin GET GRAPH req=2b0051f3da98 act=ui_mur85h2b_b_aaw53z target=project_essentials/sthpw_pipelines/~cell widget=PipelineToolWdg render=pipeline rows=2 -> 200 78.9ms
+2026-10-02T17:16:01+0000 [w3:6317] admin@admin GET OPEN req=149b5986c133 act=ui_mur85ii6_d_paxrsq target=project_essentials/sthpw_schema/~cell widget=SchemaToolWdg render=schema -> 200 68.9ms
+2026-10-02T17:16:05+0000 [w3:6317] admin@admin GET GRAPH req=27e0eff5ebdf target=admin_views/project_admin/project_workflow widget=PipelineToolWdg render=pipeline rows=2 -> 200 58.8ms
+2026-10-02T17:16:05+0000 [w3:6317] admin@admin GET GRAPH req=df4997e5a396 target=admin_views/project_admin/project_schema widget=SchemaToolWdg render=schema rows=1 -> 200 64.7ms
+2026-10-02T17:16:06+0000 [w3:6317] admin@admin GET OPEN req=ff5b8b5a90c4 target=project_essentials/sthpw_pipelines/~cell widget=PipelineToolWdg render=pipeline -> 200 73.9ms
+2026-10-02T17:16:06+0000 [w3:6317] admin@admin GET GRAPH req=e25f9fdb57c0 target=project_essentials/sthpw_pipelines/~cell widget=PipelineToolWdg render=pipeline -> 200 95.4ms
+2026-10-02T17:16:07+0000 [w3:6317] admin@admin GET GRAPH req=6270619bbe25 target=admin_views/project_admin/project_workflow widget=PipelineToolWdg render=pipeline -> 200 60.7ms

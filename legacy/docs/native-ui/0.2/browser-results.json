@@ -1,0 +1,71 @@
+{
+  "test_backend": "original config XML + synthetic rows; not real TACTIC database",
+  "transport": "Python HTTP bridge; browser URL/storage/history shims",
+  "scenarios": [
+    {
+      "scenario": "Login against actual HTTP API; ticket hidden from UI",
+      "passed": true
+    },
+    {
+      "scenario": "Top-level admin hierarchy from admin-conf.xml in original order",
+      "passed": true
+    },
+    {
+      "scenario": "Original users config opens native table with 12 synthetic rows",
+      "passed": true
+    },
+    {
+      "scenario": "Context menu opens record inspector",
+      "passed": true
+    },
+    {
+      "scenario": "Record inspector closes",
+      "passed": true
+    },
+    {
+      "scenario": "Original users_in_groups target: revisioned membership write",
+      "passed": true
+    },
+    {
+      "scenario": "Pipeline coordinate drag persists through revision-checked XML round-trip",
+      "passed": true
+    },
+    {
+      "scenario": "Manage Side Bar reads layered admin_views config, not a fixed Vue list",
+      "passed": true
+    },
+    {
+      "scenario": "Sidebar order saved as config override and reflected immediately",
+      "passed": true
+    },
+    {
+      "scenario": "Existing view tab survives sidebar reorder",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid XML rejected; original saved config preserved",
+      "passed": true
+    },
+    {
+      "scenario": "Unported original handler stays visible, not a fabricated replacement",
+      "passed": true
+    },
+    {
+      "scenario": "Mobile shell has no horizontal body overflow",
+      "passed": true
+    },
+    {
+      "scenario": "No uncaught JavaScript exceptions in tested flows",
+      "passed": true
+    },
+    {
+      "scenario": "No old widget HTML RPC in tested browser flows",
+      "passed": true
+    },
+    {
+      "scenario": "Logout clears native UI session",
+      "passed": true
+    }
+  ],
+  "js_errors": []
+}

@@ -1,0 +1,864 @@
+{
+  "baseline": {
+    "filename": "TACTIC-5.0.zip",
+    "sha256": "14851ebdeb778adcde2a467dd843694705a4e5f05abbcd07d39db575143ca8b9",
+    "git_commit_from_zip_comment": "17c78e0dfb20a6fef16d70df6aa7b0c9bf20a596",
+    "version": "5.0.0.a02",
+    "files": 6251
+  },
+  "changes": [
+    {
+      "path": ".gitignore",
+      "change": "modified",
+      "before_sha256": "0eaa46ae92b369455e5e1af29ab6680671f73623390df9fbb9957cd0df58645f",
+      "after_sha256": "6ab12ef6c431277fb1f17e8c4715b8d41125bb5f8ac759a5eea68ada433da0fe"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/LICENSE_PSF_HEADER.txt",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "22e730c3ed9e4a832dd2b3f6476a65beb650b7509c28d5e541ab6ccd3a737e60"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/_cgi_header.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b78b5eed78844119a2524ac91952d04b712f05f585e0e999dff002f1fd468fbf"
+    },
+    {
+      "path": "3rd_party/python3/site-packages/cherrypy/lib/httputil.py",
+      "change": "modified",
+      "before_sha256": "df4e22c5a76687a4e6e42191aa4ec96832abb8acde0c9eef2427704573d10734",
+      "after_sha256": "f24718d5b6a76dd5a5109470709f77340bfaf7c8813dd1eafa229571d6ea147a"
+    },
+    {
+      "path": "BUILD_VUE.bat",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c886ed70a7a3cc9e057f54d254e6fdada4b9d584cfd8c458f2becfe065259f09"
+    },
+    {
+      "path": "CHECK_ENV.bat",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5d3ff58cc68306f9bebda8b64baa374255247c25dc21c0084746f9813dd6530d"
+    },
+    {
+      "path": "INIT_LOCAL_SQLITE.bat",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c0497d782184a11b00012a48c5a92e00d6d42b5a537891bc5b7c5b46c295a277"
+    },
+    {
+      "path": "NATIVE_UI_VERSION",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "cce3c01e872dcf0ff885b1f0f6dba8f1b7e2aaf55565151f54785cef8cbce72f"
+    },
+    {
+      "path": "README_VUE_RU.md",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c0968f253acd527986bb0b0cf2575c3a87758ff000cb24bc2ef9f06e75415e7d"
+    },
+    {
+      "path": "SETUP_ENV.bat",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "4fffa3429fc429bd02778296ead6cb9be1f8cff020ac4eedf91b359a580512c7"
+    },
+    {
+      "path": "START_HERE_RU.md",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "1c1930378041826abef6c92ab05a379e23c1dc031078b7ec6ff1a926ac23b139"
+    },
+    {
+      "path": "START_LEGACY.bat",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "623c3d702c1ceefb22064217bc419072d1cd1cb6e5a2335952f8d2a8b918cb14"
+    },
+    {
+      "path": "START_TACTIC.bat",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "4a4e3da6632a6b0cd6dd9f70dfd5ccad483afa63d2a34b54e0cf2135cf04b94d"
+    },
+    {
+      "path": "UPGRADE_LOCAL_SQLITE.bat",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "bb04d37125cecba2b3ec524822861b174c00130e91cc114a857bb8d54a622e66"
+    },
+    {
+      "path": "frontend/package.json",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "f383d476fbf1305003e8976de4a49a17678a121522ef5d9b5e6d283d5fa1ac13"
+    },
+    {
+      "path": "frontend/src/App.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "53feabcc5f77cf6fd3a2d4a5ea23d5304c02de0f17ec4250fb5e65ffa6a5e252"
+    },
+    {
+      "path": "frontend/src/api.js",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a54316c58eb5ce5e115820c9478cb289836f90427131bc5d8f768a9502a38e05"
+    },
+    {
+      "path": "frontend/src/components/AdminPanel.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5c0721b9a6499a2b83977d364613cf07a16c2668bdeb29c0504d0b86768215eb"
+    },
+    {
+      "path": "frontend/src/components/AdvancedFilter.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0da33934444f6b002dce898ced9a19668543d3266890f73855317dcf30cb4142"
+    },
+    {
+      "path": "frontend/src/components/ConfigEditor.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "38d6655b13397045de4f8ffa3d168c0161705742ae6f1f0bd7e62cc27ae5fa5d"
+    },
+    {
+      "path": "frontend/src/components/ConfiguredForm.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "f3ca103d116b3961d02de7fffae10248e9637f2ffeb21bd8ef81297ae4f2003e"
+    },
+    {
+      "path": "frontend/src/components/ConfiguredTable.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c29b2abde34d265f100ec01049f6cf9b610db3ad4b48b0012873ee4e5250e1a2"
+    },
+    {
+      "path": "frontend/src/components/FieldInput.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b8faf2074f2db290951957baaf7044d87f7a2ecc41f31606505a0f2c58d164cb"
+    },
+    {
+      "path": "frontend/src/components/FilterGroup.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "8154b07690eb9d0e037c4cb32848494c8e5b33abedbf9ffb2795eaa8a176b207"
+    },
+    {
+      "path": "frontend/src/components/GraphEditor.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fd3112066deb70410b0141dd076b6237796981b4f451148b42d80fbac5c5dba9"
+    },
+    {
+      "path": "frontend/src/components/GroupMembership.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a56ad34819e95778c3151d056ed061bcf4c60e1f147f73a02fcb58afa770dd4a"
+    },
+    {
+      "path": "frontend/src/components/HistoryPanel.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "eb6b67ea45dc1a2e1f7737fb06a70ec8c440b1055e40f50cb8b9eededcf44d71"
+    },
+    {
+      "path": "frontend/src/components/RecordInspector.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a75f843a8abe28d8cdc6ee8242522c7728c2dbf7b3565bf80ccb2a476ab2ccfc"
+    },
+    {
+      "path": "frontend/src/components/RelationTree.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c5082544a1aff8954b4861ab8f2cafa021fab4ac6b763c6e43c332eecd1040c9"
+    },
+    {
+      "path": "frontend/src/components/RelationTreeRow.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ed26280d675e1ecf2a81faba9fedb9022f60f758528a3f1c0d3fb50ccd903ba7"
+    },
+    {
+      "path": "frontend/src/components/RelationshipEditor.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "e026f0fc5182220db363af1f07cbe201dab45b468702a5fc0142153686fe9d30"
+    },
+    {
+      "path": "frontend/src/components/SearchTypes.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "f5567383c94eab781c78a86bb8e914cb7a0f4982b83f6c7a8bcb3d379a1d562f"
+    },
+    {
+      "path": "frontend/src/components/SidebarNode.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "20d8d1ae738ce01e793d821b3dede42dc7e2cbddbeacc41e0e2ccc011069ef89"
+    },
+    {
+      "path": "frontend/src/components/TaskPanel.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "83f46f0f9496d7801ddbbf6601a32263734aef431ad72ecbc80f43343cfd83c0"
+    },
+    {
+      "path": "frontend/src/components/TaskTimeline.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "167043e8f0a8c81dea106db6d81cda2da38766adeb7d3a99ae1a922ba5dc3b8b"
+    },
+    {
+      "path": "frontend/src/components/ViewDesigner.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "3b5defe38bc0a5e26f71d08b27412da3bd9ede43f15ef91c809cade50299e8fd"
+    },
+    {
+      "path": "frontend/src/components/WorkHoursPanel.vue",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c4236f8121833cc59fd450da37f83760565972d437b0c7741d403d9c2454ade3"
+    },
+    {
+      "path": "frontend/src/main.js",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c4cf21971968e3fc2d5fca4c46fe0ba7f5376cd5a19ef3379b1e2c58738647cd"
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2e2d9b75bf9117223e7a23a3f6b487b1ea9fae29a794a9218292545bf50248ac"
+    },
+    {
+      "path": "src/pyasm/biz/task.py",
+      "change": "modified",
+      "before_sha256": "803fd42a434b7d71f568c9d3244a4be34692142786b57c4f883585d07592df17",
+      "after_sha256": "bb03994cd649febb270a72233a3a1bb055cd2cf7c2e65e010cec685299123371"
+    },
+    {
+      "path": "src/pyasm/command/kronos.py",
+      "change": "modified",
+      "before_sha256": "73100cf4e175fa07ed0dd4bd391cbabc2a672e153eb84e5a4d081ede5348dd0e",
+      "after_sha256": "85d37298633caa6b0e114bbf1acf737c76087aa62ef933b1076e2ccf0a6894f0"
+    },
+    {
+      "path": "src/pyasm/common/encrypt_util.py",
+      "change": "modified",
+      "before_sha256": "0f5092b32421496f97cc7bc370e80a0b3b45493aa2fe04f410965359bef464a6",
+      "after_sha256": "b18cb5e43ae8ee1481ad2919c830a909005131f910cbdeb6445f63c1eed9623e"
+    },
+    {
+      "path": "src/pyasm/common/spt_date.py",
+      "change": "modified",
+      "before_sha256": "cd9e32efeb5fa0cfabde07ae5ee834dc17cd2a0c14bd6d5244758088ba130440",
+      "after_sha256": "f6db871a0d437091eda93267ef514c07b8d4a44a1ef3863d2ec1b0594bcc4403"
+    },
+    {
+      "path": "src/pyasm/prod/service/api_xmlrpc.py",
+      "change": "modified",
+      "before_sha256": "0cb558983f2536cec9d59daab11961580046cc81ccb2654737b5cc333e664b69",
+      "after_sha256": "b82c21a3e57a7e7a7eb60cc4b2df339ad529baffecb908162143230b6847f87e"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/base_upgrade.py",
+      "change": "modified",
+      "before_sha256": "ac24ab61976c0baaf996e956afd5e226f08391a5157843349c013823db911b7f",
+      "after_sha256": "079500f9c93564906e91b266d0ea38e3eccc1883b4f2ba58c56ee17e5a70e42b"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/sqlite/__init__.py",
+      "change": "modified",
+      "before_sha256": "697970bb11ae94a8597808ec59d5aa1c7d8f06d1841bb051a684d192148fca2b",
+      "after_sha256": "201c68779acf68fb016c35605b4737d70651b6a44e0fa3b73c4bd8be75cc0f38"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/upgrade_db.py",
+      "change": "modified",
+      "before_sha256": "d586c7c1c66e56bcd7a16fd89c8a031a7c4591c0553425b273b2f6ebd9d5db27",
+      "after_sha256": "8f63351b46bcea2db02f7d70470a622d0f6500c8bfdd276e03e21a773c2d1f93"
+    },
+    {
+      "path": "src/pyasm/security/crypto_key.py",
+      "change": "modified",
+      "before_sha256": "a3d1ec9d11e995b37a1b9cab807be1e9636bd5a624636c15f09f532146a4a730",
+      "after_sha256": "d772b7bc606af52982c7086096f894bfb5d1728e7634ba7fbf0b92c7d1891d96"
+    },
+    {
+      "path": "src/pyasm/security/security.py",
+      "change": "modified",
+      "before_sha256": "d2be52ce5a35a6b1cf6895524934f7ed8bedb15a6ea156f457a028f11fc23c70",
+      "after_sha256": "a4122812e9e5fb123c1f4ec1235022ee482ba0e97d21112061dcebd423de7e1f"
+    },
+    {
+      "path": "src/pyasm/web/cherrypy30_startup.py",
+      "change": "modified",
+      "before_sha256": "b696764133c6d30d656a96802365a4ae384bd5efb334d5de0670619d413131db",
+      "after_sha256": "02836447f650d78b1443893a8f2e3a9beee718c3490ab8890f91665215300ddc"
+    },
+    {
+      "path": "src/pyasm/web/web_init.py",
+      "change": "modified",
+      "before_sha256": "6807ce7083cd62944e52ffaed1881d7e481e6f4cb315bcd3dd6f08f92c3c4777",
+      "after_sha256": "9b1073d03dbeb4824a9f85963f23f3f2d115fd22265e168d5e2a8332f7115663"
+    },
+    {
+      "path": "src/pyasm/widget/widget_config.py",
+      "change": "modified",
+      "before_sha256": "f933e4ad04c43976837aee16e1563425fb944bf4e68e34efdd091765fbb1dc73",
+      "after_sha256": "44661417f106bed09567d36f7af9ce0feb19a9f920e63cfc5020d10e0076d2a6"
+    },
+    {
+      "path": "src/tactic/command/create_project_cmd.py",
+      "change": "modified",
+      "before_sha256": "cdc790ee6a9aa9dfaf60990ae7bdff15323967a14b241ffebe0d6c2e15e2b24e",
+      "after_sha256": "3dfe8d83f1eed97d44537e93b2973858372115225b2785d5ce1f6a9978673797"
+    },
+    {
+      "path": "src/tactic/core/__init__.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7b6002a370c4ff342a506c85e1c51592964520a99db5e366e83259924a19fd68"
+    },
+    {
+      "path": "src/tactic/core/bootstrap.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2766f2139ae491ba46c433ef7341cfcd48525cd7013cea9e12a622c84bb61580"
+    },
+    {
+      "path": "src/tactic/core/config_commands.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "33119b66f11215589bd3521e174b9a99fe5896627bd282c9baa0350970ac31ed"
+    },
+    {
+      "path": "src/tactic/core/config_model.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7dedbef534a302d01fc118eb2840ae21f697fd927717986d1a0dadc3b85804b1"
+    },
+    {
+      "path": "src/tactic/core/context_actions.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ae4baab3f9460341516e13f157d7726f8395cb0c055fba1583af3321dee36b43"
+    },
+    {
+      "path": "src/tactic/core/edit_commands.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7b4f7efc815149ec5811d135ce5ec0b181007d3813c191726f544a57d428d0bb"
+    },
+    {
+      "path": "src/tactic/core/field_policy.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ad9db9d26d650342b391f3029d49d6980e90eae86ec4e39291ea853c5fb17469"
+    },
+    {
+      "path": "src/tactic/core/filter_data.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7ef908853da78ade0409768dee7de37ce95ebc479b65be585ffceb5fe32d6f72"
+    },
+    {
+      "path": "src/tactic/core/graph_model.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "18f7df471d6518cbbab032e0311e255ea11a27544ceb3476c3c1c6821506a64c"
+    },
+    {
+      "path": "src/tactic/core/native_edit.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "e8c27bb2da397dd4f66e33952a26b77cdfd570f0f220b57eeb783ce04642bee2"
+    },
+    {
+      "path": "src/tactic/core/pipeline_commands.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b44dab44f657c5205ffca41bd00d3635bebfe7f4a3b40a513a512cc7929f30d4"
+    },
+    {
+      "path": "src/tactic/core/process_commands.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "414493d22b93bd1eb5bfc5a9c20721f6666ddb1b1092bd34eddb4ef525dce3d3"
+    },
+    {
+      "path": "src/tactic/core/process_constants.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5d71dfe6e8e070a3c2143adce3b3dad39742e684bab61241b62c3ee3b2f1998d"
+    },
+    {
+      "path": "src/tactic/core/query_model.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "3d2faab288a8e2fc1f0e59a428e4735890ff4fa68df2aa78dd7a328635cc76a5"
+    },
+    {
+      "path": "src/tactic/core/schema_commands.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0b6d3f343c47d65b354fa4e755458bc3b97ea6dd2469c1dc6e31d00b07e8a4d2"
+    },
+    {
+      "path": "src/tactic/core/search_filters.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "1d113b246d63af361a041a1b1877f8ea259ee0dfa3162f12dcb847bea1127d2b"
+    },
+    {
+      "path": "src/tactic/core/security_commands.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "82261698d381e9a780ff11a9224f73cb78fe2feea889fea0d2db2e3e559c3564"
+    },
+    {
+      "path": "src/tactic/core/sidebar_config.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a2480fea46d1f18b4daf9da20af72fe95041fed5ac60bc208b7092f6763b1a67"
+    },
+    {
+      "path": "src/tactic/core/task_choices.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "01d1f7179f6c91ca645f7909a83d7c3ed600964c1d72d077c8777b41679777f5"
+    },
+    {
+      "path": "src/tactic/core/view_edits.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "4dc5ec7878754bd0420dc2c668183a57fb674a7ae675accaee64626cd2971692"
+    },
+    {
+      "path": "src/tactic/core/widget_aliases.json",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "cb0e7bcc004333ae98b3b7d34d4d336ec742eed6401138235aae6b7d53a1ee2c"
+    },
+    {
+      "path": "src/tactic/core/widget_config.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "3d722eec4d8cf9b93d9ce597055323d5c75adb5287733e4bde0c6e5617a96c64"
+    },
+    {
+      "path": "src/tactic/core/work_hours.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2d1731ab24480e7f982511547fb9257401f67c356db8b979727f0238ad0b9f90"
+    },
+    {
+      "path": "src/tactic/protocol/rest_handler.py",
+      "change": "modified",
+      "before_sha256": "95277731b03e72af0bce0c918d5c45177f90e7ff1ae0c29ec48bddf92dd11a9c",
+      "after_sha256": "8efb3a3ce29f41536a77207c47d28e11349bf22a337df923374bf15a237de66c"
+    },
+    {
+      "path": "src/tactic/ui/app/search_type_creator_wdg.py",
+      "change": "modified",
+      "before_sha256": "0bc3444b44868bcb8e96209d753efe3809380afff818841a55d315586ff0c37f",
+      "after_sha256": "7afe3640fbc62302eb3d25df1471dd6fe510c531108aaafe2a85274f6ae49f89"
+    },
+    {
+      "path": "src/tactic/ui/filter/filter_data.py",
+      "change": "modified",
+      "before_sha256": "2736eb596f5ce78276502e95e7ac1be2cb1dfc754cefca321a73ab4b28a7553e",
+      "after_sha256": "021963f0b29e57c259d88064ed08f4e44129a48ed264ffbadbd902273aa30f00"
+    },
+    {
+      "path": "src/tactic/ui/filter/filter_wdg.py",
+      "change": "modified",
+      "before_sha256": "0e0533ecfd2c6abc42fdbc39b838f93621e1cccc8b2a4b24cd83b6113ec9f543",
+      "after_sha256": "287a42767b98c2e59e70f5d0a9b709a8ee0328212c7d76cabf8789216df223d8"
+    },
+    {
+      "path": "src/tactic/ui/input/process_context_wdg.py",
+      "change": "modified",
+      "before_sha256": "55bc593e934035d538656c3c5fe6cfe5f67e4e9a04ab1db3207cc82c604adcdc",
+      "after_sha256": "81d7adcaf2d5462f5e9c204601d85a87a203205533308f6cb2f695b2c8dbfd69"
+    },
+    {
+      "path": "src/tactic/ui/panel/edit_cmd.py",
+      "change": "modified",
+      "before_sha256": "708fb874b4d1ac49f343e4420b7772988b6976fdc78957ce15ccf58055a87c8d",
+      "after_sha256": "9f9257c2a7a7ebdd6be8f39bdbe6fe37ab2d93451959c0983027f5b2bd0530b5"
+    },
+    {
+      "path": "src/tactic/ui/panel/panel_wdg.py",
+      "change": "modified",
+      "before_sha256": "b65e7ebf181ece18c68526de05b1199c07195df53c52a146852324ace29fc8ae",
+      "after_sha256": "a5a1b326a1201e6a1d11a57d15dbb13bd828fa765b78e5b58b9d7c62efbc7690"
+    },
+    {
+      "path": "src/tactic/ui/startup/security_wdg.py",
+      "change": "modified",
+      "before_sha256": "41d749db998f51c7877d0195e4a441b4a884a9b2cdf3ae783fd30fe160e918f4",
+      "after_sha256": "89e42c2385798cd6f44c3cd74f9ce6e0e68b7ee8ae48076fe3f53bbbece02ca3"
+    },
+    {
+      "path": "src/tactic/ui/table/work_hours_element_wdg.py",
+      "change": "modified",
+      "before_sha256": "7082738afcd39d0ba72550c7f56249c6879f4fe3c4ab879203c62096ccf90ed8",
+      "after_sha256": "6c1be4bb8e06a76c2a58e267d6889cb08fb69d29200693a4bf3bb83dcd386d7b"
+    },
+    {
+      "path": "src/tactic/ui/tools/pipeline_wdg.py",
+      "change": "modified",
+      "before_sha256": "7b85f12ae0a64f9658ee6cf5fb45381e7725aac6490e9beab7a6ff64d8208e22",
+      "after_sha256": "f4931960faaa5b4ee08904dc5e43cd34c84e9854b051efa9a201d195be296067"
+    },
+    {
+      "path": "src/tactic/ui_api/__init__.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ccc4dd0eefd757df372ccf926bd1c25f3407a0bc727567269e34997101892c01"
+    },
+    {
+      "path": "src/tactic/ui_api/admin_service.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9eeceae002d7739d93f1cadb138eed4d10e81f18ef7287324278119726edc519"
+    },
+    {
+      "path": "src/tactic/ui_api/api.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a38c2b50bc62867780d927171888fe31b2cebb63b0e0d78ebeb9de185181b229"
+    },
+    {
+      "path": "src/tactic/ui_api/config.json",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "3622233e634d1eef032c720ffc4b68982547200f32d39614686b42b5e5496f27"
+    },
+    {
+      "path": "src/tactic/ui_api/config_backend.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "20a3ca559c1dbabf3cc4b77949d73c7a6045b3c58f8744e42cf8f8be642453a1"
+    },
+    {
+      "path": "src/tactic/ui_api/contracts.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a2c026b3c61cf6bca57421447e58d4a9cab4af32b7ee3c271806dbd28ef4ec4e"
+    },
+    {
+      "path": "src/tactic/ui_api/extended_backend.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9212ffaf42a97f3be31191e992d2a4200b6d033cfc02db463d4c287d038a49ec"
+    },
+    {
+      "path": "src/tactic/ui_api/file_payload.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a474c25dcb55a42e8cb9b54b5975cff03fe523bb25bca2472ff8a9382d637865"
+    },
+    {
+      "path": "src/tactic/ui_api/graph_service.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7eac79d0a52c4dea457d7191684c69ea90f7625ff92e42015cecb3e0ab5e853d"
+    },
+    {
+      "path": "src/tactic/ui_api/history_service.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "016aaac2f925572ae0062dfa54da47d96155315e65de32bf08cfe003be5c1d13"
+    },
+    {
+      "path": "src/tactic/ui_api/mount.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "654af3f4aec8dd9dec147827d26854e7e67a75e3467e145fa9579c7902408b7f"
+    },
+    {
+      "path": "src/tactic/ui_api/record_service.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "57eb252a214e2665625ed956a2f33501a781eeef33e206734cc04e9143e53cba"
+    },
+    {
+      "path": "src/tactic/ui_api/relationship_service.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5ce6cff1c5fde0812db35d6fef591f8ea566de554a7f3a4a902a31eec5543958"
+    },
+    {
+      "path": "src/tactic/ui_api/routing.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "bba1b485e6f7e93500a27bd53338ba083c32808461f14b270004d9b7c7bd0a97"
+    },
+    {
+      "path": "src/tactic/ui_api/session.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b03b8ae319776ead4d7031b0a193267516a778d3445901be5cfd93cd2ec82158"
+    },
+    {
+      "path": "src/tactic/ui_api/tactic_backend.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5337a918db2f409caa91c8c6a04c58de839a7cac5a76be3f4934ea93aa3e992e"
+    },
+    {
+      "path": "src/tactic/ui_api/task_service.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ba6bff88b87d7976f3348f49f334b26ab832f354d087a6f8b37c44f56949cb45"
+    },
+    {
+      "path": "src/tactic/ui_api/view_service.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b36ecb2c264b0131410bd1171c8f99dbf487e8946a54fcefcc368b82cb155b69"
+    },
+    {
+      "path": "src/tactic/ui_api/web/app.js",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "6dea2adc84f0b221b118efd4030713e0894e1686632d8b8feadb11d264f60415"
+    },
+    {
+      "path": "src/tactic/ui_api/web/build-manifest.json",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b93b6bb00528c66b6020997e27216616cc471440686536ce8e56c974e34d931f"
+    },
+    {
+      "path": "src/tactic/ui_api/web/index.html",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9e108dcffe0861bf5a87a4e0b6af28dec6fa116564395ad61931d7f3a5879139"
+    },
+    {
+      "path": "src/tactic/ui_api/web/styles.css",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2e2d9b75bf9117223e7a23a3f6b487b1ea9fae29a794a9218292545bf50248ac"
+    },
+    {
+      "path": "src/tactic/ui_api/web/vendor/VUE_LICENSE.txt",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "49190d1f742dd61e47fe816df4963e5186a2a62100d9122f9883a60ea32973ac"
+    },
+    {
+      "path": "src/tactic/ui_api/web/vendor/vue.global.prod.js",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c459ba7cc8db65c982589fa5d64c7ff478877e8e5b0fd75683207cec6a4e89e8"
+    },
+    {
+      "path": "src/tactic/ui_api/work_hour_service.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9bceab7d6645d69558f58e79de8c2c513c598dd1a105fe7dd833b1ab06a54bd7"
+    },
+    {
+      "path": "tests/native_ui/fixture_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "9bf8e94d0d5614523f45ebb1359ed3c332a174fe7dd259c85c2af22d84f10c9d"
+    },
+    {
+      "path": "tests/native_ui/fixture_backend.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fb406a1d7893777fcd4dc79ec444c65c9a5bbb3cee7c145ae57b7cd76d44d2ee"
+    },
+    {
+      "path": "tests/native_ui/fixture_deep.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b5e3a04fd3c54a003e247a02fc6029eaae923c01b626ff207c53b9b1bca0be52"
+    },
+    {
+      "path": "tests/native_ui/run_browser.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5061ae44e9b17e5434a02867e0852a831ef6d7d286d37e7b930c89b34993ad15"
+    },
+    {
+      "path": "tests/native_ui/run_browser_03.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c1644940220cce624108e76f179e4c84678735f58365a088fcb571ecf618131d"
+    },
+    {
+      "path": "tests/native_ui/run_browser_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "4b01cdfcade0efb675ea71713e87ef7c391ddd6786f410f4b73610133faa3987"
+    },
+    {
+      "path": "tests/native_ui/run_http.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "dacdb85baed0aa3c6d61e3b81b55241603d0134e1c9ff812ecdcc60917ad87a5"
+    },
+    {
+      "path": "tests/native_ui/run_http_03.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "7cb79d44bc5bb204fdc8be4a11367b3192f6dfcf0931e4c16944df986ea5a995"
+    },
+    {
+      "path": "tests/native_ui/run_http_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a60ce7713187367781d2e8e4ef93d52a393ceadaeedac9f43c453d69df027d3c"
+    },
+    {
+      "path": "tests/native_ui/serve_fixture.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a825d65f0d726ad0e09120f51e7307d8e472baba9e951759149f5b43c8048bfb"
+    },
+    {
+      "path": "tests/native_ui/source-provenance-04.json",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "cd4ce3d489b8f83f73ba4f565326cf9588c43cf937abec1ce9fc38531bec014a"
+    },
+    {
+      "path": "tests/native_ui/test_admin_services.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "ca84dc7bf89d5cd7a3bbc923f189845cc6be34ab9ce42245618124f77307cb24"
+    },
+    {
+      "path": "tests/native_ui/test_config.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "a51012da567008f1b7079469fdc71bca7dda78353c55de71dfdc3f58df08e1f9"
+    },
+    {
+      "path": "tests/native_ui/test_domain_services_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "b0ee4483840b4540e3d208d297016489e40610dda9fe8ff743855a6bf51714a2"
+    },
+    {
+      "path": "tests/native_ui/test_final_regressions.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "cf5661353364bccb8c9ce39732c4c3399e6be3a97884853bdbdacf1c4bc71eb1"
+    },
+    {
+      "path": "tests/native_ui/test_native_deep.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2801f00451d99109d69a8097eff23375ad285e3e06f0f3ef17c0c9c835047a5c"
+    },
+    {
+      "path": "tests/native_ui/test_original_resolver.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "bd2dc864a5f83c1e35c6121291e9d890f9316bc9f361cd10b8613c0e0d2b48e7"
+    },
+    {
+      "path": "tests/native_ui/test_query_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c140634cac89a8b53f1d3b4c30bff6ec46dec557936b045b6125d82aa348d85b"
+    },
+    {
+      "path": "tests/native_ui/test_semantics_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "fba28e12a345e5240702d6552a56718a60b89f3604029905d85ed7a6f8a92edc"
+    },
+    {
+      "path": "tests/native_ui/test_source_commands.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0394b728083eed285fcb1fff289fc92b261f7973b3f13165fa3fbc478446075c"
+    },
+    {
+      "path": "tests/native_ui/test_source_provenance_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "5584088317953910954c6e88b0376e9ce6be89e766c6e58d524fbb59e1877160"
+    },
+    {
+      "path": "tests/native_ui/test_sql_builder_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "affdfa45a099006cecb7df7935e22c6441f328f217094b9de68fa336e1c17c75"
+    },
+    {
+      "path": "tests/native_ui/test_task_form_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2fd0ca32c53159fbadfb18ee2b77fccbd74849dda527be9a3bd060d210dff069"
+    },
+    {
+      "path": "tests/native_ui/test_transport.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "e83d42357553eb78b372bfba9f65a5c01add3191e1a942fc3569cf2fe9f6d491"
+    },
+    {
+      "path": "tests/native_ui/test_work_hours_04.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "3e5c1dc85f814dadb4faf3cdf65fac34b16f0b9f63c88643b1a3c28aea73062f"
+    },
+    {
+      "path": "tools/local/launch.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "0038224c6118d03676526e31caeb56cfcf7e13c2e4444f667328d0b79ffa0be4"
+    },
+    {
+      "path": "tools/local/requirements.txt",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "40e50e302e614880782897c5dfccc7c10999a20bed8e2828b5af2737deed2869"
+    },
+    {
+      "path": "tools/local/runtime-manifest.json",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "c6630a9a772b376b022bbd416a9b2354d8d84bf64c4cb472a6943f84c7a48c9d"
+    },
+    {
+      "path": "tools/local/setup_env.ps1",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "8082302569eb597d26309ac1fa6fb366346516e46161ed9b71f4169eaa76ef31"
+    },
+    {
+      "path": "tools/native_ui/audit_source.py",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "246ee1eb6d8d38fc77936adbf47b1fa9debbd38c7f31b13682e8ae42c03e9790"
+    },
+    {
+      "path": "tools/native_ui/build.cjs",
+      "change": "added",
+      "before_sha256": null,
+      "after_sha256": "2ab3a199f3855722e028c15eaea6581a7ce839b70aaacb38e855ea0234452ae0"
+    }
+  ],
+  "note": "Report files and compiled Vue vendor are not included in the textual patch."
+}

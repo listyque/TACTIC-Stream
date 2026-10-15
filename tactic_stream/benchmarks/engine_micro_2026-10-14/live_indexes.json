@@ -1,0 +1,26 @@
+{
+  "created": [
+    "pref_setting_scope_idx",
+    "sobject_list_parent_code_idx",
+    "sobject_list_parent_id_idx",
+    "snapshot_parent_code_idx",
+    "snapshot_parent_id_idx",
+    "file_path_idx",
+    "connection_src_idx",
+    "connection_dst_idx",
+    "login_in_group_login_idx"
+  ],
+  "unchanged_row_counts": {
+    "pref_setting": 0,
+    "sobject_list": 33,
+    "snapshot": 5072,
+    "file": 8408,
+    "connection": 10,
+    "login_in_group": 2,
+    "ticket": 457,
+    "transaction_log": 5090,
+    "sobject_log": 29802,
+    "change_timestamp": 58170
+  },
+  "seconds": 0.326
+}

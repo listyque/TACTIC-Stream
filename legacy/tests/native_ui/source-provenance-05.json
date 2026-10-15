@@ -1,0 +1,13 @@
+{
+  "baseline": "supplied TACTIC_5_Vue_Source_Fork_0.4.zip",
+  "methods": [
+    {
+      "source": "src/tactic/ui/filter/filter_wdg.py",
+      "class": "NotificationLogFilterWdg",
+      "method": "alter_search",
+      "target": "src/tactic/core/notification_filters.py",
+      "target_class": "NotificationLogScope",
+      "ast_sha256": "eff90c8fd6bd53bbd2417415177053f3090b6c0fe49b36275f99fe41e23bd16b"
+    }
+  ]
+}

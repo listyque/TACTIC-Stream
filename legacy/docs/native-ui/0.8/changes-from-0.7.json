@@ -1,0 +1,297 @@
+{
+  "baseline": "TACTIC_5_Vue_Source_Fork_0.7.zip",
+  "baseline_sha256": "8412e216d2cb360b26a98d79f878edcba494f6a170151503778cbb1e8d432364",
+  "changes_excluding_reports": 45,
+  "changes_excluding_reports_and_readmes": 43,
+  "changes": [
+    {
+      "path": "CHECK_ENV.bat",
+      "status": "modified",
+      "before": "5d3ff58cc68306f9bebda8b64baa374255247c25dc21c0084746f9813dd6530d",
+      "after": "76a8903a8209e11e65dcb09d267bcb0cb8c50bd9acedb3004c9601fc281905ba"
+    },
+    {
+      "path": "CHECK_LOCAL_DB.bat",
+      "status": "added",
+      "before": null,
+      "after": "90df34e7f84cdbc07968ef55d76669322b7af42cfcf8014fdb0c4ec55c6c57ed"
+    },
+    {
+      "path": "INIT_LOCAL_SQLITE.bat",
+      "status": "modified",
+      "before": "c0497d782184a11b00012a48c5a92e00d6d42b5a537891bc5b7c5b46c295a277",
+      "after": "41383d2774c7af8448b5412f9c492677a598613f6f7ed867d083eaa6996b44b5"
+    },
+    {
+      "path": "NATIVE_UI_VERSION",
+      "status": "modified",
+      "before": "3b1add489f8961560bc1562f10cabcf762bce961623cca362f0128522fe1ed29",
+      "after": "fdf276f0183c71742823b061f7342d581e56de0af10648339b525249e26ee94f"
+    },
+    {
+      "path": "README_VUE_RU.md",
+      "status": "modified",
+      "before": "95a45b9759d8d0b20e6e918937536f48ab2b05c8bfaf67e36d866becef445c58",
+      "after": "76631387274b5db01776e07405813a3ebec502653e6b870e00b9fc72bdfa4014"
+    },
+    {
+      "path": "RESTORE_LOCAL_SQLITE.bat",
+      "status": "added",
+      "before": null,
+      "after": "4c899288cd05a6bfe61dd24a2d54841cae3f57d3163b9f0a8609274c9c077a69"
+    },
+    {
+      "path": "START_HERE_RU.md",
+      "status": "modified",
+      "before": "9ab3a441033573787b2ad7ee83d9c8f7e46f3e0824c2f43183fde5a2314651f5",
+      "after": "b7236cdbb6f005f20f12ba60b991d7b088f53e0f3d8710e6984cb7ea0df42669"
+    },
+    {
+      "path": "START_LEGACY.bat",
+      "status": "modified",
+      "before": "623c3d702c1ceefb22064217bc419072d1cd1cb6e5a2335952f8d2a8b918cb14",
+      "after": "6f553f92847165632821abb46f33505d93c9d4f4b523be89549eb5dd0b6c887f"
+    },
+    {
+      "path": "START_TACTIC.bat",
+      "status": "modified",
+      "before": "4a4e3da6632a6b0cd6dd9f70dfd5ccad483afa63d2a34b54e0cf2135cf04b94d",
+      "after": "e3a298a3773409e7ac3e7e54678c30f3d7a7206459eee4b1026da2a39b1b173a"
+    },
+    {
+      "path": "UPGRADE_LOCAL_SQLITE.bat",
+      "status": "modified",
+      "before": "bb04d37125cecba2b3ec524822861b174c00130e91cc114a857bb8d54a622e66",
+      "after": "be7c13c64934988fec19b7061103308cf97e7f22799cf28aeb1b2e7c9f11a767"
+    },
+    {
+      "path": "frontend/package.json",
+      "status": "modified",
+      "before": "f383d476fbf1305003e8976de4a49a17678a121522ef5d9b5e6d283d5fa1ac13",
+      "after": "7cf66d2ca69404f0d15e7ba52589beb9cf8fe49dbc34bfe32502c5d7cc0033fc"
+    },
+    {
+      "path": "frontend/src/components/AdminPanel.vue",
+      "status": "modified",
+      "before": "5c0721b9a6499a2b83977d364613cf07a16c2668bdeb29c0504d0b86768215eb",
+      "after": "96d677f215ebb158f72d3f5a70818ff90b4d5ad64a60eb21236c1fd042474463"
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "status": "modified",
+      "before": "c8032c7457d57bba391da5757a05be7bc8d76f5d4ffd18f5d4e13914ea5f59e0",
+      "after": "737ea90e646ed41da14ec7d6651d3f293b3081afe03720de27af668e4c5b3808"
+    },
+    {
+      "path": "src/bin/fixes/fix_search_code.py",
+      "status": "modified",
+      "before": "ea30495cf1c53a08fcc694ba6faad45f69cecbdabbb8737dd02b68477745e04e",
+      "after": "52071faa24b7dd917ac9dd5ff464ff7b178b33203addec44442d4bb4f744a2fa"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/base_upgrade.py",
+      "status": "modified",
+      "before": "079500f9c93564906e91b266d0ea38e3eccc1883b4f2ba58c56ee17e5a70e42b",
+      "after": "27f213757f0b14575872ea71a30092523bbdaef3f8b31f962fe8f7fa8f758050"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/project/sthpw_upgrade.py",
+      "status": "modified",
+      "before": "1ec001fbea148e187ef8ce5b73a79a10b06eb94176d9865b00393cd60cd5f0e4",
+      "after": "61b21ed95064227f9b2a0e735f7b582a8e4f2f8b18c3d58b9fb22f2942591fcf"
+    },
+    {
+      "path": "src/pyasm/search/upgrade/upgrade_db.py",
+      "status": "modified",
+      "before": "8f63351b46bcea2db02f7d70470a622d0f6500c8bfdd276e03e21a773c2d1f93",
+      "after": "1f9b593957820e3af3c5a91222ffcdddfb68e7456b4948d89e7842393b53047b"
+    },
+    {
+      "path": "src/tactic/core/schema_health.py",
+      "status": "added",
+      "before": null,
+      "after": "07e7386d489ee3d2a63ad5ba618a605086d34c4a12c946c77c9b0a10b639db34"
+    },
+    {
+      "path": "src/tactic/core/search_code_migration.py",
+      "status": "added",
+      "before": null,
+      "after": "a1becd96746c6095346f1539173b61133d5f14467eb8bb1e104982d21e820f06"
+    },
+    {
+      "path": "src/tactic/core/sqlite_upgrade.py",
+      "status": "added",
+      "before": null,
+      "after": "39cac11d9a6ae37a9dd5bedfca08cb55ae29d1216214bc128dc9258974930db5"
+    },
+    {
+      "path": "src/tactic/ui_api/admin_service.py",
+      "status": "modified",
+      "before": "9eeceae002d7739d93f1cadb138eed4d10e81f18ef7287324278119726edc519",
+      "after": "3d66cf4d11f495a46401aa90d1ef3e89c414c3e1eb372cca07db5a8a5a979423"
+    },
+    {
+      "path": "src/tactic/ui_api/api.py",
+      "status": "modified",
+      "before": "5c676005ebe3e1eb0a4a7b69495dfec1b983b5e0789724e6517eee72044d31ab",
+      "after": "dc2783832af151966af8e3c28aa4a8198971c77ebb6fdb17233c7bb2aa826d5f"
+    },
+    {
+      "path": "src/tactic/ui_api/system_diagnostics.py",
+      "status": "added",
+      "before": null,
+      "after": "6e2bbeb55ecfbdcddd84f2d2cf90b33410d449763d8e380dae8f808abd6a4295"
+    },
+    {
+      "path": "src/tactic/ui_api/version.py",
+      "status": "added",
+      "before": null,
+      "after": "ffadbaeaaa3d99424ee18820c20675a86a91a82d6a5ae5d9a454886ecbca0902"
+    },
+    {
+      "path": "src/tactic/ui_api/web/app.js",
+      "status": "modified",
+      "before": "740ac7a383e8bf0f3575820e7ef5d4eade11084dfec203d68fb1f64ac0147aee",
+      "after": "79ceffd480658f1ab2e27d9604374a862bb2cab21839ee15ad4e2dc97a05f0eb"
+    },
+    {
+      "path": "src/tactic/ui_api/web/build-manifest.json",
+      "status": "modified",
+      "before": "10eebf1cc4b906389e65127507b2b009376e0543870d9a2ba64259cf256ccbc9",
+      "after": "6f39a3dc5bdab686bb73abaf3cc2f0839e43b5eb028e4723c4ff2ca9df5f0243"
+    },
+    {
+      "path": "src/tactic/ui_api/web/styles.css",
+      "status": "modified",
+      "before": "c8032c7457d57bba391da5757a05be7bc8d76f5d4ffd18f5d4e13914ea5f59e0",
+      "after": "737ea90e646ed41da14ec7d6651d3f293b3081afe03720de27af668e4c5b3808"
+    },
+    {
+      "path": "tests/native_ui/fixture_08.py",
+      "status": "added",
+      "before": null,
+      "after": "2249c2ddc7ae570677e3422d6451414f418f15ba83061e5ad78e058f162cb373"
+    },
+    {
+      "path": "tests/native_ui/managed_seed_08.py",
+      "status": "added",
+      "before": null,
+      "after": "87e8425bef853d9727a06b730e6ed9c574e1bda621a4fddde156c907f6235c89"
+    },
+    {
+      "path": "tests/native_ui/run_browser_08.py",
+      "status": "added",
+      "before": null,
+      "after": "3f462789287c6316c9974fe67d2478f8d45536df88a90de7e305470fb7fc8aa3"
+    },
+    {
+      "path": "tests/native_ui/run_http_08.py",
+      "status": "added",
+      "before": null,
+      "after": "8c6e50bd6a43d54d8d6069e20e9a46f0f9f21b0e714528596969d927a1b48a6a"
+    },
+    {
+      "path": "tests/native_ui/run_migration_08.py",
+      "status": "added",
+      "before": null,
+      "after": "d17be864eee7077a2e401f0a5d9cee7f5e954a3577e57ded50e96030e682bf97"
+    },
+    {
+      "path": "tests/native_ui/run_validation_08.py",
+      "status": "added",
+      "before": null,
+      "after": "18aa45b652da57ef7b27e0609a79e41325ad624987b8499a4a2f2cad89756b4f"
+    },
+    {
+      "path": "tests/native_ui/serve_fixture.py",
+      "status": "modified",
+      "before": "49b021871faa4e12f81dd1c52c33c775d161bf011a1fd4327f3ce220d7eb7007",
+      "after": "180a55a9871c08e4237c6548703652e575a792e2817d7320834432e511f33cb8"
+    },
+    {
+      "path": "tests/native_ui/test_runtime_diagnostics_08.py",
+      "status": "added",
+      "before": null,
+      "after": "17b30d1cb74e61c4def02b7c9f9821135e4c584a76289baa7af60f92c3465cde"
+    },
+    {
+      "path": "tests/native_ui/test_search_code_fix_08.py",
+      "status": "added",
+      "before": null,
+      "after": "8f5ebec2f7eb276fe59e9fde3b37f9712517c251d712322a926f82ac5f4f1909"
+    },
+    {
+      "path": "tests/native_ui/test_sqlite_migration_08.py",
+      "status": "added",
+      "before": null,
+      "after": "e0c4fbb04fadbbfb13ee0f755f050f004100de2db62f6c7553d73bd37c290d65"
+    },
+    {
+      "path": "tools/local/launch.py",
+      "status": "modified",
+      "before": "0038224c6118d03676526e31caeb56cfcf7e13c2e4444f667328d0b79ffa0be4",
+      "after": "9c60d13c10cba55ec8c3ba18e1296a10e8a861d468f6696adf39c3833e0bec22"
+    },
+    {
+      "path": "tools/local/local_lock.py",
+      "status": "added",
+      "before": null,
+      "after": "d672893e95fef0fe8f425f984265eae60699c2cd966c3519777e99c4cbb24a5d"
+    },
+    {
+      "path": "tools/local/managed_sqlite.py",
+      "status": "added",
+      "before": null,
+      "after": "d150e101236aa529775e865fe9501e0dd29362e0da5668a8b5673936b0e53d43"
+    },
+    {
+      "path": "tools/local/runtime-manifest.json",
+      "status": "modified",
+      "before": "c6630a9a772b376b022bbd416a9b2354d8d84bf64c4cb472a6943f84c7a48c9d",
+      "after": "0d4de1839a90afe334ef5a23c1acd23b49ae37c277233e7374cd16aec1e2d93c"
+    },
+    {
+      "path": "tools/local/setup_env.ps1",
+      "status": "modified",
+      "before": "8082302569eb597d26309ac1fa6fb366346516e46161ed9b71f4169eaa76ef31",
+      "after": "8f1327974ff3b3e3c2890b4f5a58abcbddfb839b2224b7dda4ed9d24e49e64b7"
+    },
+    {
+      "path": "tools/local/sqlite_worker.py",
+      "status": "added",
+      "before": null,
+      "after": "9e6f755c6a7e61df100ec5a834bb1160ddde03f2eace7a1610205c651a4c99d0"
+    },
+    {
+      "path": "tools/local/validate_pip_zipapp.py",
+      "status": "added",
+      "before": null,
+      "after": "4c969886755ed9d64e9231a343582840b70ad84f27539a1fc181b3a4607678cf"
+    },
+    {
+      "path": "tools/native_ui/build.cjs",
+      "status": "modified",
+      "before": "0fb4c70e91f58788bac8922da7f03a18d3b4dfc0990ecc87d308f78c9b9fb4ec",
+      "after": "415c18ac906d8e68fd9c0b85b057705296f56bd28edd65a161c137d93cdf4e66"
+    }
+  ],
+  "patch_verification": {
+    "applied_to": "unmodified exact files extracted from v0.7 ZIP",
+    "git_apply_check": true,
+    "git_apply": true,
+    "all_result_sha256_match": true,
+    "files": 45
+  },
+  "seed_verification": [
+    {
+      "path": "src/install/start/db/unittest.db",
+      "sha256": "88f9121dd72042d022a20ff6d1b9b23ff7831cf6519681aad84cf3bcb9cdb90f",
+      "unchanged_from_0_7": true
+    },
+    {
+      "path": "src/install/start/db/sthpw.db",
+      "sha256": "0c5fcf8148e2db77060c1cd9091e07c77723a28e8fdeb92a147e71c4b247166b",
+      "unchanged_from_0_7": true
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "tables": {
+    "spt_plugin": "CREATE TABLE \"spt_plugin\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"description\" text,\n    \"manifest\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"version\" character varying(256),\n    \"rel_dir\" text,\n    \"s_status\" character varying(256),\n    CONSTRAINT \"spt_plugin_code_idx\" UNIQUE (\"code\")\n)",
+    "spt_plugin_content": "CREATE TABLE \"spt_plugin_content\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n\t\"code\" character varying(256),\n\t\"plugin_code\" character varying(256),\n\t\"search_type\" character varying(256),\n\t\"search_code\" character varying(256)\n)",
+    "spt_url": "CREATE TABLE \"spt_url\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"url\" character varying(256),\n    \"widget\" text,\n    \"description\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"s_status\" character varying(256),\n    CONSTRAINT \"spt_url_code_idx\" UNIQUE (\"code\")\n)"
+  },
+  "registry": [
+    {
+      "id": 1,
+      "code": "config/plugin",
+      "search_type": "config/plugin",
+      "namespace": "config",
+      "description": "Plugin",
+      "database": "{project}",
+      "table_name": "spt_plugin",
+      "class_name": "pyasm.search.SObject",
+      "title": "Plugin",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 2,
+      "code": "config/plugin_content",
+      "search_type": "config/plugin_content",
+      "namespace": "config",
+      "description": "Plugin Contents",
+      "database": "{project}",
+      "table_name": "spt_plugin_content",
+      "class_name": "pyasm.search.SObject",
+      "title": "Plugin Contents",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 3,
+      "code": "config/url",
+      "search_type": "config/url",
+      "namespace": "config",
+      "description": "Custom URL",
+      "database": "{project}",
+      "table_name": "spt_url",
+      "class_name": "pyasm.search.SObject",
+      "title": "Custom URL",
+      "schema": "public",
+      "color": null
+    }
+  ]
+}

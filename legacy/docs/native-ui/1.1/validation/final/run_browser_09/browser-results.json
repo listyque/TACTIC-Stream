@@ -1,0 +1,87 @@
+{
+  "backend": "original widget configuration and ScriptService; TEST script persistence/auth collaborators",
+  "transport": "explicit Python HTTP bridge: substitutes fetch/cookies/URL/history/storage; original Blob download",
+  "scenarios": [
+    {
+      "scenario": "Original widget-config administration roots unchanged",
+      "passed": true
+    },
+    {
+      "scenario": "Stock ShelfEditWdg opens paged saved-script directory",
+      "passed": true
+    },
+    {
+      "scenario": "Original script storage displayed, not a new application table",
+      "passed": true
+    },
+    {
+      "scenario": "Choosing saved script loads exact source text",
+      "passed": true
+    },
+    {
+      "scenario": "Python syntax errors report without execution",
+      "passed": true
+    },
+    {
+      "scenario": "Valid Python syntax accepted without running its body",
+      "passed": true
+    },
+    {
+      "scenario": "Unsaved source changes tracked",
+      "passed": true
+    },
+    {
+      "scenario": "Ctrl+S saves through original-script service and clears dirty state",
+      "passed": true
+    },
+    {
+      "scenario": "New script saved as data, not executed",
+      "passed": true
+    },
+    {
+      "scenario": "Save-copy uses a new record and preserves original",
+      "passed": true
+    },
+    {
+      "scenario": "Server search refreshes matching saved scripts",
+      "passed": true
+    },
+    {
+      "scenario": "Source text search selects match",
+      "passed": true
+    },
+    {
+      "scenario": "Download preserves source bytes in a local file",
+      "passed": true
+    },
+    {
+      "scenario": "JavaScript is text; unsupported syntax check is explicit",
+      "passed": true
+    },
+    {
+      "scenario": "Discard reloads actual saved record after confirmation",
+      "passed": true
+    },
+    {
+      "scenario": "Manage button uses original custom_script view and element_names",
+      "passed": true
+    },
+    {
+      "scenario": "Original editor reopens from its same configured sidebar target",
+      "passed": true
+    },
+    {
+      "scenario": "Script editor fits mobile viewport",
+      "passed": true
+    },
+    {
+      "scenario": "No legacy HTML renderer calls or JavaScript errors",
+      "passed": true
+    },
+    {
+      "scenario": "Logout unmounts editor",
+      "passed": true
+    }
+  ],
+  "js_errors": []
+}

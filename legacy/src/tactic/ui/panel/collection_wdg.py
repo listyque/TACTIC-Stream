@@ -1,0 +1,1632 @@
+###########################################################
+#
+# Copyright (c) 2005, Southpaw Technology
+#                     All Rights Reserved
+#
+# PROPRIETARY INFORMATION.  This software is proprietary to
+# Southpaw Technology, and is not to be reproduced, transmitted,
+# or disclosed in any way without written permission.
+#
+#
+#
+
+
+__all__ = ["CollectionAddWdg", "CollectionAddCmd", "CollectionListWdg", "CollectionItemWdg", "CollectionLayoutWdg", "CollectionContentWdg", "CollectionRemoveCmd", "CollectionDeleteCmd"]
+
+
+
+
+from pyasm.common import Common, Environment, Container, TacticException
+from pyasm.search import SearchType, Search
+from pyasm.web import DivWdg, Table, SpanWdg, HtmlElement, Widget
+from pyasm.command import Command
+from pyasm.widget import CheckboxWdg, IconWdg
+from tactic.ui.common import BaseRefreshWdg
+from tactic.ui.widget import ButtonNewWdg, IconButtonWdg, ActionButtonWdg
+from tactic.ui.container import DialogWdg
+from tactic.ui.input import LookAheadTextInputWdg
+from tactic.ui.panel import TableLayoutWdg
+
+from .tool_layout_wdg import ToolLayoutWdg
+
+import re
+
+
+class CollectionAddWdg(BaseRefreshWdg):
+
+    def get_display(self):
+
+        search_type = self.kwargs.get('search_type')
+        parent_key = self.kwargs.get('parent_key')
+
+        top = self.top
+        top.add_class("spt_dialog")
+        button = ButtonNewWdg(title='Add to Collection', icon="FA_TH_LARGE")
+        top.add(button)
+
+        detail_wdg = DivWdg()
+        top.add(detail_wdg)
+
+        dialog = DialogWdg()
+        top.add(dialog)
+
+        dialog.set_as_activator(button, offset={'x':-25,'y': 0})
+        dialog.add_title("Collections")
+
+        dialog_content = CollectionAddDialogWdg(search_type= search_type, parent_key=parent_key)
+        dialog.add(dialog_content)
+
+        return top
+
+
+class CollectionAddDialogWdg(BaseRefreshWdg):
+    ''' Contents of the dialog activated by CollectionAddWdg'''
+
+    def get_display(self):
+
+        search_type = self.kwargs.get("search_type")
+
+        parent_key = self.kwargs.get("parent_key")
+
+        search = Search(search_type)
+        if not search.column_exists("_is_collection"):
+            return self.top
+
+        parent_key = self.kwargs.get("parent_key")
+        if parent_key:
+            parent = Search.get_by_search_key(parent_key)
+            search.add_parent_filter(parent)
+
+        search.add_filter("_is_collection", True)
+        collections = search.get_sobjects()
+
+        dialog = DivWdg()
+        self.set_as_panel(dialog)
+        dialog.add_class('spt_col_dialog_top')
+
+        add_div = DivWdg()
+        dialog.add(add_div)
+        #add_div.add_style("display: flex")
+        add_div.add_class("tactic_hover")
+        icon = IconWdg(name="Add new collection", icon="FA_PLUS")
+        icon.add_style("padding-right: 3px")
+        icon.add_style("vertical-align: middle")
+        add_div.add(icon)
+        add_div.add("<span>Create new Collection<span>")
+        add_div.add_style("text-align: center")
+        add_div.add_style("background-color: var(--spt_palette_background2)")
+        add_div.add_style("padding: 5px")
+        add_div.add_class("hand")
+
+
+        insert_view = "edit_collection"
+
+        add_div.add_behavior( {
+            'type': 'listen',
+            'event_name': 'refresh_col_dialog',
+            'cbjs_action': '''
+                var dialog_content = bvr.src_el.getParent('.spt_col_dialog_top');
+                spt.panel.refresh(dialog_content);
+            '''})
+
+
+        add_div.add_behavior( {
+            'type': 'click_up',
+            'insert_view': insert_view,
+            'parent_key': parent_key,
+            'event_name': 'refresh_col_dialog',
+            'cbjs_action': '''
+                let top = bvr.src_el.getParent(".spt_table_top");
+                let table = top.getElement(".spt_table");
+                let search_type = top.getAttribute("spt_search_type");
+
+                // Hide the dialog when popup loads.
+                let dialog_top = bvr.src_el.getParent(".spt_dialog_top");
+                dialog_top.style.visibility = "hidden";
+
+                // the current layout may be "insde" a collection.  Try to discover this
+                let collection_content = top.getElement(".spt_collection_content");
+                let collection_key = "";
+                if (collection_content) {
+                    collection_key = collection_content.getAttribute("spt_collection_key");
+                }
+
+                let kwargs = {
+                  search_type: search_type,
+                  parent_key: bvr.parent_key,
+                  mode: "insert",
+                  view: bvr.insert_view,
+                  save_event: bvr.event_name,
+                  show_header: false,
+                  'num_columns': 2,
+                  default: {
+                    _is_collection: true,
+                    add_to_collection: collection_key,
+                  }
+                };
+                spt.panel.load_popup("Create New Collection", "tactic.ui.panel.EditWdg", kwargs);
+
+            '''
+        } )
+
+        title_div = DivWdg()
+        title_div.add_style('margin: 20px 10px 10px 10px')
+        title_div.add(HtmlElement.b("Add selected items to collection(s)"))
+        dialog.add(title_div)
+
+
+
+        content_div = DivWdg()
+        dialog.add(content_div)
+        content_div.add_style("width: 270px")
+        content_div.add_style("padding: 5px")
+        content_div.add_style("padding-bottom: 0px")
+
+        if collections:
+
+
+            custom_cbk = {}
+            custom_cbk['enter'] = '''
+
+                var top = bvr.src_el.getParent(".spt_dialog");
+                var input = top.getElement(".spt_main_search");
+                var search_value = input.value.toLowerCase();
+                var collections = top.getElements(".spt_collection_div");
+
+                var num_result = 0;
+                var no_results_el = top.getElement(".spt_no_results");
+
+                for (i = 0; i < collections.length; i++) {
+                    // Access the Collection title (without number count)
+                    var collection_title = collections[i].getElement(".spt_collection_checkbox").getAttribute("collection_name").toLowerCase();
+                    if (collection_title.indexOf(search_value) != '-1') {
+                        collections[i].style.display = "block";
+                        num_result += 1;
+                    }
+                    else {
+                        collections[i].style.display = "none";
+                    }
+                }
+                // if no search results, show "no_results_el"
+                if (num_result == 0) {
+                    for (i = 0; i < collections.length; i++) {
+                        collections[i].style.display = "none";
+                    }
+                    no_results_el.style.display = "block";
+                }
+                else {
+                    no_results_el.style.display = "none";
+                }
+
+            '''
+            filters = []
+            filters.append(("_is_collection",True))
+            filters.append(("status","Verified"))
+            text = LookAheadTextInputWdg(
+                search_type = search_type,
+                column="name",
+                icon_pos="right",
+                width="100%",
+                height="30px",
+                hint_text="Filter collections...",
+                value_column="name",
+                filters=filters,
+                custom_cbk=custom_cbk,
+                is_collection=True,
+                validate='false'
+            )
+            text.add_class("spt_main_search")
+            content_div.add(text)
+
+        else:
+            pass
+
+        # set minimum if there is at least one collection
+        if len(collections) > 0:
+            content_div.add_style("min-height: 300px")
+        content_div.add_style("max-height: 300px")
+        content_div.add_style("overflow-y: auto")
+
+        content_div.add("<br clear='all'/>")
+
+        no_results_div = DivWdg()
+        content_div.add(no_results_div)
+
+        no_results_div.add_color("color", "color", 50)
+        no_results_div.add_style("font: normal bold 1.1em arial,serif")
+        no_results_div.add("No collections found.")
+        if collections:
+            no_results_div.add_style("display: none")
+        no_results_div.add_style("margin: 10px auto 20px auto")
+        no_results_div.add_style("text-align: center")
+        no_results_div.add_class("spt_no_results")
+
+        for collection in collections:
+
+            search_type = collection.get_base_search_type()
+            parts = search_type.split("/")
+            collection_type = "%s/%s_in_%s" % (parts[0], parts[1], parts[1])
+            search = Search(collection_type)
+            search.add_filter("parent_code", collection.get_code())
+            num_items = search.get_count()
+
+
+            collection_div = DivWdg()
+            collection_div.add_class("spt_collection_div")
+            content_div.add(collection_div)
+            collection_div.add_style("margin: 3px 5px 0px 5px")
+            collection_div.add_style("display: flex")
+
+            #go_wdg = DivWdg()
+            #collection_div.add(go_wdg)
+            #go_wdg.add_style("float: right")
+
+            #TODO: add some interaction with this arrow
+            # icon = IconWdg(name="View Collection", icon="FA_CHEVRON_RIGHT")
+            # go_wdg.add(icon)
+            #go_wdg.add_behavior( {
+            #    'type': 'click_upX',
+            #    'cbjs_action': '''
+            #    alert("Not Implemented");
+            #    '''
+            #} )
+
+
+            name = collection.get_value("name")
+            # Adding Collection title (without the number count) as an attribute
+            #collection_div.set_attr("collection_name", name)
+
+            if not name:
+                name = collection.get_value("code")
+
+            check_div = DivWdg()
+            collection_div.add(check_div)
+
+            check = CheckboxWdg("collection_key")
+            check.add_class("spt_collection_checkbox")
+            check_div.add(check)
+            check_div.add_style("margin-right: 5px")
+            check_div.add_style("margin-top: 3px")
+
+            check.add_attr("collection_key", collection.get_search_key() )
+
+            check.add_attr("collection_name", collection.get_name() )
+
+            info_div = DivWdg()
+            collection_div.add(info_div)
+            info_div.add(name)
+
+            if num_items:
+                info_div.add(" (%s)" % num_items)
+
+            collection_div.add("<hr/>")
+
+
+        add_button = DivWdg()
+        if not collections:
+            add_button.add_style("display: none")
+        add_button.add("Add Items to Selected")
+        add_button.add_style("margin: 0px 10px 10px 10px")
+        add_button.add_style("width: 100%")
+        add_button.add_class("btn btn-default")
+        dialog.add(add_button)
+
+        add_button.add_behavior( {
+            'type': 'click',
+            'cbjs_action': '''
+            var search_keys = spt.table.get_selected_search_keys(false);
+
+            if (search_keys.length == 0) {
+                spt.notify.show_message("No items selected.");
+                return;
+            }
+
+            var top = bvr.src_el.getParent(".spt_dialog");
+            var checkboxes = top.getElements(".spt_collection_checkbox");
+            var cmd = "tactic.ui.panel.CollectionAddCmd";
+            var server = TacticServerStub.get();
+            var is_checked = false;
+            var added = [];
+            var collection_keys = [];
+
+            var dialog_top = bvr.src_el.getParent(".spt_col_dialog_top");
+
+            for (i = 0; i < checkboxes.length; i++) {
+
+                if (checkboxes[i].checked == true) {
+                    var collection_key = checkboxes[i].getAttribute('collection_key');
+                    var collection_name = checkboxes[i].getAttribute('collection_name');
+
+
+                    // Preventing a collection being added to itself, check if search_keys contain collection_key.
+                    if (search_keys.indexOf(collection_key) != -1) {
+                        spt.notify.show_message("Collection [" + collection_name + " ] cannot be added to itself.");
+                        return;
+                    }
+                    // if there is at least one checkbox selected, set is_checked to 'true'
+                    is_checked = true;
+
+                    // If the collection is not being added to itself, append to the list of collection keys
+                    collection_keys.push(collection_key);
+                }
+            }
+
+            if (is_checked == false) {
+                spt.notify.show_message("No collection selected.");
+            }
+            else {
+                var kwargs = {
+                    collection_keys: collection_keys,
+                    search_keys: search_keys
+                }
+                var rtn = server.execute_cmd(cmd, kwargs);
+                var rtn_message = rtn.info.message;
+
+                if (rtn_message['circular'] == 'True') {
+                    var parent_collection_names = rtn_message['parent_collection_names'].join(", ");
+                    spt.notify.show_message("Collection [" + collection_name + " ] is a child of the source [" + parent_collection_names + "]");
+
+                    return;
+                }
+                for (var collection_name in rtn_message) {
+                    if (rtn_message[collection_name] != 'No insert')
+                        added.push(collection_name);
+                }
+
+                if (added.length == 0)
+                    spt.notify.show_message("Items already added to Collection.");
+                else
+                    spt.notify.show_message("Items added to Collection [ " + added.join(', ') + " ].");
+                // refresh dialog_top, so users can see the number change in Collections
+                spt.panel.refresh(dialog_top);
+            }
+
+            '''
+        } )
+
+
+        return dialog
+
+
+from tactic.core.collection_commands import CollectionAddCmd
+
+
+class CollectionLayoutWdg(ToolLayoutWdg):
+
+    def uses_tile(self):
+        return False
+
+
+    def get_kwargs_keys(cls):
+        return ['group_elements', 'show_collection_shelf', 'library_title','collection_key','path']
+    get_kwargs_keys = classmethod(get_kwargs_keys)
+
+
+    def get_styles(self):
+
+        styles = HtmlElement.style('''
+            .spt_collection_top .spt_group_td_inner {
+                align-items: center;
+            }
+            ''')
+
+        return styles
+
+
+
+    def alter_search(self, search):
+
+        # have to put this here as it overrid
+        #self.search_limit.alter_search(search)
+        super(CollectionLayoutWdg, self).alter_search(search)
+
+
+        collection_key = self.kwargs.get("collection_key")
+
+        # filter assets only under this collection
+        if collection_key:
+            collection = Search.get_by_search_key(collection_key)
+            if collection:
+                collection_code = collection.get_code()
+                collection_type = SearchType.get_collection_type(self.search_type)
+
+                collection_type_obj = SearchType.get(collection_type)
+                collection_table = collection_type_obj.get_value("table_name")
+
+                search.add_filter("code",
+                '''( SELECT search_code FROM (
+                WITH RECURSIVE subordinates AS (
+                    SELECT
+                        search_code,
+                        parent_code
+                    FROM
+                        %s
+                    WHERE
+                        parent_code = '%s'
+                    UNION
+                        SELECT
+                            e.search_code,
+                            e.parent_code
+                        FROM
+                            %s as e
+                        INNER JOIN subordinates s ON s.search_code = e.parent_code
+                ) SELECT
+                    *
+                FROM
+                    subordinates
+                ) AS Foo )''' % (collection_table, collection_code, collection_table),
+                op="in", quoted=False)
+
+
+
+
+
+
+
+    def get_content_wdg(self):
+        self.search_type = self.kwargs.get("search_type")
+        self.collection_key = self.kwargs.get("collection_key")
+
+        top = DivWdg()
+        top.add_class("spt_collection_top")
+
+        if not SearchType.column_exists(self.search_type, "_is_collection"):
+            msg_div = DivWdg()
+            top.add(msg_div)
+            msg_div.add("Search Type [%s] does not support collections" % self.search_type)
+            msg_div.add_style("padding: 40px")
+            msg_div.add_style("width: 300px")
+            msg_div.add_style("margin: 100px auto")
+            msg_div.add_border()
+
+            return top
+
+
+        top.add_style("margin: 5px 20px")
+
+
+        table = Table()
+        top.add(table)
+        table.add_row()
+        table.add_style("width: 100%")
+
+        table.add( self.get_styles() )
+
+        #tr, header = table.add_row_cell()
+        #header.add_style("height: 40px")
+
+        table.add_row()
+        left = table.add_cell()
+        left.add_style("vertical-align: top")
+        left.add_style("width: 250px")
+        left.add_style("max-width: 250px")
+
+        right = table.add_cell()
+        right.add_style("vertical-align: top")
+        right.add_style("width: auto")
+        right.add_style("overflow-y: auto")
+
+        left_content = DivWdg()
+        left.add(left_content)
+
+        right_content = DivWdg()
+        right.add(right_content)
+        window_resize_offset = self.kwargs.get("window_resize_offset")
+        if window_resize_offset:
+            offset = window_resize_offset
+            right_content.add_style("height", "calc(100vh - %spx)" % offset)
+            right_content.add_style("overflow-y", "auto")
+            right_content.add_attr("spt_window_resize_offset", window_resize_offset)
+            right_content.add_class("spt_window_resize")
+            left_content.add_style("height", "calc(100vh - %spx)" % offset)
+            left_content.add_style("overflow-y", "auto")
+            left_content.add_attr("spt_window_resize_offset", window_resize_offset)
+            left_content.add_class("spt_window_resize")
+
+
+
+
+        left_content.add(self.get_collection_wdg())
+        right_content.add(self.get_right_content_wdg())
+
+        return top
+
+
+
+
+    def get_collection_wdg(self):
+
+        parent_key = self.parent_key
+        collection_key = self.kwargs.get("collection_key")
+
+        div = DivWdg()
+        div.add_style("overflow: auto")
+        div.add_class("spt_collection_wrap")
+
+        #window_resize_offset = self.kwargs.get("window_resize_offset")
+        #if window_resize_offset:
+        #    div.add_class("spt_window_resize")
+        #    div.add_attr("spt_window_resize_offset", window_resize_offset)
+
+
+        # Shelf
+        show_shelf = self.kwargs.get("show_collection_shelf")
+        if not show_shelf:
+            show_shelf = False
+
+        if show_shelf not in ['false', False]:
+            shelf_div = DivWdg()
+            div.add(shelf_div)
+            shelf_div.add_style("float: right")
+            shelf_div.add_style("margin-bottom: 15px")
+
+
+            button = ButtonNewWdg(title='Add New Collection', icon="FA_PLUS")
+            shelf_div.add(button)
+            button.add_style("display: inline-block")
+            button.add_style("vertical-align: top")
+            button.add_style("margin-top: 2px")
+
+            insert_view = "edit_collection"
+
+
+            button.add_behavior( {
+                'type': 'click_up',
+                'insert_view': insert_view,
+                'search_type': self.search_type,
+                'event_name': 'refresh_col_dialog',
+                'parent_key': parent_key,
+                'cbjs_action': '''
+                    kwargs = {
+                      search_type: bvr.search_type,
+                      parent_key: bvr.parent_key,
+                      mode: 'insert',
+                      view: bvr.insert_view,
+                      save_event: bvr.event_name,
+                      show_header: false,
+                      num_columns: 2,
+                      default: {
+                        _is_collection: true
+                      }
+                    };
+                    var popup = spt.panel.load_popup('Add New Collection', 'tactic.ui.panel.EditWdg', kwargs);
+                '''
+            } )
+            text_div = DivWdg()
+            shelf_div.add(text_div)
+
+            custom_cbk = {}
+            custom_cbk['enter'] = '''
+
+                var top = bvr.src_el.getParent(".spt_collection_left");
+                var input = top.getElement(".spt_main_search");
+                var search_value = input.value.toLowerCase();
+                var collections = top.getElements(".spt_collection_div");
+                var no_results_el = top.getElement(".spt_no_results");
+                var num_result = 0;
+
+                for (i = 0; i < collections.length; i++) {
+                    // Access the Collection title (without number count)
+                    var collection_title = collections[i].attributes[0].value.toLowerCase();
+                    var subcollection = collections[i].nextSibling;
+
+                    if (collection_title.indexOf(search_value) != '-1') {
+                        collections[i].style.display = "block";
+                        subcollection.style.display = "block";
+                        num_result += 1;
+                    }
+                    else {
+                        collections[i].style.display = "none";
+                        subcollection.style.display = "none";
+                    }
+                }
+                // if no search results, show "no_results_el"
+                if (num_result == 0) {
+                    for (i = 0; i < collections.length; i++) {
+                        collections[i].style.display = "none";
+                    }
+                    no_results_el.style.display = "block";
+                }
+                else {
+                    no_results_el.style.display = "none";
+                }
+
+            '''
+
+            filters = []
+            filters.append(("_is_collection",True))
+            filters.append(("status","Verified"))
+            text = LookAheadTextInputWdg(
+                search_type = self.search_type,
+                column="name",
+                width="100%",
+                height="30px",
+                hint_text="Filter collections...",
+                value_column="name",
+                filters=filters,
+                custom_cbk=custom_cbk,
+                is_collection=True,
+                validate='false'
+            )
+            text.add_class("spt_main_search")
+
+            text_div.add(text)
+            text_div.add_style("width: 220px")
+            text_div.add_style("display: inline-block")
+
+            div.add("<br clear='all'/>")
+
+
+
+
+        # Asset Library folder access
+        library_title = self.kwargs.get("library_title")
+        if not library_title:
+            library_title = "Asset Library"
+        mode = self.kwargs.get("mode") or "tile"
+        asset_lib_div = DivWdg()
+        div.add(asset_lib_div)
+        folder_icon = IconWdg(icon="FAR_FOLDER_OPEN", width='30px')
+        asset_lib_div.add(folder_icon)
+        asset_lib_div.add_style("margin: 5px 0px 10px 0px")
+        asset_lib_div.add_style("padding-top: 5px")
+        asset_lib_div.add_style("padding-bottom: 5px")
+        asset_lib_div.add_style("padding-left: 5px")
+        asset_lib_div.add_style("font-weight: bold")
+
+        asset_lib_div.add(library_title)
+        asset_lib_div.add_class("tactic_hover")
+        asset_lib_div.add_class("hand")
+        asset_lib_div.add_behavior( {
+                'type': 'click_up',
+                'mode': mode,
+                'cbjs_action': '''
+                var top = bvr.src_el.getParent('.spt_collection_top');
+                var view_panel = top.getParent('.spt_view_panel');
+                var mode = bvr.mode;
+
+                if (mode == 'table') {
+                    view_panel.setAttribute('spt_layout', 'collection');
+                    view_panel.setAttribute('spt_mode','table');
+                }
+                else  {
+                    view_panel.setAttribute('spt_layout', 'collection');
+                    view_panel.setAttribute('spt_mode','tile');
+                }
+                spt.panel.refresh(view_panel);
+                '''
+            } )
+
+
+
+        # Collections folder structure in the left panel
+        search_type = self.kwargs.get('search_type')
+        expression = self.kwargs.get("expression")
+        collections_div = CollectionFolderWdg(
+            search_type=search_type,
+            parent_key=self.parent_key,
+            expression=expression,
+            collection_key=collection_key,
+            mode=mode)
+        div.add(collections_div)
+
+
+        return div
+
+
+    def get_right_content_wdg(self):
+
+        parent_key = self.kwargs.get("parent_key")
+        collection_key = self.kwargs.get("collection_key")
+
+        div = DivWdg()
+        div.add_style("width: 100%")
+        div.add_class("spt_collection_content")
+
+        #shelf_wdg = self.get_header_wdg()
+        #shelf_wdg.add_style("float: right")
+        #div.add(shelf_wdg)
+
+        group_elements = self.kwargs.get("group_elements") or []
+        window_resize_offset = self.kwargs.get("window_resize_offset") or None
+        # FIXME: don't really need this as search is already defined with this
+        # expression
+        expression = self.kwargs.get("expression")
+
+        mode=self.kwargs.get("mode")
+        if not mode:
+            self.kwargs["mode"] = "tile"
+
+        tile = CollectionContentWdg(
+                search_type=self.search_type,
+                show_shelf=False,
+                show_search_limit=False,
+                detail_element_names=self.kwargs.get("detail_element_names"),
+                upload_mode=self.kwargs.get("upload_mode"),
+                parent_key=parent_key,
+                collection_key=collection_key,
+                window_resize_offset=window_resize_offset,
+                expression=expression,
+                sobjects=self.sobjects,
+                element_names=self.kwargs.get("element_names"),
+                mode=self.kwargs.get("mode"),
+        )
+        div.add(tile)
+
+        return div
+
+
+
+
+
+class CollectionFolderWdg(BaseRefreshWdg):
+    '''This is the collections folder structure in CollectionLayoutWdg's left panel. '''
+
+
+    def get_display(self):
+
+        self.search_type = self.kwargs.get("search_type")
+        self.mode = self.kwargs.get("mode") or "tile"
+        parts = self.search_type.split("/")
+        collection_type = "%s/%s_in_%s" % (parts[0], parts[1], parts[1])
+
+
+        expression = self.kwargs.get("expression")
+        if expression:
+            search = Search.eval(expression)
+        else:
+            search = Search(self.search_type)
+
+        search.add_filter("_is_collection", True)
+
+
+        # make sure the collections are order by name
+        search.remove_order_bys()
+        search.add_order_by("name")
+
+        parent_key = self.kwargs.get("parent_key")
+        if parent_key:
+            parent = Search.get_by_search_key(parent_key)
+            search.add_parent_filter(parent)
+
+
+        show_top_only = self.kwargs.get("show_top_only")
+        if show_top_only is None:
+            show_top_only = True
+        if show_top_only in [True, "true"]:
+            search2 = Search(collection_type)
+            search2.add_column("search_code")
+            search.add_search_filter("code", search2, op="not in")
+
+        collections = search.get_sobjects()
+
+
+        collections_div = DivWdg()
+
+        is_refresh = self.kwargs.get("is_refresh")
+        if is_refresh:
+            div = Widget()
+        else:
+            div = DivWdg()
+            self.set_as_panel(div)
+            div.add_class("spt_collection_left_side")
+
+
+        collections_div.add_behavior( {
+            'type': 'listen',
+            'event_name': 'refresh_col_dialog',
+            'cbjs_action': '''
+                spt.panel.refresh(bvr.src_el);
+            '''})
+
+        div.add(collections_div)
+
+        collections_div.add_class("spt_collection_list")
+
+        no_results_div = DivWdg()
+        collections_div.add(no_results_div)
+
+        no_results_div.add_color("color", "color", 50)
+        no_results_div.add_style("font: normal bold 1.1em arial,serif")
+        no_results_div.add("No collections found.")
+        no_results_div.add_style("display: none")
+        no_results_div.add_style("margin: 30px auto")
+        no_results_div.add_class("spt_no_results")
+
+        from tactic.ui.panel import ThumbWdg2
+
+
+        collections_div.add_relay_behavior( {
+            'type': 'click',
+            'search_type': self.search_type,
+            'parent_key': parent_key,
+            'collection_type': collection_type,
+            'bvr_match_class': 'spt_collection_item',
+            'cbjs_action': '''
+            var top = bvr.src_el.getParent(".spt_collection_top");
+            var content = top.getElement(".spt_collection_content");
+
+            var layout = bvr.src_el.getParent(".spt_layout");
+            spt.table.set_layout(layout);
+
+
+
+
+            var list = bvr.src_el.getParent(".spt_collection_wrap");
+            var items = list.getElements(".spt_collection_item");
+            for (var i = 0; i < items.length; i++) {
+                items[i].setStyle("background", "");
+                items[i].setStyle("box-shadow", "");
+            }
+            bvr.src_el.setStyle("background", "var(--spt_palette_background2)");
+            var collection_key = bvr.src_el.getAttribute("spt_collection_key");
+            var collection_code = bvr.src_el.getAttribute("spt_collection_code");
+            var collection_path = bvr.src_el.getAttribute("spt_collection_path");
+
+            var expr = "@SEARCH("+bvr.collection_type+"['parent_code','"+collection_code+"']."+bvr.search_type+")";
+
+
+
+            var parent_dict = {};
+            var parent_collection = bvr.src_el.getParent(".spt_subcollection_wdg");
+            var path = collection_path.substring(0, collection_path.lastIndexOf("/"));
+            if (parent_collection) {
+                for (var i = 0; i < collection_path.split("/").length - 1; i++) {
+                    var n = path.lastIndexOf("/");
+                    var collection_name = path.substring(n+1);
+                    path = path.substring(0, n);
+
+                    var parent_key = parent_collection.getAttribute("spt_parent_key");
+                    parent_dict[collection_name] = parent_key;
+                    parent_collection = parent_collection.getParent(".spt_subcollection_wdg");
+
+                }
+            }
+
+
+
+            // put the collection key so the search will go through
+            var target = bvr.src_el.getParent(".spt_table_top");
+            if (collection_key) {
+                target.setAttribute("spt_collection_key", collection_key);
+                target.setAttribute("spt_path", collection_path);
+            }
+
+
+
+            let do_search = false;
+            if (do_search) {
+                spt.table.do_search();
+            }
+            else {
+
+                var cls = "tactic.ui.panel.CollectionContentWdg";
+                var element_names = bvr.src_el.getParent(".spt_element_names");
+                var mode = "%s";
+                var kwargs = {
+                    collection_key: collection_key,
+                    path: collection_path,
+                    search_type: bvr.search_type,
+                    show_shelf: false,
+                    show_search_limit: true,
+                    //expression: expr,
+                    parent_dict: parent_dict,
+                    parent_key: bvr.parent_key,
+                    element_names: element_names,
+                    mode: mode,
+                }
+                spt.panel.load(content, cls, kwargs);
+            }
+
+            bvr.src_el.setStyle("box-shadow", "0px 0px 3px rgba(0,0,0,0.5)");
+
+            // hide the bottom show_search_limit when clicking into a collection
+            var panel = bvr.src_el.getParent(".spt_panel");
+            var search_limit_div = panel.getElements(".spt_search_limit_top");
+            if (search_limit_div.length == 2){
+                search_limit_div[1].setStyle("visibility", "hidden");
+            }
+            ''' % self.mode
+        } )
+
+
+        collections_div.add_relay_behavior( {
+            'type': 'mouseup',
+            'search_type': self.search_type,
+            'bvr_match_class': 'spt_collection_open',
+            'cbjs_action': '''
+            var item = bvr.src_el.getParent(".spt_collection_div_top");
+            var next = item.getNext();
+
+            if (bvr.src_el.hasClass("spt_open")) {
+                next.innerHTML = "";
+                bvr.src_el.setStyle("opacity", 1.0);
+                bvr.src_el.removeClass("spt_open");
+            }
+            else {
+                var collection_key = bvr.src_el.getAttribute("spt_collection_key");
+                var collection_path = bvr.src_el.getAttribute("spt_collection_path");
+
+                var cls = "tactic.ui.panel.CollectionListWdg";
+                var kwargs = {
+                    parent_key: collection_key,
+                    path: collection_path,
+                }
+                spt.panel.load(next, cls, kwargs, null, {show_loading: false});
+
+                bvr.src_el.setStyle("opacity", 0.3);
+                bvr.src_el.addClass("spt_open");
+
+                evt.stopPropagation();
+            }
+
+
+
+            '''
+        } )
+
+
+        collection_key = self.kwargs.get("collection_key")
+        for collection in collections:
+            if collection.get_search_key() == collection_key:
+                selected = True
+            else:
+                selected = False
+
+            collection_wdg = CollectionItemWdg(
+                collection=collection,
+                path=collection.get_value("name"),
+                selected=selected)
+            collections_div.add(collection_wdg)
+            collection_wdg.add_class("spt_collection_div")
+
+            subcollection_wdg = DivWdg()
+            collections_div.add(subcollection_wdg)
+            subcollection_wdg.add_class("spt_subcollection_wdg")
+            subcollection_wdg.add_style("padding-left: 15px")
+
+            # this will open up sub collections
+            #contents_div = CollectionListWdg(parent_key=collection.get_search_key())
+            #subcollection_wdg.add(contents_div)
+
+
+
+        return div
+
+
+class CollectionContentWdg(BaseRefreshWdg):
+
+    def get_display(self):
+
+        self.parent_key = self.kwargs.get("parent_key")
+        self.collection_key = self.kwargs.get("collection_key")
+
+        collection = Search.get_by_search_key(self.collection_key)
+
+        # find the path of the collection
+        path = self.kwargs.get("path")
+        if not path and collection:
+            path = collection.get("name")
+
+        top = self.top
+        top.add_class("spt_collection_tile_wrap")
+        top.add_style("position", "relative")
+
+        self.kwargs["scale"] = 75
+        self.kwargs["show_scale"] = False
+        #self.kwargs["expand_mode"] = "plain"
+        self.kwargs["show_search_limit"] = False
+
+        top.add_style("overflow-y", "auto")
+        top.add_style("overflow-x", "auto")
+        top.add_style("height", "auto")
+
+        #window_resize_offset = self.kwargs.get("window_resize_offset")
+        #if window_resize_offset:
+        #    top.add_class("spt_window_resize")
+        #    top.add_attr("spt_window_resize_offset", window_resize_offset)
+
+        window_resize_xoffset = self.kwargs.get("window_resize_xoffset")
+        if window_resize_xoffset:
+            top.add_attr("spt_window_resize_xoffset", window_resize_xoffset)
+
+
+        if not collection:
+            # top level search
+            search_type = self.kwargs.get("search_type")
+
+            parts = self.kwargs.get("search_type").split("/")
+            collection_type = "%s/%s_in_%s" % (parts[0], parts[1], parts[1])
+
+            search = self.kwargs.get("search")
+            expression = self.kwargs.get("expression")
+            if search:
+                # use this search
+                pass
+            elif expression:
+                search = Search.eval(expression)
+                if not isinstance(search, Search):
+                    result = search
+                    search = Search(search_type)
+                    # TODO: maybe make the results be a filter
+            else:
+                search = Search(search_type)
+
+
+            search.add_op("begin")
+            search.add_filter("_is_collection", "false")
+            search.add_filter("_is_collection", "NULL", quoted=False)
+            search.add_op("or")
+
+            #search2 = Search(collection_type)
+            #search2.add_column("search_code")
+            #search.add_search_filter("code", search2, op="not in")
+            if self.collection_key:
+                del(self.kwargs['collection_key'])
+
+            if not self.kwargs.get('mode'):
+                self.kwargs['mode'] = 'tile'
+
+            sobjects = None
+        else:
+            sobjects = self.kwargs.get("sobjects")
+            search = None
+            if not self.kwargs.get('mode'):
+                self.kwargs['mode'] = 'table'
+
+            # this will designate a search
+            """
+            search = Search(collection.get_base_search_type() )
+            sobjects = None
+            del(self.kwargs['collection_key'])
+            self.kwargs["search"] = search
+            """
+
+
+
+        # always go by id desc
+        self.kwargs['order_by'] = 'id desc'
+
+
+        #mode = "tile"
+        #mode = "panel"
+        #mode = "table"
+        mode = self.kwargs.get("mode") or "tile"
+        #self.kwargs['show_border'] = 'horizontal'
+        # remove the sobjects from the kwargs so on refresh, the stringified sobjects
+        # don't cause a stack trace
+        if "sobjects" in self.kwargs:
+            del(self.kwargs["sobjects"])
+        if sobjects is None:
+            self.kwargs["do_search"] = 'true'
+
+
+        if mode == "table":
+            self.kwargs['element_names'] = ["asset_view", "code", "name", "modified_date", "asset_type"]
+            from .table_layout_wdg import TableLayoutWdg
+            tile = TableLayoutWdg(
+                **self.kwargs
+            )
+        elif mode == "panel":
+            from .panel_wdg import ViewPanelWdg
+            tile = ViewPanelWdg(
+                **self.kwargs
+            )
+
+        else:
+            from .tile_layout_wdg import TileLayoutWdg
+            tile = TileLayoutWdg(
+                **self.kwargs
+            )
+
+
+        if search:
+            print("search:", search) #markmark
+            tile.set_search(search)
+
+        elif sobjects:
+            # put the collectiosn at the end
+            x = []
+            collections = []
+            for sobject in sobjects:
+                if sobject.get("_is_collection") == True:
+                    collections.append(sobject)
+                else:
+                    x.append(sobject)
+            x.extend(collections)
+            sobjects = x
+
+            tile.set_sobjects(sobjects)
+
+        parent_dict = self.kwargs.get("parent_dict")
+        has_parent=False
+        if parent_dict:
+            has_parent = True
+
+        if collection and path:
+            title_div = DivWdg()
+            top.add(title_div)
+            title_div.add_style("float: left")
+            title_div.add_style("margin: 15px 0px 15px 30px")
+
+            asset_lib_span_div = SpanWdg()
+            title_div.add(asset_lib_span_div)
+            title_div.add_class("spt_collection_title")
+            title_div.add_attr("spt_collection_path", path)
+
+            # Asset Library folder access
+            library_title = "Asset Library"
+            icon = IconWdg(name=library_title, icon="FAR_FOLDER_OPEN")
+
+            asset_lib_span_div.add(icon)
+
+            asset_lib_span_div.add(" <a><b>Asset Library</b></a> ")
+
+            path = path.strip("/")
+            parts = path.split("/")
+
+            for idx, part in enumerate(parts):
+                title_div.add(" / ")
+                # the last spt_collection_link does not need a search_key
+                if has_parent and (idx is not len(parts) - 1):
+                    search_key = parent_dict.get(part)
+                    title_div.add(" <a class='spt_collection_link' search_key='%s'><b>%s</b></a> " % (search_key, part))
+                else:
+                    title_div.add(" <a class='spt_collection_link'><b>%s</b></a> " % part)
+                title_div.add_style("margin-top: 10px")
+
+
+            # Adding behavior to collections link
+
+            parts = self.kwargs.get("search_type").split("/")
+            collection_type = "%s/%s_in_%s" % (parts[0], parts[1], parts[1])
+
+            exists = SearchType.get(collection_type, no_exception=True)
+            if not exists:
+                title_div.add("SearchType %s is not registered." % collection_type)
+                return top
+
+            # These behaviors are only activated if the view is within collection layout,
+            # "is_new_tab" is a kwargs set to true, if opening a new tab
+            if not self.kwargs.get("is_new_tab"):
+                icon.add_class("hand")
+                icon.add_behavior( {
+                    'type': 'mouseover',
+                    'cbjs_action': '''
+                    bvr.src_el.setStyle('opacity', 1.0);
+                    '''
+                } )
+                icon.add_behavior( {
+                    'type': 'mouseout',
+                    'cbjs_action': '''
+                    bvr.src_el.setStyle('opacity', 0.6);
+                    '''
+                } )
+                # make icon and All Assets title clickable to return to view all assets
+                mode = self.kwargs.get("mode") or "tile"
+                asset_lib_span_div.add_class("hand")
+                asset_lib_span_div.add_behavior( {
+                    'type': 'click_up',
+                    'mode': mode,
+                    'cbjs_action': '''
+                    var top = bvr.src_el.getParent('.spt_collection_top');
+                    var view_panel = top.getParent('.spt_view_panel');
+                    var mode = bvr.mode;
+
+                    if (mode == 'table') {
+                        view_panel.setAttribute('spt_layout', 'collection');
+                        view_panel.setAttribute('spt_mode','table');
+                    }
+                    else  {
+                        view_panel.setAttribute('spt_layout', 'collection');
+                        view_panel.setAttribute('spt_mode','tile');
+                    }
+                    spt.panel.refresh(view_panel);
+                    '''
+                } )
+
+                title_div.add_class("hand")
+                window_resize_offset = self.kwargs.get("window_resize_offset") or None
+                title_div.add_relay_behavior( {
+                    'type': 'mouseup',
+                    'search_type': self.kwargs.get("search_type"),
+                    'parent_key': self.parent_key,
+                    'window_resize_offset': window_resize_offset,
+                    'collection_type': collection_type,
+                    'mode': mode,
+                    'bvr_match_class': 'spt_collection_link',
+                    'cbjs_action': '''
+
+                    var top = bvr.src_el.getParent(".spt_collection_top");
+                    var content = top.getElement(".spt_collection_content");
+
+                    var collection_key = bvr.src_el.getAttribute("search_key");
+                    if (!collection_key) {
+                        spt.notify.show_message("Already in the Collection.");
+                    }
+                    else {
+                        var collection_code = collection_key.split("code=")[1];
+                        var collection_path = bvr.src_el.innerText;
+                        var expr = "@SEARCH("+bvr.collection_type+"['parent_code','"+collection_code+"']."+bvr.search_type+")";
+
+                        var cls = "tactic.ui.panel.CollectionContentWdg";
+                        var kwargs = {
+                            collection_key: collection_key,
+                            path: collection_path,
+                            search_type: bvr.search_type,
+                            show_shelf: false,
+                            show_search_limit: true,
+                            expression: expr,
+                            parent_key: bvr.parent_key,
+                            window_resize_offset: bvr.window_resize_offset,
+                            mode: bvr.mode
+                        }
+                        spt.panel.load(content, cls, kwargs);
+
+                        bvr.src_el.setStyle("box-shadow", "0px 0px 3px rgba(0,0,0,0.5)");
+                    }
+
+                    '''
+                } )
+
+
+
+        top.add(self.get_header_wdg())
+        top.add("<br clear='all'/>")
+
+        top.add(tile)
+
+        return top
+
+
+
+    def get_header_wdg(self):
+
+        div = DivWdg()
+
+        if self.collection_key:
+
+            from pyasm.common import Environment
+            security = Environment.get_security()
+            search_type = self.kwargs.get("search_type")
+            if security.check_access("search_type", search_type, "delete"):
+
+                button = DivWdg()
+                div.add(button)
+                button.add_class("btn btn-warning btn-sm")
+                button.add_style("font-size: 0.65rem")
+                button.add("Delete Selected")
+                button.add_style("margin-right: 10px")
+                button.add_attr("title", 'Delete Selected Assets')
+
+                button.add_behavior( {
+                    "type": "click",
+                    "cbjs_action": '''
+                    let layout = bvr.src_el.getParent(".spt_layout");
+                    spt.table.set_layout(layout);
+                    spt.table.delete_selected();
+                    '''
+                } )
+
+
+
+
+            #button = ButtonNewWdg(title='Remove Selected Items from Collection', icon="FA_MINUS")
+            button = DivWdg()
+            button.add_class("btn btn-secondary btn-sm")
+            button.add_style("font-size: 0.65rem")
+            button.add_attr("title", 'Remove Selected Items from Collection')
+            button.add("Remove Selected")
+
+            div.add(button)
+            button.add_style("display: inline-block")
+            button.add_style("vertical-align: top")
+
+            button.add_behavior( {
+                'type': 'click_up',
+                'collection_key': self.collection_key,
+                'cbjs_action': '''
+                var search_keys = spt.table.get_selected_search_keys(false);
+                var server = TacticServerStub.get();
+
+                if (search_keys.length == 0) {
+                    spt.notify.show_message("Nothing selected to remove");
+                    return;
+                }
+
+                // default to false, if there is at least one collection selected, change to true
+                var collection_selected = false;
+
+                for (i=0; i<search_keys.length; i++){
+                    var sobject = server.get_by_search_key(search_keys[i]);
+
+                    if (sobject._is_collection){
+                        collection_selected = true;
+                        break;
+                    }
+                }
+
+                var ok = null;
+                var cancel = function() { return };
+                var msg = "Are you sure you wish to remove the selected Assets from the Collection?";
+
+                var ok = function() {
+                    var cls = 'tactic.ui.panel.CollectionRemoveCmd';
+                    var kwargs = {
+                        collection_key: bvr.collection_key,
+                        search_keys: search_keys,
+                    }
+
+                    try {
+                        server.execute_cmd(cls, kwargs);
+                        spt.table.remove_selected();
+                    } catch(e) {
+                        spt.alert(spt.exception.handler(e));
+                    }
+
+                    // Refresh left panel only if a collection is removed
+                    if (collection_selected) {
+                        var top = bvr.src_el.getParent(".spt_collection_top");
+                        var collection_left = top.getElement(".spt_collection_left_side");
+                        spt.panel.refresh(collection_left);
+                    }
+                }
+
+                spt.confirm(msg, ok, cancel);
+
+                '''
+            } )
+
+
+            # This is too confusing for users.  They end up selecting the contents and pressing
+            # the trash button, which here delete that parent collection, not the selected
+            # contents
+            """
+            button = ButtonNewWdg(title='Delete Collection', icon="FA_TRASH")
+            div.add(button)
+            button.add_style("display: inline-block")
+            button.add_style("vertical-align: top")
+
+            button.add_behavior( {
+                'type': 'click_up',
+                'collection_key': self.collection_key,
+                'cbjs_action': '''
+                var ok = null;
+                var cancel = function() { return };
+                var msg = "Are you sure you wish to delete the Collection?";
+
+                var ok = function() {
+                    var cls = 'tactic.ui.panel.CollectionDeleteCmd';
+                    var kwargs = {
+                        collection_key: bvr.collection_key,
+                    }
+                    var server = TacticServerStub.get();
+                    try {
+                        server.execute_cmd(cls, kwargs);
+                    } catch(e) {
+                        spt.alert(e);
+                        return;
+                    }
+
+                    var top = bvr.src_el.getParent(".spt_collection_top");
+                    if (top) {
+                        var layout = top.getParent(".spt_layout");
+                        spt.table.set_layout(layout);
+                    }
+
+                    spt.table.run_search();
+                }
+
+                spt.confirm(msg, ok, cancel);
+                '''
+            } )
+            """
+
+
+
+        div.add_style("width: auto")
+        div.add_style("float: right")
+
+        div.add("<br clear='all'/>")
+
+
+        return div
+
+
+
+from tactic.core.collection_commands import CollectionRemoveCmd
+
+
+from tactic.core.collection_commands import CollectionDeleteCmd
+
+
+
+
+
+class CollectionListWdg(BaseRefreshWdg):
+
+    def get_display(self):
+
+        parent_key = self.kwargs.get("parent_key")
+        collection = Search.get_by_search_key(parent_key)
+
+        collection_path = self.kwargs.get("path")
+
+        search_type = collection.get_base_search_type()
+        parts = search_type.split("/")
+        collection_type = "%s/%s_in_%s" % (parts[0], parts[1], parts[1])
+
+        search = Search(collection_type)
+        search.add_filter("parent_code", collection.get_value("code"))
+        collections = search.get_sobjects()
+        collection_codes = [x.get_value("search_code") for x in collections]
+
+        search = Search(search_type)
+        search.add_filter("_is_collection", True)
+        search.add_filters("code", collection_codes)
+        collections = search.get_sobjects()
+
+        top = self.top
+        top.add_class("spt_collection_list")
+
+        for item in collections:
+
+            path = "%s/%s" % (collection_path, item.get_value("name") )
+            collection_wdg = CollectionItemWdg(collection=item, path=path)
+            top.add(collection_wdg)
+
+            subcollection_wdg = DivWdg()
+            top.add(subcollection_wdg)
+            subcollection_wdg.add_class("spt_subcollection_wdg")
+            subcollection_wdg.add_style("padding-left: 15px")
+
+        return top
+
+
+class CollectionItemWdg(BaseRefreshWdg):
+
+    def get_display(self):
+
+        collection = self.kwargs.get("collection")
+        path = self.kwargs.get("path")
+        selected = self.kwargs.get("selected")
+
+        search_type = collection.get_base_search_type()
+        parts = search_type.split("/")
+        collection_type = "%s/%s_in_%s" % (parts[0], parts[1], parts[1])
+
+        search = Search(collection_type)
+        search.add_filter("parent_code", collection.get_value("code"))
+        search.add_column("search_code")
+        items = search.get_sobjects()
+        codes = [x.get_value("search_code") for x in items]
+
+        #count = search.get_count()
+
+        # find count of all the children (not include those that have been deleted)
+        search = Search(search_type)
+        search.add_filters("code", codes)
+        count = search.get_count()
+
+        # find the children that are actually collections
+        search = Search(search_type)
+        search.add_filter("_is_collection", True)
+        search.add_filters("code", codes)
+        has_child_collections = search.get_count() > 0
+
+
+        top = self.top
+        collection_top = top
+        collection_top.add_class("spt_collection_div_top")
+        collection_div = DivWdg()
+
+        name = collection.get_value("name") or "--Collection--"
+        # Adding Collection title (without the number count) as an attribute
+        collection_top.set_attr("collection_name", name)
+
+        collection_top.add(collection_div)
+        collection_top.add_class("tactic_hover")
+        collection_top.add_class("hand")
+
+        collection_div.add_class("spt_collection_item")
+        collection_div.add_style("position", "relative")
+        collection_div.add_attr("spt_collection_key", collection.get_search_key())
+        collection_div.add_attr("spt_collection_code", collection.get_code())
+        collection_div.add_attr("spt_collection_path", path)
+
+        if selected:
+            collection_div.add_style("background-color: var(--spt_palette_background2)")
+            collection_div.add_style("box-shadow", "0px 0px 3px rgba(0,0,0,0.5)")
+
+
+
+        # This is for Drag and Drop from a tile widget
+        collection_div.add_class("spt_tile_top")
+        collection_div.add_attr("spt_search_key", collection.get_search_key())
+        collection_div.add_attr("spt_search_code", collection.get_code())
+        collection_div.add_attr("spt_name", name)
+
+        collection_div.add_style("padding: 3px 0px")
+
+        collection_div.add_style("display: flex")
+        collection_div.add_style("align-items: center")
+
+
+        if has_child_collections:
+            icon_div = DivWdg()
+            icon = IconWdg(name="View Collection", icon="FA_CHEVRON_DOWN")
+            icon_div.add(icon)
+            icon.add_style("float: right")
+            icon.add_style("margin-top: -20px")
+            icon.add_style("margin-right: 3px")
+            collection_top.add(icon_div)
+            icon_div.add_class("spt_collection_open")
+            icon_div.add_attr("spt_collection_key", collection.get_search_key())
+            icon_div.add_attr("spt_collection_path", path)
+
+        from tactic.ui.panel import ThumbWdg2
+        thumb_wdg = ThumbWdg2()
+        thumb_wdg.set_sobject(collection)
+        thumb_wdg.add_style("width: 45px")
+        thumb_wdg.add_style("float: left")
+        thumb_wdg.add_style("margin-top: -10px")
+
+        thumb_wdg = DivWdg()
+        collection_div.add(thumb_wdg)
+        thumb_wdg.add("<i class='far fa-folder-open' style='opacity: 0.6; font-size: 16px'> </i>")
+        thumb_wdg.add_style('padding-left: 15px')
+
+
+        if count:
+            count_div = DivWdg()
+            collection_div.add(count_div)
+
+            count_div.add_style("width: 15px")
+            count_div.add_style("height: 15px")
+            count_div.add_style("font-size: 0.8em")
+            count_div.add_style("border-radius: 10px")
+            count_div.add_style("background: var(--spt_palette_background3)")
+            count_div.add_style("color: var(--spt_palette_color3)")
+            count_div.add_style("position: absolute")
+            count_div.add_style("text-align: center")
+            count_div.add_style("margin-left: 23px")
+            count_div.add_style("margin-top: -6px")
+            count_div.add_style("box-shadow: 0px 0px 3px rgba(0,0,0,0.5)")
+            expression = "@COUNT(%s['parent_code','%s'].%s)" % (collection_type, collection.get_code(), search_type)
+            count_div.add(count)
+            count_div.add_update( {
+                #'expr_key': collection.get_search_key(),
+                'expression': expression,
+                'interval': 2
+            } )
+
+
+        collection_div.add("<div style='margin-left: 10px'>%s</div>" % name)
+
+
+
+        return top
+
+
+__all__.append('CollectionAddAction')
+from pyasm.command import DatabaseAction
+class CollectionAddAction(DatabaseAction):
+
+    def execute(self):
+        # do nothing
+        pass
+
+    def postprocess(self):
+
+        collection_key = self.get_value()
+        if not collection_key:
+            return
+
+        collection = Search.get_by_search_key(collection_key)
+        if not collection:
+            raise Exception("Collection to add to does not exist")
+
+        self.sobject.add_to_collection(collection)
+
+
+

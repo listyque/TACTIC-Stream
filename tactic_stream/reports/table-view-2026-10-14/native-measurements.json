@@ -1,0 +1,384 @@
+{
+  "captures": [
+    {
+      "kind": "table",
+      "mode": "dark",
+      "width": 1496,
+      "height": 660,
+      "items": [
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.294545, 0.252628, 0.262364, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.231022, 0.290730, 0.312291, 1.000000)"
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.294545, 0.252628, 0.262364, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.231022, 0.290730, 0.312291, 1.000000)"
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.294545, 0.252628, 0.262364, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.231022, 0.290730, 0.312291, 1.000000)"
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.294545, 0.252628, 0.262364, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.231022, 0.290730, 0.312291, 1.000000)"
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.294545, 0.252628, 0.262364, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.231022, 0.290730, 0.312291, 1.000000)"
+        },
+        {
+          "name": "bodyFont",
+          "family": "Segoe UI",
+          "points": 9.25,
+          "pixels": 12,
+          "weight": 400,
+          "advance": 61.0,
+          "dpi": 96.0
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "tableHeaderSurface",
+          "width": 1464.0,
+          "height": 34.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.227924, 0.242359, 0.253178, 1.000000)"
+        }
+      ]
+    },
+    {
+      "kind": "task-preview",
+      "mode": "dark",
+      "width": 1496,
+      "height": 660,
+      "popups": [
+        {
+          "width": 456.0,
+          "height": 68.0,
+          "availableWidth": 440.0,
+          "availableHeight": 52.0
+        },
+        {
+          "width": 456.0,
+          "height": 68.0,
+          "availableWidth": 440.0,
+          "availableHeight": 52.0
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "mode": "light",
+      "width": 1496,
+      "height": 660,
+      "items": [
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.895308, 0.857923, 0.868864, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.845136, 0.909468, 0.932265, 1.000000)"
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.895308, 0.857923, 0.868864, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.845136, 0.909468, 0.932265, 1.000000)"
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.895308, 0.857923, 0.868864, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.845136, 0.909468, 0.932265, 1.000000)"
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.895308, 0.857923, 0.868864, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.845136, 0.909468, 0.932265, 1.000000)"
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "searchResultTableRow",
+          "width": 1464.0,
+          "height": 58.0,
+          "color": "None"
+        },
+        {
+          "name": "tableTaskRecord_0",
+          "width": 107.0,
+          "height": 50.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.895308, 0.857923, 0.868864, 1.000000)"
+        },
+        {
+          "name": "tableNoteRecord_0",
+          "width": 99.0,
+          "height": 26.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.845136, 0.909468, 0.932265, 1.000000)"
+        },
+        {
+          "name": "bodyFont",
+          "family": "Segoe UI",
+          "points": 9.25,
+          "pixels": 12,
+          "weight": 400,
+          "advance": 61.0,
+          "dpi": 96.0
+        },
+        {
+          "name": "tableCellPreview",
+          "width": 50.0,
+          "height": 50.0,
+          "color": "None"
+        },
+        {
+          "name": "tableHeaderSurface",
+          "width": 1464.0,
+          "height": 34.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.773175, 0.802350, 0.820584, 1.000000)"
+        }
+      ]
+    },
+    {
+      "kind": "task-preview",
+      "mode": "light",
+      "width": 1496,
+      "height": 660,
+      "popups": [
+        {
+          "width": 456.0,
+          "height": 68.0,
+          "availableWidth": 440.0,
+          "availableHeight": 52.0
+        },
+        {
+          "width": 456.0,
+          "height": 68.0,
+          "availableWidth": 440.0,
+          "availableHeight": 52.0
+        }
+      ]
+    },
+    {
+      "kind": "columns-editor",
+      "mode": "dark",
+      "width": 1496,
+      "height": 660,
+      "items": [
+        {
+          "name": "definitionCatalogXmlPanel",
+          "width": 1076.0,
+          "height": 660.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.154360, 0.169406, 0.180713, 1.000000)"
+        },
+        {
+          "name": "definitionCatalogElementList",
+          "width": 250.0,
+          "height": 534.0,
+          "color": "None"
+        }
+      ]
+    },
+    {
+      "kind": "columns-editor",
+      "mode": "light",
+      "width": 1496,
+      "height": 660,
+      "items": [
+        {
+          "name": "definitionCatalogXmlPanel",
+          "width": 1076.0,
+          "height": 660.0,
+          "color": "PySide6.QtGui.QColor.fromRgbF(0.868467, 0.892943, 0.908232, 1.000000)"
+        },
+        {
+          "name": "definitionCatalogElementList",
+          "width": 250.0,
+          "height": 534.0,
+          "color": "None"
+        }
+      ]
+    }
+  ],
+  "sources": {
+    "SearchResultTable.qml": "a6ad6d72d37e58ec484a2b27b72b51f8f890f2337189891f55c81f370af37d6b",
+    "SearchResultTableHeader.qml": "2638138fcea4c914fae9d58108864a1260ae75a5e0367810a69a26e339aa233b",
+    "SearchTableColumnLayout.js": "1d375d6e078c28c41157ba1b4eabe4807670c2691e76329014ef7af2fc40a7df",
+    "TacticTableCellDisplay.qml": "fc542bb9eef6a551be69b5d46908293d3312aff1b1b850fea37073e4aa7a243c",
+    "TacticTaskCell.qml": "33c676a9bf1b775b624f8a5795ff9d7bcd2b1b5cbe94c5bfbe82f0e8bba2a48a",
+    "TacticTaskCards.qml": "046868b6da4b0c74e94b8f532337f1197242fb0d616d664ad622d2ccedb52b70",
+    "controls/Popup.qml": "f16f712f1672cc77a4028562f3761dea0d449d6edac2e5aec4a0cdd481bde946",
+    "controls/ScrollBar.qml": "d619fbb218d79b208c70dc7f047188c8712e21c4f7c6628f0d6b288e19fb97dd",
+    "ColumnsEditorView.qml": "11230c58f314c667a238fd9f9f02f37d1cd022f711b4587148b551ed9b056c27",
+    "DefinitionCatalogWizard.qml": "8df50642459fcca96832d9f2c904174498a45cb64bb6247ef76467adbc938251",
+    "SObjectValueEditor.qml": "a33f3a4a15664cfa7d60178bc96589052a33359b505d3df1f7a50382b20c21b1",
+    "TacticTableInlineEditor.qml": "628b13663542477c4549c8703e05d32759e0dbaf45c411f15f0786b8f781c2bf"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "backend": "actual read-only original seed metadata, production system service, TEST auth/context",
+  "scenarios": [
+    {
+      "scenario": "System metadata requires a session",
+      "passed": true
+    },
+    {
+      "scenario": "Original widget-config SystemInfoWdg opens native system panel",
+      "passed": true
+    },
+    {
+      "scenario": "Real metadata service responds through bundled CherryPy",
+      "passed": true
+    },
+    {
+      "scenario": "Runtime version comes from NATIVE_UI_VERSION",
+      "passed": true
+    },
+    {
+      "scenario": "Original seed is honestly reported as incomplete",
+      "passed": true
+    },
+    {
+      "scenario": "Missing message_log table is not masked",
+      "passed": true
+    },
+    {
+      "scenario": "Widget config registration preserves unprefixed original table",
+      "passed": true
+    },
+    {
+      "scenario": "Report distinguishes columns from absent tables",
+      "passed": true
+    },
+    {
+      "scenario": "No credential/installation path dump in system data",
+      "passed": true
+    },
+    {
+      "scenario": "Schema check has no browser migration action",
+      "passed": true
+    },
+    {
+      "scenario": "Normal table target cannot invoke system metadata",
+      "passed": true
+    },
+    {
+      "scenario": "System POST does not execute upgrades",
+      "passed": true
+    },
+    {
+      "scenario": "Repeated GET retains identical schema and does not repair it",
+      "passed": true
+    },
+    {
+      "scenario": "Response is private/no-store",
+      "passed": true
+    },
+    {
+      "scenario": "Production writes stay disabled",
+      "passed": true
+    }
+  ]
+}

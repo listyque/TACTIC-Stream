@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "scenario": "Before login there is no unauthenticated click collection",
+      "passed": true
+    },
+    {
+      "scenario": "Only explicit event metadata is sent, never input value",
+      "passed": true
+    },
+    {
+      "scenario": "Related request carries non-security action correlation ID",
+      "passed": true
+    },
+    {
+      "scenario": "Another project or target does not inherit misleading correlation",
+      "passed": true
+    },
+    {
+      "scenario": "Event batches remain project-bound and contain at most 32 actions",
+      "passed": true
+    },
+    {
+      "scenario": "Log transport failure does not throw or repeat a command",
+      "passed": true
+    },
+    {
+      "scenario": "Logout drops queued intentions and context",
+      "passed": true
+    },
+    {
+      "scenario": "No DOM-wide keyboard or input surveillance is installed",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "server_version": "0.112.100",
+  "handler_version": {
+    "major": "0",
+    "minor": "6",
+    "build": "0",
+    "revision": "50"
+  },
+  "template": true,
+  "classic_project": true,
+  "native_command": true,
+  "packaged_qml": true,
+  "dependencies": "existing interpreter site reused; new wheel and extracted source paths verified"
+}

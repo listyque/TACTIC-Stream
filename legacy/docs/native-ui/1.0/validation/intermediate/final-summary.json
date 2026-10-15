@@ -1,0 +1,195 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "browser_transport": "explicit Python HTTP bridge; no native cookies/CSP/navigation proof",
+  "backend": "test-only synthetic persistence; original TACTIC Select and new services; not a full TACTIC database",
+  "suites": {
+    "build": {
+      "return_code": 0,
+      "seconds": 0.164,
+      "log": "docs/native-ui/1.0/validation/final/build.log"
+    },
+    "config-parity": {
+      "return_code": 0,
+      "seconds": 3.237,
+      "log": "docs/native-ui/1.0/validation/final/config-parity.log"
+    },
+    "unit": {
+      "return_code": 0,
+      "seconds": 18.461,
+      "log": "docs/native-ui/1.0/validation/final/unit.log",
+      "tests": 891
+    },
+    "run_http": {
+      "return_code": 0,
+      "seconds": 2.423,
+      "log": "docs/native-ui/1.0/validation/final/run_http.log",
+      "scenarios": 23,
+      "passed_scenarios": 23,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http.json"
+    },
+    "run_http_03": {
+      "return_code": 0,
+      "seconds": 2.877,
+      "log": "docs/native-ui/1.0/validation/final/run_http_03.log",
+      "scenarios": 22,
+      "passed_scenarios": 22,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http_03.json"
+    },
+    "run_http_04": {
+      "return_code": 0,
+      "seconds": 6.147,
+      "log": "docs/native-ui/1.0/validation/final/run_http_04.log",
+      "scenarios": 46,
+      "passed_scenarios": 46,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http_04.json"
+    },
+    "run_http_05": {
+      "return_code": 1,
+      "seconds": 4.078,
+      "log": "docs/native-ui/1.0/validation/final/run_http_05.log",
+      "scenarios": 29,
+      "passed_scenarios": 29,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http_05.json"
+    },
+    "run_http_06": {
+      "return_code": 0,
+      "seconds": 8.161,
+      "log": "docs/native-ui/1.0/validation/final/run_http_06.log",
+      "scenarios": 56,
+      "passed_scenarios": 56,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http_06.json"
+    },
+    "run_http_07": {
+      "return_code": 0,
+      "seconds": 3.719,
+      "log": "docs/native-ui/1.0/validation/final/run_http_07.log",
+      "scenarios": 46,
+      "passed_scenarios": 46,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http_07.json"
+    },
+    "run_http_08": {
+      "return_code": 0,
+      "seconds": 1.371,
+      "log": "docs/native-ui/1.0/validation/final/run_http_08.log",
+      "scenarios": 15,
+      "passed_scenarios": 15,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http_08.json"
+    },
+    "run_http_09": {
+      "return_code": 0,
+      "seconds": 3.271,
+      "log": "docs/native-ui/1.0/validation/final/run_http_09.log",
+      "scenarios": 29,
+      "passed_scenarios": 29,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http_09.json"
+    },
+    "run_http_10": {
+      "return_code": 0,
+      "seconds": 3.881,
+      "log": "docs/native-ui/1.0/validation/final/run_http_10.log",
+      "scenarios": 40,
+      "passed_scenarios": 40,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_http_10.json"
+    },
+    "run_browser_03": {
+      "return_code": 1,
+      "seconds": 8.747,
+      "log": "docs/native-ui/1.0/validation/final/run_browser_03.log",
+      "scenarios": 5,
+      "passed_scenarios": 4,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_browser_03/browser-results.json"
+    },
+    "run_browser_04": {
+      "return_code": 1,
+      "seconds": 14.851,
+      "log": "docs/native-ui/1.0/validation/final/run_browser_04.log",
+      "scenarios": 17,
+      "passed_scenarios": 16,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_browser_04/browser-results.json"
+    },
+    "run_browser_05": {
+      "return_code": 1,
+      "seconds": 19.662,
+      "log": "docs/native-ui/1.0/validation/final/run_browser_05.log",
+      "scenarios": 19,
+      "passed_scenarios": 18,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_browser_05/browser-results.json"
+    },
+    "run_browser_06": {
+      "return_code": 1,
+      "seconds": 16.21,
+      "log": "docs/native-ui/1.0/validation/final/run_browser_06.log",
+      "scenarios": 13,
+      "passed_scenarios": 12,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_browser_06/browser-results.json"
+    },
+    "run_browser_07": {
+      "return_code": 0,
+      "seconds": 7.514,
+      "log": "docs/native-ui/1.0/validation/final/run_browser_07.log",
+      "scenarios": 32,
+      "passed_scenarios": 32,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_browser_07/browser-results.json"
+    },
+    "run_browser_08": {
+      "return_code": 0,
+      "seconds": 2.933,
+      "log": "docs/native-ui/1.0/validation/final/run_browser_08.log",
+      "scenarios": 12,
+      "passed_scenarios": 12,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_browser_08/browser-results.json"
+    },
+    "run_browser_09": {
+      "return_code": 0,
+      "seconds": 4.708,
+      "log": "docs/native-ui/1.0/validation/final/run_browser_09.log",
+      "scenarios": 20,
+      "passed_scenarios": 20,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_browser_09/browser-results.json"
+    },
+    "run_browser_10": {
+      "return_code": 1,
+      "seconds": 17.125,
+      "log": "docs/native-ui/1.0/validation/final/run_browser_10.log",
+      "scenarios": 31,
+      "passed_scenarios": 30,
+      "js_errors": [],
+      "fresh_fixture": true,
+      "report": "docs/native-ui/1.0/validation/final/run_browser_10/browser-results.json"
+    }
+  },
+  "passed": false
+}

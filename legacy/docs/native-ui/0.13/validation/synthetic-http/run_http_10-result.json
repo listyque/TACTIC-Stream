@@ -1,0 +1,10 @@
+{
+  "return_code": 0,
+  "seconds": 3.779,
+  "log": "/mnt/data/tactic_013/validation/http-verified/run_http_10.log",
+  "scenarios": 40,
+  "passed_scenarios": 40,
+  "js_errors": [],
+  "fresh_fixture": true,
+  "report": "/mnt/data/tactic_013/validation/http-verified/run_http_10.json"
+}

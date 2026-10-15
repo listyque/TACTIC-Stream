@@ -1,0 +1,71 @@
+         10929 function calls (10860 primitive calls) in 0.013 seconds
+
+   Ordered by: cumulative time
+   List reduced from 469 to 35 due to restriction <35>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.013    0.013 performance_probe.py:230(invoke)
+        1    0.000    0.000    0.013    0.013 api.py:649(dispatch)
+        1    0.000    0.000    0.012    0.012 api.py:679(_dispatch)
+        6    0.000    0.000    0.007    0.001 search.py:2899(__init__)
+        1    0.000    0.000    0.005    0.005 authenticator.py:124(bind_security)
+        1    0.000    0.000    0.005    0.005 batch.py:85(__init__)
+        1    0.000    0.000    0.005    0.005 batch.py:93(_do_login)
+        1    0.000    0.000    0.005    0.005 security.py:1316(login_with_ticket)
+       29    0.004    0.000    0.004    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+        1    0.000    0.000    0.004    0.004 command.py:107(execute_cmd)
+        1    0.000    0.000    0.004    0.004 api.py:777(<lambda>)
+        1    0.000    0.000    0.004    0.004 api.py:1280(query)
+       45    0.000    0.000    0.004    0.000 storage.py:330(resolve)
+        1    0.000    0.000    0.003    0.003 api.py:1088(_search)
+    77/69    0.000    0.000    0.003    0.000 {built-in method builtins.next}
+    29/25    0.000    0.000    0.002    0.000 contextlib.py:136(__enter__)
+       44    0.000    0.000    0.002    0.000 storage.py:64(connection)
+    24/22    0.000    0.000    0.002    0.000 search.py:2353(get_column_info)
+        6    0.000    0.000    0.002    0.000 storage.py:392(columns)
+        4    0.000    0.000    0.002    0.000 sql.py:2388(get)
+        4    0.000    0.000    0.002    0.000 sql.py:2400(get_connection_pool_sql)
+        1    0.000    0.000    0.002    0.002 security.py:1028(get_by_valid_key)
+        6    0.000    0.000    0.002    0.000 search.py:3970(get_sobjects)
+        1    0.000    0.000    0.002    0.002 security.py:1018(get_by_key)
+        1    0.000    0.000    0.002    0.002 security.py:1233(_do_login)
+        2    0.000    0.000    0.002    0.001 sql.py:1234(connect)
+        1    0.000    0.000    0.002    0.002 authenticator.py:89(validate)
+      3/1    0.000    0.000    0.002    0.002 security.py:1513(_find_all_login_groups)
+        3    0.000    0.000    0.002    0.001 security.py:223(get_sub_groups)
+       12    0.000    0.000    0.001    0.000 config.py:70(get_value)
+       37    0.000    0.000    0.001    0.000 storage.py:42(get_db_resource)
+       66    0.000    0.000    0.001    0.000 sql.py:1008(get_default)
+        2    0.000    0.000    0.001    0.000 authenticator.py:39(_admin)
+       19    0.000    0.000    0.001    0.000 config.py:186(get_config_path)
+       17    0.000    0.000    0.001    0.000 config.py:56(_cache)
+
+
+         10929 function calls (10860 primitive calls) in 0.013 seconds
+
+   Ordered by: internal time
+   List reduced from 469 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       29    0.004    0.000    0.004    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+       10    0.001    0.000    0.001    0.000 {built-in method nt._getfinalpathname}
+        6    0.001    0.000    0.001    0.000 {built-in method _sqlite3.connect}
+        6    0.000    0.000    0.000    0.000 {method 'close' of 'sqlite3.Connection' objects}
+        1    0.000    0.000    0.013    0.013 api.py:649(dispatch)
+       45    0.000    0.000    0.004    0.000 storage.py:330(resolve)
+       12    0.000    0.000    0.000    0.000 lxml_wrapper.py:186(_evaluate)
+       44    0.000    0.000    0.002    0.000 storage.py:64(connection)
+        6    0.000    0.000    0.002    0.000 search.py:3970(get_sobjects)
+      352    0.000    0.000    0.000    0.000 container.py:17(get_instance)
+     1053    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        1    0.000    0.000    0.012    0.012 api.py:679(_dispatch)
+      307    0.000    0.000    0.000    0.000 container.py:28(get)
+       28    0.000    0.000    0.001    0.000 search.py:81(__init__)
+        2    0.000    0.000    0.000    0.000 {built-in method nt.stat}
+       12    0.000    0.000    0.000    0.000 {method 'fetchall' of 'sqlite3.Cursor' objects}
+      740    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+        6    0.000    0.000    0.007    0.001 search.py:2899(__init__)
+        6    0.000    0.000    0.002    0.000 storage.py:392(columns)
+    74/73    0.000    0.000    0.000    0.000 search.py:158(get_value)
+
+

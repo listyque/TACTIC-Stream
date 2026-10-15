@@ -1,0 +1,23 @@
+PASS Native shell /
+PASS CSP excludes eval /
+PASS Native shell /tactic/admin/
+PASS CSP excludes eval /tactic/admin/
+PASS Native shell /tactic/admin/link/users
+PASS CSP excludes eval /tactic/admin/link/users
+PASS Native shell /tactic/fixture/
+PASS CSP excludes eval /tactic/fixture/
+PASS Legacy service not intercepted /tactic/default/Api/
+PASS Legacy service not intercepted /tactic/admin/REST/
+PASS Legacy service not intercepted /tactic/admin/UploadServer/
+PASS Native HEAD no body
+PASS Compiled application static delivery
+PASS Health honestly separates transport from database
+PASS POST JSON through actual bundled raw body reader
+PASS Cookie flags/path and private ticket hidden
+PASS Original XML tree returned over HTTP
+PASS Unknown config target is denied
+PASS Missing CSRF rejected
+PASS Foreign Origin rejected
+PASS Malformed JSON gets JSON 400
+PASS Logout invalidates HTTP cookie session
+PASS Revoked session cannot read projects

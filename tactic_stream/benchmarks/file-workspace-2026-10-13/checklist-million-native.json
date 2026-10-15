@@ -1,0 +1,267 @@
+{
+  "vendor": "Sqlite",
+  "logical_files": 1000000,
+  "persisted_before_reedit": {
+    "version": 1000000,
+    "checkout": 1000000,
+    "page": 13652,
+    "blob": 1
+  },
+  "physical_payload_files": 2,
+  "network_included": false,
+  "build_s": 1460.71,
+  "first_edit_1000_ms": 902.2,
+  "last_edit_ms": 1590.7,
+  "submit_ms": 20.8,
+  "list_head_1000_ms": 12.35,
+  "list_tail_1000_ms": 10.74,
+  "history_ms": 10.81,
+  "sync_begin_ms": 18.13,
+  "sync_next_ms": 12.78,
+  "sync_ack_1000_ms": 25.71,
+  "fresh_edit_1000_ms": 1238.82,
+  "fresh_submit_ms": 20.61,
+  "peak_mib": 73.38,
+  "samples": [
+    {
+      "files": 25000,
+      "elapsed_s": 26.19,
+      "last_edit_ms": 1196.65,
+      "peak_mib": 70.9
+    },
+    {
+      "files": 50000,
+      "elapsed_s": 56.73,
+      "last_edit_ms": 1306.05,
+      "peak_mib": 71.66
+    },
+    {
+      "files": 75000,
+      "elapsed_s": 87.8,
+      "last_edit_ms": 1188.21,
+      "peak_mib": 71.96
+    },
+    {
+      "files": 100000,
+      "elapsed_s": 119.71,
+      "last_edit_ms": 1321.96,
+      "peak_mib": 72.05
+    },
+    {
+      "files": 125000,
+      "elapsed_s": 154.74,
+      "last_edit_ms": 1322.51,
+      "peak_mib": 72.09
+    },
+    {
+      "files": 150000,
+      "elapsed_s": 190.5,
+      "last_edit_ms": 1412.23,
+      "peak_mib": 72.09
+    },
+    {
+      "files": 175000,
+      "elapsed_s": 226.08,
+      "last_edit_ms": 1396.59,
+      "peak_mib": 72.09
+    },
+    {
+      "files": 200000,
+      "elapsed_s": 260.82,
+      "last_edit_ms": 1246.36,
+      "peak_mib": 72.09
+    },
+    {
+      "files": 225000,
+      "elapsed_s": 297.9,
+      "last_edit_ms": 1458.86,
+      "peak_mib": 72.09
+    },
+    {
+      "files": 250000,
+      "elapsed_s": 333.11,
+      "last_edit_ms": 1449.13,
+      "peak_mib": 72.09
+    },
+    {
+      "files": 275000,
+      "elapsed_s": 370.98,
+      "last_edit_ms": 1545.94,
+      "peak_mib": 72.17
+    },
+    {
+      "files": 300000,
+      "elapsed_s": 406.74,
+      "last_edit_ms": 1458.16,
+      "peak_mib": 72.34
+    },
+    {
+      "files": 325000,
+      "elapsed_s": 442.93,
+      "last_edit_ms": 1408.14,
+      "peak_mib": 72.34
+    },
+    {
+      "files": 350000,
+      "elapsed_s": 478.26,
+      "last_edit_ms": 1359.2,
+      "peak_mib": 72.34
+    },
+    {
+      "files": 375000,
+      "elapsed_s": 522.44,
+      "last_edit_ms": 1515.4,
+      "peak_mib": 72.34
+    },
+    {
+      "files": 400000,
+      "elapsed_s": 564.24,
+      "last_edit_ms": 1417.09,
+      "peak_mib": 72.34
+    },
+    {
+      "files": 425000,
+      "elapsed_s": 601.01,
+      "last_edit_ms": 1507.11,
+      "peak_mib": 72.34
+    },
+    {
+      "files": 450000,
+      "elapsed_s": 637.23,
+      "last_edit_ms": 1449.15,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 475000,
+      "elapsed_s": 673.05,
+      "last_edit_ms": 1603.65,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 500000,
+      "elapsed_s": 709.24,
+      "last_edit_ms": 1320.27,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 525000,
+      "elapsed_s": 745.95,
+      "last_edit_ms": 1516.35,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 550000,
+      "elapsed_s": 782.85,
+      "last_edit_ms": 1478.53,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 575000,
+      "elapsed_s": 819.9,
+      "last_edit_ms": 1511.36,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 600000,
+      "elapsed_s": 857.04,
+      "last_edit_ms": 1473.66,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 625000,
+      "elapsed_s": 893.85,
+      "last_edit_ms": 1595.05,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 650000,
+      "elapsed_s": 931.89,
+      "last_edit_ms": 1526.93,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 675000,
+      "elapsed_s": 969.03,
+      "last_edit_ms": 1511.37,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 700000,
+      "elapsed_s": 1006.0,
+      "last_edit_ms": 1498.7,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 725000,
+      "elapsed_s": 1043.04,
+      "last_edit_ms": 1511.94,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 750000,
+      "elapsed_s": 1079.88,
+      "last_edit_ms": 1639.0,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 775000,
+      "elapsed_s": 1116.58,
+      "last_edit_ms": 1532.24,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 800000,
+      "elapsed_s": 1153.23,
+      "last_edit_ms": 1286.81,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 825000,
+      "elapsed_s": 1190.03,
+      "last_edit_ms": 1437.97,
+      "peak_mib": 72.52
+    },
+    {
+      "files": 850000,
+      "elapsed_s": 1232.86,
+      "last_edit_ms": 1437.96,
+      "peak_mib": 72.54
+    },
+    {
+      "files": 875000,
+      "elapsed_s": 1269.81,
+      "last_edit_ms": 1434.72,
+      "peak_mib": 72.54
+    },
+    {
+      "files": 900000,
+      "elapsed_s": 1307.08,
+      "last_edit_ms": 1570.94,
+      "peak_mib": 72.54
+    },
+    {
+      "files": 925000,
+      "elapsed_s": 1347.77,
+      "last_edit_ms": 1475.84,
+      "peak_mib": 72.54
+    },
+    {
+      "files": 950000,
+      "elapsed_s": 1384.57,
+      "last_edit_ms": 1434.39,
+      "peak_mib": 72.54
+    },
+    {
+      "files": 975000,
+      "elapsed_s": 1422.76,
+      "last_edit_ms": 1531.86,
+      "peak_mib": 72.54
+    },
+    {
+      "files": 1000000,
+      "elapsed_s": 1460.71,
+      "last_edit_ms": 1590.7,
+      "peak_mib": 72.54
+    }
+  ]
+}

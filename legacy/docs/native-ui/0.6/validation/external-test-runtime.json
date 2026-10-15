@@ -1,0 +1,17 @@
+{
+  "python": "3.13.5",
+  "cgi": {
+    "origin": "Previously supplied tactic_team48.zip, python3/App/Python/Lib/cgi.py",
+    "sha256": "c40e686174a4d4bec50a1811440c1f6fdd003afc1becefa608d9db40e6db9550",
+    "path": "External test dependency only; not included in fork"
+  },
+  "full_launcher_check": {
+    "result": "failed, exit 2; encryption/auth not disabled",
+    "missing": [
+      "Cryptodome.Cipher.AES",
+      "Cryptodome.PublicKey.RSA",
+      "psycopg2"
+    ]
+  },
+  "browser": "explicit bridge; native navigation blocked; SHA-256 adapter only in insecure about:blank test"
+}

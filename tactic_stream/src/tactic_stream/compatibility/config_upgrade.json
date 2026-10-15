@@ -1,0 +1,161 @@
+{
+  "tables": {
+    "spt_widget_config": "CREATE TABLE \"spt_widget_config\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"view\" character varying(256),\n    \"category\" character varying(256),\n    \"search_type\" character varying(256),\n    \"login\" character varying(256),\n    \"config\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"widget_type\" character varying(256),\n    \"s_status\" character varying(32),\n    CONSTRAINT \"spt_widget_config_code_idx\" UNIQUE (\"code\")\n)",
+    "spt_prod_setting": "CREATE TABLE \"spt_prod_setting\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"key\" character varying(100),\n    \"value\" text,\n    \"description\" text,\n    \"type\" character varying(30),\n    \"search_type\" character varying(200),\n    \"category\" character varying(256),\n    CONSTRAINT \"spt_prod_setting_code_idx\" UNIQUE (\"code\"),\n    CONSTRAINT \"spt_prod_setting_key_idx\" UNIQUE (\"key\")\n)",
+    "spt_trigger": "CREATE TABLE \"spt_trigger\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"class_name\" character varying(256),\n    \"script_path\" character varying(256),\n    \"title\" character varying(256),\n    \"description\" text,\n    \"event\" character varying(256),\n    \"mode\" character varying(256),\n    \"process\" character varying(256),\n    \"listen_process\" character varying(256),\n    \"trigger_type\" character varying(256),\n    \"data\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"search_type\" character varying(256),\n    \"s_status\" character varying(256),\n    CONSTRAINT \"spt_trigger_code_idx\" UNIQUE (\"code\")\n)",
+    "spt_client_trigger": "CREATE TABLE \"spt_client_trigger\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"event\" character varying(256),\n    \"callback\" character varying(256),\n    \"description\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"s_status\" character varying(32),\n    CONSTRAINT \"spt_client_trigger_code_idx\" UNIQUE (\"code\")\n)",
+    "spt_pipeline": "CREATE TABLE \"spt_pipeline\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"pipeline\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"search_type\" character varying(256),\n    \"description\" text,\n    \"s_status\" character varying(32),\n    \"color\" character varying(256),\n    \"autocreate_tasks\" boolean,\n    \"data\" jsonb,\n    CONSTRAINT \"spt_pipeline_code_idx\" UNIQUE (\"code\")\n)",
+    "custom_property": "CREATE TABLE \"custom_property\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"search_type\" character varying(256),\n    \"name\" character varying(256),\n    \"description\" character varying(256),\n    \"login\" character varying(256)\n)",
+    "spt_ingest_rule": "CREATE TABLE \"spt_ingest_rule\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n\t\"spt_ingest_session_code\" character varying(256),\n\t\"title\" text,\n\t\"base_dir\" character varying(1024),\n\t\"rule\" character varying(1024),\n\t\"data\" text\n)",
+    "spt_ingest_session": "CREATE TABLE \"spt_ingest_session\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n\t\"title\" text,\n\t\"base_dir\" character varying(1024),\n\t\"location\" character varying(256),\n\t\"data\" text\n)",
+    "spt_translation": "CREATE TABLE \"spt_translation\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n\t\"code\" character varying(256),\n\t\"name\" character varying(256),\n\t\"en\" text,\n\t\"fr\" text,\n\t\"ja\" text,\n\t\"es\" text,\n\t\"login\" character varying(256),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tCONSTRAINT \"spt_translation_code_idx\" UNIQUE (\"code\"),\n\tCONSTRAINT \"spt_translation_name_idx\" UNIQUE (\"name\")\n)"
+  },
+  "registry": [
+    {
+      "id": 1,
+      "code": "config/widget_config",
+      "search_type": "config/widget_config",
+      "namespace": "config",
+      "description": "Widget Config",
+      "database": "{project}",
+      "table_name": "spt_widget_config",
+      "class_name": "pyasm.search.WidgetDbConfig",
+      "title": "Widget Config",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 2,
+      "code": "config/prod_setting",
+      "search_type": "config/prod_setting",
+      "namespace": "config",
+      "description": "Production Settings",
+      "database": "{project}",
+      "table_name": "spt_prod_setting",
+      "class_name": "pyasm.biz.ProjectSetting",
+      "title": "Production Settings",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 3,
+      "code": "config/trigger",
+      "search_type": "config/trigger",
+      "namespace": "config",
+      "description": "Triggers",
+      "database": "{project}",
+      "table_name": "spt_trigger",
+      "class_name": "pyasm.biz.TriggerSObj",
+      "title": "Triggers",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 4,
+      "code": "config/client_trigger",
+      "search_type": "config/client_trigger",
+      "namespace": "config",
+      "description": "Client Trigger",
+      "database": "{project}",
+      "table_name": "spt_client_trigger",
+      "class_name": "pyasm.search.SObject",
+      "title": "Client Trigger",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 5,
+      "code": "config/pipeline",
+      "search_type": "config/pipeline",
+      "namespace": "config",
+      "description": "Pipelines",
+      "database": "{project}",
+      "table_name": "spt_pipeline",
+      "class_name": "pyasm.biz.ProjectPipeline",
+      "title": "Pipelines",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 6,
+      "code": "config/custom_property",
+      "search_type": "config/custom_property",
+      "namespace": "sthpw",
+      "description": "Custom Property",
+      "database": "{project}",
+      "table_name": "custom_property",
+      "class_name": "pyasm.biz.CustomProperty",
+      "title": "Custom Property",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 7,
+      "code": "config/ingest_rule",
+      "search_type": "config/ingest_rule",
+      "namespace": "config",
+      "description": "Ingest Rules",
+      "database": "{project}",
+      "table_name": "spt_ingest_rule",
+      "class_name": "pyasm.search.SObject",
+      "title": "Ingest Rules",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 8,
+      "code": "config/ingest_session",
+      "search_type": "config/ingest_session",
+      "namespace": "config",
+      "description": "Ingest Sessions",
+      "database": "{project}",
+      "table_name": "spt_ingest_session",
+      "class_name": "pyasm.search.SObject",
+      "title": "Ingest Sessions",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 9,
+      "code": "config/translation",
+      "search_type": "config/translation",
+      "namespace": "config",
+      "description": "Translation",
+      "database": "{project}",
+      "table_name": "spt_translation",
+      "class_name": "pyasm.search.SObject",
+      "title": "Translation",
+      "schema": "public",
+      "color": null
+    }
+  ],
+  "columns": [
+    {
+      "table": "spt_widget_config",
+      "column": "priority",
+      "sql": "ALTER TABLE spt_widget_config ADD COLUMN priority integer;",
+      "source_method": "upgrade_v4_6_0_a01_002"
+    },
+    {
+      "table": "spt_widget_config",
+      "column": "title",
+      "sql": "ALTER TABLE \"spt_widget_config\" ADD \"title\" varchar(1024);",
+      "source_method": "upgrade_v4_1_0_b02_001"
+    },
+    {
+      "table": "spt_widget_config",
+      "column": "description",
+      "sql": "ALTER TABLE \"spt_widget_config\" ADD \"description\" text;",
+      "source_method": "upgrade_v4_1_0_a01_001"
+    }
+  ],
+  "text_columns": [{"table": "spt_process_state", "column": "state"}],
+  "drop_constraints": [
+    {
+      "table": "spt_prod_setting",
+      "constraint": "spt_prod_setting_key_idx",
+      "sql": "ALTER TABLE spt_prod_setting DROP CONSTRAINT \"spt_prod_setting_key_idx\";",
+      "source_method": "upgrade_v4_6_0_a01_001"
+    }
+  ]
+}

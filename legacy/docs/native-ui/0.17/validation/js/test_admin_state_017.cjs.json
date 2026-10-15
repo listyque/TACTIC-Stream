@@ -1,0 +1,145 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "Matrix checkbox modifies only local pending map",
+      "passed": true
+    },
+    {
+      "name": "Returning to original checkbox removes pending change",
+      "passed": true
+    },
+    {
+      "name": "Readonly/custom rule cannot be staged",
+      "passed": true
+    },
+    {
+      "name": "Read-only server blocks UI staging",
+      "passed": true
+    },
+    {
+      "name": "Rejected security save preserves complete draft",
+      "passed": true
+    },
+    {
+      "name": "Child group editor participates in unsaved navigation guard",
+      "passed": true
+    },
+    {
+      "name": "Declined modal close keeps group membership draft",
+      "passed": true
+    },
+    {
+      "name": "Fixed group screen does not expose group workspace navigation",
+      "passed": true
+    },
+    {
+      "name": "Late security load does not replace newer state",
+      "passed": true
+    },
+    {
+      "name": "User membership selection is independent of displayed filter",
+      "passed": true
+    },
+    {
+      "name": "Order of membership selection is not a change",
+      "passed": true
+    },
+    {
+      "name": "Membership error preserves intended members",
+      "passed": true
+    },
+    {
+      "name": "Membership load discards late response",
+      "passed": true
+    },
+    {
+      "name": "User manager refuses switch without confirmed discard",
+      "passed": true
+    },
+    {
+      "name": "Original user manager child path is server-owned",
+      "passed": true
+    },
+    {
+      "name": "User manager failed child leaves current view intact",
+      "passed": true
+    },
+    {
+      "name": "SearchType metadata save conflict keeps edits",
+      "passed": true
+    },
+    {
+      "name": "Physical columns only submitted after confirmation",
+      "passed": true
+    },
+    {
+      "name": "Failed physical-column command retains pending definitions",
+      "passed": true
+    },
+    {
+      "name": "SearchType open uses derived original configured table",
+      "passed": true
+    },
+    {
+      "name": "Sidebar selection does not write",
+      "passed": true
+    },
+    {
+      "name": "Title change becomes one local XML operation",
+      "passed": true
+    },
+    {
+      "name": "Malformed options do not partially stage attributes",
+      "passed": true
+    },
+    {
+      "name": "Reorder is a permutation including all current references",
+      "passed": true
+    },
+    {
+      "name": "Remove affects reference only",
+      "passed": true
+    },
+    {
+      "name": "Add link creates draft not HTTP write",
+      "passed": true
+    },
+    {
+      "name": "Sidebar conflicts preserve operations and local content",
+      "passed": true
+    },
+    {
+      "name": "Sidebar navigation cancelled does not lose edits",
+      "passed": true
+    },
+    {
+      "name": "Private child folder derives current login namespace",
+      "passed": true
+    },
+    {
+      "name": "Clicking current Matrix tab never discards pending cells",
+      "passed": true
+    },
+    {
+      "name": "Detailed user editor cannot silently replace pending matrix",
+      "passed": true
+    },
+    {
+      "name": "Security XML editor waits for current draft",
+      "passed": true
+    },
+    {
+      "name": "Sidebar XML editor waits for visual draft",
+      "passed": true
+    },
+    {
+      "name": "Sidebar XML unsaved changes block declined modal close",
+      "passed": true
+    },
+    {
+      "name": "SearchType view designer cannot drop unsaved physical column plan",
+      "passed": true
+    }
+  ]
+}

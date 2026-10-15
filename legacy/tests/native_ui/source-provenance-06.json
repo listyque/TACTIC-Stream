@@ -1,0 +1,10 @@
+{
+  "baseline": "0.5",
+  "source": "src/tactic/ui/panel/collection_wdg.py",
+  "algorithm_hashes": {
+    "CollectionAddCmd.execute": "f9fae7d6ef97f9d11fed505e9b13f204fde336c7731aff498c34bd7de18fa5a7",
+    "CollectionRemoveCmd.execute": "de4f10fdef62df6ba3604e995a0bffe16f960b103cfecdd9f883e7004f0ca85d",
+    "CollectionDeleteCmd.execute": "7d13b02479bfd639811c703d50a7a55054ecd600377e28c72d584b8f305c19cf"
+  },
+  "intentional_change": "get_parent_codes uses bounded Search traversal instead of dialect-specific, depth-10 SQL"
+}

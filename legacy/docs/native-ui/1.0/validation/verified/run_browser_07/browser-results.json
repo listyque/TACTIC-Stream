@@ -1,0 +1,135 @@
+{
+  "backend": "real config/Select/format/CSV with TEST schema and auth",
+  "transport": "explicit Python HTTP bridge: substitutes fetch/cookies/URL/history/storage; original Blob download",
+  "scenarios": [
+    {
+      "scenario": "Original configured admin roots unchanged",
+      "passed": true
+    },
+    {
+      "scenario": "Original search_limit selects 20 of 235 records",
+      "passed": true
+    },
+    {
+      "scenario": "Multi-column configured sorting reaches browser unchanged",
+      "passed": true
+    },
+    {
+      "scenario": "Original number and percent formats render separately from raw data",
+      "passed": true
+    },
+    {
+      "scenario": "Original date/timezone options format browser cell",
+      "passed": true
+    },
+    {
+      "scenario": "Checkbox is safe typed display, not legacy injected HTML",
+      "passed": true
+    },
+    {
+      "scenario": "Simple widget column alias displays its source field",
+      "passed": true
+    },
+    {
+      "scenario": "Dotted unknown widget remains visible with explicit unsupported state",
+      "passed": true
+    },
+    {
+      "scenario": "Page totals and average from original Search appear in table footer",
+      "passed": true
+    },
+    {
+      "scenario": "Inspector shows resolved personal/project/custom-column layers",
+      "passed": true
+    },
+    {
+      "scenario": "Selected field exposes real handler options and provenance",
+      "passed": true
+    },
+    {
+      "scenario": "Config inspector distinguishes unimplemented custom renderer",
+      "passed": true
+    },
+    {
+      "scenario": "Cards reuse same configured cells rather than independent data formatter",
+      "passed": true
+    },
+    {
+      "scenario": "Inline XML replaces order/title and inherits omitted field definitions",
+      "passed": true
+    },
+    {
+      "scenario": "Inline display options override inherited numeric format",
+      "passed": true
+    },
+    {
+      "scenario": "config_code resolves its own stored view without default merge",
+      "passed": true
+    },
+    {
+      "scenario": "Configured header and selection flags honored",
+      "passed": true
+    },
+    {
+      "scenario": "Configured shelf and search disabled without rewriting sidebar",
+      "passed": true
+    },
+    {
+      "scenario": "Original show_context_menu none disables custom right-click menu",
+      "passed": true
+    },
+    {
+      "scenario": "Original search-limit controls flag honored",
+      "passed": true
+    },
+    {
+      "scenario": "CSV defaults exclude unimplemented widget, but retain explicit choice",
+      "passed": true
+    },
+    {
+      "scenario": "Browser downloads 235 server matches, not just table page",
+      "passed": true
+    },
+    {
+      "scenario": "Displayed CSV values use same widget formatting as cells",
+      "passed": true
+    },
+    {
+      "scenario": "CSV download protects formula-leading text",
+      "passed": true
+    },
+    {
+      "scenario": "Raw CSV mode preserves unrounded database values",
+      "passed": true
+    },
+    {
+      "scenario": "Selected CSV applies same original sort, not click order",
+      "passed": true
+    },
+    {
+      "scenario": "Unsupported widget export fails explicitly and leaves current table intact",
+      "passed": true
+    },
+    {
+      "scenario": "CSV errors do not mutate data or current selection",
+      "passed": true
+    },
+    {
+      "scenario": "Saved original filter remains active in browser export",
+      "passed": true
+    },
+    {
+      "scenario": "Resolved-view modal fits mobile viewport",
+      "passed": true
+    },
+    {
+      "scenario": "No uncaught JS or legacy get_widget calls in new paths",
+      "passed": true
+    },
+    {
+      "scenario": "Logout closes configuration/export state",
+      "passed": true
+    }
+  ],
+  "js_errors": []
+}

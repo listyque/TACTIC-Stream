@@ -1,0 +1,131 @@
+{
+  "test_backend": "original config XML + synthetic state; not PostgreSQL",
+  "transport": "Python HTTP bridge; URL/storage/history test shims",
+  "scenarios": [
+    {
+      "scenario": "Login uses HTTP and original configured admin root",
+      "passed": true
+    },
+    {
+      "scenario": "Shipped admin config hierarchy retained",
+      "passed": true
+    },
+    {
+      "scenario": "Project SearchType is defined by XML, not a fixed frontend model",
+      "passed": true
+    },
+    {
+      "scenario": "OR subgroup combined with numeric zero AND predicate",
+      "passed": true
+    },
+    {
+      "scenario": "Saved personal view reopens equivalent FilterData predicate",
+      "passed": true
+    },
+    {
+      "scenario": "Temporary filters clear without editing the source view",
+      "passed": true
+    },
+    {
+      "scenario": "NULL has one result rather than also matching empty text",
+      "passed": true
+    },
+    {
+      "scenario": "Empty matches original NULL plus empty-text semantics",
+      "passed": true
+    },
+    {
+      "scenario": "IS NOT NULL works with original SQL builder",
+      "passed": true
+    },
+    {
+      "scenario": "Lazy relation branch loads shared object from original-shaped Schema relation",
+      "passed": true
+    },
+    {
+      "scenario": "Instance cycle is visible and is not expanded infinitely",
+      "passed": true
+    },
+    {
+      "scenario": "Instance editor is opened from the declared relation, not a guessed foreign key",
+      "passed": true
+    },
+    {
+      "scenario": "Link updates junction membership and refreshes candidate state",
+      "passed": true
+    },
+    {
+      "scenario": "Unlink leaves the target object available for linking again",
+      "passed": true
+    },
+    {
+      "scenario": "Task board separates independent task pipelines instead of merging equal statuses",
+      "passed": true
+    },
+    {
+      "scenario": "Status selector persists through task-change HTTP, not client-only drag state",
+      "passed": true
+    },
+    {
+      "scenario": "Dependent form preview reports incompatible status without changing original record",
+      "passed": true
+    },
+    {
+      "scenario": "New pipeline and compatible status are saved together",
+      "passed": true
+    },
+    {
+      "scenario": "Weekly hours save only changed regular and overtime cells",
+      "passed": true
+    },
+    {
+      "scenario": "Work-hour values survive closing and reopening the editor",
+      "passed": true
+    },
+    {
+      "scenario": "Zero clears the selected hour entry, not overtime or the task",
+      "passed": true
+    },
+    {
+      "scenario": "Work-hour modal and task sidebar keep mobile page width bounded",
+      "passed": true
+    },
+    {
+      "scenario": "Retire updates state and journal without physical deletion",
+      "passed": true
+    },
+    {
+      "scenario": "Reactivation is distinct from a new object creation and keeps history",
+      "passed": true
+    },
+    {
+      "scenario": "Archive selection queries retired data rather than filtering visible rows",
+      "passed": true
+    },
+    {
+      "scenario": "Explicit pipeline generation is available for a parent with no tasks",
+      "passed": true
+    },
+    {
+      "scenario": "Generation preview reflects existing task membership",
+      "passed": true
+    },
+    {
+      "scenario": "Original my_task WorkHoursElementWdg opens native editor from configured virtual table column",
+      "passed": true
+    },
+    {
+      "scenario": "No uncaught JS errors across new functional flows",
+      "passed": true
+    },
+    {
+      "scenario": "New flows never fetch legacy widget HTML",
+      "passed": true
+    },
+    {
+      "scenario": "Logout closes data and invalidates session",
+      "passed": true
+    }
+  ],
+  "js_errors": []
+}

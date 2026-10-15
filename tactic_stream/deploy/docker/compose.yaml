@@ -1,0 +1,88 @@
+name: tactic-stream-linux
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile
+      target: app
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 25s
+    environment:
+      TACTIC_PORTS: "8081|8082|8083"
+      PYTHONPATH: /opt/stream-src:/opt/python-packages
+    volumes:
+      - stream_data:/var/lib/tactic_stream
+      - ../../src:/opt/stream-src:ro
+      - python_packages:/opt/python-packages
+    secrets:
+      - postgres_password
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8081/health', timeout=3).read()"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+      start_period: 10s
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  apache:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile
+      target: apache
+    init: true
+    restart: unless-stopped
+    ports:
+      - "${STREAM_BIND:-127.0.0.1}:${STREAM_HTTP_PORT:-8082}:80"
+      - "127.0.0.1:${STREAM_WEBMIN_PORT:-10000}:10000"
+    secrets:
+      - webmin_password
+    volumes:
+      - webmin_config:/etc/webmin
+      - apache_config:/etc/apache2
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD-SHELL, "curl --fail --silent --max-time 3 http://127.0.0.1/health >/dev/null && curl --fail --silent --insecure --max-time 3 https://127.0.0.1:10000/ >/dev/null"]
+      interval: 5s
+      timeout: 4s
+      retries: 6
+    logging: *logging
+
+  postgres:
+    image: postgres:18.6
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sthpw
+      POSTGRES_USER: stream
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256 --auth-local=scram-sha-256
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: [CMD, pg_isready, -U, stream, -d, sthpw]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+    logging: *logging
+
+volumes:
+  python_packages:
+  stream_data:
+  postgres_data:
+  webmin_config:
+  apache_config:
+
+secrets:
+  postgres_password:
+    file: .local/postgres-password
+  webmin_password:
+    file: .local/webmin-password

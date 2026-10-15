@@ -1,0 +1,62 @@
+[
+  {
+    "percent": 0,
+    "cellWidth": 240.0,
+    "cellHeight": 52.0,
+    "trackWidth": 220.0,
+    "trackHeight": 18.0,
+    "margin": 10.0,
+    "fillWidth": 0.0,
+    "trackColor": "#3a3e41",
+    "fillColor": "#78a6c4",
+    "labelColor": "#f6f8fa",
+    "captionPoints": 8.25,
+    "captionWeight": 600,
+    "backgroundColor": "#1b1e20"
+  },
+  {
+    "percent": 25,
+    "cellWidth": 240.0,
+    "cellHeight": 52.0,
+    "trackWidth": 220.0,
+    "trackHeight": 18.0,
+    "margin": 10.0,
+    "fillWidth": 55.0,
+    "trackColor": "#3a3e41",
+    "fillColor": "#78a6c4",
+    "labelColor": "#f6f8fa",
+    "captionPoints": 8.25,
+    "captionWeight": 600,
+    "backgroundColor": "#1b1e20"
+  },
+  {
+    "percent": 75,
+    "cellWidth": 240.0,
+    "cellHeight": 52.0,
+    "trackWidth": 220.0,
+    "trackHeight": 18.0,
+    "margin": 10.0,
+    "fillWidth": 165.0,
+    "trackColor": "#3a3e41",
+    "fillColor": "#78a6c4",
+    "labelColor": "#f6f8fa",
+    "captionPoints": 8.25,
+    "captionWeight": 600,
+    "backgroundColor": "#1b1e20"
+  },
+  {
+    "percent": 100,
+    "cellWidth": 240.0,
+    "cellHeight": 52.0,
+    "trackWidth": 220.0,
+    "trackHeight": 18.0,
+    "margin": 10.0,
+    "fillWidth": 220.0,
+    "trackColor": "#3a3e41",
+    "fillColor": "#78a6c4",
+    "labelColor": "#f6f8fa",
+    "captionPoints": 8.25,
+    "captionWeight": 600,
+    "backgroundColor": "#1b1e20"
+  }
+]

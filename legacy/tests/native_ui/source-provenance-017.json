@@ -1,0 +1,70 @@
+[
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "GroupAssignCbk",
+    "start": 397,
+    "end": 506,
+    "ast_sha256": "20bd43e3efce4b643e257894ccd64e1c2892f6569843598e4d4cf22dc9eb54c9"
+  },
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "ProjectSecurityCbk",
+    "start": 2170,
+    "end": 2216,
+    "ast_sha256": "1d57ac2ea130da140cce81ecbd43f6ab322c4f1d50f6581977709e85b672bf88"
+  },
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "SearchTypeSecurityCbk",
+    "start": 2269,
+    "end": 2318,
+    "ast_sha256": "aecd8ca91425ee53a073f3690120bf3fb8b8c2ba5e98da5a923301f089ead41e"
+  },
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "GearMenuSecurityCbk",
+    "start": 2320,
+    "end": 2363,
+    "ast_sha256": "46a6f9138a7486796bfd4b6b415c10b4f9889dd1b80f1efeecf42365688aba48"
+  },
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "LinkSecurityCbk",
+    "start": 2365,
+    "end": 2406,
+    "ast_sha256": "29862a2db2fd1baa8129b8e168dea9f2f271530a75d2f7c3206f98f05a1bf3b7"
+  },
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "ProcessSecurityCbk",
+    "start": 2411,
+    "end": 2475,
+    "ast_sha256": "f628ff67e43a469a15f8c05faa5afb84988027a0ebfe9ff71f3bfa119551c5a1"
+  },
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "TaskSecurityCbk",
+    "start": 2479,
+    "end": 2485,
+    "ast_sha256": "d404e00361ab5521e3001159cc3b71a58314154bc082f1b79605dac45d22f2bf"
+  },
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "SecurityBuilder",
+    "start": 2490,
+    "end": 2666,
+    "ast_sha256": "b5bcca979d918afe72d714555ad20420401e3d9984c38145b545d53db0a58eca"
+  },
+  {
+    "source": "src/tactic/ui/startup/column_edit_wdg.py",
+    "class": "ColumnEditCbk",
+    "start": 277,
+    "end": 359,
+    "ast_sha256": "0d41a51586649676d45a53e894ba0f593b1547bd79c82c1daa9b3c789db2a0b7"
+  },
+  {
+    "source": "src/tactic/ui/startup/security_wdg.py",
+    "class": "UserSecurityCbk",
+    "ast_sha256": "666f87f74a40413c22de6c99ec7e144392bc57f6e9871e114fb5a4df68bb30f9"
+  }
+]

@@ -1,0 +1,71 @@
+         610203 function calls (610134 primitive calls) in 0.232 seconds
+
+   Ordered by: cumulative time
+   List reduced from 469 to 35 due to restriction <35>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.232    0.232 performance_probe.py:230(invoke)
+        1    0.000    0.000    0.232    0.232 api.py:649(dispatch)
+        1    0.000    0.000    0.231    0.231 api.py:679(_dispatch)
+        1    0.000    0.000    0.222    0.222 command.py:107(execute_cmd)
+        1    0.000    0.000    0.222    0.222 api.py:777(<lambda>)
+        1    0.007    0.007    0.221    0.221 api.py:1280(query)
+        6    0.014    0.002    0.094    0.016 search.py:3970(get_sobjects)
+    10000    0.003    0.000    0.072    0.000 search.py:635(get_search_key)
+    10000    0.013    0.000    0.070    0.000 keys.py:163(get_by_sobject)
+    10011    0.015    0.000    0.066    0.000 search.py:2295(fast_create_from_class_path)
+    10018    0.017    0.000    0.041    0.000 search.py:81(__init__)
+    30072    0.025    0.000    0.036    0.000 keys.py:88(_get_data)
+    20021    0.005    0.000    0.034    0.000 search.py:628(get_base_search_type)
+    20072    0.005    0.000    0.030    0.000 keys.py:134(extract_base_search_type)
+       17    0.021    0.001    0.021    0.001 {built-in method builtins.repr}
+    10000    0.004    0.000    0.020    0.000 search.py:631(get_project_code)
+    10002    0.006    0.000    0.019    0.000 spt_date.py:62(convert)
+    10000    0.004    0.000    0.017    0.000 keys.py:144(extract_project)
+       12    0.012    0.001    0.012    0.001 {method 'fetchall' of 'sqlite3.Cursor' objects}
+10064/10063    0.007    0.000    0.011    0.000 search.py:158(get_value)
+    10103    0.003    0.000    0.011    0.000 __init__.py:169(fullmatch)
+        6    0.000    0.000    0.007    0.001 search.py:2899(__init__)
+    10002    0.003    0.000    0.006    0.000 search.py:145(get_data)
+    10029    0.004    0.000    0.006    0.000 common.py:237(breakup_class_path)
+    70970    0.006    0.000    0.006    0.000 {built-in method builtins.isinstance}
+    10004    0.004    0.000    0.006    0.000 keys.py:66(build_search_key)
+    60647    0.006    0.000    0.006    0.000 {method 'get' of 'dict' objects}
+        1    0.000    0.000    0.005    0.005 authenticator.py:124(bind_security)
+        1    0.000    0.000    0.005    0.005 batch.py:85(__init__)
+        1    0.000    0.000    0.005    0.005 batch.py:93(_do_login)
+    40067    0.005    0.000    0.005    0.000 {method 'copy' of 'dict' objects}
+       29    0.005    0.000    0.005    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+        1    0.000    0.000    0.005    0.005 security.py:1316(login_with_ticket)
+    10145    0.003    0.000    0.004    0.000 __init__.py:330(_compile)
+       45    0.000    0.000    0.004    0.000 storage.py:330(resolve)
+
+
+         610203 function calls (610134 primitive calls) in 0.232 seconds
+
+   Ordered by: internal time
+   List reduced from 469 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    30072    0.025    0.000    0.036    0.000 keys.py:88(_get_data)
+       17    0.021    0.001    0.021    0.001 {built-in method builtins.repr}
+    10018    0.017    0.000    0.041    0.000 search.py:81(__init__)
+    10011    0.015    0.000    0.066    0.000 search.py:2295(fast_create_from_class_path)
+        6    0.014    0.002    0.094    0.016 search.py:3970(get_sobjects)
+    10000    0.013    0.000    0.070    0.000 keys.py:163(get_by_sobject)
+       12    0.012    0.001    0.012    0.001 {method 'fetchall' of 'sqlite3.Cursor' objects}
+        1    0.007    0.007    0.221    0.221 api.py:1280(query)
+10064/10063    0.007    0.000    0.011    0.000 search.py:158(get_value)
+    70970    0.006    0.000    0.006    0.000 {built-in method builtins.isinstance}
+    10002    0.006    0.000    0.019    0.000 spt_date.py:62(convert)
+    60647    0.006    0.000    0.006    0.000 {method 'get' of 'dict' objects}
+    20072    0.005    0.000    0.030    0.000 keys.py:134(extract_base_search_type)
+    40067    0.005    0.000    0.005    0.000 {method 'copy' of 'dict' objects}
+       29    0.005    0.000    0.005    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+    20021    0.005    0.000    0.034    0.000 search.py:628(get_base_search_type)
+    10004    0.004    0.000    0.006    0.000 keys.py:66(build_search_key)
+    10029    0.004    0.000    0.006    0.000 common.py:237(breakup_class_path)
+    10000    0.004    0.000    0.017    0.000 keys.py:144(extract_project)
+    40124    0.004    0.000    0.004    0.000 {method 'find' of 'str' objects}
+
+

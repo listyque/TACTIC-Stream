@@ -1,0 +1,176 @@
+{
+  "passed": true,
+  "files": 42,
+  "method": "patch --batch --forward -p1 applied to fresh baseline file copies, then SHA-256 comparison",
+  "checks": [
+    {
+      "path": "NATIVE_UI_VERSION",
+      "matched": true
+    },
+    {
+      "path": "frontend/package.json",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/App.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/ConfiguredForm.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/ConfiguredTable.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/ConfiguredTabs.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/ContextMenu.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/EmbeddedForm.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/FieldInput.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/MessageCenter.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/RecordInspector.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/SidebarNode.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/ViewDesigner.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/WidgetDefinition.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/WidgetHost.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/components/WidgetTable.vue",
+      "matched": true
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/core/config_model.py",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/core/context_menus.py",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/core/widget_containers.py",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/ui_api/api.py",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/ui_api/config_backend.py",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/ui_api/extended_backend.py",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/ui_api/menu_service.py",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/ui_api/web/app.js",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/ui_api/web/build-manifest.json",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/ui_api/web/styles.css",
+      "matched": true
+    },
+    {
+      "path": "src/tactic/ui_api/widget_service.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/fixture_10.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/run_browser.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/run_browser_03.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/run_browser_04.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/run_browser_05.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/run_browser_06.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/run_browser_10.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/run_http_10.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/run_validation_10.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/serve_fixture.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/test_task_form_04.py",
+      "matched": true
+    },
+    {
+      "path": "tests/native_ui/test_widgets_10.py",
+      "matched": true
+    },
+    {
+      "path": "tools/native_ui/build.cjs",
+      "matched": true
+    },
+    {
+      "path": "tools/native_ui/inventory_widgets.py",
+      "matched": true
+    }
+  ],
+  "stdout": "patching file NATIVE_UI_VERSION\npatching file frontend/package.json\npatching file frontend/src/App.vue\npatching file frontend/src/components/ConfiguredForm.vue\npatching file frontend/src/components/ConfiguredTable.vue\npatching file frontend/src/components/ConfiguredTabs.vue\npatching file frontend/src/components/ContextMenu.vue\npatching file frontend/src/components/EmbeddedForm.vue\npatching file frontend/src/components/FieldInput.vue\npatching file frontend/src/components/MessageCenter.vue\npatching file frontend/src/components/RecordInspector.vue\npatching file frontend/src/components/SidebarNode.vue\npatching file frontend/src/components/ViewDesigner.vue\npatching file frontend/src/components/WidgetDefinition.vue\npatching file frontend/src/components/WidgetHost.vue\npatching file frontend/src/components/WidgetTable.vue\npatching file frontend/src/styles.css\npatching file src/tactic/core/config_model.py\npatching file src/tactic/core/context_menus.py\npatching file src/tactic/core/widget_containers.py\npatching file src/tactic/ui_api/api.py\npatching file src/tactic/ui_api/config_backend.py\npatching file src/tactic/ui_api/extended_backend.py\npatching file src/tactic/ui_api/menu_service.py\npatching file src/tactic/ui_api/web/app.js\npatching file src/tactic/ui_api/web/build-manifest.json\npatching file src/tactic/ui_api/web/styles.css\npatching file src/tactic/ui_api/widget_service.py\npatching file tests/native_ui/fixture_10.py\npatching file tests/native_ui/run_browser.py\npatching file tests/native_ui/run_browser_03.py\npatching file tests/native_ui/run_browser_04.py\npatching file tests/native_ui/run_browser_05.py\npatching file tests/native_ui/run_browser_06.py\npatching file tests/native_ui/run_browser_10.py\npatching file tests/native_ui/run_http_10.py\npatching file tests/native_ui/run_validation_10.py\npatching file tests/native_ui/serve_fixture.py\npatching file tests/native_ui/test_task_form_04.py\npatching file tests/native_ui/test_widgets_10.py\npatching file tools/native_ui/build.cjs\npatching file tools/native_ui/inventory_widgets.py\n"
+}

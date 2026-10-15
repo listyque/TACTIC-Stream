@@ -1,0 +1,185 @@
+{
+  "mode": "real CherryPy; production message/timeline services with test persistence and schema collaborators",
+  "results": [
+    {
+      "scenario": "Messages require a browser session",
+      "passed": true
+    },
+    {
+      "scenario": "Authenticated fixture session",
+      "passed": true
+    },
+    {
+      "scenario": "Inbox is own/project scoped",
+      "passed": true
+    },
+    {
+      "scenario": "Another users chat is denied",
+      "passed": true
+    },
+    {
+      "scenario": "Another project chat is denied",
+      "passed": true
+    },
+    {
+      "scenario": "History pagination preserves 65 records",
+      "passed": true
+    },
+    {
+      "scenario": "Identical texts are separate message_log IDs",
+      "passed": true
+    },
+    {
+      "scenario": "Projectless legacy chat stays accessible to members",
+      "passed": true
+    },
+    {
+      "scenario": "Initial welcome is not a fabricated log entry",
+      "passed": true
+    },
+    {
+      "scenario": "Message mutation requires CSRF",
+      "passed": true
+    },
+    {
+      "scenario": "Foreign Origin is rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Retry returns same response without duplicate insertion",
+      "passed": true
+    },
+    {
+      "scenario": "SQLite original API method persisted message_log",
+      "passed": true
+    },
+    {
+      "scenario": "Reused request ID cannot change content",
+      "passed": true
+    },
+    {
+      "scenario": "System event cannot be overwritten as chat",
+      "passed": true
+    },
+    {
+      "scenario": "NUL is rejected before mutation",
+      "passed": true
+    },
+    {
+      "scenario": "Stale acknowledgment cannot clear unseen history",
+      "passed": true
+    },
+    {
+      "scenario": "Acknowledgment is observed timestamp, not read receipt",
+      "passed": true
+    },
+    {
+      "scenario": "New filter reflects last_cleared",
+      "passed": true
+    },
+    {
+      "scenario": "Configured SubscriptionWdg resolves to native screen",
+      "passed": true
+    },
+    {
+      "scenario": "Config category controls message list",
+      "passed": true
+    },
+    {
+      "scenario": "Widget option disables unsubscribe",
+      "passed": true
+    },
+    {
+      "scenario": "Server repeats widget unsubscribe restriction",
+      "passed": true
+    },
+    {
+      "scenario": "Exact participant sets do not mix pair/group chat",
+      "passed": true
+    },
+    {
+      "scenario": "ChatCmd creates a real scoped channel in test persistence",
+      "passed": true
+    },
+    {
+      "scenario": "Chat membership reflects both subscriptions",
+      "passed": true
+    },
+    {
+      "scenario": "Unsubscribe preserves message history by contract",
+      "passed": true
+    },
+    {
+      "scenario": "Unsubscribed caller loses channel access",
+      "passed": true
+    },
+    {
+      "scenario": "Server user lookup returns login/display only",
+      "passed": true
+    },
+    {
+      "scenario": "Object event key comes from original key rules",
+      "passed": true
+    },
+    {
+      "scenario": "Object subscription stored by original subscribe API",
+      "passed": true
+    },
+    {
+      "scenario": "Object unsubscribe does not delete object",
+      "passed": true
+    },
+    {
+      "scenario": "My Notifications handler carries original hidden scope",
+      "passed": true
+    },
+    {
+      "scenario": "Email log is recipient/project scoped, not all admin logs",
+      "passed": true
+    },
+    {
+      "scenario": "Email body is returned as data, not executed",
+      "passed": true
+    },
+    {
+      "scenario": "Direct record request cannot escape recipient scope",
+      "passed": true
+    },
+    {
+      "scenario": "Timeline has independent date-window pagination",
+      "passed": true
+    },
+    {
+      "scenario": "Both configured bars are preserved",
+      "passed": true
+    },
+    {
+      "scenario": "Page overlap not duplicated",
+      "passed": true
+    },
+    {
+      "scenario": "Timeline uses original user predicate",
+      "passed": true
+    },
+    {
+      "scenario": "Outside period is not current table page",
+      "passed": true
+    },
+    {
+      "scenario": "Excessive date range rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Arbitrary date column refused",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid target remains forbidden",
+      "passed": true
+    },
+    {
+      "scenario": "Unknown routes remain rejected",
+      "passed": true
+    }
+  ]
+}

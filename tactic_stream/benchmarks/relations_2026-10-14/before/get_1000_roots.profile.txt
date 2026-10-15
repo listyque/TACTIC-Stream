@@ -1,0 +1,38 @@
+         121325 function calls (121150 primitive calls) in 0.195 seconds
+
+   Ordered by: cumulative time
+   List reduced from 654 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.195    0.195 relation_performance_probe.py:84(invoke)
+        1    0.000    0.000    0.195    0.195 api.py:649(dispatch)
+        1    0.000    0.000    0.195    0.195 api.py:679(_dispatch)
+      2/1    0.000    0.000    0.187    0.187 command.py:107(execute_cmd)
+        1    0.000    0.000    0.187    0.187 api.py:777(<lambda>)
+        1    0.000    0.000    0.187    0.187 api.py:1024(execute_python_script)
+        1    0.000    0.000    0.186    0.186 python_cmd.py:175(execute)
+        1    0.000    0.000    0.186    0.186 python_cmd.py:94(get_results)
+        1    0.000    0.000    0.183    0.183 template.py:420(render)
+        1    0.000    0.000    0.183    0.183 runtime.py:860(_render)
+        1    0.000    0.000    0.183    0.183 runtime.py:908(_render_context)
+        1    0.000    0.000    0.183    0.183 runtime.py:923(_exec_template)
+        1    0.000    0.000    0.183    0.183 memory:0x26a43e239d0:15(render_body)
+        1    0.000    0.000    0.183    0.183 memory:0x26a43e239d0:19(spt_run_code)
+        1    0.000    0.000    0.183    0.183 memory:0x26a43e239d0:35(render_spt_run_code)
+        1    0.000    0.000    0.172    0.172 expression.py:72(eval)
+      4/1    0.000    0.000    0.167    0.167 expression.py:561(dive)
+      4/1    0.000    0.000    0.167    0.167 expression.py:542(do_parse)
+        1    0.000    0.000    0.167    0.167 expression.py:803(parse)
+        4    0.000    0.000    0.167    0.042 expression.py:1085(parse)
+        1    0.000    0.000    0.167    0.167 expression.py:1134(execute_method)
+        1    0.001    0.001    0.158    0.158 expression.py:2386(get)
+     1000    0.130    0.000    0.152    0.000 expression.py:364(cache_sobjects)
+     2000    0.003    0.000    0.015    0.000 keys.py:163(get_by_sobject)
+     2089    0.001    0.000    0.015    0.000 container.py:74(get_full_dict)
+     2091    0.001    0.000    0.015    0.000 container.py:58(_get_dict)
+     2432    0.001    0.000    0.014    0.000 container.py:28(get)
+     9887    0.013    0.000    0.013    0.000 {method 'get' of 'dict' objects}
+       10    0.001    0.000    0.011    0.001 search.py:3970(get_sobjects)
+        1    0.000    0.000    0.009    0.009 expression.py:1976(get_sobjects)
+
+

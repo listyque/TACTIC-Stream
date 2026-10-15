@@ -1,0 +1,39 @@
+{
+  "valid": [
+    {"type":"TEXT","text":"ordinary text","value":"ordinary text"},
+    {"type":"character varying(256)","text":"quote \" backslash \\ newline\nЮникод","value":"quote \" backslash \\ newline\nЮникод"},
+    {"type":"TEXT","text":"","value":""},
+    {"type":"TEXT","text":"NULL","value":"NULL"},
+    {"type":"TEXT","text":"null","value":"null"},
+    {"type":"TEXT","text":"42","value":"42"},
+    {"type":"TEXT","text":"true","value":"true"},
+    {"type":"TEXT","text":"NaN","value":"NaN"},
+    {"type":"TEXT","text":"  spaces  ","value":"  spaces  "},
+    {"type":"INTEGER","text":"  +0042 ","value":42},
+    {"type":"bigint","text":"9223372036854775807","value":"9223372036854775807"},
+    {"type":"BIGINT","text":"-9223372036854775808","value":"-9223372036854775808"},
+    {"type":"int8","text":"9007199254740991","value":9007199254740991},
+    {"type":"boolean","text":"true","value":true},
+    {"type":"BOOLEAN","text":"0","value":false},
+    {"type":"BOOL","text":" FALSE ","value":false},
+    {"type":"double precision","text":"-1.25e2","value":-125.0},
+    {"type":"real","text":".5","value":0.5},
+    {"type":"numeric(30,8)","text":"12345678901234567890.12345678","value":"12345678901234567890.12345678"},
+    {"type":"jsonb","text":"{\"a\": 9223372036854775807, \"b\": [true, null]}","value":"{\"a\": 9223372036854775807, \"b\": [true, null]}"},
+    {"type":"JSON","text":"null","value":"null"},
+    {"type":"JSON","text":"\"quoted\"","value":"\"quoted\""},
+    {"type":"JSON","text":"42","value":"42"},
+    {"type":"timestamp","text":"2026-10-14 12:00:00","value":"2026-10-14 12:00:00"},
+    {"type":"TEXT","text":"ignored","mode":"null","value":null},
+    {"type":"INTEGER","text":"ignored","mode":"null","value":null}
+  ],
+  "invalid": [
+    {"type":"INTEGER","text":"1.5"}, {"type":"INTEGER","text":""},
+    {"type":"INTEGER","text":"NaN"}, {"type":"INTEGER","text":"0x10"},
+    {"type":"INTEGER","text":"١٢٣"}, {"type":"BOOLEAN","text":"yes"},
+    {"type":"real","text":"1e400"}, {"type":"real","text":"Infinity"},
+    {"type":"decimal","text":"NaN"}, {"type":"jsonb","text":"{broken"},
+    {"type":"JSON","text":"{\"a\":1e400}"}, {"type":"JSON","text":"NaN"},
+    {"type":"TEXT","text":"x","mode":"default"}
+  ]
+}

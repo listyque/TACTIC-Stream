@@ -1,0 +1,205 @@
+{
+  "baseline": "TACTIC_5_Vue_Source_Fork_0.13.zip",
+  "baseline_sha256": "e2deb332f87c71d3d8878714fbd1cec9303c3f57db278fa20277d0ac90f2fbf3",
+  "code_and_build_changes": 31,
+  "changed_files": [
+    {
+      "path": "NATIVE_UI_VERSION",
+      "status": "modified",
+      "before_sha256": "342a2d9e91ecb95d736e0a0cd7540c7b4637173ebc0f3a12a09839873b863e56",
+      "after_sha256": "425edad3ef4afd2c4299c5532c8a36c92a9fd36c7097ecaa1d9af84b82b810d1"
+    },
+    {
+      "path": "README_VUE_RU.md",
+      "status": "modified",
+      "before_sha256": "bd05d91aad17b1fe7a9f396e77af9367ddbc2b26498e4fcd7b063c4adbf7c4f1",
+      "after_sha256": "e3755fd812239480ac88c2e773fb7715f7932df9c5ab1efcd67b33cde47655cc"
+    },
+    {
+      "path": "START_CLUSTER.bat",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "94452b399a679c4b82ca649c13d201b51b87ebab29b2f3351d17179bb56f021e"
+    },
+    {
+      "path": "START_HERE_RU.md",
+      "status": "modified",
+      "before_sha256": "6eb8cfea8965856d3a79c30ecd2d851abb791384037c962372332d3487436389",
+      "after_sha256": "ae523d60949f83105771438ab55a0c4db19dcca86ecd7a60ab85914ca2de1ffb"
+    },
+    {
+      "path": "frontend/package.json",
+      "status": "modified",
+      "before_sha256": "7a8b09c1f4feee6c35b7de7676cb05202dddc3df6538075305377387a28a69e3",
+      "after_sha256": "993979f710eef17487e24acffc4b6ec7e9c0cf58d2551e957d0c101789872957"
+    },
+    {
+      "path": "frontend/src/components/AdminPanel.vue",
+      "status": "modified",
+      "before_sha256": "84607aa9f3bc39e703ba1b7bcd34a73edf75ed0e2789968a9bba4b3021c27e1c",
+      "after_sha256": "e3b152fc14949546fd9844ee8893a983f058c846b13daf116b26fae5c1c4b070"
+    },
+    {
+      "path": "frontend/src/components/ConfiguredForm.vue",
+      "status": "modified",
+      "before_sha256": "94bdb01a3ffb22e77227bc32a25b24851e869e7b0ceef61b5f97ce67f91255db",
+      "after_sha256": "456978ac9292d22624261a43026fa2d03e47cc8c596a1cd7c8906349d50da5b6"
+    },
+    {
+      "path": "frontend/src/components/ConfiguredTable.vue",
+      "status": "modified",
+      "before_sha256": "5c26d10e61b879b461776192f84af3df07b4e99a43a58bd99d4ab369eaeb993a",
+      "after_sha256": "40d899bdb45572a37fbebd9deb6d5471b042db5a2808f2587de472a063c5b9b8"
+    },
+    {
+      "path": "frontend/src/components/TableToolbar.vue",
+      "status": "modified",
+      "before_sha256": "89910bf58759c4f6e3ab38ded16a2e1262f25e7746796f06a59195a91b269e13",
+      "after_sha256": "4ade954def6521b0134d6a160b7ccb43a9e829df66166fa2be7f090d3f4d05d3"
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "status": "modified",
+      "before_sha256": "ba5e460fda1f5560bf3a5d9ca69f8c329190248a971f1242099b32136296e00e",
+      "after_sha256": "5b40f1979eefc83e75d3c106dff55e7ebe5d65bbc70880c38119fad9565f0972"
+    },
+    {
+      "path": "src/pyasm/web/cherrypy30_startup.py",
+      "status": "modified",
+      "before_sha256": "a377809a92453fe65cf6b1f0d37b183648a6981b7dc155000c81cfb2ab35d6ac",
+      "after_sha256": "1b9eb751192a21483aa053a2b15e79014c081dd18e7daa5430906868a0cc06b5"
+    },
+    {
+      "path": "src/pyasm/web/cherrypy_startup.py",
+      "status": "modified",
+      "before_sha256": "cb03f319570b17fe1c5aadb5daa9f7c80a4678c495f6bd8a759ddeb3386dad3d",
+      "after_sha256": "ed025b0710ff5be93e1753cbd41f186de246a858ecc0d0c983d040b21f10f479"
+    },
+    {
+      "path": "src/tactic/ui_api/admin_service.py",
+      "status": "modified",
+      "before_sha256": "9df13a8aa818bb2167febe24705bef6a47a84363fb279380bff39204aba37055",
+      "after_sha256": "ae5d1e3830c5dff3545ede8dcfb4b63283b18b0527641feabe708203c1b86112"
+    },
+    {
+      "path": "src/tactic/ui_api/api.py",
+      "status": "modified",
+      "before_sha256": "7b4bc59c6101df15b898f4596df10d7003929a5c1a309d3e60c3e6b6bb653983",
+      "after_sha256": "516764800775a016dc9dc4bb7959f43b7df96aee3feb32b107c89def4265391d"
+    },
+    {
+      "path": "src/tactic/ui_api/cluster_runtime.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "3119df38ab176760106e2921daa57ee8c8b7d2651258e0e1c53f124ba109f6e5"
+    },
+    {
+      "path": "src/tactic/ui_api/extended_backend.py",
+      "status": "modified",
+      "before_sha256": "42ac2d0887369e8e63cbecbd122a19aae4d2115b859f347e4b8f8daf29176910",
+      "after_sha256": "efc0d30fd852d82fa9fbdaf4c344dd7effe6b34121389c1085e4a3198c3e5f40"
+    },
+    {
+      "path": "src/tactic/ui_api/mount.py",
+      "status": "modified",
+      "before_sha256": "dc59cf0b8e0f86227d8f4c6d1bd9a12819b2cc88952eeeae7ca2b601c9b363a8",
+      "after_sha256": "b0d13647af3d423e9e96f09efec12d348370989ebfc09904e9ef2463cbf080ac"
+    },
+    {
+      "path": "src/tactic/ui_api/shared_sessions.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "2daee57dbeaa19a2678c7eea971ae2ea3eb1950a0cf19b1ea5c0a868582954b1"
+    },
+    {
+      "path": "src/tactic/ui_api/table_edit_service.py",
+      "status": "modified",
+      "before_sha256": "294bee384372d3903ae333cf05f997e099f7304249358f1d8ede8009e43c26ce",
+      "after_sha256": "8d66c8447a47161633b320082253def83d1c696c3922da6dd059fc59a15bee95"
+    },
+    {
+      "path": "src/tactic/ui_api/web/app.js",
+      "status": "modified",
+      "before_sha256": "7c9885b93e1d2e3ec98936a762a01bb29daff58db6030f009333bbf6a9b7873e",
+      "after_sha256": "f8b8309d6358bc428d6d2878ae41f5240e0267638ccf64b6c1844aff21b0a646"
+    },
+    {
+      "path": "src/tactic/ui_api/web/build-manifest.json",
+      "status": "modified",
+      "before_sha256": "50eb949ca5e3e402303c13050fbf5eca1498ec24b6c0329e8253cd2719e8eea1",
+      "after_sha256": "d23db07719f9888680c8716b9645e692c4cf51022e99097791486d8331c12de7"
+    },
+    {
+      "path": "src/tactic/ui_api/web/styles.css",
+      "status": "modified",
+      "before_sha256": "ba5e460fda1f5560bf3a5d9ca69f8c329190248a971f1242099b32136296e00e",
+      "after_sha256": "5b40f1979eefc83e75d3c106dff55e7ebe5d65bbc70880c38119fad9565f0972"
+    },
+    {
+      "path": "tests/native_ui/cluster_test_worker_014.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "adb4bffa36683d8b3120ca41eedc231acecdea6639708e47721375436aabf4b8"
+    },
+    {
+      "path": "tests/native_ui/run_browser_014.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "739825604288b0f0c36ba1136c6ad477ffcfad5424a933d792d76a004760758c"
+    },
+    {
+      "path": "tests/native_ui/run_cluster_014.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "369f5d4159349a8cf86a417d3e0f1d3ee294b8a7d9d2e3ff5789ef12d5fc9148"
+    },
+    {
+      "path": "tests/native_ui/run_http_fill_014.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "1baa0d45c6dedb584eac817b662fd84fcf2e7d716ab5acf25f4fd655c75fe43f"
+    },
+    {
+      "path": "tests/native_ui/test_cluster_014.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "5c188c83c9fbc50f3e004b62a6e30ad170402db07ec7f74f96a6947354e36793"
+    },
+    {
+      "path": "tests/native_ui/test_fill_014.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "41bcd82225c443403c3eac68ad8692ab8cb6aa3b70145595b777219eb2f1018e"
+    },
+    {
+      "path": "tests/native_ui/test_fill_state_014.cjs",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "d8a9784eccfad6ac9ec9acf676bf1dd02a4dfd5bce66dbc4acd369a6c5bf878c"
+    },
+    {
+      "path": "tools/local/cluster.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "1430e60aaf5d6d94f428eb1b3cb63ef90210dbf39d4e92221250a7b51e60eda4"
+    },
+    {
+      "path": "tools/local/cluster_gateway.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "b275fea56687f17625ac08569421dc3b8a4ae500970d5d6d801b885b04738e74"
+    },
+    {
+      "path": "tools/local/cluster_worker.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "9f1e01879b1b5f0a79fbc99e5c21410aff04ab6615cc6d2d99181c512bdf81a2"
+    },
+    {
+      "path": "tools/local/local_lock.py",
+      "status": "modified",
+      "before_sha256": "d672893e95fef0fe8f425f984265eae60699c2cd966c3519777e99c4cbb24a5d",
+      "after_sha256": "0afef7f8b3af96c82281042d9d4cc3ec7c7352ccfaacc5ee102ba21208556adc"
+    }
+  ]
+}

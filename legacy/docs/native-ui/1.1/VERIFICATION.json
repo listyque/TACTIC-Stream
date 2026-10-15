@@ -1,0 +1,35 @@
+{
+  "release": "1.1",
+  "baseline": "1.0",
+  "regression": {
+    "unit": 921,
+    "http": 322,
+    "browser": 212,
+    "passed": true,
+    "source": "validation/final/summary.json",
+    "backend": "synthetic fixture"
+  },
+  "original_server": {
+    "http": 83,
+    "browser": 42,
+    "passed": true,
+    "source": "validation/original-verified/summary.json",
+    "backend": "original TACTIC startup, DB password authentication, models/commands, full temporary SQLite seeds",
+    "signature_verification_isolated_in_test": true,
+    "native_browser_navigation_verified": false
+  },
+  "identity_upgrade": {
+    "checks": 11,
+    "passed": true,
+    "original_initial_methods": 402,
+    "repair_replays_historical_methods": 0
+  },
+  "not_verified": [
+    "Windows BAT/PowerShell",
+    "Cryptographic licence verification/replacement",
+    "PostgreSQL/MySQL",
+    "Native Chromium cookies/CSP/navigation",
+    "Complete custom/legacy widget parity"
+  ],
+  "fixture_totals_are_not_all_live_database_tests": true
+}

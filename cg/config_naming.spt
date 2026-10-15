@@ -1,0 +1,224 @@
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00015""")
+insert.set_value('current_versionless', False)
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('script_path', """naming/shot""")
+insert.set_value('search_type', """cg/shot""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00071""")
+insert.set_value('current_versionless', False)
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('script_path', """naming/shot""")
+insert.set_value('search_type', """cg/shot""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00079""")
+insert.set_value('context', """watch_folder""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/episodes/{sobject.name}/watch_folder""")
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/scenes""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """strict""")
+insert.set_value('code', """NAMING00080""")
+insert.set_value('condition', """@GET(snapshot.context) == publish""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/{search_type.table_name}/{parent.code}/versions{@CASE( @GET(file.type) == 'playblast', '/'+'__preview', @GET(file.type) == 'web',  '/'+'__preview/web', @GET(file.type) == 'icon', '/'+'__preview/icon')}""")
+insert.set_value('file_naming', """{sobject.name}_v{version}.{ext}""")
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/assets""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00081""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{sobject.relative_dir}""")
+insert.set_value('file_naming', """{sobject.name}_v{version}.{ext}""")
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('script_path', """naming/assets_in_scenes""")
+insert.set_value('search_type', """cg/assets_in_scenes""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00082""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/sourceimages/{sobject.code}{@CASE( @GET(file.type) == 'playblast', '/'+'__preview', @GET(file.type) == 'web',  '/'+'__preview/web', @GET(file.type) == 'icon', '/'+'__preview/icon')}""")
+insert.set_value('file_naming', """{sobject.code}_v{version}.{ext}""")
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/assets_category""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """strict""")
+insert.set_value('code', """NAMING00083""")
+insert.set_value('condition', """@GET(snapshot.context) == publish""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/{search_type.table_name}/{parent.code}{@CASE( @GET(file.type) == 'playblast', '/'+'__preview', @GET(file.type) == 'web',  '/'+'__preview/web', @GET(file.type) == 'icon', '/'+'__preview/icon')}""")
+insert.set_value('file_naming', """{sobject.name}.{ext}""")
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/assets""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """strict""")
+insert.set_value('code', """NAMING00086""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/sourceimages/{parent.code}/{sobject.sub_type}/versions{@CASE( @GET(file.type) == 'playblast', '/'+'__preview', @GET(file.type) == 'web',  '/'+'__preview/web', @GET(file.type) == 'icon', '/'+'__preview/icon')}""")
+insert.set_value('file_naming', """{sobject.name}_v{version}.{ext}""")
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/texture""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00087""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{sobject.relative_dir}""")
+insert.set_value('file_naming', """{sobject.name}_v{version}.{ext}""")
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/texture_in_assets""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """strict""")
+insert.set_value('code', """NAMING00090""")
+insert.set_value('current_versionless', False)
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('script_path', """naming/episodes""")
+insert.set_value('search_type', """cg/scenes""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """strict""")
+insert.set_value('code', """NAMING00091""")
+insert.set_value('current_versionless', False)
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('script_path', """naming/episodes""")
+insert.set_value('search_type', """cg/scenes""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """strict""")
+insert.set_value('code', """NAMING00092""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/sourceimages/{parent.code}/{sobject.sub_type}{@CASE( @GET(file.type) == 'playblast', '/'+'__preview', @GET(file.type) == 'web',  '/'+'__preview/web', @GET(file.type) == 'icon', '/'+'__preview/icon')}""")
+insert.set_value('file_naming', """{sobject.name}.{ext}""")
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/texture""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('code', """NAMING00093""")
+insert.set_value('context', """watch_folder""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/{search_type.table_name}/{parent.code}/{sobject.name}/watch_folder""")
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/assets""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('code', """NAMING00094""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/sourceimages/{sobject.code}{@CASE( @GET(file.type) == 'playblast', '/'+'__preview', @GET(file.type) == 'web',  '/'+'__preview/web', @GET(file.type) == 'icon', '/'+'__preview/icon')}""")
+insert.set_value('file_naming', """{sobject.code}.{ext}""")
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/assets_category""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """strict""")
+insert.set_value('code', """NAMING00095""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/{search_type.table_name}/{parent.code}/{snapshot.context}{@CASE( @GET(file.type) == 'playblast', '/'+'__preview', @GET(file.type) == 'web',  '/'+'__preview/web', @GET(file.type) == 'icon', '/'+'__preview/icon')}""")
+insert.set_value('file_naming', """{sobject.name}_{snapshot.context}.{ext}""")
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/assets""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """strict""")
+insert.set_value('code', """NAMING00096""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{project.code}/{search_type.table_name}/{parent.code}/{snapshot.context}/versions{@CASE( @GET(file.type) == 'playblast', '/'+'__preview', @GET(file.type) == 'web',  '/'+'__preview/web', @GET(file.type) == 'icon', '/'+'__preview/icon')}""")
+insert.set_value('file_naming', """{sobject.name}_{snapshot.context}_v{version}.{ext}""")
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/assets""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00097""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{sobject.relative_dir}""")
+insert.set_value('file_naming', """{sobject.name}_v{version}.{ext}""")
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """cg/assets_in_assets""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00098""")
+insert.set_value('current_versionless', False)
+insert.set_value('latest_versionless', True)
+insert.set_value('manual_version', False)
+insert.set_value('script_path', """naming/assets_in_scenes""")
+insert.set_value('search_type', """cg/assets_in_scenes""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/naming')
+insert.set_value('checkin_type', """auto""")
+insert.set_value('code', """NAMING00099""")
+insert.set_value('current_versionless', False)
+insert.set_value('dir_naming', """{sobject.relative_dir}""")
+insert.set_value('file_naming', """{sobject.name}_v{version}.{ext}""")
+insert.set_value('latest_versionless', False)
+insert.set_value('manual_version', False)
+insert.set_value('search_type', """niki_friends/th_knowledge_article""")
+#-- End Entry --#
+

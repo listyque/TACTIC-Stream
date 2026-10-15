@@ -1,0 +1,51 @@
+{
+  "version": "0.15",
+  "passed": true,
+  "python_unit": 1071,
+  "js_suites": {
+    "test_fill_state_014": 14,
+    "test_ui_state_015": 30,
+    "test_grid_state_012": 15,
+    "test_table_toolbar_013": 19
+  },
+  "js_total": 78,
+  "original_cluster_checks": 48,
+  "original_http": {
+    "table-http": 37,
+    "fill-http": 25,
+    "globals-http": 83,
+    "state-project-http": 53
+  },
+  "original_http_total": 198,
+  "original_browser": {
+    "regression": 72,
+    "project-state": 30
+  },
+  "original_browser_total": 102,
+  "final_browser_same_code_css_rerun": 30,
+  "original_xmlrpc_widgetsettings_checks": 2,
+  "metadata_parity": {
+    "scope": "shipped file views plus same-file definitions; not live DB or rendered widgets",
+    "files": 80,
+    "views": 487,
+    "elements": 2911,
+    "checks": 11370,
+    "differences": [],
+    "errors": []
+  },
+  "vue_components": 41,
+  "real_backend": "Original TACTIC / temporary complete SQLite seeds / 3 worker processes / original auth and commands",
+  "limitations": [
+    "Licence signature isolated ONLY in disposable tests; production unchanged",
+    "Explicit HTTP bridge because Chromium native navigation blocked; native cookies/CSP/navigation not proven",
+    "Windows BAT/PowerShell, PostgreSQL/MySQL not executed",
+    "Only default/simple project sources; arbitrary template import/icon/theme not implemented",
+    "Native JSON in original wdg_settings is not byte-identical legacy last_search/save_state serialization",
+    "Record drafts and result rows not persisted as preferences"
+  ],
+  "notes": [
+    "48 orchestration checks include child suite exit checks; do not add again to API/UI totals",
+    "30 final UI cases rerun after layout and asynchronous project-scope guards; not 30 extra distinct scenarios",
+    "Historical docs are not rerun proof; this summary uses completed current reports only"
+  ]
+}

@@ -1,0 +1,38 @@
+         38092 function calls (36920 primitive calls) in 0.023 seconds
+
+   Ordered by: cumulative time
+   List reduced from 653 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.023    0.023 relation_performance_probe.py:84(invoke)
+        1    0.000    0.000    0.023    0.023 api.py:649(dispatch)
+        1    0.000    0.000    0.023    0.023 api.py:679(_dispatch)
+      2/1    0.000    0.000    0.015    0.015 command.py:107(execute_cmd)
+        1    0.000    0.000    0.015    0.015 api.py:777(<lambda>)
+        1    0.000    0.000    0.015    0.015 api.py:1024(execute_python_script)
+        1    0.000    0.000    0.015    0.015 python_cmd.py:175(execute)
+        1    0.000    0.000    0.015    0.015 python_cmd.py:94(get_results)
+        1    0.000    0.000    0.011    0.011 template.py:420(render)
+        1    0.000    0.000    0.011    0.011 runtime.py:860(_render)
+        1    0.000    0.000    0.011    0.011 runtime.py:908(_render_context)
+        1    0.000    0.000    0.011    0.011 runtime.py:923(_exec_template)
+        1    0.000    0.000    0.011    0.011 memory:0x14f25df0b90:15(render_body)
+        1    0.000    0.000    0.011    0.011 memory:0x14f25df0b90:20(spt_run_code)
+        1    0.000    0.000    0.011    0.011 memory:0x14f25df0b90:35(render_spt_run_code)
+2000/1000    0.003    0.000    0.008    0.000 schema.py:188(get_relationship_attrs)
+       36    0.006    0.000    0.006    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+        1    0.000    0.000    0.005    0.005 authenticator.py:124(bind_security)
+        1    0.000    0.000    0.005    0.005 batch.py:85(__init__)
+        1    0.000    0.000    0.005    0.005 batch.py:93(_do_login)
+        1    0.000    0.000    0.004    0.004 security.py:1316(login_with_ticket)
+        7    0.000    0.000    0.004    0.001 search.py:2899(__init__)
+    85/67    0.000    0.000    0.004    0.000 {built-in method builtins.next}
+       54    0.000    0.000    0.003    0.000 storage.py:64(connection)
+    38/29    0.000    0.000    0.003    0.000 contextlib.py:136(__enter__)
+      7/6    0.000    0.000    0.003    0.001 search.py:3970(get_sobjects)
+       53    0.000    0.000    0.003    0.000 storage.py:331(resolve)
+    28/24    0.000    0.000    0.003    0.000 search.py:2353(get_column_info)
+        9    0.000    0.000    0.003    0.000 sql.py:2388(get)
+        9    0.000    0.000    0.003    0.000 sql.py:2400(get_connection_pool_sql)
+
+

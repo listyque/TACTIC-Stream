@@ -1,0 +1,17 @@
+/* Official fonts bundled with Handler; source and licenses are in assets/fonts. */
+@font-face { font-family: 'Stream Material Icons'; src: url('./assets/fonts/materialdesignicons-webfont.ttf') format('truetype'); font-display: block; }
+@font-face { font-family: 'Stream Awesome Solid'; src: url('./assets/fonts/fontawesome5-solid-webfont.ttf') format('truetype'); font-display: block; }
+@font-face { font-family: 'Stream Awesome Outline'; src: url('./assets/fonts/fontawesome5-regular-webfont.ttf') format('truetype'); font-display: block; }
+@font-face { font-family: 'Stream Fluent Icons'; src: url('./assets/fonts/fluent-system-icons-resizable.ttf') format('truetype'); font-display: block; }
+.app-icon { display: inline-grid; grid-template-columns:minmax(0, 1fr); grid-template-rows:minmax(0, 1fr); place-items: center; line-height: 1; font-style: normal; font-weight: normal; font-size: var(--icon-size); user-select: none; }
+/* Decorative glyphs share their action's hit area; standalone icon actions keep theirs. */
+:is(button, a, summary, [role="button"]) .app-icon { pointer-events:none; }
+/* MaterialIcon.qml: opticalScale .78, MDI 1.22, Fluent 1.08, minimum 11px. */
+.app-icon > .icon-glyph { display: block; font-size: max(11px, round(nearest, calc(1em * var(--icon-optical-scale, .78)), 1px)); }
+.icon-material-design { --icon-optical-scale: .9516; }
+.icon-fluent-regular, .icon-fluent-filled { --icon-optical-scale: .8424; }
+.icon-material-design { font-family: 'Stream Material Icons'; }
+.icon-fontawesome-solid { font-family: 'Stream Awesome Solid'; }
+.icon-fontawesome-outline, .icon-fontawesome-regular { font-family: 'Stream Awesome Outline'; }
+.icon-fluent-regular, .icon-fluent-filled { font-family: 'Stream Fluent Icons'; }
+.navigation-icon .app-icon { font-size: var(--icon-navigation); }

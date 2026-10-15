@@ -1,0 +1,30 @@
+{
+  "dark": {
+    "workspace": "#1b1e20",
+    "surfaceContainerHigh": "#3a3e41",
+    "primaryText": "#f6f8fa",
+    "secondaryText": "#aeb1b3",
+    "action": "#78a6c4",
+    "selectedText": "#f6f8fa",
+    "outline": "#5a5e60",
+    "outlineVariant": "#404346",
+    "disabledText": "#767a7c",
+    "rowHover": "#3e464c",
+    "selected": "#67899f",
+    "error": "#d65b67"
+  },
+  "light": {
+    "workspace": "#d7dfe3",
+    "surfaceContainerHigh": "#e4e9ec",
+    "primaryText": "#172027",
+    "secondaryText": "#666f75",
+    "action": "#3d7599",
+    "selectedText": "#172027",
+    "outline": "#9ba4a9",
+    "outlineVariant": "#b2bac0",
+    "disabledText": "#949da2",
+    "rowHover": "#d5dee4",
+    "selected": "#6f98b2",
+    "error": "#d65b67"
+  }
+}

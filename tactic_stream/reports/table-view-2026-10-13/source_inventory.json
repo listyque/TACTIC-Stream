@@ -1,0 +1,2590 @@
+{
+  "classes": [
+    {
+      "class": "QubeState",
+      "module": "pyasm.prod.render.qube_render_submit",
+      "qualified_class": "pyasm.prod.render.qube_render_submit.QubeState",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\render\\qube_render_submit.py",
+      "legacy_line": 440,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "AssetDataLink",
+      "module": "pyasm.prod.web.asset_data_wdg",
+      "qualified_class": "pyasm.prod.web.asset_data_wdg.AssetDataLink",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\asset_data_wdg.py",
+      "legacy_line": 22,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "AssetInfoWdg",
+      "module": "pyasm.prod.web.asset_info_wdg",
+      "qualified_class": "pyasm.prod.web.asset_info_wdg.AssetInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\asset_info_wdg.py",
+      "legacy_line": 21,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CondensedAssetInfoWdg",
+      "module": "pyasm.prod.web.asset_info_wdg",
+      "qualified_class": "pyasm.prod.web.asset_info_wdg.CondensedAssetInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\asset_info_wdg.py",
+      "legacy_line": 78,
+      "bases": [
+        "AssetInfoWdg"
+      ]
+    },
+    {
+      "class": "CondensedShotInfoWdg",
+      "module": "pyasm.prod.web.asset_info_wdg",
+      "qualified_class": "pyasm.prod.web.asset_info_wdg.CondensedShotInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\asset_info_wdg.py",
+      "legacy_line": 231,
+      "bases": [
+        "ShotInfoWdg"
+      ]
+    },
+    {
+      "class": "GeneralInfoWdg",
+      "module": "pyasm.prod.web.asset_info_wdg",
+      "qualified_class": "pyasm.prod.web.asset_info_wdg.GeneralInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\asset_info_wdg.py",
+      "legacy_line": 310,
+      "bases": [
+        "AssetInfoWdg"
+      ]
+    },
+    {
+      "class": "ShotInfoWdg",
+      "module": "pyasm.prod.web.asset_info_wdg",
+      "qualified_class": "pyasm.prod.web.asset_info_wdg.ShotInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\asset_info_wdg.py",
+      "legacy_line": 106,
+      "bases": [
+        "AssetInfoWdg"
+      ]
+    },
+    {
+      "class": "SubmissionInfoWdg",
+      "module": "pyasm.prod.web.asset_info_wdg",
+      "qualified_class": "pyasm.prod.web.asset_info_wdg.SubmissionInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\asset_info_wdg.py",
+      "legacy_line": 260,
+      "bases": [
+        "AssetInfoWdg"
+      ]
+    },
+    {
+      "class": "CameraInfoWdg",
+      "module": "pyasm.prod.web.camera_info_wdg",
+      "qualified_class": "pyasm.prod.web.camera_info_wdg.CameraInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\camera_info_wdg.py",
+      "legacy_line": 19,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CompLayerTableElementWdg",
+      "module": "pyasm.prod.web.composite_wdg",
+      "qualified_class": "pyasm.prod.web.composite_wdg.CompLayerTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\composite_wdg.py",
+      "legacy_line": 102,
+      "bases": [
+        "LayerTableElementWdg"
+      ]
+    },
+    {
+      "class": "ExploreTableElementWdg",
+      "module": "pyasm.prod.web.composite_wdg",
+      "qualified_class": "pyasm.prod.web.composite_wdg.ExploreTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\composite_wdg.py",
+      "legacy_line": 175,
+      "bases": [
+        "LayerTableElementWdg"
+      ]
+    },
+    {
+      "class": "LayerTableElementWdg",
+      "module": "pyasm.prod.web.composite_wdg",
+      "qualified_class": "pyasm.prod.web.composite_wdg.LayerTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\composite_wdg.py",
+      "legacy_line": 23,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "FrameRangeWdg",
+      "module": "pyasm.prod.web.frame_info_wdg",
+      "qualified_class": "pyasm.prod.web.frame_info_wdg.FrameRangeWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\frame_info_wdg.py",
+      "legacy_line": 179,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "IFrameLink",
+      "module": "pyasm.prod.web.frame_info_wdg",
+      "qualified_class": "pyasm.prod.web.frame_info_wdg.IFrameLink",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\frame_info_wdg.py",
+      "legacy_line": 26,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "AssetsInShotWdg",
+      "module": "pyasm.prod.web.layout_summary_wdg",
+      "qualified_class": "pyasm.prod.web.layout_summary_wdg.AssetsInShotWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\layout_summary_wdg.py",
+      "legacy_line": 125,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "AssignedShotWdg",
+      "module": "pyasm.prod.web.layout_summary_wdg",
+      "qualified_class": "pyasm.prod.web.layout_summary_wdg.AssignedShotWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\layout_summary_wdg.py",
+      "legacy_line": 160,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TasksInSObjectWdg",
+      "module": "pyasm.prod.web.layout_summary_wdg",
+      "qualified_class": "pyasm.prod.web.layout_summary_wdg.TasksInSObjectWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\layout_summary_wdg.py",
+      "legacy_line": 300,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "AssetCheckboxWdg",
+      "module": "pyasm.prod.web.prod_input_wdg",
+      "qualified_class": "pyasm.prod.web.prod_input_wdg.AssetCheckboxWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_input_wdg.py",
+      "legacy_line": 55,
+      "bases": [
+        "CheckboxColWdg"
+      ]
+    },
+    {
+      "class": "LayerCheckboxWdg",
+      "module": "pyasm.prod.web.prod_input_wdg",
+      "qualified_class": "pyasm.prod.web.prod_input_wdg.LayerCheckboxWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_input_wdg.py",
+      "legacy_line": 47,
+      "bases": [
+        "CheckboxColWdg"
+      ]
+    },
+    {
+      "class": "LevelCheckboxWdg",
+      "module": "pyasm.prod.web.prod_input_wdg",
+      "qualified_class": "pyasm.prod.web.prod_input_wdg.LevelCheckboxWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_input_wdg.py",
+      "legacy_line": 72,
+      "bases": [
+        "CheckboxColWdg"
+      ]
+    },
+    {
+      "class": "SObjectCheckboxWdg",
+      "module": "pyasm.prod.web.prod_input_wdg",
+      "qualified_class": "pyasm.prod.web.prod_input_wdg.SObjectCheckboxWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_input_wdg.py",
+      "legacy_line": 31,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "ShotCheckboxWdg",
+      "module": "pyasm.prod.web.prod_input_wdg",
+      "qualified_class": "pyasm.prod.web.prod_input_wdg.ShotCheckboxWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_input_wdg.py",
+      "legacy_line": 62,
+      "bases": [
+        "CheckboxColWdg"
+      ]
+    },
+    {
+      "class": "BinTableElementWdg",
+      "module": "pyasm.prod.web.prod_table_element_wdg",
+      "qualified_class": "pyasm.prod.web.prod_table_element_wdg.BinTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_table_element_wdg.py",
+      "legacy_line": 21,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "InstancePublishWdg",
+      "module": "pyasm.prod.web.prod_table_element_wdg",
+      "qualified_class": "pyasm.prod.web.prod_table_element_wdg.InstancePublishWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_table_element_wdg.py",
+      "legacy_line": 84,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ThumbPublishWdg",
+      "module": "pyasm.prod.web.prod_table_element_wdg",
+      "qualified_class": "pyasm.prod.web.prod_table_element_wdg.ThumbPublishWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_table_element_wdg.py",
+      "legacy_line": 45,
+      "bases": [
+        "ThumbWdg"
+      ]
+    },
+    {
+      "class": "SnapshotInfoWdg",
+      "module": "pyasm.prod.web.prod_wdg",
+      "qualified_class": "pyasm.prod.web.prod_wdg.SnapshotInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_wdg.py",
+      "legacy_line": 62,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SnapshotLabelWdg",
+      "module": "pyasm.prod.web.prod_wdg",
+      "qualified_class": "pyasm.prod.web.prod_wdg.SnapshotLabelWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\prod_wdg.py",
+      "legacy_line": 118,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "RenderTableElementWdg",
+      "module": "pyasm.prod.web.render_wdg",
+      "qualified_class": "pyasm.prod.web.render_wdg.RenderTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\render_wdg.py",
+      "legacy_line": 156,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "NumSequenceInstanceWdg",
+      "module": "pyasm.prod.web.shot_instance_adder_wdg",
+      "qualified_class": "pyasm.prod.web.shot_instance_adder_wdg.NumSequenceInstanceWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\shot_instance_adder_wdg.py",
+      "legacy_line": 934,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "NumShotInstancesWdg",
+      "module": "pyasm.prod.web.shot_instance_adder_wdg",
+      "qualified_class": "pyasm.prod.web.shot_instance_adder_wdg.NumShotInstancesWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\shot_instance_adder_wdg.py",
+      "legacy_line": 544,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "NumTasksWdg",
+      "module": "pyasm.prod.web.shot_instance_adder_wdg",
+      "qualified_class": "pyasm.prod.web.shot_instance_adder_wdg.NumTasksWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\shot_instance_adder_wdg.py",
+      "legacy_line": 764,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "CheckboxCheckinWdg",
+      "module": "pyasm.prod.web.sobject_checkin_wdg",
+      "qualified_class": "pyasm.prod.web.sobject_checkin_wdg.CheckboxCheckinWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\sobject_checkin_wdg.py",
+      "legacy_line": 110,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "DescriptionCheckinWdg",
+      "module": "pyasm.prod.web.sobject_checkin_wdg",
+      "qualified_class": "pyasm.prod.web.sobject_checkin_wdg.DescriptionCheckinWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\sobject_checkin_wdg.py",
+      "legacy_line": 133,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "NumSObjectInstancesWdg",
+      "module": "pyasm.prod.web.sobject_planner_wdg",
+      "qualified_class": "pyasm.prod.web.sobject_planner_wdg.NumSObjectInstancesWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\sobject_planner_wdg.py",
+      "legacy_line": 269,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "EpisodeCompletionWdg",
+      "module": "pyasm.prod.web.statistics_wdg",
+      "qualified_class": "pyasm.prod.web.statistics_wdg.EpisodeCompletionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\statistics_wdg.py",
+      "legacy_line": 23,
+      "bases": [
+        "TaskCompletionWdg"
+      ]
+    },
+    {
+      "class": "FrameCompletionWdg",
+      "module": "pyasm.prod.web.statistics_wdg",
+      "qualified_class": "pyasm.prod.web.statistics_wdg.FrameCompletionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\statistics_wdg.py",
+      "legacy_line": 42,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "DailiesLink",
+      "module": "pyasm.prod.web.submission_wdg",
+      "qualified_class": "pyasm.prod.web.submission_wdg.DailiesLink",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\submission_wdg.py",
+      "legacy_line": 491,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SubmissionDataTableElement",
+      "module": "pyasm.prod.web.submission_wdg",
+      "qualified_class": "pyasm.prod.web.submission_wdg.SubmissionDataTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\submission_wdg.py",
+      "legacy_line": 437,
+      "bases": [
+        "AuxDataWdg"
+      ]
+    },
+    {
+      "class": "TextureAddSourceElementWdg",
+      "module": "pyasm.prod.web.texture_wdg",
+      "qualified_class": "pyasm.prod.web.texture_wdg.TextureAddSourceElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\texture_wdg.py",
+      "legacy_line": 281,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TextureSourceElementWdg",
+      "module": "pyasm.prod.web.texture_wdg",
+      "qualified_class": "pyasm.prod.web.texture_wdg.TextureSourceElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\texture_wdg.py",
+      "legacy_line": 29,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "LatestVersionContextWdg",
+      "module": "pyasm.prod.web.version_wdg",
+      "qualified_class": "pyasm.prod.web.version_wdg.LatestVersionContextWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\version_wdg.py",
+      "legacy_line": 139,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "LatestVersionWdg",
+      "module": "pyasm.prod.web.version_wdg",
+      "qualified_class": "pyasm.prod.web.version_wdg.LatestVersionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\version_wdg.py",
+      "legacy_line": 94,
+      "bases": [
+        "AuxDataWdg"
+      ]
+    },
+    {
+      "class": "SessionVersionWdg",
+      "module": "pyasm.prod.web.version_wdg",
+      "qualified_class": "pyasm.prod.web.version_wdg.SessionVersionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\web\\version_wdg.py",
+      "legacy_line": 23,
+      "bases": [
+        "AuxDataWdg"
+      ]
+    },
+    {
+      "class": "AnnotateLink",
+      "module": "pyasm.widget.annotate_wdg",
+      "qualified_class": "pyasm.widget.annotate_wdg.AnnotateLink",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\annotate_wdg.py",
+      "legacy_line": 28,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ClipboardHistoryElement",
+      "module": "pyasm.widget.clipboard_wdg",
+      "qualified_class": "pyasm.widget.clipboard_wdg.ClipboardHistoryElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\clipboard_wdg.py",
+      "legacy_line": 112,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CustomInfoWdg",
+      "module": "pyasm.widget.custom_info_wdg",
+      "qualified_class": "pyasm.widget.custom_info_wdg.CustomInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\custom_info_wdg.py",
+      "legacy_line": 24,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "DependencyLink",
+      "module": "pyasm.widget.dependency_wdg",
+      "qualified_class": "pyasm.widget.dependency_wdg.DependencyLink",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\dependency_wdg.py",
+      "legacy_line": 28,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "DependencyThumbWdg",
+      "module": "pyasm.widget.dependency_wdg",
+      "qualified_class": "pyasm.widget.dependency_wdg.DependencyThumbWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\dependency_wdg.py",
+      "legacy_line": 458,
+      "bases": [
+        "ThumbWdg"
+      ]
+    },
+    {
+      "class": "DiscussionWdg",
+      "module": "pyasm.widget.discussion_wdg",
+      "qualified_class": "pyasm.widget.discussion_wdg.DiscussionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\discussion_wdg.py",
+      "legacy_line": 37,
+      "bases": [
+        "BaseTableElementWdg",
+        "AjaxWdg"
+      ]
+    },
+    {
+      "class": "FileInfoWdg",
+      "module": "pyasm.widget.file_wdg",
+      "qualified_class": "pyasm.widget.file_wdg.FileInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\file_wdg.py",
+      "legacy_line": 1703,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ThumbWdg",
+      "module": "pyasm.widget.file_wdg",
+      "qualified_class": "pyasm.widget.file_wdg.ThumbWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\file_wdg.py",
+      "legacy_line": 35,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CheckinHistoryGanttWdg",
+      "module": "pyasm.widget.gantt_wdg",
+      "qualified_class": "pyasm.widget.gantt_wdg.CheckinHistoryGanttWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\gantt_wdg.py",
+      "legacy_line": 1410,
+      "bases": [
+        "GanttWdg"
+      ]
+    },
+    {
+      "class": "DynGanttWdg",
+      "module": "pyasm.widget.gantt_wdg",
+      "qualified_class": "pyasm.widget.gantt_wdg.DynGanttWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\gantt_wdg.py",
+      "legacy_line": 1644,
+      "bases": [
+        "GanttWdg"
+      ]
+    },
+    {
+      "class": "GanttWdg",
+      "module": "pyasm.widget.gantt_wdg",
+      "qualified_class": "pyasm.widget.gantt_wdg.GanttWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\gantt_wdg.py",
+      "legacy_line": 28,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ResourceUsageGanttWdg",
+      "module": "pyasm.widget.gantt_wdg",
+      "qualified_class": "pyasm.widget.gantt_wdg.ResourceUsageGanttWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\gantt_wdg.py",
+      "legacy_line": 1481,
+      "bases": [
+        "GanttWdg"
+      ]
+    },
+    {
+      "class": "SObjectTaskGanttWdg",
+      "module": "pyasm.widget.gantt_wdg",
+      "qualified_class": "pyasm.widget.gantt_wdg.SObjectTaskGanttWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\gantt_wdg.py",
+      "legacy_line": 1963,
+      "bases": [
+        "DynGanttWdg"
+      ]
+    },
+    {
+      "class": "ScheduleGanttWdg",
+      "module": "pyasm.widget.gantt_wdg",
+      "qualified_class": "pyasm.widget.gantt_wdg.ScheduleGanttWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\gantt_wdg.py",
+      "legacy_line": 869,
+      "bases": [
+        "GanttWdg"
+      ]
+    },
+    {
+      "class": "StatusHistoryGanttWdg",
+      "module": "pyasm.widget.gantt_wdg",
+      "qualified_class": "pyasm.widget.gantt_wdg.StatusHistoryGanttWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\gantt_wdg.py",
+      "legacy_line": 1245,
+      "bases": [
+        "GanttWdg"
+      ]
+    },
+    {
+      "class": "TextWdg",
+      "module": "pyasm.widget.input_wdg",
+      "qualified_class": "pyasm.widget.input_wdg.TextWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\input_wdg.py",
+      "legacy_line": 572,
+      "bases": [
+        "BaseTextWdg"
+      ]
+    },
+    {
+      "class": "MyTacticSummaryWdg",
+      "module": "pyasm.widget.my_tactic_summary_wdg",
+      "qualified_class": "pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\my_tactic_summary_wdg.py",
+      "legacy_line": 23,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "NamingElementWdg",
+      "module": "pyasm.widget.naming_wdg",
+      "qualified_class": "pyasm.widget.naming_wdg.NamingElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\naming_wdg.py",
+      "legacy_line": 254,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ParallelStatusEditWdg",
+      "module": "pyasm.widget.parallel_status",
+      "qualified_class": "pyasm.widget.parallel_status.ParallelStatusEditWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\parallel_status.py",
+      "legacy_line": 555,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ParallelStatusWdg",
+      "module": "pyasm.widget.parallel_status",
+      "qualified_class": "pyasm.widget.parallel_status.ParallelStatusWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\parallel_status.py",
+      "legacy_line": 29,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ProjectClassWdg",
+      "module": "pyasm.widget.project_wdg",
+      "qualified_class": "pyasm.widget.project_wdg.ProjectClassWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\project_wdg.py",
+      "legacy_line": 86,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ProjectSummaryWdg",
+      "module": "pyasm.widget.project_wdg",
+      "qualified_class": "pyasm.widget.project_wdg.ProjectSummaryWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\project_wdg.py",
+      "legacy_line": 111,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ProjectWdg",
+      "module": "pyasm.widget.project_wdg",
+      "qualified_class": "pyasm.widget.project_wdg.ProjectWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\project_wdg.py",
+      "legacy_line": 26,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SerialStatusWdg",
+      "module": "pyasm.widget.serial_status",
+      "qualified_class": "pyasm.widget.serial_status.SerialStatusWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\serial_status.py",
+      "legacy_line": 238,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SimpleStatusWdg",
+      "module": "pyasm.widget.serial_status",
+      "qualified_class": "pyasm.widget.serial_status.SimpleStatusWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\serial_status.py",
+      "legacy_line": 33,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectConnectionDetailElement",
+      "module": "pyasm.widget.sobject_browser_wdg",
+      "qualified_class": "pyasm.widget.sobject_browser_wdg.SObjectConnectionDetailElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\sobject_browser_wdg.py",
+      "legacy_line": 255,
+      "bases": [
+        "SObjectConnectionElement"
+      ]
+    },
+    {
+      "class": "SObjectConnectionElement",
+      "module": "pyasm.widget.sobject_browser_wdg",
+      "qualified_class": "pyasm.widget.sobject_browser_wdg.SObjectConnectionElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\sobject_browser_wdg.py",
+      "legacy_line": 146,
+      "bases": [
+        "AjaxWdg",
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CalendarBarWdg",
+      "module": "pyasm.widget.statistic_wdg",
+      "qualified_class": "pyasm.widget.statistic_wdg.CalendarBarWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\statistic_wdg.py",
+      "legacy_line": 412,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TaskCompletionWdg",
+      "module": "pyasm.widget.statistic_wdg",
+      "qualified_class": "pyasm.widget.statistic_wdg.TaskCompletionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\statistic_wdg.py",
+      "legacy_line": 29,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TaskGroupCompletionWdg",
+      "module": "pyasm.widget.statistic_wdg",
+      "qualified_class": "pyasm.widget.statistic_wdg.TaskGroupCompletionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\statistic_wdg.py",
+      "legacy_line": 181,
+      "bases": [
+        "TaskCompletionWdg"
+      ]
+    },
+    {
+      "class": "CustomXmlWdg",
+      "module": "pyasm.widget.tab_wdg",
+      "qualified_class": "pyasm.widget.tab_wdg.CustomXmlWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\tab_wdg.py",
+      "legacy_line": 463,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ArrayTableElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.ArrayTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 839,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "AuxDataWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.AuxDataWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2239,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CheckTableElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.CheckTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 849,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CheckboxColWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.CheckboxColWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2091,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "DateTimeWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.DateTimeWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 905,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "DateWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.DateWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 862,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "DateYearTimeWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.DateYearTimeWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 889,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "DynamicTableElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.DynamicTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 582,
+      "bases": [
+        "BaseTableElementWdg",
+        "AjaxWdg"
+      ]
+    },
+    {
+      "class": "EditCheckboxWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.EditCheckboxWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2147,
+      "bases": [
+        "CheckboxColWdg"
+      ]
+    },
+    {
+      "class": "ExpandableTextWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.ExpandableTextWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2158,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "FileAppendLinkTableElement",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.FileAppendLinkTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1100,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "GroupTableElement",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.GroupTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1722,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "HiddenRowToggleWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.HiddenRowToggleWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1231,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "NameWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.NameWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1216,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "PlaceHolderElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.PlaceHolderElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 490,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "PublishTableElement",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.PublishTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2311,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "RenderLinkTableElement",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.RenderLinkTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1084,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "SObjectAttachTableElement",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.SObjectAttachTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1775,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectExplorerWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.SObjectExplorerWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2350,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectLinkElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.SObjectLinkElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2337,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SearchTypeElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.SearchTypeElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2254,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SimpleInfoWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.SimpleInfoWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1114,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SimpleTableElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.SimpleTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 498,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SubmissionLinkTableElement",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.SubmissionLinkTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1061,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "TableAddWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.TableAddWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 2061,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "UpdateWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.UpdateWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 920,
+      "bases": [
+        "FunctionalTableElement"
+      ]
+    },
+    {
+      "class": "WikiElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.WikiElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1194,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "WrapperTableElementWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.WrapperTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 830,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "XmlWdg",
+      "module": "pyasm.widget.table_element_wdg",
+      "qualified_class": "pyasm.widget.table_element_wdg.XmlWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\table_element_wdg.py",
+      "legacy_line": 1135,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectTaskTableElement",
+      "module": "pyasm.widget.task_wdg",
+      "qualified_class": "pyasm.widget.task_wdg.SObjectTaskTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\task_wdg.py",
+      "legacy_line": 367,
+      "bases": [
+        "BaseTableElementWdg",
+        "AjaxWdg"
+      ]
+    },
+    {
+      "class": "TaskParentSpacingTableElement",
+      "module": "pyasm.widget.task_wdg",
+      "qualified_class": "pyasm.widget.task_wdg.TaskParentSpacingTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\task_wdg.py",
+      "legacy_line": 1006,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "TaskWarningTableElement",
+      "module": "pyasm.widget.task_wdg",
+      "qualified_class": "pyasm.widget.task_wdg.TaskWarningTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\task_wdg.py",
+      "legacy_line": 895,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TimecardInfoTableElement",
+      "module": "pyasm.widget.timecard_wdg",
+      "qualified_class": "pyasm.widget.timecard_wdg.TimecardInfoTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\timecard_wdg.py",
+      "legacy_line": 975,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "WeekTableElement",
+      "module": "pyasm.widget.timecard_wdg",
+      "qualified_class": "pyasm.widget.timecard_wdg.WeekTableElement",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\widget\\timecard_wdg.py",
+      "legacy_line": 514,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "MessageTableElementWdg",
+      "module": "tactic.ui.app.message_wdg",
+      "qualified_class": "tactic.ui.app.message_wdg.MessageTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\app\\message_wdg.py",
+      "legacy_line": 30,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "NoteTableElementWdg",
+      "module": "tactic.ui.app.note_wdg",
+      "qualified_class": "tactic.ui.app.note_wdg.NoteTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\app\\note_wdg.py",
+      "legacy_line": 401,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SearchTypeHasTableElementWdg",
+      "module": "tactic.ui.app.search_type_element_wdg",
+      "qualified_class": "tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\app\\search_type_element_wdg.py",
+      "legacy_line": 22,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "LoaderElementWdg",
+      "module": "tactic.ui.cgapp.loader_element_wdg",
+      "qualified_class": "tactic.ui.cgapp.loader_element_wdg.LoaderElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\cgapp\\loader_element_wdg.py",
+      "legacy_line": 30,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "PublishElementWdg",
+      "module": "tactic.ui.cgapp.publish_element_wdg",
+      "qualified_class": "tactic.ui.cgapp.publish_element_wdg.PublishElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\cgapp\\publish_element_wdg.py",
+      "legacy_line": 29,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CurrentVersionContextWdg",
+      "module": "tactic.ui.cgapp.version_wdg",
+      "qualified_class": "tactic.ui.cgapp.version_wdg.CurrentVersionContextWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\cgapp\\version_wdg.py",
+      "legacy_line": 45,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "UnknownVersionContextWdg",
+      "module": "tactic.ui.cgapp.version_wdg",
+      "qualified_class": "tactic.ui.cgapp.version_wdg.UnknownVersionContextWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\cgapp\\version_wdg.py",
+      "legacy_line": 24,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "RawTableElementWdg",
+      "module": "tactic.ui.common.base_table_element_wdg",
+      "qualified_class": "tactic.ui.common.base_table_element_wdg.RawTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\common\\base_table_element_wdg.py",
+      "legacy_line": 315,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SimpleTableElementWdg",
+      "module": "tactic.ui.common.base_table_element_wdg",
+      "qualified_class": "tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\common\\base_table_element_wdg.py",
+      "legacy_line": 361,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "WidgetTableElementWdg",
+      "module": "tactic.ui.common.base_table_element_wdg",
+      "qualified_class": "tactic.ui.common.base_table_element_wdg.WidgetTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\common\\base_table_element_wdg.py",
+      "legacy_line": 739,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "GanttTableElementWdg",
+      "module": "tactic.ui.gantt.gantt_wdg",
+      "qualified_class": "tactic.ui.gantt.gantt_wdg.GanttTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\gantt\\gantt_wdg.py",
+      "legacy_line": 1040,
+      "bases": [
+        "GanttElementWdg"
+      ]
+    },
+    {
+      "class": "LoginTableElementWdg",
+      "module": "tactic.ui.input.process_group_select_wdg",
+      "qualified_class": "tactic.ui.input.process_group_select_wdg.LoginTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\input\\process_group_select_wdg.py",
+      "legacy_line": 225,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "DocumentItemWdg",
+      "module": "tactic.ui.panel.document_wdg",
+      "qualified_class": "tactic.ui.panel.document_wdg.DocumentItemWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\panel\\document_wdg.py",
+      "legacy_line": 1262,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "FreeFormElementWdg",
+      "module": "tactic.ui.panel.freeform_layout_wdg",
+      "qualified_class": "tactic.ui.panel.freeform_layout_wdg.FreeFormElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\panel\\freeform_layout_wdg.py",
+      "legacy_line": 239,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "RowSelectWdg",
+      "module": "tactic.ui.panel.layout_wdg",
+      "qualified_class": "tactic.ui.panel.layout_wdg.RowSelectWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\panel\\layout_wdg.py",
+      "legacy_line": 597,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SecurityManagerButtonWdg",
+      "module": "tactic.ui.panel.security_manager_wdg",
+      "qualified_class": "tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\panel\\security_manager_wdg.py",
+      "legacy_line": 27,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ValueBarReportWdg",
+      "module": "tactic.ui.report.task_status_report_wdg",
+      "qualified_class": "tactic.ui.report.task_status_report_wdg.ValueBarReportWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\report\\task_status_report_wdg.py",
+      "legacy_line": 167,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "YearlyReportWdg",
+      "module": "tactic.ui.report.yearly_report_wdg",
+      "qualified_class": "tactic.ui.report.yearly_report_wdg.YearlyReportWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\report\\yearly_report_wdg.py",
+      "legacy_line": 48,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SecurityCheckboxElementWdg",
+      "module": "tactic.ui.startup.security_wdg",
+      "qualified_class": "tactic.ui.startup.security_wdg.SecurityCheckboxElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\startup\\security_wdg.py",
+      "legacy_line": 949,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "ButtonElementWdg",
+      "module": "tactic.ui.table.button_wdg",
+      "qualified_class": "tactic.ui.table.button_wdg.ButtonElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\button_wdg.py",
+      "legacy_line": 25,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CustomLayoutElementWdg",
+      "module": "tactic.ui.table.custom_layout_element_wdg",
+      "qualified_class": "tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\custom_layout_element_wdg.py",
+      "legacy_line": 23,
+      "bases": [
+        "CustomLayoutWdg",
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "FreeFormLayoutElementWdg",
+      "module": "tactic.ui.table.custom_layout_element_wdg",
+      "qualified_class": "tactic.ui.table.custom_layout_element_wdg.FreeFormLayoutElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\custom_layout_element_wdg.py",
+      "legacy_line": 173,
+      "bases": [
+        "FreeFormLayoutWdg",
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "LayoutElementWdg",
+      "module": "tactic.ui.table.custom_layout_element_wdg",
+      "qualified_class": "tactic.ui.table.custom_layout_element_wdg.LayoutElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\custom_layout_element_wdg.py",
+      "legacy_line": 63,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "DeleteElementWdg",
+      "module": "tactic.ui.table.delete_element_wdg",
+      "qualified_class": "tactic.ui.table.delete_element_wdg.DeleteElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\delete_element_wdg.py",
+      "legacy_line": 19,
+      "bases": [
+        "ButtonElementWdg"
+      ]
+    },
+    {
+      "class": "DropElementWdg",
+      "module": "tactic.ui.table.drop_element_wdg",
+      "qualified_class": "tactic.ui.table.drop_element_wdg.DropElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\drop_element_wdg.py",
+      "legacy_line": 32,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "ExplorerElementWdg",
+      "module": "tactic.ui.table.explorer_wdg",
+      "qualified_class": "tactic.ui.table.explorer_wdg.ExplorerElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\explorer_wdg.py",
+      "legacy_line": 25,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ExplorerTableElementWdg",
+      "module": "tactic.ui.table.explorer_wdg",
+      "qualified_class": "tactic.ui.table.explorer_wdg.ExplorerTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\explorer_wdg.py",
+      "legacy_line": 116,
+      "bases": [
+        "ExplorerElementWdg"
+      ]
+    },
+    {
+      "class": "ExpressionElementWdg",
+      "module": "tactic.ui.table.expression_element_wdg",
+      "qualified_class": "tactic.ui.table.expression_element_wdg.ExpressionElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\expression_element_wdg.py",
+      "legacy_line": 33,
+      "bases": [
+        "TypeTableElementWdg"
+      ]
+    },
+    {
+      "class": "ExpressionValueElementWdg",
+      "module": "tactic.ui.table.expression_element_wdg",
+      "qualified_class": "tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\expression_element_wdg.py",
+      "legacy_line": 1117,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "ForeignKeyElementWdg",
+      "module": "tactic.ui.table.foreign_key_element_wdg",
+      "qualified_class": "tactic.ui.table.foreign_key_element_wdg.ForeignKeyElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\foreign_key_element_wdg.py",
+      "legacy_line": 23,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "FormatElementWdg",
+      "module": "tactic.ui.table.format_element_wdg",
+      "qualified_class": "tactic.ui.table.format_element_wdg.FormatElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\format_element_wdg.py",
+      "legacy_line": 30,
+      "bases": [
+        "FormatValueMixin",
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "GanttElementWdg",
+      "module": "tactic.ui.table.gantt_element_wdg",
+      "qualified_class": "tactic.ui.table.gantt_element_wdg.GanttElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\gantt_element_wdg.py",
+      "legacy_line": 36,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ParentGroupTableElementWdg",
+      "module": "tactic.ui.table.group_element_wdg",
+      "qualified_class": "tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\group_element_wdg.py",
+      "legacy_line": 125,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "HiddenRowElementWdg",
+      "module": "tactic.ui.table.hidden_row_element_wdg",
+      "qualified_class": "tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\hidden_row_element_wdg.py",
+      "legacy_line": 21,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "RowAddElementWdg",
+      "module": "tactic.ui.table.hidden_row_element_wdg",
+      "qualified_class": "tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\hidden_row_element_wdg.py",
+      "legacy_line": 169,
+      "bases": [
+        "HiddenRowElementWdg"
+      ]
+    },
+    {
+      "class": "HtmlElementWdg",
+      "module": "tactic.ui.table.html_element_wdg",
+      "qualified_class": "tactic.ui.table.html_element_wdg.HtmlElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\html_element_wdg.py",
+      "legacy_line": 22,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "JsonElementWdg",
+      "module": "tactic.ui.table.json_element_wdg",
+      "qualified_class": "tactic.ui.table.json_element_wdg.JsonElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\json_element_wdg.py",
+      "legacy_line": 24,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "LinkElementWdg",
+      "module": "tactic.ui.table.link_element_wdg",
+      "qualified_class": "tactic.ui.table.link_element_wdg.LinkElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\link_element_wdg.py",
+      "legacy_line": 24,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "MetadataElementWdg",
+      "module": "tactic.ui.table.metadata_element_wdg",
+      "qualified_class": "tactic.ui.table.metadata_element_wdg.MetadataElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\metadata_element_wdg.py",
+      "legacy_line": 27,
+      "bases": [
+        "ButtonElementWdg"
+      ]
+    },
+    {
+      "class": "PreferenceDescriptionWdg",
+      "module": "tactic.ui.table.preference_wdg",
+      "qualified_class": "tactic.ui.table.preference_wdg.PreferenceDescriptionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\preference_wdg.py",
+      "legacy_line": 112,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "PreferenceEditWdg",
+      "module": "tactic.ui.table.preference_wdg",
+      "qualified_class": "tactic.ui.table.preference_wdg.PreferenceEditWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\preference_wdg.py",
+      "legacy_line": 50,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ProjectTemplateUpdateWdg",
+      "module": "tactic.ui.table.project_wdg",
+      "qualified_class": "tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\project_wdg.py",
+      "legacy_line": 86,
+      "bases": [
+        "ButtonElementWdg"
+      ]
+    },
+    {
+      "class": "ProjectWdg",
+      "module": "tactic.ui.table.project_wdg",
+      "qualified_class": "tactic.ui.table.project_wdg.ProjectWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\project_wdg.py",
+      "legacy_line": 23,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ProjectedCompletionWdg",
+      "module": "tactic.ui.table.projected_schedule_wdg",
+      "qualified_class": "tactic.ui.table.projected_schedule_wdg.ProjectedCompletionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\projected_schedule_wdg.py",
+      "legacy_line": 191,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "PythonElementWdg",
+      "module": "tactic.ui.table.python_element_wdg",
+      "qualified_class": "tactic.ui.table.python_element_wdg.PythonElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\python_element_wdg.py",
+      "legacy_line": 24,
+      "bases": [
+        "TypeTableElementWdg"
+      ]
+    },
+    {
+      "class": "RelatedElementWdg",
+      "module": "tactic.ui.table.related_element_wdg",
+      "qualified_class": "tactic.ui.table.related_element_wdg.RelatedElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\related_element_wdg.py",
+      "legacy_line": 19,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SnapshotFileElementWdg",
+      "module": "tactic.ui.table.snapshot_element_wdg",
+      "qualified_class": "tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\snapshot_element_wdg.py",
+      "legacy_line": 87,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SnapshotLockedElementWdg",
+      "module": "tactic.ui.table.snapshot_element_wdg",
+      "qualified_class": "tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\snapshot_element_wdg.py",
+      "legacy_line": 25,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SnapshotMetadataElementWdg",
+      "module": "tactic.ui.table.snapshot_element_wdg",
+      "qualified_class": "tactic.ui.table.snapshot_element_wdg.SnapshotMetadataElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\snapshot_element_wdg.py",
+      "legacy_line": 163,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SnapshotServerElementWdg",
+      "module": "tactic.ui.table.snapshot_element_wdg",
+      "qualified_class": "tactic.ui.table.snapshot_element_wdg.SnapshotServerElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\snapshot_element_wdg.py",
+      "legacy_line": 177,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SnapshotVersionElementWdg",
+      "module": "tactic.ui.table.snapshot_element_wdg",
+      "qualified_class": "tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\snapshot_element_wdg.py",
+      "legacy_line": 129,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectDetailElementWdg",
+      "module": "tactic.ui.table.sobject_detail_wdg",
+      "qualified_class": "tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\sobject_detail_wdg.py",
+      "legacy_line": 24,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectTaskStatusElementWdg",
+      "module": "tactic.ui.table.sobject_detail_wdg",
+      "qualified_class": "tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\sobject_detail_wdg.py",
+      "legacy_line": 195,
+      "bases": [
+        "SObjectDetailElementWdg"
+      ]
+    },
+    {
+      "class": "TaskDetailPanelElementWdg",
+      "module": "tactic.ui.table.sobject_detail_wdg",
+      "qualified_class": "tactic.ui.table.sobject_detail_wdg.TaskDetailPanelElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\sobject_detail_wdg.py",
+      "legacy_line": 275,
+      "bases": [
+        "SObjectDetailElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectFilesElementWdg",
+      "module": "tactic.ui.table.sobject_summary_wdg",
+      "qualified_class": "tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\sobject_summary_wdg.py",
+      "legacy_line": 172,
+      "bases": [
+        "ButtonElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectSummaryElementWdg",
+      "module": "tactic.ui.table.sobject_summary_wdg",
+      "qualified_class": "tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\sobject_summary_wdg.py",
+      "legacy_line": 27,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "SpreadsheetElementWdg",
+      "module": "tactic.ui.table.spreadsheet_element_wdg",
+      "qualified_class": "tactic.ui.table.spreadsheet_element_wdg.SpreadsheetElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\spreadsheet_element_wdg.py",
+      "legacy_line": 22,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "MilestoneCompletionWdg",
+      "module": "tactic.ui.table.statistic_wdg",
+      "qualified_class": "tactic.ui.table.statistic_wdg.MilestoneCompletionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\statistic_wdg.py",
+      "legacy_line": 473,
+      "bases": [
+        "TaskCompletionWdg"
+      ]
+    },
+    {
+      "class": "TaskCompletionWdg",
+      "module": "tactic.ui.table.statistic_wdg",
+      "qualified_class": "tactic.ui.table.statistic_wdg.TaskCompletionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\statistic_wdg.py",
+      "legacy_line": 29,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TaskDaysDueElementWdg",
+      "module": "tactic.ui.table.statistic_wdg",
+      "qualified_class": "tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\statistic_wdg.py",
+      "legacy_line": 483,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TaskGroupCompletionWdg",
+      "module": "tactic.ui.table.statistic_wdg",
+      "qualified_class": "tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\statistic_wdg.py",
+      "legacy_line": 229,
+      "bases": [
+        "TaskCompletionWdg"
+      ]
+    },
+    {
+      "class": "ProcessElementWdg",
+      "module": "tactic.ui.table.subcontext_wdg",
+      "qualified_class": "tactic.ui.table.subcontext_wdg.ProcessElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\subcontext_wdg.py",
+      "legacy_line": 24,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "SubContextElementWdg",
+      "module": "tactic.ui.table.subcontext_wdg",
+      "qualified_class": "tactic.ui.table.subcontext_wdg.SubContextElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\subcontext_wdg.py",
+      "legacy_line": 230,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "CheckinButtonElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.CheckinButtonElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 379,
+      "bases": [
+        "ButtonElementWdg"
+      ]
+    },
+    {
+      "class": "CheckoutButtonElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 660,
+      "bases": [
+        "ButtonElementWdg"
+      ]
+    },
+    {
+      "class": "ExpressionIsCountZeroElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.ExpressionIsCountZeroElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 240,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "ExpressionIsZeroElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.ExpressionIsZeroElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 220,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "GeneralPublishElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.GeneralPublishElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 151,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "IndirectMappedDisplayLabelWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.IndirectMappedDisplayLabelWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 264,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "NotificationTriggerElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 322,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "RecipientElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.RecipientElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 859,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TemplateElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.TemplateElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 205,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "TypeTableElementWdg",
+      "module": "tactic.ui.table.table_element_wdg",
+      "qualified_class": "tactic.ui.table.table_element_wdg.TypeTableElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\table_element_wdg.py",
+      "legacy_line": 26,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "RelatedTaskWdg",
+      "module": "tactic.ui.table.task_element_wdg",
+      "qualified_class": "tactic.ui.table.task_element_wdg.RelatedTaskWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\task_element_wdg.py",
+      "legacy_line": 2995,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TaskElementWdg",
+      "module": "tactic.ui.table.task_element_wdg",
+      "qualified_class": "tactic.ui.table.task_element_wdg.TaskElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\task_element_wdg.py",
+      "legacy_line": 81,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "TaskSummaryElementWdg",
+      "module": "tactic.ui.table.task_element_wdg",
+      "qualified_class": "tactic.ui.table.task_element_wdg.TaskSummaryElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\task_element_wdg.py",
+      "legacy_line": 3275,
+      "bases": [
+        "TaskElementWdg"
+      ]
+    },
+    {
+      "class": "WorkElementWdg",
+      "module": "tactic.ui.table.task_element_wdg",
+      "qualified_class": "tactic.ui.table.task_element_wdg.WorkElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\task_element_wdg.py",
+      "legacy_line": 3964,
+      "bases": [
+        "ButtonElementWdg"
+      ]
+    },
+    {
+      "class": "WorkHoursElementWdg",
+      "module": "tactic.ui.table.work_hours_element_wdg",
+      "qualified_class": "tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\table\\work_hours_element_wdg.py",
+      "legacy_line": 40,
+      "bases": [
+        "SimpleTableElementWdg",
+        "WorkHoursSemantics"
+      ]
+    },
+    {
+      "class": "AddImageElementWdg",
+      "module": "tactic.ui.tools.custom_layout_edit_wdg",
+      "qualified_class": "tactic.ui.tools.custom_layout_edit_wdg.AddImageElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\tools\\custom_layout_edit_wdg.py",
+      "legacy_line": 3170,
+      "bases": [
+        "ButtonElementWdg"
+      ]
+    },
+    {
+      "class": "PipelineDocumentItemWdg",
+      "module": "tactic.ui.tools.pipeline_wdg",
+      "qualified_class": "tactic.ui.tools.pipeline_wdg.PipelineDocumentItemWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\tools\\pipeline_wdg.py",
+      "legacy_line": 8852,
+      "bases": [
+        "DocumentItemWdg"
+      ]
+    },
+    {
+      "class": "ReviewTaskElementWdg",
+      "module": "tactic.ui.tools.review_wdg",
+      "qualified_class": "tactic.ui.tools.review_wdg.ReviewTaskElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\tools\\review_wdg.py",
+      "legacy_line": 42,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "IconButtonElementWdg",
+      "module": "tactic.ui.widget.button_new_wdg",
+      "qualified_class": "tactic.ui.widget.button_new_wdg.IconButtonElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\widget\\button_new_wdg.py",
+      "legacy_line": 1555,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "DiscussionElementWdg",
+      "module": "tactic.ui.widget.discussion_wdg",
+      "qualified_class": "tactic.ui.widget.discussion_wdg.DiscussionElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\widget\\discussion_wdg.py",
+      "legacy_line": 37,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    },
+    {
+      "class": "SObjectStatusElementWdg",
+      "module": "tactic.ui.widget.misc_input_wdg",
+      "qualified_class": "tactic.ui.widget.misc_input_wdg.SObjectStatusElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\widget\\misc_input_wdg.py",
+      "legacy_line": 480,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "TaskStatusElementWdg",
+      "module": "tactic.ui.widget.misc_input_wdg",
+      "qualified_class": "tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\widget\\misc_input_wdg.py",
+      "legacy_line": 134,
+      "bases": [
+        "SimpleTableElementWdg"
+      ]
+    },
+    {
+      "class": "OverlayStatsWdg",
+      "module": "tactic.ui.widget.overlay_stats_wdg",
+      "qualified_class": "tactic.ui.widget.overlay_stats_wdg.OverlayStatsWdg",
+      "legacy_file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\widget\\overlay_stats_wdg.py",
+      "legacy_line": 25,
+      "bases": [
+        "BaseTableElementWdg"
+      ]
+    }
+  ],
+  "catalog": [
+    {
+      "alias": "simple",
+      "handler": "tactic.ui.common.SimpleTableElementWdg",
+      "resolved_class": "tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg"
+    },
+    {
+      "alias": "default",
+      "handler": "tactic.ui.common.SimpleTableElementWdg",
+      "resolved_class": "tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg"
+    },
+    {
+      "alias": "raw_data",
+      "handler": "tactic.ui.common.RawTableElementWdg",
+      "resolved_class": "tactic.ui.common.base_table_element_wdg.RawTableElementWdg"
+    },
+    {
+      "alias": "format",
+      "handler": "tactic.ui.table.FormatElementWdg",
+      "resolved_class": "tactic.ui.table.format_element_wdg.FormatElementWdg"
+    },
+    {
+      "alias": "expression",
+      "handler": "tactic.ui.table.ExpressionElementWdg",
+      "resolved_class": "tactic.ui.table.expression_element_wdg.ExpressionElementWdg"
+    },
+    {
+      "alias": "expression_value",
+      "handler": "tactic.ui.table.ExpressionValueElementWdg",
+      "resolved_class": "tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg"
+    },
+    {
+      "alias": "link",
+      "handler": "tactic.ui.table.LinkElementWdg",
+      "resolved_class": "tactic.ui.table.link_element_wdg.LinkElementWdg"
+    },
+    {
+      "alias": "completion",
+      "handler": "tactic.ui.table.TaskCompletionWdg",
+      "resolved_class": "tactic.ui.table.statistic_wdg.TaskCompletionWdg"
+    },
+    {
+      "alias": "gantt",
+      "handler": "tactic.ui.table.GanttElementWdg",
+      "resolved_class": "tactic.ui.table.gantt_element_wdg.GanttElementWdg"
+    },
+    {
+      "alias": "button",
+      "handler": "tactic.ui.table.ButtonElementWdg",
+      "resolved_class": "tactic.ui.table.button_wdg.ButtonElementWdg"
+    },
+    {
+      "alias": "custom_layout",
+      "handler": "tactic.ui.table.CustomLayoutElementWdg",
+      "resolved_class": "tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg"
+    },
+    {
+      "alias": "freeform_layout",
+      "handler": "tactic.ui.table.FreeFormLayoutElementWdg",
+      "resolved_class": "tactic.ui.table.custom_layout_element_wdg.FreeFormLayoutElementWdg"
+    },
+    {
+      "alias": "delete",
+      "handler": "tactic.ui.table.DeleteElementWdg",
+      "resolved_class": "tactic.ui.table.delete_element_wdg.DeleteElementWdg"
+    },
+    {
+      "alias": "explorer",
+      "handler": "tactic.ui.table.ExploreElementWdg",
+      "resolved_class": null
+    },
+    {
+      "alias": "hidden_row",
+      "handler": "tactic.ui.table.HiddenRowElementWdg",
+      "resolved_class": "tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg"
+    },
+    {
+      "alias": "drop_item",
+      "handler": "tactic.ui.table.DropElementWdg",
+      "resolved_class": "tactic.ui.table.drop_element_wdg.DropElementWdg"
+    },
+    {
+      "alias": "file_list",
+      "handler": "tactic.ui.table.SObjectFilesElementWdg",
+      "resolved_class": "tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg"
+    },
+    {
+      "alias": "metadata",
+      "handler": "tactic.ui.table.MetadataElementWdg",
+      "resolved_class": "tactic.ui.table.metadata_element_wdg.MetadataElementWdg"
+    },
+    {
+      "alias": "python",
+      "handler": "tactic.ui.table.PythonElementWdg",
+      "resolved_class": "tactic.ui.table.python_element_wdg.PythonElementWdg"
+    }
+  ],
+  "supported": {
+    "pyasm.widget.table_element_wdg.ArrayTableElementWdg": [
+      "ArrayTableElementWdg",
+      "pyasm.widget.ArrayTableElementWdg",
+      "pyasm.widget.table_element_wdg.ArrayTableElementWdg"
+    ],
+    "pyasm.widget.table_element_wdg.XmlWdg": [
+      "XmlWdg",
+      "pyasm.widget.XmlWdg",
+      "pyasm.widget.table_element_wdg.XmlWdg"
+    ],
+    "tactic.ui.table.json_element_wdg.JsonElementWdg": [
+      "tactic.ui.table.JsonElementWdg",
+      "tactic.ui.table.json_element_wdg.JsonElementWdg"
+    ],
+    "tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg": [
+      "tactic.ui.table.SnapshotVersionElementWdg",
+      "tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg"
+    ],
+    "pyasm.widget.file_wdg.ThumbWdg": [
+      "ThumbWdg",
+      "pyasm.widget.ThumbWdg",
+      "pyasm.widget.file_wdg.ThumbWdg"
+    ],
+    "pyasm.widget.input_wdg.TextWdg": [
+      "TextWdg",
+      "pyasm.widget.TextWdg"
+    ],
+    "tactic.ui.table.statistic_wdg.TaskCompletionWdg": [
+      "tactic.ui.table.TaskCompletionWdg",
+      "tactic.ui.table.statistic_wdg.TaskCompletionWdg"
+    ],
+    "tactic.ui.table.task_element_wdg.TaskElementWdg": [
+      "tactic.ui.table.TaskElementWdg",
+      "tactic.ui.table.task_element_wdg.TaskElementWdg"
+    ],
+    "tactic.ui.widget.discussion_wdg.DiscussionElementWdg": [
+      "tactic.ui.widget.DiscussionElementWdg",
+      "tactic.ui.widget.discussion_wdg.DiscussionElementWdg"
+    ],
+    "tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg": [
+      "tactic.ui.common.SimpleTableElementWdg",
+      "tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg"
+    ],
+    "tactic.ui.common.base_table_element_wdg.RawTableElementWdg": [
+      "tactic.ui.common.RawTableElementWdg",
+      "tactic.ui.common.base_table_element_wdg.RawTableElementWdg"
+    ],
+    "tactic.ui.table.format_element_wdg.FormatElementWdg": [
+      "tactic.ui.table.FormatElementWdg",
+      "tactic.ui.table.format_element_wdg.FormatElementWdg"
+    ],
+    "tactic.ui.table.link_element_wdg.LinkElementWdg": [
+      "tactic.ui.table.LinkElementWdg",
+      "tactic.ui.table.link_element_wdg.LinkElementWdg"
+    ],
+    "tactic.ui.table.expression_element_wdg.ExpressionElementWdg": [
+      "tactic.ui.table.ExpressionElementWdg",
+      "tactic.ui.table.expression_element_wdg.ExpressionElementWdg"
+    ],
+    "tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg": [
+      "tactic.ui.table.ExpressionValueElementWdg",
+      "tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg"
+    ]
+  },
+  "stream_classes": {
+    "pyasm.biz.command_trigger.TriggerSObj": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\command_trigger.py:8",
+    "pyasm.biz.command_trigger.Trigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\command_trigger.py:26",
+    "pyasm.biz.custom_property.CustomProperty": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\custom_property.py:20",
+    "pyasm.biz.custom_script.CustomScript": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\custom_script.py:20",
+    "pyasm.biz.debug_log.DebugLog": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\debug_log.py:19",
+    "pyasm.biz.dir_naming.DirNaming": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\dir_naming.py:28",
+    "pyasm.biz.expression.ParserException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:39",
+    "pyasm.biz.expression.ExpressionParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:46",
+    "pyasm.biz.expression.StringMode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:625",
+    "pyasm.biz.expression.StringFormatMode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:731",
+    "pyasm.biz.expression.ExpressionMode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:776",
+    "pyasm.biz.expression.MethodMode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:1078",
+    "pyasm.biz.expression.ArgListMode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:2543",
+    "pyasm.biz.expression.ArgMode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:2575",
+    "pyasm.biz.expression.FilterMode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:2657",
+    "pyasm.biz.expression.SqrBracketMode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\expression.py:2681",
+    "pyasm.biz.file.FileException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file.py:32",
+    "pyasm.biz.file.File": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file.py:36",
+    "pyasm.biz.file.IconCreator": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file.py:356",
+    "pyasm.biz.file.FileGroup": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file.py:832",
+    "pyasm.biz.file.FileRange": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file.py:1011",
+    "pyasm.biz.file_catalog.FileCatalog": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file_catalog.py:6",
+    "pyasm.biz.file_job_signals.FileJobSignals": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file_job_signals.py:8",
+    "pyasm.biz.file_naming.BaseFileNaming": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file_naming.py:26",
+    "pyasm.biz.file_naming.FileNaming": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file_naming.py:42",
+    "pyasm.biz.file_project.FileProjectRecord": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file_project.py:30",
+    "pyasm.biz.file_project.PageStore": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file_project.py:269",
+    "pyasm.biz.file_view.FileView": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\file_view.py:5",
+    "pyasm.biz.naming.NamingException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\naming.py:24",
+    "pyasm.biz.naming.Naming": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\naming.py:28",
+    "pyasm.biz.naming.NamingUtil": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\naming.py:260",
+    "pyasm.biz.note.Note": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\note.py:21",
+    "pyasm.biz.notification.Notification": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\notification.py:8",
+    "pyasm.biz.pipeline.PipelineException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\pipeline.py:15",
+    "pyasm.biz.pipeline.Process": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\pipeline.py:20",
+    "pyasm.biz.pipeline.ProcessConnect": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\pipeline.py:187",
+    "pyasm.biz.pipeline.Pipeline": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\pipeline.py:238",
+    "pyasm.biz.pipeline.ProjectPipeline": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\pipeline.py:1111",
+    "pyasm.biz.plugin_util.PluginUtil": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\plugin_util.py:9",
+    "pyasm.biz.preference.PrefList": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\preference.py:19",
+    "pyasm.biz.preference.PrefSetting": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\preference.py:55",
+    "pyasm.biz.prod_setting.ProjectSetting": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\prod_setting.py:11",
+    "pyasm.biz.prod_setting.ProdSetting": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\prod_setting.py:112",
+    "pyasm.biz.project.Project": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\project.py:7",
+    "pyasm.biz.project.ProjectType": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\project.py:407",
+    "pyasm.biz.project.Repo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\project.py:415",
+    "pyasm.biz.project.RemoteRepo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\project.py:423",
+    "pyasm.biz.repo_handler.BaseRepoHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\repo_handler.py:18",
+    "pyasm.biz.repo_handler.SampleRepoHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\repo_handler.py:61",
+    "pyasm.biz.schema.Schema": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\schema.py:15",
+    "pyasm.biz.simple_status_attr.SimpleStatusAttr": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\simple_status_attr.py:18",
+    "pyasm.biz.snapshot.SObjectNotFoundException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\snapshot.py:29",
+    "pyasm.biz.snapshot.Snapshot": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\snapshot.py:34",
+    "pyasm.biz.sobject_connection.SObjectConnection": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\sobject_connection.py:20",
+    "pyasm.biz.status.StatusLog": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\status.py:21",
+    "pyasm.biz.subscription.Subscription": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\subscription.py:18",
+    "pyasm.biz.task.Task": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\task.py:127",
+    "pyasm.biz.task.TaskAutoSchedule": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\task.py:1382",
+    "pyasm.biz.task.TaskGenerator": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\task.py:1584",
+    "pyasm.biz.task.Timecard": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\task.py:2181",
+    "pyasm.biz.task.Milestone": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\task.py:2255",
+    "pyasm.biz.work_hour.WorkHour": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\biz\\work_hour.py:31",
+    "pyasm.checkin.checkin.CheckinException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\checkin.py:24",
+    "pyasm.checkin.checkin.BaseCheckin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\checkin.py:28",
+    "pyasm.checkin.file_checkin.SingleSnapshotException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\file_checkin.py:31",
+    "pyasm.checkin.file_checkin.FileCheckin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\file_checkin.py:47",
+    "pyasm.checkin.file_checkin.PipelineEventTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\file_checkin.py:801",
+    "pyasm.checkin.file_checkin.PipelineEventCaller": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\file_checkin.py:810",
+    "pyasm.checkin.file_checkin.FileAppendCheckin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\file_checkin.py:836",
+    "pyasm.checkin.file_checkin.FileGroupCheckin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\file_checkin.py:892",
+    "pyasm.checkin.file_checkin.FileGroupAppendCheckin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\file_checkin.py:1099",
+    "pyasm.checkin.metadata.ParserImportError": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:71",
+    "pyasm.checkin.metadata.CheckinMetadataHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:75",
+    "pyasm.checkin.metadata.BaseMetadataParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:217",
+    "pyasm.checkin.metadata.PILMetadataParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:355",
+    "pyasm.checkin.metadata.ExifMetadataParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:411",
+    "pyasm.checkin.metadata.IPTCMetadataParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:446",
+    "pyasm.checkin.metadata.XMPMetadataParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:507",
+    "pyasm.checkin.metadata.ImageMagickMetadataParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:557",
+    "pyasm.checkin.metadata.FFProbeMetadataParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:675",
+    "pyasm.checkin.metadata.XMPKeywordsParser": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\metadata.py:767",
+    "pyasm.checkin.repo.BaseRepo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\repo.py:28",
+    "pyasm.checkin.repo.TacticRepo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\repo.py:40",
+    "pyasm.checkin.repo.S3Repo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\repo.py:209",
+    "pyasm.checkin.snapshot_builder.SnapshotBuilder": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\checkin\\snapshot_builder.py:20",
+    "pyasm.command.command.CommandException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\command.py:14",
+    "pyasm.command.command.CommandExitException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\command.py:18",
+    "pyasm.command.command.Command": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\command.py:22",
+    "pyasm.command.command.HandlerCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\command.py:304",
+    "pyasm.command.database_cmd.ColumnAddCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\database_cmd.py:8",
+    "pyasm.command.database_cmd.ColumnDropCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\database_cmd.py:113",
+    "pyasm.command.edit_wdg_action.DatabaseAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:26",
+    "pyasm.command.edit_wdg_action.DefaultValueDatabaseAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:224",
+    "pyasm.command.edit_wdg_action.MultiDatabaseAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:235",
+    "pyasm.command.edit_wdg_action.NonEmptyAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:252",
+    "pyasm.command.edit_wdg_action.RegexAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:266",
+    "pyasm.command.edit_wdg_action.NullAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:283",
+    "pyasm.command.edit_wdg_action.UniqueValueAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:289",
+    "pyasm.command.edit_wdg_action.XmlAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:308",
+    "pyasm.command.edit_wdg_action.UploadAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:322",
+    "pyasm.command.edit_wdg_action.DateAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:443",
+    "pyasm.command.edit_wdg_action.TimeAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:458",
+    "pyasm.command.edit_wdg_action.TaskDateAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:487",
+    "pyasm.command.edit_wdg_action.InitialTaskCreateAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:494",
+    "pyasm.command.edit_wdg_action.MultiUploadAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:512",
+    "pyasm.command.edit_wdg_action.MultiZipUploadAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\edit_wdg_action.py:689",
+    "pyasm.command.file_upload.FileUploadException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\file_upload.py:45",
+    "pyasm.command.file_upload.FileUpload": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\file_upload.py:49",
+    "pyasm.command.trigger.TriggerException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\trigger.py:14",
+    "pyasm.command.trigger.Trigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\trigger.py:18",
+    "pyasm.command.trigger.SnapshotIsLatestTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\trigger.py:463",
+    "pyasm.command.undo_cmd.UndoCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\undo_cmd.py:23",
+    "pyasm.command.undo_cmd.RedoCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\undo_cmd.py:107",
+    "pyasm.command.workflow.WorkflowException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:217",
+    "pyasm.command.workflow.Workflow": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:222",
+    "pyasm.command.workflow.TaskStatusChangeTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:341",
+    "pyasm.command.workflow.ProcessStatusTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:499",
+    "pyasm.command.workflow.BaseWorkflowPackage": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:560",
+    "pyasm.command.workflow.BaseProcessTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:577",
+    "pyasm.command.workflow.BaseWorkflowNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:1032",
+    "pyasm.command.workflow.WorkflowDisabledNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:1647",
+    "pyasm.command.workflow.WorkflowManualNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:1663",
+    "pyasm.command.workflow.WorkflowActionNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:1999",
+    "pyasm.command.workflow.WorkflowApprovalNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2094",
+    "pyasm.command.workflow.WorkflowHierarchyNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2183",
+    "pyasm.command.workflow.WorkflowDependencyNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2273",
+    "pyasm.command.workflow.WorkflowProgressNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2437",
+    "pyasm.command.workflow.WorkflowInputNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2486",
+    "pyasm.command.workflow.WorkflowOutputNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2493",
+    "pyasm.command.workflow.WorkflowConditionNodeHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2536",
+    "pyasm.command.workflow.ProcessPendingTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2783",
+    "pyasm.command.workflow.ProcessActionTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2841",
+    "pyasm.command.workflow.ProcessCompleteTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2898",
+    "pyasm.command.workflow.ProcessApproveTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2982",
+    "pyasm.command.workflow.ProcessNotRequiredTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2987",
+    "pyasm.command.workflow.ProcessRejectTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:2994",
+    "pyasm.command.workflow.ProcessReviseTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:3036",
+    "pyasm.command.workflow.ProcessErrorTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:3102",
+    "pyasm.command.workflow.CustomProcessConfig": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:3117",
+    "pyasm.command.workflow.ProcessCustomTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:3221",
+    "pyasm.command.workflow.ProcessListenTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\command\\workflow.py:3301",
+    "pyasm.common.base.Base": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\base.py:9",
+    "pyasm.common.common.Common": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common.py:38",
+    "pyasm.common.common_exception.TacticException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common_exception.py:17",
+    "pyasm.common.common_exception.ClientTacticException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common_exception.py:25",
+    "pyasm.common.common_exception.SetupException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common_exception.py:28",
+    "pyasm.common.common_exception.CodeException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common_exception.py:34",
+    "pyasm.common.common_exception.UserException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common_exception.py:38",
+    "pyasm.common.common_exception.SecurityException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common_exception.py:41",
+    "pyasm.common.common_exception.SObjectSecurityException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common_exception.py:44",
+    "pyasm.common.common_exception.TacticWarning": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\common_exception.py:47",
+    "pyasm.common.config.ConfigException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\config.py:40",
+    "pyasm.common.config.ConfigConflict": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\config.py:47",
+    "pyasm.common.config.Config": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\config.py:51",
+    "pyasm.common.container.Container": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\container.py:7",
+    "pyasm.common.environment.EnvironmentException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\environment.py:14",
+    "pyasm.common.environment.Environment": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\environment.py:18",
+    "pyasm.common.errors.UnsupportedContract": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\errors.py:7",
+    "pyasm.common.errors.AuthenticationError": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\errors.py:11",
+    "pyasm.common.format_value.FormatValue": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\format_value.py:31",
+    "pyasm.common.js_wrapper.ApiDelegator": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\js_wrapper.py:10",
+    "pyasm.common.js_wrapper.JsWrapper": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\js_wrapper.py:28",
+    "pyasm.common.lxml_wrapper.XmlException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\lxml_wrapper.py:24",
+    "pyasm.common.lxml_wrapper.Xml": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\lxml_wrapper.py:28",
+    "pyasm.common.spt_date.SPTDate": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\spt_date.py:14",
+    "pyasm.common.system._System": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\system.py:26",
+    "pyasm.common.timecode.TimeCode": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\common\\timecode.py:18",
+    "pyasm.search.database_impl.DatabaseImplException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\database_impl.py:13",
+    "pyasm.search.database_impl.DatabaseImpl": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\database_impl.py:17",
+    "pyasm.search.database_impl.SqliteImpl": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\database_impl.py:351",
+    "pyasm.search.database_impl.PostgresImpl": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\database_impl.py:691",
+    "pyasm.search.exception_log.ExceptionLog": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\exception_log.py:22",
+    "pyasm.search.keys.SearchKey": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\keys.py:64",
+    "pyasm.search.search.SearchException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:27",
+    "pyasm.search.search.SObjectException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:31",
+    "pyasm.search.search.SObjectValueException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:35",
+    "pyasm.search.search.RequestContext": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:40",
+    "pyasm.search.search.SObject": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:75",
+    "pyasm.search.search.SearchType": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:2130",
+    "pyasm.search.search.MissingException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:2492",
+    "pyasm.search.search.SObjectUndo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:2496",
+    "pyasm.search.search.Search": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:2898",
+    "pyasm.search.search.SObjectFactory": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\search.py:4161",
+    "pyasm.search.sobject_config.SObjectAttr": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sobject_config.py:16",
+    "pyasm.search.sobject_default_config.SObjectDefaultConfig": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sobject_default_config.py:20",
+    "pyasm.search.sobject_log.SObjectLog": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sobject_log.py:10",
+    "pyasm.search.sobject_log.RetireLog": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sobject_log.py:27",
+    "pyasm.search.sql.SqlException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:31",
+    "pyasm.search.sql.DatabaseException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:35",
+    "pyasm.search.sql.Select": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:39",
+    "pyasm.search.sql.DbResource": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:944",
+    "pyasm.search.sql.Sql": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:1055",
+    "pyasm.search.sql._PostgresReadConnection": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:1924",
+    "pyasm.search.sql.Delete": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:1958",
+    "pyasm.search.sql.CreateTable": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:2012",
+    "pyasm.search.sql.DropTable": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:2133",
+    "pyasm.search.sql.Insert": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:2174",
+    "pyasm.search.sql.Update": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:2253",
+    "pyasm.search.sql.DbContainer": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql.py:2374",
+    "pyasm.search.sql_dumper.TableSchemaDumper": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql_dumper.py:43",
+    "pyasm.search.sql_dumper.TableDataDumper": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\sql_dumper.py:123",
+    "pyasm.search.storage.Store": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\storage.py:23",
+    "pyasm.search.transaction.TransactionException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction.py:20",
+    "pyasm.search.transaction.PartialCommitException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction.py:24",
+    "pyasm.search.transaction.Transaction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction.py:28",
+    "pyasm.search.transaction.TableUndo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction.py:532",
+    "pyasm.search.transaction.TableDropUndo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction.py:632",
+    "pyasm.search.transaction.AlterTableUndo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction.py:652",
+    "pyasm.search.transaction.FileUndo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction.py:745",
+    "pyasm.search.transaction.FileUndoReplay": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction.py:1272",
+    "pyasm.search.transaction_log.TransactionLog": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction_log.py:14",
+    "pyasm.search.transaction_state.TransactionState": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\transaction_state.py:21",
+    "pyasm.search.widget_db_config.WidgetDbConfig": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\widget_db_config.py:23",
+    "pyasm.search.widget_db_config.WidgetDbConfigCache": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\search\\widget_db_config.py:851",
+    "pyasm.security.access_manager.AccessException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\access_manager.py:26",
+    "pyasm.security.access_manager.Sudo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\access_manager.py:32",
+    "pyasm.security.access_manager.AccessManager": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\access_manager.py:103",
+    "pyasm.security.access_rule.AccessRuleException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\access_rule.py:25",
+    "pyasm.security.access_rule.AccessRule": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\access_rule.py:28",
+    "pyasm.security.access_rule.AccessRuleInGroup": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\access_rule.py:56",
+    "pyasm.security.access_rule.AccessRuleBuilder": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\access_rule.py:77",
+    "pyasm.security.authenticate.Authenticate": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\authenticate.py:12",
+    "pyasm.security.authenticate.TacticAuthenticate": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\authenticate.py:38",
+    "pyasm.security.authenticator.Authenticator": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\authenticator.py:35",
+    "pyasm.security.batch.Batch": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\batch.py:17",
+    "pyasm.security.batch.XmlRpcInit": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\batch.py:74",
+    "pyasm.security.batch.XmlRpcLogin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\batch.py:90",
+    "pyasm.security.batch.TacticInit": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\batch.py:119",
+    "pyasm.security.security.LoginInGroupException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\security.py:81",
+    "pyasm.security.security.Login": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\security.py:85",
+    "pyasm.security.security.LoginGroup": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\security.py:467",
+    "pyasm.security.security.LoginInGroup": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\security.py:745",
+    "pyasm.security.security.Site": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\security.py:823",
+    "pyasm.security.security.Ticket": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\security.py:1005",
+    "pyasm.security.security.Security": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\security.py:1120",
+    "pyasm.security.tactic_password_hasher.TacticPasswordHasher": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\security\\tactic_password_hasher.py:25",
+    "pyasm.web.api_xmlrpc.ApiException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\api_xmlrpc.py:29",
+    "pyasm.web.api_xmlrpc.ApiClientCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\api_xmlrpc.py:33",
+    "pyasm.web.api_xmlrpc.ApiXMLRPC": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\api_xmlrpc.py:47",
+    "pyasm.web.event_container.Event": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\event_container.py:24",
+    "pyasm.web.event_container.EventContainer": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\event_container.py:65",
+    "pyasm.web.html_wdg.HtmlException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:43",
+    "pyasm.web.html_wdg.HtmlElement": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:48",
+    "pyasm.web.html_wdg.DivWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:1586",
+    "pyasm.web.html_wdg.FloatDivWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:1615",
+    "pyasm.web.html_wdg.SpanWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:1625",
+    "pyasm.web.html_wdg.ButtonWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:1635",
+    "pyasm.web.html_wdg.StyleWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:1644",
+    "pyasm.web.html_wdg.Table": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:1656",
+    "pyasm.web.html_wdg.DivTable": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:2023",
+    "pyasm.web.html_wdg.Tbody": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:2031",
+    "pyasm.web.html_wdg.Canvas": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:2078",
+    "pyasm.web.html_wdg.Video": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\html_wdg.py:2085",
+    "pyasm.web.palette.Palette": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\palette.py:22",
+    "pyasm.web.web_container.WebContainer": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\web_container.py:7",
+    "pyasm.web.web_container.Web": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\web_container.py:70",
+    "pyasm.web.web_environment.WebEnvironmentException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\web_environment.py:7",
+    "pyasm.web.web_environment.WebEnvironment": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\web_environment.py:11",
+    "pyasm.web.web_state.WebState": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\web_state.py:57",
+    "pyasm.web.web_tools.WikiUtil": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\web_tools.py:5",
+    "pyasm.web.widget.WidgetException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\widget.py:25",
+    "pyasm.web.widget.Widget": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\widget.py:28",
+    "pyasm.web.widget.StringWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\widget.py:576",
+    "pyasm.web.widget.ClassWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\widget.py:597",
+    "pyasm.web.widget.MethodWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\widget.py:619",
+    "pyasm.web.widget.Html": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\widget.py:640",
+    "pyasm.web.widget.WidgetSettings": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\widget.py:685",
+    "pyasm.web.widget.Url": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\web\\widget.py:848",
+    "pyasm.widget.file_wdg.ThumbWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\file_wdg.py:25",
+    "pyasm.widget.input_wdg.InputException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:10",
+    "pyasm.widget.input_wdg.BaseInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:14",
+    "pyasm.widget.input_wdg.HiddenWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:264",
+    "pyasm.widget.input_wdg.BaseTextWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:273",
+    "pyasm.widget.input_wdg.TextWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:277",
+    "pyasm.widget.input_wdg.TextAreaWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:283",
+    "pyasm.widget.input_wdg.CheckboxWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:288",
+    "pyasm.widget.input_wdg.SelectWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:294",
+    "pyasm.widget.input_wdg.MultiSelectWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:398",
+    "pyasm.widget.input_wdg.UploadWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\input_wdg.py:413",
+    "pyasm.widget.table_element_wdg.BaseTableElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\table_element_wdg.py:8",
+    "pyasm.widget.table_element_wdg.SimpleTableElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\table_element_wdg.py:158",
+    "pyasm.widget.table_element_wdg.ArrayTableElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\table_element_wdg.py:167",
+    "pyasm.widget.table_element_wdg.XmlWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\table_element_wdg.py:177",
+    "pyasm.widget.widget_config.WidgetConfigException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\widget_config.py:28",
+    "pyasm.widget.widget_config.WidgetConfig": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\widget_config.py:32",
+    "pyasm.widget.widget_config.WidgetConfigView": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\pyasm\\widget\\widget_config.py:536",
+    "tactic.command.browser_checkin_cmd.BrowserCheckinCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\browser_checkin_cmd.py:87",
+    "tactic.command.checkin_queue_cmd._UploadedParts": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\checkin_queue_cmd.py:94",
+    "tactic.command.checkin_queue_cmd.SubmitCheckinChunkCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\checkin_queue_cmd.py:143",
+    "tactic.command.checkin_queue_cmd.CheckinQueueJobCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\checkin_queue_cmd.py:267",
+    "tactic.command.checkin_queue_cmd.CancelCheckinBatchCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\checkin_queue_cmd.py:348",
+    "tactic.command.create_project_cmd.CreateProjectCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\create_project_cmd.py:14",
+    "tactic.command.create_project_cmd.CopyFileToAssetTempCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\create_project_cmd.py:213",
+    "tactic.command.create_project_cmd.CopyProjectFromTemplateCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\create_project_cmd.py:235",
+    "tactic.command.file_bulk.FileBulkMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_bulk.py:18",
+    "tactic.command.file_change.FileChangeMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_change.py:21",
+    "tactic.command.file_gc.FileGcMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_gc.py:16",
+    "tactic.command.file_merge.FileMergeMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_merge.py:8",
+    "tactic.command.file_project_cmd.UploadUndo": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_project_cmd.py:65",
+    "tactic.command.file_project_cmd.FileProjectCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_project_cmd.py:92",
+    "tactic.command.file_revision.FileRevisionMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_revision.py:36",
+    "tactic.command.file_selection.FileSelectionMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_selection.py:8",
+    "tactic.command.file_storage.FileProjectBusy": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_storage.py:14",
+    "tactic.command.file_storage.FileStorageMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_storage.py:47",
+    "tactic.command.file_transfer.FileTransferMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_transfer.py:35",
+    "tactic.command.file_workspace.FileWorkspaceMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\file_workspace.py:13",
+    "tactic.command.global_search_trigger.GlobalSearchTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\global_search_trigger.py:24",
+    "tactic.command.global_search_trigger.FolderTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\global_search_trigger.py:556",
+    "tactic.command.ingestion_cmd.IngestException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\ingestion_cmd.py:23",
+    "tactic.command.ingestion_cmd.CheckinRuleCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\ingestion_cmd.py:26",
+    "tactic.command.ingestion_cmd.CheckinRuleSaveCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\ingestion_cmd.py:35",
+    "tactic.command.ingestion_cmd.IngestionCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\ingestion_cmd.py:50",
+    "tactic.command.js_cmd.JsCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\js_cmd.py:27",
+    "tactic.command.kronos.method": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:111",
+    "tactic.command.kronos.Scheduler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:119",
+    "tactic.command.kronos.Task": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:477",
+    "tactic.command.kronos.SingleTask": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:512",
+    "tactic.command.kronos.IntervalTask": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:519",
+    "tactic.command.kronos.DayTaskRescheduler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:532",
+    "tactic.command.kronos.WeekdayTask": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:568",
+    "tactic.command.kronos.MonthdayTask": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:596",
+    "tactic.command.kronos.CronLikeTask": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\kronos.py:623",
+    "tactic.command.login_group_trigger.LoginGroupTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\login_group_trigger.py:24",
+    "tactic.command.pipeline_task_trigger.TaskCreatorTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\pipeline_task_trigger.py:17",
+    "tactic.command.pipeline_task_trigger.RelatedTaskUpdateTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\pipeline_task_trigger.py:67",
+    "tactic.command.pipeline_task_trigger.TaskCompleteTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\pipeline_task_trigger.py:128",
+    "tactic.command.plugin.PluginBase": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\plugin.py:61",
+    "tactic.command.plugin.PluginCreator": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\plugin.py:269",
+    "tactic.command.plugin.PluginInstaller": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\plugin.py:573",
+    "tactic.command.plugin.PluginUninstaller": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\plugin.py:832",
+    "tactic.command.plugin.PluginTools": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\plugin.py:977",
+    "tactic.command.project_template_cmd.ProjectTemplateUpdaterCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\project_template_cmd.py:33",
+    "tactic.command.project_template_cmd.ProjectTemplateInstallerCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\project_template_cmd.py:39",
+    "tactic.command.project_template_cmd.ProjectTemplateCheckCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\project_template_cmd.py:240",
+    "tactic.command.project_template_cmd.ProjectTemplateCreatorCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\project_template_cmd.py:293",
+    "tactic.command.python_cmd.PythonCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\python_cmd.py:87",
+    "tactic.command.python_cmd.PythonTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\python_cmd.py:198",
+    "tactic.command.queue.Queue": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\queue.py:21",
+    "tactic.command.queue._ClaimJobCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\queue.py:139",
+    "tactic.command.queue._FinishJobsCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\queue.py:154",
+    "tactic.command.queue._RunJobCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\queue.py:177",
+    "tactic.command.queue.JobTask": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\queue.py:213",
+    "tactic.command.queue.QueueTest": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\queue.py:392",
+    "tactic.command.related_ingest_cmd.RelatedIngestCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\related_ingest_cmd.py:45",
+    "tactic.command.run_transaction_cmd.RunTransactionCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\run_transaction_cmd.py:19",
+    "tactic.command.scheduler.Scheduler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\scheduler.py:30",
+    "tactic.command.scheduler.SchedulerTaskCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\scheduler.py:165",
+    "tactic.command.scheduler.SchedulerTask": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\scheduler.py:173",
+    "tactic.command.sobject_duplicate_cmd.SObjectDuplicateCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\sobject_duplicate_cmd.py:16",
+    "tactic.command.sobject_link_cmd.SObjectLinkCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\sobject_link_cmd.py:12",
+    "tactic.command.uploaded_checkin_cmd.UploadedCheckinCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\command\\uploaded_checkin_cmd.py:13",
+    "tactic.core.bootstrap.StatusLogTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\bootstrap.py:20",
+    "tactic.core.bootstrap.DisplayNameTrigger": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\bootstrap.py:34",
+    "tactic.core.bootstrap.CoreInit": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\bootstrap.py:59",
+    "tactic.core.collection_commands.CollectionAddCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\collection_commands.py:27",
+    "tactic.core.collection_commands.CollectionRemoveCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\collection_commands.py:130",
+    "tactic.core.collection_commands.CollectionDeleteCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\collection_commands.py:180",
+    "tactic.core.context_actions.SubContextAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\context_actions.py:7",
+    "tactic.core.edit_commands.EditCmdException": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\edit_commands.py:12",
+    "tactic.core.edit_commands.EditCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\edit_commands.py:16",
+    "tactic.core.edit_commands.EditMultipleCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\edit_commands.py:274",
+    "tactic.core.format_value.FormatValueMixin": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\format_value.py:12",
+    "tactic.core.pipeline_commands.PipelineSaveCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\pipeline_commands.py:23",
+    "tactic.core.pipeline_commands.PipelinePropertyCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\pipeline_commands.py:220",
+    "tactic.core.pipeline_commands.PipelineSaveCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\pipeline_commands.py:238",
+    "tactic.core.process_commands.ProcessInfoCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\process_commands.py:27",
+    "tactic.core.process_commands.NewProcessInfoCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\process_commands.py:460",
+    "tactic.core.schema_commands.SearchTypeCreatorCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\schema_commands.py:11",
+    "tactic.core.sidebar_config.SidebarConfig": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\core\\sidebar_config.py:43",
+    "tactic.startup.first_run_init.FirstRunInit": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\startup\\first_run_init.py:13",
+    "tactic.ui.app.page_nav_container_wdg.PageNavContainerWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\app\\page_nav_container_wdg.py:18",
+    "tactic.ui.app.project_template_wdg.ProjectTemplateInstallCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\app\\project_template_wdg.py:12",
+    "tactic.ui.app.project_template_wdg.ProjectTemplateDownloadCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\app\\project_template_wdg.py:31",
+    "tactic.ui.app.project_template_wdg.ProjectTemplateExportCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\app\\project_template_wdg.py:52",
+    "tactic.ui.app.project_template_wdg.ProjectTemplateDeleteCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\app\\project_template_wdg.py:73",
+    "tactic.ui.app.repository_wdg.RepositoryPathsCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\app\\repository_wdg.py:14",
+    "tactic.ui.bootstrap_app.bootstrap_index_wdg.BootstrapIndexWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\bootstrap_app\\bootstrap_index_wdg.py:6",
+    "tactic.ui.common.base_refresh_wdg.BaseRefreshWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\common\\base_refresh_wdg.py:24",
+    "tactic.ui.common.base_table_element_wdg.BaseTableElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\common\\base_table_element_wdg.py:11",
+    "tactic.ui.common.base_table_element_wdg.RawTableElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\common\\base_table_element_wdg.py:73",
+    "tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\common\\base_table_element_wdg.py:81",
+    "tactic.ui.common.widget_class_handler.WidgetClassHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\common\\widget_class_handler.py:17",
+    "tactic.ui.common.widget_class_handler.TableElementClassHandler": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\common\\widget_class_handler.py:210",
+    "tactic.ui.input.color_input_wdg.ColorInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\color_input_wdg.py:8",
+    "tactic.ui.input.pipeline_input_wdg.PipelineInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\pipeline_input_wdg.py:8",
+    "tactic.ui.input.process_context_wdg.ProcessInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\process_context_wdg.py:10",
+    "tactic.ui.input.process_context_wdg.SubContextInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\process_context_wdg.py:60",
+    "tactic.ui.input.process_context_wdg.ReviewProcessInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\process_context_wdg.py:70",
+    "tactic.ui.input.process_group_select_wdg.ProcessGroupSelectWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\process_group_select_wdg.py:8",
+    "tactic.ui.input.project_user_select_wdg.ProjectSelectWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\project_user_select_wdg.py:9",
+    "tactic.ui.input.project_user_select_wdg.UserSelectWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\project_user_select_wdg.py:28",
+    "tactic.ui.input.search_type_input_wdg.SearchTypeInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\search_type_input_wdg.py:8",
+    "tactic.ui.input.search_type_input_wdg.SearchTypeWithPipelineInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\search_type_input_wdg.py:27",
+    "tactic.ui.input.task_input_wdg.TaskSObjectInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\input\\task_input_wdg.py:11",
+    "tactic.ui.panel.base_table_layout_wdg.BaseTableLayoutWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\base_table_layout_wdg.py:10",
+    "tactic.ui.panel.edit_wdg.EditWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\edit_wdg.py:14",
+    "tactic.ui.panel.graph_document.GraphDocument": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\graph_document.py:20",
+    "tactic.ui.panel.naming_cmd.NamingCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\naming_cmd.py:199",
+    "tactic.ui.panel.panel_wdg.SideBarBookmarkMenuWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\panel_wdg.py:6",
+    "tactic.ui.panel.process_rules_cmd.ProcessRulesCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\process_rules_cmd.py:308",
+    "tactic.ui.panel.schema_cmd.SchemaCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\schema_cmd.py:234",
+    "tactic.ui.panel.schema_delete_cmd.SchemaDeleteCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\schema_delete_cmd.py:177",
+    "tactic.ui.panel.search_types_cmd.SearchTypesCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\search_types_cmd.py:443",
+    "tactic.ui.panel.search_type_manager_wdg.AlterSearchTypeCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\search_type_manager_wdg.py:10",
+    "tactic.ui.panel.table_layout_wdg.TableLayoutWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\table_layout_wdg.py:13",
+    "tactic.ui.panel.table_layout_wdg.FastTableLayoutWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\table_layout_wdg.py:589",
+    "tactic.ui.panel.workflow_cmd.WorkflowCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\panel\\workflow_cmd.py:328",
+    "tactic.ui.startup.security_wdg.GearMenuSecurityWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\startup\\security_wdg.py:16",
+    "tactic.ui.table.expression_element_wdg.ExpressionElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\expression_element_wdg.py:24",
+    "tactic.ui.table.expression_element_wdg.ExpressionRecalculateCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\expression_element_wdg.py:316",
+    "tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\expression_element_wdg.py:341",
+    "tactic.ui.table.format_element_wdg.FormatElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\format_element_wdg.py:8",
+    "tactic.ui.table.json_element_wdg.JsonElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\json_element_wdg.py:7",
+    "tactic.ui.table.link_element_wdg.LinkElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\link_element_wdg.py:7",
+    "tactic.ui.table.metadata_element_wdg.MetadataElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\metadata_element_wdg.py:8",
+    "tactic.ui.table.milestones.MilestoneCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\milestones.py:123",
+    "tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\snapshot_element_wdg.py:7",
+    "tactic.ui.table.statistic_wdg.TaskCompletionWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\statistic_wdg.py:20",
+    "tactic.ui.table.task_element_wdg.TaskElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\task_element_wdg.py:64",
+    "tactic.ui.table.task_element_wdg.TaskElementCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\task_element_wdg.py:1009",
+    "tactic.ui.table.task_inspector.TaskInspectorCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\task_inspector.py:265",
+    "tactic.ui.table.task_inspector.TaskTableEditCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\task_inspector.py:362",
+    "tactic.ui.table.task_schedule.TaskScheduleCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\task_schedule.py:670",
+    "tactic.ui.table.task_workspace.TaskWorkspaceCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\task_workspace.py:74",
+    "tactic.ui.table.task_workspace_edits.TaskWorkspaceEditCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\task_workspace_edits.py:134",
+    "tactic.ui.table.work_hours.WorkHoursCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\table\\work_hours.py:141",
+    "tactic.ui.tools.delete_wdg.DeleteSearchTypeCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\delete_wdg.py:23",
+    "tactic.ui.tools.delete_wdg.DeleteCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\delete_wdg.py:59",
+    "tactic.ui.tools.ingest_wdg.IngestUploadCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\ingest_wdg.py:24",
+    "tactic.ui.tools.schema_wdg.SchemaConnectorCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\schema_wdg.py:21",
+    "tactic.ui.tools.schema_wdg.SchemaSaveCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\schema_wdg.py:152",
+    "tactic.ui.tools.trigger_wdg.BaseTriggerEditCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:24",
+    "tactic.ui.tools.trigger_wdg.StatusTriggerEditCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:110",
+    "tactic.ui.tools.trigger_wdg.TriggerParentStatusEditCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:160",
+    "tactic.ui.tools.trigger_wdg.TriggerDateCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:186",
+    "tactic.ui.tools.trigger_wdg.TriggerCreateCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:212",
+    "tactic.ui.tools.trigger_wdg.NotificationGetTemplateCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:245",
+    "tactic.ui.tools.trigger_wdg.NotificationTriggerEditCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:279",
+    "tactic.ui.tools.trigger_wdg.PythonScriptTriggerEditCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:382",
+    "tactic.ui.tools.trigger_wdg.PythonClassTriggerEditCbk": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\tools\\trigger_wdg.py:433",
+    "tactic.ui.widget.calendar_wdg.CalendarInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\calendar_wdg.py:12",
+    "tactic.ui.widget.calendar_wdg.DateDatabaseAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\calendar_wdg.py:183",
+    "tactic.ui.widget.calendar_wdg.TimeDatabaseAction": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\calendar_wdg.py:226",
+    "tactic.ui.widget.calendar_wdg.TimeInputWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\calendar_wdg.py:265",
+    "tactic.ui.widget.discussion_wdg.DiscussionWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\discussion_wdg.py:70",
+    "tactic.ui.widget.discussion_wdg.DiscussionElementWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\discussion_wdg.py:266",
+    "tactic.ui.widget.discussion_wdg.DiscussionAddNoteCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\discussion_wdg.py:359",
+    "tactic.ui.widget.discussion_wdg.DiscussionReadCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\discussion_wdg.py:487",
+    "tactic.ui.widget.discussion_wdg.DiscussionChangeNoteCmd": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\discussion_wdg.py:540",
+    "tactic.ui.widget.misc_input_wdg.TaskStatusSelectWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\misc_input_wdg.py:9",
+    "tactic.ui.widget.upload_wdg.SimpleUploadWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\upload_wdg.py:10",
+    "tactic.ui.widget.upload_wdg.UploadWdg": "D:\\code\\TACTIC_VUE\\tactic_stream\\src\\tactic\\ui\\widget\\upload_wdg.py:25"
+  },
+  "lexing_errors": [
+    {
+      "file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\search\\upgrade\\data_dumper.py",
+      "error": "('unterminated string literal (detected at line 36)', (36, 15))"
+    },
+    {
+      "file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\search\\upgrade\\sql_reporter.py",
+      "error": "('unexpected character after line continuation character', (229, 56))"
+    },
+    {
+      "file": "D:\\code\\TACTIC_VUE\\legacy\\src\\pyasm\\prod\\queue\\queue_index.py",
+      "error": "inconsistent use of tabs and spaces in indentation (<string>, line 31)"
+    },
+    {
+      "file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\active_directory\\ad_get_user_info.py",
+      "error": "inconsistent use of tabs and spaces in indentation (<string>, line 120)"
+    },
+    {
+      "file": "D:\\code\\TACTIC_VUE\\legacy\\src\\tactic\\ui\\startup\\client_wdg.py",
+      "error": "inconsistent use of tabs and spaces in indentation (<string>, line 94)"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+import assert from 'node:assert/strict'
+import { chromium } from 'playwright'
+import { selectProject } from './project_selection.mjs'
+
+const base = process.argv[2], browser = await chromium.launch({ headless:true })
+try {
+  const context = await browser.newContext({ viewport:{ width:1280, height:900 } })
+  await context.addInitScript(() => localStorage.setItem('tactic_stream.appearance', JSON.stringify({ mode:'dark', language:'en' })))
+  let page = await context.newPage()
+  const errors = []
+  const projectRequests = []
+  context.on('request', request => {
+    if (/\/admin\/(navigation|workspace-layouts|search-configuration\/query)/.test(new URL(request.url()).pathname)) projectRequests.push(request.postDataJSON())
+  })
+  const watch = page => { page.setDefaultTimeout(12000); page.on('pageerror', error => errors.push(error.message)) }
+  watch(page)
+  const tabs = () => page.locator('.workspace-tabs[data-kind="search"] [role="tab"]')
+  const project = () => page.locator('.project-picker').getAttribute('data-project')
+  const ready = () => page.waitForFunction(() => document.querySelector('.workspace') && !document.querySelector('.workspace-results[aria-busy="true"]'))
+  async function signIn(login) {
+    await page.getByLabel('Login', { exact:true }).fill(login)
+    await page.getByLabel('Password', { exact:true }).fill('private-test-password')
+    await page.getByRole('button', { name:'Sign in', exact:true }).click()
+    await ready()
+  }
+  async function signOut() {
+    await page.getByLabel('Account', { exact:true }).click()
+    await page.locator('.account-menu').getByRole('button', { name:'Sign out', exact:true }).click()
+    await page.getByRole('button', { name:'Sign in', exact:true }).waitFor()
+    assert.equal(new URL(page.url()).pathname,'/')
+  }
+  await page.goto(base+'/')
+  assert.equal(await page.getByLabel('Login',{exact:true}).inputValue(),'')
+  await signIn('workspace_user')
+  assert.equal(await project(),'')
+  assert.equal(await tabs().count(),0)
+  await page.locator('.workspace-empty').waitFor()
+  assert.equal(projectRequests.length,0,'No project-specific request precedes project selection')
+  await page.getByLabel('More options',{exact:true}).click()
+  assert.equal(await page.locator('.settings-menu').getByRole('button',{name:'Administration',exact:true}).isEnabled(),true,'Administrator controls do not depend on an open search tab')
+  await page.keyboard.press('Escape')
+  await page.screenshot({path:'../.screenshots/no-admin-startup.png',animations:'disabled'})
+  await selectProject(page,'one')
+  assert.equal(await tabs().count(),0,'Selecting a new project does not invent a Projects tab')
+  await page.goto(base+'/projects/one/?search_type=contract/entity&view=table')
+  await page.waitForFunction(() => document.querySelector('.workspace-results')?.getAttribute('aria-busy')==='false')
+  await page.getByRole('button',{name:'Add new search tab',exact:true}).click()
+  await ready()
+  assert.equal(await tabs().count(),2)
+  const tabId = await page.locator('.workspace-tabs[data-kind="search"] [aria-selected="true"]').getAttribute('data-tab-id')
+  await page.getByLabel('Search objects',{exact:true}).fill('Unsubmitted draft')
+  await page.close()
+  page = await context.newPage(); watch(page)
+  await page.goto(base+'/'); await ready()
+  assert.equal(await project(),'one')
+  assert.equal(await tabs().count(),2)
+  assert.equal(await page.locator('.workspace-tabs[data-kind="search"] [aria-selected="true"]').getAttribute('data-tab-id'),tabId)
+  assert.equal(await page.getByLabel('Search objects',{exact:true}).inputValue(),'Unsubmitted draft')
+  await page.screenshot({path:'../.screenshots/restored-workspace.png',animations:'disabled'})
+  await selectProject(page,'two'); await ready()
+  assert.equal(await tabs().count(),0)
+  await page.reload(); await ready()
+  assert.equal(await project(),'two')
+  assert.equal(await tabs().count(),0,'An intentionally empty project stays empty after reload')
+  await signOut()
+  assert.equal(await page.getByLabel('Login',{exact:true}).inputValue(),'workspace_user')
+  await signIn('admin')
+  assert.equal(await project(),'','Another account does not inherit the previous project')
+  assert.equal(await tabs().count(),0)
+  await signOut(); await signIn('workspace_user')
+  assert.equal(await project(),'two','Last project survives an explicit logout')
+  await selectProject(page,'one'); await ready()
+  assert.equal(await tabs().count(),2)
+  await signOut()
+  await page.evaluate(() => {
+    localStorage.setItem('tactic_stream.selection.workspace_user', JSON.stringify({project:'missing'}))
+  })
+  await signIn('workspace_user')
+  assert.equal(await project(),'','An unavailable saved project does not fall back to admin')
+  assert.equal(await tabs().count(),0)
+  assert.deepEqual(errors,[])
+  console.log('PASS: blank login/project, no default tab, page-close restore, draft/current tab, empty state, remembered login, per-account logout restore, unavailable project')
+} finally { await browser.close() }

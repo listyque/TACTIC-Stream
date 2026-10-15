@@ -1,0 +1,25 @@
+{
+  "all_unchanged": true,
+  "files": [
+    {
+      "path": "src/install/start/config/tactic-license.xml",
+      "sha256": "e0af98517ae5d70886619e7c8397159751f9e57cb654e003ef7b2e826c0c0e6a"
+    },
+    {
+      "path": "src/install/start/db/sthpw.db",
+      "sha256": "0c5fcf8148e2db77060c1cd9091e07c77723a28e8fdeb92a147e71c4b247166b"
+    },
+    {
+      "path": "src/install/start/db/unittest.db",
+      "sha256": "88f9121dd72042d022a20ff6d1b9b23ff7831cf6519681aad84cf3bcb9cdb90f"
+    },
+    {
+      "path": "src/install/start/templates/game-1.0.0.zip",
+      "sha256": "dba3f97494970b2957adb0f010c3f3668151fccd418188e5e2382cbfeb5c4fcf"
+    },
+    {
+      "path": "src/install/start/templates/vfx-1.0.0.zip",
+      "sha256": "3dcebb7ad9bc1e0a64926b658af81854c27e86aa5dc4d3575e7f9733fbafcfbb"
+    }
+  ]
+}

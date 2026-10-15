@@ -1,0 +1,1 @@
+Original server stdout is excluded from the package because upstream logging includes temporary login tickets and test configuration paths. Structured results and repeatable runners are included. This was a disposable installation; the test databases were removed after completion.

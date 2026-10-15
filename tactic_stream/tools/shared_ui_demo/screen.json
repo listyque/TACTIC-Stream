@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "id": "project_settings",
+  "viewport": {"width": 520, "height": 300},
+  "typography": {"body": 13, "title": 16},
+  "defaults": {"name": "Pipeline A", "enabled": true},
+  "strings": {
+    "Project settings": "Настройки проекта",
+    "One skeleton. Two native renderers.": "Один скелет. Два нативных представления.",
+    "Name": "Название",
+    "Enable notifications": "Включить уведомления",
+    "Ready": "Готово",
+    "Unsaved changes": "Есть несохранённые изменения",
+    "Name is required": "Укажите название",
+    "Saved": "Сохранено",
+    "Reset": "Сбросить",
+    "Apply": "Применить"
+  },
+  "layout": {
+    "kind": "Column", "id": "page", "padding": 20, "gap": 12,
+    "children": [
+      {"kind": "Label", "id": "title", "text": "Project settings", "height": 24, "role": "title"},
+      {"kind": "Label", "id": "subtitle", "text": "One skeleton. Two native renderers.", "height": 20, "muted": true},
+      {"kind": "Row", "id": "name_row", "height": 36, "gap": 12, "children": [
+        {"kind": "Label", "id": "name_label", "text": "Name", "width": 104},
+        {"kind": "TextField", "id": "name", "field": "name", "label": "Name", "grow": 1}
+      ]},
+      {"kind": "CheckBox", "id": "enabled", "field": "enabled", "text": "Enable notifications", "height": 36},
+      {"kind": "Label", "id": "message", "status": true, "height": 20, "muted": true},
+      {"kind": "Row", "id": "actions", "height": 36, "gap": 8, "align": "end", "children": [
+        {"kind": "Button", "id": "reset", "text": "Reset", "width": 104, "action": "reset"},
+        {"kind": "Button", "id": "apply", "text": "Apply", "width": 104, "action": "apply", "highlighted": true}
+      ]}
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+<manifest>
+  <data>
+    <code>TACTIC/vfx/stypes</code>
+    <title>VFX Search Types</title>
+    <description>Search Types for TACTIC VFX Open Source</description>
+  </data>
+  <search_type code="prod/session_contents"/>
+  <search_type code="vfx/art_reference"/>
+  <search_type code="vfx/asset"/>
+  <search_type code="vfx/asset_category"/>
+  <search_type code="vfx/asset_in_episode"/>
+  <search_type code="vfx/asset_in_sequence"/>
+  <search_type code="vfx/asset_in_shot"/>
+  <search_type code="vfx/asset_type"/>
+  <search_type code="vfx/camera"/>
+  <search_type code="vfx/episode"/>
+  <search_type code="vfx/layer"/>
+  <search_type code="vfx/leica"/>
+<!--
+    <search_type code="vfx/naming"/>
+-->
+  <search_type code="vfx/node_data"/>
+  <search_type code="vfx/plate"/>
+  <search_type code="vfx/render"/>
+  <search_type code="vfx/review"/>
+  <search_type code="vfx/schedule"/>
+  <search_type code="vfx/script"/>
+  <search_type code="vfx/sequence"/>
+  <search_type code="vfx/shot"/>
+  <search_type code="vfx/shot_texture"/>
+  <search_type code="vfx/storyboard"/>
+  <search_type code="vfx/submission"/>
+  <search_type code="vfx/texture"/>
+</manifest>

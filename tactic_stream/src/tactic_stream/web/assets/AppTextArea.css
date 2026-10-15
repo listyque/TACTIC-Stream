@@ -1,0 +1,1 @@
+.app-text-area{min-width:0;font-size:var(--text-body);resize:vertical;padding:10px 12px}.app-text-area:focus{border:2px solid var(--primary);outline:none;padding:9px 11px}.app-text-area:disabled{color:var(--disabled)}

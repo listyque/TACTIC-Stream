@@ -1,0 +1,153 @@
+{
+  "backend": "Original TACTIC + SQLite, original auth/actions/transaction; explicit test signature isolation",
+  "scenarios": [
+    {
+      "scenario": "Anonymous cell editor denied",
+      "passed": true
+    },
+    {
+      "scenario": "Original DB authentication",
+      "passed": true
+    },
+    {
+      "scenario": "Ordinary preview resolved from original ThumbWdg",
+      "passed": true
+    },
+    {
+      "scenario": "Preview served as authenticated registered PNG",
+      "passed": true
+    },
+    {
+      "scenario": "Other row without snapshot has original empty preview state",
+      "passed": true
+    },
+    {
+      "scenario": "Preview cannot be read without session",
+      "passed": true
+    },
+    {
+      "scenario": "CellEdit uses DB edit_item TextArea override",
+      "passed": true
+    },
+    {
+      "scenario": "CellEdit differs from original popup edit form",
+      "passed": true
+    },
+    {
+      "scenario": "Opening editor never changes record",
+      "passed": true
+    },
+    {
+      "scenario": "Definition revision stable across single vs multiple changed fields",
+      "passed": true
+    },
+    {
+      "scenario": "Draft request does not write either field",
+      "passed": true
+    },
+    {
+      "scenario": "One Save Changes invokes original EditMultipleCmd",
+      "passed": true
+    },
+    {
+      "scenario": "Original update_multi fires once for the batch",
+      "passed": true
+    },
+    {
+      "scenario": "First original row has both edits",
+      "passed": true
+    },
+    {
+      "scenario": "Second original row committed in batch",
+      "passed": true
+    },
+    {
+      "scenario": "Replaying stale batch cannot silently repeat side effects",
+      "passed": true
+    },
+    {
+      "scenario": "Original NonEmptyAction rejects second row",
+      "passed": true
+    },
+    {
+      "scenario": "First row rollback after second action error",
+      "passed": true
+    },
+    {
+      "scenario": "Failed batch leaves no update_multi record",
+      "passed": true
+    },
+    {
+      "scenario": "Second row unchanged after failed batch",
+      "passed": true
+    },
+    {
+      "scenario": "Conflict anywhere aborts full batch",
+      "passed": true
+    },
+    {
+      "scenario": "Preflight conflict preserved first row",
+      "passed": true
+    },
+    {
+      "scenario": "Stale cell config rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Stale table config rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Duplicate row keys rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Empty batch rejected",
+      "passed": true
+    },
+    {
+      "scenario": "More than 100 rows rejected",
+      "passed": true
+    },
+    {
+      "scenario": "Unknown field cannot be injected into cell editor",
+      "passed": true
+    },
+    {
+      "scenario": "Sensitive secret field cannot be requested",
+      "passed": true
+    },
+    {
+      "scenario": "Pending foreign field cannot be smuggled",
+      "passed": true
+    },
+    {
+      "scenario": "Protected identity field cannot be edited",
+      "passed": true
+    },
+    {
+      "scenario": "Row type cannot be substituted",
+      "passed": true
+    },
+    {
+      "scenario": "Original action type surfaced in descriptor",
+      "passed": true
+    },
+    {
+      "scenario": "Explicit NULL preserved through original action adapter",
+      "passed": true
+    },
+    {
+      "scenario": "Subsequent batch still works after rollback and conflicts",
+      "passed": true
+    },
+    {
+      "scenario": "CSRF required for table saving",
+      "passed": true
+    },
+    {
+      "scenario": "Logout invalidates cell editing",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "task_gantt",
+  "viewport": {
+    "width": 1100,
+    "height": 660
+  },
+  "metrics": {
+    "toolbar": 48,
+    "header": 54,
+    "row": 50,
+    "group": 27,
+    "overview": 30,
+    "footer": 44,
+    "bar": 27,
+    "font": 13,
+    "micro": 11,
+    "handle": 8
+  },
+  "strings": {
+    "Task schedule": "Расписание задач",
+    "Tasks": "Задачи",
+    "Undo": "Отмена",
+    "Redo": "Повтор",
+    "Today": "Сегодня",
+    "Auto": "Авто",
+    "Days": "Дни",
+    "Weeks": "Недели",
+    "Selected": "Выбрано",
+    "Working days": "Рабочие дни",
+    "Shift −1": "Сдвиг −1",
+    "Shift +1": "Сдвиг +1",
+    "Shorten": "Сократить",
+    "Extend": "Продлить",
+    "No dates": "Без дат",
+    "Set dates": "Задать даты",
+    "Changes": "Изменений",
+    "Not assigned": "Не назначен",
+    "In progress": "В работе",
+    "Waiting": "Ожидание",
+    "Review": "Проверка",
+    "Move / resize / progress": "Перемещение / длительность / прогресс"
+  }
+}

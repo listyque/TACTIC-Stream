@@ -1,0 +1,289 @@
+{
+  "passed": true,
+  "scenarios": [
+    {
+      "name": "Anonymous security requests denied",
+      "passed": true
+    },
+    {
+      "name": "Original configured manage_users resolves dedicated users",
+      "passed": true
+    },
+    {
+      "name": "Original configured manage_security resolves dedicated security",
+      "passed": true
+    },
+    {
+      "name": "Original configured manage_search_types resolves dedicated search-types",
+      "passed": true
+    },
+    {
+      "name": "Original configured manage_side_bar resolves dedicated sidebar-editor",
+      "passed": true
+    },
+    {
+      "name": "UserConfig original child users-table",
+      "passed": true
+    },
+    {
+      "name": "UserConfig original child assignment",
+      "passed": true
+    },
+    {
+      "name": "UserConfig original child security",
+      "passed": true
+    },
+    {
+      "name": "Derived admin child cannot be requested from unrelated table",
+      "passed": true
+    },
+    {
+      "name": "Original UserPanel form creates login via original handlers",
+      "passed": true
+    },
+    {
+      "name": "UserPanel original filter omits admin and guest",
+      "passed": true
+    },
+    {
+      "name": "Created account is in UserPanel",
+      "passed": true
+    },
+    {
+      "name": "Original group edit sets access_level none",
+      "passed": true
+    },
+    {
+      "name": "GroupAssignCbk executed for user membership",
+      "passed": true
+    },
+    {
+      "name": "Membership roundtrip through original login_in_group",
+      "passed": true
+    },
+    {
+      "name": "Stale membership revision conflicts",
+      "passed": true
+    },
+    {
+      "name": "Unknown group cannot be injected",
+      "passed": true
+    },
+    {
+      "name": "Original UserSecurity matrix recognizes membership",
+      "passed": true
+    },
+    {
+      "name": "UserSecurityCbk toggle removed only intended membership",
+      "passed": true
+    },
+    {
+      "name": "Unchanged cell does not toggle original callback",
+      "passed": true
+    },
+    {
+      "name": "Created local SearchType is editable",
+      "passed": true
+    },
+    {
+      "name": "SearchType editor opens original configured table",
+      "passed": true
+    },
+    {
+      "name": "Metadata revision conflict detected",
+      "passed": true
+    },
+    {
+      "name": "ColumnEditCbk creates physical column and original definitions",
+      "passed": true
+    },
+    {
+      "name": "Physical column and FormatElementWdg definition roundtrip",
+      "passed": true
+    },
+    {
+      "name": "Original edit definition created",
+      "passed": true
+    },
+    {
+      "name": "Existing rows and keys preserved",
+      "passed": true
+    },
+    {
+      "name": "Existing column cannot be re-added",
+      "passed": true
+    },
+    {
+      "name": "No type-changing metadata operation",
+      "passed": true
+    },
+    {
+      "name": "Sidebar patch creates original references and a child config",
+      "passed": true
+    },
+    {
+      "name": "Sidebar source resolves real table handler",
+      "passed": true
+    },
+    {
+      "name": "Sidebar stale revision conflicts",
+      "passed": true
+    },
+    {
+      "name": "New sidebar link opens actual SObject table",
+      "passed": true
+    },
+    {
+      "name": "Created folder is an empty real widget_config view",
+      "passed": true
+    },
+    {
+      "name": "Nested new link resolves through original sidebar",
+      "passed": true
+    },
+    {
+      "name": "Foreign personal sidebar denied",
+      "passed": true
+    },
+    {
+      "name": "Personal widget_config saved separately",
+      "passed": true
+    },
+    {
+      "name": "Original callback saves project",
+      "passed": true
+    },
+    {
+      "name": "Rule roundtrip project",
+      "passed": true
+    },
+    {
+      "name": "Stale matrix revision rejected project",
+      "passed": true
+    },
+    {
+      "name": "Original callback removes only chosen rule project",
+      "passed": true
+    },
+    {
+      "name": "Original callback saves link",
+      "passed": true
+    },
+    {
+      "name": "Rule roundtrip link",
+      "passed": true
+    },
+    {
+      "name": "Stale matrix revision rejected link",
+      "passed": true
+    },
+    {
+      "name": "Original callback removes only chosen rule link",
+      "passed": true
+    },
+    {
+      "name": "Original callback saves gear_menu",
+      "passed": true
+    },
+    {
+      "name": "Rule roundtrip gear_menu",
+      "passed": true
+    },
+    {
+      "name": "Stale matrix revision rejected gear_menu",
+      "passed": true
+    },
+    {
+      "name": "Original callback removes only chosen rule gear_menu",
+      "passed": true
+    },
+    {
+      "name": "Original callback saves search_type",
+      "passed": true
+    },
+    {
+      "name": "Rule roundtrip search_type",
+      "passed": true
+    },
+    {
+      "name": "Stale matrix revision rejected search_type",
+      "passed": true
+    },
+    {
+      "name": "Original callback removes only chosen rule search_type",
+      "passed": true
+    },
+    {
+      "name": "Original callback saves process",
+      "passed": true
+    },
+    {
+      "name": "Rule roundtrip process",
+      "passed": true
+    },
+    {
+      "name": "Stale matrix revision rejected process",
+      "passed": true
+    },
+    {
+      "name": "Original callback removes only chosen rule process",
+      "passed": true
+    },
+    {
+      "name": "Original callback saves task",
+      "passed": true
+    },
+    {
+      "name": "Rule roundtrip task",
+      "passed": true
+    },
+    {
+      "name": "Stale matrix revision rejected task",
+      "passed": true
+    },
+    {
+      "name": "Original callback removes only chosen rule task",
+      "passed": true
+    },
+    {
+      "name": "Custom deny remains locked rather than converted into allow",
+      "passed": true
+    },
+    {
+      "name": "Cannot mutate locked deny through matrix request",
+      "passed": true
+    },
+    {
+      "name": "Unrelated custom XML rule and comment survive original callback",
+      "passed": true
+    },
+    {
+      "name": "Reader sees updated SearchType metadata and column",
+      "passed": true
+    },
+    {
+      "name": "Reader sees updated SearchType metadata and column",
+      "passed": true
+    },
+    {
+      "name": "Reader sees updated SearchType metadata and column",
+      "passed": true
+    },
+    {
+      "name": "Reader sees updated SearchType metadata and column",
+      "passed": true
+    },
+    {
+      "name": "Reader sees updated SearchType metadata and column",
+      "passed": true
+    },
+    {
+      "name": "Reader sees updated SearchType metadata and column",
+      "passed": true
+    },
+    {
+      "name": "New admin reads distributed across all workers",
+      "passed": true
+    }
+  ]
+}

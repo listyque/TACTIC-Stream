@@ -1,0 +1,3 @@
+Page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at http://127.0.0.1:55841/tactic/admin/
+Call log:
+  - navigating to "http://127.0.0.1:55841/tactic/admin/", waiting until "networkidle"

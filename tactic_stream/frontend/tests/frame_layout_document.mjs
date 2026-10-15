@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict'
+import * as Layout from '../../src/tactic_stream/shared_ui/features/administration/layouts/layout.document.mjs'
+const element=(name,attrs=[],children=[])=>({type:1,name,attributes:attrs,children})
+const tree={type:9,children:[{type:7,name:'configuration',text:'kept'},element('config',[['custom','yes']],[element('cards',[['layout','sobject-layout'],['columns','12']],[{type:8,text:'kept'},element('element',[['name','group'],['title','Group']],[element('display',[['class','group']])]),element('element',[['name','copy'],['parent','group'],['custom','kept']],[element('display',[['class','text']],[element('text',[],[{type:4,text:'<fixed>'}])])]),element('extension',[['value','retained']])])])]}
+const original=JSON.stringify(tree)
+let draft=Layout.edit(tree,'cards','copy','option:text','<script>&"quoted"')
+assert.equal(JSON.stringify(tree),original,'editing a candidate cannot mutate its baseline')
+assert.equal(Layout.describe(draft,'cards').elements[1].options.text,'<script>&"quoted"')
+assert.match(Layout.serialize(draft),/&lt;script&gt;&amp;"quoted"/)
+assert.match(Layout.serialize(draft),/custom="kept"/);assert.match(Layout.serialize(draft),/<!--kept-->/);assert.match(Layout.serialize(draft),/<extension value="retained"\/>/)
+draft=Layout.edit(draft,'cards','','add','button');assert.equal(Layout.describe(draft,'cards').elements.at(-1).kind,'button')
+draft=Layout.edit(draft,'cards','group','remove','');assert.deepEqual(Layout.describe(draft,'cards').elements.map(row=>row.name),['item_1'],'removing a group removes descendants')
+const renamed=Layout.template(tree,'custom@cards');assert.equal(Layout.describe(renamed,'custom@cards').elements.length,2);assert.match(Layout.serialize(renamed),/<view layout="sobject-layout" columns="12" name="custom@cards">/)
+assert.throws(()=>Layout.template(tree,'bad view'),/Invalid view name/)
+assert.throws(()=>Layout.edit(tree,'cards','','add','arbitrary-server-widget'),/Unsupported/)
+assert.throws(()=>Layout.edit(tree,'cards','copy','option:bad<name','value'),/Invalid widget option/)
+assert.equal(Layout.binding('record.count',{record:{count:0}}),0);assert.equal(Layout.binding('node.constructor.prototype',{}),'')
+console.log('Layout XML: portable edits, groups, templates, binding safety and preservation of custom XML passed')

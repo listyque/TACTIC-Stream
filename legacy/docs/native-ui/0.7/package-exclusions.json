@@ -1,0 +1,30 @@
+{
+  "excluded_patterns": [
+    ".git",
+    ".runtime",
+    "__pycache__",
+    "*.pyc",
+    "*.pyo",
+    "node_modules",
+    "font files",
+    "temporary payloads / real user DBs"
+  ],
+  "upstream_seeds": "preserved",
+  "production_config": "unchanged: writes/uploads disabled",
+  "nested_archives_scanned_for_fonts": [
+    "3rd_party/ckeditor_3.6.tar.gz",
+    "3rd_party/python-dateutil-1.4.1.tar.gz",
+    "3rd_party/ace-0.2.0.zip",
+    "3rd_party/python2/site-packages/dateutil/zoneinfo/zoneinfo-2008e.tar.gz",
+    "3rd_party/python3.6/site-packages/CherryPy-18.5.0.tar.gz",
+    "3rd_party/python3.6/site-packages/cheroot-8.2.1.tar.gz",
+    "3rd_party/python3.6/site-packages/dateutil/zoneinfo/dateutil-zoneinfo.tar.gz",
+    "3rd_party/python3/site-packages/cheroot-8.2.1.tar.gz",
+    "3rd_party/python3/site-packages/CherryPy-18.8.0.tar.gz",
+    "3rd_party/python3/site-packages/dateutil/zoneinfo/dateutil-zoneinfo.tar.gz",
+    "src/install/start/templates/vfx-1.0.0.zip",
+    "src/install/start/templates/game-1.0.0.zip"
+  ],
+  "font_findings": [],
+  "test_reports": "Final 0.7 reports plus historical 0.2-0.6; explicit failed native navigation retained"
+}

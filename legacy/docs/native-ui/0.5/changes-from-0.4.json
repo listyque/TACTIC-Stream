@@ -1,0 +1,641 @@
+{
+  "release": "0.5",
+  "baseline": "TACTIC_5_Vue_Source_Fork_0.4.zip",
+  "baseline_sha256": "c74700674c605548fb9f9910317467dd4ac2c8b477618aa83e96c8a74f11ad84",
+  "source_tree": "TACTIC-5.0",
+  "changed_or_added_files_outside_reports": 40,
+  "count_includes_readme_version_build_tests": true,
+  "full_changes": [
+    {
+      "path": "NATIVE_UI_VERSION",
+      "status": "modified",
+      "before_sha256": "cce3c01e872dcf0ff885b1f0f6dba8f1b7e2aaf55565151f54785cef8cbce72f",
+      "after_sha256": "8d5c1b5a87c51f970807fc0c2057b3ab3aaf11638ab667dc5956edc8f5bcf138",
+      "text_patch": true
+    },
+    {
+      "path": "README_VUE_RU.md",
+      "status": "modified",
+      "before_sha256": "c0968f253acd527986bb0b0cf2575c3a87758ff000cb24bc2ef9f06e75415e7d",
+      "after_sha256": "e56ccbc17e7f4606f605926781ac152c01a6488962fc18bf5d6132600c110f6a",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/SOURCE_MAP_05.md",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8387f9b67cf3ca9fc6cd11ee895d6bdf99738e250073c0f7a028526c024e8bec",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/build.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8e8573e6ec34a479340c418e57bc10e92d1cb61df8990d10940f39f31ec345c3",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/navigation-attempt/native-navigation.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "199311152db105b464cf3cb5a0977aac200be9e13f56a4999cc01821c527ef2f",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03-server-error.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "852f6ad245c22baea246e5963e0e4dcb87917fca1e76985e9892fb7d22a0be96",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03-server.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8c9ff9f23ae524ee3556453150fcc151e7d828f6460524f9bc84db3784d4a146",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "0e0ae5c6f02ac16523b6f20c979956767811afc840c0854aff66c1c3c09c8007",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03/browser-results.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "d228d866829207139c693cecd0dbcce67ff47c82f6d7d0d6080779142fa365e0",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03/screenshots/group-rules.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "77d3ba21328c4f3f6b1ed98950d90a9840c7d5619a8506f56c12af1ed896d83d",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03/screenshots/mobile.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "af6b4f06dd96c1f62daf77d02316833558a9647232e5614207d07c9abd1c2e82",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03/screenshots/pipeline-editor.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "26b7ecfb8e249a283c1878234d77b2482b79a3dba3f45c1099ad9d7a5aa445cd",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03/screenshots/sidebar-config-layers.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "46d2a8c8abbbfe5a1433815465fddf641d91b7bcc8cb101bb348737dda220f67",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03/screenshots/task-calendar.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "d6ac0aa3ad1dadcc7853255bba5c30a5c143436b6895593e9bede1ab7f251908",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_03/screenshots/view-designer.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "ad15e182aeb7dcedf5a61cdc7f09fb55b0fd467a70b3a98b947395ce879d7b6a",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04-server-error.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "62970909c9792229377379ed32cbd04d76347eb5f16cabb1635d11560d920e27",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04-server.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8c9ff9f23ae524ee3556453150fcc151e7d828f6460524f9bc84db3784d4a146",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8a0f3c77b701f5266e00531fc4355182183201020ef24c133581899f31b18e85",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04/browser-results.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "abac2fa8254545a73ef5386b3973b21ea3c706e5c8fb41609845a10028d74fe0",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04/screenshots/compound-search.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "440b465923ab3d59f4efc5ba9e1938c3ee8160be94530ef0ab788a2efd94d130",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04/screenshots/configured-work-hours-column.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "c957a5db2411d66c31e9f4d1529cc45648566103962971f0bdbde7217ae2b3c6",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04/screenshots/record-history.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "4d4ced8244c5e8c28cdeebc1917d8b60d6fb50149c44e960ebfa7de3fcdc94f8",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04/screenshots/schema-relation-tree.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "d3ae52c9206c723f528a4bf8fd87203b0272afe80eaed5fdb38861d2fd5c76d4",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04/screenshots/task-pipelines-board.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "09138274d12f4a8be436dd598ab317224614730e54367b9bc7508a21f5026f49",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04/screenshots/task-work-hours.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "1f2d61cb476192ebe65f6140cb5dec153513631cddac15987c11fe091a992935",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_04/screenshots/work-hours-mobile.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "a695e8eebbe9083ef8e0489246f83d948d5eebf1008b96a118ba3e50a5e0bf9b",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_05-server-error.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "5986fb948e30cecc2e4f22723a60c0239537e6ef9c9ce54e3eb228a45afe92c9",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_05-server.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "12960d0bf3880956f792e09964a3e3228986f263272ca1b393bbd6fc8e96bce1",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_05.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "4289c6a606e0c783d3de7af2275c2c77646762951e65e3bdb396700dbcc9e2bd",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_05/browser-results.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "5837ec253db6446f17eb7b37c20cddce04bdf0150b7a23fca87af72114e30970",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_05/screenshots/message-history.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "4913264e59b8eda64459de9a9da0b4eb35d00df53d025d652c25546d119e8387",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_05/screenshots/messages-mobile.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "6fdd0f63106dd4cd4495f44161741469d96b85305f7ce1a6ae0ee1f90ae99682",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_05/screenshots/my-notifications.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "33711d568aa08142c03a6081ac3b1bfccf0209d26b8e031d22e34025ac79859f",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_browser_05/screenshots/server-window-gantt.png",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "e8081844d7b92e6da152ef1370254eea68c4ef40d6a2c0f71748616ea42527b8",
+      "text_patch": false
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http-server-error.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "085c45391a34433e9b470c0fe286d72d52f896daa0bbbb5ccc7ded1e379cddab",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http-server.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8c9ff9f23ae524ee3556453150fcc151e7d828f6460524f9bc84db3784d4a146",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "d5c69ff5a2b5a315a66fc0f4967bc4d8fd0b54f1acdc5eee93c4e83a1a6d8cc4",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "de44fb1cfffd448f2c44532ae7411b0922ea0efda7fa6ccc0481ce5f36b32013",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_03-server-error.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "43eb210fc5d5186ee142207fdcaa9aab7c36f1ab8107276ee42f3d1123fe6c6c",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_03-server.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8c9ff9f23ae524ee3556453150fcc151e7d828f6460524f9bc84db3784d4a146",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_03.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "7fd7f91e9bd89543d82ccb740273d7548b0473cea120239f267402d295a077e0",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_03.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "bd94b507296c3f96e0faa04eaf38553a12510e4f731b741e6b39b6756b65cbce",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_04-server-error.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "7f3c6c881313ec4e3024222182971a5c26a7c4051ae7f1df7142adc32b1940bd",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_04-server.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8c9ff9f23ae524ee3556453150fcc151e7d828f6460524f9bc84db3784d4a146",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_04.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "779d41fabf97bf9cb78a7e4a64b5c1d8f793a1ab03367a3cc8f64494b54a12cd",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_04.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "e4fed6172995b3cfddee8e698da78c9c616b974c4c5b1244967a3e96e4ebda21",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_05-server-error.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "01f817ff52031ae8a28502da1d59b46e5d28846bacfb932af510353e7435957b",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_05-server.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "12960d0bf3880956f792e09964a3e3228986f263272ca1b393bbd6fc8e96bce1",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_05.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "5874f6549ea9b6ae67265e8706ab76fe9ef998981658a3bc0348943487ce0499",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/run_http_05.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "1c73b33f046135612273ed0885d913a9d73febb31a7d7c03b8cc1452deb94d8e",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/summary.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "ddb872aab423296f35ce92010f62710cb5d3929298d52c22ef90db2daafc72af",
+      "text_patch": true
+    },
+    {
+      "path": "docs/native-ui/0.5/validation/unit.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "74980d716095a4b5cb9b16b02e7c6b4b8d0e17f52ad299fca9f0d7ab8227b052",
+      "text_patch": true
+    },
+    {
+      "path": "frontend/src/App.vue",
+      "status": "modified",
+      "before_sha256": "53feabcc5f77cf6fd3a2d4a5ea23d5304c02de0f17ec4250fb5e65ffa6a5e252",
+      "after_sha256": "1342f6d44dfd1c4b7f51bb67d2077d3c7e51bc76ecc12bad1cd93e69b4633456",
+      "text_patch": true
+    },
+    {
+      "path": "frontend/src/components/MessageCenter.vue",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "f06084730d4c4fe43dae83b207321cd9b9dcdbd01697b3951f890a6ece2ff940",
+      "text_patch": true
+    },
+    {
+      "path": "frontend/src/components/MessageContent.vue",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "096732575bdbb1df882ea25df661edc4bb116863e905c4dcfadba59157dd633a",
+      "text_patch": true
+    },
+    {
+      "path": "frontend/src/components/RecordInspector.vue",
+      "status": "modified",
+      "before_sha256": "a75f843a8abe28d8cdc6ee8242522c7728c2dbf7b3565bf80ccb2a476ab2ccfc",
+      "after_sha256": "7392bfc65294eb36e504c4e1d21b85958ba994ad59986a21ef348b279ba2914c",
+      "text_patch": true
+    },
+    {
+      "path": "frontend/src/components/SubscriptionPanel.vue",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "dc35828f2d4af0bab761ae12a05a52c451105ecf7f13e834079e2ae628471606",
+      "text_patch": true
+    },
+    {
+      "path": "frontend/src/components/TaskTimeline.vue",
+      "status": "modified",
+      "before_sha256": "167043e8f0a8c81dea106db6d81cda2da38766adeb7d3a99ae1a922ba5dc3b8b",
+      "after_sha256": "4f90c0e34822ed1b4f6c54655f3189d9184388d5a1d61ab29d189a0345a9f196",
+      "text_patch": true
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "status": "modified",
+      "before_sha256": "2e2d9b75bf9117223e7a23a3f6b487b1ea9fae29a794a9218292545bf50248ac",
+      "after_sha256": "58dbbff97a4c66efa04abf694435d938fa3734e100f523c75dd3c49ab1ddde12",
+      "text_patch": true
+    },
+    {
+      "path": "src/pyasm/biz/subscription.py",
+      "status": "modified",
+      "before_sha256": "277f781649865ab098af1977205fb789dbf456c96e7f27152c9f5e7f0b94dd26",
+      "after_sha256": "0433614e9434d4b9367ae298427bbbdad446f741e0a2ade062ac73d81d8bed45",
+      "text_patch": true
+    },
+    {
+      "path": "src/pyasm/prod/service/api_xmlrpc.py",
+      "status": "modified",
+      "before_sha256": "b82c21a3e57a7e7a7eb60cc4b2df339ad529baffecb908162143230b6847f87e",
+      "after_sha256": "1838dce5b4f70467b2f6af9b8a0d568366b5445d14fa99a52011e4aec1a4b1f0",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/core/config_model.py",
+      "status": "modified",
+      "before_sha256": "7dedbef534a302d01fc118eb2840ae21f697fd927717986d1a0dadc3b85804b1",
+      "after_sha256": "5369a92fe1289d44a31e34b4f2992d729a5a9405aed92c57ff62b9d4d8af4b99",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/core/message_commands.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "98b9887cbb49f2fdd56ad9025ec7e52ed86a9f8900313836c2625d72c6335b29",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/core/messaging.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "78165ad5a3904ec5a88e4d3b6479465256e052b28a17ec680a317dc704041283",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/core/notification_filters.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "ea5f89e1083e86c184889a6e4cafaf9a536d40582acac8bd85287da75ce71fb6",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/core/timeline_model.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "5ceb4316822b4255604f5db84c5cc2079a02a580d8380004ce4cd1ff3bf05ea9",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui/app/message_wdg.py",
+      "status": "modified",
+      "before_sha256": "a5fca6a03b093b951777103b551034fbde56edb4e8f0a1c08f070a79690b0e28",
+      "after_sha256": "1f94429b5b54b00c7d59b9711135c00ae383658798b351a1402839524f274f7a",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui/filter/filter_wdg.py",
+      "status": "modified",
+      "before_sha256": "287a42767b98c2e59e70f5d0a9b709a8ee0328212c7d76cabf8789216df223d8",
+      "after_sha256": "fa8d59be430c07167952fc1e93c29b18a61907d6ab86aecdfeba8b746fe32826",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui_api/api.py",
+      "status": "modified",
+      "before_sha256": "a38c2b50bc62867780d927171888fe31b2cebb63b0e0d78ebeb9de185181b229",
+      "after_sha256": "eac94e4393b9ab6cc2f7e5e9a600139cc7aca049de7f01171899bdec6df85cc7",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui_api/config_backend.py",
+      "status": "modified",
+      "before_sha256": "20a3ca559c1dbabf3cc4b77949d73c7a6045b3c58f8744e42cf8f8be642453a1",
+      "after_sha256": "5818b03f326cce80a02f3a52c1e6d2c889b1bfc64f3bb090239f1590e4a04b2a",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui_api/extended_backend.py",
+      "status": "modified",
+      "before_sha256": "9212ffaf42a97f3be31191e992d2a4200b6d033cfc02db463d4c287d038a49ec",
+      "after_sha256": "ff3b0f10173fc33e4a213109624a5debc34f5bca13b37d022ea3ec0cc74e23f8",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui_api/message_service.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "30f0f1012fbf6d87ea3fd08272b05cc401f3009257316ab6cca166350c244e04",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui_api/timeline_service.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "3126c5abf3036a7a12fe4f20e06fdf42be58bafd3c5052586b3974750811e5f5",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui_api/web/app.js",
+      "status": "modified",
+      "before_sha256": "6dea2adc84f0b221b118efd4030713e0894e1686632d8b8feadb11d264f60415",
+      "after_sha256": "332eaa375cd4cb98e6158917ce59b3a2aa61d92c0fda2f3d518950bdfc94b79f",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui_api/web/build-manifest.json",
+      "status": "modified",
+      "before_sha256": "b93b6bb00528c66b6020997e27216616cc471440686536ce8e56c974e34d931f",
+      "after_sha256": "a061893efb3f300f145894cb3be1b9f53925aef2b5713a4bbcef8578cd07a3cd",
+      "text_patch": true
+    },
+    {
+      "path": "src/tactic/ui_api/web/styles.css",
+      "status": "modified",
+      "before_sha256": "2e2d9b75bf9117223e7a23a3f6b487b1ea9fae29a794a9218292545bf50248ac",
+      "after_sha256": "58dbbff97a4c66efa04abf694435d938fa3734e100f523c75dd3c49ab1ddde12",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/fixture_05.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "77846628a3c295cd09f3aca88f582a01ec21fe446e3f3f296a061ac0e101d89c",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/message_test_store.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "77f947db87e5d0491352b604c21df2fe9b01a4c572ca17990c7b0c8619f106a7",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/run_browser.py",
+      "status": "modified",
+      "before_sha256": "5061ae44e9b17e5434a02867e0852a831ef6d7d286d37e7b930c89b34993ad15",
+      "after_sha256": "c77483fd46514949ea72e823d2f3e7497695cdbc7df8d97e416850ea13b6f2aa",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/run_browser_03.py",
+      "status": "modified",
+      "before_sha256": "c1644940220cce624108e76f179e4c84678735f58365a088fcb571ecf618131d",
+      "after_sha256": "616f0aee52e9303ba8e574f7de0c2b51d257bd3583dacd1d190179c41ab1af1d",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/run_browser_04.py",
+      "status": "modified",
+      "before_sha256": "4b01cdfcade0efb675ea71713e87ef7c391ddd6786f410f4b73610133faa3987",
+      "after_sha256": "91c827843c4c982789161432b82d848d473774107854758be54c086b9d6f02b4",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/run_browser_05.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "08d6b4fbfd21fb7c4ff1d01843fa4f51043f4c628758a84c65c50f19de7752de",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/run_http_05.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "58a0d9c7fa2ad0bb09e247718f210c8f9b87c9d6e90c1b66104cc37a47e15759",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/run_validation_05.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "922844d040aa9c7e4bf16bcd6cbb4d31ea40b471bfde15c38d3192b77cebed46",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/serve_fixture.py",
+      "status": "modified",
+      "before_sha256": "a825d65f0d726ad0e09120f51e7307d8e472baba9e951759149f5b43c8048bfb",
+      "after_sha256": "cac05dcbb8af50cf518433d04f475de51c80538c77dd5cf2bf262df76dcac19b",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/source-provenance-05.json",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "4330553a14afd02d0ba8d05ef4aaf4656c89f5e05305aa912d082fe955d4a917",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/test_messages_05.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "8aa5a6f0769a82497ff57c9f780b3c0e9ef0d2b97091df81b590d5a939422f62",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/test_timeline_05.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "cf21da0b7b29662ffa1b93e00541a333a561c5f16b68ea2b94851ae4daf6c2ee",
+      "text_patch": true
+    },
+    {
+      "path": "tests/native_ui/timeline_test_store.py",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "08e28820584596f7b425163294aef9b72e4951218ac6c69cef8bb03fff633eff",
+      "text_patch": true
+    },
+    {
+      "path": "tools/native_ui/build.cjs",
+      "status": "modified",
+      "before_sha256": "2ab3a199f3855722e028c15eaea6581a7ce839b70aaacb38e855ea0234452ae0",
+      "after_sha256": "a7f59ad1e7cf750a6765dcb477af1e4adc954aca6f8ae6cf720d0542d470b93b",
+      "text_patch": true
+    }
+  ],
+  "text_patch_notice": "UTF-8 changes only; new binary screenshots are in the full source archive."
+}

@@ -1,0 +1,125 @@
+import assert from 'node:assert/strict'
+import { chromium } from 'playwright'
+import { selectProject } from './project_selection.mjs'
+
+const base = process.argv[2], project = process.env.STREAM_CHECK_PROJECT
+const browser = await chromium.launch({ headless: true })
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, colorScheme: 'dark', hasTouch: true })
+  page.setDefaultTimeout(12000)
+  const errors = [], polls = []
+  page.on('pageerror', error => errors.push(error.message))
+  page.on('request', request => { if (request.url().endsWith('/admin/server-updates')) polls.push(request.postDataJSON()) })
+  await page.addInitScript(() => {
+    localStorage.setItem('tactic_stream.appearance', JSON.stringify({ mode: 'dark', language: 'en' }))
+    if (!localStorage.getItem('tactic_stream.network')) localStorage.setItem('tactic_stream.network', '{"pollInterval":7}')
+  })
+  await page.clock.install()
+  await page.goto(base + '/projects/admin/?search_type=sthpw/project&view=table')
+  await page.getByLabel('Login', { exact: true }).fill(process.env.STREAM_CHECK_LOGIN || 'admin')
+  await page.getByLabel('Password', { exact: true }).fill(process.env.STREAM_CHECK_PASSWORD)
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click()
+  const ready = () => page.waitForFunction(() => document.querySelector('.workspace-results')?.getAttribute('aria-busy') === 'false' || !!document.querySelector('.workspace-empty'))
+  await ready(); await selectProject(page, project); await ready()
+  const menu = page.locator('.connection-menu')
+  assert.equal(await menu.count(), 1)
+  const open = async () => { await menu.getByLabel('Connection', { exact: true }).click() }
+  await open()
+  assert.equal(await menu.getByRole('menuitemradio', { name: 'Every 30 seconds', exact: true }).getAttribute('aria-checked'), 'true')
+  assert.equal(await menu.locator('.menu-status').evaluate(element => element.offsetHeight), 48)
+  assert.equal(await menu.locator('.menu-check').evaluate(element => {
+    const color = getComputedStyle(element).color
+    element.style.color = 'var(--primary)'
+    const expected = getComputedStyle(element).color
+    element.style.removeProperty('color')
+    return color === expected
+  }), true)
+  await page.screenshot({ path: '../.screenshots/handler-current/stream-connection-menu.png', animations: 'disabled' })
+  await menu.getByRole('menuitemradio', { name: 'Every 5 seconds', exact: true }).click()
+  await page.clock.runFor(100)
+  const before = polls.length
+  await page.clock.runFor(4800)
+  assert.equal(polls.length, before)
+  const nextPoll = page.waitForResponse(response => response.url().endsWith('/admin/server-updates') && response.request().postDataJSON().project === project)
+  await page.clock.runFor(200)
+  await nextPoll
+  assert.equal(polls.length, before + 1)
+  assert.equal(polls.at(-1).project, project)
+  await open(); await menu.getByRole('menuitemradio', { name: 'Every 60 seconds', exact: true }).click()
+  await page.getByLabel('More options', { exact: true }).click()
+  await page.getByRole('button', { name: 'Configuration', exact: true }).click()
+  const configuration = page.locator('dialog[aria-labelledby="configuration-title"][open]')
+  await configuration.getByRole('button', { name: 'Global', exact: true }).click()
+  assert.equal(await configuration.getByLabel('Server updates', { exact: true }).inputValue(), '60')
+  await configuration.getByLabel('Server updates', { exact: true }).selectOption('10')
+  await configuration.getByRole('button', { name: 'Close', exact: true }).click()
+  await open()
+  assert.equal(await menu.getByRole('menuitemradio', { name: 'Every 60 seconds', exact: true }).getAttribute('aria-checked'), 'true')
+  await menu.getByLabel('Connection', { exact: true }).click()
+  await page.getByLabel('More options', { exact: true }).click()
+  await page.getByRole('button', { name: 'Configuration', exact: true }).click()
+  await configuration.getByRole('button', { name: 'Global', exact: true }).click()
+  await configuration.getByLabel('Server updates', { exact: true }).selectOption('30')
+  await configuration.getByRole('button', { name: 'Apply', exact: true }).click()
+  assert.equal(await configuration.count(), 1)
+  await configuration.getByLabel('Server updates', { exact: true }).selectOption('60')
+  await configuration.getByRole('button', { name: 'Save configuration', exact: true }).click()
+  assert.equal(await configuration.count(), 0)
+  await open()
+  const ping = page.waitForResponse(response => response.url().endsWith('/admin/rpc') && response.request().postDataJSON()?.method === 'ping')
+  await menu.getByRole('button', { name: 'Ping now', exact: true }).click()
+  await ping
+  assert((await menu.getByLabel('Connection', { exact: true }).innerText()).includes('Connected'))
+  await page.route('**/admin/rpc', async route => {
+    if (route.request().postDataJSON().method === 'ping') await route.fulfill({ status: 503, json: { error: 'Server unavailable' } })
+    else await route.continue()
+  })
+  await open(); await menu.getByRole('button', { name: 'Ping now', exact: true }).click()
+  await open(); await menu.getByRole('alert').waitFor()
+  assert((await menu.getByLabel('Connection', { exact: true }).innerText()).includes('Offline'))
+  await page.unroute('**/admin/rpc')
+  await menu.getByRole('button', { name: 'Ping now', exact: true }).click()
+  await open(); await menu.getByRole('status').waitFor()
+  assert((await menu.getByLabel('Connection', { exact: true }).innerText()).includes('Connected'))
+  let release, held
+  const pending = new Promise(resolve => { held = resolve })
+  const finish = new Promise(resolve => { release = resolve })
+  await page.route('**/admin/rpc', async route => {
+    if (route.request().postDataJSON().method !== 'ping') return route.continue()
+    held(); await finish; await route.fulfill({ status: 503, json: { error: 'Old project response' } })
+  })
+  await menu.getByRole('button', { name: 'Ping now', exact: true }).click()
+  await pending
+  await selectProject(page, 'admin'); await ready()
+  release(); await page.unroute('**/admin/rpc', { behavior: 'wait' })
+  await open()
+  assert.equal(await menu.getByRole('alert').count(), 0)
+  await menu.getByLabel('Connection', { exact: true }).click()
+  await selectProject(page, project); await ready()
+  await page.reload(); await ready(); await open()
+  assert.equal(await menu.getByRole('menuitemradio', { name: 'Every 60 seconds', exact: true }).getAttribute('aria-checked'), 'true')
+  await menu.getByLabel('Connection', { exact: true }).click()
+  await page.setViewportSize({ width: 800, height: 760 })
+  assert.equal(await menu.locator('.connection-icon').isVisible(), true)
+  assert.equal(await menu.evaluate(element => getComputedStyle(element.querySelector('.connection-icon')).color === getComputedStyle(element.querySelector('.connection-dot')).backgroundColor), true)
+  await page.setViewportSize({ width: 320, height: 760 })
+  await page.getByLabel('More options', { exact: true }).tap()
+  await menu.getByLabel('Connection', { exact: true }).tap()
+  await menu.getByRole('menuitemradio', { name: 'Every 10 seconds', exact: true }).tap()
+  assert.equal(await menu.count(), 1)
+  assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+  assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('tactic_stream.network')).pollInterval), 10)
+  await page.route('**/admin/rpc', async route => {
+    if (route.request().postDataJSON().method === 'ping') await route.fulfill({ status: 403, json: { error_code: 'authentication_failed', error: 'Invalid credentials or expired session.' } })
+    else await route.continue()
+  })
+  await page.getByLabel('More options', { exact: true }).tap()
+  await menu.getByLabel('Connection', { exact: true }).tap()
+  await menu.getByRole('button', { name: 'Ping now', exact: true }).tap()
+  await page.getByLabel('Password', { exact: true }).waitFor()
+  const afterLogout = polls.length
+  await page.clock.runFor(60000)
+  assert.equal(polls.length, afterLogout)
+  assert.deepEqual(errors, [])
+  console.log('Connection: native intervals/default, one shared timer, preferences/apply/save/cancel/reload, ping/error/retry/stale/auth guards, single responsive menu and touch320 PASS')
+} finally { await browser.close() }

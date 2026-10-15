@@ -1,0 +1,220 @@
+{
+  "passed": true,
+  "scenarios": [
+    {
+      "scenario": "Original password login",
+      "passed": true
+    },
+    {
+      "scenario": "Wizard describes two supported original sources",
+      "passed": true
+    },
+    {
+      "scenario": "Unsupported template/icon/theme branches disclosed",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid/reserved project code rejected: 123project",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid/reserved project code rejected: ../escape",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid/reserved project code rejected: sthpw",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid/reserved project code rejected: admin",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid/reserved project code rejected: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "passed": true
+    },
+    {
+      "scenario": "Invalid/reserved project code rejected: русский",
+      "passed": true
+    },
+    {
+      "scenario": "No arbitrary schema or template path",
+      "passed": true
+    },
+    {
+      "scenario": "Create only from configured wizard",
+      "passed": true
+    },
+    {
+      "scenario": "Preflight succeeds without creating project",
+      "passed": true
+    },
+    {
+      "scenario": "Changed review cannot silently create",
+      "passed": true
+    },
+    {
+      "scenario": "Original command creates new project and verifies schema",
+      "passed": true
+    },
+    {
+      "scenario": "Project URL is a server-derived project path",
+      "passed": true
+    },
+    {
+      "scenario": "New native project URL serves compiled UI",
+      "passed": true
+    },
+    {
+      "scenario": "New project enters project switcher",
+      "passed": true
+    },
+    {
+      "scenario": "Original sidebar available without restart",
+      "passed": true
+    },
+    {
+      "scenario": "New project catalogue loads",
+      "passed": true
+    },
+    {
+      "scenario": "Repeated creation rejected rather than overwriting database",
+      "passed": true
+    },
+    {
+      "scenario": "Original simple source also creates and passes schema check",
+      "passed": true
+    },
+    {
+      "scenario": "SearchType created inside the NEW project",
+      "passed": true
+    },
+    {
+      "scenario": "Original schema generates table target for new type",
+      "passed": true
+    },
+    {
+      "scenario": "New type resolves widget_config table",
+      "passed": true
+    },
+    {
+      "scenario": "New project Insert/Edit form opens",
+      "passed": true
+    },
+    {
+      "scenario": "SObject persisted through original form command",
+      "passed": true
+    },
+    {
+      "scenario": "Object visible in new-project query",
+      "passed": true
+    },
+    {
+      "scenario": "Nested source configuration exposes real child names",
+      "passed": true
+    },
+    {
+      "scenario": "Nested tab state stored in original database",
+      "passed": true
+    },
+    {
+      "scenario": "Nested order titles closed state roundtrip",
+      "passed": true
+    },
+    {
+      "scenario": "Configured protected tab cannot be closed",
+      "passed": true
+    },
+    {
+      "scenario": "Hidden source child cannot be injected in state",
+      "passed": true
+    },
+    {
+      "scenario": "Nested table has independent original-DB geometry",
+      "passed": true
+    },
+    {
+      "scenario": "Calendar range zoom and fields persist without result rows",
+      "passed": true
+    },
+    {
+      "scenario": "Geometry written in original wdg_settings",
+      "passed": true
+    },
+    {
+      "scenario": "Geometry read back from server",
+      "passed": true
+    },
+    {
+      "scenario": "Preferences do not rewrite widget_config",
+      "passed": true
+    },
+    {
+      "scenario": "Concurrent revision conflict is explicit",
+      "passed": true
+    },
+    {
+      "scenario": "Conflict keeps saved server value",
+      "passed": true
+    },
+    {
+      "scenario": "Unknown/hidden-secret field rejected",
+      "passed": true
+    },
+    {
+      "scenario": "SObjects/drafts are not a settings payload",
+      "passed": true
+    },
+    {
+      "scenario": "Advanced AND/OR, quick filters, sorting and paging persisted",
+      "passed": true
+    },
+    {
+      "scenario": "Restored query executes against actual Search",
+      "passed": true
+    },
+    {
+      "scenario": "Arbitrary expression not accepted as stored search",
+      "passed": true
+    },
+    {
+      "scenario": "Workspace ids and active tab saved",
+      "passed": true
+    },
+    {
+      "scenario": "Theme also stored server-side",
+      "passed": true
+    },
+    {
+      "scenario": "Another project has independent workspace",
+      "passed": true
+    },
+    {
+      "scenario": "Project-specific state does not replace admin workspace",
+      "passed": true
+    },
+    {
+      "scenario": "User identity cannot be overridden in state writes",
+      "passed": true
+    },
+    {
+      "scenario": "Unsupported scope cannot access arbitrary settings",
+      "passed": true
+    },
+    {
+      "scenario": "Unknown target cannot store geometry",
+      "passed": true
+    },
+    {
+      "scenario": "State access requires an authenticated original session",
+      "passed": true
+    },
+    {
+      "scenario": "DB state survives logout/new session, no browser storage",
+      "passed": true
+    }
+  ],
+  "storage": "original TACTIC + SQLite, real auth and commands",
+  "created_project": "p015_3c7149e3b",
+  "created_target": "project_view/item_list"
+}

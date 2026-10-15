@@ -1,0 +1,38 @@
+         473202 function calls (472847 primitive calls) in 0.501 seconds
+
+   Ordered by: cumulative time
+   List reduced from 733 to 30 due to restriction <30>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.503    0.503 relation_performance_probe.py:84(invoke)
+        1    0.000    0.000    0.503    0.503 api.py:649(dispatch)
+        1    0.000    0.000    0.503    0.503 api.py:679(_dispatch)
+      2/1    0.000    0.000    0.494    0.494 command.py:107(execute_cmd)
+        1    0.000    0.000    0.494    0.494 api.py:777(<lambda>)
+        1    0.000    0.000    0.494    0.494 api.py:1024(execute_python_script)
+        1    0.000    0.000    0.493    0.493 python_cmd.py:175(execute)
+        1    0.000    0.000    0.493    0.493 python_cmd.py:94(get_results)
+        1    0.000    0.000    0.489    0.489 template.py:420(render)
+        1    0.000    0.000    0.489    0.489 runtime.py:860(_render)
+        1    0.000    0.000    0.489    0.489 runtime.py:908(_render_context)
+        1    0.000    0.000    0.489    0.489 runtime.py:923(_exec_template)
+        1    0.000    0.000    0.489    0.489 memory:0x26a43e23b10:15(render_body)
+        1    0.001    0.001    0.489    0.489 memory:0x26a43e23b10:19(spt_run_code)
+        1    0.000    0.000    0.489    0.489 memory:0x26a43e23b10:35(render_spt_run_code)
+        1    0.000    0.000    0.353    0.353 expression.py:72(eval)
+      4/1    0.000    0.000    0.348    0.348 expression.py:561(dive)
+      4/1    0.000    0.000    0.348    0.348 expression.py:542(do_parse)
+        1    0.000    0.000    0.348    0.348 expression.py:803(parse)
+        8    0.000    0.000    0.348    0.043 expression.py:1085(parse)
+        1    0.000    0.000    0.348    0.348 expression.py:1134(execute_method)
+        1    0.002    0.002    0.348    0.348 expression.py:1976(get_sobjects)
+     2000    0.259    0.000    0.287    0.000 expression.py:364(cache_sobjects)
+        1    0.000    0.000    0.104    0.104 snapshot.py:334(get_files_dict_by_snapshots)
+        1    0.001    0.001    0.102    0.102 snapshot.py:310(get_files_by_snapshots)
+    16/15    0.040    0.003    0.087    0.006 search.py:3970(get_sobjects)
+     1000    0.000    0.000    0.055    0.000 snapshot.py:418(get_all_file_codes)
+        2    0.003    0.001    0.047    0.024 search.py:4103(get_related_by_sobjects)
+     1000    0.000    0.000    0.033    0.000 snapshot.py:141(get_snapshot_xml)
+     1000    0.003    0.000    0.032    0.000 search.py:348(get_xml_value)
+
+

@@ -1,0 +1,887 @@
+{
+  "_AppCheckbox.css": {
+    "file": "assets/AppCheckbox.css",
+    "src": "_AppCheckbox.css"
+  },
+  "_AppCheckbox.js": {
+    "file": "assets/AppCheckbox.js",
+    "name": "AppCheckbox",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/AppCheckbox.css"
+    ]
+  },
+  "_AppColorInput.css": {
+    "file": "assets/AppColorInput.css",
+    "src": "_AppColorInput.css"
+  },
+  "_AppColorInput.js": {
+    "file": "assets/AppColorInput.js",
+    "name": "AppColorInput",
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_AppSlider.js",
+      "_AppTextField.js"
+    ],
+    "css": [
+      "assets/AppColorInput.css"
+    ]
+  },
+  "_AppDateField.css": {
+    "file": "assets/AppDateField.css",
+    "src": "_AppDateField.css"
+  },
+  "_AppDateField.js": {
+    "file": "assets/AppDateField.js",
+    "name": "AppDateField",
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_AppTextField.js",
+      "_AppMenu.js"
+    ],
+    "css": [
+      "assets/AppDateField.css"
+    ]
+  },
+  "_AppMenu.css": {
+    "file": "assets/AppMenu.css",
+    "src": "_AppMenu.css"
+  },
+  "_AppMenu.js": {
+    "file": "assets/AppMenu.js",
+    "name": "AppMenu",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/AppMenu.css"
+    ]
+  },
+  "_AppMenuItem.css": {
+    "file": "assets/AppMenuItem.css",
+    "src": "_AppMenuItem.css"
+  },
+  "_AppMenuItem.js": {
+    "file": "assets/AppMenuItem.js",
+    "name": "AppMenuItem",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/AppMenuItem.css"
+    ]
+  },
+  "_AppSearchField.js": {
+    "file": "assets/AppSearchField.js",
+    "name": "AppSearchField",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ]
+  },
+  "_AppSelect.css": {
+    "file": "assets/AppSelect.css",
+    "src": "_AppSelect.css"
+  },
+  "_AppSelect.js": {
+    "file": "assets/AppSelect.js",
+    "name": "AppSelect",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/AppSelect.css"
+    ]
+  },
+  "_AppSlider.css": {
+    "file": "assets/AppSlider.css",
+    "src": "_AppSlider.css"
+  },
+  "_AppSlider.js": {
+    "file": "assets/AppSlider.js",
+    "name": "AppSlider",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/AppSlider.css"
+    ]
+  },
+  "_AppSplitter.js": {
+    "file": "assets/AppSplitter.js",
+    "name": "AppSplitter",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ]
+  },
+  "_AppSwitch.js": {
+    "file": "assets/AppSwitch.js",
+    "name": "AppSwitch",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ]
+  },
+  "_AppTextArea.css": {
+    "file": "assets/AppTextArea.css",
+    "src": "_AppTextArea.css"
+  },
+  "_AppTextArea.js": {
+    "file": "assets/AppTextArea.js",
+    "name": "AppTextArea",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/AppTextArea.css"
+    ]
+  },
+  "_AppTextField.css": {
+    "file": "assets/AppTextField.css",
+    "src": "_AppTextField.css"
+  },
+  "_AppTextField.js": {
+    "file": "assets/AppTextField.js",
+    "name": "AppTextField",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/AppTextField.css"
+    ]
+  },
+  "_AttachmentCard.css": {
+    "file": "assets/AttachmentCard.css",
+    "src": "_AttachmentCard.css"
+  },
+  "_AttachmentCard.js": {
+    "file": "assets/AttachmentCard.js",
+    "name": "AttachmentCard",
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_ItemPreview.js"
+    ],
+    "css": [
+      "assets/AttachmentCard.css"
+    ]
+  },
+  "_ItemPreview.css": {
+    "file": "assets/ItemPreview.css",
+    "src": "_ItemPreview.css"
+  },
+  "_ItemPreview.js": {
+    "file": "assets/ItemPreview.js",
+    "name": "ItemPreview",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/ItemPreview.css"
+    ]
+  },
+  "_ItemSurface.css": {
+    "file": "assets/ItemSurface.css",
+    "src": "_ItemSurface.css"
+  },
+  "_ItemSurface.js": {
+    "file": "assets/ItemSurface.js",
+    "name": "ItemSurface",
+    "imports": [
+      "_vue.js"
+    ],
+    "css": [
+      "assets/ItemSurface.css"
+    ]
+  },
+  "_MiddleElide.css": {
+    "file": "assets/MiddleElide.css",
+    "src": "_MiddleElide.css"
+  },
+  "_MiddleElide.js": {
+    "file": "assets/MiddleElide.js",
+    "name": "MiddleElide",
+    "imports": [
+      "_vue.js"
+    ],
+    "css": [
+      "assets/MiddleElide.css"
+    ]
+  },
+  "_NamingEditor.js": {
+    "file": "assets/NamingEditor.js",
+    "name": "NamingEditor",
+    "imports": [
+      "_markdown-it.js",
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue",
+      "_admin.form.js"
+    ]
+  },
+  "_RecordForm.css": {
+    "file": "assets/RecordForm.css",
+    "src": "_RecordForm.css"
+  },
+  "_RecordForm.js": {
+    "file": "assets/RecordForm.js",
+    "name": "RecordForm",
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSwitch.js",
+      "_AppColorInput.js",
+      "_AppDateField.js"
+    ],
+    "css": [
+      "assets/RecordForm.css"
+    ]
+  },
+  "_SettingRow.js": {
+    "file": "assets/SettingRow.js",
+    "name": "SettingRow",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ]
+  },
+  "_activity.js": {
+    "file": "assets/activity.js",
+    "name": "activity",
+    "imports": [
+      "index.html",
+      "_richText.js",
+      "_links.js"
+    ]
+  },
+  "_admin.form.js": {
+    "file": "assets/admin.form.js",
+    "name": "admin.form",
+    "imports": [
+      "src/App.vue"
+    ]
+  },
+  "_clipboard.css": {
+    "file": "assets/clipboard.css",
+    "src": "_clipboard.css"
+  },
+  "_clipboard.js": {
+    "file": "assets/clipboard.js",
+    "name": "clipboard",
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_AppSwitch.js",
+      "_AppSelect.js",
+      "_SettingRow.js"
+    ],
+    "css": [
+      "assets/clipboard.css"
+    ]
+  },
+  "_files.js": {
+    "file": "assets/files.js",
+    "name": "files",
+    "imports": [
+      "index.html",
+      "_clipboard.js"
+    ]
+  },
+  "_graphFrame.js": {
+    "file": "assets/graphFrame.js",
+    "name": "graphFrame",
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "src/App.vue",
+      "_admin.form.js"
+    ]
+  },
+  "_groups.ui.js": {
+    "file": "assets/groups.ui.js",
+    "name": "groups.ui",
+    "imports": [
+      "src/App.vue"
+    ]
+  },
+  "_icons.js": {
+    "file": "assets/icons.js",
+    "name": "icons"
+  },
+  "_links.js": {
+    "file": "assets/links.js",
+    "name": "links"
+  },
+  "_locales.js": {
+    "file": "assets/locales.js",
+    "name": "locales"
+  },
+  "_markdown-it.js": {
+    "file": "assets/markdown-it.js",
+    "name": "markdown-it"
+  },
+  "_previewImage.js": {
+    "file": "assets/previewImage.js",
+    "name": "previewImage"
+  },
+  "_richText.js": {
+    "file": "assets/richText.js",
+    "name": "richText"
+  },
+  "_vue.js": {
+    "file": "assets/vue.js",
+    "name": "vue"
+  },
+  "index.html": {
+    "file": "assets/index.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "imports": [
+      "_vue.js",
+      "_locales.js",
+      "_icons.js"
+    ],
+    "dynamicImports": [
+      "src/features/documentation/ApiDocumentation.vue",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/index.css"
+    ],
+    "assets": [
+      "assets/materialdesignicons-webfont-B7mPwVP_.ttf",
+      "assets/fontawesome5-solid-webfont-DRjTsAeK.ttf",
+      "assets/fontawesome5-regular-webfont-BD7gsmZB.ttf",
+      "assets/fluent-system-icons-resizable-CEFcTBOz.ttf"
+    ]
+  },
+  "src/App.vue": {
+    "file": "assets/App.js",
+    "name": "App",
+    "src": "src/App.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_markdown-it.js",
+      "_vue.js",
+      "_icons.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSwitch.js",
+      "_AppSelect.js",
+      "_SettingRow.js",
+      "_RecordForm.js",
+      "_AppSlider.js",
+      "_AppTextField.js",
+      "_AppColorInput.js",
+      "_AppMenu.js",
+      "_AppDateField.js",
+      "_AppCheckbox.js",
+      "_ItemPreview.js",
+      "_richText.js",
+      "_links.js",
+      "_activity.js",
+      "_files.js",
+      "_AppTextArea.js",
+      "_AppSearchField.js",
+      "_AttachmentCard.js",
+      "_AppMenuItem.js",
+      "_MiddleElide.js",
+      "_AppSplitter.js",
+      "_ItemSurface.js",
+      "_previewImage.js"
+    ],
+    "dynamicImports": [
+      "src/features/checkin/ObjectCheckin.vue",
+      "src/features/checkin/IngestFiles.vue",
+      "src/features/objects/DuplicateSObject.vue",
+      "src/assets/emoji.json",
+      "src/features/objects/RelatedObjects.vue",
+      "_NamingEditor.js",
+      "src/features/checkin/MatchingTemplates.vue",
+      "src/features/tasks/TaskGanttView.vue",
+      "src/features/tasks/TaskCalendarView.vue",
+      "src/features/tasks/TaskProcessPanel.vue",
+      "src/controls/MarkdownText.vue",
+      "src/features/fileWorkspace/FileWorkspaceInspection.vue",
+      "src/features/objects/DescriptionEditor.vue",
+      "src/features/objects/SnapshotBrowser.vue",
+      "src/features/knowledge/KnowledgeBase.vue",
+      "src/features/configuration/Configuration.vue",
+      "src/features/administration/SearchTypes.vue",
+      "src/features/administration/SchemaEditor.vue",
+      "src/features/administration/WorkflowEditor.vue",
+      "src/features/administration/SidebarEditor.vue",
+      "src/features/administration/LayoutEditor.vue",
+      "src/features/administration/ColumnsEditor.vue",
+      "src/features/administration/RawDatabase.vue",
+      "src/features/administration/SecurityUsers.vue",
+      "src/features/administration/SecurityGroups.vue",
+      "src/features/administration/SecurityRules.vue",
+      "src/features/scripts/ScriptEditor.vue"
+    ],
+    "css": [
+      "assets/App.css"
+    ]
+  },
+  "src/assets/emoji.json": {
+    "file": "assets/emoji.js",
+    "name": "emoji",
+    "src": "src/assets/emoji.json",
+    "isDynamicEntry": true
+  },
+  "src/assets/fonts/fluent-system-icons-resizable.ttf": {
+    "file": "assets/fluent-system-icons-resizable-CEFcTBOz.ttf",
+    "src": "src/assets/fonts/fluent-system-icons-resizable.ttf"
+  },
+  "src/assets/fonts/fontawesome5-regular-webfont.ttf": {
+    "file": "assets/fontawesome5-regular-webfont-BD7gsmZB.ttf",
+    "src": "src/assets/fonts/fontawesome5-regular-webfont.ttf"
+  },
+  "src/assets/fonts/fontawesome5-solid-webfont.ttf": {
+    "file": "assets/fontawesome5-solid-webfont-DRjTsAeK.ttf",
+    "src": "src/assets/fonts/fontawesome5-solid-webfont.ttf"
+  },
+  "src/assets/fonts/materialdesignicons-webfont.ttf": {
+    "file": "assets/materialdesignicons-webfont-B7mPwVP_.ttf",
+    "src": "src/assets/fonts/materialdesignicons-webfont.ttf"
+  },
+  "src/controls/MarkdownText.vue": {
+    "file": "assets/MarkdownText.js",
+    "name": "MarkdownText",
+    "src": "src/controls/MarkdownText.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_markdown-it.js",
+      "_vue.js",
+      "_clipboard.js",
+      "_richText.js"
+    ],
+    "css": [
+      "assets/MarkdownText.css"
+    ]
+  },
+  "src/features/administration/ColumnsEditor.vue": {
+    "file": "assets/ColumnsEditor.js",
+    "name": "ColumnsEditor",
+    "src": "src/features/administration/ColumnsEditor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue",
+      "_admin.form.js"
+    ]
+  },
+  "src/features/administration/LayoutEditor.vue": {
+    "file": "assets/LayoutEditor.js",
+    "name": "LayoutEditor",
+    "src": "src/features/administration/LayoutEditor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue",
+      "_admin.form.js"
+    ]
+  },
+  "src/features/administration/RawDatabase.vue": {
+    "file": "assets/RawDatabase.js",
+    "name": "RawDatabase",
+    "src": "src/features/administration/RawDatabase.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue"
+    ]
+  },
+  "src/features/administration/SchemaEditor.vue": {
+    "file": "assets/SchemaEditor.js",
+    "name": "SchemaEditor",
+    "src": "src/features/administration/SchemaEditor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue",
+      "src/features/administration/SearchTypes.vue",
+      "_graphFrame.js"
+    ],
+    "css": [
+      "assets/SchemaEditor.css"
+    ]
+  },
+  "src/features/administration/SearchTypes.vue": {
+    "file": "assets/SearchTypes.js",
+    "name": "SearchTypes",
+    "src": "src/features/administration/SearchTypes.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_previewImage.js",
+      "src/App.vue",
+      "_admin.form.js",
+      "_NamingEditor.js"
+    ]
+  },
+  "src/features/administration/SecurityGroups.vue": {
+    "file": "assets/SecurityGroups.js",
+    "name": "SecurityGroups",
+    "src": "src/features/administration/SecurityGroups.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue",
+      "_groups.ui.js"
+    ]
+  },
+  "src/features/administration/SecurityRules.vue": {
+    "file": "assets/SecurityRules.js",
+    "name": "SecurityRules",
+    "src": "src/features/administration/SecurityRules.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue"
+    ]
+  },
+  "src/features/administration/SecurityUsers.vue": {
+    "file": "assets/SecurityUsers.js",
+    "name": "SecurityUsers",
+    "src": "src/features/administration/SecurityUsers.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue",
+      "_groups.ui.js"
+    ]
+  },
+  "src/features/administration/SidebarEditor.vue": {
+    "file": "assets/SidebarEditor.js",
+    "name": "SidebarEditor",
+    "src": "src/features/administration/SidebarEditor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue",
+      "_admin.form.js"
+    ]
+  },
+  "src/features/administration/WorkflowEditor.vue": {
+    "file": "assets/WorkflowEditor.js",
+    "name": "WorkflowEditor",
+    "src": "src/features/administration/WorkflowEditor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "src/App.vue",
+      "_admin.form.js",
+      "_graphFrame.js"
+    ],
+    "css": [
+      "assets/WorkflowEditor.css"
+    ]
+  },
+  "src/features/checkin/IngestFiles.vue": {
+    "file": "assets/IngestFiles.js",
+    "name": "IngestFiles",
+    "src": "src/features/checkin/IngestFiles.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSwitch.js",
+      "_AppSelect.js",
+      "_SettingRow.js",
+      "_AppCheckbox.js"
+    ],
+    "css": [
+      "assets/IngestFiles.css"
+    ]
+  },
+  "src/features/checkin/MatchingTemplates.vue": {
+    "file": "assets/MatchingTemplates.js",
+    "name": "MatchingTemplates",
+    "src": "src/features/checkin/MatchingTemplates.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppTextField.js",
+      "_AppMenu.js",
+      "_AppSplitter.js"
+    ],
+    "css": [
+      "assets/MatchingTemplates.css"
+    ]
+  },
+  "src/features/checkin/ObjectCheckin.vue": {
+    "file": "assets/ObjectCheckin.js",
+    "name": "ObjectCheckin",
+    "src": "src/features/checkin/ObjectCheckin.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSwitch.js",
+      "_AppSelect.js",
+      "_SettingRow.js"
+    ],
+    "css": [
+      "assets/ObjectCheckin.css"
+    ]
+  },
+  "src/features/configuration/Configuration.vue": {
+    "file": "assets/Configuration.js",
+    "name": "Configuration",
+    "src": "src/features/configuration/Configuration.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSwitch.js",
+      "_AppSelect.js",
+      "_SettingRow.js",
+      "_RecordForm.js",
+      "_AppTextField.js",
+      "_AppColorInput.js",
+      "_AppMenu.js",
+      "_AppCheckbox.js",
+      "_activity.js",
+      "_AppSearchField.js",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/Configuration.css"
+    ]
+  },
+  "src/features/documentation/ApiDocumentation.vue": {
+    "file": "assets/ApiDocumentation.js",
+    "name": "ApiDocumentation",
+    "src": "src/features/documentation/ApiDocumentation.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSwitch.js",
+      "_AppSelect.js",
+      "_SettingRow.js"
+    ]
+  },
+  "src/features/fileWorkspace/FileWorkspaceInspection.vue": {
+    "file": "assets/FileWorkspaceInspection.js",
+    "name": "FileWorkspaceInspection",
+    "src": "src/features/fileWorkspace/FileWorkspaceInspection.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSelect.js",
+      "_AppTextField.js",
+      "_AppMenu.js",
+      "_files.js",
+      "_AppTextArea.js",
+      "_AppMenuItem.js",
+      "_AppSplitter.js",
+      "_ItemSurface.js",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/FileWorkspaceInspection.css"
+    ]
+  },
+  "src/features/knowledge/KnowledgeBase.vue": {
+    "file": "assets/KnowledgeBase.js",
+    "name": "KnowledgeBase",
+    "src": "src/features/knowledge/KnowledgeBase.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_markdown-it.js",
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSelect.js",
+      "_AppSlider.js",
+      "_AppTextField.js",
+      "_AppMenu.js",
+      "_AppCheckbox.js",
+      "_richText.js",
+      "_links.js",
+      "_AppTextArea.js",
+      "_AppSearchField.js",
+      "_AttachmentCard.js",
+      "_AppMenuItem.js",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/KnowledgeBase.css"
+    ]
+  },
+  "src/features/objects/DescriptionEditor.vue": {
+    "file": "assets/DescriptionEditor.js",
+    "name": "DescriptionEditor",
+    "src": "src/features/objects/DescriptionEditor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSelect.js",
+      "_richText.js",
+      "_links.js",
+      "_AppTextArea.js"
+    ],
+    "css": [
+      "assets/DescriptionEditor.css"
+    ]
+  },
+  "src/features/objects/DuplicateSObject.vue": {
+    "file": "assets/DuplicateSObject.js",
+    "name": "DuplicateSObject",
+    "src": "src/features/objects/DuplicateSObject.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSelect.js",
+      "_AppTextField.js",
+      "_AppColorInput.js",
+      "_AppDateField.js",
+      "_AppCheckbox.js",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/DuplicateSObject.css"
+    ]
+  },
+  "src/features/objects/RelatedObjects.vue": {
+    "file": "assets/RelatedObjects.js",
+    "name": "RelatedObjects",
+    "src": "src/features/objects/RelatedObjects.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "src/App.vue"
+    ]
+  },
+  "src/features/objects/SnapshotBrowser.vue": {
+    "file": "assets/SnapshotBrowser.js",
+    "name": "SnapshotBrowser",
+    "src": "src/features/objects/SnapshotBrowser.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_RecordForm.js",
+      "_AppSlider.js",
+      "_AppMenu.js",
+      "_ItemPreview.js",
+      "_MiddleElide.js",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/SnapshotBrowser.css"
+    ]
+  },
+  "src/features/scripts/ScriptEditor.vue": {
+    "file": "assets/ScriptEditor.js",
+    "name": "ScriptEditor",
+    "src": "src/features/scripts/ScriptEditor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSelect.js",
+      "_AppMenu.js",
+      "_AppSearchField.js",
+      "_AppSplitter.js",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/ScriptEditor.css"
+    ]
+  },
+  "src/features/tasks/TaskCalendarView.vue": {
+    "file": "assets/TaskCalendarView.js",
+    "name": "TaskCalendarView",
+    "src": "src/features/tasks/TaskCalendarView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/TaskCalendarView.css"
+    ]
+  },
+  "src/features/tasks/TaskGanttView.vue": {
+    "file": "assets/TaskGanttView.js",
+    "name": "TaskGanttView",
+    "src": "src/features/tasks/TaskGanttView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_AppSelect.js",
+      "_AppMenu.js",
+      "_AppCheckbox.js",
+      "_ItemPreview.js"
+    ],
+    "css": [
+      "assets/TaskGanttView.css"
+    ]
+  },
+  "src/features/tasks/TaskProcessPanel.vue": {
+    "file": "assets/TaskProcessPanel.js",
+    "name": "TaskProcessPanel",
+    "src": "src/features/tasks/TaskProcessPanel.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_AppMenu.js",
+      "_ItemSurface.js",
+      "src/App.vue"
+    ]
+  }
+}

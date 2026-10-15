@@ -1,0 +1,40 @@
+{
+  "tables": {
+    "pref_list": "CREATE TABLE pref_list (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    \"key\" character varying(256),\n    description character varying(256),\n    options character varying(256),\n    \"type\" character varying(256),\n    category character varying(256),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    title character varying(256),\n    CONSTRAINT \"pref_list_key_idx\" UNIQUE (\"key\")\n)",
+    "pref_setting": "CREATE TABLE pref_setting (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    project_code character varying(256),\n    \"login\" character varying(256),\n    \"key\" character varying(256),\n    value text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP\n)"
+  },
+  "registry": [
+    {
+      "id": 33,
+      "code": "sthpw/pref_setting",
+      "search_type": "sthpw/pref_setting",
+      "namespace": "sthpw",
+      "description": "Preference Setting",
+      "database": "sthpw",
+      "table_name": "{public}.pref_setting",
+      "class_name": "pyasm.biz.PrefSetting",
+      "title": "Pref Setting",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 37,
+      "code": "sthpw/pref_list",
+      "search_type": "sthpw/pref_list",
+      "namespace": "sthpw",
+      "description": "Preferences List",
+      "database": "sthpw",
+      "table_name": "{public}.pref_list",
+      "class_name": "pyasm.biz.PrefList",
+      "title": "",
+      "schema": "public",
+      "color": null
+    }
+  ],
+  "indexes": [
+    {
+      "name": "pref_setting_scope_idx",
+      "sql": "CREATE INDEX \"pref_setting_scope_idx\" ON \"pref_setting\" (\"login\", \"project_code\");"
+    }
+  ]
+}

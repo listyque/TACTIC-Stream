@@ -1,0 +1,22 @@
+PASS Authenticated deep test session
+PASS Task target resolved from original XML
+PASS Native task query
+PASS Bulk operation across two rows via real transport
+PASS Stale bulk revisions return conflict
+PASS Create discussion note
+PASS Read persisted discussion contract
+PASS Read configured relation target
+PASS Version owns explicit file list
+PASS Actual streamed download, not JSON filesystem path
+PASS Private download headers
+PASS Byte-range delivery for media transport
+PASS Unknown version file not served
+PASS File delivery requires an active session
+PASS Graph XML structure mutation via HTTP
+PASS Graph stale revision rejected
+PASS Original extension attributes preserved
+PASS Unknown graph operation rejected as 400
+PASS View metadata edit stored through HTTP
+PASS View title round trip
+PASS View stale revision rejected
+PASS Source app.ProjectCreateWdg is mapped to native screen

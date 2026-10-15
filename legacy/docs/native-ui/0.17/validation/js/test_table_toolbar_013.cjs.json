@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "Legacy File/Edit/View are grouped, not flat toolbar actions",
+      "passed": true
+    },
+    {
+      "name": "Create requires both original flag and create capability",
+      "passed": true
+    },
+    {
+      "name": "Search button honours both original search flags",
+      "passed": true
+    },
+    {
+      "name": "Column manager is absent when forbidden by configuration",
+      "passed": true
+    },
+    {
+      "name": "Layout switcher flag removes alternate layouts",
+      "passed": true
+    },
+    {
+      "name": "Layout selection has real checked state",
+      "passed": true
+    },
+    {
+      "name": "Collection item requires server capability",
+      "passed": true
+    },
+    {
+      "name": "Timeline entry only exists for date/gantt metadata",
+      "passed": true
+    },
+    {
+      "name": "No pending save actions shown for a clean table",
+      "passed": true
+    },
+    {
+      "name": "Pending save/discard use existing action ids",
+      "passed": true
+    },
+    {
+      "name": "Bulk edit disabled without selection",
+      "passed": true
+    },
+    {
+      "name": "Bulk edit honours selection limit and capability",
+      "passed": true
+    },
+    {
+      "name": "Save view remains disabled without write permission",
+      "passed": true
+    },
+    {
+      "name": "State filter reflects current original query state",
+      "passed": true
+    },
+    {
+      "name": "Column grouping uses storage field metadata",
+      "passed": true
+    },
+    {
+      "name": "Toolbar choose emits action, never writes data itself",
+      "passed": true
+    },
+    {
+      "name": "Repeat clicking same trigger closes its menu",
+      "passed": true
+    },
+    {
+      "name": "ArrowDown opens menu from trigger without duplicate toggling",
+      "passed": true
+    },
+    {
+      "name": "Column dialog searches labels and names",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "tables": {
+    "custom_script": "CREATE TABLE custom_script (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    title character varying(256),\n    description text,\n    folder character varying(1024),\n    script text,\n    \"login\" character varying(256),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    language character varying(256),\n    s_status character varying(256),\n    CONSTRAINT \"custom_script_code_idx\" UNIQUE (code)\n)",
+    "spt_custom_script": "CREATE TABLE \"spt_custom_script\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"title\" character varying(256),\n    \"description\" text,\n    \"folder\" character varying(1024),\n    \"script\" text,\n    \"login\" character varying(256),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"language\" character varying(256),\n    \"s_status\" character varying(256),\n    CONSTRAINT \"spt_custom_script_code_idx\" UNIQUE (\"code\")\n)"
+  },
+  "registry": [
+    {
+      "id": 1,
+      "code": "sthpw/custom_script",
+      "search_type": "sthpw/custom_script",
+      "namespace": "sthpw",
+      "description": "Central Custom Script",
+      "database": "sthpw",
+      "table_name": "custom_script",
+      "class_name": "pyasm.search.SObject",
+      "title": "Custom Script",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 2,
+      "code": "config/custom_script",
+      "search_type": "config/custom_script",
+      "namespace": "config",
+      "description": "Custom Script",
+      "database": "{project}",
+      "table_name": "spt_custom_script",
+      "class_name": "pyasm.search.SObject",
+      "title": "Custom Script",
+      "schema": "public",
+      "color": null
+    }
+  ]
+}

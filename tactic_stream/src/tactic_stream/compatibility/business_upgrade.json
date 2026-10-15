@@ -1,0 +1,174 @@
+{
+  "tables": {
+    "task": "CREATE TABLE task (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    -- file_name character varying(512) NOT NULL,\n    assigned character varying(100),\n    description text,\n    status text,\n    discussion text,\n    bid_start_date timestamp without time zone,\n    bid_end_date timestamp without time zone,\n    bid_duration double precision,\n    actual_start_date timestamp without time zone,\n    actual_end_date timestamp without time zone,\n    search_type character varying(100),\n    search_id integer,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    s_status character varying(30),\n    priority smallint,\n    process character varying(256),\n    context character varying(256),\n    milestone_code character varying(200),\n    pipeline_code character varying(256),\n    parent_id integer,\n    sort_order smallint,\n    depend_id integer,\n    project_code character varying(100),\n    supervisor character varying(100),\n    code character varying(256),\n    completion float,\n    CONSTRAINT \"task_code_idx\" UNIQUE (code)\n)",
+    "note": "CREATE TABLE note (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    project_code character varying(30),\n    search_type character varying(200),\n    search_id integer,\n    \"login\" character varying(30),\n    context character varying(60),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    note text,\n    title character varying(1024),\n    parent_id bigint,\n    status character varying(256),\n    label character varying(256),\n    process character varying(60),\n    \"sort_order\" integer,\n    \"access\" character varying(256),\n    CONSTRAINT \"note_code_idx\" UNIQUE (code)\n)",
+    "status_log": "CREATE TABLE status_log (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    search_type character varying(256) NOT NULL,\n    search_id integer NOT NULL,\n    status text,\n    \"login\" character varying(256) NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    to_status character varying(256),\n    from_status character varying(256),\n    project_code character varying(256)\n)",
+    "work_hour": "CREATE TABLE work_hour (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    project_code character varying(256),\n    description text,\n    category character varying(256),\n    process character varying(256),\n    \"login\" character varying(256),\n    \"day\" timestamp without time zone,\n    start_time timestamp without time zone,\n    end_time timestamp without time zone,\n    straight_time double precision,\n    over_time double precision,\n    search_type character varying(256),\n    search_id integer,\n    status character varying(256),\n    task_code character varying(256),\n    CONSTRAINT \"work_hour_code_idx\" UNIQUE (code)\n)",
+    "milestone": "CREATE TABLE milestone (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    project_code character varying(256),\n    description text,\n    due_date timestamp without time zone,\n    CONSTRAINT \"milestone_code_idx\" UNIQUE (code)\n)"
+  },
+  "registry": [
+    {
+      "id": 16,
+      "code": "sthpw/task",
+      "search_type": "sthpw/task",
+      "namespace": "sthpw",
+      "description": "User Tasks",
+      "database": "sthpw",
+      "table_name": "task",
+      "class_name": "pyasm.biz.Task",
+      "title": "User Tasks",
+      "schema": null,
+      "color": null
+    },
+    {
+      "id": 23,
+      "code": "sthpw/note",
+      "search_type": "sthpw/note",
+      "namespace": "sthpw",
+      "description": "Notes",
+      "database": "sthpw",
+      "table_name": "note",
+      "class_name": "pyasm.biz.Note",
+      "title": "Notes",
+      "schema": null,
+      "color": null
+    },
+    {
+      "id": 25,
+      "code": "sthpw/status_log",
+      "search_type": "sthpw/status_log",
+      "namespace": "sthpw",
+      "description": "Log of status changes",
+      "database": "sthpw",
+      "table_name": "status_log",
+      "class_name": "pyasm.search.SObject",
+      "title": "Status Log",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 59,
+      "code": "sthpw/work_hour",
+      "search_type": "sthpw/work_hour",
+      "namespace": "sthpw",
+      "description": "Work Hours",
+      "database": "sthpw",
+      "table_name": "work_hour",
+      "class_name": "pyasm.biz.WorkHour",
+      "title": "Work Hours",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 61,
+      "code": "sthpw/milestone",
+      "search_type": "sthpw/milestone",
+      "namespace": "sthpw",
+      "description": "Project Milestones",
+      "database": "sthpw",
+      "table_name": "milestone",
+      "class_name": "pyasm.biz.Milestone",
+      "title": "Project Milestones",
+      "schema": "public",
+      "color": null
+    }
+  ],
+  "columns": [
+    {
+      "table": "note",
+      "column": "metadata",
+      "sql": "ALTER TABLE note ADD COLUMN metadata json;",
+      "source_method": "TACTIC Stream: Handler change_note editHistory storage"
+    },
+    {
+      "table": "task",
+      "column": "assigned_group",
+      "sql": "ALTER TABLE \"task\" ADD COLUMN assigned_group varchar(256);",
+      "source_method": "upgrade_v4_6_0_a03_011"
+    },
+    {
+      "table": "task",
+      "column": "parent_task_code",
+      "sql": "ALTER TABLE \"task\" ADD COLUMN parent_task_code varchar(256);",
+      "source_method": "upgrade_v4_6_0_a03_008"
+    },
+    {
+      "table": "note",
+      "column": "parent_code",
+      "sql": "ALTER TABLE \"note\" ADD COLUMN parent_code varchar(256);",
+      "source_method": "upgrade_v4_6_0_a03_001"
+    },
+    {
+      "table": "task",
+      "column": "task_type",
+      "sql": "ALTER TABLE \"task\" ADD COLUMN \"task_type\" varchar(256);",
+      "source_method": "upgrade_v4_6_0_a01_003"
+    },
+    {
+      "table": "task",
+      "column": "data",
+      "sql": "ALTER TABLE task ADD data text;",
+      "source_method": "upgrade_v4_0_0_a09_001"
+    },
+    {
+      "table": "note",
+      "column": "search_code",
+      "sql": "ALTER TABLE note ADD COLUMN search_code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_011"
+    },
+    {
+      "table": "note",
+      "column": "code",
+      "sql": "ALTER TABLE note ADD COLUMN code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_009"
+    },
+    {
+      "table": "status_log",
+      "column": "code",
+      "sql": "ALTER TABLE status_log ADD COLUMN code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_008"
+    },
+    {
+      "table": "status_log",
+      "column": "search_code",
+      "sql": "ALTER TABLE status_log ADD COLUMN search_code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_007"
+    },
+    {
+      "table": "task",
+      "column": "search_code",
+      "sql": "ALTER TABLE task ADD COLUMN search_code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_005"
+    },
+    {
+      "table": "task",
+      "column": "actual_duration",
+      "sql": "ALTER TABLE task ADD actual_duration float;",
+      "source_method": "upgrade_v3_9_0_b09_003"
+    },
+    {
+      "table": "task",
+      "column": "actual_quantity",
+      "sql": "ALTER TABLE task ADD actual_quantity float;",
+      "source_method": "upgrade_v3_9_0_b09_002"
+    },
+    {
+      "table": "task",
+      "column": "bid_quantity",
+      "sql": "ALTER TABLE task ADD bid_quantity float;",
+      "source_method": "upgrade_v3_9_0_b09_001"
+    },
+    {
+      "table": "task",
+      "column": "login",
+      "sql": "ALTER TABLE task ADD login varchar(256);",
+      "source_method": "upgrade_v3_9_0_v02_001"
+    },
+    {
+      "table": "work_hour",
+      "column": "search_code",
+      "sql": "ALTER TABLE work_hour ADD COLUMN search_code varchar(256);",
+      "source_method": "upgrade_v4_0_0_a01_027"
+    }
+  ]
+}

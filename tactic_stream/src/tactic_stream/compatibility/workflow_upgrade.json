@@ -1,0 +1,202 @@
+{
+  "tables": {
+    "message": "CREATE TABLE \"message\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n\t\"category\" character varying(256),\n\t\"message\" text,\n\t\"status\" character varying(32),\n\t\"login\" character varying(256),\n\t\"project_code\" character varying(32),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tCONSTRAINT \"message_code_idx\" UNIQUE (\"code\")\n)",
+    "message_log": "CREATE TABLE \"message_log\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n\t\"message_code\" character varying(256),\n\t\"category\" character varying(256),\n\t\"message\" text,\n\t\"status\" character varying(32),\n\t\"login\" character varying(256),\n\t\"project_code\" character varying(32),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL\n)",
+    "subscription": "CREATE TABLE \"subscription\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n\t\"category\" character varying(256),\n\t\"message_code\" character varying(256),\n\t\"login\" character varying(256),\n\t\"project_code\" character varying(32),\n\t\"status\" character varying(32),\n\t\"last_cleared\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n\tCONSTRAINT \"subscription_code_idx\" UNIQUE (\"code\")\n)",
+    "interaction": "CREATE TABLE \"interaction\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"project_code\" character varying(256),\n    \"login\" character varying(256),\n    \"key\" character varying(1024),\n    \"data\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL\n)",
+    "wdg_settings": "CREATE TABLE \"wdg_settings\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"key\" character varying(255) NOT NULL,\n    \"login\" character varying(100) NOT NULL,\n    \"data\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"project_code\" character varying(30)\n)",
+    "queue": "CREATE TABLE \"queue\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"queue\" character varying(30) NOT NULL,\n    \"priority\" character varying(10) NOT NULL,\n    \"description\" character varying(256),\n    \"state\" character varying(30) DEFAULT 'pending' NOT NULL,\n    \"login\" character varying(30) NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"command\" character varying(200) NOT NULL,\n    \"serialized\" character varying(256),\n    \"s_status\" character varying(30),\n    \"project_code\" character varying(100),\n    \"search_id\" integer,\n    \"search_type\" character varying(100),\n    \"dispatcher_id\" integer,\n    \"policy_code\" character varying(30),\n    \"host\" character varying(256)\n)",
+    "exception_log": "CREATE TABLE \"exception_log\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"class\" character varying(100),\n    \"message\" text,\n    \"stack_trace\" text,\n    \"login\" character varying(100) NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL\n)",
+    "debug_log": "CREATE TABLE \"debug_log\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"category\" character varying(256),\n    \"level\" character varying(256),\n    \"message\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"login\" character varying(256),\n    \"s_status\" character varying(30)\n)",
+    "spt_process_state": "CREATE TABLE \"spt_process_state\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"pipeline_code\" character varying(256),\n    \"process\" character varying(256),\n    \"search_type\" character varying(256),\n    \"search_code\" character varying(256),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"status\" jsonb,\n    \"state\" text,\n    \"data\" jsonb,\n    \"s_status\" character varying(32),\n    CONSTRAINT \"spt_pipeline_info_code_idx\" UNIQUE (\"code\")\n)",
+    "spt_process": "CREATE TABLE \"spt_process\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"pipeline_code\" character varying(256),\n    \"process\" character varying(256),\n    \"color\" character varying(256),\n    \"sort_order\" integer,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    \"s_status\" character varying(256),\n    \"checkin_mode\" text,  \n    \"subcontext_options\" text, \n    \"checkin_validate_script_path\" text, \n    \"checkin_options_view\" text, \n    \"sandbox_create_script_path\" text, \n    \"context_options\" text, \n    \"description\" text, \n    \"repo_type\" character varying(256), \n    \"transfer_mode\" character varying(256),\n    CONSTRAINT \"spt_process_code_idx\" UNIQUE (\"code\")\n)"
+  },
+  "registry": [
+    {
+      "id": 1,
+      "code": "sthpw/message",
+      "search_type": "sthpw/message",
+      "namespace": "sthpw",
+      "description": "Messages",
+      "database": "sthpw",
+      "table_name": "message",
+      "class_name": "pyasm.search.SObject",
+      "title": "Message",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 2,
+      "code": "sthpw/message_log",
+      "search_type": "sthpw/message_log",
+      "namespace": "sthpw",
+      "description": "Message Log",
+      "database": "sthpw",
+      "table_name": "message_log",
+      "class_name": "pyasm.search.SObject",
+      "title": "Message Log",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 3,
+      "code": "sthpw/subscription",
+      "search_type": "sthpw/subscription",
+      "namespace": "sthpw",
+      "description": "Subscription",
+      "database": "sthpw",
+      "table_name": "subscription",
+      "class_name": "pyasm.search.SObject",
+      "title": "Subscription",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 4,
+      "code": "sthpw/interaction",
+      "search_type": "sthpw/interaction",
+      "namespace": "sthpw",
+      "description": "User Interaction",
+      "database": "sthpw",
+      "table_name": "interaction",
+      "class_name": "pyasm.search.SObject",
+      "title": "User Interaction",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 5,
+      "code": "sthpw/wdg_settings",
+      "search_type": "sthpw/wdg_settings",
+      "namespace": "sthpw",
+      "description": "Persistent store for widgets to remember user settings",
+      "database": "sthpw",
+      "table_name": "wdg_settings",
+      "class_name": "pyasm.web.WidgetSettings",
+      "title": "Widget Settings",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 6,
+      "code": "sthpw/queue",
+      "search_type": "sthpw/queue",
+      "namespace": "sthpw",
+      "description": "Tactic Dispatcher",
+      "database": "sthpw",
+      "table_name": "queue",
+      "class_name": "pyasm.search.SObject",
+      "title": "Tactic Dispatcher",
+      "schema": null,
+      "color": null
+    },
+    {
+      "id": 7,
+      "code": "sthpw/exception_log",
+      "search_type": "sthpw/exception_log",
+      "namespace": "sthpw",
+      "description": "Exception Log",
+      "database": "sthpw",
+      "table_name": "exception_log",
+      "class_name": "pyasm.search.SObject",
+      "title": "Exception Log",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 8,
+      "code": "sthpw/debug_log",
+      "search_type": "sthpw/debug_log",
+      "namespace": "sthpw",
+      "description": "Debug Log",
+      "database": "sthpw",
+      "table_name": "debug_log",
+      "class_name": "pyasm.biz.DebugLog",
+      "title": "Debug Log",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 9,
+      "code": "config/process_state",
+      "search_type": "config/process_state",
+      "namespace": "config",
+      "description": "Process State",
+      "database": "{project}",
+      "table_name": "spt_process_state",
+      "class_name": "pyasm.search.SObject",
+      "title": "Process State",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 10,
+      "code": "config/process",
+      "search_type": "config/process",
+      "namespace": "config",
+      "description": "Processes",
+      "database": "{project}",
+      "table_name": "spt_process",
+      "class_name": "pyasm.search.SObject",
+      "title": "Processes",
+      "schema": "public",
+      "color": null
+    }
+  ],
+  "columns": [
+    {
+      "table": "spt_process",
+      "column": "workflow",
+      "sql": "ALTER TABLE \"spt_process\" ADD \"workflow\" text;",
+      "source_method": "upgrade_v4_4_0_a01_002"
+    },
+    {
+      "table": "spt_process",
+      "column": "subpipeline_code",
+      "sql": "ALTER TABLE \"spt_process\" ADD \"subpipeline_code\" varchar(256);",
+      "source_method": "upgrade_v4_4_0_a01_003"
+    },
+    {
+      "table": "queue",
+      "column": "message_code",
+      "sql": "ALTER TABLE \"queue\" ADD \"message_code\" varchar(256);",
+      "source_method": "upgrade_v4_2_0_a01_003"
+    },
+    {
+      "table": "queue",
+      "column": "data",
+      "sql": "ALTER TABLE \"queue\" ADD \"data\" text;",
+      "source_method": "upgrade_v4_2_0_a01_002"
+    },
+    {
+      "table": "debug_log",
+      "column": "code",
+      "sql": "ALTER TABLE debug_log ADD \"code\" VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_rc02_001"
+    },
+    {
+      "table": "queue",
+      "column": "interval",
+      "sql": "ALTER TABLE queue ADD COLUMN \"interval\" INTEGER;",
+      "source_method": "upgrade_v4_0_0_a01_002"
+    },
+    {
+      "table": "queue",
+      "column": "code",
+      "sql": "ALTER TABLE queue ADD COLUMN code VARCHAR(256);",
+      "source_method": "upgrade_v4_0_0_a01_001"
+    },
+    {
+      "table": "queue",
+      "column": "host",
+      "sql": "ALTER TABLE queue ADD COLUMN host varchar(256);",
+      "source_method": "upgrade_v3_1_0_a01_001"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "queue_state_idx",
+      "sql": "CREATE INDEX \"queue_state_idx\" on queue (state);"
+    }
+  ]
+}

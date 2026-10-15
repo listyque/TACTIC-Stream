@@ -1,0 +1,36 @@
+#-- Start Entry --#
+insert = SearchType.create('sthpw/schema')
+insert.set_value('code', """niki_friends""")
+insert.set_value('description', """Schema for project [dolly3d]""")
+insert.set_value('login', """admin""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('schema', """<schema>
+  <search_type name="cg/assets_category" xpos="522" ypos="236"/>
+  <search_type name="cg/scenes" xpos="303" ypos="327"/>
+  <search_type name="cg/shot" xpos="303" ypos="415"/>
+  <search_type name="cg/assets" xpos="303" ypos="236"/>
+  <search_type name="cg/assets_in_assets" xpos="696" ypos="136"/>
+  <search_type name="cg/assets_in_scenes" xpos="100" ypos="282"/>
+  <search_type name="cg/texture" xpos="423" ypos="100" display="Texture"/>
+  <search_type name="cg/texture_in_assets" xpos="102" ypos="100"/>
+  <connect from="cg/scenes" to="cg/assets" instance_type="cg/assets_in_scenes" relationship="instance"/>
+  <connect from="cg/shot" to="cg/scenes" relationship="code" from_col="scenes_code" to_col="code" type="hierarchy"/>
+  <connect from="cg/assets" to="cg/assets_category" relationship="code" from_col="assets_category_code" to_col="code" type="hierarchy"/>
+  <connect from="cg/assets" to="cg/scenes" instance_type="cg/assets_in_scenes" relationship="instance"/>
+  <connect from="cg/assets" to="cg/texture" instance_type="cg/texture_in_assets" relationship="instance"/>
+  <connect from="cg/assets_in_scenes" to="cg/scenes" relationship="code" type="many_to_many"/>
+  <connect from="cg/assets_in_scenes" to="cg/assets" relationship="code" from_col="assets_code" to_col="code" type="many_to_many"/>
+  <connect from="cg/texture" to="cg/assets_category" relationship="code" from_col="assets_category_code" to_col="code" type="hierarchy"/>
+  <connect from="cg/texture" to="cg/assets" instance_type="cg/texture_in_assets" relationship="instance"/>
+  <connect from="cg/texture_in_assets" to="cg/texture" relationship="code" from_col="texture_code" to_col="code" type="many_to_many"/>
+  <connect from="cg/texture_in_assets" to="cg/assets" relationship="code" from_col="assets_code" to_col="code" type="many_to_many"/>
+  <connect from="cg/assets" to="cg/assets" instance_type="cg/assets_in_assets" relationship="instance"/>
+  <connect from="cg/assets_in_assets" to="cg/assets" relationship="code" from_col="parent_assets_code" to_col="code" path="child" type="many_to_many"/>
+  <connect from="cg/assets_in_assets" to="cg/assets" relationship="code" from_col="child_assets_code" to_col="code" path="parent" type="many_to_many"/>
+  <connect from="cg/assets_in_assets" to="cg/assets" relationship="code" from_col="parent_assets_code" to_col="code" type="many_to_many"/>
+  <search_type name="niki_friends/th_knowledge_article" xpos="0" ypos="0"/>
+</schema>
+""")
+insert.set_value('timestamp', """2016-10-26 09:02:28""")
+#-- End Entry --#
+

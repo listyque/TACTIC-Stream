@@ -1,0 +1,39 @@
+.script-editor-dialog { width:min(1100px,80vw,calc(100dvw - 16px)); height:min(800px,80dvh,calc(100dvh - 16px)); max-width:none; max-height:none; margin:auto; padding:0; border:1px solid var(--outline-variant); border-radius:var(--surface-radius); color:var(--on-surface); background:var(--page); overflow:hidden; }
+.script-editor-dialog[open] { display:flex; flex-direction:column; }
+.script-editor-dialog::backdrop { background:var(--scrim); }
+.script-editor-header { display:flex; align-items:center; height:40px; flex-shrink:0; gap:8px; padding:2px 6px 2px 14px; background:var(--surface); border-bottom:1px solid var(--outline-variant); }
+.script-editor-header strong { flex:1; }.script-editor-header > .app-icon { color:var(--primary); }
+.script-editor-screen { display:flex; gap:0; flex:1; min-height:0; min-width:0; padding:8px; }
+.script-editor-main { display:flex; flex-direction:column; flex:1; min-width:0; min-height:0; gap:4px; }
+.script-editor-toolbar { display:flex; flex-shrink:0; gap:4px; align-items:center; height:32px; overflow:auto; }
+.script-editor-toolbar input { flex:1; min-width:72px; width:120px; height:30px; min-height:0; padding:0 6px; font-size:var(--text-body); }
+.script-editor-toolbar select { width:132px; flex-shrink:0; height:30px; min-height:0; padding:0 6px; font-size:var(--text-body); }
+.script-editor-toolbar .app-button { width:30px; min-width:30px; height:30px; min-height:0; padding:0; }
+.script-editor-toolbar .app-icon { font-size:16px; }
+.script-editor-main .workspace-tabs { min-height:38px; height:38px; flex-shrink:0; padding:0; gap:0; }
+.script-editor-main .workspace-tab { height:36px; min-height:0; }.script-editor-main .workspace-tabs .icon-button { min-height:30px; height:30px; width:30px; }.script-editor-main .workspace-tabs .app-icon { font-size:16px; }
+.script-editor-code { flex:1; min-height:90px; min-width:0; }
+.script-editor-main > footer { display:flex; align-items:center; flex-shrink:0; gap:8px; }.script-editor-main > footer > .app-button { min-width:112px; }.script-editor-main > footer > span { margin-left:auto; color:var(--muted); font-size:var(--text-label); }.script-editor-main > footer select { width:220px; font-size:var(--text-body); }
+.script-editor-main > p { margin:0; flex-shrink:0; }.script-editor-empty { flex:1; display:grid; place-items:center; }
+.script-editor-output { display:flex; flex-direction:column; flex-shrink:0; min-height:28px; border:1px solid var(--outline-variant); border-radius:12px; padding:4px; overflow:hidden; background:var(--surface); }
+.script-editor-output header { display:flex; align-items:center; gap:4px; height:28px; flex-shrink:0; padding:0 4px; border-bottom:1px solid var(--outline-variant); }.script-editor-output header > span:not(.app-icon) { margin-right:auto; flex:1; }.script-editor-output .icon-button { width:26px; height:26px; min-height:0; }.script-editor-output .app-icon { font-size:16px; }
+.script-editor-output pre { margin:0; padding:6px; flex:1; min-height:0; overflow:auto; white-space:pre; font-family:Consolas,monospace; font-size:var(--editor-font-size); }.script-editor-output.wrapped pre { white-space:pre-wrap; overflow-wrap:anywhere; }
+.script-editor-tree { display:flex; flex-direction:column; gap:4px; flex-shrink:0; min-width:0; min-height:0; border:1px solid var(--outline-variant); border-radius:var(--item-radius); padding:4px; background:var(--surface); }
+.script-editor-tree .app-segmented-button { height:28px; min-height:28px; }.script-editor-tree .app-search-field { min-height:28px; height:28px; }.script-editor-tree .navigation-tree { flex:1; min-height:0; overflow:auto; }.script-editor-tree .navigation-entry .app-button { height:28px; min-height:28px; padding:0 4px; }.script-editor-tree .navigation-icon { width:18px; height:18px; border:0; background:transparent; }.script-editor-tree .navigation-icon .app-icon { font-size:16px; }.script-editor-tree .navigation-text strong { font-weight:400; }
+.script-editor-outline { display:flex; flex-direction:column; overflow:auto; gap:1px; }.script-editor-outline .app-button { min-height:34px; height:34px; justify-content:flex-start; border:0; background:transparent; flex-shrink:0; padding-right:7px; gap:6px; }
+.script-editor-outline .app-button { border-radius:var(--item-radius); font-weight:400; }.script-editor-outline .app-button[aria-current="true"], .script-editor-outline .app-button:hover { background:var(--hover); }.script-editor-outline .app-icon { font-size:14px; color:var(--primary); }
+.script-editor-outline .app-button > span:not(.app-icon) { font-family:Consolas,monospace; flex:1; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.script-editor-outline small { color:var(--muted); font-size:var(--text-caption); }.script-editor-outline > p { padding:8px; text-align:center; }
+.script-editor-history { width:min(780px,calc(100dvw - 16px)); max-height:80dvh; overflow:auto; }.script-editor-history header { display:flex; align-items:center; justify-content:space-between; }.script-editor-history > .app-button { display:flex; width:100%; justify-content:flex-start; margin:4px 0; }
+@media(max-width:600px) { .script-editor-dialog { width:calc(100dvw - 8px); height:calc(100dvh - 8px); }.script-editor-screen { flex-direction:column; padding:4px; }.script-editor-main { flex:1; }.script-editor-screen > .app-splitter { display:none; }.script-editor-tree { width:100% !important; max-height:160px; margin-top:4px; }.script-editor-main > footer select { width:100px; }.script-editor-main > footer .app-button { padding:0 8px; }.script-editor-toolbar { height:32px; }.code-source-toolbar > span { display:none; }.code-search input { width:140px; } }
+
+.script-editor-output pre { border-radius:8px; background:var(--surface-high); }
+.script-editor-main .workspace-tab.dirty::before { content:""; position:absolute; width:6px; height:6px; border-radius:50%; background:var(--syntax-keyword); left:6px; top:calc(50% - 3px); }
+.script-editor-main .workspace-tab.dirty [role="tab"] { padding-left:20px; }
+
+.script-editor-tree .workspace-search { flex:0 0 36px; min-height:36px; height:36px; width:100%; }
+.script-editor-tree .workspace-search input { font-size:var(--text-body); }
+.script-editor-main .workspace-tabs { background:transparent; }
+
+.script-editor-toolbar > .app-button:last-child { width:26px; min-width:26px; height:26px; border-radius:3px; }
+.script-editor-toolbar > .app-button:last-child.primary { background:var(--surface-high); color:var(--primary); }

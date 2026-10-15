@@ -1,0 +1,74 @@
+[
+  {
+    "language": "en",
+    "width": 640,
+    "dark": true,
+    "fieldWidth": 596.0,
+    "fieldHeight": 216.0,
+    "comboWidth": 612.0,
+    "comboHeight": 32.0
+  },
+  {
+    "language": "en",
+    "width": 640,
+    "dark": false,
+    "fieldWidth": 596.0,
+    "fieldHeight": 216.0,
+    "comboWidth": 612.0,
+    "comboHeight": 32.0
+  },
+  {
+    "language": "en",
+    "width": 480,
+    "dark": true,
+    "fieldWidth": 436.0,
+    "fieldHeight": 216.0,
+    "comboWidth": 452.0,
+    "comboHeight": 32.0
+  },
+  {
+    "language": "en",
+    "width": 480,
+    "dark": false,
+    "fieldWidth": 436.0,
+    "fieldHeight": 216.0,
+    "comboWidth": 452.0,
+    "comboHeight": 32.0
+  },
+  {
+    "language": "ru",
+    "width": 640,
+    "dark": true,
+    "fieldWidth": 596.0,
+    "fieldHeight": 216.0,
+    "comboWidth": 612.0,
+    "comboHeight": 32.0
+  },
+  {
+    "language": "ru",
+    "width": 640,
+    "dark": false,
+    "fieldWidth": 596.0,
+    "fieldHeight": 216.0,
+    "comboWidth": 612.0,
+    "comboHeight": 32.0
+  },
+  {
+    "language": "ru",
+    "width": 480,
+    "dark": true,
+    "fieldWidth": 436.0,
+    "fieldHeight": 216.0,
+    "comboWidth": 452.0,
+    "comboHeight": 32.0
+  },
+  {
+    "language": "ru",
+    "width": 480,
+    "dark": false,
+    "fieldWidth": 436.0,
+    "fieldHeight": 216.0,
+    "comboWidth": 452.0,
+    "comboHeight": 32.0
+  }
+]

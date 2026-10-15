@@ -1,0 +1,50 @@
+{
+  "tables": {
+    "schema": "CREATE TABLE \"schema\" (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    description text,\n    \"schema\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    \"login\" character varying(256),\n    s_status character varying(30),\n    CONSTRAINT \"schema_code_idx\" UNIQUE (code)\n)",
+    "project_type": "CREATE TABLE project_type (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(30),\n    dir_naming_cls character varying(200),\n    file_naming_cls character varying(200),\n    code_naming_cls character varying(200),\n    node_naming_cls character varying(200),\n    sobject_mapping_cls character varying(200),\n    s_status character varying(32),\n    \"type\" character varying(100) NOT NULL,\n    repo_handler_cls character varying(200),\n    CONSTRAINT \"project_type_code_idx\" UNIQUE (code)\n)",
+    "db_resource": "CREATE TABLE \"db_resource\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"code\" character varying(256),\n    \"host\" text,\n    \"port\" integer,\n    \"vendor\" character varying(256),\n    \"login\" character varying(256),\n    \"password\" text,\n    CONSTRAINT \"db_resource_code_idx\" UNIQUE (\"code\")\n)"
+  },
+  "registry": [
+    {
+      "id": 2,
+      "code": "sthpw/schema",
+      "search_type": "sthpw/schema",
+      "namespace": "sthpw",
+      "description": "Schema",
+      "database": "sthpw",
+      "table_name": "schema",
+      "class_name": "pyasm.biz.Schema",
+      "title": "Schema",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 7,
+      "code": "sthpw/db_resource",
+      "search_type": "sthpw/db_resource",
+      "namespace": "sthpw",
+      "description": "Database Resource",
+      "database": "sthpw",
+      "table_name": "db_resource",
+      "class_name": "pyasm.search.SObject",
+      "title": "Database Resource",
+      "schema": "public",
+      "color": null
+    },
+    {
+      "id": 32,
+      "code": "sthpw/project_type",
+      "search_type": "sthpw/project_type",
+      "namespace": "sthpw",
+      "description": "Project Type",
+      "database": "sthpw",
+      "table_name": "project_type",
+      "class_name": "pyasm.biz.ProjectType",
+      "title": "Project Type",
+      "schema": "public",
+      "color": null
+    }
+  ],
+  "project_code_sql": "ALTER TABLE \"schema\" ADD \"project_code\" varchar(256);",
+  "project_database_sql": "ALTER TABLE project ADD \"database\" VARCHAR(256);"
+}

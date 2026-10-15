@@ -1,0 +1,841 @@
+{
+  "basis": "0.20 static audit + release documentation",
+  "states": {
+    "BASE": "Base named scenarios implemented/reported tested; not full legacy parity",
+    "PARTIAL": "Native subset exists with substantive gaps",
+    "NO_NATIVE_SCREEN": "No dedicated equivalent native screen found; generic tables/runtime may remain",
+    "UNREVIEWED": "No individual functional completion claim"
+  },
+  "full_legacy_parity_percentage": null,
+  "families": [
+    {
+      "id": "foundation-config",
+      "area": "Resolver widget_config / definitions",
+      "status": "BASE",
+      "implemented_scope": "Исходные DB/file/personal/default layers, независимые handler/options, inline/config_code, пустой view, provenance.",
+      "remaining": "Все runtime DB-overrides/внешние плагины; полное поведение каждого обработчика не следует из metadata parity.",
+      "native_files": [
+        "src/tactic/core/widget_config.py",
+        "src/tactic/core/config_model.py",
+        "src/tactic/core/view_resolution.py"
+      ],
+      "legacy_files": [
+        "src/pyasm/widget/widget_config.py",
+        "src/tactic/ui/panel/base_table_layout_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "workspace",
+      "area": "Рабочее пространство / основные вкладки",
+      "status": "BASE",
+      "implemented_scope": "Проекты, конфигурационный sidebar, tabs, root/nested dispatch, DB-состояние, компактный shell, dirty guards.",
+      "remaining": "Полный legacy URL/custom routing, tear-off и все callbacks; единый dispatcher вместо дублирования App/WidgetHost.",
+      "native_files": [
+        "frontend/src/App.vue",
+        "frontend/src/components/WidgetHost.vue",
+        "frontend/src/uiState.js"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/top_wdg.py",
+        "src/tactic/ui/panel/panel_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "sidebar-runtime",
+      "area": "Sidebar и Schema Views",
+      "status": "BASE",
+      "implemented_scope": "Original SidebarConfig; folder/link/title/separator, project/admin/my roots, исходный генератор Schema Views.",
+      "remaining": "Все произвольные callbacks/персональные DB configurations и effective access для non-admin.",
+      "native_files": [
+        "src/tactic/core/sidebar_config.py",
+        "src/tactic/core/config_model.py",
+        "frontend/src/components/SidebarNode.vue"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/panel_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "table",
+      "area": "TableLayout / обычная таблица",
+      "status": "PARTIAL",
+      "implemented_scope": "Metadata, серверные страницы/поиск/сортировка, геометрия, range selection, cells, меню, состояние БД.",
+      "remaining": "Полная server Group By и totals всей выборки, unlimited/chunk-render, все table options, virtual insert-rows, custom layout hooks.",
+      "native_files": [
+        "frontend/src/components/ConfiguredTable.vue",
+        "frontend/src/components/WidgetTable.vue",
+        "src/tactic/ui_api/config_backend.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/table_layout_wdg.py",
+        "src/tactic/ui/panel/base_table_layout_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "cells",
+      "area": "Display-виджеты ячеек",
+      "status": "PARTIAL",
+      "implemented_scope": "Plain/format/link/XML, login display-name, task-status color, color, registered thumbnail, несколько global widget buttons.",
+      "remaining": "Полный ExpressionElement/Task/Snapshot/Thumb/custom cells и handle_td/handle_tr семантика; generic raw display не равен widget parity.",
+      "native_files": [
+        "frontend/src/components/WidgetCell.vue",
+        "src/tactic/ui_api/column_service.py",
+        "src/tactic/ui_api/cell_value_service.py",
+        "src/tactic/ui_api/thumbnail_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/table/expression_element_wdg.py",
+        "src/pyasm/widget/file_wdg.py",
+        "src/pyasm/widget/table_element_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "cell-editor",
+      "area": "CellEditWdg и edit_item",
+      "status": "BASE",
+      "implemented_scope": "Отдельный lookup edit + inline + DB edit_item, options, зависимые choices, field/config revisions.",
+      "remaining": "Не все input/actions/extra hooks, complex WorkHours/Gantt не входят в generic cell editor.",
+      "native_files": [
+        "src/tactic/core/cell_edit_config.py",
+        "src/tactic/ui_api/table_edit_service.py",
+        "frontend/src/components/FieldInput.vue"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/layout_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "save-buffer",
+      "area": "EditMultipleCmd / Save Changes",
+      "status": "BASE",
+      "implemented_scope": "Буфер существующих строк, 100 rows/1000 cells; один исходный batch, update_multi, rollback и сохранение черновика.",
+      "remaining": "Inline insert, полный Save All произвольных custom handlers; distributed exactly-once и rollback внешних effects не обеспечены.",
+      "native_files": [
+        "src/tactic/core/edit_commands.py",
+        "src/tactic/core/native_edit.py",
+        "src/tactic/ui_api/table_edit_service.py",
+        "frontend/src/components/ConfiguredTable.vue"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/edit_cmd.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "fill-clipboard",
+      "area": "Fill / Paste / Clipboard",
+      "status": "PARTIAL",
+      "implemented_scope": "Заполнение выбранного поля по выбранным строкам с серверным preview, затем staging в общий буфер.",
+      "remaining": "Excel TSV paste, прямоугольные диапазоны, Fill Down/series, полный legacy clipboard/undo-redo.",
+      "native_files": [
+        "frontend/src/components/ConfiguredTable.vue",
+        "src/tactic/ui_api/table_edit_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/table_layout_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "forms",
+      "area": "EditWdg / popup / embedded forms",
+      "status": "PARTIAL",
+      "implemented_scope": "Самостоятельные insert/edit/view, original defaults/validation, bindings, hidden/disables, NULL/0, sibling form values, single, dirty guards.",
+      "remaining": "parent/connect workflow, layout_view, custom edit_cmd/save callbacks, все оригинальные input/action types.",
+      "native_files": [
+        "frontend/src/components/ConfiguredForm.vue",
+        "frontend/src/components/EmbeddedForm.vue",
+        "src/tactic/ui_api/widget_service.py",
+        "src/tactic/core/native_edit.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/edit_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "tabs",
+      "area": "TabWdg / вложенные контейнеры",
+      "status": "PARTIAL",
+      "implemented_scope": "Дочерние native widgets, include/saved/category semantics, preload, hidden, selected, retain mounted state, DB preference keys.",
+      "remaining": "Динамические счетчики, load modes/callbacks, tear-off; native state не переписывает все legacy XML save_state.",
+      "native_files": [
+        "frontend/src/components/ConfiguredTabs.vue",
+        "src/tactic/core/widget_containers.py",
+        "src/tactic/ui_api/widget_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/container/tab_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "menus",
+      "area": "Контекстные меню и table shelf",
+      "status": "PARTIAL",
+      "implemented_scope": "Row/column/sidebar/tab/field/widget contexts; compact toolbar; File/Edit/View groups; доступность действий и клавиатура.",
+      "remaining": "Все gear_menu_custom/gear_settings/SmartMenu callbacks, cascade Delete, Print/Chart, old Clipboard, Undo/Redo.",
+      "native_files": [
+        "frontend/src/components/ContextMenu.vue",
+        "frontend/src/components/TableToolbar.vue",
+        "src/tactic/core/context_menus.py",
+        "src/tactic/ui_api/menu_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/base_table_layout_wdg.py",
+        "src/tactic/ui/container/smart_menu_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "search",
+      "area": "Поиск и сохранённые поиски",
+      "status": "PARTIAL",
+      "implemented_scope": "Typed AND/OR, исходные supported saved filters/scopes, server sort/paging, named views widget_config, последний query WidgetSettings.",
+      "remaining": "Весь GeneralFilter/custom filter/expression vocabulary, все legacy serialized last_search; свободный SQL не принимается.",
+      "native_files": [
+        "src/tactic/core/query_model.py",
+        "src/tactic/core/search_filters.py",
+        "frontend/src/components/AdvancedFilter.vue",
+        "src/tactic/ui_api/view_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/search_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "prefs",
+      "area": "Персональные UI-настройки",
+      "status": "BASE",
+      "implemented_scope": "Original WidgetSettings/sthpw/wdg_settings, project/login/scope, geometry/query/workspace/tabs/timeline/stype-editor, debounce/revision.",
+      "remaining": "Полный импорт всех старых XML/last_search и multi-host CAS; unsaved SObjects намеренно не persistence.",
+      "native_files": [
+        "src/tactic/ui_api/ui_state_service.py",
+        "frontend/src/uiState.js"
+      ],
+      "legacy_files": [
+        "src/pyasm/web/widget.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "cards",
+      "area": "TileLayout / карточки",
+      "status": "PARTIAL",
+      "implemented_scope": "Режим карточек той же выборки и отображаемых cells, сохранение буфера при переключении.",
+      "remaining": "Полная TileLayoutWdg tile actions/geometry/template/collection behaviors; не считать режим cards точной копией всего класса.",
+      "native_files": [
+        "frontend/src/components/ConfiguredTable.vue",
+        "src/tactic/ui_api/extended_backend.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/tile_layout_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "relationships",
+      "area": "Дерево и отношения",
+      "status": "PARTIAL",
+      "implemented_scope": "Lazy relationships исходной Schema, циклы, кандидаты и поддержанные add_instance/remove_instance; link не равен объект.",
+      "remaining": "Все relation/parent/connection types, deep bulk/drag-drop и нестандартные instance schemas.",
+      "native_files": [
+        "frontend/src/components/RelationTree.vue",
+        "frontend/src/components/RelationshipEditor.vue",
+        "src/tactic/ui_api/relationship_service.py",
+        "src/tactic/ui_api/record_service.py"
+      ],
+      "legacy_files": [
+        "src/pyasm/biz/schema.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "collections",
+      "area": "Collections",
+      "status": "PARTIAL",
+      "implemented_scope": "Исходные _is_collection и *_in_*; каталог/вложенность/add/remove/delete, cycles, original commands.",
+      "remaining": "Все expression/parent-scoped layouts и shelf callbacks, комплексные пакетные операции.",
+      "native_files": [
+        "frontend/src/components/CollectionPanel.vue",
+        "src/tactic/ui_api/collection_service.py",
+        "src/tactic/core/collection_commands.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/collection_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "record-panel",
+      "area": "Карточка SObject / notes / history",
+      "status": "PARTIAL",
+      "implemented_scope": "RecordInspector с related/tasks/files/notes/history/subscription; Note.create, исходные журналы, retire/reactivate.",
+      "remaining": "Все legacy tab/detail widgets, полный note sheet и cascade delete; HTML/custom body не эмулируется.",
+      "native_files": [
+        "frontend/src/components/RecordInspector.vue",
+        "frontend/src/components/HistoryPanel.vue",
+        "src/tactic/ui_api/record_service.py",
+        "src/tactic/ui_api/history_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/edit_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "tasks",
+      "area": "Задачи и task board",
+      "status": "PARTIAL",
+      "implemented_scope": "Original task pipelines/choices, разделение статусов разных pipelines, Task.add_initial_tasks с preview, inline/popup edits.",
+      "remaining": "Весь TaskElementWdg, все advanced assignment/automation/planning branches, шаблоны досок.",
+      "native_files": [
+        "frontend/src/components/TaskPanel.vue",
+        "src/tactic/ui_api/task_service.py",
+        "src/tactic/core/task_choices.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/table/task_element_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "hours",
+      "area": "WorkHoursElement",
+      "status": "PARTIAL",
+      "implemented_scope": "Исходный WorkHoursElementAction и привязки; плановый период/единицы/overtime/ноль по конфигурации.",
+      "remaining": "Комплексные категории, start/end и дубли не агрегируются с перезаписью; полный timesheet UI.",
+      "native_files": [
+        "frontend/src/components/WorkHoursPanel.vue",
+        "src/tactic/ui_api/work_hour_service.py",
+        "src/tactic/core/work_hours.py"
+      ],
+      "legacy_files": [
+        "src/pyasm/widget/table_element_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "timeline",
+      "area": "Gantt и Calendar",
+      "status": "PARTIAL",
+      "implemented_scope": "Отдельный server date-window, several bars, page loading, move dates через исходную форму, DB preference.",
+      "remaining": "Resize, зависимости, resource load, auto-scheduling, holidays/calendars и полный original Gantt.",
+      "native_files": [
+        "frontend/src/components/TaskTimeline.vue",
+        "src/tactic/ui_api/timeline_service.py",
+        "src/tactic/core/timeline_model.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/table/gantt_element_wdg.py",
+        "src/pyasm/widget/gantt_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "pipeline",
+      "area": "Project Workflow / Pipeline editor",
+      "status": "PARTIAL",
+      "implemented_scope": "GraphEditor: CRUD узлов/связей/параметров, owner project, исходные PipelineSaveCbk/ProcessInfoCmd; reopen.",
+      "remaining": "Все advanced process panels, nested pipelines, conditions/manual/approval/dependency semantics, rename с историей и все callbacks.",
+      "native_files": [
+        "frontend/src/components/GraphEditor.vue",
+        "src/tactic/ui_api/graph_service.py",
+        "src/tactic/core/pipeline_commands.py",
+        "src/tactic/core/process_commands.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/tools/pipeline_wdg.py",
+        "src/tactic/ui/tools/pipeline_canvas_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "schema",
+      "area": "Project Schema editor",
+      "status": "PARTIAL",
+      "implemented_scope": "Original Schema.get, read XML, graph existing types/relations, save project schema; встроенные schema readonly.",
+      "remaining": "DDL whole schema designer, миграции связанных физических полей/отношений, полный drag-drop palette.",
+      "native_files": [
+        "frontend/src/components/GraphEditor.vue",
+        "src/tactic/ui_api/graph_service.py",
+        "src/tactic/core/graph_model.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/tools/schema_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "projects",
+      "area": "ProjectCreateWdg / мастер",
+      "status": "PARTIAL",
+      "implemented_scope": "default/simple preflight/create/original CreateProjectCmd/new SQLite setup; переход и новый sidebar без restart.",
+      "remaining": "Любые template-project imports, theme/preview в мастере, безопасное восстановление частичного create и durable result.",
+      "native_files": [
+        "frontend/src/components/ProjectWizard.vue",
+        "src/tactic/ui_api/project_service.py",
+        "src/tactic/core/project_creation.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/page_header_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "stypes",
+      "area": "Manage sTypes",
+      "status": "PARTIAL",
+      "implemented_scope": "Каталог, metadata, original column info/definitions; create type/add columns; переходы к table/form/views/workflow/schema; DB state.",
+      "remaining": "DROP/RENAME/ALTER TYPE, полный triggers/notifications editor, все multi-db branches; dependencies не доказательство безопасного удаления.",
+      "native_files": [
+        "frontend/src/components/SearchTypes.vue",
+        "src/tactic/ui_api/search_type_service.py",
+        "src/tactic/ui_api/admin_workspace.py",
+        "src/tactic/core/admin_commands_017.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/search_type_creator_wdg.py",
+        "src/tactic/ui/startup/column_edit_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "csv-import",
+      "area": "CSV Import",
+      "status": "PARTIAL",
+      "implemented_scope": "До 1 MiB/100 rows/30 cols UTF-8, mapping/preview, original CsvImportCmd create-only и triggers.",
+      "remaining": "Update существующих по ключу, notes/system/special actions, автоколонки и весь legacy wizard.",
+      "native_files": [
+        "frontend/src/components/CsvImportPanel.vue",
+        "src/tactic/ui_api/search_type_service.py"
+      ],
+      "legacy_files": [
+        "src/pyasm/command/csv_import_cmd.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "csv-export",
+      "area": "CSV Export",
+      "status": "PARTIAL",
+      "implemented_scope": "Та же query/scope; selection/all, raw/display, выбор columns/delimiter, защита spreadsheet formulas.",
+      "remaining": "Все formats/Excel и сложные widget-specific exports; limit 10000 rows/32 MiB.",
+      "native_files": [
+        "frontend/src/components/CsvExport.vue",
+        "src/tactic/ui_api/csv_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/widget/data_export_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "view-designer",
+      "area": "ViewDesigner / определения",
+      "status": "PARTIAL",
+      "implemented_scope": "Порядок/параметры колонок, display/edit/action, XML sources, shared/personal save, revisions.",
+      "remaining": "Все визуальные типы колонок/форм, полный auto-refactoring refs/JS callbacks.",
+      "native_files": [
+        "frontend/src/components/ViewDesigner.vue",
+        "frontend/src/components/ConfigEditor.vue",
+        "src/tactic/ui_api/view_service.py",
+        "src/tactic/core/view_edits.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/view_manager_wdg.py"
+      ],
+      "priority": "P1",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "manage-views",
+      "area": "Manage Views",
+      "status": "PARTIAL",
+      "implemented_scope": "Отдельный каталог DB/file views, create/copy/override delete, open по layout-handler, XML preserving.",
+      "remaining": "Rename c обновлением зависимостей, все custom layout classes, пакетное сравнение и импорт legacy settings.",
+      "native_files": [
+        "frontend/src/components/ManageViews.vue",
+        "src/tactic/ui_api/design_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/manager/view_manager_wdg.py",
+        "src/tactic/ui/panel/view_manager_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "sidebar-editor",
+      "area": "Manage Side Bar",
+      "status": "PARTIAL",
+      "implemented_scope": "Общие/свои разделы, вложенные папки, links/title/separator, order/options/visibility, targeted XML patches.",
+      "remaining": "Полный drag-drop между несколькими sections, все callbacks/definition types, сложные перемещения и shared ownership.",
+      "native_files": [
+        "frontend/src/components/SidebarEditor.vue",
+        "src/tactic/ui_api/sidebar_service.py",
+        "src/tactic/core/sidebar_edits.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/manage_view_panel_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "custom-layout-editor",
+      "area": "Custom Layout Editor",
+      "status": "PARTIAL",
+      "implemented_scope": "Секции HTML/CSS/Mako/kwargs/behavior/callback; create/copy/save/override removal, XML preserving.",
+      "remaining": "Не путать хранение Mako/JS с исполняемым preview; полный визуальный legacy layout builder.",
+      "native_files": [
+        "frontend/src/components/CustomLayoutEditor.vue",
+        "src/tactic/ui_api/design_service.py",
+        "src/tactic/core/design_document.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/tools/custom_layout_edit_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "custom-layout-runtime",
+      "area": "CustomLayoutWdg runtime",
+      "status": "PARTIAL",
+      "implemented_scope": "Sanitized static HTML/CSS Shadow DOM; server-defined children / reference/inline, native WidgetHost.",
+      "remaining": "Mako, expr, behavior JS/callbacks, async/manual/sequence/load_once, arbitrary HTML forms и внешние plugins.",
+      "native_files": [
+        "frontend/src/components/LayoutPreview.vue",
+        "src/tactic/ui_api/design_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/panel/custom_layout_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "script-editor",
+      "area": "Script Editor / Ace",
+      "status": "PARTIAL",
+      "implemented_scope": "Original custom_script, local Ace, CRUD/copy/diff, syntax checks, сохранённый Python с отдельным gate и original command.",
+      "remaining": "JS/server_js/expression execution, breakpoints/debugger, полная история, безопасные фоновые jobs/отмена.",
+      "native_files": [
+        "frontend/src/components/ScriptEditor.vue",
+        "frontend/src/components/CodeEditor.vue",
+        "src/tactic/ui_api/script_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/shelf_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "users",
+      "area": "Manage Users",
+      "status": "PARTIAL",
+      "implemented_scope": "Original UserConfig composition, manage_user table/filter, LoginAction/PasswordAction, группы и detailed memberships.",
+      "remaining": "Полные identity provider/email/invites, массовые destructive operations, проверка всех полей и non-admin access.",
+      "native_files": [
+        "frontend/src/components/UserManager.vue",
+        "frontend/src/components/UserGroups.vue",
+        "src/tactic/ui_api/admin_workspace.py",
+        "src/tactic/ui_api/security_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/startup/project_config_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "security",
+      "area": "Manage Security",
+      "status": "PARTIAL",
+      "implemented_scope": "Шесть исходных матриц и callbacks, buffers/revisions, wildcard/access-level; условные/deny ambiguous readonly + XML.",
+      "remaining": "Полный effective-access evaluator по всем группам, non-admin coverage, немедленная ревокация кэшей всех sessions.",
+      "native_files": [
+        "frontend/src/components/SecurityMatrix.vue",
+        "src/tactic/ui_api/security_service.py",
+        "src/tactic/core/admin_commands_017.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/startup/security_wdg.py"
+      ],
+      "priority": "P0",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "globals",
+      "area": "Global — 13 штатных ссылок",
+      "status": "PARTIAL",
+      "implemented_scope": "Projects/templates/users/groups/membership/translations/logs/settings/license/system info/config/DB resource имеют native routes.",
+      "remaining": "Открытие таблицы не закрывает специальную ячейку. ProjectTemplateUpdate, preview и другие инструменты остаются неполными.",
+      "native_files": [
+        "frontend/src/components/GlobalSettings.vue",
+        "src/tactic/ui_api/global_admin_service.py",
+        "frontend/src/components/GroupMembership.vue"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/config/DEFAULT-conf.xml"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "system-config",
+      "area": "System Config",
+      "status": "PARTIAL",
+      "implemented_scope": "7 исходных групп, active tactic-conf.xml, secret write-only, backup/revision, preserve unrelated XML.",
+      "remaining": "Original bootstrap/create dirs/restart automation, все custom fields; restart вручную.",
+      "native_files": [
+        "frontend/src/components/GlobalSettings.vue",
+        "src/tactic/core/system_config_model.py",
+        "src/tactic/ui_api/global_admin_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/startup/db_config_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "license",
+      "area": "License Manager",
+      "status": "PARTIAL",
+      "implemented_scope": "Original metadata и gated XML v2 renew через проверку лицензии и исходную команду.",
+      "remaining": "Успешная подпись и renew не доказаны изолированными tests; legacy v1/pickle не принимается.",
+      "native_files": [
+        "frontend/src/components/GlobalSettings.vue",
+        "src/tactic/core/license_commands.py",
+        "src/tactic/ui_api/global_admin_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/license_manager_wdg.py"
+      ],
+      "priority": "P0",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "system-info",
+      "area": "System Info / диагностические журналы",
+      "status": "BASE",
+      "implemented_scope": "Исходные сведения, schema health, cluster PID/roles/status; request START/RUNNING/END; raw worker logs отдельно.",
+      "remaining": "Это не full monitoring/SQL profiler и не проверка целостности каждой business record.",
+      "native_files": [
+        "frontend/src/components/AdminPanel.vue",
+        "src/tactic/ui_api/system_diagnostics.py",
+        "src/tactic/ui_api/action_log.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/system_info_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "messages",
+      "area": "Messages / subscriptions / chat",
+      "status": "PARTIAL",
+      "implemented_scope": "Original message/message_log/subscription, pagination, exact participants, send/mark/unsubscribe, safe structured event display.",
+      "remaining": "WebSocket/presence/read receipts/attachments/global full-text history; multi-worker durable idempotency.",
+      "native_files": [
+        "frontend/src/components/MessageCenter.vue",
+        "frontend/src/components/SubscriptionPanel.vue",
+        "src/tactic/ui_api/message_service.py",
+        "src/tactic/core/message_commands.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/message_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "mail-log",
+      "area": "My Notifications",
+      "status": "PARTIAL",
+      "implemented_scope": "Original recipient/project scope notification_log/notification_login, safe table display.",
+      "remaining": "Не SMTP delivery и не новое inbox; editing routing/templates/resend не перенесено.",
+      "native_files": [
+        "src/tactic/ui_api/extended_backend.py",
+        "src/tactic/core/notification_filters.py"
+      ],
+      "legacy_files": [
+        "src/pyasm/prod/site/my_tactic_tab_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "notifications-rules",
+      "area": "Triggers / Notifications полный редактор",
+      "status": "NO_NATIVE_SCREEN",
+      "implemented_scope": "Есть отдельные исходные generic tables и dependency reads.",
+      "remaining": "Специализированный редактор всех правил/handlers/templates, валидация, subscriptions/actions и их legacy runtime behavior.",
+      "native_files": [
+        "src/tactic/ui_api/search_type_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/app/notify_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "files",
+      "area": "Files / Snapshots / current",
+      "status": "PARTIAL",
+      "implemented_scope": "Пагинация версий/контекст, protected file delivery/preview, current через original API и revision, thumbnails.",
+      "remaining": "Весь snapshot browser/check-out/load dependency UI, sequence/revision/versionless workflows.",
+      "native_files": [
+        "frontend/src/components/FilePanel.vue",
+        "src/tactic/ui_api/version_service.py",
+        "src/tactic/ui_api/record_service.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/checkin/snapshot_files_wdg.py",
+        "src/tactic/ui/table/snapshot_element_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "checkin",
+      "area": "Uploads / CheckinWdg",
+      "status": "PARTIAL",
+      "implemented_scope": "Chunked resumable staging, fingerprint/quota/locks, original simple_checkin, uncertain result, обязательные unsupported guards.",
+      "remaining": "Многофайловая snapshot, sequences/revisions, custom validators/options/callbacks, админское reconciliation uncertain.",
+      "native_files": [
+        "frontend/src/components/UploadQueue.vue",
+        "src/tactic/ui_api/upload_store.py",
+        "src/tactic/ui_api/upload_service.py",
+        "src/tactic/core/checkin_policy.py"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/widget/checkin_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "review",
+      "area": "Review / annotations",
+      "status": "NO_NATIVE_SCREEN",
+      "implemented_scope": "Есть обычный protected media preview в FilePanel.",
+      "remaining": "Специализированное review, annotations, sessions, сравнение версий не перенесены простым video/img.",
+      "native_files": [
+        "frontend/src/components/FilePanel.vue"
+      ],
+      "legacy_files": [
+        "src/tactic/ui/tools/review_wdg.py",
+        "src/tactic/ui/widget/review_wdg.py"
+      ],
+      "priority": "P3",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "dashboards-reports",
+      "area": "Dashboards / Reports / Charts",
+      "status": "NO_NATIVE_SCREEN",
+      "implemented_scope": "Общие таблицы и статический custom layout можно использовать отдельно.",
+      "remaining": "Штатные DashboardsWdg/ReportsWdg и специализированные report/chart screens не имеют equivalent native screen.",
+      "native_files": [],
+      "legacy_files": [
+        "src/tactic/ui/startup/dashboards_wdg.py",
+        "src/tactic/ui/startup/reports_wdg.py",
+        "src/tactic/ui/chart/chart_builder_wdg.py"
+      ],
+      "priority": "P3",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "plugins-ingest",
+      "area": "Plugins / Ingestion",
+      "status": "NO_NATIVE_SCREEN",
+      "implemented_scope": "Legacy runtime и исходники остаются; generic config не доказывает полный manager.",
+      "remaining": "UI installation/uninstall/import/ingestion/validation/progress и callbacks.",
+      "native_files": [],
+      "legacy_files": [
+        "src/tactic/ui/app/plugin_wdg.py",
+        "src/tactic/ui/tools/ingest_wdg.py",
+        "src/tactic/ui/tools/ingestion_wdg.py"
+      ],
+      "priority": "P3",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "sync",
+      "area": "Sync Dashboard / tools",
+      "status": "NO_NATIVE_SCREEN",
+      "implemented_scope": "Legacy source сохранён.",
+      "remaining": "Специализированные sync policies/import/security/recovery screens и multi-site transport.",
+      "native_files": [],
+      "legacy_files": [
+        "src/tactic/ui/sync/sync_settings_wdg.py",
+        "src/tactic/ui/sync/sync_import_wdg.py"
+      ],
+      "priority": "P3",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "undo-delete",
+      "area": "Undo/Redo / cascade Delete / rename tools",
+      "status": "NO_NATIVE_SCREEN",
+      "implemented_scope": "Retire/reactivate не равно delete; общий DB transaction есть.",
+      "remaining": "Original operation history/Undo UI, cascade impacts, rename migration, exact menus.",
+      "native_files": [],
+      "legacy_files": [
+        "src/tactic/ui/app/undo_log_wdg.py"
+      ],
+      "priority": "P2",
+      "full_legacy_parity_verified": false
+    },
+    {
+      "id": "other",
+      "area": "Прочие Wdg, DCC/web utilities, examples",
+      "status": "UNREVIEWED",
+      "implemented_scope": "Исходники сохранены; полный перечень кандидатов и методов в inventory.",
+      "remaining": "Каждый не сопоставленный класс требует actual call/config analysis; отсутствие registry не доказывает unused.",
+      "native_files": [],
+      "legacy_files": [],
+      "priority": "P3",
+      "full_legacy_parity_verified": false
+    }
+  ]
+}

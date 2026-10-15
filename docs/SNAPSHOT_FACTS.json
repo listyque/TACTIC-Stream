@@ -1,0 +1,45 @@
+{
+  "basis_archive": "TACTIC_5_Vue_Source_Fork_0.20.zip",
+  "archive_sha256": "e867f7466e830175f9290655c6a7fcb958bccafffb1db117fb8cffc02d2139dd",
+  "native_version": "0.20",
+  "core_version": "5.0.0.a02",
+  "build_version": "0.20.0-source-fork",
+  "vue": "3.5.13",
+  "components": 50,
+  "manifest_entries": 7692,
+  "manifest_mismatches": [],
+  "bat_files": [
+    "SETUP_ENV.bat",
+    "MANAGE_TACTIC.bat",
+    "START_TACTIC.bat"
+  ],
+  "legacy_index_summary": {
+    "ui_candidate_files": 1351,
+    "classes": 1497,
+    "methods": 6022,
+    "source_files_scanned_for_refs": 2068,
+    "parse_errors": 2,
+    "fully_verified_files_claimed": 0,
+    "extensions": {
+      ".xml": 13,
+      ".js": 831,
+      ".css": 44,
+      ".html": 28,
+      ".py": 435
+    },
+    "vendor_support_files": 837,
+    "class_readiness_counts": {
+      "NATIVE_REFERENCE_REQUIRES_REVIEW": 91,
+      "NO_NATIVE_MAPPING_EVIDENCE": 1355,
+      "PARTIAL_RENDERER_CANDIDATE": 51
+    },
+    "file_readiness_counts": {
+      "NOT_INDIVIDUALLY_REVIEWED": 427,
+      "VENDORED_SUPPORT_NOT_SCREEN": 837,
+      "PARTIAL_OR_REFERENCED": 85,
+      "PARSE_ERROR_REVIEW_REQUIRED": 2
+    }
+  },
+  "new_test_runs": [],
+  "validation_scope": "Fresh read-only CRC/hash/static inventory. Functional tests were NOT rerun during handoff; baseline report copied separately."
+}

@@ -1,0 +1,19 @@
+{
+  "handler_version": "0.6.0.50",
+  "server_version": "0.112.100",
+  "original_requirements": 124,
+  "checked": 122,
+  "stage_open_at_start": 26,
+  "stage_closed": 24,
+  "integrated_tests": 196,
+  "integrated_skips": 2,
+  "final_wait_writer_tests": 3,
+  "postgres_initial_tests": 95,
+  "postgres_initial_passed": 94,
+  "postgres_fixed_writer_tests": 2,
+  "native_source_drag": "not qualified: Windows native input rejected",
+  "physical_tb": "deferred by user",
+  "strict_1000_subsecond": "not met consistently",
+  "production_restarted": false,
+  "raw_logs_included": false
+}

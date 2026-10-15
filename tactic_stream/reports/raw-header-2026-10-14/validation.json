@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-14",
+  "stream_version": "0.112.128",
+  "handler_version": "0.6.0.79",
+  "cause": "ListView default delegate z=1 tied overlay heading z=1; row content painted above the opaque heading.",
+  "native_regression_before_fix": "failed rendered header equality at width 1400, dark, contentX 0, contentY 100",
+  "native_after_fix": {
+    "raw_qml_tests": 14,
+    "rendered_header_comparisons": 16,
+    "result": "pass"
+  },
+  "browser": {
+    "engine": "Microsoft Edge headless",
+    "rendered_header_comparisons": 16,
+    "cell_and_sparse_save_flows": "pass",
+    "runtime_change_needed": false
+  },
+  "fixtures": {
+    "rows": 50,
+    "fields": [
+      "id",
+      "value",
+      "number",
+      "password"
+    ],
+    "windows": [
+      [
+        1400,
+        940
+      ],
+      [
+        900,
+        620
+      ]
+    ],
+    "themes": [
+      "dark",
+      "light"
+    ],
+    "horizontal_requested": [
+      0,
+      120
+    ],
+    "vertical": [
+      100,
+      493
+    ],
+    "native_dpi": 96
+  },
+  "frontend_build": "pass",
+  "data_access": "isolated fixtures only",
+  "limitations": [
+    "Production Windows display scaling was not tested."
+  ]
+}

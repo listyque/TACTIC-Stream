@@ -1,0 +1,8 @@
+{
+  "name": "tactic-native-ui",
+  "private": true,
+  "version": "0.20.0",
+  "scripts": {
+    "build": "node ../tools/native_ui/build.cjs"
+  }
+}

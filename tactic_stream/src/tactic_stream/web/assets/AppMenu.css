@@ -1,0 +1,1 @@
+.workspace-menu.labelled-menu>summary{gap:var(--space-sm);width:auto;padding-inline:8px;display:inline-flex}dialog.account-panel{color:var(--on-surface);max-width:calc(100dvw - 16px);margin:0;position:fixed}dialog.account-panel:not([open]){display:none}dialog.account-panel::backdrop{background:var(--scrim)}

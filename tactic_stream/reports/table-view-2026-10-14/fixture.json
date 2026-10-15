@@ -1,0 +1,2129 @@
+{
+  "definition": {
+    "schema_version": 1,
+    "project": "table_fixture",
+    "search_type": "cg/assets",
+    "administration": true,
+    "operations": {
+      "create": true,
+      "edit": true,
+      "retire": true,
+      "delete": true,
+      "retire_column": "s_status",
+      "checkin": true
+    },
+    "columns": {
+      "assets_category_code": {
+        "data_type": "varchar",
+        "size": 256,
+        "nullable": true
+      },
+      "code": {
+        "data_type": "varchar",
+        "size": 256,
+        "nullable": true
+      },
+      "description": {
+        "data_type": "TEXT",
+        "size": 0,
+        "nullable": true
+      },
+      "id": {
+        "data_type": "INTEGER",
+        "size": 0,
+        "nullable": true
+      },
+      "keywords": {
+        "data_type": "TEXT",
+        "size": 0,
+        "nullable": true
+      },
+      "login": {
+        "data_type": "varchar",
+        "size": 256,
+        "nullable": true
+      },
+      "name": {
+        "data_type": "varchar",
+        "size": 256,
+        "nullable": true
+      },
+      "pipeline_code": {
+        "data_type": "varchar",
+        "size": 256,
+        "nullable": true
+      },
+      "relative_dir": {
+        "data_type": "varchar",
+        "size": 256,
+        "nullable": true
+      },
+      "s_status": {
+        "data_type": "varchar",
+        "size": 256,
+        "nullable": true
+      },
+      "texture_drop": {
+        "data_type": "varchar",
+        "size": 256,
+        "nullable": true
+      },
+      "timestamp": {
+        "data_type": "timestamp",
+        "size": 0,
+        "nullable": true
+      }
+    },
+    "table": {
+      "view": "table",
+      "layout": "tactic.ui.panel.TableLayoutWdg",
+      "attributes": {
+        "layout": "TableLayoutWdg"
+      },
+      "elements": [
+        {
+          "name": "preview",
+          "title": "Preview",
+          "attributes": {
+            "name": "preview",
+            "hidden": "false",
+            "width": "98",
+            "title": "Preview",
+            "th_hide_order": "10",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "ThumbWdg",
+            "options": {
+              "detail": "false"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "thumbnail",
+            "field": "preview",
+            "supported": true,
+            "sort_field": "preview",
+            "sortable": false,
+            "server": true,
+            "editor": "preview",
+            "editor_view": "edit",
+            "editable": false
+          }
+        },
+        {
+          "name": "name",
+          "title": "Name",
+          "attributes": {
+            "name": "name",
+            "hidden": "false",
+            "width": "145",
+            "title": "Name",
+            "th_hide_order": "0",
+            "edit": "true"
+          },
+          "display": {
+            "handler": "tactic.ui.common.SimpleTableElementWdg",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "text",
+            "field": "name",
+            "supported": true,
+            "sort_field": "name",
+            "sortable": true,
+            "server": false,
+            "editor": "name",
+            "editor_view": "edit",
+            "editable": true
+          }
+        },
+        {
+          "name": "description",
+          "title": "Description",
+          "attributes": {
+            "name": "description",
+            "hidden": "false",
+            "width": "94",
+            "title": "Description",
+            "th_hide_order": "8",
+            "edit": "true"
+          },
+          "display": {
+            "handler": "tactic.ui.common.SimpleTableElementWdg",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "text",
+            "field": "description",
+            "supported": true,
+            "sort_field": "description",
+            "sortable": true,
+            "server": false,
+            "editor": "description",
+            "editor_view": "edit",
+            "editable": true
+          }
+        },
+        {
+          "name": "detail",
+          "title": "Details",
+          "attributes": {
+            "name": "detail",
+            "hidden": "false",
+            "width": "77",
+            "title": "Details",
+            "th_hide_order": "7",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "tactic.ui.table.SObjectDetailElementWdg",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "sobject_detail",
+            "field": "detail",
+            "supported": true,
+            "sort_field": "detail",
+            "sortable": false,
+            "server": true,
+            "editor": "",
+            "editor_view": "edit",
+            "editable": false
+          }
+        },
+        {
+          "name": "notes",
+          "title": "Notes",
+          "attributes": {
+            "name": "notes",
+            "hidden": "false",
+            "width": "113",
+            "title": "Notes",
+            "th_hide_order": "6",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "tactic.ui.widget.DiscussionElementWdg",
+            "options": {
+              "use_parent": "false",
+              "show_fullscreen_button": "true",
+              "note_format": "full",
+              "show_note_status": "true",
+              "show_context_notes": "false",
+              "note_expandable": "false",
+              "allow_email": "true",
+              "show_task_process": "true",
+              "mode": "default",
+              "dialog_position": "side"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "notes",
+            "field": "notes",
+            "supported": true,
+            "sort_field": "notes",
+            "sortable": false,
+            "server": true,
+            "editor": "",
+            "editor_view": "edit",
+            "editable": false
+          }
+        },
+        {
+          "name": "general_checkin",
+          "title": "Check-in (Full)",
+          "attributes": {
+            "name": "general_checkin",
+            "hidden": "false",
+            "width": "48",
+            "title": "Check-in (Full)",
+            "th_hide_order": "5",
+            "help": "general-checkin",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "tactic.ui.table.CheckinButtonElementWdg",
+            "options": {
+              "width": "800"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "checkin",
+            "field": "general_checkin",
+            "supported": true,
+            "sort_field": "general_checkin",
+            "sortable": false,
+            "server": true,
+            "editor": "",
+            "editor_view": "edit",
+            "editable": false
+          }
+        },
+        {
+          "name": "task_pipeline_panels",
+          "title": "Task Workflow",
+          "attributes": {
+            "name": "task_pipeline_panels",
+            "hidden": "false",
+            "width": "263",
+            "title": "Task Workflow",
+            "th_hide_order": "4",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "tactic.ui.table.TaskElementWdg",
+            "options": {
+              "show_labels": "false",
+              "task_filter": "process_only",
+              "show_filler_tasks": "true",
+              "show_assigned": "true",
+              "layout": "panel",
+              "show_add_task": "false",
+              "show_current_pipeline_only": "true",
+              "edit_status": "true",
+              "show_processes_in_title": "false",
+              "edit_assigned": "true",
+              "bg_color": "status",
+              "show_task_edit": "false",
+              "show_border": "none",
+              "panel_width": "75px",
+              "show_bid": "false",
+              "font_size": "12",
+              "show_status": "true",
+              "show_process": "true",
+              "collate_columns": "false",
+              "status_color": "status",
+              "show_dates": "false"
+            }
+          },
+          "action": {
+            "handler": "tactic.ui.table.TaskElementCbk",
+            "options": {}
+          },
+          "cell": {
+            "kind": "tasks",
+            "field": "task_pipeline_panels",
+            "supported": true,
+            "sort_field": "task_pipeline_panels",
+            "sortable": false,
+            "server": true,
+            "editor": "",
+            "editor_view": "edit",
+            "editable": false
+          }
+        },
+        {
+          "name": "keywords",
+          "title": "Keywords",
+          "attributes": {
+            "name": "keywords",
+            "hidden": "false",
+            "width": "113",
+            "title": "Keywords",
+            "th_hide_order": "3",
+            "edit": "true"
+          },
+          "display": {
+            "handler": "tactic.ui.common.SimpleTableElementWdg",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "text",
+            "field": "keywords",
+            "supported": true,
+            "sort_field": "keywords",
+            "sortable": true,
+            "server": false,
+            "editor": "keywords",
+            "editor_view": "edit",
+            "editable": true
+          }
+        },
+        {
+          "name": "assets_category",
+          "title": "Assets Category",
+          "attributes": {
+            "name": "assets_category",
+            "hidden": "false",
+            "width": "119",
+            "title": "Assets Category",
+            "th_hide_order": "2",
+            "edit": "true"
+          },
+          "display": {
+            "handler": "tactic.ui.table.ExpressionElementWdg",
+            "options": {
+              "expression": "@GET(cg/assets_category.name)",
+              "calc_mode": "fast"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "text",
+            "field": "assets_category",
+            "supported": true,
+            "sort_field": "cg/assets_category.name",
+            "sortable": false,
+            "server": true,
+            "editor": "assets_category",
+            "editor_view": "edit_definition",
+            "editable": true
+          }
+        },
+        {
+          "name": "timestamp",
+          "title": "timestamp",
+          "attributes": {
+            "name": "timestamp",
+            "title": "timestamp",
+            "width": "160",
+            "th_hide_order": "1",
+            "type": "timestamp"
+          },
+          "display": {
+            "handler": "",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          },
+          "cell": {
+            "kind": "text",
+            "field": "timestamp",
+            "supported": true,
+            "sort_field": "timestamp",
+            "sortable": true,
+            "server": false,
+            "editor": "",
+            "editor_view": "edit",
+            "editable": false
+          }
+        }
+      ],
+      "configured": true
+    },
+    "views": [
+      "continuous_example",
+      "table_example",
+      "cards_example",
+      "archive_assets",
+      "assets_browser",
+      "color",
+      "episode_related_assets",
+      "in_progress_assets",
+      "my_assets",
+      "my_tasks",
+      "planner",
+      "simple_filter",
+      "table"
+    ],
+    "navigation": {
+      "view": "project_view",
+      "layout": "tactic.ui.panel.TableLayoutWdg",
+      "attributes": {},
+      "elements": [
+        {
+          "name": "snap",
+          "title": "Snap",
+          "attributes": {
+            "name": "snap",
+            "title": "Snap",
+            "icon": "",
+            "state": "",
+            "is_visible": "on"
+          },
+          "display": {
+            "handler": "LinkWdg",
+            "options": {
+              "widget_key": "view_panel"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "my_tasks",
+          "title": "My Tasks",
+          "attributes": {
+            "name": "my_tasks",
+            "icon": "",
+            "title": "My Tasks",
+            "state": "",
+            "is_visible": "on"
+          },
+          "display": {
+            "handler": "LinkWdg",
+            "options": {
+              "widget_key": "view_panel"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "my_assets",
+          "title": "My Assets",
+          "attributes": {
+            "name": "my_assets",
+            "title": "My Assets",
+            "icon": "",
+            "state": "",
+            "is_visible": "on"
+          },
+          "display": {
+            "handler": "LinkWdg",
+            "options": {
+              "widget_key": "view_panel"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        }
+      ],
+      "configured": true
+    }
+  },
+  "records": [
+    {
+      "assets_category_code": "CHAR",
+      "code": "TABLE_ASSET_0",
+      "description": "Sample asset: Hero Robot",
+      "id": 1,
+      "keywords": "demo cg robot",
+      "login": null,
+      "name": "Hero Robot",
+      "pipeline_code": "table_fixture/assets",
+      "relative_dir": null,
+      "s_status": null,
+      "texture_drop": null,
+      "timestamp": "2026-10-13 23:42:49",
+      "__search_key__": "cg/assets?project=table_fixture&code=TABLE_ASSET_0"
+    },
+    {
+      "assets_category_code": "PROP",
+      "code": "TABLE_ASSET_1",
+      "description": "Sample asset: Robot Arm",
+      "id": 2,
+      "keywords": "demo cg arm",
+      "login": null,
+      "name": "Robot Arm",
+      "pipeline_code": "table_fixture/assets",
+      "relative_dir": null,
+      "s_status": null,
+      "texture_drop": null,
+      "timestamp": "2026-10-13 23:42:49",
+      "__search_key__": "cg/assets?project=table_fixture&code=TABLE_ASSET_1"
+    },
+    {
+      "assets_category_code": "PROP",
+      "code": "TABLE_ASSET_2",
+      "description": "Sample asset: Robot Body",
+      "id": 3,
+      "keywords": "demo cg body",
+      "login": null,
+      "name": "Robot Body",
+      "pipeline_code": "table_fixture/assets",
+      "relative_dir": null,
+      "s_status": null,
+      "texture_drop": null,
+      "timestamp": "2026-10-13 23:42:49",
+      "__search_key__": "cg/assets?project=table_fixture&code=TABLE_ASSET_2"
+    },
+    {
+      "assets_category_code": "PROP",
+      "code": "TABLE_ASSET_3",
+      "description": "Sample asset: Shared Tool",
+      "id": 4,
+      "keywords": "demo cg tool",
+      "login": null,
+      "name": "Shared Tool",
+      "pipeline_code": "table_fixture/assets",
+      "relative_dir": null,
+      "s_status": null,
+      "texture_drop": null,
+      "timestamp": "2026-10-13 23:42:50",
+      "__search_key__": "cg/assets?project=table_fixture&code=TABLE_ASSET_3"
+    },
+    {
+      "assets_category_code": "ENV",
+      "code": "TABLE_ASSET_4",
+      "description": "Sample asset: Workshop",
+      "id": 5,
+      "keywords": "demo cg workshop",
+      "login": null,
+      "name": "Workshop",
+      "pipeline_code": "table_fixture/assets",
+      "relative_dir": null,
+      "s_status": null,
+      "texture_drop": null,
+      "timestamp": "2026-10-13 23:42:50",
+      "__search_key__": "cg/assets?project=table_fixture&code=TABLE_ASSET_4"
+    }
+  ],
+  "cells": {
+    "cg/assets?project=table_fixture&code=TABLE_ASSET_0": {
+      "preview": {
+        "text": "",
+        "image": "",
+        "files": []
+      },
+      "detail": {
+        "text": "",
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_0"
+      },
+      "notes": {
+        "text": "4",
+        "count": 4,
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_0",
+        "process": null,
+        "contexts": [],
+        "processes": [
+          {
+            "process": "publish",
+            "count": 4,
+            "label": null,
+            "accent": "#44d8fd"
+          }
+        ]
+      },
+      "general_checkin": {
+        "text": "",
+        "available": true,
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_0",
+        "process": "publish",
+        "context": "publish",
+        "checkinMode": "",
+        "transferMode": ""
+      },
+      "task_pipeline_panels": {
+        "text": "model::admin,rig::,publish::,cache::",
+        "tasks": [
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000001",
+            "taskCode": "TASK00000001",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "model",
+            "context": "model",
+            "status": "",
+            "statusColor": "",
+            "assigned": "admin",
+            "assignedIdentity": {
+              "login": "admin",
+              "displayName": "admin",
+              "retired": false,
+              "initials": "A",
+              "avatarColor": "#59a693",
+              "avatarUrl": ""
+            },
+            "processColor": "#e45858",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "admin"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000002",
+            "taskCode": "TASK00000002",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "rig",
+            "context": "rig",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#575cea",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000003",
+            "taskCode": "TASK00000003",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "publish",
+            "context": "publish",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#44d8fd",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000004",
+            "taskCode": "TASK00000004",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "cache",
+            "context": "cache",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#4d3e2e",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          }
+        ],
+        "count": 4
+      },
+      "assets_category": {
+        "text": "Characters"
+      },
+      "timestamp": {
+        "text": "5 days ago",
+        "tooltip": "2026-10-09 00:00:00"
+      }
+    },
+    "cg/assets?project=table_fixture&code=TABLE_ASSET_1": {
+      "preview": {
+        "text": "",
+        "image": "",
+        "files": []
+      },
+      "detail": {
+        "text": "",
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_1"
+      },
+      "notes": {
+        "text": "1",
+        "count": 1,
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_1",
+        "process": null,
+        "contexts": [],
+        "processes": [
+          {
+            "process": "publish",
+            "count": 1,
+            "label": null,
+            "accent": "#44d8fd"
+          }
+        ]
+      },
+      "general_checkin": {
+        "text": "",
+        "available": true,
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_1",
+        "process": "publish",
+        "context": "publish",
+        "checkinMode": "",
+        "transferMode": ""
+      },
+      "task_pipeline_panels": {
+        "text": "model::admin,rig::,publish::,cache::",
+        "tasks": [
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000005",
+            "taskCode": "TASK00000005",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "model",
+            "context": "model",
+            "status": "",
+            "statusColor": "",
+            "assigned": "admin",
+            "assignedIdentity": {
+              "login": "admin",
+              "displayName": "admin",
+              "retired": false,
+              "initials": "A",
+              "avatarColor": "#59a693",
+              "avatarUrl": ""
+            },
+            "processColor": "#e45858",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "admin"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000006",
+            "taskCode": "TASK00000006",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "rig",
+            "context": "rig",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#575cea",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000007",
+            "taskCode": "TASK00000007",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "publish",
+            "context": "publish",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#44d8fd",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000008",
+            "taskCode": "TASK00000008",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "cache",
+            "context": "cache",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#4d3e2e",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          }
+        ],
+        "count": 4
+      },
+      "assets_category": {
+        "text": "Props"
+      },
+      "timestamp": {
+        "text": "5 days ago",
+        "tooltip": "2026-10-09 00:00:00"
+      }
+    },
+    "cg/assets?project=table_fixture&code=TABLE_ASSET_2": {
+      "preview": {
+        "text": "",
+        "image": "",
+        "files": []
+      },
+      "detail": {
+        "text": "",
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_2"
+      },
+      "notes": {
+        "text": "1",
+        "count": 1,
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_2",
+        "process": null,
+        "contexts": [],
+        "processes": [
+          {
+            "process": "publish",
+            "count": 1,
+            "label": null,
+            "accent": "#44d8fd"
+          }
+        ]
+      },
+      "general_checkin": {
+        "text": "",
+        "available": true,
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_2",
+        "process": "publish",
+        "context": "publish",
+        "checkinMode": "",
+        "transferMode": ""
+      },
+      "task_pipeline_panels": {
+        "text": "model::admin,rig::,publish::,cache::",
+        "tasks": [
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000009",
+            "taskCode": "TASK00000009",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "model",
+            "context": "model",
+            "status": "",
+            "statusColor": "",
+            "assigned": "admin",
+            "assignedIdentity": {
+              "login": "admin",
+              "displayName": "admin",
+              "retired": false,
+              "initials": "A",
+              "avatarColor": "#59a693",
+              "avatarUrl": ""
+            },
+            "processColor": "#e45858",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "admin"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000010",
+            "taskCode": "TASK00000010",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "rig",
+            "context": "rig",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#575cea",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000011",
+            "taskCode": "TASK00000011",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "publish",
+            "context": "publish",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#44d8fd",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000012",
+            "taskCode": "TASK00000012",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "cache",
+            "context": "cache",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#4d3e2e",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          }
+        ],
+        "count": 4
+      },
+      "assets_category": {
+        "text": "Props"
+      },
+      "timestamp": {
+        "text": "5 days ago",
+        "tooltip": "2026-10-09 00:00:00"
+      }
+    },
+    "cg/assets?project=table_fixture&code=TABLE_ASSET_3": {
+      "preview": {
+        "text": "",
+        "image": "",
+        "files": []
+      },
+      "detail": {
+        "text": "",
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_3"
+      },
+      "notes": {
+        "text": "1",
+        "count": 1,
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_3",
+        "process": null,
+        "contexts": [],
+        "processes": [
+          {
+            "process": "publish",
+            "count": 1,
+            "label": null,
+            "accent": "#44d8fd"
+          }
+        ]
+      },
+      "general_checkin": {
+        "text": "",
+        "available": true,
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_3",
+        "process": "publish",
+        "context": "publish",
+        "checkinMode": "",
+        "transferMode": ""
+      },
+      "task_pipeline_panels": {
+        "text": "model::admin,rig::,publish::,cache::",
+        "tasks": [
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000013",
+            "taskCode": "TASK00000013",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "model",
+            "context": "model",
+            "status": "",
+            "statusColor": "",
+            "assigned": "admin",
+            "assignedIdentity": {
+              "login": "admin",
+              "displayName": "admin",
+              "retired": false,
+              "initials": "A",
+              "avatarColor": "#59a693",
+              "avatarUrl": ""
+            },
+            "processColor": "#e45858",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "admin"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000014",
+            "taskCode": "TASK00000014",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "rig",
+            "context": "rig",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#575cea",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000015",
+            "taskCode": "TASK00000015",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "publish",
+            "context": "publish",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#44d8fd",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000016",
+            "taskCode": "TASK00000016",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "cache",
+            "context": "cache",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#4d3e2e",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          }
+        ],
+        "count": 4
+      },
+      "assets_category": {
+        "text": "Props"
+      },
+      "timestamp": {
+        "text": "5 days ago",
+        "tooltip": "2026-10-09 00:00:00"
+      }
+    },
+    "cg/assets?project=table_fixture&code=TABLE_ASSET_4": {
+      "preview": {
+        "text": "",
+        "image": "",
+        "files": []
+      },
+      "detail": {
+        "text": "",
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_4"
+      },
+      "notes": {
+        "text": "1",
+        "count": 1,
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_4",
+        "process": null,
+        "contexts": [],
+        "processes": [
+          {
+            "process": "publish",
+            "count": 1,
+            "label": null,
+            "accent": "#44d8fd"
+          }
+        ]
+      },
+      "general_checkin": {
+        "text": "",
+        "available": true,
+        "targetSearchKey": "cg/assets?project=table_fixture&code=TABLE_ASSET_4",
+        "process": "publish",
+        "context": "publish",
+        "checkinMode": "",
+        "transferMode": ""
+      },
+      "task_pipeline_panels": {
+        "text": "model::admin,rig::,publish::,cache::",
+        "tasks": [
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000017",
+            "taskCode": "TASK00000017",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "model",
+            "context": "model",
+            "status": "",
+            "statusColor": "",
+            "assigned": "admin",
+            "assignedIdentity": {
+              "login": "admin",
+              "displayName": "admin",
+              "retired": false,
+              "initials": "A",
+              "avatarColor": "#59a693",
+              "avatarUrl": ""
+            },
+            "processColor": "#e45858",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "admin"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000018",
+            "taskCode": "TASK00000018",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "rig",
+            "context": "rig",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#575cea",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000019",
+            "taskCode": "TASK00000019",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "publish",
+            "context": "publish",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#44d8fd",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          },
+          {
+            "taskSearchKey": "sthpw/task?code=TASK00000020",
+            "taskCode": "TASK00000020",
+            "hasTask": true,
+            "processType": "manual",
+            "process": "cache",
+            "context": "cache",
+            "status": "",
+            "statusColor": "",
+            "assigned": "",
+            "assignedIdentity": null,
+            "processColor": "#4d3e2e",
+            "processLabel": null,
+            "bidStart": "",
+            "bidEnd": "",
+            "assignedLabel": "Not assigned"
+          }
+        ],
+        "count": 4
+      },
+      "assets_category": {
+        "text": "Environments"
+      },
+      "timestamp": {
+        "text": "5 days ago",
+        "tooltip": "2026-10-09 00:00:00"
+      }
+    }
+  },
+  "configuration": {
+    "schema_version": 1,
+    "project": "table_fixture",
+    "search_type": "cg/assets",
+    "view": "table",
+    "table_views": [
+      {
+        "view": "table",
+        "title": "table",
+        "current": true
+      },
+      {
+        "view": "assets_browser",
+        "title": "assets_browser",
+        "current": false
+      },
+      {
+        "view": "color",
+        "title": "color",
+        "current": false
+      },
+      {
+        "view": "definition",
+        "title": "definition",
+        "current": false
+      },
+      {
+        "view": "edit",
+        "title": "edit",
+        "current": false
+      },
+      {
+        "view": "edit_definition",
+        "title": "edit_definition",
+        "current": false
+      },
+      {
+        "view": "episode_related_assets",
+        "title": "episode_related_assets",
+        "current": false
+      },
+      {
+        "view": "my_assets",
+        "title": "my_assets",
+        "current": false
+      },
+      {
+        "view": "planner",
+        "title": "planner",
+        "current": false
+      },
+      {
+        "view": "simple_filter",
+        "title": "simple_filter",
+        "current": false
+      }
+    ],
+    "views": [
+      "table",
+      "continuous_example",
+      "table_example",
+      "cards_example",
+      "edit",
+      "insert",
+      "definition",
+      "edit_definition",
+      "planner",
+      "color",
+      "episode_related_assets",
+      "simple_filter",
+      "my_assets",
+      "assets_browser",
+      "my_tasks",
+      "in_progress_assets",
+      "archive_assets"
+    ],
+    "layout_views": [
+      "continuous_example",
+      "table_example",
+      "cards_example"
+    ],
+    "revision": "7d489be3a2ee0a2ea6546295ae22d5a3fa8d06f23b2259e71712c4d3c63c094d",
+    "sources": [
+      {
+        "id": 10,
+        "xml": "<config>\n  <table layout=\"TableLayoutWdg\">\n    <element name=\"preview\" hidden=\"false\" width=\"98\" title=\"Preview\" th_hide_order=\"10\"/>\n    <element name=\"name\" hidden=\"false\" width=\"145\" title=\"Name\" th_hide_order=\"0\"/>\n    <element name=\"description\" hidden=\"false\" width=\"94\" title=\"Description\" th_hide_order=\"8\"/>\n    <element name=\"detail\" hidden=\"false\" width=\"77\" title=\"Details\" th_hide_order=\"7\"/>\n    <element name=\"notes\" hidden=\"false\" width=\"113\" title=\"Notes\" th_hide_order=\"6\"/>\n    <element name=\"general_checkin\" hidden=\"false\" width=\"48\" title=\"Check-in (Full)\" th_hide_order=\"5\"/>\n    <element name=\"task_pipeline_panels\" hidden=\"false\" width=\"263\" title=\"Task Workflow\" th_hide_order=\"4\"/>\n    <element name=\"keywords\" hidden=\"false\" width=\"113\" title=\"Keywords\" th_hide_order=\"3\"/>\n    <element name=\"assets_category\" hidden=\"false\" width=\"119\" title=\"Assets Category\" th_hide_order=\"2\"/>\n    <element name=\"timestamp\" title=\"timestamp\" width=\"160\" th_hide_order=\"1\"/>\n  </table>\n</config>",
+        "priority": ""
+      }
+    ],
+    "layers": [
+      {
+        "view": "table",
+        "xml": "<config>\n  <table layout=\"TableLayoutWdg\">\n    <element name=\"preview\" hidden=\"false\" width=\"98\" title=\"Preview\" th_hide_order=\"10\"/>\n    <element name=\"name\" hidden=\"false\" width=\"145\" title=\"Name\" th_hide_order=\"0\"/>\n    <element name=\"description\" hidden=\"false\" width=\"94\" title=\"Description\" th_hide_order=\"8\"/>\n    <element name=\"detail\" hidden=\"false\" width=\"77\" title=\"Details\" th_hide_order=\"7\"/>\n    <element name=\"notes\" hidden=\"false\" width=\"113\" title=\"Notes\" th_hide_order=\"6\"/>\n    <element name=\"general_checkin\" hidden=\"false\" width=\"48\" title=\"Check-in (Full)\" th_hide_order=\"5\"/>\n    <element name=\"task_pipeline_panels\" hidden=\"false\" width=\"263\" title=\"Task Workflow\" th_hide_order=\"4\"/>\n    <element name=\"keywords\" hidden=\"false\" width=\"113\" title=\"Keywords\" th_hide_order=\"3\"/>\n    <element name=\"assets_category\" hidden=\"false\" width=\"119\" title=\"Assets Category\" th_hide_order=\"2\"/>\n    <element name=\"timestamp\" title=\"timestamp\" width=\"160\" th_hide_order=\"1\"/>\n  </table>\n</config>\n"
+      },
+      {
+        "view": "definition",
+        "xml": "<config>\n  <definition>\n    <element name=\"preview\" width=\"149px\" edit=\"false\">\n      <display class=\"ThumbWdg\">\n        <detail>false</detail>\n      </display>\n    </element>\n    <element name=\"assets_category_code\" edit=\"true\"/>\n    <element name=\"assets_category\" width=\"80\" edit=\"true\">\n      <display widget=\"expression\">\n        <expression>@GET(cg/assets_category.name)</expression>\n        <calc_mode>fast</calc_mode>\n      </display>\n    </element>\n    <element name=\"texture_in_assets\" width=\"108px\" edit=\"false\">\n      <display widget=\"hidden_row\">\n        <search_type>cg/texture</search_type>\n        <expression>@SOBJECT(cg/texture_in_assets.cg/texture)</expression>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_shelf>true</show_shelf>\n        <view>table</view>\n      </display>\n    </element>\n    <element name=\"assets_in_assets\" width=\"183px\" edit=\"false\">\n      <display widget=\"hidden_row\">\n        <search_type>cg/assets</search_type>\n        <expression>@SOBJECT(cg/assets['code', 'ASSETS00577'].parent:cg/assets_in_assets.child:cg/assets)</expression>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_shelf>true</show_shelf>\n        <view>table</view>\n      </display>\n    </element>\n    <element name=\"assets_in_scenes\" width=\"108px\" edit=\"false\">\n      <display widget=\"hidden_row\">\n        <search_type>cg/scenes</search_type>\n        <expression>@SOBJECT(cg/assets_in_scenes.cg/scenes)</expression>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_shelf>true</show_shelf>\n        <view>table</view>\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <element name=\"name\" width=\"150\" edit=\"true\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\"/>\n    </element>\n    <element name=\"description\" width=\"250\" edit=\"true\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\"/>\n    </element>\n    <element name=\"notes\" width=\"82px\" edit=\"false\">\n      <display class=\"tactic.ui.widget.DiscussionElementWdg\">\n        <use_parent>false</use_parent>\n        <show_fullscreen_button>true</show_fullscreen_button>\n        <note_format>full</note_format>\n        <show_note_status>true</show_note_status>\n        <show_context_notes>false</show_context_notes>\n        <note_expandable>false</note_expandable>\n        <allow_email>true</allow_email>\n        <show_task_process>true</show_task_process>\n        <mode>default</mode>\n        <dialog_position>side</dialog_position>\n      </display>\n    </element>\n    <element name=\"task_pipeline_panels\" title=\"Task Workflow\" width=\"420px\" edit=\"false\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <show_labels>false</show_labels>\n        <task_filter>process_only</task_filter>\n        <show_filler_tasks>true</show_filler_tasks>\n        <show_assigned>true</show_assigned>\n        <layout>panel</layout>\n        <show_add_task>false</show_add_task>\n        <show_current_pipeline_only>true</show_current_pipeline_only>\n        <edit_status>true</edit_status>\n        <show_processes_in_title>false</show_processes_in_title>\n        <edit_assigned>true</edit_assigned>\n        <bg_color>status</bg_color>\n        <show_task_edit>false</show_task_edit>\n        <show_border>none</show_border>\n        <panel_width>75px</panel_width>\n        <show_bid>false</show_bid>\n        <font_size>12</font_size>\n        <show_status>true</show_status>\n        <show_process>true</show_process>\n        <collate_columns>false</collate_columns>\n        <status_color>status</status_color>\n        <show_dates>false</show_dates>\n      </display>\n    </element>\n    <element name=\"texture_drop\" title=\"Texture Drop\" width=\"130px\" edit=\"false\">\n      <display class=\"tactic.ui.table.DropElementWdg\">\n        <instance_type>cg/texture_in_assets</instance_type>\n        <accepted_drop_type>cg/texture</accepted_drop_type>\n        <display_expr>@GET(cg/texture.name)</display_expr>\n        <css_background-color>#425952</css_background-color>\n      </display>\n    </element>\n    <element name=\"relative_dir\">\n      <display class=\"tactic.ui.table.FormatElementWdg\">\n        <type/>\n        <fps/>\n        <format>None</format>\n      </display>\n    </element>\n    <element name=\"keywords\" width=\"150\" edit=\"true\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\"/>\n    </element>\n    <element name=\"keyword\" edit=\"false\">\n      <display class=\"tactic.ui.filter.KeywordFilterElementWdg\">\n        <column>name|keywords|description</column>\n        <mode>keyword</mode>\n      </display>\n    </element>\n    <element name=\"task_pipeline_vertical\" title=\"Task Workflow\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>vertical</layout>\n        <status_color>status</status_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>true</edit>\n        <edit_status>true</edit_status>\n        <edit_assigned>true</edit_assigned>\n        <show_filler_tasks>true</show_filler_tasks>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"delete\" title=\" \" width=\"30px\" edit=\"false\">\n      <display class=\"tactic.ui.table.RelatedElementWdg\"/>\n    </element>\n    <element name=\"task_status_edit\" edit=\"false\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <show_labels>false</show_labels>\n        <task_filter>process_only</task_filter>\n        <show_filler_tasks>true</show_filler_tasks>\n        <show_assigned>true</show_assigned>\n        <layout>panel</layout>\n        <show_add_task>false</show_add_task>\n        <show_current_pipeline_only>true</show_current_pipeline_only>\n        <edit_status>true</edit_status>\n        <show_processes_in_title>false</show_processes_in_title>\n        <edit_assigned>true</edit_assigned>\n        <bg_color>status</bg_color>\n        <show_task_edit>false</show_task_edit>\n        <show_border>none</show_border>\n        <panel_width>75px</panel_width>\n        <show_bid>false</show_bid>\n        <font_size>12</font_size>\n        <show_status>true</show_status>\n        <show_process>true</show_process>\n        <collate_columns>false</collate_columns>\n        <status_color>status</status_color>\n        <show_dates>false</show_dates>\n      </display>\n    </element>\n    <element name=\"task_edit\" title=\"Tasks\" width=\"55px\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <show_gear>true</show_gear>\n        <show_search_limit>true</show_search_limit>\n        <search_type>sthpw/task</search_type>\n        <show_insert>true</show_insert>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_search>false</show_search>\n        <view>inline_add_item</view>\n        <show_shelf>true</show_shelf>\n        <init_load_num>50</init_load_num>\n        <icon>FAS_TASKS</icon>\n      </display>\n    </element>\n    <element name=\"notes_sheet\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>tactic.ui.app.NoteSheetWdg</dynamic_class>\n        <use_parent>false</use_parent>\n        <title_icon>note_go</title_icon>\n      </display>\n    </element>\n    <element name=\"task\" width=\"352px\" edit=\"false\">\n      <display class=\"pyasm.widget.SObjectTaskTableElement\">\n        <width>250</width>\n        <bid_edit>true</bid_edit>\n        <simple_date>false</simple_date>\n        <supe>true</supe>\n      </display>\n    </element>\n  </definition>\n  <simple_filter>\n    <element name=\"keyword\" title=\"\">\n      <display class=\"tactic.ui.filter.KeywordFilterElementWdg\">\n        <mode>keyword</mode>\n        <column>process|note</column>\n      </display>\n    </element>\n  </simple_filter>\n</config>\n"
+      },
+      {
+        "view": "table",
+        "xml": "<config>\n  <table>\n    <element name=\"assets_category_code\"/>\n    <element name=\"code\"/>\n    <element name=\"description\"/>\n    <element name=\"keywords\"/>\n    <element name=\"login\"/>\n    <element name=\"name\"/>\n    <element name=\"pipeline_code\"/>\n    <element name=\"relative_dir\"/>\n    <element name=\"texture_drop\"/>\n    <element name=\"timestamp\"/>\n  </table>\n</config>\n"
+      },
+      {
+        "view": "definition",
+        "xml": "<config>\n  <definition>\n    <element name=\"preview\" width=\"149px\" edit=\"false\">\n      <display class=\"ThumbWdg\">\n        <detail>false</detail>\n      </display>\n    </element>\n    <element name=\"assets_category_code\" edit=\"true\"/>\n    <element name=\"assets_category\" width=\"80\" edit=\"true\">\n      <display widget=\"expression\">\n        <expression>@GET(cg/assets_category.name)</expression>\n        <calc_mode>fast</calc_mode>\n      </display>\n    </element>\n    <element name=\"texture_in_assets\" width=\"108px\" edit=\"false\">\n      <display widget=\"hidden_row\">\n        <search_type>cg/texture</search_type>\n        <expression>@SOBJECT(cg/texture_in_assets.cg/texture)</expression>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_shelf>true</show_shelf>\n        <view>table</view>\n      </display>\n    </element>\n    <element name=\"assets_in_assets\" width=\"183px\" edit=\"false\">\n      <display widget=\"hidden_row\">\n        <search_type>cg/assets</search_type>\n        <expression>@SOBJECT(cg/assets['code', 'ASSETS00577'].parent:cg/assets_in_assets.child:cg/assets)</expression>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_shelf>true</show_shelf>\n        <view>table</view>\n      </display>\n    </element>\n    <element name=\"assets_in_scenes\" width=\"108px\" edit=\"false\">\n      <display widget=\"hidden_row\">\n        <search_type>cg/scenes</search_type>\n        <expression>@SOBJECT(cg/assets_in_scenes.cg/scenes)</expression>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_shelf>true</show_shelf>\n        <view>table</view>\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <element name=\"name\" width=\"150\" edit=\"true\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\"/>\n    </element>\n    <element name=\"description\" width=\"250\" edit=\"true\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\"/>\n    </element>\n    <element name=\"notes\" width=\"82px\" edit=\"false\">\n      <display class=\"tactic.ui.widget.DiscussionElementWdg\">\n        <use_parent>false</use_parent>\n        <show_fullscreen_button>true</show_fullscreen_button>\n        <note_format>full</note_format>\n        <show_note_status>true</show_note_status>\n        <show_context_notes>false</show_context_notes>\n        <note_expandable>false</note_expandable>\n        <allow_email>true</allow_email>\n        <show_task_process>true</show_task_process>\n        <mode>default</mode>\n        <dialog_position>side</dialog_position>\n      </display>\n    </element>\n    <element name=\"task_pipeline_panels\" title=\"Task Workflow\" width=\"420px\" edit=\"false\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <show_labels>false</show_labels>\n        <task_filter>process_only</task_filter>\n        <show_filler_tasks>true</show_filler_tasks>\n        <show_assigned>true</show_assigned>\n        <layout>panel</layout>\n        <show_add_task>false</show_add_task>\n        <show_current_pipeline_only>true</show_current_pipeline_only>\n        <edit_status>true</edit_status>\n        <show_processes_in_title>false</show_processes_in_title>\n        <edit_assigned>true</edit_assigned>\n        <bg_color>status</bg_color>\n        <show_task_edit>false</show_task_edit>\n        <show_border>none</show_border>\n        <panel_width>75px</panel_width>\n        <show_bid>false</show_bid>\n        <font_size>12</font_size>\n        <show_status>true</show_status>\n        <show_process>true</show_process>\n        <collate_columns>false</collate_columns>\n        <status_color>status</status_color>\n        <show_dates>false</show_dates>\n      </display>\n    </element>\n    <element name=\"texture_drop\" title=\"Texture Drop\" width=\"130px\" edit=\"false\">\n      <display class=\"tactic.ui.table.DropElementWdg\">\n        <instance_type>cg/texture_in_assets</instance_type>\n        <accepted_drop_type>cg/texture</accepted_drop_type>\n        <display_expr>@GET(cg/texture.name)</display_expr>\n        <css_background-color>#425952</css_background-color>\n      </display>\n    </element>\n    <element name=\"relative_dir\">\n      <display class=\"tactic.ui.table.FormatElementWdg\">\n        <type/>\n        <fps/>\n        <format>None</format>\n      </display>\n    </element>\n    <element name=\"keywords\" width=\"150\" edit=\"true\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\"/>\n    </element>\n    <element name=\"keyword\" edit=\"false\">\n      <display class=\"tactic.ui.filter.KeywordFilterElementWdg\">\n        <column>name|keywords|description</column>\n        <mode>keyword</mode>\n      </display>\n    </element>\n    <element name=\"task_pipeline_vertical\" title=\"Task Workflow\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>vertical</layout>\n        <status_color>status</status_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>true</edit>\n        <edit_status>true</edit_status>\n        <edit_assigned>true</edit_assigned>\n        <show_filler_tasks>true</show_filler_tasks>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"delete\" title=\" \" width=\"30px\" edit=\"false\">\n      <display class=\"tactic.ui.table.RelatedElementWdg\"/>\n    </element>\n    <element name=\"task_status_edit\" edit=\"false\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <show_labels>false</show_labels>\n        <task_filter>process_only</task_filter>\n        <show_filler_tasks>true</show_filler_tasks>\n        <show_assigned>true</show_assigned>\n        <layout>panel</layout>\n        <show_add_task>false</show_add_task>\n        <show_current_pipeline_only>true</show_current_pipeline_only>\n        <edit_status>true</edit_status>\n        <show_processes_in_title>false</show_processes_in_title>\n        <edit_assigned>true</edit_assigned>\n        <bg_color>status</bg_color>\n        <show_task_edit>false</show_task_edit>\n        <show_border>none</show_border>\n        <panel_width>75px</panel_width>\n        <show_bid>false</show_bid>\n        <font_size>12</font_size>\n        <show_status>true</show_status>\n        <show_process>true</show_process>\n        <collate_columns>false</collate_columns>\n        <status_color>status</status_color>\n        <show_dates>false</show_dates>\n      </display>\n    </element>\n    <element name=\"task_edit\" title=\"Tasks\" width=\"55px\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <show_gear>true</show_gear>\n        <show_search_limit>true</show_search_limit>\n        <search_type>sthpw/task</search_type>\n        <show_insert>true</show_insert>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_search>false</show_search>\n        <view>inline_add_item</view>\n        <show_shelf>true</show_shelf>\n        <init_load_num>50</init_load_num>\n        <icon>FAS_TASKS</icon>\n      </display>\n    </element>\n    <element name=\"notes_sheet\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>tactic.ui.app.NoteSheetWdg</dynamic_class>\n        <use_parent>false</use_parent>\n        <title_icon>note_go</title_icon>\n      </display>\n    </element>\n    <element name=\"task\" width=\"352px\" edit=\"false\">\n      <display class=\"pyasm.widget.SObjectTaskTableElement\">\n        <width>250</width>\n        <bid_edit>true</bid_edit>\n        <simple_date>false</simple_date>\n        <supe>true</supe>\n      </display>\n    </element>\n  </definition>\n  <simple_filter>\n    <element name=\"keyword\" title=\"\">\n      <display class=\"tactic.ui.filter.KeywordFilterElementWdg\">\n        <mode>keyword</mode>\n        <column>process|note</column>\n      </display>\n    </element>\n  </simple_filter>\n</config>\n"
+      },
+      {
+        "view": "table",
+        "xml": "<config>\n  <!-- simple starting point for a view -->\n  <custom>\n    <element name=\"preview\"/>\n    <element name=\"code\"/>\n  </custom>\n  <default_definition>\n    <!--\n    <element name=\"code\">\n        <display class=\"pyasm.alpha.sobject_navigator_wdg.SObjectCodeLinkTableElementWdg\"/>\n    </element>\n-->\n    <element name=\"color\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\">\n        <css_background>{$VALUE}</css_background>\n      </display>\n    </element>\n    <!-- test for custom views -->\n    <element name=\"frames\">\n      <display class=\"pyasm.prod.web.FrameRangeWdg\"/>\n    </element>\n    <element name=\"drop\" title=\"Drop(Test)\">\n      <display class=\"tactic.ui.table.DropElementWdg\"/>\n    </element>\n    <element name=\"drop_item\">\n      <display class=\"tactic.ui.table.DropElementWdg\"/>\n    </element>\n    <element name=\"pipeline\" edit=\"true\">\n      <display widget=\"expression\">\n        <expression>@GET(sthpw/pipeline.name)</expression>\n      </display>\n      <action class=\"pyasm.command.DatabaseAction\">\n        <column>pipeline_code</column>\n      </action>\n    </element>\n    <element name=\"edit_item\" edit=\"false\">\n      <display class=\"tactic.ui.table.ButtonElementWdg\">\n        <icon>EDIT</icon>\n        <cbjs_action>\n            var class_name = 'tactic.ui.panel.EditWdg';\n            var tbody = bvr.src_el.getParent(\".spt_table_tbody\");\n            if (!tbody) {\n                tbody = bvr.src_el.getParent(\".spt_table_row\");\n            }\n            var search_key = tbody.getAttribute(\"spt_search_key\");\n            var kwargs = {\n              'search_key': search_key\n            }\n            spt.panel.load_popup(\"Edit Item\", class_name, kwargs)\n            </cbjs_action>\n      </display>\n    </element>\n    <element name=\"delete\" title=\" \" edit=\"false\" width=\"30px\">\n      <display class=\"tactic.ui.table.DeleteElementWdg\"/>\n    </element>\n    <element name=\"detail\" title=\"Details\" edit=\"false\">\n      <display class=\"tactic.ui.table.SObjectDetailElementWdg\">\n        </display>\n    </element>\n    <element name=\"preview\">\n      <display class=\"ThumbWdg\">\n        <icon_size>100%</icon_size>\n      </display>\n    </element>\n    <element name=\"preview_25\" title=\"Preview\">\n      <display class=\"ThumbWdg\">\n        <icon_size>25%</icon_size>\n      </display>\n    </element>\n    <element name=\"preview_50\" title=\"Preview\">\n      <display class=\"ThumbWdg\">\n        <icon_size>50%</icon_size>\n      </display>\n    </element>\n    <element name=\"preview_150\" title=\"Preview\">\n      <display class=\"ThumbWdg\">\n        <icon_size>150%</icon_size>\n      </display>\n    </element>\n    <element name=\"images\" edit=\"false\">\n      <display class=\"ThumbWdg\">\n        <icon_size>100%</icon_size>\n      </display>\n    </element>\n    <element name=\"files\" edit=\"false\">\n      <display class=\"ThumbWdg\" edit=\"false\">\n        <icon_size>100%</icon_size>\n      </display>\n    </element>\n    <element name=\"history\" title=\"History\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <icon>FAS_HISTORY</icon>\n        <dynamic_class>tactic.ui.widget.SObjectCheckinHistoryWdg</dynamic_class>\n      </display>\n    </element>\n    <element name=\"checkin\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>pyasm.prod.web.AssetHistoryWdg</dynamic_class>\n      </display>\n    </element>\n    <element name=\"general_checkin_simple\" title=\"Check-in/out\" help=\"general-checkin\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>tactic.ui.checkin.SimpleCheckinWdg</dynamic_class>\n      </display>\n    </element>\n    <element name=\"general_checkin\" title=\"Check-in (Full)\" help=\"general-checkin\" edit=\"false\" width=\"27px\">\n      <display class=\"tactic.ui.table.CheckinButtonElementWdg\">\n        <width>800</width>\n      </display>\n    </element>\n    <!--\n    <element name=\"description\">\n        <display class=\"WikiTextWdg\"/>\n    </element>\n    -->\n    <element name=\"dependency\" edit=\"false\">\n      <display class=\"DependencyLink\"/>\n    </element>\n    <element name=\"timestamp\" type=\"timestamp\"/>\n    <element name=\"info\">\n      <display class=\"pyasm.flash.widget.FlashAssetInfoWdg\"/>\n    </element>\n    <element name=\"forum\" edit=\"false\">\n      <display class=\"tactic.ui.widget.DiscussionElementWdg\"/>\n    </element>\n    <element name=\"metadata\" edit=\"false\">\n      <display class=\"tactic.ui.table.MetadataElementWdg\"/>\n    </element>\n    <element name=\"notes\">\n      <display class=\"tactic.ui.widget.DiscussionElementWdg\"/>\n    </element>\n    <element name=\"notes_popup\" title=\"Notes\">\n      <display class=\"tactic.ui.table.ButtonElementWdg\">\n        <icon>EDIT</icon>\n        <cbjs_action>\n            var class_name = 'tactic.ui.widget.DiscussionWdg';\n            var tbody = bvr.src_el.getParent(\".spt_table_tbody\");\n            if (!tbody) {\n                tbody = bvr.src_el.getParent(\".spt_table_row\");\n            }\n            var search_key = tbody.getAttribute(\"spt_search_key\");\n            var kwargs = {\n              'search_key': search_key\n            }\n            spt.panel.load_popup(\"Notes\", class_name, kwargs)\n            </cbjs_action>\n      </display>\n    </element>\n    <element name=\"notes_sheet\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <title_icon>note_go</title_icon>\n        <dynamic_class>tactic.ui.app.NoteSheetWdg</dynamic_class>\n      </display>\n    </element>\n    <element name=\"work_hours_list\" title=\"Work Hours List\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <title_icon>note_go</title_icon>\n        <dynamic_class>tactic.ui.panel.TableLayoutWdg</dynamic_class>\n        <search_type>sthpw/work_hour</search_type>\n        <view>add</view>\n        <show_search_limit>false</show_search_limit>\n        <show_gear>false</show_gear>\n      </display>\n    </element>\n    <element name=\"connection\" title=\"Connections\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <title_icon>note_go</title_icon>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <search_type>sthpw/connection</search_type>\n        <show_shelf>false</show_shelf>\n        <view>table</view>\n      </display>\n    </element>\n    <element name=\"general_publish\" edit=\"false\">\n      <display class=\"tactic.ui.table.GeneralPublishElementWdg\">\n        <preview>true</preview>\n      </display>\n    </element>\n    <element name=\"render\">\n      <display class=\"pyasm.prod.web.RenderTableElementWdg\"/>\n    </element>\n    <element name=\"status\"/>\n    <element name=\"task_edit\" title=\"Tasks\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <search_type>sthpw/task</search_type>\n        <view>inline_add_item</view>\n        <icon>DATE_MAGNIFY</icon>\n        <show_gear>true</show_gear>\n        <show_search_limit>true</show_search_limit>\n        <show_search>false</show_search>\n        <show_shelf>true</show_shelf>\n        <show_insert>true</show_insert>\n      </display>\n    </element>\n    <element name=\"summary\">\n      <display class=\"tactic.ui.table.SObjectSummaryElementWdg\"/>\n    </element>\n    <element name=\"show_related\" title=\"Name\">\n      <display class=\"tactic.ui.table.RowAddElementWdg\"/>\n    </element>\n    <element name=\"task_pipeline_panels\" title=\"Task Workflow\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>panel</layout>\n        <status_color>status</status_color>\n        <bg_color>status</bg_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>true</edit>\n        <edit_status>true</edit_status>\n        <edit_assigned>true</edit_assigned>\n        <show_filler_tasks>true</show_filler_tasks>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"task_pipeline_vertical\" title=\"Task Workflow\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>vertical</layout>\n        <status_color>status</status_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>true</edit>\n        <edit_status>true</edit_status>\n        <edit_assigned>true</edit_assigned>\n        <show_filler_tasks>true</show_filler_tasks>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"task_pipeline_report\" title=\"Task Report\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>panel</layout>\n        <bg_color>status</bg_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>false</edit>\n        <edit_status>false</edit_status>\n        <edit_assigned>false</edit_assigned>\n        <edit_assigned>false</edit_assigned>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"task_status_edit\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>panel</layout>\n        <!--\n        <context_color>status</context_color>\n        <bg_color>status</bg_color>\n        -->\n        <status_color>status</status_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>true</edit>\n        <edit_status>true</edit_status>\n        <edit_assigned>true</edit_assigned>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"task_status_history\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <search_type>sthpw/status_log</search_type>\n        <view>table</view>\n        <expression>@SOBJECT(sthpw/task.sthpw/status_log)</expression>\n        <show_shelf>false</show_shelf>\n      </display>\n    </element>\n    <element name=\"task_status_summary\" title=\"Task Summary\">\n      <display class=\"tactic.ui.table.TaskSummaryElementWdg\">\n        </display>\n    </element>\n    <element name=\"task_summary_minimal\" title=\"Task Summary\">\n      <display class=\"tactic.ui.table.TaskSummaryElementWdg\">\n        <mode>minimal</mode>\n      </display>\n    </element>\n    <!-- DEPRECATED -->\n    <element name=\"task_gear\">\n      <display class=\"TaskGearElementWdg\"/>\n      <action class=\"InitialTaskCreateAction\"/>\n    </element>\n    <element name=\"task_status\">\n      <display class=\"ParallelStatusWdg\"/>\n    </element>\n    <element name=\"task\" edit=\"false\">\n      <display class=\"pyasm.widget.SObjectTaskTableElement\">\n        <width>250</width>\n        <bid_edit>false</bid_edit>\n        <simple_date>False</simple_date>\n      </display>\n    </element>\n    <element name=\"completion\" edit=\"false\">\n      <display class=\"tactic.ui.table.TaskCompletionWdg\">\n        <width>50</width>\n      </display>\n    </element>\n    <element name=\"group_completion\" edit=\"false\">\n      <display class=\"tactic.ui.table.TaskGroupCompletionWdg\">\n        <width>50</width>\n      </display>\n    </element>\n    <element name=\"explorer\" edit=\"false\">\n      <display class=\"tactic.ui.table.ExplorerElementWdg\"/>\n    </element>\n    <element name=\"detail\" title=\"Details\" edit=\"false\">\n      <display class=\"tactic.ui.table.SObjectDetailElementWdg\"/>\n    </element>\n    <element name=\"task_detail\" title=\"Tasks\" edit=\"false\">\n      <display class=\"tactic.ui.table.SObjectTaskStatusElementWdg\"/>\n    </element>\n    <element name=\"expand\" title=\"Expand\" edit=\"false\">\n      <display class=\"tactic.ui.table.SObjectDetailElementWdg\"/>\n    </element>\n    <element name=\"task_schedule\" width=\"50%\">\n      <display class=\"tactic.ui.table.GanttElementWdg\">\n        <options>[\n        {\n          \"start_date_expr\":  \"@MIN(sthpw/task.bid_start_date)\",\n          \"end_date_expr\":    \"@MAX(sthpw/task.bid_end_date)\",\n          \"color\":            \"#33F\",\n          \"edit\":             \"true\",\n          \"default\":          \"false\"\n        },\n        {\n          \"start_date_expr\":  \"@MIN(sthpw/task.actual_start_date)\",\n          \"end_date_expr\":    \"@MAX(sthpw/task.actual_end_date)\",\n          \"color\":            \"#7abc14\",\n          \"edit\":             \"false\",\n          \"default\":          \"false\"\n        }\n\n\t]</options>\n      </display>\n      <action class=\"tactic.ui.table.GanttCbk\">\n        <sobjects>@SOBJECT(sthpw/task)</sobjects>\n        <options>[\n        {\n          \"prefix\":           \"bid\",\n          \"sobjects\":         \"@SOBJECT(sthpw/task)\",\n          \"mode\":             \"cascade\"\n        },\n        {\n          \"prefix\":           \"actual\",\n          \"sobjects\":         \"@SOBJECT(sthpw/task)\",\n          \"mode\":             \"cascade\"\n        }\n\n        ]</options>\n      </action>\n    </element>\n    <element name=\"folder_drop\" title=\"Folder / File drop\" width=\"300px\">\n      <display class=\"tactic.ui.table.DropElementWdg\">\n        <css_background-color>#425952</css_background-color>\n        <accepted_drop_type>sthpw/snapshot</accepted_drop_type>\n        <cbjs_drop_action>file_drop_action(evt, bvr)</cbjs_drop_action>\n      </display>\n      <action class=\"tactic.ui.widget.file_browser_wdg.FileIngestCmd\">\n      </action>\n    </element>\n    <element name=\"file_list\" title=\"File List\">\n      <display class=\"tactic.ui.table.SObjectFilesElementWdg\">\n      </display>\n    </element>\n    <!-- Budget columns -->\n    <element name=\"bid_hours\" title=\"Bid Hours\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <group_bottom>@SUM(.bid_hours)</group_bottom>\n        <expression>@SUM(sthpw/task.bid_duration)</expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <bottom>@SUM(.bid_hours)</bottom>\n      </display>\n    </element>\n    <element name=\"bid_cost\" title=\"Bid Cost\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <group_bottom>${@SUM(.bid_cost)}</group_bottom>\n        <expression>@SUM(@GET(sthpw/task.bid_duration) * @GET(sthpw/task.sthpw/login.hourly_wage))</expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <bottom>${@SUM(.bid_cost)}</bottom>\n      </display>\n    </element>\n    <element name=\"actual_hours\" title=\"Actual Hours\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <group_bottom>@SUM(.actual_hours)</group_bottom>\n        <expression>@SUM(sthpw/task.sthpw/work_hour.straight_time)</expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <bottom>@SUM(.actual_hours)</bottom>\n      </display>\n    </element>\n    <element name=\"actual_cost\" title=\"Actual Cost\" width=\"100px\" edit=\"true\">\n      <display widget=\"expression\">\n        <group_bottom>${@SUM(.actual_cost)}</group_bottom>\n        <bottom>${@SUM(.actual_cost)}</bottom>\n        <expression>@SUM(@GET(sthpw/task.sthpw/work_hour.straight_time) * @GET(sthpw/task.sthpw/work_hour.sthpw/login.hourly_wage))</expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <display_expression>${@GET(.actual_cost)}</display_expression>\n      </display>\n    </element>\n    <element name=\"is_overbudget\" title=\"Overbudget\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <expression>@GET(.bid_cost) &lt; @GET(.actual_cost)</expression>\n        <mode>check</mode>\n      </display>\n    </element>\n    <element name=\"variance\" title=\"Variance\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <group_bottom>${@SUM(.variance)}</group_bottom>\n        <display_format>-$1,234.00</display_format>\n        <expression>@GET(.bid_cost) - @GET(.actual_cost) </expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <bottom>${@SUM(.variance)}</bottom>\n      </display>\n    </element>\n    <element name=\"cost_breakdown\" title=\"Cost Breakdown\" width=\"100px\" edit=\"false\">\n      <display widget=\"hidden_row\">\n        <icon_tip>Asset Cost Breakdown</icon_tip>\n        <search_type>sthpw/task</search_type>\n        <width>100%</width>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_shelf>false</show_shelf>\n        <view>asset_cost_breakdown</view>\n        <expression>@SOBJECT(sthpw/task)</expression>\n        <show_select>true</show_select>\n        <icon>CONTENTS</icon>\n      </display>\n    </element>\n    <element name=\"asset_panel_wdg\" title=\"Asset Panel\" edit=\"false\">\n      <display widget=\"custom_layout\">\n        <include_mako>true</include_mako>\n        <view>asset_panel_wdg</view>\n      </display>\n    </element>\n    <element name=\"preview_tile\" edit=\"false\">\n      <display class=\"ThumbWdg\">\n        <icon_size>50%</icon_size>\n        <latest_icon>true</latest_icon>\n        <detail>false</detail>\n      </display>\n    </element>\n    <element name=\"usage_mb\" title=\"Usage MB\" width=\"122.9px\" edit=\"true\">\n      <display widget=\"expression\">\n        <group_bottom>{@SUM(.usage_mb), %0.2f}Mb</group_bottom>\n        <expression>@SUM(sthpw/snapshot.sthpw/file.st_size) /1024000</expression>\n        <display_expression>{@GET(.usage_mb), %0.2f}MB</display_expression>\n        <bottom>{@SUM(.usage_mb), %0.2f}Mb</bottom>\n      </display>\n    </element>\n  </default_definition>\n  <search layout=\"SearchWdg\">\n    <element name=\"Quick Search\">\n      <display class=\"tactic.ui.filter.SObjectSearchFilterWdg\">\n        <prefix>simple</prefix>\n      </display>\n    </element>\n    <element name=\"Custom\">\n      <display class=\"tactic.ui.filter.GeneralFilterWdg\">\n        <prefix>custom</prefix>\n        <mode>custom</mode>\n        <custom_filter_view>custom_filter</custom_filter_view>\n      </display>\n    </element>\n    <element name=\"Filter\">\n      <display class=\"tactic.ui.filter.GeneralFilterWdg\">\n        <prefix>main_body</prefix>\n        <mode>sobject</mode>\n      </display>\n    </element>\n    <element name=\"Parent\">\n      <display class=\"tactic.ui.filter.GeneralFilterWdg\">\n        <prefix>parent</prefix>\n        <mode>parent</mode>\n      </display>\n    </element>\n    <element name=\"Children\">\n      <display class=\"tactic.ui.filter.GeneralFilterWdg\">\n        <prefix>children</prefix>\n        <mode>child</mode>\n      </display>\n    </element>\n  </search>\n  <table>\n    <element name=\"code\"/>\n  </table>\n  <!-- used to upload preview -->\n  <preview layout=\"EditWdg\">\n    <element name=\"preview\"/>\n  </preview>\n  <planner_left>\n    <element name=\"images\">\n      <display class=\"ThumbWdg\">\n        <icon_size>60</icon_size>\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\"/>\n    <element name=\"number_of_instances\">\n      <display class=\"pyasm.prod.web.NumSObjectInstancesWdg\"/>\n    </element>\n  </planner_left>\n  <planner_right>\n    <element name=\"images\">\n      <display class=\"ThumbWdg\">\n        <icon_size>60</icon_size>\n      </display>\n    </element>\n    <element name=\"instances\">\n      <display class=\"Htactic.ui.table.HiddenRowElementWdg\">\n        <title_icon>Contents</title_icon>\n        <dynamic>pyasm.prod.web.SObjectInstanceListWdg</dynamic>\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\"/>\n    <element name=\"number_of_instances\">\n      <display class=\"pyasm.prod.web.NumSObjectInstancesWdg\"/>\n    </element>\n  </planner_right>\n  <!-- for the layout page, to add asset instances to shots -->\n  <layout>\n    <element name=\"select_instance\">\n      <display class=\"pyasm.prod.web.SObjectCheckboxWdg\"/>\n    </element>\n    <element name=\"images\">\n      <display class=\"ThumbWdg\">\n        <icon_size>45</icon_size>\n        <!-- TODO: this is ugly. need a more formal relationship -->\n        <!--\n      <redirect>prod/asset|code|asset_code</redirect>\n      -->\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <!--\n  <element name=\"update\">\n        <display class=\"UpdateWdg\">\n            <insert>false</insert>\n            <delete>true</delete>\n        </display>\n  </element>\n-->\n  </layout>\n  <!-- display in the loader with Maya -->\n  <load default=\"table\">\n    <element name=\"images\">\n      <display class=\"ThumbWdg\">\n        <icon_size>45</icon_size>\n      </display>\n    </element>\n    <element name=\"checkin\"/>\n    <element name=\"code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\"/>\n    <element name=\"input\">\n      <display class=\"pyasm.prod.web.SnapshotLoaderWdg\">\n        <mode>input</mode>\n      </display>\n    </element>\n    <element name=\"load\">\n      <display class=\"pyasm.prod.web.SnapshotLoaderWdg\">\n        <mode>output</mode>\n      </display>\n    </element>\n  </load>\n  <render_submit>\n    <element name=\"job_type\">\n      <display class=\"SelectWdg\">\n        <setting>render_job_type</setting>\n      </display>\n      <action class=\"NullAction\"/>\n    </element>\n    <!-- Policy determines the details of the render -->\n    <element name=\"policy_code\" title=\"policy\">\n      <display class=\"SelectWdg\">\n        <query>prod/render_policy|code|code</query>\n      </display>\n    </element>\n    <element name=\"resolution\"/>\n  </render_submit>\n  <insert>\n    <!-- this one is used more for built-in insert view of asset or shot-->\n    <element name=\"preview_insert\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"preview\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"picture\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n         </display>\n      <action class=\"NullAction\"/>\n    </element>\n    <element name=\"images\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"files\" edit=\"true\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        <context>publish</context>\n      </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"snapshot\" edit=\"true\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"episode_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/episode|code|code</query>\n        <empty>true</empty>\n        <web_state>true</web_state>\n      </display>\n    </element>\n    <!--\n    <element name=\"asset_library\">\n        <display class=\"SelectWdg\">\n            <query>prod/asset_library|code|code</query>\n            <empty>true</empty>\n        </display>\n    </element>\n        -->\n    <element name=\"sequence_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/sequence|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\">\n      <display class=\"TextAreaWdg\"/>\n    </element>\n    <element name=\"sort_order\">\n      <display class=\"TextWdg\">\n        <hint>An integer. 1 will stay at the top</hint>\n      </display>\n    </element>\n  </insert>\n  <edit>\n    <element name=\"preview\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"picture\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n         </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"images\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n      <!-- <action class=\"UploadAction\"/>-->\n    </element>\n    <element name=\"files\" edit=\"true\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        <context>publish</context>\n      </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"snapshot\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n      <!-- <action class=\"UploadAction\"/>-->\n    </element>\n    <element name=\"episode_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/episode|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"sequence_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/sequence|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"shot_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/shot|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"asset_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/asset|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"pipeline\">\n      <display class=\"tactic.ui.input.PipelineInputWdg\"/>\n      <action class=\"pyasm.command.DatabaseAction\">\n        <column>pipeline_code</column>\n      </action>\n    </element>\n    <element name=\"pipeline_code\">\n      <display class=\"tactic.ui.input.PipelineInputWdg\">\n        <use_code>true</use_code>\n      </display>\n    </element>\n    <element name=\"task_status\">\n      <display class=\"ParallelStatusEditWdg\"/>\n    </element>\n    <element name=\"timestamp\"/>\n    <element name=\"code\" title=\"Code (optional)\">\n      <display class=\"TextWdg\">\n        <hint>Unique code for this item.  If left empty, then one will automatically be assigned.</hint>\n      </display>\n    </element>\n    <element name=\"short_code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\">\n      <display class=\"TextAreaWdg\"/>\n    </element>\n    <element name=\"data\">\n      <display class=\"TextAreaWdg\">\n        <rows>10</rows>\n      </display>\n    </element>\n    <element name=\"sort_order\">\n      <display class=\"TextWdg\">\n        <hint>Order with an integer. 1 will stay at the top</hint>\n      </display>\n    </element>\n    <element name=\"add_initial_tasks\">\n      <display class=\"CheckboxWdg\"/>\n      <action class=\"pyasm.command.InitialTaskCreateAction\"/>\n    </element>\n  </edit>\n  <default_edit_definition>\n    <element name=\"preview\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"picture\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n         </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"images\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n      <!-- <action class=\"UploadAction\"/>-->\n    </element>\n    <element name=\"files\" edit=\"true\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        <context>publish</context>\n      </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"snapshot\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n      <!-- <action class=\"UploadAction\"/>-->\n    </element>\n    <element name=\"episode_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/episode|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"sequence_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/sequence|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"shot_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/shot|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"asset_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/asset|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"pipeline\">\n      <display class=\"tactic.ui.input.PipelineInputWdg\"/>\n      <action class=\"pyasm.command.DatabaseAction\">\n        <column>pipeline_code</column>\n      </action>\n    </element>\n    <element name=\"pipeline_code\">\n      <display class=\"tactic.ui.input.PipelineInputWdg\">\n        <use_code>true</use_code>\n      </display>\n    </element>\n    <element name=\"task_status\">\n      <display class=\"ParallelStatusEditWdg\"/>\n    </element>\n    <element name=\"timestamp\"/>\n    <element name=\"code\" title=\"Code (optional)\">\n      <display class=\"TextWdg\">\n        <hint>Unique code for this item.  If left empty, then one will automatically be assigned.</hint>\n      </display>\n    </element>\n    <element name=\"short_code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\">\n      <display class=\"TextAreaWdg\"/>\n    </element>\n    <element name=\"sort_order\">\n      <display class=\"TextWdg\">\n        <hint>Order with an integer. 1 will stay at the top</hint>\n      </display>\n    </element>\n    <element name=\"add_initial_tasks\">\n      <display class=\"CheckboxWdg\"/>\n      <action class=\"pyasm.command.InitialTaskCreateAction\"/>\n    </element>\n  </default_edit_definition>\n  <edit_collection>\n    <element name=\"preview\"/>\n    <element name=\"name\"/>\n    <element name=\"description\"/>\n    <element name=\"keywords\"/>\n    <element name=\"is_collection\">\n      <display class=\"HiddenWdg\">\n        <default>true</default>\n        <column>_is_collection</column>\n      </display>\n    </element>\n  </edit_collection>\n  <preview_edit>\n    <element name=\"preview\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <!--\n        <action class=\"NullAction\"/>\n        -->\n      <action class=\"UploadAction\"/>\n    </element>\n  </preview_edit>\n  <!-- for manual publishing thru uploading -->\n  <publish>\n    <element name=\"images\">\n      <display class=\"ThumbInputWdg\"/>\n      <action class=\"NullAction\"/>\n    </element>\n    <element name=\"publish_files\">\n      <display class=\"tactic.ui.widget.UploadWdg\">\n        <context_expr>@GET(sthpw/task.process)</context_expr>\n      </display>\n      <action class=\"NullAction\"/>\n    </element>\n  </publish>\n  <add_item>\n    <element name=\"preview\" width=\"100px\"/>\n    <element name=\"code\" width=\"100px\"/>\n  </add_item>\n  <tracking layout=\"TableLayoutWdg\">\n    <element name=\"preview\"/>\n    <element name=\"code\"/>\n    <element name=\"keywords\"/>\n    <element name=\"description\"/>\n    <element name=\"explorer\"/>\n    <element name=\"general_checkin\"/>\n    <element name=\"history\"/>\n    <element name=\"task_edit\"/>\n    <element name=\"task_status_edit\"/>\n  </tracking>\n</config>\n"
+      },
+      {
+        "view": "default_definition",
+        "xml": "<config>\n  <!-- simple starting point for a view -->\n  <custom>\n    <element name=\"preview\"/>\n    <element name=\"code\"/>\n  </custom>\n  <default_definition>\n    <!--\n    <element name=\"code\">\n        <display class=\"pyasm.alpha.sobject_navigator_wdg.SObjectCodeLinkTableElementWdg\"/>\n    </element>\n-->\n    <element name=\"color\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\">\n        <css_background>{$VALUE}</css_background>\n      </display>\n    </element>\n    <!-- test for custom views -->\n    <element name=\"frames\">\n      <display class=\"pyasm.prod.web.FrameRangeWdg\"/>\n    </element>\n    <element name=\"drop\" title=\"Drop(Test)\">\n      <display class=\"tactic.ui.table.DropElementWdg\"/>\n    </element>\n    <element name=\"drop_item\">\n      <display class=\"tactic.ui.table.DropElementWdg\"/>\n    </element>\n    <element name=\"pipeline\" edit=\"true\">\n      <display widget=\"expression\">\n        <expression>@GET(sthpw/pipeline.name)</expression>\n      </display>\n      <action class=\"pyasm.command.DatabaseAction\">\n        <column>pipeline_code</column>\n      </action>\n    </element>\n    <element name=\"edit_item\" edit=\"false\">\n      <display class=\"tactic.ui.table.ButtonElementWdg\">\n        <icon>EDIT</icon>\n        <cbjs_action>\n            var class_name = 'tactic.ui.panel.EditWdg';\n            var tbody = bvr.src_el.getParent(\".spt_table_tbody\");\n            if (!tbody) {\n                tbody = bvr.src_el.getParent(\".spt_table_row\");\n            }\n            var search_key = tbody.getAttribute(\"spt_search_key\");\n            var kwargs = {\n              'search_key': search_key\n            }\n            spt.panel.load_popup(\"Edit Item\", class_name, kwargs)\n            </cbjs_action>\n      </display>\n    </element>\n    <element name=\"delete\" title=\" \" edit=\"false\" width=\"30px\">\n      <display class=\"tactic.ui.table.DeleteElementWdg\"/>\n    </element>\n    <element name=\"detail\" title=\"Details\" edit=\"false\">\n      <display class=\"tactic.ui.table.SObjectDetailElementWdg\">\n        </display>\n    </element>\n    <element name=\"preview\">\n      <display class=\"ThumbWdg\">\n        <icon_size>100%</icon_size>\n      </display>\n    </element>\n    <element name=\"preview_25\" title=\"Preview\">\n      <display class=\"ThumbWdg\">\n        <icon_size>25%</icon_size>\n      </display>\n    </element>\n    <element name=\"preview_50\" title=\"Preview\">\n      <display class=\"ThumbWdg\">\n        <icon_size>50%</icon_size>\n      </display>\n    </element>\n    <element name=\"preview_150\" title=\"Preview\">\n      <display class=\"ThumbWdg\">\n        <icon_size>150%</icon_size>\n      </display>\n    </element>\n    <element name=\"images\" edit=\"false\">\n      <display class=\"ThumbWdg\">\n        <icon_size>100%</icon_size>\n      </display>\n    </element>\n    <element name=\"files\" edit=\"false\">\n      <display class=\"ThumbWdg\" edit=\"false\">\n        <icon_size>100%</icon_size>\n      </display>\n    </element>\n    <element name=\"history\" title=\"History\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <icon>FAS_HISTORY</icon>\n        <dynamic_class>tactic.ui.widget.SObjectCheckinHistoryWdg</dynamic_class>\n      </display>\n    </element>\n    <element name=\"checkin\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>pyasm.prod.web.AssetHistoryWdg</dynamic_class>\n      </display>\n    </element>\n    <element name=\"general_checkin_simple\" title=\"Check-in/out\" help=\"general-checkin\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>tactic.ui.checkin.SimpleCheckinWdg</dynamic_class>\n      </display>\n    </element>\n    <element name=\"general_checkin\" title=\"Check-in (Full)\" help=\"general-checkin\" edit=\"false\" width=\"27px\">\n      <display class=\"tactic.ui.table.CheckinButtonElementWdg\">\n        <width>800</width>\n      </display>\n    </element>\n    <!--\n    <element name=\"description\">\n        <display class=\"WikiTextWdg\"/>\n    </element>\n    -->\n    <element name=\"dependency\" edit=\"false\">\n      <display class=\"DependencyLink\"/>\n    </element>\n    <element name=\"timestamp\" type=\"timestamp\"/>\n    <element name=\"info\">\n      <display class=\"pyasm.flash.widget.FlashAssetInfoWdg\"/>\n    </element>\n    <element name=\"forum\" edit=\"false\">\n      <display class=\"tactic.ui.widget.DiscussionElementWdg\"/>\n    </element>\n    <element name=\"metadata\" edit=\"false\">\n      <display class=\"tactic.ui.table.MetadataElementWdg\"/>\n    </element>\n    <element name=\"notes\">\n      <display class=\"tactic.ui.widget.DiscussionElementWdg\"/>\n    </element>\n    <element name=\"notes_popup\" title=\"Notes\">\n      <display class=\"tactic.ui.table.ButtonElementWdg\">\n        <icon>EDIT</icon>\n        <cbjs_action>\n            var class_name = 'tactic.ui.widget.DiscussionWdg';\n            var tbody = bvr.src_el.getParent(\".spt_table_tbody\");\n            if (!tbody) {\n                tbody = bvr.src_el.getParent(\".spt_table_row\");\n            }\n            var search_key = tbody.getAttribute(\"spt_search_key\");\n            var kwargs = {\n              'search_key': search_key\n            }\n            spt.panel.load_popup(\"Notes\", class_name, kwargs)\n            </cbjs_action>\n      </display>\n    </element>\n    <element name=\"notes_sheet\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <title_icon>note_go</title_icon>\n        <dynamic_class>tactic.ui.app.NoteSheetWdg</dynamic_class>\n      </display>\n    </element>\n    <element name=\"work_hours_list\" title=\"Work Hours List\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <title_icon>note_go</title_icon>\n        <dynamic_class>tactic.ui.panel.TableLayoutWdg</dynamic_class>\n        <search_type>sthpw/work_hour</search_type>\n        <view>add</view>\n        <show_search_limit>false</show_search_limit>\n        <show_gear>false</show_gear>\n      </display>\n    </element>\n    <element name=\"connection\" title=\"Connections\" edit=\"false\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <title_icon>note_go</title_icon>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <search_type>sthpw/connection</search_type>\n        <show_shelf>false</show_shelf>\n        <view>table</view>\n      </display>\n    </element>\n    <element name=\"general_publish\" edit=\"false\">\n      <display class=\"tactic.ui.table.GeneralPublishElementWdg\">\n        <preview>true</preview>\n      </display>\n    </element>\n    <element name=\"render\">\n      <display class=\"pyasm.prod.web.RenderTableElementWdg\"/>\n    </element>\n    <element name=\"status\"/>\n    <element name=\"task_edit\" title=\"Tasks\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <search_type>sthpw/task</search_type>\n        <view>inline_add_item</view>\n        <icon>DATE_MAGNIFY</icon>\n        <show_gear>true</show_gear>\n        <show_search_limit>true</show_search_limit>\n        <show_search>false</show_search>\n        <show_shelf>true</show_shelf>\n        <show_insert>true</show_insert>\n      </display>\n    </element>\n    <element name=\"summary\">\n      <display class=\"tactic.ui.table.SObjectSummaryElementWdg\"/>\n    </element>\n    <element name=\"show_related\" title=\"Name\">\n      <display class=\"tactic.ui.table.RowAddElementWdg\"/>\n    </element>\n    <element name=\"task_pipeline_panels\" title=\"Task Workflow\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>panel</layout>\n        <status_color>status</status_color>\n        <bg_color>status</bg_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>true</edit>\n        <edit_status>true</edit_status>\n        <edit_assigned>true</edit_assigned>\n        <show_filler_tasks>true</show_filler_tasks>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"task_pipeline_vertical\" title=\"Task Workflow\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>vertical</layout>\n        <status_color>status</status_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>true</edit>\n        <edit_status>true</edit_status>\n        <edit_assigned>true</edit_assigned>\n        <show_filler_tasks>true</show_filler_tasks>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"task_pipeline_report\" title=\"Task Report\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>panel</layout>\n        <bg_color>status</bg_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>false</edit>\n        <edit_status>false</edit_status>\n        <edit_assigned>false</edit_assigned>\n        <edit_assigned>false</edit_assigned>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"task_status_edit\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <layout>panel</layout>\n        <!--\n        <context_color>status</context_color>\n        <bg_color>status</bg_color>\n        -->\n        <status_color>status</status_color>\n        <show_assigned>true</show_assigned>\n        <show_dates>true</show_dates>\n        <edit>true</edit>\n        <edit_status>true</edit_status>\n        <edit_assigned>true</edit_assigned>\n      </display>\n      <action class=\"tactic.ui.table.TaskElementCbk\"/>\n    </element>\n    <element name=\"task_status_history\">\n      <display class=\"tactic.ui.table.HiddenRowElementWdg\">\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <search_type>sthpw/status_log</search_type>\n        <view>table</view>\n        <expression>@SOBJECT(sthpw/task.sthpw/status_log)</expression>\n        <show_shelf>false</show_shelf>\n      </display>\n    </element>\n    <element name=\"task_status_summary\" title=\"Task Summary\">\n      <display class=\"tactic.ui.table.TaskSummaryElementWdg\">\n        </display>\n    </element>\n    <element name=\"task_summary_minimal\" title=\"Task Summary\">\n      <display class=\"tactic.ui.table.TaskSummaryElementWdg\">\n        <mode>minimal</mode>\n      </display>\n    </element>\n    <!-- DEPRECATED -->\n    <element name=\"task_gear\">\n      <display class=\"TaskGearElementWdg\"/>\n      <action class=\"InitialTaskCreateAction\"/>\n    </element>\n    <element name=\"task_status\">\n      <display class=\"ParallelStatusWdg\"/>\n    </element>\n    <element name=\"task\" edit=\"false\">\n      <display class=\"pyasm.widget.SObjectTaskTableElement\">\n        <width>250</width>\n        <bid_edit>false</bid_edit>\n        <simple_date>False</simple_date>\n      </display>\n    </element>\n    <element name=\"completion\" edit=\"false\">\n      <display class=\"tactic.ui.table.TaskCompletionWdg\">\n        <width>50</width>\n      </display>\n    </element>\n    <element name=\"group_completion\" edit=\"false\">\n      <display class=\"tactic.ui.table.TaskGroupCompletionWdg\">\n        <width>50</width>\n      </display>\n    </element>\n    <element name=\"explorer\" edit=\"false\">\n      <display class=\"tactic.ui.table.ExplorerElementWdg\"/>\n    </element>\n    <element name=\"detail\" title=\"Details\" edit=\"false\">\n      <display class=\"tactic.ui.table.SObjectDetailElementWdg\"/>\n    </element>\n    <element name=\"task_detail\" title=\"Tasks\" edit=\"false\">\n      <display class=\"tactic.ui.table.SObjectTaskStatusElementWdg\"/>\n    </element>\n    <element name=\"expand\" title=\"Expand\" edit=\"false\">\n      <display class=\"tactic.ui.table.SObjectDetailElementWdg\"/>\n    </element>\n    <element name=\"task_schedule\" width=\"50%\">\n      <display class=\"tactic.ui.table.GanttElementWdg\">\n        <options>[\n        {\n          \"start_date_expr\":  \"@MIN(sthpw/task.bid_start_date)\",\n          \"end_date_expr\":    \"@MAX(sthpw/task.bid_end_date)\",\n          \"color\":            \"#33F\",\n          \"edit\":             \"true\",\n          \"default\":          \"false\"\n        },\n        {\n          \"start_date_expr\":  \"@MIN(sthpw/task.actual_start_date)\",\n          \"end_date_expr\":    \"@MAX(sthpw/task.actual_end_date)\",\n          \"color\":            \"#7abc14\",\n          \"edit\":             \"false\",\n          \"default\":          \"false\"\n        }\n\n\t]</options>\n      </display>\n      <action class=\"tactic.ui.table.GanttCbk\">\n        <sobjects>@SOBJECT(sthpw/task)</sobjects>\n        <options>[\n        {\n          \"prefix\":           \"bid\",\n          \"sobjects\":         \"@SOBJECT(sthpw/task)\",\n          \"mode\":             \"cascade\"\n        },\n        {\n          \"prefix\":           \"actual\",\n          \"sobjects\":         \"@SOBJECT(sthpw/task)\",\n          \"mode\":             \"cascade\"\n        }\n\n        ]</options>\n      </action>\n    </element>\n    <element name=\"folder_drop\" title=\"Folder / File drop\" width=\"300px\">\n      <display class=\"tactic.ui.table.DropElementWdg\">\n        <css_background-color>#425952</css_background-color>\n        <accepted_drop_type>sthpw/snapshot</accepted_drop_type>\n        <cbjs_drop_action>file_drop_action(evt, bvr)</cbjs_drop_action>\n      </display>\n      <action class=\"tactic.ui.widget.file_browser_wdg.FileIngestCmd\">\n      </action>\n    </element>\n    <element name=\"file_list\" title=\"File List\">\n      <display class=\"tactic.ui.table.SObjectFilesElementWdg\">\n      </display>\n    </element>\n    <!-- Budget columns -->\n    <element name=\"bid_hours\" title=\"Bid Hours\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <group_bottom>@SUM(.bid_hours)</group_bottom>\n        <expression>@SUM(sthpw/task.bid_duration)</expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <bottom>@SUM(.bid_hours)</bottom>\n      </display>\n    </element>\n    <element name=\"bid_cost\" title=\"Bid Cost\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <group_bottom>${@SUM(.bid_cost)}</group_bottom>\n        <expression>@SUM(@GET(sthpw/task.bid_duration) * @GET(sthpw/task.sthpw/login.hourly_wage))</expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <bottom>${@SUM(.bid_cost)}</bottom>\n      </display>\n    </element>\n    <element name=\"actual_hours\" title=\"Actual Hours\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <group_bottom>@SUM(.actual_hours)</group_bottom>\n        <expression>@SUM(sthpw/task.sthpw/work_hour.straight_time)</expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <bottom>@SUM(.actual_hours)</bottom>\n      </display>\n    </element>\n    <element name=\"actual_cost\" title=\"Actual Cost\" width=\"100px\" edit=\"true\">\n      <display widget=\"expression\">\n        <group_bottom>${@SUM(.actual_cost)}</group_bottom>\n        <bottom>${@SUM(.actual_cost)}</bottom>\n        <expression>@SUM(@GET(sthpw/task.sthpw/work_hour.straight_time) * @GET(sthpw/task.sthpw/work_hour.sthpw/login.hourly_wage))</expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <display_expression>${@GET(.actual_cost)}</display_expression>\n      </display>\n    </element>\n    <element name=\"is_overbudget\" title=\"Overbudget\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <expression>@GET(.bid_cost) &lt; @GET(.actual_cost)</expression>\n        <mode>check</mode>\n      </display>\n    </element>\n    <element name=\"variance\" title=\"Variance\" width=\"100px\" edit=\"false\">\n      <display widget=\"expression\">\n        <group_bottom>${@SUM(.variance)}</group_bottom>\n        <display_format>-$1,234.00</display_format>\n        <expression>@GET(.bid_cost) - @GET(.actual_cost) </expression>\n        <inline_styles>font-weight: bold;</inline_styles>\n        <bottom>${@SUM(.variance)}</bottom>\n      </display>\n    </element>\n    <element name=\"cost_breakdown\" title=\"Cost Breakdown\" width=\"100px\" edit=\"false\">\n      <display widget=\"hidden_row\">\n        <icon_tip>Asset Cost Breakdown</icon_tip>\n        <search_type>sthpw/task</search_type>\n        <width>100%</width>\n        <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>\n        <show_shelf>false</show_shelf>\n        <view>asset_cost_breakdown</view>\n        <expression>@SOBJECT(sthpw/task)</expression>\n        <show_select>true</show_select>\n        <icon>CONTENTS</icon>\n      </display>\n    </element>\n    <element name=\"asset_panel_wdg\" title=\"Asset Panel\" edit=\"false\">\n      <display widget=\"custom_layout\">\n        <include_mako>true</include_mako>\n        <view>asset_panel_wdg</view>\n      </display>\n    </element>\n    <element name=\"preview_tile\" edit=\"false\">\n      <display class=\"ThumbWdg\">\n        <icon_size>50%</icon_size>\n        <latest_icon>true</latest_icon>\n        <detail>false</detail>\n      </display>\n    </element>\n    <element name=\"usage_mb\" title=\"Usage MB\" width=\"122.9px\" edit=\"true\">\n      <display widget=\"expression\">\n        <group_bottom>{@SUM(.usage_mb), %0.2f}Mb</group_bottom>\n        <expression>@SUM(sthpw/snapshot.sthpw/file.st_size) /1024000</expression>\n        <display_expression>{@GET(.usage_mb), %0.2f}MB</display_expression>\n        <bottom>{@SUM(.usage_mb), %0.2f}Mb</bottom>\n      </display>\n    </element>\n  </default_definition>\n  <search layout=\"SearchWdg\">\n    <element name=\"Quick Search\">\n      <display class=\"tactic.ui.filter.SObjectSearchFilterWdg\">\n        <prefix>simple</prefix>\n      </display>\n    </element>\n    <element name=\"Custom\">\n      <display class=\"tactic.ui.filter.GeneralFilterWdg\">\n        <prefix>custom</prefix>\n        <mode>custom</mode>\n        <custom_filter_view>custom_filter</custom_filter_view>\n      </display>\n    </element>\n    <element name=\"Filter\">\n      <display class=\"tactic.ui.filter.GeneralFilterWdg\">\n        <prefix>main_body</prefix>\n        <mode>sobject</mode>\n      </display>\n    </element>\n    <element name=\"Parent\">\n      <display class=\"tactic.ui.filter.GeneralFilterWdg\">\n        <prefix>parent</prefix>\n        <mode>parent</mode>\n      </display>\n    </element>\n    <element name=\"Children\">\n      <display class=\"tactic.ui.filter.GeneralFilterWdg\">\n        <prefix>children</prefix>\n        <mode>child</mode>\n      </display>\n    </element>\n  </search>\n  <table>\n    <element name=\"code\"/>\n  </table>\n  <!-- used to upload preview -->\n  <preview layout=\"EditWdg\">\n    <element name=\"preview\"/>\n  </preview>\n  <planner_left>\n    <element name=\"images\">\n      <display class=\"ThumbWdg\">\n        <icon_size>60</icon_size>\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\"/>\n    <element name=\"number_of_instances\">\n      <display class=\"pyasm.prod.web.NumSObjectInstancesWdg\"/>\n    </element>\n  </planner_left>\n  <planner_right>\n    <element name=\"images\">\n      <display class=\"ThumbWdg\">\n        <icon_size>60</icon_size>\n      </display>\n    </element>\n    <element name=\"instances\">\n      <display class=\"Htactic.ui.table.HiddenRowElementWdg\">\n        <title_icon>Contents</title_icon>\n        <dynamic>pyasm.prod.web.SObjectInstanceListWdg</dynamic>\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\"/>\n    <element name=\"number_of_instances\">\n      <display class=\"pyasm.prod.web.NumSObjectInstancesWdg\"/>\n    </element>\n  </planner_right>\n  <!-- for the layout page, to add asset instances to shots -->\n  <layout>\n    <element name=\"select_instance\">\n      <display class=\"pyasm.prod.web.SObjectCheckboxWdg\"/>\n    </element>\n    <element name=\"images\">\n      <display class=\"ThumbWdg\">\n        <icon_size>45</icon_size>\n        <!-- TODO: this is ugly. need a more formal relationship -->\n        <!--\n      <redirect>prod/asset|code|asset_code</redirect>\n      -->\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <!--\n  <element name=\"update\">\n        <display class=\"UpdateWdg\">\n            <insert>false</insert>\n            <delete>true</delete>\n        </display>\n  </element>\n-->\n  </layout>\n  <!-- display in the loader with Maya -->\n  <load default=\"table\">\n    <element name=\"images\">\n      <display class=\"ThumbWdg\">\n        <icon_size>45</icon_size>\n      </display>\n    </element>\n    <element name=\"checkin\"/>\n    <element name=\"code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\"/>\n    <element name=\"input\">\n      <display class=\"pyasm.prod.web.SnapshotLoaderWdg\">\n        <mode>input</mode>\n      </display>\n    </element>\n    <element name=\"load\">\n      <display class=\"pyasm.prod.web.SnapshotLoaderWdg\">\n        <mode>output</mode>\n      </display>\n    </element>\n  </load>\n  <render_submit>\n    <element name=\"job_type\">\n      <display class=\"SelectWdg\">\n        <setting>render_job_type</setting>\n      </display>\n      <action class=\"NullAction\"/>\n    </element>\n    <!-- Policy determines the details of the render -->\n    <element name=\"policy_code\" title=\"policy\">\n      <display class=\"SelectWdg\">\n        <query>prod/render_policy|code|code</query>\n      </display>\n    </element>\n    <element name=\"resolution\"/>\n  </render_submit>\n  <insert>\n    <!-- this one is used more for built-in insert view of asset or shot-->\n    <element name=\"preview_insert\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"preview\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"picture\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n         </display>\n      <action class=\"NullAction\"/>\n    </element>\n    <element name=\"images\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"files\" edit=\"true\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        <context>publish</context>\n      </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"snapshot\" edit=\"true\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"episode_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/episode|code|code</query>\n        <empty>true</empty>\n        <web_state>true</web_state>\n      </display>\n    </element>\n    <!--\n    <element name=\"asset_library\">\n        <display class=\"SelectWdg\">\n            <query>prod/asset_library|code|code</query>\n            <empty>true</empty>\n        </display>\n    </element>\n        -->\n    <element name=\"sequence_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/sequence|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\">\n      <display class=\"TextAreaWdg\"/>\n    </element>\n    <element name=\"sort_order\">\n      <display class=\"TextWdg\">\n        <hint>An integer. 1 will stay at the top</hint>\n      </display>\n    </element>\n  </insert>\n  <edit>\n    <element name=\"preview\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"picture\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n         </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"images\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n      <!-- <action class=\"UploadAction\"/>-->\n    </element>\n    <element name=\"files\" edit=\"true\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        <context>publish</context>\n      </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"snapshot\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n      <!-- <action class=\"UploadAction\"/>-->\n    </element>\n    <element name=\"episode_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/episode|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"sequence_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/sequence|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"shot_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/shot|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"asset_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/asset|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"pipeline\">\n      <display class=\"tactic.ui.input.PipelineInputWdg\"/>\n      <action class=\"pyasm.command.DatabaseAction\">\n        <column>pipeline_code</column>\n      </action>\n    </element>\n    <element name=\"pipeline_code\">\n      <display class=\"tactic.ui.input.PipelineInputWdg\">\n        <use_code>true</use_code>\n      </display>\n    </element>\n    <element name=\"task_status\">\n      <display class=\"ParallelStatusEditWdg\"/>\n    </element>\n    <element name=\"timestamp\"/>\n    <element name=\"code\" title=\"Code (optional)\">\n      <display class=\"TextWdg\">\n        <hint>Unique code for this item.  If left empty, then one will automatically be assigned.</hint>\n      </display>\n    </element>\n    <element name=\"short_code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\">\n      <display class=\"TextAreaWdg\"/>\n    </element>\n    <element name=\"data\">\n      <display class=\"TextAreaWdg\">\n        <rows>10</rows>\n      </display>\n    </element>\n    <element name=\"sort_order\">\n      <display class=\"TextWdg\">\n        <hint>Order with an integer. 1 will stay at the top</hint>\n      </display>\n    </element>\n    <element name=\"add_initial_tasks\">\n      <display class=\"CheckboxWdg\"/>\n      <action class=\"pyasm.command.InitialTaskCreateAction\"/>\n    </element>\n  </edit>\n  <default_edit_definition>\n    <element name=\"preview\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\"/>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"picture\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n         </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"images\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n      <!-- <action class=\"UploadAction\"/>-->\n    </element>\n    <element name=\"files\" edit=\"true\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        <context>publish</context>\n      </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n    </element>\n    <element name=\"snapshot\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <action class=\"pyasm.command.UploadAction\"/>\n      <!-- <action class=\"UploadAction\"/>-->\n    </element>\n    <element name=\"episode_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/episode|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"sequence_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/sequence|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"shot_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/shot|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"asset_code\">\n      <display class=\"SelectWdg\">\n        <query>prod/asset|code|code</query>\n        <empty>true</empty>\n      </display>\n    </element>\n    <element name=\"pipeline\">\n      <display class=\"tactic.ui.input.PipelineInputWdg\"/>\n      <action class=\"pyasm.command.DatabaseAction\">\n        <column>pipeline_code</column>\n      </action>\n    </element>\n    <element name=\"pipeline_code\">\n      <display class=\"tactic.ui.input.PipelineInputWdg\">\n        <use_code>true</use_code>\n      </display>\n    </element>\n    <element name=\"task_status\">\n      <display class=\"ParallelStatusEditWdg\"/>\n    </element>\n    <element name=\"timestamp\"/>\n    <element name=\"code\" title=\"Code (optional)\">\n      <display class=\"TextWdg\">\n        <hint>Unique code for this item.  If left empty, then one will automatically be assigned.</hint>\n      </display>\n    </element>\n    <element name=\"short_code\"/>\n    <element name=\"name\"/>\n    <element name=\"description\">\n      <display class=\"TextAreaWdg\"/>\n    </element>\n    <element name=\"sort_order\">\n      <display class=\"TextWdg\">\n        <hint>Order with an integer. 1 will stay at the top</hint>\n      </display>\n    </element>\n    <element name=\"add_initial_tasks\">\n      <display class=\"CheckboxWdg\"/>\n      <action class=\"pyasm.command.InitialTaskCreateAction\"/>\n    </element>\n  </default_edit_definition>\n  <edit_collection>\n    <element name=\"preview\"/>\n    <element name=\"name\"/>\n    <element name=\"description\"/>\n    <element name=\"keywords\"/>\n    <element name=\"is_collection\">\n      <display class=\"HiddenWdg\">\n        <default>true</default>\n        <column>_is_collection</column>\n      </display>\n    </element>\n  </edit_collection>\n  <preview_edit>\n    <element name=\"preview\">\n      <display class=\"tactic.ui.widget.SimpleUploadWdg\">\n        </display>\n      <!--\n        <action class=\"NullAction\"/>\n        -->\n      <action class=\"UploadAction\"/>\n    </element>\n  </preview_edit>\n  <!-- for manual publishing thru uploading -->\n  <publish>\n    <element name=\"images\">\n      <display class=\"ThumbInputWdg\"/>\n      <action class=\"NullAction\"/>\n    </element>\n    <element name=\"publish_files\">\n      <display class=\"tactic.ui.widget.UploadWdg\">\n        <context_expr>@GET(sthpw/task.process)</context_expr>\n      </display>\n      <action class=\"NullAction\"/>\n    </element>\n  </publish>\n  <add_item>\n    <element name=\"preview\" width=\"100px\"/>\n    <element name=\"code\" width=\"100px\"/>\n  </add_item>\n  <tracking layout=\"TableLayoutWdg\">\n    <element name=\"preview\"/>\n    <element name=\"code\"/>\n    <element name=\"keywords\"/>\n    <element name=\"description\"/>\n    <element name=\"explorer\"/>\n    <element name=\"general_checkin\"/>\n    <element name=\"history\"/>\n    <element name=\"task_edit\"/>\n    <element name=\"task_status_edit\"/>\n  </tracking>\n</config>\n"
+      }
+    ],
+    "resolved": {
+      "view": "table",
+      "layout": "tactic.ui.panel.TableLayoutWdg",
+      "attributes": {
+        "layout": "TableLayoutWdg"
+      },
+      "elements": [
+        {
+          "name": "preview",
+          "title": "Preview",
+          "attributes": {
+            "name": "preview",
+            "hidden": "false",
+            "width": "98",
+            "title": "Preview",
+            "th_hide_order": "10",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "ThumbWdg",
+            "options": {
+              "detail": "false"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "name",
+          "title": "Name",
+          "attributes": {
+            "name": "name",
+            "hidden": "false",
+            "width": "145",
+            "title": "Name",
+            "th_hide_order": "0",
+            "edit": "true"
+          },
+          "display": {
+            "handler": "tactic.ui.common.SimpleTableElementWdg",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "description",
+          "title": "Description",
+          "attributes": {
+            "name": "description",
+            "hidden": "false",
+            "width": "94",
+            "title": "Description",
+            "th_hide_order": "8",
+            "edit": "true"
+          },
+          "display": {
+            "handler": "tactic.ui.common.SimpleTableElementWdg",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "detail",
+          "title": "Details",
+          "attributes": {
+            "name": "detail",
+            "hidden": "false",
+            "width": "77",
+            "title": "Details",
+            "th_hide_order": "7",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "tactic.ui.table.SObjectDetailElementWdg",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "notes",
+          "title": "Notes",
+          "attributes": {
+            "name": "notes",
+            "hidden": "false",
+            "width": "113",
+            "title": "Notes",
+            "th_hide_order": "6",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "tactic.ui.widget.DiscussionElementWdg",
+            "options": {
+              "use_parent": "false",
+              "show_fullscreen_button": "true",
+              "note_format": "full",
+              "show_note_status": "true",
+              "show_context_notes": "false",
+              "note_expandable": "false",
+              "allow_email": "true",
+              "show_task_process": "true",
+              "mode": "default",
+              "dialog_position": "side"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "general_checkin",
+          "title": "Check-in (Full)",
+          "attributes": {
+            "name": "general_checkin",
+            "hidden": "false",
+            "width": "48",
+            "title": "Check-in (Full)",
+            "th_hide_order": "5",
+            "help": "general-checkin",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "tactic.ui.table.CheckinButtonElementWdg",
+            "options": {
+              "width": "800"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "task_pipeline_panels",
+          "title": "Task Workflow",
+          "attributes": {
+            "name": "task_pipeline_panels",
+            "hidden": "false",
+            "width": "263",
+            "title": "Task Workflow",
+            "th_hide_order": "4",
+            "edit": "false"
+          },
+          "display": {
+            "handler": "tactic.ui.table.TaskElementWdg",
+            "options": {
+              "show_labels": "false",
+              "task_filter": "process_only",
+              "show_filler_tasks": "true",
+              "show_assigned": "true",
+              "layout": "panel",
+              "show_add_task": "false",
+              "show_current_pipeline_only": "true",
+              "edit_status": "true",
+              "show_processes_in_title": "false",
+              "edit_assigned": "true",
+              "bg_color": "status",
+              "show_task_edit": "false",
+              "show_border": "none",
+              "panel_width": "75px",
+              "show_bid": "false",
+              "font_size": "12",
+              "show_status": "true",
+              "show_process": "true",
+              "collate_columns": "false",
+              "status_color": "status",
+              "show_dates": "false"
+            }
+          },
+          "action": {
+            "handler": "tactic.ui.table.TaskElementCbk",
+            "options": {}
+          }
+        },
+        {
+          "name": "keywords",
+          "title": "Keywords",
+          "attributes": {
+            "name": "keywords",
+            "hidden": "false",
+            "width": "113",
+            "title": "Keywords",
+            "th_hide_order": "3",
+            "edit": "true"
+          },
+          "display": {
+            "handler": "tactic.ui.common.SimpleTableElementWdg",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "assets_category",
+          "title": "Assets Category",
+          "attributes": {
+            "name": "assets_category",
+            "hidden": "false",
+            "width": "119",
+            "title": "Assets Category",
+            "th_hide_order": "2",
+            "edit": "true"
+          },
+          "display": {
+            "handler": "tactic.ui.table.ExpressionElementWdg",
+            "options": {
+              "expression": "@GET(cg/assets_category.name)",
+              "calc_mode": "fast"
+            }
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        },
+        {
+          "name": "timestamp",
+          "title": "timestamp",
+          "attributes": {
+            "name": "timestamp",
+            "title": "timestamp",
+            "width": "160",
+            "th_hide_order": "1",
+            "type": "timestamp"
+          },
+          "display": {
+            "handler": "",
+            "options": {}
+          },
+          "action": {
+            "handler": "",
+            "options": {}
+          }
+        }
+      ],
+      "configured": true
+    },
+    "layout_templates": [
+      {
+        "name": "continuous",
+        "xml": "<config><continuous_example layout=\"sobject-layout\" collection=\"tree\" flow=\"contents\">\n    <element name=\"preview\" title=\"Preview\" tag=\"span\" role=\"preview\"><display class=\"image\"><bind>node.preview.image</bind></display></element>\n    <element name=\"copy\" title=\"Object information\" role=\"copy\" flow=\"contents\"><display class=\"group\" /></element>\n    <element name=\"heading\" title=\"Heading\" parent=\"copy\" role=\"title-line\" flow=\"contents\"><display class=\"group\" /></element>\n    <element name=\"title\" title=\"Title\" parent=\"heading\" tag=\"strong\"><display class=\"title\"><bind>node.title</bind></display></element>\n    <element name=\"quick\" title=\"Snapshot actions\" parent=\"heading\" tag=\"span\" role=\"title-actions\" when=\"tree not-branch\"><display class=\"quick-actions\" /></element>\n    <element name=\"offline\" title=\"File Offline\" parent=\"heading\" tag=\"span\" role=\"file-offline\" when=\"tree snapshot\"><display class=\"file-offline\" /></element>\n    <element name=\"description\" title=\"Description\" parent=\"copy\" tag=\"span\" role=\"description\" when=\"description\"><display class=\"description\"><bind>node.subtitle</bind></display></element>\n    <element name=\"metadata\" title=\"Metadata\" parent=\"copy\" role=\"metadata\" when=\"object\"><display class=\"metadata\" /></element>\n    <element name=\"snapshot\" title=\"Snapshot details\" parent=\"copy\" when=\"tree snapshot\"><display class=\"snapshot-details\" /></element>\n    <element name=\"snapshot_summary\" title=\"Snapshot summary\" parent=\"copy\" tag=\"small\" tone=\"muted\" when=\"not-tree snapshot\"><display class=\"snapshot-summary\" /></element>\n    <element name=\"summary\" title=\"Branch summary\" parent=\"copy\" tag=\"small\" when=\"mobile branch\"><display class=\"branch-summary\" /></element>\n    <element name=\"actions\" title=\"Actions\" role=\"actions\" flow=\"contents\"><display class=\"group\" /></element>\n    <element name=\"hover\" title=\"Related objects\" parent=\"actions\" role=\"hover-actions\" flow=\"contents\" when=\"desktop tree object\"><display class=\"group\" /></element>\n    <element name=\"relations\" title=\"Related and child objects\" parent=\"hover\"><display class=\"button\"><action>relations</action><icon>FAS_SITEMAP</icon></display></element>\n    <element name=\"relation_actions\" title=\"Relationship actions\" parent=\"actions\" when=\"desktop relation\"><display class=\"relations\" /></element>\n    <element name=\"knowledge\" title=\"Knowledge Base\" parent=\"actions\" when=\"desktop\"><display class=\"knowledge\" /></element>\n    <element name=\"communication\" title=\"Tasks and notes\" parent=\"actions\" role=\"communication\" flow=\"contents\" when=\"desktop object-or-process\"><display class=\"group\" /></element>\n    <element name=\"tasks\" title=\"Tasks\" parent=\"communication\" role=\"task-button\"><display class=\"button\"><action>tasks</action><icon>FAR_CALENDAR_CHECK</icon><badge>node.task_count</badge></display></element>\n    <element name=\"notes\" title=\"Notes\" parent=\"communication\" role=\"note-button\"><display class=\"button\"><action>notes</action><icon>FAS_COMMENT_ALT</icon><badge>node.note_count</badge></display></element>\n    <element name=\"size\" title=\"File size\" parent=\"actions\" tag=\"span\" when=\"tree snapshot\"><display class=\"snapshot-size\" /></element>\n    <element name=\"mobile_actions\" title=\"Mobile actions\" parent=\"actions\" role=\"mobile-actions\" flow=\"contents\" when=\"mobile mobile-upload\"><display class=\"group\" /></element>\n    <element name=\"mobile_tasks\" title=\"Tasks\" parent=\"mobile_actions\" when=\"object-or-process\"><display class=\"button\"><action>tasks</action><icon>FAR_CALENDAR_CHECK</icon><badge>node.task_count</badge></display></element>\n    <element name=\"mobile_notes\" title=\"Notes\" parent=\"mobile_actions\" when=\"object-or-process\"><display class=\"button\"><action>notes</action><icon>FAS_COMMENT_ALT</icon><badge>node.note_count</badge></display></element>\n    <element name=\"mobile_upload\" title=\"Add files\" parent=\"mobile_actions\"><display class=\"button\"><action>upload</action><icon>upload</icon></display></element>\n    <element name=\"menu\" title=\"Item actions\" parent=\"actions\" when=\"mobile\"><display class=\"item-menu\" /></element>\n  </continuous_example>\n  </config>"
+      },
+      {
+        "name": "cards",
+        "xml": "<config><cards_example layout=\"sobject-layout\" collection=\"grid\" columns=\"12\" card_width=\"280\">\n    <element name=\"image\" title=\"Preview\" row=\"1\" height=\"160\"><display class=\"image\"><bind>node.preview.image</bind></display></element>\n    <element name=\"title\" title=\"Title\" row=\"2\"><display class=\"title\"><bind>node.title</bind></display></element>\n    <element name=\"description\" title=\"Description\" row=\"3\"><display class=\"description\"><bind>record.description</bind></display></element>\n    <element name=\"details\" title=\"Object details\" row=\"4\" span=\"6\"><display class=\"button\"><action>inspect</action><text>Object details</text><icon>MDI_INFORMATION_OUTLINE</icon></display></element>\n    <element name=\"notes\" title=\"Notes\" row=\"4\" column=\"7\" span=\"6\"><display class=\"button\"><text>Notes</text><action>notes</action><badge>node.note_count</badge><icon>FAS_COMMENT_ALT</icon></display></element>\n  </cards_example>\n</config>"
+      },
+      {
+        "name": "table",
+        "xml": "<config><table_example layout=\"sobject-layout\" collection=\"table\" columns=\"12\">\n    <element name=\"preview\" title=\"Preview\" column=\"1\" span=\"2\" height=\"40\"><display class=\"image\"><bind>node.preview.image</bind></display></element>\n    <element name=\"title\" title=\"Title\" column=\"3\" span=\"3\"><display class=\"title\"><bind>node.title</bind></display></element>\n    <element name=\"description\" title=\"Description\" column=\"6\" span=\"4\"><display class=\"text\"><bind>record.description</bind></display></element>\n    <element name=\"tasks\" title=\"Tasks\" column=\"10\" span=\"1\"><display class=\"button\"><action>tasks</action><badge>node.task_count</badge><icon>FAR_CALENDAR_CHECK</icon></display></element>\n    <element name=\"notes\" title=\"Notes\" column=\"11\" span=\"1\"><display class=\"button\"><action>notes</action><badge>node.note_count</badge><icon>FAS_COMMENT_ALT</icon></display></element>\n    <element name=\"details\" title=\"Object details\" column=\"12\" span=\"1\"><display class=\"button\"><action>inspect</action><icon>MDI_INFORMATION_OUTLINE</icon></display></element>\n  </table_example>\n  </config>"
+      },
+      {
+        "name": "blank",
+        "xml": "<config><custom_view layout=\"sobject-layout\" collection=\"grid\" columns=\"12\" card_width=\"280\"/></config>\n"
+      }
+    ]
+  },
+  "accent": "#e85151",
+  "captured": "2026-10-14T02:42:50",
+  "editors": {
+    "name": {
+      "field": {
+        "name": "name",
+        "title": "Name",
+        "class_name": "pyasm.widget.input_wdg.TextWdg",
+        "values": [
+          "Hero Robot"
+        ],
+        "options": {},
+        "attributes": {
+          "title": "Name"
+        },
+        "action": {
+          "handler": "",
+          "options": {}
+        }
+      },
+      "plans": [
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_0",
+          "expected_revision": "c4775b0f19822c5fe38ce44095bb8a4522091973828202eb8516d25984c03654"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_1",
+          "expected_revision": "a6eb43f45569eab326468002862ab9d77c84497a85ec9292bf40da4ec0491aa5"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_2",
+          "expected_revision": "8a19f4db2eb115c62376f4de5a97352f6a0069cd4a315d1e7bc7ba9f984a3d89"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_3",
+          "expected_revision": "47af7d7c44bc8168a9e01cd168205c121ef41e2c2dd84134c05a05f8017abb47"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_4",
+          "expected_revision": "89cc9b6fd3eee87055f32dc3296734f47af0e6f609bbf333d5c65ca0827ce60e"
+        }
+      ]
+    },
+    "description": {
+      "field": {
+        "name": "description",
+        "title": "Description",
+        "class_name": "pyasm.widget.input_wdg.TextAreaWdg",
+        "values": [
+          "Sample asset: Hero Robot"
+        ],
+        "options": {},
+        "attributes": {
+          "title": "Description"
+        },
+        "action": {
+          "handler": "",
+          "options": {}
+        }
+      },
+      "plans": [
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_0",
+          "expected_revision": "d631da90e9fdd18eed9e397be278060e86fa9a8e6caaf05e6fb9a35b5a9cd82b"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_1",
+          "expected_revision": "00e26c8c35beeb9ca44fb8d79b7df3065203f08598fdb4cba4a7416dd78b2d7f"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_2",
+          "expected_revision": "e5dff8ac10b66a95ac4b00669e851393523147f870b844b4f8f009ec84ca803e"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_3",
+          "expected_revision": "9c75a45a8d00cc50306fc62ef3719ef244672193a12b810a838451c4d98e6f72"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_4",
+          "expected_revision": "9f354024fa13689f21c6b3c28aaa3d45e5d1b656b7f641702a09acbe82a81e2c"
+        }
+      ]
+    },
+    "assets_category": {
+      "field": {
+        "name": "assets_category",
+        "title": "Assets Category",
+        "class_name": "pyasm.widget.input_wdg.SelectWdg",
+        "values": [],
+        "options": {
+          "query": "cg/assets_category|code|name",
+          "required": "true",
+          "empty": "false"
+        },
+        "attributes": {
+          "title": "Assets Category"
+        },
+        "action": {
+          "handler": "DatabaseAction",
+          "options": {
+            "column": "assets_category_code"
+          }
+        },
+        "labels": [
+          "Characters",
+          "Environments",
+          "Props"
+        ],
+        "choices": [
+          "CHAR",
+          "ENV",
+          "PROP"
+        ]
+      },
+      "plans": [
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_0",
+          "expected_revision": "646e903f5b1290b271002ce885353675166449bd762d3fd15ab3e3b2e723d43b"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_1",
+          "expected_revision": "c1c2fdba688afec4afa81ba71f117add07abca5591ec63da2598a78cd7ae5b12"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_2",
+          "expected_revision": "fdee0beef93edc08783b7c8afeecfe8a34c75efc8e00a7422e55e4a4d47fda51"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_3",
+          "expected_revision": "b50b7714e8435761e0dd2d913e710f2962a39ba185171fb5e03252c181291425"
+        },
+        {
+          "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_4",
+          "expected_revision": "3d91866758ccf52b9701cee0259d345346be7f4ee1db2fbb8babc39d34660aa4"
+        }
+      ]
+    }
+  },
+  "task_editor": {
+    "plans": [
+      {
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_0",
+        "process": "model",
+        "context": "model",
+        "task_key": "sthpw/task?code=TASK00000001",
+        "expected_revision": "fdf7bc4188a79109bfafcc5cf1e383d60d46a40380a52570d672dce1deded867",
+        "task": {
+          "bid_end_date": "",
+          "assigned": "admin",
+          "bid_start_date": "",
+          "status": ""
+        },
+        "fields": [
+          {
+            "name": "status",
+            "editable": true
+          },
+          {
+            "name": "assigned",
+            "editable": true
+          },
+          {
+            "name": "bid_start_date",
+            "editable": true
+          },
+          {
+            "name": "bid_end_date",
+            "editable": true
+          }
+        ],
+        "statuses": [
+          "Assignment",
+          "Waiting",
+          "Pending",
+          "In Progress",
+          "Need Assistance",
+          "Escalated",
+          "Revise",
+          "Reject",
+          "Review",
+          "Complete",
+          "Approved",
+          "Not Required"
+        ],
+        "users": [
+          {
+            "login": "admin",
+            "displayName": "admin",
+            "retired": false,
+            "initials": "A",
+            "avatarColor": "#59a693",
+            "avatarUrl": "",
+            "groups": [
+              "Admin"
+            ],
+            "primaryGroup": "Admin",
+            "current": true,
+            "email": "",
+            "value": "admin",
+            "label": "admin"
+          }
+        ],
+        "colors": {
+          "Assignment": "#ecbf7f",
+          "Waiting": "#a96ccf",
+          "Pending": "#8ad3e5",
+          "In Progress": "#e9e386",
+          "Need Assistance": "#a96ccf",
+          "Escalated": "#e84a4d",
+          "Revise": "#e84a4d",
+          "Reject": "#e84a4d",
+          "Review": "#e84a4d",
+          "Complete": "#a3d991",
+          "Approved": "#a3d991",
+          "Not Required": "#DDDDDD"
+        }
+      },
+      {
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_1",
+        "process": "model",
+        "context": "model",
+        "task_key": "sthpw/task?code=TASK00000005",
+        "expected_revision": "4b64957b0e4d82b5434d4c289f86d61ac1ab9da19e7461dc42aea847982d0ec6",
+        "task": {
+          "bid_end_date": "",
+          "assigned": "admin",
+          "bid_start_date": "",
+          "status": ""
+        },
+        "fields": [
+          {
+            "name": "status",
+            "editable": true
+          },
+          {
+            "name": "assigned",
+            "editable": true
+          },
+          {
+            "name": "bid_start_date",
+            "editable": true
+          },
+          {
+            "name": "bid_end_date",
+            "editable": true
+          }
+        ],
+        "statuses": [
+          "Assignment",
+          "Waiting",
+          "Pending",
+          "In Progress",
+          "Need Assistance",
+          "Escalated",
+          "Revise",
+          "Reject",
+          "Review",
+          "Complete",
+          "Approved",
+          "Not Required"
+        ],
+        "users": [
+          {
+            "login": "admin",
+            "displayName": "admin",
+            "retired": false,
+            "initials": "A",
+            "avatarColor": "#59a693",
+            "avatarUrl": "",
+            "groups": [
+              "Admin"
+            ],
+            "primaryGroup": "Admin",
+            "current": true,
+            "email": "",
+            "value": "admin",
+            "label": "admin"
+          }
+        ],
+        "colors": {
+          "Assignment": "#ecbf7f",
+          "Waiting": "#a96ccf",
+          "Pending": "#8ad3e5",
+          "In Progress": "#e9e386",
+          "Need Assistance": "#a96ccf",
+          "Escalated": "#e84a4d",
+          "Revise": "#e84a4d",
+          "Reject": "#e84a4d",
+          "Review": "#e84a4d",
+          "Complete": "#a3d991",
+          "Approved": "#a3d991",
+          "Not Required": "#DDDDDD"
+        }
+      },
+      {
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_2",
+        "process": "model",
+        "context": "model",
+        "task_key": "sthpw/task?code=TASK00000009",
+        "expected_revision": "b5c1cfdf2f1bdc1d66226a46669fb45d6cf0f1b5c1b41c697da697c7f3e22938",
+        "task": {
+          "bid_end_date": "",
+          "assigned": "admin",
+          "bid_start_date": "",
+          "status": ""
+        },
+        "fields": [
+          {
+            "name": "status",
+            "editable": true
+          },
+          {
+            "name": "assigned",
+            "editable": true
+          },
+          {
+            "name": "bid_start_date",
+            "editable": true
+          },
+          {
+            "name": "bid_end_date",
+            "editable": true
+          }
+        ],
+        "statuses": [
+          "Assignment",
+          "Waiting",
+          "Pending",
+          "In Progress",
+          "Need Assistance",
+          "Escalated",
+          "Revise",
+          "Reject",
+          "Review",
+          "Complete",
+          "Approved",
+          "Not Required"
+        ],
+        "users": [
+          {
+            "login": "admin",
+            "displayName": "admin",
+            "retired": false,
+            "initials": "A",
+            "avatarColor": "#59a693",
+            "avatarUrl": "",
+            "groups": [
+              "Admin"
+            ],
+            "primaryGroup": "Admin",
+            "current": true,
+            "email": "",
+            "value": "admin",
+            "label": "admin"
+          }
+        ],
+        "colors": {
+          "Assignment": "#ecbf7f",
+          "Waiting": "#a96ccf",
+          "Pending": "#8ad3e5",
+          "In Progress": "#e9e386",
+          "Need Assistance": "#a96ccf",
+          "Escalated": "#e84a4d",
+          "Revise": "#e84a4d",
+          "Reject": "#e84a4d",
+          "Review": "#e84a4d",
+          "Complete": "#a3d991",
+          "Approved": "#a3d991",
+          "Not Required": "#DDDDDD"
+        }
+      },
+      {
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_3",
+        "process": "model",
+        "context": "model",
+        "task_key": "sthpw/task?code=TASK00000013",
+        "expected_revision": "519cf55e08fc867e6a673a85ed4c18544bbcec04b24fb0a5115ce960568e2f9d",
+        "task": {
+          "bid_end_date": "",
+          "assigned": "admin",
+          "bid_start_date": "",
+          "status": ""
+        },
+        "fields": [
+          {
+            "name": "status",
+            "editable": true
+          },
+          {
+            "name": "assigned",
+            "editable": true
+          },
+          {
+            "name": "bid_start_date",
+            "editable": true
+          },
+          {
+            "name": "bid_end_date",
+            "editable": true
+          }
+        ],
+        "statuses": [
+          "Assignment",
+          "Waiting",
+          "Pending",
+          "In Progress",
+          "Need Assistance",
+          "Escalated",
+          "Revise",
+          "Reject",
+          "Review",
+          "Complete",
+          "Approved",
+          "Not Required"
+        ],
+        "users": [
+          {
+            "login": "admin",
+            "displayName": "admin",
+            "retired": false,
+            "initials": "A",
+            "avatarColor": "#59a693",
+            "avatarUrl": "",
+            "groups": [
+              "Admin"
+            ],
+            "primaryGroup": "Admin",
+            "current": true,
+            "email": "",
+            "value": "admin",
+            "label": "admin"
+          }
+        ],
+        "colors": {
+          "Assignment": "#ecbf7f",
+          "Waiting": "#a96ccf",
+          "Pending": "#8ad3e5",
+          "In Progress": "#e9e386",
+          "Need Assistance": "#a96ccf",
+          "Escalated": "#e84a4d",
+          "Revise": "#e84a4d",
+          "Reject": "#e84a4d",
+          "Review": "#e84a4d",
+          "Complete": "#a3d991",
+          "Approved": "#a3d991",
+          "Not Required": "#DDDDDD"
+        }
+      },
+      {
+        "search_key": "cg/assets?project=table_fixture&code=TABLE_ASSET_4",
+        "process": "model",
+        "context": "model",
+        "task_key": "sthpw/task?code=TASK00000017",
+        "expected_revision": "636b392a494d9968b1f45c364366f36d29bca7f493f4038feebeedcf2ae65345",
+        "task": {
+          "bid_end_date": "",
+          "assigned": "admin",
+          "bid_start_date": "",
+          "status": ""
+        },
+        "fields": [
+          {
+            "name": "status",
+            "editable": true
+          },
+          {
+            "name": "assigned",
+            "editable": true
+          },
+          {
+            "name": "bid_start_date",
+            "editable": true
+          },
+          {
+            "name": "bid_end_date",
+            "editable": true
+          }
+        ],
+        "statuses": [
+          "Assignment",
+          "Waiting",
+          "Pending",
+          "In Progress",
+          "Need Assistance",
+          "Escalated",
+          "Revise",
+          "Reject",
+          "Review",
+          "Complete",
+          "Approved",
+          "Not Required"
+        ],
+        "users": [
+          {
+            "login": "admin",
+            "displayName": "admin",
+            "retired": false,
+            "initials": "A",
+            "avatarColor": "#59a693",
+            "avatarUrl": "",
+            "groups": [
+              "Admin"
+            ],
+            "primaryGroup": "Admin",
+            "current": true,
+            "email": "",
+            "value": "admin",
+            "label": "admin"
+          }
+        ],
+        "colors": {
+          "Assignment": "#ecbf7f",
+          "Waiting": "#a96ccf",
+          "Pending": "#8ad3e5",
+          "In Progress": "#e9e386",
+          "Need Assistance": "#a96ccf",
+          "Escalated": "#e84a4d",
+          "Revise": "#e84a4d",
+          "Reject": "#e84a4d",
+          "Review": "#e84a4d",
+          "Complete": "#a3d991",
+          "Approved": "#a3d991",
+          "Not Required": "#DDDDDD"
+        }
+      }
+    ]
+  }
+}

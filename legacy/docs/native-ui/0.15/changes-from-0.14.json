@@ -1,0 +1,200 @@
+[
+  {
+    "path": "NATIVE_UI_VERSION",
+    "status": "modified",
+    "before": "425edad3ef4afd2c4299c5532c8a36c92a9fd36c7097ecaa1d9af84b82b810d1",
+    "after": "8f50a251b2e53316450daaaece743b78d53d38d491de193bd1afabba0a18f7ae"
+  },
+  {
+    "path": "frontend/package.json",
+    "status": "modified",
+    "before": "993979f710eef17487e24acffc4b6ec7e9c0cf58d2551e957d0c101789872957",
+    "after": "e53260801a51edba214f70d472d70c6ae83017439f6a4523e7468c2b62ae6c40"
+  },
+  {
+    "path": "frontend/src/App.vue",
+    "status": "modified",
+    "before": "bb037b69186cc3243c599a219bf570129f948c4c69f4564c7e7e89eb62c61f26",
+    "after": "2efc822a5dcfd50801dc18a07c91f3c0a512051dc0a80875616fc5f3fa87f9d4"
+  },
+  {
+    "path": "frontend/src/components/AdminPanel.vue",
+    "status": "modified",
+    "before": "e3b152fc14949546fd9844ee8893a983f058c846b13daf116b26fae5c1c4b070",
+    "after": "9e893c1c59bc4512213c48bf57de0ff0aa41459e8bec74887b9cfefa5143f682"
+  },
+  {
+    "path": "frontend/src/components/ConfiguredTable.vue",
+    "status": "modified",
+    "before": "40d899bdb45572a37fbebd9deb6d5471b042db5a2808f2587de472a063c5b9b8",
+    "after": "fb104da620b1937cc21e4631fb03d1e56a59d30a2945111eec245a7705b662e7"
+  },
+  {
+    "path": "frontend/src/components/ConfiguredTabs.vue",
+    "status": "modified",
+    "before": "d66774703b417f653dda1dfc9935aabe6e550347ee6f725c12455222ae2ed453",
+    "after": "7ac462c487b3dfc4e7900ad140eb2fa99f9575379c990a61bcafe740a38dea2c"
+  },
+  {
+    "path": "frontend/src/components/ProjectWizard.vue",
+    "status": "added",
+    "before": null,
+    "after": "b91d2c3e67167e6933d4b215bef01f402cd326585fc6e3938a9d59bd7e07015e"
+  },
+  {
+    "path": "frontend/src/components/SidebarNode.vue",
+    "status": "modified",
+    "before": "6f4d9a1f6bf15a82dad3c130f7c9c8bcebe6cf68726f4f79497242caeeaa3c13",
+    "after": "5ce092c3b1f33e7b2a065827a5c0492af015bbe4b25f35224a9ce8003bea8ba3"
+  },
+  {
+    "path": "frontend/src/components/TaskTimeline.vue",
+    "status": "modified",
+    "before": "4f90c0e34822ed1b4f6c54655f3189d9184388d5a1d61ab29d189a0345a9f196",
+    "after": "e7b41cf277c61502a12615cd8b8f1fde322c2cd7df3b15a7b92232a149199697"
+  },
+  {
+    "path": "frontend/src/components/WidgetHost.vue",
+    "status": "modified",
+    "before": "19a3fd451bbe9892b4ca84dfd24855c6d4f5bf7c6b97e8c974ac899957000a24",
+    "after": "c216c5cc2283b920ca5a64bacf5b7920b6166453209beea1c2ac61c29178df22"
+  },
+  {
+    "path": "frontend/src/components/WidgetTable.vue",
+    "status": "modified",
+    "before": "8076468ad1bdfd0a7c27d0a2e50f0d390107926eb7d2b218caf6604dbed2f6a1",
+    "after": "8e5a822b0f38dc6edcd48c4aeef18d9ad158acccdef3933cdef2e4b2c0f94413"
+  },
+  {
+    "path": "frontend/src/styles.css",
+    "status": "modified",
+    "before": "5b40f1979eefc83e75d3c106dff55e7ebe5d65bbc70880c38119fad9565f0972",
+    "after": "8004607f4466c27c4304875223bf7ee4a85c2e78a7a59d18e426834aff61b56f"
+  },
+  {
+    "path": "frontend/src/uiState.js",
+    "status": "added",
+    "before": null,
+    "after": "af418eb8e8fa4a9ceaed65132fdd736c63d17328d968e345eb98481636d2e948"
+  },
+  {
+    "path": "src/pyasm/web/widget.py",
+    "status": "modified",
+    "before": "089a5e3ab16f99230647a5a0f0a20f2302c70931c39f72849aa2bf043d00d248",
+    "after": "d816e3a66b7bc7c6e85e25be2dba6b3521ee5f813315c1430123d79db1baec35"
+  },
+  {
+    "path": "src/tactic/core/project_creation.py",
+    "status": "added",
+    "before": null,
+    "after": "bd413529e0e3d88714be9f537a873590b7e61dee25dbfa4cf667b8787c70e9c5"
+  },
+  {
+    "path": "src/tactic/ui_api/admin_service.py",
+    "status": "modified",
+    "before": "ae5d1e3830c5dff3545ede8dcfb4b63283b18b0527641feabe708203c1b86112",
+    "after": "40b102d389c954c3916a80cb37cca4583ac64e1561a6ebb6ca0ed5575be97d80"
+  },
+  {
+    "path": "src/tactic/ui_api/api.py",
+    "status": "modified",
+    "before": "516764800775a016dc9dc4bb7959f43b7df96aee3feb32b107c89def4265391d",
+    "after": "79ecfbd358e02ddaca1120b9bad9a46c2c658dee94ed668c184b632fcff36f93"
+  },
+  {
+    "path": "src/tactic/ui_api/extended_backend.py",
+    "status": "modified",
+    "before": "efc0d30fd852d82fa9fbdaf4c344dd7effe6b34121389c1085e4a3198c3e5f40",
+    "after": "6b89dd49d3eab28ac1877d26cf98a4dde1ff526acab3968a23a5a913c5ef0f6f"
+  },
+  {
+    "path": "src/tactic/ui_api/project_service.py",
+    "status": "added",
+    "before": null,
+    "after": "0115cba462b5799fb39dc27579ccf2bc1eba47cd176e7f6d8ce71b2e2a898214"
+  },
+  {
+    "path": "src/tactic/ui_api/ui_state_service.py",
+    "status": "added",
+    "before": null,
+    "after": "4f00356a9ad78564a27c4d798ca9a7c957ccf3d7ff86f7f7ddc3ab2e44e793a8"
+  },
+  {
+    "path": "src/tactic/ui_api/web/app.js",
+    "status": "modified",
+    "before": "f8b8309d6358bc428d6d2878ae41f5240e0267638ccf64b6c1844aff21b0a646",
+    "after": "5d47d11f5cb7c8b6f93dcab00f6462dc1418c6ccdd33ecdb8c402b80ed090b56"
+  },
+  {
+    "path": "src/tactic/ui_api/web/build-manifest.json",
+    "status": "modified",
+    "before": "d23db07719f9888680c8716b9645e692c4cf51022e99097791486d8331c12de7",
+    "after": "eaec8bb6f19f27efb5fae4bc7110607d67bd4c6daa5b97699d30b114d7b33269"
+  },
+  {
+    "path": "src/tactic/ui_api/web/styles.css",
+    "status": "modified",
+    "before": "5b40f1979eefc83e75d3c106dff55e7ebe5d65bbc70880c38119fad9565f0972",
+    "after": "8004607f4466c27c4304875223bf7ee4a85c2e78a7a59d18e426834aff61b56f"
+  },
+  {
+    "path": "src/tactic/ui_api/widget_service.py",
+    "status": "modified",
+    "before": "da79cc416dca00e5a1d78e57dde98be3f9eb8c861445dc4c5b4d9b58fe9c2144",
+    "after": "facdce6bd1abfa79f785650be7a6a55ee63bee13eb4ae7b07fbbeca725415140"
+  },
+  {
+    "path": "tests/native_ui/check_widgetsettings_api_015.py",
+    "status": "added",
+    "before": null,
+    "after": "3d76df9bf330476449cb2d70f8de180ad7e09812df98f99c84cde6860fb36d56"
+  },
+  {
+    "path": "tests/native_ui/run_browser_regression_015.py",
+    "status": "added",
+    "before": null,
+    "after": "aed06dbd637075b49f47d236ed8f5af7a265426cff4ba210562f21be048eb34f"
+  },
+  {
+    "path": "tests/native_ui/run_browser_state_015.py",
+    "status": "added",
+    "before": null,
+    "after": "4fd255b73eaee072340c7644eeb5cf00a874270ae10077e4b5e19ede1865b93f"
+  },
+  {
+    "path": "tests/native_ui/run_cluster_015.py",
+    "status": "added",
+    "before": null,
+    "after": "580a6c81bc8808025fdf11f0e6783c99fc2ad61892a78d1d0cc7d45c3860d73c"
+  },
+  {
+    "path": "tests/native_ui/run_http_state_015.py",
+    "status": "added",
+    "before": null,
+    "after": "0fe01fb9545ff70e59e70f3150d757d28ee6d1d98184ddc1ba28bc1f9a8b8f40"
+  },
+  {
+    "path": "tests/native_ui/test_state_015.py",
+    "status": "added",
+    "before": null,
+    "after": "ebce64ab9f47c83b083ede7d22d994b65876a1b3fa4355f671a94ca33f1a6ec1"
+  },
+  {
+    "path": "tests/native_ui/test_ui_state_015.cjs",
+    "status": "added",
+    "before": null,
+    "after": "3e491767215b62ae4cffcfbba2befb2d7df9137e292e70d95ef05aee67bdf4f4"
+  },
+  {
+    "path": "tools/local/cluster_gateway.py",
+    "status": "modified",
+    "before": "b275fea56687f17625ac08569421dc3b8a4ae500970d5d6d801b885b04738e74",
+    "after": "8219d44308dfd40b708e8af828da0c98d4952813ddd451ee974df894c751e2d9"
+  },
+  {
+    "path": "tools/native_ui/build.cjs",
+    "status": "modified",
+    "before": "8f367c39853e6f590ad12f42cbc8b79cf1784f449f5f37d6a034c036eb2e559f",
+    "after": "3e0b734430226a15fcdca686c6212a88a73e575abac1f543afa4611a8ecf1393"
+  }
+]

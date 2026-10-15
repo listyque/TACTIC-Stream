@@ -1,0 +1,2492 @@
+diff --git a/CHECK_STARTUP.bat b/CHECK_STARTUP.bat
+new file mode 100644
+index 0000000..16f6329
+--- /dev/null
++++ b/CHECK_STARTUP.bat
+@@ -0,0 +1,16 @@
++@echo off
++setlocal DisableDelayedExpansion
++cd /d "%~dp0"
++set "PYTHON=%~dp0.runtime\python\python.exe"
++if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
++if not exist "%PYTHON%" (
++    echo Python environment is missing. Run SETUP_ENV.bat first.
++    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
++    if not "%TACTIC_NO_PAUSE%"=="1" pause
++    exit /b 2
++)
++"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py" --check-startup %*
++set "RESULT=%ERRORLEVEL%"
++echo.
++if not "%TACTIC_NO_PAUSE%"=="1" pause
++exit /b %RESULT%
+diff --git a/NATIVE_UI_VERSION b/NATIVE_UI_VERSION
+index aec258d..b63ba69 100644
+--- a/NATIVE_UI_VERSION
++++ b/NATIVE_UI_VERSION
+@@ -1 +1 @@
+-0.8
++0.9
+diff --git a/README_VUE_RU.md b/README_VUE_RU.md
+index 8a1f4ee..9802398 100644
+--- a/README_VUE_RU.md
++++ b/README_VUE_RU.md
+@@ -1,167 +1,158 @@
+-# TACTIC 5.0 — native Vue source fork 0.8
++# TACTIC 5.0 — native Vue source fork 0.9
+ 
+-Полное дерево исходников — продолжение 0.7. Этот этап исправляет **SETUP_ENV и управляемый локальный SQLite-upgrade из присланного лога**, а также расширяет штатный экран System Info диагностикой структуры. Новая БД приложения, альтернативные таблицы задач и жёстко заданный sidebar не создаются. Предыдущие конфигурационные таблицы, формы, фильтры, коллекции, сообщения, файлы и остальные перенесённые функции сохранены.
++Полное дерево исходников, продолжение **0.8**. В этом этапе исправлен запуск с `NameError: name 'Api' is not defined`, устранены аналогичные зависимости от неявных `exec`-locals в разрешении виджетов, перенесён штатный редактор сохранённых скриптов. Отдельный сайт/новая БД не создавались. Sidebar и админка по-прежнему определяются оригинальными widget_config, project XML и definitions.
+ 
+-Ядро: `5.0.0.a02`, первоначальный commit `17c78e0dfb20a6fef16d70df6aa7b0c9bf20a596`. Нативный UI: **0.8**. Vue в поставке — **3.5.13**, готовая сборка включена. Полный перенос всех виджетов TACTIC всё ещё не завершён.
++Ядро — **5.0.0.a02**, исходный commit `17c78e0dfb20a6fef16d70df6aa7b0c9bf20a596`. `NATIVE_UI_VERSION` — **0.9**. Комплект включает прежний Vue **3.5.13** и готовую браузерную сборку; это не утверждение о последнем релизе Vue. Полный перенос всех UI ещё не завершён.
+ 
+-## 1. Исправление загрузчика
++## 1. Ваш случай: SETUP, INIT и UPGRADE уже прошли
+ 
+-Исправлен конкретный URL закреплённого pip zipapp:
++**Не удалять local_data, не создавать базу заново и не повторять апгрейд ради этого исправления.** Последний присланный traceback относится к регистрации HTTP/XML-RPC-контекстов, а не к миграции схемы.
+ 
+-```text
+-https://bootstrap.pypa.io/pip/zipapp/pip-26.2.1.pyz
+-```
++Распаковать 0.9 отдельно. Остановить старый TACTIC. Открыть командную строку в новом корне `TACTIC-5.0` и использовать существующие окружение/данные:
+ 
+-Это файл из указанного пользователем каталога `https://bootstrap.pypa.io/pip/zipapp/`, а не сама HTML-страница каталога. Наличие файла подтверждено по официальному индексу PyPA. В этой среде бинарный файл заново не скачан: сетевой доступ из рабочего контейнера не позволил получить его. Полный Windows SETUP здесь не исполнялся.
++```bat
++set "OLD=C:\Users\listy\Downloads\TACTIC_5_Vue_Source_Fork_0.8\TACTIC-5.0"
++set "TACTIC_PYTHON=%OLD%\.runtime\python\python.exe"
+ 
+-Перед запуском проверяются размер, ZIP-структура, `__main__.py`, CRC и соответствие версии. При ошибке удаляется только невалидный управляемый pip-кэш; Python и базы не удаляются. После удаления повторите SETUP. Эти проверки не заменяют криптографическую подпись: заранее закреплённого SHA-256 pip по-прежнему нет, доверие к загрузке основано на HTTPS официального источника. Python проверяется по прежнему закреплённому SHA-256 и Authenticode; зависимости заданы прежними диапазонами, а не новым lockfile.
++CHECK_STARTUP.bat --data-dir "%OLD%\local_data"
++START_TACTIC.bat --data-dir "%OLD%\local_data" --port 9123
++```
+ 
+-Исправлен поиск соседних модулей launcher/worker в изолированном embedded Python (`._pth`). Скрипты добавляют только свой `tools/local` явно. BAT запускают Python с `-X utf8` для Unicode-путей и логов. Node для обычного запуска не нужен.
++`OLD` — путь из присланного лога; изменить его, если установка перемещена. **BAT запускать именно из 0.9**, не из прежнего каталога. Интерпретатор может остаться прежним: новые пути к исходникам настраивает новый launcher. Старый каталог данных/asset repository продолжает использоваться по существующей конфигурации.
+ 
+-## 2. Что случилось с апгрейдом в логе
++Адрес после успешного запуска:
+ 
+-Лог содержит **SQLite**, не MySQL: `SqliteConfigUpgrade`, `SqliteSthpwUpgrade`, `SqliteDefaultUpgrade`. Сообщение «no expiry on ticket for Sqlite and MySQL» общее и не определяет выбранный движок.
++```text
++http://127.0.0.1:9123/tactic/admin/
++```
+ 
+-Проблемы не сводились к одной строке:
++Вход — настоящий администратор TACTIC. Node для запуска не нужен. Сервер слушает localhost. Остановка — Ctrl+C.
+ 
+-- У штатного seed не заполнен `last_version_update`; старые миграции пытаются повторить уже присутствующие объекты схемы.
+-- Старые/новые имена некоторых config-таблиц различаются (`widget_config` и `spt_widget_config`, аналогично naming/prod_setting/custom_script). У проектного seed недостаёт части этих таблиц.
+-- Исходный SQLite-конвертер не переводит ряд PostgreSQL-команд: `ADD/DROP CONSTRAINT`, `ALTER COLUMN TYPE`, `DROP NOT NULL`, `USING btree`.
+-- `fix_search_code.py` запускался shell-командой в дочернем интерпретаторе без настроенного `tacticenv`; код возврата игнорировался.
+-- Исходный апгрейдер мог записать новую версию проекта даже при ошибках. Следующий запуск уже нельзя было надёжно направлять только по этому значению.
++Для внешней конфигурации прежний вариант сохранён:
+ 
+-**Исправление не состоит в отключении ошибок или ручной записи версии 5.0.**
++```bat
++START_TACTIC.bat --config "D:\TACTIC_TEST\config\tactic-conf.xml" --data-dir "D:\TACTIC_TEST" --port 9123
++```
+ 
+-## 3. Новый порядок локального SQLite-upgrade
++Перемещение исходников **не** меняет абсолютные пути внутри пользовательской конфигурации. Работайте с тестовой копией установки/данных; существующие резервные копии сохранить.
+ 
+-`UPGRADE_LOCAL_SQLITE.bat` принимает только установку, ранее созданную `INIT_LOCAL_SQLITE`: соответствующий `local-install.json`, vendor Sqlite, собственный `db` и существующие зарегистрированные базы. Сторонний MySQL/PostgreSQL, внешние db_resource, нестандартные типы проектов, общие базы нескольких проектов, отсутствующие файлы и неоднозначные config-хранилища не принимаются автоматически.
++### Маленький фикс без перехода на весь 0.9
+ 
+-Порядок:
++Отдельный пакет `TACTIC_0.8_Startup_Fix.zip` меняет только два файла регистрации контекстов в исходной 0.8. Проверяет хеши, делает резервную копию и отказывается затирать собственные изменения. В него **не входят** редактор скриптов и остальные исправления 0.9. Для полной новой версии применять его не нужно: изменения уже включены.
+ 
+-1. Остановить серверы и инструменты, открывшие базу. Новый launcher и upgrader используют общий локальный OS-lock. Активный SQLite-журнал не удаляется и не игнорируется.
+-2. Создать резервные копии через SQLite backup API. Скопировать базы в отдельный staging-каталог внутри `local_data/backup/<date-id>/stage`.
+-3. Направить исходные миграции TACTIC на эти копии. При старой/ошибочной отметке версии выполняется проверяемый исторический проход. Прежние БД пока не заменяются.
+-4. Проверить результат: ошибки всех шагов, обязательная структура UI, `integrity_check`, `foreign_key_check`.
+-5. Сверить, что исходные базы и управляющая конфигурация не менялись параллельно. Только затем установить проверенные файлы, сохранив прежние файлы в `backup/.../original-files`.
+-6. Записать успешную отметку в `local-install.json` после установки всех файлов.
++## 2. Причина Api NameError и исправление
+ 
+-Миграционный worker использует **оригинальные upgrade-классы и их методы**. Для управляемого offline-прохода SQL исполняется через новый SQLite-адаптер. Миграция схемы не записывается в ещё не обновлённый `transaction_log`: каждый её метод выполняется в отдельной SQLite-транзакции. Это не меняет транзакционные обёртки обычных UI-команд, check-in и workflow.
++В старом `CherryPyStartup.register_project` первый `exec` импортировал класс контекста, а следующий `exec` пытался найти этот класс по имени. На Python 3.13 неявные локальные пространства этих вызовов больше не работают как одно изменяемое хранилище. Исходный метод 0.8 воспроизвёл тот же `Api NameError` на Python 3.13.5 при алфавитном порядке контекстов, соответствующем логу Windows.
+ 
+-### Перевод и проверка SQL
++Исправлено **не понижение Python и не сокрытие исключения**:
+ 
+-Уже существующие столбцы сохраняют значения. Индексы сверяются по таблице, полям, уникальности, полной/частичной области и collation. Уникальные ограничения не ослабляются: конфликтующие данные приводят к остановке, не к дедупликации. Старые имена config-таблиц разрешаются по настоящему `search_object`; параллельное пустое хранилище вместо существующего не создаётся.
++- `context_registry.load_contexts` явно импортирует исходный модуль `tactic_sites.<project>.context.<Context>` / `sites.<project>.context.<Context>` и получает его экспортированный класс через `getattr`;
++- контексты и страницы присоединяются через `setattr`; ни project/site, ни имя контекста не подставляются в исполняемый исходный текст;
++- прежние классы `Api`, `XMLRPC`, `UploadServer` и остальные контексты сохраняются; фиктивный пустой Api не создаётся;
++- ошибки импорта/конструктора не подавляются и сохраняют traceback;
++- параметры XML-RPC применяются также к уже смонтированному CherryPy-приложению; для site используются правильные site-prefixed пути;
++- исправлен общий изменяемый аргумент `need_upgrade`.
+ 
+-Для нужных изменений SQLite-таблица перестраивается по последовательности create/copy/drop/rename. Проверяются значения **и SQLite storage class**, сохраняются rowid, индексы, собственные триггеры и autoincrement high-water mark. Строка `001` не превращается незаметно в число 1. `writable_schema` не используется. Неизвестные DDL, неоднозначные inline constraints, generated/hidden columns, затрагиваемые custom views и разрушительные операции с пользовательскими данными прекращают обновление. Это адаптер проверенных исходных миграций, не универсальный SQL-транспилятор.
++Проверены все **11 штатных default-контекстов** настоящего TACTIC, регистрация admin, site-префиксы и реальное конфигурирование XML-RPC в bundled CherryPy. В тесте использовались реальные объекты контекстов и метод регистрации, но не полный конструктор сервера с лицензией/БД/аутентификацией.
+ 
+-`fix_search_code` теперь вызывается в текущем процессе. Заполненные search_code не затираются; отсутствующие заполняются по оригинальному parent search_type/search_id. Не найденный родитель — ошибка для разбора. История и архивные строки не исключаются. Общий original upgrade больше не ставит версию проекту с зарегистрированными SQL-ошибками.
++Большое количество `SyntaxWarning: invalid escape sequence` в консоли — отдельные предупреждения старого Python/встроенного JavaScript, а не причина последнего падения `Api`. Массовая замена строк или глобальное отключение предупреждений не выполнялись: такая правка могла бы поменять смысл встроенных скриптов.
+ 
+-### Сбой и восстановление
++Официальное пояснение Python: https://docs.python.org/3.13/library/functions.html#exec
+ 
+-Обычная ошибка worker оставляет прежние файлы БД на месте. При ошибке установки нового набора выполняется возврат прежних файлов. Сбой процесса между заменой отдельных БД оставляет `.sqlite-promotion.json`; новый launcher отказывается запускать сервер до восстановления.
++## 3. CHECK_STARTUP — отдельная проверка регистрации
+ 
+-```bat
+-RESTORE_LOCAL_SQLITE.bat --data-dir "D:\TACTIC_TEST\local_data"
+-```
++`CHECK_ENV` по-прежнему проверяет импорты зависимостей и **не доказывает**, что сервер зарегистрирует свои сервисы. Для следующего уровня добавлен **`CHECK_STARTUP.bat`**.
+ 
+-Нужно подтвердить `RESTORE`. Проверяются хеши и все файлы до восстановления. Если после сбоя данные изменены сторонним процессом или копия повреждена, автоматическое затирание запрещается.
++Он выполняет обычные FirstRunInit и создание CherryPyStartup, подключает native mount, проверяет реальные `default/Api`, `default/XMLRPC`, `default/UploadServer` и настройки XML-RPC. HTTP-слушатель не запускается; периодический scheduler конструктора останавливается перед выходом. Результат: `.runtime/startup-check.json` в новом дереве.
+ 
+-Это команда **только для прерванной установки**, не откат уже работающей базы после новых пользовательских записей. Для обычного отката нужна осознанная работа с резервной копией. Журнал+lock проверены при аварийном завершении процесса на Linux; отключение питания, сетевые FS и Windows-ветка OS-lock здесь не тестировались. Старый сервер не знает нового cooperative lock: остановка всех старых процессов обязательна. Произвольные внешние эффекты пользовательских Python-классов/плагинов не покрыты этим тестом.
++**Это не read-only проверка БД:** исходная инициализация может выполнять свои штатные записи/действия, включая auto_upgrade при его включении в пользовательском config. Она не отключена ради диагностики. Команду запускать только при остановленном сервере; сохраняются проверка состояния managed SQLite и общий локальный lock.
+ 
+-Конфигурация, пользовательские assets и templates не заменяются staged-копиями. Backup содержит копию конфигурации: храните его как приватные данные с теми же ограничениями доступа, что у исходной установки. Исправление не является автоматической миграцией чужой production-инсталляции или любого исторического варианта схемы.
++Успешный CHECK_STARTUP — не проверка входа по HTTP, всех запросов браузера, PostgreSQL или пользовательских триггеров. При падении сохраняется обычный `.runtime/last-launch-error.txt`.
+ 
+-## 4. Как повторить апгрейд из 0.6 / 0.7
++## 4. Аналогичный дефект в конфигурационных обработчиках
+ 
+-**Не удаляйте существующий `local_data`, не запускайте для него INIT заново и не ставьте `state=upgraded` вручную.** Распакуйте весь 0.8 отдельно. Используйте BAT именно из нового дерева.
++Добавлен `Common.resolve_class`: разрешение **доверенного серверного** class path через importlib без создания экземпляра только ради поиска default-handler. Сохраняется plugin loader и порядок коротких имён widget → command → web. Это не новый HTTP endpoint для произвольного вызова Python-классов.
+ 
+-В командной строке, открытой в корне нового `TACTIC-5.0`:
++В выделенном `WidgetConfig` / `WidgetConfigView` заменены парные `exec`/`eval`, использовавшиеся для `has_config`, default display/edit handler и default widget. В `EditCmd` так же исправлен выбор `get_default_action`: пропавший импорт не должен незаметно приводить к стандартному DatabaseAction вместо исходного action.
+ 
+-```bat
+-rem Укажите существующий каталог данных старой установки:
+-set "DATA=D:\TACTIC_OLD\TACTIC-5.0\local_data"
++Приоритеты XML/DB-слоёв, порядок полей и lookup опций не переписывались. **80 штатных XML, 487 views, 11 370 сравнений — ноль расхождений в проверенной области.** Это сравнение метаданных, не гарантия полного переноса поведения каждого виджета.
+ 
+-rem Вариант A: скачать локальное окружение в новом дереве:
+-SETUP_ENV.bat
++Дополнительно исправлена ошибка сохранения визуального view designer: в `ViewService.view_operation(PATCH)` находился посторонний фрагмент с неопределённым `opts`. Удалён именно ошибочный фрагмент. Правильная обработка опций внутри отдельного `saved_view` сохранена. Новый тест исполняет настоящий путь сохранения view и проверяет другие views, неизвестные атрибуты, ревизию и персональные права.
+ 
+-rem Вариант B вместо SETUP: использовать уже рабочий интерпретатор:
+-rem set "TACTIC_PYTHON=D:\TACTIC_OLD\TACTIC-5.0\.runtime\python\python.exe"
++## 5. Следующий UI: оригинальный редактор сохранённых скриптов
+ 
+-CHECK_ENV.bat
+-CHECK_LOCAL_DB.bat --data-dir "%DATA%"
+-UPGRADE_LOCAL_SQLITE.bat --data-dir "%DATA%"
+-CHECK_LOCAL_DB.bat --data-dir "%DATA%"
+-START_TACTIC.bat --data-dir "%DATA%" --port 9123
+-```
++Штатная ссылка **Script Editor** из админки (`tactic.ui.app.ShelfEditWdg`) теперь открывает нативный `ScriptEditor.vue`. Поддержаны также `ScriptEditorWdg` и полные пути `shelf_wdg.*`. Сам пункт меню не зашит во Vue: он приходит из исходной конфигурации и разрешается по handler/options.
+ 
+-Вместо `D:\TACTIC_OLD` подставьте свой прежний путь. Перед UPGRADE остановите TACTIC. В первом CHECK_LOCAL_DB код **3** означает «ещё не готова» и ожидаем до успешного исправления; команда ничего не меняет. Не объединяйте этот первоначальный CHECK с UPGRADE через `&&`, иначе ожидаемый код 3 не позволит продолжить.
++### Хранилище и права
+ 
+-В логе пользователя импорты уже прошли успешно. Поэтому существующий совместимый Python можно оставить через `TACTIC_PYTHON`; перенастраивать системный Python не требуется. Путь к исходникам берётся из нового launcher, а не из старого runtime.
++Остаётся **`config/custom_script`**, а не файлы на диске и не новая таблица. Папка/название — виртуальный путь записи TACTIC. Чтение и сохранение каждый раз проверяют исходное `builtin/view_script_editor`, текущий проект и разрешённый конфигурацией target. Прямой доступ к таблице/записи также проверяет это право. Обычный generic edit не обходит специальный путь редактора.
+ 
+-UPGRADE потребует `UPGRADE`. При ошибке покажет конкретный `backup/.../worker.log` и `upgrade-report.json`. Не запускайте сервер с ошибочной схемой и не удаляйте неудачную копию до разбора причины. Исходные зарегистрированные файлы должны существовать; пустая БД на месте отсутствующей не создаётся.
++Сохранение повторяет границу исходного `shelf_wdg.save_script_cbk`: **`TacticServerStub.insert` / `update`** внутри прежней серверной транзакции. Непосредственного SQL UPDATE из Vue нет. Пустая папка становится `default`, ведущие `/` названия удаляются как в исходнике. Пробелы, переносы строк, Unicode и код скрипта не переформатируются.
+ 
+-Адрес после успешного запуска: `http://127.0.0.1:9123/tactic/admin/`. Порт можно изменить. Нужна реальная учётная запись администратора. PostgreSQL-сервер SETUP не устанавливает.
++Существующие server triggers/workflow могут использовать этот код после сохранения. Поэтому отсутствие кнопки Run **не делает редактирование произвольного кода безопасным для production**: разрешение оставлено административным, запись по умолчанию выключена.
+ 
+-### Совершенно новая локальная установка
++### Возможности
+ 
+-Только для нового пустого каталога: SETUP → INIT_LOCAL_SQLITE → UPGRADE_LOCAL_SQLITE → CHECK_LOCAL_DB → START_TACTIC. Копирование/инициализация пароля и полноценная авторизация Windows-сервера здесь не проверялись; см. границы тестирования.
++Каталог со страницами по 40 (API до 100), поиск по папке/названию с буквальным `%`/`_`, фильтр папки, группировка загруженной страницы по папкам. Количество показывает общую серверную выборку; каталог не скачивает все тела скриптов. Поддержано открытие первоначального `script_path` / `search_key` из конфигурации.
+ 
+-### Обычная существующая PostgreSQL-инсталляция
++Создание, загрузка, изменение, создание копии, описание, выбор исходных языков `javascript/server_js/python/expression/xml`. Код редактируется как текст с переносом строк, табуляцией, счётчиком строки/столбца, поиском следующего совпадения. Есть Ctrl+S, контроль несохранённых изменений, подтверждение отмены, экспорт текущего текста в локальный файл.
+ 
+-Прежний путь сохранён:
++Ревизия проверяется перед update. Конфликт не стирает набранный текст. Дубликат folder/title не перезаписывается автоматически; копии нужно отдельное название. Неизвестный существующий язык можно сохранить неизменным, а создавать новые записи с произвольным языком нельзя.
+ 
+-```bat
+-START_TACTIC.bat --config "D:\TACTIC_TEST\config\tactic-conf.xml" --data-dir "D:\TACTIC_TEST" --port 9123
+-```
++Кнопка «Таблица по конфигурации» воспроизводит исходную Manage-ветку: настоящий view `config/custom_script/table`, `element_names=folder,title,description,language`, `show_shelf=false`, через существующую конфигурационную таблицу. Не отдельный захардкоженный список полей вместо всего TACTIC.
+ 
+-Новый managed SQLite-upgrade **не** принимает этот вариант и не объявляется исправлением MySQL-миграций. Сам присланный лог относится к SQLite.
++### Проверка синтаксиса и границы
+ 
+-## 5. Продолжение UI: System Info
++Python проверяется **AST-разбором без исполнения**; XML — ограниченным XML-parser без внешних сущностей. Ошибки показываются, но сохранение синтаксически незавершённого текста допустимо, как в исходном редакторе. Корректный синтаксис не доказывает наличие импортов, правильность имён или безопасность workflow.
+ 
+-Штатная конфигурационная ссылка `system_info` / `tactic.ui.app.SystemInfoWdg` открывает расширенную системную панель. Sidebar и набор представлений не переписывались. В панели появились обязательные для перенесённого UI таблицы и поля текущего проекта и sthpw, различие между отсутствующей регистрацией, таблицей и колонками, текущая версия native UI.
++Для JavaScript, server_js и expression возвращается явное «проверка не реализована», а не выдуманное «валидно». HTML/JS из тела скрипта не рендерится и не исполняется в браузере. В production нет нового универсального Run/Test/eval endpoint.
+ 
+-Имена физических config-таблиц читаются из исходного реестра, не заменяются предположением «везде spt_». Метаданные запрашиваются реальными Search/DbContainer. Панель не возвращает пароли, DSN, licence keys, окружение или пути к файлам. Ошибки чтения метаданных обозначаются без выдачи чувствительного traceback.
++**Run/debugger, diff истории, полноценная подсветка Ace, выполнение server_js/expression и custom панели редактора пока не перенесены.** Лимит тела скрипта — 256 КиБ UTF-8; большой существующий скрипт не обрезается и не перезаписывается. Группы папок относятся к текущей странице каталога. Межпроцессная уникальность folder/title против параллельных legacy-клиентов не гарантируется новой проверкой и не обеспечивается скрытым DDL.
+ 
+-**Кнопки запуска миграции из браузера нет.** Проверка read-only; флаг «обязательная структура найдена» не доказывает исправность всех пользовательских данных, прав, триггеров и файлов. Для базы, которую сервер ещё не может открыть, отдельный CHECK_LOCAL_DB работает до проверки криптографических/серверных зависимостей. Результат сохраняется в `.runtime/local-db-check.json` нового дерева.
++## 6. Проверки именно этой поставки
+ 
+-Версия UI теперь берётся из `NATIVE_UI_VERSION`: исправлена прежняя устаревшая строка 0.4 в System Info. Build и `/health` используют тот же источник. `/health` по-прежнему не проверяет БД.
++Отчёты: `docs/native-ui/0.9/validation/`; карта: `docs/native-ui/0.9/SOURCE_MAP_09.md`.
+ 
+-## 6. Проверки и ограничения доказательств
++| Набор | Результат |
++|---|---:|
++| Unit | **826** |
++| HTTP, свежий fixture-сервер на каждый набор | **282** |
++| Browser, свежий fixture-сервер на каждый набор | **177** |
++| Конфигурационный parity | **11 370 сравнений**, без расхождений/ошибок |
++| Отдельный установщик двухфайлового hotfix | **12 тестов** |
+ 
+-Точные текущие отчёты: `docs/native-ui/0.8/validation/`; карта изменений: `docs/native-ui/0.8/SOURCE_MAP_08.md`.
++Прежние наборы повторно выполнены, не прибавлены по историческим README. Новые 58 unit-тестов включают 17 startup/import, 36 scripts и 5 production view-save регрессий. Отдельный fresh-process startup report содержит 19 проверок и входит также в startup unit-сценарий; он не прибавляется ещё раз к 826.
+ 
+-- Полные копии оригинальных **sthpw.db и unittest.db**: чистый seed и частично изменённый seed с ошибочной отметкой 5.0. По **402 исходных метода**, без зарегистрированных SQL-ошибок; повтор — **0** старых методов. Проверены структура, integrity/foreign keys, сохранность XML widget_config и хеши исходных backup-файлов. SQL и сами базы не эмулируются.
+-- В тестовом subprocess **только получение лицензии заменено заглушкой**, поскольку в контейнере отсутствует Cryptodome. Это явно записано в отчётах и включается тестовым флагом. Production worker не импортирует тестовый код, не отключает лицензию и не меняет авторизацию. Результат — проверка миграций/файлов, **не полноценного входа и запуска TACTIC**.
+-- SQL-rebuild, ошибки уникальности, конфликтующие данные, сохранность индексов/триггеров/rowid, отказ публикации, сбой второго rename, смерть процесса в середине публикации, поиск tacticenv, изолированный запуск и проверка pip-кэша имеют отдельные регрессии.
+-- Сравнение конфигураций: 80 штатных XML, 487 views, 11 370 сравнений; без расхождений в прежней области. Это не полное поведенческое покрытие всех Wdg.
+-- **768 unit-тестов, 253 HTTP-сценария и 157 браузерных сценариев** прошли в финальном прогоне. Точные результаты каждого набора — `validation/summary.json`. HTTP/browser запускают чистое тестовое хранилище для каждого набора, не рабочую PostgreSQL. Новая System Info-панель читает настоящие метаданные исходного seed, но auth/context в этом harness тестовые.
++HTTP использует настоящий bundled CherryPy, production ScriptService и настоящий Search/Select/SqliteImpl, но сохранение/аутентификация в UI-harness — тестовые collaborators и изолированные таблицы. Они не доказывают полный исходный XML-RPC-декоратор, лицензию, транзакционные побочные эффекты и логин на вашей БД.
+ 
+-Прямая навигация Chromium заблокирована `ERR_BLOCKED_BY_ADMINISTRATOR`. Использован явный HTTP-мост; нативные cookies/CSP/navigation/WebCrypto этими браузерными проверками не доказаны. Скриншоты помечены TEST FIXTURE. Полный Windows BAT/PowerShell, фактическая загрузка окружения, рабочий PostgreSQL/MySQL, полная авторизация и пользовательские внешние callback-эффекты здесь не проверены.
++Прямая Chromium-навигация была попробована и заблокирована `ERR_BLOCKED_BY_ADMINISTRATOR`; лог сохранён. Финальные browser-наборы используют явно включённый HTTP-мост. Cookies, CSP, browser navigation/WebCrypto им не доказаны. Cookie/CSRF/Origin отдельно проверены настоящими HTTP-запросами. Скриншоты имеют **TEST FIXTURE**.
+ 
+-Повтор developer-проверок:
++**Полноценный START_TACTIC с настоящей БД/лицензией и Windows BAT/PowerShell здесь не запускались.** В среде нет Cryptodome/psycopg2; заглушки этих библиотек не добавлены в production. Для тестов bundled CherryPy на Python 3.13 предоставлялся внешний тестовый cgi.py, он не упакован в форк. Лицензия и защита входа не отключались.
+ 
+ ```bat
+ python -W ignore -m unittest discover -s tests/native_ui -v
+-python tests\native_ui\run_validation_08.py --chromium "C:\path\to\chrome.exe"
+-python tests\native_ui\run_migration_08.py --output "D:\temporary-migration-test-report"
++python tests\native_ui\run_validation_09.py --chromium "C:\path\to\chrome.exe"
++python tests\native_ui\check_startup_contexts_09.py
+ ```
+ 
+-Последний runner по умолчанию использует настоящее получение лицензии и временные копии seed. Только для CI без криптографических зависимостей предусмотрен явный **тестовый** `--isolate-license`. Для запрещённой навигации у browser runner существует `--bridge`; по умолчанию он не включён. Инструменты тестов не заменяют START_TACTIC.
++`--bridge` у validation добавлять только при реальном запрете прямой навигации. Для browser/build нужны developer-зависимости Node/Playwright/Chromium; обычный пользователь запускает готовую сборку без них.
+ 
+-## 7. Пределы и откат
++## 7. Окружение, данные и дальнейшие пределы
+ 
+-Вход native UI остаётся **admin-only**. Запись и загрузка по умолчанию **выключены** в `src/tactic/ui_api/config.json`. Это не распространяется на отдельный подтверждаемый offline schema-upgrade: он специально меняет структуру управляемой локальной базы. После проверки своей тестовой установки прежние allow_writes/allow_uploads включаются отдельно.
++`SETUP_ENV.bat`, pip URL, runtime-manifest и зависимости **не изменялись**: пользователь сообщил, что эти этапы прошли. Заново скачивание окружения не проверялось. Остаются существующие CHECK_ENV, CHECK_LOCAL_DB, INIT/UPGRADE/RESTORE_LOCAL_SQLITE, START/LEGACY и BUILD_VUE. SETUP не устанавливает PostgreSQL-сервер.
+ 
+-Все прежние ограничения multisite/multiworker, неперенесённых custom layouts/expressions/widgets, частей workflow/review/системной и плагинной админки, ресурсного планирования и расширенного check-in остаются. Старые `tactic/ui`, `pyasm/widget`, `pyasm/web` удалять нельзя. Этап 0.8 не добавляет новые сущности приложения и не претендует на завершение всех UI.
++Для совершенно новой managed SQLite по-прежнему нужны SETUP → INIT → UPGRADE → CHECK_LOCAL_DB. Это **не** инструкция повторять инициализацию для уже обновлённой базы. Историческое описание безопасной миграции 0.8 сохранено в `docs/native-ui/0.8/README_REFERENCE_RU.md`.
+ 
+-`START_LEGACY.bat` / `TACTIC_UI=legacy` переключает рендерер, но не откатывает данные и миграции. Для возврата исходников есть исходный архив 0.7; для БД — private backup. Не используйте автоматическое восстановление прерванной публикации как откат после продолжения работы.
++Вход native UI **admin-only**, `src/tactic/ui_api/config.json`:
+ 
+-Поставка не содержит `.runtime`, пользовательских баз/паролей, caches/pyc, тестовых payload и файлов шрифтов. Оригинальные seed-базы в `src/install/start` сохранены; изменялись только их временные тестовые копии.
+-
+-## Источники исправлений
++```json
++{"site":"", "allow_writes":false, "allow_uploads":false}
++```
+ 
+-Исходники 0.7: `project/base_upgrade.py`, `project/sthpw_upgrade.py`, `upgrade_db.py`, `sqlite/config_schema.sql`, `sqlite/sthpw_schema.sql`, `src/install/start/db/*.db`; приложенный `logs.txt` (ошибки SQLite и потеря tacticenv).
++Разрешать запись только после проверки тестовой установки. Это касается и изменения скриптов/view designer. Включение uploads отдельно от writes. Никакие флаги не включены ради скриншота в production-конфигурации.
+ 
+-Официальный индекс pip: https://bootstrap.pypa.io/pip/zipapp/
++Сохранены прежние таблицы, формы, sidebar, поиск, задачи, work hours, схемы/pipeline, коллекции, сообщения, уведомления, timeline, файлы и загрузки. Полные custom layouts/expressions/widgets, части workflow/review/плагинной/лицензионной админки, ресурсное планирование, расширенный check-in и полный headless bootstrap ещё не закрыты. **Старые UI-каталоги не удалять.** Ограничения multiworker/multisite и работы обычных ролей не объявляются снятыми.
+ 
+-SQLite, схема безопасного перестроения таблиц: https://www.sqlite.org/lang_altertable.html
++`START_LEGACY.bat` / `TACTIC_UI=legacy` возвращает прежний рендерер, но использует общие исправленные классы. Это не откат записанных данных. Откат исходников — из 0.8, данных — из резервной копии.
+ 
+-SQLite backup API: https://www.sqlite.org/backup.html
++Архив содержит полный source fork, готовую сборку, source map, патч/хеши и тесты. Не содержит `.runtime`, кешей/pyc, рабочих пользовательских БД/паролей, внешних тестовых зависимостей и файлов шрифтов. Оригинальные seed-базы не изменены.
+diff --git a/START_HERE_RU.md b/START_HERE_RU.md
+index 0265e4a..a701e49 100644
+--- a/START_HERE_RU.md
++++ b/START_HERE_RU.md
+@@ -1,32 +1,28 @@
+-# TACTIC 5.0 / Vue source fork 0.8
++# TACTIC 5.0 / Vue source fork 0.9
+ 
+-Полный форк исходников; основная инструкция — **README_VUE_RU.md**. Vue уже собран, Node для запуска не нужен. Запись и загрузка выключены по умолчанию.
++Полное дерево исходников. Основная инструкция — **README_VUE_RU.md**. Исправлен `Api NameError` при старте Python 3.13. Новый этап — штатный редактор сохранённых скриптов через widget_config.
+ 
+-## Уже есть local_data после неудачного upgrade 0.6 / 0.7
++## Уже прошли SETUP / INIT / UPGRADE в 0.8
+ 
+-Не удаляйте его и не запускайте INIT повторно. Распакуйте 0.8 отдельно; остановите все прежние серверы. BAT запускайте из нового дерева, указывая **старый** каталог данных:
++**Не повторять инициализацию и миграцию. Не удалять local_data.** Распаковать 0.9 отдельно, остановить прежний сервер. В командной строке из нового корня `TACTIC-5.0`:
+ 
+ ```bat
+-rem Вместо D:\TACTIC_OLD — путь к прежнему каталогу:
+-set "DATA=D:\TACTIC_OLD\TACTIC-5.0\local_data"
+-SETUP_ENV.bat
+-rem Либо вместо SETUP укажите уже рабочий Python:
+-rem set "TACTIC_PYTHON=D:\TACTIC_OLD\TACTIC-5.0\.runtime\python\python.exe"
+-CHECK_ENV.bat
+-CHECK_LOCAL_DB.bat --data-dir "%DATA%"
+-UPGRADE_LOCAL_SQLITE.bat --data-dir "%DATA%"
+-CHECK_LOCAL_DB.bat --data-dir "%DATA%"
+-START_TACTIC.bat --data-dir "%DATA%" --port 9123
++set "OLD=C:\Users\listy\Downloads\TACTIC_5_Vue_Source_Fork_0.8\TACTIC-5.0"
++set "TACTIC_PYTHON=%OLD%\.runtime\python\python.exe"
++CHECK_STARTUP.bat --data-dir "%OLD%\local_data"
++START_TACTIC.bat --data-dir "%OLD%\local_data" --port 9123
+ ```
+ 
+-Первый CHECK_LOCAL_DB может вернуть 3 («не готово»); это ожидаемо до исправления. UPGRADE создаёт бэкап и обновляет сначала копии, требует подтверждение UPGRADE. Не проставляйте state/version вручную. При ошибке нужен worker.log/upgrade-report из указанного backup; прежние базы не заменяются результатом неуспешной миграции. Для прерванной установки есть RESTORE_LOCAL_SQLITE, подробности в README.
++Исправить `OLD`, если прежняя установка находится в другом месте. Новый код использует старые рабочие Python и данные. SETUP повторять необязательно. Адрес: `http://127.0.0.1:9123/tactic/admin/`, настоящий администратор, не demo/demo. Node не требуется.
+ 
+-## Новая установка / внешняя база
++CHECK_STARTUP проверяет реальную регистрацию сервисов, не поднимая HTTP listener. **Исходная инициализация может писать в БД**, поэтому это не read-only проверка. Она не доказывает полный вход/запросы и не отменяет оригинальную лицензию. Ошибка сохраняется в `.runtime/last-launch-error.txt` нового дерева.
++
++Для исправления только исходной 0.8 есть отдельный двухфайловый пакет `TACTIC_0.8_Startup_Fix.zip`; к полному 0.9 его применять не нужно.
+ 
+-Для нового пустого SQLite-каталога: SETUP → INIT_LOCAL_SQLITE → UPGRADE_LOCAL_SQLITE → CHECK_LOCAL_DB → START. Для существующей тестовой PostgreSQL-инсталляции используйте прежний START_TACTIC с --config и --data-dir; управляемый SQLite-upgrade её не принимает. PostgreSQL-сервер SETUP не устанавливает.
++## Новая установка / внешняя база
+ 
+-Адрес: http://127.0.0.1:9123/tactic/admin/. Нужен настоящий администратор TACTIC, не demo/demo.
++Для нового пустого SQLite-каталога сохранены SETUP → INIT_LOCAL_SQLITE → UPGRADE_LOCAL_SQLITE → CHECK_LOCAL_DB → START. Для существующей PostgreSQL-инсталляции — START_TACTIC с --config/--data-dir. Подробности и ограничения в README; загрузчик не устанавливает PostgreSQL-сервер.
+ 
+-Новое: правильный pip zipapp URL, staged SQLite upgrade/восстановление, исправление in-process fix_search_code и isolated embedded Python, read-only диагностика схемы в исходном SystemInfo. Конфигурационный sidebar не заменён новым списком.
++Вход пока admin-only. Запись/загрузка выключены по умолчанию. Скрипты сохраняются в исходном config/custom_script; Run/debugger пока не перенесены. Все UI ещё не закрыты, старые UI-каталоги не удалять.
+ 
+-Windows BAT/PowerShell, полный вход настоящего TACTIC и PostgreSQL/MySQL здесь не проверены. Реальные файлы seed прошли исходные миграции с явно отмеченной тестовой подменой только получения лицензии; это не production-bypass. Все UI ещё не перенесены; старые UI-каталоги не удалять.
++Проверены 826 unit, 282 HTTP и 177 браузерных сценариев, но не полная Windows/DB-авторизация. Browser harness использует явный HTTP-мост; скриншоты — TEST FIXTURE. Границы тестов перечислены в README, а не заменены заявлением «всё работает».
+diff --git a/frontend/package.json b/frontend/package.json
+index 34d7f87..e87850d 100644
+--- a/frontend/package.json
++++ b/frontend/package.json
+@@ -1,7 +1,7 @@
+ {
+   "name": "tactic-native-ui",
+   "private": true,
+-  "version": "0.8.0",
++  "version": "0.9.0",
+   "scripts": {
+     "build": "node ../tools/native_ui/build.cjs"
+   }
+diff --git a/frontend/src/App.vue b/frontend/src/App.vue
+index af3f9dc..f0397fb 100644
+--- a/frontend/src/App.vue
++++ b/frontend/src/App.vue
+@@ -1,5 +1,6 @@
+ <script>
+ import api from './api.js';
++import ScriptEditor from './components/ScriptEditor.vue';
+ import CollectionPanel from './components/CollectionPanel.vue';
+ import AdvancedFilter from './components/AdvancedFilter.vue';
+ import RelationTree from './components/RelationTree.vue';
+@@ -18,7 +19,7 @@ import TaskTimeline from './components/TaskTimeline.vue';
+ import AdminPanel from './components/AdminPanel.vue';
+ import MessageCenter from './components/MessageCenter.vue';
+ export default {
+- name:'TacticApp',components:{CsvExport,ConfigAudit,CollectionPanel,AdvancedFilter,RelationTree,SidebarNode,ConfiguredTable,ConfiguredForm,ConfigEditor,GraphEditor,RecordInspector,GroupMembership,SearchTypes,ViewDesigner,TaskTimeline,AdminPanel,MessageCenter},
++ name:'TacticApp',components:{ScriptEditor,CsvExport,ConfigAudit,CollectionPanel,AdvancedFilter,RelationTree,SidebarNode,ConfiguredTable,ConfiguredForm,ConfigEditor,GraphEditor,RecordInspector,GroupMembership,SearchTypes,ViewDesigner,TaskTimeline,AdminPanel,MessageCenter},
+  data(){return {exporting:false,audit:false,user:null,login:'',password:'',twoFactor:'',projects:[],project:'',sidebar:{sections:[]},navError:'',error:'',busy:false,navOpen:true,tabs:[],active:'',form:null,formError:'',saving:false,previewBusy:false,previewSequence:0,previewFailed:false,inspected:null,keyword:'',filterField:'',filterOp:'contains',filterValue:'',types:[],loginBusy:false,designer:null,selected:[],tableMode:'data',saveViewTitle:'',showSaveView:false,lastProject:'',messagesOpen:false,messageCode:''}},
+  computed:{timelineQuery(){return this.current?{filters:this.current.filters,where:this.current.where,sort:this.current.sort||undefined,record_state:this.current.recordState}:{}},current(){return this.tabs.find(t=>t.id===this.active)},fields(){return this.current?.spec?.fields.filter(f=>f.storage)||[]},mainSections(){return this.sidebar.sections}},
+  async mounted(){try{const s=await api.request('/session');this.user=s.user;await this.initialize()}catch(e){if(e.status!==401)this.error=e.message}},
+@@ -82,6 +83,7 @@ export default {
+     <CollectionPanel v-else-if="current.kind==='collections'" :key="project+active" :project="project" :target="active" :refresh-key="current.refreshKey" @changed="configChanged" @open="open"/>
+     <ConfigEditor v-else-if="['sidebar-editor','config-editor'].includes(current.kind)" :key="project+current.id" :project="project" :mode="current.kind" :initial-view="current.options.view==='my_view'?'my_view_'+user.login:current.options.view||(project==='admin'?'admin_views':'project_view')" :allow-writes="user.allow_writes" @changed="configChanged"/>
+     <GraphEditor v-else-if="['pipeline','schema'].includes(current.kind)" :key="project+current.id" :project="project" :kind="current.kind" @dirty="current.dirty=$event"/>
++    <ScriptEditor v-else-if="current.kind==='script-editor'" :key="project+current.id" :project="project" :target="current.id" @dirty="current.dirty=$event" @open="open"/>
+     <SearchTypes v-else-if="current.kind==='search-types'" :key="project+current.id" :project="project" :allow-writes="user.allow_writes" @open="open" @changed="configChanged"/>
+     <GroupMembership v-else-if="current.kind==='group-membership'" :key="project+current.id" :project="project" :target="current.id" @changed="configChanged"/>
+     <MessageCenter v-else-if="current.kind==='message-center'" :key="project+current.id" :project="project" :target="current.id" :options="current.options" :login="user.login" @close="close(current.id)"/>
+diff --git a/frontend/src/components/ScriptEditor.vue b/frontend/src/components/ScriptEditor.vue
+new file mode 100644
+index 0000000..7b40225
+--- /dev/null
++++ b/frontend/src/components/ScriptEditor.vue
+@@ -0,0 +1,48 @@
++<script>
++import api from '../api.js';
++export default {
++ name:'ScriptEditor',props:{project:String,target:String},emits:['dirty','open'],
++ data(){return {items:[],total:0,offset:0,limit:40,q:'',folderFilter:null,busy:false,saving:false,error:'',notice:'',canWrite:false,languages:[],manageTarget:'',record:null,draft:{folder:'default',title:'',language:'javascript',description:'',script:''},baseline:'',check:null,requestSeq:0,loadSeq:0,cursor:{line:1,column:1},wrap:false,findText:''}},
++ computed:{dirty(){return !!this.baseline&&JSON.stringify(this.draft)!==this.baseline},groups(){const groups=[];for(const row of this.items){let g=groups.find(g=>g.folder===row.values.folder);if(!g){g={folder:row.values.folder,items:[]};groups.push(g)}g.items.push(row)}return groups},lineCount(){return this.draft.script.split('\n').length}},
++ watch:{dirty(value){this.$emit('dirty',value)},'draft.script'(){this.check=null}},
++ async mounted(){this.baseline=JSON.stringify(this.draft);window.addEventListener('beforeunload',this.unload);await this.reload(true)},
++ beforeUnmount(){this.requestSeq++;this.loadSeq++;window.removeEventListener('beforeunload',this.unload);this.$emit('dirty',false)},
++ methods:{
++ unload(event){if(this.dirty){event.preventDefault();event.returnValue=''}},
++ accept(record){this.record=record;this.draft={folder:record.values.folder??'',title:record.values.title??'',language:record.values.language||'javascript',description:record.values.description??'',script:record.values.script??''};this.baseline=JSON.stringify(this.draft);this.check=null;this.cursor={line:1,column:1}},
++ async reload(initial=false){const seq=++this.requestSeq;this.busy=true;this.error='';try{const result=await api.request('/scripts',{project:this.project,target:this.target,q:this.q,folder:this.folderFilter,offset:this.offset,limit:this.limit});if(seq!==this.requestSeq)return;this.items=result.items;this.total=result.total;this.canWrite=result.can_write;this.languages=result.languages;this.manageTarget=result.manage_target;if(initial&&(result.initial?.search_key||result.initial?.script_path))await this.load({key:result.initial.search_key,script_path:result.initial.script_path})}catch(e){if(seq===this.requestSeq)this.error=e.message}finally{if(seq===this.requestSeq)this.busy=false}},
++ async load(selection){if(this.dirty&&!confirm('Отменить несохранённые правки скрипта?'))return;const seq=++this.loadSeq;this.error='';this.notice='';this.busy=true;try{const result=await api.request('/script',{project:this.project,target:this.target,...selection});if(seq===this.loadSeq)this.accept(result.record)}catch(e){if(seq===this.loadSeq)this.error=e.message}finally{if(seq===this.loadSeq)this.busy=false}},
++ fresh(){if(this.dirty&&!confirm('Отменить несохранённые правки?'))return;this.loadSeq++;this.record=null;this.draft={folder:this.folderFilter||'default',title:'',language:'javascript',description:'',script:''};this.baseline=JSON.stringify(this.draft);this.error='';this.notice='';this.check=null},
++ copy(){this.loadSeq++;this.record=null;this.baseline='new-copy';this.draft.title=this.draft.title+'_copy';this.notice='Копия ещё не сохранена. Исходная запись не изменяется.'},
++ async save(){if(this.saving||this.busy||!this.canWrite)return;this.saving=true;this.error='';this.notice='';try{const result=await api.request('/script',{project:this.project,target:this.target,key:this.record?.key,revision:this.record?.revision,values:{...this.draft}},this.record?'PATCH':'POST');this.accept(result.record);this.notice=result.notice;await this.reload()}catch(e){this.error=e.message}finally{this.saving=false}},
++ async syntax(){this.error='';const source=this.draft.script,language=this.draft.language;try{const result=await api.request('/script-check',{project:this.project,target:this.target,script:source,language},'POST');if(source===this.draft.script&&language===this.draft.language)this.check=result}catch(e){this.error=e.message}},
++ async discard(){if(this.record)await this.load({key:this.record.key});else this.fresh()},
++ filter(folder=null){this.folderFilter=folder;this.offset=0;this.reload()},
++ search(){this.offset=0;this.reload()},
++ page(delta){this.offset+=delta*this.limit;this.reload()},
++ position(){const el=this.$refs.source;if(!el)return;const before=el.value.slice(0,el.selectionStart);const lines=before.split('\n');this.cursor={line:lines.length,column:lines[lines.length-1].length+1}},
++ keydown(event){if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='s'){event.preventDefault();this.save()}else if(event.key==='Tab'){event.preventDefault();const el=event.target,start=el.selectionStart,end=el.selectionEnd;this.draft.script=el.value.slice(0,start)+'    '+el.value.slice(end);this.$nextTick(()=>{el.selectionStart=el.selectionEnd=start+4;this.position()})}},
++ find(){const el=this.$refs.source;if(!el||!this.findText)return;const at=el.value.indexOf(this.findText,el.selectionEnd);const start=at<0?el.value.indexOf(this.findText):at;if(start>=0){el.focus();el.setSelectionRange(start,start+this.findText.length);this.position()}else this.notice='Текст не найден в открытом скрипте.'},
++ download(){const ext={python:'.py',javascript:'.js',server_js:'.js',xml:'.xml',expression:'.txt'}[this.draft.language]||'.txt';const blob=new Blob([this.draft.script],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(this.draft.title||'untitled').replace(/[\\/:*?"<>|]/g,'_')+ext;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)}
++ }
++};
++</script>
++<template>
++<section class="script-editor" data-testid="script-editor">
++ <header class="script-toolbar"><div><span class="eyebrow">ORIGINAL SCRIPT EDITOR</span><h2>Сохранённые скрипты</h2><small>config/custom_script · {{dirty?'есть несохранённые правки':record?'запись загружена':'новый скрипт'}}</small></div><span class="spacer"></span><button @click="fresh" :disabled="saving||busy">Новый</button><button @click="copy" :disabled="!record||saving||busy">Создать копию</button><button @click="download">В файл</button><button @click="$emit('open',{id:manageTarget})" :disabled="!manageTarget">Таблица по конфигурации</button></header>
++ <p class="notice">Сохранение использует исходные insert/update TACTIC. Код не запускается в браузере; его могут использовать существующие workflow и триггеры. Исполнение и отладчик ещё не перенесены.</p>
++ <p v-if="error" class="error" role="alert">{{error}}</p><p v-if="notice" class="notice" role="status">{{notice}}</p>
++ <div class="script-layout"><aside class="script-directory"><form @submit.prevent="search"><input v-model="q" aria-label="Поиск скриптов" placeholder="Папка или название"><button :disabled="busy">Найти</button></form><div class="script-folder-filter"><button v-if="folderFilter!==null" @click="filter(null)">Все папки ×</button><span v-else>Все папки · {{total}} записей</span></div><p v-if="!items.length&&!busy">Скрипты не найдены.</p>
++  <section v-for="group in groups" :key="String(group.folder)"><button class="script-folder" @click="filter(group.folder??'')">{{group.folder||'(без папки)'}}</button><button v-for="item in group.items" :key="item.key" class="script-entry" :class="{active:item.key===record?.key}" @click="load({key:item.key})"><span>{{item.values.title}}</span><small>{{item.values.language||'javascript'}}</small></button></section>
++  <footer><button @click="page(-1)" :disabled="offset===0||busy">←</button><span>{{total?offset+1:0}}–{{Math.min(offset+limit,total)}} / {{total}}</span><button @click="page(1)" :disabled="offset+limit>=total||busy">→</button></footer>
++ </aside><div class="script-document" :aria-busy="saving">
++  <div class="script-fields"><label>Папка<input v-model="draft.folder" :disabled="saving||busy" aria-label="Папка скрипта"></label><label>Название<input v-model="draft.title" :disabled="saving||busy" aria-label="Название скрипта"></label><label>Язык<select v-model="draft.language" :disabled="saving||busy" aria-label="Язык скрипта"><option v-for="l in languages" :key="l" :value="l">{{l}}</option><option v-if="draft.language&&!languages.includes(draft.language)" :value="draft.language">{{draft.language}} (существующее значение)</option></select></label></div>
++  <label class="script-description">Описание<input v-model="draft.description" :disabled="saving||busy" aria-label="Описание скрипта"></label>
++  <div class="script-source-tools"><input v-model="findText" aria-label="Найти в скрипте" placeholder="Найти в тексте" @keyup.enter="find"><button @click="find">Следующее</button><label><input type="checkbox" v-model="wrap">Перенос строк</label><span class="spacer"></span><button @click="syntax" :disabled="saving||busy">Проверить синтаксис</button></div>
++  <textarea ref="source" class="script-source" :class="{wrapped:wrap}" v-model="draft.script" :disabled="saving||busy" aria-label="Код скрипта" spellcheck="false" autocapitalize="off" autocomplete="off" @keydown="keydown" @keyup="position" @click="position"></textarea>
++  <div class="script-status"><span>Строка {{cursor.line}}, столбец {{cursor.column}} · {{lineCount}} строк · {{draft.script.length}} символов</span><code v-if="record">{{record.values.code}}</code></div>
++  <p v-if="check" :class="check.valid===false?'error':'notice'">{{check.checked?(check.valid?'Синтаксис корректен':'Ошибка синтаксиса'):'Проверка недоступна'}}<span v-if="check.line"> · строка {{check.line}}, столбец {{check.column}}</span>. {{check.message||check.notice}} Код не выполнялся.</p>
++  <footer class="script-actions"><button :disabled="saving||busy||!dirty" @click="discard">Отменить правки</button><span class="spacer"></span><span v-if="!canWrite">Запись отключена на сервере</span><button class="primary" :disabled="saving||busy||!canWrite||!draft.title||(!dirty&&!!record)" @click="save">{{saving?'Сохранение…':'Сохранить'}} · Ctrl+S</button></footer>
++ </div></div>
++</section>
++</template>
+diff --git a/frontend/src/styles.css b/frontend/src/styles.css
+index 85ed889..9e38c00 100644
+--- a/frontend/src/styles.css
++++ b/frontend/src/styles.css
+@@ -49,3 +49,6 @@
+ .system-summary dd{overflow-wrap:anywhere}.schema-health{margin-top:24px;border-top:1px solid var(--border);padding-top:16px}.schema-health>header{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.schema-health h3{margin:0}.schema-database{margin:18px 0}.schema-check-table{width:100%;font-size:13px}.schema-check-table td{overflow-wrap:anywhere}.schema-check-table tr[data-schema-state="missing_table"],.schema-check-table tr[data-schema-state="missing_columns"]{background:rgba(220,85,85,.08)}.system-panel{max-width:1280px;margin:0 auto}.system-panel .table-scroll{max-width:100%;overflow:auto}.schema-check-table code{white-space:normal}.schema-health .notice{white-space:normal;overflow-wrap:anywhere}@media(max-width:600px){.system-summary{grid-template-columns:1fr!important}.schema-check-table{min-width:0;font-size:11px}.schema-check-table th,.schema-check-table td{padding:6px}.system-panel{padding:8px!important}.schema-health>header{align-items:flex-start}}
+ 
+ .system-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}.system-fact{padding:10px 12px;border:1px solid var(--border);border-radius:5px;background:rgba(140,165,190,.04);min-width:0}.system-summary .system-fact dt{font-size:11px;margin:0 0 6px;color:var(--muted)}.system-summary .system-fact dd{margin:0;font-size:13px}.system-notes p{margin:3px 0;font-size:11px}.schema-health .table-scroll{max-height:360px}.schema-check-table thead th{position:sticky;top:0;background:var(--panel);z-index:1}@media(max-width:900px){.system-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.system-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px}.system-fact{padding:8px}.system-summary .system-fact dd{font-size:11px;overflow-wrap:anywhere}.schema-health .table-scroll{max-height:380px}}
++
++/* Native saved-script editor; no legacy HTML runtime. */
++.script-editor{display:flex;flex-direction:column;padding:20px;gap:12px;min-width:0}.script-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.script-toolbar h2{margin:4px 0}.script-layout{display:grid;grid-template-columns:minmax(190px,260px) minmax(0,1fr);gap:16px}.script-directory{border:1px solid var(--line,#343b49);border-radius:8px;padding:10px;max-height:74vh;overflow:auto}.script-directory form{display:flex;gap:6px}.script-directory form input{min-width:0;width:100%}.script-folder-filter{margin:12px 0;font-size:12px}.script-directory footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:16px;font-size:12px}.script-folder{border:none;text-align:left;font-weight:600;width:100%;margin-top:12px}.script-entry{display:flex;width:100%;text-align:left;align-items:center;gap:8px;margin:4px 0;background:transparent;overflow-wrap:anywhere}.script-entry small{margin-left:auto;opacity:.65}.script-entry.active{box-shadow:inset 3px 0 currentColor}.script-document{min-width:0;display:flex;flex-direction:column;gap:10px}.script-fields{display:grid;grid-template-columns:1fr 1.4fr 170px;gap:12px}.script-fields label,.script-description{display:flex;flex-direction:column;gap:6px;font-size:12px}.script-fields input,.script-fields select{min-width:0}.script-source-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.script-source-tools label{display:flex;align-items:center;gap:6px;font-size:12px}.script-source{width:100%;height:46vh;min-height:260px;padding:16px;box-sizing:border-box;resize:vertical;tab-size:4;font:14px/1.6 Consolas,monospace;white-space:pre;overflow:auto;overflow-wrap:normal;border-radius:8px}.script-source.wrapped{white-space:pre-wrap;overflow-wrap:anywhere}.script-status,.script-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px}.script-actions{margin-top:8px}.script-editor .notice{margin:0}.script-editor .error{white-space:pre-wrap}@media(max-width:850px){.script-layout{grid-template-columns:1fr}.script-directory{max-height:230px}.script-fields{grid-template-columns:1fr 1fr}.script-source{height:45vh}.script-editor{padding:12px}.script-toolbar .spacer{display:none}}
+diff --git a/src/pyasm/common/common.py b/src/pyasm/common/common.py
+index 8f20ea5..0ec4eba 100644
+--- a/src/pyasm/common/common.py
++++ b/src/pyasm/common/common.py
+@@ -335,6 +335,38 @@ class Common(Base):
+     
+     add_func_to_class = staticmethod(add_func_to_class)
+ 
++    @staticmethod
++    def resolve_class(class_path):
++        """Resolve a trusted TACTIC configuration class without exec locals.
++
++        This does not authorize HTTP input. Callers must resolve/authorize their
++        server configuration first. Short names retain Marshaller's historical
++        widget -> command -> web search order; plugin loading keeps its loader.
++        No instance is created simply to ask a class for its default handler.
++        """
++        import importlib
++        if not isinstance(class_path, str) or not class_path or any(
++                not part.isidentifier() for part in class_path.split('.')):
++            raise ValueError("Invalid TACTIC class path: %r" % (class_path,))
++        module_name, _, class_name = class_path.rpartition('.')
++        if module_name.startswith('tactic.plugins.'):
++            plugins = importlib.import_module('tactic.plugins')
++            parts = class_path.split('.')
++            obj = plugins.import_plugin(parts[2])
++            for name in parts[3:]:
++                obj = getattr(obj, name)
++            return obj
++        if module_name:
++            return getattr(importlib.import_module(module_name), class_name)
++        for name in ('pyasm.widget', 'pyasm.command', 'pyasm.web'):
++            try:
++                module = importlib.import_module(name)
++            except ImportError:
++                continue
++            if hasattr(module, class_name):
++                return getattr(module, class_name)
++        raise ImportError("Could not find '%s' for import" % class_path)
++
+     def get_import_from_class_path(class_path):
+         '''dynamically executes a an import statement
+         Note: this assumes an empty constructor'''
+diff --git a/src/pyasm/web/cherrypy30_startup.py b/src/pyasm/web/cherrypy30_startup.py
+index c21eaf3..5182a04 100644
+--- a/src/pyasm/web/cherrypy30_startup.py
++++ b/src/pyasm/web/cherrypy30_startup.py
+@@ -26,6 +26,7 @@ from pyasm.command import SiteUpgradeCmd
+ 
+ from .cherrypy_startup import CherryPyStartup as CherryPyStartup20
+ from .cherrypy30_adapter import CherryPyAdapter
++from .context_registry import attach_project, get_project, load_contexts, route_segment
+ 
+ 
+ 
+@@ -180,9 +181,9 @@ class CherryPyStartup(CherryPyStartup20):
+ 
+             Site.set_site(site)
+             if site:
+-                eval("cherrypy.root.tactic.%s.%s" % (site, project_code))
++                get_project(cherrypy.root.tactic, project_code.replace(".", "_"), site)
+             else:
+-                eval("cherrypy.root.tactic.%s" % project_code)
++                get_project(cherrypy.root.tactic, project_code.replace(".", "_"))
+         # if project_code is empty , it raises SyntaxError
+         except (AttributeError, SyntaxError) as e:
+             print("WARNING CherryPyStartup: ", e)
+@@ -757,7 +758,10 @@ class CherryPyStartup(CherryPyStartup20):
+ 
+ 
+ 
+-    def register_project(self, project, config, site=None, need_upgrade=[False]):
++    def register_project(self, project, config, site=None, need_upgrade=None):
++
++        if need_upgrade is None:
++            need_upgrade = [False]
+ 
+         # Check if this project needs and upgrade, or if upgrade is occuring.
+         if Config.get_value("portal", "auto_upgrade") == 'true':
+@@ -787,37 +791,21 @@ class CherryPyStartup(CherryPyStartup20):
+             print("Registering project ... %s" % project)
+ 
+ 
++        # Attribute assignment, never executable source constructed from route
++        # names. In Python 3.13 two exec() calls do not share implicit locals.
++        route_segment(project, "project")
++        if site:
++            route_segment(site, "site")
+         try:
+             from tactic.ui.app import SitePage
+-            if site:
+-                # make sure the site exists
+-                try:
+-                    x = eval("cherrypy.root.tactic.%s" % (site))
+-                except:
+-                    exec("cherrypy.root.tactic.%s = TacticIndex()" % (site))
+-                    exec("cherrypy.root.projects.%s = TacticIndex()" % (site))
+-
+-                exec("cherrypy.root.tactic.%s.%s = SitePage()" % (site, project))
+-                exec("cherrypy.root.projects.%s.%s = SitePage()" % (site, project))
+-
+-            else:
+-                exec("cherrypy.root.tactic.%s = SitePage()" % project)
+-                exec("cherrypy.root.projects.%s = SitePage()" % project)
+-
+-
+-
+         except ImportError:
+-            #print("... WARNING: SitePage not found")
+-            exec("cherrypy.root.tactic.%s = TacticIndex()" % project)
+-            exec("cherrypy.root.projects.%s = TacticIndex()" % project)
+-        except SyntaxError as e:
+-            print("WARNING: skipping project [%s]" % project)
+-            print("... possibly project or site contains special characters")
+-            raise
+-
+-
+-
+-
++            page_factory = TacticIndex
++        else:
++            page_factory = SitePage
++        tactic_page = attach_project(cherrypy.root.tactic, project, page_factory,
++                                     site=site, site_factory=TacticIndex)
++        attach_project(cherrypy.root.projects, project, page_factory,
++                       site=site, site_factory=TacticIndex)
+ 
+         # The rest is only ever executed on the "default" project
+ 
+@@ -842,44 +830,22 @@ class CherryPyStartup(CherryPyStartup20):
+         if not os.path.exists(context_dir):
+             return
+ 
+-        contexts = []
+-        for context_dir in os.listdir(context_dir):
+-            if not context_dir.endswith(".py"):
+-                continue
+-            if context_dir == "__init__.py":
+-                continue
+-            if context_dir.startswith("."):
+-                continue
+-            if os.path.isdir(context_dir):
+-                continue
+-
+-            context = context_dir.replace(".py", "")
+-            contexts.append(context)
+-        
+-        for context in contexts:
+-            try:
+-
+-                exec("from %s.%s.context.%s import %s" % (base,project,context,context))
+-                if site:
+-                    exec("cherrypy.root.tactic.%s.%s.%s = %s()" % (site,project,context,context) )
+-                else:
+-                    exec("cherrypy.root.tactic.%s.%s = %s()" % (project,context,context) )
+-
+-            except ImportError as e:
+-                print(str(e))
+-                print("... failed to import '%s.%s.%s'" % (base, project, context))
+-                raise
+-                #return
+-
+-
+-            path = "/tactic/%s/%s" % (project, context)
++        # Resolve ALL classes before publishing contexts; constructor/import
++        # errors retain their original traceback instead of leaving a silently
++        # missing XML-RPC endpoint. Existing module/class naming is unchanged.
++        contexts = load_contexts(context_dir, base, project)
++        for context, instance in contexts.items():
++            setattr(tactic_page, context, instance)
++            prefix = "/tactic/%s/%s" % (site, project) if site else "/tactic/%s" % project
++            path = "%s/%s" % (prefix, context)
+             settings = {}
+             config[path] = settings
+-
+-            if context in ["XMLRPC", "Api"]:
+-                #settings['request.dispatch'] = cherrypy.dispatch.XMLRPCDispatcher(),
++            if context in ("XMLRPC", "Api"):
+                 settings['tools.xmlrpc.on'] = True
+                 settings['tools.xmlrpc.encoding'] = 'utf-8'
+                 settings['tools.xmlrpc.allow_none'] = True
+-
+-
++            # setup_sites mounts the root BEFORE registering its contexts.
++            # Application.merge() is required for late project registration.
++            app = cherrypy.tree.apps.get('')
++            if app is not None and app.root is cherrypy.root:
++                app.merge({path: settings})
+diff --git a/src/pyasm/web/context_registry.py b/src/pyasm/web/context_registry.py
+new file mode 100644
+index 0000000..506437a
+--- /dev/null
++++ b/src/pyasm/web/context_registry.py
+@@ -0,0 +1,59 @@
++"""Resolve original TACTIC service contexts without implicit exec locals.
++
++This is server configuration loading, not an HTTP class-path execution API.
++Contexts keep the original <base>.<project>.context.<Name>:<Name> contract.
++"""
++import importlib
++from pathlib import Path
++import re
++
++
++def route_segment(value, label="route"):
++    if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_-]*", value) or value.startswith("__"):
++        raise ValueError("Invalid %s segment: %r" % (label, value))
++    return value
++
++
++def get_project(root, project, site=None):
++    route_segment(project, "project")
++    if site:
++        root = getattr(root, route_segment(site, "site"))
++    return getattr(root, project)
++
++
++def attach_project(root, project, factory, site=None, site_factory=None):
++    route_segment(project, "project")
++    if site:
++        route_segment(site, "site")
++        parent = getattr(root, site, None)
++        if parent is None:
++            parent = (site_factory or factory)()
++            setattr(root, site, parent)
++        root = parent
++    page = factory()
++    setattr(root, project, page)
++    return page
++
++
++def load_contexts(directory, base, project):
++    route_segment(project, "project")
++    if base not in ("sites", "tactic_sites"):
++        raise ValueError("Unknown TACTIC context package")
++    result = {}
++    directory = Path(directory)
++    if not directory.is_dir():
++        return result
++    for path in sorted(directory.iterdir(), key=lambda item: item.name):
++        if path.suffix != ".py" or path.name.startswith((".", "__")) or not path.is_file():
++            continue
++        context = route_segment(path.stem, "context")
++        module_name = "%s.%s.context.%s" % (base, project, context)
++        module = importlib.import_module(module_name)
++        try:
++            factory = getattr(module, context)
++        except AttributeError as exc:
++            raise ImportError("Context %s must export %s" % (module_name, context)) from exc
++        if not callable(factory):
++            raise TypeError("Context %s:%s is not callable" % (module_name, context))
++        result[context] = factory()
++    return result
+diff --git a/src/tactic/core/config_model.py b/src/tactic/core/config_model.py
+index cd56d0b..434da4e 100644
+--- a/src/tactic/core/config_model.py
++++ b/src/tactic/core/config_model.py
+@@ -196,6 +196,10 @@ SCREEN_HANDLERS.update({
+     'tactic.ui.app.SystemInfoWdg': 'system',
+ })
+ 
++for _widget in ('ShelfEditWdg', 'ScriptEditorWdg'):
++    SCREEN_HANDLERS['tactic.ui.app.' + _widget] = 'script-editor'
++    SCREEN_HANDLERS['tactic.ui.app.shelf_wdg.' + _widget] = 'script-editor'
++
+ # Widget semantics, not hard-coded sidebar entries.
+ for _widget in ('SubscriptionWdg', 'SubscriptionBarWdg', 'ChatWdg', 'ChatSessionWdg'):
+     SCREEN_HANDLERS['tactic.ui.app.' + _widget] = 'message-center'
+diff --git a/src/tactic/core/edit_commands.py b/src/tactic/core/edit_commands.py
+index f9f90ab..a5ad925 100644
+--- a/src/tactic/core/edit_commands.py
++++ b/src/tactic/core/edit_commands.py
+@@ -235,9 +235,7 @@ class EditCmd(Command):
+                 display_class = \
+                         display_config.get_display_handler(element_name)
+                 try:
+-                    stmt = Common.get_import_from_class_path(display_class)
+-                    exec(stmt)
+-                    action_handler_class = eval("%s.get_default_action()" % display_class)
++                    action_handler_class = Common.resolve_class(display_class).get_default_action()
+                 except Exception as e:
+                     #print("WARNING: ", e)
+                     action_handler_class = ""
+diff --git a/src/tactic/core/widget_config.py b/src/tactic/core/widget_config.py
+index 35576e4..2cbb394 100644
+--- a/src/tactic/core/widget_config.py
++++ b/src/tactic/core/widget_config.py
+@@ -364,10 +364,7 @@ class WidgetConfig(Base):
+         if handler:
+             try:
+                 from pyasm.common import Common
+-                statement = Common.get_import_from_class_path(handler)
+-                exec(statement)
+-
+-                has_config = eval("%s.has_config()" % handler)
++                has_config = Common.resolve_class(handler).has_config()
+             except:
+                 pass
+ 
+@@ -886,9 +883,7 @@ class WidgetConfigView(Base):
+         if not display_handler:
+             layout = self.get_layout_handler()
+ 
+-            import_expr = Common.get_import_from_class_path(layout)
+-            exec( import_expr)
+-            display_handler = eval('%s.get_default_display_handler(element_name)'% layout)
++            display_handler = Common.resolve_class(layout).get_default_display_handler(element_name)
+ 
+         return display_handler
+ 
+@@ -996,10 +991,8 @@ class WidgetConfigView(Base):
+         if not edit_handler:
+             layout = self.get_layout_handler()
+ 
+-            import_expr = Common.get_import_from_class_path(layout)
+-            exec( import_expr)
+-            # NOTE: this stays as get_default_display_handler for now
+-            edit_handler = eval('%s.get_default_display_handler(element_name)'% layout)
++            # NOTE: the original contract uses get_default_display_handler here.
++            edit_handler = Common.resolve_class(layout).get_default_display_handler(element_name)
+ 
+         return edit_handler
+ 
+@@ -1224,9 +1217,8 @@ class WidgetConfigView(Base):
+                 element_type = SearchType.get_tactic_type(self.search_type, element_name)
+ 
+             layout = self.get_layout_handler()
+-            import_expr = Common.get_import_from_class_path(layout)
+-            exec( import_expr)
+-            widget = eval('%s.get_default_display_wdg(element_name, display_options, element_type, kbd_handler)'% layout)
++            widget = Common.resolve_class(layout).get_default_display_wdg(
++                element_name, display_options, element_type, kbd_handler)
+ 
+         if widget:
+             widget.set_name(element_name)
+@@ -1271,9 +1263,8 @@ class WidgetConfigView(Base):
+                 element_type = SearchType.get_tactic_type(self.search_type, element_name)
+ 
+             layout = self.get_layout_handler()
+-            import_expr = Common.get_import_from_class_path(layout)
+-            exec( import_expr)
+-            widget = eval('%s.get_default_display_wdg(element_name, options, element_type)'% layout)
++            widget = Common.resolve_class(layout).get_default_display_wdg(
++                element_name, options, element_type)
+ 
+         if widget:
+             widget.set_name(element_name)
+diff --git a/src/tactic/ui_api/api.py b/src/tactic/ui_api/api.py
+index 962312f..bd69743 100644
+--- a/src/tactic/ui_api/api.py
++++ b/src/tactic/ui_api/api.py
+@@ -157,7 +157,7 @@ class Api:
+                 return Response(200, self.backend.open_target(text(data.get("target"), "target", 4000)))
+             if path in ('/messages', '/message-history', '/message-send', '/subscriptions', '/chats', '/chat-users', '/record-subscription'):
+                 return Response(200, self.backend.message_operation(method, path, data))
+-            if path in ("/configs", "/config", "/sidebar-order", "/graph", "/pipeline-positions", "/search-types", "/memberships", "/view-config", "/saved-view",
++            if path in ("/scripts", "/script", "/script-check", "/configs", "/config", "/sidebar-order", "/graph", "/pipeline-positions", "/search-types", "/memberships", "/view-config", "/saved-view",
+                         "/form-preview", "/tasks", "/task-generate", "/task-form", "/task-change", "/task-form-preview", "/task-hours", "/relationship", "/relation-candidates", "/history", "/record-state",
+                         "/file-versions", "/snapshot-current", "/collections", "/collection-members", "/collection-change", "/relations", "/notes", "/file", "/bulk-records", "/users", "/security", "/project-create", "/system"):
+                 try:
+diff --git a/src/tactic/ui_api/config_backend.py b/src/tactic/ui_api/config_backend.py
+index dd5cfeb..c6a3e82 100644
+--- a/src/tactic/ui_api/config_backend.py
++++ b/src/tactic/ui_api/config_backend.py
+@@ -22,7 +22,7 @@ PLAIN = {'', 'TextWdg', 'TextAreaWdg', 'SelectWdg', 'CheckboxWdg', 'DateTimeWdg'
+ DATABASE_ACTIONS = {'TaskDateAction', 'pyasm.command.TaskDateAction', '', 'DatabaseAction', 'pyasm.command.DatabaseAction', 'DefaultValueDatabaseAction', 'pyasm.command.DefaultValueDatabaseAction'}
+ DENY_EDIT_TYPES = {'sthpw/login', 'sthpw/login_group', 'sthpw/login_in_group', 'sthpw/ticket',
+                    'sthpw/db_resource', 'sthpw/schema', 'sthpw/pipeline', 'config/process_state',
+-                   'sthpw/search_object', 'config/widget_config', 'config/trigger', 'sthpw/trigger'}
++                   'sthpw/search_object', 'config/widget_config', 'config/custom_script', 'config/trigger', 'sthpw/trigger'}
+ 
+ 
+ class ConfigBackend(TacticBackend):
+diff --git a/src/tactic/ui_api/extended_backend.py b/src/tactic/ui_api/extended_backend.py
+index 02de131..6913fd5 100644
+--- a/src/tactic/ui_api/extended_backend.py
++++ b/src/tactic/ui_api/extended_backend.py
+@@ -1,6 +1,7 @@
+ """Version 0.5 source-fork backend: native semantic providers and original config routes."""
+ import json
+ import re
++from .script_service import ScriptService, script_permission
+ from .csv_service import CsvService
+ from .column_service import ColumnService, EXPRESSION
+ from .config_backend import ConfigBackend, DATABASE_ACTIONS, DENY_EDIT_TYPES
+@@ -36,11 +37,21 @@ TASK_LOOKUPS = {
+ GANTT = {'tactic.ui.table.GanttElementWdg', 'pyasm.widget.GanttWdg', 'GanttWdg'}
+ 
+ 
+-class ExtendedBackend(CsvService, ColumnService, CollectionService, VersionService, UploadService, TimelineService, MessageService, WorkHourService, TaskService, RelationshipService, HistoryService, GraphService, ViewService, RecordService, AdminService, ConfigBackend):
++class ExtendedBackend(ScriptService, CsvService, ColumnService, CollectionService, VersionService, UploadService, TimelineService, MessageService, WorkHourService, TaskService, RelationshipService, HistoryService, GraphService, ViewService, RecordService, AdminService, ConfigBackend):
+     def open_target(self, key):
+         if not isinstance(key, str) or len(key) > 4000 or key.count('/~') > 8:
+             raise ApiError(400, 'target', 'Некорректная или слишком глубокая ссылка')
+-        if key.endswith('/~collection-items'):
++        if key.endswith('/~scripts-table'):
++            parent = self.open_target(key[:-len('/~scripts-table')])
++            if parent['kind'] != 'script-editor':
++                raise ApiError(403, 'script_target', 'Таблица скриптов должна исходить из ScriptEditorWdg')
++            script_permission()
++            # Exact management view/options used by original shelf_wdg.py.
++            target = {'id': key, 'kind': 'table', 'handler': 'tactic.ui.panel.ViewPanelWdg',
++                      'search_type': 'config/custom_script', 'view': 'table', 'title': 'Saved Scripts',
++                      'config_view': parent.get('config_view'), 'attributes': {},
++                      'options': {'show_shelf': 'false', 'element_names': 'folder,title,description,language'}}
++        elif key.endswith('/~collection-items'):
+             parent = self.open_target(key[:-len('/~collection-items')])
+             if parent['kind'] != 'collections' or parent.get('options',{}).get('collection_key'):
+                 raise ApiError(403,'collection_target','Не определена общая таблица коллекций')
+@@ -74,6 +85,8 @@ class ExtendedBackend(CsvService, ColumnService, CollectionService, VersionServi
+                                                    'native_parent_type': parent['search_type'], 'show_insert': 'false'}}
+         else:
+             target = super().open_target(key)
++        if target['kind'] == 'script-editor' or target.get('search_type') == 'config/custom_script':
++            script_permission()
+         self.active_target = target
+         if target['kind'] in ('table', 'form'):
+             target['spec'] = self.view(target['search_type'], target['view'], target['options'])
+@@ -82,6 +95,7 @@ class ExtendedBackend(CsvService, ColumnService, CollectionService, VersionServi
+         return target
+ 
+     def config_operation(self, method, path, data):
++        if path in ('/scripts', '/script', '/script-check'): return self.script_operation(method, path, data)
+         if path in ('/collections','/collection-members','/collection-change'): return self.collection_operation(method,path,data)
+         if path in ('/file-versions','/snapshot-current'): return self.version_operation(method,path,data)
+         if path == '/task-hours': return self.work_hour_operation(method, data)
+@@ -192,6 +206,7 @@ class ExtendedBackend(CsvService, ColumnService, CollectionService, VersionServi
+             search.add_relationship_filter(obj)
+ 
+     def _object(self, stype, key):
++        if stype == 'config/custom_script': script_permission()
+         obj = super()._object(stype, key)
+         if stype == 'sthpw/notification_log' and getattr(self, 'active_target', {}).get('options', {}).get('native_notification_scope'):
+             from pyasm.search import Search
+diff --git a/src/tactic/ui_api/script_service.py b/src/tactic/ui_api/script_service.py
+new file mode 100644
+index 0000000..852ac33
+--- /dev/null
++++ b/src/tactic/ui_api/script_service.py
+@@ -0,0 +1,186 @@
++"""Native saved-script editor, preserving ShelfEditWdg storage/save semantics.
++
++Scripts are DATA here: no eval, exec, import, subprocess, preview HTML or test-run
++endpoint. Existing workflow/client-trigger consumers may execute saved scripts
++later; editing therefore requires the ORIGINAL view_script_editor permission.
++"""
++import ast
++from .contracts import ApiError, json_safe, revision
++from tactic.core.config_model import parse_xml
++
++STYPE = 'config/custom_script'
++LANGUAGES = ('javascript', 'server_js', 'python', 'expression', 'xml')
++FIELDS = ('code', 'folder', 'title', 'language', 'description', 'script', 'timestamp', 's_status')
++MAX_SCRIPT_BYTES = 256 * 1024
++
++
++def script_permission():
++    from pyasm.common import Environment
++    if not Environment.get_security().check_access('builtin', 'view_script_editor', 'allow'):
++        raise ApiError(403, 'script_permission', 'Исходное право builtin/view_script_editor запрещает редактор скриптов')
++
++
++def number(value, name, minimum, maximum):
++    if isinstance(value, bool) or (not isinstance(value, (str, int))):
++        raise ApiError(400, name, 'Некорректное целое число: ' + name)
++    if isinstance(value, str) and not value.isdecimal():
++        raise ApiError(400, name, 'Некорректное целое число: ' + name)
++    value = int(value)
++    if not minimum <= value <= maximum:
++        raise ApiError(400, name, 'Число вне допустимого диапазона: ' + name)
++    return value
++
++
++def validate_source(value):
++    if not isinstance(value, str) or '\x00' in value or len(value.encode('utf-8')) > MAX_SCRIPT_BYTES:
++        raise ApiError(400, 'script_size', 'Скрипт: текст без NUL, не более 256 КиБ UTF-8')
++    return value
++
++
++def clean_script_values(values, current=None):
++    if not isinstance(values, dict) or set(values) - {'folder', 'title', 'language', 'script', 'description'}:
++        raise ApiError(400, 'script_fields', 'Разрешены folder, title, language, script, description')
++    for name in ('folder', 'title', 'language', 'script'):
++        if name not in values:
++            raise ApiError(400, 'script_fields', 'Отсутствует поле ' + name)
++    # Original save_script_cbk defaults and leading-slash rule, not a filesystem.
++    folder, title, language = values['folder'] or 'default', values['title'], values['language'] or 'javascript'
++    if not isinstance(title, str):
++        raise ApiError(400, 'script_title', 'Нужно название скрипта')
++    title = title.lstrip('/')
++    for name, val in (('folder', folder), ('title', title)):
++        if not isinstance(val, str) or not val.strip() or len(val) > 255 or any(ord(c)<32 for c in val):
++            raise ApiError(400, 'script_'+name, 'Некорректный виртуальный путь: ' + name)
++    if not isinstance(language, str) or (language not in LANGUAGES and language != (current or {}).get('language')):
++        raise ApiError(400, 'script_language', 'Неизвестный язык; существующее значение можно сохранить без изменения')
++    result = {'folder': folder, 'title': title, 'language': language, 'script': validate_source(values['script'])}
++    if 'description' in values:
++        description = values['description']
++        if not isinstance(description, str) or '\x00' in description or len(description) > 10000:
++            raise ApiError(400, 'script_description', 'Некорректное описание')
++        result['description'] = description
++    return result
++
++
++def syntax_check(language, source):
++    source = validate_source(source)
++    if language not in ('python', 'xml'):
++        return {'checked': False, 'valid': None, 'executed': False,
++                'notice': 'Для этого языка синтаксическая проверка не реализована. Код не выполнялся.'}
++    try:
++        if language == 'python':
++            ast.parse(source, filename='<TACTIC saved script>', mode='exec')
++        else:
++            parse_xml(source)
++    except SyntaxError as exc:
++        return {'checked': True, 'valid': False, 'executed': False, 'line': exc.lineno,
++                'column': exc.offset, 'message': exc.msg}
++    except (ValueError, RecursionError) as exc:
++        return {'checked': True, 'valid': False, 'executed': False, 'message': str(exc)[:500]}
++    except Exception as exc:
++        # XML ParseError is not necessarily SyntaxError on every XML backend.
++        import xml.etree.ElementTree as ET
++        if not isinstance(exc, ET.ParseError):
++            raise
++        return {'checked': True, 'valid': False, 'executed': False,
++                'line': exc.position[0], 'column': exc.position[1], 'message': str(exc)[:500]}
++    return {'checked': True, 'valid': True, 'executed': False,
++            'notice': 'Проверен только синтаксис. Имена, импорты и поведение workflow не проверялись.'}
++
++
++class ScriptService:
++    def _script_target(self, data):
++        script_permission()
++        opened = self.open_target(data.get('target'))
++        if opened['kind'] != 'script-editor':
++            raise ApiError(403, 'script_target', 'Редактор не определён этим widget_config')
++        self.require_type(STYPE)
++        return opened
++
++    def _script_row(self, obj, include_source=True):
++        fields = FIELDS if include_source else tuple(f for f in FIELDS if f != 'script')
++        values = {name: json_safe(obj.get_value(name, no_exception=True)) for name in fields}
++        result = {'key': obj.get_search_key(), 'values': values}
++        if include_source:
++            source = values.get('script')
++            if source is not None and (not isinstance(source, str) or len(source.encode('utf-8')) > MAX_SCRIPT_BYTES):
++                raise ApiError(413, 'script_size', 'Этот существующий скрипт превышает предел редактора 256 КиБ; данные не изменены')
++            result['revision'] = revision(obj.get_sobject_dict())
++        return result
++
++    def script_operation(self, method, path, data):
++        from pyasm.search import Search
++        target = self._script_target(data)
++        if path == '/script-check' and method == 'POST':
++            return syntax_check(data.get('language'), data.get('script'))
++        if path == '/scripts' and method == 'GET':
++            limit = number(data.get('limit', 40), 'limit', 1, 100)
++            offset = number(data.get('offset', 0), 'offset', 0, 1000000)
++            query = data.get('q', '')
++            if not isinstance(query, str) or '\x00' in query or len(query) > 200:
++                raise ApiError(400, 'script_search', 'Поиск до 200 символов')
++            search = Search(STYPE)
++            # Explicit literal SQL LIKE; do not use vendor-dependent regex EQI.
++            if query:
++                from pyasm.search import Sql
++                escaped = query.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_')
++                # A quote-safe value and fixed column names, never client SQL.
++                search.add_where('("title" LIKE %s ESCAPE %s OR "folder" LIKE %s ESCAPE %s)' %
++                                 (Sql.quote('%'+escaped+'%'), Sql.quote('\\'), Sql.quote('%'+escaped+'%'), Sql.quote('\\')))
++            folder = data.get('folder')
++            if folder is not None:
++                if not isinstance(folder, str) or len(folder) > 255: raise ApiError(400,'script_folder','Некорректная папка')
++                search.add_filter('folder', folder)
++            total = search.get_count()
++            search.add_order_by('folder'); search.add_order_by('title'); search.add_order_by('id')
++            search.set_limit(limit); search.set_offset(offset)
++            # Do not fetch every script body just to display the directory.
++            for name in FIELDS:
++                if name != 'script': search.add_column(name)
++            items = [self._script_row(obj, False) for obj in search.get_sobjects()]
++            return {'items': items, 'total': total, 'offset': offset, 'limit': limit,
++                    'has_more': offset+len(items)<total, 'languages': list(LANGUAGES),
++                    'can_write': self.allow_writes, 'can_execute': False,
++                    'initial': {k: target.get('options', {}).get(k) for k in ('script_path', 'search_key')},
++                    'manage_target': target['id']+'/~scripts-table', 'storage': STYPE}
++        if path == '/script' and method == 'GET':
++            key = data.get('key')
++            if key:
++                obj = self._object(STYPE, key)
++            else:
++                # Original script_path uses dirname + basename; it is a DB key,
++                # never a local path read. Keep '/' as the stored separator.
++                path_value = data.get('script_path')
++                if not isinstance(path_value, str) or not path_value or len(path_value)>511:
++                    raise ApiError(400,'script_path','Нужен key или script_path')
++                folder, _, title = path_value.rpartition('/')
++                search=Search(STYPE);search.add_filter('folder',folder);search.add_filter('title',title)
++                search.set_limit(2);rows=search.get_sobjects()
++                if len(rows)>1:raise ApiError(409,'script_duplicate','Несколько скриптов с этим путём; выберите запись по ключу')
++                if not rows:raise ApiError(404,'not_found','Скрипт не найден')
++                obj=rows[0]
++            return {'record':self._script_row(obj), 'can_write':self.allow_writes, 'can_execute':False}
++        if path == '/script' and method in ('POST', 'PATCH'):
++            def save():
++                obj = self._object(STYPE, data.get('key')) if method == 'PATCH' else None
++                current = self._script_row(obj) if obj else None
++                if current and current['revision'] != data.get('revision'):
++                    raise ApiError(409,'conflict','Скрипт изменён после открытия. Сохраните свой текст отдельно и перечитайте запись.')
++                if obj and obj.get_value('s_status',no_exception=True)=='retired':
++                    raise ApiError(409,'script_retired','Скрипт архивирован; сначала разберите его состояние')
++                values = clean_script_values(data.get('values'), current['values'] if current else None)
++                matches=Search(STYPE);matches.add_filter('folder',values['folder']);matches.add_filter('title',values['title'])
++                matches.set_limit(3);duplicates=matches.get_sobjects()
++                if any(not obj or str(item.get_id())!=str(obj.get_id()) for item in duplicates):
++                    raise ApiError(409,'script_duplicate','Такой folder/title уже существует. Используйте другое название или откройте существующую запись.')
++                # Same persistence boundary as original shelf_wdg.save_script_cbk.
++                stub=self._stub()
++                result=stub.update(obj.get_search_key(),values) if obj else stub.insert(STYPE,values)
++                key=result.get('__search_key__') if isinstance(result,dict) else None
++                if not key and obj:key=obj.get_search_key()
++                if not key:
++                    raise RuntimeError('Original script API did not return __search_key__')
++                return {'saved':True,'record':self._script_row(self._object(STYPE,key)),
++                        'executed':False,'notice':'Сохранено в config/custom_script. Существующие триггеры и workflow могут использовать этот код.'}
++            return self._write(save)
++        raise ApiError(405,'method','Операция не поддерживается; endpoint исполнения скриптов отсутствует')
+diff --git a/src/tactic/ui_api/view_service.py b/src/tactic/ui_api/view_service.py
+index d06de9d..8d4fa0d 100644
+--- a/src/tactic/ui_api/view_service.py
++++ b/src/tactic/ui_api/view_service.py
+@@ -42,13 +42,6 @@ class ViewService:
+         if login not in (None, Environment.get_user_name()):
+             raise ApiError(400, 'scope', 'Допустим общий или собственный personal override')
+         operations = data.get('operations')
+-        # Validate/encode options before entering the write operation.
+-        from tactic.core.config_options import append_option
+-        option_tree = ET.Element('options')
+-        try:
+-            for key, value in opts.items(): append_option(option_tree, key, value)
+-        except ValueError as exc:
+-            raise ApiError(400, 'view_options', str(exc)) from exc
+         def save():
+             search = Search('config/widget_config'); search.add_filter('search_type', stype); search.add_filter('view', view)
+             search.add_filter('login', login); search.add_order_by('priority desc')
+diff --git a/src/tactic/ui_api/web/app.js b/src/tactic/ui_api/web/app.js
+index 2071f4c..d19b8e2 100644
+--- a/src/tactic/ui_api/web/app.js
++++ b/src/tactic/ui_api/web/app.js
+@@ -1,4 +1,4 @@
+-/* TACTIC Vue 0.8.0-source-fork; templates precompiled with Vue 3.5.13. See vendor/VUE_LICENSE.txt. */
++/* TACTIC Vue 0.9.0-source-fork; templates precompiled with Vue 3.5.13. See vendor/VUE_LICENSE.txt. */
+ (function(){
+ const _Vue = Vue;
+ const api = (function(){
+@@ -3523,6 +3523,203 @@ __component.render = function render(_ctx, _cache) {
+ };
+ return __component;
+ })();
++const ScriptEditor = (function(){
++
++const __component = {
++ name:'ScriptEditor',props:{project:String,target:String},emits:['dirty','open'],
++ data(){return {items:[],total:0,offset:0,limit:40,q:'',folderFilter:null,busy:false,saving:false,error:'',notice:'',canWrite:false,languages:[],manageTarget:'',record:null,draft:{folder:'default',title:'',language:'javascript',description:'',script:''},baseline:'',check:null,requestSeq:0,loadSeq:0,cursor:{line:1,column:1},wrap:false,findText:''}},
++ computed:{dirty(){return !!this.baseline&&JSON.stringify(this.draft)!==this.baseline},groups(){const groups=[];for(const row of this.items){let g=groups.find(g=>g.folder===row.values.folder);if(!g){g={folder:row.values.folder,items:[]};groups.push(g)}g.items.push(row)}return groups},lineCount(){return this.draft.script.split('\n').length}},
++ watch:{dirty(value){this.$emit('dirty',value)},'draft.script'(){this.check=null}},
++ async mounted(){this.baseline=JSON.stringify(this.draft);window.addEventListener('beforeunload',this.unload);await this.reload(true)},
++ beforeUnmount(){this.requestSeq++;this.loadSeq++;window.removeEventListener('beforeunload',this.unload);this.$emit('dirty',false)},
++ methods:{
++ unload(event){if(this.dirty){event.preventDefault();event.returnValue=''}},
++ accept(record){this.record=record;this.draft={folder:record.values.folder??'',title:record.values.title??'',language:record.values.language||'javascript',description:record.values.description??'',script:record.values.script??''};this.baseline=JSON.stringify(this.draft);this.check=null;this.cursor={line:1,column:1}},
++ async reload(initial=false){const seq=++this.requestSeq;this.busy=true;this.error='';try{const result=await api.request('/scripts',{project:this.project,target:this.target,q:this.q,folder:this.folderFilter,offset:this.offset,limit:this.limit});if(seq!==this.requestSeq)return;this.items=result.items;this.total=result.total;this.canWrite=result.can_write;this.languages=result.languages;this.manageTarget=result.manage_target;if(initial&&(result.initial?.search_key||result.initial?.script_path))await this.load({key:result.initial.search_key,script_path:result.initial.script_path})}catch(e){if(seq===this.requestSeq)this.error=e.message}finally{if(seq===this.requestSeq)this.busy=false}},
++ async load(selection){if(this.dirty&&!confirm('Отменить несохранённые правки скрипта?'))return;const seq=++this.loadSeq;this.error='';this.notice='';this.busy=true;try{const result=await api.request('/script',{project:this.project,target:this.target,...selection});if(seq===this.loadSeq)this.accept(result.record)}catch(e){if(seq===this.loadSeq)this.error=e.message}finally{if(seq===this.loadSeq)this.busy=false}},
++ fresh(){if(this.dirty&&!confirm('Отменить несохранённые правки?'))return;this.loadSeq++;this.record=null;this.draft={folder:this.folderFilter||'default',title:'',language:'javascript',description:'',script:''};this.baseline=JSON.stringify(this.draft);this.error='';this.notice='';this.check=null},
++ copy(){this.loadSeq++;this.record=null;this.baseline='new-copy';this.draft.title=this.draft.title+'_copy';this.notice='Копия ещё не сохранена. Исходная запись не изменяется.'},
++ async save(){if(this.saving||this.busy||!this.canWrite)return;this.saving=true;this.error='';this.notice='';try{const result=await api.request('/script',{project:this.project,target:this.target,key:this.record?.key,revision:this.record?.revision,values:{...this.draft}},this.record?'PATCH':'POST');this.accept(result.record);this.notice=result.notice;await this.reload()}catch(e){this.error=e.message}finally{this.saving=false}},
++ async syntax(){this.error='';const source=this.draft.script,language=this.draft.language;try{const result=await api.request('/script-check',{project:this.project,target:this.target,script:source,language},'POST');if(source===this.draft.script&&language===this.draft.language)this.check=result}catch(e){this.error=e.message}},
++ async discard(){if(this.record)await this.load({key:this.record.key});else this.fresh()},
++ filter(folder=null){this.folderFilter=folder;this.offset=0;this.reload()},
++ search(){this.offset=0;this.reload()},
++ page(delta){this.offset+=delta*this.limit;this.reload()},
++ position(){const el=this.$refs.source;if(!el)return;const before=el.value.slice(0,el.selectionStart);const lines=before.split('\n');this.cursor={line:lines.length,column:lines[lines.length-1].length+1}},
++ keydown(event){if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='s'){event.preventDefault();this.save()}else if(event.key==='Tab'){event.preventDefault();const el=event.target,start=el.selectionStart,end=el.selectionEnd;this.draft.script=el.value.slice(0,start)+'    '+el.value.slice(end);this.$nextTick(()=>{el.selectionStart=el.selectionEnd=start+4;this.position()})}},
++ find(){const el=this.$refs.source;if(!el||!this.findText)return;const at=el.value.indexOf(this.findText,el.selectionEnd);const start=at<0?el.value.indexOf(this.findText):at;if(start>=0){el.focus();el.setSelectionRange(start,start+this.findText.length);this.position()}else this.notice='Текст не найден в открытом скрипте.'},
++ download(){const ext={python:'.py',javascript:'.js',server_js:'.js',xml:'.xml',expression:'.txt'}[this.draft.language]||'.txt';const blob=new Blob([this.draft.script],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=(this.draft.title||'untitled').replace(/[\\/:*?"<>|]/g,'_')+ext;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)}
++ }
++};
++__component.render = function render(_ctx, _cache) {
++  with (_ctx) {
++    const { createElementVNode: _createElementVNode, toDisplayString: _toDisplayString, openBlock: _openBlock, createElementBlock: _createElementBlock, createCommentVNode: _createCommentVNode, vModelText: _vModelText, withDirectives: _withDirectives, withModifiers: _withModifiers, renderList: _renderList, Fragment: _Fragment, normalizeClass: _normalizeClass, createTextVNode: _createTextVNode, vModelSelect: _vModelSelect, withKeys: _withKeys, vModelCheckbox: _vModelCheckbox } = _Vue
++
++    return (_openBlock(), _createElementBlock("section", {
++      class: "script-editor",
++      "data-testid": "script-editor"
++    }, [
++      _createElementVNode("header", { class: "script-toolbar" }, [
++        _createElementVNode("div", null, [_createElementVNode("span", { class: "eyebrow" }, "ORIGINAL SCRIPT EDITOR"), _createElementVNode("h2", null, "Сохранённые скрипты"), _createElementVNode("small", null, "config/custom_script · " + _toDisplayString(dirty?'есть несохранённые правки':record?'запись загружена':'новый скрипт'), 1)]),
++        _createElementVNode("span", { class: "spacer" }),
++        _createElementVNode("button", {
++          onClick: fresh,
++          disabled: saving||busy
++        }, "Новый", 8, ["onClick", "disabled"]),
++        _createElementVNode("button", {
++          onClick: copy,
++          disabled: !record||saving||busy
++        }, "Создать копию", 8, ["onClick", "disabled"]),
++        _createElementVNode("button", { onClick: download }, "В файл", 8, ["onClick"]),
++        _createElementVNode("button", {
++          onClick: $event => ($emit('open',{id:manageTarget})),
++          disabled: !manageTarget
++        }, "Таблица по конфигурации", 8, ["onClick", "disabled"])
++      ]),
++      _createElementVNode("p", { class: "notice" }, "Сохранение использует исходные insert/update TACTIC. Код не запускается в браузере; его могут использовать существующие workflow и триггеры. Исполнение и отладчик ещё не перенесены."),
++      error
++        ? (_openBlock(), _createElementBlock("p", {
++            key: 0,
++            class: "error",
++            role: "alert"
++          }, _toDisplayString(error), 1))
++        : _createCommentVNode("", true),
++      notice
++        ? (_openBlock(), _createElementBlock("p", {
++            key: 1,
++            class: "notice",
++            role: "status"
++          }, _toDisplayString(notice), 1))
++        : _createCommentVNode("", true),
++      _createElementVNode("div", { class: "script-layout" }, [_createElementVNode("aside", { class: "script-directory" }, [
++        _createElementVNode("form", { onSubmit: _withModifiers(search, ["prevent"]) }, [_withDirectives(_createElementVNode("input", {
++          "onUpdate:modelValue": $event => ((q) = $event),
++          "aria-label": "Поиск скриптов",
++          placeholder: "Папка или название"
++        }, null, 8, ["onUpdate:modelValue"]), [[_vModelText, q]]), _createElementVNode("button", { disabled: busy }, "Найти", 8, ["disabled"])], 40, ["onSubmit"]),
++        _createElementVNode("div", { class: "script-folder-filter" }, [(folderFilter!==null)
++          ? (_openBlock(), _createElementBlock("button", {
++              key: 0,
++              onClick: $event => (filter(null))
++            }, "Все папки ×", 8, ["onClick"]))
++          : (_openBlock(), _createElementBlock("span", { key: 1 }, "Все папки · " + _toDisplayString(total) + " записей", 1))]),
++        (!items.length&&!busy)
++          ? (_openBlock(), _createElementBlock("p", { key: 0 }, "Скрипты не найдены."))
++          : _createCommentVNode("", true),
++        (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(groups, (group) => {
++          return (_openBlock(), _createElementBlock("section", { key: String(group.folder) }, [_createElementVNode("button", {
++            class: "script-folder",
++            onClick: $event => (filter(group.folder??''))
++          }, _toDisplayString(group.folder||'(без папки)'), 9, ["onClick"]), (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(group.items, (item) => {
++            return (_openBlock(), _createElementBlock("button", {
++              key: item.key,
++              class: _normalizeClass(["script-entry", {active:item.key===record?.key}]),
++              onClick: $event => (load({key:item.key}))
++            }, [_createElementVNode("span", null, _toDisplayString(item.values.title), 1), _createElementVNode("small", null, _toDisplayString(item.values.language||'javascript'), 1)], 10, ["onClick"]))
++          }), 128))]))
++        }), 128)),
++        _createElementVNode("footer", null, [_createElementVNode("button", {
++          onClick: $event => (page(-1)),
++          disabled: offset===0||busy
++        }, "←", 8, ["onClick", "disabled"]), _createElementVNode("span", null, _toDisplayString(total?offset+1:0) + "–" + _toDisplayString(Math.min(offset+limit,total)) + " / " + _toDisplayString(total), 1), _createElementVNode("button", {
++          onClick: $event => (page(1)),
++          disabled: offset+limit>=total||busy
++        }, "→", 8, ["onClick", "disabled"])])
++      ]), _createElementVNode("div", {
++        class: "script-document",
++        "aria-busy": saving
++      }, [
++        _createElementVNode("div", { class: "script-fields" }, [_createElementVNode("label", null, [_createTextVNode("Папка"), _withDirectives(_createElementVNode("input", {
++          "onUpdate:modelValue": $event => ((draft.folder) = $event),
++          disabled: saving||busy,
++          "aria-label": "Папка скрипта"
++        }, null, 8, ["onUpdate:modelValue", "disabled"]), [[_vModelText, draft.folder]])]), _createElementVNode("label", null, [_createTextVNode("Название"), _withDirectives(_createElementVNode("input", {
++          "onUpdate:modelValue": $event => ((draft.title) = $event),
++          disabled: saving||busy,
++          "aria-label": "Название скрипта"
++        }, null, 8, ["onUpdate:modelValue", "disabled"]), [[_vModelText, draft.title]])]), _createElementVNode("label", null, [_createTextVNode("Язык"), _withDirectives(_createElementVNode("select", {
++          "onUpdate:modelValue": $event => ((draft.language) = $event),
++          disabled: saving||busy,
++          "aria-label": "Язык скрипта"
++        }, [(_openBlock(true), _createElementBlock(_Fragment, null, _renderList(languages, (l) => {
++          return (_openBlock(), _createElementBlock("option", {
++            key: l,
++            value: l
++          }, _toDisplayString(l), 9, ["value"]))
++        }), 128)), (draft.language&&!languages.includes(draft.language))
++          ? (_openBlock(), _createElementBlock("option", {
++              key: 0,
++              value: draft.language
++            }, _toDisplayString(draft.language) + " (существующее значение)", 9, ["value"]))
++          : _createCommentVNode("", true)], 8, ["onUpdate:modelValue", "disabled"]), [[_vModelSelect, draft.language]])])]),
++        _createElementVNode("label", { class: "script-description" }, [_createTextVNode("Описание"), _withDirectives(_createElementVNode("input", {
++          "onUpdate:modelValue": $event => ((draft.description) = $event),
++          disabled: saving||busy,
++          "aria-label": "Описание скрипта"
++        }, null, 8, ["onUpdate:modelValue", "disabled"]), [[_vModelText, draft.description]])]),
++        _createElementVNode("div", { class: "script-source-tools" }, [
++          _withDirectives(_createElementVNode("input", {
++            "onUpdate:modelValue": $event => ((findText) = $event),
++            "aria-label": "Найти в скрипте",
++            placeholder: "Найти в тексте",
++            onKeyup: _withKeys(find, ["enter"])
++          }, null, 40, ["onUpdate:modelValue", "onKeyup"]), [[_vModelText, findText]]),
++          _createElementVNode("button", { onClick: find }, "Следующее", 8, ["onClick"]),
++          _createElementVNode("label", null, [_withDirectives(_createElementVNode("input", {
++            type: "checkbox",
++            "onUpdate:modelValue": $event => ((wrap) = $event)
++          }, null, 8, ["onUpdate:modelValue"]), [[_vModelCheckbox, wrap]]), _createTextVNode("Перенос строк")]),
++          _createElementVNode("span", { class: "spacer" }),
++          _createElementVNode("button", {
++            onClick: syntax,
++            disabled: saving||busy
++          }, "Проверить синтаксис", 8, ["onClick", "disabled"])
++        ]),
++        _withDirectives(_createElementVNode("textarea", {
++          ref: "source",
++          class: _normalizeClass(["script-source", {wrapped:wrap}]),
++          "onUpdate:modelValue": $event => ((draft.script) = $event),
++          disabled: saving||busy,
++          "aria-label": "Код скрипта",
++          spellcheck: "false",
++          autocapitalize: "off",
++          autocomplete: "off",
++          onKeydown: keydown,
++          onKeyup: position,
++          onClick: position
++        }, null, 42, ["onUpdate:modelValue", "disabled", "onKeydown", "onKeyup", "onClick"]), [[_vModelText, draft.script]]),
++        _createElementVNode("div", { class: "script-status" }, [_createElementVNode("span", null, "Строка " + _toDisplayString(cursor.line) + ", столбец " + _toDisplayString(cursor.column) + " · " + _toDisplayString(lineCount) + " строк · " + _toDisplayString(draft.script.length) + " символов", 1), record
++          ? (_openBlock(), _createElementBlock("code", { key: 0 }, _toDisplayString(record.values.code), 1))
++          : _createCommentVNode("", true)]),
++        check
++          ? (_openBlock(), _createElementBlock("p", {
++              key: 0,
++              class: _normalizeClass(check.valid===false?'error':'notice')
++            }, [_createTextVNode(_toDisplayString(check.checked?(check.valid?'Синтаксис корректен':'Ошибка синтаксиса'):'Проверка недоступна'), 1), (check.line)
++              ? (_openBlock(), _createElementBlock("span", { key: 0 }, " · строка " + _toDisplayString(check.line) + ", столбец " + _toDisplayString(check.column), 1))
++              : _createCommentVNode("", true), _createTextVNode(". " + _toDisplayString(check.message||check.notice) + " Код не выполнялся.", 1)], 2))
++          : _createCommentVNode("", true),
++        _createElementVNode("footer", { class: "script-actions" }, [
++          _createElementVNode("button", {
++            disabled: saving||busy||!dirty,
++            onClick: discard
++          }, "Отменить правки", 8, ["disabled", "onClick"]),
++          _createElementVNode("span", { class: "spacer" }),
++          (!canWrite)
++            ? (_openBlock(), _createElementBlock("span", { key: 0 }, "Запись отключена на сервере"))
++            : _createCommentVNode("", true),
++          _createElementVNode("button", {
++            class: "primary",
++            disabled: saving||busy||!canWrite||!draft.title||(!dirty&&!!record),
++            onClick: save
++          }, _toDisplayString(saving?'Сохранение…':'Сохранить') + " · Ctrl+S", 9, ["disabled", "onClick"])
++        ])
++      ], 8, ["aria-busy"])])
++    ]))
++  }
++};
++return __component;
++})();
+ const AdminPanel = (function(){
+ 
+ const __component = {
+@@ -3817,8 +4014,9 @@ const App = (function(){
+ 
+ 
+ 
++
+ const __component = {
+- name:'TacticApp',components:{CsvExport,ConfigAudit,CollectionPanel,AdvancedFilter,RelationTree,SidebarNode,ConfiguredTable,ConfiguredForm,ConfigEditor,GraphEditor,RecordInspector,GroupMembership,SearchTypes,ViewDesigner,TaskTimeline,AdminPanel,MessageCenter},
++ name:'TacticApp',components:{ScriptEditor,CsvExport,ConfigAudit,CollectionPanel,AdvancedFilter,RelationTree,SidebarNode,ConfiguredTable,ConfiguredForm,ConfigEditor,GraphEditor,RecordInspector,GroupMembership,SearchTypes,ViewDesigner,TaskTimeline,AdminPanel,MessageCenter},
+  data(){return {exporting:false,audit:false,user:null,login:'',password:'',twoFactor:'',projects:[],project:'',sidebar:{sections:[]},navError:'',error:'',busy:false,navOpen:true,tabs:[],active:'',form:null,formError:'',saving:false,previewBusy:false,previewSequence:0,previewFailed:false,inspected:null,keyword:'',filterField:'',filterOp:'contains',filterValue:'',types:[],loginBusy:false,designer:null,selected:[],tableMode:'data',saveViewTitle:'',showSaveView:false,lastProject:'',messagesOpen:false,messageCode:''}},
+  computed:{timelineQuery(){return this.current?{filters:this.current.filters,where:this.current.where,sort:this.current.sort||undefined,record_state:this.current.recordState}:{}},current(){return this.tabs.find(t=>t.id===this.active)},fields(){return this.current?.spec?.fields.filter(f=>f.storage)||[]},mainSections(){return this.sidebar.sections}},
+  async mounted(){try{const s=await api.request('/session');this.user=s.user;await this.initialize()}catch(e){if(e.status!==401)this.error=e.message}},
+@@ -3873,6 +4071,7 @@ __component.render = function render(_ctx, _cache) {
+     const _component_ConfiguredTable = _resolveComponent("ConfiguredTable")
+     const _component_ConfigEditor = _resolveComponent("ConfigEditor")
+     const _component_GraphEditor = _resolveComponent("GraphEditor")
++    const _component_ScriptEditor = _resolveComponent("ScriptEditor")
+     const _component_SearchTypes = _resolveComponent("SearchTypes")
+     const _component_GroupMembership = _resolveComponent("GroupMembership")
+     const _component_MessageCenter = _resolveComponent("MessageCenter")
+@@ -4276,65 +4475,73 @@ __component.render = function render(_ctx, _cache) {
+                             kind: current.kind,
+                             onDirty: $event => (current.dirty=$event)
+                           }, null, 8, ["project", "kind", "onDirty"]))
+-                        : (current.kind==='search-types')
+-                          ? (_openBlock(), _createBlock(_component_SearchTypes, {
++                        : (current.kind==='script-editor')
++                          ? (_openBlock(), _createBlock(_component_ScriptEditor, {
+                               key: project+current.id,
+                               project: project,
+-                              "allow-writes": user.allow_writes,
+-                              onOpen: open,
+-                              onChanged: configChanged
+-                            }, null, 8, ["project", "allow-writes", "onOpen", "onChanged"]))
+-                          : (current.kind==='group-membership')
+-                            ? (_openBlock(), _createBlock(_component_GroupMembership, {
++                              target: current.id,
++                              onDirty: $event => (current.dirty=$event),
++                              onOpen: open
++                            }, null, 8, ["project", "target", "onDirty", "onOpen"]))
++                          : (current.kind==='search-types')
++                            ? (_openBlock(), _createBlock(_component_SearchTypes, {
+                                 key: project+current.id,
+                                 project: project,
+-                                target: current.id,
++                                "allow-writes": user.allow_writes,
++                                onOpen: open,
+                                 onChanged: configChanged
+-                              }, null, 8, ["project", "target", "onChanged"]))
+-                            : (current.kind==='message-center')
+-                              ? (_openBlock(), _createBlock(_component_MessageCenter, {
++                              }, null, 8, ["project", "allow-writes", "onOpen", "onChanged"]))
++                            : (current.kind==='group-membership')
++                              ? (_openBlock(), _createBlock(_component_GroupMembership, {
+                                   key: project+current.id,
+                                   project: project,
+                                   target: current.id,
+-                                  options: current.options,
+-                                  login: user.login,
+-                                  onClose: $event => (close(current.id))
+-                                }, null, 8, ["project", "target", "options", "login", "onClose"]))
+-                              : (['users','security','project-create','system'].includes(current.kind))
+-                                ? (_openBlock(), _createBlock(_component_AdminPanel, {
++                                  onChanged: configChanged
++                                }, null, 8, ["project", "target", "onChanged"]))
++                              : (current.kind==='message-center')
++                                ? (_openBlock(), _createBlock(_component_MessageCenter, {
+                                     key: project+current.id,
+                                     project: project,
+                                     target: current.id,
+-                                    kind: current.kind,
+-                                    onChanged: projectChanged
+-                                  }, null, 8, ["project", "target", "kind", "onChanged"]))
+-                                : (current.kind==='tabs')
+-                                  ? (_openBlock(), _createElementBlock("section", {
+-                                      key: 10,
+-                                      class: "configured-tabs"
+-                                    }, [_createElementVNode("p", { class: "notice" }, "Вложенные представления из исходной TabWdg-конфигурации."), (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(current.children, (child) => {
+-                                      return (_openBlock(), _createElementBlock("button", {
+-                                        key: child.id,
+-                                        onClick: $event => (open(child))
+-                                      }, _toDisplayString(child.title), 9, ["onClick"]))
+-                                    }), 128)), (!current.children?.length)
+-                                      ? (_openBlock(), _createElementBlock("p", { key: 0 }, "В этой конфигурации нет разрешённых вкладок. Inline/include и DB-конфигурации поддержаны; динамический JavaScript не исполняется."))
+-                                      : _createCommentVNode("", true)]))
+-                                  : (_openBlock(), _createElementBlock("section", {
+-                                      key: 11,
+-                                      class: "unsupported-panel"
+-                                    }, [
+-                                      _createElementVNode("span", { class: "eyebrow" }, "НЕПЕРЕНЕСЁННЫЙ ОБРАБОТЧИК"),
+-                                      _createElementVNode("h2", null, _toDisplayString(current.title), 1),
+-                                      _createElementVNode("p", null, "Эта ссылка присутствует в исходном widget_config. Её специализированный экран пока не реализован на Vue и не заменяется произвольной таблицей."),
+-                                      _createElementVNode("dl", null, [
+-                                        _createElementVNode("dt", null, "Класс"),
+-                                        _createElementVNode("dd", null, [_createElementVNode("code", null, _toDisplayString(current.handler), 1)]),
+-                                        _createElementVNode("dt", null, "View конфигурации"),
+-                                        _createElementVNode("dd", null, _toDisplayString(current.config_view), 1)
+-                                      ]),
+-                                      _createElementVNode("details", null, [_createElementVNode("summary", null, "Параметры из конфигурации"), _createElementVNode("pre", null, _toDisplayString(JSON.stringify(current.options,null,2)), 1)])
+-                                    ]))
++                                    options: current.options,
++                                    login: user.login,
++                                    onClose: $event => (close(current.id))
++                                  }, null, 8, ["project", "target", "options", "login", "onClose"]))
++                                : (['users','security','project-create','system'].includes(current.kind))
++                                  ? (_openBlock(), _createBlock(_component_AdminPanel, {
++                                      key: project+current.id,
++                                      project: project,
++                                      target: current.id,
++                                      kind: current.kind,
++                                      onChanged: projectChanged
++                                    }, null, 8, ["project", "target", "kind", "onChanged"]))
++                                  : (current.kind==='tabs')
++                                    ? (_openBlock(), _createElementBlock("section", {
++                                        key: 11,
++                                        class: "configured-tabs"
++                                      }, [_createElementVNode("p", { class: "notice" }, "Вложенные представления из исходной TabWdg-конфигурации."), (_openBlock(true), _createElementBlock(_Fragment, null, _renderList(current.children, (child) => {
++                                        return (_openBlock(), _createElementBlock("button", {
++                                          key: child.id,
++                                          onClick: $event => (open(child))
++                                        }, _toDisplayString(child.title), 9, ["onClick"]))
++                                      }), 128)), (!current.children?.length)
++                                        ? (_openBlock(), _createElementBlock("p", { key: 0 }, "В этой конфигурации нет разрешённых вкладок. Inline/include и DB-конфигурации поддержаны; динамический JavaScript не исполняется."))
++                                        : _createCommentVNode("", true)]))
++                                    : (_openBlock(), _createElementBlock("section", {
++                                        key: 12,
++                                        class: "unsupported-panel"
++                                      }, [
++                                        _createElementVNode("span", { class: "eyebrow" }, "НЕПЕРЕНЕСЁННЫЙ ОБРАБОТЧИК"),
++                                        _createElementVNode("h2", null, _toDisplayString(current.title), 1),
++                                        _createElementVNode("p", null, "Эта ссылка присутствует в исходном widget_config. Её специализированный экран пока не реализован на Vue и не заменяется произвольной таблицей."),
++                                        _createElementVNode("dl", null, [
++                                          _createElementVNode("dt", null, "Класс"),
++                                          _createElementVNode("dd", null, [_createElementVNode("code", null, _toDisplayString(current.handler), 1)]),
++                                          _createElementVNode("dt", null, "View конфигурации"),
++                                          _createElementVNode("dd", null, _toDisplayString(current.config_view), 1)
++                                        ]),
++                                        _createElementVNode("details", null, [_createElementVNode("summary", null, "Параметры из конфигурации"), _createElementVNode("pre", null, _toDisplayString(JSON.stringify(current.options,null,2)), 1)])
++                                      ]))
+               ], 64))]), (inspected&&current?.spec)
+             ? (_openBlock(), _createBlock(_component_RecordInspector, {
+                 key: inspected.key,
+diff --git a/src/tactic/ui_api/web/build-manifest.json b/src/tactic/ui_api/web/build-manifest.json
+index 5f0d3b6..f9b5741 100644
+--- a/src/tactic/ui_api/web/build-manifest.json
++++ b/src/tactic/ui_api/web/build-manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "0.8.0-source-fork",
++  "version": "0.9.0-source-fork",
+   "vue": "3.5.13",
+   "components": [
+     "SidebarNode",
+@@ -30,13 +30,14 @@
+     "SearchTypes",
+     "ViewDesigner",
+     "TaskTimeline",
++    "ScriptEditor",
+     "AdminPanel",
+     "App"
+   ],
+   "external_runtime_dependencies": [],
+   "files": {
+-    "app.js": "79ceffd480658f1ab2e27d9604374a862bb2cab21839ee15ad4e2dc97a05f0eb",
+-    "styles.css": "737ea90e646ed41da14ec7d6651d3f293b3081afe03720de27af668e4c5b3808",
++    "app.js": "fa211d214283221dfd31d153f6ffca3349d40915fa7f63cdd669e2f244d68256",
++    "styles.css": "f65d4593b123b9beb7e4d0e4fdc009205cd060361379f2ea496682d034959241",
+     "index.html": "9e108dcffe0861bf5a87a4e0b6af28dec6fa116564395ad61931d7f3a5879139",
+     "vendor/vue.global.prod.js": "c459ba7cc8db65c982589fa5d64c7ff478877e8e5b0fd75683207cec6a4e89e8"
+   }
+diff --git a/src/tactic/ui_api/web/styles.css b/src/tactic/ui_api/web/styles.css
+index 85ed889..9e38c00 100644
+--- a/src/tactic/ui_api/web/styles.css
++++ b/src/tactic/ui_api/web/styles.css
+@@ -49,3 +49,6 @@
+ .system-summary dd{overflow-wrap:anywhere}.schema-health{margin-top:24px;border-top:1px solid var(--border);padding-top:16px}.schema-health>header{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.schema-health h3{margin:0}.schema-database{margin:18px 0}.schema-check-table{width:100%;font-size:13px}.schema-check-table td{overflow-wrap:anywhere}.schema-check-table tr[data-schema-state="missing_table"],.schema-check-table tr[data-schema-state="missing_columns"]{background:rgba(220,85,85,.08)}.system-panel{max-width:1280px;margin:0 auto}.system-panel .table-scroll{max-width:100%;overflow:auto}.schema-check-table code{white-space:normal}.schema-health .notice{white-space:normal;overflow-wrap:anywhere}@media(max-width:600px){.system-summary{grid-template-columns:1fr!important}.schema-check-table{min-width:0;font-size:11px}.schema-check-table th,.schema-check-table td{padding:6px}.system-panel{padding:8px!important}.schema-health>header{align-items:flex-start}}
+ 
+ .system-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}.system-fact{padding:10px 12px;border:1px solid var(--border);border-radius:5px;background:rgba(140,165,190,.04);min-width:0}.system-summary .system-fact dt{font-size:11px;margin:0 0 6px;color:var(--muted)}.system-summary .system-fact dd{margin:0;font-size:13px}.system-notes p{margin:3px 0;font-size:11px}.schema-health .table-scroll{max-height:360px}.schema-check-table thead th{position:sticky;top:0;background:var(--panel);z-index:1}@media(max-width:900px){.system-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.system-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px}.system-fact{padding:8px}.system-summary .system-fact dd{font-size:11px;overflow-wrap:anywhere}.schema-health .table-scroll{max-height:380px}}
++
++/* Native saved-script editor; no legacy HTML runtime. */
++.script-editor{display:flex;flex-direction:column;padding:20px;gap:12px;min-width:0}.script-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.script-toolbar h2{margin:4px 0}.script-layout{display:grid;grid-template-columns:minmax(190px,260px) minmax(0,1fr);gap:16px}.script-directory{border:1px solid var(--line,#343b49);border-radius:8px;padding:10px;max-height:74vh;overflow:auto}.script-directory form{display:flex;gap:6px}.script-directory form input{min-width:0;width:100%}.script-folder-filter{margin:12px 0;font-size:12px}.script-directory footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:16px;font-size:12px}.script-folder{border:none;text-align:left;font-weight:600;width:100%;margin-top:12px}.script-entry{display:flex;width:100%;text-align:left;align-items:center;gap:8px;margin:4px 0;background:transparent;overflow-wrap:anywhere}.script-entry small{margin-left:auto;opacity:.65}.script-entry.active{box-shadow:inset 3px 0 currentColor}.script-document{min-width:0;display:flex;flex-direction:column;gap:10px}.script-fields{display:grid;grid-template-columns:1fr 1.4fr 170px;gap:12px}.script-fields label,.script-description{display:flex;flex-direction:column;gap:6px;font-size:12px}.script-fields input,.script-fields select{min-width:0}.script-source-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.script-source-tools label{display:flex;align-items:center;gap:6px;font-size:12px}.script-source{width:100%;height:46vh;min-height:260px;padding:16px;box-sizing:border-box;resize:vertical;tab-size:4;font:14px/1.6 Consolas,monospace;white-space:pre;overflow:auto;overflow-wrap:normal;border-radius:8px}.script-source.wrapped{white-space:pre-wrap;overflow-wrap:anywhere}.script-status,.script-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px}.script-actions{margin-top:8px}.script-editor .notice{margin:0}.script-editor .error{white-space:pre-wrap}@media(max-width:850px){.script-layout{grid-template-columns:1fr}.script-directory{max-height:230px}.script-fields{grid-template-columns:1fr 1fr}.script-source{height:45vh}.script-editor{padding:12px}.script-toolbar .spacer{display:none}}
+diff --git a/tests/native_ui/check_startup_contexts_09.py b/tests/native_ui/check_startup_contexts_09.py
+new file mode 100644
+index 0000000..979eb29
+--- /dev/null
++++ b/tests/native_ui/check_startup_contexts_09.py
+@@ -0,0 +1,62 @@
++"""Fresh-process regression using actual original service classes + bundled CherryPy.
++
++No database, authentication or licence is emulated as a successful live boot.
++Only Config auto-upgrade and Environment directories are supplied. register_project
++itself, importlib, all stock context modules and the CherryPy mount are real.
++"""
++import ast
++import json
++from pathlib import Path
++import sys
++import tempfile
++import textwrap
++from types import SimpleNamespace
++from unittest.mock import patch
++ROOT = Path(__file__).resolve().parents[2]
++sys.path.insert(0, str(ROOT/'tools/local'))
++from launch import configure_paths
++configure_paths(ROOT/'tests/native_ui/no-user-data', ROOT/'tests/native_ui/nonexistent-config.xml')
++from pyasm.common import Container
++Container.create()
++from pyasm.web import cherrypy30_startup as module
++import cherrypy
++results=[]
++def check(name, condition):
++    if not condition: raise AssertionError(name)
++    results.append({'scenario': name, 'passed': True})
++def root():
++    result=SimpleNamespace(tactic=module.TacticIndex(), projects=module.TacticIndex())
++    cherrypy.root=result; cherrypy.tree.apps.clear(); cherrypy.tree.mount(result, '')
++    return result
++server=module.CherryPyStartup.__new__(module.CherryPyStartup)
++with patch('pyasm.common.Environment.get_install_dir', return_value=str(ROOT)), patch('pyasm.common.Config.get_value', return_value=''):
++    if sys.version_info >= (3,13):
++        code=(ROOT/'tests/native_ui/fixtures/register_project_08.py.txt').read_text()
++        namespace=dict(vars(module));exec(compile(textwrap.dedent(code),'<original 0.8 register_project>','exec'),namespace)
++        root()
++        # Match the alphabetical Windows directory order in the user's log.
++        import os
++        original_listdir = os.listdir
++        try:
++            with patch.object(module.os, 'listdir', side_effect=lambda path: sorted(original_listdir(path))):
++                namespace['register_project'](server,'default',{})
++        except NameError as exc: check('Original 0.8 method reproduces user Api NameError on Python 3.13', "'Api'" in str(exc))
++        else: raise AssertionError('Original failure was not reproduced')
++    registered=root();config={};server.register_project('default',config)
++    stock=sorted(p.stem for p in (ROOT/'src/tactic_sites/default/context').glob('*.py') if not p.name.startswith('__'))
++    for name in stock:
++        obj=getattr(registered.tactic.default,name,None)
++        check('Original default context '+name+' instantiated', obj is not None and type(obj).__name__==name)
++    for name in ('Api','XMLRPC'):
++        check(name+' XML-RPC tooling reaches mounted app', cherrypy.tree.apps[''].config['/tactic/default/'+name]['tools.xmlrpc.on'] is True)
++    server.register_project('admin',config)
++    check('Admin project registers',hasattr(registered.tactic,'admin'))
++    server.register_project('default',config,site='studio_a')
++    check('Site-specific Api object',hasattr(registered.tactic.studio_a.default,'Api'))
++    check('Site-specific XML-RPC tooling',cherrypy.tree.apps[''].config['/tactic/studio_a/default/Api']['tools.xmlrpc.allow_none'] is True)
++    check('Projects namespace preserved',hasattr(registered.projects.studio_a,'default'))
++    server.config=config
++    from startup_probe import inspect_registered_services
++    report=inspect_registered_services(server)
++    check('Startup probe sees three original services without listener',len(report['registered'])==3 and report['listener_started'] is False)
++print(json.dumps({'python':sys.version,'scope':'actual register_project, stock context objects, real CherryPy; no full startup/DB/authentication','scenarios':results},indent=2))
+diff --git a/tests/native_ui/fixture_09.py b/tests/native_ui/fixture_09.py
+new file mode 100644
+index 0000000..8e22e79
+--- /dev/null
++++ b/tests/native_ui/fixture_09.py
+@@ -0,0 +1,40 @@
++"""TEST ONLY: native script service + original Search on isolated SQLite tables."""
++from fixture_08 import FixtureBackend as Previous
++from script_test_store_09 import Store,Backend,STYPE,Query
++from tactic.ui_api.contracts import ApiError
++from tactic.core.config_model import ConfigModel,ConfigSource
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[2]
++class FixtureBackend(Previous):
++ def __init__(self,*a,**kw):
++  super().__init__(*a,**kw);self.script_stores={}
++ def script_backend(self,target):
++  project=self._project()
++  if project not in self.script_stores:
++   store=Store();store.project=project;store.seed();self.script_stores[project]=store
++  return Backend(self.script_stores[project],target)
++ def open_target(self,key):
++  if isinstance(key,str) and key.endswith('/~scripts-table'):
++   parent=super().open_target(key[:-len('/~scripts-table')])
++   if parent['kind']!='script-editor':raise ApiError(403,'script_target','Not original script editor')
++   result={'id':key,'kind':'table','handler':'tactic.ui.panel.ViewPanelWdg','search_type':STYPE,'view':'table','title':'Saved Scripts','config_view':parent.get('config_view'),'attributes':{},'options':{'show_shelf':'false','element_names':'folder,title,description,language'}}
++   result['spec']=self.view(STYPE,'table',result['options']);return result
++  return super().open_target(key)
++ def view(self,stype,view,options=None):
++  if stype!=STYPE:return super().view(stype,view,options)
++  spec=super().view(stype,view,options);allowed=(options or {}).get('element_names','folder,title,description,language').split(',')
++  spec['fields']=[f for n in allowed for f in spec['fields'] if f['name']==n]
++  for f in spec['fields']:f.update(read_only=True,handler='tactic.ui.common.SimpleTableElementWdg')
++  spec['capabilities']={'create':False,'update':False,'retire':False};spec['table_options']={'show_shelf':False,'page_size':40};return spec
++ def query(self,stype,spec,query):
++  if stype!=STYPE:return super().query(stype,spec,query)
++  backend=self.script_backend(None)
++  with backend.store.bind():
++   q=Query(backend.store,STYPE);total=q.get_count();q.add_order_by('folder');q.add_order_by('title');q.set_limit(query['limit']);q.set_offset(query['offset'])
++   rows=[{'key':row.get_search_key(),'values':{f['name']:row.get_value(f['name']) for f in spec['fields']},'revision':'test'} for row in q.get_sobjects()]
++  return {'items':rows,'total':total,'offset':query['offset'],'limit':query['limit'],'has_more':query['offset']+len(rows)<total}
++ def config_operation(self,method,path,data):
++  if path in ('/scripts','/script','/script-check'):
++   target=self.open_target(data.get('target'));backend=self.script_backend(target)
++   with backend.store.bind():return backend.script_operation(method,path,data)
++  return super().config_operation(method,path,data)
+diff --git a/tests/native_ui/fixtures/register_project_08.py.txt b/tests/native_ui/fixtures/register_project_08.py.txt
+new file mode 100644
+index 0000000..fb076fe
+--- /dev/null
++++ b/tests/native_ui/fixtures/register_project_08.py.txt
+@@ -0,0 +1,124 @@
++def register_project(self, project, config, site=None, need_upgrade=[False]):
++
++        # Check if this project needs and upgrade, or if upgrade is occuring.
++        if Config.get_value("portal", "auto_upgrade") == 'true':
++
++            # If it is safe to upgrade, call upgrade project. Checks for upgrade and returns "start"
++            # if upgrade is started.
++            upgrade_status = self.get_upgrade_status(project, site)
++            if upgrade_status == "end":
++                upgrade_status = self.upgrade_project(project, config, site, need_upgrade)
++         
++            # During upgrade, project won't be registered. After project upgrade finishes, project registration can begin
++            if upgrade_status == "start":
++                need_upgrade[0] = True
++                return
++            else:
++                pass
++
++        # if there happend to be . in the project name, convert to _
++        project = project.replace(".", "_")
++
++        if project == "template":
++            return
++
++        if site:
++            print("Registering project ... %s (%s)" % (project, site))
++        else:
++            print("Registering project ... %s" % project)
++
++
++        try:
++            from tactic.ui.app import SitePage
++            if site:
++                # make sure the site exists
++                try:
++                    x = eval("cherrypy.root.tactic.%s" % (site))
++                except:
++                    exec("cherrypy.root.tactic.%s = TacticIndex()" % (site))
++                    exec("cherrypy.root.projects.%s = TacticIndex()" % (site))
++
++                exec("cherrypy.root.tactic.%s.%s = SitePage()" % (site, project))
++                exec("cherrypy.root.projects.%s.%s = SitePage()" % (site, project))
++
++            else:
++                exec("cherrypy.root.tactic.%s = SitePage()" % project)
++                exec("cherrypy.root.projects.%s = SitePage()" % project)
++
++
++
++        except ImportError:
++            #print("... WARNING: SitePage not found")
++            exec("cherrypy.root.tactic.%s = TacticIndex()" % project)
++            exec("cherrypy.root.projects.%s = TacticIndex()" % project)
++        except SyntaxError as e:
++            print("WARNING: skipping project [%s]" % project)
++            print("... possibly project or site contains special characters")
++            raise
++
++
++
++
++
++        # The rest is only ever executed on the "default" project
++
++
++        # This is to get admin project working
++        if project in ['admin', 'default', 'template', 'unittest']:
++            base = "tactic_sites"
++        else:
++            base = "sites"
++
++
++
++        # get the contexts:
++        if project in ("admin", "default", "template", "unittest"):
++            context_dir = Environment.get_install_dir().replace("\\", "/")
++            context_dir = "%s/src/tactic_sites/%s/context" % (context_dir, project)
++        else:
++            context_dir = Environment.get_site_dir().replace("\\", "/")
++            context_dir = "%s/sites/%s/context" % (context_dir, project)
++                
++
++        if not os.path.exists(context_dir):
++            return
++
++        contexts = []
++        for context_dir in os.listdir(context_dir):
++            if not context_dir.endswith(".py"):
++                continue
++            if context_dir == "__init__.py":
++                continue
++            if context_dir.startswith("."):
++                continue
++            if os.path.isdir(context_dir):
++                continue
++
++            context = context_dir.replace(".py", "")
++            contexts.append(context)
++        
++        for context in contexts:
++            try:
++
++                exec("from %s.%s.context.%s import %s" % (base,project,context,context))
++                if site:
++                    exec("cherrypy.root.tactic.%s.%s.%s = %s()" % (site,project,context,context) )
++                else:
++                    exec("cherrypy.root.tactic.%s.%s = %s()" % (project,context,context) )
++
++            except ImportError as e:
++                print(str(e))
++                print("... failed to import '%s.%s.%s'" % (base, project, context))
++                raise
++                #return
++
++
++            path = "/tactic/%s/%s" % (project, context)
++            settings = {}
++            config[path] = settings
++
++            if context in ["XMLRPC", "Api"]:
++                #settings['request.dispatch'] = cherrypy.dispatch.XMLRPCDispatcher(),
++                settings['tools.xmlrpc.on'] = True
++                settings['tools.xmlrpc.encoding'] = 'utf-8'
++                settings['tools.xmlrpc.allow_none'] = True
+diff --git a/tests/native_ui/run_browser_08.py b/tests/native_ui/run_browser_08.py
+index 02223bb..95f7ef3 100644
+--- a/tests/native_ui/run_browser_08.py
++++ b/tests/native_ui/run_browser_08.py
+@@ -39,7 +39,7 @@ with sync_playwright() as p:
+   top=page.locator('.nav-section').first.locator(':scope > ul > li > button').evaluate_all('(ns)=>ns.map(n=>n.title)');assert top==['create_project','global_admin','project_admin','project_essentials'];passed('Original widget-config admin roots unchanged')
+   nav('global_admin').click();nav('system_info').click();ready('.schema-check-table tbody tr')
+   assert 'Структура базы TACTIC' in page.locator('.system-panel').inner_text();passed('Original SystemInfoWdg opens extended native diagnostics')
+-  assert '0.8.0-source-fork' in page.locator('.system-summary').inner_text();passed('Runtime version shown from actual build version')
++  assert ((ROOT/'NATIVE_UI_VERSION').read_text().strip()+'.0-source-fork') in page.locator('.system-summary').inner_text();passed('Runtime version shown from actual build version')
+   assert 'Требуется проверка схемы' in page.locator('.schema-health header').inner_text();passed('Incomplete real stock seed is not presented as healthy')
+   row=page.locator('.schema-check-table tbody tr').filter(has=page.get_by_text('message_log',exact=True));assert row.count()==1 and 'Нет таблицы' in row.inner_text();passed('Missing message history table diagnosed explicitly')
+   row=page.locator('.schema-check-table tbody tr').filter(has=page.get_by_text('widget_config',exact=True));assert row.count()==1 and 'Нет полей' in row.inner_text() and 'priority' in row.inner_text();passed('Original unprefixed widget_config and missing columns retained in report')
+diff --git a/tests/native_ui/run_browser_09.py b/tests/native_ui/run_browser_09.py
+new file mode 100644
+index 0000000..22031e9
+--- /dev/null
++++ b/tests/native_ui/run_browser_09.py
+@@ -0,0 +1,68 @@
++"""0.9 saved script editor browser checks; TEST persistence, not live PostgreSQL.
++
++Native navigation is the default. --bridge explicitly substitutes HTTP/session,
++URL/history/storage only for environments that prohibit localhost navigation.
++Saved script source is downloaded from a real Blob without executing its body.
++"""
++import argparse,base64,csv,json
++from pathlib import Path
++import requests
++from playwright.sync_api import sync_playwright
++ROOT=Path(__file__).resolve().parents[2]
++p=argparse.ArgumentParser();p.add_argument('--bridge',action='store_true');p.add_argument('--url',default='http://127.0.0.1:9167');p.add_argument('--chromium',default='/usr/bin/chromium');p.add_argument('--output',default=str(ROOT/'docs/native-ui/0.9/browser-09'));a=p.parse_args()
++out=Path(a.output);(out/'screenshots').mkdir(parents=True,exist_ok=True);results=[];errors=[];called=[]
++def passed(name):results.append({'scenario':name,'passed':True});print('PASS',name,flush=True)
++with sync_playwright() as p:
++ browser=p.chromium.launch(executable_path=a.chromium,headless=True,args=['--no-sandbox']);context=browser.new_context(viewport={'width':1660,'height':1020},accept_downloads=True);page=context.new_page();page.set_default_timeout(10000);page.on('pageerror',lambda e:errors.append(str(e)));session=requests.Session()
++ try:
++  if a.bridge:
++   def http(req):
++    from urllib.parse import urlsplit
++    parsed=urlsplit(req['url']);path=parsed.path+('?' + parsed.query if parsed.query else '');assert path.startswith('/api/ui/v2/');called.append(path)
++    r=session.request(req['method'],a.url+path,headers=req.get('headers',{}),data=req.get('body'),timeout=30)
++    return {'status':r.status_code,'body64':base64.b64encode(r.content).decode(),'headers':dict(r.headers)}
++   page.expose_function('_fixture_http',http)
++   page.set_content('<!doctype html><html lang="ru"><head><meta charset="UTF-8"><title>TACTIC TEST FIXTURE 0.9</title></head><body><div id="app"></div></body></html>')
++   page.evaluate('''() => {
++    const URL0=window.URL;window.URL=new Proxy(URL0,{construct(target,args){if(args[1]==='null')args[1]='https://fixture.invalid';return Reflect.construct(target,args)}});
++    const store=new Map();Object.defineProperty(window,'localStorage',{value:{getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)}});
++    history.replaceState=(state,unused,url)=>{window._fixture_path=url};
++    window.fetch=async(url,options={})=>{const r=await window._fixture_http({url:String(url),method:options.method||'GET',headers:options.headers||{},body:options.body});return new Response(Uint8Array.from(atob(r.body64),c=>c.charCodeAt(0)),{status:r.status,headers:r.headers})};
++   }''')
++   web=ROOT/'src/tactic/ui_api/web';page.add_style_tag(content=(web/'styles.css').read_text());page.add_script_tag(content=(web/'vendor/vue.global.prod.js').read_text());page.add_script_tag(content=(web/'app.js').read_text())
++  else:page.goto(a.url+'/tactic/admin/',wait_until='networkidle')
++  page.on('dialog',lambda d:d.accept())
++  page.get_by_label('Логин',exact=True).fill('fixture');page.get_by_label('Пароль',exact=True).fill('fixture-only');page.get_by_role('button',name='Войти',exact=True).click();page.wait_for_selector('.sidebar .nav-item')
++  def nav(name):return page.locator('.sidebar button[title="'+name+'"]')
++  def ready(selector):page.wait_for_selector(selector);page.wait_for_timeout(100)
++  def openview(name,title):nav(name).click();page.get_by_role('heading',name=title,exact=True).wait_for();page.wait_for_selector('.table-region[aria-busy="false"]');page.wait_for_timeout(120)
++  top=page.locator('.nav-section').first.locator(':scope > ul > li > button').evaluate_all('(ns)=>ns.map(n=>n.title)');assert top==['create_project','global_admin','project_admin','project_essentials'];passed('Original widget-config administration roots unchanged')
++  nav('project_admin').click();nav('script_editor').click();ready('.script-entry')
++  assert page.locator('.script-entry').count()==40 and '65 записей' in page.locator('.script-directory').inner_text();passed('Stock ShelfEditWdg opens paged saved-script directory')
++  assert 'config/custom_script' in page.locator('.script-toolbar').inner_text();passed('Original script storage displayed, not a new application table')
++  page.locator('.script-entry').first.click();page.wait_for_function("document.querySelector('.script-source').value.startsWith('# TEST FIXTURE')");passed('Choosing saved script loads exact source text')
++  page.get_by_label('Код скрипта',exact=True).fill('value =\n');page.get_by_role('button',name='Проверить синтаксис',exact=True).click();page.get_by_text('Ошибка синтаксиса',exact=False).wait_for();passed('Python syntax errors report without execution')
++  page.get_by_label('Код скрипта',exact=True).fill('# TEST: сохранение\nresult = 42\n');page.get_by_role('button',name='Проверить синтаксис',exact=True).click();page.get_by_text('Синтаксис корректен',exact=False).wait_for();passed('Valid Python syntax accepted without running its body')
++  assert 'есть несохранённые правки' in page.locator('.script-toolbar').inner_text();passed('Unsaved source changes tracked')
++  page.get_by_label('Код скрипта',exact=True).press('Control+s');page.get_by_text('Сохранено в config/custom_script.',exact=False).wait_for();assert 'запись загружена' in page.locator('.script-toolbar').inner_text();passed('Ctrl+S saves through original-script service and clears dirty state')
++  page.get_by_role('button',name='Новый',exact=True).click();page.get_by_label('Папка скрипта',exact=True).fill('tools/native');page.get_by_label('Название скрипта',exact=True).fill('browser_created');page.get_by_label('Язык скрипта',exact=True).select_option('python');page.get_by_label('Код скрипта',exact=True).fill('raise RuntimeError("must not execute")\n');page.get_by_label('Описание скрипта',exact=True).fill('TEST FIXTURE new source');page.get_by_role('button',name='Сохранить · Ctrl+S',exact=True).click();page.get_by_text('Сохранено в config/custom_script.',exact=False).wait_for();passed('New script saved as data, not executed')
++  page.get_by_role('button',name='Создать копию',exact=True).click();assert page.get_by_label('Название скрипта',exact=True).input_value()=='browser_created_copy';page.get_by_role('button',name='Сохранить · Ctrl+S',exact=True).click();page.get_by_text('Сохранено в config/custom_script.',exact=False).wait_for();passed('Save-copy uses a new record and preserves original')
++  page.get_by_label('Поиск скриптов',exact=True).fill('browser_created');page.get_by_role('button',name='Найти',exact=True).click();page.wait_for_function("document.querySelectorAll('.script-entry').length===2");passed('Server search refreshes matching saved scripts')
++  page.get_by_label('Найти в скрипте',exact=True).fill('RuntimeError');page.get_by_role('button',name='Следующее',exact=True).click();assert page.get_by_label('Код скрипта',exact=True).evaluate('(e)=>e.value.slice(e.selectionStart,e.selectionEnd)')=='RuntimeError';passed('Source text search selects match')
++  with page.expect_download() as download:page.get_by_role('button',name='В файл',exact=True).click()
++  saved=out/'saved-source.py';download.value.save_as(str(saved));assert saved.read_text()=='raise RuntimeError("must not execute")\n';passed('Download preserves source bytes in a local file')
++  page.get_by_label('Код скрипта',exact=True).fill('<script>window.script_was_executed=true</script>');page.get_by_label('Язык скрипта',exact=True).select_option('javascript');page.get_by_role('button',name='Проверить синтаксис',exact=True).click();page.get_by_text('Проверка недоступна',exact=False).wait_for();assert page.evaluate('typeof window.script_was_executed')=='undefined';passed('JavaScript is text; unsupported syntax check is explicit')
++  page.get_by_role('button',name='Отменить правки',exact=True).click();page.wait_for_function("document.querySelector('.script-source').value.startsWith('raise RuntimeError')");passed('Discard reloads actual saved record after confirmation')
++  assert 'TEST FIXTURE' in page.locator('.fixture-banner').inner_text();page.screenshot(path=str(out/'screenshots/original-script-editor.png'))
++  page.get_by_role('button',name='Таблица по конфигурации',exact=True).click();ready('.table-region[aria-busy="false"]');headers=page.locator('thead th button').all_text_contents();assert [h.strip() for h in headers]==['Folder','Title','Description','Language'];passed('Manage button uses original custom_script view and element_names')
++  assert page.locator('tbody tr').count()==40;page.screenshot(path=str(out/'screenshots/scripts-configured-table.png'))
++  nav('script_editor').click();ready('.script-editor');passed('Original editor reopens from its same configured sidebar target')
++  page.set_viewport_size({'width':390,'height':844});page.wait_for_timeout(150);assert page.locator('body').evaluate('(e)=>e.scrollWidth<=innerWidth+2');passed('Script editor fits mobile viewport')
++  page.screenshot(path=str(out/'screenshots/scripts-mobile.png'));assert not errors,errors;assert not any('get_widget' in u for u in called);passed('No legacy HTML renderer calls or JavaScript errors')
++  page.get_by_role('button',name='Выйти',exact=True).click();page.wait_for_selector('.login-card');passed('Logout unmounts editor')
++ except Exception as exc:
++  try:page.screenshot(path=str(out/'screenshots/browser-failure.png'))
++  except Exception:pass
++  results.append({'scenario':'failure','passed':False,'error':str(exc),'js_errors':errors});raise
++ finally:
++  (out/'browser-results.json').write_text(json.dumps({'backend':'original widget configuration and ScriptService; TEST script persistence/auth collaborators','transport':'explicit Python HTTP bridge: substitutes fetch/cookies/URL/history/storage; original Blob download' if a.bridge else 'native Chromium HTTP','scenarios':results,'js_errors':errors},ensure_ascii=False,indent=2)+'\n');browser.close()
+diff --git a/tests/native_ui/run_http_08.py b/tests/native_ui/run_http_08.py
+index 27bbdd4..729a50d 100644
+--- a/tests/native_ui/run_http_08.py
++++ b/tests/native_ui/run_http_08.py
+@@ -15,7 +15,7 @@ try:
+  r=call('GET','/open',base);check('Original widget-config SystemInfoWdg opens native system panel',r.status_code==200 and r.json()['handler']=='tactic.ui.app.SystemInfoWdg' and r.json()['kind']=='system')
+  r=call('GET','/system',base);check('Real metadata service responds through bundled CherryPy',r.status_code==200)
+  data=r.json();schema=data['schema'];checks=schema['databases'][0]['checks']
+- check('Runtime version comes from NATIVE_UI_VERSION',data['ui_version']=='0.8.0-source-fork')
++ check('Runtime version comes from NATIVE_UI_VERSION',data['ui_version']==((Path(__file__).resolve().parents[2]/'NATIVE_UI_VERSION').read_text().strip()+'.0-source-fork'))
+  check('Original seed is honestly reported as incomplete',schema['read_only'] is True and schema['ready'] is False)
+  check('Missing message_log table is not masked',any(x.get('table')=='message_log' and x['state']=='missing_table' for x in checks))
+  check('Widget config registration preserves unprefixed original table',any(x.get('table')=='widget_config' for x in checks) and not any(x.get('table')=='spt_widget_config' for x in checks))
+diff --git a/tests/native_ui/run_http_09.py b/tests/native_ui/run_http_09.py
+new file mode 100644
+index 0000000..8477199
+--- /dev/null
++++ b/tests/native_ui/run_http_09.py
+@@ -0,0 +1,53 @@
++"""Real bundled CherryPy HTTP + production ScriptService, isolated TEST DB/auth."""
++import argparse,json
++from pathlib import Path
++import requests
++p=argparse.ArgumentParser();p.add_argument('--url',required=True);p.add_argument('--output',required=True);a=p.parse_args()
++s=requests.Session();headers={'X-Tactic-UI':'1'};results=[]
++base={'project':'admin','target':'admin_views/project_admin/script_editor'}
++def check(name,ok):
++ assert ok,name
++ results.append({'scenario':name,'passed':True});print('PASS',name,flush=True)
++def req(method,path,data=None,override=None):return s.request(method,a.url+'/api/ui/v2'+path,params=data if method=='GET' else None,json=data if method!='GET' else None,headers=override or headers,timeout=20)
++def op(method,path,**data):return req(method,path,dict(base,**data))
++try:
++ check('Saved scripts require session',op('GET','/scripts').status_code==401)
++ r=req('POST','/session',{'login':'fixture','password':'fixture-only'});headers['X-CSRF-Token']=r.json()['csrf']
++ side=req('GET','/sidebar',{'project':'admin'}).json()
++ def walk(nodes):
++  for n in nodes:
++   if n.get('name')=='script_editor':yield n
++   yield from walk(n.get('children',[]))
++ links=list(walk([n for section in side['sections'] for n in section['children']]))
++ check('Script editor comes from stock widget_config sidebar',len(links)==1);base['target']=links[0]['id']
++ r=op('GET','/open');check('Stock ShelfEditWdg opens native editor',r.status_code==200 and r.json()['kind']=='script-editor' and r.json()['handler']=='tactic.ui.app.ShelfEditWdg')
++ data=op('GET','/scripts',limit=20).json();check('Directory is server-paged',data['total']==65 and len(data['items'])==20 and data['has_more'])
++ more=op('GET','/scripts',limit=20,offset=20).json();check('Directory pages do not overlap',not {x['key'] for x in data['items']}&{x['key'] for x in more['items']})
++ check('Directory does not return all script bodies',all('script' not in x['values'] for x in data['items']))
++ check('Virtual nested folder filter',op('GET','/scripts',folder='workflow/review').json()['total']==32)
++ check('Injection-like search is a literal string',op('GET','/scripts',q="' OR 1=1 --").json()['total']==0)
++ rec=op('GET','/script',key=data['items'][0]['key']).json()['record'];check('Read original source content',rec['values']['script'].startswith('# TEST FIXTURE'))
++ check('Original folder/title lookup',op('GET','/script',script_path='tools/script_000').json()['record']['values']['title']=='script_000')
++ check('Cross-project search key forbidden',op('GET','/script',key=rec['key'].replace('project=admin','project=fixture')).status_code==403)
++ check('Cross-type key forbidden',op('GET','/script',key='sthpw/login?code=admin').status_code==403)
++ values={'folder':'native/test','title':'new%_script','language':'python','script':'# Привет\r\nvalue = 0\r\n','description':'Описание'}
++ r=op('POST','/script',values=values);check('Save creates original custom_script record via service',r.status_code==200 and r.json()['saved']);created=r.json()['record']
++ check('Source whitespace and CRLF survive round trip',created['values']['script']==values['script'])
++ check('Exact percent/underscore search preserved',op('GET','/scripts',q='%_').json()['total']==1)
++ check('Duplicate path does not overwrite',op('POST','/script',values=values).status_code==409)
++ changed=dict(values,script='result = 42\n');r=op('PATCH','/script',key=created['key'],revision=created['revision'],values=changed);check('Update retains same search key',r.status_code==200 and r.json()['record']['key']==created['key'])
++ check('Stale source revision rejected',op('PATCH','/script',key=created['key'],revision=created['revision'],values=values).status_code==409)
++ check('Rejected stale edit preserves newest source',op('GET','/script',key=created['key']).json()['record']['values']['script']=='result = 42\n')
++ check('Python syntax check is not execution',op('POST','/script-check',language='python',script='raise RuntimeError("must not run")').json()=={'checked':True,'valid':True,'executed':False,'notice':'Проверен только синтаксис. Имена, импорты и поведение workflow не проверялись.'})
++ check('Python syntax error reports failure',op('POST','/script-check',language='python',script='x =').json()['valid'] is False)
++ check('XML entities not read',op('POST','/script-check',language='xml',script='<!DOCTYPE x [<!ENTITY a SYSTEM "file:///etc/passwd">]><x>&a;</x>').json()['valid'] is False)
++ check('JS syntax verification not falsely claimed',op('POST','/script-check',language='javascript',script='anything').json()['checked'] is False)
++ check('No Run endpoint',op('POST','/script-run',key=created['key']).status_code>=400)
++ check('CSRF required for saving',req('POST','/script',dict(base,values=values),{'X-Tactic-UI':'1','X-CSRF-Token':'wrong'}).status_code==403)
++ check('Another configured target cannot read script editor data',req('GET','/scripts',dict(base,target='admin_views/global_admin/system_info')).status_code==403)
++ table=req('GET','/open',dict(base,target=data['manage_target']));check('Original Manage operation opens config table',table.status_code==200 and table.json()['search_type']=='config/custom_script' and [f['name'] for f in table.json()['spec']['fields']]==['folder','title','description','language'])
++ check('Script responses private no-store',r.headers.get('Cache-Control')=='no-store')
++ check('No writes enabled in shipped production config',json.loads((Path(__file__).resolve().parents[2]/'src/tactic/ui_api/config.json').read_text())['allow_writes'] is False)
++except Exception as exc:results.append({'scenario':'failure','passed':False,'error':str(exc)});raise
++finally:
++ out=Path(a.output);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps({'scope':'real HTTP and ScriptService; isolated SQL/persistence/auth collaborators, not production database','scenarios':results},ensure_ascii=False,indent=2)+'\n')
+diff --git a/tests/native_ui/run_validation_09.py b/tests/native_ui/run_validation_09.py
+new file mode 100644
+index 0000000..9e5fe7b
+--- /dev/null
++++ b/tests/native_ui/run_validation_09.py
+@@ -0,0 +1,159 @@
++"""Repeat native UI tests with a FRESH synthetic CherryPy backend per suite.
++
++Run from the source fork with its supported Python environment. Playwright and
++Chromium are developer-only dependencies. The default browser transport is
++native; --bridge is explicit and records its cookie/navigation/CSP limitation.
++This is not the production launcher and never connects to a user database.
++"""
++from __future__ import annotations
++
++import argparse
++import json
++import os
++from pathlib import Path
++import platform
++import re
++import shutil
++import socket
++import subprocess
++import sys
++import time
++from urllib.request import urlopen
++from urllib.error import URLError
++
++ROOT = Path(__file__).resolve().parents[2]
++TESTS = ROOT / 'tests/native_ui'
++
++
++def free_port() -> int:
++    with socket.socket() as sock:
++        sock.bind(('127.0.0.1', 0))
++        return int(sock.getsockname()[1])
++
++
++def execute(command: list[str], log: Path, timeout: int = 240) -> dict:
++    start = time.monotonic()
++    with log.open('w', encoding='utf-8') as stream:
++        stream.write('COMMAND: ' + json.dumps(command, ensure_ascii=False) + '\n')
++        stream.flush()
++        try:
++            result = subprocess.run(command, cwd=ROOT, stdout=stream,
++                                    stderr=subprocess.STDOUT, timeout=timeout, check=False)
++            code = result.returncode
++        except subprocess.TimeoutExpired:
++            stream.write('\nVALIDATION TIMEOUT\n')
++            code = 124
++    result = {'return_code': code, 'seconds': round(time.monotonic()-start, 3),
++              'log': str(log.relative_to(ROOT)) if log.is_relative_to(ROOT) else str(log)}
++    if 'unittest' in command:
++        matches = re.findall(r'^Ran (\d+) tests? in ', log.read_text(encoding='utf-8'), re.M)
++        result['tests'] = int(matches[-1]) if matches else None
++    return result
++
++
++def stop(process: subprocess.Popen) -> None:
++    if process.poll() is None:
++        process.terminate()
++        try:
++            process.wait(timeout=10)
++        except subprocess.TimeoutExpired:
++            process.kill()
++            process.wait(timeout=5)
++
++
++def fixture_suite(name: str, output: Path, args: argparse.Namespace) -> dict:
++    port = free_port()
++    url = f'http://127.0.0.1:{port}'
++    env = dict(os.environ, TACTIC_FIXTURE_PORT=str(port),
++               TACTIC_FIXTURE_ERROR_LOG=str(output / f'{name}-server-error.log'))
++    # TEST-only mount configuration is made inside serve_fixture.py. Do not
++    # inherit external native UI routing or real server configuration flags.
++    env.pop('TACTIC_UI', None)
++    env.pop('TACTIC_CONFIG_PATH', None)
++    report = output / (name + ('/browser-results.json' if 'browser' in name else '.json'))
++    command = [sys.executable, str(TESTS / (name + '.py')), '--url', url,
++               '--output', str(report.parent if 'browser' in name else report)]
++    if 'browser' in name:
++        command += ['--chromium', args.chromium]
++        if args.bridge:
++            command += ['--bridge']
++    with (output / f'{name}-server.log').open('w', encoding='utf-8') as server_log:
++        process = subprocess.Popen([sys.executable, str(TESTS / 'serve_fixture.py')],
++                                   cwd=ROOT, env=env, stdout=server_log,
++                                   stderr=subprocess.STDOUT)
++        try:
++            deadline = time.monotonic() + 25
++            while True:
++                if process.poll() is not None:
++                    raise RuntimeError(f'{name}: fixture exited ({process.returncode})')
++                try:
++                    with urlopen(url + '/api/ui/v2/health', timeout=1) as response:
++                        if response.status == 200:
++                            break
++                except (URLError, TimeoutError, OSError):
++                    pass
++                if time.monotonic() > deadline:
++                    raise RuntimeError(f'{name}: fixture did not become ready')
++                time.sleep(0.1)
++            result = execute(command, output / (name + '.log'), timeout=240)
++            if report.exists():
++                data = json.loads(report.read_text())
++                scenarios = data.get('scenarios', data.get('results', []))
++                result['scenarios'] = len(scenarios)
++                result['passed_scenarios'] = sum(item.get('passed') is True for item in scenarios)
++                result['js_errors'] = data.get('js_errors', [])
++            result['fresh_fixture'] = True
++            result['report'] = str(report.relative_to(ROOT)) if report.is_relative_to(ROOT) else str(report)
++            return result
++        finally:
++            stop(process)
++
++
++def main() -> int:
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--output', type=Path, default=ROOT / 'docs/native-ui/0.9/validation')
++    parser.add_argument('--bridge', action='store_true')
++    parser.add_argument('--chromium', default=shutil.which('chromium') or 'chromium')
++    parser.add_argument('--skip-browser', action='store_true')
++    parser.add_argument('--only', choices=('unit', 'http', 'browser'))
++    args = parser.parse_args()
++    args.output = args.output.resolve()
++    args.output.mkdir(parents=True, exist_ok=True)
++    report = {'python': sys.version, 'platform': platform.platform(),
++              'browser_transport': 'explicit Python HTTP bridge; no native cookies/CSP/navigation proof' if args.bridge else 'native HTTP',
++              'backend': 'test-only synthetic persistence; original TACTIC Select and new services; not a full TACTIC database',
++              'suites': {}}
++    result_code = 0
++    try:
++        build = execute(['node', 'tools/native_ui/build.cjs'], args.output / 'build.log')
++        report['suites']['build'] = build
++        if build['return_code']:
++            return 1
++        if args.only in (None, 'unit'):
++            report['suites']['config-parity'] = execute(
++                [sys.executable, 'tools/native_ui/audit_config_parity.py', '--out', str(args.output.parent / 'config-parity.json')],
++                args.output / 'config-parity.log')
++            report['suites']['unit'] = execute(
++                [sys.executable, '-W', 'ignore', '-m', 'unittest', 'discover', '-s', 'tests/native_ui', '-v'],
++                args.output / 'unit.log')
++            print('Unit:', report['suites']['unit']['return_code'], flush=True)
++        suites = []
++        if args.only in (None, 'http'):
++            suites += ['run_http', 'run_http_03', 'run_http_04', 'run_http_05', 'run_http_06', 'run_http_07', 'run_http_08', 'run_http_09']
++        if args.only in (None, 'browser') and not args.skip_browser:
++            suites += ['run_browser_03', 'run_browser_04', 'run_browser_05', 'run_browser_06', 'run_browser_07', 'run_browser_08', 'run_browser_09']
++        for name in suites:
++            try:
++                report['suites'][name] = fixture_suite(name, args.output, args)
++            except Exception as exc:
++                report['suites'][name] = {'return_code': 1, 'error': str(exc)}
++            print(name, json.dumps(report['suites'][name], ensure_ascii=False), flush=True)
++        result_code = int(any(suite['return_code'] != 0 for suite in report['suites'].values()))
++        return result_code
++    finally:
++        report['passed'] = bool(report['suites']) and all(x['return_code'] == 0 for x in report['suites'].values())
++        (args.output / 'summary.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())
+diff --git a/tests/native_ui/script_test_store_09.py b/tests/native_ui/script_test_store_09.py
+new file mode 100644
+index 0000000..b99be9f
+--- /dev/null
++++ b/tests/native_ui/script_test_store_09.py
+@@ -0,0 +1,82 @@
++"""TEST ONLY: real Search/Select SQL with isolated custom_script persistence.
++
++No full TACTIC DB/auth/trigger proof. Production ScriptService is shared by
++unit and HTTP tests; only record persistence + metadata are collaborators.
++"""
++from contextlib import contextmanager, ExitStack
++import copy
++from datetime import datetime
++from pathlib import Path
++import sqlite3
++import sys
++from types import SimpleNamespace
++from unittest.mock import patch
++ROOT=Path(__file__).resolve().parents[2]
++sys.path[:0]=[str(ROOT/'src'),str(ROOT/'src/client')]
++from pyasm.search import Search as RealSearch, Select
++from pyasm.search.database_impl import DatabaseImpl, SqliteImpl
++from tactic.ui_api.script_service import ScriptService, STYPE, script_permission
++from tactic.ui_api.config_backend import ConfigBackend
++from tactic.ui_api.contracts import ApiError
++COLS={'id':'integer','code':'varchar','title':'varchar','folder':'varchar','language':'varchar','description':'varchar','script':'varchar','timestamp':'timestamp','s_status':'varchar'}
++class Row:
++ def __init__(self,store,values):self.store=store;self.values=dict(values)
++ def get_value(self,name,no_exception=False):return self.values.get(name)
++ def get_id(self):return self.values.get('id')
++ def get_code(self):return self.values.get('code')
++ def get_search_key(self):return STYPE+'?project='+self.store.project+'&code='+str(self.get_code())
++ def get_sobject_dict(self):return copy.deepcopy(self.values)
++class Query(RealSearch):
++ def __init__(self,store,stype):
++  assert stype==STYPE,stype
++  self.store=store;self.order_bys=[];self.search_type_obj=SimpleNamespace(get_table=lambda:'custom_script');self.database_impl=SqliteImpl();self.database_impl.get_column_types=lambda *a:COLS;self.database_impl.is_column_sortable=lambda resource,table,column:column in COLS
++  with patch.object(DatabaseImpl,'get',return_value=self.database_impl):self.select=Select()
++  self.select.tables=['custom_script'];self.select.db_resource=object();self.db_resource=self.select.db_resource;self.add_filter('s_status','retired',op='!=')
++ def get_id_col(self):return 'id'
++ def get_count(self):
++  sql=self.select.get_statement(mode='count');self.store.statements.append(sql);return self.store.db.execute(sql).fetchone()[0]
++ def get_sobjects(self):
++  sql=self.select.get_statement();self.store.statements.append(sql);return [Row(self.store,dict(row)) for row in self.store.db.execute(sql)]
++ def get_sobject(self):return next(iter(self.get_sobjects()),None)
++class Store:
++ def __init__(self):
++  self.db=sqlite3.connect(':memory:',check_same_thread=False);self.db.row_factory=sqlite3.Row;self.project='admin';self.allowed=True;self.statements=[];self.calls=[]
++  self.db.execute('CREATE TABLE custom_script (id INTEGER PRIMARY KEY,code TEXT,title TEXT,folder TEXT,language TEXT,description TEXT,script TEXT,timestamp TEXT,s_status TEXT)')
++ def row(self,**values):
++  defaults={'code':'SCRIPT'+str(self.db.execute('SELECT coalesce(max(id),0)+1 FROM custom_script').fetchone()[0]),'folder':'default','title':'test','language':'python','script':'pass\n','description':'','timestamp':'2026-10-01 10:00:00','s_status':'active'};defaults.update(values)
++  cur=self.db.execute('INSERT INTO custom_script('+','.join('"'+k+'"' for k in defaults)+') VALUES ('+','.join('?' for _ in defaults)+')',list(defaults.values()));return Row(self,dict(defaults,id=cur.lastrowid))
++ def by_key(self,key):
++  from urllib.parse import parse_qs
++  if not isinstance(key,str) or key.split('?')[0]!=STYPE:raise ApiError(403,'key_scope','Foreign type')
++  q=parse_qs(key.split('?',1)[-1])
++  if q.get('project',[self.project])[0]!=self.project:raise ApiError(403,'key_scope','Foreign project')
++  row=self.db.execute('SELECT * FROM custom_script WHERE code=?',(q.get('code',[''])[0],)).fetchone();return Row(self,dict(row)) if row else None
++ def update(self,key,values):
++  self.calls.append(('update',key,copy.deepcopy(values)));obj=self.by_key(key)
++  self.db.execute('UPDATE custom_script SET '+','.join('"'+k+'"=?' for k in values)+' WHERE id=?',list(values.values())+[obj.get_id()]);return {'__search_key__':key}
++ def insert(self,stype,values):
++  self.calls.append(('insert',stype,copy.deepcopy(values)));obj=self.row(**values);return {'__search_key__':obj.get_search_key()}
++ @contextmanager
++ def bind(self):
++  with ExitStack() as stack:
++   stack.enter_context(patch('pyasm.search.Search',side_effect=lambda st:Query(self,st)))
++   stack.enter_context(patch('pyasm.search.SearchKey.get_by_search_key',side_effect=self.by_key))
++   stack.enter_context(patch('pyasm.common.Environment.get_security',return_value=SimpleNamespace(check_access=lambda *a,**kw:self.allowed,is_admin=lambda:True)))
++   yield
++ def seed(self,count=65):
++  for i in range(count):self.row(title='script_%03d'%i,folder='workflow/review' if i%2 else 'tools',script='# TEST FIXTURE\nresult = %d\n'%i)
++  self.db.commit()
++class Backend(ScriptService):
++ site='';allow_writes=True
++ def __init__(self,store,target=None):self.store=store;self.target=target
++ def require_type(self,stype):assert stype==STYPE
++ def _project(self):return self.store.project
++ def _stub(self):return self.store
++ def _object(self,stype,key):return ConfigBackend._object(self,stype,key)
++ def _write(self,cb):
++  if not self.allow_writes:raise ApiError(403,'read_only','Writes disabled')
++  with self.store.db:return cb()
++ def open_target(self,key):
++  if self.target is not None and key==self.target['id']:return self.target
++  if key=='editor':return {'id':key,'kind':'script-editor','options':{}}
++  raise ApiError(403,'script_target','Wrong target')
+diff --git a/tests/native_ui/serve_fixture.py b/tests/native_ui/serve_fixture.py
+index d1197ab..e16320d 100644
+--- a/tests/native_ui/serve_fixture.py
++++ b/tests/native_ui/serve_fixture.py
+@@ -8,7 +8,7 @@ from pathlib import Path
+ ROOT=Path(__file__).resolve().parents[2]
+ sys.path[:0]=[str(ROOT/'src'),str(ROOT/'src/client'),str(ROOT/'3rd_party/python3/site-packages')]
+ import cherrypy
+-from fixture_08 import FixtureBackend
++from fixture_09 import FixtureBackend
+ from tactic.ui_api import mount
+ mount.ConfigBackend=FixtureBackend  # TEST PROCESS ONLY: production module is not edited.
+ class Service:
+diff --git a/tests/native_ui/test_script_editor_09.py b/tests/native_ui/test_script_editor_09.py
+new file mode 100644
+index 0000000..c10349d
+--- /dev/null
++++ b/tests/native_ui/test_script_editor_09.py
+@@ -0,0 +1,88 @@
++import copy
++import json
++from pathlib import Path
++from tempfile import TemporaryDirectory
++import unittest
++from unittest.mock import patch
++from script_test_store_09 import Store,Backend,ROOT,STYPE
++from tactic.ui_api.contracts import ApiError
++from tactic.ui_api.script_service import syntax_check,clean_script_values,MAX_SCRIPT_BYTES
++from tactic.core.config_model import target_spec,ConfigModel,ConfigSource,SidebarProjection
++
++class ScriptEditor09(unittest.TestCase):
++ def setUp(self):
++  self.store=Store();self.store.seed();self.backend=Backend(self.store);self.binding=self.store.bind();self.binding.__enter__()
++ def tearDown(self):self.binding.__exit__(None,None,None);self.store.db.close()
++ def op(self,method,path,**data):return self.backend.script_operation(method,path,dict(target='editor',**data))
++ def first(self):return self.op('GET','/scripts')['items'][0]
++ def record(self,key=None):return self.op('GET','/script',key=key or self.first()['key'])['record']
++ def values(self,**kw):
++  v={'folder':'tools','title':'new_script','language':'python','script':'# Привет\nresult = 0\n','description':'описание'};v.update(kw);return v
++ def assertCode(self,code,call):
++  with self.assertRaises(ApiError) as ctx:call()
++  self.assertEqual(ctx.exception.code,code)
++ def test_stock_widget_handlers(self):
++  for name in ('tactic.ui.app.ShelfEditWdg','tactic.ui.app.ScriptEditorWdg','tactic.ui.app.shelf_wdg.ShelfEditWdg','tactic.ui.app.shelf_wdg.ScriptEditorWdg'):
++   self.assertEqual(target_spec('LinkWdg',{'class_name':name})['kind'],'script-editor')
++ def test_stock_sidebar_not_replaced(self):
++  xml=(ROOT/'src/tactic/ui/config/DEFAULT-conf.xml').read_text();m=ConfigModel('definition',[ConfigSource(xml,'definition')]);el=m.describe('script_editor');self.assertEqual(target_spec(el['handler'],el['options'])['kind'],'script-editor')
++ def test_directory_has_server_pagination(self):
++  first=self.op('GET','/scripts',limit=20);second=self.op('GET','/scripts',limit=20,offset=20)
++  self.assertEqual(first['total'],65);self.assertTrue(first['has_more']);self.assertFalse({i['key'] for i in first['items']}&{i['key'] for i in second['items']})
++ def test_directory_does_not_fetch_script_bodies(self):
++  result=self.op('GET','/scripts');self.assertTrue(all('script' not in x['values'] for x in result['items']));self.assertNotIn('"script"',self.store.statements[-1])
++ def test_nested_folder_search(self):self.assertEqual(self.op('GET','/scripts',folder='workflow/review')['total'],32)
++ def test_search_is_literal_sql_not_regex(self):
++  self.store.row(title='100%_done');self.assertEqual(self.op('GET','/scripts',q='%_')['total'],1)
++ def test_search_quote_is_literal(self):
++  self.assertEqual(self.op('GET','/scripts',q="' OR 1=1 --")['total'],0)
++ def test_read_preserves_newlines_unicode_spaces(self):
++  obj=self.store.row(title='中文',script='  # привет\r\nx = 0\r\n');self.assertEqual(self.record(obj.get_search_key())['values']['script'],'  # привет\r\nx = 0\r\n')
++ def test_read_by_original_virtual_script_path(self):self.assertEqual(self.op('GET','/script',script_path='tools/script_000')['record']['values']['title'],'script_000')
++ def test_duplicate_path_not_arbitrary_first(self):
++  self.store.row(title='script_000',folder='tools');self.assertCode('script_duplicate',lambda:self.op('GET','/script',script_path='tools/script_000'))
++ def test_original_default_folder_and_language_and_title(self):
++  result=self.op('POST','/script',values=self.values(folder='',language='',title='///new_script'));self.assertEqual(result['record']['values']['folder'],'default');self.assertEqual(result['record']['values']['title'],'new_script');self.assertEqual(result['record']['values']['language'],'javascript');self.assertEqual(self.store.calls[-1][0],'insert')
++ def test_update_uses_key_and_only_allowed_fields(self):
++  rec=self.record();values=self.values(title=rec['values']['title'],folder=rec['values']['folder']);self.op('PATCH','/script',key=rec['key'],revision=rec['revision'],values=values);self.assertEqual(self.store.calls[-1],('update',rec['key'],values))
++ def test_read_only_still_reads_and_checks_but_not_saves(self):
++  self.backend.allow_writes=False;self.assertFalse(self.op('GET','/scripts')['can_write']);self.assertTrue(self.op('POST','/script-check',language='python',script='pass')['valid']);self.assertCode('read_only',lambda:self.op('POST','/script',values=self.values()))
++ def test_original_builtin_permission_rechecked_every_request(self):
++  rec=self.record();self.store.allowed=False
++  for method,path,data in [('GET','/scripts',{}),('GET','/script',{'key':rec['key']}),('POST','/script-check',{'language':'python','script':'pass'}),('PATCH','/script',{'key':rec['key'],'revision':rec['revision'],'values':self.values()})]:
++   self.assertCode('script_permission',lambda:self.op(method,path,**data))
++ def test_target_cannot_be_an_arbitrary_table(self):
++  self.assertCode('script_target',lambda:self.backend.script_operation('GET','/scripts',{'target':'some-table'}))
++ def test_foreign_project_key_rejected(self):self.assertCode('key_scope',lambda:self.record(self.first()['key'].replace('project=admin','project=other')))
++ def test_foreign_type_key_rejected(self):self.assertCode('key_scope',lambda:self.record('sthpw/login?code=admin'))
++ def test_change_revision_conflict_keeps_text(self):
++  rec=self.record();self.store.update(rec['key'],{'script':'changed outside'});self.store.db.commit();n=len(self.store.calls);self.assertCode('conflict',lambda:self.op('PATCH','/script',key=rec['key'],revision=rec['revision'],values=self.values()));self.assertEqual(n,len(self.store.calls));self.assertEqual(self.record(rec['key'])['values']['script'],'changed outside')
++ def test_duplicate_create_is_not_an_overwrite(self):self.assertCode('script_duplicate',lambda:self.op('POST','/script',values=self.values(title='script_000')))
++ def test_save_as_insert_does_not_change_original(self):
++  rec=self.record();self.op('POST','/script',values=self.values(title='copy'));self.assertEqual(rec,self.record(rec['key']))
++ def test_unknown_existing_language_preserved(self):
++  obj=self.store.row(title='custom',language='custom_dcc');rec=self.record(obj.get_search_key());r=self.op('PATCH','/script',key=rec['key'],revision=rec['revision'],values=self.values(title='custom',folder='default',language='custom_dcc'));self.assertEqual(r['record']['values']['language'],'custom_dcc')
++ def test_new_unknown_language_rejected(self):self.assertCode('script_language',lambda:self.op('POST','/script',values=self.values(language='magic')))
++ def test_no_full_script_execution_endpoint(self):self.assertCode('method',lambda:self.op('POST','/script-run',key=self.first()['key']))
++ def test_save_with_syntax_errors_retains_original_editor_semantics(self):self.assertTrue(self.op('POST','/script',values=self.values(script='invalid python :'))['saved'])
++ def test_unknown_fields_rejected(self):self.assertCode('script_fields',lambda:self.op('POST','/script',values=self.values(class_name='evil')))
++ def test_oversize_utf8_not_character_count(self):self.assertCode('script_size',lambda:self.op('POST','/script',values=self.values(script='я'*(MAX_SCRIPT_BYTES//2+1))))
++ def test_nul_rejected(self):self.assertCode('script_size',lambda:self.op('POST','/script',values=self.values(script='\x00')))
++ def test_empty_script_is_valid_and_preserved(self):self.assertEqual(self.op('POST','/script',values=self.values(script=''))['record']['values']['script'],'')
++ def test_bad_page_limits_rejected(self):
++  for value in (0,101,-1,True,'1.1'):
++   self.assertCode('limit',lambda:self.op('GET','/scripts',limit=value))
++ def test_read_without_key_needs_path(self):self.assertCode('script_path',lambda:self.op('GET','/script'))
++ def test_syntax_parse_does_not_execute(self):
++  with TemporaryDirectory() as tmp:
++   p=Path(tmp)/'never-created';source='open('+repr(str(p))+', "w").write("no")'
++   self.assertTrue(self.op('POST','/script-check',language='python',script=source)['valid']);self.assertFalse(p.exists())
++ def test_python_syntax_error_has_line(self):
++  data=syntax_check('python','x =\n');self.assertFalse(data['valid']);self.assertEqual(data['line'],1);self.assertFalse(data['executed'])
++ def test_xml_entity_not_expanded(self):self.assertFalse(syntax_check('xml','<!DOCTYPE x [<!ENTITY e SYSTEM "file:///etc/passwd">]><x>&e;</x>')['valid'])
++ def test_unsupported_js_check_is_not_fake_success(self):self.assertIsNone(syntax_check('javascript','not javascript')['valid'])
++ def test_xml_valid_no_exec(self):self.assertTrue(syntax_check('xml','<config/>')['valid'])
++ def test_archived_script_not_overwritten(self):
++  rec=self.record();self.store.update(rec['key'],{'s_status':'retired'});rec=self.record(rec['key']);self.assertCode('script_retired',lambda:self.op('PATCH','/script',key=rec['key'],revision=rec['revision'],values=self.values()))
++
++if __name__=='__main__':unittest.main()
+diff --git a/tests/native_ui/test_startup_09.py b/tests/native_ui/test_startup_09.py
+new file mode 100644
+index 0000000..071478d
+--- /dev/null
++++ b/tests/native_ui/test_startup_09.py
+@@ -0,0 +1,88 @@
++"""Regression for the reported Api NameError and trusted class configuration."""
++import importlib.util
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++import tempfile
++from types import ModuleType, SimpleNamespace
++import unittest
++from unittest.mock import patch
++ROOT=Path(__file__).resolve().parents[2]
++sys.path.insert(0,str(ROOT/'src'));sys.path.insert(0,str(ROOT/'src/client'))
++from pyasm.common import Common, Container
++from tactic.core.widget_config import WidgetConfig, WidgetConfigView
++spec=importlib.util.spec_from_file_location('context_registry_test',ROOT/'src/pyasm/web/context_registry.py')
++registry=importlib.util.module_from_spec(spec);spec.loader.exec_module(registry)
++
++class Startup09(unittest.TestCase):
++ def test_original_and_fixed_real_registration_in_clean_process(self):
++  result=subprocess.run([sys.executable,'-W','ignore',str(ROOT/'tests/native_ui/check_startup_contexts_09.py')],capture_output=True,text=True,timeout=40)
++  self.assertEqual(result.returncode,0,result.stdout+result.stderr)
++  self.assertIn('Original default context Api instantiated',result.stdout)
++  self.assertIn('Site-specific XML-RPC tooling',result.stdout)
++ def test_project_attribute_assignment(self):
++  root=SimpleNamespace();p=registry.attach_project(root,'project-01',SimpleNamespace,'site_1');self.assertIs(registry.get_project(root,'project-01','site_1'),p)
++ def test_names_are_data_not_code(self):
++  for value in ('x;print(1)','x.y','../x','__dict__','',None):
++   with self.subTest(value=value),self.assertRaises(ValueError):registry.route_segment(value)
++ def test_context_directory_and_unknown_base(self):
++  self.assertEqual(registry.load_contexts('/does/not/exist','sites','x'),{})
++  with self.assertRaises(ValueError):registry.load_contexts('/does/not/exist','attacker','x')
++ def test_import_and_constructor_errors_propagate(self):
++  with tempfile.TemporaryDirectory() as tmp:
++   Path(tmp,'Api.py').write_text('unused')
++   with patch.object(registry.importlib,'import_module',side_effect=ModuleNotFoundError('inner dependency')):
++    with self.assertRaisesRegex(ModuleNotFoundError,'inner dependency'):registry.load_contexts(tmp,'sites','x')
++   with patch.object(registry.importlib,'import_module',return_value=SimpleNamespace()):
++    with self.assertRaisesRegex(ImportError,'must export Api'):registry.load_contexts(tmp,'sites','x')
++   with patch.object(registry.importlib,'import_module',return_value=SimpleNamespace(Api=lambda:(_ for _ in ()).throw(RuntimeError('ctor')))):
++    with self.assertRaisesRegex(RuntimeError,'ctor'):registry.load_contexts(tmp,'sites','x')
++ def test_classes_from_several_exec_calls_are_not_needed(self):
++  with tempfile.TemporaryDirectory() as tmp:
++   for name in ('Api','XMLRPC','UploadServer','__init__'):Path(tmp,name+'.py').write_text('unused')
++   with patch.object(registry.importlib,'import_module',side_effect=lambda name:SimpleNamespace(**{name.rsplit('.',1)[-1]:SimpleNamespace})):
++    self.assertEqual(list(registry.load_contexts(tmp,'sites','x')),['Api','UploadServer','XMLRPC'])
++ def test_probe_bat_invokes_new_flag_utf8(self):
++  s=(ROOT/'CHECK_STARTUP.bat').read_text();self.assertIn('--check-startup',s);self.assertIn('-X utf8',s)
++ def test_no_exec_eval_in_current_context_registration(self):
++  import ast
++  t=ast.parse((ROOT/'src/pyasm/web/cherrypy30_startup.py').read_text());m=next(n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='register_project')
++  self.assertFalse(any(isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id in ('exec','eval') for n in ast.walk(m)))
++
++class ClassResolution09(unittest.TestCase):
++ def setUp(self):
++  Container.create();self.mod=ModuleType('config_test_mod09')
++  class Layout:
++   @staticmethod
++   def get_default_display_handler(name):return 'native-test.'+name
++   @staticmethod
++   def has_config():return True
++   @staticmethod
++   def get_default_action():return 'OriginalSpecialAction'
++  self.mod.Layout=Layout;self.patch=patch.dict(sys.modules,{'config_test_mod09':self.mod});self.patch.start()
++ def tearDown(self):self.patch.stop()
++ def test_resolve_without_constructor(self):self.assertIs(Common.resolve_class('config_test_mod09.Layout'),self.mod.Layout)
++ def test_no_eval_expression_allowed(self):
++  for path in ('os.system("echo bad")','os..path','','x; x',None):
++   with self.subTest(path=path),self.assertRaises(ValueError):Common.resolve_class(path)
++ def test_missing_module_exception_preserved(self):
++  with self.assertRaises(ModuleNotFoundError):Common.resolve_class('impossible_module_09.Layout')
++ def test_missing_class_exception_preserved(self):
++  with self.assertRaises(AttributeError):Common.resolve_class('config_test_mod09.Absent')
++ def test_plugin_loader_contract(self):
++  plugin=ModuleType('tactic.plugins');plugin.import_plugin=lambda name:SimpleNamespace(inside=SimpleNamespace(Layout=self.mod.Layout))
++  with patch.dict(sys.modules,{'tactic.plugins':plugin}):self.assertIs(Common.resolve_class('tactic.plugins.demo.inside.Layout'),self.mod.Layout)
++ def test_short_name_resolution_order(self):
++  with patch('importlib.import_module',side_effect=lambda n:SimpleNamespace(Foo=n)):
++   self.assertEqual(Common.resolve_class('Foo'),'pyasm.widget')
++ def test_default_display_and_edit_use_original_class(self):
++  c=WidgetConfigView(search_type=None,view='table',configs=[WidgetConfig.get(xml='<config><table><element name="cost"/></table></config>',view='table')])
++  with patch.object(c,'get_layout_handler',return_value='config_test_mod09.Layout'):
++   self.assertEqual(c.get_display_handler('cost'),'native-test.cost');self.assertEqual(c.get_edit_handler('cost'),'native-test.cost')
++ def test_dynamic_has_config_uses_imported_class_on_python313(self):
++  c=WidgetConfig.get(xml='<config><table><element name="nested"><display class="config_test_mod09.Layout"><config><element name="name"/></config></display></element></table></config>',view='table')
++  self.assertIn('config_xml',c.get_display_options('nested'))
++ def test_original_default_action_not_silently_lost(self):self.assertEqual(Common.resolve_class('config_test_mod09.Layout').get_default_action(),'OriginalSpecialAction')
++if __name__=='__main__':unittest.main()
+diff --git a/tests/native_ui/test_view_save_09.py b/tests/native_ui/test_view_save_09.py
+new file mode 100644
+index 0000000..f0ebfda
+--- /dev/null
++++ b/tests/native_ui/test_view_save_09.py
+@@ -0,0 +1,40 @@
++"""Production ViewService regression for the misplaced undefined opts block."""
++from contextlib import ExitStack
++from types import SimpleNamespace
++import unittest
++import sys
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[2]
++sys.path[:0]=[str(ROOT/"src"),str(ROOT/"src/client")]
++from unittest.mock import patch
++from tactic.core.config_model import ConfigModel,ConfigSource,parse_xml,view_node
++from tactic.ui_api.view_service import ViewService
++from tactic.ui_api.contracts import ApiError
++XML='<config extension="keep"><table><element name="name" custom="keep"/><element name="cost"/></table><other><element name="unrelated"/></other></config>'
++class ViewSave09(unittest.TestCase):
++ def setUp(self):
++  self.values={'config':XML};self.committed=False;self.stack=ExitStack()
++  self.model=ConfigModel('table',[ConfigSource(XML,'table','test DB config')])
++  row=SimpleNamespace(get_value=lambda n:self.values.get(n),set_value=lambda k,v:self.values.update({k:v}),commit=lambda:setattr(self,'committed',True),get_search_key=lambda:'config/widget_config?code=TEST')
++  query=SimpleNamespace(add_filter=lambda *a:None,add_order_by=lambda *a:None,get_sobject=lambda:row)
++  self.stack.enter_context(patch('pyasm.search.Search',return_value=query))
++  self.stack.enter_context(patch('pyasm.common.Environment.get_security',return_value=SimpleNamespace(is_admin=lambda:True)))
++  self.stack.enter_context(patch('pyasm.common.Environment.get_user_name',return_value='fixture'))
++  self.backend=SimpleNamespace(require_type=lambda st:None,_model=lambda *a:self.model,_write=lambda cb:cb())
++ def tearDown(self):self.stack.close()
++ def save(self,operations,**kwargs):
++  data=dict(search_type='fixture/item',view='table',revision=self.model.fingerprint(),operations=operations);data.update(kwargs)
++  return ViewService.view_operation(self.backend,'PATCH',data)
++ def test_real_view_save_does_not_reference_undefined_opts(self):
++  self.assertTrue(self.save([{'op':'update','index':0,'attributes':{'title':'Название'}}])['saved']);self.assertTrue(self.committed)
++ def test_preserves_unrelated_view_unknown_attrs_and_order(self):
++  self.save([{'op':'update','index':0,'attributes':{'title':'Новое'}}]);root=parse_xml(self.values['config']);self.assertEqual(root.get('extension'),'keep');self.assertEqual(view_node(root,'other')[0].get('name'),'unrelated');self.assertEqual(view_node(root,'table')[0].get('custom'),'keep')
++ def test_invalid_operation_does_not_commit(self):
++  with self.assertRaises(ApiError):self.save([{'op':'unknown'}])
++  self.assertFalse(self.committed);self.assertEqual(self.values['config'],XML)
++ def test_stale_view_revision_does_not_commit(self):
++  with self.assertRaises(ApiError):self.save([],revision='stale')
++  self.assertFalse(self.committed)
++ def test_cannot_write_another_persons_override(self):
++  with self.assertRaises(ApiError):self.save([],login='another')
++  self.assertFalse(self.committed)
+diff --git a/tools/local/launch.py b/tools/local/launch.py
+index 000cd5a..b30e258 100644
+--- a/tools/local/launch.py
++++ b/tools/local/launch.py
+@@ -155,6 +155,7 @@ def main(argv=None) -> int:
+     parser.add_argument('--legacy', action='store_true')
+     group = parser.add_mutually_exclusive_group()
+     group.add_argument('--check', action='store_true')
++    group.add_argument('--check-startup', action='store_true', help='Run original startup/context registration without listening; may perform original startup initialization')
+     group.add_argument('--init-sqlite', action='store_true')
+     group.add_argument('--upgrade-local', action='store_true')
+     group.add_argument('--check-local-db', action='store_true', help='Read-only managed database structure check')
+@@ -202,9 +203,10 @@ def main(argv=None) -> int:
+     if marker.exists() and json.loads(marker.read_text(encoding='utf-8')).get('state') != 'upgraded':
+         raise RuntimeError('The original local seed has not been upgraded successfully. Run UPGRADE_LOCAL_SQLITE.bat and review errors first.')
+     # Check port before any server startup side effects or browser opening.
+-    with socket.socket() as sock:
+-        try: sock.bind(('127.0.0.1', args.port))
+-        except OSError as exc: raise RuntimeError('Port %d is already in use; use --port N' % args.port) from exc
++    if not args.check_startup:
++        with socket.socket() as sock:
++            try: sock.bind(('127.0.0.1', args.port))
++            except OSError as exc: raise RuntimeError('Port %d is already in use; use --port N' % args.port) from exc
+     if os.name != 'nt' and hasattr(os, 'getuid') and os.getuid() == 0:
+         raise RuntimeError('Do not run TACTIC as root; use an unprivileged account')
+     print('Config:', config)
+@@ -225,6 +227,28 @@ def main(argv=None) -> int:
+         server.set_config('global', 'request.show_tracebacks', False)
+         server.set_config('global', 'engine.autoreload.on', False)
+         server.set_config('global', 'log.screen', True)
++        if args.check_startup:
++            # Constructor starts the original cache scheduler. Stop it before
++            # returning from this diagnostic-only process; do not run periodic
++            # work merely because a check was requested.
++            from pyasm.common import Container
++            scheduler = Container.get('Scheduler')
++            if scheduler is not None:
++                scheduler.stop()
++                thread = getattr(scheduler, 'thread', None)
++                if thread is not None: thread.join(timeout=5)
++            from startup_probe import inspect_registered_services
++            from tactic.ui_api.mount import install as install_native_ui
++            install_native_ui()
++            report = inspect_registered_services(server)
++            output = ROOT / '.runtime/startup-check.json'
++            output.parent.mkdir(parents=True, exist_ok=True)
++            output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
++            print(json.dumps(report, ensure_ascii=False, indent=2))
++            print('Original startup/context registration passed; no listening socket started.')
++            print('Report:', output)
++            print('This is not an authenticated HTTP request or a read-only database check.')
++            return 0
+         server.execute()
+     return 0
+ 
+diff --git a/tools/local/startup_probe.py b/tools/local/startup_probe.py
+new file mode 100644
+index 0000000..9fb4237
+--- /dev/null
++++ b/tools/local/startup_probe.py
+@@ -0,0 +1,28 @@
++"""Inspect objects produced by actual CherryPyStartup, without starting a listener."""
++from __future__ import annotations
++import platform
++
++
++def inspect_registered_services(server):
++    import cherrypy
++    from tactic.ui_api.version import BUILD_VERSION
++    required = ('Api', 'XMLRPC', 'UploadServer')
++    root = getattr(getattr(cherrypy.root, 'tactic', None), 'default', None)
++    if root is None:
++        raise RuntimeError('Default TACTIC project was not registered')
++    app = cherrypy.tree.apps.get('')
++    services = []
++    for name in required:
++        obj = getattr(root, name, None)
++        if obj is None:
++            raise RuntimeError('Missing original TACTIC service: ' + name)
++        path = '/tactic/default/' + name
++        configured = dict(getattr(app, 'config', {}).get(path, {}))
++        if name in ('Api', 'XMLRPC') and configured.get('tools.xmlrpc.on') is not True:
++            raise RuntimeError('XML-RPC tool is not enabled in mounted application: ' + path)
++        services.append({'path': path, 'class': type(obj).__module__ + '.' + type(obj).__name__,
++                         'xmlrpc_enabled': configured.get('tools.xmlrpc.on') is True})
++    return {'python': platform.python_version(), 'ui_version': BUILD_VERSION,
++            'registered': services, 'native_api_mounted': '/api/ui/v2' in cherrypy.tree.apps,
++            'listener_started': False, 'database_login_tested': False,
++            'notice': 'Original startup ran. No HTTP login or CRUD was performed.'}
+diff --git a/tools/native_ui/build.cjs b/tools/native_ui/build.cjs
+index 286502c..cee920a 100644
+--- a/tools/native_ui/build.cjs
++++ b/tools/native_ui/build.cjs
+@@ -10,7 +10,7 @@ if(!/^\d+\.\d+\.\d+-source-fork$/.test(version))throw Error('Invalid native vers
+ const runtime=fs.readFileSync(path.join(out,'vendor','vue.global.prod.js'),'utf8');
+ const context={console};vm.createContext(context);vm.runInContext(runtime,context);
+ const Vue=context.Vue;if(!Vue?.version?.startsWith('3.'))throw Error('Vue 3 runtime missing');
+-const names=['SidebarNode','WidgetCell','ConfigAudit','CsvExport','FieldInput','ConfiguredForm','CollectionPanel','WorkHoursPanel','ConfiguredTable','FilterGroup','AdvancedFilter','RelationTreeRow','RelationTree','TaskPanel','RelationshipEditor','HistoryPanel','ConfigEditor','GraphEditor','MessageContent','MessageCenter','SubscriptionPanel','UploadQueue','FilePanel','RecordInspector','GroupMembership','SearchTypes','ViewDesigner','TaskTimeline','AdminPanel','App'];
++const names=['SidebarNode','WidgetCell','ConfigAudit','CsvExport','FieldInput','ConfiguredForm','CollectionPanel','WorkHoursPanel','ConfiguredTable','FilterGroup','AdvancedFilter','RelationTreeRow','RelationTree','TaskPanel','RelationshipEditor','HistoryPanel','ConfigEditor','GraphEditor','MessageContent','MessageCenter','SubscriptionPanel','UploadQueue','FilePanel','RecordInspector','GroupMembership','SearchTypes','ViewDesigner','TaskTimeline','ScriptEditor','AdminPanel','App'];
+ let result=`/* TACTIC Vue ${version}; templates precompiled with Vue ${Vue.version}. See vendor/VUE_LICENSE.txt. */\n(function(){\nconst _Vue = Vue;\n`;
+ let api=fs.readFileSync(path.join(src,'api.js'),'utf8').replace('export class HttpError','class HttpError').replace('export default ','return ');
+ result+=`const api = (function(){\n${api}\n})();\n`;

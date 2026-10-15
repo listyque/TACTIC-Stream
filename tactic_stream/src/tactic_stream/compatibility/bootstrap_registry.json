@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "code": "sthpw/project",
+    "search_type": "sthpw/project",
+    "namespace": "sthpw",
+    "description": "Projects",
+    "database": "sthpw",
+    "table_name": "project",
+    "class_name": "pyasm.biz.Project",
+    "title": "Projects",
+    "schema": null,
+    "color": null
+  },
+  {
+    "id": 3,
+    "code": "sthpw/login",
+    "search_type": "sthpw/login",
+    "namespace": "sthpw",
+    "description": "List of users",
+    "database": "sthpw",
+    "table_name": "login",
+    "class_name": "pyasm.security.Login",
+    "title": "Users",
+    "schema": "public",
+    "color": null
+  },
+  {
+    "id": 4,
+    "code": "sthpw/search_object",
+    "search_type": "sthpw/search_object",
+    "namespace": "sthpw",
+    "description": "Search Types",
+    "database": "sthpw",
+    "table_name": "search_object",
+    "class_name": "pyasm.search.SearchType",
+    "title": "Search Objects",
+    "schema": "public",
+    "color": null
+  },
+  {
+    "id": 11,
+    "code": "sthpw/login_in_group",
+    "search_type": "sthpw/login_in_group",
+    "namespace": "sthpw",
+    "description": "Users in groups",
+    "database": "sthpw",
+    "table_name": "login_in_group",
+    "class_name": "pyasm.security.LoginInGroup",
+    "title": "Users in groups",
+    "schema": "public",
+    "color": null
+  },
+  {
+    "id": 22,
+    "code": "sthpw/login_group",
+    "search_type": "sthpw/login_group",
+    "namespace": "sthpw",
+    "description": "List of groups that user belong to",
+    "database": "sthpw",
+    "table_name": "login_group",
+    "class_name": "pyasm.security.LoginGroup",
+    "title": "Groups",
+    "schema": "public",
+    "color": null
+  },
+  {
+    "id": 28,
+    "code": "sthpw/ticket",
+    "search_type": "sthpw/ticket",
+    "namespace": "sthpw",
+    "description": "Valid login tickets to enter the system",
+    "database": "sthpw",
+    "table_name": "ticket",
+    "class_name": "pyasm.security.Ticket",
+    "title": "Ticket",
+    "schema": "public",
+    "color": null
+  }
+]

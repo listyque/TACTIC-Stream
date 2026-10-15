@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "scenarios": [
+    {
+      "scenario": "Custom Layout is a dedicated section editor",
+      "passed": true
+    },
+    {
+      "scenario": "Local Ace loads without CDN",
+      "passed": true
+    },
+    {
+      "scenario": "Editing layout stages a draft",
+      "passed": true
+    },
+    {
+      "scenario": "Static preview renders markup in isolated shadow",
+      "passed": true
+    },
+    {
+      "scenario": "Static preview does not execute scripts or behavior",
+      "passed": true
+    },
+    {
+      "scenario": "Preview does not write original widget_config",
+      "passed": true
+    },
+    {
+      "scenario": "Ace Ctrl+S command persists original layout",
+      "passed": true
+    },
+    {
+      "scenario": "HTML edit keeps saved Mako/behaviors intact",
+      "passed": true
+    },
+    {
+      "scenario": "Saved layout opens original native child table",
+      "passed": true
+    },
+    {
+      "scenario": "Nested table reads original user rows",
+      "passed": true
+    },
+    {
+      "scenario": "Stored behavior still not executed in opened layout",
+      "passed": true
+    },
+    {
+      "scenario": "Manage Views shows inherited and DB layers",
+      "passed": true
+    },
+    {
+      "scenario": "Manage Views save writes exact selected view record",
+      "passed": true
+    },
+    {
+      "scenario": "Manage Views opens existing original-config column designer",
+      "passed": true
+    },
+    {
+      "scenario": "Managed view opens original table with configured title",
+      "passed": true
+    },
+    {
+      "scenario": "Saved Python uses Ace Python mode",
+      "passed": true
+    },
+    {
+      "scenario": "Script diff compares pending text with saved version",
+      "passed": true
+    },
+    {
+      "scenario": "Cannot run unsaved editor text",
+      "passed": true
+    },
+    {
+      "scenario": "Script save persists original custom_script",
+      "passed": true
+    },
+    {
+      "scenario": "Original saved Python execution returns real result",
+      "passed": true
+    },
+    {
+      "scenario": "Ace search works on real source",
+      "passed": true
+    },
+    {
+      "scenario": "SearchType manager restores real physical fields",
+      "passed": true
+    },
+    {
+      "scenario": "Column references do not pretend to allow unsafe DDL",
+      "passed": true
+    },
+    {
+      "scenario": "CSV header maps existing original form fields",
+      "passed": true
+    },
+    {
+      "scenario": "CSV preview exposes trimmed new row",
+      "passed": true
+    },
+    {
+      "scenario": "UI imports through original CsvImportCmd",
+      "passed": true
+    },
+    {
+      "scenario": "Imported SObject appears in original configured table",
+      "passed": true
+    },
+    {
+      "scenario": "Original static endpoint serves ace.js",
+      "passed": true
+    },
+    {
+      "scenario": "Original static endpoint serves mode-python.js",
+      "passed": true
+    },
+    {
+      "scenario": "Original static endpoint serves mode-html.js",
+      "passed": true
+    },
+    {
+      "scenario": "Original static endpoint serves ext-searchbox.js",
+      "passed": true
+    },
+    {
+      "scenario": "No JavaScript page errors",
+      "passed": true
+    }
+  ],
+  "backend": "original TACTIC/SQLite with fixture records; license signature explicitly isolated by runner",
+  "native_navigation": false,
+  "navigation_error": "Page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at http://127.0.0.1:49515/tactic/admin/\nCall log:\n  - navigating to \"http://127.0.0.1:49515/tactic/admin/\", waiting until \"networkidle\"\n",
+  "bridge": true,
+  "bridge_assets": "packaged Ace modes/themes and stylesheet including shadow CSS loaded as content",
+  "page_errors": []
+}

@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "Accept fill stages both rows, never mutates source rows",
+      "passed": true
+    },
+    {
+      "name": "Existing independent draft survives fill",
+      "passed": true
+    },
+    {
+      "name": "Fill back to original removes old pending field",
+      "passed": true
+    },
+    {
+      "name": "Rejected final JSON cannot partially stage prefix",
+      "passed": true
+    },
+    {
+      "name": "Changing drafts after preview invalidates acceptance",
+      "passed": true
+    },
+    {
+      "name": "Changing table definition invalidates acceptance",
+      "passed": true
+    },
+    {
+      "name": "Changing fill input clears previous preview",
+      "passed": true
+    },
+    {
+      "name": "Pending JSON NULL remains NULL",
+      "passed": true
+    },
+    {
+      "name": "Large integer input remains exact through staging",
+      "passed": true
+    },
+    {
+      "name": "No write while a fill dialog is open",
+      "passed": true
+    },
+    {
+      "name": "Same-tick duplicate submit emits exactly once",
+      "passed": true
+    },
+    {
+      "name": "Save sends snapshot rather than live mutable dirty object",
+      "passed": true
+    },
+    {
+      "name": "Failed/finished request releases form latch",
+      "passed": true
+    },
+    {
+      "name": "Read-only form never submits",
+      "passed": true
+    }
+  ]
+}

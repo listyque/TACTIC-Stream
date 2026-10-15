@@ -1,0 +1,182 @@
+[
+  {
+    "path": "NATIVE_UI_VERSION",
+    "status": "modified",
+    "before_sha256": "8f50a251b2e53316450daaaece743b78d53d38d491de193bd1afabba0a18f7ae",
+    "after_sha256": "29d707027ad99264288617ab4835a3704d6c95f9398523c5494206c942be6f11"
+  },
+  {
+    "path": "frontend/package.json",
+    "status": "modified",
+    "before_sha256": "e53260801a51edba214f70d472d70c6ae83017439f6a4523e7468c2b62ae6c40",
+    "after_sha256": "079cd512067e9cb3481fc1db563a8acb1761dbc938cd107c1081013d1f70298b"
+  },
+  {
+    "path": "frontend/src/App.vue",
+    "status": "modified",
+    "before_sha256": "2efc822a5dcfd50801dc18a07c91f3c0a512051dc0a80875616fc5f3fa87f9d4",
+    "after_sha256": "0ca31e9ce529c88bc04c7ad4138603455010018a3a7fc774c837840161ee2072"
+  },
+  {
+    "path": "frontend/src/api.js",
+    "status": "modified",
+    "before_sha256": "96b56e3ecec21c1ecba585a3fd760f02f019b7b20956e9b483f5788352f57ea1",
+    "after_sha256": "954d4926360e2c14d6dd3d1c8703e49480a64e9a8cb89c16ccbde27756e5dbc1"
+  },
+  {
+    "path": "frontend/src/components/ConfiguredForm.vue",
+    "status": "modified",
+    "before_sha256": "456978ac9292d22624261a43026fa2d03e47cc8c596a1cd7c8906349d50da5b6",
+    "after_sha256": "abdec0f52fc80f91fee9aec7648c1b868cc0e0f9084aa4d85e65671bb7d5334d"
+  },
+  {
+    "path": "frontend/src/components/ConfiguredTable.vue",
+    "status": "modified",
+    "before_sha256": "fb104da620b1937cc21e4631fb03d1e56a59d30a2945111eec245a7705b662e7",
+    "after_sha256": "86a7f72b3560d702a9f5db72926108e86d39bb5bb18431064d488adf17523881"
+  },
+  {
+    "path": "frontend/src/components/ConfiguredTabs.vue",
+    "status": "modified",
+    "before_sha256": "7ac462c487b3dfc4e7900ad140eb2fa99f9575379c990a61bcafe740a38dea2c",
+    "after_sha256": "0afb987fd6fdff22041e2d1c2430c1d85ac61d5ebc8e0c5f834fe085fd2a02ff"
+  },
+  {
+    "path": "frontend/src/components/ContextMenu.vue",
+    "status": "modified",
+    "before_sha256": "1674efa6cbc212c3a8a615990e2896122c8b57d203df5c950c544a85b333ce74",
+    "after_sha256": "b79a52048e5a29a3b4c1fc00ddaf06088ec3769baa77d1f2bef3bc06e58ffc50"
+  },
+  {
+    "path": "frontend/src/components/GraphEditor.vue",
+    "status": "modified",
+    "before_sha256": "a051c2c82051332b64892ebf9c51456befd328f70024e561011dfd99156d45ff",
+    "after_sha256": "79d0f26e42ccc1e17735b7b56b6134cb61bb81b7a983fbc5dce1e7bc8fd0e18b"
+  },
+  {
+    "path": "frontend/src/components/WidgetHost.vue",
+    "status": "modified",
+    "before_sha256": "c216c5cc2283b920ca5a64bacf5b7920b6166453209beea1c2ac61c29178df22",
+    "after_sha256": "4532eb52673d6f781845ce6bbf5310d74265d47027bc6b4feb96ae5f903947de"
+  },
+  {
+    "path": "src/pyasm/command/command.py",
+    "status": "modified",
+    "before_sha256": "f255242f2059c88bcc2b7534660317cc7c9f5a91f42bfca8d5c94466a1ba98f7",
+    "after_sha256": "90af0a41673bf2369456852fcc54ae1e14c437df8a281988c1ecf08f44243b98"
+  },
+  {
+    "path": "src/tactic/core/config_model.py",
+    "status": "modified",
+    "before_sha256": "565e14c39c4b1b00fb872923b15173280453d78f9a78811a6d7bf1174068babd",
+    "after_sha256": "8e45e7ac48e2ee41b61529eb95723c9ebae4c52bdd8b9b6f804c830980b87a1d"
+  },
+  {
+    "path": "src/tactic/ui_api/action_log.py",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "73f9d76fe2442943c162ed2968189a814800af36de271049a580a1f991a9f01e"
+  },
+  {
+    "path": "src/tactic/ui_api/api.py",
+    "status": "modified",
+    "before_sha256": "79ecfbd358e02ddaca1120b9bad9a46c2c658dee94ed668c184b632fcff36f93",
+    "after_sha256": "2f7928f76a581d00defeccd8b045e53083f4ccc7353c3e4773c89d944ca38ef1"
+  },
+  {
+    "path": "src/tactic/ui_api/config_backend.py",
+    "status": "modified",
+    "before_sha256": "e269c8888536690ccec524ea71773d099c3a4f68ba02ffc335844c2998cfba62",
+    "after_sha256": "b3b5c3627d3869922c8b55be04ff649c2f62d76979ca11722f30a7dfd19eb969"
+  },
+  {
+    "path": "src/tactic/ui_api/extended_backend.py",
+    "status": "modified",
+    "before_sha256": "6b89dd49d3eab28ac1877d26cf98a4dde1ff526acab3968a23a5a913c5ef0f6f",
+    "after_sha256": "d130f430f5a7e809858bc9726760f13b1a0680a29d95816528a400ac0f621c9e"
+  },
+  {
+    "path": "src/tactic/ui_api/global_admin_service.py",
+    "status": "modified",
+    "before_sha256": "330e8578e64f61703a42c5bbafb5c2ebd91d8b83d6f3ceb790e07a9d4761a040",
+    "after_sha256": "fba362f56a5bebe36f6fbaab599e832d4c1a04f8bf03f66fb0dfe16742ce40d7"
+  },
+  {
+    "path": "src/tactic/ui_api/graph_service.py",
+    "status": "modified",
+    "before_sha256": "c4fbeb8e4f8e49e19e8513a8f7a80c7c40822b2cde1a0f44c4b378f578f2e83a",
+    "after_sha256": "c203b4d6c6996989867de054492d020d84deb7ca895ddb2044cedb8f76023f51"
+  },
+  {
+    "path": "src/tactic/ui_api/mount.py",
+    "status": "modified",
+    "before_sha256": "b0d13647af3d423e9e96f09efec12d348370989ebfc09904e9ef2463cbf080ac",
+    "after_sha256": "42a25278aaa8dc60d6f6bc0de9bc1c4e3ac7438ab89ea9eb2a43b952d120eb89"
+  },
+  {
+    "path": "src/tactic/ui_api/table_edit_service.py",
+    "status": "modified",
+    "before_sha256": "8d66c8447a47161633b320082253def83d1c696c3922da6dd059fc59a15bee95",
+    "after_sha256": "e1e3998aa8e78b8646003cee9a0615332c267b76366af927cb2fa5a2ac1d0c2d"
+  },
+  {
+    "path": "src/tactic/ui_api/tactic_backend.py",
+    "status": "modified",
+    "before_sha256": "d04bfa68344fd36b3c9a20d5f87b518a2311bc049c28cfe3788c616df8092db0",
+    "after_sha256": "7288dbbfdcb57bbb72aa63ccb29fbdcae05518c6c88ef1de1a4e4df778fd76c2"
+  },
+  {
+    "path": "src/tactic/ui_api/web/app.js",
+    "status": "modified",
+    "before_sha256": "5d47d11f5cb7c8b6f93dcab00f6462dc1418c6ccdd33ecdb8c402b80ed090b56",
+    "after_sha256": "bdb0a2c9fdedd5cf9d00f70d89f8006362e0274dc43fdd9f1608a2391e0e95ae"
+  },
+  {
+    "path": "src/tactic/ui_api/web/build-manifest.json",
+    "status": "modified",
+    "before_sha256": "eaec8bb6f19f27efb5fae4bc7110607d67bd4c6daa5b97699d30b114d7b33269",
+    "after_sha256": "d892adb7a3138f89f1cd4670b5c601a3c7a423b96e2e716c8fa5382bb823e3db"
+  },
+  {
+    "path": "tests/native_ui/run_browser_016.py",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "6272cceb5a7428ed7b03497a1cdc7b5c3b6246cb5e3dc9d758f8a8d500ab2a79"
+  },
+  {
+    "path": "tests/native_ui/run_cluster_016.py",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "9712f5d67a85293a279db85b5cc8163b2e596ed657d669385bfdfa61b6117c47"
+  },
+  {
+    "path": "tests/native_ui/run_http_016.py",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "abfe1f201597583baeaeff540cad7707fbf7aca6b038f5fe00040d53dbf1f9d1"
+  },
+  {
+    "path": "tests/native_ui/test_action_log_016.cjs",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "b43b59521d036b519840003832fdb3203dcd56aeccf455251ea62c02ca4ba933"
+  },
+  {
+    "path": "tests/native_ui/test_diagnostics_016.py",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "2215a08c85956d11adf9586791981c91264e12f930d73843d8dd68aabcd7ec18"
+  },
+  {
+    "path": "tests/native_ui/test_grid_state_012.cjs",
+    "status": "modified",
+    "before_sha256": "ed08cbe9774db84534e8323793deded8c72e893ce567ebe31cb66ecd24a105a3",
+    "after_sha256": "cbfcd9bd142486a45188605d933343b4d2407cfe150c29f7afe566c1dcac05e1"
+  },
+  {
+    "path": "tools/local/cluster.py",
+    "status": "modified",
+    "before_sha256": "1430e60aaf5d6d94f428eb1b3cb63ef90210dbf39d4e92221250a7b51e60eda4",
+    "after_sha256": "238475a0180b537078017e9b6d4b89da707e25b3d702cea943a048a3152931c4"
+  }
+]

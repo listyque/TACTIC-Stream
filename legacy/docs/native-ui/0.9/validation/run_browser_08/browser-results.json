@@ -1,0 +1,55 @@
+{
+  "backend": "actual stock seed metadata, TEST request/auth collaborators",
+  "transport": "explicit Python HTTP bridge: substitutes fetch/cookies/URL/history/storage; original Blob download",
+  "scenarios": [
+    {
+      "scenario": "Original widget-config admin roots unchanged",
+      "passed": true
+    },
+    {
+      "scenario": "Original SystemInfoWdg opens extended native diagnostics",
+      "passed": true
+    },
+    {
+      "scenario": "Runtime version shown from actual build version",
+      "passed": true
+    },
+    {
+      "scenario": "Incomplete real stock seed is not presented as healthy",
+      "passed": true
+    },
+    {
+      "scenario": "Missing message history table diagnosed explicitly",
+      "passed": true
+    },
+    {
+      "scenario": "Original unprefixed widget_config and missing columns retained in report",
+      "passed": true
+    },
+    {
+      "scenario": "No browser DDL/migration action is exposed",
+      "passed": true
+    },
+    {
+      "scenario": "Repeated read-only check does not mutate the seed or silently repair data",
+      "passed": true
+    },
+    {
+      "scenario": "No passwords or config dump displayed",
+      "passed": true
+    },
+    {
+      "scenario": "Schema diagnostics fit mobile viewport",
+      "passed": true
+    },
+    {
+      "scenario": "No JS errors or legacy HTML renderer calls",
+      "passed": true
+    },
+    {
+      "scenario": "Logout clears diagnostics view",
+      "passed": true
+    }
+  ],
+  "js_errors": []
+}

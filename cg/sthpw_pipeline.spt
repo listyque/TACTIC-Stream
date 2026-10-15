@@ -1,0 +1,361 @@
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends/__TEMPLATE__""")
+insert.set_value('name', """Template Processes""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('timestamp', """2018-12-07 20:13:43""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends/assets""")
+insert.set_value('color', """#137300""")
+insert.set_value('data', """{"node_index": 0}""")
+insert.set_value('name', """3D Asset""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="model" type="manual" xpos="100" ypos="100" completion="25" task_pipeline="niki_friends/light" assigned_login_group="modeller" supervisor_login_group="supervisor" process_code="SPT_PROCESS00163" color="#e45858"/>
+  <process name="rig" type="manual" xpos="502" ypos="104" completion="90" task_pipeline="niki_friends/light" supervisor_login_group="supervisor" assigned_login_group="rigger" process_code="SPT_PROCESS00165" color="#575cea"/>
+  <process name="publish" type="manual" xpos="708" ypos="106" task_pipeline="niki_friends/publish" completion="100" assigned_login_group="rigger" supervisor_login_group="supervisor" process_code="SPT_PROCESS00166" color="#44d8fd"/>
+  <process name="cache" type="manual" xpos="714" ypos="190" process_code="SPT_PROCESS00238" color="#4d3e2e"/>
+  <connect from="rig" to="publish"/>
+  <connect from="model" to="texture"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """cg/assets""")
+insert.set_value('timestamp', """2019-04-07 00:57:15""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends/assets_2D""")
+insert.set_value('color', """#f03d3d""")
+insert.set_value('data', """{"node_index": 0}""")
+insert.set_value('name', """2D Asset""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="publish" type="manual" xpos="100" ypos="100" task_pipeline="niki_friends/publish" completion="100" assigned_login_group="rigger" supervisor_login_group="supervisor" process_code="SPT_PROCESS00448" color="#44d8fd"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """cg/assets""")
+insert.set_value('timestamp', """2024-01-23 23:26:26.141218""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends/complex/__TEMPLATE__""")
+insert.set_value('name', """Template Processes""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('timestamp', """2017-05-24 12:26:07""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends/complex/shot""")
+insert.set_value('color', """#9da349""")
+insert.set_value('data', """{"node_index": 0}""")
+insert.set_value('name', """Shot""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="layout" type="manual" xpos="100" ypos="100"/>
+  <process name="animation" type="manual" xpos="307" ypos="139"/>
+  <process name="light" type="manual" xpos="492" ypos="179"/>
+  <process name="cache" type="manual" xpos="689" ypos="243"/>
+  <connect from="animation" to="light"/>
+  <connect from="layout" to="animation"/>
+  <connect from="light" to="cache"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """cg/shot""")
+insert.set_value('timestamp', """2016-11-16 10:47:15""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('category', """Uncategorized""")
+insert.set_value('code', """niki_friends/dialog""")
+insert.set_value('color', """#d7bccf""")
+insert.set_value('data', """{"node_index": 0}""")
+insert.set_value('name', """Dialog""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="script" type="manual" xpos="100" ypos="252" completion="10" supervisor_login_group="supervisor" color="#b54f3e" label="Сценарий" task_pipeline="niki_friends/light" assigned_login_group="scriptwriter" process_code="SPT_PROCESS00264"/>
+  <process name="storyboard" type="manual" xpos="282" ypos="367" task_pipeline="niki_friends/light" assigned_login_group="storyboard" supervisor_login_group="supervisor" duration="4" color="#b5cc60" label="Сториборд" process_code="SPT_PROCESS00265"/>
+  <process name="assets" type="progress" xpos="384" ypos="245" process_code="SPT_PROCESS00266"/>
+  <process name="layout" type="manual" xpos="502" ypos="218" completion="25" color="#b37d52" label="Лейаут" task_pipeline="niki_friends/light" assigned_login_group="animator" supervisor_login_group="supervisor" process_code="SPT_PROCESS00267"/>
+  <process name="voice" type="manual" xpos="667" ypos="315" task_pipeline="niki_friends/light" assigned_login_group="supervisor" supervisor_login_group="supervisor" duration="2" color="#b89d63" label="Озвучка" process_code="SPT_PROCESS00268"/>
+  <process name="animation" type="manual" xpos="845" ypos="240" assigned_login_group="animator" supervisor_login_group="supervisor" completion="50" color="#abb33d" label="Анимация" task_pipeline="niki_friends/light" process_code="SPT_PROCESS00269"/>
+  <process name="light" type="manual" xpos="1001" ypos="126" task_pipeline="niki_friends/light" assigned_login_group="lighter" supervisor_login_group="supervisor" completion="50" color="#543cab" label="Свет" process_code="SPT_PROCESS00270"/>
+  <process name="render" type="manual" xpos="1176" ypos="126" completion="75" assigned_login_group="lighter" supervisor_login_group="supervisor" color="#30a65d" label="Рендер" task_pipeline="niki_friends_render" process_code="SPT_PROCESS00271"/>
+  <process name="compose" type="manual" xpos="1381" ypos="126" completion="90" supervisor_login_group="supervisor" color="#216b31" label="Композ" task_pipeline="niki_friends/light" assigned_login_group="composer" duration="2" bid_duration="8" process_code="SPT_PROCESS00272"/>
+  <process name="sound" type="manual" xpos="1548" ypos="291" completion="95" color="#368578" label="Звук" task_pipeline="niki_friends/light" assigned_login_group="sound" supervisor_login_group="supervisor" duration="1" bid_duration="8" process_code="SPT_PROCESS00273"/>
+  <process name="publish" type="manual" xpos="1692" ypos="100" task_pipeline="niki_friends/publish" supervisor_login_group="supervisor" completion="100" color="#56c932" label="Публикация" process_code="SPT_PROCESS00274"/>
+  <connect from="animation" to="light"/>
+  <connect from="compose" to="sound"/>
+  <connect from="layout" to="animation"/>
+  <connect from="layout" to="voice"/>
+  <connect from="light" to="render"/>
+  <connect from="render" to="compose"/>
+  <connect from="script" to="assets"/>
+  <connect from="script" to="storyboard"/>
+  <connect from="sound" to="publish"/>
+  <connect from="storyboard" to="layout"/>
+  <connect from="voice" to="animation"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """cg/scenes""")
+insert.set_value('timestamp', """2021-08-03 20:42:02""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends/light""")
+insert.set_value('color', """#999""")
+insert.set_value('data', """{"node_index": 1}""")
+insert.set_value('description', """Status pipeline for process [light]""")
+insert.set_value('name', """Lighting""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="Готов к работе" type="status" xpos="100" ypos="159" color="#4b742f" process_code="SPT_PROCESS00239"/>
+  <process name="Назначен" type="status" xpos="323" ypos="104" color="#735f36" process_code="SPT_PROCESS00191"/>
+  <process name="В работе" type="status" xpos="489" ypos="100" color="#483f69" process_code="SPT_PROCESS00193"/>
+  <process name="На проверке" type="status" xpos="618" ypos="103" color="#3441c9" process_code="SPT_PROCESS00198"/>
+  <process name="На паузе" type="status" xpos="752" ypos="104" color="#3d6d82" process_code="SPT_PROCESS00194"/>
+  <process name="Нужна помощь" type="status" xpos="889" ypos="104" color="#824882" process_code="SPT_PROCESS00195"/>
+  <process name="Пересмотр" type="status" xpos="1016" ypos="103" color="#993928" process_code="SPT_PROCESS00196"/>
+  <process name="На оплате" type="status" xpos="1135" ypos="112" color="#206947" process_code="SPT_PROCESS00199"/>
+  <process name="Оплачен" type="status" xpos="1246" ypos="154" color="#05691b" process_code="SPT_PROCESS00200"/>
+  <connect from="В работе" to="На проверке"/>
+  <connect from="Готов к работе" to="Назначен"/>
+  <connect from="На оплате" to="Оплачен"/>
+  <connect from="На паузе" to="Нужна помощь"/>
+  <connect from="На проверке" to="На паузе"/>
+  <connect from="Назначен" to="В работе"/>
+  <connect from="Нужна помощь" to="Пересмотр"/>
+  <connect from="Пересмотр" to="На оплате"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """sthpw/task""")
+insert.set_value('timestamp', """2019-04-17 03:14:19""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends/publish""")
+insert.set_value('color', """#999""")
+insert.set_value('data', """{"node_index": 0}""")
+insert.set_value('description', """Status pipeline for process [publish]""")
+insert.set_value('name', """Publish""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="В работе" type="status" xpos="100" ypos="269" color="#483f69" process_code="SPT_PROCESS00453"/>
+  <process name="На проверке" type="status" xpos="269" ypos="119" color="#3441c9" process_code="SPT_PROCESS00454"/>
+  <process name="Пересмотр" type="status" xpos="574" ypos="236" color="#993928" process_code="SPT_PROCESS00455"/>
+  <process name="Опубликован" type="status" xpos="994" ypos="100" color="#05691b" process_code="SPT_PROCESS00456"/>
+  <connect from="В работе" to="На проверке"/>
+  <connect from="На проверке" to="Опубликован"/>
+  <connect from="На проверке" to="Пересмотр"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """sthpw/task""")
+insert.set_value('timestamp', """2019-04-11 00:06:05""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends/scenes""")
+insert.set_value('color', """#096e80""")
+insert.set_value('data', """{"node_index": 0}""")
+insert.set_value('name', """Episodes""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="script" type="manual" xpos="100" ypos="254" completion="10" supervisor_login_group="supervisor" color="#b54f3e" label="Сценарий" task_pipeline="niki_friends/light" assigned_login_group="scriptwriter" process_code="SPT_PROCESS00159"/>
+  <process name="storyboard" type="manual" xpos="283" ypos="371" task_pipeline="niki_friends/light" assigned_login_group="storyboard" duration="2" supervisor_login_group="supervisor" color="#b5cc60" label="Сториборд" process_code="SPT_PROCESS00236"/>
+  <process name="assets" type="progress" xpos="307" ypos="174" process_code="SPT_PROCESS00162"/>
+  <process name="layout" type="manual" xpos="494" ypos="215" completion="25" color="#b37d52" label="Лейаут" task_pipeline="niki_friends/light" assigned_login_group="animator" supervisor_login_group="supervisor" process_code="SPT_PROCESS00160"/>
+  <process name="animation" type="manual" xpos="752" ypos="213" assigned_login_group="animator" supervisor_login_group="supervisor" completion="50" color="#abb33d" label="Анимация" task_pipeline="niki_friends/light" process_code="SPT_PROCESS00128"/>
+  <process name="light" type="manual" xpos="996" ypos="128" task_pipeline="niki_friends/light" assigned_login_group="lighter" supervisor_login_group="supervisor" completion="50" color="#543cab" label="Свет" process_code="SPT_PROCESS00127"/>
+  <process name="render" type="manual" xpos="1174" ypos="128" completion="75" assigned_login_group="lighter" supervisor_login_group="supervisor" color="#30a65d" label="Рендер" task_pipeline="niki_friends_render" process_code="SPT_PROCESS00189"/>
+  <process name="compose" type="manual" xpos="1379" ypos="128" completion="90" supervisor_login_group="supervisor" color="#216b31" label="Композ" task_pipeline="niki_friends/light" assigned_login_group="composer" duration="2" bid_duration="8" process_code="SPT_PROCESS00190"/>
+  <process name="sound" type="manual" xpos="1550" ypos="294" completion="95" color="#368578" label="Звук" task_pipeline="niki_friends/light" assigned_login_group="sound" supervisor_login_group="supervisor" duration="1" bid_duration="8" process_code="SPT_PROCESS00161"/>
+  <process name="publish" type="manual" xpos="1691" ypos="100" task_pipeline="niki_friends/publish" supervisor_login_group="supervisor" completion="100" color="#56c932" label="Публикация" process_code="SPT_PROCESS00186"/>
+  <connect from="animation" to="light"/>
+  <connect from="compose" to="sound"/>
+  <connect from="layout" to="animation"/>
+  <connect from="light" to="render"/>
+  <connect from="render" to="compose"/>
+  <connect from="script" to="assets"/>
+  <connect from="script" to="storyboard"/>
+  <connect from="sound" to="publish"/>
+  <connect from="storyboard" to="layout"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """cg/scenes""")
+insert.set_value('timestamp', """2019-02-10 08:54:44""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('category', """Uncategorized""")
+insert.set_value('code', """niki_friends/shorts""")
+insert.set_value('color', """#bcd7cf""")
+insert.set_value('data', """{"node_index": 0}""")
+insert.set_value('name', """Shorts""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="script" type="manual" xpos="100" ypos="136" completion="10" supervisor_login_group="supervisor" color="#b54f3e" label="Сценарий" task_pipeline="niki_friends/light" assigned_login_group="scriptwriter" process_code="SPT_PROCESS00240"/>
+  <process name="assets" type="progress" xpos="311" ypos="124" process_code="SPT_PROCESS00242"/>
+  <process name="layout" type="manual" xpos="503" ypos="101" completion="25" color="#b37d52" label="Лейаут" task_pipeline="niki_friends/light" assigned_login_group="animator" supervisor_login_group="supervisor" process_code="SPT_PROCESS00243"/>
+  <process name="animation" type="manual" xpos="678" ypos="100" assigned_login_group="animator" supervisor_login_group="supervisor" completion="50" color="#abb33d" label="Анимация" task_pipeline="niki_friends/light" process_code="SPT_PROCESS00245"/>
+  <process name="light" type="manual" xpos="832" ypos="204" task_pipeline="niki_friends/light" assigned_login_group="lighter" supervisor_login_group="supervisor" completion="50" color="#543cab" label="Свет" process_code="SPT_PROCESS00246"/>
+  <process name="render" type="manual" xpos="977" ypos="202" completion="75" assigned_login_group="lighter" supervisor_login_group="supervisor" color="#30a65d" label="Рендер" task_pipeline="niki_friends_render" process_code="SPT_PROCESS00247"/>
+  <process name="compose" type="manual" xpos="1122" ypos="202" completion="90" supervisor_login_group="supervisor" color="#216b31" label="Композ" task_pipeline="niki_friends/light" assigned_login_group="composer" duration="2" bid_duration="8" process_code="SPT_PROCESS00248"/>
+  <process name="sound" type="manual" xpos="1263" ypos="204" completion="95" color="#368578" label="Звук" task_pipeline="niki_friends/light" assigned_login_group="sound" supervisor_login_group="supervisor" duration="1" bid_duration="8" process_code="SPT_PROCESS00249"/>
+  <process name="publish" type="manual" xpos="1411" ypos="111" task_pipeline="niki_friends/publish" supervisor_login_group="supervisor" completion="100" color="#56c932" label="Публикация" process_code="SPT_PROCESS00250"/>
+  <connect from="animation" to="light"/>
+  <connect from="assets" to="layout"/>
+  <connect from="compose" to="sound"/>
+  <connect from="layout" to="animation"/>
+  <connect from="light" to="render"/>
+  <connect from="render" to="compose"/>
+  <connect from="script" to="assets"/>
+  <connect from="sound" to="publish"/>
+  <connect from="layout" to="voice"/>
+  <connect from="voice" to="animation"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """cg/scenes""")
+insert.set_value('timestamp', """2021-08-02 16:36:51""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('category', """Uncategorized""")
+insert.set_value('code', """niki_friends/songs""")
+insert.set_value('color', """#bccfd7""")
+insert.set_value('data', """{"node_index": 2}""")
+insert.set_value('name', """Songs""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="script" type="manual" xpos="100" ypos="166" completion="10" supervisor_login_group="supervisor" color="#b54f3e" label="Сценарий" task_pipeline="niki_friends/light" assigned_login_group="scriptwriter" process_code="SPT_PROCESS00251"/>
+  <process name="storyboard" type="manual" xpos="288" ypos="236" task_pipeline="niki_friends/light" assigned_login_group="storyboard" supervisor_login_group="supervisor" color="#b5cc60" label="Сториборд" process_code="SPT_PROCESS00252"/>
+  <process name="assets" type="progress" xpos="297" ypos="100" process_code="SPT_PROCESS00253"/>
+  <process name="arrangement" type="manual" xpos="465" ypos="174" process_code="SPT_PROCESS00262" color="#af4646" label="Аранжировка" completion="15" supervisor_login_group="supervisor" task_pipeline="niki_friends/light" assigned_login_group="supervisor"/>
+  <process name="layout" type="manual" xpos="602" ypos="255" completion="25" color="#b37d52" label="Лейаут" task_pipeline="niki_friends/light" assigned_login_group="animator" supervisor_login_group="supervisor" process_code="SPT_PROCESS00254"/>
+  <process name="vocal" type="manual" xpos="713" ypos="104" process_code="SPT_PROCESS00263" color="#4e72c6" label="Вокал" completion="20" supervisor_login_group="supervisor" task_pipeline="niki_friends/light" assigned_login_group="supervisor"/>
+  <process name="animation" type="manual" xpos="826" ypos="234" assigned_login_group="animator" supervisor_login_group="supervisor" completion="50" color="#abb33d" label="Анимация" task_pipeline="niki_friends/light" process_code="SPT_PROCESS00256"/>
+  <process name="light" type="manual" xpos="953" ypos="233" task_pipeline="niki_friends/light" assigned_login_group="lighter" supervisor_login_group="supervisor" completion="50" color="#543cab" label="Свет" process_code="SPT_PROCESS00257"/>
+  <process name="render" type="manual" xpos="1082" ypos="231" completion="75" assigned_login_group="lighter" supervisor_login_group="supervisor" color="#30a65d" label="Рендер" task_pipeline="niki_friends_render" process_code="SPT_PROCESS00258"/>
+  <process name="compose" type="manual" xpos="1212" ypos="229" completion="90" supervisor_login_group="supervisor" color="#216b31" label="Композ" task_pipeline="niki_friends/light" assigned_login_group="composer" duration="2" bid_duration="8" process_code="SPT_PROCESS00259"/>
+  <process name="sound" type="manual" xpos="1337" ypos="229" completion="95" color="#368578" label="Звук" task_pipeline="niki_friends/light" assigned_login_group="sound" supervisor_login_group="supervisor" duration="1" bid_duration="8" process_code="SPT_PROCESS00260"/>
+  <process name="publish" type="manual" xpos="1471" ypos="228" task_pipeline="niki_friends/publish" supervisor_login_group="supervisor" completion="100" color="#56c932" label="Публикация" process_code="SPT_PROCESS00261"/>
+  <connect from="animation" to="light"/>
+  <connect from="arrangement" to="layout"/>
+  <connect from="compose" to="sound"/>
+  <connect from="layout" to="vocal"/>
+  <connect from="light" to="render"/>
+  <connect from="render" to="compose"/>
+  <connect from="script" to="assets"/>
+  <connect from="script" to="storyboard"/>
+  <connect from="sound" to="publish"/>
+  <connect from="storyboard" to="arrangement"/>
+  <connect from="vocal" to="animation"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """cg/scenes""")
+insert.set_value('timestamp', """2021-08-02 16:37:02""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends_assets""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """sthpw/task""")
+insert.set_value('timestamp', """2024-09-02 19:15:15.417728""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends_layout""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """sthpw/task""")
+insert.set_value('timestamp', """2024-02-25 11:03:50.039715""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends_publish""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """sthpw/task""")
+insert.set_value('timestamp', """2024-09-02 21:02:59.127083""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends_render""")
+insert.set_value('color', """#999""")
+insert.set_value('data', """{"node_index": 0}""")
+insert.set_value('name', """Render""")
+insert.set_value('pipeline', """<pipeline>
+  <process name="Подготовлен" type="status" xpos="100" ypos="123" color="#735f36" label="Сценарий" process_code="SPT_PROCESS00447"/>
+  <process name="Рендер" type="status" xpos="258" ypos="180" color="#1f57cf" process_code="SPT_PROCESS00220"/>
+  <process name="В очереди" type="status" xpos="449" ypos="283" color="#476978" process_code="SPT_PROCESS00221"/>
+  <process name="Рендерится" type="status" xpos="624" ypos="166" color="#483f69" process_code="SPT_PROCESS00208"/>
+  <process name="Ошибки" type="status" xpos="785" ypos="289" color="#8a2222" process_code="SPT_PROCESS00209"/>
+  <process name="Готов" type="status" xpos="962" ypos="202" color="#206947" process_code="SPT_PROCESS00210"/>
+  <process name="Проверен" type="status" xpos="1154" ypos="100" color="#05691b" process_code="SPT_PROCESS00211"/>
+  <connect from="В очереди" to="Рендерится"/>
+  <connect from="Готов" to="Проверен"/>
+  <connect from="Ошибки" to="Готов"/>
+  <connect from="Подготовлен" to="Рендер"/>
+  <connect from="Рендер" to="Рендерится"/>
+  <connect from="Рендер" to="В очереди"/>
+  <connect from="Рендерится" to="Ошибки"/>
+  <connect from="Рендерится" to="Готов"/>
+</pipeline>
+""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """sthpw/task""")
+insert.set_value('timestamp', """2019-06-17 22:26:19""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('sthpw/pipeline')
+insert.set_value('autocreate_tasks', False)
+insert.set_value('code', """niki_friends_rig""")
+insert.set_value('project_code', """niki_friends""")
+insert.set_value('search_type', """sthpw/task""")
+insert.set_value('timestamp', """2026-09-14 20:54:44.044034""")
+insert.set_value('use_workflow', True)
+#-- End Entry --#
+

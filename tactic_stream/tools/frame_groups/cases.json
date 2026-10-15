@@ -1,0 +1,11 @@
+[
+  {"phase":"members","actions":[]},
+  {"phase":"single-line","actions":[{"type":"state","value":"single-line"}]},
+  {"phase":"dirty","actions":[{"type":"text","id":"securityMemberSearch","value":"user_1"},{"type":"click","id":"securityMember_user_1"}]},
+  {"phase":"confirm","actions":[{"type":"click","id":"adminDiscardDocument"}]},
+  {"phase":"details","actions":[{"type":"click","id":"confirmDiscardSecurityGroup"},{"type":"click","id":"segmentedButtonSegment_details"}]},
+  {"phase":"new","actions":[{"type":"click","id":"createSecurityGroup"},{"type":"text","id":"securityGroupName","value":"lighting_team"},{"type":"text","id":"securityGroupDescription","value":"Lighting and look development"}]},
+  {"phase":"empty-search","actions":[{"type":"click","id":"segmentedButtonSegment_members"},{"type":"text","id":"securityMemberSearch","value":"nobody-matches"}]},
+  {"phase":"uncertain","actions":[{"type":"state","value":"uncertain"}]},
+  {"phase":"busy","actions":[{"type":"state","value":"busy"}]}
+]

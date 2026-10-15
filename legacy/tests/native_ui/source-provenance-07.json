@@ -1,0 +1,15 @@
+{
+  "source_archive": "TACTIC_5_Vue_Source_Fork_0.6.zip",
+  "source_file": "src/tactic/ui/table/format_element_wdg.py",
+  "unchanged_methods": {
+    "convert_to_float": "6763111717796981509b25224e327efa4f501f5a7986a2b78186a1c4392adff6",
+    "number_format": "f583f3764f0813d36c4ec883985c31e56842d3280b45e0bbf8d0c28f5f8b3587",
+    "currency_format": "641988e1712dfb269546cbde7fc082b71889dea7bf31e953d8e73a7f9131ecb7"
+  },
+  "intentional_changes": [
+    "get_format_value: checkbox/negative currency presentation hooks",
+    "get_format_value: fix original undefined real_value for DAYS/SECONDS",
+    "timezone/ProdSetting/TimeCode imports made local; algorithms unchanged"
+  ],
+  "table_setting_ast_sha256": "a7d419e1911d88017d2641c7daf44bf33f8bb7210d58a3f8215e0b21b3008b49"
+}

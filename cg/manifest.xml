@@ -1,0 +1,28 @@
+<manifest code="niki_friends">
+  <data>
+    <code>niki_friends</code>
+    <version/>
+  </data>
+  <sobject expression="@SOBJECT(sthpw/project['code','niki_friends'])" search_type="sthpw/project" unique="true"/>
+  <sobject expression="@SOBJECT(sthpw/project['code','niki_friends'].sthpw/project_type)" search_type="sthpw/project_type" unique="true"/>
+  <sobject expression="@SOBJECT(sthpw/schema['code','niki_friends'])" search_type="sthpw/schema" unique="true"/>
+  <search_type code="cg/assets_category"/>
+  <search_type code="cg/scenes"/>
+  <search_type code="cg/shot"/>
+  <search_type code="cg/assets"/>
+  <search_type code="cg/assets_in_assets"/>
+  <search_type code="cg/assets_in_scenes"/>
+  <search_type code="cg/texture"/>
+  <search_type code="cg/texture_in_assets"/>
+  <sobject search_type="config/custom_script" seq_max="99"/>
+  <sobject search_type="config/widget_config" seq_max="318"/>
+  <sobject search_type="config/naming" seq_max="99"/>
+  <sobject search_type="config/client_trigger" seq_max="1"/>
+  <sobject search_type="config/process" seq_max="456"/>
+  <sobject search_type="config/trigger" seq_max="69"/>
+  <sobject search_type="config/url" seq_max="7"/>
+  <sobject search_type="config/prod_setting" seq_max="9"/>
+  <sobject expression="@SOBJECT(sthpw/login_group['project_code','niki_friends'])" search_type="sthpw/login_group" unique="true"/>
+  <sobject expression="@SOBJECT(sthpw/pipeline['project_code','niki_friends'])" search_type="sthpw/pipeline" unique="true"/>
+  <sobject expression="@SOBJECT(sthpw/notification['project_code','niki_friends'])" search_type="sthpw/notification"/>
+</manifest>

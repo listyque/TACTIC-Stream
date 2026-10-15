@@ -1,0 +1,513 @@
+[
+  {
+    "key": "simple",
+    "element": {
+      "name": "name",
+      "title": "Text",
+      "display": {
+        "handler": "tactic.ui.common.SimpleTableElementWdg",
+        "options": {}
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "text",
+      "field": "name",
+      "supported": true,
+      "sort_field": "name",
+      "sortable": true,
+      "server": false,
+      "cell": {
+        "kind": "text",
+        "field": "name",
+        "supported": true,
+        "sort_field": "name",
+        "sortable": true,
+        "server": false
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "Lighting review"
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"name\">\n      <display class=\"tactic.ui.common.SimpleTableElementWdg\" />\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "raw",
+    "element": {
+      "name": "description",
+      "title": "Raw value",
+      "display": {
+        "handler": "tactic.ui.common.RawTableElementWdg",
+        "options": {}
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "text",
+      "field": "description",
+      "supported": true,
+      "sort_field": "description",
+      "sortable": true,
+      "server": false,
+      "cell": {
+        "kind": "text",
+        "field": "description",
+        "supported": true,
+        "sort_field": "description",
+        "sortable": true,
+        "server": false
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "2026-10-13 10:30:00"
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"description\">\n      <display class=\"tactic.ui.common.RawTableElementWdg\" />\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "format",
+    "element": {
+      "name": "amount",
+      "title": "Formatted number",
+      "display": {
+        "handler": "tactic.ui.table.FormatElementWdg",
+        "options": {
+          "type": "float",
+          "format": "-1234.12"
+        }
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "text",
+      "field": "amount",
+      "supported": true,
+      "sort_field": "amount",
+      "sortable": true,
+      "server": true,
+      "cell": {
+        "kind": "text",
+        "field": "amount",
+        "supported": true,
+        "sort_field": "amount",
+        "sortable": true,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "1250.50"
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"amount\">\n      <display class=\"tactic.ui.table.FormatElementWdg\">\n        <type>float</type>\n        <format>-1234.12</format>\n      </display>\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "link",
+    "element": {
+      "name": "website",
+      "title": "Link",
+      "display": {
+        "handler": "tactic.ui.table.LinkElementWdg",
+        "options": {}
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "link",
+      "field": "website",
+      "supported": true,
+      "sort_field": "website",
+      "sortable": false,
+      "server": true,
+      "cell": {
+        "kind": "link",
+        "field": "website",
+        "supported": true,
+        "sort_field": "website",
+        "sortable": false,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "https://example.com/review",
+      "href": "https://example.com/review"
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"website\">\n      <display class=\"tactic.ui.table.LinkElementWdg\" />\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "expression",
+    "element": {
+      "name": "computed_name",
+      "title": "Expression",
+      "display": {
+        "handler": "tactic.ui.table.ExpressionElementWdg",
+        "options": {
+          "expression": "@GET(.name)"
+        }
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "text",
+      "field": "computed_name",
+      "supported": true,
+      "sort_field": "name",
+      "sortable": true,
+      "server": true,
+      "cell": {
+        "kind": "text",
+        "field": "computed_name",
+        "supported": true,
+        "sort_field": "name",
+        "sortable": true,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "Lighting review"
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"computed_name\">\n      <display class=\"tactic.ui.table.ExpressionElementWdg\">\n        <expression>@GET(.name)</expression>\n      </display>\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "expression_value",
+    "element": {
+      "name": "formula",
+      "title": "Expression stored in a field",
+      "display": {
+        "handler": "tactic.ui.table.ExpressionValueElementWdg",
+        "options": {}
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "text",
+      "field": "formula",
+      "supported": true,
+      "sort_field": "formula",
+      "sortable": true,
+      "server": true,
+      "cell": {
+        "kind": "text",
+        "field": "formula",
+        "supported": true,
+        "sort_field": "formula",
+        "sortable": true,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "Lighting review"
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"formula\">\n      <display class=\"tactic.ui.table.ExpressionValueElementWdg\" />\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "thumb",
+    "element": {
+      "name": "preview",
+      "title": "File preview",
+      "display": {
+        "handler": "pyasm.widget.ThumbWdg",
+        "options": {
+          "filename": "true",
+          "icon_context": "icon"
+        }
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "thumbnail",
+      "field": "preview",
+      "supported": true,
+      "sort_field": "preview",
+      "sortable": false,
+      "server": true,
+      "cell": {
+        "kind": "thumbnail",
+        "field": "preview",
+        "supported": true,
+        "sort_field": "preview",
+        "sortable": false,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "/tests/fixtures/messages-attachment.png",
+      "image": "/tests/fixtures/messages-attachment.png",
+      "filename": "lighting.png",
+      "files": []
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"preview\">\n      <display class=\"pyasm.widget.ThumbWdg\">\n        <filename>true</filename>\n        <icon_context>icon</icon_context>\n      </display>\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "discussion",
+    "element": {
+      "name": "notes",
+      "title": "Notes",
+      "display": {
+        "handler": "tactic.ui.widget.DiscussionElementWdg",
+        "options": {
+          "process": "publish",
+          "allow_email": "false"
+        }
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "notes",
+      "field": "notes",
+      "supported": true,
+      "sort_field": "notes",
+      "sortable": false,
+      "server": true,
+      "cell": {
+        "kind": "notes",
+        "field": "notes",
+        "supported": true,
+        "sort_field": "notes",
+        "sortable": false,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "search_key": "cg/demo?project=cg&code=DEMO001",
+      "count": 2,
+      "process": "publish",
+      "processes": [
+        {
+          "process": "publish",
+          "count": 2
+        }
+      ]
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"notes\">\n      <display class=\"tactic.ui.widget.DiscussionElementWdg\">\n        <process>publish</process>\n        <allow_email>false</allow_email>\n      </display>\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "task",
+    "element": {
+      "name": "tasks",
+      "title": "Tasks",
+      "display": {
+        "handler": "tactic.ui.table.TaskElementWdg",
+        "options": {
+          "process": "lighting"
+        }
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "tasks",
+      "field": "tasks",
+      "supported": true,
+      "sort_field": "tasks",
+      "sortable": false,
+      "server": true,
+      "cell": {
+        "kind": "tasks",
+        "field": "tasks",
+        "supported": true,
+        "sort_field": "tasks",
+        "sortable": false,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "tasks": [
+        {
+          "taskSearchKey": "sthpw/task?code=DEMO_TASK",
+          "process": "lighting",
+          "context": "lighting",
+          "status": "In Progress",
+          "statusColor": "#78a6c4",
+          "assigned": "artist",
+          "assignedIdentity": {
+            "displayName": "Demo artist",
+            "initials": "DA",
+            "avatarColor": "#43796c"
+          },
+          "bidStart": "2026-10-13",
+          "bidEnd": "2026-10-15"
+        }
+      ]
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"tasks\">\n      <display class=\"tactic.ui.table.TaskElementWdg\">\n        <process>lighting</process>\n      </display>\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "completion",
+    "element": {
+      "name": "completion",
+      "title": "Completion",
+      "display": {
+        "handler": "tactic.ui.table.TaskCompletionWdg",
+        "options": {}
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "completion",
+      "field": "completion",
+      "supported": true,
+      "sort_field": "completion",
+      "sortable": false,
+      "server": true,
+      "cell": {
+        "kind": "completion",
+        "field": "completion",
+        "supported": true,
+        "sort_field": "completion",
+        "sortable": false,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "25.0%",
+      "completion": 25,
+      "count": 4
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"completion\" width=\"240\">\n      <display class=\"tactic.ui.table.TaskCompletionWdg\" />\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "array",
+    "element": {
+      "name": "tags",
+      "title": "Array",
+      "display": {
+        "handler": "ArrayTableElementWdg",
+        "options": {}
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "text",
+      "field": "tags",
+      "supported": true,
+      "sort_field": "tags",
+      "sortable": true,
+      "server": true,
+      "cell": {
+        "kind": "text",
+        "field": "tags",
+        "supported": true,
+        "sort_field": "tags",
+        "sortable": true,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "Assets, Shots, Textures"
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"tags\">\n      <display class=\"ArrayTableElementWdg\" />\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "xml",
+    "element": {
+      "name": "snapshot",
+      "title": "XML",
+      "display": {
+        "handler": "XmlWdg",
+        "options": {}
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "structured",
+      "field": "snapshot",
+      "supported": true,
+      "sort_field": "snapshot",
+      "sortable": true,
+      "server": true,
+      "cell": {
+        "kind": "structured",
+        "field": "snapshot",
+        "supported": true,
+        "sort_field": "snapshot",
+        "sortable": true,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "<snapshot>\n  <file name=\"lighting.exr\" type=\"main\" />\n</snapshot>",
+      "language": "xml",
+      "diagnostic": ""
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"snapshot\">\n      <display class=\"XmlWdg\" />\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "json",
+    "element": {
+      "name": "metadata",
+      "title": "JSON",
+      "display": {
+        "handler": "tactic.ui.table.JsonElementWdg",
+        "options": {
+          "height": "72px"
+        }
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "structured",
+      "field": "metadata",
+      "supported": true,
+      "sort_field": "metadata",
+      "sortable": false,
+      "server": true,
+      "cell": {
+        "kind": "structured",
+        "field": "metadata",
+        "supported": true,
+        "sort_field": "metadata",
+        "sortable": false,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "{\n  \"a\": {\n    \"ready\": true\n  },\n  \"b\": [\n    1,\n    2\n  ],\n  \"label\": \"Lighting\"\n}",
+      "language": "json"
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"metadata\">\n      <display class=\"tactic.ui.table.JsonElementWdg\">\n        <height>72px</height>\n      </display>\n    </element>\n  </table>\n</config>"
+  },
+  {
+    "key": "snapshot_version",
+    "element": {
+      "name": "version",
+      "title": "Snapshot version",
+      "display": {
+        "handler": "tactic.ui.table.SnapshotVersionElementWdg",
+        "options": {}
+      },
+      "action": {
+        "handler": ""
+      },
+      "kind": "text",
+      "field": "version",
+      "supported": true,
+      "sort_field": "version",
+      "sortable": true,
+      "server": true,
+      "cell": {
+        "kind": "text",
+        "field": "version",
+        "supported": true,
+        "sort_field": "version",
+        "sortable": true,
+        "server": true
+      }
+    },
+    "record": {},
+    "value": {
+      "text": "v003",
+      "label": ""
+    },
+    "xml": "<config>\n  <table layout=\"tactic.ui.panel.TableLayoutWdg\">\n    <element name=\"version\">\n      <display class=\"tactic.ui.table.SnapshotVersionElementWdg\" />\n    </element>\n  </table>\n</config>"
+  }
+]

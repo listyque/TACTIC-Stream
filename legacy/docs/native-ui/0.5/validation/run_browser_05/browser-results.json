@@ -1,0 +1,115 @@
+{
+  "test_backend": "original XML + production new services on synthetic SQLite tables; not full TACTIC DB",
+  "transport": "Python HTTP bridge; URL/storage/history test shims",
+  "scenarios": [
+    {
+      "scenario": "Original admin hierarchy survives new widget handlers",
+      "passed": true
+    },
+    {
+      "scenario": "SubscriptionWdg from XML mounts native center with configured category",
+      "passed": true
+    },
+    {
+      "scenario": "Configured show_unsubscribe=false changes the available action",
+      "passed": true
+    },
+    {
+      "scenario": "Global inbox contains only accessible subscription channels",
+      "passed": true
+    },
+    {
+      "scenario": "Repeated message text is retained as separate history events",
+      "passed": true
+    },
+    {
+      "scenario": "History keyset paging appends earlier records without replacing new ones",
+      "passed": true
+    },
+    {
+      "scenario": "Sent Unicode/markup persists as escaped data, never as executable HTML",
+      "passed": true
+    },
+    {
+      "scenario": "Explicit acknowledgment clears own badge without a false read receipt",
+      "passed": true
+    },
+    {
+      "scenario": "Participant information uses actual subscriptions and last_cleared",
+      "passed": true
+    },
+    {
+      "scenario": "Messages survive closing and reopening the native widget",
+      "passed": true
+    },
+    {
+      "scenario": "Full selected participant set reuses group chat rather than pair chat",
+      "passed": true
+    },
+    {
+      "scenario": "New conversation is created via extracted ChatCmd",
+      "passed": true
+    },
+    {
+      "scenario": "Unsubscribing removes own channel without deleting its messages",
+      "passed": true
+    },
+    {
+      "scenario": "Structured SObject event renders changes and cannot be overwritten as chat",
+      "passed": true
+    },
+    {
+      "scenario": "Original progress message category is projected as bounded progress",
+      "passed": true
+    },
+    {
+      "scenario": "Message layout remains within a narrow mobile viewport",
+      "passed": true
+    },
+    {
+      "scenario": "Polling stops when the last message widget is unmounted",
+      "passed": true
+    },
+    {
+      "scenario": "My Notifications original config displays only recipient/project-scoped email log",
+      "passed": true
+    },
+    {
+      "scenario": "Object subscription stores original SObject message key",
+      "passed": true
+    },
+    {
+      "scenario": "Subscription before first event is an explicit empty state, not fake data",
+      "passed": true
+    },
+    {
+      "scenario": "Gantt loads 200 date-window records independently of 50-row table page",
+      "passed": true
+    },
+    {
+      "scenario": "More data appends remaining objects and both configured plan/actual bars",
+      "passed": true
+    },
+    {
+      "scenario": "Changing period removes stale table-page tasks outside the window",
+      "passed": true
+    },
+    {
+      "scenario": "Calendar fetches its 42-day grid instead of reusing table pagination",
+      "passed": true
+    },
+    {
+      "scenario": "Configured query predicates refresh both timeline and table semantics",
+      "passed": true
+    },
+    {
+      "scenario": "All new screens use native JSON contracts without legacy HTML or JS exceptions",
+      "passed": true
+    },
+    {
+      "scenario": "Logout unmounts data widgets and invalidates browser session",
+      "passed": true
+    }
+  ],
+  "js_errors": []
+}

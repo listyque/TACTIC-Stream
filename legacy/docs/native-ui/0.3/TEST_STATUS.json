@@ -1,0 +1,11 @@
+{
+  "unit": 176,
+  "http_base": 23,
+  "http_deep": 22,
+  "browser": 30,
+  "database_backend": "synthetic only; original config XML",
+  "browser_transport": "HTTP bridge; native navigation blocked",
+  "live_tactic_database_tested": false,
+  "windows_bats_executed": false,
+  "full_ui_migration_complete": false
+}

@@ -1,0 +1,118 @@
+{
+  "version": "0.16",
+  "passed": true,
+  "generated_utc": "2026-10-02T17:17:28.029422+00:00",
+  "counts": {
+    "python_unit": 1104,
+    "javascript_unit": 89,
+    "original_http": 232,
+    "original_browser": 124,
+    "cluster_orchestration": 58,
+    "xml_files": 80,
+    "xml_views": 487,
+    "xml_property_comparisons": 11370,
+    "vue_components": 41
+  },
+  "checks": [
+    {
+      "name": "Python unittest full suite",
+      "passed": true,
+      "count": 1104,
+      "seconds": 17.289,
+      "evidence": "unit-final.log"
+    },
+    {
+      "name": "test_grid_state_012",
+      "passed": true,
+      "count": 18
+    },
+    {
+      "name": "test_table_toolbar_013",
+      "passed": true,
+      "count": 19
+    },
+    {
+      "name": "test_fill_state_014",
+      "passed": true,
+      "count": 14
+    },
+    {
+      "name": "test_ui_state_015",
+      "passed": true,
+      "count": 30
+    },
+    {
+      "name": "test_action_log_016",
+      "passed": true,
+      "count": 8
+    },
+    {
+      "name": "table-http",
+      "passed": true,
+      "count": 37,
+      "backend": "original TACTIC / SQLite / three workers"
+    },
+    {
+      "name": "fill-http",
+      "passed": true,
+      "count": 25,
+      "backend": "original TACTIC / SQLite / three workers"
+    },
+    {
+      "name": "globals-http",
+      "passed": true,
+      "count": 83,
+      "backend": "original TACTIC / SQLite / three workers"
+    },
+    {
+      "name": "state-project-http",
+      "passed": true,
+      "count": 53,
+      "backend": "original TACTIC / SQLite / three workers"
+    },
+    {
+      "name": "diagnostics-http",
+      "passed": true,
+      "count": 34,
+      "backend": "original TACTIC / SQLite / three workers"
+    },
+    {
+      "name": "browser",
+      "passed": true,
+      "count": 72,
+      "backend": "original TACTIC / SQLite / three workers",
+      "browser_transport": "explicit HTTP bridge"
+    },
+    {
+      "name": "browser-state",
+      "passed": true,
+      "count": 30,
+      "backend": "original TACTIC / SQLite / three workers",
+      "browser_transport": "explicit HTTP bridge"
+    },
+    {
+      "name": "browser-diagnostics",
+      "passed": true,
+      "count": 22,
+      "backend": "original TACTIC / SQLite / three workers",
+      "browser_transport": "explicit HTTP bridge"
+    }
+  ],
+  "limitations": [
+    "Only original temporary SQLite data, not user database; PostgreSQL/MySQL not tested",
+    "Windows BAT/PowerShell execution not tested; no runtime download changes",
+    "Original licence signature isolated explicitly in test process only; production verification remains enabled",
+    "Explicit browser HTTP bridge because direct navigation blocked; native cookies/CSP/navigation not proven",
+    "Diagnostic events are bounded best-effort, not a durable audit log; source=client is not command confirmation",
+    "Safe successful native access suppression tested; HTTP errors and unknown access formats retained",
+    "Arbitrary custom widget_config/callbacks in user installation are not all reproduced"
+  ],
+  "logging_privacy_verified": true,
+  "all_three_workers_logged": true,
+  "full_command_paths_preserved": true,
+  "prior_failed_attempts": "prior-attempts.json",
+  "changed_code_files": 30,
+  "patch_apply_verified": true,
+  "all_existing_bat_files_unchanged": 12,
+  "all_stock_seed_and_template_files_unchanged": 5
+}

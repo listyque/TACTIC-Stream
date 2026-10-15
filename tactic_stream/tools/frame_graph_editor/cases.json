@@ -1,0 +1,19 @@
+[
+ {"phase":"canvas","actions":[]},
+ {"phase":"selection","actions":[{"type":"select","identity":"first"},{"type":"phone","value":"properties"}]},
+ {"phase":"add-tools","actions":[{"type":"page","selector":"adminGraphInspectorPages","value":"add_node"}]},
+ {"phase":"selection-restored","actions":[{"type":"page","selector":"adminGraphInspectorPages","value":"selection"}]},
+ {"phase":"advanced","actions":[{"type":"workflowPage","selector":"adminProcessPages","value":"native_json"}]},
+ {"phase":"buffer","actions":[{"type":"reveal","viewport":"adminGraphPropertiesScroll","id":"graph_attributesEditor"},{"type":"text","id":"graph_attributesEditor","value":"{invalid JSON"}]},
+ {"phase":"selection-confirmation","actions":[{"type":"select","identity":"second"}]},
+ {"phase":"keep-buffer","actions":[{"type":"click","id":"adminCancelSave"}]},
+ {"phase":"invalid-buffer","actions":[{"type":"reveal","viewport":"adminGraphPropertiesScroll","id":"graphApply_attributes"},{"type":"click","id":"graphApply_attributes"}]},
+ {"phase":"discard-confirmation","actions":[{"type":"click","id":"adminDiscardDocument"}]},
+ {"phase":"discarded","actions":[{"type":"click","id":"adminConfirmSave"}]},
+ {"phase":"edge","actions":[{"type":"edge","index":0}]},
+ {"phase":"remove-confirmation","actions":[{"type":"phone","value":"properties"},{"type":"reveal","viewport":"adminGraphPropertiesScroll","id":"adminRemoveGraphSelection"},{"type":"click","id":"adminRemoveGraphSelection"}]},
+ {"phase":"technical","actions":[{"type":"click","id":"adminCancelSave"},{"type":"page","selector":"adminGraphPages","value":"technical"}]},
+ {"phase":"readonly","actions":[{"type":"state","value":"readonly"}]},
+ {"phase":"unknown","actions":[{"type":"state","value":"uncertain"}]},
+ {"phase":"busy","actions":[{"type":"state","value":"busy"}]}
+]

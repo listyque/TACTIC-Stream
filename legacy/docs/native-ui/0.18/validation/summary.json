@@ -1,0 +1,236 @@
+{
+  "version": "0.18",
+  "passed": true,
+  "completed_utc": "2026-10-04T09:39:28.645804+00:00",
+  "counts": {
+    "python_unit": 1227,
+    "javascript": 155,
+    "original_http": 352,
+    "original_browser": 180,
+    "cluster_orchestration_includes_child_exit_checks": 68
+  },
+  "checks": [
+    {
+      "name": "python-unit",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 17.26,
+      "command": [
+        "python",
+        "-W",
+        "ignore",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/native_ui",
+        "-v"
+      ],
+      "log": "python-unit.log",
+      "tests_run": 1227
+    },
+    {
+      "name": "test_action_log_016",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 0.06,
+      "command": [
+        "node",
+        "/mnt/data/release018/TACTIC-5.0/tests/native_ui/test_action_log_016.cjs"
+      ],
+      "log": "test_action_log_016.log",
+      "tests_run": 8
+    },
+    {
+      "name": "test_admin_state_017",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 0.07,
+      "command": [
+        "node",
+        "/mnt/data/release018/TACTIC-5.0/tests/native_ui/test_admin_state_017.cjs"
+      ],
+      "log": "test_admin_state_017.log",
+      "tests_run": 35
+    },
+    {
+      "name": "test_design_state_018",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 0.06,
+      "command": [
+        "node",
+        "/mnt/data/release018/TACTIC-5.0/tests/native_ui/test_design_state_018.cjs"
+      ],
+      "log": "test_design_state_018.log",
+      "tests_run": 31
+    },
+    {
+      "name": "test_fill_state_014",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 0.03,
+      "command": [
+        "node",
+        "/mnt/data/release018/TACTIC-5.0/tests/native_ui/test_fill_state_014.cjs"
+      ],
+      "log": "test_fill_state_014.log",
+      "tests_run": 14
+    },
+    {
+      "name": "test_grid_state_012",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 0.03,
+      "command": [
+        "node",
+        "/mnt/data/release018/TACTIC-5.0/tests/native_ui/test_grid_state_012.cjs"
+      ],
+      "log": "test_grid_state_012.log",
+      "tests_run": 18
+    },
+    {
+      "name": "test_table_toolbar_013",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 0.03,
+      "command": [
+        "node",
+        "/mnt/data/release018/TACTIC-5.0/tests/native_ui/test_table_toolbar_013.cjs"
+      ],
+      "log": "test_table_toolbar_013.log",
+      "tests_run": 19
+    },
+    {
+      "name": "test_ui_state_015",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 0.06,
+      "command": [
+        "node",
+        "/mnt/data/release018/TACTIC-5.0/tests/native_ui/test_ui_state_015.cjs"
+      ],
+      "log": "test_ui_state_015.log",
+      "tests_run": 30
+    },
+    {
+      "name": "vue-build",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 0.17,
+      "command": [
+        "node",
+        "tools/native_ui/build.cjs"
+      ],
+      "log": "vue-build.log"
+    },
+    {
+      "name": "xml-parity",
+      "returncode": 0,
+      "status": "passed",
+      "seconds": 2.73,
+      "command": [
+        "python",
+        "-W",
+        "ignore",
+        "tools/native_ui/audit_config_parity.py",
+        "--out",
+        "/mnt/data/release018/validation/static-final/xml-parity.json"
+      ],
+      "log": "xml-parity.log"
+    },
+    {
+      "name": "original-http/table-http.json",
+      "status": "passed",
+      "tests_run": 37,
+      "report": "cluster/table-http.json"
+    },
+    {
+      "name": "original-http/fill-http.json",
+      "status": "passed",
+      "tests_run": 25,
+      "report": "cluster/fill-http.json"
+    },
+    {
+      "name": "original-http/globals-http.json",
+      "status": "passed",
+      "tests_run": 83,
+      "report": "cluster/globals-http.json"
+    },
+    {
+      "name": "original-http/state-project-http.json",
+      "status": "passed",
+      "tests_run": 53,
+      "report": "cluster/state-project-http.json"
+    },
+    {
+      "name": "original-http/diagnostics-http.json",
+      "status": "passed",
+      "tests_run": 34,
+      "report": "cluster/diagnostics-http.json"
+    },
+    {
+      "name": "original-http/administration-http.json",
+      "status": "passed",
+      "tests_run": 71,
+      "report": "cluster/administration-http.json"
+    },
+    {
+      "name": "original-http/design-http.json",
+      "status": "passed",
+      "tests_run": 49,
+      "report": "cluster/design-http.json"
+    },
+    {
+      "name": "original-browser/browser/browser-results.json",
+      "status": "passed",
+      "tests_run": 72,
+      "report": "cluster/browser/browser-results.json"
+    },
+    {
+      "name": "original-browser/browser-state/results.json",
+      "status": "passed",
+      "tests_run": 30,
+      "report": "cluster/browser-state/results.json"
+    },
+    {
+      "name": "original-browser/browser-diagnostics/summary.json",
+      "status": "passed",
+      "tests_run": 22,
+      "report": "cluster/browser-diagnostics/summary.json"
+    },
+    {
+      "name": "original-browser/browser-administration/summary.json",
+      "status": "passed",
+      "tests_run": 24,
+      "report": "cluster/browser-administration/summary.json"
+    },
+    {
+      "name": "original-browser/browser-design/report.json",
+      "status": "passed",
+      "tests_run": 32,
+      "report": "cluster/browser-design/report.json"
+    }
+  ],
+  "cluster_summary": "cluster/summary.json",
+  "xml_parity": {
+    "scope": "shipped file views plus same-file definitions; not live DB or rendered widgets",
+    "files": 80,
+    "views": 487,
+    "elements": 2911,
+    "checks": 11370,
+    "differences": [],
+    "errors": []
+  },
+  "signature_isolated": true,
+  "browser_http_bridge": true,
+  "limits": [
+    "Windows BAT/PowerShell and runtime downloading not executed.",
+    "PostgreSQL/MySQL not tested; original integration uses full temporary SQLite seeds.",
+    "Original DB auth, SObject/Search and commands are real; only license signature isolated in test processes.",
+    "Browser native navigation attempted and blocked; explicit HTTP bridge cannot prove native cookie/CSP/navigation/WebCrypto.",
+    "Cluster orchestration count includes child test exit checks; do not add as independent end-user scenario coverage.",
+    "No destructive column drop/rename/type-change or complete Triggers/Notifications editor."
+  ],
+  "raw_private_logs_excluded": true
+}

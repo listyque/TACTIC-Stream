@@ -1,0 +1,22 @@
+{
+  "query_10": {
+    "before": 8.365,
+    "after": 8.448,
+    "results_match": true
+  },
+  "query_1000": {
+    "before": 18.909,
+    "after": 17.931,
+    "results_match": true
+  },
+  "query_all": {
+    "before": 112.054,
+    "after": 104.322,
+    "results_match": true
+  },
+  "eval_names": {
+    "before": 110.213,
+    "after": 104.413,
+    "results_match": true
+  }
+}

@@ -1,0 +1,16 @@
+**/__pycache__
+**/*.py[cod]
+.venv
+.git
+.codex
+data
+build
+dist
+*.egg-info
+**/*.egg-info
+frontend/node_modules
+.npm-cache
+.browser-cache
+deploy/docker/.local
+tests
+tools

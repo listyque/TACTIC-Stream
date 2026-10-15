@@ -1,0 +1,15 @@
+[
+ {"phase":"rule","actions":[]},
+ {"phase":"context","actions":[{"type":"text","id":"naming_context","value":"publish/frame"}]},
+ {"phase":"flag","actions":[{"type":"reveal","viewport":"namingFieldsScroll","id":"naming_latest_versionless"},{"type":"click","id":"naming_latest_versionless"}]},
+ {"phase":"advanced","actions":[{"type":"page","selector":"namingPages","value":"advanced"}]},
+ {"phase":"condition","actions":[{"type":"reveal","viewport":"namingFieldsScroll","id":"naming_condition"},{"type":"text","id":"naming_condition","value":"@GET(snapshot.context) == 'publish'"}]},
+ {"phase":"save-confirmation","actions":[{"type":"click","id":"adminSaveDocument"}]},
+ {"phase":"discard-confirmation","actions":[{"type":"click","id":"adminCancelSave"},{"type":"click","id":"adminDiscardDocument"}]},
+ {"phase":"discarded","actions":[{"type":"click","id":"adminConfirmSave"}]},
+ {"phase":"duplicated","actions":[{"type":"click","id":"namingDuplicate"}]},
+ {"phase":"create-confirmation","actions":[{"type":"click","id":"namingCreate"}]},
+ {"phase":"keep-draft","actions":[{"type":"click","id":"adminCancelSave"}]},
+ {"phase":"unknown","actions":[{"type":"state","value":"uncertain"}]},
+ {"phase":"busy","actions":[{"type":"state","value":"busy"}]}
+]

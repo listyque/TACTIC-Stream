@@ -1,0 +1,124 @@
+def register_project(self, project, config, site=None, need_upgrade=[False]):
+
+        # Check if this project needs and upgrade, or if upgrade is occuring.
+        if Config.get_value("portal", "auto_upgrade") == 'true':
+
+            # If it is safe to upgrade, call upgrade project. Checks for upgrade and returns "start"
+            # if upgrade is started.
+            upgrade_status = self.get_upgrade_status(project, site)
+            if upgrade_status == "end":
+                upgrade_status = self.upgrade_project(project, config, site, need_upgrade)
+         
+            # During upgrade, project won't be registered. After project upgrade finishes, project registration can begin
+            if upgrade_status == "start":
+                need_upgrade[0] = True
+                return
+            else:
+                pass
+
+        # if there happend to be . in the project name, convert to _
+        project = project.replace(".", "_")
+
+        if project == "template":
+            return
+
+        if site:
+            print("Registering project ... %s (%s)" % (project, site))
+        else:
+            print("Registering project ... %s" % project)
+
+
+        try:
+            from tactic.ui.app import SitePage
+            if site:
+                # make sure the site exists
+                try:
+                    x = eval("cherrypy.root.tactic.%s" % (site))
+                except:
+                    exec("cherrypy.root.tactic.%s = TacticIndex()" % (site))
+                    exec("cherrypy.root.projects.%s = TacticIndex()" % (site))
+
+                exec("cherrypy.root.tactic.%s.%s = SitePage()" % (site, project))
+                exec("cherrypy.root.projects.%s.%s = SitePage()" % (site, project))
+
+            else:
+                exec("cherrypy.root.tactic.%s = SitePage()" % project)
+                exec("cherrypy.root.projects.%s = SitePage()" % project)
+
+
+
+        except ImportError:
+            #print("... WARNING: SitePage not found")
+            exec("cherrypy.root.tactic.%s = TacticIndex()" % project)
+            exec("cherrypy.root.projects.%s = TacticIndex()" % project)
+        except SyntaxError as e:
+            print("WARNING: skipping project [%s]" % project)
+            print("... possibly project or site contains special characters")
+            raise
+
+
+
+
+
+        # The rest is only ever executed on the "default" project
+
+
+        # This is to get admin project working
+        if project in ['admin', 'default', 'template', 'unittest']:
+            base = "tactic_sites"
+        else:
+            base = "sites"
+
+
+
+        # get the contexts:
+        if project in ("admin", "default", "template", "unittest"):
+            context_dir = Environment.get_install_dir().replace("\\", "/")
+            context_dir = "%s/src/tactic_sites/%s/context" % (context_dir, project)
+        else:
+            context_dir = Environment.get_site_dir().replace("\\", "/")
+            context_dir = "%s/sites/%s/context" % (context_dir, project)
+                
+
+        if not os.path.exists(context_dir):
+            return
+
+        contexts = []
+        for context_dir in os.listdir(context_dir):
+            if not context_dir.endswith(".py"):
+                continue
+            if context_dir == "__init__.py":
+                continue
+            if context_dir.startswith("."):
+                continue
+            if os.path.isdir(context_dir):
+                continue
+
+            context = context_dir.replace(".py", "")
+            contexts.append(context)
+        
+        for context in contexts:
+            try:
+
+                exec("from %s.%s.context.%s import %s" % (base,project,context,context))
+                if site:
+                    exec("cherrypy.root.tactic.%s.%s.%s = %s()" % (site,project,context,context) )
+                else:
+                    exec("cherrypy.root.tactic.%s.%s = %s()" % (project,context,context) )
+
+            except ImportError as e:
+                print(str(e))
+                print("... failed to import '%s.%s.%s'" % (base, project, context))
+                raise
+                #return
+
+
+            path = "/tactic/%s/%s" % (project, context)
+            settings = {}
+            config[path] = settings
+
+            if context in ["XMLRPC", "Api"]:
+                #settings['request.dispatch'] = cherrypy.dispatch.XMLRPCDispatcher(),
+                settings['tools.xmlrpc.on'] = True
+                settings['tools.xmlrpc.encoding'] = 'utf-8'
+                settings['tools.xmlrpc.allow_none'] = True

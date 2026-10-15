@@ -1,0 +1,71 @@
+         771971 function calls (771867 primitive calls) in 0.264 seconds
+
+   Ordered by: cumulative time
+   List reduced from 525 to 35 due to restriction <35>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.264    0.264 performance_probe.py:230(invoke)
+        1    0.000    0.000    0.264    0.264 api.py:649(dispatch)
+        1    0.000    0.000    0.263    0.263 api.py:679(_dispatch)
+        1    0.000    0.000    0.254    0.254 command.py:107(execute_cmd)
+        1    0.000    0.000    0.254    0.254 api.py:777(<lambda>)
+        1    0.001    0.001    0.254    0.254 api.py:1041(eval)
+        1    0.000    0.000    0.250    0.250 expression.py:72(eval)
+      4/1    0.000    0.000    0.244    0.244 expression.py:561(dive)
+      4/1    0.000    0.000    0.244    0.244 expression.py:542(do_parse)
+        1    0.000    0.000    0.244    0.244 expression.py:803(parse)
+        4    0.000    0.000    0.244    0.061 expression.py:1085(parse)
+        1    0.000    0.000    0.244    0.244 expression.py:1134(execute_method)
+        1    0.011    0.011    0.148    0.148 expression.py:2386(get)
+     9500    0.011    0.000    0.100    0.000 expression.py:364(cache_sobjects)
+        1    0.000    0.000    0.096    0.096 expression.py:1976(get_sobjects)
+       10    0.013    0.001    0.096    0.010 search.py:3970(get_sobjects)
+     9500    0.013    0.000    0.076    0.000 keys.py:153(get_by_sobject)
+     9514    0.015    0.000    0.063    0.000 search.py:2295(fast_create_from_class_path)
+     9522    0.017    0.000    0.039    0.000 search.py:81(__init__)
+    19102    0.019    0.000    0.030    0.000 keys.py:88(_get_data)
+     9514    0.005    0.000    0.025    0.000 search.py:2391(get_column_type)
+    19088    0.004    0.000    0.024    0.000 container.py:74(get_full_dict)
+     9500    0.004    0.000    0.023    0.000 search.py:631(get_project_code)
+     9522    0.003    0.000    0.021    0.000 search.py:628(get_base_search_type)
+9529/9527    0.005    0.000    0.020    0.000 search.py:2353(get_column_info)
+    19090    0.004    0.000    0.020    0.000 container.py:58(_get_dict)
+19088/19087    0.013    0.000    0.020    0.000 search.py:158(get_value)
+     9500    0.004    0.000    0.020    0.000 keys.py:134(extract_project)
+     9602    0.003    0.000    0.018    0.000 keys.py:124(extract_base_search_type)
+     9502    0.006    0.000    0.018    0.000 spt_date.py:62(convert)
+    19425    0.006    0.000    0.016    0.000 container.py:28(get)
+       35    0.012    0.000    0.012    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+   114862    0.011    0.000    0.011    0.000 {method 'get' of 'dict' objects}
+       17    0.011    0.001    0.011    0.001 {method 'fetchall' of 'sqlite3.Cursor' objects}
+    85766    0.010    0.000    0.010    0.000 {method 'split' of 'str' objects}
+
+
+         771971 function calls (771867 primitive calls) in 0.264 seconds
+
+   Ordered by: internal time
+   List reduced from 525 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    19102    0.019    0.000    0.030    0.000 keys.py:88(_get_data)
+     9522    0.017    0.000    0.039    0.000 search.py:81(__init__)
+     9514    0.015    0.000    0.063    0.000 search.py:2295(fast_create_from_class_path)
+     9500    0.013    0.000    0.076    0.000 keys.py:153(get_by_sobject)
+       10    0.013    0.001    0.096    0.010 search.py:3970(get_sobjects)
+19088/19087    0.013    0.000    0.020    0.000 search.py:158(get_value)
+       35    0.012    0.000    0.012    0.000 {method 'execute' of 'sqlite3.Connection' objects}
+   114862    0.011    0.000    0.011    0.000 {method 'get' of 'dict' objects}
+     9500    0.011    0.000    0.100    0.000 expression.py:364(cache_sobjects)
+        1    0.011    0.011    0.148    0.148 expression.py:2386(get)
+       17    0.011    0.001    0.011    0.001 {method 'fetchall' of 'sqlite3.Cursor' objects}
+    85766    0.010    0.000    0.010    0.000 {method 'split' of 'str' objects}
+   116134    0.010    0.000    0.010    0.000 {built-in method builtins.isinstance}
+    19425    0.006    0.000    0.016    0.000 container.py:28(get)
+    19483    0.006    0.000    0.008    0.000 container.py:17(get_instance)
+     9502    0.006    0.000    0.018    0.000 spt_date.py:62(convert)
+9529/9527    0.005    0.000    0.020    0.000 search.py:2353(get_column_info)
+     9514    0.005    0.000    0.025    0.000 search.py:2391(get_column_type)
+    19090    0.004    0.000    0.020    0.000 container.py:58(_get_dict)
+    19088    0.004    0.000    0.024    0.000 container.py:74(get_full_dict)
+
+

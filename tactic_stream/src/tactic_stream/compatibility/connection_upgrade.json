@@ -1,0 +1,50 @@
+{
+  "tables": {
+    "connection": "CREATE TABLE connection (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    context character varying(60),\n    project_code character varying(30),\n    src_search_type character varying(200),\n    src_search_id integer,\n    dst_search_type character varying(200),\n    dst_search_id integer,\n    login character varying(30),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP\n)"
+  },
+  "registry": [
+    {
+      "id": 41,
+      "code": "sthpw/connection",
+      "search_type": "sthpw/connection",
+      "namespace": "sthpw",
+      "description": "Connections",
+      "database": "sthpw",
+      "table_name": "connection",
+      "class_name": "pyasm.biz.SObjectConnection",
+      "title": "Connections",
+      "schema": null,
+      "color": null
+    }
+  ],
+  "columns": [
+    {
+      "table": "search_object",
+      "column": "default_layout",
+      "sql": "ALTER TABLE search_object ADD COLUMN default_layout varchar(32);",
+      "source_method": "upgrade_v4_1_0_a01_009"
+    },
+    {
+      "table": "search_object",
+      "column": "id_column",
+      "sql": "ALTER TABLE search_object ADD COLUMN id_column varchar(256);",
+      "source_method": "bootstrap_schema.sql"
+    },
+    {
+      "table": "search_object",
+      "column": "type",
+      "sql": "ALTER TABLE search_object ADD COLUMN \"type\" varchar(128);",
+      "source_method": "upgrade_v4_4_0_a01_003"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "connection_src_idx",
+      "sql": "CREATE INDEX \"connection_src_idx\" ON \"connection\" (\"src_search_type\", \"src_search_id\");"
+    },
+    {
+      "name": "connection_dst_idx",
+      "sql": "CREATE INDEX \"connection_dst_idx\" ON \"connection\" (\"dst_search_type\", \"dst_search_id\");"
+    }
+  ]
+}

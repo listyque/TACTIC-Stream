@@ -1,0 +1,67 @@
+{
+  "version": "0.13",
+  "baseline": "TACTIC_5_Vue_Source_Fork_0.12.zip",
+  "baseline_sha256": "08b20c627f9db182a5df08b7084f06b85694afcb874d45694f4a551d1eb2b0bf",
+  "created_utc": "2026-10-01T20:52:23.316807+00:00",
+  "checks": [
+    {
+      "name": "Vue build",
+      "status": "passed",
+      "components": 40,
+      "vue": "3.5.13"
+    },
+    {
+      "name": "Python unit",
+      "status": "passed",
+      "tests": 967
+    },
+    {
+      "name": "JS toolbar actual SFC methods",
+      "status": "passed",
+      "tests": 19
+    },
+    {
+      "name": "JS actual grid buffer methods",
+      "status": "passed",
+      "tests": 15
+    },
+    {
+      "name": "synthetic HTTP regression",
+      "status": "passed",
+      "scenarios": 322,
+      "individual_suites_complete": true,
+      "aggregate_shell_completed": false
+    },
+    {
+      "name": "original TACTIC SQLite HTTP",
+      "status": "passed",
+      "scenarios": 120
+    },
+    {
+      "name": "original TACTIC SQLite browser",
+      "status": "passed",
+      "scenarios": 108,
+      "explicit_http_bridge": true
+    },
+    {
+      "name": "shipped XML metadata parity",
+      "status": "passed",
+      "files": 80,
+      "views": 487,
+      "comparisons": 11370,
+      "differences": 0
+    }
+  ],
+  "limitations": [
+    "Native UI still admin-only; not all legacy custom menus or widgets ported",
+    "Test-only signature isolation; production license check unchanged",
+    "Explicit browser HTTP bridge after direct navigation denied; browser cookies/CSP/navigation/WebCrypto not proven",
+    "Windows and PostgreSQL/MySQL not run",
+    "No runtime downloads rechecked; data/launcher/runtime unchanged"
+  ],
+  "source": "full released 0.12 ZIP; only working tree used",
+  "archive_crc_verified": false,
+  "changed_code_build_test_files": 21,
+  "patch_application_and_hashes_verified": true,
+  "unchanged_runtime_bat_and_seed_files": 25
+}

@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-13",
+  "scenario": "Real QML Depot folder pointer clicks while Pending remains open",
+  "dataset": {
+    "visible_depot_rows": 200,
+    "retained_file_rows": 8000
+  },
+  "measurement": "Synchronous QTest.mouseClick duration; server/worker completion and frame presentation excluded",
+  "baseline": "Original full QVariantMap payload restored through the Qt view_data property; other navigation code held constant",
+  "baseline_ms": [
+    1679.12,
+    1657.02,
+    1692.25,
+    1803.1,
+    1769.35
+  ],
+  "fixed_ms": [
+    23.54,
+    19.71,
+    18.05,
+    18.35,
+    18.23
+  ],
+  "limitations": [
+    "Synthetic retained UI rows, not the user live project",
+    "No million-file or terabyte transfer benchmark"
+  ]
+}

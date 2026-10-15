@@ -1,0 +1,517 @@
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00013""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00163""")
+insert.set_value('script_path', """telegram/assets_tasks_handle""")
+insert.set_value('timestamp', """2019-08-26 22:31:37""")
+insert.set_value('title', """Telegram Model Task Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """pyasm.command.ProcessStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00014""")
+insert.set_value('data', """{"process_code": "SPT_PROCESS00162", "pipeline_code": "cg/scenes", "search_type": "cg/scenes"}""")
+insert.set_value('description', """Listener for [assets] from [cg/scenes]""")
+insert.set_value('event', """workflow|cg/assets""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """assets""")
+insert.set_value('timestamp', """2019-09-06 20:35:57""")
+insert.set_value('title', """Approve Episode Listener""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00017""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """rig""")
+insert.set_value('script_path', """telegram/assets_tasks_handle""")
+insert.set_value('timestamp', """2019-09-19 09:11:33""")
+insert.set_value('title', """Telegram Rig Task Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00018""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """light""")
+insert.set_value('s_status', """retired""")
+insert.set_value('script_path', """telegram/light_task_handle""")
+insert.set_value('timestamp', """2019-10-01 22:26:00""")
+insert.set_value('title', """Telegram Light Task Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00019""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """layout""")
+insert.set_value('s_status', """retired""")
+insert.set_value('script_path', """telegram/animation_task_handle""")
+insert.set_value('timestamp', """2019-10-02 22:30:14""")
+insert.set_value('title', """Telegram Layout Task Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00020""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """animation""")
+insert.set_value('s_status', """retired""")
+insert.set_value('script_path', """telegram/animation_task_handle""")
+insert.set_value('timestamp', """2019-10-02 22:30:55""")
+insert.set_value('title', """Telegram Animation Task Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00021""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """compose""")
+insert.set_value('s_status', """retired""")
+insert.set_value('script_path', """telegram/compose_task_handle""")
+insert.set_value('timestamp', """2019-11-19 18:25:14""")
+insert.set_value('title', """Telegram Compose Tasks Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00022""")
+insert.set_value('event', """shtpw/task|change""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """texture""")
+insert.set_value('script_path', """telegram/assets_tasks_handle""")
+insert.set_value('timestamp', """2019-11-21 00:41:09""")
+insert.set_value('title', """Telegram Texture Task Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00023""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """sound""")
+insert.set_value('s_status', """retired""")
+insert.set_value('script_path', """telegram/compose_task_handle""")
+insert.set_value('timestamp', """2019-11-28 16:54:30""")
+insert.set_value('title', """Telegram Sound Tasks Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00024""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00234""")
+insert.set_value('s_status', """retired""")
+insert.set_value('script_path', """telegram/compose_task_handle""")
+insert.set_value('timestamp', """2020-06-21 21:30:10""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00026""")
+insert.set_value('event', """change|sthpw/note""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('script_path', """telegram/notes_handle""")
+insert.set_value('search_type', """cg/scenes""")
+insert.set_value('timestamp', """2020-08-25 23:58:14""")
+insert.set_value('title', """Tasks notes handler for Episodes""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00027""")
+insert.set_value('event', """change|sthpw/note""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('script_path', """telegram/notes_handle""")
+insert.set_value('search_type', """cg/asset""")
+insert.set_value('timestamp', """2020-08-25 23:58:14""")
+insert.set_value('title', """Tasks notes handler for Assets""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00028""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00159""")
+insert.set_value('s_status', """retired""")
+insert.set_value('script_path', """telegram/scripts_task_handle""")
+insert.set_value('timestamp', """2021-05-26 15:24:48""")
+insert.set_value('title', """Telegram Script Tasks Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00029""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('script_path', """telegram/task_status_handler""")
+insert.set_value('search_type', """cg/scenes""")
+insert.set_value('timestamp', """2021-06-25 18:40:59""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00030""")
+insert.set_value('data', """[{"src_process": "animation", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "light", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """animation""")
+insert.set_value('timestamp', """2021-06-26 09:56:25""")
+insert.set_value('title', """Set Lighting Ready to work""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00031""")
+insert.set_value('data', """[{"src_process": "render", "src_status": "\\u0413\\u043e\\u0442\\u043e\\u0432", "dst_process": "compose", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """render""")
+insert.set_value('timestamp', """2021-06-26 17:15:54""")
+insert.set_value('title', """Render Complete trigger""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00033""")
+insert.set_value('data', """[{"src_process": "script", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "storyboard", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}, {"src_process": "script", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "layout", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00159""")
+insert.set_value('timestamp', """2021-06-26 18:10:37""")
+insert.set_value('title', """Script Task complete trigger""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00034""")
+insert.set_value('data', """{"output": ["storyboard"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00159""")
+insert.set_value('timestamp', """2021-06-27 16:14:30""")
+insert.set_value('title', """Script Task complete trigger create task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00035""")
+insert.set_value('data', """{"output": ["render"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """light""")
+insert.set_value('timestamp', """2021-06-27 17:04:27""")
+insert.set_value('title', """Light task accepted""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00036""")
+insert.set_value('data', """{"output": ["compose"], "src_status": "\\u0413\\u043e\\u0442\\u043e\\u0432"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """render""")
+insert.set_value('timestamp', """2021-06-27 22:54:08""")
+insert.set_value('title', """Render complete task creation trigger""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00037""")
+insert.set_value('data', """{"output": ["light"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """animation""")
+insert.set_value('timestamp', """2021-06-27 23:52:04""")
+insert.set_value('title', """Create Light Task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00041""")
+insert.set_value('data', """{"output": ["sound"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """compose""")
+insert.set_value('timestamp', """2021-06-28 16:38:13""")
+insert.set_value('title', """Sound Create Task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00042""")
+insert.set_value('data', """[{"src_process": "compose", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "sound", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """compose""")
+insert.set_value('timestamp', """2021-06-28 16:39:00""")
+insert.set_value('title', """Set sound assigned""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00043""")
+insert.set_value('event', """change|sthpw/task""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00236""")
+insert.set_value('s_status', """retired""")
+insert.set_value('script_path', """telegram/scripts_task_handle""")
+insert.set_value('timestamp', """2021-07-03 23:58:08""")
+insert.set_value('title', """Telegram Storyboard Tasks Handle""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00044""")
+insert.set_value('data', """[{"src_process": "sound", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "publish", "dst_status": "\\u041d\\u0430 \\u043f\\u0440\\u043e\\u0432\\u0435\\u0440\\u043a\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """sound""")
+insert.set_value('timestamp', """2021-07-07 15:49:03""")
+insert.set_value('title', """Set Publish on review""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00045""")
+insert.set_value('data', """{"output": ["publish"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """sound""")
+insert.set_value('timestamp', """2021-07-07 15:49:23""")
+insert.set_value('title', """Create publish Task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00046""")
+insert.set_value('description', """Episodes Creation / Change Trigger""")
+insert.set_value('event', """change|cg/scenes""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('script_path', """episodes/changed""")
+insert.set_value('timestamp', """2021-08-15 23:05:40""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00047""")
+insert.set_value('data', """{"class_path": "", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "src_process": "script"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """script""")
+insert.set_value('script_path', """tasks/scripts_shorts_status_handle""")
+insert.set_value('timestamp', """2021-08-16 01:42:46""")
+insert.set_value('title', """Shorts Script Task complete trigger""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00049""")
+insert.set_value('data', """[{"src_process": "light", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "render", "dst_status": "\\u041f\\u043e\\u0434\\u0433\\u043e\\u0442\\u043e\\u0432\\u043b\\u0435\\u043d"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """light""")
+insert.set_value('timestamp', """2021-08-19 21:38:13""")
+insert.set_value('title', """Set Render to ready""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00054""")
+insert.set_value('data', """{"class_path": "", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "src_process": "storyboard"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """storyboard""")
+insert.set_value('script_path', """tasks/storyboard_status_handle""")
+insert.set_value('timestamp', """2021-08-20 01:49:56""")
+insert.set_value('title', """Handle Storyboard Status Accepted""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00055""")
+insert.set_value('data', """{"class_path": "", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "src_process": "layout"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """layout""")
+insert.set_value('script_path', """tasks/layout_status_handle""")
+insert.set_value('timestamp', """2021-08-20 13:46:50""")
+insert.set_value('title', """Layout ready to work Handler""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00057""")
+insert.set_value('data', """[{"src_process": "arrangement", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "layout", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00262""")
+insert.set_value('timestamp', """2021-08-22 20:36:07""")
+insert.set_value('title', """Arrangement complete""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00058""")
+insert.set_value('data', """{"output": ["layout"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00262""")
+insert.set_value('timestamp', """2021-08-22 20:36:29""")
+insert.set_value('title', """Arrangement Complete Create Task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00059""")
+insert.set_value('data', """[{"src_process": "script", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "storyboard", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00251""")
+insert.set_value('timestamp', """2021-08-22 21:55:36""")
+insert.set_value('title', """Script Task Accepted""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00060""")
+insert.set_value('data', """{"output": ["storyboard"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00251""")
+insert.set_value('timestamp', """2021-08-22 21:55:58""")
+insert.set_value('title', """Create Storyboard Task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00061""")
+insert.set_value('data', """[{"src_process": "script", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "storyboard", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00264""")
+insert.set_value('timestamp', """2021-08-22 21:56:34""")
+insert.set_value('title', """Script Task Accepted""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00062""")
+insert.set_value('data', """{"output": ["storyboard"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00264""")
+insert.set_value('timestamp', """2021-08-22 21:56:58""")
+insert.set_value('title', """Create Storyboard Task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00063""")
+insert.set_value('data', """[{"src_process": "vocal", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "animation", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00263""")
+insert.set_value('timestamp', """2021-08-23 01:03:01""")
+insert.set_value('title', """Vocal task accepted""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00064""")
+insert.set_value('data', """{"output": ["animation"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00263""")
+insert.set_value('timestamp', """2021-08-23 01:03:41""")
+insert.set_value('title', """Create Animation Task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskStatusTrigger""")
+insert.set_value('code', """SPT_TRIGGER00065""")
+insert.set_value('data', """[{"src_process": "voice", "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442", "dst_process": "animation", "dst_status": "\\u0413\\u043e\\u0442\\u043e\\u0432 \\u043a \\u0440\\u0430\\u0431\\u043e\\u0442\\u0435"}]""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00268""")
+insert.set_value('timestamp', """2021-08-23 01:12:23""")
+insert.set_value('title', """Voice Task Complete""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('class_name', """tactic.command.PipelineTaskCreateTrigger""")
+insert.set_value('code', """SPT_TRIGGER00066""")
+insert.set_value('data', """{"output": ["animation"], "src_status": "\\u041f\\u0440\\u0438\\u043d\\u044f\\u0442"}""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('process', """SPT_PROCESS00268""")
+insert.set_value('timestamp', """2021-08-23 01:12:42""")
+insert.set_value('title', """Create Animation Task""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00067""")
+insert.set_value('data', """{"script_path": "telegram/due_date_reminder", "type": "interval", "interval": "60", "delay": "10"}""")
+insert.set_value('description', """Tasks Due Telegram reminder""")
+insert.set_value('event', """schedule""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('script_path', """telegram/due_date_reminder""")
+insert.set_value('timestamp', """2021-09-19 02:15:09""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00068""")
+insert.set_value('description', """Executes Script when tasks Status changed""")
+insert.set_value('event', """change|sthpw/task|status""")
+insert.set_value('mode', """same process,same transaction""")
+insert.set_value('script_path', """tasks/in_progress_status_handle""")
+insert.set_value('timestamp', """2022-02-14 00:34:26""")
+#-- End Entry --#
+
+#-- Start Entry --#
+insert = SearchType.create('config/trigger')
+insert.set_value('code', """SPT_TRIGGER00069""")
+insert.set_value('data', """{"version":1,"action":"snapshot.save","phase":"after","search_type":"cg/assets","search_keys":[],"process":"publish","context":"","order":0}""")
+insert.set_value('event', """handler|after|snapshot|save""")
+insert.set_value('script_path', """dev/tests/post_save_trigger""")
+insert.set_value('timestamp', """2026-09-12 09:27:49.229676""")
+insert.set_value('title', """Post Save snapshot TRIGGER TEST""")
+insert.set_value('trigger_type', """handler_script_hook""")
+#-- End Entry --#
+

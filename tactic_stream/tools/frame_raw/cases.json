@@ -1,0 +1,17 @@
+[
+ {"phase":"table","actions":[]},
+ {"phase":"cell","actions":[{"type":"click","id":"rawCell_0_id"}]},
+ {"phase":"invalid-cell","actions":[{"type":"text","window":"cell","id":"rawCellValue","value":"invalid"},{"type":"click","window":"cell","id":"rawCellApply"}]},
+ {"phase":"dirty","actions":[{"type":"text","window":"cell","id":"rawCellValue","value":"42"},{"type":"click","window":"cell","id":"rawCellApply"}]},
+ {"phase":"confirm-save","actions":[{"type":"click","id":"adminSaveDocument"}]},
+ {"phase":"confirm-discard","actions":[{"type":"click","id":"adminCancelSave"},{"type":"click","id":"adminDiscardDocument"}]},
+ {"phase":"discarded","actions":[{"type":"click","id":"adminConfirmSave"}]},
+ {"phase":"readonly-cell","actions":[{"type":"reveal","row":0,"column":3},{"type":"click","id":"rawCell_0_password"}]},
+ {"phase":"new-row","actions":[{"type":"click","window":"cell","id":"rawCellCancel"},{"type":"click","id":"rawNewRow"}]},
+ {"phase":"default-cell","actions":[{"type":"click","id":"rawCell_50_id"}]},
+ {"phase":"null-cell","actions":[{"type":"choose","window":"cell","id":"rawCellMode","value":"null"}]},
+ {"phase":"deleted-row","actions":[{"type":"click","window":"cell","id":"rawCellCancel"},{"type":"reveal","row":0,"column":0},{"type":"click","id":"rawDeleteRow_0"}]},
+ {"phase":"readonly","actions":[{"type":"state","value":"readonly"}]},
+ {"phase":"uncertain","actions":[{"type":"state","value":"uncertain"}]},
+ {"phase":"busy","actions":[{"type":"state","value":"busy"}]}
+]

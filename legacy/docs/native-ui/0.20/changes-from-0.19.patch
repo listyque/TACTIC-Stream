@@ -1,0 +1,1925 @@
+--- a/.gitignore
++++ b/.gitignore
+@@ -53,3 +53,8 @@
+ .runtime/
+ local_data/
+ local_data.initializing/
++
++# Local launcher choices (paths only; never part of a release)
++launcher.local.json
++launcher.local.json.previous
++.launcher-*.tmp
+--- a/BUILD_VUE.bat
++++ /dev/null
+@@ -1,17 +0,0 @@
+-@echo off
+-setlocal
+-cd /d "%~dp0"
+-where node >nul 2>nul
+-if errorlevel 1 (
+-  echo Node.js is needed only to rebuild the already included Vue bundle.
+-  pause
+-  exit /b 1
+-)
+-node tools\native_ui\build.cjs
+-if errorlevel 1 (
+-  echo Build failed. Do not deploy a partially built tree.
+-  pause
+-  exit /b 1
+-)
+-echo Vue bundle rebuilt.
+-pause
+--- a/CHECK_ENV.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py" --check %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- a/CHECK_LOCAL_DB.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py" --check-local-db %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- a/CHECK_STARTUP.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py" --check-startup %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- a/CONFIGURE_NATIVE.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\configure_native.py"  %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- a/INIT_LOCAL_SQLITE.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py" --init-sqlite %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- /dev/null
++++ b/MANAGE_TACTIC.bat
+@@ -0,0 +1,7 @@
++@echo off
++setlocal DisableDelayedExpansion
++rem Thin entry point; arguments are forwarded once without CALL.
++set "TACTIC_LAUNCH_ENTRY=manage"
++"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0tools\local\tactic_bootstrap.ps1" %*
++set "RESULT=%ERRORLEVEL%"
++exit /b %RESULT%
+--- a/NATIVE_UI_VERSION
++++ b/NATIVE_UI_VERSION
+@@ -1 +1 @@
+-0.19
++0.20
+--- a/README_VUE_RU.md
++++ b/README_VUE_RU.md
+@@ -1,73 +1,136 @@
+-# TACTIC 5.0 — Vue Source Fork 0.19
++# TACTIC 5.0 — Vue Source Fork 0.20
+ 
+-Полное дерево исходников на основе выпущенного **0.18**. Этот выпуск убирает крупные дублирующие заголовки и пустые отступы на страницах редакторов. Исходная версия ядра остаётся `5.0.0.a02`, комплект Vue — `3.5.13`; готовая сборка включена. Номер native UI — `0.19`.
++Полное дерево исходников на основе выпущенной **0.19**. Этот этап сокращает **12 BAT-файлов до трёх**, не убирая операции и защитные подтверждения. Ядро остаётся `5.0.0.a02`; Vue в комплекте — прежний `3.5.13`. Готовая браузерная сборка включена.
+ 
+-## Что изменено
++## 1. Три файла в корне
+ 
+-### Общая оболочка
++| Файл | Двойной щелчок / назначение |
++|---|---|
++| **START_TACTIC.bat** | Запускает сервер по сохранённым параметрам. Без настройки — кластер из трёх TACTIC-процессов на localhost:9123. |
++| **SETUP_ENV.bat** | Устанавливает локальные Python и зависимости. Работает до установки Python; не создаёт и не обновляет БД. |
++| **MANAGE_TACTIC.bat** | Открывает меню параметров запуска, диагностики, разрешений, обслуживания SQLite и сборки Vue. Само открытие меню ничего не запускает и не меняет. |
+ 
+-Из `App.vue` удалён `view-heading`: путь конфигурации, большое название страницы и отдельная строка обновления больше не выводятся над виджетом. Название остаётся в основной вкладке и sidebar. Путь конфигурации доступен в подсказке вкладки и существующем меню определения виджета.
++**В корне и во всём дереве ровно три `.bat`**, не ещё десяток спрятанных старых BAT. Все действия вызывают прежние Python/PowerShell-инструменты внутри `tools/local`. Старые раздельные BAT удалены из новой поставки, их функциональность не удалена.
+ 
+-Обновление и меню перемещены в правую часть уже существующей строки вкладок; они не занимают отдельный ряд. Для встроенной формы там же сохранён «Источник колонок». Эти кнопки имеют текстовые доступные имена и подсказки. Правый клик вкладки/виджета, исходное меню, закрытие и переключение вкладок сохранены.
++Важно: **START_TACTIC по умолчанию теперь запускает три процесса**, как прежний START_CLUSTER. Для одного процесса используйте `--single` или сохраните режим `single`; для legacy — `--legacy`.
+ 
+-### Сами редакторы
++## 2. Обновление уже работающей установки
+ 
+-Удалены вторые крупные title/eyebrow-блоки из Custom Layout, Manage Views, Script Editor, SearchTypes, Sidebar, Security, System Config/License, Message Center и Collections. У нового проекта сразу начинаются шаги мастера. Стартовая страница проекта также больше не имеет большого повторного заголовка.
++**Не удаляйте local_data. Не выполняйте INIT, SETUP или UPGRADE повторно ради 0.20.** Остановите всю прежнюю группу, сохраните резервную копию данных и распакуйте 0.20 отдельно. Не накладывайте архив поверх старой папки: распаковка не удалит старые BAT.
+ 
+-В Custom Layout первым содержимым становятся каталог и рабочая область. У Manage Views сохраняется компактный выбор SearchType. У SearchTypes кнопка создания перенесена к каталогу типов. В Sidebar действие «Исходный XML» объединено с существующей панелью раздела/сохранения. У Script Editor сохранены Новый/Копировать/В файл/Таблица и индикатор черновика, без повторного названия инструмента.
+-
+-Общие отступы редакторов: 8 px сверху/снизу и 12 px по бокам (8 px на узком экране). `widget-toolbar` — общий компактный стиль панели действий. Убрано вертикальное центрирование Custom Layout через `margin:auto`. Панели каталогов и вкладки разделов стали компактнее. Все изменения используют существующие светлые/тёмные цветовые переменные, без нового CDN, шрифтов и библиотек.
+-
+-**Не удалены** заголовки колонок таблицы, названия полей, разделы формы из `widget_config`, легенды групп настроек, этапы мастера, предупреждения и ошибки. Заголовки диалогов оставлены для идентификации окна и уменьшены. У встроенной формы повторный заголовок визуально скрыт, но остаётся её доступным именем; формы с `show_header=false` получают отдельный `aria-label`. Произвольные заголовки внутри пользовательского Custom Layout не скрываются общим CSS.
+-
+-### Обновление без потери черновика
+-
+-Исправлена связь кнопки обновления с редакторами: после успешного повторного получения `/open` обновляется ключ экземпляра редактора, а не только метаданные родительской вкладки. Несохранённые изменения сначала требуют подтверждения. Отмена и ошибка запроса сохраняют черновик. Повторный клик не запускает параллельное обновление; запоздалый ответ после закрытия вкладки/смены проекта не меняет другой виджет. Подтверждённое обновление заново загружает сохранённые данные — это не Save и не запись черновика в БД.
+-
+-## Что не изменялось
+-
+-Серверные Python-модули, бизнес-команды, исходные XML/config-resolver, авторизация, журнал START/RUNNING/END, распределение запросов и shared sessions не изменены. Состав `widget_config`, поля таблиц/форм, пути API и хранение настроек в `WidgetSettings` остаются прежними. Все BAT, launcher, загрузчик окружения, зависимости и штатные seed-базы сохранены побайтно.
+-
+-**Это не завершение всех оставшихся legacy-виджетов.** Динамическое выполнение Mako/JS в Custom Layout, обычные роли, неперенесённые custom handlers и прочие ограничения 0.18 сохраняются. Этот этап — компактная оболочка, расположение инструментов и её проверка; старые UI-каталоги остаются необходимыми.
+-
+-## Обновление уже работающей установки
+-
+-Остановите всю прежнюю группу и распакуйте архив отдельно. **Не удаляйте `local_data`, не выполняйте INIT повторно. SETUP/UPGRADE ради 0.19 не нужны.** Укажите реальные пути к своему рабочему Python и данным. Команды выполняются из НОВОГО корня `TACTIC-5.0`:
++Из НОВОГО каталога `TACTIC-5.0`, подставив свои рабочие пути:
+ 
+ ```bat
+ set "TACTIC_PYTHON=D:\TACTIC_OLD\TACTIC-5.0\.runtime\python\python.exe"
+-set "DATA=D:\TACTIC_OLD\TACTIC-5.0\local_data"
+-START_CLUSTER.bat --data-dir "%DATA%" --port 9123 --workers 3
++START_TACTIC.bat --data-dir "D:\TACTIC_OLD\TACTIC-5.0\local_data" --port 9123 --workers 3
+ ```
+ 
+-Для одного процесса — `START_TACTIC.bat --data-dir "%DATA%" --port 9123`. Если использовался внешний XML, сохраните свой `--config`. Адрес: `http://127.0.0.1:9123/tactic/admin/`. После запуска обновите страницу **Ctrl+F5**. Node/npm для обычного запуска не нужны.
++Адрес: `http://127.0.0.1:9123/tactic/admin/`. При внешней конфигурации сохраните свой `--config "...\tactic-conf.xml"`. Данные и Python могут быть в разных старых папках. Остановка всей группы — Ctrl+C в окне запуска. Шлюз и все workers остаются на localhost; схема балансировки не менялась.
+ 
+-Разрешения записи/загрузки/запуска сохранённого Python из `<data-dir>/config/native-ui.json` продолжают действовать и не включаются автоматически. Обновление интерфейса не меняет их. Для отката исходников используйте 0.18; `START_LEGACY` переключает рендерер, но не отменяет записи данных.
+-
+-## Проверки
+-
+-Точные итоги — `docs/native-ui/0.19/validation/summary.json` и внешний `TACTIC_5_Vue_0.19_Verification.json`.
+-
+-- 1227 Python unit-тестов прежнего кода повторно пройдены.
+-- 177 JavaScript-проверок реальных методов компонентов: 155 прежних и 22 новых проверки компактной оболочки, наличия действий и безопасного refresh.
+-- 352 HTTP-сценария через **три оригинальных процесса TACTIC**, включая таблицы, общий буфер, формы, Globals, проект, настройки БД, административные редакторы, Custom Layout, Manage Views, запуск сохранённого Python и CSV.
+-- 85 браузерных сценариев: предыдущие операции редакторов и новая проверка компактности 15 семейств страниц; ошибки JavaScript не обнаружены. На тестовом размере 1600×1050 у проверенных страниц контейнер виджета начинается непосредственно после строки вкладок, без пустой шапки. Проверены светлая/тёмная темы и ширина 390 px.
+-- 64 проверки управления кластером (включая коды выхода дочерних наборов); они не суммируются второй раз с HTTP/browser.
+-- 80 XML / 487 views / 11 370 сравнений метаданных — без расхождений в прежней проверяемой области.
+-- Сборка 50 Vue SFC, проверка патча и целостности архива.
+-
+-**Границы:** сквозные тесты создают собственные полные временные SQLite-базы; пароль/ticket, модели, команды, транзакции и сохранение настоящие. Только подпись тестовой лицензии изолирована явным тестовым флагом. Production её проверку не отключает. Прямая навигация Chromium в среде была заблокирована; тестам потребовался явно включённый HTTP-мост. Он не доказывает нативные browser cookies/CSP/navigation. Windows BAT/PowerShell и PostgreSQL/MySQL в этом выпуске не проверены.
+-
+-Новая браузерная матрица не приравнивается к полному повторному прохождению всех исторических браузерных сценариев. Старые отчёты в архиве остаются историческими. Сырые worker-логи, приватные тестовые базы, runtime и файлы шрифтов не включены. Неудачный прерванный инструментом первый запуск не засчитан как завершённая проверка; успешный финальный прогон выделен отдельно.
+-
+-Повторение в developer-окружении:
++Прочие режимы:
+ 
+ ```bat
+-python -W ignore -m unittest discover -s tests/native_ui -v
+-node tests/native_ui/test_compact_shell_019.cjs
+-node tools/native_ui/build.cjs
+-python tools/native_ui/audit_config_parity.py --out config-parity.json
+-python tests/native_ui/run_cluster_019.py --output D:\TEMP\tactic019-test --chromium C:\path\chrome.exe
++START_TACTIC.bat --single --data-dir "D:\TACTIC_DATA"
++START_TACTIC.bat --legacy --data-dir "D:\TACTIC_DATA"
++START_TACTIC.bat --mode cluster --port 9123 --workers 3 --worker-base-port 9200
+ ```
+ 
+-`--isolate-license` — только для изолированного теста без криптографии. `--bridge` — только при реальном запрете прямой навигации. Тестовый runner не принимает рабочую базу и не заменяет запуск приложения. Внешний `cgi.py`, использованный в Linux/Python 3.13 окружении тестов, в форк не добавлен.
++Для `--single`/`--legacy` не передавайте `--workers`, `--worker-base-port` и `--timeout`: они относятся только к группе и не будут молча проигнорированы. Диапазон workers — 2–8. Внешний порт — 1024–65535. Порты проверяются на пересечение; отсутствие свободного порта обрабатывает прежний cluster launcher.
++
++## 3. Один раз указать пути, затем запускать двойным щелчком
++
++Откройте **MANAGE_TACTIC.bat → 1. Параметры запуска**. Укажите Python, каталог данных, внешний XML (при необходимости), порт, число workers и режим `cluster/single/legacy`. Сохранение требует подтверждения. Затем для ежедневного запуска достаточно START_TACTIC.
++
++Если рядом ещё нет Python, меню предложит указать существующий `python.exe` или отдельно установить окружение. Неверный явно переданный `--python` не заменяется незаметно случайным Python из PATH.
++
++То же без меню:
++
++```bat
++MANAGE_TACTIC.bat settings --python "D:\OLD\.runtime\python\python.exe" --data-dir "D:\OLD\local_data" --mode cluster --workers 3 --port 9123 --save
++START_TACTIC.bat
++```
++
++Параметры сохраняются в **launcher.local.json рядом с тремя BAT**. Он содержит только пути/режим/порт, не пароли, не TACTIC tickets и не настройки widget_config. При следующем обновлении можно перенести этот один файл в новое дерево. В поставку он не включён, чтобы не навязывать чужие пути. Предыдущая версия файла сохраняется как `.previous`; повреждённый JSON и конфликт записи не перезаписываются молча.
++
++Приоритет Python: `--python` → `TACTIC_PYTHON` → сохранённый профиль → локальная `.runtime`. Приоритет параметров запуска: явные аргументы → профиль → значения по умолчанию. Относительные пути считаются от нового каталога исходников, а не от случайной текущей папки.
++
++Явный новый `--data-dir` без `--config` не наследует старый внешний XML другого каталога. `--config` без `--data-dir` выводит каталог данных только из стандартного расположения `<data>/config/...xml`; для другого расположения укажите оба пути. Никакого поиска «похожей базы» в Downloads нет.
++
++## 4. Меню обслуживания
++
++В MANAGE пять групп:
++
++1. Параметры запуска.
++2. Диагностика: окружение, структура managed SQLite, создание/регистрация сервера.
++3. Разрешения: просмотр, только чтение, запись, файлы, запуск сохранённых Python-скриптов, отдельное отключение uploads/scripts.
++4. База: новая SQLite, обновление с backup, восстановление прерванной установки.
++5. Пересборка готового Vue для разработчика.
++
++Кнопки INIT/UPGRADE не запускаются автоматически при диагностике. После завершения операции и ENTER меню возвращается. В обычном запуске START нет лишних шагов меню.
++
++| Раньше | Теперь |
++|---|---|
++| START_CLUSTER.bat | START_TACTIC.bat |
++| START_TACTIC.bat (один процесс) | START_TACTIC.bat --single |
++| START_LEGACY.bat | START_TACTIC.bat --legacy |
++| SETUP_ENV.bat | SETUP_ENV.bat |
++| CHECK_ENV.bat | MANAGE_TACTIC.bat check env |
++| CHECK_LOCAL_DB.bat | MANAGE_TACTIC.bat check db |
++| CHECK_STARTUP.bat | MANAGE_TACTIC.bat check startup |
++| CONFIGURE_NATIVE.bat | MANAGE_TACTIC.bat configure |
++| INIT_LOCAL_SQLITE.bat | MANAGE_TACTIC.bat db init |
++| UPGRADE_LOCAL_SQLITE.bat | MANAGE_TACTIC.bat db upgrade |
++| RESTORE_LOCAL_SQLITE.bat | MANAGE_TACTIC.bat db restore |
++| BUILD_VUE.bat | MANAGE_TACTIC.bat build |
++
++Прямые примеры:
++
++```bat
++MANAGE_TACTIC.bat check db --data-dir "D:\TACTIC_DATA"
++MANAGE_TACTIC.bat configure --data-dir "D:\TACTIC_DATA" --writes on
++MANAGE_TACTIC.bat db upgrade --data-dir "D:\TACTIC_DATA"
++START_TACTIC.bat --dry-run
++```
++
++`--dry-run` показывает точную команду без выполнения, создания БД или сохранения параметров. Для прямых команд сохраняется код возврата дочернего инструмента, в том числе **3 у check db**, когда структура не готова. Этот статус не запускает миграцию. `check startup` выполняет оригинальную инициализацию, которая может писать в БД — это НЕ read-only диагностика; остановите сервер.
++
++**CREATE, ввод пароля, UPGRADE, RESTORE, ENABLE/DISABLE и существующие lock/backup не удалены.** `db restore` только восстанавливает прерванную установку, не откатывает уже изменённую работающую БД. `db` принимает только управляемую SQLite без внешнего --config, а не произвольную PostgreSQL/MySQL-инсталляцию. Новая оболочка не подавляет ошибки, не включает запись сама и не заменяет работу исходных инструментов.
++
++## 5. Окружение и первый запуск с нуля
++
++```bat
++SETUP_ENV.bat
++SETUP_ENV.bat --offline
++SETUP_ENV.bat --repair
++```
++
++Загрузка идёт через прежний `setup_env.ps1`, manifest и проверки SHA-256/подписи/zipapp. URL, версии и зависимости **не менялись, загрузки заново не проверялись**. Ремонт выполняется отдельным PowerShell-процессом, без запущенного в этом меню Python, который требовалось бы перемещать. Перед ремонтом всё равно остановите серверы, использующие данное окружение. `--repair` не гарантирует работу при стороннем процессе, удерживающем файлы.
++
++Сохраняются также прежние формы параметров `-Repair` и `-Offline`. Нет автоматического запуска INIT/UPGRADE после SETUP. Для совершенно нового пустого каталога используйте MANAGE → База → Новая SQLite, затем отдельный UPGRADE и check db. **Это не инструкция инициализировать существующий local_data заново.** PostgreSQL-сервер по-прежнему не устанавливается.
++
++## 6. Технические детали
++
++BAT — тонкие ASCII/CRLF-входы с отключённым delayed expansion. Они вызывают общий `tools/local/tactic_bootstrap.ps1`, который до Python обрабатывает SETUP, выбор интерпретатора и справку. Затем `control.py` (только стандартная библиотека) делегирует действие прежним `launch.py`, `cluster.py`, `configure_native.py`, `setup_env.ps1` или `build.cjs`.
++
++Аргументы PowerShell→Python передаются JSON-конвертом через окружение, не исполняемым `-Command` или повторным `CALL`. Дочерние инструменты запускаются списком argv, без shell=True и без перехвата stdout/stdin: приглашения подтверждения, пароль и START/RUNNING/END остаются в консоли. Ctrl+C передаётся оригинальному launcher, контроллер ждёт завершения дочерней очистки и не повторяет команду.
++
++Дополнительный JSON-профиль нужен **только для локального запуска до открытия БД**. Настройки интерфейса/таблиц/поиска остаются в оригинальном WidgetSettings/widget_config. Нативная авторизация, роли, защита CSRF, бизнес-команды, логика миграций и структура seed в этом этапе не менялись. Обновлены лишь пользовательские подсказки, чтобы не ссылаться на удалённые BAT.
++
++## 7. Проверки и ограничения
++
++Фактические текущие результаты: `docs/native-ui/0.20/validation/summary.json` и внешний Verification.
++
++Итог: **1304 Python unit-теста** (из них 77 контроллера/entry contracts), **177 JavaScript-проверок**, **25 subprocess-проверок контроллера**, **352 HTTP-сценария** через оригинальную группу и **63 проверки управления этой группой (включая коды завершения дочерних наборов; повторно к HTTP не суммируются)**. 50 Vue SFC собраны и сверены по хешам. XML parity — 80 файлов, 487 views, 11 370 сравнений без расхождений в проверенной области.
++ Включены отдельные тесты трёх entry points, диспетчеризации, сохранения профиля, конфликтов, специальных символов в argv, кодов возврата, Ctrl+C и отсутствия автоматических подтверждений.
++
++Portable subprocess-набор сравнивает вызов оригинального read-only check db напрямую и через контроллер на временном полном seed; побайтно проверяет неизменность БД/конфигов. **Это исполнение Python-контроллера на Linux, а не Windows BAT.** Сквозная HTTP-регрессия использует оригинальный кластер TACTIC и временные SQLite, с явной изоляцией подписи тестовой лицензии. Подпись в рабочем коде не выключена.
++
++**Windows BAT/PowerShell 5.1 и фактическая загрузка окружения здесь не исполнялись.** Включён отдельный smoke-test `tests/native_ui/test_bootstrap_020.ps1` для Windows; его наличие не считается прохождением. PostgreSQL/MySQL, все действия UI в браузере и сетевые файловые системы заново не проверены. JavaScript/готовая сборка и серверная HTTP-регрессия проверены отдельно; новые браузерные цифры этого релиза не заявляются.
++
++## 8. Состав и откат
++
++Полный форк с готовыми JS/CSS, три BAT, shared helpers, тесты, source map и patch к .19. Поставка исключает `.runtime`, пользовательские БД/пароли/профили, private test установки, сырые worker-журналы, caches/pyc/.git и файлы шрифтов. Штатные исходные seed сохранены. Исторические отчёты остаются отчётами своих версий.
++
++Старые документы в `docs/native-ui/0.x` содержат прежние имена BAT — используйте таблицу соответствия выше. Никаких старых BAT с автоматическими переадресациями не добавлялось. При возврате на 0.19 снова используются её прежние BAT. START_TACTIC --legacy меняет только рендерер, не откатывает данные; старые UI-каталоги всё ещё нужны.
++
++Справка по реализации командных границ: Microsoft about_PowerShell_exe (Windows PowerShell 5.1), раздел -File; Python subprocess, раздел Security Considerations. Переменные оболочки могут быть раскрыты вызывающей CMD/PowerShell ещё до входа в BAT; не передавайте произвольную командную строку как путь к интерпретатору.
+--- a/RESTORE_LOCAL_SQLITE.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py" --restore-local %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- a/SETUP_ENV.bat
++++ b/SETUP_ENV.bat
+@@ -1,8 +1,7 @@
+ @echo off
+ setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0tools\local\setup_env.ps1" %*
++rem Thin entry point; arguments are forwarded once without CALL.
++set "TACTIC_LAUNCH_ENTRY=setup"
++"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0tools\local\tactic_bootstrap.ps1" %*
+ set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+ exit /b %RESULT%
+--- a/START_CLUSTER.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\cluster.py"  %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- a/START_LEGACY.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py" --legacy %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- a/START_TACTIC.bat
++++ b/START_TACTIC.bat
+@@ -1,16 +1,7 @@
+ @echo off
+ setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py"  %*
++rem Thin entry point; arguments are forwarded once without CALL.
++set "TACTIC_LAUNCH_ENTRY=start"
++"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0tools\local\tactic_bootstrap.ps1" %*
+ set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+ exit /b %RESULT%
+--- a/UPGRADE_LOCAL_SQLITE.bat
++++ /dev/null
+@@ -1,16 +0,0 @@
+-@echo off
+-setlocal DisableDelayedExpansion
+-cd /d "%~dp0"
+-set "PYTHON=%~dp0.runtime\python\python.exe"
+-if defined TACTIC_PYTHON set "PYTHON=%TACTIC_PYTHON%"
+-if not exist "%PYTHON%" (
+-    echo Python environment is missing. Run SETUP_ENV.bat first.
+-    echo Or set TACTIC_PYTHON to a compatible existing python.exe.
+-    if not "%TACTIC_NO_PAUSE%"=="1" pause
+-    exit /b 2
+-)
+-"%PYTHON%" -X utf8 -s "%~dp0tools\local\launch.py" --upgrade-local %*
+-set "RESULT=%ERRORLEVEL%"
+-echo.
+-if not "%TACTIC_NO_PAUSE%"=="1" pause
+-exit /b %RESULT%
+--- a/frontend/package.json
++++ b/frontend/package.json
+@@ -1,7 +1,7 @@
+ {
+   "name": "tactic-native-ui",
+   "private": true,
+-  "version": "0.19.0",
++  "version": "0.20.0",
+   "scripts": {
+     "build": "node ../tools/native_ui/build.cjs"
+   }
+--- a/frontend/src/components/GlobalSettings.vue
++++ b/frontend/src/components/GlobalSettings.vue
+@@ -16,7 +16,7 @@
+ </script>
+ <template>
+ <section class="global-settings" :aria-label="kind==='license'?'License Manager':'System Configuration'"><header class="widget-toolbar" role="group" aria-label="Действия с настройками"><button @click="load" :disabled="busy">Обновить</button><button class="primary" :disabled="busy||!record?.can_write||!dirty" @click="save">{{busy?'Обработка…':'Сохранить'}}</button></header>
+- <p v-if="error" class="error">{{error}}</p><p v-if="notice" class="notice">{{notice}}</p><p v-if="record&&!record.can_write" class="notice">Режим чтения. Для изменения запустите CONFIGURE_NATIVE.bat на сервере и перезапустите TACTIC.</p>
++ <p v-if="error" class="error">{{error}}</p><p v-if="notice" class="notice">{{notice}}</p><p v-if="record&&!record.can_write" class="notice">Режим чтения. Для изменения запустите MANAGE_TACTIC.bat configure --writes on на сервере и перезапустите TACTIC.</p>
+  <template v-if="record&&kind==='system-config'"><p class="notice">{{record.notice}}</p><div class="global-settings-grid"><fieldset v-for="g in record.groups" :key="g.title"><legend>{{g.title}}</legend><div v-for="f in g.fields" :key="f.name" class="system-field"><label :for="'setting-'+f.name">{{f.label}}<small>{{f.name}}</small></label><select v-if="f.choices.length" :id="'setting-'+f.name" :disabled="!record.can_write" :value="value(f)" @change="change(f,$event.target.value)"><option v-for="o in f.choices" :value="o" :key="o">{{o}}</option></select><select v-else-if="f.kind==='boolean'" :id="'setting-'+f.name" :disabled="!record.can_write" :value="value(f)" @change="change(f,$event.target.value)"><option value="">По умолчанию</option><option value="true">true</option><option value="false">false</option></select><input v-else :id="'setting-'+f.name" :disabled="!record.can_write" :type="f.secret?'password':f.kind==='integer'?'number':'text'" :autocomplete="f.secret?'new-password':undefined" :value="value(f)" :placeholder="f.secret&&f.configured?'Настроено; пустое поле не меняет секрет':''" @input="change(f,$event.target.value)"></div></fieldset></div></template>
+  <template v-if="record&&kind==='license'"><p v-if="record.message" class="warning-text">{{record.message}}</p><dl class="license-info"><template v-for="(v,k) in record.info" :key="k"><dt>{{k}}</dt><dd>{{v===null||v===''?'—':v}}</dd></template><dt>Проверка TACTIC</dt><dd>{{record.licensed?'Лицензия подтверждена':'Нет подтверждённой лицензии'}}</dd></dl><fieldset><legend>Renew License</legend><p>Проверка подписи выполняется исходным License. Только после неё RenewLicenseCbk заменяет файл.</p><input type="file" accept=".xml,text/xml,application/xml" :disabled="!record.can_write||busy" @change="choose"><p v-if="xml">Файл выбран: {{xml.length}} символов. Содержимое не выполняется и не выводится как HTML.</p></fieldset></template>
+ </section>
+--- a/src/tactic/ui_api/global_admin_service.py
++++ b/src/tactic/ui_api/global_admin_service.py
+@@ -53,7 +53,7 @@
+                         'notice':'Сохранение создаёт резервную копию. Изменения применяются после ручного перезапуска. Базы и каталоги автоматически не создаются.'}
+             if method=='PATCH':
+                 if data.get('confirm')!='SAVE_SYSTEM_CONFIG':raise ApiError(400,'confirmation','Подтвердите изменение конфигурации сервера')
+-                if not self.allow_writes:raise ApiError(403,'read_only','Запись отключена. Используйте CONFIGURE_NATIVE.bat на сервере.')
++                if not self.allow_writes:raise ApiError(403,'read_only','Запись отключена. Используйте MANAGE_TACTIC.bat configure --writes on на сервере.')
+                 try:result=patch_config(config_path,data.get('revision'),data.get('changes'))
+                 except FileExistsError as exc:raise ApiError(409,'conflict',str(exc)) from exc
+                 except ValueError as exc:raise ApiError(400,'system_config',str(exc)) from exc
+@@ -141,7 +141,7 @@
+                 f.update(renderer='project-database',supported=True,reason='',read_only=True)
+             if not form and short in ('XmlWdg',) and f['storage']:
+                 f.update(renderer='xml',supported=True,reason='',read_only=True)
+-        spec['write_notice']='' if self.allow_writes else 'Запись отключена в настройках native UI. Включите её явно через CONFIGURE_NATIVE.bat и перезапустите сервер.'
++        spec['write_notice']='' if self.allow_writes else 'Запись отключена в настройках native UI. Включите её явно через MANAGE_TACTIC.bat configure --writes on и перезапустите сервер.'
+         spec['diagnostics']=[{'field':f['name'],'handler':f['handler'],'reason':f['reason']} for f in spec['fields'] if f.get('reason')]
+         return spec
+ 
+--- a/src/tactic/ui_api/graph_service.py
++++ b/src/tactic/ui_api/graph_service.py
+@@ -159,7 +159,7 @@
+                       'node_types': list(PROCESS_TYPES),
+                       'source': 'predefined' if kind=='schema' and obj.get_code() in ('admin','sthpw','unittest') else 'sthpw/'+kind,
+                       'owner_project':self._project(),
+-                      'notice': 'Встроенная схема читается из исходников TACTIC. Для редактирования выберите рабочий проект.' if kind=='schema' and obj.get_code() in ('admin','sthpw','unittest') else ('' if self.allow_writes else 'Запись отключена. Используйте CONFIGURE_NATIVE.bat и перезапустите сервер.')}
++                      'notice': 'Встроенная схема читается из исходников TACTIC. Для редактирования выберите рабочий проект.' if kind=='schema' and obj.get_code() in ('admin','sthpw','unittest') else ('' if self.allow_writes else 'Запись отключена. Используйте MANAGE_TACTIC.bat configure --writes on и перезапустите сервер.')}
+             if kind == 'schema':
+                 result['search_types'] = self.catalog()['types']
+             return result
+--- a/src/tactic/ui_api/system_diagnostics.py
++++ b/src/tactic/ui_api/system_diagnostics.py
+@@ -22,7 +22,7 @@
+     except Exception as exc:
+         LOG.error('Native schema metadata unavailable: %s',type(exc).__name__)
+         return {'read_only':True,'ready':False,'databases':[],
+-                'error':'metadata_unavailable','notice':'Не удалось прочитать регистрации схемы. Используйте CHECK_LOCAL_DB.bat для управляемой локальной SQLite.'}
++                'error':'metadata_unavailable','notice':'Не удалось прочитать регистрации схемы. Используйте MANAGE_TACTIC.bat check db для управляемой локальной SQLite.'}
+     results=[]
+     for project in projects:
+         code=project.get_code()
+@@ -41,4 +41,4 @@
+         results.append(report)
+     return {'read_only':True,'ready':all(x['ready'] for x in results),'databases':results,
+             'notice':'Проверены обязательные таблицы и поля перенесённого UI. Это не проверка всех данных, авторизации, триггеров или файлов.',
+-            'upgrade_notice':'Обновление БД из браузера не выполняется. Остановите сервер; для управляемой локальной SQLite используйте CHECK_LOCAL_DB.bat → UPGRADE_LOCAL_SQLITE.bat.'}
++            'upgrade_notice':'Обновление БД из браузера не выполняется. Остановите сервер; для управляемой локальной SQLite используйте MANAGE_TACTIC.bat check db → MANAGE_TACTIC.bat db upgrade.'}
+--- a/src/tactic/ui_api/web/app.js
++++ b/src/tactic/ui_api/web/app.js
+@@ -1,4 +1,4 @@
+-/* TACTIC Vue 0.19.0-source-fork; templates precompiled with Vue 3.5.13. See vendor/VUE_LICENSE.txt. */
++/* TACTIC Vue 0.20.0-source-fork; templates precompiled with Vue 3.5.13. See vendor/VUE_LICENSE.txt. */
+ (function(){
+ const _Vue = Vue;
+ const api = (function(){
+@@ -6823,7 +6823,7 @@
+         ? (_openBlock(), _createElementBlock("p", {
+             key: 2,
+             class: "notice"
+-          }, "Режим чтения. Для изменения запустите CONFIGURE_NATIVE.bat на сервере и перезапустите TACTIC."))
++          }, "Режим чтения. Для изменения запустите MANAGE_TACTIC.bat configure --writes on на сервере и перезапустите TACTIC."))
+         : _createCommentVNode("", true),
+       (record&&kind==='system-config')
+         ? (_openBlock(), _createElementBlock(_Fragment, { key: 3 }, [_createElementVNode("p", { class: "notice" }, _toDisplayString(record.notice), 1), _createElementVNode("div", { class: "global-settings-grid" }, [(_openBlock(true), _createElementBlock(_Fragment, null, _renderList(record.groups, (g) => {
+--- a/src/tactic/ui_api/web/build-manifest.json
++++ b/src/tactic/ui_api/web/build-manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "0.19.0-source-fork",
++  "version": "0.20.0-source-fork",
+   "vue": "3.5.13",
+   "components": [
+     "CsvImportPanel",
+@@ -55,7 +55,7 @@
+   ],
+   "external_runtime_dependencies": [],
+   "files": {
+-    "app.js": "a6978e1dffd7fbb242aa971ad0dfafb86baeffa67fa7c0e95e2bddaa741f7423",
++    "app.js": "4cd07cb90f88118f8bcd2c7d39446a58b1e9361b108bd8e92b3ca43d52245fe2",
+     "styles.css": "165d9084a8e448bf74a792404950a794379a91c9657358a4c23f8873925406d2",
+     "index.html": "8cac7e6d9a8001fa9d30d635be3a7f6aed45b73b02b4ce9895a265b3721439a2",
+     "vendor/vue.global.prod.js": "c459ba7cc8db65c982589fa5d64c7ff478877e8e5b0fd75683207cec6a4e89e8",
+--- a/tests/native_ui/run_browser_08.py
++++ b/tests/native_ui/run_browser_08.py
+@@ -43,7 +43,7 @@
+   assert 'Требуется проверка схемы' in page.locator('.schema-health header').inner_text();passed('Incomplete real stock seed is not presented as healthy')
+   row=page.locator('.schema-check-table tbody tr').filter(has=page.get_by_text('message_log',exact=True));assert row.count()==1 and 'Нет таблицы' in row.inner_text();passed('Missing message history table diagnosed explicitly')
+   row=page.locator('.schema-check-table tbody tr').filter(has=page.get_by_text('widget_config',exact=True));assert row.count()==1 and 'Нет полей' in row.inner_text() and 'priority' in row.inner_text();passed('Original unprefixed widget_config and missing columns retained in report')
+-  assert 'UPGRADE_LOCAL_SQLITE.bat' in page.locator('.schema-health').inner_text();assert page.locator('.schema-health button').count()==0;passed('No browser DDL/migration action is exposed')
++  assert 'MANAGE_TACTIC.bat db upgrade' in page.locator('.schema-health').inner_text();assert page.locator('.schema-health button').count()==0;passed('No browser DDL/migration action is exposed')
+   before=page.locator('.schema-check-table').inner_text();page.get_by_role('button',name='Проверить снова',exact=True).click();page.wait_for_timeout(250);assert page.locator('.schema-check-table').inner_text()==before;passed('Repeated read-only check does not mutate the seed or silently repair data')
+   assert 'TEST FIXTURE' in page.locator('.fixture-banner').inner_text();page.screenshot(path=str(out/'screenshots/system-schema-diagnostics.png'))
+   assert not any('password' in t for t in page.locator('.system-summary dt').all_text_contents());passed('No passwords or config dump displayed')
+--- /dev/null
++++ b/tests/native_ui/run_console_020.py
+@@ -0,0 +1,47 @@
++"""Actual subprocess checks for the unified console. Temporary seed only.
++No licence bypass is needed: read-only DB inspection precedes server imports.
++No Windows execution is claimed by this portable runner.
++"""
++from pathlib import Path
++import argparse, hashlib, json, os, subprocess, sys, tempfile, time
++from managed_seed_08 import ROOT, create_seed
++p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
++a.output.mkdir(parents=True,exist_ok=True)
++report={'passed':False,'platform':sys.platform,'scenarios':[]}
++def check(name,ok):
++    report['scenarios'].append({'name':name,'passed':bool(ok)})
++    print(('PASS ' if ok else 'FAIL ')+name,flush=True)
++    if not ok: raise AssertionError(name)
++def call(name,argv,expected):
++    proc=subprocess.run([sys.executable,'-X','utf8','-s',*argv],cwd=ROOT,input=b'',stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=45)
++    (a.output/(name+'.log')).write_bytes(proc.stdout)
++    check(name+' exit',proc.returncode==expected)
++    return proc.stdout.decode('utf-8',errors='replace')
++def hashes(folder):
++    return {str(x.relative_to(folder)):hashlib.sha256(x.read_bytes()).hexdigest() for x in folder.rglob('*') if x.is_file()}
++try:
++    with tempfile.TemporaryDirectory(prefix='TACTIC console & ! ') as temp:
++        data=Path(temp)/'Данные & ! % (local)';create_seed(data);initial=hashes(data)
++        script='tools/local/control.py'
++        native='tools/local/launch.py'
++        call('wrapped-check-db',[script,'check','db','--data-dir',str(data)],3)
++        check('Read-only delegate preserves every seed/config file',hashes(data)==initial)
++        wrapped=json.loads((ROOT/'.runtime/local-db-check.json').read_text())
++        call('direct-check-db',[native,'--check-local-db','--data-dir',str(data)],3)
++        direct=json.loads((ROOT/'.runtime/local-db-check.json').read_text())
++        check('Wrapped/direct original reports identical',wrapped==direct)
++        call('show-permissions',[script,'configure','--data-dir',str(data)],0)
++        check('Showing settings does not enable writes',hashes(data)==initial)
++        call('noninteractive-enable-refused',[script,'configure','--data-dir',str(data),'--writes','on'],2)
++        check('Original ENABLE confirmation still mandatory',hashes(data)==initial)
++        call('noninteractive-restore-refused',[script,'db','restore','--data-dir',str(data)],1)
++        check('Original RESTORE confirmation still mandatory',hashes(data)==initial)
++        for command in [['start'],['start','--single'],['start','--legacy'],['db','init'],['db','upgrade'],['db','restore']]:
++            text=call('dry-'+('-'.join(command).replace('--','')), [script,*command,'--data-dir',str(data),'--dry-run'],0)
++            plan=json.loads(text);check('Dry plan contains exact selected path: '+' '.join(command),str(data) in plan['argv'])
++        check('All dry runs leave databases untouched',hashes(data)==initial)
++        call('help-before-runtime',[script,'--help'],0)
++        check('No automatic background processes by plans',hashes(data)==initial)
++    report['passed']=True
++finally:
++    (a.output/'summary.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+--- a/tests/native_ui/run_http_08.py
++++ b/tests/native_ui/run_http_08.py
+@@ -21,7 +21,7 @@
+  check('Widget config registration preserves unprefixed original table',any(x.get('table')=='widget_config' for x in checks) and not any(x.get('table')=='spt_widget_config' for x in checks))
+  check('Report distinguishes columns from absent tables',any(x['state']=='missing_columns' for x in checks))
+  check('No credential/installation path dump in system data','password' not in str(data).lower() and 'tactic-conf.xml' not in str(data) and '.runtime' not in str(data))
+- check('Schema check has no browser migration action','UPGRADE_LOCAL_SQLITE.bat' in schema['upgrade_notice'] and 'execute' not in schema)
++ check('Schema check has no browser migration action','MANAGE_TACTIC.bat db upgrade' in schema['upgrade_notice'] and 'execute' not in schema)
+  check('Normal table target cannot invoke system metadata',call('GET','/system',dict(base,target='admin_views/project_essentials/project_tasks')).status_code==403)
+  check('System POST does not execute upgrades',call('POST','/system',dict(base,operation='upgrade')).status_code==405)
+  second=call('GET','/system',base);check('Repeated GET retains identical schema and does not repair it',second.json()['schema']==schema)
+--- /dev/null
++++ b/tests/native_ui/test_bootstrap_020.ps1
+@@ -0,0 +1,76 @@
++﻿# Optional Windows PowerShell 5.1 smoke test. No downloads, no database writes.
++# Not run by the three launchers. Example from repository root:
++# powershell -NoProfile -File tests/native_ui/test_bootstrap_020.ps1 -Python C:\...\python.exe
++param([string]$Python = '', [string]$Output = '')
++$ErrorActionPreference = 'Stop'
++Set-StrictMode -Version Latest
++$Root = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
++$bootstrap = Join-Path $Root 'tools/local/tactic_bootstrap.ps1'
++$tokens = $null; $errors = $null
++[void][Management.Automation.Language.Parser]::ParseFile($bootstrap, [ref]$tokens, [ref]$errors)
++if (@($errors).Count) { throw ('PowerShell parse errors: ' + ($errors | Out-String)) }
++. $bootstrap
++$Results = New-Object Collections.Generic.List[object]
++function Check([string]$Name, [bool]$Passed) {
++    [void]$Results.Add(@{ name = $Name; passed = $Passed })
++    if (!$Passed) { throw ('FAILED: ' + $Name) }
++    Write-Host ('PASS ' + $Name)
++}
++Check 'PowerShell AST parses bootstrap' $true
++
++$ea = Get-TacticEntryArguments 'start' @()
++Check 'START without args launches, not menu' ($ea.Count -eq 1 -and $ea[0] -ceq 'start')
++$ea = Get-TacticEntryArguments 'start' @('--data-dir','C:\Data & ! %')
++Check 'START preserves arguments as data' ($ea.Count -eq 3 -and $ea[2] -ceq 'C:\Data & ! %')
++$ea = Get-TacticEntryArguments 'setup' @('--offline','--repair')
++Check 'SETUP uses its dedicated action' ($ea.Count -eq 3 -and $ea[0] -ceq 'setup')
++$ea = Get-TacticEntryArguments 'manage' @()
++Check 'MANAGE without args selects menu' ($ea.Count -eq 0)
++$ea = Get-TacticEntryArguments 'manage' @('check','db','--data-dir','C:\Data')
++Check 'MANAGE preserves direct commands' ($ea.Count -eq 4 -and $ea[0] -ceq 'check')
++$denied = $false
++try { Get-TacticEntryArguments 'unknown' @() | Out-Null } catch { $denied = $true }
++Check 'Unknown entry does not become start' $denied
++
++Check 'Empty native argument' ((ConvertTo-TacticNativeArgument '') -ceq '""')
++Check 'Plain native argument' ((ConvertTo-TacticNativeArgument 'plain') -ceq 'plain')
++Check 'Native spaces' ((ConvertTo-TacticNativeArgument 'a b') -ceq '"a b"')
++Check 'Trailing backslash' ((ConvertTo-TacticNativeArgument 'C:\Space dir\') -ceq '"C:\Space dir\\"')
++Check 'Embedded quote' ((ConvertTo-TacticNativeArgument 'say "hi"') -ceq '"say \"hi\""')
++Check 'Metacharacters are not shell syntax' ((ConvertTo-TacticNativeArgument 'a&b!%') -ceq 'a&b!%')
++$opts = Get-TacticSetupOptions @('--offline','--repair','--dry-run')
++Check 'Setup flags' ($opts.Flags -contains '-Repair' -and $opts.Flags -contains '-Offline' -and $opts.DryRun)
++$denied = $false
++try { Get-TacticSetupOptions @('--yes') | Out-Null } catch { $denied = $true }
++Check 'Unknown setup flag rejected' $denied
++$temp = Join-Path ([IO.Path]::GetTempPath()) ('tactic-bootstrap-check-' + [guid]::NewGuid().ToString('N'))
++New-Item -ItemType Directory -Path $temp | Out-Null
++$previousPython = $env:TACTIC_PYTHON
++$previousJSON = $env:TACTIC_BOOTSTRAP_ARGV_JSON
++try {
++    $one = Join-Path $temp 'one.exe'; $two = Join-Path $temp 'two.exe'
++    [IO.File]::WriteAllText($one, 'TEST sentinel - not an executable')
++    [IO.File]::WriteAllText($two, 'TEST sentinel - not an executable')
++    $env:TACTIC_PYTHON = $one
++    Check 'Environment Python selected' ((Get-TacticPython $temp @()) -ceq $one)
++    Check 'Explicit Python wins' ((Get-TacticPython $temp @('--python',$two)) -ceq $two)
++    $denied = $false
++    try { Get-TacticPython $temp @('--python',(Join-Path $temp 'missing.exe')) | Out-Null } catch { $denied = $true }
++    Check 'Missing explicit path rejected without fallback' $denied
++    if ($Python) {
++        $exe = Resolve-TacticPath $Python $Root
++        if (!(Test-Path -LiteralPath $exe -PathType Leaf)) { throw 'Test Python not found.' }
++        $env:TACTIC_BOOTSTRAP_ARGV_JSON = ConvertTo-Json -InputObject @('start','--dry-run','--data-dir',(Join-Path $temp 'Данные & ! %')) -Compress
++        $rc = Invoke-TacticNative $exe @('-X','utf8','-s',(Join-Path $Root 'tools/local/control.py'),'--bootstrap-argv') $Root
++        Check 'Real Python receives JSON arguments and dry-runs' ($rc -eq 0)
++        $rc = Invoke-TacticNative $exe @('-c','raise SystemExit(7)') $Root
++        Check 'Actual native child exit code' ($rc -eq 7)
++    } else { Write-Host 'SKIP actual native Python execution: pass -Python to enable.' }
++} finally {
++    $env:TACTIC_PYTHON = $previousPython
++    $env:TACTIC_BOOTSTRAP_ARGV_JSON = $previousJSON
++    Remove-Item -LiteralPath $temp -Recurse -Force
++}
++$result = @{ passed = $true; checks = @($Results); powershell_version = $PSVersionTable.PSVersion.ToString(); python_native_test = [bool]$Python }
++if ($Output) { $result | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $Output -Encoding UTF8 }
++$result | ConvertTo-Json -Depth 8
+--- /dev/null
++++ b/tests/native_ui/test_console_020.py
+@@ -0,0 +1,367 @@
++"""Three local entry points, shared controller. No working DB/runtime is initialized by these tests."""
++from contextlib import redirect_stdout, redirect_stderr
++import hashlib
++import io
++import json
++import os
++from pathlib import Path
++import signal
++import subprocess
++import sys
++import tempfile
++import time
++import unittest
++from unittest.mock import patch
++
++ROOT = Path(__file__).resolve().parents[2]
++sys.path.insert(0, str(ROOT / 'tools/local'))
++import control as c
++
++
++class CommandPlans(unittest.TestCase):
++    def plan(self, *argv, profile=None, env=None):
++        a = c.parse(list(argv))
++        cfg = c.effective(a, profile or {'format': 1}, ROOT, {} if env is None else env)
++        return c.plan_command(a, cfg, ROOT)
++
++    def test_default_cluster_three_workers(self):
++        v = self.plan('start').argv
++        self.assertIn(str(ROOT / 'tools/local/cluster.py'), v)
++        self.assertEqual(v[v.index('--workers') + 1], '3')
++        self.assertEqual(v[v.index('--port') + 1], '9123')
++
++    def test_single(self):
++        v = self.plan('start', '--single').argv
++        self.assertIn(str(ROOT / 'tools/local/launch.py'), v)
++        self.assertNotIn('--workers', v); self.assertNotIn('--legacy', v)
++
++    def test_legacy(self):
++        self.assertIn('--legacy', self.plan('start', '--legacy').argv)
++
++    def test_saved_single_overridden_by_explicit_mode(self):
++        v = self.plan('start', '--mode', 'cluster', profile={'format': 1, 'mode': 'single', 'workers': 4}).argv
++        self.assertIn(str(ROOT / 'tools/local/cluster.py'), v)
++        self.assertEqual(v[v.index('--workers') + 1], '4')
++
++    def test_invalid_worker_range(self):
++        with self.assertRaises(ValueError): self.plan('start', '--workers', '9')
++
++    def test_worker_flags_not_ignored_in_single(self):
++        with self.assertRaises(ValueError): self.plan('start', '--single', '--workers', '3')
++
++    def test_overlap_ports(self):
++        with self.assertRaises(ValueError): self.plan('start', '--port', '9130', '--worker-base-port', '9129')
++
++    def test_port_overflow(self):
++        with self.assertRaises(ValueError): self.plan('start', '--port', '65534')
++
++    def test_bad_timeout(self):
++        with self.assertRaises(ValueError): self.plan('start', '--timeout', '5')
++
++    def test_custom_worker_ports(self):
++        v = self.plan('start', '--port', '9250', '--workers', '2', '--worker-base-port', '9400', '--timeout', '123').argv
++        self.assertEqual(v[v.index('--worker-base-port') + 1], '9400')
++        self.assertEqual(v[v.index('--timeout') + 1], '123')
++
++    def test_all_diagnostics_map_to_original_flags(self):
++        for kind, flag in [('env', '--check'), ('db', '--check-local-db'), ('startup', '--check-startup')]:
++            with self.subTest(kind=kind):
++                p = self.plan('check', kind)
++                self.assertIn(flag, p.argv); self.assertIn(str(ROOT / 'tools/local/launch.py'), p.argv)
++
++    def test_all_database_commands_map_to_original_flags(self):
++        for kind, flag in [('init', '--init-sqlite'), ('upgrade', '--upgrade-local'), ('restore', '--restore-local')]:
++            with self.subTest(kind=kind): self.assertIn(flag, self.plan('db', kind).argv)
++
++    def test_no_auto_confirm_switch(self):
++        for cmd in [('db','init'), ('db','upgrade'), ('db','restore'), ('configure',)]:
++            with self.subTest(cmd=cmd), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
++                c.parse([*cmd, '--yes'])
++
++    def test_configure_flags_preserved(self):
++        v = self.plan('configure', '--writes', 'on', '--uploads', 'off', '--scripts', 'on').argv
++        self.assertIn(str(ROOT / 'tools/local/configure_native.py'), v)
++        self.assertEqual(v[-6:], ['--writes','on','--uploads','off','--scripts','on'])
++
++    def test_show_configure_without_writes(self):
++        v = self.plan('configure').argv
++        self.assertNotIn('--writes', v); self.assertNotIn('--scripts', v)
++
++    def test_setup_flags_and_original_script(self):
++        v = self.plan('setup', '--repair', '--offline').argv
++        self.assertIn(str(ROOT / 'tools/local/setup_env.ps1'), v)
++        self.assertEqual(v[-2:], ['-Offline', '-Repair'])
++        self.assertNotIn('init', v)
++
++    def test_build_original_script(self):
++        v = self.plan('build').argv
++        self.assertEqual(v[-1], str(ROOT / 'tools/native_ui/build.cjs'))
++
++    def test_paths_metacharacters_preserved_as_one_argument(self):
++        path = str(ROOT / 'данные с пробелами & % ! (x)')
++        v = self.plan('start', '--data-dir', path).argv
++        self.assertEqual(v[v.index('--data-dir')+1], path)
++
++    def test_python_priority(self):
++        a=c.parse(['start','--python',sys.executable])
++        result=c.effective(a,{'format':1,'python':'other'},ROOT,{'TACTIC_PYTHON':'wrong'})
++        self.assertEqual(result['python'],c.clean_path(sys.executable))
++        a=c.parse(['start'])
++        result=c.effective(a,{'format':1,'python':'other'},ROOT,{'TACTIC_PYTHON':sys.executable})
++        self.assertEqual(result['python'],c.clean_path(sys.executable))
++
++    def test_explicit_config_infers_data_not_saved_wrong_data(self):
++        a=c.parse(['start','--config',str(ROOT/'NEW/config/tactic-conf.xml')])
++        cfg=c.effective(a,{'format':1,'data_dir':str(ROOT/'OLD')},ROOT,{})
++        self.assertEqual(cfg['data_dir'], str(ROOT/'NEW'))
++
++    def test_nonstandard_config_needs_data_dir(self):
++        with self.assertRaises(ValueError): self.plan('start','--config',str(ROOT/'other.xml'))
++
++    def test_explicit_data_clears_saved_other_config(self):
++        p=self.plan('start','--data-dir',str(ROOT/'new'),profile={'format':1,'data_dir':str(ROOT/'old'),'config':str(ROOT/'old/config/tactic-conf.xml')})
++        self.assertNotIn('--config',p.argv)
++
++    def test_db_external_config_blocked(self):
++        with self.assertRaises(ValueError): self.plan('db','init','--config',str(ROOT/'x/config/tactic-conf.xml'))
++
++    def test_null_control_chars_in_path_rejected(self):
++        for value in ('', 'abc\nxyz', 'x\0', 'ab"cd'):
++            with self.subTest(value=value), self.assertRaises(ValueError): c.clean_path(value)
++
++    def test_quoted_paths_and_symlink_interpreter(self):
++        self.assertEqual(c.clean_path('"'+str(ROOT/'a b')+'"'),str(ROOT/'a b'))
++        with tempfile.TemporaryDirectory() as t:
++            linked=Path(t)/'python';linked.symlink_to(sys.executable)
++            self.assertEqual(c.clean_path(str(linked)),str(linked))
++
++    def test_no_args_selects_menu(self):self.assertEqual(c.parse([]).command,'menu')
++    def test_options_without_command_select_menu(self):self.assertEqual(c.parse(['--port','9200']).command,'menu')
++
++    def test_unknown_command_does_not_become_start(self):
++        with redirect_stderr(io.StringIO()),self.assertRaises(SystemExit):c.parse(['star'])
++
++    def test_help_does_not_load_profile(self):
++        with patch.object(c,'read_profile',side_effect=AssertionError('read')),redirect_stdout(io.StringIO()),self.assertRaises(SystemExit) as cm:c.main(['--help'])
++        self.assertEqual(cm.exception.code,0)
++
++
++class Profiles(unittest.TestCase):
++    def setUp(self):
++        self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
++    def test_absent_profile(self):self.assertEqual(c.read_profile(self.root),({'format':1},None))
++    def test_unknown_fields_rejected(self):
++        with self.assertRaises(ValueError):c.validate_profile({'format':1,'password':'no'},self.root)
++    def test_non_object_rejected(self):
++        with self.assertRaises(ValueError):c.validate_profile([],self.root)
++    def test_bool_port_rejected(self):
++        with self.assertRaises(ValueError):c.validate_profile({'format':1,'port':True},self.root)
++    def test_fraction_workers_rejected(self):
++        with self.assertRaises(ValueError):c.validate_profile({'format':1,'workers':3.5},self.root)
++    def test_mode_rejected(self):
++        with self.assertRaises(ValueError):c.validate_profile({'format':1,'mode':'taskkill'},self.root)
++    def test_round_trip_unicode_and_backup(self):
++        c.save_profile(self.root,{'format':1,'data_dir':'данные & !','python':sys.executable,'port':9123},None)
++        value,revision=c.read_profile(self.root);self.assertTrue(value['data_dir'].endswith('данные & !'))
++        raw=(self.root/c.PROFILE_NAME).read_bytes()
++        c.save_profile(self.root,dict(value,port=9201),revision)
++        self.assertEqual((self.root/(c.PROFILE_NAME+'.previous')).read_bytes(),raw)
++        self.assertEqual(list(self.root.glob('.launcher-*.tmp')),[])
++    def test_conflict_keeps_original(self):
++        c.save_profile(self.root,{'format':1},None)
++        original=(self.root/c.PROFILE_NAME).read_bytes()
++        with self.assertRaises(ValueError):c.save_profile(self.root,{'format':1,'port':9100},'old')
++        self.assertEqual((self.root/c.PROFILE_NAME).read_bytes(),original)
++    def test_corrupt_profile_not_silently_reset(self):
++        p=self.root/c.PROFILE_NAME;p.write_text('{')
++        with self.assertRaises(ValueError):c.read_profile(self.root)
++        self.assertEqual(p.read_text(),'{')
++    def test_profile_size_limit(self):
++        (self.root/c.PROFILE_NAME).write_text(' '*17000)
++        with self.assertRaises(ValueError):c.read_profile(self.root)
++    def test_profile_save_changes_no_database_files(self):
++        db=self.root/'data.db';db.write_bytes(b'preserve')
++        with redirect_stdout(io.StringIO()):self.assertEqual(c.main(['settings','--save','--data-dir','new data','--python',sys.executable],self.root),0)
++        self.assertEqual(db.read_bytes(),b'preserve');self.assertFalse((self.root/'new data').exists())
++    def test_settings_preview_does_not_write(self):
++        with redirect_stdout(io.StringIO()):c.main(['settings','--save','--dry-run','--data-dir','NEW'],self.root)
++        self.assertFalse((self.root/c.PROFILE_NAME).exists())
++    def test_settings_path_change_clears_old_external_xml(self):
++        c.save_profile(self.root,{'format':1,'config':str(self.root/'old/config/tactic-conf.xml')},None)
++        with redirect_stdout(io.StringIO()):c.main(['settings','--save','--data-dir','NEW'],self.root)
++        p,_=c.read_profile(self.root);self.assertNotIn('config',p)
++    def test_settings_config_alone_saves_matching_data(self):
++        f=self.root/'NEW/config/tactic-conf.xml';f.parent.mkdir(parents=True);f.write_text('<config/>')
++        with redirect_stdout(io.StringIO()):c.main(['settings','--save','--config',str(f)],self.root)
++        p,_=c.read_profile(self.root);self.assertEqual(p['data_dir'],str(f.parent.parent))
++    def test_menu_settings_cancel(self):
++        cfg=c.effective(c.parse(['start']),{'format':1},self.root,{})
++        with redirect_stdout(io.StringIO()):c.settings_menu(cfg,self.root,lambda prompt:'')
++        self.assertFalse((self.root/c.PROFILE_NAME).exists())
++
++
++class Execution(unittest.TestCase):
++    def test_dry_run_never_spawns(self):
++        for argv in [['start'],['db','init'],['db','upgrade'],['configure','--writes','on'],['setup','--repair'],['build']]:
++            with self.subTest(argv=argv),patch.object(c,'execute',side_effect=AssertionError('spawn')),redirect_stdout(io.StringIO()):
++                self.assertEqual(c.main(argv+['--dry-run']),0)
++    def test_original_exit_codes_propagated(self):
++        for code in (0,2,3,7):
++            with self.subTest(code=code),redirect_stdout(io.StringIO()):
++                result=c.execute(c.Plan([sys.executable,'-c',f'raise SystemExit({code})'],str(ROOT),'test',sys.executable))
++                self.assertEqual(result,code)
++    def test_no_shell_and_environment_envelope_removed(self):
++        with tempfile.TemporaryDirectory(prefix='TACTIC spaces & ! ') as t:
++            out=Path(t)/'argv.json';value='слова & echo NO ! % (x) \\'
++            script='import sys,json,os;open(sys.argv[1],"w").write(json.dumps([sys.argv[2:],os.getenv("TACTIC_BOOTSTRAP_ARGV_JSON")]))'
++            with patch.dict(os.environ,{c.BOOTSTRAP_ARGV:'["secret"]'}),redirect_stdout(io.StringIO()):
++                self.assertEqual(c.execute(c.Plan([sys.executable,'-c',script,str(out),value,''],t,'test',sys.executable)),0)
++            self.assertEqual(json.loads(out.read_text()),[[value,''],None])
++    def test_bootstrap_json_round_trip(self):
++        args=['start','--data-dir',str(ROOT/'Тест & ! %'), '--dry-run']
++        stream=io.StringIO()
++        with patch.dict(os.environ,{c.BOOTSTRAP_ARGV:json.dumps(args)}),redirect_stdout(stream):c.main(['--bootstrap-argv'])
++        out=json.loads(stream.getvalue());self.assertIn(args[2],out['argv'])
++    def test_bootstrap_bad_envelope(self):
++        with patch.dict(os.environ,{c.BOOTSTRAP_ARGV:'{}'}),self.assertRaises(ValueError):c.main(['--bootstrap-argv'])
++    def test_missing_interpreter_no_fallback(self):
++        with self.assertRaises(ValueError):c.execute(c.Plan(['/no/python','x'],str(ROOT),'', '/no/python'))
++    def test_menu_redirected_input_fails_without_actions(self):
++        with patch.object(sys,'stdin',io.StringIO('1\n')),patch.object(c,'execute',side_effect=AssertionError('spawn')),self.assertRaises(ValueError):c.main([])
++    def run_menu(self, responses, code=0, args=None, root=ROOT):
++        inputs=iter(responses);seen=[]
++        with patch.object(sys.stdin,'isatty',return_value=True),redirect_stdout(io.StringIO()):
++            rc=c.interactive(args or c.parse([]),root,lambda _:next(inputs),lambda p:seen.append(p) or code)
++        return rc,seen
++    def test_menu_check_then_exit(self):
++        rc,seen=self.run_menu(['2','1','','0'])
++        self.assertEqual(rc,0);self.assertEqual(len(seen),1);self.assertIn('--check',seen[0].argv)
++    def test_menu_exit_does_not_run(self):
++        self.assertEqual(self.run_menu(['0']), (0, []))
++    def test_menu_does_not_offer_runtime_repair_inside_running_python(self):
++        source=__import__('inspect').getsource(c.interactive)
++        self.assertNotIn("['setup'",source);self.assertNotIn('return 91',source)
++        self.assertIn('SETUP_ENV.bat',source)
++    def test_menu_db_only_check_does_not_auto_upgrade_on_3(self):
++        rc,seen=self.run_menu(['2','2','','0'],3)
++        self.assertEqual(len(seen),1);self.assertIn('--check-local-db',seen[0].argv)
++    def test_menu_db_upgrade_uses_old_tool_without_confirmation_bypass(self):
++        rc,seen=self.run_menu(['4','2','','0'])
++        self.assertIn('--upgrade-local',seen[0].argv);self.assertNotIn('--yes',seen[0].argv)
++    def test_menu_db_init_is_separate_not_default(self):
++        rc,seen=self.run_menu(['4','1','','0'])
++        self.assertEqual(len(seen),1);self.assertIn('--init-sqlite',seen[0].argv)
++    def test_menu_db_restore_is_explicit(self):
++        rc,seen=self.run_menu(['4','3','','0'])
++        self.assertIn('--restore-local',seen[0].argv)
++    def test_menu_back_without_action(self):
++        rc,seen=self.run_menu(['2','0','3','0','4','0','0'])
++        self.assertEqual(seen,[])
++    def test_menu_permission_flags(self):
++        cases={'1': [],'2':['--writes','off'],'3':['--writes','on'],
++               '4':['--writes','on','--uploads','on'],
++               '5':['--writes','on','--scripts','on'],
++               '6':['--uploads','off'],'7':['--scripts','off']}
++        for choice,flags in cases.items():
++            with self.subTest(choice=choice):
++                _,seen=self.run_menu(['3',choice,'','0'])
++                if flags:self.assertEqual(seen[0].argv[-len(flags):],flags)
++                else:self.assertNotIn('--writes',seen[0].argv)
++    def test_menu_build_original_script(self):
++        _,seen=self.run_menu(['5','','0'])
++        self.assertTrue(seen[0].argv[-1].endswith('tools/native_ui/build.cjs'))
++    def test_changed_menu_profile_used_in_same_session(self):
++        with tempfile.TemporaryDirectory() as t:
++            root=Path(t)
++            args=c.parse(['menu','--data-dir',str(root/'OLD')])
++            _,seen=self.run_menu(['1',sys.executable,str(root/'NEW'),'','','','','yes','2','2','','0'],args=args,root=root)
++            self.assertEqual(seen[0].argv[seen[0].argv.index('--data-dir')+1],str(root/'NEW'))
++    def test_menu_without_selection_never_runs_server_or_setup(self):
++        source=__import__('inspect').getsource(c.interactive)
++        self.assertNotIn("command = ['start']",source)
++        self.assertNotIn("command = ['setup']",source)
++    @unittest.skipIf(os.name=='nt','POSIX console group test; Windows covered by separate manual smoke')
++    def test_ctrl_c_waits_for_child_cleanup(self):
++        with tempfile.TemporaryDirectory() as t:
++            root=Path(t);ready=root/'ready';done=root/'done';child=root/'child.py'
++            child.write_text('import signal,time,pathlib\n'
++                             f'pathlib.Path({str(ready)!r}).write_text("ready")\n'
++                             'try:\n while True: time.sleep(.1)\n'
++                             f'except KeyboardInterrupt: pathlib.Path({str(done)!r}).write_text("clean")\n')
++            code=f'import sys;sys.path.insert(0,{str(ROOT/"tools/local")!r});import control;raise SystemExit(control.execute(control.Plan([sys.executable,{str(child)!r}],{t!r},"test",sys.executable)))'
++            p=subprocess.Popen([sys.executable,'-c',code],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,start_new_session=True)
++            try:
++                deadline=time.monotonic()+8
++                while not ready.exists() and time.monotonic()<deadline:time.sleep(.03)
++                self.assertTrue(ready.exists())
++                os.killpg(p.pid,signal.SIGINT)
++                output=p.communicate(timeout=8)[0]
++                self.assertEqual(p.returncode,0,output);self.assertEqual(done.read_text(),'clean')
++            finally:
++                if p.poll() is None:os.killpg(p.pid,signal.SIGKILL);p.wait()
++
++
++class SourceContract(unittest.TestCase):
++    def test_exactly_three_bat_entire_distribution(self):
++        self.assertEqual(sorted(str(p.relative_to(ROOT)) for p in ROOT.rglob('*.bat')),
++                         ['MANAGE_TACTIC.bat','SETUP_ENV.bat','START_TACTIC.bat'])
++    def test_batch_is_short_quoted_crlf_no_call(self):
++        entries={'START_TACTIC.bat':'start','SETUP_ENV.bat':'setup','MANAGE_TACTIC.bat':'manage'}
++        for name,entry in entries.items():
++            with self.subTest(name=name):
++                raw=(ROOT/name).read_bytes();s=raw.decode('ascii')
++                self.assertIn(b'\r\n',raw);self.assertNotIn(b'\n',raw.replace(b'\r\n',b''))
++                self.assertIn('DisableDelayedExpansion',s)
++                self.assertIn('"%~dp0tools\\local\\tactic_bootstrap.ps1"',s)
++                self.assertEqual(s.count('%*'),1)
++                self.assertNotIn('\ncall ',s.lower());self.assertIn('exit /b %RESULT%',s)
++                self.assertIn('set "TACTIC_LAUNCH_ENTRY='+entry+'"',s)
++    def test_shared_dispatch_preserves_distinct_default_actions(self):
++        s=(ROOT/'tools/local/tactic_bootstrap.ps1').read_text(encoding='utf-8-sig')
++        for rule in ("'start' { return ,(@('start') + $items) }", "'setup' { return ,(@('setup') + $items) }", "'manage' { return ,$items }"):
++            self.assertIn(rule,s)
++        self.assertIn('$arguments = Get-TacticEntryArguments',s)
++    def test_setup_is_dispatched_before_resolving_python(self):
++        s=(ROOT/'tools/local/tactic_bootstrap.ps1').read_text(encoding='utf-8-sig')
++        main=s[s.index('function Invoke-TacticBootstrap'):]
++        self.assertLess(main.index('Invoke-TacticSetup'),main.index('Get-TacticPython'))
++    def test_batch_environment_marker_not_leaked_to_child(self):
++        with patch.dict(os.environ,{'TACTIC_LAUNCH_ENTRY':'start'}),patch.object(c.subprocess,'Popen') as popen:
++            popen.return_value.wait.return_value=0
++            with redirect_stdout(io.StringIO()):c.execute(c.Plan([sys.executable,'-V'],str(ROOT),'test',sys.executable))
++            self.assertNotIn('TACTIC_LAUNCH_ENTRY',popen.call_args.kwargs['env'])
++    def test_bootstrap_bom_for_ps51(self):
++        raw=(ROOT/'tools/local/tactic_bootstrap.ps1').read_bytes();self.assertTrue(raw.startswith(b'\xef\xbb\xbf'))
++        self.assertNotIn(b'\n',raw.replace(b'\r\n',b''))
++    def test_no_eval_shell_or_raw_parameter_in_command(self):
++        s=(ROOT/'tools/local/tactic_bootstrap.ps1').read_text(encoding='utf-8-sig')
++        self.assertNotIn('Invoke-Expression',s);self.assertNotIn('-Command ',s)
++        self.assertIn('TACTIC_BOOTSTRAP_ARGV_JSON',s);self.assertIn("'--bootstrap-argv'",s);self.assertIn("$code = Invoke-TacticNative",s)
++    def test_bootstrap_inherits_console_for_prompts_and_trace(self):
++        s=(ROOT/'tools/local/tactic_bootstrap.ps1').read_text(encoding='utf-8-sig')
++        for name in ('Input','Output','Error'):
++            self.assertIn('$info.RedirectStandard'+name+' = $false',s)
++        self.assertIn('$info.UseShellExecute = $false',s)
++        self.assertIn('$process.WaitForExit()',s)
++        self.assertNotIn('| Out-Host',s.replace('through Out-Host',''))
++    def test_missing_explicit_python_cannot_loop_install_prompt(self):
++        s=(ROOT/'tools/local/tactic_bootstrap.ps1').read_text(encoding='utf-8-sig')
++        self.assertIn("if ($explicit) { throw",s)
++    def test_setup_uses_original_integrity_and_safety_checks(self):
++        s=(ROOT/'tools/local/setup_env.ps1').read_text(encoding='utf-8-sig')
++        for token in ('Get-AuthenticodeSignature','Get-FileHash','Unknown runtime','validate_pip_zipapp.py','--only-binary=:all:','setup-complete.json'):
++            self.assertIn(token,s)
++    def test_original_database_prompts_not_removed(self):
++        s=(ROOT/'tools/local/launch.py').read_text()
++        for token in ('Type CREATE','Type UPGRADE','secure_password()','local_lock(data)'):
++            self.assertIn(token,s)
++    def test_runtime_manifest_not_changed(self):
++        s=json.loads((ROOT/'tools/local/runtime-manifest.json').read_text())
++        self.assertTrue(s['pip']['url'].startswith('https://bootstrap.pypa.io/pip/zipapp/'))
++    def test_no_obsolete_command_in_live_hints(self):
++        old=['START_CLUSTER.bat','CHECK_LOCAL_DB.bat','UPGRADE_LOCAL_SQLITE.bat','RESTORE_LOCAL_SQLITE.bat','CONFIGURE_NATIVE.bat']
++        for p in [* (ROOT/'tools/local').glob('*.py'),*(ROOT/'tools/local').glob('*.ps1'),ROOT/'src/tactic/ui_api/system_diagnostics.py']:
++            s=p.read_text(encoding='utf-8-sig')
++            for token in old:self.assertNotIn(token,s,(p,token))
++
++if __name__=='__main__':unittest.main()
+--- a/tests/native_ui/test_native_deep.py
++++ b/tests/native_ui/test_native_deep.py
+@@ -201,8 +201,9 @@
+ 
+ class LocalLaunchSourceTests(unittest.TestCase):
+  def test_batch_files_crlf_and_quoted_project_path(self):
+-  for name in ('START_TACTIC.bat','CHECK_ENV.bat','START_LEGACY.bat','INIT_LOCAL_SQLITE.bat','UPGRADE_LOCAL_SQLITE.bat','SETUP_ENV.bat'):
+-   raw=(R/name).read_bytes();self.assertIn(b'\r\n',raw);self.assertIn(b'%~dp0',raw);self.assertIn(b'DisableDelayedExpansion',raw)
++  files=list(R.glob('*.bat'));self.assertEqual(sorted(p.name for p in files),['MANAGE_TACTIC.bat','SETUP_ENV.bat','START_TACTIC.bat'])
++  for p in files:
++   raw=p.read_bytes();self.assertIn(b'\r\n',raw);self.assertIn(b'%~dp0',raw);self.assertIn(b'DisableDelayedExpansion',raw)
+  def test_launcher_does_not_import_test_fixture(self):
+   text=(R/'tools/local/launch.py').read_text();tree=ast.parse(text)
+   names=[n.module for n in ast.walk(tree) if isinstance(n,ast.ImportFrom)];self.assertFalse(any('fixture' in str(n) for n in names));self.assertIn('pyasm.web.cherrypy30_startup',names)
+--- a/tests/native_ui/test_runtime_diagnostics_08.py
++++ b/tests/native_ui/test_runtime_diagnostics_08.py
+@@ -51,8 +51,11 @@
+         start=ps.index('validate_pip_zipapp.py');end=ps.index("$Site =",start)
+         snippet=ps[start:end];self.assertIn('Remove-Item -LiteralPath $Pip',snippet);self.assertNotIn('Remove-Item -LiteralPath $PythonDir',snippet)
+     def test_bat_new_commands_and_crlf(self):
+-        for name,flag in [('CHECK_LOCAL_DB.bat','--check-local-db'),('RESTORE_LOCAL_SQLITE.bat','--restore-local')]:
+-            raw=(ROOT/name).read_bytes();self.assertIn(b'\r\n',raw);self.assertIn(flag.encode(),raw);self.assertIn(b'%*',raw)
++        raw=(ROOT/'MANAGE_TACTIC.bat').read_bytes();self.assertIn(b'\r\n',raw);self.assertIn(b'%*',raw)
++        import control
++        for command,flag in [('check db','--check-local-db'),('db restore','--restore-local')]:
++            args=control.parse(command.split());cfg=control.effective(args,{'format':1},ROOT)
++            self.assertIn(flag,control.plan_command(args,cfg,ROOT).argv)
+     def test_version_single_source(self):
+         self.assertEqual(VERSION,(ROOT/'NATIVE_UI_VERSION').read_text().strip());self.assertEqual(BUILD_VERSION,VERSION+'.0-source-fork')
+     def test_isolated_python_local_check_imports_siblings(self):
+--- a/tests/native_ui/test_startup_09.py
++++ b/tests/native_ui/test_startup_09.py
+@@ -45,7 +45,10 @@
+    with patch.object(registry.importlib,'import_module',side_effect=lambda name:SimpleNamespace(**{name.rsplit('.',1)[-1]:SimpleNamespace})):
+     self.assertEqual(list(registry.load_contexts(tmp,'sites','x')),['Api','UploadServer','XMLRPC'])
+  def test_probe_bat_invokes_new_flag_utf8(self):
+-  s=(ROOT/'CHECK_STARTUP.bat').read_text();self.assertIn('--check-startup',s);self.assertIn('-X utf8',s)
++  sys.path.insert(0,str(ROOT/'tools/local'))
++  import control
++  a=control.parse(['check','startup']);c=control.effective(a,{'format':1},ROOT);v=control.plan_command(a,c,ROOT).argv
++  self.assertIn('--check-startup',v);self.assertIn('utf8',v)
+  def test_no_exec_eval_in_current_context_registration(self):
+   import ast
+   t=ast.parse((ROOT/'src/pyasm/web/cherrypy30_startup.py').read_text());m=next(n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='register_project')
+--- a/tools/local/cluster_worker.py
++++ b/tools/local/cluster_worker.py
+@@ -28,7 +28,7 @@
+ def run_worker(data, config, port):
+     role=os.environ.get('TACTIC_CLUSTER_ROLE')
+     if role not in ('writer','reader') or not os.environ.get('TACTIC_CLUSTER_RUN_ID'):
+-        raise RuntimeError('Start through START_CLUSTER.bat, not cluster_worker directly')
++        raise RuntimeError('Start through START_TACTIC.bat, not cluster_worker directly')
+     if (data/'.sqlite-promotion.json').exists():raise RuntimeError('Pending offline database recovery')
+     configure_paths(data,config)
+     with local_lock(data,shared=True):
+--- a/tools/local/configure_native.py
++++ b/tools/local/configure_native.py
+@@ -21,7 +21,7 @@
+     print('Data:',data);print('Persistent UI settings:',path)
+     print('Current settings:',json.dumps(settings,ensure_ascii=False))
+     if args.writes is None and args.uploads is None and args.scripts is None:
+-        print('To ENABLE writes: CONFIGURE_NATIVE.bat --data-dir "'+str(data)+'" --writes on')
++        print('To ENABLE writes: MANAGE_TACTIC.bat configure --data-dir "'+str(data)+'" --writes on')
+         print('To also ENABLE file uploads: add --uploads on. Changes require server restart.')
+         return 0
+     if args.writes:settings['allow_writes']=args.writes=='on'
+--- /dev/null
++++ b/tools/local/control.py
+@@ -0,0 +1,452 @@
++"""Shared controller for three local TACTIC launchers. Standard library only; delegates to original tools.
++
++Does not import TACTIC while displaying a menu, saving launch preferences or
++planning a command. No database initialization/migration runs automatically.
++"""
++from __future__ import annotations
++
++import argparse
++from dataclasses import dataclass
++import hashlib
++import json
++import os
++from pathlib import Path
++import shlex
++import shutil
++import signal
++import subprocess
++import sys
++import tempfile
++from typing import Callable
++
++ROOT = Path(__file__).resolve().parents[2]
++PROFILE_NAME = 'launcher.local.json'
++PROFILE_KEYS = {'format', 'python', 'data_dir', 'config', 'port', 'workers', 'mode'}
++BOOTSTRAP_ARGV = 'TACTIC_BOOTSTRAP_ARGV_JSON'
++LAUNCH_FLAGS = {
++    'check:env': '--check', 'check:db': '--check-local-db',
++    'check:startup': '--check-startup', 'db:init': '--init-sqlite',
++    'db:upgrade': '--upgrade-local', 'db:restore': '--restore-local',
++}
++
++
++def clean_path(value: str, root: Path = ROOT) -> str:
++    """Paths are data, never shell commands. Relative paths follow the source root."""
++    if not isinstance(value, str):
++        raise ValueError('Путь должен быть строкой.')
++    value = value.strip()
++    if len(value) >= 2 and value[0] == value[-1] == '"':
++        value = value[1:-1]
++    if not value or any(ord(c) < 32 for c in value) or '"' in value:
++        raise ValueError('Пустой путь, управляющие символы или кавычки внутри пути.')
++    p = Path(value).expanduser()
++    return os.path.abspath(p if p.is_absolute() else root / p)
++
++
++def checked_int(value: object, name: str, low: int, high: int) -> int:
++    if isinstance(value, bool):
++        raise ValueError(f'{name}: требуется целое число {low}..{high}.')
++    try:
++        result = int(value)
++    except (ValueError, TypeError) as exc:
++        raise ValueError(f'{name}: требуется целое число {low}..{high}.') from exc
++    if str(result) != str(value) or not low <= result <= high:
++        raise ValueError(f'{name}: требуется целое число {low}..{high}.')
++    return result
++
++
++def validate_profile(value: object, root: Path = ROOT) -> dict:
++    if not isinstance(value, dict) or set(value) - PROFILE_KEYS or type(value.get('format')) is not int or value.get('format') != 1:
++        raise ValueError(f'Неверный формат {PROFILE_NAME}; файл не изменён. Нужен format=1 и только известные поля.')
++    result = {'format': 1}
++    for name in ('python', 'data_dir', 'config'):
++        v = value.get(name)
++        if v is not None:
++            result[name] = clean_path(v, root)
++    for name, low, high in (('port', 1024, 65535), ('workers', 2, 8)):
++        if name in value:
++            result[name] = checked_int(value[name], name, low, high)
++    if 'mode' in value:
++        if value['mode'] not in ('cluster', 'single', 'legacy'):
++            raise ValueError('mode: cluster, single или legacy.')
++        result['mode'] = value['mode']
++    return result
++
++
++def read_profile(root: Path = ROOT) -> tuple[dict, str | None]:
++    path = root / PROFILE_NAME
++    if not path.exists():
++        return {'format': 1}, None
++    if not path.is_file() or path.stat().st_size > 16384:
++        raise ValueError(f'{PROFILE_NAME}: ожидался небольшой JSON-файл; ничего не перезаписано.')
++    raw = path.read_bytes()
++    try:
++        value = json.loads(raw.decode('utf-8-sig'))
++    except (ValueError, UnicodeError) as exc:
++        raise ValueError(f'{PROFILE_NAME}: ошибка JSON; исправьте или переименуйте файл, не базу данных.') from exc
++    return validate_profile(value, root), hashlib.sha256(raw).hexdigest()
++
++
++def save_profile(root: Path, value: dict, expected: str | None) -> None:
++    value = validate_profile(value, root)
++    path = root / PROFILE_NAME
++    current = path.read_bytes() if path.exists() else None
++    digest = hashlib.sha256(current).hexdigest() if current is not None else None
++    if digest != expected:
++        raise ValueError('Параметры запуска изменены другим редактором. Перечитайте их перед сохранением.')
++    raw = (json.dumps(value, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
++    fd, temporary = tempfile.mkstemp(prefix='.launcher-', suffix='.tmp', dir=root)
++    try:
++        with os.fdopen(fd, 'wb') as stream:
++            stream.write(raw); stream.flush(); os.fsync(stream.fileno())
++        if current is not None:
++            backup = root / (PROFILE_NAME + '.previous')
++            with backup.open('wb') as stream:
++                stream.write(current)
++            try: backup.chmod(0o600)
++            except OSError: pass
++        # Recheck immediately before replace; not a distributed CAS guarantee.
++        now = path.read_bytes() if path.exists() else None
++        if now != current:
++            raise ValueError('Параметры запуска изменились; новый файл не установлен.')
++        os.replace(temporary, path)
++    finally:
++        if os.path.exists(temporary): os.unlink(temporary)
++
++
++def make_parser() -> argparse.ArgumentParser:
++    p = argparse.ArgumentParser(prog='MANAGE_TACTIC.bat', description='Общий контроллер START_TACTIC / SETUP_ENV / MANAGE_TACTIC. Без аргументов — меню обслуживания.', allow_abbrev=False)
++    common = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
++    common.add_argument('--data-dir', help='Существующий каталог данных; для db init — новый пустой каталог')
++    common.add_argument('--config', help='Существующий tactic-conf.xml; не переписывается')
++    common.add_argument('--python', help='Путь к совместимому Python для дочерних команд')
++    common.add_argument('--dry-run', action='store_true', help='Только показать команду, без запуска и записи файлов')
++    sub = p.add_subparsers(dest='command')
++    def runtime_options(parser):
++        parser.add_argument('--port', type=int)
++        parser.add_argument('--workers', type=int)
++        parser.add_argument('--worker-base-port', type=int)
++        parser.add_argument('--timeout', type=int)
++        mode = parser.add_mutually_exclusive_group()
++        mode.add_argument('--mode', choices=['cluster', 'single', 'legacy'])
++        mode.add_argument('--single', action='store_true', help='Один процесс вместо группы')
++        mode.add_argument('--legacy', action='store_true', help='Один процесс со старым веб-интерфейсом')
++    start = sub.add_parser('start', parents=[common], help='Запустить сервер (по умолчанию 3 процесса)', allow_abbrev=False)
++    runtime_options(start)
++    menu = sub.add_parser('menu', parents=[common], help='Меню обслуживания; сервер автоматически не запускается', allow_abbrev=False)
++    runtime_options(menu)
++    check = sub.add_parser('check', parents=[common], help='Проверка: env, db или startup', allow_abbrev=False)
++    check.add_argument('kind', nargs='?', default='env', choices=['env', 'db', 'startup'])
++    db = sub.add_parser('db', parents=[common], help='Явное обслуживание managed SQLite', allow_abbrev=False)
++    db.add_argument('kind', choices=['init', 'upgrade', 'restore'])
++    config = sub.add_parser('configure', parents=[common], help='Настройки записи/загрузки/исполнения скриптов', allow_abbrev=False)
++    for name in ('writes', 'uploads', 'scripts'): config.add_argument('--' + name, choices=['on', 'off'])
++    settings = sub.add_parser('settings', parents=[common], help='Показать/сохранить пути и режим запуска', allow_abbrev=False)
++    settings.add_argument('--port', type=int); settings.add_argument('--workers', type=int)
++    settings.add_argument('--mode', choices=['cluster', 'single', 'legacy'])
++    settings.add_argument('--save', action='store_true', help='Сохранить указанные параметры в launcher.local.json')
++    setup = sub.add_parser('setup', help='Скачать локальное окружение, не трогая базы', allow_abbrev=False)
++    setup.add_argument('--repair', '-Repair', action='store_true')
++    setup.add_argument('--offline', '-Offline', action='store_true')
++    setup.add_argument('--dry-run', action='store_true')
++    build = sub.add_parser('build', help='Пересобрать уже включённый Vue (нужен Node)', allow_abbrev=False)
++    build.add_argument('--dry-run', action='store_true')
++    return p
++
++
++def parse(argv: list[str]) -> argparse.Namespace:
++    argv = list(argv)
++    if argv and argv[0].lower() in ('help', '/?'):
++        argv = ['--help']
++    commands = ('start', 'menu', 'check', 'db', 'configure', 'settings', 'setup', 'build')
++    if not argv:
++        argv = ['menu']
++    elif argv[0].lower() in commands:
++        argv[0] = argv[0].lower()
++    elif argv[0].startswith('--') and argv[0] != '--help':
++        argv.insert(0, 'menu')
++    return make_parser().parse_args(argv)
++
++
++def effective(args: argparse.Namespace, profile: dict, root: Path = ROOT, env: dict | None = None) -> dict:
++    env = os.environ if env is None else env
++    selected_python = getattr(args, 'python', None) or env.get('TACTIC_PYTHON') or profile.get('python') or sys.executable
++    explicit_data = getattr(args, 'data_dir', None)
++    explicit_config = getattr(args, 'config', None)
++    # An explicit new data directory must not silently retain an unrelated
++    # old config path. With --config alone follow the original launcher rule.
++    if explicit_data:
++        data = clean_path(explicit_data, root)
++    elif explicit_config:
++        config_path = Path(clean_path(explicit_config, root))
++        if config_path.parent.name.lower() != 'config':
++            raise ValueError('Для внешнего --config вне папки config укажите --data-dir явно.')
++        data = str(config_path.parent.parent)
++    else:
++        data = profile.get('data_dir', str(root / 'local_data'))
++    config = clean_path(explicit_config, root) if explicit_config else (None if explicit_data else profile.get('config'))
++    mode = 'legacy' if getattr(args, 'legacy', False) else 'single' if getattr(args, 'single', False) else getattr(args, 'mode', None) or profile.get('mode', 'cluster')
++    result = {
++        'python': clean_path(selected_python, root), 'data_dir': data,
++        'config': config, 'mode': mode,
++        'port': checked_int(getattr(args, 'port', None) if getattr(args, 'port', None) is not None else profile.get('port', 9123), 'port', 1024, 65535),
++        'workers': checked_int(getattr(args, 'workers', None) if getattr(args, 'workers', None) is not None else profile.get('workers', 3), 'workers', 2, 8),
++    }
++    return result
++
++
++@dataclass(frozen=True)
++class Plan:
++    argv: list[str]
++    cwd: str
++    note: str
++    python: str | None = None
++
++
++def plan_command(args: argparse.Namespace, cfg: dict, root: Path = ROOT) -> Plan:
++    command = args.command
++    python = cfg['python']
++    prefix = [python, '-X', 'utf8', '-s']
++    local = root / 'tools/local'
++    scope = ['--data-dir', cfg['data_dir']]
++    if cfg.get('config'): scope += ['--config', cfg['config']]
++    if command == 'start':
++        if cfg['mode'] == 'cluster':
++            base = args.worker_base_port if args.worker_base_port is not None else cfg['port'] + 1
++            checked_int(base, 'worker-base-port', 1024, 65535)
++            if base + cfg['workers'] - 1 > 65535 or base <= cfg['port'] < base + cfg['workers']:
++                raise ValueError('Порты шлюза и workers должны быть различны и не превышать 65535.')
++            timeout = 300 if args.timeout is None else checked_int(args.timeout, 'timeout', 10, 3600)
++            tail = scope + ['--port', str(cfg['port']), '--workers', str(cfg['workers']), '--timeout', str(timeout)]
++            if args.worker_base_port is not None: tail += ['--worker-base-port', str(base)]
++            return Plan(prefix + [str(local / 'cluster.py')] + tail, str(root), 'Три процесса по умолчанию. Остановка всей группы: Ctrl+C.', python)
++        if any(getattr(args, x, None) is not None for x in ('workers', 'worker_base_port', 'timeout')):
++            raise ValueError('--workers/--worker-base-port/--timeout относятся только к кластеру.')
++        tail = scope + ['--port', str(cfg['port'])]
++        if cfg['mode'] == 'legacy': tail += ['--legacy']
++        return Plan(prefix + [str(local / 'launch.py')] + tail, str(root), 'Один исходный сервер. Остановка: Ctrl+C.', python)
++    if command in ('check', 'db'):
++        if command == 'db' and cfg.get('config'):
++            raise ValueError('db init/upgrade/restore предназначены для managed SQLite без внешнего --config.')
++        notes = {
++            'check:env': 'Только импорты; это не проверка БД.',
++            'check:db': 'Read-only проверка managed SQLite; код 3 означает, что структура не готова.',
++            'check:startup': 'Оригинальная инициализация может писать в БД. Сервер должен быть остановлен.',
++            'db:init': 'Только новый пустой каталог. Исходные CREATE и ввод пароля обязательны.',
++            'db:upgrade': 'Исходный staged-upgrade с резервной копией и подтверждением UPGRADE.',
++            'db:restore': 'Только восстановление прерванной публикации; исходное подтверждение RESTORE.',
++        }
++        key = command + ':' + args.kind
++        return Plan(prefix + [str(local / 'launch.py'), LAUNCH_FLAGS[key]] + scope, str(root), notes[key], python)
++    if command == 'configure':
++        if cfg.get('config') and Path(cfg['config']) != Path(cfg['data_dir']) / 'config/tactic-conf.xml':
++            raise ValueError('configure ожидает исходную конфигурацию в <data-dir>/config/tactic-conf.xml.')
++        tail = ['--data-dir', cfg['data_dir']]
++        for flag in ('writes', 'uploads', 'scripts'):
++            if getattr(args, flag, None) is not None: tail += ['--' + flag, getattr(args, flag)]
++        return Plan(prefix + [str(local / 'configure_native.py')] + tail, str(root), 'Изменение разрешений требует исходного ENABLE/DISABLE и остановленного сервера.', python)
++    if command == 'setup':
++        exe = shutil.which('powershell.exe') or (shutil.which('pwsh') if os.name != 'nt' else None) or 'powershell.exe'
++        tail = []
++        if args.offline: tail.append('-Offline')
++        if args.repair: tail.append('-Repair')
++        return Plan([exe, '-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', str(local / 'setup_env.ps1')] + tail, str(root), 'Только локальное окружение. Базы не инициализируются и не обновляются.')
++    if command == 'build':
++        return Plan([shutil.which('node') or 'node', str(root / 'tools/native_ui/build.cjs')], str(root), 'Node нужен для пересборки, но не для запуска готового UI.')
++    raise ValueError('Неизвестная операция: ' + str(command))
++
++
++def display_plan(plan: Plan, dry_run: bool = False) -> None:
++    if dry_run:
++        print(json.dumps({'dry_run': True, 'argv': plan.argv, 'cwd': plan.cwd, 'note': plan.note}, ensure_ascii=False, indent=2))
++    else:
++        print('\n' + plan.note)
++        print(subprocess.list2cmdline(plan.argv) if os.name == 'nt' else shlex.join(plan.argv), flush=True)
++
++
++def execute(plan: Plan) -> int:
++    """Inherit the console, not PIPEs. Preserve status and native confirmations.
++
++Ctrl+C reaches the whole console/process group. Wait for the original launcher
++and its workers to finish their cleanup; never kill/restart them automatically.
++"""
++    if plan.python and not Path(plan.python).is_file():
++        raise ValueError('Python не найден: ' + plan.python + '. Используйте SETUP_ENV.bat или задайте TACTIC_PYTHON.')
++    if plan.python and os.name == 'nt' and Path(plan.python).suffix.lower() != '.exe':
++        raise ValueError('Нужен python.exe, не BAT/CMD-команда.')
++    env = os.environ.copy()
++    env.pop(BOOTSTRAP_ARGV, None)
++    env.pop('TACTIC_LAUNCH_ENTRY', None)
++    env['PYTHONUTF8'] = '1'
++    display_plan(plan)
++    child = subprocess.Popen(plan.argv, cwd=plan.cwd, env=env, shell=False)
++    previous = {}
++    def stop(signum, frame):
++        if child.poll() is None:
++            try: child.send_signal(signum)
++            except ProcessLookupError: pass
++    if os.name != 'nt':
++        previous[signal.SIGTERM] = signal.signal(signal.SIGTERM, stop)
++    interrupted = False
++    try:
++        while True:
++            try:
++                code = child.wait()
++                return code if code >= 0 else 128 - code
++            except KeyboardInterrupt:
++                if not interrupted:
++                    print('\nОжидаю штатную остановку дочернего процесса. Данные не удаляются.', flush=True)
++                    interrupted = True
++    finally:
++        for sig, handler in previous.items(): signal.signal(sig, handler)
++
++
++def update_profile(args, cfg, profile, digest, root):
++    value = dict(profile)
++    for key in ('python', 'data_dir', 'config', 'port', 'workers', 'mode'):
++        if getattr(args, key, None) is not None:
++            value[key] = cfg[key]
++    if args.data_dir and not args.config:
++        value.pop('config', None)
++    if args.config and not args.data_dir:
++        value['data_dir'] = cfg['data_dir']
++    if args.save:
++        if args.dry_run:
++            print(json.dumps({'dry_run': True, 'path': str(root / PROFILE_NAME), 'profile': value}, ensure_ascii=False, indent=2))
++        else:
++            if 'python' in value and not Path(value['python']).is_file(): raise ValueError('Указанный Python не существует.')
++            if value.get('config') and not Path(value['config']).is_file(): raise ValueError('Указанный XML-файл не существует.')
++            save_profile(root, value, digest)
++            print('Параметры запуска сохранены в', root / PROFILE_NAME)
++            print('База, tactic-conf.xml и права записи не изменялись.')
++    else:
++        print(json.dumps({'profile_file': str(root / PROFILE_NAME), 'saved': profile, 'effective': cfg}, ensure_ascii=False, indent=2))
++
++
++def settings_menu(cfg, root, read: Callable[[str], str] = input):
++    """One explicit profile; no scanning Downloads or guessing another database."""
++    original, digest = read_profile(root)
++    result = dict(cfg)
++    print('\nПараметры только запуска. ENTER оставляет значение; «-» сбрасывает внешний XML.')
++    for key, label in [('python', 'Python'), ('data_dir', 'Каталог данных'), ('config', 'Внешний tactic-conf.xml')]:
++        text = read(f'{label} [{result.get(key) or "по каталогу данных"}]: ').strip()
++        if key == 'config' and text == '-': result[key] = None
++        elif text:
++            result[key] = clean_path(text, root)
++            if key == 'data_dir' and result[key] != cfg['data_dir']:
++                result['config'] = None
++    for key, label, low, high in [('port', 'Порт', 1024, 65535), ('workers', 'Процессов в группе', 2, 8)]:
++        text = read(f'{label} [{result[key]}]: ').strip()
++        if text: result[key] = checked_int(text, key, low, high)
++    text = read(f'Режим cluster/single/legacy [{result["mode"]}]: ').strip()
++    if text: result['mode'] = text
++    result = validate_profile(dict(result, format=1), root)
++    if not Path(result['python']).is_file(): raise ValueError('Python не найден.')
++    if result.get('config') and not Path(result['config']).is_file(): raise ValueError('XML-файл не найден.')
++    print(json.dumps(result, ensure_ascii=False, indent=2))
++    if read('Сохранить эти параметры? [y/N]: ').strip().lower() not in ('y', 'yes', 'д', 'да'):
++        print('Отменено; параметры не изменены.'); return
++    save_profile(root, result, digest)
++    print('Сохранено. При обновлении исходников можно перенести только', PROFILE_NAME)
++    print('При следующем запуске явные --python/--data-dir и TACTIC_PYTHON имеют приоритет над файлом.')
++    return result
++
++
++def interactive(args, root: Path = ROOT, read: Callable[[str], str] = input, run: Callable[[Plan], int] = execute) -> int:
++    """Maintenance only. Daily startup and setup have their own BAT files.
++
++    The original child processes still own all CREATE/UPGRADE/RESTORE/ENABLE
++    confirmations. No default menu item starts a server or alters a database.
++    """
++    if not sys.stdin.isatty():
++        raise ValueError('Меню требует терминала. Для скрипта используйте MANAGE_TACTIC.bat check/db/configure/settings.')
++    session_profile = None
++    while True:
++        profile, _ = read_profile(root)
++        cfg = effective(args, profile, root) if session_profile is None else effective(parse(['menu']), session_profile, root, {})
++        print('\n' + '=' * 58)
++        print('TACTIC — настройки и обслуживание')
++        print('Данные:', cfg['data_dir'])
++        print(f'Режим запуска: {cfg["mode"]}; порт: {cfg["port"]}; workers: {cfg["workers"]}')
++        print('1  Параметры запуска (пути, порт, режим)\n2  Диагностика\n3  Разрешения записи / файлов / Python-скриптов\n4  База данных — инициализация, обновление, восстановление\n5  Пересобрать Vue (для разработчика, нужен Node)\n0  Выход')
++        print('Сервер: START_TACTIC.bat   Окружение: SETUP_ENV.bat')
++        try:
++            choice = read('Выберите действие: ').strip()
++            if choice == '0': return 0
++            if choice == '1':
++                updated = settings_menu(cfg, root, read)
++                if updated is not None: session_profile = updated
++                continue
++            if choice == '2':
++                print('\n1  Проверить окружение (импорты)\n2  Проверить managed SQLite (read-only)\n3  Проверить запуск (инициализация может писать; сервер остановить)\n0  Назад')
++                selected = read('Проверка: ').strip()
++                if selected not in ('1', '2', '3'): continue
++                command = ['check', {'1': 'env', '2': 'db', '3': 'startup'}[selected]]
++            elif choice == '3':
++                print('\n1  Показать настройки\n2  Только чтение\n3  Разрешить запись\n4  Запись и файлы\n5  Запись и Python-скрипты (НЕ песочница)\n6  Отключить загрузку файлов\n7  Отключить запуск Python-скриптов\n0  Назад')
++                policy = read('Разрешения: ').strip()
++                flags = {'1': [], '2': ['--writes', 'off'], '3': ['--writes', 'on'],
++                         '4': ['--writes', 'on', '--uploads', 'on'],
++                         '5': ['--writes', 'on', '--scripts', 'on'],
++                         '6': ['--uploads', 'off'], '7': ['--scripts', 'off']}
++                if policy not in flags: continue
++                command = ['configure', *flags[policy]]
++            elif choice == '4':
++                print('\nОстановите все процессы TACTIC перед обслуживанием базы.')
++                print('1  Новая SQLite — ТОЛЬКО пустой каталог\n2  Обновить managed SQLite с резервной копией\n3  Восстановить ПРЕРВАННУТОЕ обновление\n0  Назад')
++                selected = read('Операция: ').strip()
++                if selected not in ('1', '2', '3'): continue
++                command = ['db', {'1': 'init', '2': 'upgrade', '3': 'restore'}[selected]]
++            elif choice == '5':
++                command = ['build']
++            else:
++                print('Выберите номер из меню.'); continue
++            action = parse(command)
++            plan = plan_command(action, cfg, root)
++            result = run(plan)
++            print('Код завершения:', result)
++            if command == ['check', 'db'] and result == 3:
++                print('Структура не готова. Проверьте отчёт; обновление НЕ запускается автоматически.')
++            read('ENTER — вернуться в меню. ')
++        except KeyboardInterrupt:
++            print('\nДействие меню отменено.')
++        except (ValueError, OSError) as exc:
++            print('Ошибка:', exc)
++        except EOFError:
++            return 0
++
++
++def main(argv: list[str] | None = None, root: Path = ROOT) -> int:
++    argv = list(sys.argv[1:] if argv is None else argv)
++    if argv == ['--bootstrap-argv']:
++        raw = os.environ.pop(BOOTSTRAP_ARGV, '')
++        try:
++            argv = json.loads(raw)
++        except (ValueError, TypeError) as exc:
++            raise ValueError('Повреждён конверт параметров bootstrap.') from exc
++        if not isinstance(argv, list) or any(not isinstance(x, str) for x in argv) or len(raw) > 65536:
++            raise ValueError('Неверные параметры bootstrap.')
++    args = parse(argv)
++    profile, digest = ({'format': 1}, None) if args.command in ('setup', 'build') else read_profile(root)
++    cfg = effective(args, profile, root)
++    if args.command == 'settings':
++        update_profile(args, cfg, profile, digest, root); return 0
++    if args.command == 'menu':
++        if args.dry_run:
++            print(json.dumps({'dry_run': True, 'menu': True, 'effective': cfg}, ensure_ascii=False, indent=2)); return 0
++        return interactive(args, root)
++    plan = plan_command(args, cfg, root)
++    if args.dry_run:
++        display_plan(plan, True); return 0
++    if args.command == 'setup' and getattr(args, 'repair', False) and Path(sys.executable).resolve().is_relative_to(root / '.runtime'):
++        raise ValueError('Ремонт запущенного Python запрещён. Закройте меню и используйте SETUP_ENV.bat --repair.')
++    return execute(plan)
++
++
++if __name__ == '__main__':
++    try:
++        raise SystemExit(main())
++    except KeyboardInterrupt:
++        print('\nОтменено.'); raise SystemExit(130)
++    except (ValueError, OSError) as exc:
++        print('ERROR:', str(exc), file=sys.stderr); raise SystemExit(2)
+--- a/tools/local/launch.py
++++ b/tools/local/launch.py
+@@ -113,7 +113,7 @@
+     stage.rename(data)
+     if config != data / 'config/tactic-conf.xml':
+         raise ValueError('Fresh initialization requires the default local config path')
+-    print('Original seed copied. Run UPGRADE_LOCAL_SQLITE.bat before starting.')
++    print('Original seed copied. Run MANAGE_TACTIC.bat db upgrade before starting.')
+ 
+ 
+ def upgrade_local(data: Path, config: Path) -> None:
+@@ -138,7 +138,7 @@
+     if local.is_file(): return local
+     print('No local TACTIC configuration found.')
+     print('For an EXISTING TEST installation, paste its full config XML path.')
+-    print('For a NEW experimental SQLite installation, run INIT_LOCAL_SQLITE.bat and UPGRADE_LOCAL_SQLITE.bat instead.')
++    print('For a NEW experimental SQLite installation, run MANAGE_TACTIC.bat db init and MANAGE_TACTIC.bat db upgrade instead.')
+     if not sys.stdin.isatty(): raise ValueError('Use --config and --data-dir for an existing TEST installation')
+     entered = input('Existing TEST config XML path (empty = cancel): ').strip().strip('"')
+     if not entered: raise ValueError('Cancelled: no configuration selected')
+@@ -198,10 +198,10 @@
+     if args.upgrade_local:
+         upgrade_local(data, config); return 0
+     if (data / '.sqlite-promotion.json').exists():
+-        raise RuntimeError('Interrupted database publication. Run RESTORE_LOCAL_SQLITE.bat; do not start the server.')
++        raise RuntimeError('Interrupted database publication. Run MANAGE_TACTIC.bat db restore; do not start the server.')
+     marker = data / 'local-install.json'
+     if marker.exists() and json.loads(marker.read_text(encoding='utf-8')).get('state') != 'upgraded':
+-        raise RuntimeError('The original local seed has not been upgraded successfully. Run UPGRADE_LOCAL_SQLITE.bat and review errors first.')
++        raise RuntimeError('The original local seed has not been upgraded successfully. Run MANAGE_TACTIC.bat db upgrade and review errors first.')
+     # Check port before any server startup side effects or browser opening.
+     if not args.check_startup:
+         with socket.socket() as sock:
+--- a/tools/local/managed_sqlite.py
++++ b/tools/local/managed_sqlite.py
+@@ -177,13 +177,13 @@
+         (data/PENDING).unlink()
+     except BaseException:
+         # Ordinary exceptions are rolled back immediately. Process/power death
+-        # leaves the durable journal for RESTORE_LOCAL_SQLITE.bat.
++        # leaves the durable journal for MANAGE_TACTIC.bat db restore.
+         restore_pending(data)
+         raise
+ 
+ def perform_upgrade(root: Path,data: Path,config: Path, *, worker=default_worker):
+     with local_lock(data):
+-        if (data/PENDING).exists():raise RuntimeError('Interrupted database publication detected. Run RESTORE_LOCAL_SQLITE.bat first.')
++        if (data/PENDING).exists():raise RuntimeError('Interrupted database publication detected. Run MANAGE_TACTIC.bat db restore first.')
+         marker,tree,files,databases=layout(data,config)
+         _require_quiet_files(files)
+         before=fingerprint(files)
+@@ -233,5 +233,5 @@
+         print('Upgrade installed. Completed original methods:',len(report.get('completed',[])))
+         print('SQL decisions:',json.dumps(counts,ensure_ascii=False))
+         print('Report:',backup/'upgrade-report.json')
+-        print('Run CHECK_LOCAL_DB.bat, then START_TACTIC.bat.')
++        print('Run MANAGE_TACTIC.bat check db, then START_TACTIC.bat --single.')
+         return report
+--- a/tools/local/setup_env.ps1
++++ b/tools/local/setup_env.ps1
+@@ -88,7 +88,7 @@
+     if ($LASTEXITCODE -ne 0) { throw 'Cannot record resolved dependencies' }
+     $Resolved | Set-Content -LiteralPath (Join-Path $Runtime 'resolved-packages.json') -Encoding UTF8
+     @{ python=$Spec.python.version; pip_sha256=(Get-FileHash -LiteralPath $Pip -Algorithm SHA256).Hash; requirements_sha256=(Get-FileHash -LiteralPath $Req -Algorithm SHA256).Hash; completed_utc=[DateTime]::UtcNow.ToString('o') } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Runtime 'setup-complete.json') -Encoding UTF8
+-    Write-Host 'Environment import checks passed. Run START_TACTIC.bat. No existing TACTIC database was changed.' -ForegroundColor Green
++    Write-Host 'Environment import checks passed. Run START_TACTIC.bat --single. No existing TACTIC database was changed.' -ForegroundColor Green
+     exit 0
+ } catch {
+     Write-Host $_.Exception.Message -ForegroundColor Red
+--- /dev/null
++++ b/tools/local/tactic_bootstrap.ps1
+@@ -0,0 +1,259 @@
++﻿# No param block: every token after -File remains a literal item in $args.
++# In particular --data-dir/--config must not become PowerShell parameters.
++# Requires only Windows PowerShell 5.1, available before Python is installed.
++Set-StrictMode -Version Latest
++$ErrorActionPreference = 'Stop'
++
++function Get-TacticEntryArguments([string]$Entry, [string[]]$Arguments) {
++    $items = @($Arguments)
++    switch ($Entry) {
++        'start' { return ,(@('start') + $items) }
++        'setup' { return ,(@('setup') + $items) }
++        'manage' { return ,$items }
++        '' { return ,$items }  # direct internal helper invocation
++        default { throw 'Unknown launcher entry; use START_TACTIC, SETUP_ENV or MANAGE_TACTIC.' }
++    }
++}
++
++function Get-TacticRoot {
++    return [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
++}
++
++function Resolve-TacticPath([string]$Value, [string]$Root) {
++    $value = $Value.Trim()
++    if ($value.Length -ge 2 -and $value.StartsWith('"') -and $value.EndsWith('"')) {
++        $value = $value.Substring(1, $value.Length - 2)
++    }
++    if (!$value -or $value -match '[\x00-\x1f"]') { throw 'Некорректный путь к Python.' }
++    if (![IO.Path]::IsPathRooted($value)) { $value = Join-Path $Root $value }
++    return [IO.Path]::GetFullPath($value)
++}
++
++function Get-TacticPython([string]$Root, [string[]]$Arguments) {
++    # Explicit --python > environment > saved profile > adjacent runtime.
++    # Never silently substitute an unrelated Python found on PATH.
++    $candidate = $null
++    $explicit = $false
++    for ($i = 0; $i -lt $Arguments.Count; $i++) {
++        if ($Arguments[$i] -eq '--python') {
++            if ($i + 1 -ge $Arguments.Count) { throw '--python требует путь.' }
++            $candidate = $Arguments[$i + 1]
++            $explicit = $true
++        } elseif ($Arguments[$i].StartsWith('--python=')) {
++            $candidate = $Arguments[$i].Substring(9)
++            $explicit = $true
++        }
++    }
++    if (!$candidate -and $env:TACTIC_PYTHON) { $candidate = $env:TACTIC_PYTHON }
++    if (!$candidate) {
++        $profilePath = Join-Path $Root 'launcher.local.json'
++        if (Test-Path -LiteralPath $profilePath) {
++            if ((Get-Item -LiteralPath $profilePath).Length -gt 16384) { throw 'Слишком большой launcher.local.json.' }
++            $profile = Get-Content -LiteralPath $profilePath -Raw -Encoding UTF8 | ConvertFrom-Json
++            if ($profile.format -ne 1) { throw 'Неверный format в launcher.local.json. Базы не изменены.' }
++            if ($profile.PSObject.Properties['python']) { $candidate = [string]$profile.python }
++        }
++    }
++    if (!$candidate) { $candidate = Join-Path $Root '.runtime/python/python.exe' }
++    $result = Resolve-TacticPath $candidate $Root
++    if (!(Test-Path -LiteralPath $result -PathType Leaf)) {
++        if ($explicit) { throw 'Указанный --python не найден. Исправьте параметр; другой Python автоматически не выбирается.' }
++        return $null
++    }
++    if ($env:OS -eq 'Windows_NT' -and [IO.Path]::GetExtension($result) -ine '.exe') {
++        throw 'Нужен путь к python.exe, не команда CMD/BAT.'
++    }
++    return $result
++}
++
++
++function ConvertTo-TacticNativeArgument([AllowEmptyString()][string]$Value) {
++    # Windows argv escaping, not shell quoting. No cmd.exe is involved.
++    if ($Value.Length -gt 0 -and $Value -notmatch '[\s"]') { return $Value }
++    $b = New-Object Text.StringBuilder
++    [void]$b.Append('"')
++    $slashes = 0
++    foreach ($ch in $Value.ToCharArray()) {
++        if ($ch -eq '\') { $slashes++; continue }
++        if ($ch -eq '"') {
++            [void]$b.Append(('\' * (2 * $slashes + 1)))
++            [void]$b.Append('"')
++        } else {
++            [void]$b.Append(('\' * $slashes))
++            [void]$b.Append($ch)
++        }
++        $slashes = 0
++    }
++    [void]$b.Append(('\' * (2 * $slashes)))
++    [void]$b.Append('"')
++    return $b.ToString()
++}
++
++function Invoke-TacticNative([string]$Executable, [string[]]$Arguments, [string]$Root) {
++    # Inherit all three console handles. Piping Python through Out-Host would
++    # buffer newline-free input/getpass prompts and can make a menu look stuck.
++    $info = New-Object Diagnostics.ProcessStartInfo
++    $info.FileName = $Executable
++    $quoted = @($Arguments | ForEach-Object { ConvertTo-TacticNativeArgument $_ })
++    $info.Arguments = $quoted -join ' '
++    $info.WorkingDirectory = $Root
++    $info.UseShellExecute = $false
++    $info.RedirectStandardInput = $false
++    $info.RedirectStandardOutput = $false
++    $info.RedirectStandardError = $false
++    $info.CreateNoWindow = $false
++    $process = New-Object Diagnostics.Process
++    $process.StartInfo = $info
++    try {
++        if (!$process.Start()) { throw 'Не удалось запустить дочерний процесс.' }
++        # Parent console Ctrl+C also reaches the original launcher. Never
++        # force-kill its workers or replay a request while cleanup is running.
++        $process.WaitForExit()
++        return [int]$process.ExitCode
++    } finally {
++        $process.Dispose()
++    }
++}
++
++function Get-TacticSetupOptions([string[]]$Arguments) {
++    $flags = @()
++    $dry = $false
++    $help = $false
++    foreach ($item in $Arguments) {
++        switch ($item.ToLowerInvariant()) {
++            '--repair' { $flags += '-Repair' }
++            '-repair' { $flags += '-Repair' }
++            '--offline' { $flags += '-Offline' }
++            '-offline' { $flags += '-Offline' }
++            '--dry-run' { $dry = $true }
++            '--help' { $help = $true }
++            '-h' { $help = $true }
++            default { throw "Неизвестный параметр setup: $item. Допустимы --repair и --offline." }
++        }
++    }
++    return @{ Flags = @($flags | Select-Object -Unique); DryRun = $dry; Help = $help }
++}
++
++function Invoke-TacticSetup([string]$Root, [string[]]$Arguments) {
++    $options = Get-TacticSetupOptions $Arguments
++    if ($options.Help) {
++        Write-Host 'SETUP_ENV.bat [--repair] [--offline] [--dry-run]'
++        Write-Host 'Устанавливается только .runtime. INIT/UPGRADE и изменение разрешений не запускаются.'
++        return 0
++    }
++    $exe = Join-Path $PSHOME 'powershell.exe'
++    if (!(Test-Path -LiteralPath $exe)) { $exe = Join-Path $PSHOME 'pwsh' }
++    $tail = @('-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $Root 'tools/local/setup_env.ps1')) + $options.Flags
++    if ($options.DryRun) {
++        @{ dry_run = $true; argv = @($exe) + $tail; cwd = $Root } | ConvertTo-Json -Depth 5 | Write-Host
++        return 0
++    }
++    # The setup script runs in a NEW PowerShell process. Its exit cannot skip
++    # our cleanup. No Python process is left using the runtime during Repair.
++    return (Invoke-TacticNative $exe $tail $Root)
++}
++
++function Show-TacticHelp {
++    Write-Host @'
++START_TACTIC.bat                   3 процесса (или сохранённый режим)
++START_TACTIC.bat --single          один процесс
++START_TACTIC.bat --legacy          один процесс, старый UI
++SETUP_ENV.bat                      загрузить локальный Python и зависимости
++SETUP_ENV.bat --repair --offline   ремонт из локального кэша
++MANAGE_TACTIC.bat                  меню настроек и обслуживания
++MANAGE_TACTIC.bat check env|db|startup   диагностика
++MANAGE_TACTIC.bat db init|upgrade|restore   обслуживание managed SQLite
++MANAGE_TACTIC.bat configure --writes on    разрешение записи, с подтверждением
++MANAGE_TACTIC.bat settings --save ...   сохранить пути/порт/режим запуска
++MANAGE_TACTIC.bat build             пересобрать Vue (нужен Node)
++
++Общие параметры запуска/обслуживания:
++  --data-dir "D:\TACTIC\local_data" --config "...xml" --python "...python.exe"
++Запуск: --port 9123 --workers 3. --dry-run показывает команду без запуска.
++Окружение: TACTIC_PYTHON="полный путь к python.exe" или сохранённые Параметры.
++Никакая инициализация/миграция не выполняется при обычном запуске.
++SETUP работает до установки Python. Ни один BAT не меняет права записи молча.
++MANAGE_TACTIC без Python предложит указать существующий Python либо установить его.
++Для подробностей конкретной команды добавьте --help (после установки Python).
++'@
++}
++
++function Invoke-TacticBootstrap([string[]]$Arguments) {
++    $root = Get-TacticRoot
++    Set-Location -LiteralPath $root
++    $entry = if ($env:TACTIC_LAUNCH_ENTRY) { $env:TACTIC_LAUNCH_ENTRY } else { '' }
++    $arguments = Get-TacticEntryArguments $entry @($Arguments)
++    if ($arguments.Count -gt 0 -and $arguments[0].ToLowerInvariant() -in @('help', '--help', '-h', '/?')) {
++        Show-TacticHelp
++        return 0
++    }
++    if ($arguments.Count -eq 2 -and $arguments[0] -ieq 'start' -and $arguments[1].ToLowerInvariant() -in @('help', '--help', '-h', '/?')) {
++        Show-TacticHelp
++        return 0
++    }
++    if ($arguments.Count -gt 0 -and $arguments[0] -ieq 'setup') {
++        $rest = @()
++        if ($arguments.Count -gt 1) { $rest = @($arguments[1..($arguments.Count - 1)]) }
++        return (Invoke-TacticSetup $root $rest)
++    }
++    $menu = $arguments.Count -eq 0 -or $arguments[0] -ieq 'menu' -or $arguments[0].StartsWith('--')
++    while ($true) {
++        $python = Get-TacticPython $root $arguments
++        if (!$python) {
++            if (!$menu -or [Console]::IsInputRedirected) {
++                Write-Host 'Python не найден. SETUP_ENV.bat установит окружение. Либо задайте TACTIC_PYTHON/--python.'
++                return 2
++            }
++            Write-Host 'Python не выбран. Базы и конфигурация не изменены.'
++            Write-Host "1  Скачать локальное окружение`n2  Указать существующий python.exe`n0  Выход"
++            $choice = Read-Host 'Действие'
++            if ($choice -eq '0') { return 0 }
++            if ($choice -eq '1') {
++                $code = Invoke-TacticSetup $root @()
++                if ($code -ne 0) { Write-Host "Установка не завершена, код $code. Автоматического повтора нет."; return $code }
++                # A stale explicitly selected interpreter must not override a
++                # successful user-selected local install within this session.
++                $env:TACTIC_PYTHON = Join-Path $root '.runtime/python/python.exe'
++            } elseif ($choice -eq '2') {
++                $env:TACTIC_PYTHON = Read-Host 'Полный путь к существующему python.exe (не папка)'
++            }
++            continue
++        }
++        # JSON travels through the environment instead of command-string
++        # interpolation. This preserves spaces, Unicode, !, &, %, trailing
++        # slashes and empty argv tokens across Windows PowerShell 5.1.
++        $previous = $env:TACTIC_BOOTSTRAP_ARGV_JSON
++        $previousUnbuffered = $env:PYTHONUNBUFFERED
++        try {
++            $env:PYTHONUNBUFFERED = '1'
++            $env:TACTIC_BOOTSTRAP_ARGV_JSON = ConvertTo-Json -InputObject @($arguments) -Compress
++            $pythonArgs = @('-X', 'utf8', '-s', (Join-Path $root 'tools/local/control.py'), '--bootstrap-argv')
++            $code = Invoke-TacticNative $python $pythonArgs $root
++        } finally {
++            if ($null -eq $previousUnbuffered) { Remove-Item Env:PYTHONUNBUFFERED -ErrorAction SilentlyContinue }
++            else { $env:PYTHONUNBUFFERED = $previousUnbuffered }
++            if ($null -eq $previous) { Remove-Item Env:TACTIC_BOOTSTRAP_ARGV_JSON -ErrorAction SilentlyContinue }
++            else { $env:TACTIC_BOOTSTRAP_ARGV_JSON = $previous }
++        }
++        return $code
++    }
++}
++
++# Dot-sourcing exposes functions for tests; normal -File executes exactly once.
++if ($MyInvocation.InvocationName -ne '.') {
++    try {
++        [Console]::OutputEncoding = New-Object Text.UTF8Encoding($false)
++        $rc = Invoke-TacticBootstrap -Arguments @($args)
++        if (@($args).Count -eq 0 -and ![Console]::IsInputRedirected -and $env:TACTIC_NO_PAUSE -ne '1' -and ($rc -ne 0 -or $env:TACTIC_LAUNCH_ENTRY -eq 'setup')) {
++            Write-Host "Код завершения: $rc"
++            Read-Host 'ENTER — закрыть' | Out-Null
++        }
++        exit $rc
++    } catch {
++        Write-Host ('ERROR: ' + $_.Exception.Message) -ForegroundColor Red
++        if (@($args).Count -eq 0 -and ![Console]::IsInputRedirected -and $env:TACTIC_NO_PAUSE -ne '1') {
++            Read-Host 'ENTER — закрыть' | Out-Null
++        }
++        exit 2
++    }
++}

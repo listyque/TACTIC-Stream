@@ -1,0 +1,12 @@
+#-- Start Entry --#
+insert = SearchType.create('sthpw/project')
+insert.set_value('category', """work""")
+insert.set_value('code', """niki_friends""")
+insert.set_value('is_template', False)
+insert.set_value('last_db_update', """2026-09-22 07:00:02.291155""")
+insert.set_value('last_version_update', """4.9.0.b02""")
+insert.set_value('palette', """Dark""")
+insert.set_value('title', """Niki Friends""")
+insert.set_value('type', """cg""")
+#-- End Entry --#
+

@@ -1,0 +1,63 @@
+{
+  "database": "SQLite",
+  "transport": "real loopback HTTP",
+  "fresh_random_bytes": true,
+  "files": 1000,
+  "bytes": 4096000,
+  "small_files": 1000,
+  "small_size": 4096,
+  "large_files": 0,
+  "large_size": 67108864,
+  "generation_seconds": 0.115,
+  "upload_submit_seconds": 5.698,
+  "already_uploaded_to_confirmed_seconds": 1.045,
+  "download_have_seconds": 4.662,
+  "upload_peak_process_mib": 106.58,
+  "download_peak_process_mib": 110.68,
+  "upload_state": "submitted",
+  "download_state": "complete",
+  "commands": {
+    "capabilities": {
+      "count": 2,
+      "aggregate_seconds": 0.032
+    },
+    "transfer_begin": {
+      "count": 2,
+      "aggregate_seconds": 0.045
+    },
+    "transfer_status": {
+      "count": 10,
+      "aggregate_seconds": 0.298
+    },
+    "transfer_manifest": {
+      "count": 1,
+      "aggregate_seconds": 0.857
+    },
+    "transfer_next": {
+      "count": 2,
+      "aggregate_seconds": 0.077
+    },
+    "transfer_seal": {
+      "count": 1,
+      "aggregate_seconds": 0.035
+    },
+    "transfer_ack": {
+      "count": 1,
+      "aggregate_seconds": 0.031
+    }
+  },
+  "worker_commands": {
+    "transfer_claim": {
+      "count": 1,
+      "aggregate_seconds": 0.012
+    },
+    "transfer_verify_next": {
+      "count": 1,
+      "aggregate_seconds": 0.028
+    },
+    "transfer_step": {
+      "count": 1,
+      "aggregate_seconds": 0.533
+    }
+  }
+}

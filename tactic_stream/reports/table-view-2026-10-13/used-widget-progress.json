@@ -1,0 +1,233 @@
+{
+  "pyasm.widget.table_element_wdg.ArrayTableElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "pyasm.widget.table_element_wdg.XmlWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.json_element_wdg.JsonElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.metadata_element_wdg.MetadataElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.statistic_wdg.TaskCompletionWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.link_element_wdg.LinkElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.format_element_wdg.FormatElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.common.base_table_element_wdg.RawTableElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.delete_element_wdg.DeleteElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.explorer_wdg.ExplorerTableElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.task_element_wdg.TaskElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.widget.discussion_wdg.DiscussionElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.expression_element_wdg.ExpressionElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "pyasm.widget.file_wdg.ThumbWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.explorer_wdg.ExplorerElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  },
+  "tactic.ui.table.table_element_wdg.CheckinButtonElementWdg": {
+    "status": "Current Handler scenario implemented; legacy options remain",
+    "done": [
+      "Исходник и наследование",
+      "Сравнение вычислений и ошибок",
+      "Typed transport ТХ/ТС",
+      "Парные снимки ТХ/ТС",
+      "XML-пример и EN/RU Help"
+    ],
+    "todo": []
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "baseline": "1.0",
+  "methods": [
+    {
+      "legacy": "src/tactic/ui/app/license_manager_wdg.py::RenewLicenseCbk.execute",
+      "native": "src/tactic/core/license_commands.py::RenewLicenseCbk.execute",
+      "original_ast_sha256": "01368ab7c5983e76612b832ff79b0123b29461d068f09dae133e399636a37681",
+      "native_ast_sha256": "01368ab7c5983e76612b832ff79b0123b29461d068f09dae133e399636a37681",
+      "identical": true
+    }
+  ],
+  "claim": "Method AST equality only; successful cryptographic licence replacement is not tested"
+}

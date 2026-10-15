@@ -1,0 +1,8 @@
+{
+  "baseline_sha256": "a15e0a16f566fb0c843c863331d8d859788278ef04b2be12c146866320265cc4",
+  "git_apply_check": true,
+  "git_apply": true,
+  "all_changed_file_hashes_match": true,
+  "changed_files": 47,
+  "scope": "Only touched files extracted from original baseline archive; new/deleted files included"
+}

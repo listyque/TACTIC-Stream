@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+data/
+.coverage
+build/
+dist/
+frontend/node_modules/
+.npm-cache/
+.browser-cache/
+deploy/docker/.local/

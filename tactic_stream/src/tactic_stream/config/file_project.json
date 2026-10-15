@@ -1,0 +1,10 @@
+{
+  "code": "perforce_like",
+  "title": "Perforce-like file project",
+  "project_mode": "file_project",
+  "schema_version": 1,
+  "tables": ["depot", "stream", "workspace", "change", "page", "blob", "chunk", "version", "checkout", "sync"],
+  "catalog_page_size": 256,
+  "edit_chunk_limit": 1000,
+  "transfer_chunk_bytes": 4194304
+}
