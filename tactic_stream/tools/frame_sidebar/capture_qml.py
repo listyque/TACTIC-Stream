@@ -52,6 +52,9 @@ for mode in ('dark',) if quick else ('dark', 'light'):
             try:
                 from xml.etree import ElementTree
                 from thlib.ui.sidebar_editor import _serialize
+                editor.add_entry('link')
+                editor.update_selected('title','Asset browser')
+                editor.select_entry(0)
                 for view, document in editor._documents.items():
                     if any(child.tag == 'element' for child in document):
                         container = ElementTree.Element('view', {'name': view})
@@ -84,7 +87,12 @@ for mode in ('dark',) if quick else ('dark', 'light'):
                             editor.stateChanged.emit()
                         else:
                             item = controls(window)[action['id']]
-                            if action['type'] == 'text': text(window, item, action['value'])
+                            if action['type']=='key':
+                                item.forceActiveFocus(Qt.TabFocusReason)
+                                QTest.keyClick(window,{'ArrowDown':Qt.Key_Down,'Home':Qt.Key_Home}[action['key']])
+                                frame(window)
+                                assert window.activeFocusItem().objectName() == ('sidebarEditorEntry_1' if action['key']=='ArrowDown' else 'sidebarEditorEntry_0')
+                            elif action['type'] == 'text': text(window, item, action['value'])
                             else: click(window, item)
                         frame(window)
                     window.blur(); QTest.mouseMove(window, QPointF(width - 1, height - 1).toPoint()); frame(window)

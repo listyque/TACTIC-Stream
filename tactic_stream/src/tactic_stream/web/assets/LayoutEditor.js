@@ -1,5 +1,5 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
-import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, T as t, q as _plugin_vue_export_helper_default } from "./index.js";
 import { M as rpc, Y as widgetConfiguration, j as resultItems } from "./clipboard.js";
 import { A as variants, C as actions, D as roles, E as edit, J as label, O as serialize, T as describe$2, X as node, Y as muted, Z as rect, h as _sfc_main$1, j as widgets, k as template, q as button, w as binding, y as translate } from "./App.js";
 import { t as observeFrameSizes } from "./resize.js";

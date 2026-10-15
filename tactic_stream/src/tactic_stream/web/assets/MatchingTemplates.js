@@ -1,4 +1,4 @@
-import { F as renderSlot, G as withCtx, K as withDirectives, N as openBlock, P as renderList, T as mergeModels, V as useModel, X as ref, _ as createCommentVNode, a as vModelCheckbox, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, l as withKeys, m as computed, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
+import { F as renderSlot, G as withCtx, N as openBlock, P as renderList, T as mergeModels, V as useModel, X as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, l as withKeys, m as computed, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { T as t, c as _sfc_main$2, i as _sfc_main$3 } from "./index.js";
 import { M as rpc } from "./clipboard.js";
 import { t as _sfc_main$4 } from "./AppTextField.js";
@@ -8,6 +8,7 @@ import { S as _sfc_main$6 } from "./App.js";
 var _hoisted_1$1 = { class: "app-checkbox-indicator" };
 var _hoisted_2$1 = [
 	"id",
+	"checked",
 	"disabled",
 	"indeterminate",
 	"aria-label"
@@ -32,21 +33,28 @@ var _sfc_main$1 = {
 		},
 		"modelModifiers": {}
 	}),
-	emits: ["update:modelValue"],
-	setup(__props) {
+	emits: /*@__PURE__*/ mergeModels(["update:modelValue"], ["update:modelValue"]),
+	setup(__props, { emit: __emit }) {
+		const props = __props;
 		const model = useModel(__props, "modelValue");
+		const emit = __emit;
+		function changed(event) {
+			if (props.indeterminate) emit("update:modelValue", true);
+			else model.value = event.target.checked;
+		}
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("label", { class: normalizeClass(["app-checkbox", {
 				disabled: __props.disabled,
 				compact: __props.compact
-			}]) }, [createBaseVNode("span", _hoisted_1$1, [withDirectives(createBaseVNode("input", {
+			}]) }, [createBaseVNode("span", _hoisted_1$1, [createBaseVNode("input", {
 				id: __props.controlId,
 				type: "checkbox",
-				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
+				checked: !__props.indeterminate && model.value,
+				onChange: changed,
 				disabled: __props.disabled,
 				indeterminate: __props.indeterminate,
 				"aria-label": __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : void 0
-			}, null, 8, _hoisted_2$1), [[vModelCheckbox, model.value]]), model.value || __props.indeterminate ? (openBlock(), createBlock(_sfc_main$2, {
+			}, null, 40, _hoisted_2$1), model.value || __props.indeterminate ? (openBlock(), createBlock(_sfc_main$2, {
 				key: 0,
 				name: __props.indeterminate ? "minus" : "check"
 			}, null, 8, ["name"])) : createCommentVNode("", true)]), !__props.hideLabel ? renderSlot(_ctx.$slots, "default", {}, () => [createTextVNode(toDisplayString(__props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : ""), 1)], void 0, 0) : createCommentVNode("", true)], 2);

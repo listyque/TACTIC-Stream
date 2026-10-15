@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/App.js","assets/markdown-it.js","assets/icons.js","assets/RecordForm.js","assets/AppColorInput.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppTextField.js","assets/AppTextField.css","assets/AppColorInput.css","assets/AppDateField.js","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/RecordForm.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/richText.js","assets/links.js","assets/activity.js","assets/files.js","assets/AppSearchField.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/MiddleElide.js","assets/MiddleElide.css","assets/ItemSurface.js","assets/ItemSurface.css","assets/previewImage.js","assets/App.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/App.js","assets/markdown-it.js","assets/icons.js","assets/RecordForm.js","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppTextField.js","assets/AppTextField.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/RecordForm.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/richText.js","assets/links.js","assets/activity.js","assets/files.js","assets/AppSearchField.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/MiddleElide.js","assets/MiddleElide.css","assets/ItemSurface.js","assets/ItemSurface.css","assets/previewImage.js","assets/App.css"])))=>i.map(i=>d[i]);
 import { C as h, F as renderSlot, G as withCtx, H as watch, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, S as defineAsyncComponent, U as watchEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, i as render, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeStyle, p as Teleport, r as createApp, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock } from "./vue.js";
 import { n as en_default, t as ru_default } from "./locales.js";
 import { n as resolveIcon } from "./icons.js";
@@ -468,6 +468,59 @@ function savePreferencePage(page, value) {
 	Object.assign(preferences[page], next[page]);
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/core/interaction.mjs
+function buttonVisual(state = {}) {
+	const enabled = state.enabled !== false && !state.loading;
+	const active = state.hovered || state.focused;
+	let background = "surfaceContainerHigh";
+	let content = "primaryText";
+	if (state.segmented) {
+		background = !enabled ? "transparent" : state.pressed ? "surfaceContainerHighest" : state.checked ? "selected" : active ? "rowHover" : "transparent";
+		content = state.checked ? "selectedText" : "secondaryText";
+	} else if (enabled) {
+		if (state.pressed) background = state.destructive && state.highlighted ? "error" : "selected";
+		else if (state.highlighted) background = state.destructive ? "error" : "action";
+		else if (active) background = "rowHover";
+		else if (state.tonal) background = "secondaryContainer";
+		content = state.destructive ? state.highlighted ? "onError" : "error" : state.highlighted ? "selectedText" : "primaryText";
+	}
+	return {
+		background,
+		content: enabled ? content : "disabledText",
+		border: state.destructive ? "error" : "outlineVariant",
+		borderWidth: state.segmented || state.highlighted || state.flat ? 0 : 1,
+		pressedMix: enabled && state.pressed && state.destructive && state.highlighted
+	};
+}
+function fieldVisual(state = {}) {
+	return {
+		background: state.tableCell && !state.focused ? "transparent" : "surfaceContainerHigh",
+		content: state.enabled === false ? "disabledText" : "primaryText",
+		border: state.error ? "error" : state.focused ? "action" : "outline",
+		borderWidth: state.focused ? 2 : state.tableCell ? 0 : 1
+	};
+}
+function checkVisual(state = {}) {
+	const selected = state.checked || state.mixed;
+	const disabled = state.enabled === false;
+	return {
+		background: selected ? disabled ? "surfaceContainerHigh" : "action" : state.prominent ? "surfaceContainerHighest" : "transparent",
+		content: disabled ? "disabledText" : "primaryText",
+		mark: disabled ? "disabledText" : "selectedText",
+		border: disabled ? "disabledText" : selected || state.focused ? "action" : state.prominent ? "secondaryText" : "outline",
+		borderWidth: state.focused || state.prominent ? 2 : 1
+	};
+}
+function switchVisual(state = {}) {
+	const disabled = state.enabled === false;
+	return {
+		background: disabled ? "surfaceContainerHigh" : state.checked ? "action" : "surfaceContainerHighest",
+		border: disabled ? "disabledText" : state.checked || state.focused ? "action" : "outline",
+		thumb: disabled ? "disabledText" : state.checked ? "selectedText" : "secondaryText",
+		borderWidth: state.focused ? 2 : 1
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/core/foundation.mjs
 var typography = {
 	micro: 8,
@@ -489,12 +542,53 @@ var textStyles = Object.freeze({
 	hero: 24
 });
 var controls = {
+	field: {
+		padding: 12,
+		areaPadding: 10
+	},
+	choice: {
+		rowHeight: 34,
+		visibleRows: 8,
+		popupPadding: 4,
+		popupGap: 4
+	},
+	tooltip: {
+		delay: 500,
+		timeout: 5e3,
+		margin: 8,
+		paddingX: 12,
+		paddingY: 7,
+		radius: 6
+	},
+	userPicker: {
+		popupWidth: 294,
+		popupHeight: 286,
+		rowHeight: 48,
+		avatarSize: 32
+	},
+	calendar: {
+		popupWidth: 304,
+		padding: 10,
+		rowHeight: 30,
+		daySize: 28
+	},
+	colorPicker: {
+		popupWidth: 380,
+		planeHeight: 190,
+		padding: 20
+	},
+	iconPicker: {
+		popupWidth: 560,
+		popupHeight: 440
+	},
 	button: {
 		minimumWidth: 72,
 		padding: 16,
 		iconPadding: 12,
 		spacing: 7,
 		segmentedSpacing: 6,
+		segmentedPaddingStart: 3,
+		segmentedPaddingEnd: 7,
 		iconSize: 16,
 		compactIconSize: 18,
 		segmentedIconSize: 15
@@ -502,7 +596,9 @@ var controls = {
 	iconButton: {
 		extent: 28,
 		iconSize: 17,
-		surfaceInset: 2
+		surfaceInset: 2,
+		hoveredOpacity: .08,
+		pressedOpacity: .12
 	},
 	checkBox: {
 		height: 36,
@@ -794,6 +890,8 @@ var cssRoles = {
 	surfaceContainerLow: "--surface",
 	surfaceContainer: "--surface-container",
 	surfaceContainerHigh: "--surface-high",
+	surfaceContainerHighest: "--surface-highest",
+	secondaryContainer: "--secondary-container",
 	outline: "--outline",
 	outlineVariant: "--outline-variant",
 	error: "--error",
@@ -816,9 +914,39 @@ function cssVariables(style, dark, base, accent, preferences) {
 		const cssName = "--text-" + name.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
 		result[cssName] = typography[name] + "pt";
 	}
+	result["--control-text-size"] = textStyles.body + "px";
+	result["--control-compact-text-size"] = textStyles.secondary + "px";
+	const states = {
+		field: {
+			idle: fieldVisual(),
+			focus: fieldVisual({ focused: true }),
+			error: fieldVisual({ error: true }),
+			disabled: fieldVisual({ enabled: false })
+		},
+		check: {
+			idle: checkVisual(),
+			checked: checkVisual({ checked: true }),
+			focus: checkVisual({ focused: true }),
+			disabled: checkVisual({ enabled: false }),
+			disabledChecked: checkVisual({
+				checked: true,
+				enabled: false
+			})
+		},
+		switch: {
+			idle: switchVisual(),
+			checked: switchVisual({ checked: true }),
+			focus: switchVisual({ focused: true }),
+			disabled: switchVisual({ enabled: false })
+		}
+	};
+	for (const [kind, variants] of Object.entries(states)) for (const [state, paint] of Object.entries(variants)) for (const [part, value] of Object.entries(paint)) {
+		const name = ("--" + kind + "-" + state + "-" + part).replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
+		result[name] = typeof value === "number" ? value + "px" : value === "transparent" ? value : cssColor(colors[value]);
+	}
 	for (const kind of Object.keys(controls)) for (const name of Object.keys(controls[kind])) {
 		const cssName = "--" + (kind + name[0].toUpperCase() + name.slice(1)).replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
-		result[cssName] = controls[kind][name] + (name.endsWith("Opacity") ? "" : "px");
+		result[cssName] = controls[kind][name] + (name.endsWith("Opacity") || name === "visibleRows" ? "" : name === "delay" || name === "timeout" ? "ms" : "px");
 	}
 	const timings = motion(style, preferences);
 	for (const name of [
@@ -1408,6 +1536,30 @@ function installDebugLogging() {
 	}));
 }
 //#endregion
+//#region src/controls/controlAppearance.js
+function buttonVariables(options) {
+	const result = {};
+	for (const [name, flags] of Object.entries({
+		idle: {},
+		hover: { hovered: true },
+		focus: { focused: true },
+		pressed: { pressed: true },
+		disabled: { enabled: false }
+	})) {
+		const paint = buttonVisual({
+			...options,
+			...flags
+		});
+		let background = paint.background === "transparent" ? "transparent" : `var(${cssRoles[paint.background]})`;
+		if (paint.pressedMix) background = `color-mix(in srgb, ${background} 82%, var(--page))`;
+		result[`--button-${name}-background`] = background;
+		result[`--button-${name}-color`] = `var(${cssRoles[paint.content]})`;
+		result[`--button-${name}-border`] = `var(${cssRoles[paint.border]})`;
+		result[`--button-${name}-border-width`] = paint.borderWidth + "px";
+	}
+	return result;
+}
+//#endregion
 //#region src/controls/AppIcon.vue
 var _hoisted_1$2 = ["data-icon"];
 var _hoisted_2$1 = { class: "icon-glyph" };
@@ -1416,7 +1568,7 @@ var _sfc_main$2 = {
 	props: { name: String },
 	setup(__props) {
 		const props = __props;
-		const icon = computed(() => resolveIcon(props.name, appearance.iconSet === "automatic" ? "material-design" : appearance.iconSet));
+		const icon = computed(() => resolveIcon(props.name, appearance.iconSet));
 		return (_ctx, _cache) => {
 			return icon.value ? (openBlock(), createElementBlock("span", {
 				key: 0,
@@ -1517,7 +1669,7 @@ var tooltipDirective = {
 			if (active === close) active = null;
 		}
 		function start(event) {
-			if (!text || element.disabled || event.pointerType === "touch") return;
+			if (!text || element.disabled || element.getAttribute("aria-disabled") === "true" || event.pointerType === "touch") return;
 			active?.();
 			active = close;
 			for (const name of [
@@ -1528,7 +1680,7 @@ var tooltipDirective = {
 				"close"
 			]) window.addEventListener(name, close, true);
 			timer = setTimeout(() => {
-				if (!element.isConnected || !element.getClientRects().length) {
+				if (!element.isConnected || element.disabled || element.getAttribute("aria-disabled") === "true" || !element.getClientRects().length) {
 					close();
 					return;
 				}
@@ -1540,13 +1692,13 @@ var tooltipDirective = {
 				popup.textContent = text;
 				(element.closest("dialog") || document.body).append(popup);
 				popup.showPopover();
-				const anchor = element.getBoundingClientRect(), box = popup.getBoundingClientRect();
-				popup.style.left = Math.max(8, Math.min(innerWidth - box.width - 8, anchor.left + (anchor.width - box.width) / 2)) + "px";
-				popup.style.top = Math.max(8, Math.min(innerHeight - box.height - 8, anchor.bottom + box.height + 16 > innerHeight ? anchor.top - box.height - 8 : anchor.bottom + 8)) + "px";
+				const anchor = element.getBoundingClientRect(), box = popup.getBoundingClientRect(), margin = controls.tooltip.margin;
+				popup.style.left = Math.max(margin, Math.min(innerWidth - box.width - margin, anchor.left + (anchor.width - box.width) / 2)) + "px";
+				popup.style.top = Math.max(margin, Math.min(innerHeight - box.height - margin, anchor.bottom + box.height + 2 * margin > innerHeight ? anchor.top - box.height - margin : anchor.bottom + margin)) + "px";
 				describedBy = element.getAttribute("aria-describedby");
 				element.setAttribute("aria-describedby", [describedBy, popup.id].filter(Boolean).join(" "));
-				timeout = setTimeout(close, 5e3);
-			}, 500);
+				timeout = setTimeout(close, controls.tooltip.timeout);
+			}, controls.tooltip.delay);
 		}
 		element.addEventListener("pointerenter", start);
 		element.addEventListener("focusin", start);
@@ -1598,6 +1750,8 @@ var _sfc_main$1 = {
 		highlighted: Boolean,
 		destructive: Boolean,
 		tonal: Boolean,
+		segmented: Boolean,
+		checked: Boolean,
 		badgeCount: {
 			type: Number,
 			default: 0
@@ -1610,6 +1764,8 @@ var _sfc_main$1 = {
 		href: String
 	},
 	setup(__props) {
+		const props = __props;
+		const paint = computed(() => buttonVariables(props));
 		return (_ctx, _cache) => {
 			return withDirectives((openBlock(), createBlock(resolveDynamicComponent(__props.href ? "a" : "button"), {
 				class: normalizeClass(["app-button", {
@@ -1618,6 +1774,7 @@ var _sfc_main$1 = {
 					danger: __props.destructive,
 					tonal: __props.tonal
 				}]),
+				style: normalizeStyle(paint.value),
 				href: __props.href,
 				type: __props.href ? void 0 : __props.type,
 				"aria-label": __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : void 0,
@@ -1636,6 +1793,7 @@ var _sfc_main$1 = {
 				]),
 				_: 3
 			}, 40, [
+				"style",
 				"href",
 				"type",
 				"class",
@@ -2377,9 +2535,9 @@ var documentation = location.pathname === "/docs" || location.pathname === "/doc
 if (documentation) watchEffect(() => {
 	document.title = t("TACTIC Stream — API reference");
 });
-var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,9,1,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41])));
+var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,9,1,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { readableText as A, normalizeColumns as B, randomId as C, colorModes as D, appearance as E, textStyles as F, BusyIndicator_default as G, accentPresets as H, configurationPreview as I, _plugin_vue_export_helper_default as K, normalizePreferences as L, cssRoles as M, layout as N, effectiveColorMode as O, metrics as P, preferences as R, setServerDebugContext as S, t as T, iconSets as U, taskColumns as V, themes as W, logEvent as _, tooltipDirective as a, savedSessions as b, _sfc_main$2 as c, debugSettings as d, exportSession as f, levels as g, importSession as h, _sfc_main$1 as i, saveAppearance as j, languages as k, clearLive as l, formatEvent as m, mobile as n, capturePress as o, forgetSessions as p, mobileLayout as r, ripple as s, __vitePreload as t, debugLog as u, logRequest as v, asyncComponent as w, sessionRecords as x, redact as y, savePreferencePage as z };
+export { readableText as A, savePreferencePage as B, randomId as C, colorModes as D, appearance as E, metrics as F, themes as G, taskColumns as H, textStyles as I, BusyIndicator_default as K, configurationPreview as L, controls as M, cssRoles as N, effectiveColorMode as O, layout as P, normalizePreferences as R, setServerDebugContext as S, t as T, accentPresets as U, normalizeColumns as V, iconSets as W, logEvent as _, tooltipDirective as a, savedSessions as b, _sfc_main$2 as c, debugSettings as d, exportSession as f, levels as g, importSession as h, _sfc_main$1 as i, saveAppearance as j, languages as k, clearLive as l, formatEvent as m, mobile as n, capturePress as o, forgetSessions as p, _plugin_vue_export_helper_default as q, mobileLayout as r, ripple as s, __vitePreload as t, debugLog as u, logRequest as v, asyncComponent as w, sessionRecords as x, redact as y, preferences as z };
 
 //# sourceMappingURL=index.js.map

@@ -41,15 +41,17 @@ try{
     if(action.type==='state')await page.evaluate(value=>{const s=window.frameAdmin.screen.value;s.context.ticket=value==='readonly'?'readonly-fixture':s.ticket;s.uncertain=value==='uncertain';s.busy=value==='busy'},action.value)
     else{
      const el=page.locator('section.sidebar-editor [data-frame="'+action.id+'"]')
-     if(action.type==='text')await el.fill(action.value)
+     if(action.type==='key')await el.press(action.key)
+     else if(action.type==='text')await el.fill(action.value)
      else{const b=await el.boundingBox();assert(b,action.id);await page.mouse.click(b.x+b.width/2,b.y+b.height/2)}
     }
     if(action.type!=='state'||action.value!=='busy')await page.waitForFunction(()=>!window.frameAdmin.screen.value.busy&&!window.frameAdmin.screen.value.dispatching)
+    if(action.type==='key')await page.waitForFunction(id=>document.activeElement?.dataset.frame===id,action.key==='ArrowDown'?'sidebarEditorEntry_1':'sidebarEditorEntry_0')
    }
    await page.evaluate(()=>document.activeElement.blur());await page.mouse.move(width-1,height-1);await page.waitForTimeout(35)
    const actual=await page.evaluate(()=>{const s=window.frameAdmin.screen.value;return {scene:{toolbar:s.toolbarScene,body:s.frameScene},state:{ui:JSON.parse(JSON.stringify(s.ui)),dirty:!!s.dirty,selected:s.draft.selected,entry:s.entry.name||''}}})
    const label=[mode,language,width,c.phase].join(' '),reference=native.captures.find(s=>s.mode===mode&&s.language===language&&s.width===width&&s.phase===c.phase)
-   assert.deepEqual(errors,[],label+' runtime errors');assert.deepEqual(actual.state,reference.state,label+' state');assert.deepEqual(actual.scene,reference.scene,label+' graph')
+   assert.deepEqual(errors,[],label+' runtime errors');assert.deepEqual(actual.state,reference.state,label+' state');assert.deepEqual(JSON.parse(JSON.stringify(actual.scene)),reference.scene,label+' graph')
    const counts=await compareSurface(page,'section.sidebar-editor',await surface(page,'section.sidebar-editor'),reference,label)
    rectangles+=counts.rectangles;styles+=counts.styles;interiors+=counts.interiors
    const image='sidebar-vue-'+mode+'-'+language+'-'+width+'-'+c.phase+'.png'

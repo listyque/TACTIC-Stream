@@ -1,0 +1,1234 @@
+{
+  "levels": {
+    "primitive": "Базовый визуальный элемент или одно действие/значение; без проекта, бизнес-объекта и серверной операции.",
+    "composite": "Базовый составной контрол: собирает примитивы, имеет нейтральные данные и события, подходит разным формам.",
+    "infrastructure": "Механика ввода, позиционирования, окон, рендеринга или жизненного цикла; не отдельный визуальный контрол.",
+    "feature": "Форма, экран или предметный фрагмент: знает конкретный сценарий, предметную модель или операцию.",
+    "review": "Исходник учтён; его ответственность требует отдельного разбора. Это не подтверждённый базовый контрол."
+  },
+  "families": [
+    {
+      "id": "buttons",
+      "title": "Кнопки и действия",
+      "level": "primitive",
+      "native": [
+        "Button",
+        "CompactIconButton",
+        "FilledActionButton",
+        "DisclosureButton",
+        "ItemCountActionButton",
+        "PreviewNavigationButton",
+        "RefreshIconButton",
+        "MessageSendButton"
+      ],
+      "vue": [
+        "AppButton"
+      ],
+      "tokens": [
+        "button",
+        "action-count",
+        "disclosure",
+        "reveal"
+      ],
+      "variants": [
+        "Обычная",
+        "Primary / заполненная",
+        "Tonal",
+        "Destructive",
+        "Текстовая / плоская",
+        "Круглая иконка",
+        "Прямоугольная toolbar action",
+        "Счётчик поверх кнопки",
+        "Раскрытие ветки",
+        "Навигация превью",
+        "Отправка / sending"
+      ],
+      "coverage": "partial",
+      "example": "button",
+      "gaps": [
+        "Четыре кнопочных примера не покрывают все реальные варианты.",
+        "FilledActionButton, счётчики, disclosure и preview navigation не имеют полного отдельного парного сценария."
+      ],
+      "rule": "Общий Button + именованные варианты. Геометрия hit target, поверхности, иконки и бейджа задаётся отдельно; предметная команда остаётся у формы."
+    },
+    {
+      "id": "toggles",
+      "title": "Чекбоксы, radio, переключатели",
+      "level": "primitive",
+      "native": [
+        "CheckBox",
+        "Switch",
+        "SegmentedButton"
+      ],
+      "vue": [
+        "AppCheckbox",
+        "AppSwitch",
+        "AppSegmentedButton"
+      ],
+      "tokens": [
+        "checkbox",
+        "switch",
+        "radio",
+        "toggle",
+        "segment"
+      ],
+      "variants": [
+        "Checkbox обычный / compact / prominent",
+        "Unchecked / checked / mixed",
+        "Switch",
+        "Radio",
+        "Сегменты с текстом",
+        "Сегменты с иконками",
+        "Outlined segments",
+        "Недоступный отдельный вариант"
+      ],
+      "coverage": "partial",
+      "example": "check",
+      "gaps": [
+        "В стенде одна radio-кнопка, а не полный SegmentedButton.",
+        "Проминентный/компактный checkbox и outlined-группа отдельно не закрыты.",
+        "В QML отдельный сегмент учитывает modelData.enabled; Vue-группа учитывает только общий disabled."
+      ],
+      "rule": "Один смысл выбора и клавиатурной навигации; явные варианты плотности и вида, а не локальные CSS-копии."
+    },
+    {
+      "id": "text-fields",
+      "title": "Текстовые поля",
+      "level": "primitive",
+      "native": [
+        "TextField",
+        "TextArea"
+      ],
+      "vue": [
+        "AppTextField",
+        "AppTextArea"
+      ],
+      "tokens": [
+        "text-field",
+        "textarea",
+        "textinput",
+        "textedit",
+        "input",
+        "field"
+      ],
+      "variants": [
+        "Однострочное",
+        "Многострочное",
+        "Placeholder",
+        "Password / reveal",
+        "Readonly",
+        "Ошибка и helper text",
+        "Prefix / suffix / trailing action",
+        "Табличный inline editor"
+      ],
+      "coverage": "partial",
+      "example": "field",
+      "gaps": [
+        "Обычные поля и многострочный ввод проверены; password, adornments и все inline-редакторы не имеют полного собственного каталога."
+      ],
+      "rule": "Общий ввод/selection/IME/validation presentation. Значение и предметная валидация принадлежат владельцу формы."
+    },
+    {
+      "id": "search",
+      "title": "Поиск и подсказки",
+      "level": "composite",
+      "native": [
+        "SearchField"
+      ],
+      "vue": [
+        "AppSearchField"
+      ],
+      "tokens": [
+        "search",
+        "suggest",
+        "completer",
+        "autocomplete"
+      ],
+      "variants": [
+        "Поиск с иконкой",
+        "Очистка",
+        "Загрузка",
+        "Подсказки",
+        "Поиск в меню / picker",
+        "Компактный",
+        "Поиск с trailing actions"
+      ],
+      "coverage": "nested",
+      "gaps": [
+        "Ввод поиска используется внутри picker, но полный самостоятельный SearchField со всеми adornments/подсказками не сверён.",
+        "TacticSearchField / WorkspaceSearch — предметный поиск, а не новый базовый TextField."
+      ],
+      "rule": "SearchField не знает TSQL, проект или HTTP. Поисковая форма собирает его с фильтрами и владеет запросом."
+    },
+    {
+      "id": "choices",
+      "title": "Комбобоксы и выбор из списка",
+      "level": "composite",
+      "native": [
+        "ComboBox",
+        "QuickFilterOptions"
+      ],
+      "vue": [
+        "AppSelect",
+        "StatusSelect",
+        "QuickFilterOptions"
+      ],
+      "tokens": [
+        "combo",
+        "select",
+        "choice",
+        "dropdown"
+      ],
+      "variants": [
+        "Обычный",
+        "Пустой / not assigned",
+        "Иконки",
+        "Цветовые swatches",
+        "Группы",
+        "Поиск",
+        "Multi-select + chips",
+        "Статус с цветом",
+        "Action field",
+        "Длинные названия"
+      ],
+      "coverage": "partial",
+      "example": "choice",
+      "gaps": [
+        "Обычный select проверен. Группы, swatches, status/action-field и все множественные варианты отдельно не закрыты."
+      ],
+      "rule": "Нейтральная модель options/value и одинаковые события. Загрузка проектов/процессов/статусов не входит в контрол."
+    },
+    {
+      "id": "numbers",
+      "title": "Числа, spinbox, sliders",
+      "level": "composite",
+      "native": [
+        "SpinBox",
+        "Slider"
+      ],
+      "vue": [
+        "AppSlider"
+      ],
+      "tokens": [
+        "spin",
+        "slider",
+        "range",
+        "number"
+      ],
+      "variants": [
+        "Integer / decimal",
+        "Min / max / step",
+        "Ввод и стрелки",
+        "Slider horizontal / vertical",
+        "Текущее значение",
+        "Клавиатура и колесо"
+      ],
+      "coverage": "partial",
+      "example": "slider",
+      "gaps": [
+        "Slider в галерее закреплён на 50; общего сценария изменения значения нет.",
+        "QML Slider не задаёт stepSize; Vue по умолчанию имеет step=5.",
+        "SpinBox встречается внутри календаря, но самостоятельной парной реализации/проверки нет."
+      ],
+      "rule": "Общие range/step/clamp/commit правила. Не считать центральное положение thumb проверкой поведения."
+    },
+    {
+      "id": "dates",
+      "title": "Дата, время, календари",
+      "level": "composite",
+      "native": [
+        "DateField",
+        "ActivityCalendarPopup"
+      ],
+      "vue": [
+        "AppDateField",
+        "ActivityCalendar"
+      ],
+      "tokens": [
+        "date",
+        "time",
+        "calendar",
+        "month",
+        "day"
+      ],
+      "variants": [
+        "Date only",
+        "Date + time",
+        "Time only",
+        "Месяц и дни",
+        "Сегодня / очистить",
+        "Високосный год",
+        "Год до 100",
+        "Неверная дата",
+        "Readonly / disabled",
+        "Диапазон дат"
+      ],
+      "coverage": "partial",
+      "example": "date",
+      "gaps": [
+        "Парсер/календарная арифметика и реальный выбор проверены; нет полной парной галереи всех открытых popup-состояний и диапазонов.",
+        "Task Calendar / Gantt — рабочие панели, а не базовый date picker."
+      ],
+      "rule": "Календарь выбора даты — базовый составной контрол. Планировщик задач с загрузкой/сохранением — форма/панель."
+    },
+    {
+      "id": "identity",
+      "title": "Аватары, имя пользователя, группы",
+      "level": "composite",
+      "native": [
+        "UserAvatar",
+        "UserIdentity",
+        "UserGroupSection",
+        "ProfileInfoRow"
+      ],
+      "vue": [
+        "UserIdentity",
+        "UserGroupSection",
+        "ProfileInfoRow"
+      ],
+      "tokens": [
+        "avatar",
+        "identity",
+        "user-badge",
+        "profile-row",
+        "presence"
+      ],
+      "variants": [
+        "Фото",
+        "Один / два инициала",
+        "Fallback person",
+        "Круг / квадрат",
+        "Имя + login",
+        "Retired",
+        "Presence dot",
+        "Размеры строки / шапки / профиля",
+        "Группа пользователей"
+      ],
+      "coverage": "nested",
+      "gaps": [
+        "Аватар показан внутри user combo, но полный UserIdentity, размеры, fallback и overlays отдельно не сверены.",
+        "Фотография объекта и аватар человека имеют разные роли, даже если используют ItemPreview."
+      ],
+      "rule": "Identity принимает нейтральные данные профиля; редактор пользователя и операции членства — отдельные формы."
+    },
+    {
+      "id": "user-choice",
+      "title": "Выбор пользователя",
+      "level": "composite",
+      "native": [
+        "UserComboBox",
+        "UserPicker",
+        "UserFilter"
+      ],
+      "vue": [
+        "UserComboBox",
+        "UserPicker"
+      ],
+      "tokens": [
+        "user-combo",
+        "user-picker",
+        "assignee",
+        "member-picker"
+      ],
+      "variants": [
+        "Single select",
+        "Not assigned",
+        "Поиск по имени/login/group",
+        "Multi-select",
+        "Selected chips",
+        "Группировка",
+        "Клавиатурный выбор"
+      ],
+      "coverage": "partial",
+      "example": "user",
+      "gaps": [
+        "Single picker и клавиатура проверены. Полная парная галерея multi-select, групп, большого списка и selected chips отсутствует."
+      ],
+      "rule": "Контрол получает готовую модель пользователей и возвращает identity; он не меняет ACL и не выполняет серверный поиск самостоятельно."
+    },
+    {
+      "id": "pickers",
+      "title": "Цвет, иконка, emoji, изображение",
+      "level": "composite",
+      "native": [
+        "ColorField",
+        "ColorPickerDialog",
+        "IconPickerButton",
+        "EmojiPicker",
+        "ImagePicker",
+        "AccentPresetPicker"
+      ],
+      "vue": [
+        "AppColorInput",
+        "ColorPicker",
+        "IconPicker",
+        "EmojiPicker",
+        "ImagePicker",
+        "AccentPresetPicker"
+      ],
+      "tokens": [
+        "picker",
+        "swatch",
+        "palette",
+        "emoji",
+        "icon-library"
+      ],
+      "variants": [
+        "Color swatch",
+        "Plane / hue / hex / alpha",
+        "Icon search / set / virtual grid",
+        "Emoji categories / recent / search",
+        "Image choose / clear / preview",
+        "Accent presets"
+      ],
+      "coverage": "partial",
+      "example": "color",
+      "gaps": [
+        "Цвет и иконки имеют реальный ввод. Emoji, ImagePicker, presets и все открытые состояния ещё не закрыты парными снимками."
+      ],
+      "rule": "Picker выбирает значение; загрузка/сохранение файла или изменение настройки выполняется владельцем сценария."
+    },
+    {
+      "id": "icons",
+      "title": "Иконки и служебные глифы",
+      "level": "primitive",
+      "native": [
+        "MaterialIcon"
+      ],
+      "vue": [
+        "AppIcon"
+      ],
+      "tokens": [
+        "icon",
+        "glyph"
+      ],
+      "variants": [
+        "Пять наборов",
+        "Semantic alias",
+        "Точный set:name",
+        "Force solid",
+        "Оптический размер",
+        "Цвет роли",
+        "Иконка внутри контрола"
+      ],
+      "coverage": "partial",
+      "example": "icon",
+      "gaps": [
+        "305 фактических разрешений семейства/глифа проверены; это не галерея всех тысяч символов, размеров и применений."
+      ],
+      "rule": "Один семантический словарь и fallback. Разница выбора глифа — дефект; сглаживание растеризаторов учитывается отдельно."
+    },
+    {
+      "id": "tabs",
+      "title": "Табы и полосы вкладок",
+      "level": "composite",
+      "native": [
+        "TabButton",
+        "WorkspaceTabVisual",
+        "SectionTabRail"
+      ],
+      "vue": [
+        "AppTabButton",
+        "WorkspaceTabs",
+        "SectionTabRail"
+      ],
+      "tokens": [
+        "tab",
+        "tabbar",
+        "tab-rail",
+        "workspace-tab"
+      ],
+      "variants": [
+        "Section tabs",
+        "Workspace tabs",
+        "Dock tabs",
+        "Closable",
+        "Dirty / count",
+        "Overflow",
+        "Reorder / drag",
+        "Контекстное меню",
+        "Текущая / disabled / mobile"
+      ],
+      "coverage": "other-scenarios",
+      "gaps": [
+        "Отдельной полной галереи табов нет. Общие токены и отдельные экранные сценарии не закрывают все виды tab rail."
+      ],
+      "rule": "Разделить выбор вкладки, её содержимое и host docking. Общая вкладка не должна знать задачи/проекты."
+    },
+    {
+      "id": "badges",
+      "title": "Бейджи, chips, счётчики и точки",
+      "level": "composite",
+      "native": [
+        "SummaryChip",
+        "StatusChip",
+        "CompletionStrip",
+        "QuickFilterChip",
+        "MessageReactionChip"
+      ],
+      "vue": [
+        "SummaryChip"
+      ],
+      "tokens": [
+        "badge",
+        "chip",
+        "count",
+        "unread",
+        "status-dot",
+        "completion"
+      ],
+      "variants": [
+        "Badge count 0 / 1 / 99+",
+        "Unread",
+        "Notification/error",
+        "Status dot",
+        "Status chip",
+        "Filter chip + remove",
+        "Clickable / passive",
+        "Selected",
+        "Compact",
+        "Completion strip"
+      ],
+      "coverage": "missing",
+      "gaps": [
+        "Нет полного парного стенда badge/chip. Много inline-вариантов внутри кнопок, списков и шапок."
+      ],
+      "rule": "Badge (наложение), Chip (элемент потока) и status indicator (состояние) — разные роли. У каждой один контракт и именованные варианты."
+    },
+    {
+      "id": "headers",
+      "title": "Заголовки, toolbar, переключатели вида",
+      "level": "composite",
+      "native": [
+        "EditorPanel",
+        "SectionLabel",
+        "InfoValueStrip",
+        "ConfigurationSection",
+        "SObjectFieldFrame"
+      ],
+      "vue": [],
+      "tokens": [
+        "header",
+        "heading",
+        "titlebar",
+        "toolbar",
+        "view-switch",
+        "mode-switch",
+        "surface-switch"
+      ],
+      "variants": [
+        "Заголовок раздела",
+        "Панель: icon + title + subtitle + actions",
+        "Toolbar",
+        "Title + count",
+        "Header с tabs",
+        "List / cards / table switcher",
+        "Back / collapse",
+        "Sticky"
+      ],
+      "coverage": "missing",
+      "gaps": [
+        "Много шапок собираются на месте; нет самостоятельного полного контракта и галереи.",
+        "TaskWorkspaceModeSwitcher/SurfaceSwitcher обращаются к tasksController — это предметные фрагменты, использующие базовый segmented control."
+      ],
+      "rule": "Нейтральная шапка/toolbar — базовая композиция. TaskInspectorHeader и управление конкретной рабочей областью — фрагмент формы."
+    },
+    {
+      "id": "menus",
+      "title": "Меню, popover и списки действий",
+      "level": "composite",
+      "native": [
+        "Menu",
+        "ScrollablePopup",
+        "TextContextMenu",
+        "ActionMenu",
+        "ActionMenuRow"
+      ],
+      "vue": [
+        "AppMenu",
+        "AppMenuItem"
+      ],
+      "tokens": [
+        "menu",
+        "popover",
+        "context",
+        "submenu",
+        "account-panel"
+      ],
+      "variants": [
+        "Anchored",
+        "Context menu",
+        "Submenu",
+        "Checkable item",
+        "Icon + label + shortcut",
+        "Separator / heading",
+        "Scrollable",
+        "Searchable",
+        "Disabled",
+        "Escape / outside click / restore focus"
+      ],
+      "coverage": "partial",
+      "example": "menu",
+      "gaps": [
+        "Кнопка и основные реальные действия проверены; все вложенные/контекстные/прокручиваемые состояния ещё не покрыты.",
+        "Два случая offscreen mouse grab воспроизводятся и в архивном TH; их нельзя отмечать готовыми."
+      ],
+      "rule": "Меню — базовый составной контрол. Его команды передаются снаружи; ObjectActionsMenu с ACL и запросами — предметная композиция."
+    },
+    {
+      "id": "popups",
+      "title": "Popup, dialog и оконная механика",
+      "level": "infrastructure",
+      "native": [
+        "Popup",
+        "Dialog",
+        "DialogActions",
+        "PopupBackground",
+        "PopupScrim",
+        "PopupCoordinator",
+        "HoverReleaseCoordinator"
+      ],
+      "vue": [
+        "WindowControls",
+        "MobilePage"
+      ],
+      "tokens": [
+        "popup",
+        "dialog",
+        "modal",
+        "window",
+        "scrim",
+        "backdrop"
+      ],
+      "variants": [
+        "Non-modal",
+        "Modal",
+        "Anchored",
+        "Floating",
+        "Docked",
+        "Close/minimize/maximize",
+        "Drag / resize",
+        "Stacking / focus / owner"
+      ],
+      "coverage": "other-scenarios",
+      "gaps": [
+        "Оконный контракт целиком относится к следующему этапу. Формы, открываемые в dialog, не являются новыми типами базового Dialog."
+      ],
+      "rule": "Host решает ownership/lifecycle, форма — свой сценарий, DialogActions — нейтральная строка действий."
+    },
+    {
+      "id": "feedback",
+      "title": "Tooltip, loading, progress, empty/error",
+      "level": "composite",
+      "native": [
+        "ToolTip",
+        "BusyIndicator",
+        "EmptyState",
+        "InitialBatchPresentation",
+        "ContentLoadingOverlay",
+        "TacticCompletionCell",
+        "ErrorDialog"
+      ],
+      "vue": [
+        "BusyIndicator",
+        "AppProgress",
+        "CompletionCell"
+      ],
+      "tokens": [
+        "tooltip",
+        "progress",
+        "busy",
+        "spinner",
+        "empty",
+        "skeleton",
+        "error",
+        "notice",
+        "warning",
+        "alert"
+      ],
+      "variants": [
+        "Tooltip",
+        "Busy inline / block",
+        "Determinate / indeterminate",
+        "Progress + cancel",
+        "Empty state",
+        "Error + retry",
+        "Skeleton",
+        "Inline validation"
+      ],
+      "coverage": "partial",
+      "example": "busy",
+      "gaps": [
+        "Tooltip имеет ввод, busy — визуальный пример. AppProgress, skeleton, empty/error/retry отдельно не сверены."
+      ],
+      "rule": "Сообщение об ошибке и retry action поступают снаружи; контрол не перезапускает серверную операцию сам."
+    },
+    {
+      "id": "lists",
+      "title": "Списки, дерево, строки",
+      "level": "composite",
+      "native": [
+        "SmoothListView",
+        "EditorListItem",
+        "HierarchyGuide",
+        "HierarchyReveal",
+        "TreeExpansionMotion",
+        "SidebarTreeRow"
+      ],
+      "vue": [
+        "ItemSurface"
+      ],
+      "tokens": [
+        "list",
+        "tree",
+        "hierarchy",
+        "row",
+        "selection"
+      ],
+      "variants": [
+        "Обычная / selected / hover строка",
+        "Одно / двухстрочная",
+        "Tree indent / guide / disclosure",
+        "Checkbox row",
+        "Virtualized",
+        "Loading / empty",
+        "Keyboard selection"
+      ],
+      "coverage": "partial",
+      "example": "tree",
+      "gaps": [
+        "Общий preorder tree и виртуализация проверены; не все виды строк и деревьев перенесены.",
+        "ProcessSelectionTree знает Search Type и process context — предметный составной фрагмент."
+      ],
+      "rule": "Tree row и navigation — базовый контрол; загрузка и смысл веток принадлежат форме."
+    },
+    {
+      "id": "tables",
+      "title": "Табличная база и ячейки",
+      "level": "composite",
+      "native": [
+        "FrameGrid",
+        "FrameGridBranch"
+      ],
+      "vue": [
+        "FrameGrid"
+      ],
+      "tokens": [
+        "grid",
+        "table",
+        "cell",
+        "column",
+        "sort"
+      ],
+      "variants": [
+        "Header / row header",
+        "Sort / resize / reorder columns",
+        "Selection",
+        "Text / checkbox / icon cell",
+        "Inline edit",
+        "Frozen / scroll",
+        "Virtualized"
+      ],
+      "coverage": "partial",
+      "example": "grid",
+      "gaps": [
+        "Grid base и отдельные Administration-сценарии проверены. Это не означает готовность всех легаси Table View widgets."
+      ],
+      "rule": "Grid нейтрален к Search Type; widget-config renderer и сохранение SObject — отдельный уровень."
+    },
+    {
+      "id": "scroll-layout",
+      "title": "Прокрутка, splitters, layout",
+      "level": "composite",
+      "native": [
+        "ScrollBar",
+        "SplitterHandle",
+        "ResizeGripVisual",
+        "ResponsiveFlow",
+        "DockDragGrip",
+        "DockWorkspaceFooter",
+        "SettingsRow",
+        "SettingsNavigationItem",
+        "AdminSaveBar"
+      ],
+      "vue": [
+        "AppSplitter",
+        "ResponsiveFlow",
+        "DockGrip",
+        "SettingRow",
+        "AdminSaveBar"
+      ],
+      "tokens": [
+        "scroll",
+        "splitter",
+        "resize",
+        "grip",
+        "flow",
+        "settings-row",
+        "footer"
+      ],
+      "variants": [
+        "Vertical / horizontal scrollbar",
+        "Rest / hover / pressed / disabled",
+        "Splitter",
+        "Keyboard resize",
+        "Grip",
+        "Responsive flow",
+        "Label-help-control row",
+        "Footer actions"
+      ],
+      "coverage": "partial",
+      "example": "splitter",
+      "gaps": [
+        "Split/scroll используются в галерее и вводе. Все density/axis/grip/footer/layout варианты отдельно не закрыты."
+      ],
+      "rule": "Layout-кирпичики знают размеры/слоты, а не сохранение настроек проекта."
+    },
+    {
+      "id": "typography",
+      "title": "Текст, elide, markdown, кодовые блоки",
+      "level": "primitive",
+      "native": [
+        "Typography",
+        "SelectableText",
+        "MessageBodyText"
+      ],
+      "vue": [
+        "MiddleElide",
+        "MarkdownText",
+        "CodeBlock"
+      ],
+      "tokens": [
+        "label",
+        "text",
+        "elide",
+        "markdown",
+        "code-block",
+        "typography"
+      ],
+      "variants": [
+        "Именованные text roles",
+        "Single / wrap / elide",
+        "Middle elide",
+        "Selectable",
+        "Links",
+        "Markdown",
+        "Monospace / code block",
+        "Пустой / длинный / mixed script"
+      ],
+      "coverage": "partial",
+      "gaps": [
+        "Геометрия/базовые линии текста проверяются на выборке. Все текстовые поверхности, rich text и middle elide отдельно не закрыты."
+      ],
+      "rule": "Текстовые роли не заменяют контракты wrapping/selection/links. Rich renderer не должен владеть предметными запросами."
+    },
+    {
+      "id": "previews",
+      "title": "Preview, thumbnail, карточки файлов",
+      "level": "composite",
+      "native": [
+        "ItemPreview",
+        "ItemSurface",
+        "AttachmentCard",
+        "MessageTimelineFrame",
+        "MessageForwardPreview",
+        "MessageReplyPreview",
+        "SnapshotPreviewLayers"
+      ],
+      "vue": [
+        "ItemPreview",
+        "ItemSurface",
+        "AttachmentCard"
+      ],
+      "tokens": [
+        "preview",
+        "thumbnail",
+        "attachment",
+        "image",
+        "surface",
+        "card"
+      ],
+      "variants": [
+        "Photo / initials / icon",
+        "Round / square",
+        "Outlined",
+        "Fit / crop",
+        "Loading / failure / retry",
+        "File card",
+        "Image card",
+        "Selected surface / accent rail"
+      ],
+      "coverage": "nested",
+      "gaps": [
+        "Preview/surface присутствуют в других экранах; полного независимого стенда вариантов нет."
+      ],
+      "rule": "Карточка нейтральных данных — составной контрол; ObjectCard с командами/ACL — предметный фрагмент."
+    },
+    {
+      "id": "drag-files",
+      "title": "Drop zones, файлы, clipboard",
+      "level": "infrastructure",
+      "native": [
+        "AttachmentDropArea",
+        "DropTargetOverlay",
+        "ImageFileDialog"
+      ],
+      "vue": [],
+      "tokens": [
+        "drop",
+        "upload",
+        "file-dialog",
+        "clipboard",
+        "drag"
+      ],
+      "variants": [
+        "Drag enter / valid / invalid / busy",
+        "File choose",
+        "Clipboard image/text",
+        "Paste",
+        "Native filesystem capability",
+        "Browser file input"
+      ],
+      "coverage": "missing",
+      "gaps": [
+        "Общая визуальная drop-zone и матрица возможностей платформ не закрыты текущей галереей."
+      ],
+      "rule": "Обратиться к файловой системе — адаптер платформы; политика check-in/upload — предметный сценарий."
+    },
+    {
+      "id": "editors",
+      "title": "Редакторы текста/кода",
+      "level": "composite",
+      "native": [
+        "ScriptCodeEditor",
+        "FrameCode",
+        "FrameCodeBranch",
+        "ScriptOutline",
+        "KnowledgeTableOfContents",
+        "TableTextEditor"
+      ],
+      "vue": [
+        "CodeEditor",
+        "FrameCode"
+      ],
+      "tokens": [
+        "code-editor",
+        "source-editor",
+        "completion",
+        "syntax",
+        "document"
+      ],
+      "variants": [
+        "Plain code",
+        "Highlight",
+        "Line numbers",
+        "Search / replace",
+        "Undo / redo",
+        "IME",
+        "Completion",
+        "Readonly / error / dirty"
+      ],
+      "coverage": "other-scenarios",
+      "gaps": [
+        "Кодовый renderer существует, но его полный самостоятельный контракт ещё не закрыт этой галереей."
+      ],
+      "rule": "CodeEditor не знает Script Editor, Batch Manager и выполнение Python. Эти формы используют редактор."
+    },
+    {
+      "id": "graphs",
+      "title": "Графы и соединения",
+      "level": "composite",
+      "native": [
+        "NodeGraph",
+        "NodeGraphSelectionArea",
+        "GraphPort",
+        "FrameGraph",
+        "FrameGraphBranch"
+      ],
+      "vue": [
+        "FrameGraph"
+      ],
+      "tokens": [
+        "graph",
+        "edge",
+        "port",
+        "connection",
+        "node"
+      ],
+      "variants": [
+        "Node / port / edge",
+        "Single / multi select",
+        "Drag",
+        "Connect",
+        "Zoom / pan",
+        "Readonly",
+        "Keyboard delete",
+        "Marquee"
+      ],
+      "coverage": "other-scenarios",
+      "gaps": [
+        "Есть отдельные графовые сценарии. NodeGraph и FrameGraph — разные реализации; их нельзя считать автоматически одним общим контролом."
+      ],
+      "rule": "Нейтральный graph control не владеет XML schema/pipeline, ACL или сохранением."
+    },
+    {
+      "id": "input-runtime",
+      "title": "Ввод, focus, ripple, координация",
+      "level": "infrastructure",
+      "native": [
+        "ActivationHandler",
+        "PopupAction",
+        "MaterialRipple"
+      ],
+      "vue": [],
+      "tokens": [
+        "activation",
+        "ripple",
+        "pointer",
+        "focus",
+        "gesture"
+      ],
+      "variants": [
+        "Mouse / touch / pen",
+        "Press / release / cancel",
+        "Dedup synthesized click",
+        "Keyboard activation",
+        "IME",
+        "Focus return",
+        "Destroy while open"
+      ],
+      "coverage": "partial",
+      "gaps": [
+        "Есть реальные сценарии ввода. Это инфраструктурные проверки, а не отдельные визуальные компоненты."
+      ],
+      "rule": "Одна активация на один пользовательский жест; событийная механика не исполняет бизнес-команды сама."
+    },
+    {
+      "id": "domain-fragments",
+      "title": "Предметные формы и фрагменты — отдельно от базы",
+      "level": "feature",
+      "native": [
+        "ProjectCard",
+        "ProjectFilterToggles",
+        "ProcessSelectionTree",
+        "TaskWorkspaceModeSwitcher",
+        "TaskWorkspaceSurfaceSwitcher",
+        "ScriptSavedHistoryButton",
+        "TacticSearchField",
+        "MessageComposerField",
+        "UserGroupMembershipEditor"
+      ],
+      "vue": [
+        "TaskInspectorHeader",
+        "TaskWorkspaceSurfaceSwitcher"
+      ],
+      "tokens": [],
+      "variants": [
+        "Project selection/filter",
+        "Process selector",
+        "Task header/view switcher",
+        "Script history",
+        "Tactic search",
+        "Message composer",
+        "Membership editor"
+      ],
+      "coverage": "not-base",
+      "gaps": [
+        "Расположение в controls/ не делает ProjectFilterToggles или ProjectCard базовым контролом.",
+        "Существующие forms/fragments входят в полный индекс исходников, но не завышают число базовых контролов."
+      ],
+      "rule": "Если компонент знает Search Type, задачи, script token, членство/ACL или вызывает предметный controller, это композиция сценария. Вынести из неё можно нейтральную часть."
+    }
+  ],
+  "reviewedFeatureRoots": {
+    "native": [
+      "ActivityEventCard",
+      "ActivityFeedView",
+      "AdvancedSearchView",
+      "AttachmentComposerControls",
+      "AttachmentStagingPanel",
+      "CheckinOptionsPage",
+      "CollaborationInitializationState",
+      "CommitQueueActionMenus",
+      "CommitQueueOperationSummary",
+      "CommitQueueProgress",
+      "CommitQueueView",
+      "CommitWorkspaceView",
+      "CommunicationView",
+      "ConfigurationAppearancePage",
+      "ConfigurationCachePage",
+      "ConfigurationDccPage",
+      "ConfigurationGlobalPreferencesPage",
+      "ConfigurationPage",
+      "ConfigurationProjectPage",
+      "ConfigurationRepositoryPage",
+      "ConfigurationServerPage",
+      "ConfigurationTaskPreferencesPage",
+      "ConfigurationView",
+      "CostReportsView",
+      "DatabaseBatchEditorView",
+      "DatabaseEditorView",
+      "DccOptionsView",
+      "DebugLogView",
+      "DeleteSObjectView",
+      "DemoThinClientWindow",
+      "DescriptionEditor",
+      "DropPlateView",
+      "DuplicateSObjectView",
+      "FileWorkspaceCatalog",
+      "FileWorkspaceChangelistFiles",
+      "FileWorkspaceChangelistView",
+      "FileWorkspaceComparisonDialog",
+      "FileWorkspaceDepots",
+      "FileWorkspaceFileRow",
+      "FileWorkspaceGetRevisionDialog",
+      "FileWorkspaceHistory",
+      "FileWorkspaceInspector",
+      "FileWorkspaceLog",
+      "FileWorkspaceMappings",
+      "FileWorkspaceNavigation",
+      "FileWorkspaceRevertDialog",
+      "FileWorkspaceReviewDialog",
+      "FileWorkspaceShelfDialog",
+      "FileWorkspaceStorage",
+      "FileWorkspaceStreamEditor",
+      "FileWorkspaceStreamGraph",
+      "FileWorkspaceStreams",
+      "FileWorkspaceSubmitDialog",
+      "FileWorkspaceSubmitFiles",
+      "FileWorkspaceTargetDialog",
+      "FileWorkspaceTreeRow",
+      "FileWorkspaceView",
+      "HandlerServerView",
+      "HelpView",
+      "IngestConflictDialog",
+      "IngestFilesView",
+      "IngestRuleEditor",
+      "ItemCheckinDialogs",
+      "ItemQuickActions",
+      "KnowledgeArticleAttachments",
+      "KnowledgeArticleContent",
+      "KnowledgeArticleEditor",
+      "KnowledgeArticleViewer",
+      "KnowledgeAttachmentLibrary",
+      "KnowledgeBaseView",
+      "KnowledgeEditorImageOverlay",
+      "KnowledgeImageSelectionOverlay",
+      "KnowledgeLinkedObjectHeader",
+      "KnowledgeNavigation",
+      "KnowledgeRevisionHistoryPopup",
+      "KnowledgeRichTextBlockDecorations",
+      "KnowledgeRichTextToolbar",
+      "LinkList",
+      "LinkSObjectsView",
+      "LoginDialog",
+      "MatchingTemplatesView",
+      "MessageReactionPicker",
+      "MessagesConversationList",
+      "MessagesTimeline",
+      "MessagesView",
+      "MilestoneManagerView",
+      "NotesTimelinePosition",
+      "NotificationStack",
+      "NotificationsView",
+      "ProcessFilterEditorView",
+      "ProjectChooser",
+      "ProjectEditorView",
+      "ProjectTemplatesView",
+      "ProjectWizardView",
+      "QuickFilterEditorView",
+      "RepositoryEditorView",
+      "RepositorySetupPrompt",
+      "RepositorySyncEditorView",
+      "RepositorySyncView",
+      "RevisionHistoryPopup",
+      "SKeyPreviewCard",
+      "SObjectFieldDelegate",
+      "SObjectFieldEditor",
+      "SObjectFieldGrid",
+      "SObjectInfoView",
+      "SObjectSnapshotTree",
+      "SObjectValueEditor",
+      "ScreenshotMakerView",
+      "ScriptEditorView",
+      "ScriptShelfBar",
+      "ScriptShelfEditorView",
+      "ScriptTree",
+      "ScriptTreePicker",
+      "ScriptTriggerEditorView",
+      "SearchAssigneeFilterPopup",
+      "SearchPresetBar",
+      "SearchQuickFilterPopup",
+      "SearchResultMenus",
+      "SearchResultSurface",
+      "SearchResultTable",
+      "SearchResultTableHeader",
+      "SearchResultsPane",
+      "SearchWorkspaceView",
+      "ServerPresetsView",
+      "SidebarSearchPreview",
+      "SnapshotBrowser",
+      "SnapshotBrowserOptionsMenu",
+      "SnapshotBrowserToolbar",
+      "SnapshotSummary",
+      "TableViewPresetMenu",
+      "TacticStructuredTableCell",
+      "TacticTableActionCell",
+      "TacticTableCellDisplay",
+      "TacticTableInlineEditor",
+      "TacticTaskCards",
+      "TacticTaskCell",
+      "TagCloudPopup",
+      "TaskBrowserTable",
+      "TaskBulkBar",
+      "TaskCalendarView",
+      "TaskDockView",
+      "TaskGanttProgressHandle",
+      "TaskGanttView",
+      "TaskHiddenDetails",
+      "TaskInspector",
+      "TaskPendingChangesBar",
+      "TaskProcessPanel",
+      "TaskQuickFilterPopup",
+      "TaskTableEditorCell",
+      "TaskWorkspaceSummary",
+      "TasksWorkspaceView",
+      "TimesheetView",
+      "UiPerformanceView",
+      "UpdatePrompt",
+      "UpdateView",
+      "UserProfileEditorDialog",
+      "UserProfileView",
+      "UserWorkSummary",
+      "WatchFolderDeleteDialog",
+      "WatchFolderEditorView",
+      "WatchFoldersView",
+      "WorkHourEditorDialog",
+      "WorkHoursSummary",
+      "WorkReportsView",
+      "WorkspaceCard",
+      "WorkspaceFileDropTarget",
+      "WorkspaceLayoutPresetMenuSection",
+      "WorkspaceResultItem"
+    ]
+  },
+  "levelOverrides": {
+    "SegmentedButton": "composite",
+    "AppSegmentedButton": "composite",
+    "TabButton": "primitive",
+    "AppTabButton": "primitive",
+    "UserAvatar": "primitive",
+    "BusyIndicator": "primitive",
+    "AppProgress": "primitive",
+    "ScrollBar": "primitive",
+    "SplitterHandle": "primitive",
+    "HierarchyGuide": "primitive",
+    "HierarchyReveal": "primitive",
+    "AppMenuItem": "primitive",
+    "ActionMenuRow": "primitive",
+    "DialogActions": "composite",
+    "CodeBlock": "composite",
+    "MarkdownText": "composite",
+    "Typography": "infrastructure"
+  }
+}

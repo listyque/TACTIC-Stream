@@ -5589,7 +5589,9 @@ var ru_default = {
 	Thumbnail: "Миниатюра",
 	"Discard unsaved sidebar changes?": "Отменить несохранённые изменения бокового меню?",
 	"Columns list width": "Ширина списка колонок",
-	"Delete the selected sidebar item?": "Удалить выбранный элемент бокового меню?"
+	"Delete the selected sidebar item?": "Удалить выбранный элемент бокового меню?",
+	"Search icons": "Поиск иконок",
+	"Icon library": "Библиотека иконок"
 };
 //#endregion
 export { en_default as n, ru_default as t };

@@ -1,10 +1,9 @@
 import { D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, p as Teleport, rt as toDisplayString, s as vModelText, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { K as _plugin_vue_export_helper_default, T as t, c as _sfc_main$2, i as _sfc_main$1 } from "./index.js";
+import { T as t, c as _sfc_main$2, i as _sfc_main$1, q as _plugin_vue_export_helper_default } from "./index.js";
 import { M as rpc, ct as notify } from "./clipboard.js";
 import { t as _sfc_main$3 } from "./AppSelect.js";
 import { t as _sfc_main$4 } from "./AppTextField.js";
-import { t as _sfc_main$5 } from "./AppColorInput.js";
-import { t as _sfc_main$6 } from "./AppDateField.js";
+import { n as _sfc_main$6, t as _sfc_main$5 } from "./AppDateField.js";
 import { t as _sfc_main$7 } from "./AppCheckbox.js";
 import { B as contentChoices, H as saveDuplicateProfile, N as _sfc_main$9, R as applyDuplicateProfile, V as duplicateProfile, m as _sfc_main$8, z as changeContent } from "./App.js";
 //#region src/features/objects/DuplicateSObject.vue
@@ -62,13 +61,13 @@ var choices = [
 ];
 var _sfc_main = {
 	components: {
-		AppDateField: _sfc_main$6,
+		AppDateField: _sfc_main$5,
 		AppButton: _sfc_main$1,
 		AppIcon: _sfc_main$2,
 		AppCheckbox: _sfc_main$7,
 		AppSelect: _sfc_main$3,
 		AppTextField: _sfc_main$4,
-		AppColorInput: _sfc_main$5,
+		AppColorInput: _sfc_main$6,
 		AppSegmentedButton: _sfc_main$8,
 		SummaryChip: _sfc_main$9
 	},

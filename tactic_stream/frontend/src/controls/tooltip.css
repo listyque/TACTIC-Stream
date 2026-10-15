@@ -1,3 +1,33 @@
-.app-tooltip { position:fixed; inset:auto; margin:0; padding:7px 12px; min-width:28px; max-width:calc(100dvw - 16px); border:0; border-radius:6px; background:var(--on-surface); color:var(--surface-high); font:var(--text-body)/1.1 var(--font-family); box-shadow:0 3px 8px var(--shadow-color); pointer-events:none; overflow:hidden; display:none; -webkit-box-orient:vertical; -webkit-line-clamp:5; opacity:0; transition:opacity var(--motion-popup-fast) ease-out, display var(--motion-popup-fast) allow-discrete, overlay var(--motion-popup-fast) allow-discrete; }
-.app-tooltip:popover-open { display:-webkit-box; opacity:1; }
-@starting-style { .app-tooltip:popover-open { opacity:0; } }
+.app-tooltip {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: var(--tooltip-padding-y) var(--tooltip-padding-x);
+  min-width: 28px;
+  max-width: calc(100dvw - 16px);
+  border: 0;
+  border-radius: var(--tooltip-radius);
+  background: var(--on-surface);
+  color: var(--surface-high);
+  font: var(--control-text-size) / 1.1 var(--font-family);
+  box-shadow: 0 3px 8px var(--shadow-color);
+  pointer-events: none;
+  overflow: hidden;
+  display: none;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  opacity: 0;
+  transition:
+    opacity var(--motion-popup-fast) ease-out,
+    display var(--motion-popup-fast) allow-discrete,
+    overlay var(--motion-popup-fast) allow-discrete;
+}
+.app-tooltip:popover-open {
+  display: -webkit-box;
+  opacity: 1;
+}
+@starting-style {
+  .app-tooltip:popover-open {
+    opacity: 0;
+  }
+}

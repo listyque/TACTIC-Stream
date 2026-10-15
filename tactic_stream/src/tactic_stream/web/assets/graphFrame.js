@@ -1,5 +1,5 @@
 import { D as nextTick } from "./vue.js";
-import { E as appearance, P as metrics } from "./index.js";
+import { E as appearance, F as metrics } from "./index.js";
 import { J as label, X as node, Y as muted, Z as rect, q as button, y as translate } from "./App.js";
 import { t as observeFrameSizes } from "./resize.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";

@@ -1,5 +1,5 @@
 import { D as nextTick, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, X as ref, c as vShow, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, p as Teleport, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, T as t, q as _plugin_vue_export_helper_default } from "./index.js";
 import { O as rawDatabase } from "./clipboard.js";
 import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$2, q as button, y as translate } from "./App.js";
 import { t as observeFrameSizes } from "./resize.js";

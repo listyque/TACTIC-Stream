@@ -1,12 +1,12 @@
 import { A as onDeactivated, B as useId, D as nextTick, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, O as onActivated, P as renderList, X as ref, Y as reactive, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, m as computed, p as Teleport, rt as toDisplayString, s as vModelText, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, I as configurationPreview, K as _plugin_vue_export_helper_default, L as normalizePreferences, R as preferences, T as t, c as _sfc_main$8, d as debugSettings, g as levels, i as _sfc_main$9, j as saveAppearance, n as mobile, z as savePreferencePage } from "./index.js";
+import { B as savePreferencePage, E as appearance, L as configurationPreview, R as normalizePreferences, T as t, c as _sfc_main$8, d as debugSettings, g as levels, i as _sfc_main$9, j as saveAppearance, n as mobile, q as _plugin_vue_export_helper_default, z as preferences } from "./index.js";
 import { B as serverConfiguration, M as rpc, N as saveServerConfiguration, T as projectCatalog, u as _sfc_main$10 } from "./clipboard.js";
 import { t as _sfc_main$11 } from "./AppSwitch.js";
 import { t as _sfc_main$12 } from "./AppSelect.js";
 import { t as _sfc_main$13 } from "./SettingRow.js";
 import { t as RecordForm_default } from "./RecordForm.js";
 import { t as _sfc_main$14 } from "./AppTextField.js";
-import { t as _sfc_main$15 } from "./AppColorInput.js";
+import { n as _sfc_main$15 } from "./AppDateField.js";
 import { t as _sfc_main$16 } from "./AppMenu.js";
 import { t as _sfc_main$17 } from "./AppCheckbox.js";
 import { f as timestampFullLabel } from "./activity.js";

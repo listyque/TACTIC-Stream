@@ -1,19 +1,185 @@
 [
-  {"phase":"item","actions":[{"type":"click","id":"sidebarEditorEntry_0"}]},
-  {"phase":"technical","actions":[{"type":"click","id":"sidebarPages_technical"}]},
-  {"phase":"name-draft","actions":[{"type":"text","id":"sidebarNameField","value":"renamed"}]},
-  {"phase":"xml","actions":[{"type":"click","id":"sidebarModeSelector_xml"}]},
-  {"phase":"xml-draft","actions":[{"type":"text","id":"sidebarXml","value":"<element name=\"renamed\" title=\"Updated\"><display class=\"LinkWdg\" /></element>"}]},
-  {"phase":"xml-applied","actions":[{"type":"click","id":"sidebarApplyXml"}]},
-  {"phase":"access","actions":[{"type":"click","id":"sidebarModeSelector_simple"},{"type":"click","id":"sidebarPages_access"}]},
-  {"phase":"group-change","actions":[{"type":"click","id":"sidebarGroup_G0"}]},
-  {"phase":"save-confirmation","actions":[{"type":"click","id":"adminSaveDocument"}]},
-  {"phase":"discard-confirmation","actions":[{"type":"click","id":"adminCancelSave"},{"type":"click","id":"adminDiscardDocument"}]},
-  {"phase":"discarded","actions":[{"type":"click","id":"adminConfirmSave"}]},
-  {"phase":"added-section","actions":[{"type":"click","id":"sidebarAdd_section"}]},
-  {"phase":"delete-confirmation","actions":[{"type":"click","id":"sidebarItem_delete"}]},
-  {"phase":"deleted","actions":[{"type":"click","id":"adminConfirmSave"}]},
-  {"phase":"readonly","actions":[{"type":"state","value":"readonly"}]},
-  {"phase":"uncertain","actions":[{"type":"state","value":"uncertain"}]},
-  {"phase":"busy","actions":[{"type":"state","value":"busy"}]}
+  {
+    "phase": "keyboard-next",
+    "actions": [
+      {
+        "type": "key",
+        "id": "sidebarEditorEntry_0",
+        "key": "ArrowDown"
+      }
+    ]
+  },
+  {
+    "phase": "keyboard-first",
+    "actions": [
+      {
+        "type": "key",
+        "id": "sidebarEditorEntry_1",
+        "key": "Home"
+      }
+    ]
+  },
+  {
+    "phase": "item",
+    "actions": [
+      {
+        "type": "click",
+        "id": "sidebarEditorEntry_0"
+      }
+    ]
+  },
+  {
+    "phase": "technical",
+    "actions": [
+      {
+        "type": "click",
+        "id": "sidebarPages_technical"
+      }
+    ]
+  },
+  {
+    "phase": "name-draft",
+    "actions": [
+      {
+        "type": "text",
+        "id": "sidebarNameField",
+        "value": "renamed"
+      }
+    ]
+  },
+  {
+    "phase": "xml",
+    "actions": [
+      {
+        "type": "click",
+        "id": "sidebarModeSelector_xml"
+      }
+    ]
+  },
+  {
+    "phase": "xml-draft",
+    "actions": [
+      {
+        "type": "text",
+        "id": "sidebarXml",
+        "value": "<element name=\"renamed\" title=\"Updated\"><display class=\"LinkWdg\" /></element>"
+      }
+    ]
+  },
+  {
+    "phase": "xml-applied",
+    "actions": [
+      {
+        "type": "click",
+        "id": "sidebarApplyXml"
+      }
+    ]
+  },
+  {
+    "phase": "access",
+    "actions": [
+      {
+        "type": "click",
+        "id": "sidebarModeSelector_simple"
+      },
+      {
+        "type": "click",
+        "id": "sidebarPages_access"
+      }
+    ]
+  },
+  {
+    "phase": "group-change",
+    "actions": [
+      {
+        "type": "click",
+        "id": "sidebarGroup_G0"
+      }
+    ]
+  },
+  {
+    "phase": "save-confirmation",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminSaveDocument"
+      }
+    ]
+  },
+  {
+    "phase": "discard-confirmation",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminCancelSave"
+      },
+      {
+        "type": "click",
+        "id": "adminDiscardDocument"
+      }
+    ]
+  },
+  {
+    "phase": "discarded",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminConfirmSave"
+      }
+    ]
+  },
+  {
+    "phase": "added-section",
+    "actions": [
+      {
+        "type": "click",
+        "id": "sidebarAdd_section"
+      }
+    ]
+  },
+  {
+    "phase": "delete-confirmation",
+    "actions": [
+      {
+        "type": "click",
+        "id": "sidebarItem_delete"
+      }
+    ]
+  },
+  {
+    "phase": "deleted",
+    "actions": [
+      {
+        "type": "click",
+        "id": "adminConfirmSave"
+      }
+    ]
+  },
+  {
+    "phase": "readonly",
+    "actions": [
+      {
+        "type": "state",
+        "value": "readonly"
+      }
+    ]
+  },
+  {
+    "phase": "uncertain",
+    "actions": [
+      {
+        "type": "state",
+        "value": "uncertain"
+      }
+    ]
+  },
+  {
+    "phase": "busy",
+    "actions": [
+      {
+        "type": "state",
+        "value": "busy"
+      }
+    ]
+  }
 ]

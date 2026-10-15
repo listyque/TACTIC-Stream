@@ -21,7 +21,7 @@ await request('/admin/script-shelf/save', { ticket, project, mode: 'shared', tit
   code: initial.shelves.find(row => !row.personal && row.view === 'script_shelf@global')?.code || '',
   configuration: { scope: 'global', entryKey: '', buttons: [{ id: 'hello', title: 'Hello', description: 'Demo server script', icon: 'FAS_PLAY', script: 'demo/hello' }, { id: 'browser', title: 'Browser', description: 'Browser script', icon: 'FAS_CODE', script: 'demo/browser' }, { id: 'server-js', title: 'Server JS', description: '', icon: 'FAS_CODE', script: 'demo/server-js' }, { id: 'local', title: 'Local', description: '', icon: 'FAS_PLAY', script: 'demo/local' }] } })
 
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, channel: process.env.STREAM_BROWSER_CHANNEL })
 let page
 try {
   page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, colorScheme: 'dark', hasTouch: true })
@@ -78,10 +78,10 @@ try {
   await dialog.getByRole('button', { name: 'Only this tab', exact: true }).click()
   await dialog.getByRole('button', { name: 'Add button', exact: true }).click()
   await dialog.getByLabel('Button label', { exact: true }).fill('Personal browser')
-  await dialog.getByRole('button', { name: 'Choose icon', exact: true }).click()
-  const iconPicker = page.getByRole('dialog', { name: 'Choose icon', exact: true })
+  await dialog.getByLabel('Choose icon', { exact: true }).click()
+  const iconPicker = page.locator('.icon-picker-control > .account-panel:popover-open')
   await iconPicker.getByLabel('Icon set', { exact: true }).selectOption('fluent-regular')
-  await iconPicker.getByLabel('Find an icon', { exact: true }).fill('play')
+  await iconPicker.getByLabel('Search icons', { exact: true }).fill('play')
   await iconPicker.getByRole('button', { name: 'play', exact: true }).click()
   const picker = dialog.locator('.script-picker'); await picker.locator('summary').click()
   await picker.getByLabel('Search scripts', { exact: true }).fill('browser')

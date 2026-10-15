@@ -5,6 +5,8 @@ import AppCheckbox from '../controls/AppCheckbox.vue';
 import AppSwitch from '../controls/AppSwitch.vue';
 import AppTextField from '../controls/AppTextField.vue';
 import AppTextArea from '../controls/AppTextArea.vue';
+import AppDateField from '../controls/AppDateField.vue';
+import UserComboBox from '../controls/UserComboBox.vue';
 import AppSelect from '../controls/AppSelect.vue';
 import FrameGrid from './controls/grid/FrameGrid.vue';
 import FrameGraph from './controls/graph/FrameGraph.vue';
@@ -200,8 +202,10 @@ function focusControl(name) {
     '[data-frame="' + CSS.escape(name) + '"]'
   );
   if (!el) return false;
-  (el.matches('label') ? el.querySelector('input') : el)?.focus();
-  return true;
+  const focusable = 'input,textarea,select,button,summary,[tabindex]';
+  const target = el.matches(focusable) ? el : el.querySelector(focusable);
+  target?.focus();
+  return document.activeElement === target;
 }
 async function focusGrid(id, row, column, name) {
   const grid = grids.value.find((value) => value.$props.node.id === id);
@@ -291,12 +295,14 @@ defineExpose({ focusControl, focusGrid, graphCommand });
           'frame-radio': node.radio,
           'frame-radio-selected': node.radio && node.selected
         }"
-        :style="style(node)"
+        :style="Object.assign(style(node), { color: undefined })"
         :label="node.text"
         :translate-label="false"
         :icon="node.icon"
         :icon-only="node.iconOnly"
         :highlighted="node.highlighted"
+        :segmented="node.radio"
+        :checked="!!node.selected"
         :destructive="node.destructive"
         :disabled="!node.enabled"
         :role="node.radio ? 'radio' : undefined"
@@ -318,6 +324,9 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :aria-pressed="node.selected"
         :aria-description="node.description"
         :role="node.role"
+        :aria-level="node.role === 'treeitem' ? node.level : undefined"
+        :aria-expanded="node.role === 'treeitem' ? node.expanded : undefined"
+        :aria-selected="node.role === 'treeitem' ? !!node.selected : undefined"
         :aria-checked="node.role === 'checkbox' ? node.checked : undefined"
         @keydown="key($event, node)"
         @click="send(node.action)"
@@ -347,6 +356,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
           })
         "
         :model-value="node.checked"
+        :indeterminate="!!node.mixed"
         :label="node.text"
         :translate-label="false"
         :disabled="!node.enabled"
@@ -387,6 +397,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
           $event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' })
         "
         :class="{ 'table-cell': node.tableCell }"
+        :error-state="!!node.error"
         :style="style(node)"
         :label="node.label"
         :placeholder="node.placeholder"
@@ -411,6 +422,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         "
         :role="node.role"
         :class="{ 'frame-notice': node.notice }"
+        :error-state="!!node.error"
         :style="style(node)"
         :label="node.label"
         :placeholder="node.placeholder"
@@ -443,6 +455,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         v-else-if="node.kind === 'List'"
         :data-frame="node.id"
         class="frame-node frame-list"
+        :role="node.role"
         :style="style(node)"
         :aria-label="node.label"
         @scroll="scroll[node.id] = $event.target.scrollTop"
@@ -545,9 +558,36 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :min="node.min"
         :max="node.max"
         :horizontal="node.horizontal"
+        :disabled="!node.enabled"
         :reverse="node.reverse"
         :label="node.text"
         @update:model-value="send(node.action, $event)"
+      />
+      <AppDateField
+        v-else-if="node.kind === 'DateChoice'"
+        class="frame-node frame-date-choice"
+        :data-frame="node.id"
+        :style="style(node)"
+        :model-value="node.text"
+        :label="node.label"
+        :include-time="!!node.includeTime"
+        :allow-clear="node.allowClear !== false"
+        :readonly="!!node.readOnly"
+        :disabled="!node.enabled"
+        @update:model-value="send(node.action, $event)"
+        @change="send(node.commitAction, $event)"
+      />
+      <UserComboBox
+        v-else-if="node.kind === 'UserChoice'"
+        class="frame-node frame-user-choice"
+        :data-frame="node.id"
+        :style="style(node)"
+        :value="node.value"
+        :options="node.options || []"
+        :label="node.label"
+        :action-field="!!node.actionField"
+        :disabled="!node.enabled"
+        @change="send(node.action, $event)"
       />
       <FrameGrid
         v-else-if="node.kind === 'Grid'"

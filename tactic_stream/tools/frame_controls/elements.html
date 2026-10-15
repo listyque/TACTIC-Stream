@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="ru">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tactic Frame · UI atlas</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    [hidden] {
+      display: none !important;
+    }
+    body {
+      margin: 28px;
+      background: #202426;
+      color: #edf0f2;
+      font:
+        15px/1.5 'Segoe UI',
+        sans-serif;
+    }
+    h1 {
+      font-size: 28px;
+    }
+    h2 {
+      font-size: 21px;
+    }
+    h3 {
+      margin: 0 0 12px;
+    }
+    a {
+      color: #9cc9e3;
+    }
+    p {
+      max-width: 1180px;
+    }
+    small,
+    .muted {
+      color: #b2bdc4;
+    }
+    code {
+      font:
+        13px/1.6 Consolas,
+        monospace;
+      overflow-wrap: anywhere;
+    }
+    nav,
+    .filters,
+    .counts {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 18px 0;
+    }
+    input,
+    select,
+    button {
+      font: inherit;
+      color: inherit;
+      background: #343b3e;
+      padding: 9px 12px;
+      border: 1px solid #606c72;
+      border-radius: 8px;
+    }
+    input {
+      flex: 1;
+      min-width: 260px;
+    }
+    button {
+      cursor: pointer;
+    }
+    button[aria-pressed='true'] {
+      background: #3d6175;
+    }
+    select {
+      min-width: 0;
+      max-width: 100%;
+    }
+    button:disabled {
+      opacity: 0.45;
+    }
+    :focus-visible {
+      outline: 2px solid #a4cfe8;
+      outline-offset: 3px;
+    }
+    .counts span,
+    .tag {
+      padding: 4px 9px;
+      border-radius: 7px;
+      background: #30393e;
+    }
+    .families {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+      gap: 18px;
+    }
+    article {
+      padding: 20px;
+      border-radius: 14px;
+      background: #2c3235;
+      border: 1px solid #465158;
+      min-width: 0;
+    }
+    article p {
+      margin: 10px 0;
+    }
+    article ul {
+      padding-left: 20px;
+    }
+    .gap {
+      border-left: 3px solid #d6ac64;
+      padding-left: 12px;
+    }
+    .pair {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    figure {
+      margin: 0;
+      max-width: 100%;
+    }
+    figcaption {
+      font-size: 12px;
+      color: #bac6cc;
+    }
+    .crop {
+      position: relative;
+      overflow: hidden;
+      max-width: 100%;
+      background: #24282a;
+      margin-top: 5px;
+    }
+    .crop img {
+      position: absolute;
+      width: 900px;
+      max-width: none;
+    }
+    .source-links a {
+      display: inline-block;
+      margin: 2px 10px 2px 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      table-layout: fixed;
+    }
+    th,
+    td {
+      text-align: left;
+      vertical-align: top;
+      padding: 12px;
+      border-bottom: 1px solid #485158;
+      overflow-wrap: anywhere;
+    }
+    th {
+      background: #30383c;
+      position: sticky;
+      top: 0;
+    }
+    th:nth-child(1) {
+      width: 12%;
+    }
+    th:nth-child(2) {
+      width: 29%;
+    }
+    th:nth-child(3) {
+      width: 20%;
+    }
+    pre {
+      white-space: pre-wrap;
+      font:
+        12px/1.5 Consolas,
+        monospace;
+      max-height: 280px;
+      overflow: auto;
+    }
+    .definitions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .definitions p {
+      padding: 14px;
+      margin: 0;
+      background: #2c3235;
+      border-radius: 10px;
+    }
+    @media (max-width: 600px) {
+      body {
+        margin: 14px;
+      }
+      .families {
+        grid-template-columns: 1fr;
+      }
+      th,
+      td {
+        padding: 7px;
+      }
+    }
+  </style>
+  <h1>Tactic Frame · полный индекс UI, проверка — по отдельным семействам</h1>
+  <p>
+    Классификация по ответственности: базовый контрол получает значение,
+    нейтральную модель или действие и выдаёт событие. Форма знает сценарий,
+    предметные данные и операции. Папка <code>controls/</code>, размер файла и
+    число вложенных элементов этого не определяют.
+  </p>
+  <div class="definitions" id="definitions"></div>
+  <p>
+    <strong
+      >Примитивы и нейтральные составные контролы вместе составляют базовый
+      набор.</strong
+    >
+    DateField с календарём, ComboBox, меню и выбор пользователя — составные
+    контролы. Task Calendar, TaskInspector, редактор пользователя, ProjectCard и
+    ProcessSelectionTree — формы или предметные фрагменты. SettingRow —
+    нейтральная компоновка, а ConfigurationPage — форма.
+  </p>
+  <div class="counts" id="counts"></div>
+  <p id="evidence" class="muted"></p>
+  <p class="muted">
+    Числа файлов, семейств, деклараций и состояний — разные величины. Файл может
+    содержать несколько контролов; одна семья — несколько файлов. Перечни TH и
+    TS в карточке не утверждают взаимно однозначное соответствие файлов. «На
+    разбор» означает учтённый исходник, который ещё нельзя честно назвать
+    базовым контролом или формой.
+  </p>
+  <nav>
+    <a href="index.html">Парные снимки проверенной выборки · 372 состояния</a>
+    <a href="../../frame_admin/output/index.html"
+      >Administration · сценарии экранов</a
+    >
+    <a href="ui-elements.json">Полный индекс и SHA-256</a>
+  </nav>
+  <p class="gap">
+    Снимки ниже — вырезки из настоящих QML/Vue-прогонов, только там, где они уже
+    сняты. Пустой preview обозначает отсутствие парного стенда, а не
+    отсутствующий в продукте элемент. Inline-стили и raw-контролы — места для
+    проверки, а не автоматически доказанные дубли или дефекты.
+  </p>
+  <div class="filters">
+    <input
+      id="search"
+      placeholder="Поиск: имя, исходник, badge, toolbar, вариант…"
+      aria-label="Поиск по каталогу"
+    />
+    <select id="level" aria-label="Уровень">
+      <option value="">Все уровни</option>
+    </select>
+    <select id="engine" aria-label="Движок">
+      <option value="">Оба движка</option>
+      <option value="native">TH · QML</option>
+      <option value="vue">TS · Vue</option>
+    </select>
+    <select id="family" aria-label="Семейство">
+      <option value="">Все семейства</option>
+    </select>
+  </div>
+  <nav id="views"></nav>
+  <p id="total" aria-live="polite"></p>
+  <div id="content"></div>
+  <nav id="pages">
+    <button id="previous">Назад</button><span id="page"></span
+    ><button id="next">Далее</button>
+  </nav>
+  <p class="muted">
+    Граница индекса: все QML-компоненты в <code>thlib/ui/qml</code>, все
+    Vue-компоненты и CSS в <code>frontend/src</code>, house helpers и декларации
+    общего Frame. QML сканируется с исключением строк/комментариев;
+    Vue/CSS/Frame — установленными парсерами. Учитываются декларации, а не число
+    runtime-экземпляров. JS-render functions, динамические Loader/component,
+    пользовательские скрипты, plugin/config-generated UI и системные диалоги
+    требуют отдельных входных данных и runtime-сценариев. Актуальность снимков
+    проверяет <code>report.py</code>; сам этот статический индекс не доказывает
+    геометрию, доступность или поведение.
+  </p>
+  <script>
+    const data = __DATA__;
+    document.querySelector('#evidence').textContent = data.evidence;
+    const labels = {
+      primitive: 'Примитив',
+      composite: 'Базовый составной',
+      infrastructure: 'Инфраструктура',
+      feature: 'Форма / предметный фрагмент',
+      review: 'На разбор'
+    };
+    const coverage = {
+      partial: 'Частично проверено',
+      nested: 'Только вложенные применения',
+      missing: 'Нет парного стенда',
+      'other-scenarios': 'Есть отдельные экранные сценарии',
+      'not-base': 'Не часть базового набора'
+    };
+    const content = document.querySelector('#content');
+    const filters = Object.fromEntries(
+      ['search', 'level', 'engine', 'family'].map((id) => [
+        id,
+        document.getElementById(id)
+      ])
+    );
+    const views = {
+      families: 'Семейства и варианты',
+      source: 'Все компоненты и helpers',
+      uses: 'Все места использования',
+      styles: 'Все CSS-правила',
+      frames: 'Декларации Frame',
+      candidates: 'Raw-контролы внутри форм',
+      review: 'Требует классификации'
+    };
+    let view = 'families',
+      page = 0;
+    const esc = (text) =>
+      String(text ?? '').replace(
+        /[&<>"']/g,
+        (char) =>
+          ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+          })[char]
+      );
+    const sourceLink = (row) =>
+      `<a href="${esc(row.uri)}" title="${esc(row.file)}">${esc(row.tag)}</a> <small>стр. ${row.line}</small>`;
+    for (const [id, text] of Object.entries(data.levels)) {
+      document
+        .querySelector('#definitions')
+        .insertAdjacentHTML(
+          'beforeend',
+          `<p><strong>${esc(labels[id])}</strong><br>${esc(text)}</p>`
+        );
+      filters.level.add(new Option(labels[id], id));
+    }
+    for (const family of data.families)
+      filters.family.add(new Option(family.title, family.id));
+    document.querySelector('#counts').innerHTML = [
+      `${data.counts.native.component} QML-компонентов`,
+      `${data.counts.vue.component} Vue-компонентов`,
+      `${data.counts.native.houseComponents} QML / ${data.counts.vue.houseComponents} Vue в controls/`,
+      `${data.families.length} семейств (включая инфраструктуру и предметные фрагменты)`,
+      `${data.counts.declarations.uses} деклараций в QML / Vue`
+    ]
+      .map((text) => `<span>${esc(text)}</span>`)
+      .join('');
+    for (const [id, text] of Object.entries(views)) {
+      const button = document.createElement('button');
+      button.textContent = text;
+      button.dataset.view = id;
+      button.onclick = () => {
+        view = id;
+        page = 0;
+        render();
+      };
+      document.querySelector('#views').append(button);
+    }
+    function matches(row) {
+      return (
+        (!filters.level.value || row.level === filters.level.value) &&
+        (!filters.engine.value || row.engine === filters.engine.value) &&
+        (!filters.family.value ||
+          row.families.includes(filters.family.value)) &&
+        JSON.stringify(row)
+          .toLowerCase()
+          .includes(filters.search.value.toLowerCase())
+      );
+    }
+    function preview(family) {
+      const sample = data.samples[family.example];
+      if (!sample?.native || !sample?.vue)
+        return '<p class="muted">Самостоятельный парный preview этого семейства ещё не снят.</p>';
+      return (
+        '<div class="pair">' +
+        ['native', 'vue']
+          .map((engine) => {
+            const box = sample[engine],
+              width = Math.ceil(box.width),
+              height = Math.ceil(box.height);
+            return `<figure><figcaption>${engine === 'native' ? 'TH · QML' : 'TS · Vue'} · пример из выборки</figcaption>
+        <div class="crop" style="width:${width}px;height:${height}px"><img alt="Пример ${esc(family.title)}"
+        src="${esc(box.image)}" style="left:${-box.x}px;top:${-box.y}px"></div></figure>`;
+          })
+          .join('') +
+        '</div>'
+      );
+    }
+    function familyCard(family) {
+      const sources = data.entries.filter(
+        (row) => row.category === 'source' && row.families.includes(family.id)
+      );
+      const links = ['native', 'vue']
+        .filter(
+          (engine) => !filters.engine.value || engine === filters.engine.value
+        )
+        .map(
+          (engine) =>
+            `<p><strong>${engine === 'native' ? 'TH' : 'TS'}</strong> <span class="source-links">${
+              sources
+                .filter((row) => row.engine === engine)
+                .map(sourceLink)
+                .join(' · ') ||
+              'Отдельного именованного компонента в реестре нет; см. inline-применения.'
+            }</span></p>`
+        )
+        .join('');
+      const levels = [...new Set(sources.map((row) => row.level))];
+      return `<article><h2>${esc(family.title)}</h2><span class="tag">${esc(labels[family.level])}</span>
+      <p class="muted">Уровни исходников: ${esc(levels.map((level) => labels[level]).join(' / '))}. Рендерер базового контрола может относиться к инфраструктуре.</p>
+      <p><strong>${esc(coverage[family.coverage])}</strong></p><p>${family.variants.map(esc).join(' · ')}</p>
+      ${preview(family)}${links}<p>${esc(family.rule)}</p>
+      <div class="gap"><ul>${family.gaps.map((gap) => `<li>${esc(gap)}</li>`).join('')}</ul></div>
+      <button data-family="${esc(family.id)}">Все исходники и применения</button></article>`;
+    }
+    function render() {
+      document
+        .querySelectorAll('[data-view]')
+        .forEach((button) =>
+          button.setAttribute('aria-pressed', button.dataset.view === view)
+        );
+      if (view === 'families') {
+        const families = data.families.filter(
+          (family) =>
+            (!filters.family.value || family.id === filters.family.value) &&
+            (!filters.level.value ||
+              family.level === filters.level.value ||
+              data.entries.some(
+                (row) =>
+                  row.category === 'source' &&
+                  row.families.includes(family.id) &&
+                  row.level === filters.level.value
+              )) &&
+            JSON.stringify(family)
+              .toLowerCase()
+              .includes(filters.search.value.toLowerCase())
+        );
+        content.innerHTML =
+          '<div class="families">' +
+          families.map(familyCard).join('') +
+          '</div>';
+        content.querySelectorAll('[data-family]').forEach(
+          (button) =>
+            (button.onclick = () => {
+              filters.family.value = button.dataset.family;
+              filters.level.value = '';
+              filters.search.value = '';
+              view = 'uses';
+              page = 0;
+              render();
+            })
+        );
+        document.querySelector('#total').textContent =
+          `${families.length} / ${data.families.length} семейств`;
+        document.querySelector('#pages').hidden = true;
+        return;
+      }
+      const rows = data.entries.filter(
+        (row) =>
+          (view === 'candidates'
+            ? row.candidate
+            : view === 'review'
+              ? row.category === 'source' && row.level === 'review'
+              : row.category === view) && matches(row)
+      );
+      const pages = Math.max(1, Math.ceil(rows.length / 60));
+      page = Math.min(page, pages - 1);
+      content.innerHTML = `<table><thead><tr><th>Движок / уровень</th><th>Элемент / исходник</th><th>Контекст</th><th>Параметры / ответственность</th></tr></thead><tbody>${rows
+        .slice(page * 60, (page + 1) * 60)
+        .map(
+          (row) =>
+            `<tr><td>${esc(row.engine)}<br>${esc(labels[row.level])}<br><small>${esc(row.kind || row.category)}</small></td>
+      <td>${sourceLink(row)}<br><code>${esc(row.file)}</code></td><td>${esc(row.parent || '')}<br><small>${esc(row.resolved || '')}</small>
+      ${row.ownerLevel ? `<br>Владелец: ${esc(labels[row.ownerLevel])}` : ''}</td><td>${esc(row.reason || '')}
+      ${row.props ? `<details><summary>Параметры (${Object.keys(row.props).length})</summary><pre>${esc(JSON.stringify(row.props, null, 2))}</pre></details>` : ''}
+      ${row.candidate ? '<p class="gap">Raw-контрол в предметном контексте: проверить необходимость локального варианта.</p>' : ''}</td></tr>`
+        )
+        .join('')}</tbody></table>`;
+      document.querySelector('#total').textContent =
+        `${rows.length} записей; показаны ${rows.length ? page * 60 + 1 : 0}–${Math.min((page + 1) * 60, rows.length)}`;
+      document.querySelector('#pages').hidden = false;
+      document.querySelector('#page').textContent = `${page + 1} / ${pages}`;
+      document.querySelector('#previous').disabled = page === 0;
+      document.querySelector('#next').disabled = page === pages - 1;
+    }
+    for (const input of Object.values(filters))
+      input.addEventListener('input', () => {
+        page = 0;
+        render();
+      });
+    document.querySelector('#previous').onclick = () => {
+      page--;
+      render();
+    };
+    document.querySelector('#next').onclick = () => {
+      page++;
+      render();
+    };
+    render();
+  </script>
+</html>

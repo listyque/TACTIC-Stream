@@ -48,7 +48,7 @@ try {
     try {res.setHeader('Content-Type','text/html');res.end(await server.transformIndexHtml(req.url,html))} catch(error){next(error)}
   })}}],server:{host:'127.0.0.1',port:0}})
   await server.listen()
-  browser=await chromium.launch({headless:true,ignoreDefaultArgs:['--hide-scrollbars']})
+  browser=await chromium.launch({headless:true,channel:process.env.STREAM_BROWSER_CHANNEL,ignoreDefaultArgs:['--hide-scrollbars']})
   const page=await browser.newPage({viewport:{width:1000,height:1000},hasTouch:true})
   page.setDefaultTimeout(10000)
   const errors=[]

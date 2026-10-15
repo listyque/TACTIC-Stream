@@ -18,6 +18,16 @@ claim is withdrawn: original graph/form regressions are being repaired, and
 reports must be recaptured after these changes. Shared theme values and main
 toolbar geometry now have a separate archived-Handler comparison.
 
+Phase 1 supplies a verified subset of the control contract: state paint, metrics, strict local
+calendar logic, DateChoice/UserChoice, anchored icon selection and common tree
+navigation. The executable control catalog and paired gallery cover actual
+Qt/Vue controls; 372 states do not mean 372 control types or the full kit.
+The source-linked atlas at `tools/frame_controls/output/ui-elements.html`
+separates primitives, neutral composite controls, infrastructure and business
+forms/fragments, with explicit unverified families and classification work.
+The plan records exact checks and remaining OS/legacy limits. Phase 1 stays open.
+Both products remain separately packaged. Window/workspace migration is phase 2.
+
 ## Tactic Frame: Administration — previous checkpoint
 
 Все десять разделов и вложенные редакторы переведены на общий скелет и переходы

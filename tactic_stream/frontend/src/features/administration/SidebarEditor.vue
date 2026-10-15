@@ -344,6 +344,12 @@ export default {
         this.ui = result.ui;
       } finally {
         this.dispatching = false;
+        if (event.type === 'treeKey' && !this.error) {
+          await nextTick();
+          this.$refs.frame?.focusControl(
+            'sidebarEditorEntry_' + this.frameModel.selected
+          );
+        }
       }
     },
     t,

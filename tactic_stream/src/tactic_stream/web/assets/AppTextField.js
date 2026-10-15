@@ -2,6 +2,7 @@ import { K as withDirectives, N as openBlock, X as ref, et as unref, m as comput
 import { T as t } from "./index.js";
 //#region src/controls/AppTextField.vue
 var _hoisted_1 = [
+	"aria-invalid",
 	"aria-label",
 	"placeholder",
 	"disabled"
@@ -15,7 +16,8 @@ var _sfc_main = {
 		},
 		label: String,
 		placeholder: String,
-		disabled: Boolean
+		disabled: Boolean,
+		errorState: Boolean
 	},
 	emits: ["update:modelValue"],
 	setup(__props, { expose: __expose, emit: __emit }) {
@@ -35,6 +37,7 @@ var _sfc_main = {
 				ref: field,
 				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => text.value = $event),
 				class: "app-text-field",
+				"aria-invalid": __props.errorState || void 0,
 				"aria-label": __props.label || __props.placeholder ? unref(t)(__props.label || __props.placeholder) : void 0,
 				placeholder: unref(t)(__props.placeholder || ""),
 				disabled: __props.disabled

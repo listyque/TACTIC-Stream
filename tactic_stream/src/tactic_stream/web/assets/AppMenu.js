@@ -18,6 +18,7 @@ var _sfc_main = {
 	props: {
 		label: String,
 		showLabel: Boolean,
+		compactTrigger: Boolean,
 		icon: {
 			type: String,
 			default: "more"
@@ -42,8 +43,10 @@ var _sfc_main = {
 		width: Number,
 		maxHeight: Number
 	},
-	setup(__props, { expose: __expose }) {
+	emits: ["before-open"],
+	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
+		const emit = __emit;
 		const menu = ref(null);
 		const trigger = ref(null);
 		const expanded = ref(false);
@@ -74,8 +77,9 @@ var _sfc_main = {
 		}
 		function close(focus = false) {
 			clearTimeout(hoverTimer);
-			if (props.inline) return;
+			if (props.inline || !menu.value) return;
 			menu.value.open = false;
+			expanded.value = false;
 			if (props.modal && panelElement.value.open) panelElement.value.close();
 			if (props.overlay && !props.modal && panelElement.value?.matches(":popover-open")) panelElement.value.hidePopover();
 			if (focus) (returnTarget?.isConnected ? returnTarget : props.anchor?.isConnected ? props.anchor : trigger.value)?.focus();
@@ -184,6 +188,7 @@ var _sfc_main = {
 		}
 		function toggled() {
 			if (!menu.value) return;
+			if (menu.value.open && !expanded.value) emit("before-open");
 			expanded.value = menu.value.open;
 			if (!menu.value.open) {
 				point = null;
@@ -231,7 +236,10 @@ var _sfc_main = {
 			if (action && !props.closeOnSelect) event.stopPropagation();
 			if (props.closeOnSelect && action && !action.closest("[role=\"combobox\"]")) close(menu.value.contains(document.activeElement));
 		}
-		onUpdated(position);
+		onUpdated(() => {
+			if (props.disabled && menu.value?.open) close();
+			else position();
+		});
 		__expose({
 			close,
 			openAt(event) {
@@ -272,7 +280,8 @@ var _sfc_main = {
 				ref: menu,
 				class: normalizeClass(["workspace-menu", {
 					"inline-menu": __props.inline,
-					"labelled-menu": __props.showLabel
+					"labelled-menu": __props.showLabel,
+					"compact-trigger": __props.compactTrigger
 				}]),
 				onKeydown: move,
 				onToggle: toggled

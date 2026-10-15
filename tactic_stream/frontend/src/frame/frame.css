@@ -36,52 +36,50 @@
 .frame-passive {
   pointer-events: none;
 }
-.frame-view > .frame-button {
+/* The house button owns semantic paint; Frame supplies geometry only. */
+.frame-view > .frame-button.app-button {
   min-height: 0;
-  padding: 0 16px;
+  padding: 0 var(--button-padding);
+  gap: var(--button-spacing);
   border-radius: var(--button-radius);
   border: 0;
-  box-shadow: inset 0 0 0 1px var(--outline-variant);
-  background: var(--surface-high);
+  box-shadow: inset 0 0 0 var(--button-idle-border-width)
+    var(--button-idle-border);
+  background: var(--button-idle-background);
+  color: var(--button-idle-color);
+}
+.frame-view > .frame-button:hover:not(:disabled) {
+  background: var(--button-hover-background);
+  color: var(--button-hover-color);
+}
+.frame-view > .frame-button:focus-visible:not(:disabled) {
+  background: var(--button-focus-background);
+  color: var(--button-focus-color);
+}
+.frame-view > .frame-button:active:not(:disabled) {
+  background: var(--button-pressed-background);
+  color: var(--button-pressed-color);
+}
+.frame-view > .frame-button:disabled {
+  opacity: 1;
+  background: var(--button-disabled-background);
+  color: var(--button-disabled-color);
 }
 .frame-view > .frame-button:has(> .app-icon) {
-  padding-left: 12px;
+  padding-left: var(--button-icon-padding);
 }
 .frame-view > .frame-button.icon-button {
   padding: 0;
 }
-.frame-view > .frame-button:not(.icon-button):not(.frame-radio) {
-  gap: 7px;
-}
 .frame-button > span {
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
-.frame-view > .frame-button.primary {
-  border: 0;
-  box-shadow: none;
-  background: var(--primary);
-  color: var(--on-selected);
-}
-.frame-view > .frame-button:hover:not(:disabled) {
-  background: var(--hover);
-  border-color: var(--outline-variant);
-}
-.frame-view > .frame-button.primary:hover:not(:disabled) {
-  background: var(--primary);
-}
-.frame-view > .frame-button:active:not(:disabled) {
-  background: var(--selected);
-}
-.frame-view > .frame-button:disabled {
-  opacity: 1;
-  background: var(--surface-high);
-  color: var(--disabled);
-}
-.frame-view > .frame-button.danger:not(.primary) {
-  box-shadow: inset 0 0 0 1px var(--error);
-}
 .frame-button > .app-icon {
+  flex: none;
   width: 16px;
   height: 16px;
   font-size: 16px;
@@ -92,34 +90,19 @@
   font-size: 18px;
 }
 .frame-view > .frame-button.frame-radio {
-  border: 0;
-  box-shadow: none;
-  background: transparent;
   border-radius: 6px;
-  padding: 0 7px 0 3px;
-  gap: 6px;
+  padding: 0 var(--button-segmented-padding-end) 0
+    var(--button-segmented-padding-start);
+  gap: var(--button-segmented-spacing);
   font-weight: 500;
-  color: var(--muted);
-}
-.frame-view > .frame-button.frame-radio:hover:not(:disabled) {
-  background: var(--hover);
-}
-.frame-view > .frame-button.frame-radio-selected:hover:not(:disabled) {
-  background: var(--selected);
 }
 .frame-radio .app-icon {
-  width: 15px;
-  height: 15px;
-  font-size: 15px;
+  width: var(--button-segmented-icon-size);
+  height: var(--button-segmented-icon-size);
+  font-size: var(--button-segmented-icon-size);
 }
 .frame-view > .frame-button.frame-radio-selected {
-  background: var(--selected);
-  color: var(--on-selected);
   font-weight: 600;
-}
-.frame-view > .frame-button.frame-radio:disabled {
-  background: transparent;
-  color: var(--disabled);
 }
 .frame-action.app-button {
   padding: 0;
@@ -182,19 +165,22 @@
   padding: 4px 8px;
 }
 .frame-view > .frame-choice {
-  padding: 0 12px;
+  padding: 0 8px 0 10px;
   min-height: 0;
   border-radius: var(--field-radius);
 }
 .frame-area.app-text-area {
   resize: none;
-  padding: 10px 12px;
+  padding: calc(var(--field-area-padding) - 1px)
+    calc(var(--field-padding) - 1px);
   border-radius: var(--surface-radius, 12px);
-  line-height: 16px;
+  line-height: normal;
+  scrollbar-gutter: stable;
   overflow: auto;
 }
 .frame-area.app-text-area:focus {
-  padding: 9px 11px;
+  padding: calc(var(--field-area-padding) - 2px)
+    calc(var(--field-padding) - 2px);
 }
 .frame-area.frame-notice {
   background: var(--surface-high);
@@ -304,9 +290,10 @@ dialog.frame-dialog[open] {
 }
 .frame-color-choice .color-swatch {
   box-sizing: border-box;
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  flex: none;
 }
 .frame-color-choice .app-button {
   height: 100%;
@@ -318,4 +305,16 @@ dialog.frame-dialog[open] {
 }
 .frame-action[draggable='true']:active {
   cursor: grabbing;
+}
+
+.frame-action:focus-visible > .item-surface {
+  --item-interaction: color-mix(
+    in srgb,
+    var(--item-state-color) 8%,
+    var(--item-base)
+  );
+}
+.frame-action:disabled > .item-surface,
+.frame-checkbox.disabled > .item-surface {
+  --item-interaction: var(--item-base);
 }

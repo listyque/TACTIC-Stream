@@ -636,7 +636,7 @@ h2 { font-size: var(--text-heading); }
 .administration-panel-title .app-icon { color: var(--primary); width: 20px; height: 20px; font-size: 20px; }
 .administration-catalog { gap: 12px; padding: 14px; }
 .administration-catalog .app-checkbox.compact { min-height: 30px; gap: 6px; font-size: var(--text-label); }
-.administration-catalog label.app-checkbox { display: flex; }
+.administration-catalog label.app-checkbox { font-size:var(--control-text-size); display: flex; }
 .administration-catalog .app-checkbox.compact .app-checkbox-indicator, .administration-catalog .app-checkbox.compact input { width: 17px; height: 17px; flex-basis: 17px; }
 .administration-catalog .app-checkbox.compact .app-icon { font-size: 13px; }
 .administration-catalog-heading { display: flex; justify-content: space-between; gap: var(--space-sm); }
@@ -891,11 +891,14 @@ tbody tr:last-child td { border-bottom: 0; }
 .setting-control > .switch-control { justify-self: end; }
 .setting-toggle { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-sm); }
 .switch-control { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-width: var(--touch-target); min-height: var(--touch-target); cursor: pointer; }
-.app-switch { appearance: none; position: relative; flex: 0 0 auto; width: var(--switch-width); height: var(--switch-height); min-height: var(--switch-height); margin: 0; padding: 2px; border: 1px solid var(--outline); border-radius: calc(var(--switch-height) / 2); background: var(--hover); cursor: pointer; transition: background-color var(--motion-click), border-color var(--motion-click); }
+.app-switch { appearance: none; position: relative; flex: 0 0 auto; width: var(--switch-width); height: var(--switch-height); min-height: var(--switch-height); margin: 0; padding: 2px; border: 1px solid var(--outline); border-radius: calc(var(--switch-height) / 2); background: var(--switch-idle-background); cursor: pointer; transition: background-color var(--motion-click), border-color var(--motion-click); }
 .app-switch::before { content: ''; position: absolute; top: 50%; left: 2px; width: var(--switch-thumb); height: var(--switch-thumb); border-radius: 50%; background: var(--muted); transform: translateY(-50%); transition: transform var(--motion-click) var(--motion-easing), background-color var(--motion-click); }
 .app-switch:checked { background: var(--primary); border-color: var(--primary); }
 .app-switch:checked::before { transform: translate(var(--switch-travel), -50%); background: var(--on-selected); }
-.app-switch:disabled { opacity: .45; cursor: default; }
+.app-switch:disabled { opacity:1; cursor:default; background:var(--switch-disabled-background); border-color:var(--switch-disabled-border); }
+.app-switch:disabled::before { background:var(--switch-disabled-thumb); }
+.app-switch:focus-visible { border-width:var(--switch-focus-border-width); border-color:var(--switch-focus-border); }
+.app-switch:focus-visible::before { left:calc(var(--switch-inset) - 2px); }
 .configuration-services { display: flex; flex-wrap: wrap; gap: var(--space-sm); font-size: var(--text-caption); }
 .configuration-services span { border: 1px solid var(--outline-variant); border-radius: var(--button-radius); padding: var(--space-xs) var(--space-sm); color: var(--muted); }
 .configuration-services .enabled { color: var(--on-surface); background: var(--content-selection); }
@@ -1297,10 +1300,6 @@ button { border-radius: var(--button-radius); transition: background-color var(-
 .sidebar-entry-settings textarea { width: 100%; font-family: Consolas, monospace; }
 .sidebar-setting-groups { display: flex; flex-direction: column; gap: var(--space-md); }
 .sidebar-editor-status { background: var(--surface-container); border-radius: var(--surface-radius); padding: var(--space-md); }
-.icon-picker { width: min(850px, calc(100vw - 24px)); }
-.icon-library { display: grid; grid-template-columns: repeat(auto-fill, minmax(95px, 1fr)); gap: var(--space-sm); overflow: auto; max-height: 55dvh; margin-block: var(--space-md); }
-.icon-library button { flex-direction: column; border-radius: var(--surface-radius); overflow: hidden; }
-.icon-library small { overflow-wrap: anywhere; }
 .sidebar-search-shell { display: flex; flex-direction: column; height: 100%; min-height: 0; }
 .search-library-dialog { width:min(920px, calc(100dvw - 32px)); height:min(720px, calc(100dvh - 32px)); max-width:none; max-height:none; padding:0; overflow:hidden; }
 .search-library-shell { display: flex; flex-direction: column; height: 100%; min-height: 0; padding: var(--space-md); gap: var(--space-md); }
@@ -1331,12 +1330,16 @@ button { border-radius: var(--button-radius); transition: background-color var(-
 .tag-cloud-viewport > p { padding-block: var(--space-sm); }
 .tag-cloud > summary { overflow: visible; }
 .action-count { position: absolute; top: 0; right: 0; padding: 0 4px; min-width: 16px; border-radius: var(--button-radius); color: var(--on-primary); background: var(--primary); font-size: var(--text-small); }
-.app-checkbox { display: flex; align-items: center; gap: var(--check-box-spacing); min-height: var(--check-box-height); cursor: pointer; font-weight: 400; }
-.app-checkbox.disabled { cursor: default; opacity: .45; }
+.app-checkbox { font-size:var(--control-text-size); display: flex; align-items: center; gap: var(--check-box-spacing); min-height: var(--check-box-height); cursor: pointer; font-weight: 400; }
+.app-checkbox.disabled { cursor:default; opacity:1; color:var(--check-disabled-content); }
 .app-checkbox-indicator { position: relative; display: inline-flex; flex: 0 0 var(--check-box-indicator); width: var(--check-box-indicator); height: var(--check-box-indicator); }
 .app-checkbox input { appearance: none; width: var(--check-box-indicator); height: var(--check-box-indicator); min-height: 0; margin: 0; padding: 0; border: 1px solid var(--outline); border-radius: min(var(--check-box-radius), var(--item-radius)); background: transparent; cursor: inherit; transition: background var(--motion-click), border-color var(--motion-click); }
 .app-checkbox input:checked, .app-checkbox input:indeterminate { background: var(--primary); border-color: var(--primary); }
-.app-checkbox input:focus { outline: none; }
+.app-checkbox input:focus { outline:none; }
+.app-checkbox input:focus-visible { border-width:var(--check-focus-border-width); border-color:var(--check-focus-border); }
+.app-checkbox input:disabled { border-color:var(--check-disabled-border); }
+.app-checkbox input:disabled:is(:checked,:indeterminate) { background:var(--check-disabled-checked-background); }
+.app-checkbox input:disabled + .app-icon { color:var(--check-disabled-checked-mark); }
 .app-checkbox-indicator .app-icon { position: absolute; inset: 0; width: 100%; height: 100%; display: grid; place-items: center; font-size: var(--check-box-icon-size); color: var(--on-selected); pointer-events: none; }
 .user-identity { display: flex; align-items: center; gap: var(--space-md); min-width: 0; flex: 1; }
 .user-identity.retired { opacity: .5; }

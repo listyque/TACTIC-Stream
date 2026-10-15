@@ -86,10 +86,17 @@ def fingerprints(handler):
             "frame_renderer_contract.mjs",
             "frame_resize.mjs",
             "frame_platform.mjs",
+            "frame_controls_contract.mjs",
+            "frame_controls.mjs",
+            "frame_controls_input.mjs",
+            "icons.mjs",
         )
     ]
     checks += [
         handler / "tests/test_frame_platform.py",
+        handler / "tests/test_frame_controls.py",
+        handler / "tests/fixtures/FrameControlsHarness.qml",
+        handler / "tests/test_user_combo_box.py",
         handler / "tests/test_qml_smoke_harness.py",
         ROOT / "tests/test_frame_inventory.py",
         ROOT / "tests/test_tactic_frame_sync.py",
@@ -106,6 +113,11 @@ def fingerprints(handler):
         ROOT / "tools/frame_foundation/PlatformHarness.vue",
         ROOT / "tools/frame_foundation/platform.entry.js",
         ROOT / "tools/frame_foundation/platform.html",
+    ]
+    checks += [
+        path
+        for path in (ROOT / "tools/frame_controls").iterdir()
+        if path.is_file() and path.suffix in (".vue", ".js", ".html", ".py")
     ]
     for index, path in enumerate(checks):
         result[f"check/{index}/{path.name}"] = hashlib.sha256(
@@ -173,6 +185,18 @@ def main():
         ),
         ("contract", ["node", "frontend/tests/frame_contract.mjs"], ROOT, {}),
         (
+            "icons-contract",
+            ["node", "frontend/tests/icons.mjs", str(handler)],
+            ROOT,
+            {},
+        ),
+        (
+            "controls-contract",
+            ["node", "frontend/tests/frame_controls_contract.mjs"],
+            ROOT,
+            {},
+        ),
+        (
             "renderers",
             ["node", "frontend/tests/frame_renderer_contract.mjs", str(handler)],
             ROOT,
@@ -201,6 +225,8 @@ def main():
                     "unittest",
                     "-q",
                     "tests.test_frame_platform.FramePlatformTests",
+                    "tests.test_frame_controls.FrameControlsTests",
+                    "tests.test_user_combo_box.UserPickerTests",
                 ],
                 handler,
                 {"QT_SCALE_FACTOR": scale},
@@ -208,6 +234,12 @@ def main():
             for scale in ("1", "1.5", "2")
         ],
         ("browser", ["node", "tests/frame_platform.mjs"], ROOT / "frontend", {}),
+        (
+            "browser-controls",
+            ["node", "frontend/tests/frame_controls.mjs", "--input-only"],
+            ROOT,
+            {},
+        ),
         (
             "smoke",
             python + ["-m", "unittest", "-q", "tests.test_qml_smoke_harness"],

@@ -1,7 +1,9 @@
+// shortcut: this legacy journey still expects pre-Frame child dialogs and save guards; port it during Administration closure.
+// Current Frame acceptance uses administration.mjs and frame_sidebar.mjs.
 import assert from 'node:assert/strict'
 import { chromium } from 'playwright'
 
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, channel: process.env.STREAM_BROWSER_CHANNEL })
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, hasTouch: true, colorScheme: 'dark' })
 page.setDefaultTimeout(10000)
 const errors = []
@@ -27,10 +29,10 @@ try {
   await editor.getByLabel('Title', { exact: true }).fill('People')
   await editor.getByLabel('Search Type', { exact: true }).selectOption('sthpw/login')
   await ready()
-  await button('Choose icon')
-  const icons = page.locator('.icon-picker')
-  await icons.getByLabel('Icon set', { exact: true }).selectOption('fontawesome-solid')
-  await icons.getByLabel('Find an icon', { exact: true }).fill('users')
+  await editor.getByLabel('Choose icon', { exact: true }).tap()
+  const icons = page.locator('.icon-picker-control > .account-panel:popover-open')
+  assert.equal(await icons.getByLabel('Icon set', { exact: true }).count(), 0, 'TACTIC icons use the single compatible set')
+  await icons.getByLabel('Search icons', { exact: true }).fill('users')
   await icons.getByRole('button', { name: 'users', exact: true }).tap()
   await ready()
   await button('Technical')
@@ -46,7 +48,7 @@ try {
   await button('Access')
   assert.equal(await editor.getByRole('heading', { name: 'Who can see this item', exact: true }).count(), 1)
   await admin.getByRole('button', { name: 'Groups', exact: true }).tap()
-  await admin.locator('.administration-navigation').getByRole('button', { name: 'Sidebar Editor', exact: true }).tap()
+  await admin.locator('[data-frame="adminSection_sidebar"]:visible').tap()
   await button('Access')
   await admin.getByRole('button', { name: 'Save to server', exact: true }).tap()
   await ready()
