@@ -1,5 +1,5 @@
 import { G as withCtx, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, T as mergeModels, V as useModel, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, m as computed, nt as normalizeStyle, o as vModelSelect, rt as toDisplayString, v as createElementBlock, x as createVNode } from "./vue.js";
-import { T as t, c as _sfc_main$1 } from "./index.js";
+import { D as t, u as _sfc_main$1 } from "./index.js";
 //#region src/controls/AppSelect.vue
 var _hoisted_1 = ["aria-label"];
 var _hoisted_2 = {

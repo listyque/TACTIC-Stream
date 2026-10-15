@@ -1,5 +1,5 @@
 import { D as nextTick, F as renderSlot, G as withCtx, K as withDirectives, M as onUpdated, N as openBlock, R as resolveDynamicComponent, X as ref, _ as createCommentVNode, et as unref, g as createBlock, k as onBeforeUnmount, nt as normalizeStyle, q as isRef, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { T as t, a as tooltipDirective, c as _sfc_main$1, o as capturePress, s as ripple } from "./index.js";
+import { D as t, c as capturePress, l as ripple, s as tooltipDirective, u as _sfc_main$1 } from "./index.js";
 //#region src/controls/AppMenu.vue
 var _hoisted_1 = [
 	"aria-label",

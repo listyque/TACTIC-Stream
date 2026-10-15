@@ -1,5 +1,5 @@
 import { D as nextTick, F as renderSlot, G as withCtx, H as watch, K as withDirectives, N as openBlock, P as renderList, X as ref, Y as reactive, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeStyle, q as isRef, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
-import { C as randomId, E as appearance, T as t, c as _sfc_main$3, i as _sfc_main$2 } from "./index.js";
+import { D as t, O as appearance, T as randomId, o as _sfc_main$2, u as _sfc_main$3 } from "./index.js";
 import { _ as knowledgeRequest, c as xmlTokens, n as copyText, o as javascriptTokens, s as pythonTokens, v as linkPreviews, y as messageFileRequest } from "./clipboard.js";
 import { t as _sfc_main$4 } from "./AppSelect.js";
 import { t as _sfc_main$5 } from "./AppSlider.js";

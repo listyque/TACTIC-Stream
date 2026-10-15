@@ -2,6 +2,46 @@
 
 Started 2026-10-15. This replaces the previous screen-first migration order.
 
+## Phase 2B: dock trees and gesture acceptance, 2026-10-16
+
+Handler **0.6.0.100** / Stream **0.112.149**. This completes the next bounded
+part of 2B: recursive projection/minimums, resize/restore, visible-tab ordering
+and all floating edges. The current release has 56 portable modules.
+
+- `shell/dock.layout.mjs` is the single geometry implementation. Native Python
+  dataclasses/settings remain the state owner; a small application-owned Qt JS
+  evaluator runs the shared module. Vue invokes it directly. No browser, runtime
+  sibling import, new dependency or replacement settings store is introduced.
+- The old browser 240×160 per-divider limit and duplicated native geometry are
+  removed. Both products use `window.sizing.mjs`, recursive subtree minimums and
+  proportional projection when space cannot fit all panels. Host shrink/grow
+  preserves preferred ratios. Native OS minimum-window constraints and Stream's
+  phone presentation remain product capabilities rather than fake equivalence.
+- Visible-tab reorder preserves hidden slots. Mouse and touch use the same
+  threshold. Escape cancels a reorder without saving. Native release no longer
+  accesses a deleted delegate, and a cancelled grab cannot commit its preview.
+- All four floating edges and four corners use one sizing rule. Native handles
+  are above the panel body; the title no longer steals the top-left resize.
+- Real Qt/browser input covers nested split limits, keyboard divider resizing,
+  mouse/touch tab reorder, cancellation, save/reload and floating minimums.
+  58 related native checks include retained loaded content across layout changes.
+  The platform gate includes four new native input tests at scales 1/1.5/2,
+  the full tree regressions and five content-retention scenarios.
+- `tools/frame_docks/output/index.html` records 24 archived/current/browser
+  layouts and 504 rectangle comparisons at 1800×1000, 1100×800 and 760×640.
+  The oracle is the independently archived Handler Python algorithm and minimum
+  map. Real DockPanel/DockWorkspace shells have deliberately empty feature
+  contents: this report establishes dock geometry, not whole-screen fidelity.
+  Source fingerprints are verified. Reproduce with `tools/frame_docks/capture_qml.py`,
+  `frontend/tests/frame_dock_capture.mjs` and `tools/frame_docks/report.py`.
+
+**Still open before closing all of phase 2:** complete dock-tab keyboard/focus
+paths and remaining footer/chrome states, then main menus, navigation containers
+and project/tab/session composition. Keep procedural `MenuRegistry.replace/extend`.
+Native Windows compositor, popup grabs and separate OS windows still need their
+real-backend acceptance. Prior reports below are historical checkpoints and must
+be regenerated before being used as evidence for this release.
+
 ## Active batch: phase 2, started 2026-10-16
 
 The dependency order remains valid. Phase 1 stays open: a complete source census

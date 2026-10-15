@@ -12,5 +12,9 @@ onMounted(() => {
 });
 </script>
 <template>
-  <DockWorkspace ref="docks" login="frame-dock-interaction" />
+  <DockWorkspace
+    ref="docks"
+    login="frame-dock-interaction"
+    :can-administer="true"
+  />
 </template>

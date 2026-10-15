@@ -1,5 +1,5 @@
 import { K as withDirectives, N as openBlock, T as mergeModels, V as useModel, X as ref, et as unref, s as vModelText, v as createElementBlock } from "./vue.js";
-import { T as t } from "./index.js";
+import { D as t } from "./index.js";
 //#region src/controls/AppTextArea.vue
 var _hoisted_1 = [
 	"aria-invalid",

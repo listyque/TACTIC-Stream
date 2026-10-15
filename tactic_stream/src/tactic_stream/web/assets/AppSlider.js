@@ -1,5 +1,5 @@
 import { K as withDirectives, N as openBlock, T as mergeModels, V as useModel, et as unref, nt as normalizeStyle, s as vModelText, v as createElementBlock } from "./vue.js";
-import { T as t } from "./index.js";
+import { D as t } from "./index.js";
 //#region src/controls/AppSlider.vue
 var _hoisted_1 = [
 	"aria-label",

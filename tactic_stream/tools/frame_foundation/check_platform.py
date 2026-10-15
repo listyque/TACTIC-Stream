@@ -91,7 +91,7 @@ def fingerprints(handler):
             "frame_controls_input.mjs",
             "icons.mjs",
             "frame_help_state.mjs", "frame_help.mjs", "frame_navigation.mjs",
-            "frame_dock_placement.mjs", "frame_dock_interaction.mjs", "frame_window_lifecycle.mjs", "window_types.mjs", "shared_help.mjs",
+            "frame_dock_placement.mjs", "frame_dock_layout.mjs", "frame_dock_interaction.mjs", "frame_window_lifecycle.mjs", "window_types.mjs", "shared_help.mjs",
         )
     ]
     checks += [
@@ -102,7 +102,11 @@ def fingerprints(handler):
         handler / "tests/test_frame_help.py",
         handler / "tests/test_frame_navigation.py",
         handler / "tests/test_frame_dock_input.py",
+        handler / "tests/test_frame_dock_layout.py",
+        handler / "tests/fixtures/DockWorkspaceHarness.qml",
         handler / "tests/test_dock_resizing.py",
+        handler / "tests/test_dock_layout_tree.py",
+        handler / "tests/test_retained_ui.py",
         handler / "tests/test_qml_smoke_harness.py",
         ROOT / "tests/test_frame_inventory.py",
         ROOT / "tests/test_tactic_frame_sync.py",
@@ -211,6 +215,7 @@ def main():
         ("resize", ["node", "frontend/tests/frame_resize.mjs"], ROOT, {}),
         ("help-state", ["node", "frontend/tests/frame_help_state.mjs"], ROOT, {}),
         ("dock-placement", ["node", "frontend/tests/frame_dock_placement.mjs"], ROOT, {}),
+        ("dock-layout", ["node", "frontend/tests/frame_dock_layout.mjs"], ROOT, {}),
         (
             "inventory-tests",
             python
@@ -238,6 +243,7 @@ def main():
                     "tests.test_frame_help.FrameHelpTests",
                     "tests.test_frame_navigation.FrameNavigationTests",
                     "tests.test_frame_dock_input.FrameDockInputTests",
+                    "tests.test_frame_dock_layout.FrameDockLayoutTests",
                 ],
                 handler,
                 {"QT_SCALE_FACTOR": scale},
@@ -261,7 +267,16 @@ def main():
             ("help-input","frame_help"), ("help-launchers","shared_help"),
             ("navigation-input","frame_navigation"), ("dock-input","frame_dock_interaction"),
             ("window-input","frame_window_lifecycle"), ("window-kinds","window_types")]],
-        ("dock-rollback", python + ["-m", "unittest", "-q", "tests.test_dock_resizing"], handler, {}),
+        ("dock-rollback", python + ["-m", "unittest", "-q", "tests.test_dock_resizing", "tests.test_dock_layout_tree"], handler, {}),
+        ("dock-retention", python + ["-m", "unittest", "-q"] + [
+            "tests.test_retained_ui.RetainedUiTests." + name for name in [
+                "test_unsnapped_dock_title_drag_keeps_the_dock_in_its_layout",
+                "test_dock_layout_switch_keeps_delegate_and_loaded_content",
+                "test_stacked_search_dock_keeps_move_grip_at_fixed_position",
+                "test_dock_content_reflows_live_during_resize",
+                "test_shared_dock_resize_grip_starts_on_first_press",
+            ]
+        ], handler, {}),
         ("package", python + ["tools/check_frame_package.py"], ROOT, {}),
         (
             "inventory",

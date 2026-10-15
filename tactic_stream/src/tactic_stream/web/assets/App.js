@@ -1,6 +1,6 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/DuplicateSObject.css","assets/NamingEditor.js","assets/resize.js","assets/ItemPreview.js","assets/ItemPreview.css","assets/AppTextArea.js","assets/AppTextArea.css","assets/UserComboBox.js","assets/AppSearchField.js","assets/UserComboBox.css","assets/AppSplitter.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/resize.css","assets/admin.document.js","assets/admin.form.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/FileWorkspaceInspection.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/Configuration.css","assets/SearchTypes.js","assets/previewImage.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/tree.ui.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { $ as toRaw, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, J as markRaw, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, Q as shallowRef, R as resolveDynamicComponent, T as mergeModels, V as useModel, W as watchPostEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createCommentVNode, a as vModelCheckbox, b as createTextVNode, c as vShow, d as Fragment, et as unref, f as KeepAlive, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, n as TransitionGroup, nt as normalizeStyle, p as Teleport, q as isRef, rt as toDisplayString, s as vModelText, t as Transition, tt as normalizeClass, u as withModifiers, v as createElementBlock, w as inject, x as createVNode, y as createSlots } from "./vue.js";
-import { A as readableText, B as savePreferencePage, C as randomId, E as appearance, F as metrics$1, H as taskColumns, K as BusyIndicator_default, L as configurationPreview, M as controls, P as layout, S as setServerDebugContext, T as t, V as normalizeColumns, a as tooltipDirective, b as savedSessions, c as _sfc_main$99, d as debugSettings, f as exportSession, g as levels, h as importSession, i as _sfc_main$98, j as saveAppearance, l as clearLive, m as formatEvent, n as mobile, p as forgetSessions, q as _plugin_vue_export_helper_default, r as mobileLayout, t as __vitePreload, u as debugLog, w as asyncComponent, x as sessionRecords, z as preferences } from "./index.js";
+import { C as sessionRecords, D as t, E as asyncComponent, H as savePreferencePage, I as layout, J as BusyIndicator_default, L as metrics$1, M as readableText, N as saveAppearance, O as appearance, P as controls, S as savedSessions, T as randomId, U as normalizeColumns, V as preferences, W as taskColumns, Y as _plugin_vue_export_helper_default, _ as importSession, a as mobileLayout, d as clearLive, f as debugLog, g as formatEvent, h as forgetSessions, i as mobile, m as exportSession, n as dockMinimumHeight, o as _sfc_main$98, p as debugSettings, r as dockMinimumWidth, s as tooltipDirective, t as __vitePreload, u as _sfc_main$99, v as levels, w as setServerDebugContext, z as configurationPreview } from "./index.js";
 import { c as button, d as node, f as rect$1, l as label, n as _sfc_main$100, r as _sfc_main$101, s as translate, t as observeFrameSizes } from "./resize.js";
 import { $ as updatesAvailable, A as resetRequestActivity, C as objectRelations, D as projectNavigation, E as projectCreationCatalog, F as scriptShelf, G as transactionDetails, H as sessionAction, I as searchConfiguration, J as userProfile, K as uploadFormFile, M as rpc, Q as updateDelay, S as objectDeletion, T as projectCatalog, V as serverUpdates, W as tableCells, X as workspaceLayouts, Y as widgetConfiguration, Z as setUpdatesAvailable, a as _sfc_main$102, at as editNotificationReply, b as messagesRequest, c as xmlTokens, ct as notify, d as activityFeed, dt as submitNotificationReply, et as activeNotifications, f as beginActivity, g as interfaceDefinition, i as readClipboardImages, it as dismissNotification, j as resultItems, k as requestActivity, l as _sfc_main$103, lt as resetNotifications, m as endActivity, n as copyText, nt as cancelNotificationReply, o as javascriptTokens, ot as failNotificationReply, q as userAvatar, rt as clearNotificationHistory, s as pythonTokens, st as notificationHistory, t as copyImage, tt as beginNotificationReply, ut as setNotificationProgress, v as linkPreviews, w as objectStatus, x as navigationLink, y as messageFileRequest } from "./clipboard.js";
 import { t as _sfc_main$104 } from "./AppSwitch.js";
@@ -21000,6 +21000,179 @@ var _sfc_main$42 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	}
 });
 //#endregion
+//#region ../src/tactic_stream/shared_ui/shell/dock.layout.mjs
+function minimum(kind) {
+	return [dockMinimumWidth(kind), dockMinimumHeight(kind)];
+}
+function panelIds(node) {
+	if (!node) return [];
+	return node.type === "stack" ? node.panels : panelIds(node.first).concat(panelIds(node.second));
+}
+function minimumSize(node, available, sizes) {
+	if (!node) return [0, 0];
+	if (node.type === "stack") {
+		const result = [0, 0];
+		for (const id of node.panels) {
+			if (available.indexOf(id) < 0) continue;
+			const size = sizes[id] || [0, 0];
+			result[0] = Math.max(result[0], size[0]);
+			result[1] = Math.max(result[1], size[1]);
+		}
+		return result;
+	}
+	const first = minimumSize(node.first, available, sizes);
+	const second = minimumSize(node.second, available, sizes);
+	return node.orientation === "horizontal" ? [first[0] + second[0], Math.max(first[1], second[1])] : [Math.max(first[0], second[0]), first[1] + second[1]];
+}
+function present(node, available) {
+	return panelIds(node).some((id) => available.indexOf(id) >= 0);
+}
+function ratioLimits(node, rect, available, sizes) {
+	const axis = node.orientation === "horizontal" ? 0 : 1;
+	const extent = rect[axis + 2];
+	if (extent <= 0) return [node.ratio, node.ratio];
+	const first = minimumSize(node.first, available, sizes)[axis];
+	const second = minimumSize(node.second, available, sizes)[axis];
+	const lower = first / extent, upper = 1 - second / extent;
+	if (lower <= upper) return [lower, upper];
+	const proportional = first + second > 0 ? first / (first + second) : .5;
+	return [proportional, proportional];
+}
+function childRects(node, rect, ratio) {
+	const x = rect[0], y = rect[1], w = rect[2], h = rect[3];
+	return node.orientation === "horizontal" ? [[
+		x,
+		y,
+		w * ratio,
+		h
+	], [
+		x + w * ratio,
+		y,
+		w * (1 - ratio),
+		h
+	]] : [[
+		x,
+		y,
+		w,
+		h * ratio
+	], [
+		x,
+		y + h * ratio,
+		w,
+		h * (1 - ratio)
+	]];
+}
+function normalizedSizes(kinds, width, height) {
+	const sizes = {};
+	for (const id of Object.keys(kinds)) {
+		const size = minimum(kinds[id]);
+		sizes[id] = [Math.min(1, size[0] / Math.max(1, width)), Math.min(1, size[1] / Math.max(1, height))];
+	}
+	return sizes;
+}
+function project(node, available, sizes) {
+	const stacks = [], dividers = [], rectangles = {};
+	function visit(current, rect, path) {
+		if (!current || !present(current, available)) return current;
+		if (current.type === "stack") {
+			const panels = current.panels.filter((id) => available.indexOf(id) >= 0);
+			stacks.push({
+				panels,
+				active: panels.indexOf(current.active) >= 0 ? current.active : panels[0],
+				rect
+			});
+			for (const id of panels) rectangles[id] = rect;
+			return current;
+		}
+		if (!present(current.first, available)) return Object.assign({}, current, { second: visit(current.second, rect, path + "1") });
+		if (!present(current.second, available)) return Object.assign({}, current, { first: visit(current.first, rect, path + "0") });
+		const limits = ratioLimits(current, rect, available, sizes);
+		const ratio = Math.max(limits[0], Math.min(limits[1], current.ratio));
+		const children = childRects(current, rect, ratio);
+		const axis = current.orientation === "horizontal" ? 0 : 1;
+		dividers.push({
+			path,
+			orientation: current.orientation,
+			ratio,
+			rect,
+			boundary: rect[axis] + rect[axis + 2] * ratio,
+			minimum: limits[0],
+			maximum: limits[1]
+		});
+		return Object.assign({}, current, {
+			ratio,
+			first: visit(current.first, children[0], path + "0"),
+			second: visit(current.second, children[1], path + "1")
+		});
+	}
+	return {
+		tree: visit(node, [
+			0,
+			0,
+			1,
+			1
+		], ""),
+		stacks,
+		dividers,
+		rectangles
+	};
+}
+function resize(node, path, ratio, available, sizes) {
+	function replace(current, depth) {
+		if (depth === path.length) return Object.assign({}, current, { ratio });
+		const key = path[depth] === "0" ? "first" : "second";
+		const result = Object.assign({}, current);
+		result[key] = replace(current[key], depth + 1);
+		return result;
+	}
+	return project(replace(project(node, available, sizes).tree, 0), available, sizes).tree;
+}
+function reorder(node, id, order) {
+	if (!node) return node;
+	if (node.type === "stack") {
+		if (node.panels.indexOf(id) < 0) return node;
+		if (!order.length || order.some((value, index) => node.panels.indexOf(value) < 0 || order.indexOf(value) !== index)) return node;
+		let index = 0;
+		return Object.assign({}, node, { panels: node.panels.map((value) => order.indexOf(value) >= 0 ? order[index++] : value) });
+	}
+	return Object.assign({}, node, {
+		first: reorder(node.first, id, order),
+		second: reorder(node.second, id, order)
+	});
+}
+function normalizeActive(node, available) {
+	if (!node) return node;
+	if (node.type === "stack") {
+		const visible = node.panels.filter((id) => available.indexOf(id) >= 0);
+		return visible.length && visible.indexOf(node.active) < 0 ? Object.assign({}, node, { active: visible[0] }) : node;
+	}
+	return Object.assign({}, node, {
+		first: normalizeActive(node.first, available),
+		second: normalizeActive(node.second, available)
+	});
+}
+function floatingResize(rect, edge, dx, dy, kind, width, height) {
+	const x = rect[0], y = rect[1], w = rect[2], h = rect[3];
+	const size = minimum(kind), minW = Math.min(width, size[0]), minH = Math.min(height, size[1]);
+	const left = edge.indexOf("left") >= 0 ? Math.max(0, Math.min(x + w - minW, x + dx)) : x;
+	const top = edge.indexOf("top") >= 0 ? Math.max(0, Math.min(y + h - minH, y + dy)) : y;
+	const right = edge.indexOf("right") >= 0 ? x + Math.max(minW, Math.min(width - x, w + dx)) : x + w;
+	const bottom = edge.indexOf("bottom") >= 0 ? y + Math.max(minH, Math.min(height - y, h + dy)) : y + h;
+	return [
+		left,
+		top,
+		right - left,
+		bottom - top
+	];
+}
+function tabTarget(centers, source, translation) {
+	const center = centers[source] + translation;
+	let target = source;
+	if (translation > 0) while (target + 1 < centers.length && center > centers[target + 1]) target++;
+	else while (target > 0 && center < centers[target - 1]) target--;
+	return target;
+}
+//#endregion
 //#region src/controls/WorkspaceTabs.vue
 var _hoisted_1$37 = ["data-kind"];
 var _hoisted_2$33 = ["aria-label"];
@@ -21202,6 +21375,7 @@ var _sfc_main$41 = {
 			const center = source.left + source.width / 2 + translation;
 			let target = pressedTab.boxes.findIndex((box) => center >= box.left && center < box.right);
 			if (target < 0) target = center < pressedTab.boxes[0].left ? 0 : pressedTab.boxes.length - 1;
+			if (props.kind === "dock") target = tabTarget(pressedTab.boxes.map((box) => box.left + box.width / 2), pressedTab.index, translation);
 			drag.value = {
 				source: pressedTab.index,
 				target,
@@ -25827,72 +26001,12 @@ function place(node, id, side, target = "") {
 		bottom: .7
 	}[side] || .5);
 }
+var panelKinds = Object.fromEntries(dockPanels.map((panel) => [panel.id, panel.id]));
 function projectTree(node, available, width, height) {
-	const stacks = [], dividers = [];
-	function project(current, rect, path = "") {
-		if (!current || !ids(current).some((id) => available.includes(id))) return;
-		if (current.type === "stack") {
-			const panels = current.panels.filter((id) => available.includes(id));
-			stacks.push({
-				panels,
-				active: panels.includes(current.active) ? current.active : panels[0],
-				rect
-			});
-			return;
-		}
-		if (!ids(current.first).some((id) => available.includes(id))) {
-			project(current.second, rect, path + "1");
-			return;
-		}
-		if (!ids(current.second).some((id) => available.includes(id))) {
-			project(current.first, rect, path + "0");
-			return;
-		}
-		const [x, y, w, h] = rect, horizontal = current.orientation === "horizontal";
-		const extent = horizontal ? w * width : h * height;
-		const minimum = Math.min(.45, (horizontal ? 240 : 160) / Math.max(1, extent));
-		const ratio = Math.max(minimum, Math.min(1 - minimum, current.ratio));
-		dividers.push({
-			path,
-			orientation: current.orientation,
-			ratio,
-			rect,
-			boundary: horizontal ? x + w * ratio : y + h * ratio,
-			minimum
-		});
-		project(current.first, horizontal ? [
-			x,
-			y,
-			w * ratio,
-			h
-		] : [
-			x,
-			y,
-			w,
-			h * ratio
-		], path + "0");
-		project(current.second, horizontal ? [
-			x + w * ratio,
-			y,
-			w * (1 - ratio),
-			h
-		] : [
-			x,
-			y + h * ratio,
-			w,
-			h * (1 - ratio)
-		], path + "1");
-	}
-	project(node, [
-		0,
-		0,
-		1,
-		1
-	]);
-	return {
-		stacks,
-		dividers
-	};
+	return project(node, available, normalizedSizes(panelKinds, width, height));
+}
+function resizeTree(node, available, width, height, path, ratio) {
+	return resize(node, path, ratio, available, normalizedSizes(panelKinds, width, height));
 }
 function defaults() {
 	return {
@@ -26101,6 +26215,9 @@ var _sfc_main$26 = {
 			};
 			return projectTree(state.value.layout, available, width.value, height.value);
 		});
+		function dockedIds() {
+			return visible.value.filter((panel) => !state.value.panels[panel.id].floating).map((panel) => panel.id);
+		}
 		function stackFor(id) {
 			return projection.value.stacks.find((item) => item.panels.includes(id));
 		}
@@ -26121,7 +26238,7 @@ var _sfc_main$26 = {
 			let rect = dragged.value === id ? state.value.panels[id].rect : stackFor(id)?.rect || state.value.panels[id].rect;
 			if (!compact.value && (state.value.panels[id].floating || dragged.value === id) && !maximized.value) {
 				const [x, y, w, h] = rect;
-				const fw = Math.min(width.value, Math.max(280, w * width.value)), fh = Math.min(height.value, Math.max(200, h * height.value));
+				const fw = Math.min(width.value, Math.max(minimum(id)[0], w * width.value)), fh = Math.min(height.value, Math.max(minimum(id)[1], h * height.value));
 				return {
 					left: Math.max(0, Math.min(x * width.value, width.value - fw)) + "px",
 					top: Math.max(0, Math.min(y * height.value, height.value - fh)) + "px",
@@ -26188,6 +26305,7 @@ var _sfc_main$26 = {
 			}
 		}
 		async function changed() {
+			state.value.layout = normalizeActive(state.value.layout, dockedIds());
 			save();
 			await nextTick();
 			emit("changed");
@@ -26210,21 +26328,8 @@ var _sfc_main$26 = {
 		function reorderStack(id, source, target) {
 			const order = [...stackFor(id).panels];
 			order.splice(target, 0, ...order.splice(source, 1));
-			let node = state.value.layout;
-			function reorder(current) {
-				if (!current) return;
-				if (current.type === "stack") {
-					if (current.panels.includes(id) && order.length && new Set(order).size === order.length && order.every((value) => current.panels.includes(value))) {
-						let index = 0;
-						current.panels = current.panels.map((value) => order.includes(value) ? order[index++] : value);
-					}
-				} else {
-					reorder(current.first);
-					reorder(current.second);
-				}
-			}
 			emit("changing");
-			reorder(node);
+			state.value.layout = reorder(state.value.layout, id, order);
 			changed();
 		}
 		function panelKey(event, id) {
@@ -26505,11 +26610,9 @@ var _sfc_main$26 = {
 			if (!gesture || gesture.pointer !== event.pointerId) return;
 			const bounds = host.value.getBoundingClientRect(), dx = event.clientX - gesture.x, dy = event.clientY - gesture.y;
 			if (gesture.kind === "split") {
-				let node = state.value.layout;
-				for (const step of gesture.divider.path) node = step === "0" ? node.first : node.second;
 				const [x, y, w, h] = gesture.divider.rect;
-				const value = node.orientation === "horizontal" ? ((event.clientX - bounds.left) / bounds.width - x) / w : ((event.clientY - bounds.top) / bounds.height - y) / h;
-				node.ratio = Math.max(gesture.divider.minimum, Math.min(1 - gesture.divider.minimum, value));
+				const value = gesture.divider.orientation === "horizontal" ? ((event.clientX - bounds.left) / bounds.width - x) / w : ((event.clientY - bounds.top) / bounds.height - y) / h;
+				state.value.layout = resizeTree(gesture.before.layout, dockedIds(), width.value, height.value, gesture.divider.path, value);
 				return;
 			}
 			const panel = state.value.panels[gesture.id];
@@ -26526,17 +26629,7 @@ var _sfc_main$26 = {
 				return;
 			}
 			if (gesture.kind === "resize") {
-				const [x, y, w, h] = gesture.origin, minimumWidth = Math.min(1, 280 / bounds.width), minimumHeight = Math.min(1, 200 / bounds.height);
-				const left = gesture.edge.includes("left") ? Math.max(0, Math.min(x + w - minimumWidth, x + dx / bounds.width)) : x;
-				const top = gesture.edge.includes("top") ? Math.max(0, Math.min(y + h - minimumHeight, y + dy / bounds.height)) : y;
-				const right = gesture.edge.includes("right") ? Math.min(1, Math.max(x + minimumWidth, x + w + dx / bounds.width)) : x + w;
-				const bottom = gesture.edge.includes("bottom") ? Math.min(1, Math.max(y + minimumHeight, y + h + dy / bounds.height)) : y + h;
-				panel.rect = [
-					left,
-					top,
-					right - left,
-					bottom - top
-				];
+				panel.rect = floatingResize(gesture.origin.map((value, index) => value * (index % 2 ? bounds.height : bounds.width)), gesture.edge, dx, dy, gesture.id, bounds.width, bounds.height).map((value, index) => value / (index % 2 ? bounds.height : bounds.width));
 				return;
 			}
 			if (!dragged.value && Math.hypot(dx, dy) < 6) return;
@@ -26631,9 +26724,8 @@ var _sfc_main$26 = {
 			].includes(event.key)) return;
 			event.preventDefault();
 			emit("changing");
-			let node = state.value.layout;
-			for (const step of item.path) node = step === "0" ? node.first : node.second;
-			node.ratio = event.key === "Home" ? item.minimum : event.key === "End" ? 1 - item.minimum : Math.max(item.minimum, Math.min(1 - item.minimum, item.ratio + (["ArrowLeft", "ArrowUp"].includes(event.key) ? -.02 : .02)));
+			const ratio = event.key === "Home" ? item.minimum : event.key === "End" ? item.maximum : item.ratio + (["ArrowLeft", "ArrowUp"].includes(event.key) ? -.02 : .02);
+			state.value.layout = resizeTree(state.value.layout, dockedIds(), width.value, height.value, item.path, ratio);
 			changed();
 		}
 		function floatSize(event, id) {
@@ -26646,8 +26738,8 @@ var _sfc_main$26 = {
 			event.preventDefault();
 			emit("changing");
 			const rect = state.value.panels[id].rect, horizontal = ["ArrowLeft", "ArrowRight"].includes(event.key);
-			const axis = horizontal ? 2 : 3, minimum = horizontal ? .2 : .16, maximum = 1 - rect[horizontal ? 0 : 1];
-			rect[axis] = Math.max(minimum, Math.min(maximum, rect[axis] + (["ArrowLeft", "ArrowUp"].includes(event.key) ? -.02 : .02)));
+			const axis = horizontal ? 2 : 3, minimum$1 = Math.min(1, minimum(id)[horizontal ? 0 : 1] / (horizontal ? width.value : height.value)), maximum = 1 - rect[horizontal ? 0 : 1];
+			rect[axis] = Math.max(minimum$1, Math.min(maximum, rect[axis] + (["ArrowLeft", "ArrowUp"].includes(event.key) ? -.02 : .02)));
 			changed();
 		}
 		watch(() => props.login, () => {
@@ -26739,7 +26831,7 @@ var _sfc_main$26 = {
 						}]),
 						"data-dock": panel.id,
 						style: normalizeStyle(rectangle(panel.id)),
-						onPointerdown: ($event) => !__props.mobile && raise(panel.id)
+						onPointerdown: ($event) => !__props.mobile && state.value.panels[panel.id].floating && raise(panel.id)
 					}, [
 						__props.mobile && !["results", "notes"].includes(panel.id) ? (openBlock(), createElementBlock("header", _hoisted_2$20, [createVNode(_sfc_main$98, {
 							label: "Back to search",
@@ -26926,7 +27018,7 @@ var _sfc_main$26 = {
 						"aria-orientation": item.orientation === "horizontal" ? "vertical" : "horizontal",
 						"aria-valuenow": Math.round(item.ratio * 100),
 						"aria-valuemin": Math.round(item.minimum * 100),
-						"aria-valuemax": Math.round((1 - item.minimum) * 100),
+						"aria-valuemax": Math.round(item.maximum * 100),
 						onPointerdown: ($event) => start($event, "", "split", item),
 						onKeydown: ($event) => resizeKey($event, item)
 					}, null, 46, _hoisted_8$11);

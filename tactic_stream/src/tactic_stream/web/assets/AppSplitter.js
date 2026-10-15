@@ -1,5 +1,5 @@
 import { N as openBlock, T as mergeModels, V as useModel, X as ref, et as unref, k as onBeforeUnmount, tt as normalizeClass, v as createElementBlock } from "./vue.js";
-import { T as t } from "./index.js";
+import { D as t } from "./index.js";
 //#region src/controls/AppSplitter.vue
 var _hoisted_1 = [
 	"tabindex",

@@ -1,5 +1,5 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, T as t, q as _plugin_vue_export_helper_default } from "./index.js";
+import { D as t, O as appearance, Y as _plugin_vue_export_helper_default } from "./index.js";
 import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
 import { R as securityRules } from "./clipboard.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";

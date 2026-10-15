@@ -50,12 +50,15 @@ def main():
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "tools/frame_controls/*.{vue,js,html,mjs}"
     subprocess.run(command, cwd=ROOT, check=True)
+    command[-1] = "frontend/src/features/workspace/{DockWorkspace.vue,docks.js}"
+    subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/tests/{frame_controls*,frame_icons,icons}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
-    for pattern in ["frontend/src/features/help/**/*.{vue,js}", "tools/frame_help/*.{vue,js,html,mjs}", "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_interaction,navigation*}.mjs"]:
+    for pattern in ["frontend/src/features/help/**/*.{vue,js}", "tools/frame_help/*.{vue,js,html,mjs}", "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs"]:
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
     controls = [
+        "WorkspaceTabs.vue",
         "DocumentPane.vue",
         "NavigationRow.vue",
         "AppButton.vue",
@@ -107,6 +110,7 @@ def main():
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]
+        files += [args.handler_root / "tests/fixtures/DockWorkspaceHarness.qml"]
     for path in files:
         result = subprocess.run(
             [str(FORMATTER), "--newline", "unix", str(path)],

@@ -1995,6 +1995,40 @@ function windowMinimumHeight(kind) {
 	};
 	return Object.prototype.hasOwnProperty.call(heights, kind) ? heights[kind] : 360;
 }
+function dockMinimumWidth(kind) {
+	const widths = {
+		results: 360,
+		snapshot: 320,
+		tasks: 320,
+		task_calendar: 380,
+		description: 320,
+		notes: 400,
+		drop_plate: 480,
+		advanced_search: 380,
+		watch_folders: 680,
+		watch_folder_editor: 520,
+		db_table: 620,
+		commit_queue: 720
+	};
+	return Object.prototype.hasOwnProperty.call(widths, kind) ? widths[kind] : 320;
+}
+function dockMinimumHeight(kind) {
+	const heights = {
+		results: 260,
+		snapshot: 260,
+		tasks: 220,
+		task_calendar: 360,
+		description: 220,
+		notes: 300,
+		drop_plate: 360,
+		advanced_search: 320,
+		watch_folders: 420,
+		watch_folder_editor: 350,
+		db_table: 460,
+		commit_queue: 480
+	};
+	return Object.prototype.hasOwnProperty.call(heights, kind) ? heights[kind] : 220;
+}
 //#endregion
 //#region src/controls/WindowControls.vue
 var _hoisted_1 = ["onPointerdown"];
@@ -2547,6 +2581,6 @@ if (documentation) watchEffect(() => {
 var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,1,9,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { readableText as A, savePreferencePage as B, randomId as C, colorModes as D, appearance as E, metrics as F, themes as G, taskColumns as H, textStyles as I, BusyIndicator_default as K, configurationPreview as L, controls as M, cssRoles as N, effectiveColorMode as O, layout as P, normalizePreferences as R, setServerDebugContext as S, t as T, accentPresets as U, normalizeColumns as V, iconSets as W, logEvent as _, tooltipDirective as a, savedSessions as b, _sfc_main$2 as c, debugSettings as d, exportSession as f, levels as g, importSession as h, _sfc_main$1 as i, saveAppearance as j, languages as k, clearLive as l, formatEvent as m, mobile as n, capturePress as o, forgetSessions as p, _plugin_vue_export_helper_default as q, mobileLayout as r, ripple as s, __vitePreload as t, debugLog as u, logRequest as v, asyncComponent as w, sessionRecords as x, redact as y, preferences as z };
+export { effectiveColorMode as A, normalizePreferences as B, sessionRecords as C, t as D, asyncComponent as E, cssRoles as F, accentPresets as G, savePreferencePage as H, layout as I, BusyIndicator_default as J, iconSets as K, metrics as L, readableText as M, saveAppearance as N, appearance as O, controls as P, textStyles as R, savedSessions as S, randomId as T, normalizeColumns as U, preferences as V, taskColumns as W, _plugin_vue_export_helper_default as Y, importSession as _, mobileLayout as a, logRequest as b, capturePress as c, clearLive as d, debugLog as f, formatEvent as g, forgetSessions as h, mobile as i, languages as j, colorModes as k, ripple as l, exportSession as m, dockMinimumHeight as n, _sfc_main$1 as o, debugSettings as p, themes as q, dockMinimumWidth as r, tooltipDirective as s, __vitePreload as t, _sfc_main$2 as u, levels as v, setServerDebugContext as w, redact as x, logEvent as y, configurationPreview as z };
 
 //# sourceMappingURL=index.js.map

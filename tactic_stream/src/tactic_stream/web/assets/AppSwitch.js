@@ -1,5 +1,5 @@
 import { E as mergeProps, N as openBlock, T as mergeModels, V as useModel, et as unref, h as createBaseVNode, v as createElementBlock } from "./vue.js";
-import { T as t } from "./index.js";
+import { D as t } from "./index.js";
 //#region src/controls/AppSwitch.vue
 var _hoisted_1 = { class: "switch-control" };
 var _hoisted_2 = ["aria-label", "checked"];

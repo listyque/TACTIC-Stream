@@ -1,5 +1,5 @@
 import { F as renderSlot, N as openBlock, _ as createCommentVNode, et as unref, h as createBaseVNode, rt as toDisplayString, v as createElementBlock } from "./vue.js";
-import { T as t } from "./index.js";
+import { D as t } from "./index.js";
 //#region src/controls/SettingRow.vue
 var _hoisted_1 = { class: "settings-row configuration-setting" };
 var _hoisted_2 = { class: "setting-description" };
