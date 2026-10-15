@@ -1,7 +1,6 @@
 <script setup>
 import { computed, reactive } from 'vue'
-import AppButton from '../../controls/AppButton.vue'
-import AppIcon from '../../controls/AppIcon.vue'
+import NavigationRow from '../../controls/NavigationRow.vue'
 import { t } from '../../i18n.js'
 
 const props = defineProps({ entries: { type: Array, default: () => [] }, project: String, query: String, selected: String })
@@ -48,17 +47,8 @@ function move(event) {
 
 <template>
   <nav class="navigation-tree" :aria-label="t('Project views')" @keydown="move">
-    <template v-for="entry in rows" :key="entry.key">
-      <hr v-if="entry.kind === 'separator'" class="navigation-separator" :style="{ '--entry-depth': entry.depth }">
-      <div v-else class="navigation-entry" :style="{ '--entry-depth': entry.depth, '--navigation-accent': entry.accent || 'var(--primary)' }">
-        <AppButton :label="entry.title" :data-entry-key="entry.key" :data-search-type="entry.search_type" :class="{ active: selected === entry.key, 'navigation-folder': entry.kind === 'section' }"
-          :disabled="entry.kind !== 'section' && !entry.supported" :aria-expanded="entry.kind === 'section' ? entry.expanded : undefined"
-          @click="entry.kind === 'section' ? toggle(entry) : emit('select', entry)">
-          <span class="navigation-icon"><AppIcon :name="entry.kind === 'section' ? entry.expanded ? 'MDI_CHEVRON_DOWN' : 'next' : entry.icon || 'link'" /></span>
-          <span class="navigation-text"><strong>{{ entry.title }}</strong></span>
-        </AppButton>
-      </div>
-    </template>
+    <NavigationRow v-for="entry in rows" :key="entry.key" :record="entry" :selected="selected === entry.key" :data-entry-key="entry.key" :data-search-type="entry.search_type" :disabled="entry.kind !== 'section' && entry.kind !== 'separator' && !entry.supported"
+      @activated="entry.kind === 'section' ? toggle(entry) : emit('select',entry)" />
     <p v-if="!rows.length" class="muted sidebar-empty">{{ t(query ? 'No types found' : 'No navigation items') }}</p>
   </nav>
 </template>

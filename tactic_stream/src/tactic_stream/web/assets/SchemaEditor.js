@@ -1,8 +1,7 @@
 import { B as useId, D as nextTick, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, _ as createCommentVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, l as withKeys, nt as normalizeStyle, p as Teleport, rt as toDisplayString, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { E as appearance, T as t, c as _sfc_main$3, i as _sfc_main$2, q as _plugin_vue_export_helper_default } from "./index.js";
+import { d as node, f as rect, l as label, n as _sfc_main$4, s as translate, t as observeFrameSizes } from "./resize.js";
 import { M as rpc } from "./clipboard.js";
-import { J as label, X as node, Z as rect, h as _sfc_main$4, y as translate } from "./App.js";
-import { t as observeFrameSizes } from "./resize.js";
 import "./admin.document.js";
 import SearchTypes_default from "./SearchTypes.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";

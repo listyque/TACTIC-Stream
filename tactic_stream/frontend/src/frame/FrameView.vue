@@ -21,7 +21,8 @@ import {
   colors,
   virtualRange,
   validateScene,
-  recordIndex
+  recordIndex,
+  listRowHeight
 } from '../../../src/tactic_stream/shared_ui/core/frame.mjs';
 import './frame.css';
 import '../controls/panelChrome.css';
@@ -300,6 +301,9 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :translate-label="false"
         :icon="node.icon"
         :icon-only="node.iconOnly"
+        :href="node.href"
+        :target="node.target"
+        :rel="node.href ? 'noopener noreferrer' : undefined"
         :highlighted="node.highlighted"
         :segmented="node.radio"
         :checked="!!node.selected"
@@ -475,7 +479,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
             :class="{ 'frame-box': !node.fields.length }"
             :style="{
               top: item.index * node.rowHeight + 'px',
-              height: node.rowHeight - 4 + 'px',
+              height: listRowHeight(node) + 'px',
               width: node.width - 16 + 'px'
             }"
             :scene="describeRow(node, item.record)"

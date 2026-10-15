@@ -2,9 +2,8 @@ import { D as nextTick, H as watch, N as openBlock, X as ref, Y as reactive, _ a
 import { T as t, c as _sfc_main$1, i as _sfc_main$2, q as _plugin_vue_export_helper_default } from "./index.js";
 import { M as rpc } from "./clipboard.js";
 import { t as _sfc_main$3 } from "./AppSelect.js";
-import { i as linkifyPlainText } from "./richText.js";
-import { n as browserLink } from "./links.js";
-import { I as _sfc_main$4 } from "./App.js";
+import { d as linkifyPlainText, n as browserLink } from "./links.js";
+import { t as _sfc_main$4 } from "./AppTextArea.js";
 //#region src/features/objects/DescriptionEditor.vue
 var _hoisted_1 = ["aria-label"];
 var _hoisted_2 = { key: 0 };

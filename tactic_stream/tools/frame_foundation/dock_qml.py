@@ -102,7 +102,7 @@ def main():
     for current in [row for row in rows if not row['original']]:
         original = next(row for row in rows if row['original'] and all(row[key] == current[key] for key in ('width', 'stacked', 'floating')))
         assert current['controls'] == original['controls'], (current, original)
-    shared, native = source_hashes(ROOT, TH, ['thlib/ui/qml/shell/docks/DockPanel.qml', 'thlib/ui/qml/shell/docks/DockTitleLabel.qml'])
+    shared, native = source_hashes(ROOT, TH, ['thlib/ui/qml/shell/docks/DockPanel.qml', 'thlib/ui/qml/shell/docks/DockTitleLabel.qml', 'thlib/ui/qml/shell/docks/DockTitleDrag.qml', 'thlib/ui/qml/shell/docks/DockHost.qml', 'thlib/ui/qml/shell/docks/DockResizeEdge.qml', 'thlib/ui/workspace_models/docks_resizing.py'])
     (OUT / 'native.json').write_text(json.dumps(dict(captures=rows, sha256=shared, nativeSources=native), indent=2), encoding='utf-8')
     print('Native dock headers: 12 original/Frame pairs; Help/Detach/Close first-click passed')
 

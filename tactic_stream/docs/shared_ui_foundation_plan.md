@@ -2,6 +2,79 @@
 
 Started 2026-10-15. This replaces the previous screen-first migration order.
 
+## Active batch: phase 2, started 2026-10-16
+
+The dependency order remains valid. Phase 1 stays open: a complete source census
+and a verified control sample are different deliverables. Phase 2 consumes and
+verifies the controls its real workflows need; it does not silently mark the
+remaining atlas gaps complete. The previous phase-2 row was too broad for one
+acceptance decision and is now split into these checks:
+
+| Part | Deliverable | Required evidence |
+| --- | --- | --- |
+| 2A. Window hosts and Help pilot | Shared Help composition/state, neutral document reader, matching file/link actions, cached reopen and per-document positions; owner/modality/focus and close lifecycle | Original/current native and Vue captures; actual search, keyboard, links, file export, language, phone reflow and reopen; hidden views do not reload |
+| 2B. Dock interaction | Shared snap/target/gesture rules, stacks/tabs, floating drag/resize, cancellation, footer/corners and saved layout | Real first click/tap, tab activation/reorder, close/maximize/restore, cancel/blur, detached native capability and browser floating capability |
+| 2C. Main workspace closure | Main menus/navigation, search-tab presentation and layout restore use the checked host controls | Project/tab changes preserve drafts, selection and layout; no hidden/signed-out polling; affected original/native/browser workflows |
+
+Keep the existing controllers and product-specific persistence/OS operations.
+The common layer owns layout and presentation transitions. Do not add a second
+window manager, a second document loader, runtime sibling imports or a browser
+inside QML. A generic document reader is a control; Help is the feature composed
+from that reader, search, topic rows and toolbar actions.
+
+Delivered in Handler **0.6.0.99** / Stream **0.112.148**:
+
+- **2A is implemented and checked as the first complete workflow pilot.** One
+  `features/support/help` composition/state module pair drives both adapters.
+  `DocumentPane` is a neutral composite, not a second Help screen. Search,
+  contextual navigation, source/download, per-article positions, retained reopen,
+  owner close, language and phone topics use the checked paths. Early scroll
+  is retained even before a browser animation frame; `open()` waits for restore.
+- The Help comparison records **24 current Qt/browser pairs**, **48 original/current
+  native captures** and **2,460** actual geometry, typography and article-text
+  comparisons on one corpus. It covers md3/material5/fluent, light/dark, EN/RU,
+  1100/320 px. Source and article fingerprints are enforced. The original's
+  missing glyph and lack of phone reflow are recorded separately. Native
+  QTextDocument and browser Markdown retain different painting/layout internals;
+  the article body is not declared pixel-identical.
+- **2B has a checked interaction foundation, not full dock-tree acceptance.**
+  Shared placement owns edge/header/center decisions, previews, drag threshold
+  and release/cancel outcome. Float keeps its structural slot; Dock restores
+  it. Native cancellation no longer commits previews; floating title movement
+  stays separate from docking. Real mouse/touch cover first activation,
+  close/maximize/restore, stacking, cancellation and saved active tab. The
+  original/current native header comparison and browser cases remain required.
+- **2C has the neutral navigation row migrated.** Its shared control description
+  preserves section/link/separator layout, icons, badges, depth and selection;
+  routing, filtering and availability remain with the existing feature owners.
+  Eight original/current/browser cases check 448 inner geometry values.
+  Existing main-toolbar and typed-window scenarios remain release checks.
+
+Reports: `tools/frame_help/output/index.html`,
+`tools/frame_foundation/output/navigation/index.html`, and the existing control
+atlas/gallery and Administration index. Reproduction adds
+`tools/frame_help/capture_qml.py`, `frontend/tests/frame_help_capture.mjs`,
+`tools/frame_help/report.py`, `tools/frame_foundation/navigation_qml.py`, and
+`frontend/tests/frame_navigation_capture.mjs` to the phase-1 commands below.
+The platform gate now includes these actual input workflows at three native
+scales, the 19 window-kind mappings, eight Help launchers and dock rollback.
+
+The built application's static JavaScript dependency graph remains 27 files.
+Summed gzip size changed from 784,046 to 793,704 bytes against the preceding
+checkpoint (+9,658 bytes, 1.23%). Chunk movement alone is not a payload regression;
+do not add asynchronous renderer ownership without a measured need and readiness
+checks for first focus/action. The phase-1 and original checkpoint sections below
+retain their historical counts; they are not the current release totals.
+
+**Next acceptance block remains 2B/2C:** complete projected dock-tree/minimum-size
+parity, all tab reorder/focus paths and corners, then the complete main-menu,
+navigation-container and project/tab/session composition. Keep the native
+`MenuRegistry.replace/extend` runtime contract; a static replacement menu would
+silently remove script capabilities. Do not close phase 2 from a matching toolbar,
+neutral row, self-comparison or source inventory. Phase 1's unverified families
+also remain open. Real Windows compositor/native file-picker interaction still
+requires the Windows backend, separately from offscreen Qt and headless Edge.
+
 ## Phase 1: verified foundation subset; control inventory in progress, 2026-10-15
 
 Handler 0.6.0.98 / Stream 0.112.147. The products retain independent copies:

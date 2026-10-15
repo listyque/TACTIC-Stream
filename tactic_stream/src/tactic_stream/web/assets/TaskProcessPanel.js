@@ -1,8 +1,9 @@
 import { G as withCtx, N as openBlock, P as renderList, X as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
 import { T as t, i as _sfc_main$1 } from "./index.js";
 import { t as _sfc_main$2 } from "./AppMenu.js";
-import { t as _sfc_main$3 } from "./ItemSurface.js";
-import { F as _sfc_main$5, P as _sfc_main$4 } from "./App.js";
+import { t as _sfc_main$3 } from "./UserComboBox.js";
+import { t as _sfc_main$4 } from "./ItemSurface.js";
+import { A as _sfc_main$5 } from "./App.js";
 //#region src/features/tasks/TaskProcessPanel.vue
 var _hoisted_1 = ["aria-label"];
 var _hoisted_2 = { class: "task-process-title" };
@@ -49,7 +50,7 @@ var _sfc_main = {
 				"aria-label": unref(t)("Task processes"),
 				style: normalizeStyle({ "--process-columns": columns.value })
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.target ? __props.records : [], (record) => {
-				return openBlock(), createBlock(_sfc_main$3, {
+				return openBlock(), createBlock(_sfc_main$4, {
 					key: record.value,
 					accent: record.color,
 					inset: 0,
@@ -65,7 +66,7 @@ var _sfc_main = {
 							class: "task-process-dot",
 							style: normalizeStyle({ backgroundColor: record.color })
 						}, null, 4), createBaseVNode("strong", null, [createTextVNode(toDisplayString(record.label), 1), record.choices.length > 1 ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | " + toDisplayString(record.choices.length), 1)], 64)) : createCommentVNode("", true)])]),
-						createVNode(_sfc_main$4, {
+						createVNode(_sfc_main$5, {
 							value: record.values.status || "",
 							options: record.statuses,
 							disabled: __props.blocked || !editable(record, "status"),
@@ -76,7 +77,7 @@ var _sfc_main = {
 							"disabled",
 							"onChange"
 						]),
-						createVNode(_sfc_main$5, {
+						createVNode(_sfc_main$3, {
 							value: record.values.assigned || "",
 							options: record.users,
 							disabled: __props.blocked || !editable(record, "assigned"),

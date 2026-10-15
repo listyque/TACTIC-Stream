@@ -79,7 +79,7 @@ try {
     },
   }], server: { host: '127.0.0.1', port: 0, watch: null } })
   await server.listen()
-  browser = await chromium.launch({ headless: true })
+  browser = await chromium.launch({ headless: true, channel:process.env.STREAM_BROWSER_CHANNEL || 'msedge' })
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } }), errors = [], requests = []
   page.setDefaultTimeout(8000)
   page.on('pageerror', error => errors.push(error.message))
@@ -108,9 +108,9 @@ try {
     const button = page.getByRole('button', { name: label, exact: true }).first()
     await button.click()
     const help = page.locator('dialog.help-view')
-    await help.locator('[data-topic="' + topic + '"][aria-current="page"]').waitFor({ state: 'attached' })
+    await help.locator('[data-frame="helpTopic_' + topic + '"][aria-pressed="true"]').waitFor({ state: 'attached' })
     assert.equal(await help.count(), 1, key)
-    assert.equal(await help.locator('[data-topic]').count(), catalog.length, key)
+    assert.equal(await help.locator('[data-frame="helpTopicList"] > div').evaluate(node=>parseFloat(node.style.height)/61), catalog.length, key)
     await help.locator('article .markdown-text').first().waitFor()
     await page.evaluate(() => document.querySelector('dialog.help-view').dataset.fixture = 'same-window')
     await help.getByRole('button', { name: 'Close help', exact: true }).click()
@@ -121,7 +121,7 @@ try {
     await help.getByRole('button', { name: 'Close help', exact: true }).click()
     if (key === 'script') {
       await page.getByRole('button', { name: 'Code editor help', exact: true }).click()
-      await help.locator('[data-topic="script_editor"][aria-current="page"]').waitFor({ state: 'attached' })
+      await help.locator('[data-frame="helpTopic_script_editor"][aria-pressed="true"]').waitFor({ state: 'attached' })
       await help.getByRole('button', { name: 'Close help', exact: true }).click()
     }
   }
@@ -131,16 +131,16 @@ try {
   await page.evaluate(async () => { await window.host.$refs.screen.open(); window.host.$refs.screen.draft.title = 'Unsaved project' })
   await page.getByRole('button', { name: 'Project creation help', exact: true }).click()
   const help = page.locator('dialog.help-view')
-  await help.locator('[data-topic="project_creation"][aria-current="page"]').waitFor({ state: 'attached' })
+  await help.locator('[data-frame="helpTopic_project_creation"][aria-pressed="true"]').waitFor({ state: 'attached' })
   await page.setViewportSize({ width: 320, height: 700 })
   await help.getByRole('button', { name: 'Help topics', exact: true }).click()
   await help.getByRole('textbox', { name: 'Search help', exact: true }).fill('Mobile guide')
-  await help.locator('[data-topic="mobile"]').click()
+  await help.locator('[data-frame="helpTopic_mobile"]').click()
   await help.getByRole('link', { name: 'Search help', exact: true }).click()
-  await help.locator('[data-topic="search"][aria-current="page"]').waitFor({ state: 'attached' })
+  await help.locator('[data-frame="helpTopic_search"][aria-pressed="true"]').waitFor({ state: 'attached' })
   await page.evaluate(() => window.host.$refs.help.open('mobile'))
   await page.evaluate(() => window.appearance.language = 'ru')
-  await page.waitForFunction(() => document.querySelector('.help-content h1')?.textContent === 'Мобильная справка')
+  await page.waitForFunction(() => document.querySelector('[data-frame="helpArticleTitle"]')?.textContent === 'Мобильная справка')
   const bounds = await help.boundingBox(); assert(bounds.x >= 0 && bounds.x + bounds.width <= 321)
   const output = root + '/../.screenshots/shared-help-current'
   await mkdir(output, { recursive: true }); await page.screenshot({ path: output + '/ts-shared-help-mobile.png' })

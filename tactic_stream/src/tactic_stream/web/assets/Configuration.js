@@ -9,9 +9,8 @@ import { t as _sfc_main$14 } from "./AppTextField.js";
 import { n as _sfc_main$15 } from "./AppDateField.js";
 import { t as _sfc_main$16 } from "./AppMenu.js";
 import { t as _sfc_main$17 } from "./AppCheckbox.js";
-import { f as timestampFullLabel } from "./activity.js";
 import { t as AppSearchField_default } from "./AppSearchField.js";
-import { M as resultViews, N as _sfc_main$18, a as updateModes, d as ProjectChooser_default, f as ProjectCreation_default, i as updateIntervals, n as networkSettings, r as updateBatchDelays } from "./App.js";
+import { H as timestampFullLabel, O as resultViews, a as updateIntervals, f as ProjectChooser_default, i as updateBatchDelays, k as _sfc_main$18, o as updateModes, p as ProjectCreation_default, r as networkSettings } from "./App.js";
 //#region src/features/configuration/ServerConfiguration.vue
 var _sfc_main$7 = {
 	components: {

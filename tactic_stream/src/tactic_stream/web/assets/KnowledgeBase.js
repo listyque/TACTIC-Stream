@@ -1,4 +1,3 @@
-import { t as MarkdownItCallable } from "./markdown-it.js";
 import { D as nextTick, F as renderSlot, G as withCtx, H as watch, K as withDirectives, N as openBlock, P as renderList, X as ref, Y as reactive, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeStyle, q as isRef, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { C as randomId, E as appearance, T as t, c as _sfc_main$3, i as _sfc_main$2 } from "./index.js";
 import { _ as knowledgeRequest, c as xmlTokens, n as copyText, o as javascriptTokens, s as pythonTokens, v as linkPreviews, y as messageFileRequest } from "./clipboard.js";
@@ -7,12 +6,11 @@ import { t as _sfc_main$5 } from "./AppSlider.js";
 import { t as _sfc_main$6 } from "./AppTextField.js";
 import { t as _sfc_main$7 } from "./AppMenu.js";
 import { t as _sfc_main$8 } from "./AppCheckbox.js";
-import { n as escapeHtml, r as extractSkeys } from "./richText.js";
-import { n as browserLink } from "./links.js";
+import { l as escapeHtml, n as browserLink, u as extractSkeys } from "./links.js";
+import { t as _sfc_main$9 } from "./AppTextArea.js";
 import { t as AppSearchField_default } from "./AppSearchField.js";
-import { t as _sfc_main$9 } from "./AttachmentCard.js";
 import { t as _sfc_main$10 } from "./AppMenuItem.js";
-import { I as _sfc_main$12, m as _sfc_main$11, o as _sfc_main$13, s as messageDate } from "./App.js";
+import { c as messageDate, h as _sfc_main$11, j as _sfc_main$13, n as MarkdownItCallable, s as _sfc_main$12 } from "./App.js";
 //#region src/features/knowledge/markdown.js
 var safeUrl = (value) => /^(https?:\/\/|ftp:\/\/|mailto:|skey:\/\/|tactic-search:\/\/|\/assets\/|#)/i.test(value || "") && !/[\u0000-\u001f]/.test(value);
 var parser = new MarkdownItCallable({
@@ -906,7 +904,7 @@ var _sfc_main$1 = {
 							label: value
 						})),
 						label: "Language"
-					}, null, 8, ["modelValue", "options"])])) : createCommentVNode("", true), createVNode(_sfc_main$12, {
+					}, null, 8, ["modelValue", "options"])])) : createCommentVNode("", true), createVNode(_sfc_main$9, {
 						modelValue: content.value,
 						"onUpdate:modelValue": _cache[26] || (_cache[26] = ($event) => content.value = $event),
 						label: "Content"
@@ -2032,7 +2030,7 @@ var _sfc_main = {
 							placeholder: "A short, recognizable title",
 							disabled: saving.value
 						}, null, 8, ["modelValue", "disabled"])]),
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Summary")), 1), createVNode(_sfc_main$12, {
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Summary")), 1), createVNode(_sfc_main$9, {
 							modelValue: document.value.description,
 							"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => document.value.description = $event),
 							label: "Summary",
@@ -2073,7 +2071,7 @@ var _sfc_main = {
 								label: "Previous linked object",
 								onClick: _cache[17] || (_cache[17] = ($event) => linkedIndex.value = (linkedIndex.value + linked.value.length - 1) % linked.value.length)
 							})) : createCommentVNode("", true),
-							createVNode(_sfc_main$13, {
+							createVNode(_sfc_main$12, {
 								preview: linkedObject.value,
 								compact: "",
 								onOpen: openLink
@@ -2181,7 +2179,7 @@ var _sfc_main = {
 										key: file.token,
 										class: "knowledge-library-file"
 									}, [
-										createVNode(_sfc_main$9, {
+										createVNode(_sfc_main$13, {
 											compact: "",
 											"activation-icon": file.isImage ? "image" : "link",
 											"activation-label": file.isImage ? "Insert image" : "Insert link",
@@ -2348,7 +2346,7 @@ var _sfc_main = {
 								label: "Previous linked object",
 								onClick: _cache[32] || (_cache[32] = ($event) => linkedIndex.value = (linkedIndex.value + linked.value.length - 1) % linked.value.length)
 							})) : createCommentVNode("", true),
-							createVNode(_sfc_main$13, {
+							createVNode(_sfc_main$12, {
 								preview: linkedObject.value,
 								compact: "",
 								onOpen: openLink
@@ -2387,7 +2385,7 @@ var _sfc_main = {
 						resourcesVisible.value && !historyPreview.value ? (openBlock(), createElementBlock("section", _hoisted_37, [
 							createBaseVNode("h4", null, toDisplayString(unref(t)("Linked objects and files")), 1),
 							(openBlock(true), createElementBlock(Fragment, null, renderList(resourceKeys.value, (key) => {
-								return openBlock(), createBlock(_sfc_main$13, {
+								return openBlock(), createBlock(_sfc_main$12, {
 									key,
 									preview: references.value[key] || {
 										searchKey: key,
@@ -2399,7 +2397,7 @@ var _sfc_main = {
 								}, null, 8, ["preview"]);
 							}), 128)),
 							(openBlock(true), createElementBlock(Fragment, null, renderList(files.value, (file) => {
-								return openBlock(), createBlock(_sfc_main$9, {
+								return openBlock(), createBlock(_sfc_main$13, {
 									key: file.token,
 									title: file.title,
 									extension: file.extension,

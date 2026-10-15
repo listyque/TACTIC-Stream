@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/App.js","assets/markdown-it.js","assets/icons.js","assets/RecordForm.js","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppTextField.js","assets/AppTextField.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/RecordForm.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/richText.js","assets/links.js","assets/activity.js","assets/files.js","assets/AppSearchField.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/MiddleElide.js","assets/MiddleElide.css","assets/ItemSurface.js","assets/ItemSurface.css","assets/previewImage.js","assets/App.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/App.js","assets/resize.js","assets/icons.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/AppTextArea.js","assets/AppTextArea.css","assets/UserComboBox.js","assets/AppSearchField.js","assets/UserComboBox.css","assets/AppSplitter.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/resize.css","assets/RecordForm.js","assets/RecordForm.css","assets/links.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/previewImage.js","assets/App.css"])))=>i.map(i=>d[i]);
 import { C as h, F as renderSlot, G as withCtx, H as watch, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, S as defineAsyncComponent, U as watchEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, i as render, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeStyle, p as Teleport, r as createApp, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock } from "./vue.js";
 import { n as en_default, t as ru_default } from "./locales.js";
 import { n as resolveIcon } from "./icons.js";
@@ -542,6 +542,15 @@ var textStyles = Object.freeze({
 	hero: 24
 });
 var controls = {
+	document: {
+		bodySize: 12,
+		lineHeight: 17,
+		headingSize: 18,
+		headingLineHeight: 22.5,
+		paragraphGap: 8,
+		headingGap: 14,
+		cellPadding: 4
+	},
 	field: {
 		padding: 12,
 		areaPadding: 10
@@ -2092,7 +2101,7 @@ var _sfc_main = {
 			if (minimized.value) minimize();
 		}
 		function start(event) {
-			if (compact() || maximized.value || event.button !== 0 || event.target.closest("button, a, input, select, textarea, summary, label, [role=\"button\"]")) return;
+			if (gesture || event.isPrimary === false || compact() || maximized.value || event.button !== 0 || event.target.closest("button, a, input, select, textarea, summary, label, [role=\"button\"], [role=\"tab\"]")) return;
 			event.preventDefault();
 			props.header.setPointerCapture(event.pointerId);
 			gesture = {
@@ -2116,7 +2125,7 @@ var _sfc_main = {
 			}, minimum()) : moved(gesture.before, delta));
 		}
 		function startResize(event, edge) {
-			if (compact() || maximized.value || event.button !== 0) return;
+			if (gesture || event.isPrimary === false || compact() || maximized.value || event.button !== 0) return;
 			event.preventDefault();
 			props.header.setPointerCapture(event.pointerId);
 			gesture = {
@@ -2131,7 +2140,7 @@ var _sfc_main = {
 			if (!gesture || event.pointerId !== gesture.pointer) return;
 			const current = gesture;
 			gesture = null;
-			if (event.type === "pointercancel") place(current.before);
+			if (["pointercancel", "lostpointercapture"].includes(event.type)) place(current.before);
 			if (props.header.hasPointerCapture(current.pointer)) props.header.releasePointerCapture(current.pointer);
 		}
 		function doubleClick(event) {
@@ -2200,7 +2209,7 @@ var _sfc_main = {
 				lostpointercapture: stop,
 				dblclick: doubleClick
 			})) props.header.addEventListener(name, fn);
-			props.element.addEventListener("keydown", key);
+			props.element.addEventListener("keydown", key, true);
 			window.addEventListener("resize", resize);
 			props.element.addEventListener("windowshow", shown);
 			window.addEventListener("blur", cancelGesture);
@@ -2232,7 +2241,7 @@ var _sfc_main = {
 				"width",
 				"height"
 			]) props.element.style.removeProperty("--window-" + key);
-			props.element.removeEventListener("keydown", key);
+			props.element.removeEventListener("keydown", key, true);
 			window.removeEventListener("resize", resize);
 			props.element.removeEventListener("windowshow", shown);
 			window.removeEventListener("blur", cancelGesture);
@@ -2535,7 +2544,7 @@ var documentation = location.pathname === "/docs" || location.pathname === "/doc
 if (documentation) watchEffect(() => {
 	document.title = t("TACTIC Stream — API reference");
 });
-var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,9,1,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39])));
+var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,1,9,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
 export { readableText as A, savePreferencePage as B, randomId as C, colorModes as D, appearance as E, metrics as F, themes as G, taskColumns as H, textStyles as I, BusyIndicator_default as K, configurationPreview as L, controls as M, cssRoles as N, effectiveColorMode as O, layout as P, normalizePreferences as R, setServerDebugContext as S, t as T, accentPresets as U, normalizeColumns as V, iconSets as W, logEvent as _, tooltipDirective as a, savedSessions as b, _sfc_main$2 as c, debugSettings as d, exportSession as f, levels as g, importSession as h, _sfc_main$1 as i, saveAppearance as j, languages as k, clearLive as l, formatEvent as m, mobile as n, capturePress as o, forgetSessions as p, _plugin_vue_export_helper_default as q, mobileLayout as r, ripple as s, __vitePreload as t, debugLog as u, logRequest as v, asyncComponent as w, sessionRecords as x, redact as y, preferences as z };

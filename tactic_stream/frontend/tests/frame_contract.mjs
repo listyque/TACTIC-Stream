@@ -114,6 +114,12 @@ assert.equal(recordIndex(pipelines, 'key').size, pipelines.length);
 assert(
   pipelines.some((row) => row.identity === '' && row.key === 'draft:demo/asset')
 );
+
+
+for(const rowGap of [-1,NaN,Infinity,12]) {
+  assert.throws(()=>validateScene({nodes:[node('List','invalidGap',rect(0,0,100,100),{keyField:'id',source:'rows',rowHeight:12,rowGap})]},{rows:[]}),/positive rowHeight/);
+}
+
 console.log(
   'Frame contract: typography, bounds, action shapes, required bindings and stable record keys passed.'
 );

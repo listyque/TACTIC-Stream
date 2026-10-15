@@ -5,8 +5,7 @@ import { t as RecordForm_default } from "./RecordForm.js";
 import { t as _sfc_main$3 } from "./AppSlider.js";
 import { t as _sfc_main$4 } from "./AppMenu.js";
 import { t as ItemPreview_default } from "./ItemPreview.js";
-import { t as _sfc_main$5 } from "./MiddleElide.js";
-import { L as ObjectAction_default, U as FilePreview_default, m as _sfc_main$6 } from "./App.js";
+import { D as _sfc_main$6, M as ObjectAction_default, R as FilePreview_default, h as _sfc_main$5 } from "./App.js";
 //#region src/features/objects/SnapshotBrowser.vue
 var _hoisted_1 = ["aria-label", "aria-busy"];
 var _hoisted_2 = { class: "snapshot-toolbar" };
@@ -530,7 +529,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 							]),
 							_: 1
 						}),
-						showingPreview.value && !unref(mobile) ? (openBlock(), createBlock(_sfc_main$6, {
+						showingPreview.value && !unref(mobile) ? (openBlock(), createBlock(_sfc_main$5, {
 							key: 0,
 							modelValue: imageMode.value,
 							"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => imageMode.value = $event),
@@ -634,7 +633,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 								disabled: index.value === previews.value.length - 1,
 								onClick: _cache[8] || (_cache[8] = withModifiers(($event) => navigate(index.value + 1), ["stop"]))
 							}, null, 8, ["disabled"])) : createCommentVNode("", true),
-							current.value ? (openBlock(), createBlock(_sfc_main$5, {
+							current.value ? (openBlock(), createBlock(_sfc_main$6, {
 								key: 5,
 								class: "snapshot-preview-title",
 								text: current.value.title
@@ -700,9 +699,9 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 												name: fileIcon(row),
 												style: normalizeStyle({ color: row.rowType === "file" && !row.exists ? "var(--muted)" : row.rowType === "type" ? "var(--yellow)" : "var(--primary)" })
 											}, null, 8, ["name", "style"]),
-											createVNode(_sfc_main$5, { text: row.rowType === "more" ? unref(t)(row.title) : row.title }, null, 8, ["text"]),
+											createVNode(_sfc_main$6, { text: row.rowType === "more" ? unref(t)(row.title) : row.title }, null, 8, ["text"]),
 											moreSize.value ? (openBlock(), createElementBlock("span", _hoisted_14, toDisplayString(row.rowType === "file" ? size(row.size) : ""), 1)) : createCommentVNode("", true),
-											morePath.value ? (openBlock(), createBlock(_sfc_main$5, {
+											morePath.value ? (openBlock(), createBlock(_sfc_main$6, {
 												key: 1,
 												class: "file-path",
 												text: row.path || ""
@@ -737,7 +736,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 								}, null, 8, ["disabled"])) : createCommentVNode("", true)
 							], 8, _hoisted_13),
 							unref(mobile) && phoneFile.value ? (openBlock(), createElementBlock("footer", _hoisted_18, [
-								createVNode(_sfc_main$5, { text: phoneFile.value.filename || phoneFile.value.title }, null, 8, ["text"]),
+								createVNode(_sfc_main$6, { text: phoneFile.value.filename || phoneFile.value.title }, null, 8, ["text"]),
 								createVNode(_sfc_main$1, {
 									label: "Open File",
 									icon: "folder_open",

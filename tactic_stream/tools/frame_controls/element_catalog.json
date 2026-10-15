@@ -673,10 +673,11 @@
         "HierarchyGuide",
         "HierarchyReveal",
         "TreeExpansionMotion",
-        "SidebarTreeRow"
+        "NavigationRow"
       ],
       "vue": [
-        "ItemSurface"
+        "ItemSurface",
+        "NavigationRow"
       ],
       "tokens": [
         "list",
@@ -791,11 +792,13 @@
       "native": [
         "Typography",
         "SelectableText",
+        "DocumentPane",
         "MessageBodyText"
       ],
       "vue": [
         "MiddleElide",
         "MarkdownText",
+        "DocumentPane",
         "CodeBlock"
       ],
       "tokens": [
@@ -1229,6 +1232,9 @@
     "DialogActions": "composite",
     "CodeBlock": "composite",
     "MarkdownText": "composite",
-    "Typography": "infrastructure"
+    "DocumentPane": "composite",
+    "Typography": "infrastructure",
+    "NavigationRow": "composite",
+    "SidebarTreeRow": "composite"
   }
 }

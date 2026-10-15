@@ -25,7 +25,7 @@ for(const [id,[path,ref]] of Object.entries(pairs)) {
  const source=await readFile(root+'/src/features/'+path+'.vue','utf8')
  const tag=source.match(new RegExp('<dialog\\b[^>]*ref="'+ref+'"[^>]*>'))?.[0]
  assert(tag,id)
- assert.equal(tag.includes("type:'window'"),!spec.includes('blocking=True'),id)
+ assert.equal(/type\s*:\s*['"]window['"]/.test(tag),!spec.includes('blocking=True'),id)
 }
 const html=`<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="app"></div><script type="module">
 import {createApp,h,withDirectives,KeepAlive} from 'vue'
@@ -80,7 +80,7 @@ try {
    try{res.setHeader('Content-Type','text/html');res.end(await server.transformIndexHtml(req.url,html))}catch(error){next(error)}
   })},
  }],server:{host:'127.0.0.1',port:0,watch:null}});await server.listen()
- browser=await chromium.launch({headless:true});const page=await browser.newPage({viewport:{width:1280,height:900},hasTouch:true}),errors=[],commands=[],shelfWrites=[]
+ browser=await chromium.launch({headless:true,channel:process.env.STREAM_BROWSER_CHANNEL || 'msedge'});const page=await browser.newPage({viewport:{width:1280,height:900},hasTouch:true}),errors=[],commands=[],shelfWrites=[]
  page.setDefaultTimeout(8000);page.on('pageerror',error=>errors.push(error.message))
  await page.route('**/ui/help/**',async route=>{const name=new URL(route.request().url()).pathname.slice('/ui/help/'.length);await route.fulfill({body:await readFile(root+'/public/help/'+name),contentType:name.endsWith('.json')?'application/json':'text/plain; charset=utf-8'})})
  await page.route('**/admin/**',async route=>{
@@ -122,7 +122,7 @@ try {
  await page.evaluate(()=>{window.host.$refs.second.close();window.host.$refs.utility.close();window.host.$refs.blocking.showModal()})
  const blocking=page.locator('#blocking');assert.equal(await blocking.evaluate(el=>el.matches(':modal')),true)
  await blocking.getByRole('button',{name:'Parent help',exact:true}).click()
- await help.locator('[data-topic="search"][aria-current="page"]').waitFor({state:'attached'})
+ await help.locator('[data-frame="helpTopic_search"][aria-pressed="true"]').waitFor({state:'attached'})
  assert.equal(await help.evaluate(el=>el.matches(':modal')),false)
  assert.equal(await help.evaluate(el=>el.parentElement.id),'blocking')
  await help.getByRole('button',{name:'Close help',exact:true}).click()

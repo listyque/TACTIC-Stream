@@ -63,7 +63,7 @@ function minimize() {
 }
 function shown() { if (minimized.value) minimize() }
 function start(event) {
-  if (compact() || maximized.value || event.button !== 0 || event.target.closest('button, a, input, select, textarea, summary, label, [role="button"]')) return
+  if (gesture || event.isPrimary === false || compact() || maximized.value || event.button !== 0 || event.target.closest('button, a, input, select, textarea, summary, label, [role="button"], [role="tab"]')) return
   event.preventDefault(); props.header.setPointerCapture(event.pointerId)
   gesture = { pointer: event.pointerId, x: event.clientX, y: event.clientY, before: rectangle() }
 }
@@ -77,14 +77,14 @@ function move(event) {
   place(rect)
 }
 function startResize(event, edge) {
-  if (compact() || maximized.value || event.button !== 0) return
+  if (gesture || event.isPrimary === false || compact() || maximized.value || event.button !== 0) return
   event.preventDefault(); props.header.setPointerCapture(event.pointerId)
   gesture = { pointer:event.pointerId,x:event.clientX,y:event.clientY,before:rectangle(),edge }
 }
 function stop(event) {
   if (!gesture || event.pointerId !== gesture.pointer) return
   const current = gesture; gesture = null
-  if (event.type === 'pointercancel') place(current.before)
+  if (['pointercancel','lostpointercapture'].includes(event.type)) place(current.before)
   if (props.header.hasPointerCapture(current.pointer)) props.header.releasePointerCapture(current.pointer)
 }
 function doubleClick(event) { if (!event.target.closest('button, a, input, select, textarea, summary, label')) toggle() }
@@ -111,7 +111,7 @@ function key(event) {
 onMounted(() => {
   props.header.classList.add('app-window-titlebar'); props.header.tabIndex = 0
   for (const [name, fn] of Object.entries({ pointerdown: start, pointermove: move, pointerup: stop, pointercancel: stop, lostpointercapture: stop, dblclick: doubleClick })) props.header.addEventListener(name, fn)
-  props.element.addEventListener('keydown', key); window.addEventListener('resize', resize)
+  props.element.addEventListener('keydown', key, true); window.addEventListener('resize', resize)
   props.element.addEventListener('windowshow', shown)
   window.addEventListener('blur',cancelGesture); window.addEventListener('pagehide',cancelGesture)
   observer.observe(props.element, { attributes: true, attributeFilter: ['open'] }); opened()
@@ -126,7 +126,7 @@ onBeforeUnmount(() => {
   }
   props.element.classList.remove('app-window-positioned', 'app-window-maximized', 'app-window-minimized')
   for (const key of ['x', 'y', 'width', 'height']) props.element.style.removeProperty('--window-' + key)
-  props.element.removeEventListener('keydown', key); window.removeEventListener('resize', resize)
+  props.element.removeEventListener('keydown', key, true); window.removeEventListener('resize', resize)
   props.element.removeEventListener('windowshow', shown)
   window.removeEventListener('blur',cancelGesture); window.removeEventListener('pagehide',cancelGesture)
   observer.disconnect()

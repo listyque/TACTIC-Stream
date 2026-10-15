@@ -100,12 +100,35 @@
       "assets/AppSlider.css"
     ]
   },
+  "_AppSplitter.js": {
+    "file": "assets/AppSplitter.js",
+    "name": "AppSplitter",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ]
+  },
   "_AppSwitch.js": {
     "file": "assets/AppSwitch.js",
     "name": "AppSwitch",
     "imports": [
       "_vue.js",
       "index.html"
+    ]
+  },
+  "_AppTextArea.css": {
+    "file": "assets/AppTextArea.css",
+    "src": "_AppTextArea.css"
+  },
+  "_AppTextArea.js": {
+    "file": "assets/AppTextArea.js",
+    "name": "AppTextArea",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/AppTextArea.css"
     ]
   },
   "_AppTextField.css": {
@@ -121,22 +144,6 @@
     ],
     "css": [
       "assets/AppTextField.css"
-    ]
-  },
-  "_AttachmentCard.css": {
-    "file": "assets/AttachmentCard.css",
-    "src": "_AttachmentCard.css"
-  },
-  "_AttachmentCard.js": {
-    "file": "assets/AttachmentCard.js",
-    "name": "AttachmentCard",
-    "imports": [
-      "_vue.js",
-      "index.html",
-      "_ItemPreview.js"
-    ],
-    "css": [
-      "assets/AttachmentCard.css"
     ]
   },
   "_ItemPreview.css": {
@@ -168,30 +175,15 @@
       "assets/ItemSurface.css"
     ]
   },
-  "_MiddleElide.css": {
-    "file": "assets/MiddleElide.css",
-    "src": "_MiddleElide.css"
-  },
-  "_MiddleElide.js": {
-    "file": "assets/MiddleElide.js",
-    "name": "MiddleElide",
-    "imports": [
-      "_vue.js"
-    ],
-    "css": [
-      "assets/MiddleElide.css"
-    ]
-  },
   "_NamingEditor.js": {
     "file": "assets/NamingEditor.js",
     "name": "NamingEditor",
     "imports": [
-      "_markdown-it.js",
       "_vue.js",
       "index.html",
+      "_resize.js",
       "_clipboard.js",
       "src/App.vue",
-      "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -222,27 +214,36 @@
       "index.html"
     ]
   },
-  "_activity.js": {
-    "file": "assets/activity.js",
-    "name": "activity",
+  "_UserComboBox.css": {
+    "file": "assets/UserComboBox.css",
+    "src": "_UserComboBox.css"
+  },
+  "_UserComboBox.js": {
+    "file": "assets/UserComboBox.js",
+    "name": "UserComboBox",
     "imports": [
+      "_vue.js",
       "index.html",
-      "_richText.js",
-      "_links.js"
+      "_AppMenu.js",
+      "_ItemPreview.js",
+      "_AppSearchField.js"
+    ],
+    "css": [
+      "assets/UserComboBox.css"
     ]
   },
   "_admin.document.js": {
     "file": "assets/admin.document.js",
     "name": "admin.document",
     "imports": [
-      "src/App.vue"
+      "_resize.js"
     ]
   },
   "_admin.form.js": {
     "file": "assets/admin.form.js",
     "name": "admin.form",
     "imports": [
-      "src/App.vue",
+      "_resize.js",
       "_admin.document.js"
     ]
   },
@@ -278,7 +279,6 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "src/App.vue",
       "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
@@ -288,7 +288,7 @@
     "file": "assets/groups.ui.js",
     "name": "groups.ui",
     "imports": [
-      "src/App.vue"
+      "_resize.js"
     ]
   },
   "_icons.js": {
@@ -303,21 +303,44 @@
     "file": "assets/locales.js",
     "name": "locales"
   },
-  "_markdown-it.js": {
-    "file": "assets/markdown-it.js",
-    "name": "markdown-it"
-  },
   "_previewImage.js": {
     "file": "assets/previewImage.js",
     "name": "previewImage"
   },
+  "_resize.css": {
+    "file": "assets/resize.css",
+    "src": "_resize.css"
+  },
   "_resize.js": {
     "file": "assets/resize.js",
-    "name": "resize"
+    "name": "resize",
+    "imports": [
+      "_vue.js",
+      "_icons.js",
+      "index.html",
+      "_clipboard.js",
+      "_AppSwitch.js",
+      "_AppSelect.js",
+      "_AppTextField.js",
+      "_AppDateField.js",
+      "_AppMenu.js",
+      "_AppCheckbox.js",
+      "_ItemPreview.js",
+      "_AppTextArea.js",
+      "_UserComboBox.js",
+      "_AppSplitter.js",
+      "_ItemSurface.js"
+    ],
+    "css": [
+      "assets/resize.css"
+    ]
   },
-  "_richText.js": {
-    "file": "assets/richText.js",
-    "name": "richText"
+  "_tree.ui.js": {
+    "file": "assets/tree.ui.js",
+    "name": "tree.ui",
+    "imports": [
+      "_resize.js"
+    ]
   },
   "_vue.js": {
     "file": "assets/vue.js",
@@ -353,10 +376,9 @@
     "src": "src/App.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_markdown-it.js",
       "_vue.js",
-      "_icons.js",
       "index.html",
+      "_resize.js",
       "_clipboard.js",
       "_AppSwitch.js",
       "_AppSelect.js",
@@ -368,15 +390,15 @@
       "_AppMenu.js",
       "_AppCheckbox.js",
       "_ItemPreview.js",
-      "_richText.js",
       "_links.js",
-      "_activity.js",
       "_files.js",
+      "_AppTextArea.js",
       "_AppSearchField.js",
-      "_AttachmentCard.js",
+      "_UserComboBox.js",
       "_AppMenuItem.js",
-      "_MiddleElide.js",
+      "_AppSplitter.js",
       "_ItemSurface.js",
+      "_tree.ui.js",
       "_previewImage.js"
     ],
     "dynamicImports": [
@@ -390,7 +412,6 @@
       "src/features/tasks/TaskGanttView.vue",
       "src/features/tasks/TaskCalendarView.vue",
       "src/features/tasks/TaskProcessPanel.vue",
-      "src/controls/MarkdownText.vue",
       "src/features/fileWorkspace/FileWorkspaceInspection.vue",
       "src/features/objects/DescriptionEditor.vue",
       "src/features/objects/SnapshotBrowser.vue",
@@ -434,21 +455,6 @@
     "file": "assets/materialdesignicons-webfont-B7mPwVP_.ttf",
     "src": "src/assets/fonts/materialdesignicons-webfont.ttf"
   },
-  "src/controls/MarkdownText.vue": {
-    "file": "assets/MarkdownText.js",
-    "name": "MarkdownText",
-    "src": "src/controls/MarkdownText.vue",
-    "isDynamicEntry": true,
-    "imports": [
-      "_markdown-it.js",
-      "_vue.js",
-      "_clipboard.js",
-      "_richText.js"
-    ],
-    "css": [
-      "assets/MarkdownText.css"
-    ]
-  },
   "src/features/administration/ColumnsEditor.vue": {
     "file": "assets/ColumnsEditor.js",
     "name": "ColumnsEditor",
@@ -457,9 +463,9 @@
     "imports": [
       "_vue.js",
       "index.html",
+      "_resize.js",
       "_clipboard.js",
       "src/App.vue",
-      "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -472,9 +478,9 @@
     "imports": [
       "_vue.js",
       "index.html",
+      "_resize.js",
       "_clipboard.js",
       "src/App.vue",
-      "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -487,9 +493,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "src/App.vue",
       "_resize.js",
+      "_clipboard.js",
       "_admin.document.js"
     ]
   },
@@ -501,9 +506,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "src/App.vue",
       "_resize.js",
+      "_clipboard.js",
       "_admin.document.js",
       "src/features/administration/SearchTypes.vue",
       "_graphFrame.js"
@@ -520,10 +524,9 @@
     "imports": [
       "_vue.js",
       "index.html",
+      "_resize.js",
       "_clipboard.js",
       "_previewImage.js",
-      "src/App.vue",
-      "_resize.js",
       "_admin.document.js",
       "_admin.form.js",
       "_NamingEditor.js"
@@ -537,9 +540,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "src/App.vue",
       "_resize.js",
+      "_clipboard.js",
       "_groups.ui.js"
     ]
   },
@@ -551,9 +553,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "src/App.vue",
       "_resize.js",
+      "_clipboard.js",
       "_admin.document.js"
     ]
   },
@@ -565,9 +566,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "src/App.vue",
       "_resize.js",
+      "_clipboard.js",
       "_groups.ui.js"
     ]
   },
@@ -579,9 +579,9 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "src/App.vue",
       "_resize.js",
+      "_clipboard.js",
+      "_tree.ui.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -594,9 +594,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "src/App.vue",
       "_resize.js",
+      "_clipboard.js",
       "_admin.document.js",
       "_admin.form.js",
       "_graphFrame.js"
@@ -634,7 +633,7 @@
       "_clipboard.js",
       "_AppTextField.js",
       "_AppMenu.js",
-      "src/App.vue"
+      "_AppSplitter.js"
     ],
     "css": [
       "assets/MatchingTemplates.css"
@@ -674,7 +673,6 @@
       "_AppDateField.js",
       "_AppMenu.js",
       "_AppCheckbox.js",
-      "_activity.js",
       "_AppSearchField.js",
       "src/App.vue"
     ],
@@ -709,7 +707,9 @@
       "_AppTextField.js",
       "_AppMenu.js",
       "_files.js",
+      "_AppTextArea.js",
       "_AppMenuItem.js",
+      "_AppSplitter.js",
       "_ItemSurface.js",
       "src/App.vue"
     ],
@@ -723,7 +723,6 @@
     "src": "src/features/knowledge/KnowledgeBase.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_markdown-it.js",
       "_vue.js",
       "index.html",
       "_clipboard.js",
@@ -732,10 +731,9 @@
       "_AppTextField.js",
       "_AppMenu.js",
       "_AppCheckbox.js",
-      "_richText.js",
       "_links.js",
+      "_AppTextArea.js",
       "_AppSearchField.js",
-      "_AttachmentCard.js",
       "_AppMenuItem.js",
       "src/App.vue"
     ],
@@ -753,9 +751,8 @@
       "index.html",
       "_clipboard.js",
       "_AppSelect.js",
-      "_richText.js",
       "_links.js",
-      "src/App.vue"
+      "_AppTextArea.js"
     ],
     "css": [
       "assets/DescriptionEditor.css"
@@ -802,7 +799,6 @@
       "_AppSlider.js",
       "_AppMenu.js",
       "_ItemPreview.js",
-      "_MiddleElide.js",
       "src/App.vue"
     ],
     "css": [
@@ -817,10 +813,12 @@
     "imports": [
       "_vue.js",
       "index.html",
+      "_resize.js",
       "_clipboard.js",
       "_AppSelect.js",
       "_AppMenu.js",
       "_AppSearchField.js",
+      "_AppSplitter.js",
       "src/App.vue"
     ],
     "css": [
@@ -866,6 +864,7 @@
       "_vue.js",
       "index.html",
       "_AppMenu.js",
+      "_UserComboBox.js",
       "_ItemSurface.js",
       "src/App.vue"
     ]

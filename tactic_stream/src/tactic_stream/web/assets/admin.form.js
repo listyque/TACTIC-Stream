@@ -1,4 +1,4 @@
-import { J as label, X as node, Y as muted, Z as rect, y as translate } from "./App.js";
+import { d as node, f as rect, l as label, s as translate, u as muted } from "./resize.js";
 import "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
 function fieldProperties(field, language, enabled) {

@@ -65,8 +65,9 @@ def text(window, item, source):
         frame(window)
 
 
-def snapshot(window):
-    assert_icons(window)
+def snapshot(window, *, check_icons=True):
+    if check_icons:
+        assert_icons(window)
     boxes, styles, interiors, frame_ids, fills = {}, {}, {}, [], {}
     for name, item in controls(window).items():
         box = item.mapRectToScene(QRectF(0, 0, item.width(), item.height()))

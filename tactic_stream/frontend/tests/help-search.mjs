@@ -1,5 +1,6 @@
+import { filtered as filterTopics } from '../../src/tactic_stream/shared_ui/features/support/help/help.state.mjs'
 import assert from 'node:assert/strict'
-import { readArticle, filterTopics } from '../src/features/help/help.js'
+import { readArticle } from '../src/features/help/help.js'
 
 const article = readArticle('clock', '# Database clock\n\n`CURRENT_TIMESTAMP` and `Site.get_site_data()`', 'clock.en.md')
 for (const query of ['CURRENT_TIMESTAMP', 'current timestamp', '  Site.get_site_data()  ', 'Site.get site data', 'CURRENT\n  TIMESTAMP']) {

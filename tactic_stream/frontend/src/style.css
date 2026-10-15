@@ -580,16 +580,16 @@ h2 { font-size: var(--text-heading); }
 @media (max-width: 400px) { .project-cards { grid-template-columns: minmax(0, 1fr); } }
 .sidebar > :not(.type-list) { flex-shrink: 0; }
 .type-list { overflow: auto; flex: 1; min-height: 0; overscroll-behavior: contain; padding-block: 8px; }
-:is(.type-list, .navigation-tree) button { width: calc(100% - 24px); height: 48px; min-height: 48px; text-align: left; border: 1px solid transparent; background: transparent; padding: 0 16px; margin: 4px 12px; display: flex; align-items: center; gap: 12px; border-radius: var(--item-radius); }
+.type-list button { width: calc(100% - 24px); height: 48px; min-height: 48px; text-align: left; border: 1px solid transparent; background: transparent; padding: 0 16px; margin: 4px 12px; display: flex; align-items: center; gap: 12px; border-radius: var(--item-radius); }
 .navigation-entry { display: flow-root; }
-:is(.type-list, .navigation-tree) button.navigation-folder { height: 40px; min-height: 40px; }
+.type-list button.navigation-folder { height: 40px; min-height: 40px; }
 .navigation-folder .navigation-text strong { font-size: 12px; font-weight: 600; }
 .navigation-icon { display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 auto; border-radius: 50%; background: color-mix(in srgb, var(--navigation-accent, var(--primary)) 74.074%, black); color: var(--on-selected); }
 .navigation-icon .app-icon { width: var(--icon-navigation); height: var(--icon-navigation); }
 .navigation-text { display: grid; gap: var(--space-xs); min-width: 0; }
-:is(.type-list, .navigation-tree) button.active { background: var(--content-selection); color: var(--on-surface); }
-:is(.type-list, .navigation-tree) strong { font-size: 14px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-:is(.type-list, .navigation-tree) small { font-size: var(--text-caption); color: var(--muted); overflow-wrap: anywhere; }
+.type-list button.active { background: var(--content-selection); color: var(--on-surface); }
+.type-list strong { font-size: 14px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.type-list small { font-size: var(--text-caption); color: var(--muted); overflow-wrap: anywhere; }
 .sidebar-empty { padding: 12px; font-size: var(--text-label); }
 .administration-section-picker { display: none; }
 .administration-shell { --configuration-navigation-width: 250px; --configuration-header-height: 76px; }
@@ -1135,8 +1135,8 @@ button { border-radius: var(--button-radius); transition: background-color var(-
 }
 .palette-swatch { display: inline-block; width: 22px; height: 22px; border: 3px solid; border-radius: 50%; flex-shrink: 0; }
 .icon-preview { display: flex; gap: var(--space-md); flex-wrap: wrap; color: var(--primary); }
-:root[data-click-animations="false"] .icon-button:active, :root[data-click-animations="false"] :is(.type-list, .navigation-tree) button:active .navigation-icon { transform: none; }
-@media (prefers-reduced-motion: reduce) { .icon-button:active, :is(.type-list, .navigation-tree) button:active .navigation-icon { transform: none; } }
+:root[data-click-animations="false"] .icon-button:active, :root[data-click-animations="false"] .type-list button:active .navigation-icon { transform: none; }
+@media (prefers-reduced-motion: reduce) { .icon-button:active, .type-list button:active .navigation-icon { transform: none; } }
 @keyframes menu-enter { from { opacity: 0; transform: translateY(-8px) scale(.96); } to { opacity: 1; transform: none; } }
 @starting-style {
   .sidebar[open] { transform: translateX(-100%); }
@@ -1258,7 +1258,7 @@ button { border-radius: var(--button-radius); transition: background-color var(-
 .naming-layout { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(0, 3fr); gap: var(--space-md); align-items: start; }
 .naming-catalog { position: sticky; top: 0; max-height: 60dvh; overflow: auto; }
 .naming-catalog .type-list { margin-top: var(--space-md); }
-.naming-catalog :is(.type-list, .navigation-tree) button { width: 100%; }
+.naming-catalog .type-list button { width: 100%; }
 .naming-catalog .navigation-text { min-width: 0; overflow: hidden; }
 .naming-catalog small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .naming-document { min-width: 0; }

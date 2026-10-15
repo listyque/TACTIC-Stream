@@ -11,7 +11,9 @@ import DockGrip from '../../controls/DockGrip.vue'
 import WorkspaceTabs from '../../controls/WorkspaceTabs.vue'
 import { describe as describeDockChrome, positions as dockChromePositions, dimensions as chromeDimensions } from '../../../../src/tactic_stream/shared_ui/shell/dock_chrome.ui.mjs'
 import { workspaceLayouts } from '../../api.js'
-import { activate, captureLayout, decodeLayout, defaults, defaultStackTargets, dockPanels, ids, place, projectTree, readDocks, remove, stack } from './docks.js'
+import { layout as shellLayout } from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs'
+import * as DockPlacement from '../../../../src/tactic_stream/shared_ui/shell/dock.placement.mjs'
+import { activate, captureLayout, decodeLayout, defaults, defaultStackTargets, dockPanels, ids, place, projectTree, readDocks, stack } from './docks.js'
 
 const props = defineProps({ login: String, ticket: String, project: String, resultsActive: Boolean, canAdminister: Boolean, mobile: Boolean, menuTarget: Object })
 const emit = defineEmits(['open', 'changing', 'changed', 'error', 'help'])
@@ -62,8 +64,8 @@ watch(() => props.mobile, phone => {
 // Geometry changes can reveal a restored panel after its lazy screen mounted.
 watch(() => visible.value.filter(panel => presented(panel.id)).map(panel => panel.id).join(','), () => emit('changed'), { flush:'post' })
 function rectangle(id) {
-  let rect = stackFor(id)?.rect || state.value.panels[id].rect
-  if (!compact.value && state.value.panels[id].floating && !maximized.value) {
+  let rect = dragged.value === id ? state.value.panels[id].rect : stackFor(id)?.rect || state.value.panels[id].rect
+  if (!compact.value && (state.value.panels[id].floating || dragged.value === id) && !maximized.value) {
     const [x, y, w, h] = rect
     const fw = Math.min(width.value, Math.max(280, w * width.value)), fh = Math.min(height.value, Math.max(200, h * height.value))
     return { left: Math.max(0, Math.min(x * width.value, width.value - fw)) + 'px', top: Math.max(0, Math.min(y * height.value, height.value - fh)) + 'px', width: fw + 'px', height: fh + 'px', zIndex: state.value.panels[id].z + 10 }
@@ -167,8 +169,9 @@ function float(id) {
   const bounds = rectangle(id), w = Math.max(.32, Math.min(.68, parseFloat(bounds.width) / width.value)), h = Math.max(.26, Math.min(.72, parseFloat(bounds.height) / height.value))
   state.value.panels[id].rect = [Math.max(.04, (1 - w) / 2), Math.max(.04, (1 - h) / 2), w, h]
   state.value.panels[id].floating = true
-  state.value.layout = remove(state.value.layout, id); raise(id); changed()
+  raise(id); changed()
 }
+function dock(id) { state.value.panels[id].floating = false; show(id) }
 function maximize(id) { emit('changing'); maximized.value = maximized.value === id ? '' : id; changed() }
 function reset() { emit('changing'); state.value = defaults(); compactActive.value = 'results'; maximized.value = ''; changed() }
 function capture() { return { ...captureLayout(state.value), presentation: { maximized: maximized.value, compactActive: compactActive.value } } }
@@ -273,22 +276,28 @@ function pointer(event) {
     const bottom = gesture.edge.includes('bottom') ? Math.min(1, Math.max(y + minimumHeight, y + h + dy / bounds.height)) : y + h
     panel.rect = [left, top, right - left, bottom - top]; return
   }
-  if (!dragged.value && Math.hypot(dx, dy) < 5) return
+  if (!dragged.value && Math.hypot(dx, dy) < DockPlacement.dragThreshold) return
   if (!dragged.value) {
     maximized.value = ''
-    dragged.value = gesture.id; panel.floating = true; state.value.layout = remove(state.value.layout, gesture.id); raise(gesture.id)
+    dragged.value = gesture.id; raise(gesture.id)
     panel.rect = [(gesture.rect.left - bounds.left) / bounds.width, (gesture.rect.top - bounds.top) / bounds.height,
-      Math.min(.68, gesture.rect.width / bounds.width), Math.min(.72, gesture.rect.height / bounds.height)]
+      gesture.rect.width / bounds.width, gesture.rect.height / bounds.height]
     gesture.origin = [...panel.rect]
   }
   panel.rect[0] = Math.max(0, Math.min(1 - panel.rect[2], gesture.origin[0] + dx / bounds.width))
   panel.rect[1] = Math.max(0, Math.min(1 - panel.rect[3], gesture.origin[1] + dy / bounds.height))
-  drop.value = null
-  for (const item of projection.value.stacks) {
-    const [x, y, w, h] = item.rect, px = (event.clientX - bounds.left) / bounds.width, py = (event.clientY - bounds.top) / bounds.height
-    if (px < x || py < y || px > x + w || py > y + h) continue
-    const rx = (px - x) / w, ry = (py - y) / h
-    drop.value = { target: item.active, side: rx < .25 ? 'left' : rx > .75 ? 'right' : ry < .25 ? 'top' : ry > .75 ? 'bottom' : 'center' }
+  const px = event.clientX - bounds.left, py = event.clientY - bounds.top
+  const rootZone = DockPlacement.rootZone(px, py, bounds.width, bounds.height)
+  drop.value = rootZone ? { target: '', side: rootZone, rect: DockPlacement.preview(rootZone, {x:0,y:0,width:bounds.width,height:bounds.height}, true) } : null
+  if (rootZone) return
+  for (const item of [...projection.value.stacks].reverse()) {
+    if (item.active === gesture.id) continue
+    const [x, y, w, h] = item.rect
+    const rect = {x:x*bounds.width,y:y*bounds.height,width:w*bounds.width,height:h*bounds.height}
+    if (px < rect.x || py < rect.y || px > rect.x + rect.width || py > rect.y + rect.height) continue
+    const side = DockPlacement.targetZone(px, py, rect, shellLayout.dockTitleHeight, item.active !== 'commit_queue')
+    drop.value = { target: item.active, side, rect: DockPlacement.preview(side, rect, false) }
+    break
   }
 }
 function stop(event) {
@@ -296,7 +305,11 @@ function stop(event) {
   const current = gesture; gesture = null
   if (current.target.hasPointerCapture(current.pointer)) current.target.releasePointerCapture(current.pointer)
   if (event.type === 'pointercancel') { state.value = current.before; maximized.value = current.maximized }
-  if (event.type !== 'pointercancel' && dragged.value && drop.value) move(dragged.value, drop.value.side, drop.value.target)
+  if (event.type !== 'pointercancel' && dragged.value) {
+    const command = DockPlacement.finishDrop(drop.value?.side || '', drop.value?.target || '', current.before.panels[dragged.value].floating)
+    if (command.type === 'cancel') { state.value = current.before; maximized.value = current.maximized }
+    else if (command.type === 'place' || command.type === 'snap') move(dragged.value, command.zone, command.target)
+  }
   dragged.value = ''; drop.value = null; changed()
 }
 function dividerStyle(item) {
@@ -360,7 +373,7 @@ defineExpose({ show, hide, move, maximize, reset, save, capture, apply, applyAss
         <AppMenu v-if="!mobile" :style="chromeStyle(panel.id,'dockPosition')" data-dock-control="dockPosition" :label="t('Panel position: {name}', { name: t(panel.title) })" icon="MDI_DOCK_WINDOW">
           <label>{{ t('Place relative to') }}<AppSelect v-model="positionTarget" label="Place relative to" :options="visible.filter(item => item.id !== panel.id && !state.panels[item.id].floating).map(item => ({ value: item.id, label: item.title }))" /></label>
           <AppButton v-for="[side, title] in [['left','Dock left'],['right','Dock right'],['top','Dock top'],['bottom','Dock bottom'],['center','Stack panels'],['swap','Swap panels']]" :key="side" :label="title" :disabled="positionTarget === panel.id || !visible.some(item => item.id === positionTarget && !state.panels[item.id].floating)" @click="move(panel.id, side, positionTarget)" />
-          <hr><AppButton :label="state.panels[panel.id].floating ? 'Dock panel' : 'Float panel'" icon="MDI_DOCK_WINDOW" @click="state.panels[panel.id].floating ? move(panel.id, 'right') : float(panel.id)" />
+          <hr><AppButton :label="state.panels[panel.id].floating ? 'Dock panel' : 'Float panel'" icon="MDI_DOCK_WINDOW" @click="state.panels[panel.id].floating ? dock(panel.id) : float(panel.id)" />
         </AppMenu>
         <AppButton v-if="panel.closable" :style="chromeStyle(panel.id,'dockClose')" data-dock-control="dockClose" icon-only icon="close" :label="t('Close panel: {name}', { name: t(panel.title) })" @click="hide(panel.id)" />
       </header>
@@ -371,10 +384,11 @@ defineExpose({ show, hide, move, maximize, reset, save, capture, apply, applyAss
     <div v-for="item in projection.dividers" :key="item.path" class="dock-divider resize-grip" :class="item.orientation" :style="dividerStyle(item)" role="separator" tabindex="0"
       :aria-label="t('Resize workspace panels')" :aria-orientation="item.orientation === 'horizontal' ? 'vertical' : 'horizontal'" :aria-valuenow="Math.round(item.ratio * 100)" :aria-valuemin="Math.round(item.minimum * 100)" :aria-valuemax="Math.round((1 - item.minimum) * 100)"
       @pointerdown="start($event, '', 'split', item)" @keydown="resizeKey($event, item)"></div>
+    <div v-if="drop" class="dock-snap-preview" :style="{left:drop.rect.x+'px',top:drop.rect.y+'px',width:drop.rect.width+'px',height:drop.rect.height+'px'}" aria-hidden="true"></div>
     <div v-if="drop" class="dock-drop-guide" role="status">{{ t('Drop to dock') }}: {{ t(drop.side) }}</div>
     <AppMenu ref="contextMenu" class="dock-context-menu" label="Dock actions" overlay>
       <AppMenuItem label="Help for this dock" icon="help" @click="emit('help','dock.' + contextPanel)" />
-      <hr><AppMenuItem :label="state.panels[contextPanel].floating ? 'Dock to workspace' : 'Float panel'" icon="MDI_DOCK_WINDOW" @click="state.panels[contextPanel].floating ? move(contextPanel, 'right') : float(contextPanel)" />
+      <hr><AppMenuItem :label="state.panels[contextPanel].floating ? 'Dock to workspace' : 'Float panel'" icon="MDI_DOCK_WINDOW" @click="state.panels[contextPanel].floating ? dock(contextPanel) : float(contextPanel)" />
       <AppMenuItem :label="maximized === contextPanel ? 'Restore panel' : 'Maximize panel'" icon="MDI_FIT_TO_SCREEN" @click="maximize(contextPanel)" />
       <AppMenuItem v-if="contextPanel !== 'results'" label="Close dock" icon="close" @click="hide(contextPanel)" />
     </AppMenu>
@@ -397,7 +411,7 @@ defineExpose({ show, hide, move, maximize, reset, save, capture, apply, applyAss
         <template #trigger><AppIcon name="settings-suggest" /><span>{{ t('Tools') }}</span><AppIcon name="next" /></template>
         <AppMenuItem label="Drop Plate" icon="upload" :checked="state.panels.drop_plate.visible" @click="toggle('drop_plate')" />
         <AppMenuItem label="Commit Queue" icon="queue" :checked="state.panels.commit_queue.visible" @click="toggle('commit_queue')" />
-        <hr><AppMenuItem :label="state.panels.results.floating ? 'Dock results' : 'Float results'" icon="MDI_DOCK_WINDOW" @click="state.panels.results.floating ? move('results', 'left') : float('results')" />
+        <hr><AppMenuItem :label="state.panels.results.floating ? 'Dock results' : 'Float results'" icon="MDI_DOCK_WINDOW" @click="state.panels.results.floating ? dock('results') : float('results')" />
         <AppMenuItem :label="maximized === 'results' ? 'Restore panel' : 'Maximize panel'" icon="MDI_FIT_TO_SCREEN" @click="maximize('results')" />
         <hr><slot name="view-actions" />
       </AppMenu>

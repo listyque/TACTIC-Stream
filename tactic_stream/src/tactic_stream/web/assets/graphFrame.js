@@ -1,7 +1,6 @@
 import { D as nextTick } from "./vue.js";
 import { E as appearance, F as metrics } from "./index.js";
-import { J as label, X as node, Y as muted, Z as rect, q as button, y as translate } from "./App.js";
-import { t as observeFrameSizes } from "./resize.js";
+import { c as button, d as node, f as rect, l as label, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { n as fieldProperties, t as form } from "./admin.form.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/sections.ui.mjs

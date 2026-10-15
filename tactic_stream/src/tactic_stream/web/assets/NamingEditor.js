@@ -1,9 +1,8 @@
-import { n as __exportAll } from "./markdown-it.js";
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
 import { E as appearance, T as t, q as _plugin_vue_export_helper_default } from "./index.js";
+import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
 import { M as rpc } from "./clipboard.js";
-import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, q as button, y as translate } from "./App.js";
-import { t as observeFrameSizes } from "./resize.js";
+import { U as __exportAll } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.ui.mjs

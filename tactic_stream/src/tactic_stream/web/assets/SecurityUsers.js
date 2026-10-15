@@ -1,8 +1,7 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
 import { E as appearance, T as t, q as _plugin_vue_export_helper_default } from "./index.js";
+import { d as node, n as _sfc_main$1, t as observeFrameSizes } from "./resize.js";
 import { z as securityUsers } from "./clipboard.js";
-import { X as node, h as _sfc_main$1 } from "./App.js";
-import { t as observeFrameSizes } from "./resize.js";
 import { a as translate$1, n as metrics } from "./groups.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/users/users.state.mjs
 function initial() {

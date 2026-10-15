@@ -1,102 +1,289 @@
 <script setup>
-// Current HelpView.qml: searchable topic list and independently scrolling article.
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
-import AppButton from '../../controls/AppButton.vue'
-import AppIcon from '../../controls/AppIcon.vue'
-import AppTextField from '../../controls/AppTextField.vue'
-import ItemSurface from '../../controls/ItemSurface.vue'
-import BusyIndicator from '../../controls/BusyIndicator.vue'
-import { asyncComponent } from '../../controls/asyncComponent.js'
-import { appearance } from '../../appearance.js'
-import { downloadBlob } from '../../controls/files.js'
-import { t } from '../../i18n.js'
-import { filterTopics, loadArticles } from './help.js'
-const MarkdownText = asyncComponent(() => import('../../controls/MarkdownText.vue'))
+import {
+  computed,
+  markRaw,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch
+} from 'vue';
+import FrameView from '../../frame/FrameView.vue';
+import DocumentPane from '../../controls/DocumentPane.vue';
+import AppButton from '../../controls/AppButton.vue';
+import AppIcon from '../../controls/AppIcon.vue';
+import BusyIndicator from '../../controls/BusyIndicator.vue';
+import { observeFrameSizes } from '../../frame/resize.js';
+import { appearance } from '../../appearance.js';
+import { downloadBlob } from '../../controls/files.js';
+import { t } from '../../i18n.js';
+import { loadArticles } from './help.js';
+import * as UI from '../../../../src/tactic_stream/shared_ui/features/support/help/help.ui.mjs';
+import * as State from '../../../../src/tactic_stream/shared_ui/features/support/help/help.state.mjs';
 
-const props = defineProps({ label: { type: String, default: 'Help' }, topic: { type: String, default: 'overview' } })
-const dialog = ref(null), articleScroll = ref(null), topics = ref(null), article = ref(null)
-const selected = ref('overview'), query = ref(''), articles = ref([]), busy = ref(false), error = ref(''), topicsVisible = ref(false)
-let controller = null, generation = 0
-const current = computed(() => articles.value.find(row => row.id === selected.value))
-const filtered = computed(() => filterTopics(articles.value, query.value))
-function close() { dialog.value?.close(); topicsVisible.value = false }
-async function reveal() {
-  await nextTick()
-  const row = topics.value?.querySelector('[data-topic="' + selected.value + '"]')
-  if (row) {
-    const top = row.getBoundingClientRect().top - topics.value.getBoundingClientRect().top + topics.value.scrollTop
-    if (top < topics.value.scrollTop) topics.value.scrollTop = top
-    else if (top + row.offsetHeight > topics.value.scrollTop + topics.value.clientHeight) topics.value.scrollTop = top + row.offsetHeight - topics.value.clientHeight
+const props = defineProps({
+  label: { type: String, default: 'Help' },
+  topic: { type: String, default: '' }
+});
+const dialog = ref(null),
+  layout = ref(null),
+  frame = ref(null),
+  documentView = ref(null);
+const viewport = ref({ width: 900, height: 650 });
+const ui = ref(State.initial()),
+  articles = ref([]),
+  busy = ref(false),
+  error = ref('');
+const opened = ref(false);
+const selected = computed(() => ui.value.selected),
+  query = computed(() => ui.value.query),
+  topicsVisible = computed(() => ui.value.topicsVisible);
+const current = computed(() =>
+  articles.value.find((row) => row.id === selected.value)
+);
+const data = computed(() => ({
+  articles: articles.value,
+  busy: busy.value,
+  canDownload: true,
+  fileLinks: true,
+  style: appearance.theme
+}));
+const scene = computed(() =>
+  UI.describe(
+    {
+      selected: selected.value,
+      query: query.value,
+      topicsVisible: topicsVisible.value
+    },
+    data.value,
+    viewport.value.width,
+    viewport.value.height,
+    appearance.language
+  )
+);
+const models = computed(() => ({ helpTopics: scene.value.topicRows }));
+const documentComponent = markRaw(DocumentPane);
+const busyComponent = markRaw(BusyIndicator);
+const captureDocument = (value) => {
+  documentView.value = value;
+};
+const views = computed(() => ({
+  busy: { component: busyComponent, props: { running: busy.value } },
+  document: {
+    component: documentComponent,
+    captureRef: captureDocument,
+    props: {
+      documentKey: selected.value,
+      text: current.value?.body || '',
+      summary: current.value?.summary || '',
+      notice: current.value?.reference
+        ? t(
+            'Original Handler reference. Desktop-specific options belong to Handler; this article does not indicate that every feature has been migrated to Stream.'
+          )
+        : '',
+      error: error.value,
+      scrollOffset: State.offset(ui.value, selected.value),
+      presented: opened.value && (!scene.value.compact || !topicsVisible.value),
+      onScroll: (value) => dispatch({ type: 'scroll', ...value }),
+      onLink: (id) => dispatch({ type: 'select', id })
+    }
+  }
+}));
+let controller = null,
+  generation = 0,
+  openRequest = 0,
+  loadedLanguage = '',
+  observer;
+function row(list, record) {
+  return UI.topicRow(
+    { selected: selected.value },
+    record,
+    list.width - 16,
+    appearance.language
+  );
+}
+async function reveal(id) {
+  await nextTick();
+  const list = dialog.value?.querySelector('[data-frame="helpTopicList"]');
+  const index = scene.value.topicRows.findIndex((row) => row.id === id);
+  if (!list || index < 0) return;
+  list.scrollTop = State.revealOffset(
+    list.scrollTop,
+    index,
+    list.clientHeight,
+    scene.value.topicRows.length
+  );
+  list.dispatchEvent(new Event('scroll'));
+}
+async function dispatch(action) {
+  if (['select', 'open', 'close'].includes(action.type))
+    documentView.value?.capture();
+  const result = State.transition(ui.value, articles.value, action);
+  ui.value = result.model;
+  for (const command of result.commands) {
+    if (command.type === 'reload') reload();
+    else if (command.type === 'close') close();
+    // The native anchor preserves middle-click, copy-link and browser popup ownership.
+    else if (command.type === 'openFile') continue;
+    else if (command.type === 'download' && current.value)
+      downloadBlob(
+        new Blob([current.value.source], {
+          type: 'text/markdown;charset=utf-8'
+        }),
+        current.value.file.split('/').at(-1)
+      );
+    else if (command.type === 'reveal') await reveal(command.id);
+    else if (command.type === 'focusArticle') {
+      await nextTick();
+      documentView.value?.focus();
+    } else if (command.type === 'focusTopic') {
+      await reveal(command.id);
+      frame.value?.focusControl('helpTopic_' + command.id);
+    }
   }
 }
-async function select(id, keyboard = false) {
-  if (!articles.value.some(row => row.id === id)) return
-  selected.value = id; topicsVisible.value = false
-  if (!filtered.value.some(row => row.id === id)) query.value = ''
-  await nextTick(); if (articleScroll.value) articleScroll.value.scrollTop = 0
-  await reveal()
-  if (keyboard) article.value?.focus({ preventScroll: true })
-}
 async function reload() {
-  controller?.abort(); controller = new AbortController()
-  const request = ++generation
-  busy.value = true; error.value = ''
+  controller?.abort();
+  controller = new AbortController();
+  const request = ++generation;
+  const language = appearance.language;
+  busy.value = true;
+  error.value = '';
   try {
-    const loaded = await loadArticles(appearance.language, controller.signal)
-    if (request !== generation) return
-    articles.value = loaded
-    const showingTopics = topicsVisible.value
-    await select(loaded.some(row => row.id === selected.value) ? selected.value : loaded.some(row => row.id === 'overview') ? 'overview' : loaded[0].id)
-    topicsVisible.value = showingTopics
-  } catch (exception) { if (request === generation && exception.name !== 'AbortError') error.value = exception.message }
-  finally { if (request === generation) busy.value = false }
+    const loaded = await loadArticles(language, controller.signal);
+    if (request !== generation) return;
+    articles.value = loaded;
+    loadedLanguage = language;
+    dispatch({ type: 'loaded' });
+  } catch (exception) {
+    if (request === generation && exception.name !== 'AbortError')
+      error.value = exception.message;
+  } finally {
+    if (request === generation) busy.value = false;
+  }
 }
 async function open(id = props.topic) {
-  selected.value = id; query.value = ''; topicsVisible.value = false
-  if (!dialog.value.open) dialog.value.show()
-  if (!articles.value.length) await reload()
-  else await select(id)
+  const request = ++openRequest;
+  if (!dialog.value.open) dialog.value.show();
+  opened.value = true;
+  if (!articles.value.length || loadedLanguage !== appearance.language)
+    await reload();
+  if (request !== openRequest || !opened.value) return;
+  await dispatch({ type: 'open', id });
+  if (request === openRequest && opened.value)
+    await documentView.value?.restore();
 }
-function download() { if (current.value) downloadBlob(new Blob([current.value.source], { type: 'text/markdown;charset=utf-8' }), current.value.file.split('/').at(-1)) }
-function topicKey(event) {
-  if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return
-  event.preventDefault()
-  const buttons = [...topics.value.querySelectorAll('button')], index = buttons.indexOf(document.activeElement)
-  const target = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : event.key === 'ArrowDown' ? (index + 1) % buttons.length : (index - 1 + buttons.length) % buttons.length
-  buttons[target]?.focus()
+function closed() {
+  if (dialog.value?.open) return;
+  openRequest++;
+  generation++;
+  controller?.abort();
+  busy.value = false;
+  opened.value = false;
 }
-watch(() => appearance.language, () => { if (dialog.value?.open || articles.value.length) reload() })
-onBeforeUnmount(() => { generation++; controller?.abort(); dialog.value?.close() })
-defineExpose({ open, close })
+function close() {
+  documentView.value?.capture();
+  openRequest++;
+  generation++;
+  controller?.abort();
+  busy.value = false;
+  opened.value = false;
+  dialog.value?.close();
+}
+watch(
+  () => appearance.language,
+  () => {
+    if (opened.value) reload();
+  }
+);
+watch(viewport, () => {
+  if (opened.value) reveal(selected.value);
+});
+onMounted(() => {
+  observer = observeFrameSizes((entries) => {
+    const entry = entries.find((entry) => entry.target === layout.value);
+    if (entry?.contentRect.width && entry.contentRect.height)
+      viewport.value = {
+        width: entry.contentRect.width,
+        height: entry.contentRect.height
+      };
+  });
+  observer.observe(layout.value);
+});
+onBeforeUnmount(() => {
+  generation++;
+  controller?.abort();
+  observer?.disconnect();
+  dialog.value?.close();
+});
+defineExpose({ open, close });
 </script>
 <template>
-  <Teleport to="body"><dialog v-window="{kind:'help', type:'window' }" ref="dialog" class="help-view" :aria-label="t(label)" @cancel.prevent="close">
-    <header class="help-window-header"><AppIcon name="help" /><strong>{{ t(label) }}</strong><AppButton icon-only label="Close help" icon="close" @click="close" /></header>
-    <div class="help-layout" :class="{ 'topics-visible': topicsVisible }">
-      <aside class="help-topics"><header><AppIcon name="help" /><strong>{{ t('Help topics') }}</strong><AppButton class="help-mobile-toggle" icon-only icon="close" label="Close help topics" @click="topicsVisible = false" /></header>
-        <AppTextField v-model="query" placeholder="Search help" label="Search help" />
-        <nav ref="topics" :aria-label="t('Help topics')" @keydown="topicKey"><ItemSurface v-for="row in filtered" :key="row.id" :selected="selected === row.id" :inset="0"><AppButton :data-topic="row.id" :aria-current="row.id === selected ? 'page' : undefined" @click="select(row.id, $event.detail === 0)"><AppIcon :name="row.icon" /><span class="help-topic-label"><strong>{{ row.title }}</strong><small>{{ t(row.group) }}</small></span></AppButton></ItemSurface><p v-if="!filtered.length && !busy" class="muted">{{ t('No help topics match your search') }}</p></nav>
-      </aside>
-      <section class="help-content" :aria-busy="busy"><header><AppButton class="help-mobile-toggle" icon-only icon="menu" label="Help topics" :aria-expanded="topicsVisible" @click="topicsVisible = !topicsVisible" /><AppIcon :name="current?.icon || 'help'" /><div><h1>{{ current?.title || t(label) }}</h1><small>{{ t(current?.group || 'Guide') }}</small></div><BusyIndicator v-if="busy" running /><AppButton icon-only icon="refresh" label="Reload help articles" :disabled="busy" @click="reload" /><AppButton icon-only icon="folder-open" label="Open article file" :href="current?.file" target="_blank" rel="noopener noreferrer" :aria-disabled="!current" :disabled="!current" /><AppButton icon-only icon="download" label="Download article" :disabled="!current" @click="download" /></header>
-        <div ref="articleScroll" class="help-article-scroll"><p v-if="error" class="error" role="alert">{{ t(error) }}</p><article ref="article" tabindex="0"><p v-if="current?.reference" class="help-reference muted">{{ t('Original Handler reference. Desktop-specific options belong to Handler; this article does not indicate that every feature has been migrated to Stream.') }}</p><div v-if="current?.summary" class="help-summary"><AppIcon name="info" /><MarkdownText :text="current.summary" @topic="select" /></div><MarkdownText v-if="current" :text="current.body" @topic="select" /></article></div>
-      </section>
-    </div>
-  </dialog></Teleport>
+  <Teleport to="body">
+    <dialog
+      v-window="{ kind: 'help', type: 'window' }"
+      ref="dialog"
+      class="help-view"
+      :aria-label="t(label)"
+      @cancel.prevent="close"
+      @close="closed"
+    >
+      <header class="help-window-header">
+        <AppIcon name="help" /><strong>{{ t(label) }}</strong
+        ><AppButton icon-only label="Close help" icon="close" @click="close" />
+      </header>
+      <div ref="layout" class="help-layout">
+        <FrameView
+          ref="frame"
+          :scene="scene"
+          :models="models"
+          :views="views"
+          :describe-row="row"
+          @event="dispatch"
+        />
+      </div>
+    </dialog>
+  </Teleport>
 </template>
 <style>
-.help-view { width:min(70dvw,calc(100dvw - 16px)); height:min(76dvh,calc(100dvh - 16px)); min-width:min(720px,calc(100dvw - 16px)); max-width:none; max-height:none; padding:0; margin:auto; background:var(--page); color:var(--on-surface); border:1px solid var(--outline-variant); border-radius:var(--surface-radius); overflow:hidden; }
-.help-view[open] { display:flex; flex-direction:column; }.help-view::backdrop { background:var(--scrim); }
-.help-window-header { height:40px; flex:none; display:flex; align-items:center; gap:9px; padding:2px 6px 2px 14px; border-bottom:1px solid var(--outline-variant); background:var(--surface); }.help-window-header > strong { flex:1; }.help-window-header > .app-icon { color:var(--primary); }
-.help-layout { display:flex; gap:10px; margin:12px; flex:1; min-height:0; min-width:0; position:relative; }
-.help-topics { flex:0 0 clamp(236px,29%,292px); display:flex; flex-direction:column; gap:8px; min-width:0; padding:10px; background:var(--surface); border:1px solid var(--outline-variant); border-radius:var(--surface-radius); }
-.help-topics > header { display:flex; align-items:center; gap:8px; }.help-topics > header > .app-icon { font-size:20px; color:var(--primary); }.help-topics > header > strong { font-size:var(--text-body-large); flex:1; }
-.help-topics nav { position:relative; overflow:auto; min-height:0; flex:1; padding-right:8px; display:flex; flex-direction:column; gap:3px; }
-.help-topics .item-surface { flex:none; --item-base:var(--row); }.help-topics .item-surface.selected { --item-base:var(--content-selection); }.help-topics .item-surface::after { display:none; }
-.help-topics .item-surface > .app-button { height:58px; width:100%; display:flex; align-items:center; gap:9px; padding:0 9px 0 11px; margin:0; border:0; border-radius:var(--item-radius); background:transparent; text-align:left; color:var(--on-surface); }
-.help-topics .item-surface > .app-button:hover { background:transparent; }.help-topics .app-button > .app-icon { font-size:17px; color:var(--muted); }.help-topics .selected .app-button > .app-icon { color:var(--primary); }
-.help-topics .app-button > .help-topic-label { display:flex; min-width:0; flex:1; flex-direction:column; gap:1px; }.help-topics .app-button strong { font-size:var(--text-body); font-weight:400; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }.help-topics .selected .app-button strong { font-weight:600; }.help-topics .app-button small { font-size:var(--text-caption); color:var(--muted); }
-.help-content { flex:1; min-width:0; min-height:0; display:flex; flex-direction:column; padding:4px; background:var(--surface); border:1px solid var(--outline-variant); border-radius:var(--surface-radius); }
-.help-content > header { display:flex; align-items:center; gap:10px; padding:10px 10px 10px 14px; flex:none; border-bottom:1px solid var(--outline-variant); }.help-content > header > .app-icon { font-size:24px; color:var(--primary); }.help-content > header > div { flex:1; min-width:0; }.help-content h1 { font-size:var(--text-title); font-weight:600; margin:0 0 2px; overflow-wrap:anywhere; }.help-content header small { font-size:var(--text-label); color:var(--muted); }
-.help-article-scroll { overflow:auto; flex:1; min-height:0; }.help-article-scroll article { margin:14px 26px 14px 14px; }.help-summary { display:flex; align-items:flex-start; gap:10px; padding:12px; margin-bottom:14px; border:1px solid var(--outline-variant); border-radius:var(--item-radius); background:var(--surface-high); }.help-summary > .app-icon { color:var(--primary); font-size:18px; flex:none; }.help-summary > .markdown-text { flex:1; min-width:0; }.help-reference { font-size:var(--text-caption); margin:0 0 14px; }.help-view .help-mobile-toggle { display:none; }
-@media(max-width:760px) { .help-view { width:calc(100dvw - 16px); height:calc(100dvh - 16px); min-width:0; }.help-layout { margin:8px; gap:0; }.help-view .help-mobile-toggle { display:inline-flex; }.help-topics { display:none; }.topics-visible .help-content { visibility:hidden; }.topics-visible .help-topics { display:flex; position:absolute; inset:0; z-index:2; }.help-content > header { gap:4px; padding:6px; flex-wrap:wrap; }.help-content > header > .app-icon { display:none; }.help-content h1 { font-size:var(--text-body-large); }.help-content > header > div { flex-basis:calc(100% - 48px); }.help-content > header .app-button { width:30px; height:30px; min-width:30px; min-height:30px; }.help-article-scroll article { margin:12px; } }
+.help-view {
+  width: min(70dvw, calc(100dvw - 16px));
+  height: min(76dvh, calc(100dvh - 16px));
+  min-width: min(720px, calc(100dvw - 16px));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  margin: auto;
+  background: var(--page);
+  color: var(--on-surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--surface-radius);
+  overflow: hidden;
+}
+.help-view[open] {
+  display: flex;
+  flex-direction: column;
+}
+.help-window-header {
+  height: 40px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 2px 6px 2px 14px;
+  border-bottom: 1px solid var(--outline-variant);
+  background: var(--surface);
+}
+.help-window-header > strong {
+  flex: 1;
+}
+.help-window-header > .app-icon {
+  color: var(--primary);
+}
+.help-layout {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+}
 </style>

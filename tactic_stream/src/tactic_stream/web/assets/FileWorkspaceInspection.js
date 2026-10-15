@@ -5,9 +5,11 @@ import { t as _sfc_main$9 } from "./AppSelect.js";
 import { t as _sfc_main$10 } from "./AppTextField.js";
 import { t as _sfc_main$11 } from "./AppMenu.js";
 import { i as prettySize } from "./files.js";
-import { t as _sfc_main$12 } from "./AppMenuItem.js";
-import { t as _sfc_main$13 } from "./ItemSurface.js";
-import { I as _sfc_main$14, S as _sfc_main$15, p as _sfc_main$16 } from "./App.js";
+import { t as _sfc_main$12 } from "./AppTextArea.js";
+import { t as _sfc_main$13 } from "./AppMenuItem.js";
+import { t as _sfc_main$14 } from "./AppSplitter.js";
+import { t as _sfc_main$15 } from "./ItemSurface.js";
+import { m as _sfc_main$16 } from "./App.js";
 //#region src/features/fileWorkspace/FileWorkspaceTree.vue
 var _hoisted_1$5 = ["aria-label"];
 var _hoisted_2$5 = [
@@ -233,7 +235,7 @@ var _sfc_main$4 = {
 				};
 			}
 		},
-		AppTextArea: _sfc_main$14,
+		AppTextArea: _sfc_main$12,
 		AppIcon: _sfc_main$8
 	},
 	props: {
@@ -569,7 +571,7 @@ var FileWorkspaceDepots_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 				}, null, 8, ["disabled"])) : createCommentVNode("", true)
 			]), createBaseVNode("div", _hoisted_3$2, [
 				createBaseVNode("aside", { style: normalizeStyle({ flexBasis: `max(0px,calc(${split.value}% - 10px))` }) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.rows, (row) => {
-					return openBlock(), createBlock(_sfc_main$13, {
+					return openBlock(), createBlock(_sfc_main$15, {
 						key: row.code,
 						selected: __props.selected?.code === row.code,
 						"normal-color": "transparent",
@@ -595,7 +597,7 @@ var FileWorkspaceDepots_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 						_: 2
 					}, 1032, ["selected", "rail-visible"]);
 				}), 128)), !__props.rows.length ? (openBlock(), createElementBlock("p", _hoisted_5$2, toDisplayString(unref(t)("No permitted records on this page")), 1)) : createCommentVNode("", true)], 4),
-				createVNode(_sfc_main$15, {
+				createVNode(_sfc_main$14, {
 					modelValue: split.value,
 					"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => split.value = $event),
 					label: "Depots",
@@ -957,8 +959,8 @@ var _sfc_main = {
 		AppSelect: _sfc_main$9,
 		AppTextField: _sfc_main$10,
 		AppMenu: _sfc_main$11,
-		AppMenuItem: _sfc_main$12,
-		AppSplitter: _sfc_main$15,
+		AppMenuItem: _sfc_main$13,
+		AppSplitter: _sfc_main$14,
 		WorkspaceTabs: _sfc_main$16,
 		FileWorkspaceTree: FileWorkspaceTree_default,
 		FileWorkspaceInspector: FileWorkspaceInspector_default,

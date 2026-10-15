@@ -52,7 +52,12 @@ def main():
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/tests/{frame_controls*,frame_icons,icons}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
+    for pattern in ["frontend/src/features/help/**/*.{vue,js}", "tools/frame_help/*.{vue,js,html,mjs}", "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_interaction,navigation*}.mjs"]:
+        command[-1] = pattern
+        subprocess.run(command, cwd=ROOT, check=True)
     controls = [
+        "DocumentPane.vue",
+        "NavigationRow.vue",
         "AppButton.vue",
         "AppIcon.vue",
         "AppColorInput.vue",
@@ -98,6 +103,8 @@ def main():
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/administration").rglob("*.qml")
         )
+        files += sorted((args.handler_root / "thlib/ui/qml/features/support").rglob("*.qml"))
+        files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]
     for path in files:

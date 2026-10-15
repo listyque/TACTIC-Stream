@@ -134,11 +134,11 @@ def main():
 body{margin:30px auto;padding:0 24px;max-width:1500px;background:#1b1e20;color:#eef0f2;font:15px/1.5 'Segoe UI',sans-serif}a{color:#8bb7d0}h1{font-size:26px}h2{font-size:20px}p{max-width:1100px;color:#c3c8cb}code,pre{font-family:Consolas,monospace}pre{padding:16px;background:#282d30;border-radius:10px;overflow:auto}.cards{display:flex;flex-wrap:wrap;gap:12px}.card{background:#303639;padding:12px 18px;border-radius:10px}.card strong{display:block;font-size:23px}select,button,input{font:inherit}select,button{max-width:100%;background:#363d41;color:inherit;border:1px solid #555e63;border-radius:8px;padding:8px;margin:5px 12px 5px 0}.pictures{display:flex;flex-wrap:wrap;gap:16px;align-items:start}.pictures figure{margin:0;flex:1;min-width:280px;max-width:100%}.pictures img{max-width:100%;height:auto;border:1px solid #4b5257;border-radius:6px}.pictures figcaption{padding:8px 0;color:#9ebfd2}.notice{padding:12px 18px;background:#343b3e;border-left:4px solid #78a6c4;border-radius:6px}details{margin:16px 0}summary{cursor:pointer}li{margin:6px 0}
 </style>
 <h1>Tactic Frame · фундамент и читаемые исходники</h1>
-<p>Фаза 0 · 2026-10-15: TH __TH_VERSION__ / TS __TS_VERSION__. Общие модули поставляются независимыми копиями; QML использует собственные контролы Qt, Vue — браузерные контролы. WebEngine не используется.</p>
+<p>Текущий checkpoint · 2026-10-16: TH __TH_VERSION__ / TS __TS_VERSION__. Общие модули поставляются независимыми копиями; QML использует собственные контролы Qt, Vue — браузерные контролы. WebEngine не используется.</p>
 <h2>Подготовительная платформа</h2>
-<p class="notice">Все 13 шагов общего gate прошли. Проверены контракты 20 видов контролов, уникальные ключи и обязательные модели/Views, ввод и композиция, удаление редактируемой строки, списки на 10 000 записей, три масштаба, resize/dispose, обычный запуск окон и независимый пакет. Отпечатки исходников проверены при сборке этого отчёта.</p>
+<p class="notice">Все __STEPS__ шагов общего gate прошли. Проверены контракты контролов, уникальные ключи и обязательные модели/Views, ввод и композиция, удаление редактируемой строки, списки на 10 000 записей, три масштаба, resize/dispose, обычный запуск окон и независимый пакет. Добавлены реальные маршруты Help, окон, доков и навигации. Отпечатки исходников проверены при сборке этого отчёта.</p>
 <p>Убраны квадратичное согласование нативных списков и конфликт единиц шрифта. Сортировка сохраняет живой редактор, выделение и предварительный ввод IME. Исправлены потеря resize другого элемента и гонка события прокрутки с обновлением модели в браузере. Черновиками и сохранением по-прежнему владеет предметный экран.</p>
-<p><a href="inventory.html">Инвентаризация UI и точек входа</a> · <a href="platform/gate.json">13 шагов и хеши исходников</a> · <a href="../../frame_admin/output/index.html">Свежие 2340 парных состояний админки</a> · <a href="../../../docs/shared_ui_foundation_plan.md">План и границы завершения</a></p>
+<p><a href="inventory.html">Инвентаризация UI и точек входа</a> · <a href="platform/gate.json">__STEPS__ шагов и хеши исходников</a> · <a href="../../frame_admin/output/index.html">Свежие __ADMIN_PAIRS__ парных состояний админки</a> · <a href="../../frame_help/output/index.html">Help: оригинал, Qt и Vue</a> · <a href="navigation/index.html">Навигационные строки</a> · <a href="../../frame_controls/output/ui-elements.html">Полный каталог исходников UI</a> · <a href="../../../docs/shared_ui_foundation_plan.md">План и границы завершения</a></p>
 <p>249 нативных регрессий и все 14 веб-стендов прошли. Это сравнение текущих Frame-реализаций. Полное совпадение с исходным Handler остаётся отдельной фазой. Инвентаризация исходников не доказывает прохождение каждого динамического окна.</p>
 <h3>Локальный замер списка: разворот записей</h3>
 <table><thead><tr><th>Записей</th><th>До</th><th>После</th></tr></thead><tbody>__TIMINGS__</tbody></table>
@@ -174,6 +174,8 @@ select.onchange=show;document.getElementById('previous').onclick=()=>{select.sel
     values = dict(
         TH_VERSION=gate["versions"]["handler"],
         TS_VERSION=gate["versions"]["stream"],
+        STEPS=len(gate["steps"]),
+        ADMIN_PAIRS=admin["pairs"],
         TIMINGS=timings,
         OLD_FONTS=sum(quality["smoke"]["before"]["fontWarnings"].values()),
         FOUNDATION=foundation["checks"],
