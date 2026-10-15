@@ -35,6 +35,8 @@ def sync(handler_root, check=False, copy_from=None):
             destination = target / path.relative_to(source)
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(path.read_bytes())
+        if (source / 'README.md').is_file():
+            (target / 'README.md').write_bytes((source / 'README.md').read_bytes())
         hashes = {path.relative_to(handler).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(handler.rglob('*.mjs'))}
         (handler / 'manifest.json').write_text(json.dumps({'source': 'independent product copy', 'sha256': hashes}, indent=2) + '\n', encoding='utf-8')
     files = sorted(SOURCE.rglob('*.mjs'))
@@ -45,6 +47,8 @@ def sync(handler_root, check=False, copy_from=None):
     for path in files:
         relative = path.relative_to(SOURCE)
         assert (handler / relative).read_bytes() == path.read_bytes(), f'Tactic Frame copies differ: {relative}'
+    if (SOURCE / 'README.md').is_file():
+        assert (handler / 'README.md').is_file() and (handler / 'README.md').read_bytes() == (SOURCE / 'README.md').read_bytes(), 'Tactic Frame contract documentation differs'
     hashes = {path.relative_to(SOURCE).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
     assert json.loads((handler / 'manifest.json').read_text(encoding='utf-8'))['sha256'] == hashes, 'Stale Handler manifest'
     print(f'{"Copied and checked" if copy_from else "Checked"} {len(files)} Tactic Frame modules')

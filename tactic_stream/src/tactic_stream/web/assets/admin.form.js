@@ -1,4 +1,5 @@
 import { J as label, X as node, Y as muted, Z as rect, y as translate } from "./App.js";
+import "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
 function fieldProperties(field, language, enabled) {
 	const title = field.dataLabel ? field.title : translate(field.title, language);
@@ -31,7 +32,7 @@ function form(fields, width, language, enabled) {
 		const id = field.id, narrow = width < 420;
 		if (field.kind === "Heading") {
 			nodes.push(label(id, rect(0, y, width, 28), field.dataLabel ? field.title : tr(field.title), {
-				fontSize: 15,
+				fontRole: "section",
 				weight: 600,
 				role: "heading",
 				level: 2

@@ -1,7 +1,8 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, _ as createCommentVNode, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, rt as toDisplayString, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { L as securityGroups } from "./clipboard.js";
 import { h as _sfc_main$1 } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { i as toolbar, n as metrics, o as initial, r as row, s as transition, t as describe } from "./groups.ui.js";
 //#region src/features/administration/SecurityGroups.vue
 var _sfc_main = {
@@ -38,8 +39,7 @@ var _sfc_main = {
 				height: 1
 			},
 			toolbarSize: 620,
-			observer: null,
-			resizeFrame: 0
+			observer: null
 		};
 	},
 	computed: {
@@ -92,15 +92,12 @@ var _sfc_main = {
 	mounted() {
 		this.reload();
 		window.addEventListener("beforeunload", this.beforeUnload);
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el);
@@ -108,7 +105,6 @@ var _sfc_main = {
 	beforeUnmount() {
 		this.request++;
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},
 	watch: {

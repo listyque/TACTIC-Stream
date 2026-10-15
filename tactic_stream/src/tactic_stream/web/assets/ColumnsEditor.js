@@ -1,16 +1,11 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { p as columnsEditor } from "./clipboard.js";
-import { G as definitionWizard, J as label, K as displayWidgets, W as changeDefinition, X as node, Y as muted, Z as rect, h as _sfc_main$1, y as translate } from "./App.js";
+import { G as definitionWizard, J as label, K as displayWidgets, W as changeDefinition, X as node, Y as muted, Z as rect, h as _sfc_main$1, q as button, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.ui.mjs
-var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
-	text,
-	icon,
-	action,
-	enabled
-}, extra || {}));
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {
 	source,
 	rowHeight,
@@ -43,7 +38,7 @@ function describe(model, ui, width, height, language) {
 	if (split || !ui.editing) {
 		const children = [
 			label("definitionCatalogHeading", rect(12, 8, left - 70, 28), tr("Saved definitions"), {
-				fontSize: 15,
+				fontRole: "section",
 				weight: 600
 			}),
 			label("definitionCatalogCount", rect(left - 58, 8, 46, 28), String(records(model, ui).length), muted),
@@ -106,7 +101,7 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 	else {
 		const selected = model.selected;
 		children.push(label("definitionViewTitle", rect(12, y, inner, 26), selected.view, {
-			fontSize: 15,
+			fontRole: "section",
 			weight: 600
 		}), label("definitionViewType", rect(12, y + 30, inner, 24), selected.searchType + (selected.login ? " · " + selected.login : ""), muted));
 		y += 62;
@@ -427,7 +422,6 @@ var _sfc_main = {
 			},
 			toolbarSize: 620,
 			observer: null,
-			resizeFrame: 0,
 			busy: false,
 			uncertain: false,
 			error: "",
@@ -538,15 +532,12 @@ var _sfc_main = {
 	mounted() {
 		this.reload();
 		window.addEventListener("beforeunload", this.beforeUnload);
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el);
@@ -554,7 +545,6 @@ var _sfc_main = {
 	beforeUnmount() {
 		this.request++;
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},
 	methods: {

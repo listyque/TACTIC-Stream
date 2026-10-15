@@ -184,7 +184,7 @@ var box = (x, y, width, height) => ({
 var label = (id, rect, text, properties) => node("Label", id, rect, Object.assign({ text }, properties || {}));
 var muted = {
 	color: "secondaryText",
-	fontSize: 12
+	fontRole: "secondary"
 };
 function toolbar(model, ui, width, language, closable) {
 	const tr = (text) => translate(text, language);
@@ -277,7 +277,7 @@ function describe(model, ui, width, height, language) {
 			color: "action"
 		}),
 		label("securityGroupCatalogTitle", box(44, 12, catalogWidth - 58, 24), tr("Groups"), {
-			fontSize: 15,
+			fontRole: "section",
 			weight: 600
 		}),
 		list
@@ -295,7 +295,7 @@ function describe(model, ui, width, height, language) {
 		icon: "groups",
 		color: "action"
 	}), label("securityGroupDocumentTitle", box(44, 10, docWidth - 58, 24), model.draft ? model.draft.name || tr("New group") : tr("Group"), {
-		fontSize: 15,
+		fontRole: "section",
 		weight: 600
 	})];
 	if (!model.draft) content.push(label("securityGroupEmpty", box(pad, 58, docWidth - pad * 2, 70), tr("Select a group or create a new one"), {

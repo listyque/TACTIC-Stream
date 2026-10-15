@@ -1,7 +1,8 @@
 import { D as nextTick, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, X as ref, c as vShow, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, p as Teleport, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { O as rawDatabase } from "./clipboard.js";
-import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$2, y as translate } from "./App.js";
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$2, q as button, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/database/raw.state.mjs
 function initial() {
@@ -154,12 +155,6 @@ function cellTransition(ui, model, event) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/database/raw.ui.mjs
-var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
-	text,
-	icon,
-	action,
-	enabled
-}, extra || {}));
 function cellText$1(row, name) {
 	const mode = (row.modes || {})[name] || (row.key == null ? "default" : "value");
 	return mode === "null" ? "NULL" : mode === "default" ? "DEFAULT" : (row.texts || {})[name] || "";
@@ -332,7 +327,7 @@ function cellDescribe(model, ui, width, height, language) {
 	if (!model.name) return { nodes: [] };
 	const tr = (text) => translate(text, language), pad = 14, inner = Math.max(1, width - 28), footer = height - 52, errorHeight = model.error ? 48 : 0, helpY = footer - 44;
 	const narrow = width < 600;
-	const header = [label("rawCellTitle", rect(narrow ? 42 : 0, 0, inner - (narrow ? 42 : 100), 38), tr("Cell editor"), { fontSize: 17 }), button(narrow ? "rawCellBack" : "rawCellClose", rect(narrow ? 0 : inner - 38, 0, 38, 38), tr(narrow ? "Back" : "Close"), narrow ? "chevron-left" : "close", { type: "cancel" }, true, { iconOnly: true })];
+	const header = [label("rawCellTitle", rect(narrow ? 42 : 0, 0, inner - (narrow ? 42 : 100), 38), tr("Cell editor"), { fontRole: "heading" }), button(narrow ? "rawCellBack" : "rawCellClose", rect(narrow ? 0 : inner - 38, 0, 38, 38), tr(narrow ? "Back" : "Close"), narrow ? "chevron-left" : "close", { type: "cancel" }, true, { iconOnly: true })];
 	const nodes = [
 		node("Box", "rawCellHeader", rect(pad, pad, inner, 38), {
 			titlebar: true,
@@ -551,8 +546,7 @@ var _sfc_main = {
 			},
 			toolbarSize: 620,
 			controlSize: 36,
-			observer: null,
-			resizeFrame: 0
+			observer: null
 		};
 	},
 	computed: {
@@ -599,15 +593,12 @@ var _sfc_main = {
 		this.load("list");
 		this.measure();
 		window.addEventListener("beforeunload", this.beforeUnload);
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el);
@@ -615,7 +606,6 @@ var _sfc_main = {
 	beforeUnmount() {
 		this.request++;
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},
 	watch: {

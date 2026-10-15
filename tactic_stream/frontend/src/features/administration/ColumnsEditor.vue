@@ -1,4 +1,5 @@
 <script>
+import { observeFrameSizes } from '../../frame/resize.js';
 import FrameView from '../../frame/FrameView.vue';
 import { columnsEditor } from '../../api.js';
 import { t } from '../../i18n.js';
@@ -32,7 +33,6 @@ export default {
       viewport: { width: 1, height: 1 },
       toolbarSize: 620,
       observer: null,
-      resizeFrame: 0,
       busy: false,
       uncertain: false,
       error: '',
@@ -162,18 +162,15 @@ export default {
   mounted() {
     this.reload();
     window.addEventListener('beforeunload', this.beforeUnload);
-    this.observer = new ResizeObserver((entries) => {
-      cancelAnimationFrame(this.resizeFrame);
-      this.resizeFrame = requestAnimationFrame(() => {
-        for (const entry of entries) {
-          if (entry.target === this.$refs.body)
-            this.viewport = {
-              width: Math.max(1, entry.contentRect.width),
-              height: Math.max(1, entry.contentRect.height)
-            };
-          else this.toolbarSize = entry.contentRect.width;
-        }
-      });
+    this.observer = observeFrameSizes((entries) => {
+      for (const entry of entries) {
+        if (entry.target === this.$refs.body)
+          this.viewport = {
+            width: Math.max(1, entry.contentRect.width),
+            height: Math.max(1, entry.contentRect.height)
+          };
+        else this.toolbarSize = entry.contentRect.width;
+      }
     });
     this.observer.observe(this.$refs.body);
     this.observer.observe(
@@ -185,7 +182,6 @@ export default {
   beforeUnmount() {
     this.request++;
     this.observer?.disconnect();
-    cancelAnimationFrame(this.resizeFrame);
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
   methods: {

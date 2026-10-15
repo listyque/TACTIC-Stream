@@ -58,7 +58,7 @@ async function focusCell(row, column, name) {
     el.scrollTop = (row + 1) * n.rowHeight - height.value;
   position.value = { x: el.scrollLeft, y: el.scrollTop };
   await nextTick();
-  el.querySelector('[data-frame="' + name + '"]')?.focus();
+  el.querySelector('[data-frame="' + CSS.escape(name) + '"]')?.focus();
 }
 defineExpose({ focusCell });
 </script>

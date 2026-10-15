@@ -1,7 +1,8 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { z as securityUsers } from "./clipboard.js";
 import { X as node, h as _sfc_main$1 } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { a as translate$1, n as metrics } from "./groups.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/users/users.state.mjs
 function initial() {
@@ -214,7 +215,7 @@ var box = (x, y, width, height) => ({
 });
 var label = (id, rect, text, extra) => node("Label", id, rect, Object.assign({ text }, extra || {}));
 var muted = {
-	fontSize: 12,
+	fontRole: "secondary",
 	color: "secondaryText"
 };
 var profileFields = [
@@ -281,7 +282,7 @@ function identity(record, x, y, width, size, prefix) {
 		}),
 		label(prefix + "Title_" + record.login, box(x + size + 12, y + (secondary ? size / 2 - 21 : (size - 22) / 2), width - size - 12, 22), title, {
 			weight: 600,
-			fontSize: size > 40 ? 15 : 13,
+			fontRole: size > 40 ? "section" : "body",
 			opacity: record.retired ? .5 : 1
 		}),
 		label(prefix + "Login_" + record.login, box(x + size + 12, y + size / 2 + 2, width - size - 12, 18), secondary ? record.login : "", Object.assign({ opacity: record.retired ? .5 : 1 }, muted))
@@ -335,7 +336,7 @@ function describe(model, ui, width, height, language) {
 			color: "action"
 		}),
 		label("adminUsersTitle", box(44, 12, catalogWidth - 58, 24), tr("User directory"), {
-			fontSize: 15,
+			fontRole: "section",
 			weight: 600
 		}),
 		node("Field", "adminUserSearch", box(pad, 48, catalogWidth - pad * 2, 38), {
@@ -611,8 +612,7 @@ var _sfc_main = {
 				height: 1
 			},
 			toolbarSize: 620,
-			observer: null,
-			resizeFrame: 0
+			observer: null
 		};
 	},
 	computed: {
@@ -681,15 +681,12 @@ var _sfc_main = {
 	mounted() {
 		this.reload();
 		window.addEventListener("beforeunload", this.beforeUnload);
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el);
@@ -697,7 +694,6 @@ var _sfc_main = {
 	beforeUnmount() {
 		this.request++;
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		if (this.draft) this.draft.password = "";
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},

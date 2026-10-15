@@ -125,9 +125,9 @@ def main():
     (OUTPUT / 'baseline.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
     assert not new_structure and not new_lint, report
     assert smoke_before['status'] == smoke_current['status'] == 0, report['smoke']
-    assert smoke_before['fontWarnings'] == smoke_current['fontWarnings'], report['smoke']
+    assert not smoke_current['fontWarnings'], report['smoke']
     assert not smoke_before['other'] and not smoke_current['other'], report['smoke']
-    print('No new structure/lint/smoke debt versus the archive; existing failures and font warnings remain explicit in baseline.json')
+    print('No new structure/lint debt; current native smoke has no font/runtime warnings. Remaining unrelated gate failures are explicit in baseline.json')
 
 
 if __name__ == '__main__':

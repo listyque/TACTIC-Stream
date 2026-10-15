@@ -477,6 +477,17 @@ var typography = {
 	bodyLarge: 10,
 	title: 12
 };
+var textStyles = Object.freeze({
+	caption: 11,
+	secondary: 12,
+	body: 13,
+	bodyLarge: 14,
+	section: 15,
+	title: 16,
+	heading: 17,
+	display: 18,
+	hero: 24
+});
 var controls = {
 	button: {
 		minimumWidth: 72,
@@ -2369,6 +2380,6 @@ if (documentation) watchEffect(() => {
 var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,9,1,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { readableText as A, taskColumns as B, randomId as C, colorModes as D, appearance as E, configurationPreview as F, _plugin_vue_export_helper_default as G, iconSets as H, normalizePreferences as I, preferences as L, cssRoles as M, layout as N, effectiveColorMode as O, metrics as P, savePreferencePage as R, setServerDebugContext as S, t as T, themes as U, accentPresets as V, BusyIndicator_default as W, logEvent as _, tooltipDirective as a, savedSessions as b, _sfc_main$2 as c, debugSettings as d, exportSession as f, levels as g, importSession as h, _sfc_main$1 as i, saveAppearance as j, languages as k, clearLive as l, formatEvent as m, mobile as n, capturePress as o, forgetSessions as p, mobileLayout as r, ripple as s, __vitePreload as t, debugLog as u, logRequest as v, asyncComponent as w, sessionRecords as x, redact as y, normalizeColumns as z };
+export { readableText as A, normalizeColumns as B, randomId as C, colorModes as D, appearance as E, textStyles as F, BusyIndicator_default as G, accentPresets as H, configurationPreview as I, _plugin_vue_export_helper_default as K, normalizePreferences as L, cssRoles as M, layout as N, effectiveColorMode as O, metrics as P, preferences as R, setServerDebugContext as S, t as T, iconSets as U, taskColumns as V, themes as W, logEvent as _, tooltipDirective as a, savedSessions as b, _sfc_main$2 as c, debugSettings as d, exportSession as f, levels as g, importSession as h, _sfc_main$1 as i, saveAppearance as j, languages as k, clearLive as l, formatEvent as m, mobile as n, capturePress as o, forgetSessions as p, mobileLayout as r, ripple as s, __vitePreload as t, debugLog as u, logRequest as v, asyncComponent as w, sessionRecords as x, redact as y, savePreferencePage as z };
 
 //# sourceMappingURL=index.js.map

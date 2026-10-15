@@ -1,17 +1,12 @@
 import { n as __exportAll } from "./markdown-it.js";
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { M as rpc } from "./clipboard.js";
-import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, y as translate } from "./App.js";
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, q as button, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.ui.mjs
-var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
-	text,
-	icon,
-	action,
-	enabled
-}, extra || {}));
 function toolbar(model, ui, width, language) {
 	const tr = (text) => translate(text, language), actions = toolbar$1(model, ui, width, language), edit = !model.busy && !model.uncertain && model.canWrite && !ui.confirmation;
 	actions.nodes = actions.nodes.filter((row) => row.id !== "adminDocumentStatus");
@@ -37,7 +32,7 @@ function describe(model, ui, width, height, language) {
 		background: "surfaceContainerLow",
 		border: "outlineVariant",
 		children: [label("namingCatalogTitle", rect(12, 8, left - 24, 28), tr("Naming rules"), {
-			fontSize: 15,
+			fontRole: "section",
 			weight: 600
 		}), node("List", "namingRules", rect(12, 44, left - 24, h - 56), {
 			source: "namingRules",
@@ -61,7 +56,7 @@ function describe(model, ui, width, height, language) {
 		top += 44;
 	}
 	children.push(label("namingTargetTitle", rect(12, top, w, 26), model.targetTitle || model.searchType || tr("Naming editor"), {
-		fontSize: 15,
+		fontRole: "section",
 		weight: 600
 	}), label("namingTargetType", rect(12, top + 30, w, 22), model.project + " / " + model.searchType, muted));
 	top += 60;
@@ -562,7 +557,6 @@ var _sfc_main = {
 			},
 			toolbarSize: 620,
 			observer: null,
-			resizeFrame: 0,
 			sample: {
 				key: "",
 				file: "example.ma",
@@ -621,15 +615,12 @@ var _sfc_main = {
 	mounted() {
 		window.addEventListener("beforeunload", this.beforeUnload);
 		if (!this.restored) this.reload();
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el);
@@ -638,7 +629,6 @@ var _sfc_main = {
 		this.applyText();
 		if (this.session) this.session.snapshot = Object.fromEntries(sessionFields.map((key) => [key, this[key]]));
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		this.request++;
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},

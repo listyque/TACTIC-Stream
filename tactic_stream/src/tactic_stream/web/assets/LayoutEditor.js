@@ -1,7 +1,8 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { M as rpc, Y as widgetConfiguration, j as resultItems } from "./clipboard.js";
-import { A as variants, C as actions, D as roles, E as edit, J as label, O as serialize, T as describe$2, X as node, Y as muted, Z as rect, h as _sfc_main$1, j as widgets, k as template, w as binding, y as translate } from "./App.js";
+import { A as variants, C as actions, D as roles, E as edit, J as label, O as serialize, T as describe$2, X as node, Y as muted, Z as rect, h as _sfc_main$1, j as widgets, k as template, q as button, w as binding, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
 //#region src/features/interface/layoutXml.js
@@ -212,7 +213,7 @@ function describe$1(layout, sample, width, selected, language, screenWidth, asse
 				wrap: true,
 				color,
 				weight,
-				fontSize: item.kind === "title" ? 15 : 13,
+				fontRole: item.kind === "title" ? "section" : "body",
 				align: item.align === "center" ? "center" : item.align === "end" ? "right" : "left"
 			}));
 		}
@@ -599,12 +600,6 @@ function completed(ui, command) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.ui.mjs
-var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
-	text,
-	icon,
-	action,
-	enabled
-}, extra || {}));
 var labels = {
 	group: "Group",
 	view: "Reusable view",
@@ -966,7 +961,7 @@ function describe(model, ui, width, height, language) {
 	const notice = notices(noticeModel, ui, width, language, void 0, ui.confirmation === "remove" ? "Remove element" : void 0), nodes = notice.nodes;
 	let y = notice.top;
 	nodes.push(label("layoutGuideHeading", rect(0, y, width, 28), tr("Build your own view"), {
-		fontSize: 16,
+		fontRole: "title",
 		weight: 600
 	}), label("layoutGuideText", rect(0, y + 34, width, width < 520 ? 62 : 36), tr("1. Choose a starting point · 2. Arrange elements · 3. Check and save"), Object.assign({ wrap: true }, muted)));
 	y += width < 520 ? 104 : 78;
@@ -1494,7 +1489,6 @@ var _sfc_main = {
 			},
 			toolbarSize: 620,
 			observer: null,
-			resizeFrame: 0,
 			searchType: "",
 			view: "continuous_example",
 			configuration: null,
@@ -1592,22 +1586,18 @@ var _sfc_main = {
 		this.view = this.initialFocus?.view || "continuous_example";
 		this.reload();
 		window.addEventListener("beforeunload", this.beforeUnload);
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el);
 	},
 	beforeUnmount() {
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		this.request++;
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},

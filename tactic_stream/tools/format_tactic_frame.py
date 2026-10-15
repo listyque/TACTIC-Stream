@@ -28,7 +28,7 @@ def main():
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = 'frontend/src/features/administration/**/*.{vue,js}'
     subprocess.run(command, cwd=ROOT, check=True)
-    command[-1] = 'tools/frame_foundation/*.{vue,js,html}'
+    command[-1] = 'tools/frame_foundation/*.{vue,js,html,mjs}'
     subprocess.run(command, cwd=ROOT, check=True)
     changed = []
     files = []

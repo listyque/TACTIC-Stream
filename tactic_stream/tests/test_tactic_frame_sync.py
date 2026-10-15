@@ -58,6 +58,15 @@ class FrameSyncTests(unittest.TestCase):
         (self.source / 'core/frame.mjs').write_text('export const fields = ["from", "to"];')
         frame.sync(self.handler, copy_from='stream')
 
+    def test_contract_guide_is_copied_and_checked_with_the_modules(self):
+        (self.source / 'README.md').write_text('Named controls and stable keys.')
+        frame.sync(self.handler, copy_from='stream')
+        target = self.handler / 'thlib/ui/qml/tactic_frame/README.md'
+        self.assertEqual(target.read_text(), 'Named controls and stable keys.')
+        target.write_text('Outdated contract')
+        with self.assertRaisesRegex(AssertionError, 'documentation differs'):
+            frame.sync(self.handler, check=True)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,4 +1,5 @@
 <script>
+import { observeFrameSizes } from '../../frame/resize.js';
 import FrameView from '../../frame/FrameView.vue';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/users/users.ui.mjs';
@@ -31,8 +32,7 @@ export default {
       request: 0,
       viewport: { width: 1, height: 1 },
       toolbarSize: 620,
-      observer: null,
-      resizeFrame: 0
+      observer: null
     };
   },
   computed: {
@@ -120,18 +120,15 @@ export default {
   mounted() {
     this.reload();
     window.addEventListener('beforeunload', this.beforeUnload);
-    this.observer = new ResizeObserver((entries) => {
-      cancelAnimationFrame(this.resizeFrame);
-      this.resizeFrame = requestAnimationFrame(() => {
-        for (const entry of entries) {
-          if (entry.target === this.$refs.body)
-            this.viewport = {
-              width: Math.max(1, entry.contentRect.width),
-              height: Math.max(1, entry.contentRect.height)
-            };
-          else this.toolbarSize = entry.contentRect.width;
-        }
-      });
+    this.observer = observeFrameSizes((entries) => {
+      for (const entry of entries) {
+        if (entry.target === this.$refs.body)
+          this.viewport = {
+            width: Math.max(1, entry.contentRect.width),
+            height: Math.max(1, entry.contentRect.height)
+          };
+        else this.toolbarSize = entry.contentRect.width;
+      }
     });
     this.observer.observe(this.$refs.body);
     this.observer.observe(
@@ -143,7 +140,6 @@ export default {
   beforeUnmount() {
     this.request++;
     this.observer?.disconnect();
-    cancelAnimationFrame(this.resizeFrame);
     if (this.draft) this.draft.password = '';
     window.removeEventListener('beforeunload', this.beforeUnload);
   },

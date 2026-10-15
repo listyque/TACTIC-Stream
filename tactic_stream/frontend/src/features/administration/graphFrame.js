@@ -1,4 +1,5 @@
 import { nextTick } from 'vue';
+import { observeFrameSizes } from '../../frame/resize.js';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/workflow/graph_editor.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/workflow/graph_editor.state.mjs';
@@ -16,8 +17,7 @@ export default {
       viewport: { width: 1, height: 1 },
       catalogSize: { width: 1, height: 1 },
       toolbarSize: 620,
-      frameObserver: null,
-      resizeFrame: 0
+      frameObserver: null
     };
   },
   computed: {
@@ -121,23 +121,16 @@ export default {
     const toolbar = this.toolbarTarget
       ? document.querySelector(this.toolbarTarget) || this.$el
       : this.$el;
-    const pending = new Map();
-    this.frameObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) pending.set(entry.target, entry.contentRect);
-      if (this.resizeFrame) return;
-      this.resizeFrame = requestAnimationFrame(() => {
-        this.resizeFrame = 0;
-        for (const [target, box] of pending) {
-          const size = {
-            width: Math.max(1, box.width),
-            height: Math.max(1, box.height)
-          };
-          if (target === this.$refs.body) this.viewport = size;
-          else if (target === this.catalogTarget) this.catalogSize = size;
-          else if (target === toolbar) this.toolbarSize = size.width;
-        }
-        pending.clear();
-      });
+    this.frameObserver = observeFrameSizes((entries) => {
+      for (const { target, contentRect: box } of entries) {
+        const size = {
+          width: Math.max(1, box.width),
+          height: Math.max(1, box.height)
+        };
+        if (target === this.$refs.body) this.viewport = size;
+        else if (target === this.catalogTarget) this.catalogSize = size;
+        else if (target === toolbar) this.toolbarSize = size.width;
+      }
     });
     this.frameObserver.observe(this.$refs.body);
     this.frameObserver.observe(toolbar);
@@ -151,7 +144,6 @@ export default {
   },
   beforeUnmount() {
     this.frameObserver?.disconnect();
-    cancelAnimationFrame(this.resizeFrame);
   },
   methods: {
     rowScene(list, record) {

@@ -207,6 +207,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -258,7 +259,8 @@
     "file": "assets/admin.form.js",
     "name": "admin.form",
     "imports": [
-      "src/App.vue"
+      "src/App.vue",
+      "_admin.document.js"
     ]
   },
   "_clipboard.css": {
@@ -294,6 +296,7 @@
       "_vue.js",
       "index.html",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -324,6 +327,10 @@
   "_previewImage.js": {
     "file": "assets/previewImage.js",
     "name": "previewImage"
+  },
+  "_resize.js": {
+    "file": "assets/resize.js",
+    "name": "resize"
   },
   "_richText.js": {
     "file": "assets/richText.js",
@@ -470,6 +477,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -484,6 +492,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -498,6 +507,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js"
     ]
   },
@@ -511,6 +521,8 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
+      "_admin.document.js",
       "src/features/administration/SearchTypes.vue",
       "_graphFrame.js"
     ],
@@ -529,6 +541,7 @@
       "_clipboard.js",
       "_previewImage.js",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js",
       "_admin.form.js",
       "_NamingEditor.js"
@@ -544,6 +557,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_groups.ui.js"
     ]
   },
@@ -557,6 +571,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js"
     ]
   },
@@ -570,6 +585,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_groups.ui.js"
     ]
   },
@@ -583,6 +599,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js",
       "_admin.form.js"
     ]
@@ -597,6 +614,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_resize.js",
       "_admin.document.js",
       "_admin.form.js",
       "_graphFrame.js"

@@ -1,8 +1,9 @@
 import { I as resolveComponent, J as markRaw, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { M as rpc } from "./clipboard.js";
 import { t as readPreviewImage } from "./previewImage.js";
-import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, y as translate } from "./App.js";
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, q as button, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
 import { t as NamingEditor_default } from "./NamingEditor.js";
@@ -71,12 +72,6 @@ var removalReasons = {
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/search_types/search_types.ui.mjs
-var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
-	text,
-	icon,
-	action,
-	enabled
-}, extra || {}));
 function records(model, ui) {
 	const query = ui.query.toLowerCase();
 	return model.catalog.filter((row) => (!ui.projectOnly || row.projectLocal) && (!ui.hideConfig || row.namespace !== "config") && [row.label, row.identity].join(" ").toLowerCase().indexOf(query) >= 0);
@@ -109,7 +104,7 @@ function describe(model, ui, width, height, language) {
 	if (!model.creationOnly && (split || !ui.editing)) {
 		const children = [
 			label("typesCatalogTitle", rect(12, 8, left - 24, 28), tr("Search Types"), {
-				fontSize: 15,
+				fontRole: "section",
 				weight: 600
 			}),
 			node("Field", "adminSearchTypeFilter", rect(12, 44, left - 24, 38), {
@@ -246,7 +241,7 @@ function content(model, ui, width, height, language, edit, navigate) {
 		nodes.push(label(id, rect(0, y, width, 28), title, {
 			role: "heading",
 			level: 2,
-			fontSize: 15,
+			fontRole: "section",
 			weight: 600
 		}));
 		y += 34;
@@ -447,7 +442,7 @@ function content(model, ui, width, height, language, edit, navigate) {
 		metrics.forEach((row, index) => {
 			const x = index % columns * width / columns, top = y + Math.floor(index / columns) * 72;
 			nodes.push(label("adminSearchTypeCount_" + row[0], rect(x, top, width / columns - 8, 34), String((meta.summary || {})[row[0]] === void 0 ? "—" : meta.summary[row[0]]), {
-				fontSize: 24,
+				fontRole: "hero",
 				weight: 600
 			}), label("typeMetricLabel_" + row[0], rect(x, top + 38, width / columns - 8, 26), tr(row[1]), muted));
 		});
@@ -527,7 +522,7 @@ function content(model, ui, width, height, language, edit, navigate) {
 		}));
 		y += 156;
 		nodes.push(label("adminSearchTypeCreationTitle", rect(0, y, width, 32), doc.title || "", {
-			fontSize: 18,
+			fontRole: "display",
 			weight: 600,
 			color: doc.color || "action"
 		}));
@@ -815,7 +810,6 @@ var _sfc_main = {
 			},
 			toolbarSize: 620,
 			observer: null,
-			resizeFrame: 0,
 			namingView: null,
 			namingSession: {},
 			identity: "",
@@ -945,22 +939,18 @@ var _sfc_main = {
 	},
 	mounted() {
 		window.addEventListener("beforeunload", this.beforeUnload);
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el);
 	},
 	beforeUnmount() {
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		this.imageRequest++;
 		this.request++;
 		this.previewRequest++;

@@ -1,17 +1,12 @@
 import { B as useId, D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, R as resolveDynamicComponent, _ as createCommentVNode, c as vShow, g as createBlock, h as createBaseVNode, l as withKeys, nt as normalizeStyle, p as Teleport, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t, c as _sfc_main$3, i as _sfc_main$2 } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t, c as _sfc_main$3, i as _sfc_main$2 } from "./index.js";
 import { M as rpc } from "./clipboard.js";
-import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$4, y as translate } from "./App.js";
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$4, q as button, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/process_rules.ui.mjs
-var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
-	text,
-	icon,
-	action,
-	enabled
-}, extra || {}));
 function toolbar(model, ui, width, language) {
 	const result = toolbar$1(model, ui, width, language), tr = (text) => translate(text, language);
 	result.nodes = result.nodes.filter((row) => row.id !== "adminDocumentStatus");
@@ -504,7 +499,6 @@ var _sfc_main$1 = {
 			},
 			toolbarSize: 620,
 			observer: null,
-			resizeFrame: 0,
 			active: false,
 			context: null,
 			identity: "",
@@ -568,19 +562,16 @@ var _sfc_main$1 = {
 	},
 	mounted() {
 		window.addEventListener("beforeunload", this.beforeUnload);
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.objectBody) this.objectViewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.objectBody) this.objectViewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.objectBody);
 		this.observer.observe(this.$refs.body);
@@ -588,7 +579,6 @@ var _sfc_main$1 = {
 	},
 	beforeUnmount() {
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		this.request++;
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},
@@ -885,7 +875,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 		}, null, 8, ["scene"])], 512)], 8, _hoisted_7)), [[_directive_window, { type: "window" }]])
 	], 40, _hoisted_1$1)), [[_directive_window, { kind: "process_dependencies" }]]);
 }
-var ProcessRules_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-42cc7917"]]);
+var ProcessRules_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-6489e0ff"]]);
 //#endregion
 //#region src/features/administration/WorkflowEditor.vue
 function pipelineXml(text) {

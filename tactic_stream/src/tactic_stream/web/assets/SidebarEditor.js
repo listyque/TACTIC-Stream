@@ -1,16 +1,11 @@
 import { E as mergeProps, I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { U as sidebarRequest } from "./clipboard.js";
-import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, y as translate } from "./App.js";
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, q as button, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.ui.mjs
-var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
-	text,
-	icon,
-	action,
-	enabled
-}, extra || {}));
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {
 	source,
 	rowHeight,
@@ -143,7 +138,7 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 		y += 44;
 	}
 	children.push(label("sidebarSelectedTitle", rect(12, y, width - 164, 38), entry.title || tr("Selected element"), {
-		fontSize: 15,
+		fontRole: "section",
 		weight: 600
 	}));
 	[
@@ -209,7 +204,7 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 		y += 46;
 		if (ui.page === "access") {
 			children.push(label("sidebarAccessHeading", rect(12, y, inner, 28), tr("Who can see this item"), {
-				fontSize: 15,
+				fontRole: "section",
 				weight: 600,
 				role: "heading",
 				level: 2
@@ -574,7 +569,6 @@ var _sfc_main = {
 			},
 			toolbarSize: 620,
 			observer: null,
-			resizeFrame: 0,
 			dispatching: false,
 			draft: null,
 			projectTitle: "",
@@ -740,15 +734,12 @@ var _sfc_main = {
 	mounted() {
 		this.reload();
 		window.addEventListener("beforeunload", this.beforeUnload);
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
+			else this.toolbarSize = entry.contentRect.width;
 		});
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.toolbarTarget ? this.$el.closest("dialog") || this.$refs.body.parentElement : this.$refs.body.parentElement);
@@ -756,7 +747,6 @@ var _sfc_main = {
 	beforeUnmount() {
 		this.request++;
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},
 	methods: {

@@ -1,8 +1,8 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppColorInput.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppColorInput.css","assets/AppDateField.js","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/DuplicateSObject.css","assets/NamingEditor.js","assets/markdown-it.js","assets/admin.document.js","assets/admin.form.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/ItemPreview.js","assets/ItemPreview.css","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/MarkdownText.js","assets/richText.js","assets/MarkdownText.css","assets/FileWorkspaceInspection.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/MiddleElide.js","assets/MiddleElide.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AppSearchField.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/KnowledgeBase.css","assets/Configuration.js","assets/activity.js","assets/Configuration.css","assets/SearchTypes.js","assets/previewImage.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppColorInput.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppColorInput.css","assets/AppDateField.js","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/DuplicateSObject.css","assets/NamingEditor.js","assets/markdown-it.js","assets/resize.js","assets/admin.document.js","assets/admin.form.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/ItemPreview.js","assets/ItemPreview.css","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/MarkdownText.js","assets/richText.js","assets/MarkdownText.css","assets/FileWorkspaceInspection.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/MiddleElide.js","assets/MiddleElide.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AppSearchField.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/KnowledgeBase.css","assets/Configuration.js","assets/activity.js","assets/Configuration.css","assets/SearchTypes.js","assets/previewImage.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { n as __exportAll } from "./markdown-it.js";
 import { $ as toRaw, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, J as markRaw, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, Q as shallowRef, R as resolveDynamicComponent, T as mergeModels, V as useModel, W as watchPostEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createCommentVNode, a as vModelCheckbox, b as createTextVNode, c as vShow, d as Fragment, et as unref, f as KeepAlive, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, n as TransitionGroup, nt as normalizeStyle, p as Teleport, q as isRef, rt as toDisplayString, s as vModelText, t as Transition, tt as normalizeClass, u as withModifiers, v as createElementBlock, w as inject, x as createVNode, y as createSlots } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
-import { A as readableText, B as taskColumns, C as randomId, E as appearance, F as configurationPreview, G as _plugin_vue_export_helper_default, H as iconSets, L as preferences, M as cssRoles, N as layout, P as metrics, R as savePreferencePage, S as setServerDebugContext, T as t, W as BusyIndicator_default, a as tooltipDirective, b as savedSessions, c as _sfc_main$104, d as debugSettings, f as exportSession, g as levels, h as importSession, i as _sfc_main$103, j as saveAppearance, l as clearLive, m as formatEvent, n as mobile, p as forgetSessions, r as mobileLayout, t as __vitePreload, u as debugLog, w as asyncComponent, x as sessionRecords, z as normalizeColumns } from "./index.js";
+import { A as readableText, B as normalizeColumns, C as randomId, E as appearance, F as textStyles, G as BusyIndicator_default, I as configurationPreview, K as _plugin_vue_export_helper_default, M as cssRoles, N as layout, P as metrics, R as preferences, S as setServerDebugContext, T as t, U as iconSets, V as taskColumns, a as tooltipDirective, b as savedSessions, c as _sfc_main$104, d as debugSettings, f as exportSession, g as levels, h as importSession, i as _sfc_main$103, j as saveAppearance, l as clearLive, m as formatEvent, n as mobile, p as forgetSessions, r as mobileLayout, t as __vitePreload, u as debugLog, w as asyncComponent, x as sessionRecords, z as savePreferencePage } from "./index.js";
 import { $ as updatesAvailable, A as resetRequestActivity, C as objectRelations, D as projectNavigation, E as projectCreationCatalog, F as scriptShelf, G as transactionDetails, H as sessionAction, I as searchConfiguration, J as userProfile, K as uploadFormFile, M as rpc, Q as updateDelay, S as objectDeletion, T as projectCatalog, V as serverUpdates, W as tableCells, X as workspaceLayouts, Y as widgetConfiguration, Z as setUpdatesAvailable, a as _sfc_main$105, at as editNotificationReply, b as messagesRequest, ct as notify, d as activityFeed, dt as submitNotificationReply, et as activeNotifications, f as beginActivity, g as interfaceDefinition, i as readClipboardImages, it as dismissNotification, j as resultItems, k as requestActivity, l as _sfc_main$106, lt as resetNotifications, m as endActivity, n as copyText, nt as cancelNotificationReply, o as javascriptTokens, ot as failNotificationReply, q as userAvatar, r as readClipboard, rt as clearNotificationHistory, s as pythonTokens, st as notificationHistory, t as copyImage, tt as beginNotificationReply, ut as setNotificationProgress, v as linkPreviews, w as objectStatus, x as navigationLink, y as messageFileRequest } from "./clipboard.js";
 import { t as _sfc_main$107 } from "./AppSwitch.js";
 import { t as _sfc_main$108 } from "./AppSelect.js";
@@ -26,6 +26,33 @@ import { t as _sfc_main$118 } from "./MiddleElide.js";
 import { t as _sfc_main$119 } from "./ItemSurface.js";
 import { t as readPreviewImage } from "./previewImage.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
+/** @typedef {{x:number, y:number, width:number, height:number}} Bounds Logical pixels. */
+/** @typedef {{type:string, [key:string]:unknown}} Action UI event or adapter command. */
+/** @typedef {'Box'|'Label'|'Icon'|'Button'|'Action'|'CheckBox'|'Field'|'Area'|'Preview'|'List'|'Scroll'|'Choice'|'Grid'|'IconChoice'|'Splitter'|'Switch'|'Graph'|'View'|'ColorChoice'|'Code'} ControlKind */
+/** @typedef {Bounds & {kind:ControlKind, id:string, children:FrameNode[], fontRole:keyof typeof textStyles, fontSize:number, action:Action|null, [key:string]:unknown}} FrameNode */
+/** @typedef {{nodes:FrameNode[]}} Scene */
+var controlKinds = Object.freeze([
+	"Box",
+	"Label",
+	"Icon",
+	"Button",
+	"Action",
+	"CheckBox",
+	"Field",
+	"Area",
+	"Preview",
+	"List",
+	"Scroll",
+	"Choice",
+	"Grid",
+	"IconChoice",
+	"Splitter",
+	"Switch",
+	"Graph",
+	"View",
+	"ColorChoice",
+	"Code"
+]);
 function rect$1(x, y, width, height) {
 	return {
 		x,
@@ -38,7 +65,7 @@ function label(id, bounds, text, extra) {
 	return node("Label", id, bounds, Object.assign({ text }, extra || {}));
 }
 var muted = {
-	fontSize: 12,
+	fontRole: "secondary",
 	color: "secondaryText"
 };
 function button(id, bounds, text, icon, action, enabled, extra) {
@@ -49,29 +76,17 @@ function button(id, bounds, text, icon, action, enabled, extra) {
 		enabled
 	}, extra || {}));
 }
+/**
+* Create a named native control. Only fontRole enters; fontSize is resolved output.
+* @param {ControlKind} kind
+* @param {string} id Stable within its sibling scene, independent of display text.
+* @param {Bounds} rect
+* @param {Object} [properties] Control data and actions; no engine objects or requests.
+* @returns {FrameNode}
+*/
 function node(kind, id, rect, properties) {
-	if ([
-		"Box",
-		"Label",
-		"Icon",
-		"Button",
-		"Action",
-		"CheckBox",
-		"Field",
-		"Area",
-		"Preview",
-		"List",
-		"Scroll",
-		"Choice",
-		"Grid",
-		"IconChoice",
-		"Splitter",
-		"Switch",
-		"Graph",
-		"View",
-		"ColorChoice",
-		"Code"
-	].indexOf(kind) < 0) throw Error("Unsupported Tactic Frame control: " + kind);
+	if (controlKinds.indexOf(kind) < 0) throw Error("Unsupported Tactic Frame control: " + kind);
+	if (typeof id !== "string" || !id.trim()) throw Error("Missing Frame control id");
 	for (const key of [
 		"x",
 		"y",
@@ -80,6 +95,17 @@ function node(kind, id, rect, properties) {
 	]) if (typeof rect[key] !== "number" || !isFinite(rect[key])) throw Error("Invalid frame: " + id + ".." + key);
 	if (rect.width < 0 || rect.height < 0) throw Error("Negative frame: " + id);
 	const options = Object.assign(kind === "List" ? { fields: [] } : {}, properties || {});
+	for (const key of [
+		"kind",
+		"id",
+		"x",
+		"y",
+		"width",
+		"height",
+		"fontSize"
+	]) if (Object.prototype.hasOwnProperty.call(options, key)) throw Error("Reserved Frame property: " + id + "." + key);
+	const fontRole = options.fontRole === void 0 ? "body" : options.fontRole;
+	if (!Object.prototype.hasOwnProperty.call(textStyles, fontRole)) throw Error("Unknown Frame font role: " + id + "." + fontRole);
 	const button = kind === "Button";
 	const color = options.enabled === false && [
 		"Button",
@@ -92,18 +118,85 @@ function node(kind, id, rect, properties) {
 		id,
 		text: "",
 		color,
-		fontSize: 13,
+		fontRole,
+		fontSize: textStyles[fontRole],
 		weight: button ? options.radio && !options.selected ? 500 : 600 : 400,
 		enabled: true,
 		opacity: 1,
 		children: [],
 		action: null
-	}, rect, options);
+	}, rect, options, {
+		fontRole,
+		fontSize: textStyles[fontRole],
+		text: options.text == null ? "" : String(options.text)
+	});
+}
+/**
+* Validate one scene boundary. Models are engine-owned arrays or native models.
+* @param {Scene} scene
+* @param {Object} [models] Named snapshots/models, kept outside the scene tree.
+* @param {Object} [views] Registered child views; absent slots require optional:true.
+*/
+function validateScene(scene, models, views) {
+	if (!scene || !sequence(scene.nodes)) throw Error("Frame scene needs nodes");
+	const ids = /* @__PURE__ */ new Set();
+	for (let index = 0; index < scene.nodes.length; index++) {
+		const value = scene.nodes[index];
+		if (!value || controlKinds.indexOf(value.kind) < 0) throw Error("Unsupported Frame scene control");
+		if (!value.id || ids.has(value.id)) throw Error("Duplicate/missing Frame id: " + value.id);
+		ids.add(value.id);
+		if (!Object.prototype.hasOwnProperty.call(textStyles, value.fontRole) || value.fontSize !== textStyles[value.fontRole]) throw Error("Invalid Frame typography: " + value.id);
+		for (const key of [
+			"x",
+			"y",
+			"width",
+			"height"
+		]) if (typeof value[key] !== "number" || !isFinite(value[key]) || (key === "width" || key === "height") && value[key] < 0) throw Error("Invalid Frame bounds: " + value.id + "." + key);
+		for (const key of [
+			"action",
+			"activateAction",
+			"commitAction",
+			"dropAction",
+			"dragStartAction"
+		]) if (value[key] != null && (typeof value[key].type !== "string" || !value[key].type)) throw Error("Invalid Frame action: " + value.id + "." + key);
+		if (value.kind === "List" || value.kind === "Grid") {
+			if (typeof value.source !== "string" || !value.source || !models || !Object.prototype.hasOwnProperty.call(models, value.source) || models[value.source] == null) throw Error("Missing Frame source: " + value.id + "." + value.source);
+		}
+		if (value.kind === "List" && (typeof value.keyField !== "string" || !value.keyField || typeof value.rowHeight !== "number" || !isFinite(value.rowHeight) || value.rowHeight <= 4)) throw Error("List needs keyField and positive rowHeight: " + value.id);
+		if (value.kind === "List" && !sequence(value.fields)) throw Error("List needs declared model fields: " + value.id);
+		if ([
+			"Box",
+			"Scroll",
+			"Action"
+		].indexOf(value.kind) >= 0 && !sequence(value.children)) throw Error("Frame container needs children: " + value.id);
+		if (value.kind === "Grid" && (!sequence(value.rowHeaders) || !sequence(value.columnHeaders) || !Number.isFinite(value.cellWidth) || value.cellWidth <= 0 || !Number.isFinite(value.rowHeight) || value.rowHeight <= 0)) throw Error("Grid needs headers and positive cell geometry: " + value.id);
+		if (value.kind === "View" && (typeof value.view !== "string" || !value.view)) throw Error("Frame View needs a registered name: " + value.id);
+		if (value.kind === "View" && (!views || !Object.prototype.hasOwnProperty.call(views, value.view) || views[value.view] == null) && value.optional !== true) throw Error("Missing Frame View: " + value.id + "." + value.view);
+	}
+	return scene.nodes;
+}
+/** Array records are immutable snapshots; a key stays unique across sorting/filtering. */
+function recordIndex(rows, keyField) {
+	if (!sequence(rows)) throw Error("Frame array list needs an array");
+	const indexes = /* @__PURE__ */ new Map();
+	for (let index = 0; index < rows.length; index++) {
+		const value = rows[index] && rows[index][keyField];
+		if (typeof value !== "string" && typeof value !== "number" || value === "" || typeof value === "number" && !isFinite(value)) throw Error("Missing Frame record key: " + keyField + "[" + index + "]");
+		const key = String(value);
+		if (indexes.has(key)) throw Error("Duplicate Frame record key: " + key);
+		indexes.set(key, index);
+	}
+	return indexes;
+}
+function sequence(value) {
+	return value !== null && typeof value === "object" && Number.isInteger(value.length) && value.length >= 0;
 }
 function virtualRange(count, rowHeight, viewport, scroll, overscan) {
+	if (!Number.isInteger(count) || count < 0 || !Number.isFinite(rowHeight) || rowHeight <= 0 || !Number.isFinite(viewport) || viewport < 0 || !Number.isFinite(scroll) || !Number.isInteger(overscan) || overscan < 0) throw Error("Invalid Frame virtual range");
+	const first = Math.min(count, Math.max(0, Math.floor(scroll / rowHeight) - overscan));
 	return {
-		first: Math.max(0, Math.floor(scroll / rowHeight) - overscan),
-		last: Math.min(count, Math.ceil((scroll + viewport) / rowHeight) + overscan),
+		first,
+		last: Math.max(first, Math.min(count, Math.ceil((scroll + viewport) / rowHeight) + overscan)),
 		height: count * rowHeight
 	};
 }
@@ -13229,7 +13322,7 @@ var _sfc_main$61 = {
 				y: el.scrollTop
 			};
 			await nextTick();
-			el.querySelector("[data-frame=\"" + name + "\"]")?.focus();
+			el.querySelector("[data-frame=\"" + CSS.escape(name) + "\"]")?.focus();
 		}
 		__expose({ focusCell });
 		return (_ctx, _cache) => {
@@ -16425,7 +16518,7 @@ var _sfc_main$56 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 		const props = __props;
 		const emit = __emit;
 		const scroll = ref({}), host = ref(null), branches = ref([]), grids = ref([]), graphs = ref([]);
-		const nodes = computed(() => props.scene.nodes || []);
+		const nodes = computed(() => validateScene(props.scene, props.models, Object.fromEntries(Object.entries(props.views).map(([name, view]) => [name, view?.component]))));
 		const color = (role) => role?.mix ? `color-mix(in srgb, ${color(role.mix[0])} ${(1 - role.mix[2]) * 100}%, ${color(role.mix[1])} ${role.mix[2] * 100}%)` : role === "transparent" ? "transparent" : role?.startsWith("#") ? role : cssRoles[role] ? "var(" + cssRoles[role] + ")" : void 0;
 		function style(node) {
 			return {
@@ -16477,6 +16570,7 @@ var _sfc_main$56 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 			}
 		}
 		function key(event, node) {
+			if (event.isComposing || event.keyCode === 229) return;
 			if (node.tableCell && (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)) return;
 			if (node.keys?.[event.key]) {
 				event.preventDefault();
@@ -16490,11 +16584,39 @@ var _sfc_main$56 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				index: range.first + index
 			}));
 		}
-		watch(() => props.models, () => {
-			for (const node of nodes.value) if (node.kind === "List") scroll.value[node.id] = Math.min(scroll.value[node.id] || 0, Math.max(0, (props.models[node.source]?.length || 0) * node.rowHeight - node.height));
-		}, { deep: false });
+		const previousLists = /* @__PURE__ */ new Map();
+		watch(() => [props.models, nodes.value], () => {
+			const present = /* @__PURE__ */ new Set();
+			for (const node of nodes.value) {
+				if (node.kind !== "List") continue;
+				present.add(node.id);
+				const rows = props.models[node.source];
+				const previous = previousLists.get(node.id);
+				if (previous?.rows === rows && previous.keyField === node.keyField) continue;
+				const indexes = recordIndex(rows, node.keyField);
+				const container = host.value?.querySelector(":scope > [data-frame=\"" + CSS.escape(node.id) + "\"]");
+				const focused = document.activeElement;
+				const focusedRow = container?.contains(focused) ? focused.closest("[data-frame-row]") : null;
+				let offset = container ? container.scrollTop : scroll.value[node.id] || 0;
+				if (focusedRow && previous) {
+					const key = focusedRow.getAttribute("data-frame-row");
+					const oldIndex = previous.rows.findIndex((row) => String(row[previous.keyField]) === key);
+					if (oldIndex >= 0 && indexes.has(key)) offset += (indexes.get(key) - oldIndex) * node.rowHeight;
+				}
+				offset = Math.max(0, Math.min(offset, Math.max(0, rows.length * node.rowHeight - node.height)));
+				scroll.value[node.id] = offset;
+				previousLists.set(node.id, {
+					rows,
+					keyField: node.keyField
+				});
+				if (container) nextTick(() => {
+					if (container.isConnected) container.scrollTop = scroll.value[node.id] || 0;
+				});
+			}
+			for (const id of previousLists.keys()) if (!present.has(id)) previousLists.delete(id);
+		}, { immediate: true });
 		function focusControl(name) {
-			const el = host.value?.querySelector("[data-frame=\"" + name + "\"]");
+			const el = host.value?.querySelector("[data-frame=\"" + CSS.escape(name) + "\"]");
 			if (!el) return false;
 			(el.matches("label") ? el.querySelector("input") : el)?.focus();
 			return true;
@@ -16846,7 +16968,8 @@ var _sfc_main$56 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						ref_key: "branches",
 						ref: branches,
 						key: item.record[node.keyField],
-						class: "frame-row",
+						"data-frame-row": String(item.record[node.keyField]),
+						class: normalizeClass(["frame-row", { "frame-box": !node.fields.length }]),
 						style: normalizeStyle({
 							top: item.index * node.rowHeight + "px",
 							height: node.rowHeight - 4 + "px",
@@ -16860,6 +16983,8 @@ var _sfc_main$56 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						interactive: __props.interactive,
 						onEvent: _cache[3] || (_cache[3] = ($event) => emit("event", $event))
 					}, null, 8, [
+						"data-frame-row",
+						"class",
 						"style",
 						"scene",
 						"models",
@@ -17136,10 +17261,10 @@ function describe$1(model, ui, width, height, language) {
 	nodes.push(node("Box", "administrationBackground", rect(0, 0, width, height), { background: "workspace" }));
 	if (!g.mobile) {
 		const nav = [label("administrationTitle", rect(20, 15, g.nav - 60, 28), "Administration", {
-			fontSize: 17,
+			fontRole: "heading",
 			weight: 600
 		}), label("administrationBrand", rect(20, 43, g.nav - 28, 20), "TACTIC · ADMIN", {
-			fontSize: 11,
+			fontRole: "caption",
 			color: "secondaryText"
 		})];
 		if (ui.collapsed) nav.length = 0;
@@ -17197,10 +17322,10 @@ function describe$1(model, ui, width, height, language) {
 		}));
 	}
 	const head = [label("administrationSectionTitle", rect(20, 10, g.mobile ? g.body - 120 : Math.max(0, g.body - g.toolbar - 148), 28), current.title, {
-		fontSize: 18,
+		fontRole: "display",
 		weight: 600
 	}), label("administrationSectionDescription", rect(20, 40, g.mobile ? g.body - 40 : Math.max(0, g.body - g.toolbar - 148), 22), ui.error && model.locked ? ui.error : current.description, {
-		fontSize: 12,
+		fontRole: "secondary",
 		color: ui.error && model.locked ? "error" : "secondaryText"
 	})];
 	head.push(node("View", "administrationToolbar", rect(g.mobile ? 12 : g.body - g.toolbar - 104, g.mobile ? 116 : 19, g.toolbar, 38), { view: "toolbar" }));
@@ -17248,7 +17373,7 @@ function row(list, record, model, ui, language) {
 		}));
 		children.push(node("Label", "adminSectionDescription_" + record.id, rect(46, 36, w - 58, 24), {
 			text: tr(record.description),
-			fontSize: 12,
+			fontRole: "secondary",
 			color: "secondaryText"
 		}));
 	}
@@ -17410,7 +17535,7 @@ var editable = (job) => !!job && ![
 	"Skipped",
 	"Result unknown"
 ].includes(job.status);
-var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([29,30,1,2,3,4,5,6,7,8,9,10,11,31,32])));
+var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([29,30,1,2,3,4,5,6,7,8,9,10,11,31,32,33])));
 var _sfc_main$53 = {
 	components: {
 		AppButton: _sfc_main$103,
@@ -19010,7 +19135,7 @@ var _sfc_main$52 = {
 			ticket: props.ticket,
 			project: props.project
 		}));
-		const MatchingTemplates = asyncComponent(() => __vitePreload(() => import("./MatchingTemplates.js"), __vite__mapDeps([33,1,2,3,4,5,6,7,8,9,10,11,18,19,25,26,34])));
+		const MatchingTemplates = asyncComponent(() => __vitePreload(() => import("./MatchingTemplates.js"), __vite__mapDeps([34,1,2,3,4,5,6,7,8,9,10,11,18,19,25,26,35])));
 		const templateItems = ref(structuredClone(matchingDefaults)), editingTemplates = ref(false), paddingDraft = ref(3);
 		try {
 			const saved = JSON.parse(localStorage.getItem("tactic_stream.matching_templates") || "null");
@@ -21395,9 +21520,9 @@ var _sfc_main$42 = {
 };
 //#endregion
 //#region src/features/tasks/TaskManager.vue
-var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([35,1,2,3,4,5,8,9,25,26,14,15,36,37,38])));
-var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([39,1,2,3,4,5,40])));
-var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([41,1,2,3,4,5,25,26,42,43])));
+var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([36,1,2,3,4,5,8,9,25,26,14,15,37,38,39])));
+var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([40,1,2,3,4,5,41])));
+var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([42,1,2,3,4,5,25,26,43,44])));
 var readCommand = "tactic.ui.table.task_workspace.TaskWorkspaceCmd";
 var editCommand = "tactic.ui.table.task_workspace_edits.TaskWorkspaceEditCmd";
 var scheduleCommand = "tactic.ui.table.task_schedule.TaskScheduleCmd";
@@ -38107,7 +38232,7 @@ var _sfc_main$1 = {
 		}
 	},
 	setup(__props, { expose: __expose }) {
-		const MarkdownText = asyncComponent(() => __vitePreload(() => import("./MarkdownText.js"), __vite__mapDeps([44,30,1,6,2,3,4,5,7,8,9,10,11,45,46])));
+		const MarkdownText = asyncComponent(() => __vitePreload(() => import("./MarkdownText.js"), __vite__mapDeps([45,30,1,6,2,3,4,5,7,8,9,10,11,46,47])));
 		const props = __props;
 		const dialog = ref(null), articleScroll = ref(null), topics = ref(null), article = ref(null);
 		const selected = ref("overview"), query = ref(""), articles = ref([]), busy = ref(false), error = ref(""), topicsVisible = ref(false);
@@ -38326,21 +38451,21 @@ var _sfc_main$1 = {
 //#endregion
 //#region src/App.vue
 var App_exports = /* @__PURE__ */ __exportAll({ default: () => App_default });
-var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([47,1,2,3,4,5,6,7,8,9,10,11,18,19,25,26,48,49,50,42,43,51])));
-var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([52,1,2,3,4,5,6,7,8,9,10,11,45,53,54])));
-var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([55,1,2,3,4,5,6,7,8,9,10,11,56,20,21,22,18,19,23,24,25,26,27,57,36,37,58,59,60])));
-var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([61,30,1,2,3,4,5,6,7,8,9,10,11,21,22,18,19,25,26,14,15,45,53,62,63,36,37,64,49,50,65])));
-var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([66,1,2,3,4,5,6,7,8,9,10,11,56,20,21,22,18,19,23,24,25,26,27,57,14,15,67,45,53,62,68])));
-var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([69,1,2,3,4,5,6,7,8,9,10,11,70,31,32,29,30])));
-var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([71,1,2,3,4,5,6,7,8,9,10,11,69,70,31,32,29,30,72,73])));
-var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([74,1,2,3,4,5,6,7,8,9,10,11,31,32,72,75])));
-var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([76,1,2,3,4,5,6,7,8,9,10,11,31,32])));
-var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([77,1,2,3,4,5,6,7,8,9,10,11,31,32])));
-var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([78,1,2,3,4,5,6,7,8,9,10,11,31,32])));
-var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([79,1,2,3,4,5,6,7,8,9,10,11,31])));
-var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([80,1,2,3,4,5,6,7,8,9,10,11,81])));
-var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([82,1,2,3,4,5,6,7,8,9,10,11,81])));
-var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([83,1,2,3,4,5,6,7,8,9,10,11,31])));
+var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([48,1,2,3,4,5,6,7,8,9,10,11,18,19,25,26,49,50,51,43,44,52])));
+var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([53,1,2,3,4,5,6,7,8,9,10,11,46,54,55])));
+var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([56,1,2,3,4,5,6,7,8,9,10,11,57,20,21,22,18,19,23,24,25,26,27,58,37,38,59,60,61])));
+var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([62,30,1,2,3,4,5,6,7,8,9,10,11,21,22,18,19,25,26,14,15,46,54,63,64,37,38,65,50,51,66])));
+var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([67,1,2,3,4,5,6,7,8,9,10,11,57,20,21,22,18,19,23,24,25,26,27,58,14,15,68,46,54,63,69])));
+var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([70,1,2,3,4,5,6,7,8,9,10,11,71,31,32,33,29,30])));
+var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([72,1,2,3,4,5,6,7,8,9,10,11,31,32,70,71,33,29,30,73,74])));
+var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([75,1,2,3,4,5,6,7,8,9,10,11,31,32,33,73,76])));
+var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([77,1,2,3,4,5,6,7,8,9,10,11,31,32,33])));
+var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([78,1,2,3,4,5,6,7,8,9,10,11,31,32,33])));
+var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([79,1,2,3,4,5,6,7,8,9,10,11,31,32,33])));
+var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([80,1,2,3,4,5,6,7,8,9,10,11,31,32])));
+var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([81,1,2,3,4,5,6,7,8,9,10,11,31,82])));
+var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([83,1,2,3,4,5,6,7,8,9,10,11,31,82])));
+var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([84,1,2,3,4,5,6,7,8,9,10,11,31,32])));
 var compactLayout = window.matchMedia("(max-width: 900px)");
 var shortcutLayout = mobileLayout;
 var _sfc_main = {
@@ -38973,7 +39098,7 @@ var _sfc_main = {
 			const session = this.session;
 			this.scriptEditorLoading = true;
 			try {
-				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([84,1,2,3,4,5,6,7,8,9,10,11,25,26,62,85]));
+				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([85,1,2,3,4,5,6,7,8,9,10,11,25,26,63,86]));
 				if (this.session !== session) return;
 				this.scriptEditorComponent ||= markRaw(module.default);
 				await nextTick();

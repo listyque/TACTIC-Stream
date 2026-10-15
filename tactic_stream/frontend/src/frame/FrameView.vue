@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import AppButton from '../controls/AppButton.vue';
 import AppCheckbox from '../controls/AppCheckbox.vue';
 import AppSwitch from '../controls/AppSwitch.vue';
@@ -17,7 +17,9 @@ import ItemPreview from '../controls/ItemPreview.vue';
 import ItemSurface from '../controls/ItemSurface.vue';
 import {
   colors,
-  virtualRange
+  virtualRange,
+  validateScene,
+  recordIndex
 } from '../../../src/tactic_stream/shared_ui/core/frame.mjs';
 import './frame.css';
 import '../controls/panelChrome.css';
@@ -37,7 +39,15 @@ const scroll = ref({}),
   branches = ref([]),
   grids = ref([]),
   graphs = ref([]);
-const nodes = computed(() => props.scene.nodes || []);
+const nodes = computed(() =>
+  validateScene(
+    props.scene,
+    props.models,
+    Object.fromEntries(
+      Object.entries(props.views).map(([name, view]) => [name, view?.component])
+    )
+  )
+);
 const color = (role) =>
   role?.mix
     ? `color-mix(in srgb, ${color(role.mix[0])} ${(1 - role.mix[2]) * 100}%, ${color(role.mix[1])} ${role.mix[2] * 100}%)`
@@ -111,6 +121,7 @@ function drop(event, node) {
   }
 }
 function key(event, node) {
+  if (event.isComposing || event.keyCode === 229) return;
   if (
     node.tableCell &&
     (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)
@@ -134,24 +145,60 @@ function records(node) {
     .slice(range.first, range.last)
     .map((record, index) => ({ record, index: range.first + index }));
 }
+const previousLists = new Map();
 watch(
-  () => props.models,
+  () => [props.models, nodes.value],
   () => {
-    for (const node of nodes.value)
-      if (node.kind === 'List')
-        scroll.value[node.id] = Math.min(
-          scroll.value[node.id] || 0,
-          Math.max(
-            0,
-            (props.models[node.source]?.length || 0) * node.rowHeight -
-              node.height
-          )
+    const present = new Set();
+    for (const node of nodes.value) {
+      if (node.kind !== 'List') continue;
+      present.add(node.id);
+      const rows = props.models[node.source];
+      const previous = previousLists.get(node.id);
+      if (previous?.rows === rows && previous.keyField === node.keyField)
+        continue;
+      const indexes = recordIndex(rows, node.keyField);
+      const container = host.value?.querySelector(
+        ':scope > [data-frame="' + CSS.escape(node.id) + '"]'
+      );
+      const focused = document.activeElement;
+      const focusedRow = container?.contains(focused)
+        ? focused.closest('[data-frame-row]')
+        : null;
+      // A DOM scroll can precede its scroll event and the next model update.
+      let offset = container ? container.scrollTop : scroll.value[node.id] || 0;
+      if (focusedRow && previous) {
+        const key = focusedRow.getAttribute('data-frame-row');
+        const oldIndex = previous.rows.findIndex(
+          (row) => String(row[previous.keyField]) === key
         );
+        if (oldIndex >= 0 && indexes.has(key))
+          offset += (indexes.get(key) - oldIndex) * node.rowHeight;
+      }
+      offset = Math.max(
+        0,
+        Math.min(
+          offset,
+          Math.max(0, rows.length * node.rowHeight - node.height)
+        )
+      );
+      scroll.value[node.id] = offset;
+      previousLists.set(node.id, { rows, keyField: node.keyField });
+      if (container)
+        nextTick(() => {
+          if (container.isConnected)
+            container.scrollTop = scroll.value[node.id] || 0;
+        });
+    }
+    for (const id of previousLists.keys())
+      if (!present.has(id)) previousLists.delete(id);
   },
-  { deep: false }
+  { immediate: true }
 );
 function focusControl(name) {
-  const el = host.value?.querySelector('[data-frame="' + name + '"]');
+  const el = host.value?.querySelector(
+    '[data-frame="' + CSS.escape(name) + '"]'
+  );
   if (!el) return false;
   (el.matches('label') ? el.querySelector('input') : el)?.focus();
   return true;
@@ -410,7 +457,9 @@ defineExpose({ focusControl, focusGrid, graphCommand });
             ref="branches"
             v-for="item in records(node)"
             :key="item.record[node.keyField]"
+            :data-frame-row="String(item.record[node.keyField])"
             class="frame-row"
+            :class="{ 'frame-box': !node.fields.length }"
             :style="{
               top: item.index * node.rowHeight + 'px',
               height: node.rowHeight - 4 + 'px',

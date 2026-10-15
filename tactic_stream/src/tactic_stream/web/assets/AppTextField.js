@@ -1,8 +1,7 @@
-import { N as openBlock, X as ref, et as unref, v as createElementBlock } from "./vue.js";
+import { K as withDirectives, N as openBlock, X as ref, et as unref, m as computed, s as vModelText, v as createElementBlock } from "./vue.js";
 import { T as t } from "./index.js";
 //#region src/controls/AppTextField.vue
 var _hoisted_1 = [
-	"value",
 	"aria-label",
 	"placeholder",
 	"disabled"
@@ -19,22 +18,27 @@ var _sfc_main = {
 		disabled: Boolean
 	},
 	emits: ["update:modelValue"],
-	setup(__props, { expose: __expose }) {
+	setup(__props, { expose: __expose, emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const text = computed({
+			get: () => String(props.modelValue ?? ""),
+			set: (value) => emit("update:modelValue", String(value))
+		});
 		const field = ref(null);
 		__expose({ focus() {
 			field.value?.focus();
 		} });
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("input", {
+			return withDirectives((openBlock(), createElementBlock("input", {
 				ref_key: "field",
 				ref: field,
+				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => text.value = $event),
 				class: "app-text-field",
-				value: __props.modelValue,
 				"aria-label": __props.label || __props.placeholder ? unref(t)(__props.label || __props.placeholder) : void 0,
 				placeholder: unref(t)(__props.placeholder || ""),
-				disabled: __props.disabled,
-				onInput: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("update:modelValue", $event.target.value))
-			}, null, 40, _hoisted_1);
+				disabled: __props.disabled
+			}, null, 8, _hoisted_1)), [[vModelText, text.value]]);
 		};
 	}
 };

@@ -1,4 +1,5 @@
 <script>
+import { observeFrameSizes } from '../../frame/resize.js';
 // Review/confirmation adapted from Handler's schema_delete.py and
 // AdminSchemaDeleteConfirmation.qml. The native command owns every mutation.
 import { nextTick } from 'vue';
@@ -17,7 +18,6 @@ export default {
     return {
       viewport: { width: 1, height: 1 },
       observer: null,
-      resizeFrame: 0,
       active: false,
       context: null,
       identity: '',
@@ -65,21 +65,17 @@ export default {
     }
   },
   mounted() {
-    this.observer = new ResizeObserver((entries) => {
-      cancelAnimationFrame(this.resizeFrame);
-      this.resizeFrame = requestAnimationFrame(() => {
-        for (const entry of entries)
-          this.viewport = {
-            width: Math.max(1, entry.contentRect.width),
-            height: Math.max(1, entry.contentRect.height)
-          };
-      });
+    this.observer = observeFrameSizes((entries) => {
+      for (const entry of entries)
+        this.viewport = {
+          width: Math.max(1, entry.contentRect.width),
+          height: Math.max(1, entry.contentRect.height)
+        };
     });
     this.observer.observe(this.$refs.body);
   },
   beforeUnmount() {
     this.observer?.disconnect();
-    cancelAnimationFrame(this.resizeFrame);
     this.request++;
   },
   watch: {

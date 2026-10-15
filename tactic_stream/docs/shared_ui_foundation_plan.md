@@ -2,6 +2,72 @@
 
 Started 2026-10-15. This replaces the previous screen-first migration order.
 
+## Phase 0 delivered, 2026-10-15
+
+Handler 0.6.0.97 / Stream 0.112.146. The findings below describe the review
+baseline; the preparation blockers have now been resolved. Later phases remain
+open. Both products still ship independent local modules and native controls.
+
+- Array-backed native lists now index immutable records once and materialize
+  only visible keyed rows plus overscan. The existing native role-model path
+  remains direct. Reordering preserves the actual editor, draft, caret,
+  selection and IME preedit; removing a row cannot transfer its edit to the
+  successor. Persistent drafts remain the feature owner's responsibility.
+- Frame text uses named logical-pixel roles and complete native font values.
+  Deployed Frame sizes are preserved. The ordinary window smoke now passes
+  with zero font warnings; the archived baseline produces 50. Other native
+  controls retain their existing typography contract until their migration.
+- Browser size deliveries merge per observed target and release pending work
+  on disposal. Model updates use the actual DOM scroll position, including
+  when a scroll event has not yet reached reactive state. IME Enter does not
+  invoke commands; unusual control IDs are escaped during lookup.
+- Scene contracts validate kinds, sibling IDs, finite geometry, text roles,
+  required models/views and record keys. Missing required slots fail early;
+  platform-optional slots must be explicit. Eight duplicate button builders
+  were removed. No parser, runtime dependency or embedded browser was added.
+- A reproducible source inventory records native/Vue surfaces, registered
+  windows, docks, entry owners and hashes. Runtime script/plugin/configuration
+  inputs must still be supplied for their own acceptance; source discovery is
+  not a claim that every window was exercised.
+
+Measured with the same real Qt list fixture, three reverse updates per size:
+
+| Records | Before: median update + frame | After |
+| ---: | ---: | ---: |
+| 1,000 | 376.90 ms | 11.47 ms |
+| 4,000 | 5,816.32 ms | 52.85 ms |
+
+These local software-rendered measurements establish the removed quadratic
+path; they do not certify full-application FPS, GPU behavior or production data.
+The 10,000-record regression separately checks bounded delegate creation.
+
+The focused gate is one command, with isolated settings, per-step timeouts,
+owned-process cleanup and source fingerprints:
+
+```
+python tools/frame_foundation/check_platform.py --handler-root D:/code/th_codex
+```
+
+All 13 steps passed: format, module/guide sync, scene contracts, 20 renderer
+registrations, resize lifecycle, eight discovery/sync tests, five actual native
+input tests at scales 1/1.5/2, browser input at those three device scales, two
+ordinary window smoke tests, a clean independent wheel and source inventory.
+Native IME uses actual Qt input-method events; browser composition is simulated
+with DOM events, not a physical OS IME session.
+
+Release regression also passed 249 native tests and all 14 browser suites:
+2,340 paired Administration states, 98,414 geometry checks, 60,798 style checks
+and 4,622 internal-indicator checks. Captures were refreshed and their source
+hashes checked. This verifies current Frame-to-Frame behavior; the remaining
+original-Handler visual closure is still phase 3.
+
+Current evidence: `tools/frame_foundation/output/index.html`, source inventory
+`output/inventory.html`, machine-readable gate `output/platform/gate.json` and
+full paired gallery `tools/frame_admin/output/index.html`. Regenerate reports
+after source changes. Existing whole-repository structure/lint debt remains
+visible; no warning budget was raised. Next is phase 1 plus the complete Help
+vertical pilot, not another wholesale screen rollout.
+
 ## Architecture review, 2026-10-15
 
 Decision: retain Frame as shared UI composition and presentation-state modules.
@@ -131,7 +197,7 @@ database code or user-authored QML into JavaScript.
 
 | Phase | Scope | Completion gate |
 | --- | --- | --- |
-| 0. Preparation | Fix the three findings above; record source/host/entry point for every window, dock, menu and popup; define brick contracts and original references | Frame-owned smoke warnings resolved; resize delivery test passes; large-list updates preserve selection/focus without multi-second blocking; existing quality debt remains visible |
+| 0. Preparation — complete | Fixed findings, source/entry inventory, executable brick contracts and original reference | Focused 13-step gate and full current Administration regression passed; runtime-generated surfaces still require their real inputs |
 | 1. Controls | Finish foundation consumers, typography, buttons, fields, choices, checkbox/switch, tooltips, menus, scrollbars/splitters, user/date/time/color/icon pickers, tree/table base | Real normal/hover/pressed/focused/disabled/loading/error states in both engines; EN/RU, themes, narrow/wide and DPI; same semantic events |
 | 2. Windows and main workspace | Complete window kinds, ownership/modality, anchored popovers, native detach/browser panels, dock stacks/tabs, footer/corners, resize/drag, main menus/navigation, search tabs and layout restore | Original TH → Frame TH → Frame TS; first click/tap works; reopening/tab changes preserve drafts and layout; no extra requests from hidden views |
 | 3. Administration closure | Finish original-reference comparison for all existing Frame sections and child editors; restore missing source behavior before expanding | Groups, Users, Access, Search Types, Schema, Workflow, Columns, Raw database, Layouts, Sidebar, Naming and process rules pass their actual read/edit/save/error/guard scenarios |
@@ -239,7 +305,7 @@ Original reference sources stay separate from the running application.
 | Current TH/TS archives | Complete | ZIP CRC, SHA-256, no files changed while read |
 | Independent original graph reference | Captured | Original/Frame schema/workflow, selected node and edge |
 | Invisible uncolored graph connections | Fixed; initial render checks passed | Default, source color, explicit color; real pixels in Qt and browser |
-| Frame directory structure/readability | Complete for migrated code | 47 recursive modules, 72 formatted native renderers/adapters; separated Administration domains and shell/windows, shell/docks; public QML type index; independent clean wheel and native update archive checked |
+| Frame directory structure/readability | Complete for migrated code | 47 recursive modules, 73 formatted native renderers/adapters; separated Administration domains and shell/windows, shell/docks; public QML type index; independent clean wheel and native update archive checked |
 | 1. Theme/type/metrics/motion | Implemented and checked | 12,708 archived/current TH checks; 3,178 browser checks; styles, custom palettes, independent motion preferences and reduced motion |
 | 2. Controls and interaction | In progress | Common primitive metrics, form sections, tab sizing/displacement; native and browser first-click, touch, scrollbar and splitter checks passed. Complete primitive states still require review |
 | 3. Windows and docks | In progress | Common geometry, minimum sizes (240 original values), dock-header composition and tab rules; 24 browser windows have semantic kinds. Existing owners retain persistence/lifecycle. 12 original/Frame native header pairs and 9 browser cases passed; complete dock trees and chrome states remain |
@@ -291,10 +357,10 @@ The whole-repository quality gates remain red. The reproducible
 `tools/frame_foundation/check_quality_baseline.py` compares the archive with
 current sources: structure failures decreased from 11 to 10, missing-property
 remains 114, property-override remains 9, and unused-imports remains 21. No limits
-were raised. Both identical offline smoke runs load/reopen/close the registered
-windows with exit code 0, but both emit 50 existing point/pixel font warnings
-in four Frame windows; these still fail the ordinary smoke test. This is an
-explicit remaining defect, not a passing global smoke gate.
+were raised. The archived offline smoke emits 50 point/pixel font warnings;
+the current run loads/reopens/closes the same registered windows with exit code
+0 and no warnings. Both ordinary smoke regression tests now pass. Structure
+and lint debt remain separate from the resolved Frame typography defect.
 
 Current Administration reports were refreshed with source hashes after the final
 changes. They compare Frame implementations; original-wide parity is not implied.

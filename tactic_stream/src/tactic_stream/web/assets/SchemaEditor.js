@@ -1,7 +1,9 @@
 import { B as useId, D as nextTick, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, _ as createCommentVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, l as withKeys, nt as normalizeStyle, p as Teleport, rt as toDisplayString, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, G as _plugin_vue_export_helper_default, T as t, c as _sfc_main$3, i as _sfc_main$2 } from "./index.js";
+import { E as appearance, K as _plugin_vue_export_helper_default, T as t, c as _sfc_main$3, i as _sfc_main$2 } from "./index.js";
 import { M as rpc } from "./clipboard.js";
 import { J as label, X as node, Z as rect, h as _sfc_main$4, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
+import "./admin.document.js";
 import SearchTypes_default from "./SearchTypes.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/schema/schema_delete.ui.mjs
@@ -126,7 +128,6 @@ var _sfc_main$1 = {
 				height: 1
 			},
 			observer: null,
-			resizeFrame: 0,
 			active: false,
 			context: null,
 			identity: "",
@@ -164,20 +165,16 @@ var _sfc_main$1 = {
 		}
 	},
 	mounted() {
-		this.observer = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
-			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-			});
+		this.observer = observeFrameSizes((entries) => {
+			for (const entry of entries) this.viewport = {
+				width: Math.max(1, entry.contentRect.width),
+				height: Math.max(1, entry.contentRect.height)
+			};
 		});
 		this.observer.observe(this.$refs.body);
 	},
 	beforeUnmount() {
 		this.observer?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 		this.request++;
 	},
 	watch: {
@@ -305,7 +302,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 		onEvent: $options.dispatch
 	}, null, 8, ["scene", "onEvent"])], 512)], 40, _hoisted_1$1)), [[_directive_window]]);
 }
-var SchemaTypeDeletion_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-306f8cd4"]]);
+var SchemaTypeDeletion_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-848c9a0d"]]);
 //#endregion
 //#region src/features/administration/SchemaEditor.vue
 function schemaXml(text) {

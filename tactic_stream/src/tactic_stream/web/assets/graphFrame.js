@@ -1,6 +1,7 @@
 import { D as nextTick } from "./vue.js";
 import { E as appearance, P as metrics } from "./index.js";
 import { J as label, X as node, Y as muted, Z as rect, q as button, y as translate } from "./App.js";
+import { t as observeFrameSizes } from "./resize.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { n as fieldProperties, t as form } from "./admin.form.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/sections.ui.mjs
@@ -45,7 +46,7 @@ function sections(fields, width, language, enabled, style) {
 			const heading = group.heading;
 			const title = heading.dataLabel ? heading.title : translate(heading.title, language);
 			nodes.push(label(heading.id, rect(1, contentY, width - 2, 20), title, {
-				fontSize: 14,
+				fontRole: "bodyLarge",
 				weight: 600
 			}));
 			contentY += 28;
@@ -53,7 +54,7 @@ function sections(fields, width, language, enabled, style) {
 				const description = translate(heading.description, language);
 				const height = captionHeight(description, width - 2);
 				nodes.push(label(heading.id + "Description", rect(1, contentY, width - 2, height), description, Object.assign({}, muted, {
-					fontSize: 11,
+					fontRole: "caption",
 					wrap: true
 				})));
 				contentY += height + 8;
@@ -85,11 +86,11 @@ function sections(fields, width, language, enabled, style) {
 			const textHeight = 18 + (description ? 3 + descriptionHeight : 0);
 			const rowHeight = Math.max(54, stacked ? textHeight + 8 + controlHeight + 20 : Math.max(textHeight, controlHeight) + 20);
 			children.push(label(field.id + "Label", rect(20, rowY + 10, textWidth, 18), properties.label, {
-				fontSize: 13,
+				fontRole: "body",
 				weight: 600
 			}));
 			if (description) children.push(label(field.id + "Description", rect(20, rowY + 31, textWidth, descriptionHeight), description, Object.assign({}, muted, {
-				fontSize: 11,
+				fontRole: "caption",
 				wrap: true
 			})));
 			const controlY = stacked ? rowY + 10 + textHeight + 8 : rowY + (rowHeight - controlHeight) / 2;
@@ -1000,6 +1001,7 @@ function records(model, ui, language) {
 	for (const key of keys) {
 		const info = (model.metadata.searchTypes || []).find((row) => row.identity === key) || {};
 		out.push({
+			key: "group:" + key,
 			identity: "group:" + key,
 			group: true,
 			searchType: key,
@@ -1007,11 +1009,12 @@ function records(model, ui, language) {
 		});
 		if (ui.collapsed.indexOf(key) < 0 || !model.identity && model.document.searchType === key) {
 			if (model.ready && !model.identity && model.document.searchType === key) out.push({
+				key: "draft:" + key,
 				identity: "",
 				label: tr("New workflow"),
 				searchType: key
 			});
-			out.push.apply(out, groups[key].slice().sort((a, b) => (a.label || a.identity).localeCompare(b.label || b.identity)));
+			out.push.apply(out, groups[key].slice().sort((a, b) => (a.label || a.identity).localeCompare(b.label || b.identity)).map((row) => Object.assign({}, row, { key: "pipeline:" + row.identity })));
 		}
 	}
 	return out;
@@ -1081,7 +1084,7 @@ function panel(model, ui, bounds, language, narrow = false) {
 		action: { type: "query" }
 	}), node("List", "adminWorkflowCatalog", rect(8, 88, w - 16, h - 96), {
 		source: "graphPipelines",
-		keyField: "identity",
+		keyField: "key",
 		rowHeight: 42,
 		scrollbarId: "adminWorkflowCatalogScrollBar"
 	}));
@@ -1672,8 +1675,7 @@ var graphFrame_default = {
 				height: 1
 			},
 			toolbarSize: 620,
-			frameObserver: null,
-			resizeFrame: 0
+			frameObserver: null
 		};
 	},
 	computed: {
@@ -1744,23 +1746,16 @@ var graphFrame_default = {
 	},
 	mounted() {
 		const toolbar = this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el;
-		const pending = /* @__PURE__ */ new Map();
-		this.frameObserver = new ResizeObserver((entries) => {
-			for (const entry of entries) pending.set(entry.target, entry.contentRect);
-			if (this.resizeFrame) return;
-			this.resizeFrame = requestAnimationFrame(() => {
-				this.resizeFrame = 0;
-				for (const [target, box] of pending) {
-					const size = {
-						width: Math.max(1, box.width),
-						height: Math.max(1, box.height)
-					};
-					if (target === this.$refs.body) this.viewport = size;
-					else if (target === this.catalogTarget) this.catalogSize = size;
-					else if (target === toolbar) this.toolbarSize = size.width;
-				}
-				pending.clear();
-			});
+		this.frameObserver = observeFrameSizes((entries) => {
+			for (const { target, contentRect: box } of entries) {
+				const size = {
+					width: Math.max(1, box.width),
+					height: Math.max(1, box.height)
+				};
+				if (target === this.$refs.body) this.viewport = size;
+				else if (target === this.catalogTarget) this.catalogSize = size;
+				else if (target === toolbar) this.toolbarSize = size.width;
+			}
 		});
 		this.frameObserver.observe(this.$refs.body);
 		this.frameObserver.observe(toolbar);
@@ -1772,7 +1767,6 @@ var graphFrame_default = {
 	} },
 	beforeUnmount() {
 		this.frameObserver?.disconnect();
-		cancelAnimationFrame(this.resizeFrame);
 	},
 	methods: {
 		rowScene(list, record) {
