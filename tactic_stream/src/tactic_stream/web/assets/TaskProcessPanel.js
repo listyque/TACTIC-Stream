@@ -2,7 +2,7 @@ import { G as withCtx, N as openBlock, P as renderList, X as ref, _ as createCom
 import { T as t, i as _sfc_main$1 } from "./index.js";
 import { t as _sfc_main$2 } from "./AppMenu.js";
 import { t as _sfc_main$3 } from "./ItemSurface.js";
-import { U as _sfc_main$4, W as _sfc_main$5 } from "./App.js";
+import { F as _sfc_main$5, P as _sfc_main$4 } from "./App.js";
 //#region src/features/tasks/TaskProcessPanel.vue
 var _hoisted_1 = ["aria-label"];
 var _hoisted_2 = { class: "task-process-title" };

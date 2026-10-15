@@ -22,7 +22,7 @@ with ZipFile(archive) as source:
             target.write_bytes(source.read(name))
 os.environ.update(QT_QPA_PLATFORM="offscreen", QT_QUICK_BACKEND="software", QT_FONT_DPI="96")
 sys.path[:0] = [str(TH), str(ROOT / "tools/frame_admin")]
-from PySide6.QtCore import QCoreApplication, QEvent, QUrl
+from PySide6.QtCore import QCoreApplication, QEvent, QUrl, QPointF
 from PySide6.QtGui import QFont
 from PySide6.QtQml import QQmlComponent, QQmlEngine
 from PySide6.QtQuick import QQuickWindow
@@ -30,7 +30,7 @@ from tests.qt_application import gui_test_application
 from tests.profile_ui_responsiveness import frame
 from thlib.ui.admin.graph_editor import GraphEditor
 from thlib.ui.icon_font import qml_icon_bindings
-from native_capture import snapshot
+from native_capture import snapshot, controls
 
 app = gui_test_application()
 app.setFont(QFont("Segoe UI", 10))
@@ -69,7 +69,20 @@ for mode in ("schema", "workflow"):
                     controller.select_edge(0)
                 frame(window)
                 filename = mode + ("-original-" if original else "-frame-") + phase + ".png"
-                assert window.grabWindow().save(str(OUT / filename))
+                image = window.grabWindow()
+                if phase == 'initial':
+                    items = controls(window)
+                    first = controller.nodes[0]['identity']
+                    second = controller.nodes[1]['identity']
+                    source = items['graphOutput_' + first]
+                    target = items['graphInput_' + second]
+                    start = source.mapToScene(QPointF(source.width() / 2, source.height() / 2))
+                    end = target.mapToScene(QPointF(target.width() / 2, target.height() / 2))
+                    x, y = round((start.x() + end.x()) / 2), round((start.y() + end.y()) / 2)
+                    background = image.pixelColor(x, y + 8).getRgb()[:3]
+                    assert any(sum(abs(a-b) for a,b in zip(image.pixelColor(x, y+offset).getRgb()[:3], background)) > 30
+                               for offset in (-1, 0, 1)), (mode, original, 'Connection pixels are missing')
+                assert image.save(str(OUT / filename))
                 rows.append({"mode": mode, "original": original, "phase": phase, "image": filename, **snapshot(window)})
             assert not warnings, warnings
         finally:

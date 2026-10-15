@@ -1,9 +1,9 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, H as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { z as securityUsers } from "./clipboard.js";
-import { h as _sfc_main$1, k as node } from "./App.js";
+import { X as node, h as _sfc_main$1 } from "./App.js";
 import { a as translate$1, n as metrics } from "./groups.ui.js";
-//#region ../src/tactic_stream/shared_ui/users.state.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/users/users.state.mjs
 function initial() {
 	return {
 		page: "profile",
@@ -144,30 +144,30 @@ function transition(ui, model, event) {
 	};
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/users.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/users/users.ui.mjs
 var russian = {
 	"User directory": "Каталог пользователей",
 	"Create user": "Создать пользователя",
 	"New user": "Новый пользователь",
 	"Name, login or email": "Имя, логин или почта",
 	"Show retired users": "Показать архивных пользователей",
-	"Profile": "Профиль",
-	"Account": "Аккаунт",
-	"Groups": "Группы",
-	"Login": "Логин",
+	Profile: "Профиль",
+	Account: "Аккаунт",
+	Groups: "Группы",
+	Login: "Логин",
 	"First name": "Имя",
 	"Last name": "Фамилия",
 	"Display name": "Отображаемое имя",
-	"Department": "Отдел",
-	"Email": "Почта",
+	Department: "Отдел",
+	Email: "Почта",
 	"Phone number": "Телефон",
-	"Address": "Адрес",
-	"UPN": "UPN",
-	"Namespace": "Пространство имён",
+	Address: "Адрес",
+	UPN: "UPN",
+	Namespace: "Пространство имён",
 	"Project code": "Код проекта",
 	"License type": "Тип лицензии",
 	"Hourly wage": "Почасовая ставка",
-	"Password": "Пароль",
+	Password: "Пароль",
 	"Unique login, without spaces": "Уникальный логин без пробелов",
 	"Leave empty to keep the current password": "Оставьте пустым, чтобы сохранить текущий пароль",
 	"These details are shown in profiles, messages and user pickers.": "Эти сведения отображаются в профилях, сообщениях и выборе пользователей.",
@@ -181,8 +181,8 @@ var russian = {
 	"These account changes will be saved on the server and affect this user's permissions.": "Изменения аккаунта будут сохранены на сервере и повлияют на права пользователя.",
 	"Discard unsaved user changes?": "Сбросить несохранённые изменения пользователя?",
 	"Confirm save": "Подтвердить сохранение",
-	"Save": "Сохранить",
-	"Cancel": "Отмена",
+	Save: "Сохранить",
+	Cancel: "Отмена",
 	"A login is required": "Введите логин",
 	"User saved on server": "Пользователь сохранён на сервере",
 	"Invalid user document": "Некорректные данные пользователя",

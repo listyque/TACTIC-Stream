@@ -20,7 +20,7 @@ from tests.test_raw_database import RawDatabaseQmlTests
 from tests.profile_ui_responsiveness import frame
 from native_capture import click, choose, controls, snapshot, text, value, source_hashes
 
-native_names = ['thlib/ui/qml/AdminRawDatabaseView.qml', 'thlib/ui/qml/RawCellEditorView.qml', 'thlib/ui/admin/raw_database.py', 'thlib/ui/admin/editor.py', 'thlib/ui/frame_models.py']
+native_names = ['thlib/ui/qml/features/administration/database/AdminRawDatabaseView.qml', 'thlib/ui/qml/features/administration/database/RawCellEditorView.qml', 'thlib/ui/admin/raw_database.py', 'thlib/ui/admin/editor.py', 'thlib/ui/frame_models.py']
 initial_sources = source_hashes(REPO, TH, native_names)
 RawDatabaseQmlTests.setUpClass()
 for name in ('segoeui.ttf', 'seguisb.ttf'):

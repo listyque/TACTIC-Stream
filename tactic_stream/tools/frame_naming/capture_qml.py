@@ -30,7 +30,7 @@ QQuickWindow.setTextRenderType(QQuickWindow.NativeTextRendering)
 app.setFont(QFont('Segoe UI',10))
 for name in ('segoeui.ttf','seguisb.ttf'):QFontDatabase.addApplicationFont('C:/Windows/Fonts/'+name)
 icons=qml_icon_bindings(TH,app)
-sources=source_hashes(REPO,TH,['thlib/ui/qml/NamingEditorView.qml','thlib/ui/naming_editor.py'])
+sources=source_hashes(REPO,TH,['thlib/ui/qml/features/administration/naming/NamingEditorView.qml','thlib/ui/naming_editor.py'])
 document={field:False if field in _BOOLEAN_FIELDS else '' for field in _DATA_FIELDS}
 document.update(search_type='demo/asset',context='publish',checkin_type='strict',dir_naming='{project.code}/{search_type.table_name}/{sobject.code}/{snapshot.context}/versions',file_naming='{sobject.name}_v{version}.{ext}')
 rules=[dict(identity='N1',document=document)]+[dict(identity=f'N{i+2}',document=dict(document,context=f'stage_{i:02}')) for i in range(18)]
@@ -82,6 +82,6 @@ for mode in ('dark',) if quick else ('dark','light'):
     assert not warnings,warnings
    finally:
     controller._busy=False;window.close();window.deleteLater();controller.shutdown();engine.deleteLater();QCoreApplication.sendPostedEvents(None,QEvent.DeferredDelete);app.removeTranslator(translator)
-assert sources==source_hashes(REPO,TH,['thlib/ui/qml/NamingEditorView.qml','thlib/ui/naming_editor.py'])
+assert sources==source_hashes(REPO,TH,['thlib/ui/qml/features/administration/naming/NamingEditorView.qml','thlib/ui/naming_editor.py'])
 (OUT/'qml.json').write_text(json.dumps(dict(sha256=sources[0],nativeSources=sources[1],captures=samples),ensure_ascii=False,indent=2),encoding='utf8')
 print(f'Captured {len(samples)} Naming states')

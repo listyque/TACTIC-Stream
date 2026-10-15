@@ -12,3 +12,17 @@ for(const width of [360,800,1100,1400])for(const collapsed of [false,true]){
  const g=UI.geometry(width,740,collapsed);assert(g.content.x+g.content.width<=width)
 }
 console.log('Administration shell: navigation, project/close guards and bounded responsive geometry passed')
+
+const workflow={...model,section:'workflow'}
+const flatten=nodes=>nodes.flatMap(node=>[node,...flatten(node.children||[])])
+for(const width of [360,800,1100,1400]) {
+ const ui=State.initial(),scene=UI.describe(workflow,ui,width,740,'en'),nodes=flatten(scene.nodes)
+ assert.equal(nodes.filter(node=>node.id==='administrationWorkflowLibrary').length,width>=1000?1:0)
+ if(width>=1000) {
+  assert.equal(nodes.filter(node=>node.id.startsWith('adminSection_')).length,UI.sections.length)
+  const expanded=State.transition(ui,workflow,{type:'navigationSplit',value:330}).ui
+  assert.equal(UI.describe(workflow,expanded,width,740,'en').geometry.nav,330)
+  assert.equal(State.transition(expanded,workflow,{type:'navigationSplit',value:NaN}).ui.workflowNavigationWidth,330)
+  assert(!flatten(UI.describe(workflow,{...expanded,collapsed:true},width,740,'en').nodes).some(node=>node.id==='administrationWorkflowLibrary'))
+ }
+}

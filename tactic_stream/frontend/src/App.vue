@@ -1,6 +1,7 @@
 <script>
 import { randomId } from './controls/identity.js'
 import { markRaw, nextTick } from 'vue'
+import { describe as describeMainToolbar, positions as mainToolbarPositions } from '../../src/tactic_stream/shared_ui/shell/main_toolbar.ui.mjs'
 import { asyncComponent } from './controls/asyncComponent.js'
 import { rpc, sessionAction, interfaceDefinition, projectNavigation, projectCatalog, searchConfiguration, navigationLink, requestActivity, resetRequestActivity } from './api.js'
 import { t } from './i18n.js'
@@ -94,6 +95,7 @@ export default {
   } },
   data() {
     return {
+      toolbarWidth: window.innerWidth,
       workHoursProjects: { week:'', report:'', cost:'' },
       descriptionMounted: false, descriptionTarget: null, tableCheckinTarget:null, snapshotMounted:false, snapshotTarget:null, snapshotActive:false,
       inspectorSource: null, inspectorTarget: null, inspectorRequest: 0, taskInspectorActive: false, inspectorReturn: 'results',
@@ -110,7 +112,7 @@ export default {
       compact: compactLayout.matches, showRetired: false, selectedKeys: [], focusedKey:'',
       interfaceConfig: null, view: 'table', configuredView: false, viewTitle: '',
       connectionOnline: true, compactShortcuts: shortcutLayout.matches, serverBatch: null, updatesError: '', updatesTasksOpen: false, taskCalendarActive: false, updatesNotesOpen: false, updatesActivityOpen: false,
-      canAdminister: false, administrationOpen: false, administrationSection: 'types', administrationVisited: [], administrationInstances: {}, pendingWorkflow:null, administrationCollapsed: false, workspaceSelection: null, configurationReturnSection: 'data',
+      canAdminister: false, administrationOpen: false, administrationSection: 'types', administrationVisited: [], administrationInstances: {}, administrationPresentation: {mobile:true,library:null}, pendingWorkflow:null, administrationCollapsed: false, workspaceSelection: null, configurationReturnSection: 'data',
       checkins: [],
       workspaceProjects: {}, workspaceProject: '', dockMenuTarget: null, mobileViewMenuTarget: null, mobileSearchOpen:false,
       navigationByProject: {}, navigationErrors: {}, navigationRequests: {},
@@ -123,6 +125,8 @@ export default {
     }
   },
   computed: {
+    mainToolbar() { return describeMainToolbar({width:this.toolbarWidth,compact:this.compactShortcuts,progressReveal:this.activityProgress ? 1 : 0,dccClient:false}) },
+    mainToolbarControls() { return mainToolbarPositions(this.mainToolbar) },
     mobileSearchContext() { return [this.workspaceProject,this.activeWorkspaceSection?.id,this.activeSearchTab?.id].join(':') },
     serverDebugContext() { return {ticket:this.session?.ticket,project:this.workspaceProject} },
     updateSubscription() {
@@ -242,6 +246,7 @@ export default {
     finally { this.restoringSession = false }
   },
   mounted() {
+    window.addEventListener('resize', this.updateToolbarSize)
     compactLayout.addEventListener('change', this.resizeLayout)
     shortcutLayout.addEventListener('change', this.resizeLayout)
     window.addEventListener('pagehide', this.persistWorkspace)
@@ -249,6 +254,7 @@ export default {
     window.addEventListener('popstate', this.openBrowserLocation)
   },
   beforeUnmount() {
+    window.removeEventListener('resize', this.updateToolbarSize)
     resetNotifications()
     resetRequestActivity()
     uiPerformance.reset()
@@ -261,6 +267,11 @@ export default {
   },
   methods: {
     t,
+    updateToolbarSize() { this.toolbarWidth = window.innerWidth },
+    mainToolbarStyle(id) {
+      const control = this.mainToolbarControls[id]
+      return {position:'absolute',left:control.x+'px',top:control.y+'px',width:control.width+'px',height:control.height+'px',display:control.visible===false?'none':undefined}
+    },
     layoutSaved() {this.refreshAfterAdministration=true},
     changeResultView(mode) {
       if (!resultViews.some(item => item.value === mode) || !this.canCloseTaskViews(this.workspaceProject, [this.activeSearchTab?.id])) return
@@ -1630,21 +1641,21 @@ export default {
     </form>
   </main>
   <div v-else class="workspace" @pointerdown="dismissMenus" @keydown.esc="dismissMenus">
-    <header ref="topbar" class="topbar" @toggle.capture="menuToggled">
-      <AppButton class="navigation-toggle" icon-only :label="navigationVisible ? 'Close navigation' : 'Open navigation'" :icon="navigationVisible ? 'close' : 'menu'"
+    <header ref="topbar" class="topbar frame-main-toolbar" :style="{height:mainToolbar.height+'px','--project-preview-radius':mainToolbar.dimensions.projectPreviewRadius+'px'}" @toggle.capture="menuToggled">
+      <AppButton class="navigation-toggle frame-main-control" data-main-control="mainNavigation" :style="mainToolbarStyle('mainNavigation')" icon-only :label="navigationVisible ? 'Close navigation' : 'Open navigation'" :icon="navigationVisible ? 'close' : 'menu'"
         aria-controls="workspace-sidebar" :aria-expanded="navigationVisible" @click="toggleNavigation" />
-      <AppButton class="project-picker" label="Project" :title="currentProject?.title || workspaceView.project" :data-project="workspaceView.project" popovertarget="project-chooser" @click="projectChooserOpening">
-        <ItemPreview :source="currentProject?.preview" :fallback-text="projectInitials" /><strong>{{ currentProject?.title || workspaceView.project || t('Project') }}</strong><AppIcon name="MDI_CHEVRON_DOWN" />
+      <AppButton class="project-picker frame-main-control" data-main-control="mainProject" :style="mainToolbarStyle('mainProject')" label="Project" :title="currentProject?.title || workspaceView.project" :data-project="workspaceView.project" popovertarget="project-chooser" @click="projectChooserOpening">
+        <ItemPreview :source="currentProject?.preview" :fallback-text="projectInitials" :preview-size="mainToolbar.dimensions.projectPreviewExtent" accent="var(--surface-container)" outlined /><strong>{{ currentProject?.title || workspaceView.project || t('Project') }}</strong><AppIcon name="MDI_CHEVRON_DOWN" />
       </AppButton>
       <div class="account">
         <div class="workspace-shortcuts">
-          <div id="topbar-system-activity"></div>
-          <div id="topbar-connection-menu"></div>
-          <AppButton class="commit-queue-trigger" icon-only :label="fileProject ? 'Changelists' : 'Commit Queue'" icon="queue" :badge-count="checkins.filter(job => !['Complete', 'Cancelled', 'Skipped'].includes(job.status)).length" @click="openCommitQueue()" />
-          <AppButton class="activity-feed-trigger" icon-only label="Activity Feed" icon="activity-feed" :badge-count="activityUnread" @click="$refs.activityFeed.open()" />
+          <div id="topbar-system-activity" class="frame-main-control" data-main-control="mainActivity" :style="mainToolbarStyle('mainActivity')"></div>
+          <div id="topbar-connection-menu" class="frame-main-control" data-main-control="mainConnection" :style="mainToolbarStyle('mainConnection')"></div>
+          <AppButton class="commit-queue-trigger frame-main-control" data-main-control="mainQueue" :style="mainToolbarStyle('mainQueue')" icon-only :label="fileProject ? 'Changelists' : 'Commit Queue'" icon="queue" :badge-count="checkins.filter(job => !['Complete', 'Cancelled', 'Skipped'].includes(job.status)).length" @click="openCommitQueue()" />
+          <AppButton class="activity-feed-trigger frame-main-control" data-main-control="mainFeed" :style="mainToolbarStyle('mainFeed')" icon-only label="Activity Feed" icon="activity-feed" :badge-count="activityUnread" @click="$refs.activityFeed.open()" />
         </div>
-        <AppearanceControls v-if="!compactShortcuts" compact />
-        <AppMenu ref="settingsMenu" class="settings-menu" label="More options">
+        <AppearanceControls v-if="!compactShortcuts" class="frame-main-control" data-main-control="mainAppearance" :style="mainToolbarStyle('mainAppearance')" compact />
+        <AppMenu ref="settingsMenu" class="settings-menu frame-main-control" data-main-control="mainSettings" :style="mainToolbarStyle('mainSettings')" label="More options">
             <AppButton class="configuration-link" label="Configuration" icon="settings" :disabled="busy || openingLink" :aria-pressed="section === 'configuration'" @click="showConfiguration" />
             <AppButton v-if="canAdminister && !compactShortcuts" label="Administration" icon="security" :disabled="busy" :aria-pressed="administrationOpen" @click="showAdministration" />
             <AppButton v-if="!compactShortcuts" label="Save Preferences" icon="save" :disabled="reloadingCache" @click="savePreferences" />
@@ -1670,8 +1681,8 @@ export default {
             <AppButton v-if="compactShortcuts" label="Mobile guide" icon="help" @click="$refs.help.open('mobile')" /><AppButton label="Help" icon="help" @click="$refs.help.open()" />
             <AppButton v-if="!compactShortcuts" class="docs-link" href="/docs" target="_blank" rel="noopener" icon="book-open" label="API documentation ↗" />
         </AppMenu>
-        <AppMenu ref="accountMenu" class="account-menu" label="Account" :badge-count="messageUnread">
-          <template #trigger><ItemPreview class="account-avatar" :source="userIdentity?.avatarUrl" :fallback-text="userIdentity?.initials || session.login.slice(0, 1).toUpperCase()" :accent="userIdentity?.avatarColor" round /><span class="account-name">{{ userIdentity?.displayName || session.login }}</span></template>
+        <AppMenu ref="accountMenu" class="account-menu frame-main-control" data-main-control="mainAccount" :style="mainToolbarStyle('mainAccount')" label="Account" :badge-count="messageUnread">
+          <template #trigger><ItemPreview class="account-avatar" :source="userIdentity?.avatarUrl" :fallback-text="userIdentity?.initials || session.login.slice(0, 1).toUpperCase()" :accent="userIdentity?.avatarColor" :preview-size="mainToolbar.dimensions.surfaceExtent-2" round outlined /><span class="account-name">{{ userIdentity?.displayName || session.login }}</span></template>
           <AppButton label="My profile" icon="MDI_ACCOUNT" @click="$refs.userProfile.open(); $refs.accountMenu.open = false" /><AppButton label="Users" icon="MDI_ACCOUNT_GROUP" @click="$refs.userProfile.open(session.login,true); $refs.accountMenu.open = false" /><AppButton label="Messages" icon="MDI_MESSAGE_TEXT" @click="$refs.messages.open(); $refs.accountMenu.open = false"><span>{{ t('Messages') }}</span><span v-if="messageUnread" class="result-count">{{ messageUnread > 99 ? '99+' : messageUnread }}</span></AppButton><hr>
           <p class="muted">{{ t('Signed in as {login}', { login: session.login }) }}</p><p class="version">TACTIC Stream v{{ version }}</p><AppButton label="Sign out" icon="logout" :disabled="busy" @click="signOut()" />
         </AppMenu>
@@ -1741,17 +1752,17 @@ export default {
         </AppMenu></Teleport>
       </template>
     </DockWorkspace>
-    <dialog v-window="{ type:'window' }" ref="configurationDialog" class="configuration-dialog" aria-labelledby="configuration-title" @cancel.prevent="$refs.configuration?.cancel()" @close="section = configurationReturnSection">
+    <dialog v-window="{kind:'configuration', type:'window' }" ref="configurationDialog" class="configuration-dialog" aria-labelledby="configuration-title" @cancel.prevent="$refs.configuration?.cancel()" @close="section = configurationReturnSection">
       <KeepAlive><Configuration v-if="section === 'configuration'" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
     </dialog>
-    <dialog v-window ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">
+    <dialog v-window="{kind:'administration'}" ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">
       <header class="administration-window-titlebar"><strong>{{t('Administration')}}</strong><AppButton icon-only icon="close" label="Close administration" @click="leaveAdministration" /></header>
-      <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" />
+      <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" @presentation="administrationPresentation=$event" />
     </dialog>
     <Teleport defer :to="administrationOpen ? '#administration-pages' : '#workspace-data'">
     <div v-if="administrationOpen && administrationVisited.includes('types')" v-show="administrationSection === 'types'" class="administration-page"><SearchTypes :presentation-visible="administrationSection === 'types'" @vue:mounted="administrationInstances.types = $event.component.proxy" ref="searchTypes" @open-workflow="openAdministrationWorkflow" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('schema')" v-show="administrationSection === 'schema'" class="administration-page"><SchemaEditor :presentation-visible="administrationSection === 'schema'" @vue:mounted="administrationInstances.schema = $event.component.proxy" ref="schema" @node-workflows="schemaNodeWorkflows" @type-workflow="values=>openAdministrationWorkflow(values,'schema')" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :catalog-target="administrationPresentation.library" :catalog-placement="administrationPresentation.mobile ? 'inline' : 'sidebar'" :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('rules')" v-show="administrationSection === 'rules'" class="administration-page"><SecurityRules :presentation-visible="administrationSection === 'rules'" @vue:mounted="administrationInstances.rules = $event.component.proxy" ref="rules" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('raw')" v-show="administrationSection === 'raw'" class="administration-page"><RawDatabase :presentation-visible="administrationSection === 'raw'" @vue:mounted="administrationInstances.raw = $event.component.proxy" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshAfterAdministration = true" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('layouts')" v-show="administrationSection === 'layouts'" class="administration-page"><LayoutEditor :presentation-visible="administrationSection === 'layouts'" @vue:mounted="administrationInstances.layouts = $event.component.proxy" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="layoutsFocus" toolbar-target="#administration-actions" @saved="layoutSaved" @open-view="openLayoutView" /></div>
@@ -1900,12 +1911,12 @@ export default {
     </section>
     </Teleport>
     </main>
-    <dialog v-window ref="sidebarSearchDialog" class="configuration-dialog sidebar-search-dialog" :aria-label="t('Configure search')" @cancel.prevent="closeSidebarSearch">
+    <dialog v-window="{kind:'sidebar_search_preview'}" ref="sidebarSearchDialog" class="configuration-dialog sidebar-search-dialog" :aria-label="t('Configure search')" @cancel.prevent="closeSidebarSearch">
       <div class="sidebar-search-shell"><header><div><h2>{{ t('Configure search') }}</h2><p>{{ sidebarSearch?.entry.title }} · {{ sidebarSearch?.entry.searchType }}</p></div><div id="sidebar-search-actions" class="configuration-actions"><AppButton icon-only label="Quick filters" icon="filter" :disabled="busy" @click="$refs.quickFilterEditor.open()" /><AppButton label="Saved searches" icon="save" :disabled="busy" @click="$refs.searchLibrary.open()" /></div><AppButton label="Close" icon="close" @click="closeSidebarSearch" /></header><div id="sidebar-search-pages"></div></div>
     </dialog>
     <SearchLibrary ref="searchLibrary" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
     <QuickFilterEditor ref="quickFilterEditor" :tab-id="activeSearchTab?.id" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :selections="quickSelections" :layout="quickLayout" :can-manage="canAdminister" @apply="applyQuickFilters" @changed="searchConfigurationChanged(); $refs.quickFilters?.load(true)" />
-    <dialog v-window="{ type:'window' }" ref="details" class="record-dialog object-details" :aria-label="t('Object details')">
+    <dialog v-window="{kind:'sobject_info', type:'window' }" ref="details" class="record-dialog object-details" :aria-label="t('Object details')">
       <template v-if="detail">
         <header><div><h2>{{ detail.name || detail.title || detail.code || detail.id }}</h2><small class="muted">{{ detail.__search_key__ }}</small></div><div class="configuration-actions"><AppButton v-if="interfaceConfig?.operations?.edit" label="Edit record" icon="edit" :icon-only="compactShortcuts" @click="editRecord()" /><AppButton label="Close details" icon="close" :icon-only="compactShortcuts" @click="$refs.details.close()" /></div></header>
         <dl><template v-for="(value, key) in detail" :key="key"><dt>{{ key }}</dt><dd>{{ display(value) }}</dd></template></dl>

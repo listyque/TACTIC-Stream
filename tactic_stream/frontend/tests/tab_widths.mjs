@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
-import { displacedTabOffset, fitTabWidths } from '../src/controls/tabWidths.js'
+import { displacedTabOffset, fitTabWidths, dockTabWidth, dockTabHeight } from '../../src/tactic_stream/shared_ui/controls/tabs/tab_layout.mjs'
 
-const source = fs.readFileSync('D:/code/th_codex/thlib/ui/qml/SearchWorkspaceView.qml', 'utf8')
+const source = fs.readFileSync(new URL('./fixtures/tab_layout/search.qml',import.meta.url), 'utf8')
 const start = source.indexOf('readonly property real fittedTabWidth: {')
 assert(start >= 0)
 const end = source.indexOf('property real displacedX:', start)
@@ -36,10 +36,16 @@ for (let from = -1; from < 5; from++) for (let to = -1; to < 5; to++) {
   }
 }
 console.log(`PASS: ${offsets} displacement comparisons with unchanged QML displacedX`)
-const railSource = fs.readFileSync('D:/code/th_codex/thlib/ui/qml/SectionTabRail.qml', 'utf8')
+const railSource = fs.readFileSync(new URL('./fixtures/tab_layout/rail.qml',import.meta.url), 'utf8')
 const railBlock = railSource.slice(railSource.indexOf('property real displacedY:'), railSource.indexOf('width: revealed ? expandedWidth'))
 const nativeRailOffset = new Function('rail', 'index', 'height', railBlock.slice(railBlock.indexOf('{') + 1, railBlock.lastIndexOf('}')))
 for (let from = -1; from < 5; from++) for (let to = -1; to < 5; to++) for (let index = 0; index < 5; index++) {
   assert.equal(displacedTabOffset(index, from, to, 45), nativeRailOffset({ dragSourceIndex: from, dragTargetIndex: to, spacing: 3 }, index, 42))
 }
 console.log('PASS: 180 comparisons with unchanged SectionTabRail displacedY')
+assert.equal(dockTabWidth(30,1000,3),112)
+assert.equal(dockTabWidth(400,1000,3),260)
+assert.equal(dockTabWidth(400,600,3),200)
+assert.equal(dockTabWidth(400,200,3),112,'Small dock headers scroll instead of crushing their tabs')
+assert.equal(dockTabHeight(38,true),26,'Reserve the shared 12px scrollbar gutter')
+assert.equal(dockTabHeight(38,false),38)

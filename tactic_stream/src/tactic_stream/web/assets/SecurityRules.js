@@ -1,8 +1,9 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, H as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { R as securityRules } from "./clipboard.js";
-import { C as policy, D as toolbar, E as tabs, O as translate, S as notices, b as label, h as _sfc_main$1, k as node, w as rect, x as muted, y as documentEvent } from "./App.js";
-//#region ../src/tactic_stream/shared_ui/security.state.mjs
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, y as translate } from "./App.js";
+import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
+//#region ../src/tactic_stream/shared_ui/features/administration/security/security.state.mjs
 var matrixScopes$1 = [
 	"project",
 	"link",
@@ -182,7 +183,7 @@ function transition(ui, model, event) {
 	};
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/security.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/security/security.ui.mjs
 var scopes = [
 	["project", "Projects"],
 	["link", "Sidebar links"],

@@ -1,9 +1,10 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, H as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { p as columnsEditor } from "./clipboard.js";
-import { $ as definitionWizard, C as policy, D as toolbar, E as tabs, O as translate, Q as changeDefinition, S as notices, b as label, et as displayWidgets, h as _sfc_main$1, k as node, w as rect, x as muted, y as documentEvent } from "./App.js";
+import { G as definitionWizard, J as label, K as displayWidgets, W as changeDefinition, X as node, Y as muted, Z as rect, h as _sfc_main$1, y as translate } from "./App.js";
+import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
-//#region ../src/tactic_stream/shared_ui/columns.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.ui.mjs
 var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
 	text,
 	icon,
@@ -272,7 +273,7 @@ function row(listNode, record, model, ui) {
 	})] };
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/columns.state.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
 var initial = () => ({
 	query: "",
 	searchType: "",

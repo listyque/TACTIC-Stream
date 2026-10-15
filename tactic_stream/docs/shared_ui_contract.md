@@ -10,6 +10,12 @@ JavaScript-объектов; `.mjs` — стандартное расширен�
 `AGENTS.md`, `UI_ARCHITECTURE.md` и компонентную политику Handler. Уже работающие
 экраны не переписываются целиком без отдельной задачи.
 
+Current foundation work is tracked in `shared_ui_foundation_plan.md`. The
+Administration comparisons below are a previous checkpoint, not proof of
+original-Handler parity. New acceptance compares archived Handler → Frame
+Handler → Frame Stream, preserving explicit platform capabilities. Source
+layout and readability rules are in `src/tactic_stream/shared_ui/README.md`.
+
 ## Единственные владельцы
 
 | Что | Где определяется | Что запрещено в адаптерах |

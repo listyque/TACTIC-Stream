@@ -1,5 +1,5 @@
 import { G as withCtx, N as openBlock, P as renderList, T as mergeModels, V as useModel, Z as shallowReactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, m as computed, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
-import { A as readableText, B as themes, D as colorModes, E as appearance, O as effectiveColorMode, R as accentPresets, T as t, c as _sfc_main$5, i as _sfc_main$4, k as languages, u as debugLog, v as logRequest, y as redact, z as iconSets } from "./index.js";
+import { A as readableText, D as colorModes, E as appearance, H as iconSets, O as effectiveColorMode, T as t, U as themes, V as accentPresets, c as _sfc_main$5, i as _sfc_main$4, k as languages, u as debugLog, v as logRequest, y as redact } from "./index.js";
 import { t as _sfc_main$6 } from "./AppSwitch.js";
 import { t as _sfc_main$7 } from "./AppSelect.js";
 import { t as _sfc_main$8 } from "./SettingRow.js";

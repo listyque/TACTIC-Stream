@@ -1,5 +1,5 @@
 import { B as useId, D as nextTick, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, _ as createCommentVNode, a as vModelCheckbox, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, o as vModelSelect, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { H as _plugin_vue_export_helper_default, T as t, i as _sfc_main$1, n as mobile } from "./index.js";
+import { G as _plugin_vue_export_helper_default, T as t, i as _sfc_main$1, n as mobile } from "./index.js";
 import { K as uploadFormFile, M as rpc, h as formDefinition } from "./clipboard.js";
 import { t as _sfc_main$2 } from "./AppSwitch.js";
 import { t as _sfc_main$3 } from "./AppColorInput.js";

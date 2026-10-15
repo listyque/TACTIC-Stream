@@ -1,5 +1,5 @@
 import { B as useId, D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, p as Teleport, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { H as _plugin_vue_export_helper_default, T as t, c as _sfc_main$2, i as _sfc_main$1 } from "./index.js";
+import { G as _plugin_vue_export_helper_default, T as t, c as _sfc_main$2, i as _sfc_main$1 } from "./index.js";
 import { M as rpc } from "./clipboard.js";
 import { t as _sfc_main$3 } from "./AppSwitch.js";
 import { t as _sfc_main$4 } from "./AppSelect.js";
@@ -658,7 +658,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				onClick: _cache[30] || (_cache[30] = ($event) => $options.close(true))
 			})
 		])) : createCommentVNode("", true)
-	], 40, _hoisted_1)), [[_directive_window, { type: "window" }]]), createBaseVNode("dialog", {
+	], 40, _hoisted_1)), [[_directive_window, {
+		kind: "ingest_files",
+		type: "window"
+	}]]), createBaseVNode("dialog", {
 		ref: "deleteDialog",
 		class: "record-dialog",
 		"aria-label": $options.t("Delete ingest rule?"),

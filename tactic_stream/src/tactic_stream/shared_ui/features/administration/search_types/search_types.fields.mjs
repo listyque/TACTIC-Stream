@@ -1,5 +1,16 @@
 // Field choices, examples and removal reasons shared by both clients.
-export const automaticFields = ['id', 'code', 'name', 'description', 'keywords', 'login', 'timestamp', 'data', 's_status', 'relative_dir'];
+export const automaticFields = [
+    'id',
+    'code',
+    'name',
+    'description',
+    'keywords',
+    'login',
+    'timestamp',
+    'data',
+    's_status',
+    'relative_dir'
+];
 export const fieldTypes = [
     {
         value: 'varchar(256)',
@@ -42,12 +53,13 @@ export const fieldTypes = [
         name: 'deadline',
         example: 'Today, 14:30',
         help: 'A deadline or another date with a time.'
-    },
+    }
 ];
 
 export const removalReasons = {
     identity: 'Object identifier. This field cannot be deleted.',
     tactic: 'Required by TACTIC. This field cannot be deleted.',
     schema: 'Used by a schema relationship. Change the relationship before deleting this field.',
-    system_type: 'Columns of system and config Search Types cannot be deleted here.'
+    system_type:
+        'Columns of system and config Search Types cannot be deleted here.'
 };

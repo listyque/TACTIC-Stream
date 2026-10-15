@@ -30,7 +30,7 @@ QQuickWindow.setTextRenderType(QQuickWindow.NativeTextRendering)
 app.setFont(QFont('Segoe UI',10))
 for name in ('segoeui.ttf','seguisb.ttf'):QFontDatabase.addApplicationFont('C:/Windows/Fonts/'+name)
 icons=qml_icon_bindings(TH,app)
-sources=source_hashes(REPO,TH,['thlib/ui/qml/AdminSearchTypesView.qml','thlib/ui/admin/search_types.py'])
+sources=source_hashes(REPO,TH,['thlib/ui/qml/features/administration/search_types/AdminSearchTypesView.qml','thlib/ui/admin/search_types.py'])
 catalog=[dict(identity='demo/asset',label='Assets',table='asset',namespace='demo',projectLocal=True,color='#ab67c8'),dict(identity='demo/shot',label='Shots',table='shot',namespace='demo',projectLocal=True,color='#df6464')]
 catalog += [dict(identity=f'demo/entry_{i:02}',label=f'Entry {i:02}',namespace='demo',projectLocal=True,table=f'entry_{i:02}') for i in range(30)]
 document=dict(title='Assets',description='Project assets',color='#ab67c8',columns=[],removedColumns=[])
@@ -82,6 +82,6 @@ for mode in ('dark',) if quick else ('dark','light'):
     assert not warnings,warnings
    finally:
     controller._worker=None;window.close();window.deleteLater();controller.shutdown();engine.deleteLater();QCoreApplication.sendPostedEvents(None,QEvent.DeferredDelete);app.removeTranslator(translator)
-assert sources==source_hashes(REPO,TH,['thlib/ui/qml/AdminSearchTypesView.qml','thlib/ui/admin/search_types.py'])
+assert sources==source_hashes(REPO,TH,['thlib/ui/qml/features/administration/search_types/AdminSearchTypesView.qml','thlib/ui/admin/search_types.py'])
 (OUT/'qml.json').write_text(json.dumps(dict(sha256=sources[0],nativeSources=sources[1],captures=samples),ensure_ascii=False,indent=2),encoding='utf8')
 print(f'Captured {len(samples)} Search Types states')

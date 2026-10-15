@@ -17,7 +17,7 @@ from thlib.ui.localization import CatalogTranslator
 from native_capture import controls,click,text,choose,snapshot,source_hashes
 app=gui_test_application();app.setFont(QFont('Segoe UI',10));QQuickWindow.setTextRenderType(QQuickWindow.NativeTextRendering)
 for name in ('segoeui.ttf','seguisb.ttf'):QFontDatabase.addApplicationFont('C:/Windows/Fonts/'+name)
-icons=qml_icon_bindings(TH,app);sources=source_hashes(REPO,TH,['thlib/ui/qml/AdminGraphView.qml','thlib/ui/admin/graph_editor.py','thlib/ui/admin/schema_connections.py'])
+icons=qml_icon_bindings(TH,app);sources=source_hashes(REPO,TH,['thlib/ui/qml/features/administration/workflow/AdminGraphView.qml','thlib/ui/admin/graph_editor.py','thlib/ui/admin/schema_connections.py'])
 cases=json.loads((HERE/'cases.json').read_text());samples=[];quick=os.environ.get('FRAME_CAPTURE_QUICK')=='1'
 for editor_mode in ('schema','workflow'):
  names=['demo/asset','demo/shot'] if editor_mode=='schema' else ['model','publish']
@@ -31,7 +31,7 @@ for editor_mode in ('schema','workflow'):
  (OUT/(editor_mode+'.json')).write_text(json.dumps(dict(fixture=fixture,columns=columns),ensure_ascii=False),encoding='utf8')
  for mode in ('dark',) if quick else ('dark','light'):
   for language in ('en',) if quick else ('en','ru'):
-   for width,height in ((1100,740),) if quick else ((1100,740),(800,740),(360,740)):
+   for width,height in ((1100,740),(800,740),(360,740)):
     controller=GraphEditor(SimpleNamespace(can_manage_tools=False,can_administer=True,debug_log=None),editor_mode);controller._project='demo';controller._loaded=controller._can_write=True;controller._identity=identity;controller._catalog=copy.deepcopy(catalog);controller._document=copy.deepcopy(document);controller._original=copy.deepcopy(document);controller._metadata=copy.deepcopy(metadata);controller._revision='fixture-revision';controller._document_loaded()
     if controller.connectionEditor:
      def fixture_columns(owner=controller,catalog=columns):
@@ -55,10 +55,17 @@ for editor_mode in ('schema','workflow'):
         if width<800:
          items=controls(window);button=items.get('adminGraphPanels_'+action['value']);click(window,button) if button is not None else choose(window,items['adminGraphPanels'],action['value'])
        elif kind=='reveal':
+        if editor_mode=='workflow' and action['id']=='adminRemoveGraphSelection':continue
         viewport=controls(window)[action['viewport']];item=next(item for item in SidebarEditorQmlTests.descendants(window.contentItem()) if item.objectName()==action['id']);top=viewport.property('contentY')+item.mapToItem(viewport,QPointF()).y()-12;viewport.setProperty('contentY',max(0,min(top,max(0,viewport.property('contentHeight')-viewport.height()))))
        elif kind in ('page','workflowPage'):
         if kind=='workflowPage' and editor_mode!='workflow':continue
+        if editor_mode=='workflow' and action['selector']=='adminGraphInspectorPages':
+         click(window,controls(window)['adminGraphAddNode']);assert json.loads(window.property('stateJson'))['ui']['inspector']==action['value']
+         continue
         items=controls(window);button=items.get(action['selector']+'_'+action['value']);click(window,button) if button is not None else choose(window,items[action['selector']],action['value'])
+       elif kind=='workflowClick':
+        if editor_mode=='workflow':
+         click(window,controls(window)[action['id']]);assert controller.selectedNode==''
        else:
         item=controls(window)[action['id']];text(window,item,action['value']) if kind=='text' else click(window,item)
        frame(window)
@@ -66,6 +73,6 @@ for editor_mode in ('schema','workflow'):
       samples.append(dict(editor=editor_mode,mode=mode,language=language,width=width,height=height,phase=editor_mode+'-'+case['phase'],image=image,scene=json.loads(window.property('sceneJson')),state=json.loads(window.property('stateJson')),**snapshot(window)))
      assert not warnings,warnings
     finally:controller._worker=None;window.close();window.deleteLater();controller.shutdown();engine.deleteLater();QCoreApplication.sendPostedEvents(None,QEvent.DeferredDelete);app.removeTranslator(translator)
-assert sources==source_hashes(REPO,TH,['thlib/ui/qml/AdminGraphView.qml','thlib/ui/admin/graph_editor.py','thlib/ui/admin/schema_connections.py'])
+assert sources==source_hashes(REPO,TH,['thlib/ui/qml/features/administration/workflow/AdminGraphView.qml','thlib/ui/admin/graph_editor.py','thlib/ui/admin/schema_connections.py'])
 (OUT/'qml.json').write_text(json.dumps(dict(sha256=sources[0],nativeSources=sources[1],captures=samples),ensure_ascii=False,indent=2),encoding='utf8')
 print(f'Captured {len(samples)} schema/workflow states')

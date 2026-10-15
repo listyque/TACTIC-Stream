@@ -1,5 +1,5 @@
-import { k as node } from "./App.js";
-//#region ../src/tactic_stream/shared_ui/groups.state.mjs
+import { X as node } from "./App.js";
+//#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.state.mjs
 function initial() {
 	return {
 		page: "members",
@@ -123,7 +123,7 @@ function transition(ui, model, event) {
 	};
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/groups.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.ui.mjs
 var metrics = {
 	gap: 12,
 	toolbarGap: 8,
@@ -134,23 +134,23 @@ var metrics = {
 	scrollbar: 12
 };
 var russian = {
-	"Groups": "Группы",
-	"Group": "Группа",
+	Groups: "Группы",
+	Group: "Группа",
 	"New group": "Новая группа",
 	"Server error": "Ошибка сервера",
-	"Status": "Состояние",
+	Status: "Состояние",
 	"Create group": "Создать группу",
 	"Reload from server": "Обновить с сервера",
-	"Discard": "Сбросить",
+	Discard: "Сбросить",
 	"Save to server": "Сохранить на сервере",
-	"Close": "Закрыть",
-	"Members": "Участники",
+	Close: "Закрыть",
+	Members: "Участники",
 	"Group details": "Сведения о группе",
 	"Search users": "Поиск пользователей",
 	"Members: {count}": "Участников: {count}",
 	"Group identifier": "Идентификатор группы",
 	"Unique identifier": "Уникальный идентификатор",
-	"Description": "Описание",
+	Description: "Описание",
 	"What is this group responsible for?": "За что отвечает эта группа?",
 	"The identifier is used in access rules and cannot be changed after creation.": "Идентификатор используется в правилах доступа и не меняется после создания.",
 	"Membership changes apply on the server. Sidebar visibility rules are configured separately for each sidebar item.": "Состав группы меняется на сервере. Видимость пунктов навигации настраивается отдельно для каждого пункта.",
@@ -166,7 +166,7 @@ var russian = {
 	"Read-only": "Только чтение",
 	"Group saved on server": "Группа сохранена на сервере",
 	"Enter a group identifier": "Введите идентификатор группы",
-	"Retired": "Архивный",
+	Retired: "Архивный",
 	"The save result is unknown. Reload groups before trying again.": "Результат сохранения неизвестен. Обновите группы перед повторной попыткой.",
 	"Group details changed. Reload before saving.": "Сведения о группе изменились. Обновите данные перед сохранением."
 };

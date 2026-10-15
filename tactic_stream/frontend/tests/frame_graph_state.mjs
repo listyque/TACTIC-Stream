@@ -4,6 +4,16 @@ import * as UI from '../../src/tactic_stream/shared_ui/controls/graph/graph.ui.m
 
 const model={width:1000,height:700,nodes:[{identity:'a',label:'A',nodeX:0,nodeY:0},{identity:'b',label:'B',nodeX:300,nodeY:0},{identity:'ref',nodeX:0,nodeY:150,referenceOnly:true}],edges:[{from:'a',to:'b',label:'A to B'}],selectedNodes:['a','ref'],readOnly:false,selectionEnabled:true}
 const viewport=UI.viewport(model)
+for(const width of [36,75,100,150,156,202,440,1000]){
+ const definition={...model,width},toolbar=UI.toolbar(definition,State.initial(),'en'),buttons=toolbar.nodes.filter(node=>node.kind==='Button')
+ assert.equal(buttons.length,4,'Keep every graph action at '+width)
+ for(const button of buttons){assert(button.x>=0&&button.x+button.width<=width,'Toolbar action outside '+width+': '+button.id);assert(button.y+button.height<UI.viewport(definition).y)}
+ for(const [index,button] of buttons.entries())for(const other of buttons.slice(index+1))assert(button.x+button.width<=other.x||other.x+other.width<=button.x||button.y+button.height<=other.y||other.y+other.height<=button.y,'Toolbar actions overlap')
+}
+for(const width of [100,150,156,202,440]){
+ const definition={...model,width,toolbarRightInset:46}
+ for(const node of UI.toolbar(definition,State.initial(),'en').nodes)assert(node.x+node.width<=width-46,'Graph commands reserve the parent layout action')
+}
 let ui=State.initial(), commands=[]
 function step(event){const result=State.reduce(ui,event,model,viewport);ui=result.ui;commands=result.commands;for(const command of commands)if(command.type==='selectNodes')model.selectedNodes=command.identities;return commands}
 function down(x,y,extra={}){return step({type:'down',x,y,...extra})}
@@ -44,4 +54,12 @@ assert.equal(State.curves(State.initial(),{nodes:[{identity:'a',color:'#ab67c8'}
 assert.equal(State.curves(State.initial(),{nodes:model.nodes,edges:[{from:'a',to:'b',color:''}]})[0].color,'action')
 assert.equal(State.curves(State.initial(),{nodes:model.nodes,edges:[{from:'a',to:'b',color:'#123456'}]})[0].color,'#123456')
 const graph=UI.describe(model,State.initial(),'en');assert.ok(graph.nodes.some(row=>row.id==='graphNode_a'));assert.ok(!graph.nodes.some(row=>row.id==='graphInput_a'))
+for(const [style,height] of [['md3',72],['material5',76],['fluent',68]]) {
+  const themed={...model,style,readOnly:false}
+  assert.deepEqual(State.size({kind:'progress'},style),{width:height,height})
+  assert.equal(UI.describe(themed,State.initial(),'en').nodes.find(node=>node.id==='graphNode_a').height,height)
+  const edge=State.curves(State.initial(),themed)[0]
+  assert.equal(State.curvePoint(edge,0).y,height/2,'Connection follows the actual themed port')
+  assert.equal(State.hit(State.initial(),themed,{x:200,y:height/2}).kind,'port')
+}
 console.log('Frame Graph: shared geometry, selection, release-only moves, ports, camera, keys, read-only and pinch passed')

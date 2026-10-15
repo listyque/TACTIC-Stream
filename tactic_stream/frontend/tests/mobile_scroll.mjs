@@ -8,8 +8,10 @@ const html = `<!doctype html><html><body><div id="app"></div><script type="modul
 import { createApp, h, ref } from 'vue'
 import MobilePage from '/src/controls/MobilePage.vue'
 import AppButton from '/src/controls/AppButton.vue'
+import { initializeAppearance } from '/src/appearance.js'
 import '/src/theme.css'
 import '/src/style.css'
+initializeAppearance()
 createApp({setup() {
   const busy = ref(false), scroll = ref({}), active = ref(true)
   const reload = () => { busy.value = true; setTimeout(() => { busy.value = false }, 100) }

@@ -48,7 +48,7 @@ export default {
 </script>
 
 <template>
-  <dialog v-window ref="dialog" class="record-dialog project-templates" :aria-label="t('Manage templates')" @cancel.prevent="!busy && $refs.dialog.close()">
+  <dialog v-window="{kind:'project_templates'}" ref="dialog" class="record-dialog project-templates" :aria-label="t('Manage templates')" @cancel.prevent="!busy && $refs.dialog.close()">
     <header><div><h2>{{ t('Manage templates') }}</h2><p class="muted">{{ t('Install, download or remove template packages. Existing projects are not removed.') }}</p></div><AppButton label="Close" icon="close" :disabled="busy" @click="$refs.dialog.close()" /></header>
     <p v-if="error" class="error" role="alert">{{ t(error) }}</p>
     <input ref="file" type="file" accept=".zip" hidden :aria-label="t('Template ZIP archive')" :disabled="busy" @change="install">

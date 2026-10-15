@@ -30,9 +30,10 @@ defineProps({
   </component>
 </template>
 <style>
-.app-button:where(:not(.icon-button)) { padding-inline:16px; gap:7px; }
-.app-button:where(:not(.icon-button)):where(:has(> .app-icon)) { padding-inline-start:12px; }
+.app-button:where(:not(.icon-button)) { padding-inline:var(--button-padding); gap:var(--button-spacing); }
+.app-button:where(:not(.icon-button)):where(:has(> .app-icon)) { padding-inline-start:var(--button-icon-padding); }
 .app-button.primary, .app-button.primary:hover:not(:disabled) { color: var(--on-selected); }
+.app-button.danger.primary, .app-button.danger.primary:hover:not(:disabled) { color: var(--on-error); }
 a.app-button.icon-button { padding:0; border:0; border-radius:50%; background:transparent; }
 a.app-button.icon-button:hover, a.app-button.icon-button:focus-visible { background:color-mix(in srgb, currentColor 8%, transparent); }
 .app-button.tonal { background:var(--hover); border-color:var(--outline-variant); border-radius:var(--button-radius); }

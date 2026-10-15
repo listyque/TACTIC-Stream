@@ -3,7 +3,7 @@ import { T as t, c as _sfc_main$2, i as _sfc_main$3 } from "./index.js";
 import { M as rpc } from "./clipboard.js";
 import { t as _sfc_main$4 } from "./AppTextField.js";
 import { t as _sfc_main$5 } from "./AppMenu.js";
-import { t as _sfc_main$6 } from "./AppSplitter.js";
+import { S as _sfc_main$6 } from "./App.js";
 //#region src/controls/AppCheckBox.vue
 var _hoisted_1$1 = { class: "app-checkbox-indicator" };
 var _hoisted_2$1 = [

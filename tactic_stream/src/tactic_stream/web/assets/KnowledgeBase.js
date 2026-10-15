@@ -9,11 +9,10 @@ import { t as _sfc_main$7 } from "./AppMenu.js";
 import { t as _sfc_main$8 } from "./AppCheckbox.js";
 import { n as escapeHtml, r as extractSkeys } from "./richText.js";
 import { n as browserLink } from "./links.js";
-import { t as _sfc_main$9 } from "./AppTextArea.js";
 import { t as AppSearchField_default } from "./AppSearchField.js";
-import { t as _sfc_main$10 } from "./AttachmentCard.js";
-import { t as _sfc_main$11 } from "./AppMenuItem.js";
-import { m as _sfc_main$12, o as _sfc_main$13, s as messageDate } from "./App.js";
+import { t as _sfc_main$9 } from "./AttachmentCard.js";
+import { t as _sfc_main$10 } from "./AppMenuItem.js";
+import { I as _sfc_main$12, m as _sfc_main$11, o as _sfc_main$13, s as messageDate } from "./App.js";
 //#region src/features/knowledge/markdown.js
 var safeUrl = (value) => /^(https?:\/\/|ftp:\/\/|mailto:|skey:\/\/|tactic-search:\/\/|\/assets\/|#)/i.test(value || "") && !/[\u0000-\u001f]/.test(value);
 var parser = new MarkdownItCallable({
@@ -654,11 +653,11 @@ var _sfc_main$1 = {
 						width: 190
 					}, {
 						trigger: withCtx(() => [..._cache[28] || (_cache[28] = [createBaseVNode("span", null, toDisplayString("Aa"), -1)])]),
-						default: withCtx(() => [createVNode(_sfc_main$11, {
+						default: withCtx(() => [createVNode(_sfc_main$10, {
 							label: "Normal text",
 							onClick: _cache[4] || (_cache[4] = ($event) => action("formatBlock", "p"))
 						}), (openBlock(), createElementBlock(Fragment, null, renderList(6, (level) => {
-							return createVNode(_sfc_main$11, {
+							return createVNode(_sfc_main$10, {
 								key: level,
 								label: unref(t)("Heading {level}", { level }),
 								onClick: ($event) => action("formatBlock", "h" + level)
@@ -692,17 +691,17 @@ var _sfc_main$1 = {
 						width: 210
 					}, {
 						default: withCtx(() => [
-							createVNode(_sfc_main$11, {
+							createVNode(_sfc_main$10, {
 								label: "Bulleted list",
 								icon: "list-ul",
 								onClick: _cache[6] || (_cache[6] = ($event) => action("insertUnorderedList"))
 							}),
-							createVNode(_sfc_main$11, {
+							createVNode(_sfc_main$10, {
 								label: "Numbered list",
 								icon: "list-ol",
 								onClick: _cache[7] || (_cache[7] = ($event) => action("insertOrderedList"))
 							}),
-							createVNode(_sfc_main$11, {
+							createVNode(_sfc_main$10, {
 								label: "Checklist",
 								icon: "checkbox-multiple-marked-outline",
 								onClick: _cache[8] || (_cache[8] = ($event) => action("checklist"))
@@ -717,7 +716,7 @@ var _sfc_main$1 = {
 					}, {
 						default: withCtx(() => [
 							(openBlock(true), createElementBlock(Fragment, null, renderList(hidden.value, (item) => {
-								return openBlock(), createBlock(_sfc_main$11, {
+								return openBlock(), createBlock(_sfc_main$10, {
 									key: item[0],
 									label: item[2],
 									icon: item[1],
@@ -728,22 +727,22 @@ var _sfc_main$1 = {
 									"onClick"
 								]);
 							}), 128)),
-							createVNode(_sfc_main$11, {
+							createVNode(_sfc_main$10, {
 								label: "Insert image URL",
 								icon: "image",
 								onClick: _cache[9] || (_cache[9] = ($event) => action("image"))
 							}),
-							createVNode(_sfc_main$11, {
+							createVNode(_sfc_main$10, {
 								label: "Insert pull quote",
 								icon: "format-quote",
 								onClick: _cache[10] || (_cache[10] = ($event) => action("pull-quote"))
 							}),
-							createVNode(_sfc_main$11, {
+							createVNode(_sfc_main$10, {
 								label: "Insert divider",
 								icon: "minus",
 								onClick: _cache[11] || (_cache[11] = ($event) => action("divider"))
 							}),
-							createVNode(_sfc_main$11, {
+							createVNode(_sfc_main$10, {
 								label: "Insert table",
 								icon: "table",
 								onClick: _cache[12] || (_cache[12] = ($event) => action("table"))
@@ -754,7 +753,7 @@ var _sfc_main$1 = {
 								"right",
 								"justify"
 							], (align) => {
-								return createVNode(_sfc_main$11, {
+								return createVNode(_sfc_main$10, {
 									key: align,
 									label: "Align " + align,
 									icon: "align-" + align,
@@ -768,7 +767,7 @@ var _sfc_main$1 = {
 						]),
 						_: 1
 					}),
-					createVNode(_sfc_main$12, {
+					createVNode(_sfc_main$11, {
 						modelValue: mode.value,
 						"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => mode.value = $event),
 						class: "knowledge-editor-mode",
@@ -907,7 +906,7 @@ var _sfc_main$1 = {
 							label: value
 						})),
 						label: "Language"
-					}, null, 8, ["modelValue", "options"])])) : createCommentVNode("", true), createVNode(_sfc_main$9, {
+					}, null, 8, ["modelValue", "options"])])) : createCommentVNode("", true), createVNode(_sfc_main$12, {
 						modelValue: content.value,
 						"onUpdate:modelValue": _cache[26] || (_cache[26] = ($event) => content.value = $event),
 						label: "Content"
@@ -1928,19 +1927,19 @@ var _sfc_main = {
 							width: 220
 						}, {
 							default: withCtx(() => [
-								createVNode(_sfc_main$11, {
+								createVNode(_sfc_main$10, {
 									label: "Move up",
 									icon: "arrow-up",
 									disabled: editing.value || saving.value,
 									onClick: ($event) => reorder(row.identity, -1)
 								}, null, 8, ["disabled", "onClick"]),
-								createVNode(_sfc_main$11, {
+								createVNode(_sfc_main$10, {
 									label: "Move down",
 									icon: "arrow-down",
 									disabled: editing.value || saving.value,
 									onClick: ($event) => reorder(row.identity, 1)
 								}, null, 8, ["disabled", "onClick"]),
-								createVNode(_sfc_main$11, {
+								createVNode(_sfc_main$10, {
 									label: "Move to section",
 									icon: "folder",
 									disabled: editing.value || saving.value,
@@ -2033,7 +2032,7 @@ var _sfc_main = {
 							placeholder: "A short, recognizable title",
 							disabled: saving.value
 						}, null, 8, ["modelValue", "disabled"])]),
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Summary")), 1), createVNode(_sfc_main$9, {
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Summary")), 1), createVNode(_sfc_main$12, {
 							modelValue: document.value.description,
 							"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => document.value.description = $event),
 							label: "Summary",
@@ -2182,7 +2181,7 @@ var _sfc_main = {
 										key: file.token,
 										class: "knowledge-library-file"
 									}, [
-										createVNode(_sfc_main$10, {
+										createVNode(_sfc_main$9, {
 											compact: "",
 											"activation-icon": file.isImage ? "image" : "link",
 											"activation-label": file.isImage ? "Insert image" : "Insert link",
@@ -2400,7 +2399,7 @@ var _sfc_main = {
 								}, null, 8, ["preview"]);
 							}), 128)),
 							(openBlock(true), createElementBlock(Fragment, null, renderList(files.value, (file) => {
-								return openBlock(), createBlock(_sfc_main$10, {
+								return openBlock(), createBlock(_sfc_main$9, {
 									key: file.token,
 									title: file.title,
 									extension: file.extension,

@@ -34,7 +34,7 @@ defineExpose({ open })
 
 <template>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="ui-performance-dialog" :aria-label="t('UI responsiveness')" @cancel.prevent="close" @close="uiPerformance.setVisible(false); emit('closed')">
+    <dialog v-window="{kind:'ui_performance', type:'window' }" ref="dialog" class="ui-performance-dialog" :aria-label="t('UI responsiveness')" @cancel.prevent="close" @close="uiPerformance.setVisible(false); emit('closed')">
       <header class="ui-performance-heading"><AppIcon name="MDI_SPEEDOMETER" /><strong>{{ t('UI responsiveness') }}</strong><AppButton icon-only icon="close" label="Close UI responsiveness" @click="close" /></header>
       <div class="ui-performance-screen">
         <div class="ui-performance-toolbar"><span>{{ t('UI responsiveness') }}</span><AppButton :label="uiPerformance.state.recording ? 'Pause measurements' : 'Resume measurements'" @click="uiPerformance.setRecording(!uiPerformance.state.recording)" /><AppButton icon-only icon="MDI_CONTENT_COPY" label="Copy measurements" @click="copy" /><AppButton icon-only icon="delete" label="Clear measurements" @click="clear" /></div>

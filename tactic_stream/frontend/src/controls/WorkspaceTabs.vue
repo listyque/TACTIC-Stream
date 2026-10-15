@@ -7,7 +7,8 @@ import AppMenu from './AppMenu.vue'
 import AppMenuItem from './AppMenuItem.vue'
 import AppIcon from './AppIcon.vue'
 import { appearance } from '../appearance.js'
-import { displacedTabOffset, fitTabWidths } from './tabWidths.js'
+import { displacedTabOffset, fitTabWidths, dockTabWidth, dockTabHeight, dockTab } from '../../../src/tactic_stream/shared_ui/controls/tabs/tab_layout.mjs'
+import { layout } from '../../../src/tactic_stream/shared_ui/core/foundation.mjs'
 
 const props = defineProps({ tabs: { type: Array, default: () => [] }, selected: String,
   kind: { type: String, default: 'search' }, closedTabs: { type: Array, default: () => [] }, disabled: Boolean, reorderable:{ type:Boolean, default:true }, mobile:Boolean })
@@ -29,9 +30,19 @@ function measure() {
   if (!list.value) return
   cancelDrag()
   compact.value = root.value.clientWidth < 720
-  const available = list.value.clientWidth + (overflow.value && (props.kind === 'search' || !props.closedTabs.length) ? 40 : 0)
+  const overflowAction = props.kind === 'search' || props.kind === 'script' && !props.closedTabs.length
+  const available = list.value.clientWidth + (overflow.value && overflowAction ? 40 : 0)
   if (props.kind === 'script') {
     overflow.value = list.value.scrollWidth > available + 1
+    return
+  }
+  if (props.kind === 'dock') {
+    widths.value = [...list.value.querySelectorAll('[role="tab"] > span:not(.control-ripple):not(.control-ripple-clip):not(.app-icon)')].map(label => {
+      const range = document.createRange()
+      range.selectNodeContents(label)
+      return dockTabWidth(range.getBoundingClientRect().width, available, props.tabs.length)
+    })
+    overflow.value = widths.value.reduce((sum, width) => sum + width, 0) + Math.max(0,props.tabs.length-1)*dockTab.spacing > available + .5
     return
   }
   const minimum = props.kind === 'view' ? 128 : props.kind === 'dock' ? 112 : compact.value ? 84 : 96
@@ -117,7 +128,7 @@ function dragTab(event) {
   const dx = event.clientX - pressedTab.x
   if (!drag.value) {
     // Qt's default startDragDistance is 10px; keep taps and vertical scrolling intact.
-    if (Math.abs(dx) < 10 || Math.abs(dx) < Math.abs(event.clientY - pressedTab.y)) return
+    if (Math.abs(dx) < (props.kind==='dock'?dockTab.dragThreshold:10) || Math.abs(dx) < Math.abs(event.clientY - pressedTab.y)) return
     pressedTab.node.setPointerCapture(pressedTab.id)
   }
   event.preventDefault()
@@ -176,7 +187,7 @@ function clickAfterDrag(event) {
 </script>
 
 <template>
-  <div ref="root" class="workspace-tabs" :class="{ compact, 'mobile-tabs':mobile }" :data-kind="kind" @pointerdown.capture="suppressClick = false" @click.capture="clickAfterDrag">
+  <div ref="root" class="workspace-tabs" :class="{ compact, 'mobile-tabs':mobile }" :data-kind="kind" :style="{'--dock-tab-content-height':dockTabHeight(layout.dockTitleHeight,overflow)+'px','--dock-tab-spacing':dockTab.spacing+'px','--dock-tab-selected-opacity':dockTab.selectedOpacity,'--dock-tab-hovered-opacity':dockTab.hoveredOpacity,'--dock-tab-dragging-opacity':dockTab.draggingOpacity,'--dock-tab-indicator-thickness':dockTab.indicatorThickness+'px','--dock-tab-indicator-inset':dockTab.indicatorInset+'px'}" @pointerdown.capture="suppressClick = false" @click.capture="clickAfterDrag">
     <AppButton v-if="kind === 'search' && !mobile" icon-only icon="add" label="Add new search tab" :disabled="disabled" @click="emit('add')" />
     <slot v-if="!mobile" name="before-tabs" />
     <div v-show="!mobile" ref="list" class="workspace-tab-list" :class="{ reordering: drag }" role="tablist" :aria-label="t(kind === 'view' ? 'Work views' : kind === 'dock' ? 'Workspace panels' : kind === 'script' ? 'Script tabs' : 'Search tabs')" @keydown="move">

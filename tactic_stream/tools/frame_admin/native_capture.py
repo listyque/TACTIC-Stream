@@ -103,6 +103,7 @@ def source_hashes(repo, handler, names):
         shared[path.relative_to(repo / 'src/tactic_stream/shared_ui').as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
     paths = (list((handler / 'thlib/ui/qml/tactic_frame').rglob('*.qml'))
              + list((handler / 'thlib/ui/qml/controls').glob('*.qml'))
+             + [handler / 'thlib/ui/qml/qmldir', handler / 'thlib/ui/qml/controls/qmldir', handler / 'thlib/ui/qml/tactic_frame/qmldir']
              + [handler / 'thlib/ui/qml/Theme.qml'] + [handler / name for name in names])
     native = {str(path.relative_to(handler)).replace('\\', '/'): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
     return shared, native

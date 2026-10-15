@@ -1,8 +1,11 @@
 [
  {"phase":"canvas","actions":[]},
+ {"phase":"center-selection","actions":[{"type":"click","id":"graphReveal"}]},
  {"phase":"selection","actions":[{"type":"select","identity":"first"},{"type":"phone","value":"properties"}]},
  {"phase":"add-tools","actions":[{"type":"page","selector":"adminGraphInspectorPages","value":"add_node"}]},
  {"phase":"selection-restored","actions":[{"type":"page","selector":"adminGraphInspectorPages","value":"selection"}]},
+ {"phase":"pipeline-settings","actions":[{"type":"workflowClick","id":"adminEditPipeline"}]},
+ {"phase":"process-restored","actions":[{"type":"select","identity":"first"},{"type":"phone","value":"properties"}]},
  {"phase":"advanced","actions":[{"type":"workflowPage","selector":"adminProcessPages","value":"native_json"}]},
  {"phase":"buffer","actions":[{"type":"reveal","viewport":"adminGraphPropertiesScroll","id":"graph_attributesEditor"},{"type":"text","id":"graph_attributesEditor","value":"{invalid JSON"}]},
  {"phase":"selection-confirmation","actions":[{"type":"select","identity":"second"}]},

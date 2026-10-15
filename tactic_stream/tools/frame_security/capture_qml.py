@@ -22,7 +22,7 @@ from tests.test_sidebar_editor_qml import SidebarEditorQmlTests
 from tests.profile_ui_responsiveness import frame
 
 from native_capture import assert_icons, source_hashes
-native_names = ['thlib/ui/qml/AdminSecurityView.qml', 'thlib/ui/admin/security.py', 'thlib/ui/admin/editor.py', 'thlib/ui/admin/security_matrix.py']
+native_names = ['thlib/ui/qml/features/administration/security/AdminSecurityView.qml', 'thlib/ui/admin/security.py', 'thlib/ui/admin/editor.py', 'thlib/ui/admin/security_matrix.py']
 initial_sources = source_hashes(REPO, TH, native_names)
 AdminSecurityUiTests.setUpClass()
 for name in ('segoeui.ttf', 'seguisb.ttf'):

@@ -35,6 +35,30 @@ for(const mode of ['schema','workflow'])for(const width of [360,800,1100])for(co
 }
 console.log('Shared graph editor: drafts, selection, confirmation, ACL, unknown writes, integers and adaptive scenes passed')
 
+const descendants = nodes => nodes.flatMap(node => [node, ...descendants(node.children || [])])
+const parameterNodes = descendants(UI.inspector(model, State.initial(), 460, 'en').nodes)
+assert.ok(parameterNodes.some(node => node.id === 'adminProcessDescription'))
+assert.ok(!parameterNodes.some(node => node.id === 'adminGraphPositionX'), 'Coordinates must not precede process parameters')
+assert.ok(!parameterNodes.some(node => node.id === 'adminGraphInspectorPages'), 'Workflow uses its process tabs, without duplicate Selection tabs')
+const advancedNodes = descendants(UI.inspector(model, {...State.initial(), processPage:'native_json'}, 460, 'en').nodes)
+assert.ok(advancedNodes.some(node => node.id === 'adminGraphPositionX'), 'Coordinate editing remains available')
+assert.ok(parameterNodes.some(node => node.id === 'adminProcessKind'), 'Native type editing remains at the end of Parameters')
+assert.ok(parameterNodes.findIndex(node => node.id === 'adminProcessField_task_pipeline') < parameterNodes.findIndex(node => node.id === 'processGroup_Appearance'), 'Task workflow precedes process fields as in Handler')
+for (const width of [360, 1100]) {
+ const nodes = descendants(UI.describe(model, State.initial(), width, 740, 'en').nodes)
+ assert.ok(nodes.some(node => node.id === 'adminEditPipeline' && node.action.type === 'clear'), 'Dedicated Pipeline settings action')
+ const ids = nodes.map(node => node.id)
+ assert.equal(new Set(ids).size, ids.length, 'Controls have unique identities')
+}
+
+ui={...State.initial(), inspector:'add_node', propertiesVisible:false}
+send({type:'buffer',key:'attributes',value:'{}'})
+assert.deepEqual(send({type:'clear'}),[])
+assert.equal(ui.confirmation,'selection')
+assert.deepEqual(send({type:'confirm'}),[{type:'clear'}])
+assert.equal(ui.inspector,'selection')
+assert.equal(ui.propertiesVisible,true)
+
 ui=State.initial()
 send({type:'buffer',key:'instance',value:''})
 assert.deepEqual(send({type:'commitInstance'}),[])

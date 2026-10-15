@@ -4,8 +4,7 @@ import { M as rpc, P as scriptEditor, f as beginActivity, m as endActivity, n as
 import { t as _sfc_main$3 } from "./AppSelect.js";
 import { t as _sfc_main$4 } from "./AppMenu.js";
 import { t as AppSearchField_default } from "./AppSearchField.js";
-import { t as _sfc_main$5 } from "./AppSplitter.js";
-import { A as _sfc_main$9, _ as completions, c as buttonId, g as _sfc_main$7, l as runBrowserScript, m as _sfc_main$8, p as _sfc_main$6, u as scriptTree, v as documentSymbols } from "./App.js";
+import { S as _sfc_main$6, _ as completions, b as _sfc_main$9, c as buttonId, g as _sfc_main$7, l as runBrowserScript, m as _sfc_main$8, p as _sfc_main$5, u as scriptTree, v as documentSymbols } from "./App.js";
 //#region src/features/scripts/ScriptEditor.vue
 var _hoisted_1 = ["aria-label", "aria-busy"];
 var _hoisted_2 = { class: "script-editor-header" };
@@ -699,7 +698,7 @@ var _sfc_main = {
 								"highlighted"
 							])
 						]),
-						createVNode(_sfc_main$6, {
+						createVNode(_sfc_main$5, {
 							kind: "script",
 							tabs: tabs.value.map((tab) => ({
 								id: tab.id,
@@ -783,7 +782,7 @@ var _sfc_main = {
 								onClick: _cache[14] || (_cache[14] = ($event) => outputHidden.value = !outputHidden.value)
 							}, null, 8, ["icon", "label"])
 						]), !outputHidden.value ? (openBlock(), createElementBlock("pre", _hoisted_8, toDisplayString(active.value.output), 1)) : createCommentVNode("", true)], 6)) : createCommentVNode("", true),
-						active.value && !outputHidden.value ? (openBlock(), createBlock(_sfc_main$5, {
+						active.value && !outputHidden.value ? (openBlock(), createBlock(_sfc_main$6, {
 							key: 1,
 							modelValue: outputHeight.value,
 							"onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => outputHeight.value = $event),
@@ -849,7 +848,7 @@ var _sfc_main = {
 						active.value?.missing ? (openBlock(), createElementBlock("p", _hoisted_13, toDisplayString(unref(t)("This script was deleted on the server. Its local draft is preserved.")), 1)) : createCommentVNode("", true),
 						error.value || analysisError.value ? (openBlock(), createElementBlock("p", _hoisted_14, toDisplayString(unref(t)(error.value || analysisError.value)), 1)) : createCommentVNode("", true)
 					]),
-					!treeHidden.value ? (openBlock(), createBlock(_sfc_main$5, {
+					!treeHidden.value ? (openBlock(), createBlock(_sfc_main$6, {
 						key: 0,
 						modelValue: treeWidth.value,
 						"onUpdate:modelValue": _cache[20] || (_cache[20] = ($event) => treeWidth.value = $event),
@@ -928,7 +927,10 @@ var _sfc_main = {
 							]);
 						}), 128)), !allSymbols.value.length ? (openBlock(), createElementBlock("p", _hoisted_16, toDisplayString(unref(t)("No classes or methods")), 1)) : createCommentVNode("", true)], 8, _hoisted_15))
 					], 4)) : createCommentVNode("", true)
-				])], 44, _hoisted_1)), [[_directive_window, { type: "window" }]]),
+				])], 44, _hoisted_1)), [[_directive_window, {
+					kind: "script_editor",
+					type: "window"
+				}]]),
 				withDirectives((openBlock(), createElementBlock("dialog", {
 					ref_key: "confirmation",
 					ref: confirmation,

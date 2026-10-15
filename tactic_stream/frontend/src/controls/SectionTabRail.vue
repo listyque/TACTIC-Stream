@@ -3,7 +3,7 @@ import { nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vu
 import { t } from '../i18n.js'
 import AppButton from './AppButton.vue'
 import AppIcon from './AppIcon.vue'
-import { displacedTabOffset } from './tabWidths.js'
+import { displacedTabOffset } from '../../../src/tactic_stream/shared_ui/controls/tabs/tab_layout.mjs'
 import { readableText } from '../appearance.js'
 
 defineOptions({ inheritAttrs: false })

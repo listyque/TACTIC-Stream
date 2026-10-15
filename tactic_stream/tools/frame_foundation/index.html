@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Tactic Frame foundation check</title>
+  </head>
+  <body>
+    <div id="probe"></div>
+    <script type="module">
+      import {
+        appearance,
+        hostedPalette,
+        initializeAppearance
+      } from '/frontend/src/appearance.js';
+      import '/frontend/src/theme.css';
+      initializeAppearance();
+      window.foundation = { appearance, hostedPalette };
+    </script>
+  </body>
+</html>

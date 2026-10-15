@@ -3,8 +3,22 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 
 SOURCE = Path(__file__).resolve().parents[1] / 'src/tactic_stream/shared_ui'
+
+
+def check_modules(root):
+    for path in root.rglob('*.mjs'):
+        imports = re.findall(r'''(?m)^(?:import\s+(?:[\w$*{},\s]+\sfrom\s*)?|export\s+(?:\{[\w$,\s]+\}|\*)\s+from\s*)["']([^"']+)["']''', path.read_text(encoding='utf-8'))
+        for reference in imports:
+            target = (path.parent / reference).resolve()
+            assert reference.startswith('.') and target.is_relative_to(root.resolve()), f'External Frame import in {path}: {reference}'
+            assert target.is_file(), f'Missing Frame import in {path}: {reference}'
+            source_layer = path.relative_to(root).parts[0]
+            target_layer = target.relative_to(root.resolve()).parts[0]
+            assert not (source_layer == 'core' and target_layer != 'core'), f'Core depends on {target_layer}: {path}'
+            assert not (source_layer == 'controls' and target_layer not in ('core', 'controls')), f'Control depends on {target_layer}: {path}'
 
 
 def sync(handler_root, check=False, copy_from=None):
@@ -13,6 +27,7 @@ def sync(handler_root, check=False, copy_from=None):
         if check or copy_from not in ('stream', 'handler'):
             raise ValueError('Choose either comparison or an explicit copy direction')
         source, target = (SOURCE, handler) if copy_from == 'stream' else (handler, SOURCE)
+        check_modules(source)
         files = sorted(source.rglob('*.mjs'))
         assert files, 'No Tactic Frame modules to copy'
         target.mkdir(parents=True, exist_ok=True)
@@ -23,6 +38,8 @@ def sync(handler_root, check=False, copy_from=None):
         hashes = {path.relative_to(handler).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(handler.rglob('*.mjs'))}
         (handler / 'manifest.json').write_text(json.dumps({'source': 'independent product copy', 'sha256': hashes}, indent=2) + '\n', encoding='utf-8')
     files = sorted(SOURCE.rglob('*.mjs'))
+    check_modules(SOURCE)
+    check_modules(handler)
     assert files, 'No Stream Tactic Frame modules'
     assert {path.relative_to(SOURCE).as_posix() for path in files} == {path.relative_to(handler).as_posix() for path in handler.rglob('*.mjs')}, 'Different Tactic Frame module lists'
     for path in files:

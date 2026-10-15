@@ -91,7 +91,7 @@ defineExpose({ open })
 
 <template>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="debug-log-dialog" :aria-label="t('Debug Log')" @cancel.prevent="close" @close="opened = false; emit('closed')">
+    <dialog v-window="{kind:'debug_log', type:'window' }" ref="dialog" class="debug-log-dialog" :aria-label="t('Debug Log')" @cancel.prevent="close" @close="opened = false; emit('closed')">
       <header class="debug-log-header"><AppIcon name="MDI_BUG" /><strong>{{ t('Debug Log') }}</strong><AppButton icon-only icon="close" label="Close Debug Log" @click="close" /></header>
       <div class="debug-log-screen" :aria-busy="loading" :style="{ '--debug-group-width': debugSettings.groupWidth + 'px', '--debug-detail-height': debugSettings.detailHeight + 'px' }">
         <section class="debug-log-toolbar">

@@ -21,7 +21,7 @@ import json
 app=gui_test_application();app.setFont(QFont('Segoe UI',10));icons=qml_icon_bindings(TH,app)
 for name in ('segoeui.ttf','seguisb.ttf'):QFontDatabase.addApplicationFont('C:/Windows/Fonts/'+name)
 HERE=Path(__file__).resolve().parent;OUT=HERE/'output';OUT.mkdir(exist_ok=True)
-sources=source_hashes(ROOT,TH,['thlib/ui/qml/AdminSchemaDeleteConfirmation.qml','thlib/ui/admin/schema_delete.py']);samples=[]
+sources=source_hashes(ROOT,TH,['thlib/ui/qml/features/administration/schema/AdminSchemaDeleteConfirmation.qml','thlib/ui/admin/schema_delete.py']);samples=[]
 for mode in ('dark','light'):
  for language in ('en','ru'):
   for width,height in ((1100,740),(800,740),(360,740)):

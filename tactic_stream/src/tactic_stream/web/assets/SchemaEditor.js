@@ -1,10 +1,10 @@
 import { B as useId, D as nextTick, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, _ as createCommentVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, l as withKeys, nt as normalizeStyle, p as Teleport, rt as toDisplayString, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, H as _plugin_vue_export_helper_default, T as t, c as _sfc_main$3, i as _sfc_main$2 } from "./index.js";
+import { E as appearance, G as _plugin_vue_export_helper_default, T as t, c as _sfc_main$3, i as _sfc_main$2 } from "./index.js";
 import { M as rpc } from "./clipboard.js";
-import { O as translate, b as label, h as _sfc_main$4, k as node, w as rect } from "./App.js";
+import { J as label, X as node, Z as rect, h as _sfc_main$4, y as translate } from "./App.js";
 import SearchTypes_default from "./SearchTypes.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";
-//#region ../src/tactic_stream/shared_ui/schema_delete.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/schema/schema_delete.ui.mjs
 function allowed(model) {
 	return model.canWrite && (!model.metadata || !model.metadata.schemaRevision || model.metadata.schemaRevision === model.schemaRevision);
 }
@@ -305,7 +305,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 		onEvent: $options.dispatch
 	}, null, 8, ["scene", "onEvent"])], 512)], 40, _hoisted_1$1)), [[_directive_window]]);
 }
-var SchemaTypeDeletion_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-b14c84d3"]]);
+var SchemaTypeDeletion_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-306f8cd4"]]);
 //#endregion
 //#region src/features/administration/SchemaEditor.vue
 function schemaXml(text) {
@@ -1123,7 +1123,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			"checkins",
 			"onCreated",
 			"onSaved"
-		])], 64)) : createCommentVNode("", true)], 40, _hoisted_3)), [[_directive_window]])
+		])], 64)) : createCommentVNode("", true)], 40, _hoisted_3)), [[_directive_window, { kind: "schema_search_type" }]])
 	], 8, _hoisted_1);
 }
 var SchemaEditor_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);

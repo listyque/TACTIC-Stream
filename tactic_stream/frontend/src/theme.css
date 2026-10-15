@@ -1,58 +1,23 @@
-/* Roles from TACTIC-Handler Theme.qml; point sizes from Typography.js. */
+/* Shared roles, metrics, typography and motion are applied by appearance.js
+   from shared_ui/core/foundation.mjs. This file contains browser-specific roles. */
 :root {
   color-scheme: light;
   --base: #d4dce1;
-  --primary: #3d7599;
-  --on-primary: #f6f8fa;
-  --on-surface: #172027;
+
   --palette: var(--base);
-  --page: color-mix(in srgb, var(--palette), #ffffff 8%);
-  --surface: color-mix(in srgb, var(--palette), #ffffff 22%);
-  --surface-high: color-mix(in srgb, var(--palette), #ffffff 38%);
-  --surface-deep: color-mix(in srgb, var(--palette), #000000 8%);
-  --surface-container: color-mix(in srgb, var(--palette), #000000 7%);
-  --header: color-mix(in srgb, var(--palette), #000000 3%);
-  --row: color-mix(in srgb, var(--palette), #ffffff 32%);
-  --hover: color-mix(in srgb, var(--row), var(--primary) 8%);
-  --selected: color-mix(in srgb, var(--primary), var(--surface-high) 30%);
-  --on-selected: #f6f8fa;
-  --content-selection: color-mix(in srgb, var(--primary), var(--page) 72%);
-  --muted: color-mix(in srgb, var(--on-surface), var(--palette) 42%);
-  --disabled: color-mix(in srgb, var(--muted), var(--palette) 42%);
-  --outline: color-mix(in srgb, var(--palette), var(--on-surface) 30%);
-  --outline-variant: color-mix(in srgb, var(--palette), var(--on-surface) 18%);
+
   --primary-hover: color-mix(in srgb, var(--primary), #000000 12%);
-  --error: #d65b67;
-  --success: #52a86e;
-  --yellow: #d5bd51;
-  --cyan: #56a7b3;
-  --violet: #a06bb4;
+
   --tertiary: var(--violet);
   --error-container: color-mix(in srgb, var(--surface-high), var(--error) 8%);
   --error-outline: color-mix(in srgb, var(--surface), var(--error) 35%);
-  --scrim: #00000073;
+
   --navigation-scrim: #00000052;
-  --shadow-color: #00000028;
-  --ripple-color: #00000022;
+
   --preview-shade-color: #000000;
-  --syntax-keyword: #808000;
-  --syntax-string: #008000;
-  --syntax-comment: #008000;
-  --syntax-type: #800080;
-  --syntax-number: #000080;
-  --syntax-function: #00677c;
-  --syntax-definition: #7c4800;
-  --syntax-self: #092e64;
-  --syntax-occurrence: #b4b4b4;
-  --syntax-search: #ffef0b;
-  --font-family: "Segoe UI", system-ui, sans-serif;
-  --text-micro: 8pt;
-  --text-small: 8.25pt;
-  --text-body: 9.25pt;
-  --text-body-large: 10pt;
-  --text-title: 12pt;
-  --text-caption: 8.25pt;
-  --text-label: 8.75pt;
+
+  --text-small: var(--text-caption);
+
   /* HelpView SelectableText/QTextDocument at 96dpi, including Markdown headings. */
   --text-document-body: 12px;
   --text-document-line-height: 17px;
@@ -79,24 +44,21 @@
   --text-heading: 18px;
   --text-symbol: 22px;
   --text-display: 25px;
-  --control-height: 36px;
-  --compact-control-height: 32px;
-  --communication-bubble-radius: 14px;
+
   --touch-target: var(--control-height);
-  --switch-width: 42px;
-  --switch-height: 24px;
-  --switch-thumb: 18px;
-  --switch-travel: 18px;
+  --switch-travel: calc(
+    var(--switch-width) - var(--switch-thumb) - 2 * var(--switch-inset)
+  );
   --navigation-width: 280px;
-  --section-rail-width: 48px;
+
   --section-tab-width: 320px;
   --configuration-navigation-width: 216px;
   --configuration-header-height: 64px;
   --settings-control-width: 360px;
   --settings-row-padding: 8px;
-  --app-bar-height: 44px;
+
   --workspace-toolbar-height: 48px;
-  --workspace-footer-height: 58px;
+
   --result-row-height: 100px;
   --result-compact-height: 64px;
   --result-preview-size: 68px;
@@ -106,130 +68,31 @@
   --result-relation-height: 38px;
   --result-indent: 24px;
   --result-title-size: 15px;
-  --content-accent: color-mix(in srgb, var(--primary), var(--on-surface) 8%);
-  --menu-radius: 16px;
-  --field-radius: 10px;
-  --button-radius: 18px;
-  --item-radius: 9px;
-  --preview-radius: 6px;
-  --surface-radius: 12px;
-  --section-radius: 16px;
-  --dialog-radius: 20px;
+
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 12px;
   --space-lg: 20px;
-  --motion-fast: 48ms;
-  --motion-medium: 56ms;
-  --motion-slow: 72ms;
-  --motion-extended: 104ms;
-  --motion-easing-out-cubic: cubic-bezier(.215, .61, .355, 1);
-  --motion-easing: cubic-bezier(.2, 0, 0, 1);
-  --motion-hover: var(--motion-fast);
-  --motion-hover-medium: var(--motion-medium);
-  --motion-click: var(--motion-fast);
-  --motion-click-slow: var(--motion-slow);
-  --motion-click-extended: var(--motion-extended);
-  --motion-click-expansion: var(--motion-medium);
-  --motion-fade: var(--motion-medium);
-  --motion-fade-slow: var(--motion-slow);
-  --motion-fade-extended: var(--motion-extended);
-  --motion-popup: var(--motion-medium);
-  --motion-popup-fast: var(--motion-fast);
-  --motion-popup-slow: var(--motion-slow);
+
+  --motion-easing-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --motion-easing: cubic-bezier(0.2, 0, 0, 1);
 }
 
-:root[data-theme="material5"] {
+:root[data-theme='material5'] {
   --base: #ddd5e1;
-  --primary: #76558d;
+
   --palette: color-mix(in srgb, var(--base), var(--primary) 5%);
-  --control-height: 38px;
-  --compact-control-height: 34px;
-  --communication-bubble-radius: 16px;
-  --field-radius: 15px;
-  --button-radius: 16px;
-  --item-radius: 13px;
-  --surface-radius: 18px;
-  --section-radius: 22px;
-  --dialog-radius: 28px;
-  --menu-radius: 20px;
-  --motion-fast: 60ms;
-  --motion-medium: 76ms;
-  --motion-slow: 96ms;
-  --motion-extended: 128ms;
 }
 
-:root[data-mode="dark"] {
-  --ripple-color: #ffffff34;
+:root[data-mode='dark'] {
   color-scheme: dark;
   --base: #292d30;
-  --primary: #78a6c4;
-  --on-primary: #172027;
-  --on-surface: #f6f8fa;
-  --page: color-mix(in srgb, var(--palette), #000000 34%);
-  --surface: color-mix(in srgb, var(--palette), #000000 4%);
-  --surface-high: color-mix(in srgb, var(--palette), #ffffff 8%);
-  --surface-deep: color-mix(in srgb, var(--palette), #000000 19%);
-  --surface-container: color-mix(in srgb, var(--palette), #ffffff 8%);
-  --header: color-mix(in srgb, var(--palette), #ffffff 3%);
-  --row: color-mix(in srgb, var(--palette), #ffffff 7%);
-  --hover: color-mix(in srgb, var(--row), var(--primary) 10%);
-  --selected: color-mix(in srgb, var(--primary), var(--surface-high) 28%);
-  --content-selection: color-mix(in srgb, var(--primary), var(--page) 68%);
-  --content-accent: color-mix(in srgb, var(--primary), var(--on-surface) 12%);
-  --muted: color-mix(in srgb, var(--on-surface), var(--palette) 35%);
-  --outline: color-mix(in srgb, var(--palette), var(--on-surface) 24%);
-  --outline-variant: color-mix(in srgb, var(--palette), var(--on-surface) 11%);
+
   --primary-hover: color-mix(in srgb, var(--primary), #ffffff 12%);
-  --scrim: #00000099;
-  --shadow-color: #0000004a;
-  --syntax-keyword: #d5bd51;
-  --syntax-string: #69b77d;
-  --syntax-comment: #70a87a;
-  --syntax-type: #bc84cf;
-  --syntax-number: #66b8c4;
-  --syntax-function: #66b8c4;
-  --syntax-definition: #d39562;
-  --syntax-self: #88aac4;
-  --syntax-occurrence: #55545a;
-  --syntax-search: #75651f;
 }
 
-:root[data-theme="material5"][data-mode="dark"] {
+:root[data-theme='material5'][data-mode='dark'] {
   --base: #322d36;
-  --primary: #b49ac8;
+
   --palette: color-mix(in srgb, var(--base), var(--primary) 7%);
-  --header: color-mix(in srgb, var(--palette), #ffffff 5%);
-  --surface-container: color-mix(in srgb, var(--palette), #ffffff 11%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root, :root[data-theme] { --motion-fast: 0ms; --motion-medium: 0ms; --motion-slow: 0ms; --motion-extended: 0ms; }
-}
-
-:root[data-theme="fluent"] {
-  --menu-radius: 8px;
-  --page: color-mix(in srgb, var(--palette), #ffffff 12%);
-  --control-height: 34px;
-  --field-radius: 5px;
-  --button-radius: 5px;
-  --item-radius: 5px;
-  --communication-bubble-radius: 7px;
-  --surface-radius: 7px;
-  --section-radius: 8px;
-  --dialog-radius: 8px;
-  --motion-fast: 36ms;
-  --motion-medium: 48ms;
-  --motion-slow: 64ms;
-  --motion-extended: 88ms;
-}
-:root[data-theme="fluent"][data-mode="dark"] {
-  --page: color-mix(in srgb, var(--palette), #000000 23%);
-}
-:root[data-click-animations="false"] { --motion-click: 0ms; --motion-click-expansion: 0ms; --motion-click-slow: 0ms; --motion-click-extended: 0ms; }
-:root[data-hover-animations="false"] { --motion-hover: 0ms; --motion-hover-medium: 0ms; }
-:root[data-fade-animations="false"] { --motion-fade: 0ms; --motion-fade-slow: 0ms; --motion-fade-extended: 0ms; }
-:root[data-popup-animations="false"] { --motion-popup: 0ms; --motion-popup-fast: 0ms; --motion-popup-slow: 0ms; }
-@media (prefers-reduced-motion: reduce) {
-  :root[data-theme="fluent"] { --motion-fast: 0ms; --motion-medium: 0ms; --motion-slow: 0ms; --motion-extended: 0ms; }
 }

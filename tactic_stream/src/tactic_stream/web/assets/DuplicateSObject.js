@@ -1,12 +1,12 @@
 import { D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, p as Teleport, rt as toDisplayString, s as vModelText, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { H as _plugin_vue_export_helper_default, T as t, c as _sfc_main$2, i as _sfc_main$1 } from "./index.js";
+import { G as _plugin_vue_export_helper_default, T as t, c as _sfc_main$2, i as _sfc_main$1 } from "./index.js";
 import { M as rpc, ct as notify } from "./clipboard.js";
 import { t as _sfc_main$3 } from "./AppSelect.js";
 import { t as _sfc_main$4 } from "./AppTextField.js";
 import { t as _sfc_main$5 } from "./AppColorInput.js";
 import { t as _sfc_main$6 } from "./AppDateField.js";
 import { t as _sfc_main$7 } from "./AppCheckbox.js";
-import { H as _sfc_main$9, J as contentChoices, K as applyDuplicateProfile, X as saveDuplicateProfile, Y as duplicateProfile, m as _sfc_main$8, q as changeContent } from "./App.js";
+import { B as contentChoices, H as saveDuplicateProfile, N as _sfc_main$9, R as applyDuplicateProfile, V as duplicateProfile, m as _sfc_main$8, z as changeContent } from "./App.js";
 //#region src/features/objects/DuplicateSObject.vue
 var steps = [
 	"Fields",
@@ -658,7 +658,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				onClick: _cache[9] || (_cache[9] = ($event) => $options.close(true))
 			})
 		])) : createCommentVNode("", true)
-	], 40, _hoisted_1)), [[_directive_window, { type: "window" }]])]);
+	], 40, _hoisted_1)), [[_directive_window, {
+		kind: "duplicate_sobject",
+		type: "window"
+	}]])]);
 }
 var DuplicateSObject_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion

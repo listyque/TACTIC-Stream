@@ -1,260 +1,373 @@
 import { D as nextTick } from "./vue.js";
-import { E as appearance } from "./index.js";
-import { C as policy, D as toolbar$1, O as translate, S as notices, T as sectionSelector, b as label, k as node, w as rect, x as muted, y as documentEvent } from "./App.js";
-import { t as form } from "./admin.form.js";
-//#region ../src/tactic_stream/shared_ui/workflow.fields.mjs
+import { E as appearance, P as metrics } from "./index.js";
+import { J as label, X as node, Y as muted, Z as rect, q as button, y as translate } from "./App.js";
+import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
+import { n as fieldProperties, t as form } from "./admin.form.js";
+//#region ../src/tactic_stream/shared_ui/controls/forms/sections.ui.mjs
+function captionHeight(text, width) {
+	return text ? Math.max(15, Math.ceil(text.length * 6 / Math.max(1, width)) * 15) : 0;
+}
+function choices(field, properties, width, controlHeight) {
+	const options = properties.options, columns = width >= 206 ? 2 : 1;
+	const cellWidth = (width - (columns - 1) * 6) / columns;
+	return {
+		children: options.map((option, index) => node("Action", field.id + "_" + option.value, rect(index % columns * (cellWidth + 6), Math.floor(index / columns) * (controlHeight + 6), cellWidth, controlHeight), {
+			text: option.label,
+			enabled: properties.enabled,
+			selected: properties.value === option.value,
+			normalColor: "surfaceContainerHigh",
+			selectedColor: "contentSelection",
+			children: [label(field.id + "_label_" + option.value, rect(10, 0, cellWidth - 20, controlHeight), option.label)],
+			action: Object.assign({}, properties.action, { value: option.value })
+		})),
+		height: Math.max(0, Math.ceil(options.length / columns) * (controlHeight + 6) - 6)
+	};
+}
+function sections(fields, width, language, enabled, style) {
+	const sizing = metrics(style), groups = [], nodes = [];
+	for (const field of fields) {
+		if (field.when === false) continue;
+		if (field.kind === "Heading") groups.push({
+			heading: field,
+			fields: []
+		});
+		else {
+			if (!groups.length) groups.push({
+				heading: null,
+				fields: []
+			});
+			groups[groups.length - 1].fields.push(field);
+		}
+	}
+	let contentY = 0;
+	for (const group of groups) {
+		if (group.heading) {
+			const heading = group.heading;
+			const title = heading.dataLabel ? heading.title : translate(heading.title, language);
+			nodes.push(label(heading.id, rect(1, contentY, width - 2, 20), title, {
+				fontSize: 14,
+				weight: 600
+			}));
+			contentY += 28;
+			if (heading.description) {
+				const description = translate(heading.description, language);
+				const height = captionHeight(description, width - 2);
+				nodes.push(label(heading.id + "Description", rect(1, contentY, width - 2, height), description, Object.assign({}, muted, {
+					fontSize: 11,
+					wrap: true
+				})));
+				contentY += height + 8;
+			}
+		}
+		if (!group.fields.length) continue;
+		const children = [], rowWidth = Math.max(1, width - 40);
+		let rowY = 16;
+		for (let index = 0; index < group.fields.length; index++) {
+			const field = group.fields[index];
+			const properties = fieldProperties(field, language, enabled);
+			const controlHeight = field.height || sizing.controlHeight;
+			if (field.kind === "ChoiceGrid") {
+				const grid = choices(field, properties, width - 32, controlHeight);
+				children.push(node("Box", field.id, rect(16, rowY, width - 32, grid.height), { children: grid.children }));
+				rowY += grid.height + 8;
+				continue;
+			}
+			if (field.fullWidth || field.kind === "Button") {
+				children.push(node(field.kind, field.id, rect(16, rowY, width - 32, controlHeight), properties));
+				rowY += controlHeight + 8;
+				continue;
+			}
+			const controlWidth = Math.max(1, Math.min(280, width - 48));
+			const stacked = rowWidth - controlWidth - 20 < 210;
+			const textWidth = stacked ? rowWidth : rowWidth - controlWidth - 20;
+			const description = translate(field.description || "", language);
+			const descriptionHeight = captionHeight(description, textWidth);
+			const textHeight = 18 + (description ? 3 + descriptionHeight : 0);
+			const rowHeight = Math.max(54, stacked ? textHeight + 8 + controlHeight + 20 : Math.max(textHeight, controlHeight) + 20);
+			children.push(label(field.id + "Label", rect(20, rowY + 10, textWidth, 18), properties.label, {
+				fontSize: 13,
+				weight: 600
+			}));
+			if (description) children.push(label(field.id + "Description", rect(20, rowY + 31, textWidth, descriptionHeight), description, Object.assign({}, muted, {
+				fontSize: 11,
+				wrap: true
+			})));
+			const controlY = stacked ? rowY + 10 + textHeight + 8 : rowY + (rowHeight - controlHeight) / 2;
+			const controlX = width - 20 - controlWidth;
+			children.push(node(field.kind || "Field", field.id, rect(controlX, controlY, controlWidth, controlHeight), properties));
+			rowY += rowHeight;
+			if (index < group.fields.length - 1 && field.showDivider !== false) children.push(node("Box", field.id + "Divider", rect(20, rowY - 1, rowWidth, 1), { background: "outlineVariant" }));
+		}
+		const last = group.fields[group.fields.length - 1];
+		const cardHeight = rowY + (last.fullWidth || last.kind === "Button" ? 8 : 16);
+		nodes.push(node("Box", "section_" + (group.heading ? group.heading.id : group.fields[0].id), rect(0, contentY, width, cardHeight), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			borderWidth: 1,
+			radius: sizing.sectionRadius,
+			children
+		}));
+		contentY += cardHeight + 16;
+	}
+	return {
+		nodes,
+		height: contentY
+	};
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/workflow/workflow.fields.mjs
 var fieldGroups = [
 	{
-		"title": "Appearance",
-		"description": "",
-		"fields": [{
-			"section": "properties",
-			"key": "label",
-			"label": "Display label",
-			"help": "Shown on the canvas without changing the process name.",
-			"editor": "text"
+		title: "Appearance",
+		description: "",
+		fields: [{
+			section: "properties",
+			key: "label",
+			label: "Display label",
+			help: "Shown on the canvas without changing the process name.",
+			editor: "text"
 		}, {
-			"section": "properties",
-			"key": "color",
-			"label": "Color",
-			"help": "Used for this process on the canvas and in task views.",
-			"editor": "color"
+			section: "properties",
+			key: "color",
+			label: "Color",
+			help: "Used for this process on the canvas and in task views.",
+			editor: "color"
 		}]
 	},
 	{
-		"title": "Task settings",
-		"description": "Assignment choices and default estimates for this process.",
-		"kinds": [
+		title: "Task settings",
+		description: "Assignment choices and default estimates for this process.",
+		kinds: [
 			"manual",
 			"node",
 			"approval"
 		],
-		"fields": [
+		fields: [
 			{
-				"section": "properties",
-				"key": "assigned_group",
-				"label": "Assigned group",
-				"help": "Limits the available assignees to members of this group.",
-				"options": "groups"
+				section: "properties",
+				key: "assigned_group",
+				label: "Assigned group",
+				help: "Limits the available assignees to members of this group.",
+				options: "groups"
 			},
 			{
-				"section": "properties",
-				"key": "supervisor_group",
-				"label": "Supervisor group",
-				"help": "Limits the available supervisors to members of this group.",
-				"options": "groups"
+				section: "properties",
+				key: "supervisor_group",
+				label: "Supervisor group",
+				help: "Limits the available supervisors to members of this group.",
+				options: "groups"
 			},
 			{
-				"section": "properties",
-				"key": "duration",
-				"label": "Default duration, days",
-				"help": "Initial interval between a task's start and end dates.",
-				"editor": "integer"
+				section: "properties",
+				key: "duration",
+				label: "Default duration, days",
+				help: "Initial interval between a task's start and end dates.",
+				editor: "integer"
 			},
 			{
-				"section": "properties",
-				"key": "bid_duration",
-				"label": "Estimated work, hours",
-				"help": "Default planned effort for a new task.",
-				"editor": "integer"
+				section: "properties",
+				key: "bid_duration",
+				label: "Estimated work, hours",
+				help: "Default planned effort for a new task.",
+				editor: "integer"
 			},
 			{
-				"section": "properties",
-				"key": "completion",
-				"label": "Completion, %",
-				"help": "Completion level represented by this process or status.",
-				"editor": "integer",
-				"maximum": 100
+				section: "properties",
+				key: "completion",
+				label: "Completion, %",
+				help: "Completion level represented by this process or status.",
+				editor: "integer",
+				maximum: 100
 			},
 			{
-				"section": "properties",
-				"key": "task_creation",
-				"label": "Create tasks",
-				"help": "Include this process when generating tasks.",
-				"editor": "boolean",
-				"initial": true
+				section: "properties",
+				key: "task_creation",
+				label: "Create tasks",
+				help: "Include this process when generating tasks.",
+				editor: "boolean",
+				initial: true
 			},
 			{
-				"section": "properties",
-				"key": "autocreate_task",
-				"label": "Create tasks automatically",
-				"help": "Create a task when a workflow event reaches this process.",
-				"editor": "boolean"
+				section: "properties",
+				key: "autocreate_task",
+				label: "Create tasks automatically",
+				help: "Create a task when a workflow event reaches this process.",
+				editor: "boolean"
 			},
 			{
-				"section": "",
-				"key": "task_number",
-				"label": "Number of tasks",
-				"help": "How many tasks to create for this process.",
-				"editor": "integer",
-				"minimum": 1
+				section: "",
+				key: "task_number",
+				label: "Number of tasks",
+				help: "How many tasks to create for this process.",
+				editor: "integer",
+				minimum: 1
 			}
 		]
 	},
 	{
-		"title": "Approval",
-		"description": "Default reviewer for approval tasks.",
-		"kinds": ["approval"],
-		"fields": [{
-			"section": "default",
-			"key": "assigned",
-			"label": "Assigned user",
-			"help": "Choose an existing user to receive approval tasks.",
-			"options": "users"
+		title: "Approval",
+		description: "Default reviewer for approval tasks.",
+		kinds: ["approval"],
+		fields: [{
+			section: "default",
+			key: "assigned",
+			label: "Assigned user",
+			help: "Choose an existing user to receive approval tasks.",
+			options: "users"
 		}]
 	},
 	{
-		"title": "Related workflow",
-		"description": "Choose which objects and processes this node signals or tracks.",
-		"kinds": ["dependency", "progress"],
-		"fields": [
+		title: "Related workflow",
+		description: "Choose which objects and processes this node signals or tracks.",
+		kinds: ["dependency", "progress"],
+		fields: [
 			{
-				"key": "related_search_type",
-				"label": "Search Type",
-				"help": "The related objects affected by this node.",
-				"options": "searchTypes"
+				key: "related_search_type",
+				label: "Search Type",
+				help: "The related objects affected by this node.",
+				options: "searchTypes"
 			},
 			{
-				"key": "related_pipeline_code",
-				"label": "Related pipeline",
-				"help": "Only pipelines of the selected Search Type are listed.",
-				"options": "relatedPipelines"
+				key: "related_pipeline_code",
+				label: "Related pipeline",
+				help: "Only pipelines of the selected Search Type are listed.",
+				options: "relatedPipelines"
 			},
 			{
-				"key": "related_process",
-				"label": "Related process",
-				"help": "The process to signal or listen to; leave empty to use the native default.",
-				"options": "relatedProcesses"
+				key: "related_process",
+				label: "Related process",
+				help: "The process to signal or listen to; leave empty to use the native default.",
+				options: "relatedProcesses"
 			},
 			{
-				"key": "related_scope",
-				"label": "Scope",
-				"help": "Affect related objects only, or all objects of this Search Type.",
-				"choices": [{
-					"identity": "local",
-					"label": "Related objects"
+				key: "related_scope",
+				label: "Scope",
+				help: "Affect related objects only, or all objects of this Search Type.",
+				choices: [{
+					identity: "local",
+					label: "Related objects"
 				}, {
-					"identity": "global",
-					"label": "All objects"
+					identity: "global",
+					label: "All objects"
 				}],
-				"initial": "local"
+				initial: "local"
 			},
 			{
-				"key": "related_status",
-				"label": "Signal",
-				"help": "The native workflow signal sent to the related process.",
-				"choices": [
+				key: "related_status",
+				label: "Signal",
+				help: "The native workflow signal sent to the related process.",
+				choices: [
 					{
-						"identity": "Pending",
-						"label": "Pending"
+						identity: "Pending",
+						label: "Pending"
 					},
 					{
-						"identity": "Action",
-						"label": "Action"
+						identity: "Action",
+						label: "Action"
 					},
 					{
-						"identity": "Complete",
-						"label": "Complete"
+						identity: "Complete",
+						label: "Complete"
 					}
 				],
-				"kinds": ["dependency"]
+				kinds: ["dependency"]
 			},
 			{
-				"key": "related_wait",
-				"label": "Wait for completion",
-				"help": "Wait for a completion signal instead of completing this node immediately.",
-				"editor": "boolean",
-				"kinds": ["dependency"]
+				key: "related_wait",
+				label: "Wait for completion",
+				help: "Wait for a completion signal instead of completing this node immediately.",
+				editor: "boolean",
+				kinds: ["dependency"]
 			},
 			{
-				"key": "expression",
-				"label": "Related object expression",
-				"help": "Optional TACTIC search expression; it replaces selection by Search Type.",
-				"editor": "text"
+				key: "expression",
+				label: "Related object expression",
+				help: "Optional TACTIC search expression; it replaces selection by Search Type.",
+				editor: "text"
 			}
 		]
 	},
 	{
-		"title": "Status behavior",
-		"description": "Map this status to a native behavior, or explicitly change a connected process.",
-		"kinds": ["status"],
-		"fields": [
+		title: "Status behavior",
+		description: "Map this status to a native behavior, or explicitly change a connected process.",
+		kinds: ["status"],
+		fields: [
 			{
-				"section": "default",
-				"key": "mapping",
-				"label": "Behave as",
-				"help": "Native task status behavior.",
-				"choices": [
+				section: "default",
+				key: "mapping",
+				label: "Behave as",
+				help: "Native task status behavior.",
+				choices: [
 					{
-						"identity": "Assignment",
-						"label": "Assignment"
+						identity: "Assignment",
+						label: "Assignment"
 					},
 					{
-						"identity": "Pending",
-						"label": "Pending"
+						identity: "Pending",
+						label: "Pending"
 					},
 					{
-						"identity": "In Progress",
-						"label": "In Progress"
+						identity: "In Progress",
+						label: "In Progress"
 					},
 					{
-						"identity": "Waiting",
-						"label": "Waiting"
+						identity: "Waiting",
+						label: "Waiting"
 					},
 					{
-						"identity": "Need Assistance",
-						"label": "Need Assistance"
+						identity: "Need Assistance",
+						label: "Need Assistance"
 					},
 					{
-						"identity": "Revise",
-						"label": "Revise"
+						identity: "Revise",
+						label: "Revise"
 					},
 					{
-						"identity": "Reject",
-						"label": "Reject"
+						identity: "Reject",
+						label: "Reject"
 					},
 					{
-						"identity": "Complete",
-						"label": "Complete"
+						identity: "Complete",
+						label: "Complete"
 					},
 					{
-						"identity": "Approved",
-						"label": "Approved"
+						identity: "Approved",
+						label: "Approved"
 					}
 				]
 			},
 			{
-				"section": "default",
-				"key": "direction",
-				"label": "Change process",
-				"help": "Used when no status mapping is selected.",
-				"choices": [
+				section: "default",
+				key: "direction",
+				label: "Change process",
+				help: "Used when no status mapping is selected.",
+				choices: [
 					{
-						"identity": "output",
-						"label": "Output process"
+						identity: "output",
+						label: "Output process"
 					},
 					{
-						"identity": "input",
-						"label": "Input process"
+						identity: "input",
+						label: "Input process"
 					},
 					{
-						"identity": "process",
-						"label": "This process"
+						identity: "process",
+						label: "This process"
 					}
 				]
 			},
 			{
-				"section": "default",
-				"key": "status",
-				"label": "Target status",
-				"help": "Exact status name understood by the target process.",
-				"editor": "text"
+				section: "default",
+				key: "status",
+				label: "Target status",
+				help: "Exact status name understood by the target process.",
+				editor: "text"
 			}
 		]
 	}
 ];
 //#endregion
-//#region ../src/tactic_stream/shared_ui/process.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/workflow/process.ui.mjs
 function section(field, kind) {
 	return field.section === void 0 ? kind === "progress" ? "progress" : "default" : field.section;
 }
@@ -284,10 +397,12 @@ function fields(model, ui, language) {
 		kind: "Heading",
 		id: "processHeading",
 		title: model.selectedNode,
-		description: "Explain what happens at this stage of the workflow."
+		dataLabel: true,
+		description: tr("Node type: %1").replace("%1", kind)
 	}, {
 		id: "adminProcessDescription",
 		title: "Description",
+		description: "Explain what happens at this stage of the workflow.",
 		props: {
 			text: model.processDescription || "",
 			action: { type: "description" }
@@ -305,21 +420,43 @@ function fields(model, ui, language) {
 			key
 		} }, choices ? { value: (settings[part] || {})[key] === void 0 ? initial : (settings[part] || {})[key] } : { text: String((settings[part] || {})[key] || initial || "") })
 	});
-	if (model.document.searchType !== "sthpw/task") out.push({
+	if ([
+		"manual",
+		"node",
+		"approval"
+	].indexOf(kind) >= 0) out.push({
+		kind: "Heading",
+		id: "processTaskPipelineHeading",
+		title: "Task status workflow",
+		description: "Defines statuses only for tasks of this process, not stages of the parent Search Object workflow."
+	}, {
 		kind: "Choice",
-		id: "adminProcessKind",
-		title: "Node type",
-		description: "Choose the native behavior of this process.",
-		options: (model.metadata.nodeTypes || []).map((value) => ({
-			value,
-			label: value
-		})),
+		id: "adminProcessField_task_pipeline",
+		fullWidth: true,
+		title: "Task status workflow",
+		options: [{
+			value: "",
+			label: tr("Use TACTIC default")
+		}].concat((catalog.pipelines || []).filter((row) => row.searchType === "sthpw/task").map((row) => ({
+			value: row.identity,
+			label: row.label || row.identity
+		}))),
 		props: {
-			value: kind,
+			value: model.processProperties.task_pipeline || "",
 			action: {
-				type: "attribute",
-				key: "type"
+				type: "setting",
+				section: "properties",
+				key: "task_pipeline"
 			}
+		}
+	}, {
+		kind: "Button",
+		id: "adminEditTaskWorkflow",
+		title: "Edit task status workflow",
+		props: {
+			icon: "edit",
+			enabled: !model.busy && !!model.processProperties.task_pipeline,
+			action: { type: "taskWorkflow" }
 		}
 	});
 	for (const group of fieldGroups.filter((row) => !row.kinds || row.kinds.indexOf(kind) >= 0)) {
@@ -358,44 +495,6 @@ function fields(model, ui, language) {
 			});
 		}
 	}
-	if ([
-		"manual",
-		"node",
-		"approval"
-	].indexOf(kind) >= 0) out.push({
-		kind: "Heading",
-		id: "processTaskPipelineHeading",
-		title: "Task status workflow",
-		description: "Defines statuses only for tasks of this process, not stages of the parent Search Object workflow."
-	}, {
-		kind: "Choice",
-		id: "adminProcessField_task_pipeline",
-		title: "Task status workflow",
-		options: [{
-			value: "",
-			label: tr("Use TACTIC default")
-		}].concat((catalog.pipelines || []).filter((row) => row.searchType === "sthpw/task").map((row) => ({
-			value: row.identity,
-			label: row.label || row.identity
-		}))),
-		props: {
-			value: model.processProperties.task_pipeline || "",
-			action: {
-				type: "setting",
-				section: "properties",
-				key: "task_pipeline"
-			}
-		}
-	}, {
-		kind: "Button",
-		id: "adminEditTaskWorkflow",
-		title: "Edit task status workflow",
-		props: {
-			icon: "edit",
-			enabled: !model.busy && !!model.processProperties.task_pipeline,
-			action: { type: "taskWorkflow" }
-		}
-	});
 	out.push({
 		kind: "Heading",
 		id: "processDependenciesHeading",
@@ -491,26 +590,407 @@ function fields(model, ui, language) {
 			label: tr("Do not create tasks")
 		}
 	]));
+	if (model.document.searchType !== "sthpw/task") out.push({
+		kind: "ChoiceGrid",
+		id: "adminProcessKind",
+		title: "Node type",
+		description: "Choose the native behavior of this process.",
+		options: (model.metadata.nodeTypes || []).map((value) => ({
+			value,
+			label: value
+		})),
+		props: {
+			value: kind,
+			action: {
+				type: "attribute",
+				key: "type"
+			}
+		}
+	});
 	return out;
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/graph_editor.ui.mjs
-var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
-	text,
-	icon,
-	action,
-	enabled
-}, extra || {}));
-var own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
-function toolbar(model, ui, width, language) {
-	const result = toolbar$1(model, ui, width, language), tr = (text) => translate(text, language);
-	result.nodes = result.nodes.filter((row) => row.id !== "adminDocumentStatus");
-	result.nodes.push(button(model.mode === "workflow" ? "adminCreateDocument" : "adminCreateSchemaType", rect(46, 0, 38, 38), tr(model.mode === "workflow" ? "Create workflow" : "New Search Type"), "add", {
-		type: model.mode === "workflow" ? "createWorkflow" : "createType",
-		searchType: model.document.searchType || model.creationSearchType
-	}, !model.busy && !model.uncertain && (model.canWrite || model.metadata.canCreate) && (!model.dirty || model.mode !== "workflow") && (model.mode !== "workflow" || !!(model.document.searchType || model.creationSearchType)), { iconOnly: true }));
-	return result;
+//#region ../src/tactic_stream/shared_ui/features/administration/workflow/inspector.ui.mjs
+var own$1 = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+function inspector(model, ui, width, language) {
+	const tr = (text) => translate(text, language), nodes = [], editable = policy(model).editable && !ui.confirmation, contentWidth = width - 24;
+	const selectedNode = (model.nodes || []).find((row) => row.identity === model.selectedNode), selectedEdge = (model.edges || [])[model.selectedEdge], referenceOnly = !!(selectedNode && selectedNode.referenceOnly);
+	let contentY = 0;
+	function addForm(fields, enabled, sectioned) {
+		const body = (sectioned ? sections : form)(fields, contentWidth, language, enabled === void 0 ? editable : enabled, model.style);
+		nodes.push(node("Box", "graphInspectorForm_" + contentY, rect(0, contentY, contentWidth, body.height), { children: body.nodes }));
+		contentY += body.height + 8;
+	}
+	function action(id, text, icon, event, enabled) {
+		nodes.push(button(id, rect(0, contentY, contentWidth, 38), tr(text), icon, event, enabled === void 0 ? editable : enabled));
+		contentY += 46;
+	}
+	function heading(id, text, description) {
+		addForm([{
+			kind: "Heading",
+			id,
+			title: text,
+			description
+		}], false);
+	}
+	function editor(key, title, source, description) {
+		heading("graph_" + key + "Heading", title, description);
+		nodes.push(node("Area", "graph_" + key + "Editor", rect(0, contentY, contentWidth, 220), {
+			label: tr(title),
+			text: own$1(ui.text, key) ? ui.text[key] : source || "",
+			monospace: true,
+			readOnly: !editable || referenceOnly,
+			action: {
+				type: "buffer",
+				key
+			}
+		}));
+		contentY += 228;
+		action("graphApply_" + key, "Apply", "check", {
+			type: "apply",
+			key
+		}, editable && !referenceOnly && own$1(ui.text, key));
+	}
+	function addPositionFields() {
+		addForm([{
+			id: "adminGraphPositionX",
+			title: "Horizontal position",
+			description: "Move this node without dragging.",
+			props: {
+				text: own$1(ui.text, "positionX") ? ui.text.positionX : String(selectedNode.nodeX),
+				inputMode: "decimal",
+				action: {
+					type: "buffer",
+					key: "positionX"
+				},
+				commitAction: {
+					type: "position",
+					key: "positionX"
+				}
+			}
+		}, {
+			id: "adminGraphPositionY",
+			title: "Vertical position",
+			description: "Move this node without dragging.",
+			props: {
+				text: own$1(ui.text, "positionY") ? ui.text.positionY : String(selectedNode.nodeY),
+				inputMode: "decimal",
+				action: {
+					type: "buffer",
+					key: "positionY"
+				},
+				commitAction: {
+					type: "position",
+					key: "positionY"
+				}
+			}
+		}]);
+	}
+	if (model.mode !== "workflow") {
+		nodes.push(sectionSelector("adminGraphInspectorPages", [{
+			value: "selection",
+			label: tr("Selection"),
+			icon: "tune"
+		}, {
+			value: "add_node",
+			label: tr("Add node"),
+			icon: "add"
+		}], ui.inspector, rect(0, contentY, contentWidth, 38), !model.busy, "inspector"));
+		contentY += 46;
+	}
+	if (ui.inspector === "add_node") {
+		if (model.mode === "workflow") addForm([{
+			id: "adminNodeName",
+			title: "Node name",
+			description: "Enter a unique node name",
+			props: {
+				text: ui.nodeName,
+				action: { type: "nodeName" }
+			}
+		}, {
+			kind: "Choice",
+			id: "adminNodeKind",
+			title: "Node type",
+			options: (model.metadata.nodeTypes || []).map((value) => ({
+				value,
+				label: value
+			})),
+			props: {
+				value: model.document.searchType === "sthpw/task" ? "status" : ui.nodeKind,
+				enabled: editable && model.document.searchType !== "sthpw/task",
+				action: { type: "nodeKind" }
+			}
+		}]);
+		else {
+			action("adminCreateSchemaTypeInspector", "New Search Type", "add", { type: "createType" });
+			addForm([{
+				id: "adminGraphTypeFilter",
+				title: "Find a Search Type",
+				props: {
+					text: ui.typeQuery,
+					action: { type: "typeQuery" }
+				}
+			}], !model.busy);
+			nodes.push(node("List", "adminGraphTypeCatalog", rect(0, contentY, contentWidth, 220), {
+				source: "graphTypes",
+				keyField: "identity",
+				rowHeight: 66,
+				scrollbarId: "adminGraphTypeCatalogScrollBar"
+			}));
+			contentY += 228;
+		}
+		action("adminAddNode", "Add node", "add", { type: "addNode" }, editable && !!(model.mode === "workflow" ? ui.nodeName.trim() : ui.typeToAdd));
+		const options = (model.nodes || []).filter((row) => !row.referenceOnly).map((row) => ({
+			value: row.identity,
+			label: row.label || row.identity
+		}));
+		addForm([{
+			kind: "Choice",
+			id: "adminConnectSource",
+			title: "Source",
+			options,
+			props: {
+				value: ui.source,
+				action: { type: "source" }
+			}
+		}, {
+			kind: "Choice",
+			id: "adminConnectTarget",
+			title: "Destination",
+			options,
+			props: {
+				value: ui.target,
+				action: { type: "target" }
+			}
+		}]);
+		action("adminConnectNodes", "Connect", "link", { type: "connect" }, editable && !!ui.source && !!ui.target && ui.source !== ui.target);
+	} else if (selectedNode || selectedEdge) {
+		if (model.mode !== "workflow" || !selectedNode || referenceOnly) heading("graphSelectionHeading", selectedNode ? selectedNode.identity : selectedEdge.from + " → " + selectedEdge.to, referenceOnly ? model.mode === "workflow" ? "This process is referenced by a connection. Add the missing process or remove its connections before saving." : "This type is referenced by a connection. Add its registered node to the canvas to move it." : "");
+		if ((model.selectedNodes || []).length > 1) {
+			nodes.push(node("List", "adminGraphMultiSelection", rect(0, contentY, contentWidth, 152), {
+				source: "graphSelection",
+				keyField: "identity",
+				rowHeight: 40
+			}));
+			contentY += 160;
+		}
+		if (model.mode !== "workflow") action("adminRemoveGraphSelection", "Remove from canvas", "close", { type: "remove" }, editable && !referenceOnly || editable && !!selectedEdge);
+		if (selectedNode && !referenceOnly) {
+			if (model.mode === "schema") addPositionFields();
+			if (model.mode === "schema") {
+				action("adminNodeWorkflows", "Workflows", "schema", { type: "nodeWorkflows" }, !model.busy);
+				if (!model.instance && ["sthpw", "config"].indexOf(selectedNode.identity.split("/")[0]) < 0) action("adminDeleteSearchType", "Delete from project", "close", { type: "deleteType" }, editable);
+			}
+		}
+		if (model.mode === "workflow" && selectedEdge) {
+			const choices = (model.nodes || []).filter((row) => !row.referenceOnly).map((row) => ({
+				value: row.identity,
+				label: row.label || row.identity
+			}));
+			addForm([
+				"from",
+				"to",
+				"from_attr",
+				"to_attr"
+			].map((key) => ({
+				id: "adminWorkflowEdge_" + key,
+				title: {
+					from: "Source",
+					to: "Destination",
+					from_attr: "Output condition",
+					to_attr: "Input name"
+				}[key],
+				description: "Native connection attributes.",
+				kind: key === "from" || key === "to" ? "Choice" : "Field",
+				options: choices,
+				props: Object.assign({ action: {
+					type: "attribute",
+					key
+				} }, key === "from" || key === "to" ? { value: selectedEdge[key] || "" } : { text: selectedEdge[key] || "" })
+			})));
+			editor("attributes", "Attributes (JSON)", model.attributes);
+		} else if (model.mode === "workflow" && selectedNode && !referenceOnly) {
+			nodes.push(sectionSelector("adminProcessPages", [{
+				value: "parameters",
+				label: tr("Parameters"),
+				icon: "tune"
+			}, {
+				value: "native_json",
+				label: tr("Advanced JSON"),
+				icon: "code"
+			}], ui.processPage, rect(0, contentY, contentWidth, 38), !model.busy, "processPage"));
+			contentY += 46;
+			if (ui.processPage === "parameters") {
+				addForm(fields(model, ui, language), void 0, true);
+				const defaults = (model.processSettings || {}).default || {};
+				if (["action", "condition"].indexOf(model.processKind) >= 0 && defaults.action !== "command") editor("script", "Script body", defaults.script, "The code is stored with this process. Applying the draft does not run it.");
+			} else {
+				addPositionFields();
+				editor("settings", "Native process settings", model.settings, "Advanced access to native data, including parameters of installed custom nodes. Standard settings are available in Parameters.");
+				editor("attributes", "Attributes (JSON)", model.attributes);
+			}
+		} else {
+			if (model.mode === "schema" && (model.instance || selectedEdge)) {
+				const connection = model.connection || {};
+				if (model.instance) {
+					heading("schemaInstanceHeading", "Many-to-many · new Search Type", "This is a draft. The instance table and its key columns will be created only when you save the schema.");
+					addForm([{
+						id: "adminSchemaInstanceName",
+						title: "Instance table name",
+						props: {
+							text: own$1(ui.text, "instance") ? ui.text.instance : model.instance.split("/").pop(),
+							action: {
+								type: "buffer",
+								key: "instance"
+							},
+							commitAction: { type: "commitInstance" }
+						}
+					}]);
+					if (!selectedEdge) for (const link of model.instanceLinks || []) action("schemaInstanceLink_" + link.edgeIndex, link.to, "link", {
+						type: "selectEdge",
+						index: link.edgeIndex
+					}, !model.busy);
+					action("adminSchemaRestoreDirect", "Restore direct connection", "undo", { type: "restoreDirect" });
+				}
+				if (selectedEdge) {
+					if (!model.instance) addForm([{
+						kind: "Choice",
+						id: "adminSchemaRelationship",
+						title: "Relationship type",
+						description: "Many-to-many creates a separate instance Search Type with two key connections.",
+						options: [{
+							value: "code",
+							label: "code"
+						}, {
+							value: "id",
+							label: "id"
+						}].concat([selectedEdge.from, selectedEdge.to].indexOf("*") < 0 ? [{
+							value: "many_to_many",
+							label: "many_to_many"
+						}] : []),
+						props: {
+							value: selectedEdge.relationship || "code",
+							action: { type: "relationship" }
+						}
+					}]);
+					addForm([{
+						kind: "Switch",
+						id: "adminSchemaCreateColumns",
+						title: "Create missing columns",
+						description: "Choose existing columns below, or enter a new key column name. New columns are created on schema save, using the opposite key's type.",
+						props: {
+							checked: !!model.createColumns,
+							action: { type: "createColumns" }
+						}
+					}]);
+					action("adminSchemaReverse", "Reverse connection", "refresh", { type: "reverse" }, editable && !model.instance);
+					action("adminSchemaRefreshColumns", "Reload columns from server", "refresh", { type: "refreshColumns" }, !model.busy && !model.columnsBusy);
+					if (model.columnsError || model.columnsBusy) {
+						nodes.push(node("Area", "adminSchemaColumnsStatus", rect(0, contentY, contentWidth, 64), {
+							label: tr("Columns"),
+							text: tr(model.columnsError || "Loading data…"),
+							readOnly: true,
+							notice: true,
+							color: model.columnsError ? "error" : "secondaryText"
+						}));
+						contentY += 72;
+					}
+					for (const side of [{
+						key: "from_col",
+						name: connection.from,
+						title: "Source key column"
+					}, {
+						key: "to_col",
+						name: connection.to,
+						title: "Destination key column"
+					}]) {
+						const info = (model.columnCatalog || {})[side.name] || {}, options = (info.columns || []).map((row) => ({
+							value: row.name,
+							label: row.name + " · " + (row.type || "") + (row.pending ? " · " + tr("Pending") : "")
+						}));
+						addForm([{
+							id: "adminSchema_" + side.key,
+							title: side.title,
+							description: side.name,
+							props: {
+								text: connection[side.key] || "",
+								action: {
+									type: "column",
+									key: side.key
+								}
+							}
+						}, {
+							kind: "Choice",
+							id: "adminSchemaChoose_" + side.key,
+							title: "Existing columns",
+							options: [{
+								value: "",
+								label: tr("Choose a column")
+							}].concat(options),
+							props: {
+								value: connection[side.key] || "",
+								action: {
+									type: "column",
+									key: side.key
+								}
+							}
+						}]);
+						if (info.tableAvailable === false) heading("schemaAbsent_" + side.key, "Database table unavailable", "The database table is absent. No table is created by reading columns.");
+					}
+					addForm([{
+						id: "adminSchemaPath",
+						title: "Relationship path",
+						description: "Optional native path used to distinguish multiple relationships.",
+						props: {
+							text: selectedEdge.path || "",
+							action: {
+								type: "attribute",
+								key: "path"
+							}
+						}
+					}]);
+				}
+			}
+			if (!referenceOnly) editor("attributes", "Attributes (JSON)", model.attributes);
+		}
+	} else if (model.mode === "workflow" && model.ready) addForm([
+		{
+			kind: "Heading",
+			id: "pipelineSettingsHeading",
+			title: "Pipeline settings",
+			description: "These settings belong to the whole pipeline. Select a node on the canvas to configure that process and its task statuses."
+		},
+		{
+			id: "adminPipelineName",
+			title: "Title",
+			description: "The pipeline name shown to other users.",
+			field: "name",
+			props: { text: model.document.name || "" }
+		},
+		{
+			id: "adminPipelineDescription",
+			title: "Description",
+			field: "description",
+			description: "Explain what this pipeline is used for.",
+			props: { text: model.document.description || "" }
+		},
+		{
+			id: "adminPipelineColor",
+			title: "Color",
+			field: "color",
+			description: "The color of the entire pipeline, independent of its process colors.",
+			kind: "ColorChoice",
+			props: { value: model.document.color || "" }
+		}
+	], void 0, true);
+	else heading("graphSelectHelp", "Select a node or a connection", "Its details appear here. Use Add node to extend the canvas.");
+	return {
+		nodes,
+		height: contentY + 12
+	};
 }
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/workflow/catalog.ui.mjs
 function records(model, ui, language) {
 	const tr = (text) => translate(text, language), groups = {}, query = ui.query.trim().toLowerCase();
 	for (const row of model.catalog || []) if (!query || (row.label + " " + row.identity + " " + row.searchType).toLowerCase().includes(query)) (groups[row.searchType || ""] || (groups[row.searchType || ""] = [])).push(row);
@@ -591,378 +1071,42 @@ function models(model, ui, language) {
 		graphSelection: model.nodes || []
 	};
 }
-function inspector(model, ui, width, language) {
-	const tr = (text) => translate(text, language), nodes = [], edit = policy(model).editable && !ui.confirmation, w = width - 24;
-	const current = (model.nodes || []).find((row) => row.identity === model.selectedNode), edge = (model.edges || [])[model.selectedEdge], readonly = !!(current && current.referenceOnly);
-	let y = 0;
-	function addForm(fields, enabled) {
-		const body = form(fields, w, language, enabled === void 0 ? edit : enabled);
-		nodes.push(node("Box", "graphInspectorForm_" + y, rect(0, y, w, body.height), { children: body.nodes }));
-		y += body.height + 8;
-	}
-	function action(id, text, icon, event, enabled) {
-		nodes.push(button(id, rect(0, y, w, 38), tr(text), icon, event, enabled === void 0 ? edit : enabled));
-		y += 46;
-	}
-	function heading(id, text, description) {
-		addForm([{
-			kind: "Heading",
-			id,
-			title: text,
-			description
-		}], false);
-	}
-	function editor(key, title, source, description) {
-		heading("graph_" + key + "Heading", title, description);
-		nodes.push(node("Area", "graph_" + key + "Editor", rect(0, y, w, 220), {
-			label: tr(title),
-			text: own(ui.text, key) ? ui.text[key] : source || "",
-			monospace: true,
-			readOnly: !edit || readonly,
-			action: {
-				type: "buffer",
-				key
-			}
-		}));
-		y += 228;
-		action("graphApply_" + key, "Apply", "check", {
-			type: "apply",
-			key
-		}, edit && !readonly && own(ui.text, key));
-	}
-	nodes.push(sectionSelector("adminGraphInspectorPages", [{
-		value: "selection",
-		label: tr("Selection"),
-		icon: "tune"
-	}, {
-		value: "add_node",
-		label: tr("Add node"),
-		icon: "add"
-	}], ui.inspector, rect(0, y, w, 38), !model.busy, "inspector"));
-	y += 46;
-	if (ui.inspector === "add_node") {
-		if (model.mode === "workflow") addForm([{
-			id: "adminNodeName",
-			title: "Node name",
-			description: "Enter a unique node name",
-			props: {
-				text: ui.nodeName,
-				action: { type: "nodeName" }
-			}
-		}, {
-			kind: "Choice",
-			id: "adminNodeKind",
-			title: "Node type",
-			options: (model.metadata.nodeTypes || []).map((value) => ({
-				value,
-				label: value
-			})),
-			props: {
-				value: model.document.searchType === "sthpw/task" ? "status" : ui.nodeKind,
-				enabled: edit && model.document.searchType !== "sthpw/task",
-				action: { type: "nodeKind" }
-			}
-		}]);
-		else {
-			action("adminCreateSchemaTypeInspector", "New Search Type", "add", { type: "createType" });
-			addForm([{
-				id: "adminGraphTypeFilter",
-				title: "Find a Search Type",
-				props: {
-					text: ui.typeQuery,
-					action: { type: "typeQuery" }
-				}
-			}], !model.busy);
-			nodes.push(node("List", "adminGraphTypeCatalog", rect(0, y, w, 220), {
-				source: "graphTypes",
-				keyField: "identity",
-				rowHeight: 66,
-				scrollbarId: "adminGraphTypeCatalogScrollBar"
-			}));
-			y += 228;
-		}
-		action("adminAddNode", "Add node", "add", { type: "addNode" }, edit && !!(model.mode === "workflow" ? ui.nodeName.trim() : ui.typeToAdd));
-		const options = (model.nodes || []).filter((row) => !row.referenceOnly).map((row) => ({
-			value: row.identity,
-			label: row.label || row.identity
-		}));
-		addForm([{
-			kind: "Choice",
-			id: "adminConnectSource",
-			title: "Source",
-			options,
-			props: {
-				value: ui.source,
-				action: { type: "source" }
-			}
-		}, {
-			kind: "Choice",
-			id: "adminConnectTarget",
-			title: "Destination",
-			options,
-			props: {
-				value: ui.target,
-				action: { type: "target" }
-			}
-		}]);
-		action("adminConnectNodes", "Connect", "link", { type: "connect" }, edit && !!ui.source && !!ui.target && ui.source !== ui.target);
-	} else if (current || edge) {
-		heading("graphSelectionHeading", current ? current.identity : edge.from + " → " + edge.to, readonly ? model.mode === "workflow" ? "This process is referenced by a connection. Add the missing process or remove its connections before saving." : "This type is referenced by a connection. Add its registered node to the canvas to move it." : "");
-		if ((model.selectedNodes || []).length > 1) {
-			nodes.push(node("List", "adminGraphMultiSelection", rect(0, y, w, 152), {
-				source: "graphSelection",
-				keyField: "identity",
-				rowHeight: 40
-			}));
-			y += 160;
-		}
-		action("adminRemoveGraphSelection", "Remove from canvas", "close", { type: "remove" }, edit && !readonly || edit && !!edge);
-		if (current && !readonly) {
-			addForm([{
-				id: "adminGraphPositionX",
-				title: "Horizontal position",
-				description: "Move this node without dragging.",
-				props: {
-					text: own(ui.text, "positionX") ? ui.text.positionX : String(current.nodeX),
-					inputMode: "decimal",
-					action: {
-						type: "buffer",
-						key: "positionX"
-					},
-					commitAction: {
-						type: "position",
-						key: "positionX"
-					}
-				}
-			}, {
-				id: "adminGraphPositionY",
-				title: "Vertical position",
-				description: "Move this node without dragging.",
-				props: {
-					text: own(ui.text, "positionY") ? ui.text.positionY : String(current.nodeY),
-					inputMode: "decimal",
-					action: {
-						type: "buffer",
-						key: "positionY"
-					},
-					commitAction: {
-						type: "position",
-						key: "positionY"
-					}
-				}
-			}]);
-			if (model.mode === "schema") {
-				action("adminNodeWorkflows", "Workflows", "schema", { type: "nodeWorkflows" }, !model.busy);
-				if (!model.instance && ["sthpw", "config"].indexOf(current.identity.split("/")[0]) < 0) action("adminDeleteSearchType", "Delete from project", "close", { type: "deleteType" }, edit);
-			}
-		}
-		if (model.mode === "workflow" && edge) {
-			const choices = (model.nodes || []).filter((row) => !row.referenceOnly).map((row) => ({
-				value: row.identity,
-				label: row.label || row.identity
-			}));
-			addForm([
-				"from",
-				"to",
-				"from_attr",
-				"to_attr"
-			].map((key) => ({
-				id: "adminWorkflowEdge_" + key,
-				title: {
-					from: "Source",
-					to: "Destination",
-					from_attr: "Output condition",
-					to_attr: "Input name"
-				}[key],
-				description: "Native connection attributes.",
-				kind: key === "from" || key === "to" ? "Choice" : "Field",
-				options: choices,
-				props: Object.assign({ action: {
-					type: "attribute",
-					key
-				} }, key === "from" || key === "to" ? { value: edge[key] || "" } : { text: edge[key] || "" })
-			})));
-			editor("attributes", "Attributes (JSON)", model.attributes);
-		} else if (model.mode === "workflow" && current && !readonly) {
-			nodes.push(sectionSelector("adminProcessPages", [{
-				value: "parameters",
-				label: tr("Parameters"),
-				icon: "tune"
-			}, {
-				value: "native_json",
-				label: tr("Advanced JSON"),
-				icon: "code"
-			}], ui.processPage, rect(0, y, w, 38), !model.busy, "processPage"));
-			y += 46;
-			if (ui.processPage === "parameters") {
-				addForm(fields(model, ui, language));
-				const defaults = (model.processSettings || {}).default || {};
-				if (["action", "condition"].indexOf(model.processKind) >= 0 && defaults.action !== "command") editor("script", "Script body", defaults.script, "The code is stored with this process. Applying the draft does not run it.");
-			} else {
-				editor("settings", "Native process settings", model.settings, "Advanced access to native data, including parameters of installed custom nodes. Standard settings are available in Parameters.");
-				editor("attributes", "Attributes (JSON)", model.attributes);
-			}
-		} else {
-			if (model.mode === "schema" && (model.instance || edge)) {
-				const connection = model.connection || {};
-				if (model.instance) {
-					heading("schemaInstanceHeading", "Many-to-many · new Search Type", "This is a draft. The instance table and its key columns will be created only when you save the schema.");
-					addForm([{
-						id: "adminSchemaInstanceName",
-						title: "Instance table name",
-						props: {
-							text: own(ui.text, "instance") ? ui.text.instance : model.instance.split("/").pop(),
-							action: {
-								type: "buffer",
-								key: "instance"
-							},
-							commitAction: { type: "commitInstance" }
-						}
-					}]);
-					if (!edge) for (const link of model.instanceLinks || []) action("schemaInstanceLink_" + link.edgeIndex, link.to, "link", {
-						type: "selectEdge",
-						index: link.edgeIndex
-					}, !model.busy);
-					action("adminSchemaRestoreDirect", "Restore direct connection", "undo", { type: "restoreDirect" });
-				}
-				if (edge) {
-					if (!model.instance) addForm([{
-						kind: "Choice",
-						id: "adminSchemaRelationship",
-						title: "Relationship type",
-						description: "Many-to-many creates a separate instance Search Type with two key connections.",
-						options: [{
-							value: "code",
-							label: "code"
-						}, {
-							value: "id",
-							label: "id"
-						}].concat([edge.from, edge.to].indexOf("*") < 0 ? [{
-							value: "many_to_many",
-							label: "many_to_many"
-						}] : []),
-						props: {
-							value: edge.relationship || "code",
-							action: { type: "relationship" }
-						}
-					}]);
-					addForm([{
-						kind: "Switch",
-						id: "adminSchemaCreateColumns",
-						title: "Create missing columns",
-						description: "Choose existing columns below, or enter a new key column name. New columns are created on schema save, using the opposite key's type.",
-						props: {
-							checked: !!model.createColumns,
-							action: { type: "createColumns" }
-						}
-					}]);
-					action("adminSchemaReverse", "Reverse connection", "refresh", { type: "reverse" }, edit && !model.instance);
-					action("adminSchemaRefreshColumns", "Reload columns from server", "refresh", { type: "refreshColumns" }, !model.busy && !model.columnsBusy);
-					if (model.columnsError || model.columnsBusy) {
-						nodes.push(node("Area", "adminSchemaColumnsStatus", rect(0, y, w, 64), {
-							label: tr("Columns"),
-							text: tr(model.columnsError || "Loading data…"),
-							readOnly: true,
-							notice: true,
-							color: model.columnsError ? "error" : "secondaryText"
-						}));
-						y += 72;
-					}
-					for (const side of [{
-						key: "from_col",
-						name: connection.from,
-						title: "Source key column"
-					}, {
-						key: "to_col",
-						name: connection.to,
-						title: "Destination key column"
-					}]) {
-						const info = (model.columnCatalog || {})[side.name] || {}, options = (info.columns || []).map((row) => ({
-							value: row.name,
-							label: row.name + " · " + (row.type || "") + (row.pending ? " · " + tr("Pending") : "")
-						}));
-						addForm([{
-							id: "adminSchema_" + side.key,
-							title: side.title,
-							description: side.name,
-							props: {
-								text: connection[side.key] || "",
-								action: {
-									type: "column",
-									key: side.key
-								}
-							}
-						}, {
-							kind: "Choice",
-							id: "adminSchemaChoose_" + side.key,
-							title: "Existing columns",
-							options: [{
-								value: "",
-								label: tr("Choose a column")
-							}].concat(options),
-							props: {
-								value: connection[side.key] || "",
-								action: {
-									type: "column",
-									key: side.key
-								}
-							}
-						}]);
-						if (info.tableAvailable === false) heading("schemaAbsent_" + side.key, "Database table unavailable", "The database table is absent. No table is created by reading columns.");
-					}
-					addForm([{
-						id: "adminSchemaPath",
-						title: "Relationship path",
-						description: "Optional native path used to distinguish multiple relationships.",
-						props: {
-							text: edge.path || "",
-							action: {
-								type: "attribute",
-								key: "path"
-							}
-						}
-					}]);
-				}
-			}
-			if (!readonly) editor("attributes", "Attributes (JSON)", model.attributes);
-		}
-	} else if (model.mode === "workflow" && model.ready) {
-		heading("pipelineSettingsHeading", "Pipeline settings");
-		addForm([
-			{
-				id: "adminPipelineName",
-				title: "Name",
-				field: "name",
-				props: { text: model.document.name || "" }
-			},
-			{
-				id: "adminPipelineDescription",
-				title: "Description",
-				field: "description",
-				kind: "Area",
-				height: 86,
-				props: { text: model.document.description || "" }
-			},
-			{
-				id: "adminPipelineColor",
-				title: "Color",
-				field: "color",
-				kind: "ColorChoice",
-				props: { value: model.document.color || "" }
-			}
-		]);
-		heading("pipelineSearchTypeHeading", "Search Type");
-		nodes.push(label("adminWorkflowSearchType", rect(0, y, w, 38), model.document.searchType || tr("No Search Type")));
-		y += 46;
-	} else heading("graphSelectHelp", "Select a node or a connection", "Its details appear here. Use Add node to extend the canvas.");
-	return {
-		nodes,
-		height: y + 12
-	};
+function panel(model, ui, bounds, language, narrow = false) {
+	const tr = (text) => translate(text, language);
+	const w = bounds.width, h = bounds.height, children = [];
+	if (narrow || ui.catalogVisible) children.push(label("adminWorkflowCatalogTitle", rect(8, 4, w - 56, 30), tr("Workflows"), { weight: 600 }), node("Field", "adminWorkflowSearch", rect(8, 42, w - 16, 38), {
+		text: ui.query,
+		placeholder: tr("Find a workflow"),
+		label: tr("Find a workflow"),
+		action: { type: "query" }
+	}), node("List", "adminWorkflowCatalog", rect(8, 88, w - 16, h - 96), {
+		source: "graphPipelines",
+		keyField: "identity",
+		rowHeight: 42,
+		scrollbarId: "adminWorkflowCatalogScrollBar"
+	}));
+	if (!narrow) children.push(button("adminToggleWorkflowList", rect(w - 38, 0, 38, 38), tr(ui.catalogVisible ? "Hide workflow list" : "Show workflow list"), ui.catalogVisible ? "chevron-left" : "chevron-right", { type: "catalogVisible" }, true, { iconOnly: true }));
+	return node("Box", "adminWorkflowCatalogPanel", bounds, {
+		background: "surfaceContainerLow",
+		border: "outlineVariant",
+		children
+	});
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/workflow/graph_editor.ui.mjs
+var own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+function toolbar(model, ui, width, language) {
+	const result = toolbar$1(model, ui, width, language), tr = (text) => translate(text, language);
+	result.nodes = result.nodes.filter((row) => row.id !== "adminDocumentStatus");
+	result.nodes.push(button(model.mode === "workflow" ? "adminCreateDocument" : "adminCreateSchemaType", rect(46, 0, 38, 38), tr(model.mode === "workflow" ? "Create workflow" : "New Search Type"), "add", {
+		type: model.mode === "workflow" ? "createWorkflow" : "createType",
+		searchType: model.document.searchType || model.creationSearchType
+	}, !model.busy && !model.uncertain && (model.canWrite || model.metadata.canCreate) && (!model.dirty || model.mode !== "workflow") && (model.mode !== "workflow" || !!(model.document.searchType || model.creationSearchType)), { iconOnly: true }));
+	return result;
 }
 function describe(model, ui, width, height, language) {
 	if (width <= 0 || height <= 0) return { nodes: [] };
-	const tr = (text) => translate(text, language), workflow = model.mode === "workflow", narrow = width < 800, edit = policy(model).editable && !ui.confirmation;
+	const tr = (text) => translate(text, language), workflow = model.mode === "workflow", internalCatalog = workflow && !model.externalCatalog, narrow = width < 800, edit = policy(model).editable && !ui.confirmation;
 	const noticeModel = Object.assign({}, model, { error: model.error || ui.error });
 	if (ui.confirmation === "remove") noticeModel.confirmationText = workflow ? "Remove the selection from this workflow draft?" : "Remove the selection from the schema draft? Search Types, tables and data will be kept.";
 	if (ui.confirmation === "selection") noticeModel.confirmationText = "Discard unapplied JSON changes?";
@@ -977,7 +1121,21 @@ function describe(model, ui, width, height, language) {
 		label: tr("Technical"),
 		icon: "code"
 	}], ui.page, rect(0, y, Math.min(width, 320), 38), !model.busy, "page"));
+	if (workflow && ui.page === "canvas") {
+		const settingsY = width >= 560 ? y : y + 46;
+		nodes.push(button("adminEditPipeline", rect(width >= 560 ? 328 : 0, settingsY, Math.min(200, width), 38), tr("Pipeline settings"), "tune", { type: "clear" }, !model.busy));
+		if (width < 560) y += 46;
+	}
 	y += 46;
+	if (workflow) {
+		const searchType = model.document.searchType || model.creationSearchType || "";
+		const details = (model.metadata.searchTypes || []).find((record) => record.identity === searchType);
+		const context = details && details.label && details.label !== searchType ? details.label + " · " + searchType : searchType;
+		const text = searchType ? tr("Search Type: %1").replace("%1", context) : tr("No Search Type is linked. Create a workflow from the Search Type editor.");
+		const captionHeight = Math.max(18, Math.ceil(text.length * 6 / Math.max(1, width)) * 15);
+		nodes.push(label("adminWorkflowSearchType", rect(0, y, width, captionHeight), text, Object.assign({}, muted, { wrap: true })));
+		y += captionHeight + 12;
+	}
 	if (!model.ready) nodes.push(label("adminGraphEmpty", rect(12, y, width - 24, 80), tr("Select a workflow or create a new one."), { wrap: true }));
 	const info = model.metadata.shared ? "Shared pipeline: read-only. Create a project-owned pipeline to make project-specific changes." : !workflow && model.identity && !model.canWrite ? "Built-in system schema · read-only" : "";
 	if (info) {
@@ -996,7 +1154,7 @@ function describe(model, ui, width, height, language) {
 		y += 76;
 	}
 	if (narrow) {
-		nodes.push(sectionSelector("adminGraphPanels", [].concat(workflow ? [{
+		nodes.push(sectionSelector("adminGraphPanels", [].concat(internalCatalog ? [{
 			value: "catalog",
 			label: tr("Workflows"),
 			icon: "list"
@@ -1011,27 +1169,10 @@ function describe(model, ui, width, height, language) {
 		}]), ui.panel, rect(0, y, width, 38), !model.busy, "panel"));
 		y += 46;
 	}
-	const h = Math.max(1, height - y), catalogWidth = workflow && !narrow ? ui.catalogVisible ? Math.min(ui.catalogWidth, width * .28) : 40 : 0, propertiesWidth = !narrow ? ui.propertiesVisible ? Math.min(ui.propertiesWidth, width * .4) : 40 : 0;
-	if (workflow && (!narrow || ui.panel === "catalog")) {
-		const w = narrow ? width : catalogWidth, children = [];
-		if (narrow || ui.catalogVisible) children.push(label("adminWorkflowCatalogTitle", rect(8, 4, w - 56, 30), tr("Workflows"), { weight: 600 }), node("Field", "adminWorkflowSearch", rect(8, 42, w - 16, 38), {
-			text: ui.query,
-			placeholder: tr("Find a workflow"),
-			label: tr("Find a workflow"),
-			action: { type: "query" }
-		}), node("List", "adminWorkflowCatalog", rect(8, 88, w - 16, h - 96), {
-			source: "graphPipelines",
-			keyField: "identity",
-			rowHeight: 42,
-			scrollbarId: "adminWorkflowCatalogScrollBar"
-		}));
-		if (!narrow) children.push(button("adminToggleWorkflowList", rect(w - 38, 0, 38, 38), tr(ui.catalogVisible ? "Hide workflow list" : "Show workflow list"), ui.catalogVisible ? "chevron-left" : "chevron-right", { type: "catalogVisible" }, true, { iconOnly: true }));
-		nodes.push(node("Box", "adminWorkflowCatalogPanel", rect(0, y, w, h), {
-			visible: ui.page === "canvas",
-			background: "surfaceContainerLow",
-			border: "outlineVariant",
-			children
-		}));
+	const h = Math.max(1, height - y), catalogWidth = internalCatalog && !narrow ? ui.catalogVisible ? Math.min(ui.catalogWidth, width * .28) : 40 : 0, propertiesWidth = !narrow ? ui.propertiesVisible ? Math.min(ui.propertiesWidth, workflow ? 460 : 420, width * (workflow ? .5 : .45)) : 40 : 0;
+	if (internalCatalog && (!narrow || ui.panel === "catalog")) {
+		const w = narrow ? width : catalogWidth;
+		nodes.push(Object.assign(panel(model, ui, rect(0, y, w, h), language, narrow), { visible: ui.page === "canvas" }));
 		if (!narrow && ui.catalogVisible) nodes.push(node("Splitter", "adminCatalogSplit", rect(w, y, 10, h), {
 			visible: ui.page === "canvas",
 			text: tr("Workflow list width"),
@@ -1041,7 +1182,7 @@ function describe(model, ui, width, height, language) {
 			action: { type: "catalogSplit" }
 		}));
 	}
-	const x = narrow ? 0 : workflow ? catalogWidth + 10 : 0, graphWidth = narrow ? width : Math.max(1, width - x - propertiesWidth - 10);
+	const x = narrow ? 0 : internalCatalog ? catalogWidth + 10 : 0, graphWidth = narrow ? width : Math.max(1, width - x - propertiesWidth - 10);
 	const graphNodes = (model.nodes || []).map((row) => ({
 		identity: row.identity,
 		label: row.label || row.identity,
@@ -1063,7 +1204,8 @@ function describe(model, ui, width, height, language) {
 		color: row.color || ""
 	}));
 	nodes.push(node("Graph", "adminGraphCanvas", rect(x, y, graphWidth, h), {
-		visible: ui.page === "canvas" && (!narrow || ui.panel === "canvas"),
+		toolbarRightInset: 46,
+		visible: ui.page === "canvas" && (!narrow || ui.panel === "canvas" || model.externalCatalog && ui.panel === "catalog"),
 		help: false,
 		label: tr(workflow ? "Workflow" : "Project schema"),
 		nodes: graphNodes,
@@ -1088,11 +1230,21 @@ function describe(model, ui, width, height, language) {
 				children: inner.nodes
 			}));
 		}
-		if (!narrow) children.push(button("adminToggleGraphProperties", rect(0, 0, 38, 38), tr(ui.propertiesVisible ? "Hide properties" : "Show properties"), ui.propertiesVisible ? "chevron-right" : "chevron-left", { type: "propertiesVisible" }, true, { iconOnly: true }));
-		if (narrow || ui.propertiesVisible) children.push(button("adminGraphAddNode", rect(44, 0, w - 52, 38), tr(ui.inspector === "add_node" ? "Selection" : "Add node"), ui.inspector === "add_node" ? "tune" : "add", {
+		if (!narrow) children.push(button("adminToggleGraphProperties", rect(workflow && ui.propertiesVisible ? w - 38 : 0, 0, 38, 38), tr(ui.propertiesVisible ? "Hide properties" : "Show properties"), ui.propertiesVisible ? "chevron-right" : "chevron-left", { type: "propertiesVisible" }, true, { iconOnly: true }));
+		if (narrow || ui.propertiesVisible) children.push(button("adminGraphAddNode", rect(workflow ? w - 82 : 44, 0, workflow ? 38 : w - 52, 38), tr(ui.inspector === "add_node" ? "Selection" : "Add node"), ui.inspector === "add_node" ? "tune" : "add", {
 			type: "inspector",
 			value: ui.inspector === "add_node" ? "selection" : "add_node"
-		}, !model.busy));
+		}, !model.busy, { iconOnly: workflow }));
+		if (workflow && (narrow || ui.propertiesVisible)) {
+			children.push(label("adminGraphInspectorTitle", rect(12, 0, Math.max(0, w - 144), 38), tr("Inspector"), { weight: 600 }));
+			if (model.selectedNode || model.selectedEdge >= 0) {
+				const selectedNode = (model.nodes || []).find((record) => record.identity === model.selectedNode);
+				children.push(button("adminRemoveGraphSelection", rect(w - 126, 0, 38, 38), tr("Remove from canvas"), "delete", { type: "remove" }, edit && !(selectedNode && selectedNode.referenceOnly), {
+					iconOnly: true,
+					destructive: true
+				}));
+			}
+		}
 		nodes.push(node("Box", "adminGraphProperties", rect(px, y, w, h), {
 			visible: ui.page === "canvas",
 			background: "surfaceContainerLow",
@@ -1122,7 +1274,7 @@ function describe(model, ui, width, height, language) {
 		type: "apply",
 		key: "xml"
 	}, edit && own(ui.text, "xml")));
-	if (ui.page === "canvas" && (!narrow || ui.panel === "canvas")) {
+	if (ui.page === "canvas" && (!narrow || ui.panel === "canvas" || model.externalCatalog && ui.panel === "catalog")) {
 		const toolbarX = x + 230, available = graphWidth - 230;
 		if (available > 130) nodes.push(node("Choice", "adminGraphLayoutStyle", rect(toolbarX, y, Math.max(80, available - 46), 38), {
 			label: tr("Automatic layout"),
@@ -1149,7 +1301,7 @@ function describe(model, ui, width, height, language) {
 	return { nodes };
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/graph_editor.state.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/workflow/graph_editor.state.mjs
 function initial() {
 	return {
 		page: "canvas",
@@ -1157,7 +1309,7 @@ function initial() {
 		inspector: "selection",
 		processPage: "parameters",
 		catalogWidth: 230,
-		propertiesWidth: 360,
+		propertiesWidth: 460,
 		catalogVisible: true,
 		propertiesVisible: true,
 		query: "",
@@ -1209,6 +1361,8 @@ function transition(ui, model, event) {
 		next.confirmation = "";
 		if (selectionEvents.indexOf(command.type) >= 0) {
 			next.text = {};
+			next.inspector = "selection";
+			next.propertiesVisible = true;
 			next.processPage = "parameters";
 			commands.push(command);
 		} else {
@@ -1499,10 +1653,21 @@ function graphXmlText(xml) {
 //#endregion
 //#region src/features/administration/graphFrame.js
 var graphFrame_default = {
+	props: {
+		catalogTarget: Object,
+		catalogPlacement: {
+			type: String,
+			default: "inline"
+		}
+	},
 	data() {
 		return {
 			ui: initial(),
 			viewport: {
+				width: 1,
+				height: 1
+			},
+			catalogSize: {
 				width: 1,
 				height: 1
 			},
@@ -1521,6 +1686,8 @@ var graphFrame_default = {
 			})) };
 			return {
 				mode: this.frameMode,
+				externalCatalog: this.catalogPlacement === "sidebar",
+				style: appearance.theme,
 				ready: !!document.xml,
 				canWrite: this.canWrite,
 				canLoad: !!this.ticket,
@@ -1561,6 +1728,13 @@ var graphFrame_default = {
 		frameScene() {
 			return describe(this.frameModel, this.ui, this.viewport.width, this.viewport.height, appearance.language);
 		},
+		catalogScene() {
+			return { nodes: [panel(this.frameModel, this.ui, {
+				x: 0,
+				y: 0,
+				...this.catalogSize
+			}, appearance.language)] };
+		},
 		toolbarScene() {
 			return toolbar(this.frameModel, this.ui, this.toolbarSize, appearance.language);
 		},
@@ -1569,19 +1743,33 @@ var graphFrame_default = {
 		}
 	},
 	mounted() {
+		const toolbar = this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el;
+		const pending = /* @__PURE__ */ new Map();
 		this.frameObserver = new ResizeObserver((entries) => {
-			cancelAnimationFrame(this.resizeFrame);
+			for (const entry of entries) pending.set(entry.target, entry.contentRect);
+			if (this.resizeFrame) return;
 			this.resizeFrame = requestAnimationFrame(() => {
-				for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
-					width: Math.max(1, entry.contentRect.width),
-					height: Math.max(1, entry.contentRect.height)
-				};
-				else this.toolbarSize = entry.contentRect.width;
+				this.resizeFrame = 0;
+				for (const [target, box] of pending) {
+					const size = {
+						width: Math.max(1, box.width),
+						height: Math.max(1, box.height)
+					};
+					if (target === this.$refs.body) this.viewport = size;
+					else if (target === this.catalogTarget) this.catalogSize = size;
+					else if (target === toolbar) this.toolbarSize = size.width;
+				}
+				pending.clear();
 			});
 		});
 		this.frameObserver.observe(this.$refs.body);
-		this.frameObserver.observe(this.toolbarTarget ? document.querySelector(this.toolbarTarget) || this.$el : this.$el);
+		this.frameObserver.observe(toolbar);
+		if (this.catalogTarget) this.frameObserver.observe(this.catalogTarget);
 	},
+	watch: { catalogTarget(target, previous) {
+		if (previous) this.frameObserver?.unobserve(previous);
+		if (target) this.frameObserver?.observe(target);
+	} },
 	beforeUnmount() {
 		this.frameObserver?.disconnect();
 		cancelAnimationFrame(this.resizeFrame);

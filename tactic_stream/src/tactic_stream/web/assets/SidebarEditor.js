@@ -1,9 +1,10 @@
 import { E as mergeProps, I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, H as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { U as sidebarRequest } from "./clipboard.js";
-import { C as policy, D as toolbar, E as tabs, O as translate, S as notices, b as label, h as _sfc_main$1, k as node, w as rect, x as muted, y as documentEvent } from "./App.js";
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, y as translate } from "./App.js";
+import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
-//#region ../src/tactic_stream/shared_ui/sidebar.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.ui.mjs
 var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
 	text,
 	icon,
@@ -381,7 +382,7 @@ function row(listNode, record, model, ui, language) {
 	return { nodes: children };
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/sidebar.state.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.state.mjs
 var initial = () => ({
 	page: "item",
 	mode: "simple",

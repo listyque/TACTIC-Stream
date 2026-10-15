@@ -5,7 +5,7 @@ from fixture import *
 from native_capture import source_hashes
 HERE=Path(__file__).resolve().parent;OUT=HERE/'output';OUT.mkdir(exist_ok=True)
 from thlib.ui.localization import CatalogTranslator
-sources=source_hashes(ROOT,TH,['thlib/ui/qml/AdministrationView.qml','thlib/ui/administration.py']);samples=[]
+sources=source_hashes(ROOT,TH,['thlib/ui/qml/features/administration/AdministrationView.qml','thlib/ui/administration.py']);samples=[]
 quick=os.environ.get('FRAME_CAPTURE_QUICK')=='1'
 for mode in ('dark','light'):
  for language in ('en','ru'):
@@ -16,7 +16,8 @@ for mode in ('dark','light'):
    component=QQmlComponent(engine,QUrl.fromLocalFile(str(HERE/'ShellHarness.qml')));assert component.isReady(),[e.toString() for e in component.errors()]
    window=component.createWithInitialProperties({'width':width,'height':height,'dark':mode=='dark','language':language});assert window
    try:
-    for phase in ('default','collapse','groups','locked'):
+    for phase in ('default','workflow','collapse','groups','locked'):
+     if phase=='workflow':window.send({'type':'section','value':'workflow'})
      if phase=='collapse':window.send({'type':'collapse'})
      if phase=='groups':window.send({'type':'section','value':'groups'})
      if phase=='locked':window.setProperty('model',dict(section='groups',project='demo',projects=[dict(value='demo',label='Demo')],locked=True,busy=False,drafts=['schema']));window.send({'type':'close'})

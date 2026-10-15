@@ -8,7 +8,7 @@ const screens=['groups','users','security','raw','sidebar','columns','types','na
 const start=process.argv[2]?screens.indexOf(process.argv[2]):0
 if(start<0)throw new Error('Unknown screen: '+process.argv[2])
 const results=start?JSON.parse(await readFile(out+'results.json','utf8')).filter(row=>screens.indexOf(row.screen)<start&&row.status===0):[]
-for(const screen of screens.slice(start)){
+async function run(screen){
  const stream=createWriteStream(out+screen+'.log')
  const status=await new Promise(resolve=>{
   const child=spawn(process.execPath,screen==='users'?['tests/frame_groups.mjs','--users']:['tests/frame_'+screen+'.mjs'],{cwd:root+'frontend',env:{...process.env,STREAM_BROWSER_CHANNEL:process.env.STREAM_BROWSER_CHANNEL||'msedge'},stdio:['ignore','pipe','pipe']})
@@ -16,8 +16,13 @@ for(const screen of screens.slice(start)){
   const timer=setTimeout(()=>child.kill(),300000)
   child.on('close',code=>{clearTimeout(timer);stream.end();resolve(code)})
  })
- results.push({screen,status,log:screen+'.log'});console.log(screen,status)
+ console.log(screen,status)
+ return {screen,status,log:screen+'.log'}
+}
+for(let index=start;index<screens.length;index+=2){
+ const batch=await Promise.all(screens.slice(index,index+2).map(run))
+ results.push(...batch)
  await writeFile(out+'results.json',JSON.stringify(results,null,2))
- if(status)process.exit(status||1)
+ if(batch.some(row=>row.status))process.exit(1)
 }
 console.log('Paired native/browser Frame suites passed: '+results.length)

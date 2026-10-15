@@ -1,7 +1,8 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
-import { E as appearance, H as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { M as rpc, Y as widgetConfiguration, j as resultItems } from "./clipboard.js";
-import { B as widgets, C as policy, D as toolbar$1, F as edit, I as roles, L as serialize, M as actions, N as binding, O as translate, P as describe$2, R as template, S as notices, T as sectionSelector, b as label, h as _sfc_main$1, k as node, w as rect, x as muted, y as documentEvent, z as variants } from "./App.js";
+import { A as variants, C as actions, D as roles, E as edit, J as label, O as serialize, T as describe$2, X as node, Y as muted, Z as rect, h as _sfc_main$1, j as widgets, k as template, w as binding, y as translate } from "./App.js";
+import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
@@ -35,7 +36,7 @@ function layoutTree(source) {
 	return convert(document);
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/layout.preview.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs
 var number = (value, fallback, min, max) => Number.isFinite(Number(value)) ? Math.max(min, Math.min(max, Number(value))) : fallback;
 function variant(sample) {
 	return sample.kind === "branch" ? (sample.branch || {}).kind || "versions" : sample.kind === "object" ? sample.depth ? "children" : "main" : sample.kind;
@@ -323,7 +324,7 @@ function describe$1(layout, sample, width, selected, language, screenWidth, asse
 	};
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/layout.state.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.state.mjs
 function initial() {
 	return {
 		page: "design",
@@ -597,7 +598,7 @@ function completed(ui, command) {
 	}) : ui;
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/layout.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.ui.mjs
 var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
 	text,
 	icon,

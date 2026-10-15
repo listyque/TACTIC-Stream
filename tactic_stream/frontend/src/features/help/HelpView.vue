@@ -70,7 +70,7 @@ onBeforeUnmount(() => { generation++; controller?.abort(); dialog.value?.close()
 defineExpose({ open, close })
 </script>
 <template>
-  <Teleport to="body"><dialog v-window="{ type:'window' }" ref="dialog" class="help-view" :aria-label="t(label)" @cancel.prevent="close">
+  <Teleport to="body"><dialog v-window="{kind:'help', type:'window' }" ref="dialog" class="help-view" :aria-label="t(label)" @cancel.prevent="close">
     <header class="help-window-header"><AppIcon name="help" /><strong>{{ t(label) }}</strong><AppButton icon-only label="Close help" icon="close" @click="close" /></header>
     <div class="help-layout" :class="{ 'topics-visible': topicsVisible }">
       <aside class="help-topics"><header><AppIcon name="help" /><strong>{{ t('Help topics') }}</strong><AppButton class="help-mobile-toggle" icon-only icon="close" label="Close help topics" @click="topicsVisible = false" /></header>

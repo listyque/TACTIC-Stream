@@ -1,10 +1,11 @@
 import { n as __exportAll } from "./markdown-it.js";
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, H as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { M as rpc } from "./clipboard.js";
-import { C as policy, D as toolbar$1, O as translate, S as notices, T as sectionSelector, b as label, h as _sfc_main$1, k as node, w as rect, x as muted, y as documentEvent } from "./App.js";
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$1, y as translate } from "./App.js";
+import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as form } from "./admin.form.js";
-//#region ../src/tactic_stream/shared_ui/naming.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.ui.mjs
 var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
 	text,
 	icon,
@@ -335,7 +336,7 @@ function row(listNode, record, model, language) {
 	})] };
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/naming.state.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.state.mjs
 var fields$1 = [
 	"search_type",
 	"dir_naming",

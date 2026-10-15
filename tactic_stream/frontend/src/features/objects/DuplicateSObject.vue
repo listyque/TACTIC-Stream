@@ -131,7 +131,7 @@ export default {
 
 <template>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="record-dialog duplicate-sobject" :aria-label="t('Duplicate object')" @cancel.prevent="close()">
+    <dialog v-window="{kind:'duplicate_sobject', type:'window' }" ref="dialog" class="record-dialog duplicate-sobject" :aria-label="t('Duplicate object')" @cancel.prevent="close()">
       <header class="duplicate-header"><span class="duplicate-symbol"><AppIcon name="control-point-duplicate" /></span><div><h2>{{ t('Duplicate') }} {{ analysis?.title }}</h2><small>{{ analysis?.searchType || sourceType }}</small></div><span class="duplicate-step">{{ t('Step {step} of 5', {step:step + 1}) }}</span><AppButton label="Help" icon="help" icon-only @click="openHelp('duplicating_objects')" /><AppButton label="Close" icon="close" icon-only :disabled="saving" @click="close()" /></header>
       <p v-if="error" role="alert" class="error">{{ t(error) }} <AppButton v-if="!uncertain && valid" label="Analyze again" :disabled="busy || saving" @click="analyze" /></p>
       <p v-if="busy || saving" role="status">{{ t(saving ? 'Creating duplicate on server…' : 'Analyzing object…') }}</p>

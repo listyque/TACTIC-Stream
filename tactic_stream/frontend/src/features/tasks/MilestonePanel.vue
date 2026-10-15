@@ -18,7 +18,7 @@ defineExpose({ open: () => { if (!dialog.value.open) dialog.value.show() }, clos
 
 <template>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="configuration-dialog milestone-manager" :aria-label="t('Project milestones')" @cancel.prevent="emit('close')">
+    <dialog v-window="{kind:'milestone_manager', type:'window' }" ref="dialog" class="configuration-dialog milestone-manager" :aria-label="t('Project milestones')" @cancel.prevent="emit('close')">
       <header class="task-manager-heading"><div><h2>{{ t('Project milestones') }}</h2><small class="muted">{{ project }} · {{ t('Reusable deadlines and the plan of linked tasks.') }}</small></div>
         <div class="configuration-actions"><AppButton label="Refresh" icon="refresh" icon-only :disabled="busy" @click="emit('refresh')" /><AppButton label="New milestone" icon="add" :disabled="busy || !!uncertain || !result?.canCreate" @click="emit('create')" /><AppButton label="Close" icon="close" icon-only :disabled="busy" @click="emit('close')" /></div></header>
       <aside v-if="confirmation" class="notice"><p>{{ t(confirmation === 'close' ? 'Discard unsaved milestone changes?' : 'Refreshing will discard every unsaved milestone change.') }}</p><AppButton label="Keep editing" @click="emit('keep-editing')" /><AppButton label="Discard changes" destructive @click="emit('confirm')" /></aside>

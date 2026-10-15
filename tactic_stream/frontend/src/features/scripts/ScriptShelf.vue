@@ -162,7 +162,7 @@ defineExpose({ open, reload: load, canLeave })
     <AppButton v-if="error" icon-only icon="warning" :label="error" @click="open" />
   </div></Teleport>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="script-shelf-dialog" :aria-label="t('Script Shelf')" @cancel.prevent="close" @close="refreshUpdates">
+    <dialog v-window="{kind:'script_shelf_editor', type:'window' }" ref="dialog" class="script-shelf-dialog" :aria-label="t('Script Shelf')" @cancel.prevent="close" @close="refreshUpdates">
       <header class="script-shelf-heading"><AppIcon name="code" /><strong>{{ t('Script Shelf') }}</strong><AppButton icon-only icon="refresh" label="Reload shelves" :disabled="busy" @click="dirty ? confirm('reload') : refresh()" /><AppButton icon-only icon="close" label="Close script shelf" :disabled="busy || !!running" @click="close" /></header>
       <div class="script-shelf-editor" :aria-busy="busy">
         <aside class="script-shelf-presets">

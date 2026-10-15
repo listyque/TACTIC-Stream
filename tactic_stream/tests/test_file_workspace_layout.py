@@ -763,7 +763,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
         properties = {role.decode(): self.windows.data(index,key) for key,role in self.windows.roleNames().items()}
         properties.update(theme=self.theme, ownerWindow=self.window, workspaceEnabled=True)
         with patch.object(self.controller, 'action') as action:
-            details = self.create('FloatingWindow.qml', properties)
+            details = self.create('shell/windows/FloatingWindow.qml', properties)
             QTest.qWait(60)
             initial_action = action.call_args.args
         try:

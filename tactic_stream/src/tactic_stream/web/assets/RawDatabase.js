@@ -1,8 +1,9 @@
 import { D as nextTick, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, X as ref, c as vShow, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, p as Teleport, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, H as _plugin_vue_export_helper_default, T as t } from "./index.js";
+import { E as appearance, G as _plugin_vue_export_helper_default, T as t } from "./index.js";
 import { O as rawDatabase } from "./clipboard.js";
-import { C as policy, D as toolbar, O as translate, S as notices, b as label, h as _sfc_main$2, k as node, w as rect, x as muted, y as documentEvent } from "./App.js";
-//#region ../src/tactic_stream/shared_ui/raw.state.mjs
+import { J as label, X as node, Y as muted, Z as rect, h as _sfc_main$2, y as translate } from "./App.js";
+import { n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
+//#region ../src/tactic_stream/shared_ui/features/administration/database/raw.state.mjs
 function initial() {
 	return {
 		query: "",
@@ -152,7 +153,7 @@ function cellTransition(ui, model, event) {
 	};
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/raw.ui.mjs
+//#region ../src/tactic_stream/shared_ui/features/administration/database/raw.ui.mjs
 var button = (id, bounds, text, icon, action, enabled, extra) => node("Button", id, bounds, Object.assign({
 	text,
 	icon,
@@ -512,7 +513,10 @@ var _sfc_main = {
 						ref: frame,
 						scene: scene.value,
 						onEvent: dispatch
-					}, null, 8, ["scene"])], 40, _hoisted_1$1)), [[_directive_window, { backProvided: true }]]);
+					}, null, 8, ["scene"])], 40, _hoisted_1$1)), [[_directive_window, {
+						kind: "raw_cell",
+						backProvided: true
+					}]]);
 				};
 			}
 		}

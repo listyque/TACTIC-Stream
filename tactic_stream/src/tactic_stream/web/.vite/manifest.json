@@ -116,35 +116,12 @@
       "assets/AppSlider.css"
     ]
   },
-  "_AppSplitter.js": {
-    "file": "assets/AppSplitter.js",
-    "name": "AppSplitter",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ]
-  },
   "_AppSwitch.js": {
     "file": "assets/AppSwitch.js",
     "name": "AppSwitch",
     "imports": [
       "_vue.js",
       "index.html"
-    ]
-  },
-  "_AppTextArea.css": {
-    "file": "assets/AppTextArea.css",
-    "src": "_AppTextArea.css"
-  },
-  "_AppTextArea.js": {
-    "file": "assets/AppTextArea.js",
-    "name": "AppTextArea",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ],
-    "css": [
-      "assets/AppTextArea.css"
     ]
   },
   "_AppTextField.css": {
@@ -230,6 +207,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_admin.document.js",
       "_admin.form.js"
     ]
   },
@@ -267,6 +245,13 @@
       "index.html",
       "_richText.js",
       "_links.js"
+    ]
+  },
+  "_admin.document.js": {
+    "file": "assets/admin.document.js",
+    "name": "admin.document",
+    "imports": [
+      "src/App.vue"
     ]
   },
   "_admin.form.js": {
@@ -309,6 +294,7 @@
       "_vue.js",
       "index.html",
       "src/App.vue",
+      "_admin.document.js",
       "_admin.form.js"
     ]
   },
@@ -397,12 +383,10 @@
       "_links.js",
       "_activity.js",
       "_files.js",
-      "_AppTextArea.js",
       "_AppSearchField.js",
       "_AttachmentCard.js",
       "_AppMenuItem.js",
       "_MiddleElide.js",
-      "_AppSplitter.js",
       "_ItemSurface.js",
       "_previewImage.js"
     ],
@@ -486,6 +470,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_admin.document.js",
       "_admin.form.js"
     ]
   },
@@ -499,6 +484,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_admin.document.js",
       "_admin.form.js"
     ]
   },
@@ -511,7 +497,8 @@
       "_vue.js",
       "index.html",
       "_clipboard.js",
-      "src/App.vue"
+      "src/App.vue",
+      "_admin.document.js"
     ]
   },
   "src/features/administration/SchemaEditor.vue": {
@@ -542,6 +529,7 @@
       "_clipboard.js",
       "_previewImage.js",
       "src/App.vue",
+      "_admin.document.js",
       "_admin.form.js",
       "_NamingEditor.js"
     ]
@@ -568,7 +556,8 @@
       "_vue.js",
       "index.html",
       "_clipboard.js",
-      "src/App.vue"
+      "src/App.vue",
+      "_admin.document.js"
     ]
   },
   "src/features/administration/SecurityUsers.vue": {
@@ -594,6 +583,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_admin.document.js",
       "_admin.form.js"
     ]
   },
@@ -607,6 +597,7 @@
       "index.html",
       "_clipboard.js",
       "src/App.vue",
+      "_admin.document.js",
       "_admin.form.js",
       "_graphFrame.js"
     ],
@@ -643,7 +634,7 @@
       "_clipboard.js",
       "_AppTextField.js",
       "_AppMenu.js",
-      "_AppSplitter.js"
+      "src/App.vue"
     ],
     "css": [
       "assets/MatchingTemplates.css"
@@ -718,9 +709,7 @@
       "_AppTextField.js",
       "_AppMenu.js",
       "_files.js",
-      "_AppTextArea.js",
       "_AppMenuItem.js",
-      "_AppSplitter.js",
       "_ItemSurface.js",
       "src/App.vue"
     ],
@@ -745,7 +734,6 @@
       "_AppCheckbox.js",
       "_richText.js",
       "_links.js",
-      "_AppTextArea.js",
       "_AppSearchField.js",
       "_AttachmentCard.js",
       "_AppMenuItem.js",
@@ -767,7 +755,7 @@
       "_AppSelect.js",
       "_richText.js",
       "_links.js",
-      "_AppTextArea.js"
+      "src/App.vue"
     ],
     "css": [
       "assets/DescriptionEditor.css"
@@ -834,7 +822,6 @@
       "_AppSelect.js",
       "_AppMenu.js",
       "_AppSearchField.js",
-      "_AppSplitter.js",
       "src/App.vue"
     ],
     "css": [

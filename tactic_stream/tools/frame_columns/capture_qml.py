@@ -24,7 +24,7 @@ from tests.profile_ui_responsiveness import frame
 from tests.test_sidebar_editor_qml import SidebarEditorQmlTests
 from native_capture import controls, click, text, choose, snapshot, source_hashes
 
-native_names = ['thlib/ui/qml/ColumnsEditorView.qml', 'thlib/ui/columns_editor.py']
+native_names = ['thlib/ui/qml/features/administration/columns/ColumnsEditorView.qml', 'thlib/ui/columns_editor.py']
 initial_sources = source_hashes(REPO,TH,native_names)
 
 ColumnsTableViewTests.setUpClass()

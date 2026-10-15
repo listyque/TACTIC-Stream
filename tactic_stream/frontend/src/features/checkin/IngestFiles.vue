@@ -123,7 +123,7 @@ export default {
 
 <template>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="record-dialog ingest-files" :aria-label="t('Add files')" @cancel.prevent="close()" @dragover.prevent @drop.prevent="addFiles($event.dataTransfer.files)">
+    <dialog v-window="{kind:'ingest_files', type:'window' }" ref="dialog" class="record-dialog ingest-files" :aria-label="t('Add files')" @cancel.prevent="close()" @dragover.prevent @drop.prevent="addFiles($event.dataTransfer.files)">
       <header><div><h2>{{ parent?.name || parent?.title || parent?.code }} → {{ branch?.title }}</h2><small>{{ t('One Search Object per file · snapshot in publish') }} · {{ branch?.search_type }}</small></div><AppButton label="Close" icon="close" :disabled="busy" @click="close()" /></header>
       <p v-if="error" role="alert" class="error">{{ t(error) }}</p>
       <p v-if="busy" role="status">{{ t('Loading data…') }}</p>

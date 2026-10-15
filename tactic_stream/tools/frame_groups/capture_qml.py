@@ -39,7 +39,7 @@ from tests.test_admin_users_ui import AdminUsersUiTests
 from tests.test_sidebar_editor_qml import SidebarEditorQmlTests
 from tests.profile_ui_responsiveness import frame
 from native_capture import assert_icons, source_hashes
-native_names = ['thlib/ui/qml/SecurityGroupsView.qml', 'thlib/ui/administration.py'] + (['thlib/ui/qml/AdminUsersView.qml', 'thlib/ui/admin/users.py'] if USERS else [])
+native_names = ['thlib/ui/qml/features/administration/groups/SecurityGroupsView.qml', 'thlib/ui/administration.py'] + (['thlib/ui/qml/features/administration/users/AdminUsersView.qml', 'thlib/ui/admin/users.py'] if USERS else [])
 initial_sources = source_hashes(REPO, TH, native_names)
 
 OUT = HERE / 'output'

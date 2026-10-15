@@ -130,7 +130,7 @@ export default {
 </script>
 
 <template>
-  <dialog v-window ref="dialog" class="configuration-dialog project-creation-dialog" :aria-label="t('Create project')" @cancel.prevent="cancel">
+  <dialog v-window="{kind:'project_wizard'}" ref="dialog" class="configuration-dialog project-creation-dialog" :aria-label="t('Create project')" @cancel.prevent="cancel">
     <div class="configuration-shell project-wizard" :aria-busy="busy">
       <header class="configuration-header">
         <div class="configuration-brand"><h2>{{ t('Create project') }}</h2><small class="muted">{{ 'TACTIC Stream · ' + t('Project settings') }}</small></div>

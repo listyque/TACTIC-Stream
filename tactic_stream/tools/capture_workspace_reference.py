@@ -134,7 +134,7 @@ ApplicationWindow {
         rows = ItemActionsMixin.item_menu_actions(owner, 'fixture')
         expression('itemMenu('+json.dumps(rows)+',false)'); save('th-file-menu')
         expression('actions.close()')
-        sources = ['thlib/ui/qml/DockPanel.qml', 'thlib/ui/qml/DockTitleLabel.qml', 'thlib/ui/qml/controls/Typography.qml', 'thlib/ui/qml/DockMenu.qml', 'thlib/ui/qml/ActionMenu.qml',
+        sources = ['thlib/ui/qml/shell/docks/DockPanel.qml', 'thlib/ui/qml/shell/docks/DockTitleLabel.qml', 'thlib/ui/qml/controls/Typography.qml', 'thlib/ui/qml/shell/docks/DockMenu.qml', 'thlib/ui/qml/ActionMenu.qml',
             'thlib/ui/qml/WorkspaceLayoutPresetMenuSection.qml', 'thlib/ui/controllers/item_actions.py',
             'thlib/ui/controllers/search_tabs.py', 'thlib/ui/workspace_models/docks_records.py', 'thlib/ui/workspace_layout_presets.py']
         (OUTPUT/'native.json').write_text(json.dumps(dict(capturedAt=datetime.now(timezone.utc).isoformat(), sources={path:hashlib.sha256((HANDLER/path).read_bytes()).hexdigest() for path in sources},

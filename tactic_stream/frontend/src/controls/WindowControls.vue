@@ -4,6 +4,9 @@ import { ref, onMounted, onBeforeUnmount, watch, watchEffect } from 'vue'
 import AppButton from './AppButton.vue'
 import { t } from '../i18n.js'
 import { mobile } from '../mobile.js'
+import {fit, moved, resized} from '../../../src/tactic_stream/shared_ui/shell/window.geometry.mjs'
+import {layout} from '../../../src/tactic_stream/shared_ui/core/foundation.mjs'
+import {windowMinimumWidth,windowMinimumHeight} from '../../../src/tactic_stream/shared_ui/shell/window.sizing.mjs'
 const props = defineProps({ element: Object, header: Object, geometry:Object, backProvided:Boolean })
 const previousTitle = props.header.getAttribute('title'), previousTabIndex = props.header.getAttribute('tabindex')
 const maximized = ref(false)
@@ -34,8 +37,11 @@ function resizeEdges() {
     '--edge-right':innerWidth - box.x - box.width + 'px','--edge-bottom':innerHeight - box.y - box.height + 'px' }
 }
 function clamp(rect) {
-  const width = Math.max(1,Math.min(rect.width, innerWidth - 16)), height = Math.max(1,Math.min(rect.height, innerHeight - 16))
-  return { width, height, x: Math.max(0, Math.min(innerWidth - width, rect.x)), y: Math.max(0, Math.min(innerHeight - height, rect.y)) }
+  return fit(rect,{x:0,y:0,width:innerWidth,height:innerHeight},minimum(),layout.windowMargin)
+}
+function minimum() {
+  const kind = props.element.dataset.windowKind
+  return {width:Math.min(kind?windowMinimumWidth(kind):280,innerWidth-layout.windowMargin),height:Math.min(kind?windowMinimumHeight(kind):180,innerHeight-layout.windowMargin)}
 }
 function place(rect) {
   placed = clamp(rect)
@@ -63,14 +69,11 @@ function start(event) {
 }
 function move(event) {
   if (!gesture || gesture.pointer !== event.pointerId) return
-  const dx = event.clientX - gesture.x, dy = event.clientY - gesture.y, rect = { ...gesture.before }
-  if (gesture.edge) {
-    const minimumWidth = Math.min(280,innerWidth - 16), minimumHeight = Math.min(180,innerHeight - 16)
-    if (gesture.edge.includes('right')) rect.width = Math.max(minimumWidth,Math.min(innerWidth - rect.x,rect.width + dx))
-    if (gesture.edge.includes('bottom')) rect.height = Math.max(minimumHeight,Math.min(innerHeight - rect.y,rect.height + dy))
-    if (gesture.edge.includes('left')) { rect.x = Math.max(0,Math.min(rect.x + dx,rect.x + rect.width - minimumWidth)); rect.width += gesture.before.x - rect.x }
-    if (gesture.edge.includes('top')) { rect.y = Math.max(0,Math.min(rect.y + dy,rect.y + rect.height - minimumHeight)); rect.height += gesture.before.y - rect.y }
-  } else { rect.x += dx; rect.y += dy }
+  const delta = {x:event.clientX-gesture.x,y:event.clientY-gesture.y}
+  const rect = gesture.edge
+    ? resized(gesture.before,gesture.edge,delta,{x:0,y:0,width:innerWidth,height:innerHeight},
+      minimum())
+    : moved(gesture.before,delta)
   place(rect)
 }
 function startResize(event, edge) {

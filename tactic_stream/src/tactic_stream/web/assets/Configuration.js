@@ -1,5 +1,5 @@
 import { A as onDeactivated, B as useId, D as nextTick, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, O as onActivated, P as renderList, X as ref, Y as reactive, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, m as computed, p as Teleport, rt as toDisplayString, s as vModelText, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
-import { E as appearance, F as savePreferencePage, H as _plugin_vue_export_helper_default, M as configurationPreview, N as normalizePreferences, P as preferences, T as t, c as _sfc_main$8, d as debugSettings, g as levels, i as _sfc_main$9, j as saveAppearance, n as mobile } from "./index.js";
+import { E as appearance, F as configurationPreview, G as _plugin_vue_export_helper_default, I as normalizePreferences, L as preferences, R as savePreferencePage, T as t, c as _sfc_main$8, d as debugSettings, g as levels, i as _sfc_main$9, j as saveAppearance, n as mobile } from "./index.js";
 import { B as serverConfiguration, M as rpc, N as saveServerConfiguration, T as projectCatalog, u as _sfc_main$10 } from "./clipboard.js";
 import { t as _sfc_main$11 } from "./AppSwitch.js";
 import { t as _sfc_main$12 } from "./AppSelect.js";
@@ -11,7 +11,7 @@ import { t as _sfc_main$16 } from "./AppMenu.js";
 import { t as _sfc_main$17 } from "./AppCheckbox.js";
 import { f as timestampFullLabel } from "./activity.js";
 import { t as AppSearchField_default } from "./AppSearchField.js";
-import { H as _sfc_main$18, V as resultViews, a as updateModes, d as ProjectChooser_default, f as ProjectCreation_default, i as updateIntervals, n as networkSettings, r as updateBatchDelays } from "./App.js";
+import { M as resultViews, N as _sfc_main$18, a as updateModes, d as ProjectChooser_default, f as ProjectCreation_default, i as updateIntervals, n as networkSettings, r as updateBatchDelays } from "./App.js";
 //#region src/features/configuration/ServerConfiguration.vue
 var _sfc_main$7 = {
 	components: {

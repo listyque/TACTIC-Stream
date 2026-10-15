@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/App.js","assets/markdown-it.js","assets/icons.js","assets/RecordForm.js","assets/AppColorInput.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppTextField.js","assets/AppTextField.css","assets/AppColorInput.css","assets/AppDateField.js","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/RecordForm.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/richText.js","assets/links.js","assets/activity.js","assets/files.js","assets/AppTextArea.js","assets/AppTextArea.css","assets/AppSearchField.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/MiddleElide.js","assets/MiddleElide.css","assets/AppSplitter.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/previewImage.js","assets/App.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/App.js","assets/markdown-it.js","assets/icons.js","assets/RecordForm.js","assets/AppColorInput.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppTextField.js","assets/AppTextField.css","assets/AppColorInput.css","assets/AppDateField.js","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/RecordForm.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/richText.js","assets/links.js","assets/activity.js","assets/files.js","assets/AppSearchField.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/MiddleElide.js","assets/MiddleElide.css","assets/ItemSurface.js","assets/ItemSurface.css","assets/previewImage.js","assets/App.css"])))=>i.map(i=>d[i]);
 import { C as h, F as renderSlot, G as withCtx, H as watch, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, S as defineAsyncComponent, U as watchEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, i as render, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeStyle, p as Teleport, r as createApp, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock } from "./vue.js";
 import { n as en_default, t as ru_default } from "./locales.js";
 import { n as resolveIcon } from "./icons.js";
@@ -468,6 +468,379 @@ function savePreferencePage(page, value) {
 	Object.assign(preferences[page], next[page]);
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/core/foundation.mjs
+var typography = {
+	micro: 8,
+	caption: 8.25,
+	label: 8.75,
+	body: 9.25,
+	bodyLarge: 10,
+	title: 12
+};
+var controls = {
+	button: {
+		minimumWidth: 72,
+		padding: 16,
+		iconPadding: 12,
+		spacing: 7,
+		segmentedSpacing: 6,
+		iconSize: 16,
+		compactIconSize: 18,
+		segmentedIconSize: 15
+	},
+	iconButton: {
+		extent: 28,
+		iconSize: 17,
+		surfaceInset: 2
+	},
+	checkBox: {
+		height: 36,
+		compactHeight: 30,
+		spacing: 9,
+		compactSpacing: 6,
+		indicator: 19,
+		compactIndicator: 17,
+		prominentIndicator: 22,
+		iconSize: 15,
+		compactIconSize: 13,
+		prominentIconSize: 17,
+		radius: 5
+	},
+	switch: {
+		width: 42,
+		height: 24,
+		thumb: 18,
+		inset: 3,
+		spacing: 10
+	},
+	splitter: {
+		extent: 10,
+		thickness: 3,
+		length: 40,
+		restingOpacity: .28,
+		hoveredOpacity: .85,
+		pressedOpacity: 1
+	},
+	scrollBar: {
+		extent: 12,
+		restingTrack: 6,
+		expandedTrack: 11,
+		restingThumb: 5,
+		expandedThumb: 8,
+		restingTrackOpacity: .055,
+		expandedTrackOpacity: .15,
+		restingThumbOpacity: .42,
+		hoveredThumbOpacity: .72,
+		pressedThumbOpacity: .9,
+		disabledThumbOpacity: .18
+	}
+};
+var styleMetrics = {
+	md3: {
+		controlHeight: 36,
+		compactControlHeight: 32,
+		fieldRadius: 10,
+		buttonRadius: 18,
+		itemRadius: 9,
+		snapshotRadius: 5,
+		surfaceRadius: 12,
+		sectionRadius: 16,
+		dialogRadius: 20,
+		menuRadius: 16,
+		iconButtonRadius: 4,
+		communicationGroupedSpacing: 2,
+		communicationGroupTailSize: 10,
+		communicationBubbleRadius: 14,
+		communicationGroupedBubbleRadius: 8,
+		baseMotionInstant: 28,
+		baseMotionFast: 48,
+		baseMotionMedium: 56,
+		baseMotionSlow: 72,
+		baseMotionExtended: 104
+	},
+	material5: {
+		controlHeight: 38,
+		compactControlHeight: 34,
+		fieldRadius: 15,
+		buttonRadius: 16,
+		itemRadius: 13,
+		snapshotRadius: 10,
+		surfaceRadius: 18,
+		sectionRadius: 22,
+		dialogRadius: 28,
+		menuRadius: 20,
+		iconButtonRadius: 9,
+		communicationGroupedSpacing: 3,
+		communicationGroupTailSize: 11,
+		communicationBubbleRadius: 16,
+		communicationGroupedBubbleRadius: 10,
+		baseMotionInstant: 36,
+		baseMotionFast: 60,
+		baseMotionMedium: 76,
+		baseMotionSlow: 96,
+		baseMotionExtended: 128
+	},
+	fluent: {
+		controlHeight: 34,
+		compactControlHeight: 32,
+		fieldRadius: 5,
+		buttonRadius: 5,
+		itemRadius: 5,
+		snapshotRadius: 3,
+		surfaceRadius: 7,
+		sectionRadius: 8,
+		dialogRadius: 8,
+		menuRadius: 8,
+		iconButtonRadius: 4,
+		communicationGroupedSpacing: 2,
+		communicationGroupTailSize: 10,
+		communicationBubbleRadius: 7,
+		communicationGroupedBubbleRadius: 4,
+		baseMotionInstant: 24,
+		baseMotionFast: 36,
+		baseMotionMedium: 48,
+		baseMotionSlow: 64,
+		baseMotionExtended: 88
+	}
+};
+var layout = {
+	appBarHeight: 44,
+	sectionRailWidth: 48,
+	dockTitleHeight: 38,
+	dockWorkspaceHeaderHeight: 96,
+	dockWorkspaceFooterHeight: 58,
+	communicationListSpacing: 10,
+	communicationBubblePadding: 10,
+	communicationContentSpacing: 6,
+	communicationAvatarSpacing: 8,
+	scrollbarExtent: 12,
+	splitterExtent: 10,
+	windowMargin: 16,
+	dragThreshold: 5
+};
+function metrics(style) {
+	return Object.assign({}, layout, styleMetrics[style] || styleMetrics.md3);
+}
+function motion(style, preferences) {
+	const values = metrics(style), flags = preferences || {}, result = {};
+	for (const duration of [
+		"Instant",
+		"Fast",
+		"Medium",
+		"Slow",
+		"Extended"
+	]) {
+		const value = values["baseMotion" + duration];
+		result["motion" + duration] = flags.fade === false || flags.reduced ? 0 : value;
+		result["clickMotion" + duration] = flags.click === false || flags.reduced ? 0 : value;
+		result["hoverMotion" + duration] = flags.hover === false || flags.reduced ? 0 : value;
+		result["popupMotion" + duration] = flags.popup === false || flags.reduced ? 0 : value;
+	}
+	result.scrollMotion = result.motionInstant;
+	return result;
+}
+function blend(first, second, weight) {
+	const amount = Math.max(0, Math.min(1, weight));
+	return first.map((channel, index) => channel * (1 - amount) + second[index] * amount);
+}
+function readableText$1(color) {
+	return (color[0] * .2126 + color[1] * .7152 + color[2] * .0722) / 255 > .56 ? [
+		23,
+		32,
+		39
+	] : [
+		246,
+		248,
+		250
+	];
+}
+function rgb(hex) {
+	return [
+		1,
+		3,
+		5
+	].map((offset) => parseInt(hex.slice(offset, offset + 2), 16));
+}
+function palette(style, dark, base, accent) {
+	const black = [
+		0,
+		0,
+		0
+	], white = [
+		255,
+		255,
+		255
+	];
+	const material = style === "material5", fluent = style === "fluent";
+	const colors = {
+		action: accent,
+		blackMix: black,
+		whiteMix: white
+	};
+	colors.paletteBase = material ? blend(base, accent, dark ? .07 : .05) : base;
+	const surface = colors.paletteBase;
+	colors.workspace = blend(surface, dark ? black : white, dark ? fluent ? .23 : .34 : fluent ? .12 : .08);
+	colors.topBar = blend(surface, dark ? white : black, dark ? material ? .05 : .03 : .03);
+	colors.toolBar = blend(surface, dark ? white : black, dark ? material ? .11 : .08 : .07);
+	colors.panel = blend(surface, dark ? black : white, dark ? .04 : .22);
+	colors.panelRaised = blend(surface, white, dark ? .08 : .38);
+	colors.panelDeep = blend(surface, black, dark ? .19 : .08);
+	colors.row = blend(surface, white, dark ? .07 : .32);
+	colors.rowHover = blend(colors.row, accent, dark ? .1 : .08);
+	colors.selected = blend(accent, colors.panelRaised, dark ? .28 : .3);
+	colors.contentSelection = blend(accent, colors.workspace, dark ? .68 : .72);
+	colors.primaryText = readableText$1(colors.workspace);
+	colors.contentAccent = blend(accent, colors.primaryText, dark ? .12 : .08);
+	colors.selectedText = readableText$1(colors.selected);
+	colors.contentSelectionText = readableText$1(colors.contentSelection);
+	colors.secondaryText = blend(colors.primaryText, surface, dark ? .35 : .42);
+	colors.disabledText = blend(colors.secondaryText, surface, .42);
+	colors.separator = blend(surface, colors.primaryText, dark ? .11 : .18);
+	colors.border = blend(surface, colors.primaryText, dark ? .24 : .3);
+	const fixed = {
+		green: "#52a86e",
+		yellow: "#d5bd51",
+		red: "#d65b67",
+		missingFile: "#d45b5b",
+		violet: "#a06bb4",
+		cyan: "#56a7b3"
+	};
+	for (const name of Object.keys(fixed)) colors[name] = rgb(fixed[name]);
+	const syntax = {
+		Keyword: ["#d5bd51", "#808000"],
+		String: ["#69b77d", "#008000"],
+		Comment: ["#70a87a", "#008000"],
+		Number: ["#66b8c4", "#000080"],
+		Type: ["#bc84cf", "#800080"],
+		Function: ["#66b8c4", "#00677c"],
+		Definition: ["#d39562", "#7c4800"],
+		Self: ["#88aac4", "#092e64"],
+		Occurrence: ["#55545a", "#b4b4b4"],
+		Search: ["#75651f", "#ffef0b"]
+	};
+	for (const name of Object.keys(syntax)) colors["syntax" + name] = rgb(syntax[name][dark ? 0 : 1]);
+	colors.titleGreen = rgb(dark ? "#4c8700" : "#5f970d");
+	colors.ripple = (dark ? white : black).concat((dark ? 52 : 34) / 255);
+	colors.rippleStrong = (dark ? white : black).concat((dark ? 56 : 36) / 255);
+	colors.popupShadow = black.concat((dark ? 74 : 40) / 255);
+	colors.dialogShadow = black.concat((dark ? 82 : 48) / 255);
+	colors.scrim = black.concat((dark ? 153 : 115) / 255);
+	const aliases = {
+		tooltipSurface: "panelRaised",
+		tooltipText: "primaryText",
+		background: "workspace",
+		surface: "panel",
+		surfaceContainerLow: "panel",
+		surfaceContainer: "toolBar",
+		surfaceContainerHigh: "panelRaised",
+		surfaceContainerHighest: "rowHover",
+		surfaceVariant: "toolBar",
+		outline: "border",
+		outlineVariant: "separator",
+		primary: "action",
+		primaryContainer: "selected",
+		secondary: "secondaryText",
+		secondaryContainer: "rowHover",
+		tertiary: "violet",
+		tertiaryContainer: "rowHover",
+		error: "red",
+		errorContainer: "rowHover",
+		text: "primaryText",
+		muted: "secondaryText",
+		accent: "action",
+		accentContainer: "selected"
+	};
+	for (const name of Object.keys(aliases)) colors[name] = colors[aliases[name]];
+	colors.onError = readableText$1(colors.error);
+	colors.inverseSurface = rgb("#eeeeee");
+	colors.inverseOnSurface = rgb("#202020");
+	return colors;
+}
+var cssRoles = {
+	workspace: "--page",
+	topBar: "--header",
+	toolBar: "--surface-container",
+	panel: "--surface",
+	panelRaised: "--surface-high",
+	panelDeep: "--surface-deep",
+	row: "--row",
+	rowHover: "--hover",
+	selected: "--selected",
+	selectedText: "--on-selected",
+	contentSelection: "--content-selection",
+	contentAccent: "--content-accent",
+	primaryText: "--on-surface",
+	secondaryText: "--muted",
+	disabledText: "--disabled",
+	border: "--outline",
+	separator: "--outline-variant",
+	action: "--primary",
+	red: "--error",
+	green: "--success",
+	yellow: "--yellow",
+	cyan: "--cyan",
+	violet: "--violet",
+	surfaceContainerLow: "--surface",
+	surfaceContainer: "--surface-container",
+	surfaceContainerHigh: "--surface-high",
+	outline: "--outline",
+	outlineVariant: "--outline-variant",
+	error: "--error",
+	onError: "--on-error",
+	ripple: "--ripple-color",
+	popupShadow: "--shadow-color",
+	scrim: "--scrim"
+};
+function cssColor(channels) {
+	return "rgba(" + channels.slice(0, 3).join(",") + "," + (channels.length === 4 ? channels[3] : 1) + ")";
+}
+function cssVariables(style, dark, base, accent, preferences) {
+	const colors = palette(style, dark, base, accent), values = metrics(style), result = {};
+	for (const role of Object.keys(cssRoles)) result[cssRoles[role]] = cssColor(colors[role]);
+	for (const name of Object.keys(values)) {
+		const cssName = "--" + name.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
+		result[cssName] = values[name] + (name.indexOf("baseMotion") === 0 ? "ms" : "px");
+	}
+	for (const name of Object.keys(typography)) {
+		const cssName = "--text-" + name.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
+		result[cssName] = typography[name] + "pt";
+	}
+	for (const kind of Object.keys(controls)) for (const name of Object.keys(controls[kind])) {
+		const cssName = "--" + (kind + name[0].toUpperCase() + name.slice(1)).replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
+		result[cssName] = controls[kind][name] + (name.endsWith("Opacity") ? "" : "px");
+	}
+	const timings = motion(style, preferences);
+	for (const name of [
+		"Instant",
+		"Fast",
+		"Medium",
+		"Slow",
+		"Extended"
+	]) result["--motion-" + name.toLowerCase()] = timings["motion" + name] + "ms";
+	const feedback = {
+		"--motion-click": "clickMotionFast",
+		"--motion-click-expansion": "clickMotionMedium",
+		"--motion-click-slow": "clickMotionSlow",
+		"--motion-click-extended": "clickMotionExtended",
+		"--motion-hover": "hoverMotionFast",
+		"--motion-hover-medium": "hoverMotionMedium",
+		"--motion-fade": "motionMedium",
+		"--motion-fade-slow": "motionSlow",
+		"--motion-fade-extended": "motionExtended",
+		"--motion-popup": "popupMotionMedium",
+		"--motion-popup-fast": "popupMotionFast",
+		"--motion-popup-slow": "popupMotionSlow"
+	};
+	for (const name of Object.keys(feedback)) result[name] = timings[feedback[name]] + "ms";
+	for (const name of Object.keys(colors)) if (name.indexOf("syntax") === 0) result["--syntax-" + name.slice(6).toLowerCase()] = cssColor(colors[name]);
+	result["--on-primary"] = cssColor(readableText$1(accent));
+	result["--font-family"] = "\"Segoe UI\", system-ui, sans-serif";
+	result["--communication-bubble-radius"] = values.communicationBubbleRadius + "px";
+	result["--workspace-footer-height"] = values.dockWorkspaceFooterHeight + "px";
+	result["--preview-radius"] = values.snapshotRadius + "px";
+	return result;
+}
+//#endregion
 //#region src/appearance.js
 var languages = [{
 	value: "en",
@@ -528,11 +901,8 @@ function readAppearance() {
 }
 var appearance = reactive(readAppearance());
 var hostedPalette = ref(null);
-function blend(first, second, weight) {
-	return first.map((value, index) => value * (1 - weight) + second[index] * weight);
-}
-function readableText([red, green, blue]) {
-	return (red * .2126 + green * .7152 + blue * .0722) / 255 > .56 ? "#172027" : "#f6f8fa";
+function readableText(color) {
+	return "#" + readableText$1(color).map((channel) => channel.toString(16).padStart(2, "0")).join("");
 }
 function saveAppearance() {
 	localStorage.setItem(storageKey, JSON.stringify(appearance));
@@ -541,9 +911,14 @@ var systemDark = ref(typeof window !== "undefined" && window.matchMedia("(prefer
 var effectiveColorMode = computed(() => appearance.mode === "system" ? systemDark.value ? "dark" : "light" : appearance.mode);
 function initializeAppearance() {
 	const media = window.matchMedia("(prefers-color-scheme: dark)");
+	const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+	const reducedMotion = ref(motion.matches);
 	systemDark.value = media.matches;
 	media.addEventListener("change", (event) => {
 		systemDark.value = event.matches;
+	});
+	motion.addEventListener("change", (event) => {
+		reducedMotion.value = event.matches;
 	});
 	watchEffect(() => {
 		const root = document.documentElement;
@@ -556,26 +931,16 @@ function initializeAppearance() {
 		root.style.setProperty("--base", palette[mode + "Base"]);
 		root.style.setProperty("--primary", palette[mode]);
 		const accent = palette[mode].match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
-		let base = palette[mode + "Base"].match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
+		const base = palette[mode + "Base"].match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
 		const dark = mode === "dark";
-		if (appearance.theme === "material5") base = blend(base, accent, dark ? .07 : .05);
-		const raised = blend(base, [
-			255,
-			255,
-			255
-		], dark ? .08 : .38);
-		const workspace = blend(base, dark ? [
-			0,
-			0,
-			0
-		] : [
-			255,
-			255,
-			255
-		], dark ? appearance.theme === "fluent" ? .23 : .34 : appearance.theme === "fluent" ? .12 : .08);
-		root.style.setProperty("--on-surface", readableText(workspace));
-		root.style.setProperty("--on-primary", readableText(accent));
-		root.style.setProperty("--on-selected", readableText(blend(accent, raised, dark ? .28 : .3)));
+		const variables = cssVariables(appearance.theme, dark, base, accent, {
+			click: appearance.clickAnimations,
+			hover: appearance.hoverAnimations,
+			fade: appearance.fadeAnimations,
+			popup: appearance.popupAnimations,
+			reduced: reducedMotion.value
+		});
+		for (const [name, value] of Object.entries(variables)) root.style.setProperty(name, value);
 		for (const motion of [
 			"click",
 			"hover",
@@ -1287,6 +1652,172 @@ window.addEventListener("resize", viewportChanged);
 mobileLayout.addEventListener("change", viewportChanged);
 viewportChanged();
 //#endregion
+//#region ../src/tactic_stream/shared_ui/shell/window.geometry.mjs
+var finite = (value, fallback) => Number.isFinite(value) ? value : fallback;
+function fit(rectangle, bounds, minimum, sizeMargin) {
+	if (![
+		bounds.x,
+		bounds.y,
+		bounds.width,
+		bounds.height
+	].every(Number.isFinite) || bounds.width <= 0 || bounds.height <= 0) throw Error("Window bounds must be finite and have positive dimensions");
+	const limit = minimum || {
+		width: 1,
+		height: 1
+	};
+	const margin = Math.max(0, finite(sizeMargin, 0));
+	const width = Math.max(limit.width, Math.min(finite(rectangle.width, 280), Math.max(1, bounds.width - margin)));
+	const height = Math.max(limit.height, Math.min(finite(rectangle.height, 180), Math.max(1, bounds.height - margin)));
+	return {
+		x: Math.max(bounds.x, Math.min(finite(rectangle.x, bounds.x), bounds.x + bounds.width - width)),
+		y: Math.max(bounds.y, Math.min(finite(rectangle.y, bounds.y), bounds.y + bounds.height - height)),
+		width,
+		height
+	};
+}
+function moved(rectangle, delta) {
+	return Object.assign({}, rectangle, {
+		x: rectangle.x + delta.x,
+		y: rectangle.y + delta.y
+	});
+}
+function resized(rectangle, edge, delta, bounds, minimum) {
+	if ([
+		"left",
+		"right",
+		"top",
+		"bottom",
+		"top-left",
+		"top-right",
+		"bottom-left",
+		"bottom-right"
+	].indexOf(edge) < 0) throw Error("Unknown window resize edge: " + edge);
+	const result = Object.assign({}, rectangle);
+	const minimumWidth = Math.min(minimum.width, bounds.width);
+	const minimumHeight = Math.min(minimum.height, bounds.height);
+	if (edge.indexOf("right") >= 0) result.width = Math.max(minimumWidth, Math.min(bounds.x + bounds.width - result.x, result.width + delta.x));
+	if (edge.indexOf("bottom") >= 0) result.height = Math.max(minimumHeight, Math.min(bounds.y + bounds.height - result.y, result.height + delta.y));
+	if (edge.indexOf("left") >= 0) {
+		result.x = Math.max(bounds.x, Math.min(result.x + delta.x, result.x + result.width - minimumWidth));
+		result.width += rectangle.x - result.x;
+	}
+	if (edge.indexOf("top") >= 0) {
+		result.y = Math.max(bounds.y, Math.min(result.y + delta.y, result.y + result.height - minimumHeight));
+		result.height += rectangle.y - result.y;
+	}
+	return result;
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/shell/window.sizing.mjs
+function windowMinimumWidth(kind) {
+	if (String(kind).indexOf("dcc.") === 0) return 560;
+	const widths = {
+		main: 560,
+		configuration: 820,
+		server: 640,
+		project: 640,
+		project_wizard: 680,
+		project_templates: 680,
+		checkin_preferences: 640,
+		global_preferences: 560,
+		repository_editor: 760,
+		commit_queue: 860,
+		file_changelist: 520,
+		ingest_files: 760,
+		script_editor: 720,
+		script_shelf_editor: 720,
+		script_trigger_editor: 760,
+		help: 760,
+		messages: 820,
+		tasks_workspace: 760,
+		handler_server: 820,
+		sobject_info: 760,
+		debug_log: 680,
+		ui_performance: 720,
+		error: 560,
+		repository_sync: 680,
+		repository_sync_editor: 900,
+		activity_feed: 680,
+		user_profile: 680,
+		administration: 900,
+		schema_search_type: 600,
+		raw_cell: 440,
+		process_dependencies: 860,
+		sidebar_search_preview: 960,
+		server_presets: 720,
+		screenshot_maker: 640,
+		notifications: 560,
+		update: 520,
+		create_update: 560,
+		matching_templates: 640,
+		dcc_options: 520,
+		add_sobject: 620,
+		task_editor: 620,
+		link_sobjects: 620,
+		delete_sobject: 720,
+		duplicate_sobject: 680,
+		process_filter_editor: 440,
+		quick_filter_editor: 620,
+		advanced_search: 680,
+		naming_editor: 840
+	};
+	return Object.prototype.hasOwnProperty.call(widths, kind) ? widths[kind] : 480;
+}
+function windowMinimumHeight(kind) {
+	if (String(kind).indexOf("dcc.") === 0) return 440;
+	const heights = {
+		main: 480,
+		raw_cell: 340,
+		configuration: 600,
+		server: 520,
+		project: 520,
+		project_wizard: 520,
+		project_templates: 520,
+		checkin_preferences: 520,
+		global_preferences: 440,
+		repository_editor: 540,
+		commit_queue: 600,
+		file_changelist: 480,
+		ingest_files: 560,
+		script_editor: 500,
+		script_shelf_editor: 480,
+		script_trigger_editor: 520,
+		help: 520,
+		messages: 560,
+		tasks_workspace: 520,
+		handler_server: 580,
+		sobject_info: 560,
+		debug_log: 480,
+		ui_performance: 520,
+		error: 400,
+		repository_sync: 480,
+		repository_sync_editor: 620,
+		activity_feed: 480,
+		user_profile: 480,
+		administration: 620,
+		schema_search_type: 560,
+		process_dependencies: 600,
+		sidebar_search_preview: 620,
+		server_presets: 520,
+		screenshot_maker: 500,
+		notifications: 420,
+		update: 380,
+		create_update: 420,
+		matching_templates: 500,
+		dcc_options: 420,
+		add_sobject: 480,
+		task_editor: 480,
+		link_sobjects: 480,
+		delete_sobject: 520,
+		duplicate_sobject: 520,
+		process_filter_editor: 360,
+		quick_filter_editor: 520,
+		advanced_search: 500,
+		naming_editor: 600
+	};
+	return Object.prototype.hasOwnProperty.call(heights, kind) ? heights[kind] : 360;
+}
+//#endregion
 //#region src/controls/WindowControls.vue
 var _hoisted_1 = ["onPointerdown"];
 var _sfc_main = {
@@ -1351,12 +1882,18 @@ var _sfc_main = {
 			};
 		}
 		function clamp(rect) {
-			const width = Math.max(1, Math.min(rect.width, innerWidth - 16)), height = Math.max(1, Math.min(rect.height, innerHeight - 16));
+			return fit(rect, {
+				x: 0,
+				y: 0,
+				width: innerWidth,
+				height: innerHeight
+			}, minimum(), layout.windowMargin);
+		}
+		function minimum() {
+			const kind = props.element.dataset.windowKind;
 			return {
-				width,
-				height,
-				x: Math.max(0, Math.min(innerWidth - width, rect.x)),
-				y: Math.max(0, Math.min(innerHeight - height, rect.y))
+				width: Math.min(kind ? windowMinimumWidth(kind) : 280, innerWidth - layout.windowMargin),
+				height: Math.min(kind ? windowMinimumHeight(kind) : 180, innerHeight - layout.windowMargin)
 			};
 		}
 		function place(rect) {
@@ -1398,24 +1935,16 @@ var _sfc_main = {
 		}
 		function move(event) {
 			if (!gesture || gesture.pointer !== event.pointerId) return;
-			const dx = event.clientX - gesture.x, dy = event.clientY - gesture.y, rect = { ...gesture.before };
-			if (gesture.edge) {
-				const minimumWidth = Math.min(280, innerWidth - 16), minimumHeight = Math.min(180, innerHeight - 16);
-				if (gesture.edge.includes("right")) rect.width = Math.max(minimumWidth, Math.min(innerWidth - rect.x, rect.width + dx));
-				if (gesture.edge.includes("bottom")) rect.height = Math.max(minimumHeight, Math.min(innerHeight - rect.y, rect.height + dy));
-				if (gesture.edge.includes("left")) {
-					rect.x = Math.max(0, Math.min(rect.x + dx, rect.x + rect.width - minimumWidth));
-					rect.width += gesture.before.x - rect.x;
-				}
-				if (gesture.edge.includes("top")) {
-					rect.y = Math.max(0, Math.min(rect.y + dy, rect.y + rect.height - minimumHeight));
-					rect.height += gesture.before.y - rect.y;
-				}
-			} else {
-				rect.x += dx;
-				rect.y += dy;
-			}
-			place(rect);
+			const delta = {
+				x: event.clientX - gesture.x,
+				y: event.clientY - gesture.y
+			};
+			place(gesture.edge ? resized(gesture.before, gesture.edge, delta, {
+				x: 0,
+				y: 0,
+				width: innerWidth,
+				height: innerHeight
+			}, minimum()) : moved(gesture.before, delta));
 		}
 		function startResize(event, edge) {
 			if (compact() || maximized.value || event.button !== 0) return;
@@ -1684,6 +2213,7 @@ var windowDirective = {
 		const attach = () => {
 			element.classList.toggle("app-window", configuration !== false && configuration?.type !== "popup");
 			element.dataset.windowType = configuration?.type || "dialog";
+			element.dataset.windowKind = configuration?.kind || "";
 			if (nonmodal()) element.setAttribute("aria-modal", "false");
 			else element.removeAttribute("aria-modal");
 			const next = configuration === false ? null : [...element.querySelectorAll("header")].find((header) => header.closest(".app-window") === element) || null;
@@ -1836,9 +2366,9 @@ var documentation = location.pathname === "/docs" || location.pathname === "/doc
 if (documentation) watchEffect(() => {
 	document.title = t("TACTIC Stream — API reference");
 });
-var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,9,1,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44])));
+var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,9,1,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { readableText as A, themes as B, randomId as C, colorModes as D, appearance as E, savePreferencePage as F, _plugin_vue_export_helper_default as H, normalizeColumns as I, taskColumns as L, configurationPreview as M, normalizePreferences as N, effectiveColorMode as O, preferences as P, accentPresets as R, setServerDebugContext as S, t as T, BusyIndicator_default as V, logEvent as _, tooltipDirective as a, savedSessions as b, _sfc_main$2 as c, debugSettings as d, exportSession as f, levels as g, importSession as h, _sfc_main$1 as i, saveAppearance as j, languages as k, clearLive as l, formatEvent as m, mobile as n, capturePress as o, forgetSessions as p, mobileLayout as r, ripple as s, __vitePreload as t, debugLog as u, logRequest as v, asyncComponent as w, sessionRecords as x, redact as y, iconSets as z };
+export { readableText as A, taskColumns as B, randomId as C, colorModes as D, appearance as E, configurationPreview as F, _plugin_vue_export_helper_default as G, iconSets as H, normalizePreferences as I, preferences as L, cssRoles as M, layout as N, effectiveColorMode as O, metrics as P, savePreferencePage as R, setServerDebugContext as S, t as T, themes as U, accentPresets as V, BusyIndicator_default as W, logEvent as _, tooltipDirective as a, savedSessions as b, _sfc_main$2 as c, debugSettings as d, exportSession as f, levels as g, importSession as h, _sfc_main$1 as i, saveAppearance as j, languages as k, clearLive as l, formatEvent as m, mobile as n, capturePress as o, forgetSessions as p, mobileLayout as r, ripple as s, __vitePreload as t, debugLog as u, logRequest as v, asyncComponent as w, sessionRecords as x, redact as y, normalizeColumns as z };
 
 //# sourceMappingURL=index.js.map

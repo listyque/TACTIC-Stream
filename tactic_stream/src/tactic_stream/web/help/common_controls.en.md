@@ -113,3 +113,12 @@ Task Inspector, Calendar, Tasks, files and preview panels remain docks. Weekly T
 Notifications places its title and Clear history action, description, and full-width filters in three
 separate rows, matching Handler. Narrow windows show filter icons with accessible labels; segment
 labels stay on one line. Filtering does not delete events; Clear history removes this session's history.
+
+
+When dock tabs overflow, scroll their strip horizontally. The scrollbar has its
+own space below the labels and selection marker. Switching a tab keeps the
+loaded panel and its current working state.
+
+In narrow graph panels the zoom percentage gives way to the four graph actions.
+If necessary, the actions wrap to another row; zoom, reset and center selection
+remain reachable. The automatic layout action keeps its own space.

@@ -16,8 +16,11 @@ import SnapshotBrowser from '/src/features/objects/SnapshotBrowser.vue'
 import DockWorkspace from '/src/features/workspace/DockWorkspace.vue'
 import { defaults, stack } from '/src/features/workspace/docks.js'
 import { windowDirective } from '/src/controls/window.js'
+import { appearance, initializeAppearance } from '/src/appearance.js'
 import '/src/theme.css'
 import '/src/style.css'
+initializeAppearance()
+window.appearance = appearance
 const docks = defaults()
 docks.panels.description.visible = true
 docks.layout = { type:'split', orientation:'horizontal', ratio:.5, first:stack('results'), second:stack('description') }
@@ -116,7 +119,7 @@ try {
   assert.equal(await page.locator('#scroll-text').evaluate(node=>node.offsetWidth-node.clientWidth-2),12)
   await scroller.screenshot({path:output+'/stream-scrollbar.png'})
   for (const mode of ['light','dark']) for (const theme of ['md3','material5']) {
-    await page.evaluate(({mode,theme})=>{document.documentElement.dataset.mode=mode;document.documentElement.dataset.theme=theme},{mode,theme})
+    await page.evaluate(settings=>Object.assign(window.appearance,settings),{mode,theme})
     await page.screenshot({path:output+`/stream-${mode}-${theme}.png`,fullPage:true})
   }
   await page.setViewportSize({width:360,height:800})
@@ -125,9 +128,10 @@ try {
   assert.equal(await result.isVisible(),false)
   assert.equal(await snapshot.isVisible(),false)
   assert.equal(await dock.count(),0)
-  assert(await page.locator('#splitted_vertical .result-versions').isVisible())
-  assert(await page.locator('#splitted_horizontal .result-main').isVisible())
-  for (const id of ['splitted_vertical','splitted_horizontal']) assert(await page.locator('#'+id+' .result-versions').evaluate(node=>node.clientHeight>=node.querySelector('header').offsetHeight+16),'Mobile versions toolbar remains readable')
+  for (const id of ['splitted_vertical','splitted_horizontal']) {
+    assert(await page.locator('#'+id+' .mobile-results').isVisible(),'Phone uses the existing drill-in results view')
+    assert.equal(await page.locator('#'+id+' .result-versions').count(),0,'Desktop split panes are replaced on phones')
+  }
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Phone layout stays within the viewport')
   await page.screenshot({path:output+'/stream-mobile.png',fullPage:true})
   await page.setViewportSize({width:1100,height:900})

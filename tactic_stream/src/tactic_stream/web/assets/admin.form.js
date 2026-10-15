@@ -1,5 +1,28 @@
-import { O as translate, b as label, k as node, w as rect, x as muted } from "./App.js";
-//#region ../src/tactic_stream/shared_ui/admin.form.mjs
+import { J as label, X as node, Y as muted, Z as rect, y as translate } from "./App.js";
+//#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
+function fieldProperties(field, language, enabled) {
+	const title = field.dataLabel ? field.title : translate(field.title, language);
+	const properties = Object.assign({
+		label: title,
+		enabled,
+		action: field.field ? {
+			type: "field",
+			field: field.field
+		} : null
+	}, field.props || {});
+	if ([
+		"Button",
+		"CheckBox",
+		"Switch"
+	].indexOf(field.kind) >= 0) properties.text = title;
+	if (field.kind === "Choice" || field.kind === "ChoiceGrid") properties.options = (field.options || []).map((option) => ({
+		value: option.value,
+		label: option.label
+	}));
+	return properties;
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/admin.form.mjs
 function form(fields, width, language, enabled) {
 	const nodes = [], tr = (text) => translate(text, language);
 	let y = 0;
@@ -7,7 +30,7 @@ function form(fields, width, language, enabled) {
 		if (field.when === false) continue;
 		const id = field.id, narrow = width < 420;
 		if (field.kind === "Heading") {
-			nodes.push(label(id, rect(0, y, width, 28), tr(field.title), {
+			nodes.push(label(id, rect(0, y, width, 28), field.dataLabel ? field.title : tr(field.title), {
 				fontSize: 15,
 				weight: 600,
 				role: "heading",
@@ -26,20 +49,7 @@ function form(fields, width, language, enabled) {
 		const h = narrow ? 30 + detailHeight + (field.height || 38) + 20 : Math.max(62, 28 + detailHeight, (field.height || 38) + 16), controlY = narrow ? y + 26 + detailHeight : y + 8;
 		nodes.push(label(id + "Label", rect(0, y, narrow ? width : x - 16, 26), field.dataLabel ? field.title : tr(field.title)));
 		if (field.description) nodes.push(label(id + "Description", rect(0, y + 28, narrow ? width : x - 16, detailHeight), tr(field.description), Object.assign({ wrap: true }, muted)));
-		const props = Object.assign({
-			label: field.dataLabel ? field.title : tr(field.title),
-			enabled,
-			action: field.field ? {
-				type: "field",
-				field: field.field
-			} : null
-		}, field.props || {});
-		if (field.kind === "CheckBox" || field.kind === "Switch") props.text = field.dataLabel ? field.title : tr(field.title);
-		if (field.kind === "Button") props.text = tr(field.title);
-		if (field.kind === "Choice") props.options = (field.options || []).map((option) => ({
-			value: option.value,
-			label: option.label
-		}));
+		const props = fieldProperties(field, language, enabled);
 		if (field.kind === "Number") {
 			const children = [
 				node("Button", id + "Decrease", rect(0, 0, 34, 38), {
@@ -85,6 +95,6 @@ function form(fields, width, language, enabled) {
 	};
 }
 //#endregion
-export { form as t };
+export { fieldProperties as n, form as t };
 
 //# sourceMappingURL=admin.form.js.map

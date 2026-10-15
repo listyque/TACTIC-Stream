@@ -9,6 +9,7 @@ import AppSelect from '../../controls/AppSelect.vue'
 import AppIcon from '../../controls/AppIcon.vue'
 import DockGrip from '../../controls/DockGrip.vue'
 import WorkspaceTabs from '../../controls/WorkspaceTabs.vue'
+import { describe as describeDockChrome, positions as dockChromePositions, dimensions as chromeDimensions } from '../../../../src/tactic_stream/shared_ui/shell/dock_chrome.ui.mjs'
 import { workspaceLayouts } from '../../api.js'
 import { activate, captureLayout, decodeLayout, defaults, defaultStackTargets, dockPanels, ids, place, projectTree, readDocks, remove, stack } from './docks.js'
 
@@ -70,7 +71,23 @@ function rectangle(id) {
   const [x, y, w, h] = rect
   return { left: Math.round(x * width.value) + 'px', top: Math.round(y * height.value) + 'px', width: Math.round((x + w) * width.value) - Math.round(x * width.value) + 'px', height: Math.round((y + h) * height.value) - Math.round(y * height.value) + 'px' }
 }
-function header(id) { return id !== 'results' || state.value.panels[id].floating || (stackFor(id)?.panels.length || 0) > 1 }
+const chrome = computed(() => {
+  const result = {}
+  for (const panel of dockPanels) {
+    const floating = !compact.value && state.value.panels[panel.id].floating
+    const inset = (floating ? chromeDimensions.floatingSurfaceInset : chromeDimensions.surfaceInset) + chromeDimensions.surfaceBorder
+    const scene = describeDockChrome({width:Math.max(0,parseFloat(rectangle(panel.id).width)-inset*2),kind:panel.id,
+      stackSize:stackFor(panel.id)?.panels.length || 1,closable:panel.closable,floating,
+      capabilities:{maximize:true,positionMenu:true,floatingResultsTitle:true,resultsActions:true}})
+    result[panel.id] = {scene,controls:dockChromePositions(scene)}
+  }
+  return result
+})
+function header(id) { return chrome.value[id].scene.height > 0 }
+function chromeStyle(id, control) {
+  const geometry = chrome.value[id].controls[control]
+  return {position:'absolute',left:geometry.x+'px',top:geometry.y+'px',width:geometry.width+'px',height:geometry.height+'px',display:geometry.visible===false?'none':undefined}
+}
 function save() {
   if (!props.login) return true
   try { localStorage.setItem('tactic_stream.docks.' + props.login, JSON.stringify(state.value)); return true }
@@ -324,7 +341,7 @@ defineExpose({ show, hide, move, maximize, reset, save, capture, apply, applyAss
 </script>
 
 <template>
-  <div ref="host" class="dock-workspace" @pointermove="pointer" @pointerup="stop" @pointercancel="stop" @lostpointercapture="gesture?.target === $event.target && cancelGesture()">
+  <div ref="host" class="dock-workspace" :style="{'--dock-surface-inset':chromeDimensions.surfaceInset+'px','--dock-floating-surface-inset':chromeDimensions.floatingSurfaceInset+'px','--dock-surface-border':chromeDimensions.surfaceBorder+'px','--dock-action-icon':chromeDimensions.actionIcon+'px'}" @pointermove="pointer" @pointerup="stop" @pointercancel="stop" @lostpointercapture="gesture?.target === $event.target && cancelGesture()">
     <Teleport v-if="mobile" defer to="#mobile-panel-picker"><AppSelect class="phone-panel-picker" :model-value="projection.stacks[0]?.active || 'results'" label="Active panel" :options="phonePanels.map(item => ({value:item.id,label:item.id === 'results' ? 'Search' : item.title}))" @update:model-value="selectPhone" /></Teleport>
     <section v-for="panel in dockPanels" :key="panel.id" v-show="presented(panel.id)" class="dock-panel" :data-dock="panel.id"
       :class="{ floating: !compact && state.panels[panel.id].floating, dragging: dragged === panel.id }" :style="rectangle(panel.id)" @pointerdown="!mobile && raise(panel.id)">
@@ -332,20 +349,20 @@ defineExpose({ show, hide, move, maximize, reset, save, capture, apply, applyAss
         <AppButton label="Back to search" icon="MDI_ARROW_LEFT" icon-only @click="hide(panel.id)" />
         <strong>{{ t(panel.title) }}</strong>
       </header>
-      <header v-if="!mobile && header(panel.id)" class="dock-titlebar" tabindex="0" @pointerdown="titlePress($event,panel.id)" @keydown="panelKey($event,panel.id)" @contextmenu.prevent.stop="panelMenu($event, panel.id)" @dblclick="!$event.target.closest('button,summary,.dock-move-handle') && maximize(panel.id)">
+      <header v-if="!mobile && header(panel.id)" class="dock-titlebar" :style="{height:chrome[panel.id].scene.height+'px',flexBasis:chrome[panel.id].scene.height+'px'}" tabindex="0" @pointerdown="titlePress($event,panel.id)" @keydown="panelKey($event,panel.id)" @contextmenu.prevent.stop="panelMenu($event, panel.id)" @dblclick="!$event.target.closest('button,summary,.dock-move-handle') && maximize(panel.id)">
         <template v-if="(stackFor(panel.id)?.panels.length || 0) > 1">
-          <WorkspaceTabs class="dock-stack-tabs" kind="dock" :reorderable="!compact" :selected="panel.id" :tabs="stackFor(panel.id).panels.map(id => ({ ...dockPanels.find(item => item.id === id), icon:id === 'results' ? 'view-kanban' : dockPanels.find(item => item.id === id).icon, title:t(id === 'results' ? 'Search' : dockPanels.find(item => item.id === id).title) }))" @select="select" @close="hide" @reorder="(source, target) => reorderStack(panel.id, source, target)" />
+          <WorkspaceTabs class="dock-stack-tabs" :style="chromeStyle(panel.id,'dockTabs')" data-dock-control="dockTabs" kind="dock" :reorderable="!compact" :selected="panel.id" :tabs="stackFor(panel.id).panels.map(id => ({ ...dockPanels.find(item => item.id === id), icon:id === 'results' ? 'view-kanban' : dockPanels.find(item => item.id === id).icon, title:t(id === 'results' ? 'Search' : dockPanels.find(item => item.id === id).title) }))" @select="select" @close="hide" @reorder="(source, target) => reorderStack(panel.id, source, target)" />
         </template>
-        <template v-else><AppIcon :name="panel.icon" /><strong>{{ t(panel.title) }}</strong></template>
-        <span v-if="!mobile" class="dock-move-handle" :title="t('Drag to move or dock')" :aria-label="t('Drag to move or dock')" @pointerdown="start($event, panel.id, 'move')"><DockGrip /></span>
-        <AppButton icon-only icon="help" label="Help" @click="emit('help','dock.' + panel.id)" />
-        <AppButton v-if="!mobile" icon-only :icon="maximized === panel.id ? 'MDI_FIT_TO_SCREEN_OUTLINE' : 'MDI_FIT_TO_SCREEN'" :label="maximized === panel.id ? 'Restore panel' : 'Maximize panel'" @click="maximize(panel.id)" />
-        <AppMenu v-if="!mobile" :label="t('Panel position: {name}', { name: t(panel.title) })" icon="MDI_DOCK_WINDOW">
+        <template v-else><AppIcon :style="chromeStyle(panel.id,'dockIcon')" data-dock-control="dockIcon" :name="panel.icon" /><strong :style="chromeStyle(panel.id,'dockTitle')" data-dock-control="dockTitle">{{ t(panel.title) }}</strong></template>
+        <span v-if="!mobile" class="dock-move-handle" :style="chromeStyle(panel.id,'dockGrip')" data-dock-control="dockGrip" :title="t('Drag to move or dock')" :aria-label="t('Drag to move or dock')" @pointerdown="start($event, panel.id, 'move')"><DockGrip /></span>
+        <AppButton :style="chromeStyle(panel.id,'dockHelp')" data-dock-control="dockHelp" icon-only icon="help" label="Help" @click="emit('help','dock.' + panel.id)" />
+        <AppButton v-if="!mobile" :style="chromeStyle(panel.id,'dockMaximize')" data-dock-control="dockMaximize" icon-only :icon="maximized === panel.id ? 'MDI_FIT_TO_SCREEN_OUTLINE' : 'MDI_FIT_TO_SCREEN'" :label="maximized === panel.id ? 'Restore panel' : 'Maximize panel'" @click="maximize(panel.id)" />
+        <AppMenu v-if="!mobile" :style="chromeStyle(panel.id,'dockPosition')" data-dock-control="dockPosition" :label="t('Panel position: {name}', { name: t(panel.title) })" icon="MDI_DOCK_WINDOW">
           <label>{{ t('Place relative to') }}<AppSelect v-model="positionTarget" label="Place relative to" :options="visible.filter(item => item.id !== panel.id && !state.panels[item.id].floating).map(item => ({ value: item.id, label: item.title }))" /></label>
           <AppButton v-for="[side, title] in [['left','Dock left'],['right','Dock right'],['top','Dock top'],['bottom','Dock bottom'],['center','Stack panels'],['swap','Swap panels']]" :key="side" :label="title" :disabled="positionTarget === panel.id || !visible.some(item => item.id === positionTarget && !state.panels[item.id].floating)" @click="move(panel.id, side, positionTarget)" />
           <hr><AppButton :label="state.panels[panel.id].floating ? 'Dock panel' : 'Float panel'" icon="MDI_DOCK_WINDOW" @click="state.panels[panel.id].floating ? move(panel.id, 'right') : float(panel.id)" />
         </AppMenu>
-        <AppButton v-if="panel.closable" icon-only icon="close" :label="t('Close panel: {name}', { name: t(panel.title) })" @click="hide(panel.id)" />
+        <AppButton v-if="panel.closable" :style="chromeStyle(panel.id,'dockClose')" data-dock-control="dockClose" icon-only icon="close" :label="t('Close panel: {name}', { name: t(panel.title) })" @click="hide(panel.id)" />
       </header>
       <div :id="panel.id === 'results' ? 'workspace-data' : 'dock-' + panel.id" class="dock-content"></div>
       <button v-if="state.panels[panel.id].floating && !compact && !maximized" class="dock-floating-resize" :aria-label="t('Resize panel: {name}', { name: t(panel.title) })" @pointerdown="start($event, panel.id, 'resize')" @keydown="floatSize($event, panel.id)"><AppIcon name="MDI_RESIZE_BOTTOM_RIGHT" /></button>

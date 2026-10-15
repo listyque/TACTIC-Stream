@@ -22,7 +22,7 @@ from tests.test_sidebar_editor_qml import SidebarEditorQmlTests
 from tests.profile_ui_responsiveness import frame
 from native_capture import controls, click, text, snapshot, source_hashes
 
-native_names = ['thlib/ui/qml/SidebarEditorView.qml', 'thlib/ui/sidebar_editor.py']
+native_names = ['thlib/ui/qml/features/administration/sidebar/SidebarEditorView.qml', 'thlib/ui/sidebar_editor.py']
 initial_sources = source_hashes(REPO,TH,native_names)
 
 SidebarEditorQmlTests.setUpClass()

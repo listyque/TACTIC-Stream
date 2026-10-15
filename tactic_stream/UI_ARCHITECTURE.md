@@ -3,10 +3,25 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
-## Tactic Frame: вся Administration — 2026-10-15
+## Tactic Frame foundation migration — 2026-10-15
+
+Current work proceeds from foundation through controls, hosts and the main
+window to screen contents. The live acceptance ledger is
+[`docs/shared_ui_foundation_plan.md`](docs/shared_ui_foundation_plan.md).
+Portable modules and native adapters are organized by responsibility; Handler
+and Stream still ship independent copies. Source is formatted and remains
+readable. No browser engine is embedded in QML.
+
+The previous Administration reports below compared two Frame implementations.
+They do not establish fidelity to the original Handler. That broader parity
+claim is withdrawn: original graph/form regressions are being repaired, and
+reports must be recaptured after these changes. Shared theme values and main
+toolbar geometry now have a separate archived-Handler comparison.
+
+## Tactic Frame: Administration — previous checkpoint
 
 Все десять разделов и вложенные редакторы переведены на общий скелет и переходы
-Tactic Frame. Две независимые сборки содержат по 37 локальных `.mjs` модулей;
+Tactic Frame. На этом этапе две независимые сборки содержали по 37 локальных `.mjs` модулей;
 обычная сборка не читает соседний checkout. Запросы, ACL, ревизии и предметные
 операции сохраняют существующих владельцев Python/сервер/Vue API.
 
@@ -1186,9 +1201,15 @@ API-dispatcher и исходный блок логирования TACTIC. Па�
 уникальные request_id и отсутствие дублирующих блоков. Другие HTTP endpoints
 не считаются вызовами `/admin/rpc`.
 
-Следующий отдельный этап по договорённости 2026-10-14: опциональный JSON-транспорт
-ТХ для подключения к ТС с сохранением XML-RPC и совместимости с Legacy TACTIC.
-Переключение пока не реализовано; текущий транспорт и контракты не меняются.
+С 2026-10-15 ТХ сохраняет `rpc_transport` отдельно в каждом серверном пресете:
+`xmlrpc` по умолчанию для Legacy/Stream либо `json` для Stream. Настройка доступна
+на странице сервера и в редакторе пресетов, тест подключения использует черновик.
+Вход и рабочие вызовы идут через выбранный SDK transport. JSON `/admin/rpc`
+принимает необязательный codec `tactic-sdk-v1` для бинарных данных, datetime
+и литеральных словарей с зарезервированным ключом; обычный браузерный контракт
+не меняется. Ответ после завершённой записи, который нельзя сериализовать,
+даёт серверную ошибку; транспорт не повторяет запись и не переключается сам.
+Браузер ТС не имеет выбора транспорта подключения к Legacy: это настройка ТХ.
 
 ## Два формата представления
 

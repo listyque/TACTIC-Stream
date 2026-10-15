@@ -19,7 +19,8 @@ try{
   await page.goto('http://127.0.0.1:'+server.httpServer.address().port+'/tools/frame_shell/index.html?mode='+mode+'&language='+language)
   await page.waitForFunction(()=>window.frameAdmin?.screen.value?.scene.nodes.length>0);await page.evaluate(()=>document.fonts.ready)
   const control=id=>page.locator('[data-frame="'+id+'"]:visible')
-  for(const phase of ['default','collapse','groups','locked']){
+  for(const phase of ['default','workflow','collapse','groups','locked']){
+   if(phase==='workflow'){if(width>=1000)await control('adminSection_workflow').click();else await control('administrationSectionSelector').selectOption('workflow')}
    if(phase==='collapse'){if(width>=1000)await control('adminToggleNavigation').click();else await page.evaluate(()=>window.frameAdmin.screen.value.dispatch({type:'collapse'}))}
    if(phase==='groups'){if(width>=1000)await control('adminSection_groups').click();else await control('administrationSectionSelector').selectOption('groups')}
    if(phase==='locked'){await page.evaluate(()=>{const f=window.frameAdmin;f.model.value={...f.model.value,locked:true,drafts:['schema']}});await page.evaluate(()=>window.frameAdmin.screen.value.dispatch({type:'close'}))}

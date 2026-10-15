@@ -20,7 +20,10 @@ try{
   await page.route('**/admin/rpc',route=>{const body=route.request().postDataJSON();assert.equal(body.method,'execute_cmd');const action=body.args[2].action;assert(['load','list','columns'].includes(action),'paired capture cannot write');return route.fulfill({json:{result:{info:structuredClone(action==='columns'?fixture.columns:fixture.fixture)}}})})
   await page.goto('http://127.0.0.1:'+server.httpServer.address().port+'/tools/frame_graph_editor/index.html?editor='+editor+'&mode='+mode+'&language='+language)
   await page.waitForFunction(()=>window.frameAdmin?.screen.value?.document&&!window.frameAdmin.screen.value.busy);await page.evaluate(()=>document.fonts.ready);await page.waitForFunction(()=>window.frameAdmin.screen.value.viewport.width>100)
-  const control=id=>page.locator('[data-frame="'+id+'"]:visible'),section=async(selector,value)=>{const button=control(selector+'_'+value);if(await button.count())await button.click();else await control(selector).selectOption(value)}
+  const control=id=>page.locator('[data-frame="'+id+'"]:visible'),section=async(selector,value)=>{
+   if(editor==='workflow'&&selector==='adminGraphInspectorPages'){await control('adminGraphAddNode').click();assert.equal(await page.evaluate(()=>window.frameAdmin.screen.value.ui.inspector),value);return}
+   const button=control(selector+'_'+value);if(await button.count())await button.click();else await control(selector).selectOption(value)
+  }
   for(const c of cases){
    for(const action of c.actions){
     if(action.type==='state')await page.evaluate(value=>{const s=window.frameAdmin.screen.value;s.canWrite=value!=='readonly';s.uncertain=value==='uncertain';s.busy=value==='busy'},action.value)
@@ -28,7 +31,8 @@ try{
     else if(action.type==='edge')await page.evaluate(index=>window.frameAdmin.screen.value.dispatch({type:'selectEdge',index}),action.index)
     else if(action.type==='phone'){if(width<800)await section('adminGraphPanels',action.value)}
     else if(action.type==='page'||action.type==='workflowPage'){if(action.type!=='workflowPage'||editor==='workflow')await section(action.selector,action.value)}
-    else if(action.type==='reveal')await control(action.viewport).evaluate((view,id)=>{const el=view.querySelector('[data-frame="'+id+'"]');view.scrollTop+=el.getBoundingClientRect().top-view.getBoundingClientRect().top-12},action.id)
+    else if(action.type==='reveal'){if(editor!=='workflow'||action.id!=='adminRemoveGraphSelection')await control(action.viewport).evaluate((view,id)=>{const el=view.querySelector('[data-frame="'+id+'"]');view.scrollTop+=el.getBoundingClientRect().top-view.getBoundingClientRect().top-12},action.id)}
+    else if(action.type==='workflowClick'){if(editor==='workflow'){await control(action.id).click();assert.equal(await page.evaluate(()=>window.frameAdmin.screen.value.node?.identity||''),'')}}
     else if(action.type==='text')await control(action.id).fill(action.value)
     else await control(action.id).click()
     if(action.type!=='state'||action.value!=='busy')await page.waitForFunction(()=>!window.frameAdmin.screen.value.busy&&!window.frameAdmin.screen.value.columnsBusy)
@@ -39,6 +43,16 @@ try{
    assert.deepEqual(errors,[],label+' runtime errors');assert.deepEqual(actual.state,reference.state,label+' state');assert.deepEqual(actual.scene,reference.scene,label+' scene')
    const root=editor==='schema'?'section.schema-editor':'section.workflow-editor'
    const counts=await compareSurface(page,root,await surface(page,root),reference,label);rectangles+=counts.rectangles;styles+=counts.styles;interiors+=counts.interiors
+   if(c.phase===cases[0].phase&&width>=1100){
+    const painted=await page.evaluate(names=>{
+     const port=name=>document.querySelector('[data-frame="'+name+'"]'),a=port('graphOutput_'+names[0]).getBoundingClientRect(),b=port('graphInput_'+names[1]).getBoundingClientRect()
+     const canvas=document.querySelector('.graph-camera canvas'),box=canvas.getBoundingClientRect(),ratio=canvas.width/box.width
+     const x=Math.round(((a.x+a.width/2+b.x+b.width/2)/2-box.x)*ratio),y=Math.round(((a.y+a.height/2+b.y+b.height/2)/2-box.y)*ratio)
+     const pixels=canvas.getContext('2d').getImageData(x-1,y-1,3,3).data
+     return [...pixels].some((value,index)=>index%4===3&&value>127)
+    },names)
+    assert.ok(painted,label+' ordinary connection must have visible pixels')
+   }
    const image=editor+'-vue-'+mode+'-'+language+'-'+width+'-'+c.phase+'.png';await page.screenshot({path:out+image,animations:'disabled'});samples.push({editor,mode,language,width,height,phase:editor+'-'+c.phase,image})
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth),width,'no page overflow')
   }

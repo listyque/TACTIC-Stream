@@ -60,6 +60,7 @@ export const windowDirective = {
     const attach = () => {
       element.classList.toggle('app-window', configuration !== false && configuration?.type !== 'popup')
       element.dataset.windowType = configuration?.type || 'dialog'
+      element.dataset.windowKind = configuration?.kind || ''
       if (nonmodal()) element.setAttribute('aria-modal','false')
       else element.removeAttribute('aria-modal')
       const next = configuration === false ? null : [...element.querySelectorAll('header')].find(header => header.closest('.app-window') === element) || null

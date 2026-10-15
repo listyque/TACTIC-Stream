@@ -1,0 +1,5 @@
+*.mjs text eol=lf
+*.qml text eol=lf
+*.vue text eol=lf
+tactic_stream/frontend/src/**/*.js text eol=lf
+tactic_stream/frontend/src/**/*.css text eol=lf

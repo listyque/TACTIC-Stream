@@ -168,7 +168,7 @@ defineExpose({ open })
 </script>
 <template>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="activity-dialog activity-feed-dialog" :aria-label="t('Activity Feed')" :aria-busy="busy" @cancel.prevent="close" @close="visible = false; emit('closed')">
+    <dialog v-window="{kind:'activity_feed', type:'window' }" ref="dialog" class="activity-dialog activity-feed-dialog" :aria-label="t('Activity Feed')" :aria-busy="busy" @cancel.prevent="close" @close="visible = false; emit('closed')">
       <header class="activity-feed-heading"><AppIcon name="activity-feed" /><strong>{{ t('Activity Feed') }}</strong><AppButton v-if="!mobile" icon-only icon="help" label="Activity Feed help" @click="openHelp('activity_feed')" /><AppButton icon-only icon="close" label="Close Activity Feed" @click="close" /></header>
       <section class="activity-feed-panel">
         <div class="activity-feed-toolbar">

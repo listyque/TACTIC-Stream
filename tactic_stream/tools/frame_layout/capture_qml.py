@@ -2,7 +2,7 @@ from fixture import *
 from native_capture import source_hashes
 HERE=Path(__file__).resolve().parent;OUT=HERE/'output';OUT.mkdir(exist_ok=True)
 from thlib.ui.localization import CatalogTranslator
-sources=source_hashes(ROOT,TH,['thlib/ui/qml/LayoutEditorView.qml','thlib/ui/layout_editor.py','thlib/ui/source_editor.py']);samples=[]
+sources=source_hashes(ROOT,TH,['thlib/ui/qml/features/administration/layouts/LayoutEditorView.qml','thlib/ui/layout_editor.py','thlib/ui/source_editor.py']);samples=[]
 quick=os.environ.get('FRAME_CAPTURE_QUICK')=='1'
 for mode in ('dark',) if quick else ('dark','light'):
  for language in ('en',) if quick else ('en','ru'):

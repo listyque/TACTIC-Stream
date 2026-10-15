@@ -208,7 +208,7 @@ defineExpose({ open, reload: load })
 </script>
 <template>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="script-editor-dialog" :style="{ '--editor-font-size': fontSize + 'pt' }" :aria-label="t('Script Editor')" @cancel.prevent="close" @keydown="key" :aria-busy="busy || !!running">
+    <dialog v-window="{kind:'script_editor', type:'window' }" ref="dialog" class="script-editor-dialog" :style="{ '--editor-font-size': fontSize + 'pt' }" :aria-label="t('Script Editor')" @cancel.prevent="close" @keydown="key" :aria-busy="busy || !!running">
       <header class="script-editor-header"><AppIcon name="code" /><strong>{{ t('Script Editor') }}</strong><AppButton icon-only icon="help" label="Script editor help" @click="openHelp('script_editor')" /><AppButton icon-only icon="close" label="Close script editor" :disabled="busy || !!running" @click="close" /></header>
       <div class="script-editor-screen">
         <div class="script-editor-main">

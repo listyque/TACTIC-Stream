@@ -83,7 +83,7 @@ export default {
 </script>
 
 <template>
-  <dialog v-window ref="dialog" class="configuration-dialog quick-filter-editor-dialog" :aria-label="t('Quick filters')" @cancel.prevent="close">
+  <dialog v-window="{kind:'quick_filter_editor'}" ref="dialog" class="configuration-dialog quick-filter-editor-dialog" :aria-label="t('Quick filters')" @cancel.prevent="close">
     <section class="search-library-shell" :aria-busy="busy">
       <header><div><h2>{{ t('Quick filters') }}</h2><p class="muted">{{ project }} · {{ searchType }}</p></div><AppButton label="Close" icon="close" :disabled="busy" @click="close" /></header>
       <p v-if="error" class="error" role="alert">{{ t(error) }}</p>

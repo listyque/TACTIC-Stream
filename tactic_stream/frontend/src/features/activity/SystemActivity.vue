@@ -29,7 +29,7 @@ defineExpose({ open() { dialog.value.show() } })
 
 <template>
   <Teleport to="body">
-    <dialog v-window="{ type:'window' }" ref="dialog" class="activity-dialog system-activity-dialog" :aria-label="t('Notifications')" @close="emit('closed')">
+    <dialog v-window="{kind:'notifications', type:'window' }" ref="dialog" class="activity-dialog system-activity-dialog" :aria-label="t('Notifications')" @close="emit('closed')">
       <header class="activity-feed-heading"><AppIcon name="system-activity" /><strong>{{ t('Notifications') }}</strong><AppButton icon-only icon="close" label="Close Notifications" @click="dialog.close()" /></header>
       <div ref="content" class="system-activity-content"><section class="activity-feed-panel">
         <div class="activity-feed-toolbar">
