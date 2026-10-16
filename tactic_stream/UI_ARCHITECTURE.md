@@ -18,9 +18,12 @@ native and browser input/paired captures are reproduced by `tools/frame_navigati
 Project chooser, expanded cards and search-tab painting now use the shared
 `shell/projects.ui.mjs` and `controls/tabs/workspace.ui.mjs` modules. Their actual
 input and archived/native/browser comparisons live in `tools/frame_projects`.
-Section-rail metrics and keyboard decisions are shared; its full painting and
-gesture composition and the remainder of session closure remain open. Existing
-persistence, previews, ACL filtering and loaders retain their owners.
+The section rail now uses `controls/tabs/section.ui.mjs` for panel/row paint,
+close geometry, action records and vertical drag decisions. Both input adapters
+retain real grabs and existing selection/reorder/close owners. Project comparisons
+also check actual text/background color roles and coherent focus/hover states.
+Existing persistence, previews, ACL filtering and loaders retain their owners;
+the remaining workspace session/layout closure is still open.
 
 The previous Administration reports below compared two Frame implementations.
 They do not establish fidelity to the original Handler. That broader parity

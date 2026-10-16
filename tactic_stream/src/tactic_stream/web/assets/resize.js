@@ -1,6 +1,6 @@
 import { D as nextTick, E as mergeProps, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, T as mergeModels, V as useModel, X as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
-import { D as t, F as cssRoles, O as appearance, P as controls, R as metrics, X as _plugin_vue_export_helper_default, o as _sfc_main$7, q as iconSets, u as _sfc_main$6, z as textStyles } from "./index.js";
+import { D as t, F as blend, H as readableText, I as controls, L as cssColor, O as appearance, R as cssRoles, U as textStyles, V as metrics, Z as iconSets, et as _plugin_vue_export_helper_default, j as frameColors, o as _sfc_main$7, u as _sfc_main$6 } from "./index.js";
 import { n as copyText, o as javascriptTokens, r as readClipboard, s as pythonTokens } from "./clipboard.js";
 import { t as _sfc_main$8 } from "./AppSwitch.js";
 import { t as _sfc_main$9 } from "./AppSelect.js";
@@ -3526,6 +3526,20 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 		const scroll = ref({}), host = ref(null), branches = ref([]), grids = ref([]), graphs = ref([]);
 		const nodes = computed(() => validateScene(props.scene, props.models, Object.fromEntries(Object.entries(props.views).map(([name, view]) => [name, view?.component]))));
 		const color = (role) => role?.mix ? `color-mix(in srgb, ${color(role.mix[0])} ${(1 - role.mix[2]) * 100}%, ${color(role.mix[1])} ${role.mix[2] * 100}%)` : role === "transparent" ? "transparent" : role?.startsWith("#") ? role : cssRoles[role] ? "var(" + cssRoles[role] + ")" : void 0;
+		function previewPaint(node) {
+			const role = node.accent || "action";
+			const hex = role.slice(1);
+			const accent = role.startsWith("#") ? (hex.length === 3 ? [...hex].map((value) => value + value).join("") : hex).match(/../g).map((channel) => parseInt(channel, 16)) : frameColors.value[role] || frameColors.value.action;
+			const shade = blend(accent, [
+				0,
+				0,
+				0
+			], 1 - 1 / (node.round === false ? 1.65 : 1.35));
+			return {
+				background: cssColor(shade),
+				color: cssColor(readableText(shade))
+			};
+		}
 		function style(node) {
 			return {
 				transition: node.motion ? Object.entries(node.motion).map(([property, token]) => (property === "x" ? "left" : property) + " var(" + {
@@ -3548,10 +3562,12 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 			};
 		}
 		function background(node) {
+			const radius = node.radius === void 0 ? "var(--surface-radius)" : node.radius + "px";
 			return {
 				background: color(node.background),
 				boxShadow: node.border ? "inset 0 0 0 " + (node.borderWidth || 1) + "px " + color(node.border) : void 0,
-				borderRadius: node.radius === void 0 ? "var(--surface-radius)" : node.radius + "px"
+				borderRadius: radius,
+				borderBottomRightRadius: node.bottomRightRadius === void 0 ? radius : node.bottomRightRadius + "px"
 			};
 		}
 		function send(action, value) {
@@ -3972,7 +3988,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 9,
 					"data-frame": node.id,
 					class: "frame-node frame-preview",
-					style: normalizeStyle(Object.assign(style(node), node.radius !== void 0 ? { borderRadius: node.radius + "px" } : node.round === false ? { borderRadius: "4px" } : {})),
+					style: normalizeStyle(Object.assign(style(node), previewPaint(node), node.radius !== void 0 ? { borderRadius: node.radius + "px" } : node.round === false ? { borderRadius: "4px" } : {})),
 					source: node.source,
 					"fallback-text": node.initials,
 					"fallback-icon": node.icon || "person",

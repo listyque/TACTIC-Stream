@@ -22,6 +22,8 @@ def main():
     )
     for path, digest in browser["sources"].items():
         assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == digest, path
+    color_checks = 0
+    corner_checks = 0
     comparisons = 0
     reference_checks = 0
     sections = []
@@ -39,6 +41,34 @@ def main():
                 for key, value in boxes.items()
                 if key.startswith("projectChooser")
             }
+        for name in (
+            "projectCardSurface",
+            "projectGridPreview",
+            "projectCardTitle",
+            "projectCardDescription",
+            "projectCardCategory",
+            "workspaceTabSelectionLabel",
+            "sectionTabSurface",
+            "sectionTabBadge",
+            "sectionTabTitle",
+            "sectionTabIcon",
+        ):
+            if name in current["paints"] and name in web["paints"]:
+                assert current["paints"][name] == web["paints"][name], (
+                    current["id"],
+                    name,
+                    current["paints"][name],
+                    web["paints"][name],
+                )
+                color_checks += 1
+        for name, corners in current["rounding"].items():
+            assert corners == web["rounding"][name] == [15] * 4, (
+                current["id"],
+                name,
+                corners,
+                web["rounding"][name],
+            )
+            corner_checks += len(corners)
         assert boxes
         for name, bounds in boxes.items():
             assert name in web["boxes"], (current["id"], name)
@@ -80,12 +110,12 @@ def main():
             f'<details><summary>{current["id"]}</summary><div class="pictures">{pictures}</div></details>'
         )
     page = f"""<!doctype html><html lang="ru"><meta charset="utf-8"><title>Проекты и рабочие вкладки</title><style>body{{background:#202528;color:#e1e6e9;font:15px/1.5 Segoe UI,sans-serif;margin:24px}}.pictures{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}figure{{margin:0}}img{{max-width:100%;height:auto}}details{{margin:24px 0}}summary{{cursor:pointer}}</style>
-<h1>Проекты и вкладки: исходный ТХ → Frame ТХ → Frame ТС</h1><p>36 состояний настоящих компонентов: chooser, одно-/двухстрочная карточка, вкладка normal/current/hover+dirty, md3/material5/fluent, EN dark/RU light. {comparisons} измерений Qt/Vue; {reference_checks} проверок относительно архивного компонента. Отпечатки исходников проверены.</p>
+<h1>Проекты и вкладки: исходный ТХ → Frame ТХ → Frame ТС</h1><p>60 состояний настоящих компонентов: chooser, одно-/двухстрочная карточка, вкладка normal/current/hover+dirty, боковая полоса collapsed/revealed/pressed, md3/material5/fluent, EN dark/RU light. {comparisons} измерений Qt/Vue; {reference_checks} проверок относительно архивного компонента. Цветовые роли: {color_checks} проверок; скругления: {corner_checks}. Отпечатки исходников проверены. Состояние наведения задаётся одинаково; снимки Chromium используют grayscale text, чтобы LCD-сглаживание Windows не маскировало фактический цвет.</p>
 <p>Сетка сохраняет три колонки на компьютере; ТС использует две/одну на телефоне. Полоса прокрутки получает отдельные 12 px: карточки исходного ТХ были под ней, поэтому их ширина в полном chooser намеренно уменьшена на 4 px. Карточки сравниваются с архивом отдельно при одинаковой ширине 248 px. Активный проект теперь выделяется и в ТХ; исходный chooser это состояние не передавал.</p>
-<p>Проверены реальные фильтры, mouse/touch, переходы Home/End/стрелки, Enter/Space, закрытие и перестановка вкладок с восстановлением фокуса. Существующие владельцы проектов, ACL, preview, draft и saved layout сохранены. Боковая полоса получает общие размеры и клавиатуру; её полная отрисовка/жесты остаются отдельным этапом. Этот отчёт не объявляет завершение всей фазы 2C. Композитор Windows и растеризация Qt/Chromium не объявляются идентичными.</p>{"".join(sections)}</html>"""
+<p>Проверены реальные фильтры, mouse/touch, переходы Home/End/стрелки, Enter/Space, закрытие и перестановка вкладок с восстановлением фокуса. Существующие владельцы проектов, ACL, preview, draft и saved layout сохранены. Боковая полоса теперь использует общий скелет, цвета, клавиатуру и расчёт цели drag. Первое нажатие и отмена проверяются реальными событиями. Этот отчёт не объявляет завершение всей фазы 2C. Композитор Windows и растеризация Qt/Chromium не объявляются идентичными.</p>{"".join(sections)}</html>"""
     (OUT / "index.html").write_text(page, encoding="utf-8")
     print(
-        f"{comparisons} Qt/Vue and {reference_checks} reference checks: {OUT / 'index.html'}"
+        f"{comparisons} Qt/Vue, {reference_checks} reference, {color_checks} color and {corner_checks} corner checks: {OUT / 'index.html'}"
     )
 
 

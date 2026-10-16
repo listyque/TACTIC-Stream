@@ -14,14 +14,17 @@ os.environ.update(
 sys.path[:0] = [str(TH), str(ROOT / "tools/frame_admin")]
 import tests.test_sidebar_editor_qml as fixture
 from native_capture import source_hashes
-from PySide6.QtCore import QCoreApplication, QEvent, QPointF, QUrl
+from PySide6.QtCore import QCoreApplication, QEvent, QPoint, QPointF, QRect, Qt, QUrl
+from PySide6.QtGui import QColor
 from PySide6.QtQml import QQmlComponent, QQmlEngine
+from PySide6.QtTest import QTest
 from tests.profile_ui_responsiveness import frame
 from tests.qt_application import gui_test_application
 from tests.test_project_catalog import _Project
 from thlib.ui.icon_font import qml_icon_bindings
 from thlib.ui.localization import CatalogTranslator
 from thlib.ui.models import ProjectModel
+from thlib.ui.workspace_models.sections import SectionTab, SectionTabModel
 
 
 def model():
@@ -90,6 +93,10 @@ def main():
                     ("tab", 0),
                     ("tab", 1),
                     ("tab", 2),
+                    ("rail", 0),
+                    ("rail", 1),
+                    ("rail", 2),
+                    ("rail", 3),
                 ]:
                     engine = QQmlEngine()
                     warnings = []
@@ -105,28 +112,42 @@ def main():
                     details = dict(
                         catalog.groups[0]["projects"][variant if variant < 2 else 0]
                     )
-                    if kind == "chooser":
+                    section_model = SectionTabModel()
+                    section_model.replace(
+                        [
+                            SectionTab("assets", "Assets", "#6f9fc1", True, "assets"),
+                            SectionTab("shots", "Shots", "#9f80c1", False, "movie"),
+                        ]
+                    )
+                    engine.rootContext().setContextProperty(
+                        "sectionCatalog", section_model
+                    )
+                    if kind == "rail":
+                        body = "TH.SectionTabRail {theme:theme;model:sectionCatalog;height:260} function showContent(){}"
+                    elif kind == "chooser":
                         body = (
                             "TH.ProjectChooser{id:chooser;model:projectCatalog;theme:theme;usePopupWindow:false;"
                             + ("" if original else 'selectedCode:"one";')
                             + "} function showContent(){chooser.openCenteredIn(window.contentItem)}"
                         )
                     elif kind == "card":
-                        body = f'Controls.ProjectCard{{objectName:"card";theme:theme;width:248;height:258;details:({json.dumps(details)})}} function showContent(){{}}'
+                        body = f'Controls.ProjectCard{{objectName:"card";x:12;y:12;theme:theme;width:248;height:258;details:({json.dumps(details)})}} function showContent(){{}}'
                     else:
                         body = f'Controls.WorkspaceTabVisual{{theme:theme;width:180;height:50;title:"Assets";closable:true;current:{str(variant == 1).lower()};hovered:{str(variant == 2).lower()};dirty:{str(variant == 2).lower()};animateSelection:false}} function showContent(){{}}'
                     width, height = (
                         (900, 800)
                         if kind == "chooser"
-                        else (248, 258)
+                        else (272, 282)
                         if kind == "card"
+                        else (400, 260)
+                        if kind == "rail"
                         else (180, 50)
                     )
                     source = f'''import QtQuick
 import QtQuick.Controls
 import "{qml.as_uri()}" as TH
 import "{(qml / "controls").as_uri()}" as Controls
-ApplicationWindow{{id:window;visible:true;width:{width};height:{height};color:theme.workspace;TH.Theme{{id:theme;dark:{str(language == "en").lower()};styleName:"{style}";fadeAnimationsEnabled:false;popupAnimationsEnabled:false;hoverAnimationsEnabled:false;clickAnimationsEnabled:false}} {body}}}'''
+ApplicationWindow{{id:window;visible:true;width:{width};height:{height};color:theme.workspace;TH.Theme{{id:theme;dark:{str(language == "en").lower()};styleName:"{style}";fadeAnimationsEnabled:false;popupAnimationsEnabled:false;hoverAnimationsEnabled:false;clickAnimationsEnabled:false}} {body} Item{{id:focusSink;objectName:"focusSink";focus:true;width:1;height:1}}}}'''
                     component = QQmlComponent(engine)
                     component.setData(source.encode(), QUrl())
                     assert component.isReady(), [
@@ -137,15 +158,69 @@ ApplicationWindow{{id:window;visible:true;width:{width};height:{height};color:th
                     try:
                         frame(window)
                         window.showContent()
+                        QTest.mouseMove(window, QPoint(1, 1))
+                        for focus_item in fixture.SidebarEditorQmlTests.descendants(
+                            window.contentItem()
+                        ):
+                            if focus_item.objectName() == "focusSink":
+                                focus_item.forceActiveFocus()
+                        if kind == "rail":
+                            QTest.mouseMove(window, QPoint(390, 250))
+                            QTest.qWait(400)
+                            if variant:
+                                point = QPoint(20, 28 if variant == 1 else 73)
+                                QTest.mouseMove(window, point)
+                                QTest.qWait(180)
+                                if variant == 3:
+                                    QTest.mousePress(window, Qt.LeftButton, pos=point)
                         for _ in range(3):
                             frame(window)
                         image = f"{'original' if original else 'native'}-{kind}-{style}-{language}-{variant}.png"
-                        assert window.grabWindow().save(str(OUT / image))
+                        snapshot = window.grabWindow()
+                        if kind == "card":
+                            snapshot = snapshot.copy(QRect(12, 12, 248, 258))
+                        assert snapshot.save(str(OUT / image))
                         boxes = {}
+                        paints = {}
+                        rounding = {}
                         for item in fixture.SidebarEditorQmlTests.descendants(
                             window.contentItem()
                         ):
                             name = item.objectName()
+                            if kind == "rail" and name != "sectionRailBackground":
+                                owner = item
+                                while (
+                                    owner and owner.objectName() != "sectionTabDelegate"
+                                ):
+                                    owner = owner.parentItem()
+                                if owner and owner.property("index") != (
+                                    1 if variant > 1 else 0
+                                ):
+                                    continue
+                                if original and item.property("text") in (
+                                    "Assets",
+                                    "Shots",
+                                ):
+                                    name = "sectionTabTitle"
+
+                            paint = (
+                                item.property("fallbackColor")
+                                if name == "projectGridPreview"
+                                else item.property("color")
+                            )
+                            if name and isinstance(paint, QColor) and paint.isValid():
+                                paints[name] = paint.name()
+                            if not original and name == "sectionTabBadge":
+                                rounding[name] = [
+                                    item.property(corner)
+                                    for corner in (
+                                        "topLeftRadius",
+                                        "topRightRadius",
+                                        "bottomRightRadius",
+                                        "bottomLeftRadius",
+                                    )
+                                ]
+
                             if original and kind == "card":
                                 text = item.property("text")
                                 mapping = {
@@ -175,13 +250,19 @@ ApplicationWindow{{id:window;visible:true;width:{width};height:{height};color:th
                                     "projectCardType",
                                     "workspaceTabSelectionIndicator",
                                     "workspaceTabSelectionLabel",
+                                    "sectionTabSurface",
+                                    "sectionTabBadge",
+                                    "sectionTabTitle",
+                                    "sectionTabIcon",
+                                    "sectionTabCloseButton",
+                                    "sectionRailBackground",
                                 )
                                 and item.isVisible()
                             ):
                                 point = item.mapToItem(window.contentItem(), QPointF())
                                 boxes[name] = {
-                                    "x": point.x(),
-                                    "y": point.y(),
+                                    "x": point.x() - (12 if kind == "card" else 0),
+                                    "y": point.y() - (12 if kind == "card" else 0),
                                     "width": item.width(),
                                     "height": item.height(),
                                 }
@@ -196,6 +277,8 @@ ApplicationWindow{{id:window;visible:true;width:{width};height:{height};color:th
                                 "original": original,
                                 "image": image,
                                 "boxes": boxes,
+                                "paints": paints,
+                                "rounding": rounding,
                             }
                         )
                     finally:
@@ -213,6 +296,9 @@ ApplicationWindow{{id:window;visible:true;width:{width};height:{height};color:th
             "thlib/ui/qml/controls/ProjectCard.qml",
             "thlib/ui/qml/controls/WorkspaceTabVisual.qml",
             "thlib/ui/models.py",
+            "thlib/ui/qml/SectionTabRail.qml",
+            "thlib/ui/qml/qmldir",
+            "thlib/ui/qml/ActionMenu.qml",
         ],
     )
     (OUT / "native.json").write_text(
@@ -221,7 +307,7 @@ ApplicationWindow{{id:window;visible:true;width:{width};height:{height};color:th
         ),
         encoding="utf-8",
     )
-    print("36 original/current native captures, zero QML warnings.")
+    print("60 original/current native captures, zero QML warnings.")
 
 
 if __name__ == "__main__":

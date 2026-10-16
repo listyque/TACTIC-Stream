@@ -1059,6 +1059,12 @@ function saveAppearance() {
 }
 var systemDark = ref(typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 var effectiveColorMode = computed(() => appearance.mode === "system" ? systemDark.value ? "dark" : "light" : appearance.mode);
+var colorPreset = computed(() => hostedPalette.value || accentPresets.find((item) => item.value === appearance.themeAccents[appearance.theme][effectiveColorMode.value]));
+var channels = (hex) => hex.match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
+var frameColors = computed(() => {
+	const mode = effectiveColorMode.value, preset = colorPreset.value;
+	return palette(appearance.theme, mode === "dark", channels(preset[mode + "Base"]), channels(preset[mode]));
+});
 function initializeAppearance() {
 	const media = window.matchMedia("(prefers-color-scheme: dark)");
 	const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -1077,7 +1083,7 @@ function initializeAppearance() {
 		const mode = effectiveColorMode.value;
 		root.dataset.mode = mode;
 		root.dataset.iconSet = appearance.iconSet;
-		const palette = hostedPalette.value || accentPresets.find((item) => item.value === appearance.themeAccents[appearance.theme][mode]);
+		const palette = colorPreset.value;
 		root.style.setProperty("--base", palette[mode + "Base"]);
 		root.style.setProperty("--primary", palette[mode]);
 		const accent = palette[mode].match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
@@ -1579,7 +1585,7 @@ var _sfc_main$2 = {
 	props: { name: String },
 	setup(__props) {
 		const props = __props;
-		const icon = computed(() => resolveIcon(props.name, appearance.iconSet));
+		const icon = computed(() => resolveIcon(props.name, appearance.iconSet) || (props.name ? resolveIcon("fontawesome-solid:exclamation-triangle", appearance.iconSet) : null));
 		return (_ctx, _cache) => {
 			return icon.value ? (openBlock(), createElementBlock("span", {
 				key: 0,
@@ -2583,6 +2589,6 @@ if (documentation) watchEffect(() => {
 var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,1,9,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { effectiveColorMode as A, configurationPreview as B, sessionRecords as C, t as D, asyncComponent as E, cssRoles as F, taskColumns as G, preferences as H, fontFamily as I, themes as J, accentPresets as K, layout as L, readableText as M, saveAppearance as N, appearance as O, controls as P, metrics as R, savedSessions as S, randomId as T, savePreferencePage as U, normalizePreferences as V, normalizeColumns as W, _plugin_vue_export_helper_default as X, BusyIndicator_default as Y, importSession as _, mobileLayout as a, logRequest as b, capturePress as c, clearLive as d, debugLog as f, formatEvent as g, forgetSessions as h, mobile as i, languages as j, colorModes as k, ripple as l, exportSession as m, dockMinimumHeight as n, _sfc_main$1 as o, debugSettings as p, iconSets as q, dockMinimumWidth as r, tooltipDirective as s, __vitePreload as t, _sfc_main$2 as u, levels as v, setServerDebugContext as w, redact as x, logEvent as y, textStyles as z };
+export { BusyIndicator_default as $, effectiveColorMode as A, layout as B, sessionRecords as C, t as D, asyncComponent as E, blend as F, normalizePreferences as G, readableText$1 as H, controls as I, normalizeColumns as J, preferences as K, cssColor as L, languages as M, readableText as N, appearance as O, saveAppearance as P, themes as Q, cssRoles as R, savedSessions as S, randomId as T, textStyles as U, metrics as V, configurationPreview as W, accentPresets as X, taskColumns as Y, iconSets as Z, importSession as _, mobileLayout as a, logRequest as b, capturePress as c, clearLive as d, _plugin_vue_export_helper_default as et, debugLog as f, formatEvent as g, forgetSessions as h, mobile as i, frameColors as j, colorModes as k, ripple as l, exportSession as m, dockMinimumHeight as n, _sfc_main$1 as o, debugSettings as p, savePreferencePage as q, dockMinimumWidth as r, tooltipDirective as s, __vitePreload as t, _sfc_main$2 as u, levels as v, setServerDebugContext as w, redact as x, logEvent as y, fontFamily as z };
 
 //# sourceMappingURL=index.js.map

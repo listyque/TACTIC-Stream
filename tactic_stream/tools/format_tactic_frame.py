@@ -63,6 +63,7 @@ def main():
     controls = [
         "WorkspaceTabs.vue",
         "WorkspaceTabVisual.vue",
+        "SectionTabVisual.vue",
         "SectionTabRail.vue",
         "ActionRows.vue",
         "ActionRow.vue",

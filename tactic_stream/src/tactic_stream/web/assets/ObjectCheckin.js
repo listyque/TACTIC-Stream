@@ -1,5 +1,5 @@
 import { B as useId, D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, N as openBlock, P as renderList, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, p as Teleport, rt as toDisplayString, s as vModelText, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { D as t, H as preferences, X as _plugin_vue_export_helper_default, i as mobile, o as _sfc_main$1 } from "./index.js";
+import { D as t, K as preferences, et as _plugin_vue_export_helper_default, i as mobile, o as _sfc_main$1 } from "./index.js";
 import { K as uploadFormFile, M as rpc, j as resultItems, x as navigationLink } from "./clipboard.js";
 import { t as _sfc_main$2 } from "./AppSwitch.js";
 import { t as _sfc_main$3 } from "./AppSelect.js";

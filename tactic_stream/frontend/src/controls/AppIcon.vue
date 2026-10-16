@@ -5,7 +5,16 @@ import { resolveIcon } from '../icons.js';
 import '../icons.css';
 
 const props = defineProps({ name: String });
-const icon = computed(() => resolveIcon(props.name, appearance.iconSet));
+const icon = computed(
+  () =>
+    resolveIcon(props.name, appearance.iconSet) ||
+    (props.name
+      ? resolveIcon(
+          'fontawesome-solid:exclamation-triangle',
+          appearance.iconSet
+        )
+      : null)
+);
 </script>
 
 <template>

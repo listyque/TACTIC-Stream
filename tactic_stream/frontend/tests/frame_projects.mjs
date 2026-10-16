@@ -39,7 +39,8 @@ try {
   browser = await chromium.launch({
     headless: true,
     ignoreDefaultArgs: ['--hide-scrollbars'],
-    channel: process.env.STREAM_BROWSER_CHANNEL || 'msedge'
+    channel: process.env.STREAM_BROWSER_CHANNEL || 'msedge',
+    args: ['--disable-lcd-text']
   });
   const page = await browser.newPage({
     viewport: { width: 900, height: 800 },
@@ -59,12 +60,15 @@ try {
   if (process.argv.includes('--capture')) {
     const native = JSON.parse(await readFile(out + 'native.json', 'utf8'));
     for (const sample of native.captures.filter((row) => !row.original)) {
+      await page.mouse.move(1000, 1000);
       await page.setViewportSize(
         sample.kind === 'chooser'
           ? { width: 900, height: 800 }
           : sample.kind === 'card'
             ? { width: 248, height: 258 }
-            : { width: 180, height: 50 }
+            : sample.kind === 'rail'
+              ? { width: 400, height: 260 }
+              : { width: 180, height: 50 }
       );
       await page.evaluate(async (row) => {
         await window.projectsHarness.configure(
@@ -87,39 +91,115 @@ try {
             requestAnimationFrame(() => requestAnimationFrame(resolve))
           )
       );
-      const boxes = await page.locator('[data-frame]').evaluateAll((items) => {
-        const result = {};
-        for (const item of items) {
-          const name = item.dataset.frame;
-          if (
-            ![
-              'projectChooserTitle',
-              'projectChooserSummary',
-              'projectChooserDivider',
-              'projectGridPreview',
-              'projectCardTitle',
-              'projectCardDescription',
-              'projectCardCategory',
-              'projectCardType',
-              'workspaceTabSelectionIndicator',
-              'workspaceTabSelectionLabel'
-            ].includes(name) ||
-            getComputedStyle(item).display === 'none'
-          )
-            continue;
-          const box = item.getBoundingClientRect();
-          result[name] = {
-            x: box.x,
-            y: box.y,
-            width: box.width,
-            height: box.height
-          };
+      if (sample.kind === 'rail') {
+        await page.mouse.move(390, 250);
+        if (sample.variant) {
+          await page.mouse.move(20, sample.variant === 1 ? 28 : 73);
+          await page.waitForTimeout(180);
+          if (sample.variant === 3) await page.mouse.down();
         }
-        return result;
-      });
+      }
+      await page.evaluate(() => document.fonts.ready);
+      const boxes = await page
+        .locator('[data-frame]')
+        .evaluateAll((items, sample) => {
+          const result = {};
+          for (const item of items) {
+            const name = item.dataset.frame;
+            if (sample.kind === 'rail') {
+              const row = item.closest('.section-tab-row');
+              if (
+                row &&
+                row.dataset.sectionId !==
+                  (sample.variant > 1 ? 'shots' : 'assets')
+              )
+                continue;
+            }
+            if (
+              ![
+                'projectChooserTitle',
+                'projectChooserSummary',
+                'projectChooserDivider',
+                'projectGridPreview',
+                'projectCardTitle',
+                'projectCardDescription',
+                'projectCardCategory',
+                'projectCardType',
+                'workspaceTabSelectionIndicator',
+                'workspaceTabSelectionLabel',
+                'sectionTabSurface',
+                'sectionTabBadge',
+                'sectionTabTitle',
+                'sectionTabIcon',
+                'sectionRailBackground'
+              ].includes(name) ||
+              getComputedStyle(item).display === 'none'
+            )
+              continue;
+            const box = item.getBoundingClientRect();
+            result[name] = {
+              x: box.x,
+              y: box.y,
+              width: box.width,
+              height: box.height
+            };
+          }
+          const close = document.querySelector(
+            '.section-tab-reveal:popover-open:not(.section-tab-reveal-actions) > .icon-button'
+          );
+          if (close) {
+            const box = close.getBoundingClientRect();
+            result.sectionTabCloseButton = {
+              x: box.x,
+              y: box.y,
+              width: box.width,
+              height: box.height
+            };
+          }
+          return result;
+        }, sample);
+      const { paints, rounding } = await page
+        .locator('[data-frame]')
+        .evaluateAll((items, sample) => {
+          const canvas = document.createElement('canvas'),
+            ctx = canvas.getContext('2d'),
+            colors = {},
+            rounding = {};
+          canvas.width = canvas.height = 1;
+          for (const item of items) {
+            const row = item.closest('.section-tab-row');
+            if (
+              sample.kind === 'rail' &&
+              row &&
+              row.dataset.sectionId !==
+                (sample.variant > 1 ? 'shots' : 'assets')
+            )
+              continue;
+            const style = getComputedStyle(item),
+              background = item.classList.contains('frame-box');
+            if (item.dataset.frame === 'sectionTabBadge')
+              rounding.sectionTabBadge = [
+                'borderTopLeftRadius',
+                'borderTopRightRadius',
+                'borderBottomRightRadius',
+                'borderBottomLeftRadius'
+              ].map((corner) => parseFloat(style[corner]));
+            ctx.clearRect(0, 0, 1, 1);
+            ctx.fillStyle = background ? style.backgroundColor : style.color;
+            ctx.fillRect(0, 0, 1, 1);
+            colors[item.dataset.frame] =
+              '#' +
+              [...ctx.getImageData(0, 0, 1, 1).data]
+                .slice(0, 3)
+                .map((value) => value.toString(16).padStart(2, '0'))
+                .join('');
+          }
+          return { paints: colors, rounding };
+        }, sample);
       const image = 'browser-' + sample.id + '.png';
       await page.screenshot({ path: out + image, animations: 'disabled' });
-      captures.push({ id: sample.id, boxes, image });
+      captures.push({ id: sample.id, boxes, paints, rounding, image });
+      if (sample.kind === 'rail' && sample.variant === 3) await page.mouse.up();
     }
     const sources = {};
     for (const path of [
@@ -127,12 +207,15 @@ try {
       'frontend/src/features/projects/ProjectCard.vue',
       'frontend/src/controls/WorkspaceTabs.vue',
       'frontend/src/controls/WorkspaceTabVisual.vue',
+      'frontend/src/controls/SectionTabVisual.vue',
+      'frontend/src/controls/SectionTabRail.vue',
+      'frontend/src/appearance.js',
       'frontend/src/frame/FrameView.vue',
       'frontend/src/style.css',
       'frontend/src/frame/frame.css',
       'frontend/src/controls/AppButton.vue',
+      'frontend/src/controls/AppIcon.vue',
       'frontend/src/controls/ItemPreview.vue',
-      'frontend/src/appearance.js',
       'frontend/src/theme.css',
       'frontend/src/locales/ru.json',
       'frontend/src/locales/en.json',
@@ -243,9 +326,162 @@ try {
       .evaluate((node) => node === document.activeElement),
     true
   );
+  await page.setViewportSize({ width: 400, height: 260 });
+  await page.evaluate(async () => {
+    await window.projectsHarness.configure('rail', 'md3', 'en');
+    window.projectsHarness.resetSections();
+  });
+  const sectionTabs = page.getByRole('tablist', { name: 'Open sections' });
+  assert.deepEqual(
+    await sectionTabs
+      .locator('[data-frame="sectionTabBadge"]')
+      .first()
+      .evaluate((item) => {
+        const style = getComputedStyle(item);
+        return [
+          'borderTopLeftRadius',
+          'borderTopRightRadius',
+          'borderBottomRightRadius',
+          'borderBottomLeftRadius'
+        ].map((corner) => parseFloat(style[corner]));
+      }),
+    [15, 15, 15, 15]
+  );
+  await sectionTabs.getByRole('tab', { name: 'Section 1', exact: true }).tap();
+  assert.equal(
+    await page.evaluate(() => window.projectsHarness.sectionCalls),
+    1
+  );
+  await page.mouse.move(20, 28);
+  await page.waitForTimeout(150);
+  await page.mouse.move(100, 28);
+  await page.mouse.down();
+  await page.mouse.move(100, 79, { steps: 8 });
+  await page.mouse.up();
+  assert.deepEqual(
+    await page.evaluate(() =>
+      window.projectsHarness.sections.map((tab) => tab.id)
+    ),
+    ['section1', 'section0', 'section2']
+  );
+  assert.deepEqual(
+    await page.evaluate(() => window.projectsHarness.sectionReorders),
+    [[0, 1]]
+  );
+  await page.mouse.move(20, 73);
+  await page.waitForTimeout(150);
+  await page.mouse.move(100, 73);
+  await page.mouse.down();
+  await page.mouse.move(100, 125, { steps: 8 });
+  await page.keyboard.press('Escape');
+  await page.mouse.up();
+  assert.equal(
+    await page.evaluate(() => window.projectsHarness.sectionReorders.length),
+    1
+  );
+  await page.mouse.move(20, 73);
+  await page
+    .locator('.section-tab-reveal:popover-open')
+    .getByRole('button', { name: 'Close tab', exact: true })
+    .click();
+  assert.equal(
+    await page.evaluate(() => window.projectsHarness.sections.length),
+    2
+  );
+  assert.equal(
+    await page.evaluate(() => window.projectsHarness.sectionCalls),
+    1
+  );
+  await page.mouse.move(20, 73);
+  await page.mouse.click(20, 73, { button: 'right' });
+  for (const name of ['Move section up', 'Move section down'])
+    assert.equal(
+      await page
+        .getByRole('button', { name, exact: true })
+        .evaluate((button) =>
+          button.parentElement
+            .querySelector('.app-icon')
+            .classList.contains('icon-material-design')
+        ),
+      true,
+      name
+    );
+  assert.equal(
+    await page
+      .getByRole('button', { name: 'Move section down', exact: true })
+      .isDisabled(),
+    true
+  );
+  await page
+    .getByRole('button', { name: 'Move section up', exact: true })
+    .click();
+  assert.deepEqual(
+    await page.evaluate(() => window.projectsHarness.sectionReorders.at(-1)),
+    [1, 0]
+  );
+  await page.keyboard.press('Escape');
+  await page.evaluate(async () => {
+    await window.projectsHarness.configure('rail', 'md3', 'ru');
+    window.projectsHarness.resetSections();
+  });
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Input.dispatchTouchEvent', {
+    type: 'touchStart',
+    touchPoints: [{ x: 20, y: 118 }]
+  });
+  await page.waitForTimeout(550);
+  await cdp.send('Input.dispatchTouchEvent', {
+    type: 'touchEnd',
+    touchPoints: []
+  });
+  assert.equal(
+    await page
+      .getByRole('button', { name: 'Переместить раздел вниз', exact: true })
+      .isDisabled(),
+    true
+  );
+  assert.equal(
+    await page.evaluate(() => window.projectsHarness.sectionCalls),
+    0
+  );
+  await cdp.detach();
+  await page.keyboard.press('Escape');
+  await page.evaluate(
+    () => (window.projectsHarness.sections[0].accent = 'white')
+  );
+  const namedBadge = await page
+    .locator('.section-tab-row')
+    .first()
+    .locator('[data-frame="sectionTabBadge"]')
+    .evaluate((node) => getComputedStyle(node).backgroundColor);
+  assert.equal(namedBadge, 'rgb(189, 189, 189)');
+  await page.mouse.move(20, 28);
+  await page.evaluate(() =>
+    window.projectsHarness.replaceSections(
+      window.projectsHarness.sections.map((tab, index) => ({
+        ...tab,
+        title:
+          index === 0
+            ? 'Updated section with a long server-owned name '.repeat(6)
+            : tab.title
+      }))
+    )
+  );
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      )
+  );
+  const updated = page.locator('.section-tab-reveal:popover-open');
+  assert(
+    (await updated.getAttribute('aria-label')).startsWith('Updated section')
+  );
+  assert.equal((await updated.boundingBox()).width, 320);
+
   assert.deepEqual(errors, []);
   console.log(
-    'Projects/tabs: first tap/click, filters, grouping, phone/inline, keyboard, reorder and close passed.'
+    'Section rail first touch, middle drag, Escape, close, right click and long touch passed. Projects/tabs: first tap/click, filters, grouping, phone/inline, keyboard, reorder and close passed.'
   );
 } finally {
   await browser?.close();

@@ -1,4 +1,4 @@
-import { H as preferences } from "./index.js";
+import { K as preferences } from "./index.js";
 import { M as rpc } from "./clipboard.js";
 //#region src/features/checkin/files.js
 var sourcePath = (file) => file.webkitRelativePath || file.name;

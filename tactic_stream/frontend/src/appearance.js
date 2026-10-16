@@ -1,7 +1,7 @@
 import { computed, reactive, ref, watchEffect } from 'vue'
 import { themes, iconSets, accentPresets, defaultThemeAccents } from './appearanceCatalog.js'
 import { configurationPreview } from './features/configuration/preferences.js'
-import { cssVariables, readableText as sharedReadableText } from '../../src/tactic_stream/shared_ui/core/foundation.mjs'
+import { cssVariables, palette as sharedPalette, readableText as sharedReadableText } from '../../src/tactic_stream/shared_ui/core/foundation.mjs'
 export { themes, iconSets, accentPresets } from './appearanceCatalog.js'
 
 export const languages = [
@@ -66,6 +66,13 @@ export function saveAppearance() { localStorage.setItem(storageKey, JSON.stringi
 const systemDark = ref(typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 export const effectiveColorMode = computed(() => appearance.mode === 'system' ? (systemDark.value ? 'dark' : 'light') : appearance.mode)
 
+const colorPreset = computed(() => hostedPalette.value || accentPresets.find(item => item.value === appearance.themeAccents[appearance.theme][effectiveColorMode.value]))
+const channels = hex => hex.match(/[a-f\d]{2}/gi).map(value => parseInt(value, 16))
+export const frameColors = computed(() => {
+  const mode = effectiveColorMode.value, preset = colorPreset.value
+  return sharedPalette(appearance.theme, mode === 'dark', channels(preset[mode + 'Base']), channels(preset[mode]))
+})
+
 export function initializeAppearance() {
   const media = window.matchMedia('(prefers-color-scheme: dark)')
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -80,7 +87,7 @@ export function initializeAppearance() {
     const mode = effectiveColorMode.value
     root.dataset.mode = mode
     root.dataset.iconSet = appearance.iconSet
-    const palette = hostedPalette.value || accentPresets.find(item => item.value === appearance.themeAccents[appearance.theme][mode])
+    const palette = colorPreset.value
     root.style.setProperty('--base', palette[mode + 'Base'])
     root.style.setProperty('--primary', palette[mode])
     const accent = palette[mode].match(/[a-f\d]{2}/gi).map(value => parseInt(value, 16))

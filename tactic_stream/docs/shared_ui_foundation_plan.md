@@ -2,6 +2,48 @@
 
 Started 2026-10-15. This replaces the previous screen-first migration order.
 
+## Phase 2C: section rail and color evidence, 2026-10-16
+
+Handler **0.6.0.104** / Stream **0.112.153**. The independent products now ship
+64 `.mjs` modules and one menu catalog. `controls/tabs/section.ui.mjs` supplies
+panel and row geometry/paint, badge contrast, label and close positions, context
+action records and vertical drag target decisions. The existing section models,
+commands, loaded workspaces, ACLs and saved formats remain their owners.
+
+- Preserve archived collapsed/revealed/current/pressed composition, scrolling,
+  delayed hover collapse and section identity. Native buttons and pointer grabs
+  remain native; browser overlays keep real buttons and touch handling. Keyboard
+  activation stays manual on the vertical rail. Close never also selects a row.
+- Both hosts use the same row-Y drag target and threshold. Native drag no longer
+  misses collapsed neighbors by hit-testing at the wide panel's X midpoint.
+  Escape, focus loss and model removal/reset cancel native drag without committing
+  a reorder; browser input retains Escape/capture-loss/resize/model-change cleanup.
+- Right click / Shift+F10 and a 500 ms touch hold open the same action records and
+  shared menu rows. Disabled boundaries are preserved. Native actions resolve the
+  current section index from its stable ID at dispatch. A browser long touch
+  reopens after native light-dismiss settles; pending callbacks are cancelled on
+  new input/disposal. First tap activates exactly once without a hover layer
+  appearing between press and release. The native hit area only reserves the close
+  target when its control is visible, preserving an immediate first mouse click
+  throughout the opening animation.
+- Frame preview fallback text now uses contrast against the darkened actual
+  preview accent, matching native ItemPreview. Unknown nonempty browser icon names
+  now show the native warning fallback. Actual color properties are captured and
+  compared alongside bounds; captures align focus/hover rather than comparing an
+  automatically focused Qt card with an idle browser card. Chromium screenshots
+  use grayscale text, separating LCD antialiasing from the actual color role.
+  Box corner overrides retain the other radii: browser badges remain circular.
+  Captures compare all four actual badge corners as well as their colors.
+
+Acceptance: `tools/frame_projects/capture_qml.py`,
+`frontend/tests/frame_projects.mjs --capture`, and `tools/frame_projects/report.py`
+compare 60 archived/current/browser states in three themes and EN dark/RU light.
+The mandatory platform gate includes native section input at scales 1/1.5/2,
+actual browser touch/drag/menu input, retained search/dock workflows and independent
+packaging. Related disposable-server navigation/session and real main-window
+scenarios remain required for release. This closes section-rail composition,
+not the remaining workspace session/layout closure or all of phase 2C.
+
 ## Phase 2C: project chooser and search tabs, 2026-10-16
 
 Handler **0.6.0.103** / Stream **0.112.152**. `shell/projects.ui.mjs` now owns

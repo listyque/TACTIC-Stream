@@ -5,6 +5,15 @@ import ProjectChooser from '../../frontend/src/features/projects/ProjectChooser.
 import ProjectCard from '../../frontend/src/features/projects/ProjectCard.vue';
 import WorkspaceTabVisual from '../../frontend/src/controls/WorkspaceTabVisual.vue';
 import WorkspaceTabs from '../../frontend/src/controls/WorkspaceTabs.vue';
+import SectionTabRail from '../../frontend/src/controls/SectionTabRail.vue';
+const railGeneration = ref(0);
+const sections = ref([
+    { id: 'assets', title: 'Assets', accent: '#6f9fc1', icon: 'assets' },
+    { id: 'shots', title: 'Shots', accent: '#9f80c1', icon: 'movie' }
+  ]),
+  sectionSelected = ref('assets'),
+  sectionCalls = ref(0),
+  sectionReorders = ref([]);
 const kind = ref('chooser'),
   selected = ref('one'),
   calls = ref(0),
@@ -69,6 +78,32 @@ function selectedProject(code) {
 onMounted(() => {
   window.projectsHarness = {
     projects,
+    get sections() {
+      return sections.value;
+    },
+    get sectionCalls() {
+      return sectionCalls.value;
+    },
+    get sectionReorders() {
+      return sectionReorders.value;
+    },
+    get sectionSelected() {
+      return sectionSelected.value;
+    },
+    replaceSections(records) {
+      sections.value = records;
+    },
+    resetSections(count = 3) {
+      sections.value = Array.from({ length: count }, (_, i) => ({
+        id: 'section' + i,
+        title: 'Section ' + i,
+        accent: i % 2 ? '#9f80c1' : '#6f9fc1',
+        icon: i % 2 ? 'movie' : 'assets'
+      }));
+      sectionSelected.value = 'section0';
+      sectionCalls.value = 0;
+      sectionReorders.value = [];
+    },
     get calls() {
       return calls.value;
     },
@@ -77,6 +112,10 @@ onMounted(() => {
     },
     async configure(nextKind, style, language, long = false, tabState = {}) {
       kind.value = nextKind;
+      if (nextKind === 'rail') {
+        railGeneration.value++;
+        sectionSelected.value = 'assets';
+      }
       Object.assign(appearance, {
         theme: style,
         language,
@@ -137,6 +176,33 @@ onMounted(() => {
       :hovered="!!state.hovered"
     />
   </div>
+  <div
+    v-else-if="kind === 'rail'"
+    style="width: 400px; height: 260px; position: relative"
+  >
+    <SectionTabRail
+      :key="railGeneration"
+      class="workspace-rail"
+      style="height: 260px"
+      :tabs="sections"
+      :selected="sectionSelected"
+      @select="
+        sectionSelected = $event;
+        sectionCalls++;
+      "
+      @close="
+        sections = sections.filter((tab) => tab.id !== $event);
+        sectionSelected = sections[0]?.id || '';
+      "
+      @reorder="
+        (source, target) => {
+          sectionReorders.push([source, target]);
+          const [tab] = sections.splice(source, 1);
+          sections.splice(target, 0, tab);
+        }
+      "
+    />
+  </div>
   <WorkspaceTabs
     v-else
     :tabs="tabRecords"
@@ -158,7 +224,7 @@ onMounted(() => {
 <style>
 body {
   margin: 0;
-  background: var(--workspace);
+  background: var(--page);
 }
 #app {
   min-height: 100vh;

@@ -17,6 +17,12 @@ import AppSplitter from '../controls/AppSplitter.vue';
 import AppIcon from '../controls/AppIcon.vue';
 import ItemPreview from '../controls/ItemPreview.vue';
 import ItemSurface from '../controls/ItemSurface.vue';
+import { frameColors } from '../appearance.js';
+import {
+  blend,
+  cssColor,
+  readableText
+} from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 import {
   colors,
   virtualRange,
@@ -61,6 +67,21 @@ const color = (role) =>
         : colors[role]
           ? 'var(' + colors[role] + ')'
           : undefined;
+function previewPaint(node) {
+  const role = node.accent || 'action';
+  const hex = role.slice(1);
+  const accent = role.startsWith('#')
+    ? (hex.length === 3 ? [...hex].map((value) => value + value).join('') : hex)
+        .match(/../g)
+        .map((channel) => parseInt(channel, 16))
+    : frameColors.value[role] || frameColors.value.action;
+  const shade = blend(
+    accent,
+    [0, 0, 0],
+    1 - 1 / (node.round === false ? 1.65 : 1.35)
+  );
+  return { background: cssColor(shade), color: cssColor(readableText(shade)) };
+}
 function style(node) {
   return {
     transition: node.motion
@@ -93,13 +114,18 @@ function style(node) {
   };
 }
 function background(node) {
+  const radius =
+    node.radius === undefined ? 'var(--surface-radius)' : node.radius + 'px';
   return {
     background: color(node.background),
     boxShadow: node.border
       ? 'inset 0 0 0 ' + (node.borderWidth || 1) + 'px ' + color(node.border)
       : undefined,
-    borderRadius:
-      node.radius === undefined ? 'var(--surface-radius)' : node.radius + 'px'
+    borderRadius: radius,
+    borderBottomRightRadius:
+      node.bottomRightRadius === undefined
+        ? radius
+        : node.bottomRightRadius + 'px'
   };
 }
 function send(action, value) {
@@ -463,6 +489,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :style="
           Object.assign(
             style(node),
+            previewPaint(node),
             node.radius !== undefined
               ? { borderRadius: node.radius + 'px' }
               : node.round === false
