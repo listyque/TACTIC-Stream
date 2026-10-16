@@ -2,6 +2,66 @@
 
 Started 2026-10-15. This replaces the previous screen-first migration order.
 
+## Execution plan: full-day batches, revised 2026-10-16
+
+This is the current execution order. The phase IDs and release checkpoints below
+remain the coverage map and evidence history, not separate user-sized tasks.
+Preparation is delivered; verified parts of controls and shell stay delivered.
+Start with **B01** and close its remaining workflows before moving to B02.
+
+Each batch targets roughly **eight hours of complete engineering work**: inspect
+the original and dependencies, implement both hosts, exercise real workflows,
+compare appearance, fix regressions, update documentation and commit/backup.
+This is a work-sizing target, not a measured delivery promise or an eight-hour
+stop condition. Graphs, tables, queues and platform defects may take longer.
+Re-estimate from actual completed batches; do not manufacture work to fill time.
+
+| Batch | Complete deliverable | Acceptance specific to the batch |
+| --- | --- | --- |
+| B01. Main workspace and host lifecycle | Finish the remaining phase-2 window/dock/session work as one integrated shell: menus, navigation, projects, search/section tabs, floating/stacked docks, layout save/restore, ownership/focus and desktop/phone transitions | Change project/tab, edit a draft, move/stack/float/close/reopen docks, restart/restore, resize, logout/expire/login and repeat. Preserve drafts, active section and layout; stale callbacks and hidden/signed-out views must not keep requesting. Reuse the already migrated paint and input; repair remaining integration gaps rather than redo it |
+| B02. Control kit and usable catalog | Close the remaining reusable-control families in the source atlas: all button variants, fields/search/text areas, checks/radios/switches, date/time/calendar, selects/user/icon/color pickers, tabs/badges/avatars, menus/popovers/tooltips, list/tree/table/graph/code/document control contracts, scrolling and splitters | Distinguish primitives, neutral composites, infrastructure and domain forms; provide executable examples and state coverage for every family. Align text/background, typography, icons, geometry and interaction; keep rendering/platform limits explicit. Domain screen migration remains in its own batch |
+| B03. Administration original-reference closure | Review and correct the entire existing Frame Administration against original Handler: Groups, Users, Access, Search Types, Schema, Workflow/process rules, Columns, Raw database, Layouts, Sidebar and Naming, including child editors | Real create/edit/save/cancel/error/dirty-close and cross-editor journeys. Verify graph connections, process/pipeline settings, XML/JSON, ACL and unknown-write handling. Complete original-to-Frame comparisons, not just Frame-to-Frame comparisons |
+| B04. Support, identity and connection lifecycle | Complete the shared composition of Help, errors/confirmations, Debug Log, UI performance view, profile, sign-in/presets/connection status and update shell; retain already verified Help behavior | Contextual Help launch/reopen/positions, log search/filter/export, profile validation, connection errors, session expiry/relogin and update reopen/close. Native updater/local operations and server/browser operations keep explicit capabilities and their existing owners |
+| B05. Configuration and projects | Configuration navigation and every existing settings page, project creation/editing/templates and related child forms; common layout with declared client-specific settings | Apply/Save/Reset/Close, unsaved guards, validation, reconnect/restart, secrets, project/template changes and return to the workspace. Preserve persistence and useful product-specific options; both standalone packages remain usable |
+| B06. Search workflow and card results | Complete the search workspace: query cards, quick/process/advanced filters, tag cloud, saved searches, paging/continuous loading, sorting/grouping, selection, result cards and their menus | Compose and save a query, restore tabs, change filters/tags/view, load more, select/open objects and return without lost context. Verify actual request/filter effects, long labels, empty/error/offline states and phone input |
+| B07. Table View, active widgets and editor | Complete the table host and column/view editor; migrate adapted Handler cells and every usable widget referenced by the widget-config inventory, including related pickers/popovers | Exercise real rows, selection, column sizing/order/visibility, sort/group/paging, inline/batch edit, validation/save conflicts and editor persistence. Document each supported widget with a working example. Clearly unfinished legacy implementations remain explicitly excluded; never count an unsupported placeholder as delivery |
+| B08. Objects and inspector docks | Object report, description/notes, previews/snapshots/files, process/task fragments, links, create/edit/delete/duplicate and watch-folder editor, including all child surfaces | Selection/tab/project changes preserve drafts and context; same actions, confirmation/ACL/error behavior and native file adapters. Inspector remains a dock with correct float/stack/reopen behavior; test an end-to-end object journey |
+| B09. Task Manager and task inspector | Complete task list/table, scope/filters, status/assignment/date editing, task inspector, bulk actions, layouts and desktop/phone composition | Filter and select tasks, edit through real pickers, perform existing bulk operations, save/cancel and reopen across task/project changes. Keep permissions, request generations and mutation owners; do not substitute a visual fixture for production operations |
+| B10. Production Gantt and calendar | Integrate the existing shared Gantt proof into production: dependencies, scheduling, drag/resize/zoom, milestones, undo and save/conflict behavior; calendar remains its separate dock | Compare original and both production hosts on the same schedule; verify actual saved changes, drag cancellation, undo, conflicts, range/selection/scroll retention, realistic data sizes and touch/phone interaction |
+| B11. Messaging and activity | Conversations, retained message views, composer, attachments, members, emoji/search popovers, notification history and activity feed as one communication block | Immediate cached conversation switching, independent drafts/read/scroll positions, send/newline rules, anchored popovers, uploads/failures and reopen. Repeated hide/logout/expiry must stop requests; real server effects and desktop/touch paths are required |
+| B12. Files, check-in and repository queues | File workspace/changelist, ingest/check-in, Commit Queue, Repository Sync queue/editor, matching templates, repository editor and screenshot tools | Complete an actual file-to-check-in workflow plus queue cancel/retry/reopen and synchronization. Preserve file identity, progress, repository rules and large-queue virtualization. Native filesystem/DCC and available browser integrations use their declared capabilities, never fake parity |
+| B13. Scripts and standalone tools | Script Editor, shelf/triggers, Batch/Database tools, Handler Server, DCC options and standalone entry points; share corresponding shells/commands without replacing the execution system | Open/run/cancel/save scripts, launch standalone Batch Manager with native QML UI, target the selected DCC client and recover from failures. Preserve Python/QML execution and script-created menus/UI; no embedded browser or forced rewrite of user scripts |
+| B14. Remaining surfaces and release closure | Knowledge base/journal/API documentation, remaining client-specific surfaces and inventory gaps; remove superseded layouts and perform the integrated release audit | Every inventoried surface is accepted, intentionally client-specific or explicitly excluded. Exercise long sessions, repeated reopen/project changes, larger collections, independent packages and restore points. Record remaining platform/debt limits; no competing old/new runtime layouts or blanket parity claims |
+
+### Batch working rule
+
+- A request to continue the plan means completing the next whole batch. A button,
+  picker, menu, screenshot report or individual subsection is an internal
+  checklist item, not a separate delivery or a reason to request another prompt.
+- Keep one batch active. Resolve routine dependencies and regressions within it;
+  if an external blocker genuinely prevents completion, record exactly what is
+  blocked and continue independent work in that batch. Never silently rename a
+  partial batch complete or move its unfinished features to a later batch.
+- Every batch includes original Handler → Frame Handler → Frame Stream evidence
+  on matching data/theme/language/size, actual mouse/touch/keyboard where relevant,
+  focus/scroll/drag/IME, loading/empty/error/disabled, EN/RU, light/dark, three
+  themes and affected DPI/phone layouts. Check mutations and persistence through
+  existing owners separately from screenshots. Recheck source fingerprints.
+- Run focused tests while iterating, then the required platform gate and affected
+  integrated journeys on the final sources. A screenshot count alone does not
+  establish completion. Update the atlas/examples and EN/RU Help, review both
+  diffs, commit each changed product separately and verify NAS backup.
+- Common control fixes belong to the common owner and both renderers when
+  applicable. B02 owns complete family coverage; later batches extend the same
+  kit when a real workflow reveals a missing state, rather than fork local styles.
+- Runtime controllers, ACL, configuration and persistence keep their existing
+  owners. Products ship separate physical Frame copies. No WebEngine, automatic
+  QML translator, second store or forced conversion of native-only tools.
+
+The user-facing checkpoint reports the **whole batch**, its remaining gaps and
+evidence. This revision changes planning only; it does not mark any additional UI
+implemented or rerun the previous release's acceptance.
+
 ## Phase 2C: section rail and color evidence, 2026-10-16
 
 Handler **0.6.0.104** / Stream **0.112.153**. The independent products now ship
@@ -216,7 +276,7 @@ Native Windows compositor, popup grabs and separate OS windows still need their
 real-backend acceptance. Prior reports below are historical checkpoints and must
 be regenerated before being used as evidence for this release.
 
-## Active batch: phase 2, started 2026-10-16
+## Phase-2 acceptance breakdown: historical checkpoint, 2026-10-16
 
 The dependency order remains valid. Phase 1 stays open: a complete source census
 and a verified control sample are different deliverables. Phase 2 consumes and
@@ -280,7 +340,7 @@ do not add asynchronous renderer ownership without a measured need and readiness
 checks for first focus/action. The phase-1 and original checkpoint sections below
 retain their historical counts; they are not the current release totals.
 
-**Next acceptance block remains 2B/2C:** complete projected dock-tree/minimum-size
+**Next acceptance block at this checkpoint was 2B/2C:** complete projected dock-tree/minimum-size
 parity, all tab reorder/focus paths and corners, then the complete main-menu,
 navigation-container and project/tab/session composition. Keep the native
 `MenuRegistry.replace/extend` runtime contract; a static replacement menu would
@@ -557,7 +617,11 @@ the direction above, not a claim that a particular optimization is already fast:
 [Qt 6.11 performance](https://doc.qt.io/qt-6.11/qtquick-performance.html),
 [Vue performance](https://vuejs.org/guide/best-practices/performance).
 
-## Complete rollout order (proposed; not completion claims)
+## Domain coverage map (phase IDs; not execution batches)
+
+The full-day batches at the top of this document define the current execution
+order and delivery size. This table retains the domain coverage and original
+phase IDs referenced by earlier checkpoints; it is not a second active plan.
 
 Migration means one definition of corresponding UI and state, with native
 renderers. It does not mean rewriting Python controllers, browser transport,
@@ -630,10 +694,11 @@ scene JSON or thousands of small visual states is not a load test. A synthetic
 QML timing is not a browser or GPU performance guarantee. Retain the original
 controller model and brick boundaries until measurement justifies changing them.
 
-No calendar estimate is justified by file counts. Measure completion time and
-remaining defects after preparation plus the complete Help pilot, then
-estimate the remaining vertical batches. The highest-risk blocks are workspace
-lifecycle, table editing, messaging lifecycle, file queues and standalone scripts.
+File counts do not justify a delivery estimate. The eight-hour batch target above
+sets the intended working scope; recalibrate it using actual completion time and
+remaining defects. Workspace lifecycle, table editing, messaging, file queues,
+graphs and standalone scripts have the greatest uncertainty. Do not reduce their
+acceptance or claim completion merely to fit one day.
 
 ## Restore points and reference
 

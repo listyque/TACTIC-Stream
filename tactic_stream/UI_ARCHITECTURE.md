@@ -8,6 +8,11 @@
 Current work proceeds from foundation through controls, hosts and the main
 window to screen contents. The live acceptance ledger is
 [`docs/shared_ui_foundation_plan.md`](docs/shared_ui_foundation_plan.md).
+Its current execution plan groups the remaining work into 14 full-day batches,
+targeting roughly eight hours each including both hosts, original comparisons,
+integrated checks, documentation and commits. B01 closes the remaining workspace,
+dock and session lifecycle; individual controls remain internal checklist items.
+Earlier phase IDs below are historical coverage references, not delivery units.
 Portable modules and native adapters are organized by responsibility; Handler
 and Stream still ship independent copies. Source is formatted and remains
 readable. No browser engine is embedded in QML.
