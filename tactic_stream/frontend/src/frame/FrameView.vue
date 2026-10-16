@@ -63,6 +63,21 @@ const color = (role) =>
           : undefined;
 function style(node) {
   return {
+    transition: node.motion
+      ? Object.entries(node.motion)
+          .map(
+            ([property, token]) =>
+              (property === 'x' ? 'left' : property) +
+              ' var(' +
+              {
+                clickMotionSlow: '--motion-click-slow',
+                clickMotionFast: '--motion-click',
+                hoverMotionFast: '--motion-hover'
+              }[token] +
+              ') cubic-bezier(.215,.61,.355,1)'
+          )
+          .join(', ')
+      : undefined,
     left: node.x + 'px',
     top: node.y + 'px',
     width: node.width + 'px',
@@ -273,8 +288,13 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :class="{ 'frame-wrap': node.wrap }"
         :style="
           Object.assign(style(node), {
+            overflow: node.elide === false ? 'visible' : undefined,
+            textOverflow: node.elide === false ? 'clip' : undefined,
             textAlign: node.align || 'left',
-            lineHeight: node.wrap ? 'normal' : node.height + 'px'
+            lineHeight: node.wrap ? 'normal' : node.height + 'px',
+            display: node.maxLines ? '-webkit-box' : undefined,
+            WebkitLineClamp: node.maxLines || undefined,
+            WebkitBoxOrient: node.maxLines ? 'vertical' : undefined
           })
         "
         :title="node.text"
@@ -443,7 +463,11 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :style="
           Object.assign(
             style(node),
-            node.round === false ? { borderRadius: '4px' } : {}
+            node.radius !== undefined
+              ? { borderRadius: node.radius + 'px' }
+              : node.round === false
+                ? { borderRadius: '4px' }
+                : {}
           )
         "
         :source="node.source"

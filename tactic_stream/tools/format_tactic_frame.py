@@ -57,11 +57,13 @@ def main():
     for pattern in ["frontend/src/features/help/**/*.{vue,js}", "tools/frame_help/*.{vue,js,html,mjs}", "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs"]:
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
-    for pattern in ["src/tactic_stream/shared_ui/**/*.json", "tools/frame_menus/*.{vue,js,html}", "tools/frame_navigation/*.{vue,js,html}", "frontend/tests/frame_menus.mjs", "frontend/src/features/connection/ConnectionMenu.vue"]:
+    for pattern in ["src/tactic_stream/shared_ui/**/*.json", "tools/frame_menus/*.{vue,js,html}", "tools/frame_navigation/*.{vue,js,html}", "frontend/tests/frame_menus.mjs", "frontend/tests/frame_projects.mjs", "frontend/src/features/connection/ConnectionMenu.vue", "frontend/src/features/projects/{ProjectChooser,ProjectCard}.vue", "tools/frame_projects/*.{vue,js,html}"]:
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
     controls = [
         "WorkspaceTabs.vue",
+        "WorkspaceTabVisual.vue",
+        "SectionTabRail.vue",
         "ActionRows.vue",
         "ActionRow.vue",
         "DockWorkspaceFooter.vue",
@@ -113,6 +115,7 @@ def main():
             (args.handler_root / "thlib/ui/qml/features/administration").rglob("*.qml")
         )
         files += sorted((args.handler_root / "thlib/ui/qml/features/support").rglob("*.qml"))
+        files += sorted((args.handler_root / "thlib/ui/qml/features/search").rglob("*.qml"))
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]

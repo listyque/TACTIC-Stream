@@ -13,6 +13,8 @@ import AppSelect from './AppSelect.vue';
 import AppMenu from './AppMenu.vue';
 import AppMenuItem from './AppMenuItem.vue';
 import AppIcon from './AppIcon.vue';
+import WorkspaceTabVisual from './WorkspaceTabVisual.vue';
+import * as Workspace from '../../../src/tactic_stream/shared_ui/controls/tabs/workspace.ui.mjs';
 import { appearance } from '../appearance.js';
 import {
   displacedTabOffset,
@@ -42,6 +44,11 @@ const emit = defineEmits([
   'restore',
   'clear-history'
 ]);
+const hoveredTab = ref(''),
+  paintedPress = ref(''),
+  focusedTab = ref(''),
+  closeHover = ref(''),
+  closePress = ref('');
 const list = ref(null);
 const menu = ref(null);
 const history = ref(null);
@@ -191,6 +198,12 @@ async function menuAction(source, action, ...values) {
   if (document.activeElement === document.body)
     root.value?.querySelector('[role="tab"][aria-selected="true"]')?.focus();
 }
+function closeTab(id) {
+  emit('close', id);
+  nextTick(() =>
+    root.value?.querySelector('[role="tab"][aria-selected="true"]')?.focus()
+  );
+}
 function move(event) {
   const buttons = [...list.value.querySelectorAll('[role="tab"]')];
   let index = buttons.indexOf(event.target);
@@ -204,7 +217,7 @@ function move(event) {
     );
     if (!command) return;
     event.preventDefault();
-    if (command.type === 'close') emit('close', command.id);
+    if (command.type === 'close') closeTab(command.id);
     else if (command.type === 'reorder')
       emit('reorder', command.source, command.target);
     else select(command.id);
@@ -217,19 +230,22 @@ function move(event) {
     );
     return;
   }
-  if (event.key === 'ArrowRight') index = (index + 1) % buttons.length;
-  else if (event.key === 'ArrowLeft')
-    index = (index + buttons.length - 1) % buttons.length;
-  else if (event.key === 'Home') index = 0;
-  else if (event.key === 'End') index = buttons.length - 1;
-  else if (event.key === 'Delete' && closable(props.tabs[index])) {
-    event.preventDefault();
-    emit('close', props.tabs[index].id);
-    return;
-  } else return;
+  const command = Workspace.key(
+    props.tabs.map((tab) => ({ ...tab, closable: closable(tab) })),
+    props.tabs[index].id,
+    event.key,
+    false,
+    event.ctrlKey && event.shiftKey
+  );
+  if (!command) return;
   event.preventDefault();
-  select(props.tabs[index].id);
-  buttons[index].focus();
+  if (command.type === 'close') closeTab(command.id);
+  else if (command.type === 'reorder')
+    emit('reorder', command.source, command.target);
+  else {
+    select(command.id);
+    buttons[props.tabs.findIndex((tab) => tab.id === command.id)]?.focus();
+  }
 }
 function pressTab(event, index) {
   suppressClick = false;
@@ -243,6 +259,7 @@ function pressTab(event, index) {
   )
     return;
   const node = event.currentTarget;
+  paintedPress.value = props.tabs[index].id;
   pressedTab = {
     node,
     id: event.pointerId,
@@ -432,11 +449,34 @@ function clickAfterDrag(event) {
         :style="tabStyle(index)"
         @pointerdown="pressTab($event, index)"
         @dragstart.prevent
+        @pointerenter="hoveredTab = tab.id"
+        @pointerleave="
+          hoveredTab = '';
+          paintedPress = '';
+        "
+        @pointerup="paintedPress = ''"
+        @pointercancel="paintedPress = ''"
+        @focusin="focusedTab = tab.id"
+        @focusout="focusedTab = ''"
         @auxclick.prevent="
-          $event.button === 1 && closable(tab) && emit('close', tab.id)
+          $event.button === 1 && closable(tab) && closeTab(tab.id)
         "
       >
+        <WorkspaceTabVisual
+          v-if="kind === 'search'"
+          :record="{
+            ...tab,
+            current: selected === tab.id,
+            closable: closable(tab) && (!compact || selected === tab.id)
+          }"
+          :hovered="hoveredTab === tab.id"
+          :pressed="paintedPress === tab.id"
+          :focused="focusedTab === tab.id"
+          :close-hovered="closeHover === tab.id"
+          :close-pressed="closePress === tab.id"
+        />
         <AppButton
+          :class="{ 'frame-hit-target': kind === 'search' }"
           role="tab"
           :icon="['dock', 'view'].includes(kind) ? tab.icon : undefined"
           :id="kind === 'dock' ? undefined : 'tab-' + tab.id"
@@ -456,6 +496,15 @@ function clickAfterDrag(event) {
         />
         <AppButton
           v-if="kind !== 'dock' && closable(tab)"
+          :class="{ 'frame-hit-target': kind === 'search' }"
+          @pointerenter="closeHover = tab.id"
+          @pointerleave="
+            closeHover = '';
+            closePress = '';
+          "
+          @pointerdown="closePress = tab.id"
+          @pointerup="closePress = ''"
+          @pointercancel="closePress = ''"
           icon-only
           icon="close"
           :label="
@@ -477,7 +526,7 @@ function clickAfterDrag(event) {
           "
           :title="t('Close tab')"
           :disabled="disabled"
-          @click="emit('close', tab.id)"
+          @click="closeTab(tab.id)"
         />
       </div>
     </div>
@@ -532,7 +581,7 @@ function clickAfterDrag(event) {
         label="Close tab"
         :disabled="disabled"
         @click="
-          emit('close', selected);
+          closeTab(selected);
           menu.open = false;
         "
       />
@@ -705,3 +754,25 @@ function clickAfterDrag(event) {
     </AppMenu>
   </div>
 </template>
+
+<style>
+.workspace-tabs[data-kind='search']
+  .workspace-tab
+  [role='tab']
+  > span:not(.control-ripple):not(.control-ripple-clip) {
+  visibility: hidden;
+}
+.workspace-tabs[data-kind='search'] .workspace-tab > .icon-button {
+  background: transparent;
+  width: 32px;
+  height: 32px;
+  min-width: 0;
+  min-height: 0;
+}
+.workspace-tabs[data-kind='search'] .workspace-tab > .icon-button > .app-icon {
+  visibility: hidden;
+}
+.workspace-tabs[data-kind='search'] .workspace-tab::after {
+  display: none;
+}
+</style>

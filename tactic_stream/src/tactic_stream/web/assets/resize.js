@@ -3528,6 +3528,11 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 		const color = (role) => role?.mix ? `color-mix(in srgb, ${color(role.mix[0])} ${(1 - role.mix[2]) * 100}%, ${color(role.mix[1])} ${role.mix[2] * 100}%)` : role === "transparent" ? "transparent" : role?.startsWith("#") ? role : cssRoles[role] ? "var(" + cssRoles[role] + ")" : void 0;
 		function style(node) {
 			return {
+				transition: node.motion ? Object.entries(node.motion).map(([property, token]) => (property === "x" ? "left" : property) + " var(" + {
+					clickMotionSlow: "--motion-click-slow",
+					clickMotionFast: "--motion-click",
+					hoverMotionFast: "--motion-hover"
+				}[token] + ") cubic-bezier(.215,.61,.355,1)").join(", ") : void 0,
 				left: node.x + "px",
 				top: node.y + "px",
 				width: node.width + "px",
@@ -3703,8 +3708,13 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"aria-level": node.role === "heading" ? node.level || 2 : void 0,
 					class: normalizeClass(["frame-node frame-label", { "frame-wrap": node.wrap }]),
 					style: normalizeStyle(Object.assign(style(node), {
+						overflow: node.elide === false ? "visible" : void 0,
+						textOverflow: node.elide === false ? "clip" : void 0,
 						textAlign: node.align || "left",
-						lineHeight: node.wrap ? "normal" : node.height + "px"
+						lineHeight: node.wrap ? "normal" : node.height + "px",
+						display: node.maxLines ? "-webkit-box" : void 0,
+						WebkitLineClamp: node.maxLines || void 0,
+						WebkitBoxOrient: node.maxLines ? "vertical" : void 0
 					})),
 					title: node.text
 				}, [createBaseVNode("span", null, toDisplayString(node.text), 1)], 14, _hoisted_2)) : node.kind === "Icon" ? (openBlock(), createBlock(_sfc_main$6, {
@@ -3962,7 +3972,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 9,
 					"data-frame": node.id,
 					class: "frame-node frame-preview",
-					style: normalizeStyle(Object.assign(style(node), node.round === false ? { borderRadius: "4px" } : {})),
+					style: normalizeStyle(Object.assign(style(node), node.radius !== void 0 ? { borderRadius: node.radius + "px" } : node.round === false ? { borderRadius: "4px" } : {})),
 					source: node.source,
 					"fallback-text": node.initials,
 					"fallback-icon": node.icon || "person",

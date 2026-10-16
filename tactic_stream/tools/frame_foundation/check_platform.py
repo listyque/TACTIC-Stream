@@ -94,6 +94,7 @@ def fingerprints(handler):
             "frame_help.mjs",
             "frame_navigation.mjs",
             "frame_navigation_drawer.mjs",
+            "frame_projects.mjs",
             "frame_menus.mjs",
             "frame_dock_placement.mjs",
             "frame_dock_layout.mjs",
@@ -110,6 +111,8 @@ def fingerprints(handler):
         handler / "tests/test_user_combo_box.py",
         handler / "tests/test_frame_help.py",
         handler / "tests/test_frame_navigation.py",
+        handler / "tests/test_frame_projects.py",
+        handler / "tests/test_section_tab_rail.py",
         handler / "tests/test_frame_dock_input.py",
         handler / "tests/test_frame_menus.py",
         handler / "tests/test_frame_dock_layout.py",
@@ -141,7 +144,7 @@ def fingerprints(handler):
     ]
     checks += [
         path
-        for directory in ("frame_menus", "frame_navigation")
+        for directory in ("frame_menus", "frame_navigation", "frame_projects")
         for path in (ROOT / "tools" / directory).iterdir()
         if path.is_file() and path.suffix in (".vue", ".js", ".html", ".py")
     ]
@@ -263,6 +266,8 @@ def main():
                     "tests.test_user_combo_box.UserPickerTests",
                     "tests.test_frame_help.FrameHelpTests",
                     "tests.test_frame_navigation.FrameNavigationTests",
+                    "tests.test_frame_projects.FrameProjectsTests",
+                    "tests.test_section_tab_rail.SectionTabRailQmlTests",
                     "tests.test_frame_dock_input.FrameDockInputTests",
                     "tests.test_frame_menus.FrameMenuTests",
                     "tests.test_frame_dock_layout.FrameDockLayoutTests",
@@ -292,6 +297,7 @@ def main():
                 ("help-launchers", "shared_help"),
                 ("navigation-input", "frame_navigation"),
                 ("navigation-drawer", "frame_navigation_drawer"),
+                ("projects-tabs", "frame_projects"),
                 ("menus-input", "frame_menus"),
                 ("dock-input", "frame_dock_interaction"),
                 ("window-input", "frame_window_lifecycle"),
@@ -318,6 +324,8 @@ def main():
             + [
                 "tests.test_retained_ui.RetainedUiTests." + name
                 for name in [
+                    "test_search_tab_selection_visual_changes_without_late_motion",
+                    "test_search_tab_width_changes_settle_synchronously",
                     "test_unsnapped_dock_title_drag_keeps_the_dock_in_its_layout",
                     "test_dock_layout_switch_keeps_delegate_and_loaded_content",
                     "test_stacked_search_dock_keeps_move_grip_at_fixed_position",

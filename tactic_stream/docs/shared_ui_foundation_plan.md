@@ -2,6 +2,42 @@
 
 Started 2026-10-15. This replaces the previous screen-first migration order.
 
+## Phase 2C: project chooser and search tabs, 2026-10-16
+
+Handler **0.6.0.103** / Stream **0.112.152**. `shell/projects.ui.mjs` now owns
+popup/header/category-grid and expanded-card composition. The independent shipped
+copies contain 63 `.mjs` modules and one menu catalog. No embedded browser,
+shared runtime bundle, new store or dependency was introduced.
+
+- Existing project discovery/ACLs, preview cache, availability filters, category
+  order, selection commands and session owners remain in place. Empty category
+  fallback is translated in the view; actual server category names remain data.
+- Expanded cards preserve archived geometry, preview, lifecycle chip, title,
+  two-line description and metadata. The chooser reserves a 12 px scrollbar
+  gutter instead of placing cards beneath it; full desktop cards are therefore
+  4 px narrower than the archive. Active project selection is passed in native
+  QML too. Compact configuration cards retain their original implementation.
+- Stream uses two/one columns on phones and a taller filter header for Russian
+  wrapping. Configuration's inline chooser shares the same grid. Native and
+  browser filters, mouse/touch selection, Escape and bounded project arrow/Home/
+  End navigation use real house controls; availability is never a client ACL.
+- `controls/tabs/workspace.ui.mjs` owns search-tab paint and tab-key decisions.
+  Existing animation timing preferences and real close targets remain present.
+  Native search adapters keep activation, close and reorder in workspaceState;
+  browser adapters emit to their existing owner. Focus follows surviving tabs.
+  Section rails share dimensions and manual-activation keyboard decisions, but
+  their full paint/gestures are still pending. This does **not** close phase 2C.
+
+Acceptance is reproduced by `tools/frame_projects/capture_qml.py`,
+`frontend/tests/frame_projects.mjs --capture`, `tools/frame_projects/report.py`,
+`tools/frame_navigation/check_workflows.py` and the mandatory platform gate.
+The report compares 36 archived/current/browser states (md3/material5/fluent,
+EN dark/RU light, chooser/card/search-tab variants) and rejects stale source
+fingerprints. Related workflows cover project navigation, saved workspace restore
+and expired-session request suspension on a disposable server. The platform gate
+includes project/tab input at scales 1/1.5/2. Full section-rail composition,
+Windows compositor fidelity and physical phone input remain outside this block.
+
 ## Phase 2C: navigation container, 2026-10-16
 
 Handler **0.6.0.102** / Stream **0.112.151**. The complete navigation drawer now

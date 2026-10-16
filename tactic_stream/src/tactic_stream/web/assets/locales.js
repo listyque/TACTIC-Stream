@@ -1240,7 +1240,8 @@ var en_default = {
 	"Every 5 seconds": "Every 5 seconds",
 	"Every 10 seconds": "Every 10 seconds",
 	"Every 30 seconds": "Every 30 seconds",
-	"Every 60 seconds": "Every 60 seconds"
+	"Every 60 seconds": "Every 60 seconds",
+	Templates: "Templates"
 };
 var ru_default = {
 	Completion: "Готовность",
@@ -5632,7 +5633,8 @@ var ru_default = {
 	"Watch Folders": "Отслеживаемые папки",
 	"TACTIC Handler Server": "Сервер TACTIC Handler",
 	Update: "Обновление",
-	Exit: "Выход"
+	Exit: "Выход",
+	Templates: "Шаблоны"
 };
 //#endregion
 export { en_default as n, ru_default as t };

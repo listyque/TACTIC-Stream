@@ -15,8 +15,12 @@ readable. No browser engine is embedded in QML.
 The navigation drawer now uses one Frame container and keyboard/exit policy in
 both hosts, verified against the archived native header/list geometry. Its real
 native and browser input/paired captures are reproduced by `tools/frame_navigation`.
-Project chooser, section/search-tab composition and the remainder of session
-closure remain open; existing persistence and loaders retain their owners.
+Project chooser, expanded cards and search-tab painting now use the shared
+`shell/projects.ui.mjs` and `controls/tabs/workspace.ui.mjs` modules. Their actual
+input and archived/native/browser comparisons live in `tools/frame_projects`.
+Section-rail metrics and keyboard decisions are shared; its full painting and
+gesture composition and the remainder of session closure remain open. Existing
+persistence, previews, ACL filtering and loaders retain their owners.
 
 The previous Administration reports below compared two Frame implementations.
 They do not establish fidelity to the original Handler. That broader parity
