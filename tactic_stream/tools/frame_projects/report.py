@@ -27,6 +27,7 @@ def main():
     comparisons = 0
     reference_checks = 0
     sections = []
+    differences = []
     for current in [row for row in native["captures"] if not row["original"]]:
         original = next(
             row
@@ -73,13 +74,16 @@ def main():
         for name, bounds in boxes.items():
             assert name in web["boxes"], (current["id"], name)
             for key, value in bounds.items():
-                assert abs(value - web["boxes"][name][key]) < 0.6, (
-                    current["id"],
-                    name,
-                    key,
-                    value,
-                    web["boxes"][name][key],
-                )
+                if abs(value - web["boxes"][name][key]) >= 0.6:
+                    differences.append(
+                        dict(
+                            sample=current["id"],
+                            control=name,
+                            dimension=key,
+                            native=value,
+                            browser=web["boxes"][name][key],
+                        )
+                    )
                 comparisons += 1
         for name, bounds in original["boxes"].items():
             if current["kind"] == "chooser" and name != "projectChooserTitle":
@@ -109,13 +113,36 @@ def main():
         sections.append(
             f'<details><summary>{current["id"]}</summary><div class="pictures">{pictures}</div></details>'
         )
+    difference_rows = "".join(
+        f"<tr><td>{html.escape(row['sample'])}</td><td>{html.escape(row['control'])}</td>"
+        f"<td>{row['dimension']}</td><td>{row['native']}</td><td>{row['browser']}</td></tr>"
+        for row in differences
+    )
+    difference_summary = (
+        f"<p><strong>Геометрия не совпала: {len(differences)} измерений.</strong> "
+        "Это текущий результат, а не подтверждение полного совпадения. "
+        "Не ослабляйте допуски из-за различий шрифтов.</p>"
+        "<details><summary>Все расхождения Qt / браузера</summary><table>"
+        "<tr><th>Состояние</th><th>Контрол</th><th>Измерение</th><th>Qt</th><th>Браузер</th></tr>"
+        + difference_rows
+        + "</table></details>"
+        if differences
+        else "<p>Все проверенные размеры совпали.</p>"
+    )
     page = f"""<!doctype html><html lang="ru"><meta charset="utf-8"><title>Проекты и рабочие вкладки</title><style>body{{background:#202528;color:#e1e6e9;font:15px/1.5 Segoe UI,sans-serif;margin:24px}}.pictures{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}figure{{margin:0}}img{{max-width:100%;height:auto}}details{{margin:24px 0}}summary{{cursor:pointer}}</style>
-<h1>Проекты и вкладки: исходный ТХ → Frame ТХ → Frame ТС</h1><p>60 состояний настоящих компонентов: chooser, одно-/двухстрочная карточка, вкладка normal/current/hover+dirty, боковая полоса collapsed/revealed/pressed, md3/material5/fluent, EN dark/RU light. {comparisons} измерений Qt/Vue; {reference_checks} проверок относительно архивного компонента. Цветовые роли: {color_checks} проверок; скругления: {corner_checks}. Отпечатки исходников проверены. Состояние наведения задаётся одинаково; снимки Chromium используют grayscale text, чтобы LCD-сглаживание Windows не маскировало фактический цвет.</p>
+<h1>Проекты и вкладки: исходный ТХ → Frame ТХ → Frame ТС</h1>{difference_summary}<p>60 состояний настоящих компонентов: chooser, одно-/двухстрочная карточка, вкладка normal/current/hover+dirty, боковая полоса collapsed/revealed/pressed, md3/material5/fluent, EN dark/RU light. {comparisons} измерений Qt/Vue; {reference_checks} проверок относительно архивного компонента. Цветовые роли: {color_checks} проверок; скругления: {corner_checks}. Отпечатки исходников проверены. Состояние наведения задаётся одинаково; снимки Chromium используют grayscale text, чтобы LCD-сглаживание Windows не маскировало фактический цвет.</p>
 <p>Сетка сохраняет три колонки на компьютере; ТС использует две/одну на телефоне. Полоса прокрутки получает отдельные 12 px: карточки исходного ТХ были под ней, поэтому их ширина в полном chooser намеренно уменьшена на 4 px. Карточки сравниваются с архивом отдельно при одинаковой ширине 248 px. Активный проект теперь выделяется и в ТХ; исходный chooser это состояние не передавал.</p>
 <p>Проверены реальные фильтры, mouse/touch, переходы Home/End/стрелки, Enter/Space, закрытие и перестановка вкладок с восстановлением фокуса. Существующие владельцы проектов, ACL, preview, draft и saved layout сохранены. Боковая полоса теперь использует общий скелет, цвета, клавиатуру и расчёт цели drag. Первое нажатие и отмена проверяются реальными событиями. Этот отчёт не объявляет завершение всей фазы 2C. Композитор Windows и растеризация Qt/Chromium не объявляются идентичными.</p>{"".join(sections)}</html>"""
     (OUT / "index.html").write_text(page, encoding="utf-8")
+    (OUT / "differences.json").write_text(
+        json.dumps(differences, indent=2), encoding="utf-8"
+    )
     print(
         f"{comparisons} Qt/Vue, {reference_checks} reference, {color_checks} color and {corner_checks} corner checks: {OUT / 'index.html'}"
+    )
+
+    assert not differences, (
+        f"{len(differences)} geometry differences recorded in {OUT / 'index.html'}"
     )
 
 

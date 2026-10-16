@@ -1,5 +1,5 @@
 @import './controls/panelChrome.css';
-:root { font-family: var(--font-family); color: var(--on-surface); background: var(--page); font-size: var(--text-body); font-synthesis: none; }
+:root { font-family: var(--font-family); color: var(--on-surface); background: var(--page); font-size: var(--text-body); font-synthesis: none; -webkit-tap-highlight-color: transparent; }
 * { box-sizing: border-box; }
 body { margin: 0; }
 .app-splitter { flex: 0 0 var(--splitter-extent); width: var(--splitter-extent); cursor: ew-resize; touch-action: none; position: relative; }
@@ -325,7 +325,7 @@ h2 { font-size: var(--text-heading); }
 .login-card .version { text-align: center; }
 .error, .notice { background: var(--error-container); border: 1px solid var(--error-outline); border-radius: var(--field-radius); color: var(--error); padding: 12px; line-height: 1.5; overflow-wrap: anywhere; }
 .notice { background: var(--content-selection); border-color: var(--outline-variant); color: var(--on-surface); }
-.workspace { display: grid; grid-template-areas: "bar bar" "rail main"; grid-template-columns: var(--section-rail-width) minmax(0, 1fr); grid-template-rows: var(--app-bar-height) minmax(0, 1fr); height: 100dvh; overflow: hidden; }
+.workspace { display: grid; height: 100dvh; overflow: hidden; }
 .workspace-rail { grid-area: rail; min-height: 0; }
 .section-tab.app-button { flex: 1; min-width: 0; height: 38px; min-height: 38px; padding: 0 3px; justify-content: start; border: 0; background: transparent; border-radius: 9px; }
 .navigation-entry .app-button { justify-content: start; padding-left: calc(16px + var(--entry-depth) * 16px); }
@@ -425,7 +425,7 @@ h2 { font-size: var(--text-heading); }
 .workspace-shortcuts { display: flex; align-items: center; gap: 2px; }
 .compact-shortcuts { display: none; }
 .topbar .connection-menu > summary { display: flex; align-items: center; gap: 6px; width: 106px; height: 36px; padding-inline: 8px; border-radius: var(--button-radius); color: var(--muted); font-size: 14px; }
-.connection-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--error); }
+.connection-dot { flex: 0 0 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--error); }
 .connection-dot.online { background: var(--success); }
 .connection-dot.connecting { background: var(--yellow); }
 .connection-icon { display: none; }
@@ -884,7 +884,6 @@ tbody tr:last-child td { border-bottom: 0; }
   .docs-link { min-height: var(--touch-target); }
 }
 @media (max-width: 900px) {
-  .workspace { grid-template-rows: auto minmax(0, 1fr); }
   .topbar { height: var(--app-bar-height); padding-inline: var(--space-xs); }
   .workspace-rail { display: flex; }
   .content { padding: var(--space-md); }
@@ -1581,7 +1580,6 @@ button { border-radius: var(--button-radius); transition: background-color var(-
 
 /* Phone workspace: one active pane; desktop navigation and dock chrome stay out. */
 @media (max-width:700px) {
-  .workspace { grid-template-areas:"bar" "main"; grid-template-columns:minmax(0,1fr); }
   .dock-panel, .dock-panel.floating { padding:0; filter:none; }
   .dock-panel::before { display:none; }
   .dock-content, .dock-titlebar + .dock-content, .content.workspace-browser { border:0; border-radius:0; }

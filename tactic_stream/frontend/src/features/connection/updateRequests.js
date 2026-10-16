@@ -16,7 +16,10 @@ export function backgroundRequest(key, request) {
   const controller = new AbortController()
   const entry = { controller }
   pending.set(key, entry)
-  entry.promise = Promise.resolve().then(() => request(AbortSignal.any([controller.signal, AbortSignal.timeout(30000)])))
+  entry.promise = Promise.resolve().then(() => {
+    if (controller.signal.aborted) throw controller.signal.reason
+    return request(AbortSignal.any([controller.signal, AbortSignal.timeout(30000)]))
+  })
     .finally(() => { if (pending.get(key) === entry) pending.delete(key) })
   return entry.promise
 }

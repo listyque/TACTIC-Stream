@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-Start with **B01** and close its remaining workflows before moving to B02.
+**B01 is delivered** at the checkpoint below. The next batch is **B02**.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -59,8 +59,71 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
   QML translator, second store or forced conversion of native-only tools.
 
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
-evidence. This revision changes planning only; it does not mark any additional UI
-implemented or rerun the previous release's acceptance.
+evidence. Each delivered checkpoint below records implementation and current acceptance;
+the batch table itself is scope, not evidence.
+
+## B01 delivered: main workspace and host lifecycle, 2026-10-16
+
+Handler **0.6.0.105** / Stream **0.112.154**. The two independent packages now
+ship **65 `.mjs` modules and one menu catalog**. `shell/workspace.ui.mjs` supplies
+the three root host rectangles and desktop/phone grid. Main.qml and App.vue use
+that composition directly; native expanded section-rail input and public
+`dockHost` identity remain intact. Existing menus, window kinds, dock tree,
+selection, workspace/session stores and command owners are retained.
+
+- Complete the integrated lifecycle acceptance: dock move/split/stack/float,
+  maximize/restore, cancelled gestures, close/reopen, per-tab layouts, restart,
+  project/account transitions and draft retention. Correct obsolete test paths
+  for nested dock trees and the current mobile task detail editor; keep real
+  server-save and restored-state assertions. The native layout-preset fixture
+  now uses the actual `project_view` root.
+- Reject late browser bootstrap, sign-in and sign-out results after the session
+  changes. A superseded administrator bootstrap cannot publish its identity or
+  permissions into another login. Queued background reads check cancellation
+  before starting, in addition to aborting reads already running. Native workers
+  retain their existing generation/cancellation owners and lifecycle tests.
+- Retain the chosen phone panel when moving through a desktop width where that
+  dock is hidden; retain its draft and the separate desktop layout. Native
+  Handler remains a desktop host, not a simulated phone client.
+- Move preview fallback contrast to the house ItemPreview so the account avatar
+  and Frame previews use the actual darkened accent in light themes too. Keep
+  the connected status dot circular when its translated caption grows. Suppress
+  the browser tap rectangle over existing house-control feedback.
+
+Reproduce the evidence on final sources:
+
+- `tools/frame_foundation/check_main.py --workspace` and
+  `tools/frame_workspace/report.py`: actual original/native Main and built
+  browser, three themes, EN dark/RU light, 30 native captures per version and
+  36 browser states; **1,152 original, 1,152 paired geometry and 96 background/
+  avatar-contrast checks**. Whole native captures use QQuickWindow.grabWindow,
+  including the real ApplicationWindow background. Each browser state exercises
+  settings, account, project selection and Escape with real input.
+- Existing `tools/frame_projects` archived/native/browser evidence is recaptured
+  after the ItemPreview change: 738 original checks, 204 actual color checks and
+  96 corner checks pass. Of 984 Qt/browser geometry checks, 48 metadata-column
+  x/width checks differ by 1 px in EN and 4 px in RU in this environment. These
+  bounds use each engine's measured Segoe UI label width; the unchanged card
+  layout still exposes that platform text-metric difference. The report now
+  writes all mismatches and an explicit failure explanation before failing the original
+  strict assertion. It does not widen tolerances or call them a pass. Resolve
+  cross-host text measurement in B02 typography/control acceptance; whole-root
+  B01 bounds and lifecycle are checked independently.
+- `tools/frame_navigation/check_workflows.py` runs four disposable-server
+  journeys: navigation, workspace restore, session expiry/cancellation and three
+  held-response authentication races. `tests/test_workbench.py` checks actual
+  desktop/phone persistence, draft save, attachments and project/account changes.
+- The mandatory `tools/frame_foundation/check_platform.py` now also runs native
+  workspace lifecycle, these session journeys and both complete Workbench tests,
+  in addition to three-scale native input, retained docks, browser input and
+  independent packaging. Driver/source fingerprints guard against stale evidence.
+
+This closes the integrated shell, not every screen or every reusable control.
+The empty search body's existing differences and feature interiors remain B06;
+full control-family state/paint coverage is B02. No compositor/font raster or
+physical-phone identity is claimed. No new runtime dependency, embedded browser,
+UI translation engine or duplicate state store was introduced. Original full
+Administration fidelity remains B03, as recorded separately.
 
 ## Phase 2C: section rail and color evidence, 2026-10-16
 
@@ -742,7 +805,7 @@ Original reference sources stay separate from the running application.
 | 1. Theme/type/metrics/motion | Implemented and checked | 12,708 archived/current TH checks; 3,178 browser checks; styles, custom palettes, independent motion preferences and reduced motion |
 | 2. Controls and interaction | In progress; verified subset | Shared state paint and metrics; 372 paired states of the current sample, actual mouse/touch/keyboard at three scales, shared Sidebar tree and specialized Grid. The full source atlas distinguishes primitives/composites/infrastructure/forms and lists unverified families. Windows compositor/popup-grab cases and original-wide screen parity remain explicit above |
 | 3. Windows and docks | In progress | Common geometry, minimum sizes (240 original values), dock-header composition and tab rules; 24 browser windows have semantic kinds. Existing owners retain persistence/lifecycle. 12 original/Frame native header pairs and 9 browser cases passed; complete dock trees and chrome states remain |
-| 4. Main window | In progress | Original TH = Frame TH toolbar geometry at five widths; actual Vue at six widths, real settings/account/project input. Menus, navigation and full workspace composition remain |
+| 4. Main window | B01 shell delivered | Shared root hosts, toolbar, menus, navigation, projects/tabs and integrated session/layout restore; original/current/browser evidence and real input. Screen interiors remain later batches |
 | 5. Screen contents | In progress | Workflow parameters/pipeline settings and original left library placement restored; actual full TS/TH input and whole Workflow comparison passed. 2340 paired Administration states passed; original-wide visual parity remains incomplete; search/filter migration has not begun |
 
 Each screen requires two comparisons: original Handler → Frame Handler, then

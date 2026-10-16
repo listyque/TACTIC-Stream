@@ -9,7 +9,11 @@ ROOT = Path(__file__).resolve().parents[2]
 TH = Path("D:/code/th_codex")
 OUT = Path(__file__).resolve().parent / "output"
 os.environ.update(
-    QT_QPA_PLATFORM="offscreen", QT_QUICK_BACKEND="software", QSG_RENDER_LOOP="basic"
+    QT_QPA_PLATFORM="offscreen",
+    QT_QUICK_BACKEND="software",
+    QSG_RENDER_LOOP="basic",
+    QT_QPA_FONTDIR=str(Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts"),
+    QT_FONT_DPI="96",
 )
 sys.path[:0] = [str(TH), str(ROOT / "tools/frame_admin")]
 import tests.test_sidebar_editor_qml as fixture

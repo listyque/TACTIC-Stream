@@ -52,7 +52,12 @@ def main():
         environment = dict(
             os.environ, PLAYWRIGHT_BROWSERS_PATH=str(ROOT / ".browser-cache")
         )
-        for name in ("navigation", "workspace_session", "session_expiry"):
+        for name in (
+            "navigation",
+            "workspace_session",
+            "session_expiry",
+            "workspace_lifecycle",
+        ):
             with (OUT / (name + ".log")).open("w", encoding="utf-8") as log:
                 result = subprocess.run(
                     ["node", "tests/" + name + ".mjs", Transport.url],

@@ -97,6 +97,7 @@ const presets = computed(() =>
 let observer,
   gesture = null,
   applying = false;
+let phoneSelection = props.mobile;
 const compact = computed(
   () => props.mobile || width.value < 640 || height.value < 440
 );
@@ -178,6 +179,11 @@ watch(
   () => props.mobile,
   (phone) => {
     if (!phone) return;
+    if (
+      phoneSelection &&
+      phonePanels.value.some((panel) => panel.id === compactActive.value)
+    )
+      return;
     const panels = phonePanels.value
       .filter((panel) => state.value.panels[panel.id].visible)
       .map((panel) => panel.id);
@@ -317,6 +323,7 @@ function raise(id) {
     Math.max(...Object.values(state.value.panels).map((panel) => panel.z)) + 1;
 }
 async function select(id) {
+  if (props.mobile) phoneSelection = true;
   const restoreFocus = document.activeElement?.closest('[data-kind="dock"]');
   emit('changing');
   compactActive.value = id;
@@ -926,6 +933,7 @@ watch(
   () => props.login,
   () => {
     cancelGesture();
+    phoneSelection = props.mobile;
     state.value = readDocks(props.login);
   }
 );

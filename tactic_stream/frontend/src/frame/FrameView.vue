@@ -17,12 +17,6 @@ import AppSplitter from '../controls/AppSplitter.vue';
 import AppIcon from '../controls/AppIcon.vue';
 import ItemPreview from '../controls/ItemPreview.vue';
 import ItemSurface from '../controls/ItemSurface.vue';
-import { frameColors } from '../appearance.js';
-import {
-  blend,
-  cssColor,
-  readableText
-} from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 import {
   colors,
   virtualRange,
@@ -67,20 +61,10 @@ const color = (role) =>
         : colors[role]
           ? 'var(' + colors[role] + ')'
           : undefined;
-function previewPaint(node) {
-  const role = node.accent || 'action';
-  const hex = role.slice(1);
-  const accent = role.startsWith('#')
-    ? (hex.length === 3 ? [...hex].map((value) => value + value).join('') : hex)
-        .match(/../g)
-        .map((channel) => parseInt(channel, 16))
-    : frameColors.value[role] || frameColors.value.action;
-  const shade = blend(
-    accent,
-    [0, 0, 0],
-    1 - 1 / (node.round === false ? 1.65 : 1.35)
-  );
-  return { background: cssColor(shade), color: cssColor(readableText(shade)) };
+function previewStyle(node) {
+  const bounds = style(node);
+  delete bounds.color;
+  return bounds;
 }
 function style(node) {
   return {
@@ -488,8 +472,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         class="frame-node frame-preview"
         :style="
           Object.assign(
-            style(node),
-            previewPaint(node),
+            previewStyle(node),
             node.radius !== undefined
               ? { borderRadius: node.radius + 'px' }
               : node.round === false
@@ -500,7 +483,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :source="node.source"
         :fallback-text="node.initials"
         :fallback-icon="node.icon || 'person'"
-        :accent="color(node.accent) || 'var(--primary)'"
+        :accent="node.accent || 'action'"
         :preview-size="node.width"
         :round="node.round !== false"
         :outlined="node.outlined !== false"

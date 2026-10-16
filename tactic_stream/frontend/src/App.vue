@@ -2,6 +2,7 @@
 import { randomId } from './controls/identity.js'
 import { markRaw, nextTick } from 'vue'
 import { describe as describeMainToolbar, positions as mainToolbarPositions } from '../../src/tactic_stream/shared_ui/shell/main_toolbar.ui.mjs'
+import { describe as describeWorkspace } from '../../src/tactic_stream/shared_ui/shell/workspace.ui.mjs'
 import { asyncComponent } from './controls/asyncComponent.js'
 import { rpc, sessionAction, interfaceDefinition, projectNavigation, projectCatalog, searchConfiguration, navigationLink, requestActivity, resetRequestActivity } from './api.js'
 import { t } from './i18n.js'
@@ -101,6 +102,7 @@ export default {
   data() {
     return {
       toolbarWidth: window.innerWidth,
+      sessionRequest: 0,
       workHoursProjects: { week:'', report:'', cost:'' },
       descriptionMounted: false, descriptionTarget: null, tableCheckinTarget:null, snapshotMounted:false, snapshotTarget:null, snapshotActive:false,
       inspectorSource: null, inspectorTarget: null, inspectorRequest: 0, taskInspectorActive: false, inspectorReturn: 'results',
@@ -148,6 +150,10 @@ export default {
     accountActions() { return composeMainMenu(mainMenus.user, this.mainMenuContext) },
     mainToolbar() { return describeMainToolbar({width:this.toolbarWidth,compact:this.compactShortcuts,progressReveal:this.activityProgress ? 1 : 0,dccClient:false}) },
     mainToolbarControls() { return mainToolbarPositions(this.mainToolbar) },
+    workspaceStyle() {
+      const scene = describeWorkspace(this.toolbarWidth, window.innerHeight, this.compactShortcuts)
+      return { gridTemplateAreas: scene.grid.areas, gridTemplateColumns: scene.grid.columns, gridTemplateRows: scene.grid.rows }
+    },
     mobileSearchContext() { return [this.workspaceProject,this.activeWorkspaceSection?.id,this.activeSearchTab?.id].join(':') },
     serverDebugContext() { return {ticket:this.session?.ticket,project:this.workspaceProject} },
     updateSubscription() {
@@ -525,6 +531,8 @@ export default {
       this.$refs.settingsMenu?.focusTrigger()
     },
     async signOut() {
+      const session = this.session
+      if (!session) return
       if (this.$refs.scriptShelf && !this.$refs.scriptShelf.canLeave()) return
       if (!this.canCloseTaskViews()) return
       if (this.$refs.adminTaskView && !this.$refs.adminTaskView.canLeave()) return
@@ -542,13 +550,15 @@ export default {
       if (this.busy) return
       this.busy = true
       try {
-        await sessionAction('logout', this.session.ticket)
+        await sessionAction('logout', session.ticket)
+        if (session !== this.session) return
         this.logout()
         history.replaceState(null, '', '/')
-      } catch (error) { this.fail(error) }
-      finally { this.busy = false }
+      } catch (error) { if (session === this.session) this.fail(error) }
+      finally { if (session === this.session) this.busy = false }
     },
     saveSession() {
+      if (!this.session) return
       try {
         const selection = this.section === 'administration' ? this.workspaceSelection : this
         const state = { project: selection?.project ?? this.project, type: selection?.type ?? this.type, view: selection?.view ?? this.view, configuredView: selection?.configuredView ?? this.configuredView }
@@ -561,31 +571,38 @@ export default {
       catch { /* Browser storage may be unavailable; the current session still works. */ }
     },
     async signIn() {
+      if (this.signingIn) return
+      const request = ++this.sessionRequest, login = this.login.trim()
       this.signingIn = true
       this.error = ''
       try {
-        const ticket = await rpc('get_ticket', [this.login, this.password])
+        const ticket = await rpc('get_ticket', [login, this.password])
+        if (request !== this.sessionRequest) return
         this.password = ''
         this.restoringSession = true
-        this.session = { login: this.login, ticket }
-        try { this.project = JSON.parse(localStorage.getItem('tactic_stream.selection.' + this.login))?.project || '' }
+        this.session = { login, ticket }
+        try { this.project = JSON.parse(localStorage.getItem('tactic_stream.selection.' + login))?.project || '' }
         catch { this.project = '' }
         await this.bootstrap()
-      } catch (error) { this.fail(error) }
-      finally { this.signingIn = false; this.restoringSession = false }
+      } catch (error) { if (request === this.sessionRequest) this.fail(error) }
+      finally { if (request === this.sessionRequest) { this.signingIn = false; this.restoringSession = false } }
     },
     async bootstrap() {
+      const session = this.session
+      if (!session) return
       this.routeReady = false
       try { this.loadingMode = localStorage.getItem('tactic_stream.loadingMode.' + this.session.login) || preferences.checkin.loadingMode }
       catch { this.loadingMode = preferences.checkin.loadingMode }
       // Read the registry and project list in the system context first.
       const ticket = { ticket: this.session.ticket, project: 'admin', language: 'python' }
       await rpc('ping', [ticket])
+      if (session !== this.session) return
       const [projects, types, identity] = await Promise.all([
         projectCatalog(this.session.ticket),
         rpc('query', [ticket, 'sthpw/search_object'], { order_bys: ['search_type'] }),
         sessionAction('identity', this.session.ticket),
       ])
+      if (session !== this.session) return
       this.projects = projects
       this.types = types
       this.userIdentity = identity
@@ -595,10 +612,12 @@ export default {
       this.workspaceProjects = readWorkspace(this.session.login, projects, types)
       this.workspaceProject = this.project
       await this.loadNavigation()
+      if (session !== this.session) return
       // Mount authenticated surfaces before restoring rows; handle the address only once.
       this.busy = true
       this.restoringSession = false
       await nextTick()
+      if (session !== this.session) return
       this.routeReady = true
       const request = this.requestId
       const params = new URLSearchParams(location.search)
@@ -608,11 +627,15 @@ export default {
         this.clearWorkspace()
       } else if (this.activeWorkspace.current) await this.restoreSearchTab()
       else this.clearWorkspace()
+      if (session !== this.session) return
       if (request === this.requestId) this.busy = false
       this.saveSession()
       if (!this.error) this.writeLocation(true)
     },
     logout(message = '') {
+      this.sessionRequest++
+      this.signingIn = false
+      this.restoringSession = false
       this.attachmentLocation = null
       uiPerformance.reset()
       forgetSessions()
@@ -1682,7 +1705,7 @@ export default {
       <span class="version">{{ version ? `v${version}` : '' }}</span>
     </form>
   </main>
-  <div v-else class="workspace" @pointerdown="dismissMenus" @keydown.esc="dismissMenus">
+  <div v-else class="workspace" :style="workspaceStyle" @pointerdown="dismissMenus" @keydown.esc="dismissMenus">
     <header ref="topbar" class="topbar frame-main-toolbar" :style="{height:mainToolbar.height+'px','--project-preview-radius':mainToolbar.dimensions.projectPreviewRadius+'px'}" @toggle.capture="menuToggled">
       <AppButton class="navigation-toggle frame-main-control" data-main-control="mainNavigation" :style="mainToolbarStyle('mainNavigation')" icon-only :label="navigationVisible ? 'Close navigation' : 'Open navigation'" :icon="navigationVisible ? 'close' : 'menu'"
         aria-controls="workspace-sidebar" :aria-expanded="navigationVisible" @click="toggleNavigation" />

@@ -28,7 +28,15 @@ close geometry, action records and vertical drag decisions. Both input adapters
 retain real grabs and existing selection/reorder/close owners. Project comparisons
 also check actual text/background color roles and coherent focus/hover states.
 Existing persistence, previews, ACL filtering and loaders retain their owners;
-the remaining workspace session/layout closure is still open.
+B01 now closes the integrated workspace/session lifecycle: shared root host
+composition, dock/tab/layout restore, desktop/phone retention and stale-session
+response protection. Whole-window original/native/browser evidence is in
+`tools/frame_workspace/output/index.html`; complete desktop/phone and session
+journeys are included in the mandatory platform gate. The next batch is B02,
+complete reusable-control families. Empty search contents remain B06. The fresh
+project report explicitly fails 48 text-measured metadata bounds (1 px EN / 4 px
+RU); original geometry, colors and corners pass. Typography across platform font
+backends is an open B02 check, not a claim of pixel-identical controls.
 
 The previous Administration reports below compared two Frame implementations.
 They do not establish fidelity to the original Handler. That broader parity

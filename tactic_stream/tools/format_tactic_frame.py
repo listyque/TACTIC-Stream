@@ -64,6 +64,7 @@ def main():
         "WorkspaceTabs.vue",
         "WorkspaceTabVisual.vue",
         "SectionTabVisual.vue",
+        "ItemPreview.vue",
         "SectionTabRail.vue",
         "ActionRows.vue",
         "ActionRow.vue",

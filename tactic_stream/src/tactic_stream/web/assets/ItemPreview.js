@@ -1,6 +1,8 @@
 import { I as resolveComponent, N as openBlock, _ as createCommentVNode, g as createBlock, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, v as createElementBlock } from "./vue.js";
-import { D as t, et as _plugin_vue_export_helper_default, u as _sfc_main$1 } from "./index.js";
+import { D as t, F as blend, H as readableText, L as cssColor, R as cssRoles, et as _plugin_vue_export_helper_default, j as frameColors, u as _sfc_main$1 } from "./index.js";
 //#region src/controls/ItemPreview.vue
+var colorProbe;
+var variableRoles = Object.fromEntries(Object.entries(cssRoles).map(([role, variable]) => ["var(" + variable + ")", role]));
 var _sfc_main = {
 	components: { AppIcon: _sfc_main$1 },
 	props: {
@@ -25,9 +27,34 @@ var _sfc_main = {
 			request: 0
 		};
 	},
-	computed: { url() {
-		return this.localUrl || this.source || "";
-	} },
+	computed: {
+		url() {
+			return this.localUrl || this.source || "";
+		},
+		fallbackPaint() {
+			const role = variableRoles[this.accent] || this.accent;
+			let accent = frameColors.value[role] || frameColors.value.contentAccent || frameColors.value.action;
+			let cssAccent = cssColor(accent);
+			if (this.accent && !frameColors.value[role]) {
+				colorProbe ||= document.createElement("canvas").getContext("2d");
+				colorProbe.clearRect(0, 0, 1, 1);
+				colorProbe.fillStyle = "#000000";
+				colorProbe.fillStyle = this.accent;
+				colorProbe.fillRect(0, 0, 1, 1);
+				accent = [...colorProbe.getImageData(0, 0, 1, 1).data].slice(0, 3);
+				cssAccent = this.accent;
+			}
+			const shade = blend(accent, [
+				0,
+				0,
+				0
+			], 1 - 1 / (this.round ? 1.35 : 1.65));
+			return {
+				"--preview-accent": cssAccent,
+				color: cssColor(readableText(shade))
+			};
+		}
+	},
 	watch: {
 		file: {
 			immediate: true,
@@ -64,7 +91,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			"outlined-preview": $props.outlined
 		}]),
 		style: normalizeStyle({
-			"--preview-accent": $props.accent || void 0,
+			...$options.fallbackPaint,
 			"--preview-icon-size": $props.previewSize == null ? void 0 : ($props.previewSize > 40 ? 22 : 16) + "px",
 			"--preview-text-size": $props.previewSize == null ? void 0 : ($props.previewSize > 40 ? 10 : 8) + "px"
 		})

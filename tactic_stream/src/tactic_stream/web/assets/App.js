@@ -42,7 +42,7 @@ var dimensions$4 = {
 	projectPreviewExtent: 28,
 	projectPreviewRadius: 6
 };
-function describe$5(model) {
+function describe$6(model) {
 	const width = Math.max(0, model.width);
 	const compact = !!model.compact;
 	const height = layout.appBarHeight;
@@ -122,6 +122,31 @@ function positions$1(scene) {
 	const result = {};
 	for (const item of scene.nodes) result[item.id] = item;
 	return result;
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/shell/workspace.ui.mjs
+function describe$5(width, height, compact = false) {
+	const toolbar = Math.min(height, layout.appBarHeight);
+	const rail = compact ? 0 : Math.min(width, layout.sectionRailWidth);
+	const body = Math.max(0, height - toolbar);
+	return {
+		width,
+		height,
+		compact,
+		grid: {
+			areas: compact ? "\"bar\" \"main\"" : "\"bar bar\" \"rail main\"",
+			columns: compact ? "minmax(0,1fr)" : rail + "px minmax(0,1fr)",
+			rows: toolbar + "px minmax(0,1fr)"
+		},
+		nodes: [
+			node("View", "mainToolbarHost", rect$1(0, 0, width, toolbar), { view: "toolbar" }),
+			node("View", "mainSectionRailHost", rect$1(0, toolbar, rail, body), {
+				view: "sections",
+				visible: !compact
+			}),
+			node("View", "mainDockHost", rect$1(rail, toolbar, Math.max(0, width - rail), body), { view: "docks" })
+		]
+	};
 }
 //#endregion
 //#region src/features/interface/TaskCards.vue
@@ -27648,6 +27673,7 @@ var _sfc_main$26 = {
 			}
 		}));
 		let observer, gesture = null, applying = false;
+		let phoneSelection = props.mobile;
 		const compact = computed(() => props.mobile || width.value < 640 || height.value < 440);
 		const phonePanels = computed(() => dockPanels.filter((panel) => panel.id !== "drop_plate" && (!["tasks", "task_calendar"].includes(panel.id) || props.canAdminister)));
 		const visible = computed(() => (props.mobile ? phonePanels.value : dockPanels).filter((panel) => (state.value.panels[panel.id].visible || props.mobile && compactActive.value === panel.id) && (!["tasks", "task_calendar"].includes(panel.id) || props.canAdminister)));
@@ -27700,6 +27726,7 @@ var _sfc_main$26 = {
 		}
 		watch(() => props.mobile, (phone) => {
 			if (!phone) return;
+			if (phoneSelection && phonePanels.value.some((panel) => panel.id === compactActive.value)) return;
 			const panels = phonePanels.value.filter((panel) => state.value.panels[panel.id].visible).map((panel) => panel.id);
 			const active = panels.includes(maximized.value) ? [maximized.value] : [...projectTree(state.value.layout, panels.filter((id) => !state.value.panels[id].floating), width.value, height.value).stacks.map((item) => item.active), ...panels.filter((id) => state.value.panels[id].floating)];
 			compactActive.value = active.includes(compactActive.value) ? compactActive.value : active.includes("results") ? "results" : active[0] || "results";
@@ -27786,6 +27813,7 @@ var _sfc_main$26 = {
 			state.value.panels[id].z = Math.max(...Object.values(state.value.panels).map((panel) => panel.z)) + 1;
 		}
 		async function select(id) {
+			if (props.mobile) phoneSelection = true;
 			const restoreFocus = document.activeElement?.closest("[data-kind=\"dock\"]");
 			emit("changing");
 			compactActive.value = id;
@@ -28223,6 +28251,7 @@ var _sfc_main$26 = {
 		}
 		watch(() => props.login, () => {
 			cancelGesture();
+			phoneSelection = props.mobile;
 			state.value = readDocks(props.login);
 		});
 		watch(() => [props.ticket, props.project], () => {
@@ -42161,6 +42190,7 @@ var _sfc_main = {
 	data() {
 		return {
 			toolbarWidth: window.innerWidth,
+			sessionRequest: 0,
 			workHoursProjects: {
 				week: "",
 				report: "",
@@ -42307,7 +42337,7 @@ var _sfc_main = {
 			return compose(main_menus_default.user, this.mainMenuContext);
 		},
 		mainToolbar() {
-			return describe$5({
+			return describe$6({
 				width: this.toolbarWidth,
 				compact: this.compactShortcuts,
 				progressReveal: this.activityProgress ? 1 : 0,
@@ -42316,6 +42346,14 @@ var _sfc_main = {
 		},
 		mainToolbarControls() {
 			return positions$1(this.mainToolbar);
+		},
+		workspaceStyle() {
+			const scene = describe$5(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
+			return {
+				gridTemplateAreas: scene.grid.areas,
+				gridTemplateColumns: scene.grid.columns,
+				gridTemplateRows: scene.grid.rows
+			};
 		},
 		mobileSearchContext() {
 			return [
@@ -42967,6 +43005,8 @@ var _sfc_main = {
 			this.$refs.settingsMenu?.focusTrigger();
 		},
 		async signOut() {
+			const session = this.session;
+			if (!session) return;
 			if (this.$refs.scriptShelf && !this.$refs.scriptShelf.canLeave()) return;
 			if (!this.canCloseTaskViews()) return;
 			if (this.$refs.adminTaskView && !this.$refs.adminTaskView.canLeave()) return;
@@ -42984,16 +43024,18 @@ var _sfc_main = {
 			if (this.busy) return;
 			this.busy = true;
 			try {
-				await sessionAction("logout", this.session.ticket);
+				await sessionAction("logout", session.ticket);
+				if (session !== this.session) return;
 				this.logout();
 				history.replaceState(null, "", "/");
 			} catch (error) {
-				this.fail(error);
+				if (session === this.session) this.fail(error);
 			} finally {
-				this.busy = false;
+				if (session === this.session) this.busy = false;
 			}
 		},
 		saveSession() {
+			if (!this.session) return;
 			try {
 				const selection = this.section === "administration" ? this.workspaceSelection : this;
 				const state = {
@@ -43013,30 +43055,37 @@ var _sfc_main = {
 			} catch {}
 		},
 		async signIn() {
+			if (this.signingIn) return;
+			const request = ++this.sessionRequest, login = this.login.trim();
 			this.signingIn = true;
 			this.error = "";
 			try {
-				const ticket = await rpc("get_ticket", [this.login, this.password]);
+				const ticket = await rpc("get_ticket", [login, this.password]);
+				if (request !== this.sessionRequest) return;
 				this.password = "";
 				this.restoringSession = true;
 				this.session = {
-					login: this.login,
+					login,
 					ticket
 				};
 				try {
-					this.project = JSON.parse(localStorage.getItem("tactic_stream.selection." + this.login))?.project || "";
+					this.project = JSON.parse(localStorage.getItem("tactic_stream.selection." + login))?.project || "";
 				} catch {
 					this.project = "";
 				}
 				await this.bootstrap();
 			} catch (error) {
-				this.fail(error);
+				if (request === this.sessionRequest) this.fail(error);
 			} finally {
-				this.signingIn = false;
-				this.restoringSession = false;
+				if (request === this.sessionRequest) {
+					this.signingIn = false;
+					this.restoringSession = false;
+				}
 			}
 		},
 		async bootstrap() {
+			const session = this.session;
+			if (!session) return;
 			this.routeReady = false;
 			try {
 				this.loadingMode = localStorage.getItem("tactic_stream.loadingMode." + this.session.login) || preferences.checkin.loadingMode;
@@ -43049,11 +43098,13 @@ var _sfc_main = {
 				language: "python"
 			};
 			await rpc("ping", [ticket]);
+			if (session !== this.session) return;
 			const [projects, types, identity] = await Promise.all([
 				projectCatalog(this.session.ticket),
 				rpc("query", [ticket, "sthpw/search_object"], { order_bys: ["search_type"] }),
 				sessionAction("identity", this.session.ticket)
 			]);
+			if (session !== this.session) return;
 			this.projects = projects;
 			this.types = types;
 			this.userIdentity = identity;
@@ -43063,9 +43114,11 @@ var _sfc_main = {
 			this.workspaceProjects = readWorkspace(this.session.login, projects, types);
 			this.workspaceProject = this.project;
 			await this.loadNavigation();
+			if (session !== this.session) return;
 			this.busy = true;
 			this.restoringSession = false;
 			await nextTick();
+			if (session !== this.session) return;
 			this.routeReady = true;
 			const request = this.requestId;
 			const params = new URLSearchParams(location.search);
@@ -43078,11 +43131,15 @@ var _sfc_main = {
 				this.clearWorkspace();
 			} else if (this.activeWorkspace.current) await this.restoreSearchTab();
 			else this.clearWorkspace();
+			if (session !== this.session) return;
 			if (request === this.requestId) this.busy = false;
 			this.saveSession();
 			if (!this.error) this.writeLocation(true);
 		},
 		logout(message = "") {
+			this.sessionRequest++;
+			this.signingIn = false;
+			this.restoringSession = false;
 			this.attachmentLocation = null;
 			uiPerformance.reset();
 			forgetSessions();
@@ -44880,6 +44937,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	], 32)])) : (openBlock(), createElementBlock("div", {
 		key: 2,
 		class: "workspace",
+		style: normalizeStyle($options.workspaceStyle),
 		onPointerdown: _cache[172] || (_cache[172] = (...args) => $options.dismissMenus && $options.dismissMenus(...args)),
 		onKeydown: _cache[173] || (_cache[173] = withKeys((...args) => $options.dismissMenus && $options.dismissMenus(...args), ["esc"]))
 	}, [
@@ -47017,7 +47075,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			ticket: $data.session.ticket,
 			"open-project": $options.openCreatedProject
 		}, null, 8, ["ticket", "open-project"])
-	], 32));
+	], 36));
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
