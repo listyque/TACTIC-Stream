@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01 and B02 are delivered** at the checkpoints below. The next batch is **B03**.
+**B01, B02 and B03 are delivered** at the checkpoints below. The next batch is **B04**.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -61,6 +61,105 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B03 delivered: original Administration, 2026-10-17
+
+Handler **0.6.0.107**, Stream **0.112.156**. Both products still ship their own physical copies
+of **71 `.mjs` modules and one menu catalog**. Removed the second Administration
+form geometry helper; all affected forms now use `controls/forms/sections.ui.mjs`.
+
+The original UI is the tracked `TH_git_HEAD_reference.zip` at Handler commit
+`fa3f594c5cd09ce565ea14acb533302e79c9308a`. `TH.zip` already contains Frame and
+remains only the quality-debt reference. The original Columns page also uses
+its archived Python controller because its old flattened-XML API was replaced
+by the current wizard API. Only fixture loading is intercepted; archived QML
+is not patched. Its existing Label.text binding-loop warning is retained in
+`referenceWarnings`; current Frame must emit no QML warnings.
+
+| Scope reviewed | Original/current surface and retained operations | Functional acceptance owner |
+| --- | --- | --- |
+| Groups | Directory, details, membership search/cards, create, save/discard and confirmation | Native group input/API tests; real security-group commands |
+| Users | Directory/retired filter; profile, account/password and groups; identity and dirty retention | Native user input/API tests; server security-users tests |
+| Access | All eleven scope tabs, matrix and advanced rule/technical editors | Native matrix/ACL tests; server rules and revision/conflict tests |
+| Search Types | Catalog, Summary with counters/relationships, Workflow links, Details/image, Fields; creation/review and deletion guards | Native type/column/create/delete suites; real schema/type commands and browser cross-editor journey |
+| Schema | Nodes, visible connections, source/destination keys, reversal, missing tables, M:N instance draft/rename/restore, JSON/XML | Native real mouse/keyboard/touch connection tests; unchanged Handler XML-RPC schema journeys |
+| Workflow | Canvas, left workflow library, pipeline settings, all eight native process kinds, advanced JSON/XML and missing-node handling | Original/current form captures; native document/process tests; real pipeline/task/rule commands |
+| Process dependencies | Triggers, six action variants, notifications/templates, naming and related objects | Original/current child captures, native rule tests and server workflow dependency tests |
+| Columns | Project catalog, original flattened XML/current wizard, title/widget/width/visibility/order, XML and targeted table-header entry | Native XML/input tests, paired up/down actions and real browser save/readback with exact-source verification |
+| Sidebar | TH/TACTIC sources, tree, entry appearance/search/defaults/access/technical settings and XML; Groups/search links | Native sidebar input and navigation tests; server sidebar commands |
+| Naming | Rule selection, fields/advanced options, local preview, duplicate/new/reset/save and unknown-result lock | Original/current captures, native naming tests, real naming commands and paired browser input |
+| Raw database | Later addition: table catalog, cells/default/null/large integers, rows, paging and guarded destructive writes | Native Raw suite, paired real input, SQLite/XML-RPC/JSON sparse-write/conflict tests |
+| Layout Editor | Later addition: authoring/config/XML/changes/resolved pages, child forms, preview/open, validation/save/readback | Native Layout API/ownership tests and real browser authoring/runtime journey |
+| Administration host | Project lock, dirty hidden editors, child ownership, linked workflows, collapse/resize/reopen and close | Native shell/menu/access tests and disposable-server browser journey |
+
+Original/current review pairs cover both palettes, EN/RU and two desktop widths.
+Current Handler/Stream pairs additionally cover 800/360-pixel layouts and pending,
+read-only, busy, error and uncertain states. The shared control kit/platform gate
+supplies the three-style and 1/1.5/2-scale input coverage. These are separate
+evidence sets, not a claim that every domain screenshot was taken at every scale.
+Old/current screenshots check original completeness and behavior; current
+Handler/Stream geometry and styles are measured strictly. Keep the common control
+styling, compact administration navigation, type table, native source editor and
+useful later features; do not restore obsolete parallel runtime layouts.
+
+Reproduce the original review with `tools/frame_admin/original_reference.py`,
+then use the existing `capture.py`, `browser_regression.mjs`, `native_regression.py`
+and `catalog.py`. The index rejects quick/stale/incomplete original evidence and
+changed archive/driver/module/native hashes. Same input must leave the same
+original/current drafts; every original process field must still be represented.
+Columns moves are separately checked through the native XML owner and a real
+browser save/readback: comments, extensions/custom attributes and selection stay
+intact. Backend writes still enforce existing ACL, revision and unknown-write
+rules; no second persistence layer or browser inside QML is introduced.
+
+Changed behavior: plain Frame checkbox captions paint in both engines, forms use
+the existing compact settings sections, Columns has explicit up/down actions,
+missing Administration Russian strings are completed, and native drawer rows
+retain keyboard focus when ListView changes its current index. EN/RU Help
+describes buffered numeric/coordinate/instance-name completion and XML/JSON Apply.
+The shared ImagePicker also uses design advances for its action-button sizing;
+this fixes a measured 3.6-pixel proportional-column shift without changing its
+selection, validation or file ownership.
+
+Completed verification on the release sources:
+
+- **464 original/current native review pairs**, plus **12** graph states checking
+  actual painted connections and **four** full Workflow pages checking left-library
+  placement. Same input produces the same drafts; original process fields remain.
+- **2,388 current QML/Vue pairs** across all **14** Administration suites:
+  **104,964** geometry, **63,046** font/color and **4,654** interior checks. All
+  reports were recaptured and their module/native/renderer/driver hashes checked.
+- **343 isolated native tests**, including the added navigation, schema connection,
+  creation, access, API and matrix paths; the changed graph helpers retain value
+  assertions and use the real popup window for touch/keyboard delivery.
+- **Nine** focused real command/transport journeys, **two** full browser application
+  journeys and **22** domain acceptance tests passed on disposable SQLite data.
+  Columns readback verifies the exact source record, native element order, comments
+  and unknown XML. Layout covers Help, all authoring pages, validation/save/open,
+  table/card/tree rendering, reuse, errors and mobile behavior.
+- All **42** mandatory platform stages passed, including input at 1/1.5/2 scales,
+  control catalogs, navigation/projects, dock/window/session lifecycle and separate
+  packages. Formatting/copy checks pass. Native smoke has no font/runtime warnings.
+- Fresh reusable-control evidence covers **3,456** pairs with zero external
+  geometry differences and **28,716** strict font/color checks. Fresh project
+  evidence passes **984** paired, **738** original, **204** color and **96** corner
+  checks. The control report also retains **3,178** text-origin/baseline/advance
+  diagnostics, up to **9.15625** logical pixels in this Windows/OpenGL/Edge run;
+  these are not passing pixel comparisons. A direct probe confirms the largest
+  case: Segoe UI 11px Russian error text has native painted content width
+  122.84375px and browser DOM/canvas width 132px (browser design advance
+  123.0625px). CSS geometricPrecision does not remove this small-font rendering
+  difference. The earlier B02 diagnostic maximum below is historical, not the
+  result of this recapture; exact glyph-width parity remains a platform limit.
+- Quality debt did not increase: archived/current structure failures **11 → 9**;
+  current lint counts remain 18 unused imports, 6,502 unqualified accesses, 111
+  missing properties, nine property overrides and one incompatible type.
+
+Open the complete evidence at `tools/frame_admin/output/index.html`; the original
+review is `output/original/index.html`. PostgreSQL, a production server/account,
+physical touch/IME hardware and system window compositor acceptance were not run.
+Pixel rasterization and these platform boundaries remain explicit; B03 is not a
+claim of a pixel-identical copy of every old layout or completion of B04–B14.
 
 ## B02 delivered: control kit and usable catalog, 2026-10-16
 

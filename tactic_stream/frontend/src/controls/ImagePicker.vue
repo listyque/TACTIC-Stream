@@ -3,7 +3,11 @@ import { t } from '../i18n.js';
 import AppButton from './AppButton.vue';
 import ItemPreview from './ItemPreview.vue';
 import { readPreviewImage } from './previewImage.js';
-import { controls } from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
+import {
+  controls,
+  textStyles
+} from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
+import { layoutTextWidth } from './typography/textMetrics.js';
 
 export default {
   components: { AppButton, ItemPreview },
@@ -39,6 +43,26 @@ export default {
   },
   methods: {
     t,
+    actionStyle(label) {
+      const sizing = controls.button;
+      const family = getComputedStyle(document.documentElement).fontFamily;
+      // Qt lays out the proportional columns with design advances, before text rasterization.
+      const text = layoutTextWidth(
+        t(label),
+        `600 ${textStyles.body}px ${family}`
+      );
+      return {
+        width:
+          Math.max(
+            sizing.minimumWidth,
+            text +
+              sizing.iconSize +
+              sizing.spacing +
+              sizing.iconPadding +
+              sizing.padding
+          ) + 'px'
+      };
+    },
     async choose(event) {
       const file = event.target.files[0];
       event.target.value = '';
@@ -100,6 +124,7 @@ export default {
         />
         <AppButton
           label="Choose image"
+          :style="actionStyle('Choose image')"
           icon="add-photo-alternate"
           :disabled="disabled || loading"
           @click="$refs.file.click()"
@@ -107,6 +132,7 @@ export default {
         <AppButton
           v-if="modelValue"
           label="Undo image selection"
+          :style="actionStyle('Undo image selection')"
           icon="undo"
           :disabled="disabled || loading"
           @click="

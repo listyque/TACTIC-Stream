@@ -181,15 +181,27 @@ export function definitionWizard(source) {
 
 export function changeDefinition(source, path, field, value) {
   const document = parse(source);
-  let node = document.documentElement;
+  let node = document.documentElement,
+    parent = null;
   for (const part of path.split('/').filter(Boolean)) {
     if (!/^\d+$/.test(part) || !children(node)[Number(part)])
       throw new Error('Definition XML path no longer exists.');
+    parent = node;
     node = children(node)[Number(part)];
   }
   if (node.tagName !== 'element')
     throw new Error('Definition XML path no longer points to a column.');
-  if (field === 'title') {
+  if (field === 'move') {
+    const offset = String(value);
+    if (!['-1', '1'].includes(offset) || !parent)
+      throw new Error('Invalid column move');
+    const elements = [...parent.children].filter(
+      (child) => child.tagName === 'element'
+    );
+    const target = elements[elements.indexOf(node) + Number(offset)];
+    if (!target) throw new Error('The column cannot be moved further.');
+    parent.insertBefore(node, offset === '1' ? target.nextSibling : target);
+  } else if (field === 'title') {
     if (!String(value).trim()) throw new Error('Column label cannot be empty.');
     node.setAttribute('title', String(value).trim());
   } else if (field === 'visible')

@@ -4,7 +4,144 @@ import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as t
 import { p as columnsEditor } from "./clipboard.js";
 import { B as definitionWizard, V as displayWidgets, z as changeDefinition } from "./App.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as form } from "./admin.form.js";
+import { t as sections } from "./sections.ui.js";
+//#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
+var initial = () => ({
+	query: "",
+	searchType: "",
+	mode: "simple",
+	path: "",
+	editing: false,
+	catalogWidth: 350,
+	columnWidth: 250,
+	columnHeight: 170,
+	confirmation: "",
+	text: {}
+});
+var pending = (ui) => Object.keys(ui.text).length > 0;
+function selected(ui, elements, name) {
+	const column = elements.find((row) => row.name === name) || elements[0];
+	return Object.assign({}, ui, {
+		text: {},
+		path: column ? column.path : ""
+	});
+}
+function completed(ui, command, model) {
+	const next = Object.assign({}, ui, { text: {} });
+	if ([
+		"select",
+		"filter",
+		"reload",
+		"discard"
+	].indexOf(command.type) >= 0) next.path = model.element.path || "";
+	if (command.type === "column") next.path = command.path;
+	if (command.type === "mode") next.mode = command.value;
+	if (command.type === "back") next.editing = false;
+	if (command.type === "change" && command.field === "move") next.path = (model.elements.find((row) => row.name === command.name) || model.element).path;
+	return next;
+}
+function transition(ui, model, event) {
+	const document = documentEvent(ui, model, event);
+	if (document) return document;
+	const next = Object.assign({}, ui), commands = [], allow = policy(model);
+	if (event.type === "applied") {
+		next.text = {};
+		return {
+			ui: next,
+			commands
+		};
+	}
+	if (model.busy || ui.confirmation) return {
+		ui: next,
+		commands
+	};
+	switch (event.type) {
+		case "split":
+			if ([
+				"catalogWidth",
+				"columnWidth",
+				"columnHeight"
+			].indexOf(event.field) >= 0) next[event.field] = event.value;
+			break;
+		case "query":
+		case "searchType":
+			if (!model.dirty && !model.uncertain) {
+				next[event.type] = event.value;
+				commands.push({ type: "filter" });
+			}
+			break;
+		case "select":
+			if (!model.dirty && !model.uncertain) {
+				next.editing = true;
+				commands.push({
+					type: "select",
+					identity: event.identity
+				});
+			}
+			break;
+		case "back":
+			commands.push({ type: "back" });
+			break;
+		case "mode":
+			if (["xml", "simple"].indexOf(event.value) >= 0) commands.push({
+				type: "mode",
+				value: event.value
+			});
+			break;
+		case "column":
+			if (model.elements.some((row) => row.path === event.path)) commands.push({
+				type: "column",
+				path: event.path
+			});
+			break;
+		case "text":
+			if (allow.editable) {
+				next.text = Object.assign({}, ui.text);
+				if (String(event.value) === String(model.element[event.field])) delete next.text[event.field];
+				else next.text[event.field] = event.value;
+			}
+			break;
+		case "commit":
+			if (allow.editable && pending(ui)) commands.push({ type: "apply" });
+			break;
+		case "field":
+			if (allow.editable) commands.push({
+				type: "change",
+				field: event.field,
+				value: event.value
+			});
+			break;
+		case "move": {
+			const index = model.elements.findIndex((row) => row.path === model.element.path);
+			if (allow.editable && !pending(ui) && (event.value === -1 || event.value === 1) && model.elements[index + event.value]) commands.push({
+				type: "change",
+				field: "move",
+				value: event.value,
+				name: model.element.name
+			});
+			break;
+		}
+		case "step":
+			if (allow.editable) commands.push({
+				type: "change",
+				field: "width",
+				value: Math.max(48, Math.min(640, (Number(ui.text.width || model.element.width) || 160) + event.value))
+			});
+			break;
+		case "xml":
+			if (allow.editable) commands.push({
+				type: "xml",
+				value: event.value
+			});
+			break;
+		default: throw Error("Unsupported Columns event: " + event.type);
+	}
+	return {
+		ui: next,
+		commands
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.ui.mjs
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {
 	source,
@@ -123,7 +260,28 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 			action: { type: "xml" }
 		}));
 		else if (model.wizard.supported && model.elements.length) {
-			children.push(label("definitionColumnsLabel", rect(12, y, (width - 24) / 2, 22), tr("Columns"), muted), label("definitionLayoutLabel", rect(width / 2, y, width / 2 - 12, 22), model.wizard.layout ? tr("Layout: ") + model.wizard.layout : model.wizard.view, muted));
+			children.push(label("definitionColumnsLabel", rect(12, y, (width - 24) / 2, 22), tr("Columns"), muted), label("definitionLayoutLabel", rect(width / 2, y, Math.max(1, width / 2 - 100), 22), model.wizard.layout ? tr("Layout: ") + model.wizard.layout : model.wizard.view, muted));
+			const selectedIndex = model.elements.findIndex((row) => row.path === model.element.path);
+			for (const [offset, title, icon, x] of [[
+				-1,
+				"Move up",
+				"arrow-up",
+				width - 88
+			], [
+				1,
+				"Move down",
+				"arrow-down",
+				width - 50
+			]]) children.push(node("Button", offset < 0 ? "definitionColumnUp" : "definitionColumnDown", rect(x, y - 4, 34, 28), {
+				text: tr(title),
+				icon,
+				iconOnly: true,
+				enabled: edit && !pending(ui) && !!model.elements[selectedIndex + offset],
+				action: {
+					type: "move",
+					value: offset
+				}
+			}));
 			y += 30;
 			const stacked = width < 720, columnWidth = stacked ? width - 24 : Math.min(ui.columnWidth, width * .4), columnHeight = stacked ? Math.min(ui.columnHeight, (bounds.height - y - 42) * .42) : bounds.height - y - 42;
 			children.push(list("definitionCatalogElementList", rect(12, y, columnWidth, columnHeight), "columns", 60));
@@ -219,7 +377,7 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 					props: { value: element.widget || "" }
 				}
 			];
-			const body = form(fields, formWidth, language, edit);
+			const body = sections(fields, formWidth, language, edit);
 			children.push(node("Scroll", "definitionCatalogForm", rect(formX, formY, width - formX - 12, Math.max(1, bounds.height - formY - 42)), {
 				contentHeight: body.height,
 				resetKey: ui.path,
@@ -266,132 +424,6 @@ function row(listNode, record, model, ui) {
 			label("definitionRowDetail_" + (record.identity || record.path), rect(38, 30, width - 48, 20), definition ? record.searchType + (record.login ? " · " + record.login : "") : record.name, muted)
 		]
 	})] };
-}
-//#endregion
-//#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
-var initial = () => ({
-	query: "",
-	searchType: "",
-	mode: "simple",
-	path: "",
-	editing: false,
-	catalogWidth: 350,
-	columnWidth: 250,
-	columnHeight: 170,
-	confirmation: "",
-	text: {}
-});
-var pending = (ui) => Object.keys(ui.text).length > 0;
-function selected(ui, elements, name) {
-	const column = elements.find((row) => row.name === name) || elements[0];
-	return Object.assign({}, ui, {
-		text: {},
-		path: column ? column.path : ""
-	});
-}
-function completed(ui, command, model) {
-	const next = Object.assign({}, ui, { text: {} });
-	if ([
-		"select",
-		"filter",
-		"reload",
-		"discard"
-	].indexOf(command.type) >= 0) next.path = model.element.path || "";
-	if (command.type === "column") next.path = command.path;
-	if (command.type === "mode") next.mode = command.value;
-	if (command.type === "back") next.editing = false;
-	return next;
-}
-function transition(ui, model, event) {
-	const document = documentEvent(ui, model, event);
-	if (document) return document;
-	const next = Object.assign({}, ui), commands = [], allow = policy(model);
-	if (event.type === "applied") {
-		next.text = {};
-		return {
-			ui: next,
-			commands
-		};
-	}
-	if (model.busy || ui.confirmation) return {
-		ui: next,
-		commands
-	};
-	switch (event.type) {
-		case "split":
-			if ([
-				"catalogWidth",
-				"columnWidth",
-				"columnHeight"
-			].indexOf(event.field) >= 0) next[event.field] = event.value;
-			break;
-		case "query":
-		case "searchType":
-			if (!model.dirty && !model.uncertain) {
-				next[event.type] = event.value;
-				commands.push({ type: "filter" });
-			}
-			break;
-		case "select":
-			if (!model.dirty && !model.uncertain) {
-				next.editing = true;
-				commands.push({
-					type: "select",
-					identity: event.identity
-				});
-			}
-			break;
-		case "back":
-			commands.push({ type: "back" });
-			break;
-		case "mode":
-			if (["xml", "simple"].indexOf(event.value) >= 0) commands.push({
-				type: "mode",
-				value: event.value
-			});
-			break;
-		case "column":
-			if (model.elements.some((row) => row.path === event.path)) commands.push({
-				type: "column",
-				path: event.path
-			});
-			break;
-		case "text":
-			if (allow.editable) {
-				next.text = Object.assign({}, ui.text);
-				if (String(event.value) === String(model.element[event.field])) delete next.text[event.field];
-				else next.text[event.field] = event.value;
-			}
-			break;
-		case "commit":
-			if (allow.editable && pending(ui)) commands.push({ type: "apply" });
-			break;
-		case "field":
-			if (allow.editable) commands.push({
-				type: "change",
-				field: event.field,
-				value: event.value
-			});
-			break;
-		case "step":
-			if (allow.editable) commands.push({
-				type: "change",
-				field: "width",
-				value: Math.max(48, Math.min(640, (Number(ui.text.width || model.element.width) || 160) + event.value))
-			});
-			break;
-		case "xml":
-			if (allow.editable) commands.push({
-				type: "xml",
-				value: event.value
-			});
-			break;
-		default: throw Error("Unsupported Columns event: " + event.type);
-	}
-	return {
-		ui: next,
-		commands
-	};
 }
 //#endregion
 //#region src/features/administration/ColumnsEditor.vue

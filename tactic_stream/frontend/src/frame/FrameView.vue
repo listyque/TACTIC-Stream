@@ -395,7 +395,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :indeterminate="!!node.mixed"
         :compact="node.compact"
         :prominent="node.prominent"
-        :label="node.text"
+        :label="node.text || node.label"
         :translate-label="false"
         :disabled="!node.enabled"
         @keydown="key($event, node)"
@@ -409,10 +409,14 @@ defineExpose({ focusControl, focusGrid, graphCommand });
           :separator-visible="false"
           :inset="0"
           ><FrameView
+            v-if="node.children?.length"
             ref="branches"
             :scene="{ nodes: node.children }"
             :interactive="false"
-        /></ItemSurface>
+          /><span v-else class="frame-checkbox-label"
+            ><span>{{ node.text }}</span></span
+          ></ItemSurface
+        >
       </AppCheckbox>
       <div
         v-else-if="node.kind === 'Switch'"

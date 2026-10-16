@@ -4,7 +4,7 @@ import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as t
 import { M as rpc } from "./clipboard.js";
 import { U as __exportAll } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as form } from "./admin.form.js";
+import { t as sections } from "./sections.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.ui.mjs
 function toolbar(model, ui, width, language) {
 	const tr = (text) => translate(text, language), actions = toolbar$1(model, ui, width, language), edit = !model.busy && !model.uncertain && model.canWrite && !ui.confirmation;
@@ -236,7 +236,7 @@ function describe(model, ui, width, height, language) {
 				});
 			}
 		}
-		const body = form(fields, w, language, policy(model).editable && !ui.confirmation);
+		const body = sections(fields, w, language, policy(model).editable && !ui.confirmation);
 		let bottom = body.height;
 		if (ui.page === "preview") {
 			if (!local) {

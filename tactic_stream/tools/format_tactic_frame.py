@@ -56,6 +56,8 @@ def main():
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/tests/{frame_control*,frame_icons,icons}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
+    command[-1] = "frontend/tests/{administration,frame_admin_state,frame_types}.mjs"
+    subprocess.run(command, cwd=ROOT, check=True)
     for pattern in [
         "frontend/src/features/help/**/*.{vue,js}",
         "tools/frame_help/*.{vue,js,html,mjs}",

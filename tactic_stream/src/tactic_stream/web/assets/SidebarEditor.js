@@ -4,7 +4,7 @@ import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as t
 import { U as sidebarRequest } from "./clipboard.js";
 import { r as row$1, t as navigate } from "./tree.ui.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as form } from "./admin.form.js";
+import { t as sections } from "./sections.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.ui.mjs
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {
 	source,
@@ -221,7 +221,7 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 				color: "secondaryText"
 			}));
 		} else {
-			const body = form(fields(model, ui, language), inner, language, edit);
+			const body = sections(fields(model, ui, language), inner, language, edit);
 			children.push(node("Scroll", "sidebarSettingsViewport", rect(12, y, width - 24, Math.max(1, bounds.height - y - 12)), {
 				contentHeight: body.height,
 				resetKey: ui.page + ":" + entry.name,

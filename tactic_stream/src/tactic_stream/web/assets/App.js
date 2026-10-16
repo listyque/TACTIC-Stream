@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/SettingRow.css","assets/clipboard.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/DuplicateSObject.css","assets/NamingEditor.js","assets/resize.js","assets/ItemPreview.js","assets/ItemPreview.css","assets/AppTextArea.js","assets/AppTextArea.css","assets/UserComboBox.js","assets/AppSearchField.js","assets/AppSearchField.css","assets/UserComboBox.css","assets/AppSplitter.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/resize.css","assets/admin.document.js","assets/admin.form.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/FileWorkspaceInspection.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/Configuration.css","assets/SearchTypes.js","assets/previewImage.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/tree.ui.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/SettingRow.css","assets/clipboard.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/DuplicateSObject.css","assets/NamingEditor.js","assets/resize.js","assets/ItemPreview.js","assets/ItemPreview.css","assets/AppTextArea.js","assets/AppTextArea.css","assets/UserComboBox.js","assets/AppSearchField.js","assets/AppSearchField.css","assets/UserComboBox.css","assets/AppSplitter.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/resize.css","assets/admin.document.js","assets/sections.ui.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/FileWorkspaceInspection.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/Configuration.css","assets/SearchTypes.js","assets/previewImage.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/tree.ui.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { $ as toRaw, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, J as markRaw, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, Q as shallowRef, R as resolveDynamicComponent, T as mergeModels, V as useModel, W as watchPostEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createCommentVNode, a as vModelCheckbox, b as createTextVNode, c as vShow, d as Fragment, et as unref, f as KeepAlive, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, n as TransitionGroup, nt as normalizeStyle, p as Teleport, q as isRef, rt as toDisplayString, s as vModelText, t as Transition, tt as normalizeClass, u as withModifiers, v as createElementBlock, w as inject, x as createVNode, y as createSlots } from "./vue.js";
 import { B as fontLineHeight, C as sessionRecords, D as t, E as asyncComponent, F as blend, G as configurationPreview, H as metrics$2, I as controls, J as savePreferencePage, O as appearance, P as saveAppearance, S as savedSessions, T as randomId, U as readableText, V as layout, W as textStyles, X as taskColumns, Y as normalizeColumns, _ as importSession, a as mobileLayout, d as clearLive, et as BusyIndicator_default, f as debugLog, g as formatEvent, h as forgetSessions, i as mobile, j as frameColors, m as exportSession, n as dockMinimumHeight, o as _sfc_main$106, p as debugSettings, q as preferences, r as dockMinimumWidth, s as tooltipDirective, t as __vitePreload, tt as _plugin_vue_export_helper_default, u as _sfc_main$107, v as levels, w as setServerDebugContext, z as fontFamily } from "./index.js";
 import { c as button, d as node, f as rect$1, l as label, n as _sfc_main$108, r as _sfc_main$109, s as translate, t as observeFrameSizes } from "./resize.js";
@@ -1892,13 +1892,21 @@ function definitionWizard(source) {
 }
 function changeDefinition(source, path, field, value) {
 	const document = parse(source);
-	let node = document.documentElement;
+	let node = document.documentElement, parent = null;
 	for (const part of path.split("/").filter(Boolean)) {
 		if (!/^\d+$/.test(part) || !children$1(node)[Number(part)]) throw new Error("Definition XML path no longer exists.");
+		parent = node;
 		node = children$1(node)[Number(part)];
 	}
 	if (node.tagName !== "element") throw new Error("Definition XML path no longer points to a column.");
-	if (field === "title") {
+	if (field === "move") {
+		const offset = String(value);
+		if (!["-1", "1"].includes(offset) || !parent) throw new Error("Invalid column move");
+		const elements = [...parent.children].filter((child) => child.tagName === "element");
+		const target = elements[elements.indexOf(node) + Number(offset)];
+		if (!target) throw new Error("The column cannot be moved further.");
+		parent.insertBefore(node, offset === "1" ? target.nextSibling : target);
+	} else if (field === "title") {
 		if (!String(value).trim()) throw new Error("Column label cannot be empty.");
 		node.setAttribute("title", String(value).trim());
 	} else if (field === "visible") node.setAttribute("hidden", value ? "false" : "true");
@@ -23044,6 +23052,14 @@ var _sfc_main$43 = {
 	}
 };
 //#endregion
+//#region src/controls/typography/textMetrics.js
+var context;
+function layoutTextWidth(text, font) {
+	context ||= document.createElement("canvas").getContext("2d");
+	context.font = font.replace(/(\d+(?:\.\d+)?)px/, (_, size) => Number(size) * 64 + "px");
+	return context.measureText(String(text)).width / 64;
+}
+//#endregion
 //#region src/controls/ImagePicker.vue
 var _sfc_main$42 = {
 	components: {
@@ -23082,6 +23098,12 @@ var _sfc_main$42 = {
 	},
 	methods: {
 		t,
+		actionStyle(label) {
+			const sizing = controls.button;
+			const family = getComputedStyle(document.documentElement).fontFamily;
+			const text = layoutTextWidth(t(label), `600 ${textStyles.body}px ${family}`);
+			return { width: Math.max(sizing.minimumWidth, text + sizing.iconSize + sizing.spacing + sizing.iconPadding + sizing.padding) + "px" };
+		},
 		async choose(event) {
 			const file = event.target.files[0];
 			event.target.value = "";
@@ -23159,20 +23181,22 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 		}, null, 40, _hoisted_3$30),
 		createVNode(_component_AppButton, {
 			label: "Choose image",
+			style: normalizeStyle($options.actionStyle("Choose image")),
 			icon: "add-photo-alternate",
 			disabled: $props.disabled || $data.loading,
 			onClick: _cache[1] || (_cache[1] = ($event) => _ctx.$refs.file.click())
-		}, null, 8, ["disabled"]),
+		}, null, 8, ["style", "disabled"]),
 		$props.modelValue ? (openBlock(), createBlock(_component_AppButton, {
 			key: 0,
 			label: "Undo image selection",
+			style: normalizeStyle($options.actionStyle("Undo image selection")),
 			icon: "undo",
 			disabled: $props.disabled || $data.loading,
 			onClick: _cache[2] || (_cache[2] = ($event) => {
 				$data.error = "";
 				_ctx.$emit("update:modelValue", null);
 			})
-		}, null, 8, ["disabled"])) : createCommentVNode("", true),
+		}, null, 8, ["style", "disabled"])) : createCommentVNode("", true),
 		$data.error ? (openBlock(), createElementBlock("p", _hoisted_4$24, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true)
 	], 512)], 4)], 8, _hoisted_1$38);
 }
@@ -23949,14 +23973,6 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
 	])], 40, _hoisted_1$36)), [[_directive_window, { kind: "project_wizard" }]]);
 }
 var ProjectCreation_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$40, [["render", _sfc_render$8]]);
-//#endregion
-//#region src/controls/typography/textMetrics.js
-var context;
-function layoutTextWidth(text, font) {
-	context ||= document.createElement("canvas").getContext("2d");
-	context.font = font.replace(/(\d+(?:\.\d+)?)px/, (_, size) => Number(size) * 64 + "px");
-	return context.measureText(String(text)).width / 64;
-}
 //#endregion
 //#region ../src/tactic_stream/shared_ui/shell/projects.ui.mjs
 var dimensions$1 = {

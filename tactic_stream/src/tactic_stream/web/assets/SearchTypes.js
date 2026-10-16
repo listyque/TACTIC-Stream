@@ -4,7 +4,7 @@ import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as t
 import { M as rpc } from "./clipboard.js";
 import { t as readPreviewImage } from "./previewImage.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as form } from "./admin.form.js";
+import { t as sections } from "./sections.ui.js";
 import { t as NamingEditor_default } from "./NamingEditor.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/search_types/search_types.fields.mjs
 var automaticFields = [
@@ -324,7 +324,7 @@ function content(model, ui, width, height, language, edit, navigate) {
 			field: "hasPipeline",
 			props: { checked: !!doc.hasPipeline }
 		});
-		const body = form(fields, width, language, edit);
+		const body = sections(fields, width, language, edit);
 		nodes.push(...body.nodes.map((row) => Object.assign({}, row, { y: row.y + y })));
 		y += body.height;
 		heading("typeImageHeading", tr("Search Type image"), tr(model.identity ? "The image belongs to the Search Type itself, not to one of its Search Objects. Saving adds the replacement to Commit Queue." : "You can choose an image now. After the Search Type is created, its preview will be sent through Commit Queue."));
@@ -360,7 +360,7 @@ function content(model, ui, width, height, language, edit, navigate) {
 			y += 170;
 		}
 		const field = fieldTypes.find((row) => row.value === ui.fieldType) || fieldTypes[0];
-		const body = form([
+		const body = sections([
 			{
 				kind: "Heading",
 				id: "typeAddFieldHeading",

@@ -764,6 +764,51 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"A view with this name already exists": "Представление с таким именем уже существует",
+	"Actions on hover": "Действия при наведении",
+	"Applies to every process with this name in the project, including other pipelines.": "Действует для всех процессов с этим именем в проекте, включая другие pipeline.",
+	"Apply or discard the pending text before continuing": "Примените или сбросьте введённый текст перед продолжением",
+	"Attributes must be a JSON object with string values": "Атрибуты должны быть объектом JSON со строковыми значениями",
+	"Checking objects and dependencies…": "Проверка объектов и зависимостей…",
+	"Choose which actual task date to set.": "Выберите, какую фактическую дату задачи изменить.",
+	"Conditions are checked as XML before saving.": "Перед сохранением проверяется XML условий.",
+	"Database table unavailable": "Таблица базы данных недоступна",
+	"Enter a whole number within the allowed range": "Введите целое число в допустимом диапазоне",
+	"Explain why this rule is needed.": "Объясните назначение этого правила.",
+	"Filter the source task status, or listen to any status.": "Выберите исходный статус задачи или отслеживайте любой статус.",
+	"Invalid JSON. Check quotes, commas and braces.": "Некорректный JSON. Проверьте кавычки, запятые и скобки.",
+	"Invalid layout template": "Некорректный шаблон компоновки",
+	"Invalid view name": "Некорректное имя представления",
+	"Mobile actions": "Мобильные действия",
+	"Native action parameters. TACTIC expressions are supported by notifications.": "Штатные параметры действия. В уведомлениях поддерживаются выражения TACTIC.",
+	"No Search Objects": "Нет Search Objects",
+	"Node positions must be finite": "Координаты узлов должны быть конечными числами",
+	"Notification message with optional TACTIC expressions.": "Текст уведомления; можно использовать выражения TACTIC.",
+	"Object information": "Сведения об объекте",
+	"Process settings must be a JSON object": "Параметры процесса должны быть объектом JSON",
+	"Related and child objects": "Связанные и дочерние объекты",
+	"Save or discard changes before continuing": "Сохраните или сбросьте изменения перед продолжением",
+	"Save the workflow before editing process dependencies": "Сохраните рабочий процесс перед редактированием зависимостей",
+	"Schema changed on the server. Reload before deleting a Search Type.": "Схема изменилась на сервере. Обновите её перед удалением Search Type.",
+	"Select a SObject layout configuration": "Выберите конфигурацию компоновки SObject",
+	"Source status": "Исходный статус",
+	"Tasks and notes": "Задачи и заметки",
+	"The database table is absent. No table is created by reading columns.": "Таблица базы данных отсутствует. Чтение колонок не создаёт таблицу.",
+	"The deletion result is unknown. Close this review and reload the schema before trying again.": "Результат удаления неизвестен. Закройте это окно и обновите схему перед повторной попыткой.",
+	"The native event template replaces the subject and body when saved.": "При сохранении штатный шаблон события заменит тему и текст.",
+	"The native event that starts this rule.": "Штатное событие, запускающее это правило.",
+	"The native notification handler may include a login ticket.": "Штатный обработчик уведомлений может включать тикет входа.",
+	"The readable name of this rule.": "Понятное имя этого правила.",
+	"This process is referenced by a connection. Add the missing process or remove its connections before saving.": "На этот процесс ссылается связь. Добавьте отсутствующий процесс или удалите его связи перед сохранением.",
+	"Use a lowercase table name with letters, digits and underscores": "Используйте строчные латинские буквы, цифры и подчёркивания в имени таблицы",
+	"Use inherited": "Наследовать",
+	Assignment: "Назначение",
+	Body: "Текст",
+	Depth: "Глубина",
+	Editor: "Редактор",
+	Select: "Выбрать",
+	"Invalid column move": "Некорректное перемещение колонки",
+	"The column cannot be moved further.": "Колонку нельзя переместить дальше.",
 	Guide: "Руководство",
 	Reference: "Справочник",
 	"Help topics": "Разделы справки",
@@ -2462,7 +2507,7 @@ var _hoisted_7$1 = {
 	class: "code-line-numbers",
 	"aria-hidden": "true"
 };
-var _hoisted_8 = { class: "code-input-area" };
+var _hoisted_8$1 = { class: "code-input-area" };
 var _hoisted_9 = ["readonly", "aria-label"];
 var _hoisted_10 = ["aria-label"];
 var _hoisted_11 = { key: 0 };
@@ -3032,7 +3077,7 @@ var _sfc_main$3 = {
 				clipboardError.value ? (openBlock(), createElementBlock("p", _hoisted_5$1, toDisplayString(unref(t)(clipboardError.value)), 1)) : createCommentVNode("", true),
 				createBaseVNode("div", _hoisted_6$1, [
 					createBaseVNode("div", _hoisted_7$1, [createBaseVNode("pre", { style: normalizeStyle({ transform: `translateY(${-scroll.value.y}px)` }) }, toDisplayString(Array.from({ length: model.value.split("\n").length }, (_, i) => i + 1).join("\n")), 5)]),
-					createBaseVNode("div", _hoisted_8, [createBaseVNode("pre", {
+					createBaseVNode("div", _hoisted_8$1, [createBaseVNode("pre", {
 						class: "code-highlight",
 						"aria-hidden": "true",
 						style: normalizeStyle({ transform: `translate(${-scroll.value.x}px, ${-scroll.value.y}px)` })
@@ -3489,16 +3534,20 @@ var _hoisted_2 = [
 	"aria-level",
 	"title"
 ];
-var _hoisted_3 = ["data-frame"];
-var _hoisted_4 = [
+var _hoisted_3 = {
+	key: 1,
+	class: "frame-checkbox-label"
+};
+var _hoisted_4 = ["data-frame"];
+var _hoisted_5 = [
 	"data-frame",
 	"role",
 	"aria-label",
 	"onScroll"
 ];
-var _hoisted_5 = ["data-frame"];
 var _hoisted_6 = ["data-frame"];
 var _hoisted_7 = ["data-frame"];
+var _hoisted_8 = ["data-frame"];
 var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 	__name: "FrameView",
 	props: {
@@ -3861,7 +3910,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					indeterminate: !!node.mixed,
 					compact: node.compact,
 					prominent: node.prominent,
-					label: node.text,
+					label: node.text || node.label,
 					"translate-label": false,
 					disabled: !node.enabled,
 					onKeydown: ($event) => key($event, node),
@@ -3875,13 +3924,14 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"separator-visible": false,
 						inset: 0
 					}, {
-						default: withCtx(() => [createVNode(_component_FrameView, {
+						default: withCtx(() => [node.children?.length ? (openBlock(), createBlock(_component_FrameView, {
+							key: 0,
 							ref_for: true,
 							ref_key: "branches",
 							ref: branches,
 							scene: { nodes: node.children },
 							interactive: false
-						}, null, 8, ["scene"])]),
+						}, null, 8, ["scene"])) : (openBlock(), createElementBlock("span", _hoisted_3, [createBaseVNode("span", null, toDisplayString(node.text), 1)]))]),
 						_: 2
 					}, 1032, [
 						"selected",
@@ -3915,7 +3965,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"disabled",
 					"onUpdate:modelValue"
-				])], 12, _hoisted_3)) : node.kind === "Field" ? (openBlock(), createBlock(_sfc_main$10, {
+				])], 12, _hoisted_4)) : node.kind === "Field" ? (openBlock(), createBlock(_sfc_main$10, {
 					key: 7,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node frame-field", { "table-cell": node.tableCell }]),
@@ -4057,7 +4107,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"describe-cell",
 						"interactive"
 					]);
-				}), 128))], 4)], 44, _hoisted_4)) : node.kind === "Scroll" ? (openBlock(), createElementBlock("div", {
+				}), 128))], 4)], 44, _hoisted_5)) : node.kind === "Scroll" ? (openBlock(), createElementBlock("div", {
 					key: node.id + ":" + node.resetKey,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node frame-scroll", { "frame-scroll-horizontal": node.contentWidth > node.width }]),
@@ -4085,7 +4135,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"describe-row",
 					"describe-cell",
 					"interactive"
-				])], 14, _hoisted_5)) : node.kind === "Choice" ? (openBlock(), createBlock(_sfc_main$9, {
+				])], 14, _hoisted_6)) : node.kind === "Choice" ? (openBlock(), createBlock(_sfc_main$9, {
 					key: 12,
 					"data-frame": node.id,
 					class: "frame-node frame-choice",
@@ -4124,7 +4174,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"tactic-compatible-only",
 					"disabled",
 					"onUpdate:modelValue"
-				])], 12, _hoisted_6)) : node.kind === "ColorChoice" ? (openBlock(), createElementBlock("div", {
+				])], 12, _hoisted_7)) : node.kind === "ColorChoice" ? (openBlock(), createElementBlock("div", {
 					key: 14,
 					"data-frame": node.id,
 					class: "frame-node frame-color-choice",
@@ -4139,7 +4189,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"disabled",
 					"onUpdate:modelValue"
-				])], 12, _hoisted_7)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$17, {
+				])], 12, _hoisted_8)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$17, {
 					key: 15,
 					"data-frame": node.id,
 					class: "frame-node frame-splitter",

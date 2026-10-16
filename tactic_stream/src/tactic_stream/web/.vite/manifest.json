@@ -192,7 +192,7 @@
       "_clipboard.js",
       "src/App.vue",
       "_admin.document.js",
-      "_admin.form.js"
+      "_sections.ui.js"
     ]
   },
   "_RecordForm.css": {
@@ -253,14 +253,6 @@
       "_resize.js"
     ]
   },
-  "_admin.form.js": {
-    "file": "assets/admin.form.js",
-    "name": "admin.form",
-    "imports": [
-      "_resize.js",
-      "_admin.document.js"
-    ]
-  },
   "_clipboard.css": {
     "file": "assets/clipboard.css",
     "src": "_clipboard.css"
@@ -295,7 +287,7 @@
       "index.html",
       "_resize.js",
       "_admin.document.js",
-      "_admin.form.js"
+      "_sections.ui.js"
     ]
   },
   "_groups.ui.js": {
@@ -347,6 +339,14 @@
     ],
     "css": [
       "assets/resize.css"
+    ]
+  },
+  "_sections.ui.js": {
+    "file": "assets/sections.ui.js",
+    "name": "sections.ui",
+    "imports": [
+      "index.html",
+      "_resize.js"
     ]
   },
   "_tree.ui.js": {
@@ -481,7 +481,7 @@
       "_clipboard.js",
       "src/App.vue",
       "_admin.document.js",
-      "_admin.form.js"
+      "_sections.ui.js"
     ]
   },
   "src/features/administration/LayoutEditor.vue": {
@@ -496,7 +496,7 @@
       "_clipboard.js",
       "src/App.vue",
       "_admin.document.js",
-      "_admin.form.js"
+      "_sections.ui.js"
     ]
   },
   "src/features/administration/RawDatabase.vue": {
@@ -542,7 +542,7 @@
       "_clipboard.js",
       "_previewImage.js",
       "_admin.document.js",
-      "_admin.form.js",
+      "_sections.ui.js",
       "_NamingEditor.js"
     ]
   },
@@ -597,7 +597,7 @@
       "_clipboard.js",
       "_tree.ui.js",
       "_admin.document.js",
-      "_admin.form.js"
+      "_sections.ui.js"
     ]
   },
   "src/features/administration/WorkflowEditor.vue": {
@@ -611,7 +611,7 @@
       "_resize.js",
       "_clipboard.js",
       "_admin.document.js",
-      "_admin.form.js",
+      "_sections.ui.js",
       "_graphFrame.js"
     ],
     "css": [

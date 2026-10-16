@@ -39,6 +39,14 @@
     ]
   },
   {
+    "phase": "moved-down",
+    "actions": [{"type": "click", "id": "definitionColumnDown"}]
+  },
+  {
+    "phase": "moved-up",
+    "actions": [{"type": "click", "id": "definitionColumnUp"}]
+  },
+  {
     "phase": "widget",
     "actions": [
       {

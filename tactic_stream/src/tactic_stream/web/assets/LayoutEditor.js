@@ -4,7 +4,7 @@ import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as t
 import { M as rpc, Y as widgetConfiguration, j as resultItems } from "./clipboard.js";
 import { C as serialize, E as widgets, S as roles, T as variants, b as describe$2, v as actions, w as template, x as edit, y as binding } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as form } from "./admin.form.js";
+import { t as sections } from "./sections.ui.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
@@ -1239,7 +1239,7 @@ function describe(model, ui, width, height, language) {
 				}
 			});
 		}
-		const body = form(fields, width - 16, language, edit);
+		const body = sections(fields, width - 16, language, edit);
 		nodes.push(node("Scroll", "layoutConfigurationScroll", rect(0, y, width, h), {
 			contentHeight: body.height,
 			scrollbarId: "layoutConfigurationScrollBar",
@@ -1344,7 +1344,7 @@ function describe(model, ui, width, height, language) {
 		}));
 	}
 	if (wide || ui.panel === "settings") {
-		const w = properties, x = wide ? width - w : 0, fields = propertyFields(model, ui, language), body = form(fields, w - 40, language, edit && !pending(ui));
+		const w = properties, x = wide ? width - w : 0, fields = propertyFields(model, ui, language), body = sections(fields, w - 40, language, edit && !pending(ui));
 		if (selected) {
 			body.nodes.push(button("layoutRemoveElement", rect(0, body.height, w - 40, 38), tr("Remove element"), "delete", { type: "remove" }, edit && !pending(ui)));
 			body.height += 46;

@@ -160,6 +160,28 @@
   --check-box-indicator: var(--check-box-compact-indicator);
   --check-box-icon-size: var(--check-box-compact-icon-size);
 }
+.frame-checkbox-label {
+  position: absolute;
+  inset: 0 0 0
+    calc(
+      var(--frame-indicator-x) + var(--check-box-indicator) +
+        var(--check-box-spacing)
+    );
+  display: flex;
+  align-items: center;
+}
+.frame-checkbox-label > span {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.frame-checkbox.compact .frame-checkbox-label {
+  left: calc(
+    var(--frame-indicator-x) + var(--check-box-indicator) +
+      var(--check-box-compact-spacing)
+  );
+}
 .frame-field.app-text-field {
   padding-inline: 11px;
 }

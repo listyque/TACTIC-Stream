@@ -496,6 +496,16 @@ export async function exerciseVariants(page) {
   await page.evaluate(() =>
     window.controlVariants.configure({ id: 'image-picker', width: 900 })
   );
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForFunction(() => {
+    const layout = document.querySelector(
+      '[data-frame="sample"] .image-picker-layout'
+    );
+    return (
+      layout &&
+      parseFloat(layout.style.getPropertyValue('--image-actions-width')) > 1
+    );
+  });
   await page.evaluate(
     () =>
       new Promise((resolve) =>
@@ -508,7 +518,8 @@ export async function exerciseVariants(page) {
   // Current native EN fixture at 900 px places this button at x=419.
   assert(
     Math.abs(chooseImage.x - 419) < 1,
-    'Image actions retain native proportional column placement'
+    'Image actions retain native proportional column placement: ' +
+      JSON.stringify(chooseImage)
   );
   await page.setViewportSize({ width: 360, height: 520 });
   await configure('button');

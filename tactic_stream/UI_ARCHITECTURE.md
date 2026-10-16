@@ -44,14 +44,23 @@ Design-advance measurement resolves the former 48 project metadata-bound
 differences; all 984 paired project checks pass. The expanded report retains
 428 text-metric diagnostics, at most 1.046875 logical px here, separately from
 strict geometry/style checks. Physical IME/touch, rasterization and compositor
-acceptance remain explicit. The next batch is B03, original Administration
-fidelity. Empty search contents remain B06.
+acceptance remain explicit. B03 now closes the original Administration review:
+464 original/current pairs, 2,388 current Handler/Stream pairs, 343 native tests,
+real command/save/readback journeys and 42 passing platform stages. The release
+uses one existing compact form composition, restores plain checkbox captions and
+column ordering, completes Russian diagnostics and retains native drawer focus.
+Handler 0.6.0.107 and Stream 0.112.156 remain independent products. Detailed scope,
+intentional layout updates, original archive warning and verification limits are
+in the B03 checkpoint of the plan. The next batch is B04, support/identity and
+connection lifecycle. Empty search contents remain B06.
 
 The previous Administration reports below compared two Frame implementations.
-They do not establish fidelity to the original Handler. That broader parity
-claim is withdrawn: original graph/form regressions are being repaired, and
-reports must be recaptured after these changes. Shared theme values and main
-toolbar geometry now have a separate archived-Handler comparison.
+They remain historical checkpoints. B03 adds the independently archived original
+comparison and actual mutation acceptance; current reports must still be
+recaptured after source changes. Original/current review pairs and strict current
+Handler/Stream geometry are separate evidence, not blanket pixel parity with the
+old administration layout. The live fourteen-batch plan is the status authority
+for the historical phase descriptions below.
 
 Phase 1 supplies a verified subset of the control contract: state paint, metrics, strict local
 calendar logic, DateChoice/UserChoice, anchored icon selection and common tree

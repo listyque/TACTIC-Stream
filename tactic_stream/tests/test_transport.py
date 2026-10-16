@@ -3859,18 +3859,25 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         proxy.insert(auth, 'sthpw/login', dict(login='artist', display_name='Artist', email='artist@example.test'))
         proxy.insert(auth, 'sthpw/pipeline', dict(code='capture/admin_capture', name='Assets', search_type='capture/assets',
             project_code='capture', pipeline='<pipeline><process name="model" type="manual" xpos="20" ypos="30" color="#6688aa"/><process name="review" type="approval" xpos="350" ypos="30"/><connect from="model" to="review"/></pipeline>'))
-        proxy.insert(auth, 'config/widget_config', dict(search_type='capture/assets', view='table',
-            config='<config><table><element name="code" title="Code"><display widget="text"/></element><element name="name" title="Name"><display widget="text"/></element></table></config>'))
+        columns_record = proxy.insert(auth, 'config/widget_config', dict(search_type='capture/assets', view='table',
+            config='<config custom="kept"><!--keep reorder--><table><element name="code" title="Code"><display widget="text"/></element><element name="name" title="Name"><display widget="text"/></element></table><extension value="kept"/></config>'))
         sidebar = proxy.insert(auth, 'config/widget_config', dict(search_type='SideBarWdg', view='definition',
             config='<config><definition><element name="my_tasks" title="My tasks"><display class="LinkWdg"/><search_type>capture/assets</search_type><search_view>link_search:ready:capture/assets</search_view></element></definition></config>'))
         self.addCleanup(lambda: proxy.delete_sobject(auth, sidebar['__search_key__']))
         sidebar_tabs = proxy.insert(auth, 'config/widget_config', dict(search_type='SideBarWdg', view='tactic_handler', config='<config><tactic_handler><element name="my_tasks"/></tactic_handler></config>'))
         self.addCleanup(lambda: proxy.delete_sobject(auth, sidebar_tabs['__search_key__']))
         result = subprocess.run([shutil.which('node'), str(ROOT / 'frontend/tests/administration.mjs'), self.url,
-            str(ROOT / '.screenshots/administration-current')], cwd=ROOT / 'frontend',
+            str(ROOT / '.screenshots/administration-current'), str(columns_record['id'])], cwd=ROOT / 'frontend',
             env=dict(os.environ, PLAYWRIGHT_BROWSERS_PATH=str(ROOT / '.browser-cache')),
             capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=90)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+        saved = ast.literal_eval(proxy.query(auth, 'config/widget_config', [('search_type', 'capture/assets'), ('view', 'table')]))
+        saved = [row for row in saved if row['code'] == columns_record['code']]
+        self.assertEqual(len(saved), 1)
+        self.assertEqual([element.get('name') for element in ET.fromstring(saved[0]['config']).findall('table/element')], ['name', 'code'])
+        for fragment in ('<!--keep reorder-->', 'custom="kept"', '<extension value="kept"'):
+            self.assertIn(fragment, saved[0]['config'])
 
     def test_configuration_in_chromium(self):
         proxy = self.proxy(); auth = self.ticket(proxy)
