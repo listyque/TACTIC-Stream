@@ -17,12 +17,14 @@ import AppSplitter from '../controls/AppSplitter.vue';
 import AppIcon from '../controls/AppIcon.vue';
 import ItemPreview from '../controls/ItemPreview.vue';
 import ItemSurface from '../controls/ItemSurface.vue';
+import SummaryChip from '../controls/SummaryChip.vue';
 import {
   colors,
   virtualRange,
   validateScene,
   recordIndex,
-  listRowHeight
+  listRowHeight,
+  revealListOffset
 } from '../../../src/tactic_stream/shared_ui/core/frame.mjs';
 import './frame.css';
 import '../controls/panelChrome.css';
@@ -255,7 +257,34 @@ function graphCommand(id, command) {
   }
   return null;
 }
-defineExpose({ focusControl, focusGrid, graphCommand });
+async function focusListRow(id, index, controlId) {
+  const definition = nodes.value.find(
+    (node) => node.id === id && node.kind === 'List'
+  );
+  if (definition) {
+    const rows = props.models[definition.source] || [];
+    const list = host.value?.querySelector(
+      ':scope > [data-frame="' + CSS.escape(id) + '"]'
+    );
+    if (!list || index < 0 || index >= rows.length) return false;
+    const offset = revealListOffset(
+      list.scrollTop,
+      index,
+      list.clientHeight,
+      rows.length,
+      definition.rowHeight,
+      definition.rowGap ?? 4
+    );
+    list.scrollTop = offset;
+    scroll.value = { ...scroll.value, [id]: offset };
+    await nextTick();
+    return focusControl(controlId);
+  }
+  for (const branch of branches.value || [])
+    if (await branch?.focusListRow?.(id, index, controlId)) return true;
+  return false;
+}
+defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
 </script>
 
 <template>
@@ -278,6 +307,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
           })
         "
         :role="node.role"
+        :aria-label="node.label"
         ><FrameView
           ref="branches"
           :scene="{ nodes: node.children }"
@@ -362,7 +392,11 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :role="node.role"
         :aria-level="node.role === 'treeitem' ? node.level : undefined"
         :aria-expanded="node.role === 'treeitem' ? node.expanded : undefined"
-        :aria-selected="node.role === 'treeitem' ? !!node.selected : undefined"
+        :aria-selected="
+          ['treeitem', 'option'].includes(node.role)
+            ? !!node.selected
+            : undefined
+        "
         :aria-checked="node.role === 'checkbox' ? node.checked : undefined"
         @keydown="key($event, node)"
         @click="send(node.action)"
@@ -447,7 +481,10 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :readonly="node.readOnly"
         :maxlength="node.maxLength"
         :type="node.password ? 'password' : 'text'"
-        :autocomplete="node.password ? 'new-password' : 'off'"
+        :autocomplete="
+          node.autocomplete || (node.password ? 'new-password' : 'off')
+        "
+        :name="node.name"
         :inputmode="node.inputMode"
         :disabled="!node.enabled"
         @keydown="key($event, node)"
@@ -464,6 +501,7 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         "
         :role="node.role"
         :class="{ 'frame-notice': node.notice }"
+        :wrap="node.wrap === false ? 'off' : undefined"
         :error-state="!!node.error"
         :style="style(node)"
         :label="node.label"
@@ -498,6 +536,22 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :selected="node.selected"
         :loading="node.loading"
         :fill-mode="node.fit || 'cover'"
+      />
+      <SummaryChip
+        v-else-if="node.kind === 'SummaryChip'"
+        :data-frame="node.id"
+        class="frame-node frame-summary-chip"
+        :style="style(node)"
+        :label="node.text"
+        :count="node.count || 0"
+        :accent="color(node.accent || 'action')"
+        :icon="node.icon"
+        :compact="node.compact"
+        :clickable="!!node.action"
+        :disabled="!node.enabled"
+        :show-count="node.showCount !== false"
+        :show-dot="node.showDot !== false"
+        @click="send(node.action)"
       />
       <div
         v-else-if="node.kind === 'List'"

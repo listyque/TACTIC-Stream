@@ -10,7 +10,7 @@ import { l as escapeHtml, n as browserLink, u as extractSkeys } from "./links.js
 import { t as _sfc_main$9 } from "./AppTextArea.js";
 import { t as AppSearchField_default } from "./AppSearchField.js";
 import { t as _sfc_main$10 } from "./AppMenuItem.js";
-import { c as messageDate, h as _sfc_main$11, j as _sfc_main$13, n as MarkdownItCallable, s as _sfc_main$12 } from "./App.js";
+import { A as _sfc_main$13, c as messageDate, h as _sfc_main$11, n as MarkdownItCallable, s as _sfc_main$12 } from "./App.js";
 //#region src/features/knowledge/markdown.js
 var safeUrl = (value) => /^(https?:\/\/|ftp:\/\/|mailto:|skey:\/\/|tactic-search:\/\/|\/assets\/|#)/i.test(value || "") && !/[\u0000-\u001f]/.test(value);
 var parser = new MarkdownItCallable({

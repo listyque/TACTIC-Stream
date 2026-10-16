@@ -11,12 +11,13 @@ import { t as _sfc_main$14 } from "./AppCheckbox.js";
 import { t as ItemPreview_default } from "./ItemPreview.js";
 import { t as _sfc_main$15 } from "./AppTextArea.js";
 import { t as _sfc_main$16 } from "./UserComboBox.js";
-import { t as _sfc_main$17 } from "./AppSplitter.js";
-import { t as _sfc_main$18 } from "./ItemSurface.js";
+import { t as _sfc_main$17 } from "./SummaryChip.js";
+import { t as _sfc_main$18 } from "./AppSplitter.js";
+import { t as _sfc_main$19 } from "./ItemSurface.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
 /** @typedef {{x:number, y:number, width:number, height:number}} Bounds Logical pixels. */
 /** @typedef {{type:string, [key:string]:unknown}} Action UI event or adapter command. */
-/** @typedef {'Box'|'Label'|'Icon'|'Button'|'Action'|'CheckBox'|'Field'|'Area'|'Preview'|'List'|'Scroll'|'Choice'|'Grid'|'IconChoice'|'Splitter'|'Switch'|'Graph'|'View'|'ColorChoice'|'Code'|'DateChoice'|'UserChoice'} ControlKind */
+/** @typedef {'Box'|'Label'|'Icon'|'Button'|'Action'|'CheckBox'|'Field'|'Area'|'Preview'|'List'|'Scroll'|'Choice'|'Grid'|'IconChoice'|'Splitter'|'Switch'|'Graph'|'View'|'ColorChoice'|'Code'|'DateChoice'|'UserChoice'|'SummaryChip'} ControlKind */
 /** @typedef {Bounds & {kind:ControlKind, id:string, children:FrameNode[], fontRole:keyof typeof textStyles, fontSize:number, action:Action|null, [key:string]:unknown}} FrameNode */
 /** @typedef {{nodes:FrameNode[]}} Scene */
 var controlKinds = Object.freeze([
@@ -41,7 +42,8 @@ var controlKinds = Object.freeze([
 	"Graph",
 	"View",
 	"ColorChoice",
-	"Code"
+	"Code",
+	"SummaryChip"
 ]);
 function rect(x, y, width, height) {
 	return {
@@ -50,6 +52,11 @@ function rect(x, y, width, height) {
 		width: Math.max(0, width),
 		height: Math.max(0, height)
 	};
+}
+function revealListOffset(offset, index, height, count, rowHeight, rowGap = 0) {
+	const top = index * rowHeight, bottom = top + rowHeight - rowGap;
+	const desired = top < offset ? top : bottom > offset + height ? bottom - height : offset;
+	return Math.max(0, Math.min(desired, Math.max(0, count * rowHeight - rowGap - height)));
 }
 function label(id, bounds, text, extra) {
 	return node("Label", id, bounds, Object.assign({ text }, extra || {}));
@@ -764,6 +771,167 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"A connection to the TACTIC server could not be established. Check the server address, network connection, VPN or proxy, and make sure the server is running. Then try again.": "Не удалось установить соединение с сервером TACTIC. Проверьте адрес сервера, подключение к сети, VPN или прокси и убедитесь, что сервер запущен. Затем повторите попытку.",
+	"ACCOUNT SETTINGS": "НАСТРОЙКИ УЧЁТНОЙ ЗАПИСИ",
+	"API transport": "Транспорт API",
+	"Access level is shared by every member of the group. Empty uses TACTIC's Low default.": "Уровень доступа применяется ко всем участникам группы. Пустое значение использует стандартный уровень TACTIC Low.",
+	"Account status": "Статус учётной записи",
+	"Action / window": "Действие / окно",
+	"Active preset": "Активен",
+	Activity: "Активность",
+	"Activity is unavailable": "Активность недоступна",
+	"Add preset": "Добавить пресет",
+	"Add user": "Добавить пользователя",
+	"Additional information": "Дополнительная информация",
+	"Application error": "Ошибка приложения",
+	"Application updates": "Обновления приложения",
+	Approved: "Одобрено",
+	"Assertion error": "Ошибка проверки",
+	"Attribute error": "Ошибка атрибута",
+	"Authentication error": "Ошибка авторизации",
+	"Automatic installation requires a portable build": "Автоматическая установка доступна только в портативной сборке",
+	"Available updates": "Доступные обновления",
+	"BY PROCESS": "ПО ПРОЦЕССАМ",
+	"BY STATUS": "ПО СТАТУСАМ",
+	"Browser frame timings bound a paint opportunity using animation callbacks. They do not confirm GPU presentation. Handler time for asynchronous operations includes waiting; details show the measured phases.": "Браузер оценивает возможность отрисовки по animation callbacks, а не показ кадра GPU. Время обработчика асинхронной операции включает ожидание; измеренные этапы указаны в подробностях.",
+	"Change avatar": "Изменить аватар",
+	Changelog: "История изменений",
+	"Check TACTIC update snapshots": "Проверить снапшоты обновлений TACTIC",
+	"Choose a preset on the left and edit its connection and routing settings.": "Выберите пресет слева и настройте его подключение и маршрутизацию.",
+	"Clear measurements": "Очистить замеры",
+	"Clear session": "Очистить сессию",
+	"Completed tasks": "Завершённые",
+	"Configure an update sObject in Server configuration": "Укажите sObject обновлений в настройках сервера",
+	"Connection presets": "Пресеты подключения",
+	"Connection refused": "В подключении отказано",
+	"Connection timeout": "Истекло время ожидания подключения",
+	Contact: "Контакт",
+	"Copy event": "Копировать событие",
+	"Copy measurements": "Копировать замеры",
+	"Copy runtime command": "Копировать команду выполнения",
+	"Copy stacktrace": "Копировать стек вызовов",
+	"Create archive": "Создать архив",
+	"Create update": "Создать обновление",
+	"Database connection error": "Ошибка подключения к базе данных",
+	"Database query error": "Ошибка запроса к базе данных",
+	"Debug session": "Сессия отладки",
+	"Decrease value": "Уменьшить значение",
+	Dismiss: "Закрыть",
+	"Download debug session": "Скачать сессию отладки",
+	"Due this week": "Срок на этой неделе",
+	"Edit user profile": "Изменить профиль",
+	"Event #{id}": "Событие №{id}",
+	"Event details": "Параметры события",
+	"FULL LOG": "ВЕСЬ ЖУРНАЛ",
+	"File not found": "Файл не найден",
+	"First frame": "Первый кадр",
+	"GROUPS AND ROLES": "ГРУППЫ И РОЛИ",
+	"Generate ticket": "Создать тикет",
+	"Generating…": "Генерация…",
+	Handler: "Обработка",
+	"Hide stacktrace": "Скрыть стек вызовов",
+	High: "Высокий",
+	"Import error": "Ошибка импорта",
+	Incomplete: "Незавершённые",
+	"Increase value": "Увеличить значение",
+	"Index error": "Ошибка индекса",
+	"Install selected version": "Установить выбранную версию",
+	"Interface error": "Ошибка интерфейса",
+	"Loading user profile…": "Загрузка профиля…",
+	Logged: "Записано",
+	Low: "Низкий",
+	"Measurement details": "Детали измерения",
+	Message: "Сообщение",
+	Minimum: "Минимальный",
+	"Missing data": "Отсутствуют данные",
+	"New password — leave empty to keep current": "Новый пароль — оставьте пустым, чтобы не менять",
+	"New preset": "Новый пресет",
+	"No account saved": "Учётная запись не сохранена",
+	"No assigned tasks in the current project": "В текущем проекте нет назначенных задач",
+	"No groups or roles returned by TACTIC": "TACTIC не вернул группы или роли",
+	"No matching events": "Нет подходящих событий",
+	"No measurements yet. Resume measurements and interact with the application.": "Измерений пока нет. Начните измерения и выполните действия в приложении.",
+	"No recent activity": "Нет недавней активности",
+	"No release ZIP snapshots found": "ZIP-снапшоты релизов не найдены",
+	"No ticket": "Нет тикета",
+	Offline: "Не в сети",
+	Online: "В сети",
+	"Open Debug Log": "Открыть журнал отладки",
+	"Open Task Manager": "Открыть менеджер задач",
+	"Open full activity": "Открыть всю активность",
+	"Open saved debug session": "Открыть сохраненную отладочную сессию",
+	"Operating system error": "Ошибка операционной системы",
+	Overdue: "Просрочено",
+	"PROJECT TASKS": "ЗАДАЧИ ПРОЕКТА",
+	"Pause measurements": "Приостановить замеры",
+	"Permission error": "Ошибка доступа",
+	Presets: "Пресеты",
+	"Project error": "Ошибка проекта",
+	"Protocol error": "Ошибка протокола",
+	"Proxy login": "Логин прокси",
+	"Proxy password": "Пароль прокси",
+	"Proxy server": "Прокси-сервер",
+	"RECENT ACTIVITY": "НЕДАВНЯЯ АКТИВНОСТЬ",
+	"Ready frame": "Кадр результата",
+	"Refresh profile": "Обновить профиль",
+	"Resize user directory": "Изменить ширину каталога пользователей",
+	"Resume measurements": "Продолжить замеры",
+	"Return to live session": "Вернуться к текущей сессии",
+	"Runtime command": "Команда выполнения",
+	"Runtime error": "Ошибка выполнения",
+	"Samples: {count} · Frames over 50 ms: {overBudget} · p95: {p95} · Maximum: {maximum}": "Замеров: {count} · Кадров дольше 50 мс: {overBudget} · p95: {p95} · Максимум: {maximum}",
+	"Search debug log": "Поиск в журнале отладки",
+	"Search log…": "Поиск в журнале…",
+	"Search tab": "Поисковая вкладка",
+	"Select a measurement for details": "Выберите замер для просмотра подробностей",
+	"Select an event to inspect its message, runtime command and stacktrace.": "Выберите событие, чтобы посмотреть сообщение, команду выполнения и стек вызовов.",
+	Server: "Сервер",
+	"Server address": "Адрес сервера",
+	"Server default (Low)": "Серверный стандарт (Low)",
+	"Show less": "Показать меньше",
+	"Show more": "Показать подробнее",
+	"Show stacktrace": "Показать стек вызовов",
+	"Show users": "Показать пользователей",
+	"Sign In": "Войти",
+	"Sign in": "Войти",
+	"Sign in to TACTIC": "Вход в TACTIC",
+	"Sign out": "Выйти",
+	"Sign-in is changed only through Generate ticket; the preset editor never asks for a TACTIC password.": "Вход меняется только через «Создать билет»; редактор пресетов не запрашивает пароль TACTIC.",
+	"Signing in…": "Входим…",
+	"Site name": "Имя сайта",
+	Sources: "Источники",
+	Stacktrace: "Стек вызовов",
+	"Status unavailable": "Статус недоступен",
+	"Stored account": "Сохранённая учётная запись",
+	"TACTIC TEAM Mode (local repository)": "Режим TACTIC TEAM (локальный репозиторий)",
+	"THIS WEEK": "ЭТА НЕДЕЛЯ",
+	"Target: a visible response within 50 ms. Input measures the next frame of the clicked window; controller rows measure work and its ready frame. A frame is not proof that asynchronous loading has finished.": "Цель — видимый отклик за 50 мс. Для ввода измеряется следующий кадр того же окна; для операций — выполнение и кадр с результатом. Первый кадр не означает завершения фоновой загрузки.",
+	"The TACTIC server is unreachable or did not respond in time. Check the server address, network connection, VPN or proxy, and make sure the server is running. Then try again.": "Сервер TACTIC недоступен или не ответил вовремя. Проверьте адрес сервера, подключение к сети, VPN или прокси и убедитесь, что сервер запущен. Затем повторите попытку.",
+	"The server has not been set up yet. Initialize its database and set an administrator password.": "Сервер ещё не настроен. Инициализируйте базу данных и задайте пароль администратора.",
+	"Ticket stored": "Тикет сохранён",
+	Total: "Всего",
+	"Type error": "Ошибка типа данных",
+	"UI measurements": "Измерения интерфейса",
+	"UI responsiveness": "Отзывчивость интерфейса",
+	USERS: "ПОЛЬЗОВАТЕЛИ",
+	"Use portal site": "Использовать портал",
+	"Use proxy": "Использовать прокси",
+	"Use when TACTIC and Handler share local storage. If paths differ, sync them in Repository configuration. Preview, check-in, and check-out methods are locked to local access.": "Включайте, когда TACTIC и Handler работают с локальным хранилищем. Если пути различаются, синхронизируйте их в настройках репозитория. Превью, Check-in и Check-out будут закреплены за локальным доступом.",
+	"Value error": "Ошибка значения",
+	"WORK HOURS": "РАБОЧИЕ ЧАСЫ",
+	inspect: "Сведения об объекте",
+	module: "модуль",
+	ms: "мс",
+	overdue: "просрочено",
+	right: "справа",
+	task: "задача",
+	"{count} events": "Событий: {count}",
+	"{hours} h": "{hours} ч",
+	"Open event details": "Открыть подробности события",
+	"Stored ticket": "Сохранённый билет",
+	"Avatar selected": "Аватар выбран",
+	"Remove preset": "Удалить пресет",
+	"Leave empty to keep the stored password.": "Оставьте пустым, чтобы сохранить прежний пароль.",
 	"A view with this name already exists": "Представление с таким именем уже существует",
 	"Actions on hover": "Действия при наведении",
 	"Applies to every process with this name in the project, including other pipelines.": "Действует для всех процессов с этим именем в проекте, включая другие pipeline.",
@@ -3714,10 +3882,29 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 			}
 			return null;
 		}
+		async function focusListRow(id, index, controlId) {
+			const definition = nodes.value.find((node) => node.id === id && node.kind === "List");
+			if (definition) {
+				const rows = props.models[definition.source] || [];
+				const list = host.value?.querySelector(":scope > [data-frame=\"" + CSS.escape(id) + "\"]");
+				if (!list || index < 0 || index >= rows.length) return false;
+				const offset = revealListOffset(list.scrollTop, index, list.clientHeight, rows.length, definition.rowHeight, definition.rowGap ?? 4);
+				list.scrollTop = offset;
+				scroll.value = {
+					...scroll.value,
+					[id]: offset
+				};
+				await nextTick();
+				return focusControl(controlId);
+			}
+			for (const branch of branches.value || []) if (await branch?.focusListRow?.(id, index, controlId)) return true;
+			return false;
+		}
 		__expose({
 			focusControl,
 			focusGrid,
-			graphCommand
+			graphCommand,
+			focusListRow
 		});
 		return (_ctx, _cache) => {
 			const _component_FrameView = resolveComponent("FrameView", true);
@@ -3732,7 +3919,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node frame-box", { "frame-titlebar": node.titlebar }]),
 					style: normalizeStyle(Object.assign(style(node), background(node), { "--frame-titlebar-actions-right": (node.chromeRight || 0) + "px" })),
-					role: node.role
+					role: node.role,
+					"aria-label": node.label
 				}, {
 					default: withCtx(() => [createVNode(_component_FrameView, {
 						ref_for: true,
@@ -3758,7 +3946,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"data-frame",
 					"class",
 					"style",
-					"role"
+					"role",
+					"aria-label"
 				])) : node.kind === "Label" ? (openBlock(), createElementBlock("span", {
 					key: 1,
 					"data-frame": node.id,
@@ -3855,14 +4044,14 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					role: node.role,
 					"aria-level": node.role === "treeitem" ? node.level : void 0,
 					"aria-expanded": node.role === "treeitem" ? node.expanded : void 0,
-					"aria-selected": node.role === "treeitem" ? !!node.selected : void 0,
+					"aria-selected": ["treeitem", "option"].includes(node.role) ? !!node.selected : void 0,
 					"aria-checked": node.role === "checkbox" ? node.checked : void 0,
 					onKeydown: ($event) => key($event, node),
 					onClick: ($event) => send(node.action),
 					draggable: node.dragValue != null && __props.interactive,
 					onDragstart: ($event) => drag($event, node)
 				}, {
-					default: withCtx(() => [createVNode(_sfc_main$18, {
+					default: withCtx(() => [createVNode(_sfc_main$19, {
 						selected: node.selected,
 						"normal-color": color(node.normalColor) || "transparent",
 						"selected-color": color(node.selectedColor) || "transparent",
@@ -3916,7 +4105,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onKeydown: ($event) => key($event, node),
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, {
-					default: withCtx(() => [createVNode(_sfc_main$18, {
+					default: withCtx(() => [createVNode(_sfc_main$19, {
 						selected: node.checked,
 						"normal-color": color(node.normalColor) || "transparent",
 						"selected-color": color(node.selectedColor) || "transparent",
@@ -3981,7 +4170,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					readonly: node.readOnly,
 					maxlength: node.maxLength,
 					type: node.password ? "password" : "text",
-					autocomplete: node.password ? "new-password" : "off",
+					autocomplete: node.autocomplete || (node.password ? "new-password" : "off"),
+					name: node.name,
 					inputmode: node.inputMode,
 					disabled: !node.enabled,
 					onKeydown: ($event) => key($event, node),
@@ -4000,6 +4190,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"maxlength",
 					"type",
 					"autocomplete",
+					"name",
 					"inputmode",
 					"disabled",
 					"onKeydown",
@@ -4015,6 +4206,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						inline: "nearest"
 					})),
 					role: node.role,
+					wrap: node.wrap === false ? "off" : void 0,
 					"error-state": !!node.error,
 					style: normalizeStyle(style(node)),
 					label: node.label,
@@ -4028,6 +4220,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"data-frame",
 					"role",
 					"class",
+					"wrap",
 					"error-state",
 					"style",
 					"label",
@@ -4065,8 +4258,36 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"selected",
 					"loading",
 					"fill-mode"
-				])) : node.kind === "List" ? (openBlock(), createElementBlock("div", {
+				])) : node.kind === "SummaryChip" ? (openBlock(), createBlock(_sfc_main$17, {
 					key: 10,
+					"data-frame": node.id,
+					class: "frame-node frame-summary-chip",
+					style: normalizeStyle(style(node)),
+					label: node.text,
+					count: node.count || 0,
+					accent: color(node.accent || "action"),
+					icon: node.icon,
+					compact: node.compact,
+					clickable: !!node.action,
+					disabled: !node.enabled,
+					"show-count": node.showCount !== false,
+					"show-dot": node.showDot !== false,
+					onClick: ($event) => send(node.action)
+				}, null, 8, [
+					"data-frame",
+					"style",
+					"label",
+					"count",
+					"accent",
+					"icon",
+					"compact",
+					"clickable",
+					"disabled",
+					"show-count",
+					"show-dot",
+					"onClick"
+				])) : node.kind === "List" ? (openBlock(), createElementBlock("div", {
+					key: 11,
 					"data-frame": node.id,
 					class: "frame-node frame-list",
 					role: node.role,
@@ -4136,7 +4357,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"describe-cell",
 					"interactive"
 				])], 14, _hoisted_6)) : node.kind === "Choice" ? (openBlock(), createBlock(_sfc_main$9, {
-					key: 12,
+					key: 13,
 					"data-frame": node.id,
 					class: "frame-node frame-choice",
 					onFocus: _cache[5] || (_cache[5] = ($event) => $event.target.scrollIntoView({
@@ -4159,7 +4380,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onUpdate:modelValue"
 				])) : node.kind === "IconChoice" ? (openBlock(), createElementBlock("div", {
-					key: 13,
+					key: 14,
 					"data-frame": node.id,
 					class: "frame-node frame-icon-choice",
 					style: normalizeStyle(style(node))
@@ -4175,7 +4396,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onUpdate:modelValue"
 				])], 12, _hoisted_7)) : node.kind === "ColorChoice" ? (openBlock(), createElementBlock("div", {
-					key: 14,
+					key: 15,
 					"data-frame": node.id,
 					class: "frame-node frame-color-choice",
 					style: normalizeStyle(style(node))
@@ -4189,8 +4410,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"disabled",
 					"onUpdate:modelValue"
-				])], 12, _hoisted_8)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$17, {
-					key: 15,
+				])], 12, _hoisted_8)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$18, {
+					key: 16,
 					"data-frame": node.id,
 					class: "frame-node frame-splitter",
 					style: normalizeStyle(style(node)),
@@ -4214,7 +4435,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"onUpdate:modelValue"
 				])) : node.kind === "DateChoice" ? (openBlock(), createBlock(_sfc_main$12, {
-					key: 16,
+					key: 17,
 					class: "frame-node frame-date-choice",
 					"data-frame": node.id,
 					style: normalizeStyle(style(node)),
@@ -4238,7 +4459,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onUpdate:modelValue",
 					"onChange"
 				])) : node.kind === "UserChoice" ? (openBlock(), createBlock(_sfc_main$16, {
-					key: 17,
+					key: 18,
 					class: "frame-node frame-user-choice",
 					"data-frame": node.id,
 					style: normalizeStyle(style(node)),
@@ -4258,7 +4479,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onChange"
 				])) : node.kind === "Grid" ? (openBlock(), createBlock(_sfc_main$5, {
-					key: 18,
+					key: 19,
 					ref_for: true,
 					ref_key: "grids",
 					ref: grids,
@@ -4274,7 +4495,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"source",
 					"describe-cell"
 				])) : node.kind === "Graph" ? (openBlock(), createBlock(FrameGraph_default, {
-					key: 19,
+					key: 20,
 					ref_for: true,
 					ref_key: "graphs",
 					ref: graphs,
@@ -4283,13 +4504,13 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					node,
 					onEvent: _cache[7] || (_cache[7] = ($event) => emit("event", $event))
 				}, null, 8, ["style", "node"])) : node.kind === "Code" ? (openBlock(), createBlock(FrameCode_default, {
-					key: 20,
+					key: 21,
 					class: "frame-node",
 					style: normalizeStyle(style(node)),
 					node,
 					onEvent: _cache[8] || (_cache[8] = ($event) => emit("event", $event))
 				}, null, 8, ["style", "node"])) : node.kind === "View" ? (openBlock(), createBlock(resolveDynamicComponent(__props.views[node.view]?.component), mergeProps({
-					key: 21,
+					key: 22,
 					ref_for: true,
 					ref: __props.views[node.view]?.captureRef
 				}, { ref_for: true }, __props.views[node.view]?.props, {
@@ -4336,6 +4557,6 @@ function observeFrameSizes(apply) {
 	};
 }
 //#endregion
-export { completions as a, button as c, node as d, rect as f, _sfc_main$3 as i, label as l, _sfc_main as n, documentSymbols as o, _sfc_main$1 as r, translate as s, observeFrameSizes as t, muted as u };
+export { completions as a, button as c, node as d, rect as f, _sfc_main$3 as i, label as l, _sfc_main as n, documentSymbols as o, revealListOffset as p, _sfc_main$1 as r, translate as s, observeFrameSizes as t, muted as u };
 
 //# sourceMappingURL=resize.js.map

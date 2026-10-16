@@ -46,6 +46,16 @@ def main():
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/src/features/administration/**/*.{vue,js}"
     subprocess.run(command, cwd=ROOT, check=True)
+    command[-1] = "frontend/src/features/debug/{DebugLog.vue,UiPerformance.vue,ErrorDetails.vue,debugLog.css,uiPerformance.css}"
+    subprocess.run(command, cwd=ROOT, check=True)
+    command[-1] = "frontend/src/features/users/*.{vue,css}"
+    subprocess.run(command, cwd=ROOT, check=True)
+    command[-1] = "tools/frame_support/*.{html,mjs}"
+    subprocess.run(command, cwd=ROOT, check=True)
+    command[-1] = "frontend/tests/{frame_support*,profile_support,debug_log,ui_performance}.mjs"
+    subprocess.run(command, cwd=ROOT, check=True)
+    command[-1] = "frontend/src/features/connection/SignIn.vue"
+    subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "tools/frame_foundation/*.{vue,js,html,mjs}"
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "tools/frame_controls/*.{vue,js,html,mjs}"

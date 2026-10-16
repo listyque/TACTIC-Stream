@@ -5,7 +5,7 @@ import { t as RecordForm_default } from "./RecordForm.js";
 import { t as _sfc_main$3 } from "./AppSlider.js";
 import { t as _sfc_main$4 } from "./AppMenu.js";
 import { t as ItemPreview_default } from "./ItemPreview.js";
-import { D as _sfc_main$6, M as ObjectAction_default, R as FilePreview_default, h as _sfc_main$5 } from "./App.js";
+import { D as _sfc_main$6, L as FilePreview_default, h as _sfc_main$5, j as ObjectAction_default } from "./App.js";
 //#region src/features/objects/SnapshotBrowser.vue
 var _hoisted_1 = ["aria-label", "aria-busy"];
 var _hoisted_2 = { class: "snapshot-toolbar" };

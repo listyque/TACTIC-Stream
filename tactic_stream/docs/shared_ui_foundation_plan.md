@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01, B02 and B03 are delivered** at the checkpoints below. The next batch is **B04**.
+**B01, B02, B03 and B04 are delivered** at the checkpoints below. The next batch is **B05**.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -61,6 +61,75 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B04 delivered: support, identity and connection, 2026-10-17
+
+Handler **0.6.0.108**, Stream **0.112.157** ship separate copies of **81 `.mjs`
+modules and one menu catalog**. The common descriptions now compose Debug Log,
+UI responsiveness, profile and its child editor, sign-in, native presets,
+updates, errors and short confirmations. Existing Help and connection-menu
+composition remains in use. The owner/capability map and reproduction commands
+are in `docs/frame_support.md` in both repositories.
+
+- Existing controllers keep authentication, session generations, ACL, profile
+  revisions, file ownership and update/install behavior. No WebEngine or runtime
+  dependency on the other checkout was introduced. Browser current-origin
+  authentication/history/download and native presets/tickets/local ZIP operations
+  remain explicit capabilities.
+- Both profile-editor pages retain their draft. Native Save submits changed
+  fields and group/access edits through one existing mutation when needed;
+  ordinary profile edits do not rewrite memberships. Existing one-argument and
+  group-method contracts remain available. Busy, dirty-close, unknown-write and
+  password-clearing rules are exercised through the actual controls.
+- Help and Debug Log are available on sign-in. Historical event details have no
+  inherited retry worker. Logout rejects late browser imports/history reads and
+  closes owned details. Complete commands/results/tracebacks remain copyable;
+  unwrapped areas avoid pathological layout of long diagnostic lines.
+- QModel lists use their declared row gap. Shared keyboard reveal moves focus
+  to off-screen virtualized records. SummaryChip uses the existing house control,
+  with centered short text/counts, constrained long labels and native keyboard
+  activation. WindowContent exposes the loaded feature to its close guards.
+
+Completed verification on the release sources:
+
+- **109 native tests** cover support views, existing identity/login/
+  logging/update owners, error responsiveness, real mouse/keyboard/touch,
+  three widths, 250-row keyboard selection and one combined profile write.
+- Real disposable-server browser journeys pass: Debug Log settings/filter/search,
+  full JSONL import/export/history, child ownership, measurements and ready phases,
+  profile save/reopen/discard, Profile/Groups retention, lost-response lock/reload,
+  session cleanup and the phone profile/activity/queue journey. Shared state and
+  redaction/import self-checks pass separately.
+- **672 original + 1,008 current native captures**, then
+  **1,008 QML/Vue pairs**: eight surfaces, 28 states, three styles,
+  light/dark, EN/RU, original 1100/800 px and current 1100/800/360 px.
+  Strict checks pass for **25,968 control bounds**, **16,584 font-size/
+  weight/color records** and **216 checkbox interiors**. Captures share
+  the actual native model and focus. Sign-in retains its bounded native size.
+- Fresh Help has **24 pairs / 2,460 actual comparisons**. Its driver waits for
+  selected-topic scroll restoration before measuring. Empty boxes are excluded
+  consistently by the native and browser visibility checks.
+- The mandatory platform gate passes all **42 stages**, including the
+  control catalog/atlas, three scales, IME/input/virtualization, shell/session
+  journeys and independent packaging. The capture helper is fingerprinted.
+- The archived quality baseline has no new regressions: structure **11 → 9**;
+  current lint has **18 unused imports, 6,361 unqualified accesses, 112 missing
+  properties, nine property overrides and one incompatible type**. Native smoke
+  has no font/runtime warnings; existing unrelated debt remains recorded.
+
+Open `tools/frame_support/output/index.html` and `tools/frame_help/output/index.html`.
+The Support builder rejects quick, partial, stale and incomplete matrices and
+checks archive/source/driver hashes. The report uses the tracked pre-Frame
+`TH_git_HEAD_reference.zip` at Handler `fa3f594`; it never labels the later dirty
+working-tree archive as the original. Images, temporary databases and private
+runtime data stay outside Git; source drivers, fixtures and documentation ship
+with the task.
+
+These checks do not assert identical Qt/Chromium glyph rasterization, document
+wrapping, system dialogs or GPU presentation. Narrow existing activity cards and
+request/document readers retain their domain/platform owners; activity's full
+migration remains B11. Production PostgreSQL and physical touch/IME/compositor
+acceptance were not run. **The next batch is B05, Configuration and projects.**
 
 ## B03 delivered: original Administration, 2026-10-17
 

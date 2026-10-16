@@ -1,4 +1,12 @@
 {
+  "Open event details": "Открыть подробности события",
+  "Stored ticket": "Сохранённый билет",
+  "Avatar selected": "Аватар выбран",
+  "Sign in to TACTIC": "Вход в TACTIC",
+  "New preset": "Новый пресет",
+  "Remove preset": "Удалить пресет",
+  "Sign-in is changed only through Generate ticket; the preset editor never asks for a TACTIC password.": "Вход меняется только через «Создать билет»; редактор пресетов не запрашивает пароль TACTIC.",
+  "Leave empty to keep the stored password.": "Оставьте пустым, чтобы сохранить прежний пароль.",
   "Completion": "Готовность",
   "Open search": "Открыть поиск",
   "Done": "Готово",

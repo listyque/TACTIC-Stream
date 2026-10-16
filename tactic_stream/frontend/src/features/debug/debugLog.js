@@ -177,13 +177,17 @@ export function parseSession(text) {
   return records.slice(-10000)
 }
 export async function importSession(file) {
+  const session = debugLog.sessionId
   if (!file.name.toLowerCase().endsWith('.jsonl')) throw new Error('A compact Debug Log session (.jsonl) is required.')
   if (file.size > 32 * 1024 * 1024) throw new Error('Debug Log session exceeds 32 MB.')
   const records = parseSession(await file.text()), id = newSessionId()
+  if (session !== debugLog.sessionId) throw new DOMException('Session ended', 'AbortError')
   await write((sessions, events) => {
+    if (session !== debugLog.sessionId) return
     sessions.put({ id, label: file.name, updated: new Date().toISOString() })
     for (const record of records) events.put({ session: id, ...record })
   })
+  if (session !== debugLog.sessionId) throw new DOMException('Session ended', 'AbortError')
   return { id, records }
 }
 export function exportSession(records) {

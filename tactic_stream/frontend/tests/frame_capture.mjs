@@ -8,7 +8,7 @@ export async function surface(page,selector,exclude){
    if(exclude&&el.closest(exclude))continue
    if(!el.getClientRects().length||getComputedStyle(el).visibility==='hidden')continue
    if(el.tagName==='BUTTON'){const icon=el.__vueParentComponent?.props?.icon;if(icon&&!el.querySelector('.app-icon .icon-glyph')?.textContent)throw Error('Missing Frame button icon: '+el.dataset.frame+' / '+icon)}
-   const r=el.getBoundingClientRect();let visible=true
+   const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0)continue;let visible=true
    for(let p=el.parentElement;p;p=p.parentElement){const css=getComputedStyle(p);if(/hidden|auto|scroll/.test(css.overflow+css.overflowX+css.overflowY)){const clip=p.getBoundingClientRect(),left=clip.left+p.clientLeft,top=clip.top+p.clientTop;if(r.bottom<=top||r.top>=top+p.clientHeight||r.right<=left||r.left>=left+p.clientWidth){visible=false;break}}}
    if(!visible)continue
    boxes[el.dataset.frame]={x:r.x-origin.x,y:r.y-origin.y,width:r.width,height:r.height}

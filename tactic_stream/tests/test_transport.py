@@ -4922,6 +4922,23 @@ return False
                                 encoding='utf-8', errors='replace', timeout=60)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_support_windows_in_chromium(self):
+        environment = os.environ.copy()
+        environment.update(
+            PLAYWRIGHT_BROWSERS_PATH=str(ROOT / '.browser-cache'),
+            STREAM_BROWSER_CHANNEL='msedge',
+            STREAM_CHECK_LOGIN='admin',
+            STREAM_CHECK_PASSWORD='private-test-password',
+        )
+        for script in ('debug_log.mjs', 'ui_performance.mjs', 'profile_support.mjs'):
+            with self.subTest(script=script):
+                result = subprocess.run(
+                    [shutil.which('node'), str(ROOT / 'frontend/tests' / script), self.url],
+                    cwd=ROOT / 'frontend', env=environment, capture_output=True,
+                    text=True, encoding='utf-8', errors='replace', timeout=100,
+                )
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_mobile_activity_profile_in_chromium(self):
         environment = os.environ.copy()
         environment['PLAYWRIGHT_BROWSERS_PATH'] = str(ROOT / '.browser-cache')

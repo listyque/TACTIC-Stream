@@ -112,3 +112,8 @@ The profile shows project tasks, workflow status/process groups, permitted weekl
 ## Phone presentation
 
 At 700px and below, task rows adapt to a vertical list; task fields are collapsed by default in Inspector. Enter adds a newline and the explicit button sends notes/messages. Phone panel selection is separate from the desktop layout. See **Mobile application** in Help for touch actions, keyboard viewport, persistence and verified limits.
+
+
+## Support window ownership
+
+Help, Debug Log, UI responsiveness and profile remain independently reopenable tool windows. Profile editing and installation confirmation are owned dialogs. Escape first closes the active child; unsaved or busy profile edits guard closing the parent. Signing out removes account-owned browser state while Help and Debug Log remain available on sign-in. Local file pickers, native title bars and portable installers remain platform operations.

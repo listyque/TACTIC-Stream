@@ -65,6 +65,7 @@ import FilePreview from './features/objects/FilePreview.vue'
 import { addressProject, linkProject, searchLink, workspaceAddress, savedSearchLink } from './features/workspace/links.js'
 import { uiPerformance } from './features/debug/uiPerformance.js'
 import ConnectionMenu from './features/connection/ConnectionMenu.vue'
+import SignIn from './features/connection/SignIn.vue'
 import SystemActivityButton from './features/activity/SystemActivityButton.vue'
 import NotificationStack from './features/activity/NotificationStack.vue'
 import ServerUpdates from './features/connection/ServerUpdates.vue'
@@ -86,7 +87,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -354,7 +355,7 @@ export default {
     dismissMenus(event) {
       if (event.type === 'keydown' && this.navigationOpen) { this.closeNavigation(); return }
       if (event.type === 'keydown' && this.$refs.topbar?.querySelector('select:open')) return
-      for (const menu of this.$el.querySelectorAll('.topbar details[open], .workspace-menu[open], .search-filters[open]')) {
+      for (const menu of this.$refs.workspace?.querySelectorAll('.topbar details[open], .workspace-menu[open], .search-filters[open]') || []) {
         if (event.type === 'keydown' || !menu.contains(event.target)) {
           menu.open = false
           if (event.type === 'keydown') { menu.querySelector('summary').focus(); event.stopPropagation() }
@@ -364,7 +365,7 @@ export default {
     menuToggled(event) {
       if (!event.target.open || !event.target.matches('.topbar details, .workspace-menu, .search-filters')) return
       if (event.target.closest('.topbar')) this.closeNavigation(false)
-      for (const menu of this.$el.querySelectorAll('.topbar details[open], .workspace-menu[open], .search-filters[open]')) {
+      for (const menu of this.$refs.workspace?.querySelectorAll('.topbar details[open], .workspace-menu[open], .search-filters[open]') || []) {
         if (menu !== event.target && !menu.contains(event.target)) menu.open = false
       }
     },
@@ -1692,20 +1693,21 @@ export default {
     <span class="muted">{{ t('Loading data…') }}</span>
   </main>
   <main v-else-if="!session" class="login-page">
-    <form class="login-card" @submit.prevent="signIn">
-      <div class="brand"><span class="brand-icon">T</span><span>TACTIC Stream</span></div>
+    <SignIn
+      v-model:login="login"
+      v-model:password="password"
+      :busy="signingIn"
+      :ready="ready"
+      :error="error"
+      :version="version"
+      @submit="signIn"
+      @help="$refs.help.open($event)"
+    >
+      <AppButton icon="bug" label="Debug Log" icon-only @click="$refs.debugLog.open()" />
       <AppearanceControls />
-      <h1>{{ t('Sign in to administration') }}</h1>
-      <p class="muted">{{ t('Projects, object types and data') }}</p>
-      <p v-if="!ready" class="notice">{{ t('The server has not been set up yet. Initialize its database and set an administrator password.') }}</p>
-      <label>{{ t('Login') }}<input v-model="login" autocomplete="username" name="login" required :disabled="signingIn"></label>
-      <label>{{ t('Password') }}<input v-model="password" type="password" autocomplete="current-password" name="password" required :disabled="signingIn"></label>
-      <p v-if="error" class="error" role="alert">{{ t(error) }}</p>
-      <button class="primary" type="submit" :disabled="signingIn || !ready">{{ t(signingIn ? 'Signing in…' : 'Sign in') }}</button>
-      <span class="version">{{ version ? `v${version}` : '' }}</span>
-    </form>
+    </SignIn>
   </main>
-  <div v-else class="workspace" :style="workspaceStyle" @pointerdown="dismissMenus" @keydown.esc="dismissMenus">
+  <div v-else ref="workspace" class="workspace" :style="workspaceStyle" @pointerdown="dismissMenus" @keydown.esc="dismissMenus">
     <header ref="topbar" class="topbar frame-main-toolbar" :style="{height:mainToolbar.height+'px','--project-preview-radius':mainToolbar.dimensions.projectPreviewRadius+'px'}" @toggle.capture="menuToggled">
       <AppButton class="navigation-toggle frame-main-control" data-main-control="mainNavigation" :style="mainToolbarStyle('mainNavigation')" icon-only :label="navigationVisible ? 'Close navigation' : 'Open navigation'" :icon="navigationVisible ? 'close' : 'menu'"
         aria-controls="workspace-sidebar" :aria-expanded="navigationVisible" @click="toggleNavigation" />
@@ -1739,8 +1741,6 @@ export default {
     <Teleport defer :to="compactShortcuts ? '#compact-system-activity' : '#topbar-system-activity'"><SystemActivityButton :busy="!!activityProgress" :message="activityProgress" :compact="compactShortcuts" @open="$refs.systemActivity.open(); $refs.settingsMenu.open = false" /></Teleport>
     <Teleport defer :to="compactShortcuts ? '#compact-connection-menu' : '#topbar-connection-menu'"><ConnectionMenu :ticket="session.ticket" :project="workspaceProject" :online="connectionOnline" :compact="compactShortcuts" :updates-error="updatesError" :messages-initialized="serverBatch?.messagesInitialized" @busy="pingBusy = $event" @connection="connectionOnline = $event" @session-expired="logout('Session ended. Sign in again.')" /></Teleport>
     <ProjectChooser :projects="projects" :selected="workspaceView.project" @selected="projectSelected" />
-    <HelpView ref="help" />
-    <DebugLog ref="debugLog" @closed="$refs.settingsMenu?.focusTrigger()" />
     <ServerUpdates ref="serverUpdates" :ticket="session.ticket" :project="workspaceProject" :subscription="updateSubscription" @reset="serverBatch = null" @batch="serverBatch = $event; $refs.taskManager?.applyServerBatch($event)" @connection="connectionOnline = $event" @error="updatesError = $event" @session-expired="logout('Session ended. Sign in again.')" />
     <SystemActivity ref="systemActivity" @open-link="openRichLink" />
     <UserProfile ref="userProfile" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" @message="$refs.messages.openDirect($event)" @tasks="$refs.messages.close(); $refs.taskManager.openForUser($event)" @activity="$refs.activityFeed.open($event)" @open-object="$refs.messages.close(); openActivityObject($event)" @open-link="$refs.messages.close(); openRichLink($event)" @logout="signOut" @saved="identity => { if(identity.login === session.login) userIdentity = identity; $refs.messages.refreshPeople() }" @session-expired="logout('Session ended. Sign in again.')" />
@@ -1984,5 +1984,7 @@ export default {
       @snapshot-context="snapshotTarget = $event" @task-context="followInspector($event.parent, $event.process, $event.__search_key__)" :parents="(workspaceView.rows || []).filter(record => (workspaceView.selectedKeys || []).includes(record.__search_key__))" @saved="reloadWorkspace({ restore: true })" @object="inspect" />
     <ProjectCreation ref="projectCreation" :ticket="session.ticket" :open-project="openCreatedProject" />
   </div>
+  <HelpView ref="help" />
+  <DebugLog ref="debugLog" @help="$refs.help.open($event)" @closed="$refs.settingsMenu?.focusTrigger()" />
 </template>
 

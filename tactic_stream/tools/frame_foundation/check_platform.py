@@ -84,6 +84,7 @@ def fingerprints(handler):
         for name in (
             "frame_contract.mjs",
             "frame_renderer_contract.mjs",
+            "frame_capture.mjs",
             "frame_resize.mjs",
             "frame_platform.mjs",
             "frame_controls_contract.mjs",

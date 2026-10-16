@@ -35,6 +35,7 @@ defineEmits(['click']);
 .summary-chip,
 .summary-chip.app-button {
   display: inline-flex;
+  justify-content: center;
   align-items: center;
   gap: var(--summary-chip-spacing);
   width: max-content;
@@ -56,7 +57,14 @@ defineEmits(['click']);
   border-radius: 50%;
   background: var(--chip-accent);
 }
+.summary-chip > span {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .summary-chip small {
+  flex-shrink: 0;
   color: var(--chip-accent);
   font-size: inherit;
   font-weight: 600;

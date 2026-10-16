@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
-import { debugLog, debugSettings, exportSession, installDebugLogging, logEvent, logRequest, parseSession, redact, requestPayload, setServerDebugContext } from '../src/features/debug/debugLog.js'
+import { debugLog, debugSettings, importSession, exportSession, installDebugLogging, logEvent, logRequest, parseSession, redact, requestPayload, setServerDebugContext } from '../src/features/debug/debugLog.js'
 import { rpc } from '../src/api.js'
 
 globalThis.location = { origin: 'http://tactic-stream.test' }
@@ -82,3 +82,9 @@ with patch('pathlib.Path', return_value=SimpleNamespace(name='sample.png', read_
 assert.equal(replay.status, 0, replay.stderr)
 await assert.rejects(rpc('query', [cycle]), error => error instanceof TypeError && /circular/i.test(error.message), 'Logging must preserve the original request failure')
 console.log('PASS: credential redaction, positional login, cyclic values, complete JSONL roundtrip, malformed-session validation and multipart upload replay')
+
+let completeFileRead;
+const staleImport=importSession({name:'stale.jsonl',size:12,text:()=>new Promise(resolve=>{completeFileRead=resolve})});
+debugLog.sessionId='another-fixture-session';
+completeFileRead(JSON.stringify({v:1})+'\n');
+await assert.rejects(staleImport,error=>error.name==='AbortError','An import from a previous account must not reopen or persist its history');

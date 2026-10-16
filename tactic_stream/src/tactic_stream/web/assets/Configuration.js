@@ -10,7 +10,8 @@ import { n as _sfc_main$15 } from "./AppDateField.js";
 import { t as _sfc_main$16 } from "./AppMenu.js";
 import { t as _sfc_main$17 } from "./AppCheckbox.js";
 import { t as AppSearchField_default } from "./AppSearchField.js";
-import { H as timestampFullLabel, O as resultViews, a as updateIntervals, f as _sfc_main$18, i as updateBatchDelays, k as _sfc_main$19, o as updateModes, p as ProjectCreation_default, r as networkSettings } from "./App.js";
+import { t as _sfc_main$18 } from "./SummaryChip.js";
+import { O as resultViews, V as timestampFullLabel, a as updateIntervals, f as _sfc_main$19, i as updateBatchDelays, o as updateModes, p as ProjectCreation_default, r as networkSettings } from "./App.js";
 //#region src/features/configuration/ServerConfiguration.vue
 var _sfc_main$7 = {
 	components: {
@@ -1047,7 +1048,7 @@ var _sfc_main$3 = {
 				"aria-busy": busy.value
 			}, [
 				error.value ? (openBlock(), createElementBlock("p", _hoisted_2$3, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
-				createBaseVNode("section", _hoisted_3$3, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Available projects")), 1), createBaseVNode("p", _hoisted_4$3, toDisplayString(unref(t)("Select a project to make it active in the workspace.")), 1)]), createBaseVNode("div", _hoisted_5$3, [createVNode(_sfc_main$18, {
+				createBaseVNode("section", _hoisted_3$3, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Available projects")), 1), createBaseVNode("p", _hoisted_4$3, toDisplayString(unref(t)("Select a project to make it active in the workspace.")), 1)]), createBaseVNode("div", _hoisted_5$3, [createVNode(_sfc_main$19, {
 					inline: "",
 					projects: projects.value,
 					selected: selected.value,
@@ -1186,7 +1187,7 @@ var _sfc_main$2 = {
 					title: current.value?.title || "Repository configuration is loading",
 					description: current.value?.path
 				}, {
-					default: withCtx(() => [createVNode(_sfc_main$19, {
+					default: withCtx(() => [createVNode(_sfc_main$18, {
 						label: unref(t)(current.value ? "Configured" : "Loading"),
 						"show-count": false,
 						accent: current.value ? "var(--success)" : void 0
@@ -1217,11 +1218,11 @@ var _sfc_main$2 = {
 							title: item.title,
 							description: item.path
 						}, {
-							default: withCtx(() => [createBaseVNode("div", _hoisted_10$2, [createVNode(_sfc_main$19, {
+							default: withCtx(() => [createBaseVNode("div", _hoisted_10$2, [createVNode(_sfc_main$18, {
 								label: item.alias === current.value?.alias ? unref(t)("Default") : item.alias,
 								accent: /^#[a-f\d]{6}$/i.test(item.color) ? item.color : void 0,
 								"show-count": false
-							}, null, 8, ["label", "accent"]), item.status !== "unchecked" ? (openBlock(), createBlock(_sfc_main$19, {
+							}, null, 8, ["label", "accent"]), item.status !== "unchecked" ? (openBlock(), createBlock(_sfc_main$18, {
 								key: 0,
 								label: unref(t)(item.status === "available" ? "Available" : "Folder not found or inaccessible"),
 								"show-count": false,

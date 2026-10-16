@@ -119,6 +119,24 @@ try {
           requestAnimationFrame(() => requestAnimationFrame(resolve))
         )
     );
+    if (native.boxes.helpTopic_windows) {
+      await page.waitForFunction((expected) => {
+        const root = document
+          .querySelector('.help-layout')
+          .getBoundingClientRect();
+        const target = document.querySelector(
+          '[data-frame="helpTopic_windows"]'
+        );
+        if (!target) return false;
+        const box = target.getBoundingClientRect();
+        return (
+          Math.abs(box.x - root.x - expected.x) < 0.1 &&
+          Math.abs(box.y - root.y - expected.y) < 0.1 &&
+          Math.abs(box.width - expected.width) < 0.1 &&
+          Math.abs(box.height - expected.height) < 0.1
+        );
+      }, native.boxes.helpTopic_windows);
+    }
     const actual = await surface(page, '.help-layout');
     const checked = await compareSurface(
       page,

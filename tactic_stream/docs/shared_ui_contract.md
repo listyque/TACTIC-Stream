@@ -15,6 +15,10 @@ Administration comparisons below are a previous checkpoint, not proof of
 original-Handler parity. New acceptance compares archived Handler → Frame
 Handler → Frame Stream, preserving explicit platform capabilities. Source
 layout and readability rules are in `src/tactic_stream/shared_ui/README.md`.
+Support/identity/connection composition and existing command owners are mapped in
+`docs/frame_support.md`; native file/update capabilities and browser session
+storage remain explicit. Historical original-UI reports are checkpoints, not
+fresh acceptance evidence after a renderer changes.
 
 ## Единственные владельцы
 

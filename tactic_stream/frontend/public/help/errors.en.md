@@ -66,3 +66,8 @@ on Windows, a native process dump into the local `log` directory. The files star
 and can be inspected after the process ends. Handler then starts a separate native system message
 with the dump path and closes the unrecoverable process. Knowledge Base article edits are checkpointed
 separately, so reopening the project restores the latest local article draft.
+
+
+## Error inspection and retry ownership
+
+Expand and copy the full traceback, inspect the complete runtime request and open contextual Help or Debug Log. Connection errors explain address/network/proxy checks. A selected historical log event is read-only: it never inherits a retry command from an earlier live failure. Handler offers Retry only when the existing error owner supplies a retryable operation. Stream keeps existing HTTP error notifications and provides the shared details view from Debug Log.

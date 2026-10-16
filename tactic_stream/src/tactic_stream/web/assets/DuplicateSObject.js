@@ -5,7 +5,8 @@ import { t as _sfc_main$3 } from "./AppSelect.js";
 import { t as _sfc_main$4 } from "./AppTextField.js";
 import { n as _sfc_main$6, t as _sfc_main$5 } from "./AppDateField.js";
 import { t as _sfc_main$7 } from "./AppCheckbox.js";
-import { F as contentChoices, I as duplicateProfile, L as saveDuplicateProfile, N as applyDuplicateProfile, P as changeContent, h as _sfc_main$8, k as _sfc_main$9 } from "./App.js";
+import { t as _sfc_main$8 } from "./SummaryChip.js";
+import { F as duplicateProfile, I as saveDuplicateProfile, M as applyDuplicateProfile, N as changeContent, P as contentChoices, h as _sfc_main$9 } from "./App.js";
 //#region src/features/objects/DuplicateSObject.vue
 var steps = [
 	"Fields",
@@ -68,8 +69,8 @@ var _sfc_main = {
 		AppSelect: _sfc_main$3,
 		AppTextField: _sfc_main$4,
 		AppColorInput: _sfc_main$6,
-		AppSegmentedButton: _sfc_main$8,
-		SummaryChip: _sfc_main$9
+		AppSegmentedButton: _sfc_main$9,
+		SummaryChip: _sfc_main$8
 	},
 	inject: {
 		openHelp: {},
