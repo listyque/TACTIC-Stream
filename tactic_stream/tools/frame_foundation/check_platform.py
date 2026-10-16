@@ -93,6 +93,7 @@ def fingerprints(handler):
             "frame_help_state.mjs",
             "frame_help.mjs",
             "frame_navigation.mjs",
+            "frame_navigation_drawer.mjs",
             "frame_menus.mjs",
             "frame_dock_placement.mjs",
             "frame_dock_layout.mjs",
@@ -140,7 +141,8 @@ def fingerprints(handler):
     ]
     checks += [
         path
-        for path in (ROOT / "tools/frame_menus").iterdir()
+        for directory in ("frame_menus", "frame_navigation")
+        for path in (ROOT / "tools" / directory).iterdir()
         if path.is_file() and path.suffix in (".vue", ".js", ".html", ".py")
     ]
     for index, path in enumerate(checks):
@@ -289,6 +291,7 @@ def main():
                 ("help-input", "frame_help"),
                 ("help-launchers", "shared_help"),
                 ("navigation-input", "frame_navigation"),
+                ("navigation-drawer", "frame_navigation_drawer"),
                 ("menus-input", "frame_menus"),
                 ("dock-input", "frame_dock_interaction"),
                 ("window-input", "frame_window_lifecycle"),

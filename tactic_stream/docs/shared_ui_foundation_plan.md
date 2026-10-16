@@ -2,6 +2,45 @@
 
 Started 2026-10-15. This replaces the previous screen-first migration order.
 
+## Phase 2C: navigation container, 2026-10-16
+
+Handler **0.6.0.102** / Stream **0.112.151**. The complete navigation drawer now
+uses `shell/navigation.ui.mjs`: panel width, header positions/typography,
+divider/list insets, exit threshold and keyboard decisions. Both products ship
+61 `.mjs` modules and their own menu catalog; there is no runtime sibling import.
+
+- The archived Handler remains the geometry reference. Native buttons, list
+  recycling and scrollbar remain house controls; Vue uses the same positions,
+  its real buttons and a stable scrollbar gutter. Stream's phone slots for open
+  sections and dock selection remain available without a desktop rail.
+- Opening retains the scroll position and focuses the panel. Arrow keys enter
+  the available rows; Home/End also work before a row is focused and include
+  recycled off-screen rows and skip hidden/disabled/separator records. Right/Left
+  expand/collapse and enter/leave groups; Escape/close/selection restore focus.
+  Qt's built-in ListView navigation no longer overrides these decisions.
+- Hover dismissal is armed only after entering the panel in that opening, then
+  requires moving more than 120 px beyond its edge. Touch never uses this rule.
+  This also fixes the archived native drawer closing while approaching it from
+  a central opener. The native selected row now follows the controller's section.
+- Script/sidebar definitions, availability/ACLs, existing asynchronous loaders,
+  project/session stores, loaded content and saved formats retain their owners.
+  This closes the drawer container only: project chooser, section/search-tab
+  composition and the rest of phase 2C still remain to migrate.
+
+Acceptance: paired real components and translated captions pass all 12 cases.
+Mouse/touch/keyboard, retained scroll through close/reopen and live language
+changes, temporary-server project/history/session restore and expired-session
+request suspension have passed. The platform gate runs 29 steps, including
+36 native checks at each of scales 1/1.5/2. The final run is recorded by its
+source fingerprints in `tools/frame_foundation/output/platform/gate.json`.
+Reproduce with `tools/frame_navigation/capture_qml.py`,
+`frontend/tests/frame_navigation_drawer.mjs --capture`,
+`tools/frame_navigation/report.py`, `tools/frame_navigation/check_workflows.py`
+and the mandatory platform gate. The report compares 12 archived/current/browser
+states (md3/material5/fluent, EN dark/RU light, 900 and 320 px), with 864 real
+container/header/list/row measurements. Native/browser rasterization and the
+Windows system compositor are not claimed identical.
+
 ## Dock focus/footers and main menus, 2026-10-16
 
 Handler **0.6.0.101** / Stream **0.112.150**. The requested next two bounded

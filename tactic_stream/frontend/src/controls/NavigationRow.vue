@@ -17,11 +17,13 @@ const emit = defineEmits(['activated']);
 const root = ref(null),
   width = ref(280),
   hovered = ref(false),
+  focused = ref(false),
   pressed = ref(false);
 const scene = computed(() =>
   navigationRow(width.value, props.record, {
     selected: props.selected,
     hovered: hovered.value,
+    focused: focused.value,
     pressed: pressed.value,
     radius: metrics(appearance.theme).itemRadius
   })
@@ -59,7 +61,11 @@ onBeforeUnmount(() => observer?.disconnect());
       @pointerdown="pressed = true"
       @pointerup="pressed = false"
       @pointercancel="pressed = false"
-      @blur="pressed = false"
+      @focus="focused = true"
+      @blur="
+        pressed = false;
+        focused = false;
+      "
       @click="emit('activated')"
       ><span hidden aria-hidden="true"
     /></AppButton>

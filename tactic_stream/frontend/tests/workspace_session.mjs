@@ -37,7 +37,7 @@ try {
   await page.locator('.workspace-empty').waitFor()
   assert.equal(projectRequests.length,0,'No project-specific request precedes project selection')
   await page.getByLabel('More options',{exact:true}).click()
-  assert.equal(await page.locator('.settings-menu').getByRole('button',{name:'Administration',exact:true}).isEnabled(),true,'Administrator controls do not depend on an open search tab')
+  assert.equal(await page.locator('.settings-menu').getByRole('button',{name:'Administration',exact:true}).count(),0,'A regular account has no administrator action, including with no project open')
   await page.keyboard.press('Escape')
   await page.screenshot({path:'../.screenshots/no-admin-startup.png',animations:'disabled'})
   await selectProject(page,'one')

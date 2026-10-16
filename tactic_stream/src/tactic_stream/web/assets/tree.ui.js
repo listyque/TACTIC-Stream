@@ -19,7 +19,7 @@ function navigationRow(width, record, state = {}) {
 		}),
 		node("Box", "navigationRowOverlay", rect(12, 4, Math.max(0, width - 24), height - 8), {
 			background: selected ? "action" : "primaryText",
-			opacity: state.pressed ? .12 : state.hovered ? .08 : 0,
+			opacity: state.pressed ? .12 : state.hovered || state.focused ? .08 : 0,
 			radius
 		}),
 		section ? node("Icon", "navigationRowIcon", rect(x + 7.5, (height - 17) / 2, 17, 17), {

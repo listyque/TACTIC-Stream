@@ -695,7 +695,8 @@
         "Checkbox row",
         "Virtualized",
         "Loading / empty",
-        "Keyboard selection"
+        "Keyboard selection",
+        "Navigation drawer: mouse/touch, off-screen keys, focus and reserved scrollbar gutter"
       ],
       "coverage": "partial",
       "example": "tree",

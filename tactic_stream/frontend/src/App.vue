@@ -34,6 +34,7 @@ import SectionTabRail from './controls/SectionTabRail.vue'
 import { mobile, mobileLayout } from './mobile.js'
 import WorkspaceTabs from './controls/WorkspaceTabs.vue'
 import NavigationTree from './features/workspace/NavigationTree.vue'
+import NavigationDrawer from './features/workspace/NavigationDrawer.vue'
 import ProjectCreation from './features/projects/ProjectCreation.vue'
 import ProjectChooser from './features/projects/ProjectChooser.vue'
 import ItemPreview from './controls/ItemPreview.vue'
@@ -84,7 +85,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -112,7 +113,7 @@ export default {
       columns: {}, rows: [], searchText: '', filterField: '', filterValue: '', sortField: '', sortDirection: 'asc',
       page: 0, pageSize: 50, pageNumber: 1, hasNext: false, totalCount: null, nextOffset: 0, loadedQuery: null, busy: false, signingIn: false, error: '',
       loadingMode: 'pages', loadingMore: false, paginationArmed: false,
-      requestId: 0, detailRequest: 0, detail: null, section: 'data', navigationOpen: false, navigationPointerEntered: false,
+      requestId: 0, detailRequest: 0, detail: null, section: 'data', navigationOpen: false,
       compact: compactLayout.matches, showRetired: false, selectedKeys: [], focusedKey:'',
       interfaceConfig: null, view: 'table', configuredView: false, viewTitle: '',
       connectionOnline: true, compactShortcuts: shortcutLayout.matches, serverBatch: null, updatesError: '', updatesTasksOpen: false, taskCalendarActive: false, updatesNotesOpen: false, updatesActivityOpen: false,
@@ -191,6 +192,11 @@ export default {
       }[this.administrationSection] || null
     },
     navigationVisible() { return this.navigationOpen },
+    fallbackNavigation() {
+      return this.publicTypes.map(item => ({ key: item.search_type, kind: 'link',
+        title: item.title || item.search_type.split('/').pop(), search_type: item.search_type,
+        supported: true, icon: 'link' }))
+    },
     activeWorkspace() { return this.workspaceProjects[this.workspaceProject] },
     openSections() { return this.activeWorkspace?.sections || [] },
     activeWorkspaceSection() { return this.openSections.find(item => item.id === this.activeWorkspace.current) },
@@ -357,17 +363,13 @@ export default {
       }
     },
     resizeLayout() {
-      this.$refs.navigation?.close()
-      this.navigationOpen = false
+      this.closeNavigation(false)
       this.compact = compactLayout.matches
       this.compactShortcuts = shortcutLayout.matches
     },
     openNavigation() {
       if (this.navigationOpen) return
-      this.navigationPointerEntered = false
-      this.$refs.navigation.style.setProperty('--workspace-header-height', this.$refs.topbar.getBoundingClientRect().height + 'px')
-      this.$el.style.setProperty('--workspace-header-height', this.$refs.topbar.getBoundingClientRect().height + 'px')
-      this.$refs.navigation.show()
+      this.$refs.navigation.open(this.$refs.topbar.getBoundingClientRect().height)
       this.navigationOpen = true
       this.loadNavigation()
     },
@@ -376,18 +378,8 @@ export default {
       else this.openNavigation()
     },
     closeNavigation(restoreFocus = true) {
-      const wasOpen = this.navigationOpen
-      this.$refs.navigation?.close()
+      this.$refs.navigation?.close(restoreFocus)
       this.navigationOpen = false
-      if (wasOpen && restoreFocus) this.$refs.topbar?.querySelector('.navigation-toggle')?.focus()
-    },
-    dismissNavigation(event) {
-      if (event.target !== this.$refs.navigation) return
-      const bounds = this.$refs.navigation.getBoundingClientRect()
-      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) this.closeNavigation()
-    },
-    navigationPointerMoved(event) {
-      if (this.navigationPointerEntered && event.pointerType === 'mouse' && event.clientX > this.$refs.navigation.getBoundingClientRect().right + 120) this.closeNavigation()
     },
     async openScriptEditor(path) {
       if (this.scriptEditorLoading) return
@@ -1740,27 +1732,18 @@ export default {
     <component v-if="scriptEditorComponent" :is="scriptEditorComponent" ref="scriptEditor" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" :search-type="workspaceView.type" :search-keys="workspaceView.selectedKeys" @saved="$refs.scriptShelf.reload()" @executed="loadRows()" @closed="$refs.settingsMenu?.focusTrigger()" />
     <ScriptShelf ref="scriptShelf" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" v-bind="shelfContext" :search-type="workspaceView.type" :search-keys="workspaceView.selectedKeys" :visible="!compactShortcuts && shelfOpen && !!activeSearchTab && !administrationOpen && section === 'data'" @saved="loadNavigation" @executed="loadRows()" @closed="$refs.settingsMenu?.focusTrigger()" />
     <NotificationStack ref="notifications" @activity="$refs.activityFeed.open()" @messages="$refs.messages.open($event)" @reply="$refs.messages.sendQuickReply($event)" />
-    <Transition name="navigation-scrim"><div v-if="navigationOpen" class="navigation-backdrop" @click="closeNavigation" @pointermove="navigationPointerMoved"></div></Transition>
-    <dialog ref="navigation" id="workspace-sidebar" class="sidebar" role="dialog" :aria-label="t('Workspace navigation')"
-      @cancel="navigationOpen = false" @close="navigationOpen = false" @click="dismissNavigation" @pointerenter="navigationPointerEntered = true">
-      <div class="sidebar-title"><div><strong>{{ t('Navigation') }}</strong><p class="muted">{{ t('Project workspace') }}</p></div><div class="sidebar-actions">
-        <AppButton v-if="!compactShortcuts" icon-only icon="edit" label="Edit navigation" :disabled="busy || !canAdminister" @click="editNavigation" />
-        <AppButton icon-only icon="close" label="Close navigation" @click="toggleNavigation" />
-      </div></div>
-      <div v-if="compactShortcuts && openSections.length" class="mobile-open-views"><AppSelect :model-value="activeWorkspace?.current" :options="openSections.map(item => ({ value: item.id, label: item.title }))" label="Open views" @update:model-value="activateSection" /><AppButton icon-only icon="close" label="Close tab" @click="closeSection(activeWorkspace.current)" /></div>
-      <div v-if="compactShortcuts" id="mobile-panel-picker" class="mobile-panel-picker"></div>
-      <nav class="type-list" :aria-label="t('Object types')">
-        <div v-if="navigationErrors[workspaceProject]" class="error" role="alert"><p>{{ navigationErrors[workspaceProject] }}</p><AppButton label="Reload navigation" icon="refresh" @click="loadNavigation" /></div>
-        <NavigationTree v-else-if="configuredNavigation" :entries="viewLinks" :project="workspaceProject"
-          :selected="activeWorkspaceSection?.navigationKey" @select="item => selectType(item.search_type, item)" />
-        <template v-else>
-        <button v-for="item in publicTypes" :key="item.search_type" :data-search-type="item.search_type" :class="{ active: workspaceView.type === item.search_type }" @click="selectType(item.search_type)">
-          <span class="navigation-icon"><AppIcon name="link" /></span><span class="navigation-text"><strong>{{ item.title || item.search_type.split('/').pop() }}</strong></span>
-        </button>
-        <p v-if="!publicTypes.length" class="muted sidebar-empty">{{ t('No types found') }}</p>
-        </template>
-      </nav>
-    </dialog>
+    <NavigationDrawer ref="navigation" :editable="!compactShortcuts && canAdminister" :edit-enabled="!busy"
+      @closed="navigationOpen = false" @edit="editNavigation">
+      <template #extras>
+        <div v-if="compactShortcuts && openSections.length" class="mobile-open-views"><AppSelect :model-value="activeWorkspace?.current" :options="openSections.map(item => ({ value: item.id, label: item.title }))" label="Open views" @update:model-value="activateSection" /><AppButton icon-only icon="close" label="Close tab" @click="closeSection(activeWorkspace.current)" /></div>
+        <div v-if="compactShortcuts" id="mobile-panel-picker" class="mobile-panel-picker"></div>
+      </template>
+      <div v-if="navigationErrors[workspaceProject]" class="error" role="alert"><p>{{ navigationErrors[workspaceProject] }}</p><AppButton label="Reload navigation" icon="refresh" @click="loadNavigation" /></div>
+      <NavigationTree v-else-if="configuredNavigation" :entries="viewLinks" :project="workspaceProject"
+        :selected="activeWorkspaceSection?.navigationKey" @select="item => selectType(item.search_type, item)" />
+      <NavigationTree v-else :entries="fallbackNavigation" :project="workspaceProject" :selected="workspaceView.type"
+        @select="item => selectType(item.search_type)" />
+    </NavigationDrawer>
     <SectionTabRail v-if="!compactShortcuts" class="workspace-rail" :tabs="openSections" :selected="activeWorkspace?.current"
       @select="activateSection" @close="closeSection" @reorder="(source, target) => reorderTabs(source, target, true)" />
     <main class="workspace-main">

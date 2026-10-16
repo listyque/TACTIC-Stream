@@ -50,14 +50,14 @@ def main():
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "tools/frame_controls/*.{vue,js,html,mjs}"
     subprocess.run(command, cwd=ROOT, check=True)
-    command[-1] = "frontend/src/features/workspace/{DockWorkspace.vue,docks.js}"
+    command[-1] = "frontend/src/features/workspace/{DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js}"
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/tests/{frame_controls*,frame_icons,icons}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
     for pattern in ["frontend/src/features/help/**/*.{vue,js}", "tools/frame_help/*.{vue,js,html,mjs}", "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs"]:
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
-    for pattern in ["src/tactic_stream/shared_ui/**/*.json", "tools/frame_menus/*.{vue,js,html}", "frontend/tests/frame_menus.mjs", "frontend/src/features/connection/ConnectionMenu.vue"]:
+    for pattern in ["src/tactic_stream/shared_ui/**/*.json", "tools/frame_menus/*.{vue,js,html}", "tools/frame_navigation/*.{vue,js,html}", "frontend/tests/frame_menus.mjs", "frontend/src/features/connection/ConnectionMenu.vue"]:
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
     controls = [
