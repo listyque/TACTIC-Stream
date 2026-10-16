@@ -45,7 +45,7 @@ onBeforeUnmount(() => observer?.disconnect());
     <AppButton
       v-if="record.kind !== 'separator'"
       v-bind="$attrs"
-      class="navigation-row-hit"
+      class="navigation-row-hit frame-hit-target"
       :label="record.title"
       :translate-label="false"
       :disabled="disabled"
@@ -61,8 +61,8 @@ onBeforeUnmount(() => observer?.disconnect());
       @pointercancel="pressed = false"
       @blur="pressed = false"
       @click="emit('activated')"
-      ><span class="sr-only">{{ record.title }}</span></AppButton
-    >
+      ><span hidden aria-hidden="true"
+    /></AppButton>
   </div>
 </template>
 <style>

@@ -28,6 +28,12 @@ forms/fragments, with explicit unverified families and classification work.
 The plan records exact checks and remaining OS/legacy limits. Phase 1 stays open.
 Both products remain separately packaged. Window/workspace migration is phase 2.
 
+The current 0.112.150 shell checkpoint adds shared dock keyboard/footer rules
+and main user/configuration/connection menu catalog/row composition. Native
+procedural menus and platform capabilities remain explicit. The next shell
+work is the complete navigation container and project/tab/session composition.
+Current evidence and limits are recorded at the top of the foundation plan.
+
 ## Tactic Frame: Administration — previous checkpoint
 
 Все десять разделов и вложенные редакторы переведены на общий скелет и переходы

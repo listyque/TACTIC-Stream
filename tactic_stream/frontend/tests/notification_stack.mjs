@@ -120,7 +120,7 @@ try {
   assert.equal(await bar.evaluate(node => parseFloat(getComputedStyle(node, '::before').getPropertyValue('--progress-slide'))), .5)
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await query.continue(); await ready(); await progress.waitFor({ state: 'hidden' })
-  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign out', exact: true }).click()
+  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
   await page.getByLabel('Password', { exact: true }).waitFor()
   assert.equal(await page.locator('.notification-stack:popover-open').count(), 0)
   assert.deepEqual(errors, [])

@@ -144,7 +144,7 @@ try {
   if (process.argv[3]) await page.screenshot({ path: process.argv[3], fullPage:true, animations:'disabled' })
   const revokedTicket = savedSession.ticket
   await page.locator('.account-menu summary').click()
-  await page.getByRole('button', { name:'Sign out', exact:true }).click()
+  await page.getByRole('button', { name:'Sign Out', exact:true }).click()
   await page.getByRole('heading', { name:'Sign in to administration' }).waitFor()
   assert.equal(await page.evaluate(() => localStorage.getItem('tactic_stream.session')), null)
   const revoked = await page.evaluate(async ticket => {

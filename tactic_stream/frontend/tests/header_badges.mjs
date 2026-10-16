@@ -37,7 +37,7 @@ try {
       assert.ok(geometry.badge.x>=0 && geometry.badge.right<=geometry.viewport,'Badge stays inside the viewport')
     }
     await account.click()
-    await page.getByRole('button',{name:'My profile',exact:true}).waitFor()
+    await page.getByRole('button',{name:'My Profile',exact:true}).waitFor()
     await page.keyboard.press('Escape')
     await page.screenshot({path:'../.screenshots/header-badges-'+width+'.png',animations:'disabled'})
   }

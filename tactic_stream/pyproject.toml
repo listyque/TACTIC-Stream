@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tactic-stream"
-version = "0.112.149"
+version = "0.112.150"
 description = "TACTIC Stream: a TACTIC kernel with a Vue admin and a tracked legacy API contract"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -20,7 +20,7 @@ tactic-stream = "tactic_stream.__main__:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-tactic_stream = ["shared_ui/**/*.mjs", "shared_ui/README.md", "compatibility/*.json", "compatibility/*.sql", "config/*.xml", "config/*.json", "config/search_type/widget/*/*.xml", "config/search_type/widget/*.xml", "config/layouts/*.xml", "web/*.html", "web/*.txt", "web/assets/*.js", "web/assets/*.js.map", "web/assets/*.css", "web/assets/*.ttf", "web/assets/*.png", "web/licenses/icon-fonts/*.txt", "web/licenses/icon-fonts/*.md", "web/help/*.json", "web/help/*.md", "web/help/media/*.png", "web/help/media/*.jpg", "web/help/media/*.jpeg", "web/help/media/*.webp"]
+tactic_stream = ["shared_ui/**/*.mjs", "shared_ui/**/*.json", "shared_ui/README.md", "compatibility/*.json", "compatibility/*.sql", "config/*.xml", "config/*.json", "config/search_type/widget/*/*.xml", "config/search_type/widget/*.xml", "config/layouts/*.xml", "web/*.html", "web/*.txt", "web/assets/*.js", "web/assets/*.js.map", "web/assets/*.css", "web/assets/*.ttf", "web/assets/*.png", "web/licenses/icon-fonts/*.txt", "web/licenses/icon-fonts/*.md", "web/help/*.json", "web/help/*.md", "web/help/media/*.png", "web/help/media/*.jpg", "web/help/media/*.jpeg", "web/help/media/*.webp"]
 
 "tactic_client_lib" = ["VERSION", "VERSION_API"]
 "pyasm.common" = ["js/*.js"]

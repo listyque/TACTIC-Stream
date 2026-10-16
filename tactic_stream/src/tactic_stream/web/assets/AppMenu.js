@@ -17,6 +17,7 @@ var _sfc_main = {
 	__name: "AppMenu",
 	props: {
 		label: String,
+		frameComposition: Boolean,
 		showLabel: Boolean,
 		compactTrigger: Boolean,
 		icon: {
@@ -217,7 +218,7 @@ var _sfc_main = {
 					const buttons = items();
 					(focusEdge === "last" ? buttons.at(-1) : buttons[0])?.focus();
 					focusEdge = null;
-				}
+				} else if (props.frameComposition) nextTick(() => items()[0]?.focus());
 				if (props.submenu && document.activeElement === trigger.value) nextTick(() => items()[0]?.focus());
 				if (!trigger.value.getClientRects().length) nextTick(() => (panelElement.value.querySelector("input:not([type=\"hidden\"]):not(:disabled), textarea:not(:disabled)") || items()[0])?.focus());
 				window.addEventListener("windowgeometrychange", position);
@@ -280,6 +281,7 @@ var _sfc_main = {
 				ref: menu,
 				class: normalizeClass(["workspace-menu", {
 					"inline-menu": __props.inline,
+					"frame-menu": __props.frameComposition,
 					"labelled-menu": __props.showLabel,
 					"compact-trigger": __props.compactTrigger
 				}]),
@@ -306,7 +308,7 @@ var _sfc_main = {
 				ref_key: "panelElement",
 				ref: panelElement,
 				class: "account-panel",
-				style: normalizeStyle(__props.width ? { width: "min(" + __props.width + "px, calc(100dvw - 16px))" } : void 0),
+				style: normalizeStyle(__props.width ? { width: "min(" + __props.width + "px, calc(100dvw - " + (__props.frameComposition ? 8 : 16) + "px))" } : void 0),
 				"aria-label": __props.modal ? unref(t)(__props.label) : void 0,
 				popover: __props.overlay && !__props.modal ? "manual" : void 0,
 				onCancel: _cache[1] || (_cache[1] = withModifiers(($event) => close(true), ["prevent", "stop"])),

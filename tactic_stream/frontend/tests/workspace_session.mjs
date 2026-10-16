@@ -25,7 +25,7 @@ try {
   }
   async function signOut() {
     await page.getByLabel('Account', { exact:true }).click()
-    await page.locator('.account-menu').getByRole('button', { name:'Sign out', exact:true }).click()
+    await page.locator('.account-menu').getByRole('button', { name:'Sign Out', exact:true }).click()
     await page.getByRole('button', { name:'Sign in', exact:true }).waitFor()
     assert.equal(new URL(page.url()).pathname,'/')
   }

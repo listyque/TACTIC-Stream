@@ -664,7 +664,7 @@ try {
   assert.equal(await unavailable.evaluate(node => node.tagName), 'DIV', 'Unavailable original cannot be activated')
   assert.equal(await unavailable.locator('.message-reference-text > span').count(), 0, 'Deleted quote body is hidden')
   await dialog.getByRole('button', { name: 'Close Messages', exact: true }).click()
-  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign out', exact: true }).click()
+  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
   await page.getByLabel('Login', { exact: true }).fill('artist')
   await page.getByLabel('Password', { exact: true }).fill('messages-test-password')
   await page.getByRole('button', { name: 'Sign in', exact: true }).click()

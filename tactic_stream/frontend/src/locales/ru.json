@@ -4381,5 +4381,12 @@
   "Columns list width": "Ширина списка колонок",
   "Delete the selected sidebar item?": "Удалить выбранный элемент бокового меню?",
   "Search icons": "Поиск иконок",
-  "Icon library": "Библиотека иконок"
+  "Icon library": "Библиотека иконок",
+  "My Profile": "Мой профиль",
+  "Sign Out": "Выйти",
+  "Repository Sync Queue": "Очередь синхронизации репозитория",
+  "Watch Folders": "Отслеживаемые папки",
+  "TACTIC Handler Server": "Сервер TACTIC Handler",
+  "Update": "Обновление",
+  "Exit": "Выход"
 }

@@ -3,7 +3,7 @@ import { chromium } from 'playwright'
 import { selectProject } from './project_selection.mjs'
 
 const base = process.argv[2], project = process.env.STREAM_CHECK_PROJECT
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, channel: process.env.STREAM_BROWSER_CHANNEL })
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, colorScheme: 'dark', hasTouch: true })
   page.setDefaultTimeout(12000)
@@ -11,7 +11,7 @@ try {
   page.on('pageerror', error => errors.push(error.message))
   page.on('request', request => { if (request.url().endsWith('/admin/server-updates')) polls.push(request.postDataJSON()) })
   await page.addInitScript(() => {
-    localStorage.setItem('tactic_stream.appearance', JSON.stringify({ mode: 'dark', language: 'en' }))
+    localStorage.setItem('tactic_stream.appearance', JSON.stringify({ mode: 'dark', language: 'en', clickAnimations:false, hoverAnimations:false, fadeAnimations:false, popupAnimations:false }))
     if (!localStorage.getItem('tactic_stream.network')) localStorage.setItem('tactic_stream.network', '{"pollInterval":7}')
   })
   await page.clock.install()
@@ -21,13 +21,15 @@ try {
   await page.getByRole('button', { name: 'Sign in', exact: true }).click()
   const ready = () => page.waitForFunction(() => document.querySelector('.workspace-results')?.getAttribute('aria-busy') === 'false' || !!document.querySelector('.workspace-empty'))
   await ready(); await selectProject(page, project); await ready()
+  await page.waitForLoadState('networkidle')
+  await page.clock.pauseAt(await page.evaluate(() => Date.now()+1000))
   const menu = page.locator('.connection-menu')
   assert.equal(await menu.count(), 1)
   const open = async () => { await menu.getByLabel('Connection', { exact: true }).click() }
   await open()
   assert.equal(await menu.getByRole('menuitemradio', { name: 'Every 30 seconds', exact: true }).getAttribute('aria-checked'), 'true')
-  assert.equal(await menu.locator('.menu-status').evaluate(element => element.offsetHeight), 48)
-  assert.equal(await menu.locator('.menu-check').evaluate(element => {
+  assert.equal(await menu.locator('[data-menu-command="update_summary"]').evaluate(element => element.offsetHeight), 48)
+  assert.equal(await menu.locator('[data-frame="menuChecked"]').first().evaluate(element => {
     const color = getComputedStyle(element).color
     element.style.color = 'var(--primary)'
     const expected = getComputedStyle(element).color
@@ -37,33 +39,40 @@ try {
   await page.screenshot({ path: '../.screenshots/handler-current/stream-connection-menu.png', animations: 'disabled' })
   await menu.getByRole('menuitemradio', { name: 'Every 5 seconds', exact: true }).click()
   await page.clock.runFor(100)
+  await page.waitForLoadState('networkidle')
   const before = polls.length
-  await page.clock.runFor(4800)
+  // Polling jitters by 15%; one request must arrive within 4250–5750 ms.
+  await page.clock.runFor(4000)
   assert.equal(polls.length, before)
   const nextPoll = page.waitForResponse(response => response.url().endsWith('/admin/server-updates') && response.request().postDataJSON().project === project)
-  await page.clock.runFor(200)
+  await page.clock.runFor(2000)
   await nextPoll
   assert.equal(polls.length, before + 1)
   assert.equal(polls.at(-1).project, project)
+  await page.clock.resume()
   await open(); await menu.getByRole('menuitemradio', { name: 'Every 60 seconds', exact: true }).click()
   await page.getByLabel('More options', { exact: true }).click()
   await page.getByRole('button', { name: 'Configuration', exact: true }).click()
   const configuration = page.locator('dialog[aria-labelledby="configuration-title"][open]')
-  await configuration.getByRole('button', { name: 'Global', exact: true }).click()
+  await configuration.getByRole('button', { name: 'Server', exact: true }).click()
   assert.equal(await configuration.getByLabel('Server updates', { exact: true }).inputValue(), '60')
   await configuration.getByLabel('Server updates', { exact: true }).selectOption('10')
   await configuration.getByRole('button', { name: 'Close', exact: true }).click()
+  await page.getByRole('dialog', { name: 'Unsaved changes', exact: true }).getByRole('button', { name: 'Discard changes', exact: true }).click()
   await open()
   assert.equal(await menu.getByRole('menuitemradio', { name: 'Every 60 seconds', exact: true }).getAttribute('aria-checked'), 'true')
   await menu.getByLabel('Connection', { exact: true }).click()
   await page.getByLabel('More options', { exact: true }).click()
   await page.getByRole('button', { name: 'Configuration', exact: true }).click()
-  await configuration.getByRole('button', { name: 'Global', exact: true }).click()
+  await configuration.getByRole('button', { name: 'Server', exact: true }).click()
   await configuration.getByLabel('Server updates', { exact: true }).selectOption('30')
   await configuration.getByRole('button', { name: 'Apply', exact: true }).click()
   assert.equal(await configuration.count(), 1)
   await configuration.getByLabel('Server updates', { exact: true }).selectOption('60')
   await configuration.getByRole('button', { name: 'Save configuration', exact: true }).click()
+  await configuration.getByRole('button', { name: 'Save configuration', exact: true }).waitFor()
+  await page.waitForFunction(() => document.querySelector('[aria-label="Save configuration"]')?.disabled)
+  await configuration.getByRole('button', { name: 'Close', exact: true }).click()
   assert.equal(await configuration.count(), 0)
   await open()
   const ping = page.waitForResponse(response => response.url().endsWith('/admin/rpc') && response.request().postDataJSON()?.method === 'ping')

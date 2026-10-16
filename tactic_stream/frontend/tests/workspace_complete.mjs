@@ -28,7 +28,7 @@ try {
   }
   async function signOut() {
     await page.getByLabel('Account', { exact:true }).click()
-    await page.locator('.account-menu').getByRole('button', { name:'Sign out', exact:true }).click()
+    await page.locator('.account-menu').getByRole('button', { name:'Sign Out', exact:true }).click()
     await page.getByRole('button', { name:'Sign in', exact:true }).waitFor()
   }
   await page.goto(base + '/projects/one/?search_type=contract/quick_task&view=table'); await signIn()

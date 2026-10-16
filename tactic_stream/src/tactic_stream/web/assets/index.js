@@ -530,7 +530,9 @@ var typography = {
 	bodyLarge: 10,
 	title: 12
 };
+var fontFamily = "Segoe UI";
 var textStyles = Object.freeze({
+	menuHeading: 10,
 	caption: 11,
 	secondary: 12,
 	body: 13,
@@ -2581,6 +2583,6 @@ if (documentation) watchEffect(() => {
 var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,1,9,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { effectiveColorMode as A, normalizePreferences as B, sessionRecords as C, t as D, asyncComponent as E, cssRoles as F, accentPresets as G, savePreferencePage as H, layout as I, BusyIndicator_default as J, iconSets as K, metrics as L, readableText as M, saveAppearance as N, appearance as O, controls as P, textStyles as R, savedSessions as S, randomId as T, normalizeColumns as U, preferences as V, taskColumns as W, _plugin_vue_export_helper_default as Y, importSession as _, mobileLayout as a, logRequest as b, capturePress as c, clearLive as d, debugLog as f, formatEvent as g, forgetSessions as h, mobile as i, languages as j, colorModes as k, ripple as l, exportSession as m, dockMinimumHeight as n, _sfc_main$1 as o, debugSettings as p, themes as q, dockMinimumWidth as r, tooltipDirective as s, __vitePreload as t, _sfc_main$2 as u, levels as v, setServerDebugContext as w, redact as x, logEvent as y, configurationPreview as z };
+export { effectiveColorMode as A, configurationPreview as B, sessionRecords as C, t as D, asyncComponent as E, cssRoles as F, taskColumns as G, preferences as H, fontFamily as I, themes as J, accentPresets as K, layout as L, readableText as M, saveAppearance as N, appearance as O, controls as P, metrics as R, savedSessions as S, randomId as T, savePreferencePage as U, normalizePreferences as V, normalizeColumns as W, _plugin_vue_export_helper_default as X, BusyIndicator_default as Y, importSession as _, mobileLayout as a, logRequest as b, capturePress as c, clearLive as d, debugLog as f, formatEvent as g, forgetSessions as h, mobile as i, languages as j, colorModes as k, ripple as l, exportSession as m, dockMinimumHeight as n, _sfc_main$1 as o, debugSettings as p, iconSets as q, dockMinimumWidth as r, tooltipDirective as s, __vitePreload as t, _sfc_main$2 as u, levels as v, setServerDebugContext as w, redact as x, logEvent as y, textStyles as z };
 
 //# sourceMappingURL=index.js.map

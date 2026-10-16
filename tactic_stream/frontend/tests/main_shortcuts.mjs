@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { chromium } from 'playwright'
 import { selectProject } from './project_selection.mjs'
 
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, channel: process.env.STREAM_BROWSER_CHANNEL })
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, colorScheme: 'dark', hasTouch: true })
   page.setDefaultTimeout(12000)
@@ -21,7 +21,7 @@ try {
   await page.getByRole('button', { name: 'Sign in', exact: true }).click()
   await page.locator('.project-picker').waitFor()
   await selectProject(page, process.env.STREAM_CHECK_PROJECT)
-  await page.waitForFunction(() => document.querySelector('.workspace-results')?.getAttribute('aria-busy') === 'false')
+  await page.waitForFunction(() => document.querySelector('.workspace-results')?.getAttribute('aria-busy') === 'false' || !!document.querySelector('.workspace-empty'))
   const url = page.url(), selected = await page.locator('.project-picker').getAttribute('data-project')
   const shortcuts = page.locator('.workspace-shortcuts')
   assert.deepEqual(await shortcuts.locator('.system-activity-trigger, :scope > button').evaluateAll(nodes => nodes.map(node => node.getAttribute('aria-label'))), ['System activity', 'Commit Queue', 'Activity Feed'])
@@ -88,7 +88,7 @@ try {
     await page.getByLabel('More options', { exact: true }).tap()
     await page.locator('.settings-menu').getByRole('button', { name: 'Commit Queue', exact: true }).tap()
     await queue.getByText('No file check-ins yet.', { exact: true }).waitFor()
-    await page.getByLabel('Close panel: Commit Queue', { exact: true }).tap()
+    await page.locator('[data-dock="commit_queue"]').getByLabel('Back to search', { exact: true }).tap()
   }
   await page.setViewportSize({ width: 1440, height: 1000 })
   pingError = 'Unable to reach the server. Second attempt.'
@@ -101,7 +101,7 @@ try {
   await history.getByLabel('Close Notifications', { exact: true }).click()
   await page.unroute('**/admin/rpc')
   await page.getByLabel('Account', { exact: true }).click()
-  await page.getByRole('button', { name: 'Sign out', exact: true }).click()
+  await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
   await page.getByLabel('Login', { exact: true }).fill(process.env.STREAM_CHECK_LOGIN || 'admin')
   await page.getByLabel('Password', { exact: true }).fill(process.env.STREAM_CHECK_PASSWORD)
   await page.getByRole('button', { name: 'Sign in', exact: true }).click()

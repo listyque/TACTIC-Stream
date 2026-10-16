@@ -23,6 +23,7 @@ import {
 } from '../../../../src/tactic_stream/shared_ui/shell/dock_chrome.ui.mjs';
 import { workspaceLayouts } from '../../api.js';
 import { layout as shellLayout } from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs';
+import * as DockKeys from '../../../../src/tactic_stream/shared_ui/shell/dock.keys.mjs';
 import * as DockLayout from '../../../../src/tactic_stream/shared_ui/shell/dock.layout.mjs';
 import * as DockPlacement from '../../../../src/tactic_stream/shared_ui/shell/dock.placement.mjs';
 import {
@@ -427,16 +428,35 @@ function show(id) {
   raise(id);
   changed();
 }
-function hide(id) {
+async function hide(id) {
   if (id === 'results') return;
   if (props.mobile) {
     select('results');
     return;
   }
+  const next =
+    DockKeys.neighbor(
+      (stackFor(id)?.panels || [])
+        .filter((key) => state.value.panels[key].visible)
+        .map((id) => ({ id })),
+      id
+    ) ||
+    stackFor('results')?.active ||
+    'results';
+  const focused = host.value
+    ?.querySelector(`[data-dock="${id}"]`)
+    ?.contains(document.activeElement);
   emit('changing');
   state.value.panels[id].visible = false;
   maximized.value = '';
-  changed();
+  if (next) state.value.layout = activate(state.value.layout, next);
+  await changed();
+  if (focused && next) {
+    const panel = host.value?.querySelector(`[data-dock="${next}"]`);
+    (
+      panel?.querySelector(`[data-tab-id="${next}"], .dock-titlebar`) || panel
+    )?.focus();
+  }
 }
 function toggle(id) {
   if (state.value.panels[id].visible) hide(id);
@@ -999,6 +1019,7 @@ defineExpose({
       :key="panel.id"
       v-show="presented(panel.id)"
       class="dock-panel"
+      tabindex="-1"
       :data-dock="panel.id"
       :class="{
         floating: !compact && state.panels[panel.id].floating,

@@ -8,6 +8,7 @@ import { tooltipDirective as vTooltip } from './tooltip.js';
 
 const props = defineProps({
   label: String,
+  frameComposition: Boolean,
   showLabel: Boolean,
   compactTrigger: Boolean,
   icon: { type: String, default: 'more' },
@@ -317,7 +318,7 @@ function toggled() {
       const buttons = items();
       (focusEdge === 'last' ? buttons.at(-1) : buttons[0])?.focus();
       focusEdge = null;
-    }
+    } else if (props.frameComposition) nextTick(() => items()[0]?.focus());
     if (props.submenu && document.activeElement === trigger.value)
       nextTick(() => items()[0]?.focus());
     if (!trigger.value.getClientRects().length)
@@ -401,6 +402,7 @@ onBeforeUnmount(() => {
     class="workspace-menu"
     :class="{
       'inline-menu': inline,
+      'frame-menu': frameComposition,
       'labelled-menu': showLabel,
       'compact-trigger': compactTrigger
     }"
@@ -442,7 +444,14 @@ onBeforeUnmount(() => {
       class="account-panel"
       :style="
         width
-          ? { width: 'min(' + width + 'px, calc(100dvw - 16px))' }
+          ? {
+              width:
+                'min(' +
+                width +
+                'px, calc(100dvw - ' +
+                (frameComposition ? 8 : 16) +
+                'px))'
+            }
           : undefined
       "
       :aria-label="modal ? t(label) : undefined"
@@ -514,5 +523,12 @@ dialog.account-panel::backdrop {
     currentColor calc(var(--icon-button-pressed-opacity) * 100%),
     transparent
   );
+}
+</style>
+
+<style>
+.workspace-menu.frame-menu > .account-panel {
+  padding: 5px;
+  width: min(244px, calc(100dvw - 8px));
 }
 </style>

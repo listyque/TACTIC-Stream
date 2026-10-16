@@ -43,7 +43,7 @@ try {
     for (let i=0; i<10 && await page.locator('.notification-dismiss:visible').count(); i++) await page.locator('.notification-dismiss:visible').first().tap()
   }
   await page.getByLabel('Account', { exact:true }).tap()
-  await page.getByRole('button', { name:'My profile', exact:true }).tap()
+  await page.getByRole('button', { name:'My Profile', exact:true }).tap()
   const profile = page.getByRole('dialog', { name:'User profile', exact:true })
   await idleProfile(); await fits(profile)
   assert.equal(await profile.locator('.user-profile-summary > .image-picker-preview').evaluate(node => node.getBoundingClientRect().width),56)

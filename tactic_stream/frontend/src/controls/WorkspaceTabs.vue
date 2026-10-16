@@ -21,6 +21,7 @@ import {
   dockTabHeight,
   dockTab
 } from '../../../src/tactic_stream/shared_ui/controls/tabs/tab_layout.mjs';
+import * as DockKeys from '../../../src/tactic_stream/shared_ui/shell/dock.keys.mjs';
 import { tabTarget } from '../../../src/tactic_stream/shared_ui/shell/dock.layout.mjs';
 import { layout } from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 
@@ -194,6 +195,28 @@ function move(event) {
   const buttons = [...list.value.querySelectorAll('[role="tab"]')];
   let index = buttons.indexOf(event.target);
   if (index < 0) return;
+  if (props.kind === 'dock') {
+    const command = DockKeys.action(
+      props.tabs,
+      props.tabs[index].id,
+      event.key,
+      event.ctrlKey && event.shiftKey
+    );
+    if (!command) return;
+    event.preventDefault();
+    if (command.type === 'close') emit('close', command.id);
+    else if (command.type === 'reorder')
+      emit('reorder', command.source, command.target);
+    else select(command.id);
+    nextTick(() =>
+      root.value
+        ?.querySelector(
+          `[data-tab-id="${command.type === 'select' ? command.id : props.selected}"]`
+        )
+        ?.focus()
+    );
+    return;
+  }
   if (event.key === 'ArrowRight') index = (index + 1) % buttons.length;
   else if (event.key === 'ArrowLeft')
     index = (index + buttons.length - 1) % buttons.length;

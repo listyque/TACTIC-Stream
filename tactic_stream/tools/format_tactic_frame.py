@@ -57,8 +57,14 @@ def main():
     for pattern in ["frontend/src/features/help/**/*.{vue,js}", "tools/frame_help/*.{vue,js,html,mjs}", "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs"]:
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
+    for pattern in ["src/tactic_stream/shared_ui/**/*.json", "tools/frame_menus/*.{vue,js,html}", "frontend/tests/frame_menus.mjs", "frontend/src/features/connection/ConnectionMenu.vue"]:
+        command[-1] = pattern
+        subprocess.run(command, cwd=ROOT, check=True)
     controls = [
         "WorkspaceTabs.vue",
+        "ActionRows.vue",
+        "ActionRow.vue",
+        "DockWorkspaceFooter.vue",
         "DocumentPane.vue",
         "NavigationRow.vue",
         "AppButton.vue",

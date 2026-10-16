@@ -2,6 +2,63 @@
 
 Started 2026-10-15. This replaces the previous screen-first migration order.
 
+## Dock focus/footers and main menus, 2026-10-16
+
+Handler **0.6.0.101** / Stream **0.112.150**. The requested next two bounded
+blocks are implemented: dock keyboard focus/footer composition, then the main
+user/configuration/connection menus. This does not close all of phases 1 or 2.
+The products ship 60 `.mjs` modules and one data catalog independently.
+
+- `shell/dock.keys.mjs` owns Left/Right, Home/End, Enter/Space, Delete for
+  closable panels and Ctrl+Shift+Left/Right reordering. Each host transfers
+  focus to the visible delegate after model updates; closing the final tab
+  returns it to the surviving panel/header. Hidden slots and persisted layouts
+  retain their existing owner. `dock.surface.mjs` owns footer height, divider
+  and corners; a native dialog's outer frame remains an explicit capability.
+- `shell/main.menus.json` is the default action catalog. `main.menus.mjs`
+  selects platform, privilege, phone/desktop and update-mode actions without
+  executing them. `controls/menus/action.ui.mjs` paints the same row geometry,
+  icons, titles, badges, checks, status, hover/press/focus in both renderers.
+  Existing popup, input, command, settings, errors and authentication owners
+  remain in place. No embedded browser or new dependency was introduced.
+- Native `MenuRegistry.replace/extend` and arbitrary script command records
+  remain supported, including nested menus, accent/avatar records and
+  secondary actions. Handler's repository sync/watch/server/update/exit and
+  Stream's shelf/queue/tasks/timesheet/project/API/mobile actions are explicit
+  catalog capabilities. UI visibility never substitutes for server ACLs.
+- Native/button painting no longer masks Frame's row text and icons; the
+  same correction applies to the previously extracted navigation row. Accessible
+  names and real house-control input remain present without a duplicate label.
+
+Reproduction: `tools/frame_menus/capture_qml.py`,
+`frontend/tests/frame_menus.mjs --capture`, `tools/frame_menus/report.py`,
+`tools/frame_menus/check_workflows.py`, plus the platform gate and existing dock
+capture drivers. The menu report contains 18 original/current/browser cases
+(md3/material5/fluent, EN dark/RU light), footer corner measurements, matching
+common action rows and visible platform-only differences. These are real
+ActionMenu/AppMenu components on fixed records, not an assertion that native
+popup windows and DOM popups use the same OS compositor. Real input tests
+exercise native popup ownership separately; full-application browser tests
+use a disposable local server/database for commands, connection failure/retry,
+stale project replies, logout guards, settings persistence and touch at 320 px.
+
+Acceptance: the final Frame gate passed all 28 steps, including 34 native
+checks at scales 1/1.5/2. Seven additional native menu/access/submenu checks,
+the two shipped-application browser workflows and the six-size main-window
+comparison passed. The menu report checks 846 archived-native values and
+1,848 actual Qt/Vue values; the refreshed dock report checks 504 rectangle
+values across 24 layouts. The quality comparison introduces no new failure or
+warning category: structure failures decreased from 11 to 9 and unqualified
+warnings from 6,615 to 6,526; the 114 missing-property warnings remain legacy
+debt. Native smoke has no runtime/font warnings. The catalog classifies
+ActionRow as a primitive, ActionRows as a composite and the footer as a layout
+control; this does not turn all menu/scroll variants into verified families.
+
+Full navigation-container and project/tab/session composition remain next.
+The original archive is preserved. Older Help/control/Admin reports remain
+historical until their own fingerprints are refreshed; a current focused gate
+is not full legacy UI acceptance.
+
 ## Phase 2B: dock trees and gesture acceptance, 2026-10-16
 
 Handler **0.6.0.100** / Stream **0.112.149**. This completes the next bounded

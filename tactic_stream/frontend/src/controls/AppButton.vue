@@ -172,3 +172,19 @@ a.app-button.icon-button:focus-visible {
   z-index: 2;
 }
 </style>
+
+<style>
+/* Frame paints the row; this native button owns input and its accessible name. */
+.app-button.frame-hit-target:not(.icon-button),
+.app-button.frame-hit-target:not(.icon-button):is(
+    :hover,
+    :focus-visible,
+    :active,
+    :disabled
+  ) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  opacity: 1;
+}
+</style>

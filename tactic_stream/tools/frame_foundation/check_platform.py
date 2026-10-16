@@ -73,7 +73,7 @@ def fingerprints(handler):
     for product, directory in roots:
         for path in sorted(directory.rglob("*")):
             if path.is_file() and (
-                path.suffix in (".qml", ".mjs", ".vue", ".js", ".css", ".py")
+                path.suffix in (".qml", ".mjs", ".json", ".vue", ".js", ".css", ".py")
                 or path.name == "qmldir"
             ):
                 result[product + "/" + path.relative_to(directory).as_posix()] = (
@@ -90,8 +90,16 @@ def fingerprints(handler):
             "frame_controls.mjs",
             "frame_controls_input.mjs",
             "icons.mjs",
-            "frame_help_state.mjs", "frame_help.mjs", "frame_navigation.mjs",
-            "frame_dock_placement.mjs", "frame_dock_layout.mjs", "frame_dock_interaction.mjs", "frame_window_lifecycle.mjs", "window_types.mjs", "shared_help.mjs",
+            "frame_help_state.mjs",
+            "frame_help.mjs",
+            "frame_navigation.mjs",
+            "frame_menus.mjs",
+            "frame_dock_placement.mjs",
+            "frame_dock_layout.mjs",
+            "frame_dock_interaction.mjs",
+            "frame_window_lifecycle.mjs",
+            "window_types.mjs",
+            "shared_help.mjs",
         )
     ]
     checks += [
@@ -102,6 +110,7 @@ def fingerprints(handler):
         handler / "tests/test_frame_help.py",
         handler / "tests/test_frame_navigation.py",
         handler / "tests/test_frame_dock_input.py",
+        handler / "tests/test_frame_menus.py",
         handler / "tests/test_frame_dock_layout.py",
         handler / "tests/fixtures/DockWorkspaceHarness.qml",
         handler / "tests/test_dock_resizing.py",
@@ -127,6 +136,11 @@ def fingerprints(handler):
     checks += [
         path
         for path in (ROOT / "tools/frame_controls").iterdir()
+        if path.is_file() and path.suffix in (".vue", ".js", ".html", ".py")
+    ]
+    checks += [
+        path
+        for path in (ROOT / "tools/frame_menus").iterdir()
         if path.is_file() and path.suffix in (".vue", ".js", ".html", ".py")
     ]
     for index, path in enumerate(checks):
@@ -214,7 +228,12 @@ def main():
         ),
         ("resize", ["node", "frontend/tests/frame_resize.mjs"], ROOT, {}),
         ("help-state", ["node", "frontend/tests/frame_help_state.mjs"], ROOT, {}),
-        ("dock-placement", ["node", "frontend/tests/frame_dock_placement.mjs"], ROOT, {}),
+        (
+            "dock-placement",
+            ["node", "frontend/tests/frame_dock_placement.mjs"],
+            ROOT,
+            {},
+        ),
         ("dock-layout", ["node", "frontend/tests/frame_dock_layout.mjs"], ROOT, {}),
         (
             "inventory-tests",
@@ -243,6 +262,7 @@ def main():
                     "tests.test_frame_help.FrameHelpTests",
                     "tests.test_frame_navigation.FrameNavigationTests",
                     "tests.test_frame_dock_input.FrameDockInputTests",
+                    "tests.test_frame_menus.FrameMenuTests",
                     "tests.test_frame_dock_layout.FrameDockLayoutTests",
                 ],
                 handler,
@@ -263,20 +283,48 @@ def main():
             handler,
             {},
         ),
-        *[(name, ["node", "frontend/tests/"+script+".mjs"], ROOT, {}) for name,script in [
-            ("help-input","frame_help"), ("help-launchers","shared_help"),
-            ("navigation-input","frame_navigation"), ("dock-input","frame_dock_interaction"),
-            ("window-input","frame_window_lifecycle"), ("window-kinds","window_types")]],
-        ("dock-rollback", python + ["-m", "unittest", "-q", "tests.test_dock_resizing", "tests.test_dock_layout_tree"], handler, {}),
-        ("dock-retention", python + ["-m", "unittest", "-q"] + [
-            "tests.test_retained_ui.RetainedUiTests." + name for name in [
-                "test_unsnapped_dock_title_drag_keeps_the_dock_in_its_layout",
-                "test_dock_layout_switch_keeps_delegate_and_loaded_content",
-                "test_stacked_search_dock_keeps_move_grip_at_fixed_position",
-                "test_dock_content_reflows_live_during_resize",
-                "test_shared_dock_resize_grip_starts_on_first_press",
+        *[
+            (name, ["node", "frontend/tests/" + script + ".mjs"], ROOT, {})
+            for name, script in [
+                ("help-input", "frame_help"),
+                ("help-launchers", "shared_help"),
+                ("navigation-input", "frame_navigation"),
+                ("menus-input", "frame_menus"),
+                ("dock-input", "frame_dock_interaction"),
+                ("window-input", "frame_window_lifecycle"),
+                ("window-kinds", "window_types"),
             ]
-        ], handler, {}),
+        ],
+        (
+            "dock-rollback",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_dock_resizing",
+                "tests.test_dock_layout_tree",
+            ],
+            handler,
+            {},
+        ),
+        (
+            "dock-retention",
+            python
+            + ["-m", "unittest", "-q"]
+            + [
+                "tests.test_retained_ui.RetainedUiTests." + name
+                for name in [
+                    "test_unsnapped_dock_title_drag_keeps_the_dock_in_its_layout",
+                    "test_dock_layout_switch_keeps_delegate_and_loaded_content",
+                    "test_stacked_search_dock_keeps_move_grip_at_fixed_position",
+                    "test_dock_content_reflows_live_during_resize",
+                    "test_shared_dock_resize_grip_starts_on_first_press",
+                ]
+            ],
+            handler,
+            {},
+        ),
         ("package", python + ["tools/check_frame_package.py"], ROOT, {}),
         (
             "inventory",

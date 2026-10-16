@@ -20,6 +20,10 @@ import { administrationSections } from './administration.js'
 import AppSelect from './controls/AppSelect.vue'
 import AppButton from './controls/AppButton.vue'
 import AppMenu from './controls/AppMenu.vue'
+import ActionRows from './controls/ActionRows.vue'
+import mainMenus from '../../src/tactic_stream/shared_ui/shell/main.menus.json'
+import { compose as composeMainMenu } from '../../src/tactic_stream/shared_ui/shell/main.menus.mjs'
+import DockWorkspaceFooter from './controls/DockWorkspaceFooter.vue'
 import { saveAppearance } from './appearance.js'
 import CommitQueue from './features/checkin/CommitQueue.vue'
 const FileWorkspace = asyncComponent(() => import('./features/fileWorkspace/FileWorkspaceInspection.vue'))
@@ -80,7 +84,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -125,6 +129,22 @@ export default {
     }
   },
   computed: {
+    mainMenuContext() {
+      return {
+        platform: 'stream',
+        compact: this.compactShortcuts,
+        canAdminister: this.canAdminister,
+        busy: this.busy,
+        openingLink: this.openingLink,
+        reloadingCache: this.reloadingCache,
+        hasSearch: !!this.activeSearchTab,
+        scriptLoading: this.scriptEditorLoading,
+        unread: this.messageUnread,
+        fileProject: this.fileProject
+      }
+    },
+    configurationActions() { return composeMainMenu(mainMenus.configuration, this.mainMenuContext) },
+    accountActions() { return composeMainMenu(mainMenus.user, this.mainMenuContext) },
     mainToolbar() { return describeMainToolbar({width:this.toolbarWidth,compact:this.compactShortcuts,progressReveal:this.activityProgress ? 1 : 0,dccClient:false}) },
     mainToolbarControls() { return mainToolbarPositions(this.mainToolbar) },
     mobileSearchContext() { return [this.workspaceProject,this.activeWorkspaceSection?.id,this.activeSearchTab?.id].join(':') },
@@ -266,6 +286,36 @@ export default {
     this.linkRequest++
   },
   methods: {
+    async invokeMainMenu(command) {
+      for (const name of ['settingsMenu', 'accountMenu']) {
+        const menu = this.$refs[name]
+        if (menu?.open) menu.close(true)
+      }
+      await nextTick()
+      const actions = {
+        open_configuration: () => this.showConfiguration(),
+        show_administration: () => this.showAdministration(),
+        save_preferences: () => this.savePreferences(),
+        reload_cache: () => this.reloadCache(),
+        apply_view_to_all_tabs: () => this.applyViewToAllTabs(),
+        reset_workspace_layout: () => this.$refs.docks.reset(),
+        open_script_editor: () => this.openScriptEditor(),
+        show_debug_log: () => this.$refs.debugLog.open(),
+        show_ui_performance: () => this.$refs.uiPerformance.open(),
+        open_script_shelf: () => this.$refs.scriptShelf.open(),
+        show_commit_queue: () => this.openCommitQueue(),
+        show_work_hours: () => this.openWorkHours(),
+        show_tasks: () => this.$refs.taskManager.open(),
+        create_project: () => this.showProjectCreation(),
+        show_help: () => this.$refs.help.open(),
+        mobile_help: () => this.$refs.help.open('mobile'),
+        show_user_profile: () => this.$refs.userProfile.open(),
+        show_users: () => this.$refs.userProfile.open(this.session.login, true),
+        show_messages: () => this.$refs.messages.open(),
+        sign_out: () => this.signOut()
+      }
+      actions[command]?.()
+    },
     t,
     updateToolbarSize() { this.toolbarWidth = window.innerWidth },
     mainToolbarStyle(id) {
@@ -1655,36 +1705,19 @@ export default {
           <AppButton class="activity-feed-trigger frame-main-control" data-main-control="mainFeed" :style="mainToolbarStyle('mainFeed')" icon-only label="Activity Feed" icon="activity-feed" :badge-count="activityUnread" @click="$refs.activityFeed.open()" />
         </div>
         <AppearanceControls v-if="!compactShortcuts" class="frame-main-control" data-main-control="mainAppearance" :style="mainToolbarStyle('mainAppearance')" compact />
-        <AppMenu ref="settingsMenu" class="settings-menu frame-main-control" data-main-control="mainSettings" :style="mainToolbarStyle('mainSettings')" label="More options">
-            <AppButton class="configuration-link" label="Configuration" icon="settings" :disabled="busy || openingLink" :aria-pressed="section === 'configuration'" @click="showConfiguration" />
-            <AppButton v-if="canAdminister && !compactShortcuts" label="Administration" icon="security" :disabled="busy" :aria-pressed="administrationOpen" @click="showAdministration" />
-            <AppButton v-if="!compactShortcuts" label="Save Preferences" icon="save" :disabled="reloadingCache" @click="savePreferences" />
-            <AppButton label="Reload Cache" icon="refresh" :disabled="busy || reloadingCache" @click="reloadCache" />
-            <AppButton v-if="!compactShortcuts" label="Current view to All Tabs" icon="MDI_LAYERS" :disabled="!activeSearchTab" @click="applyViewToAllTabs" />
-            <AppButton v-if="!compactShortcuts" label="Reset workspace layout" icon="undo" @click="$refs.docks.reset()" />
-            <hr>
-            <AppButton v-if="!compactShortcuts" label="Script Editor" icon="code" :disabled="scriptEditorLoading" @click="openScriptEditor" />
-            <AppButton v-if="!compactShortcuts" label="Debug Log" icon="MDI_BUG" @click="$refs.debugLog.open()" />
-            <AppButton v-if="!compactShortcuts" label="UI responsiveness" icon="MDI_SPEEDOMETER" @click="$refs.uiPerformance.open()" />
-            <AppButton v-if="!compactShortcuts" label="Script Shelf" icon="code" @click="$refs.scriptShelf.open()" />
-            <AppButton :label="fileProject ? 'Changelists' : 'Commit Queue'" icon="queue" @click="openCommitQueue(); $refs.settingsMenu.open = false" />
-            <AppButton v-if="canAdminister" label="Weekly timesheet" icon="MDI_CLOCK_OUTLINE" @click="openWorkHours(); $refs.settingsMenu.open = false" />
-            <AppButton v-if="canAdminister" label="Task Manager" icon="MDI_CLIPBOARD_TEXT_OUTLINE" @click="$refs.taskManager.open(); $refs.settingsMenu.open = false" />
-            <AppButton v-if="canAdminister && !compactShortcuts" label="Create project" icon="add" @click="showProjectCreation" />
+        <AppMenu frame-composition ref="settingsMenu" class="settings-menu frame-main-control" data-main-control="mainSettings" :style="mainToolbarStyle('mainSettings')" label="More options">
+            <ActionRows :actions="configurationActions" @triggered="invokeMainMenu" />
             <p v-if="compactShortcuts" class="muted">{{ t('Schema, interface and script editors are available on a desktop screen.') }}</p>
             <div id="compact-connection-menu"></div>
             <div class="compact-shortcuts">
               <div id="compact-system-activity"></div>
               <AppButton label="Activity Feed" icon="activity-feed" @click="$refs.activityFeed.open(); $refs.settingsMenu.open = false" />
             </div>
-            <hr>
-            <AppButton v-if="compactShortcuts" label="Mobile guide" icon="help" @click="$refs.help.open('mobile')" /><AppButton label="Help" icon="help" @click="$refs.help.open()" />
-            <AppButton v-if="!compactShortcuts" class="docs-link" href="/docs" target="_blank" rel="noopener" icon="book-open" label="API documentation ↗" />
         </AppMenu>
-        <AppMenu ref="accountMenu" class="account-menu frame-main-control" data-main-control="mainAccount" :style="mainToolbarStyle('mainAccount')" label="Account" :badge-count="messageUnread">
+        <AppMenu frame-composition ref="accountMenu" class="account-menu frame-main-control" data-main-control="mainAccount" :style="mainToolbarStyle('mainAccount')" label="Account" :badge-count="messageUnread">
           <template #trigger><ItemPreview class="account-avatar" :source="userIdentity?.avatarUrl" :fallback-text="userIdentity?.initials || session.login.slice(0, 1).toUpperCase()" :accent="userIdentity?.avatarColor" :preview-size="mainToolbar.dimensions.surfaceExtent-2" round outlined /><span class="account-name">{{ userIdentity?.displayName || session.login }}</span></template>
-          <AppButton label="My profile" icon="MDI_ACCOUNT" @click="$refs.userProfile.open(); $refs.accountMenu.open = false" /><AppButton label="Users" icon="MDI_ACCOUNT_GROUP" @click="$refs.userProfile.open(session.login,true); $refs.accountMenu.open = false" /><AppButton label="Messages" icon="MDI_MESSAGE_TEXT" @click="$refs.messages.open(); $refs.accountMenu.open = false"><span>{{ t('Messages') }}</span><span v-if="messageUnread" class="result-count">{{ messageUnread > 99 ? '99+' : messageUnread }}</span></AppButton><hr>
-          <p class="muted">{{ t('Signed in as {login}', { login: session.login }) }}</p><p class="version">TACTIC Stream v{{ version }}</p><AppButton label="Sign out" icon="logout" :disabled="busy" @click="signOut()" />
+          <ActionRows :actions="accountActions" @triggered="invokeMainMenu" />
+          <p class="muted">{{ t('Signed in as {login}', { login: session.login }) }}</p><p class="version">TACTIC Stream v{{ version }}</p>
         </AppMenu>
       </div>
     </header>
@@ -1871,7 +1904,7 @@ export default {
           <AppButton v-else :label="error ? 'Retry' : 'Load more'" :icon="error ? 'refresh' : 'next'" @click="loadMore(true)" />
         </div>
       </div>
-      <footer class="pagination workspace-footer">
+      <DockWorkspaceFooter class="pagination workspace-footer">
         <span class="footer-showing">{{ t('Showing') }}</span>
         <span class="result-range"><span class="footer-range">{{ continuous ? t('{count} results', { count: totalCount ?? rows.length }) : totalCount === null ? rowRange : t('{range} of {total}', { range: rowRange, total: totalCount }) }}</span><span class="footer-total">{{ totalCount ?? rowRange }}</span></span>
         <div v-if="!continuous" class="page-controls">
@@ -1900,7 +1933,7 @@ export default {
         </AppMenu>
         <AppButton v-if="!compactShortcuts" class="footer-commit" icon-only icon="queue" :label="fileProject ? 'Changelists' : 'Commit Queue'" @click="openCommitQueue()" />
         <AppButton v-if="!compactShortcuts && (interfaceConfig?.operations?.create || (type === 'sthpw/project' && canAdminister))" class="create-object" highlighted icon-only icon="add" label="Create record" :disabled="busy" @click="createRecord"><span class="footer-create-label">{{ t('New item') }}</span></AppButton>
-      </footer>
+      </DockWorkspaceFooter>
     </section>
     </Teleport>
     <section v-if="section === 'data' && !activeSearchTab" class="workspace-empty">

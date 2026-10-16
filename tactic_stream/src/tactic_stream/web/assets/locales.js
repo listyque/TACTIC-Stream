@@ -1206,7 +1206,41 @@ var en_default = {
 	"Discard text": "Discard text",
 	Subgroups: "Subgroups",
 	"The save result is unknown. Reload access rules before trying again.": "The save result is unknown. Reload access rules before trying again.",
-	"Changes apply to the draft. Save to server to publish them.": "Changes apply to the draft. Save to server to publish them."
+	"Changes apply to the draft. Save to server to publish them.": "Changes apply to the draft. Save to server to publish them.",
+	"My Profile": "My Profile",
+	Users: "Users",
+	Messages: "Messages",
+	"Sign Out": "Sign Out",
+	Configuration: "Configuration",
+	Administration: "Administration",
+	"Save Preferences": "Save Preferences",
+	"Reload Cache": "Reload Cache",
+	"Current view to All Tabs": "Current view to All Tabs",
+	"Reset workspace layout": "Reset workspace layout",
+	"Script Editor": "Script Editor",
+	"Debug Log": "Debug Log",
+	"UI responsiveness": "UI responsiveness",
+	"Repository Sync Queue": "Repository Sync Queue",
+	"Watch Folders": "Watch Folders",
+	"TACTIC Handler Server": "TACTIC Handler Server",
+	"Script Shelf": "Script Shelf",
+	"Commit Queue": "Commit Queue",
+	"Weekly timesheet": "Weekly timesheet",
+	"Task Manager": "Task Manager",
+	"Create project": "Create project",
+	Help: "Help",
+	Update: "Update",
+	Exit: "Exit",
+	"API documentation ↗": "API documentation ↗",
+	Connection: "Connection",
+	"Ping now": "Ping now",
+	"Server updates": "Server updates",
+	"Messages, reactions, activity, tasks and presence": "Messages, reactions, activity, tasks and presence",
+	"Chat updates require an initialized messages schema.": "Chat updates require an initialized messages schema.",
+	"Every 5 seconds": "Every 5 seconds",
+	"Every 10 seconds": "Every 10 seconds",
+	"Every 30 seconds": "Every 30 seconds",
+	"Every 60 seconds": "Every 60 seconds"
 };
 var ru_default = {
 	Completion: "Готовность",
@@ -5591,7 +5625,14 @@ var ru_default = {
 	"Columns list width": "Ширина списка колонок",
 	"Delete the selected sidebar item?": "Удалить выбранный элемент бокового меню?",
 	"Search icons": "Поиск иконок",
-	"Icon library": "Библиотека иконок"
+	"Icon library": "Библиотека иконок",
+	"My Profile": "Мой профиль",
+	"Sign Out": "Выйти",
+	"Repository Sync Queue": "Очередь синхронизации репозитория",
+	"Watch Folders": "Отслеживаемые папки",
+	"TACTIC Handler Server": "Сервер TACTIC Handler",
+	Update: "Обновление",
+	Exit: "Выход"
 };
 //#endregion
 export { en_default as n, ru_default as t };

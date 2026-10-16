@@ -98,7 +98,9 @@ def snapshot(window, *, check_icons=True):
 def source_hashes(repo, handler, names):
     import hashlib
     shared = {}
-    for path in (repo / 'src/tactic_stream/shared_ui').rglob('*.mjs'):
+    for path in (repo / 'src/tactic_stream/shared_ui').rglob('*'):
+        if path.suffix not in ('.mjs', '.json'):
+            continue
         relative = path.relative_to(repo / 'src/tactic_stream/shared_ui')
         assert path.read_bytes() == (handler / 'thlib/ui/qml/tactic_frame' / relative).read_bytes(), 'Unsynchronized Frame module: ' + str(relative)
         shared[path.relative_to(repo / 'src/tactic_stream/shared_ui').as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()

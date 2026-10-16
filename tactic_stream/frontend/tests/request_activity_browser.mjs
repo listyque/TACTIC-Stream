@@ -98,7 +98,7 @@ try {
   await script.locator('p[role="alert"]').filter({ hasText: 'Script catalog failed' }).waitFor(); await idle()
   assert.equal(await script.locator('.notification-card[data-kind="progress"]').count(), 0)
   await script.getByLabel('Close script editor', { exact: true }).tap()
-  await page.getByLabel('Account', { exact: true }).tap(); await page.getByRole('button', { name: 'Sign out', exact: true }).tap()
+  await page.getByLabel('Account', { exact: true }).tap(); await page.getByRole('button', { name: 'Sign Out', exact: true }).tap()
   await page.getByLabel('Password', { exact: true }).waitFor()
   assert.equal(await page.locator('.notification-stack:popover-open').count(), 0)
   assert.deepEqual(errors, [])

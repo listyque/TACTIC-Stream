@@ -546,7 +546,9 @@
       ],
       "vue": [
         "AppMenu",
-        "AppMenuItem"
+        "AppMenuItem",
+        "ActionRow",
+        "ActionRows"
       ],
       "tokens": [
         "menu",
@@ -757,7 +759,8 @@
         "ResponsiveFlow",
         "DockGrip",
         "SettingRow",
-        "AdminSaveBar"
+        "AdminSaveBar",
+        "DockWorkspaceFooter"
       ],
       "tokens": [
         "scroll",
@@ -1235,6 +1238,7 @@
     "DocumentPane": "composite",
     "Typography": "infrastructure",
     "NavigationRow": "composite",
-    "SidebarTreeRow": "composite"
+    "SidebarTreeRow": "composite",
+    "ActionRow": "primitive"
   }
 }

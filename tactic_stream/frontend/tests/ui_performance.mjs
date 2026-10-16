@@ -94,7 +94,7 @@ try {
   await russian.getByRole('button', { name: 'Продолжить замеры', exact: true }).click()
   await page.keyboard.press('Escape')
   await page.locator('.appearance-controls > summary').click(); await page.getByLabel('Язык интерфейса', { exact: true }).selectOption('en'); await page.keyboard.press('Escape')
-  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign out', exact: true }).click()
+  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
   await page.getByRole('button', { name: 'Sign in', exact: true }).waitFor()
   await page.getByLabel('Login', { exact: true }).fill(process.env.STREAM_CHECK_LOGIN || 'admin')
   await page.getByLabel('Password', { exact: true }).fill(process.env.STREAM_CHECK_PASSWORD)

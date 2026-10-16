@@ -55,6 +55,30 @@ try {
   const capture = () =>
     page.evaluate(() => window.dockHarness.docks.value.capture());
   await setup(true);
+  // Activation, reorder and close must hand focus to the newly visible delegate.
+  const activeTab = () => page.locator('[data-kind="dock"] [role="tab"]:focus');
+  await page
+    .locator('[data-dock="description"] [data-tab-id="description"]')
+    .focus();
+  await page.keyboard.press('Home');
+  assert.equal(await activeTab().getAttribute('data-tab-id'), 'notes');
+  await page.keyboard.press('End');
+  assert.equal(await activeTab().getAttribute('data-tab-id'), 'description');
+  await page.keyboard.press('Control+Shift+ArrowLeft');
+  assert.equal(await activeTab().getAttribute('data-tab-id'), 'description');
+  await page.keyboard.press('Delete');
+  assert.equal(
+    await page
+      .locator('[data-dock="notes"] .dock-titlebar')
+      .evaluate((item) => item === document.activeElement),
+    true
+  );
+  assert.equal(
+    (await capture()).panels.find((row) => row.panel_id === 'description')
+      .visible,
+    false
+  );
+  await setup(true);
   const description = page.locator('[data-dock="description"]');
   await description
     .getByRole('tab', { name: 'Task Inspector', exact: true })

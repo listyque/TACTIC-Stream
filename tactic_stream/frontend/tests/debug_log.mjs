@@ -120,7 +120,7 @@ try {
   await page.keyboard.press('Escape')
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.getByLabel('Account', { exact: true }).click()
-  await page.getByRole('button', { name: 'Sign out', exact: true }).click()
+  await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
   await page.getByRole('button', { name: 'Sign in', exact: true }).waitFor()
   await page.getByLabel('Login', { exact: true }).fill(process.env.STREAM_CHECK_LOGIN || 'admin')
   await page.getByLabel('Password', { exact: true }).fill(process.env.STREAM_CHECK_PASSWORD)

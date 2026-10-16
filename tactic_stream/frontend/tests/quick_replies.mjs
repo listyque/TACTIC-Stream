@@ -100,7 +100,7 @@ try {
     assert.equal(await card.getByRole('textbox').isDisabled(), true)
     assert.equal(await card.getByRole('button', { name: 'Cancel reply', exact: true }).isDisabled(), true)
     await dialog.getByRole('button', { name: 'Close Messages', exact: true }).click()
-    await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign out', exact: true }).click()
+    await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
     await page.getByLabel('Login', { exact: true }).fill('artist')
     await page.getByLabel('Password', { exact: true }).fill('quick-reply-password')
     await page.getByRole('button', { name: 'Sign in', exact: true }).click(); await page.locator('.topbar').waitFor()
@@ -110,7 +110,7 @@ try {
     assert.equal(await cards.count(), 0)
     assert.equal(await page.getByRole('button', { name: 'Sign in', exact: true }).count(), 0, 'Late failure cannot log out a new account')
   } finally { release(); await page.unroute('**/messages/send') }
-  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign out', exact: true }).click()
+  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
   assert.equal(await cards.count(), 0)
   assert.deepEqual(errors, [])
   console.log('PASS: native quick-reply geometry, real send, untouched conversation/draft, failed send/retry, stopped/restarted timers, duplicate-submit guard, late failure after account switch, Escape, mobile320 and logout cleanup')
