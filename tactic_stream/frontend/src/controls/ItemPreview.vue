@@ -1,6 +1,7 @@
 <script>
 import { t } from '../i18n.js';
 import AppIcon from './AppIcon.vue';
+import BusyIndicator from './BusyIndicator.vue';
 import { frameColors } from '../appearance.js';
 import {
   blend,
@@ -18,7 +19,7 @@ const variableRoles = Object.fromEntries(
 );
 
 export default {
-  components: { AppIcon },
+  components: { AppIcon, BusyIndicator },
   props: {
     source: String,
     file: File,
@@ -27,6 +28,8 @@ export default {
     accent: String,
     round: Boolean,
     outlined: Boolean,
+    selected: Boolean,
+    loading: Boolean,
     previewSize: Number,
     fillMode: { type: String, default: 'cover' }
   },
@@ -35,6 +38,9 @@ export default {
     return { localUrl: '', broken: false, request: 0 };
   },
   computed: {
+    pending() {
+      return this.loading || this.url.startsWith('pending-preview:');
+    },
     url() {
       return this.localUrl || this.source || '';
     },
@@ -93,7 +99,12 @@ export default {
 <template>
   <div
     class="image-picker-preview item-preview"
-    :class="{ 'round-preview': round, 'outlined-preview': outlined }"
+    :class="{
+      'round-preview': round,
+      'outlined-preview': outlined,
+      'selected-preview': selected
+    }"
+    :aria-busy="pending || undefined"
     :style="{
       ...fallbackPaint,
       '--preview-icon-size':
@@ -103,7 +114,7 @@ export default {
     }"
   >
     <img
-      v-if="url && !broken"
+      v-if="url && !pending && !broken"
       :src="url"
       :style="{ objectFit: fillMode }"
       :alt="t('Preview image')"
@@ -114,6 +125,11 @@ export default {
         broken = true;
         $emit('failed');
       "
+    />
+    <BusyIndicator
+      v-else-if="pending"
+      running
+      :style="{ width: 'min(24px,45%)', height: 'min(24px,45%)' }"
     />
     <span v-else-if="fallbackText" aria-hidden="true">{{ fallbackText }}</span>
     <AppIcon v-else-if="fallbackIcon" :name="fallbackIcon" />
@@ -154,8 +170,16 @@ export default {
 }
 .image-picker-preview > span:not(.app-icon) {
   font-size: var(--preview-text-size, inherit);
+  line-height: normal;
+  font-weight: 600;
 }
 .image-picker-preview > .app-icon {
   font-size: var(--preview-icon-size, var(--icon-size));
+}
+.image-picker-preview.outlined-preview.selected-preview {
+  border-color: var(--on-selected);
+}
+.image-picker-preview > .busy-indicator {
+  flex: none;
 }
 </style>

@@ -227,6 +227,8 @@
     базовым контролом или формой.
   </p>
   <nav>
+    <a href="catalog.html">Рабочий каталог · попробовать контролы</a>
+    <a href="variants/index.html">Полный набор парных примеров</a>
     <a href="index.html">Парные снимки проверенной выборки · 372 состояния</a>
     <a href="../../frame_admin/output/index.html"
       >Administration · сценарии экранов</a
@@ -286,6 +288,7 @@
       review: 'На разбор'
     };
     const coverage = {
+      contract: 'Базовый контракт и исполняемые примеры; границы указаны ниже',
       partial: 'Частично проверено',
       nested: 'Только вложенные применения',
       missing: 'Нет парного стенда',
@@ -408,6 +411,7 @@
       return `<article><h2>${esc(family.title)}</h2><span class="tag">${esc(labels[family.level])}</span>
       <p class="muted">Уровни исходников: ${esc(levels.map((level) => labels[level]).join(' / '))}. Рендерер базового контрола может относиться к инфраструктуре.</p>
       <p><strong>${esc(coverage[family.coverage])}</strong></p><p>${family.variants.map(esc).join(' · ')}</p>
+      <p><a href="catalog.html?family=${encodeURIComponent(family.id)}">Открыть рабочие примеры (${(family.examples || []).length})</a></p>
       ${preview(family)}${links}<p>${esc(family.rule)}</p>
       <div class="gap"><ul>${family.gaps.map((gap) => `<li>${esc(gap)}</li>`).join('')}</ul></div>
       <button data-family="${esc(family.id)}">Все исходники и применения</button></article>`;

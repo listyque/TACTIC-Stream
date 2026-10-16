@@ -50,7 +50,7 @@ var _sfc_main = {
 					return openBlock(), createBlock(resolveDynamicComponent("option"), {
 						key: item.value,
 						value: item.value,
-						disabled: item.disabled
+						disabled: item.disabled || item.enabled === false
 					}, {
 						default: withCtx(() => [
 							decorated.value && item.icon ? (openBlock(), createBlock(_sfc_main$1, {

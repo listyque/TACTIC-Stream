@@ -62,12 +62,19 @@
       "assets/AppMenuItem.css"
     ]
   },
+  "_AppSearchField.css": {
+    "file": "assets/AppSearchField.css",
+    "src": "_AppSearchField.css"
+  },
   "_AppSearchField.js": {
     "file": "assets/AppSearchField.js",
     "name": "AppSearchField",
     "imports": [
       "_vue.js",
       "index.html"
+    ],
+    "css": [
+      "assets/AppSearchField.css"
     ]
   },
   "_AppSelect.css": {
@@ -206,12 +213,19 @@
       "assets/RecordForm.css"
     ]
   },
+  "_SettingRow.css": {
+    "file": "assets/SettingRow.css",
+    "src": "_SettingRow.css"
+  },
   "_SettingRow.js": {
     "file": "assets/SettingRow.js",
     "name": "SettingRow",
     "imports": [
       "_vue.js",
       "index.html"
+    ],
+    "css": [
+      "assets/SettingRow.css"
     ]
   },
   "_UserComboBox.css": {

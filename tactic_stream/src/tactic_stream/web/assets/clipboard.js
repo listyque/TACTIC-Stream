@@ -1,5 +1,5 @@
 import { G as withCtx, N as openBlock, P as renderList, T as mergeModels, V as useModel, Z as shallowReactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, m as computed, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
-import { A as effectiveColorMode, D as t, M as languages, N as readableText, O as appearance, Q as themes, X as accentPresets, Z as iconSets, b as logRequest, f as debugLog, k as colorModes, o as _sfc_main$4, u as _sfc_main$5, x as redact } from "./index.js";
+import { $ as themes, A as effectiveColorMode, D as t, M as languages, N as readableText, O as appearance, Q as iconSets, Z as accentPresets, b as logRequest, f as debugLog, k as colorModes, o as _sfc_main$4, u as _sfc_main$5, x as redact } from "./index.js";
 import { t as _sfc_main$6 } from "./AppSwitch.js";
 import { t as _sfc_main$7 } from "./AppSelect.js";
 import { t as _sfc_main$8 } from "./SettingRow.js";
@@ -620,7 +620,8 @@ var _sfc_main$3 = {
 	props: /*@__PURE__*/ mergeModels({
 		options: Array,
 		mode: String,
-		label: String
+		label: String,
+		disabled: Boolean
 	}, {
 		"modelValue": {},
 		"modelModifiers": {}
@@ -639,12 +640,13 @@ var _sfc_main$3 = {
 			return openBlock(), createElementBlock("div", {
 				class: "accent-preset-picker",
 				role: "group",
-				"aria-label": __props.label
+				"aria-label": unref(t)(__props.label)
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.options, (preset) => {
 				return openBlock(), createBlock(_sfc_main$4, {
 					key: preset.value,
 					label: preset.label,
 					title: preset.label,
+					disabled: __props.disabled,
 					"aria-pressed": model.value === preset.value,
 					style: normalizeStyle({
 						"--preset-base": preset[__props.mode + "Base"],
@@ -655,12 +657,13 @@ var _sfc_main$3 = {
 				}, {
 					default: withCtx(() => [createBaseVNode("span", null, [model.value === preset.value ? (openBlock(), createBlock(_sfc_main$5, {
 						key: 0,
-						name: "check"
+						name: "fontawesome-solid:check"
 					})) : createCommentVNode("", true)])]),
 					_: 2
 				}, 1032, [
 					"label",
 					"title",
+					"disabled",
 					"aria-pressed",
 					"style",
 					"onClick"

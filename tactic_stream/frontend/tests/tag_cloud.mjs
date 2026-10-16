@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { chromium } from 'playwright'
-import { packTagRows, tagRowAt } from '../src/features/workspace/tagCloud.js'
+import { packTagRows, tagRowAt } from '../../src/tactic_stream/shared_ui/controls/lists/chips.mjs'
 import { selectProject } from './project_selection.mjs'
 
 const packed = packTagRows(Array.from({ length: 1500 }, (_, n) => ({ tag: 'token' + n, weight: n / 1500 })), 280, text => text.length * 10, 'ALL')

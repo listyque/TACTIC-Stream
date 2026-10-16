@@ -299,7 +299,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 		readonly: Boolean,
 		includeTime: {
 			type: Boolean,
-			default: true
+			default: false
 		},
 		allowClear: {
 			type: Boolean,
@@ -333,7 +333,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 		}));
 		function dateLabel(date) {
 			const parts = Object.fromEntries(dateFormat.value.formatToParts(date).map((part) => [part.type, part.value]));
-			return `${parts.day} ${parts.month} ${parts.year}`;
+			return `${parts.day} ${parts.month} ${String(date.getFullYear()).padStart(4, "0")}`;
 		}
 		const presentation = computed(() => {
 			const date = parse$1(props.modelValue);

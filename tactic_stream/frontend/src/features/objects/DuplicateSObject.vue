@@ -144,7 +144,7 @@ export default {
               <AppSelect v-else-if="fieldKind(field) === 'select'" v-model="draft[field.name]" :options="fieldChoices(field)" :label="field.widget?.title || field.label" :translate-labels="false" :disabled="saving || readOnly(field)" />
               <AppColorInput v-else-if="fieldKind(field) === 'color'" v-model="draft[field.name]" :label="field.label" :disabled="saving || readOnly(field)" />
               <textarea v-else-if="fieldKind(field) === 'textarea'" v-model="draft[field.name]" :aria-label="t(field.widget?.title || field.label)" rows="4" :disabled="saving || readOnly(field)"></textarea>
-              <AppDateField v-else-if="fieldKind(field) === 'datetime-local'" v-model="draft[field.name]" :label="field.widget?.title || field.label" :required="[true, 'true'].includes(field.widget?.options?.required)" :disabled="saving || readOnly(field)" />
+              <AppDateField include-time v-else-if="fieldKind(field) === 'datetime-local'" v-model="draft[field.name]" :label="field.widget?.title || field.label" :required="[true, 'true'].includes(field.widget?.options?.required)" :disabled="saving || readOnly(field)" />
               <AppTextField v-else v-model="draft[field.name]" :label="field.widget?.title || field.label" :type="fieldKind(field)" :required="[true,'true'].includes(field.widget?.options?.required)" :disabled="saving || readOnly(field)" step="any" />
               <small v-if="field.widget?.options?.hint || field.widget?.options?.hint_text" class="muted">{{ t(field.widget.options.hint || field.widget.options.hint_text) }}</small>
             </div></div>

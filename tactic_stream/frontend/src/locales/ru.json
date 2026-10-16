@@ -4389,5 +4389,10 @@
   "TACTIC Handler Server": "Сервер TACTIC Handler",
   "Update": "Обновление",
   "Exit": "Выход",
-  "Templates": "Шаблоны"
+  "Templates": "Шаблоны",
+  "Increase value": "Увеличить значение",
+  "Decrease value": "Уменьшить значение",
+  "Invalid value": "Некорректное значение",
+  "Unsupported file type": "Неподдерживаемый тип файла",
+  "Read only": "Только чтение"
 }

@@ -50,14 +50,29 @@ def main():
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "tools/frame_controls/*.{vue,js,html,mjs}"
     subprocess.run(command, cwd=ROOT, check=True)
-    command[-1] = "frontend/src/features/workspace/{DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js}"
+    command[-1] = (
+        "frontend/src/features/workspace/{DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue}"
+    )
     subprocess.run(command, cwd=ROOT, check=True)
-    command[-1] = "frontend/tests/{frame_controls*,frame_icons,icons}.mjs"
+    command[-1] = "frontend/tests/{frame_control*,frame_icons,icons}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
-    for pattern in ["frontend/src/features/help/**/*.{vue,js}", "tools/frame_help/*.{vue,js,html,mjs}", "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs"]:
+    for pattern in [
+        "frontend/src/features/help/**/*.{vue,js}",
+        "tools/frame_help/*.{vue,js,html,mjs}",
+        "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs",
+    ]:
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
-    for pattern in ["src/tactic_stream/shared_ui/**/*.json", "tools/frame_menus/*.{vue,js,html}", "tools/frame_navigation/*.{vue,js,html}", "frontend/tests/frame_menus.mjs", "frontend/tests/frame_projects.mjs", "frontend/src/features/connection/ConnectionMenu.vue", "frontend/src/features/projects/{ProjectChooser,ProjectCard}.vue", "tools/frame_projects/*.{vue,js,html}"]:
+    for pattern in [
+        "src/tactic_stream/shared_ui/**/*.json",
+        "tools/frame_menus/*.{vue,js,html}",
+        "tools/frame_navigation/*.{vue,js,html}",
+        "frontend/tests/frame_menus.mjs",
+        "frontend/tests/frame_projects.mjs",
+        "frontend/src/features/connection/ConnectionMenu.vue",
+        "frontend/src/features/projects/{ProjectChooser,ProjectCard}.vue",
+        "tools/frame_projects/*.{vue,js,html}",
+    ]:
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
     controls = [
@@ -82,6 +97,30 @@ def main():
         "AppSplitter.vue",
         "AppTextArea.vue",
         "AppTextField.vue",
+        "AppProgress.vue",
+        "AppSegmentedButton.vue",
+        "AppSlider.vue",
+        "AppSearchField.vue",
+        "AppTabButton.vue",
+        "SettingRow.vue",
+        "ResponsiveFlow.vue",
+        "StatusSelect.vue",
+        "CodeEditor.vue",
+        "EmojiPicker.vue",
+        "ripple.js",
+        "AccentPresetPicker.vue",
+        "BusyIndicator.vue",
+        "ImagePicker.vue",
+        "SummaryChip.vue",
+        "UserIdentity.vue",
+        "UserGroupSection.vue",
+        "ProfileInfoRow.vue",
+        "actions/*.vue",
+        "display/*.vue",
+        "forms/*.vue",
+        "layout/*.vue",
+        "lists/*.vue",
+        "typography/*.js",
         "ColorPicker.vue",
         "IconPicker.vue",
         "UserComboBox.vue",
@@ -109,19 +148,41 @@ def main():
         files += [
             path
             for path in sorted(
-                (args.handler_root / "thlib/ui/qml/controls").glob("*.qml")
+                (args.handler_root / "thlib/ui/qml/controls").rglob("*.qml")
             )
             if "tactic_frame" in path.read_text(encoding="utf-8")
         ]
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/administration").rglob("*.qml")
         )
-        files += sorted((args.handler_root / "thlib/ui/qml/features/support").rglob("*.qml"))
-        files += sorted((args.handler_root / "thlib/ui/qml/features/search").rglob("*.qml"))
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/support").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/search").rglob("*.qml")
+        )
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]
         files += [args.handler_root / "tests/fixtures/DockWorkspaceHarness.qml"]
+        files += sorted(
+            (args.handler_root / "tests/fixtures/frame_controls").glob("*.qml")
+        )
+        files += [args.handler_root / "thlib/ui/qml/TacticSearchField.qml"]
+        files += [
+            args.handler_root / "thlib/ui/qml/controls/PreviewNavigationButton.qml"
+        ]
+        files += [args.handler_root / "thlib/ui/qml/controls/feedback/ProgressBar.qml"]
+        files += [
+            args.handler_root / "thlib/ui/qml/controls" / (name + ".qml")
+            for name in (
+                "PopupAction",
+                "DisclosureButton",
+                "AccentPresetPicker",
+                "ItemPreview",
+            )
+        ]
+        files = list(dict.fromkeys(files))
     for path in files:
         result = subprocess.run(
             [str(FORMATTER), "--newline", "unix", str(path)],

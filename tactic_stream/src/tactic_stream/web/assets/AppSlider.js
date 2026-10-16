@@ -23,7 +23,7 @@ var _sfc_main = {
 		},
 		step: {
 			type: Number,
-			default: 5
+			default: 1
 		}
 	}, {
 		"modelValue": {
@@ -40,7 +40,7 @@ var _sfc_main = {
 				class: "app-slider",
 				type: "range",
 				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
-				style: normalizeStyle({ "--slider-position": (model.value - __props.min) / (__props.max - __props.min) * 100 + "%" }),
+				style: normalizeStyle({ "--slider-position": (__props.max > __props.min ? Math.max(0, Math.min(100, (model.value - __props.min) / (__props.max - __props.min) * 100)) : 0) + "%" }),
 				"aria-label": unref(t)(__props.label),
 				disabled: __props.disabled,
 				min: __props.min,

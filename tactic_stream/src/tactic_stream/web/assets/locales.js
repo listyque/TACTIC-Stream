@@ -1241,7 +1241,16 @@ var en_default = {
 	"Every 10 seconds": "Every 10 seconds",
 	"Every 30 seconds": "Every 30 seconds",
 	"Every 60 seconds": "Every 60 seconds",
-	Templates: "Templates"
+	Templates: "Templates",
+	"Increase value": "Increase value",
+	"Decrease value": "Decrease value",
+	"Collapse item": "Collapse item",
+	"Expand item": "Expand item",
+	"No records yet": "No records yet",
+	"Invalid value": "Invalid value",
+	"Drop files here": "Drop files here",
+	"Unsupported file type": "Unsupported file type",
+	"Read only": "Read only"
 };
 var ru_default = {
 	Completion: "Готовность",
@@ -5634,7 +5643,12 @@ var ru_default = {
 	"TACTIC Handler Server": "Сервер TACTIC Handler",
 	Update: "Обновление",
 	Exit: "Выход",
-	Templates: "Шаблоны"
+	Templates: "Шаблоны",
+	"Increase value": "Увеличить значение",
+	"Decrease value": "Уменьшить значение",
+	"Invalid value": "Некорректное значение",
+	"Unsupported file type": "Неподдерживаемый тип файла",
+	"Read only": "Только чтение"
 };
 //#endregion
 export { en_default as n, ru_default as t };

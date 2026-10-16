@@ -1,5 +1,5 @@
 import { D as nextTick, H as watch, N as openBlock, X as ref, Y as reactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, p as Teleport, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
-import { D as t, et as _plugin_vue_export_helper_default, o as _sfc_main$2, u as _sfc_main$1 } from "./index.js";
+import { D as t, o as _sfc_main$2, tt as _plugin_vue_export_helper_default, u as _sfc_main$1 } from "./index.js";
 import { M as rpc } from "./clipboard.js";
 import { t as _sfc_main$3 } from "./AppSelect.js";
 import { d as linkifyPlainText, n as browserLink } from "./links.js";

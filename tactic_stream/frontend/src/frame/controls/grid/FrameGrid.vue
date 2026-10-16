@@ -254,6 +254,8 @@ defineExpose({ focusCell });
 .frame-grid-row-headings > div > span,
 .frame-grid-row-headings > div > small {
   display: block;
+  height: 19px;
+  flex: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

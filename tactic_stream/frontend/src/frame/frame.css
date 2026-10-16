@@ -68,8 +68,10 @@
 .frame-view > .frame-button:has(> .app-icon) {
   padding-left: var(--button-icon-padding);
 }
-.frame-view > .frame-button.icon-button {
+.frame-view > .frame-button.app-button.icon-button {
+  --ripple-inset: 0px;
   padding: 0;
+  background-clip: border-box;
 }
 .frame-button > span {
   flex: 0 1 auto;
@@ -145,14 +147,18 @@
 }
 .frame-checkbox .app-checkbox-indicator,
 .frame-checkbox input {
-  width: 19px;
-  height: 19px;
+  width: var(--check-box-indicator);
+  height: var(--check-box-indicator);
   min-height: 0;
   border-radius: 5px;
-  flex: 0 0 19px;
+  flex: 0 0 var(--check-box-indicator);
 }
 .frame-checkbox .app-checkbox-indicator .app-icon {
-  font-size: 15px;
+  font-size: var(--check-box-icon-size);
+}
+.frame-checkbox.compact {
+  --check-box-indicator: var(--check-box-compact-indicator);
+  --check-box-icon-size: var(--check-box-compact-icon-size);
 }
 .frame-field.app-text-field {
   padding-inline: 11px;
@@ -197,6 +203,9 @@
 .frame-scroll::-webkit-scrollbar,
 .frame-area::-webkit-scrollbar {
   width: 12px;
+}
+.frame-scroll.frame-scroll-horizontal {
+  overflow-x: auto;
 }
 .frame-row {
   position: absolute;

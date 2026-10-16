@@ -22,7 +22,9 @@
         "MessageSendButton"
       ],
       "vue": [
-        "AppButton"
+        "AppButton",
+        "DisclosureButton",
+        "PreviewNavigationButton"
       ],
       "tokens": [
         "button",
@@ -43,13 +45,26 @@
         "Навигация превью",
         "Отправка / sending"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "button",
       "gaps": [
-        "Четыре кнопочных примера не покрывают все реальные варианты.",
-        "FilledActionButton, счётчики, disclosure и preview navigation не имеют полного отдельного парного сценария."
+        "Команда формы и доступность операции остаются у владельца. Native PopupAction не активируется повторно от autorepeat-release."
       ],
-      "rule": "Общий Button + именованные варианты. Геометрия hit target, поверхности, иконки и бейджа задаётся отдельно; предметная команда остаётся у формы."
+      "rule": "Общий Button + именованные варианты. Геометрия hit target, поверхности, иконки и бейджа задаётся отдельно; предметная команда остаётся у формы.",
+      "examples": [
+        "button",
+        "button-primary",
+        "button-tonal",
+        "button-danger",
+        "button-filled-danger",
+        "button-icon",
+        "button-badge-zero",
+        "button-badge",
+        "button-badge-overflow",
+        "button-disclosure",
+        "button-preview",
+        "button-send"
+      ]
     },
     {
       "id": "toggles",
@@ -82,14 +97,25 @@
         "Outlined segments",
         "Недоступный отдельный вариант"
       ],
-      "coverage": "partial",
-      "example": "check",
+      "coverage": "contract",
+      "example": "checkbox",
       "gaps": [
-        "В стенде одна radio-кнопка, а не полный SegmentedButton.",
-        "Проминентный/компактный checkbox и outlined-группа отдельно не закрыты.",
-        "В QML отдельный сегмент учитывает modelData.enabled; Vue-группа учитывает только общий disabled."
+        "Radio — именованный вариант выбора SegmentedButton, а не отдельный предметный редактор. Disabled-опции пропускаются клавиатурой."
       ],
-      "rule": "Один смысл выбора и клавиатурной навигации; явные варианты плотности и вида, а не локальные CSS-копии."
+      "rule": "Один смысл выбора и клавиатурной навигации; явные варианты плотности и вида, а не локальные CSS-копии.",
+      "examples": [
+        "checkbox",
+        "checkbox-checked",
+        "checkbox-mixed",
+        "checkbox-compact",
+        "checkbox-prominent",
+        "switch-off",
+        "switch-on",
+        "segments",
+        "segments-icons",
+        "segments-outline",
+        "segments-disabled-option"
+      ]
     },
     {
       "id": "text-fields",
@@ -121,19 +147,30 @@
         "Prefix / suffix / trailing action",
         "Табличный inline editor"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "field",
       "gaps": [
-        "Обычные поля и многострочный ввод проверены; password, adornments и все inline-редакторы не имеют полного собственного каталога."
+        "IME, selection, undo и потеря focus проверяются настоящими вводами платформенного стенда. Предметная валидация не является частью базового поля.",
+        "У оригинального TextField нет общего prefix/suffix API: такие подписи и кнопки собираются формой из базовых контролов. Это не отдельный недописанный контрол для переноса."
       ],
-      "rule": "Общий ввод/selection/IME/validation presentation. Значение и предметная валидация принадлежат владельцу формы."
+      "rule": "Общий ввод/selection/IME/validation presentation. Значение и предметная валидация принадлежат владельцу формы.",
+      "examples": [
+        "field",
+        "field-empty",
+        "field-password",
+        "field-readonly",
+        "field-error",
+        "field-inline",
+        "text-area"
+      ]
     },
     {
       "id": "search",
       "title": "Поиск и подсказки",
       "level": "composite",
       "native": [
-        "SearchField"
+        "SearchField",
+        "SearchSuggestionsPopup"
       ],
       "vue": [
         "AppSearchField"
@@ -153,12 +190,17 @@
         "Компактный",
         "Поиск с trailing actions"
       ],
-      "coverage": "nested",
+      "coverage": "contract",
       "gaps": [
-        "Ввод поиска используется внутри picker, но полный самостоятельный SearchField со всеми adornments/подсказками не сверён.",
-        "TacticSearchField / WorkspaceSearch — предметный поиск, а не новый базовый TextField."
+        "Подсказки получают нейтральные записи; TacticSearchField оставляет запрос, debounce и открытие результата своему controller."
       ],
-      "rule": "SearchField не знает TSQL, проект или HTTP. Поисковая форма собирает его с фильтрами и владеет запросом."
+      "rule": "SearchField не знает TSQL, проект или HTTP. Поисковая форма собирает его с фильтрами и владеет запросом.",
+      "examples": [
+        "search",
+        "search-empty",
+        "search-suggestions"
+      ],
+      "example": "search"
     },
     {
       "id": "choices",
@@ -191,12 +233,20 @@
         "Action field",
         "Длинные названия"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "choice",
       "gaps": [
-        "Обычный select проверен. Группы, swatches, status/action-field и все множественные варианты отдельно не закрыты."
+        "1000 локальных записей проверяют packing/виртуализацию. Системный fallback select в браузерах без base-select сохраняет нативное оформление ОС."
       ],
-      "rule": "Нейтральная модель options/value и одинаковые события. Загрузка проектов/процессов/статусов не входит в контрол."
+      "rule": "Нейтральная модель options/value и одинаковые события. Загрузка проектов/процессов/статусов не входит в контрол.",
+      "examples": [
+        "choice",
+        "choice-empty",
+        "choice-disabled-option",
+        "choice-icons",
+        "choice-status",
+        "packed-choices"
+      ]
     },
     {
       "id": "numbers",
@@ -207,7 +257,8 @@
         "Slider"
       ],
       "vue": [
-        "AppSlider"
+        "AppSlider",
+        "AppSpinBox"
       ],
       "tokens": [
         "spin",
@@ -223,14 +274,21 @@
         "Текущее значение",
         "Клавиатура и колесо"
       ],
-      "coverage": "partial",
-      "example": "slider",
+      "coverage": "contract",
+      "example": "integer",
       "gaps": [
-        "Slider в галерее закреплён на 50; общего сценария изменения значения нет.",
-        "QML Slider не задаёт stepSize; Vue по умолчанию имеет step=5.",
-        "SpinBox встречается внутри календаря, но самостоятельной парной реализации/проверки нет."
+        "Публичный QML SpinBox сохраняет scaled-int API Qt (32-bit); JS number не расширяет его диапазон. EN/RU grouping, decimal, clamp и external-model binding проверяются отдельно."
       ],
-      "rule": "Общие range/step/clamp/commit правила. Не считать центральное положение thumb проверкой поведения."
+      "rule": "Общие range/step/clamp/commit правила. Не считать центральное положение thumb проверкой поведения.",
+      "examples": [
+        "integer",
+        "decimal",
+        "integer-min",
+        "integer-max",
+        "slider",
+        "slider-step",
+        "slider-fixed"
+      ]
     },
     {
       "id": "dates",
@@ -263,13 +321,19 @@
         "Readonly / disabled",
         "Диапазон дат"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "date",
       "gaps": [
-        "Парсер/календарная арифметика и реальный выбор проверены; нет полной парной галереи всех открытых popup-состояний и диапазонов.",
-        "Task Calendar / Gantt — рабочие панели, а не базовый date picker."
+        "ActivityCalendarPopup — фильтр истории активности, а не базовый календарь DateField; его полный экран относится к B11."
       ],
-      "rule": "Календарь выбора даты — базовый составной контрол. Планировщик задач с загрузкой/сохранением — форма/панель."
+      "rule": "Календарь выбора даты — базовый составной контрол. Планировщик задач с загрузкой/сохранением — форма/панель.",
+      "examples": [
+        "date",
+        "datetime",
+        "date-early-year",
+        "date-invalid",
+        "date-empty"
+      ]
     },
     {
       "id": "identity",
@@ -304,12 +368,25 @@
         "Размеры строки / шапки / профиля",
         "Группа пользователей"
       ],
-      "coverage": "nested",
+      "coverage": "contract",
       "gaps": [
-        "Аватар показан внутри user combo, но полный UserIdentity, размеры, fallback и overlays отдельно не сверены.",
-        "Фотография объекта и аватар человека имеют разные роли, даже если используют ItemPreview."
+        "UserAvatar обращается к profile/userModel и является адаптером предметных данных; нейтральный avatar — ItemPreview. Отдельного готового presence-dot контрола в оригинале нет."
       ],
-      "rule": "Identity принимает нейтральные данные профиля; редактор пользователя и операции членства — отдельные формы."
+      "rule": "Identity принимает нейтральные данные профиля; редактор пользователя и операции членства — отдельные формы.",
+      "examples": [
+        "avatar-initials",
+        "avatar-two-initials",
+        "avatar-fallback",
+        "identity",
+        "identity-retired",
+        "identity-emphasized",
+        "user-group",
+        "user-group-compact",
+        "user-group-empty",
+        "profile-info",
+        "avatar-photo"
+      ],
+      "example": "avatar-initials"
     },
     {
       "id": "user-choice",
@@ -339,12 +416,17 @@
         "Группировка",
         "Клавиатурный выбор"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "user",
       "gaps": [
-        "Single picker и клавиатура проверены. Полная парная галерея multi-select, групп, большого списка и selected chips отсутствует."
+        "Поиск/выбор сохраняют скрытые выбранные записи. Данные пользователя, ACL и сохранение назначения не принадлежат пикеру."
       ],
-      "rule": "Контрол получает готовую модель пользователей и возвращает identity; он не меняет ACL и не выполняет серверный поиск самостоятельно."
+      "rule": "Контрол получает готовую модель пользователей и возвращает identity; он не меняет ACL и не выполняет серверный поиск самостоятельно.",
+      "examples": [
+        "user",
+        "user-empty",
+        "users-multiple"
+      ]
     },
     {
       "id": "pickers",
@@ -381,12 +463,19 @@
         "Image choose / clear / preview",
         "Accent presets"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "color",
       "gaps": [
-        "Цвет и иконки имеют реальный ввод. Emoji, ImagePicker, presets и все открытые состояния ещё не закрыты парными снимками."
+        "Выбор локального файла остаётся системной возможностью хоста. Browser File и native URL/path не подменяются одним фиктивным API."
       ],
-      "rule": "Picker выбирает значение; загрузка/сохранение файла или изменение настройки выполняется владельцем сценария."
+      "rule": "Picker выбирает значение; загрузка/сохранение файла или изменение настройки выполняется владельцем сценария.",
+      "examples": [
+        "color",
+        "icon-choice",
+        "emoji",
+        "image-picker",
+        "accent-presets"
+      ]
     },
     {
       "id": "icons",
@@ -411,12 +500,21 @@
         "Цвет роли",
         "Иконка внутри контрола"
       ],
-      "coverage": "partial",
-      "example": "icon",
+      "coverage": "contract",
+      "example": "icon-material",
       "gaps": [
-        "305 фактических разрешений семейства/глифа проверены; это не галерея всех тысяч символов, размеров и применений."
+        "Проверяются реальные Unicode-глифы и шрифтовые наборы. Разная растеризация шрифта ОС не означает разные имена иконок."
       ],
-      "rule": "Один семантический словарь и fallback. Разница выбора глифа — дефект; сглаживание растеризаторов учитывается отдельно."
+      "rule": "Один семантический словарь и fallback. Разница выбора глифа — дефект; сглаживание растеризаторов учитывается отдельно.",
+      "examples": [
+        "icon-material",
+        "icon-solid",
+        "icon-outline",
+        "icon-fluent",
+        "icon-fluent-filled",
+        "icon-small",
+        "icon-large"
+      ]
     },
     {
       "id": "tabs",
@@ -430,7 +528,9 @@
       "vue": [
         "AppTabButton",
         "WorkspaceTabs",
-        "SectionTabRail"
+        "SectionTabRail",
+        "WorkspaceTabVisual",
+        "SectionTabVisual"
       ],
       "tokens": [
         "tab",
@@ -449,11 +549,16 @@
         "Контекстное меню",
         "Текущая / disabled / mobile"
       ],
-      "coverage": "other-scenarios",
+      "coverage": "contract",
       "gaps": [
-        "Поисковые вкладки и боковая полоса имеют общий скелет, геометрию, цвета и архивное сравнение tools/frame_projects. Проверены mouse/touch, drag/cancel и меню; полная галерея остальных видов tab rail остаётся открытой."
+        "Поиск/section tabs имеют отдельные свежие B01 сценарии drag, close, reopen и сохранения; standalone tab показывает нейтральную поверхность."
       ],
-      "rule": "Разделить выбор вкладки, её содержимое и host docking. Общая вкладка не должна знать задачи/проекты."
+      "rule": "Разделить выбор вкладки, её содержимое и host docking. Общая вкладка не должна знать задачи/проекты.",
+      "examples": [
+        "tab",
+        "tab-current"
+      ],
+      "example": "tab"
     },
     {
       "id": "badges",
@@ -467,7 +572,10 @@
         "MessageReactionChip"
       ],
       "vue": [
-        "SummaryChip"
+        "SummaryChip",
+        "StatusChip",
+        "ReactionChip",
+        "QuickFilterChip"
       ],
       "tokens": [
         "badge",
@@ -489,11 +597,28 @@
         "Compact",
         "Completion strip"
       ],
-      "coverage": "missing",
+      "coverage": "contract",
       "gaps": [
-        "Нет полного парного стенда badge/chip. Много inline-вариантов внутри кнопок, списков и шапок."
+        "CompletionStrip/TacticCompletionCell знают задачи/снимки и переходы: предметные фрагменты B07/B08. Базовые StatusChip и счётчики не сохраняют данные."
       ],
-      "rule": "Badge (наложение), Chip (элемент потока) и status indicator (состояние) — разные роли. У каждой один контракт и именованные варианты."
+      "rule": "Badge (наложение), Chip (элемент потока) и status indicator (состояние) — разные роли. У каждой один контракт и именованные варианты.",
+      "examples": [
+        "chip",
+        "chip-clickable",
+        "chip-compact",
+        "status-chip",
+        "status-chip-dense",
+        "status-chip-action",
+        "reaction",
+        "reaction-count",
+        "reaction-checked",
+        "filter-chip",
+        "filter-chip-checked",
+        "filter-chip-subtle",
+        "filter-chip-marker",
+        "filter-chip-emphasis"
+      ],
+      "example": "chip"
     },
     {
       "id": "headers",
@@ -506,7 +631,13 @@
         "ConfigurationSection",
         "SObjectFieldFrame"
       ],
-      "vue": [],
+      "vue": [
+        "EditorPanel",
+        "SectionLabel",
+        "InfoValueStrip",
+        "ConfigurationSection",
+        "FormFieldFrame"
+      ],
       "tokens": [
         "header",
         "heading",
@@ -526,12 +657,25 @@
         "Back / collapse",
         "Sticky"
       ],
-      "coverage": "missing",
+      "coverage": "contract",
       "gaps": [
-        "Много шапок собираются на месте; нет самостоятельного полного контракта и галереи.",
-        "TaskWorkspaceModeSwitcher/SurfaceSwitcher обращаются к tasksController — это предметные фрагменты, использующие базовый segmented control."
+        "EditorPanel, section, strip и FormFieldFrame — нейтральные компоновки. Поля, операции и серверная валидация задаются формой."
       ],
-      "rule": "Нейтральная шапка/toolbar — базовая композиция. TaskInspectorHeader и управление конкретной рабочей областью — фрагмент формы."
+      "rule": "Нейтральная шапка/toolbar — базовая композиция. TaskInspectorHeader и управление конкретной рабочей областью — фрагмент формы.",
+      "examples": [
+        "header",
+        "header-back",
+        "header-actions",
+        "editor-panel",
+        "configuration-section",
+        "section-label",
+        "info-values",
+        "field-frame",
+        "field-frame-required",
+        "field-frame-error",
+        "field-frame-readonly"
+      ],
+      "example": "header"
     },
     {
       "id": "menus",
@@ -569,13 +713,16 @@
         "Disabled",
         "Escape / outside click / restore focus"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "menu",
       "gaps": [
-        "Кнопка и основные реальные действия проверены; все вложенные/контекстные/прокручиваемые состояния ещё не покрыты.",
-        "Два случая offscreen mouse grab воспроизводятся и в архивном TH; их нельзя отмечать готовыми."
+        "Меню, check/radio rows, separators, submenus, tooltips и закрытие/focus проверяются каталогом и существующими menu/platform сценариями."
       ],
-      "rule": "Меню — базовый составной контрол. Его команды передаются снаружи; ObjectActionsMenu с ACL и запросами — предметная композиция."
+      "rule": "Меню — базовый составной контрол. Его команды передаются снаружи; ObjectActionsMenu с ACL и запросами — предметная композиция.",
+      "examples": [
+        "menu",
+        "menu-checks"
+      ]
     },
     {
       "id": "popups",
@@ -612,11 +759,12 @@
         "Drag / resize",
         "Stacking / focus / owner"
       ],
-      "coverage": "other-scenarios",
+      "coverage": "contract",
       "gaps": [
-        "Оконный контракт целиком относится к следующему этапу. Формы, открываемые в dialog, не являются новыми типами базового Dialog."
+        "Позиционирование, scrim, ownership и native Popup.Window — инфраструктура. Полная предметная форма внутри окна проверяется в своём batch."
       ],
-      "rule": "Host решает ownership/lifecycle, форма — свой сценарий, DialogActions — нейтральная строка действий."
+      "rule": "Host решает ownership/lifecycle, форма — свой сценарий, DialogActions — нейтральная строка действий.",
+      "examples": []
     },
     {
       "id": "feedback",
@@ -629,12 +777,15 @@
         "InitialBatchPresentation",
         "ContentLoadingOverlay",
         "TacticCompletionCell",
-        "ErrorDialog"
+        "ErrorDialog",
+        "ProgressBar"
       ],
       "vue": [
         "BusyIndicator",
         "AppProgress",
-        "CompletionCell"
+        "CompletionCell",
+        "EmptyState",
+        "ContentLoadingOverlay"
       ],
       "tokens": [
         "tooltip",
@@ -658,12 +809,23 @@
         "Skeleton",
         "Inline validation"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "busy",
       "gaps": [
-        "Tooltip имеет ввод, busy — визуальный пример. AppProgress, skeleton, empty/error/retry отдельно не сверены."
+        "Нет готового отдельного skeleton-контрола в оригинале: InitialBatchPresentation управляет появлением делегатов, а не рисует skeleton."
       ],
-      "rule": "Сообщение об ошибке и retry action поступают снаружи; контрол не перезапускает серверную операцию сам."
+      "rule": "Сообщение об ошибке и retry action поступают снаружи; контрол не перезапускает серверную операцию сам.",
+      "examples": [
+        "busy",
+        "progress",
+        "progress-empty",
+        "progress-complete",
+        "progress-indeterminate",
+        "loading-overlay",
+        "loading-cancellable",
+        "empty",
+        "error-retry"
+      ]
     },
     {
       "id": "lists",
@@ -679,7 +841,8 @@
       ],
       "vue": [
         "ItemSurface",
-        "NavigationRow"
+        "NavigationRow",
+        "EditorListItem"
       ],
       "tokens": [
         "list",
@@ -698,13 +861,19 @@
         "Keyboard selection",
         "Navigation drawer: mouse/touch, off-screen keys, focus and reserved scrollbar gutter"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "example": "tree",
       "gaps": [
-        "Общий preorder tree и виртуализация проверены; не все виды строк и деревьев перенесены.",
-        "ProcessSelectionTree знает Search Type и process context — предметный составной фрагмент."
+        "Нейтральный list/tree контракт покрывает virtual rows, selection, раскрытие и keyboard. ProcessSelectionTree остаётся предметной формой."
       ],
-      "rule": "Tree row и navigation — базовый контрол; загрузка и смысл веток принадлежат форме."
+      "rule": "Tree row и navigation — базовый контрол; загрузка и смысл веток принадлежат форме.",
+      "examples": [
+        "tree",
+        "list-item",
+        "list-item-selected",
+        "list-item-badge",
+        "list-item-long"
+      ]
     },
     {
       "id": "tables",
@@ -733,12 +902,16 @@
         "Frozen / scroll",
         "Virtualized"
       ],
-      "coverage": "partial",
-      "example": "grid",
+      "coverage": "contract",
+      "example": "table",
       "gaps": [
-        "Grid base и отдельные Administration-сценарии проверены. Это не означает готовность всех легаси Table View widgets."
+        "Это контракт Grid (virtual cells, selection/focus, resize, drafts, readonly). Production Table View и его виджеты остаются B07."
       ],
-      "rule": "Grid нейтрален к Search Type; widget-config renderer и сохранение SObject — отдельный уровень."
+      "rule": "Grid нейтрален к Search Type; widget-config renderer и сохранение SObject — отдельный уровень.",
+      "examples": [
+        "table",
+        "table-readonly"
+      ]
     },
     {
       "id": "scroll-layout",
@@ -782,12 +955,21 @@
         "Label-help-control row",
         "Footer actions"
       ],
-      "coverage": "partial",
-      "example": "splitter",
+      "coverage": "contract",
+      "example": "setting-row",
       "gaps": [
-        "Split/scroll используются в галерее и вводе. Все density/axis/grip/footer/layout варианты отдельно не закрыты."
+        "Оба направления overflow, keyboard splitter и drag проверяются реальным вводом. Физический touch/OS compositor не заменяются synthetic input."
       ],
-      "rule": "Layout-кирпичики знают размеры/слоты, а не сохранение настроек проекта."
+      "rule": "Layout-кирпичики знают размеры/слоты, а не сохранение настроек проекта.",
+      "examples": [
+        "setting-row",
+        "flow",
+        "scroll-vertical",
+        "scroll-horizontal",
+        "scroll-both",
+        "splitter-vertical",
+        "splitter-horizontal"
+      ]
     },
     {
       "id": "typography",
@@ -823,11 +1005,16 @@
         "Monospace / code block",
         "Пустой / длинный / mixed script"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "gaps": [
-        "Геометрия/базовые линии текста проверяются на выборке. Все текстовые поверхности, rich text и middle elide отдельно не закрыты."
+        "DocumentPane использует реальные Qt Markdown и browser Markdown renderer; сложный rich text и растеризация имеют явные платформенные границы. Сохранение/ссылки принадлежат владельцу."
       ],
-      "rule": "Текстовые роли не заменяют контракты wrapping/selection/links. Rich renderer не должен владеть предметными запросами."
+      "rule": "Текстовые роли не заменяют контракты wrapping/selection/links. Rich renderer не должен владеть предметными запросами.",
+      "examples": [
+        "markdown",
+        "middle-elide"
+      ],
+      "example": "markdown"
     },
     {
       "id": "previews",
@@ -865,11 +1052,21 @@
         "Image card",
         "Selected surface / accent rail"
       ],
-      "coverage": "nested",
+      "coverage": "contract",
       "gaps": [
-        "Preview/surface присутствуют в других экранах; полного независимого стенда вариантов нет."
+        "Фото, contain/crop, broken/loading и selected border показаны отдельно. Rounded mask проверяется Windows/OpenGL; Qt software не подтверждает маску. AttachmentCard/forward/reply/snapshot layers — предметные компоненты."
       ],
-      "rule": "Карточка нейтральных данных — составной контрол; ObjectCard с командами/ACL — предметный фрагмент."
+      "rule": "Карточка нейтральных данных — составной контрол; ObjectCard с командами/ACL — предметный фрагмент.",
+      "examples": [
+        "preview-square",
+        "preview-outline",
+        "preview-broken",
+        "preview-loading",
+        "preview-photo",
+        "preview-contain",
+        "preview-selected"
+      ],
+      "example": "preview-square"
     },
     {
       "id": "drag-files",
@@ -880,7 +1077,9 @@
         "DropTargetOverlay",
         "ImageFileDialog"
       ],
-      "vue": [],
+      "vue": [
+        "DropTargetOverlay"
+      ],
       "tokens": [
         "drop",
         "upload",
@@ -896,11 +1095,16 @@
         "Native filesystem capability",
         "Browser file input"
       ],
-      "coverage": "missing",
+      "coverage": "contract",
       "gaps": [
-        "Общая визуальная drop-zone и матрица возможностей платформ не закрыты текущей галереей."
+        "DropTargetOverlay — нейтральное состояние drop target. AttachmentDropArea исполняет attachmentController.add_files; фактический перенос/загрузка относится к B11/B12."
       ],
-      "rule": "Обратиться к файловой системе — адаптер платформы; политика check-in/upload — предметный сценарий."
+      "rule": "Обратиться к файловой системе — адаптер платформы; политика check-in/upload — предметный сценарий.",
+      "examples": [
+        "drop-target",
+        "drop-rejected"
+      ],
+      "example": "drop-target"
     },
     {
       "id": "editors",
@@ -935,11 +1139,16 @@
         "Completion",
         "Readonly / error / dirty"
       ],
-      "coverage": "other-scenarios",
+      "coverage": "contract",
       "gaps": [
-        "Кодовый renderer существует, но его полный самостоятельный контракт ещё не закрыт этой галереей."
+        "Контракт FrameCode: текст, readonly, undo, search/replace, selection и clipboard. ScriptCodeEditor/ScriptOutline и выполнение скриптов остаются B13."
       ],
-      "rule": "CodeEditor не знает Script Editor, Batch Manager и выполнение Python. Эти формы используют редактор."
+      "rule": "CodeEditor не знает Script Editor, Batch Manager и выполнение Python. Эти формы используют редактор.",
+      "examples": [
+        "code",
+        "code-readonly"
+      ],
+      "example": "code"
     },
     {
       "id": "graphs",
@@ -972,11 +1181,16 @@
         "Keyboard delete",
         "Marquee"
       ],
-      "coverage": "other-scenarios",
+      "coverage": "contract",
       "gaps": [
-        "Есть отдельные графовые сценарии. NodeGraph и FrameGraph — разные реализации; их нельзя считать автоматически одним общим контролом."
+        "FrameGraph — нейтральные nodes/edges/selection/move. NodeGraph и XML pipeline controller — отдельный существующий предметный редактор B03/B10."
       ],
-      "rule": "Нейтральный graph control не владеет XML schema/pipeline, ACL или сохранением."
+      "rule": "Нейтральный graph control не владеет XML schema/pipeline, ACL или сохранением.",
+      "examples": [
+        "graph",
+        "graph-readonly"
+      ],
+      "example": "graph"
     },
     {
       "id": "input-runtime",
@@ -1004,11 +1218,12 @@
         "Focus return",
         "Destroy while open"
       ],
-      "coverage": "partial",
+      "coverage": "contract",
       "gaps": [
-        "Есть реальные сценарии ввода. Это инфраструктурные проверки, а не отдельные визуальные компоненты."
+        "Настоящие мышь/touch/keyboard, отмена, одна активация и три DPI выполняются platform gate. OS IME composition и физический pen требуют аппаратной проверки."
       ],
-      "rule": "Одна активация на один пользовательский жест; событийная механика не исполняет бизнес-команды сама."
+      "rule": "Одна активация на один пользовательский жест; событийная механика не исполняет бизнес-команды сама.",
+      "examples": []
     },
     {
       "id": "domain-fragments",
@@ -1224,7 +1439,7 @@
     "AppSegmentedButton": "composite",
     "TabButton": "primitive",
     "AppTabButton": "primitive",
-    "UserAvatar": "primitive",
+    "UserAvatar": "feature",
     "BusyIndicator": "primitive",
     "AppProgress": "primitive",
     "ScrollBar": "primitive",
@@ -1240,6 +1455,43 @@
     "Typography": "infrastructure",
     "NavigationRow": "composite",
     "SidebarTreeRow": "composite",
-    "ActionRow": "primitive"
-  }
+    "ActionRow": "primitive",
+    "ActivityCalendarPopup": "feature",
+    "ActivityCalendar": "feature",
+    "CompletionStrip": "feature",
+    "TacticCompletionCell": "feature",
+    "CompletionCell": "feature",
+    "InitialBatchPresentation": "infrastructure",
+    "AttachmentDropArea": "feature",
+    "ImageFileDialog": "infrastructure",
+    "AttachmentCard": "feature",
+    "MessageTimelineFrame": "feature",
+    "MessageForwardPreview": "feature",
+    "MessageReplyPreview": "feature",
+    "SnapshotPreviewLayers": "feature",
+    "NodeGraph": "feature",
+    "NodeGraphSelectionArea": "feature",
+    "GraphPort": "feature",
+    "ScriptOutline": "feature",
+    "KnowledgeTableOfContents": "feature",
+    "TableTextEditor": "feature"
+  },
+  "excludedVariants": [
+    {
+      "name": "Standalone presence indicator",
+      "reason": "No completed standalone control in the original; avatar/status in domain cards stay domain-owned."
+    },
+    {
+      "name": "Skeleton loader",
+      "reason": "Original InitialBatchPresentation is delegate lifecycle infrastructure, not a finished skeleton control."
+    },
+    {
+      "name": "Emoji recents/favorites",
+      "reason": "Not implemented as a finished house control in the original."
+    },
+    {
+      "name": "Generic range date / multi combo / vertical slider",
+      "reason": "No completed corresponding original neutral variant; do not invent a port from wishlist names."
+    }
+  ]
 }

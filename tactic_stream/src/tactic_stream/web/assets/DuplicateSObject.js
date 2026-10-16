@@ -1,5 +1,5 @@
 import { D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, p as Teleport, rt as toDisplayString, s as vModelText, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { D as t, et as _plugin_vue_export_helper_default, o as _sfc_main$1, u as _sfc_main$2 } from "./index.js";
+import { D as t, o as _sfc_main$1, tt as _plugin_vue_export_helper_default, u as _sfc_main$2 } from "./index.js";
 import { M as rpc, ct as notify } from "./clipboard.js";
 import { t as _sfc_main$3 } from "./AppSelect.js";
 import { t as _sfc_main$4 } from "./AppTextField.js";
@@ -490,6 +490,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						disabled: $data.saving || $options.readOnly(field)
 					}, null, 8, _hoisted_12)), [[vModelText, $data.draft[field.name]]]) : $options.fieldKind(field) === "datetime-local" ? (openBlock(), createBlock(_component_AppDateField, {
 						key: 4,
+						"include-time": "",
 						modelValue: $data.draft[field.name],
 						"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
 						label: field.widget?.title || field.label,

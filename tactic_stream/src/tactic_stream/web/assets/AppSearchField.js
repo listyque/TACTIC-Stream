@@ -1,5 +1,5 @@
 import { B as useId, D as nextTick, G as withCtx, I as resolveComponent, N as openBlock, P as renderList, _ as createCommentVNode, d as Fragment, g as createBlock, h as createBaseVNode, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
-import { D as t, et as _plugin_vue_export_helper_default, o as _sfc_main$1, u as _sfc_main$2 } from "./index.js";
+import { D as t, o as _sfc_main$1, tt as _plugin_vue_export_helper_default, u as _sfc_main$2 } from "./index.js";
 //#region src/controls/AppSearchField.vue
 var _sfc_main = {
 	components: {
@@ -11,6 +11,7 @@ var _sfc_main = {
 		placeholder: String,
 		label: String,
 		disabled: Boolean,
+		readonly: Boolean,
 		suggestions: {
 			type: Array,
 			default: () => []
@@ -43,6 +44,9 @@ var _sfc_main = {
 			this.show();
 		},
 		disabled(value) {
+			if (value) this.close();
+		},
+		readonly(value) {
 			if (value) this.close();
 		}
 	},
@@ -78,13 +82,14 @@ var _sfc_main = {
 			}, 120);
 		},
 		edit(value) {
+			if (this.disabled || this.readonly) return;
 			this.close();
 			this.$emit("update:modelValue", value);
 		},
 		async show() {
 			await nextTick();
 			if (!this.$refs.popup?.isConnected) return;
-			if (this.disabled || !this.suggestions.length && !this.error) {
+			if (this.disabled || this.readonly || !this.suggestions.length && !this.error) {
 				this.close();
 				return;
 			}
@@ -148,7 +153,8 @@ var _hoisted_1 = [
 	"aria-controls",
 	"aria-expanded",
 	"aria-activedescendant",
-	"disabled"
+	"disabled",
+	"readonly"
 ];
 var _hoisted_2 = {
 	ref: "popup",
@@ -201,6 +207,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			"aria-expanded": $data.opened,
 			"aria-activedescendant": $data.opened && $data.selected >= 0 ? $setup.listId + "-" + $data.selected : void 0,
 			disabled: $props.disabled,
+			readonly: $props.readonly,
 			onInput: _cache[1] || (_cache[1] = ($event) => $options.edit($event.target.value)),
 			onFocus: _cache[2] || (_cache[2] = (...args) => $options.show && $options.show(...args)),
 			onKeydown: _cache[3] || (_cache[3] = (...args) => $options.key && $options.key(...args))
@@ -210,7 +217,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			"icon-only": "",
 			label: "Clear search",
 			icon: "close",
-			disabled: $props.disabled,
+			disabled: $props.disabled || $props.readonly,
 			onClick: _cache[4] || (_cache[4] = ($event) => {
 				$options.edit("");
 				$options.focus();

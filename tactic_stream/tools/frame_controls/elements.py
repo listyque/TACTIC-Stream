@@ -14,6 +14,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.append(str(HERE.parent / "frame_foundation"))
 from inventory import OBJECTS, masked  # noqa: E402
 from report import verify_sources  # noqa: E402
+from report_variants import verify_sources as verify_variants  # noqa: E402
 
 QT_TYPES = {
     "Button",
@@ -56,6 +57,7 @@ INFRA_NAMES = {
     "UserFilter",
     "NavigationDrawer",
     "TaskEditorReleaseCoordinator",
+    "WorkspaceTabInput",
     "DccSettingField",
 }
 
@@ -279,7 +281,7 @@ def classify(row, engine, registry, feature_roots):
     )
 
 
-def samples(handler):
+def baseline_samples(handler):
     result = {}
     paths = [HERE / "output" / name for name in ("qml.json", "vue.json")]
     if not all(path.is_file() for path in paths):
@@ -319,6 +321,36 @@ def samples(handler):
     return (
         result,
         "Показанные вырезки соответствуют текущим отпечаткам парной проверки.",
+    )
+
+
+def samples(handler):
+    result, note = baseline_samples(handler)
+    paths = [
+        HERE / "output/variants" / name for name in ("native.json", "browser.json")
+    ]
+    if not all(path.is_file() for path in paths):
+        return result, note
+    native, browser = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
+    try:
+        verify_variants(native, browser, handler)
+    except (AssertionError, FileNotFoundError) as error:
+        return result, note + " Расширенные снимки устарели: " + str(error)
+    for product, data in (("native", native), ("vue", browser)):
+        for capture in data["captures"]:
+            if (
+                capture["style"],
+                capture["mode"],
+                capture["language"],
+                capture["width"],
+            ) != ("md3", "dark", "en", 900):
+                continue
+            result.setdefault(capture["id"], {})[product] = dict(
+                image="variants/" + capture["image"], **capture["boxes"]["sample"]
+            )
+    return (
+        result,
+        note + " Расширенные примеры сверены с текущими отпечатками исходников.",
     )
 
 

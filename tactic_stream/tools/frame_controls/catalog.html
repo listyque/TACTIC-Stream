@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tactic Frame · рабочий каталог контролов</title>
+  <style>
+    __STYLES__
+  </style>
+  <style>
+    .catalog-shell {
+      position: relative;
+      padding: 20px;
+      color: #e9edef;
+      background: #202426;
+      font:
+        14px/1.5 'Segoe UI',
+        sans-serif;
+    }
+    .catalog-shell h1 {
+      font-size: 24px;
+      margin: 0 0 10px;
+    }
+    .catalog-shell p {
+      max-width: 1100px;
+    }
+    .catalog-shell nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: end;
+    }
+    .catalog-shell label {
+      display: grid;
+      gap: 4px;
+    }
+    .catalog-shell select {
+      color: #e9edef;
+      background: #373d40;
+      border: 1px solid #5b656b;
+      border-radius: 6px;
+      padding: 6px;
+      font: inherit;
+    }
+    .catalog-shell a {
+      color: #9cc9e3;
+    }
+    .catalog-canvas {
+      overflow: auto;
+      min-height: 540px;
+      padding: 20px;
+    }
+    #app {
+      position: relative;
+      width: 360px;
+      height: 520px;
+      margin: auto;
+      flex: none;
+    }
+    .catalog-shell output {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      display: block;
+    }
+  </style>
+  <header class="catalog-shell">
+    <h1>Tactic Frame · рабочий каталог контролов</h1>
+    <p>
+      Настоящие Vue-контролы и общий скелет. Выбор примера сбрасывает его
+      данные; тема, язык и размер сохраняют введённые значения. Сервер и сессия
+      не нужны. Нативный каталог запускается отдельно в QML, без браузера.
+    </p>
+    <nav>
+      <label
+        >Семейство<select id="family">
+          <option value="">Все</option>
+        </select></label
+      >
+      <label>Пример<select id="example"></select></label>
+      <label
+        >Состояние<select id="state">
+          <option value="idle">Обычное</option>
+          <option value="disabled">Недоступное</option>
+          <option value="readonly">Только чтение</option>
+          <option value="error">Ошибка</option>
+          <option value="loading">Загрузка</option>
+        </select></label
+      >
+      <label
+        >Стиль<select id="style">
+          <option>md3</option>
+          <option>material5</option>
+          <option>fluent</option>
+        </select></label
+      >
+      <label
+        >Тема<select id="mode">
+          <option>dark</option>
+          <option>light</option>
+        </select></label
+      >
+      <label
+        >Язык<select id="language">
+          <option>en</option>
+          <option>ru</option>
+        </select></label
+      >
+      <label
+        >Ширина<select id="width">
+          <option>360</option>
+          <option>900</option>
+        </select></label
+      >
+      <button id="reset" type="button">Сбросить пример</button>
+    </nav>
+    <p>
+      <a href="ui-elements.html">Исходники и классификация</a> ·
+      <a href="variants/index.html">Парные снимки QML / Vue</a>
+    </p>
+    <p>
+      Readonly применяется к изменяемым значениям; loading/error показаны только
+      у поддерживающих их контролов. Выбор файла и системные диалоги принадлежат
+      платформе. Таблица, граф, редактор и документ здесь проверяют нейтральный
+      контракт, а не готовность предметного экрана.
+    </p>
+    <output id="trace" aria-live="polite"></output>
+  </header>
+  <main class="catalog-canvas"><div id="app"></div></main>
+  <script>
+    __APPLICATION__;
+  </script>
+  <script>
+    const api = window.controlVariants;
+    const select = (id) => document.getElementById(id);
+    for (const family of [
+      ...new Set(api.examples.map((example) => example.family))
+    ])
+      select('family').add(new Option(family, family));
+    function refreshExamples() {
+      select('example').replaceChildren();
+      for (const example of api.examples.filter(
+        (example) =>
+          !select('family').value || example.family === select('family').value
+      ))
+        select('example').add(new Option(example.id, example.id));
+    }
+    function reset() {
+      api.configure({
+        id: select('example').value,
+        state: select('state').value,
+        width: Number(select('width').value),
+        style: select('style').value,
+        mode: select('mode').value,
+        language: select('language').value
+      });
+    }
+    select('family').onchange = () => {
+      refreshExamples();
+      reset();
+    };
+    select('example').onchange = reset;
+    select('reset').onclick = reset;
+    select('state').onchange = () => api.setState(select('state').value);
+    for (const key of ['style', 'mode', 'language'])
+      select(key).onchange = () =>
+        api.setAppearance({
+          [key === 'style' ? 'theme' : key]: select(key).value
+        });
+    select('width').onchange = () => {
+      const width = Number(select('width').value);
+      select('app').style.width = width + 'px';
+      api.resize(width);
+    };
+    window.addEventListener('control-variant-event', (event) => {
+      select('trace').textContent = JSON.stringify(event.detail);
+    });
+    const initialFamily = new URLSearchParams(location.search).get('family');
+    if (
+      [...select('family').options].some(
+        (option) => option.value === initialFamily
+      )
+    )
+      select('family').value = initialFamily;
+    refreshExamples();
+    reset();
+  </script>
+</html>

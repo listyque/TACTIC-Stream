@@ -21,6 +21,7 @@ var _sfc_main$1 = {
 		disabled: Boolean,
 		indeterminate: Boolean,
 		compact: Boolean,
+		prominent: Boolean,
 		hideLabel: Boolean,
 		translateLabel: {
 			type: Boolean,
@@ -45,7 +46,8 @@ var _sfc_main$1 = {
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("label", { class: normalizeClass(["app-checkbox", {
 				disabled: __props.disabled,
-				compact: __props.compact
+				compact: __props.compact,
+				prominent: __props.prominent
 			}]) }, [createBaseVNode("span", _hoisted_1$1, [createBaseVNode("input", {
 				id: __props.controlId,
 				type: "checkbox",

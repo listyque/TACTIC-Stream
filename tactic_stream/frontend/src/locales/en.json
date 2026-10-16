@@ -1241,5 +1241,14 @@
   "Every 10 seconds": "Every 10 seconds",
   "Every 30 seconds": "Every 30 seconds",
   "Every 60 seconds": "Every 60 seconds",
-  "Templates": "Templates"
+  "Templates": "Templates",
+  "Increase value": "Increase value",
+  "Decrease value": "Decrease value",
+  "Collapse item": "Collapse item",
+  "Expand item": "Expand item",
+  "No records yet": "No records yet",
+  "Invalid value": "Invalid value",
+  "Drop files here": "Drop files here",
+  "Unsupported file type": "Unsupported file type",
+  "Read only": "Read only"
 }

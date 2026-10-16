@@ -98,8 +98,7 @@ function style(node) {
   };
 }
 function background(node) {
-  const radius =
-    node.radius === undefined ? 'var(--surface-radius)' : node.radius + 'px';
+  const radius = node.radius === undefined ? '0px' : node.radius + 'px';
   return {
     background: color(node.background),
     boxShadow: node.border
@@ -338,6 +337,9 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :segmented="node.radio"
         :checked="!!node.selected"
         :destructive="node.destructive"
+        :tonal="node.tonal"
+        :badge-count="node.badgeCount || 0"
+        :show-zero-badge="node.showZeroBadge"
         :disabled="!node.enabled"
         :role="node.radio ? 'radio' : undefined"
         :aria-checked="node.radio ? !!node.selected : undefined"
@@ -391,6 +393,8 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         "
         :model-value="node.checked"
         :indeterminate="!!node.mixed"
+        :compact="node.compact"
+        :prominent="node.prominent"
         :label="node.text"
         :translate-label="false"
         :disabled="!node.enabled"
@@ -487,6 +491,8 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :preview-size="node.width"
         :round="node.round !== false"
         :outlined="node.outlined !== false"
+        :selected="node.selected"
+        :loading="node.loading"
         :fill-mode="node.fit || 'cover'"
       />
       <div
@@ -531,11 +537,18 @@ defineExpose({ focusControl, focusGrid, graphCommand });
         :key="node.id + ':' + node.resetKey"
         :data-frame="node.id"
         class="frame-node frame-scroll"
+        :class="{ 'frame-scroll-horizontal': node.contentWidth > node.width }"
         :style="style(node)"
       >
         <FrameView
           ref="branches"
-          :style="{ height: node.contentHeight + 'px' }"
+          :style="{
+            height: node.contentHeight + 'px',
+            width:
+              node.contentWidth === undefined
+                ? undefined
+                : Math.max(node.width, node.contentWidth) + 'px'
+          }"
           :scene="{ nodes: node.children }"
           :models="models"
           :views="views"

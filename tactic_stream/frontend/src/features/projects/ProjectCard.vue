@@ -1,4 +1,5 @@
 <script setup>
+import { layoutTextWidth } from '../../controls/typography/textMetrics.js';
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import AppButton from '../../controls/AppButton.vue';
 import FrameView from '../../frame/FrameView.vue';
@@ -42,10 +43,8 @@ const scene = computed(() =>
   )
 );
 function measure() {
-  const context = document.createElement('canvas').getContext('2d');
   const extent = (text, font) => {
-    context.font = font + ' "' + fontFamily + '"';
-    return context.measureText(text).width;
+    return layoutTextWidth(text, font + ' "' + fontFamily + '"');
   };
   textMetrics.value = {
     chipWidth: extent(t(lifecycle(props.record)), '600 11px'),

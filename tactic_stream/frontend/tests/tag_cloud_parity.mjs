@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { chromium } from 'playwright'
-import { packTagRows, tagRowAt } from '../src/features/workspace/tagCloud.js'
+import { packTagRows, tagRowAt } from '../../src/tactic_stream/shared_ui/controls/lists/chips.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const output = fileURLToPath(new URL('../../.screenshots/tag-cloud-current/', import.meta.url))

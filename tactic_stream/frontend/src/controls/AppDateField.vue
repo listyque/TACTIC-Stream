@@ -27,7 +27,7 @@ const props = defineProps({
   label: String,
   disabled: Boolean,
   readonly: Boolean,
-  includeTime: { type: Boolean, default: true },
+  includeTime: { type: Boolean, default: false },
   allowClear: { type: Boolean, default: true },
   placeholder: String
 });
@@ -66,7 +66,7 @@ function dateLabel(date) {
   const parts = Object.fromEntries(
     dateFormat.value.formatToParts(date).map((part) => [part.type, part.value])
   );
-  return `${parts.day} ${parts.month} ${parts.year}`;
+  return `${parts.day} ${parts.month} ${String(date.getFullYear()).padStart(4, '0')}`;
 }
 const presentation = computed(() => {
   const date = parse(props.modelValue);
@@ -346,6 +346,7 @@ onBeforeUnmount(() => observer?.disconnect());
 </template>
 <style>
 .app-date-field {
+  height: var(--control-height);
   display: block;
   min-width: 0;
   position: relative;
@@ -356,6 +357,8 @@ onBeforeUnmount(() => observer?.disconnect());
 }
 .app-date-field.app-date-field > input.app-text-field {
   width: 100%;
+  height: 100%;
+  min-height: 0;
   padding-right: 41px;
 }
 .app-date-field.app-date-field > input:focus {

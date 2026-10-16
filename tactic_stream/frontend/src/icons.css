@@ -55,6 +55,10 @@
 }
 .icon-fontawesome-solid {
   font-family: 'Stream Awesome Solid';
+  font-weight: 900;
+}
+.icon-fontawesome-solid > .icon-glyph {
+  font-weight: 900;
 }
 .icon-fontawesome-outline,
 .icon-fontawesome-regular {

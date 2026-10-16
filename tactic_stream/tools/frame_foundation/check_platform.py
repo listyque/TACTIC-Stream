@@ -89,6 +89,10 @@ def fingerprints(handler):
             "frame_controls_contract.mjs",
             "frame_controls.mjs",
             "frame_controls_input.mjs",
+            "frame_control_variants.mjs",
+            "frame_control_variants_input.mjs",
+            "frame_control_paint.mjs",
+            "frame_control_catalog.mjs",
             "icons.mjs",
             "frame_help_state.mjs",
             "frame_help.mjs",
@@ -113,6 +117,9 @@ def fingerprints(handler):
     checks += [
         handler / "tests/test_frame_platform.py",
         handler / "tests/test_frame_controls.py",
+        handler / "tests/test_control_variants.py",
+        handler / "tests/fixtures/frame_controls/ControlVariantsHarness.qml",
+        handler / "tests/fixtures/frame_controls/ControlExample.qml",
         handler / "tests/fixtures/FrameControlsHarness.qml",
         handler / "tests/test_user_combo_box.py",
         handler / "tests/test_frame_help.py",
@@ -158,7 +165,8 @@ def fingerprints(handler):
     checks += [
         path
         for path in (ROOT / "tools/frame_controls").iterdir()
-        if path.is_file() and path.suffix in (".vue", ".js", ".html", ".py")
+        if path.is_file()
+        and path.suffix in (".vue", ".js", ".html", ".py", ".json", ".mjs")
     ]
     checks += [
         path
@@ -301,6 +309,49 @@ def main():
         (
             "browser-controls",
             ["node", "frontend/tests/frame_controls.mjs", "--input-only"],
+            ROOT,
+            {},
+        ),
+        *[
+            (
+                f"native-control-variants-{scale}",
+                python
+                + [
+                    "-m",
+                    "unittest",
+                    "-q",
+                    "tests.test_control_variants.ControlVariantsTests",
+                ],
+                handler,
+                {"QT_SCALE_FACTOR": scale},
+            )
+            for scale in ("1", "1.5", "2")
+        ],
+        *[
+            (
+                f"browser-control-variants-{scale}",
+                ["node", "frontend/tests/frame_control_variants.mjs", "--input"],
+                ROOT,
+                {"FRAME_CONTROL_SCALE": scale},
+            )
+            for scale in ("1", "1.5", "2")
+        ],
+        (
+            "control-catalog",
+            ["node", "frontend/tests/frame_control_catalog.mjs"],
+            ROOT,
+            {},
+        ),
+        (
+            "control-atlas",
+            python
+            + ["tools/frame_controls/elements.py", "--handler-root", str(handler)],
+            ROOT,
+            {},
+        ),
+        (
+            "control-atlas-input",
+            ["node", "tools/frame_controls/check_elements.mjs"],
             ROOT,
             {},
         ),

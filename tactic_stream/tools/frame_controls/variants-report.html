@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ru">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  />
+  <title>Tactic Frame · полный набор примеров</title>
+  <style>
+    body {
+      margin: 24px;
+      background: #202426;
+      color: #edf0f2;
+      font:
+        14px/1.5 'Segoe UI',
+        sans-serif;
+    }
+    a {
+      color: #9cc9e3;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    label {
+      display: grid;
+      gap: 4px;
+    }
+    select {
+      font: inherit;
+      color: inherit;
+      background: #373d40;
+      border: 1px solid #596067;
+      padding: 6px;
+      border-radius: 6px;
+    }
+    .pair {
+      display: flex;
+      gap: 20px;
+      overflow: auto;
+    }
+    figure {
+      margin: 0;
+      flex: 1;
+      min-width: 300px;
+    }
+    img {
+      max-width: 100%;
+    }
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+  </style>
+  <h1>Tactic Frame · полный набор базовых примеров</h1>
+  <p id="summary"></p>
+  <p>
+    <a href="../catalog.html">Попробовать контролы</a> ·
+    <a href="../ui-elements.html">Исходники и границы семейств</a> ·
+    <a href="../index.html">Открытые состояния и ввод базового стенда</a> ·
+    <a href="summary.json">Все измерения и ограничения</a>
+  </p>
+  <p>
+    Это настоящие контролы из независимых пакетов: QML Windows/OpenGL и Vue в
+    Edge. Внешняя геометрия, размеры шрифтов и цвета проверяются строго. Базовые
+    линии Qt и DOM, переносы, rich text и растеризация не объявляются пиксельно
+    идентичными: оставшиеся измерения доступны ниже. Редакторы
+    таблицы/кода/графа показывают нейтральный контракт; готовность предметного
+    экрана проверяется отдельно.
+  </p>
+  <nav id="filters"></nav>
+  <p id="caption"></p>
+  <div class="pair">
+    <figure>
+      <figcaption>TH · QML</figcaption>
+      <img id="native" alt="Нативный контрол" />
+    </figure>
+    <figure>
+      <figcaption>TS · Vue</figcaption>
+      <img id="browser" alt="Браузерный контрол" />
+    </figure>
+  </div>
+  <details>
+    <summary>Не скрывать ограничения измерения текста</summary>
+    <p id="limits"></p>
+    <pre id="diagnostics"></pre>
+  </details>
+  <script>
+    const data = __DATA__,
+      selects = {},
+      keys = ['family', 'id', 'style', 'mode', 'language', 'width'];
+    document.querySelector('#summary').textContent =
+      `${data.summary.examples} примера · ${data.summary.configurations} конфигурации · ${data.summary.pairs} пары · ${data.summary.textStyles} проверок шрифта и цвета.`;
+    document.querySelector('#limits').textContent =
+      data.summary.limits.join(' ');
+    for (const key of keys) {
+      const label = document.createElement('label');
+      label.textContent = key;
+      const select = document.createElement('select');
+      select.setAttribute('aria-label', key);
+      for (const value of [
+        ...new Set(data.rows.map((row) => String(row[key])))
+      ])
+        select.add(new Option(value, value));
+      select.onchange = () => show(key);
+      label.append(select);
+      document.querySelector('#filters').append(label);
+      selects[key] = select;
+    }
+    function show(changed) {
+      const wanted = Object.fromEntries(
+        keys.map((key) => [key, selects[key].value])
+      );
+      let row = data.rows.find((row) =>
+        keys.every((key) => String(row[key]) === wanted[key])
+      );
+      if (!row)
+        row = data.rows.find((row) => String(row[changed]) === wanted[changed]);
+      for (const key of keys) selects[key].value = String(row[key]);
+      document.querySelector('#caption').textContent = keys
+        .map((key) => row[key])
+        .join(' / ');
+      for (const host of ['native', 'browser'])
+        document.getElementById(host).src = row[host];
+      document.querySelector('#diagnostics').textContent = JSON.stringify(
+        data.summary.paintDiagnostics.filter((item) =>
+          ['id', 'style', 'mode', 'language', 'width'].every(
+            (key) => item[key] === row[key]
+          )
+        ),
+        null,
+        2
+      );
+    }
+    show('id');
+  </script>
+</html>

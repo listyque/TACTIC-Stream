@@ -91,5 +91,15 @@ async function dispatch(event) {
   top: 36px;
   width: 100%;
   height: calc(100% - 36px);
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+.frame-code-source :deep(.code-buffer) {
+  border-radius: 0;
+}
+.frame-code-source :deep(.code-line-numbers) {
+  width: 36px;
+  border: 0;
 }
 </style>

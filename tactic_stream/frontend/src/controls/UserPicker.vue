@@ -108,21 +108,22 @@ function toggle(login) {
 }
 .user-picker > .app-search-field {
   flex: none;
-  height: 36px;
-  min-height: 36px;
-  padding-inline: 12px;
+  height: var(--control-height);
+  min-height: var(--control-height);
+  padding-inline: 11px;
   gap: 8px;
 }
 .user-picker > .app-search-field input {
   min-width: 0;
-  height: 34px;
-  min-height: 34px;
-  font-size: var(--control-text-size);
+  height: 100%;
+  min-height: 0;
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-line-height);
 }
 .user-picker > .app-search-field > .app-icon {
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }
 .user-picker-list {
   overflow: auto;
@@ -181,11 +182,13 @@ function toggle(login) {
   gap: 1px;
 }
 .user-picker-label strong {
-  font-size: var(--control-text-size);
+  font-size: var(--font-body-size);
+  line-height: var(--font-body-line-height);
   font-weight: 600;
 }
 .user-picker-label small {
-  font-size: var(--text-caption);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
   color: var(--muted);
 }
 .user-picker-label > * {
@@ -206,7 +209,8 @@ function toggle(login) {
   border-radius: 12px;
   color: var(--muted);
   background: var(--hover);
-  font-size: var(--text-caption);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-line-height);
   white-space: nowrap;
 }
 .user-picker .user-picker-current .app-icon {

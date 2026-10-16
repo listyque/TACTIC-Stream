@@ -1,6 +1,6 @@
 import { D as nextTick, E as mergeProps, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, T as mergeModels, V as useModel, X as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
-import { D as t, I as controls, O as appearance, R as cssRoles, U as textStyles, V as metrics, Z as iconSets, et as _plugin_vue_export_helper_default, o as _sfc_main$7, u as _sfc_main$6 } from "./index.js";
+import { D as t, H as metrics, I as controls, O as appearance, Q as iconSets, R as cssRoles, W as textStyles, o as _sfc_main$7, tt as _plugin_vue_export_helper_default, u as _sfc_main$6 } from "./index.js";
 import { n as copyText, o as javascriptTokens, r as readClipboard, s as pythonTokens } from "./clipboard.js";
 import { t as _sfc_main$8 } from "./AppSwitch.js";
 import { t as _sfc_main$9 } from "./AppSelect.js";
@@ -2621,6 +2621,7 @@ var _sfc_main$3 = {
 			if (!event.relatedTarget?.closest(".code-completions")) dismissCompletions();
 		}
 		function select(start, end = start) {
+			if (!input.value) return;
 			selection.value = {
 				start,
 				end
@@ -2648,6 +2649,7 @@ var _sfc_main$3 = {
 			if (!props.readOnly) apply(editCommand(action, model.value, selection.value.start, selection.value.end, props.language));
 		}
 		function syncSelection() {
+			if (!input.value) return;
 			selection.value = {
 				start: input.value.selectionStart,
 				end: input.value.selectionEnd
@@ -2656,7 +2658,7 @@ var _sfc_main$3 = {
 			if (step?.text === model.value) Object.assign(step, selection.value);
 		}
 		function syncScroll() {
-			scroll.value = {
+			if (input.value) scroll.value = {
 				x: input.value.scrollLeft,
 				y: input.value.scrollTop
 			};
@@ -3294,7 +3296,7 @@ var FrameCode_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 8, _hoisted_1$2);
 		};
 	}
-}, [["__scopeId", "data-v-0302f8a3"]]);
+}, [["__scopeId", "data-v-76ea9979"]]);
 //#endregion
 //#region src/controls/IconPicker.vue
 var _hoisted_1$1 = { key: 0 };
@@ -3553,7 +3555,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 			};
 		}
 		function background(node) {
-			const radius = node.radius === void 0 ? "var(--surface-radius)" : node.radius + "px";
+			const radius = node.radius === void 0 ? "0px" : node.radius + "px";
 			return {
 				background: color(node.background),
 				boxShadow: node.border ? "inset 0 0 0 " + (node.borderWidth || 1) + "px " + color(node.border) : void 0,
@@ -3755,6 +3757,9 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					segmented: node.radio,
 					checked: !!node.selected,
 					destructive: node.destructive,
+					tonal: node.tonal,
+					"badge-count": node.badgeCount || 0,
+					"show-zero-badge": node.showZeroBadge,
 					disabled: !node.enabled,
 					role: node.radio ? "radio" : void 0,
 					"aria-checked": node.radio ? !!node.selected : void 0,
@@ -3777,6 +3782,9 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"segmented",
 					"checked",
 					"destructive",
+					"tonal",
+					"badge-count",
+					"show-zero-badge",
 					"disabled",
 					"role",
 					"aria-checked",
@@ -3851,6 +3859,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					style: normalizeStyle(Object.assign(style(node), { "--frame-indicator-x": (node.indicatorX || 0) + "px" })),
 					"model-value": node.checked,
 					indeterminate: !!node.mixed,
+					compact: node.compact,
+					prominent: node.prominent,
 					label: node.text,
 					"translate-label": false,
 					disabled: !node.enabled,
@@ -3884,6 +3894,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"style",
 					"model-value",
 					"indeterminate",
+					"compact",
+					"prominent",
 					"label",
 					"disabled",
 					"onKeydown",
@@ -3987,6 +3999,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"preview-size": node.width,
 					round: node.round !== false,
 					outlined: node.outlined !== false,
+					selected: node.selected,
+					loading: node.loading,
 					"fill-mode": node.fit || "cover"
 				}, null, 8, [
 					"data-frame",
@@ -3998,6 +4012,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"preview-size",
 					"round",
 					"outlined",
+					"selected",
+					"loading",
 					"fill-mode"
 				])) : node.kind === "List" ? (openBlock(), createElementBlock("div", {
 					key: 10,
@@ -4044,13 +4060,16 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				}), 128))], 4)], 44, _hoisted_4)) : node.kind === "Scroll" ? (openBlock(), createElementBlock("div", {
 					key: node.id + ":" + node.resetKey,
 					"data-frame": node.id,
-					class: "frame-node frame-scroll",
+					class: normalizeClass(["frame-node frame-scroll", { "frame-scroll-horizontal": node.contentWidth > node.width }]),
 					style: normalizeStyle(style(node))
 				}, [createVNode(_component_FrameView, {
 					ref_for: true,
 					ref_key: "branches",
 					ref: branches,
-					style: normalizeStyle({ height: node.contentHeight + "px" }),
+					style: normalizeStyle({
+						height: node.contentHeight + "px",
+						width: node.contentWidth === void 0 ? void 0 : Math.max(node.width, node.contentWidth) + "px"
+					}),
 					scene: { nodes: node.children },
 					models: __props.models,
 					views: __props.views,
@@ -4066,7 +4085,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"describe-row",
 					"describe-cell",
 					"interactive"
-				])], 12, _hoisted_5)) : node.kind === "Choice" ? (openBlock(), createBlock(_sfc_main$9, {
+				])], 14, _hoisted_5)) : node.kind === "Choice" ? (openBlock(), createBlock(_sfc_main$9, {
 					key: 12,
 					"data-frame": node.id,
 					class: "frame-node frame-choice",

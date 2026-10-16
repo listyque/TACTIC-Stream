@@ -13,12 +13,14 @@ const props = defineProps({
   tooltip: String,
   icon: String,
   iconOnly: Boolean,
+  compact: Boolean,
   highlighted: Boolean,
   destructive: Boolean,
   tonal: Boolean,
   segmented: Boolean,
   checked: Boolean,
   badgeCount: { type: Number, default: 0 },
+  badgeColor: String,
   showZeroBadge: Boolean,
   type: { type: String, default: 'button' },
   href: String
@@ -30,11 +32,12 @@ const paint = computed(() => buttonVariables(props));
   <component
     :is="href ? 'a' : 'button'"
     class="app-button"
-    :style="paint"
+    :style="[paint, badgeColor ? { '--badge-color': badgeColor } : null]"
     :href="href"
     :type="href ? undefined : type"
     :class="{
-      'icon-button': iconOnly,
+      'icon-button': iconOnly || compact,
+      'compact-button': compact,
       primary: highlighted,
       danger: destructive,
       tonal
@@ -42,7 +45,7 @@ const paint = computed(() => buttonVariables(props));
     v-tooltip="
       tooltip
         ? t(tooltip)
-        : iconOnly && label
+        : (iconOnly || compact) && label
           ? translateLabel
             ? t(label)
             : label
@@ -56,7 +59,7 @@ const paint = computed(() => buttonVariables(props));
   >
     <AppIcon v-if="icon" :name="icon" />
     <slot
-      ><span v-if="!iconOnly">{{
+      ><span v-if="!iconOnly && !compact">{{
         translateLabel ? t(label) : label
       }}</span></slot
     >
@@ -87,12 +90,48 @@ const paint = computed(() => buttonVariables(props));
 }
 .app-button > .app-icon {
   flex: none;
-  width: 16px;
-  height: 16px;
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  font-size: var(--button-icon-size);
 }
 .app-button.icon-button > .app-icon {
   width: var(--compact-icon-size);
   height: var(--compact-icon-size);
+}
+.app-button.icon-button:disabled {
+  opacity: 1;
+  color: var(--disabled);
+}
+.app-button.icon-button:not(.compact-button) {
+  --ripple-inset: calc(var(--icon-button-surface-inset) / 2);
+  padding: var(--ripple-inset);
+  background-clip: content-box;
+}
+.app-button.icon-button.primary {
+  color: var(--on-selected);
+}
+.app-button.compact-button {
+  border-radius: var(--button-radius);
+  background: var(--button-idle-background);
+  color: var(--button-idle-color);
+  border: var(--button-idle-border-width) solid var(--button-idle-border);
+}
+.app-button.compact-button:hover:not(:disabled) {
+  background: var(--button-hover-background);
+  color: var(--button-hover-color);
+}
+.app-button.compact-button:active:not(:disabled) {
+  background: var(--button-pressed-background);
+  color: var(--button-pressed-color);
+}
+.app-button.compact-button:disabled {
+  background: var(--button-disabled-background);
+  color: var(--button-disabled-color);
+}
+.app-button.compact-button > .app-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }
 .app-button:not(.icon-button):hover:not(:disabled) {
   background: var(--button-hover-background);
@@ -113,11 +152,13 @@ const paint = computed(() => buttonVariables(props));
   color: var(--button-disabled-color);
 }
 .app-button:where(:not(.icon-button)) {
-  padding-inline: var(--button-padding);
+  padding-inline: calc(var(--button-padding) - var(--button-idle-border-width));
   gap: var(--button-spacing);
 }
 .app-button:where(:not(.icon-button)):where(:has(> .app-icon)) {
-  padding-inline-start: var(--button-icon-padding);
+  padding-inline-start: calc(
+    var(--button-icon-padding) - var(--button-idle-border-width)
+  );
 }
 .app-button.primary,
 .app-button.primary:hover:not(:disabled) {
@@ -149,8 +190,8 @@ a.app-button.icon-button:focus-visible {
   overflow: visible;
 }
 .icon-button > :is(.app-button-badge, .action-count) {
-  top: -4px;
-  right: -4px;
+  top: -1px;
+  right: -1px;
 }
 .app-button-badge {
   position: absolute;
@@ -159,10 +200,10 @@ a.app-button.icon-button:focus-visible {
   box-sizing: border-box;
   min-width: 16px;
   height: 16px;
-  padding: 0 2px;
+  padding: 0 1.5px;
   border: 2px solid var(--surface);
   border-radius: 8px;
-  background: var(--error);
+  background: var(--badge-color, var(--error));
   color: var(--on-selected);
   font-size: var(--text-caption);
   font-weight: 700;

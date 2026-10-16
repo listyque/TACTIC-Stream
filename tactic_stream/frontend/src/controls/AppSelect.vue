@@ -39,7 +39,7 @@ const decorated = computed(
       v-for="item in options"
       :key="item.value"
       :value="item.value"
-      :disabled="item.disabled"
+      :disabled="item.disabled || item.enabled === false"
       ><AppIcon v-if="decorated && item.icon" :name="item.icon" /><span
         v-if="swatchMode"
         class="palette-swatch"
@@ -76,7 +76,7 @@ const decorated = computed(
 .app-select selectedcontent {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 7px;
   min-width: 0;
   flex: 1;
 }
@@ -99,15 +99,18 @@ const decorated = computed(
   }
 }
 .app-select :is(option, selectedcontent) > .app-icon {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
-  font-size: 16px;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+  font-size: 15px;
 }
 .app-select selectedcontent > .app-select-option-label {
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.app-select selectedcontent > .app-icon {
+  color: var(--muted);
 }
 </style>

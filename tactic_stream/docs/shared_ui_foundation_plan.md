@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01 is delivered** at the checkpoint below. The next batch is **B02**.
+**B01 and B02 are delivered** at the checkpoints below. The next batch is **B03**.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -61,6 +61,59 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B02 delivered: control kit and usable catalog, 2026-10-16
+
+Handler **0.6.0.106** / Stream **0.112.155** ship separate physical copies of
+**72 `.mjs` modules and one menu catalog**. The reviewed source atlas groups
+27 families and classifies primitives, neutral composites, infrastructure and
+domain forms. Its 144 executable examples use one composition and neutral state
+transitions with actual house controls in both hosts. Unfinished or nonexistent
+legacy wishlist controls are explicitly excluded with reasons.
+
+- Open `tools/frame_controls/output/catalog.html` directly from disk: select a
+  family/example/state, change theme/language/width, enter values and inspect
+  events. Fonts are embedded and no HTTP requests are made. The native catalog
+  has its own QML entry point and normal native file chooser. Commands and owners
+  are documented in `docs/frame_control_catalog.md`.
+- Share numeric parsing/clamp/format, segmented keyboard decisions, chip packing,
+  neutral surface composition and pixel typography. Preserve native SpinBox's
+  scaled integer API, external value/locale bindings and existing command owners.
+  Extract SearchField suggestions without changing TacticSearchField's debounce,
+  controller or result-opening API. Keep native Python/QML scripting intact.
+- Correct disabled choice navigation, held-key duplicate activation, chip
+  measurement/virtualized scrolling, explicit adapter geometry across themes,
+  nested numeric/date/user-search heights, ImagePicker preferred-size layout,
+  native OpenGL crop/contain masks, selected preview borders and the missing
+  error-container CSS export. EN/RU Help documents the changed control behavior.
+- Run the complete platform gate: **42 stages pass**, including native/browser
+  input at 1/1.5/2 scale, IME/selection, recreation/disabled/readonly lifetimes,
+  retained drafts, 1000-choice virtualization, two-axis scroll, splitter, Grid,
+  Code and Graph contracts, workspace/session journeys and independent packaging.
+- `capture_variants.py --native`, `frame_control_variants.mjs` and
+  `report_variants.py` verify **3,456 actual pairs**, 24 theme/palette/language/
+  width combinations, **zero external geometry differences** and **28,716 font/
+  color checks**, plus photo pixels and error-icon backgrounds. Source hashes,
+  incomplete-capture guards and actual offline report/catalog input are checked.
+- Retain the detailed **372-state** gallery: 11,724 geometry, 6,696 style,
+  228 interior, 5,436 text and 2,292 glyph checks pass. Fresh project comparisons
+  pass all 984 paired, 738 original, 204 color and 96 corner checks; the B01
+  metadata-width discrepancy is resolved by design-advance text measurement.
+  Fresh Main/workspace evidence passes 1,152 original, 1,152 paired and 96 color
+  checks with real menu input at 36 browser states.
+
+The report retains **428 text-origin/baseline/advance diagnostics**, at most
+**1.046875 logical px** in this environment; these are not counted as passing
+pixel comparisons. Font rasterization, wrapped/elided text, Markdown, independent
+animation clocks, system dialogs/scrollbar fallback and physical IME/touch/
+compositor acceptance remain explicit platform limits. Whole-repository structure
+debt remains nine preexisting failures. The archived quality comparison has no
+new structure/lint failures; unused imports decrease 21 → 18 and missing-property
+warnings 114 → 111, with no current native smoke/font/runtime warnings.
+
+This completes the reusable vocabulary and neutral control contracts. Original
+Administration fidelity is B03; production Table View, Graph/Code screens and
+Gantt remain in their assigned batches, with their existing owners and APIs.
 
 ## B01 delivered: main workspace and host lifecycle, 2026-10-16
 

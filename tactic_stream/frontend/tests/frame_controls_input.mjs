@@ -137,7 +137,7 @@ export async function exerciseControls(page) {
   await date.getByRole('textbox').fill('0099-02-28T13:14');
   await date.getByLabel('Choose date and time', { exact: true }).click();
   await date
-    .getByRole('button', { name: '28 February 99', exact: true })
+    .getByRole('button', { name: '28 February 0099', exact: true })
     .click();
   assert.equal(
     await page.evaluate(() => window.frameControls.model.date),

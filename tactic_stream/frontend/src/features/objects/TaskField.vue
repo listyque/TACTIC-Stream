@@ -28,6 +28,6 @@ const numericValue = () => hourScale() === 1 ? Number(props.value || 0) : Math.r
     :disabled="busy || !field.editable" @update:model-value="emit('change', $event)" />
   <AppTextField v-else-if="['process', 'context'].includes(field.name)" type="text" :model-value="value || ''" :label="titles[field.name]" :disabled="busy || !field.editable" @update:model-value="emit('change', $event)">
   </AppTextField>
-  <AppDateField v-else-if="field.name.endsWith('_date')" :model-value="date(value)" :label="titles[field.name]" :disabled="busy || !field.editable" @update:model-value="emit('change', $event)" />
+  <AppDateField include-time v-else-if="field.name.endsWith('_date')" :model-value="date(value)" :label="titles[field.name]" :disabled="busy || !field.editable" @update:model-value="emit('change', $event)" />
   <AppTextField v-else type="number" min="0" :max="field.name === 'bid_duration' ? 100000 : 100" step="any" :model-value="numericValue()" :label="titles[field.name]" :disabled="busy || !field.editable" @update:model-value="emit('change', hourScale() === 1 ? $event : Number($event) * hourScale())" />
 </template>

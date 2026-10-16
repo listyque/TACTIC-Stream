@@ -7,6 +7,7 @@ const props = defineProps({
   disabled: Boolean,
   indeterminate: Boolean,
   compact: Boolean,
+  prominent: Boolean,
   hideLabel: Boolean,
   translateLabel: { type: Boolean, default: true }
 });
@@ -20,7 +21,7 @@ function changed(event) {
 </script>
 
 <template>
-  <label class="app-checkbox" :class="{ disabled, compact }"
+  <label class="app-checkbox" :class="{ disabled, compact, prominent }"
     ><span class="app-checkbox-indicator"
       ><input
         :id="controlId"
@@ -56,5 +57,21 @@ function changed(event) {
 }
 .app-checkbox.compact .app-icon {
   font-size: var(--check-box-compact-icon-size);
+}
+</style>
+
+<style>
+.app-checkbox.prominent {
+  --check-box-indicator: var(--check-box-prominent-indicator);
+  --check-box-compact-indicator: var(--check-box-prominent-indicator);
+  --check-box-icon-size: var(--check-box-prominent-icon-size);
+  --check-box-compact-icon-size: var(--check-box-prominent-icon-size);
+}
+.app-checkbox.prominent input {
+  border-width: 2px;
+}
+.app-checkbox.prominent input:not(:checked):not(:indeterminate):not(:disabled) {
+  background: var(--surface-highest);
+  border-color: var(--muted);
 }
 </style>

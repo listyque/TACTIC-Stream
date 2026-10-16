@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/clipboard.css","assets/App.js","assets/resize.js","assets/icons.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/AppTextArea.js","assets/AppTextArea.css","assets/UserComboBox.js","assets/AppSearchField.js","assets/UserComboBox.css","assets/AppSplitter.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/resize.css","assets/RecordForm.js","assets/RecordForm.css","assets/links.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/previewImage.js","assets/App.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/clipboard.js","assets/AppSwitch.js","assets/AppSelect.js","assets/AppSelect.css","assets/SettingRow.js","assets/SettingRow.css","assets/clipboard.css","assets/App.js","assets/resize.js","assets/icons.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/AppTextArea.js","assets/AppTextArea.css","assets/UserComboBox.js","assets/AppSearchField.js","assets/AppSearchField.css","assets/UserComboBox.css","assets/AppSplitter.js","assets/ItemSurface.js","assets/ItemSurface.css","assets/resize.css","assets/RecordForm.js","assets/RecordForm.css","assets/links.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/previewImage.js","assets/App.css"])))=>i.map(i=>d[i]);
 import { C as h, F as renderSlot, G as withCtx, H as watch, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, S as defineAsyncComponent, U as watchEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, i as render, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeStyle, p as Teleport, r as createApp, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock } from "./vue.js";
 import { n as en_default, t as ru_default } from "./locales.js";
 import { n as resolveIcon } from "./icons.js";
@@ -50,7 +50,7 @@ var BusyIndicator_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}, null, 2);
 		};
 	}
-}, [["__scopeId", "data-v-d543aead"]]);
+}, [["__scopeId", "data-v-bc754be8"]]);
 //#endregion
 //#region src/appearanceCatalog.js
 var themes = [
@@ -531,6 +531,21 @@ var typography = {
 	title: 12
 };
 var fontFamily = "Segoe UI";
+function fontLineHeight(pixelSize) {
+	return Math.ceil(pixelSize * 1.328125);
+}
+var lineHeights = Object.freeze({
+	menuHeading: 14,
+	caption: 15,
+	secondary: 16,
+	body: 18,
+	bodyLarge: 19,
+	section: 20,
+	title: 22,
+	heading: 23,
+	display: 24,
+	hero: 32
+});
 var textStyles = Object.freeze({
 	menuHeading: 10,
 	caption: 11,
@@ -630,6 +645,126 @@ var controls = {
 		thumb: 18,
 		inset: 3,
 		spacing: 10
+	},
+	search: {
+		padding: 38,
+		iconInset: 12,
+		iconSize: 18,
+		clearInset: 4,
+		clearExtent: 30,
+		clearIconSize: 17,
+		popupMinimumWidth: 240,
+		popupPadding: 4,
+		popupGap: 6,
+		rowHeight: 34
+	},
+	number: {
+		indicatorWidth: 34,
+		iconSize: 14
+	},
+	feedback: {
+		progressHeight: 4,
+		busyExtent: 24
+	},
+	slider: {
+		height: 26,
+		track: 4,
+		thumb: 16,
+		thumbBorder: 2,
+		padding: 6
+	},
+	identity: {
+		avatarSize: 40,
+		spacing: 12,
+		textSpacing: 3
+	},
+	summaryChip: {
+		height: 30,
+		compactHeight: 24,
+		spacing: 7,
+		padding: 10,
+		compactPadding: 8,
+		dot: 8
+	},
+	filterChip: {
+		height: 32,
+		emphasisHeight: 12,
+		iconSize: 11,
+		emphasisIconSize: 4,
+		emphasisFontSize: 11
+	},
+	loadingOverlay: {
+		spacing: 10,
+		surfaceOpacity: .88,
+		minimumWidth: 180,
+		maximumWidth: 420,
+		horizontalMargin: 40
+	},
+	statusChip: {
+		height: 24,
+		denseHeight: 20,
+		spacing: 5,
+		padding: 8,
+		densePadding: 5,
+		iconSize: 13,
+		denseIconSize: 11
+	},
+	reactionChip: {
+		height: 28,
+		padding: 8,
+		spacing: 5,
+		emojiSize: 18,
+		tintOpacity: .18,
+		checkedTintOpacity: .34
+	},
+	editorPanel: {
+		padding: 14,
+		spacing: 12,
+		contentSpacing: 10,
+		headerSpacing: 10,
+		textSpacing: 3,
+		actionsSpacing: 6,
+		iconSize: 20
+	},
+	formField: {
+		padding: 14,
+		labelWidth: 220,
+		columnSpacing: 20,
+		rowSpacing: 12,
+		iconExtent: 34,
+		iconSize: 17,
+		labelSpacing: 11,
+		textSpacing: 2,
+		editorSpacing: 5,
+		compactBreakpoint: 700
+	},
+	editorListItem: {
+		padding: 12,
+		spacing: 10,
+		iconSize: 19,
+		textSpacing: 4,
+		minimumExtraHeight: 12
+	},
+	emptyState: {
+		height: 140,
+		iconSize: 30,
+		spacing: 8,
+		maximumWidth: 440,
+		horizontalMargin: 24
+	},
+	dropTarget: {
+		margin: 6,
+		borderWidth: 2,
+		iconSize: 30,
+		spacing: 8,
+		textSize: 12,
+		surfaceOpacity: .94
+	},
+	imagePicker: {
+		previewSize: 112,
+		minimumActionsWidth: 290,
+		columnSpacing: 16,
+		rowSpacing: 12
 	},
 	splitter: {
 		extent: 10,
@@ -886,6 +1021,7 @@ var cssRoles = {
 	selected: "--selected",
 	selectedText: "--on-selected",
 	contentSelection: "--content-selection",
+	contentSelectionText: "--on-content-selection",
 	contentAccent: "--content-accent",
 	primaryText: "--on-surface",
 	secondaryText: "--muted",
@@ -906,6 +1042,7 @@ var cssRoles = {
 	outline: "--outline",
 	outlineVariant: "--outline-variant",
 	error: "--error",
+	errorContainer: "--error-container",
 	onError: "--on-error",
 	ripple: "--ripple-color",
 	popupShadow: "--shadow-color",
@@ -927,6 +1064,11 @@ function cssVariables(style, dark, base, accent, preferences) {
 	}
 	result["--control-text-size"] = textStyles.body + "px";
 	result["--control-compact-text-size"] = textStyles.secondary + "px";
+	for (const role of Object.keys(textStyles)) {
+		const name = role.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
+		result["--font-" + name + "-size"] = textStyles[role] + "px";
+		result["--font-" + name + "-line-height"] = lineHeights[role] + "px";
+	}
 	const states = {
 		field: {
 			idle: fieldVisual(),
@@ -1606,19 +1748,21 @@ function ripple(event) {
 	const extended = parseFloat(style.getPropertyValue("--motion-click-extended")) || 0;
 	if (!extended) return;
 	button.querySelectorAll(":scope > .control-ripple-clip").forEach((node) => node.remove());
-	const bounds = button.getBoundingClientRect(), diameter = Math.max(bounds.width, bounds.height) * 2.2;
+	const inset = parseFloat(style.getPropertyValue("--ripple-inset")) || 0;
+	const bounds = button.getBoundingClientRect(), diameter = Math.max(bounds.width - inset * 2, bounds.height - inset * 2) * 2.2;
 	const circle = document.createElement("span");
 	circle.className = "control-ripple";
 	circle.setAttribute("aria-hidden", "true");
 	Object.assign(circle.style, {
 		width: diameter + "px",
 		height: diameter + "px",
-		left: event.clientX - bounds.left - diameter / 2 + "px",
-		top: event.clientY - bounds.top - diameter / 2 + "px"
+		left: event.clientX - bounds.left - inset - diameter / 2 + "px",
+		top: event.clientY - bounds.top - inset - diameter / 2 + "px"
 	});
 	const clip = document.createElement("span");
 	clip.className = "control-ripple-clip";
 	clip.setAttribute("aria-hidden", "true");
+	clip.style.inset = inset + "px";
 	clip.append(circle);
 	button.append(clip);
 	circle.animate([{ transform: "scale(.05)" }, { transform: "scale(1)" }], {
@@ -1764,6 +1908,7 @@ var _sfc_main$1 = {
 		tooltip: String,
 		icon: String,
 		iconOnly: Boolean,
+		compact: Boolean,
 		highlighted: Boolean,
 		destructive: Boolean,
 		tonal: Boolean,
@@ -1773,6 +1918,7 @@ var _sfc_main$1 = {
 			type: Number,
 			default: 0
 		},
+		badgeColor: String,
 		showZeroBadge: Boolean,
 		type: {
 			type: String,
@@ -1786,12 +1932,13 @@ var _sfc_main$1 = {
 		return (_ctx, _cache) => {
 			return withDirectives((openBlock(), createBlock(resolveDynamicComponent(__props.href ? "a" : "button"), {
 				class: normalizeClass(["app-button", {
-					"icon-button": __props.iconOnly,
+					"icon-button": __props.iconOnly || __props.compact,
+					"compact-button": __props.compact,
 					primary: __props.highlighted,
 					danger: __props.destructive,
 					tonal: __props.tonal
 				}]),
-				style: normalizeStyle(paint.value),
+				style: normalizeStyle([paint.value, __props.badgeColor ? { "--badge-color": __props.badgeColor } : null]),
 				href: __props.href,
 				type: __props.href ? void 0 : __props.type,
 				"aria-label": __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : void 0,
@@ -1805,7 +1952,7 @@ var _sfc_main$1 = {
 						key: 0,
 						name: __props.icon
 					}, null, 8, ["name"])) : createCommentVNode("", true),
-					renderSlot(_ctx.$slots, "default", {}, () => [!__props.iconOnly ? (openBlock(), createElementBlock("span", _hoisted_1$1, toDisplayString(__props.translateLabel ? unref(t)(__props.label) : __props.label), 1)) : createCommentVNode("", true)]),
+					renderSlot(_ctx.$slots, "default", {}, () => [!__props.iconOnly && !__props.compact ? (openBlock(), createElementBlock("span", _hoisted_1$1, toDisplayString(__props.translateLabel ? unref(t)(__props.label) : __props.label), 1)) : createCommentVNode("", true)]),
 					__props.badgeCount > 0 || __props.showZeroBadge ? (openBlock(), createElementBlock("span", _hoisted_2, toDisplayString(__props.badgeCount > 99 ? "99+" : __props.badgeCount), 1)) : createCommentVNode("", true)
 				]),
 				_: 3
@@ -1815,7 +1962,7 @@ var _sfc_main$1 = {
 				"type",
 				"class",
 				"aria-label"
-			])), [[unref(tooltipDirective), __props.tooltip ? unref(t)(__props.tooltip) : __props.iconOnly && __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : ""]]);
+			])), [[unref(tooltipDirective), __props.tooltip ? unref(t)(__props.tooltip) : (__props.iconOnly || __props.compact) && __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : ""]]);
 		};
 	}
 };
@@ -2586,9 +2733,9 @@ var documentation = location.pathname === "/docs" || location.pathname === "/doc
 if (documentation) watchEffect(() => {
 	document.title = t("TACTIC Stream — API reference");
 });
-var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([8,1,9,10,2,3,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40])));
+var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7,8])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([9,1,10,11,2,3,4,5,6,7,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { BusyIndicator_default as $, effectiveColorMode as A, layout as B, sessionRecords as C, t as D, asyncComponent as E, blend as F, normalizePreferences as G, readableText$1 as H, controls as I, normalizeColumns as J, preferences as K, cssColor as L, languages as M, readableText as N, appearance as O, saveAppearance as P, themes as Q, cssRoles as R, savedSessions as S, randomId as T, textStyles as U, metrics as V, configurationPreview as W, accentPresets as X, taskColumns as Y, iconSets as Z, importSession as _, mobileLayout as a, logRequest as b, capturePress as c, clearLive as d, _plugin_vue_export_helper_default as et, debugLog as f, formatEvent as g, forgetSessions as h, mobile as i, frameColors as j, colorModes as k, ripple as l, exportSession as m, dockMinimumHeight as n, _sfc_main$1 as o, debugSettings as p, savePreferencePage as q, dockMinimumWidth as r, tooltipDirective as s, __vitePreload as t, _sfc_main$2 as u, levels as v, setServerDebugContext as w, redact as x, logEvent as y, fontFamily as z };
+export { themes as $, effectiveColorMode as A, fontLineHeight as B, sessionRecords as C, t as D, asyncComponent as E, blend as F, configurationPreview as G, metrics as H, controls as I, savePreferencePage as J, normalizePreferences as K, cssColor as L, languages as M, readableText as N, appearance as O, saveAppearance as P, iconSets as Q, cssRoles as R, savedSessions as S, randomId as T, readableText$1 as U, layout as V, textStyles as W, taskColumns as X, normalizeColumns as Y, accentPresets as Z, importSession as _, mobileLayout as a, logRequest as b, capturePress as c, clearLive as d, BusyIndicator_default as et, debugLog as f, formatEvent as g, forgetSessions as h, mobile as i, frameColors as j, colorModes as k, ripple as l, exportSession as m, dockMinimumHeight as n, _sfc_main$1 as o, debugSettings as p, preferences as q, dockMinimumWidth as r, tooltipDirective as s, __vitePreload as t, _plugin_vue_export_helper_default as tt, _sfc_main$2 as u, levels as v, setServerDebugContext as w, redact as x, logEvent as y, fontFamily as z };
 
 //# sourceMappingURL=index.js.map

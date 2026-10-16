@@ -36,6 +36,7 @@ defineExpose({
 <style>
 .app-text-field {
   min-width: 0;
+  min-height: 0;
   font-size: var(--control-text-size);
   height: var(--control-height);
   padding-inline: calc(var(--field-padding) - 1px);
@@ -51,6 +52,10 @@ defineExpose({
 }
 .app-text-field:disabled {
   color: var(--disabled);
+}
+.app-text-field::placeholder {
+  color: var(--muted);
+  opacity: 1;
 }
 .app-text-field.table-cell {
   appearance: none;
