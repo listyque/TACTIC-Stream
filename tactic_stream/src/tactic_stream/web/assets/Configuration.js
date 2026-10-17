@@ -1,10 +1,11 @@
-import { A as onDeactivated, D as nextTick, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, O as onActivated, P as renderList, X as ref, Y as reactive, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeStyle, p as Teleport, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
+import { A as onMounted, D as onActivated, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, k as onDeactivated, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { $ as themes, A as effectiveColorMode, D as t, G as configurationPreview, I as controls, J as savePreferencePage, K as normalizePreferences, M as languages, O as appearance, P as saveAppearance, Q as iconSets, Z as accentPresets, k as colorModes, o as _sfc_main$8, p as debugSettings, q as preferences, tt as _plugin_vue_export_helper_default, u as _sfc_main$7 } from "./index.js";
 import { c as button, d as node, f as rect, l as label, n as _sfc_main$9, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
 import { F as rpc, I as saveServerConfiguration, O as projectCatalog, U as serverConfiguration, f as _sfc_main$11, u as _sfc_main$10 } from "./clipboard.js";
 import { n as fieldKind, r as unsupportedField, t as RecordForm_default } from "./RecordForm.js";
-import { t as AppSearchField_default } from "./AppSearchField.js";
-import { C as describe$3, Q as timestampFullLabel, S as confirmation, _ as contentWidth, a as updateIntervals, b as fieldsFor, f as lifecycle, g as change, i as updateBatchDelays, m as ImagePicker_default, o as updateModes, p as ProjectCreation_default, r as networkSettings, v as describe$2, w as pages, y as editColumn, z as resultViews } from "./App.js";
+import { n as AppSearchField_default } from "./ItemSurface.js";
+import { f as views } from "./textMetrics.js";
+import { C as describe$3, S as confirmation, Z as timestampFullLabel, _ as contentWidth, a as updateIntervals, b as fieldsFor, f as lifecycle, g as change, i as updateBatchDelays, m as ImagePicker_default, o as updateModes, p as ProjectCreation_default, r as networkSettings, v as describe$2, w as pages, y as editColumn } from "./App.js";
 //#region src/features/configuration/FrameSettings.vue
 var _sfc_main$6 = {
 	__name: "FrameSettings",
@@ -1955,7 +1956,7 @@ var _sfc_main = {
 			language: languages,
 			iconSet: iconSets,
 			mode: colorModes,
-			defaultViewMode: resultViews,
+			defaultViewMode: views,
 			viewMode: [{
 				value: "table",
 				label: "Table"

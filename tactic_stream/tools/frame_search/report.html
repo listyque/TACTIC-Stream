@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>B06 — Search</title>
+    <style>
+      body {
+        background: #171b1e;
+        color: #e3e9ee;
+        font:
+          15px 'Segoe UI',
+          sans-serif;
+        margin: 24px;
+      }
+      h1 {
+        margin-bottom: 8px;
+      }
+      p {
+        max-width: 1050px;
+        line-height: 1.5;
+      }
+      nav {
+        position: sticky;
+        top: 0;
+        padding: 12px 0;
+        background: #171b1e;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        z-index: 1;
+      }
+      select {
+        background: #32393e;
+        color: inherit;
+        padding: 8px;
+        border: 1px solid #59636b;
+        border-radius: 8px;
+      }
+      article {
+        margin: 16px 0 28px;
+        padding: 16px;
+        border: 1px solid #45515a;
+        border-radius: 12px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+        gap: 16px;
+        align-items: start;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+        overflow: auto;
+      }
+      figcaption {
+        margin-bottom: 8px;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        vertical-align: top;
+      }
+      code {
+        white-space: pre-wrap;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #45515a;
+        padding: 8px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Пункт 6: поиск и карточки результатов</h1>
+    <p id="counts"></p>
+    <p>
+      Слева — архив Handler перед B06, в центре — текущий QML, справа — Vue.
+      Архив уже содержит предыдущие этапы Frame; это не исходный Handler до
+      начала всей миграции. Скриншоты проверяют показанные состояния. Поведение
+      запросов, сохранение и права проверяются отдельными сценариями.
+    </p>
+    <p>
+      Для расширенного поиска, панели страниц, заголовков тегов/быстрых фильтров
+      и действий видимости автоматически сопоставлены геометрия, типографика и
+      цвета общих контролов. Изображения карточек и редактора предназначены для
+      сравнения рядом; совпадение всех пикселей между разными движками шрифта не
+      заявляется.
+    </p>
+    <nav>
+      <select id="screen"></select
+      ><select id="theme"></select
+      ><select id="language"></select
+      ><select id="mode"></select
+      ><select id="width"></select>
+    </nav>
+    <section id="states"></section>
+    <h2>Длинные коллекции: настоящий браузерный ввод</h2>
+    <p>
+      Количество смонтированных элементов после прокрутки к последнему объекту.
+      Переходы Home/End проверяют фокус на первом и последнем объекте. Время
+      включает действия тестового драйвера и не является измерением частоты
+      кадров.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Объектов</th>
+          <th>Представление</th>
+          <th>В DOM</th>
+          <th>Сценарий, мс</th>
+        </tr>
+      </thead>
+      <tbody id="collections"></tbody>
+    </table>
+    <script id="data" type="application/json">
+      __SEARCH_DATA__
+    </script>
+    <script>
+      const data = JSON.parse(document.getElementById('data').textContent),
+        cases = data.browser.cases;
+      const names = {
+        advanced: 'Расширенный поиск',
+        row: 'Объект',
+        snapshot: 'Снапшот',
+        card: 'Карточка объекта',
+        card_snapshot: 'Карточка снапшота',
+        footer: 'Страницы',
+        tags: 'Заголовок тегов',
+        quick: 'Быстрые фильтры',
+        visibility: 'Видимость процессов'
+      };
+      document.getElementById('counts').textContent =
+        `${data.native.captures.length} снимков архива/QML · ${cases.length} снимков Vue · 3 темы · светлая/тёмная · EN/RU · широкая/узкая компоновка.`;
+      const filters = [
+        ['screen', 'screen', names],
+        ['theme', 'style', {}],
+        ['language', 'language', {}],
+        ['mode', 'dark', { true: 'Тёмная', false: 'Светлая' }],
+        ['width', 'width', {}]
+      ];
+      for (const [id, key, labels] of filters) {
+        const element = document.getElementById(id);
+        element.add(new Option('Все', ''));
+        for (const value of [
+          ...new Set(cases.map((row) => String(row.fixture[key])))
+        ])
+          element.add(new Option(labels[value] || value, value));
+        element.onchange = render;
+      }
+      function render() {
+        const host = document.getElementById('states');
+        host.replaceChildren();
+        for (const row of cases) {
+          const fixture = row.fixture;
+          if (
+            filters.some(
+              ([id, key]) =>
+                document.getElementById(id).value &&
+                document.getElementById(id).value !== String(fixture[key])
+            )
+          )
+            continue;
+          const article = document.createElement('article'),
+            heading = document.createElement('h2');
+          heading.textContent = `${names[fixture.screen]} · ${fixture.style} · ${fixture.dark ? 'dark' : 'light'} · ${fixture.language} · ${fixture.width}`;
+          article.append(heading);
+          const pair = document.createElement('div');
+          pair.className = 'pair';
+          const original = data.native.captures.find(
+            (record) =>
+              record.original &&
+              record.image === row.native.replace('-native-', '-original-')
+          );
+          for (const [title, image] of [
+            ['Архив до B06', original?.image],
+            ['ТХ: QML', row.native],
+            ['ТС: Vue', row.image]
+          ]) {
+            if (!image) continue;
+            const figure = document.createElement('figure'),
+              caption = document.createElement('figcaption'),
+              img = document.createElement('img');
+            caption.textContent = title;
+            img.src = image;
+            img.loading = 'lazy';
+            img.alt = heading.textContent + ' — ' + title;
+            figure.append(caption, img);
+            pair.append(figure);
+          }
+          article.append(pair);
+          host.append(article);
+        }
+      }
+      for (const row of data.browser.collections) {
+        const tr = document.createElement('tr');
+        for (const value of [
+          row.count,
+          row.tile ? 'Карточки' : 'Строки',
+          row.mounted,
+          row.elapsedMs
+        ]) {
+          const td = document.createElement('td');
+          td.textContent = value;
+          tr.append(td);
+        }
+        document.getElementById('collections').append(tr);
+      }
+      document.getElementById('screen').value = 'advanced';
+      document.getElementById('theme').value = 'md3';
+      document.getElementById('language').value = 'ru';
+      document.getElementById('mode').value = 'true';
+      render();
+    </script>
+  </body>
+</html>

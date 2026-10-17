@@ -62,21 +62,6 @@
       "assets/AppMenuItem.css"
     ]
   },
-  "_AppSearchField.css": {
-    "file": "assets/AppSearchField.css",
-    "src": "_AppSearchField.css"
-  },
-  "_AppSearchField.js": {
-    "file": "assets/AppSearchField.js",
-    "name": "AppSearchField",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ],
-    "css": [
-      "assets/AppSearchField.css"
-    ]
-  },
   "_AppSlider.css": {
     "file": "assets/AppSlider.css",
     "src": "_AppSlider.css"
@@ -153,7 +138,8 @@
     "file": "assets/ItemSurface.js",
     "name": "ItemSurface",
     "imports": [
-      "_vue.js"
+      "_vue.js",
+      "index.html"
     ],
     "css": [
       "assets/ItemSurface.css"
@@ -215,7 +201,7 @@
       "index.html",
       "_AppMenu.js",
       "_ItemPreview.js",
-      "_AppSearchField.js"
+      "_ItemSurface.js"
     ],
     "css": [
       "assets/UserComboBox.css"
@@ -299,13 +285,20 @@
       "_AppCheckbox.js",
       "_ItemPreview.js",
       "_AppTextArea.js",
+      "_ItemSurface.js",
       "_UserComboBox.js",
       "_SummaryChip.js",
-      "_AppSplitter.js",
-      "_ItemSurface.js"
+      "_AppSplitter.js"
     ],
     "css": [
       "assets/resize.css"
+    ]
+  },
+  "_textMetrics.js": {
+    "file": "assets/textMetrics.js",
+    "name": "textMetrics",
+    "imports": [
+      "_resize.js"
     ]
   },
   "_tree.ui.js": {
@@ -363,12 +356,12 @@
       "_links.js",
       "_files.js",
       "_AppTextArea.js",
-      "_AppSearchField.js",
+      "_ItemSurface.js",
       "_UserComboBox.js",
       "_SummaryChip.js",
-      "_AppMenuItem.js",
+      "_textMetrics.js",
       "_AppSplitter.js",
-      "_ItemSurface.js",
+      "_AppMenuItem.js",
       "_tree.ui.js"
     ],
     "dynamicImports": [
@@ -628,7 +621,8 @@
       "_resize.js",
       "_clipboard.js",
       "_RecordForm.js",
-      "_AppSearchField.js",
+      "_ItemSurface.js",
+      "_textMetrics.js",
       "src/App.vue"
     ],
     "css": [
@@ -659,9 +653,9 @@
       "_AppMenu.js",
       "_files.js",
       "_AppTextArea.js",
-      "_AppMenuItem.js",
-      "_AppSplitter.js",
       "_ItemSurface.js",
+      "_AppSplitter.js",
+      "_AppMenuItem.js",
       "src/App.vue"
     ],
     "css": [
@@ -683,7 +677,7 @@
       "_AppCheckbox.js",
       "_links.js",
       "_AppTextArea.js",
-      "_AppSearchField.js",
+      "_ItemSurface.js",
       "_AppMenuItem.js",
       "src/App.vue"
     ],
@@ -765,7 +759,7 @@
       "_resize.js",
       "_clipboard.js",
       "_AppMenu.js",
-      "_AppSearchField.js",
+      "_ItemSurface.js",
       "_AppSplitter.js",
       "src/App.vue"
     ],
@@ -812,8 +806,8 @@
       "_vue.js",
       "index.html",
       "_AppMenu.js",
-      "_UserComboBox.js",
       "_ItemSurface.js",
+      "_UserComboBox.js",
       "src/App.vue"
     ]
   }

@@ -1,4 +1,4 @@
-import { D as nextTick, F as renderSlot, G as withCtx, K as withDirectives, M as onUpdated, N as openBlock, R as resolveDynamicComponent, X as ref, _ as createCommentVNode, et as unref, g as createBlock, k as onBeforeUnmount, nt as normalizeStyle, q as isRef, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
+import { E as nextTick, G as withCtx, K as withDirectives, L as resolveDynamicComponent, M as openBlock, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, j as onUpdated, l as withModifiers, nt as normalizeStyle, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass } from "./vue.js";
 import { D as t, c as capturePress, l as ripple, s as tooltipDirective, u as _sfc_main$1 } from "./index.js";
 //#region src/controls/AppMenu.vue
 var _hoisted_1 = [
@@ -18,6 +18,11 @@ var _sfc_main = {
 	props: {
 		label: String,
 		frameComposition: Boolean,
+		externalTrigger: Boolean,
+		focusOnOpen: {
+			type: Boolean,
+			default: true
+		},
 		showLabel: Boolean,
 		compactTrigger: Boolean,
 		icon: {
@@ -189,7 +194,8 @@ var _sfc_main = {
 		}
 		function toggled() {
 			if (!menu.value) return;
-			if (menu.value.open && !expanded.value) emit("before-open");
+			const opening = menu.value.open && !expanded.value;
+			if (opening) emit("before-open");
 			expanded.value = menu.value.open;
 			if (!menu.value.open) {
 				point = null;
@@ -218,9 +224,9 @@ var _sfc_main = {
 					const buttons = items();
 					(focusEdge === "last" ? buttons.at(-1) : buttons[0])?.focus();
 					focusEdge = null;
-				} else if (props.frameComposition) nextTick(() => items()[0]?.focus());
-				if (props.submenu && document.activeElement === trigger.value) nextTick(() => items()[0]?.focus());
-				if (!trigger.value.getClientRects().length) nextTick(() => (panelElement.value.querySelector("input:not([type=\"hidden\"]):not(:disabled), textarea:not(:disabled)") || items()[0])?.focus());
+				} else if (opening && props.focusOnOpen && props.frameComposition) nextTick(() => items()[0]?.focus());
+				if (opening && props.focusOnOpen && props.submenu && document.activeElement === trigger.value) nextTick(() => items()[0]?.focus());
+				if (opening && props.focusOnOpen && !trigger.value.getClientRects().length) nextTick(() => (panelElement.value.querySelector("input:not([type=\"hidden\"]):not(:disabled), textarea:not(:disabled)") || items()[0])?.focus());
 				window.addEventListener("windowgeometrychange", position);
 				if (props.overlay) document.addEventListener("scroll", position, true);
 			} else if (props.modal && panelElement.value.open) panelElement.value.close();
@@ -252,7 +258,8 @@ var _sfc_main = {
 				menu.value.open = true;
 				nextTick(() => {
 					position();
-					if (trigger.value?.getClientRects().length) trigger.value.focus();
+					if (props.focusOnOpen && props.externalTrigger) panelElement.value?.querySelector("input:not(:disabled),select:not(:disabled),button:not(:disabled),a[href]")?.focus();
+					else if (props.focusOnOpen && trigger.value?.getClientRects().length) trigger.value.focus();
 				});
 			},
 			focusTrigger() {
@@ -304,7 +311,7 @@ var _sfc_main = {
 					unref(capturePress)($event);
 					!__props.disabled && unref(ripple)($event);
 				})
-			}, [renderSlot(_ctx.$slots, "trigger", {}, () => [createVNode(_sfc_main$1, { name: __props.icon }, null, 8, ["name"]), __props.showLabel ? (openBlock(), createElementBlock("span", _hoisted_2, toDisplayString(unref(t)(__props.label)), 1)) : createCommentVNode("", true)]), __props.badgeCount > 0 ? (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(__props.badgeCount > 99 ? "99+" : __props.badgeCount), 1)) : createCommentVNode("", true)], 40, _hoisted_1)), [[unref(tooltipDirective), unref(t)(__props.label)]]), (openBlock(), createBlock(resolveDynamicComponent(__props.modal ? "dialog" : "div"), {
+			}, [renderSlot(_ctx.$slots, "trigger", {}, () => [createVNode(_sfc_main$1, { name: __props.icon }, null, 8, ["name"]), __props.showLabel ? (openBlock(), createElementBlock("span", _hoisted_2, toDisplayString(unref(t)(__props.label)), 1)) : createCommentVNode("", true)]), __props.badgeCount > 0 ? (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(__props.badgeCount > 99 ? "99+" : __props.badgeCount), 1)) : createCommentVNode("", true)], 40, _hoisted_1)), [[vShow, !__props.externalTrigger], [unref(tooltipDirective), unref(t)(__props.label)]]), (openBlock(), createBlock(resolveDynamicComponent(__props.modal ? "dialog" : "div"), {
 				ref_key: "panelElement",
 				ref: panelElement,
 				class: "account-panel",

@@ -97,6 +97,12 @@ def fingerprints(handler):
             "icons.mjs",
             "frame_help_state.mjs",
             "frame_configuration_state.mjs",
+            "frame_search_state.mjs",
+            "search_library.mjs",
+            "search_suggestions.mjs",
+            "process_visibility.mjs",
+            "tag_cloud.mjs",
+            "workspace_tabs.mjs",
             "frame_configuration.mjs",
             "frame_help.mjs",
             "frame_navigation.mjs",
@@ -162,6 +168,30 @@ def fingerprints(handler):
         handler / "tests/test_project_creation.py",
         handler / "tests/frame_configuration_fixture.py",
         handler / "tests/test_search_contract.py",
+        *[
+            handler / "tests" / (name + ".py")
+            for name in (
+                "test_workspace_result_item",
+                "test_process_menu_latency",
+                "test_advanced_search_suggestions",
+                "test_search_text_qml",
+                "test_process_filter_editor",
+                "test_quick_filter_editor_qml",
+                "test_quick_filter_popup_qml",
+                "test_tag_cloud_qml",
+                "test_search_pagination_qml",
+            )
+        ],
+        ROOT / "tests/test_search_configuration.py",
+        ROOT / "tests/test_cg_template.py",
+        *[
+            ROOT / "src/tactic_stream/server" / (name + ".py")
+            for name in (
+                "app",
+                "search_configuration",
+                "result_items",
+            )
+        ],
         ROOT / "pyproject.toml",
         handler / "thlib/version.json",
         ROOT / "src/tactic_stream/shared_ui/README.md",
@@ -268,10 +298,65 @@ def main():
         ),
         ("resize", ["node", "frontend/tests/frame_resize.mjs"], ROOT, {}),
         ("help-state", ["node", "frontend/tests/frame_help_state.mjs"], ROOT, {}),
-        ("configuration-state", ["node", "frontend/tests/frame_configuration_state.mjs"], ROOT, {}),
+        (
+            "configuration-state",
+            ["node", "frontend/tests/frame_configuration_state.mjs"],
+            ROOT,
+            {},
+        ),
+        ("search-state", ["node", "frontend/tests/frame_search_state.mjs"], ROOT, {}),
+        (
+            "native-search",
+            python
+            + ["-m", "unittest", "-q"]
+            + [
+                "tests." + name
+                for name in (
+                    "test_workspace_result_item",
+                    "test_process_menu_latency",
+                    "test_advanced_search_suggestions",
+                    "test_search_text_qml",
+                    "test_process_filter_editor",
+                    "test_quick_filter_editor_qml",
+                    "test_quick_filter_popup_qml",
+                    "test_tag_cloud_qml",
+                    "test_search_pagination_qml",
+                )
+            ],
+            handler,
+            {},
+        ),
+        (
+            "search-api",
+            python
+            + ["-m", "unittest", "-q", "test_search_configuration", "test_cg_template"],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        (
+            "browser-search-library",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "test_transport.Transport.test_search_library_in_chromium",
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
         (
             "native-configuration-projects",
-            python + ["-m", "unittest", "-q", "tests.test_configuration", "tests.test_configuration_appearance", "tests.test_configuration_layout", "tests.test_project_creation"],
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_configuration",
+                "tests.test_configuration_appearance",
+                "tests.test_configuration_layout",
+                "tests.test_project_creation",
+            ],
             handler,
             {},
         ),

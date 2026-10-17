@@ -9,6 +9,8 @@ import { tooltipDirective as vTooltip } from './tooltip.js';
 const props = defineProps({
   label: String,
   frameComposition: Boolean,
+  externalTrigger: Boolean,
+  focusOnOpen: { type: Boolean, default: true },
   showLabel: Boolean,
   compactTrigger: Boolean,
   icon: { type: String, default: 'more' },
@@ -280,7 +282,8 @@ function move(event) {
 }
 function toggled() {
   if (!menu.value) return;
-  if (menu.value.open && !expanded.value) emit('before-open');
+  const opening = menu.value.open && !expanded.value;
+  if (opening) emit('before-open');
   expanded.value = menu.value.open;
   if (!menu.value.open) {
     point = null;
@@ -318,10 +321,16 @@ function toggled() {
       const buttons = items();
       (focusEdge === 'last' ? buttons.at(-1) : buttons[0])?.focus();
       focusEdge = null;
-    } else if (props.frameComposition) nextTick(() => items()[0]?.focus());
-    if (props.submenu && document.activeElement === trigger.value)
+    } else if (opening && props.focusOnOpen && props.frameComposition)
       nextTick(() => items()[0]?.focus());
-    if (!trigger.value.getClientRects().length)
+    if (
+      opening &&
+      props.focusOnOpen &&
+      props.submenu &&
+      document.activeElement === trigger.value
+    )
+      nextTick(() => items()[0]?.focus());
+    if (opening && props.focusOnOpen && !trigger.value.getClientRects().length)
       nextTick(() =>
         (
           panelElement.value.querySelector(
@@ -371,7 +380,14 @@ defineExpose({
     menu.value.open = true;
     nextTick(() => {
       position();
-      if (trigger.value?.getClientRects().length) trigger.value.focus();
+      if (props.focusOnOpen && props.externalTrigger)
+        panelElement.value
+          ?.querySelector(
+            'input:not(:disabled),select:not(:disabled),button:not(:disabled),a[href]'
+          )
+          ?.focus();
+      else if (props.focusOnOpen && trigger.value?.getClientRects().length)
+        trigger.value.focus();
     });
   },
   focusTrigger() {
@@ -410,6 +426,7 @@ onBeforeUnmount(() => {
     @toggle="toggled"
   >
     <summary
+      v-show="!externalTrigger"
       v-tooltip="t(label)"
       ref="trigger"
       class="icon-button"

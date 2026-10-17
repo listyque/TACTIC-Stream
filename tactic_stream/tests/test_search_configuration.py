@@ -29,6 +29,20 @@ def exercise(store):
         coordinate = dict(search_type='sthpw/login', scope='sthpw/login@people')
         check.assertIn('groups', request('read', dict(search_type='sthpw/search_object')))
         loaded = request('read', coordinate)
+        api.dispatch('insert', (auth, 'sthpw/pipeline', dict(code='visibility_people',
+            name='People workflow', project_code='admin', search_type='sthpw/login',
+            pipeline='<pipeline><process name="model" color="#12ab34" /><process name="rig" /></pipeline>')))
+        from pyasm.biz import Pipeline
+        Pipeline.clear_cache()  # The next HTTP request starts with an empty identity cache.
+        visibility = request('visibility', coordinate)
+        check.assertEqual([row['key'] for row in visibility['records'] if row['kind'] == 'builtin'][:3],
+                          ['publish', 'attachment', 'icon'])
+        processes = [row for row in visibility['records'] if row['kind'] == 'process' and row['group'] == 'visibility_people']
+        check.assertEqual([row['key'] for row in processes], ['model', 'rig'],
+                          [(row['group'], row['key']) for row in visibility['records'] if row['kind'] == 'process'])
+        check.assertEqual(processes[0]['accent'], '#12ab34')
+        check.assertTrue(all(row['checked'] and row['rowVisible'] for row in visibility['records']))
+        check.assertTrue(any(row['hasChildren'] for row in visibility['records'] if row['kind'] == 'pipeline'))
         conditions = [dict(column='login', relation='=', value=value, rowEnabled=True, operator='begin' if index == 0 else 'or')
                       for index, value in enumerate(('alice', 'bob'))]
         saved = request('save', dict(**coordinate, title='People', records=conditions, keyword='alice', order_bys=['login desc'], revision=loaded['revision']))
@@ -96,6 +110,13 @@ def exercise(store):
         related = request('query', dict(**tagged, selections={'process': ['model'], 'assigned': ['__current_login__']}))
         check.assertEqual([row['code'] for row in related], ['A'], 'My Tasks and process use the same related task')
         check.assertEqual(request('query', dict(**tagged, selections={'process': ['model'], 'assigned': ['bob']})), [])
+        generated = request('settings', dict(**tagged, selections={'process':['model'], 'assigned':['__current_login__'], 'column:code':['A']}))['generatedRecords']
+        check.assertEqual(generated[0]['value'], 'A')
+        check.assertEqual(generated[1]['value'], "@SOBJECT(sthpw/task['assigned', '$LOGIN']['process', 'model'])")
+        editable = [{key:value for key,value in row.items() if key not in ('generatedFilterKind','generatedFilterState')} for row in generated]
+        check.assertEqual([row['code'] for row in request('query',dict(**tagged,records=editable))],['A'])
+        with check.assertRaises(ValueError):
+            request('settings',dict(**tagged,selections={'column:not_registered':['x']}))
         with check.assertRaises(ValueError):
             request('query', dict(**tagged, tags=['blue'], tag_column='description'))
         suggestions = request('suggestions', dict(**tagged, keyword='BLUE'))
@@ -103,6 +124,10 @@ def exercise(store):
         check.assertEqual([row['title'] for row in suggestions['records']], ['Blue', 'Blue Extra'])
         check.assertEqual(suggestions['records'][0]['keyword'], 'blue')
         check.assertEqual([row['title'] for row in request('suggestions', dict(**tagged, keyword='green'))['records']], ['Blue Extra'])
+        explicit = request('suggestions',dict(**tagged,keyword='AB',column='code'))
+        check.assertEqual(explicit['column'],'code')
+        with check.assertRaisesRegex(ValueError,'Invalid suggestion column'):
+            request('suggestions',dict(**tagged,keyword='A',column='not_registered'))
         check.assertEqual(request('suggestions', dict(**tagged, keyword='hidden'))['records'], [])
         check.assertEqual(request('suggestions', dict(**tagged, keyword='tactic-search://test'))['records'], [])
         check.assertEqual(request('suggestions', dict(**tagged, keyword='  '))['records'], [])
@@ -119,6 +144,8 @@ def exercise(store):
             request('read', coordinate)
         with check.assertRaises(SecurityException):
             request('tags', coordinate)
+        with check.assertRaises(SecurityException):
+            request('visibility', coordinate)
         with check.assertRaises(SecurityException):
             request('suggestions', dict(**coordinate, keyword='admin'))
         with check.assertRaises(SecurityException):

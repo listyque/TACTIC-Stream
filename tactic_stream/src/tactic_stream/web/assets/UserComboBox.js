@@ -1,8 +1,8 @@
-import { D as nextTick, G as withCtx, N as openBlock, P as renderList, X as ref, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, m as computed, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
+import { E as nextTick, G as withCtx, M as openBlock, N as renderList, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { D as t, I as controls, o as _sfc_main$3, u as _sfc_main$2 } from "./index.js";
 import { t as _sfc_main$4 } from "./AppMenu.js";
 import { t as ItemPreview_default } from "./ItemPreview.js";
-import { t as AppSearchField_default } from "./AppSearchField.js";
+import { n as AppSearchField_default } from "./ItemSurface.js";
 //#region src/controls/UserGroupSection.vue
 var _sfc_main$1 = {
 	__name: "UserGroupSection",

@@ -1,100 +1,239 @@
-import assert from 'node:assert/strict'
-import { chromium } from 'playwright'
-import { selectProject } from './project_selection.mjs'
+import assert from 'node:assert/strict';
+import { chromium } from 'playwright';
+import { selectProject } from './project_selection.mjs';
 
-const browser = await chromium.launch({ headless: true })
-const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
-page.setDefaultTimeout(10000)
-const errors = []
-const project = process.env.STREAM_CHECK_PROJECT || 'cg_test'
-page.on('pageerror', error => errors.push(error.message))
+const browser = await chromium.launch({ headless: true });
+const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+page.setDefaultTimeout(10000);
+const errors = [];
+const project = process.env.STREAM_CHECK_PROJECT || 'cg_test';
+page.on('pageerror', (error) => errors.push(error.message));
 const menu = async (label, choice) => {
-  await page.getByLabel(label, { exact: true }).click()
-  await page.getByRole('menuitemradio', { name: choice, exact: true }).click()
-}
-const surface = () => page.locator('.workspace-browser .result-presentation:visible')
-const robot = () => surface().locator('article[data-result-key*="code=DEMO_ROBOT"]').first()
+  await page.getByLabel(label, { exact: true }).click();
+  await page.getByRole('menuitemradio', { name: choice, exact: true }).click();
+};
+const surface = () =>
+  page.locator('.workspace-browser .result-presentation:visible');
+const robot = () =>
+  surface().locator('article[data-result-key*="code=DEMO_ROBOT"]').first();
 try {
-  await page.addInitScript(() => localStorage.setItem('tactic_stream.appearance', JSON.stringify({ mode: 'dark', language: 'en' })))
-  await page.goto(process.argv[2] + '/projects/admin/?search_type=sthpw/project&view=table')
-  await page.getByLabel('Login', { exact: true }).fill(process.env.STREAM_CHECK_LOGIN || 'admin')
-  await page.getByLabel('Password', { exact: true }).fill(process.env.STREAM_CHECK_PASSWORD)
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click()
-  await page.locator('.project-picker').waitFor()
-  await selectProject(page, project)
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      'tactic_stream.appearance',
+      JSON.stringify({ mode: 'dark', language: 'en' })
+    )
+  );
+  await page.goto(
+    process.argv[2] + '/projects/admin/?search_type=sthpw/project&view=table'
+  );
+  await page
+    .getByLabel('Login', { exact: true })
+    .fill(process.env.STREAM_CHECK_LOGIN || 'admin');
+  await page
+    .getByLabel('Password', { exact: true })
+    .fill(process.env.STREAM_CHECK_PASSWORD);
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.locator('.project-picker').waitFor();
+  await selectProject(page, project);
   // Open the ordinary Assets tab through the host's shareable route.
-  await page.goto(process.argv[2] + '/projects/' + encodeURIComponent(project) + '/?' + new URLSearchParams({ search_type: 'cg/assets', view: 'table' }))
-  await menu('Change search results view', 'Continuous tree')
-  await robot().waitFor()
-  await robot().getByRole('button', { name: 'Expand item', exact: true }).click()
-  const branch = surface().locator('.result-item-branch').filter({ hasText: 'Assets' }).first()
-  await branch.getByRole('button', { name: 'Expand item', exact: true }).click()
-  await surface().locator('article[data-node-id*="/relation:cg/assets:"][data-result-key*="code=DEMO_BODY"]').waitFor()
-  await page.screenshot({ path: '../.screenshots/results-tree.png', animations: 'disabled' })
-  await menu('Group items', 'Pipeline')
-  assert.ok(await surface().locator('.result-group-heading').count() > 0)
-  await menu('Group items', 'SObject status')
-  await surface().getByRole('button', { name: /^No status/ }).waitFor()
-  await menu('Group items', 'No grouping')
-  await menu('Change search results view', 'Compact rows')
-  assert.ok(await surface().locator('.result-item-compact').count() > 0)
-  await menu('Change search results view', 'Cards')
-  await robot().locator('strong').click()
-  await surface().getByRole('button', { name: 'Back', exact: true }).waitFor()
-  await surface().locator('.result-item-branch').filter({ hasText: 'Assets' }).click()
-  await surface().locator('article[data-node-id*="/relation:cg/assets:"][data-result-key*="code=DEMO_BODY"]').waitFor()
-  await page.screenshot({ path: '../.screenshots/results-cards.png', animations: 'disabled' })
-  await surface().getByRole('button', { name: 'All items', exact: true }).click()
-  await menu('Group items', 'Pipeline')
-  assert.equal(await surface().getAttribute('data-result-view'), 'continious')
-  await menu('Group items', 'No grouping')
-  await menu('Change search results view', 'Versions on the right')
-  await robot().locator('strong').click()
-  await surface().locator('.result-versions article').first().waitFor()
-  assert.ok(await surface().locator('.result-versions article').count() >= 2)
-  await page.screenshot({ path: '../.screenshots/results-versions-right.png', animations: 'disabled' })
-  const divider = surface().getByRole('separator', { name: 'Resize versions panel', exact: true })
-  await divider.focus(); await divider.press('ArrowRight')
-  await menu('Change search results view', 'Versions at the bottom')
-  await surface().locator('.result-versions article').first().waitFor()
-  await surface().locator('.result-versions article').first().getByRole('button', { name: 'File preview', exact: true }).click()
-  const preview = page.getByRole('dialog', { name: 'File preview', exact: true })
-  await preview.getByRole('link', { name: 'Download', exact: true }).first().waitFor()
-  await preview.getByRole('button', { name: 'Close preview', exact: true }).click()
-  await page.screenshot({ path: '../.screenshots/results-versions-bottom.png', animations: 'disabled' })
-  await page.reload()
-  await surface().locator('.result-versions article').first().waitFor()
-  assert.equal(await surface().getAttribute('data-result-view'), 'splitted_horizontal')
-  await page.getByRole('button', { name: 'Add new search tab', exact: true }).click()
-  await page.waitForFunction(() => document.querySelectorAll('.workspace-tabs[data-kind="search"] [role="tab"]').length === 2 && document.querySelector('.workspace-results')?.getAttribute('aria-busy') === 'false')
-  await menu('Change search results view', 'Compact rows')
-  await menu('Group items', 'SObject status')
-  const tabs = page.locator('.workspace-tabs[data-kind="search"] [role="tab"]')
-  await tabs.first().click()
-  await surface().locator('.result-versions article').first().waitFor()
-  assert.equal(await surface().getAttribute('data-result-view'), 'splitted_horizontal')
-  await tabs.last().click()
-  await surface().getByRole('button', { name: /^No status/ }).waitFor()
-  assert.equal(await surface().getAttribute('data-result-view'), 'compact')
-  await menu('Change search results view', 'Table')
-  await menu('Group items', 'Pipeline')
-  await page.locator('.workspace-browser .result-table-group').first().waitFor()
-  await menu('Change search results view', 'Continuous tree')
-  const touch = await browser.newContext({ viewport: { width: 360, height: 800 }, hasTouch: true, isMobile: true, storageState: await page.context().storageState() })
-  const mobile = await touch.newPage()
-  mobile.on('pageerror', error => errors.push(error.message))
-  await mobile.goto(process.argv[2] + '/')
-  await mobile.locator('.result-presentation:visible .result-item').first().waitFor()
-  await mobile.getByLabel('Result actions', { exact: true }).tap()
-  await mobile.getByLabel('Group items', { exact: true }).tap()
-  await mobile.getByRole('menuitemradio', { name: 'SObject status', exact: true }).tap()
-  await mobile.locator('.result-presentation:visible .result-group-heading').first().waitFor()
-  await mobile.screenshot({ path: '../.screenshots/results-mobile.png', animations: 'disabled' })
-  assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth > innerWidth), false)
-  await touch.close()
-  assert.deepEqual(errors, [])
-  console.log('PASS: six views, instance children, card navigation, groups, versions, persistence, mobile layout')
+  await page.goto(
+    process.argv[2] +
+      '/projects/' +
+      encodeURIComponent(project) +
+      '/?' +
+      new URLSearchParams({ search_type: 'cg/assets', view: 'table' })
+  );
+  await menu('Change search results view', 'Continuous tree');
+  await robot().waitFor();
+  await robot()
+    .getByRole('button', { name: 'Expand item', exact: true })
+    .click();
+  const branch = surface()
+    .locator('.result-item-branch')
+    .filter({ hasText: 'Assets' })
+    .first();
+  await branch
+    .getByRole('button', { name: 'Expand item', exact: true })
+    .click();
+  await surface()
+    .locator(
+      'article[data-node-id*="/relation:cg/assets:"][data-result-key*="code=DEMO_BODY"]'
+    )
+    .waitFor();
+  await page.screenshot({
+    path: '../.screenshots/results-tree.png',
+    animations: 'disabled'
+  });
+  await menu('Group items', 'Pipeline');
+  assert.ok((await surface().locator('.result-group-heading').count()) > 0);
+  await menu('Group items', 'SObject status');
+  await surface()
+    .getByRole('button', { name: /^No status/ })
+    .waitFor();
+  await menu('Group items', 'No grouping');
+  await page.getByLabel('Group items', { exact: true }).click();
+  const taskGrouping = page.getByRole('menuitemradio', { name: /^model$/i });
+  await taskGrouping.waitFor();
+  await taskGrouping.click();
+  await surface()
+    .getByRole('button', { name: /^No status/ })
+    .waitFor();
+  assert(
+    (await surface().locator('.result-group-heading').count()) >= 1,
+    'Sample model tasks with an empty status stay reachable in their own group'
+  );
+  await menu('Group items', 'No grouping');
+  await menu('Change search results view', 'Compact rows');
+  assert.ok((await surface().locator('.result-item-compact').count()) > 0);
+  await menu('Change search results view', 'Cards');
+  await robot().locator('strong').click();
+  assert.equal(
+    await surface().getByRole('button', { name: 'Back', exact: true }).count(),
+    0,
+    'A single card click only selects it, as in Handler'
+  );
+  await robot().locator('strong').dblclick();
+  await surface().getByRole('button', { name: 'Back', exact: true }).waitFor();
+  await surface()
+    .locator('.result-item-branch')
+    .filter({ hasText: 'Assets' })
+    .dblclick();
+  await surface()
+    .locator(
+      'article[data-node-id*="/relation:cg/assets:"][data-result-key*="code=DEMO_BODY"]'
+    )
+    .waitFor();
+  await page.screenshot({
+    path: '../.screenshots/results-cards.png',
+    animations: 'disabled'
+  });
+  await surface()
+    .getByRole('button', { name: 'All items', exact: true })
+    .click();
+  await menu('Group items', 'Pipeline');
+  assert.equal(await surface().getAttribute('data-result-view'), 'continious');
+  await menu('Group items', 'No grouping');
+  await menu('Change search results view', 'Versions on the right');
+  await robot().locator('strong').click();
+  await surface().locator('.result-versions article').first().waitFor();
+  assert.ok((await surface().locator('.result-versions article').count()) >= 2);
+  await page.screenshot({
+    path: '../.screenshots/results-versions-right.png',
+    animations: 'disabled'
+  });
+  const divider = surface().getByRole('separator', {
+    name: 'Resize versions panel',
+    exact: true
+  });
+  await divider.focus();
+  await divider.press('ArrowRight');
+  await menu('Change search results view', 'Versions at the bottom');
+  await surface().locator('.result-versions article').first().waitFor();
+  await surface()
+    .locator('.result-versions article')
+    .first()
+    .getByRole('button', { name: 'File preview', exact: true })
+    .click();
+  const preview = page.getByRole('dialog', {
+    name: 'File preview',
+    exact: true
+  });
+  await preview
+    .getByRole('link', { name: 'Download', exact: true })
+    .first()
+    .waitFor();
+  await preview
+    .getByRole('button', { name: 'Close preview', exact: true })
+    .click();
+  await page.screenshot({
+    path: '../.screenshots/results-versions-bottom.png',
+    animations: 'disabled'
+  });
+  await page.reload();
+  await surface().locator('.result-versions article').first().waitFor();
+  assert.equal(
+    await surface().getAttribute('data-result-view'),
+    'splitted_horizontal'
+  );
+  await page
+    .getByRole('button', { name: 'Add new search tab', exact: true })
+    .click();
+  await page.waitForFunction(
+    () =>
+      document.querySelectorAll(
+        '.workspace-tabs[data-kind="search"] [role="tab"]'
+      ).length === 2 &&
+      document
+        .querySelector('.workspace-results')
+        ?.getAttribute('aria-busy') === 'false'
+  );
+  await menu('Change search results view', 'Compact rows');
+  await menu('Group items', 'SObject status');
+  const tabs = page.locator('.workspace-tabs[data-kind="search"] [role="tab"]');
+  await tabs.first().click();
+  await surface().locator('.result-versions article').first().waitFor();
+  assert.equal(
+    await surface().getAttribute('data-result-view'),
+    'splitted_horizontal'
+  );
+  await tabs.last().click();
+  await surface()
+    .getByRole('button', { name: /^No status/ })
+    .waitFor();
+  assert.equal(await surface().getAttribute('data-result-view'), 'compact');
+  await menu('Change search results view', 'Table');
+  await menu('Group items', 'Pipeline');
+  await page
+    .locator('.workspace-browser .handler-table-group')
+    .first()
+    .waitFor();
+  await menu('Change search results view', 'Continuous tree');
+  const touch = await browser.newContext({
+    viewport: { width: 360, height: 800 },
+    hasTouch: true,
+    isMobile: true,
+    storageState: await page.context().storageState()
+  });
+  const mobile = await touch.newPage();
+  mobile.on('pageerror', (error) => errors.push(error.message));
+  await mobile.goto(process.argv[2] + '/');
+  await mobile
+    .locator('.result-presentation:visible .result-item')
+    .first()
+    .waitFor();
+  await mobile.getByLabel('Result actions', { exact: true }).tap();
+  await mobile.getByLabel('Group items', { exact: true }).tap();
+  await mobile
+    .getByRole('menuitemradio', { name: 'SObject status', exact: true })
+    .tap();
+  await mobile
+    .locator('.result-presentation:visible .result-group-heading')
+    .first()
+    .waitFor();
+  await mobile.screenshot({
+    path: '../.screenshots/results-mobile.png',
+    animations: 'disabled'
+  });
+  assert.equal(
+    await mobile.evaluate(
+      () => document.documentElement.scrollWidth > innerWidth
+    ),
+    false
+  );
+  await touch.close();
+  assert.deepEqual(errors, []);
+  console.log(
+    'PASS: six views, instance children, card navigation, groups, versions, persistence, mobile layout'
+  );
 } catch (error) {
-  await page.screenshot({ path: '../.screenshots/results-failure.png', animations: 'disabled' })
-  throw error
-} finally { await browser.close() }
+  console.error(
+    await surface().locator('.result-group-heading').allTextContents()
+  );
+  await page.screenshot({
+    path: '../.screenshots/results-failure.png',
+    animations: 'disabled'
+  });
+  throw error;
+} finally {
+  await browser.close();
+}

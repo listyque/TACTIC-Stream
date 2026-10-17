@@ -1,4 +1,4 @@
-import { N as openBlock, T as mergeModels, V as useModel, X as ref, et as unref, k as onBeforeUnmount, tt as normalizeClass, v as createElementBlock } from "./vue.js";
+import { B as useModel, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, et as unref, tt as normalizeClass, w as mergeModels } from "./vue.js";
 import { D as t } from "./index.js";
 //#region src/controls/AppSplitter.vue
 var _hoisted_1 = [

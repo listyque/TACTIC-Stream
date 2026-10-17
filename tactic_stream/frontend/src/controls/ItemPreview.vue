@@ -52,7 +52,9 @@ export default {
         frameColors.value.action;
       let cssAccent = cssColor(accent);
       if (this.accent && !frameColors.value[role]) {
-        colorProbe ||= document.createElement('canvas').getContext('2d');
+        colorProbe ||= document
+          .createElement('canvas')
+          .getContext('2d', { willReadFrequently: true });
         colorProbe.clearRect(0, 0, 1, 1);
         colorProbe.fillStyle = '#000000';
         colorProbe.fillStyle = this.accent;

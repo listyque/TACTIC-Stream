@@ -1,8 +1,8 @@
-import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
+import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { D as t, O as appearance, tt as _plugin_vue_export_helper_default } from "./index.js";
 import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
 import { g as columnsEditor } from "./clipboard.js";
-import { X as definitionWizard, Y as changeDefinition, Z as displayWidgets, x as sections } from "./App.js";
+import { J as changeDefinition, X as displayWidgets, Y as definitionWizard, x as sections } from "./App.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
 var initial = () => ({

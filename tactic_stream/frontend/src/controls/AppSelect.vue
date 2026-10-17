@@ -58,6 +58,15 @@ const decorated = computed(
 <style>
 .app-select {
   font-size: var(--control-text-size);
+  background: var(--surface);
+  border-color: var(--outline-variant);
+}
+.app-select:disabled {
+  color: var(--disabled);
+}
+.app-select:focus {
+  border: var(--field-focus-border-width) solid var(--field-focus-border);
+  padding-inline: 9px 7px;
 }
 .app-select > .app-select-trigger {
   display: flex;

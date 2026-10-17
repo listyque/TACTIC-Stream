@@ -22,6 +22,14 @@ Portable modules and native adapters are organized by responsibility; Handler
 and Stream still ship independent copies. Source is formatted and remains
 readable. No browser engine is embedded in QML.
 
+B06 search composition and ownership are documented in
+[`docs/frame_search.md`](docs/frame_search.md): condition cards and suggestions,
+presets, tag/quick-filter headers and editor parts, local process visibility,
+sorting/grouping, paging and result-card geometry use independent Frame modules.
+Existing query, revision, ACL and mutation owners remain in place. Browser
+collections virtualize variable-height rows and tiles; native ListView/GridView
+remain native. Table View/cell migration stays in B07.
+
 The navigation drawer now uses one Frame container and keyboard/exit policy in
 both hosts, verified against the archived native header/list geometry. Its real
 native and browser input/paired captures are reproduced by `tools/frame_navigation`.

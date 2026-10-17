@@ -1,4 +1,4 @@
-import { B as useId, D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, R as resolveDynamicComponent, _ as createCommentVNode, c as vShow, g as createBlock, h as createBaseVNode, l as withKeys, nt as normalizeStyle, p as Teleport, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
+import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow, tt as normalizeClass, z as useId } from "./vue.js";
 import { D as t, O as appearance, o as _sfc_main$2, tt as _plugin_vue_export_helper_default, u as _sfc_main$3 } from "./index.js";
 import { c as button, d as node, f as rect, l as label, n as _sfc_main$4, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
 import { F as rpc } from "./clipboard.js";

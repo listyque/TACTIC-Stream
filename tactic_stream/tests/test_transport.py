@@ -4510,6 +4510,92 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
                                 encoding='utf-8', errors='replace', timeout=60)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_process_visibility_in_chromium(self):
+        environment = os.environ.copy()
+        environment["PLAYWRIGHT_BROWSERS_PATH"] = str(ROOT / ".browser-cache")
+        result = subprocess.run(
+            [
+                shutil.which("node"),
+                str(ROOT / "frontend/tests/process_visibility.mjs"),
+                self.url,
+            ],
+            cwd=ROOT / "frontend",
+            env=environment,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=90,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_search_library_in_chromium(self):
+        proxy = self.proxy()
+        auth = dict(
+            ticket=proxy.get_ticket("admin", "private-test-password"),
+            project="admin",
+            language="python",
+        )
+        proxy.execute_cmd(
+            auth,
+            "tactic.command.CreateProjectCmd",
+            dict(project_code="library_browser", project_title="Saved searches"),
+        )
+        auth["project"] = "library_browser"
+        kind = "library_browser/items"
+        proxy.execute_cmd(
+            auth,
+            "tactic.core.schema_commands.SearchTypeCreatorCmd",
+            dict(search_type_name=kind, asset_title="Library items"),
+        )
+        items = []
+        for code, title in [("ONE", "One object"), ("TWO", "Two object")]:
+            item = proxy.insert(auth, kind, dict(code=code, name=title))
+            items.append(ast.literal_eval(item) if isinstance(item, str) else item)
+        proxy.insert(
+            auth,
+            "sthpw/task",
+            dict(
+                project_code="library_browser",
+                process="model",
+                context="model",
+                assigned="admin",
+                status="Ready",
+            ),
+            {},
+            items[0]["__search_key__"],
+        )
+        proxy.insert(
+            auth,
+            "config/widget_config",
+            dict(
+                search_type="SideBarWdg",
+                view="project_view",
+                priority=100,
+                config='<config><project_view><element name="items" title="Library items"><display class="LinkWdg"><search_type>'
+                + kind
+                + "</search_type></display></element></project_view></config>",
+            ),
+        )
+        environment = dict(
+            os.environ, PLAYWRIGHT_BROWSERS_PATH=str(ROOT / ".browser-cache")
+        )
+        result = subprocess.run(
+            [
+                shutil.which("node"),
+                str(ROOT / "frontend/tests/search_library.mjs"),
+                self.url,
+            ],
+            cwd=ROOT / "frontend",
+            env=environment,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=90,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_tag_cloud_in_chromium(self):
         proxy = self.proxy()
         auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='admin', language='python')

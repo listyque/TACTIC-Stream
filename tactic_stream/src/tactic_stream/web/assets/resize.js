@@ -1,4 +1,4 @@
-import { D as nextTick, E as mergeProps, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, T as mergeModels, V as useModel, X as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
+import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
 import { D as t, H as metrics, I as controls, O as appearance, Q as iconSets, R as cssRoles, W as textStyles, o as _sfc_main$7, tt as _plugin_vue_export_helper_default, u as _sfc_main$6 } from "./index.js";
 import { f as _sfc_main$9, n as copyText, o as javascriptTokens, p as _sfc_main$8, r as readClipboard, s as pythonTokens } from "./clipboard.js";
@@ -8,10 +8,10 @@ import { t as _sfc_main$13 } from "./AppMenu.js";
 import { t as _sfc_main$14 } from "./AppCheckbox.js";
 import { t as ItemPreview_default } from "./ItemPreview.js";
 import { t as _sfc_main$15 } from "./AppTextArea.js";
-import { t as _sfc_main$16 } from "./UserComboBox.js";
-import { t as _sfc_main$17 } from "./SummaryChip.js";
-import { t as _sfc_main$18 } from "./AppSplitter.js";
-import { t as _sfc_main$19 } from "./ItemSurface.js";
+import { t as _sfc_main$16 } from "./ItemSurface.js";
+import { t as _sfc_main$17 } from "./UserComboBox.js";
+import { t as _sfc_main$18 } from "./SummaryChip.js";
+import { t as _sfc_main$19 } from "./AppSplitter.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
 /** @typedef {{x:number, y:number, width:number, height:number}} Bounds Logical pixels. */
 /** @typedef {{type:string, [key:string]:unknown}} Action UI event or adapter command. */
@@ -198,574 +198,6 @@ function virtualRange(count, rowHeight, viewport, scroll, overscan) {
 		last: Math.max(first, Math.min(count, Math.ceil((scroll + viewport) / rowHeight) + overscan)),
 		height: count * rowHeight
 	};
-}
-//#endregion
-//#region src/frame/controls/grid/FrameGrid.vue
-var _hoisted_1$5 = ["data-frame", "aria-label"];
-var _hoisted_2$4 = ["data-frame"];
-var _hoisted_3$3 = ["data-frame"];
-var _hoisted_4$2 = ["data-frame"];
-var _hoisted_5$2 = ["data-frame"];
-var _sfc_main$5 = {
-	__name: "FrameGrid",
-	props: {
-		node: Object,
-		source: Array,
-		describeCell: Function
-	},
-	emits: ["event"],
-	setup(__props, { expose: __expose, emit: __emit }) {
-		const props = __props;
-		const emit = __emit;
-		const body = ref(null), position = ref({
-			x: 0,
-			y: 0
-		});
-		const width = computed(() => Math.max(1, props.node.width - props.node.labelWidth - 16));
-		const height = computed(() => Math.max(1, props.node.height - props.node.headerHeight - 16));
-		const range = (count, size, extent, offset) => {
-			const r = virtualRange(count, size, extent, offset, 1);
-			return Array.from({ length: r.last - r.first }, (_, index) => r.first + index);
-		};
-		const rows = computed(() => range(props.node.rowHeaders.length, props.node.rowHeight, height.value, position.value.y));
-		const columns = computed(() => range(props.node.columnHeaders.length, props.node.cellWidth, width.value, position.value.x));
-		const totalWidth = computed(() => props.node.columnHeaders.length * props.node.cellWidth);
-		const totalHeight = computed(() => props.node.rowHeaders.length * props.node.rowHeight);
-		async function focusCell(row, column, name) {
-			const el = body.value, n = props.node;
-			if (column * n.cellWidth < el.scrollLeft) el.scrollLeft = column * n.cellWidth;
-			else if ((column + 1) * n.cellWidth > el.scrollLeft + width.value) el.scrollLeft = (column + 1) * n.cellWidth - width.value;
-			if (row * n.rowHeight < el.scrollTop) el.scrollTop = row * n.rowHeight;
-			else if ((row + 1) * n.rowHeight > el.scrollTop + height.value) el.scrollTop = (row + 1) * n.rowHeight - height.value;
-			position.value = {
-				x: el.scrollLeft,
-				y: el.scrollTop
-			};
-			await nextTick();
-			el.querySelector("[data-frame=\"" + CSS.escape(name) + "\"]")?.focus();
-		}
-		__expose({ focusCell });
-		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", {
-				class: "frame-grid",
-				"data-frame": __props.node.id,
-				role: "grid",
-				"aria-label": __props.node.text
-			}, [
-				createBaseVNode("div", {
-					class: "frame-grid-corner",
-					style: normalizeStyle({
-						width: __props.node.labelWidth + "px",
-						height: __props.node.headerHeight + "px"
-					})
-				}, toDisplayString(__props.node.caption), 5),
-				createBaseVNode("div", {
-					class: "frame-grid-column-headings",
-					style: normalizeStyle({
-						left: __props.node.labelWidth + "px",
-						width: width.value + "px",
-						height: __props.node.headerHeight + "px"
-					})
-				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
-					return openBlock(), createElementBlock("span", {
-						key: column,
-						role: "columnheader",
-						"data-frame": __props.node.id + "_column_" + column,
-						class: normalizeClass({ "frame-grid-detailed-heading": typeof __props.node.columnHeaders[column] === "object" }),
-						style: normalizeStyle({
-							left: column * __props.node.cellWidth - position.value.x + "px",
-							width: __props.node.cellWidth + "px",
-							height: __props.node.headerHeight + "px"
-						})
-					}, [typeof __props.node.columnHeaders[column] === "object" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("b", { "data-frame": __props.node.id + "_column_" + column + "_title" }, toDisplayString(__props.node.columnHeaders[column].label), 9, _hoisted_3$3), createBaseVNode("small", { "data-frame": __props.node.id + "_column_" + column + "_detail" }, toDisplayString(__props.node.columnHeaders[column].detail), 9, _hoisted_4$2)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.columnHeaders[column]), 1)], 64))], 14, _hoisted_2$4);
-				}), 128))], 4),
-				createBaseVNode("div", {
-					class: "frame-grid-row-headings",
-					style: normalizeStyle({
-						top: __props.node.headerHeight + "px",
-						width: __props.node.labelWidth + "px",
-						height: height.value + "px"
-					})
-				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(rows.value, (row) => {
-					return openBlock(), createElementBlock("div", {
-						key: row,
-						role: "rowheader",
-						"data-frame": __props.node.id + "_row_" + row,
-						class: normalizeClass({ "frame-grid-custom-heading": !!__props.node.rowHeaders[row].children }),
-						style: normalizeStyle({
-							top: row * __props.node.rowHeight - position.value.y + "px",
-							width: __props.node.labelWidth + "px",
-							height: __props.node.rowHeight + "px"
-						})
-					}, [__props.node.rowHeaders[row].children ? (openBlock(), createBlock(_sfc_main, {
-						key: 0,
-						scene: { nodes: __props.node.rowHeaders[row].children },
-						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
-					}, null, 8, ["scene"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("span", { style: normalizeStyle({ fontWeight: __props.node.rowHeaders[row].all ? 600 : 400 }) }, toDisplayString(__props.node.rowHeaders[row].label), 5), createBaseVNode("small", null, toDisplayString(__props.node.rowHeaders[row].detail), 1)], 64))], 14, _hoisted_5$2);
-				}), 128))], 4),
-				createBaseVNode("div", {
-					ref_key: "body",
-					ref: body,
-					class: "frame-grid-body",
-					style: normalizeStyle({
-						left: __props.node.labelWidth + "px",
-						top: __props.node.headerHeight + "px",
-						width: width.value + 16 + "px",
-						height: height.value + 16 + "px"
-					}),
-					onScroll: _cache[2] || (_cache[2] = ($event) => position.value = {
-						x: $event.target.scrollLeft,
-						y: $event.target.scrollTop
-					})
-				}, [createBaseVNode("div", { style: normalizeStyle({
-					position: "relative",
-					width: totalWidth.value + "px",
-					height: totalHeight.value + "px"
-				}) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(rows.value, (row) => {
-					return openBlock(), createElementBlock(Fragment, { key: row }, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
-						return openBlock(), createBlock(_sfc_main, {
-							key: column,
-							class: "frame-grid-cell",
-							style: normalizeStyle({
-								left: column * __props.node.cellWidth + "px",
-								top: row * __props.node.rowHeight + "px",
-								width: __props.node.cellWidth + "px",
-								height: __props.node.rowHeight + "px"
-							}),
-							scene: __props.describeCell(__props.node, __props.source?.[row]?.[column] || {}, row, column),
-							onEvent: _cache[1] || (_cache[1] = ($event) => emit("event", $event))
-						}, null, 8, ["style", "scene"]);
-					}), 128))], 64);
-				}), 128))], 4)], 36)
-			], 8, _hoisted_1$5);
-		};
-	}
-};
-//#endregion
-//#region ../src/tactic_stream/shared_ui/controls/graph/graph.state.mjs
-var clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-function initial() {
-	return {
-		zoom: 1,
-		x: -18,
-		y: -18,
-		world: {
-			x: -18,
-			y: -18,
-			right: 818,
-			bottom: 818
-		},
-		pointer: null,
-		pending: null,
-		cursor: {
-			x: 0,
-			y: 0
-		},
-		touch: null
-	};
-}
-function size(node, style) {
-	const height = metrics(style).controlHeight * 2;
-	return {
-		width: node.kind === "progress" ? height : 200,
-		height
-	};
-}
-function position(ui, node) {
-	return ui.pointer && ui.pointer.positions && ui.pointer.positions.find((row) => row.identity === node.identity) || {
-		identity: node.identity,
-		nodeX: Number(node.nodeX) || 0,
-		nodeY: Number(node.nodeY) || 0
-	};
-}
-function point(ui, x, y) {
-	return {
-		x: ui.x + x / ui.zoom,
-		y: ui.y + y / ui.zoom
-	};
-}
-function bounds(ui, node, style) {
-	const p = position(ui, node);
-	return Object.assign({
-		x: p.nodeX,
-		y: p.nodeY
-	}, size(node, style));
-}
-function include(ui, model, viewport) {
-	let world = Object.assign({}, ui.world);
-	for (const row of model.nodes || []) {
-		const box = bounds(ui, row, model.style);
-		world.x = Math.min(world.x, box.x - 18);
-		world.y = Math.min(world.y, box.y - 18);
-		world.right = Math.max(world.right, box.x + box.width + 100);
-		world.bottom = Math.max(world.bottom, box.y + box.height + 100);
-	}
-	world.right = Math.max(world.right, ui.x + viewport.width / ui.zoom + 18);
-	world.bottom = Math.max(world.bottom, ui.y + viewport.height / ui.zoom + 18);
-	return Object.assign({}, ui, { world });
-}
-function pan(ui, x, y, viewport, expand) {
-	const world = Object.assign({}, ui.world);
-	if (expand) {
-		world.x = Math.min(world.x, x - 100);
-		world.y = Math.min(world.y, y - 100);
-		world.right = Math.max(world.right, x + viewport.width / ui.zoom + 100);
-		world.bottom = Math.max(world.bottom, y + viewport.height / ui.zoom + 100);
-	}
-	return Object.assign({}, ui, {
-		world,
-		x: clamp(x, world.x, Math.max(world.x, world.right - viewport.width / ui.zoom)),
-		y: clamp(y, world.y, Math.max(world.y, world.bottom - viewport.height / ui.zoom))
-	});
-}
-function zoom(ui, value, x, y, viewport) {
-	const anchor = point(ui, x, y), next = Object.assign({}, ui, { zoom: clamp(value, .4, 2) });
-	return pan(next, anchor.x - x / next.zoom, anchor.y - y / next.zoom, viewport, true);
-}
-function selection(model, identity, modifiers, dragging) {
-	let names = (model.selectedNodes || []).slice();
-	const index = names.indexOf(identity);
-	if (dragging && index >= 0) return names;
-	if (modifiers.control) {
-		if (index >= 0) names.splice(index, 1);
-		else names.push(identity);
-	} else if (modifiers.shift) {
-		if (index < 0) names.push(identity);
-	} else names = [identity];
-	return names;
-}
-function selectionRect(ui) {
-	const drag = ui.pointer;
-	if (!drag || drag.kind !== "selection" || !drag.active) return null;
-	return {
-		x: Math.min(drag.start.x, ui.cursor.x),
-		y: Math.min(drag.start.y, ui.cursor.y),
-		width: Math.abs(drag.start.x - ui.cursor.x),
-		height: Math.abs(drag.start.y - ui.cursor.y)
-	};
-}
-function curves(ui, model) {
-	const nodes = model.nodes || [], rows = [];
-	for (let index = 0; index < (model.edges || []).length; index++) {
-		const edge = model.edges[index], from = nodes.find((row) => row.identity === edge.from), to = nodes.find((row) => row.identity === edge.to);
-		if (!from || !to) continue;
-		const a = bounds(ui, from, model.style), b = bounds(ui, to, model.style);
-		const offset = model.edges.some((row) => row.from === edge.to && row.to === edge.from) ? String(edge.from) < String(edge.to) ? -24 : 24 : 0;
-		rows.push(curve(a.x + a.width, a.y + a.height / 2 + offset, b.x, b.y + b.height / 2 + offset, Object.assign({ index }, edge, { color: edge.color || from.color || "action" })));
-	}
-	if (ui.pending) {
-		const node = nodes.find((row) => row.identity === ui.pending.identity);
-		if (node) {
-			const box = bounds(ui, node, model.style), port = {
-				x: box.x + (ui.pending.input ? 0 : box.width),
-				y: box.y + box.height / 2
-			};
-			const a = ui.pending.input ? ui.cursor : port, b = ui.pending.input ? port : ui.cursor;
-			rows.push(curve(a.x, a.y, b.x, b.y, {
-				index: -1,
-				pending: true,
-				color: node.color || "action"
-			}));
-		}
-	}
-	return rows;
-}
-function curve(x1, y1, x2, y2, data) {
-	return Object.assign({
-		x1,
-		y1,
-		x2,
-		y2,
-		bend: Math.max(70, Math.abs(x2 - x1) / 2)
-	}, data);
-}
-function curvePoint(edge, t) {
-	const u = 1 - t;
-	return {
-		x: u * u * u * edge.x1 + 3 * u * u * t * (edge.x1 + edge.bend) + 3 * u * t * t * (edge.x2 - edge.bend) + t * t * t * edge.x2,
-		y: u * u * u * edge.y1 + 3 * u * u * t * edge.y1 + 3 * u * t * t * edge.y2 + t * t * t * edge.y2
-	};
-}
-function contains(rect, p) {
-	return p.x >= rect.x && p.y >= rect.y && p.x <= rect.x + rect.width && p.y <= rect.y + rect.height;
-}
-function hit(ui, model, p) {
-	for (const row of (model.nodes || []).slice().reverse()) {
-		const box = bounds(ui, row, model.style), port = {
-			y: box.y + box.height / 2 - 18,
-			width: 36,
-			height: 36
-		};
-		if (!model.readOnly && !row.referenceOnly) {
-			if (contains(Object.assign({ x: box.x - 18 }, port), p)) return {
-				kind: "port",
-				identity: row.identity,
-				input: true
-			};
-			if (contains(Object.assign({ x: box.x + box.width - 18 }, port), p)) return {
-				kind: "port",
-				identity: row.identity,
-				input: false
-			};
-		}
-		if (contains(box, p)) return {
-			kind: "node",
-			identity: row.identity
-		};
-	}
-	for (const edge of curves(ui, model)) {
-		if (edge.pending) continue;
-		for (let t = 0; t <= 1; t += .025) {
-			const q = curvePoint(edge, t);
-			if (Math.hypot(q.x - p.x, q.y - p.y) <= 10 / ui.zoom) return {
-				kind: "edge",
-				index: edge.index
-			};
-		}
-	}
-	return { kind: "selection" };
-}
-function selectedCommand(names, primary) {
-	return {
-		type: "selectNodes",
-		identities: names,
-		primary: names.indexOf(primary) >= 0 ? primary : names[names.length - 1] || ""
-	};
-}
-function port(ui, target, commands) {
-	if (ui.pending && ui.pending.input !== target.input && ui.pending.identity !== target.identity) {
-		commands.push({
-			type: "connect",
-			from: target.input ? ui.pending.identity : target.identity,
-			to: target.input ? target.identity : ui.pending.identity
-		});
-		return Object.assign({}, ui, { pending: null });
-	}
-	return Object.assign({}, ui, { pending: ui.pending && ui.pending.identity === target.identity && ui.pending.input === target.input ? null : target });
-}
-function click(ui, target, event, model, commands) {
-	if (target.kind === "port" && !model.readOnly) return port(ui, target, commands);
-	if (model.selectionEnabled === false) return ui;
-	if (target.kind === "node") commands.push(selectedCommand(selection(model, target.identity, event, false), target.identity));
-	else if (target.kind === "edge") commands.push({
-		type: "selectEdge",
-		index: target.index
-	});
-	else if (!event.control && !event.shift) commands.push({ type: "clear" });
-	return Object.assign({}, ui, { pending: null });
-}
-function reduce(previous, event, model, viewport) {
-	let ui = include(previous, model, viewport);
-	const commands = [];
-	const result = () => ({
-		ui,
-		commands
-	});
-	if (event.type === "cancel") {
-		ui = Object.assign({}, ui, {
-			pointer: null,
-			pending: null,
-			touch: null
-		});
-		return result();
-	}
-	if (event.type === "scroll") {
-		ui = pan(ui, ui.world.x + event.x / ui.zoom, ui.world.y + event.y / ui.zoom, viewport, false);
-		return result();
-	}
-	if (event.type === "reset") {
-		ui = include(initial(), model, viewport);
-		return result();
-	}
-	if (event.type === "zoom") {
-		if (!ui.pointer) ui = zoom(ui, event.value, event.x === void 0 ? viewport.width / 2 : event.x, event.y === void 0 ? viewport.height / 2 : event.y, viewport);
-		return result();
-	}
-	if (event.type === "reveal") {
-		const rows = (model.nodes || []).filter((row) => (event.identities || model.selectedNodes || []).indexOf(row.identity) >= 0);
-		if (rows.length) {
-			const boxes = rows.map((row) => bounds(ui, row, model.style)), left = Math.min.apply(null, boxes.map((row) => row.x)), right = Math.max.apply(null, boxes.map((row) => row.x + row.width)), top = Math.min.apply(null, boxes.map((row) => row.y)), bottom = Math.max.apply(null, boxes.map((row) => row.y + row.height));
-			ui = pan(ui, (left + right) / 2 - viewport.width / ui.zoom / 2, (top + bottom) / 2 - viewport.height / ui.zoom / 2, viewport, true);
-		}
-		return result();
-	}
-	if (event.type === "key") {
-		if (event.key === "Escape") {
-			if (ui.pointer || ui.pending || ui.touch) ui = Object.assign({}, ui, {
-				pointer: null,
-				pending: null,
-				touch: null
-			});
-			else if (model.selectionEnabled !== false) commands.push({ type: "clear" });
-		} else if (event.control && event.key.toLowerCase() === "s" && !model.readOnly) {
-			if (!event.repeat) commands.push({ type: "save" });
-		} else if (!event.control && !event.alt) {
-			if (event.key === "+" || event.key === "=") return reduce(ui, {
-				type: "zoom",
-				value: ui.zoom + .1
-			}, model, viewport);
-			if (event.key === "-") return reduce(ui, {
-				type: "zoom",
-				value: ui.zoom - .1
-			}, model, viewport);
-			if (event.key === "Home") return reduce(ui, { type: "reset" }, model, viewport);
-			if (event.key.toLowerCase() === "f") return reduce(ui, { type: "reveal" }, model, viewport);
-			if (event.key === "Delete" && !model.readOnly && !event.repeat) commands.push({ type: "remove" });
-			const delta = {
-				ArrowLeft: [-10, 0],
-				ArrowRight: [10, 0],
-				ArrowUp: [0, -10],
-				ArrowDown: [0, 10]
-			}[event.key];
-			if (delta && !event.shift && !model.readOnly) commands.push({
-				type: "moveNodes",
-				positions: (model.nodes || []).filter((row) => !row.referenceOnly && (model.selectedNodes || []).indexOf(row.identity) >= 0).map((row) => ({
-					identity: row.identity,
-					nodeX: (Number(row.nodeX) || 0) + delta[0],
-					nodeY: (Number(row.nodeY) || 0) + delta[1]
-				}))
-			});
-		}
-		return result();
-	}
-	if (event.type === "activate") {
-		ui = click(ui, event.target, event, model, commands);
-		return result();
-	}
-	if (event.type === "touch") {
-		const points = event.points || [];
-		if (points.length >= 2) {
-			const middle = {
-				x: (points[0].x + points[1].x) / 2,
-				y: (points[0].y + points[1].y) / 2
-			}, distance = Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
-			if (ui.touch && ui.touch.pinch) {
-				const scale = clamp(ui.touch.zoom * distance / Math.max(1, ui.touch.distance), .4, 2);
-				ui = pan(Object.assign({}, ui, { zoom: scale }), ui.touch.anchor.x - middle.x / scale, ui.touch.anchor.y - middle.y / scale, viewport, true);
-			} else ui = Object.assign({}, ui, {
-				pointer: null,
-				touch: {
-					pinch: true,
-					zoom: ui.zoom,
-					distance,
-					anchor: point(ui, middle.x, middle.y)
-				}
-			});
-			return result();
-		}
-		if (ui.touch && ui.touch.pinch) {
-			if (!points.length) ui = Object.assign({}, ui, { touch: null });
-			return result();
-		}
-		if (!points.length) {
-			const p = ui.pointer;
-			return reduce(ui, p ? {
-				type: "up",
-				x: p.lastX,
-				y: p.lastY
-			} : { type: "cancel" }, model, viewport);
-		}
-		const p = points[0];
-		return reduce(ui, {
-			type: ui.pointer ? "move" : "down",
-			x: p.x,
-			y: p.y,
-			touch: true
-		}, model, viewport);
-	}
-	if (event.type === "down") {
-		if (ui.pointer) return result();
-		const start = point(ui, event.x, event.y), target = event.button === 1 ? { kind: "pan" } : hit(ui, model, start);
-		ui = Object.assign({}, ui, {
-			cursor: start,
-			pointer: Object.assign({}, target, {
-				start,
-				x: event.x,
-				y: event.y,
-				lastX: event.x,
-				lastY: event.y,
-				originX: ui.x,
-				originY: ui.y,
-				control: !!event.control,
-				shift: !!event.shift,
-				touch: !!event.touch,
-				active: false
-			})
-		});
-		return result();
-	}
-	if (event.type === "tick" && ui.pointer && ui.pointer.active && ui.pointer.kind === "node") {
-		const drag = ui.pointer, margin = 36, dt = Math.min(.05, event.seconds);
-		const speed = (p, extent) => p < margin ? -Math.min(margin, margin - p) : p > extent - margin ? Math.min(margin, p - extent + margin) : 0;
-		const dx = speed(drag.lastX, viewport.width), dy = speed(drag.lastY, viewport.height);
-		if (!dx && !dy) return result();
-		ui = pan(ui, ui.x + dx * dt * 10 / ui.zoom, ui.y + dy * dt * 10 / ui.zoom, viewport, true);
-		return reduce(ui, {
-			type: "move",
-			x: drag.lastX,
-			y: drag.lastY
-		}, model, viewport);
-	}
-	if (event.type === "move") {
-		ui = Object.assign({}, ui, { cursor: point(ui, event.x, event.y) });
-		if (!ui.pointer) return result();
-		let drag = Object.assign({}, ui.pointer, {
-			lastX: event.x,
-			lastY: event.y
-		});
-		if (!drag.active && Math.hypot(event.x - drag.x, event.y - drag.y) >= 8) {
-			drag.active = true;
-			const draggedNode = (model.nodes || []).find((row) => row.identity === drag.identity);
-			if (drag.kind === "node" && !model.readOnly && draggedNode && !draggedNode.referenceOnly) {
-				const names = selection(model, drag.identity, drag, true);
-				commands.push(selectedCommand(names, drag.identity));
-				drag.original = model.nodes.filter((row) => !row.referenceOnly && names.indexOf(row.identity) >= 0).map((row) => Object.assign({}, position(ui, row)));
-			} else if (drag.touch) drag.kind = "pan";
-			if (drag.kind === "port") ui = Object.assign({}, ui, { pending: {
-				identity: drag.identity,
-				input: drag.input
-			} });
-		}
-		if (drag.active && drag.kind === "pan") ui = pan(ui, drag.originX + (drag.x - event.x) / ui.zoom, drag.originY + (drag.y - event.y) / ui.zoom, viewport, true);
-		else if (drag.active && drag.original) drag.positions = drag.original.map((row) => ({
-			identity: row.identity,
-			nodeX: row.nodeX + ui.cursor.x - drag.start.x,
-			nodeY: row.nodeY + ui.cursor.y - drag.start.y
-		}));
-		ui = include(Object.assign({}, ui, { pointer: drag }), model, viewport);
-		return result();
-	}
-	if (event.type === "up") {
-		const drag = ui.pointer;
-		if (!drag) return result();
-		if (drag.active) {
-			if (drag.positions) commands.push({
-				type: "moveNodes",
-				positions: drag.positions
-			});
-			else if (drag.kind === "selection" && model.selectionEnabled !== false) {
-				const rect = selectionRect(ui), names = (drag.control || drag.shift ? model.selectedNodes || [] : []).slice();
-				for (const row of model.nodes || []) {
-					const box = bounds(ui, row, model.style);
-					if (rect && box.x + box.width >= rect.x && box.x <= rect.x + rect.width && box.y + box.height >= rect.y && box.y <= rect.y + rect.height && names.indexOf(row.identity) < 0) names.push(row.identity);
-				}
-				commands.push(selectedCommand(names, names[0]));
-			} else if (drag.kind === "port" && !model.readOnly) {
-				const target = hit(ui, model, point(ui, event.x, event.y));
-				if (target.kind === "port" && target.input !== drag.input && target.identity !== drag.identity) {
-					commands.push({
-						type: "connect",
-						from: target.input ? drag.identity : target.identity,
-						to: target.input ? target.identity : drag.identity
-					});
-					ui = Object.assign({}, ui, { pending: null });
-				}
-			}
-		} else if (drag.kind !== "pan") ui = click(ui, drag, drag, model, commands);
-		ui = Object.assign({}, ui, { pointer: null });
-		return result();
-	}
-	return result();
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
@@ -2624,12 +2056,707 @@ var russian = {
 	"Clear tabs cache": "Очистить кэш вкладок",
 	"Save changes before closing Configuration?": "Сохранить изменения перед закрытием конфигурации?",
 	"Object, process and version branches will collapse. Search tabs, filters and dock layouts remain unchanged.": "Ветки объектов, процессов и версий свернутся. Вкладки поиска, фильтры и леяуты доков сохранятся.",
-	"The selected preview is not a readable image": "Выбранное превью не удалось прочитать как изображение"
+	"The selected preview is not a readable image": "Выбранное превью не удалось прочитать как изображение",
+	"Enable filter": "Включить фильтр",
+	WHERE: "ГДЕ",
+	"Quick filter": "Быстрый фильтр",
+	"Add filter": "Добавить фильтр",
+	"Remove filter": "Удалить фильтр",
+	"Edit as custom filter": "Редактировать как пользовательский фильтр",
+	"Managed by Quick Filters": "Управляется быстрыми фильтрами",
+	"Filter column": "Столбец фильтра",
+	"Filter relation": "Условие фильтра",
+	relation: "Связь",
+	"Filter value": "Значение фильтра",
+	"TACTIC expression": "Выражение TACTIC",
+	"Search Filters": "Фильтры поиска",
+	"Searching...": "Поиск...",
+	"Apply filters": "Применить фильтры",
+	"Reset filters": "Сбросить фильтры",
+	"No filters selected": "Фильтры не выбраны",
+	"Loading tags…": "Загрузка тегов…",
+	TAGS: "ТЕГИ",
+	"Clear tags": "Очистить теги",
+	"Reload tags": "Обновить теги",
+	"Search tags": "Поиск тегов",
+	"Clear search": "Очистить поиск",
+	"Clear quick filters": "Очистить быстрые фильтры",
+	"Apply the shared default to this tab": "Применить общие настройки по умолчанию к этой вкладке",
+	"QUICK FILTERS": "БЫСТРЫЕ ФИЛЬТРЫ",
+	"Saved searches": "Сохранённые поиски",
+	"Select a saved search": "Выберите сохранённый поиск",
+	"Update selected preset": "Обновить выбранный пресет",
+	"Save as new preset": "Сохранить как новый пресет",
+	"Saved search actions": "Действия с сохранённым поиском",
+	"Rename preset": "Переименовать пресет",
+	"Duplicate preset": "Дублировать пресет",
+	"Copy saved search link": "Копировать ссылку на сохраненный поиск",
+	"Delete preset": "Удалить пресет",
+	"Refresh saved searches": "Обновить сохранённые поиски",
+	snapshot: "снапшот",
+	metadata: "Метаданные",
+	"Selected filters": "Выбранные фильтры",
+	"Copy selection from current tab": "Взять выбор из текущей вкладки",
+	"Clear selected filters": "Очистить выбранные фильтры",
+	"Available filters": "Доступные фильтры",
+	"Show hidden filters": "Показать скрытые фильтры",
+	"Save as defaults on server": "Сохранить как дефолты на сервере",
+	"Save for this tab": "Сохранить для этой вкладки",
+	"Preset name": "Название пресета",
+	"Items per page": "Элементов на странице",
+	" items": " элементов",
+	"Result loading": "Загрузка результатов",
+	"New item": "Создать",
+	"Create record": "Создать объект",
+	"Sync current Search Type": "Синхронизировать текущий Search Type",
+	Changelists: "Чейнджлисты",
+	"Commit Queue": "Очередь отправки",
+	"{count} / page": "{count} / стр.",
+	"Next page": "Следующая страница",
+	"Previous page": "Предыдущая страница",
+	Showing: "Показано",
+	"{range} of {total}": "{range} из {total}",
+	"{count} results": "{count} результатов",
+	Refresh: "Обновить",
+	"Page number": "Номер страницы",
+	"Go to page": "Перейти на страницу",
+	"Continuous tree": "Непрерывное дерево",
+	"Compact rows": "Компактные строки",
+	"Versions on the right": "Версии справа",
+	"Versions at the bottom": "Версии снизу",
+	"No grouping": "Без группировки",
+	"SObject status": "Статус объекта",
+	"Name A-Z": "Имя А–Я",
+	"Name Z-A": "Имя Я–А",
+	"Recently updated": "Недавно обновлённые",
+	"Oldest updated": "Давно обновлённые",
+	"Sort items": "Сортировка элементов",
+	"Default order": "Исходный порядок",
+	"Sort by column": "Сортировать по столбцу",
+	"Group items": "Группировка элементов",
+	"Task status by process": "Статус задачи по процессу",
+	"Advanced Search": "Расширенный поиск",
+	"Filter Processes": "Фильтр процессов",
+	"Saved search": "Сохранённый поиск",
+	"Loading saved searches...": "Загрузка сохраненных поисков...",
+	"No saved searches": "Нет сохраненных поисков",
+	"Sort by": "Сортировать по",
+	Descending: "По убыванию",
+	Ascending: "По возрастанию",
+	Collapse: "Свернуть",
+	Expand: "Развернуть",
+	"Toggle All": "Переключить всё",
+	"Toggle Process": "Переключить процессы",
+	"Toggle Builtin Processes": "Переключить встроенные процессы",
+	"Toggle Children": "Переключить дочерние типы",
+	"Hide Togglers": "Скрыть переключатели",
+	"Show Togglers": "Показать переключатели",
+	"Pipeline for:": "Пайплайн для:",
+	"Save and close": "Сохранить и закрыть",
+	"Visibility has unsaved changes": "Есть несохранённые изменения видимости",
+	"Search context changed. Reopen the editor.": "Контекст поиска изменился. Откройте редактор заново.",
+	"Search tab name": "Имя вкладки поиска",
+	"Related task filters": "Связанные фильтры задач",
+	"No task": "Нет задачи",
+	LATEST: "ПОСЛЕДНИЙ",
+	"{count} check-in": "{count} чекин",
+	"{count} check-ins": "{count} чекинов",
+	"{count} related item": "{count} связанный объект",
+	"{count} related items": "{count} связанных объектов",
+	Is: "Равно",
+	"Is not": "Не равно",
+	Contains: "Содержит",
+	"Does not contain": "Не содержит",
+	"Is empty": "Пусто",
+	"Is not empty": "Не пусто",
+	"Starts with": "Начинается с",
+	"Ends with": "Заканчивается на",
+	"Does not start with": "Не начинается с",
+	"Does not end with": "Не заканчивается на",
+	In: "В списке",
+	"Not in": "Не в списке",
+	"Is greater than": "Больше",
+	"Is less than": "Меньше",
+	"Is newer than": "Новее",
+	"Is older than": "Старее",
+	"Is on": "В дату",
+	Have: "Локально полученные версии",
+	"Do not have": "Не имеют",
+	"Match (slow)": "Соответствуют (медленно)",
+	"Do not match (slow)": "Не соответствуют (медленно)"
 };
 function translate(text, language, values) {
 	let result = language === "ru" && russian[text] ? russian[text] : String(text || "");
 	for (const key of Object.keys(values || {})) result = result.split("{" + key + "}").join(String(values[key]));
 	return result;
+}
+//#endregion
+//#region src/frame/controls/grid/FrameGrid.vue
+var _hoisted_1$5 = ["data-frame", "aria-label"];
+var _hoisted_2$4 = ["data-frame"];
+var _hoisted_3$3 = ["data-frame"];
+var _hoisted_4$2 = ["data-frame"];
+var _hoisted_5$2 = ["data-frame"];
+var _sfc_main$5 = {
+	__name: "FrameGrid",
+	props: {
+		node: Object,
+		source: Array,
+		describeCell: Function
+	},
+	emits: ["event"],
+	setup(__props, { expose: __expose, emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const body = ref(null), position = ref({
+			x: 0,
+			y: 0
+		});
+		const width = computed(() => Math.max(1, props.node.width - props.node.labelWidth - 16));
+		const height = computed(() => Math.max(1, props.node.height - props.node.headerHeight - 16));
+		const range = (count, size, extent, offset) => {
+			const r = virtualRange(count, size, extent, offset, 1);
+			return Array.from({ length: r.last - r.first }, (_, index) => r.first + index);
+		};
+		const rows = computed(() => range(props.node.rowHeaders.length, props.node.rowHeight, height.value, position.value.y));
+		const columns = computed(() => range(props.node.columnHeaders.length, props.node.cellWidth, width.value, position.value.x));
+		const totalWidth = computed(() => props.node.columnHeaders.length * props.node.cellWidth);
+		const totalHeight = computed(() => props.node.rowHeaders.length * props.node.rowHeight);
+		async function focusCell(row, column, name) {
+			const el = body.value, n = props.node;
+			if (column * n.cellWidth < el.scrollLeft) el.scrollLeft = column * n.cellWidth;
+			else if ((column + 1) * n.cellWidth > el.scrollLeft + width.value) el.scrollLeft = (column + 1) * n.cellWidth - width.value;
+			if (row * n.rowHeight < el.scrollTop) el.scrollTop = row * n.rowHeight;
+			else if ((row + 1) * n.rowHeight > el.scrollTop + height.value) el.scrollTop = (row + 1) * n.rowHeight - height.value;
+			position.value = {
+				x: el.scrollLeft,
+				y: el.scrollTop
+			};
+			await nextTick();
+			el.querySelector("[data-frame=\"" + CSS.escape(name) + "\"]")?.focus();
+		}
+		__expose({ focusCell });
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				class: "frame-grid",
+				"data-frame": __props.node.id,
+				role: "grid",
+				"aria-label": __props.node.text
+			}, [
+				createBaseVNode("div", {
+					class: "frame-grid-corner",
+					style: normalizeStyle({
+						width: __props.node.labelWidth + "px",
+						height: __props.node.headerHeight + "px"
+					})
+				}, toDisplayString(__props.node.caption), 5),
+				createBaseVNode("div", {
+					class: "frame-grid-column-headings",
+					style: normalizeStyle({
+						left: __props.node.labelWidth + "px",
+						width: width.value + "px",
+						height: __props.node.headerHeight + "px"
+					})
+				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
+					return openBlock(), createElementBlock("span", {
+						key: column,
+						role: "columnheader",
+						"data-frame": __props.node.id + "_column_" + column,
+						class: normalizeClass({ "frame-grid-detailed-heading": typeof __props.node.columnHeaders[column] === "object" }),
+						style: normalizeStyle({
+							left: column * __props.node.cellWidth - position.value.x + "px",
+							width: __props.node.cellWidth + "px",
+							height: __props.node.headerHeight + "px"
+						})
+					}, [typeof __props.node.columnHeaders[column] === "object" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("b", { "data-frame": __props.node.id + "_column_" + column + "_title" }, toDisplayString(__props.node.columnHeaders[column].label), 9, _hoisted_3$3), createBaseVNode("small", { "data-frame": __props.node.id + "_column_" + column + "_detail" }, toDisplayString(__props.node.columnHeaders[column].detail), 9, _hoisted_4$2)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.columnHeaders[column]), 1)], 64))], 14, _hoisted_2$4);
+				}), 128))], 4),
+				createBaseVNode("div", {
+					class: "frame-grid-row-headings",
+					style: normalizeStyle({
+						top: __props.node.headerHeight + "px",
+						width: __props.node.labelWidth + "px",
+						height: height.value + "px"
+					})
+				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(rows.value, (row) => {
+					return openBlock(), createElementBlock("div", {
+						key: row,
+						role: "rowheader",
+						"data-frame": __props.node.id + "_row_" + row,
+						class: normalizeClass({ "frame-grid-custom-heading": !!__props.node.rowHeaders[row].children }),
+						style: normalizeStyle({
+							top: row * __props.node.rowHeight - position.value.y + "px",
+							width: __props.node.labelWidth + "px",
+							height: __props.node.rowHeight + "px"
+						})
+					}, [__props.node.rowHeaders[row].children ? (openBlock(), createBlock(_sfc_main, {
+						key: 0,
+						scene: { nodes: __props.node.rowHeaders[row].children },
+						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
+					}, null, 8, ["scene"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("span", { style: normalizeStyle({ fontWeight: __props.node.rowHeaders[row].all ? 600 : 400 }) }, toDisplayString(__props.node.rowHeaders[row].label), 5), createBaseVNode("small", null, toDisplayString(__props.node.rowHeaders[row].detail), 1)], 64))], 14, _hoisted_5$2);
+				}), 128))], 4),
+				createBaseVNode("div", {
+					ref_key: "body",
+					ref: body,
+					class: "frame-grid-body",
+					style: normalizeStyle({
+						left: __props.node.labelWidth + "px",
+						top: __props.node.headerHeight + "px",
+						width: width.value + 16 + "px",
+						height: height.value + 16 + "px"
+					}),
+					onScroll: _cache[2] || (_cache[2] = ($event) => position.value = {
+						x: $event.target.scrollLeft,
+						y: $event.target.scrollTop
+					})
+				}, [createBaseVNode("div", { style: normalizeStyle({
+					position: "relative",
+					width: totalWidth.value + "px",
+					height: totalHeight.value + "px"
+				}) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(rows.value, (row) => {
+					return openBlock(), createElementBlock(Fragment, { key: row }, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
+						return openBlock(), createBlock(_sfc_main, {
+							key: column,
+							class: "frame-grid-cell",
+							style: normalizeStyle({
+								left: column * __props.node.cellWidth + "px",
+								top: row * __props.node.rowHeight + "px",
+								width: __props.node.cellWidth + "px",
+								height: __props.node.rowHeight + "px"
+							}),
+							scene: __props.describeCell(__props.node, __props.source?.[row]?.[column] || {}, row, column),
+							onEvent: _cache[1] || (_cache[1] = ($event) => emit("event", $event))
+						}, null, 8, ["style", "scene"]);
+					}), 128))], 64);
+				}), 128))], 4)], 36)
+			], 8, _hoisted_1$5);
+		};
+	}
+};
+//#endregion
+//#region ../src/tactic_stream/shared_ui/controls/graph/graph.state.mjs
+var clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+function initial() {
+	return {
+		zoom: 1,
+		x: -18,
+		y: -18,
+		world: {
+			x: -18,
+			y: -18,
+			right: 818,
+			bottom: 818
+		},
+		pointer: null,
+		pending: null,
+		cursor: {
+			x: 0,
+			y: 0
+		},
+		touch: null
+	};
+}
+function size(node, style) {
+	const height = metrics(style).controlHeight * 2;
+	return {
+		width: node.kind === "progress" ? height : 200,
+		height
+	};
+}
+function position(ui, node) {
+	return ui.pointer && ui.pointer.positions && ui.pointer.positions.find((row) => row.identity === node.identity) || {
+		identity: node.identity,
+		nodeX: Number(node.nodeX) || 0,
+		nodeY: Number(node.nodeY) || 0
+	};
+}
+function point(ui, x, y) {
+	return {
+		x: ui.x + x / ui.zoom,
+		y: ui.y + y / ui.zoom
+	};
+}
+function bounds(ui, node, style) {
+	const p = position(ui, node);
+	return Object.assign({
+		x: p.nodeX,
+		y: p.nodeY
+	}, size(node, style));
+}
+function include(ui, model, viewport) {
+	let world = Object.assign({}, ui.world);
+	for (const row of model.nodes || []) {
+		const box = bounds(ui, row, model.style);
+		world.x = Math.min(world.x, box.x - 18);
+		world.y = Math.min(world.y, box.y - 18);
+		world.right = Math.max(world.right, box.x + box.width + 100);
+		world.bottom = Math.max(world.bottom, box.y + box.height + 100);
+	}
+	world.right = Math.max(world.right, ui.x + viewport.width / ui.zoom + 18);
+	world.bottom = Math.max(world.bottom, ui.y + viewport.height / ui.zoom + 18);
+	return Object.assign({}, ui, { world });
+}
+function pan(ui, x, y, viewport, expand) {
+	const world = Object.assign({}, ui.world);
+	if (expand) {
+		world.x = Math.min(world.x, x - 100);
+		world.y = Math.min(world.y, y - 100);
+		world.right = Math.max(world.right, x + viewport.width / ui.zoom + 100);
+		world.bottom = Math.max(world.bottom, y + viewport.height / ui.zoom + 100);
+	}
+	return Object.assign({}, ui, {
+		world,
+		x: clamp(x, world.x, Math.max(world.x, world.right - viewport.width / ui.zoom)),
+		y: clamp(y, world.y, Math.max(world.y, world.bottom - viewport.height / ui.zoom))
+	});
+}
+function zoom(ui, value, x, y, viewport) {
+	const anchor = point(ui, x, y), next = Object.assign({}, ui, { zoom: clamp(value, .4, 2) });
+	return pan(next, anchor.x - x / next.zoom, anchor.y - y / next.zoom, viewport, true);
+}
+function selection(model, identity, modifiers, dragging) {
+	let names = (model.selectedNodes || []).slice();
+	const index = names.indexOf(identity);
+	if (dragging && index >= 0) return names;
+	if (modifiers.control) {
+		if (index >= 0) names.splice(index, 1);
+		else names.push(identity);
+	} else if (modifiers.shift) {
+		if (index < 0) names.push(identity);
+	} else names = [identity];
+	return names;
+}
+function selectionRect(ui) {
+	const drag = ui.pointer;
+	if (!drag || drag.kind !== "selection" || !drag.active) return null;
+	return {
+		x: Math.min(drag.start.x, ui.cursor.x),
+		y: Math.min(drag.start.y, ui.cursor.y),
+		width: Math.abs(drag.start.x - ui.cursor.x),
+		height: Math.abs(drag.start.y - ui.cursor.y)
+	};
+}
+function curves(ui, model) {
+	const nodes = model.nodes || [], rows = [];
+	for (let index = 0; index < (model.edges || []).length; index++) {
+		const edge = model.edges[index], from = nodes.find((row) => row.identity === edge.from), to = nodes.find((row) => row.identity === edge.to);
+		if (!from || !to) continue;
+		const a = bounds(ui, from, model.style), b = bounds(ui, to, model.style);
+		const offset = model.edges.some((row) => row.from === edge.to && row.to === edge.from) ? String(edge.from) < String(edge.to) ? -24 : 24 : 0;
+		rows.push(curve(a.x + a.width, a.y + a.height / 2 + offset, b.x, b.y + b.height / 2 + offset, Object.assign({ index }, edge, { color: edge.color || from.color || "action" })));
+	}
+	if (ui.pending) {
+		const node = nodes.find((row) => row.identity === ui.pending.identity);
+		if (node) {
+			const box = bounds(ui, node, model.style), port = {
+				x: box.x + (ui.pending.input ? 0 : box.width),
+				y: box.y + box.height / 2
+			};
+			const a = ui.pending.input ? ui.cursor : port, b = ui.pending.input ? port : ui.cursor;
+			rows.push(curve(a.x, a.y, b.x, b.y, {
+				index: -1,
+				pending: true,
+				color: node.color || "action"
+			}));
+		}
+	}
+	return rows;
+}
+function curve(x1, y1, x2, y2, data) {
+	return Object.assign({
+		x1,
+		y1,
+		x2,
+		y2,
+		bend: Math.max(70, Math.abs(x2 - x1) / 2)
+	}, data);
+}
+function curvePoint(edge, t) {
+	const u = 1 - t;
+	return {
+		x: u * u * u * edge.x1 + 3 * u * u * t * (edge.x1 + edge.bend) + 3 * u * t * t * (edge.x2 - edge.bend) + t * t * t * edge.x2,
+		y: u * u * u * edge.y1 + 3 * u * u * t * edge.y1 + 3 * u * t * t * edge.y2 + t * t * t * edge.y2
+	};
+}
+function contains(rect, p) {
+	return p.x >= rect.x && p.y >= rect.y && p.x <= rect.x + rect.width && p.y <= rect.y + rect.height;
+}
+function hit(ui, model, p) {
+	for (const row of (model.nodes || []).slice().reverse()) {
+		const box = bounds(ui, row, model.style), port = {
+			y: box.y + box.height / 2 - 18,
+			width: 36,
+			height: 36
+		};
+		if (!model.readOnly && !row.referenceOnly) {
+			if (contains(Object.assign({ x: box.x - 18 }, port), p)) return {
+				kind: "port",
+				identity: row.identity,
+				input: true
+			};
+			if (contains(Object.assign({ x: box.x + box.width - 18 }, port), p)) return {
+				kind: "port",
+				identity: row.identity,
+				input: false
+			};
+		}
+		if (contains(box, p)) return {
+			kind: "node",
+			identity: row.identity
+		};
+	}
+	for (const edge of curves(ui, model)) {
+		if (edge.pending) continue;
+		for (let t = 0; t <= 1; t += .025) {
+			const q = curvePoint(edge, t);
+			if (Math.hypot(q.x - p.x, q.y - p.y) <= 10 / ui.zoom) return {
+				kind: "edge",
+				index: edge.index
+			};
+		}
+	}
+	return { kind: "selection" };
+}
+function selectedCommand(names, primary) {
+	return {
+		type: "selectNodes",
+		identities: names,
+		primary: names.indexOf(primary) >= 0 ? primary : names[names.length - 1] || ""
+	};
+}
+function port(ui, target, commands) {
+	if (ui.pending && ui.pending.input !== target.input && ui.pending.identity !== target.identity) {
+		commands.push({
+			type: "connect",
+			from: target.input ? ui.pending.identity : target.identity,
+			to: target.input ? target.identity : ui.pending.identity
+		});
+		return Object.assign({}, ui, { pending: null });
+	}
+	return Object.assign({}, ui, { pending: ui.pending && ui.pending.identity === target.identity && ui.pending.input === target.input ? null : target });
+}
+function click(ui, target, event, model, commands) {
+	if (target.kind === "port" && !model.readOnly) return port(ui, target, commands);
+	if (model.selectionEnabled === false) return ui;
+	if (target.kind === "node") commands.push(selectedCommand(selection(model, target.identity, event, false), target.identity));
+	else if (target.kind === "edge") commands.push({
+		type: "selectEdge",
+		index: target.index
+	});
+	else if (!event.control && !event.shift) commands.push({ type: "clear" });
+	return Object.assign({}, ui, { pending: null });
+}
+function reduce(previous, event, model, viewport) {
+	let ui = include(previous, model, viewport);
+	const commands = [];
+	const result = () => ({
+		ui,
+		commands
+	});
+	if (event.type === "cancel") {
+		ui = Object.assign({}, ui, {
+			pointer: null,
+			pending: null,
+			touch: null
+		});
+		return result();
+	}
+	if (event.type === "scroll") {
+		ui = pan(ui, ui.world.x + event.x / ui.zoom, ui.world.y + event.y / ui.zoom, viewport, false);
+		return result();
+	}
+	if (event.type === "reset") {
+		ui = include(initial(), model, viewport);
+		return result();
+	}
+	if (event.type === "zoom") {
+		if (!ui.pointer) ui = zoom(ui, event.value, event.x === void 0 ? viewport.width / 2 : event.x, event.y === void 0 ? viewport.height / 2 : event.y, viewport);
+		return result();
+	}
+	if (event.type === "reveal") {
+		const rows = (model.nodes || []).filter((row) => (event.identities || model.selectedNodes || []).indexOf(row.identity) >= 0);
+		if (rows.length) {
+			const boxes = rows.map((row) => bounds(ui, row, model.style)), left = Math.min.apply(null, boxes.map((row) => row.x)), right = Math.max.apply(null, boxes.map((row) => row.x + row.width)), top = Math.min.apply(null, boxes.map((row) => row.y)), bottom = Math.max.apply(null, boxes.map((row) => row.y + row.height));
+			ui = pan(ui, (left + right) / 2 - viewport.width / ui.zoom / 2, (top + bottom) / 2 - viewport.height / ui.zoom / 2, viewport, true);
+		}
+		return result();
+	}
+	if (event.type === "key") {
+		if (event.key === "Escape") {
+			if (ui.pointer || ui.pending || ui.touch) ui = Object.assign({}, ui, {
+				pointer: null,
+				pending: null,
+				touch: null
+			});
+			else if (model.selectionEnabled !== false) commands.push({ type: "clear" });
+		} else if (event.control && event.key.toLowerCase() === "s" && !model.readOnly) {
+			if (!event.repeat) commands.push({ type: "save" });
+		} else if (!event.control && !event.alt) {
+			if (event.key === "+" || event.key === "=") return reduce(ui, {
+				type: "zoom",
+				value: ui.zoom + .1
+			}, model, viewport);
+			if (event.key === "-") return reduce(ui, {
+				type: "zoom",
+				value: ui.zoom - .1
+			}, model, viewport);
+			if (event.key === "Home") return reduce(ui, { type: "reset" }, model, viewport);
+			if (event.key.toLowerCase() === "f") return reduce(ui, { type: "reveal" }, model, viewport);
+			if (event.key === "Delete" && !model.readOnly && !event.repeat) commands.push({ type: "remove" });
+			const delta = {
+				ArrowLeft: [-10, 0],
+				ArrowRight: [10, 0],
+				ArrowUp: [0, -10],
+				ArrowDown: [0, 10]
+			}[event.key];
+			if (delta && !event.shift && !model.readOnly) commands.push({
+				type: "moveNodes",
+				positions: (model.nodes || []).filter((row) => !row.referenceOnly && (model.selectedNodes || []).indexOf(row.identity) >= 0).map((row) => ({
+					identity: row.identity,
+					nodeX: (Number(row.nodeX) || 0) + delta[0],
+					nodeY: (Number(row.nodeY) || 0) + delta[1]
+				}))
+			});
+		}
+		return result();
+	}
+	if (event.type === "activate") {
+		ui = click(ui, event.target, event, model, commands);
+		return result();
+	}
+	if (event.type === "touch") {
+		const points = event.points || [];
+		if (points.length >= 2) {
+			const middle = {
+				x: (points[0].x + points[1].x) / 2,
+				y: (points[0].y + points[1].y) / 2
+			}, distance = Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+			if (ui.touch && ui.touch.pinch) {
+				const scale = clamp(ui.touch.zoom * distance / Math.max(1, ui.touch.distance), .4, 2);
+				ui = pan(Object.assign({}, ui, { zoom: scale }), ui.touch.anchor.x - middle.x / scale, ui.touch.anchor.y - middle.y / scale, viewport, true);
+			} else ui = Object.assign({}, ui, {
+				pointer: null,
+				touch: {
+					pinch: true,
+					zoom: ui.zoom,
+					distance,
+					anchor: point(ui, middle.x, middle.y)
+				}
+			});
+			return result();
+		}
+		if (ui.touch && ui.touch.pinch) {
+			if (!points.length) ui = Object.assign({}, ui, { touch: null });
+			return result();
+		}
+		if (!points.length) {
+			const p = ui.pointer;
+			return reduce(ui, p ? {
+				type: "up",
+				x: p.lastX,
+				y: p.lastY
+			} : { type: "cancel" }, model, viewport);
+		}
+		const p = points[0];
+		return reduce(ui, {
+			type: ui.pointer ? "move" : "down",
+			x: p.x,
+			y: p.y,
+			touch: true
+		}, model, viewport);
+	}
+	if (event.type === "down") {
+		if (ui.pointer) return result();
+		const start = point(ui, event.x, event.y), target = event.button === 1 ? { kind: "pan" } : hit(ui, model, start);
+		ui = Object.assign({}, ui, {
+			cursor: start,
+			pointer: Object.assign({}, target, {
+				start,
+				x: event.x,
+				y: event.y,
+				lastX: event.x,
+				lastY: event.y,
+				originX: ui.x,
+				originY: ui.y,
+				control: !!event.control,
+				shift: !!event.shift,
+				touch: !!event.touch,
+				active: false
+			})
+		});
+		return result();
+	}
+	if (event.type === "tick" && ui.pointer && ui.pointer.active && ui.pointer.kind === "node") {
+		const drag = ui.pointer, margin = 36, dt = Math.min(.05, event.seconds);
+		const speed = (p, extent) => p < margin ? -Math.min(margin, margin - p) : p > extent - margin ? Math.min(margin, p - extent + margin) : 0;
+		const dx = speed(drag.lastX, viewport.width), dy = speed(drag.lastY, viewport.height);
+		if (!dx && !dy) return result();
+		ui = pan(ui, ui.x + dx * dt * 10 / ui.zoom, ui.y + dy * dt * 10 / ui.zoom, viewport, true);
+		return reduce(ui, {
+			type: "move",
+			x: drag.lastX,
+			y: drag.lastY
+		}, model, viewport);
+	}
+	if (event.type === "move") {
+		ui = Object.assign({}, ui, { cursor: point(ui, event.x, event.y) });
+		if (!ui.pointer) return result();
+		let drag = Object.assign({}, ui.pointer, {
+			lastX: event.x,
+			lastY: event.y
+		});
+		if (!drag.active && Math.hypot(event.x - drag.x, event.y - drag.y) >= 8) {
+			drag.active = true;
+			const draggedNode = (model.nodes || []).find((row) => row.identity === drag.identity);
+			if (drag.kind === "node" && !model.readOnly && draggedNode && !draggedNode.referenceOnly) {
+				const names = selection(model, drag.identity, drag, true);
+				commands.push(selectedCommand(names, drag.identity));
+				drag.original = model.nodes.filter((row) => !row.referenceOnly && names.indexOf(row.identity) >= 0).map((row) => Object.assign({}, position(ui, row)));
+			} else if (drag.touch) drag.kind = "pan";
+			if (drag.kind === "port") ui = Object.assign({}, ui, { pending: {
+				identity: drag.identity,
+				input: drag.input
+			} });
+		}
+		if (drag.active && drag.kind === "pan") ui = pan(ui, drag.originX + (drag.x - event.x) / ui.zoom, drag.originY + (drag.y - event.y) / ui.zoom, viewport, true);
+		else if (drag.active && drag.original) drag.positions = drag.original.map((row) => ({
+			identity: row.identity,
+			nodeX: row.nodeX + ui.cursor.x - drag.start.x,
+			nodeY: row.nodeY + ui.cursor.y - drag.start.y
+		}));
+		ui = include(Object.assign({}, ui, { pointer: drag }), model, viewport);
+		return result();
+	}
+	if (event.type === "up") {
+		const drag = ui.pointer;
+		if (!drag) return result();
+		if (drag.active) {
+			if (drag.positions) commands.push({
+				type: "moveNodes",
+				positions: drag.positions
+			});
+			else if (drag.kind === "selection" && model.selectionEnabled !== false) {
+				const rect = selectionRect(ui), names = (drag.control || drag.shift ? model.selectedNodes || [] : []).slice();
+				for (const row of model.nodes || []) {
+					const box = bounds(ui, row, model.style);
+					if (rect && box.x + box.width >= rect.x && box.x <= rect.x + rect.width && box.y + box.height >= rect.y && box.y <= rect.y + rect.height && names.indexOf(row.identity) < 0) names.push(row.identity);
+				}
+				commands.push(selectedCommand(names, names[0]));
+			} else if (drag.kind === "port" && !model.readOnly) {
+				const target = hit(ui, model, point(ui, event.x, event.y));
+				if (target.kind === "port" && target.input !== drag.input && target.identity !== drag.identity) {
+					commands.push({
+						type: "connect",
+						from: target.input ? drag.identity : target.identity,
+						to: target.input ? target.identity : drag.identity
+					});
+					ui = Object.assign({}, ui, { pending: null });
+				}
+			}
+		} else if (drag.kind !== "pan") ui = click(ui, drag, drag, model, commands);
+		ui = Object.assign({}, ui, { pointer: null });
+		return result();
+	}
+	return result();
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/graph/graph.ui.mjs
@@ -4249,13 +4376,15 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				width: node.width + "px",
 				height: node.height + "px",
 				display: node.visible === false ? "none" : void 0,
+				pointerEvents: node.pointerTransparent ? "none" : void 0,
 				fontSize: node.fontSize + "px",
 				fontWeight: node.weight,
 				textAlign: node.align,
 				fontFamily: node.monospace ? "Consolas" : void 0,
 				color: color(node.color),
 				opacity: node.opacity,
-				textDecoration: node.strike ? "line-through" : void 0
+				textDecoration: node.strike ? "line-through" : void 0,
+				"--frame-button-icon-size": node.iconSize ? node.iconSize + "px" : void 0
 			};
 		}
 		function background(node) {
@@ -4267,8 +4396,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				borderBottomRightRadius: node.bottomRightRadius === void 0 ? radius : node.bottomRightRadius + "px"
 			};
 		}
-		function send(action, value) {
-			if (action && props.interactive) emit("event", Object.assign({}, action, value === void 0 ? {} : { value }));
+		function send(action, value, source) {
+			if (action && props.interactive) emit("event", Object.assign({}, action, value === void 0 ? {} : { value }), source);
 		}
 		function drag(event, node) {
 			if (node.dragValue == null) return;
@@ -4296,9 +4425,10 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 		function key(event, node) {
 			if (event.isComposing || event.keyCode === 229) return;
 			if (node.tableCell && (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)) return;
-			if (node.keys?.[event.key]) {
+			const name = event.key === "Tab" && event.shiftKey ? "Backtab" : event.key;
+			if (node.keys?.[name]) {
 				event.preventDefault();
-				send(node.keys[event.key]);
+				send(node.keys[name]);
 			}
 		}
 		function records(node) {
@@ -4419,7 +4549,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"describe-row": __props.describeRow,
 						"describe-cell": __props.describeCell,
 						interactive: __props.interactive,
-						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
+						onEvent: _cache[0] || (_cache[0] = (action, source) => emit("event", action, source))
 					}, null, 8, [
 						"scene",
 						"models",
@@ -4473,6 +4603,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					style: normalizeStyle(Object.assign(style(node), { color: void 0 })),
 					label: node.text,
 					"translate-label": false,
+					"aria-label": node.label || node.text,
 					icon: node.icon,
 					"icon-only": node.iconOnly,
 					href: node.href,
@@ -4490,7 +4621,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"aria-checked": node.radio ? !!node.selected : void 0,
 					tabindex: node.radio && !node.selected ? -1 : void 0,
 					onKeydown: ($event) => key($event, node),
-					onClick: ($event) => send(node.action),
+					onPointerdown: ($event) => send(node.pressAction, void 0, $event.currentTarget),
+					onClick: ($event) => send(node.action, void 0, $event.currentTarget),
 					onDragover: ($event) => dragOver($event, node),
 					onDrop: ($event) => drop($event, node)
 				}, null, 8, [
@@ -4498,6 +4630,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"class",
 					"style",
 					"label",
+					"aria-label",
 					"icon",
 					"icon-only",
 					"href",
@@ -4515,6 +4648,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"aria-checked",
 					"tabindex",
 					"onKeydown",
+					"onPointerdown",
 					"onClick",
 					"onDragover",
 					"onDrop"
@@ -4522,7 +4656,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 4,
 					"data-frame": node.id,
 					class: "frame-node frame-action",
-					style: normalizeStyle(style(node)),
+					style: normalizeStyle(Object.assign(style(node), { borderRadius: (node.radius === void 0 ? 10 : node.radius) + "px" })),
 					label: node.text,
 					"translate-label": false,
 					disabled: !node.enabled,
@@ -4539,8 +4673,9 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					draggable: node.dragValue != null && __props.interactive,
 					onDragstart: ($event) => drag($event, node)
 				}, {
-					default: withCtx(() => [createVNode(_sfc_main$19, {
+					default: withCtx(() => [createVNode(_sfc_main$16, {
 						selected: node.selected,
+						"corner-radius": node.radius === void 0 ? 10 : node.radius,
 						"normal-color": color(node.normalColor) || "transparent",
 						"selected-color": color(node.selectedColor) || "transparent",
 						"rail-visible": !!node.rail,
@@ -4557,6 +4692,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						_: 2
 					}, 1032, [
 						"selected",
+						"corner-radius",
 						"normal-color",
 						"selected-color",
 						"rail-visible"
@@ -4594,7 +4730,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onKeydown: ($event) => key($event, node),
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, {
-					default: withCtx(() => [createVNode(_sfc_main$19, {
+					default: withCtx(() => [createVNode(_sfc_main$16, {
 						selected: node.checked,
 						"normal-color": color(node.normalColor) || "transparent",
 						"selected-color": color(node.selectedColor) || "transparent",
@@ -4647,10 +4783,13 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 7,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node frame-field", { "table-cell": node.tableCell }]),
-					onFocus: _cache[1] || (_cache[1] = ($event) => $event.target.scrollIntoView({
-						block: "nearest",
-						inline: "nearest"
-					})),
+					onFocus: ($event) => {
+						$event.target.scrollIntoView({
+							block: "nearest",
+							inline: "nearest"
+						});
+						node.selectOnFocus && $event.target.select();
+					},
 					"error-state": !!node.error,
 					style: normalizeStyle(style(node)),
 					label: node.label,
@@ -4658,7 +4797,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"model-value": node.text,
 					readonly: node.readOnly,
 					maxlength: node.maxLength,
-					type: node.password ? "password" : "text",
+					type: node.password ? "password" : node.inputType || "text",
 					autocomplete: node.autocomplete || (node.password ? "new-password" : "off"),
 					name: node.name,
 					inputmode: node.inputMode,
@@ -4669,6 +4808,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, null, 8, [
 					"data-frame",
+					"onFocus",
 					"class",
 					"error-state",
 					"style",
@@ -4690,7 +4830,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 8,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node frame-area", { "frame-notice": node.notice }]),
-					onFocus: _cache[2] || (_cache[2] = ($event) => $event.target.scrollIntoView({
+					onFocus: _cache[1] || (_cache[1] = ($event) => $event.target.scrollIntoView({
 						block: "nearest",
 						inline: "nearest"
 					})),
@@ -4747,7 +4887,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"selected",
 					"loading",
 					"fill-mode"
-				])) : node.kind === "SummaryChip" ? (openBlock(), createBlock(_sfc_main$17, {
+				])) : node.kind === "SummaryChip" ? (openBlock(), createBlock(_sfc_main$18, {
 					key: 10,
 					"data-frame": node.id,
 					class: "frame-node frame-summary-chip",
@@ -4805,7 +4945,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"describe-row": __props.describeRow,
 						"describe-cell": __props.describeCell,
 						interactive: __props.interactive,
-						onEvent: _cache[3] || (_cache[3] = ($event) => emit("event", $event))
+						onEvent: _cache[2] || (_cache[2] = (action, source) => emit("event", action, source))
 					}, null, 8, [
 						"data-frame-row",
 						"class",
@@ -4836,7 +4976,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"describe-row": __props.describeRow,
 					"describe-cell": __props.describeCell,
 					interactive: __props.interactive,
-					onEvent: _cache[4] || (_cache[4] = ($event) => emit("event", $event))
+					onEvent: _cache[3] || (_cache[3] = (action, source) => emit("event", action, source))
 				}, null, 8, [
 					"style",
 					"scene",
@@ -4849,7 +4989,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 13,
 					"data-frame": node.id,
 					class: "frame-node frame-choice",
-					onFocus: _cache[5] || (_cache[5] = ($event) => $event.target.scrollIntoView({
+					onFocus: _cache[4] || (_cache[4] = ($event) => $event.target.scrollIntoView({
 						block: "nearest",
 						inline: "nearest"
 					})),
@@ -4899,7 +5039,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"disabled",
 					"onUpdate:modelValue"
-				])], 12, _hoisted_8)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$18, {
+				])], 12, _hoisted_8)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$19, {
 					key: 16,
 					"data-frame": node.id,
 					class: "frame-node frame-splitter",
@@ -4947,7 +5087,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onUpdate:modelValue",
 					"onChange"
-				])) : node.kind === "UserChoice" ? (openBlock(), createBlock(_sfc_main$16, {
+				])) : node.kind === "UserChoice" ? (openBlock(), createBlock(_sfc_main$17, {
 					key: 18,
 					class: "frame-node frame-user-choice",
 					"data-frame": node.id,
@@ -4977,7 +5117,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					node,
 					source: __props.models[node.source],
 					"describe-cell": __props.describeCell,
-					onEvent: _cache[6] || (_cache[6] = ($event) => emit("event", $event))
+					onEvent: _cache[5] || (_cache[5] = (action, source) => emit("event", action, source))
 				}, null, 8, [
 					"style",
 					"node",
@@ -4991,22 +5131,27 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					class: "frame-node",
 					style: normalizeStyle(style(node)),
 					node,
-					onEvent: _cache[7] || (_cache[7] = ($event) => emit("event", $event))
+					onEvent: _cache[6] || (_cache[6] = (action, source) => emit("event", action, source))
 				}, null, 8, ["style", "node"])) : node.kind === "Code" ? (openBlock(), createBlock(FrameCode_default, {
 					key: 21,
 					class: "frame-node",
 					style: normalizeStyle(style(node)),
 					node,
-					onEvent: _cache[8] || (_cache[8] = ($event) => emit("event", $event))
+					onEvent: _cache[7] || (_cache[7] = (action, source) => emit("event", action, source))
 				}, null, 8, ["style", "node"])) : node.kind === "View" ? (openBlock(), createBlock(resolveDynamicComponent(__props.views[node.view]?.component), mergeProps({
 					key: 22,
 					ref_for: true,
 					ref: __props.views[node.view]?.captureRef
 				}, { ref_for: true }, __props.views[node.view]?.props, {
+					"frame-node": __props.views[node.view]?.nodeProps ? node : void 0,
 					class: "frame-node frame-child-view",
 					"data-frame": node.id,
 					style: style(node)
-				}), null, 16, ["data-frame", "style"])) : createCommentVNode("", true)], 64);
+				}), null, 16, [
+					"frame-node",
+					"data-frame",
+					"style"
+				])) : createCommentVNode("", true)], 64);
 			}), 128))], 10, _hoisted_1);
 		};
 	}
@@ -5046,6 +5191,6 @@ function observeFrameSizes(apply) {
 	};
 }
 //#endregion
-export { completions as a, button as c, node as d, rect as f, _sfc_main$3 as i, label as l, _sfc_main as n, documentSymbols as o, revealListOffset as p, _sfc_main$1 as r, translate as s, observeFrameSizes as t, muted as u };
+export { completions as a, button as c, node as d, rect as f, _sfc_main$3 as i, label as l, virtualRange as m, _sfc_main as n, documentSymbols as o, revealListOffset as p, _sfc_main$1 as r, translate as s, observeFrameSizes as t, muted as u };
 
 //# sourceMappingURL=resize.js.map

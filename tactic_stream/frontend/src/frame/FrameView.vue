@@ -90,13 +90,15 @@ function style(node) {
     width: node.width + 'px',
     height: node.height + 'px',
     display: node.visible === false ? 'none' : undefined,
+    pointerEvents: node.pointerTransparent ? 'none' : undefined,
     fontSize: node.fontSize + 'px',
     fontWeight: node.weight,
     textAlign: node.align,
     fontFamily: node.monospace ? 'Consolas' : undefined,
     color: color(node.color),
     opacity: node.opacity,
-    textDecoration: node.strike ? 'line-through' : undefined
+    textDecoration: node.strike ? 'line-through' : undefined,
+    '--frame-button-icon-size': node.iconSize ? node.iconSize + 'px' : undefined
   };
 }
 function background(node) {
@@ -114,11 +116,12 @@ function background(node) {
         : node.bottomRightRadius + 'px'
   };
 }
-function send(action, value) {
+function send(action, value, source) {
   if (action && props.interactive)
     emit(
       'event',
-      Object.assign({}, action, value === undefined ? {} : { value })
+      Object.assign({}, action, value === undefined ? {} : { value }),
+      source
     );
 }
 function drag(event, node) {
@@ -157,9 +160,10 @@ function key(event, node) {
     (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)
   )
     return;
-  if (node.keys?.[event.key]) {
+  const name = event.key === 'Tab' && event.shiftKey ? 'Backtab' : event.key;
+  if (node.keys?.[name]) {
     event.preventDefault();
-    send(node.keys[event.key]);
+    send(node.keys[name]);
   }
 }
 function records(node) {
@@ -317,7 +321,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
           :describe-row="describeRow"
           :describe-cell="describeCell"
           :interactive="interactive"
-          @event="emit('event', $event)"
+          @event="(action, source) => emit('event', action, source)"
       /></component>
       <span
         v-else-if="node.kind === 'Label'"
@@ -359,6 +363,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :style="Object.assign(style(node), { color: undefined })"
         :label="node.text"
         :translate-label="false"
+        :aria-label="node.label || node.text"
         :icon="node.icon"
         :icon-only="node.iconOnly"
         :href="node.href"
@@ -376,7 +381,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :aria-checked="node.radio ? !!node.selected : undefined"
         :tabindex="node.radio && !node.selected ? -1 : undefined"
         @keydown="key($event, node)"
-        @click="send(node.action)"
+        @pointerdown="send(node.pressAction, undefined, $event.currentTarget)"
+        @click="send(node.action, undefined, $event.currentTarget)"
         @dragover="dragOver($event, node)"
         @drop="drop($event, node)"
       />
@@ -384,7 +390,11 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         v-else-if="node.kind === 'Action'"
         :data-frame="node.id"
         class="frame-node frame-action"
-        :style="style(node)"
+        :style="
+          Object.assign(style(node), {
+            borderRadius: (node.radius === undefined ? 10 : node.radius) + 'px'
+          })
+        "
         :label="node.text"
         :translate-label="false"
         :disabled="!node.enabled"
@@ -407,6 +417,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       >
         <ItemSurface
           :selected="node.selected"
+          :corner-radius="node.radius === undefined ? 10 : node.radius"
           :normal-color="color(node.normalColor) || 'transparent'"
           :selected-color="color(node.selectedColor) || 'transparent'"
           :rail-visible="!!node.rail"
@@ -472,7 +483,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :data-frame="node.id"
         class="frame-node frame-field"
         @focus="
-          $event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+          $event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+          node.selectOnFocus && $event.target.select();
         "
         :class="{ 'table-cell': node.tableCell }"
         :error-state="!!node.error"
@@ -482,7 +494,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :model-value="node.text"
         :readonly="node.readOnly"
         :maxlength="node.maxLength"
-        :type="node.password ? 'password' : 'text'"
+        :type="node.password ? 'password' : node.inputType || 'text'"
         :autocomplete="
           node.autocomplete || (node.password ? 'new-password' : 'off')
         "
@@ -588,7 +600,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             :describe-row="describeRow"
             :describe-cell="describeCell"
             :interactive="interactive"
-            @event="emit('event', $event)"
+            @event="(action, source) => emit('event', action, source)"
           />
         </div>
       </div>
@@ -615,7 +627,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
           :describe-row="describeRow"
           :describe-cell="describeCell"
           :interactive="interactive"
-          @event="emit('event', $event)"
+          @event="(action, source) => emit('event', action, source)"
         />
       </div>
       <AppSelect
@@ -708,7 +720,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :node="node"
         :source="models[node.source]"
         :describe-cell="describeCell"
-        @event="emit('event', $event)"
+        @event="(action, source) => emit('event', action, source)"
       />
       <FrameGraph
         v-else-if="node.kind === 'Graph'"
@@ -716,20 +728,21 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         class="frame-node"
         :style="style(node)"
         :node="node"
-        @event="emit('event', $event)"
+        @event="(action, source) => emit('event', action, source)"
       />
       <FrameCode
         v-else-if="node.kind === 'Code'"
         class="frame-node"
         :style="style(node)"
         :node="node"
-        @event="emit('event', $event)"
+        @event="(action, source) => emit('event', action, source)"
       />
       <component
         v-else-if="node.kind === 'View'"
         :is="views[node.view]?.component"
         :ref="views[node.view]?.captureRef"
         v-bind="views[node.view]?.props"
+        :frame-node="views[node.view]?.nodeProps ? node : undefined"
         class="frame-node frame-child-view"
         :data-frame="node.id"
         :style="style(node)"

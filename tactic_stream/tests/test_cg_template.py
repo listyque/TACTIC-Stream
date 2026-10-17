@@ -117,7 +117,11 @@ def exercise(store, prefix):
     with request_context(RequestContext(store, 'admin', code)):
         api.auth.bind_security('admin', token)
         key = 'cg/assets?project=' + code + '&code=DEMO_ROBOT'
-        item = read_result_items('cg/assets', [key])['items'][0]
+        presented = read_result_items('cg/assets', [key])
+        item = presented['items'][0]
+        assert any(process['key'] == 'model' for process in presented['organization']['processes']), presented['organization']
+        assert 'model' in presented['organization']['statuses'], presented['organization']
+        assert all('status' in task for task in item['tasks']), item['tasks']
         assert item['task_count'] == 1 and item['note_count'] == 3, item
         asset_branch = next(row for row in item['branches'] if row.get('search_type') == 'cg/assets')
         branch = {name: asset_branch[name] for name in ('kind', 'search_type', 'path')}

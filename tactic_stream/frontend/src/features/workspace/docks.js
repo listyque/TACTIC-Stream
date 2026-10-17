@@ -3,6 +3,12 @@ import * as DockLayout from '../../../../src/tactic_stream/shared_ui/shell/dock.
 export const dockPanels = [
   { id: 'results', title: 'Results', icon: 'search', closable: false },
   {
+    id: 'advanced_search',
+    title: 'Advanced Search',
+    icon: 'advanced-search',
+    closable: true
+  },
+  {
     id: 'task_calendar',
     title: 'Task Calendar',
     icon: 'MDI_CALENDAR_MONTH',

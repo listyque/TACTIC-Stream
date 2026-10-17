@@ -2,6 +2,9 @@
 // SearchQuickFilterPopup.qml / SearchAssigneeFilterPopup.qml; the tab owns selection.
 import { nextTick, toRaw } from 'vue';
 import { searchConfiguration, userProfile } from '../../api.js';
+import FrameView from '../../frame/FrameView.vue';
+import { appearance } from '../../appearance.js';
+import * as UI from '../../../../src/tactic_stream/shared_ui/features/search/popups.ui.mjs';
 import { t } from '../../i18n.js';
 import AppButton from '../../controls/AppButton.vue';
 import QuickFilterChip from '../../controls/display/QuickFilterChip.vue';
@@ -13,6 +16,7 @@ import QuickFilterOptions from './QuickFilterOptions.vue';
 const mine = '__current_login__';
 export default {
   components: {
+    FrameView,
     AppButton,
     AppIcon,
     AppMenu,
@@ -36,6 +40,7 @@ export default {
   emits: ['apply', 'reset', 'edit', 'toggle'],
   data() {
     return {
+      headerWidth: 400,
       catalog: null,
       busy: false,
       error: '',
@@ -52,6 +57,19 @@ export default {
     };
   },
   computed: {
+    headerScene() {
+      return UI.quickHeader(
+        {
+          busy: this.busy,
+          loaded: !!this.catalog,
+          count: this.count,
+          personalized: this.personalized,
+          disabled: this.disabled
+        },
+        this.headerWidth,
+        appearance.language
+      );
+    },
     context() {
       return [
         this.ticket,
@@ -146,6 +164,19 @@ export default {
   },
   methods: {
     t,
+    groupHeader(group) {
+      return UI.groupHeader(
+        group.source === 'task' ? t(group.title) : group.title,
+        this.headerWidth
+      );
+    },
+    headerEvent(action) {
+      if (action.type === 'edit') this.edit();
+      else if (action.type === 'reset') this.reset();
+      else if (action.type === 'clear') this.clear();
+      else if (action.type === 'lastGroup')
+        this.focusGroup(this.groups.length - 1, -1);
+    },
     open() {
       this.$refs.menu.open = true;
     },
@@ -182,6 +213,8 @@ export default {
       }
     },
     scrolled() {
+      if (this.$refs.viewport)
+        this.headerWidth = this.$refs.viewport.clientWidth - 24;
       this.top = this.$refs.viewport.scrollTop;
       this.height = this.$refs.viewport.clientHeight;
     },
@@ -267,7 +300,7 @@ export default {
       if (!flow) {
         this.$refs.viewport.scrollTop = 0;
         this.scrolled();
-        this.$refs.edit.$el.focus();
+        this.$refs.header.focusControl('editQuickFiltersButton');
         return;
       }
       flow.focusOption(direction > 0 ? 0 : flow.options.length - 1);
@@ -328,34 +361,12 @@ export default {
         :aria-busy="busy"
         @scroll.passive="scrolled"
       >
-        <header>
-          <strong>{{ t('QUICK FILTERS') }}</strong>
-          <AppButton
-            v-if="personalized && catalog"
-            icon-only
-            icon="reset"
-            label="Apply the shared default to this tab"
-            :disabled="disabled"
-            @click="reset"
-          />
-          <AppButton
-            v-if="count && catalog"
-            icon-only
-            icon="close"
-            label="Clear quick filters"
-            :disabled="disabled"
-            @click="clear"
-          />
-          <AppButton
-            ref="edit"
-            label="Edit"
-            icon="edit"
-            tonal
-            :disabled="busy || !catalog"
-            @click="edit"
-            @keydown.shift.tab.prevent="focusGroup(groups.length - 1, -1)"
-          />
-        </header>
+        <FrameView
+          ref="header"
+          :scene="headerScene"
+          :style="{ height: headerScene.contentHeight + 'px', flex: 'none' }"
+          @event="headerEvent"
+        />
         <p v-if="busy || error" :class="{ error }" role="status">
           <span>{{ t(busy ? 'Loading filters…' : error) }}</span
           ><AppButton v-if="error" label="Retry" @click="load(true)" />
@@ -366,7 +377,10 @@ export default {
           class="quick-filter-group"
           :aria-label="group.source === 'task' ? t(group.title) : group.title"
         >
-          <h3>{{ group.source === 'task' ? t(group.title) : group.title }}</h3>
+          <FrameView
+            :scene="groupHeader(group)"
+            :style="{ height: '24px', marginBottom: '9px', flex: 'none' }"
+          />
           <QuickFilterOptions
             :ref="(flow) => (flows[group.key] = flow)"
             :options="optionsFor(group)"

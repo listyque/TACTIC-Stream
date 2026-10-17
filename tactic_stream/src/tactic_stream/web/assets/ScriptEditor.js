@@ -1,9 +1,9 @@
-import { D as nextTick, G as withCtx, H as watch, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, X as ref, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, p as Teleport, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
+import { C as inject, E as nextTick, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { D as t, o as _sfc_main$2, u as _sfc_main$1 } from "./index.js";
 import { a as completions, i as _sfc_main$3, o as documentSymbols } from "./resize.js";
 import { F as rpc, L as scriptEditor, _ as endActivity, f as _sfc_main$4, h as beginActivity, n as copyText } from "./clipboard.js";
 import { t as _sfc_main$5 } from "./AppMenu.js";
-import { t as AppSearchField_default } from "./AppSearchField.js";
+import { n as AppSearchField_default } from "./ItemSurface.js";
 import { t as _sfc_main$6 } from "./AppSplitter.js";
 import { D as _sfc_main$9, E as _sfc_main$8, T as _sfc_main$7, d as scriptTree, l as buttonId, u as runBrowserScript } from "./App.js";
 //#region src/features/scripts/ScriptEditor.vue

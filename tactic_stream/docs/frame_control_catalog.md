@@ -1,5 +1,11 @@
 # Tactic Frame control kit (B02)
 
+The B06 search migration adds the house `VirtualCollection` adapter to the list
+family. Its shared geometry packs variable-height rows/tiles; the Vue adapter
+owns measured delegates and offscreen keyboard focus, while Qt retains native
+ListView/GridView. Search forms and record operations remain feature composition;
+see `docs/frame_search.md` for the owner map and the 100/1,000/10,000-entry checks.
+
 The kit is the vocabulary for shared screens, not a collection of independent
 QML and Vue forms. A primitive handles one value/action; a neutral composite
 accepts ordinary records and emits intent. Infrastructure handles input,

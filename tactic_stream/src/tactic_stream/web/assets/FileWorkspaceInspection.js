@@ -1,13 +1,13 @@
-import { D as nextTick, F as renderSlot, G as withCtx, H as watch, I as resolveComponent, J as markRaw, K as withDirectives, N as openBlock, P as renderList, X as ref, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
+import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, J as markRaw, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, o as _sfc_main$7, tt as _plugin_vue_export_helper_default, u as _sfc_main$8, x as redact, y as logEvent } from "./index.js";
 import { f as _sfc_main$9, n as copyText } from "./clipboard.js";
 import { t as _sfc_main$10 } from "./AppTextField.js";
 import { t as _sfc_main$11 } from "./AppMenu.js";
 import { i as prettySize } from "./files.js";
 import { t as _sfc_main$12 } from "./AppTextArea.js";
-import { t as _sfc_main$13 } from "./AppMenuItem.js";
+import { t as _sfc_main$13 } from "./ItemSurface.js";
 import { t as _sfc_main$14 } from "./AppSplitter.js";
-import { t as _sfc_main$15 } from "./ItemSurface.js";
+import { t as _sfc_main$15 } from "./AppMenuItem.js";
 import { T as _sfc_main$16 } from "./App.js";
 //#region src/features/fileWorkspace/FileWorkspaceTree.vue
 var _hoisted_1$5 = ["aria-label"];
@@ -570,7 +570,7 @@ var FileWorkspaceDepots_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 				}, null, 8, ["disabled"])) : createCommentVNode("", true)
 			]), createBaseVNode("div", _hoisted_3$2, [
 				createBaseVNode("aside", { style: normalizeStyle({ flexBasis: `max(0px,calc(${split.value}% - 10px))` }) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.rows, (row) => {
-					return openBlock(), createBlock(_sfc_main$15, {
+					return openBlock(), createBlock(_sfc_main$13, {
 						key: row.code,
 						selected: __props.selected?.code === row.code,
 						"normal-color": "transparent",
@@ -958,7 +958,7 @@ var _sfc_main = {
 		AppSelect: _sfc_main$9,
 		AppTextField: _sfc_main$10,
 		AppMenu: _sfc_main$11,
-		AppMenuItem: _sfc_main$13,
+		AppMenuItem: _sfc_main$15,
 		AppSplitter: _sfc_main$14,
 		WorkspaceTabs: _sfc_main$16,
 		FileWorkspaceTree: FileWorkspaceTree_default,

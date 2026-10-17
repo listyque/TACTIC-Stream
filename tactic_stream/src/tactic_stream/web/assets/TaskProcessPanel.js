@@ -1,9 +1,9 @@
-import { G as withCtx, N as openBlock, P as renderList, X as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
+import { A as onMounted, G as withCtx, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, o as _sfc_main$1 } from "./index.js";
 import { t as _sfc_main$2 } from "./AppMenu.js";
-import { t as _sfc_main$3 } from "./UserComboBox.js";
-import { t as _sfc_main$4 } from "./ItemSurface.js";
-import { B as _sfc_main$5 } from "./App.js";
+import { t as _sfc_main$3 } from "./ItemSurface.js";
+import { t as _sfc_main$4 } from "./UserComboBox.js";
+import { z as _sfc_main$5 } from "./App.js";
 //#region src/features/tasks/TaskProcessPanel.vue
 var _hoisted_1 = ["aria-label"];
 var _hoisted_2 = { class: "task-process-title" };
@@ -50,7 +50,7 @@ var _sfc_main = {
 				"aria-label": unref(t)("Task processes"),
 				style: normalizeStyle({ "--process-columns": columns.value })
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.target ? __props.records : [], (record) => {
-				return openBlock(), createBlock(_sfc_main$4, {
+				return openBlock(), createBlock(_sfc_main$3, {
 					key: record.value,
 					accent: record.color,
 					inset: 0,
@@ -77,7 +77,7 @@ var _sfc_main = {
 							"disabled",
 							"onChange"
 						]),
-						createVNode(_sfc_main$3, {
+						createVNode(_sfc_main$4, {
 							value: record.values.assigned || "",
 							options: record.users,
 							disabled: __props.blocked || !editable(record, "assigned"),

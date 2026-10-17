@@ -70,3 +70,9 @@ Database-clock timestamp filters are now supported within their validated syntax
 [Core model](core_model.en.md) · [Connections](connections.en.md) · [Site](site_context.en.md) · [Script Editor](script_editor.en.md)
 
 The supported mixed Search/Select query contract and its limits are described in [Search/Select help](search_select.en.md).
+
+## Advanced Search and Quick Filter ownership
+
+Quick Filters appear as managed cards in Advanced Search. **Edit as custom filter** keeps the executable condition and detaches it from its Quick Filter chips. Process, assignee and status facets refer to the same related task. Removing a managed card removes that part of the quick selection when applied. Expressions entered in this search editor are read-only; the general Script Editor/API permission contract above is unchanged.
+
+**Filter Processes** changes which process, built-in and child branches are visible. Cancel keeps the previous visibility. Save applies the draft, and Save and close also hides the editor. This changes presentation without re-running the object query. Repeated schema links share a logical setting; the togglers and Ctrl/Shift selection work across the tree. Tag search and its clear/reload actions retain the selected tags in the current search tab.

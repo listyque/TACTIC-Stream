@@ -427,6 +427,8 @@ try {
     .getByRole('button', { name: 'Close Messages', exact: true })
     .tap();
   await panel('results');
+  const resultViewport = root.locator('.mobile-result-screen:visible');
+  await resultViewport.evaluate((node) => (node.scrollTop = node.scrollHeight));
   const snapshotOwner = root
     .locator('.result-item-object[aria-label="Asset B"]:visible')
     .first();

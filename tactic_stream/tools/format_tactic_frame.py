@@ -61,7 +61,7 @@ def main():
     command[-1] = "tools/frame_controls/*.{vue,js,html,mjs}"
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = (
-        "frontend/src/features/workspace/{DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue}"
+        "frontend/src/features/workspace/{DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue,SearchHeader.vue,SearchFooter.vue,SearchLibrary.vue,SearchPresetBar.vue,SearchEditorPart.vue,SearchResultMenu.vue,ConditionCards.vue,ConditionValue.vue,QuickFilterEditor.vue,ProcessVisibility.vue,ResultBody.vue,ResultItem.vue,ResultPresentation.vue,MobileResults.vue,resultViews.js}"
     )
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/tests/{frame_control*,frame_icons,icons}.mjs"
@@ -72,7 +72,10 @@ def main():
         "frontend/src/features/configuration/*.{vue,js}",
         "frontend/src/features/projects/{ProjectCreation,ProjectTemplates,ProjectEditorSurface}.vue",
         "frontend/tests/frame_configuration*.mjs",
+        "frontend/tests/{search_suggestions,search_library,process_visibility,frame_search_state,result_views,delivery_project}.mjs",
         "tools/frame_configuration/*.{vue,js,html,mjs}",
+        "tools/frame_search/*.{vue,js,html,mjs}",
+        "frontend/tests/frame_search*.mjs",
         "frontend/src/features/help/**/*.{vue,js}",
         "tools/frame_help/*.{vue,js,html,mjs}",
         "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs",
@@ -100,6 +103,7 @@ def main():
         "ActionRows.vue",
         "ActionRow.vue",
         "DockWorkspaceFooter.vue",
+        "lists/VirtualCollection.vue",
         "DocumentPane.vue",
         "NavigationRow.vue",
         "AppButton.vue",

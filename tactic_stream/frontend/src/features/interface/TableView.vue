@@ -50,10 +50,12 @@ const rendered = computed(() => {
 const allSelected = computed(() => records.value.length && records.value.every(record => props.selectedKeys?.includes(record.__search_key__)))
 function preference(value) { emit('state', { ...props.state, table: { ...preferences.value, ...value } }) }
 function scrolled() {
-  scrollTop.value = viewport.value.scrollTop
+  if (!viewport.value.getClientRects().length) return
+  const top = viewport.value.scrollTop, left = viewport.value.scrollLeft
+  scrollTop.value = top
   emit('scroll', { target: viewport.value })
   cancelAnimationFrame(frame)
-  frame = requestAnimationFrame(() => preference({ scrollTop: viewport.value.scrollTop, scrollLeft: viewport.value.scrollLeft }))
+  frame = requestAnimationFrame(() => preference({ scrollTop: top, scrollLeft: left }))
 }
 function choose(record, event, toggle = false) {
   if (event.target.closest('button,input,select,textarea,a,summary,[role="combobox"]') && !toggle) return
@@ -124,7 +126,12 @@ function moveKey(column, event) {
 async function restore() { await nextTick(); if (viewport.value) { viewport.value.scrollTop = preferences.value.scrollTop || 0; viewport.value.scrollLeft = preferences.value.scrollLeft || 0; scrollTop.value = viewport.value.scrollTop } }
 watch(() => props.columns, () => { overrides.value = {}; restore() })
 watch(savingView, async value => { await nextTick(); if (value) { saveDialog.value.showModal(); saveDialog.value.querySelector('input')?.focus() } else saveDialog.value?.close() })
-onMounted(() => { observer = new ResizeObserver(entries => { width.value = entries[0].contentRect.width; viewportHeight.value = entries[0].contentRect.height }); observer.observe(viewport.value); restore() })
+onMounted(() => { observer = new ResizeObserver(entries => {
+  const bounds = entries[0].contentRect, wasHidden = !width.value || !viewportHeight.value
+  width.value = bounds.width; viewportHeight.value = bounds.height
+  // A hidden retained table can lose its DOM offset without a scroll event.
+  if (wasHidden && bounds.width && bounds.height) restore()
+}); observer.observe(viewport.value); restore() })
 onBeforeUnmount(() => { observer?.disconnect(); cancelAnimationFrame(frame) })
 defineExpose({ viewport })
 </script>
@@ -157,7 +164,7 @@ defineExpose({ viewport })
         :class="{ selected: selectedKeys?.includes(entry.key), 'group-row': !!entry.group }" :style="{ top: entry.top + 'px', height: entry.height + 'px' }"
         @click="entry.record && choose(entry.record, $event)" @dblclick="entry.record && !$event.target.closest('button,input,select,textarea,a') && emit('inspect', entry.record)"
         @contextmenu="entry.record && (choose(entry.record, $event), emit('operate', entry.record, $event))">
-        <AppButton v-if="entry.group" class="handler-table-group" :icon="closedGroups?.[entry.group.key] ? 'MDI_CHEVRON_RIGHT' : 'MDI_CHEVRON_DOWN'" :aria-expanded="!closedGroups?.[entry.group.key]" @click="emit('toggle-group', entry.group.key)">{{ entry.group.key ? entry.group.label : t(entry.group.label) }} <small>{{ entry.group.records.length }}</small></AppButton>
+        <AppButton v-if="entry.group" class="handler-table-group" :icon="closedGroups?.[entry.group.key] ? 'MDI_CHEVRON_RIGHT' : 'MDI_CHEVRON_DOWN'" :aria-expanded="!closedGroups?.[entry.group.key]" @click="emit('toggle-group', entry.group.key)">{{ entry.group.translate || !entry.group.key ? t(entry.group.label) : entry.group.label }} <small>{{ entry.group.records.length }}</small></AppButton>
         <template v-else>
           <div class="handler-table-selection" role="gridcell"><AppCheckbox v-if="selectable" :label="t('Select record: {name}', { name: entry.record.name || entry.record.title || entry.record.code || entry.record.id })" :translate-label="false" :model-value="selectedKeys?.includes(entry.key)" @update:model-value="emit('select', [entry.record], $event)"><span class="visually-hidden">{{ t('Select row') }}</span></AppCheckbox></div>
           <div v-for="(column, index) in columns" :key="column.name" class="handler-table-cell" role="gridcell" :class="{ 'first-column': index === 0, 'editable-cell': editable && column.editable }" @dblclick.stop="editable && column.editable ? emit('edit', entry.record, column, $event.currentTarget) : emit('inspect', entry.record)">

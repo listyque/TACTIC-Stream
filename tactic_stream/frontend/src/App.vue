@@ -40,6 +40,8 @@ import ProjectCreation from './features/projects/ProjectCreation.vue'
 import ProjectChooser from './features/projects/ProjectChooser.vue'
 import ItemPreview from './controls/ItemPreview.vue'
 import SearchLibrary from './features/workspace/SearchLibrary.vue'
+import SearchResultMenu from './features/workspace/SearchResultMenu.vue'
+import * as SearchMenus from '../../src/tactic_stream/shared_ui/features/search/menus.ui.mjs'
 import UserProfile from './features/users/UserProfile.vue'
 import QuickFilterEditor from './features/workspace/QuickFilterEditor.vue'
 import SearchQuickFilters from './features/workspace/SearchQuickFilters.vue'
@@ -50,6 +52,8 @@ const SnapshotBrowser = asyncComponent(() => import('./features/objects/Snapshot
 const KnowledgeBase = asyncComponent(() => import('./features/knowledge/KnowledgeBase.vue'))
 import TagCloud from './features/workspace/TagCloud.vue'
 import WorkspaceSearch from './features/workspace/WorkspaceSearch.vue'
+import SearchFooter from './features/workspace/SearchFooter.vue'
+import SearchHeader from './features/workspace/SearchHeader.vue'
 import { searchFields, searchTab, readWorkspace, saveWorkspace, navigationEntries } from './features/workspace/workspace.js'
 import { defaultResultView, resultViews, resultGroups } from './features/workspace/resultViews.js'
 import DebugLog from './features/debug/DebugLog.vue'
@@ -87,7 +91,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -106,7 +110,7 @@ export default {
       sessionRequest: 0,
       workHoursProjects: { week:'', report:'', cost:'' },
       descriptionMounted: false, descriptionTarget: null, tableCheckinTarget:null, snapshotMounted:false, snapshotTarget:null, snapshotActive:false,
-      inspectorSource: null, inspectorTarget: null, inspectorRequest: 0, taskInspectorActive: false, inspectorReturn: 'results',
+      inspectorSource: null, inspectorTarget: null, inspectorRequest: 0, taskInspectorActive: false, searchEditorActive: false, inspectorReturn: 'results',
       knowledgeMounted:false, knowledgeActive:false, knowledgeTarget:'',
       attachmentLocation: null,
       scriptEditorComponent: null, scriptEditorLoading: false,
@@ -126,6 +130,7 @@ export default {
       navigationByProject: {}, navigationErrors: {}, navigationRequests: {},
       sidebarSearch: null,
       reloadingCache: false,
+      searchOrganization: { processes: [], statuses: {} }, searchOrganizationKey: '',
       filterRecords: [], savedSearch: '', quickSelections: {}, quickLayout: null, scopeKey: '', presetOrderBys: [],
       selectedTags: [], tagColumn: '',
       searchRelation: 'contains',
@@ -178,6 +183,13 @@ export default {
     browserTitle() { return [this.activeSearchTab ? this.searchTabTitle(this.activeSearchTab) : '', this.currentProject?.title || '', t('TACTIC Stream')].filter(Boolean).join(' — ') },
     resultViews() { return resultViews },
     resultGroups() { return resultGroups },
+    searchGroupMenuModel() {
+      const key = [this.project, this.displayedSearchTab?.id, this.type].join('|')
+      return { mode: this.groupMode, busy: this.busy,
+        processes: key === this.searchOrganizationKey ? this.searchOrganization.processes : [] }
+    },
+    searchFilterMenuModel() { return {presets:this.$refs.searchLibrary?.catalog?.presets || [],selected:this.savedSearch,busy:this.$refs.searchLibrary?.busy,error:this.$refs.searchLibrary?.error} },
+    searchSortMenuModel() { return {defaultOrder:true,mode:SearchMenus.sorts.find(item=>item.column===this.sortField&&item.direction===this.sortDirection)?.value || '',column:this.sortField,direction:this.sortDirection,busy:this.busy,columns:this.columnNames.map(value=>({value,label:value}))} },
     workspaceView() { return this.workspaceSelection || this },
     currentProject() { return this.projects.find(item => item.code === this.workspaceView.project) },
     fileProject() { return this.projects.find(item => item.code === this.workspaceProject)?.project_mode === 'file_project' },
@@ -329,6 +341,56 @@ export default {
       }
       actions[command]?.()
     },
+    renameCurrentSearchTab(value) {
+      if (!this.activeSearchTab) return
+      this.activeSearchTab.title = String(value || '').trim() || this.activeWorkspaceSection?.title || ''
+      this.persistWorkspace()
+    },
+    searchFilterCommand(command) {
+      if (command === 'advanced_search') this.openAdvancedSearch()
+      else if (command === 'filter_processes') this.openProcessVisibility()
+      else if (command === 'refresh_presets') this.$refs.searchLibrary.ensureCatalog(true)
+      else if (command.startsWith('preset:')) {
+        const preset = this.$refs.searchLibrary.presetValue(command.slice(7))
+        if (preset) this.applySearchLibrary(preset)
+      }
+    },
+    searchSortCommand(command) {
+      if (command === 'default' && !this.busy) {
+        this.sortField = ''
+        this.presetOrderBys = []
+        this.page = 0
+        this.loadRows()
+        return
+      }
+      const item = SearchMenus.sorts.find(item => item.value === command)
+      const match = /^column:([A-Za-z_][A-Za-z0-9_]*):(asc|desc)$/.exec(command)
+      const column = item?.column || match?.[1]
+      if (this.busy || !this.columnNames.includes(column)) return
+      this.sortField = column
+      this.sortDirection = item?.direction || match[2]
+      this.presetOrderBys = []
+      this.page = 0
+      this.loadRows()
+    },
+    openProcessVisibility() {
+      this.$refs.taskViews?.find(view=>view.workspaceId===this.displayedSearchTab?.id&&view.project===this.project)?.$refs.presentation?.openProcessVisibility()
+    },
+    openSearchTags(event) {
+      const source = this.compactShortcuts ? event.currentTarget : null
+      const returnTarget = this.compactShortcuts ? this.$refs.resultActions.$el.querySelector('summary') : null
+      this.$refs.viewMenu.open = false
+      this.$refs.tagCloud.open(source, returnTarget)
+    },
+    searchFooterEvent(action) {
+      if (action.type === 'page') this.goToPage(action.value)
+      else if (action.type === 'previous') this.changePage(-1)
+      else if (action.type === 'next') this.changePage(1)
+      else if (action.type === 'size') this.changePageSize(action.value)
+      else if (action.type === 'mode') this.setLoadingMode(action.value)
+      else if (action.type === 'queue') this.openCommitQueue()
+      else if (action.type === 'create') this.createRecord()
+    },
     t,
     updateToolbarSize() { this.toolbarWidth = window.innerWidth },
     mainToolbarStyle(id) {
@@ -341,8 +403,21 @@ export default {
       this.resultMode = mode
       this.persistWorkspace()
     },
+    prepareResultGroups() {
+      const presentation = this.$refs.taskViews?.find(view =>
+        view.workspaceId === this.displayedSearchTab?.id && view.project === this.project)?.$refs.presentation
+      if (!presentation) return
+      this.searchOrganization = presentation.organization
+      this.searchOrganizationKey = [this.project, this.displayedSearchTab?.id, this.type].join('|')
+      presentation.ensureOrganization()
+    },
+    resultOrganizationChanged(entry, organization) {
+      if (entry.tab !== this.displayedSearchTab || entry.project !== this.project) return
+      this.searchOrganization = organization
+      this.searchOrganizationKey = [this.project, entry.tab.id, this.type].join('|')
+    },
     changeResultGroup(mode) {
-      if (!resultGroups.some(item => item.value === mode)) return
+      if (!resultGroups.some(item => item.value === mode) && !(mode.startsWith('task_status:') && this.searchGroupMenuModel.processes.some(row=>'task_status:'+row.key===mode))) return
       this.groupMode = mode
       if (mode !== 'none' && this.resultMode === 'tiles') this.resultMode = 'continious'
       this.persistWorkspace()
@@ -762,6 +837,7 @@ export default {
       this.knowledgeActive = !!this.$refs.docks?.presented('knowledge')
       this.taskCalendarActive = !!this.$refs.docks?.presented('task_calendar')
       this.taskInspectorActive = !!this.$refs.docks?.presented('notes')
+      this.searchEditorActive = !!this.$refs.docks?.presented('advanced_search')
       if (this.activeSearchTab !== this.searchStateTab) return
       if (this.activeSearchTab && this.$refs.docks) this.activeSearchTab.workspaceLayout = this.$refs.docks.capture()
       if (this.session && !saveWorkspace(this.session.login, this.workspaceProjects)) this.showWorkspaceNotice('Unable to save preferences. Browser storage is unavailable or full.', true)
@@ -771,6 +847,7 @@ export default {
       }
     },
     openDock(id, restoring = false) {
+      if (id === 'advanced_search') this.$refs.searchLibrary.open(true)
       if (['timesheet','work_reports','cost_reports'].includes(id)) this.openWorkHours(id === 'timesheet' ? 'week' : id === 'cost_reports' ? 'cost' : 'report')
       if (id === 'notes') {
         const target = this.inspectorTarget
@@ -1302,10 +1379,17 @@ export default {
       } catch (error) { this.error = error.message; return }
       await this.loadRows()
     },
+    openAdvancedSearch() {
+      if (this.administrationOpen || this.sidebarSearch) this.$refs.searchLibrary.open()
+      else {
+        this.$refs.docks.show('advanced_search')
+        this.openDock('advanced_search')
+      }
+    },
     applySearchLibrary(value) {
       this.searchRelation = 'contains'
       this.selectedTags = []; this.tagColumn = ''
-      this.filterRecords = value.records; this.savedSearch = value.preset; this.searchText = value.keyword
+      this.filterRecords = value.records; this.quickSelections = value.selections || {}; this.savedSearch = value.preset; this.searchText = value.keyword
       this.navigationLink = value.preset ? savedSearchLink(this.project, this.type, value.preset) : ''
       this.presetOrderBys = value.order_bys; this.sortField = ''; this.sortDirection = 'asc'; this.page = 0; this.loadRows()
     },
@@ -1456,12 +1540,14 @@ export default {
       if (!this.continuous || (event.type === 'wheel' && event.deltaY <= 0) ||
           (event.type === 'keydown' && !['ArrowDown', 'PageDown', 'End', ' '].includes(event.key))) return
       this.paginationArmed = true
-      if (event.type === 'wheel') this.scrollResults()
+      if (event.type === 'wheel') this.scrollResults(event)
     },
     scrollResults(event) {
+      const tableViewport = [...(this.$refs.results?.querySelectorAll('.handler-table') || [])]
+        .find(element => element.getClientRects().length)
       const viewport = mobile.value ? event?.currentTarget?.classList.contains('mobile-result-screen') ? event.currentTarget
-        : [...(this.$refs.results?.querySelectorAll('.mobile-result-screen[data-screen-key="root"]') || [])].find(element => element.getClientRects().length) : this.$refs.results
-      if (!mobile.value && !document.hidden && !this.busy && this.activeSearchTab?.loaded && this.activeSearchTab === this.searchStateTab && viewport) {
+        : [...(this.$refs.results?.querySelectorAll('.mobile-result-screen[data-screen-key="root"]') || [])].find(element => element.getClientRects().length) : tableViewport || this.$refs.results
+      if (!mobile.value && viewport === this.$refs.results && !document.hidden && !this.busy && this.activeSearchTab?.loaded && this.activeSearchTab === this.searchStateTab && viewport) {
         this.activeSearchTab.scrollTop = viewport.scrollTop; this.activeSearchTab.scrollLeft = viewport.scrollLeft
       }
       if (this.paginationArmed && viewport && viewport.scrollTop + viewport.clientHeight >= viewport.scrollHeight - 2) this.loadMore()
@@ -1776,7 +1862,7 @@ export default {
         <Teleport v-if="!administrationOpen" :to="mobileViewMenuTarget || 'body'" :disabled="!compactShortcuts || !mobileViewMenuTarget"><AppMenu ref="viewMenu" v-show="!compactShortcuts || !!mobileViewMenuTarget" :class="{ 'dock-group-menu':!compactShortcuts }" :inline="compactShortcuts && !!mobileViewMenuTarget" :submenu="!compactShortcuts" :overlay="!compactShortcuts" label="View actions" @click="compactShortcuts && $refs.resultActions?.close()" @toggle="menuToggled">
             <template v-if="!administrationOpen && !compactShortcuts" #trigger><AppIcon name="edit" /><span>{{ t('View actions') }}</span><AppIcon name="next" /></template>
             <AppButton class="compact-search-action" label="Refresh" icon="refresh" :disabled="busy" @click="loadRows()" />
-            <AppButton v-if="!administrationOpen" class="compact-search-action" label="Tags" icon="MDI_TAG_MULTIPLE" :disabled="busy" @click="$refs.viewMenu.open = false; $refs.tagCloud.open()" />
+            <AppButton v-if="!administrationOpen" class="compact-search-action" label="Tags" icon="MDI_TAG_MULTIPLE" :disabled="busy" @click="openSearchTags" />
             <AppButton class="compact-search-action" label="Search help" icon="help" @click="$refs.help.open('search'); $refs.viewMenu.close(true)" />
             <AppButton v-if="(interfaceConfig?.operations?.create && (type !== 'sthpw/project' || !compactShortcuts)) || (type === 'sthpw/project' && canAdminister && !compactShortcuts)" label="Create record" icon="add" :disabled="busy" @click="createRecord" />
             <AppButton v-if="!compactShortcuts" :label="configuredView ? 'Database fields' : 'Configured view'" icon="table" :disabled="busy" :aria-pressed="configuredView" @click="toggleView(); $refs.viewMenu.open = false" />
@@ -1811,14 +1897,20 @@ export default {
     <div v-if="administrationOpen && administrationVisited.includes('sidebar')" v-show="administrationSection === 'sidebar'" class="administration-page"><SidebarEditor :presentation-visible="administrationSection === 'sidebar'" @vue:mounted="administrationInstances.sidebar = $event.component.proxy" ref="sidebar" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @manage-groups="selectAdministration('groups')" @saved="sidebarSaved" @configure-search="configureSidebarSearch" /></div>
     <Teleport defer to="#sidebar-search-pages" :disabled="!sidebarSearch">
     <section v-if="retainedSearchTabs.length || administrationOpen" v-show="section !== 'configuration' && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
-      <div class="search-header" :class="{ 'mobile-search-header':compactShortcuts && !administrationOpen, 'mobile-search-collapsed':compactShortcuts && !administrationOpen && !mobileSearchOpen }">
-        <AppButton class="compact-search-hidden" icon-only icon="refresh" label="Refresh" :disabled="busy" @click="loadRows()" />
+      <SearchHeader :model="{compact:compactShortcuts&&!administrationOpen,collapseSearch:true,searchOpen:mobileSearchOpen,busy,shelf:!administrationOpen,shelfOpen,tags:!administrationOpen,quick:true,panels:true}"
+        @event="action=>{if(action.type==='refresh')loadRows();else if(action.type==='shelf')shelfOpen=!shelfOpen;else if(action.type==='help')$refs.help.open('search')}">
+        <template #field>
         <WorkspaceSearch ref="workspaceSearch" :model-value="searchText" :placeholder="t('Search {name}', { name: activeWorkspaceSection?.title || viewTitle || selectedType?.title || type })"
           v-show="!compactShortcuts || administrationOpen || mobileSearchOpen"
           :ticket="session.ticket" :project="project" :search-type="type" :tab-id="activeSearchTab?.id" :disabled="busy"
           @update:model-value="searchText = $event; searchRelation = 'contains'" @search="submitSearch" @accept="acceptSuggestion" @open="openSuggestion" @dismiss="mobileSearchOpen = false" />
-        <AppButton v-if="!administrationOpen && !compactShortcuts" icon-only icon="code" label="Script shelf" :aria-pressed="shelfOpen" :highlighted="shelfOpen" @click="shelfOpen = !shelfOpen" />
-        <TagCloud v-if="!administrationOpen" ref="tagCloud" :overlay="compactShortcuts" :ticket="session.ticket" :project="project" :search-type="type" :tab-id="activeSearchTab?.id" :selected="selectedTags" :disabled="busy" :boundary="$refs.results?.parentElement" @apply="applyTags" @toggle="menuToggled" />
+        </template>
+        <template #tags>
+        <Teleport to="body" :disabled="!compactShortcuts">
+        <TagCloud v-if="!administrationOpen" ref="tagCloud" :overlay="compactShortcuts" :external-trigger="compactShortcuts" :ticket="session.ticket" :project="project" :search-type="type" :tab-id="activeSearchTab?.id" :selected="selectedTags" :disabled="busy" :boundary="$refs.results?.parentElement" @apply="applyTags" @toggle="menuToggled" />
+        </Teleport>
+        </template>
+        <template #quick>
         <Teleport defer to="#workspace-mobile-search-tools" :disabled="!compactShortcuts || administrationOpen">
         <SearchQuickFilters v-if="!administrationOpen" ref="quickFilters" :overlay="compactShortcuts"
           :ticket="session.ticket" :project="project" :search-type="type" :tab-id="activeSearchTab?.id" :scope="scopeKey || type.split('?')[0]" :login="session.login"
@@ -1835,37 +1927,28 @@ export default {
             @update:retired="showRetired = $event; page = 0; loadRows()" @apply="applyFilter(); $refs.searchFilters.open = false" />
         </details>
         </Teleport>
-        <AppButton class="compact-search-hidden" icon-only label="Search help" icon="help" @click="$refs.help.open('search')" />
+        </template>
+        <template #panels>
         <div v-show="!compactShortcuts" :ref="element => dockMenuTarget = element" id="workspace-dock-actions"></div>
         <AppButton v-if="compactShortcuts && !administrationOpen" v-show="mobileSearchOpen" icon-only label="Close search" icon="close" @click="mobileSearchOpen = false" />
-      </div>
+        </template>
+      </SearchHeader>
       <div id="workspace-script-shelf"></div>
       <WorkspaceTabs v-if="!administrationOpen" :mobile="compactShortcuts" :tabs="searchTabs" :selected="activeWorkspaceSection?.current" :closed-tabs="closedSearchTabs"
         @select="activateSearchTab" @add="addSearchTab" @close="closeSearchTab" @reorder="reorderTabs"
         @restore="restoreClosedSearchTab" @clear-history="clearSearchHistory">
-        <template #before-tabs><AppButton icon-only icon="filter" label="Saved searches" :disabled="busy" @click="$refs.searchLibrary.open()" /></template>
+        <template #before-tabs><SearchResultMenu kind="filters" icon="advanced-search" label="Search filters and presets" icon-only :model="searchFilterMenuModel" @opening="$refs.searchLibrary.ensureCatalog()" @command="searchFilterCommand" /></template>
         <template #mobile-leading><ItemPreview v-if="activeWorkspaceSection" class="mobile-section-badge" :style="{ width:'24px', height:'24px', minWidth:'24px', flex:'0 0 24px', borderRadius:'50%' }" :fallback-icon="activeWorkspaceSection.icon || 'link'" :accent="activeWorkspaceSection.accent" :preview-size="24" round /></template>
         <template #views><template v-if="openSections.length > 1"><strong>{{ t('Open views') }}</strong><AppButton v-for="item in openSections" :key="item.id" class="mobile-section-choice" :label="item.title" role="menuitemradio" :aria-checked="item.id === activeWorkspace?.current" @click="activateSection(item.id)"><ItemPreview class="mobile-section-badge" :style="{ width:'24px', height:'24px', minWidth:'24px', flex:'0 0 24px', borderRadius:'50%' }" :fallback-icon="item.icon || 'link'" :accent="item.accent" :preview-size="24" round /><span class="mobile-section-title">{{ item.title }}</span><AppIcon v-if="item.id === activeWorkspace?.current" name="check-circle" class="menu-check" /></AppButton><hr></template></template>
         <template #actions="{ compact }">
           <AppButton v-if="compactShortcuts" ref="mobileSearchToggle" icon-only label="Open search" icon="search" :aria-expanded="mobileSearchOpen" :highlighted="!!searchText" :disabled="busy" @click="mobileSearchOpen = !mobileSearchOpen; mobileSearchOpen && $nextTick(()=>$refs.workspaceSearch.focus())" />
-          <AppMenu ref="resultActions" class="compact-result-actions" label="Result actions" :inline="!compact" :overlay="compactShortcuts" :close-on-select="false" @toggle="menuToggled"><div id="workspace-sort-actions"></div><div v-show="compactShortcuts" id="workspace-mobile-search-tools"></div><AppButton v-if="compactShortcuts" label="Saved searches" icon="filter" :disabled="busy" @click="$refs.searchLibrary.open(); $refs.resultActions.close(true)" /><div v-show="compactShortcuts" :ref="element => mobileViewMenuTarget = element" id="workspace-mobile-view-actions"></div></AppMenu>
+          <AppMenu ref="resultActions" class="compact-result-actions" label="Result actions" :inline="!compact" :overlay="compactShortcuts" :close-on-select="false" @toggle="menuToggled"><div id="workspace-sort-actions"></div><div v-show="compactShortcuts" id="workspace-mobile-search-tools"></div><AppButton v-if="compactShortcuts" label="Saved searches" icon="filter" :disabled="busy" @click="openAdvancedSearch(); $refs.resultActions.close(true)" /><div v-show="compactShortcuts" :ref="element => mobileViewMenuTarget = element" id="workspace-mobile-view-actions"></div></AppMenu>
         </template>
       </WorkspaceTabs>
       <Teleport v-if="!administrationOpen" defer to="#workspace-sort-actions">
-          <AppMenu label="Sort by" icon="sort" @toggle="menuToggled">
-              <template #trigger><AppIcon name="sort" /><span class="result-action-label">{{ t('Sort by') }}</span></template>
-              <label>{{ t('Sort by') }}<AppSelect :model-value="sortField" :options="[{ value: '', label: 'Default order' }, ...columnNames.map(name => ({ value: name, label: name }))]" label="Sort by" :disabled="busy" @update:model-value="sortField = $event; presetOrderBys = []; page = 0; loadRows()" /></label>
-              <AppButton :label="sortDirection === 'asc' ? 'Ascending' : 'Descending'" icon="sort" :disabled="busy || !sortField" @click="sortDirection = sortDirection === 'asc' ? 'desc' : 'asc'; page = 0; loadRows()" />
-          </AppMenu>
-          <AppMenu v-if="!administrationOpen" label="Group items" icon="FAS_OBJECT_GROUP" :boundary="$refs.results?.parentElement" @toggle="menuToggled">
-            <template #trigger><AppIcon name="FAS_OBJECT_GROUP" /><span class="result-action-label">{{ t('Group items') }}</span></template>
-            <small>{{ t('Group items') }}</small>
-            <AppButton v-for="item in resultGroups" :key="item.value" :label="item.label" :icon="item.icon" role="menuitemradio" :aria-checked="groupMode === item.value" @click="changeResultGroup(item.value)"><span>{{ t(item.label) }}</span><AppIcon v-if="groupMode === item.value" class="menu-check" name="MDI_CHECK_CIRCLE" /></AppButton>
-          </AppMenu>
-          <AppMenu v-if="!administrationOpen && !compactShortcuts" label="Change search results view" :icon="resultViews.find(item => item.value === resultMode)?.icon || 'MDI_TABLE'" :boundary="$refs.results?.parentElement" @toggle="menuToggled">
-            <template #trigger><AppIcon :name="resultViews.find(item => item.value === resultMode)?.icon || 'MDI_TABLE'" /><span class="result-action-label">{{ t('Change search results view') }}</span></template>
-            <AppButton v-for="item in resultViews" :key="item.value" :label="item.label" :icon="item.icon" role="menuitemradio" :aria-checked="resultMode === item.value" @click="changeResultView(item.value)"><span>{{ t(item.label) }}</span><AppIcon v-if="resultMode === item.value" class="menu-check" name="MDI_CHECK_CIRCLE" /></AppButton>
-          </AppMenu>
+          <SearchResultMenu kind="sort" icon="sort-items" label="Sort by" :model="searchSortMenuModel" :boundary="$refs.results?.parentElement" @command="searchSortCommand" />
+          <SearchResultMenu kind="group" icon="group-items" label="Group items" :model="searchGroupMenuModel" @opening="prepareResultGroups" :boundary="$refs.results?.parentElement" @command="changeResultGroup" />
+          <SearchResultMenu v-if="!compactShortcuts" kind="view" label="Change search results view" :icon="resultViews.find(item=>item.value===resultMode)?.icon || 'MDI_TABLE'" :model="{mode:resultMode,busy}" :boundary="$refs.results?.parentElement" @command="changeResultView" />
       </Teleport>
       <p v-if="error" class="error" role="alert">{{ t(error) }}</p>
       <div v-if="selectedRecords.length && (resultMode !== 'continious' || selectedRecords.length > 1 || mobile)" class="selection-actions" role="group" :aria-label="t('Selected record actions')" @toggle.capture="menuToggled">
@@ -1890,7 +1973,7 @@ export default {
           @saved="tableRecordsSaved" @operate="(record, event, node) => $refs.objectOperations.open(record, event, node)" />
         <template v-for="entry in retainedSearchTabs" :key="entry.project + entry.tab.id">
           <ConfiguredView v-if="entry.tab === displayedSearchTab ? interfaceConfig : entry.tab.state.interfaceConfig"
-            ref="taskViews" :workspace-id="entry.tab.id" :data-workspace-current="entry.tab === displayedSearchTab && !administrationOpen"
+            ref="taskViews" @organization="resultOrganizationChanged(entry, $event)" :workspace-id="entry.tab.id" :data-workspace-current="entry.tab === displayedSearchTab && !administrationOpen"
             v-show="!administrationOpen && !busy && entry.tab === displayedSearchTab"
             :definition="entry.tab === displayedSearchTab ? interfaceConfig : entry.tab.state.interfaceConfig"
             :rows="entry.tab === displayedSearchTab ? rows : entry.tab.state.rows"
@@ -1910,35 +1993,9 @@ export default {
           <AppButton v-else :label="error ? 'Retry' : 'Load more'" :icon="error ? 'refresh' : 'next'" @click="loadMore(true)" />
         </div>
       </div>
-      <DockWorkspaceFooter class="pagination workspace-footer">
-        <span class="footer-showing">{{ t('Showing') }}</span>
-        <span class="result-range"><span class="footer-range">{{ continuous ? t('{count} results', { count: totalCount ?? rows.length }) : totalCount === null ? rowRange : t('{range} of {total}', { range: rowRange, total: totalCount }) }}</span><span class="footer-total">{{ totalCount ?? rowRange }}</span></span>
-        <div v-if="!continuous" class="page-controls">
-          <AppButton icon-only icon="previous" label="← Previous" :disabled="busy || page === 0" @click="changePage(-1)" />
-          <div class="page-numbers" :aria-label="t('Go to page')">
-            <AppButton v-for="number in pageNumbers" :key="number" class="page-number" :label="String(number)" :aria-current="number === page + 1 ? 'page' : undefined" :disabled="busy" @click="goToPage(number)" />
-          </div>
-          <AppMenu ref="pageMenu" class="page-picker" label="Go to page" :close-on-select="false" :boundary="$refs.results?.parentElement" @toggle="menuToggled">
-            <template #trigger><span :aria-label="t('Page {number}', { number: page + 1 })">{{ page + 1 }}<template v-if="pageCount !== null"> / {{ pageCount }}</template></span></template>
-            <form @submit.prevent="goToPage(pageNumber); $refs.pageMenu.open = false">
-              <label>{{ t('Page number') }}<input v-model.number="pageNumber" type="number" min="1" :max="pageCount || undefined" :aria-label="t('Page number')" required :disabled="busy"></label>
-              <AppButton label="Go to page" icon="next" type="submit" :disabled="busy" />
-            </form>
-          </AppMenu>
-          <AppButton icon-only icon="next" label="Next →" :disabled="busy || !hasNext" @click="changePage(1)" />
-        </div>
-        <AppMenu v-if="!continuous" ref="pageSizeMenu" class="page-size-menu" label="Items per page" icon="list" :boundary="$refs.results?.parentElement" @toggle="menuToggled">
-          <template #trigger><AppIcon class="page-size-small-icon" name="list" /><span>{{ t('{count} / page', { count: pageSize }) }}</span><AppIcon name="MDI_CHEVRON_DOWN" /></template>
-          <strong>{{ t('Items per page') }}</strong>
-          <AppButton v-for="size in [20, 25, 50, 100, 200, 500]" :key="size" :label="t('{count} items', { count: size })" :icon="size === pageSize ? 'check' : 'list'" :aria-pressed="size === pageSize" :disabled="busy" @click="changePageSize(size); $refs.pageSizeMenu.open = false" />
-        </AppMenu>
-        <AppMenu v-if="!administrationOpen && !compactShortcuts" ref="loadingModeMenu" class="loading-mode-menu" :class="{ continuous }" label="Result loading" :icon="continuous ? 'MDI_LAYERS' : 'MDI_VIEW_COLUMN'" :boundary="$refs.results?.parentElement" @toggle="menuToggled">
-          <template #trigger><AppIcon :name="continuous ? 'MDI_LAYERS' : 'MDI_VIEW_COLUMN'" /><span>{{ t(continuous ? 'Continuous' : 'Pages') }}</span><AppIcon class="loading-mode-chevron" name="MDI_CHEVRON_DOWN" /></template>
-          <strong>{{ t('Result loading') }}</strong>
-          <AppButton v-for="mode in ['pages', 'infinite']" :key="mode" :label="mode === 'pages' ? 'Pages' : 'Continuous'" :icon="mode === loadingMode ? 'check' : mode === 'pages' ? 'MDI_VIEW_COLUMN' : 'MDI_LAYERS'" :aria-pressed="mode === loadingMode" :disabled="busy" @click="setLoadingMode(mode); $refs.loadingModeMenu.open = false" />
-        </AppMenu>
-        <AppButton v-if="!compactShortcuts" class="footer-commit" icon-only icon="queue" :label="fileProject ? 'Changelists' : 'Commit Queue'" @click="openCommitQueue()" />
-        <AppButton v-if="!compactShortcuts && (interfaceConfig?.operations?.create || (type === 'sthpw/project' && canAdminister))" class="create-object" highlighted icon-only icon="add" label="Create record" :disabled="busy" @click="createRecord"><span class="footer-create-label">{{ t('New item') }}</span></AppButton>
+      <DockWorkspaceFooter class="pagination workspace-footer frame-search-footer">
+        <SearchFooter :boundary="$refs.results?.parentElement" :model="{mode:continuous?'infinite':'pages',busy,page:page+1,pageCount,pageSize,pageNumbers,hasNext,count:rows.length,total:totalCount,range:rowRange,queue:!compactShortcuts,fileProject,canCreate:(!compactShortcuts || type!=='sthpw/project') && !!(interfaceConfig?.operations?.create || (type==='sthpw/project'&&canAdminister))}"
+          @event="searchFooterEvent" />
       </DockWorkspaceFooter>
     </section>
     </Teleport>
@@ -1953,7 +2010,7 @@ export default {
     <dialog v-window="{kind:'sidebar_search_preview'}" ref="sidebarSearchDialog" class="configuration-dialog sidebar-search-dialog" :aria-label="t('Configure search')" @cancel.prevent="closeSidebarSearch">
       <div class="sidebar-search-shell"><header><div><h2>{{ t('Configure search') }}</h2><p>{{ sidebarSearch?.entry.title }} · {{ sidebarSearch?.entry.searchType }}</p></div><div id="sidebar-search-actions" class="configuration-actions"><AppButton icon-only label="Quick filters" icon="filter" :disabled="busy" @click="$refs.quickFilterEditor.open()" /><AppButton label="Saved searches" icon="save" :disabled="busy" @click="$refs.searchLibrary.open()" /></div><AppButton label="Close" icon="close" @click="closeSidebarSearch" /></header><div id="sidebar-search-pages"></div></div>
     </dialog>
-    <SearchLibrary ref="searchLibrary" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
+    <SearchLibrary ref="searchLibrary" :selections="quickSelections" :active="searchEditorActive" @closed="$event && $refs.docks.hide('advanced_search')" :tab-id="activeSearchTab?.id" :tab-title="activeSearchTab ? searchTabTitle(activeSearchTab) : ''" @rename="renameCurrentSearchTab" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
     <QuickFilterEditor ref="quickFilterEditor" :tab-id="activeSearchTab?.id" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :selections="quickSelections" :layout="quickLayout" :can-manage="canAdminister" @apply="applyQuickFilters" @changed="searchConfigurationChanged(); $refs.quickFilters?.load(true)" />
     <dialog v-window="{kind:'sobject_info', type:'window' }" ref="details" class="record-dialog object-details" :aria-label="t('Object details')">
       <template v-if="detail">

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 
 export async function surface(page,selector,exclude){
  return page.locator(selector).evaluate((root,exclude)=>{
-  const origin=root.getBoundingClientRect(),boxes={},styles={},fills={},canvas=document.createElement('canvas'),ctx=canvas.getContext('2d')
+  const origin=root.getBoundingClientRect(),boxes={},styles={},fills={},canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true})
   const color=value=>{ctx.clearRect(0,0,1,1);ctx.fillStyle=value;ctx.fillRect(0,0,1,1);return '#'+[...ctx.getImageData(0,0,1,1).data].slice(0,3).map(v=>v.toString(16).padStart(2,'0')).join('')}
   for(const el of root.querySelectorAll('[data-frame]')){
    if(exclude&&el.closest(exclude))continue

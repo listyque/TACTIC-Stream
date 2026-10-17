@@ -1,27 +1,59 @@
+import { taskGroup } from '../../../../src/tactic_stream/shared_ui/features/search/organization.mjs';
+export {
+  views as resultViews,
+  groups as resultGroups
+} from '../../../../src/tactic_stream/shared_ui/features/search/menus.ui.mjs';
+
 // Original Handler view_state / results_organization names are persisted as-is.
-export const defaultResultView = 'continious'
-export const resultViews = [
-  { value: 'continious', label: 'Continuous tree', icon: 'MDI_FORMAT_LIST_BULLETED' },
-  { value: 'tiles', label: 'Cards', icon: 'MDI_VIEW_DASHBOARD' },
-  { value: 'table', label: 'Table', icon: 'MDI_TABLE' },
-  { value: 'compact', label: 'Compact rows', icon: 'MDI_VIEW_LIST' },
-  { value: 'splitted_vertical', label: 'Versions on the right', icon: 'MDI_VIEW_COLUMN' },
-  { value: 'splitted_horizontal', label: 'Versions at the bottom', icon: 'MDI_VIEW_AGENDA' },
-]
-export const resultGroups = [
-  { value: 'none', label: 'No grouping', icon: 'MDI_FORMAT_LIST_BULLETED' },
-  { value: 'status', label: 'SObject status', icon: 'FAS_OBJECT_GROUP' },
-  { value: 'pipeline', label: 'Pipeline', icon: 'MDI_COGS' },
-]
-export function groupRecords(records, mode) {
-  if (mode === 'none') return [{ key: '', label: '', records }]
-  const groups = new Map()
+export const defaultResultView = 'continious';
+
+export function groupRecords(records, mode, nodes = [], organization = {}) {
+  if (mode === 'none') return [{ key: '', label: '', records }];
+  const groups = new Map(),
+    byKey = new Map(nodes.map((node) => [node.record.__search_key__, node])),
+    process = mode.startsWith('task_status:') ? mode.slice(12) : '',
+    collator = new Intl.Collator(undefined, {
+      numeric: true,
+      sensitivity: 'base'
+    });
   for (const record of records) {
-    const value = mode === 'pipeline' ? record.pipeline_code || '' : record.status || record.state || ''
-    if (!groups.has(value)) groups.set(value, { key: value,
-      label: mode === 'pipeline' ? value || 'No pipeline' : value || 'No status', records: [] })
-    groups.get(value).records.push(record)
+    const node = byKey.get(record.__search_key__),
+      task = process
+        ? taskGroup(
+            node?.tasks || [],
+            process,
+            organization.statuses?.[process] || [],
+            node?.accent,
+            collator.compare
+          )
+        : null,
+      key = task
+        ? task.key
+        : mode === 'pipeline'
+          ? record.pipeline_code || ''
+          : record.status || record.state || '';
+    if (!groups.has(key))
+      groups.set(key, {
+        key,
+        label: task
+          ? task.label
+          : mode === 'pipeline'
+            ? key || 'No pipeline'
+            : key || 'No status',
+        translate: task?.translate,
+        rank: task?.rank || 0,
+        accent: task?.accent,
+        records: []
+      });
+    groups.get(key).records.push(record);
   }
-  const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
-  return [...groups.values()].sort((a, b) => !a.key ? 1 : !b.key ? -1 : collator.compare(a.label, b.label))
+  return [...groups.values()].sort(
+    (left, right) =>
+      left.rank - right.rank ||
+      (!left.key
+        ? 1
+        : !right.key
+          ? -1
+          : collator.compare(left.label, right.label))
+  );
 }

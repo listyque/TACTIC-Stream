@@ -12,7 +12,7 @@ from pyasm.command import Command
 from pyasm.common import Environment, Container
 from pyasm.search import Search, SearchType, SObject
 from pyasm.security.security import _require_admin
-from pyasm.common.errors import SecurityException
+from pyasm.common.errors import SecurityException, UnsupportedContract
 from tactic_stream.server.api import check_record_access
 from tactic_stream.server.widget_configuration import WidgetConfigConflict
 
@@ -331,13 +331,97 @@ def read_search_configuration(search_type, scope='', include_groups=True):
                 revision=revision(records), configuration=configuration, groups=quick_groups(search_type, columns) if include_groups else [])
 
 
-def search_suggestions(search_type, text):
+def generated_quick_records(selections, columns):
+    """Handler tel_filters: task facets must match the same related task."""
+    if not isinstance(selections, dict) or len(selections) > 128:
+        raise ValueError("Invalid quick-filter selections")
+    records, conditions, tasks = [], [], {}
+
+    def literal(value):
+        return "'" + value.replace("\\", "\\\\").replace("'", "\\'") + "'"
+
+    for key, source in selections.items():
+        if (
+            not isinstance(key, str)
+            or not isinstance(source, list)
+            or len(source) > 512
+            or any(not isinstance(value, str) or len(value) > 16384 for value in source)
+        ):
+            raise ValueError("Invalid quick-filter selections")
+        values = sorted(set(value for value in source if value))
+        if key.startswith("column:") and key[7:] in columns:
+            if values:
+                records.append(
+                    dict(
+                        column=key[7:],
+                        relation="=" if len(values) == 1 else "in",
+                        value=values[0] if len(values) == 1 else "|".join(values),
+                        rowEnabled=True,
+                        operator="and",
+                        isDefault=False,
+                        generatedFilterKind="quick_filters",
+                        generatedFilterState=dict(
+                            title=key[7:].replace("_", " ").title(),
+                            translatable=False,
+                            selections={key: values},
+                        ),
+                    )
+                )
+        elif key in ("assigned", "process", "status"):
+            if values:
+                tasks[key] = values
+        else:
+            raise ValueError("Unknown quick-filter group")
+    for field in ("assigned", "process", "status"):
+        values = tasks.get(field)
+        if not values:
+            continue
+        if values == ["__current_login__"]:
+            conditions.append("['" + field + "', '$LOGIN']")
+        else:
+            values = sorted(
+                set(
+                    Environment.get_user_name()
+                    if value == "__current_login__"
+                    else value
+                    for value in values
+                )
+            )
+            conditions.append(
+                "['"
+                + field
+                + "', "
+                + ("'in', " if len(values) > 1 else "")
+                + literal("|".join(values))
+                + "]"
+            )
+    if conditions:
+        records.append(
+            dict(
+                column="_expression",
+                relation="in",
+                value="@SOBJECT(sthpw/task" + "".join(conditions) + ")",
+                rowEnabled=True,
+                operator="and",
+                isDefault=False,
+                generatedFilterKind="quick_filters",
+                generatedFilterState=dict(
+                    title="Related task filters", translatable=True, selections=tasks
+                ),
+            )
+        )
+    return records
+
+
+def search_suggestions(search_type, text, column=''):
     # Handler search_suggestion_data.py and search_helpers.get_suggestion_filter.
     if not isinstance(text, str) or len(text) > 4096:
         raise ValueError('Invalid search text')
     text = text.strip()
     info = SearchType.get_column_info(search_type)
-    column = 'code' if search_type == 'sthpw/transaction_log' else next((name for name in ('name', 'title', 'code', 'login') if name in info), '')
+    if not isinstance(column,str) or column and column not in info:
+        raise ValueError('Invalid suggestion column')
+    column = column or ('code' if search_type == 'sthpw/transaction_log' else next((name for name in ('name', 'title', 'code', 'login') if name in info), ''))
     if not text or not column or text.startswith(('skey://', 'tactic-search://')):
         return dict(column=column, records=[])
     columns = [column] + [name for name in ('keywords', 'code', 'description') if name in info and name != column]
@@ -411,6 +495,64 @@ def tag_catalog(search_type):
         for key, count in sorted(counts.items(), key=lambda item: (-item[1], labels[item[0]].casefold()))])
 
 
+def process_visibility_catalog(search_type):
+    """Metadata for the local visibility tree; the result query remains unchanged."""
+    from pyasm.biz import Schema
+    from .result_items import schema_relations
+    from .navigation_links import check_type
+
+    project = Project.get_project_code()
+    schema = Schema.get()
+    rows = []
+    expanded = set()
+
+    def append(node_id, parent_id, key, title, kind, group, depth, accent=''):
+        if len(rows) >= 4096:
+            raise ValueError('Process visibility tree is too large')
+        rows.append(dict(nodeId=node_id, parentId=parent_id, key=key, title=title,
+                         kind=kind, group=group, depth=depth, accent=accent,
+                         checked=True, checkable=kind != 'pipeline', expanded=True,
+                         selected=False, rowVisible=True, hasChildren=False))
+
+    def visit(current, parent='', depth=0, ancestors=()):
+        if current in expanded:
+            return
+        expanded.add(current)
+        if depth > 32:
+            raise ValueError('Process visibility tree is too deep')
+        for builtin in ('publish', 'attachment', 'icon'):
+            append(f'{parent or "root"}:builtin:{builtin}', parent, builtin,
+                   builtin.title(), 'builtin', '', depth)
+        for index, pipeline in enumerate(Pipeline.get_by_search_type(current, project)):
+            code = pipeline.get_code()
+            identity = f'{parent or "root"}:pipeline:{index}:{code}'
+            append(identity, parent, code, pipeline.get_value('name') or code,
+                   'pipeline', code, depth)
+            for process_index, name in enumerate(pipeline.get_process_names(recurse=True)):
+                attrs = pipeline.get_process_attrs(name)
+                append(f'{identity}:process:{process_index}:{name}', identity, name,
+                       name.capitalize(), 'process', code, depth + 1,
+                       attrs.get('color') or '')
+        for index, relation in enumerate(schema_relations(current, schema)):
+            child = relation['search_type']
+            if child in ancestors[:-1]:
+                continue
+            try:
+                check_type(child, project)
+            except (SecurityException, UnsupportedContract):
+                continue
+            identity = f'{parent or "root"}:child:{index}:{child}'
+            append(identity, parent, child, relation['title'], 'child', '', depth,
+                   relation.get('accent') or '')
+            visit(child, identity, depth + 1, (*ancestors, child))
+
+    visit(search_type)
+    parents = {row['parentId'] for row in rows if row['parentId']}
+    for row in rows:
+        row['hasChildren'] = row['nodeId'] in parents
+    return dict(title=SearchType.get(search_type).get_title(), records=rows)
+
+
 def search_configuration_request(action, payload):
     policy = SearchType.get(payload['search_type']).get_record_read_options()
     if policy.get('command') and action in ('query', 'settings', 'read', 'suggestions'):
@@ -434,8 +576,10 @@ def search_configuration_request(action, payload):
             return query(payload)
     else:
         check_record_access(search_type)
+    if action == 'visibility':
+        return process_visibility_catalog(search_type)
     if action == 'suggestions':
-        return search_suggestions(search_type, payload.get('keyword', ''))
+        return search_suggestions(search_type, payload.get('keyword', ''), payload.get('column', ''))
     if action == 'tags':
         return tag_catalog(search_type)
     if action == 'query':
@@ -502,6 +646,7 @@ def search_configuration_request(action, payload):
         return records
     if action == 'settings':
         result = read_search_configuration(search_type, scope, include_groups=False)
+        result['generatedRecords'] = generated_quick_records(payload.get('selections', {}), result['columns'])
         if journal:
             from .transaction_journal import columns
             result['columns'] = columns()

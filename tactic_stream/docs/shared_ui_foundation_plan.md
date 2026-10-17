@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01, B02, B03, B04 and B05 are delivered** at the checkpoints below. The next batch is **B06**.
+**B01–B06 are delivered** at the checkpoints below. The next batch is **B07**.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -61,6 +61,53 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B06 delivered: Search workflow and card results, 2026-10-17
+
+Handler **0.6.0.110** and Stream **0.112.159** ship independent copies of
+**101 `.mjs` modules and one menu catalog**. `features/search` composes the
+search header, condition cards/suggestions, preset bar/name form, tag and
+quick-filter headers, filter editor parts, process visibility, menus, paging
+and card geometry. The owner/capability map and reproduction commands are in
+`docs/frame_search.md` in each product. Existing controllers retain requests,
+ACL, revisions, mutations, preview/child loading and native operations.
+
+- Advanced Search is a workspace dock; Apply keeps it open. Per-tab drafts
+  survive closing, stacking and context switches. Generated task filters match
+  one related task; detaching preserves the condition and releases chip ownership.
+  Preset writes retain revision checks and reconcile lost replies before retry.
+- Tags, quick filters, sorting/grouping and paging retain their request owners.
+  Process visibility stays local to the tab and does not requery objects. Task
+  status grouping uses pipeline status priority and explicit empty groups.
+- Browser rows and tiles use the house variable-height VirtualCollection;
+  native ListView/GridView remain native. Selection, context and navigation
+  survive collection reuse, cache reload and inactive tabs. Revealed tables
+  restore scroll without overwriting it with a hidden DOM reset. Phone tags
+  anchor to their visible command; compact footer actions remain reachable.
+- The original query engine, native repository synchronization, browser Commit
+  Queue and standalone admin saved-search dialog retain explicit capabilities.
+  Table View/cell migration remains B07; no WebEngine or shared runtime install.
+
+Completed verification on the release sources:
+
+- **121 native search tests**, focused search/CG API checks and six disposable
+  server journeys cover suggestions, preset CRUD, actual filter results,
+  managed-filter detachment, unknown writes, tags, visibility, cache failures,
+  retained tabs, all six result views, related records/versions and phone input.
+- The fresh comparison contains **96 archived + 192 current QML images** and
+  **192 Vue pairs**, across three themes, light/dark, EN/RU and narrow/wide
+  components. Advanced-search and shared popup/footer controls check geometry,
+  typography and colors; tiles also check preview/gradient paint and badges.
+  The archive is the tracked pre-B06 Handler checkpoint, which already includes
+  earlier Frame batches. It is not the original pre-Frame application.
+- Real collection input covers **100 / 1,000 / 10,000** entries in rows and tiles,
+  bounded mounted delegates and offscreen keyboard focus. Driver elapsed times
+  are recorded separately from frame-rate claims. The mandatory platform gate
+  passes **48/48 stages**, including independent packages and 100/150/200% input.
+- EN/RU Help and both developer guides are updated. Two unrelated retained-UI
+  test failures reproduce against archived QML (message fixture role and floating
+  proxy row count); existing repository lint/structure debt remains explicit.
+  Physical touch hardware and production PostgreSQL were not exercised here.
 
 ## B05 delivered: Configuration and projects, 2026-10-17
 

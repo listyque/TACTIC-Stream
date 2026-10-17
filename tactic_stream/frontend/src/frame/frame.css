@@ -82,14 +82,14 @@
 }
 .frame-button > .app-icon {
   flex: none;
-  width: 16px;
-  height: 16px;
-  font-size: 16px;
+  width: var(--frame-button-icon-size, 16px);
+  height: var(--frame-button-icon-size, 16px);
+  font-size: var(--frame-button-icon-size, 16px);
 }
 .frame-button.icon-button > .app-icon {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
+  width: var(--frame-button-icon-size, 18px);
+  height: var(--frame-button-icon-size, 18px);
+  font-size: var(--frame-button-icon-size, 18px);
 }
 .frame-view > .frame-button.frame-radio {
   border-radius: 6px;
@@ -196,6 +196,9 @@
   padding: 0 8px 0 10px;
   min-height: 0;
   border-radius: var(--field-radius);
+}
+.frame-view > .frame-choice:focus {
+  padding-inline: 9px 7px;
 }
 .frame-area.app-text-area {
   resize: none;

@@ -38,7 +38,7 @@ export default {
     parentKey: String, selectionEnabled: { type: Boolean, default: true },
     accent: String,
   },
-  emits: ['sort', 'inspect', 'operate', 'select', 'column', 'result-state', 'focus', 'result-scroll', 'saved'],
+  emits: ['sort', 'inspect', 'operate', 'select', 'column', 'result-state', 'focus', 'result-scroll', 'saved', 'organization'],
   setup() { return { tabId: useId() } },
   data() { return { selected: '', loaded: [], busy: false, error: '', request: 0,
     page: 0, pageSize: 50, hasNext: false, started: false, filterField: '', filterValue: '', filters: [],
@@ -86,7 +86,7 @@ export default {
     records() { return this.rows ?? this.loaded },
     rowGroups() {
       const mode = this.tableState.table?.groupMode || this.groupMode
-      if (!mode.startsWith('column:')) return groupRecords(this.records, mode)
+      if (!mode.startsWith('column:')) return groupRecords(this.records, mode,this.$refs.presentation?.nodes||[],this.$refs.presentation?.organization||{})
       const name = mode.slice(7), groups = new Map()
       for (const record of this.records) {
         const key = String(this.displayCells[record.__search_key__]?.[name]?.text ?? record[name] ?? '')
@@ -513,7 +513,7 @@ export default {
       </div>
       <div v-if="busy" class="table-message" role="status">{{ t('Loading data…') }}</div>
       <div v-else-if="!supportedLayout" class="table-message">{{ t('This layout is not available yet.') }}</div>
-      <ResultPresentation ref="presentation" v-if="(rows !== null || table.item_layout) && !tabs" v-show="displayedMode !== 'table'" :active="displayedMode !== 'table'" :item-layout="itemLayout" :read-only="readOnly" :rows="records" :ticket="ticket" :project="project" :search-type="definition.search_type"
+      <ResultPresentation @organization="$emit('organization', $event)" ref="presentation" v-if="(rows !== null || table.item_layout) && !tabs" v-show="displayedMode !== 'table'" :active="displayedMode !== 'table'" :item-layout="itemLayout" :read-only="readOnly" :rows="records" :ticket="ticket" :project="project" :search-type="definition.search_type"
         :mode="displayedMode" :workspace-id="workspaceId" @root-scroll="$emit('result-scroll', $event)" @focus="$emit('focus', $event)" :group-mode="groupMode" :state="resultState" @state="$emit('result-state', $event)" :selected-keys="selectedKeys" @inspect="$emit('inspect', $event)" @select="(rows, selected) => $emit('select', rows, selected)" @operate="(record, event, node) => $emit('operate', record, event, node)" />
       <template v-if="!busy && supportedLayout && displayedMode === 'table'">
         <p v-if="elements.some(item => !item.supported)" class="notice">{{ t('Some widgets in this view are not available yet.') }}</p>

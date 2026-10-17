@@ -20,7 +20,7 @@ page.on('request', request => { if (request.url().endsWith('/admin/search-config
 const ready = () => page.waitForFunction(() => document.querySelector('.workspace-results')?.getAttribute('aria-busy') === 'false')
 const cloud = page.locator('.tag-cloud'), viewport = cloud.locator('.tag-cloud-viewport')
 const localSearch = cloud.getByRole('searchbox', { name: 'Search tags' })
-const range = page.locator('.workspace-footer .result-range')
+const range = page.locator('.workspace-footer [data-frame="searchResultCount"]')
 async function navigate(type) {
   await page.locator('.navigation-toggle').click()
   await page.locator(`.type-list button[data-search-type="${type}"]`).last().click()
@@ -117,7 +117,7 @@ try {
   mobile.on('pageerror', error => errors.push(error.message))
   await mobile.goto(process.argv[2] + '/')
   await mobile.waitForFunction(() => document.querySelector('.workspace-results')?.getAttribute('aria-busy') === 'false')
-  await mobile.getByLabel('View actions', { exact: true }).tap()
+  await mobile.getByLabel('Result actions', { exact: true }).tap()
   await mobile.locator('.workspace-menu[open]').getByRole('button', { name: 'Tags', exact: true }).tap()
   await mobile.waitForFunction(() => document.querySelector('.tag-cloud-viewport')?.getAttribute('aria-busy') === 'false' && document.querySelector('.tag-cloud > summary')?.getAttribute('aria-expanded') === 'true')
   await mobile.locator('.tag-cloud .account-panel').evaluate(async node => { await Promise.all(node.getAnimations().map(animation => animation.finished)) })

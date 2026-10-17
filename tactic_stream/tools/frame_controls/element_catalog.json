@@ -842,7 +842,8 @@
       "vue": [
         "ItemSurface",
         "NavigationRow",
-        "EditorListItem"
+          "EditorListItem",
+          "VirtualCollection"
       ],
       "tokens": [
         "list",
@@ -856,7 +857,8 @@
         "Одно / двухстрочная",
         "Tree indent / guide / disclosure",
         "Checkbox row",
-        "Virtualized",
+          "Virtualized",
+          "Variable-height collections and tiles; retained offscreen focus (tools/frame_search)",
         "Loading / empty",
         "Keyboard selection",
         "Navigation drawer: mouse/touch, off-screen keys, focus and reserved scrollbar gutter"

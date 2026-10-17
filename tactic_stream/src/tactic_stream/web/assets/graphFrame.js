@@ -1,4 +1,4 @@
-import { D as nextTick } from "./vue.js";
+import { E as nextTick } from "./vue.js";
 import { O as appearance } from "./index.js";
 import { c as button, d as node, f as rect, l as label, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
 import { x as sections } from "./App.js";

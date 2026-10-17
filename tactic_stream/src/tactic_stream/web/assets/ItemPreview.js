@@ -1,4 +1,4 @@
-import { I as resolveComponent, N as openBlock, _ as createCommentVNode, g as createBlock, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, v as createElementBlock } from "./vue.js";
+import { F as resolveComponent, M as openBlock, _ as createElementBlock, g as createCommentVNode, h as createBlock, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass } from "./vue.js";
 import { D as t, F as blend, L as cssColor, R as cssRoles, U as readableText, et as BusyIndicator_default, j as frameColors, tt as _plugin_vue_export_helper_default, u as _sfc_main$1 } from "./index.js";
 //#region src/controls/ItemPreview.vue
 var colorProbe;
@@ -44,7 +44,7 @@ var _sfc_main = {
 			let accent = frameColors.value[role] || frameColors.value.contentAccent || frameColors.value.action;
 			let cssAccent = cssColor(accent);
 			if (this.accent && !frameColors.value[role]) {
-				colorProbe ||= document.createElement("canvas").getContext("2d");
+				colorProbe ||= document.createElement("canvas").getContext("2d", { willReadFrequently: true });
 				colorProbe.clearRect(0, 0, 1, 1);
 				colorProbe.fillStyle = "#000000";
 				colorProbe.fillStyle = this.accent;

@@ -2,6 +2,9 @@
 // Handler TagCloudPopup.qml / view_state.py. This view owns only its catalog read.
 import { nextTick } from 'vue';
 import { searchConfiguration } from '../../api.js';
+import FrameView from '../../frame/FrameView.vue';
+import { appearance } from '../../appearance.js';
+import * as UI from '../../../../src/tactic_stream/shared_ui/features/search/popups.ui.mjs';
 import { t } from '../../i18n.js';
 import AppButton from '../../controls/AppButton.vue';
 import AppIcon from '../../controls/AppIcon.vue';
@@ -18,6 +21,7 @@ import {
 
 export default {
   components: {
+    FrameView,
     AppButton,
     AppIcon,
     AppMenu,
@@ -33,11 +37,13 @@ export default {
     selected: Array,
     disabled: Boolean,
     boundary: Object,
-    overlay: Boolean
+    overlay: Boolean,
+    externalTrigger: Boolean
   },
   emits: ['apply'],
   data() {
     return {
+      headerWidth: 400,
       records: [],
       column: '',
       loaded: false,
@@ -52,6 +58,18 @@ export default {
     };
   },
   computed: {
+    headerScene() {
+      return UI.tagHeader(
+        {
+          busy: this.busy,
+          selected: this.selected.length,
+          disabled: this.disabled,
+          search: this.search
+        },
+        this.headerWidth,
+        appearance.language
+      );
+    },
     context() {
       return [this.ticket, this.project, this.searchType, this.tabId];
     },
@@ -101,8 +119,28 @@ export default {
   },
   methods: {
     t,
-    open() {
-      this.$refs.menu.open = true;
+    headerEvent(action) {
+      if (action.type === 'search') this.search = action.value;
+      else if (action.type === 'reload') this.load(true);
+      else if (action.type === 'clearTags') this.select('');
+      else if (action.type === 'firstTag') this.focusTag(0);
+      else if (action.type === 'clearSearch') {
+        this.search = '';
+        this.$refs.search.focusControl('tagCloudSearchField');
+      }
+    },
+    open(source, returnTarget) {
+      if (!source) {
+        this.$refs.menu.open = true;
+        return;
+      }
+      this.menuBoundary = this.boundary || source.closest('.workspace-browser');
+      const bounds = source.getBoundingClientRect();
+      this.$refs.menu.openAt({
+        clientX: bounds.left,
+        clientY: bounds.bottom,
+        target: returnTarget || source
+      });
     },
     async toggled(event) {
       if (!event.target.open) return;
@@ -110,7 +148,7 @@ export default {
       this.$refs.viewport.scrollTop = 0;
       await nextTick();
       this.pack();
-      this.$refs.search.focus();
+      this.$refs.search.focusControl('tagCloudSearchField');
       await this.load();
     },
     async load(force = false) {
@@ -148,6 +186,7 @@ export default {
       const viewport = this.$refs.viewport;
       if (!this.$refs.menu?.open || !viewport?.clientWidth || !this.measure)
         return;
+      this.headerWidth = this.$refs.viewport.clientWidth - 24;
       const style = getComputedStyle(this.$refs.sizing);
       const padding = getComputedStyle(viewport);
       this.rows = packTagRows(
@@ -213,6 +252,7 @@ export default {
     label="Tags"
     icon="MDI_TAG_MULTIPLE"
     :overlay="overlay"
+    :external-trigger="externalTrigger"
     :close-on-select="false"
     :boundary="boundary || menuBoundary"
     @toggle="toggled"
@@ -230,48 +270,12 @@ export default {
       :aria-busy="busy"
       @scroll.passive="scrolled"
     >
-      <header>
-        <strong>{{ t('TAGS') }}</strong
-        ><BusyIndicator v-if="busy" :running="busy" />
-        <AppButton
-          v-if="selected.length"
-          icon-only
-          label="Clear tags"
-          icon="close"
-          :disabled="disabled"
-          @click="select('')"
-        />
-        <AppButton
-          icon-only
-          label="Reload tags"
-          icon="refresh"
-          :disabled="busy"
-          @click="load(true)"
-        />
-      </header>
-      <form
-        class="tag-cloud-search"
-        role="search"
-        @submit.prevent="focusTag(0)"
-      >
-        <AppIcon name="search" /><AppTextField
-          ref="search"
-          v-model="search"
-          type="search"
-          placeholder="Search tags"
-          @keydown.down="focusTag(0, $event)"
-        />
-        <AppButton
-          v-if="search"
-          icon-only
-          label="Clear search"
-          icon="close"
-          @click="
-            search = '';
-            $refs.search.focus();
-          "
-        />
-      </form>
+      <FrameView
+        ref="search"
+        :scene="headerScene"
+        :style="{ height: '90px', flex: 'none' }"
+        @event="headerEvent"
+      />
       <p
         v-if="!busy && (error || !filtered.length)"
         :role="error ? 'status' : undefined"

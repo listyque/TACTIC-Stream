@@ -93,7 +93,7 @@ export function readWorkspace(login, projects, types) {
           ? [...new Set(tab.state.selectedKeys.filter(key => typeof key === 'string' && key && key.length <= 16384).slice(0, 5000))] : []
         if (typeof tab.state.focusedKey !== 'string' || tab.state.focusedKey.length > 16384) tab.state.focusedKey = ''
         if (!['continious', 'tiles', 'table', 'compact', 'splitted_vertical', 'splitted_horizontal'].includes(tab.state.resultMode)) tab.state.resultMode = defaultResultView
-        if (!['none', 'status', 'pipeline'].includes(tab.state.groupMode)) tab.state.groupMode = 'none'
+        if (!['none', 'status', 'pipeline'].includes(tab.state.groupMode) && !/^task_status:.{1,256}$/.test(tab.state.groupMode || '')) tab.state.groupMode = 'none'
         if (!preferences.cache.cacheProcessTabs || !tab.state.resultState || Array.isArray(tab.state.resultState)) tab.state.resultState = {}
         if (!['contains', '='].includes(tab.state.searchRelation)) tab.state.searchRelation = 'contains'
         if (!Array.isArray(tab.state.presetOrderBys)) tab.state.presetOrderBys = []

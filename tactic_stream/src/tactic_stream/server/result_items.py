@@ -34,8 +34,10 @@ def objects(search_type, keys, *, read_access=False):
 
 
 def relations(obj, direction='child'):
-    base = obj.get_base_search_type()
-    schema = obj.get_schema()
+    return schema_relations(obj.get_base_search_type(), obj.get_schema(), direction)
+
+
+def schema_relations(base, schema, direction='child'):
     result = {}
     pending = [schema]
     seen = set()
@@ -152,7 +154,65 @@ def info_items(obj, labels):
     return output
 
 
-def describe(items, relation_counts=False):
+def organization_catalog(records, pipelines, tasks):
+    from pyasm.biz import Pipeline
+
+    ordered = {
+        code: pipelines[code]
+        for row in records
+        if (code := row.get_value("pipeline_code", no_exception=True)) in pipelines
+    }
+    for base in dict.fromkeys(row.get_base_search_type() for row in records):
+        for pipeline in Pipeline.get_by_search_type(base, Project.get_project_code()):
+            ordered.setdefault(pipeline.get_code(), pipeline)
+    processes, statuses = {}, {}
+    for pipeline in ordered.values():
+        for name in pipeline.get_process_names(recurse=True):
+            process = pipeline.get_process(name)
+            if not process or process.get_type() in (
+                "action",
+                "condition",
+                "dependency",
+                "progress",
+            ):
+                continue
+            processes.setdefault(
+                name,
+                dict(
+                    key=name,
+                    title=process.get_label() or name,
+                    accent=process.get_color() or "",
+                ),
+            )
+            catalog = statuses.setdefault(name, {})
+            task_pipeline = Pipeline.get_by_code(process.get_task_pipeline())
+            if task_pipeline:
+                for status in task_pipeline.get_process_names():
+                    catalog.setdefault(
+                        status,
+                        dict(
+                            key=status,
+                            accent=task_pipeline.get_process_attrs(status).get("color")
+                            or "",
+                        ),
+                    )
+    for rows in tasks.values():
+        for task in rows:
+            process, status = task.get_value("process"), task.get_value("status")
+            if not process:
+                continue
+            processes.setdefault(process, dict(key=process, title=process, accent=""))
+            if status:
+                statuses.setdefault(process, {}).setdefault(
+                    status, dict(key=status, accent="")
+                )
+    return dict(
+        processes=sorted(processes.values(), key=lambda row: row["title"].casefold()),
+        statuses={name: list(catalog.values()) for name, catalog in statuses.items()},
+    )
+
+
+def describe(items, relation_counts=False, organization=None):
     if not items:
         return []
     records = list(items.values())
@@ -178,6 +238,8 @@ def describe(items, relation_counts=False):
     snapshots = Search.get_related_by_sobjects(records, 'sthpw/snapshot')
     pipeline_codes = list(dict.fromkeys(row.get_value('pipeline_code', no_exception=True) for row in records if row.get_value('pipeline_code', no_exception=True)))
     pipelines = {row.get_code(): row for row in Search.get_by_code('sthpw/pipeline', pipeline_codes)} if pipeline_codes else {}
+    if organization is not None:
+        organization.update(organization_catalog(records, pipelines, tasks))
     snapshot_records = [row for row in records if row.get_base_search_type() == 'sthpw/snapshot']
     snapshot_files = {}
     for file in File.get_by_snapshots(snapshot_records) if snapshot_records else []:
@@ -255,7 +317,7 @@ def describe(items, relation_counts=False):
             note_counts={name: sum((note.get_value('process') or note.get_value('context')) == name for note in own_notes)
                          for name in dict.fromkeys((note.get_value('process') or note.get_value('context')) for note in own_notes)},
             has_snapshot=any(snapshot.get_value('context') != 'icon' for snapshot in own_snapshots),
-            tasks=[dict(taskSearchKey=task.get_search_key(), process=task.get_value('process'),
+            tasks=[dict(taskSearchKey=task.get_search_key(), process=task.get_value('process'), status=task.get_value('status'),
                         context=task.get_value('context') or task.get_value('process')) for task in own_tasks]))
     return output
 
@@ -273,7 +335,8 @@ def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50)
             return command.info
     selected = objects(search_type, search_keys, read_access=isinstance(branch,dict) and branch.get('kind') in ('snapshot_browser','snapshot_members'))
     if branch is None:
-        return dict(items=describe(selected), has_next=False)
+        organization = {}
+        return dict(items=describe(selected, organization=organization), organization=organization, has_next=False)
     if len(selected) != 1 or not isinstance(branch, dict) or set(branch) - {'kind', 'search_type', 'path', 'process'}:
         raise ValueError('Invalid result branch')
     if type(offset) is not int or type(limit) is not int or offset < 0 or not 1 <= limit <= 100:
