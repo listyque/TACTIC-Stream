@@ -82,7 +82,19 @@ function savedSearchLink(project, searchType, view) {
 		view
 	});
 }
+function sameSearchKey(left, right, project = "") {
+	if (!left || !right) return false;
+	try {
+		const a = new URL(searchLink(left)), b = new URL(searchLink(right));
+		if (a.host + a.pathname !== b.host + b.pathname) return false;
+		if (a.host !== "sthpw" && (a.searchParams.get("project") || project) !== (b.searchParams.get("project") || project)) return false;
+		const field = a.searchParams.has("code") && b.searchParams.has("code") ? "code" : "id";
+		return a.searchParams.has(field) && b.searchParams.has(field) && a.searchParams.get(field) === b.searchParams.get(field);
+	} catch {
+		return false;
+	}
+}
 //#endregion
-export { savedSearchLink as a, activateRichLink as c, linkifyPlainText as d, withoutSkeys as f, projectPath as i, escapeHtml as l, browserLink as n, searchLink as o, linkProject as r, workspaceAddress as s, addressProject as t, extractSkeys as u };
+export { sameSearchKey as a, workspaceAddress as c, extractSkeys as d, linkifyPlainText as f, projectPath as i, activateRichLink as l, browserLink as n, savedSearchLink as o, withoutSkeys as p, linkProject as r, searchLink as s, addressProject as t, escapeHtml as u };
 
 //# sourceMappingURL=links.js.map

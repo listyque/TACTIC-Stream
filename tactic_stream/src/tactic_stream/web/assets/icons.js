@@ -14245,6 +14245,7 @@ var fluent_system_icons_resizable_default = {
 //#region ../src/tactic_stream/shared_ui/core/icons.mjs
 var semanticAliases = {
 	more: "more-vert",
+	"arrow-back": "arrow-left",
 	connection: "lan-connect",
 	activity: "system-activity",
 	queue: "commit-queue",

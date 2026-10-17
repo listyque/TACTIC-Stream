@@ -1,72 +1,110 @@
-import { E as nextTick, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
-import { D as t, i as mobile, o as _sfc_main$1, tt as _plugin_vue_export_helper_default, u as _sfc_main$2 } from "./index.js";
+import { A as onMounted, E as nextTick, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, V as useSlots, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
+import { D as t, O as appearance, i as mobile, o as _sfc_main$2, tt as _plugin_vue_export_helper_default, u as _sfc_main$3 } from "./index.js";
+import { h as _sfc_main$6, i as _sfc_main$5, n as _sfc_main$4, t as observeFrameSizes } from "./resize.js";
 import { P as resultItems, a as copyImage, dt as notify, o as copyText } from "./CodeBlock.js";
 import { t as RecordForm_default } from "./RecordForm.js";
-import { t as _sfc_main$3 } from "./AppSlider.js";
-import { t as _sfc_main$4 } from "./AppMenu.js";
+import { t as _sfc_main$7 } from "./AppMenu.js";
 import { t as ItemPreview_default } from "./ItemPreview.js";
-import { E as _sfc_main$5, R as _sfc_main$6, V as ObjectAction_default, q as FilePreview_default } from "./App.js";
+import { t as FilePreview_default } from "./FilePreview.js";
+import { B as layout, H as optionActions, K as ObjectAction_default, L as clampRatio, R as fileColumns, U as optionChange, V as metrics, W as toolbar, nt as _sfc_main$8, z as fileIcon } from "./App.js";
+//#region src/features/objects/SnapshotToolbar.vue
+var _sfc_main$1 = {
+	__name: "SnapshotToolbar",
+	props: { model: Object },
+	emits: ["event"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const host = ref(null), width = ref(0), slots = useSlots();
+		const views = { options: { component: (props, { attrs }) => h("div", {
+			...attrs,
+			class: ["snapshot-options-control", attrs.class]
+		}, slots.options?.()) } };
+		const scene = computed(() => toolbar(props.model, width.value, appearance.language));
+		let observer;
+		onMounted(() => {
+			const measure = () => {
+				width.value = host.value.clientWidth;
+			};
+			measure();
+			observer = observeFrameSizes(measure);
+			observer.observe(host.value);
+		});
+		onBeforeUnmount(() => observer?.disconnect());
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("header", {
+				ref_key: "host",
+				ref: host,
+				class: "snapshot-frame-toolbar"
+			}, [createVNode(_sfc_main$4, {
+				scene: scene.value,
+				views,
+				onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
+			}, null, 8, ["scene"])], 512);
+		};
+	}
+};
+//#endregion
 //#region src/features/objects/SnapshotBrowser.vue
 var _hoisted_1 = ["aria-label", "aria-busy"];
-var _hoisted_2 = { class: "snapshot-toolbar" };
-var _hoisted_3 = {
+var _hoisted_2 = {
 	key: 0,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_4 = {
+var _hoisted_3 = {
 	key: 1,
 	role: "status",
 	class: "snapshot-status"
 };
-var _hoisted_5 = ["aria-label"];
-var _hoisted_6 = {
+var _hoisted_4 = ["aria-label"];
+var _hoisted_5 = {
 	key: 1,
 	class: "snapshot-counter"
 };
-var _hoisted_7 = { class: "snapshot-file-head" };
-var _hoisted_8 = {
+var _hoisted_6 = { class: "snapshot-file-head" };
+var _hoisted_7 = {
 	key: 0,
 	class: "file-count"
 };
-var _hoisted_9 = {
+var _hoisted_8 = {
 	key: 1,
 	class: "file-size"
 };
-var _hoisted_10 = {
+var _hoisted_9 = {
 	key: 2,
 	class: "file-path"
 };
-var _hoisted_11 = {
+var _hoisted_10 = {
 	key: 3,
 	class: "file-repo"
 };
-var _hoisted_12 = {
+var _hoisted_11 = {
 	key: 4,
 	class: "file-base"
 };
-var _hoisted_13 = ["aria-label"];
-var _hoisted_14 = {
+var _hoisted_12 = ["aria-label"];
+var _hoisted_13 = {
 	key: 0,
 	class: "file-size"
 };
-var _hoisted_15 = {
+var _hoisted_14 = {
 	key: 2,
 	class: "file-repo"
 };
-var _hoisted_16 = {
+var _hoisted_15 = {
 	key: 3,
 	class: "file-base"
 };
-var _hoisted_17 = {
+var _hoisted_16 = {
 	key: 0,
 	class: "snapshot-status"
 };
-var _hoisted_18 = {
+var _hoisted_17 = {
 	key: 0,
 	class: "snapshot-phone-actions"
 };
-var _hoisted_19 = [
+var _hoisted_18 = [
 	"aria-orientation",
 	"aria-label",
 	"aria-valuenow"
@@ -107,6 +145,22 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		} catch {}
 		const rows = ref([]), previews = ref([]), snapshots = ref([]), owner = ref(null), hasNext = ref(false);
 		const index = ref(0), selectedFile = ref(""), contextFile = ref(null), fileMenu = ref(null), preview = ref(null), form = ref(null), action = ref(null);
+		const areaSize = ref({
+			width: 0,
+			height: 0
+		});
+		const panelLayout = computed(() => layout({
+			...options.value,
+			ratio: ratio.value
+		}, areaSize.value.width, areaSize.value.height));
+		const panelStyle = (bounds) => mobile.value ? void 0 : {
+			left: bounds.x + "px",
+			top: bounds.y + "px",
+			width: bounds.width + "px",
+			height: bounds.height + "px",
+			right: "auto",
+			bottom: "auto"
+		};
 		const area = ref(null), filePanel = ref(null), fileWidth = ref(0), extent = ref(0), moving = ref(false), draftRatio = ref(.52);
 		const image = ref(null), quality = ref(""), outgoing = ref(""), incomingLayer = ref(null), outgoingLayer = ref(null);
 		let request = 0, observer, animations = [], transition = 0;
@@ -118,7 +172,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		const visibleRows = computed(() => rows.value.filter((row) => options.value.showAll || ["file", "more"].includes(row.rowType) && !row.previewType));
 		const count = computed(() => visibleRows.value.filter((row) => row.rowType === "file").length);
 		const ratio = computed(() => clamp(moving.value ? draftRatio.value : options.value.splitterRatio));
-		const imageMode = computed({
+		computed({
 			get: () => options.value.imageMode,
 			set: (value) => setOption("imageMode", value)
 		});
@@ -126,10 +180,11 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			get: () => index.value,
 			set: (value) => navigate(value)
 		});
-		const moreSize = computed(() => options.value.showMore && fileWidth.value >= 340);
-		const morePath = computed(() => options.value.showMore && fileWidth.value >= 650);
-		const moreRepo = computed(() => options.value.showMore && fileWidth.value >= 820);
-		const moreBase = computed(() => options.value.showMore && fileWidth.value >= 940);
+		const fileColumns$1 = computed(() => fileColumns(options.value.showMore, fileWidth.value));
+		const moreSize = computed(() => fileColumns$1.value.size);
+		const morePath = computed(() => fileColumns$1.value.path);
+		const moreRepo = computed(() => fileColumns$1.value.repository);
+		const moreBase = computed(() => fileColumns$1.value.base);
 		const canCopyImage = computed(() => !!navigator.clipboard?.write && !!globalThis.ClipboardItem);
 		function setOption(name, value) {
 			const next = {
@@ -144,13 +199,27 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}
 		}
 		function clamp(value) {
-			const primary = vertical.value ? 120 : 90, secondary = vertical.value ? 180 : 120;
-			if (extent.value <= 1) return Math.max(.22, Math.min(.78, value));
-			const lower = Math.max(.22, (primary + 5) / extent.value), upper = Math.min(.78, 1 - (secondary + 5) / extent.value);
-			return lower > upper ? primary / (primary + secondary) : Math.max(lower, Math.min(upper, value));
+			return clampRatio(value, extent.value, vertical.value);
+		}
+		const toolbarModel = computed(() => ({
+			...options.value,
+			phone: mobile.value,
+			canRefresh: !loading.value && !!props.target?.key
+		}));
+		function toolbarAction(event) {
+			if (event.type === "refresh") load();
+			else if (event.type === "image") setOption("imageMode", event.value);
+		}
+		function optionAction(command) {
+			const change = optionChange(options.value, command);
+			setOption(change.key, change.value);
 		}
 		function measure() {
 			const box = area.value?.getBoundingClientRect();
+			areaSize.value = {
+				width: box?.width || 0,
+				height: box?.height || 0
+			};
 			extent.value = (vertical.value ? box?.width : box?.height) || 0;
 			fileWidth.value = filePanel.value?.clientWidth || 0;
 		}
@@ -365,22 +434,8 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			load();
 			emit("changed");
 		}
-		function fileIcon(row) {
-			if (row.rowType === "snapshot") return "snapshot";
-			if (row.rowType === "type") return "folder";
-			if ([
-				"image",
-				"icon",
-				"web"
-			].includes(row.fileType)) return "image";
-			if ([
-				"playblast",
-				"movie",
-				"video"
-			].includes(row.fileType)) return "movie";
-			if (row.baseType.includes("sequence")) return "sequence";
-			if (/\.(zip|rar|7z|tar|gz)$/i.test(row.filename)) return "archive";
-			return "file";
+		function fileIcon$1(row) {
+			return fileIcon(row.rowType, row.fileType, row.baseType, row.filename);
 		}
 		function size(value) {
 			if (!Number.isFinite(Number(value)) || value === "") return "";
@@ -437,125 +492,29 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					"aria-label": unref(t)("Snapshot Browser"),
 					"aria-busy": loading.value
 				}, [
-					createBaseVNode("header", _hoisted_2, [
-						createVNode(_sfc_main$4, {
+					createVNode(_sfc_main$1, {
+						model: toolbarModel.value,
+						onEvent: toolbarAction
+					}, {
+						options: withCtx(() => [createVNode(_sfc_main$7, {
 							label: "Snapshot Browser options",
 							width: 300,
 							overlay: ""
 						}, {
-							default: withCtx(() => [
-								(openBlock(), createElementBlock(Fragment, null, renderList([
-									{
-										value: "both",
-										label: "Preview and Files",
-										icon: "grid-view"
-									},
-									{
-										value: "preview",
-										label: "Preview Only",
-										icon: "image"
-									},
-									{
-										value: "files",
-										label: "Files Only",
-										icon: "view-list"
-									}
-								], (option) => {
-									return createVNode(_sfc_main$1, {
-										key: option.value,
-										role: "menuitemradio",
-										"aria-checked": options.value.contentMode === option.value,
-										label: option.label,
-										icon: option.icon,
-										onClick: ($event) => setOption("contentMode", option.value)
-									}, null, 8, [
-										"aria-checked",
-										"label",
-										"icon",
-										"onClick"
-									]);
-								}), 64)),
-								_cache[28] || (_cache[28] = createBaseVNode("hr", null, null, -1)),
-								createVNode(_sfc_main$1, {
-									role: "menuitemcheckbox",
-									"aria-checked": options.value.showAll,
-									label: "Show All Files",
-									icon: "visibility",
-									onClick: _cache[0] || (_cache[0] = ($event) => setOption("showAll", !options.value.showAll))
-								}, null, 8, ["aria-checked"]),
-								createVNode(_sfc_main$1, {
-									role: "menuitemcheckbox",
-									"aria-checked": options.value.showMore,
-									label: "Show More Info",
-									icon: "info",
-									onClick: _cache[1] || (_cache[1] = ($event) => setOption("showMore", !options.value.showMore))
-								}, null, 8, ["aria-checked"]),
-								_cache[29] || (_cache[29] = createBaseVNode("hr", null, null, -1)),
-								!unref(mobile) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, renderList([{
-									value: "horizontal",
-									label: "Horizontal orientation",
-									icon: "view_agenda"
-								}, {
-									value: "vertical",
-									label: "Vertical orientation",
-									icon: "view_column"
-								}], (option) => {
-									return createVNode(_sfc_main$1, {
-										key: option.value,
-										role: "menuitemradio",
-										"aria-checked": options.value.orientation === option.value,
-										label: option.label,
-										icon: option.icon,
-										onClick: ($event) => setOption("orientation", option.value)
-									}, null, 8, [
-										"aria-checked",
-										"label",
-										"icon",
-										"onClick"
-									]);
-								}), 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, renderList(["fit", "fill"], (mode) => {
-									return createVNode(_sfc_main$1, {
-										key: mode,
-										role: "menuitemradio",
-										"aria-checked": imageMode.value === mode,
-										label: mode === "fit" ? "Fit" : "Fill",
-										onClick: ($event) => imageMode.value = mode
-									}, null, 8, [
-										"aria-checked",
-										"label",
-										"onClick"
-									]);
-								}), 64))
-							]),
+							default: withCtx(() => [createVNode(_sfc_main$8, {
+								actions: optionActions(toolbarModel.value),
+								onTriggered: optionAction
+							}, null, 8, ["actions"])]),
 							_: 1
-						}),
-						showingPreview.value && !unref(mobile) ? (openBlock(), createBlock(_sfc_main$5, {
-							key: 0,
-							modelValue: imageMode.value,
-							"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => imageMode.value = $event),
-							label: "Preview image mode",
-							options: [{
-								value: "fit",
-								label: "Fit"
-							}, {
-								value: "fill",
-								label: "Fill"
-							}]
-						}, null, 8, ["modelValue"])) : createCommentVNode("", true),
-						createVNode(_sfc_main$1, {
-							label: "Refresh snapshots",
-							icon: "refresh",
-							"icon-only": "",
-							disabled: loading.value || !__props.target?.key,
-							onClick: _cache[3] || (_cache[3] = ($event) => load())
-						}, null, 8, ["disabled"])
-					]),
-					error.value ? (openBlock(), createElementBlock("p", _hoisted_3, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$1, {
+						})]),
+						_: 1
+					}, 8, ["model"]),
+					error.value ? (openBlock(), createElementBlock("p", _hoisted_2, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$2, {
 						label: "Retry",
 						disabled: loading.value,
-						onClick: _cache[4] || (_cache[4] = ($event) => load())
+						onClick: _cache[0] || (_cache[0] = ($event) => load())
 					}, null, 8, ["disabled"])])) : createCommentVNode("", true),
-					loading.value && !rows.value.length ? (openBlock(), createElementBlock("p", _hoisted_4, toDisplayString(unref(t)("Loading snapshots…")), 1)) : createCommentVNode("", true),
+					loading.value && !rows.value.length ? (openBlock(), createElementBlock("p", _hoisted_3, toDisplayString(unref(t)("Loading snapshots…")), 1)) : createCommentVNode("", true),
 					createBaseVNode("div", {
 						ref_key: "area",
 						ref: area,
@@ -564,17 +523,21 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 							combined: showingPreview.value && showingFiles.value,
 							"preview-only": !showingFiles.value
 						}]),
-						style: normalizeStyle({ "--snapshot-ratio": ratio.value * 100 + "%" })
+						style: normalizeStyle({
+							"--snapshot-ratio": ratio.value * 100 + "%",
+							"--snapshot-gap": metrics.splitter + "px"
+						})
 					}, [
 						showingPreview.value ? (openBlock(), createElementBlock("div", {
 							key: 0,
 							class: "snapshot-preview",
+							style: normalizeStyle(panelStyle(panelLayout.value.preview)),
 							tabindex: "0",
 							"aria-label": unref(t)("Snapshot preview"),
-							onKeydown: [_cache[13] || (_cache[13] = withKeys(withModifiers(($event) => navigate(index.value - 1), ["prevent"]), ["left"])), _cache[14] || (_cache[14] = withKeys(withModifiers(($event) => navigate(index.value + 1), ["prevent"]), ["right"]))],
-							onWheel: _cache[15] || (_cache[15] = withModifiers(($event) => navigate(index.value + ($event.deltaY > 0 ? 1 : -1)), ["prevent"])),
-							onContextmenu: _cache[16] || (_cache[16] = withModifiers(($event) => openMenu(current.value?.file, $event), ["prevent"])),
-							onDblclick: _cache[17] || (_cache[17] = ($event) => openFile(current.value?.file))
+							onKeydown: [_cache[9] || (_cache[9] = withKeys(withModifiers(($event) => navigate(index.value - 1), ["prevent"]), ["left"])), _cache[10] || (_cache[10] = withKeys(withModifiers(($event) => navigate(index.value + 1), ["prevent"]), ["right"]))],
+							onWheel: _cache[11] || (_cache[11] = withModifiers(($event) => navigate(index.value + ($event.deltaY > 0 ? 1 : -1)), ["prevent"])),
+							onContextmenu: _cache[12] || (_cache[12] = withModifiers(($event) => openMenu(current.value?.file, $event), ["prevent"])),
+							onDblclick: _cache[13] || (_cache[13] = ($event) => openFile(current.value?.file))
 						}, [
 							outgoing.value ? (openBlock(), createElementBlock("div", {
 								key: 0,
@@ -601,57 +564,57 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 								accent: "var(--surface-high)",
 								"preview-size": 58,
 								"fill-mode": options.value.imageMode === "fill" ? "cover" : "contain",
-								onReady: _cache[5] || (_cache[5] = ($event) => {
+								onReady: _cache[1] || (_cache[1] = ($event) => {
 									image.value = $event;
 									needQuality();
 								})
 							}, null, 8, ["source", "fill-mode"])], 512),
-							current.value ? (openBlock(), createElementBlock("span", _hoisted_6, toDisplayString(index.value + 1) + " / " + toDisplayString(previews.value.length), 1)) : createCommentVNode("", true),
-							current.value ? (openBlock(), createBlock(_sfc_main$1, {
+							current.value ? (openBlock(), createElementBlock("span", _hoisted_5, toDisplayString(index.value + 1) + " / " + toDisplayString(previews.value.length), 1)) : createCommentVNode("", true),
+							current.value ? (openBlock(), createBlock(_sfc_main$2, {
 								key: 2,
 								class: "snapshot-preview-actions",
 								label: "Preview actions",
 								icon: "more",
 								"icon-only": "",
-								onClick: _cache[6] || (_cache[6] = withModifiers(($event) => openMenu(current.value.file, $event), ["stop"]))
+								onClick: _cache[2] || (_cache[2] = withModifiers(($event) => openMenu(current.value.file, $event), ["stop"]))
 							})) : createCommentVNode("", true),
-							previews.value.length > 1 ? (openBlock(), createBlock(_sfc_main$1, {
+							previews.value.length > 1 ? (openBlock(), createBlock(_sfc_main$2, {
 								key: 3,
 								class: "snapshot-previous",
 								label: "Previous preview",
 								icon: "chevron-left",
 								"icon-only": "",
 								disabled: index.value === 0,
-								onClick: _cache[7] || (_cache[7] = withModifiers(($event) => navigate(index.value - 1), ["stop"]))
+								onClick: _cache[3] || (_cache[3] = withModifiers(($event) => navigate(index.value - 1), ["stop"]))
 							}, null, 8, ["disabled"])) : createCommentVNode("", true),
-							previews.value.length > 1 ? (openBlock(), createBlock(_sfc_main$1, {
+							previews.value.length > 1 ? (openBlock(), createBlock(_sfc_main$2, {
 								key: 4,
 								class: "snapshot-next",
 								label: "Next preview",
 								icon: "chevron-right",
 								"icon-only": "",
 								disabled: index.value === previews.value.length - 1,
-								onClick: _cache[8] || (_cache[8] = withModifiers(($event) => navigate(index.value + 1), ["stop"]))
+								onClick: _cache[4] || (_cache[4] = withModifiers(($event) => navigate(index.value + 1), ["stop"]))
 							}, null, 8, ["disabled"])) : createCommentVNode("", true),
-							current.value ? (openBlock(), createBlock(_sfc_main$6, {
+							current.value ? (openBlock(), createBlock(_sfc_main$5, {
 								key: 5,
 								class: "snapshot-preview-title",
 								text: current.value.title
 							}, null, 8, ["text"])) : createCommentVNode("", true),
-							previews.value.length > 1 ? (openBlock(), createBlock(_sfc_main$3, {
+							previews.value.length > 1 ? (openBlock(), createBlock(_sfc_main$6, {
 								key: 6,
 								modelValue: imageIndex.value,
-								"onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => imageIndex.value = $event),
+								"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => imageIndex.value = $event),
 								class: "snapshot-preview-slider",
 								label: "Preview number",
 								min: 0,
 								max: previews.value.length - 1,
 								step: 1,
-								onDblclick: _cache[10] || (_cache[10] = withModifiers(() => {}, ["stop"])),
-								onWheel: _cache[11] || (_cache[11] = withModifiers(() => {}, ["stop"])),
-								onKeydown: _cache[12] || (_cache[12] = withModifiers(() => {}, ["stop"]))
+								onDblclick: _cache[6] || (_cache[6] = withModifiers(() => {}, ["stop"])),
+								onWheel: _cache[7] || (_cache[7] = withModifiers(() => {}, ["stop"])),
+								onKeydown: _cache[8] || (_cache[8] = withModifiers(() => {}, ["stop"]))
 							}, null, 8, ["modelValue", "max"])) : createCommentVNode("", true)
-						], 40, _hoisted_5)) : createCommentVNode("", true),
+						], 44, _hoisted_4)) : createCommentVNode("", true),
 						showingFiles.value ? (openBlock(), createElementBlock("div", {
 							key: 1,
 							ref_key: "filePanel",
@@ -661,16 +624,17 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 								"more-path": morePath.value,
 								"more-repo": moreRepo.value,
 								"more-base": moreBase.value
-							}])
+							}]),
+							style: normalizeStyle(panelStyle(panelLayout.value.files))
 						}, [
-							createBaseVNode("div", _hoisted_7, [
-								_cache[30] || (_cache[30] = createBaseVNode("i", null, null, -1)),
+							createBaseVNode("div", _hoisted_6, [
+								_cache[24] || (_cache[24] = createBaseVNode("i", null, null, -1)),
 								createBaseVNode("strong", null, toDisplayString(unref(t)(options.value.showMore ? "Files" : options.value.showAll ? "All snapshot files" : "Published files")), 1),
-								fileWidth.value >= 240 ? (openBlock(), createElementBlock("span", _hoisted_8, toDisplayString(unref(t)(count.value === 1 ? "{count} file" : "{count} files", { count: count.value })), 1)) : createCommentVNode("", true),
-								moreSize.value ? (openBlock(), createElementBlock("span", _hoisted_9, toDisplayString(unref(t)("Size")), 1)) : createCommentVNode("", true),
-								morePath.value ? (openBlock(), createElementBlock("span", _hoisted_10, toDisplayString(unref(t)("Path")), 1)) : createCommentVNode("", true),
-								moreRepo.value ? (openBlock(), createElementBlock("span", _hoisted_11, toDisplayString(unref(t)("Repo")), 1)) : createCommentVNode("", true),
-								moreBase.value ? (openBlock(), createElementBlock("span", _hoisted_12, toDisplayString(unref(t)("Base Type")), 1)) : createCommentVNode("", true)
+								fileWidth.value >= 240 ? (openBlock(), createElementBlock("span", _hoisted_7, toDisplayString(unref(t)(count.value === 1 ? "{count} file" : "{count} files", { count: count.value })), 1)) : createCommentVNode("", true),
+								moreSize.value ? (openBlock(), createElementBlock("span", _hoisted_8, toDisplayString(unref(t)("Size")), 1)) : createCommentVNode("", true),
+								morePath.value ? (openBlock(), createElementBlock("span", _hoisted_9, toDisplayString(unref(t)("Path")), 1)) : createCommentVNode("", true),
+								moreRepo.value ? (openBlock(), createElementBlock("span", _hoisted_10, toDisplayString(unref(t)("Repo")), 1)) : createCommentVNode("", true),
+								moreBase.value ? (openBlock(), createElementBlock("span", _hoisted_11, toDisplayString(unref(t)("Base Type")), 1)) : createCommentVNode("", true)
 							]),
 							createBaseVNode("div", {
 								class: "snapshot-file-list",
@@ -695,20 +659,20 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 										onContextmenu: withModifiers(($event) => openMenu(row, $event, true), ["prevent"])
 									}, {
 										default: withCtx(() => [
-											createVNode(_sfc_main$2, {
-												name: fileIcon(row),
+											createVNode(_sfc_main$3, {
+												name: fileIcon$1(row),
 												style: normalizeStyle({ color: row.rowType === "file" && !row.exists ? "var(--muted)" : row.rowType === "type" ? "var(--yellow)" : "var(--primary)" })
 											}, null, 8, ["name", "style"]),
-											createVNode(_sfc_main$6, { text: row.rowType === "more" ? unref(t)(row.title) : row.title }, null, 8, ["text"]),
-											moreSize.value ? (openBlock(), createElementBlock("span", _hoisted_14, toDisplayString(row.rowType === "file" ? size(row.size) : ""), 1)) : createCommentVNode("", true),
-											morePath.value ? (openBlock(), createBlock(_sfc_main$6, {
+											createVNode(_sfc_main$5, { text: row.rowType === "more" ? unref(t)(row.title) : row.title }, null, 8, ["text"]),
+											moreSize.value ? (openBlock(), createElementBlock("span", _hoisted_13, toDisplayString(row.rowType === "file" ? size(row.size) : ""), 1)) : createCommentVNode("", true),
+											morePath.value ? (openBlock(), createBlock(_sfc_main$5, {
 												key: 1,
 												class: "file-path",
 												text: row.path || ""
 											}, null, 8, ["text"])) : createCommentVNode("", true),
-											moreRepo.value ? (openBlock(), createElementBlock("span", _hoisted_15, toDisplayString(row.repository), 1)) : createCommentVNode("", true),
-											moreBase.value ? (openBlock(), createElementBlock("span", _hoisted_16, toDisplayString(row.baseType), 1)) : createCommentVNode("", true),
-											row.rowType === "file" && !row.exists ? (openBlock(), createBlock(_sfc_main$2, {
+											moreRepo.value ? (openBlock(), createElementBlock("span", _hoisted_14, toDisplayString(row.repository), 1)) : createCommentVNode("", true),
+											moreBase.value ? (openBlock(), createElementBlock("span", _hoisted_15, toDisplayString(row.baseType), 1)) : createCommentVNode("", true),
+											row.rowType === "file" && !row.exists ? (openBlock(), createBlock(_sfc_main$3, {
 												key: 4,
 												name: "cloud_download",
 												class: "offline",
@@ -727,34 +691,35 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 										"onContextmenu"
 									]);
 								}), 128)),
-								!loading.value && loaded.value && !visibleRows.value.length ? (openBlock(), createElementBlock("p", _hoisted_17, toDisplayString(unref(t)("No files for this selection")), 1)) : createCommentVNode("", true),
-								hasNext.value ? (openBlock(), createBlock(_sfc_main$1, {
+								!loading.value && loaded.value && !visibleRows.value.length ? (openBlock(), createElementBlock("p", _hoisted_16, toDisplayString(unref(t)("No files for this selection")), 1)) : createCommentVNode("", true),
+								hasNext.value ? (openBlock(), createBlock(_sfc_main$2, {
 									key: 1,
 									label: "Load more snapshots",
 									disabled: loading.value,
-									onClick: _cache[18] || (_cache[18] = ($event) => load(true))
+									onClick: _cache[14] || (_cache[14] = ($event) => load(true))
 								}, null, 8, ["disabled"])) : createCommentVNode("", true)
-							], 8, _hoisted_13),
-							unref(mobile) && phoneFile.value ? (openBlock(), createElementBlock("footer", _hoisted_18, [
-								createVNode(_sfc_main$6, { text: phoneFile.value.filename || phoneFile.value.title }, null, 8, ["text"]),
-								createVNode(_sfc_main$1, {
+							], 8, _hoisted_12),
+							unref(mobile) && phoneFile.value ? (openBlock(), createElementBlock("footer", _hoisted_17, [
+								createVNode(_sfc_main$5, { text: phoneFile.value.filename || phoneFile.value.title }, null, 8, ["text"]),
+								createVNode(_sfc_main$2, {
 									label: "Open File",
 									icon: "folder_open",
 									"icon-only": "",
 									disabled: !phoneFile.value.href,
-									onClick: _cache[19] || (_cache[19] = ($event) => openFile(phoneFile.value))
+									onClick: _cache[15] || (_cache[15] = ($event) => openFile(phoneFile.value))
 								}, null, 8, ["disabled"]),
-								createVNode(_sfc_main$1, {
+								createVNode(_sfc_main$2, {
 									label: "Snapshot file actions",
 									icon: "more",
 									"icon-only": "",
-									onClick: _cache[20] || (_cache[20] = ($event) => openMenu(phoneFile.value, $event, true))
+									onClick: _cache[16] || (_cache[16] = ($event) => openMenu(phoneFile.value, $event, true))
 								})
 							])) : createCommentVNode("", true)
-						], 2)) : createCommentVNode("", true),
+						], 6)) : createCommentVNode("", true),
 						showingPreview.value && showingFiles.value ? (openBlock(), createElementBlock("div", {
 							key: 2,
 							class: normalizeClass(["snapshot-splitter resize-grip", { dragging: moving.value }]),
+							style: normalizeStyle(panelStyle(panelLayout.value.splitter)),
 							role: "separator",
 							tabindex: "0",
 							"aria-orientation": vertical.value ? "vertical" : "horizontal",
@@ -767,9 +732,9 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 							onPointerup: endDrag,
 							onPointercancel: endDrag,
 							onKeydown: splitterKey
-						}, null, 42, _hoisted_19)) : createCommentVNode("", true)
+						}, null, 46, _hoisted_18)) : createCommentVNode("", true)
 					], 6),
-					createVNode(_sfc_main$4, {
+					createVNode(_sfc_main$7, {
 						ref_key: "fileMenu",
 						ref: fileMenu,
 						class: "snapshot-file-menu",
@@ -777,48 +742,48 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 						overlay: ""
 					}, {
 						default: withCtx(() => [
-							createVNode(_sfc_main$1, {
+							createVNode(_sfc_main$2, {
 								label: "Open File",
 								icon: "folder_open",
 								disabled: !contextFile.value?.href,
-								onClick: _cache[21] || (_cache[21] = ($event) => fileAction("open"))
+								onClick: _cache[17] || (_cache[17] = ($event) => fileAction("open"))
 							}, null, 8, ["disabled"]),
-							createVNode(_sfc_main$1, {
+							createVNode(_sfc_main$2, {
 								label: "Show Folder",
 								icon: "folder",
 								disabled: "",
 								title: unref(t)("Server folders cannot be opened by this browser.")
 							}, null, 8, ["title"]),
-							_cache[32] || (_cache[32] = createBaseVNode("hr", null, null, -1)),
-							createVNode(_sfc_main$1, {
+							_cache[26] || (_cache[26] = createBaseVNode("hr", null, null, -1)),
+							createVNode(_sfc_main$2, {
 								label: "Copy File Path",
 								icon: "copy",
-								onClick: _cache[22] || (_cache[22] = ($event) => fileAction("copy_path"))
+								onClick: _cache[18] || (_cache[18] = ($event) => fileAction("copy_path"))
 							}),
-							createVNode(_sfc_main$1, {
+							createVNode(_sfc_main$2, {
 								label: "Copy Web Link",
 								icon: "link",
 								disabled: !contextFile.value?.href,
-								onClick: _cache[23] || (_cache[23] = ($event) => fileAction("copy_web_path"))
+								onClick: _cache[19] || (_cache[19] = ($event) => fileAction("copy_web_path"))
 							}, null, 8, ["disabled"]),
-							createVNode(_sfc_main$1, {
+							createVNode(_sfc_main$2, {
 								label: "Copy To Clipboard",
 								icon: "copy",
 								disabled: !canCopyImage.value || !contextFile.value?.href,
 								title: !canCopyImage.value ? unref(t)("Copying an image requires HTTPS or localhost and clipboard permission.") : "",
-								onClick: _cache[24] || (_cache[24] = ($event) => fileAction("copy_image"))
+								onClick: _cache[20] || (_cache[20] = ($event) => fileAction("copy_image"))
 							}, null, 8, ["disabled", "title"]),
 							contextFile.value?.editing ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-								_cache[31] || (_cache[31] = createBaseVNode("hr", null, null, -1)),
-								createVNode(_sfc_main$1, {
+								_cache[25] || (_cache[25] = createBaseVNode("hr", null, null, -1)),
+								createVNode(_sfc_main$2, {
 									label: "Edit Info",
 									icon: "edit",
-									onClick: _cache[25] || (_cache[25] = ($event) => fileAction("edit"))
+									onClick: _cache[21] || (_cache[21] = ($event) => fileAction("edit"))
 								}),
-								createVNode(_sfc_main$1, {
+								createVNode(_sfc_main$2, {
 									label: "Delete",
 									icon: "delete",
-									onClick: _cache[26] || (_cache[26] = ($event) => fileAction("delete"))
+									onClick: _cache[22] || (_cache[22] = ($event) => fileAction("delete"))
 								})
 							], 64)) : createCommentVNode("", true)
 						]),
@@ -831,7 +796,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					ticket: __props.ticket,
 					project: __props.project,
 					"search-type": "sthpw/file",
-					onSessionExpired: _cache[27] || (_cache[27] = ($event) => emit("session-expired"))
+					onSessionExpired: _cache[23] || (_cache[23] = ($event) => emit("session-expired"))
 				}, null, 8, ["ticket", "project"]),
 				createVNode(RecordForm_default, {
 					ref_key: "form",
@@ -853,7 +818,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			], 64);
 		};
 	}
-}, [["__scopeId", "data-v-7a588ddc"]]);
+}, [["__scopeId", "data-v-846ff390"]]);
 //#endregion
 export { SnapshotBrowser_default as default };
 

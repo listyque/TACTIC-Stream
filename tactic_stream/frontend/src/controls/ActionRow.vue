@@ -90,7 +90,10 @@ onBeforeUnmount(() => {
       :target="record.href ? '_blank' : undefined"
       :rel="record.href ? 'noopener' : undefined"
       :disabled="record.enabled === false"
-      :role="record.checked === undefined ? undefined : 'menuitemradio'"
+      :role="
+        record.role ||
+        (record.checked === undefined ? undefined : 'menuitemradio')
+      "
       :aria-checked="record.checked"
       @pointerenter="hovered = true"
       @pointerleave="hovered = pressed = false"

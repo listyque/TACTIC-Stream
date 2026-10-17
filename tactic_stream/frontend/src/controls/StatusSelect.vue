@@ -8,21 +8,28 @@ defineEmits(['change']);
 const current = computed(() =>
   props.options.find((option) => option.value === props.value)
 );
+const choices = computed(() => {
+  const rows = props.options.map((option) =>
+    option.value === '' && !option.label
+      ? { ...option, label: t('Select status'), disabled: true }
+      : option
+  );
+  return rows.some((option) => option.value === '')
+    ? rows
+    : [{ value: '', label: t('Select status'), disabled: true }, ...rows];
+});
 </script>
 <template>
   <div class="status-select" :class="{ empty: !current }">
     <span
-      v-if="current"
+      v-if="current?.color"
       class="status-select-dot"
       :style="{ backgroundColor: current.color }"
     ></span>
     <AppSelect
       :model-value="value || ''"
       label="Status"
-      :options="[
-        { value: '', label: t('Select status'), disabled: true },
-        ...options
-      ]"
+      :options="choices"
       :translate-labels="false"
       :disabled="disabled"
       @update:model-value="$emit('change', $event)"

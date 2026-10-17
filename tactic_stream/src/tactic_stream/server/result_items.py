@@ -333,7 +333,7 @@ def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50)
                 payload={'search_type':search_type,'search_keys':search_keys,'branch':branch,'offset':offset,'limit':limit})
             Command.execute_cmd(command)
             return command.info
-    selected = objects(search_type, search_keys, read_access=isinstance(branch,dict) and branch.get('kind') in ('snapshot_browser','snapshot_members'))
+    selected = objects(search_type, search_keys, read_access=isinstance(branch,dict) and branch.get('kind') in ('snapshot_browser','snapshot_members','object_report'))
     if branch is None:
         organization = {}
         return dict(items=describe(selected, organization=organization), organization=organization, has_next=False)
@@ -342,6 +342,9 @@ def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50)
     if type(offset) is not int or type(limit) is not int or offset < 0 or not 1 <= limit <= 100:
         raise ValueError('Invalid result page')
     parent = next(iter(selected.values()))
+    if branch.get('kind') == 'object_report' and not set(branch) - {'kind', 'path'}:
+        from .object_report import read_report
+        return read_report(parent, branch.get('path', 'tasks'), offset, limit)
     if branch == {'kind': 'snapshot_members'}:
         from .snapshot_browser import read_snapshot_members
         if parent.get_base_search_type() != 'sthpw/file':

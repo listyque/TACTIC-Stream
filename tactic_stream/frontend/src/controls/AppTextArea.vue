@@ -22,7 +22,7 @@ defineExpose({
     v-model="model"
     class="app-text-area"
     :aria-invalid="errorState || undefined"
-    :aria-label="t(label || placeholder)"
+    :aria-label="label || placeholder ? t(label || placeholder) : undefined"
     :placeholder="t(placeholder || '')"
     :disabled="disabled"
   ></textarea>

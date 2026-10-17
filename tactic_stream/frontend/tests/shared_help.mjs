@@ -36,7 +36,7 @@ const screens = {
   activity: ['ActivityFeed', 'activity/ActivityFeed', 'Activity Feed help', 'activity_feed'],
   project: ['ProjectCreation', 'projects/ProjectCreation', 'Project creation help', 'project_creation'],
   sidebar: ['SidebarEditor', 'administration/SidebarEditor', 'Sidebar Editor help', 'sidebar_editor'],
-  duplicate: ['DuplicateSObject', 'objects/DuplicateSObject', 'Help', 'duplicating_objects'],
+  duplicate: ['DuplicateSObject', 'objects/DuplicateSObject', 'Duplication help', 'duplicating_objects'],
   shelf: ['ScriptShelf', 'scripts/ScriptShelf', 'Script shelf help', 'script_shelf'],
   script: ['ScriptEditor', 'scripts/ScriptEditor', 'Script editor help', 'script_editor'],
   messages: ['MessagesView', 'messages/MessagesView', 'Messages help', 'communication'],

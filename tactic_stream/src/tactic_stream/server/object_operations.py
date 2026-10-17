@@ -69,8 +69,25 @@ def deletion_groups(records):
                    for item in record.get_related_sobjects(related_type, show_retired=True)}
         if related:
             groups.append(dict(search_type=related_type, title=SearchType.get(related_type).get_title(),
-                               count=len(related), selected=related_type in ('sthpw/note', 'sthpw/task', 'sthpw/snapshot')))
+                               count=len(related), selected=related_type in ('sthpw/note', 'sthpw/task', 'sthpw/snapshot', 'sthpw/status_log'),
+                               items=[dependency_item(item) for item in related.values()]))
     return groups
+
+
+def dependency_item(item):
+    from .object_report import record
+    data = record(item)
+    transition = ''
+    if item.get_base_search_type() == 'sthpw/status_log':
+        before, after = data.get('from_status'), data.get('to_status')
+        transition = f'{before} → {after}' if before and after and before != after else after or before or data.get('status') or ''
+    title = transition or next((str(data[name]) for name in (
+        'file_name', 'filename', 'name', 'title', 'description', 'note', 'process', 'context', 'status'
+    ) if data.get(name)), data.get('code') or item.get_search_key())
+    names = ('process', 'context', 'login', 'timestamp') if transition else (
+        'description', 'note', 'context', 'process', 'status', 'assigned', 'login', 'timestamp')
+    details = list(dict.fromkeys(str(data[name]) for name in names if data.get(name) and str(data[name]) != title))
+    return dict(title=title, details=' · '.join(details if transition else details[:2]), searchKey=item.get_search_key())
 
 
 def delete_object(search_type, search_key, related_types, view='table'):

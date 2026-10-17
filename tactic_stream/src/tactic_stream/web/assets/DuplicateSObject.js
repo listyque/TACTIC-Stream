@@ -1,25 +1,46 @@
-import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, o as vModelText, rt as toDisplayString, s as vShow, u as Fragment, y as createTextVNode } from "./vue.js";
-import { D as t, o as _sfc_main$1, tt as _plugin_vue_export_helper_default, u as _sfc_main$2 } from "./index.js";
-import { F as rpc, dt as notify, f as _sfc_main$3 } from "./CodeBlock.js";
-import { t as _sfc_main$4 } from "./AppTextField.js";
-import { n as _sfc_main$6, t as _sfc_main$5 } from "./AppDateField.js";
-import { t as _sfc_main$7 } from "./AppCheckbox.js";
-import { t as _sfc_main$8 } from "./SummaryChip.js";
-import { E as _sfc_main$9, G as duplicateProfile, H as applyDuplicateProfile, K as saveDuplicateProfile, U as changeContent, W as contentChoices } from "./App.js";
-//#region src/features/objects/DuplicateSObject.vue
+import { t as __exportAll } from "./rolldown-runtime.js";
+import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, u as Fragment } from "./vue.js";
+import { D as t, I as controls, O as appearance, o as _sfc_main$2, tt as _plugin_vue_export_helper_default } from "./index.js";
+import { _ as label, b as rect, f as _sfc_main$4, g as button, m as _sfc_main$6, n as _sfc_main$3, p as _sfc_main$5, t as observeFrameSizes, u as translate, y as node } from "./resize.js";
+import { F as rpc, dt as notify, f as _sfc_main$7 } from "./CodeBlock.js";
+import { n as _sfc_main$8 } from "./AppSplitter.js";
+import { t as _sfc_main$9 } from "./AppCheckbox.js";
+import { t as _sfc_main$10 } from "./ObjectFieldFrame.js";
+import { t as captionHeight } from "./sections.ui.js";
+import { J as applyDuplicateProfile, Q as saveDuplicateProfile, X as contentChoices, Y as changeContent, Z as duplicateProfile, q as _sfc_main$11 } from "./App.js";
+//#region ../src/tactic_stream/shared_ui/features/objects/duplicate.ui.mjs
+var duplicate_ui_exports = /* @__PURE__ */ __exportAll({
+	body: () => body,
+	busyState: () => busyState,
+	choices: () => choices,
+	footer: () => footer,
+	header: () => header,
+	scrollbarExtent: () => scrollbarExtent,
+	steps: () => steps,
+	tabs: () => tabs
+});
+var scrollbarExtent = controls.scrollBar.extent;
 var steps = [
-	"Fields",
-	"Relations",
-	"Snapshots",
-	"Tasks and messages",
-	"Review duplicate"
-];
-var icons = [
-	"edit",
-	"account-tree",
-	"inventory-2",
-	"task",
-	"fact-check"
+	{
+		label: "Fields",
+		icon: "edit"
+	},
+	{
+		label: "Relations",
+		icon: "account-tree"
+	},
+	{
+		label: "Snapshots",
+		icon: "inventory-2"
+	},
+	{
+		label: "Tasks and messages",
+		icon: "task"
+	},
+	{
+		label: "Review",
+		icon: "fact-check"
+	}
 ];
 var choices = [
 	{
@@ -59,17 +80,341 @@ var choices = [
 		page: 3
 	}
 ];
+function busyState(model, language) {
+	return model.busy || model.saving ? {
+		message: translate(model.saving ? "Creating duplicate on the server… You can continue working." : "Analyzing fields, relations and process content…", language),
+		cancellable: !model.saving
+	} : null;
+}
+function header(model, width, language) {
+	const tr = (text) => translate(text, language), narrow = width < 700;
+	const badgeWidth = narrow ? 0 : 132, right = 48 + badgeWidth;
+	return {
+		height: 68,
+		nodes: [
+			node("Box", "duplicateSObjectHeader", rect(0, 0, width, 68), {
+				background: "surfaceContainer",
+				radiusRole: "sectionRadius"
+			}),
+			node("Box", "duplicateIconSurface", rect(12, 13, 42, 42), {
+				background: "surfaceContainerHigh",
+				children: [node("Icon", "duplicateIcon", rect(10, 10, 22, 22), {
+					icon: "control-point-duplicate",
+					color: "action"
+				})]
+			}),
+			label("duplicateTitle", rect(65, 12, Math.max(0, width - 65 - right), 24), tr("Duplicate") + " " + (model.title || tr("sObject")), {
+				fontRole: "bodyLarge",
+				weight: 600
+			}),
+			label("duplicateSearchType", rect(65, 38, Math.max(0, width - 65 - right), 18), model.searchType || "", {
+				fontRole: "caption",
+				color: "secondaryText",
+				elideMiddle: true
+			}),
+			...narrow ? [] : [node("StatusChip", "duplicateStepCount", rect(width - right, 22, badgeWidth - 8, 24), {
+				text: translate("Step {step} of 5", language, { step: model.step + 1 }),
+				icon: steps[model.step].icon,
+				accent: "action"
+			})],
+			button("duplicateHelp", rect(width - 42, 18, 32, 32), tr("Duplication help"), "help", { type: "help" }, true, {
+				iconOnly: true,
+				iconAction: true
+			})
+		]
+	};
+}
+function tabs(model, width, language) {
+	const cell = Math.max(0, (width - 16) / 5);
+	return {
+		height: 36,
+		nodes: [node("Box", "duplicateStepSurface", rect(0, 0, width, 36), {
+			background: "surfaceContainerHigh",
+			radius: 8
+		}), ...steps.map((step, index) => button("duplicateStep_" + index, rect(4 + index * (cell + 2), 2, cell, 32), translate(step.label, language), step.icon, {
+			type: "step",
+			value: index
+		}, !model.busy && !model.saving, {
+			radio: true,
+			selected: model.step === index,
+			iconOnly: width < 600,
+			iconSize: 16
+		}))]
+	};
+}
+function footer(model, width, language) {
+	const tr = (text) => translate(text, language), narrow = width < 680, height = narrow ? 104 : 64;
+	const nodes = [node("Box", "duplicateSObjectFooter", rect(0, 0, width, height), { background: "surfaceContainer" })];
+	if (model.ready) nodes.push(node("CheckBox", "duplicateRememberSettings", rect(13, 10, narrow ? width - 26 : Math.max(80, width - 398), 36), {
+		label: tr("Remember choices"),
+		text: tr(width < 1e3 ? "Remember" : "Remember for this Search Type"),
+		checked: model.remember,
+		enabled: !model.saving,
+		action: { type: "remember" }
+	}));
+	const actions = [
+		[
+			"cancel",
+			"Cancel",
+			"",
+			true
+		],
+		...model.ready && model.step > 0 ? [[
+			"back",
+			"Back",
+			"arrow-back",
+			!model.busy && !model.saving
+		]] : [],
+		...model.ready && model.step < 4 ? [[
+			"next",
+			"Next",
+			"arrow-forward",
+			!model.busy && !model.saving
+		]] : [],
+		[
+			"duplicate",
+			"Duplicate",
+			"control-point-duplicate",
+			model.ready && !model.busy && !model.saving && !model.uncertain && model.valid !== false
+		]
+	];
+	const gap = 6, available = width - 26;
+	const widths = actions.map(([type]) => narrow ? Math.max(0, (available - gap * (actions.length - 1)) / actions.length) : type === "duplicate" ? 110 : type === "cancel" ? 72 : 36);
+	const start = width - 13 - widths.reduce((sum, w) => sum + w, 0) - gap * (actions.length - 1);
+	actions.forEach(([type, text, icon, enabled], index) => nodes.push(button("duplicate_" + type, rect(start + widths.slice(0, index).reduce((sum, w) => sum + w + gap, 0), narrow ? 58 : 14, widths[index], 36), tr(text), icon, { type }, enabled && (type !== "cancel" || !model.saving), {
+		highlighted: type === "duplicate",
+		iconSize: 16,
+		iconOnly: !narrow && ["back", "next"].includes(type)
+	})));
+	return {
+		height,
+		nodes
+	};
+}
+function body(model, width, language) {
+	const tr = (text) => translate(text, language), nodes = [];
+	let y = 0;
+	function paragraph(id, text, icon, background = "surfaceContainerLow") {
+		const h = Math.max(44, captionHeight(text, Math.max(1, width - (icon ? 62 : 28))) + 24);
+		nodes.push(node("Box", id, rect(0, y, width, h), {
+			background,
+			children: [...icon ? [node("Icon", id + "Icon", rect(12, (h - 18) / 2, 18, 18), {
+				icon,
+				color: "action"
+			})] : [], label(id + "Text", rect(icon ? 40 : 14, 12, Math.max(0, width - (icon ? 54 : 28)), h - 24), text, {
+				wrap: true,
+				color: "secondaryText"
+			})]
+		}));
+		y += h + 10;
+	}
+	function intro(id, text) {
+		const h = captionHeight(text, Math.max(1, width));
+		nodes.push(label(id + "Text", rect(0, y, width, h), text, {
+			wrap: true,
+			color: "secondaryText"
+		}));
+		y += h + 8;
+	}
+	if (model.error) {
+		paragraph("duplicateError", tr(model.error), "warning", "errorContainer");
+		if (!model.uncertain) {
+			nodes.push(button("duplicateRetry", rect(0, y, 120, 36), tr(model.ready ? "Analyze again" : "Retry"), "refresh", { type: "retry" }, !model.busy));
+			y += 46;
+		}
+	}
+	if (!model.ready) return {
+		height: Math.max(0, y - 10),
+		nodes
+	};
+	if (model.step === 0) paragraph("duplicateFieldIntro", tr("Edit the values of the new object. Identity, project and relationship columns are generated or managed automatically."), "edit");
+	else if (model.step === 1) {
+		intro("duplicateRelationIntro", tr("Choose what happens to each relationship already attached to the source object."));
+		(model.relations || []).forEach((record, index) => {
+			const children = [
+				node("Box", "relationIconSurface", rect(11, 11, 34, 34), {
+					background: "surfaceContainerHigh",
+					children: [node("Icon", "relationIcon", rect(8, 8, 18, 18), {
+						icon: record.kind === "instance" ? "hub" : record.kind === "parent" ? "arrow-upward" : "arrow-downward",
+						color: "action"
+					})]
+				}),
+				label("relationTitle", rect(55, 11, Math.max(0, width - 66), 20), record.title, { weight: 600 }),
+				label("relationDetails", rect(55, 32, Math.max(0, width - 66), 17), tr(record.kind === "instance" ? "Instance links" : record.kind === "parent" ? "Parent" : "Children") + " · " + record.count + (record.path ? " · " + record.path : ""), {
+					fontRole: "caption",
+					color: "secondaryText"
+				})
+			];
+			const options = record.options || [], cell = Math.max(0, (width - 22 - 6 * (options.length - 1)) / Math.max(1, options.length));
+			options.forEach((option, i) => children.push(button("duplicateRelationMode_" + index + "_" + i, rect(11 + i * (cell + 6), 58, cell, 36), tr(option.label), "", {
+				type: "relation",
+				index,
+				key: record.key,
+				value: option.value
+			}, !model.saving, {
+				radio: true,
+				selected: record.mode === option.value
+			})));
+			const text = (record.items || []).map((item) => item.title).join("  ·  ");
+			if (text) children.push(label("relationItems", rect(11, 102, width - 22, 18), text, {
+				fontRole: "caption",
+				color: "secondaryText",
+				tooltip: text
+			}));
+			const height = text ? 131 : 105;
+			nodes.push(node("Box", "duplicateRelation_" + index, rect(0, y, width, height), {
+				background: "surfaceContainer",
+				radiusRole: "sectionRadius",
+				children
+			}));
+			y += height + 8;
+		});
+		if (!(model.relations || []).length) paragraph("duplicateRelationsEmpty", tr("No linked objects"), "link-off");
+	} else if (model.step === 2 || model.step === 3) {
+		intro("duplicateContentIntro", tr(model.step === 2 ? "Choose current snapshots and files to duplicate for each process. Message attachments are handled with their messages on the next step." : "Choose tasks, process messages, task messages, and their attached files. Copying task messages also copies their parent tasks."));
+		let count = 0;
+		(model.processes || []).forEach((record, index) => {
+			const available = choices.filter((choice) => choice.page === model.step && record[choice.count]);
+			if (!available.length) return;
+			count++;
+			const children = [node("Icon", "processIcon", rect(16, 18, 20, 20), {
+				icon: "account-tree",
+				color: "action"
+			}), label("processTitle", rect(47, 12, Math.max(0, width - 60), 24), record.name, { weight: 600 })];
+			children.push(node("StatusChip", "processCount", rect(Math.max(47, width - 106), 10, 94, 24), {
+				icon: "inventory-2",
+				text: translate("{count} items", language, { count: model.step === 2 ? record.snapshotCount : Number(record.taskCount || 0) + Number(record.processMessageCount || 0) + Number(record.taskMessageCount || 0) }),
+				accent: "secondaryText"
+			}));
+			let top = 42, left = 11;
+			available.forEach((choice) => {
+				const text = tr(choice.label) + " " + record[choice.count] + (choice.name === "copySnapshots" ? " · " + tr("Files") + " " + record.fileCount : "");
+				const w = Math.min(Math.max(0, width - 22), text.length * 6.5 + 32);
+				if (left > 11 && left + w > width - 11) {
+					left = 11;
+					top += 36;
+				}
+				children.push(node("CheckBox", "duplicateChoice_" + index + "_" + choice.name, rect(left, top, w, 32), {
+					label: tr(choice.label),
+					text,
+					checked: !!record[choice.name],
+					enabled: !model.saving,
+					action: {
+						type: "choice",
+						index,
+						name: choice.name
+					}
+				}));
+				left += w + 8;
+			});
+			top += 32;
+			nodes.push(node("Box", "duplicateProcess_" + index, rect(0, y, width, top + 7), {
+				background: "surfaceContainer",
+				radiusRole: "sectionRadius",
+				children
+			}));
+			y += top + 15;
+		});
+		if (!count) paragraph("duplicateContentEmpty", tr(model.step === 2 ? "No current snapshots" : "No tasks or messages"), "inventory-2");
+	} else {
+		const totals = model.totals || {}, columns = width >= 600 ? 4 : 2, cell = (width - 28 - 7 * (columns - 1)) / columns;
+		const text = tr("The new object receives the edited fields. Selected links are recreated; original instance targets are never duplicated."), textHeight = captionHeight(text, Math.max(1, width - 28));
+		const top = 92 + textHeight, height = top + Math.ceil(4 / columns) * 36 + 14;
+		const children = [
+			node("Icon", "duplicateReviewIcon", rect((width - 34) / 2, 14, 34, 34), {
+				icon: "control-point-duplicate",
+				color: "action"
+			}),
+			label("duplicateReviewTitle", rect(14, 58, width - 28, 25), tr("Ready to create the duplicate"), {
+				fontRole: "bodyLarge",
+				weight: 600,
+				align: "center"
+			}),
+			label("duplicateReviewExplanation", rect(14, 88, width - 28, textHeight), text, {
+				color: "secondaryText",
+				wrap: true,
+				align: "center"
+			})
+		];
+		[
+			["Related", totals.related],
+			["Snapshots", totals.snapshots],
+			["Tasks", totals.tasks],
+			["Messages and files", totals.messages]
+		].forEach(([text, count], i) => children.push(node("SummaryChip", "duplicateTotal_" + i, rect(14 + i % columns * (cell + 7), top + Math.floor(i / columns) * 36, cell, 28), {
+			text: tr(text),
+			count: count || 0,
+			showCount: true,
+			accent: "action"
+		})));
+		nodes.push(node("Box", "duplicateReview", rect(0, y, width, height), {
+			background: "surfaceContainer",
+			children
+		}));
+		y += height + 10;
+		paragraph("duplicateQuickChoice", tr(model.remember ? "These choices will enable Quick duplicate for this Search Type." : "These choices will be used only once."), "bolt");
+	}
+	return {
+		height: Math.max(0, y - 10),
+		nodes
+	};
+}
+//#endregion
+//#region src/features/objects/ObjectDuplicateSurface.vue
+var _hoisted_1$1 = ["role", "aria-label"];
+//#endregion
+//#region src/features/objects/DuplicateSObject.vue
 var _sfc_main = {
 	components: {
+		ContentLoadingOverlay: _sfc_main$11,
+		ObjectDuplicateSurface: {
+			__name: "ObjectDuplicateSurface",
+			props: {
+				model: Object,
+				part: {
+					type: String,
+					default: "body"
+				}
+			},
+			emits: ["event"],
+			setup(__props, { emit: __emit }) {
+				const props = __props;
+				const emit = __emit;
+				const host = ref(null), width = ref(0);
+				const scene = computed(() => duplicate_ui_exports[props.part](props.model, width.value, appearance.language));
+				let observer;
+				onMounted(() => {
+					const measure = () => {
+						width.value = host.value.clientWidth;
+					};
+					measure();
+					observer = observeFrameSizes(measure);
+					observer.observe(host.value);
+				});
+				onBeforeUnmount(() => observer?.disconnect());
+				return (_ctx, _cache) => {
+					return openBlock(), createElementBlock("section", {
+						ref_key: "host",
+						ref: host,
+						class: "object-duplicate-surface",
+						role: __props.part === "tabs" ? "radiogroup" : void 0,
+						"aria-label": __props.part === "tabs" ? unref(t)("Duplicate steps") : void 0,
+						style: normalizeStyle({ height: scene.value.height + "px" })
+					}, [createVNode(_sfc_main$3, {
+						scene: scene.value,
+						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
+					}, null, 8, ["scene"])], 12, _hoisted_1$1);
+				};
+			}
+		},
+		ObjectFieldFrame: _sfc_main$10,
+		AppTextArea: _sfc_main$4,
 		AppDateField: _sfc_main$5,
-		AppButton: _sfc_main$1,
-		AppIcon: _sfc_main$2,
-		AppCheckbox: _sfc_main$7,
-		AppSelect: _sfc_main$3,
-		AppTextField: _sfc_main$4,
-		AppColorInput: _sfc_main$6,
-		AppSegmentedButton: _sfc_main$9,
-		SummaryChip: _sfc_main$8
+		AppButton: _sfc_main$2,
+		AppCheckbox: _sfc_main$9,
+		AppSelect: _sfc_main$7,
+		AppTextField: _sfc_main$8,
+		AppColorInput: _sfc_main$6
 	},
 	inject: {
 		openHelp: {},
@@ -102,15 +447,25 @@ var _sfc_main = {
 		};
 	},
 	computed: {
-		steps() {
-			return steps.map((label, value) => ({
-				value,
-				label,
-				icon: icons[value]
-			}));
+		presentation() {
+			return {
+				title: this.analysis?.title,
+				searchType: this.analysis?.searchType || this.sourceType,
+				step: this.step,
+				ready: !!this.analysis,
+				busy: this.busy,
+				saving: this.saving,
+				uncertain: this.uncertain,
+				valid: this.valid,
+				error: this.error,
+				remember: this.remember,
+				relations: this.analysis?.relations || [],
+				processes: this.analysis?.processes || [],
+				totals: this.totals
+			};
 		},
-		processes() {
-			return this.analysis?.processes.filter((process) => choices.some((choice) => choice.page === this.step && process[choice.count])) || [];
+		busyPresentation() {
+			return busyState(this.presentation, appearance.language);
 		},
 		dirty() {
 			return !!this.analysis && JSON.stringify(this.options()) !== this.baseline;
@@ -154,6 +509,18 @@ var _sfc_main = {
 	},
 	methods: {
 		t,
+		action(event) {
+			if (event.type === "step") this.step = event.value;
+			else if (event.type === "remember") this.remember = event.value;
+			else if (event.type === "relation") this.analysis.relations[event.index].mode = event.value;
+			else if (event.type === "choice") this.changeContent(this.analysis.processes[event.index], event.name, event.value);
+			else if (event.type === "back") this.step--;
+			else if (event.type === "next") this.step++;
+			else if (event.type === "duplicate") this.duplicate();
+			else if (event.type === "retry") this.analyze();
+			else if (event.type === "cancel") this.close();
+			else if (event.type === "help") this.openHelp("duplicating_objects");
+		},
 		changeContent,
 		beforeUnload(event) {
 			if (this.$refs.dialog?.open && (this.dirty || this.saving || this.uncertain)) {
@@ -317,345 +684,176 @@ var _sfc_main = {
 	}
 };
 var _hoisted_1 = ["aria-label"];
-var _hoisted_2 = { class: "duplicate-header" };
-var _hoisted_3 = { class: "duplicate-symbol" };
-var _hoisted_4 = { class: "duplicate-step" };
-var _hoisted_5 = {
-	key: 0,
-	role: "alert",
-	class: "error"
-};
+var _hoisted_2 = { class: "duplicate-pages-wrapper" };
+var _hoisted_3 = { class: "duplicate-pages" };
+var _hoisted_4 = { class: "duplicate-page" };
+var _hoisted_5 = { class: "duplicate-fields" };
 var _hoisted_6 = {
-	key: 1,
-	role: "status"
-};
-var _hoisted_7 = { class: "duplicate-page" };
-var _hoisted_8 = { class: "muted duplicate-intro" };
-var _hoisted_9 = { class: "duplicate-fields" };
-var _hoisted_10 = { class: "duplicate-field-heading" };
-var _hoisted_11 = { class: "duplicate-symbol small" };
-var _hoisted_12 = [
-	"onUpdate:modelValue",
-	"aria-label",
-	"disabled"
-];
-var _hoisted_13 = {
 	key: 6,
 	class: "muted"
 };
-var _hoisted_14 = {
+var _hoisted_7 = {
 	key: 0,
-	class: "duplicate-page"
-};
-var _hoisted_15 = { class: "muted" };
-var _hoisted_16 = {
-	key: 0,
-	class: "muted"
-};
-var _hoisted_17 = { class: "duplicate-card-heading" };
-var _hoisted_18 = { class: "duplicate-symbol small" };
-var _hoisted_19 = { class: "muted" };
-var _hoisted_20 = {
-	key: 1,
-	class: "duplicate-page"
-};
-var _hoisted_21 = { class: "muted" };
-var _hoisted_22 = {
-	key: 0,
-	class: "muted"
-};
-var _hoisted_23 = { class: "duplicate-card-heading" };
-var _hoisted_24 = { class: "duplicate-symbol small" };
-var _hoisted_25 = { key: 0 };
-var _hoisted_26 = { class: "duplicate-content-choices" };
-var _hoisted_27 = {
-	key: 2,
-	class: "duplicate-page"
-};
-var _hoisted_28 = { class: "duplicate-review" };
-var _hoisted_29 = { class: "muted" };
-var _hoisted_30 = { class: "duplicate-totals" };
-var _hoisted_31 = { class: "duplicate-intro muted" };
-var _hoisted_32 = { class: "configuration-actions" };
-var _hoisted_33 = {
-	key: 3,
 	class: "notice",
 	role: "alert"
 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-	const _component_AppIcon = resolveComponent("AppIcon");
 	const _component_AppButton = resolveComponent("AppButton");
-	const _component_AppSegmentedButton = resolveComponent("AppSegmentedButton");
+	const _component_ObjectDuplicateSurface = resolveComponent("ObjectDuplicateSurface");
 	const _component_AppCheckbox = resolveComponent("AppCheckbox");
 	const _component_AppSelect = resolveComponent("AppSelect");
 	const _component_AppColorInput = resolveComponent("AppColorInput");
+	const _component_AppTextArea = resolveComponent("AppTextArea");
 	const _component_AppDateField = resolveComponent("AppDateField");
 	const _component_AppTextField = resolveComponent("AppTextField");
-	const _component_SummaryChip = resolveComponent("SummaryChip");
+	const _component_ObjectFieldFrame = resolveComponent("ObjectFieldFrame");
+	const _component_ContentLoadingOverlay = resolveComponent("ContentLoadingOverlay");
 	const _directive_window = resolveDirective("window");
 	return openBlock(), createBlock(Teleport, { to: "body" }, [withDirectives((openBlock(), createElementBlock("dialog", {
 		ref: "dialog",
 		class: "record-dialog duplicate-sobject",
 		"aria-label": $options.t("Duplicate object"),
-		onCancel: _cache[10] || (_cache[10] = withModifiers(($event) => $options.close(), ["prevent"]))
+		onCancel: _cache[5] || (_cache[5] = withModifiers(($event) => $options.close(), ["prevent"]))
 	}, [
-		createBaseVNode("header", _hoisted_2, [
-			createBaseVNode("span", _hoisted_3, [createVNode(_component_AppIcon, { name: "control-point-duplicate" })]),
-			createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($options.t("Duplicate")) + " " + toDisplayString($data.analysis?.title), 1), createBaseVNode("small", null, toDisplayString($data.analysis?.searchType || $data.sourceType), 1)]),
-			createBaseVNode("span", _hoisted_4, toDisplayString($options.t("Step {step} of 5", { step: $data.step + 1 })), 1),
-			createVNode(_component_AppButton, {
-				label: "Help",
-				icon: "help",
-				"icon-only": "",
-				onClick: _cache[0] || (_cache[0] = ($event) => $options.openHelp("duplicating_objects"))
-			}),
-			createVNode(_component_AppButton, {
-				label: "Close",
-				icon: "close",
-				"icon-only": "",
-				disabled: $data.saving,
-				onClick: _cache[1] || (_cache[1] = ($event) => $options.close())
-			}, null, 8, ["disabled"])
-		]),
-		$data.error ? (openBlock(), createElementBlock("p", _hoisted_5, [createTextVNode(toDisplayString($options.t($data.error)) + " ", 1), !$data.uncertain && $options.valid ? (openBlock(), createBlock(_component_AppButton, {
+		createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString($options.t("Duplicate object")), 1), createVNode(_component_AppButton, {
+			label: "Close",
+			icon: "close",
+			"icon-only": "",
+			disabled: $data.saving,
+			onClick: _cache[0] || (_cache[0] = ($event) => $options.close())
+		}, null, 8, ["disabled"])]),
+		createVNode(_component_ObjectDuplicateSurface, {
+			model: $options.presentation,
+			part: "header",
+			onEvent: $options.action
+		}, null, 8, ["model", "onEvent"]),
+		createVNode(_component_ObjectDuplicateSurface, {
+			model: $options.presentation,
+			part: "tabs",
+			onEvent: $options.action
+		}, null, 8, ["model", "onEvent"]),
+		createBaseVNode("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [createVNode(_component_ObjectDuplicateSurface, {
+			model: $options.presentation,
+			onEvent: $options.action
+		}, null, 8, ["model", "onEvent"]), $data.analysis ? (openBlock(), createElementBlock("form", {
 			key: 0,
-			label: "Analyze again",
-			disabled: $data.busy || $data.saving,
-			onClick: $options.analyze
-		}, null, 8, ["disabled", "onClick"])) : createCommentVNode("", true)])) : createCommentVNode("", true),
-		$data.busy || $data.saving ? (openBlock(), createElementBlock("p", _hoisted_6, toDisplayString($options.t($data.saving ? "Creating duplicate on server…" : "Analyzing object…")), 1)) : createCommentVNode("", true),
-		$data.analysis ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createVNode(_component_AppSegmentedButton, {
-			modelValue: $data.step,
-			"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $data.step = $event),
-			options: $options.steps,
-			label: "Duplicate steps",
-			disabled: $data.saving || $data.busy,
-			class: "duplicate-steps"
-		}, null, 8, [
-			"modelValue",
-			"options",
-			"disabled"
-		]), createBaseVNode("form", {
 			ref: "fields",
-			class: "duplicate-pages",
-			onSubmit: _cache[3] || (_cache[3] = withModifiers((...args) => $options.duplicate && $options.duplicate(...args), ["prevent"]))
-		}, [
-			withDirectives(createBaseVNode("section", _hoisted_7, [createBaseVNode("p", _hoisted_8, [createVNode(_component_AppIcon, { name: "edit" }), createTextVNode(toDisplayString($options.t("Edit values for the new object. Identity, project and relationship fields are managed automatically.")), 1)]), createBaseVNode("div", _hoisted_9, [(openBlock(true), createElementBlock(Fragment, null, renderList($data.analysis.fields.filter((field) => $options.fieldKind(field) !== "hidden"), (field) => {
-				return openBlock(), createElementBlock("div", {
-					key: field.name,
-					class: "duplicate-field"
-				}, [
-					createBaseVNode("span", _hoisted_10, [createBaseVNode("span", _hoisted_11, [createVNode(_component_AppIcon, { name: $options.fieldKind(field) === "textarea" ? "description" : "text-fields" }, null, 8, ["name"])]), createBaseVNode("span", null, [createBaseVNode("strong", null, toDisplayString($options.t(field.widget?.title || field.label)), 1), createBaseVNode("small", null, toDisplayString(field.name), 1)])]),
-					$options.fieldKind(field) === "checkbox" ? (openBlock(), createBlock(_component_AppCheckbox, {
-						key: 0,
-						modelValue: $data.draft[field.name],
-						"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
-						label: field.widget?.title || field.label,
-						disabled: $data.saving || $options.readOnly(field)
-					}, null, 8, [
-						"modelValue",
-						"onUpdate:modelValue",
-						"label",
-						"disabled"
-					])) : $options.fieldKind(field) === "select" ? (openBlock(), createBlock(_component_AppSelect, {
-						key: 1,
-						modelValue: $data.draft[field.name],
-						"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
-						options: $options.fieldChoices(field),
-						label: field.widget?.title || field.label,
-						"translate-labels": false,
-						disabled: $data.saving || $options.readOnly(field)
-					}, null, 8, [
-						"modelValue",
-						"onUpdate:modelValue",
-						"options",
-						"label",
-						"disabled"
-					])) : $options.fieldKind(field) === "color" ? (openBlock(), createBlock(_component_AppColorInput, {
-						key: 2,
-						modelValue: $data.draft[field.name],
-						"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
-						label: field.label,
-						disabled: $data.saving || $options.readOnly(field)
-					}, null, 8, [
-						"modelValue",
-						"onUpdate:modelValue",
-						"label",
-						"disabled"
-					])) : $options.fieldKind(field) === "textarea" ? withDirectives((openBlock(), createElementBlock("textarea", {
-						key: 3,
-						"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
-						"aria-label": $options.t(field.widget?.title || field.label),
-						rows: "4",
-						disabled: $data.saving || $options.readOnly(field)
-					}, null, 8, _hoisted_12)), [[vModelText, $data.draft[field.name]]]) : $options.fieldKind(field) === "datetime-local" ? (openBlock(), createBlock(_component_AppDateField, {
-						key: 4,
-						"include-time": "",
-						modelValue: $data.draft[field.name],
-						"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
-						label: field.widget?.title || field.label,
-						required: [true, "true"].includes(field.widget?.options?.required),
-						disabled: $data.saving || $options.readOnly(field)
-					}, null, 8, [
-						"modelValue",
-						"onUpdate:modelValue",
-						"label",
-						"required",
-						"disabled"
-					])) : (openBlock(), createBlock(_component_AppTextField, {
-						key: 5,
-						modelValue: $data.draft[field.name],
-						"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
-						label: field.widget?.title || field.label,
-						type: $options.fieldKind(field),
-						required: [true, "true"].includes(field.widget?.options?.required),
-						disabled: $data.saving || $options.readOnly(field),
-						step: "any"
-					}, null, 8, [
-						"modelValue",
-						"onUpdate:modelValue",
-						"label",
-						"type",
-						"required",
-						"disabled"
-					])),
-					field.widget?.options?.hint || field.widget?.options?.hint_text ? (openBlock(), createElementBlock("small", _hoisted_13, toDisplayString($options.t(field.widget.options.hint || field.widget.options.hint_text)), 1)) : createCommentVNode("", true)
-				]);
-			}), 128))])], 512), [[vShow, $data.step === 0]]),
-			$data.step === 1 ? (openBlock(), createElementBlock("section", _hoisted_14, [
-				createBaseVNode("p", _hoisted_15, toDisplayString($options.t("Keep parent and instance links, or duplicate direct children. Linked targets are not cloned.")), 1),
-				!$data.analysis.relations.length ? (openBlock(), createElementBlock("p", _hoisted_16, toDisplayString($options.t("No linked objects")), 1)) : createCommentVNode("", true),
-				(openBlock(true), createElementBlock(Fragment, null, renderList($data.analysis.relations, (relation) => {
-					return openBlock(), createElementBlock("article", {
-						key: relation.key,
-						class: "duplicate-card"
-					}, [
-						createBaseVNode("div", _hoisted_17, [createBaseVNode("span", _hoisted_18, [createVNode(_component_AppIcon, { name: relation.kind === "instance" ? "link" : "account-tree" }, null, 8, ["name"])]), createBaseVNode("div", null, [createBaseVNode("strong", null, toDisplayString(relation.title), 1), createBaseVNode("small", null, [createTextVNode(toDisplayString($options.t(relation.kind === "parent" ? "Parent" : relation.kind === "instance" ? "Instance links" : "Children")) + " · " + toDisplayString(relation.count), 1), relation.path ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString(relation.path), 1)], 64)) : createCommentVNode("", true)])])]),
-						createVNode(_component_AppSegmentedButton, {
-							modelValue: relation.mode,
-							"onUpdate:modelValue": ($event) => relation.mode = $event,
-							options: relation.options.map((option) => ({
-								value: option.value,
-								label: option.label
-							})),
-							label: relation.title,
-							disabled: $data.saving
-						}, null, 8, [
-							"modelValue",
-							"onUpdate:modelValue",
-							"options",
-							"label",
-							"disabled"
-						]),
-						createBaseVNode("p", _hoisted_19, toDisplayString(relation.items.map((item) => item.title).join(" · ")), 1)
-					]);
-				}), 128))
-			])) : createCommentVNode("", true),
-			$data.step === 2 || $data.step === 3 ? (openBlock(), createElementBlock("section", _hoisted_20, [
-				createBaseVNode("p", _hoisted_21, toDisplayString($options.t($data.step === 2 ? "Copy current snapshots and their files by process. Message attachments are selected separately." : "Choose tasks, message threads and attachments to duplicate. Attachment choices include their messages and tasks.")), 1),
-				!$options.processes.length ? (openBlock(), createElementBlock("p", _hoisted_22, toDisplayString($options.t($data.step === 2 ? "No current snapshots" : "No tasks or messages")), 1)) : createCommentVNode("", true),
-				(openBlock(true), createElementBlock(Fragment, null, renderList($options.processes, (process) => {
-					return openBlock(), createElementBlock("article", {
-						key: process.name,
-						class: "duplicate-card"
-					}, [createBaseVNode("div", _hoisted_23, [
-						createBaseVNode("span", _hoisted_24, [createVNode(_component_AppIcon, { name: "account-tree" })]),
-						createBaseVNode("div", null, [createBaseVNode("strong", null, toDisplayString(process.name), 1), $data.step === 2 ? (openBlock(), createElementBlock("small", _hoisted_25, toDisplayString($options.t("Snapshots")) + " " + toDisplayString(process.snapshotCount) + " · " + toDisplayString($options.t("Files")) + " " + toDisplayString(process.fileCount), 1)) : createCommentVNode("", true)]),
-						createVNode(_component_SummaryChip, {
-							label: $options.t("Items"),
-							count: $data.step === 2 ? process.snapshotCount : process.taskCount + process.processMessageCount + process.taskMessageCount,
-							"show-dot": false
-						}, null, 8, ["label", "count"])
-					]), createBaseVNode("div", _hoisted_26, [(openBlock(true), createElementBlock(Fragment, null, renderList($options.pageChoices(process), (choice) => {
-						return openBlock(), createBlock(_component_AppCheckbox, {
-							key: choice.name,
-							"model-value": process[choice.name],
-							label: choice.label,
-							compact: "",
-							disabled: $data.saving,
-							"onUpdate:modelValue": ($event) => $options.changeContent(process, choice.name, $event)
-						}, {
-							default: withCtx(() => [createTextVNode(toDisplayString($options.t(choice.label)) + " " + toDisplayString(process[choice.count]), 1), choice.name === "copySnapshots" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString($options.t("Files")) + " " + toDisplayString(process.fileCount), 1)], 64)) : createCommentVNode("", true)]),
-							_: 2
-						}, 1032, [
-							"model-value",
-							"label",
-							"disabled",
-							"onUpdate:modelValue"
-						]);
-					}), 128))])]);
-				}), 128))
-			])) : createCommentVNode("", true),
-			$data.step === 4 ? (openBlock(), createElementBlock("section", _hoisted_27, [createBaseVNode("div", _hoisted_28, [
-				createVNode(_component_AppIcon, { name: "control-point-duplicate" }),
-				createBaseVNode("h3", null, toDisplayString($options.t("Ready to duplicate")), 1),
-				createBaseVNode("p", _hoisted_29, toDisplayString($options.t("The new object will have its own identity. Instance links refer to the same objects; selected children and content are copied.")), 1),
-				createBaseVNode("div", _hoisted_30, [
-					createVNode(_component_SummaryChip, {
-						label: $options.t("Related objects"),
-						count: $options.totals.related
-					}, null, 8, ["label", "count"]),
-					createVNode(_component_SummaryChip, {
-						label: $options.t("Snapshots"),
-						count: $options.totals.snapshots
-					}, null, 8, ["label", "count"]),
-					createVNode(_component_SummaryChip, {
-						label: $options.t("Tasks"),
-						count: $options.totals.tasks
-					}, null, 8, ["label", "count"]),
-					createVNode(_component_SummaryChip, {
-						label: $options.t("Messages and files"),
-						count: $options.totals.messages
-					}, null, 8, ["label", "count"])
-				])
-			]), createBaseVNode("p", _hoisted_31, [createVNode(_component_AppIcon, { name: "MDI_LIGHTNING_BOLT" }), createTextVNode(toDisplayString($options.t($data.remember ? "These choices will be available for Quick Duplicate." : "These choices apply only to this duplicate.")), 1)])])) : createCommentVNode("", true)
-		], 544)], 64)) : createCommentVNode("", true),
-		createBaseVNode("footer", null, [createVNode(_component_AppCheckbox, {
-			modelValue: $data.remember,
-			"onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.remember = $event),
-			label: "Remember choices",
-			compact: "",
-			disabled: $data.saving || !$data.analysis
-		}, null, 8, ["modelValue", "disabled"]), createBaseVNode("div", _hoisted_32, [
-			createVNode(_component_AppButton, {
-				label: "Cancel",
-				disabled: $data.saving,
-				onClick: _cache[5] || (_cache[5] = ($event) => $options.close())
-			}, null, 8, ["disabled"]),
-			$data.step > 0 ? (openBlock(), createBlock(_component_AppButton, {
-				key: 0,
-				label: "Back",
-				icon: "chevron-left",
-				"icon-only": "",
-				disabled: $data.busy || $data.saving,
-				onClick: _cache[6] || (_cache[6] = ($event) => $data.step--)
-			}, null, 8, ["disabled"])) : createCommentVNode("", true),
-			$data.step < 4 ? (openBlock(), createBlock(_component_AppButton, {
-				key: 1,
-				label: "Next",
-				icon: "chevron-right",
-				"icon-only": "",
-				disabled: !$data.analysis || $data.busy || $data.saving,
-				onClick: _cache[7] || (_cache[7] = ($event) => $data.step++)
-			}, null, 8, ["disabled"])) : createCommentVNode("", true),
-			createVNode(_component_AppButton, {
-				label: "Duplicate",
-				icon: "copy",
-				highlighted: "",
-				disabled: !$data.analysis || $data.busy || $data.saving || $data.uncertain || !$options.valid,
-				onClick: $options.duplicate
-			}, null, 8, ["disabled", "onClick"])
-		])]),
-		$data.discard ? (openBlock(), createElementBlock("div", _hoisted_33, [
+			onSubmit: _cache[1] || (_cache[1] = withModifiers((...args) => $options.duplicate && $options.duplicate(...args), ["prevent"]))
+		}, [withDirectives(createBaseVNode("section", _hoisted_4, [createBaseVNode("div", _hoisted_5, [(openBlock(true), createElementBlock(Fragment, null, renderList($data.analysis.fields.filter((field) => $options.fieldKind(field) !== "hidden"), (field) => {
+			return openBlock(), createBlock(_component_ObjectFieldFrame, {
+				key: field.name,
+				"minimum-editor-height": $options.fieldKind(field) === "textarea" ? 112 : void 0,
+				model: {
+					name: field.name,
+					title: field.widget?.title || field.label,
+					description: field.widget?.options?.hint || field.widget?.options?.hint_text || "",
+					readOnly: $options.readOnly(field),
+					required: [true, "true"].includes(field.widget?.options?.required),
+					icon: $options.fieldKind(field) === "textarea" ? "description" : "text-fields"
+				}
+			}, {
+				default: withCtx(() => [$options.fieldKind(field) === "checkbox" ? (openBlock(), createBlock(_component_AppCheckbox, {
+					key: 0,
+					modelValue: $data.draft[field.name],
+					"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
+					label: field.widget?.title || field.label,
+					disabled: $data.saving || $options.readOnly(field)
+				}, null, 8, [
+					"modelValue",
+					"onUpdate:modelValue",
+					"label",
+					"disabled"
+				])) : $options.fieldKind(field) === "select" ? (openBlock(), createBlock(_component_AppSelect, {
+					key: 1,
+					modelValue: $data.draft[field.name],
+					"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
+					options: $options.fieldChoices(field),
+					label: field.widget?.title || field.label,
+					"translate-labels": false,
+					disabled: $data.saving || $options.readOnly(field)
+				}, null, 8, [
+					"modelValue",
+					"onUpdate:modelValue",
+					"options",
+					"label",
+					"disabled"
+				])) : $options.fieldKind(field) === "color" ? (openBlock(), createBlock(_component_AppColorInput, {
+					key: 2,
+					modelValue: $data.draft[field.name],
+					"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
+					label: field.label,
+					disabled: $data.saving || $options.readOnly(field)
+				}, null, 8, [
+					"modelValue",
+					"onUpdate:modelValue",
+					"label",
+					"disabled"
+				])) : $options.fieldKind(field) === "textarea" ? (openBlock(), createBlock(_component_AppTextArea, {
+					key: 3,
+					modelValue: $data.draft[field.name],
+					"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
+					label: field.widget?.title || field.label,
+					rows: "4",
+					disabled: $data.saving || $options.readOnly(field)
+				}, null, 8, [
+					"modelValue",
+					"onUpdate:modelValue",
+					"label",
+					"disabled"
+				])) : $options.fieldKind(field) === "datetime-local" ? (openBlock(), createBlock(_component_AppDateField, {
+					key: 4,
+					"include-time": "",
+					modelValue: $data.draft[field.name],
+					"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
+					label: field.widget?.title || field.label,
+					required: [true, "true"].includes(field.widget?.options?.required),
+					disabled: $data.saving || $options.readOnly(field)
+				}, null, 8, [
+					"modelValue",
+					"onUpdate:modelValue",
+					"label",
+					"required",
+					"disabled"
+				])) : (openBlock(), createBlock(_component_AppTextField, {
+					key: 5,
+					modelValue: $data.draft[field.name],
+					"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
+					label: field.widget?.title || field.label,
+					type: $options.fieldKind(field),
+					required: [true, "true"].includes(field.widget?.options?.required),
+					disabled: $data.saving || $options.readOnly(field),
+					step: "any"
+				}, null, 8, [
+					"modelValue",
+					"onUpdate:modelValue",
+					"label",
+					"type",
+					"required",
+					"disabled"
+				])), field.widget?.options?.hint || field.widget?.options?.hint_text ? (openBlock(), createElementBlock("small", _hoisted_6, toDisplayString($options.t(field.widget.options.hint || field.widget.options.hint_text)), 1)) : createCommentVNode("", true)]),
+				_: 2
+			}, 1032, ["minimum-editor-height", "model"]);
+		}), 128))])], 512), [[vShow, $data.step === 0]])], 544)) : createCommentVNode("", true)]), $options.busyPresentation ? (openBlock(), createBlock(_component_ContentLoadingOverlay, {
+			key: 0,
+			message: $options.busyPresentation.message,
+			cancellable: $options.busyPresentation.cancellable,
+			onCancel: _cache[2] || (_cache[2] = ($event) => $options.close())
+		}, null, 8, ["message", "cancellable"])) : createCommentVNode("", true)]),
+		createVNode(_component_ObjectDuplicateSurface, {
+			model: $options.presentation,
+			part: "footer",
+			onEvent: $options.action
+		}, null, 8, ["model", "onEvent"]),
+		$data.discard ? (openBlock(), createElementBlock("div", _hoisted_7, [
 			createBaseVNode("p", null, toDisplayString($options.t("Discard unsaved changes?")), 1),
 			createVNode(_component_AppButton, {
 				label: "Continue editing",
-				onClick: _cache[8] || (_cache[8] = ($event) => $data.discard = false)
+				onClick: _cache[3] || (_cache[3] = ($event) => $data.discard = false)
 			}),
 			createVNode(_component_AppButton, {
 				label: "Discard",
 				destructive: "",
-				onClick: _cache[9] || (_cache[9] = ($event) => $options.close(true))
+				onClick: _cache[4] || (_cache[4] = ($event) => $options.close(true))
 			})
 		])) : createCommentVNode("", true)
 	], 40, _hoisted_1)), [[_directive_window, {

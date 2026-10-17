@@ -1,0 +1,5 @@
+{
+  "commit": "000c6a4a009f6ac9811dfe9a906a7acd976d5e45",
+  "version": "0.6.0.111",
+  "description": "Pre-B08 Handler checkpoint, already containing previous Frame batches; not the original pre-Frame application."
+}

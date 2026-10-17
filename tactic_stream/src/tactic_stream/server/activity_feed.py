@@ -55,6 +55,13 @@ def activity_feed_request(payload):
     records = result.get('records', []) if isinstance(result, dict) else result
     identities = user_identities(Search('sthpw/login').get_sobjects()) if security.check_access('search_type', 'sthpw/login', 'view') else []
     directory = {row['login']: row for row in identities}
+    decorate_activity(records, directory)
+    return dict(records=records[:25], hasMore=len(records) > 25, nextOffset=offset + min(25, len(records)),
+        dayCounts=result.get('dayCounts', []) if isinstance(result, dict) else [], users=identities)
+
+
+def decorate_activity(records, directory):
+    """Apply the same author, type and pipeline presentation in object reports."""
     pipelines = {}
     for record in records:
         identity = directory.get(record.get('actor'), {})
@@ -82,5 +89,3 @@ def activity_feed_request(payload):
                     status_node = task_pipeline.get_process(record[field]) if task_pipeline and record.get(field) else None
                     record[field + 'Color'] = status_node.get_attribute('color') or '' if status_node else ''
         record['dayKey'] = str(record.get('timestamp') or '')[:10]
-    return dict(records=records[:25], hasMore=len(records) > 25, nextOffset=offset + min(25, len(records)),
-        dayCounts=result.get('dayCounts', []) if isinstance(result, dict) else [], users=identities)

@@ -4,7 +4,7 @@ import { searchConfiguration } from '../../api.js'
 
 export default {
   components: { AppSearchField },
-  props: { modelValue: String, placeholder: String, disabled: Boolean, ticket: String, project: String, searchType: String, tabId: String },
+  props: { modelValue: String, placeholder: String, label: {type:String,default:"Search objects"}, disabled: Boolean, ticket: String, project: String, searchType: String, tabId: String },
   emits: ['update:modelValue', 'search', 'accept', 'open', 'dismiss'],
   data() { return { records: [], error: '', request: 0, boundary: null } },
   computed: { context() { return [this.ticket, this.project, this.searchType, this.tabId] } },
@@ -36,7 +36,7 @@ export default {
 </script>
 
 <template>
-  <AppSearchField ref="field" :model-value="modelValue" :placeholder="placeholder" label="Search objects" :disabled="disabled"
+  <AppSearchField ref="field" :model-value="modelValue" :placeholder="placeholder" :label="label" :disabled="disabled"
     :suggestions="records" :error="error" :boundary="boundary" @update:model-value="edit" @search="search"
     @accept="choose($event, false)" @open="choose($event, true)" @dismiss="clear(); $emit('dismiss')" />
 </template>

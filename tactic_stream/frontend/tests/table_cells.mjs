@@ -1,6 +1,7 @@
 import { closeInspector } from './inspector_helpers.mjs';
 import assert from 'node:assert/strict';
 import { mkdirSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { selectProject } from './project_selection.mjs';
 
@@ -41,14 +42,21 @@ const ready = () =>
         .every((el) => el.getAttribute('aria-busy') === 'false')
   );
 async function choice(inspector, name, value) {
-  await inspector.getByLabel(name, { exact: true }).click();
+  await inspector
+    .getByRole('button', {
+      name: name === 'Task' ? 'Switch task for this process' : name,
+      exact: true
+    })
+    .click();
   await inspector
     .locator('[data-' + name.toLowerCase() + '-choice="' + value + '"]')
     .click();
 }
 async function taskAction(inspector, name) {
   const menu = inspector.locator('.inspector-task-actions');
-  await menu.getByLabel('Task actions', { exact: true }).click();
+  await inspector
+    .getByRole('button', { name: 'Task actions', exact: true })
+    .click();
   await menu.getByRole('button', { name, exact: true }).click();
 }
 async function captureInspector(inspector, name, height) {
@@ -196,12 +204,12 @@ try {
   await notes.getByText('Browser discussion', { exact: true }).waitFor();
   await notes.locator('.inspector-object').waitFor();
   await notes
-    .getByRole('button', { name: 'Expand task details', exact: true })
+    .getByRole('button', { name: 'Expand Task Inspector', exact: true })
     .click();
   await notes.getByText('No task for publish', { exact: true }).waitFor();
   await captureInspector(notes, 'empty', 214);
   await notes
-    .getByRole('button', { name: 'Collapse task details', exact: true })
+    .getByRole('button', { name: 'Collapse Task Inspector', exact: true })
     .click();
   const frame = await notes.boundingBox();
   const bubble = await notes.locator('.note-entry').boundingBox(),
@@ -216,7 +224,7 @@ try {
     animations: 'disabled'
   });
   await notes
-    .getByRole('button', { name: 'Expand task details', exact: true })
+    .getByRole('button', { name: 'Expand Task Inspector', exact: true })
     .click();
   assert.equal(
     await notes.locator('.task-detail-fields').count(),
@@ -268,13 +276,23 @@ try {
   });
   await notes.getByRole('button', { name: 'Send note', exact: true }).tap();
   await notes.getByText('Sent from browser', { exact: true }).waitFor();
-  assert.equal(
-    await notes.getByRole('link', { name: 'Download', exact: true }).count(),
-    1
-  );
   const sent = notes
     .locator('.note-entry')
     .filter({ hasText: 'Sent from browser' });
+  assert.equal(await sent.locator('.attachment-card').count(), 1);
+  await sent.getByRole('button', { name: 'File preview', exact: true }).tap();
+  const noteFileDownload = page.waitForEvent('download');
+  await preview.getByRole('link', { name: 'Download', exact: true }).tap();
+  const downloadedNote = await noteFileDownload;
+  assert.match(downloadedNote.suggestedFilename(), /^browser note.*\.txt$/);
+  assert.equal(
+    await readFile(await downloadedNote.path(), 'utf8'),
+    'Native note attachment'
+  );
+  await preview
+    .getByRole('button', { name: 'Close preview', exact: true })
+    .tap();
+
   await sent.getByRole('button', { name: 'Reply', exact: true }).tap();
   await notes.getByLabel('Note text', { exact: true }).fill('Thread reply');
   await notes.getByLabel('Note text', { exact: true }).press('Enter');
@@ -283,19 +301,31 @@ try {
     .getByText('Thread reply', { exact: true })
     .waitFor();
   const reply = notes.locator('.note-reply');
-  await reply.getByLabel('Note actions', { exact: true }).click();
-  await reply.getByRole('button', { name: 'Edit note', exact: true }).tap();
-  await reply.getByLabel('Note text', { exact: true }).fill('Edited reply');
-  await reply.getByRole('button', { name: 'Save', exact: true }).tap();
+  await reply
+    .getByRole('button', { name: 'Note actions', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'Edit note', exact: true }).tap();
+  const noteEditor = page.getByRole('dialog', {
+    name: 'Edit note',
+    exact: true
+  });
+  await noteEditor
+    .getByLabel('Note text', { exact: true })
+    .fill('Edited reply');
+  await noteEditor.getByRole('button', { name: 'Save', exact: true }).tap();
   await reply.getByText('Edited reply', { exact: true }).waitFor();
   await reply.getByText('Edit history', { exact: true }).tap();
   await reply.getByText('Thread reply', { exact: true }).waitFor();
-  await reply.getByLabel('Note actions', { exact: true }).click();
-  await reply.getByRole('button', { name: 'Delete note', exact: true }).tap();
   await reply
-    .locator('.notice')
-    .getByRole('button', { name: 'Delete note', exact: true })
-    .tap();
+    .getByRole('button', { name: 'Note actions', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'Delete note', exact: true }).tap();
+  const noteDelete = page.getByRole('dialog', {
+    name: 'Delete note?',
+    exact: true
+  });
+  assert(await noteDelete.evaluate((node) => node.matches(':modal')));
+  await noteDelete.getByRole('button', { name: 'Delete', exact: true }).tap();
   await reply.waitFor({ state: 'detached' });
   await closeInspector(page);
   assert.equal(
@@ -533,7 +563,7 @@ try {
   await timesheet.getByRole('button', { name: 'Close', exact: true }).tap();
   await page.setViewportSize({ width: 1280, height: 900 });
   await inspector
-    .getByRole('button', { name: 'Collapse task details', exact: true })
+    .getByRole('button', { name: 'Collapse Task Inspector', exact: true })
     .tap();
   await captureInspector(inspector, 'collapsed', 96);
   assert.equal(await inspector.locator('.task-detail-fields').count(), 0);
@@ -559,7 +589,7 @@ try {
     .getByText('Secondary task discussion', { exact: true })
     .waitFor();
   await inspector
-    .getByRole('button', { name: 'Expand task details', exact: true })
+    .getByRole('button', { name: 'Expand Task Inspector', exact: true })
     .tap();
   assert.equal(
     await inspector.getByLabel('Description', { exact: true }).inputValue(),
@@ -569,7 +599,10 @@ try {
     .getByLabel('Status', { exact: true })
     .selectOption('Complete');
   await inspector.getByRole('button', { name: 'Save task', exact: true }).tap();
-  await inspector.getByText(/Status changed:.*Complete/).waitFor();
+  await inspector
+    .locator('[data-note-kind="status"]')
+    .getByText('Complete', { exact: true })
+    .waitFor();
   await taskAction(inspector, 'Add task assignee');
   const assignee = inspector.locator('.task-details .notice .user-combo-box');
   await assignee.getByLabel('Assigned to', { exact: true }).click();
@@ -628,11 +661,11 @@ try {
     exact: true
   });
   await fullForm
-    .getByRole('button', { name: 'Save record', exact: true })
+    .getByRole('button', { name: /^(?:Create|Save changes)$/, exact: true })
     .waitFor();
   assert.equal(
     await fullForm
-      .getByRole('button', { name: 'Save record', exact: true })
+      .getByRole('button', { name: /^(?:Create|Save changes)$/, exact: true })
       .isEnabled(),
     true
   );
@@ -653,14 +686,16 @@ try {
     ),
     true
   );
-  await taskAction(inspector, 'Expand task details');
-  assert.equal(
-    await inspector
-      .locator('.inspector-quick-fields')
-      .evaluate(
-        (el) => getComputedStyle(el).gridTemplateColumns.split(' ').length
-      ),
-    2
+  await taskAction(inspector, 'Expand Task Inspector');
+  const statusBox = await inspector
+    .locator('[data-frame="taskInspectorStatusField"]')
+    .boundingBox();
+  const assignedBox = await inspector
+    .locator('[data-frame="taskInspectorAssigneeField"]')
+    .boundingBox();
+  assert(
+    Math.abs(statusBox.y - assignedBox.y) < 1 && assignedBox.x > statusBox.x,
+    'Shared quick fields keep two columns at 320px'
   );
   if (process.argv[3])
     await page.screenshot({
@@ -688,7 +723,7 @@ try {
     name: 'Related object tasks',
     exact: true
   });
-  await related.getByText('Related child', { exact: true }).waitFor();
+  await related.getByText(/^Related child · /).waitFor();
   await captureInspector(inspector, 'related', 214);
   await related.getByText('1 / 1', { exact: true }).waitFor();
   assert.equal(
@@ -723,7 +758,7 @@ try {
   await inspector
     .getByRole('button', { name: 'Back to related tasks', exact: true })
     .tap();
-  await related.getByText('Related child', { exact: true }).waitFor();
+  await related.getByText(/^Related child · /).waitFor();
   assert.equal(
     await inspector.getByLabel('Note text', { exact: true }).inputValue(),
     'Parent progress draft'
@@ -742,7 +777,7 @@ try {
   await inspector
     .getByRole('button', { name: 'Back to related tasks', exact: true })
     .tap();
-  await related.getByText('Related child', { exact: true }).waitFor();
+  await related.getByText(/^Related child · /).waitFor();
   await inspector.getByRole('button', { name: 'Send note', exact: true }).tap();
   await inspector.getByText('Parent progress draft', { exact: true }).waitFor();
   await choice(inspector, 'Process', 'empty');
@@ -752,7 +787,7 @@ try {
     })
     .waitFor();
   await choice(inspector, 'Process', 'linked');
-  await related.getByText('Related child', { exact: true }).waitFor();
+  await related.getByText(/^Related child · /).waitFor();
   if (process.argv[3])
     await page.screenshot({
       path: process.argv[3].replace('.png', '-related-tasks.png'),
@@ -765,7 +800,7 @@ try {
     ),
     true
   );
-  await taskAction(inspector, 'Expand task details');
+  await taskAction(inspector, 'Expand Task Inspector');
   const relatedButton = await related
     .getByRole('button', { name: 'Open related task', exact: true })
     .boundingBox();
@@ -784,7 +819,7 @@ try {
   await inspector
     .getByRole('button', { name: 'Back to related tasks', exact: true })
     .tap();
-  await related.getByText('Related child', { exact: true }).waitFor();
+  await related.getByText(/^Related child · /).waitFor();
   await closeInspector(page);
   await selectProject(page, 'admin');
   await ready();
@@ -942,6 +977,7 @@ try {
   await reports.getByRole('button', { name: 'Close', exact: true }).tap();
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.clock.install();
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
   await page.locator('.navigation-toggle').tap();
   await page
     .locator('.navigation-tree')
@@ -1196,6 +1232,7 @@ try {
     .getByText('2030-01-07 – 2030-01-07', { exact: true })
     .waitFor();
   await page.setViewportSize({ width: 1280, height: 900 });
+  await page.clock.runFor(50);
   await taskRow
     .getByLabel('Select record: INSPECTOR_A', { exact: true })
     .check();
@@ -1204,6 +1241,9 @@ try {
     .filter({ hasText: 'INSPECTOR_EMPTY' })
     .getByLabel('Select record: INSPECTOR_EMPTY', { exact: true })
     .check();
+  // Finish selected-row layout on the mocked frame clock before anchoring the editor.
+  await page.clock.runFor(300);
+  await ready();
   await taskCell.hover();
   await page.clock.fastForward(300);
   await cardsPreview
@@ -1214,7 +1254,7 @@ try {
         .filter({ hasText: /^review$/ })
     })
     .getByRole('button', { name: 'Edit task status', exact: true })
-    .tap();
+    .click();
   assert.equal(
     await tableEditor.getAttribute('aria-description'),
     'Apply to 2 rows'
@@ -1260,6 +1300,7 @@ try {
     .filter({ hasText: 'INSPECTOR_EMPTY' })
     .getByLabel('Select record: INSPECTOR_EMPTY', { exact: true })
     .uncheck();
+  await page.clock.resume();
   await taskRow
     .locator('.table-tasks button')
     .filter({ hasText: /^model/ })
@@ -1269,11 +1310,13 @@ try {
     .getByText('Primary task discussion', { exact: true })
     .waitFor();
   assert.ok(
-    (await inspector.locator('.note-author .user-identity img').count()) > 0
+    (await inspector
+      .locator('[data-note-kind="note"] [data-frame="noteAuthorAvatar"] img')
+      .count()) > 0
   );
   assert.equal(
     await inspector
-      .locator('.note-author .user-identity img')
+      .locator('[data-note-kind="note"] [data-frame="noteAuthorAvatar"] img')
       .first()
       .evaluate((image) => image.complete && image.naturalWidth > 0),
     true
@@ -1348,7 +1391,9 @@ try {
   await inspector
     .getByRole('button', { name: 'Discard task changes', exact: true })
     .tap();
-  await inspector.getByRole('button', { name: 'Refresh', exact: true }).tap();
+  await inspector
+    .getByRole('button', { name: 'Refresh notes and task', exact: true })
+    .tap();
   await taskAction(inspector, 'Edit task');
   assert.equal(
     await inspector.getByLabel('Description', { exact: true }).inputValue(),
@@ -1359,6 +1404,7 @@ try {
     'Keep this local note draft'
   );
   await page.setViewportSize({ width: 320, height: 740 });
+  await page.clock.runFor(50);
   assert.equal(
     await inspector.evaluate((el) => el.scrollWidth <= el.clientWidth),
     true
@@ -1400,6 +1446,7 @@ try {
     .getByRole('button', { name: 'Native cells', exact: true })
     .tap();
   await page.setViewportSize({ width: 1280, height: 900 });
+  await page.clock.runFor(50);
   await ready();
   await page
     .locator('.search-header')
@@ -1436,6 +1483,7 @@ try {
     String(loadedKeys.size + requests.at(-1).search_keys.length + 1)
   );
   await page.setViewportSize({ width: 1280, height: 900 });
+  await page.clock.runFor(50);
   await first.getByRole('button', { name: 'publish (2)', exact: true }).click();
   await notes.getByLabel('Note text', { exact: true }).fill('');
   await page.evaluate(() =>
@@ -1474,14 +1522,13 @@ try {
   const imageNote = notes
     .locator('.note-entry')
     .filter({ hasText: 'attachment-only' });
-  await imageNote.locator('.note-file-card').waitFor();
+  await imageNote.locator('.attachment-card').waitFor();
   assert.equal(
-    await imageNote.locator('.note-file-card').count(),
+    await imageNote.locator('.attachment-card').count(),
     1,
     'One card per attachment, without web/icon duplicates'
   );
   await imageNote
-    .locator('.note-file-card')
     .getByRole('button', { name: 'File preview', exact: true })
     .click();
   await preview.waitFor();

@@ -1,8 +1,9 @@
 import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow, tt as normalizeClass, z as useId } from "./vue.js";
 import { D as t, O as appearance, o as _sfc_main$2, tt as _plugin_vue_export_helper_default, u as _sfc_main$3 } from "./index.js";
-import { c as button, d as node, f as rect, l as label, n as _sfc_main$4, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
+import { _ as label, b as rect, g as button, n as _sfc_main$4, t as observeFrameSizes, u as translate, v as muted, y as node } from "./resize.js";
 import { F as rpc } from "./CodeBlock.js";
-import { x as sections } from "./App.js";
+import { n as sections } from "./sections.ui.js";
+import { t as _sfc_main$5 } from "./ObjectReport.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/process_rules.ui.mjs
@@ -369,15 +370,6 @@ function describe(model, ui, width, height, language) {
 	}
 	return { nodes };
 }
-function objectDetails(record, width, height, language) {
-	const tr = (text) => translate(text, language), text = Object.keys(record || {}).map((key) => key + ": " + (typeof record[key] === "object" ? JSON.stringify(record[key], null, 2) : String(record[key] ?? ""))).join("\n\n");
-	return { nodes: [node("Area", "processObjectFields", rect(0, 0, width, height - 46), {
-		text,
-		readOnly: true,
-		monospace: true,
-		label: tr("Object details")
-	}), button("processObjectClose", rect(Math.max(0, width - 140), height - 38, 140, 38), tr("Close"), "close", { type: "close" }, true)] };
-}
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/process_rules.state.mjs
 function initial() {
@@ -480,6 +472,7 @@ function ownField(rule, key) {
 //#region src/features/administration/ProcessRules.vue
 var _sfc_main$1 = {
 	components: {
+		ObjectReport: _sfc_main$5,
 		FrameView: _sfc_main$4,
 		AppButton: _sfc_main$2,
 		AppIcon: _sfc_main$3
@@ -512,11 +505,7 @@ var _sfc_main$1 = {
 			request: 0,
 			canWrite: false,
 			page: "trigger",
-			object: null,
-			objectViewport: {
-				width: 1,
-				height: 1
-			}
+			object: null
 		};
 	},
 	computed: {
@@ -552,9 +541,6 @@ var _sfc_main$1 = {
 		toolbarScene() {
 			return toolbar(this.frameModel, this.ui, this.toolbarSize, appearance.language);
 		},
-		objectScene() {
-			return objectDetails(this.object, this.objectViewport.width, this.objectViewport.height, appearance.language);
-		},
 		models() {
 			return models(this.frameModel, this.ui);
 		}
@@ -562,17 +548,12 @@ var _sfc_main$1 = {
 	mounted() {
 		window.addEventListener("beforeunload", this.beforeUnload);
 		this.observer = observeFrameSizes((entries) => {
-			for (const entry of entries) if (entry.target === this.$refs.objectBody) this.objectViewport = {
-				width: Math.max(1, entry.contentRect.width),
-				height: Math.max(1, entry.contentRect.height)
-			};
-			else if (entry.target === this.$refs.body) this.viewport = {
+			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
 				width: Math.max(1, entry.contentRect.width),
 				height: Math.max(1, entry.contentRect.height)
 			};
 			else this.toolbarSize = entry.contentRect.width;
 		});
-		this.observer.observe(this.$refs.objectBody);
 		this.observer.observe(this.$refs.body);
 		this.observer.observe(this.$refs.frameRoot);
 	},
@@ -820,21 +801,18 @@ var _hoisted_6 = {
 	class: "frame-host-body"
 };
 var _hoisted_7 = ["aria-label"];
-var _hoisted_8 = {
-	ref: "objectBody",
-	class: "frame-host-body"
-};
 function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_FrameView = resolveComponent("FrameView");
+	const _component_ObjectReport = resolveComponent("ObjectReport");
 	const _directive_window = resolveDirective("window");
 	return withDirectives((openBlock(), createElementBlock("dialog", {
 		ref: "dialog",
 		class: "configuration-dialog process-rules-editor frame-process-dialog",
 		"aria-label": $options.t("Process dependencies"),
 		"aria-busy": $data.busy,
-		onCancel: _cache[3] || (_cache[3] = withModifiers(($event) => $options.dispatch({ type: "close" }), ["prevent", "stop"])),
-		onKeydown: _cache[4] || (_cache[4] = withKeys(withModifiers(() => {}, ["stop"]), ["esc"]))
+		onCancel: _cache[2] || (_cache[2] = withModifiers(($event) => $options.dispatch({ type: "close" }), ["prevent", "stop"])),
+		onKeydown: _cache[3] || (_cache[3] = withKeys(withModifiers(() => {}, ["stop"]), ["esc"]))
 	}, [
 		createBaseVNode("header", _hoisted_2$1, [createBaseVNode("div", _hoisted_3$1, [createBaseVNode("h1", null, toDisplayString($options.t("Process dependencies")), 1), createBaseVNode("p", _hoisted_4$1, toDisplayString($data.metadata.process) + " · " + toDisplayString($data.metadata.pipeline), 1)]), createVNode(_component_AppButton, {
 			label: "Close process dependencies",
@@ -868,13 +846,19 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 			"icon-only": "",
 			label: "Close",
 			onClick: _cache[1] || (_cache[1] = ($event) => _ctx.$refs.object.close())
-		})]), createBaseVNode("div", _hoisted_8, [createVNode(_component_FrameView, {
-			scene: $options.objectScene,
-			onEvent: _cache[2] || (_cache[2] = ($event) => _ctx.$refs.object.close())
-		}, null, 8, ["scene"])], 512)], 8, _hoisted_7)), [[_directive_window, { type: "window" }]])
+		})]), $data.object ? (openBlock(), createBlock(_component_ObjectReport, {
+			key: 0,
+			ticket: $props.ticket,
+			project: $props.project,
+			record: $data.object
+		}, null, 8, [
+			"ticket",
+			"project",
+			"record"
+		])) : createCommentVNode("", true)], 8, _hoisted_7)), [[_directive_window, { type: "window" }]])
 	], 40, _hoisted_1$1)), [[_directive_window, { kind: "process_dependencies" }]]);
 }
-var ProcessRules_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-6489e0ff"]]);
+var ProcessRules_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$1, [["render", _sfc_render$1], ["__scopeId", "data-v-d3c16f15"]]);
 //#endregion
 //#region src/features/administration/WorkflowEditor.vue
 function pipelineXml(text) {

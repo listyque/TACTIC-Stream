@@ -7,6 +7,7 @@ import AppTextField from '../controls/AppTextField.vue';
 import AppTextArea from '../controls/AppTextArea.vue';
 import AppDateField from '../controls/AppDateField.vue';
 import UserComboBox from '../controls/UserComboBox.vue';
+import AppSegmentedButton from '../controls/AppSegmentedButton.vue';
 import AppSelect from '../controls/AppSelect.vue';
 import FrameGrid from './controls/grid/FrameGrid.vue';
 import FrameGraph from './controls/graph/FrameGraph.vue';
@@ -18,6 +19,8 @@ import AppIcon from '../controls/AppIcon.vue';
 import ItemPreview from '../controls/ItemPreview.vue';
 import ItemSurface from '../controls/ItemSurface.vue';
 import SummaryChip from '../controls/SummaryChip.vue';
+import StatusChip from '../controls/display/StatusChip.vue';
+import MiddleElide from '../controls/MiddleElide.vue';
 import {
   colors,
   virtualRange,
@@ -102,8 +105,11 @@ function style(node) {
   };
 }
 function background(node) {
-  const radius =
-    node.radius === undefined ? 'var(--surface-radius)' : node.radius + 'px';
+  const radius = node.radiusRole
+    ? `var(--${node.radiusRole.replace(/[A-Z]/g, (char) => '-' + char.toLowerCase())})`
+    : node.radius === undefined
+      ? 'var(--surface-radius)'
+      : node.radius + 'px';
   return {
     background: color(node.background),
     boxShadow: node.border
@@ -342,7 +348,10 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
           })
         "
         :title="node.text"
-        ><span>{{ node.text }}</span></span
+        ><MiddleElide v-if="node.elideMiddle" :text="node.text" /><span
+          v-else
+          >{{ node.text }}</span
+        ></span
       >
       <AppIcon
         v-else-if="node.kind === 'Icon'"
@@ -355,12 +364,21 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <AppButton
         v-else-if="node.kind === 'Button'"
         :data-frame="node.id"
-        class="frame-node frame-button"
+        class="frame-node"
         :class="{
+          'frame-button': !node.iconAction,
+          'frame-icon-action': node.iconAction,
           'frame-radio': node.radio,
           'frame-radio-selected': node.radio && node.selected
         }"
-        :style="Object.assign(style(node), { color: undefined })"
+        :style="
+          Object.assign(style(node), {
+            color:
+              node.iconAction && node.enabled !== false && node.iconColor
+                ? color(node.iconColor)
+                : undefined
+          })
+        "
         :label="node.text"
         :translate-label="false"
         :aria-label="node.label || node.text"
@@ -381,7 +399,12 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :aria-checked="node.radio ? !!node.selected : undefined"
         :tabindex="node.radio && !node.selected ? -1 : undefined"
         @keydown="key($event, node)"
-        @pointerdown="send(node.pressAction, undefined, $event.currentTarget)"
+        @pointerdown="
+          (event) => {
+            if (node.retainFocus) event.preventDefault();
+            send(node.pressAction, undefined, event.currentTarget);
+          }
+        "
         @click="send(node.action, undefined, $event.currentTarget)"
         @dragover="dragOver($event, node)"
         @drop="drop($event, node)"
@@ -410,7 +433,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         "
         :aria-checked="node.role === 'checkbox' ? node.checked : undefined"
         @keydown="key($event, node)"
-        @click="send(node.action)"
+        @click="send(node.action, undefined, $event.currentTarget)"
         @dblclick="send(node.doubleAction)"
         :draggable="node.dragValue != null && interactive"
         @dragstart="drag($event, node)"
@@ -429,6 +452,18 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             :interactive="false"
         /></ItemSurface>
       </AppButton>
+      <AppSegmentedButton
+        v-else-if="node.kind === 'Segmented'"
+        :data-frame="node.id"
+        class="frame-node"
+        :style="style(node)"
+        :label="node.label"
+        :options="node.options"
+        :model-value="node.value"
+        :icon-only="node.iconOnly"
+        :disabled="!node.enabled"
+        @update:model-value="send(node.action, $event)"
+      />
       <AppCheckbox
         v-else-if="node.kind === 'CheckBox'"
         :data-frame="node.id"
@@ -442,7 +477,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :indeterminate="!!node.mixed"
         :compact="node.compact"
         :prominent="node.prominent"
-        :label="node.text || node.label"
+        :label="node.label || node.text"
         :translate-label="false"
         :disabled="!node.enabled"
         @keydown="key($event, node)"
@@ -685,6 +720,25 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :reverse="node.reverse"
         :label="node.text"
         @update:model-value="send(node.action, $event)"
+      />
+      <StatusChip
+        v-else-if="node.kind === 'StatusChip'"
+        :data-frame="node.id"
+        class="frame-node"
+        :style="
+          Object.assign(style(node), {
+            fontSize: undefined,
+            fontWeight: undefined,
+            color: undefined
+          })
+        "
+        :text="node.text"
+        :icon="node.icon"
+        :accent="color(node.accent)"
+        :dense="node.dense"
+        :interactive="!!node.action"
+        :disabled="!node.enabled"
+        @click="send(node.action)"
       />
       <AppDateField
         v-else-if="node.kind === 'DateChoice'"

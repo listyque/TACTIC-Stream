@@ -134,7 +134,7 @@ try {
   assert.equal(await record.getByRole('textbox',{name:'Deadline precision'}).inputValue(),'2024-02-29T13:14:15.123')
   assert.equal(await record.locator('form').evaluate(node=>node.checkValidity()),true,'Unchanged seconds/milliseconds remain valid')
   await record.getByLabel('Choose date',{exact:true}).click();await record.locator('.account-panel:popover-open').waitFor();await record.locator('.account-panel:popover-open [data-day="10"]').click()
-  await record.getByRole('button',{name:'Save record',exact:true}).click();await record.waitFor({state:'hidden'})
+  await record.getByRole('button',{name:/^(?:Create|Save changes)$/,exact:true}).click();await record.waitFor({state:'hidden'})
   assert.equal(saved.args[3]['picker|deadline'],'2024-02-29T10:14:15.123456+00:00','Unchanged UTC precision survives form serialization')
   assert.equal(saved.args[3]['picker|due_day'],'2024-03-10T12:00:00+00:00','Day field retains the server noon suffix')
   for(const mode of ['light','dark']) for(const theme of ['md3','material5']) {

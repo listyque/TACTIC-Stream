@@ -128,6 +128,42 @@ def fingerprints(handler):
         )
     ]
     checks += [
+        ROOT / "frontend/tests" / name
+        for name in (
+            "frame_objects.mjs",
+            "frame_objects_state.mjs",
+            "inspector_dock.mjs",
+            "object_report.mjs",
+            "object_links.mjs",
+            "object_batch.mjs",
+            "description.mjs",
+            "snapshot_browser.mjs",
+            "record_create.mjs",
+            "mobile_objects.mjs",
+            "duplicate_sobject.mjs",
+        )
+    ]
+    checks += [
+        handler / "tests" / ("test_" + name + ".py")
+        for name in (
+            "frame_objects",
+            "sobject_info",
+            "sobject_link",
+            "sobject_editor",
+            "sobject_duplicate",
+            "sobject_delete",
+        )
+    ]
+    checks += [
+        ROOT / "src/tactic_stream/server" / name
+        for name in (
+            "object_report.py",
+            "object_operations.py",
+            "activity_feed.py",
+            "result_items.py",
+        )
+    ]
+    checks += [
         handler / "tests/test_frame_platform.py",
         handler / "tests/test_frame_controls.py",
         handler / "tests/test_control_variants.py",
@@ -322,6 +358,58 @@ def main():
         ),
         ("search-state", ["node", "frontend/tests/frame_search_state.mjs"], ROOT, {}),
         ("table-state", ["node", "frontend/tests/frame_table_state.mjs"], ROOT, {}),
+        ("objects-state", ["node", "frontend/tests/frame_objects_state.mjs"], ROOT, {}),
+        (
+            "native-objects",
+            python
+            + ["-m", "unittest", "-q"]
+            + [
+                "tests." + name
+                for name in (
+                    "test_frame_objects.FrameObjectsTests",
+                    "test_sobject_editor",
+                    "test_sobject_duplicate",
+                    "test_sobject_link",
+                    "test_sobject_info",
+                    "test_sobject_delete",
+                )
+            ],
+            handler,
+            {},
+        ),
+        ("browser-inspector", ["node", "frontend/tests/inspector_dock.mjs"], ROOT, {}),
+        (
+            "object-mutations",
+            python
+            + ["-m", "unittest", "-q"]
+            + [
+                "test_transport.Transport." + name
+                for name in (
+                    "test_record_creation_in_chromium",
+                    "test_object_batch_in_chromium",
+                    "test_object_links_in_chromium",
+                    "test_advanced_duplicate_wizard_in_chromium",
+                )
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        (
+            "object-report-files",
+            python
+            + ["-m", "unittest", "-q"]
+            + [
+                "test_transport.Transport." + name
+                for name in (
+                    "test_object_report_pages_and_acl",
+                    "test_description_editor_in_chromium",
+                    "test_snapshot_browser_in_chromium",
+                    "test_mobile_objects_in_chromium",
+                )
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
         ("browser-table", ["node", "frontend/tests/handler_table.mjs"], ROOT, {}),
         (
             "native-table",

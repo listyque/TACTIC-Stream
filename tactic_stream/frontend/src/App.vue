@@ -9,6 +9,7 @@ import { t } from './i18n.js'
 import AppearanceControls from './features/configuration/AppearanceControls.vue'
 import { preferences } from './features/configuration/preferences.js'
 import RecordForm from './features/objects/RecordForm.vue'
+import ObjectReport from './features/objects/ObjectReport.vue'
 import WidgetConfiguration from './features/interface/WidgetConfiguration.vue'
 import ConfiguredView from './features/interface/ConfiguredView.vue'
 import ObjectOperations from './features/objects/ObjectOperations.vue'
@@ -91,16 +92,21 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { ObjectReport, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
     openObjectTab: (key, project) => this.openRichLink(key, false, project, false),
-    openTaskManager: (record, process) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process) : this.showWorkspaceNotice('Access denied'),
+    openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice('Access denied'),
     openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
     openTableCheckin: (record,cell,project) => this.openTableCheckin(record,cell,project),
     openScriptEditor: path => this.openScriptEditor(path),
     openHelp: topic => this.$refs.help.open(topic),
+    openUserProfile: login => this.$refs.userProfile.open(login),
+    openSnapshotBrowser: (record, process, project = this.workspaceProject) => {
+      this.snapshotTarget = { project, key:record.__search_key__, process }
+      this.openDock('snapshot'); this.$refs.docks.show('snapshot')
+    },
     openWorkHours: (mode, task, project) => this.openWorkHours(mode, task, project),
     currentLogin: () => this.session?.login || '',
   } },
@@ -176,11 +182,11 @@ export default {
     },
     defaultLoadingMode() { return preferences.checkin.loadingMode },
     activityProgress() {
-      if (this.reloadingCache) return 'Reloading cache…'
-      if (this.busy || this.loadingMore || (!this.administrationOpen && this.activeSearchTab && !this.activeSearchTab.loaded && !this.error)) return this.loadingMore ? 'Loading more…' : 'Loading data…'
+      if (this.reloadingCache) return 'Reloading cacheвЂ¦'
+      if (this.busy || this.loadingMore || (!this.administrationOpen && this.activeSearchTab && !this.activeSearchTab.loaded && !this.error)) return this.loadingMore ? 'Loading moreвЂ¦' : 'Loading dataвЂ¦'
       return this.pingBusy ? 'Pinging TACTIC server' : requestActivity.pending.findLast(row => row.ticket === this.session?.ticket)?.message || ''
     },
-    browserTitle() { return [this.activeSearchTab ? this.searchTabTitle(this.activeSearchTab) : '', this.currentProject?.title || '', t('TACTIC Stream')].filter(Boolean).join(' — ') },
+    browserTitle() { return [this.activeSearchTab ? this.searchTabTitle(this.activeSearchTab) : '', this.currentProject?.title || '', t('TACTIC Stream')].filter(Boolean).join(' вЂ” ') },
     resultViews() { return resultViews },
     resultGroups() { return resultGroups },
     searchGroupMenuModel() {
@@ -244,7 +250,7 @@ export default {
     continuous() { return this.section === 'data' && !this.administrationOpen && this.loadingMode === 'infinite' },
     rowRange() {
       const first = this.continuous ? 0 : this.page * this.pageSize
-      return this.rows.length ? `${first + 1}–${first + this.rows.length}` : '0'
+      return this.rows.length ? `${first + 1}вЂ“${first + this.rows.length}` : '0'
     },
     pageCount() { return this.totalCount === null ? null : Math.max(1, Math.ceil(this.totalCount / this.pageSize)) },
     pageNumbers() {
@@ -894,6 +900,7 @@ export default {
       if (request !== this.inspectorRequest) return false
       const opened = await inspector.open(record, cell, process, true, taskKey, source.reveal !== false)
       if (opened && request === this.inspectorRequest) this.inspectorTarget = { record: inspector.target, cell, process: inspector.process, taskKey: inspector.selectedTask, source: this.inspectorSource }
+      if (opened && request === this.inspectorRequest && source.noteKey) await inspector.focusNote(source.noteKey)
       return opened
     },
     followInspector(record, process = '', taskKey = '') {
@@ -1766,7 +1773,7 @@ export default {
       } catch (error) { if (id === this.detailRequest) this.fail(error) }
     },
     display(value) {
-      if (value === null || value === undefined) return '—'
+      if (value === null || value === undefined) return 'вЂ”'
       if (typeof value === 'object') return JSON.stringify(value)
       return String(value)
     },
@@ -1776,7 +1783,7 @@ export default {
 
 <template>
   <main v-if="restoringSession" class="login-page" role="status">
-    <span class="muted">{{ t('Loading data…') }}</span>
+    <span class="muted">{{ t('Loading dataвЂ¦') }}</span>
   </main>
   <main v-else-if="!session" class="login-page">
     <SignIn
@@ -1966,7 +1973,7 @@ export default {
         @wheel.passive="armResultPagination" @touchstart.passive="armResultPagination" @pointerdown="armResultPagination" @keydown="armResultPagination" @scroll.passive="scrollResults"
         :id="!administrationOpen && activeSearchTab ? 'panel-' + activeSearchTab.id : undefined"
         :role="!administrationOpen ? 'tabpanel' : undefined" :aria-labelledby="!administrationOpen && activeSearchTab ? 'tab-' + activeSearchTab.id : undefined">
-        <div v-if="busy" class="table-message" role="status">{{ t('Loading data…') }}</div>
+        <div v-if="busy" class="table-message" role="status">{{ t('Loading dataвЂ¦') }}</div>
         <ConfiguredView v-if="administrationOpen && interfaceConfig" v-show="!busy" ref="adminTaskView" :definition="interfaceConfig" :rows="rows" :configured="configuredView" :read-only="false"
           :ticket="session.ticket" :project="project" :sort-field="sortField" :sort-direction="sortDirection" @sort="sortBy" @inspect="inspect"
           :selected-keys="selectedKeys" @focus="focusDescription" @select="selectRecords" @column="showColumnsEditor(false, $event)"
@@ -1989,7 +1996,7 @@ export default {
             @saved="tableRecordsSaved" @operate="(record, event, node) => $refs.objectOperations.open(record, event, node)" />
         </template>
         <div v-if="continuous && (hasNext || loadingMore || (!activeSearchTab?.loaded && error))" class="workspace-load-more">
-          <span v-if="loadingMore" role="status">{{ t('Loading more…') }}</span>
+          <span v-if="loadingMore" role="status">{{ t('Loading moreвЂ¦') }}</span>
           <AppButton v-else :label="error ? 'Retry' : 'Load more'" :icon="error ? 'refresh' : 'next'" @click="loadMore(true)" />
         </div>
       </div>
@@ -2008,14 +2015,14 @@ export default {
     </Teleport>
     </main>
     <dialog v-window="{kind:'sidebar_search_preview'}" ref="sidebarSearchDialog" class="configuration-dialog sidebar-search-dialog" :aria-label="t('Configure search')" @cancel.prevent="closeSidebarSearch">
-      <div class="sidebar-search-shell"><header><div><h2>{{ t('Configure search') }}</h2><p>{{ sidebarSearch?.entry.title }} · {{ sidebarSearch?.entry.searchType }}</p></div><div id="sidebar-search-actions" class="configuration-actions"><AppButton icon-only label="Quick filters" icon="filter" :disabled="busy" @click="$refs.quickFilterEditor.open()" /><AppButton label="Saved searches" icon="save" :disabled="busy" @click="$refs.searchLibrary.open()" /></div><AppButton label="Close" icon="close" @click="closeSidebarSearch" /></header><div id="sidebar-search-pages"></div></div>
+      <div class="sidebar-search-shell"><header><div><h2>{{ t('Configure search') }}</h2><p>{{ sidebarSearch?.entry.title }} В· {{ sidebarSearch?.entry.searchType }}</p></div><div id="sidebar-search-actions" class="configuration-actions"><AppButton icon-only label="Quick filters" icon="filter" :disabled="busy" @click="$refs.quickFilterEditor.open()" /><AppButton label="Saved searches" icon="save" :disabled="busy" @click="$refs.searchLibrary.open()" /></div><AppButton label="Close" icon="close" @click="closeSidebarSearch" /></header><div id="sidebar-search-pages"></div></div>
     </dialog>
     <SearchLibrary ref="searchLibrary" :selections="quickSelections" :active="searchEditorActive" @closed="$event && $refs.docks.hide('advanced_search')" :tab-id="activeSearchTab?.id" :tab-title="activeSearchTab ? searchTabTitle(activeSearchTab) : ''" @rename="renameCurrentSearchTab" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
     <QuickFilterEditor ref="quickFilterEditor" :tab-id="activeSearchTab?.id" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :selections="quickSelections" :layout="quickLayout" :can-manage="canAdminister" @apply="applyQuickFilters" @changed="searchConfigurationChanged(); $refs.quickFilters?.load(true)" />
     <dialog v-window="{kind:'sobject_info', type:'window' }" ref="details" class="record-dialog object-details" :aria-label="t('Object details')">
       <template v-if="detail">
         <header><div><h2>{{ detail.name || detail.title || detail.code || detail.id }}</h2><small class="muted">{{ detail.__search_key__ }}</small></div><div class="configuration-actions"><AppButton v-if="interfaceConfig?.operations?.edit" label="Edit record" icon="edit" :icon-only="compactShortcuts" @click="editRecord()" /><AppButton label="Close details" icon="close" :icon-only="compactShortcuts" @click="$refs.details.close()" /></div></header>
-        <dl><template v-for="(value, key) in detail" :key="key"><dt>{{ key }}</dt><dd>{{ display(value) }}</dd></template></dl>
+        <ObjectReport :ticket="session.ticket" :project="workspaceProject" :record="detail" />
       </template>
     </dialog>
     <ObjectOperations ref="objectOperations" :ticket="session.ticket" :project="project" :search-type="type" :operations="interfaceConfig?.operations"

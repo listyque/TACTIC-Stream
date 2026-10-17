@@ -46,13 +46,17 @@ def main():
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/src/features/administration/**/*.{vue,js}"
     subprocess.run(command, cwd=ROOT, check=True)
-    command[-1] = "frontend/src/features/debug/{DebugLog.vue,UiPerformance.vue,ErrorDetails.vue,debugLog.css,uiPerformance.css}"
+    command[-1] = (
+        "frontend/src/features/debug/{DebugLog.vue,UiPerformance.vue,ErrorDetails.vue,debugLog.css,uiPerformance.css}"
+    )
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/src/features/users/*.{vue,css}"
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "tools/frame_support/*.{html,mjs}"
     subprocess.run(command, cwd=ROOT, check=True)
-    command[-1] = "frontend/tests/{frame_support*,profile_support,debug_log,ui_performance}.mjs"
+    command[-1] = (
+        "frontend/tests/{frame_support*,profile_support,debug_log,ui_performance}.mjs"
+    )
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/src/features/connection/SignIn.vue"
     subprocess.run(command, cwd=ROOT, check=True)
@@ -78,6 +82,11 @@ def main():
         "frontend/tests/frame_search*.mjs",
         "frontend/src/features/interface/{TableView,TableCell,TableInlineEditor,TaskCell,TaskCards,TaskSummaryCell,ValueFieldsCell,GroupedCompletionCell,CompletionCell}.vue",
         "tools/frame_table/*.{vue,html,mjs}",
+        "frontend/src/features/objects/{DescriptionEditor,DescriptionSurface,DescriptionValue,SnapshotToolbar,SnapshotSummary,SnapshotBrowser,ObjectOperations,ObjectFieldFrame,RecordForm,ObjectReport,ObjectReportSurface,ObjectSnapshotTree,ObjectAction,ObjectDeleteSurface,DuplicateSObject,ObjectDuplicateSurface,RelatedObjects,ObjectLinkSurface,ObjectLinkList,ObjectEditorSurface,ObjectFieldGrid,ObjectInspectorQuick,TaskInspectorHeader,TaskDetails,WorkHoursSummary,RelatedTasks,NoteEntry,NoteBody,NoteDialogs,NotesPanel}.vue",
+        "tools/frame_objects/*.{vue,html,mjs}",
+        "frontend/src/features/objects/inspector.css",
+        "frontend/src/features/workspace/links.js",
+        "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
         "frontend/tests/{frame_table*,handler_table,table_cells,columns_editor}.mjs",
         "frontend/src/features/help/**/*.{vue,js}",
         "tools/frame_help/*.{vue,js,html,mjs}",
@@ -86,6 +95,7 @@ def main():
         command[-1] = pattern
         subprocess.run(command, cwd=ROOT, check=True)
     for pattern in [
+        "frontend/src/controls/{AttachmentCard,AppTextArea,StatusSelect}.vue",
         "src/tactic_stream/shared_ui/**/*.json",
         "tools/frame_menus/*.{vue,js,html}",
         "tools/frame_navigation/*.{vue,js,html}",
@@ -190,6 +200,9 @@ def main():
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/table").rglob("*.qml")
         )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/objects").rglob("*.qml")
+        )
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]
@@ -197,7 +210,11 @@ def main():
         files += sorted(
             (args.handler_root / "tests/fixtures/frame_controls").glob("*.qml")
         )
-        files += [args.handler_root / "thlib/ui/qml/TacticSearchField.qml"]
+        files += [
+            args.handler_root / "thlib/ui/qml/TacticSearchField.qml",
+            args.handler_root / "thlib/ui/qml/SObjectFieldEditor.qml",
+            args.handler_root / "thlib/ui/qml/controls/SearchField.qml",
+        ]
         files += [
             args.handler_root / "thlib/ui/qml/controls/PreviewNavigationButton.qml"
         ]

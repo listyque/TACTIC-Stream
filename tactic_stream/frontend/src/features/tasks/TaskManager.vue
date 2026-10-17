@@ -311,10 +311,15 @@ export default {
       if (this.opened) this.close(true)
       await this.open(false, login, key ? { [key]:value } : {})
     },
-    async openForObjects(parent, process = '') {
+    async openForObjects(parent, process = '', filters = {}, taskKey = '') {
       if (this.opened && !this.canLeave()) return
       if (this.opened) this.close(true)
-      await this.open(true, '', process ? { process } : {}, false, [parent])
+      await this.open(true, '', { ...filters, ...(process ? { process } : {}) }, false, [parent])
+      if (taskKey) {
+        const code = new URL('skey://' + taskKey).searchParams.get('code');
+        const task = this.tasks.find(row => row.__search_key__ === taskKey || code && row.code === code);
+        if (task) this.activate(task.__search_key__);
+      }
     },
     async open(selected = false, user = '', filters = {}, calendarOnly = false, parents = null, reveal = true) {
       if (this.opened) {

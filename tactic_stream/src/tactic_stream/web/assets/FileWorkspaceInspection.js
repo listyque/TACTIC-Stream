@@ -1,14 +1,13 @@
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, J as markRaw, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, o as _sfc_main$7, tt as _plugin_vue_export_helper_default, u as _sfc_main$8, x as redact, y as logEvent } from "./index.js";
-import { f as _sfc_main$9, o as copyText } from "./CodeBlock.js";
-import { t as _sfc_main$10 } from "./AppTextField.js";
-import { t as _sfc_main$11 } from "./AppMenu.js";
-import { t as _sfc_main$12 } from "./AppTextArea.js";
-import { t as _sfc_main$13 } from "./ItemSurface.js";
-import { t as _sfc_main$14 } from "./AppSplitter.js";
+import { f as _sfc_main$9 } from "./resize.js";
+import { f as _sfc_main$10, o as copyText } from "./CodeBlock.js";
+import { n as _sfc_main$12, t as _sfc_main$11 } from "./AppSplitter.js";
+import { t as _sfc_main$13 } from "./AppMenu.js";
+import { t as _sfc_main$14 } from "./ItemSurface.js";
 import { i as prettySize } from "./files.js";
 import { t as _sfc_main$15 } from "./AppMenuItem.js";
-import { T as _sfc_main$16 } from "./App.js";
+import { S as _sfc_main$16 } from "./App.js";
 //#region src/features/fileWorkspace/FileWorkspaceTree.vue
 var _hoisted_1$5 = ["aria-label"];
 var _hoisted_2$5 = [
@@ -234,7 +233,7 @@ var _sfc_main$4 = {
 				};
 			}
 		},
-		AppTextArea: _sfc_main$12,
+		AppTextArea: _sfc_main$9,
 		AppIcon: _sfc_main$8
 	},
 	props: {
@@ -570,7 +569,7 @@ var FileWorkspaceDepots_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 				}, null, 8, ["disabled"])) : createCommentVNode("", true)
 			]), createBaseVNode("div", _hoisted_3$2, [
 				createBaseVNode("aside", { style: normalizeStyle({ flexBasis: `max(0px,calc(${split.value}% - 10px))` }) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.rows, (row) => {
-					return openBlock(), createBlock(_sfc_main$13, {
+					return openBlock(), createBlock(_sfc_main$14, {
 						key: row.code,
 						selected: __props.selected?.code === row.code,
 						"normal-color": "transparent",
@@ -596,7 +595,7 @@ var FileWorkspaceDepots_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 						_: 2
 					}, 1032, ["selected", "rail-visible"]);
 				}), 128)), !__props.rows.length ? (openBlock(), createElementBlock("p", _hoisted_5$2, toDisplayString(unref(t)("No permitted records on this page")), 1)) : createCommentVNode("", true)], 4),
-				createVNode(_sfc_main$14, {
+				createVNode(_sfc_main$11, {
 					modelValue: split.value,
 					"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => split.value = $event),
 					label: "Depots",
@@ -610,7 +609,7 @@ var FileWorkspaceDepots_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 					onSubmit: _cache[8] || (_cache[8] = withModifiers(($event) => emit("save"), ["prevent"]))
 				}, [
 					createBaseVNode("h3", null, toDisplayString(unref(t)(__props.draft.creating ? "New depot" : "Edit depot")), 1),
-					createBaseVNode("label", null, [createBaseVNode("span", null, toDisplayString(unref(t)("Depot code")), 1), createVNode(_sfc_main$10, {
+					createBaseVNode("label", null, [createBaseVNode("span", null, toDisplayString(unref(t)("Depot code")), 1), createVNode(_sfc_main$12, {
 						"model-value": __props.draft.code,
 						label: "Depot code",
 						readonly: !__props.draft.creating,
@@ -624,7 +623,7 @@ var FileWorkspaceDepots_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 						"readonly",
 						"disabled"
 					])]),
-					createBaseVNode("label", null, [createBaseVNode("span", null, toDisplayString(unref(t)("Name")), 1), createVNode(_sfc_main$10, {
+					createBaseVNode("label", null, [createBaseVNode("span", null, toDisplayString(unref(t)("Name")), 1), createVNode(_sfc_main$12, {
 						"model-value": __props.draft.title,
 						label: "Name",
 						disabled: __props.busy,
@@ -633,7 +632,7 @@ var FileWorkspaceDepots_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 							title: $event
 						}))
 					}, null, 8, ["model-value", "disabled"])]),
-					createBaseVNode("label", null, [createBaseVNode("span", null, toDisplayString(unref(t)("Repository")), 1), createVNode(_sfc_main$9, {
+					createBaseVNode("label", null, [createBaseVNode("span", null, toDisplayString(unref(t)("Repository")), 1), createVNode(_sfc_main$10, {
 						"model-value": __props.draft.repository,
 						label: "Repository",
 						options: [{
@@ -828,7 +827,7 @@ var FileWorkspaceStorage_default = /*#__PURE__*/ _plugin_vue_export_helper_defau
 				}, [(openBlock(), createElementBlock(Fragment, null, renderList(fields, ([key, label, hint], index) => {
 					return openBlock(), createElementBlock(Fragment, { key }, [index === 0 || index === 3 ? (openBlock(), createElementBlock("h3", _hoisted_6$1, toDisplayString(unref(t)(index === 0 ? "Quotas" : "Retention and cleanup")), 1)) : createCommentVNode("", true), createBaseVNode("label", null, [
 						createBaseVNode("span", null, toDisplayString(unref(t)(label)), 1),
-						createVNode(_sfc_main$10, {
+						createVNode(_sfc_main$12, {
 							"model-value": __props.draft.policy[key],
 							label,
 							inputmode: "numeric",
@@ -955,11 +954,11 @@ views.splice(7, 0, {
 var _sfc_main = {
 	components: {
 		AppButton: _sfc_main$7,
-		AppSelect: _sfc_main$9,
-		AppTextField: _sfc_main$10,
-		AppMenu: _sfc_main$11,
+		AppSelect: _sfc_main$10,
+		AppTextField: _sfc_main$12,
+		AppMenu: _sfc_main$13,
 		AppMenuItem: _sfc_main$15,
-		AppSplitter: _sfc_main$14,
+		AppSplitter: _sfc_main$11,
 		WorkspaceTabs: _sfc_main$16,
 		FileWorkspaceTree: FileWorkspaceTree_default,
 		FileWorkspaceInspector: FileWorkspaceInspector_default,

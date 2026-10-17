@@ -28,10 +28,12 @@ import NotesPanel from '../objects/NotesPanel.vue';
 import ObjectOperations from '../objects/ObjectOperations.vue';
 import RecordForm from '../objects/RecordForm.vue';
 import ObjectAction from '../objects/ObjectAction.vue';
+import ObjectReport from '../objects/ObjectReport.vue';
 import RelatedObjects from '../objects/RelatedObjects.vue';
 
 export default {
   components: {
+    ObjectReport,
     ProcessVisibility,
     VirtualCollection,
     ConfiguredResultItem,
@@ -1269,7 +1271,7 @@ export default {
       <p v-if="error" class="error" role="alert">
         {{ t(error) }} <AppButton label="Retry" icon="refresh" @click="load" />
       </p>
-      <p v-if="busy" role="status">{{ t('Loading data…') }}</p>
+      <p v-if="busy" role="status">{{ t('Loading dataвЂ¦') }}</p>
       <nav
         v-if="mode === 'tiles' && cardPath.length"
         class="result-card-navigation"
@@ -1372,7 +1374,7 @@ export default {
                 "
               />
               <p v-if="node.busy" class="result-branch-message" role="status">
-                {{ t('Loading data…') }}
+                {{ t('Loading dataвЂ¦') }}
               </p>
               <p
                 v-if="node.error"
@@ -1455,7 +1457,7 @@ export default {
           {{ t(versionError) }}
           <AppButton label="Retry" @click="loadVersions()" />
         </p>
-        <p v-if="versionBusy" role="status">{{ t('Loading data…') }}</p>
+        <p v-if="versionBusy" role="status">{{ t('Loading dataвЂ¦') }}</p>
         <component
           :is="itemLayout ? 'ConfiguredResultItem' : 'ResultItem'"
           :layout="itemLayout"
@@ -1635,12 +1637,12 @@ export default {
           @click="$refs.details.close()"
         />
       </header>
-      <dl>
-        <template v-for="(value, name) in detail" :key="name"
-          ><dt>{{ name }}</dt>
-          <dd>{{ value }}</dd></template
-        >
-      </dl>
+      <ObjectReport
+        v-if="detail"
+        :ticket="ticket"
+        :project="project"
+        :record="detail"
+      />
     </dialog>
   </div>
 </template>

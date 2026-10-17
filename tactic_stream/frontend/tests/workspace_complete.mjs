@@ -110,9 +110,9 @@ try {
   );
   await process.locator('.result-item-copy').click();
   const focusedTitle = await description
-    .locator('.description-editor header strong')
+    .locator('.description-value-read')
     .innerText();
-  assert.equal(focusedTitle, 'Review');
+  assert.equal(focusedTitle, 'Review process description');
   await position('Dock right');
   const divider = page.getByRole('separator', {
     name: 'Resize workspace panels',
@@ -223,8 +223,8 @@ try {
   assert.equal((await state()).panels.description.floating, true);
   await page.waitForFunction(
     (title) =>
-      document.querySelector('.description-editor header strong')
-        ?.textContent === title,
+      document.querySelector('.description-value-read')?.textContent.trim() ===
+      title,
     focusedTitle
   );
   assert.deepEqual((await state()).panels.description.rect, floating);
@@ -249,8 +249,8 @@ try {
   );
   await page.waitForFunction(
     (title) =>
-      document.querySelector('.description-editor header strong')
-        ?.textContent === title,
+      document.querySelector('.description-value-read')?.textContent.trim() ===
+      title,
     focusedTitle
   );
   assert.equal(
@@ -319,21 +319,17 @@ try {
   );
   assertDescriptionBelowResults((await state()).layout);
   await root.getByLabel('Workspace panels', { exact: true }).click();
-  await root
-    .locator(':scope > .account-panel')
-    .screenshot({
-      path: output + '/stream-dock-menu.png',
-      animations: 'disabled'
-    });
+  await root.locator(':scope > .account-panel').screenshot({
+    path: output + '/stream-dock-menu.png',
+    animations: 'disabled'
+  });
   await page.keyboard.press('Escape');
   await root.getByLabel('Workspace panels', { exact: true }).click();
   await presets.getByLabel('Layout presets', { exact: true }).click();
-  await presets
-    .locator(':scope > .account-panel')
-    .screenshot({
-      path: output + '/stream-presets.png',
-      animations: 'disabled'
-    });
+  await presets.locator(':scope > .account-panel').screenshot({
+    path: output + '/stream-presets.png',
+    animations: 'disabled'
+  });
   await page.keyboard.press('Escape');
   await page.keyboard.press('Escape');
   await selectProject(page, 'two');

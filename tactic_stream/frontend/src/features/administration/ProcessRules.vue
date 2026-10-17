@@ -3,6 +3,7 @@ import { observeFrameSizes } from '../../frame/resize.js';
 import { nextTick } from 'vue';
 import { rpc } from '../../api.js';
 import { t } from '../../i18n.js';
+import ObjectReport from '../objects/ObjectReport.vue';
 import AppIcon from '../../controls/AppIcon.vue';
 
 import FrameView from '../../frame/FrameView.vue';
@@ -11,7 +12,7 @@ import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/workflow/process_rules.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/workflow/process_rules.state.mjs';
 export default {
-  components: { FrameView, AppButton, AppIcon },
+  components: { ObjectReport, FrameView, AppButton, AppIcon },
   props: { ticket: String, project: String },
   emits: ['saved'],
   data() {
@@ -34,8 +35,7 @@ export default {
       request: 0,
       canWrite: false,
       page: 'trigger',
-      object: null,
-      objectViewport: { width: 1, height: 1 }
+      object: null
     };
   },
   computed: {
@@ -84,14 +84,6 @@ export default {
         appearance.language
       );
     },
-    objectScene() {
-      return UI.objectDetails(
-        this.object,
-        this.objectViewport.width,
-        this.objectViewport.height,
-        appearance.language
-      );
-    },
     models() {
       return UI.models(this.frameModel, this.ui);
     }
@@ -100,12 +92,7 @@ export default {
     window.addEventListener('beforeunload', this.beforeUnload);
     this.observer = observeFrameSizes((entries) => {
       for (const entry of entries) {
-        if (entry.target === this.$refs.objectBody)
-          this.objectViewport = {
-            width: Math.max(1, entry.contentRect.width),
-            height: Math.max(1, entry.contentRect.height)
-          };
-        else if (entry.target === this.$refs.body)
+        if (entry.target === this.$refs.body)
           this.viewport = {
             width: Math.max(1, entry.contentRect.width),
             height: Math.max(1, entry.contentRect.height)
@@ -113,7 +100,6 @@ export default {
         else this.toolbarSize = entry.contentRect.width;
       }
     });
-    this.observer.observe(this.$refs.objectBody);
     this.observer.observe(this.$refs.body);
     this.observer.observe(this.$refs.frameRoot);
   },
@@ -454,9 +440,12 @@ export default {
           @click="$refs.object.close()"
         />
       </header>
-      <div ref="objectBody" class="frame-host-body">
-        <FrameView :scene="objectScene" @event="$refs.object.close()" />
-      </div>
+      <ObjectReport
+        v-if="object"
+        :ticket="ticket"
+        :project="project"
+        :record="object"
+      />
     </dialog>
   </dialog>
 </template>
@@ -473,5 +462,9 @@ export default {
   display: flex;
   flex-direction: column;
   height: min(700px, 90dvh);
+}
+.process-object-details > .object-report {
+  flex: 1;
+  min-height: 0;
 }
 </style>

@@ -1,139 +1,368 @@
-import assert from 'node:assert/strict'
-import { chromium } from 'playwright'
+import assert from 'node:assert/strict';
+import { chromium } from 'playwright';
 
-const browser = await chromium.launch({ headless:true })
+const browser = await chromium.launch({
+  headless: true,
+  channel: process.env.STREAM_BROWSER_CHANNEL || undefined
+});
 try {
-  const key = process.argv[4], url = process.argv[2], output = process.argv[3]
-  const page = await browser.newPage({ viewport:{width:1280,height:900} })
-  page.setDefaultTimeout(10000)
-  const errors = []
-  page.on('pageerror', error => errors.push(error.message))
-  await page.addInitScript(() => { if (!localStorage.getItem('tactic_stream.appearance')) localStorage.setItem('tactic_stream.appearance', JSON.stringify({mode:'dark',language:'en'})) })
-  await page.goto(url + '/projects/one/?' + new URLSearchParams({link:'skey://' + key}))
-  await page.getByLabel('Login', { exact: true }).fill('admin')
-  await page.getByLabel('Password', {exact:true}).fill('private-test-password')
-  await page.getByRole('button', {name:'Sign in',exact:true}).click()
-  const details = page.getByRole('dialog', {name:'Object details',exact:true})
-  await details.waitFor(); await details.getByRole('button', {name:'Close details',exact:true}).click()
-  const row = page.locator('.workspace-results .result-item:visible').filter({has:page.locator('.result-item-copy > strong', {hasText:'Duplicate source'})}).first()
-  const rpc = async (method, args) => (await (await page.request.post(url + '/admin/rpc', {data:{method,args,kwargs:{}}})).json()).result
-  const auth = {ticket:await rpc('get_ticket', ['admin','private-test-password']),project:'one',language:'python'}
-  const menu = page.getByRole('dialog', {name:'Object actions',exact:true})
-  const openMenu = async () => { await row.click({button:'right'}); await menu.waitFor(); await menu.getByRole('button', {name:'Advanced menu',exact:true}).click() }
-  await openMenu()
-  assert.equal(await menu.getByRole('button', {name:'Quick Duplicate',exact:true}).count(), 0)
-  assert.ok(await menu.getByRole('button', {name:'Duplicate fields only',exact:true}).isEnabled())
-  await menu.getByRole('button', {name:'Duplicate…',exact:true}).click()
-  const wizard = page.getByRole('dialog', {name:'Duplicate object',exact:true})
-  await wizard.getByRole('textbox', {name:'Name',exact:true}).waitFor()
-  const pages = wizard.getByRole('radiogroup', {name:'Duplicate steps',exact:true})
-  await wizard.getByRole('textbox', {name:'Name',exact:true}).fill('Browser deep duplicate')
-  await wizard.getByRole('checkbox', {name:'Remember choices',exact:true}).check()
-  await wizard.screenshot({path:output + '-fields.png'})
-  await pages.getByRole('radio', {name:'Relations',exact:true}).click()
-  await wizard.locator('.duplicate-card').filter({hasText:'alternate'}).getByRole('radio', {name:'Duplicate children',exact:true}).click()
-  await wizard.screenshot({path:output + '-relations.png'})
-  await pages.getByRole('radio', {name:'Snapshots',exact:true}).click()
-  await wizard.getByRole('checkbox', {name:'Snapshots',exact:true}).check()
-  await wizard.screenshot({path:output + '-snapshots.png'})
-  await pages.getByRole('radio', {name:'Tasks and messages',exact:true}).click()
-  await wizard.getByRole('checkbox', {name:'Task messages',exact:true}).check()
-  assert.ok(await wizard.getByRole('checkbox', {name:'Tasks',exact:true}).isChecked())
-  await wizard.getByRole('checkbox', {name:'Tasks',exact:true}).uncheck()
-  assert.equal(await wizard.getByRole('checkbox', {name:'Tasks',exact:true}).isChecked(), false)
-  assert.equal(await wizard.getByRole('checkbox', {name:'Task messages',exact:true}).isChecked(), false)
-  await wizard.getByRole('checkbox', {name:'Task messages',exact:true}).check()
-  await wizard.getByRole('checkbox', {name:'Process attachments',exact:true}).check()
-  assert.ok(await wizard.getByRole('checkbox', {name:'Process messages',exact:true}).isChecked())
-  await wizard.screenshot({path:output + '-messages.png'})
-  assert.equal(await wizard.locator('.duplicate-symbol:not(:has(.app-icon))').count(), 0)
-  await pages.getByRole('radio', {name:'Review',exact:true}).click()
-  await wizard.screenshot({path:output + '-review.png'})
-  await wizard.getByRole('button', {name:'Help',exact:true}).click()
-  assert.ok(await wizard.getByText('Duplicating objects', {exact:true}).isVisible())
-  await wizard.getByRole('button', {name:'Help',exact:true}).click()
-  const before = await wizard.boundingBox(), header = wizard.locator('.duplicate-header')
-  const headerBox = await header.boundingBox()
-  await page.mouse.move(headerBox.x + 160, headerBox.y + 45); await page.mouse.down()
-  await page.mouse.move(headerBox.x + 185, headerBox.y + 70); await page.mouse.up()
-  const moved = await wizard.boundingBox(); assert.ok(Math.abs(moved.x - before.x - 25) < 2)
-  await wizard.getByRole('button', {name:'Maximize window',exact:true}).click()
-  assert.ok((await wizard.boundingBox()).width > 1200)
-  await wizard.getByRole('button', {name:'Restore window',exact:true}).click()
+  const key = process.argv[4],
+    url = process.argv[2],
+    output = process.argv[3];
+  const page = await browser.newPage({
+    viewport: { width: 1280, height: 900 }
+  });
+  page.setDefaultTimeout(10000);
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('tactic_stream.appearance'))
+      localStorage.setItem(
+        'tactic_stream.appearance',
+        JSON.stringify({ mode: 'dark', language: 'en' })
+      );
+  });
+  await page.goto(
+    url + '/projects/one/?' + new URLSearchParams({ link: 'skey://' + key })
+  );
+  await page.getByLabel('Login', { exact: true }).fill('admin');
+  await page
+    .getByLabel('Password', { exact: true })
+    .fill('private-test-password');
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  const details = page.getByRole('dialog', {
+    name: 'Object details',
+    exact: true
+  });
+  await details.waitFor();
+  await details
+    .getByRole('button', { name: 'Close details', exact: true })
+    .click();
+  const row = page
+    .locator('.workspace-results .result-item:visible')
+    .and(page.getByLabel('Duplicate source', { exact: true }))
+    .first();
+  const rpc = async (method, args) =>
+    (
+      await (
+        await page.request.post(url + '/admin/rpc', {
+          data: { method, args, kwargs: {} }
+        })
+      ).json()
+    ).result;
+  const auth = {
+    ticket: await rpc('get_ticket', ['admin', 'private-test-password']),
+    project: 'one',
+    language: 'python'
+  };
+  const menu = page.getByRole('dialog', {
+    name: 'Object actions',
+    exact: true
+  });
+  const openMenu = async () => {
+    await row.click({ button: 'right' });
+    await menu.waitFor();
+    await menu
+      .getByRole('button', { name: 'Advanced menu', exact: true })
+      .click();
+  };
+  await openMenu();
+  assert.equal(
+    await menu
+      .getByRole('button', { name: 'Quick Duplicate', exact: true })
+      .count(),
+    0
+  );
+  assert.ok(
+    await menu
+      .getByRole('button', { name: 'Duplicate fields only', exact: true })
+      .isEnabled()
+  );
+  await menu.getByRole('button', { name: 'Duplicate…', exact: true }).click();
+  const wizard = page.getByRole('dialog', {
+    name: 'Duplicate object',
+    exact: true
+  });
+  await wizard.getByRole('textbox', { name: 'Name', exact: true }).waitFor();
+  const pages = wizard.getByRole('radiogroup', {
+    name: 'Duplicate steps',
+    exact: true
+  });
+  await wizard
+    .getByRole('textbox', { name: 'Name', exact: true })
+    .fill('Browser deep duplicate');
+  await wizard
+    .getByRole('checkbox', { name: 'Remember choices', exact: true })
+    .check();
+  await wizard.screenshot({ path: output + '-fields.png' });
+  await pages.getByRole('radio', { name: 'Relations', exact: true }).click();
+  await wizard
+    .locator('[data-frame^=duplicateRelation_]')
+    .filter({ hasText: 'alternate' })
+    .getByRole('radio', { name: 'Duplicate children', exact: true })
+    .click();
+  await wizard.screenshot({ path: output + '-relations.png' });
+  await pages.getByRole('radio', { name: 'Snapshots', exact: true }).click();
+  await wizard
+    .getByRole('checkbox', { name: 'Snapshots', exact: true })
+    .check();
+  await wizard.screenshot({ path: output + '-snapshots.png' });
+  await pages
+    .getByRole('radio', { name: 'Tasks and messages', exact: true })
+    .click();
+  await wizard
+    .getByRole('checkbox', { name: 'Task messages', exact: true })
+    .check();
+  assert.ok(
+    await wizard
+      .getByRole('checkbox', { name: 'Tasks', exact: true })
+      .isChecked()
+  );
+  await wizard.getByRole('checkbox', { name: 'Tasks', exact: true }).uncheck();
+  assert.equal(
+    await wizard
+      .getByRole('checkbox', { name: 'Tasks', exact: true })
+      .isChecked(),
+    false
+  );
+  assert.equal(
+    await wizard
+      .getByRole('checkbox', { name: 'Task messages', exact: true })
+      .isChecked(),
+    false
+  );
+  await wizard
+    .getByRole('checkbox', { name: 'Task messages', exact: true })
+    .check();
+  await wizard
+    .getByRole('checkbox', { name: 'Process attachments', exact: true })
+    .check();
+  assert.ok(
+    await wizard
+      .getByRole('checkbox', { name: 'Process messages', exact: true })
+      .isChecked()
+  );
+  await wizard.screenshot({ path: output + '-messages.png' });
+  assert.equal(
+    await wizard.locator('.duplicate-symbol:not(:has(.app-icon))').count(),
+    0
+  );
+  await pages.getByRole('radio', { name: 'Review', exact: true }).click();
+  await wizard.screenshot({ path: output + '-review.png' });
+  await wizard
+    .getByRole('button', { name: 'Duplication help', exact: true })
+    .click();
+  await page.getByRole('dialog', { name: 'Help', exact: true }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Duplicating Search Objects', exact: true })
+    .waitFor();
+  await page
+    .getByRole('dialog', { name: 'Help', exact: true })
+    .getByRole('button', { name: 'Close help', exact: true })
+    .click();
+  const before = await wizard.boundingBox(),
+    header = wizard.locator('header');
+  const headerBox = await header.boundingBox();
+  await page.mouse.move(headerBox.x + 160, headerBox.y + 15);
+  await page.mouse.down();
+  await page.mouse.move(headerBox.x + 185, headerBox.y + 40);
+  await page.mouse.up();
+  const moved = await wizard.boundingBox();
+  assert.ok(Math.abs(moved.x - before.x - 25) < 2);
+  await wizard
+    .getByRole('button', { name: 'Maximize window', exact: true })
+    .click();
+  assert.ok((await wizard.boundingBox()).width > 1200);
+  await wizard
+    .getByRole('button', { name: 'Restore window', exact: true })
+    .click();
   // One submit produces one object; the real native API supplies the result.
-  const response = page.waitForResponse(response => response.url().endsWith('/admin/rpc') && response.request().postDataJSON()?.args?.[2]?.action === 'duplicate')
-  await wizard.getByRole('button', {name:'Duplicate',exact:true}).click()
-  assert.equal((await response).status(), 200)
-  await wizard.waitFor({state:'hidden'})
-  await openMenu(); await menu.getByRole('button', {name:'Quick Duplicate',exact:true}).waitFor()
-  await page.keyboard.press('Escape')
+  const response = page.waitForResponse(
+    (response) =>
+      response.url().endsWith('/admin/rpc') &&
+      response.request().postDataJSON()?.args?.[2]?.action === 'duplicate'
+  );
+  await wizard.getByRole('button', { name: 'Duplicate', exact: true }).click();
+  assert.equal((await response).status(), 200);
+  await wizard.waitFor({ state: 'hidden' });
+  await openMenu();
+  await menu
+    .getByRole('button', { name: 'Quick Duplicate', exact: true })
+    .waitFor();
+  await page.keyboard.press('Escape');
   // Remembered values contain modes and flags, never the edited name.
-  const stored = await page.evaluate(() => Object.fromEntries(Object.entries(localStorage).filter(([key]) => key.startsWith('tactic-stream.duplicate.'))))
-  assert.equal(Object.keys(stored).length, 1)
-  assert.deepEqual(JSON.parse(Object.keys(stored)[0].slice('tactic-stream.duplicate.'.length)), ['admin','one','contract/entity'])
-  const profile = JSON.parse(Object.values(stored)[0]); assert.ok(!('fields' in profile))
-  assert.equal(profile.processes.publish.copyTaskMessages, true)
-  await rpc('update', [auth,key,{amount:37}])
-  await page.reload(); await details.waitFor(); await details.getByRole('button', {name:'Close details',exact:true}).click()
-  await openMenu()
-  const quickResponse = page.waitForResponse(response => response.url().endsWith('/admin/rpc') && response.request().postDataJSON()?.args?.[2]?.action === 'duplicate')
-  await menu.getByRole('button', {name:'Quick Duplicate',exact:true}).click()
-  const quick = await (await quickResponse).json(); assert.ok(quick.result.info.result.searchKey !== key)
-  await wizard.waitFor({state:'hidden'})
-  const quickObject = await rpc('get_by_search_key', [auth,quick.result.info.result.searchKey])
-  assert.equal(quickObject.amount, 37)
-  assert.equal(quickObject.name, 'Duplicate source')
+  const stored = await page.evaluate(() =>
+    Object.fromEntries(
+      Object.entries(localStorage).filter(([key]) =>
+        key.startsWith('tactic-stream.duplicate.')
+      )
+    )
+  );
+  assert.equal(Object.keys(stored).length, 1);
+  assert.deepEqual(
+    JSON.parse(Object.keys(stored)[0].slice('tactic-stream.duplicate.'.length)),
+    ['admin', 'one', 'contract/entity']
+  );
+  const profile = JSON.parse(Object.values(stored)[0]);
+  assert.ok(!('fields' in profile));
+  assert.equal(profile.processes.publish.copyTaskMessages, true);
+  await rpc('update', [auth, key, { amount: 37 }]);
+  await page.reload();
+  await details.waitFor();
+  await details
+    .getByRole('button', { name: 'Close details', exact: true })
+    .click();
+  await openMenu();
+  const quickResponse = page.waitForResponse(
+    (response) =>
+      response.url().endsWith('/admin/rpc') &&
+      response.request().postDataJSON()?.args?.[2]?.action === 'duplicate'
+  );
+  await menu
+    .getByRole('button', { name: 'Quick Duplicate', exact: true })
+    .click();
+  const quick = await (await quickResponse).json();
+  assert.ok(quick.result.info.result.searchKey !== key);
+  await wizard.waitFor({ state: 'hidden' });
+  const quickObject = await rpc('get_by_search_key', [
+    auth,
+    quick.result.info.result.searchKey
+  ]);
+  assert.equal(quickObject.amount, 37);
+  assert.equal(quickObject.name, 'Duplicate source');
   // A changed source is rejected, and reanalysis keeps the user's draft.
-  await openMenu(); await menu.getByRole('button', {name:'Duplicate…',exact:true}).click()
-  await wizard.getByRole('textbox', {name:'Name',exact:true}).waitFor()
-  await wizard.getByRole('textbox', {name:'Name',exact:true}).fill('Retained draft')
-  await rpc('update', [auth,key,{amount:49}])
-  await wizard.getByRole('button', {name:'Duplicate',exact:true}).click()
-  await wizard.locator('p.error').filter({hasText:'Source content changed. Analyze again before duplicating.'}).waitFor()
-  await wizard.getByRole('button', {name:'Analyze again',exact:true}).click()
-  await wizard.getByRole('button', {name:'Duplicate',exact:true}).waitFor()
-  await page.waitForFunction(() => !document.querySelector('.duplicate-sobject [role="status"]'))
-  assert.equal(await wizard.getByRole('textbox', {name:'Name',exact:true}).inputValue(), 'Retained draft')
-  await wizard.getByRole('button', {name:'Close',exact:true}).click()
-  await wizard.getByRole('button', {name:'Discard',exact:true}).click()
+  await openMenu();
+  await menu.getByRole('button', { name: 'Duplicate…', exact: true }).click();
+  await wizard.getByRole('textbox', { name: 'Name', exact: true }).waitFor();
+  await wizard
+    .getByRole('textbox', { name: 'Name', exact: true })
+    .fill('Retained draft');
+  await rpc('update', [auth, key, { amount: 49 }]);
+  await wizard.getByRole('button', { name: 'Duplicate', exact: true }).click();
+  await wizard.locator('[data-frame=duplicateErrorText]').waitFor();
+  await wizard
+    .getByRole('button', { name: 'Analyze again', exact: true })
+    .click();
+  await wizard
+    .getByRole('button', { name: 'Duplicate', exact: true })
+    .waitFor();
+  await page.waitForFunction(
+    () => !document.querySelector('.duplicate-sobject [role="status"]')
+  );
+  assert.equal(
+    await wizard
+      .getByRole('textbox', { name: 'Name', exact: true })
+      .inputValue(),
+    'Retained draft'
+  );
+  await wizard.getByRole('button', { name: 'Close', exact: true }).click();
+  await wizard.getByRole('button', { name: 'Discard', exact: true }).click();
   // Unknown result cannot be retried automatically, and closing preserves draft protection.
-  await openMenu(); await menu.getByRole('button', {name:'Duplicate…',exact:true}).click()
-  await wizard.getByRole('textbox', {name:'Name',exact:true}).waitFor()
-  assert.equal(await wizard.getByRole('textbox', {name:'Name',exact:true}).inputValue(), 'Duplicate source')
-  let aborted = 0
-  await page.route('**/admin/rpc', async route => {
-    if (route.request().postDataJSON()?.args?.[2]?.action === 'duplicate') { aborted++; await route.abort(); return }
-    await route.continue()
-  })
-  await wizard.getByRole('textbox', {name:'Name',exact:true}).fill('Never created')
-  await wizard.getByRole('button', {name:'Duplicate',exact:true}).click()
-  await wizard.getByText('The result is unknown. Refresh the objects before trying again.', {exact:true}).waitFor()
-  assert.ok(await wizard.getByRole('button', {name:'Duplicate',exact:true}).isDisabled()); assert.equal(aborted, 1)
-  await wizard.getByRole('button', {name:'Close',exact:true}).click()
-  await wizard.getByText('Discard unsaved changes?', {exact:true}).waitFor()
-  await wizard.getByRole('button', {name:'Continue editing',exact:true}).click()
-  assert.equal(await wizard.getByRole('textbox', {name:'Name',exact:true}).inputValue(), 'Never created')
-  await wizard.getByRole('button', {name:'Close',exact:true}).click(); await wizard.getByRole('button', {name:'Discard',exact:true}).click()
-  await page.unroute('**/admin/rpc')
-  await page.goto(url + '/projects/two/?' + new URLSearchParams({link:'skey://contract/entity?project=two&code=A'}))
-  await details.waitFor(); await details.getByRole('button', {name:'Close details',exact:true}).click()
-  await page.locator('.workspace-results .result-item:visible').first().click({button:'right'})
-  await menu.waitFor()
-  assert.equal(await menu.getByRole('button', {name:'Quick Duplicate',exact:true}).count(), 0)
-  await page.keyboard.press('Escape')
-  await page.evaluate(() => localStorage.setItem('tactic_stream.appearance', JSON.stringify({mode:'dark',language:'ru'})))
-  await page.goto(url + '/projects/one/?' + new URLSearchParams({link:'skey://' + key}))
-  const ruDetails = page.locator('.object-details[open]')
-  await ruDetails.waitFor(); await ruDetails.getByRole('button', {name:/Закрыть/}).click()
-  await row.click({button:'right'})
-  const ruMenu = page.locator('.object-operations[open]')
-  await ruMenu.getByRole('button', {name:'Расширенное меню',exact:true}).click()
-  await ruMenu.getByRole('button', {name:'Дублировать…',exact:true}).click()
-  const ruWizard = page.getByRole('dialog', {name:'Дублировать объект',exact:true})
-  await ruWizard.getByRole('radiogroup', {name:'Шаги дублирования',exact:true}).waitFor()
-  assert.ok(await ruWizard.getByRole('radio', {name:'Проверка',exact:true}).isVisible())
-  await ruWizard.screenshot({path:output + '-ru.png'})
-  await ruWizard.getByRole('button', {name:'Закрыть',exact:true}).click()
-  assert.deepEqual(errors, [])
-  console.log('Native duplicate wizard, relationships/content, fresh Quick Duplicate, persistence, drag/maximize and unknown-result draft protection passed')
-} finally { await browser.close() }
+  await openMenu();
+  await menu.getByRole('button', { name: 'Duplicate…', exact: true }).click();
+  await wizard.getByRole('textbox', { name: 'Name', exact: true }).waitFor();
+  assert.equal(
+    await wizard
+      .getByRole('textbox', { name: 'Name', exact: true })
+      .inputValue(),
+    'Duplicate source'
+  );
+  let aborted = 0;
+  await page.route('**/admin/rpc', async (route) => {
+    if (route.request().postDataJSON()?.args?.[2]?.action === 'duplicate') {
+      aborted++;
+      await route.abort();
+      return;
+    }
+    await route.continue();
+  });
+  await wizard
+    .getByRole('textbox', { name: 'Name', exact: true })
+    .fill('Never created');
+  await wizard.getByRole('button', { name: 'Duplicate', exact: true }).click();
+  await wizard
+    .locator('[data-frame=duplicateErrorText]')
+    .filter({ hasText: 'The result is unknown.' })
+    .waitFor();
+  assert.ok(
+    await wizard
+      .getByRole('button', { name: 'Duplicate', exact: true })
+      .isDisabled()
+  );
+  assert.equal(aborted, 1);
+  await wizard.getByRole('button', { name: 'Close', exact: true }).click();
+  await wizard.getByText('Discard unsaved changes?', { exact: true }).waitFor();
+  await wizard
+    .getByRole('button', { name: 'Continue editing', exact: true })
+    .click();
+  assert.equal(
+    await wizard
+      .getByRole('textbox', { name: 'Name', exact: true })
+      .inputValue(),
+    'Never created'
+  );
+  await wizard.getByRole('button', { name: 'Close', exact: true }).click();
+  await wizard.getByRole('button', { name: 'Discard', exact: true }).click();
+  await page.unroute('**/admin/rpc');
+  await page.goto(
+    url +
+      '/projects/two/?' +
+      new URLSearchParams({ link: 'skey://contract/entity?project=two&code=A' })
+  );
+  await details.waitFor();
+  await details
+    .getByRole('button', { name: 'Close details', exact: true })
+    .click();
+  await page
+    .locator('.workspace-results .result-item:visible')
+    .first()
+    .click({ button: 'right' });
+  await menu.waitFor();
+  assert.equal(
+    await menu
+      .getByRole('button', { name: 'Quick Duplicate', exact: true })
+      .count(),
+    0
+  );
+  await page.keyboard.press('Escape');
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      'tactic_stream.appearance',
+      JSON.stringify({ mode: 'dark', language: 'ru' })
+    )
+  );
+  await page.goto(
+    url + '/projects/one/?' + new URLSearchParams({ link: 'skey://' + key })
+  );
+  const ruDetails = page.locator('.object-details[open]');
+  await ruDetails.waitFor();
+  await ruDetails
+    .getByRole('button', { name: 'Закрыть карточку', exact: true })
+    .click();
+  await row.click({ button: 'right' });
+  const ruMenu = page.locator('.object-operations[open]');
+  await ruMenu
+    .getByRole('button', { name: 'Расширенное меню', exact: true })
+    .click();
+  await ruMenu
+    .getByRole('button', { name: 'Дублировать…', exact: true })
+    .click();
+  const ruWizard = page.getByRole('dialog', {
+    name: 'Дублировать объект',
+    exact: true
+  });
+  await ruWizard
+    .getByRole('radiogroup', { name: 'Шаги дублирования', exact: true })
+    .waitFor();
+  await ruWizard
+    .getByRole('radio', { name: 'Проверка', exact: true })
+    .waitFor();
+  await ruWizard.screenshot({ path: output + '-ru.png' });
+  await ruWizard.getByRole('button', { name: 'Закрыть', exact: true }).click();
+  assert.deepEqual(errors, []);
+  console.log(
+    'Native duplicate wizard, relationships/content, fresh Quick Duplicate, persistence, drag/maximize and unknown-result draft protection passed'
+  );
+} finally {
+  await browser.close();
+}

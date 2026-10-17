@@ -58,3 +58,20 @@ native identity of the whole group, as Handler FileObject does. Qt-only formats
 need browser-readable derivatives; the original remains downloadable. Current
 offline comparisons render unchanged Handler QML and Chromium at matching sizes
 using a native-record fixture, not a connected end-to-end Handler session.
+
+## Shared snapshot surfaces
+
+The toolbar, options, summary, splitter and file columns share one description.
+Select a process/snapshot in the object report to open its actual files. Browser
+preview uses authorized URLs/derivatives and Download. Watch-folder editing stays
+native: the browser explains the missing desktop capability rather than claiming
+to watch a local directory. Selection and native file identity remain with the
+existing Snapshot Browser and repository adapters.
+
+## Presentation examples
+
+Examples use test data and show the panel content. The surrounding window or dock keeps its normal behavior.
+
+![Snapshot Browser toolbar](media/frame-objects-toolbar-both-en.png)
+
+![Snapshot summary](media/frame-objects-summary-normal-en.png)

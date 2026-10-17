@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/CodeBlock.js","assets/CodeBlock.css","assets/App.js","assets/resize.js","assets/icons.js","assets/AppTextField.js","assets/AppTextField.css","assets/AppDateField.js","assets/AppSlider.js","assets/AppSlider.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppDateField.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/AppTextArea.js","assets/AppTextArea.css","assets/ItemSurface.js","assets/ItemSurface.css","assets/UserComboBox.js","assets/UserComboBox.css","assets/AppSplitter.js","assets/SummaryChip.js","assets/SummaryChip.css","assets/resize.css","assets/RecordForm.js","assets/RecordForm.css","assets/links.js","assets/files.js","assets/textMetrics.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/CodeBlock.js","assets/CodeBlock.css","assets/App.js","assets/rolldown-runtime.js","assets/resize.js","assets/icons.js","assets/AppSplitter.js","assets/AppSplitter.css","assets/AppMenu.js","assets/AppMenu.css","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/ItemSurface.js","assets/ItemPreview.js","assets/ItemPreview.css","assets/ItemSurface.css","assets/resize.css","assets/RecordForm.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/files.js","assets/FilePreview.css","assets/ObjectReport.css","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
 import { A as onMounted, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, U as watchEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeStyle, p as computed, r as render, rt as toDisplayString, tt as normalizeClass, u as Fragment, x as defineAsyncComponent } from "./vue.js";
 import { n as en_default, t as ru_default } from "./locales.js";
 import { n as resolveIcon } from "./icons.js";
@@ -544,6 +544,7 @@ var lineHeights = Object.freeze({
 	title: 22,
 	heading: 23,
 	display: 24,
+	statistic: 28,
 	hero: 32
 });
 var textStyles = Object.freeze({
@@ -556,6 +557,7 @@ var textStyles = Object.freeze({
 	title: 16,
 	heading: 17,
 	display: 18,
+	statistic: 21,
 	hero: 24
 });
 var controls = {
@@ -1034,6 +1036,7 @@ var cssRoles = {
 	yellow: "--yellow",
 	cyan: "--cyan",
 	violet: "--violet",
+	tertiary: "--tertiary",
 	surfaceContainerLow: "--surface",
 	surfaceContainer: "--surface-container",
 	surfaceContainerHigh: "--surface-high",
@@ -2737,7 +2740,7 @@ var documentation = location.pathname === "/docs" || location.pathname === "/doc
 if (documentation) watchEffect(() => {
 	document.title = t("TACTIC Stream — API reference");
 });
-var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([4,1,5,6,2,3,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])));
+var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([4,5,1,6,7,2,3,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
 export { themes as $, effectiveColorMode as A, fontLineHeight as B, sessionRecords as C, t as D, asyncComponent as E, blend as F, configurationPreview as G, metrics as H, controls as I, savePreferencePage as J, normalizePreferences as K, cssColor as L, languages as M, readableText as N, appearance as O, saveAppearance as P, iconSets as Q, cssRoles as R, savedSessions as S, randomId as T, readableText$1 as U, layout as V, textStyles as W, taskColumns as X, normalizeColumns as Y, accentPresets as Z, importSession as _, mobileLayout as a, logRequest as b, capturePress as c, clearLive as d, BusyIndicator_default as et, debugLog as f, formatEvent as g, forgetSessions as h, mobile as i, frameColors as j, colorModes as k, ripple as l, exportSession as m, dockMinimumHeight as n, _sfc_main$1 as o, debugSettings as p, preferences as q, dockMinimumWidth as r, tooltipDirective as s, __vitePreload as t, _plugin_vue_export_helper_default as tt, _sfc_main$2 as u, levels as v, setServerDebugContext as w, redact as x, logEvent as y, fontFamily as z };

@@ -1,9 +1,8 @@
 import { A as onMounted, B as useModel, G as withCtx, M as openBlock, N as renderList, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode } from "./vue.js";
 import { D as t, o as _sfc_main$3, u as _sfc_main$2 } from "./index.js";
 import { F as rpc } from "./CodeBlock.js";
-import { t as _sfc_main$4 } from "./AppTextField.js";
-import { t as _sfc_main$5 } from "./AppMenu.js";
-import { t as _sfc_main$6 } from "./AppSplitter.js";
+import { n as _sfc_main$5, t as _sfc_main$4 } from "./AppSplitter.js";
+import { t as _sfc_main$6 } from "./AppMenu.js";
 //#region src/controls/AppCheckBox.vue
 var _hoisted_1$1 = { class: "app-checkbox-indicator" };
 var _hoisted_2$1 = [
@@ -230,7 +229,7 @@ var _sfc_main = {
 							onClick: remove
 						}, null, 8, ["disabled"])
 					]),
-					createVNode(_sfc_main$5, {
+					createVNode(_sfc_main$6, {
 						class: "matching-template-overflow",
 						label: "Template actions"
 					}, {
@@ -297,7 +296,7 @@ var _sfc_main = {
 						}, 1032, ["label", "onClick"])
 					], 2);
 				}), 128))])], 4),
-				createVNode(_sfc_main$6, {
+				createVNode(_sfc_main$4, {
 					modelValue: width.value,
 					"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => width.value = $event),
 					min: 260,
@@ -306,7 +305,7 @@ var _sfc_main = {
 				}, null, 8, ["modelValue"]),
 				createBaseVNode("section", _hoisted_3, [
 					createBaseVNode("strong", null, toDisplayString(unref(t)("Template properties")), 1),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Pattern")), 1), createVNode(_sfc_main$4, {
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Pattern")), 1), createVNode(_sfc_main$5, {
 						modelValue: selected.value.pattern,
 						"onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => selected.value.pattern = $event),
 						label: "Pattern",
@@ -317,14 +316,14 @@ var _sfc_main = {
 						preview: selected.value.preview || selected.value.pattern,
 						type: selected.value.matchingType || "—"
 					})), 1),
-					createBaseVNode("div", _hoisted_5, [createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Process mapping")), 1), createVNode(_sfc_main$4, {
+					createBaseVNode("div", _hoisted_5, [createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Process mapping")), 1), createVNode(_sfc_main$5, {
 						modelValue: selected.value.process,
 						"onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => selected.value.process = $event),
 						label: "Process mapping",
 						list: "matching-process-options",
 						placeholder: "All processes",
 						disabled: selected.value.locked
-					}, null, 8, ["modelValue", "disabled"])]), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Context mapping")), 1), createVNode(_sfc_main$4, {
+					}, null, 8, ["modelValue", "disabled"])]), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Context mapping")), 1), createVNode(_sfc_main$5, {
 						modelValue: selected.value.context,
 						"onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => selected.value.context = $event),
 						label: "Context mapping",
@@ -332,7 +331,7 @@ var _sfc_main = {
 						placeholder: "All contexts",
 						disabled: selected.value.locked
 					}, null, 8, ["modelValue", "disabled"])])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Test on filename")), 1), createBaseVNode("div", _hoisted_6, [createVNode(_sfc_main$4, {
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Test on filename")), 1), createBaseVNode("div", _hoisted_6, [createVNode(_sfc_main$5, {
 						modelValue: example.value,
 						"onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => example.value = $event),
 						label: "Test on filename",

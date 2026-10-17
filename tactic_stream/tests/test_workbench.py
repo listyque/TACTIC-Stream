@@ -34,7 +34,8 @@ class Workbench(unittest.TestCase):
         fixture = test_transport.Transport()
         self.addCleanup(fixture.doCleanups)
         fixture._workspace_schema_fixture()
-        fixture._task_process_fixture()
+        proxy, auth, _, _ = fixture._task_process_fixture()
+        proxy.update(auth, 'sthpw/pipeline?code=one/quick_task', dict(pipeline='<pipeline><process name="model" label="Model" color="#ff5353"/><process name="review" label="Review" color="#25c2e8" description="Review process description"/><process name="auto" type="action"/><process name="linked" type="progress"/></pipeline>'))
         with test_transport.Transport.proxy(self) as proxy:
             auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one')
             proxy.insert(auth, 'sthpw/login', dict(login='workspace_user', password=hash_password('private-test-password')))

@@ -53,6 +53,11 @@ class Transport(unittest.TestCase):
             snapshot_contract.install_fixture(db)
         cls.baseline = Path(cls.temp.name) / 'baseline'
         shutil.copytree(cls.store.data_dir, cls.baseline)
+        cls.server = None
+        cls.start_server()
+
+    @classmethod
+    def start_server(cls):
         cls.socket = socket.socket()
         cls.socket.bind(("127.0.0.1", 0))
         cls.socket.listen()
@@ -71,11 +76,7 @@ class Transport(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         try:
-            cls.server.should_exit = True
-            cls.thread.join(10)
-            cls.socket.close()
-            if cls.thread.is_alive():
-                raise RuntimeError("Test server did not shut down")
+            cls.stop_server()
             cls.temp.cleanup()
         finally:
             # A stopped web fixture must not leave its startup handlers in unrelated headless probes.
@@ -87,18 +88,123 @@ class Transport(unittest.TestCase):
              Snapshot.integral_trigger_added, Workflow.startup_initialized) = cls.native_startup
             sys.path[:] = cls.previous_path
 
+    @classmethod
+    def stop_server(cls):
+        if cls.server is None:
+            return
+        cls.server.should_exit = True
+        cls.thread.join(10)
+        cls.socket.close()
+        if cls.thread.is_alive():
+            raise RuntimeError("Test server did not shut down")
+        cls.server = None
+
     def setUp(self):
         # Each transport scenario starts from the same private DB and repositories.
         target = self.store.data_dir.resolve()
         if target != (Path(self.temp.name) / 'data').resolve():
             raise RuntimeError('Fixture reset must stay in its private data directory')
+        self.stop_server()
         shutil.rmtree(target)
         shutil.copytree(self.baseline, target)
+        self.start_server()
 
     def proxy(self):
         proxy = ServerProxy(self.url + "/tactic/default/Api/", allow_none=True)
         self.addCleanup(proxy.__exit__, None, None, None)
         return proxy
+
+    def test_object_report_pages_and_acl(self):
+        from tactic_stream.server.api import Api
+        from tactic_stream.server.result_items import read_result_items
+        from pyasm.search.search import RequestContext, request_context
+        from pyasm.common import Environment
+        api = Api(self.store)
+        api.protocol = 'json'
+        auth = dict(ticket=api.get_ticket('admin', 'private-test-password'), project='one')
+        with self.store.connection(write=True) as db:
+            schema = db.execute('SELECT id, "schema" FROM "schema" WHERE project_code=\'one\'').fetchone()
+            xml = ET.fromstring(schema['schema'])
+            for edge in list(xml):
+                if edge.tag == 'connect' and edge.get('from', '').startswith(('contract/', 'sthpw/contract_')):
+                    xml.remove(edge)
+            db.execute('UPDATE "schema" SET "schema"=? WHERE id=?', (ET.tostring(xml, encoding='unicode'), schema['id']))
+        kind = 'one/report_assets'
+        api.dispatch('execute_cmd', (auth, 'tactic.core.schema_commands.SearchTypeCreatorCmd',
+            dict(search_type_name=kind, asset_title='Report assets')))
+        owner = api.dispatch('insert', (auth, kind, dict(code='REPORT', name='Report Robot', description='Object description\ntactic-search://open?project=one&search_type=one/report_assets')))
+        task = api.dispatch('create_task', (auth, owner['__search_key__'], 'model'))
+        api.dispatch('update', (auth, task['__search_key__'], dict(assigned='admin', description='Model description')))
+        api.dispatch('insert', (auth, 'sthpw/note', dict(search_type=kind + '?project=one', search_code=owner['code'],
+            project_code='one', process='publish', note='Object note', login='admin')))
+        api.dispatch('insert', (auth, 'sthpw/note', dict(search_type='sthpw/task', search_code=task['code'],
+            project_code='one', process='model', note='Task note', login='admin')))
+        api.dispatch('upload_file', (auth, 'Report details.txt', Binary(b'Report file contents')))
+        api.dispatch('simple_checkin', (auth, owner['__search_key__'], 'model', 'Report details.txt'),
+            dict(mode='uploaded', create_icon=False, description='Report package'))
+        with request_context(RequestContext(self.store, 'admin', 'one')):
+            api.auth.bind_security('admin', auth['ticket'])
+            def report(page='tasks'):
+                return read_result_items(kind, [owner['__search_key__']], dict(kind='object_report', path=page))
+            data = report()
+            self.assertEqual(data['summary']['title'], 'Report Robot')
+            self.assertEqual(data['metrics']['tasks'], 1)
+            self.assertEqual(data['metrics']['notes'], 2)
+            self.assertEqual(data['metrics']['taskNotes'], 1)
+            self.assertEqual(data['tasks'][0]['searchKey'], task['__search_key__'])
+            self.assertEqual(data['participants'][0]['login'], 'admin')
+            self.assertEqual({row['body'] for row in report('notes')['notes']}, {'Object note', 'Task note'})
+            self.assertEqual(report('children')['children'], [])
+            snapshot_page = report('snapshots')
+            self.assertTrue(snapshot_page['files'])
+            self.assertEqual({row['title'] for row in snapshot_page['files']}, {'Report details_model_v001.txt'})
+            self.assertEqual(snapshot_page['metrics']['files'], len(snapshot_page['files']))
+            self.assertEqual(len(snapshot_page['snapshot_processes']), 1)
+            self.assertIsInstance(report('activity')['activity'], list)
+            with self.assertRaisesRegex(ValueError, 'Invalid object report page'):
+                report('unknown')
+            security = Environment.get_security()
+            original = security.check_access
+            def restricted(group, keys, access, **options):
+                if group == 'sobject_column' and isinstance(keys, dict) and keys.get('column') in ('hourly_wage', 'description'):
+                    return False
+                return original(group, keys, access, **options)
+            with patch.object(security, 'check_access', side_effect=restricted):
+                hidden = report()
+            self.assertFalse(hidden['metrics']['canViewCosts'])
+            self.assertNotIn('totalCost', hidden['metrics'])
+            self.assertNotIn('cost', hidden['participants'][0])
+            self.assertEqual(hidden['summary']['description'], '')
+            hour = api.dispatch('insert', (auth, 'sthpw/work_hour', dict(
+                project_code='one', task_code=task['code'], login='admin',
+                straight_time=4, over_time=0, category='regular')))
+            private_columns = {'hourly_wage', 'assigned', 'login', 'status',
+                'progress', 'completion', 'st_size', 'straight_time', 'over_time', 'category'}
+            def private(group, keys, access, **options):
+                if group == 'sobject_column' and isinstance(keys, dict) and keys.get('column') in private_columns:
+                    return False
+                return original(group, keys, access, **options)
+            from pyasm.biz import Task, WorkHour
+            with patch.object(security, 'check_access', side_effect=private), patch.object(
+                Task, 'get_completion', side_effect=AssertionError('Hidden status must not be derived')
+            ), patch.object(WorkHour, 'get_total_hours', side_effect=AssertionError('Hidden hours must not be aggregated')):
+                masked = report()
+                masked_files = report('snapshots')
+            self.assertEqual(masked['participants'], [])
+            self.assertEqual(masked['metrics']['participants'], 0)
+            self.assertEqual(masked['metrics']['workHours'], 0)
+            self.assertEqual(masked['metrics']['totalSize'], '0 B')
+            self.assertEqual(masked['tasks'][0]['assigned'], '')
+            self.assertEqual(masked['tasks'][0]['status'], '')
+            self.assertEqual(masked['tasks'][0]['progress'], 0)
+            self.assertTrue(all(row['size'] == 0 for row in masked_files['files']))
+            api.dispatch('delete_sobject', (auth, hour['__search_key__']))
+        result = subprocess.run([shutil.which('node'), str(ROOT/'frontend/tests/object_report.mjs'), self.url],
+            cwd=ROOT/'frontend', env=dict(os.environ, PLAYWRIGHT_BROWSERS_PATH=str(ROOT/'.browser-cache')),
+            capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(api.dispatch('query', (auth, kind, [['code', 'REPORT']])), [])
+        self.assertFalse(Path(snapshot_page['files'][0]['path']).exists())
 
     def test_naming_editor_commands(self):
         proxy = self.proxy()
@@ -3859,6 +3965,28 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
                                 encoding='utf-8', errors='replace', timeout=45)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_object_batch_in_chromium(self):
+        self._workspace_schema_fixture()
+        import sqlite3
+        from contextlib import closing
+        with closing(sqlite3.connect(self.store.database_path('one'))) as database, database:
+            database.execute('ALTER TABLE entity ADD COLUMN description text')
+        result = subprocess.run(
+            [shutil.which('node'), str(ROOT / 'frontend/tests/object_batch.mjs'), self.url],
+            cwd=ROOT / 'frontend', env=dict(os.environ, PLAYWRIGHT_BROWSERS_PATH=str(ROOT / '.browser-cache')),
+            capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=75,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_object_links_in_chromium(self):
+        self._workspace_schema_fixture()
+        result = subprocess.run(
+            [shutil.which('node'), str(ROOT / 'frontend/tests/object_links.mjs'), self.url],
+            cwd=ROOT / 'frontend', env=dict(os.environ, PLAYWRIGHT_BROWSERS_PATH=str(ROOT / '.browser-cache')),
+            capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=75,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_mobile_objects_in_chromium(self):
         self._workspace_schema_fixture()
         environment = os.environ.copy()
@@ -4304,7 +4432,10 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
             api.dispatch('delete_sobject',(auth,first_version_file['record']['__search_key__']),dict(include_dependencies=True))
         self.assertEqual(Path(first_version_file['fullPath']).read_bytes(),original_bytes)
         self.assertEqual(len(api.dispatch('query',(auth,'sthpw/file',[['code',first_version_file['token']]]))),1)
-        result = subprocess.run([shutil.which('node'),str(ROOT/'frontend/tests/snapshot_browser.mjs'),self.url,str(output),records[0]['__search_key__'],records[1]['__search_key__'],versions[0]['__search_key__']],cwd=ROOT/'frontend',env=dict(os.environ,PLAYWRIGHT_BROWSERS_PATH=str(ROOT/'.browser-cache')),capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=120)
+        try:
+            result = subprocess.run([shutil.which('node'),str(ROOT/'frontend/tests/snapshot_browser.mjs'),self.url,str(output),records[0]['__search_key__'],records[1]['__search_key__'],versions[0]['__search_key__']],cwd=ROOT/'frontend',env=dict(os.environ,PLAYWRIGHT_BROWSERS_PATH=str(ROOT/'.browser-cache')),capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=120)
+        except subprocess.TimeoutExpired as error:
+            self.fail(f'Snapshot Browser timed out. stdout={error.stdout!r}; stderr={error.stderr!r}')
         self.assertEqual(result.returncode,0,result.stdout + result.stderr)
         self.assertEqual(api.dispatch('query',(auth,'sthpw/file',[['code',files[0]['token']]]))[0]['source_path'],'Snapshot Browser verified source')
         self.assertEqual(api.dispatch('query',(auth,'sthpw/file',[['code',first_version_file['token']]])),[])

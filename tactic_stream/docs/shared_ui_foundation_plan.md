@@ -7,14 +7,19 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01–B06 are delivered** at the checkpoints below. The next batch is **B07**.
+**B01–B06 and B08 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by B08.
 
 **B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
 widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
 inventory still has 40 usable classes without complete workflows. Nested tables,
 specialized action/forms and schedule/work-hour cells remain in B07. See
 `docs/frame_table.md` and `tools/frame_table/output/index.html`; this checkpoint
-does not close the batch or advance to B08.
+does not close B07. B08 was completed separately at the user's explicit request.
+
+**B08 is delivered.** Objects, operations, snapshot/watch presentation and Inspector
+fragments (including note bodies and edit/delete child forms) share one skeleton.
+The source/owner/capability and acceptance ledger is `docs/frame_objects.md`.
+This does not close B07's gaps.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -68,6 +73,35 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B08 delivered: Objects and inspector docks, 2026-10-17
+
+Stream **0.112.161** / Handler **0.6.0.112** ship **118 portable `.mjs` modules
+and three JSON catalogs** as independent copies. `features/objects` owns
+presentation for descriptions, configured forms/batch review, reports, linking,
+dependency deletion, five-step duplication, snapshot/watch and Inspector
+context/quick fields/related tasks/work hours/notes. Existing owners retain data,
+ACL, revisions, drafts, filesystem/DCC capabilities and mutation callbacks.
+
+Original report metadata/preview/metric layout, desktop quick-field rows,
+snapshot tags, dependency cards and duplication flow were reviewed against the
+archived Handler and restored where the first extraction had changed them.
+Phone reflow keeps all report metrics and task metadata visible. Native ListView
+and browser VirtualCollection retain variable dependency row heights and scroll.
+No WebEngine, runtime sibling import, replacement store or second write executor.
+
+Acceptance: **60 platform stages**, **101 native object tests**, **12 offline
+window/archive tests**, **2544 original/current native captures** and **1272 paired
+QML/Vue states** passed. Temporary-server journeys cover writes, conflicts,
+lost replies, ACL, files and exact contexts; the full native-table and phone
+journeys also pass. The final gallery checks source fingerprints. See
+`docs/frame_objects.md` for reproduction and explicit browser/native differences.
+EN/RU Help includes examples and screenshots. This checkpoint does not close
+B07's 40 legacy-widget workflows, B09 Task Manager, B10 scheduling or B11 messaging.
+
+Physical touch/OS IME, compositor/GPU behavior and PostgreSQL still need their
+separate hardware/deployment acceptance. Two existing legacy Messages test
+failures were reproduced on the archived checkpoint and remain recorded for B11.
 
 ## B06 delivered: Search workflow and card results, 2026-10-17
 

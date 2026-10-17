@@ -352,3 +352,18 @@ dialog.frame-dialog[open] {
 .frame-checkbox.disabled > .item-surface {
   --item-interaction: var(--item-base);
 }
+
+.frame-view > .frame-icon-action.app-button {
+  border: 0;
+  border-radius: var(--icon-button-radius);
+  box-shadow: none;
+  color: var(--on-surface);
+}
+.frame-view > .frame-icon-action > .app-icon {
+  width: var(--frame-button-icon-size, 17px);
+  height: var(--frame-button-icon-size, 17px);
+  font-size: var(--frame-button-icon-size, 17px);
+}
+.frame-view > .frame-icon-action:disabled {
+  color: var(--disabled);
+}

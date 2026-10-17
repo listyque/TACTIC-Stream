@@ -3,6 +3,15 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
+## B08 object surfaces — 2026-10-17
+
+Stream 0.112.161 / Handler 0.6.0.112 share object forms/reports/operations,
+description, snapshot/watch surfaces and Inspector fragments, including measured
+note bodies and edit/delete children. Query, ACL, revisions, drafts and native
+file/mutation owners remain in their existing products. See
+[scope, reproduction and platform limits](docs/frame_objects.md). B07's unfinished
+legacy widgets remain open; complete Task Manager and Messaging stay B09/B11.
+
 ## B07 checkpoint — 2026-10-17
 
 Stream 0.112.160 / Handler 0.6.0.111 share Table View geometry/paint, menus,

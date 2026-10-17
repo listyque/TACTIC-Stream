@@ -234,10 +234,10 @@ try {
     includeHidden: true
   });
   await inspector.locator('.inspector-context').waitFor();
-  await inspector.getByLabel('Process', { exact: true }).tap();
+  await inspector.getByRole('button', { name: 'Process', exact: true }).tap();
   await inspector.locator('[data-process-choice="model"]').tap();
   await inspector
-    .locator('.inspector-process > summary')
+    .getByRole('button', { name: 'Process', exact: true })
     .filter({ hasText: 'Model' })
     .waitFor();
   assert.equal(
@@ -267,7 +267,7 @@ try {
   await closeInspector(page);
   await phone.getByLabel('Item actions', { exact: true }).tap();
   await page.getByRole('menuitem', { name: 'Notes', exact: true }).tap();
-  await inspector.getByLabel('Process', { exact: true }).tap();
+  await inspector.getByRole('button', { name: 'Process', exact: true }).tap();
   await inspector.locator('[data-process-choice="model"]').tap();
   await note.waitFor();
   assert.equal(await note.inputValue(), 'Preserved phone note\n');
@@ -288,8 +288,22 @@ try {
     .filter({ hasText: 'Preserved phone note' })
     .waitFor();
   await inspector
+    .getByRole('button', { name: 'File preview', exact: true })
+    .tap();
+  const notePreview = page.getByRole('dialog', {
+    name: 'File preview',
+    exact: true
+  });
+  await notePreview
+    .locator('pre')
+    .filter({ hasText: 'Native phone note attachment' })
+    .waitFor();
+  await notePreview
     .getByRole('link', { name: 'Download', exact: true })
     .waitFor();
+  await notePreview
+    .getByRole('button', { name: 'Close preview', exact: true })
+    .tap();
   assert.equal(await note.inputValue(), '');
   await dismiss();
   await capture('phone-inspector-320');
@@ -374,7 +388,9 @@ try {
   await row.getByRole('button', { name: 'Open notes', exact: true }).tap();
   await inspector.locator('.inspector-context').waitFor();
   assert.match(
-    await inspector.locator('.inspector-object-title').innerText(),
+    await inspector
+      .locator('[data-frame="taskInspectorObjectTitle"]')
+      .innerText(),
     /Phone asset 0/
   );
   await closeInspector(page);
