@@ -1,5 +1,5 @@
 import { q as preferences } from "./index.js";
-import { F as rpc } from "./clipboard.js";
+import { F as rpc } from "./CodeBlock.js";
 //#region src/features/checkin/files.js
 var sourcePath = (file) => file.webkitRelativePath || file.name;
 var descriptors = (files) => files.map((file) => ({

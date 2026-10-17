@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Table View — Tactic Frame B07</title>
+    <style>
+      body {
+        margin: 24px;
+        font: 15px/1.5 system-ui;
+        background: #202629;
+        color: #e5eaed;
+      }
+      select {
+        margin: 8px;
+        padding: 8px;
+        font: inherit;
+      }
+      section {
+        margin: 24px 0;
+      }
+      .pairs {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        overflow: auto;
+      }
+      figure {
+        margin: 0;
+        flex-shrink: 0;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+        border: 1px solid #647078;
+      }
+      figcaption {
+        margin-bottom: 8px;
+      }
+      td,
+      th {
+        text-align: left;
+        vertical-align: top;
+        padding: 8px;
+        border-bottom: 1px solid #647078;
+      }
+      code {
+        overflow-wrap: anywhere;
+      }
+      #inventory {
+        max-width: 1500px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Table View: текущая реализация B07</h1>
+    <p>
+      Сравнение production-компонентов ТХ и ТС на одинаковых данных. Архивный ТХ
+      — checkpoint B06, уже содержащий предыдущие переносы Frame. Это не
+      исходное приложение до Frame. Регистрация адаптера не означает поддержку
+      всех опций старого класса. B07 остаётся открытым до закрытия списка ниже.
+    </p>
+    <label
+      >Тема<select id="style">
+        <option>md3</option>
+        <option>fluent</option>
+        <option>material5</option>
+      </select></label
+    >
+    <label
+      >Цвет<select id="dark">
+        <option value="true">Тёмный</option>
+        <option value="false">Светлый</option>
+      </select></label
+    >
+    <label
+      >Язык<select id="language">
+        <option>ru</option>
+        <option>en</option>
+      </select></label
+    >
+    <p id="counts"></p>
+    <div id="captures"></div>
+    <h2>Упоминания виджетов во всех конфигах</h2>
+    <p>
+      adapted — существует типизированный адаптер; pending — перенос не
+      закончен. Исключены только ранее выделенная pyasm.prod и явно недописанные
+      оригиналы. Неразбираемые записи не исполняются.
+    </p>
+    <table id="inventory">
+      <thead>
+        <tr>
+          <th>Класс</th>
+          <th>Состояние</th>
+          <th>Где используется</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script id="data" type="application/json">
+      __TABLE_DATA__
+    </script>
+    <script>
+      const data = JSON.parse(document.querySelector('#data').textContent);
+      const key = (fixture) =>
+        [
+          fixture.screen,
+          fixture.mode || fixture.value?.name || '',
+          fixture.width,
+          fixture.style,
+          fixture.dark,
+          fixture.language
+        ].join(':');
+      const native = new Map(
+        data.native.captures
+          .filter((row) => !row.original)
+          .map((row) => [key(row.fixture), row])
+      );
+      const original = new Map(
+        data.native.captures
+          .filter((row) => row.original)
+          .map((row) => [key(row.fixture), row])
+      );
+      const image = (source, title) => {
+        const figure = document.createElement('figure'),
+          caption = document.createElement('figcaption'),
+          img = document.createElement('img');
+        caption.textContent = title;
+        img.src = source;
+        img.alt = title;
+        img.loading = 'lazy';
+        figure.append(caption, img);
+        return figure;
+      };
+      function draw() {
+        const host = document.querySelector('#captures');
+        host.replaceChildren();
+        for (const row of data.browser.cases) {
+          const fixture = row.fixture;
+          if (
+            fixture.style !== document.querySelector('#style').value ||
+            String(fixture.dark) !== document.querySelector('#dark').value ||
+            fixture.language !== document.querySelector('#language').value
+          )
+            continue;
+          const section = document.createElement('section'),
+            title = document.createElement('h2'),
+            pairs = document.createElement('div');
+          title.textContent = [
+            fixture.screen,
+            fixture.mode || fixture.value?.name || '',
+            fixture.width + ' px'
+          ].join(' ');
+          pairs.className = 'pairs';
+          const before = original.get(key(fixture));
+          if (before) pairs.append(image(before.image, 'ТХ — архив B06'));
+          pairs.append(
+            image(native.get(key(fixture)).image, 'ТХ — текущий'),
+            image(row.image, 'ТС — текущий')
+          );
+          section.append(title, pairs);
+          host.append(section);
+        }
+      }
+      for (const input of document.querySelectorAll('select'))
+        input.addEventListener('change', draw);
+      document.querySelector('#counts').textContent =
+        `Проверено пар: ${data.browser.cases.length}. Конфигов: ${data.inventory.sources}. ${JSON.stringify(data.inventory.counts)}`;
+      for (const row of data.inventory.widgets) {
+        const tr = document.createElement('tr'),
+          name = document.createElement('td'),
+          state = document.createElement('td'),
+          uses = document.createElement('td'),
+          detail = document.createElement('details'),
+          summary = document.createElement('summary'),
+          list = document.createElement('ul');
+        name.textContent = row.widget;
+        state.textContent = row.status;
+        summary.textContent = `Упоминаний: ${row.uses.length}. ${row.reason}`;
+        for (const use of row.uses) {
+          const item = document.createElement('li');
+          item.textContent = use.source + ' → ' + use.location;
+          list.append(item);
+        }
+        detail.append(summary, list);
+        uses.append(detail);
+        tr.append(name, state, uses);
+        document.querySelector('#inventory tbody').append(tr);
+      }
+      draw();
+    </script>
+  </body>
+</html>

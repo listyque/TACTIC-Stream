@@ -1,6 +1,6 @@
 import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, o as vModelText, rt as toDisplayString, s as vShow, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, o as _sfc_main$1, tt as _plugin_vue_export_helper_default, u as _sfc_main$2 } from "./index.js";
-import { F as rpc, dt as notify, f as _sfc_main$3 } from "./clipboard.js";
+import { F as rpc, dt as notify, f as _sfc_main$3 } from "./CodeBlock.js";
 import { t as _sfc_main$4 } from "./AppTextField.js";
 import { n as _sfc_main$6, t as _sfc_main$5 } from "./AppDateField.js";
 import { t as _sfc_main$7 } from "./AppCheckbox.js";

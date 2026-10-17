@@ -40,7 +40,7 @@
     </element>
 
     <element name="discussion" edit="false">
-        <display class="tacic.ui.widget.DiscussionWdg">
+        <display class="tactic.ui.widget.DiscussionWdg">
             <sticky>new</sticky>
         </display>
     </element>

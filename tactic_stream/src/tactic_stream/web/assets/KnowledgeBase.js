@@ -1,13 +1,13 @@
 import { A as onMounted, C as inject, E as nextTick, G as withCtx, H as watch, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, O as appearance, T as randomId, o as _sfc_main$2, u as _sfc_main$3 } from "./index.js";
-import { S as messageFileRequest, b as knowledgeRequest, c as xmlTokens, f as _sfc_main$4, n as copyText, o as javascriptTokens, s as pythonTokens, x as linkPreviews } from "./clipboard.js";
+import { S as messageFileRequest, b as knowledgeRequest, f as _sfc_main$4, i as xmlTokens, n as javascriptTokens, o as copyText, r as pythonTokens, x as linkPreviews } from "./CodeBlock.js";
 import { t as _sfc_main$5 } from "./AppSlider.js";
 import { t as _sfc_main$6 } from "./AppTextField.js";
 import { t as _sfc_main$7 } from "./AppMenu.js";
 import { t as _sfc_main$8 } from "./AppCheckbox.js";
-import { l as escapeHtml, n as browserLink, u as extractSkeys } from "./links.js";
 import { t as _sfc_main$9 } from "./AppTextArea.js";
 import { n as AppSearchField_default } from "./ItemSurface.js";
+import { l as escapeHtml, n as browserLink, u as extractSkeys } from "./links.js";
 import { t as _sfc_main$10 } from "./AppMenuItem.js";
 import { B as _sfc_main$13, E as _sfc_main$11, c as messageDate, n as MarkdownItCallable, s as _sfc_main$12 } from "./App.js";
 //#region src/features/knowledge/markdown.js

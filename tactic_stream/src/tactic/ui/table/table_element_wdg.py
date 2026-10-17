@@ -29,3 +29,19 @@ class CheckinButtonElementWdg(BaseTableElementWdg):
         return dict(text='', available=True, targetSearchKey=target.get_search_key(use_id=False),
                     process=process, context=context or process, checkinMode=self.get_option('mode') or '',
                     transferMode=self.get_option('transfer_mode') or '')
+
+
+class RecipientElementWdg(BaseTableElementWdg):
+    def preprocess(self):
+        search = Search('sthpw/notification_login')
+        search.add_filters('notification_log_id', [obj.get_id() for obj in self.sobjects])
+        self.recipients = {}
+        for row in search.get_sobjects() if self.sobjects else []:
+            self.recipients.setdefault(row.get_value('notification_log_id'), []).append(row)
+
+    def get_logins(self):
+        return self.recipients.get(self.get_current_sobject().get_id(), [])
+
+    def get_cell_value(self):
+        rows = [{'title': row.get_value('type'), 'value': row.get_value('login')} for row in self.get_logins()]
+        return {'text': '\n'.join('%s: %s' % (row['title'], row['value']) for row in rows), 'entries': rows}

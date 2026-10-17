@@ -1,6 +1,6 @@
 import { E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, P as renderSlot, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, l as withModifiers, m as createBaseVNode, o as vModelText, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode, z as useId } from "./vue.js";
 import { D as t, i as mobile, o as _sfc_main$1, tt as _plugin_vue_export_helper_default } from "./index.js";
-import { F as rpc, Y as uploadFormFile, p as _sfc_main$2, v as formDefinition } from "./clipboard.js";
+import { F as rpc, Y as uploadFormFile, p as _sfc_main$2, v as formDefinition } from "./CodeBlock.js";
 import { n as _sfc_main$4, t as _sfc_main$3 } from "./AppDateField.js";
 //#region src/features/objects/recordFields.js
 function fieldKind(field) {

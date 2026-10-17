@@ -1,6 +1,6 @@
 import { A as onMounted, E as nextTick, G as withCtx, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, O as appearance, o as _sfc_main$2, u as _sfc_main$1 } from "./index.js";
-import { f as _sfc_main$3 } from "./clipboard.js";
+import { f as _sfc_main$3 } from "./CodeBlock.js";
 import { t as _sfc_main$4 } from "./AppMenu.js";
 import { t as _sfc_main$5 } from "./AppCheckbox.js";
 import { t as ItemPreview_default } from "./ItemPreview.js";

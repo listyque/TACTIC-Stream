@@ -517,7 +517,7 @@ class WidgetConfig(Base):
             elif hasattr(widget, class_path):
                 class_path = 'pyasm.widget.' + class_path
             else:
-                from tactic.ui import common as ui_common, input, widget as ui_widget
+                from tactic.ui import common as ui_common, input, widget as ui_widget, table as ui_table
                 if hasattr(input, class_path):
                     class_path = 'tactic.ui.input.' + class_path
                 # Source short CalendarInputWdg refers to the excluded old pyasm widget.
@@ -525,6 +525,8 @@ class WidgetConfig(Base):
                     class_path = 'tactic.ui.widget.' + class_path
                 elif hasattr(ui_common, class_path):
                     class_path = 'tactic.ui.common.' + class_path
+                elif hasattr(ui_table, class_path):
+                    class_path = 'tactic.ui.table.' + class_path
                 else:
                     raise UnsupportedContract('TACTIC form class is not migrated: ' + class_path)
         return Common.create_from_class_path(class_path, [], display_options)

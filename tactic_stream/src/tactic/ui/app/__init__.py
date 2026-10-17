@@ -1,3 +1,5 @@
 from .project_template_wdg import ProjectTemplateInstallCmd, ProjectTemplateDownloadCmd, ProjectTemplateDeleteCmd, ProjectTemplateExportCmd
 from .repository_wdg import RepositoryPathsCmd
 from .page_nav_container_wdg import PageNavContainerWdg
+
+from .search_type_element_wdg import SearchTypeHasTableElementWdg

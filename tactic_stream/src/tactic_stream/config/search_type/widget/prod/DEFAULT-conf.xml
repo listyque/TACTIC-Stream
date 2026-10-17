@@ -665,7 +665,7 @@ display class, it will adopt the one defined here-->
     </element>
 
     <element name="instances">
-        <display class="Htactic.ui.table.HiddenRowElementWdg">
+        <display class="tactic.ui.table.HiddenRowElementWdg">
             <title_icon>Contents</title_icon>
             <dynamic>pyasm.prod.web.SObjectInstanceListWdg</dynamic>
         </display>

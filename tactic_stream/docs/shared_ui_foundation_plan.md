@@ -9,6 +9,13 @@ remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
 **B01–B06 are delivered** at the checkpoints below. The next batch is **B07**.
 
+**B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
+widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
+inventory still has 40 usable classes without complete workflows. Nested tables,
+specialized action/forms and schedule/work-hour cells remain in B07. See
+`docs/frame_table.md` and `tools/frame_table/output/index.html`; this checkpoint
+does not close the batch or advance to B08.
+
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
 compare appearance, fix regressions, update documentation and commit/backup.

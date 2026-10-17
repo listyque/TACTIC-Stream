@@ -1,6 +1,6 @@
 import { E as nextTick, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, i as mobile, o as _sfc_main$1, tt as _plugin_vue_export_helper_default, u as _sfc_main$2 } from "./index.js";
-import { P as resultItems, dt as notify, n as copyText, t as copyImage } from "./clipboard.js";
+import { P as resultItems, a as copyImage, dt as notify, o as copyText } from "./CodeBlock.js";
 import { t as RecordForm_default } from "./RecordForm.js";
 import { t as _sfc_main$3 } from "./AppSlider.js";
 import { t as _sfc_main$4 } from "./AppMenu.js";

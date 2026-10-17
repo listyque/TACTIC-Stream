@@ -1,5 +1,4 @@
 """Working Handler table cells, native inline edits and saved view metadata."""
-import ast
 import json
 import os
 from pathlib import Path
@@ -43,20 +42,18 @@ def write(operation):
 
 class HandlerTable(unittest.TestCase):
     def test_all_handler_registered_aliases(self):
-        path = Path('D:/code/th_codex/thlib/tactic_table_widgets.py')
-        if not path.exists():
-            names = [row['alias'] for row in json.loads(Path('reports/table-view-2026-10-14/handler-widget-checklist.json').read_text(encoding='utf-8'))['aliases']]
-            self.assertEqual(len(names),45);self.assertFalse(set(names)-set(WIDGETS));return
-        source = path.read_text(encoding='utf-8')
-        tree = ast.parse(source)
-        registry = next(node.value for node in tree.body if isinstance(node, ast.Assign)
-            and any(isinstance(target, ast.Name) and target.id == 'table_classes' for target in node.targets))
-        names = ast.literal_eval(registry.values[0])
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == 'extend' and isinstance(node.func.value, ast.Subscript) and node.func.value.slice.value == 'tactic':
-                names += ast.literal_eval(node.args[0])
-        self.assertEqual(len(names), 45)
-        self.assertFalse(set(names) - set(WIDGETS))
+        expected = json.loads((Path(__file__).parent/'fixtures/table_widget_aliases.json').read_text(encoding='utf-8'))
+        self.assertEqual(len(expected), len(set(expected)))
+        self.assertFalse(set(expected) - set(WIDGETS))
+        from pyasm.widget import WidgetConfig
+        with request_context(RequestContext(None, 'admin')):
+            for alias in expected:
+                self.assertIsNotNone(WidgetConfig.create_widget(alias), alias)
+        path = Path('D:/code/th_codex/thlib/ui/qml/tactic_frame/features/table/widgets.json')
+        if path.exists():
+            catalog = json.loads(path.read_text(encoding='utf-8'))
+            names = [alias for entry in catalog for alias in entry['aliases'] if alias]
+            self.assertEqual(sorted(names), sorted(expected))
 
     def test_native_cells_edits_conflicts_rollback_and_permissions(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {'TACTIC_CONFIG_PATH':'','TACTIC_TMP_CONFIG_PATH':''}):

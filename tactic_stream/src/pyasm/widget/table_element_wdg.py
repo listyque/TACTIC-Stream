@@ -155,6 +155,24 @@ class BaseTableElementWdg(HtmlElement):
         raise UnsupportedContract('Legacy HTML table rendering is excluded')
 
 
+class CheckboxColWdg(BaseTableElementWdg):
+    """The native row selection column carries object identity, not a DB value."""
+
+    def get_cell_value(self):
+        return {'text': '', 'search_key': self.get_current_sobject().get_search_key()}
+
+
+class SearchTypeElementWdg(BaseTableElementWdg):
+    def get_cell_value(self):
+        from pyasm.search import SearchType, SearchException
+        value = self.get_current_sobject().get_value(self.get_name())
+        try:
+            title = SearchType.get(value).get_title()
+        except SearchException:
+            title = '--'
+        return {'text': str(title)}
+
+
 class SimpleTableElementWdg(BaseTableElementWdg):
     @classmethod
     def is_editable(cls):

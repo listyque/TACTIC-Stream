@@ -1,7 +1,7 @@
 import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
 import { D as t, H as metrics, I as controls, O as appearance, Q as iconSets, R as cssRoles, W as textStyles, o as _sfc_main$7, tt as _plugin_vue_export_helper_default, u as _sfc_main$6 } from "./index.js";
-import { f as _sfc_main$9, n as copyText, o as javascriptTokens, p as _sfc_main$8, r as readClipboard, s as pythonTokens } from "./clipboard.js";
+import { f as _sfc_main$9, n as javascriptTokens, o as copyText, p as _sfc_main$8, r as pythonTokens, s as readClipboard } from "./CodeBlock.js";
 import { t as _sfc_main$10 } from "./AppTextField.js";
 import { n as _sfc_main$11, t as _sfc_main$12 } from "./AppDateField.js";
 import { t as _sfc_main$13 } from "./AppMenu.js";
@@ -10,8 +10,8 @@ import { t as ItemPreview_default } from "./ItemPreview.js";
 import { t as _sfc_main$15 } from "./AppTextArea.js";
 import { t as _sfc_main$16 } from "./ItemSurface.js";
 import { t as _sfc_main$17 } from "./UserComboBox.js";
-import { t as _sfc_main$18 } from "./SummaryChip.js";
-import { t as _sfc_main$19 } from "./AppSplitter.js";
+import { t as _sfc_main$18 } from "./AppSplitter.js";
+import { t as _sfc_main$19 } from "./SummaryChip.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
 /** @typedef {{x:number, y:number, width:number, height:number}} Bounds Logical pixels. */
 /** @typedef {{type:string, [key:string]:unknown}} Action UI event or adapter command. */
@@ -202,6 +202,42 @@ function virtualRange(count, rowHeight, viewport, scroll, overscan) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	Exists: "Есть",
+	"Does not exist": "Отсутствует",
+	"Project does not exist": "Проект не существует",
+	"Not assigned": "Не назначено",
+	Array: "Массив",
+	JSON: "JSON",
+	"Legacy task completion (integer)": "Готовность задач (старый целочисленный виджет)",
+	"Table availability": "Наличие таблицы",
+	"Raw value": "Исходное значение",
+	"Expression value": "Вычисляемое значение",
+	"Preference description": "Описание настройки",
+	"Project database": "База проекта",
+	"Related value": "Связанное значение",
+	"Notification recipients": "Получатели уведомления",
+	Discussion: "Обсуждение",
+	Locked: "Заблокировано",
+	"Snapshot lock": "Блокировка снапшота",
+	"Snapshot file": "Файл снапшота",
+	"Task group completion": "Готовность по группам задач",
+	"Milestone completion": "Готовность вехи",
+	"Days until due": "До срока задачи",
+	"Row selection": "Выбор строки",
+	"Search Type title": "Название Search Type",
+	"Task summary": "Сводка задач",
+	"No date": "Нет даты",
+	Today: "Сегодня",
+	"1 Day Overdue": "Просрочено на 1 день",
+	"{count} Days Overdue": "Просрочено на {count} дн.",
+	"< 2 Hours": "< 2 часов",
+	"< 1 Hour": "< 1 часа",
+	"1 Day": "1 день",
+	"{count} Days": "{count} дн.",
+	"No version": "Нет версии",
+	Latest: "Последняя",
+	Current: "Текущая",
+	"Cell calculation failed": "Ошибка вычисления ячейки",
 	"A connection to the TACTIC server could not be established. Check the server address, network connection, VPN or proxy, and make sure the server is running. Then try again.": "Не удалось установить соединение с сервером TACTIC. Проверьте адрес сервера, подключение к сети, VPN или прокси и убедитесь, что сервер запущен. Затем повторите попытку.",
 	"ACCOUNT SETTINGS": "НАСТРОЙКИ УЧЁТНОЙ ЗАПИСИ",
 	"API transport": "Транспорт API",
@@ -4887,7 +4923,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"selected",
 					"loading",
 					"fill-mode"
-				])) : node.kind === "SummaryChip" ? (openBlock(), createBlock(_sfc_main$18, {
+				])) : node.kind === "SummaryChip" ? (openBlock(), createBlock(_sfc_main$19, {
 					key: 10,
 					"data-frame": node.id,
 					class: "frame-node frame-summary-chip",
@@ -5039,7 +5075,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"disabled",
 					"onUpdate:modelValue"
-				])], 12, _hoisted_8)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$19, {
+				])], 12, _hoisted_8)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$18, {
 					key: 16,
 					"data-frame": node.id,
 					class: "frame-node frame-splitter",

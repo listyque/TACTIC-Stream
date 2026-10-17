@@ -1,0 +1,436 @@
+"""Capture production Table View and inline editors against the B06 checkpoint."""
+
+import hashlib
+import json
+import os
+import sys
+import zipfile
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+HANDLER = Path("D:/code/th_codex")
+OUT = Path(__file__).parent / "output"
+sys.path[:0] = [str(HANDLER), str(ROOT / "tools/frame_admin")]
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+os.environ.setdefault("QT_QUICK_BACKEND", "software")
+os.environ.setdefault("QT_QUICK_CONTROLS_STYLE", "Basic")
+
+from native_capture import snapshot, source_hashes
+from PySide6.QtCore import (
+    Property,
+    QCoreApplication,
+    QEvent,
+    QObject,
+    QPoint,
+    QPointF,
+    QUrl,
+    Slot,
+)
+from PySide6.QtQml import QQmlComponent, QQmlEngine
+from PySide6.QtQuick import QQuickWindow
+from PySide6.QtTest import QTest
+from tests.profile_ui_responsiveness import frame
+from tests.qt_application import gui_test_application
+from tests.test_columns_table_view import _TableColumns, _TableController, _visual_items
+from thlib.ui.icon_font import qml_icon_bindings
+from thlib.ui.localization import CatalogTranslator
+from thlib.ui.workspace_models.records import RecordListModel
+from thlib.ui.workspace_models.results import WorkspaceItemModel
+from thlib.ui.workspace_models.results_types import WorkspaceNode
+
+DATA = json.loads(
+    (ROOT / "reports/table-view-2026-10-14/fixture.json").read_text(encoding="utf-8")
+)
+VALUES = json.loads(
+    (ROOT / "tests/fixtures/frame_table_values.json").read_text(encoding="utf-8")
+)
+
+
+class Locale(QObject):
+    def __init__(self, language):
+        super().__init__()
+        self.language = language
+
+    @Property(str, constant=True)
+    def current_language(self):
+        return self.language
+
+
+class Columns(_TableColumns):
+    def __init__(self):
+        super().__init__()
+        self._columns = []
+        for index, column in enumerate(DATA["definition"]["table"]["elements"]):
+            descriptor = column["cell"]
+            self._columns.append(
+                dict(
+                    row=index,
+                    name=column["name"],
+                    label=column["title"],
+                    width=int(column["attributes"]["width"]),
+                    hideOrder=int(column["attributes"].get("th_hide_order", 0)),
+                    kind=descriptor["kind"],
+                    dataType=DATA["definition"]["columns"]
+                    .get(descriptor["field"], {})
+                    .get("data_type", ""),
+                    sortable=descriptor["sortable"],
+                    editable=descriptor.get("editable", False),
+                    displayOptions=column["display"]["options"],
+                )
+            )
+
+    @Slot(str, int, result="QVariantMap")
+    def row_cells(self, key, revision):
+        return DATA["cells"].get(key, {})
+
+
+class Controller(_TableController):
+    @Slot(str, str, result="QVariantList")
+    def process_count_actions(self, node_id, panel):
+        if panel != "notes":
+            return []
+        values = DATA["cells"][node_id]["notes"]["processes"]
+        return [
+            dict(
+                title=value["label"] or value["process"],
+                process=value["process"],
+                badgeCount=value["count"],
+                accent=value["accent"],
+            )
+            for value in values
+        ]
+
+
+def reference():
+    target = ROOT / ".tmp/b07/reference"
+    with zipfile.ZipFile(ROOT / ".tmp/b07/handler-before.zip") as archive:
+        for name in archive.namelist():
+            path = target / name
+            assert path.resolve().is_relative_to(target.resolve())
+            if name.endswith("/"):
+                continue
+            raw = archive.read(name)
+            if path.exists():
+                assert path.read_bytes() == raw
+            else:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(raw)
+    return target / "thlib/ui/qml"
+
+
+def capture(fixture, qml, original):
+    app = gui_test_application()
+    engine = QQmlEngine()
+    warnings = []
+    engine.warnings.connect(
+        lambda items: warnings.extend(item.toString() for item in items)
+    )
+    locale = Locale(fixture["language"])
+    engine.rootContext().setContextProperty("localizationController", locale)
+    for name, value in qml_icon_bindings(HANDLER, app).items():
+        engine.rootContext().setContextProperty(name, value)
+    translator = None
+    if fixture["language"] == "ru":
+        translator = CatalogTranslator(HANDLER / "thlib/ui/translations/ru.json")
+        app.installTranslator(translator)
+    component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / "Theme.qml")))
+    theme = component.createWithInitialProperties(
+        dict(
+            dark=fixture["dark"],
+            styleName=fixture["style"],
+            fadeAnimationsEnabled=False,
+            hoverAnimationsEnabled=False,
+            clickAnimationsEnabled=False,
+            popupAnimationsEnabled=False,
+        )
+    )
+    assert theme, component.errors()
+    model = WorkspaceItemModel()
+    controller = Controller()
+    columns = Columns()
+    identities = {}
+    for row in DATA["cells"].values():
+        for cell in row.values():
+            for task in cell.get("tasks", []):
+                identity = task.get("assignedIdentity")
+                if identity:
+                    identities[identity["login"]] = identity
+    users = RecordListModel(
+        ("login", "initials", "avatarUrl", "avatarColor"), list(identities.values())
+    )
+    keep = [component, theme, locale, model, controller, columns, users]
+    if fixture["screen"] == "table":
+        model.replace_nodes(
+            [
+                WorkspaceNode(
+                    node_id=row["__search_key__"],
+                    node_type="sobject",
+                    search_key=row["__search_key__"],
+                    code=row["code"],
+                    title=row["name"],
+                    values=row,
+                    accent=DATA["accent"],
+                    comments=4,
+                    tasks=2,
+                )
+                for row in DATA["records"]
+            ]
+        )
+        controller._selected = [DATA["records"][2]["__search_key__"]]
+        component = QQmlComponent(
+            engine, QUrl.fromLocalFile(str(qml / "SearchResultTable.qml"))
+        )
+        view = component.createWithInitialProperties(
+            dict(
+                theme=theme,
+                controller=controller,
+                columnsController=columns,
+                resultModel=model,
+                userModel=users,
+                presentationActive=True,
+                width=fixture["width"],
+                height=fixture["height"],
+            )
+        )
+    elif fixture["screen"] == "cell":
+        value = fixture["value"]
+        component = QQmlComponent(
+            engine, QUrl.fromLocalFile(str(qml / "TacticTableCellDisplay.qml"))
+        )
+        view = component.createWithInitialProperties(
+            dict(
+                theme=theme,
+                controller=controller,
+                columnsController=columns,
+                userModel=users,
+                nodeId="asset",
+                kind=value["kind"],
+                cell=value["cell"],
+                textValue=value["cell"].get("text", ""),
+                columnIndex=1,
+                previewActive=False,
+                previewUrl="",
+                previewRevealed=False,
+                title="Value",
+                accent=DATA["accent"],
+                comments=0,
+                tasks=0,
+                displayOptions={},
+                width=fixture["width"],
+                height=fixture["height"],
+            )
+        )
+    else:
+        component = QQmlComponent(
+            engine, QUrl.fromLocalFile(str(qml / "features/table/ValueEditor.qml"))
+        )
+        view = component.createWithInitialProperties(
+            dict(
+                theme=theme,
+                descriptor=fixture["descriptor"],
+                mode=fixture["mode"],
+                width=fixture["width"],
+                count=2,
+                height=fixture["height"],
+            )
+        )
+    keep.append(component)
+    assert view, [item.toString() for item in component.errors()]
+    window = QQuickWindow()
+    window.resize(fixture["width"], fixture["height"])
+    window.setColor(theme.property("background"))
+    view.setParentItem(window.contentItem())
+    window.show()
+    try:
+        frame(window)
+        QTest.mouseMove(window, QPoint(window.width() + 30, window.height() + 30))
+        QCoreApplication.sendEvent(window, QEvent(QEvent.Leave))
+        if fixture["screen"] == "table":
+            window.contentItem().forceActiveFocus()
+        frame(window)
+        assert not warnings, warnings
+        name = (
+            "-".join(
+                [
+                    fixture["screen"],
+                    fixture.get("mode", fixture.get("value", {}).get("name", "")),
+                    "original" if original else "native",
+                    fixture["style"],
+                    "dark" if fixture["dark"] else "light",
+                    fixture["language"],
+                    str(fixture["width"]),
+                ]
+            )
+            + ".png"
+        )
+        assert window.grabWindow().save(str(OUT / name))
+        result = dict(fixture=fixture, original=original, image=name)
+        if not original:
+            result.update(snapshot(window))
+        result["table"] = {
+            item.objectName(): dict(
+                x=item.mapToScene(QPointF(0, 0)).x(),
+                y=item.mapToScene(QPointF(0, 0)).y(),
+                width=item.width(),
+                height=item.height(),
+            )
+            for item in _visual_items(view)
+            if item.objectName()
+            in ("tableHeaderSurface", "tableCellPreview", "tableColumnHeaderLabel_name")
+        }
+        result["paint"] = {
+            name: theme.property(name).name()
+            for name in (
+                "surfaceContainer",
+                "surfaceContainerLow",
+                "secondaryText",
+                "contentSelection",
+            )
+        }
+        result["completionTracks"] = [
+            dict(
+                x=item.mapToScene(QPointF()).x(),
+                y=item.mapToScene(QPointF()).y(),
+                width=item.width(),
+                height=item.height(),
+            )
+            for item in _visual_items(view)
+            if item.objectName() == "tableCellCompletionTrack"
+            and 0 <= item.mapToScene(QPointF()).y() < fixture["height"]
+        ]
+        return result
+    finally:
+        window.close()
+        view.setParentItem(None)
+        view.deleteLater()
+        window.deleteLater()
+        if translator:
+            app.removeTranslator(translator)
+        QCoreApplication.sendPostedEvents(None, QEvent.DeferredDelete)
+
+
+def main():
+    OUT.mkdir(parents=True, exist_ok=True)
+    archived = reference()
+    names = [
+        "thlib/ui/qml/" + name + ".qml"
+        for name in (
+            "SearchResultTable",
+            "SearchResultTableHeader",
+            "TacticTableCellDisplay",
+            "TacticTaskCell",
+            "TacticTaskCards",
+            "TacticTableActionCell",
+            "TacticTableInlineEditor",
+            "TacticCompletionCell",
+            "TacticStructuredTableCell",
+            "TableViewPresetMenu",
+        )
+    ]
+    names += [
+        "thlib/ui/qml/features/table/" + name + ".qml"
+        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell")
+    ]
+    names += [
+        "tests/test_columns_table_view.py",
+        "tests/test_frame_table.py",
+        "thlib/ui/workspace_models/results.py",
+        "thlib/tactic_table_widgets.py",
+        "thlib/tactic_query.py",
+        "thlib/ui/translations/ru.json",
+    ]
+    shared, native = source_hashes(ROOT, HANDLER, names)
+    captures = []
+    for style in ("md3", "fluent", "material5"):
+        for dark in (False, True):
+            for language in ("en", "ru"):
+                for width in (360, 800, 1496):
+                    fixture = dict(
+                        screen="table",
+                        width=width,
+                        height=420,
+                        style=style,
+                        dark=dark,
+                        language=language,
+                    )
+                    captures.append(capture(fixture, archived, True))
+                    captures.append(capture(fixture, HANDLER / "thlib/ui/qml", False))
+                for value in VALUES:
+                    fixture = dict(
+                        screen="cell",
+                        value=value,
+                        width=280,
+                        height=58,
+                        style=style,
+                        dark=dark,
+                        language=language,
+                    )
+                    captures.append(capture(fixture, HANDLER / "thlib/ui/qml", False))
+                for mode in (
+                    "text",
+                    "multiline",
+                    "select",
+                    "bool",
+                    "date",
+                    "datetime",
+                    "color",
+                ):
+                    value = (
+                        True
+                        if mode == "bool"
+                        else "2030-05-01T12:30"
+                        if mode in ("date", "datetime")
+                        else "#4a8197"
+                        if mode == "color"
+                        else "Production asset"
+                    )
+                    fixture = dict(
+                        screen="inline",
+                        mode=mode,
+                        width=360,
+                        height=336
+                        if mode == "multiline"
+                        else 84
+                        if mode in ("date", "datetime", "color")
+                        else 40,
+                        descriptor=dict(
+                            fieldValue=value,
+                            fieldName="Description" if mode == "multiline" else "Value",
+                            fieldOptions=[
+                                dict(
+                                    value="Production asset", label="Production asset"
+                                ),
+                                dict(value="Other", label="Other"),
+                            ],
+                        ),
+                        style=style,
+                        dark=dark,
+                        language=language,
+                    )
+                    captures.append(capture(fixture, HANDLER / "thlib/ui/qml", False))
+    assert (shared, native) == source_hashes(ROOT, HANDLER, names)
+    result = dict(
+        status="captured",
+        reference="Tracked pre-B07 Handler B06; already includes earlier Frame migrations",
+        referenceCommit=(ROOT / ".tmp/b07/handler-head.txt").read_text().strip(),
+        sha256=shared,
+        nativeSources=native,
+        driverSources={
+            name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
+            for name in (
+                "tools/frame_table/capture.py",
+                "tests/fixtures/frame_table_values.json",
+                "reports/table-view-2026-10-14/fixture.json",
+            )
+        },
+        data=DATA,
+        captures=captures,
+    )
+    (OUT / "native.json").write_text(
+        json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    print("Captured", len(captures), "table and inline states")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,20 +1,9 @@
 // Handler catalog_wizard / update_catalog_wizard and tactic_definition helpers.
-export const displayWidgets = [
-  ['', 'Automatic'],
-  ['format', 'Format'],
-  ['expression', 'Expression'],
-  ['link', 'Link'],
-  ['pyasm.widget.ThumbWdg', 'Thumbnail'],
-  ['tactic.ui.widget.DiscussionElementWdg', 'Notes'],
-  ['tactic.ui.table.SObjectDetailElementWdg', 'SObject details'],
-  ['tactic.ui.table.CheckinButtonElementWdg', 'Check-in'],
-  ['tactic.ui.table.TaskElementWdg', 'Tasks'],
-  ['tactic.ui.table.TaskCompletionWdg', 'Task completion'],
-  ['tactic.ui.table.ExploreElementWdg', 'Explorer'],
-  ['tactic.ui.table.SObjectFilesElementWdg', 'Files'],
-  ['tactic.ui.table.MetadataElementWdg', 'Metadata'],
-  ['tactic.ui.table.DeleteElementWdg', 'Delete']
-].map(([value, label]) => ({ value, label }));
+import widgetCatalog from '../../../../src/tactic_stream/shared_ui/features/table/widgets.json';
+export const displayWidgets = widgetCatalog.map(({ value, label }) => ({
+  value,
+  label
+}));
 
 function parse(source) {
   if (/<!DOCTYPE|<!ENTITY/i.test(source))

@@ -1160,6 +1160,58 @@ var _sfc_main$1 = {
 	}
 };
 //#endregion
+//#region src/controls/clipboard.js
+async function copyText(text) {
+	if (navigator.clipboard?.writeText) try {
+		await navigator.clipboard.writeText(text);
+		return;
+	} catch {}
+	const previous = document.activeElement, input = document.createElement("textarea");
+	input.value = text;
+	input.readOnly = true;
+	input.style.cssText = "position:fixed;inset:0;width:1px;height:1px;opacity:0";
+	(document.querySelector("dialog:modal") || document.body).append(input);
+	try {
+		input.focus();
+		input.select();
+		if (!document.execCommand("copy")) throw new Error("Clipboard access failed");
+	} finally {
+		input.remove();
+		previous?.focus();
+	}
+}
+async function readClipboard() {
+	if (!navigator.clipboard?.readText) throw new Error("Paste with Ctrl+V or the browser menu on HTTP.");
+	return navigator.clipboard.readText();
+}
+async function readClipboardImages() {
+	const files = [];
+	for (const item of await navigator.clipboard.read()) {
+		const type = item.types.includes("image/png") ? "image/png" : item.types.find((type) => type.startsWith("image/"));
+		if (!type) continue;
+		const extension = type === "image/jpeg" ? "jpg" : type.split("/")[1].split("+")[0];
+		files.push(new File([await item.getType(type)], "clipboard" + (files.length ? "-" + (files.length + 1) : "") + "." + extension, { type }));
+	}
+	return files;
+}
+async function copyImage(blob) {
+	if (!navigator.clipboard?.write || !globalThis.ClipboardItem) throw new Error("Copying an image requires HTTPS or localhost and clipboard permission.");
+	let png = blob;
+	if (blob.type !== "image/png") {
+		const image = await createImageBitmap(blob), canvas = document.createElement("canvas");
+		try {
+			canvas.width = image.width;
+			canvas.height = image.height;
+			canvas.getContext("2d").drawImage(image, 0, 0);
+			png = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+		} finally {
+			image.close();
+		}
+		if (!png) throw new Error("Unable to copy image");
+	}
+	await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
+}
+//#endregion
 //#region src/controls/pythonSyntax.js
 var keywords = new Set("False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield".split(" "));
 function xmlTokens(source) {
@@ -1264,58 +1316,6 @@ var _sfc_main = {
 	}
 };
 //#endregion
-//#region src/controls/clipboard.js
-async function copyText(text) {
-	if (navigator.clipboard?.writeText) try {
-		await navigator.clipboard.writeText(text);
-		return;
-	} catch {}
-	const previous = document.activeElement, input = document.createElement("textarea");
-	input.value = text;
-	input.readOnly = true;
-	input.style.cssText = "position:fixed;inset:0;width:1px;height:1px;opacity:0";
-	(document.querySelector("dialog:modal") || document.body).append(input);
-	try {
-		input.focus();
-		input.select();
-		if (!document.execCommand("copy")) throw new Error("Clipboard access failed");
-	} finally {
-		input.remove();
-		previous?.focus();
-	}
-}
-async function readClipboard() {
-	if (!navigator.clipboard?.readText) throw new Error("Paste with Ctrl+V or the browser menu on HTTP.");
-	return navigator.clipboard.readText();
-}
-async function readClipboardImages() {
-	const files = [];
-	for (const item of await navigator.clipboard.read()) {
-		const type = item.types.includes("image/png") ? "image/png" : item.types.find((type) => type.startsWith("image/"));
-		if (!type) continue;
-		const extension = type === "image/jpeg" ? "jpg" : type.split("/")[1].split("+")[0];
-		files.push(new File([await item.getType(type)], "clipboard" + (files.length ? "-" + (files.length + 1) : "") + "." + extension, { type }));
-	}
-	return files;
-}
-async function copyImage(blob) {
-	if (!navigator.clipboard?.write || !globalThis.ClipboardItem) throw new Error("Copying an image requires HTTPS or localhost and clipboard permission.");
-	let png = blob;
-	if (blob.type !== "image/png") {
-		const image = await createImageBitmap(blob), canvas = document.createElement("canvas");
-		try {
-			canvas.width = image.width;
-			canvas.height = image.height;
-			canvas.getContext("2d").drawImage(image, 0, 0);
-			png = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
-		} finally {
-			image.close();
-		}
-		if (!png) throw new Error("Unable to copy image");
-	}
-	await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
-}
-//#endregion
-export { workspaceLayouts as $, projectNavigation as A, securityGroups as B, messagesRequest as C, objectStatus as D, objectRelations as E, rpc as F, sessionAction as G, securityUsers as H, saveServerConfiguration as I, transactionDetails as J, sidebarRequest as K, scriptEditor as L, requestActivity as M, resetRequestActivity as N, projectCatalog as O, resultItems as P, widgetConfiguration as Q, scriptShelf as R, messageFileRequest as S, objectDeletion as T, serverConfiguration as U, securityRules as V, serverUpdates as W, userAvatar as X, uploadFormFile as Y, userProfile as Z, endActivity as _, _sfc_main as a, cancelNotificationReply as at, knowledgeRequest as b, xmlTokens as c, editNotificationReply as ct, _sfc_main$4 as d, notify as dt, setUpdatesAvailable as et, _sfc_main$5 as f, resetNotifications as ft, columnsEditor as g, beginActivity as h, readClipboardImages as i, beginNotificationReply as it, rawDatabase as j, projectCreationCatalog as k, _sfc_main$1 as l, failNotificationReply as lt, activityFeed as m, submitNotificationReply as mt, copyText as n, updatesAvailable as nt, javascriptTokens as o, clearNotificationHistory as ot, _sfc_main$6 as p, setNotificationProgress as pt, tableCells as q, readClipboard as r, activeNotifications as rt, pythonTokens as s, dismissNotification as st, copyImage as t, updateDelay as tt, _sfc_main$3 as u, notificationHistory as ut, formDefinition as v, navigationLink as w, linkPreviews as x, interfaceDefinition as y, searchConfiguration as z };
+export { workspaceLayouts as $, projectNavigation as A, securityGroups as B, messagesRequest as C, objectStatus as D, objectRelations as E, rpc as F, sessionAction as G, securityUsers as H, saveServerConfiguration as I, transactionDetails as J, sidebarRequest as K, scriptEditor as L, requestActivity as M, resetRequestActivity as N, projectCatalog as O, resultItems as P, widgetConfiguration as Q, scriptShelf as R, messageFileRequest as S, objectDeletion as T, serverConfiguration as U, securityRules as V, serverUpdates as W, userAvatar as X, uploadFormFile as Y, userProfile as Z, endActivity as _, copyImage as a, cancelNotificationReply as at, knowledgeRequest as b, readClipboardImages as c, editNotificationReply as ct, _sfc_main$4 as d, notify as dt, setUpdatesAvailable as et, _sfc_main$5 as f, resetNotifications as ft, columnsEditor as g, beginActivity as h, xmlTokens as i, beginNotificationReply as it, rawDatabase as j, projectCreationCatalog as k, _sfc_main$1 as l, failNotificationReply as lt, activityFeed as m, submitNotificationReply as mt, javascriptTokens as n, updatesAvailable as nt, copyText as o, clearNotificationHistory as ot, _sfc_main$6 as p, setNotificationProgress as pt, tableCells as q, pythonTokens as r, activeNotifications as rt, readClipboard as s, dismissNotification as st, _sfc_main as t, updateDelay as tt, _sfc_main$3 as u, notificationHistory as ut, formDefinition as v, navigationLink as w, linkPreviews as x, interfaceDefinition as y, searchConfiguration as z };
 
-//# sourceMappingURL=clipboard.js.map
+//# sourceMappingURL=CodeBlock.js.map

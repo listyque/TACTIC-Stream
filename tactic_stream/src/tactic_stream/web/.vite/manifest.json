@@ -115,6 +115,21 @@
       "assets/AppTextField.css"
     ]
   },
+  "_CodeBlock.css": {
+    "file": "assets/CodeBlock.css",
+    "src": "_CodeBlock.css"
+  },
+  "_CodeBlock.js": {
+    "file": "assets/CodeBlock.js",
+    "name": "CodeBlock",
+    "imports": [
+      "_vue.js",
+      "index.html"
+    ],
+    "css": [
+      "assets/CodeBlock.css"
+    ]
+  },
   "_ItemPreview.css": {
     "file": "assets/ItemPreview.css",
     "src": "_ItemPreview.css"
@@ -152,7 +167,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "src/App.vue",
       "_admin.document.js"
     ]
@@ -167,7 +182,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppDateField.js"
     ],
     "css": [
@@ -214,27 +229,12 @@
       "_resize.js"
     ]
   },
-  "_clipboard.css": {
-    "file": "assets/clipboard.css",
-    "src": "_clipboard.css"
-  },
-  "_clipboard.js": {
-    "file": "assets/clipboard.js",
-    "name": "clipboard",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ],
-    "css": [
-      "assets/clipboard.css"
-    ]
-  },
   "_files.js": {
     "file": "assets/files.js",
     "name": "files",
     "imports": [
       "index.html",
-      "_clipboard.js"
+      "_CodeBlock.js"
     ]
   },
   "_graphFrame.js": {
@@ -278,7 +278,7 @@
       "_vue.js",
       "_icons.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppTextField.js",
       "_AppDateField.js",
       "_AppMenu.js",
@@ -287,8 +287,8 @@
       "_AppTextArea.js",
       "_ItemSurface.js",
       "_UserComboBox.js",
-      "_SummaryChip.js",
-      "_AppSplitter.js"
+      "_AppSplitter.js",
+      "_SummaryChip.js"
     ],
     "css": [
       "assets/resize.css"
@@ -345,7 +345,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_RecordForm.js",
       "_AppSlider.js",
       "_AppTextField.js",
@@ -353,14 +353,14 @@
       "_AppMenu.js",
       "_AppCheckbox.js",
       "_ItemPreview.js",
-      "_links.js",
-      "_files.js",
       "_AppTextArea.js",
       "_ItemSurface.js",
       "_UserComboBox.js",
-      "_SummaryChip.js",
-      "_textMetrics.js",
       "_AppSplitter.js",
+      "_SummaryChip.js",
+      "_links.js",
+      "_files.js",
+      "_textMetrics.js",
       "_AppMenuItem.js",
       "_tree.ui.js"
     ],
@@ -427,7 +427,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "src/App.vue",
       "_admin.document.js"
     ]
@@ -441,7 +441,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "src/App.vue",
       "_admin.document.js"
     ]
@@ -455,7 +455,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_admin.document.js"
     ]
   },
@@ -468,7 +468,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_admin.document.js",
       "src/features/administration/SearchTypes.vue",
       "_graphFrame.js"
@@ -486,7 +486,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "src/App.vue",
       "_admin.document.js",
       "_NamingEditor.js"
@@ -501,7 +501,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_groups.ui.js"
     ]
   },
@@ -514,7 +514,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_admin.document.js"
     ]
   },
@@ -527,7 +527,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_groups.ui.js"
     ]
   },
@@ -540,7 +540,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_tree.ui.js",
       "src/App.vue",
       "_admin.document.js"
@@ -555,7 +555,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "src/App.vue",
       "_admin.document.js",
       "_graphFrame.js"
@@ -572,7 +572,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppCheckbox.js"
     ],
     "css": [
@@ -587,7 +587,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppTextField.js",
       "_AppMenu.js",
       "_AppSplitter.js"
@@ -604,7 +604,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js"
+      "_CodeBlock.js"
     ],
     "css": [
       "assets/ObjectCheckin.css"
@@ -619,7 +619,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_RecordForm.js",
       "_ItemSurface.js",
       "_textMetrics.js",
@@ -637,7 +637,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js"
+      "_CodeBlock.js"
     ]
   },
   "src/features/fileWorkspace/FileWorkspaceInspection.vue": {
@@ -648,13 +648,13 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppTextField.js",
       "_AppMenu.js",
-      "_files.js",
       "_AppTextArea.js",
       "_ItemSurface.js",
       "_AppSplitter.js",
+      "_files.js",
       "_AppMenuItem.js",
       "src/App.vue"
     ],
@@ -670,14 +670,14 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppSlider.js",
       "_AppTextField.js",
       "_AppMenu.js",
       "_AppCheckbox.js",
-      "_links.js",
       "_AppTextArea.js",
       "_ItemSurface.js",
+      "_links.js",
       "_AppMenuItem.js",
       "src/App.vue"
     ],
@@ -693,9 +693,9 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "_links.js",
-      "_AppTextArea.js"
+      "_CodeBlock.js",
+      "_AppTextArea.js",
+      "_links.js"
     ],
     "css": [
       "assets/DescriptionEditor.css"
@@ -709,7 +709,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppTextField.js",
       "_AppDateField.js",
       "_AppCheckbox.js",
@@ -737,7 +737,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_RecordForm.js",
       "_AppSlider.js",
       "_AppMenu.js",
@@ -757,7 +757,7 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppMenu.js",
       "_ItemSurface.js",
       "_AppSplitter.js",
@@ -788,7 +788,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
+      "_CodeBlock.js",
       "_AppMenu.js",
       "_AppCheckbox.js",
       "_ItemPreview.js"

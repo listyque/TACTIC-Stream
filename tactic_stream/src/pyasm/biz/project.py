@@ -125,6 +125,10 @@ class Project(SObject):
         database_name = self.get_data().get('database') or self.get_code()
         return 'sthpw' if database_name == 'admin' else database_name
 
+    def database_exists(self):
+        resource = self.get_project_db_resource()
+        return resource.get_database_impl().database_exists(resource)
+
     def get_project_db_resource(self, database=None):
         from pyasm.search.sql import DbResource
         database = database or self.get_database_name()

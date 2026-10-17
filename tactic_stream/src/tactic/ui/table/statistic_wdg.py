@@ -15,7 +15,7 @@ from pyasm.biz import Task, SimpleStatusAttr
 from pyasm.search import Search, SearchKey
 from tactic.ui.common import BaseTableElementWdg
 from .task_element_wdg import TaskElementWdg
-__all__ = ['TaskCompletionWdg']
+__all__ = ['TaskCompletionWdg', 'MilestoneCompletionWdg', 'TaskGroupCompletionWdg', 'TaskDaysDueElementWdg']
 
 class TaskCompletionWdg(BaseTableElementWdg):
 
@@ -160,3 +160,84 @@ class TaskCompletionWdg(BaseTableElementWdg):
             return None
 
         return percent
+
+
+class MilestoneCompletionWdg(TaskCompletionWdg):
+    def get_tasks(self, sobject):
+        search = Search('sthpw/task')
+        search.add_filter('milestone_code', sobject.get_code())
+        return [task for task in search.get_sobjects()
+                if TaskElementWdg.can_view_process(task.get_value('process'))]
+
+
+class TaskGroupCompletionWdg(TaskCompletionWdg):
+    def preprocess(self):
+        import json
+        source = self.get_option('options')
+        self.group_list = json.loads(source) if source else [{'label': 'default', 'context': []}]
+        if not isinstance(self.group_list, list) or any(
+                not isinstance(group, dict) or not isinstance(group.get('context', []), list)
+                for group in self.group_list):
+            raise ValueError('Completion groups require a list of labels and context lists')
+        super().preprocess()
+
+    def get_cell_value(self):
+        if not self.is_preprocessed:
+            self.preprocess()
+        tasks = self.get_tasks(self.get_current_sobject())
+        groups = []
+        for group in self.group_list:
+            label = group.get('label')
+            if not label:
+                continue
+            values = [self.get_completion(task) for task in tasks
+                      if task.get_value('context') in group.get('context', [])]
+            percent = sum(value or 0 for value in values) / len(values) if values else 0
+            groups.append({'label': label, 'completion': percent, 'count': len(values),
+                           'text': '%s: %s%%' % (label, percent)})
+        return {'text': '\n'.join(group['text'] for group in groups), 'groups': groups}
+
+
+class TaskDaysDueElementWdg(BaseTableElementWdg):
+    """Original due-date thresholds; rendering uses semantic urgency roles."""
+
+    def get_cell_value(self):
+        import calendar
+        from datetime import datetime
+        from dateutil import parser
+
+        obj = self.get_current_sobject()
+        column = self.get_option('due_date_col') or 'bid_end_date'
+        value = obj.get_value(column)
+        if not value:
+            return {'text': 'no date', 'label': 'No date', 'urgency': ''}
+        due = parser.parse(value) if isinstance(value, str) else value
+        local = datetime.fromtimestamp(calendar.timegm(due.timetuple()))
+        local = local.replace(microsecond=due.microsecond)
+        now = datetime.now()
+        delta = local - now
+        seconds = delta.days * 86400 + delta.seconds
+        days = abs((local.date() - now.date()).days)
+        mode = 'due'
+        if seconds < 0:
+            mode = 'done' if str(obj.get_value('status') or '').lower() in ('approved', 'complete', 'done') else 'critical'
+        elif seconds > 7200 and local.date() == now.date():
+            mode = 'today'
+        elif 3600 < seconds <= 7200:
+            mode = 'warning_1'
+        elif 0 < seconds <= 3600:
+            mode = 'warning_2'
+        if mode == 'critical':
+            label = 'Today' if days == 0 else '1 Day Overdue' if days == 1 else '{count} Days Overdue'
+        elif mode == 'today':
+            label = 'Today'
+        elif mode == 'warning_1':
+            label = '< 2 Hours'
+        elif mode == 'warning_2':
+            label = '< 1 Hour'
+        elif mode == 'done':
+            label = ''
+        else:
+            label = '1 Day' if days == 1 else '{count} Days'
+        return {'text': label.replace('{count}', str(days)), 'label': label,
+                'parameters': {'count': days}, 'urgency': mode}

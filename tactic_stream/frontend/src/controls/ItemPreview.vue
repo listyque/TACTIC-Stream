@@ -139,6 +139,8 @@ export default {
 </template>
 <style>
 .image-picker-preview.item-preview {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   background: color-mix(
     in srgb,
     var(--preview-accent, var(--primary)) 60.606%,
@@ -146,6 +148,10 @@ export default {
   );
   color: var(--on-selected);
   border: 0;
+}
+.image-picker-preview.item-preview:has(> .app-icon) {
+  /* Native ItemPreview masks the image, but lets the fallback glyph overflow. */
+  overflow: visible;
 }
 .image-picker-preview.item-preview.round-preview {
   background: color-mix(

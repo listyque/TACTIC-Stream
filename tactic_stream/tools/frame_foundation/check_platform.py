@@ -98,6 +98,10 @@ def fingerprints(handler):
             "frame_help_state.mjs",
             "frame_configuration_state.mjs",
             "frame_search_state.mjs",
+            "frame_table_state.mjs",
+            "handler_table.mjs",
+            "table_cells.mjs",
+            "columns_editor.mjs",
             "search_library.mjs",
             "search_suggestions.mjs",
             "process_visibility.mjs",
@@ -138,6 +142,18 @@ def fingerprints(handler):
         handler / "tests/test_section_tab_rail.py",
         handler / "tests/test_frame_dock_input.py",
         handler / "tests/test_frame_menus.py",
+        handler / "tests/test_frame_table.py",
+        handler / "tests/test_columns_table_view.py",
+        handler / "thlib/tactic_query.py",
+        handler / "thlib/tactic_table_widgets.py",
+        ROOT / "tests/test_handler_table.py",
+        ROOT / "tests/test_table_extended_values.py",
+        ROOT / "tests/test_table_value_widgets.py",
+        ROOT / "tests/test_table_inventory.py",
+        ROOT / "tools/frame_table/inventory.py",
+        ROOT / "tests/test_transport.py",
+        ROOT / "src/tactic_stream/server/table_cells.py",
+        ROOT / "src/tactic_stream/compatibility/business_upgrade.json",
         handler / "tests/test_frame_dock_layout.py",
         handler / "tests/fixtures/DockWorkspaceHarness.qml",
         handler / "tests/test_dock_resizing.py",
@@ -305,6 +321,62 @@ def main():
             {},
         ),
         ("search-state", ["node", "frontend/tests/frame_search_state.mjs"], ROOT, {}),
+        ("table-state", ["node", "frontend/tests/frame_table_state.mjs"], ROOT, {}),
+        ("browser-table", ["node", "frontend/tests/handler_table.mjs"], ROOT, {}),
+        (
+            "native-table",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_columns_table_view",
+                "tests.test_frame_table",
+            ],
+            handler,
+            {},
+        ),
+        (
+            "table-api",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "test_handler_table",
+                "test_table_value_widgets",
+                "test_table_extended_values",
+                "test_table_inventory",
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        (
+            "table-transport",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "test_transport.Transport.test_handler_extended_table_values_through_xmlrpc",
+                "test_transport.Transport.test_handler_table_metadata_values_through_xmlrpc",
+                "test_transport.Transport.test_handler_native_table_layout_through_xmlrpc",
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        *[
+            (
+                name,
+                python + ["-m", "unittest", "-q", "test_transport.Transport." + case],
+                ROOT,
+                {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+            )
+            for name, case in (
+                ("browser-columns-editor", "test_columns_editor_in_chromium"),
+                ("browser-native-cells", "test_native_table_cells_in_chromium"),
+            )
+        ],
         (
             "native-search",
             python

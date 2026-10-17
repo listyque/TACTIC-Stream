@@ -8,6 +8,10 @@ order: 93
 
 The current adapted Handler Table View is ported to Stream: **45 registered names, 21 classes**. This covers current Handler scenarios, not the entire old HTML/JS runtime. Unfinished source widgets stay excluded.
 
+## B07 checkpoint
+
+The shared catalogue now contains **37 classes / 87 named aliases**, not the historical 21/45 below. Geometry, menus, typed value editors and task-card rules share Frame modules. [New cell examples and current limits](table_widgets_b07.en.md). B07 remains open: 40 referenced usable classes still need complete workflows. The following screenshots/counts describe the October 14 checkpoint.
+
 ## Table
 
 Rounded header, 58px rows, 50px previews, 107 × 50px task cards, process note chips, relative dates, text elision and selection follow Handler. Ctrl/Shift and keyboard select rows. Double-click a row to inspect it; double-click an editable cell to use its native input. Description uses a text panel. Enter or leaving the field commits the full text; Escape cancels.

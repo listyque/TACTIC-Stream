@@ -1,7 +1,7 @@
 import { C as inject, E as nextTick, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { D as t, o as _sfc_main$2, u as _sfc_main$1 } from "./index.js";
 import { a as completions, i as _sfc_main$3, o as documentSymbols } from "./resize.js";
-import { F as rpc, L as scriptEditor, _ as endActivity, f as _sfc_main$4, h as beginActivity, n as copyText } from "./clipboard.js";
+import { F as rpc, L as scriptEditor, _ as endActivity, f as _sfc_main$4, h as beginActivity, o as copyText } from "./CodeBlock.js";
 import { t as _sfc_main$5 } from "./AppMenu.js";
 import { n as AppSearchField_default } from "./ItemSurface.js";
 import { t as _sfc_main$6 } from "./AppSplitter.js";

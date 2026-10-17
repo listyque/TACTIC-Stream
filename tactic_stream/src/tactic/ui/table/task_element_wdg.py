@@ -1006,6 +1006,22 @@ class TaskElementWdg(BaseTableElementWdg):
                     count=sum(record['hasTask'] for record in records))
 
 
+class TaskSummaryElementWdg(TaskElementWdg):
+    ARGS_KEYS = dict(TaskElementWdg.ARGS_KEYS, mode={})
+
+    def __init__(self, **kwargs):
+        kwargs.setdefault('show_filler_tasks', True)
+        super().__init__(**kwargs)
+
+    def get_cell_value(self):
+        cell = super().get_cell_value()
+        cell['summaryMode'] = self.get_option('mode') or 'default'
+        return cell
+
+    def get_width(self):
+        return 100 if self.get_option('mode') == 'minimal' else 400
+
+
 class TaskElementCbk(DatabaseAction):
     """Original task field callback: NEW/EDIT/COPY/DELETE and initial tasks."""
 

@@ -77,7 +77,8 @@ export default {
       return (this.table.elements || []).filter(item => !['true', '1', 'yes', 'on'].includes(String(item.attributes?.hidden || '').trim().toLowerCase())).map(item => {
         const cell = item.cell || { kind: 'text', field: item.name, supported: false, sortable: false }
         const rawWidth = String(item.attributes?.width || '').trim().replace(/px$/, '')
-        const width = /^[+-]?\d+$/.test(rawWidth) ? Math.max(48, Math.min(640, Number(rawWidth) || 160)) : 160
+        const hint = this.cells[this.records[0]?.__search_key__]?.[item.name]?.widthHint
+        const width = Math.max(48, Math.min(640, /^[+-]?\d+$/.test(rawWidth) ? Number(rawWidth) || 160 : hint || 160))
         const editable = !!this.definition?.operations?.edit && !!cell.editable
         return { ...item, field: cell.field, sortField: cell.sort_field || cell.field, supported: cell.supported, sortable: cell.sortable, cell, width, editable, kind: cell.kind,
           hideOrder: item.attributes?.th_hide_order == null ? undefined : Number(item.attributes.th_hide_order), dataType:columns[cell.field]?.data_type || '' }
@@ -525,7 +526,7 @@ export default {
           @width="(name,width) => changeColumns('width',name,width)" @move="(name,target) => changeColumns('move',name,target)" @hide="changeColumns('hide',$event)"
           @view="selectTableView" @save-view="saveTableView" @toggle-group="closedGroups[$event] = !closedGroups[$event]" @edit="openCellEditor">
           <template #cell="{record,column:element,height}">
-            <TableCell :element="element" :record="record" :height="height" :accent="accent" :data-type="definition.columns?.[element.field]?.data_type"
+            <TableCell :element="element" :record="record" :height="height" :accent="accent" :data-type="definition.columns?.[element.field]?.data_type" :selected="tableSelection.includes(record.__search_key__)" @select="tableSelect([record],$event)"
               :cell="displayCells[record.__search_key__]?.[element.name] || (cellError && element.cell?.server ? {error:cellError} : undefined)" :loading="cellsBusy" :editable="!readOnly && !taskBusy && !taskUncertain" :expanded="!!expandedDetails[record.__search_key__]"
               :selected-task-preview="tableSelection.includes(record.__search_key__) && tableSelection.includes(hoveredTaskCell?.key)"
               @task-hover="active => { if (active) hoveredTaskCell = {key:record.__search_key__,column:element.name}; else if (hoveredTaskCell?.key === record.__search_key__ && hoveredTaskCell.column === element.name) hoveredTaskCell = null }"

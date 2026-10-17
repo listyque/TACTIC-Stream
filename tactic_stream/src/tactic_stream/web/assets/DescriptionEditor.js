@@ -1,8 +1,8 @@
 import { A as onMounted, C as inject, E as nextTick, H as watch, M as openBlock, O as onBeforeUnmount, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, m as createBaseVNode, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { D as t, o as _sfc_main$2, tt as _plugin_vue_export_helper_default, u as _sfc_main$1 } from "./index.js";
-import { F as rpc, f as _sfc_main$3 } from "./clipboard.js";
-import { d as linkifyPlainText, n as browserLink } from "./links.js";
+import { F as rpc, f as _sfc_main$3 } from "./CodeBlock.js";
 import { t as _sfc_main$4 } from "./AppTextArea.js";
+import { d as linkifyPlainText, n as browserLink } from "./links.js";
 //#region src/features/objects/DescriptionEditor.vue
 var _hoisted_1 = ["aria-label"];
 var _hoisted_2 = { key: 0 };

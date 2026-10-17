@@ -76,6 +76,9 @@ def main():
         "tools/frame_configuration/*.{vue,js,html,mjs}",
         "tools/frame_search/*.{vue,js,html,mjs}",
         "frontend/tests/frame_search*.mjs",
+        "frontend/src/features/interface/{TableView,TableCell,TableInlineEditor,TaskCell,TaskCards,TaskSummaryCell,ValueFieldsCell,GroupedCompletionCell,CompletionCell}.vue",
+        "tools/frame_table/*.{vue,html,mjs}",
+        "frontend/tests/{frame_table*,handler_table,table_cells,columns_editor}.mjs",
         "frontend/src/features/help/**/*.{vue,js}",
         "tools/frame_help/*.{vue,js,html,mjs}",
         "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs",
@@ -183,6 +186,9 @@ def main():
         )
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/search").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/table").rglob("*.qml")
         )
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))

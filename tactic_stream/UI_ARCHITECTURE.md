@@ -3,6 +3,14 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
+## B07 checkpoint — 2026-10-17
+
+Stream 0.112.160 / Handler 0.6.0.111 share Table View geometry/paint, menus,
+typed inline editor scenes, cell rules and a 37-class catalogue. Existing query,
+revision, ACL and mutation owners remain authoritative. This is not completion
+of B07: the shipped/CG census still contains 40 usable classes needing full
+workflows. See [the current scope and reproduction guide](docs/frame_table.md).
+
 ## Tactic Frame foundation migration — 2026-10-15
 
 Current work proceeds from foundation through controls, hosts and the main

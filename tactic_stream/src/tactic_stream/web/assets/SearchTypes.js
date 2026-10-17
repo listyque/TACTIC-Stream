@@ -1,7 +1,7 @@
 import { F as resolveComponent, J as markRaw, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { D as t, O as appearance, tt as _plugin_vue_export_helper_default } from "./index.js";
 import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
-import { F as rpc } from "./clipboard.js";
+import { F as rpc } from "./CodeBlock.js";
 import { h as readPreviewImage, x as sections } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as NamingEditor_default } from "./NamingEditor.js";

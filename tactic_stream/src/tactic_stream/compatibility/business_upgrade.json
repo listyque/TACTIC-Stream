@@ -4,7 +4,9 @@
     "note": "CREATE TABLE note (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    project_code character varying(30),\n    search_type character varying(200),\n    search_id integer,\n    \"login\" character varying(30),\n    context character varying(60),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    note text,\n    title character varying(1024),\n    parent_id bigint,\n    status character varying(256),\n    label character varying(256),\n    process character varying(60),\n    \"sort_order\" integer,\n    \"access\" character varying(256),\n    CONSTRAINT \"note_code_idx\" UNIQUE (code)\n)",
     "status_log": "CREATE TABLE status_log (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    search_type character varying(256) NOT NULL,\n    search_id integer NOT NULL,\n    status text,\n    \"login\" character varying(256) NOT NULL,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,\n    to_status character varying(256),\n    from_status character varying(256),\n    project_code character varying(256)\n)",
     "work_hour": "CREATE TABLE work_hour (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    project_code character varying(256),\n    description text,\n    category character varying(256),\n    process character varying(256),\n    \"login\" character varying(256),\n    \"day\" timestamp without time zone,\n    start_time timestamp without time zone,\n    end_time timestamp without time zone,\n    straight_time double precision,\n    over_time double precision,\n    search_type character varying(256),\n    search_id integer,\n    status character varying(256),\n    task_code character varying(256),\n    CONSTRAINT \"work_hour_code_idx\" UNIQUE (code)\n)",
-    "milestone": "CREATE TABLE milestone (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    project_code character varying(256),\n    description text,\n    due_date timestamp without time zone,\n    CONSTRAINT \"milestone_code_idx\" UNIQUE (code)\n)"
+    "milestone": "CREATE TABLE milestone (\n    id integer PRIMARY KEY AUTOINCREMENT,\n    code character varying(256),\n    project_code character varying(256),\n    description text,\n    due_date timestamp without time zone,\n    CONSTRAINT \"milestone_code_idx\" UNIQUE (code)\n)",
+    "notification_log": "CREATE TABLE \"notification_log\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"project_code\" character varying(256),\n    \"login\" character varying(256),\n    \"command_cls\" character varying(256),\n    \"subject\" text,\n    \"message\" text,\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL\n)",
+    "notification_login": "CREATE TABLE \"notification_login\" (\n    \"id\" integer PRIMARY KEY AUTOINCREMENT,\n    \"notification_log_id\" integer,\n    \"login\" character varying(256),\n    \"type\" character varying(256),\n    \"project_code\" character varying(256),\n    \"timestamp\" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL\n)"
   },
   "registry": [
     {
@@ -70,6 +72,30 @@
       "class_name": "pyasm.biz.Milestone",
       "title": "Project Milestones",
       "schema": "public",
+      "color": null
+    },
+    {
+      "code": "sthpw/notification_log",
+      "search_type": "sthpw/notification_log",
+      "namespace": "sthpw",
+      "description": "Notification Log",
+      "database": "sthpw",
+      "table_name": "notification_log",
+      "class_name": "pyasm.search.SObject",
+      "title": "Notification Log",
+      "schema": null,
+      "color": null
+    },
+    {
+      "code": "sthpw/notification_login",
+      "search_type": "sthpw/notification_login",
+      "namespace": "sthpw",
+      "description": "Notification Login",
+      "database": "sthpw",
+      "table_name": "notification_login",
+      "class_name": "pyasm.search.SObject",
+      "title": "Notification Login",
+      "schema": null,
       "color": null
     }
   ],

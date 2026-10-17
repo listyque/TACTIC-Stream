@@ -108,6 +108,22 @@ class DiscussionWdg(BaseTableElementWdg):
         parent = sobject.get_parent()
         return parent
 
+    def preprocess(self):
+        self.preprocess_notes()
+
+    def get_cell_value(self):
+        notes = self.get_notes()
+        counts = {}
+        for note in notes:
+            if not note.get_parent_id():
+                process = note.get_process() or 'publish'
+                counts[process] = counts.get(process, 0) + 1
+        parent = self.parent
+        return dict(text=str(sum(counts.values())), count=sum(counts.values()),
+                    search_key=parent.get_search_key() if parent else '',
+                    process=self.parent_processes[self.get_current_index()] if self.use_parent == 'true' and self.parent_processes else self.process,
+                    contexts=self.contexts or [], processes=DiscussionElementWdg.process_counts(parent, counts))
+
     def preprocess_notes(self):
         """this call get_all_notes once by design to build the dict"""
         if not self.sobjects and not self.kwargs.get('search_key') and not self.kwargs.get('sobject'):
@@ -293,18 +309,7 @@ class DiscussionElementWdg(BaseTableElementWdg):
 
     def get_cell_value(self):
         self.discussion.set_current_index(self.get_current_index())
-        notes = self.discussion.get_notes()
-        counts = {}
-        for note in notes:
-            if not note.get_parent_id():
-                process = note.get_process() or 'publish'
-                counts[process] = counts.get(process, 0) + 1
-        parent = self.discussion.parent
-        return dict(text=str(sum(counts.values())), count=sum(counts.values()),
-                    search_key=parent.get_search_key() if parent else '',
-                    process=self.discussion.parent_processes[self.get_current_index()] if self.discussion.use_parent == 'true' and self.discussion.parent_processes else self.discussion.process,
-                    contexts=self.discussion.contexts or [],
-                    processes=self.process_counts(parent, counts))
+        return self.discussion.get_cell_value()
 
     @staticmethod
     def process_counts(parent, counts):

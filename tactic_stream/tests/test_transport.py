@@ -2560,6 +2560,102 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         finally:
             proxy.delete_sobject(ticket, config['__search_key__'])
 
+    def test_handler_extended_table_values_through_xmlrpc(self):
+        handler = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        text = handler.read_text(encoding='utf-8')
+        function = next(node for node in ast.parse(text).body
+                        if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        source = ast.get_source_segment(text, function)
+        proxy = self.proxy()
+        auth = self.ticket(proxy)
+        view = 'frame_values'
+        task = proxy.insert(auth, 'sthpw/task', dict(code='B07_TASK', process='model', context='model/main',
+            status='Pending', bid_end_date='2030-05-01 12:30:00'), {}, 'contract/entity?project=one&code=A')
+        xml = '''<config><frame_values>
+<element name="sub"><display class="tactic.ui.table.SubContextElementWdg"/></element>
+<element name="due"><display class="tactic.ui.table.TaskDaysDueElementWdg"/></element>
+<element name="groups"><display class="tactic.ui.table.TaskGroupCompletionWdg"><options>[{"label":"MODEL","context":["model/main"]}]</options></display></element>
+<element name="summary"><display class="tactic.ui.table.TaskSummaryElementWdg"><mode>minimal</mode></display></element>
+<element name="broken"><display class="tactic.ui.table.TaskGroupCompletionWdg"><options>invalid json</options></display></element>
+<element name="select"><display class="pyasm.widget.CheckboxColWdg"/></element>
+<element name="search_type"><display class="pyasm.widget.SearchTypeElementWdg"/></element>
+</frame_values></config>'''
+        config = proxy.insert(auth, 'config/widget_config', dict(search_type='sthpw/task', view=view, config=xml))
+        try:
+            code = source + '''
+import json
+from tactic_stream.server.table_cells import read_table_cells
+return json.dumps({"native": json.loads(query_table_layout("sthpw/task", search_keys=kwargs["keys"], view=kwargs["view"], project_code="one")), "browser": read_table_cells("sthpw/task", kwargs["view"], kwargs["keys"])})'''
+            result = json.loads(proxy.execute_python_script(auth, '', dict(code=code,
+                keys=[task['__search_key__']], view=view))['info'])
+            native = result['native']['rows'][task['__search_key__']]
+            browser = result['browser'][task['__search_key__']]
+            for name in ['sub', 'due', 'groups', 'select', 'search_type']:
+                self.assertFalse(native[name].get('error'), native[name])
+                self.assertFalse(browser[name].get('error'), browser[name])
+                self.assertEqual(native[name]['text'], browser[name]['text'])
+            self.assertEqual(native['sub']['text'], 'main')
+            self.assertEqual(native['select']['search_key'], task['__search_key__'])
+            self.assertEqual(native['groups']['groups'][0]['label'], 'MODEL')
+            self.assertEqual(browser['summary']['summaryMode'], 'minimal')
+            self.assertEqual(browser['summary']['widthHint'], 100)
+            self.assertTrue(native['broken']['error'])
+            self.assertTrue(browser['broken']['error'])
+        finally:
+            proxy.delete_sobject(auth, config['__search_key__'])
+            proxy.delete_sobject(auth, task['__search_key__'])
+
+    def test_handler_table_metadata_values_through_xmlrpc(self):
+        handler = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        text = handler.read_text(encoding='utf-8')
+        function = next(node for node in ast.parse(text).body
+                        if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        source = ast.get_source_segment(text, function)
+        proxy = self.proxy()
+        auth = self.ticket(proxy)
+        with self.store.connection(write=True) as db:
+            notice_id = db.execute('INSERT INTO notification_log (subject,message) VALUES (?,?)', ('Frame notification','Test')).lastrowid
+            db.executemany('INSERT INTO notification_login (notification_log_id,login,type) VALUES (?,?,?)', [(notice_id,'admin','to'),(notice_id,'test','cc')])
+            preference_id = db.execute('INSERT INTO pref_list (key,title,description,type) VALUES (?,?,?,?)', ('frame_table_test','Debug','Frame hint','string')).lastrowid
+        notice = proxy.get_by_search_key(auth, 'sthpw/notification_log?id='+str(notice_id))
+        preference = proxy.get_by_search_key(auth, 'sthpw/pref_list?id='+str(preference_id))
+        for search_type, key, widget in [
+                ('sthpw/project', 'sthpw/project?code=one', 'tactic.ui.table.ProjectWdg'),
+                ('sthpw/search_object', 'sthpw/search_object?code=contract/entity', 'tactic.ui.app.SearchTypeHasTableElementWdg'),
+                ('sthpw/notification_log', notice['__search_key__'], 'tactic.ui.table.RecipientElementWdg'),
+                ('sthpw/pref_list', preference['__search_key__'], 'tactic.ui.table.PreferenceDescriptionWdg'),
+                ('contract/child', 'contract/child?project=one&code=CH1', 'tactic.ui.table.RelatedElementWdg')]:
+            view = 'frame_metadata'
+            options = '<template>contract/child.contract/entity</template><column>name</column>' if widget.endswith('.RelatedElementWdg') else ''
+            config = proxy.insert(auth, 'config/widget_config', dict(search_type=search_type, view=view,
+                config='<config><frame_metadata><element name="metadata"><display class="'+widget+'">'+options+'</display></element></frame_metadata></config>'))
+            try:
+                code = source + '''
+import json
+from tactic_stream.server.table_cells import read_table_cells
+return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], search_keys=kwargs["keys"], view=kwargs["view"], project_code="one")), "browser": read_table_cells(kwargs["kind"], kwargs["view"], kwargs["keys"])})'''
+                result = json.loads(proxy.execute_python_script(auth, '', dict(code=code,
+                    kind=search_type, keys=[key], view=view))['info'])
+                native = result['native']['rows'][key]['metadata']
+                browser = result['browser'][key]['metadata']
+                self.assertFalse(native.get('error'), native)
+                self.assertFalse(browser.get('error'), browser)
+                self.assertEqual(native['text'], browser['text'])
+                if search_type == 'sthpw/project':
+                    self.assertEqual(browser['entries'][0]['value'], 'Yes')
+                elif search_type == 'sthpw/search_object':
+                    self.assertTrue(browser['good'], browser)
+                elif search_type == 'sthpw/notification_log':
+                    self.assertEqual(browser['text'], 'to: admin\ncc: test')
+                    self.assertEqual(len(browser['entries']), 2)
+                elif search_type == 'sthpw/pref_list':
+                    self.assertEqual(browser['text'], 'Frame hint')
+                    self.assertIn('Debug Widget', browser['tooltip'])
+                else:
+                    self.assertEqual(browser['text'], 'Первый')
+            finally:
+                proxy.delete_sobject(auth, config['__search_key__'])
+
     def test_real_xmlrpc_workflow_messages(self):
         proxy = self.proxy()
         ticket = self.ticket(proxy)

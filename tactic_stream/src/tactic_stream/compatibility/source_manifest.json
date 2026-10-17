@@ -1041,6 +1041,27 @@
     },
     "src/tactic/ui/table/snapshot_element_wdg.py": {
       "sha256": "105b9530e91afff275eadee558cbba2a651b43457d5ab9fa4e193e4e58fd2c69"
+    },
+    "src/pyasm/widget/statistic_wdg.py": {
+      "sha256": "0ea9bcf100fab67795ef34dfaa0f7ba46df4f85f4f6f59de7d7259cf8f902273"
+    },
+    "src/tactic/ui/table/subcontext_wdg.py": {
+      "sha256": "e7e1476e10267c47ba3ed1031841bb475ebb7730e39874f0089a945fe7c32c78"
+    },
+    "src/tactic/ui/table/project_wdg.py": {
+      "sha256": "fb6ef13ff9199b7df44acfb3a95dee14172255588434a9181d27fd2dfb5e9885"
+    },
+    "src/tactic/ui/table/preference_wdg.py": {
+      "sha256": "2d25211cdb566c9d50c2c4c74b8c20343e15c80cac5f32495b932f3c987f072f"
+    },
+    "src/tactic/ui/table/related_element_wdg.py": {
+      "sha256": "b8d49f77f7b0662c3018f0725c019312fa735c66ddc6f61e9c100be20906afb7"
+    },
+    "src/tactic/ui/table/table_element_wdg.py": {
+      "sha256": "e41fed6cd8366078a71b52736a4b3d4eda3fb1fd4cddca9d4a8c385e883ebc5a"
+    },
+    "src/tactic/ui/app/search_type_element_wdg.py": {
+      "sha256": "ed5808cc91e81c9a86b5b88f6947426744eb242851713e21a0acbc5bb282ef27"
     }
   },
   "handler_sources": {
@@ -2258,6 +2279,7 @@
     "handler_table_task_preview_2026_10_14": "Current Handler popup padding, 107px cards with 4px spacing, full row height and horizontal-only scrolling ported without nested overflow. Current QML/Vue same-fixture dark/light captures verify 456x68 without overflow; Vue RU, 125/150% pixel scale, row heights 58/84 and 320px last-card action are checked. No native Handler code change is required: its popup already retains card height and reserves its horizontal scrollbar.",
     "engine_recovery_query_gc_2026_10_14": "Native Command file mutations and physical undo/redo use append-only fsynced intents and per-writing-DB commit evidence; aborted owners recover, committed effects remain, partial/unknown outcomes preserve backups and block repository writes while administrator reads remain available. Windows signal/feed/client readers allow atomic replacement; failed committed signals persist and retry. Generic dictionary query projections retain identity/retirement; single SQL reads respect supplied offset (intentional source bug fix). Local/custom object contracts retain full fields. Transaction-scoped file identity checks invalidate on native account changes. GC uses root write barriers, bounded multi-level marking, resumes sweep, and counts idempotent confirmed purges. Reviewed 11 changed current Handler references: matched-source QML diffs, Python signatures where baseline copies exist, AST and refreshed RPC call inventory; 108 controller and 17 QML contract checks passed. Hashes identify references and do not claim full GUI or API parity. Real isolated PostgreSQL 18.6 checks cover concurrent clients and file crash checkpoints; physical terabyte/soak checks remain deferred by the user.",
     "request_connection_batch_keys_2026_10_14": "Reuse only request-owned independent read connections for Sql identity checks; re-read active account and groups at every connection, rollback each dedicated PostgreSQL identity read, and close on request exit. Reuse the active-account row rather than querying it twice. Avoid empty Store.resolve read scopes when definition/project metadata is already cached, preserving native metadata invalidation. Native batch SearchKey builds homogeneous generic query keys; custom key overrides/local objects/distinct remain unchanged. No cross-request identity/permission cache, client API signature change or durability shortcut.",
-    "compound_search_group_counts_compilation_2026_10_14": "Reviewed only query_sobjects change: native grouped note counts preserve parent/process/task branch counts, code/id lookup, privacy and previous retirement semantics. Stream Search.get_group_counts uses the same validated physical columns, native search filters and read connection as get_count; ordinary users gain no raw SQL expression access. Handler retains native Select aggregation for original TACTIC. PythonCmd keeps at most 32 immutable compiled entries with source <=65536 characters per worker; larger scripts keep request-only caching. Each invocation rechecks identity/permissions, reads current saved/file source and executes a fresh module; inputs, globals and templates do not persist between requests. Cache misses retain exactly one original Mako module execution. Reference-only current CheckBox/Button sources reviewed: indicator offset/pointing cursor and retaining the bound theme while a dynamic window closes; existing Theme and Help checks pass. Reference hashes identify inspected source, not full GUI parity."
+    "compound_search_group_counts_compilation_2026_10_14": "Reviewed only query_sobjects change: native grouped note counts preserve parent/process/task branch counts, code/id lookup, privacy and previous retirement semantics. Stream Search.get_group_counts uses the same validated physical columns, native search filters and read connection as get_count; ordinary users gain no raw SQL expression access. Handler retains native Select aggregation for original TACTIC. PythonCmd keeps at most 32 immutable compiled entries with source <=65536 characters per worker; larger scripts keep request-only caching. Each invocation rechecks identity/permissions, reads current saved/file source and executes a fresh module; inputs, globals and templates do not persist between requests. Cache misses retain exactly one original Mako module execution. Reference-only current CheckBox/Button sources reviewed: indicator offset/pointing cursor and retaining the bound theme while a dynamic window closes; existing Theme and Help checks pass. Reference hashes identify inspected source, not full GUI parity.",
+    "frame_table_b07_checkpoint": "Independent shared Table View width/paint/menu/inline/cell rules; explicit catalogue of 37 native server classes and 87 named aliases. Typed locks/files, completion groups/milestones, due/subcontext, selection/type title, compact tasks and project/table/preference/recipient/related values. Existing Search, Command, ACL and revision owners retained. Bad computations isolate per column/row; security exceptions propagate. Notification recipient schema enables reads, not public insert or delivery. B07 remains open: shipped/CG inventory has 40 usable classes without complete workflows; no whole legacy runtime parity claim."
   }
 }
