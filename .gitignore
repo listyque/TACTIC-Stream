@@ -36,6 +36,7 @@ htmlcov/
 /tactic_stream/.vite/
 /tactic_stream/tools/*/output/
 /tactic_stream/tools/frame_foundation/reference/
+/tactic_stream/tools/frame_foundation/reference-b05/
 /tactic_stream/tests/artifacts/
 
 # Packaged web resources under src/ remain versioned: wheels ship these files.

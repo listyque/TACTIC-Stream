@@ -100,7 +100,8 @@ function style(node) {
   };
 }
 function background(node) {
-  const radius = node.radius === undefined ? '0px' : node.radius + 'px';
+  const radius =
+    node.radius === undefined ? 'var(--surface-radius)' : node.radius + 'px';
   return {
     background: color(node.background),
     boxShadow: node.border
@@ -400,6 +401,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :aria-checked="node.role === 'checkbox' ? node.checked : undefined"
         @keydown="key($event, node)"
         @click="send(node.action)"
+        @dblclick="send(node.doubleAction)"
         :draggable="node.dragValue != null && interactive"
         @dragstart="drag($event, node)"
       >

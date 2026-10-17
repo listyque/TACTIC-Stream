@@ -1,10 +1,9 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as t, O as appearance, tt as _plugin_vue_export_helper_default } from "./index.js";
 import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
-import { M as rpc } from "./clipboard.js";
-import { H as __exportAll } from "./App.js";
+import { F as rpc } from "./clipboard.js";
+import { $ as __exportAll, x as sections } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as sections } from "./sections.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.ui.mjs
 function toolbar(model, ui, width, language) {
 	const tr = (text) => translate(text, language), actions = toolbar$1(model, ui, width, language), edit = !model.busy && !model.uncertain && model.canWrite && !ui.confirmation;

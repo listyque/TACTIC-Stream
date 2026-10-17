@@ -3891,6 +3891,43 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
             capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_configuration_project_editor_lifecycle(self):
+        proxy = self.proxy()
+        auth = dict(self.ticket(proxy), project='admin')
+        key = 'sthpw/project?code=one'
+        payload = dict(ticket=auth['ticket'], project='admin',
+                       search_type='sthpw/project', view='configuration_edit',
+                       search_key=key)
+        with urlopen(Request(self.url + '/admin/form', json.dumps(payload).encode(),
+                             headers={'Content-Type': 'application/json'})) as response:
+            definition = json.load(response)['result']
+        fields = {field['name']: field for field in definition['fields']}
+        self.assertEqual(fields['code']['options']['read_only'], 'true')
+        self.assertEqual(fields['s_status']['action']['handler'],
+                         'tactic.ui.app.project_editor.ProjectArchiveAction')
+        self.assertIn('snapshot', fields)
+        args = dict(search_key=key, view='configuration_edit',
+                    element_names=['title', 'category', 'description', 'is_template', 's_status'])
+        values = {'edit|title': 'Configuration project', 'edit|category': 'Studio',
+                  'edit|description': 'Edited through the existing form owner',
+                  'edit|is_template': 'on', 'edit|s_status': 'retired'}
+        proxy.execute_cmd(auth, 'tactic.ui.panel.EditCmd', args, values)
+        record = proxy.get_by_search_key(auth, key)
+        self.assertEqual(record['title'], 'Configuration project')
+        self.assertEqual(record['category'], 'Studio')
+        self.assertEqual(record['s_status'], 'retired')
+        logs = ast.literal_eval(proxy.query(auth, 'sthpw/retire_log',
+                                           [('search_code', 'one')]))
+        self.assertEqual(len(logs), 1, 'Lifecycle uses native retirement logging')
+        values['edit|s_status'] = ''
+        proxy.execute_cmd(auth, 'tactic.ui.panel.EditCmd', args, values)
+        self.assertIsNone(proxy.get_by_search_key(auth, key)['s_status'])
+        values['edit|s_status'] = 'invalid'
+        values['edit|title'] = 'Must roll back'
+        with self.assertRaises(Fault):
+            proxy.execute_cmd(auth, 'tactic.ui.panel.EditCmd', args, values)
+        self.assertEqual(proxy.get_by_search_key(auth, key)['title'], 'Configuration project')
+
     def test_configuration_native_project_archive(self):
         import zipfile
         from io import BytesIO

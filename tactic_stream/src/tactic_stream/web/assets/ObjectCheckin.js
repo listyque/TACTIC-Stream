@@ -1,9 +1,6 @@
 import { B as useId, D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, N as openBlock, P as renderList, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, p as Teleport, rt as toDisplayString, s as vModelText, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as t, i as mobile, o as _sfc_main$1, q as preferences, tt as _plugin_vue_export_helper_default } from "./index.js";
-import { K as uploadFormFile, M as rpc, j as resultItems, x as navigationLink } from "./clipboard.js";
-import { t as _sfc_main$2 } from "./AppSwitch.js";
-import { t as _sfc_main$3 } from "./AppSelect.js";
-import { t as _sfc_main$4 } from "./SettingRow.js";
+import { F as rpc, P as resultItems, Y as uploadFormFile, d as _sfc_main$4, f as _sfc_main$2, p as _sfc_main$3, w as navigationLink } from "./clipboard.js";
 //#region src/features/checkin/ObjectCheckin.vue
 var _sfc_main = {
 	setup() {
@@ -11,8 +8,8 @@ var _sfc_main = {
 	},
 	components: {
 		AppButton: _sfc_main$1,
-		AppSelect: _sfc_main$3,
-		AppSwitch: _sfc_main$2,
+		AppSelect: _sfc_main$2,
+		AppSwitch: _sfc_main$3,
 		SettingRow: _sfc_main$4
 	},
 	inject: {

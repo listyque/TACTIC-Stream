@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ru">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  />
+  <title>Tactic Frame · B05 Configuration</title>
+  <style>
+    body {
+      font:
+        15px/1.5 'Segoe UI',
+        sans-serif;
+      background: #1d2022;
+      color: #eee;
+      margin: 24px;
+    }
+    h1 {
+      font-size: 24px;
+    }
+    p {
+      max-width: 1200px;
+      color: #bbc1c5;
+    }
+    select,
+    button {
+      padding: 8px;
+      margin: 0 8px 12px 0;
+      background: #393e41;
+      color: inherit;
+      border: 1px solid #666;
+      border-radius: 8px;
+    }
+    .comparison {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    figure {
+      margin: 0;
+    }
+    img {
+      width: 100%;
+    }
+    figcaption {
+      padding: 8px 0;
+    }
+    a {
+      color: #8ebad3;
+    }
+    .missing {
+      padding: 24px;
+      background: #292d30;
+      border-radius: 12px;
+    }
+    @media (max-width: 850px) {
+      .comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <h1>B05: конфигурация и проекты</h1>
+  <p id="totals"></p>
+  <p>
+    Настоящие страницы QML и Vue-рендерер общего скелета на одних изолированных
+    данных. Три темы, EN/RU, светлая/тёмная палитра, 1100/800/360 px. Геометрия,
+    отступы, типографические настройки, цвета и скругления проверяются
+    автоматически.
+  </p>
+  <p>
+    Исходный ТХ — архив до Frame; менеджер шаблонов и его зависимости —
+    Git-ревизия dfd985c перед B05. Исходных телефонных компоновок нет.
+    Подтверждения закрытия, очистки и шаблона: у исходного ТХ показан весь
+    popup, в паре Frame — настоящий контент модального диалога; системная рамка
+    принадлежит платформе.
+  </p>
+  <p>
+    Vue-кадры воспроизводят общий контракт с нативными возможностями, чтобы
+    проверить скелет. В поставке браузера нет локальных пресетов, DCC и настроек
+    GPU. Настройки XML сервера, web-пути и дополнительные поля проекта
+    сохраняются как возможности ТС. Операции проверяются отдельными сквозными
+    сценариями, а не этими снимками.
+  </p>
+  <p>
+    Qt и Chromium могут различаться растеризацией глифов. SHA-256 исходников,
+    драйверов и исходных эталонов проверены.
+    <a href="../../../docs/frame_configuration.md">Владельцы и проверки B05</a>.
+  </p>
+  <select id="screen" aria-label="Экран"></select
+  ><select id="style" aria-label="Тема">
+    <option>md3</option>
+    <option>material5</option>
+    <option>fluent</option></select
+  ><select id="dark" aria-label="Палитра">
+    <option value="true">Тёмная</option>
+    <option value="false">Светлая</option></select
+  ><select id="language" aria-label="Язык">
+    <option>en</option>
+    <option>ru</option></select
+  ><select id="width" aria-label="Ширина">
+    <option>1100</option>
+    <option>800</option>
+    <option>360</option></select
+  ><select id="state" aria-label="Состояние"></select>
+  <div class="comparison">
+    <figure>
+      <figcaption>Исходный ТХ</figcaption>
+      <a id="originalLink"><img id="original" alt="Исходный ТХ" /></a>
+      <p id="missing" class="missing" hidden>
+        Исходный экран не имел общей телефонной компоновки.
+      </p>
+    </figure>
+    <figure>
+      <figcaption>Frame · ТХ / QML</figcaption>
+      <a id="nativeLink"><img id="native" alt="Текущий ТХ" /></a>
+    </figure>
+    <figure>
+      <figcaption>Frame · ТС / Vue</figcaption>
+      <a id="browserLink"><img id="browser" alt="Vue общего скелета" /></a>
+    </figure>
+  </div>
+  <script>
+    const samples = __DATA__,
+      summary = __SUMMARY__;
+    const controls = Object.fromEntries(
+      ['screen', 'style', 'dark', 'language', 'width', 'state'].map((id) => [
+        id,
+        document.getElementById(id)
+      ])
+    );
+    document.getElementById('totals').textContent =
+      `${summary.original} исходных снимков · ${summary.pairs} пар QML/Vue · ${summary.rectangles} проверок геометрии · ${summary.styles} проверок стиля · ${summary.interiors} проверок внутренних индикаторов`;
+    for (const name of new Set(samples.map((row) => row.screen)))
+      controls.screen.add(new Option(name, name));
+    function states() {
+      const previous = controls.state.value;
+      controls.state.replaceChildren();
+      for (const name of new Set(
+        samples
+          .filter((row) => row.screen === controls.screen.value)
+          .map((row) => row.case)
+      ))
+        controls.state.add(new Option(name, name));
+      if (
+        [...controls.state.options].some((option) => option.value === previous)
+      )
+        controls.state.value = previous;
+    }
+    function show() {
+      const row = samples.find(
+        (row) =>
+          row.screen === controls.screen.value &&
+          row.style === controls.style.value &&
+          row.dark === JSON.parse(controls.dark.value) &&
+          row.language === controls.language.value &&
+          row.viewportWidth === Number(controls.width.value) &&
+          row.case === controls.state.value
+      );
+      for (const [id, file] of [
+        ['original', row.original],
+        ['native', row.native],
+        ['browser', row.image]
+      ]) {
+        const image = document.getElementById(id);
+        image.hidden = !file;
+        if (file) {
+          image.src = file;
+          document.getElementById(id + 'Link').href = file;
+        }
+      }
+      document.getElementById('missing').hidden = !!row.original;
+    }
+    for (const control of Object.values(controls))
+      control.onchange = () => {
+        if (control === controls.screen) states();
+        show();
+      };
+    states();
+    show();
+  </script>
+</html>

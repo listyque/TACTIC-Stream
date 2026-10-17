@@ -12,7 +12,7 @@ import { mobile } from '../../mobile.js'
 export default {
   setup() { return { formId: useId() } },
   components: { AppDateField, AppSwitch, AppColorInput, AppButton },
-  props: { ticket: String, project: String, searchType: String },
+  props: { ticket: String, project: String, searchType: String, modal:Boolean, editView: { type:String, default:'edit' } },
   emits: ['saved'],
   data() {
     return { definition: null, context: null, draft: {}, baseline: {}, loading: false,
@@ -82,10 +82,10 @@ export default {
       this.error = ''
       this.discard = this.uncertain = false
       this.loading = true
-      this.searchType === 'sthpw/task' ? this.$refs.dialog.showModal() : this.$refs.dialog.show()
+      this.modal || this.searchType === 'sthpw/task' ? this.$refs.dialog.showModal() : this.$refs.dialog.show()
       try {
         const definition = await formDefinition(this.context.ticket, this.context.project,
-          this.searchType, searchKey ? 'edit' : 'insert', searchKey, sourceKey, this.instanceRelation ? {} : relation)
+          this.searchType, searchKey ? this.editView : 'insert', searchKey, sourceKey, this.instanceRelation ? {} : relation)
         if (id !== this.request) return
         this.definition = definition
         this.draft = Object.fromEntries(definition.fields.map(field => [field.name,
@@ -116,6 +116,7 @@ export default {
     },
     async save() {
       if (!this.contextValid || this.loading || this.saving || this.uncertain || this.blocked || !this.fieldsToSave.length) return
+      const request = this.request
       this.saving = true
       this.error = ''
       const files = Object.values(this.files).flat()
@@ -189,6 +190,7 @@ export default {
         if (this.instanceRelation) Object.assign(args, { create: true, search_type: this.searchType,
           instance_parent_key: this.instanceRelation.parent_key, path: this.instanceRelation.path })
         await rpc('execute_cmd', [this.context, this.instanceRelation ? 'tactic.command.sobject_link_cmd.SObjectLinkCmd' : this.batch ? 'tactic.ui.panel.EditMultipleCmd' : 'tactic.ui.panel.EditCmd', args, values])
+        if (request !== this.request || !this.contextValid) return
         this.definition = null
         this.draft = this.baseline = {}
         this.files = {}
@@ -205,7 +207,9 @@ export default {
 </script>
 
 <template>
-  <dialog v-window="{ type:searchType === 'sthpw/task' ? 'dialog' : 'window' }" ref="dialog" class="record-dialog record-form-dialog" :aria-label="t('Record form')" @cancel.prevent="cancel">
+  <dialog v-window="{ type:modal || searchType === 'sthpw/task' ? 'dialog' : 'window' }" ref="dialog" class="record-dialog record-form-dialog" :aria-label="t('Record form')" @cancel.prevent="cancel">
+    <slot v-if="$slots.surface" name="surface" :form="{ ...$data }" :save="save" :cancel="cancel" :close="close" :keep="() => { discard = false }" :reportError="value => { error = value }" :contextValid="contextValid" />
+    <template v-else>
     <header>
       <div><h2>{{ t(batch ? 'Edit selected' : definition?.source_key ? 'Duplicate record' : definition?.mode === 'edit' ? 'Edit record' : 'Create record') }}</h2><small class="muted">{{ batch ? t('{count} selected records', { count: definition.search_keys.length }) : definition?.source_key || definition?.search_key || searchType }}</small></div>
       <AppButton label="Close" icon="close" :icon-only="mobile" :disabled="saving" @click="cancel" />
@@ -283,6 +287,7 @@ export default {
         </div>
         <footer class="configuration-actions"><AppButton highlighted type="submit" :label="saving ? 'Saving…' : 'Save record'" icon="save" :disabled="!contextValid || saving || uncertain || blocked || !fieldsToSave.length || (definition.mode === 'edit' && !dirty)" /></footer>
       </form>
+    </template>
     </template>
   </dialog>
 </template>

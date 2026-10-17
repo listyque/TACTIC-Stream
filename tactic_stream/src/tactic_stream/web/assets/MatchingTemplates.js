@@ -1,6 +1,6 @@
 import { F as renderSlot, G as withCtx, N as openBlock, P as renderList, T as mergeModels, V as useModel, X as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, l as withKeys, m as computed, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as t, o as _sfc_main$3, u as _sfc_main$2 } from "./index.js";
-import { M as rpc } from "./clipboard.js";
+import { F as rpc } from "./clipboard.js";
 import { t as _sfc_main$4 } from "./AppTextField.js";
 import { t as _sfc_main$5 } from "./AppMenu.js";
 import { t as _sfc_main$6 } from "./AppSplitter.js";

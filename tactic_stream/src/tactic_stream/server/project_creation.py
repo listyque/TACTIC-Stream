@@ -34,7 +34,7 @@ def get_project_catalog():
                 previews[code] = item.get_web_path().replace('\\', '/')
                 break
     fields = ('code', 'title', 'category', 'description', 'type', 'status', 's_status', 'is_template')
-    return [{**{field: item.get_value(field, no_exception=True) for field in fields}, '__builtin__': item.get_code() in ('admin', 'sthpw'),
+    return [{**{field: item.get_value(field, no_exception=True) for field in fields}, '__search_key__': item.get_search_key(), '__builtin__': item.get_code() in ('admin', 'sthpw'),
              'project_mode': 'file_project' if item.get_value('type') == 'file_project' else 'classic',
              'preview': previews.get(item.get_code(), '')} for item in projects]
 

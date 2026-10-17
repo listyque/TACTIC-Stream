@@ -1,7 +1,6 @@
 import { D as nextTick, H as watch, N as openBlock, X as ref, Y as reactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, p as Teleport, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { D as t, o as _sfc_main$2, tt as _plugin_vue_export_helper_default, u as _sfc_main$1 } from "./index.js";
-import { M as rpc } from "./clipboard.js";
-import { t as _sfc_main$3 } from "./AppSelect.js";
+import { F as rpc, f as _sfc_main$3 } from "./clipboard.js";
 import { d as linkifyPlainText, n as browserLink } from "./links.js";
 import { t as _sfc_main$4 } from "./AppTextArea.js";
 //#region src/features/objects/DescriptionEditor.vue

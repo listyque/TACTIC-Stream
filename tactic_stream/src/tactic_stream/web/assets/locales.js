@@ -1250,7 +1250,13 @@ var en_default = {
 	"Invalid value": "Invalid value",
 	"Drop files here": "Drop files here",
 	"Unsupported file type": "Unsupported file type",
-	"Read only": "Read only"
+	"Read only": "Read only",
+	"Path status": "Path status",
+	"Manage server presets": "Manage server presets",
+	"Test connection": "Test connection",
+	"Additional settings": "Additional settings",
+	"Current project preview": "Current project preview",
+	"Choose a large image; the repository web representation is used automatically when available.": "Choose a large image; the repository web representation is used automatically when available."
 };
 var ru_default = {
 	"Open event details": "Открыть подробности события",
@@ -5656,7 +5662,13 @@ var ru_default = {
 	"Decrease value": "Уменьшить значение",
 	"Invalid value": "Некорректное значение",
 	"Unsupported file type": "Неподдерживаемый тип файла",
-	"Read only": "Только чтение"
+	"Read only": "Только чтение",
+	"Path status": "Состояние пути",
+	"Manage server presets": "Управление пресетами сервера",
+	"Test connection": "Проверить подключение",
+	"Additional settings": "Дополнительные настройки",
+	"Current project preview": "Текущее превью проекта",
+	"Choose a large image; the repository web representation is used automatically when available.": "Выберите крупное изображение; при наличии автоматически используется его web-представление из репозитория."
 };
 //#endregion
 export { en_default as n, ru_default as t };

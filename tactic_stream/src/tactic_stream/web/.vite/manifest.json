@@ -77,21 +77,6 @@
       "assets/AppSearchField.css"
     ]
   },
-  "_AppSelect.css": {
-    "file": "assets/AppSelect.css",
-    "src": "_AppSelect.css"
-  },
-  "_AppSelect.js": {
-    "file": "assets/AppSelect.js",
-    "name": "AppSelect",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ],
-    "css": [
-      "assets/AppSelect.css"
-    ]
-  },
   "_AppSlider.css": {
     "file": "assets/AppSlider.css",
     "src": "_AppSlider.css"
@@ -110,14 +95,6 @@
   "_AppSplitter.js": {
     "file": "assets/AppSplitter.js",
     "name": "AppSplitter",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ]
-  },
-  "_AppSwitch.js": {
-    "file": "assets/AppSwitch.js",
-    "name": "AppSwitch",
     "imports": [
       "_vue.js",
       "index.html"
@@ -191,8 +168,7 @@
       "_resize.js",
       "_clipboard.js",
       "src/App.vue",
-      "_admin.document.js",
-      "_sections.ui.js"
+      "_admin.document.js"
     ]
   },
   "_RecordForm.css": {
@@ -206,26 +182,10 @@
       "_vue.js",
       "index.html",
       "_clipboard.js",
-      "_AppSwitch.js",
       "_AppDateField.js"
     ],
     "css": [
       "assets/RecordForm.css"
-    ]
-  },
-  "_SettingRow.css": {
-    "file": "assets/SettingRow.css",
-    "src": "_SettingRow.css"
-  },
-  "_SettingRow.js": {
-    "file": "assets/SettingRow.js",
-    "name": "SettingRow",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ],
-    "css": [
-      "assets/SettingRow.css"
     ]
   },
   "_SummaryChip.css": {
@@ -277,10 +237,7 @@
     "name": "clipboard",
     "imports": [
       "_vue.js",
-      "index.html",
-      "_AppSwitch.js",
-      "_AppSelect.js",
-      "_SettingRow.js"
+      "index.html"
     ],
     "css": [
       "assets/clipboard.css"
@@ -301,8 +258,8 @@
       "_vue.js",
       "index.html",
       "_resize.js",
-      "_admin.document.js",
-      "_sections.ui.js"
+      "src/App.vue",
+      "_admin.document.js"
     ]
   },
   "_groups.ui.js": {
@@ -324,10 +281,6 @@
     "file": "assets/locales.js",
     "name": "locales"
   },
-  "_previewImage.js": {
-    "file": "assets/previewImage.js",
-    "name": "previewImage"
-  },
   "_resize.css": {
     "file": "assets/resize.css",
     "src": "_resize.css"
@@ -340,8 +293,6 @@
       "_icons.js",
       "index.html",
       "_clipboard.js",
-      "_AppSwitch.js",
-      "_AppSelect.js",
       "_AppTextField.js",
       "_AppDateField.js",
       "_AppMenu.js",
@@ -355,14 +306,6 @@
     ],
     "css": [
       "assets/resize.css"
-    ]
-  },
-  "_sections.ui.js": {
-    "file": "assets/sections.ui.js",
-    "name": "sections.ui",
-    "imports": [
-      "index.html",
-      "_resize.js"
     ]
   },
   "_tree.ui.js": {
@@ -410,9 +353,6 @@
       "index.html",
       "_resize.js",
       "_clipboard.js",
-      "_AppSwitch.js",
-      "_AppSelect.js",
-      "_SettingRow.js",
       "_RecordForm.js",
       "_AppSlider.js",
       "_AppTextField.js",
@@ -429,8 +369,7 @@
       "_AppMenuItem.js",
       "_AppSplitter.js",
       "_ItemSurface.js",
-      "_tree.ui.js",
-      "_previewImage.js"
+      "_tree.ui.js"
     ],
     "dynamicImports": [
       "src/features/checkin/ObjectCheckin.vue",
@@ -497,8 +436,7 @@
       "_resize.js",
       "_clipboard.js",
       "src/App.vue",
-      "_admin.document.js",
-      "_sections.ui.js"
+      "_admin.document.js"
     ]
   },
   "src/features/administration/LayoutEditor.vue": {
@@ -512,8 +450,7 @@
       "_resize.js",
       "_clipboard.js",
       "src/App.vue",
-      "_admin.document.js",
-      "_sections.ui.js"
+      "_admin.document.js"
     ]
   },
   "src/features/administration/RawDatabase.vue": {
@@ -557,9 +494,8 @@
       "index.html",
       "_resize.js",
       "_clipboard.js",
-      "_previewImage.js",
+      "src/App.vue",
       "_admin.document.js",
-      "_sections.ui.js",
       "_NamingEditor.js"
     ]
   },
@@ -613,8 +549,8 @@
       "_resize.js",
       "_clipboard.js",
       "_tree.ui.js",
-      "_admin.document.js",
-      "_sections.ui.js"
+      "src/App.vue",
+      "_admin.document.js"
     ]
   },
   "src/features/administration/WorkflowEditor.vue": {
@@ -627,8 +563,8 @@
       "index.html",
       "_resize.js",
       "_clipboard.js",
+      "src/App.vue",
       "_admin.document.js",
-      "_sections.ui.js",
       "_graphFrame.js"
     ],
     "css": [
@@ -644,9 +580,6 @@
       "_vue.js",
       "index.html",
       "_clipboard.js",
-      "_AppSwitch.js",
-      "_AppSelect.js",
-      "_SettingRow.js",
       "_AppCheckbox.js"
     ],
     "css": [
@@ -678,10 +611,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "_AppSwitch.js",
-      "_AppSelect.js",
-      "_SettingRow.js"
+      "_clipboard.js"
     ],
     "css": [
       "assets/ObjectCheckin.css"
@@ -695,17 +625,10 @@
     "imports": [
       "_vue.js",
       "index.html",
+      "_resize.js",
       "_clipboard.js",
-      "_AppSwitch.js",
-      "_AppSelect.js",
-      "_SettingRow.js",
       "_RecordForm.js",
-      "_AppTextField.js",
-      "_AppDateField.js",
-      "_AppMenu.js",
-      "_AppCheckbox.js",
       "_AppSearchField.js",
-      "_SummaryChip.js",
       "src/App.vue"
     ],
     "css": [
@@ -720,10 +643,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_clipboard.js",
-      "_AppSwitch.js",
-      "_AppSelect.js",
-      "_SettingRow.js"
+      "_clipboard.js"
     ]
   },
   "src/features/fileWorkspace/FileWorkspaceInspection.vue": {
@@ -735,7 +655,6 @@
       "_vue.js",
       "index.html",
       "_clipboard.js",
-      "_AppSelect.js",
       "_AppTextField.js",
       "_AppMenu.js",
       "_files.js",
@@ -758,7 +677,6 @@
       "_vue.js",
       "index.html",
       "_clipboard.js",
-      "_AppSelect.js",
       "_AppSlider.js",
       "_AppTextField.js",
       "_AppMenu.js",
@@ -782,7 +700,6 @@
       "_vue.js",
       "index.html",
       "_clipboard.js",
-      "_AppSelect.js",
       "_links.js",
       "_AppTextArea.js"
     ],
@@ -799,7 +716,6 @@
       "_vue.js",
       "index.html",
       "_clipboard.js",
-      "_AppSelect.js",
       "_AppTextField.js",
       "_AppDateField.js",
       "_AppCheckbox.js",
@@ -848,7 +764,6 @@
       "index.html",
       "_resize.js",
       "_clipboard.js",
-      "_AppSelect.js",
       "_AppMenu.js",
       "_AppSearchField.js",
       "_AppSplitter.js",
@@ -879,7 +794,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_AppSelect.js",
+      "_clipboard.js",
       "_AppMenu.js",
       "_AppCheckbox.js",
       "_ItemPreview.js"

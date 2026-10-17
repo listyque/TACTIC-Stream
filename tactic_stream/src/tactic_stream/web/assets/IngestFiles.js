@@ -1,9 +1,6 @@
 import { B as useId, D as nextTick, G as withCtx, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, _ as createCommentVNode, b as createTextVNode, d as Fragment, g as createBlock, h as createBaseVNode, p as Teleport, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as t, o as _sfc_main$1, tt as _plugin_vue_export_helper_default, u as _sfc_main$2 } from "./index.js";
-import { M as rpc } from "./clipboard.js";
-import { t as _sfc_main$3 } from "./AppSwitch.js";
-import { t as _sfc_main$4 } from "./AppSelect.js";
-import { t as _sfc_main$5 } from "./SettingRow.js";
+import { F as rpc, d as _sfc_main$5, f as _sfc_main$3, p as _sfc_main$4 } from "./clipboard.js";
 import { t as _sfc_main$6 } from "./AppCheckbox.js";
 //#region src/features/checkin/IngestFiles.vue
 var _sfc_main = {
@@ -12,8 +9,8 @@ var _sfc_main = {
 	},
 	components: {
 		AppButton: _sfc_main$1,
-		AppSelect: _sfc_main$4,
-		AppSwitch: _sfc_main$3,
+		AppSelect: _sfc_main$3,
+		AppSwitch: _sfc_main$4,
 		AppCheckbox: _sfc_main$6,
 		AppIcon: _sfc_main$2,
 		SettingRow: _sfc_main$5

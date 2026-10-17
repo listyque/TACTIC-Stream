@@ -1,10 +1,10 @@
 import { D as nextTick, E as mergeProps, I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as t, O as appearance, tt as _plugin_vue_export_helper_default } from "./index.js";
 import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
-import { U as sidebarRequest } from "./clipboard.js";
+import { K as sidebarRequest } from "./clipboard.js";
 import { r as row$1, t as navigate } from "./tree.ui.js";
+import { x as sections } from "./App.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as sections } from "./sections.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.ui.mjs
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {
 	source,

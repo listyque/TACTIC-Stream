@@ -1,8 +1,5 @@
-import { G as withCtx, N as openBlock, P as renderList, T as mergeModels, V as useModel, Z as shallowReactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, m as computed, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
-import { $ as themes, A as effectiveColorMode, D as t, M as languages, N as readableText, O as appearance, Q as iconSets, Z as accentPresets, b as logRequest, f as debugLog, k as colorModes, o as _sfc_main$4, u as _sfc_main$5, x as redact } from "./index.js";
-import { t as _sfc_main$6 } from "./AppSwitch.js";
-import { t as _sfc_main$7 } from "./AppSelect.js";
-import { t as _sfc_main$8 } from "./SettingRow.js";
+import { E as mergeProps, F as renderSlot, G as withCtx, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, T as mergeModels, V as useModel, X as ref, Z as shallowReactive, _ as createCommentVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, m as computed, nt as normalizeStyle, o as vModelSelect, rt as toDisplayString, tt as normalizeClass, v as createElementBlock, x as createVNode } from "./vue.js";
+import { $ as themes, A as effectiveColorMode, D as t, M as languages, N as readableText, O as appearance, Q as iconSets, Z as accentPresets, b as logRequest, f as debugLog, k as colorModes, o as _sfc_main$8, u as _sfc_main$7, x as redact } from "./index.js";
 //#region src/features/activity/notifications.js
 var notificationHistory = shallowReactive({ records: [] });
 var activeNotifications = shallowReactive({ records: [] });
@@ -613,6 +610,163 @@ async function userAvatar(ticket, project, login, revision, token, file) {
 	}
 }
 //#endregion
+//#region src/controls/AppSwitch.vue
+var _hoisted_1$6 = { class: "switch-control" };
+var _hoisted_2$4 = ["aria-label", "checked"];
+var _sfc_main$6 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
+	__name: "AppSwitch",
+	props: /*@__PURE__*/ mergeModels({ label: String }, {
+		"modelValue": {
+			type: Boolean,
+			default: false
+		},
+		"modelModifiers": {}
+	}),
+	emits: ["update:modelValue"],
+	setup(__props) {
+		const model = useModel(__props, "modelValue");
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("label", _hoisted_1$6, [createBaseVNode("input", mergeProps(_ctx.$attrs, {
+				class: "app-switch",
+				type: "checkbox",
+				role: "switch",
+				"aria-label": __props.label ? unref(t)(__props.label) : void 0,
+				checked: model.value,
+				onChange: _cache[0] || (_cache[0] = ($event) => model.value = $event.target.checked)
+			}), null, 16, _hoisted_2$4)]);
+		};
+	}
+});
+//#endregion
+//#region src/controls/AppSelect.vue
+var _hoisted_1$5 = ["aria-label"];
+var _hoisted_2$3 = {
+	key: 0,
+	type: "button",
+	class: "app-select-trigger"
+};
+var _hoisted_3$3 = ["value"];
+var _hoisted_4$3 = { class: "app-select-option-label" };
+var _sfc_main$5 = {
+	__name: "AppSelect",
+	props: /*@__PURE__*/ mergeModels({
+		options: {
+			type: Array,
+			default: () => []
+		},
+		label: String,
+		swatchMode: String,
+		translateLabels: {
+			type: Boolean,
+			default: true
+		}
+	}, {
+		"modelValue": {},
+		"modelModifiers": {}
+	}),
+	emits: ["update:modelValue"],
+	setup(__props) {
+		const props = __props;
+		const model = useModel(__props, "modelValue");
+		const customizable = CSS.supports("appearance", "base-select");
+		const decorated = computed(() => customizable && props.options.some((item) => item.icon));
+		return (_ctx, _cache) => {
+			return withDirectives((openBlock(), createElementBlock("select", {
+				class: "app-select",
+				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
+				"aria-label": __props.label ? unref(t)(__props.label) : void 0
+			}, [
+				unref(customizable) ? (openBlock(), createElementBlock("button", _hoisted_2$3, [(openBlock(), createBlock(resolveDynamicComponent("selectedcontent"))), createVNode(_sfc_main$7, {
+					name: "expand_more",
+					class: "app-select-indicator"
+				})])) : createCommentVNode("", true),
+				model.value !== void 0 && !__props.options.some((item) => item.value === model.value) ? (openBlock(), createElementBlock("option", {
+					key: 1,
+					value: model.value
+				}, toDisplayString(model.value), 9, _hoisted_3$3)) : createCommentVNode("", true),
+				(openBlock(true), createElementBlock(Fragment, null, renderList(__props.options, (item) => {
+					return openBlock(), createBlock(resolveDynamicComponent("option"), {
+						key: item.value,
+						value: item.value,
+						disabled: item.disabled || item.enabled === false
+					}, {
+						default: withCtx(() => [
+							decorated.value && item.icon ? (openBlock(), createBlock(_sfc_main$7, {
+								key: 0,
+								name: item.icon
+							}, null, 8, ["name"])) : createCommentVNode("", true),
+							__props.swatchMode ? (openBlock(), createElementBlock("span", {
+								key: 1,
+								class: "palette-swatch",
+								style: normalizeStyle({
+									backgroundColor: item[__props.swatchMode],
+									borderColor: item[__props.swatchMode + "Base"]
+								})
+							}, null, 4)) : createCommentVNode("", true),
+							createBaseVNode("span", _hoisted_4$3, toDisplayString(__props.translateLabels ? unref(t)(item.label) : item.label), 1)
+						]),
+						_: 2
+					}, 1032, ["value", "disabled"]);
+				}), 128))
+			], 8, _hoisted_1$5)), [[vModelSelect, model.value]]);
+		};
+	}
+};
+//#endregion
+//#region src/controls/SettingRow.vue
+var _hoisted_1$4 = { class: "setting-description" };
+var _hoisted_2$2 = ["for"];
+var _hoisted_3$2 = { key: 0 };
+var _hoisted_4$2 = ["id"];
+var _sfc_main$4 = {
+	__name: "SettingRow",
+	props: {
+		controlId: String,
+		title: String,
+		description: String,
+		path: String,
+		showDivider: {
+			type: Boolean,
+			default: true
+		}
+	},
+	setup(__props) {
+		const root = ref(null), accessory = ref(null), stacked = ref(false);
+		let observer;
+		onMounted(() => {
+			observer = new ResizeObserver(() => {
+				stacked.value = root.value.clientWidth - 28 - accessory.value.scrollWidth < 210;
+			});
+			observer.observe(root.value);
+			observer.observe(accessory.value);
+		});
+		onBeforeUnmount(() => observer?.disconnect());
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				ref_key: "root",
+				ref: root,
+				class: normalizeClass(["settings-row configuration-setting", {
+					stacked: stacked.value,
+					"no-divider": !__props.showDivider
+				}])
+			}, [createBaseVNode("div", _hoisted_1$4, [
+				createBaseVNode("label", { for: __props.controlId }, [createBaseVNode("strong", null, toDisplayString(unref(t)(__props.title)), 1)], 8, _hoisted_2$2),
+				__props.path ? (openBlock(), createElementBlock("code", _hoisted_3$2, toDisplayString(__props.path), 1)) : createCommentVNode("", true),
+				__props.description ? (openBlock(), createElementBlock("p", {
+					key: 1,
+					id: __props.controlId + "-help",
+					class: "muted"
+				}, toDisplayString(unref(t)(__props.description)), 9, _hoisted_4$2)) : createCommentVNode("", true),
+				renderSlot(_ctx.$slots, "description")
+			]), createBaseVNode("div", {
+				ref_key: "accessory",
+				ref: accessory,
+				class: "setting-control"
+			}, [renderSlot(_ctx.$slots, "default")], 512)], 2);
+		};
+	}
+};
+//#endregion
 //#region src/controls/AccentPresetPicker.vue
 var _hoisted_1$3 = ["aria-label"];
 var _sfc_main$3 = {
@@ -642,7 +796,7 @@ var _sfc_main$3 = {
 				role: "group",
 				"aria-label": unref(t)(__props.label)
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.options, (preset) => {
-				return openBlock(), createBlock(_sfc_main$4, {
+				return openBlock(), createBlock(_sfc_main$8, {
 					key: preset.value,
 					label: preset.label,
 					title: preset.label,
@@ -655,7 +809,7 @@ var _sfc_main$3 = {
 					}),
 					onClick: ($event) => model.value = preset.value
 				}, {
-					default: withCtx(() => [createBaseVNode("span", null, [model.value === preset.value ? (openBlock(), createBlock(_sfc_main$5, {
+					default: withCtx(() => [createBaseVNode("span", null, [model.value === preset.value ? (openBlock(), createBlock(_sfc_main$7, {
 						key: 0,
 						name: "fontawesome-solid:check"
 					})) : createCommentVNode("", true)])]),
@@ -726,13 +880,13 @@ var _sfc_main$2 = {
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("div", { class: normalizeClass(["appearance-settings", { "compact-settings": __props.compact }]) }, [
 				createBaseVNode("section", { class: normalizeClass({ "settings-section": !__props.compact }) }, [!__props.compact ? (openBlock(), createElementBlock("header", _hoisted_1$2, [createBaseVNode("h2", null, toDisplayString(unref(t)("Appearance")), 1), createBaseVNode("p", _hoisted_2$1, toDisplayString(unref(t)("Choose the interface style, color mode, palettes, and semantic icon set.")), 1)])) : createCommentVNode("", true), createBaseVNode("div", { class: normalizeClass({ "configuration-group": !__props.compact }) }, [
-					__props.compact ? (openBlock(), createBlock(_sfc_main$8, {
+					__props.compact ? (openBlock(), createBlock(_sfc_main$4, {
 						key: 0,
 						"control-id": unref(prefix) + "language",
 						title: "Interface language",
 						description: "Changes application labels and help text while project-defined names remain unchanged."
 					}, {
-						default: withCtx(() => [createVNode(_sfc_main$7, {
+						default: withCtx(() => [createVNode(_sfc_main$5, {
 							id: unref(prefix) + "language",
 							modelValue: unref(appearance).language,
 							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(appearance).language = $event),
@@ -747,7 +901,7 @@ var _sfc_main$2 = {
 						])]),
 						_: 1
 					}, 8, ["control-id"])) : createCommentVNode("", true),
-					!__props.compact ? (openBlock(), createBlock(_sfc_main$8, {
+					!__props.compact ? (openBlock(), createBlock(_sfc_main$4, {
 						key: 1,
 						"control-id": unref(prefix) + "dark",
 						title: "Dark color mode",
@@ -766,12 +920,12 @@ var _sfc_main$2 = {
 						])]),
 						_: 1
 					}, 8, ["control-id"])) : createCommentVNode("", true),
-					createVNode(_sfc_main$8, {
+					createVNode(_sfc_main$4, {
 						"control-id": unref(prefix) + "theme",
 						title: "Interface style",
 						description: unref(themes).find((item) => item.value === unref(appearance).theme).description
 					}, {
-						default: withCtx(() => [createVNode(_sfc_main$7, {
+						default: withCtx(() => [createVNode(_sfc_main$5, {
 							id: unref(prefix) + "theme",
 							modelValue: unref(appearance).theme,
 							"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(appearance).theme = $event),
@@ -786,13 +940,13 @@ var _sfc_main$2 = {
 						])]),
 						_: 1
 					}, 8, ["control-id", "description"]),
-					__props.compact ? (openBlock(), createBlock(_sfc_main$8, {
+					__props.compact ? (openBlock(), createBlock(_sfc_main$4, {
 						key: 2,
 						"control-id": unref(prefix) + "mode",
 						title: "Color mode",
 						description: "Choose light or dark surfaces, or follow the system preference."
 					}, {
-						default: withCtx(() => [createVNode(_sfc_main$7, {
+						default: withCtx(() => [createVNode(_sfc_main$5, {
 							id: unref(prefix) + "mode",
 							modelValue: unref(appearance).mode,
 							"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(appearance).mode = $event),
@@ -808,7 +962,7 @@ var _sfc_main$2 = {
 						_: 1
 					}, 8, ["control-id"])) : createCommentVNode("", true),
 					!__props.compact ? (openBlock(), createElementBlock(Fragment, { key: 3 }, renderList(["light", "dark"], (mode) => {
-						return createVNode(_sfc_main$8, {
+						return createVNode(_sfc_main$4, {
 							key: mode,
 							class: "appearance-palette-row",
 							"control-id": unref(prefix) + mode + "-palette",
@@ -839,12 +993,12 @@ var _sfc_main$2 = {
 							"description"
 						]);
 					}), 64)) : createCommentVNode("", true),
-					createVNode(_sfc_main$8, {
+					createVNode(_sfc_main$4, {
 						"control-id": unref(prefix) + "icons",
 						title: "Icon set",
 						description: unref(iconSets).find((item) => item.value === unref(appearance).iconSet).description
 					}, {
-						default: withCtx(() => [createVNode(_sfc_main$7, {
+						default: withCtx(() => [createVNode(_sfc_main$5, {
 							id: unref(prefix) + "icons",
 							modelValue: unref(appearance).iconSet,
 							"onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => unref(appearance).iconSet = $event),
@@ -860,7 +1014,7 @@ var _sfc_main$2 = {
 						_: 1
 					}, 8, ["control-id", "description"]),
 					!__props.compact ? (openBlock(), createElementBlock(Fragment, { key: 4 }, renderList(animations, (animation) => {
-						return createVNode(_sfc_main$8, {
+						return createVNode(_sfc_main$4, {
 							key: animation.key,
 							"control-id": unref(prefix) + animation.key,
 							title: animation.label,
@@ -887,12 +1041,12 @@ var _sfc_main$2 = {
 						]);
 					}), 64)) : createCommentVNode("", true)
 				], 2)], 2),
-				!__props.compact ? (openBlock(), createElementBlock("section", _hoisted_3$1, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Language")), 1), createBaseVNode("p", _hoisted_4$1, toDisplayString(unref(t)("Choose the language used by the application interface.")), 1)]), createBaseVNode("div", _hoisted_5, [createVNode(_sfc_main$8, {
+				!__props.compact ? (openBlock(), createElementBlock("section", _hoisted_3$1, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Language")), 1), createBaseVNode("p", _hoisted_4$1, toDisplayString(unref(t)("Choose the language used by the application interface.")), 1)]), createBaseVNode("div", _hoisted_5, [createVNode(_sfc_main$4, {
 					"control-id": unref(prefix) + "language",
 					title: "Interface language",
 					description: "Changes application labels and help text while project-defined names remain unchanged."
 				}, {
-					default: withCtx(() => [createVNode(_sfc_main$7, {
+					default: withCtx(() => [createVNode(_sfc_main$5, {
 						id: unref(prefix) + "language",
 						modelValue: unref(appearance).language,
 						"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(appearance).language = $event),
@@ -910,12 +1064,12 @@ var _sfc_main$2 = {
 				!__props.compact ? (openBlock(), createElementBlock("section", _hoisted_6, [
 					createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Browser preferences")), 1), createBaseVNode("p", _hoisted_7, toDisplayString(unref(t)("Additional browser features remain available alongside the Handler layout.")), 1)]),
 					createBaseVNode("div", _hoisted_8, [
-						createVNode(_sfc_main$8, {
+						createVNode(_sfc_main$4, {
 							"control-id": unref(prefix) + "mode",
 							title: "Color mode",
 							description: "Choose light or dark surfaces, or follow the system preference."
 						}, {
-							default: withCtx(() => [createVNode(_sfc_main$7, {
+							default: withCtx(() => [createVNode(_sfc_main$5, {
 								id: unref(prefix) + "mode",
 								modelValue: unref(appearance).mode,
 								"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => unref(appearance).mode = $event),
@@ -930,12 +1084,12 @@ var _sfc_main$2 = {
 							])]),
 							_: 1
 						}, 8, ["control-id"]),
-						createVNode(_sfc_main$8, {
+						createVNode(_sfc_main$4, {
 							"control-id": unref(prefix) + "discussion",
 							title: "Object notes",
 							description: "Open object and process notes in the Task Inspector, or use a separate notes-only window."
 						}, {
-							default: withCtx(() => [createVNode(_sfc_main$7, {
+							default: withCtx(() => [createVNode(_sfc_main$5, {
 								id: unref(prefix) + "discussion",
 								modelValue: unref(appearance).discussionView,
 								"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => unref(appearance).discussionView = $event),
@@ -971,7 +1125,7 @@ var _sfc_main$2 = {
 							"search",
 							"add"
 						], (name) => {
-							return createVNode(_sfc_main$5, {
+							return createVNode(_sfc_main$7, {
 								key: name,
 								name
 							}, null, 8, ["name"]);
@@ -1001,7 +1155,7 @@ var _sfc_main$1 = {
 				class: normalizeClass({ "icon-button": __props.compact }),
 				"aria-label": unref(t)("Appearance"),
 				title: unref(t)("Appearance")
-			}, [createVNode(_sfc_main$5, { name: "appearance" }), !__props.compact ? (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(unref(t)("Appearance")), 1)) : createCommentVNode("", true)], 10, _hoisted_2), createBaseVNode("div", _hoisted_4, [createVNode(_sfc_main$2, { compact: "" })])]);
+			}, [createVNode(_sfc_main$7, { name: "appearance" }), !__props.compact ? (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(unref(t)("Appearance")), 1)) : createCommentVNode("", true)], 10, _hoisted_2), createBaseVNode("div", _hoisted_4, [createVNode(_sfc_main$2, { compact: "" })])]);
 		};
 	}
 };
@@ -1162,6 +1316,6 @@ async function copyImage(blob) {
 	await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
 }
 //#endregion
-export { updatesAvailable as $, resetRequestActivity as A, serverConfiguration as B, objectRelations as C, projectNavigation as D, projectCreationCatalog as E, scriptShelf as F, transactionDetails as G, sessionAction as H, searchConfiguration as I, userProfile as J, uploadFormFile as K, securityGroups as L, rpc as M, saveServerConfiguration as N, rawDatabase as O, scriptEditor as P, updateDelay as Q, securityRules as R, objectDeletion as S, projectCatalog as T, sidebarRequest as U, serverUpdates as V, tableCells as W, workspaceLayouts as X, widgetConfiguration as Y, setUpdatesAvailable as Z, knowledgeRequest as _, _sfc_main as a, editNotificationReply as at, messagesRequest as b, xmlTokens as c, notify as ct, activityFeed as d, submitNotificationReply as dt, activeNotifications as et, beginActivity as f, interfaceDefinition as g, formDefinition as h, readClipboardImages as i, dismissNotification as it, resultItems as j, requestActivity as k, _sfc_main$1 as l, resetNotifications as lt, endActivity as m, copyText as n, cancelNotificationReply as nt, javascriptTokens as o, failNotificationReply as ot, columnsEditor as p, userAvatar as q, readClipboard as r, clearNotificationHistory as rt, pythonTokens as s, notificationHistory as st, copyImage as t, beginNotificationReply as tt, _sfc_main$2 as u, setNotificationProgress as ut, linkPreviews as v, objectStatus as w, navigationLink as x, messageFileRequest as y, securityUsers as z };
+export { workspaceLayouts as $, projectNavigation as A, securityGroups as B, messagesRequest as C, objectStatus as D, objectRelations as E, rpc as F, sessionAction as G, securityUsers as H, saveServerConfiguration as I, transactionDetails as J, sidebarRequest as K, scriptEditor as L, requestActivity as M, resetRequestActivity as N, projectCatalog as O, resultItems as P, widgetConfiguration as Q, scriptShelf as R, messageFileRequest as S, objectDeletion as T, serverConfiguration as U, securityRules as V, serverUpdates as W, userAvatar as X, uploadFormFile as Y, userProfile as Z, endActivity as _, _sfc_main as a, cancelNotificationReply as at, knowledgeRequest as b, xmlTokens as c, editNotificationReply as ct, _sfc_main$4 as d, notify as dt, setUpdatesAvailable as et, _sfc_main$5 as f, resetNotifications as ft, columnsEditor as g, beginActivity as h, readClipboardImages as i, beginNotificationReply as it, rawDatabase as j, projectCreationCatalog as k, _sfc_main$1 as l, failNotificationReply as lt, activityFeed as m, submitNotificationReply as mt, copyText as n, updatesAvailable as nt, javascriptTokens as o, clearNotificationHistory as ot, _sfc_main$6 as p, setNotificationProgress as pt, tableCells as q, readClipboard as r, activeNotifications as rt, pythonTokens as s, dismissNotification as st, copyImage as t, updateDelay as tt, _sfc_main$3 as u, notificationHistory as ut, formDefinition as v, navigationLink as w, linkPreviews as x, interfaceDefinition as y, searchConfiguration as z };
 
 //# sourceMappingURL=clipboard.js.map

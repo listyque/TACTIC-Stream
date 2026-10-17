@@ -1,9 +1,6 @@
 import { G as withCtx, K as withDirectives, N as openBlock, P as renderList, R as resolveDynamicComponent, X as ref, _ as createCommentVNode, b as createTextVNode, c as vShow, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, m as computed, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as t, O as appearance, o as _sfc_main$2, u as _sfc_main$1 } from "./index.js";
-import { M as rpc, a as _sfc_main$4, l as _sfc_main$3, n as copyText } from "./clipboard.js";
-import { t as _sfc_main$5 } from "./AppSwitch.js";
-import { t as _sfc_main$6 } from "./AppSelect.js";
-import { t as _sfc_main$7 } from "./SettingRow.js";
+import { F as rpc, a as _sfc_main$5, d as _sfc_main$6, f as _sfc_main$4, l as _sfc_main$3, n as copyText, p as _sfc_main$7 } from "./clipboard.js";
 //#region src/features/documentation/ApiDocumentation.vue
 var _hoisted_1 = { class: "api-docs" };
 var _hoisted_2 = { class: "api-docs-header" };
@@ -404,14 +401,14 @@ var _sfc_main = {
 						type: "search",
 						"aria-label": unref(t)("Find a method")
 					}, null, 8, _hoisted_7), [[vModelText, search.value]])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Method status")), 1), createVNode(_sfc_main$6, {
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Method status")), 1), createVNode(_sfc_main$4, {
 						modelValue: status.value,
 						"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => status.value = $event),
 						options: statuses,
 						label: "Method status"
 					}, null, 8, ["modelValue"])]),
 					createBaseVNode("small", _hoisted_8, toDisplayString(unref(t)("{count} methods", { count: methods.value.length })), 1),
-					createVNode(_sfc_main$6, {
+					createVNode(_sfc_main$4, {
 						class: "api-docs-mobile-picker",
 						"model-value": selected.value,
 						options: methodOptions.value,
@@ -445,7 +442,7 @@ var _sfc_main = {
 					createBaseVNode("section", _hoisted_15, [
 						methodHelp.value ? (openBlock(), createElementBlock("p", _hoisted_16, toDisplayString(methodHelp.value), 1)) : createCommentVNode("", true),
 						createBaseVNode("strong", null, toDisplayString(unref(t)("Method call and inputs")), 1),
-						createVNode(_sfc_main$4, {
+						createVNode(_sfc_main$5, {
 							class: "api-signature",
 							code: "api." + method.value.name + method.value.signature
 						}, null, 8, ["code"]),
@@ -492,7 +489,7 @@ var _sfc_main = {
 					createBaseVNode("section", _hoisted_28, [
 						createBaseVNode("h2", null, toDisplayString(unref(t)("Try the method")), 1),
 						createBaseVNode("p", _hoisted_29, toDisplayString(unref(t)("Choose an example, adjust the fields and run the request.")), 1),
-						exampleOptions.value.length ? (openBlock(), createElementBlock("label", _hoisted_30, [createTextVNode(toDisplayString(unref(t)("Ready example")), 1), createVNode(_sfc_main$6, {
+						exampleOptions.value.length ? (openBlock(), createElementBlock("label", _hoisted_30, [createTextVNode(toDisplayString(unref(t)("Ready example")), 1), createVNode(_sfc_main$4, {
 							"model-value": String(exampleIndex.value),
 							options: exampleOptions.value,
 							disabled: busy.value,
@@ -511,14 +508,14 @@ var _sfc_main = {
 									class: "api-parameters"
 								}, {
 									default: withCtx(() => [group.extra ? (openBlock(), createElementBlock("summary", _hoisted_32, toDisplayString(unref(t)("More parameters")), 1)) : createCommentVNode("", true), (openBlock(true), createElementBlock(Fragment, null, renderList(group.fields, (field) => {
-										return openBlock(), createBlock(_sfc_main$7, {
+										return openBlock(), createBlock(_sfc_main$6, {
 											key: field.name,
 											"control-id": "api-" + field.name,
 											title: field.label,
 											description: field.description
 										}, {
 											description: withCtx(() => [createBaseVNode("small", null, [createBaseVNode("code", null, toDisplayString(field.name), 1), createTextVNode(" · " + toDisplayString(unref(t)(field.required ? "Required input" : "Optional input")), 1)])]),
-											default: withCtx(() => [field.type === "boolean" ? (openBlock(), createBlock(_sfc_main$5, {
+											default: withCtx(() => [field.type === "boolean" ? (openBlock(), createBlock(_sfc_main$7, {
 												key: 0,
 												id: "api-" + field.name,
 												"model-value": field.value,
@@ -615,7 +612,7 @@ var _sfc_main = {
 							label: copied.value ? "Copied" : "Copy example",
 							onClick: copyExample
 						}, null, 8, ["label"]),
-						createVNode(_sfc_main$4, { code: xmlrpcExample.value }, null, 8, ["code"])
+						createVNode(_sfc_main$5, { code: xmlrpcExample.value }, null, 8, ["code"])
 					])) : createCommentVNode("", true),
 					createBaseVNode("details", _hoisted_45, [
 						createBaseVNode("summary", null, toDisplayString(unref(t)("All parameters and defaults")), 1),

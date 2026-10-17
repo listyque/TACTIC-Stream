@@ -69,6 +69,10 @@ def main():
     command[-1] = "frontend/tests/{administration,frame_admin_state,frame_types}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
     for pattern in [
+        "frontend/src/features/configuration/*.{vue,js}",
+        "frontend/src/features/projects/{ProjectCreation,ProjectTemplates,ProjectEditorSurface}.vue",
+        "frontend/tests/frame_configuration*.mjs",
+        "tools/frame_configuration/*.{vue,js,html,mjs}",
         "frontend/src/features/help/**/*.{vue,js}",
         "tools/frame_help/*.{vue,js,html,mjs}",
         "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs",
@@ -169,6 +173,9 @@ def main():
         )
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/support").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/configuration").rglob("*.qml")
         )
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/search").rglob("*.qml")

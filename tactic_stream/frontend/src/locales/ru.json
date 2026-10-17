@@ -4402,5 +4402,11 @@
   "Decrease value": "Уменьшить значение",
   "Invalid value": "Некорректное значение",
   "Unsupported file type": "Неподдерживаемый тип файла",
-  "Read only": "Только чтение"
+  "Read only": "Только чтение",
+  "Path status": "Состояние пути",
+  "Manage server presets": "Управление пресетами сервера",
+  "Test connection": "Проверить подключение",
+  "Additional settings": "Дополнительные настройки",
+  "Current project preview": "Текущее превью проекта",
+  "Choose a large image; the repository web representation is used automatically when available.": "Выберите крупное изображение; при наличии автоматически используется его web-представление из репозитория."
 }

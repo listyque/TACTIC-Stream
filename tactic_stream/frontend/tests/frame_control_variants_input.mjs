@@ -86,9 +86,9 @@ export async function exerciseVariants(page) {
   assert.equal(await sample().locator('.item-surface-rail').count(), 0);
   await configure('header');
   assert.equal(
-    await sample().evaluate(
-      (root) => getComputedStyle(root).borderTopLeftRadius
-    ),
+    await sample()
+      .locator('[data-frame=headerSurface]')
+      .evaluate((root) => getComputedStyle(root).borderTopLeftRadius),
     '0px'
   );
 
@@ -503,7 +503,7 @@ export async function exerciseVariants(page) {
     );
     return (
       layout &&
-      parseFloat(layout.style.getPropertyValue('--image-actions-width')) > 1
+      getComputedStyle(layout).gridTemplateColumns.split(' ').length === 2
     );
   });
   await page.evaluate(

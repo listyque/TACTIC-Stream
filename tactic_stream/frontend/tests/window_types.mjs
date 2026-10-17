@@ -167,7 +167,7 @@ try {
  assert(await library.evaluate(el=>el.scrollWidth<=el.clientWidth),'Saved searches fits a phone')
  await library.getByRole('button',{name:'Cancel',exact:true}).click();await page.setViewportSize({width:1280,height:900})
  await page.evaluate(async()=>{window.host.configMounted=true;await window.host.$nextTick();window.host.$refs.configDialog.show()})
- const config=page.locator('#configuration-window'),configHeader=config.locator('.configuration-header')
+ const config=page.locator('#configuration-window'),configHeader=config.locator('[data-frame=configurationHeader]')
  await config.getByRole('button',{name:'Restore window',exact:true}).waitFor()
  assert(await config.evaluate(el=>parseFloat(getComputedStyle(el).borderRadius)>0),'Configuration opens rounded in its initial maximized state')
  assert.equal(await configHeader.getByRole('button',{name:'Cancel',exact:true}).count(),0)

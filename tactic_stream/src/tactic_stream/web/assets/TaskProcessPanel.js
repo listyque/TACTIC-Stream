@@ -3,7 +3,7 @@ import { D as t, o as _sfc_main$1 } from "./index.js";
 import { t as _sfc_main$2 } from "./AppMenu.js";
 import { t as _sfc_main$3 } from "./UserComboBox.js";
 import { t as _sfc_main$4 } from "./ItemSurface.js";
-import { k as _sfc_main$5 } from "./App.js";
+import { B as _sfc_main$5 } from "./App.js";
 //#region src/features/tasks/TaskProcessPanel.vue
 var _hoisted_1 = ["aria-label"];
 var _hoisted_2 = { class: "task-process-title" };

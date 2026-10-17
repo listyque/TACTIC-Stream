@@ -209,6 +209,22 @@
 
 </edit>
 
+<configuration_edit>
+    <element name="snapshot" title="Project image">
+        <display class="tactic.ui.widget.upload_wdg.SimpleUploadWdg"><context>publish</context></display>
+        <action class="UploadAction"/>
+    </element>
+    <element name="code"><display class="TextWdg"><read_only>true</read_only></display></element>
+    <element name="title"><display class="TextWdg"><required>true</required></display><action class="NonEmptyAction"/></element>
+    <element name="category"><display class="TextWdg"/></element>
+    <element name="type"><display class="TextWdg"/></element>
+    <element name="description"><display class="TextAreaWdg"/></element>
+    <element name="s_status"><display class="TextWdg"/><action class="tactic.ui.app.project_editor.ProjectArchiveAction"/></element>
+    <element name="is_template"><display class="CheckboxWdg"/></element>
+    <element name="status"/>
+    <element name="palette"/>
+</configuration_edit>
+
 <simple_filter>
     <element name='keyword' title=''>
         <display class='tactic.ui.filter.KeywordFilterElementWdg'>

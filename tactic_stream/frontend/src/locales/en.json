@@ -1250,5 +1250,11 @@
   "Invalid value": "Invalid value",
   "Drop files here": "Drop files here",
   "Unsupported file type": "Unsupported file type",
-  "Read only": "Read only"
+  "Read only": "Read only",
+  "Path status": "Path status",
+  "Manage server presets": "Manage server presets",
+  "Test connection": "Test connection",
+  "Additional settings": "Additional settings",
+  "Current project preview": "Current project preview",
+  "Choose a large image; the repository web representation is used automatically when available.": "Choose a large image; the repository web representation is used automatically when available."
 }

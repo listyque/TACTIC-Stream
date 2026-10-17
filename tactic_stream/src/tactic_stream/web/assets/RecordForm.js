@@ -1,7 +1,6 @@
-import { B as useId, D as nextTick, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, _ as createCommentVNode, a as vModelCheckbox, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, o as vModelSelect, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
+import { B as useId, D as nextTick, F as renderSlot, I as resolveComponent, K as withDirectives, L as resolveDirective, N as openBlock, P as renderList, _ as createCommentVNode, a as vModelCheckbox, b as createTextVNode, c as vShow, d as Fragment, g as createBlock, h as createBaseVNode, o as vModelSelect, rt as toDisplayString, s as vModelText, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as t, i as mobile, o as _sfc_main$1, tt as _plugin_vue_export_helper_default } from "./index.js";
-import { K as uploadFormFile, M as rpc, h as formDefinition } from "./clipboard.js";
-import { t as _sfc_main$2 } from "./AppSwitch.js";
+import { F as rpc, Y as uploadFormFile, p as _sfc_main$2, v as formDefinition } from "./clipboard.js";
 import { n as _sfc_main$4, t as _sfc_main$3 } from "./AppDateField.js";
 //#region src/features/objects/recordFields.js
 function fieldKind(field) {
@@ -118,7 +117,12 @@ var _sfc_main = {
 	props: {
 		ticket: String,
 		project: String,
-		searchType: String
+		searchType: String,
+		modal: Boolean,
+		editView: {
+			type: String,
+			default: "edit"
+		}
 	},
 	emits: ["saved"],
 	data() {
@@ -259,9 +263,9 @@ var _sfc_main = {
 			this.error = "";
 			this.discard = this.uncertain = false;
 			this.loading = true;
-			this.searchType === "sthpw/task" ? this.$refs.dialog.showModal() : this.$refs.dialog.show();
+			this.modal || this.searchType === "sthpw/task" ? this.$refs.dialog.showModal() : this.$refs.dialog.show();
 			try {
-				const definition = await formDefinition(this.context.ticket, this.context.project, this.searchType, searchKey ? "edit" : "insert", searchKey, sourceKey, this.instanceRelation ? {} : relation);
+				const definition = await formDefinition(this.context.ticket, this.context.project, this.searchType, searchKey ? this.editView : "insert", searchKey, sourceKey, this.instanceRelation ? {} : relation);
 				if (id !== this.request) return;
 				this.definition = definition;
 				this.draft = Object.fromEntries(definition.fields.map((field) => [field.name, this.kind(field) === "MultiSelectWdg" ? field.input.value : this.kind(field) === "MultiUpload" ? {
@@ -296,6 +300,7 @@ var _sfc_main = {
 		},
 		async save() {
 			if (!this.contextValid || this.loading || this.saving || this.uncertain || this.blocked || !this.fieldsToSave.length) return;
+			const request = this.request;
 			this.saving = true;
 			this.error = "";
 			const files = Object.values(this.files).flat();
@@ -387,6 +392,7 @@ var _sfc_main = {
 					args,
 					values
 				]);
+				if (request !== this.request || !this.contextValid) return;
 				this.definition = null;
 				this.draft = this.baseline = {};
 				this.files = {};
@@ -548,7 +554,19 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		class: "record-dialog record-form-dialog",
 		"aria-label": $options.t("Record form"),
 		onCancel: _cache[3] || (_cache[3] = withModifiers((...args) => $options.cancel && $options.cancel(...args), ["prevent"]))
-	}, [
+	}, [_ctx.$slots.surface ? renderSlot(_ctx.$slots, "surface", {
+		form: { ..._ctx.$data },
+		save: $options.save,
+		cancel: $options.cancel,
+		close: $options.close,
+		keep: () => {
+			$data.discard = false;
+		},
+		reportError: (value) => {
+			$data.error = value;
+		},
+		contextValid: $options.contextValid
+	}, void 0, void 0, 0) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
 		createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($options.t($options.batch ? "Edit selected" : $data.definition?.source_key ? "Duplicate record" : $data.definition?.mode === "edit" ? "Edit record" : "Create record")), 1), createBaseVNode("small", _hoisted_2, toDisplayString($options.batch ? $options.t("{count} selected records", { count: $data.definition.search_keys.length }) : $data.definition?.source_key || $data.definition?.search_key || $props.searchType), 1)]), createVNode(_component_AppButton, {
 			label: "Close",
 			icon: "close",
@@ -781,7 +799,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				}, null, 8, ["label", "disabled"])])
 			], 32)) : createCommentVNode("", true)
 		], 64)) : createCommentVNode("", true)
-	], 40, _hoisted_1)), [[_directive_window, { type: $props.searchType === "sthpw/task" ? "dialog" : "window" }]]);
+	], 64))], 40, _hoisted_1)), [[_directive_window, { type: $props.modal || $props.searchType === "sthpw/task" ? "dialog" : "window" }]]);
 }
 var RecordForm_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion

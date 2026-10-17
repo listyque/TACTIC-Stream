@@ -1,6 +1,6 @@
 import { D as nextTick, F as renderSlot, G as withCtx, N as openBlock, P as renderList, X as ref, _ as createCommentVNode, b as createTextVNode, d as Fragment, et as unref, g as createBlock, h as createBaseVNode, j as onMounted, k as onBeforeUnmount, l as withKeys, m as computed, nt as normalizeStyle, rt as toDisplayString, tt as normalizeClass, u as withModifiers, v as createElementBlock, x as createVNode } from "./vue.js";
 import { D as t, O as appearance, o as _sfc_main$2, u as _sfc_main$1 } from "./index.js";
-import { t as _sfc_main$3 } from "./AppSelect.js";
+import { f as _sfc_main$3 } from "./clipboard.js";
 import { t as _sfc_main$4 } from "./AppMenu.js";
 import { t as _sfc_main$5 } from "./AppCheckbox.js";
 import { t as ItemPreview_default } from "./ItemPreview.js";

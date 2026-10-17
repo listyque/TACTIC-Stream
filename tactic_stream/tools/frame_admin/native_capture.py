@@ -100,7 +100,7 @@ def snapshot(window, *, check_icons=True):
                     )
                 color = item.property("color")
                 if definition.get("kind") == "Box" and hasattr(color, "alphaF"):
-                    fills[name] = dict(color=color.name(), alpha=color.alphaF())
+                    fills[name] = dict(color=color.name(), alpha=color.alphaF(), radius=item.property("radius"), bottomRightRadius=item.property("bottomRightRadius"))
                 break
             ancestor = ancestor.parentItem()
         if item.property("text") is not None and item.property("font") is not None:

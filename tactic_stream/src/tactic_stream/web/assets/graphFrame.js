@@ -1,8 +1,8 @@
 import { D as nextTick } from "./vue.js";
 import { O as appearance } from "./index.js";
 import { c as button, d as node, f as rect, l as label, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
+import { x as sections } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as sections } from "./sections.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/workflow.fields.mjs
 var fieldGroups = [
 	{

@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01, B02, B03 and B04 are delivered** at the checkpoints below. The next batch is **B05**.
+**B01, B02, B03, B04 and B05 are delivered** at the checkpoints below. The next batch is **B06**.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -61,6 +61,46 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B05 delivered: Configuration and projects, 2026-10-17
+
+Handler **0.6.0.109** and Stream **0.112.158** ship independent copies of
+**90 `.mjs` modules and one menu catalog**. Nine new configuration/project
+modules compose all Configuration pages, native DCC preference schemas,
+repository summary/editor, project catalogue, four-step creation, modal project
+editing, template management and their confirmations. The owner/capability map
+and reproduction commands are in `docs/frame_configuration.md` in each product.
+
+- Existing controllers retain per-page drafts, Reset/Apply/Save/Close, immediate
+  notification settings, presets/tickets, TEAM paths and image/creation queues.
+  Preset saves retain unrelated drafts; unknown creation results require catalogue
+  reconciliation before another creation. Project archiving uses native lifecycle
+  operations and retire history inside the existing edit transaction.
+- Browser XML revisions, validation, secret masking/clearing, technical server
+  details and web paths retain their existing owners. Native local/DCC/tray/GPU
+  options remain explicit capabilities. Matching-template editing and standalone
+  DCC tools retain their existing B12/B13 scope and entry points.
+- Long settings pages reserve visible scrollbars. Phone layouts reflow navigation
+  and image actions; real preview/Choose/Undo geometry, corrupt-image reporting,
+  selected-image cancellation and complete EN/RU button captions are checked.
+  No WebEngine, shared runtime installation or second persistence store was added.
+
+Completed verification on the release sources:
+
+- **70 native tests**, **456 shared scene contracts**, three real disposable-server
+  browser journeys and six focused API scenarios cover settings, repositories,
+  project/template/image operations, lifecycle history, revisions, secrets and ACL.
+- The fresh comparison contains **720 original and 1080 current QML images** plus
+  **1080 Vue pairs**, across three themes, light/dark, EN/RU and 1100/800/360 px.
+  It checks **32,210 rectangles**, **18,840 styles** and **228 control interiors**,
+  rejects clipped action captions and verifies source/archive fingerprints.
+- The mandatory platform gate passes **44/44 stages**, including actual input at
+  100/150/200%, smoke, window kinds, retained workspace and independent packages.
+  Quality-baseline checks introduce no new structure/lint debt; native smoke has
+  no font/runtime warnings. Nine unrelated structure failures remain explicit.
+- EN/RU Help and both developer guides are updated. Physical touch hardware and
+  live production PostgreSQL remain untested; the pre-existing file-transaction
+  exception-text test failure was reproduced on clean pre-B05 HEAD and documented.
 
 ## B04 delivered: support, identity and connection, 2026-10-17
 

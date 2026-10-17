@@ -1,10 +1,9 @@
 import { I as resolveComponent, K as withDirectives, N as openBlock, c as vShow, g as createBlock, h as createBaseVNode, nt as normalizeStyle, p as Teleport, v as createElementBlock, w as inject, x as createVNode } from "./vue.js";
 import { D as t, O as appearance, tt as _plugin_vue_export_helper_default } from "./index.js";
 import { c as button, d as node, f as rect, l as label, n as _sfc_main$1, s as translate, t as observeFrameSizes, u as muted } from "./resize.js";
-import { M as rpc, Y as widgetConfiguration, j as resultItems } from "./clipboard.js";
-import { C as serialize, E as widgets, S as roles, T as variants, b as describe$2, v as actions, w as template, x as edit, y as binding } from "./App.js";
+import { F as rpc, P as resultItems, Q as widgetConfiguration } from "./clipboard.js";
+import { A as binding, F as template, I as variants, L as widgets, M as edit, N as roles, P as serialize, j as describe$2, k as actions, x as sections } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
-import { t as sections } from "./sections.ui.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
