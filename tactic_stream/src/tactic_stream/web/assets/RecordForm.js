@@ -178,7 +178,7 @@ function separator(language) {
 function pattern(decimals = 0, language = "en") {
 	const digits = Math.floor(Math.max(0, Math.min(8, decimals)));
 	const point = separator(language) === "," ? "," : "\\.";
-	const integer = "(?:\\d+|\\d{1,3}(?:" + (separator(language) === "," ? "[\\u00a0\\u202f ]" : ",") + "\\d{3})+)";
+	const integer = "(?:\\d+|\\d{1,3}(?:" + (separator(language) === "," ? "[\xA0  ]" : ",") + "\\d{3})+)";
 	return digits ? "^[+-]?(?:" + integer + "(?:" + point + "\\d{0," + digits + "})?|" + point + "\\d{1," + digits + "})$" : "^[+-]?" + integer + "$";
 }
 function parse(text, decimals = 0, language = "en") {

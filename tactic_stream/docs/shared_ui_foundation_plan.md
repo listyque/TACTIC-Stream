@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01–B06 and B08–B12 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
+**B01–B06 and B08–B13 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
 
 **B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
 widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
@@ -40,7 +40,16 @@ See `docs/frame_messages.md`. B07 stays open; B12 is delivered below.
 Commit Queue, native synchronization and screenshot tools use shared composition.
 Final gate, connected scenarios and source-checked comparisons pass; native/browser
 capabilities and deployment limits are explicit in `docs/frame_files.md`.
-The next requested batch is B13. B07's unrelated gaps remain open.
+B13 is delivered below; B07's unrelated gaps remain open.
+
+**B13 is delivered.** Stream 0.112.166 / Handler 0.6.0.117 share Script
+Editor/source commands, shelf bar/editor and the native script/tools compositions.
+Execution, revisions, ACL, transport and existing native window owners are retained.
+Batch Manager and its existing web UI remain intact; `side_tools/frame_tool` is a
+small native reuse example, not another scheduler. The final platform gate passes
+134 stages; 384 original/current native pairs and 144 native/Vue compositions
+pass the current source-checked comparison. Scope and limits:
+[frame_scripts.md](frame_scripts.md). The next batch is B14; B07 stays incomplete.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,

@@ -6,6 +6,12 @@ from tactic_stream.server import script_features as features
 
 
 class ScriptFeatures(unittest.TestCase):
+    def test_completion_starts_at_the_cursor_after_a_newline(self):
+        for source in ('pri\n', 'server.que\n', 'pri\r\n'):
+            with self.subTest(source=source):
+                self.assertEqual(features.completion_items(source, len(source)), [])
+                self.assertTrue(all(row['start'] == len(source) for row in features.completion_items(source, len(source), True)))
+
     def test_native_outline_completion_and_no_execution(self):
         path = Path('D:/code/th_codex/thlib/ui/script_editor_features.py')
         native = path.read_text(encoding='utf-8')

@@ -713,6 +713,7 @@
       "index.html",
       "_FrameView.js",
       "_CodeBlock.js",
+      "_resize.js",
       "src/App.vue"
     ],
     "css": [

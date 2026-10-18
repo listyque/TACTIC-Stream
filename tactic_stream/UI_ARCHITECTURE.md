@@ -3,6 +3,18 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
+## B13 scripts and native tools — delivered, 2026-10-18
+
+Stream 0.112.166 / Handler 0.6.0.117 connect Script Editor/source commands,
+shelf bar/editor, native triggers, DCC options, Handler Server and selected-object
+Database tools to independent Frame descriptions. Existing execution, revision,
+ACL, transport and native window owners stay in each product. Batch Manager's
+scheduler and existing web UI remain intact. The shipped `side_tools/frame_tool`
+example demonstrates a small script-created native UI from existing controls.
+The final gate passes 134 stages; current evidence includes 384 original/native
+pairs and 144 native/Vue compositions. Source map, capabilities and limits:
+[frame_scripts.md](docs/frame_scripts.md). B07 stays open; B14 is next.
+
 ## B12 files and repository queues — delivered, 2026-10-18
 
 Stream 0.112.165 / Handler 0.6.0.116 connect File Workspace, check-in/ingest,

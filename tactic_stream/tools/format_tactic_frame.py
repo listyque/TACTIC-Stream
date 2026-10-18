@@ -76,6 +76,10 @@ def main():
     command[-1] = "frontend/tests/{administration,frame_admin_state,frame_types}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
     for pattern in [
+        "frontend/src/features/scripts/*.{vue,js,css}",
+        "frontend/tests/{script_editor,script_shelf,frame_scripts_state}.mjs",
+        "frontend/tests/frame_scripts.mjs",
+        "tools/frame_scripts/*.{vue,mjs,html}",
         "frontend/src/features/configuration/*.{vue,js}",
         "frontend/src/features/projects/{ProjectCreation,ProjectTemplates,ProjectEditorSurface}.vue",
         "frontend/tests/frame_configuration*.mjs",
@@ -238,6 +242,13 @@ def main():
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/files").rglob("*.qml")
         )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/scripts").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/tools").rglob("*.qml")
+        )
+        files += [args.handler_root / "side_tools/frame_tool/Main.qml"]
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]
@@ -277,6 +288,20 @@ def main():
             if not args.check:
                 path.write_bytes(formatted)
     if args.handler_root:
+        example = args.handler_root / "side_tools/frame_tool/selection.ui.mjs"
+        result = subprocess.run(
+            native_javascript_command,
+            cwd=ROOT,
+            input=example.read_text(encoding="utf-8"),
+            text=True,
+            encoding="utf-8",
+            capture_output=True,
+            check=True,
+        )
+        if result.stdout.encode("utf-8") != example.read_bytes():
+            changed.append(str(example))
+            if not args.check:
+                example.write_text(result.stdout, encoding="utf-8", newline="\n")
         for path in sorted(
             (args.handler_root / "thlib/ui/qml/features/files").rglob("*.js")
         ):

@@ -339,6 +339,34 @@ def fingerprints(handler):
         ROOT / "tests/test_task_schedule.py",
     ]
     checks += [
+        ROOT / "frontend/tests" / name
+        for name in (
+            "frame_scripts_state.mjs",
+            "frame_scripts.mjs",
+            "script_editor.mjs",
+            "script_shelf.mjs",
+        )
+    ]
+    checks += [
+        handler / "tests" / name
+        for name in (
+            "frame_scripts_fixture.py",
+            "test_frame_script_tools.py",
+            "test_script_editor.py",
+            "test_script_shelf.py",
+            "test_script_shelf_qml.py",
+            "test_script_triggers.py",
+            "test_handler_server_controller.py",
+            "test_maya_connector.py",
+        )
+    ]
+    checks += [
+        path
+        for path in (handler / "side_tools/frame_tool").iterdir()
+        if path.suffix in (".py", ".qml", ".mjs", ".md")
+    ]
+    checks += list((handler / "side_tools/batch_scheduler").glob("*.py"))
+    checks += [
         path
         for path in (ROOT / "tools/frame_files").iterdir()
         if path.is_file() and path.suffix in (".vue", ".mjs", ".py", ".html", ".json")
@@ -481,6 +509,74 @@ def main():
         ),
         ("notification-state", ["node", "frontend/tests/notifications.mjs"], ROOT, {}),
         ("files-state", ["node", "frontend/tests/frame_files_state.mjs"], ROOT, {}),
+        ("scripts-state", ["node", "frontend/tests/frame_scripts_state.mjs"], ROOT, {}),
+        (
+            "scripts-server",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_script_features",
+                "tests.test_script_editor",
+                "tests.test_script_shelf",
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        *[
+            (
+                "native-scripts-" + name,
+                python + ["-m", "unittest", "-q", "tests." + module],
+                handler,
+                {"QT_QUICK_CONTROLS_STYLE": "Basic"},
+            )
+            for name, module in (
+                ("editor-owners", "test_script_editor"),
+                ("shelf-owners", "test_script_shelf"),
+                ("shelf-input", "test_script_shelf_qml"),
+                ("triggers", "test_script_triggers"),
+                ("tools-input", "test_frame_script_tools"),
+                ("dcc-owners", "test_maya_connector"),
+                ("server-owners", "test_handler_server_controller"),
+            )
+        ],
+        (
+            "native-script-editor-input",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_tasks_controller.TasksQmlTests.test_script_editor_is_compact_and_output_collapses_at_minimum_size",
+            ],
+            handler,
+            {"QT_QUICK_CONTROLS_STYLE": "Basic"},
+        ),
+        (
+            "native-batch-existing",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "side_tools.batch_scheduler.test_scheduler_classes",
+            ],
+            handler,
+            {},
+        ),
+        (
+            "browser-script-editor",
+            python + ["tools/result_browser.py", "script_editor.mjs"],
+            ROOT,
+            {},
+        ),
+        (
+            "browser-script-shelf",
+            python + ["tools/result_browser.py", "script_shelf.mjs"],
+            ROOT,
+            {},
+        ),
         (
             "native-files-owners",
             python

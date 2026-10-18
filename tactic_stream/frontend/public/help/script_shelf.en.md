@@ -85,3 +85,13 @@ return {project, selected: searchKeys, count: rows.length};
 Local Python, DCC execution and DCC export are excluded from the web shelf. Server JavaScript requires administrator access and rolls back changes on uncaught errors; it has no browser DOM or DCC connection. Shelf Help opens this article in the shared catalog.
 
 A nonmodal Script Shelf editor keeps the tab and revision from which it was opened. Changing the active Search tab does not redirect Save or Apply. Changing projects blocks saving the old draft until you return to its project or close and reopen the editor. A dirty shelf asks for confirmation before sign-out.
+
+## Scope, drafts and shared controls
+
+The shelf bar and editor share their Frame composition with Handler. Overflowing
+buttons and lists retain visible scrollbars. Icon and script pickers use the
+current button identity and editing scope; a delayed selection cannot change a
+removed button or a different shelf. A native tab draft cannot be saved into a
+different tab after the editing context changes. Discard or reopen the editor
+before saving in the new context. Confirmed browser assignments immediately
+show Used on this tab. Help opens the general Help window at this article.

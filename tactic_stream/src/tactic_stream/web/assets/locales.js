@@ -3360,7 +3360,7 @@ var ru_default = {
 	"Team tasks": "Задачи группы",
 	"Project tasks": "Задачи проекта",
 	"Selected objects": "Выбранные объекты",
-	Selected: "Выбранные",
+	Selected: "Выбрано",
 	"Search Type tasks": "Задачи типа объектов",
 	"Task scope": "Область задач",
 	"Tasks for selected objects": "Задачи выбранных объектов",
@@ -3657,7 +3657,7 @@ var ru_default = {
 	"Apply to this tab": "Применить к этой вкладке",
 	"Used on this tab": "Используется на этой вкладке",
 	"Script result": "Результат скрипта",
-	"Script shelf help": "Справка по полке скриптов",
+	"Script shelf help": "Справка по шелфу скриптов",
 	"Discard unsaved changes to this shelf?": "Отменить несохранённые изменения этой полки?",
 	"Remove “{name}”": "Убрать «{name}»",
 	"Delete “{name}”": "Удалить «{name}»",
@@ -6167,7 +6167,9 @@ var ru_default = {
 	"Add to changelist…": "Добавить в чейнджлист…",
 	"Parent: {parent}": "Родитель: {parent}",
 	"Step {step} of {total}": "Шаг {step} из {total}",
-	"The session changed during check-in. Inspect Snapshot Browser before repeating it.": "Сессия изменилась во время публикации. Проверьте результат в браузере снапшотов перед повторной отправкой."
+	"The session changed during check-in. Inspect Snapshot Browser before repeating it.": "Сессия изменилась во время публикации. Проверьте результат в браузере снапшотов перед повторной отправкой.",
+	"Connection context changed. Discard this draft before saving.": "Контекст изменился. Отмените этот черновик перед сохранением.",
+	"Frame tool example": "Пример инструмента Frame"
 };
 //#endregion
 export { en_default as n, ru_default as t };

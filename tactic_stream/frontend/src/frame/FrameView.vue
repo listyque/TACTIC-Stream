@@ -366,7 +366,12 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             textAlign: node.align || 'left',
             wordBreak: node.wrapAnywhere ? 'break-all' : undefined,
             lineHeight: node.wrap ? 'normal' : node.height + 'px',
-            display: node.maxLines ? '-webkit-box' : undefined,
+            display:
+              node.visible === false
+                ? 'none'
+                : node.maxLines
+                  ? '-webkit-box'
+                  : undefined,
             WebkitLineClamp: node.maxLines || undefined,
             WebkitBoxOrient: node.maxLines ? 'vertical' : undefined
           })
