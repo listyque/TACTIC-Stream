@@ -1,5 +1,5 @@
 ---
-reference: Handler
+reference: Handler / Stream
 group: Docks
 icon: calendar-month
 order: 33
@@ -55,3 +55,7 @@ after a successful save.
 ## TACTIC Stream placement
 
 Weekly Timesheet opens in its own workspace dock. Work Reports and Cost Reports use separate docks; switching between them preserves each panel's week, filters and draft. Log time for a selected task remains available from Task Inspector. If an unsaved time entry prevents switching projects, save or discard it first.
+
+## Shared controls
+
+Handler and Stream share the week commands, summary, entry cards and time-entry fields. Select entries through the full checkbox hit area; approvals and edits still use the existing authorized controller. Duration accepts 0.01–24 hours with at most two decimal places (dot or comma); the server additionally checks the daily total. Cancel closes the editor without submitting it. Narrow cards keep overtime and actions visible; form descriptions remain multiline.

@@ -1,9 +1,9 @@
 """Keep Frame source readable: Prettier for JS/Vue, Qt for native QML."""
 
 import argparse
-from pathlib import Path
-import subprocess
 import shutil
+import subprocess
+from pathlib import Path
 
 import PySide6
 
@@ -76,6 +76,13 @@ def main():
     command[-1] = "frontend/tests/{administration,frame_admin_state,frame_types}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
     for pattern in [
+        "frontend/src/features/knowledge/*.{vue,js}",
+        "frontend/src/features/collaboration/*.vue",
+        "frontend/src/features/documentation/*.vue",
+        "frontend/src/features/journal/*.vue",
+        "frontend/src/features/objects/{TimeEntryPanel,WorkHourForm,WorkReportSurface}.vue",
+        "frontend/tests/{frame_remaining*,knowledge}.mjs",
+        "tools/frame_remaining/*.{vue,mjs,html}",
         "frontend/src/features/scripts/*.{vue,js,css}",
         "frontend/tests/{script_editor,script_shelf,frame_scripts_state}.mjs",
         "frontend/tests/frame_scripts.mjs",
@@ -248,6 +255,16 @@ def main():
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/tools").rglob("*.qml")
         )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/knowledge").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/workhours").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/collaboration").rglob("*.qml")
+        )
+        files += [args.handler_root / "tests/fixtures/FrameRemainingHarness.qml"]
         files += [args.handler_root / "side_tools/frame_tool/Main.qml"]
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))

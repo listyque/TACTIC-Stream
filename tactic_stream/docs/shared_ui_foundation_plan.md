@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01–B06 and B08–B13 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
+**B01–B06 and B08–B14 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
 
 **B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
 widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
@@ -49,7 +49,7 @@ Batch Manager and its existing web UI remain intact; `side_tools/frame_tool` is 
 small native reuse example, not another scheduler. The final platform gate passes
 134 stages; 384 original/current native pairs and 144 native/Vue compositions
 pass the current source-checked comparison. Scope and limits:
-[frame_scripts.md](frame_scripts.md). The next batch is B14; B07 stays incomplete.
+[frame_scripts.md](frame_scripts.md). B14 is delivered below; B07 stays incomplete.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -1380,3 +1380,29 @@ Scope, reproducible evidence and platform limits: `docs/frame_files.md`.
 Physical touch, OS IME, desktop-capture pixels, DCC and live PostgreSQL remain
 deployment acceptance. This **does not close B07's 40 widget gaps**. Next: **B13,
 scripts and standalone tools**.
+
+
+## B14 delivered: remaining surfaces and release audit, 2026-10-19
+
+Stream **0.112.167** / Handler **0.6.0.118** share Knowledge Base navigation,
+outline, workspace, reader/editor commands, formatting, schema confirmation,
+Timesheet, Work/Cost Reports and work-hour forms. API/journal browser adapters
+retain their client-specific capabilities. Typed document/image editing stays
+with existing engines; mutation, ACL, revision and execution owners are preserved.
+
+The final platform gate passes **142 stages**. Fresh evidence contains **720
+native/Vue compositions**, **44 original/current native pairs**, **7,416
+rectangles** and **5,256 typography/color checks**. The focused native suite passes
+108 tests, and connected production journeys pass against disposable servers.
+
+Every inventoried QML/Vue source has an explicit ownership classification; the
+checker rejects omissions and stale entries. Native/browser input and production
+workflows, original-reference captures, themes/languages/widths and independent
+packages are checked in the release audit. Reproducible commands, measured counts,
+restore points and platform limits: [frame_remaining.md](frame_remaining.md).
+
+This closes **B14**, not the whole legacy migration. **B07 remains incomplete**
+with 40 usable legacy widget classes awaiting complete workflows. User-script,
+plugin and DCC-created UI retain their owners. Full-screen pixel identity, live
+production writes, physical touch/OS IME and shipping EXE/DCC deployment are not
+inferred from a source ledger or offline captures.

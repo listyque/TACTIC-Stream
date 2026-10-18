@@ -1,4 +1,4 @@
-import { A as node, D as button, O as label, j as rect, u as translate } from "./FrameView.js";
+import { Gt as rect, Ht as label, Vt as button, Wt as node, y as translate } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/snapshot.ui.mjs
 var metrics = {
 	toolbar: 46,

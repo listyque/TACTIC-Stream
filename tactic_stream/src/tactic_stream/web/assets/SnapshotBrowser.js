@@ -1,9 +1,7 @@
 import { A as onMounted, E as nextTick, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, V as useSlots, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$2, f as _sfc_main$3, k as t, o as mobile } from "./index.js";
-import { E as _sfc_main$7, b as _sfc_main$5, h as ItemPreview_default, r as _sfc_main$6, t as _sfc_main$4 } from "./FrameView.js";
-import { P as resultItems, a as copyImage, dt as notify, o as copyText } from "./CodeBlock.js";
+import { F as _sfc_main$7, Lt as notify, _ as copyText, g as copyImage, i as _sfc_main$4, k as _sfc_main$5, o as _sfc_main$6, ot as resultItems, r as observeFrameSizes, w as ItemPreview_default } from "./CodeBlock.js";
 import { t as RecordForm_default } from "./RecordForm.js";
-import { n as observeFrameSizes } from "./resize.js";
 import { a as metrics, i as layout, l as toolbar, n as fileColumns, o as optionActions, r as fileIcon, s as optionChange, t as clampRatio } from "./snapshot.ui.js";
 import { t as FilePreview_default } from "./FilePreview.js";
 import { Q as _sfc_main$8, V as ObjectAction_default } from "./App.js";

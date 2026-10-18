@@ -1,8 +1,6 @@
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, k as t } from "./index.js";
-import { t as _sfc_main$1 } from "./FrameView.js";
-import { B as securityGroups } from "./CodeBlock.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { ft as securityGroups, i as _sfc_main$1, r as observeFrameSizes } from "./CodeBlock.js";
 import { i as toolbar, n as metrics, o as initial, r as row, s as transition, t as describe } from "./groups.ui.js";
 //#region src/features/administration/SecurityGroups.vue
 var _sfc_main = {

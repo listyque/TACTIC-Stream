@@ -14973,6 +14973,6 @@ function resolveIcon(name, pack) {
 	return selected ? [selected.set, iconCode(iconMaps[selected.set][selected.name])] : void 0;
 }
 //#endregion
-export { resolveIcon as n, iconMaps as t };
+export { semanticName as i, resolveIcon as n, aliases as r, iconMaps as t };
 
 //# sourceMappingURL=icons.js.map

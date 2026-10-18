@@ -1,8 +1,6 @@
 import { E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow, u as Fragment, z as useId } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$2, f as _sfc_main$3, k as t } from "./index.js";
-import { A as node, O as label, j as rect, t as _sfc_main$4, u as translate } from "./FrameView.js";
-import { F as rpc } from "./CodeBlock.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { Gt as rect, Ht as label, Wt as node, i as _sfc_main$4, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import "./admin.document.js";
 import SearchTypes_default from "./SearchTypes.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";

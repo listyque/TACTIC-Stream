@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.166.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.167.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7624,3 +7624,12 @@ The complete 124-requirement checklist is retained in `FILE_WORKSPACE_UI_PLAN.md
 - Preserve masked passwords, immutable existing logins, draft/permission guards, retired-account search and selection, membership edits, explicit save/discard confirmation and unknown-write recovery. Keep shared English/Russian validation messages and independent product packaging.
 - Fix Frame icon aliases, visible house scrollbars, wrapped row-label alignment, button content insets and full translated button labels. The paired harness uses visible browser scrollbars and checks internal glyphs/indicators and label bounds as well as outer geometry.
 - Qualify 108 Groups and 132 Users states in Material QML and Edge (EN/RU, light/dark, wide/narrow), native keyboard/touch and 150% geometry, browser touch/password/membership/save/conflict flows, isolated SQLite account writes, local module copies and native update packaging. Reports are tools/frame_groups/output/groups-report.html and tools/frame_users/output/users-report.html. Refresh Stream and restart Handler. Live PostgreSQL and other OS scaling settings were not tested for this UI change.
+
+## B14 remaining surfaces — 2026-10-19
+
+Stream 0.112.167 / Handler 0.6.0.118 share Knowledge Base, schema confirmation,
+Timesheet, reports and work-hour presentation. API/journal retain browser
+capabilities; native rich text, ACL, revisions, drafts and mutation owners stay
+in their existing hosts. Complete source ownership, evidence commands, restore
+points and remaining limits: [frame_remaining.md](docs/frame_remaining.md).
+B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.

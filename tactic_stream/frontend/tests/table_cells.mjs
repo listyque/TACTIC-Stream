@@ -514,34 +514,33 @@ try {
     name: 'Task timesheet',
     exact: true
   });
-  const timeForm = timesheet.locator('form'),
-    entries = timesheet.locator('.time-entry-list .note-entry');
-  await timesheet.getByLabel('Hours', { exact: true }).fill('1.25');
+  const timeForm = timesheet.locator('.work-hour-form'),
+    entries = timesheet.locator('.time-entry-list .timesheet-entry');
+  await timesheet.getByLabel('Duration, hours', { exact: true }).fill('1.25');
   await timesheet
     .getByLabel('Category', { exact: true })
-    .selectOption('overtime');
+    .getByRole('radio', { name: 'Overtime', exact: true })
+    .tap();
   await timesheet
     .getByLabel('Description', { exact: true })
     .fill('Browser time entry');
   await timeForm.getByRole('button', { name: 'Save', exact: true }).tap();
-  await entries.getByText('Browser time entry', { exact: true }).waitFor();
-  assert.match(await entries.innerText(), /1.25 h.*Overtime.*Pending/s);
+  await entries.getByText(/Browser time entry/).waitFor();
+  assert.match(await entries.innerText(), /1.25 h.*Pending.*OT 1.25 h/s);
   await entries
-    .getByRole('button', { name: 'Approve time entry', exact: true })
+    .getByRole('button', { name: 'Approve entry', exact: true })
     .tap();
   await entries
-    .getByRole('button', { name: 'Revoke approval', exact: true })
+    .getByRole('button', { name: 'Return to pending', exact: true })
     .waitFor();
-  await entries
-    .getByRole('button', { name: 'Edit time entry', exact: true })
-    .tap();
-  await timesheet.getByLabel('Hours', { exact: true }).fill('2.5');
+  await entries.getByRole('button', { name: 'Edit entry', exact: true }).tap();
+  await timesheet.getByLabel('Duration, hours', { exact: true }).fill('2.5');
   await timeForm
     .getByRole('button', { name: 'Save & Approve', exact: true })
     .tap();
-  await entries.getByText(/2.5 h/).waitFor();
+  await entries.getByText('2.5 h', { exact: true }).waitFor();
   await timesheet.getByRole('button', { name: 'Log time', exact: true }).tap();
-  await timesheet.getByLabel('Hours', { exact: true }).fill('23');
+  await timesheet.getByLabel('Duration, hours', { exact: true }).fill('23');
   await timeForm.getByRole('button', { name: 'Save', exact: true }).tap();
   await timesheet
     .locator('p[role="alert"]')
@@ -560,7 +559,7 @@ try {
       animations: 'disabled'
     });
   await entries
-    .getByRole('button', { name: 'Delete time entry', exact: true })
+    .getByRole('button', { name: 'Delete entry', exact: true })
     .tap();
   await entries
     .locator('.notice')
@@ -595,9 +594,19 @@ try {
   await inspector
     .getByText('Secondary task discussion', { exact: true })
     .waitFor();
-  await inspector
-    .getByRole('button', { name: 'Expand Task Inspector', exact: true })
-    .tap();
+  const expandInspector = inspector.getByRole('button', {
+    name: 'Expand Task Inspector',
+    exact: true
+  });
+  // Full edit can already expand the retained inspector when its task returns.
+  if (await expandInspector.isVisible()) await expandInspector.tap();
+  else
+    await inspector
+      .getByRole('button', {
+        name: 'Collapse Task Inspector',
+        exact: true
+      })
+      .waitFor();
   assert.equal(
     await inspector.getByLabel('Description', { exact: true }).inputValue(),
     'Task draft'
@@ -841,17 +850,21 @@ try {
   });
   await weekly.getByLabel('Week', { exact: true }).fill('2030-01-09');
   await weekly.getByLabel('Week', { exact: true }).blur();
-  await weekly.getByText('Weekly regular', { exact: true }).waitFor();
+  await weekly.getByText(/Weekly regular/).waitFor();
   assert.equal(
     await weekly.getByLabel('Week', { exact: true }).inputValue(),
     '2030-01-07'
   );
-  assert.equal(await weekly.locator('.time-entry-list .note-entry').count(), 1);
-  await weekly.getByLabel('Team member', { exact: true }).selectOption('');
-  await weekly.getByText('Weekly overtime', { exact: true }).waitFor();
-  const weeklyEntries = weekly.locator('.time-entry-list .note-entry');
+  assert.equal(
+    await weekly.locator('.time-entry-list .timesheet-entry').count(),
+    1
+  );
+  await weekly.getByLabel('Team member', { exact: true }).click();
+  await weekly.getByRole('radio', { name: 'All users', exact: true }).click();
+  await weekly.getByText(/Weekly overtime/).waitFor();
+  const weeklyEntries = weekly.locator('.time-entry-list .timesheet-entry');
   for (const checkbox of await weeklyEntries
-    .getByRole('checkbox', { name: 'Select time entry', exact: true })
+    .getByRole('checkbox', { name: /^Select time entry:/ })
     .all())
     await checkbox.check();
   await weekly
@@ -861,7 +874,7 @@ try {
     () =>
       [
         ...document.querySelectorAll(
-          '.time-entry-panel[aria-label="Weekly timesheet"] .time-entry-list button[aria-label="Revoke approval"]'
+          '.time-entry-panel[aria-label="Weekly timesheet"] .time-entry-list button[aria-label="Return to pending"]'
         )
       ].length === 2
   );
@@ -870,7 +883,7 @@ try {
     0
   );
   for (const checkbox of await weeklyEntries
-    .getByRole('checkbox', { name: 'Select time entry', exact: true })
+    .getByRole('checkbox', { name: /^Select time entry:/ })
     .all())
     await checkbox.check();
   await weekly
@@ -883,26 +896,26 @@ try {
     () =>
       [
         ...document.querySelectorAll(
-          '.time-entry-panel[aria-label="Weekly timesheet"] .time-entry-list button[aria-label="Approve time entry"]'
+          '.time-entry-panel[aria-label="Weekly timesheet"] .time-entry-list button[aria-label="Approve entry"]'
         )
       ].length === 2
   );
   await weeklyEntries
     .filter({ hasText: 'Weekly overtime' })
-    .getByRole('button', { name: 'Edit time entry', exact: true })
+    .getByRole('button', { name: 'Edit entry', exact: true })
     .tap();
-  await weekly.getByLabel('Hours', { exact: true }).fill('2.5');
+  await weekly.getByLabel('Duration, hours', { exact: true }).fill('2.5');
   await weekly
-    .locator('form')
+    .locator('.work-hour-form')
     .getByRole('button', { name: 'Save & Approve', exact: true })
     .tap();
   await weeklyEntries
     .filter({ hasText: 'Weekly overtime' })
-    .getByText(/2.5 h/)
+    .getByText('2.5 h', { exact: true })
     .waitFor();
   await weeklyEntries
     .filter({ hasText: 'Weekly regular' })
-    .getByRole('button', { name: 'Edit time entry', exact: true })
+    .getByRole('button', { name: 'Edit entry', exact: true })
     .tap();
   await weekly
     .getByLabel('Description', { exact: true })
@@ -915,7 +928,7 @@ try {
     'Protected weekly draft'
   );
   await weekly
-    .locator('form')
+    .locator('.work-hour-form')
     .getByRole('button', { name: 'Cancel', exact: true })
     .tap();
   await weekly.getByRole('button', { name: 'Next week', exact: true }).tap();
@@ -925,20 +938,19 @@ try {
   await weekly
     .getByRole('button', { name: 'Previous week', exact: true })
     .tap();
-  await weekly.getByText('Weekly regular', { exact: true }).waitFor();
+  await weekly.getByText(/Weekly regular/).waitFor();
   await page.setViewportSize({ width: 320, height: 740 });
   assert.equal(
     await weekly.evaluate((el) => el.scrollWidth <= el.clientWidth),
     true
   );
-  assert.equal(
-    await weekly
-      .locator('.timesheet-summary')
-      .evaluate(
-        (el) => getComputedStyle(el).gridTemplateColumns.split(' ').length
-      ),
-    2
-  );
+  const loggedSummary = await weekly
+    .locator('[data-frame="timesheetSummary-logged"]')
+    .boundingBox();
+  const pendingSummary = await weekly
+    .locator('[data-frame="timesheetSummary-pending"]')
+    .boundingBox();
+  assert.ok(pendingSummary.y >= loggedSummary.y + loggedSummary.height);
   if (process.argv[3])
     await page.screenshot({
       path: process.argv[3].replace('.png', '-weekly-mobile.png'),
@@ -968,10 +980,13 @@ try {
   );
   await reports.getByLabel('Report', { exact: true }).selectOption('approval');
   await reports
-    .locator('.work-report-row')
+    .locator('[data-frame="workReportValueLabel"]')
     .getByText('Approved', { exact: true })
     .waitFor();
-  assert.equal(await reports.locator('.work-report-row').count(), 2);
+  assert.equal(
+    await reports.locator('[data-frame="workReportValueLabel"]').count(),
+    2
+  );
   assert.equal(
     await reports.evaluate((el) => el.scrollWidth <= el.clientWidth),
     true
@@ -1490,7 +1505,7 @@ try {
     String(loadedKeys.size + requests.at(-1).search_keys.length + 1)
   );
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.clock.runFor(50);
+  await page.clock.resume();
   await first.getByRole('button', { name: 'publish (2)', exact: true }).click();
   await notes.getByLabel('Note text', { exact: true }).fill('');
   await page.evaluate(() =>

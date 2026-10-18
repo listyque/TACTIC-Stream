@@ -406,6 +406,33 @@ def fingerprints(handler):
             "test_native_file_integration.py",
         )
     ]
+    checks += [
+        ROOT / "frontend/tests" / name
+        for name in (
+            "frame_remaining.mjs",
+            "frame_remaining_workflows.mjs",
+            "frame_remaining_capture.mjs",
+        )
+    ]
+    checks += [
+        handler / "tests" / name
+        for name in (
+            "frame_remaining_fixture.py",
+            "fixtures/FrameRemainingHarness.qml",
+            "test_frame_remaining.py",
+            "test_knowledge_base.py",
+            "test_work_hours.py",
+        )
+    ]
+    checks += [
+        path
+        for path in (ROOT / "tools/frame_remaining").iterdir()
+        if path.is_file() and path.suffix in (".py", ".vue", ".mjs", ".html", ".json")
+    ]
+    checks += [
+        ROOT / "src/tactic_stream/server/messages.py",
+        ROOT / "tests/test_messages.py",
+    ]
     for index, path in enumerate(checks):
         result[f"check/{index}/{path.name}"] = hashlib.sha256(
             path.read_bytes()
@@ -510,6 +537,54 @@ def main():
         ("notification-state", ["node", "frontend/tests/notifications.mjs"], ROOT, {}),
         ("files-state", ["node", "frontend/tests/frame_files_state.mjs"], ROOT, {}),
         ("scripts-state", ["node", "frontend/tests/frame_scripts_state.mjs"], ROOT, {}),
+        ("remaining-state", ["node", "frontend/tests/frame_remaining.mjs"], ROOT, {}),
+        (
+            "remaining-production-workflows",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "test_transport.Transport.test_knowledge_base_in_chromium",
+                "test_transport.Transport.test_api_documentation_and_console",
+                "test_transport.Transport.test_native_table_cells_in_chromium",
+                "test_messages",
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        (
+            "remaining-browser-input",
+            ["node", "frontend/tests/frame_remaining_workflows.mjs"],
+            ROOT,
+            {},
+        ),
+        *[
+            (
+                "native-remaining-" + name,
+                python + ["-m", "unittest", "-q", "tests." + module],
+                handler,
+                {"QT_QUICK_CONTROLS_STYLE": "Basic"},
+            )
+            for name, module in (
+                ("knowledge", "test_knowledge_base"),
+                ("work-hours", "test_work_hours"),
+                ("input", "test_frame_remaining"),
+            )
+        ],
+        (
+            "remaining-inventory",
+            python
+            + ["tools/frame_foundation/inventory.py", "--handler-root", str(handler)],
+            ROOT,
+            {},
+        ),
+        (
+            "remaining-coverage",
+            python + ["tools/frame_remaining/coverage.py"],
+            ROOT,
+            {},
+        ),
         (
             "scripts-server",
             python

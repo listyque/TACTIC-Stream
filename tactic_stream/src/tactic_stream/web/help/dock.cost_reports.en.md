@@ -1,5 +1,5 @@
 ---
-reference: Handler
+reference: Handler / Stream
 group: Docks
 icon: payments
 order: 35
@@ -40,3 +40,7 @@ permission or data message above the report before treating zero as a real finan
 ## TACTIC Stream placement
 
 Cost Reports has its own dock and uses the existing authorized Labor Cost report. Its project/week state is independent of Work Reports and Weekly Timesheet. Server financial permissions still apply.
+
+## Access and presentation
+
+Cost Reports reuse the shared Work Reports composition. Wage/cost data remains protected by the existing server and controller permissions; a shared layout does not grant finance access. Browser report choices come from the authorized server response.

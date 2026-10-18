@@ -1,8 +1,6 @@
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, k as t } from "./index.js";
-import { A as node, D as button, O as label, j as rect, k as muted, t as _sfc_main$1, u as translate } from "./FrameView.js";
-import { V as securityRules } from "./CodeBlock.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { Gt as rect, Ht as label, Ut as muted, Vt as button, Wt as node, i as _sfc_main$1, pt as securityRules, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/security/security.state.mjs
 var matrixScopes$1 = [

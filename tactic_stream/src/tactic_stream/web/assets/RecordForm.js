@@ -1,9 +1,7 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, X as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode, z as useId } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$4, k as t, o as mobile } from "./index.js";
-import { A as node, D as button, O as label, T as _sfc_main$5, j as rect, t as _sfc_main$6, u as translate, v as _sfc_main$9, w as _sfc_main$8, y as _sfc_main$7 } from "./FrameView.js";
-import { F as rpc, Y as uploadFormFile, f as _sfc_main$11, p as _sfc_main$10, v as formDefinition } from "./CodeBlock.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { D as _sfc_main$10, Gt as rect, Ht as label, N as _sfc_main$9, O as _sfc_main$7, P as _sfc_main$5, R as _sfc_main$11, Vt as button, W as formDefinition, Wt as node, i as _sfc_main$6, r as observeFrameSizes, st as rpc, xt as uploadFormFile, y as translate, z as _sfc_main$8 } from "./CodeBlock.js";
 import { n as arrange, t as _sfc_main$12 } from "./ObjectFieldFrame.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js
@@ -598,11 +596,11 @@ var _sfc_main = {
 	},
 	components: {
 		AppDateField: _sfc_main$7,
-		AppSwitch: _sfc_main$10,
-		AppColorInput: _sfc_main$8,
+		AppSwitch: _sfc_main$8,
+		AppColorInput: _sfc_main$9,
 		AppButton: _sfc_main$4,
 		AppTextField: _sfc_main$5,
-		AppTextArea: _sfc_main$9,
+		AppTextArea: _sfc_main$10,
 		AppSelect: _sfc_main$11,
 		ObjectFieldFrame: _sfc_main$12,
 		ObjectFieldGrid: _sfc_main$3,

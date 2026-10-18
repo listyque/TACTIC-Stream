@@ -1,5 +1,5 @@
 ---
-reference: Handler
+reference: Handler / Stream
 group: Docks
 icon: bar-chart
 order: 34
@@ -43,3 +43,7 @@ not task status.
 ## TACTIC Stream placement
 
 This is a workspace dock, independent of Weekly Timesheet and Cost Reports. Selecting Labor Cost opens the Cost Reports dock through the existing authorized WorkHours command. Closing or hiding a dock keeps the other panels and their state.
+
+## Shared report presentation
+
+The report selector and value rows share one Frame composition. The narrow selector contains only reports allowed by the existing permissions; desktop keeps inaccessible report types disabled. Long value lists are virtualized and scroll to their last row without creating every delegate. Refresh reloads through the existing report controller. Native team/cost capabilities and browser server-provided report options remain explicit.

@@ -1,12 +1,11 @@
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, p as computed, rt as toDisplayString, u as Fragment, y as createTextVNode } from "./vue.js";
 import { A as appearance, Z as preferences, at as _plugin_vue_export_helper_default, c as _sfc_main$3, k as t, o as mobile } from "./index.js";
-import { A as node, D as button, O as label, j as rect, t as _sfc_main$4, u as translate } from "./FrameView.js";
-import { F as rpc, P as resultItems, Y as uploadFormFile, w as navigationLink } from "./CodeBlock.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { Gt as rect, Ht as label, Vt as button, Wt as node, X as navigationLink, i as _sfc_main$4, ot as resultItems, r as observeFrameSizes, st as rpc, xt as uploadFormFile, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { a as sourcePath, c as prettySize, l as sourceIcon } from "./files.js";
+import { t as _sfc_main$5 } from "./AppDialog.js";
 import { t as describe$1 } from "./confirmation.ui.js";
-import { C as _sfc_main$5, w as captionedSwitch } from "./App.js";
+import { w as captionedSwitch } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/object_checkin.ui.mjs
 function modeChoice(model, width, language) {
 	const tr = (text, values) => translate(text, language, values), compact = width < 360, headingHeight = model.inline ? 26 : 64, columns = compact || model.inline ? 2 : 3, gap = 8, cell = (width - gap * (columns - 1)) / columns, children = [label("multiFileCheckinQuestion", rect(0, 0, width, headingHeight), model.inline ? tr("Check in multiple files?") : tr("{count} files selected. Check in one group or separately in sequence?", { count: model.count }), { wrap: true })], choices = [[

@@ -1,4 +1,20 @@
 {
+  "_AppDialog.css": {
+    "file": "assets/AppDialog.css",
+    "src": "_AppDialog.css"
+  },
+  "_AppDialog.js": {
+    "file": "assets/AppDialog.js",
+    "name": "AppDialog",
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_CodeBlock.js"
+    ],
+    "css": [
+      "assets/AppDialog.css"
+    ]
+  },
   "_AppMenuItem.css": {
     "file": "assets/AppMenuItem.css",
     "src": "_AppMenuItem.css"
@@ -24,7 +40,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js"
+      "_CodeBlock.js"
     ],
     "css": [
       "assets/AttachmentCard.css"
@@ -39,6 +55,7 @@
     "name": "CodeBlock",
     "imports": [
       "_vue.js",
+      "_icons.js",
       "index.html"
     ],
     "css": [
@@ -55,28 +72,11 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
+      "_CodeBlock.js",
       "_files.js"
     ],
     "css": [
       "assets/FilePreview.css"
-    ]
-  },
-  "_FrameView.css": {
-    "file": "assets/FrameView.css",
-    "src": "_FrameView.css"
-  },
-  "_FrameView.js": {
-    "file": "assets/FrameView.js",
-    "name": "FrameView",
-    "imports": [
-      "_vue.js",
-      "_icons.js",
-      "index.html",
-      "_CodeBlock.js"
-    ],
-    "css": [
-      "assets/FrameView.css"
     ]
   },
   "_NamingEditor.js": {
@@ -86,9 +86,7 @@
       "_rolldown-runtime.js",
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
       "_admin.document.js"
     ]
@@ -103,8 +101,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
-      "_resize.js"
+      "_CodeBlock.js"
     ],
     "css": [
       "assets/ObjectFieldFrame.css"
@@ -120,9 +117,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_links.js",
       "_textMetrics.js",
       "_AttachmentCard.js",
@@ -143,9 +138,7 @@
       "_rolldown-runtime.js",
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_ObjectFieldFrame.js",
       "_sections.ui.js"
     ],
@@ -157,14 +150,14 @@
     "file": "assets/admin.document.js",
     "name": "admin.document",
     "imports": [
-      "_FrameView.js"
+      "_CodeBlock.js"
     ]
   },
   "_confirmation.ui.js": {
     "file": "assets/confirmation.ui.js",
     "name": "confirmation.ui",
     "imports": [
-      "_FrameView.js"
+      "_CodeBlock.js"
     ]
   },
   "_files.js": {
@@ -182,8 +175,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
-      "_resize.js",
+      "_CodeBlock.js",
       "_sections.ui.js",
       "_admin.document.js"
     ]
@@ -192,7 +184,7 @@
     "file": "assets/groups.ui.js",
     "name": "groups.ui",
     "imports": [
-      "_FrameView.js"
+      "_CodeBlock.js"
     ]
   },
   "_icons.js": {
@@ -207,10 +199,6 @@
     "file": "assets/locales.js",
     "name": "locales"
   },
-  "_resize.js": {
-    "file": "assets/resize.js",
-    "name": "resize"
-  },
   "_rolldown-runtime.js": {
     "file": "assets/rolldown-runtime.js",
     "name": "rolldown-runtime"
@@ -220,14 +208,14 @@
     "name": "sections.ui",
     "imports": [
       "index.html",
-      "_FrameView.js"
+      "_CodeBlock.js"
     ]
   },
   "_snapshot.ui.js": {
     "file": "assets/snapshot.ui.js",
     "name": "snapshot.ui",
     "imports": [
-      "_FrameView.js"
+      "_CodeBlock.js"
     ]
   },
   "_textMetrics.js": {
@@ -242,7 +230,7 @@
     "file": "assets/tree.ui.js",
     "name": "tree.ui",
     "imports": [
-      "_FrameView.js"
+      "_CodeBlock.js"
     ]
   },
   "_vue.js": {
@@ -282,10 +270,8 @@
       "_rolldown-runtime.js",
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
       "_RecordForm.js",
-      "_resize.js",
       "_sections.ui.js",
       "_links.js",
       "_textMetrics.js",
@@ -296,6 +282,7 @@
       "_FilePreview.js",
       "_AppMenuItem.js",
       "_tree.ui.js",
+      "_AppDialog.js",
       "_confirmation.ui.js"
     ],
     "dynamicImports": [
@@ -360,9 +347,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
       "src/App.vue",
       "_admin.document.js"
@@ -376,9 +361,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
       "src/App.vue",
       "_admin.document.js"
@@ -392,9 +375,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_admin.document.js"
     ]
   },
@@ -406,9 +387,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_admin.document.js",
       "src/features/administration/SearchTypes.vue",
       "_graphFrame.js"
@@ -425,9 +404,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
       "src/App.vue",
       "_admin.document.js",
@@ -442,9 +419,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_groups.ui.js"
     ]
   },
@@ -456,9 +431,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_admin.document.js"
     ]
   },
@@ -470,9 +443,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_groups.ui.js"
     ]
   },
@@ -484,9 +455,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
       "_tree.ui.js",
       "_admin.document.js"
@@ -500,9 +469,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
       "_ObjectReport.js",
       "_admin.document.js",
@@ -520,10 +487,9 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
+      "_AppDialog.js",
       "_confirmation.ui.js",
       "src/App.vue"
     ],
@@ -539,9 +505,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js"
     ],
     "css": [
@@ -556,11 +520,10 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
       "_files.js",
+      "_AppDialog.js",
       "_confirmation.ui.js",
       "src/App.vue"
     ],
@@ -576,10 +539,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
       "_RecordForm.js",
-      "_resize.js",
       "_textMetrics.js",
       "src/App.vue"
     ],
@@ -596,6 +557,9 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js"
+    ],
+    "css": [
+      "assets/ApiDocumentation.css"
     ]
   },
   "src/features/fileWorkspace/FileWorkspaceInspection.vue": {
@@ -606,12 +570,11 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_sections.ui.js",
       "_files.js",
       "_AppMenuItem.js",
+      "_AppDialog.js",
       "_confirmation.ui.js",
       "src/App.vue"
     ],
@@ -626,8 +589,8 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_icons.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
       "_links.js",
       "_AttachmentCard.js",
@@ -663,9 +626,7 @@
       "_rolldown-runtime.js",
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "_ObjectFieldFrame.js",
       "_sections.ui.js",
       "src/App.vue"
@@ -691,10 +652,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
       "_RecordForm.js",
-      "_resize.js",
       "_snapshot.ui.js",
       "_FilePreview.js",
       "src/App.vue"
@@ -711,9 +670,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
       "src/App.vue"
     ],
     "css": [
@@ -728,8 +685,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
-      "_resize.js"
+      "_CodeBlock.js"
     ],
     "css": [
       "assets/TaskCalendarView.css"
@@ -743,7 +699,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js"
+      "_CodeBlock.js"
     ],
     "css": [
       "assets/TaskGanttView.css"
@@ -757,8 +713,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
-      "_resize.js",
+      "_CodeBlock.js",
       "src/App.vue"
     ],
     "css": [

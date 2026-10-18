@@ -183,3 +183,7 @@ Delivery state, the full timestamp and edit metadata can be focused with the key
 The emoji picker keeps large glyphs, categories, search, keyboard navigation and its
 own scrollbar. Leaving or expiring the session stops further communication requests
 until authentication succeeds again.
+
+## First-use confirmation
+
+When collaboration storage is missing, **Initialize** opens a confirmation explaining the message metadata and Knowledge Base schema changes. Cancel leaves the schema unchanged. Existing columns and data are preserved on confirmation. The dialog closes when the active project changes; initialization uses the existing server permissions and mutation path.

@@ -1,11 +1,10 @@
 import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, J as markRaw, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString } from "./vue.js";
 import { A as appearance, D as randomId, at as _plugin_vue_export_helper_default, c as _sfc_main$2, k as t } from "./index.js";
-import { A as node, D as button, O as label, j as rect, k as muted, t as _sfc_main$3, u as translate } from "./FrameView.js";
-import { F as rpc } from "./CodeBlock.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { Gt as rect, Ht as label, Ut as muted, Vt as button, Wt as node, i as _sfc_main$3, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
+import { t as _sfc_main$4 } from "./AppDialog.js";
 import { t as describe$1 } from "./confirmation.ui.js";
-import { C as _sfc_main$5, H as _sfc_main$4 } from "./App.js";
+import { H as _sfc_main$5 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/ingest.ui.mjs
 function optionValue(field, value) {
 	return field === "updateMode" ? value ? "update" : "insert" : value;
@@ -391,7 +390,7 @@ var _sfc_main$1 = {
 			}
 		})));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$1, [createVNode(_sfc_main$4, {
+			return openBlock(), createElementBlock("div", _hoisted_1$1, [createVNode(_sfc_main$5, {
 				items: items.value,
 				"row-gap": 4
 			}, {
@@ -410,7 +409,7 @@ var _sfc_main$1 = {
 var _sfc_main = {
 	components: {
 		AppButton: _sfc_main$2,
-		AppDialog: _sfc_main$5,
+		AppDialog: _sfc_main$4,
 		FrameView: _sfc_main$3
 	},
 	inject: {

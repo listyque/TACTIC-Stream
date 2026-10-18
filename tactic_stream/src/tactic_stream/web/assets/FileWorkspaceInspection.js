@@ -1,13 +1,12 @@
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { A as appearance, B as cssRoles, C as redact, K as metrics, N as frameColors, R as controls, at as _plugin_vue_export_helper_default, c as _sfc_main$16, k as t, x as logEvent } from "./index.js";
-import { A as node, D as button, O as label, T as _sfc_main$19, a as _sfc_main$20, b as _sfc_main$18, j as rect, t as _sfc_main$17, u as translate } from "./FrameView.js";
-import { f as _sfc_main$21, o as copyText } from "./CodeBlock.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { Gt as rect, Ht as label, P as _sfc_main$20, R as _sfc_main$19, Vt as button, Wt as node, _ as copyText, c as _sfc_main$21, i as _sfc_main$17, k as _sfc_main$18, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { c as prettySize } from "./files.js";
 import { t as _sfc_main$22 } from "./AppMenuItem.js";
+import { t as _sfc_main$23 } from "./AppDialog.js";
 import { t as describe$7 } from "./confirmation.ui.js";
-import { C as _sfc_main$24, S as _sfc_main$23 } from "./App.js";
+import { C as _sfc_main$24 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/workspace/toolbar.ui.mjs
 function views$1(model, width, height, language) {
 	const tr = (text) => translate(text, language), h = metrics(model.style).controlHeight, nodes = [], y = Math.max(0, (h - 28) / 2);
@@ -81,7 +80,7 @@ var WorkspaceToolbar_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			canActions: false
 		}, width.value, height.value, appearance.language));
 		const views = computed(() => ({ tabs: {
-			component: markRaw(_sfc_main$23),
+			component: markRaw(_sfc_main$24),
 			props: {
 				kind: "view",
 				tabs: props.tabs,
@@ -2185,7 +2184,7 @@ var _sfc_main$2 = {
 			}, [createVNode(_sfc_main$17, {
 				scene: scene.value,
 				onEvent: event
-			}, null, 8, ["scene"])], 8, _hoisted_1$1), createVNode(_sfc_main$24, {
+			}, null, 8, ["scene"])], 8, _hoisted_1$1), createVNode(_sfc_main$23, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "Run safe GC",
@@ -2472,9 +2471,9 @@ views.splice(7, 0, {
 var _sfc_main = {
 	components: {
 		AppButton: _sfc_main$16,
-		AppSelect: _sfc_main$21,
-		AppTextField: _sfc_main$19,
-		AppSplitter: _sfc_main$20,
+		AppSelect: _sfc_main$19,
+		AppTextField: _sfc_main$20,
+		AppSplitter: _sfc_main$21,
 		WorkspaceToolbar: WorkspaceToolbar_default,
 		WorkspaceTreePane: WorkspaceTreePane_default,
 		FileWorkspaceTree: FileWorkspaceTree_default,

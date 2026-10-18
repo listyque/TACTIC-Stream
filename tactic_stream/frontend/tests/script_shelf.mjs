@@ -143,6 +143,8 @@ try {
     const url = new URL(route.request().url());
     await route.fulfill({
       response: await route.fetch({
+        // A reset proxy read is safe to retry; mutations are never replayed.
+        maxRetries: route.request().method() === 'GET' ? 1 : 0,
         url: base + url.pathname + url.search,
         headers: {
           ...route.request().headers(),
@@ -511,6 +513,7 @@ try {
   });
   await page.reload();
   await ready();
+  await page.waitForFunction(() => document.documentElement.lang === 'ru');
   await page
     .locator('.search-header')
     .getByLabel('Шелф скриптов', { exact: true })

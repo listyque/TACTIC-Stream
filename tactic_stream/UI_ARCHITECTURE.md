@@ -3,6 +3,15 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
+## B14 remaining surfaces — 2026-10-19
+
+Stream 0.112.167 / Handler 0.6.0.118 share Knowledge Base, schema confirmation,
+Timesheet, reports and work-hour presentation. API/journal retain browser
+capabilities; native rich text, ACL, revisions, drafts and mutation owners stay
+in their existing hosts. Complete source ownership, evidence commands, restore
+points and remaining limits: [frame_remaining.md](docs/frame_remaining.md).
+B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
+
 ## B13 scripts and native tools — delivered, 2026-10-18
 
 Stream 0.112.166 / Handler 0.6.0.117 connect Script Editor/source commands,

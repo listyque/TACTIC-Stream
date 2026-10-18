@@ -1,0 +1,5253 @@
+{
+  "scope": "Every inventoried QML/Vue source, including public aliases and typed renderer adapters. Per-surface classification is not a pixel-parity claim.",
+  "dispositions": {
+    "batch evidence": "See the corresponding acceptance ledger and current platform gate.",
+    "B07 partial": "Adapted table presenters are delivered; 40 usable legacy widget classes remain open.",
+    "client capability": "No separate corresponding product surface; native or browser capability remains with its existing owner."
+  },
+  "sources": [
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ActionMenu.qml",
+      "batch": "B02",
+      "role": "control/renderer",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ActionMenuRow.qml",
+      "batch": "B02",
+      "role": "control/renderer",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ActivityCalendarPopup.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ActivityEventCard.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ActivityFeedView.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/AdvancedSearchView.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/AttachmentCard.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/AttachmentComposerControls.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/AttachmentStagingPanel.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/CheckinOptionsPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/CollaborationInitializationState.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/CommitQueueView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/CommitWorkspaceView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/CommunicationView.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationAppearancePage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationCachePage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationDccPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationGlobalPreferencesPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationProjectPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationRepositoryPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationSection.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationServerPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationTaskPreferencesPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ConfigurationView.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ContentLoadingOverlay.qml",
+      "batch": "B02",
+      "role": "control/renderer",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/AccentPresetPicker.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ActivationHandler.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/AttachmentDropArea.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/BusyIndicator.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/Button.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/CheckBox.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ColorField.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ColorPickerDialog.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ComboBox.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/CompactIconButton.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/CompletionStrip.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/DateField.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/Dialog.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/DialogActions.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/DisclosureButton.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/DockDragGrip.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/DockWorkspaceFooter.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/DocumentPane.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/DropTargetOverlay.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/EditorListItem.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/EditorPanel.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/EmptyState.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/feedback/ProgressBar.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/FilledActionButton.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/forms/SearchSuggestionsPopup.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/GraphPort.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/HierarchyGuide.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/HierarchyReveal.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/HoverReleaseCoordinator.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ImageFileDialog.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ImagePicker.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/InfoValueStrip.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/InitialBatchPresentation.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ItemCountActionButton.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ItemPreview.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ItemSurface.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/MaterialIcon.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/MaterialRipple.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/Menu.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/NavigationRow.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/NodeGraph.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/NodeGraphSelectionArea.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/Popup.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/PopupAction.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/PopupBackground.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/PopupCoordinator.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/PopupScrim.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/PreviewNavigationButton.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ProcessSelectionTree.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ProfileInfoRow.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ProjectCard.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ProjectFilterToggles.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ResizeGripVisual.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ResponsiveFlow.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ScriptCodeEditor.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ScrollablePopup.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ScrollBar.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SearchField.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SectionLabel.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SegmentedButton.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SelectableText.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SettingsNavigationItem.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SettingsRow.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/Slider.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SmoothListView.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SpinBox.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SplitterHandle.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/StatusChip.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/SummaryChip.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/Switch.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/TabButton.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/TextArea.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/TextContextMenu.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/TextField.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/ToolTip.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/TreeExpansionMotion.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/Typography.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/WorkspaceTabInput.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/WorkspaceTabVisual.qml",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/CostReportsView.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DatabaseBatchEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DatabaseEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DccOptionsView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DebugLogView.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DeleteSObjectView.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DemoThinClientWindow.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "client capability"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DescriptionEditor.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DropPlateView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/DuplicateSObjectView.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/EmojiPicker.qml",
+      "batch": "B02",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ErrorDialog.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/activity/NotificationHistoryRow.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/activity/NotificationToast.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/AdministrationView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/columns/ColumnsEditorView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/common/AdminDocumentShell.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/common/AdminSaveBar.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/common/AdminXmlEditor.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/database/AdminRawDatabaseView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/database/RawCellEditorView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/groups/SecurityGroupsView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/layouts/LayoutEditorView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/naming/NamingEditorHeader.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/naming/NamingEditorView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/schema/AdminSchemaConnection.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/schema/AdminSchemaDeleteConfirmation.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/schema/AdminSchemaTypeView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/search_types/AdminSearchTypeFields.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/search_types/AdminSearchTypePreview.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/search_types/AdminSearchTypeRelationshipMap.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/search_types/AdminSearchTypeSummary.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/search_types/AdminSearchTypesView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/search_types/AdminSearchTypeWorkflows.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/security/AdminSecurityMatrix.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/security/AdminSecurityRuleEditor.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/security/AdminSecurityRules.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/security/AdminSecurityTechnical.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/security/AdminSecurityView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/sidebar/SidebarEditorView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/sidebar/SidebarEntrySettings.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/sidebar/SidebarTechnicalSettings.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/users/AdminUsersView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminGraphProperties.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminGraphView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminPipelineSettings.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminProcessFields.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminProcessRuleAction.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminProcessRuleForm.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminProcessRulesView.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminProcessSettings.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/administration/workflow/AdminWorkflowList.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/collaboration/InitializationState.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/configuration/SettingsPage.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/checkin/CheckinDialogs.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/IngestFileList.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/queue/QueueView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/screenshot/ScreenshotView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/sync/SyncEditorView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/sync/SyncQueueView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceCatalog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceChangelistFiles.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceChangelistView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceComparisonDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceDepots.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceFileRow.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceGetRevisionDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceHistory.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceInspector.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceLog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceMappings.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceNavigation.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceRevertDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceReviewDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceShelfDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceStorage.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceStreamEditor.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceStreamGraph.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceStreams.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceSubmitDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceTargetDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/FileWorkspaceTreeRow.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceChangeBranch.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceChangeFile.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceDetails.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceDialogs.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceFilters.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceFooter.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceToolbar.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceTreePane.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/files/workspace/WorkspaceView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeArticleAttachments.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeArticleContent.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeArticleEditor.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeArticleViewer.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeAttachmentLibrary.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeBaseView.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeEditorCommands.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeEditorImageOverlay.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeImageSelectionOverlay.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeLinkedObjectHeader.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeNavigation.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeRevisionHistoryPopup.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeRichTextBlockDecorations.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeRichTextToolbar.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/knowledge/KnowledgeTableOfContents.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/messages/MessageBody.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/messages/MessageForm.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/messages/MessageForward.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/messages/MessageHeader.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/messages/MessageReference.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/messages/MessageRevision.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/objects/DescriptionValue.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/objects/NoteBody.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/objects/NoteDeleteDialog.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/objects/NoteEditDialog.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/objects/ObjectDependencyList.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/objects/ObjectEditorSurface.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/objects/ObjectInspectorQuick.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/objects/ObjectReportSurface.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/scripts/ScriptEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/scripts/ScriptShelfBar.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/scripts/ScriptShelfEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/scripts/ScriptSource.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/scripts/ScriptTriggerEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/search/ConditionRow.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/search/ConditionValue.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/search/WorkspaceSearchTabInput.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/support/feedback/ErrorRequestBlocks.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/support/help/HelpView.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/support/identity/UserProfileActivity.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/TaskSummaryCell.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/ValueEditor.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/ValueFieldsCell.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskBrowserRow.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskBulkField.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskCellDisplay.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskColumnsPopup.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskEmptyState.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskGanttRow.qml",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskInlinePopup.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskOptionsPopup.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskProcessItem.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskProcessToolbar.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskScheduleDialog.qml",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskScopePopup.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskTableHeader.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tasks/TaskWorkspaceToolbar.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tools/DatabaseBatchEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tools/DatabaseEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tools/DccOptionsView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/tools/HandlerServerView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/workhours/CostReportsView.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/workhours/TimesheetView.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/workhours/WorkHourEditorDialog.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/workhours/WorkReportsView.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceCatalog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceChangelistFiles.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceChangelistView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceComparisonDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceDepots.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceFileRow.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceGetRevisionDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceHistory.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceInspector.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceLog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceMappings.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceNavigation.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceRevertDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceReviewDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceShelfDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceStorage.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceStreamEditor.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceStreamGraph.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceStreams.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceSubmitDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceTargetDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceTreeRow.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/FileWorkspaceView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/HandlerServerView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/IconPickerButton.qml",
+      "batch": "B02",
+      "role": "control/renderer",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/IngestConflictDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/IngestFilesView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/IngestRuleEditor.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ItemCheckinDialogs.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ItemQuickActions.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeArticleAttachments.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeArticleContent.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeArticleEditor.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeArticleViewer.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeAttachmentLibrary.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeBaseView.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeEditorImageOverlay.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeImageSelectionOverlay.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeLinkedObjectHeader.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeNavigation.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeRevisionHistoryPopup.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeRichTextBlockDecorations.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeRichTextToolbar.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/KnowledgeTableOfContents.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/LinkList.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/LinkSObjectsView.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/LoginDialog.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/Main.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MatchingTemplatesView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessageBodyText.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessageComposerField.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessageForwardPreview.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessageReactionChip.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessageReactionPicker.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessageReplyPreview.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessagesConversationList.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessageSendButton.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessagesTimeline.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessagesView.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MessageTimelineFrame.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/MilestoneManagerView.qml",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/NavigationDrawer.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/NotesTimelinePosition.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/NotificationStack.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/NotificationsView.qml",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ProcessFilterEditorView.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ProjectChooser.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ProjectEditorView.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ProjectTemplatesView.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ProjectWizardView.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/QuickFilterChip.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/QuickFilterEditorView.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/QuickFilterOptions.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/RefreshIconButton.qml",
+      "batch": "B02",
+      "role": "control/renderer",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/RepositoryEditorView.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/RepositorySetupPrompt.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/RepositorySyncEditorView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/RepositorySyncView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/RevisionHistoryPopup.qml",
+      "batch": "B02",
+      "role": "control/renderer",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScreenshotMakerView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScriptEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScriptOutline.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScriptSavedHistoryButton.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScriptShelfBar.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScriptShelfEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScriptTree.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScriptTreePicker.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ScriptTriggerEditorView.qml",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchAssigneeFilterPopup.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchPresetBar.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchQuickFilterPopup.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchResultMenus.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchResultsPane.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchResultSurface.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchResultTable.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchResultTableHeader.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SearchWorkspaceView.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SectionTabRail.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/ServerPresetsView.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/docks/DockContentRegistry.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/docks/DockHost.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/docks/DockMenu.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/docks/DockPanel.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/docks/DockResizeEdge.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/docks/DockTitleDrag.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/docks/DockTitleLabel.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/windows/DetachedDockWindow.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/windows/FloatingWindow.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/windows/NotificationToastWindow.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/windows/UnregisteredWindow.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/windows/WindowContent.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/windows/WindowHost.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/shell/windows/WindowSizing.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SidebarSearchPreview.qml",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SKeyPreviewCard.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SnapshotBrowser.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SnapshotBrowserOptionsMenu.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SnapshotBrowserToolbar.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SnapshotPreviewLayers.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SnapshotSummary.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SObjectFieldDelegate.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SObjectFieldEditor.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SObjectFieldFrame.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SObjectFieldGrid.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SObjectInfoView.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SObjectSnapshotTree.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/SObjectValueEditor.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TableTextEditor.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TableViewPresetMenu.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/controls/code/FrameCode.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/controls/code/FrameCodeBranch.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/controls/forms/FrameUserChoice.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/controls/graph/FrameGraph.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/controls/graph/FrameGraphBranch.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/controls/grid/FrameGrid.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/controls/grid/FrameGridBranch.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/controls/lists/FrameArrayList.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/core/FrameBranch.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/core/FrameDragScope.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/tactic_frame/core/FrameView.qml",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TacticCompletionCell.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TacticSearchField.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TacticStructuredTableCell.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TacticTableActionCell.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TacticTableCellDisplay.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TacticTableInlineEditor.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TacticTaskCards.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TacticTaskCell.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TagCloudPopup.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskBrowserTable.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskBulkBar.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskCalendarView.qml",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskDockView.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskEditorReleaseCoordinator.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskGanttProgressHandle.qml",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskGanttView.qml",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskHiddenDetails.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskInspector.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskPendingChangesBar.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskProcessPanel.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskQuickFilterPopup.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TasksWorkspaceView.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskTableEditorCell.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskWorkspaceModeSwitcher.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskWorkspaceSummary.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TaskWorkspaceSurfaceSwitcher.qml",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/Theme.qml",
+      "batch": "B02",
+      "role": "control/renderer",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/TimesheetView.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UiPerformanceView.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UpdatePrompt.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UpdateView.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserAvatar.qml",
+      "batch": "B02",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserComboBox.qml",
+      "batch": "B02",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserFilter.qml",
+      "batch": "B02",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserGroupMembershipEditor.qml",
+      "batch": "B02",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserGroupSection.qml",
+      "batch": "B02",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserIdentity.qml",
+      "batch": "B02",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserPicker.qml",
+      "batch": "B02",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserProfileEditorDialog.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserProfileView.qml",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/UserWorkSummary.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WatchFolderDeleteDialog.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WatchFolderEditorView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WatchFoldersView.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WorkHourEditorDialog.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WorkHoursSummary.qml",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WorkReportsView.qml",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WorkspaceCard.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WorkspaceFileDropTarget.qml",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WorkspaceLayoutPresetMenuSection.qml",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/WorkspaceResultItem.qml",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/App.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AccentPresetPicker.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/ActionRow.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/ActionRows.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/actions/DisclosureButton.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/actions/PreviewNavigationButton.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppButton.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppCheckbox.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppColorInput.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppDateField.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppDialog.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppEditableSelect.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppIcon.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppMenu.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppMenuItem.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppProgress.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppSearchField.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppSegmentedButton.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppSelect.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppSlider.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppSplitter.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppSwitch.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppTabButton.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppTextArea.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AppTextField.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/AttachmentCard.vue",
+      "batch": "B11",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/BusyIndicator.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/CodeBlock.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/CodeEditor.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/ColorPicker.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/display/ContentLoadingOverlay.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/display/DropTargetOverlay.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/display/EmptyState.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/display/QuickFilterChip.vue",
+      "batch": "B06",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/display/ReactionChip.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/display/StatusChip.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/DockGrip.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/DockWorkspaceFooter.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/DocumentPane.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/EmojiPicker.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/forms/AppSpinBox.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/forms/FormFieldFrame.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/IconPicker.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/ImagePicker.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/ItemPreview.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/ItemSurface.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/layout/ConfigurationSection.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/layout/EditorPanel.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/layout/InfoValueStrip.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/layout/SectionLabel.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/lists/EditorListItem.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/lists/VirtualCollection.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/MarkdownText.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/MiddleElide.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/MobilePage.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/NavigationRow.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/ProfileInfoRow.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/ResponsiveFlow.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/SectionTabRail.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/SectionTabVisual.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/SettingRow.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/StatusSelect.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/SummaryChip.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/UserComboBox.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/UserGroupSection.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/UserIdentity.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/UserPicker.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/WindowControls.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/WorkspaceTabs.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/WorkspaceTabVisual.vue",
+      "batch": "B02",
+      "role": "house control/composite",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/ActivityCalendar.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/ActivityEventCard.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/ActivityFeed.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/ActivityToolbar.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/ActivityUsers.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/NotificationHistoryRow.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/NotificationStack.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/NotificationToast.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/SystemActivity.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/activity/SystemActivityButton.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/AdministrationPort.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/AdministrationShell.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/AdminSaveBar.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/ColumnsEditor.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/LayoutEditor.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/NamingEditor.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/ProcessRules.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/RawCellEditor.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/RawDatabase.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/RelationshipMap.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SchemaEditor.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SchemaTypeDeletion.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SearchTypeFields.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SearchTypes.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SearchTypeSummary.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SecurityGroups.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SecurityRules.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SecurityUsers.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/SidebarEditor.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/WorkflowEditor.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/administration/WorkflowProcessSettings.vue",
+      "batch": "B03",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/CommitQueue.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/DropPlate.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/IngestFileList.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/IngestFiles.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/MatchingTemplates.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/ObjectCheckin.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/ObjectCheckinForm.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/ObjectRevisionConfirmation.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/queue/QueueDialogs.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/queue/QueuePreview.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/checkin/queue/QueueWorkspace.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/collaboration/InitializationState.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/configuration/AppearanceControls.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/configuration/AppearanceSettings.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/configuration/Configuration.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/configuration/FrameSettings.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/configuration/ProjectSettings.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/configuration/RepositoryEditor.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/configuration/RepositorySettings.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/configuration/ServerConfiguration.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/connection/ConnectionMenu.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/connection/ServerUpdates.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/connection/SignIn.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/debug/DebugLog.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/debug/ErrorDetails.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/debug/UiPerformance.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/documentation/ApiDocumentation.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "client capability"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/documentation/ApiParameter.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "client capability"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/FileWorkspace.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/FileWorkspaceDepots.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/FileWorkspaceInspection.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/FileWorkspaceInspector.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/FileWorkspaceLog.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/FileWorkspaceMappings.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/FileWorkspaceStorage.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/FileWorkspaceTree.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/StreamGraph.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/StreamGraphEdges.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/WorkspaceCatalog.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/WorkspaceInspectorView.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/WorkspaceLogEntries.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/WorkspaceLogMessage.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/WorkspaceTable.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/WorkspaceToolbar.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/WorkspaceTreePaint.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/fileWorkspace/inspection/WorkspaceTreePane.vue",
+      "batch": "B12",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/help/HelpView.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/CompletionCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/ConfiguredResultItem.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/ConfiguredView.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/GroupedCompletionCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/ItemLayout.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/ItemLayoutTable.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/StructuredCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TableCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TableInlineEditor.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TableView.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TaskCards.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TaskCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TaskSummaryCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TaskTableEditor.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/ValueFieldsCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/WidgetConfiguration.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/journal/JournalDetails.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "client capability"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/knowledge/KnowledgeBase.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/knowledge/KnowledgeEditor.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/knowledge/KnowledgeOutline.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/AttachmentComposerControls.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/AttachmentItem.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/ChatHeader.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/ConversationList.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/GalleryEntry.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageBody.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageBubble.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageComposer.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageForm.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageForward.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageHeader.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageMembers.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessagePanelHeader.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageReference.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessageRevision.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/MessagesView.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/messages/PinnedMessage.vue",
+      "batch": "B11",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/DescriptionEditor.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/DescriptionSurface.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/DescriptionValue.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/DuplicateSObject.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/FilePreview.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/FilePreviewContent.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/NoteBody.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/NoteDialogs.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/NoteEntry.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/NotesPanel.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectAction.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectDeleteSurface.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectDependencyList.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectDuplicateSurface.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectEditorSurface.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectFieldFrame.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectFieldGrid.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectInspectorQuick.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectLinkList.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectLinkSurface.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectOperations.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectReport.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectReportSurface.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/ObjectSnapshotTree.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/RecordForm.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/RelatedObjects.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/RelatedTasks.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/SKeyPreviewCard.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/SnapshotBrowser.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/SnapshotSummary.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/SnapshotToolbar.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/TaskDetails.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/TaskField.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/TaskInspectorHeader.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/TimeEntryPanel.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/Timesheet.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/WorkHourForm.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/WorkHoursSummary.vue",
+      "batch": "B08",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/objects/WorkReportSurface.vue",
+      "batch": "B14",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/projects/ProjectCard.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/projects/ProjectChooser.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/projects/ProjectCreation.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/projects/ProjectEditorSurface.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/projects/ProjectTemplates.vue",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/scripts/ScriptEditor.vue",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/scripts/ScriptEditorWorkspace.vue",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/scripts/ScriptPicker.vue",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/scripts/ScriptShelf.vue",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/scripts/ScriptShelfBar.vue",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/scripts/ScriptShelfEditor.vue",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/scripts/ScriptSource.vue",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/scripts/ShelfScriptPicker.vue",
+      "batch": "B13",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/MilestoneContent.vue",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/MilestoneManager.vue",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/MilestonePanel.vue",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/MilestoneRow.vue",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/MobileTasks.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskBulkBar.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskCalendarView.vue",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskCellDisplay.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskColumns.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskDetailValue.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskEmptyState.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskGanttView.vue",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskHiddenDetails.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskManager.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskMobileCard.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskProcessItem.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskProcessPanel.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskProcessToolbar.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskRowValue.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskScheduleEditor.vue",
+      "batch": "B10",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskTableHeaderInput.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceEditor.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceFilters.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceFooter.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceOptions.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspacePart.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceRow.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceScope.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceSurfaceSwitcher.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceTable.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/tasks/TaskWorkspaceToolbar.vue",
+      "batch": "B09",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/users/ProfileActivity.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/users/UserProfile.vue",
+      "batch": "B04",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/ConditionCards.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/ConditionValue.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/DockWorkspace.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/FieldFilter.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/MobileResults.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/NavigationDrawer.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/NavigationTree.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/ProcessVisibility.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/QuickFilterEditor.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/QuickFilterOptions.vue",
+      "batch": "B06",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/ResultBody.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/ResultItem.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/ResultPresentation.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/SearchEditorPart.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/SearchFooter.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/SearchHeader.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/SearchLibrary.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/SearchPresetBar.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/SearchQuickFilters.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/SearchResultMenu.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/TagCloud.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/workspace/WorkspaceSearch.vue",
+      "batch": "B01",
+      "role": "shell/infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/frame/controls/code/FrameCode.vue",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/frame/controls/display/FrameProgress.vue",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/frame/controls/graph/FrameGraph.vue",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/frame/controls/grid/FrameGrid.vue",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/frame/FrameView.vue",
+      "batch": "B02",
+      "role": "renderer infrastructure",
+      "disposition": "batch evidence"
+    }
+  ]
+}

@@ -123,11 +123,8 @@ def _message(reference):
 def _execute(action, arguments, uploads=None):
     if action == 'initialize':
         _require_admin()
-        from tactic_client_lib import TacticServerStub
-        server = TacticServerStub.get(protocol='local')
-        for search_type in CHAT_TYPES[:2]:
-            if 'metadata' not in SearchType.get_columns(search_type):
-                server.add_column_to_search_type(search_type, 'metadata', 'text')
+        from .knowledge_query import knowledge_request
+        knowledge_request('initialize', Project.get_project_code())
         return query.query_chat_conversations()
     if action == 'people':
         from .security_groups import user_directory

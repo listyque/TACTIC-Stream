@@ -123,3 +123,7 @@ The example assumes an existing disposable table. Do not use raw Delete for ordi
 | MySQL | Deferred; no driver or acceptance claim |
 
 For source-level diagnostics, run `tools/audit_api.py --contracts-output .screenshots/api9-contracts.json`. It records every explicit UnsupportedContract guard's module, function, line and source message. The inventory includes protections and agreed exclusions as well as missing variants; its count is neither a missing-feature count nor runtime coverage. Pair it with this matrix and `tools/verify_api.py` evidence before extending a contract.
+
+## Browser API console and journal details
+
+The API console retains its existing authorization, validation and explicit request execution. Filtering, method rows and parameter fields use Frame controls. Closing it cancels a pending catalogue read and clears its temporary credentials; an already submitted API operation may still finish on the server. Transaction details retain server-filtered XML and hidden-record notices; a late copy completion cannot update another transaction. These are browser capabilities, not additional native Handler windows.

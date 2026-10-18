@@ -2,8 +2,8 @@
 
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtTest import QTest
-from tests.test_sidebar_editor_qml import SidebarEditorQmlTests
 from tests.profile_ui_responsiveness import frame
+from tests.test_sidebar_editor_qml import SidebarEditorQmlTests
 
 
 def value(data):
@@ -13,10 +13,17 @@ def value(data):
 def assert_icons(window):
     for item in SidebarEditorQmlTests.descendants(window.contentItem()):
         if item.objectName() == "materialIconGlyph" and item.isVisible():
-            assert any(
+            name = str(item.parentItem().property("name") or "")
+            selection = value(item.property("selection")) or {}
+            qualified = (
+                ":" in name
+                and name == selection.get("set", "") + ":" + selection.get("name", "")
+                and bool(item.property("text"))
+            )
+            assert qualified or any(
                 item.property(field)
                 for field in ("fontAwesomeName", "materialName", "catalogGlyph")
-            ), "Unknown native icon: " + str(item.parentItem().property("name"))
+            ), "Unknown native icon: " + name
 
 
 def controls(window):
@@ -100,7 +107,12 @@ def snapshot(window, *, check_icons=True):
                     )
                 color = item.property("color")
                 if definition.get("kind") == "Box" and hasattr(color, "alphaF"):
-                    fills[name] = dict(color=color.name(), alpha=color.alphaF(), radius=item.property("radius"), bottomRightRadius=item.property("bottomRightRadius"))
+                    fills[name] = dict(
+                        color=color.name(),
+                        alpha=color.alphaF(),
+                        radius=item.property("radius"),
+                        bottomRightRadius=item.property("bottomRightRadius"),
+                    )
                 break
             ancestor = ancestor.parentItem()
         if item.property("text") is not None and item.property("font") is not None:

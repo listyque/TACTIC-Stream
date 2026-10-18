@@ -4791,5 +4791,15 @@
   "Step {step} of {total}": "Шаг {step} из {total}",
   "The session changed during check-in. Inspect Snapshot Browser before repeating it.": "Сессия изменилась во время публикации. Проверьте результат в браузере снапшотов перед повторной отправкой.",
   "Connection context changed. Discard this draft before saving.": "Контекст изменился. Отмените этот черновик перед сохранением.",
-  "Frame tool example": "Пример инструмента Frame"
+  "Frame tool example": "Пример инструмента Frame",
+  "Enter hours between 0.01 and 24.": "Введите от 0,01 до 24 часов.",
+  "More formatting actions": "Другие действия форматирования",
+  "Adds the text column metadata to sthpw/message and sthpw/message_log. It stores conversation summaries, replies, reactions, pins, forwarding and delivery state.": "Добавит текстовую колонку metadata в sthpw/message и sthpw/message_log. В ней хранятся сводки диалогов, ответы, реакции, закрепления, пересылка и состояние доставки.",
+  "Creates PROJECT/th_knowledge_article when it is missing, then adds kind, parent_code, content, content_text, sort_order, updated_by and linked_skeys.": "Создаст PROJECT/th_knowledge_article, если его нет, затем добавит kind, parent_code, content, content_text, sort_order, updated_by и linked_skeys.",
+  "Existing columns and data are kept. Nothing is deleted. The schema changes affect every user of this server and project.": "Существующие столбцы и данные сохраняются. Ничего не удаляется. Изменения схемы затронут всех пользователей этого сервера и проекта.",
+  "A TACTIC administrator must initialize these features once.": "Администратор TACTIC должен один раз инициализировать эти функции.",
+  "current project": "текущий проект",
+  "Initialize server features?": "Инициализировать функции на сервере?",
+  "Initialize the collaboration schema before starting conversations.": "Инициализируйте общую схему перед началом диалогов.",
+  "Initialize the collaboration schema before writing project documentation.": "Инициализируйте общую схему перед созданием проектной документации."
 }

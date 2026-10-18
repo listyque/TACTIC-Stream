@@ -927,13 +927,6 @@ button { border-radius: var(--button-radius); transition: background-color var(-
 .api-docs-navigation { min-height: 0; display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-md); background: var(--surface-container); border-right: 1px solid var(--outline-variant); }
 .api-docs-navigation > label { flex-shrink: 0; }
 .api-docs-methods { overflow: auto; min-height: 0; }
-.api-docs-methods button { display: flex; gap: var(--space-sm); justify-content: space-between; align-items: center; min-height: var(--touch-target); text-align: left; width: 100%; margin-block: var(--space-xs); padding: var(--space-sm) var(--space-md); background: transparent; border-color: transparent; border-radius: var(--button-radius); }
-.api-docs-methods small { padding: var(--space-xs) var(--space-sm); border-radius: var(--button-radius); background: var(--content-selection); color: var(--on-surface); font-size: var(--text-caption); }
-.api-docs-methods [aria-pressed="true"] { background: var(--selected); color: var(--on-selected); border-color: var(--primary); }
-.api-docs-methods code { overflow-wrap: anywhere; min-width: 0; }
-.api-docs-methods button > span { display: grid; gap: var(--space-xs); }
-.api-docs-methods strong { font-size: var(--text-body); }
-.api-docs-methods strong + code { font-size: var(--text-caption); }
 .api-docs-content { display: flex; flex-direction: column; gap: var(--space-md); padding: var(--space-lg); overflow: auto; min-height: 0; min-width: 0; }
 .api-docs-content .configuration-group { display: grid; gap: var(--space-md); min-width: 0; }
 .api-docs-content .content-heading h1 { font-size: var(--text-heading); overflow-wrap: anywhere; }

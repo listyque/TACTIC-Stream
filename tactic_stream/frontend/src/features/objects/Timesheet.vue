@@ -61,7 +61,7 @@ export default {
       const context = this.context, id = ++this.request
       this.busy = true; this.error = ''
       try {
-        const data = this.draft ? Object.fromEntries(['day', 'hours', 'category', 'login', 'description'].map(name => [name, this.draft[name]])) : null
+        const data = this.draft ? Object.fromEntries(['day', 'hours', 'category', 'login', 'description'].map(name => [name, name === 'hours' ? String(this.draft[name]).replace(',', '.') : this.draft[name]])) : null
         const response = await rpc('execute_cmd', [context, 'tactic.ui.table.work_hours.WorkHoursCmd',
           { ...this.task?.scope, mode: this.mode, week: this.week, login: this.login, report: this.report,
             action, entry_key: entry?.search_key || '', ...(keys ? { entry_keys: keys } : {}),

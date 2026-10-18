@@ -1,4 +1,4 @@
-import { A as node } from "./FrameView.js";
+import { Wt as node } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.state.mjs
 function initial() {
 	return {

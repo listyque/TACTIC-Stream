@@ -10,6 +10,7 @@ import {
   onMounted,
   onBeforeUnmount
 } from 'vue';
+import InitializationState from '../collaboration/InitializationState.vue';
 import AppButton from '../../controls/AppButton.vue';
 import AppIcon from '../../controls/AppIcon.vue';
 import AppMenu from '../../controls/AppMenu.vue';
@@ -1718,22 +1719,18 @@ defineExpose({
           @click="error = ''"
         />
       </p>
-      <div v-if="!initialized" class="messages-empty">
-        <strong>{{ t('Messages are not initialized') }}</strong>
-        <p>
-          {{
-            t(
-              'An administrator must initialize the conversation schema before messages can be used.'
-            )
-          }}
-        </p>
-        <AppButton
-          v-if="canInitialize"
-          label="Initialize Messages"
-          :disabled="busy"
-          @click="mutate('initialize', {})"
-        /><AppButton label="Refresh" icon="refresh" @click="refresh" />
-      </div>
+      <InitializationState
+        v-if="!initialized"
+        title="Messages are not initialized"
+        message="Initialize the collaboration schema before starting conversations."
+        icon="message"
+        :project="project"
+        :can-initialize="canInitialize"
+        :busy="busy"
+        can-refresh
+        @initialize="mutate('initialize', {})"
+        @refresh="refresh"
+      />
       <div
         v-else
         class="messages-layout"

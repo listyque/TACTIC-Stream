@@ -1,5 +1,5 @@
 import { Z as preferences } from "./index.js";
-import { F as rpc } from "./CodeBlock.js";
+import { st as rpc } from "./CodeBlock.js";
 import { r as fileIcon } from "./snapshot.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/files/file_values.mjs
 function fileName(path) {

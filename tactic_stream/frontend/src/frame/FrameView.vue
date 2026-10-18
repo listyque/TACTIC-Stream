@@ -187,6 +187,14 @@ function key(event, node) {
   )
     return;
   const name = event.key === 'Tab' && event.shiftKey ? 'Backtab' : event.key;
+  if (
+    ['Button', 'Action'].includes(node.kind) &&
+    node.enabled &&
+    !event.repeat &&
+    ['Enter', ' '].includes(name) &&
+    !node.keys?.[name]
+  )
+    send(node.pressAction, undefined, event.currentTarget);
   if (node.keys?.[name]) {
     event.preventDefault();
     send(node.keys[name]);
@@ -476,6 +484,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             : undefined
         "
         :aria-checked="node.role === 'checkbox' ? node.checked : undefined"
+        @pointerdown="send(node.pressAction, undefined, $event.currentTarget)"
         @keydown="key($event, node)"
         @click="send(node.action, undefined, $event.currentTarget)"
         @dblclick="send(node.doubleAction)"
@@ -821,6 +830,10 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :value="node.value"
         :options="node.options || []"
         :label="node.label"
+        :empty-label="
+          node.options?.find((option) => option.value === '')?.label ||
+          'Not assigned'
+        "
         :action-field="!!node.actionField"
         :disabled="!node.enabled"
         @change="send(node.action, $event)"

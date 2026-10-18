@@ -1,9 +1,7 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, k as t } from "./index.js";
-import { A as node, D as button, O as label, j as rect, k as muted, t as _sfc_main$1, u as translate } from "./FrameView.js";
-import { F as rpc } from "./CodeBlock.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { Gt as rect, Ht as label, Ut as muted, Vt as button, Wt as node, i as _sfc_main$1, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.ui.mjs

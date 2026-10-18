@@ -1,7 +1,6 @@
 import { E as nextTick } from "./vue.js";
 import { A as appearance } from "./index.js";
-import { A as node, D as button, O as label, j as rect, k as muted, u as translate } from "./FrameView.js";
-import { n as observeFrameSizes } from "./resize.js";
+import { Gt as rect, Ht as label, Ut as muted, Vt as button, Wt as node, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/workflow.fields.mjs

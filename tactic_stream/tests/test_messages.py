@@ -50,6 +50,24 @@ class Messages(unittest.TestCase):
             self.assertEqual(response.status, status, result)
             return result.get('result', result)
 
+    def test_initialization_matches_handler_and_reads_leave_schema_unchanged(self):
+        with test_transport.Transport.proxy(self) as proxy:
+            auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one')
+
+            def knowledge():
+                request = Request(self.url + '/admin/knowledge/list',
+                    data=json.dumps(auth).encode(), headers={'Content-Type': 'application/json'})
+                with urlopen(request, timeout=20) as response:
+                    return json.load(response)['result']
+
+            self.assertFalse(knowledge()['initialized'])
+            self.call('list', auth)
+            self.assertFalse(knowledge()['initialized'])
+            self.assertTrue(self.call('initialize', auth)['initialized'])
+            self.assertTrue(knowledge()['initialized'])
+            self.assertTrue(self.call('initialize', auth)['initialized'])
+            self.assertEqual(knowledge()['catalog'], [])
+
     def test_attachment_checkin_and_private_download(self):
         import base64
         import uuid

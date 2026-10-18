@@ -1,6 +1,6 @@
 import { F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, rt as toDisplayString, u as Fragment, y as createTextVNode } from "./vue.js";
 import { at as _plugin_vue_export_helper_default, c as _sfc_main$2, f as _sfc_main$3, k as t, o as mobile } from "./index.js";
-import { b as _sfc_main$4, h as ItemPreview_default } from "./FrameView.js";
+import { k as _sfc_main$4, w as ItemPreview_default } from "./CodeBlock.js";
 import { c as prettySize } from "./files.js";
 //#region src/controls/files.js
 function downloadBlob(blob, filename) {

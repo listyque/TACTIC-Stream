@@ -51,3 +51,9 @@ The original server procedure is `thlib/ui/knowledge_api.py`, carried into `serv
 Authenticated JSON requests use `/admin/knowledge/{action}`; uploads use multipart `/admin/knowledge/upload`. Native actions include list/load, save/save_draft/reserve, organize, history/history_revision, attachments/delete_attachment and link_index. The adapter also exposes upload and dependency deletion. The `/admin/` prefix here is a backend endpoint, not a browser workspace address.
 
 This block is verified with private native SQLite fixtures, current source QML captures and Chromium scenarios. Connected production PostgreSQL/MySQL, physical phones and arbitrary desktop clipboard formats are outside that verification. TH/DCC connections, Repository Sync and S3 remain excluded.
+
+## Shared presentation and context safety
+
+The navigation, heading outline, reader/editor command bars and formatting toolbar now use the same Frame descriptions in Handler and Stream. Narrow bars wrap their commands; extra formatting stays in **More formatting actions**. Native Qt rich text and browser document editing retain their existing Markdown, selection, image and attachment owners; text rasterization can differ between engines.
+
+On first use, **Initialize** opens an explicit confirmation describing both collaboration metadata and project article schema changes. **Cancel** writes nothing. Confirming preserves existing columns and data. Switching projects closes the confirmation; delayed results from the previous project cannot change the new project's articles or permissions. Already submitted server writes still belong to their original project.
