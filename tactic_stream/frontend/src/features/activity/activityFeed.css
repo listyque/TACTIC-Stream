@@ -1,80 +1,485 @@
-.activity-dialog { width:min(64dvw, calc(100dvw - 16px)); height:min(70dvh, calc(100dvh - 16px)); max-width:none; max-height:none; padding:0; margin:auto; border:1px solid var(--outline-variant); border-radius:var(--surface-radius); background:var(--page); color:var(--on-surface); overflow:hidden; }
-.activity-dialog[open] { display:flex; flex-direction:column; }
-.activity-dialog::backdrop { background:var(--scrim); }
-.activity-feed-heading { height:40px; flex-shrink:0; display:flex; align-items:center; gap:9px; padding:2px 6px 2px 14px; background:var(--surface); border-bottom:1px solid var(--outline-variant); }
-.activity-feed-heading > strong { flex:1; }
-.activity-feed-heading > .app-icon { color:var(--primary); }
-.activity-feed-panel { flex:1; min-height:0; display:flex; flex-direction:column; gap:10px; margin:12px; padding:10px; border:1px solid var(--outline-variant); border-radius:var(--surface-radius); background:var(--surface); overflow:hidden; }
-.activity-feed-toolbar { flex-shrink:0; padding:10px; display:flex; flex-flow:row wrap; gap:8px 10px; background:var(--surface-high); border-radius:var(--item-radius); container-type:inline-size; }
-.activity-feed-title { flex-basis:100%; display:flex; align-items:center; gap:12px; }
-.activity-feed-title > strong { flex:1; font-size:var(--text-body); letter-spacing:.5px; font-weight:600; color:var(--muted); }
-.activity-feed-title .app-checkbox { font-size:var(--text-label); }
-.activity-feed-toolbar > .workspace-search { width:220px; flex:1; min-width:120px; height:var(--control-height); border-radius:var(--item-radius); }
-.activity-feed-options .app-segmented-button { flex:2; min-width:0; }
-.activity-feed-actions { display:flex; align-items:center; gap:8px; }
-.activity-feed-actions > .app-button, .activity-feed-actions > details > summary { width:var(--control-height); height:var(--control-height); min-width:0; min-height:0; }
-.activity-feed-actions .app-icon { width:18px; height:18px; font-size:18px; }
-.activity-filter-count { margin-left:-10px; font-size:var(--text-caption); color:var(--primary); }
-.activity-feed-panel > .error, .activity-feed-panel > .notice { margin:0; }
-.activity-feed-events { flex:1; min-height:0; overflow:auto; overscroll-behavior:contain; scrollbar-gutter:stable; padding-right:10px; }
-.activity-day-label { display:flex; align-items:center; gap:10px; height:34px; margin-bottom:0; color:var(--muted); font-size:var(--text-label); position:sticky; top:0; background:var(--surface); z-index:1; }
-.activity-day-label hr { flex:1; margin:0; border:0; border-top:1px solid var(--outline-variant); }
-.activity-event-card { display:flex; align-items:flex-start; gap:8px; padding:4px; min-height:72px; margin-bottom:6px; }
-.activity-event-card > .image-picker-preview { width:40px; height:40px; min-width:40px; flex:0 0 40px; }
-.activity-event-bubble { width:min(760px, calc(100% - 48px)); min-width:0; padding:10px; display:flex; flex-direction:column; gap:6px; border:1px solid var(--outline-variant); border-radius:var(--communication-bubble-radius); background:var(--surface-high); transition:background var(--motion-fast); }
-.activity-event-bubble:hover { background:var(--hover); }
-.activity-event-bubble header { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-.activity-event-bubble header > strong { color:var(--primary); font-size:var(--text-label); font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.activity-event-bubble time { flex-shrink:0; color:var(--muted); font-size:var(--text-caption); }
-.activity-event-sentence { display:flex; align-items:flex-start; gap:8px; font-size:var(--text-body); line-height:1.4; }
-.activity-event-sentence > .app-icon { width:20px; height:20px; font-size:20px; flex-shrink:0; color:var(--primary); }
-.activity-event-sentence > div { min-width:0; overflow-wrap:anywhere; user-select:text; }
-.activity-event-sentence a { color:var(--primary); text-decoration:none; }
-.activity-event-sentence a:hover { text-decoration:underline; }
-.activity-changes { display:flex; flex-direction:column; gap:4px; }
-.activity-changes > div { display:flex; gap:10px; padding:5px 10px; border:1px solid var(--outline-variant); border-radius:var(--item-radius); background:var(--surface); font-size:var(--text-label); white-space:pre-wrap; overflow-wrap:anywhere; user-select:text; }
-.activity-changes > div > .muted { width:90px; max-width:116px; flex-shrink:0; font-size:var(--text-caption); overflow:hidden; text-overflow:ellipsis; }
-.activity-expand.app-button { height:var(--compact-control-height); min-height:0; align-self:flex-end; }
-.activity-feed-empty, .activity-feed-loading { text-align:center; color:var(--muted); padding:24px 0; }
-.activity-load-more { display:flex; margin:8px auto; }
-.activity-calendar-menu .account-panel { width:364px; max-width:calc(100dvw - 16px); padding:10px; }
-.activity-calendar header { display:flex; align-items:center; gap:4px; }
-.activity-calendar header > strong { flex:1; text-align:center; font-size:var(--text-body-large); font-weight:500; }
-.activity-calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px; padding:8px 0; }
-.activity-calendar-grid > span { text-align:center; font-size:var(--text-caption); }
-.activity-calendar-grid > .app-button { position:relative; height:38px; min-width:0; min-height:0; padding:0; border:0; border-radius:var(--item-radius); background:transparent; font-size:var(--text-body); font-weight:400; }
-.activity-calendar-grid > .app-button[aria-pressed="true"] { background:var(--selected); color:var(--on-selected); }
-.activity-calendar-grid > .app-button.today { border:1px solid var(--primary); }
-.activity-calendar-grid > .app-button.outside { color:var(--muted); }
-.activity-calendar-grid small { position:absolute; right:0; top:0; min-width:16px; height:16px; border-radius:8px; background:var(--primary); color:var(--on-primary); font-size:8pt; line-height:16px; }
-.activity-calendar footer, .activity-user-menu footer { display:flex; justify-content:space-between; align-items:center; gap:8px; padding-top:8px; border-top:1px solid var(--outline-variant); }
-.activity-calendar footer > span { flex:1; font-size:var(--text-caption); }
-.activity-user-menu .account-panel { width:330px; max-width:calc(100dvw - 16px); }
-.activity-user-menu h3 { font-size:var(--text-body-large); margin:0; }
-.activity-user-menu p { margin:6px 0; }
-.activity-user-list { max-height:300px; overflow:auto; display:flex; flex-direction:column; gap:6px; padding:10px 0; }
-.activity-user-list .app-checkbox { min-height:32px; }
-@container (max-width:950px) { .activity-feed-options .app-segmented-button .app-button { font-size:0; gap:0; } .activity-feed-options .app-segmented-button .app-icon { width:15px; height:15px; font-size:15px; } }
-@container (max-width:700px) { .activity-feed-title { flex-wrap:wrap; } .activity-feed-title > strong { flex-basis:100%; } .activity-feed-toolbar > .workspace-search { flex-basis:100%; } .activity-feed-options .app-segmented-button { flex:1; } }
-@media (max-width:760px) { .activity-feed-dialog { width:calc(100dvw - 16px); height:calc(100dvh - 16px); } .activity-feed-panel { margin:8px; padding:8px; } .activity-feed-events { padding-right:0; } }
-@media (max-width:380px) { .activity-event-card > .image-picker-preview { width:34px; height:34px; min-width:34px; flex:0 0 34px; } .activity-event-bubble { width:calc(100% - 42px); } .activity-event-bubble header { flex-wrap:wrap; } .activity-event-bubble time { width:100%; } .activity-changes > div > .muted { width:72px; } .activity-feed-actions { gap:4px; } }
+.activity-dialog {
+  width: min(64dvw, calc(100dvw - 16px));
+  height: min(70dvh, calc(100dvh - 16px));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  margin: auto;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--surface-radius);
+  background: var(--page);
+  color: var(--on-surface);
+  overflow: hidden;
+}
+.activity-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.activity-dialog::backdrop {
+  background: var(--scrim);
+}
+.activity-feed-heading {
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 2px 6px 2px 14px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--outline-variant);
+}
+.activity-feed-heading > strong {
+  flex: 1;
+}
+.activity-feed-heading > .app-icon {
+  color: var(--primary);
+}
+.activity-feed-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px;
+  padding: 9px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--surface-radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+.activity-feed-toolbar {
+  flex-shrink: 0;
+  padding: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 8px 10px;
+  background: var(--surface-high);
+  border-radius: var(--item-radius);
+  container-type: inline-size;
+}
+.activity-feed-title {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.activity-feed-title > strong {
+  flex: 1;
+  font-size: var(--text-body);
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.activity-feed-title .app-checkbox {
+  font-size: var(--text-label);
+}
+.activity-feed-toolbar > .workspace-search {
+  width: 220px;
+  flex: 1;
+  min-width: 120px;
+  height: var(--control-height);
+  border-radius: var(--item-radius);
+}
+.activity-feed-options .app-segmented-button {
+  flex: 2;
+  min-width: 0;
+}
+.activity-feed-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.activity-feed-actions > .app-button,
+.activity-feed-actions > details > summary {
+  width: var(--control-height);
+  height: var(--control-height);
+  min-width: 0;
+  min-height: 0;
+}
+.activity-feed-actions .app-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+.activity-filter-count {
+  margin-left: -10px;
+  font-size: var(--text-caption);
+  color: var(--primary);
+}
+.activity-feed-panel > .error,
+.activity-feed-panel > .notice {
+  margin: 0;
+}
+.activity-feed-events {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding-right: 8px;
+}
+.activity-day-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 34px;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: var(--text-label);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+.activity-day-label hr {
+  flex: 1;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--outline-variant);
+}
+.activity-event-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 4px;
+  min-height: 72px;
+  margin-bottom: 6px;
+}
+.activity-event-card > .image-picker-preview {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  flex: 0 0 40px;
+}
+.activity-event-bubble {
+  width: min(760px, calc(100% - 48px));
+  min-width: 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--communication-bubble-radius);
+  background: var(--surface-high);
+  transition: background var(--motion-fast);
+}
+.activity-event-bubble:hover {
+  background: var(--hover);
+}
+.activity-event-bubble header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.activity-event-bubble header > strong {
+  color: var(--primary);
+  font-size: var(--text-label);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.activity-event-bubble time {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: var(--text-caption);
+}
+.activity-event-sentence {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+.activity-event-sentence > .app-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+.activity-event-sentence > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.activity-event-sentence a {
+  color: var(--primary);
+  text-decoration: none;
+}
+.activity-event-sentence a:hover {
+  text-decoration: underline;
+}
+.activity-changes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.activity-changes > div {
+  display: flex;
+  gap: 10px;
+  padding: 5px 10px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--item-radius);
+  background: var(--surface);
+  font-size: var(--text-label);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.activity-changes > div > .muted {
+  width: 90px;
+  max-width: 116px;
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.activity-expand.app-button {
+  height: var(--compact-control-height);
+  min-height: 0;
+  align-self: flex-end;
+}
+.activity-feed-empty,
+.activity-feed-loading {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px 0;
+}
+.activity-load-more {
+  display: flex;
+  margin: 8px auto;
+}
+.activity-calendar-menu .account-panel {
+  display: block;
+  width: 340px;
+  max-width: calc(100dvw - 16px);
+  padding: 10px;
+}
+.activity-calendar header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.activity-calendar header > strong {
+  flex: 1;
+  text-align: center;
+  font-size: var(--text-body-large);
+  font-weight: 500;
+}
+.activity-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  padding: 8px 0;
+}
+.activity-calendar-grid > span {
+  text-align: center;
+  font-size: var(--text-caption);
+}
+.activity-calendar-grid > .app-button {
+  position: relative;
+  height: 38px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--item-radius);
+  background: transparent;
+  font-size: var(--text-body);
+  font-weight: 400;
+}
+.activity-calendar-grid > .app-button[aria-pressed='true'] {
+  background: var(--selected);
+  color: var(--on-selected);
+}
+.activity-calendar-grid > .app-button.today {
+  border: 1px solid var(--primary);
+}
+.activity-calendar-grid > .app-button.outside {
+  color: var(--muted);
+}
+.activity-calendar-grid small {
+  position: absolute;
+  right: 0;
+  top: 0;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 8pt;
+  line-height: 16px;
+}
+.activity-calendar footer,
+.activity-user-menu footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--outline-variant);
+}
+.activity-calendar footer > span {
+  flex: 1;
+  font-size: var(--text-caption);
+}
+.activity-user-menu .account-panel {
+  width: 330px;
+  max-width: calc(100dvw - 16px);
+}
+.activity-user-menu h3 {
+  font-size: var(--text-body-large);
+  margin: 0;
+}
+.activity-user-menu p {
+  margin: 6px 0;
+}
+.activity-user-list {
+  max-height: 300px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+}
+.activity-user-list .app-checkbox {
+  min-height: 32px;
+}
+@container (max-width:950px) {
+  .activity-feed-options .app-segmented-button .app-button {
+    font-size: 0;
+    gap: 0;
+  }
+  .activity-feed-options .app-segmented-button .app-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+  }
+}
+@container (max-width:700px) {
+  .activity-feed-title {
+    flex-wrap: wrap;
+  }
+  .activity-feed-title > strong {
+    flex-basis: 100%;
+  }
+  .activity-feed-toolbar > .workspace-search {
+    flex-basis: 100%;
+  }
+  .activity-feed-options .app-segmented-button {
+    flex: 1;
+  }
+}
+@media (max-width: 760px) {
+  .activity-feed-dialog {
+    width: calc(100dvw - 16px);
+    height: calc(100dvh - 16px);
+  }
+  .activity-feed-panel {
+    margin: 8px;
+    padding: 8px;
+  }
+  .activity-feed-events {
+    padding-right: 0;
+  }
+}
+@media (max-width: 380px) {
+  .activity-event-card > .image-picker-preview {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    flex: 0 0 34px;
+  }
+  .activity-event-bubble {
+    width: calc(100% - 42px);
+  }
+  .activity-event-bubble header {
+    flex-wrap: wrap;
+  }
+  .activity-event-bubble time {
+    width: 100%;
+  }
+  .activity-changes > div > .muted {
+    width: 72px;
+  }
+  .activity-feed-actions {
+    gap: 4px;
+  }
+}
 
-.activity-feed-trigger { position:relative; }
-.activity-event-sentence a, .activity-changes a { overflow-wrap:anywhere; }
-.activity-feed-trigger > .result-count { box-shadow:0 0 0 2px var(--surface); }
+.activity-feed-trigger {
+  position: relative;
+}
+.activity-event-sentence a,
+.activity-changes a {
+  overflow-wrap: anywhere;
+}
+.activity-feed-trigger > .result-count {
+  box-shadow: 0 0 0 2px var(--surface);
+}
 
-.activity-feed-options:not(details) { display:contents; }
-.activity-feed-options > .activity-feed-title { order:-1; }
-@media(max-width:700px) {
-  .activity-feed-panel { margin:0; padding:6px; gap:6px; border:0; border-radius:0; }
-  .activity-feed-toolbar { display:flex; flex-direction:row; padding:0; gap:4px; border-radius:0; background:transparent; }
-  .activity-feed-toolbar > .workspace-search { flex:1; min-width:0; height:var(--control-height); }
-  .activity-feed-options > .account-panel { display:flex; flex-direction:column; gap:8px; }
-  .activity-feed-title { flex-direction:column; align-items:stretch; gap:8px; }
-  .activity-feed-title .app-checkbox { display:flex; }
-  .activity-feed-actions { flex-direction:column; align-items:stretch; gap:0; }
-  .activity-feed-actions > .app-button, .activity-feed-actions > details > summary { width:100%; justify-content:flex-start; gap:8px; padding-inline:12px; }
-  .activity-filter-count { margin:0; }
-  .activity-feed-events { padding:0; scrollbar-gutter:auto; }
-  .activity-event-bubble { border:0; }
+.activity-feed-options:not(details) {
+  display: contents;
+}
+.activity-feed-options > .activity-feed-title {
+  order: -1;
+}
+@media (max-width: 700px) {
+  .activity-feed-panel {
+    margin: 0;
+    padding: 6px;
+    gap: 6px;
+    border: 0;
+    border-radius: 0;
+  }
+  .activity-feed-toolbar {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    gap: 4px;
+    border-radius: 0;
+    background: transparent;
+  }
+  .activity-feed-toolbar > .workspace-search {
+    flex: 1;
+    min-width: 0;
+    height: var(--control-height);
+  }
+  .activity-feed-options > .account-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .activity-feed-title {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .activity-feed-title .app-checkbox {
+    display: flex;
+  }
+  .activity-feed-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .activity-feed-actions > .app-button,
+  .activity-feed-actions > details > summary {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+    padding-inline: 12px;
+  }
+  .activity-filter-count {
+    margin: 0;
+  }
+  .activity-feed-events {
+    padding: 0;
+    scrollbar-gutter: auto;
+  }
+  .activity-event-bubble {
+    border: 0;
+  }
 }

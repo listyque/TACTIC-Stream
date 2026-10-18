@@ -94,6 +94,10 @@ def main():
         "frontend/src/features/workspace/links.js",
         "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
         "frontend/tests/{frame_table*,handler_table,table_cells,columns_editor}.mjs",
+        "tools/frame_messages/*.{vue,html,mjs,json}",
+        "frontend/src/features/messages/*.{vue,js,css}",
+        "frontend/src/features/activity/*.{vue,js,css}",
+        "frontend/tests/{frame_messages*,frame_communication_reference,messages*,notification*,activity*,mobile_activity_profile}.mjs",
         "frontend/src/features/help/**/*.{vue,js}",
         "tools/frame_help/*.{vue,js,html,mjs}",
         "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs",
@@ -210,6 +214,8 @@ def main():
             (args.handler_root / "thlib/ui/qml/features/objects").rglob("*.qml")
         )
         files += sorted((args.handler_root / "thlib/ui/qml/features/tasks").rglob("*.qml"))
+        files += sorted((args.handler_root / "thlib/ui/qml/features/messages").rglob("*.qml"))
+        files += sorted((args.handler_root / "thlib/ui/qml/features/activity").rglob("*.qml"))
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]

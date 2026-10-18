@@ -1,16 +1,31 @@
-import { closeInspector } from './inspector_helpers.mjs'
-import assert from 'node:assert/strict'
-import { chromium } from 'playwright'
-import { selectProject } from './project_selection.mjs'
+import { closeInspector } from './inspector_helpers.mjs';
+import assert from 'node:assert/strict';
+import { chromium } from 'playwright';
+import { selectProject } from './project_selection.mjs';
 
-const base = process.argv[2]
+const base = process.argv[2];
 async function request(path, values) {
-  const response = await fetch(base + path, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(values) })
-  const data = await response.json(); assert(response.ok, JSON.stringify(data)); return data.result
+  const response = await fetch(base + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(values)
+  });
+  const data = await response.json();
+  assert(response.ok, JSON.stringify(data));
+  return data.result;
 }
-const ticket = await request('/admin/rpc', { method:'get_ticket', args:['admin','private-test-password'] })
-const auth = { ticket, project:'one' }
-await request('/admin/rpc', { method:'execute_python_script', args:[auth, '', { code:`
+const ticket = await request('/admin/rpc', {
+  method: 'get_ticket',
+  args: ['admin', 'private-test-password']
+});
+const auth = { ticket, project: 'one' };
+await request('/admin/rpc', {
+  method: 'execute_python_script',
+  args: [
+    auth,
+    '',
+    {
+      code: `
 from pyasm.search import Search, SearchType
 parent = Search.get_by_code('contract/entity', 'A')
 for index in range(24):
@@ -23,158 +38,407 @@ for index in range(24):
     note.add_related_sobject(parent)
     note.commit()
 return True
-` }] })
-const browser = await chromium.launch({ headless:true })
-let page
+`
+    }
+  ]
+});
+const browser = await chromium.launch({ headless: true });
+let page;
 try {
-  page = await browser.newPage({ viewport:{ width:360, height:780 }, hasTouch:true, isMobile:true, colorScheme:'dark' })
-  await page.addInitScript(() => localStorage.setItem('tactic_stream.preferences',JSON.stringify({checkin:{commitQueueAutoClean:false}})))
-  page.setDefaultTimeout(12000)
-  const errors = []; page.on('pageerror', error => errors.push(error.message))
-  await page.goto(base + '/projects/admin/?search_type=sthpw/project&view=table')
-  await page.getByLabel('Login', { exact: true }).fill('admin')
-  await page.getByLabel('Password', { exact:true }).fill('private-test-password')
-  await page.getByRole('button', { name:'Sign in', exact:true }).click()
-  await page.waitForFunction(() => document.querySelector('.workspace-results')?.getAttribute('aria-busy') === 'false')
-  await selectProject(page,'one')
-  const idleProfile = () => page.waitForFunction(() => document.querySelector('.user-profile-window')?.getAttribute('aria-busy') === 'false')
-  const fits = async dialog => assert(await dialog.evaluate(node => node.scrollWidth <= node.clientWidth))
+  page = await browser.newPage({
+    viewport: { width: 360, height: 780 },
+    hasTouch: true,
+    isMobile: true,
+    colorScheme: 'dark'
+  });
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      'tactic_stream.preferences',
+      JSON.stringify({ checkin: { commitQueueAutoClean: false } })
+    )
+  );
+  page.setDefaultTimeout(12000);
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto(
+    base + '/projects/admin/?search_type=sthpw/project&view=table'
+  );
+  await page.getByLabel('Login', { exact: true }).fill('admin');
+  await page
+    .getByLabel('Password', { exact: true })
+    .fill('private-test-password');
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('.workspace-results')
+        ?.getAttribute('aria-busy') === 'false'
+  );
+  await selectProject(page, 'one');
+  const idleProfile = () =>
+    page.waitForFunction(
+      () =>
+        document
+          .querySelector('.user-profile-window')
+          ?.getAttribute('aria-busy') === 'false'
+    );
+  const fits = async (dialog) =>
+    assert(
+      await dialog.evaluate((node) => node.scrollWidth <= node.clientWidth)
+    );
   const dismissNotifications = async () => {
-    for (let i=0; i<10 && await page.locator('.notification-dismiss:visible').count(); i++) await page.locator('.notification-dismiss:visible').first().tap()
+    for (
+      let i = 0;
+      i < 10 && (await page.locator('.notification-dismiss:visible').count());
+      i++
+    )
+      await page.locator('.notification-dismiss:visible').first().tap();
+  };
+  await page.getByLabel('Account', { exact: true }).tap();
+  await page.getByRole('button', { name: 'My Profile', exact: true }).tap();
+  const profile = page.getByRole('dialog', {
+    name: 'User profile',
+    exact: true
+  });
+  await idleProfile();
+  await fits(profile);
+  assert.equal(
+    await profile
+      .locator('[data-frame="profileAvatar"]')
+      .evaluate((node) => node.getBoundingClientRect().width),
+    56
+  );
+  await profile
+    .getByRole('button', { name: 'Edit user profile', exact: true })
+    .tap();
+  const editor = page.getByRole('dialog', {
+    name: 'Edit user profile',
+    exact: true
+  });
+  await editor.waitFor();
+  assert.equal(
+    await editor.getByLabel('Profile editor section', { exact: true }).count(),
+    0
+  );
+  assert.equal(
+    await editor.getByLabel('Account status', { exact: true }).count(),
+    0
+  );
+  await editor.getByLabel('First name', { exact: true }).fill('Phone draft');
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await editor.getByRole('radio', { name: 'Profile', exact: true }).waitFor();
+  assert.equal(
+    await editor.getByLabel('First name', { exact: true }).inputValue(),
+    'Phone draft'
+  );
+  await page.setViewportSize({ width: 320, height: 740 });
+  await fits(editor);
+  assert.equal(
+    await editor.getByLabel('First name', { exact: true }).inputValue(),
+    'Phone draft'
+  );
+  await editor.getByRole('button', { name: 'Cancel', exact: true }).tap();
+  await editor.getByRole('button', { name: 'Keep editing', exact: true }).tap();
+  await editor.getByRole('button', { name: 'Save', exact: true }).tap();
+  await editor.waitFor({ state: 'hidden' });
+  await idleProfile();
+  const saved = await request('/admin/user-profile/read', {
+    ...auth,
+    login: 'admin'
+  });
+  assert.equal(saved.document.first_name, 'Phone draft');
+  assert(
+    await profile
+      .locator('[data-frame="profileScroll"]')
+      .evaluate((node) => node.scrollHeight > node.clientHeight)
+  );
+  await dismissNotifications();
+  await profile.screenshot({ path: '../.screenshots/mobile-profile-320.png' });
+  await profile
+    .getByRole('button', { name: 'Close profile', exact: true })
+    .tap();
+  await page.getByLabel('Account', { exact: true }).tap();
+  await page.getByRole('button', { name: 'Users', exact: true }).tap();
+  await idleProfile();
+  const users = page.getByRole('dialog', { name: 'Users', exact: true });
+  assert.equal(
+    await users.getByRole('button', { name: 'Add user', exact: true }).count(),
+    0
+  );
+  await users.getByLabel('Search users', { exact: true }).fill('admin');
+  await users.locator('[data-frame^="userDirectoryRow_"]').first().tap();
+  await idleProfile();
+  assert.equal(
+    await users.locator('[data-frame="profileDirectory"]').isVisible(),
+    false
+  );
+  await users.getByRole('button', { name: 'Close profile', exact: true }).tap();
+  await page.getByLabel('More options', { exact: true }).tap();
+  await page
+    .locator('.settings-menu')
+    .getByRole('button', { name: 'Activity Feed', exact: true })
+    .tap();
+  const feed = page.getByRole('dialog', { name: 'Activity Feed', exact: true });
+  const idleFeed = () =>
+    page.waitForFunction(
+      () =>
+        document
+          .querySelector('.activity-feed-dialog')
+          ?.getAttribute('aria-busy') === 'false'
+    );
+  await idleFeed();
+  for (const width of [320, 360]) {
+    await page.setViewportSize({ width, height: 780 });
+    await fits(feed);
+    assert(
+      (await feed.locator('.activity-feed-toolbar').boundingBox()).height < 55
+    );
+    assert(
+      (await feed.locator('.activity-feed-events').boundingBox()).height > 600
+    );
+    assert.equal(await feed.getByRole('radio').count(), 0);
+    await feed.screenshot({
+      path: `../.screenshots/mobile-activity-${width}.png`
+    });
   }
-  await page.getByLabel('Account', { exact:true }).tap()
-  await page.getByRole('button', { name:'My Profile', exact:true }).tap()
-  const profile = page.getByRole('dialog', { name:'User profile', exact:true })
-  await idleProfile(); await fits(profile)
-  assert.equal(await profile.locator('[data-frame="profileAvatar"]').evaluate(node => node.getBoundingClientRect().width),56)
-  await profile.getByRole('button', { name:'Edit user profile', exact:true }).tap()
-  const editor = page.getByRole('dialog', { name:'Edit user profile', exact:true })
-  await editor.waitFor()
-  assert.equal(await editor.getByLabel('Profile editor section', { exact:true }).count(),0)
-  assert.equal(await editor.getByLabel('Account status', { exact:true }).count(),0)
-  await editor.getByLabel('First name', { exact:true }).fill('Phone draft')
-  await page.setViewportSize({ width:1280, height:900 })
-  await editor.getByRole('radio', { name:'Profile', exact:true }).waitFor()
-  assert.equal(await editor.getByLabel('First name', { exact:true }).inputValue(),'Phone draft')
-  await page.setViewportSize({ width:320, height:740 })
-  await fits(editor)
-  assert.equal(await editor.getByLabel('First name', { exact:true }).inputValue(),'Phone draft')
-  await editor.getByRole('button', { name:'Cancel', exact:true }).tap()
-  await editor.getByRole('button', { name:'Keep editing', exact:true }).tap()
-  await editor.getByRole('button', { name:'Save', exact:true }).tap()
-  await editor.waitFor({ state:'hidden' }); await idleProfile()
-  const saved = await request('/admin/user-profile/read', { ...auth, login:'admin' })
-  assert.equal(saved.document.first_name,'Phone draft')
-  assert(await profile.locator('[data-frame="profileScroll"]').evaluate(node => node.scrollHeight > node.clientHeight))
-  await dismissNotifications()
-  await profile.screenshot({ path:'../.screenshots/mobile-profile-320.png' })
-  await profile.getByRole('button', { name:'Close profile', exact:true }).tap()
-  await page.getByLabel('Account', { exact:true }).tap()
-  await page.getByRole('button', { name:'Users', exact:true }).tap(); await idleProfile()
-  const users = page.getByRole('dialog', { name:'Users', exact:true })
-  assert.equal(await users.getByRole('button', { name:'Add user', exact:true }).count(),0)
-  await users.getByLabel('Search users', { exact:true }).fill('admin')
-  await users.locator('[data-frame^="userDirectoryRow_"]').first().tap(); await idleProfile()
-  assert.equal(await users.locator('[data-frame="profileDirectory"]').isVisible(),false)
-  await users.getByRole('button', { name:'Close profile', exact:true }).tap()
-  await page.getByLabel('More options', { exact:true }).tap()
-  await page.locator('.settings-menu').getByRole('button', { name:'Activity Feed', exact:true }).tap()
-  const feed = page.getByRole('dialog', { name:'Activity Feed', exact:true })
-  const idleFeed = () => page.waitForFunction(() => document.querySelector('.activity-feed-dialog')?.getAttribute('aria-busy') === 'false')
-  await idleFeed()
-  for (const width of [320,360]) {
-    await page.setViewportSize({ width,height:780 }); await fits(feed)
-    assert((await feed.locator('.activity-feed-toolbar').boundingBox()).height < 55)
-    assert((await feed.locator('.activity-feed-events').boundingBox()).height > 600)
-    assert.equal(await feed.getByRole('radio').count(),0)
-    await feed.screenshot({ path:`../.screenshots/mobile-activity-${width}.png` })
-  }
-  await feed.getByLabel('Activity options', { exact:true }).tap()
-  await feed.getByRole('combobox', { name:'Activity filters', exact:true }).selectOption('notes'); await idleFeed()
-  await feed.getByLabel('Exclude my activity', { exact:true }).check(); await idleFeed()
-  assert.equal(await feed.locator('.activity-event-card').count(),0)
-  await feed.getByLabel('Exclude my activity', { exact:true }).uncheck(); await idleFeed()
-  await feed.getByLabel('Filter by users', { exact:true }).tap()
-  await feed.locator('.activity-user-menu').getByRole('button', { name:'Apply', exact:true }).tap(); await idleFeed()
-  await feed.locator('.activity-calendar-menu > summary').tap()
-  const calendar = page.getByRole('dialog', { name:'All history', exact:true })
-  await calendar.waitFor(); await fits(calendar)
-  await calendar.getByRole('button', { name:'Close', exact:true }).tap()
-  await feed.getByLabel('Activity options', { exact:true }).tap()
-  await feed.getByLabel('Search activity', { exact:true }).fill('Phone activity')
-  await feed.locator('.activity-event-card').first().waitFor()
-  await page.setViewportSize({ width:1280,height:900 })
-  await feed.getByRole('radio', { name:'Notes', exact:true }).waitFor()
-  assert.equal(await feed.getByRole('radio', { name:'Notes', exact:true }).getAttribute('aria-checked'),'true')
-  assert.equal(await feed.getByLabel('Search activity', { exact:true }).inputValue(),'Phone activity')
-  await feed.screenshot({ path:'../.screenshots/mobile-activity-desktop-restored.png' })
-  await page.setViewportSize({ width:320,height:740 })
-  await feed.getByRole('link', { name:'Open note', exact:true }).first().tap()
-  const inspector = page.getByRole('region', { name:'Task Inspector', exact:true })
-  await inspector.locator('.note-body').filter({ hasText:'Phone activity' }).first().waitFor()
-  await inspector.locator('.inspector-object').waitFor()
-  await fits(inspector)
-  assert(await inspector.locator('.notes-timeline').evaluate(node => node.scrollHeight > node.clientHeight && getComputedStyle(node).overflowY === 'auto'), 'Inspector notes scroll inside their pane above the composer')
-  assert.equal(await page.getByRole('dialog', { name:'Notes', exact:true }).count(),0, 'Activity notes belong to the inspector by default')
-  await inspector.getByLabel('Note text', { exact:true }).fill('Inspector note draft')
-  await closeInspector(page)
-  const noteRows = await request('/admin/rpc', { method:'query', args:[auth,'sthpw/note'], kwargs:{ filters:[['project_code','one'],['search_code','A'],['process','publish']] } })
-  const linkSearch = page.getByLabel('Search objects', { exact:true })
-  await page.getByRole('button',{name:'Open search',exact:true}).tap()
-  await linkSearch.fill('skey://' + noteRows[0].__search_key__)
-  await linkSearch.press('Enter')
-  await inspector.locator('.note-body').filter({ hasText:'Phone activity' }).first().waitFor()
-  assert.equal(await inspector.getByLabel('Note text', { exact:true }).inputValue(),'Inspector note draft', 'Activity and note skey use the same inspector draft')
-  await inspector.screenshot({ path:'../.screenshots/mobile-notes-inspector.png' })
-  await closeInspector(page)
-  await page.getByLabel('More options', { exact:true }).tap()
-  await page.locator('.settings-menu').getByRole('button', { name:'Commit Queue', exact:true }).tap()
+  await feed.getByLabel('Activity options', { exact: true }).tap();
+  await feed
+    .getByRole('combobox', { name: 'Activity filters', exact: true })
+    .selectOption('notes');
+  await idleFeed();
+  await feed.getByLabel('Exclude my activity', { exact: true }).check();
+  await idleFeed();
+  assert.equal(await feed.locator('.activity-event-card').count(), 0);
+  await feed.getByLabel('Exclude my activity', { exact: true }).uncheck();
+  await idleFeed();
+  await feed
+    .locator(
+      '[data-frame=activityFeedUserFilterButton], [data-frame=activityFeedCompactUserFilterButton]'
+    )
+    .tap();
+  await feed
+    .locator('.activity-user-menu')
+    .getByRole('button', { name: 'Apply', exact: true })
+    .tap();
+  await idleFeed();
+  await feed.locator('[data-frame=activityFeedCalendarButton]').tap();
+  const calendar = page.getByRole('dialog', {
+    name: 'All history',
+    exact: true
+  });
+  await calendar.waitFor();
+  await fits(calendar);
+  await calendar.getByRole('button', { name: 'Close', exact: true }).tap();
+  await feed.getByLabel('Activity options', { exact: true }).tap();
+  await feed
+    .getByLabel('Search activity', { exact: true })
+    .fill('Phone activity');
+  await feed.locator('.activity-event-card').first().waitFor();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await feed.getByRole('radio', { name: 'Notes', exact: true }).waitFor();
+  assert.equal(
+    await feed
+      .getByRole('radio', { name: 'Notes', exact: true })
+      .getAttribute('aria-checked'),
+    'true'
+  );
+  assert.equal(
+    await feed.getByLabel('Search activity', { exact: true }).inputValue(),
+    'Phone activity'
+  );
+  await feed.screenshot({
+    path: '../.screenshots/mobile-activity-desktop-restored.png'
+  });
+  await page.setViewportSize({ width: 320, height: 740 });
+  await feed
+    .getByRole('link', { name: 'Open note', exact: true })
+    .first()
+    .tap();
+  const inspector = page.getByRole('region', {
+    name: 'Task Inspector',
+    exact: true
+  });
+  await inspector
+    .locator('.note-body')
+    .filter({ hasText: 'Phone activity' })
+    .first()
+    .waitFor();
+  await inspector.locator('.inspector-object').waitFor();
+  await fits(inspector);
+  assert(
+    await inspector
+      .locator('.notes-timeline')
+      .evaluate(
+        (node) =>
+          node.scrollHeight > node.clientHeight &&
+          getComputedStyle(node).overflowY === 'auto'
+      ),
+    'Inspector notes scroll inside their pane above the composer'
+  );
+  assert.equal(
+    await page.getByRole('dialog', { name: 'Notes', exact: true }).count(),
+    0,
+    'Activity notes belong to the inspector by default'
+  );
+  await inspector
+    .getByLabel('Note text', { exact: true })
+    .fill('Inspector note draft');
+  await closeInspector(page);
+  const noteRows = await request('/admin/rpc', {
+    method: 'query',
+    args: [auth, 'sthpw/note'],
+    kwargs: {
+      filters: [
+        ['project_code', 'one'],
+        ['search_code', 'A'],
+        ['process', 'publish']
+      ]
+    }
+  });
+  const linkSearch = page.getByLabel('Search objects', { exact: true });
+  await page.getByRole('button', { name: 'Open search', exact: true }).tap();
+  await linkSearch.fill('skey://' + noteRows[0].__search_key__);
+  await linkSearch.press('Enter');
+  await inspector
+    .locator('.note-body')
+    .filter({ hasText: 'Phone activity' })
+    .first()
+    .waitFor();
+  assert.equal(
+    await inspector.getByLabel('Note text', { exact: true }).inputValue(),
+    'Inspector note draft',
+    'Activity and note skey use the same inspector draft'
+  );
+  await inspector.screenshot({
+    path: '../.screenshots/mobile-notes-inspector.png'
+  });
+  await closeInspector(page);
+  await page.getByLabel('More options', { exact: true }).tap();
+  await page
+    .locator('.settings-menu')
+    .getByRole('button', { name: 'Commit Queue', exact: true })
+    .tap();
   // Preview check-ins are queued by desktop editors; inject only their input into the same mounted owner.
-  const enqueue = async name => page.evaluate(({ ticket, name }) => {
-    const app = document.querySelector('#app').__vue_app__._container._vnode.component.subTree.component.subTree.component.proxy
-    const canvas = document.createElement('canvas'); canvas.width = canvas.height = 4
-    canvas.getContext('2d').fillRect(0,0,4,4)
-    const bytes = Uint8Array.from(atob(canvas.toDataURL('image/png').split(',')[1]), character => character.charCodeAt(0))
-    app.$refs.commitQueue.enqueue({ ticket, project:'one', searchKey:'contract/entity?project=one&code=A', title:'Phone preview', name, file:new File([bytes], name, { type:'image/png' }) })
-  }, { ticket, name })
-  await page.route('**/UploadServer/', route => route.fulfill({ status:400, body:'Upload rejected' }))
-  await enqueue('cancel.png')
-  const queue = page.locator('.commit-queue')
-  await queue.getByRole('button',{ name:'Commit all',exact:true }).tap()
-  const cancelled = queue.locator('.queue-row').filter({ hasText:'cancel.png' })
-  await cancelled.getByRole('status').filter({ hasText:'Failed' }).waitFor()
-  await cancelled.getByLabel('Check-in actions', { exact:true }).tap()
-  await cancelled.getByRole('button', { name:'Cancel', exact:true }).tap()
-  await cancelled.getByRole('status').filter({ hasText:'Cancelled' }).waitFor()
-  await enqueue('retry.png')
-  await queue.getByRole('button',{ name:'Commit all',exact:true }).tap()
-  const retried = queue.locator('.queue-row').filter({ hasText:'retry.png' })
-  await retried.getByRole('status').filter({ hasText:'Failed' }).waitFor()
-  await page.unroute('**/UploadServer/')
-  await retried.getByLabel('Check-in actions', { exact:true }).tap()
-  await retried.getByRole('button', { name:'Retry', exact:true }).tap()
-  await retried.getByRole('status').filter({ hasText:'Complete' }).waitFor()
-  await page.route('**/admin/rpc', async route => {
-    if (route.request().postDataJSON().method !== 'simple_checkin') return route.continue()
-    await route.fetch(); await route.abort('failed')
-  })
-  await enqueue('unknown.png')
-  await queue.getByRole('button',{ name:'Commit all',exact:true }).tap()
-  const unknown = queue.locator('.queue-row').filter({ hasText:'unknown.png' })
-  await unknown.getByRole('status').filter({ hasText:'Result unknown' }).waitFor()
-  assert.equal(await unknown.getByRole('button', { name:'Retry', exact:true }).count(),0)
-  await unknown.getByLabel('Check-in actions', { exact:true }).tap()
-  assert.equal(await unknown.getByRole('button', { name:'Commit current', exact:true }).isDisabled(),true)
-  assert.equal(await unknown.getByRole('button', { name:'Cancel', exact:true }).isDisabled(),true)
-  await page.keyboard.press('Escape')
-  const snapshots = await request('/admin/rpc', { method:'query', args:[auth,'sthpw/snapshot'], kwargs:{ filters:[['search_type','contract/entity?project=one'],['search_code','A'],['context','icon']] } })
-  assert(snapshots.filter(row => row.version > 0).length >= 2, 'Both ordinary and lost-response check-ins must reach the native store')
-  await fits(queue)
-  assert.equal(await queue.locator(':scope > header').count(),0, 'Docked queue uses the shared mobile header')
-  assert.equal(await page.getByRole('button',{name:'Back to search',exact:true}).isVisible(),true)
-  await dismissNotifications()
-  await page.screenshot({ path:'../.screenshots/mobile-commit-queue.png' })
-  assert.equal(errors.length,0,errors.join('\n'))
-  console.log('PASS mobile profile save/draft resize, directory, feed filters/calendar/search, queue cancel/retry/native check-in and lost response guard')
-} catch (error) { if (page) await page.screenshot({ path:'../.screenshots/mobile-activity-profile-failure.png' }); throw error }
-finally { await browser.close() }
+  const enqueue = async (name) =>
+    page.evaluate(
+      ({ ticket, name }) => {
+        const app =
+          document.querySelector('#app').__vue_app__._container._vnode.component
+            .subTree.component.subTree.component.proxy;
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = 4;
+        canvas.getContext('2d').fillRect(0, 0, 4, 4);
+        const bytes = Uint8Array.from(
+          atob(canvas.toDataURL('image/png').split(',')[1]),
+          (character) => character.charCodeAt(0)
+        );
+        app.$refs.commitQueue.enqueue({
+          ticket,
+          project: 'one',
+          searchKey: 'contract/entity?project=one&code=A',
+          title: 'Phone preview',
+          name,
+          file: new File([bytes], name, { type: 'image/png' })
+        });
+      },
+      { ticket, name }
+    );
+  await page.route('**/UploadServer/', (route) =>
+    route.fulfill({ status: 400, body: 'Upload rejected' })
+  );
+  await enqueue('cancel.png');
+  const queue = page.locator('.commit-queue');
+  await queue.getByRole('button', { name: 'Commit all', exact: true }).tap();
+  const cancelled = queue
+    .locator('.queue-row')
+    .filter({ hasText: 'cancel.png' });
+  await cancelled.getByRole('status').filter({ hasText: 'Failed' }).waitFor();
+  await cancelled.getByLabel('Check-in actions', { exact: true }).tap();
+  await cancelled.getByRole('button', { name: 'Cancel', exact: true }).tap();
+  await cancelled
+    .getByRole('status')
+    .filter({ hasText: 'Cancelled' })
+    .waitFor();
+  await enqueue('retry.png');
+  await queue.getByRole('button', { name: 'Commit all', exact: true }).tap();
+  const retried = queue.locator('.queue-row').filter({ hasText: 'retry.png' });
+  await retried.getByRole('status').filter({ hasText: 'Failed' }).waitFor();
+  await page.unroute('**/UploadServer/');
+  await retried.getByLabel('Check-in actions', { exact: true }).tap();
+  await retried.getByRole('button', { name: 'Retry', exact: true }).tap();
+  await retried.getByRole('status').filter({ hasText: 'Complete' }).waitFor();
+  await page.route('**/admin/rpc', async (route) => {
+    if (route.request().postDataJSON().method !== 'simple_checkin')
+      return route.continue();
+    await route.fetch();
+    await route.abort('failed');
+  });
+  await enqueue('unknown.png');
+  await queue.getByRole('button', { name: 'Commit all', exact: true }).tap();
+  const unknown = queue
+    .locator('.queue-row')
+    .filter({ hasText: 'unknown.png' });
+  await unknown
+    .getByRole('status')
+    .filter({ hasText: 'Result unknown' })
+    .waitFor();
+  assert.equal(
+    await unknown.getByRole('button', { name: 'Retry', exact: true }).count(),
+    0
+  );
+  await unknown.getByLabel('Check-in actions', { exact: true }).tap();
+  assert.equal(
+    await unknown
+      .getByRole('button', { name: 'Commit current', exact: true })
+      .isDisabled(),
+    true
+  );
+  assert.equal(
+    await unknown
+      .getByRole('button', { name: 'Cancel', exact: true })
+      .isDisabled(),
+    true
+  );
+  await page.keyboard.press('Escape');
+  const snapshots = await request('/admin/rpc', {
+    method: 'query',
+    args: [auth, 'sthpw/snapshot'],
+    kwargs: {
+      filters: [
+        ['search_type', 'contract/entity?project=one'],
+        ['search_code', 'A'],
+        ['context', 'icon']
+      ]
+    }
+  });
+  assert(
+    snapshots.filter((row) => row.version > 0).length >= 2,
+    'Both ordinary and lost-response check-ins must reach the native store'
+  );
+  await fits(queue);
+  assert.equal(
+    await queue.locator(':scope > header').count(),
+    0,
+    'Docked queue uses the shared mobile header'
+  );
+  assert.equal(
+    await page
+      .getByRole('button', { name: 'Back to search', exact: true })
+      .isVisible(),
+    true
+  );
+  await dismissNotifications();
+  await page.screenshot({ path: '../.screenshots/mobile-commit-queue.png' });
+  assert.equal(errors.length, 0, errors.join('\n'));
+  console.log(
+    'PASS mobile profile save/draft resize, directory, feed filters/calendar/search, queue cancel/retry/native check-in and lost response guard'
+  );
+} catch (error) {
+  if (page)
+    await page.screenshot({
+      path: '../.screenshots/mobile-activity-profile-failure.png'
+    });
+  throw error;
+} finally {
+  await browser.close();
+}

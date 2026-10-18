@@ -1,25 +1,65 @@
-import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
-import { chromium } from 'playwright'
-import { selectProject } from './project_selection.mjs'
-import { groupedMessages, canChangeMessage, conversationAttachments, retainOlderMessages, bubbleContour, emojiCount } from '../src/features/messages/messages.js'
-import { matchesUser } from '../src/controls/userSearch.js'
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { chromium } from 'playwright';
+import { selectProject } from './project_selection.mjs';
+import {
+  groupedMessages,
+  canChangeMessage,
+  conversationAttachments,
+  retainOlderMessages,
+  bubbleContour,
+  emojiCount
+} from '../src/features/messages/messages.js';
+import { matchesUser } from '../src/controls/userSearch.js';
 
-const base = process.argv[2], project = process.env.STREAM_CHECK_PROJECT
-const fixture = { messages: [
-  { login:'artist', message:'The new collection is ready.\nPlease review the lighting.' },
-  { login:'artist', message:'I have also updated the textures.' },
-  { login:'admin', message:'Thank you! I will take a look.' },
-] }
+const base = process.argv[2],
+  project = process.env.STREAM_CHECK_PROJECT;
+const fixture = {
+  messages: [
+    {
+      login: 'artist',
+      message: 'The new collection is ready.\nPlease review the lighting.'
+    },
+    { login: 'artist', message: 'I have also updated the textures.' },
+    { login: 'admin', message: 'Thank you! I will take a look.' }
+  ]
+};
 async function request(path, values) {
-  const response = await fetch(base + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values) })
-  const data = await response.json(); assert(response.ok, JSON.stringify(data)); return data.result
+  const response = await fetch(base + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(values)
+  });
+  const data = await response.json();
+  assert(response.ok, JSON.stringify(data));
+  return data.result;
 }
-const ticket = await request('/admin/rpc', { method: 'get_ticket', args: ['admin', process.env.STREAM_CHECK_PASSWORD] })
-const auth = { ticket, project }, chat = (action, values = {}) => request('/admin/messages/' + action, { ...auth, ...values })
-assert(matchesUser({ login:'artist', displayName:'Lighting Artist', groups:['Artists'] }, '  ARTISTS  '))
-assert(!matchesUser({ login:'artist', displayName:'Lighting Artist', groups:['Artists'] }, 'supervisor'))
-await request('/admin/rpc', { method: 'execute_python_script', args: [auth, '', { code: `
+const ticket = await request('/admin/rpc', {
+  method: 'get_ticket',
+  args: ['admin', process.env.STREAM_CHECK_PASSWORD]
+});
+const auth = { ticket, project },
+  chat = (action, values = {}) =>
+    request('/admin/messages/' + action, { ...auth, ...values });
+assert(
+  matchesUser(
+    { login: 'artist', displayName: 'Lighting Artist', groups: ['Artists'] },
+    '  ARTISTS  '
+  )
+);
+assert(
+  !matchesUser(
+    { login: 'artist', displayName: 'Lighting Artist', groups: ['Artists'] },
+    'supervisor'
+  )
+);
+await request('/admin/rpc', {
+  method: 'execute_python_script',
+  args: [
+    auth,
+    '',
+    {
+      code: `
 from pyasm.search import Search, SearchType
 from pyasm.security.authenticator import hash_password
 for name in ['artist', 'reviewer']:
@@ -30,12 +70,24 @@ for name in ['artist', 'reviewer']:
         user.commit()
         user.add_to_group('admin')
 return True
-` }] })
-await chat('initialize')
-const artistTicket = await request('/admin/rpc', { method: 'get_ticket', args: ['artist', 'messages-test-password'] })
-const artistAuth = { ticket: artistTicket, project }
-await request('/admin/server-updates', artistAuth)
-await request('/admin/rpc', { method: 'execute_python_script', args: [auth, '', { code: `
+`
+    }
+  ]
+});
+await chat('initialize');
+const artistTicket = await request('/admin/rpc', {
+  method: 'get_ticket',
+  args: ['artist', 'messages-test-password']
+});
+const artistAuth = { ticket: artistTicket, project };
+await request('/admin/server-updates', artistAuth);
+await request('/admin/rpc', {
+  method: 'execute_python_script',
+  args: [
+    auth,
+    '',
+    {
+      code: `
 from datetime import datetime, timezone, timedelta
 from pyasm.search import Search
 search = Search('sthpw/message')
@@ -45,655 +97,2182 @@ assert presence
 stamp = (datetime.now(timezone.utc) - timedelta(hours=2)).strftime('%Y-%m-%dT%H:%M:%SZ')
 server.update(presence.get_search_key(), {'message': stamp, 'metadata': {'lastSeen': stamp}}, triggers=False)
 return True
-` }] })
-const favorites = (await chat('create')).conversationId
-const direct = (await chat('create', { recipients: ['artist'] })).conversationId
-const seeded = []
-for (const row of fixture.messages) seeded.push((await request('/admin/messages/send', { ...(row.login === 'artist' ? artistAuth : auth), message_code: direct, message: row.message })).message)
-await chat('reaction', { message_log_code: seeded[0].__search_key__, emoji: '👍' })
-await request('/admin/messages/read', { ...artistAuth, message_code: direct, timestamp: seeded.at(-1).timestamp.slice(0, 19) })
-const group = (await chat('create', { recipients: ['artist', 'reviewer'], title: 'Lighting review' })).conversationId
-await request('/admin/rpc', { method: 'execute_python_script', args: [auth, '', { code: `
+`
+    }
+  ]
+});
+const favorites = (await chat('create')).conversationId;
+const direct = (await chat('create', { recipients: ['artist'] }))
+  .conversationId;
+const seeded = [];
+for (const row of fixture.messages)
+  seeded.push(
+    (
+      await request('/admin/messages/send', {
+        ...(row.login === 'artist' ? artistAuth : auth),
+        message_code: direct,
+        message: row.message
+      })
+    ).message
+  );
+await chat('reaction', {
+  message_log_code: seeded[0].__search_key__,
+  emoji: '👍'
+});
+await request('/admin/messages/read', {
+  ...artistAuth,
+  message_code: direct,
+  timestamp: seeded.at(-1).timestamp.slice(0, 19)
+});
+const group = (
+  await chat('create', {
+    recipients: ['artist', 'reviewer'],
+    title: 'Lighting review'
+  })
+).conversationId;
+await request('/admin/rpc', {
+  method: 'execute_python_script',
+  args: [
+    auth,
+    '',
+    {
+      code: `
 from pyasm.search import Search
 search = Search('sthpw/subscription')
 search.add_filter('message_code', ${JSON.stringify(group)}); search.add_filter('login', 'admin')
 subscription = search.get_sobject()
 server.update(subscription.get_search_key(), {'last_cleared': '2020-01-01 00:00:00'}, triggers=False)
 return True
-` }] })
-for (let index = 0; index < 35; index++) await request('/admin/messages/send', { ...(index ? auth : artistAuth), message_code: group, message: 'History page ' + String(index).padStart(2, '0') + (index ? '' : ' @admin') })
-assert.equal((await chat('list')).conversations.find(row => row.conversationId === group).mentionCount, 1)
-const records = [{ login: 'a', timestamp: '2026-10-09 01:00:00' }, { login: 'a', timestamp: '2026-10-09 01:04:59' }, { login: 'b', timestamp: '2026-10-09 01:05:00' }]
-assert.deepEqual(groupedMessages(records).map(row => [row.groupFirst, row.groupLast]), [[true, false], [false, true], [true, true]])
-assert(!canChangeMessage(records[0], 'a', true, Date.UTC(2026, 9, 9, 2, 0, 1)))
-const sameSecond = [1, 2, 3, 4].map(id => ({ id, code: String(id), timestamp: '2026-10-09 01:00:00' }))
-assert.deepEqual(retainOlderMessages(sameSecond, [sameSecond[3], sameSecond[1]]).map(row => row.id), [1, 2, 4], 'Keep older same-second messages while removing a deleted message inside the refreshed page')
-for (const [text, count] of [['👍', 1], ['👍🏽', 1], ['👨‍👩‍👧‍👦', 1], ['🇷🇺 🇬🇧', 2], ['1️⃣', 1], ['1', 0], ['😀😀😀', 3], ['😀 😀 😀 😀', 0], ['👍 text', 0], ['\ufe0f', 0], ['👨\u200d', 0]]) assert.equal(emojiCount(text), count, text)
-assert.equal(bubbleContour(200, 80, 14, true), 'M 22 2 H 194 A 14 14 0 0 1 208 16 V 68 A 14 14 0 0 1 194 82 H 22 C 8 82 2 82 2 80 C 2 78 8 78 8 68 V 16 A 14 14 0 0 1 22 2 Z')
-assert(!bubbleContour(200, 80, 14, false).includes(' C '), 'Grouped messages have a rounded corner without a tail')
-const repeatedSnapshot = { code: 'REPEATED', __files__: [] }
-assert.deepEqual(conversationAttachments([
-  { code: 'ORIGINAL', login: 'artist', timestamp: '', __attachments__: [repeatedSnapshot] },
-  { code: 'FORWARDED', login: 'admin', timestamp: '', __forwarded_from__: { available: true, attachments: [repeatedSnapshot] } },
-  { code: 'DELETED_SOURCE', __forwarded_from__: { available: false, attachments: [repeatedSnapshot] } },
-], [{ login: 'artist', displayName: 'Artist' }]).map(row => [row.messageId, row.sender]), [['ORIGINAL', 'Artist'], ['FORWARDED', 'admin']])
-const browser = await chromium.launch({ headless: true })
-let page
+`
+    }
+  ]
+});
+for (let index = 0; index < 35; index++)
+  await request('/admin/messages/send', {
+    ...(index ? auth : artistAuth),
+    message_code: group,
+    message:
+      'History page ' +
+      String(index).padStart(2, '0') +
+      (index ? '' : ' @admin')
+  });
+assert.equal(
+  (await chat('list')).conversations.find((row) => row.conversationId === group)
+    .mentionCount,
+  1
+);
+const records = [
+  { login: 'a', timestamp: '2026-10-09 01:00:00' },
+  { login: 'a', timestamp: '2026-10-09 01:04:59' },
+  { login: 'b', timestamp: '2026-10-09 01:05:00' }
+];
+assert.deepEqual(
+  groupedMessages(records).map((row) => [row.groupFirst, row.groupLast]),
+  [
+    [true, false],
+    [false, true],
+    [true, true]
+  ]
+);
+assert(!canChangeMessage(records[0], 'a', true, Date.UTC(2026, 9, 9, 2, 0, 1)));
+const sameSecond = [1, 2, 3, 4].map((id) => ({
+  id,
+  code: String(id),
+  timestamp: '2026-10-09 01:00:00'
+}));
+assert.deepEqual(
+  retainOlderMessages(sameSecond, [sameSecond[3], sameSecond[1]]).map(
+    (row) => row.id
+  ),
+  [1, 2, 4],
+  'Keep older same-second messages while removing a deleted message inside the refreshed page'
+);
+for (const [text, count] of [
+  ['👍', 1],
+  ['👍🏽', 1],
+  ['👨‍👩‍👧‍👦', 1],
+  ['🇷🇺 🇬🇧', 2],
+  ['1️⃣', 1],
+  ['1', 0],
+  ['😀😀😀', 3],
+  ['😀 😀 😀 😀', 0],
+  ['👍 text', 0],
+  ['\ufe0f', 0],
+  ['👨\u200d', 0]
+])
+  assert.equal(emojiCount(text), count, text);
+assert.equal(
+  bubbleContour(200, 80, 14, true),
+  'M 22 2 H 194 A 14 14 0 0 1 208 16 V 68 A 14 14 0 0 1 194 82 H 22 C 8 82 2 82 2 80 C 2 78 8 78 8 68 V 16 A 14 14 0 0 1 22 2 Z'
+);
+assert(
+  !bubbleContour(200, 80, 14, false).includes(' C '),
+  'Grouped messages have a rounded corner without a tail'
+);
+const repeatedSnapshot = { code: 'REPEATED', __files__: [] };
+assert.deepEqual(
+  conversationAttachments(
+    [
+      {
+        code: 'ORIGINAL',
+        login: 'artist',
+        timestamp: '',
+        __attachments__: [repeatedSnapshot]
+      },
+      {
+        code: 'FORWARDED',
+        login: 'admin',
+        timestamp: '',
+        __forwarded_from__: { available: true, attachments: [repeatedSnapshot] }
+      },
+      {
+        code: 'DELETED_SOURCE',
+        __forwarded_from__: {
+          available: false,
+          attachments: [repeatedSnapshot]
+        }
+      }
+    ],
+    [{ login: 'artist', displayName: 'Artist' }]
+  ).map((row) => [row.messageId, row.sender]),
+  [
+    ['ORIGINAL', 'Artist'],
+    ['FORWARDED', 'admin']
+  ]
+);
+const browser = await chromium.launch({ headless: true });
+let page;
 try {
-  page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, colorScheme: 'dark', hasTouch: true })
-  const errors = []; page.on('pageerror', error => errors.push(error.message)); page.setDefaultTimeout(12000)
-  await page.addInitScript(() => { if (!localStorage.getItem('tactic_stream.appearance')) localStorage.setItem('tactic_stream.appearance', JSON.stringify({ mode: 'dark', language: 'en' })) })
-  await page.route('http://tactic-stream.test/**', async route => { const url = new URL(route.request().url()); await route.fulfill({ response: await route.fetch({ url: base + url.pathname + url.search, headers: { ...route.request().headers(), origin: base, referer: base + '/' } }) }) })
-  await page.goto('http://tactic-stream.test/')
-  await page.getByLabel('Login', { exact: true }).fill(process.env.STREAM_CHECK_LOGIN || 'admin')
-  await page.getByLabel('Password', { exact: true }).fill(process.env.STREAM_CHECK_PASSWORD)
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click()
-  await page.locator('.project-picker').waitFor()
-  await selectProject(page, project)
-  await page.getByLabel('Account', { exact: true }).click()
-  await page.getByRole('button', { name: 'Messages', exact: true }).click()
-  const dialog = page.getByRole('dialog', { name: 'Messages', exact: true })
-  const idle = () => page.waitForFunction(() => document.querySelector('.messages-dialog')?.getAttribute('aria-busy') === 'false')
-  await dialog.waitFor(); await idle()
-  await dialog.locator('.messages-conversation.selected').filter({hasText:'Favorites'}).waitFor()
-  await dialog.getByRole('button', { name: 'artist', exact: true }).click(); await idle()
-  await page.waitForFunction(() => document.querySelector('.messages-presence')?.textContent.startsWith('Last seen '))
-  assert.equal(await dialog.locator('.messages-presence.online').count(), 0, 'An expired heartbeat means offline, not Online')
-  assert.equal(await dialog.getByRole('button', { name: 'Chat members', exact: true }).locator('.app-button-badge').innerText(), '2')
-  const groupRow = dialog.getByRole('button', { name: 'Lighting review', exact: true })
-  assert.equal(await groupRow.getByRole('img', { name: '1 unread mentions', exact: true }).innerText(), '@')
-  await dialog.getByRole('textbox', { name: 'Write a reply', exact: true }).fill('Draft before chat menu')
-  await groupRow.click({ button: 'right' }); await idle()
-  await dialog.locator('.chat-actions .account-panel').waitFor({ state: 'visible' })
-  await page.waitForFunction(() => Number(getComputedStyle(document.querySelector('.chat-actions .account-panel')).opacity) > .99)
-  await page.screenshot({ path: '../.screenshots/messages-conversation-menu-web.png' })
-  await dialog.getByRole('button', { name: 'Rename chat', exact: true }).click()
-  const contextRename = page.locator('.messages-rename-window > .account-panel')
-  assert.equal(await contextRename.getByLabel('Chat title', { exact: true }).inputValue(), 'Lighting review', 'Context actions belong to the clicked conversation')
-  await contextRename.getByRole('button', { name: 'Cancel', exact: true }).click()
-  await page.waitForFunction(() => !document.querySelector('.messages-conversation.selected .messages-mention'))
-  await dialog.getByRole('button', { name: 'artist', exact: true }).click(); await idle()
-  assert.equal(await dialog.getByRole('textbox', { name: 'Write a reply', exact: true }).inputValue(), 'Draft before chat menu')
-  await dialog.getByRole('textbox', { name: 'Write a reply', exact: true }).fill('')
-  await dialog.getByRole('button', { name: 'artist', exact: true }).focus(); await page.keyboard.press('Shift+F10')
-  await dialog.locator('.chat-actions .account-panel').waitFor({ state: 'visible' })
-  await page.keyboard.press('Escape'); assert(await dialog.isVisible())
-  const refreshButton = dialog.getByRole('button', { name: 'Refresh conversations and messages', exact: true })
-  await refreshButton.hover()
-  await page.waitForTimeout(200)
-  assert.equal(await page.getByRole('tooltip').count(), 0, 'Tooltip waits 500 ms')
-  const tip = page.getByRole('tooltip')
-  await tip.filter({ hasText: 'Refresh conversations and messages' }).waitFor()
-  assert(await refreshButton.getAttribute('aria-describedby'))
-  assert.equal(await refreshButton.getAttribute('title'), null, 'No second native browser tooltip')
-  await page.screenshot({ path: '../.screenshots/messages-tooltip-web.png' })
-  await tip.waitFor({ state: 'hidden', timeout: 6500 })
-  await page.waitForFunction(() => !document.querySelector('button[aria-label="Refresh conversations and messages"]')?.hasAttribute('aria-describedby'))
-  assert.equal(await refreshButton.getAttribute('aria-describedby'), null)
-  const originalStyle = await refreshButton.getAttribute('style')
-  await refreshButton.evaluate(node => Object.assign(node.style, { position: 'fixed', bottom: '0', right: '0' }))
-  await refreshButton.hover(); await tip.waitFor()
-  const anchorBounds = await refreshButton.boundingBox(), tipBounds = await tip.boundingBox()
-  assert(tipBounds.x >= 8 && tipBounds.x + tipBounds.width <= 1440 - 8 && tipBounds.y + tipBounds.height <= anchorBounds.y - 7, 'Tooltip moves above a control at the lower screen edge')
-  await page.keyboard.press('Escape'); await tip.waitFor({ state: 'hidden' })
-  await refreshButton.evaluate((node, value) => { if (value === null) node.removeAttribute('style'); else node.setAttribute('style', value) }, originalStyle)
-  await fieldPlaceholderHelp()
+  page = await browser.newPage({
+    viewport: { width: 1440, height: 1000 },
+    colorScheme: 'dark',
+    hasTouch: true
+  });
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.setDefaultTimeout(12000);
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('tactic_stream.appearance'))
+      localStorage.setItem(
+        'tactic_stream.appearance',
+        JSON.stringify({ mode: 'dark', language: 'en' })
+      );
+  });
+  await page.route('http://tactic-stream.test/**', async (route) => {
+    const url = new URL(route.request().url());
+    await route.fulfill({
+      response: await route.fetch({
+        url: base + url.pathname + url.search,
+        headers: {
+          ...route.request().headers(),
+          origin: base,
+          referer: base + '/'
+        }
+      })
+    });
+  });
+  await page.goto('http://tactic-stream.test/');
+  await page
+    .getByLabel('Login', { exact: true })
+    .fill(process.env.STREAM_CHECK_LOGIN || 'admin');
+  await page
+    .getByLabel('Password', { exact: true })
+    .fill(process.env.STREAM_CHECK_PASSWORD);
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.locator('.project-picker').waitFor();
+  await selectProject(page, project);
+  await page.getByLabel('Account', { exact: true }).click();
+  await page.getByRole('button', { name: 'Messages', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Messages', exact: true });
+  const idle = () =>
+    page.waitForFunction(
+      () =>
+        document
+          .querySelector('.messages-dialog')
+          ?.getAttribute('aria-busy') === 'false'
+    );
+  await dialog.waitFor();
+  await idle();
+  await dialog
+    .locator('.messages-conversation.selected')
+    .filter({ hasText: 'Favorites' })
+    .waitFor();
+  await dialog.getByRole('button', { name: 'artist', exact: true }).click();
+  await idle();
+  await page.waitForFunction(() =>
+    document
+      .querySelector('[data-frame=chatPresence]')
+      ?.textContent.startsWith('Last seen ')
+  );
+  assert.equal(
+    await dialog
+      .locator('[data-frame=chatPresence]')
+      .filter({ hasText: /^Online$/ })
+      .count(),
+    0,
+    'An expired heartbeat means offline, not Online'
+  );
+  assert.equal(
+    await dialog
+      .getByRole('button', { name: 'Chat members', exact: true })
+      .locator('.app-button-badge')
+      .innerText(),
+    '2'
+  );
+  const groupRow = dialog.getByRole('button', {
+    name: 'Lighting review',
+    exact: true
+  });
+  assert.equal(
+    await groupRow.locator('[data-frame=conversationMentions]').innerText(),
+    '@'
+  );
+  assert(
+    (await groupRow.getAttribute('aria-description')).includes(
+      '1 unread mentions'
+    )
+  );
+  await dialog
+    .getByRole('textbox', { name: 'Write a reply', exact: true })
+    .fill('Draft before chat menu');
+  await groupRow.click({ button: 'right' });
+  await idle();
+  await dialog
+    .locator('.chat-actions .account-panel')
+    .waitFor({ state: 'visible' });
+  await page.waitForFunction(
+    () =>
+      Number(
+        getComputedStyle(document.querySelector('.chat-actions .account-panel'))
+          .opacity
+      ) > 0.99
+  );
+  await page.screenshot({
+    path: '../.screenshots/messages-conversation-menu-web.png'
+  });
+  await dialog
+    .getByRole('button', { name: 'Rename chat', exact: true })
+    .click();
+  const contextRename = page.locator(
+    '.messages-rename-window > .account-panel'
+  );
+  assert.equal(
+    await contextRename.getByLabel('Chat title', { exact: true }).inputValue(),
+    'Lighting review',
+    'Context actions belong to the clicked conversation'
+  );
+  await contextRename
+    .getByRole('button', { name: 'Cancel', exact: true })
+    .click();
+  await page.waitForFunction(
+    () =>
+      !document.querySelector(
+        '.messages-conversation.selected .messages-mention'
+      )
+  );
+  await dialog.getByRole('button', { name: 'artist', exact: true }).click();
+  await idle();
+  assert.equal(
+    await dialog
+      .getByRole('textbox', { name: 'Write a reply', exact: true })
+      .inputValue(),
+    'Draft before chat menu'
+  );
+  await dialog
+    .getByRole('textbox', { name: 'Write a reply', exact: true })
+    .fill('');
+  await dialog.getByRole('button', { name: 'artist', exact: true }).focus();
+  await page.keyboard.press('Shift+F10');
+  await dialog
+    .locator('.chat-actions .account-panel')
+    .waitFor({ state: 'visible' });
+  await page.keyboard.press('Escape');
+  assert(await dialog.isVisible());
+  const refreshButton = dialog.getByRole('button', {
+    name: 'Refresh conversations and messages',
+    exact: true
+  });
+  await refreshButton.hover();
+  await page.waitForTimeout(200);
+  assert.equal(
+    await page.getByRole('tooltip').count(),
+    0,
+    'Tooltip waits 500 ms'
+  );
+  const tip = page.getByRole('tooltip');
+  await tip.filter({ hasText: 'Refresh conversations and messages' }).waitFor();
+  assert(await refreshButton.getAttribute('aria-describedby'));
+  assert.equal(
+    await refreshButton.getAttribute('title'),
+    null,
+    'No second native browser tooltip'
+  );
+  await page.screenshot({ path: '../.screenshots/messages-tooltip-web.png' });
+  await tip.waitFor({ state: 'hidden', timeout: 6500 });
+  await page.waitForFunction(
+    () =>
+      !document
+        .querySelector(
+          'button[aria-label="Refresh conversations and messages"]'
+        )
+        ?.hasAttribute('aria-describedby')
+  );
+  assert.equal(await refreshButton.getAttribute('aria-describedby'), null);
+  const originalStyle = await refreshButton.getAttribute('style');
+  await refreshButton.evaluate((node) => {
+    node.style.setProperty('position', 'fixed', 'important');
+    node.style.setProperty('inset', 'auto 0 0 auto', 'important');
+  });
+  await refreshButton.hover();
+  await tip.waitFor();
+  const anchorBounds = await refreshButton.boundingBox(),
+    tipBounds = await tip.boundingBox();
+  assert(
+    tipBounds.x >= 8 &&
+      tipBounds.x + tipBounds.width <= 1440 - 8 &&
+      tipBounds.y + tipBounds.height <= anchorBounds.y - 7,
+    'Tooltip moves above a control at the lower screen edge'
+  );
+  await page.keyboard.press('Escape');
+  await tip.waitFor({ state: 'hidden' });
+  await refreshButton.evaluate((node, value) => {
+    if (value === null) node.removeAttribute('style');
+    else node.setAttribute('style', value);
+  }, originalStyle);
+  await fieldPlaceholderHelp();
   async function fieldPlaceholderHelp() {
-    const draft = dialog.getByRole('textbox', { name: 'Write a reply', exact: true })
-    await draft.fill('Draft while reading help')
-    await dialog.getByRole('button', { name: 'Messages help', exact: true }).click()
-    const help = page.getByRole('dialog', { name: 'Messages help', exact: true })
-    await help.getByRole('heading', { name: 'Conversations and drafts', exact: true }).waitFor()
-    assert((await help.locator('article h2').count()) >= 4)
-    await help.getByRole('button', { name: 'Maximize window', exact: true }).click()
-    await help.getByRole('button', { name: 'Restore window', exact: true }).click()
-    await help.screenshot({ path: '../.screenshots/messages-help-web.png' })
-    await page.keyboard.press('Escape'); await help.waitFor({ state: 'hidden' })
-    assert.equal(await draft.inputValue(), 'Draft while reading help')
+    const draft = dialog.getByRole('textbox', {
+      name: 'Write a reply',
+      exact: true
+    });
+    await draft.fill('Draft while reading help');
+    await dialog
+      .getByRole('button', { name: 'Messages help', exact: true })
+      .click();
+    const help = page.getByRole('dialog', {
+      name: 'Help',
+      exact: true
+    });
+    await help
+      .getByRole('heading', { name: 'Conversations and drafts', exact: true })
+      .waitFor();
+    assert((await help.locator('article h2').count()) >= 4);
+    await help
+      .getByRole('button', { name: 'Maximize window', exact: true })
+      .click();
+    await help
+      .getByRole('button', { name: 'Restore window', exact: true })
+      .click();
+    await help.screenshot({ path: '../.screenshots/messages-help-web.png' });
+    await page.keyboard.press('Escape');
+    await help.waitFor({ state: 'hidden' });
+    assert.equal(await draft.inputValue(), 'Draft while reading help');
   }
-  await dialog.locator('.messages-viewport[data-current="true"] .message-delivery').first().focus()
-  await tip.filter({ hasText: 'Read by 1 of 1' }).waitFor()
-  await page.keyboard.press('Escape'); await tip.waitFor({ state: 'hidden' })
-  assert(await dialog.isVisible(), 'Tooltip Escape does not close the chat')
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-row').count(), 3)
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-author').count(), 2)
-  console.log('Messages geometry:', await dialog.evaluate(node => Object.fromEntries(['.messages-conversations', '.messages-chat-header', '.message-author', '.message-body', '.messages-conversation.selected'].map(selector => { const el = node.querySelector(selector.startsWith('.message-') ? '.messages-viewport[data-current="true"] ' + selector : selector), css = getComputedStyle(el), box = el.getBoundingClientRect(); return [selector, { width: box.width, height: box.height, font: css.font, background: css.backgroundColor }] }))))
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-body').first().evaluate(node => node.getBoundingClientRect().height), 34, 'Two rich-text lines match the captured native 17px line height')
-  const field = dialog.getByRole('textbox', { name: 'Write a reply', exact: true })
-  await field.fill('')
-  await dialog.locator('.messages-layout').screenshot({ path: '../.screenshots/messages-web.png' })
-  assert(await dialog.getByRole('button', { name: 'Send', exact: true }).isDisabled())
-  const composerBase = await dialog.locator('.message-composer-field').boundingBox()
-  assert(Math.abs(composerBase.height - 44) < 1)
-  assert.equal(await field.evaluate(node => getComputedStyle(node).outlineWidth), '0px', 'One native field border without a second browser focus outline')
-  assert.equal(await dialog.locator('.message-composer-field > .emoji-picker > summary > .app-icon').evaluate(node => getComputedStyle(node).fontSize), '17px')
-  await field.fill('A multiline draft\nSecond line\nThird line')
-  assert((await dialog.locator('.message-composer-field').boundingBox()).height > composerBase.height)
-  await field.fill(Array.from({ length: 30 }, (_, index) => 'Draft line ' + index).join('\n'))
-  assert((await dialog.locator('.message-composer-field').boundingBox()).height <= 124)
-  assert(await field.evaluate(node => node.scrollHeight > node.clientHeight))
-  await field.fill('@ar'); await field.press('Enter')
-  assert.equal(await field.inputValue(), '@artist ', 'Enter picks a suggested member without sending')
-  await field.fill('@'); await field.press('Escape')
-  assert(await dialog.isVisible(), 'Escape closes mention suggestions before the chat')
-  await field.fill('IME draft'); await field.dispatchEvent('keydown', { key: 'Enter', isComposing: true })
-  assert.equal(await field.inputValue(), 'IME draft')
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-row').count(), 3)
-  const lastBubble = dialog.locator('.messages-viewport[data-current="true"] .message-bubble').last()
-  await lastBubble.click({ button: 'right' })
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByRole('button', { name: 'Select message', exact: true }).click()
-  await page.waitForFunction(() => !!document.querySelector('.messages-viewport[data-current="true"] .message-row.forward-selected .message-contour'))
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-row.forward-selected path').evaluate(node => getComputedStyle(node).strokeWidth), '2px')
-  await dialog.getByRole('button', { name: 'Cancel selection', exact: true }).click()
-  await field.fill('Saved draft')
-  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click(); await idle()
-  await field.fill('Personal draft')
-  await dialog.getByRole('button', { name: 'artist', exact: true }).click(); await idle()
-  assert.equal(await field.inputValue(), 'Saved draft')
-  await field.fill('New reply'); await field.press('Control+Enter'); await field.type('Second line')
-  assert.equal(await field.inputValue(), 'New reply\nSecond line')
-  await field.press('Enter'); await idle(); await page.waitForFunction(() => document.querySelector('.message-composer textarea')?.value === '')
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-row').count(), 4)
-  const message = dialog.locator('.messages-viewport[data-current="true"] .message-row').last()
-  await message.getByLabel('Message actions', { exact: true }).click()
-  await message.getByRole('button', { name: 'Edit message', exact: true }).click()
-  const edit = page.getByRole('dialog', { name: 'Edit message', exact: true })
-  assert.equal(await edit.getByLabel('Message text', { exact:true }).evaluate(node => node === document.activeElement), true)
-  await edit.getByLabel('Message text', { exact:true }).fill('   ')
-  assert(await edit.getByRole('button', { name:'Save', exact:true }).isDisabled())
-  await edit.getByLabel('Message text', { exact: true }).fill('Edited in browser')
-  assert.equal(Math.round((await edit.boundingBox()).width), 480)
-  assert.equal(Math.round((await edit.getByLabel('Message text', { exact:true }).boundingBox()).height), 130)
-  await edit.screenshot({ path:'../.screenshots/messages-edit-web.png' })
-  await edit.getByRole('button', { name: 'Save', exact: true }).click(); await edit.waitFor({ state: 'hidden' }); await idle()
-  assert((await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().innerText()).includes('Edited in browser'))
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().locator('header .message-edited').count(), 1, 'Edit metadata belongs in the header')
-  await dialog.locator('.messages-viewport[data-current="true"] .message-edited').last().focus()
-  await tip.filter({ hasText: 'Last edited by admin' }).waitFor()
-  await page.keyboard.press('Escape'); await tip.waitFor({ state: 'hidden' })
-  const editedId = await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getAttribute('data-message-id')
-  for (let revision = 0; revision < 8; revision++) await chat('edit', { message_log_code:editedId, message:'Revision ' + revision + '\n' + '<b>Plain text history</b>\n'.repeat(5) })
-  await chat('edit', { message_log_code:editedId, message:'Edited in browser' })
-  await refreshButton.click(); await idle()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByLabel('Message actions', { exact:true }).click()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByRole('button', { name:'Edit history', exact:true }).click()
-  const editHistory = page.locator('.messages-history-window[aria-label="Edit history"] > .account-panel')
-  assert((await editHistory.innerText()).includes('Edited by admin'))
-  assert((await editHistory.innerText()).includes('New reply\nSecond line'))
-  assert.equal(await editHistory.locator('.message-revision p b').count(), 0, 'History renders server text without interpreting HTML')
-  assert(await editHistory.locator('.messages-edit-history').evaluate(node => node.scrollHeight > node.clientHeight))
-  assert.equal(Math.round((await editHistory.boundingBox()).width), 396)
-  await editHistory.screenshot({ path:'../.screenshots/messages-edit-history-web.png' })
-  assert.equal(await editHistory.locator('.app-window-controls').count(), 0, 'Native history is a popup without window controls')
-  await page.setViewportSize({ width:320, height:740 })
-  assert(await editHistory.locator('.messages-edit-history').evaluate(node => node.scrollWidth <= node.clientWidth))
-  await editHistory.screenshot({ path:'../.screenshots/messages-edit-history-mobile.png' })
-  await page.keyboard.press('Escape'); await editHistory.waitFor({ state:'hidden' })
-  await page.setViewportSize({ width:1120, height:760 })
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByLabel('Message actions', { exact: true }).click()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByRole('button', { name: 'Reply', exact: true }).click()
-  assert(await dialog.locator('.messages-reply').isVisible())
-  assert.equal(await dialog.locator('.messages-reply').getByRole('button').count(), 1, 'Composer quote has only its dismiss action')
-  assert((await dialog.locator('.messages-reply').boundingBox()).height >= 54)
-  await dialog.locator('.messages-layout').screenshot({ path: '../.screenshots/messages-references-web.png' })
-  await field.fill('A reply'); await field.press('Enter'); await idle()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByLabel('Add reaction', { exact: true }).click()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByLabel('Find emoji', { exact: true }).fill('thumbs up')
-  await dialog.locator('.emoji-grid').getByRole('button', { name: 'thumbs up', exact: true }).click(); await idle()
-  assert(await dialog.locator('.messages-viewport[data-current="true"] .message-reactions').count())
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByLabel('Message actions', { exact: true }).click()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByRole('button', { name: 'Pin message', exact: true }).click(); await idle()
-  assert((await dialog.getByRole('button', { name: 'Pinned message', exact: true }).innerText()).includes('A reply'))
-  await dialog.getByLabel('Chat actions', { exact:true }).click()
-  await dialog.getByRole('button', { name:'Pin history', exact:true }).click()
-  const pinHistory = page.locator('.messages-history-window[aria-label="Pin history"] > .account-panel')
-  assert((await pinHistory.innerText()).includes('Pinned by admin'))
-  await pinHistory.screenshot({ path:'../.screenshots/messages-pin-history-web.png' })
-  await pinHistory.getByRole('button', { name:'A reply', exact:true }).click()
-  await pinHistory.waitFor({ state:'hidden' })
-  for (const row of [dialog.locator('.messages-viewport[data-current="true"] .message-row').last(), dialog.locator('.messages-viewport[data-current="true"] .message-row').nth(3)]) {
-    await row.getByLabel('Message actions', { exact:true }).click()
-    await row.getByRole('button', { name:'Select message', exact:true }).click()
+  await dialog
+    .locator(
+      '.messages-viewport[data-current="true"] [data-frame=messageDelivery]'
+    )
+    .first()
+    .focus();
+  await tip.filter({ hasText: 'Read by 1 of 1' }).waitFor();
+  await page.keyboard.press('Escape');
+  await tip.waitFor({ state: 'hidden' });
+  assert(await dialog.isVisible(), 'Tooltip Escape does not close the chat');
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .count(),
+    3
+  );
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-author')
+      .count(),
+    2
+  );
+  console.log(
+    'Messages geometry:',
+    await dialog.evaluate((node) =>
+      Object.fromEntries(
+        [
+          '.messages-conversations',
+          '.messages-chat-header',
+          '.message-author',
+          '.message-body',
+          '.messages-conversation.selected'
+        ].map((selector) => {
+          const el = node.querySelector(
+              selector.startsWith('.message-')
+                ? '.messages-viewport[data-current="true"] ' + selector
+                : selector
+            ),
+            css = getComputedStyle(el),
+            box = el.getBoundingClientRect();
+          return [
+            selector,
+            {
+              width: box.width,
+              height: box.height,
+              font: css.font,
+              background: css.backgroundColor
+            }
+          ];
+        })
+      )
+    )
+  );
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-body')
+      .first()
+      .evaluate((node) => node.getBoundingClientRect().height),
+    34,
+    'Two rich-text lines match the captured native 17px line height'
+  );
+  const field = dialog.getByRole('textbox', {
+    name: 'Write a reply',
+    exact: true
+  });
+  await field.fill('');
+  await dialog
+    .locator('.messages-layout')
+    .screenshot({ path: '../.screenshots/messages-web.png' });
+  assert(
+    await dialog.getByRole('button', { name: 'Send', exact: true }).isDisabled()
+  );
+  const composerBase = await dialog
+    .locator('.message-composer-field')
+    .boundingBox();
+  assert(Math.abs(composerBase.height - 44) < 1);
+  assert.equal(
+    await field.evaluate((node) => getComputedStyle(node).outlineStyle),
+    'none',
+    'One native field border without a second browser focus outline'
+  );
+  assert.equal(
+    await dialog
+      .locator('.message-composer-field > .emoji-picker > summary > .app-icon')
+      .evaluate((node) => getComputedStyle(node).fontSize),
+    '17px'
+  );
+  await field.fill('A multiline draft\nSecond line\nThird line');
+  assert(
+    (await dialog.locator('.message-composer-field').boundingBox()).height >
+      composerBase.height
+  );
+  await field.fill(
+    Array.from({ length: 30 }, (_, index) => 'Draft line ' + index).join('\n')
+  );
+  assert(
+    (await dialog.locator('.message-composer-field').boundingBox()).height <=
+      124
+  );
+  assert(await field.evaluate((node) => node.scrollHeight > node.clientHeight));
+  await field.fill('@ar');
+  await field.press('Enter');
+  assert.equal(
+    await field.inputValue(),
+    '@artist ',
+    'Enter picks a suggested member without sending'
+  );
+  await field.fill('@');
+  await field.press('Escape');
+  assert(
+    await dialog.isVisible(),
+    'Escape closes mention suggestions before the chat'
+  );
+  await field.fill('IME draft');
+  await field.dispatchEvent('keydown', { key: 'Enter', isComposing: true });
+  assert.equal(await field.inputValue(), 'IME draft');
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .count(),
+    3
+  );
+  const lastBubble = dialog
+    .locator('.messages-viewport[data-current="true"] .message-bubble')
+    .last();
+  await lastBubble.click({ button: 'right' });
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByRole('button', { name: 'Select message', exact: true })
+    .click();
+  await page.waitForFunction(
+    () =>
+      !!document.querySelector(
+        '.messages-viewport[data-current="true"] .message-row.forward-selected .message-contour'
+      )
+  );
+  assert.equal(
+    await dialog
+      .locator(
+        '.messages-viewport[data-current="true"] .message-row.forward-selected path'
+      )
+      .evaluate((node) => getComputedStyle(node).strokeWidth),
+    '2px'
+  );
+  await dialog
+    .getByRole('button', { name: 'Cancel selection', exact: true })
+    .click();
+  await field.fill('Saved draft');
+  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click();
+  await idle();
+  await field.fill('Personal draft');
+  await dialog.getByRole('button', { name: 'artist', exact: true }).click();
+  await idle();
+  assert.equal(await field.inputValue(), 'Saved draft');
+  await field.fill('New reply');
+  await field.press('Control+Enter');
+  await field.type('Second line');
+  assert.equal(await field.inputValue(), 'New reply\nSecond line');
+  await field.press('Enter');
+  await idle();
+  await page.waitForFunction(
+    () => document.querySelector('.message-composer textarea')?.value === ''
+  );
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .count(),
+    4
+  );
+  const message = dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last();
+  await message.getByLabel('Message actions', { exact: true }).click();
+  await message
+    .getByRole('button', { name: 'Edit message', exact: true })
+    .click();
+  const edit = page.getByRole('dialog', { name: 'Edit message', exact: true });
+  assert.equal(
+    await edit
+      .getByLabel('Message text', { exact: true })
+      .evaluate((node) => node === document.activeElement),
+    true
+  );
+  await edit.getByLabel('Message text', { exact: true }).fill('   ');
+  assert(
+    await edit.getByRole('button', { name: 'Save', exact: true }).isDisabled()
+  );
+  await edit
+    .getByLabel('Message text', { exact: true })
+    .fill('Edited in browser');
+  assert.equal(Math.round((await edit.boundingBox()).width), 480);
+  assert.equal(
+    Math.round(
+      (await edit.getByLabel('Message text', { exact: true }).boundingBox())
+        .height
+    ),
+    130
+  );
+  await edit.screenshot({ path: '../.screenshots/messages-edit-web.png' });
+  await edit.getByRole('button', { name: 'Save', exact: true }).click();
+  await edit.waitFor({ state: 'hidden' });
+  await idle();
+  assert(
+    (
+      await dialog
+        .locator('.messages-viewport[data-current="true"] .message-row')
+        .last()
+        .innerText()
+    ).includes('Edited in browser')
+  );
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .last()
+      .locator('.message-frame-header [data-frame=messageEdited]')
+      .count(),
+    1,
+    'Edit metadata belongs in the header'
+  );
+  await dialog
+    .locator(
+      '.messages-viewport[data-current="true"] [data-frame=messageEdited]'
+    )
+    .last()
+    .focus();
+  await tip.filter({ hasText: 'Last edited by admin' }).waitFor();
+  await page.keyboard.press('Escape');
+  await tip.waitFor({ state: 'hidden' });
+  const editedId = await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getAttribute('data-message-id');
+  for (let revision = 0; revision < 8; revision++)
+    await chat('edit', {
+      message_log_code: editedId,
+      message:
+        'Revision ' + revision + '\n' + '<b>Plain text history</b>\n'.repeat(5)
+    });
+  await chat('edit', {
+    message_log_code: editedId,
+    message: 'Edited in browser'
+  });
+  await refreshButton.click();
+  await idle();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByLabel('Message actions', { exact: true })
+    .click();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByRole('button', { name: 'Edit history', exact: true })
+    .click();
+  const editHistory = page.locator(
+    '.messages-history-window[aria-label="Edit history"] > .account-panel'
+  );
+  assert((await editHistory.innerText()).includes('Edited by admin'));
+  assert((await editHistory.innerText()).includes('New reply\nSecond line'));
+  assert.equal(
+    await editHistory.locator('.message-revision p b').count(),
+    0,
+    'History renders server text without interpreting HTML'
+  );
+  assert(
+    await editHistory
+      .locator('.messages-edit-history')
+      .evaluate((node) => node.scrollHeight > node.clientHeight)
+  );
+  await page.waitForFunction(
+    () =>
+      getComputedStyle(
+        document.querySelector('.messages-history-window > .account-panel')
+      ).scale === '1'
+  );
+  assert.equal(Math.round((await editHistory.boundingBox()).width), 396);
+  await editHistory.screenshot({
+    path: '../.screenshots/messages-edit-history-web.png'
+  });
+  assert.equal(
+    await editHistory.locator('.app-window-controls').count(),
+    0,
+    'Native history is a popup without window controls'
+  );
+  await page.setViewportSize({ width: 320, height: 740 });
+  assert(
+    await editHistory
+      .locator('.messages-edit-history')
+      .evaluate((node) => node.scrollWidth <= node.clientWidth)
+  );
+  await editHistory.screenshot({
+    path: '../.screenshots/messages-edit-history-mobile.png'
+  });
+  await page.keyboard.press('Escape');
+  await editHistory.waitFor({ state: 'hidden' });
+  assert(
+    await dialog.isVisible(),
+    'Escape closes anchored history without closing its Messages owner'
+  );
+  await page.setViewportSize({ width: 1120, height: 760 });
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByLabel('Message actions', { exact: true })
+    .click();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByRole('button', { name: 'Reply', exact: true })
+    .click();
+  assert(await dialog.locator('.messages-reply').isVisible());
+  assert.equal(
+    await dialog.locator('.messages-reply').getByRole('button').count(),
+    1,
+    'Composer quote has only its dismiss action'
+  );
+  assert((await dialog.locator('.messages-reply').boundingBox()).height >= 54);
+  await dialog
+    .locator('.messages-layout')
+    .screenshot({ path: '../.screenshots/messages-references-web.png' });
+  await field.fill('A reply');
+  await field.press('Enter');
+  await idle();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByLabel('Add reaction', { exact: true })
+    .click();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByLabel('Find emoji', { exact: true })
+    .fill('thumbs up');
+  await dialog
+    .locator('.emoji-grid')
+    .getByRole('button', { name: 'thumbs up', exact: true })
+    .click();
+  await idle();
+  assert(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-reactions')
+      .count()
+  );
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByLabel('Message actions', { exact: true })
+    .click();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByRole('button', { name: 'Pin message', exact: true })
+    .click();
+  await idle();
+  assert(
+    (await dialog.locator('.messages-pin-frame').innerText()).includes(
+      'A reply'
+    )
+  );
+  await dialog.getByLabel('Chat actions', { exact: true }).click();
+  await dialog
+    .locator('.chat-actions')
+    .getByRole('button', { name: 'Pin history', exact: true })
+    .click();
+  const pinHistory = page.locator(
+    '.messages-history-window[aria-label="Pin history"] > .account-panel'
+  );
+  assert((await pinHistory.innerText()).includes('Pinned by admin'));
+  await pinHistory.screenshot({
+    path: '../.screenshots/messages-pin-history-web.png'
+  });
+  await pinHistory
+    .getByRole('button', { name: 'A reply', exact: true })
+    .click();
+  await pinHistory.waitFor({ state: 'hidden' });
+  for (const row of [
+    dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .last(),
+    dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .nth(3)
+  ]) {
+    await row.getByLabel('Message actions', { exact: true }).click();
+    await row
+      .locator('.message-actions')
+      .getByRole('button', { name: 'Select message', exact: true })
+      .click();
   }
-  await dialog.locator('.messages-selection').getByRole('button', { name:'Forward', exact:true }).click()
-  const multipleForward = page.getByRole('dialog', { name:'Forward messages', exact:true })
-  assert((await multipleForward.innerText()).includes('2 messages selected'))
-  await multipleForward.getByRole('button', { name:'Cancel', exact:true }).click()
-  await page.waitForFunction(() => !document.querySelector('.messages-selection'))
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByLabel('Message actions', { exact: true }).click()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByRole('button', { name: 'Forward', exact: true }).click()
-  const forward = page.getByRole('dialog', { name: 'Forward messages', exact: true })
-  assert.equal(Math.round((await forward.boundingBox()).width), 460)
-  assert.equal(Math.round((await forward.boundingBox()).height), 540)
-  assert((await forward.innerText()).includes('1 message selected'))
-  assert((await forward.innerText()).includes('Your personal notes'))
-  assert((await forward.innerText()).includes('3 members'))
-  assert(await forward.getByRole('button', { name:'Forward', exact:true }).isDisabled())
-  assert.equal(Math.round((await forward.locator('.messages-forward-row').first().boundingBox()).height), 52)
-  await forward.screenshot({ path:'../.screenshots/messages-forward-web.png' })
-  await forward.getByRole('checkbox', { name:'Favorites', exact:true }).check()
-  await page.keyboard.press('Escape')
-  await page.waitForFunction(() => !document.querySelector('.messages-selection'))
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByLabel('Message actions', { exact:true }).click()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().getByRole('button', { name:'Forward', exact:true }).click()
-  assert(!(await forward.getByRole('checkbox', { name:'Favorites', exact:true }).isChecked()))
-  await page.setViewportSize({ width:320, height:740 })
-  assert(await forward.evaluate(node => node.scrollWidth <= node.clientWidth))
-  await forward.screenshot({ path:'../.screenshots/messages-forward-mobile.png' })
-  await page.setViewportSize({ width:1120, height:760 })
-  assert.equal(Math.round((await forward.boundingBox()).width), 460, 'Other editor modes do not share positioned window geometry')
-  await forward.getByRole('checkbox', { name: 'Favorites', exact: true }).check()
-  const forwardFailure = route => route.fulfill({ status:500, contentType:'application/json', body:JSON.stringify({ error:'Forward test failure' }) })
-  await page.route('**/admin/messages/forward', forwardFailure)
-  await forward.getByRole('button', { name:'Forward', exact:true }).click()
-  await forward.locator('form > [role="alert"]').filter({ hasText:'Forward test failure' }).waitFor()
-  assert(await forward.getByRole('checkbox', { name:'Favorites', exact:true }).isChecked(), 'Failure preserves targets for retry')
-  await page.unroute('**/admin/messages/forward', forwardFailure)
-  await forward.getByRole('button', { name: 'Forward', exact: true }).click(); await forward.waitFor({ state: 'hidden' }); await idle()
-  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click(); await idle()
-  assert((await dialog.locator('.messages-viewport[data-current="true"] .message-row').innerText()).includes('Forwarded from admin'))
-  await dialog.locator('.messages-viewport[data-current="true"] .message-reference.forwarded').click(); await idle()
-  assert.equal(await dialog.locator('.messages-conversation.selected').getAttribute('aria-label'), 'artist', 'Forwarded quote opens the source conversation')
-  assert((await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().innerText()).includes('A reply'))
-  await dialog.getByRole('button', { name: 'Search messages', exact: true }).click()
-  const searchPopup = page.locator('.messages-search-popup > .account-panel')
-  const search = searchPopup.getByRole('textbox', { name:'Search messages', exact:true })
-  const searched = page.waitForResponse(response => response.url().endsWith('/messages/history') && response.request().postDataJSON().search_text === 'Edited in browser')
-  await search.fill('Edited in browser'); await search.press('Enter'); await searched; await idle()
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-row').count(), 1)
-  const restored = page.waitForResponse(response => response.url().endsWith('/messages/history') && response.request().postDataJSON().search_text === '')
-  await dialog.getByRole('button', { name: 'Search messages', exact: true }).click()
-  await searchPopup.getByRole('button', { name:'Clear search', exact:true }).click(); await restored; await idle()
-  await dialog.getByLabel('Chat actions', { exact: true }).click()
-  await dialog.getByRole('button', { name: 'Rename chat', exact: true }).click()
-  const rename = page.locator('.messages-rename-window > .account-panel')
-  assert.equal(Math.round((await rename.boundingBox()).width), 366)
-  assert.equal(await rename.getByLabel('Chat title', { exact:true }).evaluate(node => node === document.activeElement), true)
-  await rename.getByLabel('Chat title', { exact:true }).fill('  ')
-  assert(await rename.getByRole('button', { name:'Rename', exact:true }).isDisabled())
-  await rename.getByLabel('Chat title', { exact: true }).fill('Artist review')
-  await rename.screenshot({ path:'../.screenshots/messages-rename-web.png' })
-  await page.setViewportSize({ width:320, height:740 })
-  assert(await rename.evaluate(node => node.scrollWidth <= node.clientWidth))
-  await rename.screenshot({ path:'../.screenshots/messages-rename-mobile.png' })
-  await page.setViewportSize({ width:1120, height:760 })
-  await rename.getByLabel('Chat title', { exact:true }).press('Enter'); await rename.waitFor({ state: 'hidden' }); await idle()
-  await dialog.getByRole('button', { name: 'Lighting review', exact: true }).click(); await idle()
-  assert.equal(await dialog.getByRole('button', { name: 'Chat members', exact: true }).locator('.app-button-badge').innerText(), '3')
-  await dialog.getByRole('button', { name: 'Chat members', exact: true }).click()
-  const members = page.locator('.messages-members-window > .account-panel')
-  assert((await members.innerText()).includes('reviewer'))
-  assert.equal(await members.locator('.messages-member-row').count(), 3)
-  assert.equal(await members.locator('.messages-member-row').first().getAttribute('aria-label'), 'admin', 'Native member list starts with the current user')
-  await members.screenshot({ path:'../.screenshots/messages-members-web.png' })
-  await members.getByRole('button', { name:'reviewer', exact:true }).click()
-  const profile = page.getByRole('dialog', { name:'User profile', exact:true })
-  await profile.waitFor(); await profile.getByRole('button', { name:'Close profile', exact:true }).click()
-  assert(await dialog.isVisible(), 'Closing a member profile returns to Messages')
-  await dialog.getByLabel('Chat actions', { exact:true }).click()
-  await dialog.getByRole('button', { name:'Add or remove members', exact:true }).click()
-  const editMembers = page.locator('.messages-people-window[aria-label="Add or remove members"] > .account-panel')
-  assert.equal(await editMembers.getByRole('checkbox', { name:'artist', exact:true }).getAttribute('aria-checked'), 'true')
-  await editMembers.getByRole('checkbox', { name:'artist', exact:true }).uncheck()
-  await editMembers.getByRole('checkbox', { name:'reviewer', exact:true }).uncheck()
-  assert(await editMembers.getByRole('button', { name:'Save members', exact:true }).isDisabled())
-  await editMembers.getByRole('checkbox', { name:'artist', exact:true }).check()
-  await editMembers.getByRole('checkbox', { name:'reviewer', exact:true }).check()
-  await editMembers.screenshot({ path:'../.screenshots/messages-edit-members-web.png' })
-  await editMembers.getByRole('button', { name:'Save members', exact:true }).click(); await editMembers.waitFor({ state:'hidden' }); await idle()
-  await dialog.getByRole('button', { name: 'New conversation', exact: true }).click()
-  const create = page.locator('.messages-people-window[aria-label="New conversation"] > .account-panel')
-  assert.equal(Math.round((await create.locator('.app-search-field').boundingBox()).height), 36)
-  assert.equal(Math.round((await create.locator('.user-picker-row').first().boundingBox()).height), 54)
-  assert(await create.getByRole('button', { name:'Create', exact:true }).isDisabled())
-  assert(await create.getByRole('checkbox', { name:'admin', exact:true }).isDisabled())
-  await create.getByLabel('Search users', { exact:true }).fill('  ADMIN  ')
-  await create.getByLabel('Search users', { exact:true }).press('Enter')
-  assert(await create.isVisible(), 'Searching users cannot submit the conversation form')
-  assert.equal(await create.getByRole('checkbox').count(), 3, 'Search matches group labels')
-  await create.getByLabel('Search users', { exact:true }).fill('reviewer')
-  assert.equal(await create.getByRole('checkbox').count(), 1)
-  await create.getByRole('checkbox', { name:'reviewer', exact:true }).check()
-  await create.getByLabel('Search users', { exact:true }).fill('')
-  await create.getByRole('checkbox', { name:'artist', exact:true }).check()
-  assert(await create.getByLabel('Group chat title', { exact:true }).isVisible())
-  assert(await create.getByRole('button', { name:'Create', exact:true }).isDisabled())
-  await create.getByLabel('Group chat title', { exact:true }).fill('Lighting review')
-  await create.screenshot({ path:'../.screenshots/messages-create-chat-web.png' })
-  await page.setViewportSize({ width:320, height:700 })
-  assert.equal(await create.evaluate(node => node.scrollWidth <= node.clientWidth), true)
-  await create.screenshot({ path:'../.screenshots/messages-create-chat-mobile.png' })
-  await page.setViewportSize({ width:1440, height:1000 })
-  await create.getByRole('button', { name:'Cancel', exact:true }).click()
-  await dialog.getByRole('button', { name:'New conversation', exact:true }).click()
-  assert.equal(await create.getByLabel('Search users', { exact:true }).inputValue(), '')
-  await create.getByRole('checkbox', { name: 'reviewer', exact: true }).check()
-  await create.getByRole('button', { name: 'Create', exact: true }).click(); await create.waitFor({ state: 'hidden' }); await idle()
-  assert((await dialog.locator('.messages-presence').innerText()).includes('Status unavailable'), 'A user without a heartbeat has an unknown status')
-  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click(); await idle()
-  assert.equal(await field.inputValue(), 'Personal draft')
-  await dialog.getByRole('button', { name: 'Close Messages', exact: true }).click()
-  await page.reload(); await page.locator('.project-picker').waitFor()
-  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Messages', exact: true }).click(); await idle()
-  assert.equal(await field.inputValue(), 'Personal draft')
-  await page.setViewportSize({ width: 360, height: 780 })
-  if (await dialog.getByRole('button', { name: 'Conversations', exact: true }).isVisible()) await dialog.getByRole('button', { name: 'Conversations', exact: true }).click()
-  await dialog.getByRole('button', { name: 'Artist review', exact: true }).click(); await idle()
-  assert(await dialog.locator('.messages-timeline-pane').isVisible())
-  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
-  await dialog.screenshot({ path: '../.screenshots/messages-mobile.png' })
-  await page.setViewportSize({ width: 320, height: 700 })
-  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
-  await dialog.getByRole('button', { name: 'Conversations', exact: true }).click()
-  await dialog.getByRole('button', { name: 'Lighting review', exact: true }).click(); await idle()
-  await dialog.locator('.messages-viewport[data-current="true"]').evaluate(node => { node.scrollTop = 0 })
-  await page.waitForFunction(() => document.querySelectorAll('.messages-viewport[data-current="true"] .message-row').length === 35)
-  await dialog.getByRole('button', { name: 'Jump to latest message', exact: true }).waitFor({ state: 'visible' })
-  const ids = await dialog.locator('.messages-viewport[data-current="true"] .message-row').evaluateAll(nodes => nodes.map(node => node.dataset.messageId))
-  assert.equal(new Set(ids).size, 35)
-  await page.screenshot({ path: '../.screenshots/messages-jump-latest-mobile.png' })
-  const latestBounds = await dialog.getByRole('button', { name: 'Jump to latest message', exact: true }).boundingBox()
-  await page.touchscreen.tap(latestBounds.x + latestBounds.width / 2, latestBounds.y + latestBounds.height / 2)
-  await page.waitForFunction(() => { const view = document.querySelector('.messages-viewport[data-current="true"]'); return view.scrollHeight - view.scrollTop - view.clientHeight < 2 })
-  await dialog.getByRole('button', { name: 'Jump to latest message', exact: true }).waitFor({ state: 'hidden' })
-  await dialog.getByRole('button', { name: 'Conversations', exact: true }).click()
-  const heldChat = dialog.getByRole('button', { name: 'Artist review', exact: true })
-  const heldBounds = await heldChat.boundingBox(), touch = await page.context().newCDPSession(page)
-  await touch.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: heldBounds.x + 30, y: heldBounds.y + 30 }] })
-  await dialog.locator('.chat-actions .account-panel').waitFor({ state: 'visible' })
-  await touch.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await touch.detach()
-  await dialog.getByRole('button', { name: 'Rename chat', exact: true }).click()
-  assert.equal(await contextRename.getByLabel('Chat title', { exact: true }).inputValue(), 'Artist review')
-  await contextRename.getByRole('button', { name: 'Cancel', exact: true }).click()
-  await page.setViewportSize({ width: 1440, height: 1000 })
-  await dialog.getByRole('button', { name: 'Artist review', exact: true }).click(); await idle()
-  let releaseSend, arrived
-  const gate = new Promise(resolve => { releaseSend = resolve }), arrival = new Promise(resolve => { arrived = resolve })
-  const heldSend = async route => {
-    const response = await route.fetch({ url: base + '/admin/messages/send', headers: { ...route.request().headers(), origin: base, referer: base + '/' } })
-    arrived(); await gate; await route.fulfill({ response })
-  }
-  await page.route('**/admin/messages/send', heldSend)
+  await dialog
+    .locator('.messages-selection')
+    .getByRole('button', { name: 'Forward', exact: true })
+    .click();
+  const multipleForward = page.getByRole('dialog', {
+    name: 'Forward messages',
+    exact: true
+  });
+  assert((await multipleForward.innerText()).includes('2 messages selected'));
+  await multipleForward
+    .getByRole('button', { name: 'Cancel', exact: true })
+    .click();
+  await page.waitForFunction(
+    () => !document.querySelector('.messages-selection')
+  );
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByLabel('Message actions', { exact: true })
+    .click();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByRole('button', { name: 'Forward', exact: true })
+    .click();
+  const forward = page.getByRole('dialog', {
+    name: 'Forward messages',
+    exact: true
+  });
+  assert.equal(Math.round((await forward.boundingBox()).width), 460);
+  assert.equal(Math.round((await forward.boundingBox()).height), 540);
+  assert((await forward.innerText()).includes('1 message selected'));
+  assert((await forward.innerText()).includes('Your personal notes'));
+  assert((await forward.innerText()).includes('3 members'));
+  assert(
+    await forward
+      .getByRole('button', { name: 'Forward', exact: true })
+      .isDisabled()
+  );
+  assert.equal(
+    Math.round(
+      (
+        await forward
+          .locator('[data-frame=forwardTargetLabel]')
+          .first()
+          .boundingBox()
+      ).height
+    ),
+    54
+  );
+  await forward.screenshot({
+    path: '../.screenshots/messages-forward-web.png'
+  });
+  await forward
+    .getByRole('checkbox', { name: 'Favorites', exact: true })
+    .check();
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(
+    () => !document.querySelector('.messages-selection')
+  );
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByLabel('Message actions', { exact: true })
+    .click();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .getByRole('button', { name: 'Forward', exact: true })
+    .click();
+  assert(
+    !(await forward
+      .getByRole('checkbox', { name: 'Favorites', exact: true })
+      .isChecked())
+  );
+  await page.setViewportSize({ width: 320, height: 740 });
+  assert(
+    await forward.evaluate((node) => node.scrollWidth <= node.clientWidth)
+  );
+  await forward.screenshot({
+    path: '../.screenshots/messages-forward-mobile.png'
+  });
+  await page.setViewportSize({ width: 1120, height: 760 });
+  assert.equal(
+    Math.round((await forward.boundingBox()).width),
+    460,
+    'Other editor modes do not share positioned window geometry'
+  );
+  await forward
+    .getByRole('checkbox', { name: 'Favorites', exact: true })
+    .check();
+  const forwardFailure = (route) =>
+    route.fulfill({
+      status: 500,
+      contentType: 'application/json',
+      body: JSON.stringify({ error: 'Forward test failure' })
+    });
+  await page.route('**/admin/messages/forward', forwardFailure);
+  await forward.getByRole('button', { name: 'Forward', exact: true }).click();
+  await forward
+    .locator('form > [role="alert"]')
+    .filter({ hasText: 'Forward test failure' })
+    .waitFor();
+  assert(
+    await forward
+      .getByRole('checkbox', { name: 'Favorites', exact: true })
+      .isChecked(),
+    'Failure preserves targets for retry'
+  );
+  await page.unroute('**/admin/messages/forward', forwardFailure);
+  await forward.getByRole('button', { name: 'Forward', exact: true }).click();
+  await forward.waitFor({ state: 'hidden' });
+  await idle();
+  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click();
+  await idle();
+  assert(
+    (
+      await dialog
+        .locator('.messages-viewport[data-current="true"] .message-row')
+        .innerText()
+    ).includes('Forwarded from admin')
+  );
+  await dialog
+    .locator(
+      '.messages-viewport[data-current="true"] .message-reference.forwarded'
+    )
+    .click();
+  await idle();
+  assert.equal(
+    await dialog
+      .locator(
+        '.messages-conversation.selected [data-frame=conversationSelect]'
+      )
+      .getAttribute('aria-label'),
+    'artist',
+    'Forwarded quote opens the source conversation'
+  );
+  assert(
+    (
+      await dialog
+        .locator('.messages-viewport[data-current="true"] .message-row')
+        .last()
+        .innerText()
+    ).includes('A reply')
+  );
+  await dialog
+    .getByRole('button', { name: 'Search messages', exact: true })
+    .click();
+  const searchPopup = page.locator('.messages-search-popup > .account-panel');
+  const search = searchPopup.getByRole('textbox', {
+    name: 'Search messages',
+    exact: true
+  });
+  const searched = page.waitForResponse(
+    (response) =>
+      response.url().endsWith('/messages/history') &&
+      response.request().postDataJSON().search_text === 'Edited in browser'
+  );
+  await search.fill('Edited in browser');
+  await search.press('Enter');
+  await searched;
+  await idle();
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .count(),
+    1
+  );
+  const restored = page.waitForResponse(
+    (response) =>
+      response.url().endsWith('/messages/history') &&
+      response.request().postDataJSON().search_text === ''
+  );
+  await dialog
+    .getByRole('button', { name: 'Search messages', exact: true })
+    .click();
+  await searchPopup
+    .getByRole('button', { name: 'Clear search', exact: true })
+    .click();
+  await restored;
+  await idle();
+  await dialog.getByLabel('Chat actions', { exact: true }).click();
+  await dialog
+    .getByRole('button', { name: 'Rename chat', exact: true })
+    .click();
+  const rename = page.locator('.messages-rename-window > .account-panel');
+  await page.waitForFunction(
+    () =>
+      getComputedStyle(
+        document.querySelector('.messages-rename-window > .account-panel')
+      ).scale === '1'
+  );
+  assert.equal(Math.round((await rename.boundingBox()).width), 366);
+  assert.equal(
+    await rename
+      .getByLabel('Chat title', { exact: true })
+      .evaluate((node) => node === document.activeElement),
+    true
+  );
+  await rename.getByLabel('Chat title', { exact: true }).fill('  ');
+  assert(
+    await rename
+      .getByRole('button', { name: 'Rename', exact: true })
+      .isDisabled()
+  );
+  await rename.getByLabel('Chat title', { exact: true }).fill('Artist review');
+  await rename.screenshot({ path: '../.screenshots/messages-rename-web.png' });
+  await page.setViewportSize({ width: 320, height: 740 });
+  assert(await rename.evaluate((node) => node.scrollWidth <= node.clientWidth));
+  await rename.screenshot({
+    path: '../.screenshots/messages-rename-mobile.png'
+  });
+  await page.setViewportSize({ width: 1120, height: 760 });
+  await rename.getByLabel('Chat title', { exact: true }).press('Enter');
+  await rename.waitFor({ state: 'hidden' });
+  await idle();
+  await dialog
+    .getByRole('button', { name: 'Lighting review', exact: true })
+    .click();
+  await idle();
+  assert.equal(
+    await dialog
+      .getByRole('button', { name: 'Chat members', exact: true })
+      .locator('.app-button-badge')
+      .innerText(),
+    '3'
+  );
+  await dialog
+    .getByRole('button', { name: 'Chat members', exact: true })
+    .click();
+  const members = page.locator('.messages-members-window > .account-panel');
+  await members.locator('[data-frame=chatMember_reviewer]').waitFor();
+  assert((await members.innerText()).includes('reviewer'));
+  assert.equal(await members.locator('[data-frame^=chatMember_]').count(), 3);
+  assert.equal(
+    await members
+      .locator('[data-frame^=chatMember_]')
+      .first()
+      .getAttribute('aria-label'),
+    'admin',
+    'Native member list starts with the current user'
+  );
+  await members.screenshot({
+    path: '../.screenshots/messages-members-web.png'
+  });
+  await members.getByRole('button', { name: 'reviewer', exact: true }).click();
+  const profile = page.getByRole('dialog', {
+    name: 'User profile',
+    exact: true
+  });
+  await profile.waitFor();
+  await profile
+    .getByRole('button', { name: 'Close profile', exact: true })
+    .click();
+  assert(
+    await dialog.isVisible(),
+    'Closing a member profile returns to Messages'
+  );
+  await dialog.getByLabel('Chat actions', { exact: true }).click();
+  await dialog
+    .getByRole('button', { name: 'Add or remove members', exact: true })
+    .click();
+  const editMembers = page.locator(
+    '.messages-people-window[aria-label="Add or remove members"] > .account-panel'
+  );
+  assert.equal(
+    await editMembers
+      .getByRole('checkbox', { name: 'artist', exact: true })
+      .getAttribute('aria-checked'),
+    'true'
+  );
+  await editMembers
+    .getByRole('checkbox', { name: 'artist', exact: true })
+    .uncheck();
+  await editMembers
+    .getByRole('checkbox', { name: 'reviewer', exact: true })
+    .uncheck();
+  assert(
+    await editMembers
+      .getByRole('button', { name: 'Save members', exact: true })
+      .isDisabled()
+  );
+  await editMembers
+    .getByRole('checkbox', { name: 'artist', exact: true })
+    .check();
+  await editMembers
+    .getByRole('checkbox', { name: 'reviewer', exact: true })
+    .check();
+  await editMembers.screenshot({
+    path: '../.screenshots/messages-edit-members-web.png'
+  });
+  await editMembers
+    .getByRole('button', { name: 'Save members', exact: true })
+    .click();
+  await editMembers.waitFor({ state: 'hidden' });
+  await idle();
+  await dialog
+    .getByRole('button', { name: 'New conversation', exact: true })
+    .click();
+  const create = page.locator(
+    '.messages-people-window[aria-label="New conversation"] > .account-panel'
+  );
+  await create.getByLabel('Search users', { exact: true }).waitFor();
+  await page.waitForFunction(
+    () =>
+      getComputedStyle(
+        document.querySelector('.messages-people-window > .account-panel')
+      ).scale === '1'
+  );
+  assert.equal(
+    Math.round(
+      (await create.locator('.app-search-field').boundingBox()).height
+    ),
+    36
+  );
+  assert.equal(
+    Math.round(
+      (
+        await create
+          .locator('[data-frame^=userPickerAction_]')
+          .first()
+          .boundingBox()
+      ).height
+    ),
+    54
+  );
+  assert(
+    await create
+      .getByRole('button', { name: 'Create', exact: true })
+      .isDisabled()
+  );
+  assert(
+    await create
+      .getByRole('checkbox', { name: 'admin', exact: true })
+      .isDisabled()
+  );
+  await create.getByLabel('Search users', { exact: true }).fill('  ADMIN  ');
+  await create.getByLabel('Search users', { exact: true }).press('Enter');
+  assert(
+    await create.isVisible(),
+    'Searching users cannot submit the conversation form'
+  );
+  assert.equal(
+    await create.getByRole('checkbox').count(),
+    3,
+    'Search matches group labels'
+  );
+  await create.getByLabel('Search users', { exact: true }).fill('reviewer');
+  assert.equal(await create.getByRole('checkbox').count(), 1);
+  await create.getByRole('checkbox', { name: 'reviewer', exact: true }).check();
+  await create.getByLabel('Search users', { exact: true }).fill('');
+  await create.getByRole('checkbox', { name: 'artist', exact: true }).check();
+  assert(
+    await create.getByLabel('Group chat title', { exact: true }).isVisible()
+  );
+  assert(
+    await create
+      .getByRole('button', { name: 'Create', exact: true })
+      .isDisabled()
+  );
+  await create
+    .getByLabel('Group chat title', { exact: true })
+    .fill('Lighting review');
+  await create.screenshot({
+    path: '../.screenshots/messages-create-chat-web.png'
+  });
+  await page.setViewportSize({ width: 320, height: 700 });
+  assert.equal(
+    await create.evaluate((node) => node.scrollWidth <= node.clientWidth),
+    true
+  );
+  await create.screenshot({
+    path: '../.screenshots/messages-create-chat-mobile.png'
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await create.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await dialog
+    .getByRole('button', { name: 'New conversation', exact: true })
+    .click();
+  assert.equal(
+    await create.getByLabel('Search users', { exact: true }).inputValue(),
+    ''
+  );
+  await create.getByRole('checkbox', { name: 'reviewer', exact: true }).check();
+  await create.getByRole('button', { name: 'Create', exact: true }).click();
+  await create.waitFor({ state: 'hidden' });
+  await idle();
+  assert(
+    (await dialog.locator('[data-frame=chatPresence]').innerText()).includes(
+      'Status unavailable'
+    ),
+    'A user without a heartbeat has an unknown status'
+  );
+  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click();
+  await idle();
+  assert.equal(await field.inputValue(), 'Personal draft');
+  await dialog
+    .getByRole('button', { name: 'Close Messages', exact: true })
+    .click();
+  await page.reload();
+  await page.locator('.project-picker').waitFor();
+  await page.getByLabel('Account', { exact: true }).click();
+  await page.getByRole('button', { name: 'Messages', exact: true }).click();
+  await idle();
+  assert.equal(await field.inputValue(), 'Personal draft');
+  await page.setViewportSize({ width: 360, height: 780 });
+  await dialog.locator('[data-frame=chatBack]').waitFor({ state: 'attached' });
+  if (
+    await dialog
+      .getByRole('button', { name: 'Conversations', exact: true })
+      .isVisible()
+  )
+    await dialog
+      .getByRole('button', { name: 'Conversations', exact: true })
+      .click();
+  await dialog
+    .getByRole('button', { name: 'Artist review', exact: true })
+    .click();
+  await idle();
+  assert(await dialog.locator('.messages-timeline-pane').isVisible());
+  assert.equal(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth
+    ),
+    true
+  );
+  await dialog.screenshot({ path: '../.screenshots/messages-mobile.png' });
+  await page.setViewportSize({ width: 320, height: 700 });
+  assert.equal(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth
+    ),
+    true
+  );
+  await dialog
+    .getByRole('button', { name: 'Conversations', exact: true })
+    .click();
+  await dialog
+    .getByRole('button', { name: 'Lighting review', exact: true })
+    .click();
+  await idle();
+  await dialog
+    .locator('.messages-viewport[data-current="true"]')
+    .evaluate((node) => {
+      node.scrollTop = 0;
+    });
+  await page.waitForFunction(
+    () =>
+      document.querySelectorAll(
+        '.messages-viewport[data-current="true"] .message-row'
+      ).length === 35
+  );
+  await dialog
+    .getByRole('button', { name: 'Jump to latest message', exact: true })
+    .waitFor({ state: 'visible' });
+  const ids = await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .evaluateAll((nodes) => nodes.map((node) => node.dataset.messageId));
+  assert.equal(new Set(ids).size, 35);
+  await page.screenshot({
+    path: '../.screenshots/messages-jump-latest-mobile.png'
+  });
+  const latestBounds = await dialog
+    .getByRole('button', { name: 'Jump to latest message', exact: true })
+    .boundingBox();
+  await page.touchscreen.tap(
+    latestBounds.x + latestBounds.width / 2,
+    latestBounds.y + latestBounds.height / 2
+  );
+  await page.waitForFunction(() => {
+    const view = document.querySelector(
+      '.messages-viewport[data-current="true"]'
+    );
+    return view.scrollHeight - view.scrollTop - view.clientHeight < 2;
+  });
+  await dialog
+    .getByRole('button', { name: 'Jump to latest message', exact: true })
+    .waitFor({ state: 'hidden' });
+  await dialog
+    .getByRole('button', { name: 'Conversations', exact: true })
+    .click();
+  const heldChat = dialog.getByRole('button', {
+    name: 'Artist review',
+    exact: true
+  });
+  const heldBounds = await heldChat.boundingBox(),
+    touch = await page.context().newCDPSession(page);
+  await touch.send('Input.dispatchTouchEvent', {
+    type: 'touchStart',
+    touchPoints: [{ x: heldBounds.x + 30, y: heldBounds.y + 30 }]
+  });
+  await dialog
+    .locator('.chat-actions .account-panel')
+    .waitFor({ state: 'visible' });
+  await touch.send('Input.dispatchTouchEvent', {
+    type: 'touchEnd',
+    touchPoints: []
+  });
+  await touch.detach();
+  await dialog
+    .getByRole('button', { name: 'Rename chat', exact: true })
+    .click();
+  assert.equal(
+    await contextRename.getByLabel('Chat title', { exact: true }).inputValue(),
+    'Artist review'
+  );
+  await contextRename
+    .getByRole('button', { name: 'Cancel', exact: true })
+    .click();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await dialog
+    .getByRole('button', { name: 'Artist review', exact: true })
+    .click();
+  await idle();
+  let releaseSend, arrived;
+  const gate = new Promise((resolve) => {
+      releaseSend = resolve;
+    }),
+    arrival = new Promise((resolve) => {
+      arrived = resolve;
+    });
+  const heldSend = async (route) => {
+    const response = await route.fetch({
+      url: base + '/admin/messages/send',
+      headers: {
+        ...route.request().headers(),
+        origin: base,
+        referer: base + '/'
+      }
+    });
+    arrived();
+    await gate;
+    await route.fulfill({ response });
+  };
+  await page.route('**/admin/messages/send', heldSend);
   try {
-    await field.fill('Delivery after switching'); await field.press('Enter'); await arrival
-    assert(await dialog.getByRole('button', { name: 'Sending', exact: true }).isDisabled())
-    assert.equal(await field.getAttribute('readonly'), '')
-    assert.equal(await field.isDisabled(), false, 'Pending text remains selectable')
-    assert.equal(await dialog.getByLabel('Insert emoji', { exact: true }).count(), 0)
-    await dialog.getByRole('button', { name: 'Favorites', exact: true }).click()
-    await page.waitForFunction(() => document.querySelector('.message-composer textarea')?.value === 'Personal draft')
-    releaseSend(); await idle()
-    assert.equal(await field.inputValue(), 'Personal draft')
-    await dialog.getByRole('button', { name: 'Artist review', exact: true }).click(); await idle()
-    assert.equal(await field.inputValue(), '')
-    assert((await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().innerText()).includes('Delivery after switching'))
-  } finally { releaseSend(); await page.unroute('**/admin/messages/send', heldSend) }
-  const png = readFileSync('tests/fixtures/messages-attachment.png')
-  const files = [{ name: 'poster.png', mimeType: 'image/png', buffer: png }, { name: 'review.txt', mimeType: 'text/plain', buffer: Buffer.from('Attachment review <script>window.chatInjected=true</script>') }]
-  await dialog.getByLabel('Choose files', { exact: true }).setInputFiles(files)
-  assert.equal(await dialog.locator('.messages-staging .attachment-card').count(), 2)
-  await field.press('Enter'); await idle()
-  const attached = dialog.locator('.messages-viewport[data-current="true"] .message-row').last()
-  assert.equal(await attached.locator('.attachment-card').count(), 2)
-  await attached.locator('.attachment-card').filter({ hasText: 'poster.png' }).click()
-  const fileWindow = page.getByRole('dialog', { name: 'File preview', exact: true })
-  await page.waitForFunction(() => { const node = document.querySelector('.file-preview[open] img'); return node?.complete && node.naturalWidth > 0 })
-  const download = page.waitForEvent('download')
-  await fileWindow.getByRole('button', { name: 'Download', exact: true }).first().click()
-  assert.equal((await download).suggestedFilename(), 'poster.png')
-  await fileWindow.getByRole('button', { name: 'Close preview', exact: true }).click()
-  await attached.locator('.attachment-card').filter({ hasText: 'review.txt' }).click()
-  await fileWindow.locator('pre').waitFor()
-  assert((await fileWindow.locator('pre').innerText()).includes('<script>window.chatInjected=true</script>'))
-  assert.equal(await page.evaluate(() => window.chatInjected), undefined)
-  await fileWindow.getByRole('button', { name: 'Close preview', exact: true }).click()
-  await dialog.getByRole('button', { name: 'Chat files', exact: true }).click()
-  const gallery = page.locator('.chat-files-window > .account-panel')
-  await gallery.waitFor()
-  assert.equal(await gallery.locator('.chat-file-entry').count(), 2)
-  assert((await gallery.innerText()).includes('2 loaded'))
-  assert((await gallery.locator('.chat-file-entry').first().innerText()).includes('admin'))
-  await gallery.screenshot({ path: '../.screenshots/messages-chat-files-web.png' })
-  assert.equal(Math.round((await gallery.locator('.chat-file-entry').first().boundingBox()).height), 60)
-  assert(Math.abs((await gallery.locator('.messages-file-gallery').boundingBox()).width - 328) <= 2, 'Native popup list width includes its surface border')
-  assert(Math.abs((await gallery.locator('.messages-file-gallery').boundingBox()).height - 349) <= 2, 'Native popup list height includes its surface border')
-  assert.equal(Math.round(await gallery.locator('.message-attachment').first().evaluate(node => node.getBoundingClientRect().height)), 60)
-  await page.setViewportSize({ width: 320, height: 780 })
-  await gallery.screenshot({ path: '../.screenshots/messages-chat-files-mobile.png' })
-  assert(await gallery.evaluate(node => node.scrollWidth <= node.clientWidth))
-  await page.setViewportSize({ width: 1440, height: 1000 })
-  const galleryText = gallery.locator('.message-attachment').filter({ hasText: 'review.txt' })
-  await galleryText.getByLabel('Attachment actions', { exact: true }).click()
-  const galleryDownload = page.waitForEvent('download')
-  await galleryText.getByRole('button', { name: 'Download', exact: true }).click()
-  assert.equal((await galleryDownload).suggestedFilename(), 'review.txt')
-  await galleryText.locator('.chat-file-entry').click()
-  await gallery.waitFor({ state: 'hidden' })
-  assert.equal(await fileWindow.isVisible(), false, 'Chat files navigates to the message, not a file preview')
-  const photo = attached.locator('.message-attachment').filter({ hasText: 'poster.png' })
-  const attachmentMenu = photo.locator('.account-panel')
-  await photo.locator('.attachment-card').click({ button: 'right' })
-  await attachmentMenu.waitFor({ state: 'visible' })
-  assert.equal(await attachmentMenu.getByRole('button').count(), 6)
-  assert(await attachmentMenu.getByRole('button', { name: 'Show folder', exact: true }).isDisabled())
-  assert(await attachmentMenu.getByRole('button', { name: 'Copy image', exact: true }).isDisabled())
-  assert.equal(await attachmentMenu.getByRole('button', { name: 'Download', exact: true }).evaluate(node => getComputedStyle(node).fontWeight), '400')
-  await attachmentMenu.screenshot({ path: '../.screenshots/messages-attachment-menu-web.png' })
-  const menuDownload = page.waitForEvent('download')
-  await attachmentMenu.getByRole('button', { name: 'Download', exact: true }).click()
-  assert.equal((await menuDownload).suggestedFilename(), 'poster.png')
-  // Inspect fallback clipboard text on the actual LAN HTTP path without depending on the desktop clipboard.
-  await page.evaluate(() => { document.execCommand = command => { if (command !== 'copy') return false; window.attachmentCopied = document.activeElement.value; return true } })
-  await photo.getByLabel('Attachment actions', { exact: true }).click()
-  await attachmentMenu.getByRole('button', { name: 'Copy file path', exact: true }).click()
-  await page.waitForFunction(() => window.attachmentCopied?.endsWith('.png'))
-  const copiedPath = await page.evaluate(() => window.attachmentCopied)
-  assert(/^(?:[A-Z]:\/|\/)/i.test(copiedPath))
-  assert(!copiedPath.includes('\\'))
-  await photo.getByLabel('Attachment actions', { exact: true }).click()
-  await attachmentMenu.getByRole('button', { name: 'Copy web link', exact: true }).click()
-  await page.waitForFunction(() => window.attachmentCopied?.startsWith('http://'))
-  const copiedLink = new URL(await page.evaluate(() => window.attachmentCopied))
-  assert.equal(copiedLink.pathname, '/projects/' + encodeURIComponent(project) + '/')
-  for (const key of ['chat', 'snapshot', 'file']) assert(copiedLink.searchParams.get(key))
-  assert(!/ticket|password|token/.test(copiedLink.href))
-  await page.goto(copiedLink.href)
-  await fileWindow.waitFor()
-  await page.waitForFunction(() => document.querySelector('.file-preview[open] img')?.naturalWidth > 0)
-  await page.reload()
-  await fileWindow.waitFor()
-  await page.waitForFunction(() => document.querySelector('.file-preview[open] img')?.naturalWidth > 0)
-  assert.equal(new URL(page.url()).searchParams.get('snapshot'), copiedLink.searchParams.get('snapshot'))
-  await fileWindow.getByRole('button', { name: 'Close preview', exact: true }).click()
-  await page.waitForURL(url => !url.searchParams.has('snapshot'))
-  const savedSession = await page.evaluate(() => localStorage.getItem('tactic_stream.session'))
-  const secure = await browser.newContext({ permissions: ['clipboard-read', 'clipboard-write'], viewport: { width: 1440, height: 1000 } })
-  try {
-    await secure.addInitScript(session => {
-      localStorage.setItem('tactic_stream.session', session)
-      localStorage.setItem('tactic_stream.appearance', JSON.stringify({ mode: 'dark', language: 'en' }))
-    }, savedSession)
-    const clipboardPage = await secure.newPage()
-    await clipboardPage.goto(base + copiedLink.pathname + copiedLink.search)
-    const clipboardPreview = clipboardPage.getByRole('dialog', { name: 'File preview', exact: true })
-    await clipboardPage.waitForFunction(() => document.querySelector('.file-preview[open] img')?.naturalWidth > 0)
-    await clipboardPreview.getByRole('button', { name: 'Close preview', exact: true }).click()
-    const clipboardPhoto = clipboardPage.locator('.messages-viewport[data-current="true"] .message-attachment').filter({ hasText: 'poster.png' }).last()
-    await clipboardPhoto.getByLabel('Attachment actions', { exact: true }).click()
-    const copyImage = clipboardPhoto.getByRole('button', { name: 'Copy image', exact: true })
-    assert(await copyImage.isEnabled())
-    await copyImage.click()
-    await clipboardPage.waitForFunction(() => !document.querySelector('.messages-viewport[data-current="true"] .message-attachment .attachment-card:disabled'))
-    const imageSize = await clipboardPage.evaluate(async () => {
-      const items = await navigator.clipboard.read(), png = await items[0].getType('image/png')
-      const bitmap = await createImageBitmap(png)
-      try { return [bitmap.width, bitmap.height] } finally { bitmap.close() }
+    await field.fill('Delivery after switching');
+    await field.press('Enter');
+    await arrival;
+    assert(
+      await dialog
+        .getByRole('button', { name: 'Sending', exact: true })
+        .isDisabled()
+    );
+    assert.equal(await field.getAttribute('readonly'), '');
+    assert.equal(
+      await field.isDisabled(),
+      false,
+      'Pending text remains selectable'
+    );
+    assert.equal(
+      await dialog.getByLabel('Insert emoji', { exact: true }).count(),
+      0
+    );
+    await dialog
+      .getByRole('button', { name: 'Favorites', exact: true })
+      .click();
+    await page.waitForFunction(
+      () =>
+        document.querySelector('.message-composer textarea')?.value ===
+        'Personal draft'
+    );
+    releaseSend();
+    await idle();
+    assert.equal(await field.inputValue(), 'Personal draft');
+    await dialog
+      .getByRole('button', { name: 'Artist review', exact: true })
+      .click();
+    await idle();
+    assert.equal(await field.inputValue(), '');
+    assert(
+      (
+        await dialog
+          .locator('.messages-viewport[data-current="true"] .message-row')
+          .last()
+          .innerText()
+      ).includes('Delivery after switching')
+    );
+  } finally {
+    releaseSend();
+    await page.unroute('**/admin/messages/send', heldSend);
+  }
+  async function showDrafts() {
+    const panel = dialog.locator(
+      '.message-attachment-drafts>.account-panel:popover-open'
+    );
+    if (!(await panel.isVisible()))
+      await dialog
+        .getByRole('button', { name: 'Attachments to send', exact: true })
+        .click();
+    await panel.waitFor();
+    await panel
+      .getByRole('checkbox', { name: 'Show attachment previews', exact: true })
+      .check();
+    return panel;
+  }
+  const png = readFileSync('tests/fixtures/messages-attachment.png');
+  const files = [
+    { name: 'poster.png', mimeType: 'image/png', buffer: png },
+    {
+      name: 'review.txt',
+      mimeType: 'text/plain',
+      buffer: Buffer.from(
+        'Attachment review <script>window.chatInjected=true</script>'
+      )
+    }
+  ];
+  await dialog.getByLabel('Choose files', { exact: true }).setInputFiles(files);
+  await showDrafts();
+  assert.equal(
+    await dialog
+      .locator('.message-attachment-drafts [data-frame=attachmentDraftSurface]')
+      .count(),
+    2
+  );
+  await field.press('Enter');
+  await idle();
+  const attached = dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .filter({
+      has: page.locator('.attachment-card').filter({ hasText: 'poster.png' })
     })
-    assert.deepEqual(imageSize, [240, 135])
-    const invalid = new URL(base + copiedLink.pathname + copiedLink.search)
-    invalid.searchParams.set('snapshot', 'MISSING_SNAPSHOT')
-    await clipboardPage.goto(invalid.href)
-    await clipboardPage.getByRole('dialog', { name: 'Messages', exact: true }).locator('p.error').waitFor()
-    assert.equal(await clipboardPreview.isVisible(), false)
-  } finally { await secure.close() }
-  await idle()
-  await photo.evaluate(node => { const box = node.getBoundingClientRect(); node.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'touch', pointerId: 8, isPrimary: true, clientX: box.x + 30, clientY: box.y + 30 })) })
-  await page.waitForTimeout(550)
-  await photo.evaluate(node => { node.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, pointerType: 'touch', pointerId: 8 })); node.querySelector('.attachment-card').click() })
-  await attachmentMenu.waitFor({ state: 'visible' })
-  assert.equal(await fileWindow.isVisible(), false)
-  await page.keyboard.press('Escape')
-  await photo.evaluate(node => {
-    node.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'touch', pointerId: 9, isPrimary: true, clientX: 20, clientY: 20 }))
-    node.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, pointerType: 'touch', pointerId: 9, clientX: 20, clientY: 45 }))
-  })
-  await page.waitForTimeout(550)
-  await attachmentMenu.waitFor({ state: 'hidden' })
-  await photo.dispatchEvent('pointerup', { pointerType: 'touch', pointerId: 9 })
-  await dialog.getByLabel('Chat actions', { exact: true }).click()
-  const previewChooser = page.waitForEvent('filechooser')
-  await dialog.getByRole('button', { name: 'Change preview', exact: true }).click()
-  await (await previewChooser).setFiles(files[0]); await idle()
-  await page.waitForFunction(() => document.querySelector('.messages-chat-header .image-picker-preview img')?.src.startsWith('blob:'))
-  await page.setViewportSize({ width: 360, height: 780 })
-  await dialog.screenshot({ path: '../.screenshots/messages-attachments-mobile.png' })
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"]').evaluate(node => node.scrollWidth <= node.clientWidth), true)
-  await page.setViewportSize({ width: 320, height: 780 })
-  if (!await photo.isVisible()) { await dialog.getByRole('button', { name: 'Artist review', exact: true }).click(); await idle() }
-  await photo.getByLabel('Attachment actions', { exact: true }).click()
-  await attachmentMenu.screenshot({ path: '../.screenshots/messages-attachment-menu-mobile.png' })
-  const menuBounds = await attachmentMenu.boundingBox()
-  assert(menuBounds.x >= 0 && menuBounds.x + menuBounds.width <= 320 && menuBounds.y >= 0 && menuBounds.y + menuBounds.height <= 780)
-  await page.keyboard.press('Escape')
-  await page.setViewportSize({ width: 1440, height: 1000 })
-  await dialog.locator('.messages-layout').screenshot({ path: '../.screenshots/messages-attachments-web.png' })
-  const attachmentMessage = await attached.getAttribute('data-message-id')
-  await chat('pin', { message_log_code:attachmentMessage })
-  await refreshButton.click(); await idle()
-  await dialog.getByLabel('Chat actions', { exact:true }).click()
-  await dialog.getByRole('button', { name:'Pin history', exact:true }).click()
-  await pinHistory.getByRole('button', { name:'Attached files', exact:true }).click()
-  await pinHistory.waitFor({ state:'hidden' })
-  await dialog.getByRole('button', { name: 'Lighting review', exact: true }).click(); await idle()
-  await dialog.getByRole('button', { name: 'Artist review', exact: true }).click(); await idle()
-  await chat('forward', { message_log_keys: [attachmentMessage], target_message_codes: [group] })
-  for (let index = 0; index < 35; index++) await chat('send', { message_code: group, message: 'After attachment ' + index })
-  await dialog.getByRole('button', { name: 'Lighting review', exact: true }).click(); await idle()
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').filter({ hasText: 'poster.png' }).waitFor()
+    .first();
+  assert.equal(await attached.locator('.attachment-card').count(), 2);
+  await attached
+    .locator('.attachment-card')
+    .filter({ hasText: 'poster.png' })
+    .click();
+  const fileWindow = page.getByRole('dialog', {
+    name: 'File preview',
+    exact: true
+  });
+  await page.waitForFunction(() => {
+    const node = document.querySelector('.file-preview[open] img');
+    return node?.complete && node.naturalWidth > 0;
+  });
+  const download = page.waitForEvent('download');
+  await fileWindow
+    .getByRole('button', { name: 'Download', exact: true })
+    .first()
+    .click();
+  assert.equal((await download).suggestedFilename(), 'poster.png');
+  await fileWindow
+    .getByRole('button', { name: 'Close preview', exact: true })
+    .click();
+  await attached
+    .locator('.attachment-card')
+    .filter({ hasText: 'review.txt' })
+    .click();
+  await fileWindow.locator('pre').waitFor();
+  assert(
+    (await fileWindow.locator('pre').innerText()).includes(
+      '<script>window.chatInjected=true</script>'
+    )
+  );
+  assert.equal(await page.evaluate(() => window.chatInjected), undefined);
+  await fileWindow
+    .getByRole('button', { name: 'Close preview', exact: true })
+    .click();
+  await dialog.getByRole('button', { name: 'Chat files', exact: true }).click();
+  const gallery = page.locator('.chat-files-window > .account-panel');
+  await gallery.waitFor();
+  assert.equal(await gallery.locator('.chat-file-entry-frame').count(), 2);
+  assert((await gallery.innerText()).includes('2 loaded'));
+  assert(
+    (
+      await gallery.locator('.chat-file-entry-frame').first().innerText()
+    ).includes('admin')
+  );
+  await gallery.screenshot({
+    path: '../.screenshots/messages-chat-files-web.png'
+  });
+  assert.equal(
+    Math.round(
+      (await gallery.locator('.chat-file-entry-frame').first().boundingBox())
+        .height
+    ),
+    60
+  );
+  assert(
+    Math.abs(
+      (await gallery.locator('.messages-file-gallery').boundingBox()).width -
+        328
+    ) <= 2,
+    'Native popup list width includes its surface border'
+  );
+  assert(
+    Math.abs(
+      (await gallery.locator('.messages-file-gallery').boundingBox()).height -
+        348
+    ) <= 2,
+    'Native popup list height includes its surface border'
+  );
+  assert.equal(
+    Math.round(
+      await gallery
+        .locator('.message-attachment')
+        .first()
+        .evaluate((node) => node.getBoundingClientRect().height)
+    ),
+    60
+  );
+  await page.setViewportSize({ width: 320, height: 780 });
+  await gallery.screenshot({
+    path: '../.screenshots/messages-chat-files-mobile.png'
+  });
+  assert(
+    await gallery.evaluate((node) => node.scrollWidth <= node.clientWidth)
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const galleryText = gallery
+    .locator('.message-attachment')
+    .filter({ hasText: 'review.txt' });
+  await galleryText.getByLabel('Attachment actions', { exact: true }).click();
+  const galleryDownload = page.waitForEvent('download');
+  await galleryText
+    .getByRole('button', { name: 'Download', exact: true })
+    .click();
+  assert.equal((await galleryDownload).suggestedFilename(), 'review.txt');
+  await galleryText.locator('.chat-file-entry-frame').click();
+  await gallery.waitFor({ state: 'hidden' });
+  assert.equal(
+    await fileWindow.isVisible(),
+    false,
+    'Chat files navigates to the message, not a file preview'
+  );
+  const photo = attached
+    .locator('.message-attachment')
+    .filter({ hasText: 'poster.png' });
+  const attachmentMenu = photo.locator('.account-panel');
+  await photo.locator('.attachment-card').click({ button: 'right' });
+  await attachmentMenu.waitFor({ state: 'visible' });
+  assert.equal(await attachmentMenu.getByRole('button').count(), 6);
+  assert(
+    await attachmentMenu
+      .getByRole('button', { name: 'Show folder', exact: true })
+      .isDisabled()
+  );
+  assert(
+    await attachmentMenu
+      .getByRole('button', { name: 'Copy image', exact: true })
+      .isDisabled()
+  );
+  assert.equal(
+    await attachmentMenu
+      .getByRole('button', { name: 'Download', exact: true })
+      .evaluate((node) => getComputedStyle(node).fontWeight),
+    '400'
+  );
+  await attachmentMenu.screenshot({
+    path: '../.screenshots/messages-attachment-menu-web.png'
+  });
+  const menuDownload = page.waitForEvent('download');
+  await attachmentMenu
+    .getByRole('button', { name: 'Download', exact: true })
+    .click();
+  assert.equal((await menuDownload).suggestedFilename(), 'poster.png');
+  // Inspect fallback clipboard text on the actual LAN HTTP path without depending on the desktop clipboard.
+  await page.evaluate(() => {
+    document.execCommand = (command) => {
+      if (command !== 'copy') return false;
+      window.attachmentCopied = document.activeElement.value;
+      return true;
+    };
+  });
+  await photo.getByLabel('Attachment actions', { exact: true }).click();
+  await attachmentMenu
+    .getByRole('button', { name: 'Copy file path', exact: true })
+    .click();
+  await page.waitForFunction(() => window.attachmentCopied?.endsWith('.png'));
+  const copiedPath = await page.evaluate(() => window.attachmentCopied);
+  assert(/^(?:[A-Z]:\/|\/)/i.test(copiedPath));
+  assert(!copiedPath.includes('\\'));
+  await photo.getByLabel('Attachment actions', { exact: true }).click();
+  await attachmentMenu
+    .getByRole('button', { name: 'Copy web link', exact: true })
+    .click();
+  await page.waitForFunction(() =>
+    window.attachmentCopied?.startsWith('http://')
+  );
+  const copiedLink = new URL(
+    await page.evaluate(() => window.attachmentCopied)
+  );
+  assert.equal(
+    copiedLink.pathname,
+    '/projects/' + encodeURIComponent(project) + '/'
+  );
+  for (const key of ['chat', 'snapshot', 'file'])
+    assert(copiedLink.searchParams.get(key));
+  assert(!/ticket|password|token/.test(copiedLink.href));
+  await page.goto(copiedLink.href);
+  await fileWindow.waitFor();
+  await page.waitForFunction(
+    () => document.querySelector('.file-preview[open] img')?.naturalWidth > 0
+  );
+  await page.reload();
+  await fileWindow.waitFor();
+  await page.waitForFunction(
+    () => document.querySelector('.file-preview[open] img')?.naturalWidth > 0
+  );
+  assert.equal(
+    new URL(page.url()).searchParams.get('snapshot'),
+    copiedLink.searchParams.get('snapshot')
+  );
+  await fileWindow
+    .getByRole('button', { name: 'Close preview', exact: true })
+    .click();
+  await page.waitForURL((url) => !url.searchParams.has('snapshot'));
+  const savedSession = await page.evaluate(() =>
+    localStorage.getItem('tactic_stream.session')
+  );
+  const secure = await browser.newContext({
+    permissions: ['clipboard-read', 'clipboard-write'],
+    viewport: { width: 1440, height: 1000 }
+  });
+  try {
+    await secure.addInitScript((session) => {
+      localStorage.setItem('tactic_stream.session', session);
+      localStorage.setItem(
+        'tactic_stream.appearance',
+        JSON.stringify({ mode: 'dark', language: 'en' })
+      );
+    }, savedSession);
+    const clipboardPage = await secure.newPage();
+    await clipboardPage.goto(base + copiedLink.pathname + copiedLink.search);
+    const clipboardPreview = clipboardPage.getByRole('dialog', {
+      name: 'File preview',
+      exact: true
+    });
+    await clipboardPage.waitForFunction(
+      () => document.querySelector('.file-preview[open] img')?.naturalWidth > 0
+    );
+    await clipboardPreview
+      .getByRole('button', { name: 'Close preview', exact: true })
+      .click();
+    const clipboardPhoto = clipboardPage
+      .locator('.messages-viewport[data-current="true"] .message-attachment')
+      .filter({ hasText: 'poster.png' })
+      .last();
+    await clipboardPhoto
+      .getByLabel('Attachment actions', { exact: true })
+      .click();
+    const copyImage = clipboardPhoto.getByRole('button', {
+      name: 'Copy image',
+      exact: true
+    });
+    assert(await copyImage.isEnabled());
+    await copyImage.click();
+    await clipboardPage.waitForFunction(
+      () =>
+        !document.querySelector(
+          '.messages-viewport[data-current="true"] .message-attachment .attachment-card:disabled'
+        )
+    );
+    const imageSize = await clipboardPage.evaluate(async () => {
+      const items = await navigator.clipboard.read(),
+        png = await items[0].getType('image/png');
+      const bitmap = await createImageBitmap(png);
+      try {
+        return [bitmap.width, bitmap.height];
+      } finally {
+        bitmap.close();
+      }
+    });
+    assert.deepEqual(imageSize, [240, 135]);
+    const invalid = new URL(base + copiedLink.pathname + copiedLink.search);
+    invalid.searchParams.set('snapshot', 'MISSING_SNAPSHOT');
+    await clipboardPage.goto(invalid.href);
+    await clipboardPage
+      .getByRole('dialog', { name: 'Messages', exact: true })
+      .locator('p.error')
+      .waitFor();
+    assert.equal(await clipboardPreview.isVisible(), false);
+  } finally {
+    await secure.close();
+  }
+  await idle();
+  await photo.evaluate((node) => {
+    const box = node.getBoundingClientRect();
+    node.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        bubbles: true,
+        pointerType: 'touch',
+        pointerId: 8,
+        isPrimary: true,
+        clientX: box.x + 30,
+        clientY: box.y + 30
+      })
+    );
+  });
+  await page.waitForTimeout(550);
+  await photo.evaluate((node) => {
+    node.dispatchEvent(
+      new PointerEvent('pointerup', {
+        bubbles: true,
+        pointerType: 'touch',
+        pointerId: 8
+      })
+    );
+    node.querySelector('.attachment-card').click();
+  });
+  await attachmentMenu.waitFor({ state: 'visible' });
+  assert.equal(await fileWindow.isVisible(), false);
+  await page.keyboard.press('Escape');
+  await photo.evaluate((node) => {
+    node.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        bubbles: true,
+        pointerType: 'touch',
+        pointerId: 9,
+        isPrimary: true,
+        clientX: 20,
+        clientY: 20
+      })
+    );
+    node.dispatchEvent(
+      new PointerEvent('pointermove', {
+        bubbles: true,
+        pointerType: 'touch',
+        pointerId: 9,
+        clientX: 20,
+        clientY: 45
+      })
+    );
+  });
+  await page.waitForTimeout(550);
+  await attachmentMenu.waitFor({ state: 'hidden' });
+  await photo.dispatchEvent('pointerup', {
+    pointerType: 'touch',
+    pointerId: 9
+  });
+  await dialog.getByLabel('Chat actions', { exact: true }).click();
+  const previewChooser = page.waitForEvent('filechooser');
+  await dialog
+    .getByRole('button', { name: 'Change preview', exact: true })
+    .click();
+  await (await previewChooser).setFiles(files[0]);
+  await idle();
+  await page.waitForFunction(() =>
+    document
+      .querySelector('.messages-chat-header .image-picker-preview img')
+      ?.src.startsWith('blob:')
+  );
+  await page.setViewportSize({ width: 360, height: 780 });
+  await dialog.screenshot({
+    path: '../.screenshots/messages-attachments-mobile.png'
+  });
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"]')
+      .evaluate((node) => node.scrollWidth <= node.clientWidth),
+    true
+  );
+  await page.setViewportSize({ width: 320, height: 780 });
+  if (!(await photo.isVisible())) {
+    await dialog
+      .getByRole('button', { name: 'Artist review', exact: true })
+      .click();
+    await idle();
+  }
+  await photo.getByLabel('Attachment actions', { exact: true }).click();
+  await attachmentMenu.screenshot({
+    path: '../.screenshots/messages-attachment-menu-mobile.png'
+  });
+  const menuBounds = await attachmentMenu.boundingBox();
+  assert(
+    menuBounds.x >= 0 &&
+      menuBounds.x + menuBounds.width <= 320 &&
+      menuBounds.y >= 0 &&
+      menuBounds.y + menuBounds.height <= 780
+  );
+  await page.keyboard.press('Escape');
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await dialog
+    .locator('.messages-layout')
+    .screenshot({ path: '../.screenshots/messages-attachments-web.png' });
+  const attachmentMessage = await attached.getAttribute('data-message-id');
+  await chat('pin', { message_log_code: attachmentMessage });
+  await refreshButton.click();
+  await idle();
+  await dialog.getByLabel('Chat actions', { exact: true }).click();
+  await dialog
+    .locator('.chat-actions')
+    .getByRole('button', { name: 'Pin history', exact: true })
+    .click();
+  await pinHistory
+    .getByRole('button', { name: 'Attached files', exact: true })
+    .click();
+  await pinHistory.waitFor({ state: 'hidden' });
+  await dialog
+    .getByRole('button', { name: 'Lighting review', exact: true })
+    .click();
+  await idle();
+  await dialog
+    .getByRole('button', { name: 'Artist review', exact: true })
+    .click();
+  await idle();
+  await chat('forward', {
+    message_log_keys: [attachmentMessage],
+    target_message_codes: [group]
+  });
+  for (let index = 0; index < 35; index++)
+    await chat('send', {
+      message_code: group,
+      message: 'After attachment ' + index
+    });
+  await refreshButton.click();
+  await idle();
+  await dialog
+    .getByRole('button', { name: 'Lighting review', exact: true })
+    .click();
+  await idle();
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .filter({ hasText: 'poster.png' })
+    .waitFor();
   // Reopening the browser starts with a fresh recent page; Chat files lists only loaded messages.
-  await page.reload()
-  await page.getByLabel('Account', { exact: true }).click()
-  await page.getByRole('button', { name: 'Messages', exact: true }).click(); await dialog.waitFor(); await idle()
-  await dialog.getByRole('button', { name: 'Chat files', exact: true }).click()
-  await gallery.waitFor()
-  assert((await gallery.innerText()).includes('No files in loaded messages'))
-  assert.equal(await gallery.locator('.chat-file-entry').count(), 0)
-  await gallery.getByRole('button', { name: 'Load earlier messages', exact: true }).click()
-  await gallery.locator('.chat-file-entry').first().waitFor()
-  assert.equal(await gallery.locator('.chat-file-entry').count(), 2)
-  assert((await gallery.innerText()).includes('2 loaded'))
-  const earlierHistory = page.waitForResponse(response => response.url().endsWith('/admin/messages/history') && response.request().postDataJSON()?.offset === 60)
-  await gallery.locator('.messages-file-gallery').evaluate(node => { node.style.height = '32px'; node.style.flex = 'none'; node.scrollTop = node.scrollHeight })
-  await earlierHistory
-  await gallery.getByRole('button', { name: 'Load earlier messages', exact: true }).waitFor({ state: 'hidden' })
-  assert.equal(await gallery.locator('.chat-file-entry').count(), 2)
-  await gallery.locator('.chat-file-entry').first().click(); await gallery.waitFor({ state: 'hidden' })
-  assert.equal(await fileWindow.isVisible(), false)
-  assert((await dialog.locator('.messages-viewport[data-current="true"] .message-row').filter({ hasText: 'poster.png' }).innerText()).includes('Forwarded from'))
-  await dialog.getByRole('button', { name: 'Artist review', exact: true }).click(); await idle()
-  await attached.getByLabel('Message actions', { exact: true }).click()
-  await attached.getByRole('button', { name: 'Forward', exact: true }).click()
-  await forward.getByRole('checkbox', { name: 'Favorites', exact: true }).check()
-  await forward.getByRole('button', { name: 'Forward', exact: true }).click(); await forward.waitFor({ state: 'hidden' }); await idle()
-  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click(); await idle()
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().locator('.attachment-card').count(), 2)
-  await dialog.locator('.messages-viewport[data-current="true"] .message-row').last().locator('.attachment-card').filter({ hasText: 'review.txt' }).click()
-  await fileWindow.locator('pre').waitFor()
-  assert((await fileWindow.locator('pre').innerText()).includes('Lighting approved') || (await fileWindow.locator('pre').innerText()).includes('Attachment review'))
-  await fileWindow.getByRole('button', { name: 'Close preview', exact: true }).click()
-  await dialog.getByLabel('Chat actions', { exact: true }).click()
-  await dialog.getByRole('button', { name: 'Clear favorites', exact: true }).click()
-  const clear = page.getByRole('dialog', { name: 'Clear favorites', exact: true })
-  await clear.getByRole('button', { name: 'Clear messages', exact: true }).click(); await clear.waitFor({ state: 'hidden' }); await idle()
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-row').count(), 0, 'A complete empty history must discard old cached messages')
-  await dialog.getByRole('button', { name: 'Artist review', exact: true }).click(); await idle()
+  await page.reload();
+  await page.getByLabel('Account', { exact: true }).click();
+  await page.getByRole('button', { name: 'Messages', exact: true }).click();
+  await dialog.waitFor();
+  await idle();
+  await dialog.getByRole('button', { name: 'Chat files', exact: true }).click();
+  await gallery.waitFor();
+  assert((await gallery.innerText()).includes('No files in loaded messages'));
+  assert.equal(await gallery.locator('.chat-file-entry-frame').count(), 0);
+  await gallery
+    .getByRole('button', { name: 'Load earlier messages', exact: true })
+    .click();
+  await gallery.locator('.chat-file-entry-frame').first().waitFor();
+  assert.equal(await gallery.locator('.chat-file-entry-frame').count(), 2);
+  assert((await gallery.innerText()).includes('2 loaded'));
+  const earlierHistory = page.waitForResponse(
+    (response) =>
+      response.url().endsWith('/admin/messages/history') &&
+      response.request().postDataJSON()?.offset === 60
+  );
+  await gallery.locator('.messages-file-gallery').evaluate((node) => {
+    node.style.height = '32px';
+    node.style.flex = 'none';
+    node.scrollTop = node.scrollHeight;
+  });
+  await earlierHistory;
+  await gallery
+    .getByRole('button', { name: 'Load earlier messages', exact: true })
+    .waitFor({ state: 'hidden' });
+  assert.equal(await gallery.locator('.chat-file-entry-frame').count(), 2);
+  await gallery.locator('.chat-file-entry-frame').first().click();
+  await gallery.waitFor({ state: 'hidden' });
+  assert.equal(await fileWindow.isVisible(), false);
+  assert(
+    (
+      await dialog
+        .locator('.messages-viewport[data-current="true"] .message-row')
+        .filter({ hasText: 'poster.png' })
+        .innerText()
+    ).includes('Forwarded from')
+  );
+  await dialog
+    .getByRole('button', { name: 'Artist review', exact: true })
+    .click();
+  await idle();
+  await attached.getByLabel('Message actions', { exact: true }).click();
+  await attached.getByRole('button', { name: 'Forward', exact: true }).click();
+  await forward
+    .getByRole('checkbox', { name: 'Favorites', exact: true })
+    .check();
+  await forward.getByRole('button', { name: 'Forward', exact: true }).click();
+  await forward.waitFor({ state: 'hidden' });
+  await idle();
+  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click();
+  await idle();
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .last()
+      .locator('.attachment-card')
+      .count(),
+    2
+  );
+  await dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .locator('.attachment-card')
+    .filter({ hasText: 'review.txt' })
+    .click();
+  await fileWindow.locator('pre').waitFor();
+  assert(
+    (await fileWindow.locator('pre').innerText()).includes(
+      'Lighting approved'
+    ) ||
+      (await fileWindow.locator('pre').innerText()).includes(
+        'Attachment review'
+      )
+  );
+  await fileWindow
+    .getByRole('button', { name: 'Close preview', exact: true })
+    .click();
+  await dialog.getByLabel('Chat actions', { exact: true }).click();
+  await dialog
+    .getByRole('button', { name: 'Clear favorites', exact: true })
+    .click();
+  const clear = page.getByRole('dialog', {
+    name: 'Clear favorites',
+    exact: true
+  });
+  await clear
+    .getByRole('button', { name: 'Clear messages', exact: true })
+    .click();
+  await clear.waitFor({ state: 'hidden' });
+  await idle();
+  assert.equal(
+    await dialog
+      .locator('.messages-viewport[data-current="true"] .message-row')
+      .count(),
+    0,
+    'A complete empty history must discard old cached messages'
+  );
+  await dialog
+    .getByRole('button', { name: 'Artist review', exact: true })
+    .click();
+  await idle();
   // A browser reload cannot retain File objects: recover by selecting the same file, keeping its token.
-  const draftFile = { name: 'draft.txt', mimeType: 'text/plain', buffer: Buffer.from('Recover this draft') }
-  await dialog.getByLabel('Choose files', { exact: true }).setInputFiles(draftFile)
-  const draftToken = await page.evaluate(() => JSON.parse(localStorage.getItem('tactic_stream.messages.admin')).drafts[JSON.parse(localStorage.getItem('tactic_stream.messages.admin')).selected].attachments[0].token)
-  await page.reload(); await page.locator('.project-picker').waitFor()
-  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Messages', exact: true }).click(); await idle()
-  await dialog.getByText('Select this local file again before sending, or remove it.', { exact: true }).waitFor()
-  await dialog.getByLabel('Choose files', { exact: true }).setInputFiles(draftFile)
-  assert.equal(await dialog.locator('.messages-staging .attachment-card').count(), 1)
-  assert.equal(await page.evaluate(() => { const stored = JSON.parse(localStorage.getItem('tactic_stream.messages.admin')); return stored.drafts[stored.selected].attachments[0].token }), draftToken)
-  let uploaded = 0, failSend = true
-  const onRequest = request => { if (request.url().endsWith('/messages/upload')) uploaded++ }
-  page.on('request', onRequest)
-  await page.route('**/messages/send', async route => { if (failSend) { failSend = false; await route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ error_code: 'invalid_request', error: 'Retry test' }) }) } else await route.fallback() })
-  await field.press('Enter'); await idle()
-  await dialog.getByText('Retry test', { exact: true }).waitFor()
-  assert.equal(await dialog.locator('.messages-staging .attachment-card').count(), 1)
-  await field.press('Enter'); await idle()
-  assert.equal(uploaded, 1, 'A failed send must reuse its checked-in snapshot')
-  await page.unroute('**/messages/send'); page.off('request', onRequest)
-  assert.equal(await dialog.locator('.messages-staging .attachment-card').count(), 0)
-  const lastFiles = dialog.locator('.messages-viewport[data-current="true"] .message-row').last().locator('.attachment-card')
-  assert((await lastFiles.innerText()).includes('draft.txt'))
+  const draftFile = {
+    name: 'draft.txt',
+    mimeType: 'text/plain',
+    buffer: Buffer.from('Recover this draft')
+  };
+  await dialog
+    .getByLabel('Choose files', { exact: true })
+    .setInputFiles(draftFile);
+  const draftToken = await page.evaluate(
+    () =>
+      JSON.parse(localStorage.getItem('tactic_stream.messages.admin')).drafts[
+        JSON.parse(localStorage.getItem('tactic_stream.messages.admin'))
+          .selected
+      ].attachments[0].token
+  );
+  await page.reload();
+  await page.locator('.project-picker').waitFor();
+  await page.getByLabel('Account', { exact: true }).click();
+  await page.getByRole('button', { name: 'Messages', exact: true }).click();
+  await idle();
+  await showDrafts();
+  await dialog
+    .getByText('Select this local file again before sending, or remove it.', {
+      exact: true
+    })
+    .waitFor();
+  await dialog
+    .getByLabel('Choose files', { exact: true })
+    .setInputFiles(draftFile);
+  await showDrafts();
+  assert.equal(
+    await dialog
+      .locator('.message-attachment-drafts [data-frame=attachmentDraftSurface]')
+      .count(),
+    1
+  );
+  assert.equal(
+    await page.evaluate(() => {
+      const stored = JSON.parse(
+        localStorage.getItem('tactic_stream.messages.admin')
+      );
+      return stored.drafts[stored.selected].attachments[0].token;
+    }),
+    draftToken
+  );
+  let uploaded = 0,
+    failSend = true;
+  const onRequest = (request) => {
+    if (request.url().endsWith('/messages/upload')) uploaded++;
+  };
+  page.on('request', onRequest);
+  await page.route('**/messages/send', async (route) => {
+    if (failSend) {
+      failSend = false;
+      await route.fulfill({
+        status: 400,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          error_code: 'invalid_request',
+          error: 'Retry test'
+        })
+      });
+    } else await route.fallback();
+  });
+  await field.press('Enter');
+  await idle();
+  await dialog.getByText('Retry test', { exact: true }).waitFor();
+  await showDrafts();
+  assert.equal(
+    await dialog
+      .locator('.message-attachment-drafts [data-frame=attachmentDraftSurface]')
+      .count(),
+    1
+  );
+  await field.press('Enter');
+  await idle();
+  assert.equal(uploaded, 1, 'A failed send must reuse its checked-in snapshot');
+  await page.unroute('**/messages/send');
+  page.off('request', onRequest);
+  assert.equal(
+    await dialog
+      .locator('.message-attachment-drafts [data-frame=attachmentDraftSurface]')
+      .count(),
+    0
+  );
+  const lastFiles = dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .last()
+    .locator('.attachment-card');
+  assert((await lastFiles.innerText()).includes('draft.txt'));
   // Clipboard files use the same staging control and upload path as the picker.
-  await field.evaluate(node => { const transfer = new DataTransfer(); transfer.items.add(new File(['Pasted'], 'paste.txt', { type: 'text/plain' })); node.dispatchEvent(new ClipboardEvent('paste', { clipboardData: transfer, bubbles: true, cancelable: true })) })
-  await dialog.locator('.messages-staging .attachment-card').filter({ hasText: 'paste.txt' }).waitFor()
-  await dialog.getByRole('button', { name: 'Remove attachment', exact: true }).click()
-  const emojiChat = group
-  await chat('rename', { message_code: emojiChat, title: 'Emoji geometry' })
-  for (const [index, message] of ['👍', '👍🏽 👨‍👩‍👧‍👦', '😀 😀 😀'].entries()) await request('/admin/messages/send', { ...(index < 2 ? artistAuth : auth), message_code: emojiChat, message })
-  await refreshButton.click(); await idle()
-  await dialog.getByRole('button', { name: 'Emoji geometry', exact: true }).click(); await idle()
-  assert.deepEqual(await dialog.locator('.messages-viewport[data-current="true"] .message-body.emoji-only').evaluateAll(nodes => nodes.map(node => parseFloat(getComputedStyle(node).fontSize))), [56, 48, 42], 'Native 42/36/31.5pt emoji-only sizes')
-  assert.equal(await dialog.locator('.messages-viewport[data-current="true"] .message-body.emoji-only').count(), 3)
-  await dialog.locator('.messages-layout').screenshot({ path: '../.screenshots/messages-emoji-only-web.png' })
-  await page.setViewportSize({ width: 320, height: 740 })
-  assert(await dialog.locator('.messages-viewport[data-current="true"]').evaluate(node => node.scrollWidth <= node.clientWidth), 'Emoji bubbles fit the native small-screen extents')
-  await page.setViewportSize({ width: 1440, height: 1000 })
-  const deletedSource = (await chat('send', { message_code: emojiChat, message: 'Deleted quote source' })).message
-  await chat('send', { message_code: emojiChat, message: 'Quote after deletion', reply_to: deletedSource.__search_key__ })
-  await chat('delete-message', { message_log_code: deletedSource.__search_key__ })
-  await refreshButton.click(); await idle()
-  const unavailable = dialog.locator('.messages-viewport[data-current="true"] .message-row').filter({ hasText: 'Quote after deletion' }).locator('.message-reference.unavailable')
-  await unavailable.waitFor()
-  assert.equal(await unavailable.evaluate(node => node.tagName), 'DIV', 'Unavailable original cannot be activated')
-  assert.equal(await unavailable.locator('.message-reference-text > span').count(), 0, 'Deleted quote body is hidden')
-  await dialog.getByRole('button', { name: 'Close Messages', exact: true }).click()
-  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Sign Out', exact: true }).click()
-  await page.getByLabel('Login', { exact: true }).fill('artist')
-  await page.getByLabel('Password', { exact: true }).fill('messages-test-password')
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click()
-  await page.locator('.topbar').waitFor()
-  await page.getByLabel('Account', { exact: true }).click(); await page.getByRole('button', { name: 'Messages', exact: true }).click(); await idle()
-  await dialog.getByRole('button', { name: 'Artist review', exact: true }).click(); await idle()
-  await dialog.locator('.messages-presence.online').waitFor()
-  assert((await dialog.locator('.messages-presence').innerText()).startsWith('Online'), 'A fresh heartbeat shows the peer Online')
-  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click(); await idle()
-  assert.equal(await field.inputValue(), '', 'Another account must never inherit the previous account draft')
-  const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('tactic_stream.messages.admin')))
-  assert.equal(stored.drafts[favorites].text, 'Personal draft')
-  await page.evaluate(() => { const value = JSON.parse(localStorage.getItem('tactic_stream.appearance')); Object.assign(value, { language: 'ru', mode: 'light' }); localStorage.setItem('tactic_stream.appearance', JSON.stringify(value)) })
-  await page.reload()
-  await page.getByLabel('Аккаунт', { exact: true }).click()
-  await page.getByRole('button', { name: 'Сообщения', exact: true }).click(); await idle()
-  const russian = page.getByRole('dialog', { name: 'Сообщения', exact: true })
-  await russian.getByRole('button', { name: 'Справка по сообщениям', exact: true }).click()
-  const russianHelp = page.getByRole('dialog', { name: 'Справка', exact: true })
-  await russianHelp.getByRole('heading', { name: 'Чаты и черновики', exact: true }).waitFor()
-  await page.setViewportSize({ width: 360, height: 800 })
-  assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
-  assert(await russianHelp.locator('.help-article-scroll').evaluate(node => node.scrollHeight > node.clientHeight && node.scrollWidth <= node.clientWidth))
-  await russianHelp.screenshot({ path: '../.screenshots/messages-help-ru-mobile.png' })
-  await page.touchscreen.tap(...Object.values(await russianHelp.getByRole('button', { name: 'Закрыть справку', exact: true }).evaluate(node => { const box = node.getBoundingClientRect(); return { x: box.x + box.width / 2, y: box.y + box.height / 2 } })))
-  await russianHelp.waitFor({ state: 'hidden' }); assert.equal(await page.getByRole('tooltip').count(), 0)
-  assert.equal(errors.length, 0, errors.join('\n'))
-  console.log('Messages: native auxiliary windows, rename/empty validation, edit/history scroll/plain text, pin/file history jumps, single/multiple forward/cancel/error/retry, independent geometry/maximize/mobile; files, links, clipboard, drafts and account isolation at 320/360 touch passed')
+  await field.evaluate((node) => {
+    const transfer = new DataTransfer();
+    transfer.items.add(
+      new File(['Pasted'], 'paste.txt', { type: 'text/plain' })
+    );
+    node.dispatchEvent(
+      new ClipboardEvent('paste', {
+        clipboardData: transfer,
+        bubbles: true,
+        cancelable: true
+      })
+    );
+  });
+  await showDrafts();
+  await dialog
+    .locator('.message-attachment-drafts [data-frame-row]')
+    .filter({ hasText: 'paste.txt' })
+    .waitFor();
+  await dialog
+    .getByRole('button', { name: 'Remove attachment', exact: true })
+    .click();
+  const emojiChat = group;
+  await chat('rename', { message_code: emojiChat, title: 'Emoji geometry' });
+  for (const [index, message] of ['👍', '👍🏽 👨‍👩‍👧‍👦', '😀 😀 😀'].entries())
+    await request('/admin/messages/send', {
+      ...(index < 2 ? artistAuth : auth),
+      message_code: emojiChat,
+      message
+    });
+  await refreshButton.click();
+  await idle();
+  await dialog
+    .getByRole('button', { name: 'Emoji geometry', exact: true })
+    .click();
+  await idle();
+  assert.deepEqual(
+    await dialog
+      .locator(
+        '.messages-viewport[data-current="true"] .message-body.emoji-only'
+      )
+      .evaluateAll((nodes) =>
+        nodes.map((node) => parseFloat(getComputedStyle(node).fontSize))
+      ),
+    [56, 48, 42],
+    'Native 42/36/31.5pt emoji-only sizes'
+  );
+  assert.equal(
+    await dialog
+      .locator(
+        '.messages-viewport[data-current="true"] .message-body.emoji-only'
+      )
+      .count(),
+    3
+  );
+  await dialog
+    .locator('.messages-layout')
+    .screenshot({ path: '../.screenshots/messages-emoji-only-web.png' });
+  await page.setViewportSize({ width: 320, height: 740 });
+  assert(
+    await dialog
+      .locator('.messages-viewport[data-current="true"]')
+      .evaluate((node) => node.scrollWidth <= node.clientWidth),
+    'Emoji bubbles fit the native small-screen extents'
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const deletedSource = (
+    await chat('send', {
+      message_code: emojiChat,
+      message: 'Deleted quote source'
+    })
+  ).message;
+  await chat('send', {
+    message_code: emojiChat,
+    message: 'Quote after deletion',
+    reply_to: deletedSource.__search_key__
+  });
+  await chat('delete-message', {
+    message_log_code: deletedSource.__search_key__
+  });
+  await refreshButton.click();
+  await idle();
+  const unavailable = dialog
+    .locator('.messages-viewport[data-current="true"] .message-row')
+    .filter({ hasText: 'Quote after deletion' })
+    .locator('.message-reference.unavailable');
+  await unavailable.waitFor();
+  assert.equal(
+    await unavailable.evaluate((node) => node.tagName),
+    'DIV',
+    'Unavailable original cannot be activated'
+  );
+  assert.equal(
+    await unavailable.locator('[data-frame=messageReferenceBodyPort]').count(),
+    0,
+    'Deleted quote body is hidden'
+  );
+  await dialog
+    .getByRole('button', { name: 'Close Messages', exact: true })
+    .click();
+  await page.getByLabel('Account', { exact: true }).click();
+  await page.getByRole('button', { name: 'Sign Out', exact: true }).click();
+  await page.getByLabel('Login', { exact: true }).fill('artist');
+  await page
+    .getByLabel('Password', { exact: true })
+    .fill('messages-test-password');
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.locator('.topbar').waitFor();
+  await page.getByLabel('Account', { exact: true }).click();
+  await page.getByRole('button', { name: 'Messages', exact: true }).click();
+  await idle();
+  await dialog
+    .getByRole('button', { name: 'Artist review', exact: true })
+    .click();
+  await idle();
+  await dialog.locator('[data-frame=chatPresence]').waitFor();
+  assert(
+    (await dialog.locator('[data-frame=chatPresence]').innerText()).startsWith(
+      'Online'
+    ),
+    'A fresh heartbeat shows the peer Online'
+  );
+  await dialog.getByRole('button', { name: 'Favorites', exact: true }).click();
+  await idle();
+  assert.equal(
+    await field.inputValue(),
+    '',
+    'Another account must never inherit the previous account draft'
+  );
+  const stored = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem('tactic_stream.messages.admin'))
+  );
+  assert.equal(stored.drafts[favorites].text, 'Personal draft');
+  await page.evaluate(() => {
+    const value = JSON.parse(localStorage.getItem('tactic_stream.appearance'));
+    Object.assign(value, { language: 'ru', mode: 'light' });
+    localStorage.setItem('tactic_stream.appearance', JSON.stringify(value));
+  });
+  await page.reload();
+  await page.getByLabel('Аккаунт', { exact: true }).click();
+  await page.getByRole('button', { name: 'Сообщения', exact: true }).click();
+  await idle();
+  const russian = page.getByRole('dialog', { name: 'Сообщения', exact: true });
+  await russian
+    .getByRole('button', { name: 'Справка по сообщениям', exact: true })
+    .click();
+  const russianHelp = page.getByRole('dialog', {
+    name: 'Справка',
+    exact: true
+  });
+  await russianHelp
+    .getByRole('heading', { name: 'Чаты и черновики', exact: true })
+    .waitFor();
+  await page.setViewportSize({ width: 360, height: 800 });
+  assert(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth
+    )
+  );
+  assert(
+    await russianHelp
+      .locator('.document-pane')
+      .evaluate(
+        (node) =>
+          node.scrollHeight > node.clientHeight &&
+          node.scrollWidth <= node.clientWidth
+      )
+  );
+  await russianHelp.screenshot({
+    path: '../.screenshots/messages-help-ru-mobile.png'
+  });
+  await page.touchscreen.tap(
+    ...Object.values(
+      await russianHelp
+        .getByRole('button', { name: 'Закрыть справку', exact: true })
+        .evaluate((node) => {
+          const box = node.getBoundingClientRect();
+          return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+        })
+    )
+  );
+  await russianHelp.waitFor({ state: 'hidden' });
+  assert.equal(await page.getByRole('tooltip').count(), 0);
+  assert.equal(errors.length, 0, errors.join('\n'));
+  console.log(
+    'Messages: native auxiliary windows, rename/empty validation, edit/history scroll/plain text, pin/file history jumps, single/multiple forward/cancel/error/retry, independent geometry/maximize/mobile; files, links, clipboard, drafts and account isolation at 320/360 touch passed'
+  );
 } catch (failure) {
-  if (page && !page.isClosed()) { await page.screenshot({ path: '../.screenshots/messages-failure.png' }); console.error(await page.locator('.emoji-picker[open]').evaluateAll(nodes => nodes.map(node => ({ html: node.outerHTML.slice(0, 500), box: node.getBoundingClientRect().toJSON() })))) }
-  throw failure
-} finally { if (page && !page.isClosed()) await page.unrouteAll({ behavior: 'ignoreErrors' }); await browser.close() }
+  if (page && !page.isClosed()) {
+    await page.screenshot({ path: '../.screenshots/messages-failure.png' });
+    console.error(
+      await page.locator('.emoji-picker[open]').evaluateAll((nodes) =>
+        nodes.map((node) => ({
+          html: node.outerHTML.slice(0, 500),
+          box: node.getBoundingClientRect().toJSON()
+        }))
+      )
+    );
+  }
+  throw failure;
+} finally {
+  if (page && !page.isClosed())
+    await page.unrouteAll({ behavior: 'ignoreErrors' });
+  await browser.close();
+}

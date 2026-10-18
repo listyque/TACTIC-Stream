@@ -136,6 +136,17 @@ def fingerprints(handler):
             "frame_tasks_state.mjs",
             "frame_schedule.mjs",
             "frame_schedule_state.mjs",
+            "frame_messages_state.mjs",
+            "frame_communication_reference.mjs",
+            "notifications_layout.mjs",
+            "frame_messages.mjs",
+            "messages_ui.mjs",
+            "messages.mjs",
+            "notifications.mjs",
+            "activity_feed.mjs",
+            "activity_paging.mjs",
+            "notification_history.mjs",
+            "notification_stack.mjs",
             "gantt_calendar.mjs",
             "gantt_scroll_stability.mjs",
             "mobile_tasks.mjs",
@@ -297,6 +308,27 @@ def fingerprints(handler):
         )
     ]
     checks += [
+        path
+        for path in (ROOT / "tools/frame_messages").iterdir()
+        if path.is_file() and path.suffix in (".vue", ".mjs", ".py", ".html", ".json")
+    ]
+    checks += [
+        handler / "tests" / name
+        for name in (
+            "test_frame_messages.py",
+            "frame_messages_fixture.py",
+            "fixtures/frame_messages.json",
+            "test_notes_qml.py",
+            "test_communication_feed.py",
+            "test_activity_feed_qml.py",
+            "test_activity_feed_loading.py",
+            "test_notifications_qml.py",
+            "test_emoji.py",
+            "test_message_bubble_rendering.py",
+            "test_topbar_activity.py",
+        )
+    ]
+    checks += [
         ROOT / "src/tactic/ui/table/task_schedule.py",
         ROOT / "tests/test_task_schedule.py",
     ]
@@ -394,6 +426,39 @@ def main():
             ["node", "frontend/tests/frame_configuration_state.mjs"],
             ROOT,
             {},
+        ),
+        (
+            "messaging-state",
+            ["node", "frontend/tests/frame_messages_state.mjs"],
+            ROOT,
+            {},
+        ),
+        ("notification-state", ["node", "frontend/tests/notifications.mjs"], ROOT, {}),
+        (
+            "browser-messaging-lifecycle",
+            ["node", "frontend/tests/messages_ui.mjs"],
+            ROOT,
+            {},
+        ),
+        (
+            "native-communication",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_frame_messages",
+                "tests.test_notes_qml",
+                "tests.test_emoji",
+                "tests.test_activity_feed_qml",
+                "tests.test_activity_feed_loading",
+                "tests.test_notifications_qml",
+                "tests.test_message_bubble_rendering",
+                "tests.test_communication_feed",
+                "tests.test_topbar_activity",
+            ],
+            handler,
+            {"QT_QUICK_CONTROLS_STYLE": "Basic"},
         ),
         ("search-state", ["node", "frontend/tests/frame_search_state.mjs"], ROOT, {}),
         ("table-state", ["node", "frontend/tests/frame_table_state.mjs"], ROOT, {}),

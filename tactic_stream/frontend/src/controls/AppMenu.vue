@@ -101,7 +101,13 @@ function escape(event) {
   )
     return;
   const dialog = event.target.closest('dialog');
-  if (dialog && dialog !== panelElement.value && !dialog.contains(menu.value))
+  if (
+    dialog &&
+    dialog !== panelElement.value &&
+    dialog !== props.boundary &&
+    !dialog.contains(menu.value) &&
+    !dialog.contains(props.anchor)
+  )
     return;
   event.preventDefault();
   event.stopPropagation();
@@ -431,7 +437,7 @@ onBeforeUnmount(() => {
       v-tooltip="t(label)"
       ref="trigger"
       class="icon-button"
-      :aria-label="t(label)"
+      :aria-label="externalTrigger ? undefined : t(label)"
       :aria-expanded="expanded"
       :aria-disabled="disabled || undefined"
       :tabindex="disabled ? -1 : 0"

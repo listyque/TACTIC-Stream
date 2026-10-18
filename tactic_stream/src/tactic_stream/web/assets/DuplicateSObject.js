@@ -1,7 +1,7 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, u as Fragment } from "./vue.js";
 import { D as t, I as controls, O as appearance, o as _sfc_main$2, rt as _plugin_vue_export_helper_default } from "./index.js";
-import { C as button, D as rect, E as node, _ as _sfc_main$4, t as _sfc_main$3, u as translate, v as _sfc_main$5, w as label, x as _sfc_main$6 } from "./FrameView.js";
+import { D as node, O as rect, S as _sfc_main$6, T as label, _ as _sfc_main$4, t as _sfc_main$3, u as translate, v as _sfc_main$5, w as button } from "./FrameView.js";
 import { F as rpc, dt as notify, f as _sfc_main$7 } from "./CodeBlock.js";
 import { r as _sfc_main$8 } from "./AppSplitter.js";
 import { t as _sfc_main$9 } from "./AppCheckbox.js";

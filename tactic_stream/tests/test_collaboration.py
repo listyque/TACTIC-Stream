@@ -29,6 +29,18 @@ class Collaboration(unittest.TestCase):
     def test_messages_in_chromium(self):
         self.browser('messages.mjs', 180)
 
+    def test_activity_feed_in_chromium(self):
+        self.browser('activity_feed.mjs')
+
+    def test_activity_paging_in_chromium(self):
+        self.browser('activity_paging.mjs')
+
+    def test_notification_history_in_chromium(self):
+        self.browser('notification_history.mjs')
+
+    def test_notification_stack_in_chromium(self):
+        self.browser('notification_stack.mjs')
+
     def test_common_windows_in_chromium(self):
         self.browser('window_controls.mjs')
 

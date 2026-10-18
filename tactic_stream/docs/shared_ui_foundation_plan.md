@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01–B06 and B08–B10 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
+**B01–B06 and B08–B11 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
 
 **B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
 widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
@@ -29,7 +29,12 @@ Production Gantt/calendar is delivered in B10 below; B07's 40 legacy-widget gaps
 **B10 is delivered.** Production Gantt, the separate Calendar dock, milestones
 and schedule editing use shared descriptions and input calculations. Existing
 draft/revision/write owners remain independent. Scope, capabilities and current
-evidence: `docs/frame_schedule.md`. The next batch is B11 Messaging.
+evidence: `docs/frame_schedule.md`. B11 Messaging is delivered below.
+
+**B11 is delivered.** Messages, attachment staging, activity, notification history
+and toast content use independent shared descriptions. Original/native/browser
+captures and real workflows are accepted within the documented platform limits.
+See `docs/frame_messages.md`. B07 stays open; the next batch is B12.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -83,6 +88,41 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B11 delivered: Messages, activity and notifications, 2026-10-18
+
+Stream **0.112.164** / Handler **0.6.0.115** ship **153 portable `.mjs`
+modules and three JSON catalogs** independently. Fourteen new modules describe
+conversations, message metadata/body/reference/pins, composer rules, forms and
+child panels, attachment staging, activity cards/calendar, notification history,
+toast content and neutral people/emoji pickers. Native Qt text/file/image ports
+remain native; existing request, permission, draft, receipt, upload and timer
+owners retain their responsibilities. There is no embedded browser.
+
+Acceptance: **111 mandatory platform stages**, **214 native communication cases**,
+**eight temporary-server API/browser checks** and the separate notification layout
+check passed. The complete desktop/mobile Workbench and independent wheel check
+also passed. The source-checked gallery records **384 Qt/Vue pairs / 1,152
+original/current-native/browser images**: 288 pairs across three styles, both
+modes/languages and 24 states/widths at 100%, plus 48 pairs each at 150% and 200%.
+Forms, forwarding, members, revision/pin history and files are included alongside
+the main communication surfaces; composer send/emoji geometry is measured.
+
+Real workflows cover cached switching, independent drafts/read positions,
+send/newline and popup input, files and failures, rights, notification actions,
+activity paging and hide/logout/expiry. Restored conversations create their
+retained surface, closed owners reject late opening callbacks, and authentication
+failure stops subsequent reads before ticket cleanup. Activity counts no longer
+reset the selected calendar month. Native message/Knowledge preview widths and
+phone toolbar composition are verified separately from the original reference.
+
+Handler retains local file/cancel and Repository Sync capabilities; Stream keeps
+browser downloads/reselection and its phone composition. Physical touch, OS IME,
+compositor/font rasterization and production PostgreSQL remain separate hardware
+and deployment acceptance. Source/owner map, reproduction and explicit limits:
+`docs/frame_messages.md`; gallery: `tools/frame_messages/output/index.html`.
+This checkpoint does not close B07's 40 legacy-widget gaps. **Next: B12 files,
+check-in and repository queues.**
 
 ## B10 delivered: production Gantt and calendar, 2026-10-18
 

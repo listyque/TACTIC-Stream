@@ -1,6 +1,6 @@
 import { A as onMounted, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { D as t, O as appearance, W as metrics } from "./index.js";
-import { C as button, D as rect, E as node, t as _sfc_main$1, u as translate, w as label } from "./FrameView.js";
+import { D as node, O as rect, T as label, t as _sfc_main$1, u as translate, w as button } from "./FrameView.js";
 import { n as observeFrameSizes } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/calendar.ui.mjs
 function layout(width, height) {

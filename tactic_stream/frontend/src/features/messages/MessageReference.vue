@@ -1,18 +1,103 @@
 <script setup>
-import AppButton from '../../controls/AppButton.vue'
-import AppIcon from '../../controls/AppIcon.vue'
-import { t } from '../../i18n.js'
-defineProps({ reference: Object, users: Array, forwarded: Boolean, dismissible: Boolean })
-defineEmits(['activate', 'dismiss'])
+import { ref, computed, h, onMounted, onBeforeUnmount } from 'vue';
+import FrameView from '../../frame/FrameView.vue';
+import { observeFrameSizes } from '../../frame/resize.js';
+import { appearance } from '../../appearance.js';
+import * as UI from '../../../../src/tactic_stream/shared_ui/features/messages/message.ui.mjs';
+const props = defineProps({
+  reference: Object,
+  users: Array,
+  forwarded: Boolean,
+  dismissible: Boolean
+});
+const emit = defineEmits(['activate', 'dismiss']);
+const root = ref(null),
+  width = ref(300),
+  height = ref(19);
+let observer;
+const model = computed(() => ({
+  sender:
+    props.users?.find((user) => user.login === props.reference.sender)
+      ?.displayName || props.reference.sender,
+  body: props.reference.body,
+  available: props.reference.available !== false,
+  forwarded: props.forwarded,
+  dismissible: props.dismissible,
+  attachments: props.reference.attachments?.length || 0
+}));
+const scene = computed(() =>
+  UI.reference(model.value, width.value, appearance.language, height.value)
+);
+const port = {
+  setup(_, { attrs }) {
+    const text = ref(null);
+    let resize;
+    onMounted(() => {
+      resize = observeFrameSizes(() => {
+        const value = text.value.getBoundingClientRect().height;
+        if (value > 0) height.value = value;
+      });
+      resize.observe(text.value);
+    });
+    onBeforeUnmount(() => resize?.disconnect());
+    return () =>
+      h('div', attrs, [
+        h(
+          'div',
+          {
+            ref: text,
+            style: {
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: props.forwarded ? 3 : 2,
+              overflow: 'hidden',
+              overflowWrap: 'anywhere',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '19px'
+            }
+          },
+          props.reference.body
+        )
+      ]);
+  }
+};
+onMounted(() => {
+  observer = observeFrameSizes((entries) => {
+    if (entries[0].contentRect.width > 0)
+      width.value = entries[0].contentRect.width;
+  });
+  observer.observe(root.value);
+});
+onBeforeUnmount(() => observer?.disconnect());
 </script>
 <template>
-  <component :is="!dismissible && reference.available ? AppButton : 'div'" class="message-reference" :class="{ forwarded, unavailable: !reference.available }" @click="!dismissible && reference.available && $emit('activate')">
-    <AppIcon :name="forwarded ? 'MDI_SHARE' : 'MDI_REPLY'" />
-    <span class="message-reference-text">
-      <strong>{{ reference.available ? t(forwarded ? 'Forwarded from {name}' : 'Reply to {name}', { name: users?.find(user => user.login === reference.sender)?.displayName || reference.sender || t('Unknown user') }) : t(forwarded ? 'Forwarded message unavailable' : 'Original message is unavailable') }}</strong>
-      <span v-if="reference.available && reference.body">{{ reference.body }}</span>
-      <small v-if="forwarded && reference.available && reference.attachments?.length">{{ t('{count} attachments', { count: reference.attachments.length }) }}</small>
-    </span>
-    <AppButton v-if="dismissible" icon-only icon="close" label="Cancel reply" @click.stop="$emit('dismiss')" />
-  </component>
+  <div
+    ref="root"
+    class="message-reference"
+    :class="{ forwarded, unavailable: reference.available === false }"
+    :style="{ height: scene.height + 'px' }"
+  >
+    <FrameView
+      :scene="scene"
+      :views="{ body: { component: port } }"
+      @event="(event) => emit(event.type === 'open' ? 'activate' : 'dismiss')"
+    />
+  </div>
 </template>
+<style>
+.message-reference {
+  display: block !important;
+  position: relative;
+  min-width: 0;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+.message-reference > .frame-view {
+  height: 100%;
+}
+.message-reference::before {
+  display: none !important;
+}
+</style>

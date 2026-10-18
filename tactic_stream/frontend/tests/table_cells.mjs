@@ -1557,6 +1557,10 @@ try {
     }
   ]);
   await first.getByRole('button', { name: /^publish \(/ }).click();
+  // The external write must be loaded before testing the retained reading position.
+  await notes
+    .getByRole('button', { name: 'Refresh notes and task', exact: true })
+    .click();
   await notes.getByText(/Scroll marker/).waitFor();
   const timeline = notes.locator('.notes-timeline');
   await timeline.evaluate((node) => {

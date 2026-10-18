@@ -3,6 +3,17 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
+## B11 communication — 2026-10-18
+
+Stream 0.112.164 / Handler 0.6.0.115 share conversation/header/body/composer
+presentation, message forms and child panels, attachment staging, activity
+cards/calendar, notification history and toasts. Existing stores, request and
+mutation owners remain separate. Neutral emoji/people pickers keep their native
+controls in both engines. Scope, capabilities and reproducible acceptance are in
+[frame_messages.md](docs/frame_messages.md). B07's remaining widgets stay open.
+The checkpoint passed 111 mandatory platform stages, 214 native communication
+cases, eight temporary-server checks and 384 source-checked Qt/Vue capture pairs.
+
 ## B10 production scheduling — 2026-10-18
 
 Stream 0.112.163 / Handler 0.6.0.114 share production Gantt, its timeline/rows,

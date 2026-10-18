@@ -443,6 +443,9 @@ try {
     ).messages.some((row) => row.message === 'Phone chat draft\n')
   );
   await messages
+    .getByRole('button', { name: 'Conversations', exact: true })
+    .tap();
+  await messages
     .getByRole('button', { name: 'Close Messages', exact: true })
     .tap();
   await panel('results');

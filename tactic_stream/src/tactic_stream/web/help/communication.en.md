@@ -161,3 +161,25 @@ local files cannot be restored automatically after a full reload. No Handler or 
 ## Phone presentation
 
 At 700px and below, task rows adapt to a vertical list; task fields are collapsed by default in Inspector. Enter adds a newline and the explicit button sends notes/messages. Phone panel selection is separate from the desktop layout. See **Mobile application** in Help for touch actions, keyboard viewport, persistence and verified limits.
+
+## Conversation panels and attachments
+
+Members, chat files, message search, edit history and pin history open beside their
+button. Press the same button again or Escape to close that panel; its conversation
+window and draft stay open. Creation and membership editing keep their confirmation
+forms. The title, action buttons and list rows follow the same layout in both clients.
+
+Use **Attachments to send** beside the attachment button to inspect staged files.
+The count follows the active conversation. **Show attachment previews** switches
+between compact file rows and previews; removing a row removes only that staged
+attachment. Upload errors remain visible with the draft. Handler can cancel its
+native upload operation; a browser file lost after reloading must be selected again
+before sending. Server permissions still determine which file operations are available.
+
+Desktop Enter sends, Ctrl+Enter or Command+Enter inserts a line, and a phone's Enter
+inserts a line. During a mention, arrows choose a member, Enter inserts the mention
+and Escape dismisses suggestions. Composing IME input never submits a message.
+Delivery state, the full timestamp and edit metadata can be focused with the keyboard.
+The emoji picker keeps large glyphs, categories, search, keyboard navigation and its
+own scrollbar. Leaving or expiring the session stops further communication requests
+until authentication succeeds again.

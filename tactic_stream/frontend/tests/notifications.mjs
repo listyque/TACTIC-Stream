@@ -1,88 +1,173 @@
-import assert from 'node:assert/strict'
-import { notify, notificationHistory, resetNotifications } from '../src/features/activity/notifications.js'
-import { redact } from '../src/features/debug/debugLog.js'
-import { mock } from 'node:test'
-import { activeNotifications, clearNotificationHistory, dismissNotification, setNotificationProgress, beginNotificationReply, cancelNotificationReply, editNotificationReply, submitNotificationReply, failNotificationReply } from '../src/features/activity/notifications.js'
+import assert from 'node:assert/strict';
+import {
+  notify,
+  notificationHistory,
+  resetNotifications
+} from '../src/features/activity/notifications.js';
+import { redact } from '../src/features/debug/debugLog.js';
+import { mock } from 'node:test';
+import {
+  activeNotifications,
+  clearNotificationHistory,
+  dismissNotification,
+  setNotificationProgress,
+  beginNotificationReply,
+  cancelNotificationReply,
+  editNotificationReply,
+  submitNotificationReply,
+  failNotificationReply
+} from '../src/features/activity/notifications.js';
 
-resetNotifications()
-notify('info', '')
-assert.equal(notificationHistory.records.length, 0)
-notify('error', 'Failure')
-notify('error', 'Failure')
-assert.equal(notificationHistory.records.length, 1, 'Duplicate signals are combined')
-for (let index = 0; index < 205; index++) notify('info', 'Event ' + index)
-assert.equal(notificationHistory.records.length, 200)
-assert.equal(notificationHistory.records[0].message, 'Event 204')
-redact({ ticket: 'never-show-this-ticket' })
-notify('error', 'never-show-this-ticket', 'also never-show-this-ticket')
-assert.equal(notificationHistory.records[0].message, '<REDACTED>')
-assert.equal(notificationHistory.records[0].detail, 'also <REDACTED>')
-resetNotifications()
-notify('error', 'Failure')
-assert.equal(notificationHistory.records.length, 1, 'Clearing also resets deduplication')
-resetNotifications()
-console.log('PASS: session history limit, ordering, deduplication, secret masking and clear')
-mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 100000 })
+resetNotifications();
+notify('info', '');
+assert.equal(notificationHistory.records.length, 0);
+notify('error', 'Failure');
+notify('error', 'Failure');
+assert.equal(
+  notificationHistory.records.length,
+  1,
+  'Duplicate signals are combined'
+);
+for (let index = 0; index < 205; index++) notify('info', 'Event ' + index);
+assert.equal(notificationHistory.records.length, 200);
+assert.equal(notificationHistory.records[0].message, 'Event 204');
+redact({ ticket: 'never-show-this-ticket' });
+notify('error', 'never-show-this-ticket', 'also never-show-this-ticket');
+assert.equal(notificationHistory.records[0].message, '<REDACTED>');
+assert.equal(notificationHistory.records[0].detail, 'also <REDACTED>');
+resetNotifications();
+notify('error', 'Failure');
+assert.equal(
+  notificationHistory.records.length,
+  1,
+  'Clearing also resets deduplication'
+);
+resetNotifications();
+console.log(
+  'PASS: session history limit, ordering, deduplication, secret masking and clear'
+);
+mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 100000 });
 try {
-  resetNotifications()
-  notify('complete', 'Saved')
-  notify('error', 'Failed')
-  notify('info', 'Artist', 'Review changed', 'server', 'activity:1', { sourceType: 'activity', action: 'activity' })
-  assert.equal(activeNotifications.records.length, 3)
-  clearNotificationHistory()
-  assert.equal(activeNotifications.records.length, 3, 'History clear leaves active notices intact')
-  mock.timers.tick(3200)
-  assert.deepEqual(activeNotifications.records.map(row => row.kind), ['error', 'info'])
-  mock.timers.tick(1800)
-  assert.equal(activeNotifications.records.length, 1)
-  notify('info', 'Artist', 'Duplicate event', 'server', 'activity:1')
-  assert.equal(notificationHistory.records.length, 0, 'An active notice deduplicates even beyond five seconds')
-  mock.timers.tick(3000)
-  assert.equal(activeNotifications.records.length, 0)
-  for (const message of ['One', 'Two', 'Three', 'Four']) notify('info', message)
-  assert.deepEqual(activeNotifications.records.map(row => row.message), ['Two', 'Three', 'Four'])
-  assert.equal(notificationHistory.records.length, 4)
-  const first = activeNotifications.records[0]
-  dismissNotification(first.notificationId)
-  assert.equal(notificationHistory.records.length, 4, 'Dismiss keeps history')
-  setNotificationProgress('Loading')
-  setNotificationProgress('Restoring')
-  assert.equal(activeNotifications.records.filter(row => row.kind === 'progress').length, 1)
-  assert.equal(notificationHistory.records.length, 4, 'Progress is transient')
-  mock.timers.tick(30000)
-  assert.equal(activeNotifications.records.length, 1)
-  assert.equal(activeNotifications.records[0].dismissible, false)
-  setNotificationProgress('')
-  assert.equal(activeNotifications.records.length, 0)
-  const reply = notify('info', 'Question', '', 'messages', 'chat:1', { sourceType: 'messages', actionData: 'CHAT1' })
-  mock.timers.tick(14000)
-  assert.equal(activeNotifications.records.length, 1, 'Message toast lasts fifteen seconds like Handler')
-  assert(beginNotificationReply(reply))
-  editNotificationReply(reply, 'Answer draft')
-  mock.timers.tick(20000)
-  assert.equal(activeNotifications.records[0].replyText, 'Answer draft', 'Editing stops expiry')
-  for (const message of ['One', 'Two', 'Three']) notify('info', message)
-  assert(activeNotifications.records.some(row => row.notificationId === reply), 'Active-limit eviction preserves the editor')
-  assert(submitNotificationReply(reply))
-  assert.equal(submitNotificationReply(reply), false, 'A second click cannot submit twice')
-  cancelNotificationReply(reply)
-  assert(activeNotifications.records.find(row => row.notificationId === reply).replyOpen, 'Sending cannot be cancelled')
-  failNotificationReply(reply, 'Offline')
-  assert.equal(activeNotifications.records.find(row => row.notificationId === reply).replyText, 'Answer draft')
-  cancelNotificationReply(reply)
-  mock.timers.tick(14999)
-  assert(activeNotifications.records.some(row => row.notificationId === reply))
-  mock.timers.tick(1)
-  assert(!activeNotifications.records.some(row => row.notificationId === reply))
-  assert.equal(beginNotificationReply(reply), false)
-  failNotificationReply(reply, 'Late old-session error')
-  assert.equal(activeNotifications.records.length, 0)
-  const readonly = notify('info', 'Read only', '', 'messages', 'readonly', { sourceType: 'messages', actionData: 'CHAT2', canReply: false })
-  assert.equal(beginNotificationReply(readonly), false)
-  resetNotifications()
-  notify('warning', 'Warning')
-  resetNotifications(); mock.timers.tick(30000)
-  assert.equal(activeNotifications.records.length, 0)
-  assert.equal(notificationHistory.records.length, 0)
-  console.log('PASS: native active limit, 3200/5000/8000/15000ms expiry, quick-reply draft/pause/cancel/retry/readonly, active/recent dedup, independent history, progress and session timer cleanup')
-} finally { resetNotifications(); mock.timers.reset() }
+  resetNotifications();
+  notify('complete', 'Saved');
+  notify('error', 'Failed');
+  notify('info', 'Artist', 'Review changed', 'server', 'activity:1', {
+    sourceType: 'activity',
+    action: 'activity'
+  });
+  assert.equal(activeNotifications.records.length, 3);
+  clearNotificationHistory();
+  assert.equal(
+    activeNotifications.records.length,
+    3,
+    'History clear leaves active notices intact'
+  );
+  mock.timers.tick(3200);
+  assert.deepEqual(
+    activeNotifications.records.map((row) => row.kind),
+    ['error', 'info']
+  );
+  mock.timers.tick(1800);
+  assert.equal(activeNotifications.records.length, 1);
+  notify('info', 'Artist', 'Duplicate event', 'server', 'activity:1');
+  assert.equal(
+    notificationHistory.records.length,
+    0,
+    'An active notice deduplicates even beyond five seconds'
+  );
+  mock.timers.tick(3000);
+  assert.equal(activeNotifications.records.length, 0);
+  for (const message of ['One', 'Two', 'Three', 'Four'])
+    notify('info', message);
+  assert.deepEqual(
+    activeNotifications.records.map((row) => row.message),
+    ['Two', 'Three', 'Four']
+  );
+  assert.equal(notificationHistory.records.length, 4);
+  const first = activeNotifications.records[0];
+  dismissNotification(first.notificationId);
+  assert.equal(notificationHistory.records.length, 4, 'Dismiss keeps history');
+  setNotificationProgress('Loading');
+  setNotificationProgress('Restoring');
+  assert.equal(
+    activeNotifications.records.filter((row) => row.kind === 'progress').length,
+    1
+  );
+  assert.equal(notificationHistory.records.length, 4, 'Progress is transient');
+  mock.timers.tick(30000);
+  assert.equal(activeNotifications.records.length, 1);
+  assert.equal(activeNotifications.records[0].dismissible, false);
+  setNotificationProgress('');
+  assert.equal(activeNotifications.records.length, 0);
+  const reply = notify('info', 'Question', '', 'messages', 'chat:1', {
+    sourceType: 'messages',
+    actionData: 'CHAT1'
+  });
+  mock.timers.tick(14000);
+  assert.equal(
+    activeNotifications.records.length,
+    1,
+    'Message toast lasts fifteen seconds like Handler'
+  );
+  assert(beginNotificationReply(reply));
+  editNotificationReply(reply, 'Answer draft');
+  mock.timers.tick(20000);
+  assert.equal(
+    activeNotifications.records[0].replyText,
+    'Answer draft',
+    'Editing stops expiry'
+  );
+  for (const message of ['One', 'Two', 'Three']) notify('info', message);
+  assert(
+    activeNotifications.records.some((row) => row.notificationId === reply),
+    'Active-limit eviction preserves the editor'
+  );
+  assert(submitNotificationReply(reply));
+  assert.equal(
+    submitNotificationReply(reply),
+    false,
+    'A second click cannot submit twice'
+  );
+  cancelNotificationReply(reply);
+  assert(
+    activeNotifications.records.find((row) => row.notificationId === reply)
+      .replyOpen,
+    'Sending cannot be cancelled'
+  );
+  failNotificationReply(reply, 'Offline');
+  assert.equal(
+    activeNotifications.records.find((row) => row.notificationId === reply)
+      .replyText,
+    'Answer draft'
+  );
+  cancelNotificationReply(reply);
+  mock.timers.tick(14999);
+  assert(
+    activeNotifications.records.some((row) => row.notificationId === reply)
+  );
+  mock.timers.tick(1);
+  assert(
+    !activeNotifications.records.some((row) => row.notificationId === reply)
+  );
+  assert.equal(beginNotificationReply(reply), false);
+  failNotificationReply(reply, 'Late old-session error');
+  assert.equal(activeNotifications.records.length, 0);
+  const readonly = notify('info', 'Read only', '', 'messages', 'readonly', {
+    sourceType: 'messages',
+    actionData: 'CHAT2',
+    canReply: false
+  });
+  assert.equal(beginNotificationReply(readonly), false);
+  resetNotifications();
+  notify('warning', 'Warning');
+  resetNotifications();
+  mock.timers.tick(30000);
+  assert.equal(activeNotifications.records.length, 0);
+  assert.equal(notificationHistory.records.length, 0);
+  console.log(
+    'PASS: native active limit, 3200/5000/8000/15000ms expiry, quick-reply draft/pause/cancel/retry/readonly, active/recent dedup, independent history, progress and session timer cleanup'
+  );
+} finally {
+  resetNotifications();
+  mock.timers.reset();
+}

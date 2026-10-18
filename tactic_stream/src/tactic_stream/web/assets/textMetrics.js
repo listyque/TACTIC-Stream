@@ -1,33 +1,6 @@
 import { D as t, O as appearance } from "./index.js";
 import { f as linkifyPlainText, n as browserLink, u as escapeHtml } from "./links.js";
 //#region src/features/activity/activity.js
-var feedFilters = [
-	{
-		value: "all",
-		label: "All",
-		icon: "select-all"
-	},
-	{
-		value: "my_tasks",
-		label: "My tasks",
-		icon: "task"
-	},
-	{
-		value: "my_objects",
-		label: "My objects",
-		icon: "inventory-2"
-	},
-	{
-		value: "notes",
-		label: "Notes",
-		icon: "notes"
-	},
-	{
-		value: "publications",
-		label: "Publications",
-		icon: "snapshot"
-	}
-];
 function dateKey(date) {
 	return [
 		date.getFullYear(),
@@ -55,7 +28,7 @@ function dayLabel(value) {
 		month: "long",
 		year: "numeric"
 	});
-	return prefix ? prefix + " · " + suffix : suffix;
+	return prefix ? prefix + "  ·  " + suffix : suffix;
 }
 function timestampLabel(timestamp, now = /* @__PURE__ */ new Date()) {
 	const value = new Date(String(timestamp || "").replace(" ", "T"));
@@ -122,18 +95,6 @@ function changeValue(record, change) {
 	if (record.kind === "create" && after) return after;
 	if (record.kind === "delete" && before) return t("Previous value: {value}", { value: before });
 	return before || after ? (before || t("empty")) + " → " + (after || t("empty")) : t("Changed");
-}
-function eventIcon(record) {
-	return record.relationAction ? "link" : {
-		publication: "snapshot",
-		note: "notes",
-		task: "task",
-		work_hour: "schedule",
-		status: "system-activity",
-		create: "add",
-		delete: "delete",
-		change: "edit"
-	}[record.kind] || "activity-feed";
 }
 function eventSentence(row, expanded) {
 	const html = (value) => escapeHtml(value).replace(/\r?\n/g, "<br>");
@@ -239,6 +200,6 @@ function qtLabelTextWidth(text, font) {
 	}, 0);
 }
 //#endregion
-export { dateKey as a, eventIcon as c, matchesSearch as d, needsExpansion as f, uniqueRecords as g, timestampLabel as h, compactText as i, eventSentence as l, timestampFullLabel as m, qtLabelTextWidth as n, dateLabel as o, safeColor as p, changeValue as r, dayLabel as s, layoutTextWidth as t, feedFilters as u };
+export { dateLabel as a, matchesSearch as c, timestampFullLabel as d, timestampLabel as f, compactText as i, needsExpansion as l, qtLabelTextWidth as n, dayLabel as o, uniqueRecords as p, changeValue as r, eventSentence as s, layoutTextWidth as t, safeColor as u };
 
 //# sourceMappingURL=textMetrics.js.map

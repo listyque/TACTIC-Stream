@@ -142,7 +142,7 @@ var _sfc_main$1 = {
 		function escape(event) {
 			if (event.key !== "Escape" || event.defaultPrevented || !menu.value.open || props.inline || menu.value.querySelector("details[open]")) return;
 			const dialog = event.target.closest("dialog");
-			if (dialog && dialog !== panelElement.value && !dialog.contains(menu.value)) return;
+			if (dialog && dialog !== panelElement.value && dialog !== props.boundary && !dialog.contains(menu.value) && !dialog.contains(props.anchor)) return;
 			event.preventDefault();
 			event.stopPropagation();
 			close(true);
@@ -345,7 +345,7 @@ var _sfc_main$1 = {
 				ref_key: "trigger",
 				ref: trigger,
 				class: "icon-button",
-				"aria-label": unref(t)(__props.label),
+				"aria-label": __props.externalTrigger ? void 0 : unref(t)(__props.label),
 				"aria-expanded": expanded.value,
 				"aria-disabled": __props.disabled || void 0,
 				tabindex: __props.disabled ? -1 : 0,

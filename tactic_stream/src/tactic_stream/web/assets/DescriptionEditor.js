@@ -1,6 +1,6 @@
 import { A as onMounted, C as inject, E as nextTick, H as watch, J as markRaw, M as openBlock, O as onBeforeUnmount, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString } from "./vue.js";
 import { D as t, O as appearance, rt as _plugin_vue_export_helper_default } from "./index.js";
-import { C as button, D as rect, E as node, _ as _sfc_main$3, t as _sfc_main$4, u as translate, w as label } from "./FrameView.js";
+import { D as node, O as rect, T as label, _ as _sfc_main$3, t as _sfc_main$4, u as translate, w as button } from "./FrameView.js";
 import { F as rpc } from "./CodeBlock.js";
 import { n as observeFrameSizes } from "./resize.js";
 import { f as linkifyPlainText, n as browserLink } from "./links.js";

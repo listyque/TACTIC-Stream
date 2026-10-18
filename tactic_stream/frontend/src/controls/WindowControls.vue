@@ -100,7 +100,7 @@ function opened() {
 const observer = new MutationObserver(opened)
 const sizeObserver = new ResizeObserver(resizeEdges)
 function key(event) {
-  if (event.target.closest('.app-window') !== props.element) return
+  if (event.target.closest('.app-window') !== props.element || event.target.closest('dialog') !== props.element) return
   if (event.key === 'Escape' && gesture) { event.preventDefault(); event.stopPropagation(); cancelGesture(); return }
   if (event.altKey && event.key === 'F10') { event.preventDefault(); event.stopPropagation(); toggle() }
   if (event.target !== props.header || !event.altKey || !event.key.startsWith('Arrow') || compact() || maximized.value) return

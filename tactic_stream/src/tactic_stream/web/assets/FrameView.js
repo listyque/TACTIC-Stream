@@ -1,6 +1,6 @@
 import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, R as useAttrs, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
-import { D as t, F as blend, G as readableText, I as controls, K as textStyles, L as cssColor, O as appearance, R as cssRoles, W as metrics, et as iconSets, j as frameColors, nt as BusyIndicator_default, o as _sfc_main$20, rt as _plugin_vue_export_helper_default, u as _sfc_main$21 } from "./index.js";
+import { D as t, F as blend, G as readableText, I as controls, K as textStyles, L as cssColor, O as appearance, R as cssRoles, W as metrics, et as iconSets, j as frameColors, nt as BusyIndicator_default, o as _sfc_main$20, rt as _plugin_vue_export_helper_default, s as tooltipDirective, u as _sfc_main$21 } from "./index.js";
 import { f as _sfc_main$23, n as javascriptTokens, o as copyText, p as _sfc_main$22, r as pythonTokens, s as readClipboard } from "./CodeBlock.js";
 import { n as _sfc_main$25, r as _sfc_main$24, t as _sfc_main$26 } from "./AppSplitter.js";
 import { t as _sfc_main$27 } from "./AppCheckbox.js";
@@ -2201,6 +2201,129 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"ACTIVITY & NOTIFICATIONS": "АКТИВНОСТЬ И УВЕДОМЛЕНИЯ",
+	"ACTIVITY FEED": "ЛЕНТА АКТИВНОСТИ",
+	"ATTACHMENTS TO SEND": "ВЛОЖЕНИЯ ДЛЯ ОТПРАВКИ",
+	Action: "Действие",
+	Activities: "Занятия",
+	"Activity notifications": "Уведомления ленты",
+	"Add or remove members": "Добавить или удалить участников",
+	"Add reaction": "Добавить реакцию",
+	All: "Все",
+	"All history": "Вся история",
+	"All messages in Favorites will be cleared. Favorites itself will remain.": "Все сообщения в избранном будут удалены. Сам чат «Избранное» останется.",
+	"All users": "Все пользователи",
+	"Animals & Nature": "Животные и природа",
+	Apply: "Применить",
+	"Attach image from clipboard": "Вставить изображение из буфера",
+	"Attachments to send": "Вложения для отправки",
+	"CHAT FILES": "ФАЙЛЫ ЧАТА",
+	"CHAT MEMBERS": "УЧАСТНИКИ ЧАТА",
+	CONVERSATIONS: "ЧАТЫ",
+	Cancel: "Отмена",
+	"Cancel attachment upload": "Отменить загрузку вложений",
+	"Cancel reply": "Отменить ответ",
+	"Chat actions": "Действия чата",
+	"Chat files": "Файлы чата",
+	"Chat members": "Участники чата",
+	"Chat title": "Название чата",
+	"Check-in": "Check-in",
+	"Check-in operations": "Операции Check-in",
+	"Choose one or more destination chats": "Выберите один или несколько чатов",
+	Clear: "Очистить",
+	"Clear attachments": "Очистить вложения",
+	"Clear favorites?": "Очистить избранное?",
+	"Clear history": "Очистить историю",
+	"Clear messages": "Очистить сообщения",
+	Client: "Клиент",
+	"Client events and background operations from this session.": "События клиентов и фоновые операции текущей сессии.",
+	Close: "Закрыть",
+	Collapse: "Свернуть",
+	Component: "Компоненты",
+	Create: "Создать",
+	Delete: "Удалить",
+	"Delete chat": "Удалить чат",
+	"Delete chat?": "Удалить чат?",
+	"Delivered to {count} of {total}": "Доставлено {count} из {total}",
+	"EDIT HISTORY": "ИСТОРИЯ ИЗМЕНЕНИЙ",
+	"Edit message": "Редактировать сообщение",
+	Edited: "Изменено",
+	"Emoji categories": "Категории эмодзи",
+	"Exclude my activity": "Исключать мои действия",
+	Expand: "Развернуть",
+	Favorites: "Избранное",
+	Field: "Поле",
+	File: "Файл",
+	"Filter by users": "Фильтр по пользователям",
+	"Find emoji": "Найти эмодзи",
+	"Find people and start a direct or group chat": "Найдите пользователей и создайте личный или групповой чат",
+	Flags: "Флаги",
+	"Food & Drink": "Еда и напитки",
+	Forward: "Переслать",
+	"Forwarded from {name}": "Переслано от {name}",
+	"Forwarded message unavailable": "Пересланное сообщение недоступно",
+	"Group chat title": "Название группового чата",
+	"Group chats can be created by administrators and supervisors": "Групповые чаты могут создавать администраторы и супервайзеры",
+	Icon: "Иконка",
+	"Last edited by {name} · {time}": "Последнее изменение: {name} · {time}",
+	Message: "Сообщение",
+	"Message actions": "Действия сообщения",
+	Messages: "Сообщения",
+	"My objects": "Мои объекты",
+	"New conversation": "Новый чат",
+	"No events in this group": "В этой группе нет событий",
+	"No matching emoji": "Подходящие эмодзи не найдены",
+	"No messages yet": "Сообщений пока нет",
+	Notes: "Заметки",
+	"Notification history filters": "Фильтры истории уведомлений",
+	Objects: "Предметы",
+	"Open attachment": "Открыть вложение",
+	"Open profile for {name}": "Открыть профиль {name}",
+	"Original message is unavailable": "Исходное сообщение недоступно",
+	"PIN HISTORY": "ИСТОРИЯ ЗАКРЕПЛЕНИЙ",
+	"People & Body": "Люди и тело",
+	"Pin history": "История закреплений",
+	"Pinned by {user}": "Закрепил(а) {user}",
+	"Pinned message": "Закреплённое сообщение",
+	Preview: "Превью",
+	Publications: "Публикации",
+	"Read by {count} of {total}": "Прочитали {count} из {total}",
+	"Refresh activity": "Обновить активность",
+	"Refresh conversations and messages": "Обновить чаты и сообщения",
+	"Remove attachment": "Удалить вложение",
+	Rename: "Переименовать",
+	"Rename chat": "Переименовать чат",
+	Reply: "Ответить",
+	"Reply to {name}": "Ответ {name}",
+	"Repository sync": "Синхронизация репозитория",
+	Save: "Сохранить",
+	"Save members": "Сохранить участников",
+	Search: "Поиск",
+	"Search activity": "Поиск по активности",
+	"Search messages": "Искать сообщения",
+	"Select a conversation": "Выберите чат",
+	"Select everyone who should remain in this chat": "Выберите всех, кто должен остаться в чате",
+	Send: "Отправить",
+	Sent: "Отправлено",
+	Server: "Сервер",
+	"Server transactions": "Серверные транзакции",
+	"Server trigger": "Серверный триггер",
+	"Show activity created by selected users": "Показывать активность выбранных пользователей",
+	"Smileys & Emotion": "Смайлы и эмоции",
+	Symbols: "Символы",
+	Text: "Текст",
+	"The chat will be archived for every participant. Message history and attachments remain available for audit.": "Чат будет архивирован для всех участников. История сообщений и вложения останутся доступны для аудита.",
+	"Travel & Places": "Путешествия и места",
+	"Type a message or phrase": "Введите сообщение или фразу",
+	Unknown: "Неизвестно",
+	"Unknown user": "Неизвестный пользователь",
+	"Unpin message": "Открепить сообщение",
+	Uploaded: "Загружен",
+	View: "Вид",
+	"Write a reply": "Напишите ответ",
+	"Your personal notes": "Ваши личные заметки",
+	snapshot: "снапшот",
+	unknown: "неизвестно",
 	"Milestone name is required": "Укажите название этапа",
 	"Choose a valid due date": "Выберите корректную дату",
 	"Milestone operation failed": "Не удалось выполнить операцию с этапом",
@@ -6391,6 +6514,7 @@ var _hoisted_2 = [
 	"data-frame",
 	"role",
 	"aria-level",
+	"tabindex",
 	"title"
 ];
 var _hoisted_3 = { key: 1 };
@@ -6645,11 +6769,12 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"style",
 					"role",
 					"aria-label"
-				])) : node.kind === "Label" ? (openBlock(), createElementBlock("span", {
+				])) : node.kind === "Label" ? withDirectives((openBlock(), createElementBlock("span", {
 					key: 1,
 					"data-frame": node.id,
 					role: node.role,
 					"aria-level": node.role === "heading" ? node.level || 2 : void 0,
+					tabindex: node.focusable ? 0 : void 0,
 					class: normalizeClass(["frame-node frame-label", { "frame-wrap": node.wrap }]),
 					style: normalizeStyle(Object.assign(style(node), {
 						overflow: node.elide === false ? "visible" : void 0,
@@ -6660,23 +6785,29 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						WebkitLineClamp: node.maxLines || void 0,
 						WebkitBoxOrient: node.maxLines ? "vertical" : void 0
 					})),
-					title: node.text
+					title: node.toolTip ? void 0 : node.text
 				}, [node.elideMiddle ? (openBlock(), createBlock(_sfc_main$2, {
 					key: 0,
 					text: node.text
-				}, null, 8, ["text"])) : (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(node.text), 1))], 14, _hoisted_2)) : node.kind === "Icon" ? (openBlock(), createBlock(_sfc_main$21, {
+				}, null, 8, ["text"])) : (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(node.text), 1))], 14, _hoisted_2)), [[unref(tooltipDirective), node.toolTip]]) : node.kind === "Icon" ? withDirectives((openBlock(), createBlock(_sfc_main$21, {
 					key: 2,
 					"data-frame": node.id,
 					class: "frame-node",
 					style: normalizeStyle(Object.assign(style(node), { fontSize: node.width + "px" })),
 					name: node.icon,
-					title: node.text || void 0
+					"aria-hidden": node.text ? "false" : "true",
+					role: node.text ? "img" : void 0,
+					"aria-label": node.text || void 0,
+					tabindex: node.focusable ? 0 : void 0
 				}, null, 8, [
 					"data-frame",
 					"style",
 					"name",
-					"title"
-				])) : node.kind === "Button" ? (openBlock(), createBlock(_sfc_main$20, {
+					"aria-hidden",
+					"role",
+					"aria-label",
+					"tabindex"
+				])), [[unref(tooltipDirective), node.toolTip || node.text]]) : node.kind === "Button" ? (openBlock(), createBlock(_sfc_main$20, {
 					key: 3,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node", {
@@ -6689,6 +6820,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					label: node.text,
 					"translate-label": false,
 					"aria-label": node.label || node.text,
+					tooltip: node.toolTip || (node.iconOnly ? node.label || node.text : void 0),
 					icon: node.icon,
 					"icon-only": node.iconOnly,
 					href: node.href,
@@ -6720,6 +6852,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"style",
 					"label",
 					"aria-label",
+					"tooltip",
 					"icon",
 					"icon-only",
 					"href",
@@ -6744,6 +6877,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onDrop"
 				])) : node.kind === "Action" ? (openBlock(), createBlock(_sfc_main$20, {
 					key: 4,
+					id: node.elementId,
 					"data-frame": node.id,
 					class: "frame-node frame-action",
 					style: normalizeStyle(Object.assign(style(node), { borderRadius: (node.radius === void 0 ? 10 : node.radius) + "px" })),
@@ -6751,6 +6885,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"translate-label": false,
 					disabled: !node.enabled,
 					"aria-pressed": node.selected,
+					tooltip: node.toolTip,
 					"aria-description": node.description,
 					role: node.role,
 					"aria-level": node.role === "treeitem" ? node.level : void 0,
@@ -6765,6 +6900,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				}, {
 					default: withCtx(() => [createVNode(_sfc_main$4, {
 						selected: node.selected,
+						accent: color(node.accent),
 						"corner-radius": node.radius === void 0 ? 10 : node.radius,
 						"normal-color": color(node.normalColor) || "transparent",
 						"selected-color": color(node.selectedColor) || "transparent",
@@ -6782,6 +6918,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						_: 2
 					}, 1032, [
 						"selected",
+						"accent",
 						"corner-radius",
 						"normal-color",
 						"selected-color",
@@ -6789,11 +6926,13 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					])]),
 					_: 2
 				}, 1032, [
+					"id",
 					"data-frame",
 					"style",
 					"label",
 					"disabled",
 					"aria-pressed",
+					"tooltip",
 					"aria-description",
 					"role",
 					"aria-level",
@@ -7297,6 +7436,6 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 	}
 });
 //#endregion
-export { button as C, rect as D, node as E, revealListOffset as O, _sfc_main$19 as S, muted as T, _sfc_main$15 as _, _sfc_main$4 as a, parse as b, completions as c, _sfc_main$10 as d, _sfc_main$11 as f, AppSearchField_default as g, ItemPreview_default as h, _sfc_main$3 as i, virtualRange as k, documentSymbols as l, _sfc_main$12 as m, _sfc_main$1 as n, _sfc_main$5 as o, matchesUser as p, _sfc_main$2 as r, _sfc_main$7 as s, _sfc_main as t, translate as u, _sfc_main$16 as v, label as w, _sfc_main$17 as x, monthLabel as y };
+export { virtualRange as A, _sfc_main$19 as C, node as D, muted as E, rect as O, _sfc_main$17 as S, label as T, _sfc_main$15 as _, _sfc_main$4 as a, monthLabel as b, completions as c, _sfc_main$10 as d, _sfc_main$11 as f, AppSearchField_default as g, ItemPreview_default as h, _sfc_main$3 as i, revealListOffset as k, documentSymbols as l, _sfc_main$12 as m, _sfc_main$1 as n, _sfc_main$5 as o, matchesUser as p, _sfc_main$2 as r, _sfc_main$7 as s, _sfc_main as t, translate as u, _sfc_main$16 as v, button as w, parse as x, localDate as y };
 
 //# sourceMappingURL=FrameView.js.map

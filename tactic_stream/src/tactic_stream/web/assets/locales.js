@@ -1373,7 +1373,8 @@ var en_default = {
 	"Match (slow)": "Match (slow)",
 	"Do not match (slow)": "Do not match (slow)",
 	"The schedule could not be staged.": "The schedule could not be staged.",
-	"The task changed while this editor was open. Close and reopen the schedule.": "The task changed while this editor was open. Close and reopen the schedule."
+	"The task changed while this editor was open. Close and reopen the schedule.": "The task changed while this editor was open. Close and reopen the schedule.",
+	"Authentication required": "Authentication required"
 };
 var ru_default = {
 	"Open event details": "Открыть подробности события",
@@ -5960,7 +5961,8 @@ var ru_default = {
 	RECENT: "НЕДАВНИЕ",
 	"No supervisor": "Без руководителя",
 	"The schedule could not be staged.": "Не удалось применить расписание к черновику.",
-	"The task changed while this editor was open. Close and reopen the schedule.": "Задача изменилась, пока редактор был открыт. Закройте его и откройте расписание заново."
+	"The task changed while this editor was open. Close and reopen the schedule.": "Задача изменилась, пока редактор был открыт. Закройте его и откройте расписание заново.",
+	"Authentication required": "Требуется вход в систему"
 };
 //#endregion
 export { en_default as n, ru_default as t };

@@ -1,4 +1,4 @@
-import { D as rect, E as node, T as muted, u as translate, w as label } from "./FrameView.js";
+import { D as node, E as muted, O as rect, T as label, u as translate } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/admin.document.mjs
 function policy(model) {
 	const editable = !!model.ready && !!model.canWrite && !model.busy && !model.uncertain;

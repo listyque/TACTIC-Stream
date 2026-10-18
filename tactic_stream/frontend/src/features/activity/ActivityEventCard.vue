@@ -1,38 +1,203 @@
 <script setup>
-import { computed, ref, watchPostEffect } from 'vue'
-import AppButton from '../../controls/AppButton.vue'
-import AppIcon from '../../controls/AppIcon.vue'
-import ItemPreview from '../../controls/ItemPreview.vue'
-import { t } from '../../i18n.js'
-import { appearance } from '../../appearance.js'
-import { eventSentence, eventIcon, changeValue, compactText, needsExpansion, timestampLabel, safeColor } from './activity.js'
-import { escapeHtml, linkifyPlainText, activateRichLink } from '../../controls/richText.js'
-import { browserLink } from '../workspace/links.js'
-const props = defineProps({ record: Object, now: Number })
-const emit = defineEmits(['activity', 'target', 'open-link'])
-const expanded = ref(false)
-const sentence = ref(null)
-const html = computed(() => eventSentence(props.record, expanded.value))
+import {
+  computed,
+  ref,
+  watchPostEffect,
+  h,
+  onMounted,
+  onBeforeUnmount
+} from 'vue';
+import FrameView from '../../frame/FrameView.vue';
+import { observeFrameSizes } from '../../frame/resize.js';
+import * as UI from '../../../../src/tactic_stream/shared_ui/features/activity/event.ui.mjs';
+import { t } from '../../i18n.js';
+import { appearance } from '../../appearance.js';
+import {
+  eventSentence,
+  eventIcon,
+  changeValue,
+  compactText,
+  needsExpansion,
+  timestampLabel,
+  safeColor
+} from './activity.js';
+import {
+  escapeHtml,
+  linkifyPlainText,
+  activateRichLink
+} from '../../controls/richText.js';
+import { browserLink } from '../workspace/links.js';
+const props = defineProps({ record: Object, now: Number });
+const emit = defineEmits(['activity', 'target', 'open-link']);
+const expanded = ref(false);
+const sentence = ref(null),
+  root = ref(null),
+  width = ref(500),
+  heights = ref({}),
+  hovered = ref(false);
+let observer;
+const html = computed(() => eventSentence(props.record, expanded.value));
 // CSSOM assignments preserve the site's CSP; injected style attributes are blocked.
-watchPostEffect(() => { html.value; sentence.value?.querySelectorAll('[data-color]').forEach(element => { element.style.color = safeColor(element.dataset.color) }) })
-const accent = computed(() => safeColor(props.record.processColor) || safeColor(props.record.typeColor) || ({ publication: 'var(--success)', task: 'var(--yellow)', work_hour: 'var(--cyan)' }[props.record.kind]) || 'var(--primary)')
-const changes = computed(() => !props.record.relationAction && ['create', 'change', 'delete'].includes(props.record.kind) ? props.record.changes || [] : [])
-const expandable = computed(() => [props.record.detail, props.record.title, ...changes.value.map(change => changeValue(props.record, change))].some(needsExpansion))
-const time = computed(() => { appearance.language; return timestampLabel(props.record.timestamp, new Date(props.now || Date.now())) })
+watchPostEffect(() => {
+  html.value;
+  sentence.value?.querySelectorAll('[data-color]').forEach((element) => {
+    element.style.color = safeColor(element.dataset.color);
+  });
+});
+const changes = computed(() =>
+  !props.record.relationAction &&
+  ['create', 'change', 'delete'].includes(props.record.kind)
+    ? props.record.changes || []
+    : []
+);
+const expandable = computed(() =>
+  [
+    props.record.detail,
+    props.record.title,
+    ...changes.value.map((change) => changeValue(props.record, change))
+  ].some(needsExpansion)
+);
+const time = computed(() => {
+  appearance.language;
+  return timestampLabel(
+    props.record.timestamp,
+    new Date(props.now || Date.now())
+  );
+});
 function activate(event) {
-  if (activateRichLink(event, value => emit('open-link', value))) return
-  const action = event.target.closest('[data-action]')?.dataset.action
-  if (action) { event.preventDefault(); emit(action) }
+  if (activateRichLink(event, (value) => emit('open-link', value))) return;
+  const action = event.target.closest('[data-action]')?.dataset.action;
+  if (action) {
+    event.preventDefault();
+    emit(action);
+  }
 }
+
+const fieldLabel = (value) =>
+  t(
+    {
+      name: 'Name',
+      title: 'Title',
+      description: 'Description',
+      assigned: 'Assignee',
+      status: 'Status',
+      priority: 'Priority',
+      'bid start date': 'Start date',
+      'bid end date': 'Deadline'
+    }[String(value).toLowerCase()] || value
+  );
+const model = computed(() => ({
+  ...props.record,
+  time: time.value,
+  fullTime: props.record.timestamp,
+  expanded: expanded.value,
+  expandable: expandable.value,
+  hovered: hovered.value,
+  changes: changes.value.map((row) => ({
+    ...row,
+    label: fieldLabel(row.field)
+  }))
+}));
+const scene = computed(() =>
+  UI.card(
+    model.value,
+    width.value,
+    heights.value,
+    appearance.language,
+    appearance.theme
+  )
+);
+const port = {
+  props: { frameNode: Object },
+  setup(port, { attrs }) {
+    const element = ref(null);
+    let resize;
+    onMounted(() => {
+      resize = observeFrameSizes(() => {
+        const key =
+            port.frameNode.view === 'sentence'
+              ? 'sentence'
+              : 'change_' + port.frameNode.index,
+          height = element.value.getBoundingClientRect().height;
+        if (height > 0 && heights.value[key] !== height)
+          heights.value = { ...heights.value, [key]: height };
+      });
+      resize.observe(element.value);
+    });
+    onBeforeUnmount(() => resize?.disconnect());
+    return () => {
+      const body = port.frameNode.view === 'sentence',
+        change = changes.value[port.frameNode.index],
+        value = body
+          ? html.value
+          : expanded.value
+            ? linkifyPlainText(changeValue(props.record, change), browserLink)
+            : escapeHtml(compactText(changeValue(props.record, change)));
+      return h('div', attrs, [
+        h('div', {
+          ref: (node) => {
+            element.value = node;
+            if (body) sentence.value = node;
+          },
+          class: body ? 'activity-sentence-port' : 'activity-change-port',
+          style: {
+            overflowWrap: 'anywhere',
+            fontSize: body ? '13px' : '12px',
+            lineHeight: body ? '18px' : '16px',
+            userSelect: 'text'
+          },
+          innerHTML: value,
+          onClick: activate
+        })
+      ]);
+    };
+  }
+};
+const views = {
+  sentence: { component: port, nodeProps: true },
+  change: { component: port, nodeProps: true }
+};
+onMounted(() => {
+  observer = observeFrameSizes((entries) => {
+    if (entries[0].contentRect.width > 0)
+      width.value = entries[0].contentRect.width;
+  });
+  observer.observe(root.value);
+});
+onBeforeUnmount(() => observer?.disconnect());
 </script>
 <template>
-  <article class="activity-event-card" :data-event-id="record.eventId" @click="activate">
-    <ItemPreview :source="record.actorAvatar" :fallback-text="record.serverGenerated ? '' : record.actorInitials || record.actor?.slice(0, 1).toUpperCase()" :fallback-icon="record.serverGenerated ? 'system-activity' : !record.actor ? 'user' : undefined" :accent="record.actorColor" :preview-size="40" round outlined />
-    <div class="activity-event-bubble">
-      <header><strong>{{ record.serverGenerated ? t('Server trigger') : record.actorLabel || record.actor || t('Unknown user') }}</strong><time :datetime="record.timestamp" :title="record.timestamp">{{ time }}</time></header>
-      <div class="activity-event-sentence"><AppIcon :name="eventIcon(record)" :style="{ color: accent }" /><div ref="sentence" v-html="html" /></div>
-      <div v-if="changes.length" class="activity-changes"><div v-for="(change, index) in changes" :key="index"><span class="muted" :title="change.field">{{ t({ name: 'Name', title: 'Title', description: 'Description', assigned: 'Assignee', status: 'Status', priority: 'Priority', 'bid start date': 'Start date', 'bid end date': 'Deadline' }[String(change.field).toLowerCase()] || change.field) }}</span><span v-html="expanded ? linkifyPlainText(changeValue(record, change), browserLink) : escapeHtml(compactText(changeValue(record, change)))" /></div></div>
-      <AppButton v-if="expandable" class="activity-expand" tonal :label="expanded ? 'Collapse' : 'Expand'" :icon="expanded ? 'MDI_CHEVRON_UP' : 'MDI_CHEVRON_DOWN'" :aria-expanded="expanded" @click="expanded = !expanded" />
-    </div>
+  <article
+    ref="root"
+    class="activity-event-card"
+    :data-event-id="record.eventId"
+    :style="{ height: scene.height + 'px' }"
+    @mouseenter="hovered = true"
+    @mouseleave="hovered = false"
+  >
+    <FrameView
+      :scene="scene"
+      :views="views"
+      @event="
+        (event) => {
+          if (event.type === 'expand') expanded = !expanded;
+        }
+      "
+    />
   </article>
 </template>
+<style>
+.activity-event-card {
+  display: block !important;
+  position: relative;
+  padding: 0 !important;
+  min-width: 0;
+}
+.activity-event-card > .frame-view {
+  height: 100%;
+}
+.activity-event-card .activity-sentence-port,
+.activity-event-card .activity-change-port {
+  white-space: normal;
+}
+</style>

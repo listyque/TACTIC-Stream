@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, ref, watch } from 'vue';
+import { tooltipDirective as vTooltip } from '../controls/tooltip.js';
 import AppButton from '../controls/AppButton.vue';
 import AppCheckbox from '../controls/AppCheckbox.vue';
 import AppSwitch from '../controls/AppSwitch.vue';
@@ -338,6 +339,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :data-frame="node.id"
         :role="node.role"
         :aria-level="node.role === 'heading' ? node.level || 2 : undefined"
+        :tabindex="node.focusable ? 0 : undefined"
+        v-tooltip="node.toolTip"
         class="frame-node frame-label"
         :class="{ 'frame-wrap': node.wrap }"
         :style="
@@ -351,7 +354,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             WebkitBoxOrient: node.maxLines ? 'vertical' : undefined
           })
         "
-        :title="node.text"
+        :title="node.toolTip ? undefined : node.text"
         ><MiddleElide v-if="node.elideMiddle" :text="node.text" /><span
           v-else
           >{{ node.text }}</span
@@ -363,7 +366,11 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         class="frame-node"
         :style="Object.assign(style(node), { fontSize: node.width + 'px' })"
         :name="node.icon"
-        :title="node.text || undefined"
+        :aria-hidden="node.text ? 'false' : 'true'"
+        :role="node.text ? 'img' : undefined"
+        :aria-label="node.text || undefined"
+        :tabindex="node.focusable ? 0 : undefined"
+        v-tooltip="node.toolTip || node.text"
       />
       <AppButton
         v-else-if="node.kind === 'Button'"
@@ -388,6 +395,9 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :label="node.text"
         :translate-label="false"
         :aria-label="node.label || node.text"
+        :tooltip="
+          node.toolTip || (node.iconOnly ? node.label || node.text : undefined)
+        "
         :icon="node.icon"
         :icon-only="node.iconOnly"
         :href="node.href"
@@ -418,6 +428,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       />
       <AppButton
         v-else-if="node.kind === 'Action'"
+        :id="node.elementId"
         :data-frame="node.id"
         class="frame-node frame-action"
         :style="
@@ -429,6 +440,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :translate-label="false"
         :disabled="!node.enabled"
         :aria-pressed="node.selected"
+        :tooltip="node.toolTip"
         :aria-description="node.description"
         :role="node.role"
         :aria-level="node.role === 'treeitem' ? node.level : undefined"
@@ -449,6 +461,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       >
         <ItemSurface
           :selected="node.selected"
+          :accent="color(node.accent)"
           :corner-radius="node.radius === undefined ? 10 : node.radius"
           :normal-color="color(node.normalColor) || 'transparent'"
           :selected-color="color(node.selectedColor) || 'transparent'"

@@ -1,11 +1,11 @@
 import { A as onMounted, C as inject, E as nextTick, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, W as watchPostEffect, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, u as Fragment, y as createTextVNode } from "./vue.js";
-import { D as t, O as appearance, o as _sfc_main$5, u as _sfc_main$4 } from "./index.js";
-import { C as button, D as rect, E as node, T as muted, h as ItemPreview_default, t as _sfc_main$6, u as translate, w as label } from "./FrameView.js";
+import { D as t, O as appearance, W as metrics, o as _sfc_main$4 } from "./index.js";
+import { D as node, E as muted, O as rect, T as label, t as _sfc_main$5, u as translate, w as button } from "./FrameView.js";
 import { P as resultItems } from "./CodeBlock.js";
 import { n as observeFrameSizes } from "./resize.js";
 import { f as linkifyPlainText, l as activateRichLink, n as browserLink, u as escapeHtml } from "./links.js";
-import { c as eventIcon, f as needsExpansion, h as timestampLabel, i as compactText, l as eventSentence, m as timestampFullLabel, n as qtLabelTextWidth, p as safeColor, r as changeValue } from "./textMetrics.js";
-import { t as _sfc_main$7 } from "./AttachmentCard.js";
+import { d as timestampFullLabel, f as timestampLabel, i as compactText, l as needsExpansion, n as qtLabelTextWidth, r as changeValue, s as eventSentence, u as safeColor } from "./textMetrics.js";
+import { t as _sfc_main$6 } from "./AttachmentCard.js";
 import { t as FilePreview_default } from "./FilePreview.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/report.ui.mjs
 var sections = [
@@ -577,7 +577,7 @@ var _sfc_main$3 = {
 				ref: host,
 				class: "object-report-surface",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$6, {
+			}, [createVNode(_sfc_main$5, {
 				scene: scene.value,
 				views: { reportDescription: {
 					component: descriptionView,
@@ -683,18 +683,117 @@ function usePagination(viewport, content, enabled, requestMore) {
 	};
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/activity/event.ui.mjs
+function icon(model) {
+	return model.relationAction ? "link" : {
+		publication: "snapshot",
+		note: "notes",
+		task: "task",
+		work_hour: "schedule",
+		status: "system-activity",
+		create: "add",
+		delete: "delete",
+		change: "edit"
+	}[model.kind] || "activity-feed";
+}
+function accent(model) {
+	return model.processColor || model.typeColor || {
+		publication: "green",
+		work_hour: "cyan",
+		task: "yellow"
+	}[model.kind] || "action";
+}
+function geometry(width, style = "md3") {
+	const avatar = width < 380 ? 34 : 40, gap = metrics(style).communicationAvatarSpacing;
+	const bubble = Math.max(0, Math.min(760, width - avatar - gap - 8));
+	return {
+		avatar,
+		bubble,
+		x: 4 + avatar + gap,
+		inner: Math.max(0, bubble - 20)
+	};
+}
+function card(model, width, heights = {}, language, style = "md3") {
+	const tr = (text) => translate(text, language), g = geometry(width, style), compact = g.bubble < 520, timeWidth = Math.min(140, g.inner * .35), headerHeight = compact ? 33 : 16, nodes = [], sentenceHeight = Math.max(18, heights.sentence || 18), color = accent(model);
+	let y = 14 + headerHeight + 6;
+	const content = [
+		label("activityActorLabel", rect(10, 10, compact ? g.inner : Math.max(0, g.inner - timeWidth - 8), 16), model.serverGenerated ? tr("Server trigger") : model.actorLabel || model.actor || tr("Unknown user"), {
+			fontRole: "secondary",
+			weight: 600,
+			color: "action"
+		}),
+		label("activityTimestamp", rect(compact ? 10 : g.bubble - 10 - timeWidth, compact ? 28 : 10, compact ? g.inner : timeWidth, 15), model.time || "", {
+			fontRole: "caption",
+			color: "secondaryText",
+			align: compact ? "left" : "right",
+			toolTip: model.fullTime || ""
+		}),
+		node("Icon", "activityKind", rect(10, y - 4, 20, 20), {
+			icon: icon(model),
+			color
+		}),
+		node("View", "activitySentencePort", rect(38, y - 4, Math.max(0, g.inner - 28), sentenceHeight), { view: "sentence" })
+	];
+	y += Math.max(20, sentenceHeight) + 6;
+	const changes = model.changes || [], changeNodes = [], changeTop = y - 4;
+	for (let i = 0; i < changes.length; i++) {
+		const rowHeight = Math.max(16, heights["change_" + i] || 16) + 10, labelWidth = Math.min(116, Math.max(60, g.inner * .25)), rowY = y - 4 - changeTop;
+		changeNodes.push(node("Box", "activityChangeRow_" + i, rect(0, rowY, g.inner, rowHeight), {
+			background: "surfaceContainer",
+			radius: 9,
+			border: "outlineVariant",
+			borderWidth: 1
+		}));
+		changeNodes.push(label("activityChangeLabel_" + i, rect(10, rowY + 5, labelWidth, 15), changes[i].label || changes[i].field || "", {
+			fontRole: "caption",
+			color: "secondaryText",
+			toolTip: changes[i].label || changes[i].field || ""
+		}));
+		changeNodes.push(node("View", "activityChangePort_" + i, rect(20 + labelWidth, rowY + 5, Math.max(0, g.inner - labelWidth - 30), rowHeight - 10), {
+			view: "change",
+			index: i
+		}));
+		y += rowHeight + 4;
+	}
+	content.push(node("Box", "activityChangeList", rect(10, changeTop, g.inner, Math.max(0, y - 4 - changeTop)), {
+		visible: !!changes.length,
+		background: "transparent",
+		children: changeNodes
+	}));
+	if (changes.length) y += 2;
+	if (model.expandable) {
+		const w = 120;
+		content.push(button("activityTextExpandButton", rect(Math.max(10, g.bubble - 10 - w), y - 4, w, 32), tr(model.expanded ? "Collapse" : "Expand"), model.expanded ? "chevron-up" : "chevron-down", { type: "expand" }, true, { tonal: true }));
+		y += 38;
+	}
+	const bubbleHeight = y - 4 + 4, height = Math.max(72, bubbleHeight + 8);
+	nodes.push(node("Preview", "activityActorPreview", rect(4, 4, g.avatar, g.avatar), {
+		source: model.actorAvatar || "",
+		initials: model.serverGenerated ? "" : model.actorInitials || "?",
+		icon: model.serverGenerated ? "system-activity" : "person",
+		round: true,
+		outlined: true,
+		accent: model.actorColor || "action"
+	}));
+	nodes.push(node("Box", "activityEventBubble", rect(g.x, 4, g.bubble, bubbleHeight), {
+		background: model.hovered ? { mix: [
+			"surfaceContainerHigh",
+			"primaryText",
+			.08
+		] } : "surfaceContainerHigh",
+		radius: metrics(style).communicationBubbleRadius,
+		border: "outlineVariant",
+		borderWidth: 1,
+		children: content
+	}));
+	return {
+		height,
+		nodes
+	};
+}
+//#endregion
 //#region src/features/activity/ActivityEventCard.vue
 var _hoisted_1$1 = ["data-event-id"];
-var _hoisted_2$1 = { class: "activity-event-bubble" };
-var _hoisted_3$1 = ["datetime", "title"];
-var _hoisted_4$1 = { class: "activity-event-sentence" };
-var _hoisted_5$1 = ["innerHTML"];
-var _hoisted_6 = {
-	key: 0,
-	class: "activity-changes"
-};
-var _hoisted_7 = ["title"];
-var _hoisted_8 = ["innerHTML"];
 var _sfc_main$2 = {
 	__name: "ActivityEventCard",
 	props: {
@@ -710,7 +809,8 @@ var _sfc_main$2 = {
 		const props = __props;
 		const emit = __emit;
 		const expanded = ref(false);
-		const sentence = ref(null);
+		const sentence = ref(null), root = ref(null), width = ref(500), heights = ref({}), hovered = ref(false);
+		let observer;
 		const html = computed(() => eventSentence(props.record, expanded.value));
 		watchPostEffect(() => {
 			html.value;
@@ -718,11 +818,6 @@ var _sfc_main$2 = {
 				element.style.color = safeColor(element.dataset.color);
 			});
 		});
-		const accent = computed(() => safeColor(props.record.processColor) || safeColor(props.record.typeColor) || {
-			publication: "var(--success)",
-			task: "var(--yellow)",
-			work_hour: "var(--cyan)"
-		}[props.record.kind] || "var(--primary)");
 		const changes = computed(() => !props.record.relationAction && [
 			"create",
 			"change",
@@ -745,66 +840,98 @@ var _sfc_main$2 = {
 				emit(action);
 			}
 		}
+		const fieldLabel = (value) => t({
+			name: "Name",
+			title: "Title",
+			description: "Description",
+			assigned: "Assignee",
+			status: "Status",
+			priority: "Priority",
+			"bid start date": "Start date",
+			"bid end date": "Deadline"
+		}[String(value).toLowerCase()] || value);
+		const model = computed(() => ({
+			...props.record,
+			time: time.value,
+			fullTime: props.record.timestamp,
+			expanded: expanded.value,
+			expandable: expandable.value,
+			hovered: hovered.value,
+			changes: changes.value.map((row) => ({
+				...row,
+				label: fieldLabel(row.field)
+			}))
+		}));
+		const scene = computed(() => card(model.value, width.value, heights.value, appearance.language, appearance.theme));
+		const port = {
+			props: { frameNode: Object },
+			setup(port, { attrs }) {
+				const element = ref(null);
+				let resize;
+				onMounted(() => {
+					resize = observeFrameSizes(() => {
+						const key = port.frameNode.view === "sentence" ? "sentence" : "change_" + port.frameNode.index, height = element.value.getBoundingClientRect().height;
+						if (height > 0 && heights.value[key] !== height) heights.value = {
+							...heights.value,
+							[key]: height
+						};
+					});
+					resize.observe(element.value);
+				});
+				onBeforeUnmount(() => resize?.disconnect());
+				return () => {
+					const body = port.frameNode.view === "sentence", change = changes.value[port.frameNode.index], value = body ? html.value : expanded.value ? linkifyPlainText(changeValue(props.record, change), browserLink) : escapeHtml(compactText(changeValue(props.record, change)));
+					return h("div", attrs, [h("div", {
+						ref: (node) => {
+							element.value = node;
+							if (body) sentence.value = node;
+						},
+						class: body ? "activity-sentence-port" : "activity-change-port",
+						style: {
+							overflowWrap: "anywhere",
+							fontSize: body ? "13px" : "12px",
+							lineHeight: body ? "18px" : "16px",
+							userSelect: "text"
+						},
+						innerHTML: value,
+						onClick: activate
+					})]);
+				};
+			}
+		};
+		const views = {
+			sentence: {
+				component: port,
+				nodeProps: true
+			},
+			change: {
+				component: port,
+				nodeProps: true
+			}
+		};
+		onMounted(() => {
+			observer = observeFrameSizes((entries) => {
+				if (entries[0].contentRect.width > 0) width.value = entries[0].contentRect.width;
+			});
+			observer.observe(root.value);
+		});
+		onBeforeUnmount(() => observer?.disconnect());
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("article", {
+				ref_key: "root",
+				ref: root,
 				class: "activity-event-card",
 				"data-event-id": __props.record.eventId,
-				onClick: activate
-			}, [createVNode(ItemPreview_default, {
-				source: __props.record.actorAvatar,
-				"fallback-text": __props.record.serverGenerated ? "" : __props.record.actorInitials || __props.record.actor?.slice(0, 1).toUpperCase(),
-				"fallback-icon": __props.record.serverGenerated ? "system-activity" : !__props.record.actor ? "user" : void 0,
-				accent: __props.record.actorColor,
-				"preview-size": 40,
-				round: "",
-				outlined: ""
-			}, null, 8, [
-				"source",
-				"fallback-text",
-				"fallback-icon",
-				"accent"
-			]), createBaseVNode("div", _hoisted_2$1, [
-				createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(__props.record.serverGenerated ? unref(t)("Server trigger") : __props.record.actorLabel || __props.record.actor || unref(t)("Unknown user")), 1), createBaseVNode("time", {
-					datetime: __props.record.timestamp,
-					title: __props.record.timestamp
-				}, toDisplayString(time.value), 9, _hoisted_3$1)]),
-				createBaseVNode("div", _hoisted_4$1, [createVNode(_sfc_main$4, {
-					name: unref(eventIcon)(__props.record),
-					style: normalizeStyle({ color: accent.value })
-				}, null, 8, ["name", "style"]), createBaseVNode("div", {
-					ref_key: "sentence",
-					ref: sentence,
-					innerHTML: html.value
-				}, null, 8, _hoisted_5$1)]),
-				changes.value.length ? (openBlock(), createElementBlock("div", _hoisted_6, [(openBlock(true), createElementBlock(Fragment, null, renderList(changes.value, (change, index) => {
-					return openBlock(), createElementBlock("div", { key: index }, [createBaseVNode("span", {
-						class: "muted",
-						title: change.field
-					}, toDisplayString(unref(t)({
-						name: "Name",
-						title: "Title",
-						description: "Description",
-						assigned: "Assignee",
-						status: "Status",
-						priority: "Priority",
-						"bid start date": "Start date",
-						"bid end date": "Deadline"
-					}[String(change.field).toLowerCase()] || change.field)), 9, _hoisted_7), createBaseVNode("span", { innerHTML: expanded.value ? unref(linkifyPlainText)(unref(changeValue)(__props.record, change), unref(browserLink)) : unref(escapeHtml)(unref(compactText)(unref(changeValue)(__props.record, change))) }, null, 8, _hoisted_8)]);
-				}), 128))])) : createCommentVNode("", true),
-				expandable.value ? (openBlock(), createBlock(_sfc_main$5, {
-					key: 1,
-					class: "activity-expand",
-					tonal: "",
-					label: expanded.value ? "Collapse" : "Expand",
-					icon: expanded.value ? "MDI_CHEVRON_UP" : "MDI_CHEVRON_DOWN",
-					"aria-expanded": expanded.value,
-					onClick: _cache[0] || (_cache[0] = ($event) => expanded.value = !expanded.value)
-				}, null, 8, [
-					"label",
-					"icon",
-					"aria-expanded"
-				])) : createCommentVNode("", true)
-			])], 8, _hoisted_1$1);
+				style: normalizeStyle({ height: scene.value.height + "px" }),
+				onMouseenter: _cache[1] || (_cache[1] = ($event) => hovered.value = true),
+				onMouseleave: _cache[2] || (_cache[2] = ($event) => hovered.value = false)
+			}, [createVNode(_sfc_main$5, {
+				scene: scene.value,
+				views,
+				onEvent: _cache[0] || (_cache[0] = (event) => {
+					if (event.type === "expand") expanded.value = !expanded.value;
+				})
+			}, null, 8, ["scene"])], 44, _hoisted_1$1);
 		};
 	}
 };
@@ -1003,7 +1130,7 @@ var _sfc_main$1 = {
 					onBeforeUnmount(() => resize?.disconnect());
 					return () => {
 						const record = props.frameNode.record;
-						return h("div", { ...attrs }, [h("div", { ref: element }, [h(_sfc_main$7, {
+						return h("div", { ...attrs }, [h("div", { ref: element }, [h(_sfc_main$6, {
 							title: record.title,
 							extension: record.extension,
 							previewUrl: record.previewUrl,
@@ -1039,7 +1166,7 @@ var _sfc_main$1 = {
 				ref: host,
 				class: "object-snapshot-tree",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$6, {
+			}, [createVNode(_sfc_main$5, {
 				scene: scene.value,
 				views,
 				onEvent: action
@@ -1288,11 +1415,11 @@ var _sfc_main = {
 					ref_key: "tabs",
 					ref: tabs$1,
 					class: "object-report-tabs"
-				}, [createVNode(_sfc_main$6, {
+				}, [createVNode(_sfc_main$5, {
 					scene: tabScene.value,
 					onEvent: action
 				}, null, 8, ["scene"])], 512),
-				error.value ? (openBlock(), createElementBlock("p", _hoisted_2, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$5, {
+				error.value ? (openBlock(), createElementBlock("p", _hoisted_2, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$4, {
 					label: "Retry",
 					disabled: busy.value,
 					onClick: _cache[0] || (_cache[0] = ($event) => load(false, true))
@@ -1328,7 +1455,7 @@ var _sfc_main = {
 						]);
 					}), 128)),
 					!activity.value.length && !busy.value ? (openBlock(), createElementBlock("p", _hoisted_5, toDisplayString(unref(t)("No recent activity")), 1)) : createCommentVNode("", true),
-					data.value.hasMore ? (openBlock(), createBlock(_sfc_main$5, {
+					data.value.hasMore ? (openBlock(), createBlock(_sfc_main$4, {
 						key: 1,
 						label: "Load more",
 						disabled: busy.value,
