@@ -4,8 +4,15 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 
 ## Execution plan: full-day batches, revised 2026-10-16
 
-This is the current execution order. The phase IDs and release checkpoints below
-remain the coverage map and evidence history, not separate user-sized tasks.
+The Frame batches below retain their completion/evidence history.
+**The next execution order is the [remaining-legacy plan L01–L12](../UI_ARCHITECTURE.md#legacy-plan),
+revised 2026-10-19.** Start with L01 (nested/hidden rows and relationships), then
+L02–L07 to finish B07. L08–L12 cover remaining native/API behavior, execution,
+project lifecycle, database acceptance and independent delivery. No other
+completed Frame batch is reopened wholesale. The [exact 40-class checklist](frame_table.md#legacy-checklist)
+tracks unfinished workflows and the final check of already adapted options.
+The phase IDs and release checkpoints below remain the coverage map and evidence
+history, not separate new user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
 **B01–B06 and B08–B14 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
 

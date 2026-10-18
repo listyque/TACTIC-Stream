@@ -76,8 +76,9 @@ deduplicates aliases and does not execute scripts. Current shipped/template
 census: 239 entries, 34 referenced adapted classes, 40 pending classes,
 27 previously excluded `pyasm.prod` classes and 3 explicitly unfinished originals.
 The catalogue also includes three adapted classes not mentioned by this census.
-A read-only scan including all four local project/system databases covers 449
-entries and produces the same class/status counts.
+An older optional local-database census covered 449 entries with the same
+class counts; it is historical evidence, not required input for the current plan.
+No working databases were read for this revision.
 
 Largest pending groups are nested/hidden-row table scopes, Gantt/timecard/work-hour
 cells, loader/publish/checkout operations, configurable buttons/custom layouts,
@@ -90,3 +91,129 @@ Notification recipient tables are bootstrapped through the existing schema
 upgrade. This checkpoint adds read projection, not a public notification insert
 or email-delivery implementation. PostgreSQL production data, physical touch
 hardware and all historical widget options have not been certified.
+
+<a id="legacy-checklist"></a>
+## Active legacy checklist — 2026-10-19
+
+The current delivery order is [L01–L12](../UI_ARCHITECTURE.md#legacy-plan).
+L01–L07 below partition all **40 pending canonical classes exactly once** from
+239 shipped/CG entries. Every box is still open. These are required config
+references, including definitions under `config/.../prod`; excluding `pyasm.prod`
+does not exclude other namespaces in that directory. Full source paths, options
+and use sites are reproducible with `inventory.py`; generated output stays ignored.
+
+The scan also reports `cg:sthpw/pipeline/document` as an XML parse issue: its
+content is a JSON document, not a widget XML. Follow dynamic/script references
+when inspecting each group; the static count is not proof that every runtime
+reference was discovered. Add newly confirmed usable dependencies to this ledger.
+
+<a id="l01"></a>
+### L01 — Связи и вложенные строки (8)
+
+- [ ] `pyasm.widget.dependency_wdg.DependencyLink`
+- [ ] `pyasm.widget.sobject_browser_wdg.SObjectConnectionElement`
+- [ ] `pyasm.widget.table_element_wdg.HiddenRowToggleWdg`
+- [ ] `tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg`
+- [ ] `tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg`
+- [ ] `tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg`
+- [ ] `pyasm.widget.table_element_wdg.AuxDataWdg`
+- [ ] `tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg`
+
+Раскрыть настроенную дочернюю таблицу, добавить/связать объект, свернуть и восстановить состояние; проверить фильтры, направление связи, права, пустой результат, группировку и итог. Вложенная область имеет собственный query/selection scope; переход в общий Inspector не заменяет её.
+
+<a id="l02"></a>
+### L02 — Встроенные заметки, сообщения и задачи (4)
+
+- [ ] `pyasm.widget.discussion_wdg.DiscussionWdg`
+- [ ] `tactic.ui.app.message_wdg.MessageTableElementWdg`
+- [ ] `pyasm.widget.task_wdg.SObjectTaskTableElement`
+- [ ] `pyasm.widget.task_wdg.TaskParentSpacingTableElement`
+
+Открыть ветку из ячейки, прочитать/добавить заметку или сообщение, изменить связанную задачу и увидеть обновлённые счётчики без потери положения таблицы. Проверить родителя, процесс, приватность и вложенные формы; использовать существующие Messages/Inspector/task owners.
+
+<a id="l03"></a>
+### L03 — Настраиваемые действия и layout (3)
+
+- [ ] `tactic.ui.table.button_wdg.ButtonElementWdg`
+- [ ] `tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg`
+- [ ] `tactic.ui.table.drop_element_wdg.DropElementWdg`
+
+Из исходного XML вызвать реальное действие с контекстом строки/выделения, выполнить разрешённый script/layout и проверить результат, ошибки, отмену и откат. Для drop дать явную альтернативу выбора. Общий редактор колонок/ячеек должен сохранять исходные options и revisions; неподдержанный параметр не игнорируется.
+
+<a id="l04"></a>
+### L04 — Файловые действия в таблице (7)
+
+- [ ] `pyasm.widget.table_element_wdg.FileAppendLinkTableElement`
+- [ ] `pyasm.widget.table_element_wdg.PublishTableElement`
+- [ ] `pyasm.widget.table_element_wdg.RenderLinkTableElement`
+- [ ] `pyasm.widget.table_element_wdg.SubmissionLinkTableElement`
+- [ ] `tactic.ui.cgapp.loader_element_wdg.LoaderElementWdg`
+- [ ] `tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg`
+- [ ] `tactic.ui.table.table_element_wdg.GeneralPublishElementWdg`
+
+Из ячейки выполнить append/publish/checkout/load/submission по исходным параметрам через текущие file/Commit Queue owners; проверить snapshot/version, naming, файлы, повтор, права и FileUndo. RenderLink не объявляет готовым отдельный render farm. Local/DCC операции остаются native capabilities, браузер показывает доступные ему действия и понятное ограничение.
+
+<a id="l05"></a>
+### L05 — Статусы, процессы и назначение (6)
+
+- [ ] `pyasm.widget.parallel_status.ParallelStatusEditWdg`
+- [ ] `pyasm.widget.parallel_status.ParallelStatusWdg`
+- [ ] `tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg`
+- [ ] `tactic.ui.table.subcontext_wdg.ProcessElementWdg`
+- [ ] `tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg`
+- [ ] `tactic.ui.table.task_element_wdg.WorkElementWdg`
+
+Из таблицы изменить процесс/статус/исполнителя, включая parallel status; проверить пустое значение, родительский scope, допустимые переходы, ревизию, ACL и конфликт. Внешний вид и первый пункт picker совпадают с текущим Handler; существующий Task Manager не реализуется заново.
+
+<a id="l06"></a>
+### L06 — Gantt и учёт времени внутри таблицы (5)
+
+- [ ] `pyasm.widget.gantt_wdg.GanttWdg`
+- [ ] `tactic.ui.table.gantt_element_wdg.GanttElementWdg`
+- [ ] `pyasm.widget.timecard_wdg.TimecardInfoTableElement`
+- [ ] `pyasm.widget.timecard_wdg.WeekTableElement`
+- [ ] `tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg`
+
+Проверить исходную временную шкалу, неделю, границы дат, часы и редактирование из ячейки с сохранением/отменой и пересчётом итогов. Переиспользовать B10/B14 schedule/time owners; отдельный Calendar dock остаётся отдельным. Наличие готового большого Gantt не закрывает его legacy table options.
+
+<a id="l07"></a>
+### L07 — Служебные ячейки и итоговая приёмка B07 (7)
+
+- [ ] `pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg`
+- [ ] `pyasm.widget.table_element_wdg.UpdateWdg`
+- [ ] `tactic.ui.input.process_group_select_wdg.LoginTableElementWdg`
+- [ ] `tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg`
+- [ ] `tactic.ui.table.preference_wdg.PreferenceEditWdg`
+- [ ] `tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg`
+- [ ] `tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg`
+
+Из конфигов login/group/project/preferences/naming/notification выполнить штатные переходы и изменения: пользователь, Security, preference, update/template, summary, recipient/trigger. Проверить обычного пользователя, admin, revisions и отмену. NotificationTrigger cell не означает готовую отправку email. После этого прогнать весь B07, включая ранее адаптированные 37 классов и их реально используемые options, inline/forms, keywords/tags и bottom/group_bottom/total_summary; закрыть только подтверждённые сценарии.
+
+### Excluded unfinished originals
+
+| Canonical class | Source evidence / decision |
+| --- | --- |
+| `pyasm.widget.table_element_wdg.WikiElementWdg` | Original explicitly says its wiki implementation is unfinished. |
+| `tactic.ui.cgapp.publish_element_wdg.PublishElementWdg` | Returns only an unbound textarea; it is not the working GeneralPublish/Table publish operation. |
+| `tactic.ui.table.snapshot_element_wdg.SnapshotServerElementWdg` | Empty direct BaseTableElementWdg placeholder. |
+
+`ExplorerTableElementWdg` inherits a working ExplorerElementWdg; an alias with
+`pass` is not unfinished. PlaceHolderElementWdg is intentionally empty infrastructure.
+The 27 referenced `pyasm.prod` classes remain excluded separately.
+
+### Acceptance applies to old adapters too
+
+A checked class needs its original config/options, inherited behavior and real
+read/write/action scenario, a reproducible XML/data example, unchanged scripts,
+ACL/revision/failure/rollback checks and fresh matching native/browser captures
+where the capability exists. Record the entry point, screenshots, parameters
+and limits in EN/RU Widget Database Help. Reuse the existing object, task, file,
+schedule and communication owners; opening a generic panel is not implementation
+of the configured embedded scope. Unsupported options stay explicit.
+
+Before closing B07 in L07, exercise the already adapted 37-class catalogue,
+configured forms/inline editors, native keywords/tags and the used legacy
+bottom/group_bottom/total_summary contracts too. A 40-class checklist alone
+cannot certify all historical options. Current working controls remain delivered.
+The rest of API/native/workflow/database/deployment compatibility is L08–L12,
+not a reason to invent a second UI engine or to declare full TACTIC parity.

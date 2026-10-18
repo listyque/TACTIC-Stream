@@ -6,16 +6,26 @@ order: 96
 
 # Table View: active widget checklist
 
-[Table View / Columns Editor](table_view.en.md) — October 14 update: the current 45 names/21 adapted Handler classes, actions and shared editor are ported. The original legacy audit/examples below remain historical; full legacy parity is not claimed.
+[Table View / Columns Editor](table_view.en.md) · [B07](table_widgets_b07.en.md) · [Widget Database](widget_database.en.md)
 
+Current as of 2026-10-19: 239 shipped XML/CG entries without working databases,
+34 referenced adapted classes, **40 pending**, 27 excluded `pyasm.prod` classes
+and 3 explicitly unfinished originals. The complete catalogue has 37 classes /
+87 aliases; an adapter does not certify every legacy option/action. B07 is open.
 
-> All table widgets mentioned in widget configs, including definitions and nested references.
+L01–L07 order: relationships/nested rows (8) → discussion/message/task (4) →
+configured actions/layout (3) → files (7) → status/process (6) →
+Gantt/timecard/hours (5) → service cells (7) and full B07 acceptance.
+Each group requires an original scenario, XML/data, real operations,
+permissions/errors/rollback, paired captures and EN/RU Help. Inspect dynamic
+references while reading configs; clearly unfinished originals are excluded.
 
-449 configurations scanned; 108 classes/separate invalid references. Shipped XML, CG template and saved configurations from every local project. Databases were read mode=ro without changes. A mention is an inclusion criterion, not proof of runtime execution. Old production and explicit stubs remain excluded.
-
-[Examples and paired captures](table_widget_examples.en.md) · [Complete database](widget_database.en.md)
-
-Criteria: source and inheritance reviewed; used options/actions reproduced; TH/Stream compared; permissions/errors checked; captures and Help added. Current Handler scenarios, grouping/resize/reorder/presets/inline editing are ported; see table_view.en.md. XML/JSON remain structured display as in current Handler. Old totals and remaining legacy options are tracked separately.
+**The detailed lists below are the historical October 13–14 audit:** it covered
+449 configurations including read-only local databases. Its old statuses and
+invalid references are not the current execution order. Every confirmed mention,
+including definitions, nested and scripted references, remains in scope.
+See B07 above for current behavior. Bottom/group_bottom/total_summary and other
+historical options need separate acceptance, beyond a generic editor.
 
 ## Invalid class reference: repair configuration (3)
 

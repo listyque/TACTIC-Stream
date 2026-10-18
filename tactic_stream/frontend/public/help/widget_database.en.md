@@ -5,8 +5,20 @@ order: 94
 ---
 # Table View widget database
 
-[Table View / Columns Editor](table_view.en.md) — October 14 update: the current 45 names/21 adapted Handler classes, actions and shared editor are ported. The original legacy audit/examples below remain historical; full legacy parity is not claimed.
+[Table View / Columns Editor](table_view.en.md) · [B07](table_widgets_b07.en.md)
 
+Current as of 2026-10-19: the portable catalogue has **37 classes / 87 aliases**.
+A scan of 239 shipped XML/CG entries without working databases finds 34 referenced
+adapted classes, **40 pending**, 27 excluded `pyasm.prod` classes and 3 explicitly
+unfinished originals. An adapter does not certify all original options/actions.
+
+Next: relationships/nested rows → embedded notes/messages/tasks → configured
+actions/layout → file operations → status/assignment → table Gantt/hours →
+service cells and full B07 acceptance. Each group requires XML examples,
+captures, permission checks and actual operations.
+
+**The October 13–14 audit below is historical. Its counts/statuses are not the
+current working checklist.** See B07 Help above for the current checkpoint.
 
 > Widgets grouped by purpose, readiness and source condition. Migration starts with a reproducible scenario.
 
@@ -14,7 +26,7 @@ order: 94
 
 Read the source, inheritance and callers first. Prepare test XML and data. Capture legacy/TH and Stream with the same theme, language, scale and size. Document options, actions, permissions and limitations, then verify and migrate. Clearly unfinished classes are excluded. A TODO, known bug or pass in an alias is not enough to declare a widget unfinished.
 
-## Statuses
+## Historical statuses — October 13–14
 
 14 classes have a working basic scenario; HiddenRow only supports transaction details. 134 classes are not connected. Complete class parity is not claimed. TextWdg is one compatible input alias. 43 pyasm.prod classes were already excluded; SnapshotServerElementWdg is now excluded as an explicit stub. PlaceHolderElementWdg is an intentionally empty infrastructure cell.
 

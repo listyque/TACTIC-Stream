@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.167.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.168.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -35,6 +35,10 @@ PostgreSQL через Apache. Windows EXE/Electron и комплектовани
 без пересборки Vue. Старые widget API сохраняют HTML контракты; современное
 представление использует описание, независимое от frontend. Требования и
 границы будущей реализации — в [UI_ARCHITECTURE.md](UI_ARCHITECTURE.md).
+
+Актуальный [план оставшегося legacy — L01–L12](UI_ARCHITECTURE.md#legacy-plan)
+отделяет незакрытый B07 от завершённых Frame-блоков: 40 упомянутых в конфигах
+классов, затем поведение ядра/скриптов, процессы, проекты/плагины, БД и поставка.
 
 Там же закреплён [контракт API для AI-помощника](UI_ARCHITECTURE.md#api-для-ai-помощника):
 выборочный контекст с правами пользователя, draft/validate/preview/apply,
@@ -7633,3 +7637,17 @@ capabilities; native rich text, ACL, revisions, drafts and mutation owners stay
 in their existing hosts. Complete source ownership, evidence commands, restore
 points and remaining limits: [frame_remaining.md](docs/frame_remaining.md).
 B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
+
+## 0.112.168 — 2026-10-19
+
+- Refresh the remaining-legacy plan with L01–L12, clear acceptance and exclusions;
+  retain the completed Frame checkpoints and unfinished B07 status. Assign all
+  40 pending configured canonical classes once across seven workflow blocks.
+- Re-run the shipped XML/CG inventory without working databases: 239 entries,
+  34 referenced adapted / 40 pending / 27 production-excluded / 3 unfinished;
+  the portable catalogue remains 37 classes and 87 aliases. The JSON pipeline
+  document reported by the XML scanner is documented as a non-widget entry.
+- Correct stale Help/deployment snapshots: 127 of 129 API entries are partial,
+  two are excluded; behavioral parity remains unverified. Preserve independent
+  clients, native capabilities and deferred MySQL. This release changes planning,
+  documentation and version metadata only; it implements no planned legacy block.
