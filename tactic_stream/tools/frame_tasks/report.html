@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ru">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Frame B09 — задачи</title>
+  <style>
+    body {
+      margin: 0;
+      background: #202427;
+      color: #eef2f4;
+      font:
+        15px 'Segoe UI',
+        sans-serif;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #30363a;
+      padding: 16px;
+      border-bottom: 1px solid #667077;
+    }
+    h1 {
+      font-size: 21px;
+      margin: 0 0 8px;
+    }
+    p {
+      max-width: 1100px;
+      margin: 8px 0;
+      color: #b9c5cd;
+    }
+    label {
+      display: inline-flex;
+      gap: 6px;
+      margin: 8px 16px 0 0;
+    }
+    select {
+      background: #202427;
+      color: inherit;
+      padding: 6px;
+      border: 1px solid #667077;
+      border-radius: 6px;
+    }
+    main {
+      padding: 16px;
+    }
+    article {
+      margin: 0 0 24px;
+    }
+    h2 {
+      font-size: 17px;
+    }
+    section {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    figure {
+      margin: 0;
+      padding: 10px;
+      background: #30363a;
+      border-radius: 10px;
+      min-width: 0;
+    }
+    figcaption {
+      margin-bottom: 8px;
+      color: #b9c5cd;
+    }
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    small {
+      display: block;
+      margin-top: 8px;
+      color: #d5bd51;
+    }
+    a {
+      color: #92c5e6;
+    }
+    @media (max-width: 900px) {
+      section {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <header>
+    <h1>Задачи и инспектор — архивный ТХ / текущий ТХ / ТС</h1>
+    <p id="summary"></p>
+    <p>
+      Эталон — ТХ 0.6.0.112 перед B09. Таблица и Quick Tasks сняты из настоящих
+      компонентов; обе версии получают одинаковые записи контроллера. Проверены
+      координаты, типографика, цвета и внутренние индикаторы; операции отдельно
+      проверяются реальным вводом и серверными сценариями. Сохранены
+      дополнительные команды ТС: в общей панели всегда доступно меню параметров.
+      В пустом состоянии теперь общий футер и фиксированный блок сообщения со
+      стрелкой. Эти изменения видны относительно архива; абсолютное совпадение с
+      архивом не заявляется. Отдельная сводка управленческого окна ТХ —
+      возможность нативного клиента.
+    </p>
+    <p id="scales"></p>
+    <div id="filters"></div>
+  </header>
+  <main></main>
+  <script type="application/json" id="evidence">
+    __TASKS_DATA__
+  </script>
+  <script>
+    const data = JSON.parse(document.querySelector('#evidence').textContent),
+      native = data.native.captures.filter((row) => !row.original),
+      original = data.native.captures.filter((row) => row.original);
+    const key = (f) =>
+      JSON.stringify([f.screen, f.state, f.style, f.dark, f.language, f.width]);
+    const baseline = new Map(original.map((row) => [key(row.fixture), row]));
+    const web = new Map(
+      data.browser.cases.map((row) => [key(row.fixture), row])
+    );
+    document.querySelector('#summary').textContent =
+      `${original.length} архивных, ${native.length} текущих QML и ${data.browser.cases.length} Vue-снимков. ${data.native.smoke ? 'SMOKE — неполная матрица.' : 'Полная матрица: 3 темы, светлая/тёмная, EN/RU, 520–1600 px.'} Отпечатки исходников проверены генератором.`;
+    const scaleLinks = document.querySelector('#scales');
+    for (const [title, path] of data.native.scale === 1
+      ? [
+          ['Масштаб 125%', 'scale-125/index.html'],
+          ['Масштаб 150%', 'scale-150/index.html']
+        ]
+      : [['Полная матрица 100%', '../index.html']]) {
+      const link = document.createElement('a');
+      link.textContent = title;
+      link.href = path;
+      scaleLinks.append(link, document.createTextNode(' · '));
+    }
+    const fields = [
+        ['screen', 'Поверхность'],
+        ['style', 'Тема'],
+        ['dark', 'Тёмная'],
+        ['language', 'Язык'],
+        ['width', 'Ширина']
+      ],
+      filters = {};
+    for (const [name, title] of fields) {
+      const label = document.createElement('label');
+      label.textContent = title;
+      const select = document.createElement('select');
+      const all = document.createElement('option');
+      all.value = '';
+      all.textContent = 'Все';
+      select.append(all);
+      for (const value of [
+        ...new Set(native.map((row) => String(row.fixture[name])))
+      ]) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        select.append(option);
+      }
+      label.append(select);
+      document.querySelector('#filters').append(label);
+      filters[name] = select;
+      select.addEventListener('change', draw);
+    }
+    filters.style.value = 'md3';
+    filters.dark.value = 'true';
+    filters.language.value = 'en';
+    filters.width.value = '';
+    function draw() {
+      const host = document.querySelector('main');
+      host.replaceChildren();
+      for (const row of native) {
+        const f = row.fixture;
+        if (
+          fields.some(
+            ([name]) =>
+              filters[name].value && String(f[name]) !== filters[name].value
+          )
+        )
+          continue;
+        const article = document.createElement('article'),
+          heading = document.createElement('h2');
+        heading.textContent = `${f.screen} · ${f.style} · ${f.dark ? 'dark' : 'light'} · ${f.language} · ${f.width}px`;
+        article.append(heading);
+        const section = document.createElement('section');
+        for (const [title, item] of [
+          ['ТХ до B09', baseline.get(key(f))],
+          ['ТХ — Frame', row],
+          ['ТС — Frame', web.get(key(f))]
+        ]) {
+          const figure = document.createElement('figure'),
+            caption = document.createElement('figcaption');
+          caption.textContent = title;
+          figure.append(caption);
+          if (item) {
+            const link = document.createElement('a');
+            link.href = item.image;
+            const img = document.createElement('img');
+            img.loading = 'lazy';
+            img.src = item.image;
+            img.alt = title + ' ' + f.screen;
+            link.append(img);
+            figure.append(link);
+            if (item.baselineIconErrors?.length) {
+              const warning = document.createElement('small');
+              warning.textContent =
+                'Ошибка уже присутствует в архиве: ' +
+                item.baselineIconErrors.join('; ');
+              figure.append(warning);
+            }
+          } else figure.append('Снимка нет');
+          section.append(figure);
+        }
+        article.append(section);
+        host.append(article);
+      }
+    }
+    draw();
+  </script>
+</html>

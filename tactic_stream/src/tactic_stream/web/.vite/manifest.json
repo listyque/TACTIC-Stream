@@ -123,23 +123,6 @@
       "assets/ItemPreview.css"
     ]
   },
-  "_ItemSurface.css": {
-    "file": "assets/ItemSurface.css",
-    "src": "_ItemSurface.css"
-  },
-  "_ItemSurface.js": {
-    "file": "assets/ItemSurface.js",
-    "name": "ItemSurface",
-    "imports": [
-      "_vue.js",
-      "index.html",
-      "_AppMenu.js",
-      "_ItemPreview.js"
-    ],
-    "css": [
-      "assets/ItemSurface.css"
-    ]
-  },
   "_NamingEditor.js": {
     "file": "assets/NamingEditor.js",
     "name": "NamingEditor",
@@ -272,7 +255,6 @@
       "_AppSplitter.js",
       "_AppMenu.js",
       "_AppCheckbox.js",
-      "_ItemSurface.js",
       "_ItemPreview.js"
     ],
     "css": [
@@ -349,7 +331,6 @@
       "_AppSplitter.js",
       "_AppMenu.js",
       "_AppCheckbox.js",
-      "_ItemSurface.js",
       "_ItemPreview.js",
       "_sections.ui.js",
       "_links.js",
@@ -621,7 +602,6 @@
       "_resize.js",
       "_CodeBlock.js",
       "_RecordForm.js",
-      "_ItemSurface.js",
       "_textMetrics.js",
       "src/App.vue"
     ],
@@ -652,7 +632,6 @@
       "_CodeBlock.js",
       "_AppSplitter.js",
       "_AppMenu.js",
-      "_ItemSurface.js",
       "_files.js",
       "_AppMenuItem.js",
       "src/App.vue"
@@ -674,7 +653,6 @@
       "_AppSplitter.js",
       "_AppMenu.js",
       "_AppCheckbox.js",
-      "_ItemSurface.js",
       "_links.js",
       "_AttachmentCard.js",
       "_AppMenuItem.js",
@@ -762,7 +740,6 @@
       "_CodeBlock.js",
       "_AppSplitter.js",
       "_AppMenu.js",
-      "_ItemSurface.js",
       "src/App.vue"
     ],
     "css": [
@@ -807,9 +784,12 @@
     "imports": [
       "_vue.js",
       "index.html",
+      "_resize.js",
       "_AppMenu.js",
-      "_ItemSurface.js",
       "src/App.vue"
+    ],
+    "css": [
+      "assets/TaskProcessPanel.css"
     ]
   }
 }

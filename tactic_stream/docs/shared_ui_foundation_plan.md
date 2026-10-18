@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01–B06 and B08 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by B08.
+**B01–B06, B08 and B09 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by B08.
 
 **B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
 widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
@@ -20,6 +20,11 @@ does not close B07. B08 was completed separately at the user's explicit request.
 fragments (including note bodies and edit/delete child forms) share one skeleton.
 The source/owner/capability and acceptance ledger is `docs/frame_objects.md`.
 This does not close B07's gaps.
+
+**B09 is delivered.** Task Manager, Quick Tasks, remaining task Inspector
+fields, bulk editors and desktop/phone composition use independent shared
+descriptions. Scope, existing owners, acceptance and limits: `docs/frame_tasks.md`.
+Production Gantt/calendar remains B10; B07's 40 legacy-widget gaps remain open.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -73,6 +78,55 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B09 delivered: Task Manager and task inspector, 2026-10-18
+
+Stream **0.112.162** / Handler **0.6.0.113** ship **131 portable `.mjs`
+modules and three JSON catalogs** independently. Thirteen task modules describe
+the workspace/quick toolbars, table/group/expanded rows, scope and filters,
+columns/options/footer, typed inline/full editors, pending changes, opt-in bulk
+editing, row menus, empty states and native management summary. Existing owners
+retain requests, revisions, drafts, permissions, selection, persistence and writes.
+Native lazy controls and virtualized models remain; Stream retains phone
+list/detail/back navigation and its additional Inspector/timesheet capabilities.
+
+Acceptance: **104 mandatory platform stages**, **153 focused native cases**
+(136 task owner/QML, 15 creation/picker/section and two filled-action checks),
+**four connected task/context/process/phone workflows**, the existing production
+Gantt/separate Calendar scenario, and **160 paired states / 480 images** passed.
+The complete desktop/mobile Workbench and dedicated phone tasks/search gesture
+regression also passed, including Back/Forward, scroll, unchanged-response
+identity, coalesced quiet refresh, revision-preserving Save and visible pickers.
+The complete matrix covers three themes, light/dark, EN/RU, ten states/widths
+(520–1600 px); two additional DPI processes cover 125% and 150%. Comparisons
+retain the archived Handler before B09, current Handler and Stream, check source
+freshness and exercise actual painted labels, selected text, geometry, colors,
+checkboxes, filled actions and idle/hover row commands. EN/RU Help includes usage.
+
+Actual input verifies virtual creation, status/user/date/hour edits, expanded
+fields, column resize/order/visibility, opt-in bulk changes, save/discard,
+conflicts/unknown writes, exact contexts, live profile avatars, lazy popup
+reopening/release and phone-to-desktop restoration. The gate runs popup suites
+in independent Qt processes to avoid process-wide style/grab contamination;
+no assertions or input paths are bypassed. A single object-batch navigation
+timeout was retained in local diagnostics and its isolated scenario passed.
+The native table test waits for a rendered frame after changing scroll and row
+height before clicking, replacing its fixed 20 ms layout pause.
+The dock-resize test waits for the applied wide projection before recording
+the baseline that must be restored after a narrow viewport.
+The native UserChoice test waits for its popup's opened signal before using
+the separate popup window; a parent-window frame alone is not popup readiness.
+Mobile tests use the public Frame buttons and touch visible content outside
+editable fields/actions; the search fixture reserves its actual flex viewport.
+
+The gallery exposes deliberate toolbar/empty-state improvements against the
+archive; absolute archived-screen identity is not claimed. Native standalone
+management summary remains a native capability, and the Stream task API's
+existing administrator requirement is unchanged. OS text rasterization,
+physical touch/IME and compositor/hardware acceptance remain separate; exact
+filled-button hover tint for fully saturated custom accents is still limited.
+See `docs/frame_tasks.md` and `tools/frame_tasks/output/index.html`.
+This checkpoint does not close B07, B10 scheduling or B11 messaging.
 
 ## B08 delivered: Objects and inspector docks, 2026-10-17
 

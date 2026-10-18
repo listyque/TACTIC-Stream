@@ -437,6 +437,7 @@ export default {
       if (event.type === 'keydown' && this.navigationOpen) { this.closeNavigation(); return }
       if (event.type === 'keydown' && this.$refs.topbar?.querySelector('select:open')) return
       for (const menu of this.$refs.workspace?.querySelectorAll('.topbar details[open], .workspace-menu[open], .search-filters[open]') || []) {
+        if (menu.dataset.menuOwner === 'control') continue
         if (event.type === 'keydown' || !menu.contains(event.target)) {
           menu.open = false
           if (event.type === 'keydown') { menu.querySelector('summary').focus(); event.stopPropagation() }
@@ -2044,7 +2045,7 @@ export default {
     <Timesheet ref="timesheet" dock-target="#dock-timesheet" dock-mode="week" :ticket="session.ticket" :project="workHoursProjects.week || workspaceView.project" :current-user="session.login" @opened="$refs.docks.show('timesheet')" @closed="$refs.docks.hide('timesheet')" @open-dock="openWorkHours($event,$refs.timesheet.task,workHoursProjects.week)" @saved="reloadWorkspace" />
     <Timesheet ref="workReports" dock-target="#dock-work_reports" dock-mode="report" :ticket="session.ticket" :project="workHoursProjects.report || workspaceView.project" :current-user="session.login" @opened="$refs.docks.show('work_reports')" @closed="$refs.docks.hide('work_reports')" @open-dock="openWorkHours($event,$refs.workReports.task,workHoursProjects.report)" @saved="reloadWorkspace" />
     <Timesheet ref="costReports" dock-target="#dock-cost_reports" dock-mode="report" dock-report="labor_cost" :ticket="session.ticket" :project="workHoursProjects.cost || workspaceView.project" :current-user="session.login" @opened="$refs.docks.show('cost_reports')" @closed="$refs.docks.hide('cost_reports')" @open-dock="openWorkHours($event,$refs.costReports.task,workHoursProjects.cost)" @saved="reloadWorkspace" />
-    <TaskManager ref="taskManager" docked calendar-target="#dock-task_calendar" :calendar-active="taskCalendarActive" @calendar="$refs.docks.show('task_calendar'); openDock('task_calendar')" :ticket="session.ticket" :project="workspaceView.project" :current-user="session.login" :search-type="workspaceView.type" @opened="updatesTasksOpen = true; $refs.docks.show('tasks')" @closed="updatesTasksOpen = taskCalendarActive; $refs.docks.hide('tasks')"
+    <TaskManager ref="taskManager" docked calendar-target="#dock-task_calendar" :calendar-active="taskCalendarActive" @calendar="$refs.docks.show('task_calendar'); openDock('task_calendar')" :ticket="session.ticket" :project="workspaceView.project" :current-user="session.login" :search-type="workspaceView.type" :search-type-title="(workspaceView.types || types).find(item => item.search_type === workspaceView.type)?.title || ''" @opened="updatesTasksOpen = true; $refs.docks.show('tasks')" @closed="updatesTasksOpen = taskCalendarActive; $refs.docks.hide('tasks')"
       @snapshot-context="snapshotTarget = $event" @task-context="followInspector($event.parent, $event.process, $event.__search_key__)" :parents="(workspaceView.rows || []).filter(record => (workspaceView.selectedKeys || []).includes(record.__search_key__))" @saved="reloadWorkspace({ restore: true })" @object="inspect" />
     <ProjectCreation ref="projectCreation" :ticket="session.ticket" :open-project="openCreatedProject" />
   </div>

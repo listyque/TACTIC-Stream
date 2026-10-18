@@ -3,6 +3,15 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
+## B09 task surfaces — 2026-10-18
+
+Stream 0.112.162 / Handler 0.6.0.113 use independent task descriptions under
+`shared_ui/features/tasks`: workspace/quick toolbar, task rows/expanded fields,
+scope/filter/options/columns, bulk editor, menus and native management summary.
+Existing task request/draft/revision/permission/mutation owners remain in place.
+Details, capabilities and reproducible evidence: [frame_tasks.md](docs/frame_tasks.md).
+Gantt/Calendar scheduling is B10; the B07 legacy-widget gaps remain open.
+
 ## B08 object surfaces — 2026-10-17
 
 Stream 0.112.161 / Handler 0.6.0.112 share object forms/reports/operations,

@@ -1,6 +1,6 @@
 import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow, tt as normalizeClass, z as useId } from "./vue.js";
-import { D as t, O as appearance, o as _sfc_main$2, tt as _plugin_vue_export_helper_default, u as _sfc_main$3 } from "./index.js";
-import { _ as label, b as rect, g as button, n as _sfc_main$4, t as observeFrameSizes, u as translate, v as muted, y as node } from "./resize.js";
+import { D as t, O as appearance, o as _sfc_main$2, rt as _plugin_vue_export_helper_default, u as _sfc_main$3 } from "./index.js";
+import { C as label, E as rect, S as button, T as node, f as translate, n as observeFrameSizes, r as _sfc_main$4, w as muted } from "./resize.js";
 import { F as rpc } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { t as _sfc_main$5 } from "./ObjectReport.js";

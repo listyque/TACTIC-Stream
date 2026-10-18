@@ -54,6 +54,7 @@ const initials = computed(() =>
 );
 const host = ref(null),
   width = ref(0),
+  anchors = ref({}),
   processMenu = ref(null),
   taskMenu = ref(null),
   actionsMenu = ref(null);
@@ -90,6 +91,7 @@ function event(action, source) {
           ? actionsMenu
           : null;
   if (menu) {
+    anchors.value[action.type] = source;
     if (menu.value.open) {
       menu.value.close();
       return;
@@ -122,6 +124,7 @@ onBeforeUnmount(() => observer?.disconnect());
     <AppMenu
       external-trigger
       ref="processMenu"
+      :anchor="anchors['process-menu']"
       class="inspector-process"
       label="Process"
       overlay
@@ -171,6 +174,7 @@ onBeforeUnmount(() => observer?.disconnect());
     <AppMenu
       external-trigger
       ref="taskMenu"
+      :anchor="anchors['task-menu']"
       v-if="editor.task_choices.length > 1"
       class="inspector-task-picker"
       label="Task"
@@ -209,6 +213,7 @@ onBeforeUnmount(() => observer?.disconnect());
     <AppMenu
       external-trigger
       ref="actionsMenu"
+      :anchor="anchors['task-actions']"
       v-if="mobile || editor.process_type !== 'progress'"
       class="inspector-task-actions"
       label="Task actions"

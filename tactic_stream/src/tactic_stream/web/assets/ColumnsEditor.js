@@ -1,6 +1,6 @@
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
-import { D as t, O as appearance, tt as _plugin_vue_export_helper_default } from "./index.js";
-import { _ as label, b as rect, g as button, n as _sfc_main$1, t as observeFrameSizes, u as translate, v as muted, y as node } from "./resize.js";
+import { D as t, O as appearance, rt as _plugin_vue_export_helper_default } from "./index.js";
+import { C as label, E as rect, S as button, T as node, f as translate, n as observeFrameSizes, r as _sfc_main$1, w as muted } from "./resize.js";
 import { g as columnsEditor } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { $ as changeDefinition, et as definitionWizard, tt as displayWidgets } from "./App.js";

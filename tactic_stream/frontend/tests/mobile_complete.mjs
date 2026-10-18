@@ -319,13 +319,16 @@ try {
       document.querySelector('.task-manager-results[aria-busy="false"]')
     );
   await tasksReady();
-  await manager.getByLabel('Task view options', { exact: true }).tap();
   await manager
-    .getByRole('group', { name: 'Task scope', exact: true })
-    .getByRole('menuitemradio', { name: 'Project tasks', exact: true })
+    .getByRole('button', { name: 'Task view options', exact: true })
+    .tap();
+  await manager
+    .getByRole('button', { name: 'Choose task scope', exact: true })
+    .tap();
+  await manager
+    .getByRole('checkbox', { name: 'Project tasks', exact: true })
     .tap();
   await tasksReady();
-  await manager.getByLabel('Task view options', { exact: true }).tap();
   await manager.locator('.mobile-task-list [data-task-key]').first().waitFor();
   assert.equal(await manager.locator('table:visible').count(), 0);
   await fits(manager);

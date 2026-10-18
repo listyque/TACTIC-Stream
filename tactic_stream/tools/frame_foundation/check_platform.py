@@ -132,6 +132,12 @@ def fingerprints(handler):
         for name in (
             "frame_objects.mjs",
             "frame_objects_state.mjs",
+            "frame_tasks.mjs",
+            "frame_tasks_state.mjs",
+            "mobile_tasks.mjs",
+            "task_manager.mjs",
+            "task_manager_context.mjs",
+            "task_process_panel.mjs",
             "inspector_dock.mjs",
             "object_report.mjs",
             "object_links.mjs",
@@ -223,6 +229,14 @@ def fingerprints(handler):
         *[
             handler / "tests" / (name + ".py")
             for name in (
+                "test_project_tasks",
+                "test_task_combo_activation_qml",
+                "test_task_section_retention_qml",
+            )
+        ],
+        *[
+            handler / "tests" / (name + ".py")
+            for name in (
                 "test_workspace_result_item",
                 "test_process_menu_latency",
                 "test_advanced_search_suggestions",
@@ -284,6 +298,9 @@ def main():
     environment = dict(
         os.environ,
         PYTHONDONTWRITEBYTECODE="1",
+        PLAYWRIGHT_BROWSERS_PATH=os.environ.get(
+            "PLAYWRIGHT_BROWSERS_PATH", str(ROOT / ".browser-cache")
+        ),
         QT_QPA_PLATFORM="offscreen",
         QT_QPA_FONTDIR=str(Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts"),
         QT_QUICK_BACKEND="software",
@@ -358,7 +375,38 @@ def main():
         ),
         ("search-state", ["node", "frontend/tests/frame_search_state.mjs"], ROOT, {}),
         ("table-state", ["node", "frontend/tests/frame_table_state.mjs"], ROOT, {}),
+        ("tasks-state", ["node", "frontend/tests/frame_tasks_state.mjs"], ROOT, {}),
+        ("browser-task-phone", ["node", "frontend/tests/mobile_tasks.mjs"], ROOT, {}),
         ("objects-state", ["node", "frontend/tests/frame_objects_state.mjs"], ROOT, {}),
+        (
+            "native-task-owners",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_tasks_controller.TasksControllerTests",
+                "tests.test_tasks_controller.TasksQmlTests.test_task_workspace_creates_with_a_real_record",
+                "tests.test_tasks_controller.TasksQmlTests.test_empty_task_workspace_keeps_heavy_surfaces_unloaded",
+                "tests.test_tasks_controller.TasksQmlTests.test_filled_action_button_natural_width_does_not_clip_label",
+                "tests.test_tasks_controller.TasksQmlTests.test_filled_action_button_clips_localized_text_to_its_width",
+            ],
+            handler,
+            {"QT_QUICK_CONTROLS_STYLE": "Basic"},
+        ),
+        *[
+            (
+                "native-tasks-" + name.removeprefix("test_"),
+                python + ["-m", "unittest", "-q", "tests." + name],
+                handler,
+                {"QT_QUICK_CONTROLS_STYLE": "Basic"},
+            )
+            for name in (
+                "test_project_tasks",
+                "test_task_combo_activation_qml",
+                "test_task_section_retention_qml",
+            )
+        ],
         (
             "native-objects",
             python
@@ -465,27 +513,26 @@ def main():
                 ("browser-native-cells", "test_native_table_cells_in_chromium"),
             )
         ],
-        (
-            "native-search",
-            python
-            + ["-m", "unittest", "-q"]
-            + [
-                "tests." + name
-                for name in (
-                    "test_workspace_result_item",
-                    "test_process_menu_latency",
-                    "test_advanced_search_suggestions",
-                    "test_search_text_qml",
-                    "test_process_filter_editor",
-                    "test_quick_filter_editor_qml",
-                    "test_quick_filter_popup_qml",
-                    "test_tag_cloud_qml",
-                    "test_search_pagination_qml",
-                )
-            ],
-            handler,
-            {},
-        ),
+        # Popup suites own Qt's process-wide style, window grabs and scene graph.
+        *[
+            (
+                "native-search-" + name.removeprefix("test_"),
+                python + ["-m", "unittest", "-q", "tests." + name],
+                handler,
+                {},
+            )
+            for name in (
+                "test_workspace_result_item",
+                "test_process_menu_latency",
+                "test_advanced_search_suggestions",
+                "test_search_text_qml",
+                "test_process_filter_editor",
+                "test_quick_filter_editor_qml",
+                "test_quick_filter_popup_qml",
+                "test_search_pagination_qml",
+                "test_tag_cloud_qml",
+            )
+        ],
         (
             "search-api",
             python
@@ -540,30 +587,28 @@ def main():
             ROOT,
             {},
         ),
+        # Each GUI fixture owns its process-wide Qt style and native popup grabs.
         *[
             (
-                f"native-{scale}",
-                python
-                + [
-                    "-m",
-                    "unittest",
-                    "-q",
-                    "tests.test_frame_platform.FramePlatformTests",
-                    "tests.test_frame_controls.FrameControlsTests",
-                    "tests.test_user_combo_box.UserPickerTests",
-                    "tests.test_frame_help.FrameHelpTests",
-                    "tests.test_frame_navigation.FrameNavigationTests",
-                    "tests.test_frame_projects.FrameProjectsTests",
-                    "tests.test_frame_sections.FrameSectionInputTests",
-                    "tests.test_section_tab_rail.SectionTabRailQmlTests",
-                    "tests.test_frame_dock_input.FrameDockInputTests",
-                    "tests.test_frame_menus.FrameMenuTests",
-                    "tests.test_frame_dock_layout.FrameDockLayoutTests",
-                ],
+                f"native-{scale}-{case.rsplit('.', 1)[-1]}",
+                python + ["-m", "unittest", "-q", case],
                 handler,
                 {"QT_SCALE_FACTOR": scale},
             )
             for scale in ("1", "1.5", "2")
+            for case in (
+                "tests.test_frame_platform.FramePlatformTests",
+                "tests.test_frame_controls.FrameControlsTests",
+                "tests.test_user_combo_box.UserPickerTests",
+                "tests.test_frame_help.FrameHelpTests",
+                "tests.test_frame_navigation.FrameNavigationTests",
+                "tests.test_frame_projects.FrameProjectsTests",
+                "tests.test_frame_sections.FrameSectionInputTests",
+                "tests.test_section_tab_rail.SectionTabRailQmlTests",
+                "tests.test_frame_dock_input.FrameDockInputTests",
+                "tests.test_frame_menus.FrameMenuTests",
+                "tests.test_frame_dock_layout.FrameDockLayoutTests",
+            )
         ],
         ("browser", ["node", "tests/frame_platform.mjs"], ROOT / "frontend", {}),
         (

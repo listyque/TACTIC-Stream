@@ -1,4 +1,4 @@
-import { _ as label, b as rect, g as button, v as muted, y as node } from "./resize.js";
+import { C as label, E as rect, S as button, T as node, w as muted } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/controls/lists/tree.ui.mjs
 function navigationRow(width, record, state = {}) {
 	const section = record.kind === "section", separator = record.kind === "separator";

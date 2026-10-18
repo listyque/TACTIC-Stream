@@ -414,6 +414,7 @@ onBeforeUnmount(() => {
 
 <template>
   <details
+    data-menu-owner="control"
     ref="menu"
     class="workspace-menu"
     :class="{

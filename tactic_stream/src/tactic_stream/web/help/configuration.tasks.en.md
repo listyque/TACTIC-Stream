@@ -16,3 +16,5 @@ Saved per-account/project scope, filters, columns, group expansion, calendar and
 Administrators also see Task scheduling from native server XML. Project schedule/mode overrides the server mode; empty retains pipeline dates. Modes even/even_day/from_end_date use native scheduling commands. These defaults do not turn calendar UI settings into a scheduling algorithm.
 
 Owners: preferences.tasks, taskColumns.js, TaskManager/NotesPanel, native task_workspace/task_schedule and ServerConfiguration. Reset/Apply for Tasks preserves unrelated repository/server XML drafts.
+
+Task Manager's shared table/field editors, virtual creation and opt-in bulk workflow are described in [Tasks and planning](tasks.en.md). Existing configuration and permission owners remain unchanged.

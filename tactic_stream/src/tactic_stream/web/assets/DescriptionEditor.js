@@ -1,6 +1,6 @@
 import { A as onMounted, C as inject, E as nextTick, H as watch, J as markRaw, M as openBlock, O as onBeforeUnmount, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString } from "./vue.js";
-import { D as t, O as appearance, tt as _plugin_vue_export_helper_default } from "./index.js";
-import { _ as label, b as rect, f as _sfc_main$3, g as button, n as _sfc_main$4, t as observeFrameSizes, u as translate, y as node } from "./resize.js";
+import { D as t, O as appearance, rt as _plugin_vue_export_helper_default } from "./index.js";
+import { C as label, E as rect, S as button, T as node, f as translate, n as observeFrameSizes, r as _sfc_main$4, v as _sfc_main$3 } from "./resize.js";
 import { F as rpc } from "./CodeBlock.js";
 import { f as linkifyPlainText, n as browserLink } from "./links.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/description.ui.mjs

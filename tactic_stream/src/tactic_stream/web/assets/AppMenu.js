@@ -284,6 +284,7 @@ var _sfc_main = {
 		});
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("details", {
+				"data-menu-owner": "control",
 				ref_key: "menu",
 				ref: menu,
 				class: normalizeClass(["workspace-menu", {

@@ -1,4 +1,4 @@
-import { _ as label, b as rect, u as translate, v as muted, y as node } from "./resize.js";
+import { C as label, E as rect, T as node, f as translate, w as muted } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/admin.document.mjs
 function policy(model) {
 	const editable = !!model.ready && !!model.canWrite && !model.busy && !model.uncertain;

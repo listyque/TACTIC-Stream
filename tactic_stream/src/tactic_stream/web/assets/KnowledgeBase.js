@@ -1,11 +1,10 @@
 import { A as onMounted, C as inject, E as nextTick, G as withCtx, H as watch, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, O as appearance, T as randomId, o as _sfc_main$2, u as _sfc_main$3 } from "./index.js";
-import { d as _sfc_main$4, f as _sfc_main$6, h as _sfc_main$5 } from "./resize.js";
+import { _ as AppSearchField_default, p as _sfc_main$4, v as _sfc_main$6, x as _sfc_main$5 } from "./resize.js";
 import { S as messageFileRequest, b as knowledgeRequest, f as _sfc_main$7, i as xmlTokens, n as javascriptTokens, o as copyText, r as pythonTokens, x as linkPreviews } from "./CodeBlock.js";
 import { n as _sfc_main$8 } from "./AppSplitter.js";
 import { t as _sfc_main$9 } from "./AppMenu.js";
 import { t as _sfc_main$10 } from "./AppCheckbox.js";
-import { a as AppSearchField_default } from "./ItemSurface.js";
 import { d as extractSkeys, n as browserLink, u as escapeHtml } from "./links.js";
 import { t as _sfc_main$11 } from "./AttachmentCard.js";
 import { t as _sfc_main$12 } from "./AppMenuItem.js";

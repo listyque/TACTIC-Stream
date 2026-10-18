@@ -1,51 +1,226 @@
 <script setup>
-// Handler TaskHiddenDetails.qml (EPL-1.0): TaskManager owns its plan/draft.
-import { computed, nextTick, ref, watch } from 'vue'
-import TaskField from '../objects/TaskField.vue'
-import StatusSelect from '../../controls/StatusSelect.vue'
-import UserComboBox from '../../controls/UserComboBox.vue'
-import AppButton from '../../controls/AppButton.vue'
-import AppSlider from '../../controls/AppSlider.vue'
-import AppTextArea from '../../controls/AppTextArea.vue'
-import { t } from '../../i18n.js'
-const props = defineProps({ editor: Object, columns: Array, busy: Boolean })
-const emit = defineEmits(['change', 'milestones'])
-const description = ref(''), editing = ref(false), area = ref(null)
-const titles = { process: 'Process', status: 'Status', assigned: 'Assignee', supervisor: 'Supervisor', priority: 'Priority',
-  milestone_code: 'Milestone', bid_start_date: 'Start', bid_end_date: 'Deadline', progress: 'Progress', completion: 'Progress', bid_duration: 'Expected work hours' }
+import {
+  computed,
+  nextTick,
+  ref,
+  watch,
+  markRaw,
+  h,
+  onBeforeUnmount
+} from 'vue';
+import FrameView from '../../frame/FrameView.vue';
+import AppTextArea from '../../controls/AppTextArea.vue';
+import TaskDetailValue from './TaskDetailValue.vue';
+import { appearance } from '../../appearance.js';
+import { observeFrameSizes, frameContentWidth } from '../../frame/resize.js';
+import * as UI from '../../../../src/tactic_stream/shared_ui/features/tasks/details.ui.mjs';
+const props = defineProps({ editor: Object, columns: Array, busy: Boolean });
+const emit = defineEmits(['change', 'milestones']);
+let descriptionBaseline = '';
+const description = ref(''),
+  editing = ref(false),
+  area = ref(null);
 const fields = computed(() => {
-  const visible = key => props.columns.some(column => column.key === key && column.visible)
-  const order = ['process', 'status', 'assigned', 'bid_start_date', 'bid_end_date', 'progress', 'completion', 'bid_duration', 'priority', 'milestone_code', 'supervisor']
-  return order.flatMap(name => {
-    const field = props.editor?.fields.find(field => field.name === name)
-    const key = name.endsWith('_date') ? 'dates' : name === 'completion' ? 'progress' : name
-    return field && (name === 'process' ? props.editor.plans[0].operation === 'create' : ['priority', 'milestone_code', 'supervisor'].includes(name) || visible(key)) ? [field] : []
-  })
-})
-const descriptionField = computed(() => props.editor?.fields.find(field => field.name === 'description'))
-const creating = computed(() => props.editor?.plans[0].operation === 'create')
-watch(() => props.editor?.values.description, value => { if (!editing.value) description.value = value || '' }, { immediate: true })
-watch(creating, value => { editing.value = !!value }, { immediate: true })
-function finish() { if (!props.busy && descriptionField.value?.editable && description.value !== (props.editor.values.description || '')) emit('change', 'description', description.value); editing.value = creating.value }
-async function editDescription() { if (editing.value) { finish(); area.value?.$el.blur() } else { editing.value = true; await nextTick(); area.value?.focus() } }
-function escape(event) { description.value = props.editor.values.description || ''; editing.value = creating.value; event.target.blur() }
+  const visible = (key) =>
+    props.columns.some((column) => column.key === key && column.visible);
+  const order = [
+    'process',
+    'context',
+    'status',
+    'assigned',
+    'bid_start_date',
+    'bid_end_date',
+    'progress',
+    'completion',
+    'bid_duration',
+    'priority',
+    'milestone_code',
+    'supervisor'
+  ];
+  return order.flatMap((name) => {
+    const field = props.editor?.fields.find((field) => field.name === name);
+    const key = name.endsWith('_date')
+      ? 'dates'
+      : name === 'completion'
+        ? 'progress'
+        : name;
+    return field &&
+      (['process', 'context'].includes(name)
+        ? props.editor.plans[0].operation === 'create'
+        : ['priority', 'milestone_code', 'supervisor'].includes(name) ||
+          visible(key))
+      ? [field]
+      : [];
+  });
+});
+const descriptionField = computed(() =>
+  props.editor?.fields.find((field) => field.name === 'description')
+);
+const creating = computed(() => props.editor?.plans[0].operation === 'create');
+watch(
+  () => props.editor?.values.description,
+  (value) => {
+    if (!editing.value) description.value = value || '';
+  },
+  { immediate: true }
+);
+watch(
+  creating,
+  (value) => {
+    editing.value = !!value;
+  },
+  { immediate: true }
+);
+function finish() {
+  if (
+    !props.busy &&
+    descriptionField.value?.editable &&
+    description.value !== (props.editor.values.description || '')
+  )
+    emit('change', 'description', description.value);
+  editing.value = creating.value;
+}
+async function editDescription() {
+  if (editing.value) {
+    finish();
+    area.value?.$el.blur();
+  } else {
+    descriptionBaseline = description.value;
+    editing.value = true;
+    await nextTick();
+    area.value?.focus();
+  }
+}
+function escape(event) {
+  description.value = descriptionBaseline;
+  emit('change', 'description', descriptionBaseline);
+  editing.value = creating.value;
+  event.target.blur();
+}
+
+const host = ref(null),
+  width = ref(0);
+const scene = computed(() =>
+  UI.describe(
+    {
+      fields: fields.value.map((field) => ({
+        name: field.name,
+        value: props.editor?.values[field.name]
+      })),
+      progress: Number(
+        props.editor?.values.progress ?? props.editor?.values.completion ?? 0
+      ),
+      description: !!descriptionField.value,
+      descriptionEditable: !!descriptionField.value?.editable,
+      creating: creating.value,
+      editingDescription: editing.value,
+      busy: props.busy
+    },
+    width.value,
+    appearance.language
+  )
+);
+const fieldComponent = markRaw(TaskDetailValue);
+const descriptionComponent = markRaw({
+  setup(_, { attrs }) {
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          'data-task-field': 'description',
+          class: 'task-description-value'
+        },
+        [
+          h(AppTextArea, {
+            ref: area,
+            modelValue: description.value,
+            label: 'Description',
+            placeholder: 'Add task description…',
+            readonly: !editing.value,
+            disabled: props.busy || !descriptionField.value?.editable,
+            style: { paddingRight: creating.value ? '12px' : '42px' },
+            'onUpdate:modelValue': (value) => {
+              description.value = value;
+              if (
+                editing.value &&
+                !props.busy &&
+                descriptionField.value?.editable
+              )
+                emit('change', 'description', value);
+            },
+            onFocus: () => {
+              descriptionBaseline = description.value;
+            },
+            onBlur: finish,
+            onKeydown: (event) => {
+              if (event.key === 'Escape') {
+                event.preventDefault();
+                escape(event);
+              }
+            }
+          })
+        ]
+      );
+  }
+});
+const views = computed(() =>
+  Object.assign(
+    { description: { component: descriptionComponent } },
+    Object.fromEntries(
+      fields.value.map((field) => [
+        field.name,
+        {
+          component: fieldComponent,
+          props: {
+            field,
+            editor: props.editor,
+            busy: props.busy,
+            onChange: (value) => emit('change', field.name, value),
+            onMilestones: () => emit('milestones')
+          }
+        }
+      ])
+    )
+  )
+);
+let observer;
+watch(
+  host,
+  (element) => {
+    observer?.disconnect();
+    if (!element) return;
+    const measure = () => {
+      width.value = frameContentWidth(element);
+    };
+    measure();
+    observer = observeFrameSizes(measure);
+    observer.observe(element);
+  },
+  { flush: 'post' }
+);
+onBeforeUnmount(() => observer?.disconnect());
 </script>
 <template>
-  <section v-if="editor" class="task-workspace-details">
-    <div class="task-detail-grid">
-      <label v-for="field in fields" :key="field.name" :data-task-field="field.name" class="task-detail-field">
-        <span>{{ t(titles[field.name]) }}<output v-if="['progress', 'completion'].includes(field.name)">{{ editor.values[field.name] || 0 }}%</output></span>
-        <StatusSelect v-if="field.name === 'status'" :value="editor.values.status || ''" :options="editor.statusChoices" :disabled="busy || !field.editable" @change="emit('change', field.name, $event)" />
-        <UserComboBox v-else-if="['assigned', 'supervisor'].includes(field.name)" :label="titles[field.name]" :value="editor.values[field.name] || ''" :options="editor.users" :disabled="busy || !field.editable" @change="emit('change', field.name, $event)" />
-        <AppSlider v-else-if="['progress', 'completion'].includes(field.name)" :label="titles[field.name]" :model-value="Number(editor.values[field.name] || 0)" :disabled="busy || !field.editable" @update:model-value="emit('change', field.name, $event)" />
-        <div v-else-if="field.name === 'milestone_code'" class="task-detail-milestone"><TaskField :field="field" :value="editor.values[field.name]" :catalog="editor.catalog" :busy="busy" @change="emit('change', field.name, $event)" /><AppButton label="Project milestones" icon="add" icon-only :disabled="busy" @click="emit('milestones')" /></div>
-        <TaskField v-else :field="field" :value="editor.values[field.name]" :catalog="editor.catalog" :busy="busy" @change="emit('change', field.name, $event)" />
-      </label>
-    </div>
-    <div v-if="descriptionField" class="task-detail-description" data-task-field="description">
-      <span>{{ t('Description') }}</span>
-      <div><AppTextArea ref="area" v-model="description" label="Description" placeholder="Add task description…" :readonly="!editing" :disabled="busy || !descriptionField.editable" @blur="finish" @keydown.esc.prevent="escape" />
-        <AppButton v-if="!creating" :label="editing ? 'Finish editing description' : 'Edit task description'" :icon="editing ? 'check' : 'edit'" icon-only :disabled="busy || !descriptionField.editable" @mousedown.prevent @click="editDescription" /></div>
-    </div>
+  <section
+    v-if="editor"
+    ref="host"
+    class="task-workspace-details"
+    :style="{ height: scene.height + 'px' }"
+  >
+    <FrameView :scene="scene" :views="views" @event="editDescription" />
   </section>
 </template>
+<style>
+.task-workspace-details {
+  padding: 0;
+  border: 0;
+}
+.task-description-value > .app-text-area {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  resize: none;
+  font-size: var(--text-label);
+}
+</style>

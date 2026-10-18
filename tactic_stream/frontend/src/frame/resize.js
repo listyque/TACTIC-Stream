@@ -31,3 +31,20 @@ export function observeFrameSizes(apply) {
     }
   };
 }
+
+// Keep logical subpixels; clientWidth rounds and transformed bounds include popup animation.
+export function frameContentWidth(element) {
+  const style = getComputedStyle(element);
+  const width = parseFloat(style.width);
+  if (!Number.isFinite(width)) return element.clientWidth;
+  return style.boxSizing === 'border-box'
+    ? Math.max(
+        0,
+        width -
+          parseFloat(style.paddingLeft) -
+          parseFloat(style.paddingRight) -
+          parseFloat(style.borderLeftWidth) -
+          parseFloat(style.borderRightWidth)
+      )
+    : width;
+}

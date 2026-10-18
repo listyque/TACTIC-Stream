@@ -15,6 +15,7 @@ const props = defineProps({
   iconOnly: Boolean,
   compact: Boolean,
   highlighted: Boolean,
+  filledAction: Boolean,
   destructive: Boolean,
   tonal: Boolean,
   segmented: Boolean,
@@ -39,6 +40,7 @@ const paint = computed(() => buttonVariables(props));
       'icon-button': iconOnly || compact,
       'compact-button': compact,
       primary: highlighted,
+      'filled-action': filledAction,
       danger: destructive,
       tonal
     }"
@@ -227,5 +229,35 @@ a.app-button.icon-button:focus-visible {
   border: 0;
   box-shadow: none;
   opacity: 1;
+}
+</style>
+
+<style>
+.frame-view > .frame-node.frame-button.app-button.filled-action {
+  padding: 2px;
+  border: 0;
+  border-radius: calc(var(--item-radius) + 2px);
+  background: transparent;
+  box-shadow: none;
+  isolation: isolate;
+}
+.frame-view > .frame-button.app-button.filled-action::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: var(--item-radius);
+  background: var(--primary);
+  z-index: -1;
+  pointer-events: none;
+}
+/* shortcut: brightness matches shipped accents; saturated custom accents need Qt HSV tinting for exact hover parity. */
+.app-button.filled-action:is(:hover, :focus-visible):not(:disabled)::before {
+  filter: brightness(1.08);
+}
+.app-button.filled-action:active:not(:disabled)::before {
+  filter: brightness(0.8695652174);
+}
+.frame-view > .frame-button.app-button.filled-action:disabled::before {
+  background: var(--surface-high);
 }
 </style>

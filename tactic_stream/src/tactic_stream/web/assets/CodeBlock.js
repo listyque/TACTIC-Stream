@@ -1,5 +1,5 @@
 import { A as onMounted, B as useModel, G as withCtx, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, T as mergeProps, X as ref, Z as shallowReactive, _ as createElementBlock, a as vModelSelect, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels } from "./vue.js";
-import { $ as themes, A as effectiveColorMode, D as t, M as languages, N as readableText, O as appearance, Q as iconSets, Z as accentPresets, b as logRequest, f as debugLog, k as colorModes, o as _sfc_main$8, u as _sfc_main$7, x as redact } from "./index.js";
+import { $ as accentPresets, A as effectiveColorMode, D as t, M as languages, N as readableText, O as appearance, b as logRequest, et as iconSets, f as debugLog, k as colorModes, o as _sfc_main$8, tt as themes, u as _sfc_main$7, x as redact } from "./index.js";
 //#region src/features/activity/notifications.js
 var notificationHistory = shallowReactive({ records: [] });
 var activeNotifications = shallowReactive({ records: [] });
@@ -645,8 +645,10 @@ var _hoisted_2$3 = {
 	type: "button",
 	class: "app-select-trigger"
 };
-var _hoisted_3$3 = ["value"];
+var _hoisted_3$3 = { class: "app-select-selected-content" };
 var _hoisted_4$3 = { class: "app-select-option-label" };
+var _hoisted_5$1 = ["value"];
+var _hoisted_6$1 = { class: "app-select-option-label" };
 var _sfc_main$5 = {
 	__name: "AppSelect",
 	props: /*@__PURE__*/ mergeModels({
@@ -655,6 +657,7 @@ var _sfc_main$5 = {
 			default: () => []
 		},
 		label: String,
+		displayPrefix: String,
 		swatchMode: String,
 		translateLabels: {
 			type: Boolean,
@@ -670,20 +673,37 @@ var _sfc_main$5 = {
 		const model = useModel(__props, "modelValue");
 		const customizable = CSS.supports("appearance", "base-select");
 		const decorated = computed(() => customizable && props.options.some((item) => item.icon));
+		const selectedOption = computed(() => props.options.find((item) => item.value === model.value));
+		const optionLabel = (item) => props.translateLabels ? t(item.label) : item.label;
 		return (_ctx, _cache) => {
 			return withDirectives((openBlock(), createElementBlock("select", {
 				class: "app-select",
+				style: normalizeStyle(__props.displayPrefix ? { "--select-display-prefix": JSON.stringify(__props.displayPrefix) } : void 0),
 				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
 				"aria-label": __props.label ? unref(t)(__props.label) : void 0
 			}, [
-				unref(customizable) ? (openBlock(), createElementBlock("button", _hoisted_2$3, [(openBlock(), createBlock(resolveDynamicComponent("selectedcontent"))), createVNode(_sfc_main$7, {
+				unref(customizable) ? (openBlock(), createElementBlock("button", _hoisted_2$3, [createBaseVNode("span", _hoisted_3$3, [
+					decorated.value && selectedOption.value?.icon ? (openBlock(), createBlock(_sfc_main$7, {
+						key: 0,
+						name: selectedOption.value.icon
+					}, null, 8, ["name"])) : createCommentVNode("", true),
+					__props.swatchMode && selectedOption.value ? (openBlock(), createElementBlock("span", {
+						key: 1,
+						class: "palette-swatch",
+						style: normalizeStyle({
+							backgroundColor: selectedOption.value[__props.swatchMode],
+							borderColor: selectedOption.value[__props.swatchMode + "Base"]
+						})
+					}, null, 4)) : createCommentVNode("", true),
+					createBaseVNode("span", _hoisted_4$3, toDisplayString(selectedOption.value ? optionLabel(selectedOption.value) : model.value), 1)
+				]), createVNode(_sfc_main$7, {
 					name: "expand_more",
 					class: "app-select-indicator"
 				})])) : createCommentVNode("", true),
 				model.value !== void 0 && !__props.options.some((item) => item.value === model.value) ? (openBlock(), createElementBlock("option", {
 					key: 1,
 					value: model.value
-				}, toDisplayString(model.value), 9, _hoisted_3$3)) : createCommentVNode("", true),
+				}, toDisplayString(model.value), 9, _hoisted_5$1)) : createCommentVNode("", true),
 				(openBlock(true), createElementBlock(Fragment, null, renderList(__props.options, (item) => {
 					return openBlock(), createBlock(resolveDynamicComponent("option"), {
 						key: item.value,
@@ -703,12 +723,12 @@ var _sfc_main$5 = {
 									borderColor: item[__props.swatchMode + "Base"]
 								})
 							}, null, 4)) : createCommentVNode("", true),
-							createBaseVNode("span", _hoisted_4$3, toDisplayString(__props.translateLabels ? unref(t)(item.label) : item.label), 1)
+							createBaseVNode("span", _hoisted_6$1, toDisplayString(optionLabel(item)), 1)
 						]),
 						_: 2
 					}, 1032, ["value", "disabled"]);
 				}), 128))
-			], 8, _hoisted_1$5)), [[vModelSelect, model.value]]);
+			], 12, _hoisted_1$5)), [[vModelSelect, model.value]]);
 		};
 	}
 };

@@ -34,7 +34,7 @@ export async function compareSurface(page,root,actual,expected,label){
   }
   if(expected.styles[id]?.color){assert.deepEqual(actual.styles[id],expected.styles[id],label+' '+id+' typography/color');styles++}
   if(expected.interiors[id]){
-   const indicator=await page.locator(root).locator('[data-frame="'+id+'"] > .app-checkbox-indicator').boundingBox()
+   const indicator=await page.locator(root).locator('[data-frame="'+id+'"] > .app-checkbox-indicator').last().boundingBox()
    for(const key of ['x','y','width','height'])assert(Math.abs(indicator[key]-(key==='x'||key==='y'?actual.origin[key]:0)-expected.interiors[id][key])<=.6,label+' '+id+' indicator '+key)
    interiors++
   }

@@ -96,6 +96,8 @@ function style(node) {
     pointerEvents: node.pointerTransparent ? 'none' : undefined,
     fontSize: node.fontSize + 'px',
     fontWeight: node.weight,
+    letterSpacing:
+      node.letterSpacing === undefined ? undefined : node.letterSpacing + 'px',
     textAlign: node.align,
     fontFamily: node.monospace ? 'Consolas' : undefined,
     color: color(node.color),
@@ -374,8 +376,10 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :style="
           Object.assign(style(node), {
             color:
-              node.iconAction && node.enabled !== false && node.iconColor
-                ? color(node.iconColor)
+              node.iconAction &&
+              node.enabled !== false &&
+              (node.iconColor || node.highlighted)
+                ? color(node.iconColor || 'selectedText')
                 : undefined
           })
         "
@@ -388,6 +392,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :target="node.target"
         :rel="node.href ? 'noopener noreferrer' : undefined"
         :highlighted="node.highlighted"
+        :filled-action="node.filledAction"
         :segmented="node.radio"
         :checked="!!node.selected"
         :destructive="node.destructive"
@@ -674,6 +679,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         "
         :style="style(node)"
         :label="node.label"
+        :display-prefix="node.displayPrefix"
         :translate-labels="false"
         :options="node.options"
         :model-value="node.value"

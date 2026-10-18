@@ -6,6 +6,7 @@ import AppIcon from './AppIcon.vue';
 const props = defineProps({
   options: { type: Array, default: () => [] },
   label: String,
+  displayPrefix: String,
   swatchMode: String,
   translateLabels: { type: Boolean, default: true }
 });
@@ -14,16 +15,42 @@ const customizable = CSS.supports('appearance', 'base-select');
 const decorated = computed(
   () => customizable && props.options.some((item) => item.icon)
 );
+const selectedOption = computed(() =>
+  props.options.find((item) => item.value === model.value)
+);
+const optionLabel = (item) =>
+  props.translateLabels ? t(item.label) : item.label;
 </script>
 
 <template>
   <select
     class="app-select"
+    :style="
+      displayPrefix
+        ? { '--select-display-prefix': JSON.stringify(displayPrefix) }
+        : undefined
+    "
     v-model="model"
     :aria-label="label ? t(label) : undefined"
   >
     <button v-if="customizable" type="button" class="app-select-trigger">
-      <component is="selectedcontent" />
+      <span class="app-select-selected-content">
+        <AppIcon
+          v-if="decorated && selectedOption?.icon"
+          :name="selectedOption.icon"
+        />
+        <span
+          v-if="swatchMode && selectedOption"
+          class="palette-swatch"
+          :style="{
+            backgroundColor: selectedOption[swatchMode],
+            borderColor: selectedOption[swatchMode + 'Base']
+          }"
+        />
+        <span class="app-select-option-label">{{
+          selectedOption ? optionLabel(selectedOption) : model
+        }}</span>
+      </span>
       <AppIcon name="expand_more" class="app-select-indicator" />
     </button>
     <option
@@ -49,7 +76,7 @@ const decorated = computed(
         }"
       ></span
       ><span class="app-select-option-label">{{
-        translateLabels ? t(item.label) : item.label
+        optionLabel(item)
       }}</span></component
     >
   </select>
@@ -82,7 +109,7 @@ const decorated = computed(
   font: inherit;
   text-align: start;
 }
-.app-select selectedcontent {
+.app-select .app-select-selected-content {
   display: flex;
   align-items: center;
   gap: 7px;
@@ -107,19 +134,28 @@ const decorated = computed(
     transform: rotate(180deg);
   }
 }
-.app-select :is(option, selectedcontent) > .app-icon {
+.app-select :is(option, .app-select-selected-content) > .app-icon {
   width: 15px;
   height: 15px;
   flex: 0 0 15px;
   font-size: 15px;
 }
-.app-select selectedcontent > .app-select-option-label {
+.app-select .app-select-selected-content > .app-select-option-label {
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.app-select selectedcontent > .app-icon {
+.app-select .app-select-selected-content > .app-icon {
   color: var(--muted);
+}
+</style>
+
+<style>
+.app-select
+  > .app-select-trigger
+  .app-select-selected-content
+  .app-select-option-label::before {
+  content: var(--select-display-prefix, '');
 }
 </style>

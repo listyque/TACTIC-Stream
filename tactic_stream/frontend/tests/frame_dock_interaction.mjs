@@ -191,6 +191,14 @@ try {
     page
       .locator('[data-dock="results"]')
       .evaluate((item) => item.getBoundingClientRect().width);
+  // Use the applied nested layout as the baseline, after its resize projection.
+  await page.waitForFunction(
+    () =>
+      Math.abs(
+        document.querySelector('[data-dock="results"]').getBoundingClientRect()
+          .width - 360
+      ) < 1
+  );
   const wideWidth = await resultWidth();
   await page.setViewportSize({ width: 760, height: 640 });
   await page.waitForFunction(

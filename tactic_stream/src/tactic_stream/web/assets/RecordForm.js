@@ -1,7 +1,7 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, X as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode, z as useId } from "./vue.js";
-import { D as t, O as appearance, i as mobile, o as _sfc_main$4, tt as _plugin_vue_export_helper_default } from "./index.js";
-import { _ as label, b as rect, f as _sfc_main$8, g as button, m as _sfc_main$7, n as _sfc_main$5, p as _sfc_main$6, t as observeFrameSizes, u as translate, y as node } from "./resize.js";
+import { D as t, O as appearance, i as mobile, o as _sfc_main$4, rt as _plugin_vue_export_helper_default } from "./index.js";
+import { C as label, E as rect, S as button, T as node, b as _sfc_main$7, f as translate, n as observeFrameSizes, r as _sfc_main$5, v as _sfc_main$8, y as _sfc_main$6 } from "./resize.js";
 import { F as rpc, Y as uploadFormFile, f as _sfc_main$10, p as _sfc_main$9, v as formDefinition } from "./CodeBlock.js";
 import { n as _sfc_main$11 } from "./AppSplitter.js";
 import { n as arrange, t as _sfc_main$12 } from "./ObjectFieldFrame.js";
@@ -1506,6 +1506,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var RecordForm_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { unsupportedField as i, format as n, fieldKind as r, RecordForm_default as t };
+export { unsupportedField as a, fieldKind as i, _sfc_main$2 as n, format as r, RecordForm_default as t };
 
 //# sourceMappingURL=RecordForm.js.map

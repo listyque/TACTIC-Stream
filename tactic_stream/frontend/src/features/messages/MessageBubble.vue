@@ -47,7 +47,7 @@ function selectMessage(event) { if (props.selectionMode && !event.target.closest
           <AppButton v-if="pinned" class="message-pin-action" icon-only icon="pin" label="Unpin message" :disabled="busy || !permissions.pin" @click="action('pin', row)" />
           <EmojiPicker v-if="permissions.reaction && !mobile" class="message-react-picker" label="Add reaction" :disabled="busy" @selected="emit('reaction', row, $event)" />
           <AppMenu ref="menu" class="message-actions" label="Message actions" overlay>
-            <EmojiPicker v-if="mobile && permissions.reaction" text-trigger label="Add reaction" :disabled="busy" @selected="emit('reaction', row, $event)" />
+            <EmojiPicker v-if="mobile && permissions.reaction" text-trigger label="Add reaction" :disabled="busy" @selected="menu.close(); emit('reaction', row, $event)" />
             <AppButton label="Reply" icon="MDI_REPLY" :disabled="!permissions.send" @click="action('reply', row)" />
             <AppButton label="Forward" icon="MDI_SHARE" :disabled="!permissions.forward" @click="action('forward', row)" />
             <AppButton :label="selected ? 'Deselect message' : 'Select message'" icon="MDI_CHECKBOX_MARKED_OUTLINE" @click="action('select', row)" />

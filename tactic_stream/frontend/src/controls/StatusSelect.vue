@@ -3,7 +3,12 @@
 import { computed } from 'vue';
 import AppSelect from './AppSelect.vue';
 import { t } from '../i18n.js';
-const props = defineProps({ value: String, options: Array, disabled: Boolean });
+const props = defineProps({
+  value: String,
+  options: Array,
+  disabled: Boolean,
+  placeholder: String
+});
 defineEmits(['change']);
 const current = computed(() =>
   props.options.find((option) => option.value === props.value)
@@ -11,12 +16,23 @@ const current = computed(() =>
 const choices = computed(() => {
   const rows = props.options.map((option) =>
     option.value === '' && !option.label
-      ? { ...option, label: t('Select status'), disabled: true }
+      ? {
+          ...option,
+          label: props.placeholder || t('Select status'),
+          disabled: true
+        }
       : option
   );
   return rows.some((option) => option.value === '')
     ? rows
-    : [{ value: '', label: t('Select status'), disabled: true }, ...rows];
+    : [
+        {
+          value: '',
+          label: props.placeholder || t('Select status'),
+          disabled: true
+        },
+        ...rows
+      ];
 });
 </script>
 <template>

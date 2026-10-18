@@ -12,6 +12,8 @@ import { matchesUser } from './userSearch.js';
 import { t } from '../i18n.js';
 const props = defineProps({
   value: String,
+  placeholder: String,
+  emptyLabel: { type: String, default: 'Not assigned' },
   options: { type: Array, default: () => [] },
   disabled: Boolean,
   actionField: { type: Boolean, default: true },
@@ -26,7 +28,7 @@ const users = computed(() => [
   {
     value: '',
     login: '',
-    displayName: t('Not assigned'),
+    displayName: t(props.emptyLabel),
     primaryGroup: 'Ungrouped'
   },
   ...props.options
@@ -147,7 +149,7 @@ function optionKey(event) {
         :preview-size="22"
         round
         outlined /><span class="user-combo-label">{{
-        current.displayName
+        placeholder || current.displayName
       }}</span
       ><AppIcon
         v-if="!actionField"

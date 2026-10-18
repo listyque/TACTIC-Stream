@@ -41,7 +41,7 @@ def main():
         "src/tactic_stream/shared_ui/**/*.mjs",
     ]
     subprocess.run(command, cwd=ROOT, check=True)
-    command[-1] = "frontend/src/frame/**/*.{vue,css}"
+    command[-1] = "frontend/src/frame/**/*.{vue,css,js}"
     command[command.index("--tab-width") + 1] = "2"
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/src/features/administration/**/*.{vue,js}"
@@ -82,8 +82,11 @@ def main():
         "frontend/tests/frame_search*.mjs",
         "frontend/src/features/interface/{TableView,TableCell,TableInlineEditor,TaskCell,TaskCards,TaskSummaryCell,ValueFieldsCell,GroupedCompletionCell,CompletionCell}.vue",
         "tools/frame_table/*.{vue,html,mjs}",
-        "frontend/src/features/objects/{DescriptionEditor,DescriptionSurface,DescriptionValue,SnapshotToolbar,SnapshotSummary,SnapshotBrowser,ObjectOperations,ObjectFieldFrame,RecordForm,ObjectReport,ObjectReportSurface,ObjectSnapshotTree,ObjectAction,ObjectDeleteSurface,DuplicateSObject,ObjectDuplicateSurface,RelatedObjects,ObjectLinkSurface,ObjectLinkList,ObjectEditorSurface,ObjectFieldGrid,ObjectInspectorQuick,TaskInspectorHeader,TaskDetails,WorkHoursSummary,RelatedTasks,NoteEntry,NoteBody,NoteDialogs,NotesPanel}.vue",
+        "tools/frame_tasks/*.{vue,html,mjs}",
+        "frontend/src/features/objects/{DescriptionEditor,DescriptionSurface,DescriptionValue,SnapshotToolbar,SnapshotSummary,SnapshotBrowser,ObjectOperations,ObjectFieldFrame,RecordForm,ObjectReport,ObjectReportSurface,ObjectSnapshotTree,ObjectAction,ObjectDeleteSurface,DuplicateSObject,ObjectDuplicateSurface,RelatedObjects,ObjectLinkSurface,ObjectLinkList,ObjectEditorSurface,ObjectFieldGrid,ObjectInspectorQuick,TaskInspectorHeader,TaskDetails,TaskField,WorkHoursSummary,RelatedTasks,NoteEntry,NoteBody,NoteDialogs,NotesPanel}.vue",
         "tools/frame_objects/*.{vue,html,mjs}",
+        "frontend/src/features/tasks/{TaskEmptyState,TaskBulkBar,TaskCellDisplay,TaskColumns,TaskDetailValue,TaskHiddenDetails,TaskManager,TaskMobileCard,MobileTasks,TaskProcessItem,TaskProcessPanel,TaskProcessToolbar,TaskRowValue,TaskTableHeaderInput,TaskWorkspaceEditor,TaskWorkspaceFilters,TaskWorkspaceFooter,TaskWorkspaceOptions,TaskWorkspacePart,TaskWorkspaceRow,TaskWorkspaceScope,TaskWorkspaceSurfaceSwitcher,TaskWorkspaceTable,TaskWorkspaceToolbar}.vue",
+        "frontend/tests/{frame_tasks,frame_tasks_state,task_manager,task_manager_context,task_process_panel,mobile_tasks,mobile_complete}.mjs",
         "frontend/src/features/objects/inspector.css",
         "frontend/src/features/workspace/links.js",
         "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
@@ -203,6 +206,7 @@ def main():
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/objects").rglob("*.qml")
         )
+        files += sorted((args.handler_root / "thlib/ui/qml/features/tasks").rglob("*.qml"))
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]

@@ -1,10 +1,24 @@
 <script setup>
-// Handler TaskWorkspaceSurfaceSwitcher.qml, EPL-1.0.
-import AppSegmentedButton from '../../controls/AppSegmentedButton.vue'
-defineProps({ value: String, disabled: Boolean })
-defineEmits(['change'])
-const options = [{ value: 'cards', label: 'Task cards', icon: 'MDI_VIEW_GRID' },
-  { value: 'compact', label: 'Compact task list', icon: 'MDI_VIEW_LIST' },
-  { value: 'workspace', label: 'Open task workspace', icon: 'MDI_VIEW_DASHBOARD' }]
+import { appearance } from '../../appearance.js';
+import { metrics } from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs';
+import TaskWorkspacePart from './TaskWorkspacePart.vue';
+defineProps({ value: String, disabled: Boolean });
+defineEmits(['change']);
 </script>
-<template><AppSegmentedButton class="task-surface-switcher" :model-value="value" label="Task workspace surface" icon-only :options="options" :disabled="disabled" @update:model-value="$emit('change', $event)" /></template>
+<template>
+  <TaskWorkspacePart
+    class="task-surface-switcher"
+    part="surfaces"
+    :model="{
+      value,
+      disabled,
+      controlHeight: metrics(appearance.theme).controlHeight
+    }"
+    @event="$emit('change', $event.value)"
+  />
+</template>
+<style>
+.task-surface-switcher.task-workspace-part {
+  width: 108px;
+}
+</style>

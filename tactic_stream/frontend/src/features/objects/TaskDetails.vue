@@ -1,10 +1,8 @@
 <script setup>
 import ObjectInspectorQuick from './ObjectInspectorQuick.vue';
 import AppButton from '../../controls/AppButton.vue';
-import TaskField from './TaskField.vue';
-import StatusSelect from '../../controls/StatusSelect.vue';
+import TaskWorkspaceEditor from '../tasks/TaskWorkspaceEditor.vue';
 import UserComboBox from '../../controls/UserComboBox.vue';
-import AppSlider from '../../controls/AppSlider.vue';
 import { computed } from 'vue';
 import { t } from '../../i18n.js';
 
@@ -30,24 +28,12 @@ const emit = defineEmits([
   'cancel-action',
   'assignee'
 ]);
-const titles = {
-  status: 'Status',
-  assigned: 'Assigned to',
-  supervisor: 'Supervisor',
-  bid_start_date: 'Start date',
-  bid_end_date: 'End date',
-  bid_duration: 'Planned hours',
-  completion: 'Progress',
-  progress: 'Progress',
-  description: 'Description'
-};
-const quickFields = computed(() =>
-  props.editor.fields.filter((field) =>
-    ['status', 'assigned', 'bid_start_date', 'bid_end_date'].includes(
-      field.name
-    )
-  )
-);
+const fullEditor = computed(() => ({
+  ...props.editor,
+  values: props.draft,
+  plans: [{}],
+  enabled: []
+}));
 const progress = computed(() =>
   props.editor.fields.find((field) =>
     ['progress', 'completion'].includes(field.name)
@@ -211,20 +197,12 @@ function event(action) {
       </div>
     </div>
     <div v-if="editing" class="task-detail-fields">
-      <label
-        v-for="field in editor?.fields || []"
-        :key="field.name"
-        :data-task-field="field.name"
-        ><span>{{ t(titles[field.name] || field.name) }}</span>
-        <TaskField
-          :field="field"
-          :value="draft[field.name]"
-          :statuses="editor.statuses"
-          :users="editor.users"
-          :busy="busy"
-          @change="emit('change', field.name, $event)"
-        />
-      </label>
+      <TaskWorkspaceEditor
+        immediate
+        :editor="fullEditor"
+        :busy="busy"
+        @change="(key, value) => emit('change', key, value)"
+      />
       <footer v-if="editing">
         <AppButton
           label="Discard task changes"
