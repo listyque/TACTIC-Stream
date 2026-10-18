@@ -1,10 +1,10 @@
 import { A as onMounted, E as nextTick, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, V as useSlots, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, O as appearance, i as mobile, o as _sfc_main$2, rt as _plugin_vue_export_helper_default, u as _sfc_main$3 } from "./index.js";
-import { a as _sfc_main$5, n as observeFrameSizes, r as _sfc_main$4, x as _sfc_main$6 } from "./resize.js";
+import { S as _sfc_main$6, h as ItemPreview_default, r as _sfc_main$5, t as _sfc_main$4 } from "./FrameView.js";
 import { P as resultItems, a as copyImage, dt as notify, o as copyText } from "./CodeBlock.js";
 import { t as RecordForm_default } from "./RecordForm.js";
-import { t as _sfc_main$7 } from "./AppMenu.js";
-import { t as ItemPreview_default } from "./ItemPreview.js";
+import { n as _sfc_main$7 } from "./AppSplitter.js";
+import { n as observeFrameSizes } from "./resize.js";
 import { t as FilePreview_default } from "./FilePreview.js";
 import { B as layout, H as optionActions, K as ObjectAction_default, L as clampRatio, R as fileColumns, U as optionChange, V as metrics, W as toolbar, nt as _sfc_main$8, z as fileIcon } from "./App.js";
 //#region src/features/objects/SnapshotToolbar.vue

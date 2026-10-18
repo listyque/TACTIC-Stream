@@ -169,7 +169,8 @@ try {
       }
     } else if (command.endsWith('TaskScheduleCmd'))
       info = { calendar: { days: [] }, gantt: { records: [] } };
-    else if (command.endsWith('TaskMilestoneCmd')) info = { records: [] };
+    else if (command.endsWith('MilestoneCmd'))
+      info = { records: [], fields: [], canCreate: false, canDelete: false };
     await route.fulfill({ json: { result: { info } } });
   });
   await page.goto(server.resolvedUrls.local[0] + 'mobile-tasks-test');

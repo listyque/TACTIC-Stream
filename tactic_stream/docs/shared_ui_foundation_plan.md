@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01–B06, B08 and B09 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by B08.
+**B01–B06 and B08–B10 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
 
 **B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
 widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
@@ -24,7 +24,12 @@ This does not close B07's gaps.
 **B09 is delivered.** Task Manager, Quick Tasks, remaining task Inspector
 fields, bulk editors and desktop/phone composition use independent shared
 descriptions. Scope, existing owners, acceptance and limits: `docs/frame_tasks.md`.
-Production Gantt/calendar remains B10; B07's 40 legacy-widget gaps remain open.
+Production Gantt/calendar is delivered in B10 below; B07's 40 legacy-widget gaps remain open.
+
+**B10 is delivered.** Production Gantt, the separate Calendar dock, milestones
+and schedule editing use shared descriptions and input calculations. Existing
+draft/revision/write owners remain independent. Scope, capabilities and current
+evidence: `docs/frame_schedule.md`. The next batch is B11 Messaging.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -78,6 +83,34 @@ Re-estimate from actual completed batches; do not manufacture work to fill time.
 The user-facing checkpoint reports the **whole batch**, its remaining gaps and
 evidence. Each delivered checkpoint below records implementation and current acceptance;
 the batch table itself is scope, not evidence.
+
+## B10 delivered: production Gantt and calendar, 2026-10-18
+
+Stream **0.112.163** / Handler **0.6.0.114** ship **136 portable `.mjs`
+modules and three JSON catalogs** independently. Five scheduling modules describe
+the production timeline, virtualized rows, drag/resize/progress previews,
+zoom/overview/menus, the independent Calendar and Agenda, milestone management
+and the explicit schedule form. Native house controls and existing task and
+milestone mutation owners remain in place. There is no embedded browser.
+
+Acceptance: **107 mandatory platform stages**, **25 focused native scheduling
+cases**, **four connected server/browser workflows** and **208 paired states /
+624 original/current-native/browser images** passed on final source fingerprints.
+The matrix covers thirteen states/widths, three themes, light/dark and EN/RU;
+additional processes cover 125% and 150% DPI. Actual input verifies pointer
+cancellation, group-band activation, bounded progress, Enter-to-apply, one-step
+form undo, retained redo after no-op, original saved times, independent calendar
+ownership, milestone conflicts and deletion guards, mode/zoom/scroll retention
+and 500-row virtualization. Fractional-size empty/populated scroll checks and
+the complete desktop/mobile Workbench also passed.
+
+Connectors use actual loaded task dependency IDs. Handler milestones retain
+their existing SObject commit/delete path; browser revision review and
+unknown-write inspection remain explicit client capabilities. Physical touch,
+OS IME and compositor/font rasterization are separate acceptance. Reproduction,
+source/owner map and gallery: `docs/frame_schedule.md` and
+`tools/frame_schedule/output/index.html`. B07's legacy-widget gaps remain open;
+this checkpoint does not close B11 Messaging.
 
 ## B09 delivered: Task Manager and task inspector, 2026-10-18
 

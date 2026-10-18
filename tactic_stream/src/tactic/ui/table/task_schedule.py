@@ -631,7 +631,7 @@ def checked_records(values):
     if not isinstance(values, list) or len(values) > 500:
         raise ValueError('Choose at most 500 task records')
     fields = {'taskCode', 'parentKey', 'parentTitle', 'process', 'processLabel', 'status',
-              'assigned', 'assignedLabel', 'start', 'end', 'groupKey', 'group'}
+              'assigned', 'assignedLabel', 'start', 'end', 'groupKey', 'group', 'taskId', 'dependencyId'}
     result, seen, dates = [], set(), []
     for source in values:
         if not isinstance(source, dict):

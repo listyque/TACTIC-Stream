@@ -1371,7 +1371,9 @@ var en_default = {
 	"Is on": "Is on",
 	"Do not have": "Do not have",
 	"Match (slow)": "Match (slow)",
-	"Do not match (slow)": "Do not match (slow)"
+	"Do not match (slow)": "Do not match (slow)",
+	"The schedule could not be staged.": "The schedule could not be staged.",
+	"The task changed while this editor was open. Close and reopen the schedule.": "The task changed while this editor was open. Close and reopen the schedule."
 };
 var ru_default = {
 	"Open event details": "Открыть подробности события",
@@ -3430,7 +3432,7 @@ var ru_default = {
 	"Center today": "Показать сегодня по центру",
 	"Timeline overview": "Обзор расписания",
 	"{count} schedule warnings": "Предупреждений расписания: {count}",
-	"Scheduled tasks": "Запланированные задачи",
+	"Scheduled tasks": "Задачи с расписанием",
 	"Unscheduled tasks": "Задачи без расписания",
 	"Resize start date": "Изменить дату начала",
 	"Resize deadline": "Изменить срок",
@@ -5091,7 +5093,7 @@ var ru_default = {
 	"Close view tab: {title}": "Закрыть вкладку: {title}",
 	"Workspace tree": "Дерево workspace",
 	"Task Calendar": "Календарь задач",
-	"Task schedule": "Планирование задач",
+	"Task schedule": "Расписание задач",
 	"Project overview": "Обзор проекта",
 	Agenda: "Список событий",
 	TODAY: "СЕГОДНЯ",
@@ -5956,7 +5958,9 @@ var ru_default = {
 	"Quick task editor": "Быстрый редактор задач",
 	REVIEW: "НА ПРОВЕРКУ",
 	RECENT: "НЕДАВНИЕ",
-	"No supervisor": "Без руководителя"
+	"No supervisor": "Без руководителя",
+	"The schedule could not be staged.": "Не удалось применить расписание к черновику.",
+	"The task changed while this editor was open. Close and reopen the schedule.": "Задача изменилась, пока редактор был открыт. Закройте его и откройте расписание заново."
 };
 //#endregion
 export { en_default as n, ru_default as t };

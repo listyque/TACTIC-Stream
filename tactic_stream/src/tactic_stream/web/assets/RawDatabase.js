@@ -1,7 +1,8 @@
 import { A as onMounted, E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
 import { D as t, O as appearance, rt as _plugin_vue_export_helper_default } from "./index.js";
-import { C as label, E as rect, S as button, T as node, f as translate, n as observeFrameSizes, r as _sfc_main$2, w as muted } from "./resize.js";
+import { C as button, D as rect, E as node, T as muted, t as _sfc_main$2, u as translate, w as label } from "./FrameView.js";
 import { j as rawDatabase } from "./CodeBlock.js";
+import { n as observeFrameSizes } from "./resize.js";
 import { n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/database/raw.state.mjs
 function initial() {

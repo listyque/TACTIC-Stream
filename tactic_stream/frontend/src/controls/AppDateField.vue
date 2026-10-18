@@ -1,4 +1,5 @@
 <script setup>
+import { monthLabel } from '../../../src/tactic_stream/shared_ui/controls/forms/calendar.mjs';
 import { controls } from '../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 // Handler controls/DateField.qml (EPL-1.0): local dates and a Monday-first calendar.
 import {
@@ -28,6 +29,7 @@ const props = defineProps({
   disabled: Boolean,
   readonly: Boolean,
   includeTime: { type: Boolean, default: false },
+  monthOnly: { type: Boolean, default: false },
   allowClear: { type: Boolean, default: true },
   placeholder: String
 });
@@ -71,6 +73,7 @@ function dateLabel(date) {
 const presentation = computed(() => {
   const date = parse(props.modelValue);
   if (!date) return props.modelValue || '';
+  if (props.monthOnly) return monthLabel(date, appearance.language);
   const label = dateLabel(date),
     full = label + ' · ' + pad(date.getHours()) + ':' + pad(date.getMinutes());
   if (!props.includeTime || !/[ T]\d{2}:\d{2}/.test(props.modelValue))

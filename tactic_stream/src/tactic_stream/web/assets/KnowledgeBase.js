@@ -1,9 +1,8 @@
 import { A as onMounted, C as inject, E as nextTick, G as withCtx, H as watch, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, Y as reactive, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, O as appearance, T as randomId, o as _sfc_main$2, u as _sfc_main$3 } from "./index.js";
-import { _ as AppSearchField_default, p as _sfc_main$4, v as _sfc_main$6, x as _sfc_main$5 } from "./resize.js";
+import { S as _sfc_main$5, _ as _sfc_main$6, d as _sfc_main$4, g as AppSearchField_default } from "./FrameView.js";
 import { S as messageFileRequest, b as knowledgeRequest, f as _sfc_main$7, i as xmlTokens, n as javascriptTokens, o as copyText, r as pythonTokens, x as linkPreviews } from "./CodeBlock.js";
-import { n as _sfc_main$8 } from "./AppSplitter.js";
-import { t as _sfc_main$9 } from "./AppMenu.js";
+import { n as _sfc_main$8, r as _sfc_main$9 } from "./AppSplitter.js";
 import { t as _sfc_main$10 } from "./AppCheckbox.js";
 import { d as extractSkeys, n as browserLink, u as escapeHtml } from "./links.js";
 import { t as _sfc_main$11 } from "./AttachmentCard.js";
@@ -642,7 +641,7 @@ var _sfc_main$1 = {
 						onClick: _cache[3] || (_cache[3] = ($event) => action("redo"))
 					}, null, 8, ["disabled"]),
 					_cache[29] || (_cache[29] = createBaseVNode("span", { class: "knowledge-format-divider" }, null, -1)),
-					createVNode(_sfc_main$9, {
+					createVNode(_sfc_main$8, {
 						label: "Text style",
 						icon: "format-size",
 						overlay: "",
@@ -680,7 +679,7 @@ var _sfc_main$1 = {
 						])) : createCommentVNode("", true)], 64);
 					}), 64)),
 					_cache[30] || (_cache[30] = createBaseVNode("span", { class: "knowledge-format-divider" }, null, -1)),
-					createVNode(_sfc_main$9, {
+					createVNode(_sfc_main$8, {
 						label: "Lists",
 						icon: "list-ul",
 						overlay: "",
@@ -705,7 +704,7 @@ var _sfc_main$1 = {
 						]),
 						_: 1
 					}),
-					createVNode(_sfc_main$9, {
+					createVNode(_sfc_main$8, {
 						label: "More formatting",
 						overlay: "",
 						width: 240
@@ -881,11 +880,11 @@ var _sfc_main$1 = {
 						onClick: _cache[22] || (_cache[22] = ($event) => insertion.value.close())
 					})]),
 					failure.value ? (openBlock(), createElementBlock("p", _hoisted_5$1, toDisplayString(failure.value), 1)) : createCommentVNode("", true),
-					panel.value === "link" || panel.value === "image" ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Label")), 1), createVNode(_sfc_main$8, {
+					panel.value === "link" || panel.value === "image" ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Label")), 1), createVNode(_sfc_main$9, {
 						modelValue: label.value,
 						"onUpdate:modelValue": _cache[23] || (_cache[23] = ($event) => label.value = $event),
 						label: "Label"
-					}, null, 8, ["modelValue"])]), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Address")), 1), createVNode(_sfc_main$8, {
+					}, null, 8, ["modelValue"])]), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Address")), 1), createVNode(_sfc_main$9, {
 						modelValue: address.value,
 						"onUpdate:modelValue": _cache[24] || (_cache[24] = ($event) => address.value = $event),
 						label: "Address"
@@ -1915,7 +1914,7 @@ var _sfc_main = {
 							])]),
 							_: 2
 						}, 1032, ["label", "onClick"]),
-						canEdit.value && !row.localDraft ? (openBlock(), createBlock(_sfc_main$9, {
+						canEdit.value && !row.localDraft ? (openBlock(), createBlock(_sfc_main$8, {
 							key: 0,
 							class: "knowledge-row-menu",
 							label: "Organize page",
@@ -2021,7 +2020,7 @@ var _sfc_main = {
 					]),
 					creating.value && step.value === 0 ? (openBlock(), createElementBlock("div", _hoisted_16, [createVNode(_sfc_main$3, { name: "folder" }), createBaseVNode("span", null, [createBaseVNode("small", null, toDisplayString(unref(t)("Parent section")), 1), createTextVNode(toDisplayString(parentTitle.value), 1)])])) : createCommentVNode("", true),
 					document.value.kind === "section" || creating.value && step.value === 0 || expandedMetadata.value && !creating.value ? (openBlock(), createElementBlock("div", _hoisted_17, [
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Title")), 1), createVNode(_sfc_main$8, {
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Title")), 1), createVNode(_sfc_main$9, {
 							modelValue: document.value.title,
 							"onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => document.value.title = $event),
 							label: "Title",
@@ -2245,7 +2244,7 @@ var _sfc_main = {
 							label: "Copy search key",
 							onClick: _cache[28] || (_cache[28] = ($event) => copy(searchKey.value))
 						}),
-						shown.value.kind === "article" ? (openBlock(), createBlock(_sfc_main$9, {
+						shown.value.kind === "article" ? (openBlock(), createBlock(_sfc_main$8, {
 							key: 1,
 							ref_key: "historyDialog",
 							ref: historyDialog,

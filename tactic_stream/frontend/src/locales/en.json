@@ -1371,5 +1371,7 @@
   "Is on": "Is on",
   "Do not have": "Do not have",
   "Match (slow)": "Match (slow)",
-  "Do not match (slow)": "Do not match (slow)"
+  "Do not match (slow)": "Do not match (slow)",
+  "The schedule could not be staged.": "The schedule could not be staged.",
+  "The task changed while this editor was open. Close and reopen the schedule.": "The task changed while this editor was open. Close and reopen the schedule."
 }

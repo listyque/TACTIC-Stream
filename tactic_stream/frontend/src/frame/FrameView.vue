@@ -100,6 +100,8 @@ function style(node) {
       node.letterSpacing === undefined ? undefined : node.letterSpacing + 'px',
     textAlign: node.align,
     fontFamily: node.monospace ? 'Consolas' : undefined,
+    paddingLeft:
+      node.paddingLeft === undefined ? undefined : node.paddingLeft + 'px',
     color: color(node.color),
     opacity: node.opacity,
     textDecoration: node.strike ? 'line-through' : undefined,
@@ -430,7 +432,9 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :aria-description="node.description"
         :role="node.role"
         :aria-level="node.role === 'treeitem' ? node.level : undefined"
-        :aria-expanded="node.role === 'treeitem' ? node.expanded : undefined"
+        :aria-expanded="
+          ['treeitem', 'button'].includes(node.role) ? node.expanded : undefined
+        "
         :aria-selected="
           ['treeitem', 'option'].includes(node.role)
             ? !!node.selected
@@ -754,6 +758,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :model-value="node.text"
         :label="node.label"
         :include-time="!!node.includeTime"
+        :month-only="!!node.monthOnly"
         :allow-clear="node.allowClear !== false"
         :readonly="!!node.readOnly"
         :disabled="!node.enabled"

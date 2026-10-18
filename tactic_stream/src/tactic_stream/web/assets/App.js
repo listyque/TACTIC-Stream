@@ -1,22 +1,21 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/resize.js","assets/AppSplitter.js","assets/AppSplitter.css","assets/AppMenu.js","assets/AppMenu.css","assets/ItemPreview.js","assets/ItemPreview.css","assets/resize.css","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/DuplicateSObject.css","assets/NamingEditor.js","assets/admin.document.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/tree.ui.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/AppCheckbox.js","assets/AppCheckbox.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/FrameView.js","assets/AppSplitter.js","assets/AppSplitter.css","assets/FrameView.css","assets/resize.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/DuplicateSObject.css","assets/NamingEditor.js","assets/admin.document.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/files.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/tree.ui.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { t as __exportAll$1 } from "./rolldown-runtime.js";
 import { $ as toRaw, A as onMounted, B as useModel, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
-import { B as fontLineHeight, C as sessionRecords, D as t, E as asyncComponent, F as blend, G as readableText$1, H as layout$4, I as controls, K as textStyles, N as readableText, O as appearance, P as saveAppearance, Q as taskColumns, R as cssRoles, S as savedSessions, T as randomId, U as lineHeights, V as fontMetricHeight, W as metrics$6, X as savePreferencePage, Y as preferences, Z as normalizeColumns, _ as importSession, a as mobileLayout, d as clearLive, f as debugLog, g as formatEvent, h as forgetSessions, i as mobile, j as frameColors, m as exportSession, n as dockMinimumHeight, nt as BusyIndicator_default, o as _sfc_main$138, p as debugSettings, q as configurationPreview, r as dockMinimumWidth, rt as _plugin_vue_export_helper_default, s as tooltipDirective, t as __vitePreload, u as _sfc_main$139, v as levels, w as setServerDebugContext, z as fontFamily } from "./index.js";
-import { C as label, D as revealListOffset, E as rect$1, O as virtualRange, S as button, T as node, _ as AppSearchField_default, a as _sfc_main$146, c as _sfc_main$151, f as translate, g as _sfc_main$150, h as matchesUser$1, i as _sfc_main$147, m as _sfc_main$142, n as observeFrameSizes, o as _sfc_main$148, p as _sfc_main$149, r as _sfc_main$140, s as _sfc_main$145, t as frameContentWidth, v as _sfc_main$143, w as muted, x as _sfc_main$141, y as _sfc_main$144 } from "./resize.js";
-import { $ as workspaceLayouts, A as projectNavigation, C as messagesRequest, D as objectStatus, E as objectRelations, F as rpc, G as sessionAction, J as transactionDetails, M as requestActivity, N as resetRequestActivity, O as projectCatalog, P as resultItems, Q as widgetConfiguration, R as scriptShelf, S as messageFileRequest, T as objectDeletion, W as serverUpdates, X as userAvatar, Y as uploadFormFile, Z as userProfile, _ as endActivity, a as copyImage, at as cancelNotificationReply, c as readClipboardImages, ct as editNotificationReply, dt as notify, et as setUpdatesAvailable, f as _sfc_main$153, ft as resetNotifications, h as beginActivity, i as xmlTokens, it as beginNotificationReply, k as projectCreationCatalog, l as _sfc_main$155, lt as failNotificationReply, m as activityFeed, mt as submitNotificationReply, n as javascriptTokens, nt as updatesAvailable, o as copyText, ot as clearNotificationHistory, p as _sfc_main$154, pt as setNotificationProgress, q as tableCells, r as pythonTokens, rt as activeNotifications, st as dismissNotification, t as _sfc_main$152, tt as updateDelay, ut as notificationHistory, w as navigationLink, x as linkPreviews, y as interfaceDefinition, z as searchConfiguration } from "./CodeBlock.js";
-import { a as unsupportedField, i as fieldKind, n as _sfc_main$156, r as format$1, t as RecordForm_default } from "./RecordForm.js";
-import { n as _sfc_main$157, t as _sfc_main$158 } from "./AppSplitter.js";
-import { t as _sfc_main$159 } from "./AppMenu.js";
-import { t as _sfc_main$160 } from "./AppCheckbox.js";
-import { t as ItemPreview_default } from "./ItemPreview.js";
+import { B as fontLineHeight, C as sessionRecords, D as t, E as asyncComponent, F as blend, G as readableText$1, H as layout$5, I as controls, K as textStyles, N as readableText, O as appearance, P as saveAppearance, Q as taskColumns, R as cssRoles, S as savedSessions, T as randomId, U as lineHeights, V as fontMetricHeight, W as metrics$6, X as savePreferencePage, Y as preferences, Z as normalizeColumns, _ as importSession, a as mobileLayout, d as clearLive, f as debugLog, g as formatEvent, h as forgetSessions, i as mobile, j as frameColors, m as exportSession, n as dockMinimumHeight, nt as BusyIndicator_default, o as _sfc_main$141, p as debugSettings, q as configurationPreview, r as dockMinimumWidth, rt as _plugin_vue_export_helper_default, s as tooltipDirective, t as __vitePreload, u as _sfc_main$142, v as levels, w as setServerDebugContext, z as fontFamily } from "./index.js";
+import { C as button, D as rect$1, E as node, O as revealListOffset, S as _sfc_main$144, T as muted, _ as _sfc_main$146, a as _sfc_main$148, b as parse$1, d as _sfc_main$152, f as _sfc_main$145, g as AppSearchField_default, h as ItemPreview_default, i as _sfc_main$151, k as virtualRange, m as _sfc_main$153, n as _sfc_main$150, o as _sfc_main$154, p as matchesUser$1, r as _sfc_main$149, t as _sfc_main$143, u as translate, v as _sfc_main$147, w as label, y as monthLabel } from "./FrameView.js";
+import { $ as workspaceLayouts, A as projectNavigation, C as messagesRequest, D as objectStatus, E as objectRelations, F as rpc, G as sessionAction, J as transactionDetails, M as requestActivity, N as resetRequestActivity, O as projectCatalog, P as resultItems, Q as widgetConfiguration, R as scriptShelf, S as messageFileRequest, T as objectDeletion, W as serverUpdates, X as userAvatar, Y as uploadFormFile, Z as userProfile, _ as endActivity, a as copyImage, at as cancelNotificationReply, c as readClipboardImages, ct as editNotificationReply, dt as notify, et as setUpdatesAvailable, f as _sfc_main$156, ft as resetNotifications, h as beginActivity, i as xmlTokens, it as beginNotificationReply, k as projectCreationCatalog, l as _sfc_main$158, lt as failNotificationReply, m as activityFeed, mt as submitNotificationReply, n as javascriptTokens, nt as updatesAvailable, o as copyText, ot as clearNotificationHistory, p as _sfc_main$157, pt as setNotificationProgress, q as tableCells, r as pythonTokens, rt as activeNotifications, st as dismissNotification, t as _sfc_main$155, tt as updateDelay, ut as notificationHistory, w as navigationLink, x as linkPreviews, y as interfaceDefinition, z as searchConfiguration } from "./CodeBlock.js";
+import { a as unsupportedField, i as fieldKind, n as _sfc_main$159, r as format$1, t as RecordForm_default } from "./RecordForm.js";
+import { n as _sfc_main$160, r as _sfc_main$161, t as _sfc_main$162 } from "./AppSplitter.js";
+import { t as _sfc_main$163 } from "./AppCheckbox.js";
+import { n as observeFrameSizes, t as frameContentWidth } from "./resize.js";
 import { n as sections$1, t as captionHeight } from "./sections.ui.js";
 import { a as sameSearchKey, c as workspaceAddress, d as extractSkeys, f as linkifyPlainText, i as projectPath, l as activateRichLink, n as browserLink, o as savedSearchLink, p as withoutSkeys, r as linkProject, s as searchLink, t as addressProject, u as escapeHtml$1 } from "./links.js";
 import { a as dateKey, d as matchesSearch, g as uniqueRecords, h as timestampLabel, m as timestampFullLabel, n as qtLabelTextWidth, o as dateLabel, s as dayLabel, t as layoutTextWidth, u as feedFilters } from "./textMetrics.js";
-import { i as usePagination, n as fileBlob, r as _sfc_main$162, t as _sfc_main$161 } from "./ObjectReport.js";
-import { t as _sfc_main$163 } from "./AttachmentCard.js";
+import { i as usePagination, n as fileBlob, r as _sfc_main$165, t as _sfc_main$164 } from "./ObjectReport.js";
+import { t as _sfc_main$166 } from "./AttachmentCard.js";
 import { a as repositories, i as prettySize, n as droppedFiles, o as sourcePath, r as prepareFiles, t as descriptors } from "./files.js";
 import { n as FilePreviewContent_default, r as downloadBlob, t as FilePreview_default } from "./FilePreview.js";
-import { t as _sfc_main$164 } from "./AppMenuItem.js";
+import { t as _sfc_main$167 } from "./AppMenuItem.js";
 import { n as navigationRow, t as navigate } from "./tree.ui.js";
 //#region ../src/tactic_stream/shared_ui/shell/main_toolbar.ui.mjs
 var dimensions$4 = {
@@ -25,10 +24,10 @@ var dimensions$4 = {
 	projectPreviewExtent: 28,
 	projectPreviewRadius: 6
 };
-function describe$30(model) {
+function describe$31(model) {
 	const width = Math.max(0, model.width);
 	const compact = !!model.compact;
-	const height = layout$4.appBarHeight;
+	const height = layout$5.appBarHeight;
 	const extent = dimensions$4.controlExtent;
 	const gap = 2;
 	const left = compact ? 4 : 8;
@@ -108,9 +107,9 @@ function positions$1(scene) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/shell/workspace.ui.mjs
-function describe$29(width, height, compact = false) {
-	const toolbar = Math.min(height, layout$4.appBarHeight);
-	const rail = compact ? 0 : Math.min(width, layout$4.sectionRailWidth);
+function describe$30(width, height, compact = false) {
+	const toolbar = Math.min(height, layout$5.appBarHeight);
+	const rail = compact ? 0 : Math.min(width, layout$5.sectionRailWidth);
 	const body = Math.max(0, height - toolbar);
 	return {
 		width,
@@ -290,7 +289,7 @@ function keyValues(entries, width, height, language) {
 }
 //#endregion
 //#region src/features/interface/TaskCards.vue
-var _sfc_main$137 = {
+var _sfc_main$140 = {
 	__name: "TaskCards",
 	props: {
 		tasks: Array,
@@ -328,7 +327,7 @@ var _sfc_main$137 = {
 					class: normalizeClass(["task-card", { pending: task.pending }]),
 					style: normalizeStyle({ "--task-accent": task.statusColor || task.processColor || "var(--primary)" })
 				}, [
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						class: "task-card-heading",
 						label: "Task Inspector",
 						icon: task.processType === "progress" ? "MDI_CHART_DONUT" : void 0,
@@ -337,7 +336,7 @@ var _sfc_main$137 = {
 						default: withCtx(() => [createTextVNode(toDisplayString(task.processLabel || task.process || task.context), 1)]),
 						_: 2
 					}, 1032, ["icon", "onClick"]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						class: "task-card-status",
 						label: "Edit task status",
 						disabled: !__props.editable || task.processType === "progress",
@@ -346,7 +345,7 @@ var _sfc_main$137 = {
 						default: withCtx(() => [_cache[0] || (_cache[0] = createBaseVNode("i", { "aria-hidden": "true" }, null, -1)), createBaseVNode("span", null, toDisplayString(task.status || unref(t)("Select status")), 1)]),
 						_: 2
 					}, 1032, ["disabled", "onClick"]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						class: "task-card-assignee",
 						label: "Edit task assignee",
 						disabled: !__props.editable || task.processType === "progress",
@@ -368,7 +367,7 @@ var _sfc_main$137 = {
 						]), createBaseVNode("span", null, toDisplayString(assigneeLabel(task, unref(appearance).language)), 1)]),
 						_: 2
 					}, 1032, ["disabled", "onClick"]),
-					layout.value.dates ? (openBlock(), createBlock(_sfc_main$138, {
+					layout.value.dates ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 0,
 						class: "task-card-dates",
 						label: "Edit task dates",
@@ -386,8 +385,8 @@ var _sfc_main$137 = {
 };
 //#endregion
 //#region src/features/interface/TaskCell.vue
-var _hoisted_1$94 = ["aria-label"];
-var _sfc_main$136 = {
+var _hoisted_1$96 = ["aria-label"];
+var _sfc_main$139 = {
 	__name: "TaskCell",
 	props: {
 		cell: Object,
@@ -556,7 +555,7 @@ var _sfc_main$136 = {
 				onPointerenter: enter,
 				onPointermove: moved,
 				onPointerleave: leave
-			}, [createVNode(_sfc_main$137, {
+			}, [createVNode(_sfc_main$140, {
 				tasks: tasks.value.slice(0, count.value),
 				height: __props.height,
 				editable: __props.editable,
@@ -568,7 +567,7 @@ var _sfc_main$136 = {
 				"height",
 				"editable",
 				"class"
-			]), overflow.value ? (openBlock(), createBlock(_sfc_main$138, {
+			]), overflow.value ? (openBlock(), createBlock(_sfc_main$141, {
 				key: 0,
 				ref_key: "menu",
 				ref: menu,
@@ -591,7 +590,7 @@ var _sfc_main$136 = {
 				onPointerleave: popupLeave,
 				onPointerdown: activate,
 				onFocusin: activate
-			}, [createVNode(_sfc_main$137, {
+			}, [createVNode(_sfc_main$140, {
 				tasks: tasks.value,
 				height: __props.height || 58,
 				editable: __props.editable,
@@ -601,7 +600,7 @@ var _sfc_main$136 = {
 				"tasks",
 				"height",
 				"editable"
-			])], 40, _hoisted_1$94)]))], 64);
+			])], 40, _hoisted_1$96)]))], 64);
 		};
 	}
 };
@@ -633,12 +632,12 @@ var TaskSummaryCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				ref_key: "host",
 				ref: host,
 				class: "table-task-summary"
-			}, [__props.cell?.summaryMode === "minimal" ? (openBlock(), createBlock(_sfc_main$140, {
+			}, [__props.cell?.summaryMode === "minimal" ? (openBlock(), createBlock(_sfc_main$143, {
 				key: 0,
 				scene: scene.value,
 				style: normalizeStyle({ height: __props.height + "px" }),
 				onEvent: _cache[0] || (_cache[0] = ($event) => emit("inspect", __props.cell.tasks[$event.index]))
-			}, null, 8, ["scene", "style"])) : (openBlock(), createBlock(_sfc_main$136, {
+			}, null, 8, ["scene", "style"])) : (openBlock(), createBlock(_sfc_main$139, {
 				key: 1,
 				cell: __props.cell,
 				height: __props.height,
@@ -675,7 +674,7 @@ var ValueFieldsCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				ref_key: "host",
 				ref: host,
 				class: "table-value-fields"
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				style: normalizeStyle({ height: __props.height + "px" })
 			}, null, 8, ["scene", "style"])], 512);
@@ -684,7 +683,7 @@ var ValueFieldsCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 }, [["__scopeId", "data-v-e1aebbf0"]]);
 //#endregion
 //#region src/features/interface/CompletionCell.vue
-var _hoisted_1$93 = [
+var _hoisted_1$95 = [
 	"aria-label",
 	"aria-valuenow",
 	"aria-valuetext"
@@ -711,7 +710,7 @@ var CompletionCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}, [createBaseVNode("span", {
 				class: "table-completion-fill",
 				style: normalizeStyle({ width: percent.value + "%" })
-			}, null, 4), createBaseVNode("span", _hoisted_2$70, toDisplayString(__props.text || percent.value.toFixed(1) + "%"), 1)], 8, _hoisted_1$93);
+			}, null, 4), createBaseVNode("span", _hoisted_2$70, toDisplayString(__props.text || percent.value.toFixed(1) + "%"), 1)], 8, _hoisted_1$95);
 		};
 	}
 }, [["__scopeId", "data-v-9cb6efea"]]);
@@ -760,20 +759,20 @@ var GroupedCompletionCell_default = /*#__PURE__*/ _plugin_vue_export_helper_defa
 }, [["__scopeId", "data-v-7adb7e90"]]);
 //#endregion
 //#region src/features/interface/StructuredCell.vue
-var _hoisted_1$92 = {
+var _hoisted_1$94 = {
 	key: 0,
 	role: "status",
 	class: "error-text"
 };
 //#endregion
 //#region src/features/interface/TableCell.vue
-var _sfc_main$130 = {
+var _sfc_main$133 = {
 	components: {
-		AppCheckbox: _sfc_main$160,
-		AppIcon: _sfc_main$139,
-		AppButton: _sfc_main$138,
+		AppCheckbox: _sfc_main$163,
+		AppIcon: _sfc_main$142,
+		AppButton: _sfc_main$141,
 		ItemPreview: ItemPreview_default,
-		TaskCell: _sfc_main$136,
+		TaskCell: _sfc_main$139,
 		TaskSummaryCell: TaskSummaryCell_default,
 		ValueFieldsCell: ValueFieldsCell_default,
 		CompletionCell: CompletionCell_default,
@@ -789,7 +788,7 @@ var _sfc_main$130 = {
 					return openBlock(), createElementBlock("div", {
 						class: "table-structured",
 						style: normalizeStyle({ maxHeight: (__props.height || (__props.cell?.language === "xml" ? 600 : 300)) + "px" })
-					}, [__props.cell?.diagnostic ? (openBlock(), createElementBlock("span", _hoisted_1$92, toDisplayString(unref(t)("XML Parse Error")) + ": " + toDisplayString(__props.cell.diagnostic), 1)) : createCommentVNode("", true), createVNode(_sfc_main$152, {
+					}, [__props.cell?.diagnostic ? (openBlock(), createElementBlock("span", _hoisted_1$94, toDisplayString(unref(t)("XML Parse Error")) + ": " + toDisplayString(__props.cell.diagnostic), 1)) : createCommentVNode("", true), createVNode(_sfc_main$155, {
 						code: __props.cell?.text || "",
 						language: "text"
 					}, null, 8, ["code"])], 4);
@@ -863,7 +862,7 @@ var _sfc_main$130 = {
 	},
 	methods: { t }
 };
-var _hoisted_1$91 = {
+var _hoisted_1$93 = {
 	key: 0,
 	class: "table-cell-text muted"
 };
@@ -881,8 +880,8 @@ var _hoisted_6$32 = { class: "visually-hidden" };
 var _hoisted_7$32 = ["aria-label", "title"];
 var _hoisted_8$28 = ["aria-label", "title"];
 var _hoisted_9$24 = ["aria-label", "title"];
-var _hoisted_10$24 = ["href", "target"];
-var _hoisted_11$20 = ["title"];
+var _hoisted_10$23 = ["href", "target"];
+var _hoisted_11$19 = ["title"];
 function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_TaskCell = resolveComponent("TaskCell");
@@ -894,7 +893,7 @@ function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_ItemPreview = resolveComponent("ItemPreview");
 	const _component_AppCheckbox = resolveComponent("AppCheckbox");
 	const _component_AppIcon = resolveComponent("AppIcon");
-	return !$props.element.supported ? (openBlock(), createElementBlock("span", _hoisted_1$91, toDisplayString($options.t("Widget unavailable")), 1)) : $props.cell?.error ? (openBlock(), createElementBlock("span", {
+	return !$props.element.supported ? (openBlock(), createElementBlock("span", _hoisted_1$93, toDisplayString($options.t("Widget unavailable")), 1)) : $props.cell?.error ? (openBlock(), createElementBlock("span", {
 		key: 1,
 		class: "table-cell-text error-text",
 		title: $props.cell.error,
@@ -1068,20 +1067,20 @@ function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 		href: $options.href,
 		target: $options.href.startsWith("/") ? void 0 : "_blank",
 		rel: "noopener noreferrer"
-	}, toDisplayString($options.value), 9, _hoisted_10$24)) : (openBlock(), createElementBlock("span", {
+	}, toDisplayString($options.value), 9, _hoisted_10$23)) : (openBlock(), createElementBlock("span", {
 		key: 19,
 		class: "table-cell-text",
 		title: $options.tooltip,
 		style: normalizeStyle({ color: $options.foreground })
-	}, toDisplayString($options.text), 13, _hoisted_11$20));
+	}, toDisplayString($options.text), 13, _hoisted_11$19));
 }
-var TableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$130, [["render", _sfc_render$22]]);
+var TableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$133, [["render", _sfc_render$22]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/menus/action.ui.mjs
 function height(record, extent) {
 	return record.separator ? 5 : record.header ? 28 : record.status ? 48 : extent;
 }
-function row$9(record, width, options) {
+function row$10(record, width, options) {
 	const h = height(record, options.extent), nodes = [];
 	if (record.separator) return {
 		width,
@@ -1187,8 +1186,8 @@ function row$9(record, width, options) {
 }
 //#endregion
 //#region src/controls/ActionRow.vue
-var _hoisted_1$90 = ["data-menu-command"];
-var _sfc_main$129 = {
+var _hoisted_1$92 = ["data-menu-command"];
+var _sfc_main$132 = {
 	__name: "ActionRow",
 	props: {
 		record: {
@@ -1202,7 +1201,7 @@ var _sfc_main$129 = {
 		const props = __props;
 		const root = ref(null), width = ref(230), hovered = ref(false), pressed = ref(false), focused = ref(false), badgeTextWidth = ref(0);
 		const title = computed(() => props.record.translate === false ? props.record.title : t(props.record.title || "", props.record.titleArgs));
-		const scene = computed(() => row$9({
+		const scene = computed(() => row$10({
 			...props.record,
 			title: title.value,
 			status: props.record.statusTranslate === false ? props.record.status : t(props.record.status || "")
@@ -1242,10 +1241,10 @@ var _sfc_main$129 = {
 				class: "action-row",
 				"data-menu-command": __props.record.command,
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				interactive: false
-			}, null, 8, ["scene"]), !__props.record.separator && !__props.record.header ? (openBlock(), createBlock(_sfc_main$138, {
+			}, null, 8, ["scene"]), !__props.record.separator && !__props.record.header ? (openBlock(), createBlock(_sfc_main$141, {
 				key: 0,
 				class: "action-row-hit frame-hit-target",
 				label: title.value,
@@ -1278,14 +1277,14 @@ var _sfc_main$129 = {
 				"disabled",
 				"role",
 				"aria-checked"
-			])) : createCommentVNode("", true)], 12, _hoisted_1$90);
+			])) : createCommentVNode("", true)], 12, _hoisted_1$92);
 		};
 	}
 };
 //#endregion
 //#region src/controls/ActionRows.vue
-var _hoisted_1$89 = { class: "action-rows" };
-var _sfc_main$128 = {
+var _hoisted_1$91 = { class: "action-rows" };
+var _sfc_main$131 = {
 	__name: "ActionRows",
 	props: { actions: {
 		type: Array,
@@ -1295,8 +1294,8 @@ var _sfc_main$128 = {
 	setup(__props) {
 		const hovered = ref(null);
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$89, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.actions, (record, index) => {
-				return openBlock(), createBlock(_sfc_main$129, {
+			return openBlock(), createElementBlock("div", _hoisted_1$91, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.actions, (record, index) => {
+				return openBlock(), createBlock(_sfc_main$132, {
 					key: record.command || index,
 					record,
 					"suppress-focus": hovered.value !== null,
@@ -1434,7 +1433,7 @@ var paint = {
 	selected: "contentSelection",
 	group: "surfaceContainerHigh"
 };
-function describe$28(model, width) {
+function describe$29(model, width) {
 	const available = Math.max(0, width - metrics$4.selection - metrics$4.actions);
 	const columns = visibleColumns(model.columns || [], available, model.overrides);
 	const fitted = model.autoFit ? fittedWidths(columns, available, model.overrides) : {};
@@ -1601,7 +1600,7 @@ function viewActions$1(views, enabled, language) {
 }
 //#endregion
 //#region src/features/interface/TableView.vue
-var _hoisted_1$88 = [
+var _hoisted_1$90 = [
 	"aria-label",
 	"aria-rowcount",
 	"aria-colcount"
@@ -1641,14 +1640,14 @@ var _hoisted_8$27 = {
 	role: "gridcell"
 };
 var _hoisted_9$23 = { class: "visually-hidden" };
-var _hoisted_10$23 = ["onDblclick"];
-var _hoisted_11$19 = {
+var _hoisted_10$22 = ["onDblclick"];
+var _hoisted_11$18 = {
 	class: "handler-table-actions",
 	role: "gridcell"
 };
-var _hoisted_12$18 = ["aria-label"];
-var _hoisted_13$16 = ["aria-label", "placeholder"];
-var _sfc_main$127 = {
+var _hoisted_12$17 = ["aria-label"];
+var _hoisted_13$15 = ["aria-label", "placeholder"];
+var _sfc_main$130 = {
 	__name: "TableView",
 	props: {
 		columns: Array,
@@ -1695,7 +1694,7 @@ var _sfc_main$127 = {
 		let observer, frame;
 		const preferences = computed(() => props.state?.table || {});
 		const autoFit = computed(() => !!preferences.value.autoFit);
-		const layout = computed(() => describe$28({
+		const layout = computed(() => describe$29({
 			columns: props.columns,
 			overrides: overrides.value,
 			autoFit: autoFit.value,
@@ -1995,7 +1994,7 @@ var _sfc_main$127 = {
 					role: "row",
 					style: normalizeStyle({ width: tableWidth.value + "px" })
 				}, [
-					createBaseVNode("div", _hoisted_2$68, [__props.selectable ? (openBlock(), createBlock(_sfc_main$160, {
+					createBaseVNode("div", _hoisted_2$68, [__props.selectable ? (openBlock(), createBlock(_sfc_main$163, {
 						key: 0,
 						label: "Select all rows",
 						"model-value": !!allSelected.value,
@@ -2023,7 +2022,7 @@ var _sfc_main$127 = {
 							onKeydown: ($event) => moveKey(column, $event)
 						}, [
 							createBaseVNode("span", null, toDisplayString(column.title), 1),
-							__props.groupMode === "column:" + column.name ? (openBlock(), createBlock(_sfc_main$139, {
+							__props.groupMode === "column:" + column.name ? (openBlock(), createBlock(_sfc_main$142, {
 								key: 0,
 								name: "group-items",
 								class: "table-group-indicator"
@@ -2043,7 +2042,7 @@ var _sfc_main$127 = {
 					}), 128)),
 					createBaseVNode("div", _hoisted_6$31, [
 						__props.busy ? (openBlock(), createBlock(BusyIndicator_default, { key: 0 })) : createCommentVNode("", true),
-						withDirectives(createVNode(_sfc_main$138, {
+						withDirectives(createVNode(_sfc_main$141, {
 							label: "Auto Fit columns",
 							icon: "fit-width",
 							"icon-only": "",
@@ -2051,14 +2050,14 @@ var _sfc_main$127 = {
 							highlighted: autoFit.value,
 							onClick: _cache[1] || (_cache[1] = ($event) => preference({ autoFit: !autoFit.value }))
 						}, null, 8, ["aria-pressed", "highlighted"]), [[vShow, !__props.busy]]),
-						withDirectives(createVNode(_sfc_main$159, {
+						withDirectives(createVNode(_sfc_main$160, {
 							label: "Table views and columns",
 							icon: "view-column",
 							overlay: "",
 							width: 280,
 							disabled: __props.busy
 						}, {
-							default: withCtx(() => [createVNode(_sfc_main$128, {
+							default: withCtx(() => [createVNode(_sfc_main$131, {
 								actions: viewActions.value,
 								onTriggered: viewCommand
 							}, null, 8, ["actions"])]),
@@ -2088,7 +2087,7 @@ var _sfc_main$127 = {
 						onClick: ($event) => entry.record && choose(entry.record, $event),
 						onDblclick: ($event) => entry.record && !$event.target.closest("button,input,select,textarea,a") && emit("inspect", entry.record),
 						onContextmenu: ($event) => entry.record && (choose(entry.record, $event), emit("operate", entry.record, $event))
-					}, [entry.group ? (openBlock(), createBlock(_sfc_main$138, {
+					}, [entry.group ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 0,
 						class: "handler-table-group",
 						icon: __props.closedGroups?.[entry.group.key] ? "MDI_CHEVRON_RIGHT" : "MDI_CHEVRON_DOWN",
@@ -2102,7 +2101,7 @@ var _sfc_main$127 = {
 						"aria-expanded",
 						"onClick"
 					])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-						createBaseVNode("div", _hoisted_8$27, [__props.selectable ? (openBlock(), createBlock(_sfc_main$160, {
+						createBaseVNode("div", _hoisted_8$27, [__props.selectable ? (openBlock(), createBlock(_sfc_main$163, {
 							key: 0,
 							label: unref(t)("Select record: {name}", { name: entry.record.name || entry.record.title || entry.record.code || entry.record.id }),
 							"translate-label": false,
@@ -2133,9 +2132,9 @@ var _sfc_main$127 = {
 								},
 								index,
 								height: rowHeight.value
-							})], 42, _hoisted_10$23);
+							})], 42, _hoisted_10$22);
 						}), 128)),
-						createBaseVNode("div", _hoisted_11$19, [!__props.readOnly ? (openBlock(), createBlock(_sfc_main$138, {
+						createBaseVNode("div", _hoisted_11$18, [!__props.readOnly ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							label: "Object actions",
 							icon: "more",
@@ -2143,8 +2142,8 @@ var _sfc_main$127 = {
 							onClick: ($event) => emit("operate", entry.record, $event)
 						}, null, 8, ["onClick"])) : createCommentVNode("", true)])
 					], 64))], 46, _hoisted_7$31);
-				}), 128))], 4)], 46, _hoisted_1$88),
-				createVNode(_sfc_main$159, {
+				}), 128))], 4)], 46, _hoisted_1$90),
+				createVNode(_sfc_main$160, {
 					ref_key: "contextMenu",
 					ref: contextMenu,
 					class: "table-column-menu",
@@ -2152,7 +2151,7 @@ var _sfc_main$127 = {
 					overlay: "",
 					width: 280
 				}, {
-					default: withCtx(() => [createVNode(_sfc_main$128, {
+					default: withCtx(() => [createVNode(_sfc_main$131, {
 						actions: columnActions$1.value,
 						onTriggered: columnCommand
 					}, null, 8, ["actions"])]),
@@ -2165,7 +2164,7 @@ var _sfc_main$127 = {
 					"aria-label": unref(t)("Save table view"),
 					onCancel: _cache[6] || (_cache[6] = withModifiers(($event) => savingView.value = false, ["prevent"])),
 					onClose: _cache[7] || (_cache[7] = ($event) => savingView.value = false)
-				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Save table view")), 1), createVNode(_sfc_main$138, {
+				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Save table view")), 1), createVNode(_sfc_main$141, {
 					label: "Close",
 					icon: "close",
 					"icon-only": "",
@@ -2179,15 +2178,15 @@ var _sfc_main$127 = {
 					"aria-label": unref(t)("View name"),
 					placeholder: unref(t)("View name"),
 					required: ""
-				}, null, 8, _hoisted_13$16), [[vModelText, viewName.value]]), createBaseVNode("footer", null, [createVNode(_sfc_main$138, {
+				}, null, 8, _hoisted_13$15), [[vModelText, viewName.value]]), createBaseVNode("footer", null, [createVNode(_sfc_main$141, {
 					label: "Save",
 					highlighted: "",
 					type: "submit",
 					disabled: !viewName.value.trim() || __props.busy
-				}, null, 8, ["disabled"]), createVNode(_sfc_main$138, {
+				}, null, 8, ["disabled"]), createVNode(_sfc_main$141, {
 					label: "Cancel",
 					onClick: _cache[4] || (_cache[4] = ($event) => savingView.value = false)
-				})])], 32)], 40, _hoisted_12$18)), [[_directive_window, { type: "dialog" }]])
+				})])], 32)], 40, _hoisted_12$17)), [[_directive_window, { type: "dialog" }]])
 			], 64);
 		};
 	}
@@ -2397,10 +2396,10 @@ function applyDuplicateProfile(analysis, profile) {
 var desktopReason = "Watch Folders require a desktop connection, which is not enabled in this web version.";
 //#endregion
 //#region src/features/objects/ObjectOperations.vue
-var _sfc_main$126 = {
+var _sfc_main$129 = {
 	components: {
-		AppButton: _sfc_main$138,
-		AppMenu: _sfc_main$159,
+		AppButton: _sfc_main$141,
+		AppMenu: _sfc_main$160,
 		FilePreview: FilePreview_default
 	},
 	inject: {
@@ -2609,7 +2608,7 @@ var _sfc_main$126 = {
 				if (!this.duplicateComponent) this.duplicateComponent = markRaw((await __vitePreload(async () => {
 					const { default: __vite_default__ } = await import("./DuplicateSObject.js");
 					return { default: __vite_default__ };
-				}, __vite__mapDeps([13,14,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,23,24,25,26]))).default);
+				}, __vite__mapDeps([13,14,1,2,3,4,5,15,6,7,16,17,10,11,18,19,20,21,22,23]))).default);
 				await nextTick();
 				if (request === this.request) await this.$refs.duplicate.open(record, quick);
 			} catch (error) {
@@ -2660,7 +2659,7 @@ var _sfc_main$126 = {
 		}
 	}
 };
-var _hoisted_1$87 = { key: 2 };
+var _hoisted_1$89 = { key: 2 };
 function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_AppMenu = resolveComponent("AppMenu");
@@ -2765,7 +2764,7 @@ function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
 					icon: "save",
 					onClick: _cache[8] || (_cache[8] = ($event) => $options.checkin())
 				})) : createCommentVNode("", true),
-				$options.canCheckin ? (openBlock(), createElementBlock("hr", _hoisted_1$87)) : createCommentVNode("", true),
+				$options.canCheckin ? (openBlock(), createElementBlock("hr", _hoisted_1$89)) : createCommentVNode("", true),
 				$options.kind === "object" && $data.advanced && $props.operations?.create ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [
 					createVNode(_component_AppButton, {
 						label: "Duplicate…",
@@ -2938,10 +2937,10 @@ function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
 		])
 	], 64);
 }
-var ObjectOperations_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$126, [["render", _sfc_render$21]]);
+var ObjectOperations_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$129, [["render", _sfc_render$21]]);
 //#endregion
 //#region src/controls/display/ContentLoadingOverlay.vue
-var _sfc_main$125 = {
+var _sfc_main$128 = {
 	__name: "ContentLoadingOverlay",
 	props: {
 		message: {
@@ -2963,7 +2962,7 @@ var _sfc_main$125 = {
 			}, [createBaseVNode("div", null, [
 				createVNode(BusyIndicator_default, { running: "" }),
 				createBaseVNode("strong", null, toDisplayString(unref(t)(__props.message)), 1),
-				__props.cancellable ? (openBlock(), createBlock(_sfc_main$138, {
+				__props.cancellable ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					label: "Cancel",
 					disabled: __props.disabled,
@@ -2975,7 +2974,7 @@ var _sfc_main$125 = {
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/lists/collection.mjs
-function layout$3(items, width, options = {}) {
+function layout$4(items, width, options = {}) {
 	const columns = Math.max(1, Math.floor((width + (options.columnGap || 0)) / ((options.cellWidth || width || 1) + (options.columnGap || 0)))), cellWidth = options.cellWidth ? Math.min(width, options.cellWidth) : width, rows = [], rowByKey = Object.create(null);
 	let top = 0;
 	for (let index = 0; index < items.length; index += columns) {
@@ -3014,13 +3013,13 @@ function range(rows, top, height, overscan = 240) {
 }
 //#endregion
 //#region src/controls/lists/VirtualCollection.vue
-var _hoisted_1$86 = ["data-collection-total"];
+var _hoisted_1$88 = ["data-collection-total"];
 var _hoisted_2$67 = [
 	"aria-setsize",
 	"aria-posinset",
 	"data-collection-key"
 ];
-var _sfc_main$124 = {
+var _sfc_main$127 = {
 	__name: "VirtualCollection",
 	props: {
 		items: Array,
@@ -3037,7 +3036,7 @@ var _sfc_main$124 = {
 	setup(__props) {
 		const props = __props;
 		const host = ref(null), width = ref(1), top = ref(0), height = ref(600), focused = ref(""), measurements = ref(/* @__PURE__ */ new Map());
-		const geometry = computed(() => layout$3(props.items.map((item) => ({
+		const geometry = computed(() => layout$4(props.items.map((item) => ({
 			...item,
 			height: measurements.value.get(item.key) || item.height
 		})), width.value, props));
@@ -3174,7 +3173,7 @@ var _sfc_main$124 = {
 					item: entry.data,
 					index: entry.index
 				})], 12, _hoisted_2$67);
-			}), 128))], 44, _hoisted_1$86);
+			}), 128))], 44, _hoisted_1$88);
 		};
 	}
 };
@@ -3262,7 +3261,7 @@ function dependency(record, width) {
 		]
 	};
 }
-function describe$27(model, width, height, language) {
+function describe$28(model, width, height, language) {
 	const tr = (text) => translate(text, language), margin = 16, w = Math.max(0, width - 32), groups = model.groups || [];
 	const selected = groups.reduce((sum, row) => sum + (row.checked ? row.count : 0), 0), total = groups.reduce((sum, row) => sum + row.count, 0);
 	const targets = model.targets || [], targetHeight = Math.min(132, Math.max(56, targets.length * 30 + 20));
@@ -3407,8 +3406,8 @@ function target(record, width) {
 }
 //#endregion
 //#region src/features/objects/ObjectDependencyList.vue
-var _hoisted_1$85 = { class: "object-dependencies-list" };
-var _sfc_main$123 = {
+var _hoisted_1$87 = { class: "object-dependencies-list" };
+var _sfc_main$126 = {
 	__name: "ObjectDependencyList",
 	props: {
 		models: Object,
@@ -3422,8 +3421,8 @@ var _sfc_main$123 = {
 			height: dependencyHeight(row)
 		})));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$85, [createVNode(_sfc_main$124, { items: items.value }, {
-				default: withCtx(({ item }) => [createVNode(_sfc_main$140, {
+			return openBlock(), createElementBlock("div", _hoisted_1$87, [createVNode(_sfc_main$127, { items: items.value }, {
+				default: withCtx(({ item }) => [createVNode(_sfc_main$143, {
 					scene: dependency(item, __props.frameNode.width),
 					style: normalizeStyle({ height: dependencyHeight(item) + "px" })
 				}, null, 8, ["scene", "style"])]),
@@ -3434,9 +3433,9 @@ var _sfc_main$123 = {
 };
 //#endregion
 //#region src/features/objects/ObjectAction.vue
-var _sfc_main$121 = {
+var _sfc_main$124 = {
 	components: {
-		AppButton: _sfc_main$138,
+		AppButton: _sfc_main$141,
 		ObjectDeleteSurface: {
 			__name: "ObjectDeleteSurface",
 			props: { model: Object },
@@ -3450,12 +3449,12 @@ var _sfc_main$121 = {
 				});
 				const models$1 = computed(() => models(props.model, appearance.language));
 				const views = computed(() => ({ dependencies: {
-					component: _sfc_main$123,
+					component: _sfc_main$126,
 					nodeProps: true,
 					props: { models: models$1.value }
 				} }));
 				let observer;
-				const scene = computed(() => describe$27(props.model, size.value.width, size.value.height, appearance.language));
+				const scene = computed(() => describe$28(props.model, size.value.width, size.value.height, appearance.language));
 				onMounted(() => {
 					const measure = () => {
 						size.value = {
@@ -3473,7 +3472,7 @@ var _sfc_main$121 = {
 						ref_key: "host",
 						ref: host,
 						class: "object-delete-surface"
-					}, [createVNode(_sfc_main$140, {
+					}, [createVNode(_sfc_main$143, {
 						scene: scene.value,
 						models: models$1.value,
 						views: views.value,
@@ -3484,7 +3483,7 @@ var _sfc_main$121 = {
 						"models",
 						"views",
 						"describe-row"
-					]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$125, {
+					]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$128, {
 						key: 0,
 						message: scene.value.loading.message,
 						cancellable: scene.value.loading.cancellable,
@@ -3687,7 +3686,7 @@ var _sfc_main$121 = {
 		}
 	}
 };
-var _hoisted_1$84 = ["aria-label"];
+var _hoisted_1$86 = ["aria-label"];
 var _hoisted_2$66 = { key: 1 };
 var _hoisted_3$54 = {
 	key: 2,
@@ -3738,12 +3737,12 @@ function _sfc_render$20(_ctx, _cache, $props, $setup, $data, $options) {
 			disabled: $data.loading || $data.saving || $data.uncertain,
 			onClick: _cache[1] || (_cache[1] = (...args) => $options.apply && $options.apply(...args))
 		}, toDisplayString($options.t($data.saving ? "Applying…" : $options.title)), 11, _hoisted_7$30)])) : createCommentVNode("", true)
-	], 42, _hoisted_1$84)), [[_directive_window, {
+	], 42, _hoisted_1$86)), [[_directive_window, {
 		kind: $data.operation === "delete" ? "delete_sobject" : "",
 		type: "dialog"
 	}]]);
 }
-var ObjectAction_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$121, [["render", _sfc_render$20]]);
+var ObjectAction_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$124, [["render", _sfc_render$20]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/inline.ui.mjs
 function explicitSave(mode) {
@@ -3755,7 +3754,7 @@ function explicitSave(mode) {
 		"multi"
 	].indexOf(mode) >= 0;
 }
-function describe$26(model, width, language) {
+function describe$27(model, width, language) {
 	const tr = (text) => translate(text, language);
 	const enabled = !model.busy && !model.uncertain;
 	const mode = model.mode || "text", nodes = [];
@@ -3853,8 +3852,8 @@ function savesOnChange(mode) {
 }
 //#endregion
 //#region src/features/interface/TableInlineEditor.vue
-var _hoisted_1$83 = ["aria-label", "onKeydown"];
-var _sfc_main$120 = {
+var _hoisted_1$85 = ["aria-label", "onKeydown"];
+var _sfc_main$123 = {
 	__name: "TableInlineEditor",
 	props: {
 		editor: Object,
@@ -3882,7 +3881,7 @@ var _sfc_main$120 = {
 			MultiSelectWdg: "multi",
 			TimeInputWdg: "time"
 		}[kind.value] || "text");
-		const scene = computed(() => describe$26({
+		const scene = computed(() => describe$27({
 			mode: mode.value,
 			title: props.editor?.field.title,
 			value: value.value,
@@ -3989,14 +3988,14 @@ var _sfc_main$120 = {
 				"aria-label": __props.editor?.field.title,
 				onToggle: toggle,
 				onKeydown: withKeys(withModifiers(cancel, ["stop", "prevent"]), ["esc"])
-			}, [__props.editor ? (openBlock(), createBlock(_sfc_main$140, {
+			}, [__props.editor ? (openBlock(), createBlock(_sfc_main$143, {
 				key: 0,
 				ref_key: "frame",
 				ref: frame,
 				scene: scene.value,
 				style: normalizeStyle({ height: scene.value.height + "px" }),
 				onEvent: dispatch
-			}, null, 8, ["scene", "style"])) : createCommentVNode("", true)], 42, _hoisted_1$83)]);
+			}, null, 8, ["scene", "style"])) : createCommentVNode("", true)], 42, _hoisted_1$85)]);
 		};
 	}
 };
@@ -4371,7 +4370,7 @@ function workHours(model, width, language) {
 }
 //#endregion
 //#region src/controls/UserIdentity.vue
-var _hoisted_1$82 = { class: "user-identity-text" };
+var _hoisted_1$84 = { class: "user-identity-text" };
 var _hoisted_2$65 = {
 	key: 0,
 	class: "muted"
@@ -4380,7 +4379,7 @@ var _hoisted_3$53 = {
 	key: 0,
 	class: "muted identity-retired"
 };
-var _sfc_main$119 = {
+var _sfc_main$122 = {
 	__name: "UserIdentity",
 	props: {
 		login: String,
@@ -4418,19 +4417,19 @@ var _sfc_main$119 = {
 					"accent",
 					"preview-size"
 				]),
-				createBaseVNode("span", _hoisted_1$82, [createBaseVNode("strong", null, toDisplayString(__props.displayName || __props.login), 1), __props.login && __props.displayName !== __props.login ? (openBlock(), createElementBlock("small", _hoisted_2$65, toDisplayString(__props.login), 1)) : createCommentVNode("", true)]),
-				__props.retired ? (openBlock(), createElementBlock("span", _hoisted_3$53, [createVNode(_sfc_main$139, { name: "archive" }), createTextVNode(toDisplayString(unref(t)("Retired")), 1)])) : createCommentVNode("", true)
+				createBaseVNode("span", _hoisted_1$84, [createBaseVNode("strong", null, toDisplayString(__props.displayName || __props.login), 1), __props.login && __props.displayName !== __props.login ? (openBlock(), createElementBlock("small", _hoisted_2$65, toDisplayString(__props.login), 1)) : createCommentVNode("", true)]),
+				__props.retired ? (openBlock(), createElementBlock("span", _hoisted_3$53, [createVNode(_sfc_main$142, { name: "archive" }), createTextVNode(toDisplayString(unref(t)("Retired")), 1)])) : createCommentVNode("", true)
 			], 6);
 		};
 	}
 };
 //#endregion
 //#region src/features/objects/TaskInspectorHeader.vue
-var _hoisted_1$81 = { class: "inspector-menu-heading" };
+var _hoisted_1$83 = { class: "inspector-menu-heading" };
 var _hoisted_2$64 = { class: "inspector-choice-copy" };
 var _hoisted_3$52 = { class: "inspector-menu-heading" };
 var _hoisted_4$44 = { class: "inspector-choice-copy" };
-var _sfc_main$118 = {
+var _sfc_main$121 = {
 	__name: "TaskInspectorHeader",
 	props: {
 		editor: Object,
@@ -4508,11 +4507,11 @@ var _sfc_main$118 = {
 				class: "inspector-context inspector-object",
 				style: normalizeStyle({ height: scene.value.height + "px" })
 			}, [
-				createVNode(_sfc_main$140, {
+				createVNode(_sfc_main$143, {
 					scene: scene.value,
 					onEvent: event
 				}, null, 8, ["scene"]),
-				createVNode(_sfc_main$159, {
+				createVNode(_sfc_main$160, {
 					"external-trigger": "",
 					ref_key: "processMenu",
 					ref: processMenu,
@@ -4525,8 +4524,8 @@ var _sfc_main$118 = {
 					onPointerdownCapture: _cache[0] || (_cache[0] = ($event) => __props.busy && $event.preventDefault()),
 					onKeydownCapture: _cache[1] || (_cache[1] = ($event) => __props.busy && $event.preventDefault())
 				}, {
-					default: withCtx(() => [createBaseVNode("strong", _hoisted_1$81, toDisplayString(unref(t)("Process and note context")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.processes, (row) => {
-						return openBlock(), createBlock(_sfc_main$138, {
+					default: withCtx(() => [createBaseVNode("strong", _hoisted_1$83, toDisplayString(unref(t)("Process and note context")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.processes, (row) => {
+						return openBlock(), createBlock(_sfc_main$141, {
 							key: row.value,
 							"data-process-choice": row.value,
 							"translate-label": false,
@@ -4542,7 +4541,7 @@ var _sfc_main$118 = {
 									style: normalizeStyle({ background: row.color || "var(--primary)" })
 								}, null, 4),
 								createBaseVNode("span", _hoisted_2$64, [createBaseVNode("strong", null, toDisplayString(row.label), 1), createBaseVNode("small", null, toDisplayString(row.type === "progress" ? unref(t)("Related tasks") : row.type === "built-in" ? unref(t)("Built-in") : row.type) + " · " + toDisplayString(row.type === "progress" ? (row.approved || 0) + " / " + (row.total || 0) : unref(t)("{count} notes", { count: row.count || 0 })), 1)]),
-								row.value === __props.process ? (openBlock(), createBlock(_sfc_main$139, {
+								row.value === __props.process ? (openBlock(), createBlock(_sfc_main$142, {
 									key: 0,
 									name: "check-circle"
 								})) : createCommentVNode("", true)
@@ -4558,7 +4557,7 @@ var _sfc_main$118 = {
 					}), 128))]),
 					_: 1
 				}, 8, ["anchor", "aria-disabled"]),
-				__props.editor.task_choices.length > 1 ? (openBlock(), createBlock(_sfc_main$159, {
+				__props.editor.task_choices.length > 1 ? (openBlock(), createBlock(_sfc_main$160, {
 					key: 0,
 					"external-trigger": "",
 					ref_key: "taskMenu",
@@ -4574,7 +4573,7 @@ var _sfc_main$118 = {
 					onKeydownCapture: _cache[3] || (_cache[3] = ($event) => __props.busy && $event.preventDefault())
 				}, {
 					default: withCtx(() => [createBaseVNode("strong", _hoisted_3$52, toDisplayString(unref(t)("Tasks for this process")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.task_choices, (row) => {
-						return openBlock(), createBlock(_sfc_main$138, {
+						return openBlock(), createBlock(_sfc_main$141, {
 							key: row.value,
 							"data-task-choice": row.value,
 							"translate-label": false,
@@ -4585,12 +4584,12 @@ var _sfc_main$118 = {
 							onClick: ($event) => emit("task", row.value)
 						}, {
 							default: withCtx(() => [
-								row.identity ? (openBlock(), createBlock(_sfc_main$119, mergeProps({
+								row.identity ? (openBlock(), createBlock(_sfc_main$122, mergeProps({
 									key: 0,
 									ref_for: true
 								}, row.identity), null, 16)) : createCommentVNode("", true),
 								createBaseVNode("span", _hoisted_4$44, [createBaseVNode("strong", null, [createTextVNode(toDisplayString(row.label), 1), row.primary ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString(unref(t)("Main")), 1)], 64)) : createCommentVNode("", true)]), createBaseVNode("small", null, toDisplayString(row.status) + " · " + toDisplayString(unref(t)("{count} notes", { count: row.count || 0 })), 1)]),
-								row.value === __props.editor.selected_task ? (openBlock(), createBlock(_sfc_main$139, {
+								row.value === __props.editor.selected_task ? (openBlock(), createBlock(_sfc_main$142, {
 									key: 1,
 									name: "check-circle"
 								})) : createCommentVNode("", true)
@@ -4606,7 +4605,7 @@ var _sfc_main$118 = {
 					}), 128))]),
 					_: 1
 				}, 8, ["anchor", "aria-disabled"])) : createCommentVNode("", true),
-				unref(mobile) || __props.editor.process_type !== "progress" ? (openBlock(), createBlock(_sfc_main$159, {
+				unref(mobile) || __props.editor.process_type !== "progress" ? (openBlock(), createBlock(_sfc_main$160, {
 					key: 1,
 					"external-trigger": "",
 					ref_key: "actionsMenu",
@@ -4617,24 +4616,24 @@ var _sfc_main$118 = {
 					overlay: ""
 				}, {
 					default: withCtx(() => [unref(mobile) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: __props.expanded ? "Collapse Task Inspector" : "Expand Task Inspector",
 							icon: "MDI_CHEVRON_DOWN",
 							disabled: __props.busy,
 							onClick: _cache[4] || (_cache[4] = ($event) => emit("toggle"))
 						}, null, 8, ["label", "disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Refresh",
 							icon: "refresh",
 							disabled: __props.busy,
 							onClick: _cache[5] || (_cache[5] = ($event) => emit("refresh"))
 						}, null, 8, ["disabled"]),
-						__props.editor.work_hours ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createVNode(_sfc_main$138, {
+						__props.editor.work_hours ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createVNode(_sfc_main$141, {
 							label: "Log time",
 							icon: "MDI_ALARM_PLUS",
 							disabled: __props.busy,
 							onClick: _cache[6] || (_cache[6] = ($event) => emit("log"))
-						}, null, 8, ["disabled"]), createVNode(_sfc_main$138, {
+						}, null, 8, ["disabled"]), createVNode(_sfc_main$141, {
 							label: "Open timesheet",
 							icon: "MDI_CALENDAR_MONTH",
 							disabled: __props.busy,
@@ -4642,27 +4641,27 @@ var _sfc_main$118 = {
 						}, null, 8, ["disabled"])], 64)) : createCommentVNode("", true),
 						_cache[12] || (_cache[12] = createBaseVNode("hr", null, null, -1))
 					], 64)) : createCommentVNode("", true), __props.editor.process_type !== "progress" ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Edit task",
 							icon: "edit",
 							disabled: __props.busy || __props.editing,
 							onClick: _cache[8] || (_cache[8] = ($event) => emit("edit"))
 						}, null, 8, ["disabled"]),
-						__props.editor.selected_task ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.editor.selected_task ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							label: "Add task assignee",
 							icon: "copy",
 							disabled: __props.busy || __props.editing,
 							onClick: _cache[9] || (_cache[9] = ($event) => emit("action", "copy"))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						__props.editor.selected_task ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.editor.selected_task ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 1,
 							label: "Delete task",
 							icon: "delete",
 							destructive: "",
 							disabled: __props.busy || __props.editing,
 							onClick: _cache[10] || (_cache[10] = ($event) => emit("action", "delete"))
-						}, null, 8, ["disabled"])) : (openBlock(), createBlock(_sfc_main$138, {
+						}, null, 8, ["disabled"])) : (openBlock(), createBlock(_sfc_main$141, {
 							key: 2,
 							label: "Create task",
 							icon: "add",
@@ -4678,14 +4677,14 @@ var _sfc_main$118 = {
 };
 //#endregion
 //#region src/controls/EmojiPicker.vue
-var _hoisted_1$80 = { class: "emoji-categories" };
+var _hoisted_1$82 = { class: "emoji-categories" };
 var _hoisted_2$63 = {
 	key: 0,
 	role: "alert"
 };
 var _hoisted_3$51 = { class: "emoji-grid" };
 var _hoisted_4$43 = { key: 1 };
-var _sfc_main$117 = {
+var _sfc_main$120 = {
 	__name: "EmojiPicker",
 	props: {
 		label: {
@@ -4718,7 +4717,7 @@ var _sfc_main$117 = {
 			menu.value.close(true);
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$159, {
+			return openBlock(), createBlock(_sfc_main$160, {
 				ref_key: "menu",
 				ref: menu,
 				class: normalizeClass(["emoji-picker", { "menu-entry": __props.textTrigger }]),
@@ -4736,8 +4735,8 @@ var _sfc_main$117 = {
 						label: "Find emoji",
 						placeholder: unref(t)("Find emoji")
 					}, null, 8, ["modelValue", "placeholder"]),
-					createBaseVNode("div", _hoisted_1$80, [(openBlock(true), createElementBlock(Fragment, null, renderList(categories.value, (name) => {
-						return openBlock(), createBlock(_sfc_main$138, {
+					createBaseVNode("div", _hoisted_1$82, [(openBlock(true), createElementBlock(Fragment, null, renderList(categories.value, (name) => {
+						return openBlock(), createBlock(_sfc_main$141, {
 							key: name,
 							label: name,
 							tonal: category.value === name,
@@ -4754,12 +4753,12 @@ var _sfc_main$117 = {
 							"onClick"
 						]);
 					}), 128))]),
-					error.value ? (openBlock(), createElementBlock("p", _hoisted_2$63, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$138, {
+					error.value ? (openBlock(), createElementBlock("p", _hoisted_2$63, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$141, {
 						label: "Retry",
 						onClick: load
 					})])) : createCommentVNode("", true),
 					createBaseVNode("div", _hoisted_3$51, [(openBlock(true), createElementBlock(Fragment, null, renderList(shown.value, (row) => {
-						return openBlock(), createBlock(_sfc_main$138, {
+						return openBlock(), createBlock(_sfc_main$141, {
 							key: row.value,
 							"aria-label": row.name,
 							title: row.name,
@@ -4778,7 +4777,7 @@ var _sfc_main$117 = {
 				_: 2
 			}, [__props.textTrigger ? {
 				name: "trigger",
-				fn: withCtx(() => [createVNode(_sfc_main$139, { name: "MDI_EMOTICON_OUTLINE" }), createBaseVNode("span", null, toDisplayString(unref(t)(__props.label)), 1)]),
+				fn: withCtx(() => [createVNode(_sfc_main$142, { name: "MDI_EMOTICON_OUTLINE" }), createBaseVNode("span", null, toDisplayString(unref(t)(__props.label)), 1)]),
 				key: "0"
 			} : void 0]), 1032, [
 				"class",
@@ -4790,7 +4789,7 @@ var _sfc_main$117 = {
 };
 //#endregion
 //#region src/features/messages/MessageComposer.vue
-var _hoisted_1$79 = { class: "message-composer" };
+var _hoisted_1$81 = { class: "message-composer" };
 var _hoisted_2$62 = { class: "message-composer-field" };
 var _hoisted_3$50 = [
 	"value",
@@ -4802,7 +4801,7 @@ var _hoisted_3$50 = [
 	"aria-activedescendant"
 ];
 var _hoisted_4$42 = ["aria-label"];
-var _sfc_main$116 = {
+var _sfc_main$119 = {
 	__name: "MessageComposer",
 	props: {
 		modelValue: String,
@@ -4891,7 +4890,7 @@ var _sfc_main$116 = {
 			field.value?.focus();
 		} });
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$79, [
+			return openBlock(), createElementBlock("div", _hoisted_1$81, [
 				createBaseVNode("div", _hoisted_2$62, [createBaseVNode("textarea", {
 					ref_key: "field",
 					ref: field,
@@ -4913,7 +4912,7 @@ var _sfc_main$116 = {
 							emit("files", event.clipboardData.files);
 						}
 					})
-				}, null, 40, _hoisted_3$50), createVNode(_sfc_main$117, {
+				}, null, 40, _hoisted_3$50), createVNode(_sfc_main$120, {
 					label: "Insert emoji",
 					disabled: __props.disabled || __props.sending,
 					onSelected: insert
@@ -4925,7 +4924,7 @@ var _sfc_main$116 = {
 					role: "listbox",
 					"aria-label": unref(t)("Mention a member")
 				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(matches.value, (member, index) => {
-					return openBlock(), createBlock(_sfc_main$138, {
+					return openBlock(), createBlock(_sfc_main$141, {
 						id: optionId(member.login),
 						key: member.login,
 						role: "option",
@@ -4942,7 +4941,7 @@ var _sfc_main$116 = {
 						"onClick"
 					]);
 				}), 128))], 8, _hoisted_4$42)) : createCommentVNode("", true),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					class: "message-send",
 					"icon-only": unref(mobile) || __props.label === "Note text",
 					label: __props.sending ? "Sending" : __props.sendLabel,
@@ -4961,7 +4960,7 @@ var _sfc_main$116 = {
 };
 //#endregion
 //#region src/controls/StatusSelect.vue
-var _sfc_main$115 = {
+var _sfc_main$118 = {
 	__name: "StatusSelect",
 	props: {
 		value: String,
@@ -4990,7 +4989,7 @@ var _sfc_main$115 = {
 				key: 0,
 				class: "status-select-dot",
 				style: normalizeStyle({ backgroundColor: current.value.color })
-			}, null, 4)) : createCommentVNode("", true), createVNode(_sfc_main$153, {
+			}, null, 4)) : createCommentVNode("", true), createVNode(_sfc_main$156, {
 				"model-value": __props.value || "",
 				label: "Status",
 				options: choices.value,
@@ -5007,7 +5006,7 @@ var _sfc_main$115 = {
 };
 //#endregion
 //#region src/features/objects/ObjectInspectorQuick.vue
-var _sfc_main$114 = {
+var _sfc_main$117 = {
 	__name: "ObjectInspectorQuick",
 	props: { model: Object },
 	emits: ["event"],
@@ -5023,7 +5022,7 @@ var _sfc_main$114 = {
 				component: {
 					props: { frameNode: Object },
 					setup(port, { attrs }) {
-						return () => h(_sfc_main$115, {
+						return () => h(_sfc_main$118, {
 							...attrs,
 							value: port.frameNode.value,
 							options: port.frameNode.options,
@@ -5042,7 +5041,7 @@ var _sfc_main$114 = {
 				component: {
 					props: { frameNode: Object },
 					setup(port, { attrs }) {
-						return () => h(_sfc_main$141, {
+						return () => h(_sfc_main$144, {
 							...attrs,
 							min: port.frameNode.minimum,
 							max: port.frameNode.maximum,
@@ -5074,7 +5073,7 @@ var _sfc_main$114 = {
 				ref: host,
 				class: "object-inspector-quick",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views,
 				onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
@@ -5084,7 +5083,7 @@ var _sfc_main$114 = {
 };
 //#endregion
 //#region src/features/objects/TaskField.vue
-var _sfc_main$113 = {
+var _sfc_main$116 = {
 	__name: "TaskField",
 	props: {
 		field: Object,
@@ -5120,7 +5119,7 @@ var _sfc_main$113 = {
 		const hourScale = () => props.field.name === "bid_duration" && props.catalog?.bidDurationUnit === "minute" ? 60 : 1;
 		const numericValue = () => hourScale() === 1 ? Number(props.value || 0) : Math.round(Number(props.value || 0) / hourScale() * 100) / 100;
 		return (_ctx, _cache) => {
-			return ["assigned", "supervisor"].includes(__props.field.name) ? (openBlock(), createBlock(_sfc_main$142, {
+			return ["assigned", "supervisor"].includes(__props.field.name) ? (openBlock(), createBlock(_sfc_main$145, {
 				key: 0,
 				value: __props.value || "",
 				"empty-label": __props.field.name === "supervisor" ? "No supervisor" : "Not assigned",
@@ -5136,7 +5135,7 @@ var _sfc_main$113 = {
 				"label",
 				"action-field",
 				"disabled"
-			])) : __props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$153, {
+			])) : __props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$156, {
 				key: 1,
 				"model-value": __props.value ?? "",
 				label: titles[__props.field.name],
@@ -5156,14 +5155,14 @@ var _sfc_main$113 = {
 				"label",
 				"options",
 				"disabled"
-			])) : __props.field.name === "description" ? (openBlock(), createBlock(_sfc_main$143, {
+			])) : __props.field.name === "description" ? (openBlock(), createBlock(_sfc_main$146, {
 				key: 2,
 				"model-value": __props.value || "",
 				label: "Description",
 				rows: "2",
 				disabled: __props.busy || !__props.field.editable,
 				"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => emit("change", $event))
-			}, null, 8, ["model-value", "disabled"])) : ["priority", "milestone_code"].includes(__props.field.name) || __props.field.name === "process" && __props.catalog?.processes?.length ? (openBlock(), createBlock(_sfc_main$153, {
+			}, null, 8, ["model-value", "disabled"])) : ["priority", "milestone_code"].includes(__props.field.name) || __props.field.name === "process" && __props.catalog?.processes?.length ? (openBlock(), createBlock(_sfc_main$156, {
 				key: 3,
 				"model-value": __props.value ?? "",
 				label: titles[__props.field.name],
@@ -5179,7 +5178,7 @@ var _sfc_main$113 = {
 				"label",
 				"options",
 				"disabled"
-			])) : ["process", "context"].includes(__props.field.name) ? (openBlock(), createBlock(_sfc_main$157, {
+			])) : ["process", "context"].includes(__props.field.name) ? (openBlock(), createBlock(_sfc_main$161, {
 				key: 4,
 				type: "text",
 				"model-value": __props.value || "",
@@ -5190,7 +5189,7 @@ var _sfc_main$113 = {
 				"model-value",
 				"label",
 				"disabled"
-			])) : __props.field.name.endsWith("_date") ? (openBlock(), createBlock(_sfc_main$144, {
+			])) : __props.field.name.endsWith("_date") ? (openBlock(), createBlock(_sfc_main$147, {
 				key: 5,
 				"include-time": "",
 				"model-value": date(__props.value),
@@ -5201,7 +5200,7 @@ var _sfc_main$113 = {
 				"model-value",
 				"label",
 				"disabled"
-			])) : __props.field.name === "bid_duration" ? (openBlock(), createBlock(_sfc_main$156, {
+			])) : __props.field.name === "bid_duration" ? (openBlock(), createBlock(_sfc_main$159, {
 				key: 6,
 				min: 0,
 				max: 1e5,
@@ -5215,7 +5214,7 @@ var _sfc_main$113 = {
 				"model-value",
 				"label",
 				"disabled"
-			])) : (openBlock(), createBlock(_sfc_main$157, {
+			])) : (openBlock(), createBlock(_sfc_main$161, {
 				key: 7,
 				type: "number",
 				min: "0",
@@ -5250,7 +5249,7 @@ var titles$1 = {
 	priority: "Priority",
 	milestone_code: "Milestone"
 };
-function describe$25(model, width, language) {
+function describe$26(model, width, language) {
 	const tr = (text) => translate(text, language), nodes = [], gap = 12, columns = width >= (model.live ? 420 : 520) ? 2 : 1, cell = (width - gap * (columns - 1)) / columns;
 	let y = 0, slot = 0;
 	if (model.inline) {
@@ -5322,7 +5321,7 @@ function describe$25(model, width, language) {
 }
 //#endregion
 //#region src/features/tasks/TaskWorkspaceEditor.vue
-var _sfc_main$112 = {
+var _sfc_main$115 = {
 	__name: "TaskWorkspaceEditor",
 	props: {
 		editor: Object,
@@ -5349,7 +5348,7 @@ var _sfc_main$112 = {
 		const scene = computed(() => !props.editor ? {
 			nodes: [],
 			height: 0
-		} : describe$25({
+		} : describe$26({
 			inline: props.inline,
 			title: props.title,
 			fields: props.editor.fields,
@@ -5372,7 +5371,7 @@ var _sfc_main$112 = {
 					return () => h("div", {
 						"data-task-field": p.frameNode.field.name,
 						class: "task-editor-field-port"
-					}, [h(_sfc_main$113, {
+					}, [h(_sfc_main$116, {
 						field: p.frameNode.field,
 						value: props.editor.values[p.frameNode.field.name],
 						statuses: props.editor.statuses,
@@ -5380,7 +5379,7 @@ var _sfc_main$112 = {
 						catalog: props.editor.catalog,
 						busy: !p.frameNode.enabled,
 						onChange: (value) => emit(p.frameNode.field.name === "process" && props.editor.creating ? "process" : "change", ...p.frameNode.field.name === "process" && props.editor.creating ? [value] : [p.frameNode.field.name, value])
-					}), ...p.frameNode.field.name === "milestone_code" ? [h(_sfc_main$138, {
+					}), ...p.frameNode.field.name === "milestone_code" ? [h(_sfc_main$141, {
 						label: "Project milestones",
 						icon: "milestone",
 						iconOnly: true,
@@ -5411,7 +5410,7 @@ var _sfc_main$112 = {
 				class: "task-workspace-editor",
 				style: normalizeStyle({ height: scene.value.height + "px" }),
 				onSubmit: _cache[0] || (_cache[0] = withModifiers(($event) => !__props.immediate && emit("apply"), ["prevent"]))
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views,
 				onEvent: event
@@ -5421,7 +5420,7 @@ var _sfc_main$112 = {
 };
 //#endregion
 //#region src/features/objects/TaskDetails.vue
-var _hoisted_1$78 = ["data-has-task"];
+var _hoisted_1$80 = ["data-has-task"];
 var _hoisted_2$61 = { key: 1 };
 var _hoisted_3$49 = { class: "inspector-task-caption" };
 var _hoisted_4$41 = { key: 0 };
@@ -5436,8 +5435,8 @@ var _hoisted_9$22 = {
 	key: 3,
 	class: "task-detail-fields"
 };
-var _hoisted_10$22 = { key: 0 };
-var _sfc_main$111 = {
+var _hoisted_10$21 = { key: 0 };
+var _sfc_main$114 = {
 	__name: "TaskDetails",
 	props: {
 		editor: Object,
@@ -5517,12 +5516,12 @@ var _sfc_main$111 = {
 				}]),
 				"data-has-task": !!__props.editor.selected_task
 			}, [
-				!__props.editing && !__props.pendingAction ? (openBlock(), createBlock(_sfc_main$114, {
+				!__props.editing && !__props.pendingAction ? (openBlock(), createBlock(_sfc_main$117, {
 					key: 0,
 					model: quickModel.value,
 					onEvent: event
 				}, null, 8, ["model"])) : (openBlock(), createElementBlock("header", _hoisted_2$61, [createBaseVNode("div", _hoisted_3$49, [createBaseVNode("strong", null, toDisplayString(__props.editor.selected_task ? __props.editor.task_context && __props.editor.task_context !== __props.editor.process ? __props.editor.task_context : unref(t)("{process} task", { process: __props.processTitle }) : unref(t)("No task for {process}", { process: __props.processTitle })), 1), __props.editor.selected_task && assigned.value ? (openBlock(), createElementBlock("small", _hoisted_4$41, toDisplayString(assigned.value), 1)) : createCommentVNode("", true)]), createBaseVNode("div", _hoisted_5$34, [
-					__props.editor.selected_task && !__props.editing ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.editor.selected_task && !__props.editing ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 0,
 						label: "Edit task",
 						icon: "edit",
@@ -5530,7 +5529,7 @@ var _sfc_main$111 = {
 						disabled: __props.busy,
 						onClick: _cache[0] || (_cache[0] = ($event) => emit("edit"))
 					}, null, 8, ["disabled"])) : createCommentVNode("", true),
-					__props.editor.process_available && !__props.editing ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.editor.process_available && !__props.editing ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 1,
 						label: "Create task",
 						icon: "add",
@@ -5538,7 +5537,7 @@ var _sfc_main$111 = {
 						disabled: __props.busy,
 						onClick: _cache[1] || (_cache[1] = ($event) => emit("create"))
 					}, null, 8, ["disabled"])) : createCommentVNode("", true),
-					__props.dirty && !__props.editing ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.dirty && !__props.editing ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 2,
 						label: "Discard task changes",
 						icon: "undo",
@@ -5546,7 +5545,7 @@ var _sfc_main$111 = {
 						disabled: __props.busy,
 						onClick: _cache[2] || (_cache[2] = ($event) => emit("discard"))
 					}, null, 8, ["disabled"])) : createCommentVNode("", true),
-					!__props.editing && (__props.dirty || !__props.editor.selected_task && __props.editor.process_available) ? (openBlock(), createBlock(_sfc_main$138, {
+					!__props.editing && (__props.dirty || !__props.editor.selected_task && __props.editor.process_available) ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 3,
 						label: __props.editor.selected_task ? "Save task" : "Create task",
 						icon: "save",
@@ -5555,7 +5554,7 @@ var _sfc_main$111 = {
 						onClick: _cache[3] || (_cache[3] = ($event) => emit("save"))
 					}, null, 8, ["label", "disabled"])) : createCommentVNode("", true)
 				])])),
-				__props.pendingAction ? (openBlock(), createElementBlock("div", _hoisted_6$29, [__props.pendingAction === "copy" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("p", null, toDisplayString(unref(t)("Create a separate task for another assignee in this process.")), 1), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Assigned to")), 1), createVNode(_sfc_main$142, {
+				__props.pendingAction ? (openBlock(), createElementBlock("div", _hoisted_6$29, [__props.pendingAction === "copy" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("p", null, toDisplayString(unref(t)("Create a separate task for another assignee in this process.")), 1), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Assigned to")), 1), createVNode(_sfc_main$145, {
 					value: __props.assignee,
 					options: __props.editor.users,
 					"action-field": false,
@@ -5566,7 +5565,7 @@ var _sfc_main$111 = {
 					"value",
 					"options",
 					"disabled"
-				])])], 64)) : (openBlock(), createElementBlock("p", _hoisted_7$29, toDisplayString(unref(t)("Delete the selected task? Its notes and files will not be deleted.")), 1)), createBaseVNode("div", _hoisted_8$26, [createVNode(_sfc_main$138, {
+				])])], 64)) : (openBlock(), createElementBlock("p", _hoisted_7$29, toDisplayString(unref(t)("Delete the selected task? Its notes and files will not be deleted.")), 1)), createBaseVNode("div", _hoisted_8$26, [createVNode(_sfc_main$141, {
 					label: __props.pendingAction === "copy" ? "Create task copy" : "Delete task",
 					icon: __props.pendingAction === "copy" ? "copy" : "delete",
 					destructive: __props.pendingAction === "delete",
@@ -5577,36 +5576,36 @@ var _sfc_main$111 = {
 					"icon",
 					"destructive",
 					"disabled"
-				]), createVNode(_sfc_main$138, {
+				]), createVNode(_sfc_main$141, {
 					label: "Cancel",
 					disabled: __props.busy,
 					onClick: _cache[6] || (_cache[6] = ($event) => emit("cancel-action"))
 				}, null, 8, ["disabled"])])])) : createCommentVNode("", true),
-				__props.editing ? (openBlock(), createElementBlock("div", _hoisted_9$22, [createVNode(_sfc_main$112, {
+				__props.editing ? (openBlock(), createElementBlock("div", _hoisted_9$22, [createVNode(_sfc_main$115, {
 					immediate: "",
 					editor: fullEditor.value,
 					busy: __props.busy,
 					onChange: _cache[7] || (_cache[7] = (key, value) => emit("change", key, value))
-				}, null, 8, ["editor", "busy"]), __props.editing ? (openBlock(), createElementBlock("footer", _hoisted_10$22, [createVNode(_sfc_main$138, {
+				}, null, 8, ["editor", "busy"]), __props.editing ? (openBlock(), createElementBlock("footer", _hoisted_10$21, [createVNode(_sfc_main$141, {
 					label: "Discard task changes",
 					icon: "close",
 					disabled: __props.busy,
 					onClick: _cache[8] || (_cache[8] = ($event) => emit("discard"))
-				}, null, 8, ["disabled"]), createVNode(_sfc_main$138, {
+				}, null, 8, ["disabled"]), createVNode(_sfc_main$141, {
 					label: "Save task",
 					icon: "save",
 					highlighted: "",
 					disabled: __props.busy || !__props.dirty && !!__props.editor.selected_task,
 					onClick: _cache[9] || (_cache[9] = ($event) => emit("save"))
 				}, null, 8, ["disabled"])])) : createCommentVNode("", true)])) : createCommentVNode("", true)
-			], 10, _hoisted_1$78)), [[vShow, __props.expanded || __props.pendingAction || __props.editing]]);
+			], 10, _hoisted_1$80)), [[vShow, __props.expanded || __props.pendingAction || __props.editing]]);
 		};
 	}
 };
 //#endregion
 //#region src/features/objects/RelatedTasks.vue
-var _hoisted_1$77 = ["aria-label"];
-var _sfc_main$110 = {
+var _hoisted_1$79 = ["aria-label"];
+var _sfc_main$113 = {
 	__name: "RelatedTasks",
 	props: {
 		related: Object,
@@ -5657,7 +5656,7 @@ var _sfc_main$110 = {
 				"aria-label": unref(t)("Related object tasks"),
 				class: "related-tasks shared-related-tasks",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				models: { items: rows.value },
 				"describe-row": (list, record) => relatedRow(record, list.width - 16, unref(appearance).language),
@@ -5666,14 +5665,14 @@ var _sfc_main$110 = {
 				"scene",
 				"models",
 				"describe-row"
-			])], 12, _hoisted_1$77);
+			])], 12, _hoisted_1$79);
 		};
 	}
 };
 //#endregion
 //#region src/features/objects/WorkHoursSummary.vue
-var _hoisted_1$76 = ["aria-label"];
-var _sfc_main$109 = {
+var _hoisted_1$78 = ["aria-label"];
+var _sfc_main$112 = {
 	__name: "WorkHoursSummary",
 	props: {
 		summary: Object,
@@ -5707,16 +5706,16 @@ var _sfc_main$109 = {
 				class: normalizeClass(["work-hours-summary shared-work-hours", { compact: !__props.expanded }]),
 				"aria-label": unref(t)("Work hours"),
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				onEvent: _cache[0] || (_cache[0] = ($event) => emit($event.type))
-			}, null, 8, ["scene"])], 14, _hoisted_1$76);
+			}, null, 8, ["scene"])], 14, _hoisted_1$78);
 		};
 	}
 };
 //#endregion
 //#region src/features/objects/TimeEntryPanel.vue
-var _hoisted_1$75 = {
+var _hoisted_1$77 = {
 	key: 0,
 	class: "error",
 	role: "alert"
@@ -5748,39 +5747,39 @@ var _hoisted_9$21 = {
 	key: 5,
 	class: "work-reports"
 };
-var _hoisted_10$21 = { key: 0 };
-var _hoisted_11$18 = {
+var _hoisted_10$20 = { key: 0 };
+var _hoisted_11$17 = {
 	key: 1,
 	class: "notice"
 };
-var _hoisted_12$17 = {
+var _hoisted_12$16 = {
 	key: 2,
 	class: "muted"
 };
-var _hoisted_13$15 = ["value", "aria-label"];
-var _hoisted_14$13 = ["value", "disabled"];
-var _hoisted_15$13 = ["value", "disabled"];
-var _hoisted_16$13 = {
+var _hoisted_13$14 = ["value", "aria-label"];
+var _hoisted_14$12 = ["value", "disabled"];
+var _hoisted_15$12 = ["value", "disabled"];
+var _hoisted_16$12 = {
 	key: 7,
 	role: "status"
 };
-var _hoisted_17$12 = {
+var _hoisted_17$11 = {
 	key: 8,
 	class: "muted"
 };
-var _hoisted_18$11 = {
+var _hoisted_18$10 = {
 	key: 9,
 	class: "time-entry-list"
 };
-var _hoisted_19$10 = { class: "visually-hidden" };
-var _hoisted_20$9 = { key: 0 };
-var _hoisted_21$8 = { class: "note-body" };
-var _hoisted_22$7 = { class: "configuration-actions" };
-var _hoisted_23$7 = {
+var _hoisted_19$9 = { class: "visually-hidden" };
+var _hoisted_20$8 = { key: 0 };
+var _hoisted_21$7 = { class: "note-body" };
+var _hoisted_22$5 = { class: "configuration-actions" };
+var _hoisted_23$5 = {
 	key: 1,
 	class: "notice"
 };
-var _sfc_main$108 = {
+var _sfc_main$111 = {
 	__name: "TimeEntryPanel",
 	props: {
 		dockTarget: String,
@@ -5857,29 +5856,29 @@ var _sfc_main$108 = {
 				onCancel: _cache[25] || (_cache[25] = withModifiers(($event) => emit("close"), ["prevent"]))
 			}, {
 				default: withCtx(() => [
-					createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString(unref(t)(__props.mode === "task" ? "Task timesheet" : __props.mode === "report" ? __props.dockReport === "labor_cost" ? "Cost Reports" : "Work reports" : "Weekly timesheet")), 1), createBaseVNode("small", null, toDisplayString(__props.mode === "task" ? unref(t)("Time entries for the selected task") : `${__props.data?.week_start || __props.week} — ${__props.data?.week_end || ""}`), 1)]), createVNode(_sfc_main$138, {
+					createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString(unref(t)(__props.mode === "task" ? "Task timesheet" : __props.mode === "report" ? __props.dockReport === "labor_cost" ? "Cost Reports" : "Work reports" : "Weekly timesheet")), 1), createBaseVNode("small", null, toDisplayString(__props.mode === "task" ? unref(t)("Time entries for the selected task") : `${__props.data?.week_start || __props.week} — ${__props.data?.week_end || ""}`), 1)]), createVNode(_sfc_main$141, {
 						label: "Close",
 						icon: "close",
 						"icon-only": "",
 						disabled: __props.busy,
 						onClick: _cache[0] || (_cache[0] = ($event) => emit("close"))
 					}, null, 8, ["disabled"])]),
-					__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$75, toDisplayString(unref(t)(__props.error)), 1)) : createCommentVNode("", true),
+					__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$77, toDisplayString(unref(t)(__props.error)), 1)) : createCommentVNode("", true),
 					__props.uncertain ? (openBlock(), createElementBlock("p", _hoisted_2$60, toDisplayString(unref(t)("Refresh and check the timesheet before retrying. The server may have saved the changes.")), 1)) : createCommentVNode("", true),
 					__props.confirmation ? (openBlock(), createElementBlock("aside", _hoisted_3$48, [
 						createBaseVNode("p", null, toDisplayString(unref(t)("Discard unsaved changes?")), 1),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Keep editing",
 							onClick: _cache[1] || (_cache[1] = ($event) => emit("keep-editing"))
 						}),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Discard changes",
 							destructive: "",
 							onClick: _cache[2] || (_cache[2] = ($event) => emit("discard-close"))
 						})
 					])) : createCommentVNode("", true),
 					createBaseVNode("div", _hoisted_4$40, [
-						__props.mode !== "report" ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.mode !== "report" ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							label: "Log time",
 							icon: "add",
@@ -5887,28 +5886,28 @@ var _sfc_main$108 = {
 							title: !__props.canCreate ? unref(t)("Select a task before logging time") : void 0,
 							onClick: _cache[3] || (_cache[3] = ($event) => emit("create"))
 						}, null, 8, ["disabled", "title"])) : createCommentVNode("", true),
-						__props.mode !== "week" ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.mode !== "week" ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 1,
 							label: "Weekly timesheet",
 							icon: "table",
 							disabled: __props.busy || __props.uncertain || __props.editing,
 							onClick: _cache[4] || (_cache[4] = ($event) => emit("scope", "mode", "week"))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						__props.mode !== "task" && __props.canCreate ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.mode !== "task" && __props.canCreate ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 2,
 							label: "Task timesheet",
 							icon: "MDI_CLOCK_OUTLINE",
 							disabled: __props.busy || __props.uncertain || __props.editing,
 							onClick: _cache[5] || (_cache[5] = ($event) => emit("scope", "mode", "task"))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						__props.mode !== "report" ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.mode !== "report" ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 3,
 							label: "Open work reports",
 							icon: "MDI_CHART_BAR",
 							disabled: __props.busy || __props.uncertain || __props.editing,
 							onClick: _cache[6] || (_cache[6] = ($event) => emit("scope", "mode", "report"))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Refresh",
 							icon: "refresh",
 							disabled: __props.busy,
@@ -5916,14 +5915,14 @@ var _sfc_main$108 = {
 						}, null, 8, ["disabled"])
 					]),
 					__props.mode !== "task" ? (openBlock(), createElementBlock("div", _hoisted_5$33, [createBaseVNode("div", _hoisted_6$28, [
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Previous week",
 							icon: "previous",
 							"icon-only": "",
 							disabled: __props.busy || __props.uncertain || __props.editing,
 							onClick: _cache[8] || (_cache[8] = ($event) => emit("move-week", -1))
 						}, null, 8, ["disabled"]),
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Week")), 1), createVNode(_sfc_main$144, {
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Week")), 1), createVNode(_sfc_main$147, {
 							"model-value": __props.week,
 							label: "Week",
 							"include-time": false,
@@ -5931,14 +5930,14 @@ var _sfc_main$108 = {
 							disabled: __props.busy || __props.uncertain || __props.editing,
 							onChange: _cache[9] || (_cache[9] = ($event) => emit("scope", "week", $event))
 						}, null, 8, ["model-value", "disabled"])]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Next week",
 							icon: "next",
 							"icon-only": "",
 							disabled: __props.busy || __props.uncertain || __props.editing,
 							onClick: _cache[10] || (_cache[10] = ($event) => emit("move-week", 1))
 						}, null, 8, ["disabled"])
-					]), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Team member")), 1), createVNode(_sfc_main$153, {
+					]), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Team member")), 1), createVNode(_sfc_main$156, {
 						"model-value": __props.login,
 						options: [{
 							value: "",
@@ -5962,19 +5961,19 @@ var _sfc_main$108 = {
 						return createBaseVNode("div", { key: name }, [createBaseVNode("dt", null, toDisplayString(unref(t)(label)), 1), createBaseVNode("dd", null, toDisplayString(__props.data.summary[name]) + " " + toDisplayString(unref(t)("h")), 1)]);
 					}), 64))])) : createCommentVNode("", true), __props.selected?.length ? (openBlock(), createElementBlock("div", _hoisted_8$25, [
 						createBaseVNode("span", null, toDisplayString(unref(t)("{count} selected", { count: __props.selected.length })), 1),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Approve selected entries",
 							icon: "check",
 							disabled: __props.busy || __props.uncertain || __props.editing,
 							onClick: _cache[12] || (_cache[12] = ($event) => emit("bulk", "approve"))
 						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Return selected entries to pending",
 							icon: "MDI_UNDO",
 							disabled: __props.busy || __props.uncertain || __props.editing,
 							onClick: _cache[13] || (_cache[13] = ($event) => emit("bulk", "reject"))
 						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Clear selection",
 							icon: "close",
 							disabled: __props.busy,
@@ -5982,7 +5981,7 @@ var _sfc_main$108 = {
 						}, null, 8, ["disabled"])
 					])) : createCommentVNode("", true)], 64)) : createCommentVNode("", true),
 					__props.mode === "report" ? (openBlock(), createElementBlock("section", _hoisted_9$21, [
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Report")), 1), createVNode(_sfc_main$153, {
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Report")), 1), createVNode(_sfc_main$156, {
 							"model-value": __props.report,
 							options: (__props.data?.reports || []).filter((row) => !__props.dockReport || row.value === __props.dockReport),
 							label: "Report",
@@ -5993,9 +5992,9 @@ var _sfc_main$108 = {
 							"options",
 							"disabled"
 						])]),
-						__props.data?.reports ? (openBlock(), createElementBlock("p", _hoisted_10$21, toDisplayString(unref(t)(__props.data.reports.find((item) => item.value === __props.report)?.description || "")), 1)) : createCommentVNode("", true),
-						__props.data?.message ? (openBlock(), createElementBlock("p", _hoisted_11$18, toDisplayString(unref(t)(__props.data.message)), 1)) : createCommentVNode("", true),
-						__props.data && !__props.data.rows.length ? (openBlock(), createElementBlock("p", _hoisted_12$17, toDisplayString(unref(t)("No report data for this week")), 1)) : createCommentVNode("", true),
+						__props.data?.reports ? (openBlock(), createElementBlock("p", _hoisted_10$20, toDisplayString(unref(t)(__props.data.reports.find((item) => item.value === __props.report)?.description || "")), 1)) : createCommentVNode("", true),
+						__props.data?.message ? (openBlock(), createElementBlock("p", _hoisted_11$17, toDisplayString(unref(t)(__props.data.message)), 1)) : createCommentVNode("", true),
+						__props.data && !__props.data.rows.length ? (openBlock(), createElementBlock("p", _hoisted_12$16, toDisplayString(unref(t)("No report data for this week")), 1)) : createCommentVNode("", true),
 						(openBlock(true), createElementBlock(Fragment, null, renderList(__props.data?.rows || [], (row, index) => {
 							return openBlock(), createElementBlock("article", {
 								key: index,
@@ -6006,7 +6005,7 @@ var _sfc_main$108 = {
 									value: row.share,
 									max: "1",
 									"aria-label": row.localized ? unref(t)(row.label) : row.label
-								}, null, 8, _hoisted_13$15),
+								}, null, 8, _hoisted_13$14),
 								createBaseVNode("span", null, toDisplayString(__props.data.unit === "cost" ? Number(row.value).toFixed(2) : `${row.value} ${unref(t)("h")}`), 1)
 							]);
 						}), 128))
@@ -6019,7 +6018,7 @@ var _sfc_main$108 = {
 						onSubmit: _cache[23] || (_cache[23] = withModifiers(($event) => emit("save", false), ["prevent"]))
 					}, [
 						createBaseVNode("h3", null, toDisplayString(unref(t)(__props.draft.search_key ? "Edit time entry" : "Log time")), 1),
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Day")), 1), createVNode(_sfc_main$144, {
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Day")), 1), createVNode(_sfc_main$147, {
 							"model-value": __props.draft.day,
 							label: "Day",
 							"include-time": false,
@@ -6037,8 +6036,8 @@ var _sfc_main$108 = {
 							value: __props.draft.hours,
 							disabled: __props.busy || __props.uncertain,
 							onInput: _cache[17] || (_cache[17] = ($event) => emit("change", "hours", $event.target.value))
-						}, null, 40, _hoisted_14$13)]),
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Category")), 1), createVNode(_sfc_main$153, {
+						}, null, 40, _hoisted_14$12)]),
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Category")), 1), createVNode(_sfc_main$156, {
 							"model-value": __props.draft.category,
 							options: [{
 								value: "regular",
@@ -6051,7 +6050,7 @@ var _sfc_main$108 = {
 							disabled: __props.busy || __props.uncertain,
 							"onUpdate:modelValue": _cache[18] || (_cache[18] = ($event) => emit("change", "category", $event))
 						}, null, 8, ["model-value", "disabled"])]),
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("User")), 1), createVNode(_sfc_main$153, {
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("User")), 1), createVNode(_sfc_main$156, {
 							"model-value": __props.draft.login,
 							options: __props.users,
 							label: "User",
@@ -6068,20 +6067,20 @@ var _sfc_main$108 = {
 							value: __props.draft.description,
 							disabled: __props.busy || __props.uncertain,
 							onInput: _cache[20] || (_cache[20] = ($event) => emit("change", "description", $event.target.value))
-						}, null, 40, _hoisted_15$13)]),
+						}, null, 40, _hoisted_15$12)]),
 						createBaseVNode("footer", null, [
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								label: "Cancel",
 								disabled: __props.busy,
 								onClick: _cache[21] || (_cache[21] = ($event) => emit("cancel-edit"))
 							}, null, 8, ["disabled"]),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								type: "submit",
 								label: "Save",
 								icon: "save",
 								disabled: __props.busy || __props.uncertain
 							}, null, 8, ["disabled"]),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								label: "Save & Approve",
 								icon: "check",
 								highlighted: "",
@@ -6090,21 +6089,21 @@ var _sfc_main$108 = {
 							}, null, 8, ["disabled"])
 						])
 					], 544)) : createCommentVNode("", true),
-					__props.busy ? (openBlock(), createElementBlock("p", _hoisted_16$13, toDisplayString(unref(t)("Loading data…")), 1)) : __props.mode !== "report" && __props.data && !__props.data.entries.length ? (openBlock(), createElementBlock("p", _hoisted_17$12, toDisplayString(unref(t)(__props.mode === "week" ? "No work hours for this week" : "No time entries yet")), 1)) : createCommentVNode("", true),
-					__props.mode !== "report" ? (openBlock(), createElementBlock("div", _hoisted_18$11, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.data?.entries || [], (entry) => {
+					__props.busy ? (openBlock(), createElementBlock("p", _hoisted_16$12, toDisplayString(unref(t)("Loading data…")), 1)) : __props.mode !== "report" && __props.data && !__props.data.entries.length ? (openBlock(), createElementBlock("p", _hoisted_17$11, toDisplayString(unref(t)(__props.mode === "week" ? "No work hours for this week" : "No time entries yet")), 1)) : createCommentVNode("", true),
+					__props.mode !== "report" ? (openBlock(), createElementBlock("div", _hoisted_18$10, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.data?.entries || [], (entry) => {
 						return openBlock(), createElementBlock("article", {
 							key: entry.search_key,
 							class: "note-entry"
 						}, [
 							createBaseVNode("header", null, [
-								__props.mode === "week" ? (openBlock(), createBlock(_sfc_main$160, {
+								__props.mode === "week" ? (openBlock(), createBlock(_sfc_main$163, {
 									key: 0,
 									label: "Select time entry",
 									"model-value": __props.selected.includes(entry.search_key),
 									disabled: __props.busy || __props.uncertain || __props.editing,
 									"onUpdate:modelValue": ($event) => emit("select", entry.search_key, $event)
 								}, {
-									default: withCtx(() => [createBaseVNode("span", _hoisted_19$10, toDisplayString(entry.task_title) + " · " + toDisplayString(entry.day), 1)]),
+									default: withCtx(() => [createBaseVNode("span", _hoisted_19$9, toDisplayString(entry.task_title) + " · " + toDisplayString(entry.day), 1)]),
 									_: 2
 								}, 1032, [
 									"model-value",
@@ -6114,17 +6113,17 @@ var _sfc_main$108 = {
 								createBaseVNode("strong", null, toDisplayString(entry.day) + " · " + toDisplayString(entry.hours) + " " + toDisplayString(unref(t)("h")), 1),
 								createBaseVNode("span", null, toDisplayString(entry.login) + " · " + toDisplayString(unref(t)(entry.category === "overtime" ? "Overtime" : "Regular")) + " · " + toDisplayString(unref(t)(entry.status === "approved" ? "Approved" : "Pending")), 1)
 							]),
-							__props.mode === "week" ? (openBlock(), createElementBlock("p", _hoisted_20$9, toDisplayString(entry.task_title || unref(t)("Removed task")) + " · " + toDisplayString(entry.process), 1)) : createCommentVNode("", true),
-							createBaseVNode("p", _hoisted_21$8, toDisplayString(entry.description), 1),
-							createBaseVNode("div", _hoisted_22$7, [
-								createVNode(_sfc_main$138, {
+							__props.mode === "week" ? (openBlock(), createElementBlock("p", _hoisted_20$8, toDisplayString(entry.task_title || unref(t)("Removed task")) + " · " + toDisplayString(entry.process), 1)) : createCommentVNode("", true),
+							createBaseVNode("p", _hoisted_21$7, toDisplayString(entry.description), 1),
+							createBaseVNode("div", _hoisted_22$5, [
+								createVNode(_sfc_main$141, {
 									label: "Edit time entry",
 									icon: "edit",
 									"icon-only": "",
 									disabled: __props.busy || __props.uncertain || __props.editing || entry.can_edit === false,
 									onClick: ($event) => emit("edit", entry)
 								}, null, 8, ["disabled", "onClick"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: entry.status === "approved" ? "Revoke approval" : "Approve time entry",
 									icon: "check",
 									disabled: __props.busy || __props.uncertain || __props.editing,
@@ -6134,7 +6133,7 @@ var _sfc_main$108 = {
 									"disabled",
 									"onClick"
 								]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Delete time entry",
 									icon: "delete",
 									destructive: "",
@@ -6143,16 +6142,16 @@ var _sfc_main$108 = {
 									onClick: ($event) => emit("delete", entry.search_key)
 								}, null, 8, ["disabled", "onClick"])
 							]),
-							__props.deleting === entry.search_key ? (openBlock(), createElementBlock("div", _hoisted_23$7, [
+							__props.deleting === entry.search_key ? (openBlock(), createElementBlock("div", _hoisted_23$5, [
 								createBaseVNode("p", null, toDisplayString(unref(t)("Delete this time entry?")), 1),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Delete time entry",
 									icon: "delete",
 									destructive: "",
 									disabled: __props.busy || __props.uncertain,
 									onClick: ($event) => emit("action", entry, "delete")
 								}, null, 8, ["disabled", "onClick"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Cancel",
 									disabled: __props.busy,
 									onClick: _cache[24] || (_cache[24] = ($event) => emit("delete", ""))
@@ -6177,8 +6176,8 @@ function today$1() {
 	const date = /* @__PURE__ */ new Date();
 	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
-var _sfc_main$107 = {
-	components: { TimeEntryPanel: _sfc_main$108 },
+var _sfc_main$110 = {
+	components: { TimeEntryPanel: _sfc_main$111 },
 	props: {
 		ticket: String,
 		project: String,
@@ -6442,7 +6441,7 @@ function _sfc_render$19(_ctx, _cache, $props, $setup, $data, $options) {
 		"onSelect"
 	]);
 }
-var Timesheet_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$107, [["render", _sfc_render$19]]);
+var Timesheet_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$110, [["render", _sfc_render$19]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/objects/note.ui.mjs
 var note_ui_exports = /* @__PURE__ */ __exportAll$1({
@@ -6451,7 +6450,7 @@ var note_ui_exports = /* @__PURE__ */ __exportAll$1({
 	card: () => card$1,
 	edit: () => edit$2,
 	geometry: () => geometry$1,
-	header: () => header$3,
+	header: () => header$4,
 	remove: () => remove$1
 });
 function geometry$1(model, width) {
@@ -6491,7 +6490,7 @@ function card$1(model, width, height) {
 	}));
 	return { nodes };
 }
-function header$3(model, width, language) {
+function header$4(model, width, language) {
 	const tr = (text) => translate(text, language), actions = model.status ? 0 : model.reply ? 56 : 28;
 	const timeWidth = Math.min(110, Math.max(48, String(model.time || "").length * 6));
 	const authorWidth = Math.max(0, width - timeWidth - actions - 12);
@@ -6604,7 +6603,7 @@ function remove$1(model, width, language) {
 }
 //#endregion
 //#region src/features/objects/NoteEntry.vue
-var _sfc_main$106 = {
+var _sfc_main$109 = {
 	__name: "NoteEntry",
 	props: { model: Object },
 	emits: ["event"],
@@ -6615,7 +6614,7 @@ var _sfc_main$106 = {
 		let observer;
 		const geometry = computed(() => geometry$1(props.model, width.value));
 		const height = computed(() => Math.max(52, 48 + (bodyHeight.value ? 6 + bodyHeight.value : 0)));
-		const header = computed(() => header$3({
+		const header = computed(() => header$4({
 			...props.model,
 			actionsVisible: hovered.value || mobile.value
 		}, geometry.value.contentWidth, appearance.language));
@@ -6643,14 +6642,14 @@ var _sfc_main$106 = {
 				onPointerenter: _cache[1] || (_cache[1] = ($event) => hovered.value = true),
 				onPointerleave: _cache[2] || (_cache[2] = ($event) => hovered.value = false)
 			}, [
-				createVNode(_sfc_main$140, { scene: card$1(__props.model, geometry.value.width, height.value) }, null, 8, ["scene"]),
+				createVNode(_sfc_main$143, { scene: card$1(__props.model, geometry.value.width, height.value) }, null, 8, ["scene"]),
 				createBaseVNode("div", {
 					class: "shared-note-header",
 					style: normalizeStyle({
 						left: geometry.value.contentX + "px",
 						width: geometry.value.contentWidth + "px"
 					})
-				}, [createVNode(_sfc_main$140, {
+				}, [createVNode(_sfc_main$143, {
 					scene: header.value,
 					onEvent: _cache[0] || (_cache[0] = (action, source) => emit("event", action, source))
 				}, null, 8, ["scene"])], 4),
@@ -6670,7 +6669,7 @@ var _sfc_main$106 = {
 };
 //#endregion
 //#region src/controls/ResponsiveFlow.vue
-var _sfc_main$105 = {
+var _sfc_main$108 = {
 	__name: "ResponsiveFlow",
 	props: {
 		minimumCellWidth: {
@@ -6875,7 +6874,7 @@ function optionChange(model, command) {
 	};
 	throw Error("Unknown snapshot option: " + command);
 }
-function layout$2(model, width, height) {
+function layout$3(model, width, height) {
 	const preview = model.contentMode !== "files", files = model.contentMode !== "preview";
 	const gap = metrics$3.splitter;
 	const margin = 0;
@@ -6986,7 +6985,7 @@ function summary$1(model, width, language, measure = (text, size) => String(text
 }
 //#endregion
 //#region src/features/objects/SnapshotSummary.vue
-var _sfc_main$104 = {
+var _sfc_main$107 = {
 	__name: "SnapshotSummary",
 	props: {
 		snapshot: Object,
@@ -7014,7 +7013,7 @@ var _sfc_main$104 = {
 				ref_key: "host",
 				ref: host,
 				class: "snapshot-summary"
-			}, [createVNode(_sfc_main$140, { scene: scene.value }, null, 8, ["scene"])], 512);
+			}, [createVNode(_sfc_main$143, { scene: scene.value }, null, 8, ["scene"])], 512);
 		};
 	}
 };
@@ -7222,7 +7221,7 @@ function emojiCount(value) {
 }
 //#endregion
 //#region src/features/objects/SKeyPreviewCard.vue
-var _hoisted_1$74 = { class: "skey-author-row" };
+var _hoisted_1$76 = { class: "skey-author-row" };
 var _hoisted_2$59 = { class: "skey-message-text" };
 var _hoisted_3$47 = { class: "skey-author-heading" };
 var _hoisted_4$39 = ["title"];
@@ -7240,25 +7239,25 @@ var _hoisted_9$20 = {
 	key: 3,
 	class: "skey-preview-text skey-knowledge-text"
 };
-var _hoisted_10$20 = { class: "skey-kind" };
-var _hoisted_11$17 = { class: "skey-article-kind" };
-var _hoisted_12$16 = ["title"];
-var _hoisted_13$14 = { key: 0 };
-var _hoisted_14$12 = {
+var _hoisted_10$19 = { class: "skey-kind" };
+var _hoisted_11$16 = { class: "skey-article-kind" };
+var _hoisted_12$15 = ["title"];
+var _hoisted_13$13 = { key: 0 };
+var _hoisted_14$11 = {
 	key: 4,
 	class: "skey-preview-text"
 };
-var _hoisted_15$12 = {
+var _hoisted_15$11 = {
 	key: 0,
 	class: "skey-kind"
 };
-var _hoisted_16$12 = ["title"];
-var _hoisted_17$11 = {
+var _hoisted_16$11 = ["title"];
+var _hoisted_17$10 = {
 	key: 1,
 	class: "skey-article-kind"
 };
-var _hoisted_18$10 = { key: 0 };
-var _sfc_main$103 = {
+var _hoisted_18$9 = { key: 0 };
+var _sfc_main$106 = {
 	__name: "SKeyPreviewCard",
 	props: {
 		preview: Object,
@@ -7303,7 +7302,7 @@ var _sfc_main$103 = {
 		}
 		return (_ctx, _cache) => {
 			const _component_SKeyPreviewCard = resolveComponent("SKeyPreviewCard", true);
-			return withDirectives((openBlock(), createBlock(resolveDynamicComponent(__props.compact ? _sfc_main$145 : "article"), {
+			return withDirectives((openBlock(), createBlock(resolveDynamicComponent(__props.compact ? _sfc_main$148 : "article"), {
 				class: normalizeClass(["skey-preview-card", [__props.preview.kind, {
 					failed: failed.value,
 					compact: __props.compact,
@@ -7318,7 +7317,7 @@ var _sfc_main$103 = {
 				onKeydown: [withKeys(withModifiers(activate, ["self", "prevent"]), ["enter"]), withKeys(withModifiers(activate, ["self", "prevent"]), ["space"])]
 			}, {
 				default: withCtx(() => [rich.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-					createBaseVNode("div", _hoisted_1$74, [createVNode(ItemPreview_default, {
+					createBaseVNode("div", _hoisted_1$76, [createVNode(ItemPreview_default, {
 						source: __props.preview.avatarUrl,
 						"fallback-text": __props.preview.initials,
 						"fallback-icon": "user",
@@ -7330,7 +7329,7 @@ var _sfc_main$103 = {
 						"source",
 						"fallback-text",
 						"accent"
-					]), createBaseVNode("div", _hoisted_2$59, [createBaseVNode("div", _hoisted_3$47, [createVNode(_sfc_main$138, {
+					]), createBaseVNode("div", _hoisted_2$59, [createBaseVNode("div", _hoisted_3$47, [createVNode(_sfc_main$141, {
 						class: "skey-author-name",
 						style: normalizeStyle({ color: __props.preview.authorColor || "var(--primary)" }),
 						href: unref(browserLink)("skey://sthpw/login?code=" + encodeURIComponent(__props.preview.author)),
@@ -7361,13 +7360,13 @@ var _sfc_main$103 = {
 						]);
 					}), 128)),
 					__props.preview.nestedPreviewCount > (__props.preview.nestedPreviews || []).length ? (openBlock(), createElementBlock("small", _hoisted_7$27, toDisplayString(unref(t)("+{count} more linked items", { count: __props.preview.nestedPreviewCount - __props.preview.nestedPreviews.length })), 1)) : createCommentVNode("", true),
-					__props.preview.attachments?.length ? (openBlock(), createBlock(_sfc_main$105, {
+					__props.preview.attachments?.length ? (openBlock(), createBlock(_sfc_main$108, {
 						key: 2,
 						"minimum-cell-width": 210,
 						"maximum-columns": 2
 					}, {
 						default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.preview.attachments, (file) => {
-							return openBlock(), createBlock(_sfc_main$163, {
+							return openBlock(), createBlock(_sfc_main$166, {
 								key: file.searchKey + file.title,
 								title: file.title,
 								extension: file.extension,
@@ -7387,7 +7386,7 @@ var _sfc_main$103 = {
 					})) : createCommentVNode("", true),
 					__props.preview.attachmentCount > (__props.preview.attachments || []).length ? (openBlock(), createElementBlock("small", _hoisted_8$24, toDisplayString(unref(t)("+{count} more attachments", { count: __props.preview.attachmentCount - __props.preview.attachments.length })), 1)) : createCommentVNode("", true)
 				], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-					__props.compact ? (openBlock(), createBlock(_sfc_main$139, {
+					__props.compact ? (openBlock(), createBlock(_sfc_main$142, {
 						key: 0,
 						name: icon.value
 					}, null, 8, ["name"])) : (openBlock(), createBlock(ItemPreview_default, {
@@ -7403,26 +7402,26 @@ var _sfc_main$103 = {
 						"preview-size",
 						"outlined"
 					])),
-					__props.preview.kind === "snapshot" && ready.value && !__props.compact ? (openBlock(), createBlock(_sfc_main$104, {
+					__props.preview.kind === "snapshot" && ready.value && !__props.compact ? (openBlock(), createBlock(_sfc_main$107, {
 						key: 2,
 						snapshot: __props.preview
 					}, null, 8, ["snapshot"])) : __props.preview.kind === "knowledge" && !__props.compact ? (openBlock(), createElementBlock("div", _hoisted_9$20, [
-						createBaseVNode("div", null, [createBaseVNode("small", _hoisted_10$20, toDisplayString(unref(t)("Knowledge Base")), 1), createBaseVNode("small", _hoisted_11$17, toDisplayString(unref(t)(__props.preview.articleKind === "section" ? "Section" : "Article")), 1)]),
-						createBaseVNode("strong", { title: __props.preview.title }, toDisplayString(!ready.value && !failed.value ? unref(t)("Loading article") : __props.preview.title || unref(t)("Knowledge Base article")), 9, _hoisted_12$16),
-						failed.value || !ready.value || __props.preview.description || __props.preview.excerpt ? (openBlock(), createElementBlock("small", _hoisted_13$14, toDisplayString(failed.value ? unref(t)(__props.preview.error || "Link preview is unavailable") : !ready.value ? unref(t)("Resolving Knowledge Base link") : __props.preview.description || __props.preview.excerpt), 1)) : createCommentVNode("", true)
-					])) : (openBlock(), createElementBlock("div", _hoisted_14$12, [
+						createBaseVNode("div", null, [createBaseVNode("small", _hoisted_10$19, toDisplayString(unref(t)("Knowledge Base")), 1), createBaseVNode("small", _hoisted_11$16, toDisplayString(unref(t)(__props.preview.articleKind === "section" ? "Section" : "Article")), 1)]),
+						createBaseVNode("strong", { title: __props.preview.title }, toDisplayString(!ready.value && !failed.value ? unref(t)("Loading article") : __props.preview.title || unref(t)("Knowledge Base article")), 9, _hoisted_12$15),
+						failed.value || !ready.value || __props.preview.description || __props.preview.excerpt ? (openBlock(), createElementBlock("small", _hoisted_13$13, toDisplayString(failed.value ? unref(t)(__props.preview.error || "Link preview is unavailable") : !ready.value ? unref(t)("Resolving Knowledge Base link") : __props.preview.description || __props.preview.excerpt), 1)) : createCommentVNode("", true)
+					])) : (openBlock(), createElementBlock("div", _hoisted_14$11, [
 						createBaseVNode("div", null, [
-							!__props.compact ? (openBlock(), createElementBlock("small", _hoisted_15$12, toDisplayString(unref(t)(__props.preview.kind === "knowledge" ? "Knowledge Base" : __props.preview.kind === "sobject" ? "SObject" : __props.preview.kind === "user" ? "User" : __props.preview.kind === "project" ? "Project" : __props.preview.kind === "task" ? "Task" : __props.preview.kind === "file" ? "File" : __props.preview.kind === "note" ? "Note" : __props.preview.kind === "message" ? "Message" : "Snapshot")), 1)) : createCommentVNode("", true),
-							createBaseVNode("strong", { title: __props.preview.title }, toDisplayString(__props.preview.kind === "knowledge" && !ready.value && !failed.value ? unref(t)("Loading article") : __props.preview.title || unref(t)("TACTIC item")), 9, _hoisted_16$12),
-							__props.preview.kind === "knowledge" ? (openBlock(), createElementBlock("small", _hoisted_17$11, toDisplayString(unref(t)(__props.preview.articleKind === "section" ? "Section" : "Article")), 1)) : createCommentVNode("", true)
+							!__props.compact ? (openBlock(), createElementBlock("small", _hoisted_15$11, toDisplayString(unref(t)(__props.preview.kind === "knowledge" ? "Knowledge Base" : __props.preview.kind === "sobject" ? "SObject" : __props.preview.kind === "user" ? "User" : __props.preview.kind === "project" ? "Project" : __props.preview.kind === "task" ? "Task" : __props.preview.kind === "file" ? "File" : __props.preview.kind === "note" ? "Note" : __props.preview.kind === "message" ? "Message" : "Snapshot")), 1)) : createCommentVNode("", true),
+							createBaseVNode("strong", { title: __props.preview.title }, toDisplayString(__props.preview.kind === "knowledge" && !ready.value && !failed.value ? unref(t)("Loading article") : __props.preview.title || unref(t)("TACTIC item")), 9, _hoisted_16$11),
+							__props.preview.kind === "knowledge" ? (openBlock(), createElementBlock("small", _hoisted_17$10, toDisplayString(unref(t)(__props.preview.articleKind === "section" ? "Section" : "Article")), 1)) : createCommentVNode("", true)
 						]),
-						!__props.compact && __props.preview.subtitle && __props.preview.kind !== "knowledge" ? (openBlock(), createElementBlock("span", _hoisted_18$10, toDisplayString(__props.preview.subtitle), 1)) : createCommentVNode("", true),
+						!__props.compact && __props.preview.subtitle && __props.preview.kind !== "knowledge" ? (openBlock(), createElementBlock("span", _hoisted_18$9, toDisplayString(__props.preview.subtitle), 1)) : createCommentVNode("", true),
 						createBaseVNode("small", null, toDisplayString(failed.value ? unref(t)(__props.preview.error || "Link preview is unavailable") : !ready.value ? unref(t)("Resolving link") : __props.preview.kind === "knowledge" ? __props.preview.description || __props.preview.excerpt : __props.preview.detail || (__props.compact ? __props.preview.subtitle : "")), 1)
 					])),
 					!ready.value && !failed.value ? (openBlock(), createBlock(BusyIndicator_default, {
 						key: 5,
 						running: ""
-					})) : !__props.compact ? (openBlock(), createBlock(_sfc_main$138, {
+					})) : !__props.compact ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 6,
 						class: "skey-open",
 						icon: failed.value ? "refresh" : __props.preview.kind === "knowledge" ? "MDI_ARROW_RIGHT" : "MDI_OPEN_IN_NEW",
@@ -7430,25 +7429,25 @@ var _sfc_main$103 = {
 						label: failed.value ? "Retry preview" : __props.preview.kind === "snapshot" ? "Open snapshot" : __props.preview.kind === "knowledge" ? "Open article" : "Open linked item",
 						onClick: activate
 					}, null, 8, ["icon", "label"])) : createCommentVNode("", true)
-				], 64)), createVNode(_sfc_main$159, {
+				], 64)), createVNode(_sfc_main$160, {
 					ref_key: "menu",
 					ref: menu,
 					class: "skey-actions",
 					label: "Link actions",
 					overlay: ""
 				}, {
-					default: withCtx(() => [failed.value ? (openBlock(), createBlock(_sfc_main$138, {
+					default: withCtx(() => [failed.value ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 0,
 						label: "Retry preview",
 						icon: "refresh",
 						onClick: _cache[6] || (_cache[6] = ($event) => emit("retry", __props.preview.searchKey))
-					})) : (openBlock(), createBlock(_sfc_main$138, {
+					})) : (openBlock(), createBlock(_sfc_main$141, {
 						key: 1,
 						label: __props.preview.kind === "message" && !canOpen.value ? "Source conversation is unavailable" : "Open linked item",
 						icon: "MDI_OPEN_IN_NEW",
 						disabled: !canOpen.value,
 						onClick: _cache[7] || (_cache[7] = ($event) => emit("open", __props.preview.searchKey))
-					}, null, 8, ["label", "disabled"])), createVNode(_sfc_main$138, {
+					}, null, 8, ["label", "disabled"])), createVNode(_sfc_main$141, {
 						label: "Copy sKey",
 						icon: "link",
 						onClick: _cache[8] || (_cache[8] = ($event) => emit("copy", __props.preview.searchKey))
@@ -7495,7 +7494,7 @@ function skeyPlaceholder(searchKey, status = "loading") {
 }
 //#endregion
 //#region src/features/objects/NoteBody.vue
-var _sfc_main$102 = {
+var _sfc_main$105 = {
 	__name: "NoteBody",
 	props: {
 		note: Object,
@@ -7546,7 +7545,7 @@ var _sfc_main$102 = {
 						display: "flex",
 						gap: "8px",
 						alignItems: "center"
-					} }, [h(_sfc_main$139, {
+					} }, [h(_sfc_main$142, {
 						name: "status",
 						style: {
 							fontSize: "22px",
@@ -7572,7 +7571,7 @@ var _sfc_main$102 = {
 							innerHTML: linkifyPlainText(text.value),
 							onClick: (event) => activateRichLink(event, (key) => emit("link", key))
 						});
-					} else if (port.frameNode.view === "previews") content = keys.value.map((key) => h(_sfc_main$103, {
+					} else if (port.frameNode.view === "previews") content = keys.value.map((key) => h(_sfc_main$106, {
 						key,
 						preview: props.previews?.[key] || skeyPlaceholder(key),
 						previews: props.previews,
@@ -7580,11 +7579,11 @@ var _sfc_main$102 = {
 						onRetry: (key) => emit("retry", key),
 						onCopy: (key) => emit("copy", key)
 					}));
-					else content = h(_sfc_main$105, {
+					else content = h(_sfc_main$108, {
 						minimumCellWidth: bodyMetrics.minimumCellWidth,
 						maximumColumns: bodyMetrics.maximumColumns,
 						spacing: bodyMetrics.gap
-					}, () => props.files.map((file) => h(_sfc_main$163, {
+					}, () => props.files.map((file) => h(_sfc_main$166, {
 						key: file.href,
 						"data-flow-full": file.previewUrl ? "" : void 0,
 						title: file.filename,
@@ -7639,7 +7638,7 @@ var _sfc_main$102 = {
 				ref: host,
 				class: "note-body-surface",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views
 			}, null, 8, ["scene"])], 4);
@@ -7648,10 +7647,10 @@ var _sfc_main$102 = {
 };
 //#endregion
 //#region src/features/objects/NoteDialogs.vue
-var _hoisted_1$73 = ["aria-label", "aria-busy"];
+var _hoisted_1$75 = ["aria-label", "aria-busy"];
 //#endregion
 //#region src/features/objects/NotesPanel.vue
-var _sfc_main$100 = {
+var _sfc_main$103 = {
 	inject: {
 		openHelp: {},
 		openUserProfile: { default: null },
@@ -7659,20 +7658,20 @@ var _sfc_main$100 = {
 		openTaskInspector: { default: null }
 	},
 	components: {
-		AppButton: _sfc_main$138,
-		AppSelect: _sfc_main$153,
-		AppIcon: _sfc_main$139,
-		AppTextArea: _sfc_main$143,
-		AppMenu: _sfc_main$159,
-		AttachmentCard: _sfc_main$163,
+		AppButton: _sfc_main$141,
+		AppSelect: _sfc_main$156,
+		AppIcon: _sfc_main$142,
+		AppTextArea: _sfc_main$146,
+		AppMenu: _sfc_main$160,
+		AttachmentCard: _sfc_main$166,
 		FilePreview: FilePreview_default,
-		TaskDetails: _sfc_main$111,
-		RelatedTasks: _sfc_main$110,
+		TaskDetails: _sfc_main$114,
+		RelatedTasks: _sfc_main$113,
 		RecordForm: RecordForm_default,
-		WorkHoursSummary: _sfc_main$109,
+		WorkHoursSummary: _sfc_main$112,
 		Timesheet: Timesheet_default,
-		NoteEntry: _sfc_main$106,
-		NoteBody: _sfc_main$102,
+		NoteEntry: _sfc_main$109,
+		NoteBody: _sfc_main$105,
 		NoteDialogs: {
 			__name: "NoteDialogs",
 			props: {
@@ -7741,15 +7740,15 @@ var _sfc_main$100 = {
 						ref: host,
 						class: "note-child-content",
 						style: normalizeStyle({ height: scene.value.height + "px" })
-					}, [createVNode(_sfc_main$140, {
+					}, [createVNode(_sfc_main$143, {
 						scene: scene.value,
 						onEvent: action
-					}, null, 8, ["scene"])], 4)], 42, _hoisted_1$73)), [[_directive_window, __props.editing ? { type: "popup" } : false]])]);
+					}, null, 8, ["scene"])], 4)], 42, _hoisted_1$75)), [[_directive_window, __props.editing ? { type: "popup" } : false]])]);
 				};
 			}
 		},
-		TaskInspectorHeader: _sfc_main$118,
-		MessageComposer: _sfc_main$116
+		TaskInspectorHeader: _sfc_main$121,
+		MessageComposer: _sfc_main$119
 	},
 	props: {
 		ticket: String,
@@ -8549,7 +8548,7 @@ var _sfc_main$100 = {
 		}
 	}
 };
-var _hoisted_1$72 = {
+var _hoisted_1$74 = {
 	key: 0,
 	class: "inspector-window-header"
 };
@@ -8584,10 +8583,10 @@ var _hoisted_9$19 = {
 	key: 1,
 	class: "muted notes-empty"
 };
-var _hoisted_10$19 = { key: 0 };
-var _hoisted_11$16 = { class: "note-body" };
-var _hoisted_12$15 = { key: 0 };
-var _hoisted_13$13 = {
+var _hoisted_10$18 = { key: 0 };
+var _hoisted_11$15 = { class: "note-body" };
+var _hoisted_12$14 = { key: 0 };
+var _hoisted_13$12 = {
 	key: 3,
 	class: "inspector-mobile-navigation"
 };
@@ -8627,7 +8626,7 @@ function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
 		onDrop: _cache[25] || (_cache[25] = withModifiers(($event) => $options.attach($event.dataTransfer.files), ["prevent"]))
 	}, {
 		default: withCtx(() => [
-			!$options.docked && !$options.mobile ? (openBlock(), createElementBlock("header", _hoisted_1$72, [
+			!$options.docked && !$options.mobile ? (openBlock(), createElementBlock("header", _hoisted_1$74, [
 				createVNode(_component_AppIcon, { name: "comment" }),
 				createBaseVNode("h2", null, toDisplayString($options.t($data.taskMode ? "Task Inspector" : "Notes")), 1),
 				createVNode(_component_AppButton, {
@@ -8854,8 +8853,8 @@ function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
 							"onLink",
 							"onCopy",
 							"onFile"
-						]), note.entry_type !== "status" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [note.metadata?.editHistory?.length ? (openBlock(), createElementBlock("details", _hoisted_10$19, [createBaseVNode("summary", null, toDisplayString($options.t("Edit history")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(note.metadata.editHistory, (entry, index) => {
-							return openBlock(), createElementBlock("div", { key: index }, [createBaseVNode("small", null, toDisplayString(entry.editedBy) + " · " + toDisplayString(entry.editedAt), 1), createBaseVNode("p", _hoisted_11$16, toDisplayString(entry.body), 1)]);
+						]), note.entry_type !== "status" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [note.metadata?.editHistory?.length ? (openBlock(), createElementBlock("details", _hoisted_10$18, [createBaseVNode("summary", null, toDisplayString($options.t("Edit history")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(note.metadata.editHistory, (entry, index) => {
+							return openBlock(), createElementBlock("div", { key: index }, [createBaseVNode("small", null, toDisplayString(entry.editedBy) + " · " + toDisplayString(entry.editedAt), 1), createBaseVNode("p", _hoisted_11$15, toDisplayString(entry.body), 1)]);
 						}), 128))])) : createCommentVNode("", true)], 64)) : createCommentVNode("", true)]),
 						_: 2
 					}, 1032, [
@@ -8889,7 +8888,7 @@ function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
 					class: "note-composer",
 					onSubmit: _cache[21] || (_cache[21] = withModifiers((...args) => $options.send && $options.send(...args), ["prevent"]))
 				}, [
-					$options.draft.reply ? (openBlock(), createElementBlock("p", _hoisted_12$15, [createTextVNode(toDisplayString($options.t("Reply to")) + " " + toDisplayString($options.draft.reply.login) + ": " + toDisplayString($options.draft.reply.body) + " ", 1), createVNode(_component_AppButton, {
+					$options.draft.reply ? (openBlock(), createElementBlock("p", _hoisted_12$14, [createTextVNode(toDisplayString($options.t("Reply to")) + " " + toDisplayString($options.draft.reply.login) + ": " + toDisplayString($options.draft.reply.body) + " ", 1), createVNode(_component_AppButton, {
 						label: "Cancel reply",
 						icon: "close",
 						"icon-only": "",
@@ -8954,7 +8953,7 @@ function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
 					])
 				], 32)
 			], 64)),
-			$options.mobile && (!$data.taskMode || !$data.editor?.object) ? (openBlock(), createElementBlock("footer", _hoisted_13$13, [
+			$options.mobile && (!$data.taskMode || !$data.editor?.object) ? (openBlock(), createElementBlock("footer", _hoisted_13$12, [
 				createVNode(_component_AppButton, {
 					label: "Back",
 					icon: "MDI_ARROW_LEFT",
@@ -9017,10 +9016,10 @@ function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
 		])
 	]))], 64);
 }
-var NotesPanel_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$100, [["render", _sfc_render$18]]);
+var NotesPanel_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$103, [["render", _sfc_render$18]]);
 //#endregion
 //#region src/features/interface/TaskTableEditor.vue
-var _hoisted_1$71 = [
+var _hoisted_1$73 = [
 	"popover",
 	"aria-label",
 	"aria-description",
@@ -9032,7 +9031,7 @@ var _hoisted_3$45 = {
 	class: "muted"
 };
 var _hoisted_4$37 = { key: 0 };
-var _sfc_main$99 = {
+var _sfc_main$102 = {
 	__name: "TaskTableEditor",
 	props: {
 		editor: Object,
@@ -9101,7 +9100,7 @@ var _sfc_main$99 = {
 				onKeydown: withKeys(withModifiers(close, ["stop", "prevent"]), ["esc"]),
 				onToggle: _cache[0] || (_cache[0] = ($event) => $event.newState === "closed" && emit("closed"))
 			}, [__props.editor ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-				!compact.value ? (openBlock(), createElementBlock("header", _hoisted_2$57, [createBaseVNode("strong", null, toDisplayString(__props.editor.process), 1), createVNode(_sfc_main$138, {
+				!compact.value ? (openBlock(), createElementBlock("header", _hoisted_2$57, [createBaseVNode("strong", null, toDisplayString(__props.editor.process), 1), createVNode(_sfc_main$141, {
 					label: "Close",
 					icon: "close",
 					"icon-only": "",
@@ -9109,7 +9108,7 @@ var _sfc_main$99 = {
 				})])) : createCommentVNode("", true),
 				!compact.value && __props.editor.plans.length > 1 ? (openBlock(), createElementBlock("p", _hoisted_3$45, toDisplayString(unref(t)("Apply to {count} rows", { count: __props.editor.plans.length })), 1)) : createCommentVNode("", true),
 				(openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.fields, (field) => {
-					return openBlock(), createElementBlock("label", { key: field.name }, [!compact.value ? (openBlock(), createElementBlock("span", _hoisted_4$37, toDisplayString(unref(t)(field.name === "status" ? "Status" : field.name === "assigned" ? "Assigned to" : field.name === "bid_start_date" ? "Start date" : "End date")), 1)) : createCommentVNode("", true), createVNode(_sfc_main$113, {
+					return openBlock(), createElementBlock("label", { key: field.name }, [!compact.value ? (openBlock(), createElementBlock("span", _hoisted_4$37, toDisplayString(unref(t)(field.name === "status" ? "Status" : field.name === "assigned" ? "Assigned to" : field.name === "bid_start_date" ? "Start date" : "End date")), 1)) : createCommentVNode("", true), createVNode(_sfc_main$116, {
 						field,
 						compact: compact.value,
 						value: __props.editor.values[field.name],
@@ -9127,13 +9126,13 @@ var _sfc_main$99 = {
 						"onChange"
 					])]);
 				}), 128))
-			], 64)) : createCommentVNode("", true)], 42, _hoisted_1$71)]);
+			], 64)) : createCommentVNode("", true)], 42, _hoisted_1$73)]);
 		};
 	}
 };
 //#endregion
 //#region src/features/journal/JournalDetails.vue
-var _hoisted_1$70 = ["aria-label", "aria-busy"];
+var _hoisted_1$72 = ["aria-label", "aria-busy"];
 var _hoisted_2$56 = {
 	key: 0,
 	class: "muted",
@@ -9206,14 +9205,14 @@ var JournalDetails_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}, [
 				createBaseVNode("header", null, [
 					createBaseVNode("strong", null, toDisplayString(unref(t)("Transaction XML")), 1),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						icon: "copy",
 						"icon-only": "",
 						label: "Copy transaction XML",
 						disabled: busy.value || !xml.value,
 						onClick: copy
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						icon: "refresh",
 						"icon-only": "",
 						label: "Refresh transaction details",
@@ -9222,7 +9221,7 @@ var JournalDetails_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					}, null, 8, ["disabled"])
 				]),
 				busy.value ? (openBlock(), createElementBlock("p", _hoisted_2$56, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
-				error.value ? (openBlock(), createElementBlock("p", _hoisted_3$44, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$138, {
+				error.value ? (openBlock(), createElementBlock("p", _hoisted_3$44, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$141, {
 					label: "Retry",
 					icon: "refresh",
 					disabled: busy.value,
@@ -9230,12 +9229,12 @@ var JournalDetails_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				}, null, 8, ["disabled"])])) : createCommentVNode("", true),
 				message.value ? (openBlock(), createElementBlock("p", _hoisted_4$36, toDisplayString(unref(t)(message.value)), 1)) : createCommentVNode("", true),
 				hidden.value ? (openBlock(), createElementBlock("p", _hoisted_5$30, toDisplayString(unref(t)("{count} journal operations are hidden by access rules.", { count: hidden.value })), 1)) : createCommentVNode("", true),
-				xml.value ? (openBlock(), createBlock(_sfc_main$152, {
+				xml.value ? (openBlock(), createBlock(_sfc_main$155, {
 					key: 4,
 					code: xml.value,
 					language: "xml"
 				}, null, 8, ["code"])) : createCommentVNode("", true)
-			], 8, _hoisted_1$70);
+			], 8, _hoisted_1$72);
 		};
 	}
 }, [["__scopeId", "data-v-88dc07c2"]]);
@@ -9571,7 +9570,7 @@ function tileLayout(model, width) {
 		counts: rect$1(width - 71, height - 37, 63, 30)
 	};
 }
-function layout$1(model, width) {
+function layout$2(model, width) {
 	if (model.tile) return tileLayout(model, width);
 	const kind = model.kind, object = kind === "object", snapshot = kind === "snapshot", branch = kind === "process" || kind === "relation", compact = !!model.compact, mobile = !!model.mobile, tile = !!model.tile, indent = Math.max(0, model.depth || 0) * 24;
 	const height = tile ? 196 : mobile ? object ? 104 : snapshot ? 92 : branch ? 54 : 48 : kind === "group" ? 40 : kind === "relation" ? 38 : kind === "process" ? 32 : compact ? object ? 64 : snapshot ? 56 : 42 : object ? 100 : snapshot ? 84 : 49;
@@ -9595,7 +9594,7 @@ function layout$1(model, width) {
 	};
 }
 function body(model, width, height) {
-	const geometry = layout$1(model, width), nodes = [], object = model.kind === "object", snapshot = model.kind === "snapshot", compact = !!model.compact, reserve = model.reserve == null ? geometry.reserve : model.reserve, available = Math.min(width, Math.max(48, width - reserve)), color = model.selected ? "contentSelectionText" : "secondaryText";
+	const geometry = layout$2(model, width), nodes = [], object = model.kind === "object", snapshot = model.kind === "snapshot", compact = !!model.compact, reserve = model.reserve == null ? geometry.reserve : model.reserve, available = Math.min(width, Math.max(48, width - reserve)), color = model.selected ? "contentSelectionText" : "secondaryText";
 	if (model.tile) {
 		let top = 0;
 		nodes.push(node("View", "resultTitle", rect$1(0, top, width, 18), {
@@ -9682,7 +9681,7 @@ function body(model, width, height) {
 }
 //#endregion
 //#region src/features/workspace/ResultBody.vue
-var _sfc_main$97 = {
+var _sfc_main$100 = {
 	__name: "ResultBody",
 	props: {
 		model: Object,
@@ -9700,7 +9699,7 @@ var _sfc_main$97 = {
 		].map((name) => [name, { component: () => h("div", { class: "result-body-slot" }, slots[name]?.()) }]));
 		const scene = computed(() => body(props.model, props.width, props.height));
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$140, {
+			return openBlock(), createBlock(_sfc_main$143, {
 				scene: scene.value,
 				views: unref(views)
 			}, null, 8, ["scene", "views"]);
@@ -9709,12 +9708,12 @@ var _sfc_main$97 = {
 };
 //#endregion
 //#region src/controls/layout/InfoValueStrip.vue
-var _hoisted_1$69 = { class: "info-value-strip" };
+var _hoisted_1$71 = { class: "info-value-strip" };
 var _hoisted_2$55 = {
 	key: 0,
 	class: "info-separator"
 };
-var _sfc_main$96 = {
+var _sfc_main$99 = {
 	__name: "InfoValueStrip",
 	props: {
 		items: {
@@ -9741,7 +9740,7 @@ var _sfc_main$96 = {
 			return /^(https?:\/\/|ftp:\/\/|mailto:)/i.test(url || "") && !/[\u0000-\u001f]/.test(url);
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("span", _hoisted_1$69, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.maximumItems > 0 ? __props.items.slice(0, __props.maximumItems) : __props.items, (item, index) => {
+			return openBlock(), createElementBlock("span", _hoisted_1$71, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.maximumItems > 0 ? __props.items.slice(0, __props.maximumItems) : __props.items, (item, index) => {
 				return openBlock(), createElementBlock(Fragment, { key: index }, [index ? (openBlock(), createElementBlock("span", _hoisted_2$55, toDisplayString(__props.separator), 1)) : createCommentVNode("", true), (openBlock(), createBlock(resolveDynamicComponent(external(item.url) ? "a" : "span"), {
 					href: external(item.url) ? item.url : void 0,
 					target: "_blank",
@@ -9767,7 +9766,7 @@ var _sfc_main$96 = {
 };
 //#endregion
 //#region src/features/workspace/ResultItem.vue
-var _hoisted_1$68 = [
+var _hoisted_1$70 = [
 	"data-result-key",
 	"data-node-id",
 	"aria-label"
@@ -9799,43 +9798,43 @@ var _hoisted_7$25 = {
 };
 var _hoisted_8$22 = { class: "result-snapshot-version" };
 var _hoisted_9$18 = { key: 0 };
-var _hoisted_10$18 = {
+var _hoisted_10$17 = {
 	key: 2,
 	class: "result-snapshot-latest"
 };
-var _hoisted_11$15 = ["datetime", "title"];
-var _hoisted_12$14 = {
+var _hoisted_11$14 = ["datetime", "title"];
+var _hoisted_12$13 = {
 	key: 0,
 	class: "muted"
 };
-var _hoisted_13$12 = {
+var _hoisted_13$11 = {
 	key: 1,
 	class: "result-branch-summary muted"
 };
-var _hoisted_14$11 = { class: "result-snapshot-description" };
-var _hoisted_15$11 = { key: 0 };
-var _hoisted_16$11 = ["title"];
-var _hoisted_17$10 = {
+var _hoisted_14$10 = { class: "result-snapshot-description" };
+var _hoisted_15$10 = { key: 0 };
+var _hoisted_16$10 = ["title"];
+var _hoisted_17$9 = {
 	key: 0,
 	class: "result-mobile-actions"
 };
-var _hoisted_18$9 = {
+var _hoisted_18$8 = {
 	key: 1,
 	class: "result-snapshot-size"
 };
-var _hoisted_19$9 = {
+var _hoisted_19$8 = {
 	key: 0,
 	class: "result-hover-actions"
 };
-var _hoisted_20$8 = {
+var _hoisted_20$7 = {
 	key: 1,
 	class: "result-hover-actions"
 };
-var _hoisted_21$7 = {
+var _hoisted_21$6 = {
 	key: 1,
 	class: "result-relation-count muted"
 };
-var _sfc_main$95 = {
+var _sfc_main$98 = {
 	__name: "ResultItem",
 	props: {
 		node: Object,
@@ -9932,7 +9931,7 @@ var _sfc_main$95 = {
 			textWidth: qtLabelTextWidth(t("LATEST"), "700 11px \"" + fontFamily + "\""),
 			foreground: readableText(frameColors.value.action)
 		}, geometry.value.preview.width, appearance.language));
-		const geometry = computed(() => layout$1(cardModel.value, hostWidth.value));
+		const geometry = computed(() => layout$2(cardModel.value, hostWidth.value));
 		const bounds = (part) => ({
 			position: "absolute",
 			left: part.x + "px",
@@ -10040,19 +10039,19 @@ var _sfc_main$95 = {
 						"aria-hidden": "true"
 					}, null, 6);
 				}), 128)),
-				unref(mobile) && __props.navigable ? (openBlock(), createBlock(_sfc_main$139, {
+				unref(mobile) && __props.navigable ? (openBlock(), createBlock(_sfc_main$142, {
 					key: 0,
 					class: "result-mobile-next",
 					name: "MDI_CHEVRON_RIGHT"
 				})) : createCommentVNode("", true),
-				unref(mobile) && __props.back ? (openBlock(), createBlock(_sfc_main$138, {
+				unref(mobile) && __props.back ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 1,
 					class: "result-mobile-back",
 					label: "Back",
 					icon: "MDI_ARROW_LEFT",
 					"icon-only": "",
 					onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.$emit("back"), ["stop"]))
-				})) : !unref(mobile) && !__props.card && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$138, {
+				})) : !unref(mobile) && !__props.card && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 2,
 					class: normalizeClass(["result-expand", { expanded: __props.node.expanded }]),
 					style: normalizeStyle(bounds(geometry.value.disclosure)),
@@ -10110,7 +10109,7 @@ var _sfc_main$95 = {
 					])]),
 					_: 1
 				}, 8, ["style", "aria-label"])) : createCommentVNode("", true),
-				__props.card && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$140, {
+				__props.card && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$143, {
 					key: 5,
 					scene: previewOverlay$1.value,
 					style: normalizeStyle(bounds(geometry.value.preview)),
@@ -10120,15 +10119,15 @@ var _sfc_main$95 = {
 					key: 6,
 					class: "result-branch-icon",
 					style: normalizeStyle(bounds(geometry.value.preview))
-				}, [createVNode(_sfc_main$139, { name: process.value ? __props.node.branch.process_type === "hierarchy" ? "FAS_CODE_BRANCH" : "FAS_CIRCLE" : "stream" }, null, 8, ["name"])], 4)) : createCommentVNode("", true),
-				__props.card && branch.value ? (openBlock(), createBlock(_sfc_main$140, {
+				}, [createVNode(_sfc_main$142, { name: process.value ? __props.node.branch.process_type === "hierarchy" ? "FAS_CODE_BRANCH" : "FAS_CIRCLE" : "stream" }, null, 8, ["name"])], 4)) : createCommentVNode("", true),
+				__props.card && branch.value ? (openBlock(), createBlock(_sfc_main$143, {
 					key: 7,
 					scene: branchScene.value,
 					style: normalizeStyle(bounds(geometry.value.header)),
 					interactive: false
 				}, null, 8, ["scene", "style"])) : createCommentVNode("", true),
 				__props.card && __props.node.kind === "object" ? (openBlock(), createElementBlock("span", _hoisted_2$54)) : createCommentVNode("", true),
-				__props.card ? (openBlock(), createBlock(_sfc_main$140, {
+				__props.card ? (openBlock(), createBlock(_sfc_main$143, {
 					key: 9,
 					scene: headerScene.value,
 					class: "result-tile-header",
@@ -10141,7 +10140,7 @@ var _sfc_main$95 = {
 				createBaseVNode("div", {
 					class: "result-item-copy",
 					style: normalizeStyle(bounds(geometry.value.content))
-				}, [createVNode(_sfc_main$97, {
+				}, [createVNode(_sfc_main$100, {
 					model: cardModel.value,
 					width: geometry.value.content.width,
 					height: geometry.value.content.height
@@ -10151,12 +10150,12 @@ var _sfc_main$95 = {
 						onPointerenter: fitTitleActions,
 						onFocusin: fitTitleActions
 					}, [
-						__props.node.kind === "file" ? (openBlock(), createBlock(_sfc_main$139, {
+						__props.node.kind === "file" ? (openBlock(), createBlock(_sfc_main$142, {
 							key: 0,
 							name: __props.node.snapshot_display?.exists === false ? "priority_high" : "description"
 						}, null, 8, ["name"])) : createCommentVNode("", true),
 						(openBlock(), createBlock(resolveDynamicComponent(__props.back ? "h2" : "strong"), null, {
-							default: withCtx(() => [__props.tree && !unref(mobile) && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$146, {
+							default: withCtx(() => [__props.tree && !unref(mobile) && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$149, {
 								key: 0,
 								text: title.value
 							}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))]),
@@ -10166,13 +10165,13 @@ var _sfc_main$95 = {
 							key: 1,
 							class: normalizeClass(["result-title-actions", { "actions-fit": titleActionsFit.value }]),
 							onClick: _cache[7] || (_cache[7] = withModifiers(() => {}, ["stop"]))
-						}, [__props.node.kind === "object" || __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$138, {
+						}, [__props.node.kind === "object" || __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							label: "Save snapshot",
 							icon: "save",
 							"icon-only": "",
 							onClick: _cache[5] || (_cache[5] = ($event) => _ctx.$emit("quickaction", __props.node, "save"))
-						})) : createCommentVNode("", true), __props.node.kind === "snapshot" || __props.node.has_snapshot ? (openBlock(), createBlock(_sfc_main$138, {
+						})) : createCommentVNode("", true), __props.node.kind === "snapshot" || __props.node.has_snapshot ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 1,
 							label: "Open snapshot",
 							icon: "folder-open",
@@ -10183,7 +10182,7 @@ var _sfc_main$95 = {
 					], 32)]),
 					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_4$35, [
 						(openBlock(true), createElementBlock(Fragment, null, renderList(__props.compact ? __props.node.progress_items?.slice(0, 1) : __props.node.progress_items, (item) => {
-							return openBlock(), createBlock(_sfc_main$147, {
+							return openBlock(), createBlock(_sfc_main$150, {
 								key: item.name,
 								class: "result-completion",
 								icon: "donut-small",
@@ -10204,7 +10203,7 @@ var _sfc_main$95 = {
 							]);
 						}), 128)),
 						__props.node.progress_items?.length && __props.node.info_items?.length ? (openBlock(), createElementBlock("span", _hoisted_5$29, "|")) : createCommentVNode("", true),
-						createVNode(_sfc_main$96, {
+						createVNode(_sfc_main$99, {
 							items: __props.node.info_items || [],
 							selected: __props.selected,
 							separator: "|",
@@ -10218,22 +10217,22 @@ var _sfc_main$95 = {
 							key: 1,
 							style: normalizeStyle({ color: __props.node.snapshot_display?.repositoryColor })
 						}, toDisplayString(__props.node.snapshot_display?.repository || record.value.repo), 5)) : createCommentVNode("", true),
-						__props.node.snapshot_display?.latest ? (openBlock(), createElementBlock("small", _hoisted_10$18, toDisplayString(unref(t)("Latest")), 1)) : createCommentVNode("", true),
+						__props.node.snapshot_display?.latest ? (openBlock(), createElementBlock("small", _hoisted_10$17, toDisplayString(unref(t)("Latest")), 1)) : createCommentVNode("", true),
 						createBaseVNode("time", {
 							class: "result-snapshot-date",
 							datetime: record.value.timestamp,
 							title: unref(timestampFullLabel)(record.value.timestamp)
-						}, [createBaseVNode("span", null, toDisplayString(unref(timestampLabel)(record.value.timestamp)), 1), createBaseVNode("span", null, toDisplayString(unref(timestampFullLabel)(record.value.timestamp)), 1)], 8, _hoisted_11$15)
-					])) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [__props.node.kind === "snapshot" ? (openBlock(), createElementBlock("small", _hoisted_12$14, [createTextVNode(toDisplayString(record.value.context) + " · ", 1), record.value.version < 0 ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(toDisplayString(unref(t)("Versionless")), 1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(unref(t)("Version")) + " " + toDisplayString(record.value.version), 1)], 64))])) : unref(mobile) && branch.value ? (openBlock(), createElementBlock("small", _hoisted_13$12, [
+						}, [createBaseVNode("span", null, toDisplayString(unref(timestampLabel)(record.value.timestamp)), 1), createBaseVNode("span", null, toDisplayString(unref(timestampFullLabel)(record.value.timestamp)), 1)], 8, _hoisted_11$14)
+					])) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [__props.node.kind === "snapshot" ? (openBlock(), createElementBlock("small", _hoisted_12$13, [createTextVNode(toDisplayString(record.value.context) + " · ", 1), record.value.version < 0 ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(toDisplayString(unref(t)("Versionless")), 1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(unref(t)("Version")) + " " + toDisplayString(record.value.version), 1)], 64))])) : unref(mobile) && branch.value ? (openBlock(), createElementBlock("small", _hoisted_13$11, [
 						createTextVNode(toDisplayString(unref(t)(relation.value ? "Objects" : "Versions")) + ": " + toDisplayString(__props.node.branch.count ?? __props.node.children?.length ?? 0), 1),
 						__props.node.hasNext ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode("+")], 64)) : createCommentVNode("", true),
 						process.value && !__props.node.branch.count && __props.node.hasChildren ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(" · " + toDisplayString(unref(t)("Versionless")), 1)], 64)) : createCommentVNode("", true)
 					])) : createCommentVNode("", true)], 64))]),
-					description: withCtx(() => [createBaseVNode("div", _hoisted_14$11, [
-						__props.node.snapshot_display?.author ? (openBlock(), createElementBlock("em", _hoisted_15$11, toDisplayString(__props.node.snapshot_display.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
+					description: withCtx(() => [createBaseVNode("div", _hoisted_14$10, [
+						__props.node.snapshot_display?.author ? (openBlock(), createElementBlock("em", _hoisted_15$10, toDisplayString(__props.node.snapshot_display.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
 						createBaseVNode("span", null, toDisplayString(subtitle.value), 1),
 						createBaseVNode("small", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.node.snapshot_display?.infoChips, (chip, index) => {
-							return openBlock(), createElementBlock(Fragment, { key: chip.label }, [index ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | ")], 64)) : createCommentVNode("", true), createBaseVNode("span", { title: chip.label + ": " + chip.value }, toDisplayString(chip.value), 9, _hoisted_16$11)], 64);
+							return openBlock(), createElementBlock(Fragment, { key: chip.label }, [index ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | ")], 64)) : createCommentVNode("", true), createBaseVNode("span", { title: chip.label + ": " + chip.value }, toDisplayString(chip.value), 9, _hoisted_16$10)], 64);
 						}), 128))])
 					])]),
 					_: 1
@@ -10242,7 +10241,7 @@ var _sfc_main$95 = {
 					"width",
 					"height"
 				])], 4),
-				__props.card && relation.value && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$138, {
+				__props.card && relation.value && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 10,
 					class: "result-tile-enter",
 					icon: "chevron_right",
@@ -10259,70 +10258,70 @@ var _sfc_main$95 = {
 					onPointerenter: holdControls,
 					onPointerleave: releaseControls
 				}, [
-					unref(mobile) && (__props.node.kind === "object" || process.value || __props.back && __props.node.kind === "snapshot") ? (openBlock(), createElementBlock("div", _hoisted_17$10, [__props.node.kind === "object" || process.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createVNode(_sfc_main$138, {
+					unref(mobile) && (__props.node.kind === "object" || process.value || __props.back && __props.node.kind === "snapshot") ? (openBlock(), createElementBlock("div", _hoisted_17$9, [__props.node.kind === "object" || process.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createVNode(_sfc_main$141, {
 						label: "Tasks",
 						icon: "FAR_CALENDAR_CHECK",
 						"icon-only": "",
 						"badge-count": __props.node.task_count || 0,
 						onClick: _cache[10] || (_cache[10] = ($event) => _ctx.$emit("tasks", __props.node, $event))
-					}, null, 8, ["badge-count"]), createVNode(_sfc_main$138, {
+					}, null, 8, ["badge-count"]), createVNode(_sfc_main$141, {
 						label: "Notes",
 						icon: "FAS_COMMENT_ALT",
 						"icon-only": "",
 						"badge-count": __props.node.note_count || 0,
 						onClick: _cache[11] || (_cache[11] = ($event) => _ctx.$emit("notes", __props.node, $event))
-					}, null, 8, ["badge-count"])], 64)) : createCommentVNode("", true), createVNode(_sfc_main$138, {
+					}, null, 8, ["badge-count"])], 64)) : createCommentVNode("", true), createVNode(_sfc_main$141, {
 						label: "Add files",
 						icon: "upload",
 						"icon-only": "",
 						onClick: _cache[12] || (_cache[12] = ($event) => _ctx.$emit("upload", __props.node))
 					})])) : createCommentVNode("", true),
-					__props.tree && __props.node.kind === "snapshot" && __props.node.snapshot_display?.size != null ? (openBlock(), createElementBlock("span", _hoisted_18$9, toDisplayString(unref(prettySize)(__props.node.snapshot_display.size)), 1)) : createCommentVNode("", true),
-					unref(mobile) ? (openBlock(), createBlock(_sfc_main$159, {
+					__props.tree && __props.node.kind === "snapshot" && __props.node.snapshot_display?.size != null ? (openBlock(), createElementBlock("span", _hoisted_18$8, toDisplayString(unref(prettySize)(__props.node.snapshot_display.size)), 1)) : createCommentVNode("", true),
+					unref(mobile) ? (openBlock(), createBlock(_sfc_main$160, {
 						key: 2,
 						label: "Item actions",
 						overlay: ""
 					}, {
 						default: withCtx(() => [
-							__props.selectable ? (openBlock(), createBlock(_sfc_main$160, {
+							__props.selectable ? (openBlock(), createBlock(_sfc_main$163, {
 								key: 0,
 								label: "Select record",
 								"model-value": __props.checked,
 								"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => _ctx.$emit("select", __props.node, $event))
 							}, null, 8, ["model-value"])) : createCommentVNode("", true),
-							!branch.value ? (openBlock(), createBlock(_sfc_main$164, {
+							!branch.value ? (openBlock(), createBlock(_sfc_main$167, {
 								key: 1,
 								label: "Object details",
 								icon: "MDI_INFORMATION_OUTLINE",
 								onClick: _cache[14] || (_cache[14] = ($event) => _ctx.$emit("inspect", __props.node))
 							})) : createCommentVNode("", true),
-							!branch.value ? (openBlock(), createBlock(_sfc_main$164, {
+							!branch.value ? (openBlock(), createBlock(_sfc_main$167, {
 								key: 2,
 								label: "File preview",
 								icon: "image",
 								onClick: _cache[15] || (_cache[15] = ($event) => _ctx.$emit("preview", __props.node))
 							})) : createCommentVNode("", true),
-							__props.node.kind === "object" || process.value ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [createVNode(_sfc_main$164, {
+							__props.node.kind === "object" || process.value ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [createVNode(_sfc_main$167, {
 								label: "Tasks",
 								icon: "FAR_CALENDAR_CHECK",
 								onClick: _cache[16] || (_cache[16] = ($event) => _ctx.$emit("tasks", __props.node, $event))
-							}), createVNode(_sfc_main$164, {
+							}), createVNode(_sfc_main$167, {
 								label: "Notes",
 								icon: "FAS_COMMENT_ALT",
 								onClick: _cache[17] || (_cache[17] = ($event) => _ctx.$emit("notes", __props.node, $event))
 							})], 64)) : createCommentVNode("", true),
-							relation.value ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.node.branch.relationship === "instance" ? (openBlock(), createBlock(_sfc_main$164, {
+							relation.value ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.node.branch.relationship === "instance" ? (openBlock(), createBlock(_sfc_main$167, {
 								key: 0,
 								label: "Link existing objects",
 								icon: "link",
 								onClick: _cache[18] || (_cache[18] = ($event) => _ctx.$emit("link", __props.node))
-							})) : createCommentVNode("", true), createVNode(_sfc_main$164, {
+							})) : createCommentVNode("", true), createVNode(_sfc_main$167, {
 								label: "Create related object",
 								icon: "add",
 								onClick: _cache[19] || (_cache[19] = ($event) => _ctx.$emit("create", __props.node))
 							})], 64)) : createCommentVNode("", true),
 							(openBlock(true), createElementBlock(Fragment, null, renderList(__props.node.knowledge || [], (article) => {
-								return openBlock(), createBlock(_sfc_main$164, {
+								return openBlock(), createBlock(_sfc_main$167, {
 									key: article.identity,
 									label: article.title,
 									translate: false,
@@ -10330,7 +10329,7 @@ var _sfc_main$95 = {
 									onClick: ($event) => unref(openObjectTab)?.(article.searchKey)
 								}, null, 8, ["label", "onClick"]);
 							}), 128)),
-							createVNode(_sfc_main$164, {
+							createVNode(_sfc_main$167, {
 								label: "Object actions",
 								icon: "more",
 								onClick: _cache[20] || (_cache[20] = ($event) => _ctx.$emit("operate", __props.node, $event))
@@ -10338,54 +10337,54 @@ var _sfc_main$95 = {
 						]),
 						_: 1
 					})) : (openBlock(), createElementBlock(Fragment, { key: 3 }, [
-						__props.tree && __props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_19$9, [createVNode(_sfc_main$138, {
+						__props.tree && __props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_19$8, [createVNode(_sfc_main$141, {
 							label: "Related and child objects",
 							icon: "FAS_SITEMAP",
 							"icon-only": "",
 							onClick: _cache[21] || (_cache[21] = ($event) => _ctx.$emit("relations", __props.node, $event))
-						})])) : !__props.tree ? (openBlock(), createElementBlock("div", _hoisted_20$8, [!branch.value ? (openBlock(), createBlock(_sfc_main$138, {
+						})])) : !__props.tree ? (openBlock(), createElementBlock("div", _hoisted_20$7, [!branch.value ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							class: "result-details",
 							label: "Object details",
 							icon: "MDI_INFORMATION_OUTLINE",
 							"icon-only": "",
 							onClick: _cache[22] || (_cache[22] = ($event) => _ctx.$emit("inspect", __props.node))
-						})) : createCommentVNode("", true), createVNode(_sfc_main$138, {
+						})) : createCommentVNode("", true), createVNode(_sfc_main$141, {
 							label: "Object actions",
 							icon: "more",
 							"icon-only": "",
 							onClick: _cache[23] || (_cache[23] = ($event) => _ctx.$emit("operate", __props.node, $event))
 						})])) : createCommentVNode("", true),
 						relation.value ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [
-							__props.node.branch.relationship === "instance" ? (openBlock(), createBlock(_sfc_main$138, {
+							__props.node.branch.relationship === "instance" ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 0,
 								label: "Link existing objects",
 								icon: "link",
 								"icon-only": "",
 								onClick: _cache[24] || (_cache[24] = ($event) => _ctx.$emit("link", __props.node))
 							})) : createCommentVNode("", true),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								label: "Create related object",
 								icon: "add",
 								"icon-only": "",
 								onClick: _cache[25] || (_cache[25] = ($event) => _ctx.$emit("create", __props.node))
 							}),
-							__props.node.branch.count > 0 ? (openBlock(), createElementBlock("small", _hoisted_21$7, "| \xA0" + toDisplayString(__props.node.branch.count), 1)) : createCommentVNode("", true)
+							__props.node.branch.count > 0 ? (openBlock(), createElementBlock("small", _hoisted_21$6, "| \xA0" + toDisplayString(__props.node.branch.count), 1)) : createCommentVNode("", true)
 						], 64)) : createCommentVNode("", true),
-						__props.node.knowledge?.length === 1 ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.node.knowledge?.length === 1 ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 3,
 							"icon-only": "",
 							icon: "book-open",
 							label: "Knowledge Base",
 							onClick: _cache[26] || (_cache[26] = ($event) => unref(openObjectTab)?.(__props.node.knowledge[0].searchKey))
-						})) : __props.node.knowledge?.length > 1 ? (openBlock(), createBlock(_sfc_main$159, {
+						})) : __props.node.knowledge?.length > 1 ? (openBlock(), createBlock(_sfc_main$160, {
 							key: 4,
 							icon: "book-open",
 							label: "Knowledge Base",
 							overlay: ""
 						}, {
 							default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.node.knowledge, (article) => {
-								return openBlock(), createBlock(_sfc_main$164, {
+								return openBlock(), createBlock(_sfc_main$167, {
 									key: article.identity,
 									label: article.title,
 									icon: "file",
@@ -10398,14 +10397,14 @@ var _sfc_main$95 = {
 							key: 5,
 							class: normalizeClass(["result-communication", { "result-communication-empty": process.value && !__props.node.task_count && !__props.node.note_count }]),
 							style: normalizeStyle(__props.card ? bounds(geometry.value.counts) : void 0)
-						}, [createVNode(_sfc_main$138, {
+						}, [createVNode(_sfc_main$141, {
 							class: "result-task-button",
 							label: "Tasks",
 							icon: "FAR_CALENDAR_CHECK",
 							"icon-only": "",
 							"badge-count": __props.node.task_count || 0,
 							onClick: _cache[27] || (_cache[27] = ($event) => _ctx.$emit("tasks", __props.node, $event))
-						}, null, 8, ["badge-count"]), createVNode(_sfc_main$138, {
+						}, null, 8, ["badge-count"]), createVNode(_sfc_main$141, {
 							class: "result-note-button",
 							label: "Notes",
 							icon: "FAS_COMMENT_ALT",
@@ -10415,11 +10414,11 @@ var _sfc_main$95 = {
 						}, null, 8, ["badge-count"])], 6)) : createCommentVNode("", true)
 					], 64))
 				], 36)
-			], 46, _hoisted_1$68);
+			], 46, _hoisted_1$70);
 		};
 	}
 };
-function row$8(record, index, width, language) {
+function row$9(record, index, width, language) {
 	const text = (key) => translate(key, language), x = 5 + (record.depth || 0) * 18, kindIcon = record.kind === "child" || record.kind === "process", title = record.title + (record.kind === "child" ? text(" (child)") : record.kind === "builtin" ? text(" (builtin)") : ""), titleX = x + (kindIcon ? 77 : 58), nodes = [];
 	nodes.push(node("Action", "processVisibilitySelect", rect$1(0, 0, width, 30), {
 		text: title,
@@ -10505,7 +10504,7 @@ function togglers(model, width, language) {
 		contentHeight: top + 36
 	};
 }
-function header$2(model, width, language) {
+function header$3(model, width, language) {
 	return {
 		nodes: [
 			node("Box", "processVisibilityHeaderSurface", rect$1(0, 0, width, 42), {
@@ -10565,7 +10564,7 @@ function footer$3(model, width, language) {
 		contentHeight: compact ? top : 48
 	};
 }
-function empty(text, width, height, language) {
+function empty$1(text, width, height, language) {
 	return { nodes: [node("Icon", "processVisibilityEmptyIcon", rect$1((width - 26) / 2, (height - 56) / 2, 26, 26), {
 		icon: "account-tree",
 		color: "disabledText"
@@ -10644,7 +10643,7 @@ function branchVisible(branch, record, ignore) {
 }
 //#endregion
 //#region src/features/workspace/ProcessVisibility.vue
-var _hoisted_1$67 = ["aria-label"];
+var _hoisted_1$69 = ["aria-label"];
 var _hoisted_2$53 = ["aria-busy"];
 var _hoisted_3$42 = {
 	key: 0,
@@ -10658,7 +10657,7 @@ var _hoisted_4$34 = {
 var _hoisted_5$28 = { class: "process-visibility-tree" };
 var _hoisted_6$24 = ["aria-label"];
 var _hoisted_7$24 = ["data-process-id"];
-var _sfc_main$94 = {
+var _sfc_main$97 = {
 	__name: "ProcessVisibility",
 	props: {
 		ticket: String,
@@ -10672,7 +10671,7 @@ var _sfc_main$94 = {
 		const props = __props;
 		const emit = __emit;
 		const dialog = ref(null), body = ref(null), viewport = ref(null), width = ref(440), treeWidth = ref(400), treeHeight = ref(200), top = ref(0), title = ref(""), records = ref([]), baseline = ref("{}"), busy = ref(false), error = ref(""), valid = ref(false), togglers$1 = ref(false);
-		const header = computed(() => header$2({ title: title.value }, width.value, appearance.language));
+		const header = computed(() => header$3({ title: title.value }, width.value, appearance.language));
 		const footer = computed(() => footer$3({
 			valid: valid.value,
 			dirty: JSON.stringify(ignoreFrom(records.value)) !== baseline.value
@@ -10687,7 +10686,7 @@ var _sfc_main$94 = {
 			row,
 			top: (range.value.first + index) * 30
 		})));
-		const empty$1 = computed(() => empty("Select a Search Tab first", treeWidth.value, treeHeight.value, appearance.language));
+		const empty = computed(() => empty$1("Select a Search Tab first", treeWidth.value, treeHeight.value, appearance.language));
 		let generation = 0, observer, inputModifiers = {};
 		watch(() => [
 			props.ticket,
@@ -10784,7 +10783,7 @@ var _sfc_main$94 = {
 				class: "configuration-dialog process-visibility-dialog",
 				"aria-label": unref(t)("Filter Processes"),
 				onCancel: withModifiers(cancel, ["prevent"])
-			}, [createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(unref(t)("Filter Processes")), 1), createVNode(_sfc_main$138, {
+			}, [createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(unref(t)("Filter Processes")), 1), createVNode(_sfc_main$141, {
 				label: "Close",
 				icon: "close",
 				"icon-only": "",
@@ -10795,7 +10794,7 @@ var _sfc_main$94 = {
 				class: "process-visibility-body",
 				"aria-busy": busy.value
 			}, [
-				createVNode(_sfc_main$140, {
+				createVNode(_sfc_main$143, {
 					scene: header.value,
 					style: {
 						"height": "42px",
@@ -10803,7 +10802,7 @@ var _sfc_main$94 = {
 					}
 				}, null, 8, ["scene"]),
 				busy.value ? (openBlock(), createElementBlock("p", _hoisted_3$42, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
-				error.value ? (openBlock(), createElementBlock("p", _hoisted_4$34, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$138, {
+				error.value ? (openBlock(), createElementBlock("p", _hoisted_4$34, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$141, {
 					label: "Retry",
 					onClick: load
 				})])) : createCommentVNode("", true),
@@ -10829,14 +10828,14 @@ var _sfc_main$94 = {
 						}),
 						onPointerdownCapture: capture,
 						onKeydownCapture: capture
-					}, [createVNode(_sfc_main$140, {
-						scene: row$8(cell.row, cell.row.sourceIndex, treeWidth.value, unref(appearance).language),
+					}, [createVNode(_sfc_main$143, {
+						scene: row$9(cell.row, cell.row.sourceIndex, treeWidth.value, unref(appearance).language),
 						onEvent: rowEvent
 					}, null, 8, ["scene"])], 44, _hoisted_7$24);
-				}), 128))], 4), !records.value.length && !busy.value && !error.value ? (openBlock(), createBlock(_sfc_main$140, {
+				}), 128))], 4), !records.value.length && !busy.value && !error.value ? (openBlock(), createBlock(_sfc_main$143, {
 					key: 0,
-					scene: empty$1.value
-				}, null, 8, ["scene"])) : createCommentVNode("", true)], 40, _hoisted_6$24), createVNode(_sfc_main$140, {
+					scene: empty.value
+				}, null, 8, ["scene"])) : createCommentVNode("", true)], 40, _hoisted_6$24), createVNode(_sfc_main$143, {
 					scene: togglerScene.value,
 					style: normalizeStyle({
 						height: togglerScene.value.contentHeight + "px",
@@ -10846,7 +10845,7 @@ var _sfc_main$94 = {
 					}),
 					onEvent: command
 				}, null, 8, ["scene", "style"])]),
-				createVNode(_sfc_main$140, {
+				createVNode(_sfc_main$143, {
 					scene: footer.value,
 					style: normalizeStyle({
 						height: footer.value.contentHeight + "px",
@@ -10854,7 +10853,7 @@ var _sfc_main$94 = {
 					}),
 					onEvent: command
 				}, null, 8, ["scene", "style"])
-			], 8, _hoisted_2$53)], 40, _hoisted_1$67)), [[_directive_window, { kind: "process_filter_editor" }]]);
+			], 8, _hoisted_2$53)], 40, _hoisted_1$69)), [[_directive_window, { kind: "process_filter_editor" }]]);
 		};
 	}
 };
@@ -10946,7 +10945,7 @@ function viewOf(tree, view) {
 function content(node) {
 	return [3, 4].indexOf(node.type) >= 0 ? node.text || "" : (node.children || []).map(content).join("");
 }
-function describe$24(tree, view) {
+function describe$25(tree, view) {
 	const node = viewOf(tree, view);
 	if (!node || get(node, "layout") !== "sobject-layout") throw Error("Select a SObject layout configuration");
 	const elements = children(node).filter((child) => child.name === "element").map((item) => {
@@ -11119,7 +11118,7 @@ function layoutElements(layout, node, parent = "") {
 }
 //#endregion
 //#region src/features/interface/ItemLayout.vue
-var _hoisted_1$66 = { key: 2 };
+var _hoisted_1$68 = { key: 2 };
 var _hoisted_2$52 = {
 	key: 5,
 	class: "item-layout-title"
@@ -11141,27 +11140,27 @@ var _hoisted_8$21 = {
 	class: "muted"
 };
 var _hoisted_9$17 = ["href", "title"];
-var _hoisted_10$17 = ["title"];
-var _hoisted_11$14 = { class: "result-snapshot-technical" };
-var _hoisted_12$13 = { class: "result-snapshot-version" };
-var _hoisted_13$11 = { key: 0 };
-var _hoisted_14$10 = {
+var _hoisted_10$16 = ["title"];
+var _hoisted_11$13 = { class: "result-snapshot-technical" };
+var _hoisted_12$12 = { class: "result-snapshot-version" };
+var _hoisted_13$10 = { key: 0 };
+var _hoisted_14$9 = {
 	key: 2,
 	class: "result-snapshot-latest"
 };
-var _hoisted_15$10 = ["datetime", "title"];
-var _hoisted_16$10 = { class: "result-snapshot-description" };
-var _hoisted_17$9 = { key: 0 };
-var _hoisted_18$8 = ["title"];
-var _hoisted_19$8 = {
+var _hoisted_15$9 = ["datetime", "title"];
+var _hoisted_16$9 = { class: "result-snapshot-description" };
+var _hoisted_17$8 = { key: 0 };
+var _hoisted_18$7 = ["title"];
+var _hoisted_19$7 = {
 	key: 13,
 	class: "result-snapshot-size"
 };
-var _hoisted_20$7 = {
+var _hoisted_20$6 = {
 	key: 1,
 	class: "result-relation-count muted"
 };
-var _sfc_main$93 = {
+var _sfc_main$96 = {
 	__name: "ItemLayout",
 	props: {
 		layout: Object,
@@ -11381,7 +11380,7 @@ var _sfc_main$93 = {
 							"presentation",
 							"read-only",
 							"editing"
-						])) : item.kind === "view" ? (openBlock(), createElementBlock("span", _hoisted_1$66, toDisplayString(item.options.view || unref(t)("Choose a reusable view")), 1)) : item.kind === "image" ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [__props.node.kind === "branch" ? (openBlock(), createBlock(_sfc_main$139, {
+						])) : item.kind === "view" ? (openBlock(), createElementBlock("span", _hoisted_1$68, toDisplayString(item.options.view || unref(t)("Choose a reusable view")), 1)) : item.kind === "image" ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [__props.node.kind === "branch" ? (openBlock(), createBlock(_sfc_main$142, {
 							key: 0,
 							name: process.value ? __props.node.branch.process_type === "hierarchy" ? "FAS_CODE_BRANCH" : "FAS_CIRCLE" : "stream"
 						}, null, 8, ["name"])) : (openBlock(), createBlock(ItemPreview_default, {
@@ -11404,10 +11403,10 @@ var _sfc_main$93 = {
 							"accent",
 							"fill-mode",
 							"style"
-						]))], 64)) : item.kind === "title" && nativeFlow.value && item.tag === "strong" ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.presentation.tree && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$146, {
+						]))], 64)) : item.kind === "title" && nativeFlow.value && item.tag === "strong" ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.presentation.tree && __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$149, {
 							key: 0,
 							text: title.value
-						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))], 64)) : item.kind === "title" ? (openBlock(), createElementBlock("strong", _hoisted_2$52, [__props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$146, {
+						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(__props.node.branch?.kind === "versions" ? unref(t)(title.value) : title.value), 1)], 64))], 64)) : item.kind === "title" ? (openBlock(), createElementBlock("strong", _hoisted_2$52, [__props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$149, {
 							key: 0,
 							text: value(item) || title.value
 						}, null, 8, ["text"])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(value(item) || title.value), 1)], 64)), __props.node.kind === "snapshot" && !snapshot.value.exists ? (openBlock(), createElementBlock("small", _hoisted_3$41, " (" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)])) : item.kind === "text" || item.kind === "description" ? (openBlock(), createElementBlock("span", _hoisted_4$33, toDisplayString(item.role === "description" ? subtitle.value : value(item)), 1)) : item.kind === "link" && href(item) ? (openBlock(), createElementBlock("a", {
@@ -11417,7 +11416,7 @@ var _sfc_main$93 = {
 							onClick: _cache[7] || (_cache[7] = ($event) => __props.editing ? $event.preventDefault() : $event.stopPropagation()),
 							target: href(item).startsWith("/") ? void 0 : "_blank",
 							rel: "noopener noreferrer"
-						}, toDisplayString(value(item) || item.title), 9, _hoisted_5$27)) : item.kind === "link" ? (openBlock(), createElementBlock("span", _hoisted_6$23, toDisplayString(value(item) || item.title), 1)) : item.kind === "button" && (__props.editing || href(item) || available(item.options.action)) ? (openBlock(), createBlock(_sfc_main$138, {
+						}, toDisplayString(value(item) || item.title), 9, _hoisted_5$27)) : item.kind === "link" ? (openBlock(), createElementBlock("span", _hoisted_6$23, toDisplayString(value(item) || item.title), 1)) : item.kind === "button" && (__props.editing || href(item) || available(item.options.action)) ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 9,
 							class: normalizeClass(nativeFlow.value ? roleClasses[item.role] : void 0),
 							href: !__props.readOnly && !__props.editing ? href(item) || void 0 : void 0,
@@ -11448,7 +11447,7 @@ var _sfc_main$93 = {
 						}, {
 							default: withCtx(() => [
 								(openBlock(true), createElementBlock(Fragment, null, renderList(__props.presentation.compact ? __props.node.progress_items?.slice(0, 1) : __props.node.progress_items || [], (progress) => {
-									return openBlock(), createBlock(_sfc_main$138, {
+									return openBlock(), createBlock(_sfc_main$141, {
 										key: progress.name,
 										class: "result-progress",
 										icon: "MDI_CHART_DONUT",
@@ -11478,42 +11477,42 @@ var _sfc_main$93 = {
 									}, toDisplayString(info.text), 9, _hoisted_9$17)) : (openBlock(), createElementBlock("span", {
 										key: 2,
 										title: info.tooltip
-									}, toDisplayString(info.text), 9, _hoisted_10$17))], 64);
+									}, toDisplayString(info.text), 9, _hoisted_10$16))], 64);
 								}), 128))
 							]),
 							_: 1
-						}, 8, ["tag"])) : item.kind === "snapshot-details" && __props.node.kind === "snapshot" ? (openBlock(), createElementBlock(Fragment, { key: 11 }, [createBaseVNode("div", _hoisted_11$14, [
-							createBaseVNode("span", _hoisted_12$13, toDisplayString(snapshot.value.version), 1),
-							snapshot.value.revision ? (openBlock(), createElementBlock("span", _hoisted_13$11, toDisplayString(snapshot.value.revision), 1)) : createCommentVNode("", true),
+						}, 8, ["tag"])) : item.kind === "snapshot-details" && __props.node.kind === "snapshot" ? (openBlock(), createElementBlock(Fragment, { key: 11 }, [createBaseVNode("div", _hoisted_11$13, [
+							createBaseVNode("span", _hoisted_12$12, toDisplayString(snapshot.value.version), 1),
+							snapshot.value.revision ? (openBlock(), createElementBlock("span", _hoisted_13$10, toDisplayString(snapshot.value.revision), 1)) : createCommentVNode("", true),
 							__props.node.record?.repo ? (openBlock(), createElementBlock("span", {
 								key: 1,
 								style: normalizeStyle({ color: snapshot.value.repositoryColor })
 							}, toDisplayString(snapshot.value.repository || __props.node.record?.repo), 5)) : createCommentVNode("", true),
-							snapshot.value.latest ? (openBlock(), createElementBlock("small", _hoisted_14$10, toDisplayString(unref(t)("Latest")), 1)) : createCommentVNode("", true),
+							snapshot.value.latest ? (openBlock(), createElementBlock("small", _hoisted_14$9, toDisplayString(unref(t)("Latest")), 1)) : createCommentVNode("", true),
 							createBaseVNode("time", {
 								class: "result-snapshot-date",
 								datetime: __props.node.record?.timestamp,
 								title: unref(timestampFullLabel)(__props.node.record?.timestamp)
-							}, [createBaseVNode("span", null, toDisplayString(unref(timestampLabel)(__props.node.record?.timestamp)), 1), createBaseVNode("span", null, toDisplayString(unref(timestampFullLabel)(__props.node.record?.timestamp)), 1)], 8, _hoisted_15$10)
-						]), createBaseVNode("div", _hoisted_16$10, [
-							snapshot.value.author ? (openBlock(), createElementBlock("em", _hoisted_17$9, toDisplayString(snapshot.value.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
+							}, [createBaseVNode("span", null, toDisplayString(unref(timestampLabel)(__props.node.record?.timestamp)), 1), createBaseVNode("span", null, toDisplayString(unref(timestampFullLabel)(__props.node.record?.timestamp)), 1)], 8, _hoisted_15$9)
+						]), createBaseVNode("div", _hoisted_16$9, [
+							snapshot.value.author ? (openBlock(), createElementBlock("em", _hoisted_17$8, toDisplayString(snapshot.value.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
 							createBaseVNode("span", null, toDisplayString(subtitle.value), 1),
 							createBaseVNode("small", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(snapshot.value.infoChips || [], (chip, index) => {
-								return openBlock(), createElementBlock(Fragment, { key: chip.label }, [index ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | ")], 64)) : createCommentVNode("", true), createBaseVNode("span", { title: chip.label + ": " + chip.value }, toDisplayString(chip.value), 9, _hoisted_18$8)], 64);
+								return openBlock(), createElementBlock(Fragment, { key: chip.label }, [index ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | ")], 64)) : createCommentVNode("", true), createBaseVNode("span", { title: chip.label + ": " + chip.value }, toDisplayString(chip.value), 9, _hoisted_18$7)], 64);
 							}), 128))])
 						])], 64)) : item.kind === "quick-actions" && __props.node.kind !== "branch" ? (openBlock(), createBlock(LayoutContainer, {
 							key: 12,
 							tag: nativeFlow.value ? Fragment : "div",
 							class: "item-quick-actions"
 						}, {
-							default: withCtx(() => [__props.node.kind === "object" || __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$138, {
+							default: withCtx(() => [__props.node.kind === "object" || __props.node.kind === "snapshot" ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 0,
 								label: "Save snapshot",
 								icon: "save",
 								"icon-only": "",
 								disabled: __props.readOnly || __props.editing,
 								onClick: _cache[9] || (_cache[9] = withModifiers(($event) => emit("action", "quickaction", __props.node, "save"), ["stop"]))
-							}, null, 8, ["disabled"])) : createCommentVNode("", true), __props.node.kind === "snapshot" || __props.node.has_snapshot ? (openBlock(), createBlock(_sfc_main$138, {
+							}, null, 8, ["disabled"])) : createCommentVNode("", true), __props.node.kind === "snapshot" || __props.node.has_snapshot ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 1,
 								label: "Open snapshot",
 								icon: "folder-open",
@@ -11522,62 +11521,62 @@ var _sfc_main$93 = {
 								onClick: _cache[10] || (_cache[10] = withModifiers(($event) => emit("action", "quickaction", __props.node, "open"), ["stop"]))
 							}, null, 8, ["disabled"])) : createCommentVNode("", true)]),
 							_: 1
-						}, 8, ["tag"])) : item.kind === "snapshot-size" ? (openBlock(), createElementBlock("span", _hoisted_19$8, toDisplayString(unref(prettySize)(snapshot.value.size)), 1)) : item.kind === "snapshot-summary" ? (openBlock(), createElementBlock(Fragment, { key: 14 }, [createTextVNode(toDisplayString(__props.node.record?.context) + " · ", 1), __props.node.record?.version < 0 ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(toDisplayString(unref(t)("Versionless")), 1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(unref(t)("Version")) + " " + toDisplayString(__props.node.record?.version), 1)], 64))], 64)) : item.kind === "file-offline" ? (openBlock(), createElementBlock(Fragment, { key: 15 }, [createTextVNode("(" + toDisplayString(unref(t)("File Offline")) + ")", 1)], 64)) : item.kind === "branch-summary" ? (openBlock(), createElementBlock(Fragment, { key: 16 }, [
+						}, 8, ["tag"])) : item.kind === "snapshot-size" ? (openBlock(), createElementBlock("span", _hoisted_19$7, toDisplayString(unref(prettySize)(snapshot.value.size)), 1)) : item.kind === "snapshot-summary" ? (openBlock(), createElementBlock(Fragment, { key: 14 }, [createTextVNode(toDisplayString(__props.node.record?.context) + " · ", 1), __props.node.record?.version < 0 ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(toDisplayString(unref(t)("Versionless")), 1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(unref(t)("Version")) + " " + toDisplayString(__props.node.record?.version), 1)], 64))], 64)) : item.kind === "file-offline" ? (openBlock(), createElementBlock(Fragment, { key: 15 }, [createTextVNode("(" + toDisplayString(unref(t)("File Offline")) + ")", 1)], 64)) : item.kind === "branch-summary" ? (openBlock(), createElementBlock(Fragment, { key: 16 }, [
 							createTextVNode(toDisplayString(unref(t)(__props.node.branch?.kind === "relation" ? "Objects" : "Versions")) + ": " + toDisplayString(__props.node.branch.count ?? __props.node.children?.length ?? 0), 1),
 							__props.node.hasNext ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode("+")], 64)) : createCommentVNode("", true),
 							process.value && !__props.node.branch.count && __props.node.hasChildren ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(" · " + toDisplayString(unref(t)("Versionless")), 1)], 64)) : createCommentVNode("", true)
-						], 64)) : item.kind === "item-menu" ? (openBlock(), createBlock(_sfc_main$159, {
+						], 64)) : item.kind === "item-menu" ? (openBlock(), createBlock(_sfc_main$160, {
 							key: 17,
 							label: "Item actions",
 							overlay: ""
 						}, {
 							default: withCtx(() => [
-								__props.presentation.selectable ? (openBlock(), createBlock(_sfc_main$160, {
+								__props.presentation.selectable ? (openBlock(), createBlock(_sfc_main$163, {
 									key: 0,
 									label: "Select record",
 									"model-value": __props.presentation.checked,
 									disabled: __props.readOnly || __props.editing,
 									"onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => emit("action", "select", __props.node, $event))
 								}, null, 8, ["model-value", "disabled"])) : createCommentVNode("", true),
-								__props.node.kind !== "branch" ? (openBlock(), createBlock(_sfc_main$164, {
+								__props.node.kind !== "branch" ? (openBlock(), createBlock(_sfc_main$167, {
 									key: 1,
 									label: "Object details",
 									icon: "MDI_INFORMATION_OUTLINE",
 									disabled: __props.readOnly || __props.editing,
 									onClick: _cache[12] || (_cache[12] = ($event) => act("inspect", $event))
 								}, null, 8, ["disabled"])) : createCommentVNode("", true),
-								__props.node.kind !== "branch" ? (openBlock(), createBlock(_sfc_main$164, {
+								__props.node.kind !== "branch" ? (openBlock(), createBlock(_sfc_main$167, {
 									key: 2,
 									label: "File preview",
 									icon: "image",
 									disabled: __props.readOnly || __props.editing,
 									onClick: _cache[13] || (_cache[13] = ($event) => act("preview", $event))
 								}, null, 8, ["disabled"])) : createCommentVNode("", true),
-								__props.node.kind === "object" || process.value ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [createVNode(_sfc_main$164, {
+								__props.node.kind === "object" || process.value ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [createVNode(_sfc_main$167, {
 									label: "Tasks",
 									icon: "FAR_CALENDAR_CHECK",
 									disabled: __props.readOnly || __props.editing,
 									onClick: _cache[14] || (_cache[14] = ($event) => act("tasks", $event))
-								}, null, 8, ["disabled"]), createVNode(_sfc_main$164, {
+								}, null, 8, ["disabled"]), createVNode(_sfc_main$167, {
 									label: "Notes",
 									icon: "FAS_COMMENT_ALT",
 									disabled: __props.readOnly || __props.editing,
 									onClick: _cache[15] || (_cache[15] = ($event) => act("notes", $event))
 								}, null, 8, ["disabled"])], 64)) : createCommentVNode("", true),
-								__props.node.branch?.kind === "relation" ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.node.branch.relationship === "instance" ? (openBlock(), createBlock(_sfc_main$164, {
+								__props.node.branch?.kind === "relation" ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [__props.node.branch.relationship === "instance" ? (openBlock(), createBlock(_sfc_main$167, {
 									key: 0,
 									label: "Link existing objects",
 									icon: "link",
 									disabled: __props.readOnly || __props.editing,
 									onClick: _cache[16] || (_cache[16] = ($event) => act("link", $event))
-								}, null, 8, ["disabled"])) : createCommentVNode("", true), createVNode(_sfc_main$164, {
+								}, null, 8, ["disabled"])) : createCommentVNode("", true), createVNode(_sfc_main$167, {
 									label: "Create related object",
 									icon: "add",
 									disabled: __props.readOnly || __props.editing,
 									onClick: _cache[17] || (_cache[17] = ($event) => act("create", $event))
 								}, null, 8, ["disabled"])], 64)) : createCommentVNode("", true),
 								(openBlock(true), createElementBlock(Fragment, null, renderList(__props.node.knowledge || [], (article) => {
-									return openBlock(), createBlock(_sfc_main$164, {
+									return openBlock(), createBlock(_sfc_main$167, {
 										key: article.identity,
 										label: article.title,
 										translate: false,
@@ -11590,7 +11589,7 @@ var _sfc_main$93 = {
 										"onClick"
 									]);
 								}), 128)),
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: "Object actions",
 									icon: "more",
 									disabled: __props.readOnly || __props.editing,
@@ -11598,21 +11597,21 @@ var _sfc_main$93 = {
 								}, null, 8, ["disabled"])
 							]),
 							_: 1
-						})) : item.kind === "knowledge" ? (openBlock(), createElementBlock(Fragment, { key: 18 }, [__props.node.knowledge?.length === 1 ? (openBlock(), createBlock(_sfc_main$138, {
+						})) : item.kind === "knowledge" ? (openBlock(), createElementBlock(Fragment, { key: 18 }, [__props.node.knowledge?.length === 1 ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							label: "Knowledge Base",
 							icon: "book-open",
 							"icon-only": "",
 							disabled: __props.editing || __props.readOnly,
 							onClick: _cache[19] || (_cache[19] = withModifiers(($event) => unref(openObjectTab)?.(__props.node.knowledge[0].searchKey), ["stop"]))
-						}, null, 8, ["disabled"])) : __props.node.knowledge?.length > 1 ? (openBlock(), createBlock(_sfc_main$159, {
+						}, null, 8, ["disabled"])) : __props.node.knowledge?.length > 1 ? (openBlock(), createBlock(_sfc_main$160, {
 							key: 1,
 							label: "Knowledge Base",
 							icon: "book-open",
 							overlay: ""
 						}, {
 							default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.node.knowledge, (article) => {
-								return openBlock(), createBlock(_sfc_main$164, {
+								return openBlock(), createBlock(_sfc_main$167, {
 									key: article.identity,
 									label: article.title,
 									translate: false,
@@ -11632,7 +11631,7 @@ var _sfc_main$93 = {
 							class: "item-quick-actions"
 						}, {
 							default: withCtx(() => [
-								__props.node.branch.relationship === "instance" ? (openBlock(), createBlock(_sfc_main$138, {
+								__props.node.branch.relationship === "instance" ? (openBlock(), createBlock(_sfc_main$141, {
 									key: 0,
 									label: "Link existing objects",
 									icon: "link",
@@ -11640,14 +11639,14 @@ var _sfc_main$93 = {
 									disabled: __props.readOnly || __props.editing,
 									onClick: _cache[20] || (_cache[20] = withModifiers(($event) => act("link", $event), ["stop"]))
 								}, null, 8, ["disabled"])) : createCommentVNode("", true),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Create related object",
 									icon: "add",
 									"icon-only": "",
 									disabled: __props.readOnly || __props.editing,
 									onClick: _cache[21] || (_cache[21] = withModifiers(($event) => act("create", $event), ["stop"]))
 								}, null, 8, ["disabled"]),
-								__props.node.branch.count > 0 ? (openBlock(), createElementBlock("small", _hoisted_20$7, "| \xA0" + toDisplayString(__props.node.branch.count), 1)) : createCommentVNode("", true)
+								__props.node.branch.count > 0 ? (openBlock(), createElementBlock("small", _hoisted_20$6, "| \xA0" + toDisplayString(__props.node.branch.count), 1)) : createCommentVNode("", true)
 							]),
 							_: 1
 						}, 8, ["tag"])) : createCommentVNode("", true)]),
@@ -11674,7 +11673,7 @@ var _sfc_main$93 = {
 };
 //#endregion
 //#region src/features/interface/ConfiguredResultItem.vue
-var _hoisted_1$65 = [
+var _hoisted_1$67 = [
 	"data-result-key",
 	"data-node-id",
 	"aria-label",
@@ -11684,7 +11683,7 @@ var _hoisted_2$51 = {
 	key: 3,
 	class: "result-expand-spacer"
 };
-var _sfc_main$92 = {
+var _sfc_main$95 = {
 	__name: "ConfiguredResultItem",
 	props: {
 		editing: Boolean,
@@ -11824,19 +11823,19 @@ var _sfc_main$92 = {
 						"aria-hidden": "true"
 					}, null, 6);
 				}), 128)),
-				unref(mobile) && __props.navigable ? (openBlock(), createBlock(_sfc_main$139, {
+				unref(mobile) && __props.navigable ? (openBlock(), createBlock(_sfc_main$142, {
 					key: 0,
 					class: "result-mobile-next",
 					name: "MDI_CHEVRON_RIGHT"
 				})) : createCommentVNode("", true),
-				unref(mobile) && __props.back ? (openBlock(), createBlock(_sfc_main$138, {
+				unref(mobile) && __props.back ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 1,
 					class: "result-mobile-back",
 					label: "Back",
 					icon: "MDI_ARROW_LEFT",
 					"icon-only": "",
 					onClick: _cache[0] || (_cache[0] = withModifiers(($event) => emit("back"), ["stop"]))
-				})) : !unref(mobile) && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$138, {
+				})) : !unref(mobile) && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 2,
 					class: normalizeClass(["result-expand", { expanded: __props.node.expanded }]),
 					"icon-only": "",
@@ -11852,7 +11851,7 @@ var _sfc_main$92 = {
 					"disabled"
 				])) : createCommentVNode("", true),
 				!unref(mobile) && !__props.node.hasChildren ? (openBlock(), createElementBlock("span", _hoisted_2$51)) : createCommentVNode("", true),
-				!native.value && unref(mobile) && __props.selectable && !__props.readOnly ? (openBlock(), createBlock(_sfc_main$160, {
+				!native.value && unref(mobile) && __props.selectable && !__props.readOnly ? (openBlock(), createBlock(_sfc_main$163, {
 					key: 4,
 					label: "Select record",
 					"hide-label": "",
@@ -11860,7 +11859,7 @@ var _sfc_main$92 = {
 					onClick: _cache[2] || (_cache[2] = withModifiers(() => {}, ["stop"])),
 					"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => emit("select", __props.node, $event))
 				}, null, 8, ["model-value"])) : createCommentVNode("", true),
-				createVNode(_sfc_main$93, {
+				createVNode(_sfc_main$96, {
 					presentation: presentation.value,
 					layout: __props.layout,
 					node: __props.node,
@@ -11879,18 +11878,18 @@ var _sfc_main$92 = {
 					"editing",
 					"selected-element"
 				])
-			], 46, _hoisted_1$65);
+			], 46, _hoisted_1$67);
 		};
 	}
 };
 //#endregion
 //#region src/features/interface/ItemLayoutTable.vue
-var _hoisted_1$64 = { class: "item-layout-table-scroll" };
+var _hoisted_1$66 = { class: "item-layout-table-scroll" };
 var _hoisted_2$50 = { class: "item-layout-table" };
 var _hoisted_3$40 = { key: 0 };
 var _hoisted_4$32 = ["onClick", "onContextmenu"];
 var _hoisted_5$26 = { key: 0 };
-var _sfc_main$91 = {
+var _sfc_main$94 = {
 	__name: "ItemLayoutTable",
 	props: {
 		layout: Object,
@@ -11911,8 +11910,8 @@ var _sfc_main$91 = {
 		const emit = __emit;
 		const columns = computed(() => props.layout.elements.filter((item) => !item.parent && !item.hidden && ["all", "main"].includes(item.variant)));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$64, [createBaseVNode("table", _hoisted_2$50, [createBaseVNode("thead", null, [createBaseVNode("tr", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
-				return openBlock(), createElementBlock("th", { key: column.name }, [__props.editing ? (openBlock(), createBlock(_sfc_main$138, {
+			return openBlock(), createElementBlock("div", _hoisted_1$66, [createBaseVNode("table", _hoisted_2$50, [createBaseVNode("thead", null, [createBaseVNode("tr", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
+				return openBlock(), createElementBlock("th", { key: column.name }, [__props.editing ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					label: column.title,
 					"translate-label": false,
@@ -11929,7 +11928,7 @@ var _sfc_main$91 = {
 					onClick: ($event) => emit("activate", node, $event),
 					onContextmenu: withModifiers(($event) => emit("context", node, $event), ["prevent"])
 				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
-					return openBlock(), createElementBlock("td", { key: column.name }, [createVNode(_sfc_main$93, {
+					return openBlock(), createElementBlock("td", { key: column.name }, [createVNode(_sfc_main$96, {
 						layout: __props.layout,
 						node,
 						only: column.name,
@@ -11954,14 +11953,14 @@ var _sfc_main$91 = {
 };
 //#endregion
 //#region src/controls/MobilePage.vue
-var _hoisted_1$63 = ["data-chrome-hidden"];
+var _hoisted_1$65 = ["data-chrome-hidden"];
 var _hoisted_2$49 = {
 	key: 0,
 	class: "mobile-result-header"
 };
 var _hoisted_3$39 = { class: "mobile-result-stage" };
 var _hoisted_4$31 = ["aria-label", "data-screen-key"];
-var _sfc_main$90 = {
+var _sfc_main$93 = {
 	__name: "MobilePage",
 	props: {
 		screenKey: String,
@@ -12124,13 +12123,13 @@ var _sfc_main$90 = {
 					_: 3
 				}, 8, ["name"])]),
 				renderSlot(_ctx.$slots, "footer")
-			], 40, _hoisted_1$63);
+			], 40, _hoisted_1$65);
 		};
 	}
 };
 //#endregion
 //#region src/features/workspace/MobileResults.vue
-var _hoisted_1$62 = { class: "mobile-snapshot-view file-preview" };
+var _hoisted_1$64 = { class: "mobile-snapshot-view file-preview" };
 var _hoisted_2$48 = {
 	key: 0,
 	role: "status"
@@ -12155,7 +12154,7 @@ var _hoisted_7$22 = {
 	key: 3,
 	class: "table-message"
 };
-var _sfc_main$89 = {
+var _sfc_main$92 = {
 	__name: "MobileResults",
 	props: {
 		visibleNode: Function,
@@ -12208,7 +12207,7 @@ var _sfc_main$89 = {
 		const error = computed(() => props.error || props.parent?.error);
 		const snapshotFooter = ref(null);
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$90, {
+			return openBlock(), createBlock(_sfc_main$93, {
 				"aria-label": unref(t)("Mobile item browser"),
 				"screen-key": key.value,
 				title: title.value,
@@ -12222,7 +12221,7 @@ var _sfc_main$89 = {
 				onScrolled: _cache[18] || (_cache[18] = (id, top) => emit("scrolled", id, top)),
 				onRootScroll: _cache[19] || (_cache[19] = ($event) => emit("root-scroll", $event))
 			}, createSlots({
-				header: withCtx(() => [(openBlock(), createBlock(resolveDynamicComponent(__props.itemLayout ? _sfc_main$92 : _sfc_main$95), {
+				header: withCtx(() => [(openBlock(), createBlock(resolveDynamicComponent(__props.itemLayout ? _sfc_main$95 : _sfc_main$98), {
 					layout: __props.itemLayout,
 					"read-only": __props.readOnly,
 					node: __props.parent,
@@ -12245,9 +12244,9 @@ var _sfc_main$89 = {
 				]))]),
 				default: withCtx(() => [
 					snapshot.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-						createBaseVNode("div", _hoisted_1$62, [
+						createBaseVNode("div", _hoisted_1$64, [
 							__props.parent.previewBusy ? (openBlock(), createElementBlock("p", _hoisted_2$48, toDisplayString(unref(t)("Loading file…")), 1)) : createCommentVNode("", true),
-							__props.parent.previewError ? (openBlock(), createElementBlock("p", _hoisted_3$38, [createTextVNode(toDisplayString(unref(t)(__props.parent.previewError)) + " ", 1), createVNode(_sfc_main$138, {
+							__props.parent.previewError ? (openBlock(), createElementBlock("p", _hoisted_3$38, [createTextVNode(toDisplayString(unref(t)(__props.parent.previewError)) + " ", 1), createVNode(_sfc_main$141, {
 								label: "Retry",
 								onClick: _cache[10] || (_cache[10] = ($event) => emit("preview-retry", __props.parent))
 							})])) : createCommentVNode("", true),
@@ -12265,7 +12264,7 @@ var _sfc_main$89 = {
 								"actions-target"
 							])) : createCommentVNode("", true)
 						]),
-						__props.parent.children?.length ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.parent.children?.length ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							class: "mobile-snapshot-versions",
 							label: "View versions",
@@ -12286,13 +12285,13 @@ var _sfc_main$89 = {
 						])
 					], 64)) : createCommentVNode("", true),
 					busy.value ? (openBlock(), createElementBlock("p", _hoisted_5$25, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
-					error.value ? (openBlock(), createElementBlock("p", _hoisted_6$22, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$138, {
+					error.value ? (openBlock(), createElementBlock("p", _hoisted_6$22, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$141, {
 						label: "Retry",
 						icon: "refresh",
 						onClick: _cache[12] || (_cache[12] = ($event) => emit(__props.parent ? "retry" : "refresh"))
 					})])) : createCommentVNode("", true),
 					(openBlock(true), createElementBlock(Fragment, null, renderList(snapshot.value ? [] : groups.value, (group) => {
-						return openBlock(), createElementBlock("section", { key: group.key }, [group.label ? (openBlock(), createBlock(_sfc_main$138, {
+						return openBlock(), createElementBlock("section", { key: group.key }, [group.label ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							class: "result-group-heading",
 							"aria-expanded": !__props.closedGroups[group.key],
@@ -12300,18 +12299,18 @@ var _sfc_main$89 = {
 						}, {
 							default: withCtx(() => [createTextVNode(toDisplayString(group.translate || !group.key ? unref(t)(group.label) : group.label) + " ", 1), createBaseVNode("small", null, toDisplayString(group.nodes.length), 1)]),
 							_: 2
-						}, 1032, ["aria-expanded", "onClick"])) : createCommentVNode("", true), withDirectives(createVNode(_sfc_main$124, {
+						}, 1032, ["aria-expanded", "onClick"])) : createCommentVNode("", true), withDirectives(createVNode(_sfc_main$127, {
 							class: "mobile-result-list",
 							items: group.nodes.map((node) => ({
 								key: node.id,
 								data: node,
-								height: layout$1({
+								height: layout$2({
 									kind: node.kind === "branch" ? node.branch?.kind === "relation" ? "relation" : "process" : node.kind,
 									mobile: true
 								}, 320).height
 							}))
 						}, {
-							default: withCtx(({ item: node }) => [(openBlock(), createBlock(resolveDynamicComponent(__props.itemLayout ? _sfc_main$92 : _sfc_main$95), {
+							default: withCtx(({ item: node }) => [(openBlock(), createBlock(resolveDynamicComponent(__props.itemLayout ? _sfc_main$95 : _sfc_main$98), {
 								layout: __props.itemLayout,
 								"read-only": __props.readOnly,
 								node,
@@ -12350,7 +12349,7 @@ var _sfc_main$89 = {
 						}, 8, ["items"]), [[vShow, __props.parent || !__props.closedGroups[group.key]]])]);
 					}), 128)),
 					!busy.value && !error.value && !snapshot.value && !groups.value.some((group) => group.nodes.length) ? (openBlock(), createElementBlock("p", _hoisted_7$22, toDisplayString(unref(t)(__props.parent?.branch?.kind === "versions" ? "No versions" : "No records yet")), 1)) : createCommentVNode("", true),
-					__props.parent?.hasNext ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.parent?.hasNext ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 4,
 						label: "Load more",
 						icon: "next",
@@ -12382,7 +12381,7 @@ var _sfc_main$89 = {
 };
 //#endregion
 //#region src/features/workspace/WorkspaceSearch.vue
-var _sfc_main$88 = {
+var _sfc_main$91 = {
 	components: { AppSearchField: AppSearchField_default },
 	props: {
 		modelValue: String,
@@ -12507,10 +12506,10 @@ function _sfc_render$17(_ctx, _cache, $props, $setup, $data, $options) {
 		"onSearch"
 	]);
 }
-var WorkspaceSearch_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$88, [["render", _sfc_render$17]]);
+var WorkspaceSearch_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$91, [["render", _sfc_render$17]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/objects/links.ui.mjs
-function describe$23(model, width, height, language) {
+function describe$24(model, width, height, language) {
 	const tr = (text) => translate(text, language), narrow = width < 650, footerHeight = narrow ? 92 : 64;
 	const errorHeight = model.error ? Math.max(44, captionHeight(tr(model.error), Math.max(1, width - 50)) + 20) : 0;
 	const bodyHeight = Math.max(0, height - 68 - footerHeight - errorHeight - 28), paneWidth = narrow ? width - 28 : (width - 80) / 2;
@@ -12604,7 +12603,7 @@ function list$1(model, width, height, language) {
 	}));
 	return result;
 }
-function row$7(record, width) {
+function row$8(record, width) {
 	return {
 		height: 64,
 		nodes: [node("Action", "linkRow_" + record.key, rect$1(0, 0, width, 64), {
@@ -12657,7 +12656,7 @@ function select(keys, records, index, anchor, control, shift) {
 }
 //#endregion
 //#region src/features/objects/ObjectLinkList.vue
-var _sfc_main$87 = {
+var _sfc_main$90 = {
 	__name: "ObjectLinkList",
 	props: {
 		records: Array,
@@ -12768,18 +12767,18 @@ var _sfc_main$87 = {
 				}),
 				onDragover: _cache[2] || (_cache[2] = withModifiers(() => {}, ["prevent"])),
 				onDrop: drop
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				interactive: !__props.disabled,
 				models: { rows: rows.value },
-				"describe-row": (list, record) => row$7(record, scene.value.rowWidth),
+				"describe-row": (list, record) => row$8(record, scene.value.rowWidth),
 				onEvent: event
 			}, null, 8, [
 				"scene",
 				"interactive",
 				"models",
 				"describe-row"
-			]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$125, {
+			]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$128, {
 				key: 0,
 				message: "Loading objects...",
 				style: normalizeStyle({
@@ -12794,7 +12793,7 @@ var _sfc_main$87 = {
 };
 //#endregion
 //#region src/features/objects/RelatedObjects.vue
-var _sfc_main$85 = {
+var _sfc_main$88 = {
 	components: {
 		ObjectLinkSurface: {
 			__name: "ObjectLinkSurface",
@@ -12827,7 +12826,7 @@ var _sfc_main$85 = {
 					height: 0
 				});
 				let observer;
-				const scene = computed(() => describe$23(props.model, size.value.width, size.value.height, appearance.language));
+				const scene = computed(() => describe$24(props.model, size.value.width, size.value.height, appearance.language));
 				const views = {};
 				for (const scope of ["available", "linked"]) {
 					views[scope + "Search"] = { component: (_, context) => h(scope === "available" ? WorkspaceSearch_default : AppSearchField_default, {
@@ -12847,7 +12846,7 @@ var _sfc_main$85 = {
 						"onUpdate:modelValue": (value) => emit("query", scope, value, false),
 						onSearch: () => emit("query", scope, props[scope + "Query"], true)
 					}) };
-					views[scope + "List"] = { component: (_, context) => h(_sfc_main$87, {
+					views[scope + "List"] = { component: (_, context) => h(_sfc_main$90, {
 						...context.attrs,
 						scope,
 						records: props[scope],
@@ -12878,7 +12877,7 @@ var _sfc_main$85 = {
 						ref_key: "host",
 						ref: host,
 						class: "object-link-surface"
-					}, [createVNode(_sfc_main$140, {
+					}, [createVNode(_sfc_main$143, {
 						scene: scene.value,
 						views,
 						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
@@ -12886,16 +12885,16 @@ var _sfc_main$85 = {
 				};
 			}
 		},
-		ObjectReport: _sfc_main$161,
+		ObjectReport: _sfc_main$164,
 		get ConfiguredView() {
 			return ConfiguredView_default;
 		},
 		RecordForm: RecordForm_default,
 		ObjectOperations: ObjectOperations_default,
 		ObjectAction: ObjectAction_default,
-		AppButton: _sfc_main$138,
-		AppSelect: _sfc_main$153,
-		AppMenu: _sfc_main$159
+		AppButton: _sfc_main$141,
+		AppSelect: _sfc_main$156,
+		AppMenu: _sfc_main$160
 	},
 	props: {
 		ticket: String,
@@ -13296,7 +13295,7 @@ var _sfc_main$85 = {
 		}
 	}
 };
-var _hoisted_1$61 = ["aria-label"];
+var _hoisted_1$63 = ["aria-label"];
 var _hoisted_2$47 = {
 	key: 0,
 	class: "error",
@@ -13325,7 +13324,7 @@ var _hoisted_8$20 = {
 	role: "alert"
 };
 var _hoisted_9$16 = ["aria-label"];
-var _hoisted_10$16 = { class: "configuration-actions" };
+var _hoisted_10$15 = { class: "configuration-actions" };
 function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_AppSelect = resolveComponent("AppSelect");
@@ -13449,7 +13448,7 @@ function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 					onClick: _cache[6] || (_cache[6] = ($event) => $options.close(true))
 				})
 			])) : createCommentVNode("", true)
-		], 42, _hoisted_1$61)), [[_directive_window, {
+		], 42, _hoisted_1$63)), [[_directive_window, {
 			kind: $data.linking ? "link_sobjects" : void 0,
 			type: "window"
 		}]]),
@@ -13510,7 +13509,7 @@ function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 			ref: "details",
 			class: "record-dialog object-details",
 			"aria-label": $options.t("Object details")
-		}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($data.detail.name || $data.detail.title || $data.detail.code || $data.detail.id), 1), createBaseVNode("small", null, toDisplayString($data.detail.__search_key__), 1)]), createBaseVNode("div", _hoisted_10$16, [$data.definition?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
+		}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($data.detail.name || $data.detail.title || $data.detail.code || $data.detail.id), 1), createBaseVNode("small", null, toDisplayString($data.detail.__search_key__), 1)]), createBaseVNode("div", _hoisted_10$15, [$data.definition?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
 			key: 0,
 			label: "Edit record",
 			icon: "edit",
@@ -13532,23 +13531,23 @@ function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 		])], 64)) : createCommentVNode("", true)], 8, _hoisted_9$16)), [[_directive_window, { type: "window" }]])
 	], 64);
 }
-var RelatedObjects_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$85, [["render", _sfc_render$16]]);
+var RelatedObjects_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$88, [["render", _sfc_render$16]]);
 //#endregion
 //#region src/features/workspace/ResultPresentation.vue
-var _sfc_main$84 = {
+var _sfc_main$87 = {
 	components: {
-		ObjectReport: _sfc_main$161,
-		ProcessVisibility: _sfc_main$94,
-		VirtualCollection: _sfc_main$124,
-		ConfiguredResultItem: _sfc_main$92,
-		ItemLayoutTable: _sfc_main$91,
-		MobileResults: _sfc_main$89,
-		ResultItem: _sfc_main$95,
-		AppButton: _sfc_main$138,
-		AppSelect: _sfc_main$153,
-		AppSplitter: _sfc_main$158,
-		AppMenu: _sfc_main$159,
-		AppMenuItem: _sfc_main$164,
+		ObjectReport: _sfc_main$164,
+		ProcessVisibility: _sfc_main$97,
+		VirtualCollection: _sfc_main$127,
+		ConfiguredResultItem: _sfc_main$95,
+		ItemLayoutTable: _sfc_main$94,
+		MobileResults: _sfc_main$92,
+		ResultItem: _sfc_main$98,
+		AppButton: _sfc_main$141,
+		AppSelect: _sfc_main$156,
+		AppSplitter: _sfc_main$162,
+		AppMenu: _sfc_main$160,
+		AppMenuItem: _sfc_main$167,
 		FilePreview: FilePreview_default,
 		NotesPanel: NotesPanel_default,
 		ObjectOperations: ObjectOperations_default,
@@ -13802,7 +13801,7 @@ var _sfc_main$84 = {
 			return (this.mode === "tiles" ? nodes : this.visible(nodes)).map((node) => ({
 				key: node.id,
 				data: node,
-				height: layout$1({
+				height: layout$2({
 					kind: node.kind === "branch" ? node.branch?.kind === "relation" ? "relation" : "process" : node.kind,
 					compact: this.compact,
 					tile: this.mode === "tiles"
@@ -14413,7 +14412,7 @@ var _sfc_main$84 = {
 		}
 	}
 };
-var _hoisted_1$60 = ["data-result-view", "aria-busy"];
+var _hoisted_1$62 = ["data-result-view", "aria-busy"];
 var _hoisted_2$46 = {
 	key: 1,
 	class: "result-main"
@@ -14443,30 +14442,30 @@ var _hoisted_9$15 = {
 	key: 2,
 	class: "result-branch-message"
 };
-var _hoisted_10$15 = {
+var _hoisted_10$14 = {
 	key: 3,
 	class: "table-message"
 };
-var _hoisted_11$13 = ["aria-label", "aria-busy"];
-var _hoisted_12$12 = {
+var _hoisted_11$12 = ["aria-label", "aria-busy"];
+var _hoisted_12$11 = {
 	key: 0,
 	class: "table-message"
 };
-var _hoisted_13$10 = {
+var _hoisted_13$9 = {
 	key: 1,
 	class: "table-message"
 };
-var _hoisted_14$9 = {
+var _hoisted_14$8 = {
 	key: 2,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_15$9 = {
+var _hoisted_15$8 = {
 	key: 3,
 	role: "status"
 };
-var _hoisted_16$9 = { key: 0 };
-var _hoisted_17$8 = ["aria-label"];
+var _hoisted_16$8 = { key: 0 };
+var _hoisted_17$7 = ["aria-label"];
 function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_MobileResults = resolveComponent("MobileResults");
 	const _component_AppButton = resolveComponent("AppButton");
@@ -14705,7 +14704,7 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 					"row-gap"
 				])), [[vShow, !$data.closedGroups[group.key]]])]);
 			}), 128)),
-			!$data.busy && !$data.nodes.length && !$data.error ? (openBlock(), createElementBlock("p", _hoisted_10$15, toDisplayString($options.t("No records yet")), 1)) : createCommentVNode("", true)
+			!$data.busy && !$data.nodes.length && !$data.error ? (openBlock(), createElementBlock("p", _hoisted_10$14, toDisplayString($options.t("No records yet")), 1)) : createCommentVNode("", true)
 		])),
 		$options.split ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createVNode(_component_AppSplitter, {
 			modelValue: $data.splitRatio,
@@ -14745,12 +14744,12 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 					onClick: _cache[17] || (_cache[17] = ($event) => $options.loadVersions())
 				}, null, 8, ["disabled"])
 			]),
-			!$options.selectedNode ? (openBlock(), createElementBlock("p", _hoisted_12$12, toDisplayString($options.t("Select an item to see its versions.")), 1)) : !$data.versionBusy && !$data.versions.length && !$data.versionError ? (openBlock(), createElementBlock("p", _hoisted_13$10, toDisplayString($options.t("No versions")), 1)) : createCommentVNode("", true),
-			$data.versionError ? (openBlock(), createElementBlock("p", _hoisted_14$9, [createTextVNode(toDisplayString($options.t($data.versionError)) + " ", 1), createVNode(_component_AppButton, {
+			!$options.selectedNode ? (openBlock(), createElementBlock("p", _hoisted_12$11, toDisplayString($options.t("Select an item to see its versions.")), 1)) : !$data.versionBusy && !$data.versions.length && !$data.versionError ? (openBlock(), createElementBlock("p", _hoisted_13$9, toDisplayString($options.t("No versions")), 1)) : createCommentVNode("", true),
+			$data.versionError ? (openBlock(), createElementBlock("p", _hoisted_14$8, [createTextVNode(toDisplayString($options.t($data.versionError)) + " ", 1), createVNode(_component_AppButton, {
 				label: "Retry",
 				onClick: _cache[18] || (_cache[18] = ($event) => $options.loadVersions())
 			})])) : createCommentVNode("", true),
-			$data.versionBusy ? (openBlock(), createElementBlock("p", _hoisted_15$9, toDisplayString($options.t("Loading dataвЂ¦")), 1)) : createCommentVNode("", true),
+			$data.versionBusy ? (openBlock(), createElementBlock("p", _hoisted_15$8, toDisplayString($options.t("Loading dataвЂ¦")), 1)) : createCommentVNode("", true),
 			(openBlock(true), createElementBlock(Fragment, null, renderList($data.versions, (node) => {
 				return openBlock(), createBlock(resolveDynamicComponent($props.itemLayout ? "ConfiguredResultItem" : "ResultItem"), {
 					layout: $props.itemLayout,
@@ -14780,7 +14779,7 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 				disabled: $data.versionBusy,
 				onClick: _cache[21] || (_cache[21] = ($event) => $options.loadVersions(true))
 			}, null, 8, ["disabled"])) : createCommentVNode("", true)
-		], 8, _hoisted_11$13)], 64)) : createCommentVNode("", true),
+		], 8, _hoisted_11$12)], 64)) : createCommentVNode("", true),
 		createVNode(_component_AppMenu, {
 			ref: "processMenu",
 			class: "result-process-menu",
@@ -14840,7 +14839,7 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 						"onClick"
 					]);
 				}), 128)),
-				$data.relationNode?.related_parents?.length && $data.relationNode?.branches.some((branch) => branch.kind === "relation") ? (openBlock(), createElementBlock("hr", _hoisted_16$9)) : createCommentVNode("", true),
+				$data.relationNode?.related_parents?.length && $data.relationNode?.branches.some((branch) => branch.kind === "relation") ? (openBlock(), createElementBlock("hr", _hoisted_16$8)) : createCommentVNode("", true),
 				(openBlock(true), createElementBlock(Fragment, null, renderList($data.relationNode?.branches.filter((branch) => branch.kind === "relation") || [], (branch) => {
 					return openBlock(), createBlock(_component_AppMenuItem, {
 						key: branch.key,
@@ -14994,31 +14993,31 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 			"ticket",
 			"project",
 			"record"
-		])) : createCommentVNode("", true)], 8, _hoisted_17$8)), [[_directive_window, { type: "window" }]])
-	], 14, _hoisted_1$60);
+		])) : createCommentVNode("", true)], 8, _hoisted_17$7)), [[_directive_window, { type: "window" }]])
+	], 14, _hoisted_1$62);
 }
-var ResultPresentation_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$84, [["render", _sfc_render$15]]);
+var ResultPresentation_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$87, [["render", _sfc_render$15]]);
 //#endregion
 //#region src/features/interface/ConfiguredView.vue
 var RelatedObjects = asyncComponent(() => __vitePreload(() => import("./RelatedObjects.js"), []));
-var _sfc_main$83 = {
+var _sfc_main$86 = {
 	name: "ConfiguredView",
 	inject: { openTableCheckin: { default: null } },
 	components: {
 		RecordForm: RecordForm_default,
 		RelatedObjects,
-		TableInlineEditor: _sfc_main$120,
-		TableView: _sfc_main$127,
+		TableInlineEditor: _sfc_main$123,
+		TableView: _sfc_main$130,
 		TableCell: TableCell_default,
 		ObjectOperations: ObjectOperations_default,
 		ObjectAction: ObjectAction_default,
-		AppButton: _sfc_main$138,
-		AppMenu: _sfc_main$159,
-		AppSelect: _sfc_main$153,
+		AppButton: _sfc_main$141,
+		AppMenu: _sfc_main$160,
+		AppSelect: _sfc_main$156,
 		AppSearchField: AppSearchField_default,
 		FilePreview: FilePreview_default,
 		NotesPanel: NotesPanel_default,
-		TaskTableEditor: _sfc_main$99,
+		TaskTableEditor: _sfc_main$102,
 		ResultPresentation: ResultPresentation_default,
 		JournalDetails: JournalDetails_default
 	},
@@ -15993,7 +15992,7 @@ var _sfc_main$83 = {
 		}
 	}
 };
-var _hoisted_1$59 = ["data-result-mode", "aria-busy"];
+var _hoisted_1$61 = ["data-result-mode", "aria-busy"];
 var _hoisted_2$45 = ["aria-label"];
 var _hoisted_3$35 = [
 	"id",
@@ -16021,58 +16020,58 @@ var _hoisted_9$14 = {
 	class: "error",
 	role: "alert"
 };
-var _hoisted_10$14 = {
+var _hoisted_10$13 = {
 	key: 2,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_11$12 = {
+var _hoisted_11$11 = {
 	key: 3,
 	class: "notice"
 };
-var _hoisted_12$11 = { key: 0 };
-var _hoisted_13$9 = {
+var _hoisted_12$10 = { key: 0 };
+var _hoisted_13$8 = {
 	key: 4,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_14$8 = {
+var _hoisted_14$7 = {
 	key: 5,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_15$8 = {
+var _hoisted_15$7 = {
 	key: 6,
 	class: "notice"
 };
-var _hoisted_16$8 = ["aria-label"];
-var _hoisted_17$7 = { role: "status" };
-var _hoisted_18$7 = {
+var _hoisted_16$7 = ["aria-label"];
+var _hoisted_17$6 = { role: "status" };
+var _hoisted_18$6 = {
 	key: 8,
 	class: "table-message",
 	role: "status"
 };
-var _hoisted_19$7 = {
+var _hoisted_19$6 = {
 	key: 9,
 	class: "table-message"
 };
-var _hoisted_20$6 = {
+var _hoisted_20$5 = {
 	key: 0,
 	class: "notice"
 };
-var _hoisted_21$6 = {
+var _hoisted_21$5 = {
 	key: 1,
 	class: "table-message"
 };
-var _hoisted_22$6 = {
+var _hoisted_22$4 = {
 	key: 3,
 	class: "table-message"
 };
-var _hoisted_23$6 = {
+var _hoisted_23$4 = {
 	key: 4,
 	class: "table-message"
 };
-var _hoisted_24$6 = ["aria-label"];
+var _hoisted_24$4 = ["aria-label"];
 function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_ConfiguredView = resolveComponent("ConfiguredView", true);
 	const _component_AppSearchField = resolveComponent("AppSearchField");
@@ -16218,8 +16217,8 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 				}, 8, ["overlay"]))
 			], 40, _hoisted_7$19)) : createCommentVNode("", true),
 			$data.error ? (openBlock(), createElementBlock("p", _hoisted_9$14, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
-			$data.columnError ? (openBlock(), createElementBlock("p", _hoisted_10$14, toDisplayString($options.t($data.columnError)), 1)) : createCommentVNode("", true),
-			$data.columnError ? (openBlock(), createElementBlock("p", _hoisted_11$12, [$data.columnUncertain ? (openBlock(), createElementBlock("span", _hoisted_12$11, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true), createVNode(_component_AppButton, {
+			$data.columnError ? (openBlock(), createElementBlock("p", _hoisted_10$13, toDisplayString($options.t($data.columnError)), 1)) : createCommentVNode("", true),
+			$data.columnError ? (openBlock(), createElementBlock("p", _hoisted_11$11, [$data.columnUncertain ? (openBlock(), createElementBlock("span", _hoisted_12$10, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true), createVNode(_component_AppButton, {
 				label: "Reload from server",
 				icon: "refresh",
 				onClick: _cache[10] || (_cache[10] = ($event) => {
@@ -16228,16 +16227,16 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					$options.selectTableView($options.table.view || "table");
 				})
 			})])) : createCommentVNode("", true),
-			$data.cellError ? (openBlock(), createElementBlock("p", _hoisted_13$9, toDisplayString($options.t($data.cellError)), 1)) : createCommentVNode("", true),
-			$data.taskError ? (openBlock(), createElementBlock("p", _hoisted_14$8, toDisplayString($options.t($data.taskError)), 1)) : createCommentVNode("", true),
-			$data.taskUncertain ? (openBlock(), createElementBlock("p", _hoisted_15$8, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true),
+			$data.cellError ? (openBlock(), createElementBlock("p", _hoisted_13$8, toDisplayString($options.t($data.cellError)), 1)) : createCommentVNode("", true),
+			$data.taskError ? (openBlock(), createElementBlock("p", _hoisted_14$7, toDisplayString($options.t($data.taskError)), 1)) : createCommentVNode("", true),
+			$data.taskUncertain ? (openBlock(), createElementBlock("p", _hoisted_15$7, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true),
 			$options.dirtyTaskCount ? (openBlock(), createElementBlock("div", {
 				key: 7,
 				class: "task-draft-actions",
 				role: "region",
 				"aria-label": $options.t("Pending task changes")
 			}, [
-				createBaseVNode("span", _hoisted_17$7, toDisplayString($options.t("{count} unsaved tasks", { count: $options.dirtyTaskCount })), 1),
+				createBaseVNode("span", _hoisted_17$6, toDisplayString($options.t("{count} unsaved tasks", { count: $options.dirtyTaskCount })), 1),
 				createVNode(_component_AppButton, {
 					label: "Discard task changes",
 					icon: "undo",
@@ -16261,8 +16260,8 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					disabled: $data.taskBusy || $data.taskUncertain,
 					onClick: _cache[12] || (_cache[12] = ($event) => $options.saveTasks())
 				}, null, 8, ["disabled"])
-			], 8, _hoisted_16$8)) : createCommentVNode("", true),
-			$data.busy ? (openBlock(), createElementBlock("div", _hoisted_18$7, toDisplayString($options.t("Loading data…")), 1)) : !$options.supportedLayout ? (openBlock(), createElementBlock("div", _hoisted_19$7, toDisplayString($options.t("This layout is not available yet.")), 1)) : createCommentVNode("", true),
+			], 8, _hoisted_16$7)) : createCommentVNode("", true),
+			$data.busy ? (openBlock(), createElementBlock("div", _hoisted_18$6, toDisplayString($options.t("Loading data…")), 1)) : !$options.supportedLayout ? (openBlock(), createElementBlock("div", _hoisted_19$6, toDisplayString($options.t("This layout is not available yet.")), 1)) : createCommentVNode("", true),
 			($props.rows !== null || $options.table.item_layout) && !$options.tabs ? withDirectives((openBlock(), createBlock(_component_ResultPresentation, {
 				key: 10,
 				onOrganization: _cache[13] || (_cache[13] = ($event) => _ctx.$emit("organization", $event)),
@@ -16300,8 +16299,8 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 				"selected-keys"
 			])), [[vShow, $options.displayedMode !== "table"]]) : createCommentVNode("", true),
 			!$data.busy && $options.supportedLayout && $options.displayedMode === "table" ? (openBlock(), createElementBlock(Fragment, { key: 11 }, [
-				$options.elements.some((item) => !item.supported) ? (openBlock(), createElementBlock("p", _hoisted_20$6, toDisplayString($options.t("Some widgets in this view are not available yet.")), 1)) : createCommentVNode("", true),
-				!$options.elements.length ? (openBlock(), createElementBlock("div", _hoisted_21$6, toDisplayString($options.t("This view has no elements.")), 1)) : (openBlock(), createBlock(_component_TableView, {
+				$options.elements.some((item) => !item.supported) ? (openBlock(), createElementBlock("p", _hoisted_20$5, toDisplayString($options.t("Some widgets in this view are not available yet.")), 1)) : createCommentVNode("", true),
+				!$options.elements.length ? (openBlock(), createElementBlock("div", _hoisted_21$5, toDisplayString($options.t("This view has no elements.")), 1)) : (openBlock(), createBlock(_component_TableView, {
 					key: 2,
 					ref: "tableView",
 					columns: $options.elements,
@@ -16418,7 +16417,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					"onSaveView",
 					"onEdit"
 				])),
-				!$options.records.length && !$data.error && $options.ownQuery && !$data.started ? (openBlock(), createElementBlock("div", _hoisted_22$6, toDisplayString($options.t("Run a search to load records.")), 1)) : !$options.records.length && !$data.error ? (openBlock(), createElementBlock("div", _hoisted_23$6, [createBaseVNode("strong", null, toDisplayString($options.t("No records yet")), 1), createBaseVNode("span", null, toDisplayString($options.t("Choose another type or change the filter.")), 1)])) : createCommentVNode("", true)
+				!$options.records.length && !$data.error && $options.ownQuery && !$data.started ? (openBlock(), createElementBlock("div", _hoisted_22$4, toDisplayString($options.t("Run a search to load records.")), 1)) : !$options.records.length && !$data.error ? (openBlock(), createElementBlock("div", _hoisted_23$4, [createBaseVNode("strong", null, toDisplayString($options.t("No records yet")), 1), createBaseVNode("span", null, toDisplayString($options.t("Choose another type or change the filter.")), 1)])) : createCommentVNode("", true)
 			], 64)) : createCommentVNode("", true),
 			$options.ownQuery && $props.definition.panel?.show_search_limit !== false ? (openBlock(), createElementBlock("footer", {
 				key: 12,
@@ -16436,7 +16435,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 				"icon-only": $options.mobile,
 				disabled: $data.busy || !$data.hasNext,
 				onClick: _cache[29] || (_cache[29] = ($event) => $options.changePage(1))
-			}, null, 8, ["icon-only", "disabled"])])], 8, _hoisted_24$6)) : createCommentVNode("", true)
+			}, null, 8, ["icon-only", "disabled"])])], 8, _hoisted_24$4)) : createCommentVNode("", true)
 		], 64)),
 		createVNode(_component_FilePreview, {
 			ref: "preview",
@@ -16577,12 +16576,12 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			"onSave",
 			"onCancel"
 		])
-	], 8, _hoisted_1$59);
+	], 8, _hoisted_1$61);
 }
-var ConfiguredView_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$83, [["render", _sfc_render$14]]);
+var ConfiguredView_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$86, [["render", _sfc_render$14]]);
 //#endregion
 //#region src/controls/NavigationRow.vue
-var _sfc_main$82 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
+var _sfc_main$85 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	__name: "NavigationRow",
 	props: {
 		record: {
@@ -16621,10 +16620,10 @@ var _sfc_main$82 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					height: scene.value.height + "px",
 					opacity: __props.disabled ? .5 : 1
 				})
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				interactive: false
-			}, null, 8, ["scene"]), __props.record.kind !== "separator" ? (openBlock(), createBlock(_sfc_main$138, mergeProps({ key: 0 }, _ctx.$attrs, {
+			}, null, 8, ["scene"]), __props.record.kind !== "separator" ? (openBlock(), createBlock(_sfc_main$141, mergeProps({ key: 0 }, _ctx.$attrs, {
 				class: "navigation-row-hit frame-hit-target",
 				label: __props.record.title,
 				"translate-label": false,
@@ -16668,7 +16667,7 @@ var dimensions$3 = {
 	edgeGap: 56,
 	exitDistance: 120
 };
-function describe$22(model, translate = (text) => text) {
+function describe$23(model, translate = (text) => text) {
 	const width = Math.min(Math.max(0, model.width), dimensions$3.maximumWidth, Math.max(dimensions$3.minimumWidth, model.width - dimensions$3.edgeGap));
 	const height = Math.max(0, model.height);
 	const closeX = width - 48;
@@ -16719,12 +16718,12 @@ function move(rows, id, key) {
 }
 //#endregion
 //#region src/features/workspace/NavigationTree.vue
-var _hoisted_1$58 = ["aria-label"];
+var _hoisted_1$60 = ["aria-label"];
 var _hoisted_2$44 = {
 	key: 0,
 	class: "muted sidebar-empty"
 };
-var _sfc_main$81 = {
+var _sfc_main$84 = {
 	__name: "NavigationTree",
 	props: {
 		entries: {
@@ -16788,7 +16787,7 @@ var _sfc_main$81 = {
 				"aria-label": unref(t)("Project views"),
 				onKeydown: move$1
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(rows.value, (entry) => {
-				return openBlock(), createBlock(_sfc_main$82, {
+				return openBlock(), createBlock(_sfc_main$85, {
 					key: entry.key,
 					record: entry,
 					selected: __props.selected === entry.key,
@@ -16804,7 +16803,7 @@ var _sfc_main$81 = {
 					"disabled",
 					"onActivated"
 				]);
-			}), 128)), !rows.value.length ? (openBlock(), createElementBlock("p", _hoisted_2$44, toDisplayString(unref(t)(__props.query ? "No types found" : "No navigation items")), 1)) : createCommentVNode("", true)], 40, _hoisted_1$58);
+			}), 128)), !rows.value.length ? (openBlock(), createElementBlock("p", _hoisted_2$44, toDisplayString(unref(t)(__props.query ? "No types found" : "No navigation items")), 1)) : createCommentVNode("", true)], 40, _hoisted_1$60);
 		};
 	}
 };
@@ -17074,12 +17073,12 @@ function readWorkspace(login, projects, types) {
 }
 //#endregion
 //#region src/features/interface/WidgetConfiguration.vue
-var _sfc_main$80 = {
+var _sfc_main$83 = {
 	components: {
 		ConfiguredView: ConfiguredView_default,
-		NavigationTree: _sfc_main$81,
-		AppButton: _sfc_main$138,
-		AppSelect: _sfc_main$153
+		NavigationTree: _sfc_main$84,
+		AppButton: _sfc_main$141,
+		AppSelect: _sfc_main$156
 	},
 	props: {
 		ticket: String,
@@ -17258,7 +17257,7 @@ var _sfc_main$80 = {
 		}
 	}
 };
-var _hoisted_1$57 = ["aria-label"];
+var _hoisted_1$59 = ["aria-label"];
 var _hoisted_2$43 = {
 	key: 0,
 	class: "error",
@@ -17283,9 +17282,9 @@ var _hoisted_8$17 = {
 	class: "xml-diff"
 };
 var _hoisted_9$13 = ["aria-label"];
-var _hoisted_10$13 = { class: "muted" };
-var _hoisted_11$11 = { class: "configuration-actions" };
-var _hoisted_12$10 = {
+var _hoisted_10$12 = { class: "muted" };
+var _hoisted_11$10 = { class: "configuration-actions" };
+var _hoisted_12$9 = {
 	key: 4,
 	role: "alert",
 	class: "notice"
@@ -17360,7 +17359,7 @@ function _sfc_render$13(_ctx, _cache, $props, $setup, $data, $options) {
 				"aria-label": $options.t("Interface preview")
 			}, [
 				createBaseVNode("h3", null, toDisplayString($options.t("Interface preview")), 1),
-				createBaseVNode("p", _hoisted_10$13, toDisplayString($options.t("Read-only preview. Changes have not been saved.")), 1),
+				createBaseVNode("p", _hoisted_10$12, toDisplayString($options.t("Read-only preview. Changes have not been saved.")), 1),
 				$data.context.search_type === "SideBarWdg" ? (openBlock(), createBlock(_component_NavigationTree, {
 					key: 0,
 					entries: $options.previewNavigation,
@@ -17382,7 +17381,7 @@ function _sfc_render$13(_ctx, _cache, $props, $setup, $data, $options) {
 			(openBlock(true), createElementBlock(Fragment, null, renderList($data.configuration.layers, (layer, index) => {
 				return openBlock(), createElementBlock("details", { key: index }, [createBaseVNode("summary", null, toDisplayString($options.t("Inherited layer")) + " " + toDisplayString(index + 1) + " · " + toDisplayString(layer.view), 1), createBaseVNode("pre", null, toDisplayString(layer.xml), 1)]);
 			}), 128)),
-			createBaseVNode("footer", _hoisted_11$11, [
+			createBaseVNode("footer", _hoisted_11$10, [
 				createVNode(_component_AppButton, {
 					label: "Check XML",
 					icon: "check",
@@ -17404,7 +17403,7 @@ function _sfc_render$13(_ctx, _cache, $props, $setup, $data, $options) {
 				}, null, 8, ["disabled"])
 			])
 		], 64)) : createCommentVNode("", true),
-		$data.discard ? (openBlock(), createElementBlock("aside", _hoisted_12$10, [
+		$data.discard ? (openBlock(), createElementBlock("aside", _hoisted_12$9, [
 			createBaseVNode("p", null, toDisplayString($options.t("Discard unsaved changes?")), 1),
 			createVNode(_component_AppButton, {
 				label: "Keep editing",
@@ -17415,12 +17414,12 @@ function _sfc_render$13(_ctx, _cache, $props, $setup, $data, $options) {
 				onClick: $options.close
 			}, null, 8, ["onClick"])
 		])) : createCommentVNode("", true)
-	], 40, _hoisted_1$57)), [[_directive_window]]);
+	], 40, _hoisted_1$59)), [[_directive_window]]);
 }
-var WidgetConfiguration_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$80, [["render", _sfc_render$13]]);
+var WidgetConfiguration_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$83, [["render", _sfc_render$13]]);
 //#endregion
 //#region src/features/administration/AdministrationPort.vue
-var _hoisted_1$56 = ["id"];
+var _hoisted_1$58 = ["id"];
 var AdministrationPort_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	__name: "AdministrationPort",
 	props: { target: String },
@@ -17429,7 +17428,7 @@ var AdministrationPort_default = /*#__PURE__*/ _plugin_vue_export_helper_default
 			return openBlock(), createElementBlock("div", {
 				id: __props.target,
 				class: "administration-port"
-			}, null, 8, _hoisted_1$56);
+			}, null, 8, _hoisted_1$58);
 		};
 	}
 }, [["__scopeId", "data-v-8bebcc2a"]]);
@@ -17528,7 +17527,7 @@ function geometry(width, height, collapsed, workflow = false, navigationWidth = 
 		content: rect(nav + pad, header + pad, body - pad * 2, height - header - pad * 2)
 	};
 }
-function describe$21(model, ui, width, height, language) {
+function describe$22(model, ui, width, height, language) {
 	const tr = (text) => translate(text, language), workflow = model.section === "workflow", g = geometry(width, height, ui.collapsed, workflow, ui.workflowNavigationWidth), nodes = [], current = sections.find((row) => row.id === model.section) || sections[0];
 	const label = (id, r, text, props) => node("Label", id, r, Object.assign({ text: tr(text) }, props || {}));
 	const button = (id, r, text, icon, action, enabled) => node("Button", id, r, {
@@ -17640,7 +17639,7 @@ function describe$21(model, ui, width, height, language) {
 		geometry: g
 	};
 }
-function row$6(list, record, model, ui, language) {
+function row$7(list, record, model, ui, language) {
 	const tr = (text) => translate(text, language), compact = !!ui.collapsed, w = list.width - 16, h = list.rowHeight - 4;
 	const children = [node("Icon", "adminSectionIcon_" + record.id, rect(12, (h - 22) / 2, 22, 22), {
 		icon: record.icon,
@@ -17737,7 +17736,7 @@ var AdministrationShell_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			width: 1,
 			height: 1
 		}), ui = ref(initial$1());
-		const scene = computed(() => describe$21(props.model, ui.value, size.value.width, size.value.height, appearance.language));
+		const scene = computed(() => describe$22(props.model, ui.value, size.value.width, size.value.height, appearance.language));
 		const library = shallowRef(null);
 		watch([() => scene.value.geometry.mobile, () => library.value], ([mobile, library]) => {
 			emit("presentation", {
@@ -17792,11 +17791,11 @@ var AdministrationShell_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 				ref_key: "host",
 				ref: host,
 				class: "administration-frame-shell"
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views,
 				models: { sections },
-				"describe-row": (list, record) => row$6(list, record, __props.model, ui.value, unref(appearance).language),
+				"describe-row": (list, record) => row$7(list, record, __props.model, ui.value, unref(appearance).language),
 				onEvent: dispatch
 			}, null, 8, [
 				"scene",
@@ -18075,7 +18074,7 @@ function footer$2(radius, nativeDialog, options = {}) {
 	const corner = Math.max(0, radius - 1);
 	return {
 		radius: corner,
-		height: layout$4.dockWorkspaceFooterHeight,
+		height: layout$5.dockWorkspaceFooterHeight,
 		topLeft: options.topLeft ? corner : 0,
 		topRight: options.topRight ? corner : 0,
 		bottomLeft: (options.bottomLeft === void 0 ? !nativeDialog : options.bottomLeft) ? corner : 0,
@@ -18085,7 +18084,7 @@ function footer$2(radius, nativeDialog, options = {}) {
 }
 //#endregion
 //#region src/controls/DockWorkspaceFooter.vue
-var _sfc_main$77 = {
+var _sfc_main$80 = {
 	__name: "DockWorkspaceFooter",
 	props: {
 		nativeDialog: Boolean,
@@ -18132,20 +18131,20 @@ var editable = (job) => !!job && ![
 	"Skipped",
 	"Result unknown"
 ].includes(job.status);
-var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([27,14,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,25,28])));
-var _sfc_main$76 = {
+var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([24,14,1,2,3,4,5,15,6,7,16,17,10,11,18,19,22,25])));
+var _sfc_main$79 = {
 	components: {
-		AppButton: _sfc_main$138,
-		AppMenu: _sfc_main$159,
-		AppIcon: _sfc_main$139,
-		AppCheckbox: _sfc_main$160,
-		AppSwitch: _sfc_main$154,
-		AppSelect: _sfc_main$153,
-		AppTextField: _sfc_main$157,
-		AppTextArea: _sfc_main$143,
-		AppSplitter: _sfc_main$158,
+		AppButton: _sfc_main$141,
+		AppMenu: _sfc_main$160,
+		AppIcon: _sfc_main$142,
+		AppCheckbox: _sfc_main$163,
+		AppSwitch: _sfc_main$157,
+		AppSelect: _sfc_main$156,
+		AppTextField: _sfc_main$161,
+		AppTextArea: _sfc_main$146,
+		AppSplitter: _sfc_main$162,
 		ItemPreview: ItemPreview_default,
-		SummaryChip: _sfc_main$148,
+		SummaryChip: _sfc_main$151,
 		NamingEditor
 	},
 	props: {
@@ -18739,7 +18738,7 @@ var _sfc_main$76 = {
 		}
 	}
 };
-var _hoisted_1$55 = { key: 0 };
+var _hoisted_1$57 = { key: 0 };
 var _hoisted_2$42 = { class: "queue-files-dock" };
 var _hoisted_3$33 = { class: "queue-toolbar" };
 var _hoisted_4$25 = { class: "result-count" };
@@ -18751,41 +18750,41 @@ var _hoisted_6$17 = {
 var _hoisted_7$17 = ["onClick", "onContextmenu"];
 var _hoisted_8$16 = { class: "queue-row-status" };
 var _hoisted_9$12 = { role: "status" };
-var _hoisted_10$12 = ["value", "aria-label"];
-var _hoisted_11$10 = {
+var _hoisted_10$11 = ["value", "aria-label"];
+var _hoisted_11$9 = {
 	key: 1,
 	class: "error queue-row-error",
 	role: "alert"
 };
-var _hoisted_12$9 = { class: "queue-source-files" };
-var _hoisted_13$8 = { class: "queue-toolbar" };
-var _hoisted_14$7 = { class: "result-count" };
-var _hoisted_15$7 = {
+var _hoisted_12$8 = { class: "queue-source-files" };
+var _hoisted_13$7 = { class: "queue-toolbar" };
+var _hoisted_14$6 = { class: "result-count" };
+var _hoisted_15$6 = {
 	key: 0,
 	class: "muted queue-empty"
 };
-var _hoisted_16$7 = { class: "queue-reselect" };
-var _hoisted_17$6 = { class: "queue-details" };
-var _hoisted_18$6 = {
+var _hoisted_16$6 = { class: "queue-reselect" };
+var _hoisted_17$5 = { class: "queue-details" };
+var _hoisted_18$5 = {
 	key: 0,
 	class: "notice queue-duplicate"
 };
-var _hoisted_19$6 = {
+var _hoisted_19$5 = {
 	key: 1,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_20$5 = { class: "queue-summary" };
-var _hoisted_21$5 = { class: "queue-context" };
-var _hoisted_22$5 = { class: "queue-preview-buttons" };
-var _hoisted_23$5 = { class: "queue-detail-scroll" };
-var _hoisted_24$5 = { class: "queue-section-label" };
-var _hoisted_25$5 = {
+var _hoisted_20$4 = { class: "queue-summary" };
+var _hoisted_21$4 = { class: "queue-context" };
+var _hoisted_22$3 = { class: "queue-preview-buttons" };
+var _hoisted_23$3 = { class: "queue-detail-scroll" };
+var _hoisted_24$3 = { class: "queue-section-label" };
+var _hoisted_25$3 = {
 	key: 1,
 	class: "queue-fields"
 };
-var _hoisted_26$5 = { class: "muted queue-field-note" };
-var _hoisted_27$4 = {
+var _hoisted_26$3 = { class: "muted queue-field-note" };
+var _hoisted_27$3 = {
 	key: 2,
 	class: "queue-section-label"
 };
@@ -18855,7 +18854,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 			})
 		}, {
 			default: withCtx(() => [
-				!$options.docked ? (openBlock(), createElementBlock("header", _hoisted_1$55, [createBaseVNode("h2", null, toDisplayString($options.t("Commit Queue")), 1), createVNode(_component_AppButton, {
+				!$options.docked ? (openBlock(), createElementBlock("header", _hoisted_1$57, [createBaseVNode("h2", null, toDisplayString($options.t("Commit Queue")), 1), createVNode(_component_AppButton, {
 					label: "Close",
 					icon: "close",
 					onClick: _cache[0] || (_cache[0] = ($event) => _ctx.$refs.dialog.close())
@@ -18982,7 +18981,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 									value: job.progress,
 									max: "1",
 									"aria-label": $options.t("Progress")
-								}, null, 8, _hoisted_10$12)) : createCommentVNode("", true)]),
+								}, null, 8, _hoisted_10$11)) : createCommentVNode("", true)]),
 								!$options.mobile ? (openBlock(), createBlock(_component_AppButton, {
 									key: 0,
 									"icon-only": "",
@@ -18991,7 +18990,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 									disabled: ["Uploading", "Checking in"].includes(job.status),
 									onClick: withModifiers(($event) => $options.remove(job), ["stop"])
 								}, null, 8, ["disabled", "onClick"])) : createCommentVNode("", true),
-								$options.mobile && (job.planError || job.error) ? (openBlock(), createElementBlock("p", _hoisted_11$10, toDisplayString($options.t(job.planError || job.error)), 1)) : createCommentVNode("", true),
+								$options.mobile && (job.planError || job.error) ? (openBlock(), createElementBlock("p", _hoisted_11$9, toDisplayString($options.t(job.planError || job.error)), 1)) : createCommentVNode("", true),
 								$options.editable(job) || $options.mobile ? (openBlock(), createBlock(_component_AppMenu, {
 									key: 2,
 									overlay: $options.mobile,
@@ -19046,9 +19045,9 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 							max: 430,
 							label: "Files pane height"
 						}, null, 8, ["modelValue"]),
-						createBaseVNode("div", _hoisted_12$9, [
-							createBaseVNode("div", _hoisted_13$8, [createBaseVNode("strong", null, toDisplayString($options.t("FILES")), 1), createBaseVNode("span", _hoisted_14$7, toDisplayString($options.sourceFiles.length), 1)]),
-							!$options.selected ? (openBlock(), createElementBlock("p", _hoisted_15$7, toDisplayString($options.t("Select an operation to inspect its files.")), 1)) : createCommentVNode("", true),
+						createBaseVNode("div", _hoisted_12$8, [
+							createBaseVNode("div", _hoisted_13$7, [createBaseVNode("strong", null, toDisplayString($options.t("FILES")), 1), createBaseVNode("span", _hoisted_14$6, toDisplayString($options.sourceFiles.length), 1)]),
+							!$options.selected ? (openBlock(), createElementBlock("p", _hoisted_15$6, toDisplayString($options.t("Select an operation to inspect its files.")), 1)) : createCommentVNode("", true),
 							(openBlock(true), createElementBlock(Fragment, null, renderList($options.sourceFiles, (file, index) => {
 								return openBlock(), createElementBlock("div", {
 									key: index,
@@ -19073,7 +19072,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 										class: "queue-missing-file"
 									}, toDisplayString(file.path), 1);
 								}), 128)),
-								createBaseVNode("div", _hoisted_16$7, [createVNode(_component_AppButton, {
+								createBaseVNode("div", _hoisted_16$6, [createVNode(_component_AppButton, {
 									label: "Choose source files again",
 									icon: "upload",
 									onClick: _cache[10] || (_cache[10] = ($event) => _ctx.$refs.reselectInput.click())
@@ -19113,8 +19112,8 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 						max: 600,
 						label: "Queue pane width"
 					}, null, 8, ["modelValue"]),
-					createBaseVNode("div", _hoisted_17$6, [
-						$data.duplicate ? (openBlock(), createElementBlock("div", _hoisted_18$6, [
+					createBaseVNode("div", _hoisted_17$5, [
+						$data.duplicate ? (openBlock(), createElementBlock("div", _hoisted_18$5, [
 							createBaseVNode("p", null, toDisplayString($options.t("The same files are already prepared for this object and context.")), 1),
 							createVNode(_component_AppButton, {
 								label: "Replace",
@@ -19134,8 +19133,8 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 								onClick: _cache[17] || (_cache[17] = ($event) => $options.resolveDuplicate("ignore"))
 							})
 						])) : createCommentVNode("", true),
-						$data.error ? (openBlock(), createElementBlock("p", _hoisted_19$6, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
-						$options.selected ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createBaseVNode("div", _hoisted_20$5, [
+						$data.error ? (openBlock(), createElementBlock("p", _hoisted_19$5, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
+						$options.selected ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createBaseVNode("div", _hoisted_20$4, [
 							createVNode(_component_ItemPreview, {
 								file: $options.selected.previews[0] || ($options.selected.files[0]?.type.startsWith("image/") ? $options.selected.files[0] : void 0),
 								"preview-size": 72,
@@ -19144,7 +19143,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 							createBaseVNode("div", null, [
 								createBaseVNode("strong", null, toDisplayString($options.selected.title), 1),
 								createBaseVNode("span", null, toDisplayString($options.selected.plan?.files[0]?.versioned[0]?.split("/").pop() || $options.selected.name), 1),
-								createBaseVNode("div", _hoisted_21$5, [
+								createBaseVNode("div", _hoisted_21$4, [
 									createBaseVNode("small", null, toDisplayString($options.selected.process) + " ·", 1),
 									$data.contextEditing ? (openBlock(), createBlock(_component_AppTextField, {
 										key: 0,
@@ -19180,7 +19179,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 								accent: $options.selected.status === "Queued" ? "var(--success)" : $options.selected.status === "Failed" ? "var(--error)" : "var(--muted)",
 								label: $options.t($options.selected.status === "Queued" ? $options.selected.validating ? "Validating" : $options.selected.planError ? "Invalid" : "Ready to send" : $options.selected.status)
 							}, null, 8, ["accent", "label"]),
-							createBaseVNode("div", _hoisted_22$5, [
+							createBaseVNode("div", _hoisted_22$3, [
 								createVNode(_component_AppButton, {
 									"icon-only": "",
 									label: "Capture screenshot",
@@ -19238,7 +19237,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 								]),
 								_: 1
 							})
-						]), createBaseVNode("div", _hoisted_23$5, [
+						]), createBaseVNode("div", _hoisted_23$3, [
 							$data.jobs.length > 1 ? (openBlock(), createBlock(_component_AppCheckbox, {
 								key: 0,
 								label: "Apply every edit to checked items",
@@ -19251,7 +19250,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 								"disabled",
 								"title"
 							])) : createCommentVNode("", true),
-							createBaseVNode("strong", _hoisted_24$5, toDisplayString($options.t("BASIC")), 1),
+							createBaseVNode("strong", _hoisted_24$3, toDisplayString($options.t("BASIC")), 1),
 							createVNode(_component_AppTextArea, {
 								"model-value": $options.selected.description,
 								label: "Description",
@@ -19266,7 +19265,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 								"aria-expanded": $data.advanced,
 								onClick: _cache[25] || (_cache[25] = ($event) => $data.advanced = !$data.advanced)
 							}, null, 8, ["icon", "aria-expanded"]),
-							$data.advanced ? (openBlock(), createElementBlock("div", _hoisted_25$5, [
+							$data.advanced ? (openBlock(), createElementBlock("div", _hoisted_25$3, [
 								createBaseVNode("label", null, [createTextVNode(toDisplayString($options.t("Repository")), 1), createVNode(_component_AppSelect, {
 									"model-value": $options.selected.repositoryAlias,
 									options: $data.repositoryOptions,
@@ -19313,9 +19312,9 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 									disabled: !$options.canEdit || $options.selected.contextAsFilename || $options.selected.ingest || $options.selected.preview,
 									"onUpdate:modelValue": _cache[28] || (_cache[28] = ($event) => $options.update("explicitFilename", $event))
 								}, null, 8, ["model-value", "disabled"])]),
-								createBaseVNode("p", _hoisted_26$5, toDisplayString($options.t("Local transfer methods require a desktop connection. Browser check-in uses Upload.")), 1)
+								createBaseVNode("p", _hoisted_26$3, toDisplayString($options.t("Local transfer methods require a desktop connection. Browser check-in uses Upload.")), 1)
 							])) : createCommentVNode("", true),
-							$data.advanced ? (openBlock(), createElementBlock("strong", _hoisted_27$4, toDisplayString($options.t("FILE OPTIONS")), 1)) : createCommentVNode("", true),
+							$data.advanced ? (openBlock(), createElementBlock("strong", _hoisted_27$3, toDisplayString($options.t("FILE OPTIONS")), 1)) : createCommentVNode("", true),
 							$data.advanced ? (openBlock(), createElementBlock("div", _hoisted_28$3, [(openBlock(), createElementBlock(Fragment, null, renderList([
 								["updateVersionless", "Update versionless"],
 								["onlyVersionless", "Commit versionless only"],
@@ -19543,7 +19542,7 @@ function _sfc_render$12(_ctx, _cache, $props, $setup, $data, $options) {
 		], 8, _hoisted_39$1)]))
 	], 64);
 }
-var CommitQueue_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$76, [["render", _sfc_render$12]]);
+var CommitQueue_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$79, [["render", _sfc_render$12]]);
 //#endregion
 //#region src/features/checkin/matchingDefaults.js
 var matchingDefaults = [
@@ -19683,7 +19682,7 @@ var matchingDefaults = [
 ];
 //#endregion
 //#region src/features/checkin/DropPlate.vue
-var _hoisted_1$54 = ["aria-label"];
+var _hoisted_1$56 = ["aria-label"];
 var _hoisted_2$41 = { class: "drop-plate-toolbar" };
 var _hoisted_3$32 = { class: "drop-plate-filter" };
 var _hoisted_4$24 = { class: "drop-plate-groups" };
@@ -19699,17 +19698,17 @@ var _hoisted_7$16 = {
 };
 var _hoisted_8$15 = { class: "drop-plate-footer" };
 var _hoisted_9$11 = { class: "muted" };
-var _hoisted_10$11 = {
+var _hoisted_10$10 = {
 	key: 0,
 	class: "drop-plate-target"
 };
-var _hoisted_11$9 = ["aria-label"];
-var _hoisted_12$8 = {
+var _hoisted_11$8 = ["aria-label"];
+var _hoisted_12$7 = {
 	key: 1,
 	class: "error",
 	role: "alert"
 };
-var _sfc_main$75 = {
+var _sfc_main$78 = {
 	__name: "DropPlate",
 	props: {
 		ticket: String,
@@ -19732,7 +19731,7 @@ var _sfc_main$75 = {
 			ticket: props.ticket,
 			project: props.project
 		}));
-		const MatchingTemplates = asyncComponent(() => __vitePreload(() => import("./MatchingTemplates.js"), __vite__mapDeps([29,1,2,3,4,5,6,7,16,17,18,19,30])));
+		const MatchingTemplates = asyncComponent(() => __vitePreload(() => import("./MatchingTemplates.js"), __vite__mapDeps([26,1,2,3,4,5,6,7,16,17,27])));
 		const templateItems = ref(structuredClone(matchingDefaults)), editingTemplates = ref(false), paddingDraft = ref(3);
 		try {
 			const saved = JSON.parse(localStorage.getItem("tactic_stream.matching_templates") || "null");
@@ -19962,48 +19961,48 @@ var _sfc_main$75 = {
 				})
 			}, [
 				createBaseVNode("div", _hoisted_2$41, [
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Files",
 						icon: "add",
 						disabled: busy.value,
 						onClick: _cache[0] || (_cache[0] = ($event) => input.value.click())
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Directory",
 						icon: "folder",
 						disabled: busy.value,
 						onClick: _cache[1] || (_cache[1] = ($event) => directory.value.click())
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$160, {
+					createVNode(_sfc_main$163, {
 						label: "Include subfolders",
 						"model-value": unref(preferences).checkin.includeSubfolders,
 						"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => preference("includeSubfolders", $event))
 					}, null, 8, ["model-value"]),
-					createVNode(_sfc_main$160, {
+					createVNode(_sfc_main$163, {
 						label: "Group check-in",
 						"model-value": unref(preferences).checkin.groupCheckin,
 						"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => preference("groupCheckin", $event))
 					}, null, 8, ["model-value"]),
-					createVNode(_sfc_main$160, {
+					createVNode(_sfc_main$163, {
 						label: "Keep filename",
 						"model-value": unref(preferences).checkin.keepFilename,
 						"onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => preference("keepFilename", $event))
 					}, null, 8, ["model-value"]),
 					_cache[17] || (_cache[17] = createBaseVNode("span", { class: "spacer" }, null, -1)),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						label: "Paste files",
 						icon: "clipboard",
 						disabled: busy.value,
 						onClick: pasteFiles
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						label: "Matching Templates",
 						icon: "tune",
 						onClick: templates
 					}),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						label: "Clear",
 						icon: "delete",
@@ -20011,7 +20010,7 @@ var _sfc_main$75 = {
 						onClick: clear
 					}, null, 8, ["disabled"])
 				]),
-				createBaseVNode("div", _hoisted_3$32, [createVNode(_sfc_main$153, {
+				createBaseVNode("div", _hoisted_3$32, [createVNode(_sfc_main$156, {
 					modelValue: filterMode.value,
 					"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => filterMode.value = $event),
 					label: "Filter mode",
@@ -20022,19 +20021,19 @@ var _sfc_main$75 = {
 						value: "extension",
 						label: "Extension"
 					}]
-				}, null, 8, ["modelValue"]), createVNode(_sfc_main$157, {
+				}, null, 8, ["modelValue"]), createVNode(_sfc_main$161, {
 					modelValue: filter.value,
 					"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => filter.value = $event),
 					placeholder: filterMode.value === "extension" ? "Filter by extension" : "Filter files",
 					label: "Filter files"
 				}, null, 8, ["modelValue", "placeholder"])]),
-				createBaseVNode("div", _hoisted_4$24, [!groups.value.length ? (openBlock(), createElementBlock("div", _hoisted_5$19, [createVNode(_sfc_main$139, { name: "upload" }), createBaseVNode("span", null, toDisplayString(unref(t)(busy.value ? "Matching files…" : "Drop files or directories here")), 1)])) : createCommentVNode("", true), (openBlock(true), createElementBlock(Fragment, null, renderList(visible.value, (group) => {
+				createBaseVNode("div", _hoisted_4$24, [!groups.value.length ? (openBlock(), createElementBlock("div", _hoisted_5$19, [createVNode(_sfc_main$142, { name: "upload" }), createBaseVNode("span", null, toDisplayString(unref(t)(busy.value ? "Matching files…" : "Drop files or directories here")), 1)])) : createCommentVNode("", true), (openBlock(true), createElementBlock(Fragment, null, renderList(visible.value, (group) => {
 					return openBlock(), createElementBlock("article", {
 						key: group.id,
 						class: "drop-plate-group",
 						onContextmenu: withModifiers(($event) => _ctx.$refs["menu" + group.id][0].openAt($event), ["prevent"])
 					}, [
-						createVNode(_sfc_main$160, {
+						createVNode(_sfc_main$163, {
 							compact: "",
 							"hide-label": "",
 							label: "Select file group",
@@ -20046,35 +20045,35 @@ var _sfc_main$75 = {
 							"onUpdate:modelValue",
 							"disabled"
 						]),
-						createVNode(_sfc_main$139, { name: group.matchingType.includes("sequence") ? "movie" : "file" }, null, 8, ["name"]),
+						createVNode(_sfc_main$142, { name: group.matchingType.includes("sequence") ? "movie" : "file" }, null, 8, ["name"]),
 						createBaseVNode("div", null, [
 							createBaseVNode("strong", null, toDisplayString(group.title), 1),
 							createBaseVNode("small", null, toDisplayString(group.sequenceInfo || group.matchingType) + " · " + toDisplayString(group.fileCount) + " " + toDisplayString(unref(t)("Files")) + " · " + toDisplayString(unref(prettySize)(group.size)), 1),
 							createBaseVNode("small", null, toDisplayString(group.path || group.files[0].name), 1)
 						]),
 						createBaseVNode("span", null, toDisplayString(unref(t)(group.status)), 1),
-						createVNode(_sfc_main$159, {
+						createVNode(_sfc_main$160, {
 							ref_for: true,
 							ref: "menu" + group.id,
 							label: "File actions"
 						}, {
 							default: withCtx(() => [
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Open file",
 									icon: "open",
 									onClick: ($event) => localFile(group)
 								}, null, 8, ["onClick"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Copy file path",
 									icon: "copy",
 									onClick: ($event) => unref(copyText)(unref(sourcePath)(group.files[0]))
 								}, null, 8, ["onClick"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Copy all file paths",
 									icon: "copy",
 									onClick: ($event) => unref(copyText)(group.files.map(unref(sourcePath)).join("\n"))
 								}, null, 8, ["onClick"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Remove from Drop Plate",
 									icon: "delete",
 									onClick: ($event) => remove(group)
@@ -20082,7 +20081,7 @@ var _sfc_main$75 = {
 							]),
 							_: 2
 						}, 1536),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							"icon-only": "",
 							label: "Remove from Drop Plate",
 							icon: "close",
@@ -20091,18 +20090,18 @@ var _sfc_main$75 = {
 					], 40, _hoisted_6$16);
 				}), 128))]),
 				error.value ? (openBlock(), createElementBlock("p", _hoisted_7$16, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
-				createBaseVNode("footer", _hoisted_8$15, [createBaseVNode("div", null, [createBaseVNode("span", _hoisted_9$11, toDisplayString(owner.value?.title || unref(t)("Select an object, process and context first")), 1), owner.value ? (openBlock(), createElementBlock("div", _hoisted_10$11, [createVNode(_sfc_main$153, {
+				createBaseVNode("footer", _hoisted_8$15, [createBaseVNode("div", null, [createBaseVNode("span", _hoisted_9$11, toDisplayString(owner.value?.title || unref(t)("Select an object, process and context first")), 1), owner.value ? (openBlock(), createElementBlock("div", _hoisted_10$10, [createVNode(_sfc_main$156, {
 					modelValue: process.value,
 					"onUpdate:modelValue": [_cache[7] || (_cache[7] = ($event) => process.value = $event), _cache[8] || (_cache[8] = ($event) => context.value = process.value)],
 					label: "Process",
 					options: processes.value,
 					"translate-labels": false
-				}, null, 8, ["modelValue", "options"]), createVNode(_sfc_main$157, {
+				}, null, 8, ["modelValue", "options"]), createVNode(_sfc_main$161, {
 					modelValue: context.value,
 					"onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => context.value = $event),
 					label: "Context",
 					placeholder: "Context"
-				}, null, 8, ["modelValue"])])) : createCommentVNode("", true)]), createVNode(_sfc_main$138, {
+				}, null, 8, ["modelValue"])])) : createCommentVNode("", true)]), createVNode(_sfc_main$141, {
 					label: "Add to queue",
 					highlighted: "",
 					icon: "queue",
@@ -20132,19 +20131,19 @@ var _sfc_main$75 = {
 						$event.target.value = "";
 					})
 				}, null, 544)
-			], 40, _hoisted_1$54)])), (openBlock(), createBlock(Teleport, { to: "body" }, [withDirectives((openBlock(), createElementBlock("dialog", {
+			], 40, _hoisted_1$56)])), (openBlock(), createBlock(Teleport, { to: "body" }, [withDirectives((openBlock(), createElementBlock("dialog", {
 				ref_key: "templatesDialog",
 				ref: templatesDialog,
 				class: "record-dialog drop-plate-templates",
 				"aria-label": unref(t)("Matching Templates"),
 				onCancel: _cache[16] || (_cache[16] = withModifiers(($event) => templatesEditor.value?.close(), ["prevent"]))
 			}, [
-				createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Matching Templates")), 1), createVNode(_sfc_main$138, {
+				createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Matching Templates")), 1), createVNode(_sfc_main$141, {
 					label: "Close",
 					icon: "close",
 					onClick: _cache[14] || (_cache[14] = ($event) => templatesEditor.value?.close())
 				})]),
-				createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Frame padding")), 1), createVNode(_sfc_main$157, {
+				createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Frame padding")), 1), createVNode(_sfc_main$161, {
 					modelValue: paddingDraft.value,
 					"onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => paddingDraft.value = $event),
 					modelModifiers: { number: true },
@@ -20171,8 +20170,8 @@ var _sfc_main$75 = {
 					"items",
 					"padding"
 				])) : createCommentVNode("", true),
-				templatesError.value ? (openBlock(), createElementBlock("p", _hoisted_12$8, toDisplayString(unref(t)(templatesError.value)), 1)) : createCommentVNode("", true)
-			], 40, _hoisted_11$9)), [[_directive_window, {
+				templatesError.value ? (openBlock(), createElementBlock("p", _hoisted_12$7, toDisplayString(unref(t)(templatesError.value)), 1)) : createCommentVNode("", true)
+			], 40, _hoisted_11$8)), [[_directive_window, {
 				kind: "matching_templates",
 				type: "window"
 			}]])]))], 64);
@@ -20233,7 +20232,7 @@ function column$1(model) {
 	});
 	return actions;
 }
-function row$5(model) {
+function row$6(model) {
 	const actions = [{
 		title: model.recordEditor ? "Edit sObject" : "Edit task",
 		icon: "edit",
@@ -20313,7 +20312,7 @@ var titles = {
 function columnCount(width) {
 	return width >= 1280 ? 5 : width >= 960 ? 4 : width >= 720 ? 3 : width >= 440 ? 2 : 1;
 }
-function describe$20(model, width, language) {
+function describe$21(model, width, language) {
 	const tr = (text) => translate(text, language);
 	const left = model.left === void 0 ? 12 : model.left;
 	const right = model.right === void 0 ? 12 : model.right;
@@ -20388,12 +20387,12 @@ function describe$20(model, width, language) {
 }
 //#endregion
 //#region src/features/tasks/TaskDetailValue.vue
-var _hoisted_1$53 = ["data-task-field"];
+var _hoisted_1$55 = ["data-task-field"];
 var _hoisted_2$40 = {
 	key: 3,
 	class: "task-detail-milestone"
 };
-var _sfc_main$74 = {
+var _sfc_main$77 = {
 	__name: "TaskDetailValue",
 	props: {
 		field: Object,
@@ -20407,7 +20406,7 @@ var _sfc_main$74 = {
 			return openBlock(), createElementBlock("div", {
 				class: "task-detail-value",
 				"data-task-field": __props.field.name
-			}, [__props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$115, {
+			}, [__props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$118, {
 				key: 0,
 				value: __props.editor.values.status || "",
 				options: __props.editor.statusChoices,
@@ -20417,7 +20416,7 @@ var _sfc_main$74 = {
 				"value",
 				"options",
 				"disabled"
-			])) : ["assigned", "supervisor"].includes(__props.field.name) ? (openBlock(), createBlock(_sfc_main$142, {
+			])) : ["assigned", "supervisor"].includes(__props.field.name) ? (openBlock(), createBlock(_sfc_main$145, {
 				key: 1,
 				label: unref(titles)[__props.field.name],
 				value: __props.editor.values[__props.field.name] || "",
@@ -20431,7 +20430,7 @@ var _sfc_main$74 = {
 				"empty-label",
 				"options",
 				"disabled"
-			])) : ["progress", "completion"].includes(__props.field.name) ? (openBlock(), createBlock(_sfc_main$141, {
+			])) : ["progress", "completion"].includes(__props.field.name) ? (openBlock(), createBlock(_sfc_main$144, {
 				key: 2,
 				label: unref(titles)[__props.field.name],
 				"model-value": Number(__props.editor.values[__props.field.name] || 0),
@@ -20442,7 +20441,7 @@ var _sfc_main$74 = {
 				"label",
 				"model-value",
 				"disabled"
-			])) : __props.field.name === "milestone_code" ? (openBlock(), createElementBlock("div", _hoisted_2$40, [createVNode(_sfc_main$113, {
+			])) : __props.field.name === "milestone_code" ? (openBlock(), createElementBlock("div", _hoisted_2$40, [createVNode(_sfc_main$116, {
 				field: __props.field,
 				value: __props.editor.values[__props.field.name],
 				catalog: __props.editor.catalog,
@@ -20453,13 +20452,13 @@ var _sfc_main$74 = {
 				"value",
 				"catalog",
 				"busy"
-			]), createVNode(_sfc_main$138, {
+			]), createVNode(_sfc_main$141, {
 				label: "Project milestones",
 				icon: "add",
 				"icon-only": "",
 				disabled: __props.busy,
 				onClick: _cache[4] || (_cache[4] = ($event) => emit("milestones"))
-			}, null, 8, ["disabled"])])) : (openBlock(), createBlock(_sfc_main$113, {
+			}, null, 8, ["disabled"])])) : (openBlock(), createBlock(_sfc_main$116, {
 				key: 4,
 				field: __props.field,
 				value: __props.editor.values[__props.field.name],
@@ -20471,13 +20470,13 @@ var _sfc_main$74 = {
 				"value",
 				"catalog",
 				"busy"
-			]))], 8, _hoisted_1$53);
+			]))], 8, _hoisted_1$55);
 		};
 	}
 };
 //#endregion
 //#region src/features/tasks/TaskHiddenDetails.vue
-var _sfc_main$73 = {
+var _sfc_main$76 = {
 	__name: "TaskHiddenDetails",
 	props: {
 		editor: Object,
@@ -20545,7 +20544,7 @@ var _sfc_main$73 = {
 			event.target.blur();
 		}
 		const host = ref(null), width = ref(0);
-		const scene = computed(() => describe$20({
+		const scene = computed(() => describe$21({
 			fields: fields.value.map((field) => ({
 				name: field.name,
 				value: props.editor?.values[field.name]
@@ -20557,13 +20556,13 @@ var _sfc_main$73 = {
 			editingDescription: editing.value,
 			busy: props.busy
 		}, width.value, appearance.language));
-		const fieldComponent = markRaw(_sfc_main$74);
+		const fieldComponent = markRaw(_sfc_main$77);
 		const descriptionComponent = markRaw({ setup(_, { attrs }) {
 			return () => h("div", {
 				...attrs,
 				"data-task-field": "description",
 				class: "task-description-value"
-			}, [h(_sfc_main$143, {
+			}, [h(_sfc_main$146, {
 				ref: area,
 				modelValue: description.value,
 				label: "Description",
@@ -20616,7 +20615,7 @@ var _sfc_main$73 = {
 				ref: host,
 				class: "task-workspace-details",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views: views.value,
 				onEvent: editDescription
@@ -20666,7 +20665,7 @@ function choice(model, width, height) {
 }
 //#endregion
 //#region src/features/tasks/TaskCellDisplay.vue
-var _sfc_main$72 = {
+var _sfc_main$75 = {
 	__name: "TaskCellDisplay",
 	props: {
 		model: Object,
@@ -20709,7 +20708,7 @@ var _sfc_main$72 = {
 				class: "task-cell-display",
 				onPointerenter: _cache[0] || (_cache[0] = ($event) => hovered.value = true),
 				onPointerleave: _cache[1] || (_cache[1] = ($event) => hovered.value = false)
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views: views.value
 			}, null, 8, ["scene", "views"])], 544);
@@ -20718,8 +20717,8 @@ var _sfc_main$72 = {
 };
 //#endregion
 //#region src/features/tasks/TaskRowValue.vue
-var _hoisted_1$52 = ["data-task-cell"];
-var _sfc_main$71 = {
+var _hoisted_1$54 = ["data-task-cell"];
+var _sfc_main$74 = {
 	__name: "TaskRowValue",
 	props: {
 		task: Object,
@@ -20768,13 +20767,13 @@ var _sfc_main$71 = {
 			return openBlock(), createElementBlock("span", {
 				class: "task-row-value",
 				"data-task-cell": source.value
-			}, [createVNode(_sfc_main$138, {
+			}, [createVNode(_sfc_main$141, {
 				class: normalizeClass(["task-cell-value", { "task-cell-input": !painted.value }]),
 				disabled: __props.blocked || __props.task.deleting,
 				"aria-label": unref(t)("Edit {column}", { column: unref(t)(__props.column.label) }) + ": " + __props.task.title,
 				onClick: _cache[0] || (_cache[0] = ($event) => emit("edit", $event))
 			}, {
-				default: withCtx(() => [painted.value ? (openBlock(), createBlock(_sfc_main$72, {
+				default: withCtx(() => [painted.value ? (openBlock(), createBlock(_sfc_main$75, {
 					key: 0,
 					user: __props.task[source.value + "User"],
 					model: {
@@ -20788,7 +20787,7 @@ var _sfc_main$71 = {
 				"class",
 				"disabled",
 				"aria-label"
-			])], 8, _hoisted_1$52);
+			])], 8, _hoisted_1$54);
 		};
 	}
 };
@@ -20905,7 +20904,7 @@ function visible(columns, name, width) {
 function spacing(width) {
 	return width < 420 ? 3 : width < 1100 ? 5 : 7;
 }
-function layout(columns, width) {
+function layout$1(columns, width) {
 	const gap = spacing(width);
 	const cells = (columns || []).filter((record) => key$1(record.key) !== "process" && visible(columns, record.key, width)).map((record, index) => ({
 		record,
@@ -20953,7 +20952,7 @@ var headings = {
 	milestone: "MILESTONE",
 	supervisor: "SUPERVISOR"
 };
-function header$1(model, geometry, language) {
+function header$2(model, geometry, language) {
 	const tr = (text) => translate(text, language);
 	const nodes = [
 		node("Box", "taskHeaderSurface", rect$1(0, 0, geometry.width, metrics$2.header), {
@@ -20996,7 +20995,7 @@ function header$1(model, geometry, language) {
 		height: metrics$2.header
 	};
 }
-function row$4(model, geometry, language) {
+function row$5(model, geometry, language) {
 	const tr = (text) => translate(text, language);
 	const width = geometry.width, height = metrics$2.row;
 	const nodes = [
@@ -21213,9 +21212,9 @@ function mobileRow(model, width, language) {
 }
 //#endregion
 //#region src/features/tasks/TaskWorkspaceRow.vue
-var _hoisted_1$51 = ["data-task-key", "tabindex"];
+var _hoisted_1$53 = ["data-task-key", "tabindex"];
 var _hoisted_2$39 = ["data-task-cell", "colspan"];
-var _sfc_main$70 = {
+var _sfc_main$73 = {
 	__name: "TaskWorkspaceRow",
 	props: {
 		task: Object,
@@ -21267,7 +21266,7 @@ var _sfc_main$70 = {
 		const scene = computed(() => {
 			const task = props.task, progress = Number(task.progress ?? task.completion) || 0;
 			const hours = (value) => Number(value || 0).toFixed(1);
-			return row$4({
+			return row$5({
 				code: task.key,
 				title: task.title,
 				process: task.process,
@@ -21294,7 +21293,7 @@ var _sfc_main$70 = {
 				editableCells: true
 			}, props.geometry, appearance.language);
 		});
-		const valuePort = markRaw(_sfc_main$71), previewPort = markRaw(ItemPreview_default), actionPort = markRaw(_sfc_main$138);
+		const valuePort = markRaw(_sfc_main$74), previewPort = markRaw(ItemPreview_default), actionPort = markRaw(_sfc_main$141);
 		const views = computed(() => ({
 			preview: {
 				component: previewPort,
@@ -21361,20 +21360,20 @@ var _sfc_main$70 = {
 				}, [createBaseVNode("div", {
 					class: "task-workspace-row",
 					style: normalizeStyle({ height: scene.value.height + "px" })
-				}, [createVNode(_sfc_main$140, {
+				}, [createVNode(_sfc_main$143, {
 					scene: slice(scene.value, segment),
 					views: views.value,
 					onEvent: event
 				}, null, 8, ["scene", "views"])], 4)], 10, _hoisted_2$39);
-			}), 128))], 42, _hoisted_1$51);
+			}), 128))], 42, _hoisted_1$53);
 		};
 	}
 };
 //#endregion
 //#region src/features/tasks/TaskTableHeaderInput.vue
-var _hoisted_1$50 = ["data-task-column"];
+var _hoisted_1$52 = ["data-task-column"];
 var _hoisted_2$38 = ["aria-label", "aria-valuenow"];
-var _sfc_main$69 = {
+var _sfc_main$72 = {
 	__name: "TaskTableHeaderInput",
 	props: {
 		frameNode: Object,
@@ -21396,7 +21395,7 @@ var _sfc_main$69 = {
 				class: "task-table-header-input",
 				"data-task-column": __props.frameNode.column.sourceKey,
 				onContextmenu: _cache[7] || (_cache[7] = withModifiers(($event) => emit("context", __props.frameNode.column, $event.currentTarget.getBoundingClientRect()), ["prevent"]))
-			}, [__props.frameNode.column.sort ? (openBlock(), createBlock(_sfc_main$138, {
+			}, [__props.frameNode.column.sort ? (openBlock(), createBlock(_sfc_main$141, {
 				key: 0,
 				label: __props.frameNode.column.label,
 				disabled: __props.busy,
@@ -21416,13 +21415,13 @@ var _sfc_main$69 = {
 				onPointerup: _cache[4] || (_cache[4] = ($event) => emit("finish", $event)),
 				onPointercancel: _cache[5] || (_cache[5] = ($event) => emit("finish", $event)),
 				onLostpointercapture: _cache[6] || (_cache[6] = ($event) => emit("finish", $event))
-			}, null, 40, _hoisted_2$38)], 40, _hoisted_1$50);
+			}, null, 40, _hoisted_2$38)], 40, _hoisted_1$52);
 		};
 	}
 };
 //#endregion
 //#region src/features/tasks/TaskWorkspaceTable.vue
-var _hoisted_1$49 = ["aria-label"];
+var _hoisted_1$51 = ["aria-label"];
 var _hoisted_2$37 = ["data-task-column", "aria-label"];
 var _hoisted_3$31 = {
 	"aria-hidden": "true",
@@ -21439,7 +21438,7 @@ var _hoisted_7$15 = {
 	class: "task-expanded-row"
 };
 var _hoisted_8$14 = ["colspan"];
-var _sfc_main$68 = {
+var _sfc_main$71 = {
 	__name: "TaskWorkspaceTable",
 	props: {
 		groups: Array,
@@ -21484,7 +21483,7 @@ var _sfc_main$68 = {
 			observer.observe(table.value.parentElement);
 		});
 		onBeforeUnmount(() => observer?.disconnect());
-		const geometry = computed(() => layout(props.columns.map((column) => resizing.value?.key === column.key ? {
+		const geometry = computed(() => layout$1(props.columns.map((column) => resizing.value?.key === column.key ? {
 			...column,
 			width: resizing.value.preview
 		} : column), width.value));
@@ -21549,13 +21548,13 @@ var _sfc_main$68 = {
 				inline: "nearest"
 			});
 		}
-		const headerScene = computed(() => header$1({
+		const headerScene = computed(() => header$2({
 			allSelected: props.allSelected,
 			someSelected: !!props.selected.length,
 			busy: props.busy
 		}, geometry.value, appearance.language));
 		const headerSegments = computed(() => segments(geometry.value, false));
-		const headerPort = markRaw(_sfc_main$69);
+		const headerPort = markRaw(_sfc_main$72);
 		const headerViews = computed(() => Object.fromEntries(geometry.value.cells.map((column) => ["header_" + column.key, {
 			component: headerPort,
 			nodeProps: true,
@@ -21600,7 +21599,7 @@ var _sfc_main$68 = {
 						key: segment.key,
 						"data-task-column": segment.sourceKey,
 						"aria-label": segment.label && unref(t)(segment.label)
-					}, [createBaseVNode("div", { style: normalizeStyle({ height: headerScene.value.height + "px" }) }, [createVNode(_sfc_main$140, {
+					}, [createBaseVNode("div", { style: normalizeStyle({ height: headerScene.value.height + "px" }) }, [createVNode(_sfc_main$143, {
 						scene: slice(headerScene.value, segment),
 						views: headerViews.value,
 						onEvent: headerEvent
@@ -21611,7 +21610,7 @@ var _sfc_main$68 = {
 					style: normalizeStyle({ height: metrics$2.headerGap + "px" })
 				}, null, 12, _hoisted_4$23)])]),
 				(openBlock(true), createElementBlock(Fragment, null, renderList(__props.groups, (group) => {
-					return openBlock(), createElementBlock("tbody", { key: group.key }, [group.key ? (openBlock(), createElementBlock("tr", _hoisted_5$18, [createBaseVNode("th", { colspan: headerSegments.value.length }, [createVNode(_sfc_main$140, {
+					return openBlock(), createElementBlock("tbody", { key: group.key }, [group.key ? (openBlock(), createElementBlock("tr", _hoisted_5$18, [createBaseVNode("th", { colspan: headerSegments.value.length }, [createVNode(_sfc_main$143, {
 						scene: group$1({
 							key: group.key,
 							label: group.label,
@@ -21621,7 +21620,7 @@ var _sfc_main$68 = {
 						}, tableWidth.value),
 						onEvent: ($event) => emit("collapse", group.key)
 					}, null, 8, ["scene", "onEvent"])], 8, _hoisted_6$15)])) : createCommentVNode("", true), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.collapsed.includes(group.key) ? [] : group.tasks, (task) => {
-						return openBlock(), createElementBlock(Fragment, { key: task.key }, [createVNode(_sfc_main$70, {
+						return openBlock(), createElementBlock(Fragment, { key: task.key }, [createVNode(_sfc_main$73, {
 							task,
 							geometry: geometry.value,
 							active: __props.active === task.key,
@@ -21653,7 +21652,7 @@ var _sfc_main$68 = {
 							"onObject",
 							"onOperate",
 							"onEditCell"
-						]), __props.expanded.includes(task.key) ? (openBlock(), createElementBlock("tr", _hoisted_7$15, [createBaseVNode("td", { colspan: headerSegments.value.length }, [createVNode(_sfc_main$73, {
+						]), __props.expanded.includes(task.key) ? (openBlock(), createElementBlock("tr", _hoisted_7$15, [createBaseVNode("td", { colspan: headerSegments.value.length }, [createVNode(_sfc_main$76, {
 							"aria-label": unref(t)("Task details") + ": " + task.title,
 							editor: __props.editors[task.key],
 							columns: __props.columns,
@@ -21669,7 +21668,7 @@ var _sfc_main$68 = {
 						])], 8, _hoisted_8$14)])) : createCommentVNode("", true)], 64);
 					}), 128))]);
 				}), 128))
-			], 12, _hoisted_1$49)], 544);
+			], 12, _hoisted_1$51)], 544);
 		};
 	}
 };
@@ -21718,7 +21717,7 @@ function actions$2(model, language) {
 		enabled: !model.blocked && (value !== "search_type" || model.searchTypeAvailable !== false)
 	}));
 }
-function describe$19(model, width, language) {
+function describe$20(model, width, language) {
 	const tr = (text) => translate(text, language), nodes = [];
 	let y = 0;
 	for (const record of actions$2(model, language)) {
@@ -21732,7 +21731,7 @@ function describe$19(model, width, language) {
 				type: "scope",
 				value: record.value
 			},
-			children: row$9(record, width, {
+			children: row$10(record, width, {
 				extent: 32,
 				radius: model.radius
 			}).nodes
@@ -22251,7 +22250,7 @@ function options(model, width, language) {
 }
 //#endregion
 //#region src/features/tasks/TaskWorkspacePart.vue
-var _sfc_main$67 = {
+var _sfc_main$70 = {
 	__name: "TaskWorkspacePart",
 	props: {
 		part: String,
@@ -22280,7 +22279,7 @@ var _sfc_main$67 = {
 				ref: host,
 				class: "task-workspace-part",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views: __props.views,
 				onEvent: _cache[0] || (_cache[0] = (action, source) => emit("event", action, source))
@@ -22424,8 +22423,8 @@ function preview$1(form) {
 }
 //#endregion
 //#region src/features/tasks/TaskBulkBar.vue
-var _hoisted_1$48 = ["aria-label"];
-var _sfc_main$66 = {
+var _hoisted_1$50 = ["aria-label"];
+var _sfc_main$69 = {
 	__name: "TaskBulkBar",
 	props: {
 		form: Object,
@@ -22471,7 +22470,7 @@ var _sfc_main$66 = {
 			else emit(action.type);
 		}
 		const status = markRaw({ setup() {
-			return () => h(_sfc_main$115, {
+			return () => h(_sfc_main$118, {
 				value: props.form?.mixed.includes("status") && !props.form.set.includes("status") ? "" : props.form?.values.status,
 				options: props.form?.statusChoices || [],
 				placeholder: props.form?.mixed.includes("status") && !props.form.set.includes("status") ? t("Mixed status") : "",
@@ -22480,7 +22479,7 @@ var _sfc_main$66 = {
 			});
 		} });
 		const assigned = markRaw({ setup() {
-			return () => h(_sfc_main$142, {
+			return () => h(_sfc_main$145, {
 				value: props.form?.mixed.includes("assigned") && !props.form.set.includes("assigned") ? "" : props.form?.values.assigned,
 				options: props.form?.users || [],
 				placeholder: props.form?.mixed.includes("assigned") && !props.form.set.includes("assigned") ? t("Mixed assignee") : "",
@@ -22517,11 +22516,11 @@ var _sfc_main$66 = {
 				class: "task-bulk-bar",
 				role: "region",
 				"aria-label": unref(t)("Bulk task editing")
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views,
 				onEvent: event
-			}, null, 8, ["scene"]), createVNode(_sfc_main$159, {
+			}, null, 8, ["scene"]), createVNode(_sfc_main$160, {
 				class: "task-bulk-more",
 				ref_key: "menu",
 				ref: menu,
@@ -22532,7 +22531,7 @@ var _sfc_main$66 = {
 				"close-on-select": false,
 				label: "Edit selected tasks"
 			}, {
-				default: withCtx(() => [moreEditor.value ? (openBlock(), createBlock(_sfc_main$112, {
+				default: withCtx(() => [moreEditor.value ? (openBlock(), createBlock(_sfc_main$115, {
 					key: 0,
 					role: "group",
 					"aria-label": unref(t)("Bulk fields"),
@@ -22552,13 +22551,13 @@ var _sfc_main$66 = {
 					"read-only"
 				])) : createCommentVNode("", true)]),
 				_: 1
-			}, 8, ["anchor"])], 8, _hoisted_1$48);
+			}, 8, ["anchor"])], 8, _hoisted_1$50);
 		};
 	}
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/tasks/empty.ui.mjs
-function describe$18(model, width, height, language) {
+function describe$19(model, width, height, language) {
 	const tr = (text) => translate(text, language);
 	const title = model.busy ? "Loading data…" : model.filtered ? "No tasks match the current filters" : "Create a task";
 	const hint = model.filtered ? "Clear filters to see all tasks" : model.canCreate ? "Use the + button above" : "Select a parent object before creating a task.";
@@ -22606,7 +22605,7 @@ function describe$18(model, width, height, language) {
 }
 //#endregion
 //#region src/features/tasks/TaskEmptyState.vue
-var _sfc_main$65 = {
+var _sfc_main$68 = {
 	__name: "TaskEmptyState",
 	props: {
 		busy: Boolean,
@@ -22622,7 +22621,7 @@ var _sfc_main$65 = {
 				embedded: true,
 				controlHeight: metrics$6(appearance.theme).controlHeight
 			}, props.toolbarWidth || width.value + 12, appearance.language), bounds = toolbar$2.createBounds;
-			return describe$18({
+			return describe$19({
 				...props,
 				target: {
 					x: bounds.x + bounds.width / 2 - 6,
@@ -22672,7 +22671,7 @@ var _sfc_main$65 = {
 				ref: host,
 				class: "task-empty-state",
 				role: "status"
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views
 			}, null, 8, ["scene"])], 512);
@@ -22681,7 +22680,7 @@ var _sfc_main$65 = {
 };
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/tasks/columns.ui.mjs
-function describe$17(model, width, language) {
+function describe$18(model, width, language) {
 	const tr = (text, values) => translate(text, language, values), nodes = [label("taskColumnsTitle", rect$1(0, 0, width, 24), tr("Task columns"), {
 		fontRole: "secondary",
 		weight: 600
@@ -22745,7 +22744,7 @@ function describe$17(model, width, language) {
 }
 //#endregion
 //#region src/features/tasks/TaskColumns.vue
-var _sfc_main$64 = {
+var _sfc_main$67 = {
 	__name: "TaskColumns",
 	props: {
 		columns: Array,
@@ -22756,12 +22755,12 @@ var _sfc_main$64 = {
 		const props = __props;
 		const emit = __emit;
 		const host = ref(null), width = ref(0);
-		const scene = computed(() => describe$17(props, width.value, appearance.language));
+		const scene = computed(() => describe$18(props, width.value, appearance.language));
 		const views = { width: {
 			component: markRaw({
 				props: { frameNode: Object },
 				setup(p) {
-					return () => h(_sfc_main$156, {
+					return () => h(_sfc_main$159, {
 						min: 40,
 						max: 480,
 						step: 1,
@@ -22795,7 +22794,7 @@ var _sfc_main$64 = {
 				ref: host,
 				class: "task-columns-frame",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views,
 				onEvent: _cache[0] || (_cache[0] = (action) => emit("event", action))
@@ -22805,7 +22804,7 @@ var _sfc_main$64 = {
 };
 //#endregion
 //#region src/features/tasks/TaskWorkspaceSurfaceSwitcher.vue
-var _sfc_main$63 = {
+var _sfc_main$66 = {
 	__name: "TaskWorkspaceSurfaceSwitcher",
 	props: {
 		value: String,
@@ -22814,7 +22813,7 @@ var _sfc_main$63 = {
 	emits: ["change"],
 	setup(__props) {
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$67, {
+			return openBlock(), createBlock(_sfc_main$70, {
 				class: "task-surface-switcher",
 				part: "surfaces",
 				model: {
@@ -22829,7 +22828,7 @@ var _sfc_main$63 = {
 };
 //#endregion
 //#region src/features/tasks/TaskWorkspaceOptions.vue
-var _sfc_main$62 = {
+var _sfc_main$65 = {
 	__name: "TaskWorkspaceOptions",
 	props: { model: Object },
 	emits: ["event"],
@@ -22837,7 +22836,7 @@ var _sfc_main$62 = {
 		const props = __props;
 		const emit = __emit;
 		const views = computed(() => ({ surfaces: {
-			component: markRaw(_sfc_main$63),
+			component: markRaw(_sfc_main$66),
 			props: {
 				value: props.model.surface,
 				disabled: props.model.blocked,
@@ -22848,7 +22847,7 @@ var _sfc_main$62 = {
 			}
 		} }));
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$67, {
+			return openBlock(), createBlock(_sfc_main$70, {
 				part: "options",
 				model: __props.model,
 				views: views.value,
@@ -22859,7 +22858,7 @@ var _sfc_main$62 = {
 };
 //#endregion
 //#region src/features/tasks/TaskWorkspaceFooter.vue
-var _sfc_main$61 = {
+var _sfc_main$64 = {
 	__name: "TaskWorkspaceFooter",
 	props: { model: Object },
 	emits: ["event"],
@@ -22874,7 +22873,7 @@ var _sfc_main$61 = {
 			return () => h(BusyIndicator_default, { running: props.model.busy });
 		} }) } };
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$67, {
+			return openBlock(), createBlock(_sfc_main$70, {
 				class: "task-workspace-footer",
 				part: "footer",
 				model: model.value,
@@ -22886,7 +22885,7 @@ var _sfc_main$61 = {
 };
 //#endregion
 //#region src/features/tasks/TaskWorkspaceToolbar.vue
-var _sfc_main$60 = {
+var _sfc_main$63 = {
 	__name: "TaskWorkspaceToolbar",
 	props: { model: Object },
 	emits: ["event"],
@@ -22915,7 +22914,7 @@ var _sfc_main$60 = {
 				onDismiss: () => emit("event", { type: "search-dismiss" })
 			});
 		} });
-		const surfacePort = markRaw(_sfc_main$63);
+		const surfacePort = markRaw(_sfc_main$66);
 		const views = computed(() => ({
 			search: { component: searchPort },
 			surfaces: {
@@ -22936,7 +22935,7 @@ var _sfc_main$60 = {
 		}
 		__expose({ focusSearch });
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$67, {
+			return openBlock(), createBlock(_sfc_main$70, {
 				class: "task-workspace-toolbar",
 				part: "toolbar",
 				model: paintModel.value,
@@ -22948,7 +22947,7 @@ var _sfc_main$60 = {
 };
 //#endregion
 //#region src/features/tasks/TaskProcessToolbar.vue
-var _sfc_main$59 = {
+var _sfc_main$62 = {
 	__name: "TaskProcessToolbar",
 	props: { model: Object },
 	emits: ["event"],
@@ -22959,7 +22958,7 @@ var _sfc_main$59 = {
 			controlHeight: metrics$6(appearance.theme).controlHeight
 		}));
 		const emit = __emit;
-		const surfacePort = markRaw(_sfc_main$63);
+		const surfacePort = markRaw(_sfc_main$66);
 		const views = computed(() => ({ surfaces: {
 			component: surfacePort,
 			props: {
@@ -22972,7 +22971,7 @@ var _sfc_main$59 = {
 			}
 		} }));
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$67, {
+			return openBlock(), createBlock(_sfc_main$70, {
 				class: "task-manager-toolbar task-process-toolbar shared-process-toolbar",
 				part: "processToolbar",
 				model: paintModel.value,
@@ -22984,7 +22983,7 @@ var _sfc_main$59 = {
 };
 //#endregion
 //#region src/features/tasks/TaskMobileCard.vue
-var _sfc_main$58 = {
+var _sfc_main$61 = {
 	__name: "TaskMobileCard",
 	props: {
 		row: Object,
@@ -23047,7 +23046,7 @@ var _sfc_main$58 = {
 				ref: host,
 				class: "task-mobile-card",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views,
 				onEvent: event
@@ -23057,7 +23056,7 @@ var _sfc_main$58 = {
 };
 //#endregion
 //#region src/features/tasks/MobileTasks.vue
-var _hoisted_1$47 = {
+var _hoisted_1$49 = {
 	key: 0,
 	class: "mobile-task-heading"
 };
@@ -23085,7 +23084,7 @@ var _hoisted_7$14 = {
 	class: "table-message",
 	role: "status"
 };
-var _sfc_main$57 = {
+var _sfc_main$60 = {
 	__name: "MobileTasks",
 	props: {
 		groups: Array,
@@ -23128,7 +23127,7 @@ var _sfc_main$57 = {
 			if (task && !task.deleting) emit("enter", task);
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$90, {
+			return openBlock(), createBlock(_sfc_main$93, {
 				class: "mobile-tasks",
 				"aria-label": unref(t)("Project tasks"),
 				"screen-key": __props.task?.key || "root",
@@ -23142,8 +23141,8 @@ var _sfc_main$57 = {
 				onBack: _cache[6] || (_cache[6] = ($event) => emit("back")),
 				onScrolled: _cache[7] || (_cache[7] = (key, top) => emit("scrolled", key, top))
 			}, {
-				header: withCtx(() => [__props.task ? (openBlock(), createElementBlock("div", _hoisted_1$47, [
-					createVNode(_sfc_main$138, {
+				header: withCtx(() => [__props.task ? (openBlock(), createElementBlock("div", _hoisted_1$49, [
+					createVNode(_sfc_main$141, {
 						label: "Back",
 						icon: "previous",
 						"icon-only": "",
@@ -23160,7 +23159,7 @@ var _sfc_main$57 = {
 						"accent"
 					]),
 					createBaseVNode("div", _hoisted_2$36, [createBaseVNode("h2", null, toDisplayString(__props.task.title), 1), createBaseVNode("small", null, toDisplayString(__props.task.__process__?.label || __props.task.process) + toDisplayString(__props.task.context && __props.task.context !== __props.task.process ? " · " + __props.task.context : ""), 1)]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Task actions",
 						icon: "more",
 						"icon-only": "",
@@ -23168,21 +23167,21 @@ var _sfc_main$57 = {
 						onClick: _cache[1] || (_cache[1] = ($event) => actions(__props.task, $event))
 					}, null, 8, ["disabled"])
 				])) : createCommentVNode("", true)]),
-				default: withCtx(() => [__props.task ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [__props.busy ? (openBlock(), createElementBlock("p", _hoisted_3$30, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true), __props.task.deleting ? (openBlock(), createElementBlock("p", _hoisted_4$22, toDisplayString(unref(t)("Pending task changes")), 1)) : __props.editor ? (openBlock(), createBlock(_sfc_main$112, {
+				default: withCtx(() => [__props.task ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [__props.busy ? (openBlock(), createElementBlock("p", _hoisted_3$30, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true), __props.task.deleting ? (openBlock(), createElementBlock("p", _hoisted_4$22, toDisplayString(unref(t)("Pending task changes")), 1)) : __props.editor ? (openBlock(), createBlock(_sfc_main$115, {
 					key: 2,
 					immediate: "",
 					editor: __props.editor,
 					busy: __props.blocked,
 					onChange: _cache[2] || (_cache[2] = (name, value) => emit("change", __props.task.key, name, value)),
 					onMilestones: _cache[3] || (_cache[3] = ($event) => emit("milestones"))
-				}, null, 8, ["editor", "busy"])) : !__props.busy ? (openBlock(), createBlock(_sfc_main$138, {
+				}, null, 8, ["editor", "busy"])) : !__props.busy ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 3,
 					label: "Retry",
 					icon: "refresh",
 					onClick: _cache[4] || (_cache[4] = ($event) => emit("retry", __props.task))
 				})) : createCommentVNode("", true)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
 					(openBlock(true), createElementBlock(Fragment, null, renderList(__props.groups, (group) => {
-						return openBlock(), createElementBlock("section", { key: group.key }, [group.key ? (openBlock(), createBlock(_sfc_main$138, {
+						return openBlock(), createElementBlock("section", { key: group.key }, [group.key ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							class: "result-group-heading",
 							icon: __props.collapsed.includes(group.key) ? "next" : "MDI_CHEVRON_DOWN",
@@ -23209,7 +23208,7 @@ var _sfc_main$57 = {
 								onClick: ($event) => !$event.target.closest("button,a,input,textarea,select,label") && enter(row.key),
 								onKeydown: withKeys(withModifiers(($event) => enter(row.key), ["self", "prevent"]), ["enter"]),
 								onContextmenu: withModifiers(($event) => actions(row, $event), ["prevent"])
-							}, [createVNode(_sfc_main$58, {
+							}, [createVNode(_sfc_main$61, {
 								row,
 								busy: __props.busy,
 								checked: __props.selected.includes(row.key),
@@ -23229,7 +23228,7 @@ var _sfc_main$57 = {
 						}), 128))])]);
 					}), 128)),
 					!tasks.value.length ? (openBlock(), createElementBlock("p", _hoisted_7$14, toDisplayString(unref(t)(__props.busy ? "Loading data…" : "No records yet")), 1)) : createCommentVNode("", true),
-					__props.hasMore ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.hasMore ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 1,
 						class: "mobile-task-more",
 						label: "Load more tasks",
@@ -23268,7 +23267,7 @@ function filterGeometry(emphasis = 0) {
 }
 //#endregion
 //#region src/controls/display/QuickFilterChip.vue
-var _hoisted_1$46 = { class: "quick-filter-chip-content" };
+var _hoisted_1$48 = { class: "quick-filter-chip-content" };
 var _hoisted_2$35 = {
 	key: 0,
 	class: "quick-filter-accent"
@@ -23293,7 +23292,7 @@ var QuickFilterChip_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		const props = __props;
 		const geometry = computed(() => filterGeometry(props.emphasis));
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$138, {
+			return openBlock(), createBlock(_sfc_main$141, {
 				class: normalizeClass(["quick-filter-chip", {
 					checked: __props.checked,
 					subtle: __props.subtle
@@ -23309,9 +23308,9 @@ var QuickFilterChip_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					maxWidth: __props.maximumWidth ? __props.maximumWidth + "px" : void 0
 				})
 			}, {
-				default: withCtx(() => [createBaseVNode("span", _hoisted_1$46, [
+				default: withCtx(() => [createBaseVNode("span", _hoisted_1$48, [
 					__props.showAccentMarker ? (openBlock(), createElementBlock("i", _hoisted_2$35)) : createCommentVNode("", true),
-					__props.icon ? (openBlock(), createBlock(_sfc_main$139, {
+					__props.icon ? (openBlock(), createBlock(_sfc_main$142, {
 						key: 1,
 						name: __props.icon,
 						style: normalizeStyle({
@@ -23427,7 +23426,7 @@ function fromFacets(facets, quick, scope) {
 		};
 	}).filter((group) => group.options.length);
 }
-function describe$16(model, width, language, measure) {
+function describe$17(model, width, language, measure) {
 	const tr = (text) => translate(text, language), nodes = [], options = model.groups || [];
 	const chip = (id, bounds, record, action, marker) => node("View", id, bounds, {
 		view: "chip",
@@ -23542,8 +23541,8 @@ function describe$16(model, width, language, measure) {
 }
 //#endregion
 //#region src/features/tasks/TaskWorkspaceFilters.vue
-var _hoisted_1$45 = ["aria-label"];
-var _sfc_main$55 = {
+var _hoisted_1$47 = ["aria-label"];
+var _sfc_main$58 = {
 	__name: "TaskWorkspaceFilters",
 	props: {
 		filters: Object,
@@ -23564,7 +23563,7 @@ var _sfc_main$55 = {
 		const emit = __emit;
 		const host = ref(null), width = ref(0), advanced = ref(false);
 		const groups = computed(() => fromFacets(props.facets, props.quick, props.scope));
-		const scene = computed(() => describe$16({
+		const scene = computed(() => describe$17({
 			groups: groups.value,
 			filters: props.filters,
 			busy: props.busy,
@@ -23617,18 +23616,18 @@ var _sfc_main$55 = {
 				role: "group",
 				"aria-label": unref(t)("Quick filters"),
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views,
 				onEvent: event
-			}, null, 8, ["scene"])], 12, _hoisted_1$45);
+			}, null, 8, ["scene"])], 12, _hoisted_1$47);
 		};
 	}
 };
 //#endregion
 //#region src/features/tasks/TaskWorkspaceScope.vue
-var _hoisted_1$44 = ["aria-label"];
-var _sfc_main$54 = {
+var _hoisted_1$46 = ["aria-label"];
+var _sfc_main$57 = {
 	__name: "TaskWorkspaceScope",
 	props: {
 		scope: String,
@@ -23645,7 +23644,7 @@ var _sfc_main$54 = {
 		const props = __props;
 		const emit = __emit;
 		const host = ref(null), width = ref(0), chooseTeam = ref(false);
-		const scene = computed(() => describe$19({
+		const scene = computed(() => describe$20({
 			scope: props.scope,
 			identity: props.identity,
 			personal: props.identity === props.currentUser,
@@ -23694,10 +23693,425 @@ var _sfc_main$54 = {
 				role: "group",
 				"aria-label": unref(t)("Task scope"),
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				onEvent: event
-			}, null, 8, ["scene"])], 12, _hoisted_1$44);
+			}, null, 8, ["scene"])], 12, _hoisted_1$46);
+		};
+	}
+};
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/tasks/milestones.ui.mjs
+function layout(width, height, controlHeight = 36) {
+	const margin = 12, gap = 10, inner = Math.max(0, width - 24), searchY = 98, listY = searchY + controlHeight + gap;
+	return {
+		margin,
+		gap,
+		inner,
+		searchY,
+		listY,
+		listHeight: Math.max(0, height - listY - margin)
+	};
+}
+function header$1(model, width, language) {
+	const tr = (text) => translate(text, language), compact = width < 600, createWidth = compact ? 36 : 146;
+	const createX = width - 12 - createWidth, refreshX = createX - 39, countWidth = width >= 700 ? 86 : 0;
+	const textRight = refreshX - (countWidth ? countWidth + 11 : 8), radius = model.radius || 8;
+	const nodes = [
+		node("Box", "milestoneHeaderSurface", rect$1(0, 0, width, 76), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			borderWidth: 1,
+			radius
+		}),
+		node("Box", "milestoneHeaderIconSurface", rect$1(12, 15, 46, 46), {
+			background: "secondaryContainer",
+			radius
+		}),
+		node("Icon", "milestoneHeaderIcon", rect$1(24, 27, 22, 22), {
+			icon: "milestone",
+			color: "action"
+		}),
+		label("milestoneHeaderTitle", rect$1(69, 21, textRight - 77, 20), tr("Project milestones"), {
+			fontRole: "section",
+			weight: 600
+		}),
+		label("milestoneHeaderProject", rect$1(69, 43, textRight - 77, 16), translate("Schedule reusable task deadlines for {project}", language, { project: model.project || tr("current project") }), {
+			fontRole: "secondary",
+			color: "secondaryText"
+		}),
+		button("milestoneRefresh", rect$1(refreshX, 24, 28, 28), "", "refresh", { type: "refresh" }, !model.busy, {
+			label: tr("Refresh milestones"),
+			iconOnly: true,
+			iconAction: true,
+			iconSize: 16
+		}),
+		button("milestoneCreate", rect$1(createX, 22, createWidth, 32), compact ? "" : tr("New milestone"), "add", { type: "create" }, !model.busy && model.canCreate !== false, {
+			label: tr("New milestone"),
+			iconOnly: compact,
+			highlighted: true,
+			filledAction: true,
+			fontRole: "secondary"
+		})
+	];
+	if (countWidth) nodes.push(label("milestoneHeaderCount", rect$1(refreshX - countWidth - 11, 30, countWidth, 16), String(model.count || 0) + " " + tr("milestones"), {
+		fontRole: "secondary",
+		color: "secondaryText",
+		align: "right"
+	}));
+	return {
+		nodes,
+		height: 76
+	};
+}
+function search(model, width, language) {
+	const height = model.controlHeight || 36;
+	return {
+		height,
+		nodes: [node("Field", "milestoneSearch", rect$1(0, 0, width, height), {
+			text: model.query || "",
+			inputType: "search",
+			paddingLeft: 39,
+			label: translate("Search milestones", language),
+			placeholder: translate("Search milestones", language),
+			enabled: !model.busy,
+			action: { type: "query" }
+		}), node("Icon", "milestoneSearchIcon", rect$1(12, (height - 16) / 2, 16, 16), {
+			icon: "search",
+			color: "secondaryText",
+			pointerTransparent: true
+		})]
+	};
+}
+function empty(model, width, language) {
+	const tr = (text) => translate(text, language), nodes = [];
+	nodes.push(node("Icon", "milestoneEmptyIcon", rect$1(width / 2 - 18, 0, 36, 36), {
+		icon: "milestone",
+		color: "disabledText"
+	}));
+	nodes.push(label("milestoneEmptyTitle", rect$1(0, 44, width, 18), tr(model.query ? "No matching milestones" : "No milestones yet"), {
+		fontRole: "body",
+		weight: 600,
+		align: "center"
+	}));
+	nodes.push(label("milestoneEmptyHint", rect$1(0, 70, width, 32), tr(model.query ? "Try another search" : "Create a reusable deadline for project tasks"), {
+		fontRole: "secondary",
+		color: "secondaryText",
+		align: "center",
+		wrap: true
+	}));
+	if (!model.query) nodes.push(button("milestoneEmptyCreate", rect$1(width / 2 - 80, 110, 160, 32), tr("New milestone"), "add", { type: "create" }, !model.busy && model.canCreate !== false, {
+		filledAction: true,
+		highlighted: true
+	}));
+	return {
+		nodes,
+		height: model.query ? 102 : 150
+	};
+}
+function row$4(model, width, language) {
+	const tr = (text) => translate(text, language), nodes = [], compact = width < 640;
+	const radius = model.radius || 8, control = model.controlHeight || 36, blocked = model.busy || model.saving || !!model.uncertain;
+	const discard = !!(model.dirty || model.uncertain), actionCount = discard ? 3 : 2, actionsWidth = actionCount * 28 + (actionCount - 1) * 4;
+	const nameX = 68, actionsX = width - 9 - actionsWidth;
+	const available = Math.max(0, actionsX - nameX - 18), nameWidth = compact ? Math.max(0, width - nameX - 9) : available * .41;
+	const dueX = compact ? nameX : nameX + nameWidth + 9, dueWidth = compact ? nameWidth : available - nameWidth;
+	const dueTitleY = compact ? 82 : 14, planY = compact ? 148 : 76, planHeight = compact ? 86 : 43;
+	const errorY = planY + planHeight + 7, height = errorY + (model.error ? model.canReview ? 72 : 36 : 0);
+	nodes.push(node("Box", "milestoneRowSurface", rect$1(0, 0, width, height), {
+		background: model.dirty ? "surfaceContainerHigh" : "surfaceContainerLow",
+		radius,
+		border: model.error ? "error" : model.selected || model.dirty ? "action" : void 0,
+		borderWidth: model.dirty || model.selected || model.error ? 1 : 0
+	}));
+	nodes.push(node("Box", "milestoneDateSurface", rect$1(9, 17, 50, 50), {
+		background: model.isNew ? "secondaryContainer" : "surfaceContainerHighest",
+		radius
+	}));
+	const parsed = parse$1(model.dueDate, false);
+	nodes.push(label("milestoneDateDay", rect$1(9, 24, 50, 22), parsed ? String(parsed.getDate()) : "—", {
+		fontRole: "title",
+		weight: 600,
+		align: "center"
+	}));
+	nodes.push(label("milestoneDateMonth", rect$1(9, 48, 50, 15), parsed ? monthLabel(parsed, language).split(" ")[0].slice(0, 3).toUpperCase() : "", {
+		fontRole: "caption",
+		weight: 700,
+		align: "center",
+		color: "action"
+	}));
+	nodes.push(label("milestoneRowState", rect$1(nameX, 14, compact ? Math.max(0, actionsX - nameX - 8) : nameWidth, 12), tr(model.isNew ? "New milestone" : "Milestone").toUpperCase() + (model.dirty ? " · " + tr(model.saving ? "Saving…" : "Unsaved changes") : ""), {
+		fontRole: "caption",
+		weight: 700,
+		color: model.dirty ? "yellow" : "secondaryText"
+	}));
+	const actions = discard ? [[
+		"milestoneDiscard",
+		"Discard changes",
+		"undo",
+		"discard",
+		true
+	]] : [];
+	actions.push([
+		"milestoneSave",
+		"Save milestone",
+		"save",
+		"save",
+		model.dirty && !model.uncertain
+	]);
+	actions.push([
+		"milestoneDelete",
+		"Delete milestone",
+		"delete",
+		"delete",
+		model.canDelete !== false && !model.uncertain
+	]);
+	actions.forEach(([id, title, icon, type, enabled], index) => nodes.push(button(id, rect$1(actionsX + index * 32, compact ? 2 : 31, 28, 28), "", icon, {
+		type,
+		code: model.code
+	}, !model.busy && !model.saving && !!enabled, {
+		label: tr(title),
+		iconOnly: true,
+		iconAction: true,
+		iconSize: 16,
+		iconColor: type === "delete" ? "error" : type === "save" && model.dirty ? "action" : "secondaryText"
+	})));
+	nodes.push(node("Field", "milestoneName", rect$1(nameX, 28, nameWidth, control), {
+		text: model.description || "",
+		label: tr("Milestone name"),
+		maxLength: 4096,
+		enabled: !blocked && model.nameEditable !== false,
+		action: {
+			type: "change",
+			code: model.code,
+			field: "description"
+		}
+	}));
+	nodes.push(label("milestoneDueTitle", rect$1(dueX, dueTitleY, dueWidth, 12), tr("Due date").toUpperCase(), {
+		fontRole: "caption",
+		weight: 700,
+		color: "secondaryText"
+	}));
+	nodes.push(node("DateChoice", "milestoneDueDate", rect$1(dueX, dueTitleY + 14, dueWidth, control), {
+		text: model.dueDate || "",
+		label: tr("Due date"),
+		includeTime: false,
+		allowClear: false,
+		enabled: !blocked && model.dateEditable !== false,
+		action: {
+			type: "change",
+			code: model.code,
+			field: "dueDate"
+		}
+	}));
+	nodes.push(node("Box", "milestonePlanSurface", rect$1(69, planY, width - 79, planHeight), {
+		background: "surfaceContainerHighest",
+		radius: 6
+	}));
+	nodes.push(node("Box", "milestonePlanIconSurface", rect$1(78, planY + 7.5, 28, 28), {
+		background: "secondaryContainer",
+		radius: 6
+	}));
+	nodes.push(node("Icon", "milestonePlanIcon", rect$1(84.5, planY + 14, 15, 15), {
+		icon: "milestone",
+		color: "action"
+	}));
+	const overdueWidth = model.overdueCount ? 68 : 0, progressWidth = compact ? Math.max(0, width - 100 - overdueWidth) : Math.min(226, width * .28);
+	const progressX = compact ? 78 : width - 19 - overdueWidth - progressWidth - (overdueWidth ? 9 : 0);
+	const titleWidth = compact ? width - 127 : Math.max(0, progressX - 124);
+	nodes.push(label("milestonePlanTitle", rect$1(115, planY + 6, titleWidth, 16), tr("Linked task plan").toUpperCase() + " · " + (model.taskCount ? String(model.completedCount == null ? "—" : model.completedCount) + " / " + model.taskCount + " " + tr("tasks") : tr("No tasks")), {
+		fontRole: "secondary",
+		weight: 600
+	}));
+	nodes.push(label("milestonePlanSummary", rect$1(compact ? 78 : 115, planY + (compact ? 34 : 25), compact ? width - 98 : titleWidth, 15), model.taskCount ? (model.planStartDate || tr("Start not set")) + " → " + (model.dueDate || "—") + (model.processSummary ? " · " + model.processSummary : "") + (model.plannedHours > 0 ? " · " + model.plannedHours + " h" : "") : tr("Assign tasks to build the milestone plan"), {
+		fontRole: "caption",
+		color: "secondaryText"
+	}));
+	const completion = Math.max(0, Math.min(100, Number(model.completion) || 0)), progressY = planY + (compact ? 58 : 11);
+	nodes.push(label("milestoneCompletionTitle", rect$1(progressX, progressY, Math.max(0, progressWidth - 40), 15), tr("Completion").toUpperCase(), {
+		fontRole: "caption",
+		weight: 700,
+		color: "secondaryText"
+	}));
+	nodes.push(label("milestoneCompletion", rect$1(progressX + Math.max(0, progressWidth - 40), progressY, 40, 15), model.taskCount ? completion + "%" : "—", {
+		fontRole: "caption",
+		weight: 600,
+		align: "right"
+	}));
+	nodes.push(node("Box", "milestoneCompletionTrack", rect$1(progressX, progressY + 18, progressWidth, 5), {
+		background: "surfaceContainerLow",
+		radius: 2.5
+	}));
+	nodes.push(node("Box", "milestoneCompletionValue", rect$1(progressX, progressY + 18, progressWidth * completion / 100, 5), {
+		background: "action",
+		radius: 2.5
+	}));
+	if (model.overdueCount) nodes.push(label("milestoneOverdue", rect$1(width - 19 - overdueWidth, progressY + 4, overdueWidth, 15), String(model.overdueCount) + " " + tr("overdue"), {
+		fontRole: "caption",
+		weight: 600,
+		color: "error",
+		align: "right"
+	}));
+	if (model.error) {
+		nodes.push(label("milestoneRowError", rect$1(12, errorY, width - 24, 30), tr(model.error), {
+			fontRole: "caption",
+			color: "error",
+			wrap: true
+		}));
+		if (model.canReview) nodes.push(button("milestoneReview", rect$1(12, errorY + 36, width - 24, 28), tr("Review current milestone revision"), "refresh", {
+			type: "review",
+			code: model.code
+		}, !model.busy));
+	}
+	return {
+		nodes,
+		height
+	};
+}
+//#endregion
+//#region src/features/tasks/MilestoneRow.vue
+var _hoisted_1$45 = ["aria-label", "data-milestone"];
+var _sfc_main$56 = {
+	__name: "MilestoneRow",
+	props: { model: Object },
+	emits: ["event"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const root = ref(null), width = ref(800);
+		let observer;
+		const scene = computed(() => row$4({
+			...props.model,
+			radius: metrics$6(appearance.theme).itemRadius,
+			controlHeight: metrics$6(appearance.theme).controlHeight
+		}, width.value, appearance.language));
+		onMounted(() => {
+			observer = observeFrameSizes((entries) => width.value = entries[0].contentRect.width);
+			observer.observe(root.value);
+		});
+		onBeforeUnmount(() => observer?.disconnect());
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("article", {
+				ref_key: "root",
+				ref: root,
+				class: "milestone-frame-row",
+				role: "group",
+				"aria-label": __props.model.description || unref(t)("New milestone"),
+				"data-milestone": __props.model.code,
+				style: normalizeStyle({ height: scene.value.height + "px" })
+			}, [createVNode(_sfc_main$143, {
+				scene: scene.value,
+				onEvent: _cache[0] || (_cache[0] = (event) => emit("event", event))
+			}, null, 8, ["scene"])], 12, _hoisted_1$45);
+		};
+	}
+};
+//#endregion
+//#region src/features/tasks/MilestoneContent.vue
+var _hoisted_1$44 = ["aria-busy"];
+var _sfc_main$55 = {
+	__name: "MilestoneContent",
+	props: {
+		project: String,
+		result: Object,
+		rows: {
+			type: Array,
+			default: () => []
+		},
+		query: String,
+		busy: Boolean,
+		uncertain: String,
+		focused: String
+	},
+	emits: ["event"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const root = ref(null), width = ref(800), height = ref(500);
+		let observer;
+		const metrics = computed(() => metrics$6(appearance.theme));
+		const geometry = computed(() => layout(width.value, height.value, metrics.value.controlHeight));
+		const headerModel = computed(() => ({
+			project: props.project,
+			count: props.result?.records?.length ?? props.rows.length,
+			radius: metrics.value.itemRadius,
+			busy: props.busy,
+			canCreate: !!(props.result?.canCreate && !props.uncertain)
+		}));
+		const bounds = (x, y, w, h) => ({
+			left: x + "px",
+			top: y + "px",
+			width: w + "px",
+			height: h + "px"
+		});
+		const editable = (name) => props.result?.fields?.some((field) => field.name === name && field.editable);
+		onMounted(() => {
+			observer = observeFrameSizes((entries) => {
+				width.value = entries[0].contentRect.width;
+				height.value = entries[0].contentRect.height;
+			});
+			observer.observe(root.value);
+		});
+		onBeforeUnmount(() => observer?.disconnect());
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				ref_key: "root",
+				ref: root,
+				class: "milestone-content-frame"
+			}, [
+				createVNode(_sfc_main$143, {
+					class: "milestone-common-header",
+					style: normalizeStyle(bounds(geometry.value.margin, geometry.value.margin, geometry.value.inner, 76)),
+					scene: header$1(headerModel.value, geometry.value.inner, unref(appearance).language),
+					onEvent: _cache[0] || (_cache[0] = (action) => emit("event", action))
+				}, null, 8, ["style", "scene"]),
+				createVNode(_sfc_main$143, {
+					class: "milestone-frame-search",
+					style: normalizeStyle(bounds(geometry.value.margin, geometry.value.searchY, geometry.value.inner, metrics.value.controlHeight)),
+					scene: search({
+						query: __props.query,
+						busy: __props.busy,
+						controlHeight: metrics.value.controlHeight
+					}, geometry.value.inner, unref(appearance).language),
+					onEvent: _cache[1] || (_cache[1] = (action) => emit("event", action))
+				}, null, 8, ["style", "scene"]),
+				createBaseVNode("div", {
+					class: "milestone-results milestone-frame-results",
+					style: normalizeStyle(bounds(geometry.value.margin, geometry.value.listY, geometry.value.inner, geometry.value.listHeight)),
+					"aria-busy": __props.busy
+				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.rows, (row) => {
+					return openBlock(), createBlock(_sfc_main$56, {
+						key: row.code,
+						model: {
+							...row,
+							busy: __props.busy,
+							uncertain: __props.uncertain,
+							selected: __props.focused === row.code,
+							canDelete: __props.result?.canDelete,
+							canReview: !!row.revision && !__props.uncertain,
+							nameEditable: editable("description"),
+							dateEditable: editable("due_date")
+						},
+						onEvent: _cache[2] || (_cache[2] = (action) => emit("event", action))
+					}, null, 8, ["model"]);
+				}), 128))], 12, _hoisted_1$44),
+				!__props.rows.length ? (openBlock(), createElementBlock("div", {
+					key: 0,
+					class: "milestone-frame-empty",
+					style: normalizeStyle(bounds(geometry.value.margin, geometry.value.listY, geometry.value.inner, geometry.value.listHeight))
+				}, [createVNode(_sfc_main$143, {
+					style: normalizeStyle({
+						width: Math.min(360, geometry.value.inner) + "px",
+						height: empty({ query: __props.query }, Math.min(360, geometry.value.inner), unref(appearance).language).height + "px"
+					}),
+					scene: empty({
+						query: __props.query,
+						busy: __props.busy,
+						canCreate: !!__props.result?.canCreate
+					}, Math.min(360, geometry.value.inner), unref(appearance).language),
+					onEvent: _cache[3] || (_cache[3] = (action) => emit("event", action))
+				}, null, 8, ["style", "scene"])], 4)) : createCommentVNode("", true)
+			], 512);
 		};
 	}
 };
@@ -23725,55 +24139,12 @@ var _hoisted_8$13 = {
 	key: 3,
 	class: "milestone-server-data"
 };
-var _hoisted_9$10 = { class: "workspace-search milestone-search" };
-var _hoisted_10$10 = [
-	"value",
-	"placeholder",
-	"aria-label"
-];
-var _hoisted_11$8 = ["aria-busy"];
-var _hoisted_12$7 = ["data-milestone"];
-var _hoisted_13$7 = { class: "milestone-date" };
-var _hoisted_14$6 = { class: "milestone-content" };
-var _hoisted_15$6 = { class: "milestone-row-heading" };
-var _hoisted_16$6 = { class: "muted" };
-var _hoisted_17$5 = { class: "configuration-actions" };
-var _hoisted_18$5 = ["onSubmit"];
-var _hoisted_19$5 = [
-	"value",
-	"aria-label",
-	"disabled",
-	"onInput"
-];
-var _hoisted_20$4 = { class: "milestone-plan" };
-var _hoisted_21$4 = {
-	key: 0,
-	class: "muted"
-};
-var _hoisted_22$4 = {
-	key: 1,
-	class: "milestone-progress"
-};
-var _hoisted_23$4 = ["value", "aria-label"];
-var _hoisted_24$4 = {
-	key: 2,
-	class: "error"
-};
-var _hoisted_25$4 = {
-	key: 0,
-	class: "error",
-	role: "alert"
-};
-var _hoisted_26$4 = {
-	key: 0,
-	class: "table-message"
-};
-var _hoisted_27$3 = {
+var _hoisted_9$10 = {
 	key: 4,
 	class: "notice milestone-delete",
 	role: "alert"
 };
-var _sfc_main$53 = {
+var _sfc_main$54 = {
 	__name: "MilestonePanel",
 	props: {
 		project: String,
@@ -23804,18 +24175,17 @@ var _sfc_main$53 = {
 		"confirm-delete"
 	],
 	setup(__props, { expose: __expose, emit: __emit }) {
-		const props = __props;
 		const emit = __emit;
 		const dialog = ref(null);
-		const editable = (name) => props.result?.fields.some((field) => field.name === name && field.editable);
+		function action(event) {
+			if (event.type === "change") emit("change", event.code, event.field, event.value);
+			else if (event.type === "query") emit("query", event.value);
+			else emit(event.type, event.code);
+		}
 		function focusRow(code, input = false) {
 			const row = [...dialog.value?.querySelectorAll("[data-milestone]") || []].find((row) => row.dataset.milestone === code);
 			row?.scrollIntoView({ block: "nearest" });
 			if (input) row?.querySelector("input")?.focus();
-		}
-		function dateBadge(value, month = false) {
-			const date = /* @__PURE__ */ new Date(value + "T12:00:00");
-			return Number.isNaN(date.getTime()) ? "—" : month ? date.toLocaleDateString(appearance.language, { month: "short" }) : date.getDate();
 		}
 		__expose({
 			open: () => {
@@ -23831,159 +24201,77 @@ var _sfc_main$53 = {
 				ref: dialog,
 				class: "configuration-dialog milestone-manager",
 				"aria-label": unref(t)("Project milestones"),
-				onCancel: _cache[10] || (_cache[10] = withModifiers(($event) => emit("close"), ["prevent"]))
+				onCancel: _cache[7] || (_cache[7] = withModifiers(($event) => emit("close"), ["prevent"]))
 			}, [
-				createBaseVNode("header", _hoisted_2$34, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Project milestones")), 1), createBaseVNode("small", _hoisted_3$28, toDisplayString(__props.project) + " · " + toDisplayString(unref(t)("Reusable deadlines and the plan of linked tasks.")), 1)]), createBaseVNode("div", _hoisted_4$21, [
-					createVNode(_sfc_main$138, {
-						label: "Refresh",
-						icon: "refresh",
-						"icon-only": "",
-						disabled: __props.busy,
-						onClick: _cache[0] || (_cache[0] = ($event) => emit("refresh"))
-					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$138, {
-						label: "New milestone",
-						icon: "add",
-						disabled: __props.busy || !!__props.uncertain || !__props.result?.canCreate,
-						onClick: _cache[1] || (_cache[1] = ($event) => emit("create"))
-					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$138, {
-						label: "Close",
-						icon: "close",
-						"icon-only": "",
-						disabled: __props.busy,
-						onClick: _cache[2] || (_cache[2] = ($event) => emit("close"))
-					}, null, 8, ["disabled"])
-				])]),
+				createBaseVNode("header", _hoisted_2$34, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Project milestones")), 1), createBaseVNode("small", _hoisted_3$28, toDisplayString(__props.project) + " · " + toDisplayString(unref(t)("Reusable deadlines and the plan of linked tasks.")), 1)]), createBaseVNode("div", _hoisted_4$21, [createVNode(_sfc_main$141, {
+					label: "Close",
+					icon: "close",
+					"icon-only": "",
+					disabled: __props.busy,
+					onClick: _cache[0] || (_cache[0] = ($event) => emit("close"))
+				}, null, 8, ["disabled"])])]),
 				__props.confirmation ? (openBlock(), createElementBlock("aside", _hoisted_5$16, [
 					createBaseVNode("p", null, toDisplayString(unref(t)(__props.confirmation === "close" ? "Discard unsaved milestone changes?" : "Refreshing will discard every unsaved milestone change.")), 1),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Keep editing",
-						onClick: _cache[3] || (_cache[3] = ($event) => emit("keep-editing"))
+						onClick: _cache[1] || (_cache[1] = ($event) => emit("keep-editing"))
 					}),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Discard changes",
 						destructive: "",
-						onClick: _cache[4] || (_cache[4] = ($event) => emit("confirm"))
+						onClick: _cache[2] || (_cache[2] = ($event) => emit("confirm"))
 					})
 				])) : createCommentVNode("", true),
 				__props.error ? (openBlock(), createElementBlock("p", _hoisted_6$13, toDisplayString(unref(t)(__props.error)), 1)) : createCommentVNode("", true),
 				__props.uncertain ? (openBlock(), createElementBlock("aside", _hoisted_7$13, [
 					createBaseVNode("p", null, toDisplayString(unref(t)("The server may have saved this milestone. Inspect the server data before discarding the draft; saving is blocked.")), 1),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Inspect current server data",
 						icon: "refresh",
 						disabled: __props.busy,
-						onClick: _cache[5] || (_cache[5] = ($event) => emit("inspect-server"))
+						onClick: _cache[3] || (_cache[3] = ($event) => emit("inspect-server"))
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Discard changes",
 						disabled: __props.busy,
-						onClick: _cache[6] || (_cache[6] = ($event) => emit("discard", __props.uncertain))
+						onClick: _cache[4] || (_cache[4] = ($event) => emit("discard", __props.uncertain))
 					}, null, 8, ["disabled"])
 				])) : createCommentVNode("", true),
 				__props.uncertain && __props.result ? (openBlock(), createElementBlock("div", _hoisted_8$13, [createBaseVNode("strong", null, toDisplayString(unref(t)("Current server data")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.result.records, (row) => {
 					return openBlock(), createElementBlock("p", { key: row.code }, toDisplayString(row.code) + " · " + toDisplayString(row.description) + " · " + toDisplayString(row.dueDate), 1);
 				}), 128))])) : createCommentVNode("", true),
-				createBaseVNode("label", _hoisted_9$10, [
-					createVNode(_sfc_main$139, { name: "search" }),
-					createBaseVNode("input", {
-						type: "search",
-						value: __props.query,
-						placeholder: unref(t)("Find a milestone"),
-						"aria-label": unref(t)("Find a milestone"),
-						onInput: _cache[7] || (_cache[7] = ($event) => emit("query", $event.target.value))
-					}, null, 40, _hoisted_10$10),
-					createBaseVNode("span", null, toDisplayString(__props.rows.length), 1)
+				createVNode(_sfc_main$55, {
+					class: "milestone-manager-content",
+					project: __props.project,
+					result: __props.result,
+					rows: __props.rows,
+					query: __props.query,
+					busy: __props.busy,
+					uncertain: __props.uncertain,
+					focused: __props.focused,
+					onEvent: action
+				}, null, 8, [
+					"project",
+					"result",
+					"rows",
+					"query",
+					"busy",
+					"uncertain",
+					"focused"
 				]),
-				createBaseVNode("div", {
-					class: "milestone-results",
-					"aria-busy": __props.busy
-				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.rows, (row) => {
-					return openBlock(), createElementBlock("article", {
-						key: row.code,
-						class: normalizeClass(["milestone-row", { selected: __props.focused === row.code }]),
-						"data-milestone": row.code
-					}, [createBaseVNode("div", _hoisted_13$7, [createBaseVNode("strong", null, toDisplayString(dateBadge(row.dueDate)), 1), createBaseVNode("small", null, toDisplayString(dateBadge(row.dueDate, true)), 1)]), createBaseVNode("div", _hoisted_14$6, [
-						createBaseVNode("div", _hoisted_15$6, [createBaseVNode("small", _hoisted_16$6, toDisplayString(unref(t)(row.isNew ? "New milestone" : "Milestone")) + " · " + toDisplayString(unref(t)(row.saving ? "Saving…" : row.dirty ? "Unsaved changes" : "Saved")), 1), createBaseVNode("div", _hoisted_17$5, [
-							createVNode(_sfc_main$138, {
-								label: "Discard changes",
-								icon: "undo",
-								"icon-only": "",
-								disabled: __props.busy || !row.dirty && !row.uncertain,
-								onClick: ($event) => emit("discard", row.code)
-							}, null, 8, ["disabled", "onClick"]),
-							createVNode(_sfc_main$138, {
-								label: "Save milestone",
-								icon: "save",
-								"icon-only": "",
-								highlighted: "",
-								disabled: __props.busy || !!__props.uncertain || !row.dirty,
-								onClick: ($event) => emit("save", row.code)
-							}, null, 8, ["disabled", "onClick"]),
-							createVNode(_sfc_main$138, {
-								label: "Delete milestone",
-								icon: "delete",
-								"icon-only": "",
-								destructive: "",
-								disabled: __props.busy || !!__props.uncertain || !__props.result?.canDelete,
-								onClick: ($event) => emit("delete", row.code)
-							}, null, 8, ["disabled", "onClick"])
-						])]),
-						createBaseVNode("form", {
-							class: "milestone-fields",
-							onSubmit: withModifiers(($event) => emit("save", row.code), ["prevent"])
-						}, [createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Milestone name")), 1), createBaseVNode("input", {
-							value: row.description,
-							maxlength: "4096",
-							"aria-label": unref(t)("Milestone name"),
-							disabled: __props.busy || !!__props.uncertain || !editable("description"),
-							onInput: ($event) => emit("change", row.code, "description", $event.target.value)
-						}, null, 40, _hoisted_19$5)]), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Due date")), 1), createVNode(_sfc_main$144, {
-							"model-value": row.dueDate,
-							label: "Due date",
-							"include-time": false,
-							disabled: __props.busy || !!__props.uncertain || !editable("due_date"),
-							"onUpdate:modelValue": ($event) => emit("change", row.code, "dueDate", $event)
-						}, null, 8, [
-							"model-value",
-							"disabled",
-							"onUpdate:modelValue"
-						])])], 40, _hoisted_18$5),
-						createBaseVNode("div", _hoisted_20$4, [
-							createBaseVNode("strong", null, [createVNode(_sfc_main$139, { name: "MDI_FLAG_VARIANT" }), createTextVNode(" " + toDisplayString(unref(t)("Linked task plan")), 1)]),
-							createBaseVNode("span", null, toDisplayString(row.completedCount ?? "—") + " / " + toDisplayString(row.taskCount) + " " + toDisplayString(unref(t)("tasks complete")), 1),
-							createBaseVNode("small", null, [createTextVNode(toDisplayString(row.planStartDate || "—") + " → " + toDisplayString(row.dueDate || "—"), 1), row.plannedHours !== null ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString(row.plannedHours) + " " + toDisplayString(unref(t)("h")), 1)], 64)) : createCommentVNode("", true)]),
-							row.processSummary ? (openBlock(), createElementBlock("small", _hoisted_21$4, toDisplayString(row.processSummary), 1)) : createCommentVNode("", true),
-							row.completion !== null ? (openBlock(), createElementBlock("div", _hoisted_22$4, [createBaseVNode("progress", {
-								max: "100",
-								value: Math.min(100, row.completion),
-								"aria-label": unref(t)("Task completion")
-							}, null, 8, _hoisted_23$4), createBaseVNode("span", null, toDisplayString(row.completion) + "%", 1)])) : createCommentVNode("", true),
-							row.overdueCount ? (openBlock(), createElementBlock("small", _hoisted_24$4, toDisplayString(unref(t)("{count} overdue tasks", { count: row.overdueCount })), 1)) : createCommentVNode("", true)
-						]),
-						row.error ? (openBlock(), createElementBlock("p", _hoisted_25$4, [createTextVNode(toDisplayString(unref(t)(row.error)) + " ", 1), !__props.uncertain ? (openBlock(), createBlock(_sfc_main$138, {
-							key: 0,
-							label: "Review current milestone revision",
-							icon: "refresh",
-							disabled: __props.busy,
-							onClick: ($event) => emit("review", row.code)
-						}, null, 8, ["disabled", "onClick"])) : createCommentVNode("", true)])) : createCommentVNode("", true)
-					])], 10, _hoisted_12$7);
-				}), 128)), !__props.rows.length ? (openBlock(), createElementBlock("p", _hoisted_26$4, toDisplayString(unref(t)(__props.busy ? "Loading data…" : __props.query ? "No milestones match your search." : "No project milestones yet.")), 1)) : createCommentVNode("", true)], 8, _hoisted_11$8),
-				__props.deleting ? (openBlock(), createElementBlock("aside", _hoisted_27$3, [
+				__props.deleting ? (openBlock(), createElementBlock("aside", _hoisted_9$10, [
 					createBaseVNode("p", null, toDisplayString(unref(t)("Delete this milestone? It can only be deleted when no tasks use it.")), 1),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Cancel",
 						disabled: __props.busy,
-						onClick: _cache[8] || (_cache[8] = ($event) => emit("cancel-delete"))
+						onClick: _cache[5] || (_cache[5] = ($event) => emit("cancel-delete"))
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Delete milestone",
 						icon: "delete",
 						destructive: "",
 						disabled: __props.busy || !!__props.uncertain,
-						onClick: _cache[9] || (_cache[9] = ($event) => emit("confirm-delete"))
+						onClick: _cache[6] || (_cache[6] = ($event) => emit("confirm-delete"))
 					}, null, 8, ["disabled"])
 				])) : createCommentVNode("", true)
 			], 40, _hoisted_1$43)), [[_directive_window, {
@@ -23999,8 +24287,8 @@ function today() {
 	const date = /* @__PURE__ */ new Date();
 	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
-var _sfc_main$52 = {
-	components: { MilestonePanel: _sfc_main$53 },
+var _sfc_main$53 = {
+	components: { MilestonePanel: _sfc_main$54 },
 	props: {
 		ticket: String,
 		project: String
@@ -24337,12 +24625,123 @@ function _sfc_render$11(_ctx, _cache, $props, $setup, $data, $options) {
 		"onConfirm"
 	]);
 }
-var MilestoneManager_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$52, [["render", _sfc_render$11]]);
+var MilestoneManager_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$53, [["render", _sfc_render$11]]);
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/tasks/schedule.ui.mjs
+function describe$16(model, width, language) {
+	const tr = (text) => translate(text, language), nodes = [];
+	let y = 0;
+	function field(id, title, value, kind, enabled, field) {
+		nodes.push(label(id + "Title", rect$1(0, y, width, 20), tr(title), { fontRole: "body" }));
+		nodes.push(node(kind, id, rect$1(0, y + 25, width, 32), {
+			label: tr(title),
+			text: String(value == null ? "" : value),
+			includeTime: false,
+			allowClear: false,
+			enabled: !model.busy && enabled,
+			action: {
+				type: "change",
+				field
+			},
+			selectOnFocus: true
+		}));
+		y += 68;
+	}
+	field("ganttEditorStart", "Start date", model.start, "DateChoice", model.dates, "start");
+	field("ganttEditorDuration", model.workingDays ? "Duration in working days" : "Duration in calendar days", model.duration, "Field", model.dates, "duration");
+	nodes.push(node("CheckBox", "ganttEditorWorking", rect$1(0, y, width, 28), {
+		text: tr("Working days only"),
+		checked: !!model.workingDays,
+		enabled: !model.busy && model.dates,
+		action: { type: "working" }
+	}));
+	y += 36;
+	if (model.progressField) field("ganttEditorProgress", "Progress", model.progress, "Field", true, "progress");
+	if (model.multi) {
+		nodes.push(node("CheckBox", "ganttEditorMove", rect$1(0, y, width, 28), {
+			text: tr("Move selected tasks together"),
+			checked: !!model.move,
+			enabled: !model.busy && model.dates,
+			action: {
+				type: "change",
+				field: "move"
+			}
+		}));
+		y += 36;
+	}
+	if (model.error) {
+		nodes.push(label("ganttEditorError", rect$1(0, y, width, 36), tr(model.error), {
+			fontRole: "caption",
+			color: "error",
+			wrap: true
+		}));
+		y += 44;
+	}
+	const valid = (!model.dates || !!parse$1(model.start, false) && Number.isInteger(Number(model.duration)) && Number(model.duration) >= 1 && Number(model.duration) <= 3650) && (!model.progressField || Number.isFinite(Number(model.progress)) && Number(model.progress) >= 0 && Number(model.progress) <= 100);
+	nodes.push(button("ganttEditorCancel", rect$1(Math.max(0, width - 244), y, 84, 32), tr("Cancel"), "", { type: "cancel" }, !model.busy));
+	nodes.push(button("ganttEditorApply", rect$1(Math.max(0, width - 152), y, 152, 32), tr("Apply to draft"), "check", { type: "apply" }, !model.busy && valid && (model.dates || !!model.progressField), { highlighted: true }));
+	for (const field of nodes.filter((node) => node.kind === "Field")) field.keys = valid && !model.busy ? { Enter: { type: "apply" } } : {};
+	return {
+		nodes,
+		height: y + 40
+	};
+}
+//#endregion
+//#region src/features/tasks/TaskScheduleEditor.vue
+var _sfc_main$52 = {
+	__name: "TaskScheduleEditor",
+	props: {
+		model: Object,
+		workingDays: Boolean,
+		multi: Boolean,
+		busy: Boolean,
+		error: String
+	},
+	emits: [
+		"change",
+		"working",
+		"cancel",
+		"apply"
+	],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const root = ref(null), width = ref(360);
+		let observer;
+		const scene = computed(() => describe$16({
+			...props.model,
+			workingDays: props.workingDays,
+			multi: props.multi,
+			busy: props.busy,
+			error: props.error
+		}, width.value, appearance.language));
+		function action(event) {
+			if (event.type === "change") emit("change", event.field, event.value);
+			else emit(event.type, event.value);
+		}
+		onMounted(() => {
+			observer = observeFrameSizes((entries) => width.value = entries[0].contentRect.width);
+			observer.observe(root.value);
+		});
+		onBeforeUnmount(() => observer?.disconnect());
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				ref_key: "root",
+				ref: root,
+				class: "task-schedule-editor",
+				style: normalizeStyle({ height: scene.value.height + "px" })
+			}, [createVNode(_sfc_main$143, {
+				scene: scene.value,
+				onEvent: action
+			}, null, 8, ["scene"])], 4);
+		};
+	}
+};
 //#endregion
 //#region src/features/tasks/TaskManager.vue
-var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([31,1,2,3,4,5,6,7,18,19,10,11,20,21,32])));
-var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([33,1,2,3,4,5,34])));
-var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([35,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,36])));
+var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([28,1,2,3,4,5,15,6,7,16,17,10,11,18,29])));
+var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([30,1,2,3,4,5,15,6,7,16,17,10,11,18,19,31])));
+var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([32,1,2,3,4,5,15,6,7,16,17,10,11,18,19,33])));
 var readCommand = "tactic.ui.table.task_workspace.TaskWorkspaceCmd";
 var editCommand = "tactic.ui.table.task_workspace_edits.TaskWorkspaceEditCmd";
 var scheduleCommand = "tactic.ui.table.task_schedule.TaskScheduleCmd";
@@ -24401,29 +24800,30 @@ var sortIcons = [
 ];
 var _sfc_main$51 = {
 	components: {
-		TaskProcessToolbar: _sfc_main$59,
-		TaskWorkspaceToolbar: _sfc_main$60,
-		TaskWorkspacePart: _sfc_main$67,
-		TaskBulkBar: _sfc_main$66,
-		TaskEmptyState: _sfc_main$65,
-		TaskColumns: _sfc_main$64,
-		TaskWorkspaceOptions: _sfc_main$62,
-		TaskWorkspaceFooter: _sfc_main$61,
-		AppDateField: _sfc_main$144,
-		AppButton: _sfc_main$138,
-		ActionRows: _sfc_main$128,
-		AppCheckbox: _sfc_main$160,
-		AppMenu: _sfc_main$159,
-		AppSegmentedButton: _sfc_main$149,
+		TaskProcessToolbar: _sfc_main$62,
+		TaskWorkspaceToolbar: _sfc_main$63,
+		TaskWorkspacePart: _sfc_main$70,
+		TaskBulkBar: _sfc_main$69,
+		TaskEmptyState: _sfc_main$68,
+		TaskColumns: _sfc_main$67,
+		TaskWorkspaceOptions: _sfc_main$65,
+		TaskWorkspaceFooter: _sfc_main$64,
+		AppDateField: _sfc_main$147,
+		AppButton: _sfc_main$141,
+		ActionRows: _sfc_main$131,
+		AppCheckbox: _sfc_main$163,
+		AppMenu: _sfc_main$160,
+		AppSegmentedButton: _sfc_main$152,
 		NotesPanel: NotesPanel_default,
 		Timesheet: Timesheet_default,
-		TaskWorkspaceTable: _sfc_main$68,
-		MobileTasks: _sfc_main$57,
-		TaskWorkspaceEditor: _sfc_main$112,
-		TaskWorkspaceFilters: _sfc_main$55,
-		TaskWorkspaceScope: _sfc_main$54,
+		TaskWorkspaceTable: _sfc_main$71,
+		MobileTasks: _sfc_main$60,
+		TaskWorkspaceEditor: _sfc_main$115,
+		TaskWorkspaceFilters: _sfc_main$58,
+		TaskWorkspaceScope: _sfc_main$57,
 		TaskGanttView,
 		TaskCalendarView,
+		TaskScheduleEditor: _sfc_main$52,
 		MilestoneManager: MilestoneManager_default,
 		TaskProcessPanel
 	},
@@ -24718,7 +25118,7 @@ var _sfc_main$51 = {
 		},
 		rowActions() {
 			const row = this.rowMenu;
-			return row ? row$5({
+			return row ? row$6({
 				inspector: true,
 				timesheet: true,
 				hasTask: !!row.__search_key__,
@@ -24801,6 +25201,8 @@ var _sfc_main$51 = {
 				const scheduled = section ? section === "scheduled" : !!(original.bid_start_date && original.bid_end_date && Date.parse(original.bid_start_date.replace(" ", "T")) <= Date.parse(original.bid_end_date.replace(" ", "T")));
 				return {
 					taskCode: task.key,
+					taskId: String(task.id || ""),
+					dependencyId: String(task.depend_id || ""),
 					parentKey: task.parent?.__search_key__ || "",
 					parentTitle: task.title,
 					process: task.process || "",
@@ -26368,22 +26770,13 @@ var _hoisted_11$7 = ["aria-label"];
 var _hoisted_12$6 = ["aria-label"];
 var _hoisted_13$6 = ["aria-label"];
 var _hoisted_14$5 = ["aria-label"];
-var _hoisted_15$5 = {
-	key: 0,
-	class: "error",
-	role: "alert"
-};
-var _hoisted_16$5 = ["disabled"];
-var _hoisted_17$4 = { key: 0 };
-var _hoisted_18$4 = ["disabled"];
-var _hoisted_19$4 = { class: "configuration-actions" };
-var _hoisted_20$3 = ["aria-label"];
-var _hoisted_21$3 = ["aria-label"];
-var _hoisted_22$3 = { class: "configuration-actions" };
-var _hoisted_23$3 = ["aria-label"];
-var _hoisted_24$3 = { class: "task-conflict-values" };
-var _hoisted_25$3 = { class: "muted" };
-var _hoisted_26$3 = { class: "configuration-actions" };
+var _hoisted_15$5 = ["aria-label"];
+var _hoisted_16$5 = ["aria-label"];
+var _hoisted_17$4 = { class: "configuration-actions" };
+var _hoisted_18$4 = ["aria-label"];
+var _hoisted_19$4 = { class: "task-conflict-values" };
+var _hoisted_20$3 = { class: "muted" };
+var _hoisted_21$3 = { class: "configuration-actions" };
 function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_TaskProcessToolbar = resolveComponent("TaskProcessToolbar");
@@ -26404,7 +26797,7 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_TaskWorkspaceFooter = resolveComponent("TaskWorkspaceFooter");
 	const _component_ActionRows = resolveComponent("ActionRows");
 	const _component_TaskWorkspaceEditor = resolveComponent("TaskWorkspaceEditor");
-	const _component_AppDateField = resolveComponent("AppDateField");
+	const _component_TaskScheduleEditor = resolveComponent("TaskScheduleEditor");
 	const _component_AppCheckbox = resolveComponent("AppCheckbox");
 	const _component_NotesPanel = resolveComponent("NotesPanel");
 	const _component_Timesheet = resolveComponent("Timesheet");
@@ -26759,8 +27152,9 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 						"onInspect",
 						"onObject",
 						"onOperate"
-					])) : $options.displayedView !== "table" ? (openBlock(), createBlock(_component_TaskGanttView, {
-						key: 4,
+					])) : createCommentVNode("", true),
+					(openBlock(), createBlock(KeepAlive, { max: 1 }, [!$options.mobile && $data.surface === "workspace" && $options.displayedView !== "table" ? (openBlock(), createBlock(_component_TaskGanttView, {
+						key: $props.project,
 						active: $data.active,
 						"has-more": !!$data.result?.hasMore,
 						projection: $data.projection,
@@ -26845,9 +27239,9 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 						"onSelectAll",
 						"onProgress",
 						"onResourceMode"
-					])) : createCommentVNode("", true),
+					])) : createCommentVNode("", true)], 1024)),
 					!$options.mobile && $data.surface === "workspace" && $options.displayedView === "table" && !$options.tasks.length ? (openBlock(), createBlock(_component_TaskEmptyState, {
-						key: 5,
+						key: 4,
 						busy: $data.busy,
 						filtered: $options.filtersActive,
 						"can-create": !!$options.creationParent
@@ -26952,78 +27346,38 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 				ref: "scheduleDialog",
 				class: "record-dialog task-manager-editor",
 				"aria-label": $options.t("Edit schedule"),
-				onCancel: _cache[46] || (_cache[46] = withModifiers((...args) => $options.cancelSchedule && $options.cancelSchedule(...args), ["prevent"]))
-			}, [
-				createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString($options.t("Edit schedule")), 1), createVNode(_component_AppButton, {
-					label: "Close",
-					icon: "close",
-					"icon-only": "",
-					disabled: $data.busy,
-					onClick: $options.cancelSchedule
-				}, null, 8, ["disabled", "onClick"])]),
-				$data.error ? (openBlock(), createElementBlock("p", _hoisted_15$5, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
-				$data.scheduleEditor ? (openBlock(), createElementBlock("form", {
-					key: 1,
-					class: "record-form",
-					onSubmit: _cache[45] || (_cache[45] = withModifiers((...args) => $options.applySchedule && $options.applySchedule(...args), ["prevent"]))
-				}, [
-					createBaseVNode("label", null, [createTextVNode(toDisplayString($options.t("Start date")), 1), createVNode(_component_AppDateField, {
-						modelValue: $data.scheduleEditor.start,
-						"onUpdate:modelValue": _cache[40] || (_cache[40] = ($event) => $data.scheduleEditor.start = $event),
-						label: "Start date",
-						"include-time": false,
-						"allow-clear": false,
-						required: "",
-						disabled: $data.busy || !$data.scheduleEditor.dates
-					}, null, 8, ["modelValue", "disabled"])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString($options.t($data.workingDays ? "Duration in working days" : "Duration in calendar days")), 1), withDirectives(createBaseVNode("input", {
-						"onUpdate:modelValue": _cache[41] || (_cache[41] = ($event) => $data.scheduleEditor.duration = $event),
-						type: "number",
-						min: "1",
-						max: "3650",
-						step: "1",
-						required: "",
-						disabled: $data.busy || !$data.scheduleEditor.dates
-					}, null, 8, _hoisted_16$5), [[vModelText, $data.scheduleEditor.duration]])]),
-					createVNode(_component_AppCheckbox, {
-						label: "Working days only",
-						modelValue: $data.workingDays,
-						"onUpdate:modelValue": _cache[42] || (_cache[42] = ($event) => $data.workingDays = $event),
-						disabled: $data.busy || !$data.scheduleEditor.dates
-					}, null, 8, ["modelValue", "disabled"]),
-					$data.scheduleEditor.progressField ? (openBlock(), createElementBlock("label", _hoisted_17$4, [createTextVNode(toDisplayString($options.t("Progress")), 1), withDirectives(createBaseVNode("input", {
-						"onUpdate:modelValue": _cache[43] || (_cache[43] = ($event) => $data.scheduleEditor.progress = $event),
-						type: "number",
-						min: "0",
-						max: "100",
-						step: "1",
-						disabled: $data.busy
-					}, null, 8, _hoisted_18$4), [[vModelText, $data.scheduleEditor.progress]])])) : createCommentVNode("", true),
-					$data.selected.includes($data.scheduleEditor.key) && $data.selected.length > 1 ? (openBlock(), createBlock(_component_AppCheckbox, {
-						key: 1,
-						label: "Move selected tasks together",
-						modelValue: $data.scheduleEditor.move,
-						"onUpdate:modelValue": _cache[44] || (_cache[44] = ($event) => $data.scheduleEditor.move = $event),
-						disabled: $data.busy || !$data.scheduleEditor.dates
-					}, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true),
-					createBaseVNode("footer", _hoisted_19$4, [createVNode(_component_AppButton, {
-						label: "Cancel",
-						disabled: $data.busy,
-						onClick: $options.cancelSchedule
-					}, null, 8, ["disabled", "onClick"]), createVNode(_component_AppButton, {
-						label: "Apply to draft",
-						icon: "check",
-						type: "submit",
-						highlighted: "",
-						disabled: $data.busy || !$data.scheduleEditor.dates && !$data.scheduleEditor.progressField
-					}, null, 8, ["disabled"])])
-				], 32)) : createCommentVNode("", true)
-			], 40, _hoisted_14$5),
+				onCancel: _cache[42] || (_cache[42] = withModifiers((...args) => $options.cancelSchedule && $options.cancelSchedule(...args), ["prevent"]))
+			}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString($options.t("Edit schedule")), 1), createVNode(_component_AppButton, {
+				label: "Close",
+				icon: "close",
+				"icon-only": "",
+				disabled: $data.busy,
+				onClick: $options.cancelSchedule
+			}, null, 8, ["disabled", "onClick"])]), $data.scheduleEditor ? (openBlock(), createBlock(_component_TaskScheduleEditor, {
+				key: 0,
+				model: $data.scheduleEditor,
+				"working-days": $data.workingDays,
+				multi: $data.selected.includes($data.scheduleEditor.key) && $data.selected.length > 1,
+				busy: $data.busy,
+				error: $data.error,
+				onChange: _cache[40] || (_cache[40] = (field, value) => $data.scheduleEditor[field] = value),
+				onWorking: _cache[41] || (_cache[41] = ($event) => $data.workingDays = $event),
+				onCancel: $options.cancelSchedule,
+				onApply: $options.applySchedule
+			}, null, 8, [
+				"model",
+				"working-days",
+				"multi",
+				"busy",
+				"error",
+				"onCancel",
+				"onApply"
+			])) : createCommentVNode("", true)], 40, _hoisted_14$5),
 			createBaseVNode("dialog", {
 				ref: "editor",
 				class: "record-dialog task-manager-editor",
 				"aria-label": $options.t("Edit task draft"),
-				onCancel: _cache[51] || (_cache[51] = withModifiers((...args) => $options.cancelEdit && $options.cancelEdit(...args), ["prevent"]))
+				onCancel: _cache[47] || (_cache[47] = withModifiers((...args) => $options.cancelEdit && $options.cancelEdit(...args), ["prevent"]))
 			}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString($options.t($data.editor?.creating ? "Create task" : "Edit selected tasks")), 1), createVNode(_component_AppButton, {
 				label: "Close",
 				icon: "close",
@@ -27033,10 +27387,10 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 			}, null, 8, ["disabled", "onClick"])]), createVNode(_component_TaskWorkspaceEditor, {
 				editor: $data.editor,
 				busy: $data.busy,
-				onMilestones: _cache[47] || (_cache[47] = ($event) => _ctx.$refs.milestones.open()),
-				onChange: _cache[48] || (_cache[48] = (name, value) => $data.editor.values[name] = value),
-				onEnable: _cache[49] || (_cache[49] = (name, checked) => $data.editor.enabled = checked ? [...$data.editor.enabled, name] : $data.editor.enabled.filter((item) => item !== name)),
-				onProcess: _cache[50] || (_cache[50] = ($event) => $options.edit([], true, $event)),
+				onMilestones: _cache[43] || (_cache[43] = ($event) => _ctx.$refs.milestones.open()),
+				onChange: _cache[44] || (_cache[44] = (name, value) => $data.editor.values[name] = value),
+				onEnable: _cache[45] || (_cache[45] = (name, checked) => $data.editor.enabled = checked ? [...$data.editor.enabled, name] : $data.editor.enabled.filter((item) => item !== name)),
+				onProcess: _cache[46] || (_cache[46] = ($event) => $options.edit([], true, $event)),
 				onCancel: $options.cancelEdit,
 				onApply: $options.stageEditor
 			}, null, 8, [
@@ -27044,12 +27398,12 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 				"busy",
 				"onCancel",
 				"onApply"
-			])], 40, _hoisted_20$3),
+			])], 40, _hoisted_15$5),
 			createBaseVNode("dialog", {
 				ref: "deleteDialog",
 				class: "record-dialog",
 				"aria-label": $options.t("Delete selected tasks"),
-				onCancel: _cache[54] || (_cache[54] = withModifiers(($event) => {
+				onCancel: _cache[50] || (_cache[50] = withModifiers(($event) => {
 					_ctx.$refs.deleteDialog.close();
 					$data.deletion = null;
 				}, ["prevent"]))
@@ -27058,7 +27412,7 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 					label: "Close",
 					icon: "close",
 					"icon-only": "",
-					onClick: _cache[52] || (_cache[52] = ($event) => {
+					onClick: _cache[48] || (_cache[48] = ($event) => {
 						_ctx.$refs.deleteDialog.close();
 						$data.deletion = null;
 					})
@@ -27079,9 +27433,9 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 						]);
 					}), 128))]);
 				}), 128)),
-				createBaseVNode("footer", _hoisted_22$3, [createVNode(_component_AppButton, {
+				createBaseVNode("footer", _hoisted_17$4, [createVNode(_component_AppButton, {
 					label: "Cancel",
-					onClick: _cache[53] || (_cache[53] = ($event) => {
+					onClick: _cache[49] || (_cache[49] = ($event) => {
 						_ctx.$refs.deleteDialog.close();
 						$data.deletion = null;
 					})
@@ -27091,12 +27445,12 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 					destructive: "",
 					onClick: $options.stageDeletion
 				}, null, 8, ["onClick"])])
-			], 40, _hoisted_21$3),
+			], 40, _hoisted_16$5),
 			createBaseVNode("dialog", {
 				ref: "rebaseDialog",
 				class: "record-dialog",
 				"aria-label": $options.t("Review task conflicts"),
-				onCancel: _cache[58] || (_cache[58] = withModifiers(($event) => {
+				onCancel: _cache[54] || (_cache[54] = withModifiers(($event) => {
 					_ctx.$refs.rebaseDialog.close();
 					$data.rebaseReview = null;
 				}, ["prevent"]))
@@ -27105,24 +27459,24 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 					label: "Close",
 					icon: "close",
 					"icon-only": "",
-					onClick: _cache[55] || (_cache[55] = ($event) => {
+					onClick: _cache[51] || (_cache[51] = ($event) => {
 						_ctx.$refs.rebaseDialog.close();
 						$data.rebaseReview = null;
 					})
 				})]),
 				createBaseVNode("p", null, toDisplayString($options.t("Review the current server values and your draft. Applying refreshes revisions; Save is still a separate action.")), 1),
 				(openBlock(true), createElementBlock(Fragment, null, renderList($data.rebaseReview, (plan) => {
-					return openBlock(), createElementBlock("section", { key: plan.task_key || plan.draft_id }, [createBaseVNode("strong", null, toDisplayString(plan.process) + " · " + toDisplayString(plan.task_key || plan.search_key), 1), createBaseVNode("dl", _hoisted_24$3, [(openBlock(true), createElementBlock(Fragment, null, renderList(plan.data, (value, name) => {
+					return openBlock(), createElementBlock("section", { key: plan.task_key || plan.draft_id }, [createBaseVNode("strong", null, toDisplayString(plan.process) + " · " + toDisplayString(plan.task_key || plan.search_key), 1), createBaseVNode("dl", _hoisted_19$4, [(openBlock(true), createElementBlock(Fragment, null, renderList(plan.data, (value, name) => {
 						return openBlock(), createElementBlock(Fragment, { key: name }, [createBaseVNode("dt", null, toDisplayString(name), 1), createBaseVNode("dd", null, [
-							createBaseVNode("span", _hoisted_25$3, toDisplayString($options.t("Server value")) + ": " + toDisplayString(plan.task[name] ?? "—"), 1),
-							_cache[66] || (_cache[66] = createBaseVNode("br", null, null, -1)),
+							createBaseVNode("span", _hoisted_20$3, toDisplayString($options.t("Server value")) + ": " + toDisplayString(plan.task[name] ?? "—"), 1),
+							_cache[62] || (_cache[62] = createBaseVNode("br", null, null, -1)),
 							createTextVNode(toDisplayString($options.t("Draft value")) + ": " + toDisplayString(value), 1)
 						])], 64);
 					}), 128))])]);
 				}), 128)),
-				createBaseVNode("footer", _hoisted_26$3, [createVNode(_component_AppButton, {
+				createBaseVNode("footer", _hoisted_21$3, [createVNode(_component_AppButton, {
 					label: "Cancel",
-					onClick: _cache[56] || (_cache[56] = ($event) => {
+					onClick: _cache[52] || (_cache[52] = ($event) => {
 						_ctx.$refs.rebaseDialog.close();
 						$data.rebaseReview = null;
 					})
@@ -27130,7 +27484,7 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 					label: "Use latest revisions",
 					icon: "check",
 					highlighted: "",
-					onClick: _cache[57] || (_cache[57] = ($event) => {
+					onClick: _cache[53] || (_cache[53] = ($event) => {
 						$data.drafts = Object.fromEntries($data.rebaseReview.map((plan) => [plan.draft_id || plan.task_key, plan]));
 						$data.undo = [];
 						$data.redo = [];
@@ -27138,12 +27492,12 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 						$data.rebaseReview = null;
 					})
 				})])
-			], 40, _hoisted_23$3),
+			], 40, _hoisted_18$4),
 			createVNode(_component_NotesPanel, {
 				ref: "notes",
 				ticket: $props.ticket,
 				project: $props.project,
-				onSaved: _cache[59] || (_cache[59] = ($event) => {
+				onSaved: _cache[55] || (_cache[55] = ($event) => {
 					$options.load();
 					_ctx.$emit("saved");
 				})
@@ -27153,7 +27507,7 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $props.ticket,
 				project: $props.project,
 				"current-user": $props.currentUser,
-				onSaved: _cache[60] || (_cache[60] = ($event) => {
+				onSaved: _cache[56] || (_cache[56] = ($event) => {
 					$options.load();
 					_ctx.$emit("saved");
 				})
@@ -27166,7 +27520,7 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 				ref: "milestones",
 				ticket: $props.ticket,
 				project: $props.project,
-				onMarkers: _cache[61] || (_cache[61] = ($event) => $data.milestoneRecords = $event),
+				onMarkers: _cache[57] || (_cache[57] = ($event) => $data.milestoneRecords = $event),
 				onSaved: $options.refreshMilestoneCatalog
 			}, null, 8, [
 				"ticket",
@@ -27191,10 +27545,10 @@ function _sfc_render$10(_ctx, _cache, $props, $setup, $data, $options) {
 			onMonthValue: $options.setMonth,
 			onToday: $options.calendarToday,
 			onDay: $options.selectDay,
-			onInspect: _cache[62] || (_cache[62] = (key) => $options.inspect($options.tasks.find((task) => task.key === key))),
-			onMilestone: _cache[63] || (_cache[63] = ($event) => _ctx.$refs.milestones.open($event)),
-			onLoadMore: _cache[64] || (_cache[64] = ($event) => $options.load(false, true)),
-			onTasks: _cache[65] || (_cache[65] = ($event) => _ctx.$emit("opened"))
+			onInspect: _cache[58] || (_cache[58] = (key) => $options.inspect($options.tasks.find((task) => task.key === key))),
+			onMilestone: _cache[59] || (_cache[59] = ($event) => _ctx.$refs.milestones.open($event)),
+			onLoadMore: _cache[60] || (_cache[60] = ($event) => $options.load(false, true)),
+			onTasks: _cache[61] || (_cache[61] = ($event) => _ctx.$emit("opened"))
 		}, null, 8, [
 			"projection",
 			"year",
@@ -27466,7 +27820,7 @@ var _sfc_main$50 = {
 			};
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$140, {
+			return openBlock(), createBlock(_sfc_main$143, {
 				class: "section-tab-visual",
 				scene: scene.value,
 				interactive: false
@@ -27515,7 +27869,7 @@ function dockTabWidth(labelWidth, available, count) {
 	return Math.max(dockTab.minimumWidth, Math.min(natural, available / Math.max(1, count)));
 }
 function dockTabHeight(height, overflow) {
-	return Math.max(0, height - (overflow ? layout$4.scrollbarExtent : 0));
+	return Math.max(0, height - (overflow ? layout$5.scrollbarExtent : 0));
 }
 function displacedTabOffset(index, source, target, extent) {
 	if (source < 0 || target < 0) return 0;
@@ -27828,7 +28182,7 @@ var _sfc_main$49 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 			}, _ctx.$attrs, {
 				style: layoutStyle,
 				class: "section-tab-host"
-			}), [createVNode(_sfc_main$140, {
+			}), [createVNode(_sfc_main$143, {
 				class: "section-tab-panel",
 				scene: panel$1.value,
 				interactive: false
@@ -27864,7 +28218,7 @@ var _sfc_main$49 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					"width",
 					"record",
 					"pressed"
-				]), createVNode(_sfc_main$138, {
+				]), createVNode(_sfc_main$141, {
 					role: "tab",
 					class: "section-tab frame-hit-target",
 					label: tab.title,
@@ -27930,7 +28284,7 @@ var _sfc_main$49 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					popup.value.hidePopover();
 					revealed.value = null;
 				}, ["esc"]))]
-			}, [revealed.value && actions.value ? (openBlock(), createBlock(_sfc_main$128, {
+			}, [revealed.value && actions.value ? (openBlock(), createBlock(_sfc_main$131, {
 				key: 0,
 				actions: actions$1(__props.tabs.findIndex((tab) => tab.id === revealed.value.id), __props.tabs.length, revealed.value.title),
 				onTriggered: _cache[3] || (_cache[3] = (command) => command === "close" ? close(revealed.value.id) : reorder(command === "up" ? -1 : 1))
@@ -27948,7 +28302,7 @@ var _sfc_main$49 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					"record",
 					"pressed"
 				]),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					class: "section-tab-expanded frame-hit-target",
 					label: revealed.value.title,
 					"aria-pressed": __props.selected === revealed.value.id,
@@ -27969,7 +28323,7 @@ var _sfc_main$49 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					}, null, -1)])]),
 					_: 1
 				}, 8, ["label", "aria-pressed"]),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					style: normalizeStyle(closeStyle.value),
 					"icon-only": "",
 					icon: "close",
@@ -28011,7 +28365,7 @@ var _sfc_main$48 = {
 				ref_key: "root",
 				ref: root,
 				class: "frame-workspace-tab"
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				interactive: false
 			}, null, 8, ["scene"])], 512);
@@ -28513,7 +28867,7 @@ var _sfc_main$47 = {
 				}]),
 				"data-kind": __props.kind,
 				style: normalizeStyle({
-					"--dock-tab-content-height": unref(dockTabHeight)(unref(layout$4).dockTitleHeight, overflow.value) + "px",
+					"--dock-tab-content-height": unref(dockTabHeight)(unref(layout$5).dockTitleHeight, overflow.value) + "px",
 					"--dock-tab-spacing": unref(dockTab).spacing + "px",
 					"--dock-tab-selected-opacity": unref(dockTab).selectedOpacity,
 					"--dock-tab-hovered-opacity": unref(dockTab).hoveredOpacity,
@@ -28524,7 +28878,7 @@ var _sfc_main$47 = {
 				onPointerdownCapture: _cache[19] || (_cache[19] = ($event) => isRef(suppressClick) ? suppressClick.value = false : suppressClick = false),
 				onClickCapture: clickAfterDrag
 			}, [
-				__props.kind === "search" && !__props.mobile ? (openBlock(), createBlock(_sfc_main$138, {
+				__props.kind === "search" && !__props.mobile ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					"icon-only": "",
 					icon: "add",
@@ -28582,7 +28936,7 @@ var _sfc_main$47 = {
 							"close-hovered",
 							"close-pressed"
 						])) : createCommentVNode("", true),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							class: normalizeClass({ "frame-hit-target": __props.kind === "search" }),
 							role: "tab",
 							icon: ["dock", "view"].includes(__props.kind) ? tab.icon : void 0,
@@ -28606,7 +28960,7 @@ var _sfc_main$47 = {
 							"disabled",
 							"onClick"
 						]),
-						__props.kind !== "dock" && closable(tab) ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.kind !== "dock" && closable(tab) ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 1,
 							class: normalizeClass({ "frame-hit-target": __props.kind === "search" }),
 							onPointerenter: ($event) => closeHover.value = tab.id,
@@ -28636,7 +28990,7 @@ var _sfc_main$47 = {
 						])) : createCommentVNode("", true)
 					], 46, _hoisted_3$25);
 				}), 128))], 42, _hoisted_2$31), [[vShow, !__props.mobile]]),
-				__props.kind === "script" && (overflow.value || __props.closedTabs.length) ? (openBlock(), createBlock(_sfc_main$159, {
+				__props.kind === "script" && (overflow.value || __props.closedTabs.length) ? (openBlock(), createBlock(_sfc_main$160, {
 					key: 2,
 					ref_key: "menu",
 					ref: menu,
@@ -28645,7 +28999,7 @@ var _sfc_main$47 = {
 					icon: overflow.value ? "MDI_CHEVRON_DOWN" : "history"
 				}, {
 					default: withCtx(() => [
-						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)(__props.kind === "script" ? "Open script tabs" : "Open search tabs")), 1), createVNode(_sfc_main$153, {
+						createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)(__props.kind === "script" ? "Open script tabs" : "Open search tabs")), 1), createVNode(_sfc_main$156, {
 							"model-value": __props.selected,
 							options: __props.tabs.map((tab) => ({
 								value: tab.id,
@@ -28663,7 +29017,7 @@ var _sfc_main$47 = {
 							"label",
 							"disabled"
 						])]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							icon: "previous",
 							label: "Move tab left",
 							disabled: __props.disabled || __props.tabs[0]?.id === __props.selected,
@@ -28672,7 +29026,7 @@ var _sfc_main$47 = {
 								menu.value.open = false;
 							})
 						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							icon: "next",
 							label: "Move tab right",
 							disabled: __props.disabled || __props.tabs.at(-1)?.id === __props.selected,
@@ -28681,7 +29035,7 @@ var _sfc_main$47 = {
 								menu.value.open = false;
 							})
 						}, null, 8, ["disabled"]),
-						__props.kind === "script" || __props.tabs.length > 1 ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.kind === "script" || __props.tabs.length > 1 ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							icon: "close",
 							label: "Close tab",
@@ -28694,7 +29048,7 @@ var _sfc_main$47 = {
 						__props.closedTabs.length ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
 							createBaseVNode("strong", null, toDisplayString(unref(t)(__props.kind === "script" ? "Closed script tabs" : "Closed search tabs")), 1),
 							(openBlock(true), createElementBlock(Fragment, null, renderList(__props.closedTabs, (tab) => {
-								return openBlock(), createBlock(_sfc_main$138, {
+								return openBlock(), createBlock(_sfc_main$141, {
 									key: tab.id,
 									icon: "history",
 									label: tab.title,
@@ -28704,7 +29058,7 @@ var _sfc_main$47 = {
 									}
 								}, null, 8, ["label", "onClick"]);
 							}), 128)),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								label: "Clear tab history",
 								onClick: _cache[13] || (_cache[13] = ($event) => {
 									emit("clear-history");
@@ -28715,7 +29069,7 @@ var _sfc_main$47 = {
 					]),
 					_: 1
 				}, 8, ["icon"])) : createCommentVNode("", true),
-				__props.kind === "search" && (overflow.value || __props.mobile) ? (openBlock(), createBlock(_sfc_main$159, {
+				__props.kind === "search" && (overflow.value || __props.mobile) ? (openBlock(), createBlock(_sfc_main$160, {
 					key: 3,
 					ref_key: "menu",
 					ref: menu,
@@ -28733,7 +29087,7 @@ var _sfc_main$47 = {
 							role: "menu",
 							"aria-label": unref(t)("Open search tabs")
 						}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tabs, (tab, index) => {
-							return openBlock(), createBlock(_sfc_main$164, {
+							return openBlock(), createBlock(_sfc_main$167, {
 								key: tab.id,
 								label: tab.title,
 								icon: "tab",
@@ -28755,21 +29109,21 @@ var _sfc_main$47 = {
 							]);
 						}), 128))], 8, _hoisted_6$11),
 						_cache[21] || (_cache[21] = createBaseVNode("hr", null, null, -1)),
-						__props.mobile ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.mobile ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 1,
 							icon: "add",
 							label: "Add new search tab",
 							disabled: __props.disabled,
 							onClick: _cache[14] || (_cache[14] = ($event) => menuAction(menu.value, "add"))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						!__props.mobile || __props.tabs.length > 1 ? (openBlock(), createBlock(_sfc_main$138, {
+						!__props.mobile || __props.tabs.length > 1 ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 2,
 							icon: "previous",
 							label: "Move tab left",
 							disabled: __props.disabled || __props.tabs[0]?.id === __props.selected,
 							onClick: _cache[15] || (_cache[15] = ($event) => menuAction(menu.value, "reorder", __props.tabs.findIndex((tab) => tab.id === __props.selected), __props.tabs.findIndex((tab) => tab.id === __props.selected) - 1))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						!__props.mobile || __props.tabs.length > 1 ? (openBlock(), createBlock(_sfc_main$138, {
+						!__props.mobile || __props.tabs.length > 1 ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 3,
 							icon: "next",
 							label: "Move tab right",
@@ -28780,7 +29134,7 @@ var _sfc_main$47 = {
 							_cache[20] || (_cache[20] = createBaseVNode("hr", null, null, -1)),
 							createBaseVNode("strong", null, toDisplayString(unref(t)("Closed search tabs")), 1),
 							(openBlock(true), createElementBlock(Fragment, null, renderList(__props.closedTabs, (tab) => {
-								return openBlock(), createBlock(_sfc_main$164, {
+								return openBlock(), createBlock(_sfc_main$167, {
 									key: tab.id,
 									label: tab.title,
 									icon: "history",
@@ -28793,7 +29147,7 @@ var _sfc_main$47 = {
 									"onClick"
 								]);
 							}), 128)),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								label: "Clear history",
 								icon: "delete",
 								disabled: __props.disabled,
@@ -28808,12 +29162,12 @@ var _sfc_main$47 = {
 						renderSlot(_ctx.$slots, "mobile-leading"),
 						createBaseVNode("span", _hoisted_4$19, toDisplayString(__props.tabs.find((tab) => tab.id === __props.selected)?.title), 1),
 						__props.tabs.length > 1 ? (openBlock(), createElementBlock("small", _hoisted_5$14, toDisplayString(__props.tabs.length), 1)) : createCommentVNode("", true),
-						createVNode(_sfc_main$139, { name: "MDI_CHEVRON_DOWN" })
+						createVNode(_sfc_main$142, { name: "MDI_CHEVRON_DOWN" })
 					]),
 					key: "0"
 				} : void 0]), 1032, ["show-label"])) : createCommentVNode("", true),
 				renderSlot(_ctx.$slots, "actions", { compact: compact.value }),
-				__props.kind === "search" && __props.closedTabs.length && !__props.mobile ? (openBlock(), createBlock(_sfc_main$159, {
+				__props.kind === "search" && __props.closedTabs.length && !__props.mobile ? (openBlock(), createBlock(_sfc_main$160, {
 					key: 4,
 					ref_key: "history",
 					ref: history,
@@ -28822,9 +29176,9 @@ var _sfc_main$47 = {
 					label: unref(t)(__props.closedTabs.length === 1 ? "{count} recently closed search tab" : "{count} recently closed search tabs", { count: __props.closedTabs.length }),
 					icon: "history"
 				}, {
-					trigger: withCtx(() => [createVNode(_sfc_main$139, { name: "history" }), createBaseVNode("span", _hoisted_7$11, toDisplayString(__props.closedTabs.length > 99 ? "99+" : __props.closedTabs.length), 1)]),
+					trigger: withCtx(() => [createVNode(_sfc_main$142, { name: "history" }), createBaseVNode("span", _hoisted_7$11, toDisplayString(__props.closedTabs.length > 99 ? "99+" : __props.closedTabs.length), 1)]),
 					default: withCtx(() => [
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							icon: "delete",
 							label: "Clear history",
 							disabled: __props.disabled,
@@ -28837,7 +29191,7 @@ var _sfc_main$47 = {
 							role: "menu",
 							"aria-label": unref(t)("Closed search tabs")
 						}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.closedTabs, (tab) => {
-							return openBlock(), createBlock(_sfc_main$164, {
+							return openBlock(), createBlock(_sfc_main$167, {
 								key: tab.id,
 								label: tab.title,
 								icon: "history",
@@ -28874,7 +29228,7 @@ var _sfc_main$46 = {
 		const dialog = ref(null), extras = ref(null), opened = ref(false);
 		const width = ref(innerWidth), height = ref(innerHeight), extraHeight = ref(0), top = ref(0);
 		let entered = false, opener, observer;
-		const scene = computed(() => describe$22({
+		const scene = computed(() => describe$23({
 			width: width.value,
 			height: height.value,
 			editable: props.editable,
@@ -28965,11 +29319,11 @@ var _sfc_main$46 = {
 				onKeydown: [_cache[3] || (_cache[3] = withKeys(withModifiers(($event) => close(), ["stop", "prevent"]), ["esc"])), navigateFromContainer],
 				onPointerenter: _cache[4] || (_cache[4] = ($event) => isRef(entered) ? entered.value = true : entered = true)
 			}, [
-				createVNode(_sfc_main$140, {
+				createVNode(_sfc_main$143, {
 					scene: chrome.value,
 					interactive: false
 				}, null, 8, ["scene"]),
-				__props.editable ? (openBlock(), createBlock(_sfc_main$138, {
+				__props.editable ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					class: "navigation-drawer-action",
 					style: normalizeStyle(bounds("navigationEdit")),
@@ -28979,7 +29333,7 @@ var _sfc_main$46 = {
 					disabled: !__props.editEnabled,
 					onClick: edit
 				}, null, 8, ["style", "disabled"])) : createCommentVNode("", true),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					class: "navigation-drawer-action",
 					style: normalizeStyle(bounds("navigationClose")),
 					"icon-only": "",
@@ -30813,7 +31167,7 @@ async function readPreviewImage(file) {
 //#region src/controls/ImagePicker.vue
 var _sfc_main$45 = {
 	components: {
-		AppButton: _sfc_main$138,
+		AppButton: _sfc_main$141,
 		ItemPreview: ItemPreview_default
 	},
 	props: {
@@ -31091,7 +31445,7 @@ function confirmation(model, width, height, language) {
 //#region src/features/projects/ProjectTemplates.vue
 var _sfc_main$44 = {
 	inject: ["openHelp"],
-	components: { FrameView: _sfc_main$140 },
+	components: { FrameView: _sfc_main$143 },
 	props: {
 		ticket: String,
 		packages: Array
@@ -31283,7 +31637,7 @@ function identifier(value) {
 var _sfc_main$43 = {
 	inject: ["openHelp"],
 	components: {
-		FrameView: _sfc_main$140,
+		FrameView: _sfc_main$143,
 		ProjectTemplates: ProjectTemplates_default
 	},
 	props: {
@@ -31807,10 +32161,10 @@ var _sfc_main$42 = {
 				ref: root,
 				class: "project-card frame-project-card",
 				"data-project": __props.record.code
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				interactive: false
-			}, null, 8, ["scene"]), createVNode(_sfc_main$138, {
+			}, null, 8, ["scene"]), createVNode(_sfc_main$141, {
 				class: "project-card-hit frame-hit-target",
 				label: __props.record.title || __props.record.code,
 				"translate-label": false,
@@ -31985,11 +32339,11 @@ var _sfc_main$41 = {
 				class: "project-header",
 				style: normalizeStyle({ height: heading.value.height + "px" })
 			}, [
-				createVNode(_sfc_main$140, {
+				createVNode(_sfc_main$143, {
 					scene: chrome.value,
 					interactive: false
 				}, null, 8, ["scene"]),
-				!__props.inline ? (openBlock(), createBlock(_sfc_main$138, {
+				!__props.inline ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					class: "project-close",
 					"icon-only": "",
@@ -31998,7 +32352,7 @@ var _sfc_main$41 = {
 					onClick: close
 				})) : createCommentVNode("", true),
 				createBaseVNode("div", _hoisted_2$26, [(openBlock(true), createElementBlock(Fragment, null, renderList(filters.value, (filter) => {
-					return openBlock(), createBlock(_sfc_main$160, {
+					return openBlock(), createBlock(_sfc_main$163, {
 						key: filter.key,
 						compact: "",
 						"model-value": filter.value.value,
@@ -32024,7 +32378,7 @@ var _sfc_main$41 = {
 						height: group.layout.height + "px",
 						width: categoryWidth.value + "px"
 					})
-				}, [createVNode(_sfc_main$140, {
+				}, [createVNode(_sfc_main$143, {
 					class: "project-category-heading",
 					scene: unref(categoryHeader)(categoryWidth.value, group.title, group.projects.length, unref(t)),
 					interactive: false
@@ -32247,7 +32601,7 @@ var _sfc_main$40 = {
 					flex: "none",
 					minWidth: 0
 				})
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				ref_key: "frame",
 				ref: frame,
 				scene: scene.value,
@@ -32401,10 +32755,10 @@ var _sfc_main$39 = {
 					flex: "none",
 					overflow: "hidden"
 				})
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				onEvent: dispatch
-			}, null, 8, ["scene"]), createVNode(_sfc_main$159, {
+			}, null, 8, ["scene"]), createVNode(_sfc_main$160, {
 				ref_key: "menu",
 				ref: menu,
 				"external-trigger": "",
@@ -32414,7 +32768,7 @@ var _sfc_main$39 = {
 				anchor: anchor.value,
 				width: 300
 			}, {
-				default: withCtx(() => [createVNode(_sfc_main$128, {
+				default: withCtx(() => [createVNode(_sfc_main$131, {
 					actions: actions$5.value,
 					onTriggered: _cache[0] || (_cache[0] = (type) => emit("event", { type }))
 				}, null, 8, ["actions"])]),
@@ -32688,7 +33042,7 @@ var _sfc_main$38 = {
 		}
 		onBeforeUnmount(() => clearTimeout(blurTimer));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$33, [createVNode(_sfc_main$157, {
+			return openBlock(), createElementBlock("div", _hoisted_1$33, [createVNode(_sfc_main$161, {
 				ref_key: "field",
 				ref: field,
 				"model-value": __props.frameNode.text,
@@ -32711,7 +33065,7 @@ var _sfc_main$38 = {
 				"aria-expanded",
 				"aria-controls",
 				"aria-activedescendant"
-			]), createVNode(_sfc_main$159, {
+			]), createVNode(_sfc_main$160, {
 				ref_key: "popup",
 				ref: popup,
 				"external-trigger": "",
@@ -32729,7 +33083,7 @@ var _sfc_main$38 = {
 					role: "listbox",
 					"aria-label": __props.frameNode.label
 				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(records.value, (record, index) => {
-					return openBlock(), createBlock(_sfc_main$138, {
+					return openBlock(), createBlock(_sfc_main$141, {
 						key: index,
 						id: unref(suggestionId) + "-" + index,
 						role: "option",
@@ -32741,7 +33095,7 @@ var _sfc_main$38 = {
 						onPointerdown: _cache[0] || (_cache[0] = withModifiers(() => {}, ["prevent"])),
 						onClick: ($event) => accept(index)
 					}, {
-						default: withCtx(() => [createVNode(_sfc_main$140, {
+						default: withCtx(() => [createVNode(_sfc_main$143, {
 							scene: scenes.value[index],
 							interactive: false
 						}, null, 8, ["scene"])]),
@@ -32764,10 +33118,10 @@ var _sfc_main$38 = {
 var _sfc_main$36 = {
 	components: {
 		SearchEditorPart: _sfc_main$40,
-		AppButton: _sfc_main$138,
-		AppSelect: _sfc_main$153,
-		AppSwitch: _sfc_main$154,
-		AppIcon: _sfc_main$139,
+		AppButton: _sfc_main$141,
+		AppSelect: _sfc_main$156,
+		AppSwitch: _sfc_main$157,
+		AppIcon: _sfc_main$142,
 		SearchPresetBar: _sfc_main$39,
 		ConditionCards: {
 			__name: "ConditionCards",
@@ -32813,7 +33167,7 @@ var _sfc_main$36 = {
 							position: "relative",
 							height: scene.value.contentHeight + "px"
 						})
-					}, [createVNode(_sfc_main$140, {
+					}, [createVNode(_sfc_main$143, {
 						scene: scene.value,
 						views: views.value,
 						onEvent: dispatch
@@ -33544,7 +33898,7 @@ var _sfc_main$35 = {
 		}
 		__expose({ close });
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock(Fragment, null, [createVNode(_sfc_main$159, {
+			return openBlock(), createElementBlock(Fragment, null, [createVNode(_sfc_main$160, {
 				ref_key: "menu",
 				ref: menu,
 				label: __props.label,
@@ -33553,8 +33907,8 @@ var _sfc_main$35 = {
 				width: __props.kind === "filters" ? 300 : 280,
 				onToggle: opened
 			}, {
-				trigger: withCtx(() => [createVNode(_sfc_main$139, { name: __props.icon }, null, 8, ["name"]), !__props.iconOnly ? (openBlock(), createElementBlock("span", _hoisted_1$31, toDisplayString(unref(t)(__props.label)), 1)) : createCommentVNode("", true)]),
-				default: withCtx(() => [createVNode(_sfc_main$128, {
+				trigger: withCtx(() => [createVNode(_sfc_main$142, { name: __props.icon }, null, 8, ["name"]), !__props.iconOnly ? (openBlock(), createElementBlock("span", _hoisted_1$31, toDisplayString(unref(t)(__props.label)), 1)) : createCommentVNode("", true)]),
+				default: withCtx(() => [createVNode(_sfc_main$131, {
 					actions: actions.value,
 					onTriggered: choose
 				}, null, 8, ["actions"])]),
@@ -33564,7 +33918,7 @@ var _sfc_main$35 = {
 				"icon",
 				"boundary",
 				"width"
-			]), __props.kind === "sort" ? (openBlock(), createBlock(_sfc_main$159, {
+			]), __props.kind === "sort" ? (openBlock(), createBlock(_sfc_main$160, {
 				key: 0,
 				ref_key: "editor",
 				ref: editor,
@@ -33577,7 +33931,7 @@ var _sfc_main$35 = {
 				label: "Sort by column",
 				"close-on-select": false
 			}, {
-				default: withCtx(() => [createVNode(_sfc_main$140, {
+				default: withCtx(() => [createVNode(_sfc_main$143, {
 					scene: scene.value,
 					style: { "height": "156px" },
 					onEvent: edit
@@ -33617,7 +33971,7 @@ var ProfileActivity_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				ref: content,
 				class: "profile-activity-cards"
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.expanded ? __props.records : __props.records.slice(0, 6), (record) => {
-				return openBlock(), createBlock(_sfc_main$162, {
+				return openBlock(), createBlock(_sfc_main$165, {
 					key: record.eventId,
 					record,
 					onActivity: ($event) => emit("activity", record),
@@ -34573,9 +34927,9 @@ var _sfc_main$33 = {
 				"aria-busy": busy.value || relatedBusy.value,
 				onCancel: withModifiers(close, ["prevent"])
 			}, [createBaseVNode("header", null, [
-				createVNode(_sfc_main$139, { name: "MDI_ACCOUNT" }),
+				createVNode(_sfc_main$142, { name: "MDI_ACCOUNT" }),
 				createBaseVNode("strong", null, toDisplayString(unref(t)(directory.value ? "Users" : "User profile")), 1),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					label: "Close profile",
 					icon: "close",
 					"icon-only": "",
@@ -34586,7 +34940,7 @@ var _sfc_main$33 = {
 				ref_key: "body",
 				ref: body,
 				class: "user-profile-layout"
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				ref_key: "frame",
 				ref: frame,
 				scene: scene.value,
@@ -34609,7 +34963,7 @@ var _sfc_main$33 = {
 				"aria-busy": saving.value,
 				onCancel: _cache[1] || (_cache[1] = withModifiers(($event) => closeEditor(), ["prevent"]))
 			}, [
-				createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(unref(t)(creating.value ? "Add user" : mode.value === "groups" ? "Edit group membership" : "Edit user profile")), 1), createVNode(_sfc_main$138, {
+				createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(unref(t)(creating.value ? "Add user" : mode.value === "groups" ? "Edit group membership" : "Edit user profile")), 1), createVNode(_sfc_main$141, {
 					icon: "close",
 					label: "Close profile editor",
 					"icon-only": "",
@@ -34631,7 +34985,7 @@ var _sfc_main$33 = {
 					ref: editorBody,
 					class: "profile-editor-frame",
 					onSubmit: withModifiers(save, ["prevent"])
-				}, [createVNode(_sfc_main$140, {
+				}, [createVNode(_sfc_main$143, {
 					ref_key: "editorFrame",
 					ref: editorFrame,
 					scene: editorScene.value,
@@ -34655,8 +35009,8 @@ var _sfc_main$33 = {
 //#region src/features/workspace/QuickFilterEditor.vue
 var _sfc_main$32 = {
 	components: {
-		AppButton: _sfc_main$138,
-		AppSwitch: _sfc_main$154,
+		AppButton: _sfc_main$141,
+		AppSwitch: _sfc_main$157,
 		SearchEditorPart: _sfc_main$40,
 		QuickFilterChip: QuickFilterChip_default
 	},
@@ -35164,15 +35518,15 @@ var _sfc_main$31 = {
 				"placeholder",
 				"disabled"
 			]), createBaseVNode("div", _hoisted_2$21, [(openBlock(true), createElementBlock(Fragment, null, renderList(groups.value, (group) => {
-				return openBlock(), createElementBlock(Fragment, { key: group.title }, [createVNode(_sfc_main$150, { title: group.title }, null, 8, ["title"]), (openBlock(true), createElementBlock(Fragment, null, renderList(group.users, (user) => {
-					return openBlock(), createBlock(_sfc_main$145, {
+				return openBlock(), createElementBlock(Fragment, { key: group.title }, [createVNode(_sfc_main$153, { title: group.title }, null, 8, ["title"]), (openBlock(true), createElementBlock(Fragment, null, renderList(group.users, (user) => {
+					return openBlock(), createBlock(_sfc_main$148, {
 						key: user.login,
 						class: "user-picker-surface",
 						selected: selected.value.includes(user.login),
 						"corner-radius": 12,
 						inset: 0
 					}, {
-						default: withCtx(() => [createVNode(_sfc_main$138, {
+						default: withCtx(() => [createVNode(_sfc_main$141, {
 							class: "user-picker-row",
 							role: "checkbox",
 							"aria-checked": selected.value.includes(user.login),
@@ -35194,11 +35548,11 @@ var _sfc_main$31 = {
 									"accent"
 								]),
 								createBaseVNode("span", _hoisted_3$18, [createBaseVNode("strong", null, toDisplayString(user.displayName || user.login), 1), createBaseVNode("small", null, [createTextVNode(toDisplayString(user.login), 1), user.groups?.length ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString(user.groups.join(", ")), 1)], 64)) : createCommentVNode("", true)])]),
-								selected.value.includes(user.login) ? (openBlock(), createBlock(_sfc_main$139, {
+								selected.value.includes(user.login) ? (openBlock(), createBlock(_sfc_main$142, {
 									key: 0,
 									class: "user-picker-check",
 									name: "MDI_CHECK_CIRCLE"
-								})) : user.login === __props.currentLogin ? (openBlock(), createElementBlock("span", _hoisted_4$13, [createVNode(_sfc_main$139, { name: "MDI_LOCK" }), createTextVNode(toDisplayString(unref(t)("Current user")), 1)])) : createCommentVNode("", true)
+								})) : user.login === __props.currentLogin ? (openBlock(), createElementBlock("span", _hoisted_4$13, [createVNode(_sfc_main$142, { name: "MDI_LOCK" }), createTextVNode(toDisplayString(unref(t)("Current user")), 1)])) : createCommentVNode("", true)
 							]),
 							_: 2
 						}, 1032, [
@@ -35362,10 +35716,10 @@ var QuickFilterOptions_default = /*#__PURE__*/ _plugin_vue_export_helper_default
 var mine = "__current_login__";
 var _sfc_main$29 = {
 	components: {
-		FrameView: _sfc_main$140,
-		AppButton: _sfc_main$138,
-		AppIcon: _sfc_main$139,
-		AppMenu: _sfc_main$159,
+		FrameView: _sfc_main$143,
+		AppButton: _sfc_main$141,
+		AppIcon: _sfc_main$142,
+		AppMenu: _sfc_main$160,
 		UserPicker: _sfc_main$31,
 		QuickFilterOptions: QuickFilterOptions_default,
 		QuickFilterChip: QuickFilterChip_default
@@ -35835,7 +36189,7 @@ var _sfc_main$28 = {
 				class: "search-filter-panel",
 				onSubmit: _cache[3] || (_cache[3] = withModifiers(($event) => _ctx.$emit("apply"), ["prevent"]))
 			}, [
-				createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Filter field")), 1), createVNode(_sfc_main$153, {
+				createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Filter field")), 1), createVNode(_sfc_main$156, {
 					modelValue: field.value,
 					"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => field.value = $event),
 					options: __props.columns.map((name) => ({
@@ -35849,19 +36203,19 @@ var _sfc_main$28 = {
 					"options",
 					"disabled"
 				])]),
-				createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Filter value")), 1), createVNode(_sfc_main$157, {
+				createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Filter value")), 1), createVNode(_sfc_main$161, {
 					modelValue: value.value,
 					"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => value.value = $event),
 					placeholder: "Filter value",
 					disabled: __props.disabled
 				}, null, 8, ["modelValue", "disabled"])]),
-				createBaseVNode("label", _hoisted_1$24, [createVNode(_sfc_main$154, {
+				createBaseVNode("label", _hoisted_1$24, [createVNode(_sfc_main$157, {
 					modelValue: retired.value,
 					"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => retired.value = $event),
 					label: "Show retired",
 					disabled: __props.disabled
 				}, null, 8, ["modelValue", "disabled"]), createBaseVNode("span", null, toDisplayString(unref(t)("Show retired")), 1)]),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					type: "submit",
 					label: "Apply filters",
 					highlighted: "",
@@ -35904,7 +36258,7 @@ function describe$7(model) {
 	const stacked = model.stackSize > 1;
 	const results = model.kind === "results";
 	const ownChrome = results && !(model.floating && capabilities.floatingResultsTitle) || model.kind === "commit_queue" && capabilities.queueOwnChrome;
-	const height = !stacked && ownChrome ? 0 : layout$4.dockTitleHeight;
+	const height = !stacked && ownChrome ? 0 : layout$5.dockTitleHeight;
 	const resultsActions = !results || capabilities.resultsActions;
 	const actions = [
 		[
@@ -36993,7 +37347,7 @@ var _sfc_main$26 = {
 					height: h * bounds.height
 				};
 				if (px < rect.x || py < rect.y || px > rect.x + rect.width || py > rect.y + rect.height) continue;
-				const side = targetZone(px, py, rect, layout$4.dockTitleHeight, item.active !== "commit_queue");
+				const side = targetZone(px, py, rect, layout$5.dockTitleHeight, item.active !== "commit_queue");
 				drop.value = {
 					target: item.active,
 					side,
@@ -37136,7 +37490,7 @@ var _sfc_main$26 = {
 					key: 0,
 					defer: "",
 					to: "#mobile-panel-picker"
-				}, [createVNode(_sfc_main$153, {
+				}, [createVNode(_sfc_main$156, {
 					class: "phone-panel-picker",
 					"model-value": projection.value.stacks[0]?.active || "results",
 					label: "Active panel",
@@ -37158,7 +37512,7 @@ var _sfc_main$26 = {
 						style: normalizeStyle(rectangle(panel.id)),
 						onPointerdown: ($event) => !__props.mobile && state.value.panels[panel.id].floating && raise(panel.id)
 					}, [
-						__props.mobile && !["results", "notes"].includes(panel.id) ? (openBlock(), createElementBlock("header", _hoisted_2$19, [createVNode(_sfc_main$138, {
+						__props.mobile && !["results", "notes"].includes(panel.id) ? (openBlock(), createElementBlock("header", _hoisted_2$19, [createVNode(_sfc_main$141, {
 							label: "Back to search",
 							icon: "MDI_ARROW_LEFT",
 							"icon-only": "",
@@ -37199,7 +37553,7 @@ var _sfc_main$26 = {
 								"selected",
 								"tabs",
 								"onReorder"
-							])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createVNode(_sfc_main$139, {
+							])) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createVNode(_sfc_main$142, {
 								style: normalizeStyle(chromeStyle(panel.id, "dockIcon")),
 								"data-dock-control": "dockIcon",
 								name: panel.icon
@@ -37216,7 +37570,7 @@ var _sfc_main$26 = {
 								"aria-label": unref(t)("Drag to move or dock"),
 								onPointerdown: ($event) => start($event, panel.id, "move")
 							}, [createVNode(DockGrip_default)], 44, _hoisted_4$11)) : createCommentVNode("", true),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								style: normalizeStyle(chromeStyle(panel.id, "dockHelp")),
 								"data-dock-control": "dockHelp",
 								"icon-only": "",
@@ -37224,7 +37578,7 @@ var _sfc_main$26 = {
 								label: "Help",
 								onClick: ($event) => emit("help", "dock." + panel.id)
 							}, null, 8, ["style", "onClick"]),
-							!__props.mobile ? (openBlock(), createBlock(_sfc_main$138, {
+							!__props.mobile ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 3,
 								style: normalizeStyle(chromeStyle(panel.id, "dockMaximize")),
 								"data-dock-control": "dockMaximize",
@@ -37238,7 +37592,7 @@ var _sfc_main$26 = {
 								"label",
 								"onClick"
 							])) : createCommentVNode("", true),
-							!__props.mobile ? (openBlock(), createBlock(_sfc_main$159, {
+							!__props.mobile ? (openBlock(), createBlock(_sfc_main$160, {
 								key: 4,
 								style: normalizeStyle(chromeStyle(panel.id, "dockPosition")),
 								"data-dock-control": "dockPosition",
@@ -37246,7 +37600,7 @@ var _sfc_main$26 = {
 								icon: "MDI_DOCK_WINDOW"
 							}, {
 								default: withCtx(() => [
-									createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Place relative to")), 1), createVNode(_sfc_main$153, {
+									createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Place relative to")), 1), createVNode(_sfc_main$156, {
 										modelValue: positionTarget.value,
 										"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => positionTarget.value = $event),
 										label: "Place relative to",
@@ -37263,7 +37617,7 @@ var _sfc_main$26 = {
 										["center", "Stack panels"],
 										["swap", "Swap panels"]
 									], ([side, title]) => {
-										return createVNode(_sfc_main$138, {
+										return createVNode(_sfc_main$141, {
 											key: side,
 											label: title,
 											disabled: positionTarget.value === panel.id || !visible.value.some((item) => item.id === positionTarget.value && !state.value.panels[item.id].floating),
@@ -37275,7 +37629,7 @@ var _sfc_main$26 = {
 										]);
 									}), 64)),
 									_cache[23] || (_cache[23] = createBaseVNode("hr", null, null, -1)),
-									createVNode(_sfc_main$138, {
+									createVNode(_sfc_main$141, {
 										label: state.value.panels[panel.id].floating ? "Dock panel" : "Float panel",
 										icon: "MDI_DOCK_WINDOW",
 										onClick: ($event) => state.value.panels[panel.id].floating ? dock(panel.id) : float(panel.id)
@@ -37283,7 +37637,7 @@ var _sfc_main$26 = {
 								]),
 								_: 2
 							}, 1032, ["style", "label"])) : createCommentVNode("", true),
-							panel.closable ? (openBlock(), createBlock(_sfc_main$138, {
+							panel.closable ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 5,
 								style: normalizeStyle(chromeStyle(panel.id, "dockClose")),
 								"data-dock-control": "dockClose",
@@ -37307,7 +37661,7 @@ var _sfc_main$26 = {
 							"aria-label": unref(t)("Resize panel: {name}", { name: unref(t)(panel.title) }),
 							onPointerdown: ($event) => start($event, panel.id, "resize"),
 							onKeydown: ($event) => floatSize($event, panel.id)
-						}, [createVNode(_sfc_main$139, { name: "MDI_RESIZE_BOTTOM_RIGHT" })], 40, _hoisted_6$7)) : createCommentVNode("", true),
+						}, [createVNode(_sfc_main$142, { name: "MDI_RESIZE_BOTTOM_RIGHT" })], 40, _hoisted_6$7)) : createCommentVNode("", true),
 						state.value.panels[panel.id].floating && !compact.value && !maximized.value ? (openBlock(), createElementBlock(Fragment, { key: 3 }, renderList([
 							"left",
 							"right",
@@ -37360,7 +37714,7 @@ var _sfc_main$26 = {
 					"aria-hidden": "true"
 				}, null, 4)) : createCommentVNode("", true),
 				drop.value ? (openBlock(), createElementBlock("div", _hoisted_9$6, toDisplayString(unref(t)("Drop to dock")) + ": " + toDisplayString(unref(t)(drop.value.side)), 1)) : createCommentVNode("", true),
-				createVNode(_sfc_main$159, {
+				createVNode(_sfc_main$160, {
 					ref_key: "contextMenu",
 					ref: contextMenu,
 					class: "dock-context-menu",
@@ -37368,23 +37722,23 @@ var _sfc_main$26 = {
 					overlay: ""
 				}, {
 					default: withCtx(() => [
-						createVNode(_sfc_main$164, {
+						createVNode(_sfc_main$167, {
 							label: "Help for this dock",
 							icon: "help",
 							onClick: _cache[1] || (_cache[1] = ($event) => emit("help", "dock." + contextPanel.value))
 						}),
 						_cache[24] || (_cache[24] = createBaseVNode("hr", null, null, -1)),
-						createVNode(_sfc_main$164, {
+						createVNode(_sfc_main$167, {
 							label: state.value.panels[contextPanel.value].floating ? "Dock to workspace" : "Float panel",
 							icon: "MDI_DOCK_WINDOW",
 							onClick: _cache[2] || (_cache[2] = ($event) => state.value.panels[contextPanel.value].floating ? dock(contextPanel.value) : float(contextPanel.value))
 						}, null, 8, ["label"]),
-						createVNode(_sfc_main$164, {
+						createVNode(_sfc_main$167, {
 							label: maximized.value === contextPanel.value ? "Restore panel" : "Maximize panel",
 							icon: "MDI_FIT_TO_SCREEN",
 							onClick: _cache[3] || (_cache[3] = ($event) => maximize(contextPanel.value))
 						}, null, 8, ["label"]),
-						contextPanel.value !== "results" ? (openBlock(), createBlock(_sfc_main$164, {
+						contextPanel.value !== "results" ? (openBlock(), createBlock(_sfc_main$167, {
 							key: 0,
 							label: "Close dock",
 							icon: "close",
@@ -37396,7 +37750,7 @@ var _sfc_main$26 = {
 				(openBlock(), createBlock(Teleport, {
 					defer: "",
 					to: __props.resultsActive && __props.menuTarget ? __props.menuTarget : "#workspace-data"
-				}, [!__props.mobile ? withDirectives((openBlock(), createBlock(_sfc_main$159, {
+				}, [!__props.mobile ? withDirectives((openBlock(), createBlock(_sfc_main$160, {
 					key: 0,
 					class: normalizeClass(["dock-menu", { "dock-menu-toolbar": __props.resultsActive && __props.menuTarget }]),
 					label: "Workspace panels",
@@ -37405,7 +37759,7 @@ var _sfc_main$26 = {
 					width: 280
 				}, {
 					default: withCtx(() => [
-						createVNode(_sfc_main$159, {
+						createVNode(_sfc_main$160, {
 							class: "dock-group-menu",
 							label: "Browsing",
 							icon: "view-kanban",
@@ -37415,30 +37769,30 @@ var _sfc_main$26 = {
 							width: 280
 						}, {
 							trigger: withCtx(() => [
-								createVNode(_sfc_main$139, { name: "view-kanban" }),
+								createVNode(_sfc_main$142, { name: "view-kanban" }),
 								createBaseVNode("span", null, toDisplayString(unref(t)("Browsing")), 1),
-								createVNode(_sfc_main$139, { name: "next" })
+								createVNode(_sfc_main$142, { name: "next" })
 							]),
 							default: withCtx(() => [
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: "Results",
 									icon: "search",
 									checked: state.value.panels.results.visible,
 									disabled: ""
 								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: "Description",
 									icon: "description",
 									checked: state.value.panels.description.visible,
 									onClick: _cache[5] || (_cache[5] = ($event) => toggle("description"))
 								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: "Snapshot Browser",
 									icon: "snapshot",
 									checked: state.value.panels.snapshot.visible,
 									onClick: _cache[6] || (_cache[6] = ($event) => toggle("snapshot"))
 								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: "Knowledge Base",
 									icon: "book-open",
 									checked: state.value.panels.knowledge.visible,
@@ -37447,7 +37801,7 @@ var _sfc_main$26 = {
 							]),
 							_: 1
 						}, 8, ["boundary"]),
-						createVNode(_sfc_main$159, {
+						createVNode(_sfc_main$160, {
 							class: "dock-group-menu",
 							label: "Tasks and reports",
 							icon: "task-alt",
@@ -37457,25 +37811,25 @@ var _sfc_main$26 = {
 							width: 280
 						}, {
 							trigger: withCtx(() => [
-								createVNode(_sfc_main$139, { name: "task-alt" }),
+								createVNode(_sfc_main$142, { name: "task-alt" }),
 								createBaseVNode("span", null, toDisplayString(unref(t)("Tasks and reports")), 1),
-								createVNode(_sfc_main$139, { name: "next" })
+								createVNode(_sfc_main$142, { name: "next" })
 							]),
 							default: withCtx(() => [
-								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$164, {
+								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$167, {
 									key: 0,
 									label: "Task Manager",
 									icon: "MDI_CLIPBOARD_TEXT_OUTLINE",
 									checked: state.value.panels.tasks.visible,
 									onClick: _cache[8] || (_cache[8] = ($event) => toggle("tasks"))
 								}, null, 8, ["checked"])) : createCommentVNode("", true),
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: "Task Inspector",
 									icon: "comment",
 									checked: state.value.panels.notes.visible,
 									onClick: _cache[9] || (_cache[9] = ($event) => toggle("notes"))
 								}, null, 8, ["checked"]),
-								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$164, {
+								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$167, {
 									key: 1,
 									label: "Task Calendar",
 									icon: "MDI_CALENDAR_MONTH",
@@ -37485,7 +37839,7 @@ var _sfc_main$26 = {
 							]),
 							_: 1
 						}, 8, ["boundary"]),
-						createVNode(_sfc_main$159, {
+						createVNode(_sfc_main$160, {
 							class: "dock-group-menu",
 							label: "Tools",
 							icon: "settings-suggest",
@@ -37495,30 +37849,30 @@ var _sfc_main$26 = {
 							width: 280
 						}, {
 							trigger: withCtx(() => [
-								createVNode(_sfc_main$139, { name: "settings-suggest" }),
+								createVNode(_sfc_main$142, { name: "settings-suggest" }),
 								createBaseVNode("span", null, toDisplayString(unref(t)("Tools")), 1),
-								createVNode(_sfc_main$139, { name: "next" })
+								createVNode(_sfc_main$142, { name: "next" })
 							]),
 							default: withCtx(() => [
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: "Drop Plate",
 									icon: "upload",
 									checked: state.value.panels.drop_plate.visible,
 									onClick: _cache[11] || (_cache[11] = ($event) => toggle("drop_plate"))
 								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: "Commit Queue",
 									icon: "queue",
 									checked: state.value.panels.commit_queue.visible,
 									onClick: _cache[12] || (_cache[12] = ($event) => toggle("commit_queue"))
 								}, null, 8, ["checked"]),
 								_cache[25] || (_cache[25] = createBaseVNode("hr", null, null, -1)),
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: state.value.panels.results.floating ? "Dock results" : "Float results",
 									icon: "MDI_DOCK_WINDOW",
 									onClick: _cache[13] || (_cache[13] = ($event) => state.value.panels.results.floating ? dock("results") : float("results"))
 								}, null, 8, ["label"]),
-								createVNode(_sfc_main$164, {
+								createVNode(_sfc_main$167, {
 									label: maximized.value === "results" ? "Restore panel" : "Maximize panel",
 									icon: "MDI_FIT_TO_SCREEN",
 									onClick: _cache[14] || (_cache[14] = ($event) => maximize("results"))
@@ -37529,7 +37883,7 @@ var _sfc_main$26 = {
 							_: 3
 						}, 8, ["boundary"]),
 						_cache[27] || (_cache[27] = createBaseVNode("hr", null, null, -1)),
-						createVNode(_sfc_main$159, {
+						createVNode(_sfc_main$160, {
 							ref_key: "presetMenu",
 							ref: presetMenu,
 							class: "dock-presets-menu dock-group-menu",
@@ -37542,12 +37896,12 @@ var _sfc_main$26 = {
 							width: 330
 						}, {
 							trigger: withCtx(() => [
-								createVNode(_sfc_main$139, { name: "dashboard-customize" }),
+								createVNode(_sfc_main$142, { name: "dashboard-customize" }),
 								createBaseVNode("span", null, toDisplayString(unref(t)("Layout presets")), 1),
-								createVNode(_sfc_main$139, { name: "next" })
+								createVNode(_sfc_main$142, { name: "next" })
 							]),
 							default: withCtx(() => [
-								createBaseVNode("header", _hoisted_10$6, [createBaseVNode("strong", null, toDisplayString(unref(t)("Layout presets")), 1), createVNode(_sfc_main$138, {
+								createBaseVNode("header", _hoisted_10$6, [createBaseVNode("strong", null, toDisplayString(unref(t)("Layout presets")), 1), createVNode(_sfc_main$141, {
 									"icon-only": "",
 									label: "Refresh layout presets",
 									icon: "refresh",
@@ -37560,7 +37914,7 @@ var _sfc_main$26 = {
 										key: row.view,
 										class: "dock-preset-row"
 									}, [
-										createVNode(_sfc_main$138, {
+										createVNode(_sfc_main$141, {
 											label: row.title,
 											"translate-label": false,
 											"aria-pressed": activePreset.value === row.view,
@@ -37571,7 +37925,7 @@ var _sfc_main$26 = {
 												presetMenu.value.open = false;
 											}
 										}, {
-											default: withCtx(() => [createVNode(_sfc_main$139, { name: row.valid ? "MDI_VIEW_DASHBOARD" : "warning" }, null, 8, ["name"]), createBaseVNode("span", null, [createBaseVNode("strong", null, toDisplayString(row.title), 1), createBaseVNode("small", null, toDisplayString(row.valid ? unref(t)("{panels} panels · {items} sidebar items", {
+											default: withCtx(() => [createVNode(_sfc_main$142, { name: row.valid ? "MDI_VIEW_DASHBOARD" : "warning" }, null, 8, ["name"]), createBaseVNode("span", null, [createBaseVNode("strong", null, toDisplayString(row.title), 1), createBaseVNode("small", null, toDisplayString(row.valid ? unref(t)("{panels} panels · {items} sidebar items", {
 												panels: row.panelCount,
 												items: row.assignedCount
 											}) : unref(t)("Invalid layout preset")), 1)])]),
@@ -37583,7 +37937,7 @@ var _sfc_main$26 = {
 											"title",
 											"onClick"
 										]),
-										__props.canAdminister ? (openBlock(), createBlock(_sfc_main$138, {
+										__props.canAdminister ? (openBlock(), createBlock(_sfc_main$141, {
 											key: 0,
 											"icon-only": "",
 											label: "Replace with current layout",
@@ -37591,7 +37945,7 @@ var _sfc_main$26 = {
 											disabled: presetBusy.value || uncertain.value,
 											onClick: ($event) => savePreset(row)
 										}, null, 8, ["disabled", "onClick"])) : createCommentVNode("", true),
-										__props.canAdminister ? (openBlock(), createBlock(_sfc_main$138, {
+										__props.canAdminister ? (openBlock(), createBlock(_sfc_main$141, {
 											key: 1,
 											"icon-only": "",
 											label: "Delete layout preset",
@@ -37607,7 +37961,7 @@ var _sfc_main$26 = {
 										])) : createCommentVNode("", true)
 									]);
 								}), 128)),
-								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$138, {
+								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$141, {
 									key: 1,
 									label: "Save current layout…",
 									icon: "add",
@@ -37618,7 +37972,7 @@ var _sfc_main$26 = {
 							]),
 							_: 1
 						}, 8, ["boundary"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Reset layout",
 							icon: "sync",
 							onClick: reset
@@ -37643,13 +37997,13 @@ var _sfc_main$26 = {
 					disabled: presetBusy.value
 				}, null, 8, _hoisted_14$4), [[vModelText, presetTitle.value]])]),
 				presetError.value ? (openBlock(), createElementBlock("p", _hoisted_15$4, toDisplayString(unref(t)(presetError.value)), 1)) : createCommentVNode("", true),
-				createBaseVNode("div", _hoisted_16$4, [createVNode(_sfc_main$138, {
+				createBaseVNode("div", _hoisted_16$4, [createVNode(_sfc_main$141, {
 					type: "submit",
 					label: "Save",
 					icon: "save",
 					highlighted: "",
 					disabled: presetBusy.value || uncertain.value || !presetTitle.value.trim()
-				}, null, 8, ["disabled"]), createVNode(_sfc_main$138, {
+				}, null, 8, ["disabled"]), createVNode(_sfc_main$141, {
 					label: "Cancel",
 					disabled: presetBusy.value,
 					onClick: _cache[17] || (_cache[17] = ($event) => nameDialog.value.close())
@@ -37664,13 +38018,13 @@ var _sfc_main$26 = {
 				createBaseVNode("h2", null, toDisplayString(unref(t)("Delete layout preset?")), 1),
 				createBaseVNode("p", null, toDisplayString(unref(t)("The server layout preset “{name}” will be deleted.", { name: deleting.value?.title || "" })), 1),
 				presetError.value ? (openBlock(), createElementBlock("p", _hoisted_18$3, toDisplayString(unref(t)(presetError.value)), 1)) : createCommentVNode("", true),
-				createBaseVNode("div", _hoisted_19$3, [createVNode(_sfc_main$138, {
+				createBaseVNode("div", _hoisted_19$3, [createVNode(_sfc_main$141, {
 					label: "Delete",
 					icon: "delete",
 					destructive: "",
 					disabled: presetBusy.value || uncertain.value,
 					onClick: _cache[20] || (_cache[20] = ($event) => mutatePreset("delete", { code: deleting.value.code }))
-				}, null, 8, ["disabled"]), createVNode(_sfc_main$138, {
+				}, null, 8, ["disabled"]), createVNode(_sfc_main$141, {
 					label: "Cancel",
 					disabled: presetBusy.value,
 					onClick: _cache[21] || (_cache[21] = ($event) => deleteDialog.value.close())
@@ -37683,11 +38037,11 @@ var _sfc_main$26 = {
 //#region src/features/workspace/TagCloud.vue
 var _sfc_main$25 = {
 	components: {
-		FrameView: _sfc_main$140,
-		AppButton: _sfc_main$138,
-		AppIcon: _sfc_main$139,
-		AppMenu: _sfc_main$159,
-		AppTextField: _sfc_main$157,
+		FrameView: _sfc_main$143,
+		AppButton: _sfc_main$141,
+		AppIcon: _sfc_main$142,
+		AppMenu: _sfc_main$160,
+		AppTextField: _sfc_main$161,
 		BusyIndicator: BusyIndicator_default,
 		QuickFilterChip: QuickFilterChip_default
 	},
@@ -38168,13 +38522,13 @@ var _sfc_main$24 = {
 					"min-width": "0",
 					"overflow": "hidden"
 				}
-			}, [width.value ? (openBlock(), createBlock(_sfc_main$140, {
+			}, [width.value ? (openBlock(), createBlock(_sfc_main$143, {
 				key: 0,
 				ref_key: "frame",
 				ref: frame,
 				scene: scene.value,
 				onEvent: dispatch
-			}, null, 8, ["scene"])) : createCommentVNode("", true), createVNode(_sfc_main$159, {
+			}, null, 8, ["scene"])) : createCommentVNode("", true), createVNode(_sfc_main$160, {
 				ref_key: "popup",
 				ref: popup,
 				"external-trigger": "",
@@ -38186,12 +38540,12 @@ var _sfc_main$24 = {
 				label: kind.value === "pagePicker" ? "Go to page" : kind.value === "size" ? "Items per page" : "Result loading",
 				width: 224
 			}, {
-				default: withCtx(() => [kind.value === "pagePicker" ? (openBlock(), createBlock(_sfc_main$140, {
+				default: withCtx(() => [kind.value === "pagePicker" ? (openBlock(), createBlock(_sfc_main$143, {
 					key: 0,
 					scene: pickerScene.value,
 					style: { "height": "80px" },
 					onEvent: pageEvent
-				}, null, 8, ["scene"])) : (openBlock(), createBlock(_sfc_main$128, {
+				}, null, 8, ["scene"])) : (openBlock(), createBlock(_sfc_main$131, {
 					key: 1,
 					actions: actions.value,
 					onTriggered: choose
@@ -38276,7 +38630,7 @@ var _sfc_main$23 = {
 				ref_key: "host",
 				ref: host,
 				class: normalizeClass(["search-header frame-search-header", { "mobile-search-collapsed": __props.model.compact && __props.model.collapseSearch && !__props.model.searchOpen }])
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views: unref(views),
 				onEvent: _cache[0] || (_cache[0] = (action) => emit("event", action))
@@ -38439,7 +38793,7 @@ var ErrorDetails_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			canConfigure: false
 		}));
 		const scene = computed(() => describe$4(model.value, viewport.value.width, viewport.value.height, appearance.language));
-		const codeComponent = markRaw(_sfc_main$152);
+		const codeComponent = markRaw(_sfc_main$155);
 		const views = computed(() => ({ requests: {
 			component: codeComponent,
 			props: {
@@ -38500,7 +38854,7 @@ var ErrorDetails_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				"aria-label": unref(t)("Event details"),
 				onCancel: withModifiers(close, ["prevent"]),
 				onClose: _cache[0] || (_cache[0] = ($event) => record.value = null)
-			}, [createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(unref(t)("Event details")), 1), createVNode(_sfc_main$138, {
+			}, [createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(unref(t)("Event details")), 1), createVNode(_sfc_main$141, {
 				icon: "close",
 				label: "Close",
 				"icon-only": "",
@@ -38509,7 +38863,7 @@ var ErrorDetails_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				ref_key: "body",
 				ref: body,
 				class: "support-error-body"
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				views: views.value,
 				onEvent: dispatch
@@ -39289,9 +39643,9 @@ var _sfc_main$21 = {
 				})
 			}, [
 				createBaseVNode("header", _hoisted_2$17, [
-					createVNode(_sfc_main$139, { name: "MDI_BUG" }),
+					createVNode(_sfc_main$142, { name: "MDI_BUG" }),
 					createBaseVNode("strong", null, toDisplayString(unref(t)("Debug Log")), 1),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						icon: "close",
 						label: "Close Debug Log",
@@ -39312,7 +39666,7 @@ var _sfc_main$21 = {
 					ref: body,
 					class: "debug-log-screen",
 					"aria-busy": loading.value
-				}, [createVNode(_sfc_main$140, {
+				}, [createVNode(_sfc_main$143, {
 					ref_key: "frame",
 					ref: frame,
 					scene: scene.value,
@@ -39537,7 +39891,7 @@ var _sfc_main$20 = {
 			failed: failed.value
 		}));
 		const scene = computed(() => describe$2(model.value, viewport.value.width, viewport.value.height, appearance.language));
-		const row$10 = (list, record) => row(model.value, record, list.width - 16, appearance.language);
+		const row$11 = (list, record) => row(model.value, record, list.width - 16, appearance.language);
 		let observer;
 		onMounted(() => {
 			observer = observeFrameSizes((entries) => {
@@ -39601,9 +39955,9 @@ var _sfc_main$20 = {
 					emit("closed");
 				})
 			}, [createBaseVNode("header", _hoisted_2$16, [
-				createVNode(_sfc_main$139, { name: "MDI_SPEEDOMETER" }),
+				createVNode(_sfc_main$142, { name: "MDI_SPEEDOMETER" }),
 				createBaseVNode("strong", null, toDisplayString(unref(t)("UI responsiveness")), 1),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					"icon-only": "",
 					icon: "close",
 					label: "Close UI responsiveness",
@@ -39613,12 +39967,12 @@ var _sfc_main$20 = {
 				ref_key: "body",
 				ref: body,
 				class: "ui-performance-screen"
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				ref_key: "frame",
 				ref: frame,
 				scene: scene.value,
 				models: { samples: unref(uiPerformance).state.samples },
-				"describe-row": row$10,
+				"describe-row": row$11,
 				onEvent: dispatch
 			}, null, 8, ["scene", "models"])], 512)], 40, _hoisted_1$18)), [[_directive_window, {
 				kind: "ui_performance",
@@ -39702,7 +40056,7 @@ var _sfc_main$19 = {
 			menu.value.open = false;
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$159, {
+			return openBlock(), createBlock(_sfc_main$160, {
 				ref_key: "menu",
 				ref: menu,
 				class: "script-picker",
@@ -39714,9 +40068,9 @@ var _sfc_main$19 = {
 				onToggle: _cache[1] || (_cache[1] = ($event) => query.value = "")
 			}, {
 				trigger: withCtx(() => [
-					createVNode(_sfc_main$139, { name: "MDI_FILE_TREE" }),
+					createVNode(_sfc_main$142, { name: "MDI_FILE_TREE" }),
 					createBaseVNode("span", null, toDisplayString(__props.modelValue || unref(t)("Choose script")), 1),
-					createVNode(_sfc_main$139, { name: "MDI_CHEVRON_DOWN" })
+					createVNode(_sfc_main$142, { name: "MDI_CHEVRON_DOWN" })
 				]),
 				default: withCtx(() => [
 					createBaseVNode("strong", null, toDisplayString(unref(t)("Choose script")), 1),
@@ -39726,7 +40080,7 @@ var _sfc_main$19 = {
 						label: "Search scripts",
 						placeholder: unref(t)("Search scripts")
 					}, null, 8, ["modelValue", "placeholder"]),
-					createVNode(_sfc_main$81, {
+					createVNode(_sfc_main$84, {
 						entries: entries.value,
 						query: query.value,
 						selected: __props.modelValue,
@@ -40153,14 +40507,14 @@ var _sfc_main$18 = {
 				"aria-label": unref(t)("Script shelf"),
 				"aria-busy": busy.value || !!running.value
 			}, [
-				createBaseVNode("div", _hoisted_2$15, [createVNode(_sfc_main$138, {
+				createBaseVNode("div", _hoisted_2$15, [createVNode(_sfc_main$141, {
 					"icon-only": "",
 					icon: "MDI_ACCOUNT",
 					label: "My shelf",
 					"aria-pressed": mode.value === "personal",
 					highlighted: mode.value === "personal",
 					onClick: _cache[0] || (_cache[0] = ($event) => setMode("personal"))
-				}, null, 8, ["aria-pressed", "highlighted"]), createVNode(_sfc_main$138, {
+				}, null, 8, ["aria-pressed", "highlighted"]), createVNode(_sfc_main$141, {
 					"icon-only": "",
 					icon: "MDI_ACCOUNT_GROUP",
 					label: "Shared shelf",
@@ -40177,7 +40531,7 @@ var _sfc_main$18 = {
 						}
 					})
 				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(effective.value?.configuration.buttons || [], (button) => {
-					return openBlock(), createBlock(_sfc_main$138, {
+					return openBlock(), createBlock(_sfc_main$141, {
 						key: button.id,
 						class: "script-shelf-button",
 						label: button.title,
@@ -40185,7 +40539,7 @@ var _sfc_main$18 = {
 						disabled: busy.value || !!running.value || !runnable(button),
 						onClick: ($event) => run(button)
 					}, {
-						default: withCtx(() => [createVNode(_sfc_main$139, { name: button.icon }, null, 8, ["name"]), createBaseVNode("small", null, toDisplayString(button.title), 1)]),
+						default: withCtx(() => [createVNode(_sfc_main$142, { name: button.icon }, null, 8, ["name"]), createBaseVNode("small", null, toDisplayString(button.title), 1)]),
 						_: 2
 					}, 1032, [
 						"label",
@@ -40194,14 +40548,14 @@ var _sfc_main$18 = {
 						"onClick"
 					]);
 				}), 128)), busy.value || running.value ? (openBlock(), createElementBlock("span", _hoisted_3$13, toDisplayString(unref(t)("Running…")), 1)) : !effective.value?.configuration.buttons.length ? (openBlock(), createElementBlock("span", _hoisted_4$9, toDisplayString(unref(t)("No buttons")), 1)) : createCommentVNode("", true)], 32),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					"icon-only": "",
 					icon: "edit",
 					label: "Edit script shelf",
 					disabled: busy.value || !!running.value,
 					onClick: open
 				}, null, 8, ["disabled"]),
-				error.value ? (openBlock(), createBlock(_sfc_main$138, {
+				error.value ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					"icon-only": "",
 					icon: "warning",
@@ -40217,16 +40571,16 @@ var _sfc_main$18 = {
 					onCancel: withModifiers(close, ["prevent"]),
 					onClose: refreshUpdates
 				}, [createBaseVNode("header", _hoisted_6$6, [
-					createVNode(_sfc_main$139, { name: "code" }),
+					createVNode(_sfc_main$142, { name: "code" }),
 					createBaseVNode("strong", null, toDisplayString(unref(t)("Script Shelf")), 1),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						icon: "refresh",
 						label: "Reload shelves",
 						disabled: busy.value,
 						onClick: _cache[3] || (_cache[3] = ($event) => dirty.value ? confirm("reload") : refresh())
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						icon: "close",
 						label: "Close script shelf",
@@ -40237,7 +40591,7 @@ var _sfc_main$18 = {
 					class: "script-shelf-editor",
 					"aria-busy": busy.value
 				}, [createBaseVNode("aside", _hoisted_8$6, [
-					createBaseVNode("div", _hoisted_9$5, [createVNode(_sfc_main$149, {
+					createBaseVNode("div", _hoisted_9$5, [createVNode(_sfc_main$152, {
 						"model-value": owner.value,
 						options: [{
 							value: "personal",
@@ -40258,13 +40612,13 @@ var _sfc_main$18 = {
 						"model-value",
 						"options",
 						"disabled"
-					]), createVNode(_sfc_main$138, {
+					]), createVNode(_sfc_main$141, {
 						"icon-only": "",
 						icon: "help",
 						label: "Script shelf help",
 						onClick: _cache[5] || (_cache[5] = ($event) => unref(openHelp)("script_shelf"))
 					})]),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: owner.value === "shared" ? "Shared shelf" : "All tabs",
 						icon: scope.value === "global" ? "MDI_CHECK" : "MDI_EARTH",
 						highlighted: scope.value === "global",
@@ -40279,7 +40633,7 @@ var _sfc_main$18 = {
 						"highlighted",
 						"disabled"
 					]),
-					owner.value === "personal" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createVNode(_sfc_main$138, {
+					owner.value === "personal" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createVNode(_sfc_main$141, {
 						label: "Only this tab",
 						highlighted: scope.value === "tab",
 						disabled: busy.value || dirty.value || !editorEntryKey.value,
@@ -40287,7 +40641,7 @@ var _sfc_main$18 = {
 							owner: owner.value,
 							scope: "tab"
 						}))
-					}, null, 8, ["highlighted", "disabled"]), createBaseVNode("small", _hoisted_10$5, toDisplayString(title.value ? editorScope.value?.title : ""), 1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("div", _hoisted_11$5, [createBaseVNode("strong", null, toDisplayString(unref(t)("Tab shelves")), 1), createVNode(_sfc_main$138, {
+					}, null, 8, ["highlighted", "disabled"]), createBaseVNode("small", _hoisted_10$5, toDisplayString(title.value ? editorScope.value?.title : ""), 1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("div", _hoisted_11$5, [createBaseVNode("strong", null, toDisplayString(unref(t)("Tab shelves")), 1), createVNode(_sfc_main$141, {
 						"icon-only": "",
 						icon: "add",
 						label: "New shelf",
@@ -40298,7 +40652,7 @@ var _sfc_main$18 = {
 							new: true
 						}))
 					}, null, 8, ["disabled"])]), createBaseVNode("div", _hoisted_12$4, [(openBlock(true), createElementBlock(Fragment, null, renderList(presets.value, (row) => {
-						return openBlock(), createBlock(_sfc_main$138, {
+						return openBlock(), createBlock(_sfc_main$141, {
 							key: row.code,
 							label: row.title,
 							icon: selected.value === row.code ? "MDI_CHECK" : "MDI_VIEW_AGENDA",
@@ -40325,13 +40679,13 @@ var _sfc_main$18 = {
 						"aria-label": unref(t)("Shelf name"),
 						disabled: busy.value || !catalog.value?.canWrite,
 						maxlength: "256"
-					}, null, 8, _hoisted_15$3)), [[vModelText, title.value]]) : (openBlock(), createElementBlock("strong", _hoisted_16$3, toDisplayString(unref(t)(owner.value === "personal" ? "My shelf" : "Shared shelf")), 1)), canRename.value && editorEntryKey.value && current.value ? (openBlock(), createBlock(_sfc_main$138, {
+					}, null, 8, _hoisted_15$3)), [[vModelText, title.value]]) : (openBlock(), createElementBlock("strong", _hoisted_16$3, toDisplayString(unref(t)(owner.value === "personal" ? "My shelf" : "Shared shelf")), 1)), canRename.value && editorEntryKey.value && current.value ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 2,
 						label: assignmentPending.value ? "Apply to this tab" : "Used on this tab",
 						disabled: busy.value || dirty.value || !assignmentPending.value || uncertain.value || !catalog.value?.canWrite,
 						onClick: _cache[10] || (_cache[10] = ($event) => write("assign"))
 					}, null, 8, ["label", "disabled"])) : createCommentVNode("", true)]),
-					createBaseVNode("div", _hoisted_17$2, [createBaseVNode("strong", null, toDisplayString(unref(t)("Shelf buttons")), 1), createVNode(_sfc_main$138, {
+					createBaseVNode("div", _hoisted_17$2, [createBaseVNode("strong", null, toDisplayString(unref(t)("Shelf buttons")), 1), createVNode(_sfc_main$141, {
 						label: "Add button",
 						icon: "add",
 						disabled: !ready.value || busy.value || !catalog.value?.canWrite || !scripts.value.some((row) => row.runnable),
@@ -40347,7 +40701,7 @@ var _sfc_main$18 = {
 							class: normalizeClass(["script-shelf-editor-row", { unavailable: !script(button.script)?.runnable }]),
 							disabled: busy.value || uncertain.value || !catalog.value?.canWrite,
 							inert: busy.value || uncertain.value || !catalog.value?.canWrite
-						}, [createVNode(_sfc_main$151, {
+						}, [createVNode(_sfc_main$154, {
 							modelValue: button.icon,
 							"onUpdate:modelValue": ($event) => button.icon = $event,
 							"icon-only": ""
@@ -40367,21 +40721,21 @@ var _sfc_main$18 = {
 								"onUpdate:modelValue",
 								"scripts"
 							]),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								"icon-only": "",
 								icon: "MDI_ARROW_UP",
 								label: "Move up",
 								disabled: index === 0,
 								onClick: ($event) => move(index, -1)
 							}, null, 8, ["disabled", "onClick"]),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								"icon-only": "",
 								icon: "MDI_ARROW_DOWN",
 								label: "Move down",
 								disabled: index === buttons.value.length - 1,
 								onClick: ($event) => move(index, 1)
 							}, null, 8, ["disabled", "onClick"]),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								"icon-only": "",
 								destructive: "",
 								icon: "delete",
@@ -40395,12 +40749,12 @@ var _sfc_main$18 = {
 							maxlength: "4096"
 						}, null, 8, _hoisted_27$2), [[vModelText, button.description]])])], 10, _hoisted_23$2);
 					}), 128)), !buttons.value.length ? (openBlock(), createElementBlock("div", _hoisted_28$2, [
-						createVNode(_sfc_main$139, { name: "MDI_VIEW_AGENDA" }),
+						createVNode(_sfc_main$142, { name: "MDI_VIEW_AGENDA" }),
 						createBaseVNode("strong", null, toDisplayString(unref(t)(ready.value ? "Add the first script button" : "No shelf selected")), 1),
 						createBaseVNode("p", _hoisted_29$2, toDisplayString(unref(t)(ready.value ? "Only saved executable scripts are listed." : "Choose a shelf above or create a new one.")), 1)
 					])) : createCommentVNode("", true)]),
 					ready.value ? (openBlock(), createElementBlock("footer", _hoisted_30$2, [
-						canRemove.value ? (openBlock(), createBlock(_sfc_main$138, {
+						canRemove.value ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							destructive: "",
 							icon: "delete",
@@ -40409,7 +40763,7 @@ var _sfc_main$18 = {
 							onClick: _cache[11] || (_cache[11] = ($event) => confirm("delete"))
 						}, null, 8, ["label", "disabled"])) : createCommentVNode("", true),
 						_cache[16] || (_cache[16] = createBaseVNode("span", null, null, -1)),
-						dirty.value ? (openBlock(), createBlock(_sfc_main$138, {
+						dirty.value ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 1,
 							label: "Discard",
 							icon: "MDI_UNDO",
@@ -40420,7 +40774,7 @@ var _sfc_main$18 = {
 								code: selected.value
 							}))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							highlighted: "",
 							label: "Save shelf",
 							icon: "save",
@@ -40440,11 +40794,11 @@ var _sfc_main$18 = {
 				}, [
 					createBaseVNode("h2", null, toDisplayString(confirmAction.value === "delete" ? deleteTitle.value : unref(t)("Discard changes?")), 1),
 					createBaseVNode("p", null, toDisplayString(unref(t)(confirmAction.value === "delete" ? owner.value === "personal" ? "The personal shelf will be removed. Shared shelves will not change." : "The shared shelf and its sidebar assignments will be deleted. Affected tabs will use the project shelf." : "Discard unsaved changes to this shelf?")), 1),
-					createBaseVNode("footer", null, [createVNode(_sfc_main$138, {
+					createBaseVNode("footer", null, [createVNode(_sfc_main$141, {
 						label: confirmAction.value === "delete" ? owner.value === "personal" ? "Remove" : "Delete" : "Discard",
 						destructive: "",
 						onClick: accept
-					}, null, 8, ["label"]), createVNode(_sfc_main$138, {
+					}, null, 8, ["label"]), createVNode(_sfc_main$141, {
 						label: "Cancel",
 						onClick: _cache[14] || (_cache[14] = ($event) => confirmation.value.close())
 					})])
@@ -40454,7 +40808,7 @@ var _sfc_main$18 = {
 					ref: outputDialog,
 					class: "record-dialog script-shelf-output",
 					"aria-label": unref(t)("Script result")
-				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Script result")), 1), createVNode(_sfc_main$138, {
+				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Script result")), 1), createVNode(_sfc_main$141, {
 					label: "Close",
 					icon: "close",
 					onClick: _cache[15] || (_cache[15] = ($event) => outputDialog.value.close())
@@ -40519,14 +40873,14 @@ var _sfc_main$17 = {
 				"aria-busy": __props.busy
 			}, [
 				createBaseVNode("header", null, [
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						label: "Previous month",
 						icon: "MDI_CHEVRON_LEFT",
 						onClick: _cache[0] || (_cache[0] = ($event) => move(-1))
 					}),
 					createBaseVNode("strong", null, toDisplayString(title.value), 1),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						label: "Next month",
 						icon: "MDI_CHEVRON_RIGHT",
@@ -40539,7 +40893,7 @@ var _sfc_main$17 = {
 						class: "muted"
 					}, toDisplayString(name), 1);
 				}), 128)), (openBlock(true), createElementBlock(Fragment, null, renderList(cells.value, (cell) => {
-					return openBlock(), createBlock(_sfc_main$138, {
+					return openBlock(), createBlock(_sfc_main$141, {
 						key: cell.key,
 						label: String(cell.day),
 						"translate-label": false,
@@ -40564,12 +40918,12 @@ var _sfc_main$17 = {
 					]);
 				}), 128))]),
 				createBaseVNode("footer", null, [
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "All history",
 						onClick: _cache[2] || (_cache[2] = ($event) => emit("accepted", ""))
 					}),
 					__props.busy ? (openBlock(), createElementBlock("span", _hoisted_4$8, toDisplayString(unref(t)("Updating calendar history…")), 1)) : createCommentVNode("", true),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Close",
 						onClick: _cache[3] || (_cache[3] = ($event) => emit("closed"))
 					})
@@ -40946,16 +41300,16 @@ var _sfc_main$16 = {
 					emit("closed");
 				})
 			}, [createBaseVNode("header", _hoisted_2$13, [
-				createVNode(_sfc_main$139, { name: "activity-feed" }),
+				createVNode(_sfc_main$142, { name: "activity-feed" }),
 				createBaseVNode("strong", null, toDisplayString(unref(t)("Activity Feed")), 1),
-				!unref(mobile) ? (openBlock(), createBlock(_sfc_main$138, {
+				!unref(mobile) ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					"icon-only": "",
 					icon: "help",
 					label: "Activity Feed help",
 					onClick: _cache[0] || (_cache[0] = ($event) => unref(openHelp)("activity_feed"))
 				})) : createCommentVNode("", true),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					"icon-only": "",
 					icon: "close",
 					label: "Close Activity Feed",
@@ -40967,7 +41321,7 @@ var _sfc_main$16 = {
 					"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => search.value = $event),
 					label: "Search activity",
 					placeholder: unref(t)("Search activity")
-				}, null, 8, ["modelValue", "placeholder"]), (openBlock(), createBlock(resolveDynamicComponent(unref(mobile) ? _sfc_main$159 : "div"), {
+				}, null, 8, ["modelValue", "placeholder"]), (openBlock(), createBlock(resolveDynamicComponent(unref(mobile) ? _sfc_main$160 : "div"), {
 					class: "activity-feed-options",
 					label: "Activity options",
 					overlay: unref(mobile),
@@ -40976,28 +41330,28 @@ var _sfc_main$16 = {
 					default: withCtx(() => [
 						createBaseVNode("div", _hoisted_5$6, [
 							!unref(mobile) ? (openBlock(), createElementBlock("strong", _hoisted_6$5, toDisplayString(unref(t)("ACTIVITY FEED")), 1)) : createCommentVNode("", true),
-							createVNode(_sfc_main$160, {
+							createVNode(_sfc_main$163, {
 								modelValue: notifications.value,
 								"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => notifications.value = $event),
 								compact: "",
 								label: "Activity notifications",
 								title: unref(t)("Show a notification for new activity from other users")
 							}, null, 8, ["modelValue", "title"]),
-							createVNode(_sfc_main$160, {
+							createVNode(_sfc_main$163, {
 								modelValue: excludeOwn.value,
 								"onUpdate:modelValue": [_cache[3] || (_cache[3] = ($event) => excludeOwn.value = $event), changeFilter],
 								compact: "",
 								label: "Exclude my activity"
 							}, null, 8, ["modelValue"])
 						]),
-						(openBlock(), createBlock(resolveDynamicComponent(unref(mobile) ? _sfc_main$153 : _sfc_main$149), {
+						(openBlock(), createBlock(resolveDynamicComponent(unref(mobile) ? _sfc_main$156 : _sfc_main$152), {
 							modelValue: filter.value,
 							"onUpdate:modelValue": [_cache[4] || (_cache[4] = ($event) => filter.value = $event), changeFilter],
 							options: unref(feedFilters),
 							label: "Activity filters"
 						}, null, 8, ["modelValue", "options"])),
 						createBaseVNode("div", _hoisted_7$5, [
-							createVNode(_sfc_main$159, {
+							createVNode(_sfc_main$160, {
 								ref_key: "usersMenu",
 								ref: usersMenu,
 								class: "activity-user-menu",
@@ -41017,7 +41371,7 @@ var _sfc_main$16 = {
 										placeholder: unref(t)("Find users")
 									}, null, 8, ["modelValue", "placeholder"]),
 									createBaseVNode("div", _hoisted_9$4, [(openBlock(true), createElementBlock(Fragment, null, renderList(visibleUsers.value, (user) => {
-										return openBlock(), createBlock(_sfc_main$160, {
+										return openBlock(), createBlock(_sfc_main$163, {
 											key: user.login,
 											"model-value": pendingUsers.value.includes(user.login),
 											label: user.displayName || user.login,
@@ -41030,15 +41384,15 @@ var _sfc_main$16 = {
 										]);
 									}), 128))]),
 									createBaseVNode("footer", null, [
-										createVNode(_sfc_main$138, {
+										createVNode(_sfc_main$141, {
 											label: "Clear",
 											onClick: _cache[6] || (_cache[6] = ($event) => pendingUsers.value = [])
 										}),
-										createVNode(_sfc_main$138, {
+										createVNode(_sfc_main$141, {
 											label: "Cancel",
 											onClick: _cache[7] || (_cache[7] = ($event) => usersMenu.value.open = false)
 										}),
-										createVNode(_sfc_main$138, {
+										createVNode(_sfc_main$141, {
 											label: "Apply",
 											highlighted: "",
 											onClick: applyUsers
@@ -41048,7 +41402,7 @@ var _sfc_main$16 = {
 								_: 2
 							}, [unref(mobile) ? {
 								name: "trigger",
-								fn: withCtx(() => [createVNode(_sfc_main$139, { name: "MDI_ACCOUNT_MULTIPLE" }), createTextVNode(toDisplayString(unref(t)("Filter by users")), 1)]),
+								fn: withCtx(() => [createVNode(_sfc_main$142, { name: "MDI_ACCOUNT_MULTIPLE" }), createTextVNode(toDisplayString(unref(t)("Filter by users")), 1)]),
 								key: "0"
 							} : void 0]), 1536),
 							selectedUsers.value.length ? (openBlock(), createElementBlock("span", {
@@ -41056,7 +41410,7 @@ var _sfc_main$16 = {
 								class: "activity-filter-count",
 								title: userTitle.value
 							}, toDisplayString(selectedUsers.value.length), 9, _hoisted_10$4)) : createCommentVNode("", true),
-							createVNode(_sfc_main$159, {
+							createVNode(_sfc_main$160, {
 								ref_key: "calendarMenu",
 								ref: calendarMenu,
 								class: "activity-calendar-menu",
@@ -41082,7 +41436,7 @@ var _sfc_main$16 = {
 										"busy"
 									]),
 									calendarError.value ? (openBlock(), createElementBlock("p", _hoisted_11$4, toDisplayString(unref(t)(calendarError.value)), 1)) : createCommentVNode("", true),
-									calendarError.value ? (openBlock(), createBlock(_sfc_main$138, {
+									calendarError.value ? (openBlock(), createBlock(_sfc_main$141, {
 										key: 1,
 										label: "Retry",
 										onClick: loadCounts
@@ -41091,17 +41445,17 @@ var _sfc_main$16 = {
 								_: 2
 							}, [unref(mobile) ? {
 								name: "trigger",
-								fn: withCtx(() => [createVNode(_sfc_main$139, { name: "MDI_CALENDAR_MONTH" }), createTextVNode(toDisplayString(unref(dateLabel)(day.value)), 1)]),
+								fn: withCtx(() => [createVNode(_sfc_main$142, { name: "MDI_CALENDAR_MONTH" }), createTextVNode(toDisplayString(unref(dateLabel)(day.value)), 1)]),
 								key: "0"
 							} : void 0]), 1032, ["label"]),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								"icon-only": !unref(mobile),
 								label: "Refresh activity",
 								icon: "refresh",
 								disabled: busy.value,
 								onClick: refresh
 							}, null, 8, ["icon-only", "disabled"]),
-							unref(mobile) ? (openBlock(), createBlock(_sfc_main$138, {
+							unref(mobile) ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 1,
 								label: "Activity Feed help",
 								icon: "help",
@@ -41111,7 +41465,7 @@ var _sfc_main$16 = {
 					]),
 					_: 1
 				}, 8, ["overlay"]))]),
-				error.value || pollError.value ? (openBlock(), createElementBlock("p", _hoisted_12$3, [createTextVNode(toDisplayString(unref(t)(error.value || pollError.value)) + " ", 1), createVNode(_sfc_main$138, {
+				error.value || pollError.value ? (openBlock(), createElementBlock("p", _hoisted_12$3, [createTextVNode(toDisplayString(unref(t)(error.value || pollError.value)) + " ", 1), createVNode(_sfc_main$141, {
 					label: "Retry",
 					onClick: refresh
 				})])) : createCommentVNode("", true),
@@ -41127,7 +41481,7 @@ var _sfc_main$16 = {
 				}, [
 					(openBlock(true), createElementBlock(Fragment, null, renderList(grouped.value, ([key, rows]) => {
 						return openBlock(), createElementBlock("section", { key }, [createBaseVNode("header", _hoisted_14$2, [createBaseVNode("strong", null, toDisplayString(unref(dayLabel)(key)), 1), _cache[13] || (_cache[13] = createBaseVNode("hr", null, null, -1))]), (openBlock(true), createElementBlock(Fragment, null, renderList(rows, (row) => {
-							return openBlock(), createBlock(_sfc_main$162, {
+							return openBlock(), createBlock(_sfc_main$165, {
 								key: row.eventId,
 								record: row,
 								now: now.value,
@@ -41184,14 +41538,14 @@ var _sfc_main$15 = {
 			return openBlock(), createElementBlock("aside", {
 				class: "messages-conversations",
 				"aria-label": unref(t)("Conversations")
-			}, [createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(unref(t)("CONVERSATIONS")), 1), createVNode(_sfc_main$138, {
+			}, [createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString(unref(t)("CONVERSATIONS")), 1), createVNode(_sfc_main$141, {
 				"icon-only": "",
 				icon: "MDI_ACCOUNT_MULTIPLE_PLUS",
 				label: "New conversation",
 				disabled: __props.busy,
 				onClick: _cache[0] || (_cache[0] = ($event) => emit("create"))
 			}, null, 8, ["disabled"])]), createBaseVNode("div", _hoisted_2$12, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.records, (row) => {
-				return withDirectives((openBlock(), createBlock(_sfc_main$138, {
+				return withDirectives((openBlock(), createBlock(_sfc_main$141, {
 					key: row.conversationId,
 					class: normalizeClass(["messages-conversation", {
 						selected: row.conversationId === __props.selected,
@@ -41310,7 +41664,7 @@ var _sfc_main$14 = {
 				class: "message-attachment",
 				"data-flow-full": !__props.compact && /^(png|jpe?g|webp|gif|bmp|tiff?|tga|exr|hdr|svg|heic|avif)$/i.test(filename().split(".").at(-1)) ? "" : void 0
 			}, [
-				__props.entry ? (openBlock(), createBlock(_sfc_main$138, {
+				__props.entry ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					class: "chat-file-entry",
 					icon: __props.snapshot.__files__?.some((file) => ["web", "icon"].includes(file.type)) ? "image" : "description",
@@ -41324,7 +41678,7 @@ var _sfc_main$14 = {
 					"icon",
 					"aria-label",
 					"title"
-				])) : (openBlock(), createBlock(_sfc_main$163, {
+				])) : (openBlock(), createBlock(_sfc_main$166, {
 					key: 1,
 					title: filename(),
 					extension: filename().split(".").at(-1),
@@ -41341,7 +41695,7 @@ var _sfc_main$14 = {
 					"compact",
 					"disabled"
 				])),
-				createVNode(_sfc_main$159, {
+				createVNode(_sfc_main$160, {
 					ref_key: "menu",
 					ref: menu,
 					class: "attachment-actions",
@@ -41349,38 +41703,38 @@ var _sfc_main$14 = {
 					overlay: ""
 				}, {
 					default: withCtx(() => [
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Download",
 							icon: "download",
 							disabled: __props.actionState?.pending,
 							onClick: _cache[2] || (_cache[2] = ($event) => emit("action", "download", __props.snapshot))
 						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Show folder",
 							icon: "folder-open",
 							disabled: "",
 							title: unref(t)("A browser cannot open a folder on your computer.")
 						}, null, 8, ["title"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Download and open",
 							icon: "MDI_OPEN_IN_NEW",
 							disabled: __props.actionState?.pending,
 							onClick: _cache[3] || (_cache[3] = ($event) => emit("open", __props.snapshot))
 						}, null, 8, ["disabled"]),
 						_cache[7] || (_cache[7] = createBaseVNode("hr", null, null, -1)),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Copy file path",
 							icon: "MDI_CONTENT_COPY",
 							disabled: __props.actionState?.pending,
 							onClick: _cache[4] || (_cache[4] = ($event) => emit("action", "copy-path", __props.snapshot))
 						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Copy web link",
 							icon: "link",
 							disabled: __props.actionState?.pending,
 							onClick: _cache[5] || (_cache[5] = ($event) => emit("action", "copy-web", __props.snapshot))
 						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Copy image",
 							icon: "image",
 							disabled: !isImage() || !unref(canCopyImage) || __props.actionState?.pending,
@@ -41391,7 +41745,7 @@ var _sfc_main$14 = {
 					_: 1
 				}, 512),
 				__props.actionState?.error ? (openBlock(), createElementBlock("p", _hoisted_2$11, toDisplayString(unref(t)(__props.actionState.error)), 1)) : createCommentVNode("", true),
-				error.value ? (openBlock(), createElementBlock("p", _hoisted_3$9, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$138, {
+				error.value ? (openBlock(), createElementBlock("p", _hoisted_3$9, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$141, {
 					label: "Retry",
 					onClick: load
 				})])) : createCommentVNode("", true)
@@ -41415,7 +41769,7 @@ var _sfc_main$13 = {
 	emits: ["activate", "dismiss"],
 	setup(__props) {
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(resolveDynamicComponent(!__props.dismissible && __props.reference.available ? _sfc_main$138 : "div"), {
+			return openBlock(), createBlock(resolveDynamicComponent(!__props.dismissible && __props.reference.available ? _sfc_main$141 : "div"), {
 				class: normalizeClass(["message-reference", {
 					forwarded: __props.forwarded,
 					unavailable: !__props.reference.available
@@ -41423,13 +41777,13 @@ var _sfc_main$13 = {
 				onClick: _cache[1] || (_cache[1] = ($event) => !__props.dismissible && __props.reference.available && _ctx.$emit("activate"))
 			}, {
 				default: withCtx(() => [
-					createVNode(_sfc_main$139, { name: __props.forwarded ? "MDI_SHARE" : "MDI_REPLY" }, null, 8, ["name"]),
+					createVNode(_sfc_main$142, { name: __props.forwarded ? "MDI_SHARE" : "MDI_REPLY" }, null, 8, ["name"]),
 					createBaseVNode("span", _hoisted_1$12, [
 						createBaseVNode("strong", null, toDisplayString(__props.reference.available ? unref(t)(__props.forwarded ? "Forwarded from {name}" : "Reply to {name}", { name: __props.users?.find((user) => user.login === __props.reference.sender)?.displayName || __props.reference.sender || unref(t)("Unknown user") }) : unref(t)(__props.forwarded ? "Forwarded message unavailable" : "Original message is unavailable")), 1),
 						__props.reference.available && __props.reference.body ? (openBlock(), createElementBlock("span", _hoisted_2$10, toDisplayString(__props.reference.body), 1)) : createCommentVNode("", true),
 						__props.forwarded && __props.reference.available && __props.reference.attachments?.length ? (openBlock(), createElementBlock("small", _hoisted_3$8, toDisplayString(unref(t)("{count} attachments", { count: __props.reference.attachments.length })), 1)) : createCommentVNode("", true)
 					]),
-					__props.dismissible ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.dismissible ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 0,
 						"icon-only": "",
 						icon: "close",
@@ -41559,7 +41913,7 @@ var _sfc_main$12 = {
 					"media-attachments": media.value
 				}]),
 				"data-message-id": unref(messageId)(__props.row)
-			}, [__props.row.groupLast ? (openBlock(), createBlock(_sfc_main$138, {
+			}, [__props.row.groupLast ? (openBlock(), createBlock(_sfc_main$141, {
 				key: 0,
 				class: "message-author-action",
 				"aria-label": unref(t)("Open profile for {name}", { name: __props.row.login }),
@@ -41594,7 +41948,7 @@ var _sfc_main$12 = {
 					focusable: "false"
 				}, [createBaseVNode("path", { d: contour.value }, null, 8, _hoisted_3$7)], 8, _hoisted_2$9)) : createCommentVNode("", true),
 				createBaseVNode("header", null, [
-					__props.row.groupFirst ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.row.groupFirst ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 0,
 						class: "message-sender",
 						"aria-label": unref(t)("Open profile for {name}", { name: __props.row.login }),
@@ -41612,12 +41966,12 @@ var _sfc_main$12 = {
 						tabindex: "0",
 						role: "img",
 						"aria-label": delivery(__props.row.__delivery__)
-					}, [createVNode(_sfc_main$139, { name: __props.row.__delivery__.status === "sent" ? "MDI_CHECK" : "MDI_CHECK_ALL" }, null, 8, ["name"])], 10, _hoisted_5$4)), [[unref(tooltipDirective), delivery(__props.row.__delivery__)]]) : createCommentVNode("", true),
+					}, [createVNode(_sfc_main$142, { name: __props.row.__delivery__.status === "sent" ? "MDI_CHECK" : "MDI_CHECK_ALL" }, null, 8, ["name"])], 10, _hoisted_5$4)), [[unref(tooltipDirective), delivery(__props.row.__delivery__)]]) : createCommentVNode("", true),
 					withDirectives((openBlock(), createElementBlock("time", {
 						tabindex: "0",
 						"aria-label": __props.row.timestamp
 					}, [createTextVNode(toDisplayString(timestamp(__props.row.timestamp)), 1)], 8, _hoisted_6$4)), [[unref(tooltipDirective), timestamp(__props.row.timestamp, true)]]),
-					__props.row.__edit_history__?.length ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.row.__edit_history__?.length ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 3,
 						tooltip: edited(__props.row),
 						class: "message-edited",
@@ -41625,7 +41979,7 @@ var _sfc_main$12 = {
 						onClick: _cache[2] || (_cache[2] = ($event) => action("history", __props.row))
 					}, null, 8, ["tooltip"])) : createCommentVNode("", true),
 					createBaseVNode("div", _hoisted_7$4, [
-						__props.selectionMode ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.selectionMode ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							"icon-only": "",
 							label: __props.selected ? "Deselect message" : "Select message",
@@ -41639,7 +41993,7 @@ var _sfc_main$12 = {
 							"aria-pressed",
 							"disabled"
 						])) : createCommentVNode("", true),
-						__props.pinned ? (openBlock(), createBlock(_sfc_main$138, {
+						__props.pinned ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 1,
 							class: "message-pin-action",
 							"icon-only": "",
@@ -41648,14 +42002,14 @@ var _sfc_main$12 = {
 							disabled: __props.busy || !__props.permissions.pin,
 							onClick: _cache[4] || (_cache[4] = ($event) => action("pin", __props.row))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						__props.permissions.reaction && !unref(mobile) ? (openBlock(), createBlock(_sfc_main$117, {
+						__props.permissions.reaction && !unref(mobile) ? (openBlock(), createBlock(_sfc_main$120, {
 							key: 2,
 							class: "message-react-picker",
 							label: "Add reaction",
 							disabled: __props.busy,
 							onSelected: _cache[5] || (_cache[5] = ($event) => emit("reaction", __props.row, $event))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						createVNode(_sfc_main$159, {
+						createVNode(_sfc_main$160, {
 							ref_key: "menu",
 							ref: menu,
 							class: "message-actions",
@@ -41663,7 +42017,7 @@ var _sfc_main$12 = {
 							overlay: ""
 						}, {
 							default: withCtx(() => [
-								unref(mobile) && __props.permissions.reaction ? (openBlock(), createBlock(_sfc_main$117, {
+								unref(mobile) && __props.permissions.reaction ? (openBlock(), createBlock(_sfc_main$120, {
 									key: 0,
 									"text-trigger": "",
 									label: "Add reaction",
@@ -41673,52 +42027,52 @@ var _sfc_main$12 = {
 										emit("reaction", __props.row, $event);
 									})
 								}, null, 8, ["disabled"])) : createCommentVNode("", true),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Reply",
 									icon: "MDI_REPLY",
 									disabled: !__props.permissions.send,
 									onClick: _cache[7] || (_cache[7] = ($event) => action("reply", __props.row))
 								}, null, 8, ["disabled"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Forward",
 									icon: "MDI_SHARE",
 									disabled: !__props.permissions.forward,
 									onClick: _cache[8] || (_cache[8] = ($event) => action("forward", __props.row))
 								}, null, 8, ["disabled"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: __props.selected ? "Deselect message" : "Select message",
 									icon: "MDI_CHECKBOX_MARKED_OUTLINE",
 									onClick: _cache[9] || (_cache[9] = ($event) => action("select", __props.row))
 								}, null, 8, ["label"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Copy text",
 									icon: "MDI_CONTENT_COPY",
 									onClick: _cache[10] || (_cache[10] = ($event) => action("copy", __props.row))
 								}),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Copy sKey",
 									icon: "MDI_LINK",
 									onClick: _cache[11] || (_cache[11] = ($event) => action("skey", __props.row))
 								}),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: __props.pinned ? "Unpin message" : "Pin message",
 									icon: "pin",
 									disabled: !__props.permissions.pin || __props.busy,
 									onClick: _cache[12] || (_cache[12] = ($event) => action("pin", __props.row))
 								}, null, 8, ["label", "disabled"]),
-								__props.row.__edit_history__?.length ? (openBlock(), createBlock(_sfc_main$138, {
+								__props.row.__edit_history__?.length ? (openBlock(), createBlock(_sfc_main$141, {
 									key: 1,
 									label: "Edit history",
 									icon: "MDI_HISTORY",
 									onClick: _cache[13] || (_cache[13] = ($event) => action("history", __props.row))
 								})) : createCommentVNode("", true),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Edit message",
 									icon: "MDI_PENCIL",
 									disabled: !__props.canEdit || __props.busy,
 									onClick: _cache[14] || (_cache[14] = ($event) => action("edit", __props.row))
 								}, null, 8, ["disabled"]),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									label: "Delete message",
 									icon: "MDI_DELETE",
 									destructive: "",
@@ -41743,7 +42097,7 @@ var _sfc_main$12 = {
 					forwarded: "",
 					onActivate: _cache[17] || (_cache[17] = ($event) => action("original", __props.row.__forwarded_from__))
 				}, null, 8, ["reference", "users"])) : createCommentVNode("", true),
-				unref(messageAttachments)(__props.row).length ? (openBlock(), createBlock(_sfc_main$105, {
+				unref(messageAttachments)(__props.row).length ? (openBlock(), createBlock(_sfc_main$108, {
 					key: 3,
 					"minimum-cell-width": 210,
 					"maximum-columns": 2
@@ -41774,7 +42128,7 @@ var _sfc_main$12 = {
 					onClick: _cache[20] || (_cache[20] = ($event) => unref(activateRichLink)($event, (value) => emit("link", value)))
 				}, null, 14, _hoisted_8$4)) : createCommentVNode("", true),
 				unref(extractSkeys)(__props.row.message).length ? (openBlock(), createElementBlock("div", _hoisted_9$3, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(extractSkeys)(__props.row.message), (key) => {
-					return openBlock(), createBlock(_sfc_main$103, {
+					return openBlock(), createBlock(_sfc_main$106, {
 						key,
 						preview: __props.previews?.[key] || unref(skeyPlaceholder)(key),
 						previews: __props.previews,
@@ -41789,7 +42143,7 @@ var _sfc_main$12 = {
 					]);
 				}), 128))])) : createCommentVNode("", true),
 				Object.keys(__props.row.__reactions__ || {}).length ? (openBlock(), createElementBlock("div", _hoisted_10$3, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.row.__reactions__, (actors, emoji) => {
-					return openBlock(), createBlock(_sfc_main$138, {
+					return openBlock(), createBlock(_sfc_main$141, {
 						key: emoji,
 						tooltip: actors.join(", "),
 						"aria-label": unref(t)("React with {emoji}", { emoji }),
@@ -43029,46 +43383,46 @@ var _sfc_main$11 = {
 				onClose: _cache[34] || (_cache[34] = ($event) => visible.value = false)
 			}, [
 				createBaseVNode("header", _hoisted_2$8, [
-					createVNode(_sfc_main$139, { name: "MDI_MESSAGE_TEXT" }),
+					createVNode(_sfc_main$142, { name: "MDI_MESSAGE_TEXT" }),
 					createBaseVNode("strong", null, toDisplayString(unref(t)("Messages")), 1),
-					!unref(mobile) ? (openBlock(), createBlock(_sfc_main$160, {
+					!unref(mobile) ? (openBlock(), createBlock(_sfc_main$163, {
 						key: 0,
 						modelValue: notifications.value,
 						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => notifications.value = $event),
 						compact: "",
 						label: "Message notifications"
-					}, null, 8, ["modelValue"])) : (openBlock(), createBlock(_sfc_main$159, {
+					}, null, 8, ["modelValue"])) : (openBlock(), createBlock(_sfc_main$160, {
 						key: 1,
 						label: "Messages options",
 						overlay: ""
 					}, {
-						default: withCtx(() => [createVNode(_sfc_main$160, {
+						default: withCtx(() => [createVNode(_sfc_main$163, {
 							modelValue: notifications.value,
 							"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => notifications.value = $event),
 							compact: "",
 							label: "Message notifications"
-						}, null, 8, ["modelValue"]), createVNode(_sfc_main$138, {
+						}, null, 8, ["modelValue"]), createVNode(_sfc_main$141, {
 							label: "Messages help",
 							icon: "help",
 							onClick: _cache[2] || (_cache[2] = ($event) => unref(openHelp)("communication"))
 						})]),
 						_: 1
 					})),
-					!unref(mobile) ? (openBlock(), createBlock(_sfc_main$138, {
+					!unref(mobile) ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 2,
 						"icon-only": "",
 						icon: "help",
 						label: "Messages help",
 						onClick: _cache[3] || (_cache[3] = ($event) => unref(openHelp)("communication"))
 					})) : createCommentVNode("", true),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						"icon-only": "",
 						icon: "close",
 						label: "Close Messages",
 						onClick: close
 					})
 				]),
-				error.value || __props.updatesError ? (openBlock(), createElementBlock("p", _hoisted_3$6, [createTextVNode(toDisplayString(unref(t)(error.value || __props.updatesError)) + " ", 1), createVNode(_sfc_main$138, {
+				error.value || __props.updatesError ? (openBlock(), createElementBlock("p", _hoisted_3$6, [createTextVNode(toDisplayString(unref(t)(error.value || __props.updatesError)) + " ", 1), createVNode(_sfc_main$141, {
 					"icon-only": "",
 					label: "Dismiss error",
 					icon: "close",
@@ -43077,13 +43431,13 @@ var _sfc_main$11 = {
 				!initialized.value ? (openBlock(), createElementBlock("div", _hoisted_4$4, [
 					createBaseVNode("strong", null, toDisplayString(unref(t)("Messages are not initialized")), 1),
 					createBaseVNode("p", null, toDisplayString(unref(t)("An administrator must initialize the conversation schema before messages can be used.")), 1),
-					canInitialize.value ? (openBlock(), createBlock(_sfc_main$138, {
+					canInitialize.value ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 0,
 						label: "Initialize Messages",
 						disabled: busy.value,
 						onClick: _cache[5] || (_cache[5] = ($event) => mutate("initialize", {}))
 					}, null, 8, ["disabled"])) : createCommentVNode("", true),
-					createVNode(_sfc_main$138, {
+					createVNode(_sfc_main$141, {
 						label: "Refresh",
 						icon: "refresh",
 						onClick: refresh
@@ -43109,7 +43463,7 @@ var _sfc_main$11 = {
 						"users",
 						"busy"
 					]),
-					createVNode(_sfc_main$158, {
+					createVNode(_sfc_main$162, {
 						modelValue: paneWidth.value,
 						"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => paneWidth.value = $event),
 						min: 210,
@@ -43121,7 +43475,7 @@ var _sfc_main$11 = {
 						"aria-label": unref(t)("Conversation")
 					}, [
 						createBaseVNode("div", _hoisted_6$3, [
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								class: "messages-back",
 								"icon-only": "",
 								label: "Conversations",
@@ -43147,7 +43501,7 @@ var _sfc_main$11 = {
 								key: 0,
 								class: normalizeClass(["messages-presence", { online: presence.value?.online }])
 							}, toDisplayString(presenceText.value) + " · ", 3)) : createCommentVNode("", true), createTextVNode(toDisplayString(conversation.value.isPersonalNotes ? unref(t)("Your personal notes") + " · " + unref(t)("{count} notes", { count: conversation.value.messageCount }) : (peer.value ? "" : unref(t)("{count} members", { count: conversation.value.participantCount }) + " · ") + unref(t)("{count} messages", { count: conversation.value.messageCount })), 1)])) : createCommentVNode("", true)]),
-							!unref(mobile) && conversation.value && !conversation.value.isPersonalNotes ? (openBlock(), createBlock(_sfc_main$138, {
+							!unref(mobile) && conversation.value && !conversation.value.isPersonalNotes ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 1,
 								"icon-only": "",
 								label: "Chat members",
@@ -43155,7 +43509,7 @@ var _sfc_main$11 = {
 								"badge-count": conversation.value.participantCount,
 								onClick: _cache[9] || (_cache[9] = ($event) => showEditor("view-members", null, $event))
 							}, null, 8, ["badge-count"])) : createCommentVNode("", true),
-							!unref(mobile) && conversation.value ? (openBlock(), createBlock(_sfc_main$138, {
+							!unref(mobile) && conversation.value ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 2,
 								"icon-only": "",
 								label: "Chat files",
@@ -43163,7 +43517,7 @@ var _sfc_main$11 = {
 								"badge-count": conversation.value.attachmentCount,
 								onClick: _cache[10] || (_cache[10] = ($event) => showEditor("files", null, $event))
 							}, null, 8, ["badge-count"])) : createCommentVNode("", true),
-							!unref(mobile) && conversation.value ? (openBlock(), createBlock(_sfc_main$138, {
+							!unref(mobile) && conversation.value ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 3,
 								"icon-only": "",
 								label: "Search messages",
@@ -43172,7 +43526,7 @@ var _sfc_main$11 = {
 								"aria-pressed": !!search.value,
 								onClick: _cache[11] || (_cache[11] = ($event) => showEditor("search", null, $event))
 							}, null, 8, ["aria-expanded", "aria-pressed"])) : createCommentVNode("", true),
-							!unref(mobile) ? (openBlock(), createBlock(_sfc_main$138, {
+							!unref(mobile) ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 4,
 								"icon-only": "",
 								label: "Refresh conversations and messages",
@@ -43180,7 +43534,7 @@ var _sfc_main$11 = {
 								disabled: busy.value || loading.value,
 								onClick: refresh
 							}, null, 8, ["disabled"])) : createCommentVNode("", true),
-							conversation.value ? (openBlock(), createBlock(_sfc_main$159, {
+							conversation.value ? (openBlock(), createBlock(_sfc_main$160, {
 								key: 5,
 								ref_key: "chatMenu",
 								ref: chatMenu,
@@ -43190,68 +43544,68 @@ var _sfc_main$11 = {
 							}, {
 								default: withCtx(() => [
 									unref(mobile) ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-										createVNode(_sfc_main$138, {
+										createVNode(_sfc_main$141, {
 											label: "Search messages",
 											icon: "search",
 											"aria-expanded": searchOpen.value,
 											"aria-pressed": !!search.value,
 											onClick: _cache[12] || (_cache[12] = ($event) => showEditor("search", null, $event))
 										}, null, 8, ["aria-expanded", "aria-pressed"]),
-										createVNode(_sfc_main$138, {
+										createVNode(_sfc_main$141, {
 											label: "Chat files",
 											icon: "MDI_PAPERCLIP",
 											onClick: _cache[13] || (_cache[13] = ($event) => showEditor("files", null, $event))
 										}),
-										!conversation.value.isPersonalNotes ? (openBlock(), createBlock(_sfc_main$138, {
+										!conversation.value.isPersonalNotes ? (openBlock(), createBlock(_sfc_main$141, {
 											key: 0,
 											label: "Chat members",
 											icon: "MDI_ACCOUNT_MULTIPLE",
 											onClick: _cache[14] || (_cache[14] = ($event) => showEditor("view-members", null, $event))
 										})) : createCommentVNode("", true),
-										createVNode(_sfc_main$138, {
+										createVNode(_sfc_main$141, {
 											label: "Refresh conversations and messages",
 											icon: "refresh",
 											disabled: busy.value || loading.value,
 											onClick: refresh
 										}, null, 8, ["disabled"]),
-										createVNode(_sfc_main$160, {
+										createVNode(_sfc_main$163, {
 											modelValue: notifications.value,
 											"onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => notifications.value = $event),
 											compact: "",
 											label: "Message notifications"
 										}, null, 8, ["modelValue"]),
-										createVNode(_sfc_main$138, {
+										createVNode(_sfc_main$141, {
 											label: "Messages help",
 											icon: "help",
 											onClick: _cache[16] || (_cache[16] = ($event) => unref(openHelp)("communication"))
 										}),
 										_cache[54] || (_cache[54] = createBaseVNode("hr", null, null, -1))
 									], 64)) : createCommentVNode("", true),
-									createVNode(_sfc_main$138, {
+									createVNode(_sfc_main$141, {
 										label: "Rename chat",
 										icon: "MDI_PENCIL",
 										disabled: !conversation.value.canRename || !permissions.value.rename,
 										onClick: _cache[17] || (_cache[17] = ($event) => showEditor("rename"))
 									}, null, 8, ["disabled"]),
-									createVNode(_sfc_main$138, {
+									createVNode(_sfc_main$141, {
 										label: "Change preview",
 										icon: "image",
 										disabled: !conversation.value.canManage || !permissions.value.upload,
 										onClick: _cache[18] || (_cache[18] = ($event) => showEditor("preview"))
 									}, null, 8, ["disabled"]),
-									createVNode(_sfc_main$138, {
+									createVNode(_sfc_main$141, {
 										label: "Add or remove members",
 										icon: "MDI_ACCOUNT_COG",
 										disabled: !conversation.value.canAddMembers || !permissions.value.members,
 										onClick: _cache[19] || (_cache[19] = ($event) => showEditor("members"))
 									}, null, 8, ["disabled"]),
-									createVNode(_sfc_main$138, {
+									createVNode(_sfc_main$141, {
 										label: "Pin history",
 										icon: "pin",
 										onClick: _cache[20] || (_cache[20] = ($event) => showEditor("pin-history", null, $event))
 									}),
 									_cache[55] || (_cache[55] = createBaseVNode("hr", null, null, -1)),
-									createVNode(_sfc_main$138, {
+									createVNode(_sfc_main$141, {
 										label: conversation.value.canClearPersonal ? "Clear favorites" : "Delete chat",
 										icon: "MDI_DELETE",
 										destructive: "",
@@ -43261,7 +43615,7 @@ var _sfc_main$11 = {
 								]),
 								_: 1
 							}, 512)) : createCommentVNode("", true),
-							unref(mobile) ? (openBlock(), createBlock(_sfc_main$138, {
+							unref(mobile) ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 6,
 								"icon-only": "",
 								icon: "close",
@@ -43273,7 +43627,7 @@ var _sfc_main$11 = {
 								running: ""
 							})) : createCommentVNode("", true)
 						]),
-						pinned.value.messageId ? (openBlock(), createBlock(_sfc_main$138, {
+						pinned.value.messageId ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 0,
 							class: "messages-pin",
 							icon: "pin",
@@ -43300,7 +43654,7 @@ var _sfc_main$11 = {
 									tabindex: "0",
 									onScrollPassive: ($event) => state.id === timelineId.value && scroll()
 								}, [createBaseVNode("div", _hoisted_11$2, [
-									state.more ? (openBlock(), createBlock(_sfc_main$138, {
+									state.more ? (openBlock(), createBlock(_sfc_main$141, {
 										key: 0,
 										label: "Load older messages",
 										disabled: loading.value,
@@ -43356,7 +43710,7 @@ var _sfc_main$11 = {
 								])], 44, _hoisted_10$2)), [[vShow, state.id === timelineId.value]]);
 							}), 128)),
 							current.value && !presented.value && loading.value ? (openBlock(), createElementBlock("div", _hoisted_13$2, [createVNode(BusyIndicator_default, { running: "" }), createBaseVNode("span", null, toDisplayString(unref(t)("Loading conversation")), 1)])) : createCommentVNode("", true),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								class: normalizeClass(["messages-latest", { hidden: followBottom.value }]),
 								disabled: followBottom.value,
 								tabindex: followBottom.value ? -1 : 0,
@@ -43374,13 +43728,13 @@ var _sfc_main$11 = {
 						]),
 						selected.value.length ? (openBlock(), createElementBlock("div", _hoisted_14$1, [
 							createBaseVNode("strong", null, toDisplayString(unref(t)("{count} messages selected", { count: selected.value.length })), 1),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								label: "Forward",
 								icon: "MDI_SHARE",
 								disabled: busy.value || !permissions.value.forward,
 								onClick: _cache[26] || (_cache[26] = ($event) => showEditor("forward"))
 							}, null, 8, ["disabled"]),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								"icon-only": "",
 								label: "Cancel selection",
 								icon: "close",
@@ -43405,7 +43759,7 @@ var _sfc_main$11 = {
 							"aria-label": unref(t)("Attachments")
 						}, [(openBlock(true), createElementBlock(Fragment, null, renderList(attachments.value, (row) => {
 							return openBlock(), createElementBlock("div", { key: row.token }, [
-								createVNode(_sfc_main$163, {
+								createVNode(_sfc_main$166, {
 									title: row.name,
 									extension: row.name.split(".").at(-1),
 									"size-text": unref(formatFileSize)(row.size),
@@ -43428,7 +43782,7 @@ var _sfc_main$11 = {
 									uploaded: "Uploaded",
 									failed: "Upload failed. Retry sending."
 								}[row.status] || "Uploaded")), 1)),
-								createVNode(_sfc_main$138, {
+								createVNode(_sfc_main$141, {
 									"icon-only": "",
 									label: "Remove attachment",
 									icon: "close",
@@ -43459,14 +43813,14 @@ var _sfc_main$11 = {
 								"aria-label": unref(t)("Choose conversation preview"),
 								onChange: changePreview
 							}, null, 40, _hoisted_20$1),
-							createVNode(_sfc_main$138, {
+							createVNode(_sfc_main$141, {
 								"icon-only": "",
 								icon: "MDI_PAPERCLIP",
 								label: "Attach file",
 								disabled: sending.value || !permissions.value.upload,
 								onClick: _cache[30] || (_cache[30] = ($event) => fileInput.value.click())
 							}, null, 8, ["disabled"]),
-							!unref(mobile) ? (openBlock(), createBlock(_sfc_main$138, {
+							!unref(mobile) ? (openBlock(), createBlock(_sfc_main$141, {
 								key: 0,
 								"icon-only": "",
 								icon: "MDI_CONTENT_PASTE",
@@ -43474,7 +43828,7 @@ var _sfc_main$11 = {
 								disabled: sending.value || !permissions.value.upload,
 								onClick: pasteFiles
 							}, null, 8, ["disabled"])) : createCommentVNode("", true),
-							createVNode(_sfc_main$116, {
+							createVNode(_sfc_main$119, {
 								ref_key: "composer",
 								ref: composer,
 								modelValue: draft.value,
@@ -43498,7 +43852,7 @@ var _sfc_main$11 = {
 			], 42, _hoisted_1$10)), [[_directive_window, {
 				kind: "messages",
 				type: "window"
-			}]]), withDirectives((openBlock(), createBlock(resolveDynamicComponent(editorPopup.value ? _sfc_main$159 : "dialog"), {
+			}]]), withDirectives((openBlock(), createBlock(resolveDynamicComponent(editorPopup.value ? _sfc_main$160 : "dialog"), {
 				key: mode.value,
 				ref_key: "editor",
 				ref: editor,
@@ -43529,7 +43883,7 @@ var _sfc_main$11 = {
 				default: withCtx(() => [!editorPopup.value || !["create", "members"].includes(mode.value) ? (openBlock(), createElementBlock("header", _hoisted_21$1, [
 					createBaseVNode("strong", null, toDisplayString(unref(t)(actionTitles[mode.value] || "Messages")), 1),
 					mode.value === "files" ? (openBlock(), createElementBlock("small", _hoisted_22$1, toDisplayString(unref(t)("{count} loaded", { count: gallery.value.length })), 1)) : createCommentVNode("", true),
-					!editorPopup.value ? (openBlock(), createBlock(_sfc_main$138, {
+					!editorPopup.value ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 1,
 						"icon-only": "",
 						icon: "close",
@@ -43540,27 +43894,27 @@ var _sfc_main$11 = {
 				])) : createCommentVNode("", true), createBaseVNode("form", { onSubmit: _cache[50] || (_cache[50] = withModifiers(($event) => mode.value === "search" ? applySearch() : submitEditor(), ["prevent"])) }, [
 					error.value ? (openBlock(), createElementBlock("p", _hoisted_23$1, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
 					mode.value === "search" ? (openBlock(), createElementBlock("div", _hoisted_24$1, [
-						createVNode(_sfc_main$157, {
+						createVNode(_sfc_main$161, {
 							modelValue: searchDraft.value,
 							"onUpdate:modelValue": _cache[36] || (_cache[36] = ($event) => searchDraft.value = $event),
 							label: "Search messages",
 							placeholder: unref(t)("Type a message or phrase")
 						}, null, 8, ["modelValue", "placeholder"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							"icon-only": "",
 							icon: "close",
 							label: "Clear search",
 							disabled: !search.value,
 							onClick: _cache[37] || (_cache[37] = ($event) => applySearch(""))
 						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							"icon-only": "",
 							icon: "search",
 							label: "Search",
 							onClick: _cache[38] || (_cache[38] = ($event) => applySearch())
 						})
 					])) : createCommentVNode("", true),
-					mode.value === "rename" ? (openBlock(), createBlock(_sfc_main$157, {
+					mode.value === "rename" ? (openBlock(), createBlock(_sfc_main$161, {
 						key: 2,
 						modelValue: title.value,
 						"onUpdate:modelValue": _cache[39] || (_cache[39] = ($event) => title.value = $event),
@@ -43571,7 +43925,7 @@ var _sfc_main$11 = {
 						disabled: busy.value
 					}, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true),
 					mode.value === "create" || mode.value === "members" ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [
-						createBaseVNode("div", _hoisted_25$1, [createVNode(_sfc_main$139, { name: mode.value === "create" ? "MDI_ACCOUNT_MULTIPLE_PLUS" : "MDI_ACCOUNT_COG" }, null, 8, ["name"]), createBaseVNode("div", null, [createBaseVNode("strong", null, toDisplayString(unref(t)(actionTitles[mode.value])), 1), createBaseVNode("small", null, toDisplayString(unref(t)(mode.value === "create" ? "Find people and start a direct or group chat" : "Select everyone who should remain in this chat")), 1)])]),
+						createBaseVNode("div", _hoisted_25$1, [createVNode(_sfc_main$142, { name: mode.value === "create" ? "MDI_ACCOUNT_MULTIPLE_PLUS" : "MDI_ACCOUNT_COG" }, null, 8, ["name"]), createBaseVNode("div", null, [createBaseVNode("strong", null, toDisplayString(unref(t)(actionTitles[mode.value])), 1), createBaseVNode("small", null, toDisplayString(unref(t)(mode.value === "create" ? "Find people and start a direct or group chat" : "Select everyone who should remain in this chat")), 1)])]),
 						(openBlock(), createBlock(_sfc_main$31, {
 							key: pickerKey.value,
 							modelValue: recipients.value,
@@ -43585,7 +43939,7 @@ var _sfc_main$11 = {
 							"current-login",
 							"disabled"
 						])),
-						mode.value === "create" && recipients.value.length > 1 ? (openBlock(), createBlock(_sfc_main$157, {
+						mode.value === "create" && recipients.value.length > 1 ? (openBlock(), createBlock(_sfc_main$161, {
 							key: 0,
 							modelValue: title.value,
 							"onUpdate:modelValue": _cache[41] || (_cache[41] = ($event) => title.value = $event),
@@ -43598,12 +43952,12 @@ var _sfc_main$11 = {
 						mode.value === "create" && recipients.value.length > 1 && !canCreateGroup.value ? (openBlock(), createElementBlock("p", _hoisted_26$1, toDisplayString(unref(t)("Group chats can be created by administrators and supervisors")), 1)) : createCommentVNode("", true)
 					], 64)) : createCommentVNode("", true),
 					mode.value === "view-members" ? (openBlock(), createElementBlock("div", _hoisted_27$1, [(openBlock(true), createElementBlock(Fragment, null, renderList(members.value, (user) => {
-						return openBlock(), createBlock(_sfc_main$145, {
+						return openBlock(), createBlock(_sfc_main$148, {
 							key: user.login,
 							"corner-radius": 12,
 							inset: 0
 						}, {
-							default: withCtx(() => [createVNode(_sfc_main$138, {
+							default: withCtx(() => [createVNode(_sfc_main$141, {
 								class: "messages-member-row",
 								"aria-label": user.displayName || user.login,
 								onClick: ($event) => {
@@ -43628,7 +43982,7 @@ var _sfc_main$11 = {
 							_: 2
 						}, 1024);
 					}), 128))])) : createCommentVNode("", true),
-					mode.value === "edit" ? (openBlock(), createBlock(_sfc_main$143, {
+					mode.value === "edit" ? (openBlock(), createBlock(_sfc_main$146, {
 						key: 5,
 						modelValue: editText.value,
 						"onUpdate:modelValue": _cache[42] || (_cache[42] = ($event) => editText.value = $event),
@@ -43638,13 +43992,13 @@ var _sfc_main$11 = {
 						required: ""
 					}, null, 8, ["modelValue", "disabled"])) : createCommentVNode("", true),
 					["history", "pin-history"].includes(mode.value) ? (openBlock(), createElementBlock("div", _hoisted_28$1, [(openBlock(true), createElementBlock(Fragment, null, renderList(historyEntries.value, (entry, index) => {
-						return openBlock(), createBlock(resolveDynamicComponent(mode.value === "pin-history" ? _sfc_main$145 : "div"), {
+						return openBlock(), createBlock(resolveDynamicComponent(mode.value === "pin-history" ? _sfc_main$148 : "div"), {
 							key: index,
 							class: "message-revision-surface",
 							"corner-radius": 10,
 							inset: 0
 						}, {
-							default: withCtx(() => [(openBlock(), createBlock(resolveDynamicComponent(mode.value === "pin-history" ? _sfc_main$138 : "article"), {
+							default: withCtx(() => [(openBlock(), createBlock(resolveDynamicComponent(mode.value === "pin-history" ? _sfc_main$141 : "article"), {
 								class: "message-revision",
 								disabled: mode.value === "pin-history" ? !entry.messageId || loading.value : void 0,
 								"aria-label": mode.value === "pin-history" ? entry.summary || entry.body || unref(t)("Pinned message") : void 0,
@@ -43661,13 +44015,13 @@ var _sfc_main$11 = {
 						}, 1024);
 					}), 128))])) : createCommentVNode("", true),
 					mode.value === "forward" ? (openBlock(), createElementBlock(Fragment, { key: 7 }, [createBaseVNode("p", _hoisted_29$1, toDisplayString(unref(t)("Choose one or more destination chats")), 1), createBaseVNode("div", _hoisted_30$1, [(openBlock(true), createElementBlock(Fragment, null, renderList(conversations.value, (row) => {
-						return openBlock(), createBlock(_sfc_main$145, {
+						return openBlock(), createBlock(_sfc_main$148, {
 							key: row.conversationId,
 							selected: targets.value.includes(row.conversationId),
 							"corner-radius": 12,
 							inset: 1
 						}, {
-							default: withCtx(() => [createVNode(_sfc_main$160, {
+							default: withCtx(() => [createVNode(_sfc_main$163, {
 								class: "messages-forward-row",
 								"model-value": targets.value.includes(row.conversationId),
 								label: titleFor(row),
@@ -43717,7 +44071,7 @@ var _sfc_main$11 = {
 							"action-state"
 						]);
 					}), 128))], 32)) : createCommentVNode("", true),
-					mode.value === "files" && more.value ? (openBlock(), createBlock(_sfc_main$138, {
+					mode.value === "files" && more.value ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 10,
 						class: "chat-files-earlier",
 						label: "Load earlier messages",
@@ -43736,7 +44090,7 @@ var _sfc_main$11 = {
 							"members",
 							"forward"
 						].includes(mode.value) ? (openBlock(), createElementBlock("small", _hoisted_34$1, toDisplayString(mode.value === "forward" ? unref(t)(selected.value.length === 1 ? "{count} message selected" : "{count} messages selected", { count: selected.value.length }) : unref(t)(mode.value === "create" ? "{count} selected" : "{count} members selected", { count: recipients.value.length })), 1)) : createCommentVNode("", true),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							label: "Cancel",
 							disabled: busy.value,
 							onClick: _cache[49] || (_cache[49] = ($event) => editor.value.close())
@@ -43750,7 +44104,7 @@ var _sfc_main$11 = {
 							"delete",
 							"delete-message",
 							"clear"
-						].includes(mode.value) ? (openBlock(), createBlock(_sfc_main$138, {
+						].includes(mode.value) ? (openBlock(), createBlock(_sfc_main$141, {
 							key: 1,
 							type: "submit",
 							label: mode.value === "forward" ? "Forward" : mode.value === "rename" ? "Rename" : mode.value === "create" ? "Create" : mode.value === "members" ? "Save members" : mode.value === "clear" ? "Clear messages" : mode.value === "delete" ? "Delete chat" : mode.value === "delete-message" ? "Delete" : "Save",
@@ -43877,9 +44231,9 @@ var _sfc_main$10 = {
 				"aria-label": unref(t)("Notifications"),
 				onClose: _cache[2] || (_cache[2] = ($event) => emit("closed"))
 			}, [createBaseVNode("header", _hoisted_2$7, [
-				createVNode(_sfc_main$139, { name: "system-activity" }),
+				createVNode(_sfc_main$142, { name: "system-activity" }),
 				createBaseVNode("strong", null, toDisplayString(unref(t)("Notifications")), 1),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					"icon-only": "",
 					icon: "close",
 					label: "Close Notifications",
@@ -43890,14 +44244,14 @@ var _sfc_main$10 = {
 				ref: content,
 				class: "system-activity-content"
 			}, [createBaseVNode("section", _hoisted_3$5, [createBaseVNode("div", _hoisted_4$3, [
-				createBaseVNode("div", _hoisted_5$2, [createBaseVNode("strong", null, toDisplayString(unref(t)("ACTIVITY & NOTIFICATIONS")), 1), createVNode(_sfc_main$138, {
+				createBaseVNode("div", _hoisted_5$2, [createBaseVNode("strong", null, toDisplayString(unref(t)("ACTIVITY & NOTIFICATIONS")), 1), createVNode(_sfc_main$141, {
 					label: "Clear history",
 					icon: "delete-sweep",
 					disabled: !unref(notificationHistory).records.length,
 					onClick: unref(clearNotificationHistory)
 				}, null, 8, ["disabled", "onClick"])]),
 				createBaseVNode("p", _hoisted_6$2, toDisplayString(unref(t)("Client events and background operations from this session.")), 1),
-				createVNode(_sfc_main$149, {
+				createVNode(_sfc_main$152, {
 					modelValue: group.value,
 					"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => group.value = $event),
 					options: filters,
@@ -43915,7 +44269,7 @@ var _sfc_main$10 = {
 					"data-kind": row.kind,
 					"data-group": row.group,
 					onClick: activate
-				}, [createBaseVNode("div", _hoisted_9$1, [createVNode(_sfc_main$139, { name: kindIcon(row.kind) }, null, 8, ["name"]), createBaseVNode("div", null, [
+				}, [createBaseVNode("div", _hoisted_9$1, [createVNode(_sfc_main$142, { name: kindIcon(row.kind) }, null, 8, ["name"]), createBaseVNode("div", null, [
 					createBaseVNode("header", null, [createBaseVNode("strong", { innerHTML: unref(linkifyPlainText)(row.sourceType ? row.message : unref(t)(row.message), unref(browserLink)) }, null, 8, _hoisted_10$1), time(row.timestamp) ? (openBlock(), createElementBlock("time", {
 						key: 0,
 						datetime: row.timestamp,
@@ -43927,7 +44281,7 @@ var _sfc_main$10 = {
 						innerHTML: unref(linkifyPlainText)(row.sourceType ? row.detail : unref(t)(row.detail), unref(browserLink))
 					}, null, 8, _hoisted_12$1)) : createCommentVNode("", true)
 				])])], 8, _hoisted_8$2);
-			}), 128)), !records.value.length ? (openBlock(), createElementBlock("div", _hoisted_13$1, [createVNode(_sfc_main$139, { name: "notifications" }), createBaseVNode("p", null, toDisplayString(unref(t)("No events in this group")), 1)])) : createCommentVNode("", true)], 8, _hoisted_7$2)])], 512)], 40, _hoisted_1$9)), [[_directive_window, {
+			}), 128)), !records.value.length ? (openBlock(), createElementBlock("div", _hoisted_13$1, [createVNode(_sfc_main$142, { name: "notifications" }), createBaseVNode("p", null, toDisplayString(unref(t)("No events in this group")), 1)])) : createCommentVNode("", true)], 8, _hoisted_7$2)])], 512)], 40, _hoisted_1$9)), [[_directive_window, {
 				kind: "notifications",
 				type: "window"
 			}]])]);
@@ -44068,7 +44422,7 @@ var ConnectionMenu_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			emit("busy", false);
 		});
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$159, {
+			return openBlock(), createBlock(_sfc_main$160, {
 				"frame-composition": "",
 				width: 330,
 				ref_key: "menu",
@@ -44082,14 +44436,14 @@ var ConnectionMenu_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 						online: __props.online,
 						connecting: busy.value
 					}]) }, null, 2),
-					createVNode(_sfc_main$139, {
+					createVNode(_sfc_main$142, {
 						class: "connection-icon",
 						name: "connection",
 						style: normalizeStyle({ color: busy.value ? "var(--yellow)" : __props.online ? "var(--success)" : "var(--error)" })
 					}, null, 8, ["style"]),
 					createBaseVNode("span", _hoisted_1$8, toDisplayString(unref(t)(busy.value ? "Connecting" : __props.online ? "Connected" : "Offline")), 1)
 				]),
-				default: withCtx(() => [createVNode(_sfc_main$128, {
+				default: withCtx(() => [createVNode(_sfc_main$131, {
 					actions: actions.value,
 					onTriggered: invoke
 				}, null, 8, ["actions"]), error.value || __props.updatesError ? (openBlock(), createElementBlock("p", _hoisted_2$6, toDisplayString(unref(t)(error.value || __props.updatesError)), 1)) : message.value ? (openBlock(), createElementBlock("p", _hoisted_3$4, toDisplayString(unref(t)(message.value)), 1)) : createCommentVNode("", true)]),
@@ -44246,7 +44600,7 @@ var SignIn_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				ref: body,
 				class: "sign-in-frame",
 				onSubmit: _cache[0] || (_cache[0] = withModifiers(($event) => dispatch({ type: "submit" }), ["prevent"]))
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				scene: scene.value,
 				onEvent: dispatch
 			}, null, 8, ["scene"])], 544)]);
@@ -44278,7 +44632,7 @@ var SystemActivityButton_default = /*#__PURE__*/ _plugin_vue_export_helper_defau
 					"in-menu": __props.compact
 				}]),
 				onClick: _cache[1] || (_cache[1] = withModifiers(($event) => _ctx.$emit("open"), ["self"]))
-			}, [createVNode(_sfc_main$138, {
+			}, [createVNode(_sfc_main$141, {
 				class: "system-activity-trigger",
 				"icon-only": !__props.compact,
 				label: "System activity",
@@ -44287,7 +44641,7 @@ var SystemActivityButton_default = /*#__PURE__*/ _plugin_vue_export_helper_defau
 				onClick: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("open"))
 			}, {
 				default: withCtx(() => [
-					createVNode(_sfc_main$139, {
+					createVNode(_sfc_main$142, {
 						class: "activity-icon",
 						name: "system-activity"
 					}),
@@ -44489,7 +44843,7 @@ var NotificationStack_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 					"data-dismissible": row.dismissible,
 					role: row.kind === "error" || row.kind === "warning" ? "alert" : "status"
 				}, [
-					["activity", "messages"].includes(row.action) ? (openBlock(), createBlock(_sfc_main$138, {
+					["activity", "messages"].includes(row.action) ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 0,
 						class: "notification-activation",
 						label: row.action === "messages" ? "Open Messages" : "Open Activity Feed",
@@ -44523,7 +44877,7 @@ var NotificationStack_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 							label: row.message
 						}, null, 8, ["label"])) : createCommentVNode("", true)
 					]),
-					row.dismissible ? (openBlock(), createBlock(_sfc_main$138, {
+					row.dismissible ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 1,
 						class: "notification-dismiss",
 						"icon-only": "",
@@ -44531,7 +44885,7 @@ var NotificationStack_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 						label: "Dismiss notification",
 						onClick: ($event) => unref(dismissNotification)(row.notificationId)
 					}, null, 8, ["onClick"])) : createCommentVNode("", true),
-					row.sourceType === "messages" && row.actionData && !row.replyOpen ? (openBlock(), createBlock(_sfc_main$138, {
+					row.sourceType === "messages" && row.actionData && !row.replyOpen ? (openBlock(), createBlock(_sfc_main$141, {
 						key: 2,
 						class: "notification-reply-button",
 						label: "Reply",
@@ -44545,7 +44899,7 @@ var NotificationStack_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 						onSubmit: withModifiers(($event) => sendReply(row), ["prevent"]),
 						onKeydown: withKeys(withModifiers(($event) => unref(cancelNotificationReply)(row.notificationId), ["prevent", "stop"]), ["esc"])
 					}, [
-						createVNode(_sfc_main$157, {
+						createVNode(_sfc_main$161, {
 							"model-value": row.replyText,
 							label: "Write a reply",
 							placeholder: unref(t)("Write a reply"),
@@ -44560,12 +44914,12 @@ var NotificationStack_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 							"disabled",
 							"onUpdate:modelValue"
 						]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							type: "submit",
 							label: "Send",
 							disabled: row.replySending || !row.replyText.trim()
 						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$138, {
+						createVNode(_sfc_main$141, {
 							"icon-only": "",
 							icon: "close",
 							label: "Cancel reply",
@@ -50556,7 +50910,7 @@ var _sfc_main$2 = {
 			}, [
 				__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$2, toDisplayString(__props.error), 1)) : createCommentVNode("", true),
 				__props.notice ? (openBlock(), createElementBlock("p", _hoisted_2$2, toDisplayString(__props.notice), 1)) : createCommentVNode("", true),
-				__props.summary && !__props.error ? (openBlock(), createElementBlock("div", _hoisted_3$1, [createVNode(_sfc_main$139, { name: "info" }), createVNode(_sfc_main$3, {
+				__props.summary && !__props.error ? (openBlock(), createElementBlock("div", _hoisted_3$1, [createVNode(_sfc_main$142, { name: "info" }), createVNode(_sfc_main$3, {
 					text: __props.summary,
 					onTopic: _cache[0] || (_cache[0] = ($event) => emit("link", $event))
 				}, null, 8, ["text"])])) : createCommentVNode("", true),
@@ -51079,9 +51433,9 @@ var _sfc_main$1 = {
 				onCancel: withModifiers(close, ["prevent"]),
 				onClose: closed
 			}, [createBaseVNode("header", _hoisted_2$1, [
-				createVNode(_sfc_main$139, { name: "help" }),
+				createVNode(_sfc_main$142, { name: "help" }),
 				createBaseVNode("strong", null, toDisplayString(unref(t)(__props.label)), 1),
-				createVNode(_sfc_main$138, {
+				createVNode(_sfc_main$141, {
 					"icon-only": "",
 					label: "Close help",
 					icon: "close",
@@ -51091,7 +51445,7 @@ var _sfc_main$1 = {
 				ref_key: "layout",
 				ref: layout,
 				class: "help-layout"
-			}, [createVNode(_sfc_main$140, {
+			}, [createVNode(_sfc_main$143, {
 				ref_key: "frame",
 				ref: frame,
 				scene: scene.value,
@@ -51113,35 +51467,35 @@ var _sfc_main$1 = {
 //#endregion
 //#region src/App.vue
 var App_exports = /* @__PURE__ */ __exportAll$1({ default: () => App_default });
-var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([37,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,38,39,40,41])));
-var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([42,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,43,44])));
-var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([45,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,46,14,23,24,25,47,48,38,49,50])));
-var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([51,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,43,52,53,39,40,54])));
-var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([55,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,46,14,23,24,25,47,56,43,57])));
-var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([58,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,25,28,27,14])));
-var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([59,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,28,58,25,27,14,60,61])));
-var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([62,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,25,63,43,56,52,53,48,38,49,64,28,60,65])));
-var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([66,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,25,67,28])));
-var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([68,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,25,28])));
-var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([69,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,25,28])));
-var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([70,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,28])));
-var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([71,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,72])));
-var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([73,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,72])));
-var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([74,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,28])));
+var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([34,1,2,3,4,5,15,6,7,16,17,10,11,18,35,36,37,38])));
+var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([39,1,2,3,4,5,15,6,7,16,17,10,11,18,19,40,41])));
+var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([42,1,2,3,4,5,15,6,7,16,17,10,11,18,43,14,19,20,21,22,44,45,35,46,47])));
+var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([48,1,2,3,4,5,15,6,7,16,17,10,11,18,40,49,50,36,37,51])));
+var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([52,1,2,3,4,5,15,6,7,16,17,10,11,18,43,14,19,20,21,22,44,53,40,54])));
+var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([55,1,2,3,4,5,15,6,7,16,17,10,11,18,19,22,25,24,14])));
+var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([56,1,2,3,4,5,15,6,7,16,17,10,11,18,19,25,55,22,24,14,57,58])));
+var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([59,1,2,3,4,5,15,6,7,16,17,10,11,18,19,22,60,40,53,49,50,45,35,46,61,25,57,62])));
+var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([63,1,2,3,4,5,15,6,7,16,17,10,11,18,19,22,64,25])));
+var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([65,1,2,3,4,5,15,6,7,16,17,10,11,18,19,22,25])));
+var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([66,1,2,3,4,5,15,6,7,16,17,10,11,18,19,22,25])));
+var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([67,1,2,3,4,5,15,6,7,16,17,10,11,18,19,25])));
+var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([68,1,2,3,4,5,15,6,7,16,17,10,11,18,19,69])));
+var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([70,1,2,3,4,5,15,6,7,16,17,10,11,18,19,69])));
+var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([71,1,2,3,4,5,15,6,7,16,17,10,11,18,19,25])));
 var compactLayout = window.matchMedia("(max-width: 900px)");
 var shortcutLayout = mobileLayout;
 var _sfc_main = {
 	components: {
-		ObjectReport: _sfc_main$161,
+		ObjectReport: _sfc_main$164,
 		SearchResultMenu: _sfc_main$35,
 		SearchHeader: _sfc_main$23,
 		SearchFooter: _sfc_main$24,
 		SignIn: SignIn_default,
-		ActionRows: _sfc_main$128,
-		DockWorkspaceFooter: _sfc_main$77,
+		ActionRows: _sfc_main$131,
+		DockWorkspaceFooter: _sfc_main$80,
 		AdministrationShell: AdministrationShell_default,
 		FileWorkspace,
-		DropPlate: _sfc_main$75,
+		DropPlate: _sfc_main$78,
 		KnowledgeBase,
 		SnapshotBrowser,
 		DescriptionEditor,
@@ -51162,7 +51516,7 @@ var _sfc_main = {
 		WorkspaceSearch: WorkspaceSearch_default,
 		TagCloud: TagCloud_default,
 		DockWorkspace: _sfc_main$26,
-		AppearanceControls: _sfc_main$155,
+		AppearanceControls: _sfc_main$158,
 		Configuration,
 		RecordForm: RecordForm_default,
 		WidgetConfiguration: WidgetConfiguration_default,
@@ -51170,20 +51524,20 @@ var _sfc_main = {
 		ObjectOperations: ObjectOperations_default,
 		ObjectAction: ObjectAction_default,
 		RelatedObjects: RelatedObjects_default,
-		AppIcon: _sfc_main$139,
-		AppSwitch: _sfc_main$154,
+		AppIcon: _sfc_main$142,
+		AppSwitch: _sfc_main$157,
 		SearchTypes,
 		SchemaEditor,
 		WorkflowEditor,
-		AppSelect: _sfc_main$153,
-		AppButton: _sfc_main$138,
-		AppMenu: _sfc_main$159,
+		AppSelect: _sfc_main$156,
+		AppButton: _sfc_main$141,
+		AppMenu: _sfc_main$160,
 		CommitQueue: CommitQueue_default,
 		Timesheet: Timesheet_default,
 		TaskManager: TaskManager_default,
 		SectionTabRail: _sfc_main$49,
 		WorkspaceTabs: _sfc_main$47,
-		NavigationTree: _sfc_main$81,
+		NavigationTree: _sfc_main$84,
 		NavigationDrawer: _sfc_main$46,
 		ProjectCreation: ProjectCreation_default,
 		ProjectChooser: _sfc_main$41,
@@ -51383,7 +51737,7 @@ var _sfc_main = {
 			return compose(main_menus_default.user, this.mainMenuContext);
 		},
 		mainToolbar() {
-			return describe$30({
+			return describe$31({
 				width: this.toolbarWidth,
 				compact: this.compactShortcuts,
 				progressReveal: this.activityProgress ? 1 : 0,
@@ -51394,7 +51748,7 @@ var _sfc_main = {
 			return positions$1(this.mainToolbar);
 		},
 		workspaceStyle() {
-			const scene = describe$29(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
+			const scene = describe$30(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
 			return {
 				gridTemplateAreas: scene.grid.areas,
 				gridTemplateColumns: scene.grid.columns,
@@ -51943,7 +52297,7 @@ var _sfc_main = {
 			const session = this.session;
 			this.scriptEditorLoading = true;
 			try {
-				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([75,1,2,3,4,5,15,6,7,16,17,18,19,10,11,20,21,22,76]));
+				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([72,1,2,3,4,5,15,6,7,16,17,10,11,18,73]));
 				if (this.session !== session) return;
 				this.scriptEditorComponent ||= markRaw(module.default);
 				await nextTick();
@@ -56006,6 +56360,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { changeDefinition as $, serialize as A, layout$2 as B, _sfc_main$81 as C, describe$24 as D, binding as E, _sfc_main$103 as F, _sfc_main$115 as G, optionActions as H, messageDate as I, applyDuplicateProfile as J, ObjectAction_default as K, clampRatio as L, variants as M, widgets as N, edit$1 as O, views as P, saveDuplicateProfile as Q, fileColumns as R, _sfc_main$47 as S, actions$3 as T, optionChange as U, metrics$3 as V, toolbar$1 as W, contentChoices as X, changeContent as Y, duplicateProfile as Z, editColumn as _, updateIntervals as a, describe$14 as b, runBrowserScript as c, ProjectCreation_default as d, App_default as default, definitionWizard as et, ImagePicker_default as f, describe$13 as g, contentWidth as h, updateBatchDelays as i, template as j, roles as k, scriptTree as l, change as m, MarkdownItCallable as n, _sfc_main$128 as nt, updateModes as o, readPreviewImage as p, _sfc_main$125 as q, networkSettings as r, buttonId as s, App_exports as t, displayWidgets as tt, lifecycle as u, fieldsFor as v, RelatedObjects_default as w, pages as x, confirmation$1 as y, fileIcon as z };
+export { changeDefinition as $, serialize as A, layout$3 as B, _sfc_main$84 as C, describe$25 as D, binding as E, _sfc_main$106 as F, _sfc_main$118 as G, optionActions as H, messageDate as I, applyDuplicateProfile as J, ObjectAction_default as K, clampRatio as L, variants as M, widgets as N, edit$1 as O, views as P, saveDuplicateProfile as Q, fileColumns as R, _sfc_main$47 as S, actions$3 as T, optionChange as U, metrics$3 as V, toolbar$1 as W, contentChoices as X, changeContent as Y, duplicateProfile as Z, editColumn as _, updateIntervals as a, describe$14 as b, runBrowserScript as c, ProjectCreation_default as d, App_default as default, definitionWizard as et, ImagePicker_default as f, describe$13 as g, contentWidth as h, updateBatchDelays as i, template as j, roles as k, scriptTree as l, change as m, MarkdownItCallable as n, _sfc_main$131 as nt, updateModes as o, readPreviewImage as p, _sfc_main$128 as q, networkSettings as r, buttonId as s, App_exports as t, displayWidgets as tt, lifecycle as u, fieldsFor as v, RelatedObjects_default as w, pages as x, confirmation$1 as y, fileIcon as z };
 
 //# sourceMappingURL=App.js.map

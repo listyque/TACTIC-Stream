@@ -846,7 +846,9 @@ try {
   assert.equal(await gantt.locator('[data-task-key]').count(), 2);
   for (const box of await gantt.getByRole('checkbox').all()) await box.check();
   await editSelected('Description must survive schedule undo');
-  await gantt.locator('.workspace-menu > summary').tap();
+  await gantt
+    .getByRole('button', { name: 'Schedule options', exact: true })
+    .tap();
   await gantt
     .getByRole('checkbox', { name: 'Working days only', exact: true })
     .check();
@@ -854,7 +856,6 @@ try {
     .getByRole('button', { name: 'Shift one day later', exact: true })
     .tap();
   await scheduleReady();
-  await gantt.locator('.workspace-menu > summary').tap();
   assert.ok(
     projectedRecords
       .find((row) => row.taskCode === baseline[0].__search_key__)
@@ -895,9 +896,7 @@ try {
   });
   await scheduleEditor.waitFor({ state: 'visible' });
   await scheduleEditor.getByLabel('Progress', { exact: true }).fill('35');
-  await scheduleEditor
-    .getByRole('button', { name: 'Apply to draft', exact: true })
-    .tap();
+  await scheduleEditor.getByLabel('Progress', { exact: true }).press('Enter');
   await scheduleEditor.waitFor({ state: 'hidden' });
   await scheduleReady();
   assert.equal(
@@ -919,11 +918,15 @@ try {
     .tap();
   await scheduleReady();
   const beforeDrag = JSON.parse(JSON.stringify(projectedRecords));
-  await gantt.locator('.workspace-menu > summary').tap();
   await gantt
-    .getByLabel('Timeline scale', { exact: true })
+    .getByRole('button', { name: 'Schedule options', exact: true })
+    .tap();
+  await gantt
+    .getByRole('combobox', { name: 'Timeline scale', exact: true })
     .selectOption('days');
-  await gantt.locator('.workspace-menu > summary').tap();
+  await gantt
+    .getByRole('button', { name: 'Schedule options', exact: true })
+    .tap();
   const bar = gantt.locator('.task-gantt-move').first(),
     rect = await bar.boundingBox();
   await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height / 2);
@@ -968,17 +971,23 @@ try {
     'Original deadline time is retained'
   );
   assert.equal(Number(savedFirst.progress ?? savedFirst.completion), 35);
-  await gantt.locator('.workspace-menu > summary').tap();
+  await gantt
+    .getByRole('button', { name: 'Schedule options', exact: true })
+    .tap();
   await gantt
     .getByRole('checkbox', { name: 'Group workload by assignee', exact: true })
     .check();
   await scheduleReady();
-  assert.ok((await gantt.locator('.task-gantt-summary').count()) > 0);
+  assert.ok(
+    (await gantt.locator('[data-frame="ganttGroupSummary"]').count()) > 0
+  );
   await gantt
     .getByRole('checkbox', { name: 'Group workload by assignee', exact: true })
     .uncheck();
   await scheduleReady();
-  await gantt.locator('.workspace-menu > summary').tap();
+  await gantt
+    .getByRole('button', { name: 'Schedule options', exact: true })
+    .tap();
   if (process.argv[3])
     await page.screenshot({
       path: process.argv[3].replace('.png', '-gantt.png'),
@@ -987,13 +996,20 @@ try {
   await captureSurface('gantt');
   await chooseView('calendar');
   await scheduleReady();
-  await calendar.getByLabel('Calendar month', { exact: true }).fill('2030-01');
+  await calendar
+    .getByLabel('Calendar month', { exact: true })
+    .fill('2030-01-01');
   await scheduleReady();
   assert.equal(await calendar.locator('.task-calendar-day').count(), 42);
   await calendar.getByRole('button', { name: 'Agenda', exact: true }).tap();
-  assert.equal(await calendar.locator('.task-calendar-agenda-row').count(), 2);
+  assert.equal(
+    await calendar.locator('[data-frame="calendarAgendaAction"]').count(),
+    2
+  );
   await calendar.getByRole('button', { name: 'Agenda', exact: true }).tap();
-  await calendar.locator('[data-date="2030-01-09"]').tap();
+  await calendar
+    .locator('[data-date="2030-01-09"] [data-frame="calendarDayAction"]')
+    .tap();
   await scheduleReady();
   assert.equal(
     await manager.locator('[data-task-key]').count(),
@@ -1219,19 +1235,13 @@ try {
   await milestones.waitFor({ state: 'visible' });
   await milestonesReady();
   for (const name of ['Release A', 'Release B']) {
-    await milestones
-      .getByRole('button', { name: 'New milestone', exact: true })
-      .tap();
+    await milestones.locator('[data-frame="milestoneCreate"]').tap();
     const row = milestones.locator('[data-milestone]').first();
     await row.getByLabel('Milestone name', { exact: true }).fill(name);
     await row.getByLabel('Due date', { exact: true }).fill('2030-01-10');
   }
   const milestoneRow = (name) =>
-    milestones.locator('[data-milestone]').filter({
-      has: page
-        .getByLabel('Milestone name', { exact: true })
-        .and(page.locator(`input[value="${name}"]`))
-    });
+    milestones.getByRole('group', { name, exact: true });
   await milestoneRow('Release A')
     .getByRole('button', { name: 'Save milestone', exact: true })
     .tap();
@@ -1310,7 +1320,7 @@ try {
     .tap();
   await milestonesReady();
   await milestones
-    .getByRole('searchbox', { name: 'Find a milestone', exact: true })
+    .getByRole('searchbox', { name: 'Search milestones', exact: true })
     .fill('Release B');
   assert.equal(await milestones.locator('[data-milestone]').count(), 1);
   await milestoneRow('Release B local')
@@ -1322,7 +1332,7 @@ try {
     .tap();
   await milestonesReady();
   await milestones
-    .getByRole('searchbox', { name: 'Find a milestone', exact: true })
+    .getByRole('searchbox', { name: 'Search milestones', exact: true })
     .fill('');
   assert.equal(await milestones.locator('[data-milestone]').count(), 1);
   assert.equal(
@@ -1337,7 +1347,7 @@ try {
   );
   assert.ok(
     (await milestones
-      .locator('.milestone-search')
+      .locator('.milestone-frame-search')
       .evaluate((el) => el.clientHeight)) < 70,
     'Search does not consume the scrollable list height'
   );
@@ -1389,12 +1399,20 @@ try {
   await page.setViewportSize({ width: 1280, height: 900 });
   await chooseView('gantt');
   await scheduleReady();
-  await gantt.locator('.task-gantt-milestone').first().tap();
+  const markerOverview = await gantt
+    .locator('[data-frame^="ganttOverviewMarker"]')
+    .first()
+    .boundingBox();
+  await page.mouse.click(
+    markerOverview.x + markerOverview.width / 2,
+    markerOverview.y + markerOverview.height / 2
+  );
+  await gantt.locator('[data-frame^="ganttMarkerOpen"]').first().tap();
   await milestones.waitFor({ state: 'visible' });
   await milestonesReady();
   assert.match(
-    await milestones.locator('.milestone-plan').innerText(),
-    /\/ 2 tasks complete/,
+    await milestones.locator('[data-frame="milestonePlanTitle"]').innerText(),
+    /\/ 2/,
     'Markers and editor share the linked-task plan'
   );
   await milestones
@@ -1414,9 +1432,7 @@ try {
     .locator('.milestone-delete')
     .getByRole('button', { name: 'Cancel', exact: true })
     .tap();
-  await milestones
-    .getByRole('button', { name: 'New milestone', exact: true })
-    .tap();
+  await milestones.locator('[data-frame="milestoneCreate"]').tap();
   await milestones
     .locator('[data-milestone]')
     .first()

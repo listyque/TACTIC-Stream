@@ -1,9 +1,8 @@
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, H as watch, J as markRaw, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
 import { D as t, o as _sfc_main$7, rt as _plugin_vue_export_helper_default, u as _sfc_main$8, x as redact, y as logEvent } from "./index.js";
-import { s as _sfc_main$10, v as _sfc_main$9 } from "./resize.js";
+import { _ as _sfc_main$9, a as _sfc_main$10 } from "./FrameView.js";
 import { f as _sfc_main$11, o as copyText } from "./CodeBlock.js";
-import { n as _sfc_main$13, t as _sfc_main$12 } from "./AppSplitter.js";
-import { t as _sfc_main$14 } from "./AppMenu.js";
+import { n as _sfc_main$14, r as _sfc_main$13, t as _sfc_main$12 } from "./AppSplitter.js";
 import { i as prettySize } from "./files.js";
 import { t as _sfc_main$15 } from "./AppMenuItem.js";
 import { S as _sfc_main$16 } from "./App.js";

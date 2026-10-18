@@ -1,6 +1,6 @@
 import { A as onMounted, G as withCtx, H as watch, M as openBlock, O as onBeforeUnmount, X as ref, b as createVNode, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass } from "./vue.js";
 import { o as _sfc_main$1, u as _sfc_main$2 } from "./index.js";
-import { t as ItemPreview_default } from "./ItemPreview.js";
+import { h as ItemPreview_default } from "./FrameView.js";
 //#region src/controls/AttachmentCard.vue
 var _hoisted_1 = { class: "attachment-info" };
 var _sfc_main = {

@@ -134,6 +134,10 @@ def fingerprints(handler):
             "frame_objects_state.mjs",
             "frame_tasks.mjs",
             "frame_tasks_state.mjs",
+            "frame_schedule.mjs",
+            "frame_schedule_state.mjs",
+            "gantt_calendar.mjs",
+            "gantt_scroll_stability.mjs",
             "mobile_tasks.mjs",
             "task_manager.mjs",
             "task_manager_context.mjs",
@@ -278,6 +282,24 @@ def fingerprints(handler):
         for path in (ROOT / "tools" / directory).iterdir()
         if path.is_file() and path.suffix in (".vue", ".js", ".html", ".py")
     ]
+    checks += [
+        path
+        for path in (ROOT / "tools/frame_schedule").iterdir()
+        if path.is_file() and path.suffix in (".vue", ".mjs", ".py", ".html")
+    ]
+    checks += [
+        handler / "tests" / (name + ".py")
+        for name in (
+            "test_frame_schedule",
+            "test_task_gantt_scroll_qml",
+            "test_task_gantt_schedule",
+            "test_milestones",
+        )
+    ]
+    checks += [
+        ROOT / "src/tactic/ui/table/task_schedule.py",
+        ROOT / "tests/test_task_schedule.py",
+    ]
     for index, path in enumerate(checks):
         result[f"check/{index}/{path.name}"] = hashlib.sha256(
             path.read_bytes()
@@ -376,6 +398,34 @@ def main():
         ("search-state", ["node", "frontend/tests/frame_search_state.mjs"], ROOT, {}),
         ("table-state", ["node", "frontend/tests/frame_table_state.mjs"], ROOT, {}),
         ("tasks-state", ["node", "frontend/tests/frame_tasks_state.mjs"], ROOT, {}),
+        (
+            "schedule-state",
+            ["node", "frontend/tests/frame_schedule_state.mjs"],
+            ROOT,
+            {},
+        ),
+        (
+            "browser-production-schedule",
+            ["node", "frontend/tests/gantt_calendar.mjs"],
+            ROOT,
+            {},
+        ),
+        (
+            "native-production-schedule",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_frame_schedule.FrameScheduleTests",
+                "tests.test_task_gantt_schedule",
+                "tests.test_task_gantt_scroll_qml.GanttScrollTests",
+                "tests.test_milestones.MilestoneControllerTests",
+                "tests.test_tasks_controller.TasksQmlTests.test_gantt_edge_grips_and_progress_drag_at_extremes",
+            ],
+            handler,
+            {"QT_QUICK_CONTROLS_STYLE": "Basic"},
+        ),
         ("browser-task-phone", ["node", "frontend/tests/mobile_tasks.mjs"], ROOT, {}),
         ("objects-state", ["node", "frontend/tests/frame_objects_state.mjs"], ROOT, {}),
         (

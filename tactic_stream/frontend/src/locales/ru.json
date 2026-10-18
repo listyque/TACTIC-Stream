@@ -2055,7 +2055,7 @@
   "Center today": "Показать сегодня по центру",
   "Timeline overview": "Обзор расписания",
   "{count} schedule warnings": "Предупреждений расписания: {count}",
-  "Scheduled tasks": "Запланированные задачи",
+  "Scheduled tasks": "Задачи с расписанием",
   "Unscheduled tasks": "Задачи без расписания",
   "Resize start date": "Изменить дату начала",
   "Resize deadline": "Изменить срок",
@@ -3716,7 +3716,7 @@
   "Close view tab: {title}": "Закрыть вкладку: {title}",
   "Workspace tree": "Дерево workspace",
   "Task Calendar": "Календарь задач",
-  "Task schedule": "Планирование задач",
+  "Task schedule": "Расписание задач",
   "Project overview": "Обзор проекта",
   "Agenda": "Список событий",
   "TODAY": "СЕГОДНЯ",
@@ -4581,5 +4581,7 @@
   "Quick task editor": "Быстрый редактор задач",
   "REVIEW": "НА ПРОВЕРКУ",
   "RECENT": "НЕДАВНИЕ",
-  "No supervisor": "Без руководителя"
+  "No supervisor": "Без руководителя",
+  "The schedule could not be staged.": "Не удалось применить расписание к черновику.",
+  "The task changed while this editor was open. Close and reopen the schedule.": "Задача изменилась, пока редактор был открыт. Закройте его и откройте расписание заново."
 }

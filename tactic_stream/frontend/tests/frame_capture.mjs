@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 
 export async function surface(page,selector,exclude){
  return page.locator(selector).evaluate((root,exclude)=>{
-  const origin=root.getBoundingClientRect(),boxes={},styles={},fills={},canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true})
+  const origin=root.getBoundingClientRect(),boxes={},styles={},fills={},interiors={},canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true})
   const color=value=>{ctx.clearRect(0,0,1,1);ctx.fillStyle=value;ctx.fillRect(0,0,1,1);return '#'+[...ctx.getImageData(0,0,1,1).data].slice(0,3).map(v=>v.toString(16).padStart(2,'0')).join('')}
   for(const el of root.querySelectorAll('[data-frame]')){
    if(exclude&&el.closest(exclude))continue
@@ -13,10 +13,12 @@ export async function surface(page,selector,exclude){
    if(!visible)continue
    if(el.classList.contains('frame-wrap')&&el.dataset.frame.endsWith('Description')){const text=el.querySelector('span');if(text&&text.getBoundingClientRect().height>r.height+.6)throw Error('Clipped description: '+el.dataset.frame)}
    boxes[el.dataset.frame]={x:r.x-origin.x,y:r.y-origin.y,width:r.width,height:r.height}
+   const indicator=el.querySelector(':scope > .app-checkbox-indicator')
+   if(indicator){const box=indicator.getBoundingClientRect();interiors[el.dataset.frame]={x:box.x,y:box.y,width:box.width,height:box.height}}
    const css=getComputedStyle(el);styles[el.dataset.frame]={fontSize:parseFloat(css.fontSize),weight:Number(css.fontWeight),color:color(css.color)}
    if(el.classList.contains('frame-box')){const value=color(css.backgroundColor);fills[el.dataset.frame]={color:value,alpha:ctx.getImageData(0,0,1,1).data[3]/255,radius:parseFloat(css.borderTopLeftRadius),bottomRightRadius:parseFloat(css.borderBottomRightRadius)}}
   }
-  return {boxes,styles,fills,origin:{x:origin.x,y:origin.y}}
+  return {boxes,styles,fills,interiors,origin:{x:origin.x,y:origin.y}}
  },exclude)
 }
 export async function compareSurface(page,root,actual,expected,label){
@@ -34,7 +36,7 @@ export async function compareSurface(page,root,actual,expected,label){
   }
   if(expected.styles[id]?.color){assert.deepEqual(actual.styles[id],expected.styles[id],label+' '+id+' typography/color');styles++}
   if(expected.interiors[id]){
-   const indicator=await page.locator(root).locator('[data-frame="'+id+'"] > .app-checkbox-indicator').last().boundingBox()
+   const indicator=actual.interiors?.[id] || await page.locator(root).locator('[data-frame="'+id+'"] > .app-checkbox-indicator').last().boundingBox()
    for(const key of ['x','y','width','height'])assert(Math.abs(indicator[key]-(key==='x'||key==='y'?actual.origin[key]:0)-expected.interiors[id][key])<=.6,label+' '+id+' indicator '+key)
    interiors++
   }

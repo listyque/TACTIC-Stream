@@ -3,6 +3,15 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
+## B10 production scheduling — 2026-10-18
+
+Stream 0.112.163 / Handler 0.6.0.114 share production Gantt, its timeline/rows,
+operation menus, pointer/zoom/progress rules, the separate Calendar dock,
+milestone presentation and explicit schedule form. Existing task drafts,
+revisions, server authorization and native/web mutation owners are retained.
+Source map, capabilities and evidence: [frame_schedule.md](docs/frame_schedule.md).
+B07 legacy-widget gaps and B11 Messaging remain separate.
+
 ## B09 task surfaces — 2026-10-18
 
 Stream 0.112.162 / Handler 0.6.0.113 use independent task descriptions under

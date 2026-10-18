@@ -1,6 +1,7 @@
 import { A as onMounted, M as openBlock, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString } from "./vue.js";
 import { I as controls, O as appearance, W as metrics } from "./index.js";
-import { C as label, E as rect, T as node, f as translate, n as observeFrameSizes, r as _sfc_main$1 } from "./resize.js";
+import { D as rect, E as node, t as _sfc_main$1, u as translate, w as label } from "./FrameView.js";
+import { n as observeFrameSizes } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/fields.ui.mjs
 function columnCount(width, count, minimum = 430, maximum = 3, gap = 10) {
 	return Math.max(1, Math.min(maximum, Math.max(1, count), Math.floor((width + gap) / (minimum + gap))));

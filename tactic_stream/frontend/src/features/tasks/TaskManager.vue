@@ -30,6 +30,7 @@ import TaskWorkspaceEditor from './TaskWorkspaceEditor.vue';
 import TaskWorkspaceFilters from './TaskWorkspaceFilters.vue';
 import TaskWorkspaceScope from './TaskWorkspaceScope.vue';
 import MilestoneManager from './MilestoneManager.vue';
+import TaskScheduleEditor from './TaskScheduleEditor.vue';
 import { preferences as configurationPreferences } from '../configuration/preferences.js';
 import { taskColumns as columns, normalizeColumns } from './taskColumns.js';
 const TaskGanttView = asyncComponent(() => import('./TaskGanttView.vue'));
@@ -118,6 +119,7 @@ export default {
     TaskWorkspaceScope,
     TaskGanttView,
     TaskCalendarView,
+    TaskScheduleEditor,
     MilestoneManager,
     TaskProcessPanel
   },
@@ -589,6 +591,8 @@ export default {
                 );
             return {
               taskCode: task.key,
+              taskId: String(task.id || ''),
+              dependencyId: String(task.depend_id || ''),
               parentKey: task.parent?.__search_key__ || '',
               parentTitle: task.title,
               process: task.process || '',
@@ -3015,72 +3019,80 @@ export default {
           @object="openObject"
           @operate="showMenu"
         />
-        <TaskGanttView
-          v-else-if="displayedView !== 'table'"
-          :active="active"
-          :has-more="!!result?.hasMore"
-          :projection="projection"
-          :tasks="tasks"
-          :selected="selected"
-          :collapsed="collapsed"
-          :busy="blocked || projecting"
-          :projecting="projecting"
-          :working-days="workingDays"
-          :resource-mode="!!resourcePrevious"
-          :can-undo="!!undo.length"
-          :can-redo="!!redo.length"
-          @select="toggle"
-          @collapse="collapse"
-          @edit="openSchedule"
-          @inspect="(key) => inspect(tasks.find((task) => task.key === key))"
-          @load-more="load(false, true)"
-          @activate="activate"
-          @select-all="selectVisible"
-          @object="(key) => openObject(tasks.find((task) => task.key === key))"
-          @progress="stageProgress"
-          @delete="remove(tasks.filter((task) => selected.includes(task.key)))"
-          @milestone="$refs.milestones.open($event)"
-          @working-days="workingDays = $event"
-          @resource-mode="resourceMode"
-          @undo="history(true)"
-          @redo="history(false)"
-          @batch="
-            (operation, amount) =>
-              schedule({ action: 'batch', operation, amount })
-          "
-          @schedule="
-            (key, start, duration, mode) =>
-              schedule(
-                {
-                  action: 'schedule',
-                  primary: key,
-                  range_start: projection.gantt.rangeStart,
-                  start_day: start,
-                  duration,
-                  move_selected: mode === 'move'
-                },
-                mode === 'move' && selected.includes(key) ? selected : [key]
-              )
-          "
-        >
-          <template #footer
-            ><AppSegmentedButton
-              :model-value="view"
-              label="Task view"
-              icon-only
-              :options="[
-                { value: 'table', label: 'Table', icon: 'MDI_TABLE' },
-                { value: 'gantt', label: 'Gantt', icon: 'MDI_CHART_GANTT' }
-              ]"
-              :disabled="busy"
-              @update:model-value="view = $event" /><AppButton
-              v-if="calendarTarget"
-              label="Calendar"
-              icon="MDI_CALENDAR_MONTH"
-              icon-only
-              @click="$emit('calendar')"
-          /></template>
-        </TaskGanttView>
+        <KeepAlive :max="1"
+          ><TaskGanttView
+            v-if="
+              !mobile && surface === 'workspace' && displayedView !== 'table'
+            "
+            :key="project"
+            :active="active"
+            :has-more="!!result?.hasMore"
+            :projection="projection"
+            :tasks="tasks"
+            :selected="selected"
+            :collapsed="collapsed"
+            :busy="blocked || projecting"
+            :projecting="projecting"
+            :working-days="workingDays"
+            :resource-mode="!!resourcePrevious"
+            :can-undo="!!undo.length"
+            :can-redo="!!redo.length"
+            @select="toggle"
+            @collapse="collapse"
+            @edit="openSchedule"
+            @inspect="(key) => inspect(tasks.find((task) => task.key === key))"
+            @load-more="load(false, true)"
+            @activate="activate"
+            @select-all="selectVisible"
+            @object="
+              (key) => openObject(tasks.find((task) => task.key === key))
+            "
+            @progress="stageProgress"
+            @delete="
+              remove(tasks.filter((task) => selected.includes(task.key)))
+            "
+            @milestone="$refs.milestones.open($event)"
+            @working-days="workingDays = $event"
+            @resource-mode="resourceMode"
+            @undo="history(true)"
+            @redo="history(false)"
+            @batch="
+              (operation, amount) =>
+                schedule({ action: 'batch', operation, amount })
+            "
+            @schedule="
+              (key, start, duration, mode) =>
+                schedule(
+                  {
+                    action: 'schedule',
+                    primary: key,
+                    range_start: projection.gantt.rangeStart,
+                    start_day: start,
+                    duration,
+                    move_selected: mode === 'move'
+                  },
+                  mode === 'move' && selected.includes(key) ? selected : [key]
+                )
+            "
+          >
+            <template #footer
+              ><AppSegmentedButton
+                :model-value="view"
+                label="Task view"
+                icon-only
+                :options="[
+                  { value: 'table', label: 'Table', icon: 'MDI_TABLE' },
+                  { value: 'gantt', label: 'Gantt', icon: 'MDI_CHART_GANTT' }
+                ]"
+                :disabled="busy"
+                @update:model-value="view = $event" /><AppButton
+                v-if="calendarTarget"
+                label="Calendar"
+                icon="MDI_CALENDAR_MONTH"
+                icon-only
+                @click="$emit('calendar')"
+            /></template> </TaskGanttView
+        ></KeepAlive>
         <TaskEmptyState
           v-if="
             !mobile &&
@@ -3194,75 +3206,18 @@ export default {
           @click="cancelSchedule"
         />
       </header>
-      <p v-if="error" class="error" role="alert">{{ t(error) }}</p>
-      <form
+      <TaskScheduleEditor
         v-if="scheduleEditor"
-        class="record-form"
-        @submit.prevent="applySchedule"
-      >
-        <label
-          >{{ t('Start date')
-          }}<AppDateField
-            v-model="scheduleEditor.start"
-            label="Start date"
-            :include-time="false"
-            :allow-clear="false"
-            required
-            :disabled="busy || !scheduleEditor.dates"
-        /></label>
-        <label
-          >{{
-            t(
-              workingDays
-                ? 'Duration in working days'
-                : 'Duration in calendar days'
-            )
-          }}<input
-            v-model="scheduleEditor.duration"
-            type="number"
-            min="1"
-            max="3650"
-            step="1"
-            required
-            :disabled="busy || !scheduleEditor.dates"
-        /></label>
-        <AppCheckbox
-          label="Working days only"
-          v-model="workingDays"
-          :disabled="busy || !scheduleEditor.dates"
-        />
-        <label v-if="scheduleEditor.progressField"
-          >{{ t('Progress')
-          }}<input
-            v-model="scheduleEditor.progress"
-            type="number"
-            min="0"
-            max="100"
-            step="1"
-            :disabled="busy"
-        /></label>
-        <AppCheckbox
-          v-if="selected.includes(scheduleEditor.key) && selected.length > 1"
-          label="Move selected tasks together"
-          v-model="scheduleEditor.move"
-          :disabled="busy || !scheduleEditor.dates"
-        />
-        <footer class="configuration-actions">
-          <AppButton
-            label="Cancel"
-            :disabled="busy"
-            @click="cancelSchedule"
-          /><AppButton
-            label="Apply to draft"
-            icon="check"
-            type="submit"
-            highlighted
-            :disabled="
-              busy || (!scheduleEditor.dates && !scheduleEditor.progressField)
-            "
-          />
-        </footer>
-      </form>
+        :model="scheduleEditor"
+        :working-days="workingDays"
+        :multi="selected.includes(scheduleEditor.key) && selected.length > 1"
+        :busy="busy"
+        :error="error"
+        @change="(field, value) => (scheduleEditor[field] = value)"
+        @working="workingDays = $event"
+        @cancel="cancelSchedule"
+        @apply="applySchedule"
+      />
     </dialog>
     <dialog
       ref="editor"

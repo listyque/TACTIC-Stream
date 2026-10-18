@@ -1,4 +1,4 @@
-import { T as node } from "./resize.js";
+import { E as node } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.state.mjs
 function initial() {
 	return {
