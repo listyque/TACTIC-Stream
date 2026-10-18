@@ -109,6 +109,29 @@ fallback select/scrollbar and native system file dialogs keep their platform
 appearance. Automated IME/selection and synthetic touch do not replace physical
 OS IME, touch hardware, rasterizer and compositor acceptance.
 
+## Files control variants (B12)
+
+The files migration also exercises the existing TabButton variant (`Button.tab`),
+editable Choice, multiline checkbox captions and character-wrapped notices.
+Graph content can scale its paint around the top-left origin. These are variants
+of the same house controls, not new feature-local controls. Both renderers keep
+child view/model descriptors inside passive action paint and reveal focused
+checkboxes in scrolling forms. `controls/forms/toggle.ui.mjs` composes a switch
+and a passive caption without reducing the primitive's hit target;
+`controls/buttons/metrics.mjs` lays out measured natural action widths.
+Work-view tabs share `viewTabWidth` and the existing workspace-tab painter,
+retain close targets and reserve horizontal scrollbar space.
+
+Native Workspace input tests exercise these variants through actual forms,
+graph controls, EN/RU dialogs and narrow layouts; the browser queue tests cover
+late clipboard/capture/validation results and session changes. The executable catalog includes `choice-editable` and
+`checkbox-wrapped`; input checks enter custom text and toggle the wrapped label.
+Splitter `action` previews a draft, `commitAction` saves it once and
+`cancelAction` restores the previous value. The browser and QML queue drivers
+check release, cancellation and keyboard paths. Fresh comparisons and the
+mandatory platform gate are recorded in `docs/frame_files.md`; the combined
+native timer-test regression is resolved and retained as a release check.
+
 ## B02 release evidence, 2026-10-16
 
 Handler 0.6.0.106 / Stream 0.112.155: 3,456 current actual pairs, 24 configurations,

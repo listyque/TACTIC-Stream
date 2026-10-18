@@ -1,9 +1,7 @@
-import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, R as useAttrs, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
+import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, R as useAttrs, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
-import { D as t, F as blend, G as readableText, I as controls, K as textStyles, L as cssColor, O as appearance, R as cssRoles, W as metrics, et as iconSets, j as frameColors, nt as BusyIndicator_default, o as _sfc_main$20, rt as _plugin_vue_export_helper_default, s as tooltipDirective, u as _sfc_main$21 } from "./index.js";
-import { f as _sfc_main$23, n as javascriptTokens, o as copyText, p as _sfc_main$22, r as pythonTokens, s as readClipboard } from "./CodeBlock.js";
-import { n as _sfc_main$25, r as _sfc_main$24, t as _sfc_main$26 } from "./AppSplitter.js";
-import { t as _sfc_main$27 } from "./AppCheckbox.js";
+import { A as appearance, B as cssRoles, J as textStyles, K as metrics, L as blend, N as frameColors, R as controls, at as _plugin_vue_export_helper_default, c as _sfc_main$26, d as ripple, f as _sfc_main$27, it as BusyIndicator_default, k as t, l as tooltipDirective, nt as iconSets, q as readableText, u as capturePress, z as cssColor } from "./index.js";
+import { f as _sfc_main$29, n as javascriptTokens, o as copyText, p as _sfc_main$28, r as pythonTokens, s as readClipboard } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
 /** @typedef {{x:number, y:number, width:number, height:number}} Bounds Logical pixels. */
 /** @typedef {{type:string, [key:string]:unknown}} Action UI event or adapter command. */
@@ -134,6 +132,7 @@ function validateScene(scene, models, views) {
 		if (!value || controlKinds.indexOf(value.kind) < 0) throw Error("Unsupported Frame scene control");
 		if (!value.id || ids.has(value.id)) throw Error("Duplicate/missing Frame id: " + value.id);
 		ids.add(value.id);
+		if (value.scale !== void 0 && (!Number.isFinite(value.scale) || value.scale <= 0)) throw Error("Invalid Frame scale: " + value.id);
 		if (!Object.prototype.hasOwnProperty.call(textStyles, value.fontRole) || value.fontSize !== textStyles[value.fontRole]) throw Error("Invalid Frame typography: " + value.id);
 		for (const key of [
 			"x",
@@ -144,8 +143,10 @@ function validateScene(scene, models, views) {
 		for (const key of [
 			"action",
 			"doubleAction",
+			"contextAction",
 			"activateAction",
 			"commitAction",
+			"cancelAction",
 			"dropAction",
 			"dragStartAction"
 		]) if (value[key] != null && (typeof value[key].type !== "string" || !value[key].type)) throw Error("Invalid Frame action: " + value.id + "." + key);
@@ -195,14 +196,14 @@ function virtualRange(count, rowHeight, viewport, scroll, overscan) {
 }
 //#endregion
 //#region src/controls/AppSlider.vue
-var _hoisted_1$18 = [
+var _hoisted_1$23 = [
 	"aria-label",
 	"disabled",
 	"min",
 	"max",
 	"step"
 ];
-var _sfc_main$19 = {
+var _sfc_main$25 = {
 	__name: "AppSlider",
 	props: /*@__PURE__*/ mergeModels({
 		label: String,
@@ -240,7 +241,7 @@ var _sfc_main$19 = {
 				min: __props.min,
 				max: __props.max,
 				step: __props.step
-			}, null, 12, _hoisted_1$18)), [[
+			}, null, 12, _hoisted_1$23)), [[
 				vModelText,
 				model.value,
 				void 0,
@@ -250,17 +251,63 @@ var _sfc_main$19 = {
 	}
 };
 //#endregion
+//#region src/controls/AppTextField.vue
+var _hoisted_1$22 = [
+	"aria-invalid",
+	"aria-label",
+	"placeholder",
+	"disabled"
+];
+var _sfc_main$24 = {
+	__name: "AppTextField",
+	props: {
+		modelValue: {
+			type: [String, Number],
+			default: ""
+		},
+		label: String,
+		placeholder: String,
+		disabled: Boolean,
+		errorState: Boolean
+	},
+	emits: ["update:modelValue"],
+	setup(__props, { expose: __expose, emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const text = computed({
+			get: () => String(props.modelValue ?? ""),
+			set: (value) => emit("update:modelValue", String(value))
+		});
+		const field = ref(null);
+		__expose({ focus() {
+			field.value?.focus();
+		} });
+		return (_ctx, _cache) => {
+			return withDirectives((openBlock(), createElementBlock("input", {
+				ref_key: "field",
+				ref: field,
+				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => text.value = $event),
+				class: "app-text-field",
+				"aria-invalid": __props.errorState || void 0,
+				"aria-label": __props.label || __props.placeholder ? unref(t)(__props.label || __props.placeholder) : void 0,
+				placeholder: unref(t)(__props.placeholder || ""),
+				disabled: __props.disabled
+			}, null, 8, _hoisted_1$22)), [[vModelText, text.value]]);
+		};
+	}
+};
+//#endregion
 //#region src/controls/ColorPicker.vue
-var _hoisted_1$17 = ["aria-label"];
-var _hoisted_2$11 = { class: "color-picker-fields" };
-var _hoisted_3$8 = [
+var _hoisted_1$21 = ["aria-label"];
+var _hoisted_2$13 = { class: "color-picker-fields" };
+var _hoisted_3$9 = [
 	"aria-label",
 	"aria-valuetext",
 	"aria-valuenow",
 	"aria-description"
 ];
 var _hoisted_4$6 = { class: "color-picker-hex" };
-var _sfc_main$18 = {
+var _sfc_main$23 = {
 	__name: "ColorPicker",
 	emits: ["chosen"],
 	setup(__props, { expose: __expose, emit: __emit }) {
@@ -365,7 +412,7 @@ var _sfc_main$18 = {
 				onClose: _cache[4] || (_cache[4] = ($event) => hex.value = "#ffffff")
 			}, [
 				createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Choose a color")), 1)]),
-				createBaseVNode("div", _hoisted_2$11, [
+				createBaseVNode("div", _hoisted_2$13, [
 					createBaseVNode("div", {
 						class: "color-picker-plane",
 						role: "slider",
@@ -383,9 +430,9 @@ var _sfc_main$18 = {
 					}, [createBaseVNode("span", { style: normalizeStyle({
 						left: saturation.value * 100 + "%",
 						top: (1 - brightness.value) * 100 + "%"
-					}) }, null, 4)], 44, _hoisted_3$8),
+					}) }, null, 4)], 44, _hoisted_3$9),
 					createBaseVNode("label", null, toDisplayString(unref(t)("Hue")), 1),
-					createVNode(_sfc_main$19, {
+					createVNode(_sfc_main$25, {
 						modelValue: hue.value,
 						"onUpdate:modelValue": [_cache[0] || (_cache[0] = ($event) => hue.value = $event), updateHex],
 						label: "Hue",
@@ -406,23 +453,23 @@ var _sfc_main$18 = {
 						onChange: _cache[2] || (_cache[2] = ($event) => setColor(hex.value))
 					}, null, 8, ["modelValue", "aria-invalid"])])
 				]),
-				createBaseVNode("footer", null, [createVNode(_sfc_main$20, {
+				createBaseVNode("footer", null, [createVNode(_sfc_main$26, {
 					label: "Cancel",
 					onClick: _cache[3] || (_cache[3] = ($event) => dialog.value.close())
-				}), createVNode(_sfc_main$20, {
+				}), createVNode(_sfc_main$26, {
 					label: "OK",
 					disabled: !valid.value,
 					onClick: accept
 				}, null, 8, ["disabled"])])
-			], 40, _hoisted_1$17);
+			], 40, _hoisted_1$21);
 		};
 	}
 };
 //#endregion
 //#region src/controls/AppColorInput.vue
-var _hoisted_1$16 = { class: "app-color-input" };
-var _hoisted_2$10 = ["name", "value"];
-var _sfc_main$17 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
+var _hoisted_1$20 = { class: "app-color-input" };
+var _hoisted_2$12 = ["name", "value"];
+var _sfc_main$22 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	__name: "AppColorInput",
 	props: /*@__PURE__*/ mergeModels({
 		label: String,
@@ -443,13 +490,13 @@ var _sfc_main$17 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 		});
 		const swatch = computed(() => /^#[\da-f]{6}$/i.test(model.value || "") ? model.value : "var(--primary)");
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$16, [
+			return openBlock(), createElementBlock("div", _hoisted_1$20, [
 				createBaseVNode("span", {
 					class: "color-swatch",
 					style: normalizeStyle({ background: swatch.value }),
 					"aria-hidden": "true"
 				}, null, 4),
-				createVNode(_sfc_main$20, {
+				createVNode(_sfc_main$26, {
 					id: unref(attrs).id,
 					label: "Choose color",
 					icon: "palette",
@@ -470,8 +517,8 @@ var _sfc_main$17 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					type: "hidden",
 					name: unref(attrs).name,
 					value: model.value
-				}, null, 8, _hoisted_2$10)) : createCommentVNode("", true),
-				createVNode(_sfc_main$18, {
+				}, null, 8, _hoisted_2$12)) : createCommentVNode("", true),
+				createVNode(_sfc_main$23, {
 					ref_key: "picker",
 					ref: picker,
 					onChosen: _cache[1] || (_cache[1] = ($event) => model.value = $event)
@@ -538,9 +585,344 @@ function monthDays(year, month) {
 	});
 }
 //#endregion
+//#region src/controls/AppMenu.vue
+var _hoisted_1$19 = [
+	"aria-label",
+	"aria-expanded",
+	"aria-disabled",
+	"tabindex"
+];
+var _hoisted_2$11 = { key: 0 };
+var _hoisted_3$8 = {
+	key: 0,
+	class: "app-button-badge",
+	"aria-hidden": "true"
+};
+var _sfc_main$21 = {
+	__name: "AppMenu",
+	props: {
+		label: String,
+		frameComposition: Boolean,
+		externalTrigger: Boolean,
+		focusOnOpen: {
+			type: Boolean,
+			default: true
+		},
+		showLabel: Boolean,
+		compactTrigger: Boolean,
+		icon: {
+			type: String,
+			default: "more"
+		},
+		badgeCount: {
+			type: Number,
+			default: 0
+		},
+		closeOnSelect: {
+			type: Boolean,
+			default: true
+		},
+		boundary: Object,
+		anchor: Object,
+		alignStart: Boolean,
+		centered: Boolean,
+		disabled: Boolean,
+		inline: Boolean,
+		overlay: Boolean,
+		modal: Boolean,
+		submenu: Boolean,
+		width: Number,
+		maxHeight: Number
+	},
+	emits: ["before-open"],
+	setup(__props, { expose: __expose, emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const menu = ref(null);
+		const trigger = ref(null);
+		const expanded = ref(false);
+		const panelElement = ref(null);
+		let point = null;
+		let returnTarget = null;
+		let hoverTimer = null;
+		let focusEdge = null;
+		function cancelHover() {
+			clearTimeout(hoverTimer);
+		}
+		function hoverSubmenu() {
+			if (!props.submenu || props.disabled) return;
+			clearTimeout(hoverTimer);
+			hoverTimer = setTimeout(() => {
+				if (menu.value.parentElement.closest("details")?.open) menu.value.open = true;
+			}, parseFloat(getComputedStyle(menu.value).getPropertyValue("--motion-medium")) || 0);
+		}
+		function activate(event) {
+			if (props.disabled) {
+				event.preventDefault();
+				return;
+			}
+			if (!props.submenu) return;
+			event.preventDefault();
+			clearTimeout(hoverTimer);
+			menu.value.open = true;
+		}
+		function close(focus = false) {
+			clearTimeout(hoverTimer);
+			if (props.inline || !menu.value) return;
+			menu.value.open = false;
+			expanded.value = false;
+			if (props.modal && panelElement.value.open) panelElement.value.close();
+			if (props.overlay && !props.modal && panelElement.value?.matches(":popover-open")) panelElement.value.hidePopover();
+			if (focus) (returnTarget?.isConnected ? returnTarget : props.anchor?.isConnected ? props.anchor : trigger.value)?.focus();
+		}
+		function outside(event) {
+			if (menu.value && !menu.value.contains(event.target) && !props.anchor?.contains(event.target)) close();
+		}
+		function escape(event) {
+			if (event.key !== "Escape" || event.defaultPrevented || !menu.value.open || props.inline || menu.value.querySelector("details[open]")) return;
+			const dialog = event.target.closest("dialog");
+			if (dialog && dialog !== panelElement.value && dialog !== props.boundary && !dialog.contains(menu.value) && !dialog.contains(props.anchor)) return;
+			event.preventDefault();
+			event.stopPropagation();
+			close(true);
+		}
+		function position() {
+			const panel = menu.value?.querySelector(".account-panel");
+			if (!panel || !menu.value.open) return;
+			const boundary = props.boundary?.getBoundingClientRect();
+			const viewport = window.visualViewport, keyboardViewport = innerWidth <= 700 && viewport?.scale === 1;
+			const viewportTop = keyboardViewport ? viewport.offsetTop : 0, viewportBottom = keyboardViewport ? viewportTop + viewport.height : innerHeight;
+			const top = Math.max(viewportTop, boundary?.top || 0), bottom = Math.min(viewportBottom, boundary?.bottom ?? viewportBottom);
+			if (props.centered) {
+				const left = Math.max(0, boundary?.left || 0), right = Math.min(innerWidth, boundary?.right ?? innerWidth);
+				panel.style.maxHeight = Math.max(0, Math.min(props.maxHeight ?? Infinity, bottom - top - 8)) + "px";
+				panel.style.left = left + (right - left - panel.offsetWidth) / 2 + "px";
+				panel.style.top = top + (bottom - top - panel.offsetHeight) / 2 + "px";
+			} else if (props.overlay || props.modal) {
+				const triggerBox = (props.anchor || trigger.value).getBoundingClientRect();
+				panel.style.left = Math.max(4, props.submenu ? triggerBox.right + 6 : point?.x ?? (props.alignStart ? triggerBox.left : triggerBox.right - panel.offsetWidth)) + "px";
+				const anchorTop = point?.y ?? triggerBox.top, anchorBottom = point?.y ?? triggerBox.bottom;
+				const below = bottom - anchorBottom - 8, above = anchorTop - top - 8;
+				const up = !props.modal && panel.scrollHeight > below && above > below;
+				panel.style.maxHeight = Math.max(0, Math.min(props.maxHeight ?? Infinity, props.modal ? bottom - top - 8 : up ? above : below)) + "px";
+				if (props.overlay && !props.modal) panel.style.overflowY = "auto";
+				panel.style.top = (props.submenu ? triggerBox.top - 6 : up ? anchorTop - panel.offsetHeight - 4 : anchorBottom + 4) + "px";
+				if (props.submenu) {
+					panel.style.maxHeight = Math.max(0, Math.min(props.maxHeight ?? Infinity, bottom - top - 8)) + "px";
+					if (triggerBox.right + 6 + panel.offsetWidth > (boundary?.right ?? innerWidth)) panel.style.left = Math.max(4, triggerBox.left - panel.offsetWidth - 6) + "px";
+				}
+			}
+			panel.style.translate = "";
+			const left = Math.max(0, boundary?.left || 0), right = Math.min(innerWidth, boundary?.right ?? innerWidth);
+			if (boundary) panel.style.maxWidth = Math.max(0, right - left - 8) + "px";
+			const box = panel.getBoundingClientRect(), style = getComputedStyle(panel);
+			const scale = parseFloat(style.scale) || 1;
+			const [originX, originY] = style.transformOrigin.split(" ").map(parseFloat);
+			const x = box.left - originX * (1 - scale), y0 = box.top - originY * (1 - scale);
+			const bounds = {
+				left: x,
+				top: y0,
+				right: x + parseFloat(style.width),
+				bottom: y0 + parseFloat(style.height)
+			};
+			const y = Math.max(top + 4 - bounds.top, Math.min(0, bottom - 4 - bounds.bottom));
+			panel.style.translate = Math.max(left + 4 - bounds.left, Math.min(0, right - 4 - bounds.right)) + "px " + y + "px";
+		}
+		function items() {
+			return [...panelElement.value.querySelectorAll("button:not(:disabled):not([data-menu-secondary]), a[href], .workspace-menu > summary")].filter((item) => item.getClientRects().length && item.getAttribute("aria-disabled") !== "true" && (item.tagName === "SUMMARY" ? item.parentElement.parentElement.closest(".workspace-menu") : item.closest(".workspace-menu")) === menu.value);
+		}
+		function move(event) {
+			if (props.disabled) {
+				event.preventDefault();
+				return;
+			}
+			if (props.inline) return;
+			if (event.key === "Escape" && menu.value.open && !menu.value.querySelector("details[open]")) {
+				event.preventDefault();
+				event.stopPropagation();
+				close(true);
+				return;
+			}
+			if (event.key === "ArrowLeft" && props.submenu && menu.value.open) {
+				event.preventDefault();
+				event.stopPropagation();
+				close(true);
+				return;
+			}
+			if (event.key === "ArrowRight" && event.target.tagName === "SUMMARY" && event.target.parentElement !== menu.value) {
+				event.preventDefault();
+				event.stopPropagation();
+				const child = event.target.parentElement;
+				child.open = true;
+				nextTick(() => child.querySelector(".account-panel button:not(:disabled)")?.focus());
+				return;
+			}
+			if (event.target.closest("input, select, textarea, [role=\"combobox\"]")) return;
+			if (![
+				"ArrowDown",
+				"ArrowUp",
+				"Home",
+				"End"
+			].includes(event.key)) return;
+			event.preventDefault();
+			const backwards = event.key === "ArrowUp" || event.key === "End";
+			if (!menu.value.open) {
+				focusEdge = backwards ? "last" : "first";
+				menu.value.open = true;
+				toggled();
+				return;
+			}
+			const buttons = items();
+			const active = document.activeElement;
+			const index = buttons.indexOf(active?.matches("[data-menu-secondary]") ? active.parentElement.querySelector("[data-menu-primary]") : active);
+			buttons[event.key === "Home" ? 0 : event.key === "End" ? buttons.length - 1 : index < 0 ? backwards ? buttons.length - 1 : 0 : (index + (backwards ? -1 : 1) + buttons.length) % buttons.length]?.focus();
+		}
+		function toggled() {
+			if (!menu.value) return;
+			const opening = menu.value.open && !expanded.value;
+			if (opening) emit("before-open");
+			expanded.value = menu.value.open;
+			if (!menu.value.open) {
+				point = null;
+				for (const child of menu.value.querySelectorAll("details[open]")) child.open = false;
+			}
+			document.removeEventListener("pointerdown", outside);
+			document.removeEventListener("keydown", escape, true);
+			document.removeEventListener("scroll", position, true);
+			window.removeEventListener("resize", position);
+			window.visualViewport?.removeEventListener("resize", position);
+			window.visualViewport?.removeEventListener("scroll", position);
+			window.removeEventListener("windowgeometrychange", position);
+			if (menu.value.open) {
+				if (props.submenu) {
+					for (const sibling of menu.value.parentElement.querySelectorAll(":scope > details[open]")) if (sibling !== menu.value) sibling.open = false;
+				}
+				if (props.modal && !panelElement.value.open) panelElement.value.showModal();
+				else if (props.overlay && !props.modal && !panelElement.value.matches(":popover-open")) panelElement.value.showPopover();
+				document.addEventListener("pointerdown", outside);
+				document.addEventListener("keydown", escape, true);
+				window.addEventListener("resize", position);
+				window.visualViewport?.addEventListener("resize", position);
+				window.visualViewport?.addEventListener("scroll", position);
+				position();
+				if (focusEdge) {
+					const buttons = items();
+					(focusEdge === "last" ? buttons.at(-1) : buttons[0])?.focus();
+					focusEdge = null;
+				} else if (opening && props.focusOnOpen && props.frameComposition) nextTick(() => items()[0]?.focus());
+				if (opening && props.focusOnOpen && props.submenu && document.activeElement === trigger.value) nextTick(() => items()[0]?.focus());
+				if (opening && props.focusOnOpen && !trigger.value.getClientRects().length) nextTick(() => (panelElement.value.querySelector("input:not([type=\"hidden\"]):not(:disabled), textarea:not(:disabled)") || items()[0])?.focus());
+				window.addEventListener("windowgeometrychange", position);
+				if (props.overlay) document.addEventListener("scroll", position, true);
+			} else if (props.modal && panelElement.value.open) panelElement.value.close();
+			else if (props.overlay && !props.modal && panelElement.value.matches(":popover-open")) panelElement.value.hidePopover();
+		}
+		function backdrop(event) {
+			if (!props.modal || event.target !== panelElement.value) return;
+			const box = panelElement.value.getBoundingClientRect();
+			if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) close(true);
+		}
+		function selected(event) {
+			if (!menu.value) return;
+			const action = event.target.closest("button, a[href]");
+			if (action && !props.closeOnSelect) event.stopPropagation();
+			if (props.closeOnSelect && action && !action.closest("[role=\"combobox\"]")) close(menu.value.contains(document.activeElement));
+		}
+		onUpdated(() => {
+			if (props.disabled && menu.value?.open) close();
+			else position();
+		});
+		__expose({
+			close,
+			openAt(event) {
+				point = {
+					x: event.clientX,
+					y: event.clientY
+				};
+				returnTarget = event.target?.closest("[tabindex],button,a");
+				menu.value.open = true;
+				nextTick(() => {
+					position();
+					if (props.focusOnOpen && props.externalTrigger) panelElement.value?.querySelector("input:not(:disabled),select:not(:disabled),button:not(:disabled),a[href]")?.focus();
+					else if (props.focusOnOpen && trigger.value?.getClientRects().length) trigger.value.focus();
+				});
+			},
+			focusTrigger() {
+				trigger.value?.focus();
+			},
+			get open() {
+				return menu.value?.open;
+			},
+			set open(value) {
+				if (menu.value) menu.value.open = value;
+			}
+		});
+		onBeforeUnmount(() => {
+			clearTimeout(hoverTimer);
+			document.removeEventListener("pointerdown", outside);
+			document.removeEventListener("keydown", escape, true);
+			document.removeEventListener("scroll", position, true);
+			window.removeEventListener("resize", position);
+			window.visualViewport?.removeEventListener("resize", position);
+			window.visualViewport?.removeEventListener("scroll", position);
+			window.removeEventListener("windowgeometrychange", position);
+		});
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("details", {
+				"data-menu-owner": "control",
+				ref_key: "menu",
+				ref: menu,
+				class: normalizeClass(["workspace-menu", {
+					"inline-menu": __props.inline,
+					"frame-menu": __props.frameComposition,
+					"labelled-menu": __props.showLabel,
+					"compact-trigger": __props.compactTrigger
+				}]),
+				onKeydown: move,
+				onToggle: toggled
+			}, [withDirectives((openBlock(), createElementBlock("summary", {
+				ref_key: "trigger",
+				ref: trigger,
+				class: "icon-button",
+				"aria-label": __props.externalTrigger ? void 0 : unref(t)(__props.label),
+				"aria-expanded": expanded.value,
+				"aria-disabled": __props.disabled || void 0,
+				tabindex: __props.disabled ? -1 : 0,
+				onClick: activate,
+				onPointerenter: hoverSubmenu,
+				onPointerleave: cancelHover,
+				onPointerdown: _cache[0] || (_cache[0] = ($event) => {
+					cancelHover();
+					isRef(point) ? point.value = null : point = null;
+					unref(capturePress)($event);
+					!__props.disabled && unref(ripple)($event);
+				})
+			}, [renderSlot(_ctx.$slots, "trigger", {}, () => [createVNode(_sfc_main$27, { name: __props.icon }, null, 8, ["name"]), __props.showLabel ? (openBlock(), createElementBlock("span", _hoisted_2$11, toDisplayString(unref(t)(__props.label)), 1)) : createCommentVNode("", true)]), __props.badgeCount > 0 ? (openBlock(), createElementBlock("span", _hoisted_3$8, toDisplayString(__props.badgeCount > 99 ? "99+" : __props.badgeCount), 1)) : createCommentVNode("", true)], 40, _hoisted_1$19)), [[vShow, !__props.externalTrigger], [unref(tooltipDirective), unref(t)(__props.label)]]), (openBlock(), createBlock(resolveDynamicComponent(__props.modal ? "dialog" : "div"), {
+				ref_key: "panelElement",
+				ref: panelElement,
+				class: "account-panel",
+				style: normalizeStyle(__props.width ? { width: "min(" + __props.width + "px, calc(100dvw - " + (__props.frameComposition ? 8 : 16) + "px))" } : void 0),
+				"aria-label": __props.modal ? unref(t)(__props.label) : void 0,
+				popover: __props.overlay && !__props.modal ? "manual" : void 0,
+				onCancel: _cache[1] || (_cache[1] = withModifiers(($event) => close(true), ["prevent", "stop"])),
+				onPointerdown: backdrop,
+				onClick: selected,
+				onTransitionend: withModifiers(position, ["self"])
+			}, {
+				default: withCtx(() => [renderSlot(_ctx.$slots, "default")]),
+				_: 3
+			}, 40, [
+				"style",
+				"aria-label",
+				"popover"
+			]))], 34);
+		};
+	}
+};
+//#endregion
 //#region src/controls/AppDateField.vue
-var _hoisted_1$15 = ["data-frame"];
-var _hoisted_2$9 = {
+var _hoisted_1$18 = ["data-frame"];
+var _hoisted_2$10 = {
 	key: 0,
 	class: "app-date-presentation",
 	"aria-hidden": "true"
@@ -566,7 +948,7 @@ var _hoisted_10$1 = [
 	"onKeydown"
 ];
 var _hoisted_11$1 = { class: "date-calendar-footer" };
-var _sfc_main$16 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
+var _sfc_main$20 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	__name: "AppDateField",
 	props: {
 		modelValue: String,
@@ -742,8 +1124,8 @@ var _sfc_main$16 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					"readonly",
 					"aria-invalid"
 				]),
-				!focused.value && __props.modelValue ? (openBlock(), createElementBlock("span", _hoisted_2$9, toDisplayString(presentation.value), 1)) : createCommentVNode("", true),
-				createVNode(_sfc_main$25, {
+				!focused.value && __props.modelValue ? (openBlock(), createElementBlock("span", _hoisted_2$10, toDisplayString(presentation.value), 1)) : createCommentVNode("", true),
+				createVNode(_sfc_main$21, {
 					ref_key: "menu",
 					ref: menu,
 					"compact-trigger": "",
@@ -758,17 +1140,17 @@ var _sfc_main$16 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					onBeforeOpen: prepare,
 					onToggle: opened
 				}, {
-					trigger: withCtx(() => [createVNode(_sfc_main$21, { name: "MDI_CALENDAR_MONTH" })]),
+					trigger: withCtx(() => [createVNode(_sfc_main$27, { name: "MDI_CALENDAR_MONTH" })]),
 					default: withCtx(() => [createBaseVNode("div", _hoisted_3$7, [
 						createBaseVNode("header", _hoisted_4$5, [
-							createVNode(_sfc_main$20, {
+							createVNode(_sfc_main$26, {
 								label: "Previous month",
 								icon: "previous",
 								"icon-only": "",
 								onClick: _cache[2] || (_cache[2] = ($event) => moveMonth(-1))
 							}),
 							createBaseVNode("strong", null, toDisplayString(heading.value), 1),
-							createVNode(_sfc_main$20, {
+							createVNode(_sfc_main$26, {
 								label: "Next month",
 								icon: "next",
 								"icon-only": "",
@@ -785,7 +1167,7 @@ var _sfc_main$16 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 								class: "calendar-weekday"
 							}, toDisplayString(day), 1);
 						}), 128)), (openBlock(true), createElementBlock(Fragment, null, renderList(days.value, (day, index) => {
-							return openBlock(), createElementBlock(Fragment, { key: index }, [day ? (openBlock(), createBlock(_sfc_main$20, {
+							return openBlock(), createElementBlock(Fragment, { key: index }, [day ? (openBlock(), createBlock(_sfc_main$26, {
 								key: 0,
 								class: normalizeClass(["calendar-day", {
 									selected: sameDay(pending.value, day),
@@ -810,7 +1192,7 @@ var _sfc_main$16 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 						}), 128))], 8, _hoisted_5$4),
 						__props.includeTime ? (openBlock(), createElementBlock("div", _hoisted_7$3, [createBaseVNode("span", null, toDisplayString(unref(t)("Time")), 1), (openBlock(), createElementBlock(Fragment, null, renderList(["hour", "minute"], (name) => {
 							return openBlock(), createElementBlock(Fragment, { key: name }, [name === "minute" ? (openBlock(), createElementBlock("span", _hoisted_8$3, ":")) : createCommentVNode("", true), createBaseVNode("div", _hoisted_9$2, [
-								createVNode(_sfc_main$20, {
+								createVNode(_sfc_main$26, {
 									label: name === "hour" ? "Decrease hours" : "Decrease minutes",
 									icon: "MDI_CHEVRON_DOWN",
 									"icon-only": "",
@@ -832,7 +1214,7 @@ var _sfc_main$16 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 									onInput: ($event) => timeValue(name).value = $event.target.value === "" ? "" : Number($event.target.value),
 									onKeydown: ($event) => timeKey($event, name)
 								}, null, 40, _hoisted_10$1),
-								createVNode(_sfc_main$20, {
+								createVNode(_sfc_main$26, {
 									label: name === "hour" ? "Increase hours" : "Increase minutes",
 									icon: "MDI_CHEVRON_UP",
 									"icon-only": "",
@@ -845,11 +1227,11 @@ var _sfc_main$16 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 								])
 							])], 64);
 						}), 64))])) : createCommentVNode("", true),
-						createBaseVNode("footer", _hoisted_11$1, [__props.allowClear ? (openBlock(), createBlock(_sfc_main$20, {
+						createBaseVNode("footer", _hoisted_11$1, [__props.allowClear ? (openBlock(), createBlock(_sfc_main$26, {
 							key: 0,
 							label: "Clear",
 							onClick: _cache[4] || (_cache[4] = ($event) => accept(null))
-						})) : createCommentVNode("", true), createVNode(_sfc_main$20, {
+						})) : createCommentVNode("", true), createVNode(_sfc_main$26, {
 							label: "Today",
 							onClick: _cache[5] || (_cache[5] = ($event) => accept(/* @__PURE__ */ new Date()))
 						})])
@@ -861,19 +1243,19 @@ var _sfc_main$16 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					"anchor",
 					"width"
 				])
-			], 14, _hoisted_1$15);
+			], 14, _hoisted_1$18);
 		};
 	}
 });
 //#endregion
 //#region src/controls/AppTextArea.vue
-var _hoisted_1$14 = [
+var _hoisted_1$17 = [
 	"aria-invalid",
 	"aria-label",
 	"placeholder",
 	"disabled"
 ];
-var _sfc_main$15 = {
+var _sfc_main$19 = {
 	__name: "AppTextArea",
 	props: /*@__PURE__*/ mergeModels({
 		label: String,
@@ -904,16 +1286,90 @@ var _sfc_main$15 = {
 				"aria-label": __props.label || __props.placeholder ? unref(t)(__props.label || __props.placeholder) : void 0,
 				placeholder: unref(t)(__props.placeholder || ""),
 				disabled: __props.disabled
-			}, null, 8, _hoisted_1$14)), [[vModelText, model.value]]);
+			}, null, 8, _hoisted_1$17)), [[vModelText, model.value]]);
+		};
+	}
+};
+//#endregion
+//#region src/controls/AppTabButton.vue
+var _sfc_main$18 = {
+	__name: "AppTabButton",
+	props: { checked: Boolean },
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createBlock(_sfc_main$26, {
+				class: "app-tab-button",
+				"aria-pressed": __props.checked
+			}, null, 8, ["aria-pressed"]);
+		};
+	}
+};
+//#endregion
+//#region src/controls/AppCheckbox.vue
+var _hoisted_1$16 = { class: "app-checkbox-indicator" };
+var _hoisted_2$9 = [
+	"id",
+	"checked",
+	"disabled",
+	"indeterminate",
+	"aria-label"
+];
+var _sfc_main$17 = {
+	__name: "AppCheckbox",
+	props: /*@__PURE__*/ mergeModels({
+		label: String,
+		controlId: String,
+		disabled: Boolean,
+		indeterminate: Boolean,
+		compact: Boolean,
+		prominent: Boolean,
+		hideLabel: Boolean,
+		translateLabel: {
+			type: Boolean,
+			default: true
+		}
+	}, {
+		"modelValue": {
+			type: Boolean,
+			default: false
+		},
+		"modelModifiers": {}
+	}),
+	emits: /*@__PURE__*/ mergeModels(["update:modelValue"], ["update:modelValue"]),
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const model = useModel(__props, "modelValue");
+		const emit = __emit;
+		function changed(event) {
+			if (props.indeterminate) emit("update:modelValue", true);
+			else model.value = event.target.checked;
+		}
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("label", { class: normalizeClass(["app-checkbox", {
+				disabled: __props.disabled,
+				compact: __props.compact,
+				prominent: __props.prominent
+			}]) }, [createBaseVNode("span", _hoisted_1$16, [createBaseVNode("input", {
+				id: __props.controlId,
+				type: "checkbox",
+				checked: !__props.indeterminate && model.value,
+				onChange: changed,
+				disabled: __props.disabled,
+				indeterminate: __props.indeterminate,
+				"aria-label": __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : void 0
+			}, null, 40, _hoisted_2$9), model.value || __props.indeterminate ? (openBlock(), createBlock(_sfc_main$27, {
+				key: 0,
+				name: __props.indeterminate ? "minus" : "check"
+			}, null, 8, ["name"])) : createCommentVNode("", true)]), !__props.hideLabel ? renderSlot(_ctx.$slots, "default", {}, () => [createTextVNode(toDisplayString(__props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : ""), 1)], void 0, 0) : createCommentVNode("", true)], 2);
 		};
 	}
 };
 //#endregion
 //#region src/controls/AppSearchField.vue
-var _sfc_main$14 = {
+var _sfc_main$16 = {
 	components: {
-		AppButton: _sfc_main$20,
-		AppIcon: _sfc_main$21
+		AppButton: _sfc_main$26,
+		AppIcon: _sfc_main$27
 	},
 	props: {
 		modelValue: String,
@@ -1055,7 +1511,7 @@ var _sfc_main$14 = {
 		}
 	}
 };
-var _hoisted_1$13 = [
+var _hoisted_1$15 = [
 	"value",
 	"placeholder",
 	"aria-label",
@@ -1120,7 +1576,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 			onInput: _cache[1] || (_cache[1] = ($event) => $options.edit($event.target.value)),
 			onFocus: _cache[2] || (_cache[2] = (...args) => $options.show && $options.show(...args)),
 			onKeydown: _cache[3] || (_cache[3] = (...args) => $options.key && $options.key(...args))
-		}, null, 40, _hoisted_1$13),
+		}, null, 40, _hoisted_1$15),
 		$props.modelValue ? (openBlock(), createBlock(_component_AppButton, {
 			key: 0,
 			"icon-only": "",
@@ -1180,14 +1636,14 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
 		}), 128))], 8, _hoisted_4$4))], 512)
 	], 32);
 }
-var AppSearchField_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$14, [["render", _sfc_render$1]]);
+var AppSearchField_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$16, [["render", _sfc_render$1]]);
 //#endregion
 //#region src/controls/ItemPreview.vue
 var colorProbe;
 var variableRoles = Object.fromEntries(Object.entries(cssRoles).map(([role, variable]) => ["var(" + variable + ")", role]));
-var _sfc_main$13 = {
+var _sfc_main$15 = {
 	components: {
-		AppIcon: _sfc_main$21,
+		AppIcon: _sfc_main$27,
 		BusyIndicator: BusyIndicator_default
 	},
 	props: {
@@ -1268,7 +1724,7 @@ var _sfc_main$13 = {
 	},
 	methods: { t }
 };
-var _hoisted_1$12 = ["aria-busy"];
+var _hoisted_1$14 = ["aria-busy"];
 var _hoisted_2$7 = ["src", "alt"];
 var _hoisted_3$5 = {
 	key: 2,
@@ -1311,12 +1767,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	})) : $props.fallbackText ? (openBlock(), createElementBlock("span", _hoisted_3$5, toDisplayString($props.fallbackText), 1)) : $props.fallbackIcon ? (openBlock(), createBlock(_component_AppIcon, {
 		key: 3,
 		name: $props.fallbackIcon
-	}, null, 8, ["name"])) : createCommentVNode("", true)], 14, _hoisted_1$12);
+	}, null, 8, ["name"])) : createCommentVNode("", true)], 14, _hoisted_1$14);
 }
-var ItemPreview_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$13, [["render", _sfc_render]]);
+var ItemPreview_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$15, [["render", _sfc_render]]);
 //#endregion
 //#region src/controls/UserGroupSection.vue
-var _sfc_main$12 = {
+var _sfc_main$14 = {
 	__name: "UserGroupSection",
 	props: {
 		title: String,
@@ -1325,7 +1781,7 @@ var _sfc_main$12 = {
 	setup(__props) {
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("div", { class: normalizeClass(["user-group-section", { compact: __props.compact }]) }, [
-				createVNode(_sfc_main$21, { name: "MDI_ACCOUNT_GROUP" }),
+				createVNode(_sfc_main$27, { name: "MDI_ACCOUNT_GROUP" }),
 				createBaseVNode("span", null, toDisplayString(__props.title === "Ungrouped" ? unref(t)("UNGROUPED") : __props.title?.toUpperCase()), 1),
 				_cache[0] || (_cache[0] = createBaseVNode("hr", null, null, -1))
 			], 2);
@@ -1340,11 +1796,11 @@ function matchesUser(user, query) {
 }
 //#endregion
 //#region src/controls/UserComboBox.vue
-var _hoisted_1$11 = { class: "user-combo-label" };
+var _hoisted_1$13 = { class: "user-combo-label" };
 var _hoisted_2$6 = { class: "user-combo-list" };
 var _hoisted_3$4 = { class: "user-combo-copy" };
 var _hoisted_4$3 = { key: 0 };
-var _sfc_main$11 = {
+var _sfc_main$13 = {
 	__name: "UserComboBox",
 	props: {
 		value: String,
@@ -1433,7 +1889,7 @@ var _sfc_main$11 = {
 			rows[event.key === "Home" ? 0 : event.key === "End" ? rows.length - 1 : (index + (event.key === "ArrowUp" ? -1 : 1) + rows.length) % rows.length]?.focus();
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$25, {
+			return openBlock(), createBlock(_sfc_main$21, {
 				ref_key: "menu",
 				ref: menu,
 				class: normalizeClass(["user-combo-box", {
@@ -1463,8 +1919,8 @@ var _sfc_main$11 = {
 						"fallback-text",
 						"accent"
 					]),
-					createBaseVNode("span", _hoisted_1$11, toDisplayString(__props.placeholder || current.value.displayName), 1),
-					!__props.actionField ? (openBlock(), createBlock(_sfc_main$21, {
+					createBaseVNode("span", _hoisted_1$13, toDisplayString(__props.placeholder || current.value.displayName), 1),
+					!__props.actionField ? (openBlock(), createBlock(_sfc_main$27, {
 						key: 0,
 						class: "user-combo-indicator",
 						name: expanded.value ? "MDI_CHEVRON_UP" : "MDI_CHEVRON_DOWN"
@@ -1483,11 +1939,11 @@ var _sfc_main$11 = {
 					"placeholder",
 					"disabled"
 				]), createBaseVNode("div", _hoisted_2$6, [(openBlock(true), createElementBlock(Fragment, null, renderList(groups.value, (group) => {
-					return openBlock(), createElementBlock(Fragment, { key: group.title }, [createVNode(_sfc_main$12, {
+					return openBlock(), createElementBlock(Fragment, { key: group.title }, [createVNode(_sfc_main$14, {
 						title: group.title,
 						compact: ""
 					}, null, 8, ["title"]), (openBlock(true), createElementBlock(Fragment, null, renderList(group.users, (user) => {
-						return openBlock(), createBlock(_sfc_main$20, {
+						return openBlock(), createBlock(_sfc_main$26, {
 							key: user.login,
 							class: "user-combo-option",
 							label: user.displayName,
@@ -1512,7 +1968,7 @@ var _sfc_main$11 = {
 									"accent"
 								]),
 								createBaseVNode("span", _hoisted_3$4, [createBaseVNode("strong", null, toDisplayString(user.displayName), 1), user.login ? (openBlock(), createElementBlock("small", _hoisted_4$3, toDisplayString(user.login), 1)) : createCommentVNode("", true)]),
-								__props.value === user.login ? (openBlock(), createBlock(_sfc_main$21, {
+								__props.value === user.login ? (openBlock(), createBlock(_sfc_main$27, {
 									key: 0,
 									class: "user-combo-check",
 									name: "MDI_CHECK_CIRCLE"
@@ -1563,8 +2019,8 @@ function target(options, value, key) {
 }
 //#endregion
 //#region src/controls/AppSegmentedButton.vue
-var _hoisted_1$10 = ["aria-label"];
-var _sfc_main$10 = {
+var _hoisted_1$12 = ["aria-label"];
+var _sfc_main$12 = {
 	__name: "AppSegmentedButton",
 	props: /*@__PURE__*/ mergeModels({
 		options: {
@@ -1605,7 +2061,7 @@ var _sfc_main$10 = {
 				"aria-label": unref(t)(__props.label),
 				onKeydown: move
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.options, (option, index) => {
-				return openBlock(), createBlock(_sfc_main$20, {
+				return openBlock(), createBlock(_sfc_main$26, {
 					key: option.value,
 					label: option.label,
 					"translate-label": option.translate !== false,
@@ -1626,18 +2082,165 @@ var _sfc_main$10 = {
 					"disabled",
 					"onClick"
 				]);
-			}), 128))], 42, _hoisted_1$10);
+			}), 128))], 42, _hoisted_1$12);
+		};
+	}
+};
+//#endregion
+//#region src/controls/AppEditableSelect.vue
+var _hoisted_1$11 = ["id", "aria-label"];
+var _sfc_main$11 = {
+	__name: "AppEditableSelect",
+	props: {
+		modelValue: {
+			type: [String, Number],
+			default: ""
+		},
+		options: {
+			type: Array,
+			default: () => []
+		},
+		label: String,
+		placeholder: String,
+		disabled: Boolean
+	},
+	emits: ["update:modelValue", "accept"],
+	setup(__props, { expose: __expose, emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const owner = ref(null), field = ref(null), menu = ref(null), expanded = ref(false);
+		const popupId = useId();
+		const popupWidth = ref(0);
+		function choose(option) {
+			if (props.disabled || option.disabled || option.enabled === false) return;
+			emit("update:modelValue", option.value);
+			menu.value.close();
+			field.value.focus();
+		}
+		async function toggle(keyboard = false, last = false) {
+			if (props.disabled) return;
+			if (menu.value.open) {
+				menu.value.close();
+				return;
+			}
+			popupWidth.value = owner.value.getBoundingClientRect().width;
+			menu.value.openAt({ target: owner.value.querySelector("input") });
+			if (keyboard) {
+				await nextTick();
+				const options = [...menu.value.$el.querySelectorAll("[role=\"option\"]:not(:disabled)")];
+				(options.find((option) => option.getAttribute("aria-selected") === "true") || (last ? options.at(-1) : options[0]))?.focus();
+			}
+		}
+		function key(event) {
+			if (event.isComposing || event.keyCode === 229 || props.disabled) return;
+			if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+				event.preventDefault();
+				toggle(true, event.key === "ArrowUp");
+			} else if (event.key === "Enter") {
+				event.preventDefault();
+				emit("accept", props.modelValue);
+			}
+		}
+		watch(() => props.disabled, (value) => {
+			if (value) menu.value?.close();
+		});
+		__expose({ focus: () => field.value?.focus() });
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				ref_key: "owner",
+				ref: owner,
+				class: normalizeClass(["app-editable-select", { disabled: __props.disabled }])
+			}, [
+				createVNode(_sfc_main$24, {
+					ref_key: "field",
+					ref: field,
+					"model-value": __props.modelValue,
+					label: __props.label,
+					placeholder: __props.placeholder,
+					disabled: __props.disabled,
+					role: "combobox",
+					"aria-autocomplete": "list",
+					"aria-expanded": expanded.value,
+					"aria-controls": unref(popupId),
+					tabindex: "0",
+					onKeydown: key,
+					"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => emit("update:modelValue", $event))
+				}, null, 8, [
+					"model-value",
+					"label",
+					"placeholder",
+					"disabled",
+					"aria-expanded",
+					"aria-controls"
+				]),
+				createVNode(_sfc_main$26, {
+					class: "editable-select-indicator",
+					"icon-only": "",
+					icon: expanded.value ? "expand_less" : "expand_more",
+					label: __props.label,
+					disabled: __props.disabled,
+					tabindex: "-1",
+					onClick: _cache[1] || (_cache[1] = ($event) => toggle())
+				}, null, 8, [
+					"icon",
+					"label",
+					"disabled"
+				]),
+				createVNode(_sfc_main$21, {
+					ref_key: "menu",
+					ref: menu,
+					class: "editable-select-menu",
+					"external-trigger": "",
+					overlay: "",
+					"align-start": "",
+					anchor: owner.value,
+					label: __props.label,
+					width: popupWidth.value,
+					disabled: __props.disabled,
+					"focus-on-open": false,
+					"close-on-select": false,
+					onToggle: _cache[2] || (_cache[2] = ($event) => expanded.value = $event.newState === "open")
+				}, {
+					default: withCtx(() => [createBaseVNode("div", {
+						id: unref(popupId),
+						role: "listbox",
+						"aria-label": __props.label,
+						class: "editable-select-options"
+					}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.options, (option) => {
+						return openBlock(), createBlock(_sfc_main$26, {
+							key: option.value,
+							role: "option",
+							label: option.label,
+							"translate-label": false,
+							disabled: option.disabled || option.enabled === false,
+							"aria-selected": __props.modelValue === option.value,
+							onClick: ($event) => choose(option)
+						}, null, 8, [
+							"label",
+							"disabled",
+							"aria-selected",
+							"onClick"
+						]);
+					}), 128))], 8, _hoisted_1$11)]),
+					_: 1
+				}, 8, [
+					"anchor",
+					"label",
+					"width",
+					"disabled"
+				])
+			], 2);
 		};
 	}
 };
 //#endregion
 //#region src/frame/controls/grid/FrameGrid.vue
-var _hoisted_1$9 = ["data-frame", "aria-label"];
+var _hoisted_1$10 = ["data-frame", "aria-label"];
 var _hoisted_2$5 = ["data-frame"];
 var _hoisted_3$3 = ["data-frame"];
 var _hoisted_4$2 = ["data-frame"];
 var _hoisted_5$2 = ["data-frame"];
-var _sfc_main$9 = {
+var _sfc_main$10 = {
 	__name: "FrameGrid",
 	props: {
 		node: Object,
@@ -1768,7 +2371,7 @@ var _sfc_main$9 = {
 						}, null, 8, ["style", "scene"]);
 					}), 128))], 64);
 				}), 128))], 4)], 36)
-			], 8, _hoisted_1$9);
+			], 8, _hoisted_1$10);
 		};
 	}
 };
@@ -4751,7 +5354,591 @@ var russian = {
 	Have: "Локально полученные версии",
 	"Do not have": "Не имеют",
 	"Match (slow)": "Соответствуют (медленно)",
-	"Do not match (slow)": "Не соответствуют (медленно)"
+	"Do not match (slow)": "Не соответствуют (медленно)",
+	"Matched as {type}": "Распознано как {type}",
+	"Template actions": "Действия с шаблоном",
+	"Templates pane width": "Ширина списка шаблонов",
+	"Template properties": "Параметры шаблона",
+	Pattern: "Шаблон",
+	"Preview: {preview} · Type: {type}": "Превью: {preview} · Тип: {type}",
+	"Process mapping": "Сопоставление процессов",
+	"All processes": "Все процессы",
+	"Context mapping": "Сопоставление контекста",
+	"All contexts": "Все контексты",
+	"Test on filename": "Проверить на имени файла",
+	Test: "Проверить",
+	"No match": "Совпадений нет",
+	"Enable template": "Включить шаблон",
+	Completed: "Завершено",
+	Failed: "Ошибка",
+	Conflict: "Конфликт",
+	Cancelled: "Отменено",
+	"Remove file": "Удалить файл",
+	"Quick ingest": "Быстрый инжест",
+	"For another Search Type": "Для другого серч-тайпа",
+	"Create one child item per file and publish immediately": "Создать по одному дочернему объекту на файл и сразу опубликовать",
+	"Include: .mov, /regex/": "Включить: .mov, /regex/",
+	"Ignore: .tmp, .db": "Игнорировать: .tmp, .db",
+	"Parse values from a path pattern": "Извлекать значения из шаблона пути",
+	"Update matching item": "Обновлять совпавший объект",
+	"Create preview when supported": "Создавать превью для поддерживаемых файлов",
+	"Extra Search Object values (JSON)": "Дополнительные поля серч-объекта (JSON)",
+	Keywords: "Ключевые слова",
+	"Keyword mode": "Режим ключевых слов",
+	Simplified: "Упрощённый",
+	"Context case": "Регистр контекста",
+	"Case sensitive": "С учётом регистра",
+	Lowercase: "Нижний регистр",
+	"Scripts receive path, sobject, parent and snapshot. Return a truthy value to accept the file.": "Скрипты получают path, sobject, parent и snapshot. Верните истинное значение, чтобы принять файл.",
+	"Validation script path": "Путь к скрипту проверки",
+	"Process script path": "Путь к скрипту обработки",
+	"Rule title": "Название правила",
+	"Save rule": "Сохранить правило",
+	"Delete rule": "Удалить правило",
+	"One Search Object per file · snapshot in publish": "Один серч-объект на файл · снапшот в publish",
+	"Drop files here": "Перетащите файлы сюда",
+	"Each file creates a child item named without its extension.": "Для каждого файла будет создан дочерний объект с именем без расширения.",
+	"Ingest rule": "Правило инжеста",
+	"Remove extension from item name": "Убирать расширение из имени объекта",
+	"Hide rule details": "Скрыть параметры правила",
+	"Edit rule details": "Изменить параметры правила",
+	"Ingest {count}": "Импортировать {count}",
+	"Update is unavailable because at least one name does not identify exactly one existing item.": "Обновление недоступно: хотя бы одно имя не указывает ровно на один существующий объект.",
+	"Create duplicates": "Создать дубликаты",
+	"Skip existing": "Пропустить существующие",
+	"Update existing": "Обновить существующие",
+	"{count} file(s) match existing child items or repeat a name in this batch. What should ingest do?": "{count} файл(ов) совпадают с существующими дочерними объектами или повторяют имя в этом наборе. Как продолжить импорт?",
+	"Conflicts: {names}": "Конфликты: {names}",
+	"{count} file(s)": "{count} файл(ов)",
+	"Open file": "Открыть файл",
+	"Show folder": "Показать папку",
+	"Copy file path": "Копировать путь к файлу",
+	"Copy all file paths": "Копировать все пути файлов",
+	"Remove from Drop Plate": "Убрать из Drop Plate",
+	Directory: "Папка",
+	"Paste files": "Вставить файлы",
+	"Matching Templates": "Шаблоны сопоставления",
+	"Group check-in": "Групповой Check-in",
+	"Keep filename": "Сохранять имя файла",
+	"Filter mode": "Режим фильтра",
+	Filename: "Имя файла",
+	"Filter files": "Фильтр файлов",
+	"Filter by extension": "Фильтр по расширению",
+	"Drop Plate": "Drop Plate",
+	"Matching files…": "Сопоставление файлов…",
+	"Drop files or directories here": "Перетащите сюда файлы или папки",
+	"Select an object, process and context first": "Сначала выберите объект, процесс и контекст",
+	"Add to queue": "Добавить в очередь",
+	"Select file group": "Выбрать группу файлов",
+	"File actions": "Действия с файлами",
+	"Version must be a whole number from 0 to 9999": "Версия должна быть целым числом от 0 до 9999",
+	"No previews": "Превью нет",
+	Running: "Выполняется",
+	"Needs validation": "Требуется проверка",
+	"Uploaded {done} / {total} files · {bytes} / {totalBytes} MB": "Загружено файлов: {done} / {total} · {bytes} / {totalBytes} МБ",
+	"Uploaded {done} files · {bytes} MB": "Загружено файлов: {done} · {bytes} МБ",
+	"Check-ins: {completed} / {total} completed · {failed} failed · {cancelled} cancelled · {running} running": "Публикации: завершено {completed} / {total} · ошибок {failed} · отменено {cancelled} · выполняется {running}",
+	"Elapsed: {seconds} s": "Прошло: {seconds} с",
+	"No new progress for {seconds} s": "Нет обновлений {seconds} с",
+	"Operation actions": "Действия с операцией",
+	"Context: {context}": "Контекст: {context}",
+	"{count} queue items · Ready to send": "Операций в очереди: {count} · Готово к отправке",
+	FILE: "ФАЙЛ",
+	bytes: "байт",
+	"File selection": "Отбор файлов",
+	"{sobject.name}_{snapshot.context}.mov": "{sobject.name}_{snapshot.context}.mov",
+	"Publish target": "Куда публиковать",
+	"TACTIC server scripts": "Серверные скрипты TACTIC",
+	"Open Script Editor": "Открыть редактор скриптов",
+	"Child items": "Дочерние объекты",
+	"Loading ingest rules…": "Загружаем правила инжеста…",
+	Stop: "Остановить",
+	Invalid: "Некорректная операция",
+	"Missing files": "Отсутствующие файлы",
+	Validating: "Проверка",
+	Prepared: "Подготовлено",
+	"Ready to send": "Готово к отправке",
+	"Capture screenshot": "Сделать снимок экрана",
+	capture: "состояние",
+	"Choose preview images": "Выбрать изображения превью",
+	"Paste preview image from clipboard": "Вставить превью из буфера обмена",
+	"Manage selected previews": "Управление выбранными превью",
+	"Clear operation previews": "Очистить превью операции",
+	"Commit current": "Отправить текущую",
+	"Commit selected": "Закоммитить выбранные",
+	"Remove operation": "Удалить операцию",
+	"Move operation up": "Переместить операцию вверх",
+	"Move operation down": "Переместить операцию вниз",
+	"Clear completed": "Очистить завершенные",
+	"Clear queue": "Очистить очередь",
+	"The same files are already prepared for this object and context.": "Эти файлы уже подготовлены для этого объекта и контекста.",
+	"Add another": "Добавить еще",
+	"Ignore duplicate": "Игнорировать дубликат",
+	"Select an operation": "Выберите операцию",
+	"Ready for operations": "Всё готово к операциям",
+	"Select an operation in the queue to review its files and settings.": "Выберите операцию в очереди, чтобы проверить её файлы и параметры.",
+	"Add files through Save Snapshot or Drop Plate. You can review every prepared operation before sending it.": "Добавьте файлы через Save Snapshot или Drop Plate. Перед отправкой можно проверить каждую подготовленную операцию.",
+	"Snapshot Browser": "Браузер снапшотов",
+	"Commit all": "Отправить все",
+	all: "Все",
+	"More send actions": "Дополнительные варианты отправки",
+	Versioned: "Нумерованная версия",
+	"Waiting for naming preview": "Ожидание превью нейминга",
+	"Not generated": "Не создано",
+	"Apply every edit to checked items": "Применять каждое изменение к отмеченным элементам",
+	"The current item and all checked operations will receive each edit.": "Каждая правка применяется к текущей и всем отмеченным операциям.",
+	BASIC: "ОСНОВНОЕ",
+	"Advanced options": "Расширенные параметры",
+	"Automatic version": "Автоматически",
+	Method: "Метод",
+	"Generated by naming rules": "Сформировано правилами именования",
+	"Local transfer methods require a desktop connection. Browser check-in uses Upload.": "Локальная передача требует подключения настольного клиента. В браузере используется загрузка Upload.",
+	"FILE OPTIONS": "ПАРАМЕТРЫ ФАЙЛОВ",
+	"Update versionless": "Обновлять versionless",
+	"Commit versionless only": "Отправить только versionless",
+	"Keep source filename": "Сохранять имя исходного файла",
+	"Use context as filename": "Использовать контекст как имя файла",
+	"Naming Editor": "Редактор именования",
+	"Result unknown": "Результат неизвестен",
+	"Check the current snapshot before repeating this check-in; the server may already have saved it.": "Перед повторной сдачей проверьте текущий снимок: сервер мог уже сохранить его.",
+	QUEUE: "ОЧЕРЕДЬ",
+	"Auto-clean": "Автоочистка",
+	"Server queue": "На сервере",
+	"Send files in chunks. The server checks in and reports results for the whole batch. Legacy mode is the default.": "Файлы передаются чанками. Сервер выполняет чекин и возвращает результаты всего пакета. По умолчанию — легаси.",
+	"No file check-ins yet.": "Сдач файлов пока нет.",
+	"Files pane height": "Высота списка файлов",
+	"Select an operation to inspect its files.": "Выберите операцию для просмотра файлов.",
+	"No files": "Нет файлов",
+	"Choose source files before check-in": "Выберите исходные файлы перед чекином",
+	"Choose source files again": "Повторно выбрать исходные файлы",
+	"Operation previews": "Превью операций",
+	"Add images": "Добавить изображения",
+	"Paste image": "Вставить изображение",
+	"Remove preview": "Удалить превью",
+	"Upload interrupted. Use Retry to resume the existing batch.": "Загрузка прервана. Нажмите «Повторить», чтобы продолжить тот же пакет.",
+	"Progress unavailable. Check-in results are not confirmed; retrying status requests.": "Нет связи с сервером. Результаты чекинов не подтверждены; повторяем запрос состояния.",
+	"Running before check-in hooks": "Выполняем скрипты перед чекином",
+	"Preparing files and checksums": "Подготавливаем файлы и контрольные суммы",
+	uploading: "Загрузка файлов",
+	"Uploading files": "Загружаем файлы",
+	"Checking in on server": "Выполняем чекины на сервере",
+	Finished: "Обработка завершена",
+	"Upload progress": "Прогресс загрузки",
+	"Server check-in progress": "Прогресс серверных чекинов",
+	"Operation details": "Параметры операции",
+	"Queue pane width": "Ширина списка операций",
+	"{count} files": "{count} файлов",
+	"No context": "Нет контекста",
+	"Select operation for commit": "Выбрать операцию для отправки",
+	"Remove file from operation": "Убрать файл из операции",
+	"Preview actions": "Действия превью",
+	"Context branch": "Ветка контекста",
+	"Add context": "Добавить контекст",
+	"Download file": "Скачать файл",
+	"Matched as ": "Совпало как ",
+	"{count} files selected. Check in one group or separately in sequence?": "Выбрано файлов: {count}. Опубликовать одной группой или по отдельности?",
+	"Source files": "Исходные файлы",
+	"Repository changed. Close this dialog and review the current path before confirming again.": "Репозиторий изменился. Закройте это окно и проверьте текущий путь перед повторным подтверждением.",
+	"Resize capture area": "Изменить размер области захвата",
+	"Repository Sync preset": "Пресет синхронизации репозитория",
+	"Repository Sync scope": "Область синхронизации репозитория",
+	"Processing server response: {count} objects": "Обработка ответа сервера: объектов {count}",
+	"Requesting snapshots: {done} / {total} objects": "Запрос снапшотов: объектов {done} / {total}",
+	"Preparing download queue: {count} files": "Подготовка очереди загрузки: файлов {count}",
+	"Parallel repository chunks: {done} / {total} objects": "Параллельные части репозитория: объектов {done} / {total}",
+	"{count} active downloads": "Активных загрузок: {count}",
+	"{count} files in queue": "Файлов в очереди: {count}",
+	"{count} failed downloads": "Неудачных загрузок: {count}",
+	"Select file": "Выбрать файл",
+	"Check in multiple files?": "Сохранить несколько файлов?",
+	"One group": "Одной группой",
+	Separately: "По отдельности",
+	"The file stored in this revision will be replaced. Use Save snapshot when you need a new version.": "Файл в этой ревизии будет заменён. Для новой версии используйте «Сохранить снапшот».",
+	"Replace revision": "Заменить ревизию",
+	"The attachment result is unknown. Close this window and refresh the snapshot before retrying.": "Результат прикрепления неизвестен. Закройте это окно и обновите снапшот перед повторной попыткой.",
+	"Choose files for check-in": "Выбрать файлы для Check-in",
+	"Save from Clipboard": "Сохранить из буфера обмена",
+	"Drop files here, paste an image, or choose files for check-in.": "Перетащите файлы сюда, вставьте изображение или выберите файлы для чекина.",
+	"Keep original file names": "Сохранить исходные имена файлов",
+	"Attach files": "Прикрепить файлы",
+	"Add to Commit Queue": "Добавить в очередь чекина",
+	"This affects every TACTIC client. Confirm only if the server can access this folder.": "Это затронет всех клиентов TACTIC. Подтверждайте, только если серверу доступна эта папка.",
+	"Update server path": "Обновить путь сервера",
+	"TACTIC's server-wide repository path will be set to:": "Общий серверный путь репозитория TACTIC будет изменён на:",
+	"Repository storage is not configured": "Хранилище репозитория не настроено",
+	"TACTIC-Handler needs a repository path for snapshots, previews, check-in, check-out and synchronization. Configure it now to avoid missing files.": "TACTIC-Handler нужен путь репозитория для снапшотов, превью, check-in, check-out и синхронизации. Настройте его сейчас, чтобы избежать отсутствующих файлов.",
+	"Configure repositories": "Настроить репозитории",
+	"Move or resize the area, then capture": "Переместите или измените область, затем сделайте снимок",
+	"Drag over the area to capture": "Выделите область для снимка",
+	"Cancel screenshot": "Отменить снимок",
+	"Draw again": "Нарисовать заново",
+	"Capturing…": "Создание снимка…",
+	Capture: "Сделать снимок",
+	"Remove Current Preset": "Удалить текущий пресет",
+	"Save Current Preset Changes": "Сохранить изменения текущего пресета",
+	"Create new Preset and Save": "Создать и сохранить новый пресет",
+	Chunk: "Чанк",
+	"Only updates": "Только обновления",
+	"Preset has unsaved changes": "В пресете есть несохранённые изменения",
+	"Begin Repo Sync": "Начать синхронизацию репозитория",
+	"Create and save": "Создать и сохранить",
+	"Requesting object list from TACTIC": "Получение списка объектов из TACTIC",
+	"Preparing parallel repository chunks": "Подготовка параллельных чанков репозитория",
+	streaming: "Скачивание файлов",
+	"Stopping repository discovery": "Остановка поиска файлов репозитория",
+	"Discovering repository files": "Поиск файлов репозитория",
+	"Processed / total files": "Обработано / всего файлов",
+	"Total size": "Общий объём",
+	Downloaded: "Скачано",
+	"Remaining data": "Осталось скачать",
+	Speed: "Скорость",
+	"Average speed": "Средняя скорость",
+	Elapsed: "Прошло",
+	"Successful / errors": "Успешно / с ошибкой",
+	"Downloading repository files": "Загрузка файлов репозитория",
+	"Ready to download repository files": "Файлы репозитория готовы к загрузке",
+	"Repository download finished with errors": "Загрузка репозитория завершена с ошибками",
+	"Repository download complete": "Загрузка репозитория завершена",
+	"Repository discovery failed": "Не удалось просканировать репозиторий",
+	"Clear completed downloads": "Очистить завершенные загрузки",
+	"Auto-clean completed repository downloads": "Автоматически очищать завершённые загрузки репозитория",
+	"Start checked downloads": "Запустить отмеченные загрузки",
+	"Stop discovering more files": "Остановить поиск новых файлов",
+	"Completed rows were cleared; the batch summary is retained": "Завершённые строки очищены; итоговая статистика сохранена",
+	"Repository Sync queue is empty": "Очередь синхронизации репозитория пуста",
+	"Background transfers are active — the interface remains responsive": "Фоновые передачи активны — интерфейс остаётся отзывчивым",
+	"Files are verified before downloading and written atomically": "Файлы проверяются перед загрузкой и записываются атомарно",
+	cancelled: "Cancelled",
+	Downloading: "Загрузка",
+	"Revert pending changes. Local files are kept unless deletion is selected.": "Откатить pending-изменения. Локальные файлы сохраняются, если удаление не выбрано.",
+	"Delete files not in depot": "Удалить файлы вне depot",
+	"Only newly added local files absent from the published stream will be moved to Trash after the server revert succeeds.": "После успешного серверного отката в Корзину попадут только новые локальные файлы, которых нет в опубликованном стриме.",
+	Revert: "Откатить",
+	"Revision selector": "Выбор ревизии",
+	"File revision (each file)": "Ревизия каждого файла",
+	"Submitted changelist": "Опубликованный чейнджлист",
+	"As of date / time": "Состояние на дату / время",
+	"Stream revision": "Ревизия стрима",
+	"Revision number or date": "Номер ревизии или дата",
+	"YYYY-MM-DD or ISO date / time": "ГГГГ-ММ-ДД или дата / время ISO",
+	"Without a timezone, UTC is used. A date includes the whole UTC day.": "Без часового пояса используется UTC. Дата включает весь день по UTC.",
+	"Files without this revision are left unchanged and reported in the Log.": "Файлы без этой ревизии остаются без изменений; список выводится в журнал.",
+	"Changelist and stream revision select the complete submitted state of the selected stream.": "Чейнджлист и ревизия стрима задают его целиком опубликованное состояние.",
+	"Force overwrite local files": "Принудительно перезаписать локальные файлы",
+	"Force replaces modified files and removes files absent from the selected state. Preserve your local changes first.": "Force заменяет изменённые файлы и удаляет полученные ранее файлы, отсутствующие в выбранном состоянии. Сначала сохраните локальные изменения.",
+	Get: "Получить",
+	"Select a permitted shelf in the same stream. Replacing it preserves its previous contents.": "Выберите доступный shelf в том же stream. При замене предыдущее содержимое сохраняется.",
+	"Shelved changelist": "Чейнджлист shelf",
+	"Next shelves": "Следующие shelves",
+	Continue: "Продолжить",
+	"Target changelist": "Целевой список изменений",
+	"Review selected add, edit, delete and rename operations. Local files are kept.": "Проверьте выбранные добавления, изменения, удаления и переименования. Локальные файлы сохраняются.",
+	"Create a new changelist": "Создать новый чейнджлист",
+	"Changelist description": "Описание списка изменений",
+	"Add to changelist": "Добавить в чейнджлист",
+	checkout: "Открыт для изменения",
+	Checkout: "Чекаут",
+	"Changelist #{number}": "Чейнджлист №{number}",
+	"files on this page": "файлов на странице",
+	"Finish or cancel the upload before submit": "Завершите или отмените загрузку перед submit",
+	"Resolve all conflicts before submit": "Разрешите все конфликты перед submit",
+	"Stream head changed; rebase before submit": "Head стрима изменился; выполните rebase перед submit",
+	"The shelf is saved before reverting. Local files are kept.": "Shelf сохраняется перед revert. Локальные файлы остаются на диске.",
+	"Merge stream": "Объединить потоки",
+	Unshelve: "Взять с полки",
+	"Rebase / resolve": "Обновить базу / разрешить конфликты",
+	"Replace shelf files": "Заменить файлы в shelf",
+	Shelve: "Сохранить на полку",
+	"Excluded by workspace mapping": "Исключён mapping воркспейса",
+	"Binary or large file. Use an external comparison application.": "Двоичный или большой файл. Используйте внешнее приложение сравнения.",
+	"No differences.": "Различий нет.",
+	"Comparison result": "Результат сравнения",
+	"Compare with application…": "Сравнить в приложении…",
+	staged: "подготовлены",
+	"Waiting for upload": "Ожидает загрузки",
+	Uploading: "Загрузка",
+	"Verified; waiting for staging": "Проверен; ожидает подготовки",
+	"Not mapped to workspace": "Не включён в mappings workspace",
+	"Renamed / moved": "Переименован / перемещён",
+	write: "Загружен",
+	pending: "Pending",
+	"Modified after upload": "Изменён после загрузки",
+	Modified: "Изменён",
+	Added: "Добавлен",
+	Missing: "Отсутствует",
+	"Marked for delete": "Помечен для удаления",
+	shelved: "На полке",
+	Shelved: "На полке",
+	submitted: "Опубликован",
+	Submitted: "Опубликован",
+	"Checked out": "Открыт для изменения",
+	"Newer on server": "На сервере новее",
+	"Server only": "Только на сервере",
+	deleted: "Удалён",
+	"Deleted on server": "Удалён на сервере",
+	Untracked: "Не отслеживается",
+	"Not on server": "Отсутствует на сервере",
+	Published: "Опубликован",
+	"Load more": "Загрузить ещё",
+	waiting: "ожидают",
+	"Counts not indexed": "Счётчики не индексированы",
+	Reverted: "Отменён",
+	conflicts: "конфликтов",
+	"No active checkout": "Нет активного checkout",
+	"Owner: {owner}": "Владелец: {owner}",
+	"Choose files to submit ({count})": "Выберите файлы для отправки ({count})",
+	"Selected tasks: {count}": "Выбрано задач: {count}",
+	"Files ({count})": "Файлы ({count})",
+	"Tasks ({count})": "Задачи ({count})",
+	"Selected items: {count}": "Выбрано элементов: {count}",
+	"Delete {count} changelist(s) / shelf(s)? Local files are kept. Shelved contents will no longer be available. The whole selection is deleted together.": "Удалить списки изменений / полки ({count})? Локальные файлы сохранятся. Содержимое полок станет недоступным. Весь набор удаляется вместе.",
+	"Confirm {operation} for the selected items? Local changes may be affected.": "Подтвердить {operation} для выбранных элементов? Локальные изменения могут быть затронуты.",
+	"Column width must be a whole number from 48 to 900": "Ширина колонки должна быть целым числом от 48 до 900",
+	State: "Состояние",
+	Workspace: "Рабочее пространство",
+	Date: "Дата",
+	"Access type": "Доступ",
+	Restricted: "Ограниченный",
+	Public: "Общий",
+	Stream: "Поток",
+	"Loading changelist contents…": "Загрузка содержимого чейнджлиста…",
+	"Shelved files": "Файлы в shelf",
+	"Shelf changelist": "Список изменений на полке",
+	"The selected changelist has changed. Reopen its details.": "Выбран другой чейнджлист. Откройте его сведения заново.",
+	"Changelist actions": "Действия со списком изменений",
+	"New depot": "Новый Depot",
+	"Edit depot": "Редактировать Depot",
+	"Depot code": "Код Depot",
+	"Project storage": "Хранилище проекта",
+	"Repository changes apply to new uploads. Existing file contents stay in their original storage.": "Смена repository применяется к новым загрузкам. Содержимое существующих файлов остаётся в прежнем хранилище.",
+	"Depot paths are case-sensitive. Access is configured in Administration → Rules using file_depot.": "Пути Depot учитывают регистр. Доступ настраивается в Administration → Rules через file_depot.",
+	"Select a depot": "Выберите Depot",
+	Revision: "Ревизия",
+	"Case-sensitive depot paths": "Пути Depot учитывают регистр",
+	Depots: "Депоты",
+	id: "id",
+	"Revert changelist": "Отменить список изменений",
+	"Remove files": "Убрать файлы",
+	"Move to Trash": "В Корзину",
+	"Mark for deletion": "Пометить на удаление",
+	"Recipient login": "Логин получателя",
+	"Changelist number": "Номер чейнджлиста",
+	"Local workspace root": "Локальная папка рабочего пространства",
+	"New depot path": "Новый путь в depot",
+	"Merge source stream": "Исходный поток для объединения",
+	OK: "ОК",
+	"Move selected files between pending changelists. Local files are kept.": "Перенести выбранные файлы между pending-чейнджлистами. Локальные файлы сохранятся.",
+	"Restore shelved files into this changelist. Review conflicts before Submit.": "Восстановить файлы из shelf в этот чейнджлист. Перед Submit проверьте конфликты.",
+	"Open selected files for editing in this changelist. Missing local copies will be downloaded; existing local files are kept.": "Открыть выбранные файлы для редактирования в этом чейнджлисте. Отсутствующие локальные копии будут скачаны; существующие сохранятся.",
+	"Move all files to another changelist, then delete the empty changelist. Or revert this changelist; it will appear in Reverted. Local files are kept.": "Перенеси все файлы в другой чейнджлист, затем удали пустой. Или откати этот чейнджлист — он появится в Reverted. Локальные файлы сохранятся.",
+	"Move files…": "Перенести файлы…",
+	"Pending changes and server tasks remain in the previous workspace. Local files are kept.": "Незавершённые changelists и серверные задачи останутся в прежнем workspace. Локальные файлы сохранятся.",
+	"Apply the pinned query to all matching server files? The batch is atomic; local files are kept.": "Применить зафиксированную выборку ко всем подходящим файлам на сервере? Пакет атомарен; локальные файлы сохранятся.",
+	"depot deletion on submit": "удаление из depot при Submit",
+	"moving local copies to Trash": "перемещение локальных копий в корзину",
+	"removing files from the changelist": "удаление файлов из чейнджлиста",
+	"Revert the changelist? Local files will be kept.": "Отменить список изменений? Локальные файлы сохранятся.",
+	"Changelist number, e.g. #42": "Номер чейнджлиста, например #42",
+	"Local changes": "Локальные изменения",
+	"Server state": "Состояние на сервере",
+	"Checkout / locks": "Checkout / блокировки",
+	"Local revision": "Локальная ревизия",
+	Head: "Head",
+	"Column width": "Ширина колонки",
+	"New stream": "Новый стрим",
+	"Stream Graph": "Граф стримов",
+	"Parent links and submitted integrations. Double-click a stream to edit its settings.": "Связи Parent и опубликованные интеграции. Двойной щелчок открывает настройки стрима.",
+	"Select a stream": "Выберите стрим",
+	"Next connections": "Следующие связи",
+	"Date submitted": "Дата отправки",
+	Changelist: "Чейнджлист",
+	"Submitted by": "Отправитель",
+	"Workspace location": "Путь в workspace",
+	"Depot location": "Путь в depot",
+	"Local modification date": "Дата локального изменения",
+	"Submitted at": "Дата submit",
+	Author: "Автор",
+	"Integration source": "Источник интеграции",
+	Integrations: "Интеграции",
+	"Checked Out By": "Взят в checkout",
+	"Select a revision": "Выберите ревизию",
+	"Select a file to inspect": "Выберите файл для просмотра",
+	"No integration source for this revision": "У этой ревизии нет источника интеграции",
+	"Exclusive checkout": "Эксклюзивный checkout",
+	"Ordinary checkout": "Обычный checkout",
+	"Loading preview…": "Загрузка предпросмотра…",
+	"No content available for this file": "Для этого файла нет содержимого",
+	"Binary file": "Двоичный файл",
+	"Preview shows the first 256 KiB": "Показаны первые 256 КиБ",
+	contain: "Вписать",
+	"Copy log": "Скопировать журнал",
+	"Clear log": "Очистить журнал",
+	"Debug Log": "Журнал отладки",
+	"Hide log": "Скрыть лог",
+	"Collapse log": "Свернуть журнал",
+	"Expand log": "Развернуть журнал",
+	Log: "Лог",
+	"Mappings and exclusions": "Mappings и исключения",
+	"Add mapping": "Добавить mapping",
+	"Technical JSON": "Технический JSON",
+	"Workspace mappings (JSON)": "Сопоставления рабочего пространства (JSON)",
+	"Mapping stream": "Stream для mapping",
+	"Remove mapping": "Удалить mapping",
+	"Depot pattern": "Шаблон пути depot",
+	"Depot pattern, e.g. assets/...": "Шаблон depot, например assets/...",
+	"Local pattern": "Шаблон локального пути",
+	"Local pattern, e.g. art/...": "Локальный шаблон, например art/...",
+	Exclude: "Исключить",
+	Writable: "Разрешена запись",
+	"Byte quota": "Квота в байтах",
+	"Zero means unlimited.": "Ноль — без ограничения.",
+	"File quota": "Квота файлов",
+	"Parallel transfers": "Параллельные передачи",
+	"From 1 to 16.": "От 1 до 16.",
+	"Unfinished uploads (seconds)": "Незавершённые загрузки (секунды)",
+	"Zero disables expiration.": "Ноль отключает истечение срока хранения.",
+	"Reverted changelists (seconds)": "Откаченные списки изменений (секунды)",
+	"Completed tasks (seconds)": "Завершённые задачи (секунды)",
+	"Shelved changelists (seconds)": "Отложенные списки изменений (секунды)",
+	"Quarantine before deletion (seconds)": "Карантин до удаления (секунды)",
+	"Unreferenced contents stay in quarantine before physical deletion.": "Невостребованное содержимое остаётся в карантине до физического удаления.",
+	"Automatic GC interval (seconds)": "Интервал автоматической очистки (секунды)",
+	"Zero disables automatic cleanup.": "Ноль отключает автоматическую очистку.",
+	queued: "В очереди на сервере",
+	running: "Проверка и подготовка",
+	"Storage administration": "Администрирование хранилища",
+	"Storage index complete": "Индекс хранилища готов",
+	"Storage index incomplete": "Индекс хранилища не готов",
+	"Initialize storage": "Инициализировать хранилище",
+	"Continue storage index": "Продолжить индексацию",
+	"Stop waiting": "Прекратить ожидание",
+	"Finish indexing before editing the policy or running GC. Indexing can be stopped and continued.": "Завершите индексацию перед изменением политики или запуском очистки. Индексацию можно остановить и продолжить.",
+	Quotas: "Квоты",
+	"Retention and cleanup": "Хранение и очистка",
+	"Save storage policy": "Сохранить политику хранилища",
+	"Garbage collection": "Очистка хранилища",
+	"Dry run counts unused objects without deleting them. Safe GC expires retained records and quarantines unused contents according to the saved policy.": "Пробный запуск считает неиспользуемые объекты без удаления. Безопасная очистка завершает срок хранения записей и помещает невостребованное содержимое в карантин по сохранённой политике.",
+	"Enable the files service on the server to process GC tasks.": "Включите сервис files на сервере для выполнения задач очистки.",
+	"GC dry run": "Пробный GC",
+	"Run safe GC": "Запустить безопасный GC",
+	"Cancel GC": "Отменить очистку",
+	"Objects scanned": "Проверено объектов",
+	Candidates: "Кандидаты",
+	"Expired records": "Истёкшие записи",
+	Quarantined: "В карантине",
+	Purged: "Удалено",
+	"GC stopped. After fixing the cause, start a new dry run or safe GC.": "Очистка остановлена. После исправления причины запустите новую пробную или безопасную очистку.",
+	"Run safe GC using the configured retention policy?": "Запустить безопасный GC с настроенной политикой хранения?",
+	"Stream code": "Код стрима",
+	Depot: "Депо",
+	"Stream type": "Тип стрима",
+	"Parent stream": "Родительский поток",
+	"Choose parent": "Выбрать родителя",
+	"The picker shows the first 1000 records. Enter another parent stream code directly.": "В списке показаны первые 1000 записей. Код другого родительского стрима можно ввести вручную.",
+	"Only the owner and administrators may edit stream settings": "Настройки стрима могут менять только владелец и администраторы",
+	"The new branch starts from the parent's published files without copying file contents.": "Новая ветка начинается с опубликованных файлов родителя без копирования содержимого файлов.",
+	"Changing Parent changes the hierarchy. Existing files and their branch history stay intact.": "Смена Parent меняет иерархию. Существующие файлы и история ветвления сохраняются.",
+	"Virtual streams, inherited path views and automatic merge/copy policies are not supported yet.": "Виртуальные стримы, наследуемые правила путей и автоматические политики merge/copy пока не поддерживаются.",
+	"Preparing submit…": "Подготовка Submit…",
+	"Select all files": "Выбрать все файлы",
+	"Unchecked files remain pending. Local files are kept.": "Неотмеченные файлы останутся в pending. Локальные файлы сохраняются.",
+	"Shelves are separate snapshots and are kept after submit.": "Shelf — отдельные снимки. После Submit они сохраняются.",
+	"Additional options": "Дополнительные параметры",
+	"Do not submit if resolved files have been modified": "Не выполнять Submit, если файлы изменены после разрешения конфликтов",
+	"Check out submitted files after submit": "Снова открыть опубликованные файлы для редактирования",
+	"Restrict access to changelist": "Ограничить доступ к сведениям о чейнджлисте",
+	"Only the owner and administrators can view changelist details. Depot file permissions do not change.": "Сведения о чейнджлисте доступны только владельцу и администраторам. Права на файлы depot не меняются.",
+	"On submit": "При Submit",
+	"Submit all selected files": "Отправить все выбранные файлы",
+	"Revert unchanged files": "Отменить неизменённые файлы",
+	"Leave unchanged files pending": "Оставить неизменённые файлы в pending",
+	"Link tasks to changelist (optional)": "Связанные задачи (необязательно)",
+	"Find tasks by code or description": "Найти задачи по коду или описанию",
+	"Search tasks": "Найти задачи",
+	"Next tasks": "Следующие задачи",
+	"No tasks. Create tasks in Task Manager.": "Задач нет. Создайте их в менеджере задач.",
+	"Status after submit": "Статус после Submit",
+	Submit: "Опубликовать",
+	"In folder": "В папке",
+	"Resolve status": "Разрешение конфликтов",
+	Task: "Задача",
+	"Stream root": "Путь стрима",
+	Owner: "Владелец",
+	Resolved: "Разрешённые",
+	"Expand or collapse": "Развернуть или свернуть",
+	"Switch workspace": "Переключить рабочее пространство",
+	"Edit workspace": "Изменить рабочее пространство",
+	"Workspace setup": "Настройка рабочего пространства",
+	"Server metadata": "Серверные данные",
+	"Selected server record": "Выбранная серверная запись",
+	"No permitted records on this page": "На этой странице нет доступных записей",
+	Conflicts: "Конфликты",
+	Transfers: "Передачи",
+	"Detail actions": "Действия с деталями",
+	Unresolved: "Неразрешённые",
+	"Next files": "Следующие файлы",
+	"Save workspace": "Сохранить рабочее пространство",
+	"Tab title": "Название вкладки",
+	"File source": "Источник файлов",
+	"Selected tree": "Выбранное дерево",
+	"Depot files": "Файлы депо",
+	"Changelist files": "Файлы списка изменений",
+	"Pin file history": "Закрепить историю файла",
+	"Changelist scope": "Область чейнджлистов",
+	"My changes": "Мои чейнджлисты",
+	"This workspace": "Этот workspace",
+	"This stream": "Этот stream",
+	"All permitted changes": "Все доступные чейнджлисты",
+	"Path prefix": "Начало пути",
+	"Case-sensitive local paths": "Учитывать регистр локальных путей",
+	"Sample depot path": "Пример пути в depot",
+	"Preview mappings": "Проверить mappings",
+	Ready: "Готово",
+	"Show log": "Показать лог",
+	seconds: "секунд",
+	"Transfer progress": "Прогресс передачи",
+	Tools: "Инструменты",
+	"Parent folder": "Родительская папка",
+	"Workspace or depot path": "Путь workspace или depot",
+	"Resume interrupted operation": "Продолжить прерванную операцию",
+	"Connection lost; work retained": "Соединение потеряно; работа сохранена",
+	"Interrupted operation available to resume": "Есть прерванная операция для продолжения",
+	Clean: "Без изменений",
+	"Not inspected": "Не проверен",
+	Deleted: "Удалён",
+	"Preparing manifest": "Подготовка манифеста",
+	"Preparing local changes": "Подготовка локальных правок",
+	"Applying atomic batch": "Применение атомарного пакета",
+	"Submitting changelist": "Публикация чейнджлиста",
+	"Recovering submit result": "Восстановление результата submit",
+	"Verifying files": "Проверка файлов",
+	"Staging files": "Подготовка файлов",
+	"Unavailable locally": "Недоступно локально",
+	"Indexing revision history": "Индексация истории ревизий",
+	"Sync stopped": "Синхронизация остановлена",
+	"Waiting for server": "Ожидание сервера",
+	"Discovering files": "Поиск файлов",
+	"Reconciling workspace": "Сравнение рабочего пространства",
+	"Queued on server": "В очереди на сервере",
+	"Verifying and staging": "Проверка и подготовка",
+	"Downloading files": "Скачивание файлов",
+	"Resolving conflicts": "Разрешение конфликтов",
+	"Ready to submit": "Готов к публикации",
+	"local unstaged": "локальных незалитых",
+	tree: "Дерево",
+	"New changelist": "Новый список изменений",
+	"Restore panel": "Восстановить размер панели",
+	"Maximize panel": "Развернуть панель",
+	"Workspace actions": "Действия с рабочим пространством",
+	"Local changes detected. Reconcile to review them.": "Обнаружены локальные изменения. Просмотрите их через Reconcile.",
+	Filter: "Фильтр",
+	"Filter loaded files": "Фильтр загруженных строк",
+	"File state": "Состояние файла",
+	"All states": "Все состояния",
+	"Add to changelist…": "Добавить в чейнджлист…",
+	"Parent: {parent}": "Родитель: {parent}",
+	"Step {step} of {total}": "Шаг {step} из {total}",
+	"The session changed during check-in. Inspect Snapshot Browser before repeating it.": "Сессия изменилась во время публикации. Проверьте результат в браузере снапшотов перед повторной отправкой."
 };
 function translate(text, language, values) {
 	let result = language === "ru" && russian[text] ? russian[text] : String(text || "");
@@ -4946,7 +6133,7 @@ function paint(context, definition, ui, viewportSize, color, selection) {
 }
 //#endregion
 //#region src/frame/controls/graph/FrameGraph.vue
-var _hoisted_1$8 = ["data-frame", "aria-label"];
+var _hoisted_1$9 = ["data-frame", "aria-label"];
 var _hoisted_2$4 = ["aria-label"];
 var FrameGraph_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	__name: "FrameGraph",
@@ -5193,7 +6380,7 @@ var FrameGraph_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					transform: `translate(${-(ui.value.x - ui.value.world.x) * ui.value.zoom}px,${-(ui.value.y - ui.value.world.y) * ui.value.zoom}px) scale(${ui.value.zoom})`
 				}),
 				onEvent: dispatch
-			}, null, 8, ["scene", "style"])], 44, _hoisted_2$4)], 4)], 8, _hoisted_1$8);
+			}, null, 8, ["scene", "style"])], 44, _hoisted_2$4)], 4)], 8, _hoisted_1$9);
 		};
 	}
 }, [["__scopeId", "data-v-6646f71f"]]);
@@ -5269,7 +6456,7 @@ function completions(text, cursor, language, apiMethods = []) {
 }
 //#endregion
 //#region src/controls/CodeEditor.vue
-var _hoisted_1$7 = {
+var _hoisted_1$8 = {
 	key: 0,
 	class: "code-source-toolbar"
 };
@@ -5294,7 +6481,7 @@ var _hoisted_9$1 = ["readonly", "aria-label"];
 var _hoisted_10 = ["aria-label"];
 var _hoisted_11 = { key: 0 };
 var _hoisted_12 = { class: "code-completion-kind" };
-var _sfc_main$7 = {
+var _sfc_main$8 = {
 	__name: "CodeEditor",
 	props: /*@__PURE__*/ mergeModels({
 		bufferKey: String,
@@ -5678,30 +6865,30 @@ var _sfc_main$7 = {
 				style: normalizeStyle({ "--code-size": fontSize.value + "pt" }),
 				onKeydown: key
 			}, [
-				__props.sourceToolbar ? (openBlock(), createElementBlock("div", _hoisted_1$7, [
-					createVNode(_sfc_main$21, { name: "MDI_FILE_EDIT" }),
+				__props.sourceToolbar ? (openBlock(), createElementBlock("div", _hoisted_1$8, [
+					createVNode(_sfc_main$27, { name: "MDI_FILE_EDIT" }),
 					createBaseVNode("span", null, toDisplayString(unref(t)("Source")), 1),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "undo",
 						label: "Undo",
 						disabled: __props.readOnly || history.value.index <= 0,
 						onClick: _cache[0] || (_cache[0] = ($event) => restore(history.value.index - 1))
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "redo",
 						label: "Redo",
 						disabled: __props.readOnly || history.value.index >= history.value.steps.length - 1,
 						onClick: _cache[1] || (_cache[1] = ($event) => restore(history.value.index + 1))
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$25, {
+					createVNode(_sfc_main$21, {
 						overlay: "",
 						label: "Edit history",
 						icon: "history"
 					}, {
 						default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList([...history.value.steps].reverse(), (step, index) => {
-							return openBlock(), createBlock(_sfc_main$20, {
+							return openBlock(), createBlock(_sfc_main$26, {
 								key: index,
 								label: String(history.value.steps.length - index) + " · " + step.text.split("\n")[0].slice(0, 80),
 								disabled: __props.readOnly,
@@ -5715,28 +6902,28 @@ var _sfc_main$7 = {
 						_: 1
 					}),
 					renderSlot(_ctx.$slots, "actions"),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "FAS_CUT",
 						label: "Cut",
 						disabled: __props.readOnly || !selectedText.value,
 						onClick: _cache[2] || (_cache[2] = ($event) => clipboard("cut"))
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "copy",
 						label: "Copy",
 						disabled: !selectedText.value,
 						onClick: _cache[3] || (_cache[3] = ($event) => clipboard("copy"))
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "MDI_CONTENT_PASTE",
 						label: "Paste",
 						disabled: __props.readOnly,
 						onClick: _cache[4] || (_cache[4] = ($event) => clipboard("paste"))
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$25, {
+					createVNode(_sfc_main$21, {
 						overlay: "",
 						label: "Text size",
 						icon: "MDI_FORMAT_SIZE"
@@ -5748,7 +6935,7 @@ var _sfc_main$7 = {
 							13,
 							15
 						], (size, index) => {
-							return createVNode(_sfc_main$20, {
+							return createVNode(_sfc_main$26, {
 								key: size,
 								label: [
 									"Small",
@@ -5767,20 +6954,20 @@ var _sfc_main$7 = {
 						}), 64))]),
 						_: 1
 					}),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "search",
 						label: "Find",
 						onClick: _cache[5] || (_cache[5] = ($event) => showFind())
 					}),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "MDI_PLAY_BOX_OUTLINE",
 						label: "Run selection",
 						disabled: __props.readOnly || __props.disabled || !selectedText.value,
 						onClick: _cache[6] || (_cache[6] = ($event) => emit("run", selectedText.value))
 					}, null, 8, ["disabled"]),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "help",
 						label: "Code editor help",
@@ -5797,41 +6984,41 @@ var _sfc_main$7 = {
 						onKeydown: _cache[9] || (_cache[9] = withKeys(withModifiers(($event) => nextMatch($event.shiftKey), ["prevent"]), ["enter"]))
 					}, null, 40, _hoisted_3$2), [[vModelText, query.value]]),
 					createBaseVNode("span", null, toDisplayString(matches.value.length), 1),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "previous",
 						label: "Previous match",
 						onClick: _cache[10] || (_cache[10] = ($event) => nextMatch(true))
 					}),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "next",
 						label: "Next match",
 						onClick: _cache[11] || (_cache[11] = ($event) => nextMatch())
 					}),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Match case")), 1), createVNode(_sfc_main$22, {
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Match case")), 1), createVNode(_sfc_main$28, {
 						modelValue: caseSensitive.value,
 						"onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => caseSensitive.value = $event),
 						label: "Match case"
 					}, null, 8, ["modelValue"])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Whole word")), 1), createVNode(_sfc_main$22, {
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Whole word")), 1), createVNode(_sfc_main$28, {
 						modelValue: wholeWord.value,
 						"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => wholeWord.value = $event),
 						label: "Whole word"
 					}, null, 8, ["modelValue"])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Regular expression")), 1), createVNode(_sfc_main$22, {
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Regular expression")), 1), createVNode(_sfc_main$28, {
 						modelValue: regex.value,
 						"onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => regex.value = $event),
 						label: "Regular expression"
 					}, null, 8, ["modelValue"])]),
-					!__props.readOnly ? (openBlock(), createBlock(_sfc_main$20, {
+					!__props.readOnly ? (openBlock(), createBlock(_sfc_main$26, {
 						key: 0,
 						"icon-only": "",
 						icon: "edit",
 						label: "Replace",
 						onClick: _cache[15] || (_cache[15] = ($event) => replaceOpen.value = !replaceOpen.value)
 					})) : createCommentVNode("", true),
-					createVNode(_sfc_main$20, {
+					createVNode(_sfc_main$26, {
 						"icon-only": "",
 						icon: "close",
 						label: "Close search",
@@ -5846,11 +7033,11 @@ var _sfc_main$7 = {
 							"aria-label": unref(t)("Replacement"),
 							placeholder: unref(t)("Replacement")
 						}, null, 8, _hoisted_4$1), [[vModelText, replacement.value]]),
-						createVNode(_sfc_main$20, {
+						createVNode(_sfc_main$26, {
 							label: "Replace",
 							onClick: _cache[18] || (_cache[18] = ($event) => replace())
 						}),
-						createVNode(_sfc_main$20, {
+						createVNode(_sfc_main$26, {
 							label: "Replace all",
 							onClick: _cache[19] || (_cache[19] = ($event) => replace(true))
 						})
@@ -5895,7 +7082,7 @@ var _sfc_main$7 = {
 						role: "listbox",
 						"aria-label": unref(t)("Code completions")
 					}, [(openBlock(true), createElementBlock(Fragment, null, renderList(suggestions.value, (row, index) => {
-						return openBlock(), createBlock(_sfc_main$20, {
+						return openBlock(), createBlock(_sfc_main$26, {
 							key: row.label || row.name,
 							role: "option",
 							"aria-selected": index === suggestionIndex.value,
@@ -5904,7 +7091,7 @@ var _sfc_main$7 = {
 							onClick: ($event) => acceptSuggestion(row)
 						}, {
 							default: withCtx(() => [
-								createVNode(_sfc_main$21, { name: row.kind === "class" ? "MDI_FORMAT_SIZE" : row.kind === "module" ? "MDI_API" : "code" }, null, 8, ["name"]),
+								createVNode(_sfc_main$27, { name: row.kind === "class" ? "MDI_FORMAT_SIZE" : row.kind === "module" ? "MDI_API" : "code" }, null, 8, ["name"]),
 								createBaseVNode("span", null, [createBaseVNode("strong", null, toDisplayString(row.label || row.name), 1), row.detail ? (openBlock(), createElementBlock("small", _hoisted_11, toDisplayString(unref(t)(row.detail)), 1)) : createCommentVNode("", true)]),
 								createBaseVNode("small", _hoisted_12, toDisplayString(unref(t)(row.kind || "variable")), 1)
 							]),
@@ -6051,7 +7238,7 @@ function toolbar(model, width, language, revision) {
 }
 //#endregion
 //#region src/frame/controls/code/FrameCode.vue
-var _hoisted_1$6 = ["data-frame"];
+var _hoisted_1$7 = ["data-frame"];
 var FrameCode_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	__name: "FrameCode",
 	props: { node: {
@@ -6097,7 +7284,7 @@ var FrameCode_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				class: "frame-code-toolbar",
 				scene: toolbar$2.value,
 				onEvent: dispatch
-			}, null, 8, ["scene"]), createVNode(_sfc_main$7, {
+			}, null, 8, ["scene"]), createVNode(_sfc_main$8, {
 				ref_key: "source",
 				ref: source,
 				class: "frame-code-source",
@@ -6120,16 +7307,16 @@ var FrameCode_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				"read-only",
 				"disabled",
 				"font-size"
-			])], 8, _hoisted_1$6);
+			])], 8, _hoisted_1$7);
 		};
 	}
 }, [["__scopeId", "data-v-76ea9979"]]);
 //#endregion
 //#region src/controls/IconPicker.vue
-var _hoisted_1$5 = { key: 0 };
+var _hoisted_1$6 = { key: 0 };
 var _hoisted_2$2 = { class: "icon-picker" };
 var _hoisted_3$1 = ["aria-label"];
-var _sfc_main$5 = {
+var _sfc_main$6 = {
 	__name: "IconPicker",
 	props: {
 		modelValue: String,
@@ -6225,7 +7412,7 @@ var _sfc_main$5 = {
 		}
 		onBeforeUnmount(() => observer?.disconnect());
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$25, {
+			return openBlock(), createBlock(_sfc_main$21, {
 				ref_key: "menu",
 				ref: menu,
 				"compact-trigger": "",
@@ -6240,13 +7427,13 @@ var _sfc_main$5 = {
 				onBeforeOpen: prepare,
 				onToggle: opened
 			}, {
-				trigger: withCtx(() => [createVNode(_sfc_main$21, { name: __props.modelValue || "image" }, null, 8, ["name"]), !__props.iconOnly ? (openBlock(), createElementBlock("span", _hoisted_1$5, toDisplayString(unref(t)("Choose icon")), 1)) : createCommentVNode("", true)]),
+				trigger: withCtx(() => [createVNode(_sfc_main$27, { name: __props.modelValue || "image" }, null, 8, ["name"]), !__props.iconOnly ? (openBlock(), createElementBlock("span", _hoisted_1$6, toDisplayString(unref(t)("Choose icon")), 1)) : createCommentVNode("", true)]),
 				default: withCtx(() => [createBaseVNode("div", _hoisted_2$2, [
 					createBaseVNode("header", null, [
-						createVNode(_sfc_main$21, { name: "shapes" }),
+						createVNode(_sfc_main$27, { name: "shapes" }),
 						createBaseVNode("strong", null, toDisplayString(unref(t)("Icon library")), 1),
 						createBaseVNode("small", null, toDisplayString(names.value.length), 1),
-						sets.value.length > 1 ? (openBlock(), createBlock(_sfc_main$23, {
+						sets.value.length > 1 ? (openBlock(), createBlock(_sfc_main$29, {
 							key: 0,
 							modelValue: family.value,
 							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => family.value = $event),
@@ -6272,7 +7459,7 @@ var _sfc_main$5 = {
 							offset: $event.target.scrollTop
 						})
 					}, [createBaseVNode("div", { style: normalizeStyle({ height: rowCount.value * 76 + "px" }) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(visible.value, (item) => {
-						return openBlock(), createBlock(_sfc_main$20, {
+						return openBlock(), createBlock(_sfc_main$26, {
 							key: item.name,
 							"data-icon-index": item.index,
 							"aria-label": item.name,
@@ -6285,7 +7472,7 @@ var _sfc_main$5 = {
 							onKeydown: ($event) => move($event, item.index),
 							onClick: ($event) => select(item.name)
 						}, {
-							default: withCtx(() => [createVNode(_sfc_main$21, { name: family.value + ":" + item.name }, null, 8, ["name"]), createBaseVNode("small", null, toDisplayString(item.name), 1)]),
+							default: withCtx(() => [createVNode(_sfc_main$27, { name: family.value + ":" + item.name }, null, 8, ["name"]), createBaseVNode("small", null, toDisplayString(item.name), 1)]),
 							_: 2
 						}, 1032, [
 							"data-icon-index",
@@ -6304,6 +7491,111 @@ var _sfc_main$5 = {
 				"width",
 				"max-height"
 			]);
+		};
+	}
+};
+//#endregion
+//#region src/controls/AppSplitter.vue
+var _hoisted_1$5 = [
+	"tabindex",
+	"aria-disabled",
+	"aria-label",
+	"aria-orientation",
+	"aria-valuemin",
+	"aria-valuemax",
+	"aria-valuenow"
+];
+var _sfc_main$5 = {
+	__name: "AppSplitter",
+	props: /*@__PURE__*/ mergeModels({
+		label: String,
+		horizontal: Boolean,
+		min: Number,
+		max: Number,
+		reverse: Boolean,
+		proportional: Boolean,
+		disabled: Boolean
+	}, {
+		"modelValue": {
+			type: Number,
+			required: true
+		},
+		"modelModifiers": {}
+	}),
+	emits: /*@__PURE__*/ mergeModels(["committed", "cancelled"], ["update:modelValue"]),
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const model = useModel(__props, "modelValue");
+		const emit = __emit;
+		const dragging = ref(false);
+		let gesture = null;
+		function set(value, commit = false) {
+			const bounded = Math.max(props.min, Math.min(props.max, value));
+			if (gesture) gesture.last = bounded;
+			model.value = bounded;
+			if (commit) emit("committed", bounded);
+		}
+		function move(event) {
+			if (gesture && event.pointerId === gesture.id) set(gesture.value + ((props.horizontal ? event.clientY : event.clientX) - gesture.position) * gesture.scale * (props.reverse ? -1 : 1));
+		}
+		function end(event) {
+			if (gesture && event?.pointerId != null && event.pointerId !== gesture.id) return;
+			const previous = gesture;
+			gesture = null;
+			dragging.value = false;
+			window.removeEventListener("pointermove", move);
+			window.removeEventListener("pointerup", end);
+			window.removeEventListener("pointercancel", end);
+			window.removeEventListener("blur", end);
+			if (previous) emit(event?.type === "pointerup" ? "committed" : "cancelled", event?.type === "pointerup" ? previous.last : previous.value);
+		}
+		function start(event) {
+			if (props.disabled || event.button !== 0 || gesture) return;
+			const bounds = event.currentTarget.parentElement.getBoundingClientRect();
+			gesture = {
+				id: event.pointerId,
+				value: model.value,
+				last: model.value,
+				position: props.horizontal ? event.clientY : event.clientX,
+				scale: props.proportional ? 100 / Math.max(1, props.horizontal ? bounds.height : bounds.width) : 1
+			};
+			dragging.value = true;
+			event.currentTarget.focus();
+			event.preventDefault();
+			window.addEventListener("pointermove", move);
+			window.addEventListener("pointerup", end);
+			window.addEventListener("pointercancel", end);
+			window.addEventListener("blur", end);
+		}
+		function key(event) {
+			if (props.disabled) return;
+			const keys = props.horizontal ? ["ArrowUp", "ArrowDown"] : ["ArrowLeft", "ArrowRight"];
+			if (![
+				...keys,
+				"Home",
+				"End"
+			].includes(event.key)) return;
+			event.preventDefault();
+			set(event.key === "Home" ? props.min : event.key === "End" ? props.max : model.value + (event.key === keys[0] ? -1 : 1) * (props.reverse ? -1 : 1) * (event.ctrlKey || props.proportional ? 1 : 10), true);
+		}
+		onBeforeUnmount(end);
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				class: normalizeClass(["app-splitter resize-grip", {
+					horizontal: __props.horizontal,
+					dragging: dragging.value
+				}]),
+				role: "separator",
+				tabindex: __props.disabled ? -1 : 0,
+				"aria-disabled": __props.disabled || void 0,
+				"aria-label": unref(t)(__props.label),
+				"aria-orientation": __props.horizontal ? "horizontal" : "vertical",
+				"aria-valuemin": __props.min,
+				"aria-valuemax": __props.max,
+				"aria-valuenow": Math.round(model.value),
+				onPointerdown: start,
+				onKeydown: key
+			}, null, 42, _hoisted_1$5);
 		};
 	}
 };
@@ -6380,7 +7672,7 @@ var _sfc_main$3 = {
 	emits: ["click"],
 	setup(__props) {
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(resolveDynamicComponent(__props.clickable ? _sfc_main$20 : "div"), {
+			return openBlock(), createBlock(resolveDynamicComponent(__props.clickable ? _sfc_main$26 : "div"), {
 				class: normalizeClass(["summary-chip", {
 					clickable: __props.clickable,
 					compact: __props.compact
@@ -6390,7 +7682,7 @@ var _sfc_main$3 = {
 				onClick: _cache[0] || (_cache[0] = ($event) => __props.clickable && _ctx.$emit("click"))
 			}, {
 				default: withCtx(() => [
-					__props.icon ? (openBlock(), createBlock(_sfc_main$21, {
+					__props.icon ? (openBlock(), createBlock(_sfc_main$27, {
 						key: 0,
 						name: __props.icon
 					}, null, 8, ["name"])) : createCommentVNode("", true),
@@ -6474,7 +7766,7 @@ var _sfc_main$1 = {
 	emits: ["click"],
 	setup(__props) {
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(resolveDynamicComponent(__props.interactive ? _sfc_main$20 : "span"), {
+			return openBlock(), createBlock(resolveDynamicComponent(__props.interactive ? _sfc_main$26 : "span"), {
 				class: normalizeClass(["status-chip", {
 					dense: __props.dense,
 					interactive: __props.interactive
@@ -6489,7 +7781,7 @@ var _sfc_main$1 = {
 				title: __props.text,
 				onClick: _cache[0] || (_cache[0] = ($event) => __props.interactive && !__props.disabled && _ctx.$emit("click"))
 			}, {
-				default: withCtx(() => [__props.icon ? (openBlock(), createBlock(_sfc_main$21, {
+				default: withCtx(() => [__props.icon ? (openBlock(), createBlock(_sfc_main$27, {
 					key: 0,
 					name: __props.icon
 				}, null, 8, ["name"])) : createCommentVNode("", true), __props.dense ? (openBlock(), createBlock(_sfc_main$2, {
@@ -6587,6 +7879,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				paddingLeft: node.paddingLeft === void 0 ? void 0 : node.paddingLeft + "px",
 				color: color(node.color),
 				opacity: node.opacity,
+				transform: node.scale === void 0 ? void 0 : `scale(${node.scale})`,
+				transformOrigin: "top left",
 				textDecoration: node.strike ? "line-through" : void 0,
 				"--frame-button-icon-size": node.iconSize ? node.iconSize + "px" : void 0
 			};
@@ -6602,6 +7896,16 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 		}
 		function send(action, value, source) {
 			if (action && props.interactive) emit("event", Object.assign({}, action, value === void 0 ? {} : { value }), source);
+		}
+		function context(event, node) {
+			if (!node.contextAction || !props.interactive) return;
+			event.preventDefault();
+			event.stopPropagation();
+			const bounds = event.currentTarget.getBoundingClientRect();
+			send(node.contextAction, {
+				x: event.clientX - bounds.left,
+				y: event.clientY - bounds.top
+			}, event.currentTarget);
 		}
 		function drag(event, node) {
 			if (node.dragValue == null) return;
@@ -6741,7 +8045,8 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					class: normalizeClass(["frame-node frame-box", { "frame-titlebar": node.titlebar }]),
 					style: normalizeStyle(Object.assign(style(node), background(node), { "--frame-titlebar-actions-right": (node.chromeRight || 0) + "px" })),
 					role: node.role,
-					"aria-label": node.label
+					"aria-label": node.label,
+					onContextmenu: ($event) => context($event, node)
 				}, {
 					default: withCtx(() => [createVNode(_component_FrameView, {
 						ref_for: true,
@@ -6763,12 +8068,13 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"interactive"
 					])]),
 					_: 2
-				}, 1032, [
+				}, 1064, [
 					"data-frame",
 					"class",
 					"style",
 					"role",
-					"aria-label"
+					"aria-label",
+					"onContextmenu"
 				])) : node.kind === "Label" ? withDirectives((openBlock(), createElementBlock("span", {
 					key: 1,
 					"data-frame": node.id,
@@ -6780,6 +8086,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						overflow: node.elide === false ? "visible" : void 0,
 						textOverflow: node.elide === false ? "clip" : void 0,
 						textAlign: node.align || "left",
+						wordBreak: node.wrapAnywhere ? "break-all" : void 0,
 						lineHeight: node.wrap ? "normal" : node.height + "px",
 						display: node.maxLines ? "-webkit-box" : void 0,
 						WebkitLineClamp: node.maxLines || void 0,
@@ -6789,7 +8096,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				}, [node.elideMiddle ? (openBlock(), createBlock(_sfc_main$2, {
 					key: 0,
 					text: node.text
-				}, null, 8, ["text"])) : (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(node.text), 1))], 14, _hoisted_2)), [[unref(tooltipDirective), node.toolTip]]) : node.kind === "Icon" ? withDirectives((openBlock(), createBlock(_sfc_main$21, {
+				}, null, 8, ["text"])) : (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(node.text), 1))], 14, _hoisted_2)), [[unref(tooltipDirective), node.toolTip]]) : node.kind === "Icon" ? withDirectives((openBlock(), createBlock(_sfc_main$27, {
 					key: 2,
 					"data-frame": node.id,
 					class: "frame-node",
@@ -6807,11 +8114,11 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"role",
 					"aria-label",
 					"tabindex"
-				])), [[unref(tooltipDirective), node.toolTip || node.text]]) : node.kind === "Button" ? (openBlock(), createBlock(_sfc_main$20, {
+				])), [[unref(tooltipDirective), node.toolTip || node.text]]) : node.kind === "Button" ? (openBlock(), createBlock(resolveDynamicComponent(node.tab ? _sfc_main$18 : _sfc_main$26), {
 					key: 3,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node", {
-						"frame-button": !node.iconAction,
+						"frame-button": !node.iconAction && !node.tab,
 						"frame-icon-action": node.iconAction,
 						"frame-radio": node.radio,
 						"frame-radio-selected": node.radio && node.selected
@@ -6846,7 +8153,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onClick: ($event) => send(node.action, void 0, $event.currentTarget),
 					onDragover: ($event) => dragOver($event, node),
 					onDrop: ($event) => drop($event, node)
-				}, null, 8, [
+				}, null, 40, [
 					"data-frame",
 					"class",
 					"style",
@@ -6875,7 +8182,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onClick",
 					"onDragover",
 					"onDrop"
-				])) : node.kind === "Action" ? (openBlock(), createBlock(_sfc_main$20, {
+				])) : node.kind === "Action" ? (openBlock(), createBlock(_sfc_main$26, {
 					key: 4,
 					id: node.elementId,
 					"data-frame": node.id,
@@ -6913,8 +8220,18 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 							ref_key: "branches",
 							ref: branches,
 							scene: { nodes: node.children },
-							interactive: false
-						}, null, 8, ["scene"])]),
+							interactive: false,
+							models: __props.models,
+							views: __props.views,
+							"describe-row": __props.describeRow,
+							"describe-cell": __props.describeCell
+						}, null, 8, [
+							"scene",
+							"models",
+							"views",
+							"describe-row",
+							"describe-cell"
+						])]),
 						_: 2
 					}, 1032, [
 						"selected",
@@ -6944,7 +8261,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onDblclick",
 					"draggable",
 					"onDragstart"
-				])) : node.kind === "Segmented" ? (openBlock(), createBlock(_sfc_main$10, {
+				])) : node.kind === "Segmented" ? (openBlock(), createBlock(_sfc_main$12, {
 					key: 5,
 					"data-frame": node.id,
 					class: "frame-node",
@@ -6964,10 +8281,10 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"icon-only",
 					"disabled",
 					"onUpdate:modelValue"
-				])) : node.kind === "CheckBox" ? (openBlock(), createBlock(_sfc_main$27, {
+				])) : node.kind === "CheckBox" ? (openBlock(), createBlock(_sfc_main$17, {
 					key: 6,
 					"data-frame": node.id,
-					class: "frame-node frame-checkbox",
+					class: normalizeClass(["frame-node frame-checkbox", { "frame-checkbox-wrap": node.wrapText }]),
 					style: normalizeStyle(Object.assign(style(node), { "--frame-indicator-x": (node.indicatorX || 0) + "px" })),
 					"model-value": node.checked,
 					indeterminate: !!node.mixed,
@@ -7004,6 +8321,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					_: 2
 				}, 1032, [
 					"data-frame",
+					"class",
 					"style",
 					"model-value",
 					"indeterminate",
@@ -7013,12 +8331,12 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onKeydown",
 					"onUpdate:modelValue"
-				])) : node.kind === "Switch" ? (openBlock(), createElementBlock("div", {
+				])) : node.kind === "Switch" ? withDirectives((openBlock(), createElementBlock("div", {
 					key: 7,
 					"data-frame": node.id,
 					class: "frame-node frame-switch",
 					style: normalizeStyle(style(node))
-				}, [createVNode(_sfc_main$22, {
+				}, [createVNode(_sfc_main$28, {
 					"model-value": node.checked,
 					label: node.text,
 					disabled: !node.enabled,
@@ -7028,7 +8346,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"disabled",
 					"onUpdate:modelValue"
-				])], 12, _hoisted_5)) : node.kind === "Field" ? (openBlock(), createBlock(_sfc_main$24, {
+				])], 12, _hoisted_5)), [[unref(tooltipDirective), node.toolTip]]) : node.kind === "Field" ? (openBlock(), createBlock(_sfc_main$24, {
 					key: 8,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node frame-field", { "table-cell": node.tableCell }]),
@@ -7075,7 +8393,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onClick",
 					"onBlur",
 					"onUpdate:modelValue"
-				])) : node.kind === "Area" ? (openBlock(), createBlock(_sfc_main$15, {
+				])) : node.kind === "Area" ? (openBlock(), createBlock(_sfc_main$19, {
 					key: 9,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node frame-area", { "frame-notice": node.notice }]),
@@ -7188,7 +8506,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 							height: unref(listRowHeight)(node) + "px",
 							width: node.width - 16 + "px"
 						}),
-						scene: __props.describeRow(node, item.record),
+						scene: __props.describeRow(node, item.record, item.index),
 						models: __props.models,
 						views: __props.views,
 						"describe-row": __props.describeRow,
@@ -7234,7 +8552,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"describe-row",
 					"describe-cell",
 					"interactive"
-				])], 14, _hoisted_7)) : node.kind === "Choice" ? (openBlock(), createBlock(_sfc_main$23, {
+				])], 14, _hoisted_7)) : node.kind === "Choice" ? (openBlock(), createBlock(resolveDynamicComponent(node.editable ? _sfc_main$11 : _sfc_main$29), {
 					key: 14,
 					"data-frame": node.id,
 					class: "frame-node frame-choice",
@@ -7248,23 +8566,29 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"translate-labels": false,
 					options: node.options,
 					"model-value": node.value,
+					placeholder: node.placeholder,
 					disabled: !node.enabled,
+					onKeydown: ($event) => key($event, node),
+					onAccept: ($event) => send(node.commitAction, $event),
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
-				}, null, 8, [
+				}, null, 40, [
 					"data-frame",
 					"style",
 					"label",
 					"display-prefix",
 					"options",
 					"model-value",
+					"placeholder",
 					"disabled",
+					"onKeydown",
+					"onAccept",
 					"onUpdate:modelValue"
 				])) : node.kind === "IconChoice" ? (openBlock(), createElementBlock("div", {
 					key: 15,
 					"data-frame": node.id,
 					class: "frame-node frame-icon-choice",
 					style: normalizeStyle(style(node))
-				}, [createVNode(_sfc_main$5, {
+				}, [createVNode(_sfc_main$6, {
 					"model-value": node.value,
 					"tactic-compatible-only": node.tacticCompatibleOnly,
 					"icon-only": "",
@@ -7280,7 +8604,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"data-frame": node.id,
 					class: "frame-node frame-color-choice",
 					style: normalizeStyle(style(node))
-				}, [createVNode(_sfc_main$17, {
+				}, [createVNode(_sfc_main$22, {
 					"model-value": node.value,
 					label: node.label,
 					disabled: !node.enabled,
@@ -7290,7 +8614,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"label",
 					"disabled",
 					"onUpdate:modelValue"
-				])], 12, _hoisted_9)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$26, {
+				])], 12, _hoisted_9)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$5, {
 					key: 17,
 					"data-frame": node.id,
 					class: "frame-node frame-splitter",
@@ -7302,7 +8626,9 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					disabled: !node.enabled,
 					reverse: node.reverse,
 					label: node.text,
-					"onUpdate:modelValue": ($event) => send(node.action, $event)
+					"onUpdate:modelValue": ($event) => send(node.action, $event),
+					onCommitted: ($event) => node.commitAction && send(node.commitAction, $event),
+					onCancelled: ($event) => node.cancelAction && send(node.cancelAction, $event)
 				}, null, 8, [
 					"data-frame",
 					"style",
@@ -7313,7 +8639,9 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"reverse",
 					"label",
-					"onUpdate:modelValue"
+					"onUpdate:modelValue",
+					"onCommitted",
+					"onCancelled"
 				])) : node.kind === "StatusChip" ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 18,
 					"data-frame": node.id,
@@ -7340,7 +8668,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"interactive",
 					"disabled",
 					"onClick"
-				])) : node.kind === "DateChoice" ? (openBlock(), createBlock(_sfc_main$16, {
+				])) : node.kind === "DateChoice" ? (openBlock(), createBlock(_sfc_main$20, {
 					key: 19,
 					class: "frame-node frame-date-choice",
 					"data-frame": node.id,
@@ -7366,7 +8694,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"disabled",
 					"onUpdate:modelValue",
 					"onChange"
-				])) : node.kind === "UserChoice" ? (openBlock(), createBlock(_sfc_main$11, {
+				])) : node.kind === "UserChoice" ? (openBlock(), createBlock(_sfc_main$13, {
 					key: 20,
 					class: "frame-node frame-user-choice",
 					"data-frame": node.id,
@@ -7386,7 +8714,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"action-field",
 					"disabled",
 					"onChange"
-				])) : node.kind === "Grid" ? (openBlock(), createBlock(_sfc_main$9, {
+				])) : node.kind === "Grid" ? (openBlock(), createBlock(_sfc_main$10, {
 					key: 21,
 					ref_for: true,
 					ref_key: "grids",
@@ -7436,6 +8764,6 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 	}
 });
 //#endregion
-export { virtualRange as A, _sfc_main$19 as C, node as D, muted as E, rect as O, _sfc_main$17 as S, label as T, _sfc_main$15 as _, _sfc_main$4 as a, monthLabel as b, completions as c, _sfc_main$10 as d, _sfc_main$11 as f, AppSearchField_default as g, ItemPreview_default as h, _sfc_main$3 as i, revealListOffset as k, documentSymbols as l, _sfc_main$12 as m, _sfc_main$1 as n, _sfc_main$5 as o, matchesUser as p, _sfc_main$2 as r, _sfc_main$7 as s, _sfc_main as t, translate as u, _sfc_main$16 as v, button as w, parse as x, localDate as y };
+export { node as A, parse as C, button as D, _sfc_main$25 as E, revealListOffset as M, virtualRange as N, label as O, monthLabel as S, _sfc_main$24 as T, _sfc_main$17 as _, _sfc_main$5 as a, _sfc_main$21 as b, completions as c, _sfc_main$12 as d, _sfc_main$13 as f, AppSearchField_default as g, ItemPreview_default as h, _sfc_main$4 as i, rect as j, muted as k, documentSymbols as l, _sfc_main$14 as m, _sfc_main$1 as n, _sfc_main$6 as o, matchesUser as p, _sfc_main$2 as r, _sfc_main$8 as s, _sfc_main as t, translate as u, _sfc_main$19 as v, _sfc_main$22 as w, localDate as x, _sfc_main$20 as y };
 
 //# sourceMappingURL=FrameView.js.map

@@ -147,6 +147,12 @@ def fingerprints(handler):
             "activity_paging.mjs",
             "notification_history.mjs",
             "notification_stack.mjs",
+            "frame_files.mjs",
+            "frame_files_state.mjs",
+            "frame_files_queue.mjs",
+            "frame_files_object_checkin.mjs",
+            "checkin.mjs",
+            "file-workspace-inspection.mjs",
             "gantt_calendar.mjs",
             "gantt_scroll_stability.mjs",
             "mobile_tasks.mjs",
@@ -332,6 +338,46 @@ def fingerprints(handler):
         ROOT / "src/tactic/ui/table/task_schedule.py",
         ROOT / "tests/test_task_schedule.py",
     ]
+    checks += [
+        path
+        for path in (ROOT / "tools/frame_files").iterdir()
+        if path.is_file() and path.suffix in (".vue", ".mjs", ".py", ".html", ".json")
+    ]
+    checks += [
+        handler / "tests" / name
+        for name in (
+            "test_frame_queue.py",
+            "test_frame_sync.py",
+            "test_frame_screenshot.py",
+            "test_frame_repository_prompts.py",
+            "test_commit_queue.py",
+            "test_drop_plate.py",
+            "test_ingest_files.py",
+            "test_repository_sync.py",
+            "test_repository_sync_editor.py",
+            "test_repository_sync_scope.py",
+            "test_repository_download_errors.py",
+            "test_screenshot_controller.py",
+            "test_matching_templates_layout.py",
+            "test_item_checkin_dialogs.py",
+            "test_frame_ingest.py",
+            "test_frame_drop_plate.py",
+            "test_commit_queue_layout.py",
+            "test_theme_controls.py",
+            "frame_files_fixture.py",
+            "fixtures/frame_files.json",
+        )
+    ]
+    checks += [
+        ROOT / "tests" / name
+        for name in (
+            "test_file_workspace_layout.py",
+            "test_handler_file_workspace_ui.py",
+            "test_file_workspace_drag_ui.py",
+            "test_file_workspace_ui.py",
+            "test_native_file_integration.py",
+        )
+    ]
     for index, path in enumerate(checks):
         result[f"check/{index}/{path.name}"] = hashlib.sha256(
             path.read_bytes()
@@ -434,6 +480,119 @@ def main():
             {},
         ),
         ("notification-state", ["node", "frontend/tests/notifications.mjs"], ROOT, {}),
+        ("files-state", ["node", "frontend/tests/frame_files_state.mjs"], ROOT, {}),
+        (
+            "native-files-owners",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_commit_queue",
+                "tests.test_drop_plate",
+                "tests.test_ingest_files",
+                "tests.test_repository_sync",
+                "tests.test_repository_sync_editor",
+                "tests.test_repository_sync_scope",
+                "tests.test_repository_download_errors",
+                "tests.test_screenshot_controller",
+                "tests.test_matching_templates_layout",
+                "tests.test_commit_queue_layout",
+                "tests.test_item_checkin_dialogs",
+                "tests.test_frame_ingest",
+                "tests.test_frame_drop_plate",
+            ],
+            handler,
+            {"QT_QUICK_CONTROLS_STYLE": "Basic"},
+        ),
+        (
+            "browser-file-queue-input",
+            ["node", "frontend/tests/frame_files_queue.mjs"],
+            ROOT,
+            {},
+        ),
+        (
+            "browser-object-checkin-input",
+            ["node", "frontend/tests/frame_files_object_checkin.mjs"],
+            ROOT,
+            {},
+        ),
+        (
+            "native-files-input",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "tests.test_frame_queue",
+                "tests.test_commit_queue_layout",
+                "tests.test_frame_sync",
+                "tests.test_frame_screenshot",
+                "tests.test_frame_repository_prompts",
+                "tests.test_item_checkin_dialogs",
+                "tests.test_theme_controls.ThemeControlTests.test_material_ripple_has_no_idle_effect_or_animation_graph",
+            ],
+            handler,
+            {"QT_QUICK_CONTROLS_STYLE": "Basic"},
+        ),
+        (
+            "native-file-workspace-layout",
+            python + ["-m", "unittest", "-q", "test_file_workspace_layout"],
+            ROOT,
+            {
+                "PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src"),
+                "QT_QUICK_CONTROLS_STYLE": "Basic",
+            },
+        ),
+        (
+            "native-file-workspace-journey",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "test_handler_file_workspace_ui.HandlerFileWorkspaceUiTest.test_native_qml_upload_submit_have_history_and_small_layout",
+                "test_handler_file_workspace_ui.HandlerFileWorkspaceUiTest.test_pointer_range_context_menu_and_file_move_against_native_api",
+            ],
+            ROOT,
+            {
+                "PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src"),
+                "QT_QUICK_CONTROLS_STYLE": "Basic",
+            },
+        ),
+        (
+            "browser-file-workspace-journey",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "test_file_workspace_ui.FileWorkspaceUiTest.test_stream_interface_in_chromium",
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        (
+            "browser-checkin-journey",
+            python
+            + [
+                "-m",
+                "unittest",
+                "-q",
+                "test_transport.Transport.test_drop_plate_commit_queue_in_chromium",
+            ],
+            ROOT,
+            {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        (
+            "native-sync-preset-server",
+            python + ["-m", "unittest", "-q", "test_native_file_integration"],
+            ROOT,
+            {
+                "PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src"),
+                "QT_QUICK_CONTROLS_STYLE": "Basic",
+            },
+        ),
         (
             "browser-messaging-lifecycle",
             ["node", "frontend/tests/messages_ui.mjs"],

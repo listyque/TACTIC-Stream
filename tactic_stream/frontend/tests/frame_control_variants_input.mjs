@@ -177,6 +177,17 @@ export async function exerciseVariants(page) {
     true
   );
 
+  await configure('choice-editable');
+  const editable = sample().getByRole('combobox');
+  await editable.fill('custom_context');
+  assert.equal((await model()).value, 'custom_context');
+  await state('disabled');
+  assert.equal(await editable.isDisabled(), true);
+
+  await configure('checkbox-wrapped');
+  await sample().getByRole('checkbox').click();
+  assert.equal((await model()).value, false);
+
   await configure('checkbox-mixed');
   await sample().getByRole('checkbox').click();
   assert.equal((await model()).value, true);

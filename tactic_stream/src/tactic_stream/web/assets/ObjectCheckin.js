@@ -1,20 +1,332 @@
-import { E as nextTick, F as resolveComponent, G as withCtx, K as withDirectives, M as openBlock, N as renderList, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, o as vModelText, rt as toDisplayString, u as Fragment, y as createTextVNode, z as useId } from "./vue.js";
-import { D as t, Y as preferences, i as mobile, o as _sfc_main$1, rt as _plugin_vue_export_helper_default } from "./index.js";
-import { F as rpc, P as resultItems, Y as uploadFormFile, d as _sfc_main$4, f as _sfc_main$2, p as _sfc_main$3, w as navigationLink } from "./CodeBlock.js";
+import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, p as computed, rt as toDisplayString, u as Fragment, y as createTextVNode } from "./vue.js";
+import { A as appearance, Z as preferences, at as _plugin_vue_export_helper_default, c as _sfc_main$3, k as t, o as mobile } from "./index.js";
+import { A as node, D as button, O as label, j as rect, t as _sfc_main$4, u as translate } from "./FrameView.js";
+import { F as rpc, P as resultItems, Y as uploadFormFile, w as navigationLink } from "./CodeBlock.js";
+import { n as observeFrameSizes } from "./resize.js";
+import { t as captionHeight } from "./sections.ui.js";
+import { a as sourcePath, c as prettySize, l as sourceIcon } from "./files.js";
+import { t as describe$1 } from "./confirmation.ui.js";
+import { C as _sfc_main$5, w as captionedSwitch } from "./App.js";
+//#region ../src/tactic_stream/shared_ui/features/files/object_checkin.ui.mjs
+function modeChoice(model, width, language) {
+	const tr = (text, values) => translate(text, language, values), compact = width < 360, headingHeight = model.inline ? 26 : 64, columns = compact || model.inline ? 2 : 3, gap = 8, cell = (width - gap * (columns - 1)) / columns, children = [label("multiFileCheckinQuestion", rect(0, 0, width, headingHeight), model.inline ? tr("Check in multiple files?") : tr("{count} files selected. Check in one group or separately in sequence?", { count: model.count }), { wrap: true })], choices = [[
+		"group",
+		"One group",
+		"multiFileCheckinGroupButton"
+	], [
+		"individual",
+		"Separately",
+		"multiFileCheckinSeparateButton"
+	]];
+	if (!model.inline) choices.push([
+		"cancel",
+		"Cancel",
+		"multiFileCheckinCancelButton"
+	]);
+	choices.forEach(([value, title, id], index) => children.push(button(id, rect(index < columns ? index * (cell + gap) : 0, headingHeight + 10 + Math.floor(index / columns) * 46, index >= columns ? width : cell, 38), tr(title), "", {
+		type: "mode",
+		value
+	}, !model.busy, { highlighted: value === (model.mode || "group") })));
+	return {
+		height: headingHeight + 10 + Math.ceil(choices.length / columns) * 46,
+		nodes: children
+	};
+}
+function revision(model, width, height, language) {
+	return describe$1({
+		message: translate("The file stored in this revision will be replaced. Use Save snapshot when you need a new version.", language),
+		accept: "Replace revision",
+		destructive: true,
+		busy: !!model.busy,
+		acceptId: "revisionCheckinAccept",
+		rejectId: "revisionCheckinCancel"
+	}, width, height, language);
+}
+function describe(model, width, height, language) {
+	const tr = (text) => translate(text, language), margin = 10, inner = Math.max(0, width - 20 - 16), nodes = [], body = [], footerHeight = width < 370 ? 96 : 52;
+	let y = 0;
+	function notice(id, text, error) {
+		if (!text) return;
+		const h = Math.max(40, captionHeight(text, inner - 20) * 1.2 + 16);
+		body.push(node("Box", id, rect(0, y, inner, h), {
+			background: error ? "errorContainer" : "surfaceContainerLow",
+			radius: 12,
+			children: [label(id + "Text", rect(10, 8, inner - 20, h - 16), text, {
+				wrap: true,
+				color: error ? "error" : "secondaryText",
+				role: error ? "alert" : "status"
+			})]
+		}));
+		y += h + 8;
+	}
+	if (model.busy) notice("objectCheckinBusy", tr("Loading data…"), false);
+	notice("objectCheckinError", model.error, true);
+	if (model.appendUncertain) notice("objectCheckinUnknown", tr("The attachment result is unknown. Close this window and refresh the snapshot before retrying."), true);
+	if (model.revision) notice("objectCheckinRevisionNotice", tr("The file stored in this revision will be replaced. Use Save snapshot when you need a new version."), false);
+	const fields = [];
+	if (!model.revision && !model.append) fields.push({
+		field: "repositoryAlias",
+		title: "Repository",
+		kind: "Choice",
+		value: model.repositoryAlias,
+		options: model.repositories
+	});
+	if (!model.preview) fields.push({
+		field: "process",
+		title: "Process",
+		kind: "Choice",
+		value: model.process,
+		options: model.processes,
+		readOnly: model.revision || model.append
+	}, {
+		field: "context",
+		title: "Context",
+		kind: "Field",
+		text: model.context,
+		readOnly: model.revision || model.append
+	});
+	const columns = inner >= 650 ? 2 : 1, cellWidth = (inner - (columns - 1) * 12) / columns;
+	fields.forEach((field, index) => {
+		const x = index % columns * (cellWidth + 12), top = y + Math.floor(index / columns) * 72;
+		body.push(label("objectCheckinLabel_" + field.field, rect(x, top, cellWidth, 22), tr(field.title), {
+			fontRole: "secondary",
+			color: "secondaryText"
+		}));
+		body.push(node(field.kind, "objectCheckinField_" + field.field, rect(x, top + 26, cellWidth, 36), {
+			label: tr(field.title),
+			text: field.text,
+			value: field.value,
+			options: field.options,
+			enabled: !model.busy && !field.readOnly,
+			maxLength: field.field === "context" ? 256 : void 0,
+			action: {
+				type: "field",
+				field: field.field
+			}
+		}));
+	});
+	y += Math.ceil(fields.length / columns) * 72;
+	if (!model.append) {
+		body.push(label("objectCheckinDescriptionLabel", rect(0, y, inner, 22), tr("Description"), {
+			fontRole: "secondary",
+			color: "secondaryText"
+		}));
+		body.push(node("Area", "objectCheckinDescription", rect(0, y + 26, inner, 72), {
+			label: tr("Description"),
+			text: model.description || "",
+			enabled: !model.busy,
+			action: {
+				type: "field",
+				field: "description"
+			}
+		}));
+		y += 108;
+	}
+	const compact = inner < 420, chooseWidth = compact ? inner - 44 : Math.min(260, inner - 150);
+	body.push(button("objectCheckinChooseFiles", rect(0, y, chooseWidth, 38), tr("Choose files for check-in"), "upload", { type: "choose" }, !model.busy));
+	body.push(button("objectCheckinClipboard", rect(chooseWidth + 8, y, compact ? 36 : Math.max(0, inner - chooseWidth - 8), 38), tr("Save from Clipboard"), "clipboard", { type: "clipboard" }, !model.busy, { iconOnly: compact }));
+	y += 48;
+	const listHeight = model.count ? Math.min(220, model.count * 44) : 54;
+	body.push(node("List", "objectCheckinFiles", rect(0, y, inner, listHeight), {
+		source: "files",
+		keyField: "key",
+		rowHeight: 44,
+		rowGap: 2,
+		label: tr("Source files"),
+		fields: [
+			"key",
+			"index",
+			"path",
+			"title",
+			"size",
+			"canRemove"
+		]
+	}));
+	if (!model.count) body.push(label("objectCheckinFilesEmpty", rect(8, y + 2, inner - 24, 46), tr("Drop files here, paste an image, or choose files for check-in."), {
+		wrap: true,
+		color: "secondaryText",
+		fontRole: "secondary"
+	}));
+	y += listHeight + 12;
+	if (model.count > 1 && !model.append) {
+		const choices = modeChoice({
+			inline: true,
+			mode: model.mode,
+			busy: model.busy
+		}, inner, language);
+		body.push(node("Box", "objectCheckinModeChoice", rect(0, y, inner, choices.height), { children: choices.nodes }));
+		y += choices.height + 8;
+	}
+	if (!model.append) {
+		body.push(captionedSwitch("objectCheckinKeepName", rect(0, y, inner, 36), {
+			text: tr("Keep original file names"),
+			checked: !!model.keepFileName,
+			enabled: !model.busy,
+			action: {
+				type: "field",
+				field: "keepFileName"
+			}
+		}));
+		y += 46;
+	}
+	if (model.discard) {
+		notice("objectCheckinDiscardNotice", tr("Discard unsaved changes?"), false);
+		const w = (inner - 8) / 2;
+		body.push(button("objectCheckinContinue", rect(0, y, w, 38), tr("Continue editing"), "", { type: "continue" }, !model.busy));
+		body.push(button("objectCheckinDiscard", rect(w + 8, y, w, 38), tr("Discard"), "", { type: "discard" }, !model.busy, { destructive: true }));
+		y += 48;
+	}
+	nodes.push(node("Scroll", "objectCheckinBody", rect(margin, margin, width - 20, Math.max(0, height - footerHeight - margin - 8)), {
+		contentHeight: y,
+		scrollbarId: "objectCheckinBodyScrollBar",
+		children: body
+	}));
+	const stacked = width < 370, buttonWidth = stacked ? width - 20 : 96, buttonY = height - footerHeight + 6;
+	nodes.push(button("objectCheckinCancel", rect(margin, buttonY, buttonWidth, 38), tr("Cancel"), "", { type: "close" }, !model.busy));
+	nodes.push(button("objectCheckinSubmit", rect(stacked ? margin : margin + buttonWidth + 8, buttonY + (stacked ? 46 : 0), stacked ? buttonWidth : width - 20 - buttonWidth - 8, 38), tr(model.append ? "Attach files" : "Add to Commit Queue"), "save", { type: "submit" }, !!model.ready && !model.busy && !model.appendUncertain && model.count > 0 && !!(String(model.context || "").trim() || model.process) && (!model.revision || !!model.confirmed) && (model.append || !!model.hasQueue), { highlighted: true }));
+	return { nodes };
+}
+function fileRow(record, width, language) {
+	return { nodes: [node("Box", "objectCheckinFile_" + record.key, rect(0, 0, width, 42), {
+		background: "surfaceContainerLow",
+		radius: 10,
+		children: [
+			node("Icon", "objectCheckinFileIcon_" + record.key, rect(8, 12, 18, 18), {
+				icon: sourceIcon(record.path),
+				color: "action"
+			}),
+			label("objectCheckinFileName_" + record.key, rect(34, 3, Math.max(0, width - 72), 20), record.title, {
+				toolTip: record.path,
+				elideMiddle: true
+			}),
+			label("objectCheckinFileSize_" + record.key, rect(34, 24, Math.max(0, width - 72), 15), prettySize(record.size), {
+				fontRole: "caption",
+				color: "secondaryText"
+			}),
+			button("objectCheckinFileRemove_" + record.key, rect(width - 34, 7, 28, 28), translate("Remove file", language), "close", {
+				type: "removeFile",
+				index: record.index,
+				path: record.path
+			}, !!record.canRemove, {
+				iconOnly: true,
+				iconAction: true
+			})
+		]
+	})] };
+}
+//#endregion
+//#region src/features/checkin/ObjectCheckinForm.vue
+var _hoisted_1$1 = ["aria-busy"];
+//#endregion
 //#region src/features/checkin/ObjectCheckin.vue
 var _sfc_main = {
-	setup() {
-		return { formId: useId() };
-	},
 	components: {
-		AppButton: _sfc_main$1,
-		AppSelect: _sfc_main$2,
-		AppSwitch: _sfc_main$3,
-		SettingRow: _sfc_main$4
+		AppButton: _sfc_main$3,
+		ObjectCheckinForm: {
+			__name: "ObjectCheckinForm",
+			props: {
+				model: Object,
+				files: Array
+			},
+			emits: ["event"],
+			setup(__props, { emit: __emit }) {
+				const props = __props;
+				const emit = __emit;
+				const host = ref(null), viewport = ref({
+					width: 680,
+					height: 650
+				});
+				const rows = computed(() => props.files.map((file, index) => ({
+					key: String(index),
+					index,
+					path: sourcePath(file),
+					title: file.name,
+					size: file.size,
+					canRemove: !props.model.busy
+				})));
+				const scene = computed(() => describe(props.model, viewport.value.width, viewport.value.height, appearance.language));
+				const describeRow = (list, record) => fileRow(record, list.width - 16, appearance.language);
+				let observer;
+				onMounted(() => {
+					observer = observeFrameSizes((entries) => {
+						const box = entries.at(-1).contentRect;
+						if (box.width > 0 && box.height > 0) viewport.value = {
+							width: box.width,
+							height: box.height
+						};
+					});
+					observer.observe(host.value);
+				});
+				onBeforeUnmount(() => observer?.disconnect());
+				return (_ctx, _cache) => {
+					return openBlock(), createElementBlock("div", {
+						ref_key: "host",
+						ref: host,
+						class: "object-checkin-workspace",
+						"aria-busy": __props.model.busy
+					}, [createVNode(_sfc_main$4, {
+						scene: scene.value,
+						models: { files: rows.value },
+						"describe-row": describeRow,
+						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
+					}, null, 8, ["scene", "models"])], 8, _hoisted_1$1);
+				};
+			}
+		},
+		ObjectRevisionConfirmation: {
+			__name: "ObjectRevisionConfirmation",
+			props: { busy: Boolean },
+			emits: ["event"],
+			setup(__props, { expose: __expose, emit: __emit }) {
+				const props = __props;
+				const emit = __emit;
+				const dialog = ref(null), host = ref(null), viewport = ref({
+					width: 440,
+					height: 170
+				});
+				const scene = computed(() => revision({ busy: props.busy }, viewport.value.width, viewport.value.height, appearance.language));
+				let observer;
+				onMounted(() => {
+					observer = observeFrameSizes((entries) => {
+						const box = entries.at(-1).contentRect;
+						if (box.width > 0 && box.height > 0) viewport.value = {
+							width: box.width,
+							height: box.height
+						};
+					});
+					observer.observe(host.value);
+				});
+				onBeforeUnmount(() => observer?.disconnect());
+				__expose({
+					show: (owner) => dialog.value.show(owner),
+					close: () => dialog.value.close()
+				});
+				return (_ctx, _cache) => {
+					return openBlock(), createBlock(_sfc_main$5, {
+						ref_key: "dialog",
+						ref: dialog,
+						class: "object-revision-confirmation",
+						title: "Replace snapshot revision?",
+						"close-on-escape": false,
+						"close-on-outside": false
+					}, {
+						default: withCtx(() => [createBaseVNode("div", {
+							ref_key: "host",
+							ref: host,
+							class: "object-revision-confirmation-content"
+						}, [createVNode(_sfc_main$4, {
+							scene: scene.value,
+							onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
+						}, null, 8, ["scene"])], 512)]),
+						_: 1
+					}, 512);
+				};
+			}
+		}
 	},
 	inject: {
 		queueCheckin: { default: null },
-		checkinDescription: { default: () => "" }
+		checkinDescription: { default: () => () => "" }
 	},
 	props: {
 		ticket: String,
@@ -45,11 +357,20 @@ var _sfc_main = {
 			busy: false,
 			error: "",
 			discard: false,
-			request: 0
+			request: 0,
+			pickerRequest: 0
 		};
 	},
 	emits: ["attached"],
 	watch: {
+		busy(value) {
+			if (!value && this.ready && this.revision && !this.confirmed) {
+				const request = this.request;
+				nextTick(() => {
+					if (request === this.request && this.ready) this.$refs.revisionDialog.show(this.$refs.dialog);
+				});
+			}
+		},
 		ticket() {
 			this.reset();
 		},
@@ -58,6 +379,29 @@ var _sfc_main = {
 		}
 	},
 	computed: {
+		frameModel() {
+			return {
+				preview: this.preview,
+				revision: this.revision,
+				append: !!this.appendSnapshot,
+				ready: this.ready,
+				busy: this.busy,
+				error: t(this.error),
+				appendUncertain: this.appendUncertain,
+				count: this.files.length,
+				repositoryAlias: this.repositoryAlias,
+				repositories: this.repositories,
+				process: this.process,
+				context: this.context,
+				processes: this.processes,
+				description: this.description,
+				mode: this.mode,
+				keepFileName: this.keepFileName,
+				confirmed: this.confirmed,
+				discard: this.discard,
+				hasQueue: !!this.queueCheckin
+			};
+		},
 		mobile() {
 			return mobile.value;
 		},
@@ -74,6 +418,39 @@ var _sfc_main = {
 	},
 	methods: {
 		t,
+		dispatch(action) {
+			if (action.type === "close") this.close();
+			else if (action.type === "continue") this.discard = false;
+			else if (action.type === "discard" && !this.busy) this.close(true);
+			else if (action.type === "submit") this.submit();
+			else if (!this.busy) {
+				if (action.type === "choose") {
+					this.pickerRequest = this.request;
+					this.$refs.fileInput.click();
+				} else if (action.type === "clipboard") this.readImage();
+				else if (action.type === "mode" && ["group", "individual"].includes(action.value)) this.mode = action.value;
+				else if (action.type === "removeFile") {
+					const file = this.files[action.index];
+					if (file && sourcePath(file) === action.path) this.files.splice(action.index, 1);
+				} else if (action.type === "field" && [
+					"repositoryAlias",
+					"process",
+					"context",
+					"description",
+					"keepFileName"
+				].includes(action.field)) {
+					this[action.field] = action.value;
+					if (action.field === "process") this.context = "";
+				}
+			}
+		},
+		resolveRevision(action) {
+			if (this.busy || !this.ready) return;
+			if (action.type === "accept") {
+				this.confirmed = true;
+				this.$refs.revisionDialog.close();
+			} else this.close(true);
+		},
 		beforeUnload(event) {
 			if (this.files.length) {
 				event.preventDefault();
@@ -82,6 +459,8 @@ var _sfc_main = {
 		},
 		reset() {
 			this.request++;
+			this.ready = false;
+			this.$refs.revisionDialog?.close();
 			this.files = [];
 			this.$refs.dialog?.close();
 		},
@@ -96,6 +475,7 @@ var _sfc_main = {
 		},
 		async open(record, options = {}) {
 			const request = ++this.request;
+			this.pickerRequest = request;
 			this.scope = {
 				ticket: this.ticket,
 				project: this.project
@@ -192,7 +572,7 @@ var _sfc_main = {
 			this.error = "";
 		},
 		paste(event) {
-			if (event.clipboardData?.files.length) {
+			if (!this.busy && event.clipboardData?.files.length) {
 				event.preventDefault();
 				this.addFiles(event.clipboardData.files);
 			}
@@ -293,53 +673,19 @@ var _sfc_main = {
 	}
 };
 var _hoisted_1 = ["aria-label"];
-var _hoisted_2 = {
-	key: 0,
-	role: "status"
-};
-var _hoisted_3 = {
-	key: 1,
-	class: "error",
-	role: "alert"
-};
-var _hoisted_4 = { class: "object-checkin-body" };
-var _hoisted_5 = { key: 1 };
-var _hoisted_6 = { key: 2 };
-var _hoisted_7 = ["disabled"];
-var _hoisted_8 = { key: 3 };
-var _hoisted_9 = ["disabled"];
-var _hoisted_10 = ["accept"];
-var _hoisted_11 = { class: "configuration-actions checkin-file-actions" };
-var _hoisted_12 = {
-	key: 4,
-	class: "muted"
-};
-var _hoisted_13 = { class: "file-preview-files" };
-var _hoisted_14 = { key: 5 };
-var _hoisted_15 = { class: "notice" };
-var _hoisted_16 = {
-	key: 8,
-	class: "notice",
-	role: "alert"
-};
-var _hoisted_17 = {
-	key: 9,
-	class: "notice",
-	role: "alert"
-};
+var _hoisted_2 = ["accept", "disabled"];
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
-	const _component_AppSelect = resolveComponent("AppSelect");
-	const _component_AppSwitch = resolveComponent("AppSwitch");
-	const _component_SettingRow = resolveComponent("SettingRow");
+	const _component_ObjectCheckinForm = resolveComponent("ObjectCheckinForm");
+	const _component_ObjectRevisionConfirmation = resolveComponent("ObjectRevisionConfirmation");
 	return openBlock(), createBlock(Teleport, { to: "body" }, [createBaseVNode("dialog", {
 		ref: "dialog",
 		class: "record-dialog object-checkin",
 		"aria-label": $options.t($options.title),
-		onCancel: _cache[16] || (_cache[16] = withModifiers(($event) => $options.close(), ["prevent"])),
-		onPaste: _cache[17] || (_cache[17] = (...args) => $options.paste && $options.paste(...args)),
-		onDragover: _cache[18] || (_cache[18] = withModifiers(() => {}, ["prevent"])),
-		onDrop: _cache[19] || (_cache[19] = withModifiers(($event) => $options.addFiles($event.dataTransfer.files), ["prevent"]))
+		onCancel: _cache[3] || (_cache[3] = withModifiers(($event) => $options.close(), ["prevent"])),
+		onPaste: _cache[4] || (_cache[4] = (...args) => $options.paste && $options.paste(...args)),
+		onDragover: _cache[5] || (_cache[5] = withModifiers(() => {}, ["prevent"])),
+		onDrop: _cache[6] || (_cache[6] = withModifiers(($event) => !$data.busy && $options.addFiles($event.dataTransfer.files), ["prevent"]))
 	}, [
 		createBaseVNode("header", null, [
 			$options.mobile ? (openBlock(), createBlock(_component_AppButton, {
@@ -357,142 +703,32 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				onClick: _cache[1] || (_cache[1] = ($event) => $options.close())
 			})) : createCommentVNode("", true)
 		]),
-		$data.busy ? (openBlock(), createElementBlock("p", _hoisted_2, toDisplayString($options.t("Loading data…")), 1)) : createCommentVNode("", true),
-		$data.error ? (openBlock(), createElementBlock("p", _hoisted_3, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true),
-		createBaseVNode("form", { onSubmit: _cache[15] || (_cache[15] = withModifiers((...args) => $options.submit && $options.submit(...args), ["prevent"])) }, [createBaseVNode("div", _hoisted_4, [
-			!$data.revision && !$data.appendSnapshot ? (openBlock(), createBlock(_component_AppSelect, {
-				key: 0,
-				modelValue: $data.repositoryAlias,
-				"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $data.repositoryAlias = $event),
-				options: $data.repositories,
-				"translate-labels": false,
-				label: "Repository",
-				disabled: $data.busy
-			}, null, 8, [
-				"modelValue",
-				"options",
-				"disabled"
-			])) : createCommentVNode("", true),
-			!$data.preview ? (openBlock(), createElementBlock("label", _hoisted_5, [createTextVNode(toDisplayString($options.t("Process")), 1), createVNode(_component_AppSelect, {
-				modelValue: $data.process,
-				"onUpdate:modelValue": [_cache[3] || (_cache[3] = ($event) => $data.process = $event), _cache[4] || (_cache[4] = ($event) => $data.context = "")],
-				options: $data.processes,
-				"translate-labels": false,
-				label: "Process",
-				disabled: $data.busy || $data.revision || !!$data.appendSnapshot
-			}, null, 8, [
-				"modelValue",
-				"options",
-				"disabled"
-			])])) : createCommentVNode("", true),
-			!$data.preview ? (openBlock(), createElementBlock("label", _hoisted_6, [createTextVNode(toDisplayString($options.t("Context")), 1), withDirectives(createBaseVNode("input", {
-				"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.context = $event),
-				disabled: $data.busy || $data.revision || !!$data.appendSnapshot,
-				maxlength: "256"
-			}, null, 8, _hoisted_7), [[vModelText, $data.context]])])) : createCommentVNode("", true),
-			!$data.appendSnapshot ? (openBlock(), createElementBlock("label", _hoisted_8, [createTextVNode(toDisplayString($options.t("Description")), 1), withDirectives(createBaseVNode("textarea", {
-				"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.description = $event),
-				rows: "3",
-				disabled: $data.busy
-			}, null, 8, _hoisted_9), [[vModelText, $data.description]])])) : createCommentVNode("", true),
-			createBaseVNode("input", {
-				ref: "fileInput",
-				type: "file",
-				multiple: "",
-				hidden: "",
-				accept: $data.preview ? "image/*" : void 0,
-				onChange: _cache[7] || (_cache[7] = ($event) => {
-					$options.addFiles($event.target.files);
-					$event.target.value = "";
-				})
-			}, null, 40, _hoisted_10),
-			createBaseVNode("div", _hoisted_11, [createVNode(_component_AppButton, {
-				label: "Choose files for check-in",
-				icon: "upload",
-				disabled: $data.busy,
-				onClick: _cache[8] || (_cache[8] = ($event) => _ctx.$refs.fileInput.click())
-			}, null, 8, ["disabled"]), createVNode(_component_AppButton, {
-				label: "Save from Clipboard",
-				icon: "MDI_CONTENT_PASTE",
-				"icon-only": $options.mobile,
-				disabled: $data.busy,
-				onClick: $options.readImage
-			}, null, 8, [
-				"icon-only",
-				"disabled",
-				"onClick"
-			])]),
-			!$data.files.length && !$options.mobile ? (openBlock(), createElementBlock("p", _hoisted_12, toDisplayString($options.t("Drop files here, paste an image, or choose files for check-in.")), 1)) : createCommentVNode("", true),
-			createBaseVNode("ul", _hoisted_13, [(openBlock(true), createElementBlock(Fragment, null, renderList($data.files, (file, index) => {
-				return openBlock(), createElementBlock("li", { key: index }, [createBaseVNode("span", null, toDisplayString(file.name) + " · " + toDisplayString(file.size) + " " + toDisplayString($options.t("bytes")), 1), createVNode(_component_AppButton, {
-					label: "Remove file",
-					icon: "close",
-					"icon-only": "",
-					onClick: ($event) => $data.files.splice(index, 1)
-				}, null, 8, ["onClick"])]);
-			}), 128))]),
-			$data.files.length > 1 && !$data.appendSnapshot ? (openBlock(), createElementBlock("label", _hoisted_14, [createTextVNode(toDisplayString($options.t("Check in multiple files?")), 1), createVNode(_component_AppSelect, {
-				modelValue: $data.mode,
-				"onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => $data.mode = $event),
-				label: "Check in multiple files?",
-				options: [{
-					value: "group",
-					label: "One group"
-				}, {
-					value: "individual",
-					label: "Separately"
-				}]
-			}, null, 8, ["modelValue"])])) : createCommentVNode("", true),
-			!$data.appendSnapshot ? (openBlock(), createBlock(_component_SettingRow, {
-				key: 6,
-				title: "Keep original file names",
-				"control-id": $setup.formId + "-keep-file-name"
-			}, {
-				default: withCtx(() => [createVNode(_component_AppSwitch, {
-					id: $setup.formId + "-keep-file-name",
-					modelValue: $data.keepFileName,
-					"onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => $data.keepFileName = $event),
-					label: "Keep original file names"
-				}, null, 8, ["id", "modelValue"])]),
-				_: 1
-			}, 8, ["control-id"])) : createCommentVNode("", true),
-			$data.revision ? (openBlock(), createElementBlock(Fragment, { key: 7 }, [createBaseVNode("p", _hoisted_15, toDisplayString($options.t("The file stored in this revision will be replaced. Use Save snapshot when you need a new version.")), 1), createVNode(_component_SettingRow, {
-				title: "Replace revision",
-				"control-id": $setup.formId + "-replace-revision"
-			}, {
-				default: withCtx(() => [createVNode(_component_AppSwitch, {
-					id: $setup.formId + "-replace-revision",
-					modelValue: $data.confirmed,
-					"onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => $data.confirmed = $event),
-					label: "Replace revision"
-				}, null, 8, ["id", "modelValue"])]),
-				_: 1
-			}, 8, ["control-id"])], 64)) : createCommentVNode("", true),
-			$data.appendUncertain ? (openBlock(), createElementBlock("p", _hoisted_16, toDisplayString($options.t("The attachment result is unknown. Close this window and refresh the snapshot before retrying.")), 1)) : createCommentVNode("", true),
-			$data.discard ? (openBlock(), createElementBlock("div", _hoisted_17, [
-				createBaseVNode("p", null, toDisplayString($options.t("Discard unsaved changes?")), 1),
-				createVNode(_component_AppButton, {
-					label: "Continue editing",
-					onClick: _cache[12] || (_cache[12] = ($event) => $data.discard = false)
-				}),
-				createVNode(_component_AppButton, {
-					label: "Discard",
-					destructive: "",
-					onClick: _cache[13] || (_cache[13] = ($event) => $options.close(true))
-				})
-			])) : createCommentVNode("", true)
-		]), createBaseVNode("footer", null, [createVNode(_component_AppButton, {
-			label: "Cancel",
+		createVNode(_component_ObjectCheckinForm, {
+			model: $options.frameModel,
+			files: $data.files,
+			onEvent: $options.dispatch
+		}, null, 8, [
+			"model",
+			"files",
+			"onEvent"
+		]),
+		createBaseVNode("input", {
+			ref: "fileInput",
+			type: "file",
+			multiple: "",
+			hidden: "",
+			accept: $data.preview ? "image/*" : void 0,
 			disabled: $data.busy,
-			onClick: _cache[14] || (_cache[14] = ($event) => $options.close())
-		}, null, 8, ["disabled"]), createVNode(_component_AppButton, {
-			type: "submit",
-			label: $data.appendSnapshot ? "Attach files" : "Add to Commit Queue",
-			icon: "save",
-			highlighted: "",
-			disabled: !$data.ready || $data.busy || $data.appendUncertain || !$data.files.length || !($data.context.trim() || $data.process) || $data.revision && !$data.confirmed || !$data.appendSnapshot && !$options.queueCheckin
-		}, null, 8, ["label", "disabled"])])], 32)
-	], 40, _hoisted_1)]);
+			onChange: _cache[2] || (_cache[2] = ($event) => {
+				$data.pickerRequest === $data.request && $options.addFiles($event.target.files);
+				$event.target.value = "";
+			})
+		}, null, 40, _hoisted_2)
+	], 40, _hoisted_1), createVNode(_component_ObjectRevisionConfirmation, {
+		ref: "revisionDialog",
+		busy: $data.busy,
+		onEvent: $options.resolveRevision
+	}, null, 8, ["busy", "onEvent"])]);
 }
 var ObjectCheckin_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion

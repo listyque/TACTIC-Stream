@@ -1,9 +1,8 @@
 import { C as inject, E as nextTick, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
-import { D as t, o as _sfc_main$2, u as _sfc_main$1 } from "./index.js";
-import { c as completions, d as _sfc_main$4, g as AppSearchField_default, l as documentSymbols, s as _sfc_main$3 } from "./FrameView.js";
-import { F as rpc, L as scriptEditor, _ as endActivity, f as _sfc_main$5, h as beginActivity, o as copyText } from "./CodeBlock.js";
-import { n as _sfc_main$6, t as _sfc_main$7 } from "./AppSplitter.js";
-import { C as _sfc_main$9, S as _sfc_main$8, c as runBrowserScript, l as scriptTree, s as buttonId } from "./App.js";
+import { c as _sfc_main$2, f as _sfc_main$1, k as t } from "./index.js";
+import { a as _sfc_main$4, b as _sfc_main$3, c as completions, d as _sfc_main$6, g as AppSearchField_default, l as documentSymbols, s as _sfc_main$5 } from "./FrameView.js";
+import { F as rpc, L as scriptEditor, _ as endActivity, f as _sfc_main$7, h as beginActivity, o as copyText } from "./CodeBlock.js";
+import { E as _sfc_main$9, S as _sfc_main$8, c as runBrowserScript, l as scriptTree, s as buttonId } from "./App.js";
 //#region src/features/scripts/ScriptEditor.vue
 var _hoisted_1 = ["aria-label", "aria-busy"];
 var _hoisted_2 = { class: "script-editor-header" };
@@ -643,7 +642,7 @@ var _sfc_main = {
 								placeholder: unref(t)("Title"),
 								"aria-label": unref(t)("Script title")
 							}, null, 8, _hoisted_7)), [[vModelText, active.value.title]]) : createCommentVNode("", true),
-							active.value ? (openBlock(), createBlock(_sfc_main$5, {
+							active.value ? (openBlock(), createBlock(_sfc_main$7, {
 								key: 2,
 								modelValue: active.value.language,
 								"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => active.value.language = $event),
@@ -717,7 +716,7 @@ var _sfc_main = {
 								label: "Close all script tabs",
 								disabled: busy.value || !!running.value,
 								onClick: closeAll
-							}, null, 8, ["disabled"]), createVNode(_sfc_main$6, {
+							}, null, 8, ["disabled"]), createVNode(_sfc_main$3, {
 								ref_key: "actions",
 								ref: actions,
 								overlay: "",
@@ -781,7 +780,7 @@ var _sfc_main = {
 								onClick: _cache[14] || (_cache[14] = ($event) => outputHidden.value = !outputHidden.value)
 							}, null, 8, ["icon", "label"])
 						]), !outputHidden.value ? (openBlock(), createElementBlock("pre", _hoisted_8, toDisplayString(active.value.output), 1)) : createCommentVNode("", true)], 6)) : createCommentVNode("", true),
-						active.value && !outputHidden.value ? (openBlock(), createBlock(_sfc_main$7, {
+						active.value && !outputHidden.value ? (openBlock(), createBlock(_sfc_main$4, {
 							key: 1,
 							modelValue: outputHeight.value,
 							"onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => outputHeight.value = $event),
@@ -790,7 +789,7 @@ var _sfc_main = {
 							min: 80,
 							max: 500
 						}, null, 8, ["modelValue"])) : createCommentVNode("", true),
-						active.value ? (openBlock(), createElementBlock("div", _hoisted_9, [createVNode(_sfc_main$3, {
+						active.value ? (openBlock(), createElementBlock("div", _hoisted_9, [createVNode(_sfc_main$5, {
 							ref_key: "editor",
 							ref: editor,
 							modelValue: active.value.source,
@@ -833,7 +832,7 @@ var _sfc_main = {
 								onClick: _cache[19] || (_cache[19] = ($event) => run())
 							}, null, 8, ["disabled"]),
 							createBaseVNode("span", null, toDisplayString(running.value ? unref(t)("Running…") : unref(t)("Run in")), 1),
-							createVNode(_sfc_main$5, {
+							createVNode(_sfc_main$7, {
 								"model-value": active.value?.language === "javascript" ? "browser" : "server",
 								label: "Execution target",
 								options: [{
@@ -847,7 +846,7 @@ var _sfc_main = {
 						active.value?.missing ? (openBlock(), createElementBlock("p", _hoisted_13, toDisplayString(unref(t)("This script was deleted on the server. Its local draft is preserved.")), 1)) : createCommentVNode("", true),
 						error.value || analysisError.value ? (openBlock(), createElementBlock("p", _hoisted_14, toDisplayString(unref(t)(error.value || analysisError.value)), 1)) : createCommentVNode("", true)
 					]),
-					!treeHidden.value ? (openBlock(), createBlock(_sfc_main$7, {
+					!treeHidden.value ? (openBlock(), createBlock(_sfc_main$4, {
 						key: 0,
 						modelValue: treeWidth.value,
 						"onUpdate:modelValue": _cache[20] || (_cache[20] = ($event) => treeWidth.value = $event),
@@ -861,7 +860,7 @@ var _sfc_main = {
 						class: "script-editor-tree",
 						style: normalizeStyle({ width: treeWidth.value + "px" })
 					}, [
-						createVNode(_sfc_main$4, {
+						createVNode(_sfc_main$6, {
 							modelValue: side.value,
 							"onUpdate:modelValue": _cache[21] || (_cache[21] = ($event) => side.value = $event),
 							outlined: "",

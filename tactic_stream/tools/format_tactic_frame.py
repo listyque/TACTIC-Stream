@@ -40,6 +40,9 @@ def main():
         "4",
         "src/tactic_stream/shared_ui/**/*.mjs",
     ]
+    native_javascript_command = command[:-1]
+    native_javascript_command.remove("--check" if args.check else "--write")
+    native_javascript_command += ["--parser", "babel"]
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/src/frame/**/*.{vue,css,js}"
     command[command.index("--tab-width") + 1] = "2"
@@ -95,8 +98,16 @@ def main():
         "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
         "frontend/tests/{frame_table*,handler_table,table_cells,columns_editor}.mjs",
         "tools/frame_messages/*.{vue,html,mjs,json}",
+        "tools/frame_files/*.{vue,html,mjs,json}",
+        "frontend/tests/frame_files*.mjs",
+        "frontend/tests/{checkin,file-workspace-inspection}.mjs",
         "frontend/src/features/messages/*.{vue,js,css}",
         "frontend/src/features/activity/*.{vue,js,css}",
+        "frontend/src/features/checkin/*.vue",
+        "frontend/src/features/fileWorkspace/FileWorkspace{Inspection,Inspector,Tree,Log,Depots,Storage}.vue",
+        "frontend/src/features/fileWorkspace/inspection/*.{vue,js}",
+        "frontend/src/features/checkin/queue/*.{vue,js}",
+        "frontend/src/frame/controls/display/*.vue",
         "frontend/tests/{frame_messages*,frame_communication_reference,messages*,notification*,activity*,mobile_activity_profile}.mjs",
         "frontend/src/features/help/**/*.{vue,js}",
         "tools/frame_help/*.{vue,js,html,mjs}",
@@ -137,6 +148,8 @@ def main():
         "AppMenu.vue",
         "AppMenuItem.vue",
         "AppSelect.vue",
+        "AppEditableSelect.vue",
+        "AppDialog.vue",
         "AppSplitter.vue",
         "AppTextArea.vue",
         "AppTextField.vue",
@@ -213,9 +226,18 @@ def main():
         files += sorted(
             (args.handler_root / "thlib/ui/qml/features/objects").rglob("*.qml")
         )
-        files += sorted((args.handler_root / "thlib/ui/qml/features/tasks").rglob("*.qml"))
-        files += sorted((args.handler_root / "thlib/ui/qml/features/messages").rglob("*.qml"))
-        files += sorted((args.handler_root / "thlib/ui/qml/features/activity").rglob("*.qml"))
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/tasks").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/messages").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/activity").rglob("*.qml")
+        )
+        files += sorted(
+            (args.handler_root / "thlib/ui/qml/features/files").rglob("*.qml")
+        )
         files += [args.handler_root / "thlib/ui/qml/controls/DocumentPane.qml"]
         files += sorted((args.handler_root / "thlib/ui/qml/shell").rglob("*.qml"))
         files += [args.handler_root / "tests/fixtures/FrameControlsHarness.qml"]
@@ -254,6 +276,31 @@ def main():
             changed.append(str(path))
             if not args.check:
                 path.write_bytes(formatted)
+    if args.handler_root:
+        for path in sorted(
+            (args.handler_root / "thlib/ui/qml/features/files").rglob("*.js")
+        ):
+            source = path.read_text(encoding="utf-8")
+            lines = source.splitlines(keepends=True)
+            header = ""
+            while lines and (
+                lines[0].startswith((".pragma ", ".import ")) or not lines[0].strip()
+            ):
+                header += lines.pop(0)
+            result = subprocess.run(
+                native_javascript_command,
+                cwd=ROOT,
+                input="".join(lines),
+                text=True,
+                encoding="utf-8",
+                capture_output=True,
+                check=True,
+            )
+            formatted = (header.rstrip() + "\n\n" + result.stdout).encode("utf-8")
+            if formatted != path.read_bytes():
+                changed.append(str(path))
+                if not args.check:
+                    path.write_bytes(formatted)
     if args.check and changed:
         raise SystemExit("Unformatted Tactic Frame modules:\n" + "\n".join(changed))
     if files:

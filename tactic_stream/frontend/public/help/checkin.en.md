@@ -374,3 +374,10 @@ boundaries. Full API parity remains false; Repository Sync/S3 remain excluded.
 ## Files left by a failed check-in
 
 Check-in overwrites an existing destination file that has no registered snapshot reference. Native FileUndo retains its previous contents and restores them if saving fails. Files belonging to saved snapshots remain protected, except the existing latest/revision replacements. Inplace files staged by the client before its server command can remain after a failed command; server rollback does not remove those pre-existing inputs. Retry only failed operations, since completed queue entries remain saved.
+
+## Template mappings
+
+Process mapping and Context mapping in Matching Templates accept both existing
+choices and typed custom values. An empty mapping applies to all processes or
+contexts. Mandatory templates remain locked. Test a filename before saving;
+changing templates rematches prepared Drop Plate files without publishing them.

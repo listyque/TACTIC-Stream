@@ -41,6 +41,13 @@ const ready = () =>
         .filter((el) => el.offsetParent)
         .every((el) => el.getAttribute('aria-busy') === 'false')
   );
+async function attachNote(notes, file) {
+  const chooser = page.waitForEvent('filechooser');
+  await notes
+    .getByRole('button', { name: 'Attach files', exact: true })
+    .click();
+  await (await chooser).setFiles(file);
+}
 async function choice(inspector, name, value) {
   await inspector
     .getByRole('button', {
@@ -269,7 +276,7 @@ try {
   await notes
     .getByLabel('Note text', { exact: true })
     .fill('Sent from browser');
-  await notes.locator('input[type="file"]').setInputFiles({
+  await attachNote(notes, {
     name: 'browser note.txt',
     mimeType: 'text/plain',
     buffer: Buffer.from('Native note attachment')
@@ -1510,7 +1517,7 @@ try {
   await notes
     .getByRole('button', { name: 'Remove attachment', exact: true })
     .click();
-  await notes.locator('input[type="file"]').setInputFiles({
+  await attachNote(notes, {
     name: 'attachment-only.png',
     mimeType: 'image/png',
     buffer: Buffer.from(

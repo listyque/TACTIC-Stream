@@ -2,6 +2,7 @@
 import { computed, nextTick, ref, watch } from 'vue';
 import { tooltipDirective as vTooltip } from '../controls/tooltip.js';
 import AppButton from '../controls/AppButton.vue';
+import AppTabButton from '../controls/AppTabButton.vue';
 import AppCheckbox from '../controls/AppCheckbox.vue';
 import AppSwitch from '../controls/AppSwitch.vue';
 import AppTextField from '../controls/AppTextField.vue';
@@ -10,6 +11,7 @@ import AppDateField from '../controls/AppDateField.vue';
 import UserComboBox from '../controls/UserComboBox.vue';
 import AppSegmentedButton from '../controls/AppSegmentedButton.vue';
 import AppSelect from '../controls/AppSelect.vue';
+import AppEditableSelect from '../controls/AppEditableSelect.vue';
 import FrameGrid from './controls/grid/FrameGrid.vue';
 import FrameGraph from './controls/graph/FrameGraph.vue';
 import FrameCode from './controls/code/FrameCode.vue';
@@ -105,6 +107,8 @@ function style(node) {
       node.paddingLeft === undefined ? undefined : node.paddingLeft + 'px',
     color: color(node.color),
     opacity: node.opacity,
+    transform: node.scale === undefined ? undefined : `scale(${node.scale})`,
+    transformOrigin: 'top left',
     textDecoration: node.strike ? 'line-through' : undefined,
     '--frame-button-icon-size': node.iconSize ? node.iconSize + 'px' : undefined
   };
@@ -134,6 +138,17 @@ function send(action, value, source) {
       Object.assign({}, action, value === undefined ? {} : { value }),
       source
     );
+}
+function context(event, node) {
+  if (!node.contextAction || !props.interactive) return;
+  event.preventDefault();
+  event.stopPropagation();
+  const bounds = event.currentTarget.getBoundingClientRect();
+  send(
+    node.contextAction,
+    { x: event.clientX - bounds.left, y: event.clientY - bounds.top },
+    event.currentTarget
+  );
 }
 function drag(event, node) {
   if (node.dragValue == null) return;
@@ -324,6 +339,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         "
         :role="node.role"
         :aria-label="node.label"
+        @contextmenu="context($event, node)"
         ><FrameView
           ref="branches"
           :scene="{ nodes: node.children }"
@@ -348,6 +364,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             overflow: node.elide === false ? 'visible' : undefined,
             textOverflow: node.elide === false ? 'clip' : undefined,
             textAlign: node.align || 'left',
+            wordBreak: node.wrapAnywhere ? 'break-all' : undefined,
             lineHeight: node.wrap ? 'normal' : node.height + 'px',
             display: node.maxLines ? '-webkit-box' : undefined,
             WebkitLineClamp: node.maxLines || undefined,
@@ -372,12 +389,13 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :tabindex="node.focusable ? 0 : undefined"
         v-tooltip="node.toolTip || node.text"
       />
-      <AppButton
+      <component
+        :is="node.tab ? AppTabButton : AppButton"
         v-else-if="node.kind === 'Button'"
         :data-frame="node.id"
         class="frame-node"
         :class="{
-          'frame-button': !node.iconAction,
+          'frame-button': !node.iconAction && !node.tab,
           'frame-icon-action': node.iconAction,
           'frame-radio': node.radio,
           'frame-radio-selected': node.radio && node.selected
@@ -472,6 +490,10 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             ref="branches"
             :scene="{ nodes: node.children }"
             :interactive="false"
+            :models="models"
+            :views="views"
+            :describe-row="describeRow"
+            :describe-cell="describeCell"
         /></ItemSurface>
       </AppButton>
       <AppSegmentedButton
@@ -490,6 +512,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         v-else-if="node.kind === 'CheckBox'"
         :data-frame="node.id"
         class="frame-node frame-checkbox"
+        :class="{ 'frame-checkbox-wrap': node.wrapText }"
         :style="
           Object.assign(style(node), {
             '--frame-indicator-x': (node.indicatorX || 0) + 'px'
@@ -527,6 +550,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :data-frame="node.id"
         class="frame-node frame-switch"
         :style="style(node)"
+        v-tooltip="node.toolTip"
       >
         <AppSwitch
           :model-value="node.checked"
@@ -651,7 +675,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
               height: listRowHeight(node) + 'px',
               width: node.width - 16 + 'px'
             }"
-            :scene="describeRow(node, item.record)"
+            :scene="describeRow(node, item.record, item.index)"
             :models="models"
             :views="views"
             :describe-row="describeRow"
@@ -687,7 +711,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
           @event="(action, source) => emit('event', action, source)"
         />
       </div>
-      <AppSelect
+      <component
+        :is="node.editable ? AppEditableSelect : AppSelect"
         v-else-if="node.kind === 'Choice'"
         :data-frame="node.id"
         class="frame-node frame-choice"
@@ -700,7 +725,10 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :translate-labels="false"
         :options="node.options"
         :model-value="node.value"
+        :placeholder="node.placeholder"
         :disabled="!node.enabled"
+        @keydown="key($event, node)"
+        @accept="send(node.commitAction, $event)"
         @update:model-value="send(node.action, $event)"
       />
       <div
@@ -743,6 +771,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :reverse="node.reverse"
         :label="node.text"
         @update:model-value="send(node.action, $event)"
+        @committed="node.commitAction && send(node.commitAction, $event)"
+        @cancelled="node.cancelAction && send(node.cancelAction, $event)"
       />
       <StatusChip
         v-else-if="node.kind === 'StatusChip'"

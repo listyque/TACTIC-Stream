@@ -11,10 +11,14 @@ const props = defineProps({
   disabled: Boolean
 });
 const model = defineModel({ type: Number, required: true });
+const emit = defineEmits(['committed', 'cancelled']);
 const dragging = ref(false);
 let gesture = null;
-function set(value) {
-  model.value = Math.max(props.min, Math.min(props.max, value));
+function set(value, commit = false) {
+  const bounded = Math.max(props.min, Math.min(props.max, value));
+  if (gesture) gesture.last = bounded;
+  model.value = bounded;
+  if (commit) emit('committed', bounded);
 }
 function move(event) {
   if (gesture && event.pointerId === gesture.id)
@@ -26,20 +30,29 @@ function move(event) {
           (props.reverse ? -1 : 1)
     );
 }
-function end() {
+function end(event) {
+  if (gesture && event?.pointerId != null && event.pointerId !== gesture.id)
+    return;
+  const previous = gesture;
   gesture = null;
   dragging.value = false;
   window.removeEventListener('pointermove', move);
   window.removeEventListener('pointerup', end);
   window.removeEventListener('pointercancel', end);
   window.removeEventListener('blur', end);
+  if (previous)
+    emit(
+      event?.type === 'pointerup' ? 'committed' : 'cancelled',
+      event?.type === 'pointerup' ? previous.last : previous.value
+    );
 }
 function start(event) {
-  if (props.disabled || event.button !== 0) return;
+  if (props.disabled || event.button !== 0 || gesture) return;
   const bounds = event.currentTarget.parentElement.getBoundingClientRect();
   gesture = {
     id: event.pointerId,
     value: model.value,
+    last: model.value,
     position: props.horizontal ? event.clientY : event.clientX,
     scale: props.proportional
       ? 100 / Math.max(1, props.horizontal ? bounds.height : bounds.width)
@@ -68,7 +81,8 @@ function key(event) {
         : model.value +
           (event.key === keys[0] ? -1 : 1) *
             (props.reverse ? -1 : 1) *
-            (event.ctrlKey || props.proportional ? 1 : 10)
+            (event.ctrlKey || props.proportional ? 1 : 10),
+    true
   );
 }
 onBeforeUnmount(end);

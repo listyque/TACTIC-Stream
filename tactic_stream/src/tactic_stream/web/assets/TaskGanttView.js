@@ -1,7 +1,6 @@
 import { A as onMounted, D as onActivated, E as nextTick, G as withCtx, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, k as onDeactivated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
-import { D as t, H as layout$1, O as appearance, W as metrics$1, o as _sfc_main$1 } from "./index.js";
-import { D as node, O as rect, T as label, t as _sfc_main$2, u as translate, w as button } from "./FrameView.js";
-import { n as _sfc_main$3 } from "./AppSplitter.js";
+import { A as appearance, K as metrics$1, W as layout$1, c as _sfc_main$1, k as t } from "./index.js";
+import { A as node, D as button, O as label, b as _sfc_main$3, j as rect, t as _sfc_main$2, u as translate } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/gantt.state.mjs
 var clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 var metrics = {

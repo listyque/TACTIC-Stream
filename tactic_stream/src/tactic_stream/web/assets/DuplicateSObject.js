@@ -1,14 +1,12 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, u as Fragment } from "./vue.js";
-import { D as t, I as controls, O as appearance, o as _sfc_main$2, rt as _plugin_vue_export_helper_default } from "./index.js";
-import { D as node, O as rect, S as _sfc_main$6, T as label, _ as _sfc_main$4, t as _sfc_main$3, u as translate, v as _sfc_main$5, w as button } from "./FrameView.js";
-import { F as rpc, dt as notify, f as _sfc_main$7 } from "./CodeBlock.js";
-import { r as _sfc_main$8 } from "./AppSplitter.js";
-import { t as _sfc_main$9 } from "./AppCheckbox.js";
+import { A as appearance, R as controls, at as _plugin_vue_export_helper_default, c as _sfc_main$2, k as t } from "./index.js";
+import { A as node, D as button, O as label, T as _sfc_main$7, _ as _sfc_main$6, j as rect, t as _sfc_main$3, u as translate, v as _sfc_main$4, w as _sfc_main$8, y as _sfc_main$5 } from "./FrameView.js";
+import { F as rpc, dt as notify, f as _sfc_main$9 } from "./CodeBlock.js";
 import { n as observeFrameSizes } from "./resize.js";
 import { t as _sfc_main$10 } from "./ObjectFieldFrame.js";
 import { t as captionHeight } from "./sections.ui.js";
-import { J as applyDuplicateProfile, Q as saveDuplicateProfile, X as contentChoices, Y as changeContent, Z as duplicateProfile, q as _sfc_main$11 } from "./App.js";
+import { G as changeContent, J as saveDuplicateProfile, K as contentChoices, U as _sfc_main$11, W as applyDuplicateProfile, q as duplicateProfile } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/duplicate.ui.mjs
 var duplicate_ui_exports = /* @__PURE__ */ __exportAll({
 	body: () => body,
@@ -412,10 +410,10 @@ var _sfc_main = {
 		AppTextArea: _sfc_main$4,
 		AppDateField: _sfc_main$5,
 		AppButton: _sfc_main$2,
-		AppCheckbox: _sfc_main$9,
-		AppSelect: _sfc_main$7,
-		AppTextField: _sfc_main$8,
-		AppColorInput: _sfc_main$6
+		AppCheckbox: _sfc_main$6,
+		AppSelect: _sfc_main$9,
+		AppTextField: _sfc_main$7,
+		AppColorInput: _sfc_main$8
 	},
 	inject: {
 		openHelp: {},

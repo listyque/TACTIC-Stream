@@ -176,6 +176,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.frame-checkbox-wrap .frame-checkbox-label > span {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 .frame-checkbox.compact .frame-checkbox-label {
   left: calc(
     var(--frame-indicator-x) + var(--check-box-indicator) +
@@ -192,12 +196,12 @@
 .frame-view > .frame-field.table-cell:focus {
   padding: 4px 8px;
 }
-.frame-view > .frame-choice {
+.frame-view > select.frame-choice {
   padding: 0 8px 0 10px;
   min-height: 0;
   border-radius: var(--field-radius);
 }
-.frame-view > .frame-choice:focus {
+.frame-view > select.frame-choice:focus {
   padding-inline: 9px 7px;
 }
 .frame-area.app-text-area {

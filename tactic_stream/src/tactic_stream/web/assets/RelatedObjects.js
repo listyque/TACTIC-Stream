@@ -1,2 +1,2 @@
-import { w as RelatedObjects_default } from "./App.js";
+import { D as RelatedObjects_default } from "./App.js";
 export { RelatedObjects_default as default };

@@ -16,7 +16,7 @@ export const windowDirective = {
     function closed() {
       if (element.matches(':popover-open')) element.hidePopover()
       owner?.removeEventListener('close', closeChild); owner = null
-      if (home.parentNode) home.after(element)
+      if (home.parentNode && (element.parentNode !== home.parentNode || element.previousSibling !== home)) home.after(element)
       if (activeWindow === element) activeWindow = null
     }
     function nativeClosed() {

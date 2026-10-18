@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount, markRaw } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
-import { observeFrameSizes } from '../../frame/resize.js';
+import { frameContentWidth, observeFrameSizes } from '../../frame/resize.js';
 import { appearance } from '../../appearance.js';
 import DescriptionValue from './DescriptionValue.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/objects/description.ui.mjs';
@@ -39,7 +39,7 @@ let observer;
 onMounted(() => {
   const measure = () => {
     viewport.value = {
-      width: host.value.clientWidth,
+      width: frameContentWidth(host.value),
       height: host.value.clientHeight
     };
   };

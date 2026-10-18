@@ -4,12 +4,7 @@ import { preferences } from '../configuration/preferences.js'
 export const defaultPatterns = ['$FILENAME', '$FILENAME.$EXT', '$FILENAME.$FRAME.$EXT', '$FILENAME_$UDIM.$EXT', '$FILENAME_$UV.$EXT', '$FILENAME.$FRAME_$UDIM.$EXT', '$FILENAME.$FRAME_$UV.$EXT', '$FILENAME_$UV.$FRAME.$EXT']
 export const sourcePath = file => file.webkitRelativePath || file.name
 export const descriptors = files => files.map(file => ({ path:sourcePath(file), size:file.size }))
-export function prettySize(value) {
-  for (const unit of ['B','KB','MB','GB','TB']) {
-    if (value < 1024 || unit === 'TB') return value.toFixed(unit === 'B' ? 0 : 1) + ' ' + unit
-    value /= 1024
-  }
-}
+export { prettySize } from '../../../../src/tactic_stream/shared_ui/features/files/file_values.mjs'
 export async function prepareFiles(scope, files, values = {}) {
   return (await rpc('execute_cmd', [scope, 'tactic.command.browser_checkin_cmd.BrowserCheckinCmd', {
     action:'match', source_files:descriptors(files), ...values,

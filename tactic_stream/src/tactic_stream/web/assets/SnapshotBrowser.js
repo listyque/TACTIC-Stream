@@ -1,12 +1,12 @@
 import { A as onMounted, E as nextTick, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, V as useSlots, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
-import { D as t, O as appearance, i as mobile, o as _sfc_main$2, rt as _plugin_vue_export_helper_default, u as _sfc_main$3 } from "./index.js";
-import { C as _sfc_main$6, h as ItemPreview_default, r as _sfc_main$5, t as _sfc_main$4 } from "./FrameView.js";
+import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$2, f as _sfc_main$3, k as t, o as mobile } from "./index.js";
+import { E as _sfc_main$7, b as _sfc_main$5, h as ItemPreview_default, r as _sfc_main$6, t as _sfc_main$4 } from "./FrameView.js";
 import { P as resultItems, a as copyImage, dt as notify, o as copyText } from "./CodeBlock.js";
 import { t as RecordForm_default } from "./RecordForm.js";
-import { n as _sfc_main$7 } from "./AppSplitter.js";
 import { n as observeFrameSizes } from "./resize.js";
+import { a as metrics, i as layout, l as toolbar, n as fileColumns, o as optionActions, r as fileIcon, s as optionChange, t as clampRatio } from "./snapshot.ui.js";
 import { t as FilePreview_default } from "./FilePreview.js";
-import { B as layout, H as optionActions, K as ObjectAction_default, L as clampRatio, R as fileColumns, U as optionChange, V as metrics, W as toolbar, nt as _sfc_main$8, z as fileIcon } from "./App.js";
+import { Q as _sfc_main$8, V as ObjectAction_default } from "./App.js";
 //#region src/features/objects/SnapshotToolbar.vue
 var _sfc_main$1 = {
 	__name: "SnapshotToolbar",
@@ -496,7 +496,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 						model: toolbarModel.value,
 						onEvent: toolbarAction
 					}, {
-						options: withCtx(() => [createVNode(_sfc_main$7, {
+						options: withCtx(() => [createVNode(_sfc_main$5, {
 							label: "Snapshot Browser options",
 							width: 300,
 							overlay: ""
@@ -596,12 +596,12 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 								disabled: index.value === previews.value.length - 1,
 								onClick: _cache[4] || (_cache[4] = withModifiers(($event) => navigate(index.value + 1), ["stop"]))
 							}, null, 8, ["disabled"])) : createCommentVNode("", true),
-							current.value ? (openBlock(), createBlock(_sfc_main$5, {
+							current.value ? (openBlock(), createBlock(_sfc_main$6, {
 								key: 5,
 								class: "snapshot-preview-title",
 								text: current.value.title
 							}, null, 8, ["text"])) : createCommentVNode("", true),
-							previews.value.length > 1 ? (openBlock(), createBlock(_sfc_main$6, {
+							previews.value.length > 1 ? (openBlock(), createBlock(_sfc_main$7, {
 								key: 6,
 								modelValue: imageIndex.value,
 								"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => imageIndex.value = $event),
@@ -663,9 +663,9 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 												name: fileIcon$1(row),
 												style: normalizeStyle({ color: row.rowType === "file" && !row.exists ? "var(--muted)" : row.rowType === "type" ? "var(--yellow)" : "var(--primary)" })
 											}, null, 8, ["name", "style"]),
-											createVNode(_sfc_main$5, { text: row.rowType === "more" ? unref(t)(row.title) : row.title }, null, 8, ["text"]),
+											createVNode(_sfc_main$6, { text: row.rowType === "more" ? unref(t)(row.title) : row.title }, null, 8, ["text"]),
 											moreSize.value ? (openBlock(), createElementBlock("span", _hoisted_13, toDisplayString(row.rowType === "file" ? size(row.size) : ""), 1)) : createCommentVNode("", true),
-											morePath.value ? (openBlock(), createBlock(_sfc_main$5, {
+											morePath.value ? (openBlock(), createBlock(_sfc_main$6, {
 												key: 1,
 												class: "file-path",
 												text: row.path || ""
@@ -700,7 +700,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 								}, null, 8, ["disabled"])) : createCommentVNode("", true)
 							], 8, _hoisted_12),
 							unref(mobile) && phoneFile.value ? (openBlock(), createElementBlock("footer", _hoisted_17, [
-								createVNode(_sfc_main$5, { text: phoneFile.value.filename || phoneFile.value.title }, null, 8, ["text"]),
+								createVNode(_sfc_main$6, { text: phoneFile.value.filename || phoneFile.value.title }, null, 8, ["text"]),
 								createVNode(_sfc_main$2, {
 									label: "Open File",
 									icon: "folder_open",
@@ -734,7 +734,7 @@ var SnapshotBrowser_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 							onKeydown: splitterKey
 						}, null, 46, _hoisted_18)) : createCommentVNode("", true)
 					], 6),
-					createVNode(_sfc_main$7, {
+					createVNode(_sfc_main$5, {
 						ref_key: "fileMenu",
 						ref: fileMenu,
 						class: "snapshot-file-menu",

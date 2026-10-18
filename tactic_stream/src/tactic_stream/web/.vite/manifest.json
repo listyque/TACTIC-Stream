@@ -1,19 +1,4 @@
 {
-  "_AppCheckbox.css": {
-    "file": "assets/AppCheckbox.css",
-    "src": "_AppCheckbox.css"
-  },
-  "_AppCheckbox.js": {
-    "file": "assets/AppCheckbox.js",
-    "name": "AppCheckbox",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ],
-    "css": [
-      "assets/AppCheckbox.css"
-    ]
-  },
   "_AppMenuItem.css": {
     "file": "assets/AppMenuItem.css",
     "src": "_AppMenuItem.css"
@@ -27,21 +12,6 @@
     ],
     "css": [
       "assets/AppMenuItem.css"
-    ]
-  },
-  "_AppSplitter.css": {
-    "file": "assets/AppSplitter.css",
-    "src": "_AppSplitter.css"
-  },
-  "_AppSplitter.js": {
-    "file": "assets/AppSplitter.js",
-    "name": "AppSplitter",
-    "imports": [
-      "_vue.js",
-      "index.html"
-    ],
-    "css": [
-      "assets/AppSplitter.css"
     ]
   },
   "_AttachmentCard.css": {
@@ -86,7 +56,6 @@
       "_vue.js",
       "index.html",
       "_FrameView.js",
-      "_AppSplitter.js",
       "_files.js"
     ],
     "css": [
@@ -104,9 +73,7 @@
       "_vue.js",
       "_icons.js",
       "index.html",
-      "_CodeBlock.js",
-      "_AppSplitter.js",
-      "_AppCheckbox.js"
+      "_CodeBlock.js"
     ],
     "css": [
       "assets/FrameView.css"
@@ -178,7 +145,6 @@
       "index.html",
       "_FrameView.js",
       "_CodeBlock.js",
-      "_AppSplitter.js",
       "_resize.js",
       "_ObjectFieldFrame.js",
       "_sections.ui.js"
@@ -194,12 +160,20 @@
       "_FrameView.js"
     ]
   },
+  "_confirmation.ui.js": {
+    "file": "assets/confirmation.ui.js",
+    "name": "confirmation.ui",
+    "imports": [
+      "_FrameView.js"
+    ]
+  },
   "_files.js": {
     "file": "assets/files.js",
     "name": "files",
     "imports": [
       "index.html",
-      "_CodeBlock.js"
+      "_CodeBlock.js",
+      "_snapshot.ui.js"
     ]
   },
   "_graphFrame.js": {
@@ -246,6 +220,13 @@
     "name": "sections.ui",
     "imports": [
       "index.html",
+      "_FrameView.js"
+    ]
+  },
+  "_snapshot.ui.js": {
+    "file": "assets/snapshot.ui.js",
+    "name": "snapshot.ui",
+    "imports": [
       "_FrameView.js"
     ]
   },
@@ -304,18 +285,18 @@
       "_FrameView.js",
       "_CodeBlock.js",
       "_RecordForm.js",
-      "_AppSplitter.js",
-      "_AppCheckbox.js",
       "_resize.js",
       "_sections.ui.js",
       "_links.js",
       "_textMetrics.js",
       "_ObjectReport.js",
       "_AttachmentCard.js",
+      "_snapshot.ui.js",
       "_files.js",
       "_FilePreview.js",
       "_AppMenuItem.js",
-      "_tree.ui.js"
+      "_tree.ui.js",
+      "_confirmation.ui.js"
     ],
     "dynamicImports": [
       "src/features/checkin/ObjectCheckin.vue",
@@ -539,8 +520,12 @@
     "imports": [
       "_vue.js",
       "index.html",
+      "_FrameView.js",
       "_CodeBlock.js",
-      "_AppCheckbox.js"
+      "_resize.js",
+      "_sections.ui.js",
+      "_confirmation.ui.js",
+      "src/App.vue"
     ],
     "css": [
       "assets/IngestFiles.css"
@@ -554,8 +539,10 @@
     "imports": [
       "_vue.js",
       "index.html",
+      "_FrameView.js",
       "_CodeBlock.js",
-      "_AppSplitter.js"
+      "_resize.js",
+      "_sections.ui.js"
     ],
     "css": [
       "assets/MatchingTemplates.css"
@@ -569,7 +556,13 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_CodeBlock.js"
+      "_FrameView.js",
+      "_CodeBlock.js",
+      "_resize.js",
+      "_sections.ui.js",
+      "_files.js",
+      "_confirmation.ui.js",
+      "src/App.vue"
     ],
     "css": [
       "assets/ObjectCheckin.css"
@@ -615,9 +608,11 @@
       "index.html",
       "_FrameView.js",
       "_CodeBlock.js",
-      "_AppSplitter.js",
+      "_resize.js",
+      "_sections.ui.js",
       "_files.js",
       "_AppMenuItem.js",
+      "_confirmation.ui.js",
       "src/App.vue"
     ],
     "css": [
@@ -634,8 +629,6 @@
       "index.html",
       "_FrameView.js",
       "_CodeBlock.js",
-      "_AppSplitter.js",
-      "_AppCheckbox.js",
       "_links.js",
       "_AttachmentCard.js",
       "_AppMenuItem.js",
@@ -653,10 +646,9 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
       "_CodeBlock.js",
-      "_resize.js",
-      "_links.js"
+      "_links.js",
+      "src/App.vue"
     ],
     "css": [
       "assets/DescriptionEditor.css"
@@ -673,8 +665,6 @@
       "index.html",
       "_FrameView.js",
       "_CodeBlock.js",
-      "_AppSplitter.js",
-      "_AppCheckbox.js",
       "_resize.js",
       "_ObjectFieldFrame.js",
       "_sections.ui.js",
@@ -704,8 +694,8 @@
       "_FrameView.js",
       "_CodeBlock.js",
       "_RecordForm.js",
-      "_AppSplitter.js",
       "_resize.js",
+      "_snapshot.ui.js",
       "_FilePreview.js",
       "src/App.vue"
     ],
@@ -723,7 +713,6 @@
       "index.html",
       "_FrameView.js",
       "_CodeBlock.js",
-      "_AppSplitter.js",
       "src/App.vue"
     ],
     "css": [
@@ -753,8 +742,7 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_FrameView.js",
-      "_AppSplitter.js"
+      "_FrameView.js"
     ],
     "css": [
       "assets/TaskGanttView.css"
@@ -769,7 +757,6 @@
       "_vue.js",
       "index.html",
       "_FrameView.js",
-      "_AppSplitter.js",
       "_resize.js",
       "src/App.vue"
     ],

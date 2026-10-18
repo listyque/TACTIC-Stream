@@ -1,6 +1,6 @@
 import { E as nextTick } from "./vue.js";
-import { O as appearance } from "./index.js";
-import { D as node, E as muted, O as rect, T as label, u as translate, w as button } from "./FrameView.js";
+import { A as appearance } from "./index.js";
+import { A as node, D as button, O as label, j as rect, k as muted, u as translate } from "./FrameView.js";
 import { n as observeFrameSizes } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";

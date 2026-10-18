@@ -7,7 +7,7 @@ Started 2026-10-15. This replaces the previous screen-first migration order.
 This is the current execution order. The phase IDs and release checkpoints below
 remain the coverage map and evidence history, not separate user-sized tasks.
 Preparation is delivered; verified parts of controls and shell stay delivered.
-**B01–B06 and B08–B11 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
+**B01–B06 and B08–B12 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
 
 **B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
 widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
@@ -34,7 +34,13 @@ evidence: `docs/frame_schedule.md`. B11 Messaging is delivered below.
 **B11 is delivered.** Messages, attachment staging, activity, notification history
 and toast content use independent shared descriptions. Original/native/browser
 captures and real workflows are accepted within the documented platform limits.
-See `docs/frame_messages.md`. B07 stays open; the next batch is B12.
+See `docs/frame_messages.md`. B07 stays open; B12 is delivered below.
+
+**B12 is delivered.** File Workspace, check-in/ingest, Drop Plate, matching,
+Commit Queue, native synchronization and screenshot tools use shared composition.
+Final gate, connected scenarios and source-checked comparisons pass; native/browser
+capabilities and deployment limits are explicit in `docs/frame_files.md`.
+The next requested batch is B13. B07's unrelated gaps remain open.
 
 Each batch targets roughly **eight hours of complete engineering work**: inspect
 the original and dependencies, implement both hosts, exercise real workflows,
@@ -1338,3 +1344,30 @@ Current Administration reports were refreshed with source hashes after the final
 changes. They compare Frame implementations; original-wide parity is not implied.
 No live database or user configuration is part of these fixtures. The local
 evidence entry point is `tools/frame_foundation/output/index.html`.
+
+## B12 delivered: files, check-in and repository queues, 2026-10-18
+
+Stream **0.112.165** / Handler **0.6.0.116** ship independent copies of
+**191 portable JavaScript modules and three JSON catalogs**. File Workspace,
+inspectors/catalog/storage, native operation forms, Drop Plate, matching,
+ingest/check-in, Commit Queue, native Repository Sync, repository prompts and
+screenshot selection use the shared composition. Existing data, file identities,
+request generations, revisions, transfer journals, ACL and mutation owners remain
+in their hosts. Browser inspection/admin and native local/DCC capabilities are
+explicit; there is no embedded browser or runtime cross-repository import.
+
+**121 mandatory platform stages pass**. The combined **137-case native owner
+suite** passes, including native Windows/OpenGL after fixing fake-pool fixture
+shutdown and Screenshot Maker's Escape focus. Connected native/browser journeys
+exercise actual check-in, lost-response uncertainty, revision/groups, workspace
+operations and XML-RPC preset writes; large queues retain virtualization.
+The fresh source-checked evidence contains **300 Qt/Vue pairs**, **56 native
+capability pairs**, and an additional **50 Qt/Vue plus 56 native pairs at 150%**.
+Queue capability regions are explicitly marked shared-fragment comparisons.
+Quality budgets do not regress; existing unrelated structure/lint debt remains.
+EN/RU Help, the control atlas, executable variants and release metadata are updated.
+
+Scope, reproducible evidence and platform limits: `docs/frame_files.md`.
+Physical touch, OS IME, desktop-capture pixels, DCC and live PostgreSQL remain
+deployment acceptance. This **does not close B07's 40 widget gaps**. Next: **B13,
+scripts and standalone tools**.

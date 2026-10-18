@@ -14,7 +14,8 @@ from test_file_project import FileProjectFixture
 import test_file_transfer as transfers
 from thlib.ui.workspace_models.windows import FloatingWindowModel
 from thlib.ui.window_appearance import WindowAppearanceController
-from PySide6.QtCore import QObject, Signal
+from PySide6.QtCore import QObject, Signal, QMetaObject
+from PySide6.QtGui import QInputMethodEvent
 
 
 class ConfigurationSignals(QObject):
@@ -95,6 +96,19 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
         QTest.mouseClick(window or self.window, Qt.LeftButton, Qt.NoModifier, point)
         QTest.qWait(30)
 
+    def enter(self, item, text):
+        if item.metaObject().indexOfMethod('focusEditor()') >= 0:
+            QMetaObject.invokeMethod(item, 'focusEditor')
+        else:
+            item.forceActiveFocus()
+        QTest.qWait(30)
+        target=item.window() or self.window
+        QTest.keyClick(target, Qt.Key_A, Qt.ControlModifier)
+        event = QInputMethodEvent()
+        event.setCommitString(text)
+        QCoreApplication.sendEvent(self.app.focusObject(), event)
+        QTest.qWait(30)
+
     def tearDown(self):
         self.controller.shutdown()
         self.window.close()
@@ -133,13 +147,13 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                 QTest.mouseDClick(self.window,Qt.LeftButton,Qt.NoModifier,point);wait()
                 self.assertTrue(dialog.property('opened'))
                 self.assertTrue(dialog.property('modal'));self.assertTrue(dialog.property('draggable'))
-                self.assertEqual(dialog.findChild(QQuickItem,'streamEditorCode').property('text'),'feature')
-                name=dialog.findChild(QQuickItem,'streamEditorName');name.setProperty('text','Updated feature')
-                dialog.findChild(QQuickItem,'streamEditorDescription').setProperty('text','Edited through Handler')
-                dialog.findChild(QQuickItem,'streamEditorParent').setProperty('text','main')
+                self.assertEqual(self.find('streamEditorCode',dialog.property('contentItem')).property('text'),'feature')
+                name=self.find('streamEditorName',dialog.property('contentItem'));self.enter(name,'Updated feature')
+                self.enter(self.find('streamEditorDescription',dialog.property('contentItem')),'Edited through Handler')
+                self.enter(self.find('streamEditorParent',dialog.property('contentItem')),'main')
                 output=Path(__file__).resolve().parents[1]/'.screenshots/file-workspace';output.mkdir(parents=True,exist_ok=True)
                 for language in ('en','ru'):
-                    if language=='ru':self.app.installTranslator(translator);self.engine.retranslate()
+                    if language=='ru':self.app.installTranslator(translator);self.engine.setUiLanguage('ru');self.engine.retranslate()
                     for dark in (True,False):
                         self.theme.setProperty('dark',dark)
                         for width in (700,1280):
@@ -147,26 +161,57 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                             self.assertGreaterEqual(dialog.property('x'),0)
                             self.assertLessEqual(dialog.property('x')+dialog.property('width'),width)
                             self.window.grabWindow().save(str(output/f'handler-stream-editor-{language}-{dark}-{width}.png'))
-                self.click(dialog.findChild(QQuickItem,'streamEditorSave'));wait()
+                self.click(self.find('streamEditorSave',dialog.property('contentItem')));wait()
                 self.assertFalse(dialog.property('opened'))
                 saved=self.call('stream_status',stream='feature')
                 self.assertEqual(saved['parent'],'main');self.assertEqual(saved['branch_parent'],'dev')
                 self.assertEqual(saved['description'],'Edited through Handler')
                 self.click(self.find('streamNewButton'));wait()
-                dialog.findChild(QQuickItem,'streamEditorCode').setProperty('text','new-mainline')
-                dialog.findChild(QQuickItem,'streamEditorName').setProperty('text','New mainline')
-                self.click(dialog.findChild(QQuickItem,'streamEditorSave'));wait()
+                self.enter(self.find('streamEditorCode',dialog.property('contentItem')),'new-mainline')
+                self.enter(self.find('streamEditorName',dialog.property('contentItem')),'New mainline')
+                self.click(self.find('streamEditorSave',dialog.property('contentItem')));wait()
                 self.assertEqual(self.call('stream_status',stream='new-mainline')['stream_type'],'mainline')
                 self.controller.open_view('stream_graph');wait()
                 graph=self.find('streamGraphNode_feature');point=graph.mapToScene(QPointF(60,25)).toPoint()
                 QTest.mouseDClick(self.window,Qt.LeftButton,Qt.NoModifier,point);wait()
                 self.assertTrue(dialog.property('opened'))
-                self.assertEqual(dialog.findChild(QQuickItem,'streamEditorName').property('text'),'Updated feature')
+                self.assertEqual(self.find('streamEditorName',dialog.property('contentItem')).property('text'),'Updated feature')
                 dialog.close()
                 self.window.grabWindow().save(str(output/'handler-stream-graph.png'))
             self.assertFalse(self.warnings,self.warnings)
         finally:
-            self.app.removeTranslator(translator);self.engine.retranslate();self.controller.shutdown();pool.exit()
+            self.app.removeTranslator(translator);self.engine.setUiLanguage('en');self.engine.retranslate();self.controller.shutdown();pool.exit()
+
+    def test_workspace_catalog_and_conflict_selection_use_real_input(self):
+        state=self.controller._data
+        state['tabs'].append({'id':'catalog-workspaces','kind':'catalog','source':'workspaces','title':'Workspaces','icon':'desktop'})
+        state.update(active_tab='catalog-workspaces',catalog_source='workspaces',catalog_rows=self.call('workspaces')['items'])
+        self.controller.stateChanged.emit();QTest.qWait(100)
+        self.click(self.find('workspaceCatalog_work'))
+        self.assertEqual(state['catalog_detail']['code'],'work')
+        self.assertIn('"code": "work"',self.find('workspaceCatalogRecord').property('text'))
+        with patch.object(self.controller,'action') as action:
+            self.click(self.find('workspaceCatalogSwitch'))
+        action.assert_called_once_with('preview_workspace_switch',{'workspace':'work'})
+        self.resize(360,700)
+        for name in ('workspaceCatalogSwitch','workspaceCatalogEdit','workspaceCatalogSetup'):
+            button=self.find(name)
+            point=button.mapToScene(QPointF())
+            self.assertGreaterEqual(point.x(),0)
+            self.assertLessEqual(point.x()+button.width(),360)
+            self.assertLessEqual(point.y()+button.height(),700)
+        state['tabs'].append({'id':'conflicts-input','kind':'conflicts','title':'Conflicts','icon':'warning'})
+        state.update(active_tab='conflicts-input',conflicts=[{'path':'first.txt'},{'path':'second.txt'}],resolved_conflicts=[{'path':'resolved.txt'}],conflict_selected=[])
+        self.controller.stateChanged.emit();QTest.qWait(100)
+        rows=self.find('workspaceDetailRows')
+        first=rows.mapToScene(QPointF(80,18)).toPoint()
+        second=rows.mapToScene(QPointF(80,56)).toPoint()
+        QTest.mouseClick(self.window,Qt.LeftButton,Qt.NoModifier,first)
+        QTest.mouseClick(self.window,Qt.LeftButton,Qt.ControlModifier,second)
+        self.assertEqual(state['conflict_selected'],['first.txt','second.txt'])
+        self.click(self.find('workspaceConflicts_1'))
+        self.assertEqual(rows.property('count'),1)
+        self.assertFalse(self.warnings,self.warnings)
 
     def test_checkout_target_is_centered_modal_movable_and_uses_shared_actions(self):
         from thlib.ui.localization import CatalogTranslator
@@ -176,7 +221,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
         output=Path(__file__).resolve().parents[1]/'.screenshots/file-workspace';output.mkdir(parents=True,exist_ok=True)
         try:
             for language in ('en','ru'):
-                if language=='ru':self.app.installTranslator(translator);self.engine.retranslate()
+                if language=='ru':self.app.installTranslator(translator);self.engine.setUiLanguage('ru');self.engine.retranslate()
                 for width in (360,900):
                     self.resize(width,640)
                     dialog.open();QTest.qWait(100)
@@ -201,7 +246,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                     self.assertFalse(dialog.property('opened'))
             self.assertFalse(self.warnings,self.warnings)
         finally:
-            self.app.removeTranslator(translator);self.engine.retranslate()
+            self.app.removeTranslator(translator);self.engine.setUiLanguage('en');self.engine.retranslate()
 
     def test_outside_workspace_drop_notice_has_only_ok_and_fits_localized_popup(self):
         from thlib.ui.file_workspace_files import WORKSPACE_DROP_MESSAGE
@@ -215,7 +260,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
         count=0
         try:
             for language in ('en','ru'):
-                if language=='ru':self.app.installTranslator(translator);self.engine.retranslate()
+                if language=='ru':self.app.installTranslator(translator);self.engine.setUiLanguage('ru');self.engine.retranslate()
                 for dark in (True,False):
                     self.theme.setProperty('dark',dark)
                     for width in (360,760):
@@ -226,15 +271,16 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                         ok=self.find('workspaceDropBlockedOk',self.window.contentItem())
                         self.assertEqual(ok.property('text'),'ОК' if language=='ru' else 'OK');self.assertTrue(ok.hasActiveFocus())
                         content=dialog.property('contentItem');surface=content.parentItem()
-                        self.assertLessEqual(content.property('contentHeight'),content.height()+1)
+                        message=self.find('workspacePromptMessage',self.window.contentItem())
+                        self.assertLessEqual(message.property('contentHeight'),message.height()+1)
                         self.assertGreaterEqual(ok.mapToItem(surface,QPointF()).x(),0)
                         self.assertLessEqual(ok.mapToItem(surface,QPointF(ok.width(),ok.height())).x(),surface.width()+1)
-                        if language=='ru':self.assertIn('Перетаскивать',content.property('text'))
+                        if language=='ru':self.assertIn('Перетаскивать',message.property('text'))
                         self.window.grabWindow().save(str(output/f'handler-drop-blocked-{language}-{dark}-{width}.png'))
                         self.click(ok);count+=1
                         self.assertFalse(dialog.property('opened'));self.assertEqual(accepted.count(),count)
         finally:
-            self.app.removeTranslator(translator);self.engine.retranslate()
+            self.app.removeTranslator(translator);self.engine.setUiLanguage('en');self.engine.retranslate()
         self.assertEqual(self.controller.log_model.count(),0)
         self.assertFalse(self.warnings,self.warnings)
 
@@ -263,7 +309,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
             with patch.object(self.controller,'action') as action:
                 try:
                     for language in ('en','ru'):
-                        if language=='ru':self.app.installTranslator(translator);self.engine.retranslate()
+                        if language=='ru':self.app.installTranslator(translator);self.engine.setUiLanguage('ru');self.engine.retranslate()
                         for width,height in ((1100,1050),(360,640)):
                             self.resize(width,height);dialog.open();QTest.qWait(100)
                             self.assertTrue(dialog.property('modal'))
@@ -279,7 +325,13 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                     self.click(self.find('submitFileSelect:b.txt',self.window.contentItem()))
                     self.assertEqual(dialog.property('exceptions').toVariant(),['b.txt'])
                     dialog.setProperty('draft','Reviewed description')
-                    self.find('submitRestricted',self.window.contentItem()).setProperty('checked',True)
+                    restricted=self.find('submitRestricted',self.window.contentItem())
+                    restricted.forceActiveFocus();QTest.qWait(30)
+                    body=self.find('submitBody',self.window.contentItem())
+                    self.assertGreaterEqual(restricted.mapToItem(body,QPointF()).y(),0)
+                    self.assertLessEqual(restricted.mapToItem(body,QPointF(0,restricted.height())).y(),body.height()+1)
+                    QTest.keyClick(self.window,Qt.Key_Space);QTest.qWait(30)
+                    self.assertTrue(dialog.property('restrictAccess'))
                     task=state['submit_review']['tasks']['items'][0]
                     body=self.find('submitBody',self.window.contentItem())
                     body.setProperty('contentY',max(0,body.property('contentHeight')-body.height()))
@@ -296,6 +348,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                     FileWorkspaceController._execute(client,state,cache,operation,dict(values),threading.Event())
                     self.controller.stateChanged.emit();QTest.qWait(50)
                     self.assertEqual(client.rpc('status',change=change['code'])['description'],'Reviewed description')
+                    self.assertTrue(client.rpc('status',change=change['code'])['restricted'])
                     self.assertEqual(client.rpc('transfer_tasks')['items'],[])
                     self.assertTrue(dialog.property('opened'))
                     self.click(self.find('submitSave',self.window.contentItem()))
@@ -321,7 +374,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                     self.assertEqual(client.rpc('submit_task_status',change=change['code'])['updated'],0)
                     self.assertEqual((local/'b.txt').read_bytes(),b'reviewed bytes')
                 finally:
-                    self.app.removeTranslator(translator);self.engine.retranslate()
+                    self.app.removeTranslator(translator);self.engine.setUiLanguage('en');self.engine.retranslate()
             self.assertFalse(self.warnings,self.warnings)
 
     def test_revert_options_for_file_group_and_change_default_to_keep_local_files(self):
@@ -338,7 +391,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
         try:
             with patch.object(self.controller,'action') as action:
                 for language in ('en','ru'):
-                    if language=='ru':self.app.installTranslator(translator);self.engine.retranslate()
+                    if language=='ru':self.app.installTranslator(translator);self.engine.setUiLanguage('ru');self.engine.retranslate()
                     for dark in (True,False):
                         self.theme.setProperty('dark',dark)
                         for width in (360,760):
@@ -365,7 +418,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                 self.assertEqual(options['files'][0]['path'],'new.txt')
                 self.assertFalse(dialog.property('opened'))
         finally:
-            self.app.removeTranslator(translator);self.engine.retranslate()
+            self.app.removeTranslator(translator);self.engine.setUiLanguage('en');self.engine.retranslate()
         self.assertFalse(self.warnings,self.warnings)
 
     def test_confirmation_uses_shared_buttons_wraps_and_dispatches_once(self):
@@ -386,7 +439,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
         try:
             with patch.object(self.controller,'action') as action:
                 for language in ('en','ru'):
-                    if language=='ru':self.app.installTranslator(translator);self.engine.retranslate()
+                    if language=='ru':self.app.installTranslator(translator);self.engine.setUiLanguage('ru');self.engine.retranslate()
                     for dark in (True,False):
                         self.theme.setProperty('dark',dark)
                         for width in (760,360):
@@ -405,7 +458,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                                 self.assertAlmostEqual(button.width(),button.implicitWidth(),delta=1)
                                 point=button.mapToScene(QPointF(button.width(),button.height()))
                                 self.assertLessEqual(point.x(),width+1);self.assertLessEqual(point.y(),481)
-                                surface=message.parentItem()
+                                surface=dialog.property('contentItem').parentItem()
                                 start=button.mapToItem(surface,QPointF())
                                 end=button.mapToItem(surface,QPointF(button.width(),button.height()))
                                 self.assertGreaterEqual(start.x(),0)
@@ -420,7 +473,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                     self.assertTrue(dialog.property('opened'),command)
                     message=self.find('workspaceConfirmationMessage',self.window.contentItem())
                     for name in ('workspaceConfirmationCancel','workspaceConfirmationAccept'):
-                        button=self.find(name,self.window.contentItem());surface=message.parentItem()
+                        button=self.find(name,self.window.contentItem());surface=dialog.property('contentItem').parentItem()
                         self.assertGreaterEqual(button.mapToItem(surface,QPointF()).x(),0)
                         self.assertLessEqual(button.mapToItem(surface,QPointF(button.width(),button.height())).x(),surface.width()+1)
                     self.click(self.find('workspaceConfirmationCancel',self.window.contentItem()))
@@ -433,7 +486,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                 self.assertEqual(accepted.count(),1)
                 action.assert_called_once_with('remove_files',{})
         finally:
-            self.app.removeTranslator(translator);self.engine.retranslate()
+            self.app.removeTranslator(translator);self.engine.setUiLanguage('en');self.engine.retranslate()
         self.assertFalse(self.warnings,self.warnings)
 
     def test_history_table_selected_revision_details_and_lazy_preview(self):
@@ -497,7 +550,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
             self.click(self.find('historyTab_details'));QTest.qWait(40)
             try:
                 for language in ('en','ru'):
-                    if language=='ru':self.app.installTranslator(translator);self.engine.retranslate()
+                    if language=='ru':self.app.installTranslator(translator);self.engine.setUiLanguage('ru');self.engine.retranslate()
                     for dark in (True,False):
                         self.theme.setProperty('dark',dark)
                         for width in (700,1600):
@@ -506,10 +559,10 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                             self.assertGreater(self.find('historyRevisionInspector').height(),90)
                             self.window.grabWindow().save(str(output/f'handler-history-{language}-{dark}-{width}.png'))
             finally:
-                self.app.removeTranslator(translator);self.engine.retranslate()
+                self.app.removeTranslator(translator);self.engine.setUiLanguage('en');self.engine.retranslate()
             state.update(history=[],history_path='another.txt')
             self.controller.stateChanged.emit();QTest.qWait(40)
-            self.assertEqual(description.property('text'),'')
+            self.assertFalse(self.find('historyRevisionInspector').property('hasFile'))
         self.assertFalse(self.warnings,self.warnings)
 
     def test_changelist_menu_reverts_unchanged_without_confirmation(self):
@@ -529,7 +582,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
         try:
             with patch.object(self.controller,'action') as action:
                 for language in ('en','ru'):
-                    if language=='ru':self.app.installTranslator(translator);self.engine.retranslate()
+                    if language=='ru':self.app.installTranslator(translator);self.engine.setUiLanguage('ru');self.engine.retranslate()
                     self.resize(900,720)
                     self.click(self.find('changelistActionsButton'));QTest.qWait(250)
                     entry=next(row for row in menu.property('actions').toVariant() if row.get('command')=='revert_unchanged_change')
@@ -548,7 +601,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                 self.assertFalse(entry['enabled'])
                 menu.close()
         finally:
-            self.app.removeTranslator(translator);self.engine.retranslate()
+            self.app.removeTranslator(translator);self.engine.setUiLanguage('en');self.engine.retranslate()
         self.assertFalse(self.warnings,self.warnings)
 
     def test_multiple_empty_changelists_can_be_deleted_from_real_menu(self):
@@ -772,7 +825,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
             content = details.findChild(QQuickItem, 'fileWorkspaceChangelistDetails')
             self.assertIsNotNone(content, self.warnings)
             self.assertEqual(content.property('changeCode'), change['code'])
-            editor = content.findChild(QQuickItem, 'fileWorkspaceChangelistDescription')
+            editor = self.find('fileWorkspaceChangelistDescription',content)
             self.assertEqual(editor.property('text'), 'Original description')
             self.assertLess(editor.mapToScene(QPointF()).y(), 250)
             self.assertTrue(editor.property('readOnly'))
@@ -789,13 +842,10 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                     self.assertEqual(len(self.controller.data['change_details']['files']['items']),2)
                     self.assertEqual(len(self.controller.data['change_details']['shelf_files']['items']),2)
                     self.assertEqual(self.controller.data['change_details']['tasks']['items'][0]['code'],task['code'])
-                    self.click(content.findChild(QQuickItem,'fileWorkspaceDetailsEdit'), details)
+                    self.click(self.find('fileWorkspaceDetailsEdit',content), details)
                     self.assertFalse(editor.property('readOnly'))
-                    editor.forceActiveFocus()
-                    QTest.keyClick(details, Qt.Key_A, Qt.ControlModifier)
-                    for char in 'saved description':
-                        QTest.keyClick(details, Qt.Key(ord(char.upper())), Qt.ShiftModifier if char.isupper() else Qt.NoModifier)
-                    self.click(content.findChild(QQuickItem,'fileWorkspaceDetailsSave'), details)
+                    self.enter(editor,'saved description')
+                    self.click(self.find('fileWorkspaceDetailsSave',content), details)
                     deadline=monotonic()+5
                     while self.controller.busy and monotonic()<deadline:
                         QTest.qWait(10)
@@ -804,7 +854,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                     self.assertEqual(self.controller.data['error'], '')
                     self.assertEqual(self.call('status',change=change['code'])['description'],'saved description')
                     self.assertFalse(content.property('dirty'))
-                    self.click(content.findChild(QQuickItem,'fileWorkspaceDetailsActions'), details)
+                    self.click(self.find('fileWorkspaceDetailsActions',content), details)
                     from PySide6.QtCore import QObject
                     menu=content.findChild(QObject,'fileWorkspaceDetailsMenu')
                     deadline=monotonic()+1
@@ -830,7 +880,7 @@ class FileWorkspaceLayoutTest(FileProjectFixture, unittest.TestCase):
                                     details.resize(width,1080 if width==1000 else 620)
                                     QTest.qWait(30)
                                     self.assertLess(editor.mapToScene(QPointF()).y(),250)
-                                    close=content.findChild(QQuickItem,'fileWorkspaceDetailsClose')
+                                    close=self.find('fileWorkspaceDetailsClose',content)
                                     self.assertLessEqual(close.mapToScene(QPointF(close.width(),close.height())).x(),width)
                                     self.assertEqual(content.property('draft'),'saved description')
                                     details.grabWindow().save(str(output/f'handler-changelist-{language}-{dark}-{width}.png'))

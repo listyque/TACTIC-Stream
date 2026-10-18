@@ -1,11 +1,18 @@
-import { Y as preferences } from "./index.js";
+import { Z as preferences } from "./index.js";
 import { F as rpc } from "./CodeBlock.js";
-//#region src/features/checkin/files.js
-var sourcePath = (file) => file.webkitRelativePath || file.name;
-var descriptors = (files) => files.map((file) => ({
-	path: sourcePath(file),
-	size: file.size
-}));
+import { r as fileIcon } from "./snapshot.ui.js";
+//#region ../src/tactic_stream/shared_ui/features/files/file_values.mjs
+function fileName(path) {
+	return String(path || "").replace(/\\/g, "/").split("/").pop();
+}
+function extension(path) {
+	const name = fileName(path), index = name.lastIndexOf(".");
+	return index > 0 ? name.slice(index + 1).toUpperCase() : "FILE";
+}
+function sourceIcon(path) {
+	const type = /\.(apng|avif|png|jpe?g|webp|gif|tiff?|bmp|svg)$/i.test(path) ? "image" : /\.(mov|mp4|avi|mkv|webm)$/i.test(path) ? "movie" : "";
+	return fileIcon("file", type, "", path);
+}
 function prettySize(value) {
 	for (const unit of [
 		"B",
@@ -18,6 +25,13 @@ function prettySize(value) {
 		value /= 1024;
 	}
 }
+//#endregion
+//#region src/features/checkin/files.js
+var sourcePath = (file) => file.webkitRelativePath || file.name;
+var descriptors = (files) => files.map((file) => ({
+	path: sourcePath(file),
+	size: file.size
+}));
 async function prepareFiles(scope, files, values = {}) {
 	return (await rpc("execute_cmd", [
 		scope,
@@ -65,6 +79,6 @@ async function droppedFiles(transfer) {
 	return files;
 }
 //#endregion
-export { repositories as a, prettySize as i, droppedFiles as n, sourcePath as o, prepareFiles as r, descriptors as t };
+export { sourcePath as a, prettySize as c, repositories as i, sourceIcon as l, droppedFiles as n, extension as o, prepareFiles as r, fileName as s, descriptors as t };
 
 //# sourceMappingURL=files.js.map

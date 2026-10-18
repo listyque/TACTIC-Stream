@@ -42,7 +42,8 @@ const emit = defineEmits([
   'close',
   'reorder',
   'restore',
-  'clear-history'
+  'clear-history',
+  'gutter'
 ]);
 const hoveredTab = ref(''),
   paintedPress = ref(''),
@@ -61,6 +62,15 @@ let pressedTab;
 let suppressClick = false;
 let observer;
 
+watch(
+  overflow,
+  (value) => {
+    if (props.kind === 'view')
+      emit('gutter', value ? layout.scrollbarExtent : 0);
+  },
+  { immediate: true }
+);
+
 function measure() {
   if (props.mobile) {
     cancelDrag();
@@ -75,6 +85,23 @@ function measure() {
     (props.kind === 'script' && !props.closedTabs.length);
   const available =
     list.value.clientWidth + (overflow.value && overflowAction ? 40 : 0);
+  if (props.kind === 'view') {
+    compact.value = false;
+    widths.value = [
+      ...list.value.querySelectorAll(
+        '[role="tab"] > span:not(.control-ripple):not(.control-ripple-clip):not(.app-icon)'
+      )
+    ].map((label) => {
+      const range = document.createRange();
+      range.selectNodeContents(label);
+      return Workspace.viewTabWidth(range.getBoundingClientRect().width);
+    });
+    overflow.value =
+      widths.value.reduce((sum, width) => sum + width, 0) +
+        Math.max(0, props.tabs.length - 1) * 4 >
+      available + 0.5;
+    return;
+  }
   if (props.kind === 'script') {
     overflow.value = list.value.scrollWidth > available + 1;
     return;
@@ -404,7 +431,8 @@ function clickAfterDrag(event) {
       '--dock-tab-hovered-opacity': dockTab.hoveredOpacity,
       '--dock-tab-dragging-opacity': dockTab.draggingOpacity,
       '--dock-tab-indicator-thickness': dockTab.indicatorThickness + 'px',
-      '--dock-tab-indicator-inset': dockTab.indicatorInset + 'px'
+      '--dock-tab-indicator-inset': dockTab.indicatorInset + 'px',
+      '--view-scrollbar-gutter': (overflow ? layout.scrollbarExtent : 0) + 'px'
     }"
     @pointerdown.capture="suppressClick = false"
     @click.capture="clickAfterDrag"
@@ -463,7 +491,7 @@ function clickAfterDrag(event) {
         "
       >
         <WorkspaceTabVisual
-          v-if="kind === 'search'"
+          v-if="kind === 'search' || kind === 'view'"
           :record="{
             ...tab,
             current: selected === tab.id,
@@ -476,7 +504,7 @@ function clickAfterDrag(event) {
           :close-pressed="closePress === tab.id"
         />
         <AppButton
-          :class="{ 'frame-hit-target': kind === 'search' }"
+          :class="{ 'frame-hit-target': kind === 'search' || kind === 'view' }"
           role="tab"
           :icon="['dock', 'view'].includes(kind) ? tab.icon : undefined"
           :id="kind === 'dock' ? undefined : 'tab-' + tab.id"
@@ -496,7 +524,7 @@ function clickAfterDrag(event) {
         />
         <AppButton
           v-if="kind !== 'dock' && closable(tab)"
-          :class="{ 'frame-hit-target': kind === 'search' }"
+          :class="{ 'frame-hit-target': kind === 'search' || kind === 'view' }"
           @pointerenter="closeHover = tab.id"
           @pointerleave="
             closeHover = '';
@@ -756,6 +784,58 @@ function clickAfterDrag(event) {
 </template>
 
 <style>
+.workspace-tabs[data-kind='view'] {
+  height: calc(var(--control-height) + var(--view-scrollbar-gutter));
+  padding: 0;
+  border: 0;
+  background: transparent;
+  align-items: flex-start;
+}
+.workspace-tabs[data-kind='view'] .workspace-tab-list {
+  height: 100%;
+  gap: 4px;
+  overflow-y: hidden;
+}
+.workspace-tabs[data-kind='view'] .workspace-tab {
+  flex: none;
+  max-width: none;
+  height: var(--control-height);
+}
+.workspace-tabs[data-kind='view'] .workspace-tab [role='tab'] {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  width: 100%;
+  justify-content: center;
+  font-weight: 400;
+}
+.workspace-tabs[data-kind='view']
+  .workspace-tab
+  [role='tab']
+  > span:not(.control-ripple):not(.control-ripple-clip) {
+  width: calc(100% - 82px);
+  transform: translateY(-1px);
+  visibility: hidden;
+}
+.workspace-tabs[data-kind='view'] .workspace-tab [role='tab'] > .app-icon {
+  visibility: hidden;
+}
+.workspace-tabs[data-kind='view'] .workspace-tab > .icon-button {
+  position: absolute;
+  right: 4px;
+  margin: 0;
+  background: transparent;
+  width: 32px;
+  height: 32px;
+  min-width: 0;
+  min-height: 0;
+}
+.workspace-tabs[data-kind='view'] .workspace-tab > .icon-button > .app-icon {
+  visibility: hidden;
+}
+.workspace-tabs[data-kind='view'] .workspace-tab::after {
+  display: none;
+}
 .workspace-tabs[data-kind='search']
   .workspace-tab
   [role='tab']

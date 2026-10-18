@@ -18,7 +18,7 @@ os.environ.setdefault('QT_QUICK_CONTROLS_STYLE', 'Material')
 os.environ.setdefault('QT_QPA_FONTDIR', 'C:/Windows/Fonts')
 sys.path.insert(0, 'D:/code/th_codex')
 
-from PySide6.QtCore import QCoreApplication, QEvent, QObject, QPointF, QUrl, Signal, Qt
+from PySide6.QtCore import QCoreApplication, QEvent, QObject, QPointF, QUrl, Signal, Qt, QMetaObject
 from PySide6.QtGui import QFont, QGuiApplication
 from PySide6.QtQml import QQmlComponent, QQmlEngine, qmlClearTypeRegistrations
 from PySide6.QtQuick import QQuickItem, QQuickWindow
@@ -445,6 +445,7 @@ class HandlerFileWorkspaceUiTest(FileProjectFixture, unittest.TestCase):
                             theme.setProperty('dark',dark)
                             for width in (700,1600):
                                 window.resize(width,1000);view.setWidth(width);view.setHeight(1000);QTest.qWait(100)
+                                wait_inspection()
                                 self.assertTrue(find(view,'workspaceFile_note.txt').property('selected'))
                                 self.assertEqual(controller.data['inspection']['path'],'note.txt')
                                 window.grabWindow().save(str(directory/f'handler-files-{language}-{dark}-{width}.png'))
@@ -837,7 +838,7 @@ class HandlerFileWorkspaceUiTest(FileProjectFixture, unittest.TestCase):
                 QCoreApplication.sendEvent(window,QDropEvent(QPointF(point),Qt.CopyAction,folder_mime,Qt.LeftButton,Qt.NoModifier))
                 QTest.qWait(20)
                 self.assertTrue(confirm.property('opened'))
-                self.assertIn('Open selected files for editing',view.findChild(QObject,'workspaceDropDescription').property('text'))
+                self.assertIn('Open selected files for editing',find(confirm.property('contentItem'),'workspaceDropDescription').property('text'))
                 confirm.accept()
                 deadline=monotonic()+15
                 while (controller.busy or controller._read_worker is not None) and monotonic()<deadline:
@@ -940,7 +941,7 @@ class HandlerFileWorkspaceUiTest(FileProjectFixture, unittest.TestCase):
                 self.assertEqual(controller.data['error'],'')
                 self.assertFalse((root/rejected_file.name).exists())
                 self.assertEqual(self.call('status',change=target['code'])['edit_revision'],before_revision)
-                ok=view.findChild(QQuickItem,'workspaceDropBlockedOk')
+                ok=find(blocked.property('contentItem'),'workspaceDropBlockedOk')
                 QTest.mouseClick(window,Qt.LeftButton,Qt.NoModifier,ok.mapToScene(QPointF(ok.width()/2,ok.height()/2)).toPoint())
                 QTest.qWait(30);self.assertFalse(blocked.property('opened'))
                 from thlib.ui.file_workspace_files import execute_files
@@ -1340,14 +1341,15 @@ Item {
             self.assertIsNotNone(item, f'{name}: rows={controller.data["depot_tree"]}; model={controller.depot_model.rowCount()}; warnings={warnings}')
             return item
 
+        def children(item):
+            for child in item.childItems():
+                yield child
+                yield from children(child)
+
         def menu_command(button, command):
-            click(view.findChild(QObject, button))
+            click(tree_item(button))
             menu = view.findChild(QObject, 'workspaceActionMenu')
             self.assertTrue(menu.property('opened'),str(warnings))
-            def children(item):
-                for child in item.childItems():
-                    yield child
-                    yield from children(child)
             groups={'checkout_ordinary':'Checkout','checkout_exclusive':'Checkout','remove_files':'Changelist edits','move_files':'Changelist edits','rename_file':'Changelist edits','file_history':'Inspect / revisions','revision_selected':'Inspect / revisions'}
             active=menu
             if command in groups:
@@ -1384,7 +1386,7 @@ Item {
                 action('refresh')
                 self.assertEqual(controller.data['workspace'], 'gui')
                 QTest.qWait(30)
-                button = view.findChild(QObject, 'newChangelistButton')
+                button = tree_item('newChangelistButton')
                 self.assertIsNotNone(button)
                 point = button.mapToScene(QPointF(button.width() / 2, button.height() / 2))
                 QTest.mouseClick(window, Qt.LeftButton, Qt.NoModifier, point.toPoint())
@@ -1407,12 +1409,18 @@ Item {
                 details.setParentItem(details_window.contentItem());details.setWidth(600);details.setHeight(540)
                 details_window.show();QTest.qWait(30)
                 try:
-                    field = details.findChild(QQuickItem,'fileWorkspaceChangelistDescription')
-                    field.forceActiveFocus()
+                    action(None)
+                    details_window.requestActivate();QTest.qWait(30)
+                    edit = next(item for item in children(details) if item.objectName()=='fileWorkspaceDetailsEdit')
+                    self.assertTrue(edit.property('enabled'))
+                    QTest.mouseClick(details_window,Qt.LeftButton,Qt.NoModifier,edit.mapToScene(QPointF(edit.width()/2,edit.height()/2)).toPoint())
+                    field = next(item for item in children(details) if item.objectName()=='fileWorkspaceChangelistDescription')
+                    self.assertFalse(field.property('readOnly'))
+                    QMetaObject.invokeMethod(field,'focusEditor')
                     for char in 'menu change':
                         QTest.keyClick(details_window, Qt.Key(ord(char.upper())))
                     self.assertEqual(field.property('text'), 'menu change')
-                    save = details.findChild(QQuickItem,'fileWorkspaceDetailsSave')
+                    save = next(item for item in children(details) if item.objectName()=='fileWorkspaceDetailsSave')
                     QTest.mouseClick(details_window,Qt.LeftButton,Qt.NoModifier,save.mapToScene(QPointF(save.width()/2,save.height()/2)).toPoint())
                     action(None)
                     self.assertEqual(controller.data['change']['description'], 'menu change')
@@ -1479,7 +1487,7 @@ Item {
                 controller.set_value('prefix', '')
                 QTest.qWait(20)
                 changelist_tree = view.findChild(QObject, 'workspaceChangelistTree')
-                depot_tree = view.findChild(QObject, 'workspaceDepotTree')
+                depot_tree = tree_item('workspaceDepotTree')
                 self.assertGreater(changelist_tree.mapToScene(QPointF()).x(), depot_tree.mapToScene(QPointF()).x() + depot_tree.width())
                 click(tree_item('workspaceDisclosure:' + selected_change))
                 action(None)
@@ -1489,7 +1497,7 @@ Item {
                 self.assertIn(selected_change, controller.data['expanded_changes'])
                 self.assertTrue(any(row.get('parent') == selected_change and row.get('path') == 'fresh.txt' for row in controller.data['change_tree']))
                 change_file = tree_item('workspaceChangeFile:' + selected_change + '/fresh.txt')
-                checkbox = next(item for item in change_file.findChildren(QQuickItem) if item.property('checkState') is not None)
+                checkbox = next(item for item in children(change_file) if item.property('checkState') is not None)
                 click(checkbox)
                 action(None)
                 self.assertEqual(controller.data['selected'], ['fresh.txt'])
@@ -1535,10 +1543,10 @@ Item {
                 deadline=monotonic()+2
                 while not tab_editor.property('opened') and monotonic()<deadline:QTest.qWait(5)
                 self.assertTrue(tab_editor.property('opened'))
-                title=view.findChild(QQuickItem,'workspaceTabTitle')
+                title=next(item for item in children(tab_editor.property('contentItem')) if item.objectName()=='workspaceTabTitle')
                 title.forceActiveFocus()
                 for character in 'UI history':QTest.keyClick(window,character)
-                preset=view.findChild(QQuickItem,'workspaceTabPreset')
+                preset=next(item for item in children(tab_editor.property('contentItem')) if item.objectName()=='workspaceTabPreset')
                 preset.forceActiveFocus()
                 QTest.keyClick(window,Qt.Key_Home)
                 for _ in range(3):QTest.keyClick(window,Qt.Key_Down)
@@ -1564,8 +1572,8 @@ Item {
                 self.assertFalse(revision_dialog.property('force'))
                 revision_dialog.setProperty('selector','file_revision')
                 revision_dialog.setProperty('value','1')
-                force=view.findChild(QQuickItem,'workspaceRevisionForce')
                 QTest.qWait(30)
+                force=next(item for item in children(revision_dialog.property('contentItem')) if item.objectName()=='workspaceRevisionForce')
                 click(force)
                 output=Path(__file__).resolve().parents[1]/'.screenshots/file-workspace'
                 output.mkdir(parents=True,exist_ok=True)

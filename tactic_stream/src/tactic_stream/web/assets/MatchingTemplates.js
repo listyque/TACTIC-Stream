@@ -1,84 +1,318 @@
-import { A as onMounted, B as useModel, G as withCtx, M as openBlock, N as renderList, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode } from "./vue.js";
-import { D as t, o as _sfc_main$3, u as _sfc_main$2 } from "./index.js";
+import { A as onMounted, E as nextTick, G as withCtx, M as openBlock, N as renderList, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, h as createBlock, p as computed, u as Fragment } from "./vue.js";
+import { A as appearance, D as randomId, R as controls, c as _sfc_main$1, k as t } from "./index.js";
+import { A as node, D as button, O as label, b as _sfc_main$3, j as rect, t as _sfc_main$2, u as translate } from "./FrameView.js";
 import { F as rpc } from "./CodeBlock.js";
-import { n as _sfc_main$4, r as _sfc_main$6, t as _sfc_main$5 } from "./AppSplitter.js";
-//#region src/controls/AppCheckBox.vue
-var _hoisted_1$1 = { class: "app-checkbox-indicator" };
-var _hoisted_2$1 = [
-	"id",
-	"checked",
-	"disabled",
-	"indeterminate",
-	"aria-label"
-];
-var _sfc_main$1 = {
-	__name: "AppCheckBox",
-	props: /*@__PURE__*/ mergeModels({
-		label: String,
-		controlId: String,
-		disabled: Boolean,
-		indeterminate: Boolean,
-		compact: Boolean,
-		prominent: Boolean,
-		hideLabel: Boolean,
-		translateLabel: {
-			type: Boolean,
-			default: true
-		}
-	}, {
-		"modelValue": {
-			type: Boolean,
-			default: false
+import { n as observeFrameSizes } from "./resize.js";
+import { t as captionHeight } from "./sections.ui.js";
+//#region ../src/tactic_stream/shared_ui/features/files/matching.ui.mjs
+function testResult(text, language, matchedType) {
+	return text.startsWith("Matched as ") ? translate("Matched as {type}", language, { type: matchedType || text.slice(11) }) : translate(text, language);
+}
+function actions(model) {
+	const selected = model.selected >= 0;
+	return [
+		{
+			title: "Duplicate",
+			icon: "copy",
+			command: "duplicate",
+			enabled: selected && !model.busy && model.canAdd !== false
 		},
-		"modelModifiers": {}
-	}),
-	emits: /*@__PURE__*/ mergeModels(["update:modelValue"], ["update:modelValue"]),
-	setup(__props, { emit: __emit }) {
-		const props = __props;
-		const model = useModel(__props, "modelValue");
-		const emit = __emit;
-		function changed(event) {
-			if (props.indeterminate) emit("update:modelValue", true);
-			else model.value = event.target.checked;
+		{
+			title: "Move up",
+			icon: "arrow-up",
+			command: "move_up",
+			enabled: selected && model.selected > 0 && !model.busy
+		},
+		{
+			title: "Move down",
+			icon: "arrow-down",
+			command: "move_down",
+			enabled: selected && model.selected < model.count - 1 && !model.busy
+		},
+		{
+			title: "Delete",
+			icon: "delete",
+			command: "delete",
+			enabled: selected && !model.record?.locked && !model.busy
 		}
-		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("label", { class: normalizeClass(["app-checkbox", {
-				disabled: __props.disabled,
-				compact: __props.compact,
-				prominent: __props.prominent
-			}]) }, [createBaseVNode("span", _hoisted_1$1, [createBaseVNode("input", {
-				id: __props.controlId,
-				type: "checkbox",
-				checked: !__props.indeterminate && model.value,
-				onChange: changed,
-				disabled: __props.disabled,
-				indeterminate: __props.indeterminate,
-				"aria-label": __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : void 0
-			}, null, 40, _hoisted_2$1), model.value || __props.indeterminate ? (openBlock(), createBlock(_sfc_main$2, {
-				key: 0,
-				name: __props.indeterminate ? "minus" : "check"
-			}, null, 8, ["name"])) : createCommentVNode("", true)]), !__props.hideLabel ? renderSlot(_ctx.$slots, "default", {}, () => [createTextVNode(toDisplayString(__props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : ""), 1)], void 0, 0) : createCommentVNode("", true)], 2);
-		};
+	];
+}
+function layout(model, width, height) {
+	const compact = width < 620, inset = 12, gap = 10;
+	const available = Math.max(0, width - 24);
+	const left = compact ? available : Math.max(200, Math.min(model.paneWidth || Math.max(300, width * .48), available - gap - 260));
+	return {
+		compact,
+		list: rect(inset, inset, left, height - 24),
+		editor: rect(compact ? inset : inset + left + gap, inset, compact ? available : available - left - gap, height - 24),
+		showList: !compact || !model.editing,
+		showEditor: !compact || model.editing,
+		splitter: rect(inset + left, inset, gap, height - 24)
+	};
+}
+function describe(model, width, height, language) {
+	const tr = (text) => translate(text, language), bounds = layout(model, width, height), nodes = [];
+	if (bounds.showList) {
+		const w = bounds.list.width, compact = w < 400, children = [];
+		const tools = actions(model), count = compact ? 2 : 5, extent = controls.iconButton.extent, stride = extent + 5, start = w - 9 - count * stride + 5;
+		children.push(label("matchingTemplatesHeading", rect(9, 9, Math.max(0, start - 14), extent), tr("Matching templates"), {
+			fontRole: "secondary",
+			weight: 600
+		}));
+		children.push(button("matchingTemplatesAdd", rect(start, 9, extent, extent), tr("Add"), "add", { type: "create" }, !model.busy && model.canAdd !== false, {
+			iconOnly: true,
+			iconAction: true
+		}));
+		if (compact) children.push(button("matchingTemplatesOverflowButton", rect(start + stride, 9, extent, extent), tr("Template actions"), "more", { type: "menu" }, !model.busy, {
+			iconOnly: true,
+			iconAction: true
+		}));
+		else tools.forEach((action, index) => children.push(button("matchingTemplate_" + action.command, rect(start + (index + 1) * stride, 9, extent, extent), tr(action.title), action.icon, { type: action.command }, action.enabled, {
+			iconOnly: true,
+			iconAction: true
+		})));
+		children.push(node("List", "matchingTemplatesList", rect(9, 44, w - 18, bounds.list.height - 53), {
+			source: "templates",
+			keyField: "templateId",
+			rowHeight: 69,
+			rowGap: 5,
+			label: tr("Matching templates"),
+			fields: [
+				"templateId",
+				"templateEnabled",
+				"pattern",
+				"preview",
+				"matchingType",
+				"process",
+				"context",
+				"locked",
+				"selected",
+				"priority",
+				"validationError"
+			]
+		}));
+		nodes.push(node("Box", "matchingTemplatesListPanel", bounds.list, {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			radius: 16,
+			children
+		}));
 	}
-};
+	if (!bounds.compact) nodes.push(node("Splitter", "matchingTemplatesSplitter", bounds.splitter, {
+		label: tr("Templates pane width"),
+		value: bounds.list.width,
+		min: 200,
+		max: Math.max(200, width - 294),
+		action: { type: "splitter" }
+	}));
+	if (bounds.showEditor) {
+		const w = bounds.editor.width, h = bounds.editor.height, footerHeight = w < 330 ? 64 : 38, children = [];
+		const form = properties(Object.assign({}, model, { editing: bounds.compact && model.editing }), Math.max(0, w - 44), language);
+		children.push(node("Scroll", "matchingTemplatesEditorScroll", rect(14, 14, w - 28, Math.max(0, h - footerHeight - 38)), {
+			contentHeight: form.height,
+			children: form.nodes
+		}));
+		if (model.dirty) children.push(label("matchingTemplatesDirty", rect(14, h - footerHeight - 14, w < 330 ? w - 28 : w - 238, 20), tr("Unsaved changes"), {
+			fontRole: "secondary",
+			color: "yellow"
+		}));
+		const footerY = h - 52;
+		children.push(button("matchingTemplatesCancel", rect(w - 254, footerY, 110, 38), tr("Cancel"), "", { type: "close" }, !model.busy));
+		children.push(button("matchingTemplatesSave", rect(w - 134, footerY, 120, 38), tr("Save"), "save", { type: "save" }, !!model.dirty && !model.busy, { highlighted: true }));
+		nodes.push(node("Box", "matchingTemplatesEditorPanel", bounds.editor, {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			radius: 16,
+			children
+		}));
+	}
+	return { nodes };
+}
+function properties(model, width, language) {
+	const tr = (text, values) => translate(text, language, values), record = model.record || {}, enabled = model.selected >= 0 && !model.busy;
+	const children = [], headingX = model.editing ? 36 : 0;
+	if (model.editing) children.push(button("matchingTemplatesBack", rect(0, 0, 28, 28), tr("Back"), "arrow-left", { type: "back" }, !model.busy, {
+		iconOnly: true,
+		iconAction: true
+	}));
+	children.push(label("matchingTemplatesProperties", rect(headingX, 0, width - headingX, 28), tr("Template properties"), {
+		fontRole: "bodyLarge",
+		weight: 600,
+		role: "heading"
+	}));
+	children.push(label("matchingPatternLabel", rect(0, 38, width, 18), tr("Pattern"), {
+		fontRole: "secondary",
+		color: "secondaryText"
+	}));
+	children.push(node("Field", "matchingPattern", rect(0, 62, width, 36), {
+		label: tr("Pattern"),
+		text: record.pattern || "",
+		enabled: enabled && !record.locked,
+		action: {
+			type: "field",
+			field: "pattern"
+		},
+		commitAction: { type: "validate" }
+	}));
+	const preview = record.validationError || tr("Preview: {preview} · Type: {type}", {
+		preview: record.preview || "—",
+		type: record.matchingType || "—"
+	});
+	const previewHeight = Math.max(30, captionHeight(preview, width));
+	children.push(label("matchingPatternPreview", rect(0, 108, width, previewHeight), preview, {
+		fontRole: "secondary",
+		wrap: true,
+		color: record.validationError ? "error" : "secondaryText"
+	}));
+	let y = 108 + previewHeight + 10;
+	const stacked = width < 316;
+	for (const [field, title, empty, options] of [[
+		"process",
+		"Process mapping",
+		"All processes",
+		model.processes || []
+	], [
+		"context",
+		"Context mapping",
+		"All contexts",
+		model.contexts || []
+	]]) {
+		children.push(label("matching_" + field + "Label", rect(0, y, stacked ? width : 122, stacked ? 18 : 36), tr(title), {
+			fontRole: "secondary",
+			color: "secondaryText"
+		}));
+		children.push(node("Choice", "matching_" + field, rect(stacked ? 0 : 132, y + (stacked ? 24 : 0), stacked ? width : width - 132, 36), {
+			label: tr(title),
+			placeholder: tr(empty),
+			editable: true,
+			value: record[field] || "",
+			options: [{
+				value: "",
+				label: tr(empty)
+			}, ...options.map((option) => typeof option === "string" ? {
+				value: option,
+				label: option
+			} : option)],
+			enabled: enabled && !record.locked,
+			action: {
+				type: "field",
+				field
+			}
+		}));
+		y += stacked ? 70 : 46;
+	}
+	children.push(label("matchingExampleLabel", rect(0, y, width, 18), tr("Test on filename"), {
+		fontRole: "secondary",
+		color: "secondaryText"
+	}));
+	y += 24;
+	const testBelow = width < 316;
+	children.push(node("Field", "matchingExample", rect(0, y, testBelow ? width : width - 94, 36), {
+		label: tr("Test on filename"),
+		placeholder: "shot.001.exr",
+		text: model.example || "",
+		action: { type: "example" },
+		keys: { Enter: { type: "test" } },
+		enabled: !model.busy
+	}));
+	children.push(button("matchingTest", rect(testBelow ? Math.max(0, width - 84) : width - 84, y + (testBelow ? 44 : 0), 84, 36), tr("Test"), "science", { type: "test" }, enabled));
+	y += testBelow ? 90 : 46;
+	for (const [id, text, error] of [[
+		"matchingTestResult",
+		model.result,
+		model.result === tr("No match")
+	], [
+		"matchingTemplateError",
+		model.error,
+		true
+	]]) {
+		if (!text) continue;
+		const height = Math.max(20, captionHeight(text, width));
+		children.push(label(id, rect(0, y, width, height), text, {
+			fontRole: "secondary",
+			wrap: true,
+			color: error ? "error" : "secondaryText",
+			role: error ? "alert" : "status"
+		}));
+		y += height + 10;
+	}
+	return {
+		nodes: children,
+		height: y
+	};
+}
+function row(model, record, width, language) {
+	const tr = (text) => translate(text, language), titleWidth = Math.max(0, width - 98), index = record.priority;
+	return { nodes: [node("Box", "matchingTemplateDelegate", rect(0, 0, width, 64), { children: [node("Action", "matchingTemplateSelect_" + record.templateId, rect(0, 0, width, 64), {
+		text: record.pattern,
+		selected: !!record.selected,
+		normalColor: "surfaceContainerHigh",
+		selectedColor: "secondaryContainer",
+		radius: 12,
+		action: {
+			type: "select",
+			index
+		},
+		keys: {
+			ArrowUp: {
+				type: "select",
+				index: Math.max(0, index - 1),
+				focus: true
+			},
+			ArrowDown: {
+				type: "select",
+				index: Math.min(model.count - 1, index + 1),
+				focus: true
+			},
+			Home: {
+				type: "select",
+				index: 0,
+				focus: true
+			},
+			End: {
+				type: "select",
+				index: model.count - 1,
+				focus: true
+			}
+		},
+		children: [
+			label("matchingPriority_" + record.templateId, rect(55, 0, 12, 64), String(index + 1), {
+				fontRole: "secondary",
+				color: "disabledText",
+				align: "center"
+			}),
+			label("matchingPattern_" + record.templateId, rect(71, 6, titleWidth, 20), record.pattern, {
+				weight: 600,
+				elideMiddle: true,
+				color: record.validationError ? "error" : "primaryText"
+			}),
+			label("matchingPreview_" + record.templateId, rect(71, 27, titleWidth, 15), record.validationError || record.preview || "", {
+				fontRole: "secondary",
+				color: record.validationError ? "error" : "secondaryText"
+			}),
+			label("matchingType_" + record.templateId, rect(71, 44, titleWidth, 14), (record.matchingType || "") + (record.process ? " • " + record.process : "") + (record.context ? " / " + record.context : ""), {
+				fontRole: "caption",
+				color: "disabledText"
+			}),
+			node("Icon", "matchingLock_" + record.templateId, rect(width - 22, 24, 16, 16), {
+				icon: record.locked ? "lock" : "drag-handle",
+				color: "secondaryText"
+			})
+		]
+	}), node("CheckBox", "matchingEnabled_" + record.templateId, rect(8, 14, 36, 36), {
+		label: tr("Enable template"),
+		indicatorX: 6,
+		checked: !!record.templateEnabled,
+		enabled: !record.locked && !model.busy,
+		action: {
+			type: "enabled",
+			index
+		}
+	})] })] };
+}
 //#endregion
 //#region src/features/checkin/MatchingTemplates.vue
-var _hoisted_1 = { class: "matching-template-actions" };
-var _hoisted_2 = { class: "matching-template-rows" };
-var _hoisted_3 = { class: "matching-template-editor" };
-var _hoisted_4 = { class: "muted" };
-var _hoisted_5 = { class: "matching-template-mapping" };
-var _hoisted_6 = { class: "matching-template-test" };
-var _hoisted_7 = {
-	key: 1,
-	class: "error",
-	role: "alert"
-};
-var _hoisted_8 = { class: "muted" };
-var _hoisted_9 = { id: "matching-process-options" };
-var _hoisted_10 = ["value"];
-var _hoisted_11 = { id: "matching-context-options" };
-var _hoisted_12 = ["value"];
+var _hoisted_1 = ["aria-busy"];
 var _sfc_main = {
 	__name: "MatchingTemplates",
 	props: {
@@ -92,16 +326,32 @@ var _sfc_main = {
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const rows = ref(props.items.map((row) => ({ ...row }))), selectedIndex = ref(0), width = ref(440), example = ref(""), result = ref(""), matchedType = ref(""), error = ref(""), busy = ref(false);
+		const rows = ref(props.items.map((row) => ({ ...row }))), selectedIndex = ref(0), paneWidth = ref(0), editing = ref(false), viewport = ref({
+			width: 860,
+			height: 620
+		}), example = ref(""), result = ref(""), matchedType = ref(""), error = ref(""), busy = ref(false);
 		const selected = computed(() => rows.value[selectedIndex.value]);
-		const workspace = ref(null);
+		const workspace = ref(null), presenter = ref(null), menu = ref(null), menuAnchor = ref(null);
+		let observer;
 		onMounted(() => {
-			width.value = Math.max(300, workspace.value.clientWidth * .48);
+			observer = observeFrameSizes((entries) => {
+				const box = entries.at(-1).contentRect;
+				viewport.value = {
+					width: box.width,
+					height: box.height
+				};
+			});
+			observer.observe(workspace.value);
+		});
+		onBeforeUnmount(() => {
+			request++;
+			observer?.disconnect();
 		});
 		const initialPadding = props.padding;
 		const dirty = computed(() => props.padding !== initialPadding || JSON.stringify(rows.value.map(({ preview, matchingType, validationError, ...row }) => row)) !== JSON.stringify(props.items.map(({ preview, matchingType, validationError, ...row }) => row)));
 		let request = 0;
 		async function inspect(test = false) {
+			if (test && !selected.value) return false;
 			const id = ++request;
 			error.value = "";
 			result.value = "";
@@ -142,6 +392,7 @@ var _sfc_main = {
 		}
 		function select(index) {
 			selectedIndex.value = index;
+			editing.value = true;
 			result.value = "";
 			error.value = "";
 		}
@@ -157,6 +408,7 @@ var _sfc_main = {
 				locked: false
 			};
 			const index = duplicate ? selectedIndex.value + 1 : rows.value.length;
+			item.templateId = randomId();
 			rows.value.splice(index, 0, item);
 			select(index);
 			inspect();
@@ -168,7 +420,7 @@ var _sfc_main = {
 			select(target);
 		}
 		function remove() {
-			if (selected.value.locked) return;
+			if (!selected.value || selected.value.locked) return;
 			rows.value.splice(selectedIndex.value, 1);
 			select(Math.min(selectedIndex.value, rows.value.length - 1));
 		}
@@ -180,197 +432,99 @@ var _sfc_main = {
 		}
 		__expose({ close });
 		inspect();
+		const model = computed(() => ({
+			selected: selectedIndex.value,
+			record: selected.value || {},
+			count: rows.value.length,
+			busy: busy.value,
+			canAdd: rows.value.length < 32,
+			dirty: dirty.value,
+			example: example.value,
+			result: testResult(result.value, appearance.language, matchedType.value),
+			error: t(error.value),
+			processes: props.processes || [],
+			contexts: props.context ? [props.context] : [],
+			editing: editing.value,
+			paneWidth: paneWidth.value
+		}));
+		const presentedRows = computed(() => rows.value.map((row, index) => ({
+			...row,
+			templateId: row.templateId || String(index),
+			templateEnabled: row.enabled,
+			selected: index === selectedIndex.value,
+			priority: index
+		})));
+		const scene = computed(() => describe(model.value, viewport.value.width, viewport.value.height, appearance.language));
+		const describeRow = (list, record) => row(model.value, record, list.width - 16, appearance.language);
+		function dispatch(action, source) {
+			if (action.type === "select") {
+				selectedIndex.value = action.index;
+				result.value = error.value = "";
+				if (action.focus) {
+					const key = presentedRows.value[action.index].templateId;
+					nextTick(() => presenter.value.focusListRow("matchingTemplatesList", action.index, "matchingTemplateSelect_" + key));
+				} else editing.value = true;
+			} else if (action.type === "enabled") {
+				selectedIndex.value = action.index;
+				selected.value.enabled = action.value;
+				inspect();
+			} else if (action.type === "field") {
+				if (selected.value && !selected.value.locked) selected.value[action.field] = action.value;
+			} else if (action.type === "validate") inspect();
+			else if (action.type === "example") example.value = action.value;
+			else if (action.type === "test") inspect(true);
+			else if (action.type === "create") create();
+			else if (action.type === "duplicate") create(true);
+			else if (action.type === "move_up") move(-1);
+			else if (action.type === "move_down") move(1);
+			else if (action.type === "delete") remove();
+			else if (action.type === "save") save();
+			else if (action.type === "close") close();
+			else if (action.type === "splitter") paneWidth.value = action.value;
+			else if (action.type === "back") editing.value = false;
+			else if (action.type === "menu") {
+				menuAnchor.value = source;
+				if (menu.value.open) menu.value.close(true);
+				else menu.value.openAt({ target: source });
+			}
+		}
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("div", {
 				ref_key: "workspace",
 				ref: workspace,
-				class: "matching-templates-workspace"
-			}, [
-				createBaseVNode("section", {
-					class: "matching-template-list",
-					style: normalizeStyle({ "--template-width": width.value + "px" })
-				}, [createBaseVNode("header", null, [
-					createBaseVNode("strong", null, toDisplayString(unref(t)("Matching templates")), 1),
-					createVNode(_sfc_main$3, {
-						"icon-only": "",
-						label: "Add",
-						icon: "add",
-						disabled: rows.value.length >= 32,
-						onClick: _cache[0] || (_cache[0] = ($event) => create())
-					}, null, 8, ["disabled"]),
-					createBaseVNode("div", _hoisted_1, [
-						createVNode(_sfc_main$3, {
-							"icon-only": "",
-							label: "Duplicate",
-							icon: "copy",
-							disabled: rows.value.length >= 32,
-							onClick: _cache[1] || (_cache[1] = ($event) => create(true))
-						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$3, {
-							"icon-only": "",
-							label: "Move up",
-							icon: "MDI_ARROW_UP",
-							disabled: selectedIndex.value === 0,
-							onClick: _cache[2] || (_cache[2] = ($event) => move(-1))
-						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$3, {
-							"icon-only": "",
-							label: "Move down",
-							icon: "MDI_ARROW_DOWN",
-							disabled: selectedIndex.value === rows.value.length - 1,
-							onClick: _cache[3] || (_cache[3] = ($event) => move(1))
-						}, null, 8, ["disabled"]),
-						createVNode(_sfc_main$3, {
-							"icon-only": "",
-							label: "Delete",
-							icon: "delete",
-							disabled: selected.value?.locked,
-							onClick: remove
-						}, null, 8, ["disabled"])
-					]),
-					createVNode(_sfc_main$4, {
-						class: "matching-template-overflow",
-						label: "Template actions"
-					}, {
-						default: withCtx(() => [
-							createVNode(_sfc_main$3, {
-								label: "Duplicate",
-								icon: "copy",
-								onClick: _cache[4] || (_cache[4] = ($event) => create(true)),
-								disabled: rows.value.length >= 32
-							}, null, 8, ["disabled"]),
-							createVNode(_sfc_main$3, {
-								label: "Move up",
-								icon: "MDI_ARROW_UP",
-								disabled: selectedIndex.value === 0,
-								onClick: _cache[5] || (_cache[5] = ($event) => move(-1))
-							}, null, 8, ["disabled"]),
-							createVNode(_sfc_main$3, {
-								label: "Move down",
-								icon: "MDI_ARROW_DOWN",
-								disabled: selectedIndex.value === rows.value.length - 1,
-								onClick: _cache[6] || (_cache[6] = ($event) => move(1))
-							}, null, 8, ["disabled"]),
-							createVNode(_sfc_main$3, {
-								label: "Delete",
-								icon: "delete",
-								disabled: selected.value?.locked,
-								onClick: remove
-							}, null, 8, ["disabled"])
-						]),
-						_: 1
-					})
-				]), createBaseVNode("div", _hoisted_2, [(openBlock(true), createElementBlock(Fragment, null, renderList(rows.value, (row, index) => {
-					return openBlock(), createElementBlock("article", {
-						key: index,
-						class: normalizeClass({ selected: index === selectedIndex.value })
-					}, [
-						createVNode(_sfc_main$1, {
-							compact: "",
-							"hide-label": "",
-							label: "Enable template",
-							modelValue: row.enabled,
-							"onUpdate:modelValue": [($event) => row.enabled = $event, inspect],
-							disabled: row.locked
-						}, null, 8, [
-							"modelValue",
-							"onUpdate:modelValue",
-							"disabled"
-						]),
-						createBaseVNode("small", null, toDisplayString(index + 1), 1),
-						createVNode(_sfc_main$3, {
-							label: row.pattern,
-							onClick: ($event) => select(index)
-						}, {
-							default: withCtx(() => [
-								createBaseVNode("strong", null, toDisplayString(row.pattern), 1),
-								createBaseVNode("small", null, toDisplayString(row.validationError || row.preview || row.pattern), 1),
-								createBaseVNode("small", null, [
-									createTextVNode(toDisplayString(row.matchingType), 1),
-									row.process ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString(row.process), 1)], 64)) : createCommentVNode("", true),
-									row.context ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(" · " + toDisplayString(row.context), 1)], 64)) : createCommentVNode("", true)
-								])
-							]),
-							_: 2
-						}, 1032, ["label", "onClick"])
-					], 2);
-				}), 128))])], 4),
-				createVNode(_sfc_main$5, {
-					modelValue: width.value,
-					"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => width.value = $event),
-					min: 260,
-					max: 650,
-					label: "Templates pane width"
-				}, null, 8, ["modelValue"]),
-				createBaseVNode("section", _hoisted_3, [
-					createBaseVNode("strong", null, toDisplayString(unref(t)("Template properties")), 1),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Pattern")), 1), createVNode(_sfc_main$6, {
-						modelValue: selected.value.pattern,
-						"onUpdate:modelValue": _cache[8] || (_cache[8] = ($event) => selected.value.pattern = $event),
-						label: "Pattern",
-						disabled: selected.value.locked,
-						onChange: inspect
-					}, null, 8, ["modelValue", "disabled"])]),
-					createBaseVNode("small", _hoisted_4, toDisplayString(unref(t)("Preview: {preview} · Type: {type}", {
-						preview: selected.value.preview || selected.value.pattern,
-						type: selected.value.matchingType || "—"
-					})), 1),
-					createBaseVNode("div", _hoisted_5, [createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Process mapping")), 1), createVNode(_sfc_main$6, {
-						modelValue: selected.value.process,
-						"onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => selected.value.process = $event),
-						label: "Process mapping",
-						list: "matching-process-options",
-						placeholder: "All processes",
-						disabled: selected.value.locked
-					}, null, 8, ["modelValue", "disabled"])]), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Context mapping")), 1), createVNode(_sfc_main$6, {
-						modelValue: selected.value.context,
-						"onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => selected.value.context = $event),
-						label: "Context mapping",
-						list: "matching-context-options",
-						placeholder: "All contexts",
-						disabled: selected.value.locked
-					}, null, 8, ["modelValue", "disabled"])])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Test on filename")), 1), createBaseVNode("div", _hoisted_6, [createVNode(_sfc_main$6, {
-						modelValue: example.value,
-						"onUpdate:modelValue": _cache[11] || (_cache[11] = ($event) => example.value = $event),
-						label: "Test on filename",
-						placeholder: "shot.001.exr",
-						onKeydown: _cache[12] || (_cache[12] = withKeys(withModifiers(($event) => inspect(true), ["prevent"]), ["enter"]))
-					}, null, 8, ["modelValue"]), createVNode(_sfc_main$3, {
-						label: "Test",
-						icon: "search",
-						disabled: busy.value,
-						onClick: _cache[13] || (_cache[13] = ($event) => inspect(true))
-					}, null, 8, ["disabled"])])]),
-					result.value ? (openBlock(), createElementBlock("p", {
-						key: 0,
-						class: normalizeClass({ error: result.value === "No match" }),
-						role: "status"
-					}, toDisplayString(unref(t)(result.value, { type: matchedType.value })), 3)) : createCommentVNode("", true),
-					error.value ? (openBlock(), createElementBlock("p", _hoisted_7, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
-					createBaseVNode("footer", null, [
-						createBaseVNode("span", _hoisted_8, toDisplayString(dirty.value ? unref(t)("Unsaved changes") : ""), 1),
-						createVNode(_sfc_main$3, {
-							label: "Cancel",
-							onClick: close
-						}),
-						createVNode(_sfc_main$3, {
-							label: "Save",
-							icon: "save",
-							highlighted: "",
-							disabled: !dirty.value || busy.value,
-							onClick: save
-						}, null, 8, ["disabled"])
-					])
-				]),
-				createBaseVNode("datalist", _hoisted_9, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.processes || [], (process) => {
-					return openBlock(), createElementBlock("option", {
-						key: process.value,
-						value: process.value
-					}, null, 8, _hoisted_10);
+				class: "matching-templates-workspace",
+				"aria-busy": busy.value
+			}, [createVNode(_sfc_main$2, {
+				ref_key: "presenter",
+				ref: presenter,
+				scene: scene.value,
+				models: { templates: presentedRows.value },
+				"describe-row": describeRow,
+				onEvent: dispatch
+			}, null, 8, ["scene", "models"]), createVNode(_sfc_main$3, {
+				ref_key: "menu",
+				ref: menu,
+				"external-trigger": "",
+				overlay: "",
+				anchor: menuAnchor.value,
+				label: "Template actions"
+			}, {
+				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(actions(model.value), (action) => {
+					return openBlock(), createBlock(_sfc_main$1, {
+						key: action.command,
+						label: action.title,
+						icon: action.icon,
+						disabled: !action.enabled,
+						onClick: ($event) => dispatch({ type: action.command })
+					}, null, 8, [
+						"label",
+						"icon",
+						"disabled",
+						"onClick"
+					]);
 				}), 128))]),
-				createBaseVNode("datalist", _hoisted_11, [createBaseVNode("option", { value: __props.context }, null, 8, _hoisted_12)])
-			], 512);
+				_: 1
+			}, 8, ["anchor"])], 8, _hoisted_1);
 		};
 	}
 };

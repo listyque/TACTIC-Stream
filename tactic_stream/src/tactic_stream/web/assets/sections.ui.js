@@ -1,5 +1,5 @@
-import { W as metrics } from "./index.js";
-import { D as node, E as muted, O as rect, T as label, u as translate } from "./FrameView.js";
+import { K as metrics } from "./index.js";
+import { A as node, O as label, j as rect, k as muted, u as translate } from "./FrameView.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
 function fieldProperties(field, language, enabled) {
 	const title = field.dataLabel ? field.title : translate(field.title, language);

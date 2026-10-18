@@ -3,6 +3,17 @@
 Требования пользователя, зафиксированные с 2026-10-06. Готовность конкретных
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
+## B12 files and repository queues — delivered, 2026-10-18
+
+Stream 0.112.165 / Handler 0.6.0.116 connect File Workspace, check-in/ingest,
+Drop Plate, matching, Commit Queue, native Repository Sync, repository prompts
+and screenshot selection to independent shared descriptions. Existing file,
+request, revision, transfer and mutation owners remain native to each host.
+The browser remains the production inspection/admin interface; native local/DCC
+operations are declared capabilities. Source map, evidence and the resolved
+combined native timer-test regression are in [frame_files.md](docs/frame_files.md).
+The final gate passes 121 stages. This checkpoint **does not close B07**.
+
 ## B11 communication — 2026-10-18
 
 Stream 0.112.164 / Handler 0.6.0.115 share conversation/header/body/composer

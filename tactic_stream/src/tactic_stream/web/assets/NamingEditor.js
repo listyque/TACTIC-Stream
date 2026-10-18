@@ -1,7 +1,7 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
-import { D as t, O as appearance, rt as _plugin_vue_export_helper_default } from "./index.js";
-import { D as node, E as muted, O as rect, T as label, t as _sfc_main$1, u as translate, w as button } from "./FrameView.js";
+import { A as appearance, at as _plugin_vue_export_helper_default, k as t } from "./index.js";
+import { A as node, D as button, O as label, j as rect, k as muted, t as _sfc_main$1, u as translate } from "./FrameView.js";
 import { F as rpc } from "./CodeBlock.js";
 import { n as observeFrameSizes } from "./resize.js";
 import { n as sections } from "./sections.ui.js";

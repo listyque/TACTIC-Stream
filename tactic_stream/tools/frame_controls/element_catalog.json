@@ -213,7 +213,8 @@
       "vue": [
         "AppSelect",
         "StatusSelect",
-        "QuickFilterOptions"
+        "QuickFilterOptions",
+        "AppEditableSelect"
       ],
       "tokens": [
         "combo",
@@ -739,7 +740,8 @@
       ],
       "vue": [
         "WindowControls",
-        "MobilePage"
+        "MobilePage",
+        "AppDialog"
       ],
       "tokens": [
         "popup",
@@ -842,8 +844,8 @@
       "vue": [
         "ItemSurface",
         "NavigationRow",
-          "EditorListItem",
-          "VirtualCollection"
+        "EditorListItem",
+        "VirtualCollection"
       ],
       "tokens": [
         "list",
@@ -857,8 +859,8 @@
         "Одно / двухстрочная",
         "Tree indent / guide / disclosure",
         "Checkbox row",
-          "Virtualized",
-          "Variable-height collections and tiles; retained offscreen focus (tools/frame_search)",
+        "Virtualized",
+        "Variable-height collections and tiles; retained offscreen focus (tools/frame_search)",
         "Loading / empty",
         "Keyboard selection",
         "Navigation drawer: mouse/touch, off-screen keys, focus and reserved scrollbar gutter"
@@ -1271,11 +1273,9 @@
       "AdvancedSearchView",
       "AttachmentComposerControls",
       "AttachmentStagingPanel",
+      "CheckinDialogs",
       "CheckinOptionsPage",
       "CollaborationInitializationState",
-      "CommitQueueActionMenus",
-      "CommitQueueOperationSummary",
-      "CommitQueueProgress",
       "CommitQueueView",
       "CommitWorkspaceView",
       "CommunicationView",
@@ -1319,13 +1319,13 @@
       "FileWorkspaceStreamGraph",
       "FileWorkspaceStreams",
       "FileWorkspaceSubmitDialog",
-      "FileWorkspaceSubmitFiles",
       "FileWorkspaceTargetDialog",
       "FileWorkspaceTreeRow",
       "FileWorkspaceView",
       "HandlerServerView",
       "HelpView",
       "IngestConflictDialog",
+      "IngestFileList",
       "IngestFilesView",
       "IngestRuleEditor",
       "ItemCheckinDialogs",
@@ -1360,6 +1360,7 @@
       "ProjectEditorView",
       "ProjectTemplatesView",
       "ProjectWizardView",
+      "QueueView",
       "QuickFilterEditorView",
       "RepositoryEditorView",
       "RepositorySetupPrompt",
@@ -1374,6 +1375,7 @@
       "SObjectSnapshotTree",
       "SObjectValueEditor",
       "ScreenshotMakerView",
+      "ScreenshotView",
       "ScriptEditorView",
       "ScriptShelfBar",
       "ScriptShelfEditorView",
@@ -1395,6 +1397,8 @@
       "SnapshotBrowserOptionsMenu",
       "SnapshotBrowserToolbar",
       "SnapshotSummary",
+      "SyncEditorView",
+      "SyncQueueView",
       "TableViewPresetMenu",
       "TacticStructuredTableCell",
       "TacticTableActionCell",
@@ -1431,9 +1435,33 @@
       "WorkHoursSummary",
       "WorkReportsView",
       "WorkspaceCard",
+      "WorkspaceChangeBranch",
+      "WorkspaceChangeFile",
+      "WorkspaceDetails",
+      "WorkspaceDialogs",
       "WorkspaceFileDropTarget",
+      "WorkspaceFilters",
+      "WorkspaceFooter",
       "WorkspaceLayoutPresetMenuSection",
-      "WorkspaceResultItem"
+      "WorkspaceResultItem",
+      "WorkspaceToolbar",
+      "WorkspaceTreePane",
+      "WorkspaceView"
+    ],
+    "vue": [
+      "QueueDialogs",
+      "QueuePreview",
+      "QueueWorkspace",
+      "StreamGraph",
+      "StreamGraphEdges",
+      "WorkspaceCatalog",
+      "WorkspaceInspectorView",
+      "WorkspaceLogEntries",
+      "WorkspaceLogMessage",
+      "WorkspaceTable",
+      "WorkspaceToolbar",
+      "WorkspaceTreePaint",
+      "WorkspaceTreePane"
     ]
   },
   "levelOverrides": {

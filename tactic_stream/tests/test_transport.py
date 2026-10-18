@@ -4871,6 +4871,8 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
         snapshots = api.dispatch('query',(auth,'sthpw/snapshot'),dict(filters=[('search_type',kind + '?project=one'),('search_code','QUEUE001'),('version','>=',1)]))
         self.assertGreaterEqual(len(snapshots),2)
         self.assertTrue(any(row['description'] == 'Prepared in Commit Queue' for row in snapshots))
+        self.assertEqual(len([row for row in snapshots if row['context']=='publish/unknown']),1,
+                         'The lost response must leave exactly one published snapshot')
 
     def test_object_context_menu_in_chromium(self):
         from tactic_stream.server.api import Api
