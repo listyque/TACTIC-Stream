@@ -17,8 +17,9 @@ Preparation is delivered; verified parts of controls and shell stay delivered.
 **B01–B06 and B08–B14 are delivered** at the checkpoints below. **B07 remains incomplete**; its gaps are not absorbed by later batches.
 
 **B07 is in progress.** Table geometry/paint, menus, typed inline editors and the
-widget catalogue are shared; 37 classes have typed adapters. The shipped/CG
-inventory still has 40 usable classes without complete workflows. Nested tables,
+widget catalogue are shared; L02 brings the catalogue to 41 classes / 98 aliases.
+The shipped/CG inventory has 38 adapted / 36 pending classes. L02 reuses existing
+note/task owners and a shared formatted-message cell; limitations remain explicit. Nested tables,
 specialized action/forms and schedule/work-hour cells remain in B07. See
 `docs/frame_table.md` and `tools/frame_table/output/index.html`; this checkpoint
 does not close B07. B08 was completed separately at the user's explicit request.

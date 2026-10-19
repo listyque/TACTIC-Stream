@@ -7,9 +7,9 @@ order: 94
 
 [Table View / Columns Editor](table_view.en.md) · [B07](table_widgets_b07.en.md)
 
-Current as of 2026-10-19: the portable catalogue has **37 classes / 87 aliases**.
-A scan of 239 shipped XML/CG entries without working databases finds 34 referenced
-adapted classes, **40 pending**, 27 excluded `pyasm.prod` classes and 3 explicitly
+Current as of 2026-10-19: the portable catalogue has **41 classes / 98 aliases**.
+A scan of 239 shipped XML/CG entries without working databases finds 38 referenced
+adapted classes, **36 pending**, 27 excluded `pyasm.prod` classes and 3 explicitly
 unfinished originals. An adapter does not certify all original options/actions.
 
 Next: relationships/nested rows → embedded notes/messages/tasks → configured
@@ -21,6 +21,8 @@ captures, permission checks and actual operations.
 current working checklist.** See B07 Help above for the current checkpoint.
 
 > Widgets grouped by purpose, readiness and source condition. Migration starts with a reproducible scenario.
+
+L02 adapters reuse existing panels; see B07 above for XML and explicit limits.
 
 ## Migration rule
 

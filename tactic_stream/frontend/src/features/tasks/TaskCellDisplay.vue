@@ -5,12 +5,20 @@ import ItemPreview from '../../controls/ItemPreview.vue';
 import { observeFrameSizes, frameContentWidth } from '../../frame/resize.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/tasks/cells.ui.mjs';
 
-const props = defineProps({ model: Object, user: Object });
+const props = defineProps({
+  model: Object,
+  user: Object,
+  height: { type: Number, default: 29 }
+});
 const host = ref(null),
   width = ref(0),
   hovered = ref(false);
 const scene = computed(() =>
-  UI.choice({ ...props.model, hovered: hovered.value }, width.value, 29)
+  UI.choice(
+    { ...props.model, hovered: hovered.value },
+    width.value,
+    props.height
+  )
 );
 const avatar = markRaw(ItemPreview);
 const views = computed(() => ({
@@ -20,10 +28,12 @@ const views = computed(() => ({
       source: props.user?.avatarUrl,
       fallbackText:
         props.user?.initials ||
-        UI.initials(props.model.avatarLabel || props.model.text),
+        (props.model.avatarLabel === ''
+          ? ''
+          : UI.initials(props.model.avatarLabel ?? props.model.text)),
       fallbackIcon: 'user',
       accent: props.user?.avatarColor,
-      previewSize: 22,
+      previewSize: Math.max(0, Math.min(22, props.height - 4)),
       round: true,
       outlined: true
     }
@@ -44,6 +54,7 @@ onBeforeUnmount(() => observer?.disconnect());
   <span
     ref="host"
     class="task-cell-display"
+    :style="{ height: height + 'px' }"
     @pointerenter="hovered = true"
     @pointerleave="hovered = false"
     ><FrameView :scene="scene" :views="views"

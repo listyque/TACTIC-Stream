@@ -1,13 +1,216 @@
 [
-  {"name":"fields","kind":"fields","cell":{"entries":[{"title":"Database","value":"cg_test"},{"title":"Exists","value":"Yes","translate":true},{"title":"Version","value":"4.8"},{"title":"Owner","value":"Очень длинное имя пользователя"}]}},
-  {"name":"summary","kind":"task_summary","cell":{"summaryMode":"minimal","tasks":[{"taskCode":"T01","process":"model","status":"In progress","statusColor":"#d99846"},{"taskCode":"T02","process":"rig","status":"Review","statusColor":"#7b84ce"},{"taskCode":"T03","process":"publish","status":"Done","statusColor":"#5b9c75"},{"taskCode":"T04","process":"cache","status":"Waiting","statusColor":"#ad777e"}]}},
-  {"name":"groups","kind":"group_completion","cell":{"groups":[{"text":"MODEL: 66.7%","completion":66.7},{"text":"RIG: 0.0%","completion":0},{"text":"PUBLISH: 100.0%","completion":100},{"text":"CACHE: 25.0%","completion":25}]}},
-  {"name":"completion","kind":"completion","cell":{"text":"66.7%","completion":66.7,"percent":66.7}},
-  {"name":"locked","kind":"locked","cell":{"text":"Locked","checked":true}},
-  {"name":"check","kind":"check","cell":{"text":"true","checked":true}},
-  {"name":"boolean","kind":"boolean","cell":{"text":"false","checked":false}},
-  {"name":"good","kind":"status_flag","cell":{"text":"Good","good":true}},
-  {"name":"missing","kind":"status_flag","cell":{"text":"Missing","good":false}},
-  {"name":"due","kind":"text","cell":{"text":"1.2 hours late","label":"{hours} hours late","parameters":{"hours":"1.2"},"urgency":"critical"}},
-  {"name":"error","kind":"text","cell":{"text":"","error":"Invalid group definition"}}
+  {
+    "name": "fields",
+    "kind": "fields",
+    "cell": {
+      "entries": [
+        {
+          "title": "Database",
+          "value": "cg_test"
+        },
+        {
+          "title": "Exists",
+          "value": "Yes",
+          "translate": true
+        },
+        {
+          "title": "Version",
+          "value": "4.8"
+        },
+        {
+          "title": "Owner",
+          "value": "Очень длинное имя пользователя"
+        }
+      ]
+    }
+  },
+  {
+    "name": "summary",
+    "kind": "task_summary",
+    "cell": {
+      "summaryMode": "minimal",
+      "tasks": [
+        {
+          "taskCode": "T01",
+          "process": "model",
+          "status": "In progress",
+          "statusColor": "#d99846"
+        },
+        {
+          "taskCode": "T02",
+          "process": "rig",
+          "status": "Review",
+          "statusColor": "#7b84ce"
+        },
+        {
+          "taskCode": "T03",
+          "process": "publish",
+          "status": "Done",
+          "statusColor": "#5b9c75"
+        },
+        {
+          "taskCode": "T04",
+          "process": "cache",
+          "status": "Waiting",
+          "statusColor": "#ad777e"
+        }
+      ]
+    }
+  },
+  {
+    "name": "groups",
+    "kind": "group_completion",
+    "cell": {
+      "groups": [
+        {
+          "text": "MODEL: 66.7%",
+          "completion": 66.7
+        },
+        {
+          "text": "RIG: 0.0%",
+          "completion": 0
+        },
+        {
+          "text": "PUBLISH: 100.0%",
+          "completion": 100
+        },
+        {
+          "text": "CACHE: 25.0%",
+          "completion": 25
+        }
+      ]
+    }
+  },
+  {
+    "name": "completion",
+    "kind": "completion",
+    "cell": {
+      "text": "66.7%",
+      "completion": 66.7,
+      "percent": 66.7
+    }
+  },
+  {
+    "name": "locked",
+    "kind": "locked",
+    "cell": {
+      "text": "Locked",
+      "checked": true
+    }
+  },
+  {
+    "name": "check",
+    "kind": "check",
+    "cell": {
+      "text": "true",
+      "checked": true
+    }
+  },
+  {
+    "name": "boolean",
+    "kind": "boolean",
+    "cell": {
+      "text": "false",
+      "checked": false
+    }
+  },
+  {
+    "name": "good",
+    "kind": "status_flag",
+    "cell": {
+      "text": "Good",
+      "good": true
+    }
+  },
+  {
+    "name": "missing",
+    "kind": "status_flag",
+    "cell": {
+      "text": "Missing",
+      "good": false
+    }
+  },
+  {
+    "name": "due",
+    "kind": "text",
+    "cell": {
+      "text": "1.2 hours late",
+      "label": "{hours} hours late",
+      "parameters": {
+        "hours": "1.2"
+      },
+      "urgency": "critical"
+    }
+  },
+  {
+    "name": "error",
+    "kind": "text",
+    "cell": {
+      "text": "",
+      "error": "Invalid group definition"
+    }
+  },
+  {
+    "name": "message",
+    "kind": "message",
+    "cell": {
+      "text": "Review the robot arm",
+      "author": "artist",
+      "messageLabel": "Note added",
+      "progress": null
+    }
+  },
+  {
+    "name": "message_progress",
+    "kind": "message",
+    "cell": {
+      "text": "Uploading files",
+      "author": "admin",
+      "messageLabel": "",
+      "progress": 37
+    }
+  },
+  {
+    "name": "legacy_context",
+    "kind": "text",
+    "cell": {
+      "text": "model",
+      "tooltip": "model/high/res"
+    }
+  },
+  {
+    "name": "legacy_tasks",
+    "kind": "tasks",
+    "cell": {
+      "tasks": [
+        {
+          "taskCode": "L02_TASK",
+          "process": "model",
+          "context": "model",
+          "status": "In progress",
+          "assigned": "admin",
+          "editAssigned": false,
+          "editDates": false,
+          "simpleDates": true,
+          "bidStart": "2030-01-01",
+          "bidEnd": "2030-01-03"
+        }
+      ]
+    }
+  },
+  {
+    "name": "legacy_notes",
+    "kind": "notes",
+    "cell": {
+      "search_key": "cg/assets?project=cg&code=ARM",
+      "count": 0,
+      "processes": [
+        {
+          "process": "review",
+          "label": "Review phase",
+          "count": 0
+        }
+      ]
+    }
+  }
 ]

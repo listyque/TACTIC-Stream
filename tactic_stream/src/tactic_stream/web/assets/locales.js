@@ -1374,7 +1374,16 @@ var en_default = {
 	"Do not match (slow)": "Do not match (slow)",
 	"The schedule could not be staged.": "The schedule could not be staged.",
 	"The task changed while this editor was open. Close and reopen the schedule.": "The task changed while this editor was open. Close and reopen the schedule.",
-	"Authentication required": "Authentication required"
+	"Authentication required": "Authentication required",
+	"Legacy discussion": "Legacy discussion",
+	"Object tasks": "Object tasks",
+	"Task context": "Task context",
+	"Formatted message": "Formatted message",
+	"Note added": "Note added",
+	"Task modified": "Task modified",
+	"Files checked in": "Files checked in",
+	"Object modified": "Object modified",
+	Retired: "Retired"
 };
 var ru_default = {
 	"Open event details": "Открыть подробности события",
@@ -6179,7 +6188,15 @@ var ru_default = {
 	"current project": "текущий проект",
 	"Initialize server features?": "Инициализировать функции на сервере?",
 	"Initialize the collaboration schema before starting conversations.": "Инициализируйте общую схему перед началом диалогов.",
-	"Initialize the collaboration schema before writing project documentation.": "Инициализируйте общую схему перед созданием проектной документации."
+	"Initialize the collaboration schema before writing project documentation.": "Инициализируйте общую схему перед созданием проектной документации.",
+	"Legacy discussion": "Обсуждение (legacy)",
+	"Object tasks": "Задачи объекта",
+	"Task context": "Контекст задачи",
+	"Formatted message": "Форматированное сообщение",
+	"Note added": "Добавлена заметка",
+	"Task modified": "Задача изменена",
+	"Files checked in": "Файлы опубликованы",
+	"Object modified": "Объект изменён"
 };
 //#endregion
 export { en_default as n, ru_default as t };

@@ -4801,5 +4801,13 @@
   "current project": "текущий проект",
   "Initialize server features?": "Инициализировать функции на сервере?",
   "Initialize the collaboration schema before starting conversations.": "Инициализируйте общую схему перед началом диалогов.",
-  "Initialize the collaboration schema before writing project documentation.": "Инициализируйте общую схему перед созданием проектной документации."
+  "Initialize the collaboration schema before writing project documentation.": "Инициализируйте общую схему перед созданием проектной документации.",
+  "Legacy discussion": "Обсуждение (legacy)",
+  "Object tasks": "Задачи объекта",
+  "Task context": "Контекст задачи",
+  "Formatted message": "Форматированное сообщение",
+  "Note added": "Добавлена заметка",
+  "Task modified": "Задача изменена",
+  "Files checked in": "Файлы опубликованы",
+  "Object modified": "Объект изменён"
 }

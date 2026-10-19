@@ -94,7 +94,7 @@ def main():
         "tools/frame_configuration/*.{vue,js,html,mjs}",
         "tools/frame_search/*.{vue,js,html,mjs}",
         "frontend/tests/frame_search*.mjs",
-        "frontend/src/features/interface/{TableView,TableCell,TableInlineEditor,TaskCell,TaskCards,TaskSummaryCell,ValueFieldsCell,GroupedCompletionCell,CompletionCell}.vue",
+        "frontend/src/features/interface/{TableView,TableCell,TableInlineEditor,TaskCell,TaskCards,TaskSummaryCell,ValueFieldsCell,MessageTableCell,GroupedCompletionCell,CompletionCell}.vue",
         "tools/frame_table/*.{vue,html,mjs}",
         "tools/frame_tasks/*.{vue,html,mjs}",
         "tools/frame_schedule/*.{vue,html,mjs}",

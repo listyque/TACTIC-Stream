@@ -107,6 +107,73 @@ try {
     ),
     ['2031-04-02']
   );
+  const embedded = native.captures.filter(
+    (row) => row.fixture.screen === 'cell'
+  );
+  for (const name of ['legacy_tasks', 'legacy_notes', 'message_progress']) {
+    const fixture = structuredClone(
+      embedded.find((row) => row.fixture.value.name === name).fixture
+    );
+    fixture.height = 90;
+    if (name === 'message_progress')
+      fixture.value.cell.text = '<img src=x onerror="window.unexpected=true">';
+    await page.evaluate(
+      ({ fixture, data }) => window.tableFixture.show(fixture, data),
+      { fixture, data: native.data }
+    );
+    await page.evaluate(
+      () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve))
+        )
+    );
+    await page.evaluate(() => window.tableFixture.events.value.splice(0));
+    if (name === 'legacy_tasks') {
+      assert(
+        await page
+          .getByRole('button', { name: 'Edit task assignee', exact: true })
+          .isDisabled()
+      );
+      assert(
+        await page
+          .getByRole('button', { name: 'Edit task dates', exact: true })
+          .isDisabled()
+      );
+      await page
+        .getByRole('button', { name: 'Task Inspector', exact: true })
+        .click();
+      const events = await page.evaluate(
+        () => window.tableFixture.events.value
+      );
+      assert.equal(events.length, 1);
+      assert.equal(events[0].type, 'tasks');
+      assert.equal(events[0].task.taskCode, 'L02_TASK');
+    } else if (name === 'legacy_notes') {
+      await page
+        .getByRole('button', { name: 'Review phase (0)', exact: true })
+        .click();
+      const events = await page.evaluate(
+        () => window.tableFixture.events.value
+      );
+      assert.equal(events.length, 1);
+      assert.equal(events[0].process, 'review');
+      assert.equal(events[0].cell.search_key, 'cg/assets?project=cg&code=ARM');
+    } else {
+      assert.equal(await page.locator('.table-message-cell img').count(), 0);
+      assert.equal(await page.evaluate(() => window.unexpected), undefined);
+      assert.equal(
+        await page.locator('[data-frame="tableMessageBody"]').innerText(),
+        fixture.value.cell.text
+      );
+      const track = await page
+        .locator('[data-frame="tableMessageTrack"]')
+        .boundingBox();
+      const fill = await page
+        .locator('[data-frame="tableMessageProgress"]')
+        .boundingBox();
+      assert(Math.abs(fill.width / track.width - 0.37) < 0.001);
+    }
+  }
   for (const record of native.captures.filter((item) => !item.original)) {
     const fixture = record.fixture;
     await page.setViewportSize({
@@ -153,6 +220,16 @@ try {
       cases.push({ image, fixture, ...compared });
     } else if (fixture.screen === 'cell') {
       const selector = '.cell-example';
+      if (fixture.value.name === 'legacy_tasks') {
+        assert(
+          await page
+            .locator('.task-card-dates > span')
+            .evaluateAll((labels) =>
+              labels.every((label) => label.scrollWidth <= label.clientWidth)
+            ),
+          'Short task dates must fit their card without truncation'
+        );
+      }
       const actual = await surface(page, selector);
       const compared = await compareSurface(
         page,

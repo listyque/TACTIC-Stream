@@ -9,7 +9,7 @@ __all__ = ['WidgetConfigException', 'WidgetConfig', 'WidgetConfigView',
            'BaseInputWdg', 'TextWdg', 'TextAreaWdg', 'CheckboxWdg', 'SelectWdg', 'MultiSelectWdg', 'UploadWdg', 'HiddenWdg', 'InputException',
            'BaseTableElementWdg', 'SimpleTableElementWdg', 'ArrayTableElementWdg', 'XmlWdg', 'ThumbWdg', 'CheckboxColWdg', 'SearchTypeElementWdg']
 
-__all__.append("TaskCompletionWdg")
+__all__ += ["TaskCompletionWdg", "DiscussionWdg", "SObjectTaskTableElement", "TaskParentSpacingTableElement"]
 
 
 def __getattr__(name):
@@ -17,4 +17,10 @@ def __getattr__(name):
     if name == 'TaskCompletionWdg':
         from .statistic_wdg import TaskCompletionWdg
         return TaskCompletionWdg
+    if name == 'DiscussionWdg':
+        from .discussion_wdg import DiscussionWdg
+        return DiscussionWdg
+    if name in ('SObjectTaskTableElement', 'TaskParentSpacingTableElement'):
+        from . import task_wdg
+        return getattr(task_wdg, name)
     raise AttributeError(name)

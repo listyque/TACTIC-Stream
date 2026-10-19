@@ -1,8 +1,8 @@
 # Tactic Frame B07: Table View checkpoint
 
 B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the widget-config census still contains 40 usable classes without a complete
-native/browser implementation. A registered adapter is not proof that every old
+the widget-config census still contains 36 classes without typed adapters; L02 adds four
+class adapters with the explicit limits below. A registered adapter is not proof that every old
 display option or embedded action works.
 
 | Portable module | Responsibility |
@@ -12,7 +12,7 @@ display option or embedded action works.
 | `features/table/menus.ui.mjs` | Column and saved-view actions and availability |
 | `features/table/cells.ui.mjs` | Typed labels, safe links, task-card geometry and compact summary/field scenes |
 | `features/table/inline.ui.mjs` | Typed value editor body, explicit-save and uncertain-write states |
-| `features/table/widgets.json` | 37 server classes, 87 named aliases, editor choices and native adapter categories |
+| `features/table/widgets.json` | 41 server classes, 98 named aliases, editor choices and native adapter categories |
 
 Stream ships these under `src/tactic_stream/shared_ui`; Handler ships its own
 copy under `thlib/ui/qml/tactic_frame`. The server still imports an explicit
@@ -61,9 +61,23 @@ The archived checkpoint already includes previous Frame migrations; it is not
 the original application before Frame.
 
 The matrix contains three themes, light/dark, EN/RU, table widths 360/800/1496,
-seven inline input modes and eleven typed/error cell examples. GUI fixtures
+seven inline input modes and sixteen typed/error cell examples. GUI fixtures
 exercise production presenters; disposable HTTP/XML-RPC tests separately verify
 queries and actual mutation effects. Qt/Chromium font rasterization can differ.
+
+The L02 checkpoint adds five backend/original-source/XML-RPC tests and three
+native input cases (14 tests in `tests.test_frame_table`). Fresh comparisons
+cover 312 paired states plus 36 archived-reference captures. EN/RU B07 Help
+ships four paired cell examples and their XML definitions in both products.
+The native SQLite integration checks note/task writes, stale revisions,
+permissions, rollback, empty configured branches and foreign-project isolation.
+PostgreSQL production data and physical touch hardware were not exercised here.
+
+The broader Search regression run passed 47 of 48 tests. Its existing
+`test_instance_children_reject_ambiguous_self_and_cross_resource_links` failure
+expects “Self-instance children” but receives “Unknown column or SQL expression:
+entity_code”; the same failure was reproduced using the unchanged HEAD
+relationship method. L02 does not change that self-instance contract.
 
 The old `handler_table.mjs` workflow now writes into
 `tools/frame_table/output/legacy-driver`, preserving historical reports.
@@ -73,7 +87,7 @@ The old `handler_table.mjs` workflow now writes into
 The executable inventory scans every shipped widget XML and CG template entry;
 optional local databases use SQLite read-only mode. It records exact references,
 deduplicates aliases and does not execute scripts. Current shipped/template
-census: 239 entries, 34 referenced adapted classes, 40 pending classes,
+census: 239 entries, 38 referenced adapted classes, 36 pending classes,
 27 previously excluded `pyasm.prod` classes and 3 explicitly unfinished originals.
 The catalogue also includes three adapted classes not mentioned by this census.
 An older optional local-database census covered 449 entries with the same
@@ -96,8 +110,8 @@ hardware and all historical widget options have not been certified.
 ## Active legacy checklist — 2026-10-19
 
 The current delivery order is [L01–L12](../UI_ARCHITECTURE.md#legacy-plan).
-L01–L07 below partition all **40 pending canonical classes exactly once** from
-239 shipped/CG entries. Every box is still open. These are required config
+L01–L07 below partition the original **40 canonical classes exactly once** from
+239 shipped/CG entries. L02 has four registered adapters; the other 36 boxes are open. These are required config
 references, including definitions under `config/.../prod`; excluding `pyasm.prod`
 does not exclude other namespaces in that directory. Full source paths, options
 and use sites are reproducible with `inventory.py`; generated output stays ignored.
@@ -122,14 +136,33 @@ reference was discovered. Add newly confirmed usable dependencies to this ledger
 Раскрыть настроенную дочернюю таблицу, добавить/связать объект, свернуть и восстановить состояние; проверить фильтры, направление связи, права, пустой результат, группировку и итог. Вложенная область имеет собственный query/selection scope; переход в общий Inspector не заменяет её.
 
 <a id="l02"></a>
-### L02 — Встроенные заметки, сообщения и задачи (4)
+### L02 — Legacy-ячейки для готовых заметок, сообщений и задач (4 адаптера)
 
-- [ ] `pyasm.widget.discussion_wdg.DiscussionWdg`
-- [ ] `tactic.ui.app.message_wdg.MessageTableElementWdg`
-- [ ] `pyasm.widget.task_wdg.SObjectTaskTableElement`
-- [ ] `pyasm.widget.task_wdg.TaskParentSpacingTableElement`
+- [x] `pyasm.widget.discussion_wdg.DiscussionWdg`
+- [x] `tactic.ui.app.message_wdg.MessageTableElementWdg`
+- [x] `pyasm.widget.task_wdg.SObjectTaskTableElement`
+- [x] `pyasm.widget.task_wdg.TaskParentSpacingTableElement`
 
 Открыть ветку из ячейки, прочитать/добавить заметку или сообщение, изменить связанную задачу и увидеть обновлённые счётчики без потери положения таблицы. Проверить родителя, процесс, приватность и вложенные формы; использовать существующие Messages/Inspector/task owners.
+
+L02 checkpoint: Stream 0.112.169 / Handler 0.6.0.119. These boxes mean
+configured adapters and the tested base workflows, not every original option.
+The old Discussion uses existing note counts/Inspector and setting/append_setting
+process choices (including zero-count choices); Task uses existing cards, drafts
+and editors, with supe/bid_edit controlling inline assignment/dates. simple_date
+selects compact month-day dates; the old HTML CalendarBar is replaced by the
+current native/Frame date presentation. TaskParentSpacing shows the original
+context prefix. Messages format plain/chat/note/task/snapshot/progress payloads
+as plain text; the old HTML preview is not recreated.
+
+`include_submission=true` is explicitly rejected because Submission belongs to
+the agreed excluded pyasm.prod subsystem. Slash subcontexts in legacy setting
+choices and CGI filter state stay explicitly unsupported; use the modern
+Discussion context option for that separate scenario. Display flags are not ACL:
+server permissions/revisions remain authoritative. No second Messages or Tasks
+application is introduced. Reproduce with `test_table_embedded_widgets.py`, the
+unchanged native transport checks and the existing Qt/Vue table capture harness;
+examples are also in EN/RU Help → Table View: B07.
 
 <a id="l03"></a>
 ### L03 — Настраиваемые действия и layout (3)

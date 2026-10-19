@@ -10,6 +10,7 @@ import ValueFieldsCell from './ValueFieldsCell.vue';
 import CompletionCell from './CompletionCell.vue';
 import GroupedCompletionCell from './GroupedCompletionCell.vue';
 import StructuredCell from './StructuredCell.vue';
+import MessageTableCell from './MessageTableCell.vue';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
 import * as Cells from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
@@ -27,7 +28,8 @@ export default {
     ValueFieldsCell,
     CompletionCell,
     GroupedCompletionCell,
-    StructuredCell
+    StructuredCell,
+    MessageTableCell
   },
   props: {
     element: Object,
@@ -183,6 +185,11 @@ export default {
   <GroupedCompletionCell
     v-else-if="element.cell?.kind === 'group_completion'"
     :groups="cell?.groups || []"
+  />
+  <MessageTableCell
+    v-else-if="element.cell?.kind === 'message'"
+    :cell="cell"
+    :height="height - 8"
   />
   <ValueFieldsCell
     v-else-if="element.cell?.kind === 'fields'"

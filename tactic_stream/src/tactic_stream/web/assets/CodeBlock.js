@@ -3984,6 +3984,15 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Legacy discussion": "Обсуждение (legacy)",
+	"Object tasks": "Задачи объекта",
+	"Task context": "Контекст задачи",
+	"Formatted message": "Форматированное сообщение",
+	"Note added": "Добавлена заметка",
+	"Task modified": "Задача изменена",
+	"Files checked in": "Файлы опубликованы",
+	"Object modified": "Объект изменён",
+	Retired: "Архивные",
 	"Adds the text column metadata to sthpw/message and sthpw/message_log. It stores conversation summaries, replies, reactions, pins, forwarding and delivery state.": "Добавит текстовую колонку metadata в sthpw/message и sthpw/message_log. В ней хранятся сводки диалогов, ответы, реакции, закрепления, пересылка и состояние доставки.",
 	"Creates PROJECT/th_knowledge_article when it is missing, then adds kind, parent_code, content, content_text, sort_order, updated_by and linked_skeys.": "Создаст PROJECT/th_knowledge_article, если его нет, затем добавит kind, parent_code, content, content_text, sort_order, updated_by и linked_skeys.",
 	"Existing columns and data are kept. Nothing is deleted. The schema changes affect every user of this server and project.": "Существующие столбцы и данные сохраняются. Ничего не удаляется. Изменения схемы затронут всех пользователей этого сервера и проекта.",

@@ -76,6 +76,7 @@ export default {
       target: null,
       context: null,
       contexts: [],
+      configuredProcesses: [],
       alive: true,
       notes: [],
       process: 'publish',
@@ -184,11 +185,17 @@ export default {
             ...new Set([
               'publish',
               this.process,
+              ...this.configuredProcesses.map((item) => item.process),
               ...this.notes.map((note) => note.process)
             ])
           ]
             .filter(Boolean)
-            .map((value) => ({ value, label: value }));
+            .map((value) => ({
+              value,
+              label:
+                this.configuredProcesses.find((item) => item.process === value)
+                  ?.label || value
+            }));
     },
     timeline() {
       const children = new Map(),
@@ -559,6 +566,7 @@ export default {
       if (taskMode && !taskKey)
         this.selectedTask = this.taskPreferences[this.taskPreferenceKey] || '';
       this.contexts = cell.contexts || [];
+      this.configuredProcesses = cell.processes || [];
       this.ensureDraft();
       this.notes = [];
       this.editing = this.deleting = null;

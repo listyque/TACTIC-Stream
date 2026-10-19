@@ -2,7 +2,7 @@
   "scope": "Every inventoried QML/Vue source, including public aliases and typed renderer adapters. Per-surface classification is not a pixel-parity claim.",
   "dispositions": {
     "batch evidence": "See the corresponding acceptance ledger and current platform gate.",
-    "B07 partial": "Adapted table presenters are delivered; 40 usable legacy widget classes remain open.",
+    "B07 partial": "Adapted table presenters are delivered; remaining legacy workflows/options stay open. See docs/frame_table.md.",
     "client capability": "No separate corresponding product surface; native or browser capability remains with its existing owner."
   },
   "sources": [
@@ -5248,6 +5248,20 @@
       "batch": "B02",
       "role": "renderer infrastructure",
       "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/MessageCell.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/MessageTableCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
     }
   ]
 }

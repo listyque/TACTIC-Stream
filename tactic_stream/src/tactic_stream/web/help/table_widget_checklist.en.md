@@ -9,9 +9,9 @@ order: 96
 [Table View / Columns Editor](table_view.en.md) · [B07](table_widgets_b07.en.md) · [Widget Database](widget_database.en.md)
 
 Current as of 2026-10-19: 239 shipped XML/CG entries without working databases,
-34 referenced adapted classes, **40 pending**, 27 excluded `pyasm.prod` classes
-and 3 explicitly unfinished originals. The complete catalogue has 37 classes /
-87 aliases; an adapter does not certify every legacy option/action. B07 is open.
+38 referenced adapted classes, **36 pending**, 27 excluded `pyasm.prod` classes
+and 3 explicitly unfinished originals. The complete catalogue has 41 classes /
+98 aliases; an adapter does not certify every legacy option/action. B07 is open.
 
 L01–L07 order: relationships/nested rows (8) → discussion/message/task (4) →
 configured actions/layout (3) → files (7) → status/process (6) →
@@ -26,6 +26,8 @@ invalid references are not the current execution order. Every confirmed mention,
 including definitions, nested and scripted references, remains in scope.
 See B07 above for current behavior. Bottom/group_bottom/total_summary and other
 historical options need separate acceptance, beyond a generic editor.
+
+L02 adapters reuse existing panels; see B07 above for XML and explicit limits.
 
 ## Invalid class reference: repair configuration (3)
 

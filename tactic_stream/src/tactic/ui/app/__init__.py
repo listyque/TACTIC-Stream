@@ -3,3 +3,5 @@ from .repository_wdg import RepositoryPathsCmd
 from .page_nav_container_wdg import PageNavContainerWdg
 
 from .search_type_element_wdg import SearchTypeHasTableElementWdg
+
+from .message_wdg import MessageTableElementWdg

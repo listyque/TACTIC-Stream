@@ -831,6 +831,7 @@ defineExpose({ viewport });
   .table-task-cell,
   .table-task-summary,
   .table-value-fields,
+  .table-message-cell,
   .table-completion,
   .table-completion-groups,
   .table-action

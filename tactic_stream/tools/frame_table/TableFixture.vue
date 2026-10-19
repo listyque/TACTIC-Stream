@@ -164,6 +164,14 @@ window.tableFixture = {
         :cell="fixture.value.cell"
         :height="fixture.height"
         editable
+        @notes="
+          (cell, process) => events.push({ type: 'notes', cell, process })
+        "
+        @tasks="(cell, task) => events.push({ type: 'tasks', cell, task })"
+        @task-edit="
+          (cell, task, field) =>
+            events.push({ type: 'task-edit', cell, task, field })
+        "
       />
     </div>
     <TableInlineEditor

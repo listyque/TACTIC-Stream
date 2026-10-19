@@ -216,7 +216,7 @@ class DiscussionWdg(BaseTableElementWdg):
                 process = 'publish'
             if process.endswith('/review') or process.endswith('/error'):
                 process = process.split('/')[0]
-            search_type = note.get_value('search_type')
+            search_type = SearchType.build_search_type(note.get_value('search_type'), note.get_value('project_code'))
             attrs = schema.get_relationship_attrs('sthpw/note', search_type)
             attrs = schema.resolve_relationship_attrs(attrs, 'sthpw/note', search_type)
             from_col = attrs.get('from_col')
@@ -249,7 +249,7 @@ class DiscussionWdg(BaseTableElementWdg):
         if not self.parent:
             key = ''
         else:
-            search_type = self.parent.get_search_type()
+            search_type = SearchType.build_search_type(self.parent.get_search_type(), self.parent.get_project_code())
             from pyasm.biz import Schema
             schema = Schema.get()
             attrs = schema.get_relationship_attrs('sthpw/note', search_type)

@@ -62,6 +62,7 @@ def get_compare(processes):
     return functools.cmp_to_key(compare)
 
 class TaskElementWdg(BaseTableElementWdg):
+    relationship_type = None
 
     ARGS_KEYS = {
     'layout': {
@@ -542,7 +543,7 @@ class TaskElementWdg(BaseTableElementWdg):
         else: 
             # get all of the tasks for all of the sobjects
             search = Search("sthpw/task")
-            search.add_relationship_filters(self.sobjects)
+            search.add_relationship_filters(self.sobjects, type=self.relationship_type)
 
             # this serves a shortcut to limit what context to show
             context = self.kwargs.get("context")
@@ -566,7 +567,7 @@ class TaskElementWdg(BaseTableElementWdg):
 
             # process the tasks
             for task in tasks:
-                search_type = task.get_value("search_type")
+                search_type = SearchType.build_search_type(task.get_value("search_type"), task.get_value("project_code"))
 
                 supprocess = self.kwargs.get("parent_process")
                 if supprocess:
@@ -574,7 +575,7 @@ class TaskElementWdg(BaseTableElementWdg):
                     if not process.startswith("%s." % supprocess):
                         continue
 
-                attrs = schema.get_relationship_attrs("sthpw/task", search_type)
+                attrs = schema.get_relationship_attrs("sthpw/task", search_type, type=self.relationship_type)
                 attrs = schema.resolve_relationship_attrs(attrs, "sthpw/task", search_type)
                 from_col = attrs.get("from_col")
 
@@ -810,10 +811,10 @@ class TaskElementWdg(BaseTableElementWdg):
         # use parent?
         #sobject = sobject.get_parent()
 
-        search_type = sobject.get_search_type()
+        search_type = SearchType.build_search_type(sobject.get_search_type(), sobject.get_project_code())
 
         schema = Schema.get()
-        attrs = schema.get_relationship_attrs("sthpw/task", search_type)
+        attrs = schema.get_relationship_attrs("sthpw/task", search_type, type=self.relationship_type)
         attrs = schema.resolve_relationship_attrs(attrs, "sthpw/task", search_type)
         to_col = attrs.get("to_col")
         code = sobject.get_value(to_col)

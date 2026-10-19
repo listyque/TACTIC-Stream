@@ -9,6 +9,9 @@ from pyasm.common import SecurityException
 from pyasm.search import Search, SearchKey, SearchType
 from pyasm.security.security import _require_admin
 from pyasm.widget import ArrayTableElementWdg, ThumbWdg, WidgetConfigView, XmlWdg
+from pyasm.widget.discussion_wdg import DiscussionWdg as LegacyDiscussionWdg
+from pyasm.widget.task_wdg import SObjectTaskTableElement, TaskParentSpacingTableElement
+from tactic.ui.app.message_wdg import MessageTableElementWdg
 from pyasm.widget.statistic_wdg import TaskCompletionWdg as FormerTaskCompletionWdg
 from pyasm.widget.table_element_wdg import CheckboxColWdg, SearchTypeElementWdg
 from tactic.ui.app.search_type_element_wdg import SearchTypeHasTableElementWdg
@@ -51,6 +54,10 @@ _CLASSES = {
     cls.__module__ + "." + cls.__name__: cls
     for cls in (
         ThumbWdg,
+        LegacyDiscussionWdg,
+        SObjectTaskTableElement,
+        TaskParentSpacingTableElement,
+        MessageTableElementWdg,
         FormerTaskCompletionWdg,
         ArrayTableElementWdg,
         CheckboxColWdg,
@@ -100,10 +107,14 @@ WIDGETS = {
 assert len(WIDGETS) == sum(len(entry["aliases"]) for entry in _catalog), (
     "Duplicate table widget alias"
 )
-NOTE_WIDGETS = (DiscussionElementWdg, DiscussionWdg)
-TASK_WIDGETS = (TaskElementWdg, TaskSummaryElementWdg)
+NOTE_WIDGETS = (DiscussionElementWdg, DiscussionWdg, LegacyDiscussionWdg)
+TASK_WIDGETS = (TaskElementWdg, TaskSummaryElementWdg, SObjectTaskTableElement)
 
 VALUE_WIDGETS = (
+    LegacyDiscussionWdg,
+    SObjectTaskTableElement,
+    TaskParentSpacingTableElement,
+    MessageTableElementWdg,
     SnapshotLockedElementWdg,
     SnapshotFileElementWdg,
     MilestoneCompletionWdg,
@@ -278,6 +289,8 @@ def describe_cell(element, columns, search_type=""):
             "context",
         }
         supported = supported and options.get("protocol", "http") in ("", "http")
+    elif widget is LegacyDiscussionWdg:
+        allowed |= {"process", "context", "setting", "append_setting", "include_submission", "scroll", "sticky"}
     elif widget in NOTE_WIDGETS:
         allowed |= {"process", "context", "use_parent", "mode", "allow_email"}
         allowed |= set(DiscussionElementWdg.ARGS_KEYS) | {"sticky"}
@@ -340,6 +353,8 @@ def describe_cell(element, columns, search_type=""):
         kind = "fields"
     elif widget is SearchTypeHasTableElementWdg:
         kind = "status_flag"
+    elif widget is MessageTableElementWdg:
+        kind = "message"
     elif widget in NOTE_WIDGETS:
         kind = "notes"
     elif widget is ThumbWdg:

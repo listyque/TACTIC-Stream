@@ -3373,6 +3373,22 @@ class Search(Base):
         else:
             raise UnsupportedContract("Relationship is not migrated: " + str(relationship))
 
+    def _add_parent_type_filter(self, parent, prefix=''):
+        search_type = parent.get_search_type()
+        base = parent.get_base_search_type()
+        full = SearchType.build_search_type(search_type, parent.get_project_code())
+        if not prefix and self.get_base_search_type() in ('sthpw/note', 'sthpw/task') and full != base:
+            # Native scripts can persist a bare type; its logical project must still match.
+            self.add_op('begin')
+            self.add_filter('search_type', full)
+            self.add_op('begin')
+            self.add_filter('search_type', base)
+            self.add_filter('project_code', parent.get_project_code())
+            self.add_op('and')
+            self.add_op('or')
+        else:
+            self.add_filter(prefix + 'search_type', search_type)
+
     def add_relationship_filters(self, sobjects, op='in', path=None, type=None):
         from pyasm.biz.schema import Schema
         if not sobjects:
@@ -3410,13 +3426,13 @@ class Search(Base):
                     self.add_op("begin")
                     for obj in sobjects:
                         self.add_op("begin")
-                        self.add_filter("search_type", obj.get_search_type())
+                        self._add_parent_type_filter(obj)
                         self.add_filter(from_col, obj.get_value(to_col))
                         self.add_op("and")
                     self.add_op("or")
                 else:
                     values = [obj.get_value(to_col) for obj in sobjects]
-                    self.add_filter(prefix + "search_type", first.get_search_type())
+                    self._add_parent_type_filter(first, prefix)
                     self.add_filters(from_col if isinstance(values[0], int) else prefix + "search_code", values, op=op)
             else:
                 column = prefix + ("search_code" if SearchType.column_exists(related_type, prefix + "search_code") else "search_id")

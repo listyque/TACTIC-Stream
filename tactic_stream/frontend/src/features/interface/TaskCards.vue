@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import * as Cells from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
 import AppButton from '../../controls/AppButton.vue';
-import ItemPreview from '../../controls/ItemPreview.vue';
+import TaskCellDisplay from '../tasks/TaskCellDisplay.vue';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
 
@@ -15,9 +15,6 @@ const layout = computed(() =>
   Cells.taskLayout(props.tasks?.length || 0, 0, props.height)
 );
 const emit = defineEmits(['inspect', 'edit']);
-function date(value) {
-  return value ? String(value).slice(0, 10) : '—';
-}
 function edit(task, field, event) {
   const anchor = event.currentTarget;
   emit('edit', task, field, {
@@ -53,39 +50,50 @@ function edit(task, field, event) {
         >{{ task.processLabel || task.process || task.context }}</AppButton
       >
       <AppButton
-        class="task-card-status"
+        class="task-card-status frame-hit-target"
         label="Edit task status"
-        :disabled="!editable || task.processType === 'progress'"
+        :disabled="!Cells.taskEditable(task, 'status', editable)"
         @click="edit(task, 'status', $event)"
-        ><i aria-hidden="true" />
-        <span>{{ task.status || t('Select status') }}</span></AppButton
-      >
+        ><TaskCellDisplay
+          :height="layout.editorHeight"
+          :model="{
+            text: task.status || t('Select status'),
+            enabled: Cells.taskEditable(task, 'status', editable),
+            actionField: true,
+            showAccent: true,
+            accent: task.statusColor || task.processColor || 'action',
+            fontRole: 'caption'
+          }"
+      /></AppButton>
       <AppButton
-        class="task-card-assignee"
+        class="task-card-assignee frame-hit-target"
         label="Edit task assignee"
-        :disabled="!editable || task.processType === 'progress'"
+        :disabled="!Cells.taskEditable(task, 'assigned', editable)"
         @click="edit(task, 'assigned', $event)"
-      >
-        <ItemPreview
-          :source="task.assignedIdentity?.avatarUrl"
-          :fallback-text="task.assignedIdentity?.initials"
-          fallback-icon="person"
-          :accent="task.assignedIdentity?.avatarColor"
-          :preview-size="Math.max(0, Math.min(22, layout.editorHeight - 4))"
-          round
-          outlined
-        />
-        <span>{{ Cells.assigneeLabel(task, appearance.language) }}</span>
-      </AppButton>
+        ><TaskCellDisplay
+          :height="layout.editorHeight"
+          :user="task.assignedIdentity"
+          :model="{
+            text: Cells.assigneeLabel(task, appearance.language),
+            enabled: Cells.taskEditable(task, 'assigned', editable),
+            actionField: true,
+            avatar: true,
+            avatarLabel: task.assigned
+              ? Cells.assigneeLabel(task, appearance.language)
+              : '',
+            fontRole: 'caption'
+          }"
+      /></AppButton>
       <AppButton
         v-if="layout.dates"
         class="task-card-dates"
         label="Edit task dates"
         icon="calendar"
-        :disabled="!editable || task.processType === 'progress'"
+        :disabled="!Cells.taskEditable(task, 'bid_start_date', editable)"
         @click="edit(task, 'bid_start_date', $event)"
         ><span
-          >{{ date(task.bidStart) }} – {{ date(task.bidEnd) }}</span
+          >{{ Cells.taskDate(task.bidStart, task.simpleDates) }} –
+          {{ Cells.taskDate(task.bidEnd, task.simpleDates) }}</span
         ></AppButton
       >
     </article>
@@ -139,31 +147,20 @@ function edit(task, field, event) {
   padding: 0;
   background: transparent;
 }
-.task-cards .task-card :is(.task-card-status, .task-card-assignee) {
-  background: var(--surface);
-}
-.task-cards .task-card-status i {
-  width: 9px;
-  height: 9px;
-  flex: 0 0 9px;
-  border-radius: 50%;
-  background: var(--task-accent);
-}
-.task-cards .task-card .item-preview {
-  width: min(22px, calc(var(--task-editor-height) - 4px));
-  height: min(22px, calc(var(--task-editor-height) - 4px));
-  flex: 0 0 min(22px, calc(var(--task-editor-height) - 4px));
-  font-size: 8px;
-}
-.task-cards .task-card .task-card-assignee > .app-icon {
-  font-size: 12px;
+.task-cards .task-card .app-button.frame-hit-target {
+  padding: 0;
+  gap: 0;
 }
 .task-cards .task-card .task-card-dates {
   flex: 0 0 14px;
   height: 14px;
+  padding: 0 7px;
+  gap: 4px;
   color: var(--muted);
 }
 .task-cards .task-card-dates .app-icon {
+  width: 11px;
+  height: 11px;
   font-size: 11px;
 }
 .handler-table-cell .table-task-cell {

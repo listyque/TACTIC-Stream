@@ -203,7 +203,7 @@ def capture(fixture, qml, original):
                 controller=controller,
                 columnsController=columns,
                 userModel=users,
-                nodeId="asset",
+                nodeId=DATA["records"][0]["__search_key__"],
                 kind=value["kind"],
                 cell=value["cell"],
                 textValue=value["cell"].get("text", ""),
@@ -329,7 +329,7 @@ def main():
     ]
     names += [
         "thlib/ui/qml/features/table/" + name + ".qml"
-        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell")
+        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell")
     ]
     names += [
         "tests/test_columns_table_view.py",
@@ -360,7 +360,7 @@ def main():
                         screen="cell",
                         value=value,
                         width=280,
-                        height=58,
+                        height=90 if value["name"] == "legacy_tasks" else 58,
                         style=style,
                         dark=dark,
                         language=language,

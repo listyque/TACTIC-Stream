@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.168.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.169.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7651,3 +7651,19 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
   two are excluded; behavioral parity remains unverified. Preserve independent
   clients, native capabilities and deferred MySQL. This release changes planning,
   documentation and version metadata only; it implements no planned legacy block.
+
+## 0.112.169 — 2026-10-19
+
+- Connect L02's four configured legacy columns to existing native note/task owners
+  and independent Frame adapters: old Discussion, SObjectTask, TaskParentSpacing,
+  and formatted message cells. Preserve task-column width and inline assignment/
+  date flags; retain original context prefix text. Message JSON becomes plain
+  formatted text with author and shared progress, without executing message HTML.
+- Match bare and project-qualified note/task parent references while checking
+  the logical project of bare records. Normalize batch lookup keys; another
+  project's equal parent code must not enter the result. Keep Command writes,
+  ACL, stale revision handling and rollback with existing owners.
+- The catalogue now has 41 classes / 98 named aliases; the shipped XML/CG census
+  has 38 adapted / 36 pending classes. B07 remains open. Old Submission notes
+  stay excluded with pyasm.prod; setting subcontexts, old CGI filters and the old
+  HTML calendar/preview are not claimed as full legacy presentation parity.
