@@ -105,6 +105,7 @@ def fingerprints(handler):
             "search_library.mjs",
             "search_suggestions.mjs",
             "process_visibility.mjs",
+            "result_disclosure.mjs",
             "tag_cloud.mjs",
             "workspace_tabs.mjs",
             "frame_configuration.mjs",
@@ -1004,6 +1005,12 @@ def main():
             ],
             ROOT,
             {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
+        ),
+        (
+            "browser-result-disclosure",
+            ["node", "frontend/tests/result_disclosure.mjs"],
+            ROOT,
+            {},
         ),
         (
             "native-configuration-projects",

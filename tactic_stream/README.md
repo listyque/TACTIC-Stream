@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.169.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.170.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7667,3 +7667,11 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
   has 38 adapted / 36 pending classes. B07 remains open. Old Submission notes
   stay excluded with pyasm.prod; setting subcontexts, old CGI filters and the old
   HTML calendar/preview are not claimed as full legacy presentation parity.
+
+## 0.112.170 — 2026-10-19
+
+- Use the existing DisclosureButton for normal and XML-configured result cards. The clicked arrow becomes the native-sized spinner, without Loading data rows shifting the tree. Keep branch errors and Retry.
+- Retain loaded metadata on search-tab activation. Explicit refresh and changed record inputs still reload; root loading finishes before saved descendant restoration. Cached expansion/tab return makes no result-items request. The first uncached server request remains asynchronous.
+- Add a production-component browser regression for held responses, configured cards, keyboard activation, failures/retry, cached reuse and late replies; compare with Handler's existing disclosure controls.
+- The real Episode → Shot profile exposed 1980 reparses of a roughly thousand-file snapshot while describing two shots. Reuse the existing request-local, XML-source-checked file index for the first file type too; mutable external XML and malformed/missing attributes retain their original behavior. No path/result cache is added.
+- On the same live Episode 01 → Shot data, the request fell from about 4.30 s to 0.204 s. The already running server contains mixed old/new workers and needs a full restart for consistent application of the fix. Focused browser/native/snapshot/naming checks and the shipped web build pass; verification limits are recorded in docs/frame_search.md.

@@ -11,6 +11,7 @@ import InfoValueStrip from '../../controls/layout/InfoValueStrip.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import * as Card from '../../../../src/tactic_stream/shared_ui/features/search/card.ui.mjs';
 import AppButton from '../../controls/AppButton.vue';
+import DisclosureButton from '../../controls/actions/DisclosureButton.vue';
 import AppIcon from '../../controls/AppIcon.vue';
 import ItemPreview from '../../controls/ItemPreview.vue';
 import AppMenu from '../../controls/AppMenu.vue';
@@ -348,16 +349,18 @@ onBeforeUnmount(() => clearTimeout(hoverTimer));
       icon-only
       @click.stop="$emit('back')"
     />
-    <AppButton
+    <DisclosureButton
       v-else-if="!mobile && !card && node.hasChildren"
       class="result-expand"
       :style="bounds(geometry.disclosure)"
-      icon-only
-      icon="MDI_CHEVRON_RIGHT"
-      :class="{ expanded: node.expanded }"
-      :label="node.expanded ? 'Collapse item' : 'Expand item'"
-      :aria-expanded="!!node.expanded"
-      :disabled="node.busy"
+      :identity="node.id"
+      :has-children="node.hasChildren"
+      :expanded="!!node.expanded"
+      :loading="!!node.busy"
+      :icon-size="
+        node.kind === 'object' ? (compact ? 14 : 18) : branch ? 13 : 15
+      "
+      :indicator-size="node.kind === 'object' ? (compact ? 20 : 24) : 18"
       @click.stop="$emit('expand', node, undefined, $event)"
     />
     <span

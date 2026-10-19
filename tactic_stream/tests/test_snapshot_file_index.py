@@ -34,10 +34,29 @@ class SnapshotFileIndex(unittest.TestCase):
         read_string = Xml.read_string
         with patch.object(Xml, 'read_string', autospec=True, side_effect=read_string) as parsing:
             for index in range(1000):
+                self.assertEqual(self.snapshot.get_file_type(), 'part0')
                 self.assertEqual(self.snapshot.get_type_by_file_name('file%d' % index), 'part%d' % index)
                 self.assertEqual(self.snapshot.get_type_by_file_code('F%d' % index), 'part%d' % index)
                 self.assertFalse(self.snapshot.get_use_naming_by_type('part%d' % index))
             self.assertEqual(parsing.call_count, 1)
+
+    def test_first_file_type_keeps_empty_missing_and_mutable_xml_semantics(self):
+        for source, expected in (
+            ('<snapshot/>', ''),
+            ('<snapshot><file/><file type="main"/></snapshot>', None),
+            ('<snapshot><file type=""/><file type="main"/></snapshot>', ''),
+            ('<snapshot><file type="first"/><file type="second"/></snapshot>', 'first'),
+        ):
+            self.snapshot.set_value('snapshot', source)
+            self.assertEqual(self.snapshot.get_file_type(), expected)
+        key = self.snapshot.get_search_key() + '|snapshot'
+        xml = Xml('<snapshot><file type="external"/></snapshot>')
+        Container.get_full_dict('SObject:xml_cache')[key] = xml
+        self.assertEqual(self.snapshot.get_file_type(), 'external')
+        Xml.set_attribute(xml.get_node('snapshot/file'), 'type', 'changed')
+        self.assertEqual(self.snapshot.get_file_type(), 'changed')
+        Container.remove('SObject:xml_cache')
+        self.assertEqual(self.snapshot.get_file_type(), 'first')
 
     def test_duplicates_missing_attributes_and_empty_values_keep_xml_selection(self):
         source = '''<snapshot>

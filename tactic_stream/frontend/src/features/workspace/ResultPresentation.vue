@@ -19,6 +19,7 @@ import ConfiguredResultItem from '../interface/ConfiguredResultItem.vue';
 import ItemLayoutTable from '../interface/ItemLayoutTable.vue';
 import MobileResults from './MobileResults.vue';
 import AppButton from '../../controls/AppButton.vue';
+import BusyIndicator from '../../controls/BusyIndicator.vue';
 import AppSelect from '../../controls/AppSelect.vue';
 import AppSplitter from '../../controls/AppSplitter.vue';
 import AppMenu from '../../controls/AppMenu.vue';
@@ -41,6 +42,7 @@ export default {
     MobileResults,
     ResultItem,
     AppButton,
+    BusyIndicator,
     AppSelect,
     AppSplitter,
     AppMenu,
@@ -216,7 +218,7 @@ export default {
       }
     },
     active(value) {
-      if (value) this.load();
+      if (value && !this.nodes.length && !this.busy) this.load();
     },
     mobile() {
       this.load();
@@ -392,6 +394,7 @@ export default {
         this.nodes = result.items.map((item) =>
           this.makeNode(item, null, previous)
         );
+        this.busy = false;
         this.selectedId = this.selectedId || this.state?.selectedId || '';
         if (this.mobile) {
           const saved = history.state?.mobileResult;
@@ -1271,7 +1274,13 @@ export default {
       <p v-if="error" class="error" role="alert">
         {{ t(error) }} <AppButton label="Retry" icon="refresh" @click="load" />
       </p>
-      <p v-if="busy" role="status">{{ t('Loading dataвЂ¦') }}</p>
+      <p
+        v-if="busy && !nodes.length"
+        role="status"
+        :aria-label="t('Loading data…')"
+      >
+        <BusyIndicator running />
+      </p>
       <nav
         v-if="mode === 'tiles' && cardPath.length"
         class="result-card-navigation"
@@ -1373,9 +1382,6 @@ export default {
                   (node, item) => showRelated(node, null, item.search_type)
                 "
               />
-              <p v-if="node.busy" class="result-branch-message" role="status">
-                {{ t('Loading dataвЂ¦') }}
-              </p>
               <p
                 v-if="node.error"
                 class="error result-branch-message"

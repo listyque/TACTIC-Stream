@@ -7,6 +7,8 @@ const props = defineProps({
   expanded: Boolean,
   loading: Boolean,
   hasChildren: Boolean,
+  iconSize: { type: Number, default: 15 },
+  indicatorSize: { type: Number, default: 22 },
   label: String
 });
 const emit = defineEmits(['click']);
@@ -36,6 +38,10 @@ function activate(event) {
 <template>
   <AppButton
     class="disclosure-button"
+    :style="{
+      '--disclosure-icon-size': iconSize + 'px',
+      '--disclosure-indicator-size': indicatorSize + 'px'
+    }"
     icon-only
     :icon="!hasChildren || (loading && requested) ? undefined : 'chevron-right'"
     :label="label || (expanded ? 'Collapse item' : 'Expand item')"
@@ -59,17 +65,17 @@ function activate(event) {
   background: transparent;
 }
 .disclosure-button.app-button.icon-button > .app-icon {
-  width: 15px;
-  height: 15px;
-  font-size: 15px;
+  width: var(--disclosure-icon-size);
+  height: var(--disclosure-icon-size);
+  font-size: var(--disclosure-icon-size);
   transform: rotate(0);
   transition: transform var(--motion-click) ease-out;
 }
-.disclosure-button[aria-expanded='true'] > .app-icon {
+.disclosure-button.app-button.icon-button[aria-expanded='true'] > .app-icon {
   transform: rotate(90deg);
 }
 .disclosure-button .busy-indicator {
-  width: 22px;
-  height: 22px;
+  width: var(--disclosure-indicator-size);
+  height: var(--disclosure-indicator-size);
 }
 </style>

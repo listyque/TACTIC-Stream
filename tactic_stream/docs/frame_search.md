@@ -117,3 +117,51 @@ whole-repository lint/structure debt remains recorded by the platform baseline.
 Table View/cell migration is B07. Nested legacy saved-search groups that cannot
 be represented by the existing flat condition editor remain explicitly rejected;
 they are not silently flattened or counted as supported.
+
+## Result disclosure correction — Stream 0.112.170
+
+Normal and configured cards use the existing DisclosureButton, matching native
+WorkspaceResultItem icon/indicator sizes. Only the arrow activated by the user
+spins; automatic descendant restoration does not add loading text rows.
+Returning to a retained search tab reuses its result metadata and expanded tree;
+explicit refresh and changed inputs still fetch current metadata. Root loading
+ends when root items arrive, rather than after all saved expansions.
+
+Run `node frontend/tests/result_disclosure.mjs` for real click/keyboard checks
+with held responses, error/retry, cached reuse and a completed stale reply.
+The standalone Vite fixture mounts production ResultPresentation and both card
+renderers. Handler's existing DisclosureButton/input tests provide the native
+reference. First-request latency on a remote production server is separate from
+this client regression; the browser does not fabricate unloaded descendants.
+
+The live cg_test Episode → Shot request took about 4.16 seconds before the
+backend fix. cProfile attributed almost all of it to ThumbWdg directory naming
+repeatedly asking for the first snapshot file type: 1980 XML parses for two
+shots. Snapshot.get_file_type now reuses the existing request-local file index,
+invalidated by XML source changes and bypassed for externally cached mutable
+XML. Tests preserve the first file's missing/empty type, malformed XML, changed
+rows and request boundaries. These are not cached naming paths.
+
+Focused verification: six file-index tests, 29 snapshot tests, three naming
+tests, three existing native disclosure/input tests, production Vue browser
+regression, native/Vue 24px owner and 18px branch indicator bounds, formatting
+and shipped web build passed. The Vue regression also checks the rendered
+arrow rotation, not only aria-expanded. With 1/500/5000 cached descendants the
+first visible child appears in the next animation frame without another request.
+
+The authenticated live browser repeated cg_test / Episode 01 / Shot: the
+clicked arrow spins in the first frame, row Y stays fixed, no loading text
+appears, cached reopening makes no request, and there are no page errors.
+Worker probes found mixed loaded code: one process has the updated file-type
+lookup and two retain the old implementation. The same live Shot request took
+4.30 seconds on old code and 0.204 seconds after the fix; cached reopening
+makes no request. A conditional cProfile run in the updated worker took 0.618
+seconds versus 7.8 seconds under the old profiled implementation. These are
+measurements of two particular shots, not a universal latency guarantee. A full
+server restart is still required to update every worker consistently.
+
+The neighboring panel_chrome fixture still fails its mobile result-separator
+visibility assertion. The identical failure reproduces using HEAD versions of
+all changed Vue components via a Vite source override, without changing the
+working files. It is not included among the passing checks above. The full
+Frame platform gate was not rerun for this focused correction.

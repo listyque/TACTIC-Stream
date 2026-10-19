@@ -150,7 +150,9 @@ class Snapshot(SObject):
         if external_xml is None and cached is not None and cached[0] == source:
             return cached[1]
         by_name, by_code, use_naming = {}, {}, {}
-        for node in self.get_snapshot_xml().get_nodes('snapshot/file'):
+        nodes = self.get_snapshot_xml().get_nodes('snapshot/file')
+        first_type = Xml.get_attribute(nodes[0], 'type') if nodes else ''
+        for node in nodes:
             attributes = node.attrib
             if 'name' in attributes:
                 by_name.setdefault(attributes['name'], attributes.get('type'))
@@ -158,7 +160,7 @@ class Snapshot(SObject):
                 by_code.setdefault(attributes['file_code'], attributes.get('type'))
             if 'type' in attributes and 'use_naming' in attributes:
                 use_naming.setdefault(attributes['type'], attributes['use_naming'])
-        index = (by_name, by_code, use_naming)
+        index = (by_name, by_code, use_naming, first_type)
         if external_xml is None:
             cache[key] = (source, index)
         else:
@@ -270,12 +272,7 @@ class Snapshot(SObject):
 
     def get_file_type(self):
         '''this will just get the first one if there are more than 1'''
-        xml = self.get_snapshot_xml()
-        node = xml.get_node("snapshot/file")
-        if node is not None:
-            return Xml.get_attribute(node, "type")
-        else:
-            return ''
+        return self._get_file_index()[3]
 
     def get_all_file_types(self):
         '''get all file types'''

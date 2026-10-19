@@ -390,3 +390,7 @@ Each search tab keeps its own draft. Closing and reopening the dock retains that
 **Group items → Task status by process** groups objects by the chosen process's task status, including separate No status and No task groups. Process/status names remain server data. **Sort by column** uses the actual Search Type columns. Page number, page size and Pages/Continuous are available from the result footer.
 
 A single card click selects; double click or its Open action enters its contents. Long lists and card grids render only visible entries, preserving loaded data, expansion and selection. On a focused result, Home/End and Up/Down move through the collection, including offscreen entries. Phone navigation retains its explicit Back/Open controls.
+
+## Expanding result branches
+
+The clicked disclosure arrow becomes a small progress indicator while its children are fetched, as in Handler. Loading does not insert text rows or shift the tree. Cached branches and retained search tabs reopen without another metadata request; use Refresh to request current data. After a refresh, available root records appear before saved child expansions finish. The first uncached expansion still waits for the server; a failure keeps its Retry action.
