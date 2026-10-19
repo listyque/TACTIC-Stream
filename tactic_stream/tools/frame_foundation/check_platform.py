@@ -106,6 +106,7 @@ def fingerprints(handler):
             "search_suggestions.mjs",
             "process_visibility.mjs",
             "result_disclosure.mjs",
+            "profile_activity.mjs",
             "tag_cloud.mjs",
             "workspace_tabs.mjs",
             "frame_configuration.mjs",
@@ -1009,6 +1010,12 @@ def main():
         (
             "browser-result-disclosure",
             ["node", "frontend/tests/result_disclosure.mjs"],
+            ROOT,
+            {},
+        ),
+        (
+            "browser-profile-activity",
+            ["node", "frontend/tests/profile_activity.mjs"],
             ROOT,
             {},
         ),

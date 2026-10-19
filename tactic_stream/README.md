@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.170.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.171.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7675,3 +7675,8 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 - Add a production-component browser regression for held responses, configured cards, keyboard activation, failures/retry, cached reuse and late replies; compare with Handler's existing disclosure controls.
 - The real Episode → Shot profile exposed 1980 reparses of a roughly thousand-file snapshot while describing two shots. Reuse the existing request-local, XML-source-checked file index for the first file type too; mutable external XML and malformed/missing attributes retain their original behavior. No path/result cache is added.
 - On the same live Episode 01 → Shot data, the request fell from about 4.30 s to 0.204 s. The already running server contains mixed old/new workers and needs a full restart for consistent application of the fix. Focused browser/native/snapshot/naming checks and the shipped web build pass; verification limits are recorded in docs/frame_search.md.
+
+## 0.112.171 — 2026-10-19
+
+- Verify the existing browser profile activity lifecycle against the Handler zero-width hidden-document fix: create six preview cards, reveal all 25 only on demand, preserve complete long snapshot filenames and first-card identity, and collapse without refetching records.
+- Add a real UserProfile browser regression and synchronized EN/RU profile Help. Record native before/after frame measurements and Qt bytecode/cache versus AOT boundaries in docs/frame_support.md. Stream runtime UI and portable Frame descriptions are unchanged in this correction.
