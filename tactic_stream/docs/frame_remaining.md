@@ -63,13 +63,15 @@ User/plugin/DCC-generated UI remains with its script/connector execution owner.
 `tools/frame_remaining/surfaces.json` classifies every inventoried QML/Vue file
 by batch, role and disposition. It covers controls/composites, renderer
 infrastructure, shell and domain forms/presenters separately. The fresh inventory
-contains **452 native and 297 browser sources**. The coverage checker rejects
+at the B14 checkpoint contained **452 native and 297 browser sources**; the
+current source-only audit below contains **453 + 298 = 751**. The coverage checker rejects
 missing, duplicate and removed entries and self-tests its omission guard.
 
 This ledger routes ownership; it does not turn static declarations into runtime
 acceptance. Existing batch documents retain their workflow evidence. B07 entries
 remain explicitly partial: adapted table presenters are delivered, but **40
-usable legacy widget classes** still need complete workflows. Unfinished legacy
+usable legacy widget classes** formed its backlog. Four now have L02 adapters;
+36 still await adapters, and used options/overall B07 acceptance remain open. Unfinished legacy
 widgets and the excluded old production subsystem are not silently reintroduced.
 
 ## Reproducible release audit
@@ -110,9 +112,10 @@ and lifecycle scenarios pass. The full comparison checks **7,416 rectangles**
 and **5,256 typography/color checks** across its 720 pairs; indicator bounds
 are checked separately. Production
 Knowledge, API and table/time-entry transport journeys pass against isolated
-servers. The integrated platform gate passes **142 mandatory stages**, including the
-existing 64-case Batch Manager suite. Its current source fingerprints and results
-are recorded in `gate.json`.
+servers. The B14 integrated platform gate passed **142 mandatory stages**, including the
+existing 64-case Batch Manager suite. Its captured source fingerprints and results
+are recorded in `gate.json`; later edits require new acceptance and are not
+certified by this historical run.
 
 ## Restore points and remaining limits
 
@@ -129,3 +132,60 @@ production writes/PostgreSQL deployment and actual DCC/render jobs remain
 deployment acceptance. The existing repository-wide structure/lint debt remains
 under its previous budgets. B14's offline audit does not erase these limits or
 the open B07 backlog.
+
+<a id="source-audit-2026-10-19"></a>
+## Current source-only audit — 2026-10-19
+
+The fresh inventory and coverage check pass for 453 Handler QML and 298 Stream
+Vue files (751 total). They include controls, adapters, aliases and predecessor
+files, not 751 distinct screens. The shipped XML/CG census remains 239 entries,
+38 referenced adapted classes, 36 pending, 27 excluded production classes and
+three explicitly unfinished originals. The full adapted catalogue has 41
+canonical classes / 98 aliases. API status remains 127 partial + two excluded
+methods; full_api_parity_verified is false.
+
+### Confirmed active remainder
+
+Native TacticTableInlineEditor.qml chooses legacyTagsEditor for tags/keywords,
+then SObjectValueEditor.qml and TableTextEditor.qml. Browser TableInlineEditor.vue
+already describes its input with features/table/inline.ui.mjs. The specialized
+native interaction has not joined that shared scene; preserve its suggestions,
+editing, Save/Cancel and focus when doing U01. Do not mark an ordinary text-field
+replacement as parity. The 36 pending widget classes and remaining old options
+are still B07 work, not missing copies of the standalone Messages/Tasks/Gantt.
+
+### Predecessor forms are not active migration work
+
+The following seven sources now have the explicit retained predecessor
+classification. Source tracing found no incoming call from the current shipped
+hosts, outside their own old component chain and qmldir registration:
+
+| Former source | Current shipped composition |
+| --- | --- |
+| Handler features/administration/search_types/AdminSearchTypeFields.qml | AdminSearchTypesView.qml → search_types/search_types.ui.mjs |
+| Stream features/administration/SearchTypeFields.vue | SearchTypes.vue → the same portable search_types scene |
+| Handler features/administration/security/AdminSecurityRules.qml and AdminSecurityRuleEditor.qml | AdminSecurityView.qml and Stream SecurityRules.vue → security/security.ui.mjs |
+| Handler features/administration/workflow/AdminGraphProperties.qml and AdminProcessSettings.qml | AdminGraphView.qml → workflow/graph_editor.ui.mjs, inspector/process descriptions |
+| Stream features/administration/WorkflowProcessSettings.vue | WorkflowEditor.vue / graphFrame.js → the same graph_editor scene |
+
+These files remain on disk; no deletion or runtime migration was performed by
+this audit. Public QML names could still be referenced by external scripts, so
+source tracing of the shipped hosts is not proof that deletion is safe.
+
+### What the scan cannot certify
+
+A supplementary direct-import search found 183 domain form/presenter files
+without a direct .mjs or Frame reference. That is a candidate list, not 183
+unfinished screens: NotesPanel, ScriptEditor, FileWorkspace and DescriptionEditor
+retain owners/typed ports or delegate composition to child components. Inspect
+callers and actual composition before adding one to the queue. Neutral house
+controls, text/code/image ports and native window/transport owners intentionally
+remain engine implementations. User/plugin/DCC-generated UI and the standalone
+Batch Manager keep their existing execution owners.
+
+Only inventory, source routing and shipped-config checks were rerun here. No new
+runtime or pixel-parity acceptance is claimed. The complete Frame gate and prior
+comparison screenshots were not refreshed for this planning change. The ordered
+queue, from smaller known work to heavier integration, is
+[U01 / L01–L12](../UI_ARCHITECTURE.md#legacy-plan); ID numbers retain their original
+meaning, and dependencies are implemented within the first blocked scenario.

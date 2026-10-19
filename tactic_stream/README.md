@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.171.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.172.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -36,7 +36,7 @@ PostgreSQL через Apache. Windows EXE/Electron и комплектовани
 представление использует описание, независимое от frontend. Требования и
 границы будущей реализации — в [UI_ARCHITECTURE.md](UI_ARCHITECTURE.md).
 
-Актуальный [план оставшегося legacy — L01–L12](UI_ARCHITECTURE.md#legacy-plan)
+Актуальный [план оставшегося legacy — U01 / L01–L12](UI_ARCHITECTURE.md#legacy-plan)
 отделяет незакрытый B07 от завершённых Frame-блоков: 40 упомянутых в конфигах
 классов, затем поведение ядра/скриптов, процессы, проекты/плагины, БД и поставка.
 
@@ -7680,3 +7680,9 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 
 - Verify the existing browser profile activity lifecycle against the Handler zero-width hidden-document fix: create six preview cards, reveal all 25 only on demand, preserve complete long snapshot filenames and first-card identity, and collapse without refetching records.
 - Add a real UserProfile browser regression and synchronized EN/RU profile Help. Record native before/after frame measurements and Qt bytecode/cache versus AOT boundaries in docs/frame_support.md. Stream runtime UI and portable Frame descriptions are unchanged in this correction.
+
+## 0.112.172 — 2026-10-19
+
+- Refresh the source-only UI/config audit: 453 QML + 298 Vue files, all 751 classified; 36 used legacy widget classes still pending. Distinguish seven retained predecessor admin forms from their current Frame replacements; do not infer active migration work from missing direct imports.
+- Sort the remaining plan by relative effort, preserving L01–L12 identities and splitting L07 implementation/acceptance without duplicating classes. Put the confirmed inline tags/keywords Frame gap first (U01), followed by L02 option completion and service cells; preserve exclusions and dependency gates.
+- Record that classification is not runtime/pixel acceptance and that the B14 gate is historical evidence. No UI runtime or Handler source changes are part of this planning update.

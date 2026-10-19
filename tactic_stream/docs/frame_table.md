@@ -109,7 +109,7 @@ hardware and all historical widget options have not been certified.
 <a id="legacy-checklist"></a>
 ## Active legacy checklist — 2026-10-19
 
-The current delivery order is [L01–L12](../UI_ARCHITECTURE.md#legacy-plan).
+The current delivery order is the effort-sorted [U01 / L01–L12 queue](../UI_ARCHITECTURE.md#legacy-plan), not the numeric order of headings below.
 L01–L07 below partition the original **40 canonical classes exactly once** from
 239 shipped/CG entries. L02 has four registered adapters; the other 36 boxes are open. These are required config
 references, including definitions under `config/.../prod`; excluding `pyasm.prod`
@@ -120,6 +120,20 @@ The scan also reports `cg:sthpw/pipeline/document` as an XML parse issue: its
 content is a JSON document, not a widget XML. Follow dynamic/script references
 when inspecting each group; the static count is not proof that every runtime
 reference was discovered. Add newly confirmed usable dependencies to this ledger.
+
+### U01 — active shared-UI gap: inline keywords/tags
+
+Open; first in the effort-sorted plan. Native TacticTableInlineEditor still
+selects legacyTagsEditor and SObjectValueEditor/TableTextEditor for keywords;
+Stream TableInlineEditor uses the shared inline scene. Share the specialized
+interaction, retain suggestions, token edits, Save/Cancel, draft and focus, and
+verify both production editors on the same data. Do not replace the native
+behavior with an ordinary text field. U01 adds no canonical legacy class to
+the 40-class partition below. L07b accepts it with the rest of the table.
+
+L07a implements the seven service/admin classes listed under L07; L07b is the
+later integrated acceptance, not a second set of seven classes. Existing L02
+adapters remain delivered with the explicit option limits recorded below.
 
 <a id="l01"></a>
 ### L01 — Связи и вложенные строки (8)
@@ -220,7 +234,7 @@ examples are also in EN/RU Help → Table View: B07.
 - [ ] `tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg`
 - [ ] `tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg`
 
-Из конфигов login/group/project/preferences/naming/notification выполнить штатные переходы и изменения: пользователь, Security, preference, update/template, summary, recipient/trigger. Проверить обычного пользователя, admin, revisions и отмену. NotificationTrigger cell не означает готовую отправку email. После этого прогнать весь B07, включая ранее адаптированные 37 классов и их реально используемые options, inline/forms, keywords/tags и bottom/group_bottom/total_summary; закрыть только подтверждённые сценарии.
+Из конфигов login/group/project/preferences/naming/notification выполнить штатные переходы и изменения: пользователь, Security, preference, update/template, summary, recipient/trigger. Проверить обычного пользователя, admin, revisions и отмену. NotificationTrigger cell не означает готовую отправку email. После этого прогнать весь B07, включая уже адаптированные классы и их реально используемые options, inline/forms, keywords/tags и bottom/group_bottom/total_summary; закрыть только подтверждённые сценарии.
 
 ### Excluded unfinished originals
 

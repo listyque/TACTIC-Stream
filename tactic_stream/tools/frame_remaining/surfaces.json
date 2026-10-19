@@ -3,7 +3,8 @@
   "dispositions": {
     "batch evidence": "See the corresponding acceptance ledger and current platform gate.",
     "B07 partial": "Adapted table presenters are delivered; remaining legacy workflows/options stay open. See docs/frame_table.md.",
-    "client capability": "No separate corresponding product surface; native or browser capability remains with its existing owner."
+    "client capability": "No separate corresponding product surface; native or browser capability remains with its existing owner.",
+    "retained predecessor": "No incoming reference from current shipped hosts was found, outside its predecessor chain/qmldir registration. Current screens use Frame replacements. External dynamic scripts are not certified; do not count this file as active migration work."
   },
   "sources": [
     {
@@ -942,7 +943,7 @@
       "file": "thlib/ui/qml/features/administration/search_types/AdminSearchTypeFields.qml",
       "batch": "B03",
       "role": "domain form/presenter",
-      "disposition": "batch evidence"
+      "disposition": "retained predecessor"
     },
     {
       "product": "handler",
@@ -991,14 +992,14 @@
       "file": "thlib/ui/qml/features/administration/security/AdminSecurityRuleEditor.qml",
       "batch": "B03",
       "role": "domain form/presenter",
-      "disposition": "batch evidence"
+      "disposition": "retained predecessor"
     },
     {
       "product": "handler",
       "file": "thlib/ui/qml/features/administration/security/AdminSecurityRules.qml",
       "batch": "B03",
       "role": "domain form/presenter",
-      "disposition": "batch evidence"
+      "disposition": "retained predecessor"
     },
     {
       "product": "handler",
@@ -1047,7 +1048,7 @@
       "file": "thlib/ui/qml/features/administration/workflow/AdminGraphProperties.qml",
       "batch": "B03",
       "role": "domain form/presenter",
-      "disposition": "batch evidence"
+      "disposition": "retained predecessor"
     },
     {
       "product": "handler",
@@ -1096,7 +1097,7 @@
       "file": "thlib/ui/qml/features/administration/workflow/AdminProcessSettings.qml",
       "batch": "B03",
       "role": "domain form/presenter",
-      "disposition": "batch evidence"
+      "disposition": "retained predecessor"
     },
     {
       "product": "handler",
@@ -3819,7 +3820,7 @@
       "file": "frontend/src/features/administration/SearchTypeFields.vue",
       "batch": "B03",
       "role": "domain form/presenter",
-      "disposition": "batch evidence"
+      "disposition": "retained predecessor"
     },
     {
       "product": "stream",
@@ -3875,7 +3876,7 @@
       "file": "frontend/src/features/administration/WorkflowProcessSettings.vue",
       "batch": "B03",
       "role": "domain form/presenter",
-      "disposition": "batch evidence"
+      "disposition": "retained predecessor"
     },
     {
       "product": "stream",
