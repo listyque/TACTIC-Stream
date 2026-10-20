@@ -1,31 +1,6 @@
 import { Z as preferences } from "./index.js";
 import { st as rpc } from "./CodeBlock.js";
-import { r as fileIcon } from "./snapshot.ui.js";
-//#region ../src/tactic_stream/shared_ui/features/files/file_values.mjs
-function fileName(path) {
-	return String(path || "").replace(/\\/g, "/").split("/").pop();
-}
-function extension(path) {
-	const name = fileName(path), index = name.lastIndexOf(".");
-	return index > 0 ? name.slice(index + 1).toUpperCase() : "FILE";
-}
-function sourceIcon(path) {
-	const type = /\.(apng|avif|png|jpe?g|webp|gif|tiff?|bmp|svg)$/i.test(path) ? "image" : /\.(mov|mp4|avi|mkv|webm)$/i.test(path) ? "movie" : "";
-	return fileIcon("file", type, "", path);
-}
-function prettySize(value) {
-	for (const unit of [
-		"B",
-		"KB",
-		"MB",
-		"GB",
-		"TB"
-	]) {
-		if (value < 1024 || unit === "TB") return value.toFixed(unit === "B" ? 0 : 1) + " " + unit;
-		value /= 1024;
-	}
-}
-//#endregion
+import "./file_values.js";
 //#region src/features/checkin/files.js
 var sourcePath = (file) => file.webkitRelativePath || file.name;
 var descriptors = (files) => files.map((file) => ({
@@ -79,6 +54,6 @@ async function droppedFiles(transfer) {
 	return files;
 }
 //#endregion
-export { sourcePath as a, prettySize as c, repositories as i, sourceIcon as l, droppedFiles as n, extension as o, prepareFiles as r, fileName as s, descriptors as t };
+export { sourcePath as a, repositories as i, droppedFiles as n, prepareFiles as r, descriptors as t };
 
 //# sourceMappingURL=files.js.map

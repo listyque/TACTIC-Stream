@@ -7,14 +7,14 @@ from .metadata_element_wdg import MetadataElementWdg
 from .json_element_wdg import JsonElementWdg
 from .snapshot_element_wdg import SnapshotVersionElementWdg
 from .sobject_detail_wdg import SObjectDetailElementWdg
-from .table_element_wdg import CheckinButtonElementWdg
+from .table_element_wdg import CheckinButtonElementWdg, CheckoutButtonElementWdg
 from .explorer_wdg import ExplorerElementWdg, ExplorerTableElementWdg
 ExploreElementWdg = ExplorerElementWdg
 from .sobject_summary_wdg import SObjectFilesElementWdg
 from .delete_element_wdg import DeleteElementWdg
 
 __all__ = ['MetadataElementWdg', 'FormatElementWdg', 'LinkElementWdg', 'ExpressionElementWdg', 'ExpressionValueElementWdg', 'ExpressionRecalculateCmd', 'TaskElementWdg', 'TaskElementCbk', 'TaskSummaryElementWdg', 'TaskCompletionWdg', 'JsonElementWdg', 'SnapshotVersionElementWdg']
-__all__ += ['SObjectDetailElementWdg', 'CheckinButtonElementWdg', 'ExplorerElementWdg', 'ExplorerTableElementWdg', 'SObjectFilesElementWdg', 'DeleteElementWdg']
+__all__ += ['SObjectDetailElementWdg', 'CheckinButtonElementWdg', 'CheckoutButtonElementWdg', 'ExplorerElementWdg', 'ExplorerTableElementWdg', 'SObjectFilesElementWdg', 'DeleteElementWdg']
 __all__ += ['ExploreElementWdg']
 
 from .snapshot_element_wdg import SnapshotLockedElementWdg, SnapshotFileElementWdg
@@ -57,5 +57,5 @@ from .gantt_element_wdg import GanttElementWdg
 from .work_hours_element_wdg import WorkHoursElementWdg
 __all__ += ['GanttElementWdg', 'WorkHoursElementWdg']
 
-from .file_actions import TableSnapshotAppendCmd
-__all__.append('TableSnapshotAppendCmd')
+from .file_actions import TableSnapshotAppendCmd, TableSnapshotFilesCmd
+__all__ += ['TableSnapshotAppendCmd', 'TableSnapshotFilesCmd']

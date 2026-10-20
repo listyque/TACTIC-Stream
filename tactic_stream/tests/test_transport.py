@@ -4620,7 +4620,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
         proxy = self.proxy()
         auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='admin')
         proxy.insert(auth, 'config/widget_config', dict(search_type='sthpw/snapshot', view='append_test', priority=100,
-            config='<config><append_test><element name="code"/><element name="version"/><element name="append"><display class="pyasm.widget.FileAppendLinkTableElement"/></element></append_test></config>'))
+            config='<config><append_test><element name="code"/><element name="version"/><element name="append"><display class="pyasm.widget.FileAppendLinkTableElement"/></element><element name="checkout"><display class="tactic.ui.table.CheckoutButtonElementWdg"/></element></append_test></config>'))
         environment = os.environ.copy()
         result = subprocess.run([shutil.which('node'), str(ROOT / 'frontend/tests/table_append.mjs'), self.url],
             cwd=ROOT / 'frontend', env=environment, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=40)

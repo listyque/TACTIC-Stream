@@ -73,7 +73,9 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
-      "_files.js"
+      "_file_values.js",
+      "_files.js",
+      "_files2.js"
     ],
     "css": [
       "assets/FilePreview.css"
@@ -121,7 +123,8 @@
       "_links.js",
       "_textMetrics.js",
       "_AttachmentCard.js",
-      "_FilePreview.js"
+      "_FilePreview.js",
+      "_previewFiles.js"
     ],
     "css": [
       "assets/ObjectReport.css"
@@ -160,14 +163,25 @@
       "_CodeBlock.js"
     ]
   },
+  "_file_values.js": {
+    "file": "assets/file_values.js",
+    "name": "file_values",
+    "imports": [
+      "_snapshot.ui.js"
+    ]
+  },
   "_files.js": {
     "file": "assets/files.js",
     "name": "files",
     "imports": [
       "index.html",
       "_CodeBlock.js",
-      "_snapshot.ui.js"
+      "_file_values.js"
     ]
+  },
+  "_files2.js": {
+    "file": "assets/files2.js",
+    "name": "files"
   },
   "_graphFrame.js": {
     "file": "assets/graphFrame.js",
@@ -198,6 +212,13 @@
   "_locales.js": {
     "file": "assets/locales.js",
     "name": "locales"
+  },
+  "_previewFiles.js": {
+    "file": "assets/previewFiles.js",
+    "name": "previewFiles",
+    "imports": [
+      "index.html"
+    ]
   },
   "_rolldown-runtime.js": {
     "file": "assets/rolldown-runtime.js",
@@ -278,8 +299,11 @@
       "_ObjectReport.js",
       "_AttachmentCard.js",
       "_snapshot.ui.js",
+      "_file_values.js",
       "_files.js",
+      "_files2.js",
       "_FilePreview.js",
+      "_previewFiles.js",
       "_AppDialog.js",
       "_confirmation.ui.js",
       "_AppMenuItem.js",
@@ -291,6 +315,7 @@
       "src/features/objects/DuplicateSObject.vue",
       "src/assets/emoji.json",
       "src/features/objects/RelatedObjects.vue",
+      "src/features/checkin/SnapshotCheckout.vue",
       "_NamingEditor.js",
       "src/features/checkin/MatchingTemplates.vue",
       "src/features/tasks/TaskGanttView.vue",
@@ -522,6 +547,7 @@
       "index.html",
       "_CodeBlock.js",
       "_sections.ui.js",
+      "_file_values.js",
       "_files.js",
       "_AppDialog.js",
       "_confirmation.ui.js",
@@ -529,6 +555,26 @@
     ],
     "css": [
       "assets/ObjectCheckin.css"
+    ]
+  },
+  "src/features/checkin/SnapshotCheckout.vue": {
+    "file": "assets/SnapshotCheckout.js",
+    "name": "SnapshotCheckout",
+    "src": "src/features/checkin/SnapshotCheckout.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_CodeBlock.js",
+      "_sections.ui.js",
+      "_file_values.js",
+      "_files2.js",
+      "_previewFiles.js",
+      "_confirmation.ui.js",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/SnapshotCheckout.css"
     ]
   },
   "src/features/configuration/Configuration.vue": {
@@ -572,6 +618,7 @@
       "index.html",
       "_CodeBlock.js",
       "_sections.ui.js",
+      "_file_values.js",
       "_files.js",
       "_AppDialog.js",
       "_confirmation.ui.js",

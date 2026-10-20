@@ -203,6 +203,20 @@ def capture(fixture, qml, original):
         component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'features/table/SnapshotAppendView.qml')))
         view = component.createWithInitialProperties(dict(theme=theme, owner=owner,
             width=fixture['width'], height=fixture['height']))
+    elif fixture["screen"] == "checkout":
+        from thlib.ui.table.file_checkout import SnapshotCheckoutController
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        owner = SnapshotCheckoutController(SimpleNamespace(repository_sync=Mock(), window_model=Mock()))
+        owner._state.update(fixture['model'])
+        owner._snapshot = dict(code='S7',version=7,context='publish/reference')
+        owner._records = [dict(row) for row in fixture['files']]
+        owner._selected = 'F1'
+        owner._rebuild()
+        keep.append(owner)
+        component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'features/table/SnapshotCheckoutView.qml')))
+        view = component.createWithInitialProperties(dict(theme=theme, owner=owner,
+            width=fixture['width'],height=fixture['height']))
     elif fixture["screen"] == "nested":
         from tests.test_table_nested import Scope
         scope = Scope()
@@ -289,6 +303,9 @@ def capture(fixture, qml, original):
         if fixture['screen'] == 'append':
             result['enabled'] = {item.objectName():item.isEnabled() for item in _visual_items(view)
                 if item.objectName() in ('objectCheckinFileRemove_0','objectCheckinChooseFiles','objectCheckinSubmit')}
+        if fixture['screen'] == 'checkout':
+            result['enabled'] = {item.objectName():item.isEnabled() for item in _visual_items(view)
+                if item.objectName() in ('snapshotCheckoutDownload','snapshotCheckoutClose','snapshotCheckoutFile_F1')}
         if not original:
             result.update(snapshot(window))
         if fixture['screen'] == 'nested':
@@ -324,7 +341,19 @@ def capture(fixture, qml, original):
                 "contentSelection",
             )
         }
-        result['background'] = theme.property('surfaceContainerHigh').name() if fixture['screen'] == 'append' else window.color().name()
+        result['background'] = theme.property('surfaceContainerHigh').name() if fixture['screen'] in ('append','checkout') else window.color().name()
+        if fixture['screen'] == 'checkout' and fixture['mode'] == 'busy':
+            progress = next(item for item in _visual_items(view)
+                if 'ProgressBar' in item.metaObject().className() and item.property('theme') is not None)
+            background = progress.property('background')
+            point = background.mapToScene(QPointF())
+            fill = progress.property('contentItem').property('color')
+            track = background.property('color')
+            assert fill == theme.property('action')
+            assert abs(track.alphaF() - 0.25) < 0.005
+            result['progress'] = dict(value=progress.property('position'),
+                fill=list(fill.getRgb()), track=list(track.getRgb()),
+                bounds=dict(x=point.x(), y=point.y(), width=background.width(), height=background.height()))
         result["completionTracks"] = [
             dict(
                 x=item.mapToScene(QPointF()).x(),
@@ -367,7 +396,7 @@ def main():
     ]
     names += [
         "thlib/ui/qml/features/table/" + name + ".qml"
-        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView", "NestedTableView", "SnapshotAppendView")
+        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView", "NestedTableView", "SnapshotAppendView", "SnapshotCheckoutView")
     ]
     names += [
         "tests/test_columns_table_view.py",
@@ -382,7 +411,11 @@ def main():
         "thlib/ui/table/nested.py",
         "tests/test_table_nested.py",
         "tests/test_table_append.py",
+        "tests/test_table_checkout.py",
         "thlib/ui/table/file_append.py",
+        "thlib/ui/table/file_checkout.py",
+        "thlib/repository_download.py",
+        "thlib/tactic_classes.py",
         "thlib/ui/qml/features/table/runtime/client_api.js",
         "thlib/ui/qml/features/table/runtime/table_action_runtime.js",
         "thlib/ui/translations/ru.json",
@@ -428,6 +461,18 @@ def main():
                                 count=2, processes=[dict(value='publish',label='publish')]),
                             files=[dict(name='reference.txt',size=1024),dict(name='preview.png',size=4096)])
                         captures.append(capture(fixture, HANDLER / 'thlib/ui/qml', False))
+                for width in (360,760):
+                    for state in ('ready','loading','error','busy','empty'):
+                        files = [dict(token='F1',title='scene.ma',fileType='main',bytes=1024,selected=True,enabled=state!='busy'),
+                            dict(token='F2',title='reference.txt',fileType='reference',bytes=4096,selected=False,enabled=state!='busy')]
+                        if state in ('loading','error','empty'):
+                            files=[]
+                        fixture = dict(screen='checkout',mode=state,width=width,height=560,
+                            style=style,dark=dark,language=language,
+                            model=dict(ready=state in ('ready','busy','empty'),loading=state=='loading',busy=state=='busy',
+                                error='File Offline' if state=='error' else '',message='',progress=0.4 if state=='busy' else 0,
+                                context='publish/reference',count=len(files)),files=files)
+                        captures.append(capture(fixture,HANDLER/'thlib/ui/qml',False))
                 for mode in (
                     "text",
                     "multiline",

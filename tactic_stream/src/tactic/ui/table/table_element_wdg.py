@@ -31,6 +31,30 @@ class CheckinButtonElementWdg(BaseTableElementWdg):
                     transferMode=self.get_option('transfer_mode') or '')
 
 
+class CheckoutButtonElementWdg(BaseTableElementWdg):
+    ARGS_KEYS = dict.fromkeys(('transfer_mode',), {})
+
+    def is_editable(self):
+        return False
+
+    def get_cell_value(self):
+        obj = self.get_current_sobject()
+        if obj is None or obj.is_insert():
+            return dict(text='', actions=[])
+        if obj.get_base_search_type() != 'sthpw/snapshot':
+            raise ValueError('Check out requires a snapshot')
+        unsupported = [name for name, value in self.options.items() if value not in (None, '', False)
+            and name not in ('name', 'title', 'class_name', 'transfer_mode')]
+        if unsupported:
+            raise ValueError('Unsupported checkout options: ' + ', '.join(sorted(unsupported)))
+        transfer = self.get_option('transfer_mode') or 'browser'
+        if transfer not in ('browser', 'copy', 'client_repo'):
+            raise ValueError('Unsupported checkout transfer mode')
+        return dict(text='', targetSearchKey=obj.get_search_key(), projectCode=obj.get_value('project_code'),
+            requiresDesktop=transfer != 'browser',
+            actions=[dict(name='file-checkout', label='Check out', icon='download')])
+
+
 class NotificationTriggerElementWdg(BaseTableElementWdg):
     def get_cell_value(self):
         return dict(text='', targetSearchKey=self.get_current_sobject().get_search_key(),

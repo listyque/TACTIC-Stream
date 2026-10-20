@@ -1,16 +1,9 @@
 import { F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, rt as toDisplayString, u as Fragment, y as createTextVNode } from "./vue.js";
 import { at as _plugin_vue_export_helper_default, c as _sfc_main$2, f as _sfc_main$3, k as t, o as mobile } from "./index.js";
 import { k as _sfc_main$4, w as ItemPreview_default } from "./CodeBlock.js";
-import { c as prettySize } from "./files.js";
-//#region src/controls/files.js
-function downloadBlob(blob, filename) {
-	const href = URL.createObjectURL(blob), link = document.createElement("a");
-	link.href = href;
-	link.download = filename;
-	link.click();
-	setTimeout(() => URL.revokeObjectURL(href), 1e3);
-}
-//#endregion
+import { r as prettySize } from "./file_values.js";
+import "./files.js";
+import { t as downloadBlob } from "./files2.js";
 //#region src/features/objects/FilePreviewContent.vue
 var _sfc_main$1 = {
 	components: {
@@ -422,6 +415,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var FilePreview_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { FilePreviewContent_default as n, downloadBlob as r, FilePreview_default as t };
+export { FilePreviewContent_default as n, FilePreview_default as t };
 
 //# sourceMappingURL=FilePreview.js.map

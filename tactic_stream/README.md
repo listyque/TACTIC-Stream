@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.176.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.177.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7691,6 +7691,14 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 
 - Group the existing effort-sorted legacy queue into three implementation stages, keeping independent distribution/legacy transition as a separate fourth stage. Preserve every U/L subblock, its internal order, exclusions and dependency/acceptance gates.
 - Clarify that executing stage 1 means U01, L02, L07a, L03 and L05 together; the inline tags editor alone does not close it. Retain the detailed 14-subblock queue as an expandable reference. This is a planning-only change; runtime and source-audit results are unchanged.
+
+## 0.112.177 — 2026-10-21
+
+- Продолжен файловый блок этапа 2: табличный CheckoutButtonElementWdg открывает общий Frame-список файлов фиксированной версии в отдельном окне ТХ и браузерном диалоге ТС. Браузер скачивает выбранный файл; ТХ использует native File и существующую файловую очередь.
+- Отмена и закрытие прекращают текущую операцию; ответы старой сессии игнорируются. Локальная перезапись требует явного подтверждения. Исправлены поздняя отмена, защита локального файла при завершении передачи и кодирование native URL с #/%.
+- Открытие списка читает метаданные без обхода локального диска; проверка выбранного файла остаётся в worker. В обоих клиентах совпадает порядок файлов, а узкий русский футер и выбранная строка проверяются вводом.
+- Общий нативный индикатор прогресса закреплён за Material: цвет и толщина больше не зависят от порядка загрузки старых Qt-модулей.
+- Здесь принимаются обычные файлы; sequence/UDIM checkout, другие L04 workflows и общая B07-приёмка остаются открыты. Проверки и примеры: docs/frame_table.md.
 
 ## 0.112.176 — 2026-10-20
 

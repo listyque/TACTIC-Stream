@@ -109,3 +109,54 @@ class TableSnapshotAppendCmd(Command):
     def execute(self):
         self.info = append_snapshot_files(**self.kwargs)
         return self.info
+
+
+def read_snapshot_files(search_key):
+    """Read a captured concrete snapshot using only original server methods."""
+    import json
+    from pyasm.biz import Project, Snapshot
+    from pyasm.common import Environment
+    from pyasm.search import Search, SearchKey
+
+    if not Environment.get_security().is_admin():
+        raise PermissionError('Administration requires administrator access')
+    if SearchKey.extract_base_search_type(search_key) != 'sthpw/snapshot':
+        raise ValueError('Check out requires a snapshot')
+    snapshot = Search.get_by_search_key(search_key)
+    if snapshot is None:
+        raise LookupError('Snapshot is no longer available')
+    if snapshot.get_value('project_code') != Project.get_project_code():
+        raise ValueError('Open the snapshot in its own project before checking out files')
+    if str(snapshot.get_value('search_type') or '').split('?')[0] in ('sthpw/message', 'sthpw/message_log'):
+        raise ValueError('Download private message attachments from Messages')
+    version = int(snapshot.get_value('version'))
+    if version <= 0:
+        parent = snapshot.get_sobject()
+        if parent is None:
+            raise LookupError('Snapshot owner is no longer available')
+        snapshot = Snapshot.get_snapshot(parent.get_search_type(), parent.get_code() or parent.get_id(),
+            context=snapshot.get_value('context'), version=version, revision=-1,
+            level_type=snapshot.get_value('level_type'), level_id=snapshot.get_value('level_id'),
+            process=snapshot.get_value('process') or None, use_cache=False, level_parent_search=False)
+        if snapshot is None or int(snapshot.get_value('version')) <= 0:
+            raise LookupError('No concrete snapshot version is available')
+    if snapshot.get_value('project_code') != Project.get_project_code():
+        raise ValueError('Open the snapshot in its own project before checking out files')
+    files = snapshot.get_all_file_objects()
+    # shortcut: Expand native ranges/metadata groups before enabling sequence/UDIM transfers here.
+    if any(file.get_value('file_range', no_exception=True) or (
+            file.get_metadata_dict().get('template') and
+            file.get_metadata_dict().get('type') not in ('file', 'layer_file', 'no_ext')) for file in files):
+        raise ValueError('Sequence and UDIM checkout is not available in this table yet')
+    data = snapshot.get_sobject_dict()
+    data['__files__'] = [file.get_sobject_dict() for file in files]
+    return json.loads(json.dumps(data, default=str))
+
+
+class TableSnapshotFilesCmd(Command):
+    def execute(self):
+        from tactic_stream.server.navigation_links import navigation_link_request
+        data = read_snapshot_files(self.kwargs['search_key'])
+        target = navigation_link_request(dict(link='skey://' + data['__search_key__']))
+        self.info = dict(snapshot=target['object'], files=target['preview']['files'])
+        return self.info

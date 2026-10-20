@@ -26,6 +26,9 @@ import { asyncComponent } from '../../controls/asyncComponent.js';
 const RelatedObjects = asyncComponent(
   () => import('../objects/RelatedObjects.vue')
 );
+const SnapshotCheckout = asyncComponent(
+  () => import('../checkin/SnapshotCheckout.vue')
+);
 import AppButton from '../../controls/AppButton.vue';
 import AppMenu from '../../controls/AppMenu.vue';
 import AppSelect from '../../controls/AppSelect.vue';
@@ -49,6 +52,7 @@ export default {
     openTablePort: { default: null }
   },
   components: {
+    SnapshotCheckout,
     NestedTable,
     TableServiceDialogs,
     TableDocument,
@@ -151,6 +155,8 @@ export default {
       serviceBusy: false,
       serviceMessage: '',
       relatedVisited: false,
+      checkoutVisited: false,
+      checkoutProject: '',
       cellEditor: null,
       editRequest: 0,
       editBusy: false,
@@ -1164,6 +1170,21 @@ export default {
       this.serviceMessage = '';
       try {
         if (kind === 'error') throw new Error(cell.error);
+        if (kind === 'file-checkout') {
+          if (cell.requiresDesktop)
+            throw new Error('This checkout mode requires a desktop connection');
+          this.checkoutProject =
+            cell.projectCode || record.project_code || this.project;
+          await SnapshotCheckout.__asyncLoader();
+          if (request !== this.actionRequest) return;
+          this.checkoutVisited = true;
+          await this.$nextTick();
+          await this.$refs.tableCheckout.open({
+            ...record,
+            __search_key__: cell.targetSearchKey || record.__search_key__
+          });
+          return;
+        }
         if (kind === 'nested-table') {
           const key = record.__search_key__,
             previous = this.expandedTables[key];
@@ -2175,6 +2196,12 @@ export default {
         :search-key="record.__search_key__"
       />
     </section>
+    <SnapshotCheckout
+      v-if="checkoutVisited"
+      ref="tableCheckout"
+      :ticket="ticket"
+      :project="checkoutProject"
+    />
     <ObjectOperations
       v-if="targetRecord"
       ref="tableOperations"

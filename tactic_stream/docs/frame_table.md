@@ -1,9 +1,9 @@
 # Tactic Frame B07: Table View checkpoint
 
 B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the current widget-config census contains 10 classes without typed adapters. The
+the current widget-config census contains 9 classes without typed adapters. The
 first checkpoint added 16 adapters and shared tags; the combined second stage
-adds ten registrations with the explicit limits below. A registered adapter is not proof that every old
+adds eleven registrations with the explicit limits below. A registered adapter is not proof that every old
 display option or embedded action works.
 
 | Portable module | Responsibility |
@@ -15,7 +15,7 @@ display option or embedded action works.
 | `features/table/nested.ui.mjs` | Scoped expanded-table presentation; requests and mutations stay with each host |
 | `features/table/time.ui.mjs` | Table schedule and daily-hours projections; current Gantt/Timesheet owners retain writes |
 | `features/table/inline.ui.mjs` | Typed value editor body, explicit-save and uncertain-write states |
-| `features/table/widgets.json` | 67 server classes, 160 named aliases, editor choices and native adapter categories |
+| `features/table/widgets.json` | 68 server classes, 163 named aliases, editor choices and native adapter categories |
 
 Stream ships these under `src/tactic_stream/shared_ui`; Handler ships its own
 copy under `thlib/ui/qml/tactic_frame`. The server still imports an explicit
@@ -268,6 +268,51 @@ L07a implements the seven service/admin classes listed under L07; L07b is the
 later integrated acceptance, not a second set of seven classes. Existing L02
 adapters remain delivered with the explicit option limits recorded below.
 
+## Snapshot checkout checkpoint — 2026-10-21
+
+Stream 0.112.177 / Handler 0.6.0.124 add `CheckoutButtonElementWdg` for ordinary
+individual snapshot files. The catalogue contains 68 classes / 163 named aliases;
+the 239-source census is 65 adapted, 9 pending, 27 excluded-production and 3
+excluded-unfinished classes. The source ledger has 459 QML + 305 Vue = 764 entries,
+with 220 separately shipped Frame modules.
+
+Both products use `features/files/snapshot_checkout.ui.mjs`. Handler opens an
+ordinary native modal window and reuses native `File` paths plus the existing
+`RepositorySyncController`; the browser downloads the selected file using its
+own destination policy. No browser engine or second transfer queue is added.
+Opening reads file metadata without a local disk walk; the selected file is
+checked off the GUI thread before transfer. Both hosts order main files first,
+then by filename, type and identity, including Unicode filenames.
+Concrete version, owning project and selected file remain captured. Private
+message attachments retain the Messages flow; unsupported sequence/UDIM groups
+are rejected explicitly. Their full transfer support remains L04 work.
+
+Real mouse input verifies native overwrite confirmation, cancellation during
+local stat/HTTP read, closing, and late-response disposal. Transfer regressions
+preserve files created during HTTP reads and prevent duplicate scheduling from
+mutating an active request's source/policy. Native file URLs quote literal path
+metadata including spaces, `#` and `%`. A real isolated browser/server/database
+scenario clicks the table action after append, then verifies the actual downloaded
+name, bytes, owning project and unchanged snapshot version. Focused browser input
+also covers empty/error, HTTP cancellation, session changes and 320px scrolling.
+
+The house native ProgressBar explicitly uses the Material implementation. Its
+accent and track no longer depend on which Qt control module was loaded first.
+A regression preloads the generic control before checking actual colors/pixels;
+the paired checkout driver also compares track color, thickness and fill value.
+
+Checks for this checkpoint: all 147 Frame platform steps, including independent
+packaging; 89 native table tests and 65 server table tests. Fresh comparison
+covers 708 current Handler/Stream states, including 120 checkout states; the
+744 native captures also retain 36 historical B06 references. The paired form
+body is checked separately from operating-system window decorations. Browser
+input checks the real table action and downloaded filename/bytes, cancellation,
+session changes, selection paint and the narrow translated footer.
+
+This is an L04 checkpoint, not completion of stage 2 or B07. Ordinary-user ACL,
+original-server/PostgreSQL execution, physical devices/DPI, groups, publish,
+remaining nested/group/time/options and the final B07 matrix remain open.
+
 ## Snapshot append checkpoint — 2026-10-20
 
 Stream 0.112.176 / Handler 0.6.0.123 add `FileAppendLinkTableElement`.
@@ -371,7 +416,7 @@ examples are also in EN/RU Help → Table View: B07.
 - [ ] `pyasm.widget.table_element_wdg.RenderLinkTableElement`
 - [ ] `pyasm.widget.table_element_wdg.SubmissionLinkTableElement`
 - [ ] `tactic.ui.cgapp.loader_element_wdg.LoaderElementWdg`
-- [ ] `tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg`
+- [ ] `tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg` — ordinary single files delivered in .177/.124; sequence/UDIM and remaining original options are not accepted yet.
 - [ ] `tactic.ui.table.table_element_wdg.GeneralPublishElementWdg`
 
 Из ячейки выполнить append/publish/checkout/load/submission по исходным параметрам через текущие file/Commit Queue owners; проверить snapshot/version, naming, файлы, повтор, права и FileUndo. RenderLink не объявляет готовым отдельный render farm. Local/DCC операции остаются native capabilities, браузер показывает доступные ему действия и понятное ограничение.
@@ -434,7 +479,7 @@ and limits in EN/RU Widget Database Help. Reuse the existing object, task, file,
 schedule and communication owners; opening a generic panel is not implementation
 of the configured embedded scope. Unsupported options stay explicit.
 
-Before closing B07 in L07b, exercise the complete 67-class catalogue,
+Before closing B07 in L07b, exercise the complete 68-class catalogue,
 configured forms/inline editors, native keywords/tags and the used legacy
 bottom/group_bottom/total_summary contracts too. A 40-class checklist alone
 cannot certify all historical options. Current working controls remain delivered.

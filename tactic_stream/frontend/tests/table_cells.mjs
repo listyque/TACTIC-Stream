@@ -1046,8 +1046,11 @@ try {
     .evaluate((el) => el.dispatchEvent(new Event('scroll')));
   await cardsPreview.waitFor({ state: 'hidden' });
   // Configured table previews are desktop-only; phone task editing is exercised in mobile_complete.
+  // Scroll closes the preview; reopening requires a new pointer movement.
+  await page.mouse.move(1000, 40);
   await taskCell.hover();
-  await page.clock.fastForward(300);
+  await page.clock.runFor(300);
+  await cardsPreview.waitFor({ state: 'visible' });
   assert.equal(
     await cardsPreview.evaluate((el) => el.scrollWidth <= el.clientWidth),
     true
@@ -1266,8 +1269,10 @@ try {
   // Finish selected-row layout on the mocked frame clock before anchoring the editor.
   await page.clock.runFor(300);
   await ready();
+  await page.mouse.move(1000, 40);
   await taskCell.hover();
-  await page.clock.fastForward(300);
+  await page.clock.runFor(300);
+  await cardsPreview.waitFor({ state: 'visible' });
   await cardsPreview
     .locator('.task-card')
     .filter({

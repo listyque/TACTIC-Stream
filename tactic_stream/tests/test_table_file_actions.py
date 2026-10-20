@@ -1,6 +1,7 @@
 """Snapshot append uses actual files, revisions and the native rollback owner."""
 import unittest
 import hashlib
+import json
 from pathlib import Path
 from unittest.mock import patch
 
@@ -9,7 +10,7 @@ from test_table_embedded_widgets import write
 from pyasm.biz import Snapshot
 from pyasm.common import Environment
 from pyasm.search import Search
-from tactic.ui.table.file_actions import append_snapshot_files
+from tactic.ui.table.file_actions import append_snapshot_files, read_snapshot_files
 
 
 class TableFileActions(unittest.TestCase):
@@ -147,6 +148,7 @@ class TableFileActions(unittest.TestCase):
                 prepared=append_snapshot_files(alias.get_search_key())
                 self.assertEqual(prepared['searchKey'],target.get_search_key())
                 self.assertEqual(prepared['version'],target.get_value('version'))
+                self.assertEqual(read_snapshot_files(alias.get_search_key())['__search_key__'], target.get_search_key())
                 with self.assertRaisesRegex(ValueError,'concrete snapshot'):
                     write(lambda:append_snapshot_files(alias.get_search_key(),action='save'))
 
@@ -159,6 +161,71 @@ class TableFileActions(unittest.TestCase):
         alias=write(lambda:Snapshot._get_versionless(parent.get_search_type(),parent.get_code(),'publish','latest',
             True,level_type=level.get_search_type(),level_id=level.get_id()))
         self.assertEqual(append_snapshot_files(alias.get_search_key())['searchKey'],scoped.get_search_key())
+        self.assertEqual(read_snapshot_files(alias.get_search_key())['__search_key__'],scoped.get_search_key())
+
+    def test_checkout_reads_the_exact_version_and_uses_existing_encoded_web_paths(self):
+        from tactic.ui.table.file_actions import TableSnapshotFilesCmd
+        from tactic.ui.table import CheckoutButtonElementWdg
+        from tactic_stream.server.table_cells import describe_cell
+        snapshot = self.snapshot()
+        prepared = append_snapshot_files(snapshot.get_search_key())
+        self.upload('reference #.txt', b'captured version', prepared=prepared)
+        write(lambda: append_snapshot_files(prepared['searchKey'], action='save', upload_directory=prepared['uploadDirectory'],
+            expected_revision=prepared['expectedRevision'], filenames=['reference #.txt'], keep_file_name=True))
+        latest = self.snapshot()
+        data = read_snapshot_files(snapshot.get_search_key())
+        self.assertEqual(data['version'], 1)
+        self.assertEqual(data['__files__'][0]['file_name'], 'reference #.txt')
+        self.assertEqual(read_snapshot_files(latest.get_search_key())['__files__'], [])
+        command = TableSnapshotFilesCmd(search_key=snapshot.get_search_key())
+        command.execute()
+        self.assertEqual(command.info['snapshot']['__search_key__'], snapshot.get_search_key())
+        self.assertIn('%23', command.info['files'][0]['href'])
+        self.assertEqual(command.info['files'][0]['filename'], 'reference #.txt')
+        widget = CheckoutButtonElementWdg()
+        widget.set_sobject(snapshot)
+        self.assertEqual(widget.get_cell_value()['actions'][0]['name'], 'file-checkout')
+        self.assertFalse(widget.get_cell_value()['requiresDesktop'])
+        widget.set_option('transfer_mode', 'copy')
+        self.assertTrue(widget.get_cell_value()['requiresDesktop'])
+        self.assertTrue(describe_cell(dict(name='checkout', display=dict(
+            handler='tactic.ui.table.CheckoutButtonElementWdg', options={}), action=dict(handler='', options={})), {})['supported'])
+
+    def test_checkout_checks_identity_project_and_privacy_before_file_reads(self):
+        snapshot = self.snapshot()
+        with patch.object(Environment.get_security(), 'is_admin', return_value=False), self.assertRaises(PermissionError):
+            read_snapshot_files(snapshot.get_search_key())
+        with patch('pyasm.biz.Project.get_project_code', return_value='another'), self.assertRaisesRegex(ValueError, 'own project'):
+            read_snapshot_files(snapshot.get_search_key())
+        with self.assertRaisesRegex(ValueError, 'requires a snapshot'):
+            read_snapshot_files('contract/entity?project=one&code=A')
+        def make_private():
+            snapshot.set_value('search_type', 'sthpw/message')
+            snapshot.commit(triggers=False)
+        write(make_private)
+        with self.assertRaisesRegex(ValueError, 'Messages'):
+            read_snapshot_files(snapshot.get_search_key())
+
+    def test_checkout_refuses_a_representative_file_instead_of_a_whole_sequence(self):
+        snapshot = self.snapshot()
+        prepared = append_snapshot_files(snapshot.get_search_key())
+        self.upload('frame.exr', prepared=prepared)
+        write(lambda: append_snapshot_files(prepared['searchKey'], action='save', upload_directory=prepared['uploadDirectory'],
+            expected_revision=prepared['expectedRevision'], filenames=['frame.exr'], keep_file_name=True))
+        file = Search.get_by_search_key(prepared['searchKey']).get_all_file_objects()[0]
+        for file_range, metadata in (
+            ('1-2', {}),
+            ('', dict(template='$FILENAME.$UDIM.$EXT', type='udim', udims=['1001', '1002'])),
+            ('', dict(template='$FILENAME.$FRAME.$EXT', type='sequence', frameranges=['1-2'])),
+        ):
+            with self.subTest(file_range=file_range, metadata=metadata):
+                def make_group():
+                    file.set_value('file_range', file_range)
+                    file.set_value('metadata', json.dumps(metadata))
+                    file.commit(triggers=False)
+                write(make_group)
+                with self.assertRaisesRegex(ValueError, 'Sequence'):
+                    read_snapshot_files(snapshot.get_search_key())
 
     def test_interleaved_sessions_do_not_replace_each_others_same_named_uploads(self):
         first = self.snapshot()

@@ -3,7 +3,7 @@ import { A as appearance, I as saveAppearance, M as effectiveColorMode, P as lan
 import { Gt as rect, Ht as label, L as _sfc_main$9, R as _sfc_main$11, T as AppSearchField_default, Ut as muted, Vt as button, Wt as node, ct as saveServerConfiguration, et as projectCatalog, ht as serverConfiguration, i as _sfc_main$10, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { a as unsupportedField, i as fieldKind, t as RecordForm_default } from "./RecordForm.js";
 import { d as timestampFullLabel } from "./textMetrics.js";
-import { L as views, S as pages, _ as describe$2, a as updateIntervals, b as confirmation, d as lifecycle, f as ProjectCreation_default, g as contentWidth, h as change, i as updateBatchDelays, o as updateModes, p as ImagePicker_default, r as networkSettings, v as editColumn, x as describe$3, y as fieldsFor } from "./App.js";
+import { R as views, S as pages, _ as describe$2, a as updateIntervals, b as confirmation, d as lifecycle, f as ProjectCreation_default, g as contentWidth, h as change, i as updateBatchDelays, o as updateModes, p as ImagePicker_default, r as networkSettings, v as editColumn, x as describe$3, y as fieldsFor } from "./App.js";
 //#region src/features/configuration/FrameSettings.vue
 var _sfc_main$6 = {
 	__name: "FrameSettings",

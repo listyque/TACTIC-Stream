@@ -2,7 +2,8 @@ import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I a
 import { A as appearance, R as controls, Z as preferences, at as _plugin_vue_export_helper_default, c as _sfc_main$3, k as t, o as mobile } from "./index.js";
 import { Gt as rect, Ht as label, Vt as button, Wt as node, X as navigationLink, i as _sfc_main$4, ot as resultItems, r as observeFrameSizes, st as rpc, xt as uploadFormFile, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
-import { a as sourcePath, c as prettySize, l as sourceIcon } from "./files.js";
+import { i as sourceIcon, r as prettySize } from "./file_values.js";
+import { a as sourcePath } from "./files.js";
 import { t as _sfc_main$5 } from "./AppDialog.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { w as captionedSwitch } from "./App.js";

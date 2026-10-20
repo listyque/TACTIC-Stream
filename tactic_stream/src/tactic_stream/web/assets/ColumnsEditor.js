@@ -2,7 +2,7 @@ import { F as resolveComponent, K as withDirectives, M as openBlock, _ as create
 import { A as appearance, at as _plugin_vue_export_helper_default, k as t } from "./index.js";
 import { Gt as rect, H as columnsEditor, Ht as label, Ut as muted, Vt as button, Wt as node, i as _sfc_main$1, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
-import { X as definitionWizard, Y as changeDefinition, Z as displayWidgets } from "./App.js";
+import { Q as displayWidgets, X as changeDefinition, Z as definitionWizard } from "./App.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
 var initial = () => ({

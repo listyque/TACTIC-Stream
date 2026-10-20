@@ -12,6 +12,7 @@ import TableServiceDialogs from '../../frontend/src/features/interface/TableServ
 import TableDocument from '../../frontend/src/features/interface/TableDocument.vue';
 import TableInlineEditor from '../../frontend/src/features/interface/TableInlineEditor.vue';
 import ObjectCheckinForm from '../../frontend/src/features/checkin/ObjectCheckinForm.vue';
+import SnapshotCheckoutSurface from '../../frontend/src/features/checkin/SnapshotCheckoutSurface.vue';
 import { t } from '../../frontend/src/i18n.js';
 const fixture = ref(null),
   data = ref(null),
@@ -146,6 +147,16 @@ window.tableFixture = {
     <ObjectCheckinForm
       v-else-if="fixture.screen === 'append'"
       :model="{ ...fixture.model, error: t(fixture.model.error) }"
+      :files="fixture.files"
+      @event="events.push($event)"
+    />
+    <SnapshotCheckoutSurface
+      v-else-if="fixture.screen === 'checkout'"
+      :model="{
+        ...fixture.model,
+        error: t(fixture.model.error),
+        message: t(fixture.model.message)
+      }"
       :files="fixture.files"
       @event="events.push($event)"
     />

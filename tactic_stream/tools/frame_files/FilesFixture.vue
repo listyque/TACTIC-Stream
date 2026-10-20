@@ -10,6 +10,7 @@ import IngestFiles from '../../frontend/src/features/checkin/IngestFiles.vue';
 import DropPlate from '../../frontend/src/features/checkin/DropPlate.vue';
 import CommitQueue from '../../frontend/src/features/checkin/CommitQueue.vue';
 import ObjectCheckin from '../../frontend/src/features/checkin/ObjectCheckin.vue';
+import SnapshotCheckout from '../../frontend/src/features/checkin/SnapshotCheckout.vue';
 import WorkspaceInspectorView from '../../frontend/src/features/fileWorkspace/inspection/WorkspaceInspectorView.vue';
 import FileWorkspaceDepots from '../../frontend/src/features/fileWorkspace/FileWorkspaceDepots.vue';
 import FileWorkspaceStorage from '../../frontend/src/features/fileWorkspace/FileWorkspaceStorage.vue';
@@ -19,6 +20,7 @@ const fixture = ref(null),
   ingest = ref(null),
   queue = ref(null),
   objectCheckin = ref(null),
+  snapshotCheckout = ref(null),
   events = ref([]);
 provide('queueCheckin', (value) => events.value.push({ type: 'queue', value }));
 provide('openScriptEditor', (value) =>
@@ -63,6 +65,10 @@ window.filesFixture = {
           : { name: 'Hero Robot', __search_key__: 'cg/asset?code=ROBOT001' },
         value.options || {}
       );
+    if (value.screen === 'snapshot-checkout')
+      await snapshotCheckout.value.open({
+        __search_key__: 'sthpw/snapshot?code=S7'
+      });
     if (value.screen.startsWith('queue')) {
       preferences.checkin.commitQueueAutoClean = false;
       for (const row of value.model.queue || []) {
@@ -171,6 +177,12 @@ window.filesFixture = {
       v-else-if="fixture.screen === 'object-checkin'"
       ref="objectCheckin"
       ticket="fixture"
+      project="cg"
+    />
+    <SnapshotCheckout
+      v-else-if="fixture.screen === 'snapshot-checkout'"
+      ref="snapshotCheckout"
+      :ticket="session.ticket"
       project="cg"
     />
     <div v-else-if="fixture.screen.startsWith('queue')" id="dock-commit_queue">

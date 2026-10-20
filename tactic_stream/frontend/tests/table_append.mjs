@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 
 const browser = await chromium.launch({
@@ -150,11 +151,49 @@ try {
     'Append preserves the concrete snapshot version'
   );
   assert.equal(result.text, 'real HTTP attachment bytes');
+  const checkoutReads = [];
+  page.on('request', (request) => {
+    if (!request.url().endsWith('/admin/rpc')) return;
+    const data = request.postDataJSON();
+    if (
+      data.method === 'execute_cmd' &&
+      data.args[1] === 'tactic.ui.table.TableSnapshotFilesCmd'
+    )
+      checkoutReads.push(data);
+  });
+  await snapshotRow
+    .getByRole('button', { name: 'Check out', exact: true })
+    .tap();
+  const checkout = page.locator('.snapshot-checkout[open]');
+  await checkout
+    .locator('.snapshot-checkout-workspace[aria-busy=false]')
+    .waitFor();
+  assert.equal(checkoutReads.length, 1);
+  const read = checkoutReads[0];
+  assert.equal(read.args[0].project, 'one');
+  assert.equal(read.args[2].search_key, snapshot.__search_key__);
+  const fileDownload = page.waitForEvent('download');
+  await checkout.locator('[data-frame=snapshotCheckoutDownload]').tap();
+  const file = await fileDownload;
+  assert.equal(file.suggestedFilename(), 'http-append.txt');
+  assert.equal(
+    (await readFile(await file.path())).toString(),
+    'real HTTP attachment bytes'
+  );
+  await checkout.locator('[data-frame=snapshotCheckoutClose]').tap();
+  await checkout.waitFor({ state: 'hidden' });
   assert.match(page.url(), /\/projects\/admin\//);
   assert.deepEqual(errors, []);
   console.log(
-    'Snapshot table append: real HTTP bytes, scoped project, captured version/type/name passed.'
+    'Snapshot table append and checkout: real upload/download bytes, scoped project, captured version/type/name passed.'
   );
+} catch (error) {
+  console.error(
+    'Visible table errors:',
+    await page.locator('.configured-view > .error').allTextContents()
+  );
+  console.error('Browser errors:', errors);
+  throw error;
 } finally {
   await browser.close();
 }

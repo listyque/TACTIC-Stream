@@ -1,7 +1,7 @@
 import { A as onMounted, B as useModel, C as inject, E as nextTick, G as withCtx, H as watch, I as resolveDirective, K as withDirectives, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, T as mergeProps, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, w as mergeModels } from "./vue.js";
 import { A as appearance, R as controls, c as _sfc_main$4, f as _sfc_main$3, k as t } from "./index.js";
 import { Gt as rect, Ht as label, T as AppSearchField_default, U as endActivity, Ut as muted, V as beginActivity, Vt as button, Wt as node, _ as copyText, c as _sfc_main$7, d as completions, f as documentSymbols, i as _sfc_main$5, k as _sfc_main$8, l as toolbar$1, lt as scriptEditor, n as frameContentWidth, r as observeFrameSizes, st as rpc, u as _sfc_main$6, y as translate } from "./CodeBlock.js";
-import { C as _sfc_main$9, E as _sfc_main$10, c as buttonId, l as runBrowserScript, u as scriptTree } from "./App.js";
+import { C as _sfc_main$9, D as _sfc_main$10, c as buttonId, l as runBrowserScript, u as scriptTree } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/source.ui.mjs
 function toolbarHeight(width) {
 	return 30 + (width < 530 ? controls.scrollBar.extent : 0);

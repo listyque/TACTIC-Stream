@@ -88,6 +88,9 @@ def fingerprints(handler):
         handler / 'tests/test_table_service_workflows.py',
         handler / 'tests/test_table_nested.py',
         handler / 'tests/test_table_append.py',
+        handler / 'tests/test_table_checkout.py',
+        handler / 'thlib/repository_download.py',
+        handler / 'thlib/tactic_classes.py',
         handler / 'thlib/side/client/tactic_client_lib/tactic_server_stub.py',
         ROOT / 'frontend/tests/table_script_runtime.mjs',
         ROOT / 'frontend/tests/table_script_worker.mjs',
@@ -184,6 +187,7 @@ def fingerprints(handler):
             "frame_files_state.mjs",
             "frame_files_queue.mjs",
             "frame_files_object_checkin.mjs",
+            "frame_files_snapshot_checkout.mjs",
             "checkin.mjs",
             "file-workspace-inspection.mjs",
             "gantt_calendar.mjs",
@@ -730,6 +734,12 @@ def main():
             {},
         ),
         (
+            "browser-snapshot-checkout-input",
+            ["node", "frontend/tests/frame_files_snapshot_checkout.mjs"],
+            ROOT,
+            {},
+        ),
+        (
             "native-files-input",
             python
             + [
@@ -960,6 +970,7 @@ def main():
                 "tests.test_table_service_workflows",
                 "tests.test_table_nested",
                 "tests.test_table_append",
+                "tests.test_table_checkout",
             ],
             handler,
             {},

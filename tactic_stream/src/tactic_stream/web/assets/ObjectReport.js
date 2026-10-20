@@ -5,6 +5,7 @@ import { f as linkifyPlainText, l as activateRichLink, n as browserLink, u as es
 import { d as timestampFullLabel, f as timestampLabel, i as compactText, l as needsExpansion, n as qtLabelTextWidth, r as changeValue, s as eventSentence, u as safeColor } from "./textMetrics.js";
 import { t as _sfc_main$6 } from "./AttachmentCard.js";
 import { t as FilePreview_default } from "./FilePreview.js";
+import { t as fileBlob } from "./previewFiles.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/report.ui.mjs
 var sections = [
 	{
@@ -1173,14 +1174,6 @@ var _sfc_main$1 = {
 	}
 };
 //#endregion
-//#region src/features/objects/previewFiles.js
-async function fileBlob(file) {
-	if (!file?.href) throw new Error(t("No web path is configured for this file."));
-	const response = await fetch(file.href);
-	if (!response.ok) throw new Error(t("File Offline"));
-	return response.blob();
-}
-//#endregion
 //#region src/features/objects/ObjectReport.vue
 var _hoisted_1 = ["aria-busy"];
 var _hoisted_2 = {
@@ -1476,6 +1469,6 @@ var _sfc_main = {
 	}
 };
 //#endregion
-export { usePagination as i, fileBlob as n, _sfc_main$2 as r, _sfc_main as t };
+export { _sfc_main$2 as n, usePagination as r, _sfc_main as t };
 
 //# sourceMappingURL=ObjectReport.js.map

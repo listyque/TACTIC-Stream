@@ -8,7 +8,7 @@ order: 96
 
 [Table View / Columns Editor](table_view.en.md) · [B07](table_widgets_b07.en.md) · [Widget Database](widget_database.en.md)
 
-Current as of 2026-10-20: 239 shipped XML/CG entries; 64 referenced adapted classes, **10 pending**, 27 excluded `pyasm.prod`, 3 explicitly unfinished. The complete catalogue contains 67 classes / 160 named aliases. Registration does not certify every original option; stage 2/B07 remain open.
+Current as of 2026-10-21: 239 shipped XML/CG entries; 65 referenced adapted classes, **9 pending**, 27 excluded `pyasm.prod`, 3 explicitly unfinished. The complete catalogue contains 68 classes / 163 named aliases. Checkout currently accepts ordinary single files; sequence/UDIM and remaining options stay open. Registration does not certify every original option; stage 2/B07 remain open.
 
 L01–L07 order: relationships/nested rows (8) → discussion/message/task (4) →
 configured actions/layout (3) → files (7) → status/process (6) →

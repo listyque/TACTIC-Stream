@@ -472,8 +472,79 @@ try {
       const image = record.image.replace('-native-', '-stream-');
       await page.locator(selector).screenshot({ path: out + image });
       cases.push({ image, fixture, ...compared });
-    } else if (fixture.screen === 'append') {
-      const selector = '.object-checkin-workspace > .frame-view';
+    } else if (['append', 'checkout'].includes(fixture.screen)) {
+      const selector =
+        fixture.screen === 'append'
+          ? '.object-checkin-workspace > .frame-view'
+          : '.snapshot-checkout-workspace > .frame-view';
+      if (record.progress) {
+        const progress = await page
+          .locator('[data-frame=snapshotCheckoutProgress].app-progress')
+          .evaluate((element, native) => {
+            const rgba = (color) => {
+              const canvas = document.createElement('canvas');
+              canvas.width = canvas.height = 1;
+              const context = canvas.getContext('2d');
+              // Check visible RGB and alpha separately; unpremultiplication loses low-alpha precision.
+              context.fillStyle = '#000';
+              context.fillRect(0, 0, 1, 1);
+              context.fillStyle = color;
+              context.fillRect(0, 0, 1, 1);
+              const painted = [...context.getImageData(0, 0, 1, 1).data].slice(
+                0,
+                3
+              );
+              context.clearRect(0, 0, 1, 1);
+              context.fillRect(0, 0, 1, 1);
+              return painted.concat(context.getImageData(0, 0, 1, 1).data[3]);
+            };
+            const style = getComputedStyle(element),
+              fill = getComputedStyle(element, '::before');
+            return {
+              value: Number(style.getPropertyValue('--progress-value')),
+              fill: rgba(fill.backgroundColor),
+              track: rgba(style.backgroundColor),
+              native: Object.fromEntries(
+                ['fill', 'track'].map((name) => {
+                  const [red, green, blue, alpha] = native[name];
+                  return [
+                    name,
+                    rgba(`rgba(${red}, ${green}, ${blue}, ${alpha / 255})`)
+                  ];
+                })
+              )
+            };
+          }, record.progress);
+        assert.equal(progress.value, record.progress.value);
+        for (const color of ['fill', 'track'])
+          progress[color].forEach((channel, index) =>
+            assert(
+              Math.abs(channel - progress.native[color][index]) <= 1,
+              JSON.stringify({
+                image: record.image,
+                color,
+                actual: progress[color],
+                native: progress.native[color]
+              })
+            )
+          );
+        const actual = await page
+          .locator('[data-frame=snapshotCheckoutProgress].app-progress')
+          .boundingBox();
+        const root = await page.locator(selector).boundingBox();
+        for (const [key, expected] of Object.entries(record.progress.bounds)) {
+          const value =
+            key === 'x'
+              ? actual.x - root.x
+              : key === 'y'
+                ? actual.y - root.y
+                : actual[key];
+          assert(
+            Math.abs(value - expected) <= 0.1,
+            record.image + ' progress ' + key
+          );
+        }
+      }
       for (const [id, enabled] of Object.entries(record.enabled))
         assert.equal(
           await page.locator('[data-frame="' + id + '"]').isEnabled(),
@@ -483,10 +554,16 @@ try {
       const background = `rgb(${[1, 3, 5].map((index) => parseInt(record.background.slice(index, index + 2), 16)).join(', ')})`;
       assert.equal(
         await page
-          .locator('[data-frame=snapshotAppendSurface]')
+          .locator(
+            '[data-frame=' +
+              (fixture.screen === 'append'
+                ? 'snapshotAppendSurface'
+                : 'snapshotCheckoutSurface') +
+              ']'
+          )
           .evaluate((element) => getComputedStyle(element).backgroundColor),
         background,
-        'Append body paint matches the real native host'
+        'File form body paint matches the real native host'
       );
       const actual = await surface(page, selector);
       const compared = await compareSurface(

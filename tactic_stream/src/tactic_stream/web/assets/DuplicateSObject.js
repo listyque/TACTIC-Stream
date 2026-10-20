@@ -4,7 +4,7 @@ import { A as appearance, R as controls, at as _plugin_vue_export_helper_default
 import { D as _sfc_main$4, E as _sfc_main$6, Gt as rect, Ht as label, Lt as notify, N as _sfc_main$9, O as _sfc_main$5, P as _sfc_main$8, R as _sfc_main$7, Vt as button, Wt as node, i as _sfc_main$3, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$10 } from "./ObjectFieldFrame.js";
 import { t as captionHeight } from "./sections.ui.js";
-import { G as changeContent, J as saveDuplicateProfile, K as contentChoices, U as _sfc_main$11, W as applyDuplicateProfile, q as duplicateProfile } from "./App.js";
+import { G as applyDuplicateProfile, J as duplicateProfile, K as changeContent, W as _sfc_main$11, Y as saveDuplicateProfile, q as contentChoices } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/duplicate.ui.mjs
 var duplicate_ui_exports = /* @__PURE__ */ __exportAll({
 	body: () => body,

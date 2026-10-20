@@ -5,7 +5,7 @@ import { D as _sfc_main$10, E as _sfc_main$11, F as _sfc_main$7, Gt as rect, Ht 
 import { d as extractSkeys, n as browserLink, u as escapeHtml } from "./links.js";
 import { t as _sfc_main$12 } from "./AttachmentCard.js";
 import { t as _sfc_main$13 } from "./AppMenuItem.js";
-import { R as _sfc_main$15, n as MarkdownItCallable, s as _sfc_main$14, z as messageDate } from "./App.js";
+import { B as messageDate, n as MarkdownItCallable, s as _sfc_main$14, z as _sfc_main$15 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/knowledge/workspace.ui.mjs
 var metrics = Object.freeze({
 	inset: 8,

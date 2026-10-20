@@ -18,6 +18,7 @@ from tactic.ui.app.search_type_element_wdg import SearchTypeHasTableElementWdg
 from tactic.ui.common import RawTableElementWdg, SimpleTableElementWdg
 from tactic.ui.table import (
     CheckinButtonElementWdg,
+    CheckoutButtonElementWdg,
     DeleteElementWdg,
     ExplorerElementWdg,
     ExplorerTableElementWdg,
@@ -75,7 +76,7 @@ from tactic.ui.table.gantt_element_wdg import GanttElementWdg
 from tactic.ui.table.work_hours_element_wdg import WorkHoursElementWdg
 TIME_WIDGETS = (GanttWdg, GanttElementWdg, TimecardInfoTableElement, WeekTableElement, WorkHoursElementWdg)
 
-SERVICE_WIDGETS = (FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
+SERVICE_WIDGETS = (CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
                    ProjectTemplateUpdateWdg, NotificationTriggerElementWdg, ButtonElementWdg,
                    ParallelStatusWdg, ParallelStatusEditWdg, SObjectTaskStatusElementWdg, WorkElementWdg, DropElementWdg)
 
@@ -248,6 +249,8 @@ def describe_cell(element, columns, search_type=""):
     allowed = {"column"}
     if widget in TIME_WIDGETS:
         allowed |= set(widget.ARGS_KEYS) if hasattr(widget, 'ARGS_KEYS') else set()
+    elif widget is CheckoutButtonElementWdg:
+        allowed |= set(widget.ARGS_KEYS)
     elif widget in NESTED_WIDGETS:
         allowed |= set(HiddenRowElementWdg.ARGS_KEYS)
     elif widget in (ButtonElementWdg, DropElementWdg, CustomLayoutElementWdg):

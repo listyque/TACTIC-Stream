@@ -4,7 +4,7 @@ import { F as _sfc_main$7, Lt as notify, _ as copyText, g as copyImage, i as _sf
 import { t as RecordForm_default } from "./RecordForm.js";
 import { a as metrics, i as layout, l as toolbar, n as fileColumns, o as optionActions, r as fileIcon, s as optionChange, t as clampRatio } from "./snapshot.ui.js";
 import { t as FilePreview_default } from "./FilePreview.js";
-import { Q as _sfc_main$8, V as ObjectAction_default } from "./App.js";
+import { $ as _sfc_main$8, H as ObjectAction_default } from "./App.js";
 //#region src/features/objects/SnapshotToolbar.vue
 var _sfc_main$1 = {
 	__name: "SnapshotToolbar",
