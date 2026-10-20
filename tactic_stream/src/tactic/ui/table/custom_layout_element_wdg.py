@@ -82,6 +82,23 @@ def read_custom_layout(search_key, view='', html='', include_mako=True, _depth=0
             trees.append(ast.parse(textwrap.dedent(part.text).strip(),mode='eval' if kind=='Expression' else 'exec'))
         local_names = {target.id for tree in trees for item in ast.walk(tree) if isinstance(item,ast.Assign)
                        for target in item.targets if isinstance(target,ast.Name)}
+        # CG binds `parent` to its JSON search key, before any output; never expose Mako's parent namespace.
+        for tree in trees[:1]:
+            if not isinstance(tree, ast.Module):
+                continue
+            for statement in tree.body:
+                if (isinstance(statement, ast.Assign) and len(statement.targets) == 1
+                        and isinstance(statement.targets[0], ast.Name) and statement.targets[0].id == 'parent'
+                        and isinstance(statement.value, ast.Call)
+                        and isinstance(statement.value.func, ast.Attribute)
+                        and isinstance(statement.value.func.value, ast.Name) and statement.value.func.value.id == 'sobject'
+                        and statement.value.func.attr == 'get' and len(statement.value.args) == 1
+                        and isinstance(statement.value.args[0], ast.Constant) and statement.value.args[0].value == '__search_key__'
+                        and not statement.value.keywords):
+                    reserved.discard('parent')
+                    break
+                if any(isinstance(item, ast.Name) and item.id == 'parent' for item in ast.walk(statement)):
+                    break
         if local_names & reserved:
             raise ValueError('CustomLayout supports data-only Mako; use a configured action for code execution')
         for tree in trees:
@@ -155,6 +172,16 @@ def read_custom_layout(search_key, view='', html='', include_mako=True, _depth=0
             options = {child['tag']: (''.join(markup(part) for part in child['children']) if child['tag']=='html' else text(child).strip()) for child in display['children'] if isinstance(child, dict)}
             if handler in ('tactic.ui.panel.CustomLayoutWdg', 'tactic.ui.table.CustomLayoutElementWdg', 'custom_layout'):
                 nodes.extend(read_custom_layout(search_key, _depth=_depth+1, _behaviors=behaviors, **options)['layoutNodes'])
+            elif handler in ('tactic.ui.panel.TableLayoutWdg', 'tactic.ui.panel.FastTableLayoutWdg', 'tactic.ui.panel.ViewPanelWdg'):
+                allowed = {'search_type','search_key','view','expression','show_search_limit','show_insert',
+                           'show_row_select','show_select','show_gear','show_search','show_shelf','init_load_num'}
+                if set(options) - allowed or not options.get('search_type'):
+                    raise ValueError('Unsupported CustomLayout table options')
+                nodes.append(dict(kind='table', text=attrs.get('name') or 'Table View', table=dict(
+                    searchType=options['search_type'], parentKey=options.get('search_key') or search_key,
+                    view=options.get('view') or 'table', expression=options.get('expression') or '',
+                    selection=options.get('show_row_select',options.get('show_select')) not in (False,'false'),
+                    insert=options.get('show_insert') not in (False,'false'))))
             elif handler in ('pyasm.widget.ThumbWdg', 'ThumbWdg'):
                 from pyasm.widget import ThumbWdg
                 widget = ThumbWdg(name=attrs.get('name') or 'preview', **options)
@@ -163,7 +190,6 @@ def read_custom_layout(search_key, view='', html='', include_mako=True, _depth=0
                 nodes.append(dict(kind='preview', text=str(obj.get_display_value()), value=value,
                                   javascript=behaviors.get(attrs.get('name'), '')))
             else:
-                # shortcut: nested TableLayout belongs to the hidden-row/table migration in stage 2.
                 raise ValueError('CustomLayout embedded widget is not migrated: ' + str(handler))
         elif tag == 'a':
             source = next((behaviors[name] for name in attrs.get('class','').split() if name in behaviors), '')

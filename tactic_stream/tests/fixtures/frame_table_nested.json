@@ -1,0 +1,998 @@
+{
+  "columns": [
+    {
+      "name": "name",
+      "title": "Name",
+      "width": 180,
+      "cell": {
+        "kind": "text"
+      },
+      "supported": true
+    },
+    {
+      "name": "description",
+      "title": "Description",
+      "width": 320,
+      "cell": {
+        "kind": "text"
+      },
+      "supported": true
+    }
+  ],
+  "rows": [
+    {
+      "key": "0",
+      "nodeId": "nested:0",
+      "record": {
+        "name": "Robot 0",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 0"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "1",
+      "nodeId": "nested:1",
+      "record": {
+        "name": "Robot 1",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 1"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "2",
+      "nodeId": "nested:2",
+      "record": {
+        "name": "Robot 2",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 2"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "3",
+      "nodeId": "nested:3",
+      "record": {
+        "name": "Robot 3",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 3"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "4",
+      "nodeId": "nested:4",
+      "record": {
+        "name": "Robot 4",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 4"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "5",
+      "nodeId": "nested:5",
+      "record": {
+        "name": "Robot 5",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 5"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "6",
+      "nodeId": "nested:6",
+      "record": {
+        "name": "Robot 6",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 6"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "7",
+      "nodeId": "nested:7",
+      "record": {
+        "name": "Robot 7",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 7"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "8",
+      "nodeId": "nested:8",
+      "record": {
+        "name": "Robot 8",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 8"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "9",
+      "nodeId": "nested:9",
+      "record": {
+        "name": "Robot 9",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 9"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "10",
+      "nodeId": "nested:10",
+      "record": {
+        "name": "Robot 10",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 10"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "11",
+      "nodeId": "nested:11",
+      "record": {
+        "name": "Robot 11",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 11"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "12",
+      "nodeId": "nested:12",
+      "record": {
+        "name": "Robot 12",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 12"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "13",
+      "nodeId": "nested:13",
+      "record": {
+        "name": "Robot 13",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 13"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "14",
+      "nodeId": "nested:14",
+      "record": {
+        "name": "Robot 14",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 14"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "15",
+      "nodeId": "nested:15",
+      "record": {
+        "name": "Robot 15",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 15"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "16",
+      "nodeId": "nested:16",
+      "record": {
+        "name": "Robot 16",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 16"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "17",
+      "nodeId": "nested:17",
+      "record": {
+        "name": "Robot 17",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 17"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "18",
+      "nodeId": "nested:18",
+      "record": {
+        "name": "Robot 18",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 18"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "19",
+      "nodeId": "nested:19",
+      "record": {
+        "name": "Robot 19",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 19"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "20",
+      "nodeId": "nested:20",
+      "record": {
+        "name": "Robot 20",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 20"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "21",
+      "nodeId": "nested:21",
+      "record": {
+        "name": "Robot 21",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 21"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "22",
+      "nodeId": "nested:22",
+      "record": {
+        "name": "Robot 22",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 22"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "23",
+      "nodeId": "nested:23",
+      "record": {
+        "name": "Robot 23",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 23"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "24",
+      "nodeId": "nested:24",
+      "record": {
+        "name": "Robot 24",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 24"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "25",
+      "nodeId": "nested:25",
+      "record": {
+        "name": "Robot 25",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 25"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "26",
+      "nodeId": "nested:26",
+      "record": {
+        "name": "Robot 26",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 26"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "27",
+      "nodeId": "nested:27",
+      "record": {
+        "name": "Robot 27",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 27"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "28",
+      "nodeId": "nested:28",
+      "record": {
+        "name": "Robot 28",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 28"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "29",
+      "nodeId": "nested:29",
+      "record": {
+        "name": "Robot 29",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 29"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "30",
+      "nodeId": "nested:30",
+      "record": {
+        "name": "Robot 30",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 30"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "31",
+      "nodeId": "nested:31",
+      "record": {
+        "name": "Robot 31",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 31"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "32",
+      "nodeId": "nested:32",
+      "record": {
+        "name": "Robot 32",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 32"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "33",
+      "nodeId": "nested:33",
+      "record": {
+        "name": "Robot 33",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 33"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "34",
+      "nodeId": "nested:34",
+      "record": {
+        "name": "Robot 34",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 34"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "35",
+      "nodeId": "nested:35",
+      "record": {
+        "name": "Robot 35",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 35"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "36",
+      "nodeId": "nested:36",
+      "record": {
+        "name": "Robot 36",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 36"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "37",
+      "nodeId": "nested:37",
+      "record": {
+        "name": "Robot 37",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 37"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "38",
+      "nodeId": "nested:38",
+      "record": {
+        "name": "Robot 38",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 38"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "39",
+      "nodeId": "nested:39",
+      "record": {
+        "name": "Robot 39",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 39"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "40",
+      "nodeId": "nested:40",
+      "record": {
+        "name": "Robot 40",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 40"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "41",
+      "nodeId": "nested:41",
+      "record": {
+        "name": "Robot 41",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 41"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "42",
+      "nodeId": "nested:42",
+      "record": {
+        "name": "Robot 42",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 42"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "43",
+      "nodeId": "nested:43",
+      "record": {
+        "name": "Robot 43",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 43"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "44",
+      "nodeId": "nested:44",
+      "record": {
+        "name": "Robot 44",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 44"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "45",
+      "nodeId": "nested:45",
+      "record": {
+        "name": "Robot 45",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 45"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "46",
+      "nodeId": "nested:46",
+      "record": {
+        "name": "Robot 46",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 46"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "47",
+      "nodeId": "nested:47",
+      "record": {
+        "name": "Robot 47",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 47"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "48",
+      "nodeId": "nested:48",
+      "record": {
+        "name": "Robot 48",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 48"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "49",
+      "nodeId": "nested:49",
+      "record": {
+        "name": "Robot 49",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 49"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "50",
+      "nodeId": "nested:50",
+      "record": {
+        "name": "Robot 50",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 50"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "51",
+      "nodeId": "nested:51",
+      "record": {
+        "name": "Robot 51",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 51"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "52",
+      "nodeId": "nested:52",
+      "record": {
+        "name": "Robot 52",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 52"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "53",
+      "nodeId": "nested:53",
+      "record": {
+        "name": "Robot 53",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 53"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "54",
+      "nodeId": "nested:54",
+      "record": {
+        "name": "Robot 54",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 54"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "55",
+      "nodeId": "nested:55",
+      "record": {
+        "name": "Robot 55",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 55"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "56",
+      "nodeId": "nested:56",
+      "record": {
+        "name": "Robot 56",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 56"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "57",
+      "nodeId": "nested:57",
+      "record": {
+        "name": "Robot 57",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 57"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "58",
+      "nodeId": "nested:58",
+      "record": {
+        "name": "Robot 58",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 58"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    },
+    {
+      "key": "59",
+      "nodeId": "nested:59",
+      "record": {
+        "name": "Robot 59",
+        "description": "Configured nested table"
+      },
+      "cells": {
+        "name": {
+          "text": "Robot 59"
+        },
+        "description": {
+          "text": "Configured nested table"
+        }
+      }
+    }
+  ],
+  "selected": [
+    "2"
+  ],
+  "offset": 0,
+  "filter": "",
+  "busy": false,
+  "insert": true,
+  "hasNext": true,
+  "loaded": true,
+  "scope": {
+    "searchType": "fixture/asset",
+    "view": "table",
+    "parentKey": "fixture/parent?code=P"
+  }
+}

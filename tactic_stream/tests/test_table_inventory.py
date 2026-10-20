@@ -19,14 +19,15 @@ class TableInventory(unittest.TestCase):
         <element name="c"><display class="tactic.ui.table.TaskSummaryElementWdg"/></element>
         <element name="d"><display class="tactic.ui.table.HiddenRowElementWdg">
           <dynamic_class>tactic.ui.table.GanttElementWdg</dynamic_class>
-        </display></element></table></config>"""
+        </display></element>
+        <element name="e"><display class="pyasm.widget.DependencyLink"/></element></table></config>"""
         with patch(
             "tools.frame_table.inventory.sources", return_value=[("fixture", xml)]
         ):
             result = inventory()
         rows = {row["widget"]: row for row in result["widgets"]}
         aux = rows["pyasm.widget.table_element_wdg.AuxDataWdg"]
-        self.assertEqual(aux["status"], "pending")
+        self.assertEqual(aux["status"], "adapted")
         self.assertEqual(len(aux["handlers"]), 2)
         self.assertEqual(len(aux["uses"]), 2)
         self.assertEqual(
@@ -35,8 +36,9 @@ class TableInventory(unittest.TestCase):
         )
         self.assertEqual(
             rows["tactic.ui.table.gantt_element_wdg.GanttElementWdg"]["status"],
-            "pending",
+            "adapted",
         )
+        self.assertEqual(rows['pyasm.widget.dependency_wdg.DependencyLink']['status'], 'pending')
 
     def test_database_scan_does_not_modify_configurations(self):
         with tempfile.TemporaryDirectory() as directory:

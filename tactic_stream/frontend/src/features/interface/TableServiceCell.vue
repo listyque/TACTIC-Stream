@@ -7,7 +7,12 @@ import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/serv
 import { droppedKeys } from '../../../../src/tactic_stream/shared_ui/features/table/drop.ui.mjs';
 import { onMounted, onBeforeUnmount } from 'vue';
 
-const props = defineProps({ cell: Object, height: Number, editable: Boolean });
+const props = defineProps({
+  cell: Object,
+  height: Number,
+  editable: Boolean,
+  nestedState: Object
+});
 const emit = defineEmits(['action']);
 const host = ref(null),
   width = ref(160),
@@ -20,7 +25,7 @@ const scene = computed(() =>
     props.height,
     appearance.language,
     props.editable,
-    expanded.value,
+    { ...expanded.value, __nested: props.nestedState },
     location.origin
   )
 );
@@ -44,6 +49,7 @@ function activate(action, value) {
         action.name,
         {
           ...props.cell,
+          nestedTable: action.nestedTable || props.cell.nestedTable,
           href: action.href,
           displayOptions: {
             ...props.cell.displayOptions,
@@ -57,6 +63,7 @@ function activate(action, value) {
               ? droppedKeys(value, props.cell.acceptedType)
               : [],
           actionTaskKey: action.taskKey,
+          actionDay: action.day,
           actionTaskCode: action.taskCode
         },
         host.value

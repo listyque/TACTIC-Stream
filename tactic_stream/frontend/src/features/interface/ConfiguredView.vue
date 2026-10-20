@@ -11,6 +11,7 @@ import TableCell from './TableCell.vue';
 import TableView from './TableView.vue';
 import TableDocument from './TableDocument.vue';
 import TableServiceDialogs from './TableServiceDialogs.vue';
+import NestedTable from './NestedTable.vue';
 import {
   tableDefinition,
   changeTable
@@ -48,6 +49,7 @@ export default {
     openTablePort: { default: null }
   },
   components: {
+    NestedTable,
     TableServiceDialogs,
     TableDocument,
     RecordForm,
@@ -121,6 +123,8 @@ export default {
       cellError: '',
       cellRequest: 0,
       expandedDetails: {},
+      expandedTables: {},
+      nestedEditor: null,
       taskDrafts: {},
       taskEditor: null,
       taskBusy: false,
@@ -534,6 +538,8 @@ export default {
     },
     t,
     invalidateContext() {
+      this.expandedTables = {};
+      this.nestedEditor = null;
       this.scriptAbort?.abort();
       this.scriptAbort = null;
       this.$refs.tableServiceDialogs?.close();
@@ -955,7 +961,27 @@ export default {
         if (request === this.actionRequest) this.columnError = error.message;
       }
     },
+    async openNestedEditor(record, state) {
+      if (this.readOnly) return;
+      this.nestedEditor = state;
+      await this.$nextTick();
+      this.$refs.nestedForm.open(
+        record?.__search_key__ || null,
+        null,
+        state.scope.searchType === state.scope.parentKey.split('?')[0]
+          ? {}
+          : { parent_key: state.scope.parentKey }
+      );
+    },
+    nestedCellEvent(name, record, values) {
+      if (name === 'preview') this.$refs.preview.open(record, ...values);
+      else if (name === 'notes') this.$refs.notes.open(record, ...values);
+      else if (name === 'tasks') this.$refs.notes.openTask(record, ...values);
+      else if (name === 'task-edit') this.openTaskEditor(record, ...values);
+    },
     async tableSaved() {
+      for (const state of Object.values(this.expandedTables))
+        state.revision = (state.revision || 0) + 1;
       if (this.ownQuery) await this.load();
       await this.loadCells();
       this.$emit('saved');
@@ -998,12 +1024,21 @@ export default {
           searchType: record.__search_key__.split('?')[0],
           project: context.project,
           column: cell.columnName,
-          view: cell.layoutView || this.table.view || 'table',
+          view:
+            cell.layoutView ||
+            cell.tableScope?.view ||
+            this.table.view ||
+            'table',
           record: { ...record },
-          searchKeys: [...this.tableSelection],
-          records: Object.fromEntries(
-            this.records.map((row) => [row.__search_key__, { code: row.code }])
-          )
+          searchKeys: [...(cell.tableScope?.searchKeys || this.tableSelection)],
+          records:
+            cell.tableScope?.records ||
+            Object.fromEntries(
+              this.records.map((row) => [
+                row.__search_key__,
+                { code: row.code }
+              ])
+            )
         },
         {
           ticket: context.ticket,
@@ -1123,6 +1158,24 @@ export default {
       this.serviceMessage = '';
       try {
         if (kind === 'error') throw new Error(cell.error);
+        if (kind === 'nested-table') {
+          const key = record.__search_key__,
+            previous = this.expandedTables[key];
+          if (previous && previous.column === cell.columnName)
+            previous.open = !previous.open;
+          else
+            this.expandedTables[key] = {
+              scope: cell.nestedTable,
+              column: cell.columnName,
+              open: true,
+              selected: [],
+              offset: 0,
+              rows: [],
+              columns: [],
+              selection: cell.nestedTable.selection
+            };
+          return;
+        }
         if (kind === 'layout-link') {
           const href = tableLink(cell.href, location.origin);
           if (!href) throw new Error('Unsupported table link');
@@ -1231,7 +1284,15 @@ export default {
             await this.$refs.tableRelated.stageDropped(cell.dropKeys);
           return;
         }
-        if (['task-details', 'add-task', 'work'].includes(kind)) {
+        if (
+          [
+            'task-details',
+            'add-task',
+            'work',
+            'table-schedule',
+            'work-hours'
+          ].includes(kind)
+        ) {
           if (!this.openTablePort)
             throw new Error('Unsupported table window: ' + kind);
           await this.openTablePort({ type: kind, options: cell }, target);
@@ -1934,6 +1995,7 @@ export default {
           :state="tableState"
           :views="tableViews"
           :closed-groups="closedGroups"
+          :expanded-rows="expandedTables"
           :sort-field="activeSortField"
           :sort-direction="activeSortDirection"
           :group-mode="tableState.table?.groupMode || groupMode"
@@ -1960,6 +2022,18 @@ export default {
           @edit="openCellEditor"
           @header-action="tableHeaderAction"
         >
+          <template #detail="{ record }">
+            <NestedTable
+              :ticket="ticket"
+              :project="project"
+              :state="expandedTables[record.__search_key__]"
+              @close="expandedTables[record.__search_key__].open = false"
+              @edit="openNestedEditor"
+              @inspect="$emit('inspect', $event)"
+              @action="tableAction"
+              @cell-event="nestedCellEvent"
+            />
+          </template>
           <template #cell="{ record, column: element, height }">
             <TableCell
               :element="element"
@@ -1980,6 +2054,7 @@ export default {
                 !readOnly && !serviceBusy && !taskBusy && !taskUncertain
               "
               :expanded="!!expandedDetails[record.__search_key__]"
+              :nested-state="expandedTables[record.__search_key__]"
               :selected-task-preview="
                 tableSelection.includes(record.__search_key__) &&
                 tableSelection.includes(hoveredTaskCell?.key)
@@ -2137,6 +2212,14 @@ export default {
       :ignore-fields="targetIgnore"
       :insert-view="targetInsertView"
       :search-type="targetRecord.__search_key__.split('?')[0]"
+      @saved="tableSaved"
+    />
+    <RecordForm
+      v-if="nestedEditor"
+      ref="nestedForm"
+      :ticket="ticket"
+      :project="project"
+      :search-type="nestedEditor.scope.searchType"
       @saved="tableSaved"
     />
     <TableServiceDialogs ref="tableServiceDialogs" />

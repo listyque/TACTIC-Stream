@@ -3984,6 +3984,21 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Recursive nested tables are not available yet.": "Рекурсивные вложенные таблицы пока недоступны.",
+	"Choose at most 500 table records": "Выберите не более 500 строк таблицы",
+	"Show related table": "Показать связанную таблицу",
+	"Auxiliary data": "Дополнительные данные",
+	General: "Общие",
+	"Task is unavailable": "Задача недоступна",
+	"Work Hours": "Рабочие часы",
+	Mon: "Пн",
+	Tue: "Вт",
+	Wed: "Ср",
+	Thu: "Чт",
+	Fri: "Пт",
+	Sat: "Сб",
+	Sun: "Вс",
+	"Save or discard time-entry changes before switching tasks.": "Сохраните или отмените изменения рабочих часов перед сменой задачи.",
 	"Configured button": "Настраиваемая кнопка",
 	"Parallel task status": "Параллельные статусы задач",
 	"Task status": "Статус задачи",

@@ -6,6 +6,7 @@ import {
   initializeAppearance
 } from '../../frontend/src/appearance.js';
 import TableView from '../../frontend/src/features/interface/TableView.vue';
+import NestedTable from '../../frontend/src/features/interface/NestedTable.vue';
 import TableCell from '../../frontend/src/features/interface/TableCell.vue';
 import TableServiceDialogs from '../../frontend/src/features/interface/TableServiceDialogs.vue';
 import TableDocument from '../../frontend/src/features/interface/TableDocument.vue';
@@ -139,8 +140,9 @@ window.tableFixture = {
   >
     <TableServiceDialogs ref="serviceDialogs" />
     <TableDocument ref="tableDocument" :model="documentModel" />
+    <NestedTable v-if="fixture.screen === 'nested'" :state="fixture.model" />
     <TableView
-      v-if="fixture.screen === 'table'"
+      v-else-if="fixture.screen === 'table'"
       :columns="columns"
       :groups="[{ key: 'all', label: '', records: data.records }]"
       :selected-keys="selected"

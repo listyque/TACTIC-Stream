@@ -34,6 +34,7 @@ const props = defineProps({
   state: Object,
   views: Array,
   closedGroups: Object,
+  expandedRows: { type: Object, default: () => ({}) },
   accent: { type: String, default: 'var(--primary)' }
 });
 const emit = defineEmits([
@@ -181,6 +182,15 @@ const entries = computed(() => {
         height: rowHeight.value
       });
       offset += rowHeight.value;
+      if (props.expandedRows[record.__search_key__]?.open) {
+        rows.push({
+          detail: record,
+          key: 'nested:' + record.__search_key__,
+          top: offset,
+          height: 320
+        });
+        offset += 320;
+      }
     }
   }
   return rows;
@@ -598,8 +608,18 @@ defineExpose({ viewport });
           (choose(entry.record, $event), emit('operate', entry.record, $event))
         "
       >
+        <div
+          v-if="entry.detail"
+          class="handler-table-detail"
+          :style="{ width: width + 'px' }"
+          @click.stop
+          @dblclick.stop
+          @contextmenu.stop
+        >
+          <slot name="detail" :record="entry.detail" />
+        </div>
         <AppButton
-          v-if="entry.group"
+          v-else-if="entry.group"
           class="handler-table-group"
           :icon="
             closedGroups?.[entry.group.key]
@@ -979,5 +999,12 @@ defineExpose({ viewport });
 .handler-table-cell .table-structured {
   max-height: 100%;
   width: 100%;
+}
+.handler-table-detail {
+  grid-column: 1 / -1;
+  position: sticky;
+  left: 0;
+  padding-inline: 8px;
+  box-sizing: border-box;
 }
 </style>

@@ -41,6 +41,7 @@ export default {
     inspectable: Boolean,
     editable: Boolean,
     expanded: Boolean,
+    nestedState: Object,
     selected: Boolean,
     selectedTaskPreview: Boolean,
     height: { type: Number, default: 58 },
@@ -147,6 +148,7 @@ export default {
     :cell="cell"
     :height="height - 6"
     :editable="editable"
+    :nested-state="nestedState"
     @action="
       (name, value, anchor) =>
         $emit(

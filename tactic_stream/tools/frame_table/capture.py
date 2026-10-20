@@ -192,6 +192,15 @@ def capture(fixture, qml, original):
                 height=fixture["height"],
             )
         )
+    elif fixture["screen"] == "nested":
+        from tests.test_table_nested import Scope
+        scope = Scope()
+        scope.state = fixture['model']
+        keep.append(scope)
+        component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'features/table/NestedTableView.qml')))
+        view = component.createWithInitialProperties(dict(theme=theme, controller=controller,
+            columnsController=columns, userModel=users, services=None, administration=None, scope=scope,
+            width=fixture['width'], height=fixture['height']))
     elif fixture["screen"] == "cell":
         value = fixture["value"]
         component = QQmlComponent(
@@ -268,6 +277,19 @@ def capture(fixture, qml, original):
         result = dict(fixture=fixture, original=original, image=name)
         if not original:
             result.update(snapshot(window))
+        if fixture['screen'] == 'nested':
+            result['embeddedText'] = {}
+            for item in _visual_items(view):
+                text = item.property('text')
+                if text not in ('Robot 0', 'Configured nested table') or item.property('paintedHeight') is None:
+                    continue
+                point = item.mapToScene(QPointF())
+                record = dict(x=point.x() + float(item.property('leftPadding') or 0),
+                    centerY=point.y() + item.height() / 2,
+                    fontSize=item.property('font').pixelSize(), weight=item.property('font').weight())
+                previous = result['embeddedText'].get(text)
+                if previous is None or record['centerY'] < previous['centerY']:
+                    result['embeddedText'][text] = record
         result["table"] = {
             item.objectName(): dict(
                 x=item.mapToScene(QPointF(0, 0)).x(),
@@ -331,7 +353,7 @@ def main():
     ]
     names += [
         "thlib/ui/qml/features/table/" + name + ".qml"
-        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView")
+        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView", "NestedTableView")
     ]
     names += [
         "tests/test_columns_table_view.py",
@@ -343,6 +365,8 @@ def main():
         "thlib/ui/table/scripts.py",
         "thlib/ui/table/script_worker.py",
         "thlib/ui/table/requests.py",
+        "thlib/ui/table/nested.py",
+        "tests/test_table_nested.py",
         "thlib/ui/qml/features/table/runtime/client_api.js",
         "thlib/ui/qml/features/table/runtime/table_action_runtime.js",
         "thlib/ui/translations/ru.json",
@@ -363,6 +387,10 @@ def main():
                     )
                     captures.append(capture(fixture, archived, True))
                     captures.append(capture(fixture, HANDLER / "thlib/ui/qml", False))
+                for width in (320, 800):
+                    fixture = dict(screen='nested', mode='scope', width=width, height=320, style=style, dark=dark, language=language,
+                        model=json.loads((ROOT / 'tests/fixtures/frame_table_nested.json').read_text(encoding='utf-8')))
+                    captures.append(capture(fixture, HANDLER / 'thlib/ui/qml', False))
                 for value in VALUES:
                     fixture = dict(
                         screen="cell",
@@ -432,6 +460,7 @@ def main():
                 "tools/frame_table/capture.py",
                 "tools/frame_table/TableFixture.vue",
                 "tests/fixtures/frame_table_values.json",
+                "tests/fixtures/frame_table_nested.json",
                 "reports/table-view-2026-10-14/fixture.json",
             )
         },

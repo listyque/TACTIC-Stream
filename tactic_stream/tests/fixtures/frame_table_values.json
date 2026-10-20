@@ -382,5 +382,94 @@
         }
       ]
     }
+  },
+  {
+    "name": "table_schedule",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "targetSearchKey": "cg/assets?code=A",
+      "timeline": {
+        "start": "2031-04-01",
+        "end": "2031-04-30",
+        "showTitle": true,
+        "barHeight": 12,
+        "weekStart": 0,
+        "week": true,
+        "overlap": false,
+        "dateMode": "visible",
+        "bars": [
+          {
+            "start": "2031-04-03",
+            "end": "2031-04-09",
+            "index": 0,
+            "searchKey": "sthpw/task?code=T",
+            "color": "#4b4",
+            "label": "Model",
+            "editable": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "table_hours",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "taskKey": "sthpw/task?code=T",
+      "week": "2031-04-07",
+      "timeDays": [
+        {
+          "day": "2031-04-07",
+          "label": "Mon",
+          "value": "0",
+          "overtime": "0"
+        },
+        {
+          "day": "2031-04-08",
+          "label": "Tue",
+          "value": "1",
+          "overtime": "0"
+        },
+        {
+          "day": "2031-04-09",
+          "label": "Wed",
+          "value": "2",
+          "overtime": "0"
+        },
+        {
+          "day": "2031-04-10",
+          "label": "Thu",
+          "value": "3",
+          "overtime": "0"
+        },
+        {
+          "day": "2031-04-11",
+          "label": "Fri",
+          "value": "4",
+          "overtime": "0"
+        },
+        {
+          "day": "2031-04-12",
+          "label": "Sat",
+          "value": "5",
+          "overtime": "0"
+        },
+        {
+          "day": "2031-04-13",
+          "label": "Sun",
+          "value": "6",
+          "overtime": "0"
+        }
+      ],
+      "actions": [
+        {
+          "name": "work-hours",
+          "label": "Work Hours",
+          "icon": "schedule"
+        }
+      ]
+    }
   }
 ]

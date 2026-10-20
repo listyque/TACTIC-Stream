@@ -65,8 +65,17 @@ from tactic.ui.widget.misc_input_wdg import TaskStatusElementWdg
 from tactic.ui.table.drop_element_wdg import DropElementWdg
 
 from tactic.ui.table.custom_layout_element_wdg import CustomLayoutElementWdg
+from tactic.ui.table.hidden_row_element_wdg import HiddenRowElementWdg, RowAddElementWdg
+from pyasm.widget.table_element_wdg import HiddenRowToggleWdg, AuxDataWdg
 
-SERVICE_WIDGETS = (CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
+NESTED_WIDGETS = (HiddenRowElementWdg, RowAddElementWdg, HiddenRowToggleWdg)
+from pyasm.widget.gantt_wdg import GanttWdg
+from pyasm.widget.timecard_wdg import TimecardInfoTableElement, WeekTableElement
+from tactic.ui.table.gantt_element_wdg import GanttElementWdg
+from tactic.ui.table.work_hours_element_wdg import WorkHoursElementWdg
+TIME_WIDGETS = (GanttWdg, GanttElementWdg, TimecardInfoTableElement, WeekTableElement, WorkHoursElementWdg)
+
+SERVICE_WIDGETS = (*TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
                    ProjectTemplateUpdateWdg, NotificationTriggerElementWdg, ButtonElementWdg,
                    ParallelStatusWdg, ParallelStatusEditWdg, SObjectTaskStatusElementWdg, WorkElementWdg, DropElementWdg)
 
@@ -74,6 +83,7 @@ _CLASSES = {
     cls.__module__ + "." + cls.__name__: cls
     for cls in (
         *SERVICE_WIDGETS,
+        AuxDataWdg,
         LoginTableElementWdg,
         MyTacticSummaryWdg,
         ProcessElementWdg,
@@ -137,6 +147,7 @@ TASK_WIDGETS = (TaskElementWdg, TaskSummaryElementWdg, SObjectTaskTableElement)
 
 VALUE_WIDGETS = (
     *SERVICE_WIDGETS,
+    AuxDataWdg,
     LoginTableElementWdg,
     MyTacticSummaryWdg,
     ProcessElementWdg,
@@ -225,14 +236,21 @@ def describe_cell(element, columns, search_type=""):
         )
         and not element["action"]["options"]
     )
+    native_time_action = widget in (GanttWdg, GanttElementWdg) and action in (
+        'tactic.ui.table.GanttCbk', 'tactic.ui.table.gantt_element_wdg.GanttCbk',
+        'pyasm.widget.GanttCbk', 'pyasm.widget.gantt_wdg.GanttCbk')
     supported = (
         widget is not None
         and isinstance(field, str)
         and (field in columns or computed)
-        and (not action or native_task_action)
+        and (not action or native_task_action or native_time_action)
     )
     allowed = {"column"}
-    if widget in (ButtonElementWdg, DropElementWdg, CustomLayoutElementWdg):
+    if widget in TIME_WIDGETS:
+        allowed |= set(widget.ARGS_KEYS) if hasattr(widget, 'ARGS_KEYS') else set()
+    elif widget in NESTED_WIDGETS:
+        allowed |= set(HiddenRowElementWdg.ARGS_KEYS)
+    elif widget in (ButtonElementWdg, DropElementWdg, CustomLayoutElementWdg):
         allowed |= set(widget.ARGS_KEYS)
     elif widget in (ParallelStatusWdg, TaskStatusElementWdg, WorkElementWdg):
         allowed |= set(widget.ARGS_KEYS)
@@ -630,6 +648,10 @@ def read_table_cells(search_type, view, search_keys):
                     cell['columnName'] = element['name']
                 if widget_class is DropElementWdg:
                     cell['tableView'] = view
+                if widget_class in TIME_WIDGETS:
+                    cell['tableView'] = view
+                    cell['columnName'] = element['name']
+                    cell['actionOptions'] = element['action']['options']
                 if widget_class is ThumbWdg:
                     cell["image"] = safe_link(cell["image"])
                     cell["text"] = safe_link(cell["text"])

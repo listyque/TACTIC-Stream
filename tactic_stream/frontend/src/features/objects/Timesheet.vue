@@ -18,9 +18,14 @@ export default {
   beforeUnmount() { this.alive = false; this.request++; window.removeEventListener('beforeunload', this.beforeUnload) },
   methods: {
     beforeUnload(event) { if (this.draft || this.busy || this.uncertain) { event.preventDefault(); event.returnValue = '' } },
-    async open(task = null, log = false, weekly = false) {
-      if (this.busy || this.$refs.panel.isOpen()) return
+    async open(task = null, log = false, weekly = false, day = '') {
+      if (this.busy || this.draft || this.uncertain) {
+        this.error = 'Save or discard time-entry changes before switching tasks.'
+        return
+      }
+      if (this.$refs.panel.isOpen() && this.task?.scope.task_key === task?.scope.task_key && (!day || day === this.week)) return
       this.context = { ticket: this.ticket, project: this.project }; this.task = task
+      if (day) this.week = String(day).slice(0,10)
       this.users = task?.users || []
       this.mode = this.dockMode || (weekly ? 'week' : 'task'); this.login = this.currentUser || ''; this.result = null
       this.draft = null; this.confirmation = false; this.selected = []; this.deleting = ''; this.uncertain = false

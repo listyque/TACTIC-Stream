@@ -1,8 +1,9 @@
 # Tactic Frame B07: Table View checkpoint
 
 B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the widget-config census contains 20 classes without typed adapters. Stage 1 adds
-16 adapters and shared tags, with the explicit dependencies below. A registered adapter is not proof that every old
+the current widget-config census contains 11 classes without typed adapters. The
+first checkpoint added 16 adapters and shared tags; the combined second stage
+adds nine registrations with the explicit limits below. A registered adapter is not proof that every old
 display option or embedded action works.
 
 | Portable module | Responsibility |
@@ -11,8 +12,10 @@ display option or embedded action works.
 | `features/table/host.ui.mjs` | Row/header/selection/action geometry, paint and drag targets |
 | `features/table/menus.ui.mjs` | Column and saved-view actions and availability |
 | `features/table/cells.ui.mjs` | Typed labels, safe links, task-card geometry and compact summary/field scenes |
+| `features/table/nested.ui.mjs` | Scoped expanded-table presentation; requests and mutations stay with each host |
+| `features/table/time.ui.mjs` | Table schedule and daily-hours projections; current Gantt/Timesheet owners retain writes |
 | `features/table/inline.ui.mjs` | Typed value editor body, explicit-save and uncertain-write states |
-| `features/table/widgets.json` | 57 server classes, 134 named aliases, editor choices and native adapter categories |
+| `features/table/widgets.json` | 66 server classes, 157 named aliases, editor choices and native adapter categories |
 
 Stream ships these under `src/tactic_stream/shared_ui`; Handler ships its own
 copy under `thlib/ui/qml/tactic_frame`. The server still imports an explicit
@@ -83,6 +86,65 @@ relationship method. L02 does not change that self-instance contract.
 
 The old `handler_table.mjs` workflow now writes into
 `tools/frame_table/output/legacy-driver`, preserving historical reports.
+
+<a id="stage-two-2026-10-20"></a>
+## Combined stage 2 checkpoint — 2026-10-20
+
+The user moved the remaining stage-1 acceptance into stage 2. The current order
+is L01 → L04 → remaining L03 → L06 → L07b. **Stage 2 and B07 remain open.**
+
+The old `tactic.ui.tools.CustomLayoutEditWdg` is excluded: it edits the legacy
+HTML/CSS/JavaScript/Mako browser shell. Frame and the existing layout editor own
+new portable UI. This does not remove saved CustomLayout definitions or reinterpret
+an unsupported DOM callback as a generic Inspector action.
+
+Stream 0.112.175 / Handler 0.6.0.122 add `HiddenRowElementWdg`,
+`HiddenRowToggleWdg`, `RowAddElementWdg`, `AuxDataWdg`, `GanttWdg`,
+`GanttElementWdg`, `WeekTableElement`, `TimecardInfoTableElement` and
+`WorkHoursElementWdg` registrations. The catalogue now contains **66 classes /
+157 named aliases**; the shipped/CG census has **63 referenced adapted, 11 pending,
+27 excluded-production and 3 excluded-unfinished classes**, across 239 sources.
+An adapted census entry is a registered projection, not full original-option acceptance.
+
+Expanded tables use `features/table/nested.ui.mjs` and existing cell presenters.
+Each scope owns its records, selection, filter and page; the parent search selection
+is unchanged. A collapsed loaded branch reuses its data and selection. Native
+delegates create the expanded surface only when needed; server reads stay off the
+GUI thread and repeated notifications coalesce. Session/project teardown discards
+requests and contexts. The login record projection omits password material.
+
+Same-type hidden views show the current record; child views use its relationship;
+reverse task → parent reads resolve the actual parent. The real CG
+`columns/tasks_parent` Mako binds only its JSON search key and opens its configured
+parent table. A hidden portable CustomLayout currently requires one embedded table.
+The initial surface has a 50-record page and a 320-pixel viewport. Legacy
+`init_load_num`, shelf/gear and complete search-limit option behavior remain
+unaccepted; their XML is retained, not a claim of matching original behavior.
+Other dynamic widgets, recursive child surfaces, instance auxiliary transport and
+full grouping/summary acceptance remain L01/L03 work. Do not silently substitute
+an Inspector for those missing paths.
+
+`features/table/time.ui.mjs` draws configured date ranges and daily hours in both
+engines. A schedule bar opens the existing Task Manager Gantt; a daily-hours action
+opens the existing Timesheet for its task/week. Read-only all-user hours have no
+edit action. Overtime is counted once, minute display converts hours explicitly,
+and page dates share one range. **This does not implement the original inline
+`GanttCbk` default/cascade writes, full timecard lifecycle or bottom totals.**
+Those options, file ingest/publish/append/checkout and the complete B07 matrix
+remain required in this stage. Registered time classes stay unchecked below.
+
+Validation at this checkpoint: all **146 platform-gate steps** passed;
+**69 native table tests**, **50 table API tests**, browser table workflows and
+**468 fresh paired states** passed. The paired driver now compares the embedded
+nested-cell text position, size and weight, in addition to Frame container bounds.
+The native set includes 504 captures, of which 36 are the archived B06 reference.
+One initial integrated Task Inspector menu timeout did not reproduce in its
+unchanged isolated scenario or the repeated complete gate; no retry was added to
+the test. Retain that observation when investigating intermittent menu activation.
+
+`tools/frame_table/output/index.html` contains the current paired evidence. Local
+reports do not certify a production database, actual file transfers or a frozen
+Windows package.
 
 ## Remaining B07 work
 
@@ -155,8 +217,8 @@ Table View: B07 includes XML examples and paired screenshots of supported cells.
 
 The executable inventory scans every shipped widget XML and CG template entry;
 optional local databases use SQLite read-only mode. It records exact references,
-deduplicates aliases and does not execute scripts. Current shipped/template
-census: 239 entries, 54 referenced adapted classes, 20 pending classes,
+deduplicates aliases and does not execute scripts. At the stage-1 checkpoint (0.112.174), the shipped/template
+census was 239 entries, 54 referenced adapted classes, 20 pending classes,
 27 previously excluded `pyasm.prod` classes and 3 explicitly unfinished originals.
 The catalogue also includes three adapted classes not mentioned by this census.
 An older optional local-database census covered 449 entries with the same
@@ -329,7 +391,7 @@ and limits in EN/RU Widget Database Help. Reuse the existing object, task, file,
 schedule and communication owners; opening a generic panel is not implementation
 of the configured embedded scope. Unsupported options stay explicit.
 
-Before closing B07 in L07b, exercise the complete 57-class catalogue,
+Before closing B07 in L07b, exercise the complete 66-class catalogue,
 configured forms/inline editors, native keywords/tags and the used legacy
 bottom/group_bottom/total_summary contracts too. A 40-class checklist alone
 cannot certify all historical options. Current working controls remain delivered.

@@ -239,3 +239,19 @@ class XmlWdg(BaseTableElementWdg):
             diagnostic = str(error)
         return {'text': value, 'language': 'xml', 'diagnostic': diagnostic}
 
+
+class HiddenRowToggleWdg(BaseTableElementWdg):
+    def is_editable(self):
+        return False
+
+    def get_cell_value(self):
+        from tactic.ui.table.nested_scope import nested_cell
+        return nested_cell(self.get_current_sobject().get_search_key(), self.options, self.get_name())
+
+
+class AuxDataWdg(BaseTableElementWdg):
+    def get_cell_value(self):
+        values = getattr(self, 'aux_data', [])
+        row = values[self.current_index] if 0 <= self.current_index < len(values) else {}
+        return dict(text=row.get(self.get_name(), ''))
+

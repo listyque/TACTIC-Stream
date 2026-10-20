@@ -14,6 +14,15 @@ __all__ += ["TaskCompletionWdg", "DiscussionWdg", "SObjectTaskTableElement", "Ta
 
 
 def __getattr__(name):
+    if name in ('TimecardInfoTableElement', 'WeekTableElement'):
+        from . import timecard_wdg
+        return getattr(timecard_wdg, name)
+    if name == 'GanttWdg':
+        from .gantt_wdg import GanttWdg
+        return GanttWdg
+    if name in ('HiddenRowToggleWdg', 'AuxDataWdg'):
+        from . import table_element_wdg
+        return getattr(table_element_wdg, name)
     # The modern statistic class imports the common table base from this package.
     if name == 'TaskCompletionWdg':
         from .statistic_wdg import TaskCompletionWdg

@@ -48,3 +48,11 @@ __all__ += ["CustomLayoutElementWdg", "CustomLayoutReadCmd"]
 
 from .record_actions import TableObjectStatusCmd
 __all__.append("TableObjectStatusCmd")
+
+from .hidden_row_element_wdg import HiddenRowElementWdg, RowAddElementWdg
+from .nested_table import NestedTableReadCmd
+__all__ += ['HiddenRowElementWdg', 'RowAddElementWdg', 'NestedTableReadCmd']
+
+from .gantt_element_wdg import GanttElementWdg
+from .work_hours_element_wdg import WorkHoursElementWdg
+__all__ += ['GanttElementWdg', 'WorkHoursElementWdg']

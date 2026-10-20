@@ -472,6 +472,48 @@ try {
       const image = record.image.replace('-native-', '-stream-');
       await page.locator(selector).screenshot({ path: out + image });
       cases.push({ image, fixture, ...compared });
+    } else if (fixture.screen === 'nested') {
+      const selector = '.nested-table > .frame-view';
+      for (const [text, label] of Object.entries(record.embeddedText)) {
+        const cell = page
+          .locator('.nested-table .table-cell-text')
+          .filter({ hasText: text })
+          .first();
+        const actualText = await cell.evaluate((element) => {
+          const box = element.getBoundingClientRect(),
+            origin = element.closest('.nested-table').getBoundingClientRect(),
+            style = getComputedStyle(element);
+          return {
+            x: box.x - origin.x,
+            centerY: box.y - origin.y + box.height / 2,
+            fontSize: parseFloat(style.fontSize),
+            weight: Number(style.fontWeight)
+          };
+        });
+        for (const key of ['x', 'centerY', 'fontSize', 'weight'])
+          assert(
+            Math.abs(actualText[key] - label[key]) <=
+              (key === 'centerY' ? 1 : 0.1),
+            JSON.stringify({
+              image: record.image,
+              text,
+              key,
+              vue: actualText[key],
+              qml: label[key]
+            })
+          );
+      }
+      const actual = await surface(page, selector);
+      const compared = await compareSurface(
+        page,
+        selector,
+        actual,
+        record,
+        record.image
+      );
+      const image = record.image.replace('-native-', '-stream-');
+      await page.locator(selector).screenshot({ path: out + image });
+      cases.push({ image, fixture, ...compared });
     } else if (fixture.screen === 'cell') {
       const selector = '.cell-example';
       if (fixture.value.name === 'legacy_tasks') {

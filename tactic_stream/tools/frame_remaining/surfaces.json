@@ -5305,6 +5305,27 @@
       "batch": "B07",
       "role": "domain form/presenter",
       "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/NestedTableView.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/NestedTable.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/NestedTableCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
     }
   ]
 }

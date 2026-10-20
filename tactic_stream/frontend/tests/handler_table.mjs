@@ -281,6 +281,31 @@ try {
                     writes.push(args);
                     result = { info: { tasks: [] } };
                   }
+                } else if (command === 'tactic.ui.table.NestedTableReadCmd') {
+                  assert.equal(args.search_type, 'cg/assets');
+                  assert.equal(
+                    args.parent_key,
+                    fixture.records[0].__search_key__
+                  );
+                  const childDefinition = structuredClone(fixture.definition);
+                  childDefinition.table.elements =
+                    childDefinition.table.elements.filter((column) =>
+                      ['name', 'description'].includes(column.name)
+                    );
+                  const records = fixture.records.slice(0, 2);
+                  result = {
+                    info: {
+                      definition: childDefinition,
+                      records,
+                      hasNext: false,
+                      cells: Object.fromEntries(
+                        records.map((row) => [
+                          row.__search_key__,
+                          fixture.cells[row.__search_key__]
+                        ])
+                      )
+                    }
+                  };
                 } else throw Error('Unexpected command ' + command);
               } else throw Error('Unexpected endpoint ' + req.url);
               res.setHeader('Content-Type', 'application/json');
@@ -757,6 +782,96 @@ try {
     await page.evaluate(() => document.documentElement.scrollWidth),
     320
   );
+  await page.setViewportSize({ width: 800, height: 660 });
+  await page.evaluate(() => {
+    window.host.page = 'table';
+    window.appearance.language = 'en';
+  });
+  await page.waitForFunction(
+    () => !!window.host.$refs.table && !window.host.$refs.table.cellsBusy
+  );
+  const rootSelection = await page.evaluate(() => [...window.host.selected]);
+  await page.evaluate(() => {
+    const record = window.host.rows[0];
+    return window.host.$refs.table.tableAction(
+      record,
+      'nested-table',
+      {
+        columnName: 'nested',
+        nestedTable: {
+          searchType: 'cg/assets',
+          view: 'table',
+          parentKey: record.__search_key__,
+          insert: true
+        }
+      },
+      null
+    );
+  });
+  const nested = page.locator('.nested-table');
+  await nested.waitFor();
+  await page.waitForFunction(
+    () =>
+      Object.values(window.host.$refs.table.expandedTables)[0]?.rows?.length ===
+      2
+  );
+  await nested.locator('[data-frame="nestedSelect"]').first().click();
+  assert.deepEqual(
+    await page.evaluate(() => window.host.selected),
+    rootSelection,
+    'Nested selection must not change the search selection'
+  );
+  assert.equal(
+    await page.evaluate(
+      () =>
+        Object.values(window.host.$refs.table.expandedTables)[0].selected.length
+    ),
+    1
+  );
+  const childCalls = () =>
+    requests.filter(
+      (row) => row.data.args?.[1] === 'tactic.ui.table.NestedTableReadCmd'
+    ).length;
+  const beforeReopen = childCalls();
+  await nested.locator('[data-frame="nestedClose"]').click();
+  await nested.waitFor({ state: 'detached' });
+  await page.evaluate(() => {
+    const record = window.host.rows[0],
+      state = Object.values(window.host.$refs.table.expandedTables)[0];
+    return window.host.$refs.table.tableAction(
+      record,
+      'nested-table',
+      { columnName: 'nested', nestedTable: state.scope },
+      null
+    );
+  });
+  await nested.waitFor();
+  assert.equal(
+    childCalls(),
+    beforeReopen,
+    'Reopening a loaded branch must reuse its rows'
+  );
+  assert.equal(
+    await page.evaluate(
+      () =>
+        Object.values(window.host.$refs.table.expandedTables)[0].selected.length
+    ),
+    1
+  );
+  await nested.locator('[data-frame="nestedFilter"]').fill('Robot');
+  await nested.locator('[data-frame="nestedReload"]').click();
+  await page.waitForFunction(
+    () => !Object.values(window.host.$refs.table.expandedTables)[0].busy
+  );
+  const lastChild = requests
+    .filter(
+      (row) => row.data.args?.[1] === 'tactic.ui.table.NestedTableReadCmd'
+    )
+    .at(-1);
+  assert.deepEqual(lastChild.data.args[2].filters, [
+    ['name', 'like', '%Robot%']
+  ]);
+  await nested.screenshot({ path: report + '/nested-table-stream.png' });
   assert.deepEqual(errors, []);
   await writeFile(
     report + '/stream-measurements.json',

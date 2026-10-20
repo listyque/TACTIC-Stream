@@ -530,10 +530,16 @@ export default {
       if (!this.canAdminister) throw new Error('Access denied')
       if (kind === 'schedule') { await this.$refs.taskManager.openForUser({login:options.login}); return }
       if (kind === 'script') { await this.openScriptEditor(options.script_path); return }
-      if (['task-details','add-task','work'].includes(kind)) {
-        await this.$refs.taskManager.openForObjects(record,options.actionProcess || options.process || '',{},options.actionTaskKey || options.taskSearchKey || '')
+      if (kind === 'work-hours') {
+        await this.openWorkHours('week', {scope:{search_key:record.__search_key__, task_key:options.taskKey, process:options.process}}, project, options.actionDay)
+        return
+      }
+      if (['task-details','add-task','work','table-schedule'].includes(kind)) {
+        const taskKey = options.actionTaskKey || options.taskSearchKey || ''
+        await this.$refs.taskManager.openForObjects(record,options.actionProcess || options.process || '',{},taskKey.startsWith('sthpw/task?') ? taskKey : '')
         if (kind === 'add-task') await this.$refs.taskManager.edit([],true,'','inline')
         if (kind === 'work') await this.openTableCheckin(record,options,this.workspaceProject)
+        if (kind === 'table-schedule') this.$refs.taskManager.view = 'gantt'
         return
       }
       if (kind === 'workflow') {
@@ -931,7 +937,7 @@ export default {
       if (id === 'task_calendar' && this.canAdminister) { this.updatesTasksOpen = true; this.$refs.taskManager.open(false, '', {}, true) }
       if (id === 'commit_queue' && !this.fileProject && !restoring) this.openCommitQueue()
     },
-    async openWorkHours(mode = 'week', task = null, project = this.workspaceView.project) {
+    async openWorkHours(mode = 'week', task = null, project = this.workspaceView.project, day = '') {
       const id = mode === 'cost' ? 'cost_reports' : mode === 'report' ? 'work_reports' : 'timesheet'
       const panel = this.$refs[mode === 'cost' ? 'costReports' : mode === 'report' ? 'workReports' : 'timesheet']
       if (panel.context && panel.context.project !== project && (panel.draft || panel.busy || panel.uncertain)) {
@@ -941,7 +947,7 @@ export default {
       this.workHoursProjects[mode] = project || this.workspaceView.project
       await nextTick()
       this.$refs.docks.show(id)
-      await panel.open(task, false, true)
+      await panel.open(task, false, true, day)
     },
     async openTaskInspector(record, cell = {}, process = '', taskKey = '', source = {}) {
       const inspector = this.$refs.taskInspector

@@ -1,3 +1,3 @@
 """TACTIC Stream kernel. Importing this package performs no I/O."""
 
-__version__ = "0.112.174"
+__version__ = "0.112.175"
