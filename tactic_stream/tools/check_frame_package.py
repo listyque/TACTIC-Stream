@@ -33,6 +33,8 @@ def main():
                 },
             )
         with ZipFile(work / "wheel" / wheel) as archive:
+            for relative in ('tactic_stream/compatibility/table_action_runtime.js','pyasm/common/js/client_api.js'):
+                assert archive.read(relative) == (ROOT/'src'/relative).read_bytes(), relative
             prefix = "tactic_stream/shared_ui/"
             shipped = {
                 name.removeprefix(prefix)

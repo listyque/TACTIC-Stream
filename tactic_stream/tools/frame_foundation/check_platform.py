@@ -80,6 +80,29 @@ def fingerprints(handler):
                     hashlib.sha256(path.read_bytes()).hexdigest()
                 )
     checks = [
+        ROOT / 'src/tactic_stream/compatibility/table_action_runtime.js',
+        ROOT / 'src/pyasm/common/js/client_api.js',
+        ROOT.parent / 'cg/config_custom_script.spt',
+        ROOT.parent / 'cg/config_widget_config.spt',
+        handler / 'tests/test_table_scripts.py',
+        handler / 'tests/test_table_service_workflows.py',
+        ROOT / 'frontend/tests/table_script_runtime.mjs',
+        ROOT / 'frontend/tests/table_script_worker.mjs',
+        ROOT / 'tests/fixtures/table_widget_aliases.json',
+        ROOT / 'tests/fixtures/frame_table_values.json',
+        *sorted((ROOT / 'src/tactic/ui/table').glob('*.py')),
+        *[ROOT / path for path in (
+            'tests/test_table_stage_one.py', 'tests/test_table_services.py',
+            'tests/test_table_drop_links.py', 'src/pyasm/widget/parallel_status.py',
+            'src/pyasm/widget/my_tactic_summary_wdg.py',
+            'src/pyasm/widget/table_element_wdg.py',
+            'src/tactic/ui/input/process_group_select_wdg.py',
+            'src/tactic/ui/panel/security_manager_wdg.py',
+            'src/tactic/ui/widget/misc_input_wdg.py',
+            'src/tactic/command/notification_cmd.py',
+        )],
+    ]
+    checks += [
         ROOT / "frontend/tests" / name
         for name in (
             "frame_contract.mjs",
@@ -912,6 +935,8 @@ def main():
             ROOT,
             {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
         ),
+        ("table-script-runtime", ["node", "frontend/tests/table_script_runtime.mjs"], ROOT, {}),
+        ("table-script-worker", ["node", "frontend/tests/table_script_worker.mjs"], ROOT, {}),
         ("browser-table", ["node", "frontend/tests/handler_table.mjs"], ROOT, {}),
         (
             "native-table",
@@ -922,6 +947,8 @@ def main():
                 "-q",
                 "tests.test_columns_table_view",
                 "tests.test_frame_table",
+                "tests.test_table_scripts",
+                "tests.test_table_service_workflows",
             ],
             handler,
             {},
@@ -938,6 +965,9 @@ def main():
                 "test_table_extended_values",
                 "test_table_inventory",
                 "test_table_embedded_widgets",
+                "test_table_services",
+                "test_table_drop_links",
+                "test_table_stage_one",
             ],
             ROOT,
             {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},

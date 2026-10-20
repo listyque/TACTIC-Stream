@@ -21,7 +21,7 @@ from pyasm.common.errors import UnsupportedContract
 from pyasm.biz import Pipeline, Project, Task, Schema
 from pyasm.search import Search, SearchType, SObject
 from tactic.ui.common import BaseTableElementWdg
-__all__ = ['TaskElementWdg', 'TaskElementCbk']
+__all__ = ['TaskElementWdg', 'TaskElementCbk', 'WorkElementWdg']
 
 basestring = six.string_types
 
@@ -1150,4 +1150,31 @@ class TaskElementCbk(DatabaseAction):
                     continue
                 task.set_value(column, value)
                 task.commit()
+
+
+class WorkElementWdg(BaseTableElementWdg):
+    ARGS_KEYS = dict.fromkeys(('icon', 'transfer_mode', 'mode'), {})
+
+    def is_editable(self):
+        return False
+
+    def get_cell_value(self):
+        source = self.get_current_sobject()
+        if source is None or source.is_insert():
+            return dict(text='', actions=[])
+        target = source.get_parent() if source.get_base_search_type() in ('sthpw/task', 'sthpw/note') else source
+        if target is None:
+            return dict(text='', actions=[], available=False, diagnostic='Parent not found')
+        transfer = self.get_option('transfer_mode') or 'upload'
+        if transfer not in ('upload', 'copy', 'move'):
+            raise ValueError('Invalid configured file transfer mode')
+        mode = self.get_option('mode') or 'file'
+        if mode != 'file':
+            raise ValueError('This configured check-in mode is not available yet')
+        return dict(text='', targetSearchKey=target.get_search_key(), taskSearchKey=source.get_search_key(),
+                    taskCode=source.get_code() if isinstance(source, Task) else '',
+                    process=source.get_value('process', no_exception=True) or 'publish',
+                    context=source.get_value('context', no_exception=True) or source.get_value('process', no_exception=True) or 'publish',
+                    transferMode=transfer, checkinMode=self.get_option('mode') or 'file',
+                    actions=[dict(name='work', label='Work on Task', icon=self.get_option('icon') or 'work')])
 

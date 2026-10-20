@@ -11,6 +11,7 @@ import CompletionCell from './CompletionCell.vue';
 import GroupedCompletionCell from './GroupedCompletionCell.vue';
 import StructuredCell from './StructuredCell.vue';
 import MessageTableCell from './MessageTableCell.vue';
+import TableServiceCell from './TableServiceCell.vue';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
 import * as Cells from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
@@ -29,7 +30,8 @@ export default {
     CompletionCell,
     GroupedCompletionCell,
     StructuredCell,
-    MessageTableCell
+    MessageTableCell,
+    TableServiceCell
   },
   props: {
     element: Object,
@@ -139,6 +141,28 @@ export default {
     icon-only
     :aria-expanded="expanded"
     @click="$emit('expand')"
+  />
+  <TableServiceCell
+    v-else-if="element.cell?.kind === 'commands'"
+    :cell="cell"
+    :height="height - 6"
+    :editable="editable"
+    @action="
+      (name, value, anchor) =>
+        $emit(
+          'action',
+          name,
+          {
+            ...value,
+            displayOptions: {
+              ...(element.display?.options || {}),
+              ...(value.displayOptions || {})
+            },
+            columnName: element.name
+          },
+          anchor
+        )
+    "
   />
   <TaskCell
     v-else-if="element.cell?.kind === 'tasks'"
@@ -297,8 +321,12 @@ export default {
   <span
     v-else
     class="table-cell-text"
+    :class="{ 'table-status-cell': cell?.statusColor }"
     :title="tooltip"
-    :style="{ color: foreground }"
+    :style="{
+      color: cell?.statusColor ? '#000' : foreground,
+      background: cell?.statusColor || undefined
+    }"
     >{{ text }}</span
   >
 </template>
@@ -306,6 +334,16 @@ export default {
 <style>
 .table-cell-text {
   font-size: var(--font-body-size);
+}
+.table-status-cell {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  width: 100%;
+  padding: 0 10px;
+}
+.first-column > .table-status-cell {
+  padding-left: 14px;
 }
 .handler-table-cell .table-thumbnail {
   display: flex;

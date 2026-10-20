@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.173.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.174.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7691,3 +7691,9 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 
 - Group the existing effort-sorted legacy queue into three implementation stages, keeping independent distribution/legacy transition as a separate fourth stage. Preserve every U/L subblock, its internal order, exclusions and dependency/acceptance gates.
 - Clarify that executing stage 1 means U01, L02, L07a, L03 and L05 together; the inline tags editor alone does not close it. Retain the detailed 14-subblock queue as an expandable reference. This is a planning-only change; runtime and source-audit results are unchanged.
+
+## 0.112.174 — 2026-10-20
+
+- Deliver the shared inline tags editor and 16 additional typed table adapters. Keep explicit drafts, current-user preferences, captured script/selection context, safe confirmation and transactional link/record revisions in the existing owners.
+- Run original client JavaScript through its existing SDK in a browser worker or an isolated Qt JS process; native windows remain QML. Retain independent product resources and use shared Frame descriptions for service cells, parallel tasks, instance links, portable CustomLayout and confirmations.
+- Preserve all CG layouts. Slash references resolve to dotted names. Keep nested FastTable/HiddenRow, file-ingest DOM callbacks, unrestricted Mako and bottom reports explicitly open in L01/L04/L07b/L11; adapter registration is not full B07 acceptance. See docs/frame_table.md for evidence and the remaining stage-1 dependency.

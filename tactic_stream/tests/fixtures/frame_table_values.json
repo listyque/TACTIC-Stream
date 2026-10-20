@@ -212,5 +212,175 @@
         }
       ]
     }
+  },
+  {
+    "name": "service_actions",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "targetSearchKey": "cg/assets?project=cg&code=ARM",
+      "actions": [
+        {
+          "name": "edit",
+          "label": "Edit",
+          "icon": "edit"
+        },
+        {
+          "name": "retire",
+          "label": "Retire",
+          "icon": "archive"
+        },
+        {
+          "name": "delete",
+          "label": "Delete sObject",
+          "icon": "delete",
+          "destructive": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "service_preference",
+    "kind": "commands",
+    "cell": {
+      "text": "final",
+      "preferenceKey": "fixture_quality",
+      "actions": [
+        {
+          "name": "preference",
+          "label": "Edit preference",
+          "icon": "edit"
+        }
+      ]
+    }
+  },
+  {
+    "name": "service_admin",
+    "kind": "commands",
+    "cell": {
+      "text": "ADMIN",
+      "actions": []
+    }
+  },
+  {
+    "name": "service_button",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "align": "center",
+      "targetSearchKey": "cg/assets?project=cg&code=ARM",
+      "actions": [
+        {
+          "name": "script",
+          "label": "Assign episode",
+          "icon": "play-arrow",
+          "translateLabel": false,
+          "iconAction": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "parallel_status",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "groups": [
+        {
+          "process": "model",
+          "label": "MODEL",
+          "count": 3,
+          "completion": 66.33,
+          "bars": [
+            {
+              "search_key": "sthpw/task?code=T0",
+              "taskCode": "T0",
+              "percent": 33,
+              "color": "#e8c268",
+              "status": "Ready",
+              "assigned": "admin"
+            },
+            {
+              "search_key": "sthpw/task?code=T1",
+              "taskCode": "T1",
+              "percent": 66,
+              "color": "#f00",
+              "status": "Working",
+              "assigned": "admin"
+            },
+            {
+              "search_key": "sthpw/task?code=T2",
+              "taskCode": "T2",
+              "percent": 100,
+              "color": "#b5e868",
+              "status": "Done",
+              "assigned": "admin"
+            }
+          ],
+          "children": []
+        },
+        {
+          "process": "rig",
+          "label": "RIG",
+          "count": 0,
+          "completion": 0,
+          "bars": [],
+          "children": []
+        }
+      ],
+      "steps": 3,
+      "barHeight": 3,
+      "targetSearchKey": "cg/assets?project=cg&code=ARM"
+    }
+  },
+  {
+    "name": "task_status_color",
+    "kind": "text",
+    "cell": {
+      "text": "Working",
+      "statusColor": "#aabbcc"
+    }
+  },
+  {
+    "name": "drop_links",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "available": true,
+      "targetSearchKey": "sthpw/login_group?code=crew",
+      "acceptedType": "sthpw/login",
+      "links": [
+        {
+          "searchKey": "sthpw/login?code=admin",
+          "label": "admin"
+        },
+        {
+          "searchKey": "sthpw/login?code=artist",
+          "label": "Artist"
+        }
+      ],
+      "backgroundColor": ""
+    }
+  },
+  {
+    "name": "custom_layout",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "targetSearchKey": "cg/assets?project=cg&code=ARM",
+      "layoutNodes": [
+        {
+          "kind": "action",
+          "text": "Edit Script Link",
+          "javascript": "alert(\"fixture\")"
+        },
+        {
+          "kind": "link",
+          "text": "Open external document",
+          "href": "https://example.com/document",
+          "translate": true
+        }
+      ]
+    }
   }
 ]

@@ -539,7 +539,6 @@ if (lay) {
     spt.app_busy.hide();
 }
 
-spt.dg_table.add_filter(bvr.src_el);
 alert("Эпизод назначен на вас.");
 """)
 insert.set_value('timestamp', """2019-09-07 20:25:31""")

@@ -159,3 +159,20 @@ for (const pack of Object.keys(iconMaps))
     'material-design:constructor'
   ])
     assert.equal(resolveIcon(name, pack), undefined, 'Unknown icon: ' + name);
+
+for (const pack of ['material-design', 'fontawesome-solid', 'fluent-system']) {
+  for (const [legacy, semantic] of Object.entries({
+    WORK: 'workspaces',
+    work: 'workspaces',
+    EDIT: 'edit',
+    DELETE: 'delete',
+    ADD: 'add',
+    CALENDAR: 'calendar',
+    GROUP_LINK: 'group',
+    LOCK: 'lock',
+    JUMP: 'open-in-new'
+  })) {
+    assert(resolveIcon(legacy, pack), legacy + ' must resolve in ' + pack);
+    assert.deepEqual(resolveIcon(legacy, pack), resolveIcon(semantic, pack));
+  }
+}

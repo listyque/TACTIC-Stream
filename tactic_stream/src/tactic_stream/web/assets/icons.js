@@ -14244,6 +14244,17 @@ var fluent_system_icons_resizable_default = {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/icons.mjs
 var semanticAliases = {
+	WORK: "workspaces",
+	work: "workspaces",
+	EDIT: "edit",
+	DELETE: "delete",
+	ADD: "add",
+	CALENDAR: "calendar",
+	"GROUP-LINK": "group",
+	LOCK: "lock",
+	JUMP: "open-in-new",
+	CREATE: "edit",
+	create: "edit",
 	more: "more-vert",
 	"arrow-back": "arrow-left",
 	connection: "lan-connect",

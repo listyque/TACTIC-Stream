@@ -1,8 +1,8 @@
 # Tactic Frame B07: Table View checkpoint
 
 B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the widget-config census still contains 36 classes without typed adapters; L02 adds four
-class adapters with the explicit limits below. A registered adapter is not proof that every old
+the widget-config census contains 20 classes without typed adapters. Stage 1 adds
+16 adapters and shared tags, with the explicit dependencies below. A registered adapter is not proof that every old
 display option or embedded action works.
 
 | Portable module | Responsibility |
@@ -12,7 +12,7 @@ display option or embedded action works.
 | `features/table/menus.ui.mjs` | Column and saved-view actions and availability |
 | `features/table/cells.ui.mjs` | Typed labels, safe links, task-card geometry and compact summary/field scenes |
 | `features/table/inline.ui.mjs` | Typed value editor body, explicit-save and uncertain-write states |
-| `features/table/widgets.json` | 41 server classes, 98 named aliases, editor choices and native adapter categories |
+| `features/table/widgets.json` | 57 server classes, 134 named aliases, editor choices and native adapter categories |
 
 Stream ships these under `src/tactic_stream/shared_ui`; Handler ships its own
 copy under `thlib/ui/qml/tactic_frame`. The server still imports an explicit
@@ -25,13 +25,15 @@ scrolling and real input. Application search sessions/ConfiguredView retain
 queries and selection. ColumnsEditorController and widget-configuration API
 retain definitions, revisions and saved views. Existing EditSObject/TableCellEditCmd
 and task controllers retain writes, permissions, rollback and unknown outcomes.
-No second database, query engine, script runtime or embedded browser is added.
+No second database, query engine or embedded browser is added. Configured JavaScript
+uses the original SDK through a bounded host bridge: a browser Worker or an isolated
+QJSEngine process, never the native UI thread.
 
 Native `features/table/ValueEditor.qml` and Vue `TableInlineEditor` render the
 same editor scene. Enter commits a single-line value; multiline Enter adds a
 newline, and Save commits. Date/datetime/color/multiple values require explicit
-Save. Escape cancels. The existing native keyword/tag editor remains specialized;
-it has not yet been moved into the shared value scene.
+Save. Escape cancels. Keywords/tags now use the same specialized shared scene:
+suggestions, deduplicated tokens, pending draft flush and explicit Save/Cancel.
 
 Ordinary cell values are plain text in both hosts, including strings containing
 markup. Body text uses the shared resolved pixel size, without point rounding
@@ -61,7 +63,7 @@ The archived checkpoint already includes previous Frame migrations; it is not
 the original application before Frame.
 
 The matrix contains three themes, light/dark, EN/RU, table widths 360/800/1496,
-seven inline input modes and sixteen typed/error cell examples. GUI fixtures
+eight inline input modes and twenty-four typed/error cell examples. GUI fixtures
 exercise production presenters; disposable HTTP/XML-RPC tests separately verify
 queries and actual mutation effects. Qt/Chromium font rasterization can differ.
 
@@ -84,10 +86,77 @@ The old `handler_table.mjs` workflow now writes into
 
 ## Remaining B07 work
 
+<a id="stage-one-2026-10-20"></a>
+### Stage 1 checkpoint — 2026-10-20
+
+Stream 0.112.174 / Handler 0.6.0.121 deliver U01 and sixteen additional class
+adapters. This is a checkpoint of the requested five-subblock stage, **not its
+completion**. Supported configured paths reuse the existing owners:
+
+| Subblock | Delivered and checked | Still outside acceptance |
+| --- | --- | --- |
+| U01 | Shared tags, suggestions, pending input, explicit Save/Cancel; real native IME and browser keyboard/pointer input | Old standalone forms remain for their other callers |
+| L02 | Existing note/task/message cells, original-source comparison and native XML-RPC regression checks retained | Excluded Submission; old CGI state/slash setting choices and raw message HTML |
+| L07a | Seven service cells, custom insert/edit views, user/group identity, per-login preference revision/check, record retire/reactivate revision, template command and forced notification trigger path | Notification delivery and template lifecycle certification remain L09/L10 |
+| L03 | Original JS SDK and captured row/selection; browser Worker and isolated native Qt JS process; confirmations and context cancellation; instance-link editor with rollback; real CG script CustomLayout | Nested FastTable/HiddenRow (L01), file-ingest DOM callback (L04), unrestricted Mako/DOM and complex development layouts |
+| L05 | Six task/process/work adapters, original parallel 33/66/100 steps, exact task identity, status pipeline and assigned-scope validation; existing Task Manager/check-in | Local transfer modes are native capabilities; complete bottom/group reports remain L07b |
+
+CG layouts were **not missing**: slash references resolve to dotted saved names.
+`episodes.columns.script` is exercised from the actual template, with and without
+a document URL. It renders links and the saved edit callback without embedding
+HTML into QML. `columns.tasks_parent` embeds a FastTable and remains open in L01;
+`episodes.columns.assets` contains only `No html` and is preserved as unfinished.
+The one removed CG line was `spt.dg_table.add_filter(bvr.src_el)` in `take_episode`:
+it supplies no filter definition; the surrounding assignment and refresh are retained.
+All other CG scripts/layout definitions remain unchanged.
+
+Portable layout Mako is limited to reading supplied JSON data and formatting it.
+Table projection can repeat; it never runs imports, server writes or file/network
+I/O. General Python/Mako compatibility is not claimed. The original SDK is a
+byte-identical resource in both products; API permissions remain server-owned.
+Unknown DOM/popup routes fail explicitly rather than silently opening a generic form.
+
+New shared descriptions live in `features/table/services.ui.mjs`,
+`parallel.ui.mjs`, `drop.ui.mjs`, `layout.ui.mjs`, `document.ui.mjs` and
+`actions.state.mjs`. Native orchestration is grouped under `thlib/ui/table`;
+QML presenters are under `qml/features/table`. Vue adapters remain under
+`features/interface`. Neither checkout is required by the other's runtime.
+
+Reproduce focused checks with:
+
+```powershell
+# Stream product directory; use temporary fixture databases only.
+.venv/Scripts/python.exe -B -m unittest discover -s tests -p 'test_table_*.py' -q
+node frontend/tests/table_script_runtime.mjs
+node frontend/tests/table_script_worker.mjs
+.venv/Scripts/python.exe tools/frame_foundation/check_platform.py --handler-root D:/code/th_codex
+# Handler checkout, using the same development Python:
+# -m unittest -q tests.test_frame_table tests.test_table_scripts tests.test_table_service_workflows tests.test_sobject_link
+```
+
+Final checkpoint validation passed: the complete Frame platform gate, **63 native
+table tests**, **38 table API tests**, actual browser HTTP/XML-RPC workflows,
+ordinary QML smoke and an independent wheel containing all **217 Frame modules**
+and exact SDK/bridge resources. The original 250-visual-item table budget remains
+unchanged; Insert controls are created only for configured Update columns.
+
+The current capture matrix has **420 paired current states plus 36 archived
+references**. New input scenarios cover custom actions, external links, parallel
+task targets, the link editor button, custom header insert view, confirmations,
+and a modeless readonly document with group switching and common Help. The actual
+CG JavaScript scripts run against a fake SDK; sixteen shipped inline callback
+bodies are checked through their typed routes. No production scripts or real
+SMTP/Telegram delivery run during these tests. PostgreSQL, frozen Windows
+packaging and physical touch hardware remain unverified for this checkpoint.
+
+The next dependency work is L01/L04, followed by acceptance of the remaining L03
+paths. Do not close stage 1 or B07 using the adapter count alone. EN/RU Help →
+Table View: B07 includes XML examples and paired screenshots of supported cells.
+
 The executable inventory scans every shipped widget XML and CG template entry;
 optional local databases use SQLite read-only mode. It records exact references,
 deduplicates aliases and does not execute scripts. Current shipped/template
-census: 239 entries, 38 referenced adapted classes, 36 pending classes,
+census: 239 entries, 54 referenced adapted classes, 20 pending classes,
 27 previously excluded `pyasm.prod` classes and 3 explicitly unfinished originals.
 The catalogue also includes three adapted classes not mentioned by this census.
 An older optional local-database census covered 449 entries with the same
@@ -95,8 +164,8 @@ class counts; it is historical evidence, not required input for the current plan
 No working databases were read for this revision.
 
 Largest pending groups are nested/hidden-row table scopes, Gantt/timecard/work-hour
-cells, loader/publish/checkout operations, configurable buttons/custom layouts,
-legacy task/status/assignment editors and their child forms. These must preserve
+cells and loader/publish/checkout operations. Configurable actions/layouts and
+task/status/assignment adapters have the stage-1 limits below. These must preserve
 the original workflow through existing owners. Opening a generic inspector does
 not implement a configured nested table; drawing a button does not implement its
 script. Unknown classes/options stay explicitly unsupported.
@@ -107,11 +176,13 @@ or email-delivery implementation. PostgreSQL production data, physical touch
 hardware and all historical widget options have not been certified.
 
 <a id="legacy-checklist"></a>
-## Active legacy checklist — 2026-10-19
+## Active legacy checklist — 2026-10-20
 
 The current delivery plan has [three implementation stages and a separate fourth deployment stage](../UI_ARCHITECTURE.md#legacy-plan). U01 / L01–L12 remain subblock IDs, not stage numbers; the effort-sorted internal order is unchanged.
 L01–L07 below partition the original **40 canonical classes exactly once** from
-239 shipped/CG entries. L02 has four registered adapters; the other 36 boxes are open. These are required config
+239 shipped/CG entries. L02 has four registered adapters; stage 1 adds another 16. Twenty classes still
+need adapters. Checked entries below mean tested supported adapter scenarios;
+full original-option acceptance remains a separate L07b gate. These are required config
 references, including definitions under `config/.../prod`; excluding `pyasm.prod`
 does not exclude other namespaces in that directory. Full source paths, options
 and use sites are reproducible with `inventory.py`; generated output stays ignored.
@@ -123,13 +194,13 @@ reference was discovered. Add newly confirmed usable dependencies to this ledger
 
 ### U01 — active shared-UI gap: inline keywords/tags
 
-Open; first subblock of stage 1, followed by L02, L07a, L03 and L05. Finishing U01 alone does not complete stage 1. Native TacticTableInlineEditor still
-selects legacyTagsEditor and SObjectValueEditor/TableTextEditor for keywords;
-Stream TableInlineEditor uses the shared inline scene. Share the specialized
-interaction, retain suggestions, token edits, Save/Cancel, draft and focus, and
-verify both production editors on the same data. Do not replace the native
-behavior with an ordinary text field. U01 adds no canonical legacy class to
-the 40-class partition below. L07b accepts it with the rest of the table.
+Delivered in Stream 0.112.174 / Handler 0.6.0.121: the same specialized Frame
+scene renders chips, suggestions and the pending text draft. Save flushes the
+pending draft, Escape discards it, outside clicks do not save. Real native
+QInputMethodEvent and browser pointer/keyboard tests cover the active path.
+The old standalone tag forms remain available to their other callers; the
+active table editor no longer selects legacyTagsEditor. This does not close
+stage 1 or add another canonical class to the 40-class partition.
 
 L07a implements the seven service/admin classes listed under L07; L07b is the
 later integrated acceptance, not a second set of seven classes. Existing L02
@@ -181,9 +252,9 @@ examples are also in EN/RU Help → Table View: B07.
 <a id="l03"></a>
 ### L03 — Настраиваемые действия и layout (3)
 
-- [ ] `tactic.ui.table.button_wdg.ButtonElementWdg`
+- [x] `tactic.ui.table.button_wdg.ButtonElementWdg`
 - [ ] `tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg`
-- [ ] `tactic.ui.table.drop_element_wdg.DropElementWdg`
+- [ ] `tactic.ui.table.drop_element_wdg.DropElementWdg` — portable instance links delivered; the shipped `folder_drop` / FileIngest callback remains L04 work.
 
 Из исходного XML вызвать реальное действие с контекстом строки/выделения, выполнить разрешённый script/layout и проверить результат, ошибки, отмену и откат. Для drop дать явную альтернативу выбора. Общий редактор колонок/ячеек должен сохранять исходные options и revisions; неподдержанный параметр не игнорируется.
 
@@ -203,12 +274,12 @@ examples are also in EN/RU Help → Table View: B07.
 <a id="l05"></a>
 ### L05 — Статусы, процессы и назначение (6)
 
-- [ ] `pyasm.widget.parallel_status.ParallelStatusEditWdg`
-- [ ] `pyasm.widget.parallel_status.ParallelStatusWdg`
-- [ ] `tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg`
-- [ ] `tactic.ui.table.subcontext_wdg.ProcessElementWdg`
-- [ ] `tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg`
-- [ ] `tactic.ui.table.task_element_wdg.WorkElementWdg`
+- [x] `pyasm.widget.parallel_status.ParallelStatusEditWdg`
+- [x] `pyasm.widget.parallel_status.ParallelStatusWdg`
+- [x] `tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg`
+- [x] `tactic.ui.table.subcontext_wdg.ProcessElementWdg`
+- [x] `tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg`
+- [x] `tactic.ui.table.task_element_wdg.WorkElementWdg`
 
 Из таблицы изменить процесс/статус/исполнителя, включая parallel status; проверить пустое значение, родительский scope, допустимые переходы, ревизию, ACL и конфликт. Внешний вид и первый пункт picker совпадают с текущим Handler; существующий Task Manager не реализуется заново.
 
@@ -226,13 +297,13 @@ examples are also in EN/RU Help → Table View: B07.
 <a id="l07"></a>
 ### L07 — Служебные ячейки и итоговая приёмка B07 (7)
 
-- [ ] `pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg`
-- [ ] `pyasm.widget.table_element_wdg.UpdateWdg`
-- [ ] `tactic.ui.input.process_group_select_wdg.LoginTableElementWdg`
-- [ ] `tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg`
-- [ ] `tactic.ui.table.preference_wdg.PreferenceEditWdg`
-- [ ] `tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg`
-- [ ] `tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg`
+- [x] `pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg`
+- [x] `pyasm.widget.table_element_wdg.UpdateWdg`
+- [x] `tactic.ui.input.process_group_select_wdg.LoginTableElementWdg`
+- [x] `tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg`
+- [x] `tactic.ui.table.preference_wdg.PreferenceEditWdg`
+- [x] `tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg`
+- [x] `tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg`
 
 Из конфигов login/group/project/preferences/naming/notification выполнить штатные переходы и изменения: пользователь, Security, preference, update/template, summary, recipient/trigger. Проверить обычного пользователя, admin, revisions и отмену. NotificationTrigger cell не означает готовую отправку email. После этого прогнать весь B07, включая уже адаптированные классы и их реально используемые options, inline/forms, keywords/tags и bottom/group_bottom/total_summary; закрыть только подтверждённые сценарии.
 
@@ -258,7 +329,7 @@ and limits in EN/RU Widget Database Help. Reuse the existing object, task, file,
 schedule and communication owners; opening a generic panel is not implementation
 of the configured embedded scope. Unsupported options stay explicit.
 
-Before closing B07 in L07, exercise the already adapted 37-class catalogue,
+Before closing B07 in L07b, exercise the complete 57-class catalogue,
 configured forms/inline editors, native keywords/tags and the used legacy
 bottom/group_bottom/total_summary contracts too. A 40-class checklist alone
 cannot certify all historical options. Current working controls remain delivered.

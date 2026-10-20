@@ -361,8 +361,10 @@ export default {
           result.relations[0]?.search_type ||
           '';
         if (this.linking) {
+          if (linkBranch.tableDrop)
+            this.linkedRecords = linkBranch.links.map((link) => link.record);
           let offset = 0,
-            next = true;
+            next = !linkBranch.tableDrop;
           while (next) {
             const page = await resultItems(
               this.ticket,
@@ -394,6 +396,61 @@ export default {
         if (id === this.request) this.error = error.message;
       } finally {
         if (id === this.request) this.busy = false;
+      }
+    },
+    async openDrop(record, cell) {
+      if (this.$refs.dialog.open)
+        throw new Error('Apply or discard unsaved changes first');
+      await this.open(record, cell.acceptedType, {
+        ...cell.relation,
+        links: cell.links,
+        tableDrop: {
+          search_type: this.searchType,
+          view: cell.tableView,
+          column: cell.columnName,
+          expected_revision: cell.expectedRevision,
+          parent_key: record.__search_key__
+        }
+      });
+    },
+    async stageDropped(keys) {
+      if (
+        !this.linkValid ||
+        this.saving ||
+        this.busy ||
+        this.uncertain ||
+        !Array.isArray(keys) ||
+        keys.length > 500
+      )
+        return;
+      const id = this.request,
+        scope = this.scope,
+        type = this.selectedType;
+      if (
+        keys.some(
+          (key) => typeof key !== 'string' || key.split('?')[0] !== type
+        )
+      )
+        throw new Error('Dropped objects belong to another Search Type');
+      this.availableBusy = true;
+      try {
+        const records = await rpc('get_by_search_key', [scope, keys]);
+        if (id !== this.request || !this.linkValid) return;
+        if (records.some((record) => !record))
+          throw new Error('A linked object is no longer available');
+        this.availableRecords = [
+          ...new Map(
+            [...this.availableRecords, ...records].map((record) => [
+              record.__search_key__,
+              record
+            ])
+          ).values()
+        ];
+        this.transferLinks('linked', keys);
+      } catch (error) {
+        if (id === this.request) this.error = error.message;
+      } finally {
+        if (id === this.request) this.availableBusy = false;
       }
     },
     async load() {
@@ -522,18 +579,26 @@ export default {
       try {
         await rpc('execute_cmd', [
           this.scope,
-          'tactic.command.sobject_link_cmd.SObjectLinkCmd',
-          {
-            parent_key: this.parent.__search_key__,
-            search_type: this.selectedType,
-            path: this.linkBranch.path,
-            insert_search_keys: this.selectedKeys.filter(
-              (key) => !this.originalKeys.includes(key)
-            ),
-            exclude_search_keys: this.originalKeys.filter(
-              (key) => !this.selectedKeys.includes(key)
-            )
-          }
+          this.linkBranch.tableDrop
+            ? 'tactic.ui.table.DropElementEditCmd'
+            : 'tactic.command.sobject_link_cmd.SObjectLinkCmd',
+          this.linkBranch.tableDrop
+            ? {
+                ...this.linkBranch.tableDrop,
+                action: 'save',
+                target_keys: [...this.selectedKeys]
+              }
+            : {
+                parent_key: this.parent.__search_key__,
+                search_type: this.selectedType,
+                path: this.linkBranch.path,
+                insert_search_keys: this.selectedKeys.filter(
+                  (key) => !this.originalKeys.includes(key)
+                ),
+                exclude_search_keys: this.originalKeys.filter(
+                  (key) => !this.selectedKeys.includes(key)
+                )
+              }
         ]);
         if (id !== this.request) return;
         this.originalKeys = [...this.selectedKeys];

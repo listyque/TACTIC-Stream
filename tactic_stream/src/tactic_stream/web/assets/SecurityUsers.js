@@ -596,6 +596,7 @@ var _sfc_main = {
 			catalog: null,
 			context: null,
 			identity: "",
+			requestedLogin: "",
 			revision: "",
 			draft: null,
 			original: null,
@@ -673,6 +674,7 @@ var _sfc_main = {
 			this.request++;
 			this.busy = false;
 			this.catalog = this.draft = this.original = null;
+			this.requestedLogin = "";
 			this.reload(true);
 		}
 	},
@@ -753,7 +755,18 @@ var _sfc_main = {
 		},
 		accept(catalog, selected) {
 			this.catalog = catalog;
-			this.select(selected || catalog.users[0]?.login || "", true);
+			const requested = this.requestedLogin;
+			this.requestedLogin = "";
+			this.select(requested || selected || catalog.users[0]?.login || "", true);
+			if (requested && this.identity !== requested) this.error = "The configured table target is unavailable";
+		},
+		focus(login) {
+			if (this.dirty || this.uncertain) throw new Error("Apply or discard unsaved changes first");
+			if (this.busy || !this.catalog) this.requestedLogin = login;
+			else {
+				this.select(login, true);
+				if (this.identity !== login) throw new Error("The configured table target is unavailable");
+			}
 		},
 		select(login, loaded = false) {
 			if (!loaded && (!this.editable || this.dirty)) return;

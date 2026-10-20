@@ -838,6 +838,7 @@ var _sfc_main = {
 			revision: "",
 			context: null,
 			group: "",
+			pendingGroup: "",
 			selected: -1,
 			ui: initial(),
 			busy: false,
@@ -1103,6 +1104,15 @@ var _sfc_main = {
 			this.metadata = result.metadata;
 			this.revision = result.revision;
 			this.baseline = JSON.stringify(this.document);
+			if (this.pendingGroup) {
+				this.group = this.pendingGroup;
+				this.pendingGroup = "";
+				if (!this.groups.some((group) => group.identity === this.group)) {
+					this.group = "";
+					this.selectGroup("");
+					throw new Error("Group is no longer available");
+				}
+			}
 			this.group = this.groups.some((group) => group.identity === this.group) ? this.group : this.groups[0]?.identity || "";
 			this.selectGroup(this.group);
 			for (const group of Object.values(this.document.groups)) parseRules(group.xml);
@@ -1141,6 +1151,15 @@ var _sfc_main = {
 		},
 		pendingText() {
 			return pending(this.ui);
+		},
+		focusGroup(code) {
+			if (this.dirty || this.uncertain) throw new Error("Apply or discard unsaved changes first");
+			if (this.document?.groups[code]) this.selectGroup(code);
+			else if (this.document && !this.busy) throw new Error("Group is no longer available");
+			else {
+				this.pendingGroup = code;
+				this.group = code;
+			}
 		},
 		selectGroup(code) {
 			if (this.pendingText() && code !== this.group) {

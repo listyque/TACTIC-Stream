@@ -31,6 +31,12 @@ class CheckinButtonElementWdg(BaseTableElementWdg):
                     transferMode=self.get_option('transfer_mode') or '')
 
 
+class NotificationTriggerElementWdg(BaseTableElementWdg):
+    def get_cell_value(self):
+        return dict(text='', targetSearchKey=self.get_current_sobject().get_search_key(),
+                    actions=[dict(name='notification-test', label='Email Test', icon='notifications')])
+
+
 class RecipientElementWdg(BaseTableElementWdg):
     def preprocess(self):
         search = Search('sthpw/notification_login')

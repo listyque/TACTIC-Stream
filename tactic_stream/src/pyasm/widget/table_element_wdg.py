@@ -192,6 +192,31 @@ class ArrayTableElementWdg(BaseTableElementWdg):
         return {'text': self.get_text_value()}
 
 
+class UpdateWdg(BaseTableElementWdg):
+    """Original edit/insert/retire/delete links, dispatched by object owners."""
+
+    def get_cell_value(self):
+        from pyasm.common import Environment
+        import hashlib
+        import json
+        obj = self.get_current_sobject()
+        if not obj or obj.is_insert():
+            return dict(text='', actions=[])
+        if self.get_option('user_filter') == 'true' and obj.has_value('login') and obj.get_value('login') != Environment.get_user_name():
+            return dict(text='', actions=[])
+        actions = []
+        if self.get_option('edit') != 'false':
+            actions.append(dict(name='edit', label='Edit', icon='edit', view=self.get_option('edit_view') or 'edit'))
+        if self.get_option('retire') != 'false' and obj.has_value('s_status'):
+            retired = obj.get_value('s_status') == 'retired'
+            actions.append(dict(name='reactivate' if retired else 'retire',
+                                label='Reactivate' if retired else 'Retire', icon='restore' if retired else 'archive'))
+        if self.get_option('delete') == 'true':
+            actions.append(dict(name='delete', label='Delete sObject', icon='delete', destructive=True))
+        return dict(text='', actions=actions, targetSearchKey=obj.get_search_key(),
+                    expectedRevision=hashlib.sha256(json.dumps(obj.get_data(), sort_keys=True, default=str).encode()).hexdigest())
+
+
 class XmlWdg(BaseTableElementWdg):
     """Raw/compressed XML, with the original parse diagnostic and safe text."""
     def is_editable(self):

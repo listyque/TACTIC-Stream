@@ -100,6 +100,8 @@ export default {
     openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice('Access denied'),
     openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
     openTableCheckin: (record,cell,project) => this.openTableCheckin(record,cell,project),
+    openTableSecurity: code => this.openTableSecurity(code),
+    openTablePort: (command,record) => this.openTablePort(command,record),
     openScriptEditor: path => this.openScriptEditor(path),
     openHelp: topic => this.$refs.help.open(topic),
     openUserProfile: login => this.$refs.userProfile.open(login),
@@ -473,14 +475,17 @@ export default {
     async openScriptEditor(path) {
       if (this.scriptEditorLoading) return
       const session = this.session
+      const project = this.workspaceProject
+      const current = () => this.session === session && this.workspaceProject === project
       this.scriptEditorLoading = true
       try {
         const module = await import('./features/scripts/ScriptEditor.vue')
-        if (this.session !== session) return
+        if (!current()) return
         this.scriptEditorComponent ||= markRaw(module.default)
         await nextTick()
+        if (!current()) return
         await this.$refs.scriptEditor.open(typeof path === 'string' ? path : '')
-      } catch (error) { if (this.session === session) notify('error', error.message, '', 'script-editor') }
+      } catch (error) { if (current()) notify('error', error.message, '', 'script-editor') }
       finally { this.scriptEditorLoading = false }
     },
     async showConfiguration() {
@@ -501,6 +506,63 @@ export default {
       this.section = 'configuration'
       await nextTick()
       this.$refs.configurationDialog.show()
+    },
+    async openTableSecurity(code) {
+      if (!this.canAdminister || this.administrationLocked) throw new Error('Apply or discard unsaved changes first')
+      const session = this.session, project = this.workspaceProject
+      const current = () => {
+        if (this.session !== session || this.workspaceProject !== project || !this.canAdminister)
+          throw new Error('Connection context changed. Close this form and reopen it before saving.')
+      }
+      await SecurityRules.__asyncLoader()
+      current()
+      if (this.administrationOpen) this.selectAdministration('rules')
+      else await this.showAdministration('rules')
+      await nextTick()
+      current()
+      if (!this.$refs.rules) throw new Error('Global Permissions are unavailable in this host')
+      this.$refs.rules.focusGroup(code)
+    },
+    async openTablePort(command,record) {
+      const options = command.options || {}, kind = command.type
+      const session=this.session, project=this.workspaceProject
+      const current=()=>{if(this.session!==session || this.workspaceProject!==project || !this.canAdminister) throw new Error('Connection context changed. Close this form and reopen it before saving.')}
+      if (!this.canAdminister) throw new Error('Access denied')
+      if (kind === 'schedule') { await this.$refs.taskManager.openForUser({login:options.login}); return }
+      if (kind === 'script') { await this.openScriptEditor(options.script_path); return }
+      if (['task-details','add-task','work'].includes(kind)) {
+        await this.$refs.taskManager.openForObjects(record,options.actionProcess || options.process || '',{},options.actionTaskKey || options.taskSearchKey || '')
+        if (kind === 'add-task') await this.$refs.taskManager.edit([],true,'','inline')
+        if (kind === 'work') await this.openTableCheckin(record,options,this.workspaceProject)
+        return
+      }
+      if (kind === 'workflow') {
+        if(options.search_key !== record.__search_key__) throw new Error('The configured table target is unavailable')
+        if(this.busy || this.openingLink || this.administrationLocked || this.pendingWorkflow || this.administrationInstances.workflow?.busy) throw new Error('Apply or discard unsaved changes first')
+        await WorkflowEditor.__asyncLoader(); current()
+        if(this.administrationLocked)throw new Error('Apply or discard unsaved changes first')
+        this.pendingWorkflow={identity:record.code}
+        if(this.administrationOpen)this.selectAdministration('workflow')
+        else await this.showAdministration('workflow')
+        current(); await nextTick()
+        if(!this.administrationOpen){this.pendingWorkflow=null;throw new Error('Apply or discard unsaved changes first')}
+        const editor=this.administrationInstances.workflow
+        if(this.pendingWorkflow && editor)this.runWorkflowRequest(editor)
+        return
+      }
+      if (!['users','groups','schema'].includes(kind)) throw new Error('Unsupported table window: ' + kind)
+      if (this.administrationLocked) throw new Error('Apply or discard unsaved changes first')
+      const components = {users:SecurityUsers,groups:SecurityGroups,schema:SchemaEditor}
+      await components[kind].__asyncLoader(); current()
+      if (this.administrationOpen) this.selectAdministration(kind)
+      else await this.showAdministration(kind)
+      await nextTick()
+      current()
+      const editor = this.$refs[kind]
+      if (!editor) throw new Error('This editor is available on a desktop screen.')
+      if (['users','groups','workflow'].includes(kind) && options.search_key !== record.__search_key__) throw new Error('The configured table target is unavailable')
+      if (kind === 'users') editor.focus(record.login)
+      else if (kind === 'groups') editor.focus(record.code)
     },
     async showAdministration(section = null) {
       if (mobile.value) { this.showWorkspaceNotice('This editor is available on a desktop screen.'); return }
@@ -1749,7 +1811,7 @@ export default {
     },
     async openTableCheckin(record,cell,project) {
       if (!this.canAdminister || !this.$refs.dropPlate.canLeave()) return
-      if (['move','local','inplace'].includes(cell.transferMode)) throw new Error('This configured check-in mode requires a desktop connection.')
+      if (['copy','move','local','inplace'].includes(cell.transferMode)) throw new Error('This configured check-in mode requires a desktop connection.')
       this.$refs.dropPlate.clear()
       this.tableCheckinTarget = {project,searchKey:record.__search_key__,title:record.name || record.title || record.code,record,
         process:cell.process || 'publish',context:cell.context || cell.process || 'publish'}

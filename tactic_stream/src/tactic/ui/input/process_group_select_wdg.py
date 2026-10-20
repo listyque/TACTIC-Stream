@@ -3,6 +3,17 @@
 from pyasm.biz import Pipeline
 from pyasm.widget import BaseInputWdg, SelectWdg
 from pyasm.common.errors import UnsupportedContract
+from tactic.ui.common import SimpleTableElementWdg
+
+
+class LoginTableElementWdg(SimpleTableElementWdg):
+    """Keep login identity and the group used by ProcessGroupSelectWdg."""
+
+    def get_cell_value(self):
+        task = self.get_current_sobject()
+        login = str(self.get_value() or '')
+        return dict(text=login, login=login,
+                    assignedGroup=task.get_value('assigned_group', no_exception=True) or '')
 
 
 class ProcessGroupSelectWdg(BaseInputWdg):

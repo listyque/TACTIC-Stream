@@ -238,7 +238,8 @@ def capture(fixture, qml, original):
     assert view, [item.toString() for item in component.errors()]
     window = QQuickWindow()
     window.resize(fixture["width"], fixture["height"])
-    window.setColor(theme.property("background"))
+    popup_editor = fixture['screen'] == 'inline' and fixture['mode'] in ('multiline', 'tags', 'date', 'datetime', 'color')
+    window.setColor(theme.property("surfaceContainerHigh" if popup_editor else "background"))
     view.setParentItem(window.contentItem())
     window.show()
     try:
@@ -287,6 +288,7 @@ def capture(fixture, qml, original):
                 "contentSelection",
             )
         }
+        result['background'] = window.color().name()
         result["completionTracks"] = [
             dict(
                 x=item.mapToScene(QPointF()).x(),
@@ -329,7 +331,7 @@ def main():
     ]
     names += [
         "thlib/ui/qml/features/table/" + name + ".qml"
-        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell")
+        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView")
     ]
     names += [
         "tests/test_columns_table_view.py",
@@ -337,6 +339,12 @@ def main():
         "thlib/ui/workspace_models/results.py",
         "thlib/tactic_table_widgets.py",
         "thlib/tactic_query.py",
+        "thlib/ui/table/services.py",
+        "thlib/ui/table/scripts.py",
+        "thlib/ui/table/script_worker.py",
+        "thlib/ui/table/requests.py",
+        "thlib/ui/qml/features/table/runtime/client_api.js",
+        "thlib/ui/qml/features/table/runtime/table_action_runtime.js",
         "thlib/ui/translations/ru.json",
     ]
     shared, native = source_hashes(ROOT, HANDLER, names)
@@ -360,7 +368,7 @@ def main():
                         screen="cell",
                         value=value,
                         width=280,
-                        height=90 if value["name"] == "legacy_tasks" else 58,
+                        height=90 if value["name"] in ("legacy_tasks","custom_layout","drop_links") else 58,
                         style=style,
                         dark=dark,
                         language=language,
@@ -374,6 +382,7 @@ def main():
                     "date",
                     "datetime",
                     "color",
+                    "tags",
                 ):
                     value = (
                         True
@@ -390,6 +399,8 @@ def main():
                         width=360,
                         height=336
                         if mode == "multiline"
+                        else 154
+                        if mode == "tags"
                         else 84
                         if mode in ("date", "datetime", "color")
                         else 40,
@@ -419,6 +430,7 @@ def main():
             name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
             for name in (
                 "tools/frame_table/capture.py",
+                "tools/frame_table/TableFixture.vue",
                 "tests/fixtures/frame_table_values.json",
                 "reports/table-view-2026-10-14/fixture.json",
             )

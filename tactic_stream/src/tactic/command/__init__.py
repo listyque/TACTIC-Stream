@@ -1,5 +1,6 @@
 """Ported headless TACTIC commands; see LICENSE.TACTIC/source_manifest.json."""
 from .python_cmd import PythonCmd, PythonTrigger
+from .notification_cmd import NotificationTestCmd
 from .js_cmd import JsCmd
 from .create_project_cmd import CreateProjectCmd, CopyProjectFromTemplateCmd, CopyFileToAssetTempCmd
 from .global_search_trigger import GlobalSearchTrigger, FolderTrigger
@@ -9,6 +10,7 @@ from .pipeline_task_trigger import TaskCreatorTrigger, TaskCompleteTrigger, Rela
 __all__ = ['CreateProjectCmd', 'PythonCmd', 'PythonTrigger', 'GlobalSearchTrigger', 'FolderTrigger', 'LoginGroupTrigger', 'TaskCreatorTrigger', 'TaskCompleteTrigger', 'RelatedTaskUpdateTrigger']
 __all__.append('CopyProjectFromTemplateCmd')
 __all__.append('JsCmd')
+__all__.append('NotificationTestCmd')
 __all__.append('CopyFileToAssetTempCmd')
 
 

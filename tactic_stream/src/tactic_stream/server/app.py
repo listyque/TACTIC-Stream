@@ -502,7 +502,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                         raise ValueError('Invalid default data')
                     result = read_form(payload['search_type'], payload.get('view', 'edit'),
                                        payload.get('search_key'), payload.get('default'), payload.get('source_key'), payload.get('search_keys'),
-                                       payload.get('parent_key'), payload.get('connect_key'))
+                                       payload.get('parent_key'), payload.get('connect_key'), ignore=payload.get('ignore'))
                 else:
                     result = read_interface(payload['search_type'], payload.get('view', 'table'))
             if messages == 'file':

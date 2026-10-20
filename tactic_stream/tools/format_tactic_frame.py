@@ -44,6 +44,8 @@ def main():
     native_javascript_command.remove("--check" if args.check else "--write")
     native_javascript_command += ["--parser", "babel"]
     subprocess.run(command, cwd=ROOT, check=True)
+    command[-1] = "src/tactic_stream/compatibility/table_action_runtime.js"
+    subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/src/frame/**/*.{vue,css,js}"
     command[command.index("--tab-width") + 1] = "2"
     subprocess.run(command, cwd=ROOT, check=True)
@@ -94,7 +96,7 @@ def main():
         "tools/frame_configuration/*.{vue,js,html,mjs}",
         "tools/frame_search/*.{vue,js,html,mjs}",
         "frontend/tests/frame_search*.mjs",
-        "frontend/src/features/interface/{TableView,TableCell,TableInlineEditor,TaskCell,TaskCards,TaskSummaryCell,ValueFieldsCell,MessageTableCell,GroupedCompletionCell,CompletionCell}.vue",
+        "frontend/src/features/interface/{TableView,TableCell,TableInlineEditor,TableServiceCell,TableDocument,TableServiceDialogs,ConfiguredView,TaskCell,TaskCards,TaskSummaryCell,ValueFieldsCell,MessageTableCell,GroupedCompletionCell,CompletionCell}.vue",
         "tools/frame_table/*.{vue,html,mjs}",
         "tools/frame_tasks/*.{vue,html,mjs}",
         "tools/frame_schedule/*.{vue,html,mjs}",
@@ -107,7 +109,8 @@ def main():
         "frontend/src/features/objects/inspector.css",
         "frontend/src/features/workspace/links.js",
         "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
-        "frontend/tests/{frame_table*,handler_table,table_cells,columns_editor}.mjs",
+        "frontend/tests/{frame_table*,handler_table,table_cells,columns_editor,table_script_*}.mjs",
+        "frontend/src/features/interface/tableScript.js",
         "tools/frame_messages/*.{vue,html,mjs,json}",
         "tools/frame_files/*.{vue,html,mjs,json}",
         "frontend/tests/frame_files*.mjs",

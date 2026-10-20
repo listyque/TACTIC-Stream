@@ -40,6 +40,12 @@ class TableCellEditCmd(Command):
         records = selected_objects(search_type, self.kwargs.get('search_keys'))
         plans, field, first_field = [], None, None
         for record in records:
+            from tactic.ui.widget.misc_input_wdg import TaskStatusElementWdg
+            from tactic_stream.server.table_cells import WIDGETS
+            if WIDGETS.get(element['display']['handler']) is TaskStatusElementWdg:
+                status_widget = TaskStatusElementWdg(name=column, **element['display']['options'])
+                status_widget.set_sobject(record)
+                status_widget.assert_editable()
             form = read_form(search_type, edit_view, record.get_search_key(), element_names=[edit_name])
             field = next((item for item in form['fields'] if item['name'] == edit_name), None)
             if not field:

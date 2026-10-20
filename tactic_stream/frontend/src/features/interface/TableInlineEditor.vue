@@ -19,6 +19,10 @@ const panel = ref(null),
   panelWidth = ref(300),
   inputHeight = ref(36);
 const initialValue = ref('');
+const tagDraft = ref('');
+const requiresSave = computed(
+  () => props.editor?.explicitSave || UI.explicitSave(mode.value)
+);
 const kind = computed(() =>
   props.editor ? fieldKind(props.editor.field) : ''
 );
@@ -27,23 +31,26 @@ const multiline = computed(
     kind.value === 'TextAreaWdg' || props.editor?.field.name === 'description'
 );
 const mode = computed(() =>
-  multiline.value
-    ? 'multiline'
-    : kind.value === 'SelectWdg' &&
-        props.editor?.field.class_name ===
-          'tactic.ui.input.process_group_select_wdg.ProcessGroupSelectWdg'
-      ? 'user'
-      : {
-          SelectWdg: 'select',
-          CheckboxWdg: 'bool',
-          CalendarInputWdg:
-            props.editor?.field.input?.type === 'datetime-local'
-              ? 'datetime'
-              : 'date',
-          ColorInputWdg: 'color',
-          MultiSelectWdg: 'multi',
-          TimeInputWdg: 'time'
-        }[kind.value] || 'text'
+  props.editor?.field.name === 'keywords' ||
+  props.editor?.field.input?.type === 'tags'
+    ? 'tags'
+    : multiline.value
+      ? 'multiline'
+      : kind.value === 'SelectWdg' &&
+          props.editor?.field.class_name ===
+            'tactic.ui.input.process_group_select_wdg.ProcessGroupSelectWdg'
+        ? 'user'
+        : {
+            SelectWdg: 'select',
+            CheckboxWdg: 'bool',
+            CalendarInputWdg:
+              props.editor?.field.input?.type === 'datetime-local'
+                ? 'datetime'
+                : 'date',
+            ColorInputWdg: 'color',
+            MultiSelectWdg: 'multi',
+            TimeInputWdg: 'time'
+          }[kind.value] || 'text'
 );
 const scene = computed(() =>
   UI.describe(
@@ -51,6 +58,8 @@ const scene = computed(() =>
       mode: mode.value,
       title: props.editor?.field.title,
       value: value.value,
+      draft: tagDraft.value,
+      explicitSave: props.editor?.explicitSave,
       options: props.editor ? choices.value : [],
       height: inputHeight.value,
       count: props.editor?.plans.length || 1,
@@ -63,9 +72,15 @@ const scene = computed(() =>
   )
 );
 function dispatch(action) {
-  if (action.type === 'value' || action.type === 'toggle') {
+  if (['tagDraft', 'addTag', 'removeTag'].includes(action.type)) {
+    const next = UI.editTags(value.value, tagDraft.value, action);
+    value.value = next.value;
+    tagDraft.value = next.draft;
+    if (action.type !== 'tagDraft')
+      nextTick(() => frame.value?.focusControl('tableInlineValue'));
+  } else if (action.type === 'value' || action.type === 'toggle') {
     value.value = UI.change(value.value, action);
-    if (UI.savesOnChange(mode.value)) save();
+    if (!requiresSave.value && UI.savesOnChange(mode.value)) save();
   } else if (action.type === 'save') {
     if (action.value !== undefined) value.value = action.value;
     save();
@@ -84,6 +99,7 @@ const choices = computed(() => {
     : options;
 });
 async function open(bounds) {
+  tagDraft.value = '';
   const field = props.editor.field;
   value.value = [
     'CalendarInputWdg',
@@ -101,14 +117,17 @@ async function open(bounds) {
     1,
     Math.min(
       innerWidth - 36,
-      multiline.value
-        ? 600
-        : UI.explicitSave(mode.value)
-          ? Math.max(280, bounds.width - 8)
-          : bounds.width - 8
+      props.editor?.preferredWidth ||
+        (multiline.value || mode.value === 'tags'
+          ? 600
+          : requiresSave.value
+            ? Math.max(280, bounds.width - 8)
+            : bounds.width - 8)
     )
   );
-  inputHeight.value = Math.max(36, bounds.height - 8);
+  inputHeight.value = props.editor?.explicitSave
+    ? 36
+    : Math.max(36, bounds.height - 8);
   panel.value.style.width = panelWidth.value + 'px';
   panel.value.style.setProperty('--inline-height', bounds.height - 8 + 'px');
   panel.value.showPopover();
@@ -116,7 +135,7 @@ async function open(bounds) {
     Math.max(
       8,
       Math.min(
-        bounds.left + (UI.explicitSave(mode.value) ? 0 : 4),
+        bounds.left + (requiresSave.value ? 0 : 4),
         innerWidth - panel.value.offsetWidth - 8
       )
     ) + 'px';
@@ -124,7 +143,7 @@ async function open(bounds) {
     Math.max(
       8,
       Math.min(
-        UI.explicitSave(mode.value) ? bounds.bottom + 4 : bounds.top + 4,
+        requiresSave.value ? bounds.bottom + 4 : bounds.top + 4,
         innerHeight - panel.value.offsetHeight - 8
       )
     ) + 'px';
@@ -136,6 +155,8 @@ function close() {
 }
 function save() {
   if (!props.busy && !props.uncertain) {
+    if (mode.value === 'tags')
+      value.value = UI.tagValue(value.value, tagDraft.value);
     if (JSON.stringify(value.value) === initialValue.value) cancel();
     else emit('save', value.value);
   }
@@ -158,7 +179,7 @@ function toggle(event) {
 function outside(event) {
   if (
     props.editor &&
-    !UI.explicitSave(mode.value) &&
+    !requiresSave.value &&
     !panel.value?.contains(event.target) &&
     !props.busy &&
     !props.uncertain
@@ -194,7 +215,7 @@ defineExpose({ open, close });
       ref="panel"
       popover="manual"
       class="table-inline-editor"
-      :class="{ 'in-cell': !UI.explicitSave(mode) }"
+      :class="{ 'in-cell': !requiresSave }"
       role="dialog"
       :aria-label="editor?.field.title"
       @toggle="toggle"

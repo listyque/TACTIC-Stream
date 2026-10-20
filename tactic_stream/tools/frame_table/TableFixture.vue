@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, nextTick } from 'vue';
+import { computed, ref, nextTick, provide } from 'vue';
 import {
   appearance,
   hostedPalette,
@@ -7,6 +7,8 @@ import {
 } from '../../frontend/src/appearance.js';
 import TableView from '../../frontend/src/features/interface/TableView.vue';
 import TableCell from '../../frontend/src/features/interface/TableCell.vue';
+import TableServiceDialogs from '../../frontend/src/features/interface/TableServiceDialogs.vue';
+import TableDocument from '../../frontend/src/features/interface/TableDocument.vue';
 import TableInlineEditor from '../../frontend/src/features/interface/TableInlineEditor.vue';
 const fixture = ref(null),
   data = ref(null),
@@ -14,7 +16,11 @@ const fixture = ref(null),
   selected = ref([]),
   events = ref([]),
   editor = ref(null),
-  inline = ref(null);
+  inline = ref(null),
+  serviceDialogs = ref(null),
+  tableDocument = ref(null),
+  documentModel = ref({});
+provide('openHelp', (topic) => events.value.push({ type: 'help', topic }));
 Object.assign(appearance, {
   clickAnimations: false,
   hoverAnimations: false,
@@ -51,6 +57,14 @@ function selection(rows, enabled) {
   selected.value = [...keys];
 }
 window.tableFixture = {
+  async openDocument(model) {
+    documentModel.value = model;
+    await nextTick();
+    tableDocument.value.open();
+  },
+  closeDocument: () => tableDocument.value.close(),
+  confirm: (message, options) => serviceDialogs.value.ask(message, options),
+  cancelConfirmation: () => serviceDialogs.value.close(),
   async show(value, source) {
     inline.value?.close();
     editor.value = null;
@@ -67,9 +81,15 @@ window.tableFixture = {
     await document.fonts.ready;
     if (value.screen === 'inline') {
       const mode = value.mode;
-      const name = mode === 'multiline' ? 'description' : 'value';
+      const name =
+        mode === 'tags'
+          ? 'keywords'
+          : mode === 'multiline'
+            ? 'description'
+            : 'value';
       const className = {
         text: 'pyasm.widget.input_wdg.TextWdg',
+        tags: 'pyasm.widget.input_wdg.TextWdg',
         multiline: 'pyasm.widget.input_wdg.TextAreaWdg',
         select: 'pyasm.widget.input_wdg.SelectWdg',
         bool: 'pyasm.widget.input_wdg.CheckboxWdg',
@@ -117,6 +137,8 @@ window.tableFixture = {
     tabindex="-1"
     :style="{ width: fixture.width + 'px', height: fixture.height + 'px' }"
   >
+    <TableServiceDialogs ref="serviceDialogs" />
+    <TableDocument ref="tableDocument" :model="documentModel" />
     <TableView
       v-if="fixture.screen === 'table'"
       :columns="columns"
@@ -134,6 +156,7 @@ window.tableFixture = {
       @select="selection"
       @inspect="events.push({ type: 'inspect', value: $event })"
       @sort="events.push({ type: 'sort', value: $event })"
+      @header-action="events.push({ type: 'header-action', value: $event })"
     >
       <template #cell="{ record, column, height }">
         <TableCell
@@ -168,6 +191,7 @@ window.tableFixture = {
           (cell, process) => events.push({ type: 'notes', cell, process })
         "
         @tasks="(cell, task) => events.push({ type: 'tasks', cell, task })"
+        @action="(name, cell) => events.push({ type: 'action', name, cell })"
         @task-edit="
           (cell, task, field) =>
             events.push({ type: 'task-edit', cell, task, field })

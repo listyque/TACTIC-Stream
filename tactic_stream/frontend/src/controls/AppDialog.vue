@@ -1,12 +1,15 @@
 <script setup>
 import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { t } from '../i18n.js';
+import AppButton from './AppButton.vue';
 import { windowDirective as vWindow } from './window.js';
 import { observeFrameSizes } from '../frame/resize.js';
 import { fit } from '../../../src/tactic_stream/shared_ui/shell/window.geometry.mjs';
 
 const props = defineProps({
-  title: String,
+  title: { type: String, default: '' },
+  translateTitle: { type: Boolean, default: true },
+  windowKind: String,
   modal: { type: Boolean, default: true },
   closeOnEscape: { type: Boolean, default: true },
   closeOnOutside: { type: Boolean, default: true },
@@ -97,15 +100,26 @@ defineExpose({
 <template>
   <dialog
     ref="dialog"
-    v-window="modal ? false : { type: 'popup' }"
+    v-window="
+      modal
+        ? false
+        : { type: windowKind ? 'window' : 'popup', kind: windowKind || '' }
+    "
     class="app-dialog"
     :class="{ 'app-dialog-untitled': !title }"
-    :aria-label="t(title)"
+    :aria-label="translateTitle ? t(title) : title"
     @cancel.prevent="closeOnEscape && reject()"
     @close="emit('closed')"
   >
     <header v-if="title" class="app-dialog-titlebar">
-      <h2>{{ t(title) }}</h2>
+      <h2>{{ translateTitle ? t(title) : title }}</h2>
+      <AppButton
+        v-if="windowKind"
+        label="Close"
+        icon="close"
+        icon-only
+        @click="reject"
+      />
     </header>
     <div class="app-dialog-content"><slot /></div>
   </dialog>
@@ -147,6 +161,7 @@ defineExpose({
   box-shadow: inset 0 0 0 1px var(--outline-variant);
 }
 .app-dialog-titlebar > h2 {
+  flex: 1;
   margin: 0;
   font-family: var(--font-family, 'Segoe UI');
   font-size: var(--dialog-title-size);

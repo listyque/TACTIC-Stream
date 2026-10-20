@@ -52,6 +52,7 @@ const emit = defineEmits([
   'save-view',
   'scroll',
   'toggle-group',
+  'header-action',
   'edit'
 ]);
 const viewport = ref(null),
@@ -518,7 +519,18 @@ defineExpose({ viewport });
         @pointerdown="beginMove(column, $event)"
         @keydown="moveKey(column, $event)"
       >
-        <span>{{ column.title }}</span>
+        <AppButton
+          v-if="Host.headerAction(column)"
+          class="table-header-insert"
+          label="Create"
+          icon="add"
+          compact
+          icon-only
+          :disabled="readOnly || busy"
+          @pointerdown.stop
+          @click.stop="emit('header-action', Host.headerAction(column))"
+        />
+        <span v-else>{{ column.title }}</span>
         <AppIcon
           v-if="groupMode === 'column:' + column.name"
           name="group-items"
@@ -831,6 +843,8 @@ defineExpose({ viewport });
   .table-task-cell,
   .table-task-summary,
   .table-value-fields,
+  .table-service-cell,
+  .table-status-cell,
   .table-message-cell,
   .table-completion,
   .table-completion-groups,

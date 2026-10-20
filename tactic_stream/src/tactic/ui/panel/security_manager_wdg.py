@@ -28,3 +28,17 @@ permission_list = [
     {'key':'retire_delete', 'title': 'Retire and Delete'},
     {'key':'edit', 'title': 'Edit'}
 ]
+
+
+from tactic.ui.common import BaseTableElementWdg
+
+
+class SecurityManagerButtonWdg(BaseTableElementWdg):
+    """Open the existing group permission editor; admin groups stay explicit."""
+
+    def get_cell_value(self):
+        group = self.get_current_sobject()
+        if group.is_admin():
+            return dict(text='ADMIN', actions=[])
+        return dict(text='', groupCode=group.get_code(), actions=[
+            dict(name='security', label='Global Permissions', icon='security')])

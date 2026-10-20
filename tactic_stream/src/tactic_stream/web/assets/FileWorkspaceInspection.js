@@ -3,9 +3,9 @@ import { A as appearance, B as cssRoles, C as redact, K as metrics, N as frameCo
 import { Gt as rect, Ht as label, P as _sfc_main$20, R as _sfc_main$19, Vt as button, Wt as node, _ as copyText, c as _sfc_main$21, i as _sfc_main$17, k as _sfc_main$18, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { c as prettySize } from "./files.js";
-import { t as _sfc_main$22 } from "./AppMenuItem.js";
-import { t as _sfc_main$23 } from "./AppDialog.js";
+import { t as _sfc_main$22 } from "./AppDialog.js";
 import { t as describe$7 } from "./confirmation.ui.js";
+import { t as _sfc_main$23 } from "./AppMenuItem.js";
 import { C as _sfc_main$24 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/workspace/toolbar.ui.mjs
 function views$1(model, width, height, language) {
@@ -123,7 +123,7 @@ var WorkspaceToolbar_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				"align-start": ""
 			}, {
 				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.presets, (view) => {
-					return openBlock(), createBlock(_sfc_main$22, {
+					return openBlock(), createBlock(_sfc_main$23, {
 						key: view.id,
 						label: view.title,
 						icon: view.icon,
@@ -2184,7 +2184,7 @@ var _sfc_main$2 = {
 			}, [createVNode(_sfc_main$17, {
 				scene: scene.value,
 				onEvent: event
-			}, null, 8, ["scene"])], 8, _hoisted_1$1), createVNode(_sfc_main$23, {
+			}, null, 8, ["scene"])], 8, _hoisted_1$1), createVNode(_sfc_main$22, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "Run safe GC",

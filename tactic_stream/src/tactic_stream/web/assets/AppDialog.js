@@ -1,5 +1,5 @@
-import { A as onMounted, E as nextTick, K as withDirectives, M as openBlock, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, et as unref, g as createCommentVNode, l as withModifiers, m as createBaseVNode, rt as toDisplayString, tt as normalizeClass } from "./vue.js";
-import { a as fit, k as t, n as windowDirective } from "./index.js";
+import { A as onMounted, E as nextTick, K as withDirectives, M as openBlock, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, et as unref, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, rt as toDisplayString, tt as normalizeClass } from "./vue.js";
+import { a as fit, c as _sfc_main$1, k as t, n as windowDirective } from "./index.js";
 import { r as observeFrameSizes } from "./CodeBlock.js";
 //#region src/controls/AppDialog.vue
 var _hoisted_1 = ["aria-label"];
@@ -11,7 +11,15 @@ var _hoisted_3 = { class: "app-dialog-content" };
 var _sfc_main = {
 	__name: "AppDialog",
 	props: {
-		title: String,
+		title: {
+			type: String,
+			default: ""
+		},
+		translateTitle: {
+			type: Boolean,
+			default: true
+		},
+		windowKind: String,
 		modal: {
 			type: Boolean,
 			default: true
@@ -111,10 +119,19 @@ var _sfc_main = {
 				ref_key: "dialog",
 				ref: dialog,
 				class: normalizeClass(["app-dialog", { "app-dialog-untitled": !__props.title }]),
-				"aria-label": unref(t)(__props.title),
+				"aria-label": __props.translateTitle ? unref(t)(__props.title) : __props.title,
 				onCancel: _cache[0] || (_cache[0] = withModifiers(($event) => __props.closeOnEscape && reject(), ["prevent"])),
 				onClose: _cache[1] || (_cache[1] = ($event) => emit("closed"))
-			}, [__props.title ? (openBlock(), createElementBlock("header", _hoisted_2, [createBaseVNode("h2", null, toDisplayString(unref(t)(__props.title)), 1)])) : createCommentVNode("", true), createBaseVNode("div", _hoisted_3, [renderSlot(_ctx.$slots, "default")])], 42, _hoisted_1)), [[unref(windowDirective), __props.modal ? false : { type: "popup" }]]);
+			}, [__props.title ? (openBlock(), createElementBlock("header", _hoisted_2, [createBaseVNode("h2", null, toDisplayString(__props.translateTitle ? unref(t)(__props.title) : __props.title), 1), __props.windowKind ? (openBlock(), createBlock(_sfc_main$1, {
+				key: 0,
+				label: "Close",
+				icon: "close",
+				"icon-only": "",
+				onClick: reject
+			})) : createCommentVNode("", true)])) : createCommentVNode("", true), createBaseVNode("div", _hoisted_3, [renderSlot(_ctx.$slots, "default")])], 42, _hoisted_1)), [[unref(windowDirective), __props.modal ? false : {
+				type: __props.windowKind ? "window" : "popup",
+				kind: __props.windowKind || ""
+			}]]);
 		};
 	}
 };

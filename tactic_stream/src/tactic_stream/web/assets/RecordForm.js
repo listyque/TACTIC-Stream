@@ -615,6 +615,14 @@ var _sfc_main = {
 		editView: {
 			type: String,
 			default: "edit"
+		},
+		insertView: {
+			type: String,
+			default: "insert"
+		},
+		ignoreFields: {
+			type: Array,
+			default: () => []
 		}
 	},
 	emits: ["saved"],
@@ -946,7 +954,10 @@ var _sfc_main = {
 			this.loading = true;
 			this.modal || this.searchType === "sthpw/task" && !this.modeless ? this.$refs.dialog.showModal() : this.$refs.dialog.show();
 			try {
-				const definition = await formDefinition(this.context.ticket, this.context.project, this.searchType, searchKey ? this.editView : "insert", searchKey, sourceKey, this.instanceRelation ? {} : relation);
+				const definition = await formDefinition(this.context.ticket, this.context.project, this.searchType, searchKey ? this.editView : this.insertView, searchKey, sourceKey, {
+					...this.instanceRelation ? {} : relation,
+					...this.ignoreFields.length ? { ignore: this.ignoreFields } : {}
+				});
 				if (id !== this.request) return;
 				this.definition = definition;
 				this.draft = Object.fromEntries(definition.fields.map((field) => [field.name, this.kind(field) === "MultiSelectWdg" ? field.input.value : this.kind(field) === "MultiUpload" ? {

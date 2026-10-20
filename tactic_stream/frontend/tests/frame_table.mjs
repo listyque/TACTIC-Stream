@@ -110,6 +110,42 @@ try {
   const embedded = native.captures.filter(
     (row) => row.fixture.screen === 'cell'
   );
+  const tagFixture = native.captures.find(
+    (row) =>
+      !row.original &&
+      row.fixture.mode === 'tags' &&
+      row.fixture.language === 'en'
+  ).fixture;
+  await page.evaluate(
+    ({ fixture, data }) => window.tableFixture.show(fixture, data),
+    { fixture: tagFixture, data: native.data }
+  );
+  await page.evaluate(() => window.tableFixture.events.value.splice(0));
+  const tagInput = page.locator('[data-frame="tableInlineValue"] input');
+  await tagInput.fill('rig, Production asset');
+  await tagInput.press('Enter');
+  await page.locator('[data-frame="tableInlineTag_0"]').click();
+  await tagInput.fill(' final ');
+  await page.mouse.click(780, 600);
+  assert.equal(
+    await page.evaluate(
+      () =>
+        window.tableFixture.events.value.filter(
+          (event) => event.type === 'save'
+        ).length
+    ),
+    0,
+    'Tag draft requires explicit Save'
+  );
+  await page.locator('[data-frame="tableInlineSave"]').click();
+  assert.deepEqual(
+    await page.evaluate(() =>
+      window.tableFixture.events.value
+        .filter((event) => event.type === 'save')
+        .map((event) => event.value)
+    ),
+    ['rig, final']
+  );
   for (const name of ['legacy_tasks', 'legacy_notes', 'message_progress']) {
     const fixture = structuredClone(
       embedded.find((row) => row.fixture.value.name === name).fixture
@@ -174,11 +210,209 @@ try {
       assert(Math.abs(fill.width / track.width - 0.37) < 0.001);
     }
   }
+  for (const [name, target, expected] of [
+    ['custom_layout', 'customLayout_0', 'script'],
+    ['custom_layout', 'customLayout_1', 'layout-link'],
+    ['parallel_status', 'parallelTask_0_0', 'task-details'],
+    ['parallel_status', 'parallelProcess_0', 'task-details'],
+    ['drop_links', 'dropEdit', 'edit-links']
+  ]) {
+    const fixture = structuredClone(
+      embedded.find(
+        (row) =>
+          row.fixture.value.name === name && row.fixture.language === 'en'
+      ).fixture
+    );
+    await page.evaluate(
+      ({ fixture, data }) => window.tableFixture.show(fixture, data),
+      { fixture, data: native.data }
+    );
+    await page.evaluate(
+      () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve))
+        )
+    );
+    await page.evaluate(() => window.tableFixture.events.value.splice(0));
+    await page.locator('[data-frame="' + target + '"]').click();
+    const calls = await page.evaluate(() => window.tableFixture.events.value);
+    assert.equal(calls.length, 1, name + ' must activate on its first click');
+    assert.equal(calls[0].name, expected);
+    if (target === 'customLayout_0')
+      assert.equal(
+        calls[0].cell.displayOptions.cbjs_action,
+        'alert("fixture")'
+      );
+    if (target === 'parallelTask_0_0')
+      assert.equal(calls[0].cell.actionTaskCode, 'T0');
+  }
+  {
+    const fixture = structuredClone(
+      native.captures.find(
+        (row) =>
+          row.fixture.screen === 'table' &&
+          !row.original &&
+          row.fixture.language === 'en' &&
+          row.fixture.width === 1496
+      ).fixture
+    );
+    const data = structuredClone(native.data),
+      column = data.definition.table.elements[0];
+    column.display = {
+      handler: 'pyasm.widget.table_element_wdg.UpdateWdg',
+      options: { insert_view: 'insert_review' }
+    };
+    column.resolvedClass = column.display.handler;
+    column.displayOptions = column.display.options;
+    column.cell = { ...column.cell, kind: 'commands', supported: true };
+    await page.evaluate(
+      ({ fixture, data }) => window.tableFixture.show(fixture, data),
+      { fixture, data }
+    );
+    await page.evaluate(
+      () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve))
+        )
+    );
+    await page.evaluate(() => window.tableFixture.events.value.splice(0));
+    await page.getByRole('button', { name: 'Create', exact: true }).click();
+    assert.deepEqual(
+      await page.evaluate(() => window.tableFixture.events.value),
+      [
+        {
+          type: 'header-action',
+          value: { type: 'insert', view: 'insert_review' }
+        }
+      ]
+    );
+  }
+  await page.evaluate(() => {
+    window.confirmResult = null;
+    window.tableFixture
+      .confirm('Update fixture?')
+      .then((value) => (window.confirmResult = value));
+  });
+  await page.getByRole('button', { name: 'Continue', exact: true }).click();
+  await page.waitForFunction(() => window.confirmResult === true);
+  await page.evaluate(() => {
+    window.confirmResult = null;
+    window.tableFixture
+      .confirm('Cancel fixture?')
+      .then((value) => (window.confirmResult = value));
+  });
+  await page.getByRole('button', { name: 'Cancel', exact: true }).waitFor();
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => window.confirmResult === false);
+  await page.evaluate(async () => {
+    const pending = window.tableFixture.confirm('Stale fixture?');
+    window.tableFixture.cancelConfirmation();
+    window.confirmResult = await pending;
+  });
+  assert.equal(
+    await page.locator('.table-service-confirmation[open]').count(),
+    0,
+    'Cancelled confirmation must not reopen on nextTick'
+  );
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.evaluate(() => {
+    window.confirmResult = null;
+    window.tableFixture
+      .confirm('Narrow fixture?')
+      .then((value) => (window.confirmResult = value));
+  });
+  const accept = page.getByRole('button', { name: 'Continue', exact: true });
+  await accept.waitFor();
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      )
+  );
+  const bounds = await page
+    .locator('.table-service-confirmation[open]')
+    .boundingBox();
+  const button = await accept.boundingBox(),
+    message = await page
+      .locator(
+        '.table-service-confirmation[open] [data-frame="confirmationMessage"]'
+      )
+      .boundingBox();
+  assert(
+    button.x >= bounds.x &&
+      button.x + button.width <= bounds.x + bounds.width + 0.1
+  );
+  assert(
+    message.y + message.height <= button.y,
+    'Narrow confirmation controls must not overlap'
+  );
+  await accept.click();
+  await page.waitForFunction(() => window.confirmResult === true);
+  await page.setViewportSize({ width: 900, height: 700 });
+  await page.evaluate(() =>
+    window.tableFixture.openDocument({
+      title: 'Security summary',
+      identity: 'admin',
+      sections: [
+        { title: 'crew', text: '<rules/>', syntax: 'xml' },
+        { title: 'review', text: '<rules><allow/></rules>', syntax: 'xml' }
+      ]
+    })
+  );
+  const documentWindow = page.locator('.table-document[open]');
+  await documentWindow.waitFor();
+  assert.equal(
+    await documentWindow.evaluate((element) => element.matches(':modal')),
+    false
+  );
+  assert.equal(await documentWindow.locator('.app-window-controls').count(), 1);
+  const source = documentWindow.getByRole('textbox', {
+    name: 'Script source',
+    exact: true
+  });
+  await source.waitFor();
+  assert.equal(await source.inputValue(), '<rules/>');
+  assert((await source.getAttribute('readonly')) !== null);
+  const groupChoice = documentWindow.getByRole('combobox', {
+    name: 'Groups',
+    exact: true
+  });
+  await groupChoice.click();
+  await page.getByRole('option', { name: 'review', exact: true }).click();
+  assert.equal(await source.inputValue(), '<rules><allow/></rules>');
+  assert.equal(await documentWindow.locator('.code-editor').count(), 1);
+  await documentWindow
+    .getByRole('button', { name: 'Code editor help', exact: true })
+    .click();
+  assert(
+    await page.evaluate(() =>
+      window.tableFixture.events.value.some(
+        (event) => event.type === 'help' && event.topic === 'table_widgets_b07'
+      )
+    )
+  );
+  await page.evaluate(() => window.tableFixture.closeDocument());
+  await page.evaluate(() =>
+    window.tableFixture.openDocument({
+      title: 'Security summary',
+      identity: 'test',
+      sections: [{ title: 'crew', text: '<other/>', syntax: 'xml' }]
+    })
+  );
+  await source.waitFor();
+  assert.equal(await source.inputValue(), '<other/>');
+  await documentWindow
+    .locator('header')
+    .getByRole('button', { name: 'Close', exact: true })
+    .click();
+  await documentWindow.waitFor({ state: 'hidden' });
+  await page.locator('#table-fixture').focus();
   for (const record of native.captures.filter((item) => !item.original)) {
     const fixture = record.fixture;
     await page.setViewportSize({
       width:
-        fixture.screen === 'inline' && fixture.mode === 'multiline'
+        fixture.screen === 'inline' &&
+        ['multiline', 'tags'].includes(fixture.mode)
           ? 396
           : Math.max(800, fixture.width),
       height: 700
@@ -194,9 +428,29 @@ try {
       { fixture, data: native.data }
     );
     await page.evaluate(() => document.fonts.ready);
+    await page.evaluate(
+      () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve))
+        )
+    );
     await page.mouse.move(1599, 699);
     if (fixture.screen === 'inline') {
       const selector = '.table-inline-editor:popover-open > .frame-view';
+      if (
+        ['multiline', 'tags', 'date', 'datetime', 'color'].includes(
+          fixture.mode
+        )
+      ) {
+        const expected = `rgb(${[1, 3, 5].map((index) => parseInt(record.background.slice(index, index + 2), 16)).join(', ')})`;
+        assert.equal(
+          await page
+            .locator('.table-inline-editor:popover-open')
+            .evaluate((element) => getComputedStyle(element).backgroundColor),
+          expected,
+          'Inline popup uses the native surface background'
+        );
+      }
       assert(
         await page.locator(selector).count(),
         JSON.stringify({

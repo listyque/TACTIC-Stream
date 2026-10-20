@@ -18,3 +18,14 @@ class SObjectDetailElementWdg(BaseTableElementWdg):
         if self.get_option('use_parent') in (True, 'true'):
             target = target.get_parent() or target
         return dict(text='', targetSearchKey=target.get_search_key(use_id=False))
+
+
+class SObjectTaskStatusElementWdg(SObjectDetailElementWdg):
+    ARGS_KEYS = {}
+
+    def get_cell_value(self):
+        target = self.get_current_sobject()
+        if target.get_base_search_type() == 'sthpw/task':
+            target = target.get_parent() or target
+        return dict(text='', targetSearchKey=target.get_search_key(), actions=[
+            dict(name='task-details', label='Open tasks', icon='search')])

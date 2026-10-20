@@ -9,10 +9,14 @@ from pyasm.security.security import _require_admin
 from pyasm.widget import WidgetConfig, WidgetConfigView
 
 
-def read_form(search_type, view='edit', search_key=None, default=None, source_key=None, search_keys=None, parent_key=None, connect_key=None, element_names=None):
+def read_form(search_type, view='edit', search_key=None, default=None, source_key=None, search_keys=None, parent_key=None, connect_key=None, element_names=None, ignore=None):
     _require_admin()
     if not isinstance(view, str) or not re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}', view):
         raise ValueError('Invalid view name')
+    if isinstance(ignore, str):
+        ignore = ignore.split('|')
+    if ignore is not None and (not isinstance(ignore,list) or len(ignore)>128 or any(not isinstance(name,str) or len(name)>128 for name in ignore)):
+        raise ValueError('Invalid ignored form fields')
     project = Project.get_project_code()
     SearchType.get(search_type)
     for name, key in (('parent_key', parent_key), ('connect_key', connect_key)):
@@ -57,7 +61,7 @@ def read_form(search_type, view='edit', search_key=None, default=None, source_ke
             raise ValueError('This column is not in the native edit view')
     widget = EditWdg(search_type=search_type, view=view, search_key=source_key or search_key,
                      default=default, parent_key=parent_key, mode='insert' if source_key else None,
-                     element_names=','.join(element_names) if element_names is not None else None)
+                     element_names=','.join(element_names) if element_names is not None else None, ignore=ignore)
     widget.explicit_display()
     fields = []
     for item in widget.get_widgets():

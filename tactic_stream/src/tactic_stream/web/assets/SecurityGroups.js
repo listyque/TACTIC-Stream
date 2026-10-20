@@ -20,6 +20,7 @@ var _sfc_main = {
 	data() {
 		return {
 			catalog: null,
+			requestedCode: "",
 			context: null,
 			draft: null,
 			original: null,
@@ -113,6 +114,7 @@ var _sfc_main = {
 			this.request++;
 			this.busy = false;
 			this.catalog = this.draft = this.original = null;
+			this.requestedCode = "";
 			this.members = [];
 			this.originalMembers = [];
 			this.uncertain = false;
@@ -182,7 +184,18 @@ var _sfc_main = {
 		},
 		accept(catalog, selected) {
 			this.catalog = catalog;
-			this.select(selected || catalog.groups[0]?.code || "", true);
+			const requested = this.requestedCode;
+			this.requestedCode = "";
+			this.select(requested || selected || catalog.groups[0]?.code || "", true);
+			if (requested && this.draft?.code !== requested) this.error = "The configured table target is unavailable";
+		},
+		focus(code) {
+			if (this.dirty || this.uncertain) throw new Error("Apply or discard unsaved changes first");
+			if (this.busy || !this.catalog) this.requestedCode = code;
+			else {
+				this.select(code, true);
+				if (this.draft?.code !== code) throw new Error("The configured table target is unavailable");
+			}
 		},
 		select(code, loaded = false) {
 			if (!loaded && (!this.editable || this.dirty)) return;

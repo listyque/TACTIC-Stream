@@ -39,7 +39,9 @@ export default {
     searchType: String,
     modal: Boolean,
     modeless: Boolean,
-    editView: { type: String, default: 'edit' }
+    editView: { type: String, default: 'edit' },
+    insertView: { type: String, default: 'insert' },
+    ignoreFields: { type: Array, default: () => [] }
   },
   emits: ['saved'],
   data() {
@@ -470,10 +472,13 @@ export default {
           this.context.ticket,
           this.context.project,
           this.searchType,
-          searchKey ? this.editView : 'insert',
+          searchKey ? this.editView : this.insertView,
           searchKey,
           sourceKey,
-          this.instanceRelation ? {} : relation
+          {
+            ...(this.instanceRelation ? {} : relation),
+            ...(this.ignoreFields.length ? { ignore: this.ignoreFields } : {})
+          }
         );
         if (id !== this.request) return;
         this.definition = definition;

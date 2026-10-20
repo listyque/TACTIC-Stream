@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/CodeBlock.js","assets/icons.js","assets/CodeBlock.css","assets/ApiDocumentation.css","assets/App.js","assets/rolldown-runtime.js","assets/RecordForm.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/files.js","assets/snapshot.ui.js","assets/FilePreview.css","assets/ObjectReport.css","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/confirmation.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/CodeBlock.js","assets/icons.js","assets/CodeBlock.css","assets/ApiDocumentation.css","assets/App.js","assets/rolldown-runtime.js","assets/RecordForm.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/files.js","assets/snapshot.ui.js","assets/FilePreview.css","assets/ObjectReport.css","assets/AppDialog.js","assets/AppDialog.css","assets/confirmation.ui.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
 import { A as onMounted, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, S as h, U as watchEffect, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeStyle, p as computed, r as render, rt as toDisplayString, tt as normalizeClass, u as Fragment, x as defineAsyncComponent } from "./vue.js";
 import { n as en_default, t as ru_default } from "./locales.js";
 import { n as resolveIcon } from "./icons.js";
@@ -2106,6 +2106,7 @@ function windowMinimumWidth(kind) {
 		administration: 900,
 		schema_search_type: 600,
 		raw_cell: 440,
+		table_document: 480,
 		process_dependencies: 860,
 		sidebar_search_preview: 960,
 		server_presets: 720,
@@ -2132,6 +2133,7 @@ function windowMinimumHeight(kind) {
 	const heights = {
 		main: 480,
 		raw_cell: 340,
+		table_document: 340,
 		configuration: 600,
 		server: 520,
 		project: 520,

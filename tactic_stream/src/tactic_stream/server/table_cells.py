@@ -49,10 +49,35 @@ from tactic.ui.table.subcontext_wdg import SubContextElementWdg
 from tactic.ui.table.table_element_wdg import RecipientElementWdg
 from tactic.ui.table.task_element_wdg import TaskSummaryElementWdg
 from tactic.ui.widget.discussion_wdg import DiscussionElementWdg, DiscussionWdg
+from pyasm.widget.my_tactic_summary_wdg import MyTacticSummaryWdg
+from pyasm.widget.table_element_wdg import UpdateWdg
+from tactic.ui.input.process_group_select_wdg import LoginTableElementWdg
+from tactic.ui.panel.security_manager_wdg import SecurityManagerButtonWdg
+from tactic.ui.table.preference_wdg import PreferenceEditWdg
+from tactic.ui.table.project_wdg import ProjectTemplateUpdateWdg
+from tactic.ui.table.table_element_wdg import NotificationTriggerElementWdg
+from tactic.ui.table.button_wdg import ButtonElementWdg
+from pyasm.widget.parallel_status import ParallelStatusWdg, ParallelStatusEditWdg
+from tactic.ui.table.subcontext_wdg import ProcessElementWdg
+from tactic.ui.table.sobject_detail_wdg import SObjectTaskStatusElementWdg
+from tactic.ui.table.task_element_wdg import WorkElementWdg
+from tactic.ui.widget.misc_input_wdg import TaskStatusElementWdg
+from tactic.ui.table.drop_element_wdg import DropElementWdg
+
+from tactic.ui.table.custom_layout_element_wdg import CustomLayoutElementWdg
+
+SERVICE_WIDGETS = (CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
+                   ProjectTemplateUpdateWdg, NotificationTriggerElementWdg, ButtonElementWdg,
+                   ParallelStatusWdg, ParallelStatusEditWdg, SObjectTaskStatusElementWdg, WorkElementWdg, DropElementWdg)
 
 _CLASSES = {
     cls.__module__ + "." + cls.__name__: cls
     for cls in (
+        *SERVICE_WIDGETS,
+        LoginTableElementWdg,
+        MyTacticSummaryWdg,
+        ProcessElementWdg,
+        TaskStatusElementWdg,
         ThumbWdg,
         LegacyDiscussionWdg,
         SObjectTaskTableElement,
@@ -111,6 +136,11 @@ NOTE_WIDGETS = (DiscussionElementWdg, DiscussionWdg, LegacyDiscussionWdg)
 TASK_WIDGETS = (TaskElementWdg, TaskSummaryElementWdg, SObjectTaskTableElement)
 
 VALUE_WIDGETS = (
+    *SERVICE_WIDGETS,
+    LoginTableElementWdg,
+    MyTacticSummaryWdg,
+    ProcessElementWdg,
+    TaskStatusElementWdg,
     LegacyDiscussionWdg,
     SObjectTaskTableElement,
     TaskParentSpacingTableElement,
@@ -202,7 +232,15 @@ def describe_cell(element, columns, search_type=""):
         and (not action or native_task_action)
     )
     allowed = {"column"}
-    if widget is SObjectDetailElementWdg:
+    if widget in (ButtonElementWdg, DropElementWdg, CustomLayoutElementWdg):
+        allowed |= set(widget.ARGS_KEYS)
+    elif widget in (ParallelStatusWdg, TaskStatusElementWdg, WorkElementWdg):
+        allowed |= set(widget.ARGS_KEYS)
+    elif widget is UpdateWdg:
+        allowed |= {'edit', 'delete', 'retire', 'insert', 'edit_view', 'insert_view', 'width', 'user_filter'}
+    elif widget is ProjectTemplateUpdateWdg:
+        allowed.add('icon')
+    elif widget is SObjectDetailElementWdg:
         allowed |= set(widget.ARGS_KEYS)
     elif widget is CheckinButtonElementWdg:
         allowed |= {
@@ -333,7 +371,11 @@ def describe_cell(element, columns, search_type=""):
         allowed.add("due_date_col")
     supported = supported and not set(options) - allowed
     kind = ACTION_KINDS.get(widget, "text")
-    if widget is TaskSummaryElementWdg:
+    if widget in SERVICE_WIDGETS:
+        kind = 'commands'
+    elif widget is MyTacticSummaryWdg:
+        kind = 'fields'
+    elif widget is TaskSummaryElementWdg:
         kind = "task_summary"
     elif widget in TASK_WIDGETS:
         kind = "tasks"
@@ -372,7 +414,7 @@ def describe_cell(element, columns, search_type=""):
     sort_field = field
     sortable = (
         supported
-        and widget not in VALUE_WIDGETS
+        and (widget not in VALUE_WIDGETS or widget in (LoginTableElementWdg, ProcessElementWdg, TaskStatusElementWdg))
         and widget not in ACTION_KINDS
         and widget
         not in (
@@ -584,6 +626,10 @@ def read_table_cells(search_type, view, search_keys):
                 )
                 if widget_class in TASK_WIDGETS:
                     cell["widthHint"] = widget.get_width()
+                if widget_class is ButtonElementWdg:
+                    cell['columnName'] = element['name']
+                if widget_class is DropElementWdg:
+                    cell['tableView'] = view
                 if widget_class is ThumbWdg:
                     cell["image"] = safe_link(cell["image"])
                     cell["text"] = safe_link(cell["text"])

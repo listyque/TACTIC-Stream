@@ -5263,6 +5263,48 @@
       "batch": "B07",
       "role": "domain form/presenter",
       "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/DocumentView.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/ServiceCell.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/ServiceDialogs.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TableDocument.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TableServiceCell.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TableServiceDialogs.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
     }
   ]
 }

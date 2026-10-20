@@ -185,3 +185,18 @@ assert.equal(
 console.log(
   'PASS: table layout, bounds, menus, workflow cards, safe links and typed inline scenes'
 );
+
+assert.deepEqual(
+  Host.headerAction({
+    resolvedClass: 'pyasm.widget.table_element_wdg.UpdateWdg',
+    displayOptions: { insert_view: 'insert_review' }
+  }),
+  { type: 'insert', view: 'insert_review' }
+);
+assert.equal(
+  Host.headerAction({
+    resolvedClass: 'UpdateWdg',
+    displayOptions: { insert: 'false' }
+  }),
+  null
+);
