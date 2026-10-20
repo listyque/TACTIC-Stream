@@ -109,7 +109,7 @@ hardware and all historical widget options have not been certified.
 <a id="legacy-checklist"></a>
 ## Active legacy checklist — 2026-10-19
 
-The current delivery order is the effort-sorted [U01 / L01–L12 queue](../UI_ARCHITECTURE.md#legacy-plan), not the numeric order of headings below.
+The current delivery plan has [three implementation stages and a separate fourth deployment stage](../UI_ARCHITECTURE.md#legacy-plan). U01 / L01–L12 remain subblock IDs, not stage numbers; the effort-sorted internal order is unchanged.
 L01–L07 below partition the original **40 canonical classes exactly once** from
 239 shipped/CG entries. L02 has four registered adapters; the other 36 boxes are open. These are required config
 references, including definitions under `config/.../prod`; excluding `pyasm.prod`
@@ -123,7 +123,7 @@ reference was discovered. Add newly confirmed usable dependencies to this ledger
 
 ### U01 — active shared-UI gap: inline keywords/tags
 
-Open; first in the effort-sorted plan. Native TacticTableInlineEditor still
+Open; first subblock of stage 1, followed by L02, L07a, L03 and L05. Finishing U01 alone does not complete stage 1. Native TacticTableInlineEditor still
 selects legacyTagsEditor and SObjectValueEditor/TableTextEditor for keywords;
 Stream TableInlineEditor uses the shared inline scene. Share the specialized
 interaction, retain suggestions, token edits, Save/Cancel, draft and focus, and

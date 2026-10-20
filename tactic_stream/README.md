@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.172.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.173.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7686,3 +7686,8 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 - Refresh the source-only UI/config audit: 453 QML + 298 Vue files, all 751 classified; 36 used legacy widget classes still pending. Distinguish seven retained predecessor admin forms from their current Frame replacements; do not infer active migration work from missing direct imports.
 - Sort the remaining plan by relative effort, preserving L01–L12 identities and splitting L07 implementation/acceptance without duplicating classes. Put the confirmed inline tags/keywords Frame gap first (U01), followed by L02 option completion and service cells; preserve exclusions and dependency gates.
 - Record that classification is not runtime/pixel acceptance and that the B14 gate is historical evidence. No UI runtime or Handler source changes are part of this planning update.
+
+## 0.112.173 — 2026-10-20
+
+- Group the existing effort-sorted legacy queue into three implementation stages, keeping independent distribution/legacy transition as a separate fourth stage. Preserve every U/L subblock, its internal order, exclusions and dependency/acceptance gates.
+- Clarify that executing stage 1 means U01, L02, L07a, L03 and L05 together; the inline tags editor alone does not close it. Retain the detailed 14-subblock queue as an expandable reference. This is a planning-only change; runtime and source-audit results are unchanged.
