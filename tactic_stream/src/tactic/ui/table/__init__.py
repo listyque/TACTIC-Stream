@@ -56,3 +56,6 @@ __all__ += ['HiddenRowElementWdg', 'RowAddElementWdg', 'NestedTableReadCmd']
 from .gantt_element_wdg import GanttElementWdg
 from .work_hours_element_wdg import WorkHoursElementWdg
 __all__ += ['GanttElementWdg', 'WorkHoursElementWdg']
+
+from .file_actions import TableSnapshotAppendCmd
+__all__.append('TableSnapshotAppendCmd')

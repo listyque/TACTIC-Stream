@@ -1,9 +1,9 @@
 # Tactic Frame B07: Table View checkpoint
 
 B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the current widget-config census contains 11 classes without typed adapters. The
+the current widget-config census contains 10 classes without typed adapters. The
 first checkpoint added 16 adapters and shared tags; the combined second stage
-adds nine registrations with the explicit limits below. A registered adapter is not proof that every old
+adds ten registrations with the explicit limits below. A registered adapter is not proof that every old
 display option or embedded action works.
 
 | Portable module | Responsibility |
@@ -15,7 +15,7 @@ display option or embedded action works.
 | `features/table/nested.ui.mjs` | Scoped expanded-table presentation; requests and mutations stay with each host |
 | `features/table/time.ui.mjs` | Table schedule and daily-hours projections; current Gantt/Timesheet owners retain writes |
 | `features/table/inline.ui.mjs` | Typed value editor body, explicit-save and uncertain-write states |
-| `features/table/widgets.json` | 66 server classes, 157 named aliases, editor choices and native adapter categories |
+| `features/table/widgets.json` | 67 server classes, 160 named aliases, editor choices and native adapter categories |
 
 Stream ships these under `src/tactic_stream/shared_ui`; Handler ships its own
 copy under `thlib/ui/qml/tactic_frame`. The server still imports an explicit
@@ -268,6 +268,49 @@ L07a implements the seven service/admin classes listed under L07; L07b is the
 later integrated acceptance, not a second set of seven classes. Existing L02
 adapters remain delivered with the explicit option limits recorded below.
 
+## Snapshot append checkpoint — 2026-10-20
+
+Stream 0.112.176 / Handler 0.6.0.123 add `FileAppendLinkTableElement`.
+The catalogue contains 67 classes / 160 named aliases; the 239-source census is
+64 adapted / 10 pending / 27 excluded-production / 3 excluded-unfinished.
+The UI source ledger contains 458 QML + 303 Vue = 761 entries.
+
+Both hosts render `features/files/object_checkin.ui.mjs`, including file type,
+keep-original-name, pending files, explicit discard, loading/error and uncertain
+write states. Handler hosts the body in an ordinary native modal Window, not an
+embedded Popup; geometry persists but an old snapshot session never restores.
+Browser uses the existing check-in owner, while native uploads/filesystem work
+runs in workers with captured server/project and lifecycle cancellation.
+Ctrl+V attaches an image even when a native text field has focus; plain text
+paste still edits that field. Directories and more than 50 files are rejected.
+Each draft uploads into its own ticket-relative directory, so concurrent
+same-named files cannot overwrite another draft's upload. Completion refreshes
+both the concrete snapshot and the original current/latest row.
+
+`TableSnapshotAppendCmd` and the copied native procedure resolve a versionless
+alias to a concrete snapshot, validate its owning project, capture a full
+snapshot/files revision and lock/recheck it at save. Every uploaded basename,
+file type and duplicate is validated before `FileAppendCheckin`; no new version
+is created. `FileUndo` rolls back a late failure. Server uploads are disposable;
+original client files and existing repository files remain protected. Unknown
+write outcomes disable repeat until the snapshot is refreshed. Only admin scope
+is currently accepted, matching the table host. PostgreSQL/original-server
+execution and physical hardware/DPI acceptance remain unverified here.
+
+Checks for this checkpoint: all 146 Frame platform steps, including independent
+packaging; 80 native table tests and 62 server table tests;
+an isolated browser scenario clicks the real table action, uploads through
+UploadServer in the snapshot's owning project and reads the repository bytes
+back without changing the version. Fresh comparison covers 588 current
+Handler/Stream states, including 120 append states (three styles, light/dark,
+EN/RU, 360/760 px, ready/loading/error/unknown/discard). Native captures also
+retain 36 historical B06 references. The paired images compare form content;
+operating-system window decorations are not a pixel-parity claim. The default
+760×820 form viewport is checked separately from browser titlebar geometry.
+
+The remaining L04/L01/L03/L06 and L07b work is still open. This checkpoint does
+not turn an unsupported action into a generic Inspector link.
+
 <a id="l01"></a>
 ### L01 — Связи и вложенные строки (8)
 
@@ -323,7 +366,7 @@ examples are also in EN/RU Help → Table View: B07.
 <a id="l04"></a>
 ### L04 — Файловые действия в таблице (7)
 
-- [ ] `pyasm.widget.table_element_wdg.FileAppendLinkTableElement`
+- [x] `pyasm.widget.table_element_wdg.FileAppendLinkTableElement`
 - [ ] `pyasm.widget.table_element_wdg.PublishTableElement`
 - [ ] `pyasm.widget.table_element_wdg.RenderLinkTableElement`
 - [ ] `pyasm.widget.table_element_wdg.SubmissionLinkTableElement`
@@ -391,7 +434,7 @@ and limits in EN/RU Widget Database Help. Reuse the existing object, task, file,
 schedule and communication owners; opening a generic panel is not implementation
 of the configured embedded scope. Unsupported options stay explicit.
 
-Before closing B07 in L07b, exercise the complete 66-class catalogue,
+Before closing B07 in L07b, exercise the complete 67-class catalogue,
 configured forms/inline editors, native keywords/tags and the used legacy
 bottom/group_bottom/total_summary contracts too. A 40-class checklist alone
 cannot certify all historical options. Current working controls remain delivered.

@@ -4616,6 +4616,16 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
             capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=90)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_snapshot_append_in_chromium(self):
+        proxy = self.proxy()
+        auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='admin')
+        proxy.insert(auth, 'config/widget_config', dict(search_type='sthpw/snapshot', view='append_test', priority=100,
+            config='<config><append_test><element name="code"/><element name="version"/><element name="append"><display class="pyasm.widget.FileAppendLinkTableElement"/></element></append_test></config>'))
+        environment = os.environ.copy()
+        result = subprocess.run([shutil.which('node'), str(ROOT / 'frontend/tests/table_append.mjs'), self.url],
+            cwd=ROOT / 'frontend', env=environment, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=40)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_native_table_cells_in_chromium(self):
         proxy = self.proxy()
         auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='admin', language='python')

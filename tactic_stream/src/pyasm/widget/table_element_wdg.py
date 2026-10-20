@@ -255,3 +255,17 @@ class AuxDataWdg(BaseTableElementWdg):
         row = values[self.current_index] if 0 <= self.current_index < len(values) else {}
         return dict(text=row.get(self.get_name(), ''))
 
+
+class FileAppendLinkTableElement(BaseTableElementWdg):
+    def is_editable(self):
+        return False
+
+    def get_cell_value(self):
+        obj = self.get_current_sobject()
+        if obj is None or obj.is_insert():
+            return dict(text='', actions=[])
+        if obj.get_base_search_type() != 'sthpw/snapshot':
+            raise ValueError('Append files requires a snapshot')
+        return dict(text='', targetSearchKey=obj.get_search_key(), projectCode=obj.get_value('project_code'),
+                    actions=[dict(name='file-append', label='Attach files', icon='attach-file')])
+

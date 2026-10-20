@@ -1,5 +1,5 @@
-import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, p as computed, rt as toDisplayString, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as appearance, Z as preferences, at as _plugin_vue_export_helper_default, c as _sfc_main$3, k as t, o as mobile } from "./index.js";
+import { A as onMounted, E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment, y as createTextVNode } from "./vue.js";
+import { A as appearance, R as controls, Z as preferences, at as _plugin_vue_export_helper_default, c as _sfc_main$3, k as t, o as mobile } from "./index.js";
 import { Gt as rect, Ht as label, Vt as button, Wt as node, X as navigationLink, i as _sfc_main$4, ot as resultItems, r as observeFrameSizes, st as rpc, xt as uploadFormFile, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { a as sourcePath, c as prettySize, l as sourceIcon } from "./files.js";
@@ -43,7 +43,12 @@ function revision(model, width, height, language) {
 }
 function describe(model, width, height, language) {
 	const tr = (text) => translate(text, language), margin = 10, inner = Math.max(0, width - 20 - 16), nodes = [], body = [], footerHeight = width < 370 ? 96 : 52;
+	const canChoose = !model.busy && (!model.append || !!model.ready) && !model.appendUncertain;
 	let y = 0;
+	if (model.append) nodes.push(node("Box", "snapshotAppendSurface", rect(0, 0, width, height), {
+		background: "surfaceContainerHigh",
+		radius: 0
+	}));
 	function notice(id, text, error) {
 		if (!text) return;
 		const h = Math.max(40, captionHeight(text, inner - 20) * 1.2 + 16);
@@ -84,6 +89,12 @@ function describe(model, width, height, language) {
 		text: model.context,
 		readOnly: model.revision || model.append
 	});
+	if (model.append) fields.push({
+		field: "fileType",
+		title: "File type",
+		kind: "Field",
+		text: model.fileType ?? "attachment"
+	});
 	const columns = inner >= 650 ? 2 : 1, cellWidth = (inner - (columns - 1) * 12) / columns;
 	fields.forEach((field, index) => {
 		const x = index % columns * (cellWidth + 12), top = y + Math.floor(index / columns) * 72;
@@ -97,7 +108,7 @@ function describe(model, width, height, language) {
 			value: field.value,
 			options: field.options,
 			enabled: !model.busy && !field.readOnly,
-			maxLength: field.field === "context" ? 256 : void 0,
+			maxLength: field.field === "context" ? 256 : field.field === "fileType" ? 128 : void 0,
 			action: {
 				type: "field",
 				field: field.field
@@ -122,8 +133,8 @@ function describe(model, width, height, language) {
 		y += 108;
 	}
 	const compact = inner < 420, chooseWidth = compact ? inner - 44 : Math.min(260, inner - 150);
-	body.push(button("objectCheckinChooseFiles", rect(0, y, chooseWidth, 38), tr("Choose files for check-in"), "upload", { type: "choose" }, !model.busy));
-	body.push(button("objectCheckinClipboard", rect(chooseWidth + 8, y, compact ? 36 : Math.max(0, inner - chooseWidth - 8), 38), tr("Save from Clipboard"), "clipboard", { type: "clipboard" }, !model.busy, { iconOnly: compact }));
+	body.push(button("objectCheckinChooseFiles", rect(0, y, chooseWidth, 38), tr("Choose files for check-in"), "upload", { type: "choose" }, canChoose));
+	body.push(button("objectCheckinClipboard", rect(chooseWidth + 8, y, compact ? 36 : Math.max(0, inner - chooseWidth - 8), 38), tr("Save from Clipboard"), "clipboard", { type: "clipboard" }, canChoose, { iconOnly: compact }));
 	y += 48;
 	const listHeight = model.count ? Math.min(220, model.count * 44) : 54;
 	body.push(node("List", "objectCheckinFiles", rect(0, y, inner, listHeight), {
@@ -156,18 +167,16 @@ function describe(model, width, height, language) {
 		body.push(node("Box", "objectCheckinModeChoice", rect(0, y, inner, choices.height), { children: choices.nodes }));
 		y += choices.height + 8;
 	}
-	if (!model.append) {
-		body.push(captionedSwitch("objectCheckinKeepName", rect(0, y, inner, 36), {
-			text: tr("Keep original file names"),
-			checked: !!model.keepFileName,
-			enabled: !model.busy,
-			action: {
-				type: "field",
-				field: "keepFileName"
-			}
-		}));
-		y += 46;
-	}
+	body.push(captionedSwitch("objectCheckinKeepName", rect(0, y, inner, 36), {
+		text: tr("Keep original file names"),
+		checked: !!model.keepFileName,
+		enabled: !model.busy,
+		action: {
+			type: "field",
+			field: "keepFileName"
+		}
+	}));
+	y += 46;
 	if (model.discard) {
 		notice("objectCheckinDiscardNotice", tr("Discard unsaved changes?"), false);
 		const w = (inner - 8) / 2;
@@ -347,6 +356,9 @@ var _sfc_main = {
 			version: null,
 			confirmed: false,
 			appendSnapshot: null,
+			appendRevision: "",
+			appendUploadDirectory: "",
+			fileType: "attachment",
 			appendUncertain: false,
 			existingFiles: [],
 			keepFileName: false,
@@ -378,6 +390,9 @@ var _sfc_main = {
 		}
 	},
 	computed: {
+		appendStyle() {
+			return this.appendSnapshot ? { "--append-header-height": controls.dialog.headerHeight + "px" } : null;
+		},
 		frameModel() {
 			return {
 				preview: this.preview,
@@ -396,6 +411,7 @@ var _sfc_main = {
 				description: this.description,
 				mode: this.mode,
 				keepFileName: this.keepFileName,
+				fileType: this.fileType,
 				confirmed: this.confirmed,
 				discard: this.discard,
 				hasQueue: !!this.queueCheckin
@@ -436,6 +452,7 @@ var _sfc_main = {
 					"process",
 					"context",
 					"description",
+					"fileType",
 					"keepFileName"
 				].includes(action.field)) {
 					this[action.field] = action.value;
@@ -484,14 +501,17 @@ var _sfc_main = {
 			this.processes = [];
 			this.error = "";
 			this.discard = false;
-			this.appendSnapshot = null;
+			this.appendSnapshot = options.append ? {} : null;
+			this.appendRevision = "";
+			this.appendUploadDirectory = "";
+			this.fileType = "attachment";
 			this.appendUncertain = false;
 			this.existingFiles = [];
 			this.repositories = [];
 			this.repositoryAlias = preferences.repository.defaultAlias;
 			this.description = this.checkinDescription();
 			this.mode = preferences.checkin.groupCheckin ? "group" : "individual";
-			this.keepFileName = preferences.checkin.keepFilename;
+			this.keepFileName = options.append ? false : preferences.checkin.keepFilename;
 			this.confirmed = !preferences.checkin.confirmRevision;
 			if (options.checkinType === "file") this.mode = "individual";
 			if (options.checkinType === "multi_file") this.mode = "group";
@@ -506,6 +526,35 @@ var _sfc_main = {
 			await nextTick();
 			this.$refs.dialog.showModal();
 			try {
+				if (options.append) {
+					const response = await rpc("execute_cmd", [
+						this.scope,
+						"tactic.ui.table.TableSnapshotAppendCmd",
+						{ search_key: record.__search_key__ }
+					]);
+					if (request !== this.request) return;
+					const prepared = response.info;
+					this.owner = {
+						__search_key__: prepared.ownerKey,
+						name: prepared.ownerTitle
+					};
+					this.appendSnapshot = {
+						code: prepared.snapshotCode,
+						__search_key__: prepared.searchKey,
+						version: prepared.version
+					};
+					this.appendRevision = prepared.expectedRevision;
+					this.appendUploadDirectory = prepared.uploadDirectory;
+					this.existingFiles = prepared.existingNames.map((filename) => ({ filename }));
+					this.process = prepared.process;
+					this.context = prepared.context;
+					this.processes = [{
+						value: prepared.process,
+						label: prepared.process
+					}];
+					this.ready = true;
+					return;
+				}
 				if ([
 					"move",
 					"local",
@@ -518,12 +567,6 @@ var _sfc_main = {
 					this.owner = target.parent;
 					this.context = record.context;
 					this.process = record.process || record.context.split("/")[0];
-					if (options.append) {
-						this.appendSnapshot = record.version < 0 ? await rpc("get_snapshot", [this.scope, this.owner.__search_key__], { context: record.context }) || record : record;
-						const snapshot = await navigationLink(this.scope.ticket, this.scope.project, "skey://" + this.appendSnapshot.__search_key__);
-						if (request !== this.request) return;
-						this.existingFiles = snapshot.preview?.files || [];
-					}
 					if (this.revision && record.version >= 0) this.version = record.version;
 				}
 				const type = this.owner.__search_key__.split("?")[0];
@@ -563,6 +606,13 @@ var _sfc_main = {
 		},
 		addFiles(files) {
 			const incoming = [...files];
+			if (this.appendSnapshot) {
+				if (!this.ready || this.busy || this.appendUncertain) return;
+				if (this.files.length + incoming.length > 50) {
+					this.error = "Choose between one and 50 files";
+					return;
+				}
+			}
 			if (incoming.some((file) => this.preview && !file.type.startsWith("image/"))) {
 				this.error = "Choose an image for the preview";
 				return;
@@ -570,10 +620,25 @@ var _sfc_main = {
 			this.files.push(...incoming);
 			this.error = "";
 		},
+		drop(event) {
+			if (this.busy) return;
+			if (this.appendSnapshot && [...event.dataTransfer.items || []].some((item) => item.webkitGetAsEntry?.()?.isDirectory)) {
+				this.error = "Choose files, not directories";
+				return;
+			}
+			this.addFiles(event.dataTransfer.files);
+		},
+		clipboardFiles(files) {
+			return [...files].map((file) => {
+				if (!this.appendSnapshot || !file.type.startsWith("image/")) return file;
+				const identity = globalThis.crypto?.randomUUID?.() || Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
+				return new File([file], "clipboard-" + identity + "." + (file.type.split("/")[1] || "png"), { type: file.type });
+			});
+		},
 		paste(event) {
 			if (!this.busy && event.clipboardData?.files.length) {
 				event.preventDefault();
-				this.addFiles(event.clipboardData.files);
+				this.addFiles(this.clipboardFiles(event.clipboardData.files));
 			}
 		},
 		async readImage() {
@@ -589,8 +654,8 @@ var _sfc_main = {
 					if (type) files.push(new File([await item.getType(type)], "clipboard-" + (files.length + 1) + "." + type.split("/")[1], { type }));
 				}
 				if (request !== this.request) return;
-				if (!files.length) throw new Error("No image in clipboard");
-				this.addFiles(files);
+				if (!files.length) throw new Error("The clipboard does not contain an image");
+				this.addFiles(this.clipboardFiles(files));
 			} catch (error) {
 				if (request === this.request) this.error = error.message;
 			}
@@ -631,6 +696,11 @@ var _sfc_main = {
 		},
 		async attachFiles() {
 			if (!this.ready || this.busy || this.appendUncertain || !this.files.length) return;
+			const fileType = this.fileType.trim();
+			if (!fileType || fileType.length > 128 || /[\u0000-\u001f]/.test(fileType)) {
+				this.error = "Choose a valid file type";
+				return;
+			}
 			const names = this.files.map((file) => file.name.toLocaleLowerCase());
 			if (new Set(names).size !== names.length || this.existingFiles.some((file) => names.includes(file.filename.toLocaleLowerCase()))) {
 				this.error = "Choose file names that are not already in the snapshot";
@@ -643,19 +713,29 @@ var _sfc_main = {
 			try {
 				const paths = [];
 				for (const file of this.files) {
-					paths.push(await uploadFormFile(scope.ticket, scope.project, file));
+					paths.push(await uploadFormFile(scope.ticket, scope.project, file, { subdir: this.appendUploadDirectory }));
 					if (request !== this.request) return;
 				}
 				committing = true;
-				await rpc("add_file", [
+				const response = await rpc("execute_cmd", [
 					scope,
-					this.appendSnapshot.code,
-					paths
-				], {
-					file_type: "attachment",
-					mode: "upload"
-				});
+					"tactic.ui.table.TableSnapshotAppendCmd",
+					{
+						action: "save",
+						search_key: this.appendSnapshot.__search_key__,
+						expected_revision: this.appendRevision,
+						upload_directory: this.appendUploadDirectory,
+						filenames: paths,
+						file_type: fileType,
+						keep_file_name: !!this.keepFileName
+					}
+				]);
 				if (request !== this.request) return;
+				if (response.info?.state !== "saved" || response.info?.searchKey !== this.appendSnapshot.__search_key__) {
+					const error = /* @__PURE__ */ new Error("The attachment result is unknown. Close this window and refresh the snapshot before retrying.");
+					error.status = 502;
+					throw error;
+				}
 				this.busy = false;
 				this.files = [];
 				this.close(true);
@@ -672,19 +752,22 @@ var _sfc_main = {
 	}
 };
 var _hoisted_1 = ["aria-label"];
-var _hoisted_2 = ["accept", "disabled"];
+var _hoisted_2 = { key: 0 };
+var _hoisted_3 = ["accept", "disabled"];
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_ObjectCheckinForm = resolveComponent("ObjectCheckinForm");
 	const _component_ObjectRevisionConfirmation = resolveComponent("ObjectRevisionConfirmation");
-	return openBlock(), createBlock(Teleport, { to: "body" }, [createBaseVNode("dialog", {
+	const _directive_window = resolveDirective("window");
+	return openBlock(), createBlock(Teleport, { to: "body" }, [withDirectives((openBlock(), createElementBlock("dialog", {
 		ref: "dialog",
-		class: "record-dialog object-checkin",
+		class: normalizeClass(["record-dialog object-checkin", { "snapshot-append": $data.appendSnapshot }]),
+		style: normalizeStyle($options.appendStyle),
 		"aria-label": $options.t($options.title),
 		onCancel: _cache[3] || (_cache[3] = withModifiers(($event) => $options.close(), ["prevent"])),
 		onPaste: _cache[4] || (_cache[4] = (...args) => $options.paste && $options.paste(...args)),
 		onDragover: _cache[5] || (_cache[5] = withModifiers(() => {}, ["prevent"])),
-		onDrop: _cache[6] || (_cache[6] = withModifiers(($event) => !$data.busy && $options.addFiles($event.dataTransfer.files), ["prevent"]))
+		onDrop: _cache[6] || (_cache[6] = withModifiers((...args) => $options.drop && $options.drop(...args), ["prevent"]))
 	}, [
 		createBaseVNode("header", null, [
 			$options.mobile ? (openBlock(), createBlock(_component_AppButton, {
@@ -694,7 +777,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"icon-only": "",
 				onClick: _cache[0] || (_cache[0] = ($event) => $options.close())
 			})) : createCommentVNode("", true),
-			createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($options.t($options.title)), 1), createBaseVNode("small", null, [createTextVNode(toDisplayString($data.owner?.name || $data.owner?.title || $data.owner?.code), 1), !$options.mobile ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString($data.owner?.__search_key__), 1)], 64)) : createCommentVNode("", true)])]),
+			createBaseVNode("div", null, [createBaseVNode("h2", null, [createTextVNode(toDisplayString($options.t($options.title)), 1), $data.appendSnapshot && $data.ready ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString($data.owner?.name) + " · v" + toDisplayString($data.appendSnapshot.version), 1)], 64)) : createCommentVNode("", true)]), !$data.appendSnapshot ? (openBlock(), createElementBlock("small", _hoisted_2, [createTextVNode(toDisplayString($data.owner?.name || $data.owner?.title || $data.owner?.code), 1), !$options.mobile ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" · " + toDisplayString($data.owner?.__search_key__), 1)], 64)) : createCommentVNode("", true)])) : createCommentVNode("", true)]),
 			!$options.mobile ? (openBlock(), createBlock(_component_AppButton, {
 				key: 1,
 				label: "Close",
@@ -722,8 +805,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				$data.pickerRequest === $data.request && $options.addFiles($event.target.files);
 				$event.target.value = "";
 			})
-		}, null, 40, _hoisted_2)
-	], 40, _hoisted_1), createVNode(_component_ObjectRevisionConfirmation, {
+		}, null, 40, _hoisted_3)
+	], 46, _hoisted_1)), [[_directive_window, $data.appendSnapshot ? {
+		type: "dialog",
+		kind: "snapshot_append"
+	} : false]]), createVNode(_component_ObjectRevisionConfirmation, {
 		ref: "revisionDialog",
 		busy: $data.busy,
 		onEvent: $options.resolveRevision

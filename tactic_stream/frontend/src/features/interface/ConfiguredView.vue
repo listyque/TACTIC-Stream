@@ -189,6 +189,11 @@ export default {
       return this.ownQuery ? this.localSelection : this.selectedKeys;
     },
     targetProject() {
+      if (
+        this.targetRecord?.__search_key__?.startsWith('sthpw/snapshot?') &&
+        this.targetRecord.project_code
+      )
+        return this.targetRecord.project_code;
       return this.targetRecord
         ? new URL(
             'skey://' + this.targetRecord.__search_key__
@@ -1136,6 +1141,7 @@ export default {
             'reactivate',
             'delete',
             'checkin',
+            'file-append',
             'template',
             'preference',
             'notification-test',
@@ -1237,6 +1243,7 @@ export default {
         const targetContext = {
           ...context,
           project:
+            (kind === 'file-append' && cell.projectCode) ||
             new URL('skey://' + key).searchParams.get('project') ||
             context.project
         };
@@ -1320,7 +1327,10 @@ export default {
           'table'
         );
         if (request !== this.actionRequest) return;
-        if (kind === 'checkin' && !definition.operations.checkin)
+        if (
+          ['checkin', 'file-append'].includes(kind) &&
+          !definition.operations.checkin
+        )
           throw new Error(
             'This operation or object type is not available yet.'
           );
@@ -1329,7 +1339,10 @@ export default {
           return;
         }
         this.targetOperations = definition.operations;
-        this.targetRecord = target;
+        this.targetRecord =
+          kind === 'file-append'
+            ? { ...target, project_code: targetContext.project }
+            : target;
         await this.$nextTick();
         if (['delete', 'retire', 'reactivate'].includes(kind))
           this.$refs.tableDelete.open(target, kind);
@@ -1337,7 +1350,7 @@ export default {
           this.targetIgnore = [];
           this.targetEditView = cell.actionView || 'edit';
           await this.openTableRecordForm(target);
-        } else if (kind === 'checkin')
+        } else if (kind === 'checkin' || kind === 'file-append')
           await this.$refs.tableOperations.quick(
             target,
             {
@@ -1347,7 +1360,7 @@ export default {
                 context: cell.context
               }
             },
-            'save',
+            kind === 'file-append' ? 'append' : 'save',
             {
               process: cell.process,
               context: cell.context,

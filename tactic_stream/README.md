@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.175.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.176.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7691,6 +7691,13 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 
 - Group the existing effort-sorted legacy queue into three implementation stages, keeping independent distribution/legacy transition as a separate fourth stage. Preserve every U/L subblock, its internal order, exclusions and dependency/acceptance gates.
 - Clarify that executing stage 1 means U01, L02, L07a, L03 and L05 together; the inline tags editor alone does not close it. Retain the detailed 14-subblock queue as an expandable reference. This is a planning-only change; runtime and source-audit results are unchanged.
+
+## 0.112.176 — 2026-10-20
+
+- Продолжен объединённый этап 2: FileAppendLinkTableElement открывает общую Frame-форму в отдельном нативном окне ТХ и браузерном диалоге ТС. Добавлены тип файла и сохранение имени; конкретная версия снапшота фиксируется до загрузки.
+- Append использует FileAppendCheckin/FileUndo, проверяет полную ревизию и все имена перед записью, откатывает позднюю ошибку. При неизвестном результате повтор блокируется; отмена не удаляет исходные локальные файлы.
+- У каждого черновика отдельная папка загрузки. Ctrl+V вставляет изображение даже из поля с фокусом; обычная вставка текста сохраняется. Проверены настоящая кнопка ячейки, HTTP-загрузка/байты и парные состояния формы.
+- Проверки и ограничения: docs/frame_table.md. Остальные файловые действия и завершение этапа 2 остаются открытыми.
 
 ## 0.112.175 — 2026-10-20
 

@@ -20,7 +20,7 @@ def __getattr__(name):
     if name == 'GanttWdg':
         from .gantt_wdg import GanttWdg
         return GanttWdg
-    if name in ('HiddenRowToggleWdg', 'AuxDataWdg'):
+    if name in ('HiddenRowToggleWdg', 'AuxDataWdg', 'FileAppendLinkTableElement'):
         from . import table_element_wdg
         return getattr(table_element_wdg, name)
     # The modern statistic class imports the common table base from this package.

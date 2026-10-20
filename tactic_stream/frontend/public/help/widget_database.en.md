@@ -7,10 +7,7 @@ order: 94
 
 [Table View / Columns Editor](table_view.en.md) · [B07](table_widgets_b07.en.md)
 
-Current as of 2026-10-19: the portable catalogue has **41 classes / 98 aliases**.
-A scan of 239 shipped XML/CG entries without working databases finds 38 referenced
-adapted classes, **36 pending**, 27 excluded `pyasm.prod` classes and 3 explicitly
-unfinished originals. An adapter does not certify all original options/actions.
+Current as of 2026-10-20: 239 shipped XML/CG entries; 64 referenced adapted classes, **10 pending**, 27 excluded `pyasm.prod`, 3 explicitly unfinished. The complete catalogue contains 67 classes / 160 named aliases. Registration does not certify every original option; stage 2/B07 remain open.
 
 Next: relationships/nested rows → embedded notes/messages/tasks → configured
 actions/layout → file operations → status/assignment → table Gantt/hours →

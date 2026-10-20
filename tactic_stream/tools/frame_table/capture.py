@@ -192,6 +192,17 @@ def capture(fixture, qml, original):
                 height=fixture["height"],
             )
         )
+    elif fixture["screen"] == "append":
+        from thlib.ui.table.file_append import SnapshotAppendController
+        from types import SimpleNamespace
+        owner = SnapshotAppendController(SimpleNamespace())
+        owner._model.update(fixture['model'])
+        owner._add_records([dict(path=row['name'], title=row['name'], size=row['size']) for row in fixture['files']])
+        owner.files.replace([dict(row,canRemove=not owner.busy) for row in owner.files.records()])
+        keep.append(owner)
+        component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'features/table/SnapshotAppendView.qml')))
+        view = component.createWithInitialProperties(dict(theme=theme, owner=owner,
+            width=fixture['width'], height=fixture['height']))
     elif fixture["screen"] == "nested":
         from tests.test_table_nested import Scope
         scope = Scope()
@@ -275,6 +286,9 @@ def capture(fixture, qml, original):
         )
         assert window.grabWindow().save(str(OUT / name))
         result = dict(fixture=fixture, original=original, image=name)
+        if fixture['screen'] == 'append':
+            result['enabled'] = {item.objectName():item.isEnabled() for item in _visual_items(view)
+                if item.objectName() in ('objectCheckinFileRemove_0','objectCheckinChooseFiles','objectCheckinSubmit')}
         if not original:
             result.update(snapshot(window))
         if fixture['screen'] == 'nested':
@@ -310,7 +324,7 @@ def capture(fixture, qml, original):
                 "contentSelection",
             )
         }
-        result['background'] = window.color().name()
+        result['background'] = theme.property('surfaceContainerHigh').name() if fixture['screen'] == 'append' else window.color().name()
         result["completionTracks"] = [
             dict(
                 x=item.mapToScene(QPointF()).x(),
@@ -353,7 +367,7 @@ def main():
     ]
     names += [
         "thlib/ui/qml/features/table/" + name + ".qml"
-        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView", "NestedTableView")
+        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView", "NestedTableView", "SnapshotAppendView")
     ]
     names += [
         "tests/test_columns_table_view.py",
@@ -367,6 +381,8 @@ def main():
         "thlib/ui/table/requests.py",
         "thlib/ui/table/nested.py",
         "tests/test_table_nested.py",
+        "tests/test_table_append.py",
+        "thlib/ui/table/file_append.py",
         "thlib/ui/qml/features/table/runtime/client_api.js",
         "thlib/ui/qml/features/table/runtime/table_action_runtime.js",
         "thlib/ui/translations/ru.json",
@@ -402,6 +418,16 @@ def main():
                         language=language,
                     )
                     captures.append(capture(fixture, HANDLER / "thlib/ui/qml", False))
+                for width in (360, 760):
+                    for state in ('ready', 'loading', 'error', 'unknown', 'discard'):
+                        fixture = dict(screen='append', mode=state, width=width, height=700,
+                            style=style, dark=dark, language=language,
+                            model=dict(append=True, ready=state!='loading', busy=state=='loading',
+                                appendUncertain=state=='unknown', discard=state=='discard', error='Choose a valid file type' if state=='error' else '',
+                                process='publish', context='publish/reference', fileType='reference', keepFileName=True,
+                                count=2, processes=[dict(value='publish',label='publish')]),
+                            files=[dict(name='reference.txt',size=1024),dict(name='preview.png',size=4096)])
+                        captures.append(capture(fixture, HANDLER / 'thlib/ui/qml', False))
                 for mode in (
                     "text",
                     "multiline",

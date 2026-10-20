@@ -109,7 +109,7 @@ def main():
         "frontend/src/features/objects/inspector.css",
         "frontend/src/features/workspace/links.js",
         "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
-        "frontend/tests/{frame_table*,handler_table,table_cells,columns_editor,table_script_*}.mjs",
+        "frontend/tests/{frame_table*,handler_table,table_cells,table_append,columns_editor,table_script_*}.mjs",
         "frontend/src/features/interface/tableScript.js",
         "tools/frame_messages/*.{vue,html,mjs,json}",
         "tools/frame_files/*.{vue,html,mjs,json}",

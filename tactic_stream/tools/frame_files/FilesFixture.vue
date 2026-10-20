@@ -58,7 +58,9 @@ window.filesFixture = {
     await nextTick();
     if (value.screen === 'object-checkin')
       await objectCheckin.value.open(
-        { name: 'Hero Robot', __search_key__: 'cg/asset?code=ROBOT001' },
+        value.options?.append
+          ? { code: 'S7', version: 7, __search_key__: 'sthpw/snapshot?code=S7' }
+          : { name: 'Hero Robot', __search_key__: 'cg/asset?code=ROBOT001' },
         value.options || {}
       );
     if (value.screen.startsWith('queue')) {

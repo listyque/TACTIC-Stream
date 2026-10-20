@@ -11,6 +11,8 @@ import TableCell from '../../frontend/src/features/interface/TableCell.vue';
 import TableServiceDialogs from '../../frontend/src/features/interface/TableServiceDialogs.vue';
 import TableDocument from '../../frontend/src/features/interface/TableDocument.vue';
 import TableInlineEditor from '../../frontend/src/features/interface/TableInlineEditor.vue';
+import ObjectCheckinForm from '../../frontend/src/features/checkin/ObjectCheckinForm.vue';
+import { t } from '../../frontend/src/i18n.js';
 const fixture = ref(null),
   data = ref(null),
   state = ref({}),
@@ -141,6 +143,12 @@ window.tableFixture = {
     <TableServiceDialogs ref="serviceDialogs" />
     <TableDocument ref="tableDocument" :model="documentModel" />
     <NestedTable v-if="fixture.screen === 'nested'" :state="fixture.model" />
+    <ObjectCheckinForm
+      v-else-if="fixture.screen === 'append'"
+      :model="{ ...fixture.model, error: t(fixture.model.error) }"
+      :files="fixture.files"
+      @event="events.push($event)"
+    />
     <TableView
       v-else-if="fixture.screen === 'table'"
       :columns="columns"

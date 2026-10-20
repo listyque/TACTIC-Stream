@@ -66,7 +66,7 @@ from tactic.ui.table.drop_element_wdg import DropElementWdg
 
 from tactic.ui.table.custom_layout_element_wdg import CustomLayoutElementWdg
 from tactic.ui.table.hidden_row_element_wdg import HiddenRowElementWdg, RowAddElementWdg
-from pyasm.widget.table_element_wdg import HiddenRowToggleWdg, AuxDataWdg
+from pyasm.widget.table_element_wdg import HiddenRowToggleWdg, AuxDataWdg, FileAppendLinkTableElement
 
 NESTED_WIDGETS = (HiddenRowElementWdg, RowAddElementWdg, HiddenRowToggleWdg)
 from pyasm.widget.gantt_wdg import GanttWdg
@@ -75,7 +75,7 @@ from tactic.ui.table.gantt_element_wdg import GanttElementWdg
 from tactic.ui.table.work_hours_element_wdg import WorkHoursElementWdg
 TIME_WIDGETS = (GanttWdg, GanttElementWdg, TimecardInfoTableElement, WeekTableElement, WorkHoursElementWdg)
 
-SERVICE_WIDGETS = (*TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
+SERVICE_WIDGETS = (FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
                    ProjectTemplateUpdateWdg, NotificationTriggerElementWdg, ButtonElementWdg,
                    ParallelStatusWdg, ParallelStatusEditWdg, SObjectTaskStatusElementWdg, WorkElementWdg, DropElementWdg)
 

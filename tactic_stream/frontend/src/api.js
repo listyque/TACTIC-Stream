@@ -99,10 +99,11 @@ export async function widgetConfiguration(action, ticket, project, search_type, 
   return post(`/admin/widget-configuration/${action}`, { ticket, project, search_type, view, ...values })
 }
 
-export async function uploadFormFile(ticket, project, file, { signal, filename } = {}) {
+export async function uploadFormFile(ticket, project, file, { signal, filename, subdir } = {}) {
   const body = new FormData()
   body.append('login_ticket', ticket)
   body.append('file', file, filename || file.name)
+  if (subdir) body.append('subdir', subdir)
   const url = `/tactic/${encodeURIComponent(project)}/UploadServer/`
   const started = performance.now(), session = debugLog.sessionId
   const activity = beginActivity(ticket, 'Uploading')

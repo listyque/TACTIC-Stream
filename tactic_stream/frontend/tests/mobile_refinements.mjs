@@ -12,7 +12,7 @@ page.on('request', request => {
   if (!request.url().endsWith('/admin/rpc')) return
   const data = request.postDataJSON()
   if (data?.method === 'execute_cmd' && data.args?.[1] === 'tactic.ui.table.task_workspace.TaskWorkspaceCmd' && data.args[2]?.scope) taskReads.push(data.args[2])
-  if (data?.method === 'add_file') appends.push(data)
+  if (data?.method === 'execute_cmd' && data.args?.[1] === 'tactic.ui.table.TableSnapshotAppendCmd' && data.args[2]?.action === 'save') appends.push(data)
 })
 const base = process.argv[2], project = process.env.STREAM_CHECK_PROJECT
 const mobile = () => page.locator('.workspace-browser .mobile-results:visible')
@@ -154,8 +154,8 @@ try {
   await attach.locator('input[type=file]').setInputFiles({ name:'mobile-attachment.txt',mimeType:'text/plain',buffer:Buffer.from('Attached from the mobile snapshot screen') })
   await attach.getByRole('button',{ name:'Attach files',exact:true }).tap()
   await attach.waitFor({ state:'hidden' })
-  assert.equal(appends.length,1,'Attachment must use native add_file once')
-  assert.equal(appends[0].kwargs.mode,'upload')
+  assert.equal(appends.length,1,'Attachment must use the transactional append command once')
+  assert.equal(appends[0].args[2].action,'save')
   await screen().getByLabel('Preview file',{ exact:true }).waitFor()
   await screen().getByLabel('Preview file',{ exact:true }).tap()
   const files = await screen().locator('.file-preview-choice strong').allTextContents()

@@ -5326,6 +5326,13 @@
       "batch": "B07",
       "role": "domain form/presenter",
       "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/SnapshotAppendView.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
     }
   ]
 }

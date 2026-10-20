@@ -472,6 +472,33 @@ try {
       const image = record.image.replace('-native-', '-stream-');
       await page.locator(selector).screenshot({ path: out + image });
       cases.push({ image, fixture, ...compared });
+    } else if (fixture.screen === 'append') {
+      const selector = '.object-checkin-workspace > .frame-view';
+      for (const [id, enabled] of Object.entries(record.enabled))
+        assert.equal(
+          await page.locator('[data-frame="' + id + '"]').isEnabled(),
+          enabled,
+          record.image + ' ' + id + ' enabled state'
+        );
+      const background = `rgb(${[1, 3, 5].map((index) => parseInt(record.background.slice(index, index + 2), 16)).join(', ')})`;
+      assert.equal(
+        await page
+          .locator('[data-frame=snapshotAppendSurface]')
+          .evaluate((element) => getComputedStyle(element).backgroundColor),
+        background,
+        'Append body paint matches the real native host'
+      );
+      const actual = await surface(page, selector);
+      const compared = await compareSurface(
+        page,
+        selector,
+        actual,
+        record,
+        record.image
+      );
+      const image = record.image.replace('-native-', '-stream-');
+      await page.locator(selector).screenshot({ path: out + image });
+      cases.push({ image, fixture, ...compared });
     } else if (fixture.screen === 'nested') {
       const selector = '.nested-table > .frame-view';
       for (const [text, label] of Object.entries(record.embeddedText)) {
@@ -645,6 +672,7 @@ try {
       .digest('hex');
   for (const path of [
     'frontend/src/features/interface',
+    'frontend/src/features/checkin',
     'frontend/src/frame',
     'frontend/src/controls'
   ]) {
