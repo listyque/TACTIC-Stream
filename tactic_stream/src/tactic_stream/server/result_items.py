@@ -52,7 +52,7 @@ def schema_relations(base, schema, direction='child'):
         for node in current.xml.findall('connect'):
             target = node.get('from' if direction == 'child' else 'to')
             owner = node.get('to' if direction == 'child' else 'from')
-            if owner not in (base, '*') or not target or target in ('sthpw/task', 'sthpw/note', 'sthpw/snapshot', 'sthpw/file'):
+            if owner not in (base, '*') or not target or target in ('*', 'sthpw/task', 'sthpw/note', 'sthpw/snapshot', 'sthpw/file'):
                 continue
             path = node.get('path') or ''
             identity = (target, path)

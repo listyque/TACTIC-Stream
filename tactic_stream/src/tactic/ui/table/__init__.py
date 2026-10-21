@@ -68,3 +68,7 @@ __all__.append('SObjectSummaryElementWdg')
 
 from .dependencies import TableDependencyReadCmd
 __all__.append('TableDependencyReadCmd')
+
+from .group_element_wdg import ParentGroupTableElementWdg, ParentGroupAction
+from .parent_group import TableParentGroupCmd
+__all__ += ['ParentGroupTableElementWdg', 'ParentGroupAction', 'TableParentGroupCmd']

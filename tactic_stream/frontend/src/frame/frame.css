@@ -120,6 +120,15 @@
   background: transparent;
   color: var(--disabled);
 }
+.frame-view
+  > button.frame-action.app-button:is(
+    :hover,
+    :active,
+    :focus-visible,
+    :disabled
+  ) {
+  background: transparent;
+}
 .frame-action > .item-surface,
 .frame-checkbox > .item-surface {
   position: absolute;

@@ -622,16 +622,46 @@ try {
       const image = record.image.replace('-native-', '-stream-');
       await page.locator(selector).screenshot({ path: out + image });
       cases.push({ image, fixture, ...compared });
-    } else if (fixture.screen === 'dependencies') {
+    } else if (
+      ['dependencies', 'parent', 'parent-group'].includes(fixture.screen)
+    ) {
       const selector = '#table-fixture > .frame-view';
-      if (fixture.mode === 'error' || fixture.mode === 'empty')
+      if (fixture.screen === 'parent' && fixture.mode === 'unknown') {
+        const backgrounds = await page
+          .locator(selector + ' button.frame-action:disabled')
+          .evaluateAll((items) =>
+            items.map((item) => getComputedStyle(item).backgroundColor)
+          );
+        assert(backgrounds.length > 0);
+        assert(
+          backgrounds.every((color) => color === 'rgba(0, 0, 0, 0)'),
+          'Disabled Frame actions keep their ItemSurface paint without an AppButton background'
+        );
+      }
+      if (fixture.screen === 'parent')
+        await page
+          .locator(selector)
+          .locator(
+            '[data-frame="' +
+              (fixture.mode === 'discard'
+                ? 'confirmationMessage'
+                : 'parentHeading') +
+              '"]'
+          )
+          .waitFor();
+      else if (fixture.screen === 'parent-group')
+        await page
+          .locator(selector)
+          .locator('[data-frame="parentGroupTitle"]')
+          .waitFor();
+      else if (fixture.mode === 'error' || fixture.mode === 'empty')
         await page.locator('[data-frame^="dependencyStatus_"]').waitFor();
       else
         await page
           .locator('[data-frame^="dependencyTitle_"]')
           .first()
           .waitFor();
-      if (fixture.mode === 'expanded') {
+      if (fixture.screen === 'dependencies' && fixture.mode === 'expanded') {
         await page.locator('[data-frame="dependencyExpand_root_0"]').click();
         await page
           .getByText(

@@ -5368,6 +5368,34 @@
       "batch": "B07",
       "role": "domain form/presenter",
       "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/ParentGroupView.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/ParentGroupPopup.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/features/table/ParentGroupHeader.qml",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/features/interface/TableParentPicker.vue",
+      "batch": "B07",
+      "role": "domain form/presenter",
+      "disposition": "B07 partial"
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { Kt as node, Ut as button, Wt as label, qt as rect, y as translate } from "./CodeBlock.js";
+import { Gt as label, Jt as rect, Wt as button, qt as node, y as translate } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/snapshot.ui.mjs
 var metrics = {
 	toolbar: 46,

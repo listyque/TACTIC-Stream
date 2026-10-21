@@ -15,6 +15,9 @@ import TableInlineEditor from '../../frontend/src/features/interface/TableInline
 import ObjectCheckinForm from '../../frontend/src/features/checkin/ObjectCheckinForm.vue';
 import SnapshotCheckoutSurface from '../../frontend/src/features/checkin/SnapshotCheckoutSurface.vue';
 import { t } from '../../frontend/src/i18n.js';
+import FrameView from '../../frontend/src/frame/FrameView.vue';
+import * as ParentState from '../../src/tactic_stream/shared_ui/features/table/parent.state.mjs';
+import * as ParentUI from '../../src/tactic_stream/shared_ui/features/table/parent.ui.mjs';
 const fixture = ref(null),
   data = ref(null),
   state = ref({}),
@@ -144,8 +147,30 @@ window.tableFixture = {
   >
     <TableServiceDialogs ref="serviceDialogs" />
     <TableDocument ref="tableDocument" :model="documentModel" />
+    <FrameView
+      v-if="fixture.screen === 'parent'"
+      :scene="
+        ParentUI.describe(
+          fixture.model,
+          fixture.width,
+          fixture.height,
+          fixture.language
+        )
+      "
+      :models="{ parentRows: ParentState.rows(fixture.model) }"
+      :describe-row="
+        (list, record) =>
+          ParentUI.row(record, Math.max(0, list.width - 16), fixture.language)
+      "
+    />
+    <FrameView
+      v-else-if="fixture.screen === 'parent-group'"
+      :scene="
+        ParentUI.group(fixture.model, fixture.width, fixture.language, true, '')
+      "
+    />
     <TableDependencies
-      v-if="fixture.screen === 'dependencies'"
+      v-else-if="fixture.screen === 'dependencies'"
       :key="
         [
           fixture.mode,

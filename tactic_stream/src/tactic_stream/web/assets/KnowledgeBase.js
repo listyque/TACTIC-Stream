@@ -1,7 +1,7 @@
 import { D as nextTick, F as renderSlot, J as isRef, K as withCtx, N as openBlock, P as renderList, U as watch, X as reactive, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, w as inject, y as createTextVNode } from "./vue.js";
 import { i as semanticName, r as aliases } from "./icons.js";
 import { A as appearance, D as randomId, c as _sfc_main$3, f as _sfc_main$4, k as t } from "./index.js";
-import { D as _sfc_main$10, E as _sfc_main$11, F as _sfc_main$7, J as messageFileRequest, K as knowledgeRequest, Kt as node, P as _sfc_main$8, R as _sfc_main$9, T as AppSearchField_default, Ut as button, Wt as label, _ as copyText, h as xmlTokens, i as _sfc_main$5, k as _sfc_main$6, m as pythonTokens, p as javascriptTokens, q as linkPreviews, qt as rect, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { D as _sfc_main$10, E as _sfc_main$11, F as _sfc_main$7, Gt as label, J as messageFileRequest, Jt as rect, K as knowledgeRequest, P as _sfc_main$8, R as _sfc_main$9, T as AppSearchField_default, Wt as button, _ as copyText, h as xmlTokens, i as _sfc_main$5, k as _sfc_main$6, m as pythonTokens, p as javascriptTokens, q as linkPreviews, qt as node, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { d as extractSkeys, n as browserLink, u as escapeHtml } from "./links.js";
 import { t as _sfc_main$12 } from "./AttachmentCard.js";
 import { t as _sfc_main$13 } from "./AppMenuItem.js";

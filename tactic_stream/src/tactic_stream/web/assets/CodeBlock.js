@@ -477,6 +477,18 @@ function tableDependencyFile(context, values, signal) {
 		kwargs: {}
 	}, signal, true);
 }
+function tableParentGroup(context, values, signal) {
+	const timeout = AbortSignal.any([AbortSignal.timeout(3e4), ...signal ? [signal] : []]);
+	return post("/admin/rpc", {
+		method: "execute_cmd",
+		args: [
+			context,
+			"tactic.ui.table.TableParentGroupCmd",
+			values
+		],
+		kwargs: {}
+	}, timeout, true);
+}
 function linkPreviews(ticket, project, keys) {
 	return backgroundPost("/admin/navigation-link", {
 		ticket,
@@ -4048,6 +4060,39 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Server worker is unavailable": "Обработчик серверного запроса недоступен",
+	"Check saved changes": "Проверить сохранение",
+	"Unable to reach the server.": "Не удалось связаться с сервером.",
+	"Parent group": "Группа по родителю",
+	"Change parent": "Изменить родителя",
+	"Find parent": "Найти родителя",
+	"Current parent": "Текущий родитель",
+	"Selected parent": "Выбранный родитель",
+	"No parent": "Нет родителя",
+	"No parent selected": "Родитель не выбран",
+	"Parent unavailable": "Родитель недоступен",
+	"Available parents": "Доступные родители",
+	"No matching parents": "Подходящие родители не найдены",
+	"Add Another Item": "Добавить ещё объект",
+	"Drop one parent object": "Перетащите один родительский объект",
+	"Discard this draft?": "Отменить изменения черновика?",
+	"Invalid parent response": "Некорректный ответ при выборе родителя",
+	"Unable to verify the parent change": "Не удалось проверить результат смены родителя",
+	"Invalid parent table scope": "Некорректная область таблицы родителей",
+	"This object is not available in parent groups": "Этот объект недоступен для группировки по родителю",
+	"Invalid parent operation": "Некорректная операция с родителем",
+	"Choose a configured parent column": "Выберите настроенную колонку родителя",
+	"Invalid parent search": "Некорректный поиск родителя",
+	"The parent belongs to another project": "Родитель относится к другому проекту",
+	"Open parent editing in the source project": "Откройте выбор родителя в исходном проекте",
+	"The configured parent action changed. Reload before saving.": "Настройка смены родителя изменилась. Обновите данные перед сохранением.",
+	"Unsupported parent action options": "Эти параметры смены родителя не поддерживаются",
+	"Parent revisions require a transactional database lock": "Для проверки ревизии родителя нужна транзакционная блокировка БД",
+	"Parent changed. Reload before saving.": "Родитель или запись изменились. Обновите данные перед сохранением.",
+	"The configured parent relationship is unavailable": "Настроенная родительская связь недоступна",
+	"Parent is no longer available": "Родитель больше недоступен",
+	"Choose a current parent": "Выберите действующего родителя",
+	"Parent relationship is cyclic": "Родительская связь образует цикл",
 	Upstream: "Входящие",
 	Inputs: "Входные зависимости",
 	Downstream: "Исходящие",
@@ -10582,6 +10627,6 @@ var _sfc_main = {
 	}
 };
 //#endregion
-export { objectStatus as $, localDate as A, updatesAvailable as At, activityFeed as B, resetNotifications as Bt, _sfc_main$15 as C, uploadFormFile as Ct, _sfc_main$20 as D, workspaceLayouts as Dt, _sfc_main$18 as E, widgetConfiguration as Et, _sfc_main$26 as F, dismissNotification as Ft, interfaceDefinition as G, muted as Gt, columnsEditor as H, submitNotificationReply as Ht, _sfc_main$27 as I, editNotificationReply as It, messageFileRequest as J, revealListOffset as Jt, knowledgeRequest as K, node as Kt, _sfc_main$29 as L, failNotificationReply as Lt, parse as M, beginNotificationReply as Mt, _sfc_main$23 as N, cancelNotificationReply as Nt, _sfc_main$21 as O, setUpdatesAvailable as Ot, _sfc_main$25 as P, clearNotificationHistory as Pt, objectRelations as Q, _sfc_main$31 as R, notificationHistory as Rt, matchesUser as S, transactionDetails as St, AppSearchField_default as T, userProfile as Tt, endActivity as U, button as Ut, beginActivity as V, setNotificationProgress as Vt, formDefinition as W, label as Wt, navigationLink as X, messagesRequest as Y, virtualRange as Yt, objectDeletion as Z, copyText as _, sessionAction as _t, _sfc_main$2 as a, resetRequestActivity as at, _sfc_main$13 as b, tableDependencies as bt, _sfc_main$6 as c, saveServerConfiguration as ct, completions as d, searchConfiguration as dt, projectCatalog as et, documentSymbols as f, securityGroups as ft, copyImage as g, serverUpdates as gt, xmlTokens as h, serverConfiguration as ht, _sfc_main$1 as i, requestActivity as it, monthLabel as j, activeNotifications as jt, _sfc_main$22 as k, updateDelay as kt, toolbar as l, scriptEditor as lt, pythonTokens as m, securityUsers as mt, frameContentWidth as n, projectNavigation as nt, _sfc_main$3 as o, resultItems as ot, javascriptTokens as p, securityRules as pt, linkPreviews as q, rect as qt, observeFrameSizes as r, rawDatabase as rt, _sfc_main$5 as s, rpc as st, _sfc_main as t, projectCreationCatalog as tt, _sfc_main$9 as u, scriptShelf as ut, readClipboardImages as v, sidebarRequest as vt, ItemPreview_default as w, userAvatar as wt, _sfc_main$14 as x, tableDependencyFile as xt, translate as y, tableCells as yt, _sfc_main$32 as z, notify as zt };
+export { objectStatus as $, localDate as A, updateDelay as At, activityFeed as B, notify as Bt, _sfc_main$15 as C, transactionDetails as Ct, _sfc_main$20 as D, widgetConfiguration as Dt, _sfc_main$18 as E, userProfile as Et, _sfc_main$26 as F, clearNotificationHistory as Ft, interfaceDefinition as G, label as Gt, columnsEditor as H, setNotificationProgress as Ht, _sfc_main$27 as I, dismissNotification as It, messageFileRequest as J, rect as Jt, knowledgeRequest as K, muted as Kt, _sfc_main$29 as L, editNotificationReply as Lt, parse as M, activeNotifications as Mt, _sfc_main$23 as N, beginNotificationReply as Nt, _sfc_main$21 as O, workspaceLayouts as Ot, _sfc_main$25 as P, cancelNotificationReply as Pt, objectRelations as Q, _sfc_main$31 as R, failNotificationReply as Rt, matchesUser as S, tableParentGroup as St, AppSearchField_default as T, userAvatar as Tt, endActivity as U, submitNotificationReply as Ut, beginActivity as V, resetNotifications as Vt, formDefinition as W, button as Wt, navigationLink as X, virtualRange as Xt, messagesRequest as Y, revealListOffset as Yt, objectDeletion as Z, copyText as _, sessionAction as _t, _sfc_main$2 as a, resetRequestActivity as at, _sfc_main$13 as b, tableDependencies as bt, _sfc_main$6 as c, saveServerConfiguration as ct, completions as d, searchConfiguration as dt, projectCatalog as et, documentSymbols as f, securityGroups as ft, copyImage as g, serverUpdates as gt, xmlTokens as h, serverConfiguration as ht, _sfc_main$1 as i, requestActivity as it, monthLabel as j, updatesAvailable as jt, _sfc_main$22 as k, setUpdatesAvailable as kt, toolbar as l, scriptEditor as lt, pythonTokens as m, securityUsers as mt, frameContentWidth as n, projectNavigation as nt, _sfc_main$3 as o, resultItems as ot, javascriptTokens as p, securityRules as pt, linkPreviews as q, node as qt, observeFrameSizes as r, rawDatabase as rt, _sfc_main$5 as s, rpc as st, _sfc_main as t, projectCreationCatalog as tt, _sfc_main$9 as u, scriptShelf as ut, readClipboardImages as v, sidebarRequest as vt, ItemPreview_default as w, uploadFormFile as wt, _sfc_main$14 as x, tableDependencyFile as xt, translate as y, tableCells as yt, _sfc_main$32 as z, notificationHistory as zt };
 
 //# sourceMappingURL=CodeBlock.js.map

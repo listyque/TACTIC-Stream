@@ -1,0 +1,332 @@
+{
+  "cell": {
+    "parentGrouping": true,
+    "parentEditable": true,
+    "targetSearchKey": "sthpw/note?code=N1",
+    "groupKey": "contract/entity?project=demo&code=A",
+    "text": "A",
+    "parent": {
+      "searchKey": "contract/entity?project=demo&code=A",
+      "code": "A",
+      "title": "Episode 01 — Arrival",
+      "revision": "a",
+      "name": "Episode 01 — Arrival",
+      "description": "Sample episode · Dialog",
+      "retired": false,
+      "preview": {}
+    }
+  },
+  "models": {
+    "ready": {
+      "seed": {
+        "targetSearchKey": "sthpw/note?code=N1",
+        "sourceId": "10",
+        "projectCode": "demo",
+        "sourceTitle": "Review note",
+        "tableView": "table",
+        "columnName": "parent",
+        "sourceRevision": "source"
+      },
+      "ready": true,
+      "rows": [
+        {
+          "searchKey": "contract/entity?project=demo&code=A",
+          "code": "A",
+          "title": "Episode 01 — Arrival",
+          "revision": "a"
+        },
+        {
+          "searchKey": "contract/entity?project=demo&code=B",
+          "code": "B",
+          "title": "Episode 02 — Long production title",
+          "revision": "b"
+        }
+      ],
+      "parentTypes": [
+        {
+          "value": "contract/entity",
+          "label": "Entities"
+        }
+      ],
+      "parentType": "contract/entity",
+      "query": "",
+      "draftQuery": "",
+      "currentParentKey": "contract/entity?project=demo&code=A",
+      "currentParent": {
+        "searchKey": "contract/entity?project=demo&code=A",
+        "code": "A",
+        "title": "Episode 01 — Arrival",
+        "revision": "a"
+      },
+      "selectedParent": {
+        "searchKey": "contract/entity?project=demo&code=A",
+        "code": "A",
+        "title": "Episode 01 — Arrival",
+        "revision": "a"
+      },
+      "expectedRevision": "captured",
+      "busy": "",
+      "error": "",
+      "uncertain": false,
+      "confirmAction": "",
+      "append": false,
+      "sourceId": "10",
+      "sourceTitle": "Review note",
+      "hasNext": false
+    },
+    "selected": {
+      "seed": {
+        "targetSearchKey": "sthpw/note?code=N1",
+        "sourceId": "10",
+        "projectCode": "demo",
+        "sourceTitle": "Review note",
+        "tableView": "table",
+        "columnName": "parent",
+        "sourceRevision": "source"
+      },
+      "ready": true,
+      "rows": [
+        {
+          "searchKey": "contract/entity?project=demo&code=A",
+          "code": "A",
+          "title": "Episode 01 — Arrival",
+          "revision": "a"
+        },
+        {
+          "searchKey": "contract/entity?project=demo&code=B",
+          "code": "B",
+          "title": "Episode 02 — Long production title",
+          "revision": "b"
+        }
+      ],
+      "parentTypes": [
+        {
+          "value": "contract/entity",
+          "label": "Entities"
+        }
+      ],
+      "parentType": "contract/entity",
+      "query": "",
+      "draftQuery": "",
+      "currentParentKey": "contract/entity?project=demo&code=A",
+      "currentParent": {
+        "searchKey": "contract/entity?project=demo&code=A",
+        "code": "A",
+        "title": "Episode 01 — Arrival",
+        "revision": "a"
+      },
+      "selectedParent": {
+        "searchKey": "contract/entity?project=demo&code=B",
+        "code": "B",
+        "title": "Episode 02 — Long production title",
+        "revision": "b"
+      },
+      "expectedRevision": "captured",
+      "busy": "",
+      "error": "",
+      "uncertain": false,
+      "confirmAction": "",
+      "append": false,
+      "sourceId": "10",
+      "sourceTitle": "Review note",
+      "hasNext": false
+    },
+    "loading": {
+      "seed": {
+        "targetSearchKey": "sthpw/note?code=N1",
+        "sourceId": "10",
+        "projectCode": "demo",
+        "sourceTitle": "Review note",
+        "tableView": "table",
+        "columnName": "parent",
+        "sourceRevision": "source"
+      },
+      "ready": false,
+      "rows": [],
+      "parentTypes": [],
+      "parentType": "",
+      "query": "",
+      "draftQuery": "",
+      "currentParentKey": "",
+      "currentParent": null,
+      "selectedParent": null,
+      "expectedRevision": "",
+      "busy": "prepare",
+      "error": "",
+      "uncertain": false,
+      "confirmAction": "",
+      "append": false
+    },
+    "error": {
+      "seed": {
+        "targetSearchKey": "sthpw/note?code=N1",
+        "sourceId": "10",
+        "projectCode": "demo",
+        "sourceTitle": "Review note",
+        "tableView": "table",
+        "columnName": "parent",
+        "sourceRevision": "source"
+      },
+      "ready": true,
+      "rows": [
+        {
+          "searchKey": "contract/entity?project=demo&code=A",
+          "code": "A",
+          "title": "Episode 01 — Arrival",
+          "revision": "a"
+        },
+        {
+          "searchKey": "contract/entity?project=demo&code=B",
+          "code": "B",
+          "title": "Episode 02 — Long production title",
+          "revision": "b"
+        }
+      ],
+      "parentTypes": [
+        {
+          "value": "contract/entity",
+          "label": "Entities"
+        }
+      ],
+      "parentType": "contract/entity",
+      "query": "",
+      "draftQuery": "",
+      "currentParentKey": "contract/entity?project=demo&code=A",
+      "currentParent": {
+        "searchKey": "contract/entity?project=demo&code=A",
+        "code": "A",
+        "title": "Episode 01 — Arrival",
+        "revision": "a"
+      },
+      "selectedParent": {
+        "searchKey": "contract/entity?project=demo&code=A",
+        "code": "A",
+        "title": "Episode 01 — Arrival",
+        "revision": "a"
+      },
+      "expectedRevision": "captured",
+      "busy": "",
+      "error": "Unable to reach the server.",
+      "uncertain": false,
+      "confirmAction": "",
+      "append": false,
+      "sourceId": "10",
+      "sourceTitle": "Review note",
+      "hasNext": false
+    },
+    "unknown": {
+      "seed": {
+        "targetSearchKey": "sthpw/note?code=N1",
+        "sourceId": "10",
+        "projectCode": "demo",
+        "sourceTitle": "Review note",
+        "tableView": "table",
+        "columnName": "parent",
+        "sourceRevision": "source"
+      },
+      "ready": true,
+      "rows": [
+        {
+          "searchKey": "contract/entity?project=demo&code=A",
+          "code": "A",
+          "title": "Episode 01 — Arrival",
+          "revision": "a"
+        },
+        {
+          "searchKey": "contract/entity?project=demo&code=B",
+          "code": "B",
+          "title": "Episode 02 — Long production title",
+          "revision": "b"
+        }
+      ],
+      "parentTypes": [
+        {
+          "value": "contract/entity",
+          "label": "Entities"
+        }
+      ],
+      "parentType": "contract/entity",
+      "query": "",
+      "draftQuery": "",
+      "currentParentKey": "contract/entity?project=demo&code=A",
+      "currentParent": {
+        "searchKey": "contract/entity?project=demo&code=A",
+        "code": "A",
+        "title": "Episode 01 — Arrival",
+        "revision": "a"
+      },
+      "selectedParent": {
+        "searchKey": "contract/entity?project=demo&code=B",
+        "code": "B",
+        "title": "Episode 02 — Long production title",
+        "revision": "b"
+      },
+      "expectedRevision": "captured",
+      "busy": "",
+      "error": "Unable to reach the server.",
+      "uncertain": true,
+      "confirmAction": "",
+      "append": false,
+      "sourceId": "10",
+      "sourceTitle": "Review note",
+      "hasNext": false
+    },
+    "discard": {
+      "seed": {
+        "targetSearchKey": "sthpw/note?code=N1",
+        "sourceId": "10",
+        "projectCode": "demo",
+        "sourceTitle": "Review note",
+        "tableView": "table",
+        "columnName": "parent",
+        "sourceRevision": "source"
+      },
+      "ready": true,
+      "rows": [
+        {
+          "searchKey": "contract/entity?project=demo&code=A",
+          "code": "A",
+          "title": "Episode 01 — Arrival",
+          "revision": "a"
+        },
+        {
+          "searchKey": "contract/entity?project=demo&code=B",
+          "code": "B",
+          "title": "Episode 02 — Long production title",
+          "revision": "b"
+        }
+      ],
+      "parentTypes": [
+        {
+          "value": "contract/entity",
+          "label": "Entities"
+        }
+      ],
+      "parentType": "contract/entity",
+      "query": "",
+      "draftQuery": "",
+      "currentParentKey": "contract/entity?project=demo&code=A",
+      "currentParent": {
+        "searchKey": "contract/entity?project=demo&code=A",
+        "code": "A",
+        "title": "Episode 01 — Arrival",
+        "revision": "a"
+      },
+      "selectedParent": {
+        "searchKey": "contract/entity?project=demo&code=B",
+        "code": "B",
+        "title": "Episode 02 — Long production title",
+        "revision": "b"
+      },
+      "expectedRevision": "captured",
+      "busy": "",
+      "error": "",
+      "uncertain": false,
+      "confirmAction": "close",
+      "append": false,
+      "sourceId": "10",
+      "sourceTitle": "Review note",
+      "hasNext": false
+    }
+  }
+}

@@ -227,6 +227,18 @@ def capture(fixture, qml, original):
         view = component.createWithInitialProperties(dict(theme=theme, controller=controller,
             columnsController=columns, userModel=users, services=None, administration=None, scope=scope,
             width=fixture['width'], height=fixture['height']))
+    elif fixture['screen'] == 'parent':
+        from tests.test_table_parent_group import ParentResponses
+        owner = ParentResponses()
+        owner._open = False
+        keep.append(owner)
+        component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'features/table/ParentGroupView.qml')))
+        view = component.createWithInitialProperties(dict(theme=theme, owner=owner, state=fixture['model'],
+            width=fixture['width'], height=fixture['height']))
+    elif fixture['screen'] == 'parent-group':
+        component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'features/table/ParentGroupHeader.qml')))
+        view = component.createWithInitialProperties(dict(theme=theme, model=fixture['model'], editable=True,
+            width=fixture['width'], height=fixture['height']))
     elif fixture['screen'] == 'dependencies':
         from tests.test_table_dependencies import DependencyResponses
         owner = DependencyResponses(fixture['data'], fixture['mode'])
@@ -440,12 +452,23 @@ def main():
         "thlib/ui/qml/features/table/runtime/table_action_runtime.js",
         "thlib/ui/translations/ru.json",
     ]
-    names += ['thlib/ui/table/dependencies.py', 'thlib/ui/table/requests.py', 'tests/test_table_dependencies.py']
+    names += ['thlib/ui/table/dependencies.py', 'thlib/ui/table/requests.py', 'tests/test_table_dependencies.py',
+        'thlib/ui/table/parent_group.py', 'tests/test_table_parent_group.py', 'thlib/ui/workspace_models/results_organization.py']
     shared, native = source_hashes(ROOT, HANDLER, names)
     captures = []
     for style in ("md3", "fluent", "material5"):
         for dark in (False, True):
             for language in ("en", "ru"):
+                parent = json.loads((ROOT/'tests/fixtures/frame_table_parent.json').read_text(encoding='utf-8'))
+                for width in (288, 800):
+                    for mode, model in parent['models'].items():
+                        fixture = dict(screen='parent', mode=mode, width=width, height=480,
+                            style=style, dark=dark, language=language, model=model)
+                        captures.append(capture(fixture, HANDLER/'thlib/ui/qml', False))
+                    for closed in (False, True):
+                        fixture = dict(screen='parent-group', mode='closed' if closed else 'open', width=width, height=64,
+                            style=style, dark=dark, language=language, model=dict(cell=parent['cell'],count=3,closed=closed))
+                        captures.append(capture(fixture, HANDLER/'thlib/ui/qml', False))
                 for width in (320, 800):
                     for mode in ('tree','expanded','empty','error'):
                         fixture = dict(screen='dependencies', mode=mode, width=width, height=440,
@@ -560,6 +583,7 @@ def main():
                 "tests/fixtures/frame_table_values.json",
                 "tests/fixtures/frame_table_nested.json",
                 "tests/fixtures/frame_table_dependencies.json",
+                "tests/fixtures/frame_table_parent.json",
                 "reports/table-view-2026-10-14/fixture.json",
             )
         },

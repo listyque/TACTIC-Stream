@@ -1,6 +1,6 @@
 import { C as h, D as nextTick, H as useSlots, K as withCtx, N as openBlock, P as renderList, R as resolveDynamicComponent, U as watch, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment, y as createTextVNode } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$2, f as _sfc_main$3, k as t, o as mobile } from "./index.js";
-import { F as _sfc_main$7, _ as copyText, g as copyImage, i as _sfc_main$4, k as _sfc_main$5, o as _sfc_main$6, ot as resultItems, r as observeFrameSizes, w as ItemPreview_default, zt as notify } from "./CodeBlock.js";
+import { Bt as notify, F as _sfc_main$7, _ as copyText, g as copyImage, i as _sfc_main$4, k as _sfc_main$5, o as _sfc_main$6, ot as resultItems, r as observeFrameSizes, w as ItemPreview_default } from "./CodeBlock.js";
 import { t as RecordForm_default } from "./RecordForm.js";
 import { a as metrics, i as layout, l as toolbar, n as fileColumns, o as optionActions, r as fileIcon, s as optionChange, t as clampRatio } from "./snapshot.ui.js";
 import { t as FilePreview_default } from "./FilePreview.js";

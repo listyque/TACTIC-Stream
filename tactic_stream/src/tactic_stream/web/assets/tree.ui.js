@@ -1,4 +1,4 @@
-import { Gt as muted, Kt as node, Ut as button, Wt as label, qt as rect } from "./CodeBlock.js";
+import { Gt as label, Jt as rect, Kt as muted, Wt as button, qt as node } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/controls/lists/tree.ui.mjs
 function navigationRow(width, record, state = {}) {
 	const section = record.kind === "section", separator = record.kind === "separator";

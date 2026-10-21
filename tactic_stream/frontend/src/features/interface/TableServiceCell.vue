@@ -6,6 +6,7 @@ import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/services.ui.mjs';
 import * as Connections from '../../../../src/tactic_stream/shared_ui/features/table/connections.ui.mjs';
 import { droppedKeys } from '../../../../src/tactic_stream/shared_ui/features/table/drop.ui.mjs';
+import { dropParentKey } from '../../../../src/tactic_stream/shared_ui/features/table/parent.state.mjs';
 import { onMounted, onBeforeUnmount } from 'vue';
 
 const props = defineProps({
@@ -47,7 +48,7 @@ onMounted(() => {
   observer.observe(host.value);
 });
 onBeforeUnmount(() => observer?.disconnect());
-function activate(action, value) {
+function activate(action) {
   if (action.type === 'parallel-toggle') {
     expanded.value = {
       ...expanded.value,
@@ -75,8 +76,10 @@ function activate(action, value) {
           direction: action.direction || props.cell.direction,
           dropKeys:
             action.name === 'drop-links'
-              ? droppedKeys(value, props.cell.acceptedType)
+              ? droppedKeys(action.value, props.cell.acceptedType)
               : [],
+          dropParentKey:
+            action.name === 'drop-parent' ? dropParentKey(action.value) : '',
           actionTaskKey: action.taskKey,
           actionDay: action.day,
           actionTaskCode: action.taskCode

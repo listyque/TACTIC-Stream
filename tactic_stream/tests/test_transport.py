@@ -4751,6 +4751,49 @@ return True
             config='<config><dependencies_snapshot_test><element name="code"/><element name="dependency"><display class="DependencyLink"/></element></dependencies_snapshot_test></config>'))
         return proxy, auth, snapshot
 
+    def parent_group_fixture(self):
+        proxy = self.proxy()
+        auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one')
+        proxy.insert(auth, 'config/widget_config', dict(search_type='sthpw/note', view='parent_test', priority=100,
+            config='<config><parent_test><element name="code"/><element name="note"/>'
+            '<element name="parent" title="Parent"><display class="tactic.ui.table.ParentGroupTableElementWdg"/>'
+            '<action class="tactic.ui.table.ParentGroupAction"/></element></parent_test></config>'))
+        notes = [proxy.insert(auth, 'sthpw/note', dict(search_type='contract/entity', search_code='A', search_id=1,
+            project_code='one', login='admin', process='publish', note='Parent browser fixture ' + str(index))) for index in range(2)]
+        return proxy, auth, notes
+
+    def test_handler_parent_group_through_xmlrpc(self):
+        proxy, auth, notes = self.parent_group_fixture()
+        text = (ROOT.parent.parent/'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        functions = {node.name: ast.get_source_segment(text, node) for node in ast.parse(text).body if isinstance(node, ast.FunctionDef)}
+        def call(name, values):
+            result = proxy.execute_python_script(auth, '', dict(code=functions[name] + '\nreturn ' + name + '(**kwargs["values"])', values=values))['info']
+            return json.loads(result) if isinstance(result, str) else result
+        cell = call('read_parent_cells', dict(search_keys=[notes[0]['__search_key__']]))[notes[0]['__search_key__']]
+        self.assertEqual(cell['parent']['code'], 'A')
+        args = dict(search_key=notes[0]['__search_key__'], view='parent_test', column='parent', source_id=str(notes[0]['id']))
+        prepared = call('edit_parent_group', args)
+        candidates = call('edit_parent_group', dict(args, action='candidates', parent_type='contract/entity', expected_revision=prepared['expectedRevision']))
+        target = next(row for row in candidates['rows'] if row['code'] == 'B')
+        self.assertEqual(call('edit_parent_group', dict(args, action='save', expected_revision=prepared['expectedRevision'],
+            parent_key=target['searchKey'], parent_revision=target['revision']))['state'], 'saved')
+        text = (ROOT.parent.parent/'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        query = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        result = proxy.execute_python_script(auth, '', dict(code=ast.get_source_segment(text, query) +
+            '\nreturn query_table_layout("sthpw/note",view="parent_test",project_code="one",search_keys=kwargs["keys"])', keys=[notes[0]['__search_key__']]))['info']
+        result = json.loads(result) if isinstance(result, str) else result
+        cell = result['rows'][notes[0]['__search_key__']]['parent']
+        self.assertFalse(cell['error'], cell)
+        self.assertEqual(cell['parent']['code'], 'B')
+        self.assertTrue(cell['parentEditable'])
+
+    def test_table_parent_group_in_chromium(self):
+        _proxy, _auth, notes = self.parent_group_fixture()
+        environment = os.environ.copy()
+        result = subprocess.run([shutil.which('node'), str(ROOT/'frontend/tests/table_parent.mjs'), self.url, notes[0]['code']],
+            cwd=ROOT/'frontend', env=environment, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=60)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_handler_dependencies_through_xmlrpc(self):
         proxy, auth, snapshot = self.dependency_fixture()
         text = (ROOT.parent.parent/'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')

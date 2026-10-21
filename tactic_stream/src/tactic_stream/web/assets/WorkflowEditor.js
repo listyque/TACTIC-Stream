@@ -1,6 +1,6 @@
 import { B as useId, D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, R as resolveDynamicComponent, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, l as withModifiers, m as createBaseVNode, nt as normalizeClass, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$2, f as _sfc_main$3, k as t } from "./index.js";
-import { Gt as muted, Kt as node, Ut as button, Wt as label, i as _sfc_main$4, qt as rect, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
+import { Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$4, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { t as _sfc_main$5 } from "./ObjectReport.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";

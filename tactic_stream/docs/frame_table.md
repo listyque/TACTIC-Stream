@@ -1,7 +1,7 @@
 # Tactic Frame B07: Table View checkpoint
 
 B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the current widget-config census contains 3 classes without typed adapters. The
+the current widget-config census contains 2 classes without typed adapters. The
 combined second stage extends the catalogue with the explicit limits below.
 A registered adapter is not proof that every old
 display option or embedded action works.
@@ -15,12 +15,58 @@ display option or embedded action works.
 | `features/table/nested.ui.mjs` | Scoped expanded-table presentation; requests and mutations stay with each host |
 | `features/table/time.ui.mjs` | Table schedule and daily-hours projections; current Gantt/Timesheet owners retain writes |
 | `features/table/inline.ui.mjs` | Typed value editor body, explicit-save and uncertain-write states |
-| `features/table/widgets.json` | 71 server classes, 171 named aliases, editor choices and native adapter categories |
+| `features/table/widgets.json` | 72 server classes, 174 named aliases, editor choices and native adapter categories |
 | `features/table/dependencies.state.mjs` / `dependencies.ui.mjs` | Concrete snapshot tree, cached expansion, cycle guards, page state and presentation |
 
 Stream ships these under `src/tactic_stream/shared_ui`; Handler ships its own
 copy under `thlib/ui/qml/tactic_frame`. The server still imports an explicit
 allowlist of Python classes. Catalogue data cannot import arbitrary code.
+
+## Parent groups: Stream .180 / Handler .127
+
+`ParentGroupTableElementWdg` groups by canonical parent search key rather than
+visible code. Identically named objects from different types remain separate;
+missing references remain visible and can be repaired. The 64px shared header
+shows disclosure, preview, code/name/type/description, count and Add Another Item.
+The add action uses each product's existing configured insert form and passes
+the captured parent and source project; it does not invent a second editor.
+
+`ParentGroupAction` enables an anchored, nonmodal shared picker. This includes
+Expression display cells: their computed text is preserved while the relationship
+is edited. Search is literal and paged at 50; Save is explicit. Dirty Cancel/Refresh
+requires discard confirmation. Save captures source physical ID and full revision,
+configuration revision and target revision, locks/rereads the source, rejects
+retired/cyclic/foreign-project targets and uses the native relationship API.
+A lost response requires Check saved changes, never automatic write replay.
+Global rows resolve bare parent types in their own project. Only safe parent
+fields are exported; account credentials/private-message/ticket targets are excluded.
+
+The independently shipped Handler procedure retains the same relationship rules.
+Actual Qt drag sequences exercise both parent and existing instance-link drops;
+the adapter reads `action.value`, not the event's source control. Browser retained
+card state now preserves table state; collapsing a group cannot erase the chosen
+table view. System-note result trees skip the wildcard `*` as a concrete Search Type.
+
+Known scope: current table/mutation admission is administrator-only. Ordinary-user
+ACL, all inherited group summaries/options and arbitrary legacy DOM behavior are
+not certified here; they remain L07b. The removed Custom Layout Editor stays out.
+
+Validation for this checkpoint: the 155-step Frame platform gate passed on the
+final sources, including 124 native table tests, 106 table API tests and seven
+native-source XML-RPC scenarios. Real browser input covers parent changes,
+dirty cancellation, resize, a lost save response followed by verification,
+collapse/reopen and the captured parent/project in the existing creation form.
+The source ledger is 463 QML + 307 Vue = 770 surfaces. Fresh capture contains
+1056 native states (36 historical) and 1020 current QML/Vue pairs; Parent picker
+and group examples ship in both Help bundles. The disabled Frame Action wrapper
+no longer adds an AppButton background underneath its ItemSurface.
+
+Acceptance logs: `.tmp/stage2/parent-platform4.log`, `parent-capture4.log` and
+`parent-paired6.log`. Earlier partial runs were rejected or restarted after
+source/driver/translation changes; their results are not the final acceptance.
+The deployed original server, PostgreSQL, real-device input and frozen EXE were
+not certified here. Browser Parent/instance-drop events, all scoped column/totals
+options and ordinary-user ACL still require the final L07b workflow pass.
 
 ## Owners
 
@@ -447,12 +493,12 @@ when another document opens or the window closes. A late successful response mus
 not replace Dependencies or reopen its closed window. Both functional-window
 captions use the current language.
 
-Current registration census: **71 classes / 171 named aliases**; 239 shipped/CG
-sources reference **68 adapted, 3 pending, 30 excluded-production and 3 unfinished**
-classes. ParentGroup and the two publish classes still lack their adapted workflow.
+Current registration census: **72 classes / 174 named aliases**; 239 shipped/CG
+sources reference **69 adapted, 2 pending, 30 excluded-production and 3 unfinished**
+classes. The two publish classes still lack their adapted workflow.
 Older checkpoint counts above describe those releases, not the current census.
 
-Validation: 108 native table tests, 90 table API tests and six native-source
+Previous dependency checkpoint validation (.179/.126): 108 native table tests, 90 table API tests and six native-source
 XML-RPC cases passed. Fresh capture produced 864 native states (36 historical
 references); the paired driver accepted all 828 current states. The production
 browser flow additionally checks actual registered file bytes, page/cache
@@ -472,7 +518,7 @@ deployed original server, PostgreSQL, ordinary-user ACL or physical hardware.
 - [ ] `pyasm.widget.table_element_wdg.HiddenRowToggleWdg`
 - [ ] `tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg`
 - [ ] `tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg`
-- [ ] `tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg`
+- [x] `tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg` — identity grouping/header, parent action and existing child insert form; full option/ACL acceptance remains L07b.
 - [ ] `pyasm.widget.table_element_wdg.AuxDataWdg`
 - [x] `tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg` — object/project counts and separate task/snapshot scopes.
 
@@ -587,7 +633,7 @@ and limits in EN/RU Widget Database Help. Reuse the existing object, task, file,
 schedule and communication owners; opening a generic panel is not implementation
 of the configured embedded scope. Unsupported options stay explicit.
 
-Before closing B07 in L07b, exercise the complete 68-class catalogue,
+Before closing B07 in L07b, exercise the complete current catalogue,
 configured forms/inline editors, native keywords/tags and the used legacy
 bottom/group_bottom/total_summary contracts too. A 40-class checklist alone
 cannot certify all historical options. Current working controls remain delivered.

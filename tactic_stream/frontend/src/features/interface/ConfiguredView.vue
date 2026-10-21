@@ -11,6 +11,7 @@ import TableCell from './TableCell.vue';
 import TableView from './TableView.vue';
 import TableDocument from './TableDocument.vue';
 import TableServiceDialogs from './TableServiceDialogs.vue';
+import TableParentPicker from './TableParentPicker.vue';
 import NestedTable from './NestedTable.vue';
 import {
   tableDefinition,
@@ -56,6 +57,7 @@ export default {
     SnapshotCheckout,
     NestedTable,
     TableServiceDialogs,
+    TableParentPicker,
     TableDocument,
     RecordForm,
     RelatedObjects,
@@ -363,21 +365,29 @@ export default {
       const name = mode.slice(7),
         groups = new Map();
       for (const record of this.records) {
-        const key = String(
-          this.displayCells[record.__search_key__]?.[name]?.text ??
-            record[name] ??
-            ''
-        );
+        const cell = this.displayCells[record.__search_key__]?.[name];
+        const parent = cell?.parentGrouping ? cell : null;
+        const label = String(cell?.text ?? record[name] ?? '');
+        const key = parent ? parent.groupKey : label;
         if (!groups.has(key))
-          groups.set(key, { key, label: key || 'No value', records: [] });
+          groups.set(key, {
+            key,
+            label: label || 'No value',
+            cell: parent,
+            records: []
+          });
         groups.get(key).records.push(record);
       }
-      return [...groups.values()].sort((left, right) =>
-        left.key.localeCompare(right.key, undefined, {
+      return [...groups.values()].sort((left, right) => {
+        if (left.cell || right.cell) {
+          if (left.key === right.key) return 0;
+          return left.key < right.key ? -1 : 1;
+        }
+        return left.key.localeCompare(right.key, undefined, {
           numeric: true,
           sensitivity: 'base'
-        })
-      );
+        });
+      });
     },
     selectable() {
       return (
@@ -455,8 +465,8 @@ export default {
       deep: true,
       handler(value) {
         if (this.resultMode === 'table')
-          this.$emit('result-state', {
-            ...this.resultState,
+          this.tableStateChanged({
+            ...this.tableState,
             closedGroups: { ...value }
           });
       }
@@ -519,6 +529,7 @@ export default {
   },
   beforeUnmount() {
     this.scriptAbort?.abort();
+    this.$refs.parentPicker?.close();
     this.$refs.tableServiceDialogs?.close();
     this.request++;
     this.cellRequest++;
@@ -564,6 +575,7 @@ export default {
       this.scriptAbort?.abort();
       this.scriptAbort = null;
       this.$refs.tableServiceDialogs?.close();
+      this.$refs.parentPicker?.close();
       this.$refs.tableDocument?.close();
       this.serviceDocument = null;
       this.editRequest++;
@@ -1023,6 +1035,21 @@ export default {
       await this.$nextTick();
       this.$refs.tableForm.open(null);
     },
+    async createParentChild(cell) {
+      if (this.readOnly || !cell.parent || cell.parent.retired) return;
+      this.targetRecord = {
+        __search_key__:
+          cell.targetSearchKey.split('?')[0] +
+          '?project=' +
+          encodeURIComponent(cell.projectCode || this.project)
+      };
+      this.targetInsertView = 'insert';
+      this.targetIgnore = [];
+      await this.$nextTick();
+      this.$refs.tableForm.open(null, null, {
+        parent_key: cell.parent.searchKey
+      });
+    },
     async runConfiguredScript(record, cell, context, request) {
       this.serviceBusy = true;
       const abort = new AbortController();
@@ -1175,6 +1202,8 @@ export default {
             'script',
             'edit-links',
             'drop-links',
+            'change-parent',
+            'drop-parent',
             'add-task',
             'work'
           ].includes(kind)) ||
@@ -1191,6 +1220,14 @@ export default {
       this.serviceMessage = '';
       try {
         if (kind === 'error') throw new Error(cell.error);
+        if (kind === 'change-parent' || kind === 'drop-parent') {
+          await this.$refs.parentPicker.open(
+            cell,
+            record.name || record.title || record.code || '',
+            anchor
+          );
+          return;
+        }
         if (kind === 'remove-connection') {
           if (
             !(await this.$refs.tableServiceDialogs.ask(
@@ -2125,6 +2162,7 @@ export default {
           @toggle-group="closedGroups[$event] = !closedGroups[$event]"
           @edit="openCellEditor"
           @header-action="tableHeaderAction"
+          @create-child="createParentChild"
         >
           <template #detail="{ record }">
             <NestedTable
@@ -2333,6 +2371,12 @@ export default {
       @saved="tableSaved"
     />
     <TableServiceDialogs ref="tableServiceDialogs" />
+    <TableParentPicker
+      ref="parentPicker"
+      :ticket="ticket"
+      :project="project"
+      @saved="tableSaved"
+    />
     <TableDocument
       ref="tableDocument"
       :model="serviceDocument"

@@ -45,6 +45,11 @@ export function tableDependencyFile(context, values, signal) {
   return post('/admin/rpc', { method: 'execute_cmd', args: [context, 'tactic.ui.table.TableSnapshotFilesCmd', values], kwargs: {} }, signal, true)
 }
 
+export function tableParentGroup(context, values, signal) {
+  const timeout = AbortSignal.any([AbortSignal.timeout(30000), ...(signal ? [signal] : [])])
+  return post('/admin/rpc', { method: 'execute_cmd', args: [context, 'tactic.ui.table.TableParentGroupCmd', values], kwargs: {} }, timeout, true)
+}
+
 export function linkPreviews(ticket, project, keys) {
   return backgroundPost('/admin/navigation-link', { ticket, project, keys })
 }

@@ -304,8 +304,8 @@
       "_files2.js",
       "_FilePreview.js",
       "_previewFiles.js",
-      "_AppDialog.js",
       "_confirmation.ui.js",
+      "_AppDialog.js",
       "_AppMenuItem.js",
       "_tree.ui.js"
     ],
@@ -514,8 +514,8 @@
       "index.html",
       "_CodeBlock.js",
       "_sections.ui.js",
-      "_AppDialog.js",
       "_confirmation.ui.js",
+      "_AppDialog.js",
       "src/App.vue"
     ],
     "css": [
@@ -549,8 +549,8 @@
       "_sections.ui.js",
       "_file_values.js",
       "_files.js",
-      "_AppDialog.js",
       "_confirmation.ui.js",
+      "_AppDialog.js",
       "src/App.vue"
     ],
     "css": [
@@ -620,8 +620,8 @@
       "_sections.ui.js",
       "_file_values.js",
       "_files.js",
-      "_AppDialog.js",
       "_confirmation.ui.js",
+      "_AppDialog.js",
       "_AppMenuItem.js",
       "src/App.vue"
     ],

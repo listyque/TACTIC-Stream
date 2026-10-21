@@ -66,6 +66,7 @@ from tactic.ui.widget.misc_input_wdg import TaskStatusElementWdg
 from tactic.ui.table.drop_element_wdg import DropElementWdg
 from pyasm.widget.sobject_browser_wdg import SObjectConnectionElement
 from pyasm.widget.dependency_wdg import DependencyLink
+from tactic.ui.table.group_element_wdg import ParentGroupTableElementWdg, read_parent_cells
 from tactic.ui.table.sobject_summary_wdg import SObjectSummaryElementWdg
 
 from tactic.ui.table.custom_layout_element_wdg import CustomLayoutElementWdg
@@ -79,7 +80,7 @@ from tactic.ui.table.gantt_element_wdg import GanttElementWdg
 from tactic.ui.table.work_hours_element_wdg import WorkHoursElementWdg
 TIME_WIDGETS = (GanttWdg, GanttElementWdg, TimecardInfoTableElement, WeekTableElement, WorkHoursElementWdg)
 
-SERVICE_WIDGETS = (DependencyLink, SObjectSummaryElementWdg, SObjectConnectionElement, CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
+SERVICE_WIDGETS = (ParentGroupTableElementWdg, DependencyLink, SObjectSummaryElementWdg, SObjectConnectionElement, CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
                    ProjectTemplateUpdateWdg, NotificationTriggerElementWdg, ButtonElementWdg,
                    ParallelStatusWdg, ParallelStatusEditWdg, SObjectTaskStatusElementWdg, WorkElementWdg, DropElementWdg)
 
@@ -243,15 +244,21 @@ def describe_cell(element, columns, search_type=""):
     native_time_action = widget in (GanttWdg, GanttElementWdg) and action in (
         'tactic.ui.table.GanttCbk', 'tactic.ui.table.gantt_element_wdg.GanttCbk',
         'pyasm.widget.GanttCbk', 'pyasm.widget.gantt_wdg.GanttCbk')
+    native_parent_action = action in (
+        'ParentGroupAction', 'tactic.ui.table.ParentGroupAction', 'tactic.ui.table.group_element_wdg.ParentGroupAction'
+    ) and not element['action']['options']
     supported = (
         widget is not None
         and isinstance(field, str)
         and (field in columns or computed)
-        and (not action or native_task_action or native_time_action)
+        and (not action or native_task_action or native_time_action or native_parent_action)
     )
     allowed = {"column"}
     if widget in TIME_WIDGETS:
         allowed |= set(widget.ARGS_KEYS) if hasattr(widget, 'ARGS_KEYS') else set()
+    elif widget is ParentGroupTableElementWdg:
+        allowed |= set(widget.ARGS_KEYS)
+        supported = supported and options.get('disable') in (None, '', True, False, 'true', 'false')
     elif widget is CheckoutButtonElementWdg:
         allowed |= set(widget.ARGS_KEYS)
     elif widget is SObjectConnectionElement:
@@ -400,7 +407,7 @@ def describe_cell(element, columns, search_type=""):
         allowed.add("due_date_col")
     supported = supported and not set(options) - allowed
     kind = ACTION_KINDS.get(widget, "text")
-    if widget in SERVICE_WIDGETS:
+    if widget in SERVICE_WIDGETS or native_parent_action:
         kind = 'commands'
     elif widget is MyTacticSummaryWdg:
         kind = 'fields'
@@ -620,6 +627,12 @@ def read_table_cells(search_type, view, search_keys):
             widget.set_attributes(element["attributes"])
             widget.set_sobjects(objects)
             widget.preprocess()
+            parent_action = element['action']['handler'] in (
+                'ParentGroupAction', 'tactic.ui.table.ParentGroupAction', 'tactic.ui.table.group_element_wdg.ParentGroupAction'
+            ) and not element['action']['options']
+            parent_values = None
+            if parent_action and widget_class is not ParentGroupTableElementWdg:
+                parent_values = read_parent_cells([obj.get_search_key() for obj in objects])
         except SecurityException:
             raise
         except Exception as error:
@@ -655,6 +668,11 @@ def read_table_cells(search_type, view, search_keys):
                 )
                 if widget_class in TASK_WIDGETS:
                     cell["widthHint"] = widget.get_width()
+                if parent_values is not None:
+                    cell = dict(parent_values[obj.get_search_key()], **cell)
+                    cell['parentGrouping'] = False
+                if parent_action or widget_class is ParentGroupTableElementWdg:
+                    cell.update(parentEditable=parent_action, tableView=view, columnName=element['name'])
                 if widget_class is ButtonElementWdg:
                     cell['columnName'] = element['name']
                 if widget_class is DropElementWdg:

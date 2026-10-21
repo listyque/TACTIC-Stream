@@ -19,6 +19,8 @@ import { appearance } from '../../appearance.js';
 import { cssRoles } from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 import * as Host from '../../../../src/tactic_stream/shared_ui/features/table/host.ui.mjs';
 import * as Menus from '../../../../src/tactic_stream/shared_ui/features/table/menus.ui.mjs';
+import FrameView from '../../frame/FrameView.vue';
+import * as ParentUI from '../../../../src/tactic_stream/shared_ui/features/table/parent.ui.mjs';
 
 const props = defineProps({
   columns: Array,
@@ -54,6 +56,7 @@ const emit = defineEmits([
   'scroll',
   'toggle-group',
   'header-action',
+  'create-child',
   'edit'
 ]);
 const viewport = ref(null),
@@ -170,8 +173,9 @@ const entries = computed(() => {
   let offset = 0;
   for (const group of props.groups || []) {
     if (group.label) {
-      rows.push({ group, key: 'group:' + group.key, top: offset, height: 38 });
-      offset += 38;
+      const height = group.cell ? ParentUI.groupHeight : 38;
+      rows.push({ group, key: 'group:' + group.key, top: offset, height });
+      offset += height;
     }
     if (props.closedGroups?.[group.key]) continue;
     for (const record of group.records) {
@@ -618,6 +622,30 @@ defineExpose({ viewport });
         >
           <slot name="detail" :record="entry.detail" />
         </div>
+        <FrameView
+          v-else-if="entry.group?.cell"
+          class="handler-table-group"
+          :scene="
+            ParentUI.group(
+              {
+                cell: entry.group.cell,
+                count: entry.group.records.length,
+                closed: !!closedGroups?.[entry.group.key]
+              },
+              Math.max(0, width - 24),
+              appearance.language,
+              !readOnly,
+              ''
+            )
+          "
+          @event="
+            (action) =>
+              action.type === 'toggle'
+                ? emit('toggle-group', entry.group.key)
+                : action.type === 'create-child' &&
+                  emit('create-child', entry.group.cell)
+          "
+        />
         <AppButton
           v-else-if="entry.group"
           class="handler-table-group"

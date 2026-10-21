@@ -502,6 +502,7 @@ export default {
         ? this.state?.expanded || []
         : collect(this.nodes);
       this.$emit('state', {
+        ...this.state,
         processIgnore: structuredClone(toRaw(this.processIgnore)),
         expanded,
         selectedId: this.selectedId,
