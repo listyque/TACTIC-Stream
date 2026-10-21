@@ -4,6 +4,7 @@ import FrameView from '../../frame/FrameView.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/services.ui.mjs';
+import * as Connections from '../../../../src/tactic_stream/shared_ui/features/table/connections.ui.mjs';
 import { droppedKeys } from '../../../../src/tactic_stream/shared_ui/features/table/drop.ui.mjs';
 import { onMounted, onBeforeUnmount } from 'vue';
 
@@ -18,6 +19,16 @@ const host = ref(null),
   width = ref(160),
   expanded = ref({});
 let observer;
+function connectionRow(_node, record) {
+  return Connections.row(
+    record,
+    props.cell,
+    Math.max(0, _node.width - 16),
+    appearance.language,
+    props.editable,
+    location.origin
+  );
+}
 const scene = computed(() =>
   UI.describe(
     props.cell || {},
@@ -58,6 +69,10 @@ function activate(action, value) {
           actionView: action.view,
           actionProcess: action.process,
           targetSearchKey: action.targetSearchKey || props.cell.targetSearchKey,
+          connectionKey: action.connectionKey,
+          expectedRevision:
+            action.expectedRevision || props.cell.expectedRevision,
+          direction: action.direction || props.cell.direction,
           dropKeys:
             action.name === 'drop-links'
               ? droppedKeys(value, props.cell.acceptedType)
@@ -79,6 +94,8 @@ function activate(action, value) {
   <div ref="host" class="table-service-cell">
     <FrameView
       :scene="scene"
+      :models="{ connectionRows: cell?.connectionRows || [] }"
+      :describe-row="connectionRow"
       :style="{ height: height + 'px' }"
       @event="activate"
     />

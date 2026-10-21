@@ -1,4 +1,4 @@
-import { E as nextTick } from "./vue.js";
+import { D as nextTick } from "./vue.js";
 import { A as appearance } from "./index.js";
 import { Gt as rect, Ht as label, Ut as muted, Vt as button, Wt as node, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";

@@ -1,4 +1,4 @@
-import { A as onMounted, G as withCtx, J as markRaw, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
+import { C as h, K as withCtx, N as openBlock, P as renderList, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
 import { A as appearance, c as _sfc_main$2, k as t } from "./index.js";
 import { Gt as rect, Ht as label, Vt as button, Wt as node, i as _sfc_main$4, k as _sfc_main$5, n as frameContentWidth, r as observeFrameSizes, x as _sfc_main$3, y as translate } from "./CodeBlock.js";
 import { V as _sfc_main$6 } from "./App.js";

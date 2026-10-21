@@ -471,5 +471,76 @@
         }
       ]
     }
+  },
+  {
+    "name": "object_summary",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "summary": [
+        {
+          "label": "Tasks",
+          "value": "2",
+          "icon": "task",
+          "nestedTable": {
+            "searchType": "sthpw/task",
+            "view": "table",
+            "parentKey": "cg/assets?code=A",
+            "projectCode": "cg",
+            "shelf": false,
+            "insert": false
+          }
+        },
+        {
+          "label": "Checkins",
+          "value": "2",
+          "icon": "upload",
+          "nestedTable": {
+            "searchType": "sthpw/snapshot",
+            "view": "table",
+            "parentKey": "cg/assets?code=A",
+            "projectCode": "cg",
+            "shelf": false,
+            "insert": false
+          }
+        },
+        {
+          "label": "Notes",
+          "value": "2",
+          "icon": "comment"
+        },
+        {
+          "label": "Work Hours",
+          "value": "2.5",
+          "icon": "schedule"
+        }
+      ]
+    }
+  },
+  {
+    "name": "object_connections",
+    "kind": "commands",
+    "cell": {
+      "text": "",
+      "iconSize": 60,
+      "direction": "dst",
+      "connectionRows": [
+        {
+          "connectionKey": "sthpw/connection?code=C",
+          "expectedRevision": "fixture",
+          "available": true,
+          "searchKey": "cg/assets?code=A",
+          "code": "ROBOT",
+          "name": "Robot",
+          "description": "Linked asset",
+          "keywords": "cg arm",
+          "retired": true,
+          "preview": {
+            "filename": "robot arm.png",
+            "text": "https://example.com/robot.png"
+          }
+        }
+      ]
+    }
   }
 ]

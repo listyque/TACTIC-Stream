@@ -630,6 +630,15 @@ try {
           'Short task dates must fit their card without truncation'
         );
       }
+      for (const [id, text] of Object.entries(record.summaryText || {}))
+        assert.equal(
+          await page
+            .locator(selector)
+            .locator('[data-frame="' + id + '"]')
+            .innerText(),
+          text,
+          'Summary text must match visible QML labels'
+        );
       const actual = await surface(page, selector);
       const compared = await compareSurface(
         page,

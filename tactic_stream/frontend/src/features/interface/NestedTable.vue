@@ -1,5 +1,12 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import {
+  computed,
+  getCurrentInstance,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch
+} from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import { rpc } from '../../api.js';
@@ -7,17 +14,53 @@ import { appearance } from '../../appearance.js';
 import NestedTableCell from './NestedTableCell.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
 
-const props = defineProps({ ticket: String, project: String, state: Object });
+const props = defineProps({
+  ticket: String,
+  project: String,
+  state: Object,
+  parentState: Object,
+  frameNode: Object,
+  ancestors: { type: Array, default: () => [] }
+});
 const emit = defineEmits(['close', 'edit', 'action', 'inspect', 'cell-event']);
 const host = ref(null),
   width = ref(1);
 let observer,
   generation = 0;
-const model = computed(() => props.state);
+const model = computed(
+  () => props.state || props.parentState.children[props.frameNode.key]
+);
+const component = getCurrentInstance().type;
+const records = computed(() => UI.rows(model.value));
 const scene = computed(() =>
-  UI.describe(model.value, width.value, UI.height, appearance.language)
+  UI.describe(
+    { ...model.value.scope, ...model.value },
+    width.value,
+    UI.height,
+    appearance.language
+  )
 );
 const views = computed(() => ({
+  nestedTable: {
+    component,
+    nodeProps: true,
+    props: {
+      ticket: props.ticket,
+      project: props.project,
+      parentState: model.value,
+      ancestors: [
+        ...props.ancestors,
+        UI.identity(model.value.scope, props.project)
+      ],
+      onClose: (key) => {
+        model.value.children[key].open = false;
+      },
+      onEdit: (...args) => emit('edit', ...args),
+      onAction: (...args) => emit('action', ...args),
+      onInspect: (record) => emit('inspect', record),
+      onCellEvent: (...args) => emit('cell-event', ...args)
+    }
+  },
   tableCell: {
     component: NestedTableCell,
     nodeProps: true,
@@ -29,9 +72,38 @@ const views = computed(() => ({
   }
 }));
 function forward(record, kind, cell, anchor) {
-  if (kind === 'nested-table')
-    props.state.error = 'Recursive nested tables are not available yet.';
-  else if (kind === 'nested-select')
+  if (kind === 'nested-table') {
+    const scope = cell.nestedTable;
+    if (
+      [
+        ...props.ancestors,
+        UI.identity(model.value.scope, props.project)
+      ].includes(UI.identity(scope, props.project))
+    ) {
+      model.value.error = 'This nested table would repeat an ancestor scope';
+      return;
+    }
+    model.value.children ||= {};
+    const key = record.__search_key__,
+      previous = model.value.children[key];
+    if (
+      previous &&
+      previous.column === cell.columnName &&
+      JSON.stringify(previous.scope) === JSON.stringify(scope)
+    )
+      previous.open = !previous.open;
+    else
+      model.value.children[key] = {
+        scope,
+        column: cell.columnName,
+        open: true,
+        selected: [],
+        offset: 0,
+        rows: [],
+        columns: [],
+        selection: scope.selection
+      };
+  } else if (kind === 'nested-select')
     activate({ type: 'select', key: record.__search_key__ });
   else
     emit(
@@ -41,12 +113,13 @@ function forward(record, kind, cell, anchor) {
       {
         ...cell,
         tableScope: {
-          view: props.state.scope.view || 'table',
-          searchKeys: [...(props.state.selected || [])],
+          view: model.value.scope.view || 'table',
+          projectCode: model.value.scope.projectCode || props.project,
+          searchKeys: [...(model.value.selected || [])],
           records: {
-            ...props.state.selectionRecords,
+            ...model.value.selectionRecords,
             ...Object.fromEntries(
-              (props.state.rows || []).map((row) => [
+              (model.value.rows || []).map((row) => [
                 row.key,
                 { code: row.record.code }
               ])
@@ -57,12 +130,12 @@ function forward(record, kind, cell, anchor) {
       anchor
     );
 }
-function row(_node, record) {
-  return UI.row(model.value, record, appearance.language);
+function row(list, record) {
+  return UI.row(model.value, record, appearance.language, list.width - 16);
 }
 async function load() {
   const request = ++generation,
-    state = props.state,
+    state = model.value,
     scope = state.scope;
   state.busy = true;
   state.error = '';
@@ -82,12 +155,16 @@ async function load() {
     ];
   try {
     const response = await rpc('execute_cmd', [
-      { ticket: props.ticket, project: props.project, language: 'python' },
+      {
+        ticket: props.ticket,
+        project: scope.projectCode || props.project,
+        language: 'python'
+      },
       'tactic.ui.table.NestedTableReadCmd',
       query
     ]);
     const result = response.info;
-    if (request !== generation || state !== props.state) return;
+    if (request !== generation || state !== model.value) return;
     const definition = result.definition;
     state.definition = definition;
     state.columns = definition.table.elements
@@ -122,8 +199,8 @@ async function load() {
   }
 }
 function activate(action, value) {
-  const state = props.state;
-  if (action.type === 'close') emit('close');
+  const state = model.value;
+  if (action.type === 'close') emit('close', props.frameNode?.key);
   else if (action.type === 'filter') state.filter = String(action.value ?? '');
   else if (action.type === 'clear-selection') {
     state.selected = [];
@@ -164,23 +241,23 @@ function activate(action, value) {
   }
 }
 watch(
-  () => [props.ticket, props.project, props.state],
+  () => [props.ticket, props.project, model.value],
   () => {
     ++generation;
-    if (!props.state.loaded) load();
+    if (!model.value.loaded) load();
   }
 );
-watch(() => props.state.revision, load);
+watch(() => model.value.revision, load);
 onMounted(() => {
   observer = observeFrameSizes(
     (entries) => (width.value = entries[0].contentRect.width)
   );
   observer.observe(host.value);
-  if (!props.state.loaded) load();
+  if (!model.value.loaded) load();
 });
 onBeforeUnmount(() => {
   ++generation;
-  props.state.busy = false;
+  model.value.busy = false;
   observer?.disconnect();
 });
 defineExpose({ reload: load });
@@ -197,7 +274,7 @@ defineExpose({ reload: load });
   >
     <FrameView
       :scene="scene"
-      :models="{ rows: state.rows || [] }"
+      :models="{ rows: records }"
       :views="views"
       :describe-row="row"
       @event="activate"

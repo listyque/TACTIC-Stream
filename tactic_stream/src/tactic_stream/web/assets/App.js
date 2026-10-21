@@ -1,6 +1,6 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/sections.ui.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/AppDialog.js","assets/AppDialog.css","assets/confirmation.ui.js","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/previewFiles.js","assets/SnapshotCheckout.css","assets/NamingEditor.js","assets/admin.document.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/tree.ui.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { t as __exportAll$1 } from "./rolldown-runtime.js";
-import { $ as toRaw, A as onMounted, B as useModel, C as inject, E as nextTick, F as resolveComponent, G as withCtx, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, Q as shallowRef, S as h, T as mergeProps, V as useSlots, X as ref, Y as reactive, Z as shallowReactive, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, t as Transition, tt as normalizeClass, u as Fragment, v as createSlots, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
+import { $ as shallowRef, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, S as getCurrentInstance, T as mergeModels, U as watch, V as useModel, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, t as Transition, tt as unref, u as Fragment, v as createSlots, w as inject, y as createTextVNode } from "./vue.js";
 import { $ as normalizeColumns, A as appearance, B as cssRoles, D as randomId, E as setServerDebugContext, F as readableText, G as lineHeights, H as fontLineHeight, I as saveAppearance, J as textStyles, K as metrics$12, L as blend, N as frameColors, O as asyncComponent, Q as savePreferencePage, R as controls$1, S as logRequest, T as sessionRecords, U as fontMetricHeight, V as fontFamily, W as layout$11, Y as configurationPreview, Z as preferences, _ as forgetSessions, at as _plugin_vue_export_helper_default, b as levels, c as _sfc_main$175, et as taskColumns, f as _sfc_main$176, g as exportSession, h as debugSettings, i as dockMinimumWidth, it as BusyIndicator_default, k as t, m as debugLog, o as mobile, p as clearLive, q as readableText$1, r as dockMinimumHeight, s as mobileLayout, t as __vitePreload, v as formatEvent, w as savedSessions, y as importSession } from "./index.js";
 import { $ as objectStatus, A as localDate, At as beginNotificationReply, B as activityFeed, Bt as submitNotificationReply, C as _sfc_main$193, Ct as userProfile, D as _sfc_main$184, Dt as updateDelay, E as _sfc_main$179, Et as setUpdatesAvailable, F as _sfc_main$182, Ft as failNotificationReply, G as interfaceDefinition, Gt as rect$1, Ht as label, I as _sfc_main$194, It as notificationHistory, J as messageFileRequest, Kt as revealListOffset, Lt as notify, M as parse$1, Mt as clearNotificationHistory, Nt as dismissNotification, O as _sfc_main$186, Ot as updatesAvailable, P as _sfc_main$185, Pt as editNotificationReply, Q as objectRelations, R as _sfc_main$181, Rt as resetNotifications, S as matchesUser$1, St as userAvatar, T as AppSearchField_default, Tt as workspaceLayouts, U as endActivity, Ut as muted, V as beginActivity, Vt as button, Wt as node, X as navigationLink, Y as messagesRequest, Z as objectDeletion, _ as copyText, _t as sessionAction, a as _sfc_main$189, at as resetRequestActivity, b as _sfc_main$191, bt as transactionDetails, c as _sfc_main$190, dt as searchConfiguration, et as projectCatalog, g as copyImage, gt as serverUpdates, h as xmlTokens, i as _sfc_main$177, it as requestActivity, j as monthLabel, jt as cancelNotificationReply, k as _sfc_main$180, kt as activeNotifications, m as pythonTokens, n as frameContentWidth, nt as projectNavigation, o as _sfc_main$188, ot as resultItems, p as javascriptTokens, q as linkPreviews, qt as virtualRange, r as observeFrameSizes, s as _sfc_main$187, st as rpc, t as _sfc_main$178, tt as projectCreationCatalog, ut as scriptShelf, v as readClipboardImages, w as ItemPreview_default, wt as widgetConfiguration, x as _sfc_main$183, xt as uploadFormFile, y as translate, yt as tableCells, z as _sfc_main$192, zt as setNotificationProgress } from "./CodeBlock.js";
 import { a as unsupportedField, i as fieldKind, n as _sfc_main$195, r as format$1, t as RecordForm_default } from "./RecordForm.js";
@@ -9,14 +9,14 @@ import { a as sameSearchKey, c as workspaceAddress, d as extractSkeys, f as link
 import { a as dateLabel, c as matchesSearch, d as timestampFullLabel, f as timestampLabel, n as qtLabelTextWidth, o as dayLabel, p as uniqueRecords, t as layoutTextWidth } from "./textMetrics.js";
 import { n as _sfc_main$197, r as usePagination, t as _sfc_main$196 } from "./ObjectReport.js";
 import { t as _sfc_main$198 } from "./AttachmentCard.js";
-import { c as summary$2 } from "./snapshot.ui.js";
+import { c as summary$3 } from "./snapshot.ui.js";
 import { i as sourceIcon, n as fileName, r as prettySize, t as extension } from "./file_values.js";
 import { a as sourcePath, i as repositories, n as droppedFiles, r as prepareFiles, t as descriptors } from "./files.js";
 import { t as downloadBlob } from "./files2.js";
 import { n as FilePreviewContent_default, t as FilePreview_default } from "./FilePreview.js";
 import { t as fileBlob } from "./previewFiles.js";
 import { t as _sfc_main$199 } from "./AppDialog.js";
-import { t as describe$52 } from "./confirmation.ui.js";
+import { t as describe$53 } from "./confirmation.ui.js";
 import { t as _sfc_main$200 } from "./AppMenuItem.js";
 import { n as navigationRow, t as navigate } from "./tree.ui.js";
 //#region ../src/tactic_stream/shared_ui/shell/main_toolbar.ui.mjs
@@ -26,7 +26,7 @@ var dimensions$4 = {
 	projectPreviewExtent: 28,
 	projectPreviewRadius: 6
 };
-function describe$51(model) {
+function describe$52(model) {
 	const width = Math.max(0, model.width);
 	const compact = !!model.compact;
 	const height = layout$11.appBarHeight;
@@ -109,7 +109,7 @@ function positions$1(scene) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/shell/workspace.ui.mjs
-function describe$50(width, height, compact = false) {
+function describe$51(width, height, compact = false) {
 	const toolbar = Math.min(height, layout$11.appBarHeight);
 	const rail = compact ? 0 : Math.min(width, layout$11.sectionRailWidth);
 	const body = Math.max(0, height - toolbar);
@@ -961,7 +961,7 @@ var MessageTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 }, [["__scopeId", "data-v-141aba48"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/parallel.ui.mjs
-function describe$49(cell, width, height, language, expanded = {}) {
+function describe$50(cell, width, height, language, expanded = {}) {
 	const children = [], inner = Math.max(1, width - 24), barHeight = (cell.barHeight || 1) + 1, steps = cell.steps || 6, labelHeight = 20, rowHeight = Math.max(28, steps * barHeight + labelHeight + 4);
 	let index = 0, left = 0;
 	function append(groups, parent) {
@@ -1006,7 +1006,7 @@ function describe$49(cell, width, height, language, expanded = {}) {
 				fontRole: cell.labelFormat === "small" ? "secondary" : "body",
 				tooltip: group.process
 			}));
-			children.push(node("Action", "parallelProcess_" + index, rect$1(left, top + steps * barHeight + 1, extent, 28), {
+			if (!group.children?.length) children.push(node("Action", "parallelProcess_" + index, rect$1(left, top + steps * barHeight + 1, extent, 28), {
 				text: "",
 				tooltip: translate("Open tasks", language) + " · " + group.label,
 				action: {
@@ -1037,7 +1037,7 @@ function droppedKeys(value, accepted) {
 	if (!value || value.searchType !== accepted || !Array.isArray(value.searchKeys) || value.searchKeys.length > 500 || value.searchKeys.some((key) => typeof key !== "string" || !key)) throw new Error("Dropped objects belong to another Search Type");
 	return [...new Set(value.searchKeys)];
 }
-function describe$48(cell, width, height, language, editable) {
+function describe$49(cell, width, height, language, editable) {
 	const inner = Math.max(0, width - 24), links = cell.links || [], children = [];
 	if (cell.available === false) children.push(label("dropDiagnostic", rect$1(4, 0, inner, 28), translate(cell.diagnostic, language), {
 		color: "secondaryText",
@@ -1086,7 +1086,7 @@ function describe$48(cell, width, height, language, editable) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/layout.ui.mjs
-function describe$47(cell, width, height, language, editable = true, server = "") {
+function describe$48(cell, width, height, language, editable = true, server = "") {
 	const children = [];
 	let top = 0;
 	for (const [index, item] of (cell.layoutNodes || []).entries()) {
@@ -1219,13 +1219,103 @@ function hours(cell, width, height, language) {
 	})] };
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/table/connections.ui.mjs
+function describe$47(cell, width, height, language) {
+	if (!cell.connectionRows?.length) return { nodes: [label("tableConnectionsEmpty", rect$1(8, 0, Math.max(0, width - 16), height), translate("No connections", language), { color: "secondaryText" })] };
+	return { nodes: [node("List", "tableConnections", rect$1(0, 0, width, height), {
+		source: "connectionRows",
+		keyField: "connectionKey",
+		fields: [
+			"connectionKey",
+			"expectedRevision",
+			"available",
+			"searchKey",
+			"code",
+			"name",
+			"description",
+			"keywords",
+			"retired",
+			"preview"
+		],
+		rowHeight: Math.max(64, cell.iconSize || 60) + 32,
+		scrollbarId: "tableConnectionsScrollBar",
+		label: translate("Connections", language),
+		role: "list"
+	})] };
+}
+function row$19(record, cell, width, language, editable, server) {
+	const tr = (text) => translate(text, language), iconSize = cell.iconSize || 60;
+	const title = record.available ? [record.code, record.name].filter((value, index, values) => value && values.indexOf(value) === index).join(" · ") : tr("Object is unavailable");
+	const content = [], textLeft = iconSize + 12, textWidth = Math.max(0, width - textLeft - 40);
+	if (record.available) {
+		content.push(node("Action", "tableConnectionPreviewAction", rect$1(4, 4, iconSize, iconSize), {
+			text: tr("Details"),
+			action: {
+				type: "service",
+				name: "sobject_detail",
+				targetSearchKey: record.searchKey
+			},
+			children: [node("Preview", "tableConnectionPreview", rect$1(0, 0, iconSize, iconSize), {
+				source: link$1(record.preview?.image, server) || "",
+				initials: String(record.code || "").slice(0, 2),
+				icon: "sobject",
+				round: false,
+				outlined: false
+			})]
+		}));
+		if (record.preview?.filename && link$1(record.preview.text, server)) content.push(node("Action", "tableConnectionFile", rect$1(4, Math.max(iconSize, 64) + 6, Math.max(0, width - (record.retired ? 100 : 8)), 22), {
+			text: record.preview.filename,
+			action: {
+				type: "service",
+				name: "layout-link",
+				href: link$1(record.preview.text, server)
+			},
+			children: [label("tableConnectionFilename", rect$1(0, 0, Math.max(0, width - (record.retired ? 100 : 8)), 22), record.preview.filename, {
+				color: "action",
+				fontRole: "caption",
+				toolTip: record.preview.filename
+			})]
+		}));
+		content.push(label("tableConnectionObject", rect$1(textLeft, 1, textWidth, 24), title, { toolTip: title }));
+		content.push(label("tableConnectionDescription", rect$1(textLeft, 25, textWidth, 20), record.description || "", {
+			color: "secondaryText",
+			toolTip: record.description || ""
+		}));
+		content.push(label("tableConnectionKeywords", rect$1(textLeft, 45, textWidth, 18), record.keywords || "", {
+			color: "secondaryText",
+			fontRole: "caption"
+		}));
+		if (record.retired) content.push(label("tableConnectionRetired", rect$1(Math.max(4, width - 92), Math.max(iconSize, 64) + 6, Math.min(88, width), 22), tr("Retired"), {
+			color: "secondaryText",
+			fontRole: "caption"
+		}));
+	} else content.push(label("tableConnectionMissing", rect$1(8, 4, Math.max(0, width - 52), Math.max(64, iconSize)), title, {
+		color: "secondaryText",
+		wrap: true
+	}));
+	content.push(button("tableConnectionRemove", rect$1(Math.max(0, width - 36), Math.max(0, (iconSize - 24) / 2), 32, 32), tr("Remove connection"), "delete", {
+		type: "service",
+		name: "remove-connection",
+		connectionKey: record.connectionKey,
+		expectedRevision: record.expectedRevision,
+		parentKey: cell.targetSearchKey,
+		direction: cell.direction || "dst"
+	}, editable, {
+		iconOnly: true,
+		destructive: true
+	}));
+	return { nodes: content };
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/services.ui.mjs
 function describe$46(cell, width, height, language, editable = true, expanded = {}, server = "") {
+	if (cell.summary) return summary$2(cell, width, height, language);
+	if (cell.connectionRows) return describe$47(cell, width, height, language);
 	if (cell.timeline) return timeline(cell, width, height, language);
 	if (cell.timeDays) return hours(cell, width, height, language);
-	if (cell.layoutNodes) return describe$47(cell, width, height, language, editable, server);
-	if (cell.groups && cell.steps) return describe$49(cell, width, height, language, expanded);
-	if (cell.links) return describe$48(cell, width, height, language, editable);
+	if (cell.layoutNodes) return describe$48(cell, width, height, language, editable, server);
+	if (cell.groups && cell.steps) return describe$50(cell, width, height, language, expanded);
+	if (cell.links) return describe$49(cell, width, height, language, editable);
 	if (cell.label && !cell.text) cell = Object.assign({}, cell, { text: translate(cell.label, language) });
 	const actions = cell.actions || [];
 	const size = 28, gap = 4;
@@ -1254,6 +1344,31 @@ function describe$46(cell, width, height, language, editable = true, expanded = 
 		contentHeight: Math.max(size, contentHeight),
 		scrollbarId: "tableServiceScrollBar",
 		children
+	})] };
+}
+function summary$2(cell, width, height, language) {
+	const nodes = [];
+	cell.summary.forEach((entry, index) => {
+		const top = index * 28;
+		const text = translate(entry.label, language) + ": " + entry.value;
+		const contents = [node("Icon", "tableSummaryIcon_" + index, rect$1(8, 4, 20, 20), {
+			icon: entry.icon,
+			color: "secondaryText"
+		}), label("tableSummaryText_" + index, rect$1(36, 0, Math.max(0, width - 60), 28), text)];
+		nodes.push(node(entry.nestedTable ? "Action" : "Box", "tableSummary_" + index, rect$1(0, top, Math.max(0, width - 16), 28), {
+			text,
+			children: contents,
+			action: entry.nestedTable ? {
+				type: "service",
+				name: "nested-table",
+				nestedTable: entry.nestedTable
+			} : null
+		}));
+	});
+	return { nodes: [node("Scroll", "tableSummary", rect$1(0, 0, width, height), {
+		children: nodes,
+		contentHeight: cell.summary.length * 28,
+		scrollbarId: "tableSummaryScrollBar"
 	})] };
 }
 //#endregion
@@ -1285,6 +1400,9 @@ var _sfc_main$164 = {
 				const emit = __emit;
 				const host = ref(null), width = ref(160), expanded = ref({});
 				let observer;
+				function connectionRow(_node, record) {
+					return row$19(record, props.cell, Math.max(0, _node.width - 16), appearance.language, props.editable, location.origin);
+				}
 				const scene = computed(() => describe$46(props.cell || {}, width.value, props.height, appearance.language, props.editable, {
 					...expanded.value,
 					__nested: props.nestedState
@@ -1311,6 +1429,9 @@ var _sfc_main$164 = {
 							actionView: action.view,
 							actionProcess: action.process,
 							targetSearchKey: action.targetSearchKey || props.cell.targetSearchKey,
+							connectionKey: action.connectionKey,
+							expectedRevision: action.expectedRevision || props.cell.expectedRevision,
+							direction: action.direction || props.cell.direction,
 							dropKeys: action.name === "drop-links" ? droppedKeys(value, props.cell.acceptedType) : [],
 							actionTaskKey: action.taskKey,
 							actionDay: action.day,
@@ -1327,12 +1448,18 @@ var _sfc_main$164 = {
 						class: "table-service-cell"
 					}, [createVNode(_sfc_main$177, {
 						scene: scene.value,
+						models: { connectionRows: __props.cell?.connectionRows || [] },
+						"describe-row": connectionRow,
 						style: normalizeStyle({ height: __props.height + "px" }),
 						onEvent: activate
-					}, null, 8, ["scene", "style"])], 512);
+					}, null, 8, [
+						"scene",
+						"models",
+						"style"
+					])], 512);
 				};
 			}
-		}, [["__scopeId", "data-v-3b2fc318"]])
+		}, [["__scopeId", "data-v-d449a94e"]])
 	},
 	props: {
 		element: Object,
@@ -2013,6 +2140,15 @@ function headerAction(column) {
 	};
 	return null;
 }
+function serviceHeight(columns) {
+	return columns.reduce((height, column) => {
+		const className = column.resolvedClass || column.display?.handler || "";
+		if (className.split(".").pop() === "SObjectSummaryElementWdg") return Math.max(height, 118);
+		if (className.split(".").pop() !== "SObjectConnectionElement") return height;
+		const options = column.displayOptions || column.display?.options || {};
+		return Math.max(height, Math.max(64, Number(options.icon_size) || 60) + 32);
+	}, 0);
+}
 function describe$45(model, width) {
 	const available = Math.max(0, width - metrics$10.selection - metrics$10.actions);
 	const columns = visibleColumns(model.columns || [], available, model.overrides);
@@ -2035,7 +2171,7 @@ function describe$45(model, width) {
 		cells,
 		fitted,
 		width: Math.max(width, left + metrics$10.actions),
-		rowHeight: model.automaticRowHeight ? Math.max(model.rowHeight || 58, widthForKind(columns, "thumbnail", model.overrides, fitted)) : model.rowHeight || 58
+		rowHeight: model.automaticRowHeight ? Math.max(model.rowHeight || 58, serviceHeight(columns), widthForKind(columns, "thumbnail", model.overrides, fitted)) : model.rowHeight || 58
 	};
 }
 function boundedWidth(width) {
@@ -2850,7 +2986,7 @@ var TableDocument_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			height: 1
 		});
 		let observer;
-		const scene = computed(() => props.model?.layoutNodes ? describe$47(props.model, size.value.width, size.value.height, appearance.language, true, location.origin) : describe$44(props.model || {}, size.value.width, size.value.height, appearance.language, selected.value));
+		const scene = computed(() => props.model?.layoutNodes ? describe$48(props.model, size.value.width, size.value.height, appearance.language, true, location.origin) : describe$44(props.model || {}, size.value.width, size.value.height, appearance.language, selected.value));
 		onMounted(() => {
 			observer = observeFrameSizes((entries) => {
 				size.value = {
@@ -2909,7 +3045,7 @@ var TableServiceDialogs_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			height: 180
 		});
 		let resolve, observer;
-		const scene = computed(() => describe$52(model.value, size.value.width, size.value.height, appearance.language));
+		const scene = computed(() => describe$53(model.value, size.value.width, size.value.height, appearance.language));
 		function finish(accepted = false) {
 			const pending = resolve;
 			resolve = null;
@@ -2993,6 +3129,7 @@ var NestedTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				editable: true,
 				inspectable: true,
 				selected: __props.frameNode.selected,
+				"nested-state": __props.frameNode.nestedState,
 				onInspect: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("inspect", __props.frameNode.record)),
 				onSelect: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("action", __props.frameNode.record, "nested-select", {}, null)),
 				onPreview: _cache[2] || (_cache[2] = (...args) => _ctx.$emit("cell-event", "preview", __props.frameNode.record, args)),
@@ -3005,13 +3142,29 @@ var NestedTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				"record",
 				"cell",
 				"height",
-				"selected"
+				"selected",
+				"nested-state"
 			])], 2);
 		};
 	}
-}, [["__scopeId", "data-v-37de24f5"]]);
+}, [["__scopeId", "data-v-af196405"]]);
+function identity(scope = {}, project = "") {
+	return JSON.stringify([
+		scope.projectCode || project,
+		scope.searchType,
+		scope.view || "table",
+		scope.parentKey,
+		scope.expression || ""
+	]);
+}
+function rows(model) {
+	return (model.rows || []).map((record) => Object.assign({}, record, {
+		detailOpen: !!model.children?.[record.key]?.open,
+		extent: 68 + (model.children?.[record.key]?.open ? 320 : 0)
+	}));
+}
 function columns$1(model) {
-	let left = metrics$10.selection;
+	let left = model.selection === false ? 0 : metrics$10.selection;
 	return (model.columns || []).map((column, index) => {
 		const width = Math.max(48, Math.min(640, Number(column.width) || 160));
 		const result = Object.assign({}, column, {
@@ -3026,7 +3179,7 @@ function columns$1(model) {
 function describe$43(model, width, extent, language) {
 	const t = (value) => translate(value, language);
 	const fields = columns$1(model);
-	const contentWidth = Math.max(width - 16, metrics$10.selection + fields.reduce((sum, field) => sum + field.width, 0) + 40);
+	const contentWidth = Math.max(width - 16, (model.selection === false ? 0 : metrics$10.selection) + fields.reduce((sum, field) => sum + field.width, 0) + 40);
 	const nodes = [
 		node("Field", "nestedFilter", rect$1(0, 0, Math.max(0, width - 120), 36), {
 			text: model.filter || "",
@@ -3048,10 +3201,15 @@ function describe$43(model, width, extent, language) {
 		}, !model.busy && !!model.hasNext, { iconOnly: true })
 	];
 	const children = [node("Box", "nestedHeaderSurface", rect$1(0, 0, contentWidth, metrics$10.header), { background: paint.header })];
-	for (const field of fields) children.push(field.sortable ? button("nestedHeader_" + field.name, rect$1(field.x, 0, field.width, metrics$10.header), field.title || field.name, "", {
-		type: "sort",
-		value: field.name
-	}, !model.busy, { iconAction: true }) : label("nestedHeader_" + field.name, rect$1(field.x + 10, 0, field.width - 20, metrics$10.header), field.title || field.name, { color: paint.headerText }));
+	for (const field of fields) children.push(field.sortable ? node("Action", "nestedHeader_" + field.name, rect$1(field.x, 0, field.width, metrics$10.header), {
+		text: field.title || field.name,
+		action: {
+			type: "sort",
+			value: field.name
+		},
+		enabled: !model.busy,
+		children: [label("nestedHeaderText_" + field.name, rect$1(10, 0, field.width - 20, metrics$10.header), field.title || field.name, { color: paint.headerText })]
+	}) : label("nestedHeader_" + field.name, rect$1(field.x + 10, 0, field.width - 20, metrics$10.header), field.title || field.name, { color: paint.headerText }));
 	children.push(node("List", "nestedRows", rect$1(0, metrics$10.header + 3, contentWidth, Math.max(0, extent - metrics$10.header - 86)), {
 		source: "rows",
 		keyField: "key",
@@ -3059,9 +3217,13 @@ function describe$43(model, width, extent, language) {
 			"key",
 			"nodeId",
 			"record",
-			"cells"
+			"cells",
+			"detailOpen",
+			"extent"
 		],
 		rowHeight: 68,
+		rowHeightField: "extent",
+		rowGap: 0,
 		label: t("Table View"),
 		role: "list"
 	}));
@@ -3071,14 +3233,25 @@ function describe$43(model, width, extent, language) {
 		scrollbarId: "nestedHorizontalBar",
 		children
 	}));
-	return { nodes };
+	return { nodes: nodes.filter((item) => {
+		if ([
+			"nestedFilter",
+			"nestedReload",
+			"nestedCreate"
+		].includes(item.id) && model.shelf === false) return false;
+		if (item.id === "nestedFilter" && model.search === false) return false;
+		if (item.id === "nestedCreate" && model.insert === false) return false;
+		if (item.id === "nestedClearSelection" && model.selection === false) return false;
+		if (["nestedPrevious", "nestedNext"].includes(item.id) && model.searchLimit === false) return false;
+		return true;
+	}) };
 }
-function row$17(model, record, language) {
+function row$17(model, record, language, viewportWidth = 0) {
 	const fields = columns$1(model), nodes = [];
-	const width = metrics$10.selection + fields.reduce((sum, field) => sum + field.width, 0) + 40;
+	const width = Math.max(viewportWidth, (model.selection === false ? 0 : metrics$10.selection) + fields.reduce((sum, field) => sum + field.width, 0) + 40);
 	const selected = (model.selected || []).includes(record.key);
 	nodes.push(node("Box", "nestedRowSurface", rect$1(0, 0, width, 67), { background: selected ? paint.selected : paint.row }));
-	if (model.selection !== false) nodes.push(node("CheckBox", "nestedSelect", rect$1(6, 14, 28, 28), {
+	if (model.selection !== false) nodes.push(node("CheckBox", "nestedSelect", rect$1(6, 20, 28, 28), {
 		checked: selected,
 		label: translate("Select row", language),
 		action: {
@@ -3094,14 +3267,20 @@ function row$17(model, record, language) {
 		cell: record.cells[field.name] || { text: "" },
 		key: record.key,
 		nodeId: record.nodeId,
+		nestedState: model.children?.[record.key],
 		selected
 	}));
-	nodes.push(button("nestedEdit", rect$1(width - 36, 16, 28, 28), translate("Edit", language), "edit", {
+	nodes.push(button("nestedEdit", rect$1(width - 36, 20, 28, 28), translate("Edit", language), "edit", {
 		type: "edit",
 		key: record.key
 	}, true, {
 		iconOnly: true,
 		iconAction: true
+	}));
+	if (record.detailOpen) nodes.push(node("View", "nestedDetail", rect$1(0, 68, width, 320), {
+		view: "nestedTable",
+		key: record.key,
+		nodeId: record.nodeId
 	}));
 	return { nodes };
 }
@@ -3110,7 +3289,13 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	props: {
 		ticket: String,
 		project: String,
-		state: Object
+		state: Object,
+		parentState: Object,
+		frameNode: Object,
+		ancestors: {
+			type: Array,
+			default: () => []
+		}
 	},
 	emits: [
 		"close",
@@ -3124,40 +3309,83 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		const emit = __emit;
 		const host = ref(null), width = ref(1);
 		let observer, generation = 0;
-		const model = computed(() => props.state);
-		const scene = computed(() => describe$43(model.value, width.value, 320, appearance.language));
-		const views = computed(() => ({ tableCell: {
-			component: NestedTableCell_default,
-			nodeProps: true,
-			props: {
-				onAction: forward,
-				onInspect: (record) => emit("inspect", record),
-				onCellEvent: (...args) => emit("cell-event", ...args)
+		const model = computed(() => props.state || props.parentState.children[props.frameNode.key]);
+		const component = getCurrentInstance().type;
+		const records = computed(() => rows(model.value));
+		const scene = computed(() => describe$43({
+			...model.value.scope,
+			...model.value
+		}, width.value, 320, appearance.language));
+		const views = computed(() => ({
+			nestedTable: {
+				component,
+				nodeProps: true,
+				props: {
+					ticket: props.ticket,
+					project: props.project,
+					parentState: model.value,
+					ancestors: [...props.ancestors, identity(model.value.scope, props.project)],
+					onClose: (key) => {
+						model.value.children[key].open = false;
+					},
+					onEdit: (...args) => emit("edit", ...args),
+					onAction: (...args) => emit("action", ...args),
+					onInspect: (record) => emit("inspect", record),
+					onCellEvent: (...args) => emit("cell-event", ...args)
+				}
+			},
+			tableCell: {
+				component: NestedTableCell_default,
+				nodeProps: true,
+				props: {
+					onAction: forward,
+					onInspect: (record) => emit("inspect", record),
+					onCellEvent: (...args) => emit("cell-event", ...args)
+				}
 			}
-		} }));
+		}));
 		function forward(record, kind, cell, anchor) {
-			if (kind === "nested-table") props.state.error = "Recursive nested tables are not available yet.";
-			else if (kind === "nested-select") activate({
+			if (kind === "nested-table") {
+				const scope = cell.nestedTable;
+				if ([...props.ancestors, identity(model.value.scope, props.project)].includes(identity(scope, props.project))) {
+					model.value.error = "This nested table would repeat an ancestor scope";
+					return;
+				}
+				model.value.children ||= {};
+				const key = record.__search_key__, previous = model.value.children[key];
+				if (previous && previous.column === cell.columnName && JSON.stringify(previous.scope) === JSON.stringify(scope)) previous.open = !previous.open;
+				else model.value.children[key] = {
+					scope,
+					column: cell.columnName,
+					open: true,
+					selected: [],
+					offset: 0,
+					rows: [],
+					columns: [],
+					selection: scope.selection
+				};
+			} else if (kind === "nested-select") activate({
 				type: "select",
 				key: record.__search_key__
 			});
 			else emit("action", record, kind, {
 				...cell,
 				tableScope: {
-					view: props.state.scope.view || "table",
-					searchKeys: [...props.state.selected || []],
+					view: model.value.scope.view || "table",
+					projectCode: model.value.scope.projectCode || props.project,
+					searchKeys: [...model.value.selected || []],
 					records: {
-						...props.state.selectionRecords,
-						...Object.fromEntries((props.state.rows || []).map((row) => [row.key, { code: row.record.code }]))
+						...model.value.selectionRecords,
+						...Object.fromEntries((model.value.rows || []).map((row) => [row.key, { code: row.record.code }]))
 					}
 				}
 			}, anchor);
 		}
-		function row(_node, record) {
-			return row$17(model.value, record, appearance.language);
+		function row(list, record) {
+			return row$17(model.value, record, appearance.language, list.width - 16);
 		}
 		async function load() {
-			const request = ++generation, state = props.state, scope = state.scope;
+			const request = ++generation, state = model.value, scope = state.scope;
 			state.busy = true;
 			state.error = "";
 			const query = {
@@ -3179,13 +3407,13 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				const result = (await rpc("execute_cmd", [
 					{
 						ticket: props.ticket,
-						project: props.project,
+						project: scope.projectCode || props.project,
 						language: "python"
 					},
 					"tactic.ui.table.NestedTableReadCmd",
 					query
 				])).info;
-				if (request !== generation || state !== props.state) return;
+				if (request !== generation || state !== model.value) return;
 				const definition = result.definition;
 				state.definition = definition;
 				state.columns = definition.table.elements.filter((element) => !element.hidden).map((element) => ({
@@ -3216,8 +3444,8 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}
 		}
 		function activate(action, value) {
-			const state = props.state;
-			if (action.type === "close") emit("close");
+			const state = model.value;
+			if (action.type === "close") emit("close", props.frameNode?.key);
 			else if (action.type === "filter") state.filter = String(action.value ?? "");
 			else if (action.type === "clear-selection") {
 				state.selected = [];
@@ -3246,20 +3474,20 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		watch(() => [
 			props.ticket,
 			props.project,
-			props.state
+			model.value
 		], () => {
 			++generation;
-			if (!props.state.loaded) load();
+			if (!model.value.loaded) load();
 		});
-		watch(() => props.state.revision, load);
+		watch(() => model.value.revision, load);
 		onMounted(() => {
 			observer = observeFrameSizes((entries) => width.value = entries[0].contentRect.width);
 			observer.observe(host.value);
-			if (!props.state.loaded) load();
+			if (!model.value.loaded) load();
 		});
 		onBeforeUnmount(() => {
 			++generation;
-			props.state.busy = false;
+			model.value.busy = false;
 			observer?.disconnect();
 		});
 		__expose({ reload: load });
@@ -3274,7 +3502,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				onContextmenu: _cache[2] || (_cache[2] = withModifiers(() => {}, ["stop"]))
 			}, [createVNode(_sfc_main$177, {
 				scene: scene.value,
-				models: { rows: __props.state.rows || [] },
+				models: { rows: records.value },
 				views: views.value,
 				"describe-row": row,
 				onEvent: activate
@@ -3285,10 +3513,10 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 36);
 		};
 	}
-}, [["__scopeId", "data-v-9590f25f"]]);
+}, [["__scopeId", "data-v-1ec2cbe5"]]);
 //#endregion
 //#region src/features/administration/columnsEditor.js
-var displayWidgets = (/* @__PURE__ */ JSON.parse("[{\"value\":\"\",\"label\":\"Automatic\",\"class\":\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"aliases\":[\"TextWdg\",\"\",\"pyasm.widget.TextWdg\",\"tactic.ui.common.SimpleTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"SimpleTableElementWdg\",\"pyasm.widget.SimpleTableElementWdg\",\"pyasm.widget.table_element_wdg.SimpleTableElementWdg\",\"pyasm.widget.input_wdg.TextWdg\"],\"adapter\":\"value\"},{\"value\":\"format\",\"label\":\"Format\",\"class\":\"tactic.ui.table.format_element_wdg.FormatElementWdg\",\"aliases\":[\"tactic.ui.table.FormatElementWdg\",\"tactic.ui.table.format_element_wdg.FormatElementWdg\"],\"adapter\":\"formatted\"},{\"value\":\"expression\",\"label\":\"Expression\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"link\",\"label\":\"Link\",\"class\":\"tactic.ui.table.link_element_wdg.LinkElementWdg\",\"aliases\":[\"tactic.ui.table.LinkElementWdg\",\"tactic.ui.table.link_element_wdg.LinkElementWdg\"],\"adapter\":\"link\"},{\"value\":\"pyasm.widget.ThumbWdg\",\"label\":\"Thumbnail\",\"class\":\"pyasm.widget.file_wdg.ThumbWdg\",\"aliases\":[\"ThumbWdg\",\"pyasm.widget.ThumbWdg\",\"pyasm.widget.file_wdg.ThumbWdg\"],\"adapter\":\"preview\"},{\"value\":\"tactic.ui.widget.DiscussionElementWdg\",\"label\":\"Notes\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionElementWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\"],\"adapter\":\"notes\"},{\"value\":\"tactic.ui.table.SObjectDetailElementWdg\",\"label\":\"SObject details\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectDetailElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\"],\"adapter\":\"details\"},{\"value\":\"tactic.ui.table.CheckinButtonElementWdg\",\"label\":\"Check-in\",\"class\":\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\",\"aliases\":[\"tactic.ui.table.CheckinButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\"],\"adapter\":\"checkin\"},{\"value\":\"tactic.ui.table.TaskElementWdg\",\"label\":\"Tasks\",\"class\":\"tactic.ui.table.task_element_wdg.TaskElementWdg\",\"aliases\":[\"tactic.ui.table.TaskElementWdg\",\"tactic.ui.table.task_element_wdg.TaskElementWdg\"],\"adapter\":\"tasks\"},{\"value\":\"tactic.ui.table.TaskCompletionWdg\",\"label\":\"Task completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.ExploreElementWdg\",\"label\":\"Explorer\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\",\"aliases\":[\"tactic.ui.table.ExploreElementWdg\",\"tactic.ui.table.ExplorerElementWdg\",\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.SObjectFilesElementWdg\",\"label\":\"Files\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectFilesElementWdg\",\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\"],\"adapter\":\"files\"},{\"value\":\"tactic.ui.table.MetadataElementWdg\",\"label\":\"Metadata\",\"class\":\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\",\"aliases\":[\"tactic.ui.table.MetadataElementWdg\",\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\"],\"adapter\":\"metadata\"},{\"value\":\"tactic.ui.table.DeleteElementWdg\",\"label\":\"Delete\",\"class\":\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\",\"aliases\":[\"tactic.ui.table.DeleteElementWdg\",\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\"],\"adapter\":\"delete\"},{\"value\":\"ArrayTableElementWdg\",\"label\":\"Array\",\"class\":\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\",\"aliases\":[\"ArrayTableElementWdg\",\"pyasm.widget.ArrayTableElementWdg\",\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"XmlWdg\",\"label\":\"XML\",\"class\":\"pyasm.widget.table_element_wdg.XmlWdg\",\"aliases\":[\"XmlWdg\",\"pyasm.widget.XmlWdg\",\"pyasm.widget.table_element_wdg.XmlWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.JsonElementWdg\",\"label\":\"JSON\",\"class\":\"tactic.ui.table.json_element_wdg.JsonElementWdg\",\"aliases\":[\"tactic.ui.table.JsonElementWdg\",\"tactic.ui.table.json_element_wdg.JsonElementWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.SnapshotVersionElementWdg\",\"label\":\"Snapshot version\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotVersionElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SnapshotLockedElementWdg\",\"label\":\"Snapshot lock\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotLockedElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\"],\"adapter\":\"lock\"},{\"value\":\"tactic.ui.table.SnapshotFileElementWdg\",\"label\":\"Snapshot file\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotFileElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\"],\"adapter\":\"link\"},{\"value\":\"tactic.ui.table.MilestoneCompletionWdg\",\"label\":\"Milestone completion\",\"class\":\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\",\"aliases\":[\"tactic.ui.table.MilestoneCompletionWdg\",\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.TaskGroupCompletionWdg\",\"label\":\"Task group completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskGroupCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\"],\"adapter\":\"groupCompletion\"},{\"value\":\"tactic.ui.table.TaskDaysDueElementWdg\",\"label\":\"Days until due\",\"class\":\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\",\"aliases\":[\"tactic.ui.table.TaskDaysDueElementWdg\",\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SubContextElementWdg\",\"label\":\"Subcontext\",\"class\":\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\",\"aliases\":[\"tactic.ui.table.SubContextElementWdg\",\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.TaskSummaryElementWdg\",\"label\":\"Task summary\",\"class\":\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\",\"aliases\":[\"TaskSummaryElementWdg\",\"tactic.ui.table.TaskSummaryElementWdg\",\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\"],\"adapter\":\"taskSummary\"},{\"value\":\"pyasm.widget.CheckboxColWdg\",\"label\":\"Row selection\",\"class\":\"pyasm.widget.table_element_wdg.CheckboxColWdg\",\"aliases\":[\"CheckboxColWdg\",\"pyasm.widget.CheckboxColWdg\",\"pyasm.widget.table_element_wdg.CheckboxColWdg\"],\"adapter\":\"selection\"},{\"value\":\"pyasm.widget.SearchTypeElementWdg\",\"label\":\"Search Type title\",\"class\":\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\",\"aliases\":[\"SearchTypeElementWdg\",\"pyasm.widget.SearchTypeElementWdg\",\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\"],\"adapter\":\"value\"},{\"value\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"label\":\"Legacy task completion (integer)\",\"class\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"pyasm.widget.TaskCompletionWdg\",\"TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"label\":\"Table availability\",\"class\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"aliases\":[\"tactic.ui.app.SearchTypeHasTableElementWdg\",\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\"],\"adapter\":\"flag\"},{\"value\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"label\":\"Raw value\",\"class\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"aliases\":[\"tactic.ui.common.RawTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\"],\"adapter\":\"raw\"},{\"value\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"label\":\"Folder\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"aliases\":[\"tactic.ui.table.ExplorerTableElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"label\":\"Expression value\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionValueElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"label\":\"Preference description\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"aliases\":[\"tactic.ui.table.PreferenceDescriptionWdg\",\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"label\":\"Project database\",\"class\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"aliases\":[\"tactic.ui.table.ProjectWdg\",\"tactic.ui.table.project_wdg.ProjectWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"label\":\"Related value\",\"class\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"aliases\":[\"tactic.ui.table.RelatedElementWdg\",\"tactic.ui.table.related_element_wdg.RelatedElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"label\":\"Notification recipients\",\"class\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"aliases\":[\"tactic.ui.table.RecipientElementWdg\",\"tactic.ui.table.table_element_wdg.RecipientElementWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Discussion\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Legacy discussion\",\"class\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"DiscussionWdg\",\"pyasm.widget.DiscussionWdg\",\"pyasm.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"label\":\"Object tasks\",\"class\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"aliases\":[\"SObjectTaskTableElement\",\"pyasm.widget.SObjectTaskTableElement\",\"pyasm.widget.task_wdg.SObjectTaskTableElement\"],\"adapter\":\"tasks\"},{\"value\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"label\":\"Task context\",\"class\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"aliases\":[\"TaskParentSpacingTableElement\",\"pyasm.widget.TaskParentSpacingTableElement\",\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"label\":\"Formatted message\",\"class\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"aliases\":[\"tactic.ui.app.MessageTableElementWdg\",\"tactic.ui.app.message_wdg.MessageTableElementWdg\"],\"adapter\":\"message\"},{\"value\":\"pyasm.widget.MyTacticSummaryWdg\",\"label\":\"My TACTIC summary\",\"class\":\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\",\"aliases\":[\"MyTacticSummaryWdg\",\"pyasm.widget.MyTacticSummaryWdg\",\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\"],\"adapter\":\"fields\"},{\"value\":\"pyasm.widget.UpdateWdg\",\"label\":\"Object actions\",\"class\":\"pyasm.widget.table_element_wdg.UpdateWdg\",\"aliases\":[\"UpdateWdg\",\"pyasm.widget.UpdateWdg\",\"pyasm.widget.table_element_wdg.UpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.input.LoginTableElementWdg\",\"label\":\"Login\",\"class\":\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\",\"aliases\":[\"tactic.ui.input.LoginTableElementWdg\",\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.panel.SecurityManagerButtonWdg\",\"label\":\"Global Permissions\",\"class\":\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\",\"aliases\":[\"tactic.ui.panel.SecurityManagerButtonWdg\",\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.PreferenceEditWdg\",\"label\":\"User preference\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceEditWdg\",\"aliases\":[\"tactic.ui.table.PreferenceEditWdg\",\"tactic.ui.table.preference_wdg.PreferenceEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"label\":\"Update Template\",\"class\":\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\",\"aliases\":[\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.NotificationTriggerElementWdg\",\"label\":\"Email Test\",\"class\":\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\",\"aliases\":[\"tactic.ui.table.NotificationTriggerElementWdg\",\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ButtonElementWdg\",\"label\":\"Configured button\",\"class\":\"tactic.ui.table.button_wdg.ButtonElementWdg\",\"aliases\":[\"tactic.ui.table.ButtonElementWdg\",\"tactic.ui.table.button_wdg.ButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusWdg\",\"label\":\"Parallel task status\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusWdg\",\"aliases\":[\"ParallelStatusWdg\",\"pyasm.widget.ParallelStatusWdg\",\"pyasm.widget.parallel_status.ParallelStatusWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusEditWdg\",\"label\":\"Add Task\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusEditWdg\",\"aliases\":[\"ParallelStatusEditWdg\",\"pyasm.widget.ParallelStatusEditWdg\",\"pyasm.widget.parallel_status.ParallelStatusEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"label\":\"Open tasks\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProcessElementWdg\",\"label\":\"Process\",\"class\":\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\",\"aliases\":[\"tactic.ui.table.ProcessElementWdg\",\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.widget.TaskStatusElementWdg\",\"label\":\"Task status\",\"class\":\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\",\"aliases\":[\"tactic.ui.widget.TaskStatusElementWdg\",\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.WorkElementWdg\",\"label\":\"Work on Task\",\"class\":\"tactic.ui.table.task_element_wdg.WorkElementWdg\",\"aliases\":[\"tactic.ui.table.WorkElementWdg\",\"tactic.ui.table.task_element_wdg.WorkElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.DropElementWdg\",\"label\":\"Instance links\",\"class\":\"tactic.ui.table.drop_element_wdg.DropElementWdg\",\"aliases\":[\"tactic.ui.table.DropElementWdg\",\"tactic.ui.table.drop_element_wdg.DropElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CustomLayoutElementWdg\",\"label\":\"Custom Layout\",\"class\":\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\",\"aliases\":[\"tactic.ui.table.CustomLayoutElementWdg\",\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"label\":\"Show related table\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"tactic.ui.table.HiddenRowElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"label\":\"Related tasks\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"tactic.ui.table.RowAddElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"HiddenRowToggleWdg\",\"label\":\"Show related table\",\"class\":\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"aliases\":[\"HiddenRowToggleWdg\",\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"pyasm.widget.HiddenRowToggleWdg\"],\"adapter\":\"commands\"},{\"value\":\"AuxDataWdg\",\"label\":\"Auxiliary data\",\"class\":\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"aliases\":[\"AuxDataWdg\",\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"pyasm.widget.AuxDataWdg\"],\"adapter\":\"value\"},{\"value\":\"GanttWdg\",\"label\":\"Gantt\",\"class\":\"pyasm.widget.gantt_wdg.GanttWdg\",\"aliases\":[\"GanttWdg\",\"pyasm.widget.gantt_wdg.GanttWdg\",\"pyasm.widget.GanttWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"label\":\"Gantt\",\"class\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"aliases\":[\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"tactic.ui.table.GanttElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"TimecardInfoTableElement\",\"label\":\"Timecard\",\"class\":\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"aliases\":[\"TimecardInfoTableElement\",\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"pyasm.widget.TimecardInfoTableElement\"],\"adapter\":\"commands\"},{\"value\":\"WeekTableElement\",\"label\":\"Week\",\"class\":\"pyasm.widget.timecard_wdg.WeekTableElement\",\"aliases\":[\"WeekTableElement\",\"pyasm.widget.timecard_wdg.WeekTableElement\",\"pyasm.widget.WeekTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"label\":\"Work Hours\",\"class\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"aliases\":[\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"tactic.ui.table.WorkHoursElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"FileAppendLinkTableElement\",\"label\":\"Attach files\",\"class\":\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"aliases\":[\"FileAppendLinkTableElement\",\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"pyasm.widget.FileAppendLinkTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CheckoutButtonElementWdg\",\"label\":\"Check out\",\"class\":\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\",\"aliases\":[\"CheckoutButtonElementWdg\",\"tactic.ui.table.CheckoutButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\"],\"adapter\":\"commands\"}]")).map(({ value, label }) => ({
+var displayWidgets = (/* @__PURE__ */ JSON.parse("[{\"value\":\"\",\"label\":\"Automatic\",\"class\":\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"aliases\":[\"TextWdg\",\"\",\"pyasm.widget.TextWdg\",\"tactic.ui.common.SimpleTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"SimpleTableElementWdg\",\"pyasm.widget.SimpleTableElementWdg\",\"pyasm.widget.table_element_wdg.SimpleTableElementWdg\",\"pyasm.widget.input_wdg.TextWdg\"],\"adapter\":\"value\"},{\"value\":\"format\",\"label\":\"Format\",\"class\":\"tactic.ui.table.format_element_wdg.FormatElementWdg\",\"aliases\":[\"tactic.ui.table.FormatElementWdg\",\"tactic.ui.table.format_element_wdg.FormatElementWdg\"],\"adapter\":\"formatted\"},{\"value\":\"expression\",\"label\":\"Expression\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"link\",\"label\":\"Link\",\"class\":\"tactic.ui.table.link_element_wdg.LinkElementWdg\",\"aliases\":[\"tactic.ui.table.LinkElementWdg\",\"tactic.ui.table.link_element_wdg.LinkElementWdg\"],\"adapter\":\"link\"},{\"value\":\"pyasm.widget.ThumbWdg\",\"label\":\"Thumbnail\",\"class\":\"pyasm.widget.file_wdg.ThumbWdg\",\"aliases\":[\"ThumbWdg\",\"pyasm.widget.ThumbWdg\",\"pyasm.widget.file_wdg.ThumbWdg\"],\"adapter\":\"preview\"},{\"value\":\"tactic.ui.widget.DiscussionElementWdg\",\"label\":\"Notes\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionElementWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\"],\"adapter\":\"notes\"},{\"value\":\"tactic.ui.table.SObjectDetailElementWdg\",\"label\":\"SObject details\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectDetailElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\"],\"adapter\":\"details\"},{\"value\":\"tactic.ui.table.CheckinButtonElementWdg\",\"label\":\"Check-in\",\"class\":\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\",\"aliases\":[\"tactic.ui.table.CheckinButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\"],\"adapter\":\"checkin\"},{\"value\":\"tactic.ui.table.TaskElementWdg\",\"label\":\"Tasks\",\"class\":\"tactic.ui.table.task_element_wdg.TaskElementWdg\",\"aliases\":[\"tactic.ui.table.TaskElementWdg\",\"tactic.ui.table.task_element_wdg.TaskElementWdg\"],\"adapter\":\"tasks\"},{\"value\":\"tactic.ui.table.TaskCompletionWdg\",\"label\":\"Task completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.ExploreElementWdg\",\"label\":\"Explorer\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\",\"aliases\":[\"tactic.ui.table.ExploreElementWdg\",\"tactic.ui.table.ExplorerElementWdg\",\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.SObjectFilesElementWdg\",\"label\":\"Files\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectFilesElementWdg\",\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\"],\"adapter\":\"files\"},{\"value\":\"tactic.ui.table.MetadataElementWdg\",\"label\":\"Metadata\",\"class\":\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\",\"aliases\":[\"tactic.ui.table.MetadataElementWdg\",\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\"],\"adapter\":\"metadata\"},{\"value\":\"tactic.ui.table.DeleteElementWdg\",\"label\":\"Delete\",\"class\":\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\",\"aliases\":[\"tactic.ui.table.DeleteElementWdg\",\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\"],\"adapter\":\"delete\"},{\"value\":\"ArrayTableElementWdg\",\"label\":\"Array\",\"class\":\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\",\"aliases\":[\"ArrayTableElementWdg\",\"pyasm.widget.ArrayTableElementWdg\",\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"XmlWdg\",\"label\":\"XML\",\"class\":\"pyasm.widget.table_element_wdg.XmlWdg\",\"aliases\":[\"XmlWdg\",\"pyasm.widget.XmlWdg\",\"pyasm.widget.table_element_wdg.XmlWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.JsonElementWdg\",\"label\":\"JSON\",\"class\":\"tactic.ui.table.json_element_wdg.JsonElementWdg\",\"aliases\":[\"tactic.ui.table.JsonElementWdg\",\"tactic.ui.table.json_element_wdg.JsonElementWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.SnapshotVersionElementWdg\",\"label\":\"Snapshot version\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotVersionElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SnapshotLockedElementWdg\",\"label\":\"Snapshot lock\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotLockedElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\"],\"adapter\":\"lock\"},{\"value\":\"tactic.ui.table.SnapshotFileElementWdg\",\"label\":\"Snapshot file\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotFileElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\"],\"adapter\":\"link\"},{\"value\":\"tactic.ui.table.MilestoneCompletionWdg\",\"label\":\"Milestone completion\",\"class\":\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\",\"aliases\":[\"tactic.ui.table.MilestoneCompletionWdg\",\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.TaskGroupCompletionWdg\",\"label\":\"Task group completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskGroupCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\"],\"adapter\":\"groupCompletion\"},{\"value\":\"tactic.ui.table.TaskDaysDueElementWdg\",\"label\":\"Days until due\",\"class\":\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\",\"aliases\":[\"tactic.ui.table.TaskDaysDueElementWdg\",\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SubContextElementWdg\",\"label\":\"Subcontext\",\"class\":\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\",\"aliases\":[\"tactic.ui.table.SubContextElementWdg\",\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.TaskSummaryElementWdg\",\"label\":\"Task summary\",\"class\":\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\",\"aliases\":[\"TaskSummaryElementWdg\",\"tactic.ui.table.TaskSummaryElementWdg\",\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\"],\"adapter\":\"taskSummary\"},{\"value\":\"pyasm.widget.CheckboxColWdg\",\"label\":\"Row selection\",\"class\":\"pyasm.widget.table_element_wdg.CheckboxColWdg\",\"aliases\":[\"CheckboxColWdg\",\"pyasm.widget.CheckboxColWdg\",\"pyasm.widget.table_element_wdg.CheckboxColWdg\"],\"adapter\":\"selection\"},{\"value\":\"pyasm.widget.SearchTypeElementWdg\",\"label\":\"Search Type title\",\"class\":\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\",\"aliases\":[\"SearchTypeElementWdg\",\"pyasm.widget.SearchTypeElementWdg\",\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\"],\"adapter\":\"value\"},{\"value\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"label\":\"Legacy task completion (integer)\",\"class\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"pyasm.widget.TaskCompletionWdg\",\"TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"label\":\"Table availability\",\"class\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"aliases\":[\"tactic.ui.app.SearchTypeHasTableElementWdg\",\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\"],\"adapter\":\"flag\"},{\"value\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"label\":\"Raw value\",\"class\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"aliases\":[\"tactic.ui.common.RawTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\"],\"adapter\":\"raw\"},{\"value\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"label\":\"Folder\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"aliases\":[\"tactic.ui.table.ExplorerTableElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"label\":\"Expression value\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionValueElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"label\":\"Preference description\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"aliases\":[\"tactic.ui.table.PreferenceDescriptionWdg\",\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"label\":\"Project database\",\"class\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"aliases\":[\"tactic.ui.table.ProjectWdg\",\"tactic.ui.table.project_wdg.ProjectWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"label\":\"Related value\",\"class\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"aliases\":[\"tactic.ui.table.RelatedElementWdg\",\"tactic.ui.table.related_element_wdg.RelatedElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"label\":\"Notification recipients\",\"class\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"aliases\":[\"tactic.ui.table.RecipientElementWdg\",\"tactic.ui.table.table_element_wdg.RecipientElementWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Discussion\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Legacy discussion\",\"class\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"DiscussionWdg\",\"pyasm.widget.DiscussionWdg\",\"pyasm.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"label\":\"Object tasks\",\"class\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"aliases\":[\"SObjectTaskTableElement\",\"pyasm.widget.SObjectTaskTableElement\",\"pyasm.widget.task_wdg.SObjectTaskTableElement\"],\"adapter\":\"tasks\"},{\"value\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"label\":\"Task context\",\"class\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"aliases\":[\"TaskParentSpacingTableElement\",\"pyasm.widget.TaskParentSpacingTableElement\",\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"label\":\"Formatted message\",\"class\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"aliases\":[\"tactic.ui.app.MessageTableElementWdg\",\"tactic.ui.app.message_wdg.MessageTableElementWdg\"],\"adapter\":\"message\"},{\"value\":\"pyasm.widget.MyTacticSummaryWdg\",\"label\":\"My TACTIC summary\",\"class\":\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\",\"aliases\":[\"MyTacticSummaryWdg\",\"pyasm.widget.MyTacticSummaryWdg\",\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\"],\"adapter\":\"fields\"},{\"value\":\"pyasm.widget.UpdateWdg\",\"label\":\"Object actions\",\"class\":\"pyasm.widget.table_element_wdg.UpdateWdg\",\"aliases\":[\"UpdateWdg\",\"pyasm.widget.UpdateWdg\",\"pyasm.widget.table_element_wdg.UpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.input.LoginTableElementWdg\",\"label\":\"Login\",\"class\":\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\",\"aliases\":[\"tactic.ui.input.LoginTableElementWdg\",\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.panel.SecurityManagerButtonWdg\",\"label\":\"Global Permissions\",\"class\":\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\",\"aliases\":[\"tactic.ui.panel.SecurityManagerButtonWdg\",\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.PreferenceEditWdg\",\"label\":\"User preference\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceEditWdg\",\"aliases\":[\"tactic.ui.table.PreferenceEditWdg\",\"tactic.ui.table.preference_wdg.PreferenceEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"label\":\"Update Template\",\"class\":\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\",\"aliases\":[\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.NotificationTriggerElementWdg\",\"label\":\"Email Test\",\"class\":\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\",\"aliases\":[\"tactic.ui.table.NotificationTriggerElementWdg\",\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ButtonElementWdg\",\"label\":\"Configured button\",\"class\":\"tactic.ui.table.button_wdg.ButtonElementWdg\",\"aliases\":[\"tactic.ui.table.ButtonElementWdg\",\"tactic.ui.table.button_wdg.ButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusWdg\",\"label\":\"Parallel task status\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusWdg\",\"aliases\":[\"ParallelStatusWdg\",\"pyasm.widget.ParallelStatusWdg\",\"pyasm.widget.parallel_status.ParallelStatusWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusEditWdg\",\"label\":\"Add Task\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusEditWdg\",\"aliases\":[\"ParallelStatusEditWdg\",\"pyasm.widget.ParallelStatusEditWdg\",\"pyasm.widget.parallel_status.ParallelStatusEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"label\":\"Open tasks\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProcessElementWdg\",\"label\":\"Process\",\"class\":\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\",\"aliases\":[\"tactic.ui.table.ProcessElementWdg\",\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.widget.TaskStatusElementWdg\",\"label\":\"Task status\",\"class\":\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\",\"aliases\":[\"tactic.ui.widget.TaskStatusElementWdg\",\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.WorkElementWdg\",\"label\":\"Work on Task\",\"class\":\"tactic.ui.table.task_element_wdg.WorkElementWdg\",\"aliases\":[\"tactic.ui.table.WorkElementWdg\",\"tactic.ui.table.task_element_wdg.WorkElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.DropElementWdg\",\"label\":\"Instance links\",\"class\":\"tactic.ui.table.drop_element_wdg.DropElementWdg\",\"aliases\":[\"tactic.ui.table.DropElementWdg\",\"tactic.ui.table.drop_element_wdg.DropElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CustomLayoutElementWdg\",\"label\":\"Custom Layout\",\"class\":\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\",\"aliases\":[\"tactic.ui.table.CustomLayoutElementWdg\",\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"label\":\"Show related table\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"tactic.ui.table.HiddenRowElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"label\":\"Related tasks\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"tactic.ui.table.RowAddElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"HiddenRowToggleWdg\",\"label\":\"Show related table\",\"class\":\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"aliases\":[\"HiddenRowToggleWdg\",\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"pyasm.widget.HiddenRowToggleWdg\"],\"adapter\":\"commands\"},{\"value\":\"AuxDataWdg\",\"label\":\"Auxiliary data\",\"class\":\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"aliases\":[\"AuxDataWdg\",\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"pyasm.widget.AuxDataWdg\"],\"adapter\":\"value\"},{\"value\":\"GanttWdg\",\"label\":\"Gantt\",\"class\":\"pyasm.widget.gantt_wdg.GanttWdg\",\"aliases\":[\"GanttWdg\",\"pyasm.widget.gantt_wdg.GanttWdg\",\"pyasm.widget.GanttWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"label\":\"Gantt\",\"class\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"aliases\":[\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"tactic.ui.table.GanttElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"TimecardInfoTableElement\",\"label\":\"Timecard\",\"class\":\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"aliases\":[\"TimecardInfoTableElement\",\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"pyasm.widget.TimecardInfoTableElement\"],\"adapter\":\"commands\"},{\"value\":\"WeekTableElement\",\"label\":\"Week\",\"class\":\"pyasm.widget.timecard_wdg.WeekTableElement\",\"aliases\":[\"WeekTableElement\",\"pyasm.widget.timecard_wdg.WeekTableElement\",\"pyasm.widget.WeekTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"label\":\"Work Hours\",\"class\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"aliases\":[\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"tactic.ui.table.WorkHoursElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"FileAppendLinkTableElement\",\"label\":\"Attach files\",\"class\":\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"aliases\":[\"FileAppendLinkTableElement\",\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"pyasm.widget.FileAppendLinkTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CheckoutButtonElementWdg\",\"label\":\"Check out\",\"class\":\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\",\"aliases\":[\"CheckoutButtonElementWdg\",\"tactic.ui.table.CheckoutButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"pyasm.widget.SObjectConnectionElement\",\"label\":\"Connections\",\"class\":\"pyasm.widget.sobject_browser_wdg.SObjectConnectionElement\",\"aliases\":[\"SObjectConnectionElement\",\"pyasm.widget.SObjectConnectionElement\",\"pyasm.widget.sobject_browser_wdg.SObjectConnectionElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"label\":\"Object summary\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"aliases\":[\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"tactic.ui.table.SObjectSummaryElementWdg\"],\"adapter\":\"commands\"}]")).map(({ value, label }) => ({
 	value,
 	label
 }));
@@ -8829,7 +9057,7 @@ var _sfc_main$132 = {
 	setup(__props) {
 		const props = __props;
 		const host = ref(null), width = ref(0);
-		const scene = computed(() => summary$2({
+		const scene = computed(() => summary$3({
 			...props.snapshot,
 			selected: props.selected
 		}, width.value, appearance.language, (text, size, weight = 400) => qtLabelTextWidth(text, `${weight} ${size}px Segoe UI`)));
@@ -9524,6 +9752,7 @@ var _sfc_main$128 = {
 			editing: null,
 			deleting: null,
 			loading: false,
+			refreshing: false,
 			saving: false,
 			uncertain: false,
 			error: "",
@@ -9769,7 +9998,7 @@ var _sfc_main$128 = {
 			return this.editor?.status_choices?.find((row) => row.value === note.after)?.color || "var(--primary)";
 		},
 		refresh() {
-			if (!this.opened || document.hidden || (this.docked ? !this.active : document.activeElement?.closest("dialog") !== this.$refs.dialog) || this.loading || this.saving || this.editing || this.deleting || this.taskAction || this.uncertain || this.taskUncertain || !this.validContext) return;
+			if (!this.opened || document.hidden || (this.docked ? !this.active : document.activeElement?.closest("dialog") !== this.$refs.dialog) || this.loading || this.refreshing || this.saving || this.editing || this.deleting || this.taskAction || this.uncertain || this.taskUncertain || !this.validContext) return;
 			this.load(true);
 		},
 		beforeUnload(event) {
@@ -10071,7 +10300,8 @@ var _sfc_main$128 = {
 			const timeline = this.$refs.timeline;
 			this.rememberTimeline();
 			const follow = timeline && timeline.scrollHeight - timeline.clientHeight - timeline.scrollTop < 24;
-			this.loading = true;
+			this.refreshing = quiet;
+			if (!quiet) this.loading = true;
 			if (!quiet) {
 				this.error = "";
 				this.taskAction = "";
@@ -10116,7 +10346,10 @@ var _sfc_main$128 = {
 					else this.error = error.message;
 				}
 			} finally {
-				if (id === this.request) this.loading = false;
+				if (id === this.request) {
+					this.loading = false;
+					this.refreshing = false;
+				}
 			}
 		},
 		close(force = false) {
@@ -10132,6 +10365,7 @@ var _sfc_main$128 = {
 			this.rememberTimeline();
 			this.request++;
 			this.loading = false;
+			this.refreshing = false;
 			this.$refs.preview?.close();
 			this.$refs.hours?.close(true);
 			this.opened = false;
@@ -17750,7 +17984,12 @@ var _sfc_main$110 = {
 			else if (name === "task-edit") this.openTaskEditor(record, ...values);
 		},
 		async tableSaved() {
-			for (const state of Object.values(this.expandedTables)) state.revision = (state.revision || 0) + 1;
+			const pending = Object.values(this.expandedTables);
+			while (pending.length) {
+				const state = pending.pop();
+				state.revision = (state.revision || 0) + 1;
+				pending.push(...Object.values(state.children || {}));
+			}
 			if (this.ownQuery) await this.load();
 			await this.loadCells();
 			this.$emit("saved");
@@ -17851,6 +18090,7 @@ var _sfc_main$110 = {
 				"delete",
 				"checkin",
 				"file-append",
+				"remove-connection",
 				"template",
 				"preference",
 				"notification-test",
@@ -17862,13 +18102,35 @@ var _sfc_main$110 = {
 			].includes(kind) || cell?.available === false) return;
 			const request = ++this.actionRequest, context = {
 				ticket: this.ticket,
-				project: this.project,
+				project: cell.tableScope?.projectCode || this.project,
 				language: "python"
 			};
 			this.columnError = "";
 			this.serviceMessage = "";
 			try {
 				if (kind === "error") throw new Error(cell.error);
+				if (kind === "remove-connection") {
+					if (!await this.$refs.tableServiceDialogs.ask(t("Remove this connection? The connected objects will be kept."), {
+						accept: "Remove connection",
+						destructive: true
+					}) || request !== this.actionRequest) return;
+					this.serviceBusy = true;
+					try {
+						await rpc("execute_cmd", [
+							context,
+							"tactic.ui.table.connections.TableConnectionRemoveCmd",
+							{
+								parent_key: cell.targetSearchKey || record.__search_key__,
+								connection_key: cell.connectionKey,
+								expected_revision: cell.expectedRevision,
+								direction: cell.direction || "dst"
+							}
+						]);
+					} finally {
+						if (request === this.actionRequest) await this.loadCells();
+					}
+					return;
+				}
 				if (kind === "file-checkout") {
 					if (cell.requiresDesktop) throw new Error("This checkout mode requires a desktop connection");
 					this.checkoutProject = cell.projectCode || record.project_code || this.project;
@@ -17884,7 +18146,7 @@ var _sfc_main$110 = {
 				}
 				if (kind === "nested-table") {
 					const key = record.__search_key__, previous = this.expandedTables[key];
-					if (previous && previous.column === cell.columnName) previous.open = !previous.open;
+					if (previous && previous.column === cell.columnName && JSON.stringify(previous.scope) === JSON.stringify(cell.nestedTable)) previous.open = !previous.open;
 					else this.expandedTables[key] = {
 						scope: cell.nestedTable,
 						column: cell.columnName,
@@ -17942,7 +18204,7 @@ var _sfc_main$110 = {
 				const key = cell?.targetSearchKey || record.__search_key__;
 				const targetContext = {
 					...context,
-					project: kind === "file-append" && cell.projectCode || new URL("skey://" + key).searchParams.get("project") || context.project
+					project: kind === "file-append" && cell.projectCode || cell.tableScope?.projectCode || new URL("skey://" + key).searchParams.get("project") || context.project
 				};
 				const target = key === record.__search_key__ && kind !== "notification-test" ? record : await rpc("get_by_search_key", [targetContext, key]);
 				if (request !== this.actionRequest) return;
@@ -18922,7 +19184,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			key: 7,
 			ref: "nestedForm",
 			ticket: $props.ticket,
-			project: $props.project,
+			project: $data.nestedEditor.scope.projectCode || $props.project,
 			"search-type": $data.nestedEditor.scope.searchType,
 			onSaved: $options.tableSaved
 		}, null, 8, [
@@ -22159,7 +22421,7 @@ var _sfc_main$97 = {
 			width: 480,
 			height: 346
 		}), previewsOpen = ref(false);
-		const confirmation = computed(() => describe$52({
+		const confirmation = computed(() => describe$53({
 			message: t("All prepared, failed and completed operations will be removed from the queue."),
 			accept: "Clear queue",
 			destructive: true,
@@ -33339,7 +33601,7 @@ var _sfc_main$64 = {
 //#region ../src/tactic_stream/shared_ui/features/configuration/configuration.ui.mjs
 function confirmation$2(model, width, height, language) {
 	const text = (key) => translate(key, language);
-	if (model.kind === "clear") return describe$52({
+	if (model.kind === "clear") return describe$53({
 		message: text(model.scope === "tabs" ? "Object, process and version branches will collapse. Search tabs, filters and dock layouts remain unchanged." : "Projects, Search Types, search results and navigation will be downloaded again. Saved layouts and preferences remain unchanged."),
 		reject: "Cancel",
 		accept: model.scope === "tabs" ? "Clear tabs cache" : "Clear cache",
@@ -35391,7 +35653,7 @@ function describe$16(model, width, height, language) {
 	return { nodes };
 }
 function confirmation$1(model, width, height, language) {
-	return describe$52({
+	return describe$53({
 		message: translate("Remove template {code}? Existing projects are not removed.", language, { code: model.code }),
 		accept: "Delete",
 		reject: "Cancel",
@@ -38461,7 +38723,7 @@ function describe$12(model, width, viewportHeight, language) {
 		noticeY += 44;
 	}
 	if (model.confirmClose) {
-		const confirmation = describe$52({
+		const confirmation = describe$53({
 			message: text("Discard unsaved user changes?"),
 			accept: "Discard changes",
 			reject: "Keep editing",
@@ -57807,7 +58069,7 @@ var _sfc_main = {
 			return compose(main_menus_default.user, this.mainMenuContext);
 		},
 		mainToolbar() {
-			return describe$51({
+			return describe$52({
 				width: this.toolbarWidth,
 				compact: this.compactShortcuts,
 				progressReveal: this.activityProgress ? 1 : 0,
@@ -57818,7 +58080,7 @@ var _sfc_main = {
 			return positions$1(this.mainToolbar);
 		},
 		workspaceStyle() {
-			const scene = describe$50(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
+			const scene = describe$51(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
 			return {
 				gridTemplateAreas: scene.grid.areas,
 				gridTemplateColumns: scene.grid.columns,

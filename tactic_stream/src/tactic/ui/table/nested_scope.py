@@ -2,7 +2,6 @@
 
 
 def nested_cell(search_key, options, column='', layout_reader=None):
-    # shortcut: shelf/gear and init_load_num need host support before full L01 acceptance.
     from pyasm.search import Search
 
     allowed = {
@@ -13,6 +12,16 @@ def nested_cell(search_key, options, column='', layout_reader=None):
     }
     if set(options) - allowed:
         raise ValueError('Unsupported nested table options: ' + ', '.join(sorted(set(options) - allowed)))
+    for flag in ('show_search_limit', 'show_insert', 'show_row_select', 'show_select',
+                 'show_gear', 'show_search', 'show_shelf'):
+        if options.get(flag, '') not in ('', True, False, 'true', 'false'):
+            raise ValueError('Invalid nested table display option: ' + flag)
+    # shortcut: nested column authoring awaits the scoped Columns editor; never ignore an explicit request.
+    if options.get('show_gear') in (True, 'true'):
+        raise ValueError('Nested column authoring is not available yet')
+    if options.get('init_load_num') not in (None, '', 'null'):
+        if str(options['init_load_num']) != '-1' and not str(options['init_load_num']).isdecimal():
+            raise ValueError('Invalid initial row rendering limit')
     handler = options.get('dynamic_class') or options.get('dynamic') or 'tactic.ui.panel.TableLayoutWdg'
     if handler in ('tactic.ui.table.CustomLayoutElementWdg', 'tactic.ui.panel.CustomLayoutWdg'):
         if layout_reader is None:
@@ -38,6 +47,9 @@ def nested_cell(search_key, options, column='', layout_reader=None):
                     view=view, parentKey=search_key,
                     selection=options.get('show_row_select', options.get('show_select')) not in (False, 'false'),
                     insert=options.get('show_insert') not in (False, 'false'),
+                    shelf=options.get('show_shelf') not in (False, 'false'),
+                    search=options.get('show_search') not in (False, 'false'),
+                    searchLimit=options.get('show_search_limit') not in (False, 'false'),
                     expression=options.get('expression') or ''),
                 actions=[dict(name='nested-table', label='Show related table', icon='chevron-right')])
 
@@ -62,13 +74,20 @@ def read_nested_scope(parent_key, search_type, view='table', expression='', offs
     if requested.get('project') not in (None, '', Project.get_project_code(), 'sthpw', 'admin'):
         raise ValueError('The nested table belongs to another project')
     base = SearchType.get(search_type).get_base_key()
+    if base in ('sthpw/message', 'sthpw/message_log'):
+        raise ValueError('Open private messages from Messages')
     if base.startswith(('prod/', 'flash/')):
         raise ValueError('The legacy production subsystem is excluded')
     parent = Search.get_by_search_key(parent_key)
     if parent is None:
         raise LookupError('Object is no longer available')
+    if parent.get_base_search_type() in ('sthpw/message', 'sthpw/message_log'):
+        raise ValueError('Open private messages from Messages')
     search = Search(search_type)
-    if base == parent.get_base_search_type() and not expression:
+    if parent.get_base_search_type() == 'sthpw/project' and base in (
+            'sthpw/task', 'sthpw/snapshot', 'sthpw/note', 'sthpw/work_hour') and not expression:
+        search.add_filter('project_code', parent.get_code())
+    elif base == parent.get_base_search_type() and not expression:
         search.add_id_filter(parent.get_id())
     elif expression:
         # Only reads enter a nested table. Mutating expressions belong to actions.

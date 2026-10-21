@@ -308,6 +308,13 @@ def capture(fixture, qml, original):
                 if item.objectName() in ('snapshotCheckoutDownload','snapshotCheckoutClose','snapshotCheckoutFile_F1')}
         if not original:
             result.update(snapshot(window))
+        if fixture.get('value', {}).get('name') == 'object_summary':
+            result['summaryText'] = {}
+            for index, entry in enumerate(fixture['value']['cell']['summary']):
+                name = 'tableSummaryText_' + str(index)
+                item = next(item for item in _visual_items(view) if item.objectName() == name and item.property('text') is not None)
+                assert item.isVisible() and item.property('paintedWidth') > 0, 'Missing visible summary text: ' + name
+                result['summaryText'][name] = item.property('text')
         if fixture['screen'] == 'nested':
             result['embeddedText'] = {}
             for item in _visual_items(view):
@@ -445,7 +452,7 @@ def main():
                         screen="cell",
                         value=value,
                         width=280,
-                        height=90 if value["name"] in ("legacy_tasks","custom_layout","drop_links") else 58,
+                        height=118 if value["name"] == "object_summary" else 102 if value["name"] == "object_connections" else 90 if value["name"] in ("legacy_tasks","custom_layout","drop_links") else 58,
                         style=style,
                         dark=dark,
                         language=language,

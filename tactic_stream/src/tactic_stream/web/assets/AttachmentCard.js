@@ -1,4 +1,4 @@
-import { A as onMounted, G as withCtx, H as watch, M as openBlock, O as onBeforeUnmount, X as ref, b as createVNode, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass } from "./vue.js";
+import { K as withCtx, N as openBlock, U as watch, Z as ref, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle } from "./vue.js";
 import { c as _sfc_main$1, f as _sfc_main$2 } from "./index.js";
 import { w as ItemPreview_default } from "./CodeBlock.js";
 //#region src/controls/AttachmentCard.vue

@@ -991,8 +991,12 @@ export default {
       else if (name === 'task-edit') this.openTaskEditor(record, ...values);
     },
     async tableSaved() {
-      for (const state of Object.values(this.expandedTables))
+      const pending = Object.values(this.expandedTables);
+      while (pending.length) {
+        const state = pending.pop();
         state.revision = (state.revision || 0) + 1;
+        pending.push(...Object.values(state.children || {}));
+      }
       if (this.ownQuery) await this.load();
       await this.loadCells();
       this.$emit('saved');
@@ -1148,6 +1152,7 @@ export default {
             'delete',
             'checkin',
             'file-append',
+            'remove-connection',
             'template',
             'preference',
             'notification-test',
@@ -1163,13 +1168,42 @@ export default {
       const request = ++this.actionRequest,
         context = {
           ticket: this.ticket,
-          project: this.project,
+          project: cell.tableScope?.projectCode || this.project,
           language: 'python'
         };
       this.columnError = '';
       this.serviceMessage = '';
       try {
         if (kind === 'error') throw new Error(cell.error);
+        if (kind === 'remove-connection') {
+          if (
+            !(await this.$refs.tableServiceDialogs.ask(
+              t('Remove this connection? The connected objects will be kept.'),
+              {
+                accept: 'Remove connection',
+                destructive: true
+              }
+            )) ||
+            request !== this.actionRequest
+          )
+            return;
+          this.serviceBusy = true;
+          try {
+            await rpc('execute_cmd', [
+              context,
+              'tactic.ui.table.connections.TableConnectionRemoveCmd',
+              {
+                parent_key: cell.targetSearchKey || record.__search_key__,
+                connection_key: cell.connectionKey,
+                expected_revision: cell.expectedRevision,
+                direction: cell.direction || 'dst'
+              }
+            ]);
+          } finally {
+            if (request === this.actionRequest) await this.loadCells();
+          }
+          return;
+        }
         if (kind === 'file-checkout') {
           if (cell.requiresDesktop)
             throw new Error('This checkout mode requires a desktop connection');
@@ -1188,7 +1222,11 @@ export default {
         if (kind === 'nested-table') {
           const key = record.__search_key__,
             previous = this.expandedTables[key];
-          if (previous && previous.column === cell.columnName)
+          if (
+            previous &&
+            previous.column === cell.columnName &&
+            JSON.stringify(previous.scope) === JSON.stringify(cell.nestedTable)
+          )
             previous.open = !previous.open;
           else
             this.expandedTables[key] = {
@@ -1265,6 +1303,7 @@ export default {
           ...context,
           project:
             (kind === 'file-append' && cell.projectCode) ||
+            cell.tableScope?.projectCode ||
             new URL('skey://' + key).searchParams.get('project') ||
             context.project
         };
@@ -2258,7 +2297,7 @@ export default {
       v-if="nestedEditor"
       ref="nestedForm"
       :ticket="ticket"
-      :project="project"
+      :project="nestedEditor.scope.projectCode || project"
       :search-type="nestedEditor.scope.searchType"
       @saved="tableSaved"
     />

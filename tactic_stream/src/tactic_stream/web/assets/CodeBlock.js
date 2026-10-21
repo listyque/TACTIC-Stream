@@ -1,4 +1,4 @@
-import { A as onMounted, B as useModel, E as nextTick, F as resolveComponent, G as withCtx, H as watch, K as withDirectives, L as resolveDynamicComponent, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, R as useAttrs, T as mergeProps, X as ref, Z as shallowReactive, _ as createElementBlock, a as vModelSelect, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, j as onUpdated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, o as vModelText, p as computed, q as isRef, rt as toDisplayString, s as vShow, tt as normalizeClass, u as Fragment, w as mergeModels, y as createTextVNode, z as useId } from "./vue.js";
+import { B as useId, D as nextTick, E as mergeProps, F as renderSlot, I as resolveComponent, J as isRef, K as withCtx, M as onUpdated, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, T as mergeModels, U as watch, V as useModel, Z as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, c as withKeys, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, y as createTextVNode, z as useAttrs } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
 import { A as appearance, B as cssRoles, C as redact, F as readableText, J as textStyles, K as metrics, L as blend, M as effectiveColorMode, N as frameColors, P as languages, R as controls, S as logRequest, at as _plugin_vue_export_helper_default, c as _sfc_main$34, d as ripple, f as _sfc_main$33, it as BusyIndicator_default, j as colorModes, k as t, l as tooltipDirective, m as debugLog, nt as iconSets, q as readableText$1, rt as themes, tt as accentPresets, u as capturePress, z as cssColor } from "./index.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
@@ -42,10 +42,10 @@ function rect(x, y, width, height) {
 		height: Math.max(0, height)
 	};
 }
-function revealListOffset(offset, index, height, count, rowHeight, rowGap = 0) {
-	const top = index * rowHeight, bottom = top + rowHeight - rowGap;
+function revealListOffset(offset, index, height, count, rowHeight, rowGap = 0, offsets = null) {
+	const top = offsets ? offsets[index] : index * rowHeight, bottom = top + rowHeight - rowGap;
 	const desired = top < offset ? top : bottom > offset + height ? bottom - height : offset;
-	return Math.max(0, Math.min(desired, Math.max(0, count * rowHeight - rowGap - height)));
+	return Math.max(0, Math.min(desired, Math.max(0, (offsets ? offsets[count] : count * rowHeight) - rowGap - height)));
 }
 function label(id, bounds, text, extra) {
 	return node("Label", id, bounds, Object.assign({ text }, extra || {}));
@@ -155,6 +155,8 @@ function validateScene(scene, models, views) {
 		}
 		if (value.kind === "List" && (typeof value.keyField !== "string" || !value.keyField || typeof value.rowHeight !== "number" || !isFinite(value.rowHeight) || listRowHeight(value) <= 0 || value.rowGap !== void 0 && (!Number.isFinite(value.rowGap) || value.rowGap < 0))) throw Error("List needs keyField, positive rowHeight and valid rowGap: " + value.id);
 		if (value.kind === "List" && !sequence$1(value.fields)) throw Error("List needs declared model fields: " + value.id);
+		if (value.kind === "List" && value.rowHeightField !== void 0 && (typeof value.rowHeightField !== "string" || !value.rowHeightField || !value.fields.includes(value.rowHeightField))) throw Error("List needs a declared rowHeightField: " + value.id);
+		if (value.kind === "List" && value.rowHeightField !== void 0 && !sequence$1(models[value.source])) throw Error("Variable Frame rows require an array model: " + value.id);
 		if ([
 			"Box",
 			"Scroll",
@@ -184,6 +186,45 @@ function sequence$1(value) {
 }
 function listRowHeight(definition) {
 	return definition.rowHeight - (definition.rowGap === void 0 ? 4 : definition.rowGap);
+}
+function listOffsets(definition, rows) {
+	if (!definition.rowHeightField) return null;
+	const gap = definition.rowGap === void 0 ? 4 : definition.rowGap;
+	const offsets = [0];
+	for (const row of rows) {
+		const height = row[definition.rowHeightField];
+		const next = offsets[offsets.length - 1] + height;
+		if (!Number.isFinite(height) || height <= gap || !Number.isFinite(next)) throw Error("Invalid Frame row height: " + definition.id);
+		offsets.push(next);
+	}
+	return offsets;
+}
+function listBounds(definition, offsets, index) {
+	const gap = definition.rowGap === void 0 ? 4 : definition.rowGap;
+	return {
+		y: offsets ? offsets[index] : index * definition.rowHeight,
+		height: offsets ? offsets[index + 1] - offsets[index] - gap : listRowHeight(definition)
+	};
+}
+function listRange(count, rowHeight, viewport, scroll, overscan, offsets = null) {
+	const fixed = virtualRange(count, rowHeight, viewport, scroll, overscan);
+	if (!offsets) return fixed;
+	if (offsets.length !== count + 1) throw Error("Invalid Frame row offsets");
+	function boundary(pixel, after) {
+		let first = 0, last = offsets.length;
+		while (first < last) {
+			const middle = Math.floor((first + last) / 2);
+			if (offsets[middle] < pixel || after && offsets[middle] === pixel) first = middle + 1;
+			else last = middle;
+		}
+		return first;
+	}
+	const first = Math.min(count, Math.max(0, boundary(scroll, true) - 1 - overscan));
+	return {
+		first,
+		last: Math.max(first, Math.min(count, boundary(scroll + viewport, false) + overscan)),
+		height: offsets[count]
+	};
 }
 function virtualRange(count, rowHeight, viewport, scroll, overscan) {
 	if (!Number.isInteger(count) || count < 0 || !Number.isFinite(rowHeight) || rowHeight <= 0 || !Number.isFinite(viewport) || viewport < 0 || !Number.isFinite(scroll) || !Number.isInteger(overscan) || overscan < 0) throw Error("Invalid Frame virtual range");
@@ -3985,6 +4026,20 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Object summary": "Сводка объекта",
+	Connections: "Связи",
+	"No connections": "Нет связей",
+	"Object is unavailable": "Объект недоступен",
+	"Remove connection": "Удалить связь",
+	"Remove this connection? The connected objects will be kept.": "Удалить эту связь? Связанные объекты будут сохранены.",
+	"Invalid connection direction": "Недопустимое направление связи",
+	"Invalid connection icon size": "Недопустимый размер миниатюры связи",
+	"Invalid connection table scope": "Недопустимый набор объектов для таблицы связей",
+	"Select a connection before removing it": "Перед удалением выберите связь",
+	"Reload the connection before removing it": "Перед удалением обновите связь",
+	"The connection belongs to another project": "Связь относится к другому проекту",
+	"Connection changed. Reload before removing it.": "Связь изменилась. Перед удалением обновите её.",
+	"Could not confirm removal of the connection": "Не удалось подтвердить удаление связи",
 	"Check out": "Получить файлы",
 	"Cancel transfer": "Отменить передачу",
 	Files: "Файлы",
@@ -7442,6 +7497,7 @@ var russian = {
 	"Team Hours": "Часы команды",
 	"Team member": "Участник команды",
 	"Transaction XML": "XML транзакции",
+	"This nested table would repeat an ancestor scope": "Эта вложенная таблица повторяет область родительской таблицы",
 	Underline: "Подчёркнутый",
 	Visual: "Визуально",
 	Week: "Неделя",
@@ -9578,11 +9634,17 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				send(node.keys[name]);
 			}
 		}
+		const listLayouts = computed(() => new Map(nodes.value.filter((node) => node.kind === "List").map((node) => [node.id, listOffsets(node, props.models[node.source] || [])])));
+		function listHeight(node) {
+			const rows = props.models[node.source] || [], offsets = listLayouts.value.get(node.id);
+			return offsets ? offsets[rows.length] : rows.length * node.rowHeight;
+		}
 		function records(node) {
-			const rows = props.models[node.source] || [], range = virtualRange(rows.length, node.rowHeight, node.height, scroll.value[node.id] || 0, 3);
+			const rows = props.models[node.source] || [], offsets = listLayouts.value.get(node.id), range = listRange(rows.length, node.rowHeight, node.height, scroll.value[node.id] || 0, 3, offsets);
 			return rows.slice(range.first, range.last).map((record, index) => ({
 				record,
-				index: range.first + index
+				index: range.first + index,
+				...listBounds(node, offsets, range.first + index)
 			}));
 		}
 		const previousLists = /* @__PURE__ */ new Map();
@@ -9592,8 +9654,9 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				if (node.kind !== "List") continue;
 				present.add(node.id);
 				const rows = props.models[node.source];
+				const offsets = listLayouts.value.get(node.id);
 				const previous = previousLists.get(node.id);
-				if (previous?.rows === rows && previous.keyField === node.keyField) continue;
+				if (previous?.rows === rows && previous.keyField === node.keyField && previous.offsets === offsets && previous.rowHeight === node.rowHeight) continue;
 				const indexes = recordIndex(rows, node.keyField);
 				const container = host.value?.querySelector(":scope > [data-frame=\"" + CSS.escape(node.id) + "\"]");
 				const focused = document.activeElement;
@@ -9602,13 +9665,15 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				if (focusedRow && previous) {
 					const key = focusedRow.getAttribute("data-frame-row");
 					const oldIndex = previous.rows.findIndex((row) => String(row[previous.keyField]) === key);
-					if (oldIndex >= 0 && indexes.has(key)) offset += (indexes.get(key) - oldIndex) * node.rowHeight;
+					if (oldIndex >= 0 && indexes.has(key)) offset += (offsets ? offsets[indexes.get(key)] : indexes.get(key) * node.rowHeight) - (previous.offsets ? previous.offsets[oldIndex] : oldIndex * previous.rowHeight);
 				}
-				offset = Math.max(0, Math.min(offset, Math.max(0, rows.length * node.rowHeight - node.height)));
+				offset = Math.max(0, Math.min(offset, Math.max(0, listHeight(node) - node.height)));
 				scroll.value[node.id] = offset;
 				previousLists.set(node.id, {
 					rows,
-					keyField: node.keyField
+					keyField: node.keyField,
+					offsets,
+					rowHeight: node.rowHeight
 				});
 				if (container) nextTick(() => {
 					if (container.isConnected) container.scrollTop = scroll.value[node.id] || 0;
@@ -9652,7 +9717,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				const rows = props.models[definition.source] || [];
 				const list = host.value?.querySelector(":scope > [data-frame=\"" + CSS.escape(id) + "\"]");
 				if (!list || index < 0 || index >= rows.length) return false;
-				const offset = revealListOffset(list.scrollTop, index, list.clientHeight, rows.length, definition.rowHeight, definition.rowGap ?? 4);
+				const offset = revealListOffset(list.scrollTop, index, list.clientHeight, rows.length, definition.rowHeight, definition.rowGap ?? 4, listLayouts.value.get(definition.id));
 				list.scrollTop = offset;
 				scroll.value = {
 					...scroll.value,
@@ -10133,7 +10198,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onScroll: ($event) => scroll.value[node.id] = $event.target.scrollTop
 				}, [createBaseVNode("div", { style: normalizeStyle({
 					position: "relative",
-					height: (__props.models[node.source]?.length || 0) * node.rowHeight + "px"
+					height: listHeight(node) + "px"
 				}) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(records(node), (item) => {
 					return openBlock(), createBlock(_component_FrameView, {
 						ref_for: true,
@@ -10143,8 +10208,8 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"data-frame-row": String(item.record[node.keyField]),
 						class: normalizeClass(["frame-row", { "frame-box": !node.fields.length }]),
 						style: normalizeStyle({
-							top: item.index * node.rowHeight + "px",
-							height: unref(listRowHeight)(node) + "px",
+							top: item.y + "px",
+							height: item.height + "px",
 							width: node.width - 16 + "px"
 						}),
 						scene: __props.describeRow(node, item.record, item.index),

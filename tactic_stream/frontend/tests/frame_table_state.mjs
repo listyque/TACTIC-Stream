@@ -27,6 +27,33 @@ for (const width of [0, 240, 800, 1600]) {
 }
 assert.equal(Host.boundedWidth(1000), 640);
 assert.equal(Host.boundedWidth(0), 48);
+for (const connection of [
+  {
+    name: 'connections',
+    resolvedClass: 'pyasm.widget.sobject_browser_wdg.SObjectConnectionElement',
+    displayOptions: { icon_size: '72' }
+  },
+  {
+    name: 'connections',
+    display: {
+      handler: 'SObjectConnectionElement',
+      options: { icon_size: '72' }
+    }
+  }
+]) {
+  assert.equal(
+    Host.describe({ columns: [connection], automaticRowHeight: true }, 800)
+      .rowHeight,
+    104
+  );
+  assert.equal(
+    Host.describe(
+      { columns: [connection], automaticRowHeight: false, rowHeight: 52 },
+      800
+    ).rowHeight,
+    52
+  );
+}
 assert.equal(Columns.visibleColumns(columns, 200, {}).length, 1);
 assert.equal(Cells.taskLayout(4, 220, 52).visible, 1);
 assert.equal(Cells.taskLayout(4, 440, 52).visible, 4);
@@ -199,4 +226,79 @@ assert.equal(
     displayOptions: { insert: 'false' }
   }),
   null
+);
+
+const Nested = await import(
+  '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs'
+);
+const nestedModel = {
+  selection: false,
+  shelf: false,
+  searchLimit: false,
+  columns: [{ name: 'code', width: 160 }],
+  rows: [{ key: 'A', cells: {}, record: {} }],
+  children: { A: { open: true } }
+};
+const nestedRows = Nested.rows(nestedModel);
+assert.equal(nestedRows[0].extent, Nested.rowHeight + Nested.height);
+assert.equal(Nested.columns(nestedModel)[0].x, 0);
+const nestedScene = Nested.describe(nestedModel, 320, 320, 'en');
+assert.ok(
+  !nestedScene.nodes.some((node) =>
+    [
+      'nestedFilter',
+      'nestedReload',
+      'nestedCreate',
+      'nestedPrevious',
+      'nestedNext',
+      'nestedClearSelection'
+    ].includes(node.id)
+  )
+);
+validateScene(nestedScene, { rows: nestedRows });
+assert.equal(
+  Nested.identity({ searchType: 'x', parentKey: 'A' }),
+  Nested.identity({ searchType: 'x', view: 'table', parentKey: 'A' })
+);
+
+const Connections = await import(
+  '../../src/tactic_stream/shared_ui/features/table/connections.ui.mjs'
+);
+for (const iconSize of [16, 32, 60, 256]) {
+  const cell = {
+    iconSize,
+    connectionRows: [
+      {
+        connectionKey: 'C',
+        available: true,
+        code: 'A',
+        preview: {
+          filename: 'asset.png',
+          text: 'https://example.com/asset.png'
+        }
+      }
+    ]
+  };
+  const list = Connections.describe(cell, 280, 300, 'en').nodes[0];
+  const row = Connections.row(
+    cell.connectionRows[0],
+    cell,
+    264,
+    'en',
+    true,
+    ''
+  );
+  assert.ok(list.rowHeight >= 96);
+  for (const node of row.nodes)
+    assert.ok(
+      node.y >= 0 && node.y + node.height <= list.rowHeight,
+      JSON.stringify(node)
+    );
+  const filename = row.nodes.find((node) => node.id === 'tableConnectionFile');
+  assert.ok(filename.y >= 64);
+}
+
+assert.equal(
+  Nested.identity({ searchType: 'x', parentKey: 'A' }, 'demo'),
+  Nested.identity({ projectCode: 'demo', searchType: 'x', parentKey: 'A' })
 );

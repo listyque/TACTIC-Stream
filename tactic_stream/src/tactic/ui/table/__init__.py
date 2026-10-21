@@ -59,3 +59,9 @@ __all__ += ['GanttElementWdg', 'WorkHoursElementWdg']
 
 from .file_actions import TableSnapshotAppendCmd, TableSnapshotFilesCmd
 __all__ += ['TableSnapshotAppendCmd', 'TableSnapshotFilesCmd']
+
+from .connections import TableConnectionRemoveCmd
+__all__.append('TableConnectionRemoveCmd')
+
+from .sobject_summary_wdg import SObjectSummaryElementWdg
+__all__.append('SObjectSummaryElementWdg')

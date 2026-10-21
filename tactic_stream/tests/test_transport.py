@@ -4616,6 +4616,99 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
             capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=90)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_handler_connection_fallback_and_removal_through_xmlrpc(self):
+        path = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        text = path.read_text(encoding='utf-8')
+        function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        source = ast.get_source_segment(text, function)
+        proxy = self.proxy()
+        auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one', language='python')
+        keys = ['contract/entity?project=one&code=A', 'contract/entity?project=one&code=B']
+        proxy.execute_python_script(auth, '', dict(code="from pyasm.biz import SObjectConnection\nfrom pyasm.search import Search\nSObjectConnection.create(Search.get_by_code('contract/entity','A'),Search.get_by_code('contract/entity','B'),direction='one')\nreturn True"))
+        proxy.insert(auth, 'config/widget_config', dict(search_type='contract/entity', view='connections_contract', priority=100,
+            config='<config><connections_contract><element name="code"/><element name="connections"><display class="pyasm.widget.SObjectConnectionElement"><direction>src</direction></display></element></connections_contract></config>'))
+        code = source + '''
+from pyasm.widget import SObjectConnectionElement, ThumbWdg
+native_connection = SObjectConnectionElement.get_cell_value
+native_thumb = ThumbWdg.get_cell_value
+del SObjectConnectionElement.get_cell_value
+del ThumbWdg.get_cell_value
+try:
+    return query_table_layout('contract/entity', search_keys=kwargs['keys'], view='connections_contract', project_code='one')
+finally:
+    SObjectConnectionElement.get_cell_value = native_connection
+    ThumbWdg.get_cell_value = native_thumb
+'''
+        layout = json.loads(proxy.execute_python_script(auth, '', dict(code=code, keys=keys))['info'])
+        incoming = layout['rows'][keys[0]]['connections']
+        self.assertEqual(incoming['error'], '')
+        self.assertEqual(incoming['connectionRows'][0]['searchKey'], keys[1])
+        self.assertEqual(layout['rows'][keys[1]]['connections']['connectionRows'], [])
+        row = incoming['connectionRows'][0]
+        text = (ROOT.parent.parent / 'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'remove_connection')
+        code = ast.get_source_segment(text, function) + "\nreturn remove_connection(kwargs['parent_key'],kwargs['connection_key'],kwargs['revision'],'src')"
+        arguments = dict(code=code, parent_key=keys[0], connection_key=row['connectionKey'], revision=row['expectedRevision'])
+        for _ in range(2):
+            self.assertEqual(proxy.execute_python_script(auth, '', arguments)['info']['state'], 'removed')
+        self.assertTrue(all(proxy.get_by_search_key(auth, key) for key in keys))
+
+    def test_handler_object_summary_and_project_scope_through_xmlrpc(self):
+        text = (ROOT.parent.parent / 'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        source = ast.get_source_segment(text,function)
+        proxy=self.proxy()
+        auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one',language='python')
+        key='contract/entity?project=one&code=A'
+        proxy.create_task(auth,key,'model','summary_contract')
+        proxy.insert(auth,'config/widget_config',dict(search_type='contract/entity',view='summary_contract',priority=100,
+            config='<config><summary_contract><element name="code"/><element name="summary"><display class="tactic.ui.table.SObjectSummaryElementWdg"/></element></summary_contract></config>'))
+        code=source+"\nreturn query_table_layout('contract/entity',view='summary_contract',project_code='one',search_keys=kwargs['keys'])"
+        layout=json.loads(proxy.execute_python_script(auth,'',dict(code=code,keys=[key]))['info'])
+        cell=layout['rows'][key]['summary']
+        self.assertFalse(cell.get('error'),cell)
+        self.assertGreaterEqual(int(cell['summary'][0]['value']),1)
+        self.assertEqual(cell['summary'][0]['nestedTable']['projectCode'],'one')
+        text=(ROOT.parent.parent / 'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        function=next(node for node in ast.parse(text).body if isinstance(node,ast.FunctionDef) and node.name=='read_nested_scope')
+        parent=proxy.query(auth,'sthpw/project',[('code','one')])
+        parent=ast.literal_eval(parent) if isinstance(parent,str) else parent
+        code=ast.get_source_segment(text,function)+"\nreturn read_nested_scope(kwargs['key'],'sthpw/task')"
+        records=proxy.execute_python_script(auth,'',dict(code=code,key=parent[0]['__search_key__']))['info']['records']
+        self.assertTrue(records)
+        self.assertTrue(all(record['project_code']=='one' for record in records))
+
+    def test_table_connections_in_chromium(self):
+        proxy = self.proxy()
+        auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one', language='python')
+        search_type = 'contract/browser_connections'
+        proxy.execute_cmd(auth, 'tactic.core.schema_commands.SearchTypeCreatorCmd', dict(search_type_name=search_type))
+        for code, description in (('TARGET', 'Connection target'), ('ALPHA', 'Alpha source'),
+                ('BETA', 'Archived source'), ('MISSING', 'Deleted source')):
+            proxy.insert(auth, search_type, dict(code=code, description=description))
+        proxy.execute_python_script(auth, '', dict(code="""
+from pyasm.biz import SObjectConnection
+from pyasm.search import Search
+target = Search.get_by_code('contract/browser_connections', 'TARGET')
+for code in ('ALPHA', 'BETA', 'MISSING'):
+    source = Search.get_by_code('contract/browser_connections', code)
+    SObjectConnection.create(source, target, direction='one')
+Search.get_by_code('contract/browser_connections', 'BETA').retire()
+Search.get_by_code('contract/browser_connections', 'MISSING').delete()
+return True
+"""))
+        proxy.insert(auth, 'config/widget_config', dict(search_type=search_type, view='connections_test', priority=100,
+            config='<config><connections_test><element name="code" width="120"/><element name="connections" width="400"><display class="pyasm.widget.SObjectConnectionElement"><direction>dst</direction><icon_size>60</icon_size></display></element></connections_test></config>'))
+        environment = os.environ.copy()
+        environment['PLAYWRIGHT_BROWSERS_PATH'] = str(ROOT / '.browser-cache')
+        result = subprocess.run([shutil.which('node'), str(ROOT / 'frontend/tests/table_connections.mjs'), self.url],
+            cwd=ROOT / 'frontend', env=environment, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=60)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        records = proxy.execute_python_script(auth, '', dict(code="from pyasm.search import Search\nsearch=Search('contract/browser_connections')\nsearch.set_show_retired(True)\nreturn [row.get_code() for row in search.get_sobjects()]"))
+        records = records['info']
+        records = ast.literal_eval(records) if isinstance(records, str) else records
+        self.assertEqual(set(records), {'TARGET', 'ALPHA', 'BETA'})
+
     def test_snapshot_append_in_chromium(self):
         proxy = self.proxy()
         auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='admin')

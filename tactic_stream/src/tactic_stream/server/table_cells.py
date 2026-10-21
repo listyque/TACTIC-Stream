@@ -64,6 +64,8 @@ from tactic.ui.table.sobject_detail_wdg import SObjectTaskStatusElementWdg
 from tactic.ui.table.task_element_wdg import WorkElementWdg
 from tactic.ui.widget.misc_input_wdg import TaskStatusElementWdg
 from tactic.ui.table.drop_element_wdg import DropElementWdg
+from pyasm.widget.sobject_browser_wdg import SObjectConnectionElement
+from tactic.ui.table.sobject_summary_wdg import SObjectSummaryElementWdg
 
 from tactic.ui.table.custom_layout_element_wdg import CustomLayoutElementWdg
 from tactic.ui.table.hidden_row_element_wdg import HiddenRowElementWdg, RowAddElementWdg
@@ -76,7 +78,7 @@ from tactic.ui.table.gantt_element_wdg import GanttElementWdg
 from tactic.ui.table.work_hours_element_wdg import WorkHoursElementWdg
 TIME_WIDGETS = (GanttWdg, GanttElementWdg, TimecardInfoTableElement, WeekTableElement, WorkHoursElementWdg)
 
-SERVICE_WIDGETS = (CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
+SERVICE_WIDGETS = (SObjectSummaryElementWdg, SObjectConnectionElement, CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
                    ProjectTemplateUpdateWdg, NotificationTriggerElementWdg, ButtonElementWdg,
                    ParallelStatusWdg, ParallelStatusEditWdg, SObjectTaskStatusElementWdg, WorkElementWdg, DropElementWdg)
 
@@ -251,6 +253,11 @@ def describe_cell(element, columns, search_type=""):
         allowed |= set(widget.ARGS_KEYS) if hasattr(widget, 'ARGS_KEYS') else set()
     elif widget is CheckoutButtonElementWdg:
         allowed |= set(widget.ARGS_KEYS)
+    elif widget is SObjectConnectionElement:
+        allowed |= set(widget.ARGS_KEYS)
+        icon_size = str(options.get('icon_size') or '60')
+        supported = supported and options.get('direction', 'dst') in ('', 'src', 'dst')
+        supported = supported and icon_size.isdecimal() and 16 <= int(icon_size) <= 256
     elif widget in NESTED_WIDGETS:
         allowed |= set(HiddenRowElementWdg.ARGS_KEYS)
     elif widget in (ButtonElementWdg, DropElementWdg, CustomLayoutElementWdg):

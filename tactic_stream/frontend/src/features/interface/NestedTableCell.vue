@@ -16,6 +16,7 @@ defineEmits(['action', 'inspect', 'cell-event']);
       :editable="true"
       :inspectable="true"
       :selected="frameNode.selected"
+      :nested-state="frameNode.nestedState"
       @inspect="$emit('inspect', frameNode.record)"
       @select="$emit('action', frameNode.record, 'nested-select', {}, null)"
       @preview="

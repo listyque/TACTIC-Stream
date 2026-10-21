@@ -1,4 +1,4 @@
-import { E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString, s as vShow, u as Fragment, z as useId } from "./vue.js";
+import { B as useId, D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, l as withModifiers, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow, u as Fragment } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$2, f as _sfc_main$3, k as t } from "./index.js";
 import { Gt as rect, Ht as label, Wt as node, i as _sfc_main$4, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import "./admin.document.js";

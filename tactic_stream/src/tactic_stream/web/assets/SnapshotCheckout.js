@@ -1,4 +1,4 @@
-import { A as onMounted, E as nextTick, H as watch, I as resolveDirective, J as markRaw, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, h as createBlock, l as withModifiers, m as createBaseVNode, p as computed, rt as toDisplayString } from "./vue.js";
+import { D as nextTick, L as resolveDirective, N as openBlock, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, tt as unref } from "./vue.js";
 import { A as appearance, R as controls, c as _sfc_main$2, k as t } from "./index.js";
 import { Gt as rect, Ht as label, Vt as button, Wt as node, i as _sfc_main$3, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";

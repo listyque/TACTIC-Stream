@@ -11,9 +11,13 @@ __all__ = ['WidgetConfigException', 'WidgetConfig', 'WidgetConfigView',
            'BaseTableElementWdg', 'SimpleTableElementWdg', 'ArrayTableElementWdg', 'XmlWdg', 'ThumbWdg', 'CheckboxColWdg', 'SearchTypeElementWdg']
 
 __all__ += ["TaskCompletionWdg", "DiscussionWdg", "SObjectTaskTableElement", "TaskParentSpacingTableElement", "UpdateWdg", "MyTacticSummaryWdg"]
+__all__.append('SObjectConnectionElement')
 
 
 def __getattr__(name):
+    if name == 'SObjectConnectionElement':
+        from .sobject_browser_wdg import SObjectConnectionElement
+        return SObjectConnectionElement
     if name in ('TimecardInfoTableElement', 'WeekTableElement'):
         from . import timecard_wdg
         return getattr(timecard_wdg, name)

@@ -87,6 +87,7 @@ export default {
       editing: null,
       deleting: null,
       loading: false,
+      refreshing: false,
       saving: false,
       uncertain: false,
       error: '',
@@ -421,6 +422,7 @@ export default {
           ? !this.active
           : document.activeElement?.closest('dialog') !== this.$refs.dialog) ||
         this.loading ||
+        this.refreshing ||
         this.saving ||
         this.editing ||
         this.deleting ||
@@ -841,7 +843,8 @@ export default {
       const follow =
         timeline &&
         timeline.scrollHeight - timeline.clientHeight - timeline.scrollTop < 24;
-      this.loading = true;
+      this.refreshing = quiet;
+      if (!quiet) this.loading = true;
       if (!quiet) {
         this.error = '';
         this.taskAction = '';
@@ -909,7 +912,10 @@ export default {
           else this.error = error.message;
         }
       } finally {
-        if (id === this.request) this.loading = false;
+        if (id === this.request) {
+          this.loading = false;
+          this.refreshing = false;
+        }
       }
     },
     close(force = false) {
@@ -926,6 +932,7 @@ export default {
       this.rememberTimeline();
       this.request++;
       this.loading = false;
+      this.refreshing = false;
       this.$refs.preview?.close();
       this.$refs.hours?.close(true);
       this.opened = false;

@@ -73,7 +73,7 @@ def main():
         "frontend/src/features/workspace/{DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue,SearchHeader.vue,SearchFooter.vue,SearchLibrary.vue,SearchPresetBar.vue,SearchEditorPart.vue,SearchResultMenu.vue,ConditionCards.vue,ConditionValue.vue,QuickFilterEditor.vue,ProcessVisibility.vue,ResultBody.vue,ResultItem.vue,ResultPresentation.vue,MobileResults.vue,resultViews.js}"
     )
     subprocess.run(command, cwd=ROOT, check=True)
-    command[-1] = "frontend/tests/{frame_control*,frame_icons,icons}.mjs"
+    command[-1] = "frontend/tests/{frame_control*,frame_icons,frame_variable_rows*,table_nested,table_connections,icons}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)
     command[-1] = "frontend/tests/{administration,frame_admin_state,frame_types}.mjs"
     subprocess.run(command, cwd=ROOT, check=True)

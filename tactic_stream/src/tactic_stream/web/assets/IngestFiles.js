@@ -1,4 +1,4 @@
-import { E as nextTick, F as resolveComponent, G as withCtx, I as resolveDirective, J as markRaw, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString } from "./vue.js";
+import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, Y as markRaw, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, tt as unref } from "./vue.js";
 import { A as appearance, D as randomId, at as _plugin_vue_export_helper_default, c as _sfc_main$2, k as t } from "./index.js";
 import { Gt as rect, Ht as label, Ut as muted, Vt as button, Wt as node, i as _sfc_main$3, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";

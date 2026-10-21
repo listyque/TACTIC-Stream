@@ -1,4 +1,4 @@
-import { F as resolveComponent, J as markRaw, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
+import { I as resolveComponent, N as openBlock, Y as markRaw, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, k as t } from "./index.js";
 import { Gt as rect, Ht as label, Ut as muted, Vt as button, Wt as node, i as _sfc_main$1, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";

@@ -302,7 +302,89 @@ try {
 
   await sent.getByRole('button', { name: 'Reply', exact: true }).tap();
   await notes.getByLabel('Note text', { exact: true }).fill('Thread reply');
-  await notes.getByLabel('Note text', { exact: true }).press('Enter');
+  let releaseRefresh, markRefresh, finishRefresh;
+  const refreshDone = new Promise((resolve) => {
+    finishRefresh = resolve;
+  });
+  const pendingRefresh = new Promise((resolve) => {
+    markRefresh = resolve;
+  });
+  const refreshGate = new Promise((resolve) => {
+    releaseRefresh = resolve;
+  });
+  let holdRefresh = true;
+  const refreshRoute = async (route) => {
+    const data = route.request().postDataJSON();
+    if (
+      holdRefresh &&
+      data.method === 'execute_cmd' &&
+      data.args[1].endsWith('TaskInspectorCmd') &&
+      data.args[2].action === 'read'
+    ) {
+      holdRefresh = false;
+      const response = await route.fetch();
+      markRefresh();
+      await refreshGate;
+      await route.fulfill({ response });
+      finishRefresh();
+    } else await route.continue();
+  };
+  let disconnected;
+  const offline = new Promise((resolve) => {
+    disconnected = resolve;
+  });
+  let failPoll = true;
+  const reconnectRoute = async (route) => {
+    if (failPoll) {
+      failPoll = false;
+      await route.fulfill({
+        status: 503,
+        json: { error: 'Temporary fixture disconnect' }
+      });
+      disconnected();
+    } else await route.continue();
+  };
+  await page.route('**/admin/server-updates', reconnectRoute);
+  let refreshTimeout;
+  try {
+    await Promise.race([
+      offline,
+      new Promise((_, reject) => {
+        refreshTimeout = setTimeout(
+          () => reject(Error('The update poll did not start')),
+          15000
+        );
+      })
+    ]);
+    clearTimeout(refreshTimeout);
+    await page.route('**/admin/rpc', refreshRoute);
+    await Promise.race([
+      pendingRefresh,
+      new Promise((_, reject) => {
+        refreshTimeout = setTimeout(
+          () => reject(Error('Reconnect did not refresh Inspector')),
+          15000
+        );
+      })
+    ]);
+    clearTimeout(refreshTimeout);
+    assert.equal(
+      await notes.getByLabel('Note text', { exact: true }).isEnabled(),
+      true,
+      'A background refresh must keep the active composer enabled'
+    );
+    await notes.getByLabel('Note text', { exact: true }).press('Enter');
+    await notes
+      .locator('.note-reply')
+      .getByText('Thread reply', { exact: true })
+      .waitFor();
+  } finally {
+    clearTimeout(refreshTimeout);
+    releaseRefresh();
+    if (!holdRefresh) await refreshDone;
+    await page.unroute('**/admin/rpc', refreshRoute);
+    await page.unroute('**/admin/server-updates', reconnectRoute);
+  }
   await notes
     .locator('.note-reply')
     .getByText('Thread reply', { exact: true })

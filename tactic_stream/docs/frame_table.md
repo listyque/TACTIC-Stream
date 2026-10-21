@@ -356,17 +356,70 @@ operating-system window decorations are not a pixel-parity claim. The default
 The remaining L04/L01/L03/L06 and L07b work is still open. This checkpoint does
 not turn an unsupported action into a generic Inspector link.
 
+## Connections, recursive tables and object summary — .178 / .125
+
+`SObjectConnectionElement` batches page targets and previews. Incoming/outgoing
+directions retain original endpoint semantics; retired and deleted targets remain
+visible. Removal captures the source before confirmation, rereads after the DB
+lock, checks its revision and removes only the connection. Refresh on a lost
+response makes replay safe; target objects remain untouched.
+
+`SObjectSummaryElementWdg` counts related tasks, snapshots and notes, and SQL-sums
+`straight_time` without adding overtime. A project row scopes by its own code;
+Tasks and Checkins open distinct nested tables in that project's context.
+
+Recursive nested tables reuse the same presenter and Frame `List`; variable
+array extents preserve the focused header position and virtualize expanded rows.
+Ancestor-scope cycles are rejected. Each child retains its own selection and
+loaded state. Closing a branch invalidates its pending native/browser result;
+reopening a loaded branch needs no read. Hidden native ancestors reject actions.
+The explicit `show_shelf`, `show_search`, `show_search_limit` and selection/insert
+flags hide their controls. `init_load_num` is a rendering hint, not pagination:
+viewport virtualization replaces the original placeholder rows. Pages remain 50
+records and child viewports 320px. Explicit `show_gear=true` is rejected until
+nested Columns authoring has its own captured scope.
+
+The shared parallel-group label no longer intercepts the disclosure button.
+Summary buttons and sortable child headers use ordinary Action/Icon/Label
+composition: `iconAction` is an icon-only native control. The paired capture
+requires painted summary labels and compares their exact visible text in Vue.
+The broader table workflow also reproduced a dropped Enter: a quiet Inspector
+poll disabled its active composer. Quiet refresh now has a separate in-flight
+flag, preserves input and rejects its stale reply after a send. A held real server
+response proves Enter can send before the poll completes. Handler has no matching
+periodic all-project-note poll; its explicit context loads retain their guard.
+
+Actual QML and browser input tests cover disclosure, independent selection,
+summary switching, cycle rejection and cache reuse; 10k-row tests cover bounded
+materialization and focus retention. Transport tests execute the Handler query
+source over XML-RPC against disposable Stream data. This does not certify an
+original server, PostgreSQL, ordinary-user ACL or physical touch/DPI hardware.
+
+Current catalogue: **70 classes / 168 named aliases**. The 239 shipped/CG source
+entries reference 67 adapted, 4 pending, 30 excluded-production and 3 explicitly
+unfinished classes. Render/Submission/Loader have mandatory excluded production
+dependencies; normal `prod/DEFAULT` definitions remain generic fallback entries.
+Registration and these scenarios do not close L01 or stage 2/B07.
+
+Validation for this checkpoint: 151 platform stages passed with fresh source
+fingerprints and independent packaging; 102 native table tests and 80 table API
+tests passed. The current paired driver accepted 732 states after 768 native
+captures (36 are historical references). Summary labels are checked as painted
+text, not inferred from button rectangles. Browser table, connection, held-refresh,
+10k variable-row and native-fallback XML-RPC scenarios passed.
+
+
 <a id="l01"></a>
 ### L01 — Связи и вложенные строки (8)
 
 - [ ] `pyasm.widget.dependency_wdg.DependencyLink`
-- [ ] `pyasm.widget.sobject_browser_wdg.SObjectConnectionElement`
+- [x] `pyasm.widget.sobject_browser_wdg.SObjectConnectionElement` — administrator direction/read/remove workflows; ordinary-user ACL remains open.
 - [ ] `pyasm.widget.table_element_wdg.HiddenRowToggleWdg`
 - [ ] `tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg`
 - [ ] `tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg`
 - [ ] `tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg`
 - [ ] `pyasm.widget.table_element_wdg.AuxDataWdg`
-- [ ] `tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg`
+- [x] `tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg` — object/project counts and separate task/snapshot scopes.
 
 Раскрыть настроенную дочернюю таблицу, добавить/связать объект, свернуть и восстановить состояние; проверить фильтры, направление связи, права, пустой результат, группировку и итог. Вложенная область имеет собственный query/selection scope; переход в общий Inspector не заменяет её.
 
@@ -413,9 +466,9 @@ examples are also in EN/RU Help → Table View: B07.
 
 - [x] `pyasm.widget.table_element_wdg.FileAppendLinkTableElement`
 - [ ] `pyasm.widget.table_element_wdg.PublishTableElement`
-- [ ] `pyasm.widget.table_element_wdg.RenderLinkTableElement`
-- [ ] `pyasm.widget.table_element_wdg.SubmissionLinkTableElement`
-- [ ] `tactic.ui.cgapp.loader_element_wdg.LoaderElementWdg`
+- Excluded: `pyasm.widget.table_element_wdg.RenderLinkTableElement` — requires the previously excluded production subsystem; see the source inventory.
+- Excluded: `pyasm.widget.table_element_wdg.SubmissionLinkTableElement` — requires the previously excluded production subsystem; see the source inventory.
+- Excluded: `tactic.ui.cgapp.loader_element_wdg.LoaderElementWdg` — requires the previously excluded production subsystem; see the source inventory.
 - [ ] `tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg` — ordinary single files delivered in .177/.124; sequence/UDIM and remaining original options are not accepted yet.
 - [ ] `tactic.ui.table.table_element_wdg.GeneralPublishElementWdg`
 

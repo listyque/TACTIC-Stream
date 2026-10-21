@@ -1,4 +1,4 @@
-import { A as onMounted, C as inject, E as nextTick, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, S as h, W as watchPostEffect, X as ref, _ as createElementBlock, b as createVNode, et as unref, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, u as Fragment, y as createTextVNode } from "./vue.js";
+import { C as h, D as nextTick, G as watchPostEffect, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, p as computed, rt as normalizeStyle, tt as unref, u as Fragment, w as inject, y as createTextVNode } from "./vue.js";
 import { A as appearance, K as metrics, c as _sfc_main$4, k as t } from "./index.js";
 import { Gt as rect, Ht as label, Ut as muted, Vt as button, Wt as node, i as _sfc_main$5, ot as resultItems, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { f as linkifyPlainText, l as activateRichLink, n as browserLink, u as escapeHtml } from "./links.js";

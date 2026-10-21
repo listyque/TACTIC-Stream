@@ -26,10 +26,11 @@ import StatusChip from '../controls/display/StatusChip.vue';
 import MiddleElide from '../controls/MiddleElide.vue';
 import {
   colors,
-  virtualRange,
+  listRange,
+  listOffsets,
+  listBounds,
   validateScene,
   recordIndex,
-  listRowHeight,
   revealListOffset
 } from '../../../src/tactic_stream/shared_ui/core/frame.mjs';
 import './frame.css';
@@ -200,18 +201,38 @@ function key(event, node) {
     send(node.keys[name]);
   }
 }
+const listLayouts = computed(
+  () =>
+    new Map(
+      nodes.value
+        .filter((node) => node.kind === 'List')
+        .map((node) => [
+          node.id,
+          listOffsets(node, props.models[node.source] || [])
+        ])
+    )
+);
+function listHeight(node) {
+  const rows = props.models[node.source] || [],
+    offsets = listLayouts.value.get(node.id);
+  return offsets ? offsets[rows.length] : rows.length * node.rowHeight;
+}
 function records(node) {
   const rows = props.models[node.source] || [],
-    range = virtualRange(
+    offsets = listLayouts.value.get(node.id),
+    range = listRange(
       rows.length,
       node.rowHeight,
       node.height,
       scroll.value[node.id] || 0,
-      3
+      3,
+      offsets
     );
-  return rows
-    .slice(range.first, range.last)
-    .map((record, index) => ({ record, index: range.first + index }));
+  return rows.slice(range.first, range.last).map((record, index) => ({
+    record,
+    index: range.first + index,
+    ...listBounds(node, offsets, range.first + index)
+  }));
 }
 const previousLists = new Map();
 watch(
@@ -222,8 +243,14 @@ watch(
       if (node.kind !== 'List') continue;
       present.add(node.id);
       const rows = props.models[node.source];
+      const offsets = listLayouts.value.get(node.id);
       const previous = previousLists.get(node.id);
-      if (previous?.rows === rows && previous.keyField === node.keyField)
+      if (
+        previous?.rows === rows &&
+        previous.keyField === node.keyField &&
+        previous.offsets === offsets &&
+        previous.rowHeight === node.rowHeight
+      )
         continue;
       const indexes = recordIndex(rows, node.keyField);
       const container = host.value?.querySelector(
@@ -241,17 +268,25 @@ watch(
           (row) => String(row[previous.keyField]) === key
         );
         if (oldIndex >= 0 && indexes.has(key))
-          offset += (indexes.get(key) - oldIndex) * node.rowHeight;
+          offset +=
+            (offsets
+              ? offsets[indexes.get(key)]
+              : indexes.get(key) * node.rowHeight) -
+            (previous.offsets
+              ? previous.offsets[oldIndex]
+              : oldIndex * previous.rowHeight);
       }
       offset = Math.max(
         0,
-        Math.min(
-          offset,
-          Math.max(0, rows.length * node.rowHeight - node.height)
-        )
+        Math.min(offset, Math.max(0, listHeight(node) - node.height))
       );
       scroll.value[node.id] = offset;
-      previousLists.set(node.id, { rows, keyField: node.keyField });
+      previousLists.set(node.id, {
+        rows,
+        keyField: node.keyField,
+        offsets,
+        rowHeight: node.rowHeight
+      });
       if (container)
         nextTick(() => {
           if (container.isConnected)
@@ -312,7 +347,8 @@ async function focusListRow(id, index, controlId) {
       list.clientHeight,
       rows.length,
       definition.rowHeight,
-      definition.rowGap ?? 4
+      definition.rowGap ?? 4,
+      listLayouts.value.get(definition.id)
     );
     list.scrollTop = offset;
     scroll.value = { ...scroll.value, [id]: offset };
@@ -674,7 +710,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         <div
           :style="{
             position: 'relative',
-            height: (models[node.source]?.length || 0) * node.rowHeight + 'px'
+            height: listHeight(node) + 'px'
           }"
         >
           <FrameView
@@ -685,8 +721,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
             class="frame-row"
             :class="{ 'frame-box': !node.fields.length }"
             :style="{
-              top: item.index * node.rowHeight + 'px',
-              height: listRowHeight(node) + 'px',
+              top: item.y + 'px',
+              height: item.height + 'px',
               width: node.width - 16 + 'px'
             }"
             :scene="describeRow(node, item.record, item.index)"

@@ -19,6 +19,15 @@ from tactic_stream.server.table_cells import WIDGETS
 OUT = Path(__file__).parent / "output"
 LEGACY = ROOT / "reports/table-view-2026-10-13/source_inventory.json"
 
+PRODUCTION_DEPENDENCIES = {
+    'pyasm.widget.table_element_wdg.RenderLinkTableElement':
+        'RenderLinkWdg unconditionally targets excluded pyasm.prod.web.RenderSubmissionWdg (legacy/src/pyasm/widget/web_wdg.py).',
+    'pyasm.widget.table_element_wdg.SubmissionLinkTableElement':
+        'SubmissionLinkWdg unconditionally targets excluded pyasm.prod.web.SubmissionWdg and vfx/submission (legacy/src/pyasm/widget/web_wdg.py).',
+    'tactic.ui.cgapp.loader_element_wdg.LoaderElementWdg':
+        'LoaderElementWdg requires excluded SessionContents and ProdLoaderContext (legacy/src/tactic/ui/cgapp/loader_element_wdg.py).',
+}
+
 
 def sources():
     for path in sorted(
@@ -150,6 +159,8 @@ def inventory(databases=()):
                         "excluded-production",
                         "Previously excluded obsolete pyasm.prod subsystem.",
                     )
+                elif key in PRODUCTION_DEPENDENCIES:
+                    status, reason = 'excluded-production', PRODUCTION_DEPENDENCIES[key]
                 elif name in unfinished:
                     status, reason = "excluded-unfinished", unfinished[name]
                 parts, current = [], node
