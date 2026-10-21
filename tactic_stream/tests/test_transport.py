@@ -4787,6 +4787,111 @@ return True
         self.assertEqual(cell['parent']['code'], 'B')
         self.assertTrue(cell['parentEditable'])
 
+    def publish_fixture(self):
+        proxy = self.proxy()
+        auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one', language='python')
+        with self.store.connection('one', write=True) as database:
+            database.execute('ALTER TABLE entity ADD COLUMN attachment text')
+        for view, elements in (
+            ('publish_test', '<element name="code"/><element name="name"/>'
+                '<element name="publish"><display class="PublishTableElement"><multi_publish>true</multi_publish></display></element>'
+                '<element name="general"><display class="tactic.ui.table.GeneralPublishElementWdg"><view>review_publish</view></display></element>'),
+            ('review_publish', '<element name="name"><display class="pyasm.widget.TextWdg"/></element>'
+                '<element name="attachment"><display class="tactic.ui.widget.SimpleUploadWdg"><context>publish/reference</context></display>'
+                '<action class="pyasm.command.UploadAction"/></element>'),
+            ('multi_publish', '<element name="name"><display class="pyasm.widget.TextWdg"/></element>')):
+            proxy.insert(auth, 'config/widget_config', dict(search_type='contract/entity', view=view, priority=100,
+                config='<config><'+view+'>'+elements+'</'+view+'></config>'))
+        return proxy, auth
+
+    def test_handler_publish_fallback_through_xmlrpc(self):
+        proxy, auth = self.publish_fixture()
+        text = (ROOT.parent.parent/'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        source = ast.get_source_segment(text, function)
+        keys = ['contract/entity?project=one&code=A', 'contract/entity?project=one&code=B']
+        source += '''
+from unittest.mock import patch
+from pyasm.widget import PublishTableElement, ThumbWdg
+from tactic.ui.table import GeneralPublishElementWdg
+with patch.object(PublishTableElement, 'get_cell_value', None), patch.object(GeneralPublishElementWdg, 'get_cell_value', None):
+    return query_table_layout('contract/entity', search_keys=kwargs['keys'], view='publish_test', project_code='one')
+'''
+        result = proxy.execute_python_script(auth, '', dict(code=source, keys=keys))['info']
+        result = json.loads(result) if isinstance(result, str) else result
+        for key in keys:
+            row = result['rows'][key]
+            for name in ('publish', 'general'):
+                self.assertFalse(row[name]['error'], row[name])
+                self.assertEqual(row[name]['targetSearchKey'], key)
+                self.assertEqual(row[name]['projectCode'], 'one')
+            self.assertEqual(row['publish']['publishView'], 'publish')
+            self.assertEqual(row['general']['publishView'], 'review_publish')
+            self.assertIn('preview', row['general'])
+
+    def test_table_publish_in_chromium(self):
+        proxy, auth = self.publish_fixture()
+        result = subprocess.run([shutil.which('node'), str(ROOT/'frontend/tests/table_publish.mjs'), self.url],
+            cwd=ROOT/'frontend', env=os.environ.copy(), capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=90)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(proxy.get_by_search_key(auth, 'contract/entity?project=one&code=A')['name'], 'Published in browser')
+        self.assertEqual(proxy.get_by_search_key(auth, 'contract/entity?project=one&code=B')['name'], "O'Reilly")
+        snapshots = proxy.query(auth, 'sthpw/snapshot', [['search_code', 'A'], ['context', 'publish/reference']])
+        snapshots = ast.literal_eval(snapshots) if isinstance(snapshots, str) else snapshots
+        snapshots = [row for row in snapshots if row['version'] > 0]
+        self.assertEqual(len(snapshots), 1)
+
+    def test_handler_configured_publish_actions_through_xmlrpc(self):
+        from types import SimpleNamespace
+        from pyasm.command import UploadAction
+        from pyasm.search import Search
+        from pyasm.search.search import RequestContext, request_context
+        proxy, auth = self.publish_fixture()
+        handler = ROOT.parent.parent/'th_codex'
+        self.enterContext(patch.object(sys, 'path', [str(handler), *sys.path]))
+        module = importlib.import_module('thlib.side.client.tactic_client_lib.tactic_server_stub')
+        client = module.TacticServerStub(setup=False, protocol='xmlrpc')
+        client.set_server(self.url)
+        client.set_project('one')
+        client.set_ticket(auth['ticket'])
+        self.addCleanup(client.server.__exit__, None, None, None)
+        key = 'contract/entity?project=one&code=A'
+        text = (handler/'thlib/tactic_query.py').read_text(encoding='utf-8')
+        query = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_EditWdg')
+        result = client.execute_python_script('', kwargs=dict(code=ast.get_source_segment(text, query)+
+            '\nreturn query_EditWdg(kwargs["args"], "contract/entity", "one")',
+            args=dict(mode='edit', input_prefix='edit', view='review_publish', search_type='contract/entity', search_key=key)))['info']
+        definition = json.loads(result) if isinstance(result, str) else result
+        text = (handler/'thlib/tactic_widgets.py').read_text(encoding='utf-8')
+        cls = next(node for node in ast.parse(text).body if isinstance(node, ast.ClassDef) and node.name == 'TacticEditWdg')
+        function = next(node for node in cls.body if isinstance(node, ast.FunctionDef) and node.name == '_commit_publish')
+        scope = {}
+        exec(ast.get_source_segment(text, function), scope)
+        owner = SimpleNamespace(options_dict=dict(configured_publish=definition['InputWidgets']), input_prefix='edit',
+            view='review_publish', get_search_type=lambda:'contract/entity', get_search_key=lambda:key, get_parent_search_key=lambda:None)
+        upload = Path(self.temp.name)/'native-publication.txt'
+        payload = b'Actual Handler configured publication\x00'
+        upload.write_bytes(payload)
+        values = dict(name='Published in Handler', attachment=str(upload))
+        original = UploadAction.postprocess
+        def fail(action):
+            original(action)
+            raise ValueError('Late native publication failure')
+        with patch.object(UploadAction, 'postprocess', fail), self.assertRaises(Fault):
+            scope['_commit_publish'](owner, values, client)
+        self.assertEqual(proxy.get_by_search_key(auth, key)['name'], 'Первый')
+        record = scope['_commit_publish'](owner, values, client)
+        self.assertEqual(record['name'], 'Published in Handler')
+        self.assertEqual(record['amount'], 0)
+        with request_context(RequestContext(self.store, 'admin', 'one')):
+            search = Search('sthpw/snapshot')
+            search.add_filter('context', 'publish/reference')
+            search.add_filter('version', 0, '>')
+            snapshots = search.get_sobjects()
+            self.assertEqual(len(snapshots), 1)
+            file = next(file for file in snapshots[0].get_all_file_objects() if file.get_type() == 'main')
+            self.assertEqual(Path(file.get_lib_path()).read_bytes(), payload)
+
     def test_table_parent_group_in_chromium(self):
         _proxy, _auth, notes = self.parent_group_fixture()
         environment = os.environ.copy()

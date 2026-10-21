@@ -5,6 +5,83 @@ import * as Menus from '../../src/tactic_stream/shared_ui/features/table/menus.u
 import * as Cells from '../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
 import * as Inline from '../../src/tactic_stream/shared_ui/features/table/inline.ui.mjs';
 import { validateScene } from '../../src/tactic_stream/shared_ui/core/frame.mjs';
+import * as Publish from '../../src/tactic_stream/shared_ui/features/table/publish.ui.mjs';
+import * as FileInput from '../../src/tactic_stream/shared_ui/controls/forms/file.ui.mjs';
+import { unsupportedField } from '../src/features/objects/recordFields.js';
+
+for (const value of ['', 'D:\\publish\\reference.txt', '/tmp/reference.txt'])
+  for (const enabled of [false, true]) {
+    const scene = FileInput.describe(value, 220, 'ru', enabled);
+    validateScene(scene);
+    assert.equal(
+      scene.nodes.find((node) => node.id === 'fileInputChoose').enabled,
+      enabled
+    );
+    assert.equal(
+      scene.nodes.some((node) => node.id === 'fileInputClear'),
+      !!value
+    );
+    if (value)
+      assert.equal(
+        scene.nodes.find((node) => node.id === 'fileInputName').text,
+        'reference.txt'
+      );
+  }
+
+for (const preview of [undefined, { image: '' }])
+  for (const height of [36, 58, 98])
+    for (const editable of [false, true]) {
+      const scene = Publish.describe(
+        { preview, available: true, publishView: 'review_publish' },
+        90,
+        height,
+        'en',
+        editable,
+        ''
+      );
+      validateScene(scene);
+      const action = scene.nodes.find((node) => node.id === 'tablePublish');
+      assert.deepEqual(action.action, {
+        type: 'service',
+        name: 'publish',
+        view: 'review_publish'
+      });
+      assert.equal(action.enabled, editable);
+      assert(
+        scene.nodes.every(
+          (node) => node.y >= 0 && node.y + node.height <= height
+        )
+      );
+    }
+assert.deepEqual(
+  Host.headerAction({
+    resolvedClass: 'PublishTableElement',
+    displayOptions: { multi_publish: 'true' }
+  }),
+  {
+    type: 'publish',
+    view: 'multi_publish',
+    label: 'Multi Publish',
+    icon: 'publish'
+  }
+);
+assert.equal(Host.headerAction({ resolvedClass: 'PublishTableElement' }), null);
+const upload = {
+  class_name: 'tactic.ui.widget.upload_wdg.SimpleUploadWdg',
+  values: [],
+  options: {},
+  action: { handler: 'pyasm.command.NullAction', options: {} }
+};
+assert(
+  unsupportedField(upload),
+  'Legacy NullAction must not become a fabricated check-in'
+);
+assert(
+  !unsupportedField({
+    ...upload,
+    action: { handler: 'pyasm.command.UploadAction', options: {} }
+  })
+);
 
 const columns = [
   { name: 'name', title: 'Name', width: 160, hideOrder: 0, sortable: true },

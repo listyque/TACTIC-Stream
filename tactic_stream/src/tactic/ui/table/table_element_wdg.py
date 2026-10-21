@@ -4,6 +4,36 @@
 import re
 from pyasm.search import Search
 from tactic.ui.common import BaseTableElementWdg
+from pyasm.widget.table_element_wdg import PublishTableElement
+
+
+class GeneralPublishElementWdg(PublishTableElement):
+    ARGS_KEYS = dict.fromkeys(('view', 'preview'), {})
+
+    def get_publish_view(self):
+        view = self.get_option('view') or 'publish'
+        if not isinstance(view, str) or not re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}', view):
+            raise ValueError('Invalid publish view')
+        return view
+
+    def preprocess(self):
+        self.thumb = None
+        if self.get_option('preview') not in ('false', False):
+            from pyasm.widget import ThumbWdg
+            self.thumb = ThumbWdg(name='preview')
+            self.thumb.set_options(self.options)
+            self.thumb.set_sobjects(self.sobjects)
+            self.thumb.preprocess()
+
+    def get_cell_value(self):
+        value = super().get_cell_value()
+        if value['available']:
+            if not hasattr(self, 'thumb'):
+                self.preprocess()
+            if self.thumb is not None:
+                self.thumb.set_current_index(self.current_index)
+                value['preview'] = self.thumb.get_cell_value()
+        return value
 
 
 class CheckinButtonElementWdg(BaseTableElementWdg):

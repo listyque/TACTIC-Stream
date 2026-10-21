@@ -115,6 +115,8 @@ def main():
         "frontend/src/features/interface/TableParentPicker.vue",
         "frontend/tests/frame_parent_state.mjs",
         "frontend/tests/table_parent.mjs",
+        "frontend/tests/table_publish.mjs",
+        "frontend/src/controls/forms/AppFileInput.vue",
         "frontend/tests/table_dependencies.mjs",
         "frontend/tests/frame_dependencies_state.mjs",
         "tools/frame_messages/*.{vue,html,mjs,json}",

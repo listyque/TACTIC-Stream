@@ -13,6 +13,7 @@ __all__ = ['WidgetConfigException', 'WidgetConfig', 'WidgetConfigView',
 __all__ += ["TaskCompletionWdg", "DiscussionWdg", "SObjectTaskTableElement", "TaskParentSpacingTableElement", "UpdateWdg", "MyTacticSummaryWdg"]
 __all__.append('SObjectConnectionElement')
 __all__.append('DependencyLink')
+__all__.append('PublishTableElement')
 
 
 def __getattr__(name):
@@ -28,7 +29,7 @@ def __getattr__(name):
     if name == 'GanttWdg':
         from .gantt_wdg import GanttWdg
         return GanttWdg
-    if name in ('HiddenRowToggleWdg', 'AuxDataWdg', 'FileAppendLinkTableElement'):
+    if name in ('HiddenRowToggleWdg', 'AuxDataWdg', 'FileAppendLinkTableElement', 'PublishTableElement'):
         from . import table_element_wdg
         return getattr(table_element_wdg, name)
     # The modern statistic class imports the common table base from this package.

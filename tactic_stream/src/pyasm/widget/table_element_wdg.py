@@ -269,3 +269,26 @@ class FileAppendLinkTableElement(BaseTableElementWdg):
         return dict(text='', targetSearchKey=obj.get_search_key(), projectCode=obj.get_value('project_code'),
                     actions=[dict(name='file-append', label='Attach files', icon='attach-file')])
 
+
+class PublishTableElement(BaseTableElementWdg):
+    """PublishLink's configured form; persistence stays with its field actions."""
+    ARGS_KEYS = dict.fromkeys(('multi_publish',), {})
+
+    def is_editable(self):
+        return False
+
+    def get_publish_view(self):
+        return 'publish'
+
+    def get_cell_value(self):
+        from pyasm.biz import Project
+        obj = self.get_current_sobject()
+        if obj is None or obj.is_insert():
+            return dict(text='', publish=True, available=False)
+        return dict(text='', publish=True, available=True, publishView=self.get_publish_view(),
+            targetSearchKey=obj.get_search_key(use_id=False),
+            projectCode=obj.get_value('project_code', no_exception=True) or Project.get_project_code())
+
+    def get_text_value(self):
+        return ''
+

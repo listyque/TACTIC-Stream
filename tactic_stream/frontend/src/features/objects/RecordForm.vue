@@ -12,6 +12,7 @@ import AppTextArea from '../../controls/AppTextArea.vue';
 import AppSelect from '../../controls/AppSelect.vue';
 import ObjectFieldFrame from './ObjectFieldFrame.vue';
 import ObjectFieldGrid from './ObjectFieldGrid.vue';
+import AppFileInput from '../../controls/forms/AppFileInput.vue';
 import ObjectEditorSurface from './ObjectEditorSurface.vue';
 import * as EditorUI from '../../../../src/tactic_stream/shared_ui/features/objects/editor.ui.mjs';
 import fieldCatalog from '../../../../src/tactic_stream/shared_ui/features/objects/fields.json';
@@ -31,6 +32,7 @@ export default {
     AppSelect,
     ObjectFieldFrame,
     ObjectFieldGrid,
+    AppFileInput,
     ObjectEditorSurface
   },
   props: {
@@ -64,13 +66,16 @@ export default {
       request: 0,
       files: {},
       selectedFields: [],
-      instanceRelation: null
+      instanceRelation: null,
+      operation: '',
+      formSearchKey: ''
     };
   },
   computed: {
     batchCreationAllowed() {
       return (
         !!this.definition &&
+        this.operation !== 'publish' &&
         this.definition.mode === 'insert' &&
         !this.instanceRelation &&
         this.definition.fields.every(
@@ -98,14 +103,17 @@ export default {
     editorModel() {
       return {
         title: this.t(
-          this.batch
-            ? 'Edit selected'
-            : this.definition?.mode === 'edit'
-              ? 'Edit record'
-              : 'Create record'
+          this.operation === 'publish'
+            ? 'Publish'
+            : this.batch
+              ? 'Edit selected'
+              : this.definition?.mode === 'edit'
+                ? 'Edit record'
+                : 'Create record'
         ),
         searchType: this.searchType,
-        mode: this.definition?.mode || 'insert',
+        mode: this.operation || this.definition?.mode || 'insert',
+        recordKey: this.formSearchKey,
         parentTitle: this.definition?.parent_key || '',
         fieldCount:
           this.definition?.fields.filter(
@@ -275,7 +283,7 @@ export default {
       const key =
         this.definition?.mode === 'edit' ? this.definition.search_key : null;
       this.$refs.dialog.close();
-      await this.open(key);
+      await this.open(key, null, { operation: this.operation });
     },
     previewBatch() {
       if (!this.$refs.form.checkValidity()) {
@@ -441,10 +449,27 @@ export default {
         'Connection context changed. Close this form and reopen it before saving.';
     },
     async open(searchKey = null, sourceKey = null, relation = {}) {
-      if (this.$refs.dialog.open) {
+      const uploads = Object.values(this.files).some((value) =>
+        Array.isArray(value) ? value.length : !!value
+      );
+      if (
+        this.$refs.dialog.open &&
+        (this.loading ||
+          this.saving ||
+          this.dirty ||
+          uploads ||
+          this.uncertain ||
+          this.createBatch)
+      ) {
         this.$refs.dialog.show();
         return;
       }
+      const { operation = '', ...relations } = relation;
+      if (!['', 'publish'].includes(operation))
+        throw new Error('Unsupported form operation');
+      this.operation = operation;
+      this.formSearchKey = searchKey || '';
+      relation = relations;
       const id = ++this.request;
       this.createBatch = false;
       this.batchIndex = -1;
@@ -762,13 +787,15 @@ export default {
           <h2>
             {{
               t(
-                batch
-                  ? 'Edit selected'
-                  : definition?.source_key
-                    ? 'Duplicate record'
-                    : definition?.mode === 'edit'
-                      ? 'Edit record'
-                      : 'Create record'
+                operation === 'publish'
+                  ? 'Publish'
+                  : batch
+                    ? 'Edit selected'
+                    : definition?.source_key
+                      ? 'Duplicate record'
+                      : definition?.mode === 'edit'
+                        ? 'Edit record'
+                        : 'Create record'
               )
             }}
           </h2>
@@ -904,11 +931,11 @@ export default {
                   :disabled="batch && disabled(field)"
                   :required="required(field)"
                 />
-                <input
+                <AppFileInput
                   v-else-if="kind(field) === 'FileInput'"
                   :id="`record-field-${formId}-${index}`"
-                  type="file"
-                  :name="inputName(field)"
+                  :label="field.title"
+                  :value="files[field.name]?.name || ''"
                   :disabled="disabled(field)"
                   :required="required(field)"
                   @change="selectFile(field, $event)"

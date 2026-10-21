@@ -972,14 +972,15 @@ export default {
       }
       this.changeColumns('copy', '', { view: 'th_table_' + slug, title });
     },
-    async openTableRecordForm(records, sourceKey = null) {
+    async openTableRecordForm(records, sourceKey = null, operation = '') {
       if (this.readOnly || !this.targetRecord) return;
       await this.$nextTick();
       this.$refs.tableForm.open(
         Array.isArray(records)
           ? records.map((record) => record.__search_key__)
           : records?.__search_key__ || null,
-        sourceKey
+        sourceKey,
+        { operation }
       );
     },
     async openTableRelations(record) {
@@ -1033,7 +1034,9 @@ export default {
       };
       this.targetInsertView = action.view;
       await this.$nextTick();
-      this.$refs.tableForm.open(null);
+      this.$refs.tableForm.open(null, null, {
+        operation: action.type === 'publish' ? 'publish' : ''
+      });
     },
     async createParentChild(cell) {
       if (this.readOnly || !cell.parent || cell.parent.retired) return;
@@ -1204,6 +1207,7 @@ export default {
             'drop-links',
             'change-parent',
             'drop-parent',
+            'publish',
             'add-task',
             'work'
           ].includes(kind)) ||
@@ -1474,10 +1478,17 @@ export default {
         await this.$nextTick();
         if (['delete', 'retire', 'reactivate'].includes(kind))
           this.$refs.tableDelete.open(target, kind);
-        else if (kind === 'edit') {
+        else if (kind === 'edit' || kind === 'publish') {
           this.targetIgnore = [];
-          this.targetEditView = cell.actionView || 'edit';
-          await this.openTableRecordForm(target);
+          this.targetEditView =
+            cell.actionView ||
+            cell.publishView ||
+            (kind === 'publish' ? 'publish' : 'edit');
+          await this.openTableRecordForm(
+            target,
+            null,
+            kind === 'publish' ? 'publish' : ''
+          );
         } else if (kind === 'checkin' || kind === 'file-append')
           await this.$refs.tableOperations.quick(
             target,

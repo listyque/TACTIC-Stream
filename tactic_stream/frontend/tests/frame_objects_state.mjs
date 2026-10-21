@@ -11,6 +11,23 @@ import * as Inspector from '../../src/tactic_stream/shared_ui/features/objects/i
 import * as Report from '../../src/tactic_stream/shared_ui/features/objects/report.ui.mjs';
 import { cssVariables } from '../../src/tactic_stream/shared_ui/core/foundation.mjs';
 
+for (const language of ['en', 'ru']) {
+  const model = {
+    mode: 'publish',
+    recordKey: 'demo/asset?project=demo&code=A',
+    searchType: 'demo/asset',
+    valid: true,
+    canSave: true
+  };
+  const scene = Editor.header(model, 320, language);
+  validateScene(scene);
+  assert.equal(
+    scene.nodes.find((node) => node.id === 'sobjectEditorParent').toolTip,
+    model.recordKey
+  );
+  assert(!scene.nodes.some((node) => node.id === 'sobjectCreateMode'));
+}
+
 for (const width of [0, 320, 880])
   for (const editing of [false, true]) {
     const scene = Description.describe(

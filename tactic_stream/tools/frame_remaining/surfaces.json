@@ -5396,6 +5396,20 @@
       "batch": "B07",
       "role": "domain form/presenter",
       "disposition": "B07 partial"
+    },
+    {
+      "product": "stream",
+      "file": "frontend/src/controls/forms/AppFileInput.vue",
+      "batch": "B07",
+      "role": "control/renderer",
+      "disposition": "B07 partial"
+    },
+    {
+      "product": "handler",
+      "file": "thlib/ui/qml/controls/FileInput.qml",
+      "batch": "B07",
+      "role": "control/renderer",
+      "disposition": "B07 partial"
     }
   ]
 }

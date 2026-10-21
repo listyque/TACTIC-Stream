@@ -1,8 +1,8 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { B as useId, C as h, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, M as onUpdated, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$4, k as t, o as mobile } from "./index.js";
-import { D as _sfc_main$10, Gt as label, Jt as rect, N as _sfc_main$9, O as _sfc_main$7, P as _sfc_main$5, R as _sfc_main$11, W as formDefinition, Wt as button, i as _sfc_main$6, qt as node, r as observeFrameSizes, st as rpc, wt as uploadFormFile, y as translate, z as _sfc_main$8 } from "./CodeBlock.js";
-import { n as arrange, t as _sfc_main$12 } from "./ObjectFieldFrame.js";
+import { A as appearance, at as _plugin_vue_export_helper_default, c as _sfc_main$5, k as t, o as mobile } from "./index.js";
+import { D as _sfc_main$11, Gt as label, Jt as rect, N as _sfc_main$10, O as _sfc_main$8, P as _sfc_main$7, R as _sfc_main$12, W as formDefinition, Wt as button, i as _sfc_main$6, qt as node, r as observeFrameSizes, st as rpc, wt as uploadFormFile, y as translate, z as _sfc_main$9 } from "./CodeBlock.js";
+import { n as arrange, t as _sfc_main$13 } from "./ObjectFieldFrame.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js
 function fieldKind(field) {
@@ -106,7 +106,7 @@ function unsupportedField(field) {
 }
 //#endregion
 //#region src/features/objects/ObjectFieldGrid.vue
-var _sfc_main$3 = {
+var _sfc_main$4 = {
 	__name: "ObjectFieldGrid",
 	setup(__props) {
 		const host = ref(null), height = ref(0);
@@ -155,6 +155,97 @@ var _sfc_main$3 = {
 				class: "object-field-grid",
 				style: normalizeStyle({ height: height.value + "px" })
 			}, [renderSlot(_ctx.$slots, "default")], 4);
+		};
+	}
+};
+//#endregion
+//#region ../src/tactic_stream/shared_ui/controls/forms/file.ui.mjs
+function describe(value, width, language, enabled = true) {
+	const tr = (text) => translate(text, language), name = String(value || "").replace(/\\/g, "/").split("/").pop(), actions = name ? 76 : 40;
+	const nodes = [
+		node("Box", "fileInputSurface", rect(0, 0, width, 44), { background: "surfaceContainerHigh" }),
+		label("fileInputName", rect(12, 10, Math.max(0, width - actions - 20), 24), name || tr("No file selected"), {
+			color: name ? "primaryText" : "secondaryText",
+			toolTip: name || "",
+			elideMiddle: true
+		}),
+		button("fileInputChoose", rect(Math.max(0, width - actions), 6, 32, 32), tr("Choose file"), "attach-file", { type: "choose" }, enabled, {
+			iconOnly: true,
+			iconAction: true
+		})
+	];
+	if (name) nodes.push(button("fileInputClear", rect(Math.max(0, width - 36), 6, 32, 32), tr("Clear file"), "close", { type: "clear" }, enabled, {
+		iconOnly: true,
+		iconAction: true
+	}));
+	return {
+		height: 44,
+		nodes
+	};
+}
+//#endregion
+//#region src/controls/forms/AppFileInput.vue
+var _hoisted_1$1 = [
+	"aria-label",
+	"disabled",
+	"required"
+];
+var _sfc_main$3 = {
+	__name: "AppFileInput",
+	props: {
+		value: String,
+		disabled: Boolean,
+		label: String,
+		required: Boolean
+	},
+	emits: ["change"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const input = ref(null);
+		const host = ref(null), width = ref(0);
+		let observer;
+		const scene = computed(() => describe(props.value, width.value, appearance.language, !props.disabled));
+		onMounted(() => {
+			const measure = () => {
+				width.value = host.value.clientWidth;
+			};
+			measure();
+			observer = observeFrameSizes(measure);
+			observer.observe(host.value);
+		});
+		onBeforeUnmount(() => observer?.disconnect());
+		function action(event) {
+			if (props.disabled) return;
+			if (event.type === "choose") input.value.click();
+			else if (event.type === "clear") {
+				input.value.value = "";
+				emit("change", { target: { files: [] } });
+			}
+		}
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				ref_key: "host",
+				ref: host,
+				class: "app-file-input",
+				style: {
+					"position": "relative",
+					"height": "44px",
+					"width": "100%"
+				}
+			}, [createVNode(_sfc_main$6, {
+				scene: scene.value,
+				onEvent: action
+			}, null, 8, ["scene"]), createBaseVNode("input", {
+				ref_key: "input",
+				ref: input,
+				type: "file",
+				hidden: "",
+				"aria-label": __props.label,
+				disabled: __props.disabled,
+				required: __props.required,
+				onChange: _cache[0] || (_cache[0] = ($event) => emit("change", $event))
+			}, null, 40, _hoisted_1$1)], 512);
 		};
 	}
 };
@@ -268,14 +359,14 @@ var _sfc_main$2 = {
 				class: normalizeClass(["app-spin-box", { disabled: __props.disabled }]),
 				onKeydown: key
 			}, [
-				createVNode(_sfc_main$4, {
+				createVNode(_sfc_main$5, {
 					"icon-only": "",
 					icon: "chevron-down",
 					label: "Decrease value",
 					disabled: __props.disabled || __props.readonly || __props.modelValue <= __props.min,
 					onClick: _cache[0] || (_cache[0] = ($event) => increment(-1))
 				}, null, 8, ["disabled"]),
-				createVNode(_sfc_main$5, {
+				createVNode(_sfc_main$7, {
 					modelValue: text.value,
 					"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => text.value = $event),
 					inputmode: "decimal",
@@ -304,7 +395,7 @@ var _sfc_main$2 = {
 					"aria-valuenow",
 					"error-state"
 				]),
-				createVNode(_sfc_main$4, {
+				createVNode(_sfc_main$5, {
 					"icon-only": "",
 					icon: "chevron-up",
 					label: "Increase value",
@@ -327,6 +418,7 @@ var editor_ui_exports = /* @__PURE__ */ __exportAll({
 });
 function header(model, width, language) {
 	const tr = (text) => translate(text, language), compact = width < 660, height = compact ? 90 : 98, margin = compact ? 16 : 22;
+	const publishing = model.mode === "publish", context = publishing ? model.recordKey || tr("New object") : model.parentTitle;
 	const actions = model.mode === "insert" ? Math.min(238, Math.max(80, width - margin * 2 - 142)) : 0;
 	const refreshX = width - margin - 28, modeX = refreshX - 8 - actions;
 	const textWidth = Math.max(0, (model.mode === "insert" ? modeX : refreshX - (model.mode === "edit" ? 60 : 0)) - margin - 57 - 10);
@@ -335,22 +427,23 @@ function header(model, width, language) {
 		node("Box", "sobjectEditorIconSurface", rect(margin, (height - 44) / 2, 44, 44), {
 			background: "secondaryContainer",
 			children: [node("Icon", "sobjectEditorIcon", rect(11, 11, 22, 22), {
-				icon: "sobject",
+				icon: model.mode === "publish" ? "publish" : "sobject",
 				color: "action"
 			})]
 		}),
-		label("sobjectEditorTitle", rect(margin + 57, model.parentTitle ? 14 : 22, textWidth, 24), model.title || tr(model.mode === "edit" ? "Edit record" : "Create record"), {
+		label("sobjectEditorTitle", rect(margin + 57, context ? 14 : 22, textWidth, 24), (model.mode === "publish" ? tr("Publish") : model.title) || tr(model.mode === "edit" ? "Edit record" : "Create record"), {
 			fontRole: "bodyLarge",
 			weight: 600
 		}),
-		label("sobjectEditorType", rect(margin + 57, model.parentTitle ? 40 : 48, Math.max(0, width - margin * 2 - 57), 20), model.searchType || "", {
+		label("sobjectEditorType", rect(margin + 57, context ? 40 : 48, Math.max(0, width - margin * 2 - 57), 20), model.searchType || "", {
 			elideMiddle: true,
 			color: "secondaryText"
 		})
 	];
-	if (model.parentTitle) nodes.push(label("sobjectEditorParent", rect(margin + 57, 63, Math.max(0, width - margin * 2 - 57), 18), tr("Parent") + ": " + model.parentTitle, {
+	if (context) nodes.push(label("sobjectEditorParent", rect(margin + 57, 63, Math.max(0, width - margin * 2 - 57), 18), tr(publishing ? "Object" : "Parent") + ": " + context, {
 		fontRole: "caption",
-		color: "secondaryText"
+		color: "secondaryText",
+		toolTip: context
 	}));
 	if (model.mode === "insert") nodes.push(node("Segmented", "sobjectCreateMode", rect(modeX, 18, actions, 36), {
 		label: tr("Create mode"),
@@ -483,7 +576,7 @@ function tools(model, width, language) {
 }
 function footer(model, width, language) {
 	const tr = (text) => translate(text, language), compact = width < 660, margin = compact ? 16 : 22;
-	const submit = model.submitLabel || (model.mode === "edit" ? tr("Save changes") : model.batchPreview ? translate("Create {count} objects", language, { count: model.batchTotal }) : model.batchEnabled ? translate("Preview {count} objects", language, { count: model.batchCount }) : tr("Create"));
+	const submit = model.submitLabel || (model.mode === "publish" ? tr("Publish") : model.mode === "edit" ? tr("Save changes") : model.batchPreview ? translate("Create {count} objects", language, { count: model.batchTotal }) : model.batchEnabled ? translate("Preview {count} objects", language, { count: model.batchCount }) : tr("Create"));
 	const submitWidth = Math.min(width * .52, Math.max(72, submit.length * 6 + 32)), backWidth = model.batchPreview ? 86 : 0, closeWidth = 72, submitX = width - margin - submitWidth;
 	const nodes = [
 		node("Box", "sobjectEditorFooter", rect(0, 0, width, 58), {
@@ -595,15 +688,16 @@ var _sfc_main = {
 		return { formId: useId() };
 	},
 	components: {
-		AppDateField: _sfc_main$7,
-		AppSwitch: _sfc_main$8,
-		AppColorInput: _sfc_main$9,
-		AppButton: _sfc_main$4,
-		AppTextField: _sfc_main$5,
-		AppTextArea: _sfc_main$10,
-		AppSelect: _sfc_main$11,
-		ObjectFieldFrame: _sfc_main$12,
-		ObjectFieldGrid: _sfc_main$3,
+		AppDateField: _sfc_main$8,
+		AppSwitch: _sfc_main$9,
+		AppColorInput: _sfc_main$10,
+		AppButton: _sfc_main$5,
+		AppTextField: _sfc_main$7,
+		AppTextArea: _sfc_main$11,
+		AppSelect: _sfc_main$12,
+		ObjectFieldFrame: _sfc_main$13,
+		ObjectFieldGrid: _sfc_main$4,
+		AppFileInput: _sfc_main$3,
 		ObjectEditorSurface: _sfc_main$1
 	},
 	props: {
@@ -646,12 +740,14 @@ var _sfc_main = {
 			request: 0,
 			files: {},
 			selectedFields: [],
-			instanceRelation: null
+			instanceRelation: null,
+			operation: "",
+			formSearchKey: ""
 		};
 	},
 	computed: {
 		batchCreationAllowed() {
-			return !!this.definition && this.definition.mode === "insert" && !this.instanceRelation && this.definition.fields.every((field) => this.readOnly(field) || ["HiddenWdg", "ParentInput"].includes(this.kind(field)) || [
+			return !!this.definition && this.operation !== "publish" && this.definition.mode === "insert" && !this.instanceRelation && this.definition.fields.every((field) => this.readOnly(field) || ["HiddenWdg", "ParentInput"].includes(this.kind(field)) || [
 				"TextWdg",
 				"TextAreaWdg",
 				"SelectWdg",
@@ -668,9 +764,10 @@ var _sfc_main = {
 		},
 		editorModel() {
 			return {
-				title: this.t(this.batch ? "Edit selected" : this.definition?.mode === "edit" ? "Edit record" : "Create record"),
+				title: this.t(this.operation === "publish" ? "Publish" : this.batch ? "Edit selected" : this.definition?.mode === "edit" ? "Edit record" : "Create record"),
 				searchType: this.searchType,
-				mode: this.definition?.mode || "insert",
+				mode: this.operation || this.definition?.mode || "insert",
+				recordKey: this.formSearchKey,
 				parentTitle: this.definition?.parent_key || "",
 				fieldCount: this.definition?.fields.filter((field) => this.kind(field) !== "HiddenWdg").length || 0,
 				busy: this.loading || this.saving,
@@ -806,7 +903,7 @@ var _sfc_main = {
 			if (this.dirty || this.saving || this.uncertain) return;
 			const key = this.definition?.mode === "edit" ? this.definition.search_key : null;
 			this.$refs.dialog.close();
-			await this.open(key);
+			await this.open(key, null, { operation: this.operation });
 		},
 		previewBatch() {
 			if (!this.$refs.form.checkValidity()) {
@@ -929,10 +1026,16 @@ var _sfc_main = {
 			this.error = "Connection context changed. Close this form and reopen it before saving.";
 		},
 		async open(searchKey = null, sourceKey = null, relation = {}) {
-			if (this.$refs.dialog.open) {
+			const uploads = Object.values(this.files).some((value) => Array.isArray(value) ? value.length : !!value);
+			if (this.$refs.dialog.open && (this.loading || this.saving || this.dirty || uploads || this.uncertain || this.createBatch)) {
 				this.$refs.dialog.show();
 				return;
 			}
+			const { operation = "", ...relations } = relation;
+			if (!["", "publish"].includes(operation)) throw new Error("Unsupported form operation");
+			this.operation = operation;
+			this.formSearchKey = searchKey || "";
+			relation = relations;
 			const id = ++this.request;
 			this.createBatch = false;
 			this.batchIndex = -1;
@@ -1150,27 +1253,20 @@ var _hoisted_14 = {
 };
 var _hoisted_15 = ["id"];
 var _hoisted_16 = ["name", "value"];
-var _hoisted_17 = [
-	"id",
-	"name",
-	"disabled",
-	"required",
-	"onChange"
-];
-var _hoisted_18 = ["id", "disabled"];
-var _hoisted_19 = [
+var _hoisted_17 = ["id", "disabled"];
+var _hoisted_18 = [
 	"multiple",
 	"required",
 	"onChange"
 ];
-var _hoisted_20 = ["onUpdate:modelValue", "aria-label"];
-var _hoisted_21 = ["value"];
-var _hoisted_22 = ["onUpdate:modelValue"];
-var _hoisted_23 = { key: 0 };
+var _hoisted_19 = ["onUpdate:modelValue", "aria-label"];
+var _hoisted_20 = ["value"];
+var _hoisted_21 = ["onUpdate:modelValue"];
+var _hoisted_22 = { key: 0 };
+var _hoisted_23 = ["onUpdate:modelValue"];
 var _hoisted_24 = ["onUpdate:modelValue"];
-var _hoisted_25 = ["onUpdate:modelValue"];
-var _hoisted_26 = { class: "configuration-toggle" };
-var _hoisted_27 = [
+var _hoisted_25 = { class: "configuration-toggle" };
+var _hoisted_26 = [
 	"id",
 	"onUpdate:modelValue",
 	"name",
@@ -1178,35 +1274,36 @@ var _hoisted_27 = [
 	"disabled",
 	"required"
 ];
-var _hoisted_28 = ["id", "disabled"];
-var _hoisted_29 = [
+var _hoisted_27 = ["id", "disabled"];
+var _hoisted_28 = [
 	"onUpdate:modelValue",
 	"value",
 	"name",
 	"required"
 ];
-var _hoisted_30 = {
+var _hoisted_29 = {
 	key: 15,
 	class: "muted"
 };
-var _hoisted_31 = {
+var _hoisted_30 = {
 	key: 16,
 	class: "muted"
 };
-var _hoisted_32 = {
+var _hoisted_31 = {
 	key: 17,
 	class: "muted"
 };
-var _hoisted_33 = {
+var _hoisted_32 = {
 	key: 0,
 	class: "notice",
 	role: "alert"
 };
-var _hoisted_34 = { class: "configuration-actions" };
+var _hoisted_33 = { class: "configuration-actions" };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_ObjectEditorSurface = resolveComponent("ObjectEditorSurface");
 	const _component_AppColorInput = resolveComponent("AppColorInput");
+	const _component_AppFileInput = resolveComponent("AppFileInput");
 	const _component_AppSwitch = resolveComponent("AppSwitch");
 	const _component_AppDateField = resolveComponent("AppDateField");
 	const _component_AppSelect = resolveComponent("AppSelect");
@@ -1233,7 +1330,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		},
 		contextValid: $options.contextValid
 	}, void 0, void 0, 0) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-		createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($options.t($options.batch ? "Edit selected" : $data.definition?.source_key ? "Duplicate record" : $data.definition?.mode === "edit" ? "Edit record" : "Create record")), 1), createBaseVNode("small", _hoisted_2, toDisplayString($options.batch ? $options.t("{count} selected records", { count: $data.definition.search_keys.length }) : $data.definition?.source_key || $data.definition?.search_key || $props.searchType), 1)]), createVNode(_component_AppButton, {
+		createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($options.t($data.operation === "publish" ? "Publish" : $options.batch ? "Edit selected" : $data.definition?.source_key ? "Duplicate record" : $data.definition?.mode === "edit" ? "Edit record" : "Create record")), 1), createBaseVNode("small", _hoisted_2, toDisplayString($options.batch ? $options.t("{count} selected records", { count: $data.definition.search_keys.length }) : $data.definition?.source_key || $data.definition?.search_key || $props.searchType), 1)]), createVNode(_component_AppButton, {
 			label: "Close",
 			icon: "close",
 			"icon-only": $options.mobile,
@@ -1312,15 +1409,22 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"readonly",
 									"disabled",
 									"required"
-								])) : $options.kind(field) === "FileInput" ? (openBlock(), createElementBlock("input", {
+								])) : $options.kind(field) === "FileInput" ? (openBlock(), createBlock(_component_AppFileInput, {
 									key: 6,
 									id: `record-field-${$setup.formId}-${index}`,
-									type: "file",
-									name: $options.inputName(field),
+									label: field.title,
+									value: $data.files[field.name]?.name || "",
 									disabled: $options.disabled(field),
 									required: $options.required(field),
 									onChange: ($event) => $options.selectFile(field, $event)
-								}, null, 40, _hoisted_17)) : $options.kind(field) === "MultiUpload" ? (openBlock(), createElementBlock("fieldset", {
+								}, null, 8, [
+									"id",
+									"label",
+									"value",
+									"disabled",
+									"required",
+									"onChange"
+								])) : $options.kind(field) === "MultiUpload" ? (openBlock(), createElementBlock("fieldset", {
 									key: 7,
 									id: `record-field-${$setup.formId}-${index}`,
 									disabled: $options.disabled(field),
@@ -1333,7 +1437,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 											multiple: field.input.arbitrary,
 											required: slot.required && ($data.definition.mode === "insert" || Object.values($data.draft[field.name].files).some((files) => files.length)),
 											onChange: ($event) => $options.selectUploads(field, `${field.name}|${slot.name}`, $event)
-										}, null, 40, _hoisted_19)]);
+										}, null, 40, _hoisted_18)]);
 									}), 128)),
 									createBaseVNode("label", null, [createTextVNode(toDisplayString($options.t("Context")) + " ", 1), field.input.context.type === "select" ? withDirectives((openBlock(), createElementBlock("select", {
 										key: 0,
@@ -1343,22 +1447,22 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										return openBlock(), createElementBlock("option", {
 											key: option,
 											value
-										}, toDisplayString(field.input.context.labels[option]), 9, _hoisted_21);
-									}), 128))], 8, _hoisted_20)), [[vModelSelect, $data.draft[field.name].context]]) : withDirectives((openBlock(), createElementBlock("input", {
+										}, toDisplayString(field.input.context.labels[option]), 9, _hoisted_20);
+									}), 128))], 8, _hoisted_19)), [[vModelSelect, $data.draft[field.name].context]]) : withDirectives((openBlock(), createElementBlock("input", {
 										key: 1,
 										"onUpdate:modelValue": ($event) => $data.draft[field.name].context = $event
-									}, null, 8, _hoisted_22)), [[vModelText, $data.draft[field.name].context]])]),
-									field.input.subcontext ? (openBlock(), createElementBlock("label", _hoisted_23, [createTextVNode(toDisplayString($options.t("Subcontext")), 1), withDirectives(createBaseVNode("input", { "onUpdate:modelValue": ($event) => $data.draft[field.name].subcontext = $event }, null, 8, _hoisted_24), [[vModelText, $data.draft[field.name].subcontext]])])) : createCommentVNode("", true),
+									}, null, 8, _hoisted_21)), [[vModelText, $data.draft[field.name].context]])]),
+									field.input.subcontext ? (openBlock(), createElementBlock("label", _hoisted_22, [createTextVNode(toDisplayString($options.t("Subcontext")), 1), withDirectives(createBaseVNode("input", { "onUpdate:modelValue": ($event) => $data.draft[field.name].subcontext = $event }, null, 8, _hoisted_23), [[vModelText, $data.draft[field.name].subcontext]])])) : createCommentVNode("", true),
 									createBaseVNode("label", null, [createTextVNode(toDisplayString($options.t("Comment")), 1), withDirectives(createBaseVNode("textarea", {
 										"onUpdate:modelValue": ($event) => $data.draft[field.name].description = $event,
 										rows: "3"
-									}, null, 8, _hoisted_25), [[vModelText, $data.draft[field.name].description]])]),
-									createBaseVNode("div", _hoisted_26, [createBaseVNode("span", null, toDisplayString($options.t("Is revision")), 1), createVNode(_component_AppSwitch, {
+									}, null, 8, _hoisted_24), [[vModelText, $data.draft[field.name].description]])]),
+									createBaseVNode("div", _hoisted_25, [createBaseVNode("span", null, toDisplayString($options.t("Is revision")), 1), createVNode(_component_AppSwitch, {
 										modelValue: $data.draft[field.name].is_revision,
 										"onUpdate:modelValue": ($event) => $data.draft[field.name].is_revision = $event,
 										label: "Is revision"
 									}, null, 8, ["modelValue", "onUpdate:modelValue"])])
-								], 8, _hoisted_18)) : $options.kind(field) === "CheckboxWdg" ? (openBlock(), createBlock(_component_AppSwitch, {
+								], 8, _hoisted_17)) : $options.kind(field) === "CheckboxWdg" ? (openBlock(), createBlock(_component_AppSwitch, {
 									key: 8,
 									id: `record-field-${$setup.formId}-${index}`,
 									name: $options.inputName(field),
@@ -1383,7 +1487,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									readonly: $options.readOnly(field),
 									disabled: $options.batch && $options.disabled(field),
 									required: $options.required(field)
-								}, null, 8, _hoisted_27)), [[vModelText, $data.draft[field.name]]]) : $options.kind(field) === "CalendarInputWdg" ? (openBlock(), createBlock(_component_AppDateField, {
+								}, null, 8, _hoisted_26)), [[vModelText, $data.draft[field.name]]]) : $options.kind(field) === "CalendarInputWdg" ? (openBlock(), createBlock(_component_AppDateField, {
 									key: 10,
 									id: `record-field-${$setup.formId}-${index}`,
 									"include-time": field.input.type !== "date",
@@ -1436,8 +1540,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										value,
 										name: $options.inputName(field),
 										required: $options.required(field) && !$data.draft[field.name].length && option === 0
-									}, null, 8, _hoisted_29), [[vModelCheckbox, $data.draft[field.name]]])]);
-								}), 128))], 8, _hoisted_28)) : $options.kind(field) === "TextAreaWdg" ? (openBlock(), createBlock(_component_AppTextArea, {
+									}, null, 8, _hoisted_28), [[vModelCheckbox, $data.draft[field.name]]])]);
+								}), 128))], 8, _hoisted_27)) : $options.kind(field) === "TextAreaWdg" ? (openBlock(), createBlock(_component_AppTextArea, {
 									key: 13,
 									label: field.title,
 									id: `record-field-${$setup.formId}-${index}`,
@@ -1481,9 +1585,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"disabled",
 									"required",
 									"size"
-								])) : (openBlock(), createElementBlock("span", _hoisted_30, toDisplayString($options.t("Widget unavailable")), 1)),
-								field.options.hint || field.options.hint_text ? (openBlock(), createElementBlock("small", _hoisted_31, toDisplayString(field.options.hint || field.options.hint_text), 1)) : createCommentVNode("", true),
-								field.input?.timezone ? (openBlock(), createElementBlock("small", _hoisted_32, toDisplayString($options.t("Time zone: {timezone}", { timezone: field.input.timezone === "local" ? $options.t("Server local time") : field.input.timezone })), 1)) : createCommentVNode("", true)
+								])) : (openBlock(), createElementBlock("span", _hoisted_29, toDisplayString($options.t("Widget unavailable")), 1)),
+								field.options.hint || field.options.hint_text ? (openBlock(), createElementBlock("small", _hoisted_30, toDisplayString(field.options.hint || field.options.hint_text), 1)) : createCommentVNode("", true),
+								field.input?.timezone ? (openBlock(), createElementBlock("small", _hoisted_31, toDisplayString($options.t("Time zone: {timezone}", { timezone: field.input.timezone === "local" ? $options.t("Server local time") : field.input.timezone })), 1)) : createCommentVNode("", true)
 							]),
 							_: 2
 						}, 1032, [
@@ -1494,7 +1598,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					}), 128))]),
 					_: 1
 				})], 8, _hoisted_10),
-				$data.discard ? (openBlock(), createElementBlock("div", _hoisted_33, [createBaseVNode("p", null, toDisplayString($options.t("Discard unsaved changes?")), 1), createBaseVNode("div", _hoisted_34, [createVNode(_component_AppButton, {
+				$data.discard ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("p", null, toDisplayString($options.t("Discard unsaved changes?")), 1), createBaseVNode("div", _hoisted_33, [createVNode(_component_AppButton, {
 					label: "Keep editing",
 					onClick: _cache[1] || (_cache[1] = ($event) => $data.discard = false)
 				}), createVNode(_component_AppButton, {

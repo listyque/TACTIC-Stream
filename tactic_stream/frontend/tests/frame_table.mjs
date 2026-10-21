@@ -683,6 +683,44 @@ try {
       const image = record.image.replace('-native-', '-stream-');
       await page.locator(selector).screenshot({ path: out + image });
       cases.push({ image, fixture, ...compared });
+    } else if (fixture.screen === 'publish-file') {
+      const selector = '.app-file-input > .frame-view';
+      await page
+        .locator(selector)
+        .locator('[data-frame="fileInputChoose"]')
+        .waitFor();
+      const actual = await surface(page, selector);
+      const compared = await compareSurface(
+        page,
+        selector,
+        actual,
+        record,
+        record.image
+      );
+      const image = record.image.replace('-native-', '-stream-');
+      await page.locator(selector).screenshot({ path: out + image });
+      cases.push({ image, fixture, ...compared });
+    } else if (fixture.screen === 'publish-form') {
+      const selector = '.object-editor-surface > .frame-view';
+      await page
+        .locator(selector)
+        .locator(
+          '[data-frame="sobjectEditor' +
+            (fixture.part === 'header' ? 'Title' : 'Submit') +
+            '"]'
+        )
+        .waitFor();
+      const actual = await surface(page, selector);
+      const compared = await compareSurface(
+        page,
+        selector,
+        actual,
+        record,
+        record.image
+      );
+      const image = record.image.replace('-native-', '-stream-');
+      await page.locator(selector).screenshot({ path: out + image });
+      cases.push({ image, fixture, ...compared });
     } else if (fixture.screen === 'nested') {
       const selector = '.nested-table > .frame-view';
       for (const [text, label] of Object.entries(record.embeddedText)) {

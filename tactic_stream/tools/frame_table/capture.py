@@ -227,6 +227,15 @@ def capture(fixture, qml, original):
         view = component.createWithInitialProperties(dict(theme=theme, controller=controller,
             columnsController=columns, userModel=users, services=None, administration=None, scope=scope,
             width=fixture['width'], height=fixture['height']))
+    elif fixture['screen'] == 'publish-file':
+        component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'controls/FileInput.qml')))
+        view = component.createWithInitialProperties(dict(theme=theme,
+            value='' if fixture['mode'] == 'empty' else 'reference.txt', editable=fixture['mode'] != 'busy',
+            width=fixture['width'], height=fixture['height']))
+    elif fixture['screen'] == 'publish-form':
+        component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'features/objects/ObjectEditorSurface.qml')))
+        view = component.createWithInitialProperties(dict(theme=theme, model=fixture['model'], part=fixture['part'],
+            width=fixture['width'], height=fixture['height']))
     elif fixture['screen'] == 'parent':
         from tests.test_table_parent_group import ParentResponses
         owner = ParentResponses()
@@ -454,11 +463,31 @@ def main():
     ]
     names += ['thlib/ui/table/dependencies.py', 'thlib/ui/table/requests.py', 'tests/test_table_dependencies.py',
         'thlib/ui/table/parent_group.py', 'tests/test_table_parent_group.py', 'thlib/ui/workspace_models/results_organization.py']
+    names += ['thlib/ui/sobject_editor.py', 'tests/test_sobject_editor.py',
+        'thlib/tactic_widgets.py', 'thlib/ui/qml/SObjectValueEditor.qml',
+        'thlib/ui/qml/controls/FileInput.qml', 'tests/test_upload_multipart.py',
+        'thlib/side/client/tactic_client_lib/common/upload_multipart.py',
+        'tests/test_table_service_workflows.py', 'thlib/ui/qml/features/objects/ObjectEditorSurface.qml',
+        'thlib/ui/controllers/commands.py', 'thlib/ui/controllers/item_operations.py']
     shared, native = source_hashes(ROOT, HANDLER, names)
     captures = []
     for style in ("md3", "fluent", "material5"):
         for dark in (False, True):
             for language in ("en", "ru"):
+                for width in (320, 800):
+                    for mode in ('empty', 'selected', 'busy'):
+                        fixture = dict(screen='publish-file', mode=mode, width=width, height=44,
+                            style=style, dark=dark, language=language)
+                        captures.append(capture(fixture, HANDLER/'thlib/ui/qml', False))
+                    for mode in ('existing', 'new', 'ready', 'busy', 'unknown'):
+                        part = 'header' if mode in ('existing', 'new') else 'footer'
+                        model = dict(mode='publish', searchType='cg/assets', fieldCount=2, valid=True, canSave=True,
+                            recordKey='cg/assets?project=cg&code=ROBOT' if mode != 'new' else '',
+                            busy=mode == 'busy', uncertain=mode == 'unknown')
+                        fixture = dict(screen='publish-form', mode=mode, part=part, model=model,
+                            width=width, height=(90 if width < 660 else 98) if part == 'header' else 58,
+                            style=style, dark=dark, language=language)
+                        captures.append(capture(fixture, HANDLER/'thlib/ui/qml', False))
                 parent = json.loads((ROOT/'tests/fixtures/frame_table_parent.json').read_text(encoding='utf-8'))
                 for width in (288, 800):
                     for mode, model in parent['models'].items():
@@ -495,7 +524,7 @@ def main():
                         screen="cell",
                         value=value,
                         width=280,
-                        height=118 if value["name"] == "object_summary" else 102 if value["name"] == "object_connections" else 90 if value["name"] in ("legacy_tasks","custom_layout","drop_links") else 58,
+                        height=118 if value["name"] == "object_summary" else 102 if value["name"] == "object_connections" else 98 if value["name"] == "publish_preview" else 90 if value["name"] in ("legacy_tasks","custom_layout","drop_links") else 58,
                         style=style,
                         dark=dark,
                         language=language,

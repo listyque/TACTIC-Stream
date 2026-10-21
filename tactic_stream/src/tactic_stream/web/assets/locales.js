@@ -6455,7 +6455,18 @@ var ru_default = {
 	"This nested table would repeat an ancestor scope": "Эта вложенная таблица повторяет область родительской таблицы",
 	"Object summary": "Сводка объекта",
 	"Check saved changes": "Проверить сохранение",
-	"Server worker is unavailable": "Обработчик серверного запроса недоступен"
+	"Server worker is unavailable": "Обработчик серверного запроса недоступен",
+	Publish: "Опубликовать",
+	"Multi Publish": "Групповая публикация",
+	"New object": "Новый объект",
+	"Invalid publish view": "Некорректный вид публикации",
+	"Unsupported form operation": "Неподдерживаемая операция формы",
+	"Choose file": "Выбрать файл",
+	"Clear file": "Убрать файл",
+	"No file selected": "Файл не выбран",
+	"This configured publish form contains unsupported fields or actions": "Форма публикации содержит неподдерживаемые поля или действия",
+	"Choose an existing file": "Выберите существующий файл",
+	"The configured publication result could not be verified": "Не удалось проверить результат публикации"
 };
 //#endregion
 export { en_default as n, ru_default as t };

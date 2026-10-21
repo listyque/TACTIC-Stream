@@ -542,5 +542,43 @@
         }
       ]
     }
+  },
+  {
+    "name": "publish_preview",
+    "kind": "commands",
+    "cell": {
+      "publish": true,
+      "available": true,
+      "publishView": "review_publish",
+      "targetSearchKey": "cg/assets?project=cg&code=ROBOT",
+      "preview": {
+        "image": "",
+        "text": ""
+      }
+    }
+  },
+  {
+    "name": "publish_compact",
+    "kind": "commands",
+    "cell": {
+      "publish": true,
+      "available": true,
+      "publishView": "review_publish",
+      "targetSearchKey": "cg/assets?project=cg&code=ROBOT",
+      "preview": {
+        "image": "",
+        "text": ""
+      }
+    }
+  },
+  {
+    "name": "publish_unavailable",
+    "kind": "commands",
+    "cell": {
+      "publish": true,
+      "available": false,
+      "publishView": "review_publish",
+      "targetSearchKey": "cg/assets?project=cg&code=ROBOT"
+    }
   }
 ]

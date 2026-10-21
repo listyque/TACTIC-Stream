@@ -1,7 +1,7 @@
 # Tactic Frame B07: Table View checkpoint
 
 B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the current widget-config census contains 2 classes without typed adapters. The
+the current widget-config census contains no classes without typed adapters. The
 combined second stage extends the catalogue with the explicit limits below.
 A registered adapter is not proof that every old
 display option or embedded action works.
@@ -566,12 +566,12 @@ examples are also in EN/RU Help → Table View: B07.
 ### L04 — Файловые действия в таблице (7)
 
 - [x] `pyasm.widget.table_element_wdg.FileAppendLinkTableElement`
-- [ ] `pyasm.widget.table_element_wdg.PublishTableElement`
+- [x] `pyasm.widget.table_element_wdg.PublishTableElement` — configured row form and optional Multi Publish header; configured field actions, not an invented generic check-in.
 - Excluded: `pyasm.widget.table_element_wdg.RenderLinkTableElement` — requires the previously excluded production subsystem; see the source inventory.
 - Excluded: `pyasm.widget.table_element_wdg.SubmissionLinkTableElement` — requires the previously excluded production subsystem; see the source inventory.
 - Excluded: `tactic.ui.cgapp.loader_element_wdg.LoaderElementWdg` — requires the previously excluded production subsystem; see the source inventory.
 - [ ] `tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg` — ordinary single files delivered in .177/.124; sequence/UDIM and remaining original options are not accepted yet.
-- [ ] `tactic.ui.table.table_element_wdg.GeneralPublishElementWdg`
+- [x] `tactic.ui.table.table_element_wdg.GeneralPublishElementWdg` — configured view and optional bounded preview; excluded Publish Browser is not included.
 
 Из ячейки выполнить append/publish/checkout/load/submission по исходным параметрам через текущие file/Commit Queue owners; проверить snapshot/version, naming, файлы, повтор, права и FileUndo. RenderLink не объявляет готовым отдельный render farm. Local/DCC операции остаются native capabilities, браузер показывает доступные ему действия и понятное ограничение.
 
@@ -639,3 +639,29 @@ bottom/group_bottom/total_summary contracts too. A 40-class checklist alone
 cannot certify all historical options. Current working controls remain delivered.
 The rest of API/native/workflow/database/deployment compatibility is L08–L12,
 not a reason to invent a second UI engine or to declare full TACTIC parity.
+
+
+### Configured publication checkpoint (.181/.128)
+
+Both canonical publish classes use the existing configured editor and EditCmd,
+with captured publish presentation, a target key, optional preview and explicit
+Multi Publish header. They preserve the configured UploadAction and rollback;
+NullAction is not substituted with a check-in. Dirty/busy/uncertain/batch editor
+sessions survive another row click; clean sessions may retarget. All shipped
+native object/task entry points use the same admission helper.
+
+Current registration: **74 classes / 180 named aliases**. The 239-source census
+references **71 adapted, 0 without adapters, 30 excluded-production and 3
+unfinished** classes. This is registration coverage, not completed acceptance:
+L04 sequence/UDIM/ingest, remaining L03/L06 and L07b remain open. The old
+HTML/Mako Custom Layout Editor and production Publish Browser stay excluded.
+Real original-server deployment, PostgreSQL, frozen EXE and physical devices
+remain unverified.
+
+Native publication supports text/multiline/select/checkbox and explicit
+SimpleUpload/UploadAction. Other configured input/action combinations block the
+form explicitly. It uses configured EditCmd rather than the ordinary native
+editor's direct update; other native forms retain their persistence. Native and
+browser FileInput controls share controls/forms/file.ui.mjs and live under their
+base-control directories. UploadMultipart closes HTTP connections on both success
+and failure. Ordinary-user ACL, form revisions and additional inputs stay L07b.

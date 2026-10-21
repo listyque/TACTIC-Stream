@@ -67,6 +67,8 @@ from tactic.ui.table.drop_element_wdg import DropElementWdg
 from pyasm.widget.sobject_browser_wdg import SObjectConnectionElement
 from pyasm.widget.dependency_wdg import DependencyLink
 from tactic.ui.table.group_element_wdg import ParentGroupTableElementWdg, read_parent_cells
+from pyasm.widget.table_element_wdg import PublishTableElement
+from tactic.ui.table.table_element_wdg import GeneralPublishElementWdg
 from tactic.ui.table.sobject_summary_wdg import SObjectSummaryElementWdg
 
 from tactic.ui.table.custom_layout_element_wdg import CustomLayoutElementWdg
@@ -80,7 +82,7 @@ from tactic.ui.table.gantt_element_wdg import GanttElementWdg
 from tactic.ui.table.work_hours_element_wdg import WorkHoursElementWdg
 TIME_WIDGETS = (GanttWdg, GanttElementWdg, TimecardInfoTableElement, WeekTableElement, WorkHoursElementWdg)
 
-SERVICE_WIDGETS = (ParentGroupTableElementWdg, DependencyLink, SObjectSummaryElementWdg, SObjectConnectionElement, CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
+SERVICE_WIDGETS = (PublishTableElement, GeneralPublishElementWdg, ParentGroupTableElementWdg, DependencyLink, SObjectSummaryElementWdg, SObjectConnectionElement, CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
                    ProjectTemplateUpdateWdg, NotificationTriggerElementWdg, ButtonElementWdg,
                    ParallelStatusWdg, ParallelStatusEditWdg, SObjectTaskStatusElementWdg, WorkElementWdg, DropElementWdg)
 
@@ -256,6 +258,10 @@ def describe_cell(element, columns, search_type=""):
     allowed = {"column"}
     if widget in TIME_WIDGETS:
         allowed |= set(widget.ARGS_KEYS) if hasattr(widget, 'ARGS_KEYS') else set()
+    elif widget in (PublishTableElement, GeneralPublishElementWdg):
+        allowed |= set(widget.ARGS_KEYS)
+        if widget is GeneralPublishElementWdg:
+            supported = supported and options.get('preview') in (None, '', True, False, 'true', 'false')
     elif widget is ParentGroupTableElementWdg:
         allowed |= set(widget.ARGS_KEYS)
         supported = supported and options.get('disable') in (None, '', True, False, 'true', 'false')

@@ -536,8 +536,8 @@ defineExpose({ viewport });
         <AppButton
           v-if="Host.headerAction(column)"
           class="table-header-insert"
-          label="Create"
-          icon="add"
+          :label="Host.headerAction(column).label || 'Create'"
+          :icon="Host.headerAction(column).icon || 'add'"
           compact
           icon-only
           :disabled="readOnly || busy"

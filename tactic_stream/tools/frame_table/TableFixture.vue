@@ -16,6 +16,8 @@ import ObjectCheckinForm from '../../frontend/src/features/checkin/ObjectCheckin
 import SnapshotCheckoutSurface from '../../frontend/src/features/checkin/SnapshotCheckoutSurface.vue';
 import { t } from '../../frontend/src/i18n.js';
 import FrameView from '../../frontend/src/frame/FrameView.vue';
+import ObjectEditorSurface from '../../frontend/src/features/objects/ObjectEditorSurface.vue';
+import AppFileInput from '../../frontend/src/controls/forms/AppFileInput.vue';
 import * as ParentState from '../../src/tactic_stream/shared_ui/features/table/parent.state.mjs';
 import * as ParentUI from '../../src/tactic_stream/shared_ui/features/table/parent.ui.mjs';
 const fixture = ref(null),
@@ -147,8 +149,19 @@ window.tableFixture = {
   >
     <TableServiceDialogs ref="serviceDialogs" />
     <TableDocument ref="tableDocument" :model="documentModel" />
+    <AppFileInput
+      v-if="fixture.screen === 'publish-file'"
+      :value="fixture.mode === 'empty' ? '' : 'reference.txt'"
+      :disabled="fixture.mode === 'busy'"
+      label="Attachment"
+    />
+    <ObjectEditorSurface
+      v-else-if="fixture.screen === 'publish-form'"
+      :model="fixture.model"
+      :part="fixture.part"
+    />
     <FrameView
-      v-if="fixture.screen === 'parent'"
+      v-else-if="fixture.screen === 'parent'"
       :scene="
         ParentUI.describe(
           fixture.model,
