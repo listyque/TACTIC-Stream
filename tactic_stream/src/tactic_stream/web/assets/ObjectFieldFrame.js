@@ -1,6 +1,6 @@
 import { F as renderSlot, N as openBlock, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, p as computed, rt as normalizeStyle } from "./vue.js";
 import { A as appearance, K as metrics, R as controls } from "./index.js";
-import { Gt as rect, Ht as label, Wt as node, i as _sfc_main$1, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { Kt as node, Wt as label, i as _sfc_main$1, qt as rect, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/fields.ui.mjs
 function columnCount(width, count, minimum = 430, maximum = 3, gap = 10) {
 	return Math.max(1, Math.min(maximum, Math.max(1, count), Math.floor((width + gap) / (minimum + gap))));

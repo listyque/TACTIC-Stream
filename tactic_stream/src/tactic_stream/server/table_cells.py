@@ -65,6 +65,7 @@ from tactic.ui.table.task_element_wdg import WorkElementWdg
 from tactic.ui.widget.misc_input_wdg import TaskStatusElementWdg
 from tactic.ui.table.drop_element_wdg import DropElementWdg
 from pyasm.widget.sobject_browser_wdg import SObjectConnectionElement
+from pyasm.widget.dependency_wdg import DependencyLink
 from tactic.ui.table.sobject_summary_wdg import SObjectSummaryElementWdg
 
 from tactic.ui.table.custom_layout_element_wdg import CustomLayoutElementWdg
@@ -78,7 +79,7 @@ from tactic.ui.table.gantt_element_wdg import GanttElementWdg
 from tactic.ui.table.work_hours_element_wdg import WorkHoursElementWdg
 TIME_WIDGETS = (GanttWdg, GanttElementWdg, TimecardInfoTableElement, WeekTableElement, WorkHoursElementWdg)
 
-SERVICE_WIDGETS = (SObjectSummaryElementWdg, SObjectConnectionElement, CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
+SERVICE_WIDGETS = (DependencyLink, SObjectSummaryElementWdg, SObjectConnectionElement, CheckoutButtonElementWdg, FileAppendLinkTableElement, *TIME_WIDGETS, *NESTED_WIDGETS, CustomLayoutElementWdg, UpdateWdg, SecurityManagerButtonWdg, PreferenceEditWdg,
                    ProjectTemplateUpdateWdg, NotificationTriggerElementWdg, ButtonElementWdg,
                    ParallelStatusWdg, ParallelStatusEditWdg, SObjectTaskStatusElementWdg, WorkElementWdg, DropElementWdg)
 

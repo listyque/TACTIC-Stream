@@ -206,6 +206,35 @@ class TableFileActions(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Messages'):
             read_snapshot_files(snapshot.get_search_key())
 
+    def test_dependency_file_is_captured_and_revision_checked(self):
+        from tactic.ui.table.file_actions import TableSnapshotFilesCmd
+        snapshot = self.snapshot()
+        prepared = append_snapshot_files(snapshot.get_search_key())
+        for name in ('one.txt', 'two.txt'):
+            self.upload(name, prepared=prepared)
+        write(lambda: append_snapshot_files(prepared['searchKey'], action='save', upload_directory=prepared['uploadDirectory'],
+            expected_revision=prepared['expectedRevision'], filenames=['one.txt', 'two.txt'], keep_file_name=True))
+        fresh = Search.get_by_search_key(prepared['searchKey'])
+        revision = hashlib.sha256(json.dumps(fresh.get_data(), sort_keys=True, default=str).encode()).hexdigest()
+        file = fresh.get_all_file_objects()[0]
+        data = read_snapshot_files(fresh.get_search_key(), file_code=file.get_code(), expected_revision=revision)
+        self.assertEqual([row['code'] for row in data['__files__']], [file.get_code()])
+        command = TableSnapshotFilesCmd(search_key=fresh.get_search_key(), file_code=file.get_code(), expected_revision=revision)
+        command.execute()
+        self.assertEqual([row['code'] for row in command.info['files']], [file.get_code()])
+        other = next(row for row in fresh.get_all_file_objects() if row.get_code() != file.get_code())
+        def sequence():
+            other.set_value('file_range', '1-10000000')
+            other.commit(triggers=False)
+        write(sequence)
+        with patch('pyasm.biz.FileGroup.expand_paths', side_effect=AssertionError('Unrelated sequence expanded')):
+            command.execute()
+        self.assertEqual([row['code'] for row in command.info['files']], [file.get_code()])
+        with self.assertRaisesRegex(LookupError, 'file is no longer'):
+            read_snapshot_files(fresh.get_search_key(), file_code='other')
+        with self.assertRaisesRegex(ValueError, 'Dependencies changed'):
+            read_snapshot_files(fresh.get_search_key(), file_code=file.get_code(), expected_revision='old')
+
     def test_checkout_refuses_a_representative_file_instead_of_a_whole_sequence(self):
         snapshot = self.snapshot()
         prepared = append_snapshot_files(snapshot.get_search_key())
@@ -252,3 +281,29 @@ class TableFileActions(unittest.TestCase):
                     upload_directory=directory, expected_revision=prepared['expectedRevision'], filenames=['safe.txt']))
         self.assertTrue(uploaded.is_file())
         self.assertEqual(Search.get_by_search_key(prepared['searchKey']).get_all_file_objects(), [])
+
+    def test_sequence_preview_expands_only_the_first_frame(self):
+        from pyasm.biz import FileGroup
+        from pyasm.widget import ThumbWdg
+        snapshot = self.snapshot()
+        prepared = append_snapshot_files(snapshot.get_search_key())
+        self.upload('frame.####.exr', prepared=prepared)
+        write(lambda: append_snapshot_files(prepared['searchKey'], action='save', upload_directory=prepared['uploadDirectory'],
+            expected_revision=prepared['expectedRevision'], filenames=['frame.####.exr'], keep_file_name=True))
+        snapshot = Search.get_by_search_key(prepared['searchKey'])
+        file = snapshot.get_all_file_objects()[0]
+        def make_group():
+            file.set_value('file_range', '1001-10000000')
+            file.commit(triggers=False)
+        write(make_group)
+        expand = FileGroup.expand_paths
+        def bounded(path, file_range):
+            self.assertEqual(file_range.get_num_frames(), 1, 'A preview must not expand the entire sequence')
+            return expand(path, file_range)
+        widget = ThumbWdg(name='preview')
+        widget.set_sobjects([snapshot])
+        widget.preprocess()
+        widget.set_current_index(0)
+        with patch.object(FileGroup, 'expand_paths', side_effect=bounded):
+            cell = widget.get_cell_value()
+        self.assertTrue(cell['files'][0]['href'].endswith('frame.1001.exr'))

@@ -111,9 +111,10 @@ class TableSnapshotAppendCmd(Command):
         return self.info
 
 
-def read_snapshot_files(search_key):
+def read_snapshot_files(search_key, file_code='', expected_revision=''):
     """Read a captured concrete snapshot using only original server methods."""
     import json
+    import hashlib
     from pyasm.biz import Project, Snapshot
     from pyasm.common import Environment
     from pyasm.search import Search, SearchKey
@@ -127,7 +128,7 @@ def read_snapshot_files(search_key):
         raise LookupError('Snapshot is no longer available')
     if snapshot.get_value('project_code') != Project.get_project_code():
         raise ValueError('Open the snapshot in its own project before checking out files')
-    if str(snapshot.get_value('search_type') or '').split('?')[0] in ('sthpw/message', 'sthpw/message_log'):
+    if SearchKey.extract_base_search_type(snapshot.get_value('search_type') or '') in ('sthpw/message', 'sthpw/message_log'):
         raise ValueError('Download private message attachments from Messages')
     version = int(snapshot.get_value('version'))
     if version <= 0:
@@ -142,7 +143,13 @@ def read_snapshot_files(search_key):
             raise LookupError('No concrete snapshot version is available')
     if snapshot.get_value('project_code') != Project.get_project_code():
         raise ValueError('Open the snapshot in its own project before checking out files')
+    if expected_revision and hashlib.sha256(json.dumps(snapshot.get_data(), sort_keys=True, default=str).encode()).hexdigest() != expected_revision:
+        raise ValueError('Dependencies changed. Reload this snapshot.')
     files = snapshot.get_all_file_objects()
+    if file_code:
+        files = [file for file in files if file.get_code() == file_code]
+        if len(files) != 1:
+            raise LookupError('Dependency file is no longer available')
     # shortcut: Expand native ranges/metadata groups before enabling sequence/UDIM transfers here.
     if any(file.get_value('file_range', no_exception=True) or (
             file.get_metadata_dict().get('template') and
@@ -155,8 +162,25 @@ def read_snapshot_files(search_key):
 
 class TableSnapshotFilesCmd(Command):
     def execute(self):
-        from tactic_stream.server.navigation_links import navigation_link_request
-        data = read_snapshot_files(self.kwargs['search_key'])
-        target = navigation_link_request(dict(link='skey://' + data['__search_key__']))
-        self.info = dict(snapshot=target['object'], files=target['preview']['files'])
+        from pyasm.common import Xml
+        from pyasm.search import Search
+        from pyasm.widget import ThumbWdg
+        from tactic_stream.server.api import ApiXMLRPC
+        from tactic_stream.server.table_cells import safe_link
+
+        data = read_snapshot_files(**self.kwargs)
+        snapshot = Search.get_by_search_key(data['__search_key__'])
+        selected = {file['code'] for file in data['__files__']}
+        source = snapshot.get_snapshot_xml()
+        xml = Xml()
+        xml.read_string('<snapshot>' + ''.join(
+            source.to_string(node, pretty=False) for node in source.get_nodes('snapshot/file')
+            if Xml.get_attribute(node, 'file_code') in selected) + '</snapshot>')
+        objects = {file.get_code(): file for file in snapshot.get_all_file_objects() if file.get_code() in selected}
+        files = []
+        # The normal Thumb path must not expand unrelated sequences in this snapshot.
+        ThumbWdg.get_file_info(xml, objects, snapshot, snapshot, files=files)
+        for file in files:
+            file['href'] = safe_link(file['href'])
+        self.info = dict(snapshot=ApiXMLRPC._record(snapshot), files=files)
         return self.info

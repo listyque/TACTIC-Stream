@@ -52,6 +52,29 @@ try {
   const page = await browser.newPage({
     viewport: { width: 1600, height: 800 }
   });
+  let dependencyFixture;
+  await page.route('**/admin/rpc', async (route) => {
+    const body = route.request().postDataJSON();
+    if (
+      body.args?.[1] !== 'tactic.ui.table.TableDependencyReadCmd' ||
+      !dependencyFixture
+    )
+      return route.continue();
+    if (dependencyFixture.mode === 'error')
+      return route.fulfill({ status: 400, json: { error: 'File Offline' } });
+    const request = body.args[2];
+    const info =
+      dependencyFixture.mode === 'empty'
+        ? { rows: [], hasNext: false, message: 'No snapshot found' }
+        : dependencyFixture.data[
+            request.file_index !== undefined
+              ? 'range'
+              : request.search_key === dependencyFixture.data.seed.searchKey
+                ? 'root'
+                : 'child'
+          ];
+    await route.fulfill({ json: { result: { info } } });
+  });
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto(server.resolvedUrls.local[0] + 'tools/frame_table/');
   await page.waitForFunction(() => !!window.tableFixture);
@@ -406,9 +429,32 @@ try {
     .getByRole('button', { name: 'Close', exact: true })
     .click();
   await documentWindow.waitFor({ state: 'hidden' });
+  await page.evaluate(
+    ({ fixture, data }) =>
+      window.tableFixture.show({ ...fixture, language: 'ru' }, data),
+    {
+      fixture: {
+        screen: 'table',
+        width: 800,
+        height: 420,
+        style: 'md3',
+        dark: true
+      },
+      data: native.data
+    }
+  );
+  await page.evaluate(() =>
+    window.tableFixture.openDocument({ title: 'Dependencies', sections: [] })
+  );
+  await documentWindow
+    .getByRole('heading', { name: 'Зависимости', exact: true })
+    .waitFor();
+  await page.evaluate(() => window.tableFixture.closeDocument());
+  await documentWindow.waitFor({ state: 'hidden' });
   await page.locator('#table-fixture').focus();
   for (const record of native.captures.filter((item) => !item.original)) {
     const fixture = record.fixture;
+    dependencyFixture = fixture.screen === 'dependencies' ? fixture : null;
     await page.setViewportSize({
       width:
         fixture.screen === 'inline' &&
@@ -565,6 +611,37 @@ try {
         background,
         'File form body paint matches the real native host'
       );
+      const actual = await surface(page, selector);
+      const compared = await compareSurface(
+        page,
+        selector,
+        actual,
+        record,
+        record.image
+      );
+      const image = record.image.replace('-native-', '-stream-');
+      await page.locator(selector).screenshot({ path: out + image });
+      cases.push({ image, fixture, ...compared });
+    } else if (fixture.screen === 'dependencies') {
+      const selector = '#table-fixture > .frame-view';
+      if (fixture.mode === 'error' || fixture.mode === 'empty')
+        await page.locator('[data-frame^="dependencyStatus_"]').waitFor();
+      else
+        await page
+          .locator('[data-frame^="dependencyTitle_"]')
+          .first()
+          .waitFor();
+      if (fixture.mode === 'expanded') {
+        await page.locator('[data-frame="dependencyExpand_root_0"]').click();
+        await page
+          .getByText(
+            fixture.language === 'ru'
+              ? /Циклическая зависимость/
+              : /Cyclic dependency/
+          )
+          .waitFor();
+        await page.mouse.move(1599, 699);
+      }
       const actual = await surface(page, selector);
       const compared = await compareSurface(
         page,
@@ -751,6 +828,10 @@ try {
     'frontend/src/style.css',
     'frontend/src/appearance.js',
     'frontend/src/i18n.js',
+    'frontend/src/api.js',
+    'frontend/src/features/objects/previewFiles.js',
+    'frontend/src/features/objects/FilePreview.vue',
+    'frontend/src/features/objects/FilePreviewContent.vue',
     'frontend/src/locales/ru.json'
   ])
     browserSources[name] = createHash('sha256')

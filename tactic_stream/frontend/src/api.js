@@ -37,6 +37,14 @@ export function navigationLink(ticket, project, link) {
   return post('/admin/navigation-link', { ticket, project, link })
 }
 
+export function tableDependencies(context, values, signal) {
+  return post('/admin/rpc', { method: 'execute_cmd', args: [context, 'tactic.ui.table.TableDependencyReadCmd', values], kwargs: {} }, signal, true)
+}
+
+export function tableDependencyFile(context, values, signal) {
+  return post('/admin/rpc', { method: 'execute_cmd', args: [context, 'tactic.ui.table.TableSnapshotFilesCmd', values], kwargs: {} }, signal, true)
+}
+
 export function linkPreviews(ticket, project, keys) {
   return backgroundPost('/admin/navigation-link', { ticket, project, keys })
 }

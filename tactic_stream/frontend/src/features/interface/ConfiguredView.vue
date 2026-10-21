@@ -35,6 +35,7 @@ import AppSelect from '../../controls/AppSelect.vue';
 import AppSearchField from '../../controls/AppSearchField.vue';
 import { mobile } from '../../mobile.js';
 import FilePreview from '../objects/FilePreview.vue';
+import { fileBlob } from '../objects/previewFiles.js';
 import NotesPanel from '../objects/NotesPanel.vue';
 import TaskTableEditor from './TaskTableEditor.vue';
 import JournalDetails from '../journal/JournalDetails.vue';
@@ -152,6 +153,7 @@ export default {
       targetInsertView: 'insert',
       scriptAbort: null,
       serviceDocument: null,
+      documentRequest: 0,
       serviceBusy: false,
       serviceMessage: '',
       relatedVisited: false,
@@ -527,6 +529,14 @@ export default {
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
   methods: {
+    openDependencyFile(result) {
+      this.$refs.preview.open(result.snapshot, {
+        ...result,
+        context: result.snapshot.context,
+        version: result.snapshot.version,
+        loadFile: fileBlob
+      });
+    },
     restoreFocus(key) {
       if (this.displayedMode === 'table') {
         const record = this.records.find(
@@ -1114,6 +1124,7 @@ export default {
         } else if (
           ['security-summary', 'custom-layout'].includes(command.type)
         ) {
+          const documentRequest = ++this.documentRequest;
           const result = await rpc('execute_cmd', [
             context,
             command.type === 'security-summary'
@@ -1126,7 +1137,11 @@ export default {
                   view: options.view || ''
                 }
           ]);
-          if (request !== this.actionRequest) return;
+          if (
+            request !== this.actionRequest ||
+            documentRequest !== this.documentRequest
+          )
+            return;
           this.serviceDocument = {
             ...result.info,
             title: command.title || result.info.title || 'Custom Layout',
@@ -1134,7 +1149,8 @@ export default {
             record
           };
           await this.$nextTick();
-          this.$refs.tableDocument.open();
+          if (documentRequest === this.documentRequest)
+            this.$refs.tableDocument.open();
         } else if (this.openTablePort)
           await this.openTablePort(command, record);
         else throw new Error('Unsupported table window: ' + command.type);
@@ -1307,6 +1323,21 @@ export default {
             new URL('skey://' + key).searchParams.get('project') ||
             context.project
         };
+        if (kind === 'dependencies') {
+          this.documentRequest++;
+          const sourceProject = cell.projectCode || targetContext.project;
+          this.serviceDocument = {
+            kind: 'dependencies',
+            title: 'Dependencies',
+            searchKey: key,
+            projectCode: sourceProject,
+            context: { ...targetContext, project: sourceProject },
+            record
+          };
+          await this.$nextTick();
+          if (request === this.actionRequest) this.$refs.tableDocument.open();
+          return;
+        }
         const target =
           key === record.__search_key__ && kind !== 'notification-test'
             ? record
@@ -2305,6 +2336,8 @@ export default {
     <TableDocument
       ref="tableDocument"
       :model="serviceDocument"
+      @file="openDependencyFile"
+      @closed="documentRequest++"
       @action="
         (action) =>
           tableAction(

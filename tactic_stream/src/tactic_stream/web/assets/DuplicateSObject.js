@@ -1,7 +1,7 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment } from "./vue.js";
 import { A as appearance, R as controls, at as _plugin_vue_export_helper_default, c as _sfc_main$2, k as t } from "./index.js";
-import { D as _sfc_main$4, E as _sfc_main$6, Gt as rect, Ht as label, Lt as notify, N as _sfc_main$9, O as _sfc_main$5, P as _sfc_main$8, R as _sfc_main$7, Vt as button, Wt as node, i as _sfc_main$3, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
+import { D as _sfc_main$4, E as _sfc_main$6, Kt as node, N as _sfc_main$9, O as _sfc_main$5, P as _sfc_main$8, R as _sfc_main$7, Ut as button, Wt as label, i as _sfc_main$3, qt as rect, r as observeFrameSizes, st as rpc, y as translate, zt as notify } from "./CodeBlock.js";
 import { t as _sfc_main$10 } from "./ObjectFieldFrame.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { G as applyDuplicateProfile, J as duplicateProfile, K as changeContent, W as _sfc_main$11, Y as saveDuplicateProfile, q as contentChoices } from "./App.js";

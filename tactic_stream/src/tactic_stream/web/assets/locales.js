@@ -1471,6 +1471,7 @@ var en_default = {
 	"Finish the current confirmation first": "Finish the current confirmation first"
 };
 var ru_default = {
+	Dependencies: "Зависимости",
 	Overwrite: "Перезаписать",
 	"Check out": "Получить файлы",
 	"Check out completed": "Файл получен",

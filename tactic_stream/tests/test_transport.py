@@ -4709,6 +4709,82 @@ return True
         records = ast.literal_eval(records) if isinstance(records, str) else records
         self.assertEqual(set(records), {'TARGET', 'ALPHA', 'BETA'})
 
+    def dependency_fixture(self):
+        proxy = self.proxy()
+        auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one', language='python')
+        key = 'contract/entity?project=one&code=A'
+        proxy.upload_file(auth, 'dependency.txt', Binary(b'Concrete dependency contents'))
+        snapshot = proxy.simple_checkin(auth, key, 'root', 'dependency.txt', dict(mode='uploaded', create_icon=False))
+        proxy.execute_python_script(auth, '', dict(code="""
+from pyasm.biz import File, Snapshot
+from pyasm.search import Search, SearchType
+import xml.etree.ElementTree as ET
+root = Snapshot.get_by_code(kwargs['snapshot_code'])
+target = Snapshot.create(Search.get_by_code('contract/entity', 'B'), 'file', 'target', triggers=False)
+main = root.get_all_file_objects()[0]
+group = SearchType.create('sthpw/file')
+for name, value in dict(project_code='one', snapshot_code=root.get_code(), type='render',
+        search_type=main.get_value('search_type'), search_id=main.get_value('search_id'),
+        file_name='render.####.exr', relative_dir=main.get_value('relative_dir'),
+        file_range='1001-1000000', base_type=File.BASE_TYPE_SEQ, st_size=0).items():
+    group.set_value(name, value)
+group.commit(triggers=False)
+xml = ET.fromstring(root.get_value('snapshot'))
+ET.SubElement(xml, 'ref', snapshot_code=target.get_code(), instance='robot/arm')
+ET.SubElement(xml, 'fref', snapshot_code='MISSING')
+ET.SubElement(xml, 'file', file_code=group.get_code(), name='render.####.exr', file_range='1001-1000000', type='render')
+root.set_value('snapshot', ET.tostring(xml,encoding='unicode'))
+root.commit(triggers=False)
+target.set_value('snapshot', '<snapshot><input_ref snapshot_code="'+root.get_code()+'"/></snapshot>')
+target.commit(triggers=False)
+return True
+""", snapshot_code=snapshot['code'], key=key))
+        from xml.sax.saxutils import escape
+        admins = proxy.query(auth, 'sthpw/login', [['login', 'admin']])
+        admins = ast.literal_eval(admins) if isinstance(admins, str) else admins
+        callback = "spt.panel.load_popup('Summary','tactic.ui.startup.GroupSummaryWdg',{search_key:" + json.dumps(admins[0]['__search_key__']) + "});"
+        proxy.insert(auth, 'config/widget_config', dict(search_type='contract/entity',view='dependencies_test',priority=100,
+            config='<config><dependencies_test><element name="code"/><element name="dependency"><display class="DependencyLink"/></element>'
+            '<element name="summary"><display class="tactic.ui.table.ButtonElementWdg"><icon>group</icon><hint>Open summary</hint><cbjs_action>'
+            + escape(callback) + '</cbjs_action></display></element></dependencies_test></config>'))
+        proxy.insert(dict(auth, project='admin'), 'config/widget_config', dict(search_type='sthpw/snapshot',view='dependencies_snapshot_test',priority=100,
+            config='<config><dependencies_snapshot_test><element name="code"/><element name="dependency"><display class="DependencyLink"/></element></dependencies_snapshot_test></config>'))
+        return proxy, auth, snapshot
+
+    def test_handler_dependencies_through_xmlrpc(self):
+        proxy, auth, snapshot = self.dependency_fixture()
+        text = (ROOT.parent.parent/'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        function = next(node for node in ast.parse(text).body if isinstance(node,ast.FunctionDef) and node.name=='read_dependency_node')
+        code = ast.get_source_segment(text,function)+"\nreturn read_dependency_node(**kwargs['values'])"
+        result = proxy.execute_python_script(auth,'',dict(code=code,values=dict(search_key=snapshot['__search_key__'])))['info']
+        if isinstance(result,str): result=json.loads(result)
+        self.assertEqual(result['version'],snapshot['version'])
+        self.assertEqual(result['identity'],snapshot['code'])
+        self.assertTrue(any(row['kind']=='missing' for row in result['rows']))
+        sequence=next(row for row in result['rows'] if row.get('fileRange'))
+        page=proxy.execute_python_script(auth,'',dict(code=code,values=dict(search_key=result['snapshotKey'],
+            expected_revision=result['revision'],file_index=sequence['fileIndex'],offset=100,limit=2)))['info']
+        if isinstance(page,str): page=json.loads(page)
+        self.assertEqual([row['title'] for row in page['rows']],['render.1101.exr','render.1102.exr'])
+        self.assertTrue(page['hasNext'])
+
+        text = (ROOT.parent.parent/'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        query = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        code = ast.get_source_segment(text, query) + "\nreturn query_table_layout('sthpw/snapshot',view='dependencies_snapshot_test',project_code='admin',search_keys=[kwargs['key']])"
+        layout = proxy.execute_python_script(dict(auth,project='admin'), '', dict(code=code,key=snapshot['__search_key__']))['info']
+        layout = json.loads(layout) if isinstance(layout,str) else layout
+        cell = layout['rows'][snapshot['__search_key__']]['dependency']
+        self.assertFalse(cell.get('error'),cell)
+        self.assertEqual(cell['projectCode'],'one')
+
+    def test_table_dependencies_in_chromium(self):
+        _proxy, _auth, snapshot = self.dependency_fixture()
+        environment=os.environ.copy()
+        environment['PLAYWRIGHT_BROWSERS_PATH']=str(ROOT/'.browser-cache')
+        result=subprocess.run([shutil.which('node'),str(ROOT/'frontend/tests/table_dependencies.mjs'),self.url,snapshot['code']],
+            cwd=ROOT/'frontend',env=environment,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=60)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+
     def test_snapshot_append_in_chromium(self):
         proxy = self.proxy()
         auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='admin')

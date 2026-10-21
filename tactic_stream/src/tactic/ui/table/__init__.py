@@ -65,3 +65,6 @@ __all__.append('TableConnectionRemoveCmd')
 
 from .sobject_summary_wdg import SObjectSummaryElementWdg
 __all__.append('SObjectSummaryElementWdg')
+
+from .dependencies import TableDependencyReadCmd
+__all__.append('TableDependencyReadCmd')

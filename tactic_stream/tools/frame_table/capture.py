@@ -25,6 +25,7 @@ from PySide6.QtCore import (
     QPointF,
     QUrl,
     Slot,
+    Qt,
 )
 from PySide6.QtQml import QQmlComponent, QQmlEngine
 from PySide6.QtQuick import QQuickWindow
@@ -226,6 +227,13 @@ def capture(fixture, qml, original):
         view = component.createWithInitialProperties(dict(theme=theme, controller=controller,
             columnsController=columns, userModel=users, services=None, administration=None, scope=scope,
             width=fixture['width'], height=fixture['height']))
+    elif fixture['screen'] == 'dependencies':
+        from tests.test_table_dependencies import DependencyResponses
+        owner = DependencyResponses(fixture['data'], fixture['mode'])
+        keep.append(owner)
+        component = QQmlComponent(engine, QUrl.fromLocalFile(str(qml / 'features/table/DependenciesView.qml')))
+        view = component.createWithInitialProperties(dict(theme=theme, owner=owner, model=fixture['data']['seed'],
+            width=fixture['width'], height=fixture['height']))
     elif fixture["screen"] == "cell":
         value = fixture["value"]
         component = QQmlComponent(
@@ -278,6 +286,11 @@ def capture(fixture, qml, original):
     window.show()
     try:
         frame(window)
+        if fixture['screen'] == 'dependencies' and fixture['mode'] == 'expanded':
+            item = next(item for item in _visual_items(view) if item.objectName() == 'dependencyExpand_root_0')
+            point = item.mapToScene(QPointF(item.width()/2,item.height()/2)).toPoint()
+            QTest.mouseClick(window, Qt.LeftButton, Qt.NoModifier, point)
+            frame(window)
         QTest.mouseMove(window, QPoint(window.width() + 30, window.height() + 30))
         QCoreApplication.sendEvent(window, QEvent(QEvent.Leave))
         if fixture["screen"] == "table":
@@ -403,7 +416,7 @@ def main():
     ]
     names += [
         "thlib/ui/qml/features/table/" + name + ".qml"
-        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView", "NestedTableView", "SnapshotAppendView", "SnapshotCheckoutView")
+        for name in ("ValueEditor", "TaskSummaryCell", "ValueFieldsCell", "MessageCell", "ServiceCell", "ServiceDialogs", "DocumentView", "NestedTableView", "SnapshotAppendView", "SnapshotCheckoutView", "DependenciesView")
     ]
     names += [
         "tests/test_columns_table_view.py",
@@ -427,11 +440,18 @@ def main():
         "thlib/ui/qml/features/table/runtime/table_action_runtime.js",
         "thlib/ui/translations/ru.json",
     ]
+    names += ['thlib/ui/table/dependencies.py', 'thlib/ui/table/requests.py', 'tests/test_table_dependencies.py']
     shared, native = source_hashes(ROOT, HANDLER, names)
     captures = []
     for style in ("md3", "fluent", "material5"):
         for dark in (False, True):
             for language in ("en", "ru"):
+                for width in (320, 800):
+                    for mode in ('tree','expanded','empty','error'):
+                        fixture = dict(screen='dependencies', mode=mode, width=width, height=440,
+                            style=style,dark=dark,language=language,
+                            data=json.loads((ROOT/'tests/fixtures/frame_table_dependencies.json').read_text(encoding='utf-8')))
+                        captures.append(capture(fixture,HANDLER/'thlib/ui/qml',False))
                 for width in (360, 800, 1496):
                     fixture = dict(
                         screen="table",
@@ -539,6 +559,7 @@ def main():
                 "tools/frame_table/TableFixture.vue",
                 "tests/fixtures/frame_table_values.json",
                 "tests/fixtures/frame_table_nested.json",
+                "tests/fixtures/frame_table_dependencies.json",
                 "reports/table-view-2026-10-14/fixture.json",
             )
         },

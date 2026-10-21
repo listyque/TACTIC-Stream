@@ -1,0 +1,23 @@
+{
+  "seed": {"searchKey": "sthpw/snapshot?code=S1", "projectCode": "demo"},
+  "root": {
+    "identity": "S1", "snapshotKey": "sthpw/snapshot?code=S1", "projectCode": "demo",
+    "context": "publish/scene", "version": 7, "revision": "r1", "hasNext": false,
+    "owner": {"title": "Episode 01 — Arrival", "searchKey": "cg/episode?project=demo&code=E1"},
+    "rows": [
+      {"key": "0", "kind": "reference", "group": "Upstream", "snapshotKey": "sthpw/snapshot?code=S2", "projectCode": "demo", "parentCode": "Robot Arm", "context": "model", "version": 3, "revision": "r2", "current": true, "instance": "robot/arm"},
+      {"key": "1", "kind": "file", "group": "Files", "snapshotKey": "sthpw/snapshot?code=S1", "projectCode": "demo", "fileIndex": 0, "fileCode": "F1", "filename": "scene.ma", "fileType": "main"},
+      {"key": "2", "kind": "file", "group": "Files", "snapshotKey": "sthpw/snapshot?code=S1", "projectCode": "demo", "fileIndex": 1, "fileCode": "F2", "filename": "render.####.exr", "fileType": "render", "fileRange": "1001-1200"},
+      {"key": "3", "kind": "missing", "group": "Downstream", "title": "Deleted snapshot S3"},
+      {"key": "4", "kind": "reference", "group": "Inputs", "snapshotKey": "sthpw/snapshot?code=S4", "projectCode": "demo", "parentCode": "Workshop", "context": "layout", "version": 1, "revision": "r4", "retired": true},
+      {"key": "5", "kind": "missing", "group": "Unresolved references", "title": "Missing reference.ma"}
+    ]
+  },
+  "child": {"snapshotKey": "sthpw/snapshot?code=S2", "revision": "r2", "hasNext": false, "rows": [
+    {"key": "0", "kind": "reference", "group": "Upstream", "snapshotKey": "sthpw/snapshot?code=S1", "projectCode": "demo", "parentCode": "Episode 01", "context": "publish/scene", "version": 7}
+  ]},
+  "range": {"snapshotKey": "sthpw/snapshot?code=S1", "revision": "r1", "hasNext": true, "rows": [
+    {"key": "0", "kind": "member", "group": "Files", "title": "render.1001.exr"},
+    {"key": "1", "kind": "member", "group": "Files", "title": "render.1002.exr"}
+  ]}
+}

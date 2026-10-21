@@ -455,6 +455,28 @@ function navigationLink(ticket, project, link) {
 		link
 	});
 }
+function tableDependencies(context, values, signal) {
+	return post("/admin/rpc", {
+		method: "execute_cmd",
+		args: [
+			context,
+			"tactic.ui.table.TableDependencyReadCmd",
+			values
+		],
+		kwargs: {}
+	}, signal, true);
+}
+function tableDependencyFile(context, values, signal) {
+	return post("/admin/rpc", {
+		method: "execute_cmd",
+		args: [
+			context,
+			"tactic.ui.table.TableSnapshotFilesCmd",
+			values
+		],
+		kwargs: {}
+	}, signal, true);
+}
 function linkPreviews(ticket, project, keys) {
 	return backgroundPost("/admin/navigation-link", {
 		ticket,
@@ -4026,6 +4048,23 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	Upstream: "Входящие",
+	Inputs: "Входные зависимости",
+	Downstream: "Исходящие",
+	Instance: "Экземпляр",
+	"File references": "Ссылки файлов",
+	"Unresolved references": "Неопределённые ссылки",
+	"No dependencies": "Нет зависимостей",
+	"No snapshot found": "Снапшот не найден",
+	"Cyclic dependency": "Циклическая зависимость",
+	"Dependencies changed. Reload this snapshot.": "Зависимости изменились. Обновите снапшот.",
+	"Open dependencies in the source project": "Откройте зависимости в исходном проекте",
+	"Open dependencies in the snapshot project": "Откройте зависимости в проекте снапшота",
+	"Invalid dependency page": "Недопустимая страница зависимостей",
+	"Invalid dependency file": "Недопустимый файл зависимости",
+	"Invalid dependency file range": "Недопустимый диапазон файлов зависимости",
+	"Dependency file is no longer available": "Файл зависимости больше недоступен",
+	"This object is not available in Dependencies": "Этот объект недоступен в зависимостях",
 	"Object summary": "Сводка объекта",
 	Connections: "Связи",
 	"No connections": "Нет связей",
@@ -10543,6 +10582,6 @@ var _sfc_main = {
 	}
 };
 //#endregion
-export { objectStatus as $, localDate as A, beginNotificationReply as At, activityFeed as B, submitNotificationReply as Bt, _sfc_main$15 as C, userProfile as Ct, _sfc_main$20 as D, updateDelay as Dt, _sfc_main$18 as E, setUpdatesAvailable as Et, _sfc_main$26 as F, failNotificationReply as Ft, interfaceDefinition as G, rect as Gt, columnsEditor as H, label as Ht, _sfc_main$27 as I, notificationHistory as It, messageFileRequest as J, knowledgeRequest as K, revealListOffset as Kt, _sfc_main$29 as L, notify as Lt, parse as M, clearNotificationHistory as Mt, _sfc_main$23 as N, dismissNotification as Nt, _sfc_main$21 as O, updatesAvailable as Ot, _sfc_main$25 as P, editNotificationReply as Pt, objectRelations as Q, _sfc_main$31 as R, resetNotifications as Rt, matchesUser as S, userAvatar as St, AppSearchField_default as T, workspaceLayouts as Tt, endActivity as U, muted as Ut, beginActivity as V, button as Vt, formDefinition as W, node as Wt, navigationLink as X, messagesRequest as Y, objectDeletion as Z, copyText as _, sessionAction as _t, _sfc_main$2 as a, resetRequestActivity as at, _sfc_main$13 as b, transactionDetails as bt, _sfc_main$6 as c, saveServerConfiguration as ct, completions as d, searchConfiguration as dt, projectCatalog as et, documentSymbols as f, securityGroups as ft, copyImage as g, serverUpdates as gt, xmlTokens as h, serverConfiguration as ht, _sfc_main$1 as i, requestActivity as it, monthLabel as j, cancelNotificationReply as jt, _sfc_main$22 as k, activeNotifications as kt, toolbar as l, scriptEditor as lt, pythonTokens as m, securityUsers as mt, frameContentWidth as n, projectNavigation as nt, _sfc_main$3 as o, resultItems as ot, javascriptTokens as p, securityRules as pt, linkPreviews as q, virtualRange as qt, observeFrameSizes as r, rawDatabase as rt, _sfc_main$5 as s, rpc as st, _sfc_main as t, projectCreationCatalog as tt, _sfc_main$9 as u, scriptShelf as ut, readClipboardImages as v, sidebarRequest as vt, ItemPreview_default as w, widgetConfiguration as wt, _sfc_main$14 as x, uploadFormFile as xt, translate as y, tableCells as yt, _sfc_main$32 as z, setNotificationProgress as zt };
+export { objectStatus as $, localDate as A, updatesAvailable as At, activityFeed as B, resetNotifications as Bt, _sfc_main$15 as C, uploadFormFile as Ct, _sfc_main$20 as D, workspaceLayouts as Dt, _sfc_main$18 as E, widgetConfiguration as Et, _sfc_main$26 as F, dismissNotification as Ft, interfaceDefinition as G, muted as Gt, columnsEditor as H, submitNotificationReply as Ht, _sfc_main$27 as I, editNotificationReply as It, messageFileRequest as J, revealListOffset as Jt, knowledgeRequest as K, node as Kt, _sfc_main$29 as L, failNotificationReply as Lt, parse as M, beginNotificationReply as Mt, _sfc_main$23 as N, cancelNotificationReply as Nt, _sfc_main$21 as O, setUpdatesAvailable as Ot, _sfc_main$25 as P, clearNotificationHistory as Pt, objectRelations as Q, _sfc_main$31 as R, notificationHistory as Rt, matchesUser as S, transactionDetails as St, AppSearchField_default as T, userProfile as Tt, endActivity as U, button as Ut, beginActivity as V, setNotificationProgress as Vt, formDefinition as W, label as Wt, navigationLink as X, messagesRequest as Y, virtualRange as Yt, objectDeletion as Z, copyText as _, sessionAction as _t, _sfc_main$2 as a, resetRequestActivity as at, _sfc_main$13 as b, tableDependencies as bt, _sfc_main$6 as c, saveServerConfiguration as ct, completions as d, searchConfiguration as dt, projectCatalog as et, documentSymbols as f, securityGroups as ft, copyImage as g, serverUpdates as gt, xmlTokens as h, serverConfiguration as ht, _sfc_main$1 as i, requestActivity as it, monthLabel as j, activeNotifications as jt, _sfc_main$22 as k, updateDelay as kt, toolbar as l, scriptEditor as lt, pythonTokens as m, securityUsers as mt, frameContentWidth as n, projectNavigation as nt, _sfc_main$3 as o, resultItems as ot, javascriptTokens as p, securityRules as pt, linkPreviews as q, rect as qt, observeFrameSizes as r, rawDatabase as rt, _sfc_main$5 as s, rpc as st, _sfc_main as t, projectCreationCatalog as tt, _sfc_main$9 as u, scriptShelf as ut, readClipboardImages as v, sidebarRequest as vt, ItemPreview_default as w, userAvatar as wt, _sfc_main$14 as x, tableDependencyFile as xt, translate as y, tableCells as yt, _sfc_main$32 as z, notify as zt };
 
 //# sourceMappingURL=CodeBlock.js.map

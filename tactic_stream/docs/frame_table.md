@@ -1,9 +1,9 @@
 # Tactic Frame B07: Table View checkpoint
 
 B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the current widget-config census contains 9 classes without typed adapters. The
-first checkpoint added 16 adapters and shared tags; the combined second stage
-adds eleven registrations with the explicit limits below. A registered adapter is not proof that every old
+the current widget-config census contains 3 classes without typed adapters. The
+combined second stage extends the catalogue with the explicit limits below.
+A registered adapter is not proof that every old
 display option or embedded action works.
 
 | Portable module | Responsibility |
@@ -15,7 +15,8 @@ display option or embedded action works.
 | `features/table/nested.ui.mjs` | Scoped expanded-table presentation; requests and mutations stay with each host |
 | `features/table/time.ui.mjs` | Table schedule and daily-hours projections; current Gantt/Timesheet owners retain writes |
 | `features/table/inline.ui.mjs` | Typed value editor body, explicit-save and uncertain-write states |
-| `features/table/widgets.json` | 68 server classes, 163 named aliases, editor choices and native adapter categories |
+| `features/table/widgets.json` | 71 server classes, 171 named aliases, editor choices and native adapter categories |
+| `features/table/dependencies.state.mjs` / `dependencies.ui.mjs` | Concrete snapshot tree, cached expansion, cycle guards, page state and presentation |
 
 Stream ships these under `src/tactic_stream/shared_ui`; Handler ships its own
 copy under `thlib/ui/qml/tactic_frame`. The server still imports an explicit
@@ -409,10 +410,64 @@ text, not inferred from button rectangles. Browser table, connection, held-refre
 10k variable-row and native-fallback XML-RPC scenarios passed.
 
 
+## Snapshot dependency viewer — .179 / .126
+
+`DependencyLink` opens the existing modeless `table_document` window. Both hosts
+use the same state and presenter, including per-path row identities, branch-local
+loading/error/retry, cached reopening and ancestor cycle detection. Tree projection
+uses iterative traversal, including a tested 1,000-level chain without a depth cap.
+Root selection
+resolves current/latest once; every later read captures the concrete version,
+source project and revision. Contextual level references retain their original
+resolution instead of falling back to an unscoped snapshot code.
+Global snapshot/project tables open the record's own project; an expanded scope
+without an explicit project inherits its captured application project.
+
+Files, upstream/input/downstream links, file-local references, instance/node
+metadata, retired snapshots and missing owners/references remain visible.
+Sequence members are paged in batches of 50 without eagerly expanding the full
+range. This viewer does not claim sequence/UDIM transfers: those remain L04.
+An ordinary registered file opens through the existing native file owner or
+browser preview, validating its captured snapshot/file code and revision first.
+The browser file selector contains only the requested file.
+
+The thumbnail projection now expands only the first sequence frame. Its original
+path expanded the complete range just to keep index zero; a 10-million-frame
+regression guard fails on that behavior and accepts the bounded read. A real
+registered million-frame sequence is exercised through the browser/XML-RPC fixture.
+
+Close, refresh, project change and sign-out invalidate outstanding reads; native
+reads run in workers. Actual native input/lifetime tests, exact native procedure
+source over XML-RPC and the production Edge workflow cover expansion/cache,
+cycles, sequence pagination and concrete file bytes. The viewer currently requires
+administrator access; ordinary-user ACL and stage 2/B07 acceptance remain open.
+
+The generic document host also invalidates pending custom-layout/security reads
+when another document opens or the window closes. A late successful response must
+not replace Dependencies or reopen its closed window. Both functional-window
+captions use the current language.
+
+Current registration census: **71 classes / 171 named aliases**; 239 shipped/CG
+sources reference **68 adapted, 3 pending, 30 excluded-production and 3 unfinished**
+classes. ParentGroup and the two publish classes still lack their adapted workflow.
+Older checkpoint counts above describe those releases, not the current census.
+
+Validation: 108 native table tests, 90 table API tests and six native-source
+XML-RPC cases passed. Fresh capture produced 864 native states (36 historical
+references); the paired driver accepted all 828 current states. The production
+browser flow additionally checks actual registered file bytes, page/cache
+behavior, captured projects and responses arriving after document closure.
+All 153 platform stages passed on the final source fingerprints, including
+format, independent copies, input, DPI and independent packaging. Earlier runs
+observed intermittent bold-action and Batch submenu input failures; both
+unchanged suites passed independently and in the final complete gate. This
+checkpoint does not claim to fix those intermittent tests or certify the
+deployed original server, PostgreSQL, ordinary-user ACL or physical hardware.
+
 <a id="l01"></a>
 ### L01 — Связи и вложенные строки (8)
 
-- [ ] `pyasm.widget.dependency_wdg.DependencyLink`
+- [x] `pyasm.widget.dependency_wdg.DependencyLink` — administrator base viewer; ordinary-user ACL remains in L07b.
 - [x] `pyasm.widget.sobject_browser_wdg.SObjectConnectionElement` — administrator direction/read/remove workflows; ordinary-user ACL remains open.
 - [ ] `pyasm.widget.table_element_wdg.HiddenRowToggleWdg`
 - [ ] `tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg`

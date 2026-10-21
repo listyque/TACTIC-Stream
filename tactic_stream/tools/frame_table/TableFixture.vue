@@ -10,6 +10,7 @@ import NestedTable from '../../frontend/src/features/interface/NestedTable.vue';
 import TableCell from '../../frontend/src/features/interface/TableCell.vue';
 import TableServiceDialogs from '../../frontend/src/features/interface/TableServiceDialogs.vue';
 import TableDocument from '../../frontend/src/features/interface/TableDocument.vue';
+import TableDependencies from '../../frontend/src/features/interface/TableDependencies.vue';
 import TableInlineEditor from '../../frontend/src/features/interface/TableInlineEditor.vue';
 import ObjectCheckinForm from '../../frontend/src/features/checkin/ObjectCheckinForm.vue';
 import SnapshotCheckoutSurface from '../../frontend/src/features/checkin/SnapshotCheckoutSurface.vue';
@@ -143,7 +144,26 @@ window.tableFixture = {
   >
     <TableServiceDialogs ref="serviceDialogs" />
     <TableDocument ref="tableDocument" :model="documentModel" />
-    <NestedTable v-if="fixture.screen === 'nested'" :state="fixture.model" />
+    <TableDependencies
+      v-if="fixture.screen === 'dependencies'"
+      :key="
+        [
+          fixture.mode,
+          fixture.width,
+          fixture.style,
+          fixture.dark,
+          fixture.language
+        ].join(':')
+      "
+      :model="{ ...fixture.data.seed, context: { ticket: 'fixture' } }"
+      :width="fixture.width"
+      :height="fixture.height"
+      @file="events.push({ type: 'file', ...$event })"
+    />
+    <NestedTable
+      v-else-if="fixture.screen === 'nested'"
+      :state="fixture.model"
+    />
     <ObjectCheckinForm
       v-else-if="fixture.screen === 'append'"
       :model="{ ...fixture.model, error: t(fixture.model.error) }"

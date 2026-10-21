@@ -408,7 +408,8 @@ class ThumbWdg(BaseTableElementWdg):
             if file_range:
                 from pyasm.biz import FileGroup, FileRange
                 file_range = FileRange.get(file_range)
-                file_names = FileGroup.expand_paths(file_name, file_range)
+                start = file_range.get_frame_start()
+                file_names = FileGroup.expand_paths(file_name, FileRange(start, start))
                 if file_names:
                     file_name = file_names[0]
             path = ('%s/%s' % (web_dir, file_name)).replace('\\', '/')

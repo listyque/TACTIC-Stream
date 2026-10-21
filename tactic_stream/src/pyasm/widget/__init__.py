@@ -12,9 +12,13 @@ __all__ = ['WidgetConfigException', 'WidgetConfig', 'WidgetConfigView',
 
 __all__ += ["TaskCompletionWdg", "DiscussionWdg", "SObjectTaskTableElement", "TaskParentSpacingTableElement", "UpdateWdg", "MyTacticSummaryWdg"]
 __all__.append('SObjectConnectionElement')
+__all__.append('DependencyLink')
 
 
 def __getattr__(name):
+    if name == 'DependencyLink':
+        from .dependency_wdg import DependencyLink
+        return DependencyLink
     if name == 'SObjectConnectionElement':
         from .sobject_browser_wdg import SObjectConnectionElement
         return SObjectConnectionElement

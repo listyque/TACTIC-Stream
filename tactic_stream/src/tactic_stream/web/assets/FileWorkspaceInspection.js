@@ -1,6 +1,6 @@
 import { $ as shallowRef, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
 import { A as appearance, B as cssRoles, C as redact, K as metrics, N as frameColors, R as controls, at as _plugin_vue_export_helper_default, c as _sfc_main$16, k as t, x as logEvent } from "./index.js";
-import { Gt as rect, Ht as label, P as _sfc_main$20, R as _sfc_main$19, Vt as button, Wt as node, _ as copyText, c as _sfc_main$21, i as _sfc_main$17, k as _sfc_main$18, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { Kt as node, P as _sfc_main$20, R as _sfc_main$19, Ut as button, Wt as label, _ as copyText, c as _sfc_main$21, i as _sfc_main$17, k as _sfc_main$18, qt as rect, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { r as prettySize } from "./file_values.js";
 import "./files.js";
