@@ -6,6 +6,7 @@ terminated on interruption or timeout.
 """
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 import os
@@ -36,7 +37,7 @@ def stop(process):
     process.wait()
 
 
-def run(name, command, directory, environment):
+def run(name, command, directory, environment, timeout=120):
     log = OUTPUT / (name + ".log")
     with log.open("w", encoding="utf-8") as stream:
         process = subprocess.Popen(
@@ -50,7 +51,7 @@ def run(name, command, directory, environment):
             start_new_session=os.name != "nt",
         )
         try:
-            status = process.wait(timeout=120)
+            status = process.wait(timeout=timeout)
         finally:
             stop(process)
     print(name, status, flush=True)
@@ -517,6 +518,10 @@ def main():
         "--only", help="Regex of stage names for an inner-loop run; never counts as the gate"
     )
     parser.add_argument("--list", action="store_true", help="Print stage names and exit")
+    parser.add_argument(
+        "--jobs", type=int, default=max(1, (os.cpu_count() or 2) // 2),
+        help="Parallel stages; 1 restores the old serial run"
+    )
     args = parser.parse_args()
     handler = args.handler_root.resolve()
     assert (handler / "tests/test_frame_platform.py").is_file(), (
@@ -1353,10 +1358,43 @@ def main():
                 XDG_CONFIG_HOME=settings,
                 XDG_CACHE_HOME=settings,
             )
-            for name, command, directory, extra in steps:
-                report["steps"].append(
-                    run(name, command, directory, dict(environment, **extra))
+            def stage(step):
+                name, command, directory, extra = step
+                # Each stage gets its own settings/TMP so parallel Qt/browser runs cannot share state.
+                own = Path(settings) / name
+                temp = ROOT / ".tmp/frame-tests" / name
+                own.mkdir(parents=True, exist_ok=True)
+                temp.mkdir(parents=True, exist_ok=True)
+                env = dict(
+                    environment,
+                    LOCALAPPDATA=str(own),
+                    APPDATA=str(own),
+                    XDG_CONFIG_HOME=str(own),
+                    XDG_CACHE_HOME=str(own),
+                    TMP=str(temp),
+                    TEMP=str(temp),
                 )
+                try:
+                    # shortcut: fixed 3x timeout under load, tune if slow stages time out
+                    return run(name, command, directory, dict(env, **extra),
+                               120 if args.jobs == 1 else 360)
+                except Exception as error:
+                    return error
+
+            with ThreadPoolExecutor(max(1, args.jobs)) as pool:
+                results = list(pool.map(stage, steps))
+            if args.jobs > 1:
+                # Timing-sensitive Qt/server stages can fail only under parallel load;
+                # rerun those alone once and keep their names visible in the report.
+                retry = [i for i, item in enumerate(results) if isinstance(item, Exception)]
+                report["retried"] = [steps[i][0] for i in retry]
+                for i in retry:
+                    print("serial retry:", steps[i][0], flush=True)
+                    results[i] = stage(steps[i])
+            failures = [str(item) for item in results if isinstance(item, Exception)]
+            report["steps"] = [item for item in results if isinstance(item, dict)]
+            if failures:
+                raise RuntimeError("\n".join(failures))
             assert report["sources"] == fingerprints(handler), (
                 "UI source changed during the gate"
             )

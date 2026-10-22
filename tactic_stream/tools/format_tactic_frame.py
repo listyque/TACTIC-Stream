@@ -43,40 +43,41 @@ def main():
     native_javascript_command = command[:-1]
     native_javascript_command.remove("--check" if args.check else "--write")
     native_javascript_command += ["--parser", "babel"]
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued = []
+    queued.append(list(command))
     command[-1] = "src/tactic_stream/compatibility/table_action_runtime.js"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "frontend/src/frame/**/*.{vue,css,js}"
     command[command.index("--tab-width") + 1] = "2"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "frontend/src/features/administration/**/*.{vue,js}"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = (
         "frontend/src/features/debug/{DebugLog.vue,UiPerformance.vue,ErrorDetails.vue,debugLog.css,uiPerformance.css}"
     )
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "frontend/src/features/users/*.{vue,css}"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "tools/frame_support/*.{html,mjs}"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = (
         "frontend/tests/{frame_support*,profile_support,debug_log,ui_performance}.mjs"
     )
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "frontend/src/features/connection/SignIn.vue"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "tools/frame_foundation/*.{vue,js,html,mjs}"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "tools/frame_controls/*.{vue,js,html,mjs}"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = (
         "frontend/src/features/workspace/{DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue,SearchHeader.vue,SearchFooter.vue,SearchLibrary.vue,SearchPresetBar.vue,SearchEditorPart.vue,SearchResultMenu.vue,ConditionCards.vue,ConditionValue.vue,QuickFilterEditor.vue,ProcessVisibility.vue,ResultBody.vue,ResultItem.vue,ResultPresentation.vue,MobileResults.vue,resultViews.js}"
     )
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "frontend/tests/{frame_control*,frame_icons,frame_variable_rows*,table_nested,table_connections,icons}.mjs"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-1] = "frontend/tests/{administration,frame_admin_state,frame_types}.mjs"
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     for pattern in [
         "frontend/src/features/knowledge/*.{vue,js}",
         "frontend/src/features/collaboration/*.vue",
@@ -136,7 +137,7 @@ def main():
         "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs",
     ]:
         command[-1] = pattern
-        subprocess.run(command, cwd=ROOT, check=True)
+        queued.append(list(command))
     for pattern in [
         "frontend/src/controls/{AttachmentCard,AppTextArea,StatusSelect}.vue",
         "src/tactic_stream/shared_ui/**/*.json",
@@ -149,7 +150,7 @@ def main():
         "tools/frame_projects/*.{vue,js,html}",
     ]:
         command[-1] = pattern
-        subprocess.run(command, cwd=ROOT, check=True)
+        queued.append(list(command))
     controls = [
         "WorkspaceTabs.vue",
         "WorkspaceTabVisual.vue",
@@ -209,9 +210,23 @@ def main():
         "panelChrome.css",
     ]
     command[-1:] = ["frontend/src/controls/" + name for name in controls]
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
     command[-len(controls) :] = ["frontend/src/icons.js", "frontend/src/icons.css"]
-    subprocess.run(command, cwd=ROOT, check=True)
+    queued.append(list(command))
+    # One npm/node start per option set instead of one per pattern (~0.8 s each).
+    batches = {}
+    for queued_command in queued:
+        size = queued_command.index("--tab-width") + 2
+        batches.setdefault(tuple(queued_command[:size]), []).extend(queued_command[size:])
+    for prefix, patterns in batches.items():
+        chunk = []
+        for pattern in list(dict.fromkeys(patterns)) + [None]:
+            # npm.cmd runs through cmd.exe, whose command line is limited to 8191 chars.
+            if chunk and (pattern is None or len(" ".join([*prefix, *chunk, pattern])) > 7000):
+                subprocess.run([*prefix, *chunk], cwd=ROOT, check=True)
+                chunk = []
+            if pattern is not None:
+                chunk.append(pattern)
     changed = []
     files = []
     if args.handler_root:
