@@ -8,12 +8,12 @@ def nested_cell(search_key, options, column='', layout_reader=None):
         'dynamic_class', 'dynamic', 'search_type', 'view', 'expression',
         'icon', 'title_icon', 'icon_tip', 'label', 'mode', 'init_load_num',
         'show_search_limit', 'show_insert', 'show_row_select', 'show_select',
-        'show_gear', 'show_search', 'show_shelf', 'related_types', 'include_mako', 'html',
+        'show_gear', 'show_search', 'show_shelf', 'show_resize_scroll', 'related_types', 'include_mako', 'html',
     }
     if set(options) - allowed:
         raise ValueError('Unsupported nested table options: ' + ', '.join(sorted(set(options) - allowed)))
     for flag in ('show_search_limit', 'show_insert', 'show_row_select', 'show_select',
-                 'show_gear', 'show_search', 'show_shelf'):
+                 'show_gear', 'show_search', 'show_shelf', 'show_resize_scroll'):
         if options.get(flag, '') not in ('', True, False, 'true', 'false'):
             raise ValueError('Invalid nested table display option: ' + flag)
     # shortcut: nested column authoring awaits the scoped Columns editor; never ignore an explicit request.
@@ -30,10 +30,12 @@ def nested_cell(search_key, options, column='', layout_reader=None):
         layout = layout_reader(search_key, view=options.get('view') or '', html=options.get('html') or '',
                                include_mako=options.get('include_mako', True))
         nodes = layout['layoutNodes']
-        if len(nodes) != 1 or nodes[0]['kind'] != 'table':
-            raise ValueError('A hidden CustomLayout must contain one migrated table')
-        return dict(text='', targetSearchKey=search_key, columnName=column,
-            nestedTable=nodes[0]['table'], actions=[dict(name='nested-table', label='Show related table', icon='chevron-right')])
+        if len(nodes) == 1 and nodes[0]['kind'] == 'table':
+            return dict(text='', targetSearchKey=search_key, columnName=column,
+                nestedTable=nodes[0]['table'], actions=[dict(name='nested-table', label='Show related table', icon='chevron-right')])
+        if nodes:
+            return dict(layout, columnName=column)
+        raise ValueError('A hidden CustomLayout must contain one migrated table')
     if handler not in ('tactic.ui.panel.TableLayoutWdg', 'tactic.ui.panel.FastTableLayoutWdg',
                        'tactic.ui.panel.ViewPanelWdg'):
         raise ValueError('Nested widget is not a migrated table: ' + str(handler))

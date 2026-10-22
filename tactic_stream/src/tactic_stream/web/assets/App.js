@@ -18978,15 +18978,17 @@ var _sfc_main$110 = {
 			}
 			if (!source) throw new Error("No script defined for this button");
 			if (request !== this.actionRequest) return;
+			const targetKey = cell.targetSearchKey || record.__search_key__;
+			const selectedKeys = [...cell.tableScope?.searchKeys || this.tableSelection];
 			const result = await runTableScript(source, {
-				searchKey: record.__search_key__,
-				searchType: record.__search_key__.split("?")[0],
+				searchKey: targetKey,
+				searchType: targetKey.split("?")[0],
 				project: context.project,
 				column: cell.columnName,
 				view: cell.layoutView || cell.tableScope?.view || this.table.view || "table",
 				record: { ...record },
-				searchKeys: [...cell.tableScope?.searchKeys || this.tableSelection],
-				records: cell.tableScope?.records || Object.fromEntries(this.records.map((row) => [row.__search_key__, { code: row.code }]))
+				searchKeys: selectedKeys,
+				records: cell.tableScope?.records || Object.fromEntries(this.records.filter((row) => selectedKeys.includes(row.__search_key__)).map((row) => [row.__search_key__, { code: row.code }]))
 			}, {
 				ticket: context.ticket,
 				signal: abort.signal,

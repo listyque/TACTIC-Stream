@@ -557,7 +557,7 @@ examples are also in EN/RU Help → Table View: B07.
 ### L03 — Настраиваемые действия и layout (3)
 
 - [x] `tactic.ui.table.button_wdg.ButtonElementWdg`
-- [ ] `tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg`
+- [x] `tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg` — portable saved layouts (`episodes/columns/script`, `columns/tasks_parent`, `columns.thumb_view` → `custom_col`), including `HiddenRowElementWdg` custom-layout cells and explicit unresolved references (`asset_panel_wdg`, `asset_cost_breakdown`, `inline_add_item`, bare `custom_col`); ordinary-user ACL remains L07b.
 - [x] `tactic.ui.table.drop_element_wdg.DropElementWdg` — portable instance links and `folder_drop` / `FileIngestCmd` callback delivered; ordinary-user ACL remains L07b.
 
 Из исходного XML вызвать реальное действие с контекстом строки/выделения, выполнить разрешённый script/layout и проверить результат, ошибки, отмену и откат. Для drop дать явную альтернативу выбора. Общий редактор колонок/ячеек должен сохранять исходные options и revisions; неподдержанный параметр не игнорируется.

@@ -8,7 +8,7 @@ class HiddenRowElementWdg(BaseTableElementWdg):
         'dynamic_class', 'dynamic', 'search_type', 'view', 'expression',
         'icon', 'title_icon', 'icon_tip', 'label', 'mode', 'init_load_num',
         'show_search_limit', 'show_insert', 'show_row_select', 'show_select',
-        'show_gear', 'show_search', 'show_shelf', 'related_types', 'include_mako', 'html',
+        'show_gear', 'show_search', 'show_shelf', 'show_resize_scroll', 'related_types', 'include_mako', 'html',
     ), {})
 
     def is_editable(self):

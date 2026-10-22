@@ -146,7 +146,55 @@ class StageOneCells(unittest.TestCase):
         key=Search.get_by_code('contract/entity','A').get_search_key()
         for code in ('from pyasm.search import Search',"search('contract/entity').get_sobject().delete()",
                      "open('should-not-exist','w')",'x=sobject.__class__',"sobject['code']='changed'",'str=search.get_by_search_key',
-                     'if False: context=0',"x=context.get('open')",'str=sobject.get'):
+                     'if False: context=0',"x=context.get('open')",'str=sobject.get','if sobject:&gt;'):
             with self.subTest(code=code),self.assertRaisesRegex(ValueError,'data-only Mako'):
                 read_custom_layout(key,html='<% '+code+' %>text')
+        with self.assertRaisesRegex(ValueError,'data-only Mako'):
+            read_custom_layout(key,html='${x = 1}')
         self.assertEqual(Search.get_by_search_key(key).get_value('code'),'A')
+
+    def test_cg_nested_custom_layout_wrapper_and_hidden_row_script_layout(self):
+        from tactic.ui.table.custom_layout_element_wdg import CustomLayoutElementWdg
+        from tactic.ui.table.hidden_row_element_wdg import HiddenRowElementWdg
+        from tactic.ui.table.button_wdg import ButtonElementWdg
+        from pyasm.search import SearchType
+        for view in ('custom_col','columns.thumb_view','episodes.columns.script'):
+            self.load_cg_layout(view)
+        with self.store.connection('one',write=True) as database:
+            database.execute('ALTER TABLE entity ADD COLUMN script text')
+            database.execute("UPDATE entity SET script='https://docs.google.com/document/d/fixture/edit' WHERE code='A'")
+        parent=Search.get_by_code('contract/entity','A')
+        thumb_element=dict(name='thumb',display=dict(handler='tactic.ui.table.CustomLayoutElementWdg',options={
+            'icon_size':'100%','view':'columns.thumb_view','show_resize_scroll':'true','include_mako':'true'}),
+            action=dict(handler='',options={}))
+        self.assertTrue(describe_cell(thumb_element,{})['supported'])
+        widget=CustomLayoutElementWdg(name='thumb',**thumb_element['display']['options'])
+        widget.set_sobject(parent)
+        thumb_cell=widget.get_cell_value()
+        self.assertEqual([node['kind'] for node in thumb_cell['layoutNodes']],['preview'])
+        self.assertIn("alert('Hello World')",thumb_cell['layoutNodes'][0]['javascript'])
+        hidden_element=dict(name='script',display=dict(handler='tactic.ui.table.HiddenRowElementWdg',options={
+            'dynamic_class':'tactic.ui.table.CustomLayoutElementWdg','show_resize_scroll':'true',
+            'include_mako':'true','icon':'FAS_SCROLL','view':'episodes/columns/script'}),
+            action=dict(handler='',options={}))
+        self.assertTrue(describe_cell(hidden_element,{})['supported'])
+        hidden=HiddenRowElementWdg(name='script',**hidden_element['display']['options'])
+        hidden.set_sobject(parent)
+        script_cell=hidden.get_cell_value()
+        self.assertEqual(script_cell['layoutView'],'episodes.columns.script')
+        self.assertEqual([node['kind'] for node in script_cell['layoutNodes']],['link','text','action','link'])
+        with self.assertRaisesRegex(ValueError,'not configured: asset_panel_wdg'):
+            read_custom_layout(parent.get_search_key(),'asset_panel_wdg')
+        def create_script():
+            row=SearchType.create('config/custom_script')
+            row.set_value('code','EMPTY_LANG_SCRIPT')
+            row.set_value('folder','episodes')
+            row.set_value('title','take_episode')
+            row.set_value('language','')
+            row.set_value('script','spt.panel.refresh();')
+            row.commit()
+            return row
+        write(create_script)
+        button=ButtonElementWdg(name='take',script_path='episodes/take_episode')
+        button.set_sobjects([parent]);button.preprocess();button.set_current_index(0)
+        self.assertEqual(button.get_cell_value()['scriptLanguage'],'javascript')

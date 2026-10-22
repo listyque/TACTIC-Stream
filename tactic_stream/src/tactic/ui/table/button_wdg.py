@@ -57,7 +57,7 @@ class ButtonElementWdg(BaseTableElementWdg):
             raise ValueError('Table button color must be a hexadecimal color')
         return dict(text=text, columnName=self.get_name(), align=self.get_option('align') or 'center', targetSearchKey=obj.get_search_key(),
                     scriptKey=source.get_search_key() if source else '',
-                    scriptLanguage=source.get_value('language') if source else 'javascript',
+                    scriptLanguage=(source.get_value('language') if source else '') or 'javascript',
                     actions=[dict(name='script', label=self.get_option('icon_tip') or self.get_option('hint') or 'Run script',
                                   icon=str(icon), iconSize=int(size), iconColor=str(color), iconAction=True,
                                   translateLabel=not bool(self.get_option('icon_tip') or self.get_option('hint')))])
