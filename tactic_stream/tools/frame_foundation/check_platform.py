@@ -513,6 +513,10 @@ def fingerprints(handler):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--handler-root", type=Path, required=True)
+    parser.add_argument(
+        "--only", help="Regex of stage names for an inner-loop run; never counts as the gate"
+    )
+    parser.add_argument("--list", action="store_true", help="Print stage names and exit")
     args = parser.parse_args()
     handler = args.handler_root.resolve()
     assert (handler / "tests/test_frame_platform.py").is_file(), (
@@ -549,8 +553,8 @@ def main():
             "stream": stream_version,
         },
     )
-    path = OUTPUT / "gate.json"
-    path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    # Partial runs must not overwrite the full-gate evidence consumed by release reports.
+    path = OUTPUT / ("partial.json" if args.only or args.list else "gate.json")
     steps = [
         (
             "format",
@@ -1330,6 +1334,14 @@ def main():
             {},
         ),
     ]
+    if args.list:
+        print("\n".join(name for name, *_ in steps))
+        return
+    if args.only:
+        steps = [step for step in steps if re.search(args.only, step[0])]
+        assert steps, "No stages match --only"
+        report["only"] = args.only
+    path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     try:
         with tempfile.TemporaryDirectory(
             prefix="frame-platform-", dir=ROOT / ".tmp"
@@ -1348,12 +1360,15 @@ def main():
             assert report["sources"] == fingerprints(handler), (
                 "UI source changed during the gate"
             )
-            report["status"] = "passed"
+            report["status"] = "partial" if args.only else "passed"
     except BaseException:
         report["status"] = "failed"
         raise
     finally:
         path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    if args.only:
+        print(f"{len(steps)} selected stages passed; this is NOT the full gate.")
+        return
     print("Frame platform gate passed; full release scenarios remain separate.")
 
 
