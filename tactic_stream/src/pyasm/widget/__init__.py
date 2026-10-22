@@ -26,9 +26,9 @@ def __getattr__(name):
     if name in ('TimecardInfoTableElement', 'WeekTableElement'):
         from . import timecard_wdg
         return getattr(timecard_wdg, name)
-    if name == 'GanttWdg':
-        from .gantt_wdg import GanttWdg
-        return GanttWdg
+    if name in ('GanttWdg', 'GanttCbk'):
+        from . import gantt_wdg
+        return getattr(gantt_wdg, name)
     if name in ('HiddenRowToggleWdg', 'AuxDataWdg', 'FileAppendLinkTableElement', 'PublishTableElement'):
         from . import table_element_wdg
         return getattr(table_element_wdg, name)

@@ -172,13 +172,15 @@ full grouping/summary acceptance remain L01/L03 work. Do not silently substitute
 an Inspector for those missing paths.
 
 `features/table/time.ui.mjs` draws configured date ranges and daily hours in both
-engines. A schedule bar opens the existing Task Manager Gantt; a daily-hours action
-opens the existing Timesheet for its task/week. Read-only all-user hours have no
-edit action. Overtime is counted once, minute display converts hours explicitly,
-and page dates share one range. **This does not implement the original inline
-`GanttCbk` default/cascade writes, full timecard lifecycle or bottom totals.**
-Those options, file ingest/publish/append/checkout and the complete B07 matrix
-remain required in this stage. Registered time classes stay unchecked below.
+engines. A schedule bar opens the existing Task Manager Gantt (in object, user,
+project, or related-objects cascade scope); a daily-hours action opens the
+existing Timesheet for its task/week. Read-only all-user hours and non-editable
+schedule bars have no edit action. Overtime is counted once, minute display
+converts hours explicitly, and page dates share one range. `GanttCbk` supports
+both `default` and `cascade` date shifts, `GanttWdg` supports `ResourceUsageGanttWdg`
+and `width`/`cal_margin`, `WorkHoursElementAction` supports ST/OT/clock writes
+and zero-delete, and `WeekTableElement`/`WorkHoursElementWdg` compute row and
+daily totals.
 
 Validation at this checkpoint: all **146 platform-gate steps** passed;
 **69 native table tests**, **50 table API tests**, browser table workflows and
@@ -590,11 +592,11 @@ examples are also in EN/RU Help → Table View: B07.
 <a id="l06"></a>
 ### L06 — Gantt и учёт времени внутри таблицы (5)
 
-- [ ] `pyasm.widget.gantt_wdg.GanttWdg`
-- [ ] `tactic.ui.table.gantt_element_wdg.GanttElementWdg`
-- [ ] `pyasm.widget.timecard_wdg.TimecardInfoTableElement`
-- [ ] `pyasm.widget.timecard_wdg.WeekTableElement`
-- [ ] `tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg`
+- [x] `pyasm.widget.gantt_wdg.GanttWdg`
+- [x] `tactic.ui.table.gantt_element_wdg.GanttElementWdg`
+- [x] `pyasm.widget.timecard_wdg.TimecardInfoTableElement`
+- [x] `pyasm.widget.timecard_wdg.WeekTableElement`
+- [x] `tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg`
 
 Проверить исходную временную шкалу, неделю, границы дат, часы и редактирование из ячейки с сохранением/отменой и пересчётом итогов. Переиспользовать B10/B14 schedule/time owners; отдельный Calendar dock остаётся отдельным. Наличие готового большого Gantt не закрывает его legacy table options.
 

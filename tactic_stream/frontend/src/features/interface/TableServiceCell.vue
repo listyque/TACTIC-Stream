@@ -86,7 +86,11 @@ function activate(action) {
             action.name === 'drop-parent' ? dropParentKey(action.value) : '',
           actionTaskKey: action.taskKey,
           actionDay: action.day,
-          actionTaskCode: action.taskCode
+          actionTaskCode: action.taskCode,
+          actionScheduleIndex: action.scheduleIndex,
+          actionLogin: action.login || props.cell.login,
+          actionParentKeys: action.parentKeys,
+          actionScope: action.scope || props.cell.scope
         },
         host.value
       );

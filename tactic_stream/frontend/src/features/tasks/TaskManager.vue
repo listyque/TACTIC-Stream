@@ -1224,7 +1224,7 @@ export default {
         '',
         { ...filters, ...(process ? { process } : {}) },
         false,
-        [parent]
+        Array.isArray(parent) ? parent : [parent]
       );
       if (taskKey) {
         const code = new URL('skey://' + taskKey).searchParams.get('code');

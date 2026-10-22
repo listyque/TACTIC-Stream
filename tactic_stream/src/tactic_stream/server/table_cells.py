@@ -243,9 +243,26 @@ def describe_cell(element, columns, search_type=""):
         )
         and not element["action"]["options"]
     )
-    native_time_action = widget in (GanttWdg, GanttElementWdg) and action in (
-        'tactic.ui.table.GanttCbk', 'tactic.ui.table.gantt_element_wdg.GanttCbk',
-        'pyasm.widget.GanttCbk', 'pyasm.widget.gantt_wdg.GanttCbk')
+    native_time_action = (
+        widget in (GanttWdg, GanttElementWdg)
+        and action
+        in (
+            'tactic.ui.table.GanttCbk',
+            'tactic.ui.table.gantt_element_wdg.GanttCbk',
+            'pyasm.widget.GanttCbk',
+            'pyasm.widget.gantt_wdg.GanttCbk',
+        )
+    ) or (
+        widget is WorkHoursElementWdg
+        and action
+        in (
+            'WorkHoursElementAction',
+            'tactic.ui.table.WorkHoursElementAction',
+            'tactic.ui.table.work_hours_element_wdg.WorkHoursElementAction',
+            'tactic.core.work_hours.WorkHoursElementAction',
+        )
+        and not element['action']['options']
+    )
     native_parent_action = action in (
         'ParentGroupAction', 'tactic.ui.table.ParentGroupAction', 'tactic.ui.table.group_element_wdg.ParentGroupAction'
     ) and not element['action']['options']
@@ -261,6 +278,14 @@ def describe_cell(element, columns, search_type=""):
     allowed = {"column"}
     if widget in TIME_WIDGETS:
         allowed |= set(widget.ARGS_KEYS) if hasattr(widget, 'ARGS_KEYS') else set()
+        if widget is GanttWdg:
+            handlers_raw = str(options.get('handlers') or '').strip()
+            handlers = [h.strip() for h in handlers_raw.split('|') if h.strip()] if handlers_raw else []
+            supported = supported and all(h in ('ScheduleGanttWdg', 'ResourceUsageGanttWdg') for h in handlers)
+        for size in ('width', 'cal_margin', 'day_width'):
+            raw = options.get(size)
+            if raw not in (None, ''):
+                supported = supported and str(raw).isdecimal() and int(raw) > 0
     elif widget in (PublishTableElement, GeneralPublishElementWdg):
         allowed |= set(widget.ARGS_KEYS)
         if widget is GeneralPublishElementWdg:
@@ -633,6 +658,7 @@ def read_table_cells(search_type, view, search_keys):
                 **element["display"]["options"],
             )
             widget.set_options(element["display"]["options"])
+            widget.action_options = element["action"]["options"]
             widget.set_attributes(element["attributes"])
             widget.set_sobjects(objects)
             widget.preprocess()

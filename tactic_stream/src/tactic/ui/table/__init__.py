@@ -54,9 +54,9 @@ from .hidden_row_element_wdg import HiddenRowElementWdg, RowAddElementWdg
 from .nested_table import NestedTableReadCmd
 __all__ += ['HiddenRowElementWdg', 'RowAddElementWdg', 'NestedTableReadCmd']
 
-from .gantt_element_wdg import GanttElementWdg
-from .work_hours_element_wdg import WorkHoursElementWdg
-__all__ += ['GanttElementWdg', 'WorkHoursElementWdg']
+from .gantt_element_wdg import GanttCbk, GanttElementWdg
+from .work_hours_element_wdg import WorkHoursElementAction, WorkHoursElementWdg, WorkHoursSemantics
+__all__ += ['GanttElementWdg', 'GanttCbk', 'WorkHoursElementWdg', 'WorkHoursElementAction', 'WorkHoursSemantics']
 
 from .file_actions import TableSnapshotAppendCmd, TableSnapshotFilesCmd
 __all__ += ['TableSnapshotAppendCmd', 'TableSnapshotFilesCmd']

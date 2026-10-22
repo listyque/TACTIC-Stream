@@ -536,7 +536,15 @@ export default {
       }
       if (['task-details','add-task','work','table-schedule'].includes(kind)) {
         const taskKey = options.actionTaskKey || options.taskSearchKey || ''
-        await this.$refs.taskManager.openForObjects(record,options.actionProcess || options.process || '',{},taskKey.startsWith('sthpw/task?') ? taskKey : '')
+        if (kind === 'table-schedule' && options.actionLogin) {
+          await this.$refs.taskManager.openForUser({login:options.actionLogin})
+          this.$refs.taskManager.view = 'gantt'
+          return
+        }
+        const parentKeys = Array.isArray(options.actionParentKeys) ? options.actionParentKeys.filter(Boolean) : []
+        const parents = parentKeys.length > 1 ? parentKeys.map((key) => ({__search_key__:key})) : record
+        await this.$refs.taskManager.openForObjects(parents,options.actionProcess || options.process || '',{},taskKey.startsWith('sthpw/task?') ? taskKey : '')
+        if (kind === 'table-schedule' && options.actionScope === 'project') this.$refs.taskManager.changeScope('project')
         if (kind === 'add-task') await this.$refs.taskManager.edit([],true,'','inline')
         if (kind === 'work') await this.openTableCheckin(record,options,this.workspaceProject)
         if (kind === 'table-schedule') this.$refs.taskManager.view = 'gantt'

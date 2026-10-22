@@ -1143,7 +1143,7 @@ var day$1 = 864e5;
 function date(value) {
 	return value ? Date.parse(String(value).slice(0, 10) + "T00:00:00Z") : NaN;
 }
-function timeline(cell, width, height, language) {
+function timeline(cell, width, height, language, editable = true) {
 	const model = cell.timeline, nodes = [], start = date(model.start), end = date(model.end) + day$1;
 	const extent = Math.max(1, end - start), inner = Math.max(0, width - 20);
 	const top = model.showTitle ? 18 : 0, bars = model.bars.filter((bar) => !bar.hidden);
@@ -1176,9 +1176,12 @@ function timeline(cell, width, height, language) {
 				type: "service",
 				name: "table-schedule",
 				taskKey: bar.searchKey,
-				scheduleIndex: bar.index
+				scheduleIndex: bar.index,
+				login: bar.login || cell.login || "",
+				parentKeys: bar.parentKeys || [],
+				scope: bar.scope || cell.scope || ""
 			},
-			enabled: true
+			enabled: editable && bar.editable !== false
 		}));
 	});
 	return { nodes: [node("Scroll", "tableScheduleScroll", rect$1(0, 0, width, height), {
@@ -1187,7 +1190,7 @@ function timeline(cell, width, height, language) {
 		children: nodes
 	})] };
 }
-function hours(cell, width, height, language) {
+function hours(cell, width, height, language, editable = true) {
 	const days = cell.timeDays || [], nodes = [], t = (value) => translate(value, language);
 	const extent = Math.max(35, cell.dayWidth || 35), available = Math.max(1, width - 20);
 	const columnWidth = Math.max(extent, available / Math.max(1, days.length));
@@ -1212,7 +1215,8 @@ function hours(cell, width, height, language) {
 				name: "work-hours",
 				day: value.day,
 				taskKey: cell.taskKey
-			}
+			},
+			enabled: editable
 		}));
 	});
 	return { nodes: [node("Scroll", "tableHoursScroll", rect$1(0, 0, width, height), {
@@ -1662,8 +1666,8 @@ function describe$47(cell, width, height, language, editable = true, expanded = 
 	if (cell.parentGrouping !== void 0) return cell$1(cell, width, height, language, editable);
 	if (cell.summary) return summary$2(cell, width, height, language);
 	if (cell.connectionRows) return describe$50(cell, width, height, language);
-	if (cell.timeline) return timeline(cell, width, height, language);
-	if (cell.timeDays) return hours(cell, width, height, language);
+	if (cell.timeline) return timeline(cell, width, height, language, editable);
+	if (cell.timeDays) return hours(cell, width, height, language, editable);
 	if (cell.layoutNodes) return describe$51(cell, width, height, language, editable, server);
 	if (cell.groups && cell.steps) return describe$53(cell, width, height, language, expanded);
 	if (cell.links || cell.ingest) return describe$52(cell, width, height, language, editable);
@@ -1788,7 +1792,11 @@ var _sfc_main$166 = {
 							dropParentKey: action.name === "drop-parent" ? dropParentKey(action.value) : "",
 							actionTaskKey: action.taskKey,
 							actionDay: action.day,
-							actionTaskCode: action.taskCode
+							actionTaskCode: action.taskCode,
+							actionScheduleIndex: action.scheduleIndex,
+							actionLogin: action.login || props.cell.login,
+							actionParentKeys: action.parentKeys,
+							actionScope: action.scope || props.cell.scope
 						}, host.value);
 					} catch (error) {
 						emit("action", "error", { error: error.message }, host.value);
@@ -1812,7 +1820,7 @@ var _sfc_main$166 = {
 					])], 512);
 				};
 			}
-		}, [["__scopeId", "data-v-30831e6f"]])
+		}, [["__scopeId", "data-v-b1e79fcd"]])
 	},
 	props: {
 		element: Object,
@@ -30962,7 +30970,7 @@ var _sfc_main$69 = {
 			await this.open(true, "", {
 				...filters,
 				...process ? { process } : {}
-			}, false, [parent]);
+			}, false, Array.isArray(parent) ? parent : [parent]);
 			if (taskKey) {
 				const code = new URL("skey://" + taskKey).searchParams.get("code");
 				const task = this.tasks.find((row) => row.__search_key__ === taskKey || code && row.code === code);
@@ -59765,7 +59773,15 @@ var _sfc_main = {
 				"table-schedule"
 			].includes(kind)) {
 				const taskKey = options.actionTaskKey || options.taskSearchKey || "";
-				await this.$refs.taskManager.openForObjects(record, options.actionProcess || options.process || "", {}, taskKey.startsWith("sthpw/task?") ? taskKey : "");
+				if (kind === "table-schedule" && options.actionLogin) {
+					await this.$refs.taskManager.openForUser({ login: options.actionLogin });
+					this.$refs.taskManager.view = "gantt";
+					return;
+				}
+				const parentKeys = Array.isArray(options.actionParentKeys) ? options.actionParentKeys.filter(Boolean) : [];
+				const parents = parentKeys.length > 1 ? parentKeys.map((key) => ({ __search_key__: key })) : record;
+				await this.$refs.taskManager.openForObjects(parents, options.actionProcess || options.process || "", {}, taskKey.startsWith("sthpw/task?") ? taskKey : "");
+				if (kind === "table-schedule" && options.actionScope === "project") this.$refs.taskManager.changeScope("project");
 				if (kind === "add-task") await this.$refs.taskManager.edit([], true, "", "inline");
 				if (kind === "work") await this.openTableCheckin(record, options, this.workspaceProject);
 				if (kind === "table-schedule") this.$refs.taskManager.view = "gantt";
