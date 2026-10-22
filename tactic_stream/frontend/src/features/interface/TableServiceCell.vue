@@ -78,6 +78,10 @@ function activate(action) {
             action.name === 'drop-links'
               ? droppedKeys(action.value, props.cell.acceptedType)
               : [],
+          dropFiles:
+            action.name === 'file-ingest' && Array.isArray(action.value)
+              ? action.value
+              : [],
           dropParentKey:
             action.name === 'drop-parent' ? dropParentKey(action.value) : '',
           actionTaskKey: action.taskKey,

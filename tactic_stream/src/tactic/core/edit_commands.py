@@ -145,21 +145,39 @@ class EditCmd(Command):
         action_handlers = []
         for element_name in self.element_names:
             action_handler_class = config.get_action_handler(element_name)
-            if not action_handler_class and (not SearchType.column_exists(self.search_type, element_name)):
+            display_item = next((item for item in (*config.get_configs(), *display_config.get_configs()) if item.get_display_handler(element_name)), None)
+            display_class = display_item.get_display_handler(element_name) if display_item else ''
+            display_options = display_item.get_display_options(element_name) if display_item else {}
+            upload_display = display_class in (
+                'SimpleUploadWdg', 'tactic.ui.widget.SimpleUploadWdg', 'tactic.ui.widget.upload_wdg.SimpleUploadWdg',
+                'UploadWdg', 'pyasm.widget.UploadWdg', 'pyasm.widget.input_wdg.UploadWdg',
+                'tactic.ui.widget.UploadWdg', 'tactic.ui.widget.upload_wdg.UploadWdg',
+            )
+            if not action_handler_class and not SearchType.column_exists(self.search_type, element_name) and not upload_display:
                 if element_name not in ['workflow']:
                     continue
+            if action_handler_class in ('NullAction', 'pyasm.command.NullAction') and display_class in ('UploadWdg', 'pyasm.widget.UploadWdg', 'pyasm.widget.input_wdg.UploadWdg', 'tactic.ui.widget.UploadWdg', 'tactic.ui.widget.upload_wdg.UploadWdg'):
+                action_handler_class = ''
             if not action_handler_class:
-                display_class = next((value for item in display_config.get_configs() if (value := item.get_display_handler(element_name))), '')
                 try:
                     action_handler_class = Common.resolve_class(display_class).get_default_action()
-                except Exception as e:
+                except Exception:
                     action_handler_class = ''
+                if display_class in ('tactic.ui.widget.UploadWdg', 'tactic.ui.widget.upload_wdg.UploadWdg') and display_options.get('names'):
+                    action_handler_class = 'MultiUploadAction'
             if action_handler_class == '':
                 action_handler_class = self.get_default_action_handler()
             action_handler = WidgetConfig.create_widget(action_handler_class)
             action_handler.set_name(element_name)
             action_handler.set_input_prefix(self.input_prefix)
-            action_options = config.get_action_options(element_name)
+            action_options = dict(config.get_action_options(element_name))
+            if action_handler_class in ('MultiUploadAction', 'pyasm.command.MultiUploadAction', 'pyasm.command.edit_wdg_action.MultiUploadAction') and display_options.get('names'):
+                action_options.setdefault('names', display_options['names'])
+                action_options.setdefault('types', '|'.join('icon_main' if 'icon' in item else 'main' for item in str(action_options['names']).split('|')))
+            elif action_handler_class in ('UploadAction', 'pyasm.command.UploadAction', 'pyasm.command.edit_wdg_action.UploadAction'):
+                for key in ('context', 'type', 'column'):
+                    if display_options.get(key):
+                        action_options.setdefault(key, display_options[key])
             if self.data != None:
                 element_data = self.data.get(element_name)
                 action_handler.set_data(element_data)

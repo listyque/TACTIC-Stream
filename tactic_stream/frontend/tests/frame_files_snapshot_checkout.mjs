@@ -82,7 +82,7 @@ try {
     });
   });
   await page.route(
-    /\/assets\/(?:scene\.ma|reference%20%23100%25\.txt)$/,
+    /\/assets\/(?:scene\.ma|reference%20%23100%25\.txt|seq\.1001\.exr|seq\.1002\.exr)$/,
     (route) =>
       route.fulfill({ body: 'remote', contentType: 'application/octet-stream' })
   );
@@ -261,6 +261,33 @@ try {
   assert.equal(
     await dialog.evaluate((node) => node.scrollWidth <= node.clientWidth),
     true
+  );
+  await field('snapshotCheckoutClose').tap();
+  preparedFiles = [
+    {
+      code: 'SEQ1',
+      filename: 'seq.####.exr',
+      type: 'sequence',
+      size: 12,
+      href: '/assets/seq.1001.exr',
+      members: [
+        { filename: 'seq.1001.exr', href: '/assets/seq.1001.exr', size: 6 },
+        { filename: 'seq.1002.exr', href: '/assets/seq.1002.exr', size: 6 }
+      ]
+    }
+  ];
+  await page.setViewportSize({ width: 760, height: 700 });
+  await show(760, 'en');
+  const seqFirst = page.waitForEvent('download');
+  await field('snapshotCheckoutDownload').tap();
+  const dl1 = await seqFirst;
+  await field('snapshotCheckout_message')
+    .filter({ hasText: 'Download completed' })
+    .waitFor();
+  assert.equal(downloads.length, 3);
+  assert.deepEqual(
+    downloads.slice(1).map((item) => item.suggestedFilename()),
+    ['seq.1001.exr', 'seq.1002.exr']
   );
   await field('snapshotCheckoutClose').tap();
   assert.deepEqual(errors, []);

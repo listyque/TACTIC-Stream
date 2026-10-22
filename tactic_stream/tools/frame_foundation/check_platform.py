@@ -130,6 +130,8 @@ def fingerprints(handler):
             'src/tactic/ui/input/process_group_select_wdg.py',
             'src/tactic/ui/panel/security_manager_wdg.py',
             'src/tactic/ui/widget/misc_input_wdg.py',
+            'src/tactic/ui/widget/file_browser_wdg.py',
+            'src/tactic/ui/widget/upload_wdg.py',
             'src/tactic/command/notification_cmd.py',
         )],
     ]

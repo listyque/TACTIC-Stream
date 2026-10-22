@@ -115,7 +115,8 @@ def read_snapshot_files(search_key, file_code='', expected_revision=''):
     """Read a captured concrete snapshot using only original server methods."""
     import json
     import hashlib
-    from pyasm.biz import Project, Snapshot
+    import os
+    from pyasm.biz import FileGroup, FileRange, Project, Snapshot
     from pyasm.common import Environment
     from pyasm.search import Search, SearchKey
 
@@ -150,18 +151,70 @@ def read_snapshot_files(search_key, file_code='', expected_revision=''):
         files = [file for file in files if file.get_code() == file_code]
         if len(files) != 1:
             raise LookupError('Dependency file is no longer available')
-    # shortcut: Expand native ranges/metadata groups before enabling sequence/UDIM transfers here.
-    if any(file.get_value('file_range', no_exception=True) or (
-            file.get_metadata_dict().get('template') and
-            file.get_metadata_dict().get('type') not in ('file', 'layer_file', 'no_ext')) for file in files):
-        raise ValueError('Sequence and UDIM checkout is not available in this table yet')
+    rows = []
+    for file in files:
+        row = file.get_sobject_dict()
+        meta = file.get_metadata_dict()
+        file_range = str(file.get_value('file_range', no_exception=True) or '').strip()
+        template = str(meta.get('new_template') or meta.get('template') or '').strip()
+        group_type = str(meta.get('type') or '').strip()
+        if file_range or (template and group_type not in ('', 'file', 'layer_file', 'no_ext')):
+            if file_code:
+                raise ValueError('Sequence and UDIM files require Snapshot Checkout')
+            name = file.get_full_file_name()
+            names = []
+            if file_range:
+                rng = FileRange.get(file_range)
+                if rng.get_num_frames() > 5000:
+                    raise ValueError('Sequence or UDIM group exceeds the checkout limit')
+                names = FileGroup.expand_paths(name, rng)
+            else:
+                stem, suffix = os.path.splitext(name)
+                base = str(meta.get('new_filename') or meta.get('filename') or stem)
+                ext = str(meta.get('new_file_ext') or meta.get('ext') or suffix.lstrip('.'))
+                layer = str(meta.get('layer') or '')
+                pad = int(meta.get('new_padding') or meta.get('padding') or 4)
+                render = lambda udim='', frame=None: (template
+                    .replace('$FILENAME', base).replace('$LAYER', layer)
+                    .replace('$UDIM', str(udim)).replace('$UV', str(udim))
+                    .replace('$FRAME', '' if frame is None else str(frame).zfill(pad))
+                    .replace('$EXT', ext))
+                parse_span = lambda item: (int(item[0]), int(item[1])) if isinstance(item, (list, tuple)) else [int(part) for part in str(item).split('-')]
+                if group_type in ('sequence', 'layer_sequence'):
+                    for item in meta.get('frameranges') or []:
+                        start, end = parse_span(item)
+                        if end < start or len(names) + (end - start + 1) > 5000:
+                            raise ValueError('Sequence or UDIM group exceeds the checkout limit')
+                        names.extend(render(frame=frame) for frame in range(start, end + 1))
+                elif group_type in ('udim', 'uv', 'layer_udim', 'layer_uv'):
+                    for udim in meta.get('udims') or []:
+                        if len(names) + 1 > 5000:
+                            raise ValueError('Sequence or UDIM group exceeds the checkout limit')
+                        names.append(render(udim=udim))
+                elif group_type in ('udim_sequence', 'uv_sequence', 'layer_udim_sequence', 'layer_uv_sequence'):
+                    for pair in meta.get('frameranges') or []:
+                        udim, ranges = pair[0], pair[1]
+                        for item in ranges or []:
+                            start, end = parse_span(item)
+                            if end < start or len(names) + (end - start + 1) > 5000:
+                                raise ValueError('Sequence or UDIM group exceeds the checkout limit')
+                            names.extend(render(udim=udim, frame=frame) for frame in range(start, end + 1))
+            if not names or len(set(names)) != len(names):
+                raise ValueError('Sequence or UDIM group has no valid member files')
+            sizes = meta.get('files_sizes') or []
+            row['__member_files__'] = [
+                dict(file_name=member, st_size=int(sizes[idx] or 0) if idx < len(sizes) else 0)
+                for idx, member in enumerate(names)
+            ]
+        rows.append(row)
     data = snapshot.get_sobject_dict()
-    data['__files__'] = [file.get_sobject_dict() for file in files]
+    data['__files__'] = rows
     return json.loads(json.dumps(data, default=str))
 
 
 class TableSnapshotFilesCmd(Command):
     def execute(self):
+        from urllib.parse import quote, urlsplit, urlunsplit
         from pyasm.common import Xml
         from pyasm.search import Search
         from pyasm.widget import ThumbWdg
@@ -170,7 +223,8 @@ class TableSnapshotFilesCmd(Command):
 
         data = read_snapshot_files(**self.kwargs)
         snapshot = Search.get_by_search_key(data['__search_key__'])
-        selected = {file['code'] for file in data['__files__']}
+        by_code = {file['code']: file for file in data['__files__']}
+        selected = set(by_code)
         source = snapshot.get_snapshot_xml()
         xml = Xml()
         xml.read_string('<snapshot>' + ''.join(
@@ -182,5 +236,17 @@ class TableSnapshotFilesCmd(Command):
         ThumbWdg.get_file_info(xml, objects, snapshot, snapshot, files=files)
         for file in files:
             file['href'] = safe_link(file['href'])
+            members = by_code.get(file['code'], {}).get('__member_files__')
+            if members:
+                web_dir = snapshot.get_web_dir(snapshot, file_object=objects[file['code']]).replace('\\', '/')
+                url = urlsplit(web_dir)
+                file['members'] = [
+                    dict(
+                        filename=member['file_name'],
+                        size=int(member.get('st_size') or 0),
+                        href=safe_link(urlunsplit((url.scheme, url.netloc, quote(url.path + '/' + member['file_name'], safe='/:'), url.query, url.fragment))),
+                    )
+                    for member in members
+                ]
         self.info = dict(snapshot=ApiXMLRPC._record(snapshot), files=files)
         return self.info

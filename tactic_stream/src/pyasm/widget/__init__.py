@@ -1,13 +1,13 @@
 """TACTIC XML view configuration; browser rendering belongs to Vue."""
 from .widget_config import WidgetConfigException, WidgetConfig, WidgetConfigView
-from .input_wdg import BaseInputWdg, TextWdg, TextAreaWdg, CheckboxWdg, SelectWdg, MultiSelectWdg, UploadWdg, HiddenWdg, InputException
+from .input_wdg import BaseInputWdg, TextWdg, TextAreaWdg, CheckboxWdg, SelectWdg, MultiSelectWdg, UploadWdg, ThumbInputWdg, HiddenWdg, InputException
 from .table_element_wdg import BaseTableElementWdg, SimpleTableElementWdg, ArrayTableElementWdg, XmlWdg
 from .table_element_wdg import CheckboxColWdg, SearchTypeElementWdg, UpdateWdg
 from .my_tactic_summary_wdg import MyTacticSummaryWdg
 from .file_wdg import ThumbWdg
 
 __all__ = ['WidgetConfigException', 'WidgetConfig', 'WidgetConfigView',
-           'BaseInputWdg', 'TextWdg', 'TextAreaWdg', 'CheckboxWdg', 'SelectWdg', 'MultiSelectWdg', 'UploadWdg', 'HiddenWdg', 'InputException',
+           'BaseInputWdg', 'TextWdg', 'TextAreaWdg', 'CheckboxWdg', 'SelectWdg', 'MultiSelectWdg', 'UploadWdg', 'ThumbInputWdg', 'HiddenWdg', 'InputException',
            'BaseTableElementWdg', 'SimpleTableElementWdg', 'ArrayTableElementWdg', 'XmlWdg', 'ThumbWdg', 'CheckboxColWdg', 'SearchTypeElementWdg']
 
 __all__ += ["TaskCompletionWdg", "DiscussionWdg", "SObjectTaskTableElement", "TaskParentSpacingTableElement", "UpdateWdg", "MyTacticSummaryWdg"]

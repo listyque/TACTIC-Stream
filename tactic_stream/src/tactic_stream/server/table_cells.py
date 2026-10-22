@@ -249,11 +249,14 @@ def describe_cell(element, columns, search_type=""):
     native_parent_action = action in (
         'ParentGroupAction', 'tactic.ui.table.ParentGroupAction', 'tactic.ui.table.group_element_wdg.ParentGroupAction'
     ) and not element['action']['options']
+    native_drop_action = widget is DropElementWdg and action in (
+        'FileIngestCmd', 'tactic.ui.widget.FileIngestCmd', 'tactic.ui.widget.file_browser_wdg.FileIngestCmd'
+    ) and not element['action']['options']
     supported = (
         widget is not None
         and isinstance(field, str)
         and (field in columns or computed)
-        and (not action or native_task_action or native_time_action or native_parent_action)
+        and (not action or native_task_action or native_time_action or native_parent_action or native_drop_action)
     )
     allowed = {"column"}
     if widget in TIME_WIDGETS:

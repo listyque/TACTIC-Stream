@@ -235,17 +235,18 @@ class TableFileActions(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Dependencies changed'):
             read_snapshot_files(fresh.get_search_key(), file_code=file.get_code(), expected_revision='old')
 
-    def test_checkout_refuses_a_representative_file_instead_of_a_whole_sequence(self):
+    def test_checkout_expands_sequences_and_udims_from_file_range_and_metadata(self):
+        from tactic.ui.table.file_actions import TableSnapshotFilesCmd
         snapshot = self.snapshot()
         prepared = append_snapshot_files(snapshot.get_search_key())
-        self.upload('frame.exr', prepared=prepared)
+        self.upload('frame.####.exr', prepared=prepared)
         write(lambda: append_snapshot_files(prepared['searchKey'], action='save', upload_directory=prepared['uploadDirectory'],
-            expected_revision=prepared['expectedRevision'], filenames=['frame.exr'], keep_file_name=True))
+            expected_revision=prepared['expectedRevision'], filenames=['frame.####.exr'], keep_file_name=True))
         file = Search.get_by_search_key(prepared['searchKey']).get_all_file_objects()[0]
-        for file_range, metadata in (
-            ('1-2', {}),
-            ('', dict(template='$FILENAME.$UDIM.$EXT', type='udim', udims=['1001', '1002'])),
-            ('', dict(template='$FILENAME.$FRAME.$EXT', type='sequence', frameranges=['1-2'])),
+        for file_range, metadata, expected in (
+            ('1001-1002', {}, ['frame.1001.exr', 'frame.1002.exr']),
+            ('', dict(new_template='tex.$UDIM.exr', type='udim', udims=[1001, 1002]), ['tex.1001.exr', 'tex.1002.exr']),
+            ('', dict(new_template='shot.$FRAME.exr', type='sequence', frameranges=[(1001, 1002, 4)]), ['shot.1001.exr', 'shot.1002.exr']),
         ):
             with self.subTest(file_range=file_range, metadata=metadata):
                 def make_group():
@@ -253,8 +254,18 @@ class TableFileActions(unittest.TestCase):
                     file.set_value('metadata', json.dumps(metadata))
                     file.commit(triggers=False)
                 write(make_group)
-                with self.assertRaisesRegex(ValueError, 'Sequence'):
-                    read_snapshot_files(snapshot.get_search_key())
+                data = read_snapshot_files(snapshot.get_search_key())
+                self.assertEqual([item['file_name'] for item in data['__files__'][0]['__member_files__']], expected)
+                cmd = TableSnapshotFilesCmd(search_key=snapshot.get_search_key())
+                cmd.execute()
+                self.assertEqual([item['filename'] for item in cmd.info['files'][0]['members']], expected)
+        def make_huge():
+            file.set_value('file_range', '1-5001')
+            file.set_value('metadata', '{}')
+            file.commit(triggers=False)
+        write(make_huge)
+        with self.assertRaisesRegex(ValueError, 'exceeds the checkout limit'):
+            read_snapshot_files(snapshot.get_search_key())
 
     def test_interleaved_sessions_do_not_replace_each_others_same_named_uploads(self):
         first = self.snapshot()

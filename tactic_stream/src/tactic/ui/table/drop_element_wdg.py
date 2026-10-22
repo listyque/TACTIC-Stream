@@ -11,6 +11,27 @@ from tactic.ui.common import BaseTableElementWdg
 
 
 def drop_link_data(parent, options):
+    background = Search.eval(options.get('css_background-color'), sobjects=parent) if options.get('css_background-color') else ''
+    if background and not re.fullmatch(r'#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?(?:[0-9a-fA-F]{2})?', str(background)):
+        raise ValueError('Drop background must be a hexadecimal color')
+    callback = str(options.get('cbjs_drop_action') or '').strip()
+    if callback:
+        if callback != 'file_drop_action(evt, bvr)':
+            raise ValueError('Custom DOM drop callbacks require a Frame action before they can run in both clients')
+        return dict(
+            text='',
+            links=[],
+            ingest=True,
+            available=True,
+            targetSearchKey=parent.get_search_key(),
+            projectCode=parent.get_project_code(),
+            backgroundColor=background,
+            context=str(options.get('context') or 'publish'),
+            checkinMode=str(options.get('checkin_mode') or 'default'),
+            subcontextMode=str(options.get('subcontext_mode') or '{none}'),
+            subcontext=str(options.get('subcontext') or ''),
+            transferMode=str(options.get('transfer_mode') or 'free_copy'),
+        )
     instance_type, accepted = options.get('instance_type'), options.get('accepted_drop_type')
     if not instance_type or not accepted:
         return dict(text='', links=[], available=False, diagnostic='Configure an instance type and accepted Search Type')
@@ -35,16 +56,16 @@ def drop_link_data(parent, options):
                           id=target.get_id(), code=target.get_code(), name=str(target.get_display_value()))))
     revision = hashlib.sha256(json.dumps([options, sorted((row.get_data() for row in instances),
         key=lambda row: str(row.get('id') or row.get('code')))], sort_keys=True, default=str).encode()).hexdigest()
-    background = Search.eval(options.get('css_background-color'), sobjects=parent) if options.get('css_background-color') else ''
-    if background and not re.fullmatch(r'#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?(?:[0-9a-fA-F]{2})?', str(background)):
-        raise ValueError('Drop background must be a hexadecimal color')
     return dict(text='', links=links, available=True, targetSearchKey=parent.get_search_key(),
         acceptedType=accepted, instanceType=instance_type, path=path or '', expectedRevision=revision, backgroundColor=background,
         relation=dict(relationship='instance', instance_type=instance_type, path=path or '', search_type=accepted))
 
 
 class DropElementWdg(BaseTableElementWdg):
-    ARGS_KEYS = dict.fromkeys(('accepted_drop_type', 'instance_type', 'path', 'display_expr', 'css_background-color', 'cbjs_drop_action'), {})
+    ARGS_KEYS = dict.fromkeys((
+        'accepted_drop_type', 'instance_type', 'path', 'display_expr', 'css_background-color',
+        'cbjs_drop_action', 'context', 'checkin_mode', 'subcontext_mode', 'subcontext', 'transfer_mode',
+    ), {})
 
     def is_editable(self):
         return False
@@ -52,8 +73,6 @@ class DropElementWdg(BaseTableElementWdg):
     def get_cell_value(self):
         if not self.get_current_sobject() or self.get_current_sobject().is_insert():
             return dict(text='', links=[], available=False)
-        if self.get_option('cbjs_drop_action'):
-            raise ValueError('Custom DOM drop callbacks require a Frame action before they can run in both clients')
         cell = drop_link_data(self.get_current_sobject(), self.options)
         return dict(cell, columnName=self.get_name())
 

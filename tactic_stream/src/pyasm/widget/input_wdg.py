@@ -414,6 +414,10 @@ class UploadWdg(BaseInputWdg):
     def __init__(self, name=None, **kwargs):
         super().__init__(name, **kwargs)
 
+    @classmethod
+    def get_default_action(cls):
+        return 'MultiUploadAction'
+
     def get_input(self):
         names = self.get_option('names')
         required = self.get_option('required')
@@ -444,4 +448,12 @@ class UploadWdg(BaseInputWdg):
         else:
             self.context_input = TextWdg(context_name)
         return self
+
+
+class ThumbInputWdg(BaseInputWdg):
+    def __init__(self, name=None, **kwargs):
+        super().__init__(name, **kwargs)
+
+    def is_read_only(self):
+        return True
 

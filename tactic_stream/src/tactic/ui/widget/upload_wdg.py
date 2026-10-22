@@ -12,6 +12,10 @@ class SimpleUploadWdg(BaseInputWdg):
         name = kwargs.get('key')
         super().__init__(name, 'upload', **kwargs)
 
+    @classmethod
+    def get_default_action(cls):
+        return 'UploadAction'
+
     def get_input(self):
         if self.kwargs.get('client_action'):
             raise UnsupportedContract('Client-side immediate upload actions are not migrated')
@@ -67,5 +71,19 @@ class UploadWdg(SimpleUploadWdg):
         else:
             text = TextWdg(context_name)
         self.context_input = text
-        self.upload_fields = [dict(name=self.name, required=self.get_option('required') in (True, 'true'))]
+        names = self.get_option('names')
+        required = self.get_option('required')
+        if names:
+            names = names.split('|')
+            if len(set(names)) != len(names):
+                raise InputException('[names] in the config file must be unique')
+            if required:
+                required = required.split('|')
+                if len(required) != len(names):
+                    raise InputException('required needs to match the number of names if defined in the config file.')
+            else:
+                required = ['false'] * len(names)
+            self.upload_fields = [dict(name=name, required=flag == 'true') for name, flag in zip(names, required)]
+        else:
+            self.upload_fields = [dict(name=self.name, required=self.get_option('required') in (True, 'true'))]
         return self

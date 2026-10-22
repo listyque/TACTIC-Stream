@@ -30,7 +30,8 @@ function fieldKind(field) {
 		"CheckboxWdg",
 		"SelectWdg",
 		"MultiSelectWdg",
-		"HiddenWdg"
+		"HiddenWdg",
+		"ThumbInputWdg"
 	].find((name) => field.class_name === `pyasm.widget.input_wdg.${name}`);
 }
 function unsupportedField(field) {
@@ -70,28 +71,36 @@ function unsupportedField(field) {
 	if (field.class_name === "tactic.ui.input.process_context_wdg.ReviewProcessInputWdg") allowed.push("context", "pipeline_code");
 	if (field.class_name === "tactic.ui.input.process_group_select_wdg.ProcessGroupSelectWdg") allowed.push("label_attr");
 	if (fieldKind(field) === "FileInput") allowed.push("context", "client_action");
-	if (fieldKind(field) === "MultiUpload") allowed.push("names", "upload_type", "context", "pipeline");
+	if (fieldKind(field) === "MultiUpload") allowed.push("names", "upload_type", "context", "pipeline", "context_option", "subcontext");
 	if (field.class_name === "tactic.ui.widget.upload_wdg.UploadWdg") allowed.push("context_expr", "client_action");
-	return !fieldKind(field) || field.values.length > 1 && fieldKind(field) !== "MultiSelectWdg" || field.values.some((value) => value !== null && typeof value === "object") || Object.keys(options).some((key) => !allowed.includes(key)) || fieldKind(field) === "CheckboxWdg" && options.value || fieldKind(field) === "ColorInputWdg" && options.css_background && options.css_background !== "{$VALUE}" || fieldKind(field) === "CalendarInputWdg" && field.input?.display_mode !== "browser" || [
-		"TimeAction",
-		"pyasm.command.TimeAction",
-		"pyasm.command.edit_wdg_action.TimeAction"
-	].includes(field.action.handler) && fieldKind(field) !== "TimeInputWdg" || fieldKind(field) === "FileInput" && (![
-		"UploadAction",
-		"pyasm.command.UploadAction",
-		"pyasm.command.edit_wdg_action.UploadAction"
-	].includes(field.action.handler) || options.client_action) || fieldKind(field) === "MultiUpload" && (field.class_name === "tactic.ui.widget.upload_wdg.UploadWdg" ? ![
-		"UploadAction",
-		"pyasm.command.UploadAction",
-		"pyasm.command.edit_wdg_action.UploadAction"
-	].includes(field.action.handler) || options.client_action || options.names || options.upload_type : ![
+	const multiActions = [
 		"MultiUploadAction",
 		"pyasm.command.MultiUploadAction",
 		"pyasm.command.edit_wdg_action.MultiUploadAction",
 		"MultiZipUploadAction",
 		"pyasm.command.MultiZipUploadAction",
 		"pyasm.command.edit_wdg_action.MultiZipUploadAction"
-	].includes(field.action.handler) || field.input.arbitrary !== (field.action.options.upload_type === "arbitrary") || field.input.arbitrary && field.input.fields.length !== 1 || !field.input.arbitrary && field.input.fields.map((item) => item.name).join("|") !== (field.action.options.names || field.name)) || fieldKind(field) === "MultiSelectWdg" && ![
+	];
+	const uploadActions = [
+		"UploadAction",
+		"pyasm.command.UploadAction",
+		"pyasm.command.edit_wdg_action.UploadAction"
+	];
+	const nullActions = [
+		"",
+		"NullAction",
+		"pyasm.command.NullAction",
+		"pyasm.command.edit_wdg_action.NullAction"
+	];
+	return !fieldKind(field) || field.values.length > 1 && fieldKind(field) !== "MultiSelectWdg" || field.values.some((value) => value !== null && typeof value === "object") || Object.keys(options).some((key) => !allowed.includes(key)) || fieldKind(field) === "CheckboxWdg" && options.value || fieldKind(field) === "ColorInputWdg" && options.css_background && options.css_background !== "{$VALUE}" || fieldKind(field) === "CalendarInputWdg" && field.input?.display_mode !== "browser" || fieldKind(field) === "ThumbInputWdg" && !nullActions.includes(field.action.handler || "") || [
+		"TimeAction",
+		"pyasm.command.TimeAction",
+		"pyasm.command.edit_wdg_action.TimeAction"
+	].includes(field.action.handler) && fieldKind(field) !== "TimeInputWdg" || fieldKind(field) === "FileInput" && (!uploadActions.includes(field.action.handler || "") || options.client_action) || fieldKind(field) === "MultiUpload" && (field.class_name === "tactic.ui.widget.upload_wdg.UploadWdg" ? ![
+		...uploadActions,
+		...multiActions,
+		...nullActions
+	].includes(field.action.handler || "") || options.client_action || options.upload_type || options.names && ![...multiActions, ...nullActions].includes(field.action.handler || "") || field.input.fields.map((item) => item.name).join("|") !== (field.action.options.names || options.names || field.name) : ![...multiActions, ...nullActions].includes(field.action.handler || "") || field.input.arbitrary !== (field.action.options.upload_type === "arbitrary") || field.input.arbitrary && field.input.fields.length !== 1 || !field.input.arbitrary && field.input.fields.map((item) => item.name).join("|") !== (field.action.options.names || field.name)) || fieldKind(field) === "MultiSelectWdg" && ![
 		"MultiDatabaseAction",
 		"pyasm.command.MultiDatabaseAction",
 		"pyasm.command.edit_wdg_action.MultiDatabaseAction"
@@ -963,7 +972,8 @@ var _sfc_main = {
 				SelectWdg: "enum",
 				CalendarInputWdg: "date",
 				ParentInput: "parent",
-				FileInput: "preview"
+				FileInput: "preview",
+				ThumbInputWdg: "thumbnail"
 			}[fieldKind(field)] || "string";
 			if (unsupportedField(field)) type = "unsupported";
 			return {
@@ -1252,21 +1262,22 @@ var _hoisted_14 = {
 	class: "muted"
 };
 var _hoisted_15 = ["id"];
-var _hoisted_16 = ["name", "value"];
-var _hoisted_17 = ["id", "disabled"];
-var _hoisted_18 = [
+var _hoisted_16 = ["id"];
+var _hoisted_17 = ["name", "value"];
+var _hoisted_18 = ["id", "disabled"];
+var _hoisted_19 = [
 	"multiple",
 	"required",
 	"onChange"
 ];
-var _hoisted_19 = ["onUpdate:modelValue", "aria-label"];
-var _hoisted_20 = ["value"];
-var _hoisted_21 = ["onUpdate:modelValue"];
-var _hoisted_22 = { key: 0 };
-var _hoisted_23 = ["onUpdate:modelValue"];
+var _hoisted_20 = ["onUpdate:modelValue", "aria-label"];
+var _hoisted_21 = ["value"];
+var _hoisted_22 = ["onUpdate:modelValue"];
+var _hoisted_23 = { key: 0 };
 var _hoisted_24 = ["onUpdate:modelValue"];
-var _hoisted_25 = { class: "configuration-toggle" };
-var _hoisted_26 = [
+var _hoisted_25 = ["onUpdate:modelValue"];
+var _hoisted_26 = { class: "configuration-toggle" };
+var _hoisted_27 = [
 	"id",
 	"onUpdate:modelValue",
 	"name",
@@ -1274,17 +1285,13 @@ var _hoisted_26 = [
 	"disabled",
 	"required"
 ];
-var _hoisted_27 = ["id", "disabled"];
-var _hoisted_28 = [
+var _hoisted_28 = ["id", "disabled"];
+var _hoisted_29 = [
 	"onUpdate:modelValue",
 	"value",
 	"name",
 	"required"
 ];
-var _hoisted_29 = {
-	key: 15,
-	class: "muted"
-};
 var _hoisted_30 = {
 	key: 16,
 	class: "muted"
@@ -1294,11 +1301,15 @@ var _hoisted_31 = {
 	class: "muted"
 };
 var _hoisted_32 = {
+	key: 18,
+	class: "muted"
+};
+var _hoisted_33 = {
 	key: 0,
 	class: "notice",
 	role: "alert"
 };
-var _hoisted_33 = { class: "configuration-actions" };
+var _hoisted_34 = { class: "configuration-actions" };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_ObjectEditorSurface = resolveComponent("ObjectEditorSurface");
@@ -1385,13 +1396,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								$options.kind(field) === "ParentInput" ? (openBlock(), createElementBlock("span", {
 									key: 3,
 									id: `record-field-${$setup.formId}-${index}`
-								}, toDisplayString(field.input.no_parent_type ? $options.t("No parent type") : field.input.project ? $options.t("Project: {project}", { project: field.input.project }) : field.input.label), 9, _hoisted_15)) : $options.kind(field) === "HiddenWdg" ? (openBlock(), createElementBlock("input", {
+								}, toDisplayString(field.input.no_parent_type ? $options.t("No parent type") : field.input.project ? $options.t("Project: {project}", { project: field.input.project }) : field.input.label), 9, _hoisted_15)) : $options.kind(field) === "ThumbInputWdg" ? (openBlock(), createElementBlock("span", {
 									key: 4,
+									id: `record-field-${$setup.formId}-${index}`,
+									class: "muted"
+								}, toDisplayString($options.t("Thumbnail is managed by the check-in and preview pipeline")), 9, _hoisted_16)) : $options.kind(field) === "HiddenWdg" ? (openBlock(), createElementBlock("input", {
+									key: 5,
 									type: "hidden",
 									name: $options.inputName(field),
 									value: $data.draft[field.name]
-								}, null, 8, _hoisted_16)) : $options.kind(field) === "ColorInputWdg" ? (openBlock(), createBlock(_component_AppColorInput, {
-									key: 5,
+								}, null, 8, _hoisted_17)) : $options.kind(field) === "ColorInputWdg" ? (openBlock(), createBlock(_component_AppColorInput, {
+									key: 6,
 									id: `record-field-${$setup.formId}-${index}`,
 									modelValue: $data.draft[field.name],
 									"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
@@ -1410,7 +1425,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"disabled",
 									"required"
 								])) : $options.kind(field) === "FileInput" ? (openBlock(), createBlock(_component_AppFileInput, {
-									key: 6,
+									key: 7,
 									id: `record-field-${$setup.formId}-${index}`,
 									label: field.title,
 									value: $data.files[field.name]?.name || "",
@@ -1425,7 +1440,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"required",
 									"onChange"
 								])) : $options.kind(field) === "MultiUpload" ? (openBlock(), createElementBlock("fieldset", {
-									key: 7,
+									key: 8,
 									id: `record-field-${$setup.formId}-${index}`,
 									disabled: $options.disabled(field),
 									class: "compound-upload"
@@ -1437,7 +1452,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 											multiple: field.input.arbitrary,
 											required: slot.required && ($data.definition.mode === "insert" || Object.values($data.draft[field.name].files).some((files) => files.length)),
 											onChange: ($event) => $options.selectUploads(field, `${field.name}|${slot.name}`, $event)
-										}, null, 40, _hoisted_18)]);
+										}, null, 40, _hoisted_19)]);
 									}), 128)),
 									createBaseVNode("label", null, [createTextVNode(toDisplayString($options.t("Context")) + " ", 1), field.input.context.type === "select" ? withDirectives((openBlock(), createElementBlock("select", {
 										key: 0,
@@ -1447,23 +1462,23 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										return openBlock(), createElementBlock("option", {
 											key: option,
 											value
-										}, toDisplayString(field.input.context.labels[option]), 9, _hoisted_20);
-									}), 128))], 8, _hoisted_19)), [[vModelSelect, $data.draft[field.name].context]]) : withDirectives((openBlock(), createElementBlock("input", {
+										}, toDisplayString(field.input.context.labels[option]), 9, _hoisted_21);
+									}), 128))], 8, _hoisted_20)), [[vModelSelect, $data.draft[field.name].context]]) : withDirectives((openBlock(), createElementBlock("input", {
 										key: 1,
 										"onUpdate:modelValue": ($event) => $data.draft[field.name].context = $event
-									}, null, 8, _hoisted_21)), [[vModelText, $data.draft[field.name].context]])]),
-									field.input.subcontext ? (openBlock(), createElementBlock("label", _hoisted_22, [createTextVNode(toDisplayString($options.t("Subcontext")), 1), withDirectives(createBaseVNode("input", { "onUpdate:modelValue": ($event) => $data.draft[field.name].subcontext = $event }, null, 8, _hoisted_23), [[vModelText, $data.draft[field.name].subcontext]])])) : createCommentVNode("", true),
+									}, null, 8, _hoisted_22)), [[vModelText, $data.draft[field.name].context]])]),
+									field.input.subcontext ? (openBlock(), createElementBlock("label", _hoisted_23, [createTextVNode(toDisplayString($options.t("Subcontext")), 1), withDirectives(createBaseVNode("input", { "onUpdate:modelValue": ($event) => $data.draft[field.name].subcontext = $event }, null, 8, _hoisted_24), [[vModelText, $data.draft[field.name].subcontext]])])) : createCommentVNode("", true),
 									createBaseVNode("label", null, [createTextVNode(toDisplayString($options.t("Comment")), 1), withDirectives(createBaseVNode("textarea", {
 										"onUpdate:modelValue": ($event) => $data.draft[field.name].description = $event,
 										rows: "3"
-									}, null, 8, _hoisted_24), [[vModelText, $data.draft[field.name].description]])]),
-									createBaseVNode("div", _hoisted_25, [createBaseVNode("span", null, toDisplayString($options.t("Is revision")), 1), createVNode(_component_AppSwitch, {
+									}, null, 8, _hoisted_25), [[vModelText, $data.draft[field.name].description]])]),
+									createBaseVNode("div", _hoisted_26, [createBaseVNode("span", null, toDisplayString($options.t("Is revision")), 1), createVNode(_component_AppSwitch, {
 										modelValue: $data.draft[field.name].is_revision,
 										"onUpdate:modelValue": ($event) => $data.draft[field.name].is_revision = $event,
 										label: "Is revision"
 									}, null, 8, ["modelValue", "onUpdate:modelValue"])])
-								], 8, _hoisted_17)) : $options.kind(field) === "CheckboxWdg" ? (openBlock(), createBlock(_component_AppSwitch, {
-									key: 8,
+								], 8, _hoisted_18)) : $options.kind(field) === "CheckboxWdg" ? (openBlock(), createBlock(_component_AppSwitch, {
+									key: 9,
 									id: `record-field-${$setup.formId}-${index}`,
 									name: $options.inputName(field),
 									"model-value": $options.checked($data.draft[field.name]),
@@ -1478,7 +1493,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"required",
 									"onUpdate:modelValue"
 								])) : $options.kind(field) === "TimeInputWdg" ? withDirectives((openBlock(), createElementBlock("input", {
-									key: 9,
+									key: 10,
 									id: `record-field-${$setup.formId}-${index}`,
 									type: "time",
 									step: "60",
@@ -1487,8 +1502,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									readonly: $options.readOnly(field),
 									disabled: $options.batch && $options.disabled(field),
 									required: $options.required(field)
-								}, null, 8, _hoisted_26)), [[vModelText, $data.draft[field.name]]]) : $options.kind(field) === "CalendarInputWdg" ? (openBlock(), createBlock(_component_AppDateField, {
-									key: 10,
+								}, null, 8, _hoisted_27)), [[vModelText, $data.draft[field.name]]]) : $options.kind(field) === "CalendarInputWdg" ? (openBlock(), createBlock(_component_AppDateField, {
+									key: 11,
 									id: `record-field-${$setup.formId}-${index}`,
 									"include-time": field.input.type !== "date",
 									label: field.title,
@@ -1509,7 +1524,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"required",
 									"onUpdate:modelValue"
 								])) : $options.kind(field) === "SelectWdg" ? (openBlock(), createBlock(_component_AppSelect, {
-									key: 11,
+									key: 12,
 									id: `record-field-${$setup.formId}-${index}`,
 									modelValue: $data.draft[field.name],
 									"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
@@ -1527,7 +1542,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"required",
 									"options"
 								])) : $options.kind(field) === "MultiSelectWdg" ? (openBlock(), createElementBlock("fieldset", {
-									key: 12,
+									key: 13,
 									id: `record-field-${$setup.formId}-${index}`,
 									disabled: $options.disabled(field)
 								}, [createBaseVNode("legend", null, toDisplayString(field.title), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(field.choices, (value, option) => {
@@ -1540,9 +1555,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										value,
 										name: $options.inputName(field),
 										required: $options.required(field) && !$data.draft[field.name].length && option === 0
-									}, null, 8, _hoisted_28), [[vModelCheckbox, $data.draft[field.name]]])]);
-								}), 128))], 8, _hoisted_27)) : $options.kind(field) === "TextAreaWdg" ? (openBlock(), createBlock(_component_AppTextArea, {
-									key: 13,
+									}, null, 8, _hoisted_29), [[vModelCheckbox, $data.draft[field.name]]])]);
+								}), 128))], 8, _hoisted_28)) : $options.kind(field) === "TextAreaWdg" ? (openBlock(), createBlock(_component_AppTextArea, {
+									key: 14,
 									label: field.title,
 									id: `record-field-${$setup.formId}-${index}`,
 									modelValue: $data.draft[field.name],
@@ -1565,7 +1580,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"rows",
 									"cols"
 								])) : $options.kind(field) === "TextWdg" ? (openBlock(), createBlock(_component_AppTextField, {
-									key: 14,
+									key: 15,
 									label: field.title,
 									id: `record-field-${$setup.formId}-${index}`,
 									modelValue: $data.draft[field.name],
@@ -1585,9 +1600,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"disabled",
 									"required",
 									"size"
-								])) : (openBlock(), createElementBlock("span", _hoisted_29, toDisplayString($options.t("Widget unavailable")), 1)),
-								field.options.hint || field.options.hint_text ? (openBlock(), createElementBlock("small", _hoisted_30, toDisplayString(field.options.hint || field.options.hint_text), 1)) : createCommentVNode("", true),
-								field.input?.timezone ? (openBlock(), createElementBlock("small", _hoisted_31, toDisplayString($options.t("Time zone: {timezone}", { timezone: field.input.timezone === "local" ? $options.t("Server local time") : field.input.timezone })), 1)) : createCommentVNode("", true)
+								])) : (openBlock(), createElementBlock("span", _hoisted_30, toDisplayString($options.t("Widget unavailable")), 1)),
+								field.options.hint || field.options.hint_text ? (openBlock(), createElementBlock("small", _hoisted_31, toDisplayString(field.options.hint || field.options.hint_text), 1)) : createCommentVNode("", true),
+								field.input?.timezone ? (openBlock(), createElementBlock("small", _hoisted_32, toDisplayString($options.t("Time zone: {timezone}", { timezone: field.input.timezone === "local" ? $options.t("Server local time") : field.input.timezone })), 1)) : createCommentVNode("", true)
 							]),
 							_: 2
 						}, 1032, [
@@ -1598,7 +1613,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					}), 128))]),
 					_: 1
 				})], 8, _hoisted_10),
-				$data.discard ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("p", null, toDisplayString($options.t("Discard unsaved changes?")), 1), createBaseVNode("div", _hoisted_33, [createVNode(_component_AppButton, {
+				$data.discard ? (openBlock(), createElementBlock("div", _hoisted_33, [createBaseVNode("p", null, toDisplayString($options.t("Discard unsaved changes?")), 1), createBaseVNode("div", _hoisted_34, [createVNode(_component_AppButton, {
 					label: "Keep editing",
 					onClick: _cache[1] || (_cache[1] = ($event) => $data.discard = false)
 				}), createVNode(_component_AppButton, {

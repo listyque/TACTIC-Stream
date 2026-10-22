@@ -4061,6 +4061,7 @@ function reduce(previous, event, model, viewport) {
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
 	"Choose file": "Выбрать файл",
+	"Choose files": "Выбрать файлы",
 	"Clear file": "Убрать файл",
 	"No file selected": "Файл не выбран",
 	"This configured publish form contains unsupported fields or actions": "Форма публикации содержит неподдерживаемые поля или действия",
@@ -9700,13 +9701,18 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 			send(node.dragStartAction);
 		}
 		function dragOver(event, node) {
-			if (props.interactive && node.enabled !== false && node.dropAction && event.dataTransfer.types.includes("application/x-tactic-frame")) {
+			if (props.interactive && node.enabled !== false && node.dropAction && (event.dataTransfer.types.includes("application/x-tactic-frame") || node.dropAction.name === "file-ingest" && event.dataTransfer.types.includes("Files"))) {
 				event.preventDefault();
-				event.dataTransfer.dropEffect = "move";
+				event.dataTransfer.dropEffect = node.dropAction.name === "file-ingest" ? "copy" : "move";
 			}
 		}
 		function drop(event, node) {
 			if (!props.interactive || node.enabled === false || !node.dropAction) return;
+			if (node.dropAction.name === "file-ingest" && event.dataTransfer.files?.length) {
+				event.preventDefault();
+				send(node.dropAction, Array.from(event.dataTransfer.files));
+				return;
+			}
 			const source = event.dataTransfer.getData("application/x-tactic-frame");
 			if (!source) return;
 			event.preventDefault();

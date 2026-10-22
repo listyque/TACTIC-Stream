@@ -558,7 +558,7 @@ examples are also in EN/RU Help → Table View: B07.
 
 - [x] `tactic.ui.table.button_wdg.ButtonElementWdg`
 - [ ] `tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg`
-- [ ] `tactic.ui.table.drop_element_wdg.DropElementWdg` — portable instance links delivered; the shipped `folder_drop` / FileIngest callback remains L04 work.
+- [x] `tactic.ui.table.drop_element_wdg.DropElementWdg` — portable instance links and `folder_drop` / `FileIngestCmd` callback delivered; ordinary-user ACL remains L07b.
 
 Из исходного XML вызвать реальное действие с контекстом строки/выделения, выполнить разрешённый script/layout и проверить результат, ошибки, отмену и откат. Для drop дать явную альтернативу выбора. Общий редактор колонок/ячеек должен сохранять исходные options и revisions; неподдержанный параметр не игнорируется.
 
@@ -570,7 +570,7 @@ examples are also in EN/RU Help → Table View: B07.
 - Excluded: `pyasm.widget.table_element_wdg.RenderLinkTableElement` — requires the previously excluded production subsystem; see the source inventory.
 - Excluded: `pyasm.widget.table_element_wdg.SubmissionLinkTableElement` — requires the previously excluded production subsystem; see the source inventory.
 - Excluded: `tactic.ui.cgapp.loader_element_wdg.LoaderElementWdg` — requires the previously excluded production subsystem; see the source inventory.
-- [ ] `tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg` — ordinary single files delivered in .177/.124; sequence/UDIM and remaining original options are not accepted yet.
+- [x] `tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg` — ordinary files, sequences and UDIM groups delivered in .183/.130; ordinary-user ACL remains L07b.
 - [x] `tactic.ui.table.table_element_wdg.GeneralPublishElementWdg` — configured view and optional bounded preview; excluded Publish Browser is not included.
 
 Из ячейки выполнить append/publish/checkout/load/submission по исходным параметрам через текущие file/Commit Queue owners; проверить snapshot/version, naming, файлы, повтор, права и FileUndo. RenderLink не объявляет готовым отдельный render farm. Local/DCC операции остаются native capabilities, браузер показывает доступные ему действия и понятное ограничение.

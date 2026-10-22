@@ -1043,6 +1043,10 @@ function describe$52(cell, width, height, language, editable) {
 		color: "secondaryText",
 		tooltip: translate(cell.diagnostic, language)
 	}));
+	else if (cell.ingest) children.push(button("dropIngest", rect$1(4, 0, Math.min(inner, 148), 28), translate("Choose files", language), "upload", {
+		type: "service",
+		name: "file-ingest"
+	}, editable));
 	else {
 		children.push(button("dropEdit", rect$1(4, 0, 28, 28), translate("Link SObjects", language), "link", {
 			type: "service",
@@ -1075,10 +1079,10 @@ function describe$52(cell, width, height, language, editable) {
 		enabled: true,
 		dropAction: editable && cell.available !== false ? {
 			type: "service",
-			name: "drop-links"
+			name: cell.ingest ? "file-ingest" : "drop-links"
 		} : null,
 		children: [node("Scroll", "dropScroll", rect$1(0, 0, width, height), {
-			contentHeight: cell.available === false ? 28 : 32 + links.length * 28,
+			contentHeight: cell.available === false || cell.ingest ? 28 : 32 + links.length * 28,
 			scrollbarId: "dropScrollBar",
 			children
 		})]
@@ -1662,7 +1666,7 @@ function describe$47(cell, width, height, language, editable = true, expanded = 
 	if (cell.timeDays) return hours(cell, width, height, language);
 	if (cell.layoutNodes) return describe$51(cell, width, height, language, editable, server);
 	if (cell.groups && cell.steps) return describe$53(cell, width, height, language, expanded);
-	if (cell.links) return describe$52(cell, width, height, language, editable);
+	if (cell.links || cell.ingest) return describe$52(cell, width, height, language, editable);
 	if (cell.label && !cell.text) cell = Object.assign({}, cell, { text: translate(cell.label, language) });
 	const actions = cell.actions || [];
 	const size = 28, gap = 4;
@@ -1780,6 +1784,7 @@ var _sfc_main$166 = {
 							expectedRevision: action.expectedRevision || props.cell.expectedRevision,
 							direction: action.direction || props.cell.direction,
 							dropKeys: action.name === "drop-links" ? droppedKeys(action.value, props.cell.acceptedType) : [],
+							dropFiles: action.name === "file-ingest" && Array.isArray(action.value) ? action.value : [],
 							dropParentKey: action.name === "drop-parent" ? dropParentKey(action.value) : "",
 							actionTaskKey: action.taskKey,
 							actionDay: action.day,
@@ -1807,7 +1812,7 @@ var _sfc_main$166 = {
 					])], 512);
 				};
 			}
-		}, [["__scopeId", "data-v-176d4f25"]])
+		}, [["__scopeId", "data-v-30831e6f"]])
 	},
 	props: {
 		element: Object,
@@ -19057,6 +19062,7 @@ var _sfc_main$110 = {
 				"script",
 				"edit-links",
 				"drop-links",
+				"file-ingest",
 				"change-parent",
 				"drop-parent",
 				"publish",
@@ -19095,6 +19101,48 @@ var _sfc_main$110 = {
 						]);
 					} finally {
 						if (request === this.actionRequest) await this.loadCells();
+					}
+					return;
+				}
+				if (kind === "file-ingest") {
+					let files = Array.isArray(cell.dropFiles) ? cell.dropFiles : [];
+					if (!files.length) files = await new Promise((resolve) => {
+						const input = document.createElement("input");
+						input.type = "file";
+						input.multiple = true;
+						input.onchange = () => resolve(Array.from(input.files || []));
+						input.oncancel = () => resolve([]);
+						input.click();
+					});
+					if (!files.length || request !== this.actionRequest) return;
+					this.serviceBusy = true;
+					const project = cell.projectCode || record.project_code || context.project;
+					const uploadDirectory = "ingest_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+					const names = [];
+					for (const file of files) {
+						names.push(await uploadFormFile(context.ticket, project, file, { subdir: uploadDirectory }));
+						if (request !== this.actionRequest) return;
+					}
+					const result = await rpc("execute_cmd", [
+						{
+							...context,
+							project
+						},
+						"tactic.ui.widget.file_browser_wdg.FileIngestCmd",
+						{
+							search_key: cell.targetSearchKey || record.__search_key__,
+							files: names,
+							upload_directory: uploadDirectory,
+							transfer_mode: cell.transferMode || "free_copy",
+							checkin_mode: cell.checkinMode || "default",
+							context: cell.context || "publish",
+							subcontext_mode: cell.subcontextMode || "{none}",
+							subcontext: cell.subcontext || ""
+						}
+					]);
+					if (request === this.actionRequest) {
+						this.serviceMessage = result.description || "";
+						await this.tableSaved();
 					}
 					return;
 				}

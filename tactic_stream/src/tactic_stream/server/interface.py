@@ -54,7 +54,7 @@ def read_form(search_type, view='edit', search_key=None, default=None, source_ke
     from tactic.ui.widget.upload_wdg import UploadWdg as RichUploadWdg
     from tactic.ui.input import TaskSObjectInputWdg
     from tactic.ui.input import ColorInputWdg
-    from pyasm.widget import HiddenWdg, MultiSelectWdg, UploadWdg, SelectWdg
+    from pyasm.widget import HiddenWdg, MultiSelectWdg, UploadWdg, SelectWdg, ThumbInputWdg
     if element_names is not None:
         config = WidgetConfigView.get_by_search_type(search_type, view, use_cache=False)
         if not isinstance(element_names, list) or not element_names or any(not isinstance(name, str) or name not in config.get_element_names() for name in element_names):
@@ -93,6 +93,9 @@ def read_form(search_type, view='edit', search_key=None, default=None, source_ke
         if isinstance(item, SimpleUploadWdg):
             field['values'] = []
             field['input'] = dict(type='file', context=item.context, column=item.get_option('column') or item.name)
+        if isinstance(item, ThumbInputWdg):
+            field['values'] = []
+            field['input'] = dict(type='thumbnail', read_only=True)
         if isinstance(item, MultiSelectWdg):
             field['input'] = dict(type='multiselect', value=[value for value in field['choices'] if item._is_selected(value, field['values'])])
         if isinstance(item, TimeInputWdg):

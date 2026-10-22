@@ -16,6 +16,7 @@ const dialog = ref(null),
 const loading = ref(false),
   ready = ref(false),
   busy = ref(false),
+  progress = ref(0),
   error = ref(''),
   message = ref('');
 let generation = 0,
@@ -35,6 +36,7 @@ const model = computed(() => ({
   loading: loading.value,
   ready: ready.value,
   busy: busy.value,
+  progress: progress.value,
   error: t(error.value),
   message: t(message.value),
   count: files.value.length,
@@ -58,6 +60,7 @@ function close() {
   dialog.value?.close();
   files.value = [];
   snapshot.value = null;
+  progress.value = 0;
   busy.value = loading.value = ready.value = false;
 }
 async function open(record) {
@@ -118,6 +121,7 @@ async function activate(action) {
   if (busy.value || !ready.value) return;
   if (action.type === 'select') {
     selected.value = action.token;
+    progress.value = 0;
     message.value = error.value = '';
     return;
   }
@@ -126,16 +130,20 @@ async function activate(action) {
     (file, index) => String(file.code || index) === selected.value
   );
   if (!file) return;
+  const members = file.members?.length ? file.members : [file];
   const request = generation;
   busy.value = true;
+  progress.value = 0;
   error.value = message.value = '';
   download = new AbortController();
   try {
-    const blob = await fileBlob(file, { signal: download.signal });
-    if (request === generation) {
-      downloadBlob(blob, file.filename);
-      message.value = 'Download completed';
+    for (const [index, member] of members.entries()) {
+      const blob = await fileBlob(member, { signal: download.signal });
+      if (request !== generation) return;
+      downloadBlob(blob, member.filename);
+      progress.value = (index + 1) / members.length;
     }
+    if (request === generation) message.value = 'Download completed';
   } catch (failure) {
     if (request === generation) {
       if (failure.name === 'AbortError') message.value = 'Download cancelled';

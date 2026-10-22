@@ -4,7 +4,8 @@ import {
   rpc,
   tableCells,
   widgetConfiguration,
-  interfaceDefinition
+  interfaceDefinition,
+  uploadFormFile
 } from '../../api.js';
 import { t } from '../../i18n.js';
 import TableCell from './TableCell.vue';
@@ -1222,6 +1223,7 @@ export default {
             'script',
             'edit-links',
             'drop-links',
+            'file-ingest',
             'change-parent',
             'drop-parent',
             'publish',
@@ -1275,6 +1277,53 @@ export default {
             ]);
           } finally {
             if (request === this.actionRequest) await this.loadCells();
+          }
+          return;
+        }
+        if (kind === 'file-ingest') {
+          let files = Array.isArray(cell.dropFiles) ? cell.dropFiles : [];
+          if (!files.length) {
+            files = await new Promise((resolve) => {
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.multiple = true;
+              input.onchange = () => resolve(Array.from(input.files || []));
+              input.oncancel = () => resolve([]);
+              input.click();
+            });
+          }
+          if (!files.length || request !== this.actionRequest) return;
+          this.serviceBusy = true;
+          const project =
+            cell.projectCode || record.project_code || context.project;
+          const uploadDirectory =
+            'ingest_' + Date.now() + '_' + Math.random().toString(16).slice(2);
+          const names = [];
+          for (const file of files) {
+            names.push(
+              await uploadFormFile(context.ticket, project, file, {
+                subdir: uploadDirectory
+              })
+            );
+            if (request !== this.actionRequest) return;
+          }
+          const result = await rpc('execute_cmd', [
+            { ...context, project },
+            'tactic.ui.widget.file_browser_wdg.FileIngestCmd',
+            {
+              search_key: cell.targetSearchKey || record.__search_key__,
+              files: names,
+              upload_directory: uploadDirectory,
+              transfer_mode: cell.transferMode || 'free_copy',
+              checkin_mode: cell.checkinMode || 'default',
+              context: cell.context || 'publish',
+              subcontext_mode: cell.subcontextMode || '{none}',
+              subcontext: cell.subcontext || ''
+            }
+          ]);
+          if (request === this.actionRequest) {
+            this.serviceMessage = result.description || '';
+            await this.tableSaved();
           }
           return;
         }

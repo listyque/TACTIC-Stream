@@ -20,8 +20,12 @@ class TableDependencies(unittest.TestCase):
         if not native.is_file():
             self.skipTest('Handler checkout is required for the independent-copy check')
         functions = {node.name: node for node in ast.parse(native.read_text(encoding='utf-8')).body if isinstance(node, ast.FunctionDef)}
-        for filename, name in (('dependencies.py', 'read_dependency_node'), ('file_actions.py', 'read_snapshot_files')):
-            source = Path(__file__).resolve().parents[1] / 'src/tactic/ui/table' / filename
+        for folder, filename, name in (
+            ('src/tactic/ui/table', 'dependencies.py', 'read_dependency_node'),
+            ('src/tactic/ui/table', 'file_actions.py', 'read_snapshot_files'),
+            ('src/tactic/ui/widget', 'file_browser_wdg.py', 'ingest_drop_files'),
+        ):
+            source = Path(__file__).resolve().parents[1] / folder / filename
             function = next(node for node in ast.parse(source.read_text(encoding='utf-8')).body if isinstance(node, ast.FunctionDef) and node.name == name)
             self.assertEqual(ast.dump(function), ast.dump(functions[name]), name)
 

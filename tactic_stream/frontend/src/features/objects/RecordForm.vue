@@ -376,7 +376,8 @@ export default {
           SelectWdg: 'enum',
           CalendarInputWdg: 'date',
           ParentInput: 'parent',
-          FileInput: 'preview'
+          FileInput: 'preview',
+          ThumbInputWdg: 'thumbnail'
         }[kind] || 'string';
       if (unsupportedField(field)) type = 'unsupported';
       return {
@@ -913,6 +914,16 @@ export default {
                             project: field.input.project
                           })
                         : field.input.label
+                  }}</span
+                >
+                <span
+                  v-else-if="kind(field) === 'ThumbInputWdg'"
+                  :id="`record-field-${formId}-${index}`"
+                  class="muted"
+                  >{{
+                    t(
+                      'Thumbnail is managed by the check-in and preview pipeline'
+                    )
                   }}</span
                 >
                 <input
