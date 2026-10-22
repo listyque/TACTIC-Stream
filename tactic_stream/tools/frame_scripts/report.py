@@ -18,7 +18,7 @@ def main():
     )
     for sources, root in (
         (native["sha256"], ROOT / "src/tactic_stream/shared_ui"),
-        (native["nativeSources"], Path("D:/code/th_codex")),
+        (native["nativeSources"], Path("D:/grav/Tactic Stream/TH")),
         (browser["webSources"], ROOT),
         (native["driverSources"], ROOT),
     ):

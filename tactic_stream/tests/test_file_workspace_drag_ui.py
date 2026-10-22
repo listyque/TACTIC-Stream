@@ -9,7 +9,7 @@ import unittest
 os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 os.environ.setdefault('QT_QUICK_BACKEND', 'software')
 os.environ.setdefault('QSG_RENDER_LOOP', 'basic')
-sys.path.insert(0, 'D:/code/th_codex')
+sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
 from PySide6.QtCore import QCoreApplication, QEvent, QMimeData, QPoint, QUrl, Qt
 from PySide6.QtGui import QDragEnterEvent, QDragLeaveEvent, QDragMoveEvent, QGuiApplication
 from PySide6.QtQml import QQmlComponent, QQmlEngine
@@ -17,7 +17,7 @@ from PySide6.QtQuick import QQuickWindow
 from PySide6.QtTest import QTest
 from thlib.ui.icon_font import qml_icon_bindings
 
-HANDLER=Path('D:/code/th_codex')
+HANDLER=Path('D:/grav/Tactic Stream/TH')
 QML=HANDLER/'thlib/ui/qml'
 
 

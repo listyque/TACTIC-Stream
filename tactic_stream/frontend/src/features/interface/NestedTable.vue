@@ -145,7 +145,7 @@ async function load() {
     view: scope.view || 'table',
     expression: scope.expression || '',
     offset: state.offset || 0,
-    limit: 50,
+    limit: scope.initialLimit || 50,
     order_by: state.order ? [state.order] : [],
     filters: []
   };
@@ -186,6 +186,10 @@ async function load() {
       record,
       cells: result.cells[record.__search_key__] || {}
     }));
+    state.selectionRecords ||= {};
+    for (const record of result.records)
+      if ((state.selected || []).includes(record.__search_key__))
+        state.selectionRecords[record.__search_key__] = { code: record.code };
     state.hasNext = result.hasNext;
     state.insert = scope.insert !== false && !!definition.operations.create;
     state.filterField =
@@ -229,7 +233,10 @@ function activate(action, value) {
   else {
     if (state.busy) return;
     if (action.type === 'page')
-      state.offset = Math.max(0, (state.offset || 0) + action.value * 50);
+      state.offset = Math.max(
+        0,
+        (state.offset || 0) + action.value * (state.scope.initialLimit || 50)
+      );
     else {
       state.offset = 0;
       if (action.type === 'sort')

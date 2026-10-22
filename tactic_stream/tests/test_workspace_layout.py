@@ -31,7 +31,7 @@ class WorkspaceLayout(unittest.TestCase):
         auth = dict(ticket=ticket, project='admin', language='python')
         layout = dict(layout=dict(type='stack', panels=['results'], active='results'), panels=[dict(panel_id='results', title='Results', kind='results',
             x=0., y=0., width=1., height=1., visible=True, closable=False, z=1, dock_area='center', detached=False, previous_dock_area='')])
-        source = Path('D:/code/th_codex/thlib/ui/workspace_layout_presets.py')
+        source = Path('D:/grav/Tactic Stream/TH/thlib/ui/workspace_layout_presets.py')
         if source.exists():
             tree = ast.parse(source.read_text(encoding='utf-8'))
             functions = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name.startswith('layout_configuration_')]

@@ -16,7 +16,7 @@ class TableDependencies(unittest.TestCase):
     setUp = fixtures.TableServices.setUp
 
     def test_independent_native_reader_copies_match(self):
-        native = Path(__file__).resolve().parents[3] / 'th_codex/thlib/ui/table/requests.py'
+        native = Path(__file__).resolve().parents[3] / 'TH/thlib/ui/table/requests.py'
         if not native.is_file():
             self.skipTest('Handler checkout is required for the independent-copy check')
         functions = {node.name: node for node in ast.parse(native.read_text(encoding='utf-8')).body if isinstance(node, ast.FunctionDef)}

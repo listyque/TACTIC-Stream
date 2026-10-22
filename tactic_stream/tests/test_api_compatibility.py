@@ -154,7 +154,7 @@ server.update('contract/entity?project=one&code=A', {'missing_column': 'fail'})
         self.assertEqual(self.proxy.eval(self.admin, '@COUNT(sthpw/snapshot)'), before)
 
     def test_current_handler_batch_naming_and_note_history(self):
-        source = Path('D:/code/th_codex/thlib/tactic_query.py').read_text(encoding='utf-8-sig')
+        source = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py').read_text(encoding='utf-8-sig')
         names = ('get_virtual_snapshot_extended', 'get_virtual_snapshots_extended', 'change_note')
         procedures = '\n\n'.join(ast.get_source_segment(source, node) for node in ast.parse(source).body
             if isinstance(node, ast.FunctionDef) and node.name in names)

@@ -12,7 +12,7 @@ from pyasm.security.authenticator import hash_password
 class ChatCompatibility(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        source = Path('D:/code/th_codex/thlib/tactic_query.py').read_text(encoding='utf-8-sig')
+        source = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py').read_text(encoding='utf-8-sig')
         cls.procedures = {
             node.name: '\n'.join(source.splitlines()[node.lineno - 1:node.end_lineno])
             for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)

@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 OUT = Path(__file__).resolve().parent / "output"
 SCREENS = [
     "groups",

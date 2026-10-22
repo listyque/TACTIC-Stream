@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 import { chromium } from 'playwright'
 
 const root=fileURLToPath(new URL('..',import.meta.url))
-const handler=await readFile(new URL('../../../../th_codex/thlib/ui/workspace_models/windows.py',import.meta.url),'utf8')
+const handler=await readFile(new URL('../../../../TH/thlib/ui/workspace_models/windows.py',import.meta.url),'utf8')
 const pairs={
  'help':['help/HelpView','dialog'], 'messages':['messages/MessagesView','dialog'],
  'activity_feed':['activity/ActivityFeed','dialog'], 'notifications':['activity/SystemActivity','dialog'],

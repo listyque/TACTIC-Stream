@@ -1,21 +1,19 @@
 import assert from 'node:assert/strict';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
 import { surface, compareSurface } from './frame_capture.mjs';
-const root = new URL('../../', import.meta.url).pathname.replace(
-  /^\/(\w:)/,
-  '$1'
-);
+const root = fileURLToPath(new URL('../../', import.meta.url));
 const out = root + 'tools/frame_remaining/output/';
 const native = JSON.parse(await readFile(out + 'native.json', 'utf8'));
 assert.equal(native.status, 'captured');
 for (const [prefix, sources] of [
   [root + 'src/tactic_stream/shared_ui/', native.sha256],
   [
-    (process.env.HANDLER_ROOT || 'D:/code/th_codex') + '/',
+    (process.env.HANDLER_ROOT || 'D:/grav/Tactic Stream/TH') + '/',
     native.nativeSources
   ],
   [root, native.driverSources]

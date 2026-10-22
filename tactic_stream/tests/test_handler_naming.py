@@ -17,7 +17,7 @@ from pyasm.search.storage import Store
 
 class HandlerNaming(unittest.TestCase):
     def test_snapshot_version_matches_filename_for_code_and_id_keys(self):
-        source = (ROOT.parents[1] / 'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        source = (ROOT.parents[1] / 'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         scripts = {node.name: ast.get_source_segment(source, node) +
                    '\nreturn ' + node.name + '(**kwargs["options"])'
                    for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)

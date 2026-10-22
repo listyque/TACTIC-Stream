@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 import time
 
-sys.path.insert(0, 'D:/code/th_codex')
+sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
 from tests.test_raw_database import RawDatabaseQmlTests
 from tests.profile_ui_responsiveness import frame
 from tests.test_sidebar_editor_qml import SidebarEditorQmlTests

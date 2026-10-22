@@ -24,7 +24,7 @@ def image(title, path):
 def main():
     gate = read("platform/gate.json")
     assert gate["status"] == "passed", "Platform gate has not passed"
-    handler = Path("D:/code/th_codex")
+    handler = Path("D:/grav/Tactic Stream/TH")
     assert gate["sources"] == fingerprints(handler), "Platform evidence is stale"
     subprocess.run(
         [

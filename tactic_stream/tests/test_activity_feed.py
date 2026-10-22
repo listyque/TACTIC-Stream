@@ -40,7 +40,7 @@ class ActivityFeed(unittest.TestCase):
                            <column name="owner_code" to="G1"/>
                            <column name="member_code" to="A"/>
                          </sobject></transaction>'''))
-        handler_path = Path(__file__).resolve().parents[3] / 'th_codex/thlib/tactic_query.py'
+        handler_path = Path(__file__).resolve().parents[3] / 'TH/thlib/tactic_query.py'
         handler_source = handler_path.read_text(encoding='utf-8')
         handler_query = next(node for node in ast.parse(handler_source).body
                              if isinstance(node, ast.FunctionDef) and node.name == 'query_user_recent_activity')

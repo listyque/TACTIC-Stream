@@ -9,7 +9,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('output', type=Path)
     args = parser.parse_args()
-    sys.path.insert(0, 'D:/code/th_codex')
+    sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
     from tests.test_raw_database import RawDatabaseQmlTests
     from tests.profile_ui_responsiveness import frame
 

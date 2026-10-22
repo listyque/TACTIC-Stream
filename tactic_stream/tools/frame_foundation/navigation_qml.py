@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path('D:/code/th_codex')
+TH = Path('D:/grav/Tactic Stream/TH')
 OUT = Path(__file__).resolve().parent / 'output/navigation'
 OUT.mkdir(parents=True, exist_ok=True)
 os.environ.update(QT_QPA_PLATFORM='offscreen', QT_QUICK_BACKEND='software', QSG_RENDER_LOOP='basic')

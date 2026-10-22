@@ -244,7 +244,7 @@ def exercise(store, prefix):
     import json
     from pyasm.common import Environment
     handler = Path(os.environ.get('STREAM_HANDLER_QUERY') or
-                   Path(__file__).resolve().parents[3] / 'th_codex/thlib/tactic_query.py')
+                   Path(__file__).resolve().parents[3] / 'TH/thlib/tactic_query.py')
     source = handler.read_text(encoding='utf-8')
     function = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)
                     and node.name == 'create_snapshot_extended')

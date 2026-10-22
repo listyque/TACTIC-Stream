@@ -10,7 +10,7 @@ import tempfile
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 OUT = ROOT / os.environ.get("TASK_FRAME_OUTPUT", "tools/frame_tasks/output")
 REFERENCE = "0297005238226e9bd9bd7461e729177ac365ade7"
 sys.path[:0] = [

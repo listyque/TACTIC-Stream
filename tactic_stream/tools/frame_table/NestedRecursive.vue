@@ -53,9 +53,11 @@ const state = reactive({
     }
   ]
 });
+const edits = [];
 window.nestedFixture = {
   state,
   original,
+  edits,
   summary() {
     state.rows[0].cells.expand = {
       summary: [
@@ -84,5 +86,14 @@ window.nestedFixture = {
     project="demo"
     :state="state"
     style="width: 600px"
+    @edit="
+      (record, target) =>
+        edits.push({
+          record,
+          parentKey: target.scope.parentKey,
+          searchType: target.scope.searchType,
+          projectCode: target.scope.projectCode || 'demo'
+        })
+    "
   />
 </template>

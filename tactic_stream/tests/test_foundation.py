@@ -480,7 +480,7 @@ class ExtractedContracts(unittest.TestCase):
         directory = ROOT / "src/tactic_stream/compatibility"
         sources = json.loads((directory / "source_manifest.json").read_text())
         for name, record in sources["sources"].items():
-            root = ROOT.parent.parent / 'th_codex' if name.startswith('thlib/') else LEGACY
+            root = ROOT.parent.parent / 'TH' if name.startswith('thlib/') else LEGACY
             self.assertEqual(hashlib.sha256((root / name).read_bytes()).hexdigest(), record["sha256"])
         from pyasm.common import Xml
         defaults = json.loads((directory / "widget_defaults.json").read_text(encoding='utf-8'))

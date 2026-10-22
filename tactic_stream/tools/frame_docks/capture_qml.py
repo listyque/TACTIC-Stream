@@ -11,7 +11,7 @@ from dataclasses import replace
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 OUT = Path(__file__).resolve().parent / "output"
 REFERENCE = "fa3f594c5cd09ce565ea14acb533302e79c9308a"
 os.environ.update(

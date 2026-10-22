@@ -3,7 +3,7 @@ import ast,copy,importlib.util,json,os,sys
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock,patch
-ROOT=Path(__file__).resolve().parents[2];TH=Path('D:/code/th_codex')
+ROOT=Path(__file__).resolve().parents[2];TH=Path('D:/grav/Tactic Stream/TH')
 os.environ.update(QT_QPA_PLATFORM='offscreen',QT_QUICK_BACKEND='software',QT_FONT_DPI='96');sys.path[:0]=[str(TH),str(ROOT/'tools/frame_admin')]
 from PySide6.QtCore import QObject,Signal,QUrl,QPointF,QCoreApplication,QEvent,Qt
 from PySide6.QtGui import QFont,QFontDatabase

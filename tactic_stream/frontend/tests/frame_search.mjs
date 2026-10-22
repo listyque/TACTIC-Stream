@@ -39,7 +39,7 @@ for (const name of [
 async function fresh() {
   for (const [prefix, sources] of [
     [root + 'src/tactic_stream/shared_ui/', native.sha256],
-    ['D:/code/th_codex/', native.nativeSources],
+    ['D:/grav/Tactic Stream/TH/', native.nativeSources],
     [root, native.driverSources || {}],
     [root, browserSources]
   ])

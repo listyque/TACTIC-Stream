@@ -7,11 +7,11 @@ import sys
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 HERE = Path(__file__).resolve().parent
 baseline = HERE / 'reference/foundation'
 baseline.mkdir(parents=True, exist_ok=True)
-with ZipFile('D:/code/TACTIC_VUE/backups/2026-10-15_103116_before_shared_ui_foundation/TH.zip') as archive:
+with ZipFile('D:/grav/Tactic Stream/TS/backups/2026-10-15_103116_before_shared_ui_foundation/TH.zip') as archive:
     (baseline / 'Theme.qml').write_bytes(archive.read('thlib/ui/qml/Theme.qml'))
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 from PySide6.QtGui import QColor, QGuiApplication

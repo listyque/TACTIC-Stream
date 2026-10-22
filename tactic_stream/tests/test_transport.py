@@ -878,7 +878,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         self.assertEqual(result['info']['action'], 'Updated')
         self.assertEqual(client.get_by_search_key(record['__search_key__'])['name'], 'Changed')
         # Execute the existing Handler procedure body without importing/modifying its GUI.
-        path = Path('D:/code/th_codex/thlib/tactic_query.py')
+        path = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py')
         source = path.read_text(encoding='utf-8')
         function = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef) and node.name == 'query_EditWdg')
         code = ast.get_source_segment(source, function)
@@ -1793,7 +1793,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         import inspect
         from tactic_client_lib import TacticServerStub
         from tactic_stream.server.raw_database import raw_database_request
-        handler = ROOT.parent.parent / 'th_codex'
+        handler = ROOT.parent.parent / 'TH'
         native_path = handler / 'thlib/side/client/tactic_client_lib/tactic_server_stub.py'
         if native_path.is_file():
             with patch.object(sys, 'path', [str(handler), *sys.path]):
@@ -1837,7 +1837,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
     def test_raw_sparse_edits_preserve_background_rows_and_target_conflicts(self):
         import inspect
         from tactic_client_lib import TacticServerStub
-        handler_path = ROOT.parent.parent / 'th_codex/thlib/ui/admin/raw_database_api.py'
+        handler_path = ROOT.parent.parent / 'TH/thlib/ui/admin/raw_database_api.py'
         spec = importlib.util.spec_from_file_location('handler_raw_save_procedure', handler_path)
         handler = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(handler)
@@ -2424,7 +2424,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         namespace = {}
         exec(compile(ast.Module(body=[method], type_ignores=[]), '<original gear security catalog>', 'exec'), namespace)
         self.assertEqual(GearMenuSecurityWdg.get_all_menu_names(), namespace['get_all_menu_names'](None))
-        path = ROOT.parent.parent / 'th_codex/thlib/ui/admin/security_api.py'
+        path = ROOT.parent.parent / 'TH/thlib/ui/admin/security_api.py'
         source = path.read_text(encoding='utf-8')
         function = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)
                         and node.name == 'security_request')
@@ -2476,7 +2476,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
             proxy.delete_sobject(token, group['__search_key__'])
 
     def test_handler_admin_search_types_load_through_xmlrpc(self):
-        path = ROOT.parent.parent / 'th_codex/thlib/ui/admin/search_types_api.py'
+        path = ROOT.parent.parent / 'TH/thlib/ui/admin/search_types_api.py'
         source = path.read_text(encoding='utf-8')
         function = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)
                         and node.name == 'search_types_request')
@@ -2497,7 +2497,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
     def test_handler_extended_checkin_through_xmlrpc(self):
         # Run the actual unchanged Handler procedures, including their local SDK
         # helpers, through XML-RPC/Mako rather than substituting simple_checkin.
-        source = (ROOT.parent.parent / 'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        source = (ROOT.parent.parent / 'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         functions = {node.name: ast.get_source_segment(source, node) for node in ast.parse(source).body
                      if isinstance(node, ast.FunctionDef) and node.name in
                      ('get_virtual_snapshot_extended', 'create_snapshot_extended')}
@@ -2539,11 +2539,11 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
     def test_handler_inplace_image_checkin_through_xmlrpc(self):
         previous_path = sys.path.copy()
         try:
-            sys.path.insert(0, str(ROOT.parent.parent / 'th_codex'))
+            sys.path.insert(0, str(ROOT.parent.parent / 'TH'))
             from thlib.global_functions import FileObject
         finally:
             sys.path[:] = previous_path
-        source = (ROOT.parent.parent / 'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        source = (ROOT.parent.parent / 'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         function = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)
                         and node.name == 'create_snapshot_extended')
         code = ast.get_source_segment(source, function) + '\nreturn create_snapshot_extended(**kwargs["options"])'
@@ -2608,7 +2608,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
                         self.assertEqual(path.read_bytes(), expected)
 
     def test_handler_project_and_user_selects_through_xmlrpc(self):
-        path = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        path = ROOT.parent.parent / 'TH/thlib/tactic_query.py'
         source = path.read_text(encoding='utf-8')
         function = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)
                         and node.name == 'query_EditWdg')
@@ -2640,7 +2640,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
 
     def test_handler_native_table_layout_through_xmlrpc(self):
         # Execute the existing Handler function without edits or a UI dependency.
-        handler = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        handler = ROOT.parent.parent / 'TH/thlib/tactic_query.py'
         tree = ast.parse(handler.read_text(encoding='utf-8'))
         function = next(node for node in tree.body if isinstance(node, ast.FunctionDef)
                         and node.name == 'query_table_layout')
@@ -2667,7 +2667,7 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
             proxy.delete_sobject(ticket, config['__search_key__'])
 
     def test_handler_extended_table_values_through_xmlrpc(self):
-        handler = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        handler = ROOT.parent.parent / 'TH/thlib/tactic_query.py'
         text = handler.read_text(encoding='utf-8')
         function = next(node for node in ast.parse(text).body
                         if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
@@ -2712,7 +2712,7 @@ return json.dumps({"native": json.loads(query_table_layout("sthpw/task", search_
             proxy.delete_sobject(auth, task['__search_key__'])
 
     def test_handler_table_metadata_values_through_xmlrpc(self):
-        handler = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        handler = ROOT.parent.parent / 'TH/thlib/tactic_query.py'
         text = handler.read_text(encoding='utf-8')
         function = next(node for node in ast.parse(text).body
                         if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
@@ -2786,7 +2786,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
         self.check_original_client(path, "original_tactic_client")
 
     def test_handler_client_runs_unchanged_against_new_server(self):
-        handler = ROOT.parent.parent / "th_codex"
+        handler = ROOT.parent.parent / "TH"
         path = handler / "thlib/side/client/tactic_client_lib/tactic_server_stub.py"
         if not path.is_file():
             self.skipTest("Sibling th_codex checkout is required for the real Handler client check")
@@ -2799,7 +2799,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
             sys.path[:] = previous_path
 
     def test_handler_bootstrap_procedures_run_unchanged(self):
-        handler = ROOT.parent.parent / 'th_codex'
+        handler = ROOT.parent.parent / 'TH'
         path = handler / 'thlib/tactic_query.py'
         if not path.is_file():
             self.skipTest('Sibling th_codex checkout required')
@@ -2866,7 +2866,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
                         self.assertTrue(all('definition' in item for item in data['stypes']))
 
     def test_handler_task_workspace_page_runs_unchanged(self):
-        path = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        path = ROOT.parent.parent / 'TH/thlib/tactic_query.py'
         if not path.is_file():
             self.skipTest('Sibling th_codex checkout required')
         spec = importlib.util.spec_from_file_location('handler_task_query', path)
@@ -3072,7 +3072,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
         bases = proxy.get_base_dirs(self.ticket(proxy))
         self.assertEqual(bases['asset_base_dir'], (self.store.data_dir / 'assets').as_posix())
         self.assertEqual(bases['web_base_dir'], '/assets')
-        path = ROOT.parent.parent / 'th_codex/thlib/environment.py'
+        path = ROOT.parent.parent / 'TH/thlib/environment.py'
         if not path.is_file():
             self.skipTest('Sibling th_codex checkout required')
         # Load only the original consumer class; no Qt or real Handler settings.
@@ -3376,7 +3376,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
 
     def test_handler_bootstrap_distinguishes_session_project_and_access_faults(self):
         from types import SimpleNamespace
-        sys.path.insert(0, str(ROOT.parent.parent / 'th_codex'))
+        sys.path.insert(0, str(ROOT.parent.parent / 'TH'))
         from thlib import tactic_query as tq
         from thlib.ui.debug_logging import DebugLogController
         from thlib.ui.controllers.connection import ConnectionMixin
@@ -4617,7 +4617,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_handler_connection_fallback_and_removal_through_xmlrpc(self):
-        path = ROOT.parent.parent / 'th_codex/thlib/tactic_query.py'
+        path = ROOT.parent.parent / 'TH/thlib/tactic_query.py'
         text = path.read_text(encoding='utf-8')
         function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
         source = ast.get_source_segment(text, function)
@@ -4645,7 +4645,7 @@ finally:
         self.assertEqual(incoming['connectionRows'][0]['searchKey'], keys[1])
         self.assertEqual(layout['rows'][keys[1]]['connections']['connectionRows'], [])
         row = incoming['connectionRows'][0]
-        text = (ROOT.parent.parent / 'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        text = (ROOT.parent.parent / 'TH/thlib/ui/table/requests.py').read_text(encoding='utf-8')
         function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'remove_connection')
         code = ast.get_source_segment(text, function) + "\nreturn remove_connection(kwargs['parent_key'],kwargs['connection_key'],kwargs['revision'],'src')"
         arguments = dict(code=code, parent_key=keys[0], connection_key=row['connectionKey'], revision=row['expectedRevision'])
@@ -4654,7 +4654,7 @@ finally:
         self.assertTrue(all(proxy.get_by_search_key(auth, key) for key in keys))
 
     def test_handler_object_summary_and_project_scope_through_xmlrpc(self):
-        text = (ROOT.parent.parent / 'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        text = (ROOT.parent.parent / 'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
         source = ast.get_source_segment(text,function)
         proxy=self.proxy()
@@ -4669,7 +4669,7 @@ finally:
         self.assertFalse(cell.get('error'),cell)
         self.assertGreaterEqual(int(cell['summary'][0]['value']),1)
         self.assertEqual(cell['summary'][0]['nestedTable']['projectCode'],'one')
-        text=(ROOT.parent.parent / 'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        text=(ROOT.parent.parent / 'TH/thlib/ui/table/requests.py').read_text(encoding='utf-8')
         function=next(node for node in ast.parse(text).body if isinstance(node,ast.FunctionDef) and node.name=='read_nested_scope')
         parent=proxy.query(auth,'sthpw/project',[('code','one')])
         parent=ast.literal_eval(parent) if isinstance(parent,str) else parent
@@ -4758,13 +4758,19 @@ return True
             config='<config><parent_test><element name="code"/><element name="note"/>'
             '<element name="parent" title="Parent"><display class="tactic.ui.table.ParentGroupTableElementWdg"/>'
             '<action class="tactic.ui.table.ParentGroupAction"/></element></parent_test></config>'))
+        proxy.insert(auth, 'config/widget_config', dict(search_type='contract/collection', view='drop_test', priority=100,
+            config='<config><drop_test><element name="code"/><element name="name"/>'
+            '<element name="entities" title="Entities"><display class="tactic.ui.table.DropElementWdg">'
+            '<accepted_drop_type>contract/entity</accepted_drop_type>'
+            '<instance_type>contract/entity_in_collection</instance_type>'
+            '</display></element></drop_test></config>'))
         notes = [proxy.insert(auth, 'sthpw/note', dict(search_type='contract/entity', search_code='A', search_id=1,
             project_code='one', login='admin', process='publish', note='Parent browser fixture ' + str(index))) for index in range(2)]
         return proxy, auth, notes
 
     def test_handler_parent_group_through_xmlrpc(self):
         proxy, auth, notes = self.parent_group_fixture()
-        text = (ROOT.parent.parent/'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        text = (ROOT.parent.parent/'TH/thlib/ui/table/requests.py').read_text(encoding='utf-8')
         functions = {node.name: ast.get_source_segment(text, node) for node in ast.parse(text).body if isinstance(node, ast.FunctionDef)}
         def call(name, values):
             result = proxy.execute_python_script(auth, '', dict(code=functions[name] + '\nreturn ' + name + '(**kwargs["values"])', values=values))['info']
@@ -4777,7 +4783,7 @@ return True
         target = next(row for row in candidates['rows'] if row['code'] == 'B')
         self.assertEqual(call('edit_parent_group', dict(args, action='save', expected_revision=prepared['expectedRevision'],
             parent_key=target['searchKey'], parent_revision=target['revision']))['state'], 'saved')
-        text = (ROOT.parent.parent/'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        text = (ROOT.parent.parent/'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         query = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
         result = proxy.execute_python_script(auth, '', dict(code=ast.get_source_segment(text, query) +
             '\nreturn query_table_layout("sthpw/note",view="parent_test",project_code="one",search_keys=kwargs["keys"])', keys=[notes[0]['__search_key__']]))['info']
@@ -4806,7 +4812,7 @@ return True
 
     def test_handler_publish_fallback_through_xmlrpc(self):
         proxy, auth = self.publish_fixture()
-        text = (ROOT.parent.parent/'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        text = (ROOT.parent.parent/'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
         source = ast.get_source_segment(text, function)
         keys = ['contract/entity?project=one&code=A', 'contract/entity?project=one&code=B']
@@ -4847,7 +4853,7 @@ with patch.object(PublishTableElement, 'get_cell_value', None), patch.object(Gen
         from pyasm.search import Search
         from pyasm.search.search import RequestContext, request_context
         proxy, auth = self.publish_fixture()
-        handler = ROOT.parent.parent/'th_codex'
+        handler = ROOT.parent.parent/'TH'
         self.enterContext(patch.object(sys, 'path', [str(handler), *sys.path]))
         module = importlib.import_module('thlib.side.client.tactic_client_lib.tactic_server_stub')
         client = module.TacticServerStub(setup=False, protocol='xmlrpc')
@@ -4901,7 +4907,7 @@ with patch.object(PublishTableElement, 'get_cell_value', None), patch.object(Gen
 
     def test_handler_dependencies_through_xmlrpc(self):
         proxy, auth, snapshot = self.dependency_fixture()
-        text = (ROOT.parent.parent/'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        text = (ROOT.parent.parent/'TH/thlib/ui/table/requests.py').read_text(encoding='utf-8')
         function = next(node for node in ast.parse(text).body if isinstance(node,ast.FunctionDef) and node.name=='read_dependency_node')
         code = ast.get_source_segment(text,function)+"\nreturn read_dependency_node(**kwargs['values'])"
         result = proxy.execute_python_script(auth,'',dict(code=code,values=dict(search_key=snapshot['__search_key__'])))['info']
@@ -4916,7 +4922,7 @@ with patch.object(PublishTableElement, 'get_cell_value', None), patch.object(Gen
         self.assertEqual([row['title'] for row in page['rows']],['render.1101.exr','render.1102.exr'])
         self.assertTrue(page['hasNext'])
 
-        text = (ROOT.parent.parent/'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        text = (ROOT.parent.parent/'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         query = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
         code = ast.get_source_segment(text, query) + "\nreturn query_table_layout('sthpw/snapshot',view='dependencies_snapshot_test',project_code='admin',search_keys=[kwargs['key']])"
         layout = proxy.execute_python_script(dict(auth,project='admin'), '', dict(code=code,key=snapshot['__search_key__']))['info']

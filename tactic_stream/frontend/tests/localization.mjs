@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 import { chromium } from 'playwright'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
-const handler = JSON.parse(await readFile(new URL('../../../../th_codex/thlib/ui/translations/ru.json', import.meta.url), 'utf8'))
+const handler = JSON.parse(await readFile(new URL('../../../../TH/thlib/ui/translations/ru.json', import.meta.url), 'utf8'))
 const stream = JSON.parse(await readFile(root + '/src/locales/ru.json', 'utf8'))
 let shared = 0
 for (const [source, translated] of Object.entries(stream)) {

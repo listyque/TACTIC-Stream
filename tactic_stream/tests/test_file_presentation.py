@@ -17,7 +17,7 @@ from pyasm.common.config import ConfigException
 class FilePresentation(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        path = Path(__file__).resolve().parents[3] / 'th_codex/thlib/global_functions.py'
+        path = Path(__file__).resolve().parents[3] / 'TH/thlib/global_functions.py'
         tree = ast.parse(path.read_text(encoding='utf-8-sig'))
         names = {'FileObject', 'MatchTemplate', 'natural_sort_key', 'extract_filename', 'form_path'}
         selected = ast.Module(body=[node for node in tree.body if isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name in names], type_ignores=[])

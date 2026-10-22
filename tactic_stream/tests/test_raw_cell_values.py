@@ -7,7 +7,7 @@ import unittest
 from test_foundation import ROOT
 import test_raw_database as raw_tests
 
-HANDLER = ROOT.parent.parent / 'th_codex/thlib/ui/admin/raw_cell_values.py'
+HANDLER = ROOT.parent.parent / 'TH/thlib/ui/admin/raw_cell_values.py'
 spec = importlib.util.spec_from_file_location('handler_raw_cell_values', HANDLER)
 values = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(values)

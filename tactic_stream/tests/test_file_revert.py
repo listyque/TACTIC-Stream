@@ -13,7 +13,7 @@ from tactic_client_lib.file_transfer import FileTransferClient
 from pyasm.biz.file_project import FileProjectRecord
 from pyasm.common.errors import SecurityException
 
-sys.path.insert(0,'D:/code/th_codex')
+sys.path.insert(0,'D:/grav/Tactic Stream/TH')
 from thlib.ui.file_workspace import initial_state
 from thlib.ui.file_workspace_revert import revert_files
 

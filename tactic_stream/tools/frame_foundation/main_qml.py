@@ -9,7 +9,7 @@ import tempfile
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 OUT = Path(__file__).resolve().parent / "output/main"
 OUT.mkdir(parents=True, exist_ok=True)
 parser = argparse.ArgumentParser(description=__doc__)
@@ -42,7 +42,7 @@ with tempfile.TemporaryDirectory(dir=ROOT / ".tmp/frame-tests") as settings:
     if args.original:
         reference = Path(__file__).resolve().parent / "reference/main"
         archive = Path(
-            "D:/code/TACTIC_VUE/backups/2026-10-15_103116_before_shared_ui_foundation/TH.zip"
+            "D:/grav/Tactic Stream/TS/backups/2026-10-15_103116_before_shared_ui_foundation/TH.zip"
         )
         with ZipFile(archive) as source:
             for name in source.namelist():

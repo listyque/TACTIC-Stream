@@ -19,7 +19,7 @@ def capture(app, qml, case, original, output):
     layout.FileWorkspaceLayoutTest.app = app
     fixture = layout.FileWorkspaceLayoutTest("runTest")
     translator = (
-        CatalogTranslator(Path("D:/code/th_codex/thlib/ui/translations/ru.json"))
+        CatalogTranslator(Path("D:/grav/Tactic Stream/TH/thlib/ui/translations/ru.json"))
         if case["language"] == "ru"
         else None
     )

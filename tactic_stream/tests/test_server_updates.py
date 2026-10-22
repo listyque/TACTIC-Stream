@@ -56,7 +56,7 @@ class ServerUpdates(unittest.TestCase):
             self.assertEqual(unchanged['activity'], [])
             self.assertEqual(unchanged['cacheChanges'], [])
             # Execute the unchanged current Handler procedure over the native XML-RPC API.
-            source = Path('D:/code/th_codex/thlib/tactic_query.py').read_text(encoding='utf-8-sig')
+            source = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py').read_text(encoding='utf-8-sig')
             node = next(row for row in ast.parse(source).body if isinstance(row, ast.FunctionDef) and row.name == 'query_server_updates')
             code = '\n'.join(source.splitlines()[node.lineno-1:node.end_lineno])
             original = proxy.execute_python_script(auth, '', {'code': code + "\nreturn query_server_updates(project_code='one', include_cache_changes=True)"})['info']

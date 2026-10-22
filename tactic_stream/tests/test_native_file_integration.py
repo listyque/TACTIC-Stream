@@ -32,7 +32,7 @@ import tests.test_repository_sync_editor as EditorFixtures
 from thlib.ui.repository_sync import RepositorySyncController
 from thlib.side.client.tactic_client_lib.tactic_server_stub import TacticServerStub
 
-QML = Path("D:/code/th_codex/thlib/ui/qml")
+QML = Path("D:/grav/Tactic Stream/TH/thlib/ui/qml")
 
 
 class NativeFileIntegrationTest(FileProjectFixture, unittest.TestCase):

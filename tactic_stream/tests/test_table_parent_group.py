@@ -203,7 +203,7 @@ class ParentGroups(unittest.TestCase):
     def test_independently_shipped_handler_functions_execute_without_stream_imports(self):
         import ast
         from pathlib import Path
-        source = (Path(__file__).resolve().parents[3] / 'th_codex/thlib/ui/table/requests.py').read_text(encoding='utf-8')
+        source = (Path(__file__).resolve().parents[3] / 'TH/thlib/ui/table/requests.py').read_text(encoding='utf-8')
         functions = {node.name: ast.get_source_segment(source, node) for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)}
         scope = {}
         exec(functions['read_parent_cells'] + '\n' + functions['edit_parent_group'], scope)

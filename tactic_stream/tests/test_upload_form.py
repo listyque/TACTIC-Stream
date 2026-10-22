@@ -288,7 +288,7 @@ class UploadForm(read_tests.ReadParity):
         self.addCleanup(client.server.__exit__, None, None, None)
         source = (Path(__file__).parent / 'scripts/upload_form_contract.py').read_text(encoding='utf-8')
         client.execute_python_script('', kwargs={'code': source + '\nreturn run({"operation": "metadata"})'})
-        handler = Path('D:/code/th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        handler = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         function = next(node for node in ast.parse(handler).body if isinstance(node, ast.FunctionDef) and node.name == 'query_EditWdg')
         code = ast.get_source_segment(handler, function) + '\nreturn query_EditWdg(args=kwargs["form_args"], search_type=kwargs["kind"])'
         result = json.loads(client.execute_python_script('', kwargs=dict(code=code, kind='contract/work_item',

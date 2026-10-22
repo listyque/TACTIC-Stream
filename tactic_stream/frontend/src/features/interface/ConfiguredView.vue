@@ -985,9 +985,10 @@ export default {
     },
     async openTableRelations(record) {
       const request = this.actionRequest;
-      this.relatedVisited = true;
       try {
         await RelatedObjects.__asyncLoader();
+        if (request !== this.actionRequest) return;
+        this.relatedVisited = true;
         await this.$nextTick();
         if (request === this.actionRequest)
           this.$refs.tableRelated.open(record);
@@ -997,6 +998,22 @@ export default {
     },
     async openNestedEditor(record, state) {
       if (this.readOnly) return;
+      const form = this.$refs.nestedForm;
+      const uploads = Object.values(form?.files || {}).some((value) =>
+        Array.isArray(value) ? value.length : !!value
+      );
+      if (
+        form?.$refs?.dialog?.open &&
+        (form.loading ||
+          form.saving ||
+          form.dirty ||
+          uploads ||
+          form.uncertain ||
+          form.createBatch)
+      ) {
+        form.$refs.dialog.show();
+        return;
+      }
       this.nestedEditor = state;
       await this.$nextTick();
       this.$refs.nestedForm.open(
@@ -1411,13 +1428,30 @@ export default {
           return;
         }
         if (['edit-links', 'drop-links'].includes(kind)) {
-          this.relatedVisited = true;
-          this.targetRecord = target;
+          const related = this.$refs.tableRelated;
+          if (
+            related?.$refs?.dialog?.open &&
+            (related.dirty ||
+              related.saving ||
+              related.busy ||
+              related.availableBusy ||
+              related.uncertain)
+          )
+            throw new Error('Apply or discard unsaved changes first');
           await RelatedObjects.__asyncLoader();
+          if (request !== this.actionRequest) return;
+          this.relatedVisited = true;
+          this.targetProject = targetContext.project;
+          this.targetRecord = target;
           await this.$nextTick();
+          if (request !== this.actionRequest) return;
           await this.$refs.tableRelated.openDrop(target, {
             ...cell,
-            tableView: this.table.view || 'table'
+            tableView:
+              cell.tableView ||
+              cell.tableScope?.view ||
+              this.table.view ||
+              'table'
           });
           if (request === this.actionRequest && kind === 'drop-links')
             await this.$refs.tableRelated.stageDropped(cell.dropKeys);

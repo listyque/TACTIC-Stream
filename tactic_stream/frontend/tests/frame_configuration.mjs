@@ -13,7 +13,7 @@ const native = JSON.parse(await readFile(out + 'native.json', 'utf8'));
 assert.equal(native.status, 'captured');
 for (const [prefix, sources] of [
   [root + 'src/tactic_stream/shared_ui/', native.sha256],
-  ['D:/code/th_codex/', native.nativeSources],
+  ['D:/grav/Tactic Stream/TH/', native.nativeSources],
   [root, native.driverSources]
 ]) {
   for (const [name, digest] of Object.entries(sources))

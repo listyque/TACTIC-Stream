@@ -23,7 +23,7 @@ class BrowserCheckin(unittest.TestCase):
         self.assertEqual(sum(len(indices) for group, indices in matched_files(records, max_files=10000)), 1001)
 
     def test_unchanged_handler_replaces_all_metadata_group_members(self):
-        source = Path('D:/code/th_codex/thlib/tactic_query.py').read_text(encoding='utf8')
+        source = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py').read_text(encoding='utf8')
         function = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef) and node.name == 'create_snapshot_extended')
         code = ast.get_source_segment(source, function) + '\nreturn create_snapshot_extended(**kwargs["options"])'
         with tempfile.TemporaryDirectory() as temporary:
@@ -48,7 +48,7 @@ class BrowserCheckin(unittest.TestCase):
                 self.assertEqual([Path(path).read_bytes() for path in paths['versionless']],[f'Handler version {version}'.encode()] * 2)
 
     def test_matching_native_shapes_and_sparse_frames(self):
-        source = Path('D:/code/th_codex/thlib/global_functions.py').read_text(encoding='utf8')
+        source = Path('D:/grav/Tactic Stream/TH/thlib/global_functions.py').read_text(encoding='utf8')
         from tactic_stream.server import file_matching
         namespace = dict(vars(file_matching))
         nodes = [node for node in ast.parse(source).body if isinstance(node,(ast.FunctionDef,ast.ClassDef)) and node.name in ('natural_sort_key','FileObject','MatchTemplate')]

@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-HANDLER = Path("D:/code/th_codex")
+HANDLER = Path("D:/grav/Tactic Stream/TH")
 os.environ.update(
     QT_QPA_PLATFORM="offscreen",
     QT_QUICK_BACKEND="software",

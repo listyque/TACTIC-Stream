@@ -12,6 +12,7 @@ const page = await browser.newPage({
 page.setDefaultTimeout(10000);
 const errors = [],
   calls = [],
+  dropCalls = [],
   forms = [];
 page.on('pageerror', (error) => errors.push(error.message));
 page.on('request', (request) => {
@@ -23,6 +24,8 @@ page.on('request', (request) => {
   const body = request.postDataJSON();
   if (body.args?.[1] === 'tactic.ui.table.TableParentGroupCmd')
     calls.push({ ...body.args[2], project: body.args[0].project });
+  if (body.args?.[1] === 'tactic.ui.table.DropElementEditCmd')
+    dropCalls.push({ ...body.args[2], project: body.args[0].project });
 });
 const ready = () =>
   page.waitForFunction(() => {
@@ -105,6 +108,28 @@ try {
   assert.equal(calls.at(-1).action, 'check');
   assert.equal(calls.at(-1).project, 'one');
   await page.setViewportSize({ width: 1280, height: 900 });
+  await row.locator('[data-frame="parentCell"]').evaluate((el) => {
+    const dataTransfer = new DataTransfer();
+    dataTransfer.setData(
+      'application/x-tactic-frame',
+      JSON.stringify({
+        searchType: 'contract/entity',
+        searchKeys: ['contract/entity?project=one&code=A']
+      })
+    );
+    el.dispatchEvent(
+      new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer })
+    );
+  });
+  await picker.waitFor();
+  const droppedParent = picker.locator(
+    '[data-frame="parentCandidate:contract/entity?project=one&code=A"]'
+  );
+  await droppedParent.waitFor();
+  assert.equal(await droppedParent.getAttribute('aria-selected'), 'true');
+  await picker.getByRole('button', { name: 'Save', exact: true }).click();
+  await picker.waitFor({ state: 'hidden' });
+  await ready();
   await page
     .locator('.handler-table-heading')
     .filter({ hasText: 'PARENT' })
@@ -115,7 +140,7 @@ try {
   await page.locator('[data-frame="parentGroupTitle"]').first().waitFor();
   assert.equal(
     await page.locator('[data-frame="parentGroupTitle"]').count(),
-    2
+    1
   );
   const group = page
     .locator('.handler-table-group')
@@ -131,6 +156,59 @@ try {
   assert.equal(forms.at(-1).project, 'one');
   assert.equal(forms.at(-1).search_type, 'sthpw/note');
   assert.equal(forms.at(-1).parent_key, 'contract/entity?project=one&code=A');
+  await page.goto(
+    process.argv[2] +
+      '/projects/one/?search_type=contract/collection&view=drop_test'
+  );
+  await ready();
+  await page.getByLabel('Change search results view', { exact: true }).click();
+  await page.getByRole('menuitemradio', { name: 'Table', exact: true }).click();
+  await ready();
+  const emptyRow = page.getByRole('row').filter({ hasText: 'EMPTY' }).first();
+  await emptyRow.locator('[data-frame="dropSurface"]').evaluate((el) => {
+    const dataTransfer = new DataTransfer();
+    dataTransfer.setData(
+      'application/x-tactic-frame',
+      JSON.stringify({
+        searchType: 'contract/entity',
+        searchKeys: ['contract/entity?project=one&code=A']
+      })
+    );
+    el.dispatchEvent(
+      new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer })
+    );
+  });
+  const related = page.locator('.related-objects[open]');
+  await related.waitFor();
+  await related
+    .locator(
+      '[data-frame="linkedLinkList"] [data-frame="linkRow_contract/entity?project=one&code=A"]'
+    )
+    .waitFor();
+  await related.locator('[data-frame="linkSave"]').click();
+  await related.waitFor({ state: 'hidden' });
+  await ready();
+  assert.equal(dropCalls.length, 1);
+  assert.deepEqual(dropCalls[0].target_keys, [
+    'contract/entity?project=one&code=A'
+  ]);
+  await emptyRow.locator('[data-frame="dropEdit"]').click();
+  await related
+    .locator(
+      '[data-frame="linkedLinkList"] [data-frame="linkRow_contract/entity?project=one&code=A"]'
+    )
+    .waitFor();
+  await related
+    .locator(
+      '[data-frame="linkedLinkList"] [data-frame="linkRow_contract/entity?project=one&code=A"]'
+    )
+    .click();
+  await related.locator('[data-frame="linkTransferButton"]').click();
+  await related.locator('[data-frame="linkSave"]').click();
+  await related.waitFor({ state: 'hidden' });
+  await ready();
+  assert.equal(dropCalls.length, 2);
+  assert.deepEqual(dropCalls[1].target_keys, []);
   assert.deepEqual(errors, []);
   console.log(
     'PASS: real ParentGroup table, touch, dirty cancel, resize, uncertain save/check, grouping and existing child form'

@@ -162,6 +162,8 @@ function drag(event, node) {
 }
 function dragOver(event, node) {
   if (
+    props.interactive &&
+    node.enabled !== false &&
     node.dropAction &&
     event.dataTransfer.types.includes('application/x-tactic-frame')
   ) {
@@ -170,7 +172,7 @@ function dragOver(event, node) {
   }
 }
 function drop(event, node) {
-  if (!node.dropAction) return;
+  if (!props.interactive || node.enabled === false || !node.dropAction) return;
   const source = event.dataTransfer.getData('application/x-tactic-frame');
   if (!source) return;
   event.preventDefault();
@@ -384,6 +386,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :role="node.role"
         :aria-label="node.label"
         @contextmenu="context($event, node)"
+        @dragover="dragOver($event, node)"
+        @drop="drop($event, node)"
         ><FrameView
           ref="branches"
           :scene="{ nodes: node.children }"
@@ -526,6 +530,8 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         @dblclick="send(node.doubleAction)"
         :draggable="node.dragValue != null && interactive"
         @dragstart="drag($event, node)"
+        @dragover="dragOver($event, node)"
+        @drop="drop($event, node)"
       >
         <ItemSurface
           :selected="node.selected"

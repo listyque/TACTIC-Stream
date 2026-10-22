@@ -19,7 +19,7 @@ for (const [name, value] of Object.entries(reference.sha256))
 for (const [name, value] of Object.entries(reference.nativeSources))
   assert.equal(
     createHash('sha256')
-      .update(await readFile('D:/code/th_codex/' + name))
+      .update(await readFile('D:/grav/Tactic Stream/TH/' + name))
       .digest('hex'),
     value,
     name

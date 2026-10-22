@@ -9,7 +9,7 @@ const reference = JSON.parse(
 );
 for (const [prefix, sources] of [
   [root + 'src/tactic_stream/shared_ui/', reference.shared],
-  ['D:/code/th_codex/', reference.nativeSources],
+  ['D:/grav/Tactic Stream/TH/', reference.nativeSources],
   [root, reference.driverSources]
 ]) {
   for (const [name, hash] of Object.entries(sources)) {

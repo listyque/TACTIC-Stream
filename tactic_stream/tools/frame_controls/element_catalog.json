@@ -1079,10 +1079,12 @@
       "native": [
         "AttachmentDropArea",
         "DropTargetOverlay",
-        "ImageFileDialog"
+        "ImageFileDialog",
+        "FileInput"
       ],
       "vue": [
-        "DropTargetOverlay"
+        "DropTargetOverlay",
+        "AppFileInput"
       ],
       "tokens": [
         "drop",

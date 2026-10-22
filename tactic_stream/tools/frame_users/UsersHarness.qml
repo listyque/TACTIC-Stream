@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
-import "file:///D:/code/th_codex/thlib/ui/qml" as TH
-import "file:///D:/code/th_codex/thlib/ui/qml/tactic_frame/features/administration/users/users.ui.mjs" as UI
+import "file:///D:/grav/Tactic Stream/TH/thlib/ui/qml" as TH
+import "file:///D:/grav/Tactic Stream/TH/thlib/ui/qml/tactic_frame/features/administration/users/users.ui.mjs" as UI
 
 ApplicationWindow {
     id: root

@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-HANDLER = Path('D:/code/th_codex/thlib')
+HANDLER = Path('D:/grav/Tactic Stream/TH/thlib')
 
 # Native range metadata, calculated from present frames rather than enumerating gaps.
 FRAME_RANGES = '''    def get_sequence_frameranges(self, padding=False):

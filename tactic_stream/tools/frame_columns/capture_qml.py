@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 
 REPO = Path(__file__).resolve().parents[2]
-TH = Path('D:/code/th_codex')
+TH = Path('D:/grav/Tactic Stream/TH')
 HERE = Path(__file__).resolve().parent
 OUT = HERE / 'output'
 OUT.mkdir(exist_ok=True)

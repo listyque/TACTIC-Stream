@@ -11,7 +11,7 @@ import unittest
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[2]
-HANDLER = Path("D:/code/th_codex")
+HANDLER = Path("D:/grav/Tactic Stream/TH")
 OUT = Path(__file__).with_name("output") / "menu-baseline"
 ARCHIVE = ROOT.parent / "backups/2026-10-15_103116_before_shared_ui_foundation/TH.zip"
 CASES = [

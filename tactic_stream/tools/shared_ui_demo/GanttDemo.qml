@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
-import "file:///D:/code/th_codex/thlib/ui/qml" as TH
-import "file:///D:/code/th_codex/thlib/ui/qml/controls" as Controls
+import "file:///D:/grav/Tactic Stream/TH/thlib/ui/qml" as TH
+import "file:///D:/grav/Tactic Stream/TH/thlib/ui/qml/controls" as Controls
 import "gantt.state.mjs" as State
 import "gantt.ui.mjs" as UI
 

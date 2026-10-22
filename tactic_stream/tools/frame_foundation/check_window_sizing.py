@@ -13,7 +13,7 @@ app = QGuiApplication.instance() or QGuiApplication([])
 engine = QQmlEngine()
 warnings = []
 engine.warnings.connect(lambda errors: warnings.extend(error.toString() for error in errors))
-component = QQmlComponent(engine, QUrl.fromLocalFile('D:/code/th_codex/thlib/ui/qml/shell/windows/WindowSizing.qml'))
+component = QQmlComponent(engine, QUrl.fromLocalFile('D:/grav/Tactic Stream/TH/thlib/ui/qml/shell/windows/WindowSizing.qml'))
 assert component.isReady(), component.errors()
 policy = component.create()
 reference = json.loads((ROOT / 'frontend/tests/fixtures/window_sizing.json').read_text(encoding='utf-8'))

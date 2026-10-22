@@ -43,10 +43,10 @@ class FrameGroupsBackend(unittest.TestCase):
 
     def test_shipped_handler_modules_match_stream_copy(self):
         from tools.sync_tactic_frame import sync
-        sync('D:/code/th_codex', check=True)
+        sync('D:/grav/Tactic Stream/TH', check=True)
 
     def test_handler_and_browser_share_revisions_and_memberships(self):
-        source = Path('D:/code/th_codex/thlib/ui/security_store.py').read_text(encoding='utf-8')
+        source = Path('D:/grav/Tactic Stream/TH/thlib/ui/security_store.py').read_text(encoding='utf-8')
         procedures = '\n\n'.join(ast.get_source_segment(source, node) for node in ast.parse(source).body if isinstance(node, ast.FunctionDef))
         with tempfile.TemporaryDirectory(prefix='frame-groups-') as directory, patch.dict(os.environ, {'TACTIC_CONFIG_PATH': '', 'TACTIC_TMP_CONFIG_PATH': ''}):
             Config.reload_config()

@@ -146,7 +146,7 @@ class CheckinQueue(unittest.TestCase):
             dict(filters=[('code', code)], include_files=True))
         self.assertEqual(records[0]['repo'], 'base')
         previous_path = sys.path.copy()
-        sys.path.insert(0, 'D:/code/th_codex')
+        sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
         try:
             from thlib.environment import env_tactic
             from thlib.tactic_classes import Snapshot as HandlerSnapshot

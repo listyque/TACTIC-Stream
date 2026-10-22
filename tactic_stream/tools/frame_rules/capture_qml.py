@@ -2,7 +2,7 @@ import ast,copy,importlib.util,os,sys,unittest
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock,patch
-ROOT=Path(__file__).resolve().parents[2];TH=Path('D:/code/th_codex')
+ROOT=Path(__file__).resolve().parents[2];TH=Path('D:/grav/Tactic Stream/TH')
 os.environ.update(QT_QPA_PLATFORM='offscreen',QT_QUICK_BACKEND='software',QT_FONT_DPI='96',TMP=str(ROOT/'.tmp/frame-tests'),TEMP=str(ROOT/'.tmp/frame-tests'))
 sys.path[:0]=[str(TH),str(ROOT/'tools/frame_admin')]
 from PySide6.QtCore import QUrl,QPointF,QCoreApplication,QEvent

@@ -10,7 +10,7 @@ from tactic.ui.table import task_schedule as native
 
 class TaskSchedule(unittest.TestCase):
     def test_handler_projections_and_transformations(self):
-        root = Path(__file__).resolve().parents[2].parent / 'th_codex/thlib/ui'
+        root = Path(__file__).resolve().parents[2].parent / 'TH/thlib/ui'
         if not root.is_dir():
             self.skipTest('Sibling Handler checkout required for source comparison')
         namespace = dict(calendar=calendar, date=date, datetime=datetime, timedelta=timedelta)

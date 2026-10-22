@@ -11,7 +11,7 @@ import time
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--handler', type=Path, default=Path('D:/code/th_codex'))
+    parser.add_argument('--handler', type=Path, default=Path('D:/grav/Tactic Stream/TH'))
     parser.add_argument('--server', default='http://127.0.0.1:8081')
     parser.add_argument('--project', default='admin')
     parser.add_argument('--login', default='admin')

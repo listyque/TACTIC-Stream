@@ -7,7 +7,7 @@ os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 os.environ.setdefault('QT_QUICK_BACKEND', 'software')
 os.environ.setdefault('QT_SCALE_FACTOR', '1')
 ROOT = Path(__file__).resolve().parents[1]
-HANDLER = Path('D:/code/th_codex')
+HANDLER = Path('D:/grav/Tactic Stream/TH')
 sys.path.insert(0, str(HANDLER))
 from PySide6.QtCore import QUrl, Slot, QPoint, QObject
 from PySide6.QtGui import QColor, QFontDatabase

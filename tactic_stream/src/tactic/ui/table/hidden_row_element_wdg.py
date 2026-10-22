@@ -15,11 +15,17 @@ class HiddenRowElementWdg(BaseTableElementWdg):
         return False
 
     def get_cell_value(self):
-        return nested_cell(self.get_current_sobject().get_search_key(), self.options, self.get_name())
+        sobject = self.get_current_sobject()
+        if not sobject or sobject.is_insert():
+            return {'text': '', 'actions': []}
+        return nested_cell(sobject.get_search_key(), dict(self.options), self.get_name())
 
 
 class RowAddElementWdg(HiddenRowElementWdg):
     def get_cell_value(self):
-        # The original RowAdd always overrides related_types with sthpw/task.
-        options = dict(self.options, search_type='sthpw/task')
-        return nested_cell(self.get_current_sobject().get_search_key(), options, self.get_name())
+        sobject = self.get_current_sobject()
+        if not sobject or sobject.is_insert():
+            return {'text': '', 'actions': []}
+        options = dict(self.options)
+        options.setdefault('search_type', options.get('related_types') or 'sthpw/task')
+        return nested_cell(sobject.get_search_key(), options, self.get_name())

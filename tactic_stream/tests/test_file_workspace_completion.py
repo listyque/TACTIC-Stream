@@ -11,7 +11,7 @@ from urllib.error import URLError
 from test_file_project import FileProjectFixture
 import test_file_transfer as transfer
 
-sys.path.insert(0,'D:/code/th_codex')
+sys.path.insert(0,'D:/grav/Tactic Stream/TH')
 os.environ.setdefault('QT_QPA_PLATFORM','offscreen')
 os.environ.setdefault('QT_QUICK_CONTROLS_STYLE','Material')
 os.environ.setdefault('QT_QUICK_BACKEND','software')

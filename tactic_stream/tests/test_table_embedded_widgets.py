@@ -260,7 +260,7 @@ class EmbeddedTableTransport(unittest.TestCase):
                             status='Pending'), {}, key)
         message = proxy.insert(auth, 'sthpw/message_log', dict(project_code='one', login='admin',
             category='progress', message=json.dumps(dict(message='RPC upload', progress=37))))
-        source_path = Path('D:/code/th_codex/thlib/tactic_query.py')
+        source_path = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py')
         text = source_path.read_text(encoding='utf-8-sig')
         function = next(node for node in ast.parse(text).body
                         if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')

@@ -20,7 +20,7 @@ for (const [name, expected] of [
 ]) {
   assert.equal(
     await readFile(
-      'D:/code/th_codex/thlib/ui/qml/features/table/runtime/' + name,
+      'D:/grav/Tactic Stream/TH/thlib/ui/qml/features/table/runtime/' + name,
       'utf8'
     ),
     expected,

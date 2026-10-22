@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import "file:///D:/code/th_codex/thlib/ui/qml" as TH
+import "file:///D:/grav/Tactic Stream/TH/thlib/ui/qml" as TH
 ApplicationWindow {
  id:root;visible:true;width:1100;height:740;color:theme.workspace
  property alias dark:theme.dark

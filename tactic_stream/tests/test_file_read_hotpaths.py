@@ -36,7 +36,7 @@ class FileReadHotpathTest(FileProjectFixture, unittest.TestCase):
         self.assertIsNone(last['after'])
         with self.assertRaises(ValueError):
             self.call('read_page',source='list',stream='main',prefix='folder/',folder=True,after='elsewhere/file')
-        os.environ.setdefault('QT_QPA_PLATFORM','offscreen');sys.path.insert(0,'D:/code/th_codex')
+        os.environ.setdefault('QT_QPA_PLATFORM','offscreen');sys.path.insert(0,'D:/grav/Tactic Stream/TH')
         from thlib.ui.file_workspace import FileWorkspaceController,initial_state
         state=initial_state()
         rows=self.call('browse',stream='main',directory='folder/',limit=1000)['items']
@@ -96,7 +96,7 @@ class FileReadHotpathTest(FileProjectFixture, unittest.TestCase):
         with self.assertRaises(ValueError):self.call('history',stream='main',path='a.txt',limit=1001)
 
     def test_changelist_tab_and_polling_have_one_request_each(self):
-        os.environ.setdefault('QT_QPA_PLATFORM','offscreen');sys.path.insert(0,'D:/code/th_codex')
+        os.environ.setdefault('QT_QPA_PLATFORM','offscreen');sys.path.insert(0,'D:/grav/Tactic Stream/TH')
         from thlib.ui.file_workspace import FileWorkspaceController,initial_state
         change=self.call('create_change',workspace='work')
         state=initial_state();state.update(workspace='work',stream='main',change=change,active_tab='pending')
@@ -113,7 +113,7 @@ class FileReadHotpathTest(FileProjectFixture, unittest.TestCase):
         self.assertEqual(calls,['transfer_status']);self.assertEqual(result['tasks'][0]['bytes_done'],10)
 
     def test_fifty_reconcile_renames_use_one_bounded_entries_read(self):
-        os.environ.setdefault('QT_QPA_PLATFORM','offscreen');sys.path.insert(0,'D:/code/th_codex')
+        os.environ.setdefault('QT_QPA_PLATFORM','offscreen');sys.path.insert(0,'D:/grav/Tactic Stream/TH')
         from thlib.ui.file_workspace import initial_state
         from thlib.ui.file_workspace_files import execute_files
         paths=['old%02d.txt'%index for index in range(50)]

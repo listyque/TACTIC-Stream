@@ -399,8 +399,17 @@ export default {
       }
     },
     async openDrop(record, cell) {
-      if (this.$refs.dialog.open)
-        throw new Error('Apply or discard unsaved changes first');
+      if (this.$refs.dialog.open) {
+        if (
+          this.dirty ||
+          this.saving ||
+          this.busy ||
+          this.availableBusy ||
+          this.uncertain
+        )
+          throw new Error('Apply or discard unsaved changes first');
+        this.close(true);
+      }
       await this.open(record, cell.acceptedType, {
         ...cell.relation,
         links: cell.links,

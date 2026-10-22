@@ -10,7 +10,7 @@ import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 OUT = ROOT / os.environ.get("SCHEDULE_FRAME_OUTPUT", "tools/frame_schedule/output")
 REFERENCE = "8d18661f1a070b68930eb56afa997c142708b622"
 sys.path[:0] = [

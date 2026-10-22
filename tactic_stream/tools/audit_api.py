@@ -8,7 +8,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-HANDLER = ROOT.parent.parent / 'th_codex'
+HANDLER = ROOT.parent.parent / 'TH'
 OUT = ROOT / 'src/tactic_stream/compatibility'
 
 

@@ -179,7 +179,7 @@ def check(address, handler, password, nonce, directory):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--handler', type=Path, default=ROOT.parent.parent / 'th_codex')
+    parser.add_argument('--handler', type=Path, default=ROOT.parent.parent / 'TH')
     parser.add_argument('--output', type=Path, default=ROOT / '.test-tmp/handler-deployment.json')
     parser.add_argument('--local-only', action='store_true')
     parser.add_argument('--backend', choices=('Sqlite', 'PostgreSQL'))

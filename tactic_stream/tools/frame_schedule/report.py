@@ -16,7 +16,7 @@ def main():
     assert browser["status"] == "passed"
     for prefix, sources in [
         (ROOT / "src/tactic_stream/shared_ui", native["shared"]),
-        (Path("D:/code/th_codex"), native["nativeSources"]),
+        (Path("D:/grav/Tactic Stream/TH"), native["nativeSources"]),
         (ROOT, native["driverSources"]),
         (ROOT, browser["browserSources"]),
     ]:

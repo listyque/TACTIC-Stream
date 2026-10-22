@@ -11,7 +11,7 @@ import zipfile
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 OUT = ROOT / os.environ.get("MESSAGES_FRAME_OUTPUT", "tools/frame_messages/output")
 REFERENCE = "a824d3ec3fa02653e9e9c9fe3da51c0cde11abc4"
 sys.path[:0] = [str(TH), str(ROOT / "tools/frame_admin")]

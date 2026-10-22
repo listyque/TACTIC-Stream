@@ -285,6 +285,25 @@ function choose(record, event, toggle = false) {
     emit('select', [record], true);
   }
 }
+function rowDrag(record, event) {
+  if (
+    props.readOnly ||
+    event.dataTransfer.types.includes('application/x-tactic-frame')
+  )
+    return;
+  const key = record.__search_key__;
+  const searchKeys = props.selectedKeys?.includes(key)
+    ? props.selectedKeys
+    : [key];
+  event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData(
+    'application/x-tactic-frame',
+    JSON.stringify({
+      searchType: key.split('?')[0],
+      searchKeys
+    })
+  );
+}
 function rowKey(event) {
   if (event.target !== viewport.value) return;
   if (
@@ -601,6 +620,8 @@ defineExpose({ viewport });
           'group-row': !!entry.group
         }"
         :style="{ top: entry.top + 'px', height: entry.height + 'px' }"
+        :draggable="!!entry.record && !readOnly"
+        @dragstart="entry.record && rowDrag(entry.record, $event)"
         @click="entry.record && choose(entry.record, $event)"
         @dblclick="
           entry.record &&

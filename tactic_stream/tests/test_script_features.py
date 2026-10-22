@@ -13,7 +13,7 @@ class ScriptFeatures(unittest.TestCase):
                 self.assertTrue(all(row['start'] == len(source) for row in features.completion_items(source, len(source), True)))
 
     def test_native_outline_completion_and_no_execution(self):
-        path = Path('D:/code/th_codex/thlib/ui/script_editor_features.py')
+        path = Path('D:/grav/Tactic Stream/TH/thlib/ui/script_editor_features.py')
         native = path.read_text(encoding='utf-8')
         namespace = dict(features.__dict__, __file__=str(path))
         functions = native[native.index('def _node_signature('):native.index('def find_matches(')]

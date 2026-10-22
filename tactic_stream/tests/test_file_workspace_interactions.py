@@ -12,7 +12,7 @@ from pyasm.common.errors import SecurityException
 from test_file_project import FileProjectFixture
 import test_file_project_resilience as resilience
 
-sys.path.insert(0, 'D:/code/th_codex')
+sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
 os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtGui import QGuiApplication

@@ -9,7 +9,7 @@ import sys
 REPO = Path(__file__).resolve().parents[2]
 USERS = '--users' in sys.argv
 HERE = REPO / 'tools' / ('frame_users' if USERS else 'frame_groups')
-TH = Path('D:/code/th_codex')
+TH = Path('D:/grav/Tactic Stream/TH')
 os.environ.update(QT_QPA_PLATFORM='offscreen', QT_QUICK_BACKEND='software', QT_FONT_DPI='96')
 os.environ.setdefault('QT_QUICK_CONTROLS_STYLE', 'Material')
 sys.path[:0] = [str(TH), str(REPO / 'tools/frame_admin')]

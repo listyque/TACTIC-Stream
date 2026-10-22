@@ -7,7 +7,7 @@ import tempfile
 
 os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 root = Path(__file__).resolve().parents[1]
-handler = Path('D:/code/th_codex')
+handler = Path('D:/grav/Tactic Stream/TH')
 sys.path.insert(0, str(handler))
 spec = importlib.util.spec_from_file_location('handler_ingest_fixture', handler / 'tests/test_ingest_files.py')
 fixture = importlib.util.module_from_spec(spec)

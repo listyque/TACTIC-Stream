@@ -356,7 +356,7 @@ def samples(handler):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--handler-root", type=Path, default=Path("D:/code/th_codex"))
+    parser.add_argument("--handler-root", type=Path, default=Path("D:/grav/Tactic Stream/TH"))
     args = parser.parse_args()
     registry = json.loads((HERE / "element_catalog.json").read_text(encoding="utf-8"))
     families = registry["families"]

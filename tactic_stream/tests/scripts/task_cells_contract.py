@@ -427,8 +427,8 @@ def exercise_workspace(record, api, auth):
             raise AssertionError('Workspace read without authorization')
     # The unchanged Handler procedure remains the reference, not a rewritten mock.
     source_path = Path(os.environ['STREAM_HANDLER_QUERY_FILE']) if os.environ.get('STREAM_HANDLER_QUERY_FILE') else next(
-        (parent / 'th_codex/thlib/tactic_query.py' for parent in Path(__file__).resolve().parents
-         if (parent / 'th_codex/thlib/tactic_query.py').is_file()), None)
+        (parent / 'TH/thlib/tactic_query.py' for parent in Path(__file__).resolve().parents
+         if (parent / 'TH/thlib/tactic_query.py').is_file()), None)
     if source_path and source_path.is_file():
         tree = ast.parse(source_path.read_text(encoding='utf-8'))
         node = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'query_task_workspace_page')

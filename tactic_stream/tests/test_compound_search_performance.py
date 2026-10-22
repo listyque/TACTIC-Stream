@@ -26,7 +26,7 @@ class NormalizedNote(Note):
 
 
 def procedure_source():
-    source = (ROOT.parents[1] / 'th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+    source = (ROOT.parents[1] / 'TH/thlib/tactic_query.py').read_text(encoding='utf-8')
     node = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef) and node.name == 'query_sobjects')
     return ast.get_source_segment(source, node) + '\nreturn query_sobjects(**kwargs["options"])'
 

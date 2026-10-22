@@ -25,7 +25,7 @@ class FileWorkspaceUiTest(FileProjectFixture, unittest.TestCase):
     context = transfers.FileTransferTest.context
 
     def test_handler_catalog_offers_native_file_project_template(self):
-        source = Path('D:/code/th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        source = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         node = next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef) and node.name == 'get_project_creation_catalog')
         scope = {}
         with self.context():
@@ -57,7 +57,7 @@ class FileWorkspaceUiTest(FileProjectFixture, unittest.TestCase):
                 result = self.api.dispatch('execute_cmd', ({'ticket':self.token,'project':'files'}, command, selected))['info']
                 self.assertEqual(result['identity'], selected['identity'])
                 self.assertIn('total', result['metadata']['summary'])
-        source = Path('D:/code/th_codex/thlib/ui/admin/search_types_api.py').read_text(encoding='utf-8')
+        source = Path('D:/grav/Tactic Stream/TH/thlib/ui/admin/search_types_api.py').read_text(encoding='utf-8')
         function = next(node for node in ast.parse(source).body if isinstance(node,ast.FunctionDef) and node.name=='search_types_request')
         scope = {}
         with self.context():

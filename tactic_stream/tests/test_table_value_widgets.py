@@ -199,7 +199,7 @@ class TableValueWidgets(unittest.TestCase):
             self.assertFalse(describe_cell(element, {"value": {}})["supported"])
 
     def test_handler_transport_matches_both_server_paths(self):
-        path = Path("D:/code/th_codex/thlib/tactic_query.py")
+        path = Path("D:/grav/Tactic Stream/TH/thlib/tactic_query.py")
         method = next(
             n
             for n in ast.walk(ast.parse(path.read_text(encoding="utf-8")))

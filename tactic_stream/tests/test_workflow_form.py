@@ -77,7 +77,7 @@ class WorkflowForm(read_tests.ReadParity):
         client.execute_python_script('', kwargs={'code': source + '\nreturn run({"operation": "metadata"})'})
         client.execute_cmd('tactic.ui.panel.EditCmd', args=dict(search_key='contract/work_task?project=one&code=TASK',
             view='workflow_form_test', element_names=['status']), values={'edit|status': 'In Progress'})
-        handler = Path('D:/code/th_codex/thlib/tactic_query.py').read_text(encoding='utf-8')
+        handler = Path('D:/grav/Tactic Stream/TH/thlib/tactic_query.py').read_text(encoding='utf-8')
         function = next(node for node in ast.parse(handler).body if isinstance(node, ast.FunctionDef) and node.name == 'query_EditWdg')
         code = ast.get_source_segment(handler, function) + '\nreturn query_EditWdg(args=kwargs["form_args"], search_type=kwargs["kind"])'
         kind = 'contract/work_task'

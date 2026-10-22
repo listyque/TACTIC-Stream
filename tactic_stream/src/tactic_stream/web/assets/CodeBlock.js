@@ -9700,13 +9700,13 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 			send(node.dragStartAction);
 		}
 		function dragOver(event, node) {
-			if (node.dropAction && event.dataTransfer.types.includes("application/x-tactic-frame")) {
+			if (props.interactive && node.enabled !== false && node.dropAction && event.dataTransfer.types.includes("application/x-tactic-frame")) {
 				event.preventDefault();
 				event.dataTransfer.dropEffect = "move";
 			}
 		}
 		function drop(event, node) {
-			if (!node.dropAction) return;
+			if (!props.interactive || node.enabled === false || !node.dropAction) return;
 			const source = event.dataTransfer.getData("application/x-tactic-frame");
 			if (!source) return;
 			event.preventDefault();
@@ -9842,7 +9842,9 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					style: normalizeStyle(Object.assign(style(node), background(node), { "--frame-titlebar-actions-right": (node.chromeRight || 0) + "px" })),
 					role: node.role,
 					"aria-label": node.label,
-					onContextmenu: ($event) => context($event, node)
+					onContextmenu: ($event) => context($event, node),
+					onDragover: ($event) => dragOver($event, node),
+					onDrop: ($event) => drop($event, node)
 				}, {
 					default: withCtx(() => [createVNode(_component_FrameView, {
 						ref_for: true,
@@ -9870,7 +9872,9 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"style",
 					"role",
 					"aria-label",
-					"onContextmenu"
+					"onContextmenu",
+					"onDragover",
+					"onDrop"
 				])) : node.kind === "Label" ? withDirectives((openBlock(), createElementBlock("span", {
 					key: 1,
 					"data-frame": node.id,
@@ -10000,7 +10004,9 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onClick: ($event) => send(node.action, void 0, $event.currentTarget),
 					onDblclick: ($event) => send(node.doubleAction),
 					draggable: node.dragValue != null && __props.interactive,
-					onDragstart: ($event) => drag($event, node)
+					onDragstart: ($event) => drag($event, node),
+					onDragover: ($event) => dragOver($event, node),
+					onDrop: ($event) => drop($event, node)
 				}, {
 					default: withCtx(() => [createVNode(_sfc_main$5, {
 						selected: node.selected,
@@ -10058,7 +10064,9 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onClick",
 					"onDblclick",
 					"draggable",
-					"onDragstart"
+					"onDragstart",
+					"onDragover",
+					"onDrop"
 				])) : node.kind === "Segmented" ? (openBlock(), createBlock(_sfc_main$13, {
 					key: 5,
 					"data-frame": node.id,

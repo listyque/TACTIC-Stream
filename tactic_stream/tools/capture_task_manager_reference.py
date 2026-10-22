@@ -5,7 +5,7 @@ import os
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-HANDLER = Path(os.environ.get("TACTIC_HANDLER_ROOT", "D:/code/th_codex"))
+HANDLER = Path(os.environ.get("TACTIC_HANDLER_ROOT", "D:/grav/Tactic Stream/TH"))
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 sys.path.insert(0, str(HANDLER))
 

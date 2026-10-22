@@ -13,7 +13,7 @@ class NamingBatch(unittest.TestCase):
     def test_callback_failure_rolls_back_the_entire_native_request(self):
         previous_path = sys.path.copy()
         try:
-            sys.path.insert(0, 'D:/code/th_codex')
+            sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
             from thlib import tactic_query as tq
         finally:
             sys.path[:] = previous_path

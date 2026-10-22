@@ -8,7 +8,7 @@ import sys
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-HANDLER = Path('D:/code/th_codex')
+HANDLER = Path('D:/grav/Tactic Stream/TH')
 OUTPUT = ROOT / '.screenshots/continuous-topology'
 
 

@@ -12,7 +12,7 @@ HERE = Path(__file__).resolve().parent
 OUT = HERE / "output/variants"
 
 
-def verify_sources(native, browser, handler=Path("D:/code/th_codex")):
+def verify_sources(native, browser, handler=Path("D:/grav/Tactic Stream/TH")):
     assert native.get("status") == browser.get("status") == "captured", (
         "Capture did not complete; recapture both hosts"
     )

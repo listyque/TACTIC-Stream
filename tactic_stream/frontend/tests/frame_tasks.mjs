@@ -17,7 +17,7 @@ const digest = async (path) =>
 async function fresh() {
   for (const [prefix, files] of [
     [root + 'src/tactic_stream/shared_ui/', native.shared],
-    ['D:/code/th_codex/', native.nativeSources],
+    ['D:/grav/Tactic Stream/TH/', native.nativeSources],
     [root, native.driverSources]
   ])
     for (const [name, hash] of Object.entries(files))

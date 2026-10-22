@@ -117,3 +117,23 @@ class NestedTables(unittest.TestCase):
         for options in (dict(init_load_num='no'),dict(show_shelf='yes'),dict(show_gear='true')):
             with self.subTest(options=options),self.assertRaises(ValueError):
                 nested_cell(parent.get_search_key(),options)
+
+    def test_hidden_row_toggle_row_add_and_aux_data_elements(self):
+        from types import SimpleNamespace
+        from pyasm.widget.table_element_wdg import AuxDataWdg, HiddenRowToggleWdg
+        from tactic.ui.table.hidden_row_element_wdg import RowAddElementWdg
+        parent = Search.get_by_code('contract/entity', 'A')
+        toggle = HiddenRowToggleWdg(name='toggle', search_type='sthpw/task')
+        toggle.set_sobject(parent)
+        self.assertEqual(toggle.get_cell_value()['nestedTable']['searchType'], 'sthpw/task')
+        row_add = RowAddElementWdg(name='tasks')
+        row_add.set_sobject(parent)
+        self.assertEqual(row_add.get_cell_value()['nestedTable']['searchType'], 'sthpw/task')
+        custom_add = RowAddElementWdg(name='notes', search_type='sthpw/note')
+        custom_add.set_sobject(parent)
+        self.assertEqual(custom_add.get_cell_value()['nestedTable']['searchType'], 'sthpw/note')
+        aux = AuxDataWdg(name='summary')
+        aux.set_parent_wdg(SimpleNamespace(aux_data=[{'summary': 42}]))
+        aux.set_current_index(0)
+        self.assertEqual(aux.get_text_value(), '42')
+        self.assertEqual(aux.get_cell_value(), {'text': '42'})

@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import test_compound_search_performance as compound
 
-sys.path.insert(0, 'D:/code/th_codex')
+sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
 from thlib import tactic_classes as tc, tactic_query as tq, server_cache
 from thlib.ui.controllers.search_runtime import SearchRuntimeMixin
 from thlib.ui.controllers.snapshot_details import SnapshotDetailsMixin

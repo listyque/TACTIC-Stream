@@ -10,7 +10,7 @@ from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--failed", action="store_true")
-parser.add_argument("--handler-root", type=Path, default=Path("D:/code/th_codex"))
+parser.add_argument("--handler-root", type=Path, default=Path("D:/grav/Tactic Stream/TH"))
 arguments = parser.parse_args()
 ROOT = Path(__file__).resolve().parents[2]
 TH = arguments.handler_root.resolve()

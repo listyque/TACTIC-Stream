@@ -12,7 +12,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
-HANDLER = Path("D:/code/th_codex")
+HANDLER = Path("D:/grav/Tactic Stream/TH")
 sys.path[:0] = [str(HANDLER), str(ROOT / "tools/frame_admin")]
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("QT_QUICK_BACKEND", "software")

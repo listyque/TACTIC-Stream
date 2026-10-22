@@ -58,7 +58,7 @@ class ScriptShelf(unittest.TestCase):
             button = dict(id='first', title='Привет', description='A & B', icon='fontawesome-solid:play', script='demo/hello')
             config = dict(scope='global', entryKey='', buttons=[button])
             # Evaluate only the original pure XML functions, without loading Qt or Handler.
-            source = ast.parse(Path('D:/code/th_codex/thlib/ui/script_shelf.py').read_text(encoding='utf-8'))
+            source = ast.parse(Path('D:/grav/Tactic Stream/TH/thlib/ui/script_shelf.py').read_text(encoding='utf-8'))
             functions = [node for node in source.body if isinstance(node, ast.FunctionDef) and node.name in ('shelf_configuration_xml', 'shelf_configuration_from_xml')]
             native = dict(ElementTree=ET, json=json, uuid=uuid)
             exec(compile(ast.Module(body=functions, type_ignores=[]), 'handler_script_shelf', 'exec'), native)

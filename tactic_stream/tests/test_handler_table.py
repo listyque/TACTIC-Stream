@@ -49,7 +49,7 @@ class HandlerTable(unittest.TestCase):
         with request_context(RequestContext(None, 'admin')):
             for alias in expected:
                 self.assertIsNotNone(WidgetConfig.create_widget(alias), alias)
-        path = Path('D:/code/th_codex/thlib/ui/qml/tactic_frame/features/table/widgets.json')
+        path = Path('D:/grav/Tactic Stream/TH/thlib/ui/qml/tactic_frame/features/table/widgets.json')
         if path.exists():
             catalog = json.loads(path.read_text(encoding='utf-8'))
             names = [alias for entry in catalog for alias in entry['aliases'] if alias]

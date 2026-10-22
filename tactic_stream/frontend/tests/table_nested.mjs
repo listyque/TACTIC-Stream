@@ -27,11 +27,17 @@ const page = await browser.newPage({ viewport: { width: 500, height: 300 } });
 const errors = [];
 page.on('pageerror', (error) => errors.push(error.message));
 let reads = 0;
+const queries = [];
 await page.route('**/admin/rpc', async (route) => {
   const request = route.request().postDataJSON();
   assert.equal(request.args[1], 'tactic.ui.table.NestedTableReadCmd');
   assert.ok(['child', 'table'].includes(request.args[2].view));
   reads++;
+  const query = request.args[2];
+  queries.push(query);
+  const secondPage = query.offset > 0;
+  const recordKey = secondPage ? 'demo/asset?code=C' : 'demo/asset?code=B';
+  const recordCode = secondPage ? 'C' : 'B';
   await route.fulfill({
     json: {
       result: {
@@ -45,7 +51,12 @@ await page.route('**/admin/rpc', async (route) => {
                   name: 'code',
                   title: 'Code',
                   attributes: { width: '160' },
-                  cell: { kind: 'text', supported: true }
+                  cell: {
+                    kind: 'text',
+                    supported: true,
+                    sortable: true,
+                    field: 'code'
+                  }
                 },
                 {
                   name: 'expand',
@@ -56,11 +67,11 @@ await page.route('**/admin/rpc', async (route) => {
               ]
             }
           },
-          records: [{ code: 'B', __search_key__: 'demo/asset?code=B' }],
-          hasNext: false,
+          records: [{ code: recordCode, __search_key__: recordKey }],
+          hasNext: !secondPage,
           cells: {
-            'demo/asset?code=B': {
-              code: { text: 'B' },
+            [recordKey]: {
+              code: { text: recordCode },
               expand: {
                 nestedTable: {
                   searchType: 'demo/asset',
@@ -120,6 +131,54 @@ try {
       () => window.nestedFixture.state.children['demo/asset?code=A'].selected
     ),
     ['demo/asset?code=B']
+  );
+  await child.locator('[data-frame="nestedNext"]').click();
+  await page.waitForFunction(
+    () =>
+      window.nestedFixture.state.children['demo/asset?code=A'].rows[0]?.key ===
+      'demo/asset?code=C'
+  );
+  assert.deepEqual(
+    await page.evaluate(() => ({
+      selected:
+        window.nestedFixture.state.children['demo/asset?code=A'].selected,
+      records:
+        window.nestedFixture.state.children['demo/asset?code=A']
+          .selectionRecords
+    })),
+    {
+      selected: ['demo/asset?code=B'],
+      records: { 'demo/asset?code=B': { code: 'B' } }
+    }
+  );
+  await child.locator('[data-frame="nestedHeader_code"]').click();
+  await page.waitForFunction(
+    () =>
+      window.nestedFixture.state.children['demo/asset?code=A'].order ===
+      'code asc'
+  );
+  assert.equal(queries.at(-1).offset, 0);
+  assert.deepEqual(queries.at(-1).order_by, ['code asc']);
+  const filterReads = reads;
+  await child.locator('[data-frame="nestedFilter"]').fill('B');
+  await child.locator('[data-frame="nestedReload"]').click();
+  await page.waitForFunction(
+    ([prev]) =>
+      !window.nestedFixture.state.children['demo/asset?code=A'].busy &&
+      window.nestedFixture.state.children['demo/asset?code=A'].filter === 'B',
+    [filterReads]
+  );
+  assert.equal(reads, filterReads + 1);
+  assert.deepEqual(queries.at(-1).filters, [['code', 'like', '%B%']]);
+  await child.locator('[data-frame="nestedCreate"]').click();
+  assert.deepEqual(
+    await page.evaluate(() => window.nestedFixture.edits.at(-1)),
+    {
+      record: null,
+      parentKey: 'demo/asset?code=A',
+      searchType: 'demo/asset',
+      projectCode: 'demo'
+    }
   );
   await child.locator('[data-frame="nestedClose"]').click();
   await page.evaluate(() => window.nestedFixture.summary());

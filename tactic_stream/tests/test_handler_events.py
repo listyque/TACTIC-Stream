@@ -31,7 +31,7 @@ class HandlerEvents(unittest.TestCase):
     def setUpClass(cls):
         os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
         os.environ.setdefault('QT_QUICK_CONTROLS_STYLE', 'Basic')
-        sys.path.append('D:/code/th_codex')
+        sys.path.append('D:/grav/Tactic Stream/TH')
         from PySide6.QtGui import QGuiApplication
         cls.owns_qt = QGuiApplication.instance() is None
         cls.qt = QGuiApplication.instance() or QGuiApplication([])
@@ -42,7 +42,7 @@ class HandlerEvents(unittest.TestCase):
         try:
             test_transport.Transport.tearDownClass()
         finally:
-            sys.path.remove('D:/code/th_codex')
+            sys.path.remove('D:/grav/Tactic Stream/TH')
             if cls.owns_qt:
                 from PySide6.QtCore import QCoreApplication, QEvent
                 cls.qt.deleteLater()

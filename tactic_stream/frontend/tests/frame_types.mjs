@@ -24,7 +24,7 @@ for (const [name, hash] of Object.entries(native.sha256))
 for (const [name, hash] of Object.entries(native.nativeSources))
   assert.equal(
     createHash('sha256')
-      .update(await readFile('D:/code/th_codex/' + name))
+      .update(await readFile('D:/grav/Tactic Stream/TH/' + name))
       .digest('hex'),
     hash,
     'stale native renderer: ' + name

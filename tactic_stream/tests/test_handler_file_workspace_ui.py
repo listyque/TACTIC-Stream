@@ -16,7 +16,7 @@ os.environ.setdefault('QT_QUICK_BACKEND', 'software')
 os.environ.setdefault('QSG_RENDER_LOOP', 'basic')
 os.environ.setdefault('QT_QUICK_CONTROLS_STYLE', 'Material')
 os.environ.setdefault('QT_QPA_FONTDIR', 'C:/Windows/Fonts')
-sys.path.insert(0, 'D:/code/th_codex')
+sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
 
 from PySide6.QtCore import QCoreApplication, QEvent, QObject, QPointF, QUrl, Signal, Qt, QMetaObject
 from PySide6.QtGui import QFont, QGuiApplication
@@ -30,7 +30,7 @@ from thlib.ui.localization import CatalogTranslator
 from thlib.pool import ThreadsPool
 from thlib.environment import env_inst, env_mode, env_server
 
-HANDLER = Path('D:/code/th_codex')
+HANDLER = Path('D:/grav/Tactic Stream/TH')
 QML = HANDLER / 'thlib/ui/qml'
 
 

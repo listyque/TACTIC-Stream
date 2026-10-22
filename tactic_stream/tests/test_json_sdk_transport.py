@@ -14,7 +14,7 @@ import test_transport as transport_fixture
 from tactic_stream import rpc_json
 
 _native_path = sys.path.copy()
-sys.path.insert(0, 'D:/code/th_codex')
+sys.path.insert(0, 'D:/grav/Tactic Stream/TH')
 from thlib.side.client.tactic_client_lib.tactic_server_stub import TacticServerStub
 from thlib.side.client.tactic_client_lib import rpc_json as handler_codec
 from thlib import tactic_classes as tc, server_cache

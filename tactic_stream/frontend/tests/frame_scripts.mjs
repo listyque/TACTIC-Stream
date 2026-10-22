@@ -27,7 +27,7 @@ assert.equal(native.status, 'captured');
 for (const [prefix, sources] of [
   [root + 'src/tactic_stream/shared_ui/', native.sha256],
   [
-    (process.env.HANDLER_ROOT || 'D:/code/th_codex') + '/',
+    (process.env.HANDLER_ROOT || 'D:/grav/Tactic Stream/TH') + '/',
     native.nativeSources
   ],
   [root, native.driverSources]

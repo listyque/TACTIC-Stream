@@ -1,13 +1,11 @@
 import assert from 'node:assert/strict';
 import { writeFile, mkdir, readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
-const root = new URL('../../', import.meta.url).pathname.replace(
-  /^\/(\w:)/,
-  '$1'
-);
+const root = fileURLToPath(new URL('../../', import.meta.url));
 const out = root + 'tools/frame_remaining/output/';
 const sources = {};
 for (const name of [

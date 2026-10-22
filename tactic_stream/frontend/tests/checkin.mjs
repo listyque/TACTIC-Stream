@@ -115,6 +115,7 @@ try {
     while (true) {
       const box = await templateList.evaluate((list, offset) => {
         list.scrollTop = offset;
+        list.dispatchEvent(new Event('scroll'));
         return { height: list.clientHeight, total: list.scrollHeight };
       }, offset);
       await page.waitForTimeout(30);
@@ -139,6 +140,7 @@ try {
     while (true) {
       const box = await templateList.evaluate((list, offset) => {
         list.scrollTop = offset;
+        list.dispatchEvent(new Event('scroll'));
         return { height: list.clientHeight, total: list.scrollHeight };
       }, offset);
       await page.waitForTimeout(30);

@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 
 HERE = Path(__file__).resolve().parent
-TH = Path('D:/code/th_codex')
+TH = Path('D:/grav/Tactic Stream/TH')
 screen = json.loads((HERE/'screen.json').read_text(encoding='utf-8'))
 parser = argparse.ArgumentParser()
 parser.add_argument('--capture', action='store_true')

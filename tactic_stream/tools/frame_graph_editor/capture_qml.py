@@ -2,7 +2,7 @@
 import copy,json,os,sys
 from pathlib import Path
 from types import SimpleNamespace
-REPO=Path(__file__).resolve().parents[2];TH=Path('D:/code/th_codex');HERE=Path(__file__).resolve().parent;OUT=HERE/'output';OUT.mkdir(exist_ok=True)
+REPO=Path(__file__).resolve().parents[2];TH=Path('D:/grav/Tactic Stream/TH');HERE=Path(__file__).resolve().parent;OUT=HERE/'output';OUT.mkdir(exist_ok=True)
 os.environ.update(QT_QPA_PLATFORM='offscreen',QT_QUICK_BACKEND='software',QT_FONT_DPI='96');sys.path[:0]=[str(TH),str(REPO/'tools/frame_admin')]
 from PySide6.QtCore import QCoreApplication,QEvent,QPointF,QUrl
 from PySide6.QtQml import QQmlEngine,QQmlComponent

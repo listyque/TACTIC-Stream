@@ -18,7 +18,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "output/original"
 REFERENCE = ROOT / "tools/frame_foundation/reference/thlib/ui/qml"

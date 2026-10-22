@@ -13,7 +13,7 @@ import tempfile
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-HANDLER = Path(os.environ.get("TACTIC_HANDLER_ROOT", "D:/code/th_codex"))
+HANDLER = Path(os.environ.get("TACTIC_HANDLER_ROOT", "D:/grav/Tactic Stream/TH"))
 OUTPUT = ROOT / ".screenshots/handler-current"
 
 

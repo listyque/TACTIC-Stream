@@ -11,7 +11,7 @@ import zipfile
 import base64
 
 ROOT = Path(__file__).resolve().parents[2]
-HANDLER = Path("D:/code/th_codex")
+HANDLER = Path("D:/grav/Tactic Stream/TH")
 sys.path[:0] = [str(HANDLER), str(ROOT / "tools/frame_admin")]
 
 from tests.frame_configuration_fixture import Surface, SCREENS

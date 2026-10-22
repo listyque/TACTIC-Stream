@@ -7,7 +7,7 @@ import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const handler = 'D:/code/th_codex/';
+const handler = 'D:/grav/Tactic Stream/TH/';
 const output = root + 'tools/frame_help/output/';
 const reference = JSON.parse(await readFile(output + 'native.json', 'utf8'));
 const hash = async (path) =>

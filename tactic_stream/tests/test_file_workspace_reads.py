@@ -112,7 +112,7 @@ class FileWorkspaceReadTest(FileProjectFixture,unittest.TestCase):
 
     def test_handler_refresh_one_request_and_one_selected_file_page(self):
         os.environ.setdefault('QT_QPA_PLATFORM','offscreen')
-        sys.path.insert(0,'D:/code/th_codex')
+        sys.path.insert(0,'D:/grav/Tactic Stream/TH')
         from thlib.ui.file_workspace import FileWorkspaceController,initial_state
         from thlib.environment import env_mode,env_server
         change=self.call('create_change',workspace='work')
@@ -135,7 +135,7 @@ class FileWorkspaceReadTest(FileProjectFixture,unittest.TestCase):
 
     def test_setup_reloads_metadata_once_and_transfer_cancel_skips_metadata(self):
         os.environ.setdefault('QT_QPA_PLATFORM','offscreen')
-        sys.path.insert(0,'D:/code/th_codex')
+        sys.path.insert(0,'D:/grav/Tactic Stream/TH')
         from thlib.ui.file_workspace import FileWorkspaceController,initial_state
         from thlib.environment import env_mode,env_server
         state=initial_state();state.update(workspace='work',stream='main',code='extra')
@@ -196,7 +196,7 @@ class FileWorkspaceReadTest(FileProjectFixture,unittest.TestCase):
 
     def test_refresh_expanded_nested_directories_uses_the_same_request(self):
         os.environ.setdefault('QT_QPA_PLATFORM','offscreen')
-        sys.path.insert(0,'D:/code/th_codex')
+        sys.path.insert(0,'D:/grav/Tactic Stream/TH')
         from thlib.ui.file_workspace import FileWorkspaceController,initial_state
         from thlib.environment import env_mode,env_server
         change=self.call('create_change',workspace='work')

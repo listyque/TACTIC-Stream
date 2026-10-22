@@ -515,11 +515,11 @@ deployed original server, PostgreSQL, ordinary-user ACL or physical hardware.
 
 - [x] `pyasm.widget.dependency_wdg.DependencyLink` — administrator base viewer; ordinary-user ACL remains in L07b.
 - [x] `pyasm.widget.sobject_browser_wdg.SObjectConnectionElement` — administrator direction/read/remove workflows; ordinary-user ACL remains open.
-- [ ] `pyasm.widget.table_element_wdg.HiddenRowToggleWdg`
-- [ ] `tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg`
-- [ ] `tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg`
+- [x] `pyasm.widget.table_element_wdg.HiddenRowToggleWdg`
+- [x] `tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg`
+- [x] `tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg`
 - [x] `tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg` — identity grouping/header, parent action and existing child insert form; full option/ACL acceptance remains L07b.
-- [ ] `pyasm.widget.table_element_wdg.AuxDataWdg`
+- [x] `pyasm.widget.table_element_wdg.AuxDataWdg`
 - [x] `tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg` — object/project counts and separate task/snapshot scopes.
 
 Раскрыть настроенную дочернюю таблицу, добавить/связать объект, свернуть и восстановить состояние; проверить фильтры, направление связи, права, пустой результат, группировку и итог. Вложенная область имеет собственный query/selection scope; переход в общий Inspector не заменяет её.
@@ -665,3 +665,10 @@ editor's direct update; other native forms retain their persistence. Native and
 browser FileInput controls share controls/forms/file.ui.mjs and live under their
 base-control directories. UploadMultipart closes HTTP connections on both success
 and failure. Ordinary-user ACL, form revisions and additional inputs stay L07b.
+
+Step 2.0 acceptance: all 156 Frame platform gate steps passed on the unified
+`d:/grav/Tactic Stream/{TS,TH}` workspace after adding `get_action_handler` to
+the `test_columns_table_view.py` config stubs, registering `FileInput` /
+`AppFileInput` in `element_catalog.json`, and synchronizing programmatic scroll
+events in `checkin.mjs`; `tools/frame_table/report.py` validated current source
+fingerprints cleanly.

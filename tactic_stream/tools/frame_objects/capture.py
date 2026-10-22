@@ -10,7 +10,7 @@ import zipfile
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 OUT = Path(__file__).parent / "output"
 REFERENCE = json.loads(
     (Path(__file__).parent / "reference.json").read_text(encoding="utf-8")

@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-TH = Path("D:/code/th_codex")
+TH = Path("D:/grav/Tactic Stream/TH")
 QML = Path(sys.argv[1]) if len(sys.argv) > 1 else TH / "thlib/ui/qml"
 os.environ.update(QT_QPA_PLATFORM="offscreen", QT_QUICK_BACKEND="software")
 sys.path.insert(0, str(TH))

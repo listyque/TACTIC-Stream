@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 
 os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
-handler = Path('D:/code/th_codex')
+handler = Path('D:/grav/Tactic Stream/TH')
 sys.path.insert(0, str(handler))
 spec = importlib.util.spec_from_file_location('handler_duplicate_fixture', handler / 'tests/test_sobject_duplicate.py')
 fixture = importlib.util.module_from_spec(spec)

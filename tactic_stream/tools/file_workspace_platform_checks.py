@@ -13,7 +13,7 @@ import time
 import uuid
 
 ROOT=Path(__file__).resolve().parents[1]
-sys.path[:0]=[str(ROOT/'src'),str(ROOT/'tests'),'D:/code/th_codex']
+sys.path[:0]=[str(ROOT/'src'),str(ROOT/'tests'),'D:/grav/Tactic Stream/TH']
 
 
 def native_drag():
@@ -28,7 +28,7 @@ def native_drag():
     app=QGuiApplication.instance() or QGuiApplication([])
     engine=QQmlEngine();warnings=[]
     engine.warnings.connect(lambda rows:warnings.extend(row.toString() for row in rows))
-    handler=Path('D:/code/th_codex');qml=handler/'thlib/ui/qml'
+    handler=Path('D:/grav/Tactic Stream/TH');qml=handler/'thlib/ui/qml'
     for name,value in qml_icon_bindings(handler,engine).items():engine.rootContext().setContextProperty(name,value)
     theme_component=QQmlComponent(engine,QUrl.fromLocalFile(str(qml/'Theme.qml')))
     theme=theme_component.createWithInitialProperties({'dark':True})
