@@ -22,7 +22,14 @@ const props = defineProps({
   frameNode: Object,
   ancestors: { type: Array, default: () => [] }
 });
-const emit = defineEmits(['close', 'edit', 'action', 'inspect', 'cell-event']);
+const emit = defineEmits([
+  'close',
+  'edit',
+  'action',
+  'inspect',
+  'cell-event',
+  'column'
+]);
 const host = ref(null),
   width = ref(1);
 let observer,
@@ -58,7 +65,8 @@ const views = computed(() => ({
       onEdit: (...args) => emit('edit', ...args),
       onAction: (...args) => emit('action', ...args),
       onInspect: (record) => emit('inspect', record),
-      onCellEvent: (...args) => emit('cell-event', ...args)
+      onCellEvent: (...args) => emit('cell-event', ...args),
+      onColumn: (...args) => emit('column', ...args)
     }
   },
   tableCell: {
@@ -67,7 +75,8 @@ const views = computed(() => ({
     props: {
       onAction: forward,
       onInspect: (record) => emit('inspect', record),
-      onCellEvent: (...args) => emit('cell-event', ...args)
+      onCellEvent: (...args) => emit('cell-event', ...args),
+      onColumn: (...args) => emit('column', ...args)
     }
   }
 }));
@@ -192,6 +201,7 @@ async function load() {
         state.selectionRecords[record.__search_key__] = { code: record.code };
     state.hasNext = result.hasNext;
     state.insert = scope.insert !== false && !!definition.operations.create;
+    state.gear = scope.gear !== false && !!definition.administration;
     state.filterField =
       ['name', 'title', 'code'].find((name) => definition.columns[name]) ||
       'id';
@@ -224,7 +234,15 @@ function activate(action, value) {
     state.selected = selected
       ? state.selected.filter((key) => key !== action.key)
       : [...(state.selected || []), action.key];
-  } else if (action.type === 'edit' || action.type === 'create')
+  } else if (action.type === 'columns')
+    emit('column', {
+      project: state.scope.projectCode || props.project,
+      searchType: state.scope.searchType.split('?')[0],
+      view: state.scope.view || 'table',
+      column: '',
+      target: 'definition'
+    });
+  else if (action.type === 'edit' || action.type === 'create')
     emit(
       'edit',
       state.rows?.find((row) => row.key === action.key)?.record || null,

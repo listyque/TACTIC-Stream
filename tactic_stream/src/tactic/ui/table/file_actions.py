@@ -16,7 +16,7 @@ def append_snapshot_files(search_key, action='prepare', expected_revision='',
     from pyasm.common import Environment
     from pyasm.search import Search, SearchKey
 
-    if not Environment.get_security().is_admin():
+    if not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_admin() and (not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_logged_in() or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().get_user_name() == 'admin' or not (__import__('pyasm.biz', fromlist=['Project']).Project.get_project_code() in ('admin', 'sthpw') or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().check_access('project', [{'code': '*'}, {'code': __import__('pyasm.biz', fromlist=['Project']).Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if action not in ('prepare', 'save'):
         raise ValueError('Invalid snapshot append action')
@@ -120,7 +120,7 @@ def read_snapshot_files(search_key, file_code='', expected_revision=''):
     from pyasm.common import Environment
     from pyasm.search import Search, SearchKey
 
-    if not Environment.get_security().is_admin():
+    if not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_admin() and (not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_logged_in() or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().get_user_name() == 'admin' or not (__import__('pyasm.biz', fromlist=['Project']).Project.get_project_code() in ('admin', 'sthpw') or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().check_access('project', [{'code': '*'}, {'code': __import__('pyasm.biz', fromlist=['Project']).Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if SearchKey.extract_base_search_type(search_key) != 'sthpw/snapshot':
         raise ValueError('Check out requires a snapshot')

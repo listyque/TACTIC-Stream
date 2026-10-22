@@ -189,6 +189,7 @@ def read_custom_layout(search_key, view='', html='', include_mako=True, _depth=0
                     searchType=options['search_type'], parentKey=options.get('search_key') or search_key,
                     view=options.get('view') or 'table', expression=options.get('expression') or '',
                     selection=options.get('show_row_select',options.get('show_select')) not in (False,'false'),
+                    gear=options.get('show_gear') not in (False,'false'),
                     insert=options.get('show_insert') not in (False,'false'))))
             elif handler in ('pyasm.widget.ThumbWdg', 'ThumbWdg'):
                 from pyasm.widget import ThumbWdg

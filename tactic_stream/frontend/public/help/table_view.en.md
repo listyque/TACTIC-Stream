@@ -10,7 +10,7 @@ The current adapted Handler Table View is ported to Stream: **45 registered name
 
 ## B07 checkpoint
 
-The shared catalogue now contains **37 classes / 87 named aliases**, not the historical 21/45 below. Geometry, menus, typed value editors and task-card rules share Frame modules. [New cell examples and current limits](table_widgets_b07.en.md). B07 remains open: 40 referenced usable classes still need complete workflows. The following screenshots/counts describe the October 14 checkpoint.
+The shared catalogue now contains **71 adapted classes / 172 named aliases** across the 104 inventory sources (30 production/3D/Maya/Flash wrappers and 3 unfinished source classes remain excluded). Geometry, menus, typed value editors, group/bottom summaries, nested `show_gear` column authoring, ordinary-user ACL, and form revision/uncertain-save checks share Frame modules. [Full cell examples and remaining explicit limits](table_widgets_b07.en.md). The following historical screenshots/counts describe the initial October 14 checkpoint.
 
 ## Table
 

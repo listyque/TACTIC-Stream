@@ -11,7 +11,7 @@ def read_connection_cells(search_keys, direction='dst', icon_size=60):
     from pyasm.search import Search, SearchKey
     from pyasm.widget import ThumbWdg
 
-    if not Environment.get_security().is_admin():
+    if not Environment.get_security().is_admin() and (not Environment.get_security().is_logged_in() or Environment.get_security().get_user_name() == 'admin' or not (Project.get_project_code() in ('admin', 'sthpw') or Environment.get_security().check_access('project', [{'code': '*'}, {'code': Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if direction not in ('src', 'dst'):
         raise ValueError('Invalid connection direction')
@@ -100,7 +100,7 @@ def remove_connection(parent_key, connection_key, expected_revision, direction='
     from pyasm.common import Environment, UserException
     from pyasm.search import Search, SearchKey
 
-    if not Environment.get_security().is_admin():
+    if not Environment.get_security().is_admin() and (not Environment.get_security().is_logged_in() or Environment.get_security().get_user_name() == 'admin' or not (Project.get_project_code() in ('admin', 'sthpw') or Environment.get_security().check_access('project', [{'code': '*'}, {'code': Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if direction not in ('src', 'dst'):
         raise ValueError('Invalid connection direction')

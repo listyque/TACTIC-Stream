@@ -821,7 +821,15 @@ class ApiXMLRPC:
         browser_checkin = method == 'execute_cmd' and command in ('tactic.command.browser_checkin_cmd.BrowserCheckinCmd',
             'tactic.command.checkin_queue_cmd.SubmitCheckinChunkCmd', 'tactic.command.checkin_queue_cmd.CancelCheckinBatchCmd',
             'tactic.command.file_project_cmd.FileProjectCmd')
-        if method in WRITE_METHODS and not Environment.get_security().is_admin() and not (chat_call or object_call or browser_checkin or method == 'log'):
+        table_call = method == 'execute_cmd' and command in (
+            'tactic.ui.panel.EditCmd', 'tactic.ui.panel.EditMultipleCmd',
+            'tactic.ui.table.TableCellEditCmd', 'tactic.ui.table.NestedTableReadCmd',
+            'tactic.ui.table.TableDependencyReadCmd', 'tactic.ui.table.TableConnectionRemoveCmd',
+            'tactic.ui.table.TableParentGroupCmd', 'tactic.ui.table.TableSnapshotAppendCmd',
+            'tactic.ui.table.TableSnapshotFilesCmd', 'tactic.ui.table.TableObjectStatusCmd',
+            'tactic.ui.table.DropElementEditCmd', 'tactic.ui.table.TableTimeEditCmd',
+            'tactic.command.sobject_link_cmd.SObjectLinkCmd')
+        if method in WRITE_METHODS and not Environment.get_security().is_admin() and not (chat_call or object_call or browser_checkin or table_call or method == 'log'):
             raise SecurityException('API writes currently require administrator access')
         from pyasm.common import Config
         if Config.get_value('security', 'api_method_restricted') == 'true' and not Environment.get_security().check_access('api_method', method, 'allow', default='allow'):

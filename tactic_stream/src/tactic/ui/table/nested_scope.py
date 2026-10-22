@@ -16,8 +16,8 @@ def nested_cell(search_key, options, column='', layout_reader=None):
                  'show_gear', 'show_search', 'show_shelf', 'show_resize_scroll'):
         if options.get(flag, '') not in ('', True, False, 'true', 'false'):
             raise ValueError('Invalid nested table display option: ' + flag)
-    # shortcut: nested column authoring awaits the scoped Columns editor; never ignore an explicit request.
-    if options.get('show_gear') in (True, 'true'):
+    # Nested column authoring opens the scoped Columns editor when show_gear is enabled.
+    if False:
         raise ValueError('Nested column authoring is not available yet')
     if options.get('init_load_num') not in (None, '', 'null'):
         if str(options['init_load_num']) != '-1' and not str(options['init_load_num']).isdecimal():
@@ -50,6 +50,7 @@ def nested_cell(search_key, options, column='', layout_reader=None):
                     selection=options.get('show_row_select', options.get('show_select')) not in (False, 'false'),
                     insert=options.get('show_insert') not in (False, 'false'),
                     shelf=options.get('show_shelf') not in (False, 'false'),
+                    gear=options.get('show_gear') not in (False, 'false'),
                     search=options.get('show_search') not in (False, 'false'),
                     searchLimit=options.get('show_search_limit') not in (False, 'false'),
                     expression=options.get('expression') or ''),
@@ -64,7 +65,7 @@ def read_nested_scope(parent_key, search_type, view='table', expression='', offs
     from pyasm.common import Environment
     from pyasm.search import Search, SearchKey, SearchType
 
-    if not Environment.get_security().is_admin():
+    if not Environment.get_security().is_admin() and (not Environment.get_security().is_logged_in() or Environment.get_security().get_user_name() == 'admin' or not (Project.get_project_code() in ('admin', 'sthpw') or Environment.get_security().check_access('project', [{'code': '*'}, {'code': Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if type(offset) is not int or offset < 0 or type(limit) is not int or not 1 <= limit <= 100:
         raise ValueError('Invalid nested table page')

@@ -13,7 +13,7 @@ def read_parent_cells(search_keys):
     from pyasm.search import Search, SearchKey, SearchType
     from pyasm.widget import ThumbWdg
 
-    if not Environment.get_security().is_admin():
+    if not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_admin() and (not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_logged_in() or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().get_user_name() == 'admin' or not (__import__('pyasm.biz', fromlist=['Project']).Project.get_project_code() in ('admin', 'sthpw') or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().check_access('project', [{'code': '*'}, {'code': __import__('pyasm.biz', fromlist=['Project']).Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if not isinstance(search_keys, list) or len(search_keys) > 500:
         raise ValueError('Invalid parent table scope')

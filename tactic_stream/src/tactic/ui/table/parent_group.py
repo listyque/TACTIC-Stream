@@ -14,7 +14,7 @@ def edit_parent_group(search_key, view, column, action='prepare', source_revisio
     from pyasm.search import Search, SearchKey, SearchType
     from pyasm.widget import WidgetConfigView
 
-    if not Environment.get_security().is_admin():
+    if not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_admin() and (not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_logged_in() or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().get_user_name() == 'admin' or not (__import__('pyasm.biz', fromlist=['Project']).Project.get_project_code() in ('admin', 'sthpw') or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().check_access('project', [{'code': '*'}, {'code': __import__('pyasm.biz', fromlist=['Project']).Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if action not in ('prepare', 'candidates', 'save', 'check'):
         raise ValueError('Invalid parent operation')

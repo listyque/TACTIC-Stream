@@ -312,6 +312,18 @@ class ExpressionElementWdg(SimpleTableElementWdg):
     def set_td(self, td):
         self.td = td
 
+    def evaluate_summary(self, sobjects, mode='bottom'):
+        self.init_kwargs()
+        expression = self.get_option('group_bottom' if mode == 'group_bottom' else 'bottom')
+        if not expression:
+            return ''
+        result = Search.eval(expression, list(sobjects or []), single=True, show_retired=self.show_retired)
+        if result in (None, []):
+            return ''
+        if self.get_option('display_format'):
+            result = FormatValue().get_format_value(result, self.get_option('display_format'))
+        return str(result)
+
 
 class ExpressionRecalculateCmd(Command):
     def execute(self):

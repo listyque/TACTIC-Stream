@@ -1,16 +1,39 @@
 """TACTIC view descriptors and primitive EditWdg form preparation, without HTML."""
 import hashlib
+import json
 import re
 
 from pyasm.biz import Project
-from pyasm.common import Container
+from pyasm.common import Container, Environment
+from pyasm.common.errors import SecurityException
 from pyasm.search import Search, SearchKey, SearchType, WidgetDbConfig
-from pyasm.security.security import _require_admin
+from pyasm.security.access_manager import Sudo
 from pyasm.widget import WidgetConfig, WidgetConfigView
 
 
+def _require_table_access(search_type=None, access='view'):
+    security = Environment.get_security()
+    if security is None:
+        raise SecurityException('Account administration requires administrator access')
+    if security.is_admin() or Sudo.is_sudo():
+        return
+    project_code = Project.get_project_code()
+    if not security.is_logged_in() or security.get_user_name() == 'admin' or not (
+        project_code in ('admin', 'sthpw')
+        or security.check_access('project', [{'code': '*'}, {'code': project_code}], 'allow', default='deny')
+    ):
+        raise SecurityException('Account administration requires administrator access')
+    if search_type:
+        base = SearchType.get(search_type).get_base_key()
+        keys = [{'code': base, 'project': project_code}, {'code': base}, {'code': '*', 'project': project_code}, {'code': '*'}]
+        if not security.check_access('search_type', keys, access, default='edit'):
+            raise SecurityException(f'Access denied for {base}')
+        if access in ('edit', 'insert', 'retire', 'delete') and security.check_access('search_type', keys, 'view', is_match=True):
+            raise SecurityException(f'Modify access denied for {base}')
+
+
 def read_form(search_type, view='edit', search_key=None, default=None, source_key=None, search_keys=None, parent_key=None, connect_key=None, element_names=None, ignore=None):
-    _require_admin()
+    _require_table_access(search_type, 'insert' if (view == 'insert' or source_key) else 'edit')
     if not isinstance(view, str) or not re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}', view):
         raise ValueError('Invalid view name')
     if isinstance(ignore, str):
@@ -63,6 +86,10 @@ def read_form(search_type, view='edit', search_key=None, default=None, source_ke
                      default=default, parent_key=parent_key, mode='insert' if source_key else None,
                      element_names=','.join(element_names) if element_names is not None else None, ignore=ignore)
     widget.explicit_display()
+    if widget.mode == 'edit':
+        targets = records if records else ([widget.sobjects[0]] if getattr(widget, 'sobjects', None) else [])
+        if any(item.is_retired() for item in targets):
+            raise ValueError('Retired records cannot be edited. Reactivate the record first.')
     fields = []
     for item in widget.get_widgets():
         if source_key and (item.get_option('column') or item.get_name()) in ('id', 'code', 'timestamp', 'last_update'):
@@ -156,8 +183,17 @@ def read_form(search_type, view='edit', search_key=None, default=None, source_ke
     result = dict(schema_version=1, project=project, search_type=search_type, view=widget.view,
                 search_key=search_key, source_key=source_key, mode=widget.mode, input_prefix=widget.input_prefix,
                 element_names=widget.element_names, skipped=widget.skipped_element_names, fields=fields)
+    if widget.mode == 'edit' and getattr(widget, 'sobjects', None) and widget.sobjects[0]:
+        result['expected_revision'] = hashlib.sha256(json.dumps(widget.sobjects[0].get_data(), sort_keys=True, default=str).encode()).hexdigest()
     if records:
         result['search_keys'] = [record.get_search_key(use_id=True) for record in records]
+        result['plans'] = [
+            dict(
+                search_key=record.get_search_key(use_id=True),
+                expected_revision=hashlib.sha256(json.dumps(record.get_data(), sort_keys=True, default=str).encode()).hexdigest(),
+            )
+            for record in records
+        ]
     if parent_key is not None:
         result['parent_key'] = parent_key
     if connect_key is not None:
@@ -318,7 +354,7 @@ def describe_composition(config, search_type, path=(), budget=None, identity='')
 
 
 def read_interface(search_type, view='table'):
-    _require_admin()
+    _require_table_access(search_type, 'view')
     if not isinstance(view, str) or not re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}', view):
         raise ValueError('Invalid view name')
     project = Project.get()
@@ -347,7 +383,33 @@ def read_interface(search_type, view='table'):
     if base == 'sthpw/transaction_log':
         from .transaction_journal import columns as journal_columns
         columns = journal_columns()
-    writable = (base in SObject.SECURITY_TYPES + SObject.BUSINESS_TYPES or not base.startswith(('sthpw/', 'config/'))) and not SearchType.get(search_type).get_record_read_options().get('readonly')
+    security = Environment.get_security()
+    is_admin = bool(security and security.is_admin())
+    type_keys = [{'code': base, 'project': project.get_code()}, {'code': base}, {'code': '*', 'project': project.get_code()}, {'code': '*'}]
+    can_edit_type = is_admin or bool(
+        security
+        and not security.check_access('search_type', type_keys, 'view', is_match=True)
+        and security.check_access('search_type', type_keys, 'edit', default='edit')
+    )
+    if not is_admin and security and isinstance(description.get('elements'), list):
+        visible = []
+        for element in description['elements']:
+            el_keys = [
+                {'search_type': base, 'code': element['name'], 'project': project.get_code()},
+                {'search_type': base, 'code': element['name']},
+                {'search_type': base, 'code': '*'},
+            ]
+            if not security.check_access('element', el_keys, 'view', default='view'):
+                continue
+            if element.get('cell', {}).get('editable') and (
+                not can_edit_type
+                or security.check_access('element', el_keys, 'view', is_match=True)
+                or not security.check_access('element', el_keys, 'edit', default='edit')
+            ):
+                element['cell']['editable'] = False
+            visible.append(element)
+        description['elements'] = visible
+    writable = can_edit_type and (base in SObject.SECURITY_TYPES + SObject.BUSINESS_TYPES or not base.startswith(('sthpw/', 'config/'))) and not SearchType.get(search_type).get_record_read_options().get('readonly')
     attributes = description['attributes']
     operations = {name: writable and attributes.get(flag) not in (False, 'false')
                   for name, flag in (('create', 'insert'), ('edit', 'edit'), ('retire', 'retire'), ('delete', 'delete'))}
@@ -364,7 +426,7 @@ def read_interface(search_type, view='table'):
         and not item.get_value('view').startswith('quick_filters@')
         and item.get_value('view') not in ('definition', 'edit_definition', 'edit', 'insert')]))
     return dict(schema_version=1, project=project.get_code(), search_type=search_type,
-                administration=True,
+                administration=is_admin,
                 operations=operations,
                 columns=columns, table=description, views=custom_views,
                 navigation=describe_view(navigation))

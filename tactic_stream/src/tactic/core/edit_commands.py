@@ -66,6 +66,8 @@ class EditCmd(Command):
         if isinstance(self.extra_data, basestring):
             self.extra_data = jsonloads(self.extra_data)
         self.extra_action = kwargs.get('extra_action') or {}
+        self.expected_revision = kwargs.get('expected_revision')
+        self.action = kwargs.get('action') or 'save'
         super(EditCmd, self).__init__()
         self.search_type = None
         self.sobject = kwargs.get('sobject')
@@ -206,10 +208,43 @@ class EditCmd(Command):
             sudo = Sudo()
             try:
                 sobject = SearchKey.get_by_search_key(self.search_key)
+                if sobject and (self.expected_revision or self.action == 'check') and self.action != 'check':
+                    sql = sobject.get_sql()
+                    sql.get_database_impl().lock_collection_table(sql, sobject.get_table())
+                    sobject = SearchKey.get_by_search_key(self.search_key)
             finally:
                 sudo.exit()
             if not sobject:
                 raise TacticException('This search key [%s] no longer exists.' % self.search_key)
+            if sobject.is_retired():
+                raise TacticException('Retired records cannot be edited. Reactivate the record first.')
+            if self.expected_revision or self.action == 'check':
+                import hashlib
+                import json
+                current_rev = hashlib.sha256(json.dumps(sobject.get_data(), sort_keys=True, default=str).encode()).hexdigest()
+                if self.action == 'check':
+                    self.search_type = sobject.get_search_type()
+                    probe = SearchType.create(self.search_type)
+                    for k, v in sobject.get_data().items():
+                        if v is not None:
+                            probe.set_value(k, v)
+                    for action_handler in self._get_action_handlers():
+                        if action_handler.__class__.__name__ in ('UploadAction', 'MultiUploadAction', 'MultiZipUploadAction'):
+                            continue
+                        action_handler.set_sobject(probe)
+                        if action_handler.check():
+                            action_handler.execute()
+                    matches = bool(probe.update_data) and all(
+                        str(sobject.get_value(col, no_exception=True) or '') == str(val or '')
+                        for col, val in probe.update_data.items()
+                    )
+                    self.sobject = sobject
+                    self.info['state'] = 'saved' if matches else ('unchanged' if current_rev == self.expected_revision else 'conflict')
+                    self.info['search_key'] = SearchKey.get_by_sobject(sobject, use_id=True)
+                    self.info['sobject'] = sobject.get_sobject_dict()
+                    return sobject
+                if self.expected_revision and current_rev != self.expected_revision:
+                    raise TacticException('Record changed. Reload before saving.')
             self.search_type = sobject.get_search_type()
         elif self.sobject:
             sobject = self.sobject
@@ -320,6 +355,12 @@ class EditMultipleCmd(Command):
         extra_data = jsonloads(extra_data)
         extra_action = self.kwargs.get('extra_action')
         extra_action = jsonloads(extra_action)
+        plans = self.kwargs.get('plans') or []
+        if isinstance(plans, basestring):
+            plans = jsonloads(plans)
+        plan_map = {item.get('search_key'): item.get('expected_revision') for item in plans if isinstance(item, dict)}
+        action = self.kwargs.get('action') or 'save'
+        states = []
         edit_search_keys = []
         from pyasm.web import WebContainer
         web = WebContainer.get_web()
@@ -340,8 +381,11 @@ class EditMultipleCmd(Command):
                 single_web_data = web_data_list[i]
                 web.set_form_value('web_data', single_web_data)
             command_class = getattr(self, 'edit_command_class', EditCmd)
-            cmd = command_class(parent_key=parent_key, connect_key=connect_key, search_key=search_key, view=view, data=data, input_prefix=input_prefix, extra_action=extra_action[i], trigger_mode=trigger_mode, config_xml=config_xml)
+            cmd = command_class(parent_key=parent_key, connect_key=connect_key, search_key=search_key, view=view, data=data, input_prefix=input_prefix, extra_action=extra_action[i], trigger_mode=trigger_mode, config_xml=config_xml, expected_revision=plan_map.get(search_key), action=action)
             cmd.execute()
+            if action == 'check':
+                states.append(cmd.info.get('state', 'conflict'))
+                continue
             sobject = cmd.get_sobject()
             search_key = sobject.get_search_key(use_id=True)
             edit_search_keys.append(search_key)
@@ -352,6 +396,9 @@ class EditMultipleCmd(Command):
                 sk_data_list = []
                 sk_dict[base_search_type] = sk_data_list
             sk_data_list.append((search_key, data))
+        if action == 'check':
+            self.info['state'] = states[0] if len(set(states)) == 1 else 'conflict'
+            return
         self.info['search_keys'] = edit_search_keys
         search_types = list(search_types)
         search_types_label = ', '.join(search_types)

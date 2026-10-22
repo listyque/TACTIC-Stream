@@ -85,11 +85,13 @@ def edit_drop_links(search_type, view, column, parent_key, target_keys=None, exp
     from pyasm.common import Environment
     from pyasm.search import Search, SearchKey, SearchType
     from pyasm.widget import WidgetConfigView
-    if not Environment.get_security().is_admin():
+    from pyasm.biz import Project
+    security = Environment.get_security()
+    if not security.is_admin() and (not security.is_logged_in() or security.get_user_name() == 'admin' or not (
+            Project.get_project_code() in ('admin', 'sthpw') or security.check_access('project', [{'code': '*'}, {'code': Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if action not in ('prepare', 'save', 'check'):
         raise ValueError('Invalid link operation')
-    from pyasm.biz import Project
     if SearchKey.extract_project(parent_key) not in (None, '', Project.get_project_code()):
         raise ValueError('The configured table target belongs to another project')
     if SearchKey.extract_base_search_type(parent_key) != SearchType.get(search_type).get_base_key():

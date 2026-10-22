@@ -441,3 +441,15 @@ assert.equal(
   148,
   'An empty Inspector retains its original card geometry'
 );
+
+for (const language of ['en', 'ru']) {
+  const uncertainFooter = Editor.footer(
+    { mode: 'edit', uncertain: true, busy: false, canSave: false },
+    640,
+    language
+  );
+  validateScene(uncertainFooter);
+  assert.ok(
+    uncertainFooter.nodes.some((node) => node.id === 'sobjectEditorCheck')
+  );
+}

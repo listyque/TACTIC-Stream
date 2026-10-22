@@ -56,3 +56,27 @@ class FormatElementWdg(FormatValueMixin, SimpleTableElementWdg):
         format = self.get_option('format')
         return str(value) if format == 'Checkbox' else self.get_format_value(value, format)
 
+    def evaluate_summary(self, sobjects):
+        calc = self.get_option('total_summary')
+        if calc not in ('count', 'total', 'average'):
+            return ''
+        if not sobjects:
+            return '0'
+        if calc == 'count':
+            return self.get_format_value(len(sobjects), self.get_option('format'))
+        total = 0.0
+        count = 0
+        for sobject in sobjects:
+            raw = sobject.get_value(self.get_name())
+            if raw not in (None, ''):
+                try:
+                    total += float(raw)
+                    count += 1
+                except (ValueError, TypeError):
+                    pass
+        if calc == 'average':
+            total = (total / count) if count else 0.0
+        if self.get_option('type') == 'integer' and calc == 'total':
+            total = int(round(total))
+        return self.get_format_value(total, self.get_option('format'))
+

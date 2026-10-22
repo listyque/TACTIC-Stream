@@ -198,3 +198,93 @@ class StageOneCells(unittest.TestCase):
         button=ButtonElementWdg(name='take',script_path='episodes/take_episode')
         button.set_sobjects([parent]);button.preprocess();button.set_current_index(0)
         self.assertEqual(button.get_cell_value()['scriptLanguage'],'javascript')
+
+
+    def test_catalogue_summary_filename_and_nested_gear_options(self):
+        from pyasm.widget.table_element_wdg import SearchTypeElementWdg
+        from tactic.ui.table.expression_element_wdg import ExpressionElementWdg
+        from tactic.ui.table.format_element_wdg import FormatElementWdg
+        from tactic.ui.table.nested_scope import nested_cell
+        rows=[Search.get_by_code('contract/entity','A'),Search.get_by_code('contract/entity','B')]
+        fmt=FormatElementWdg(name='id',format='float',total_summary='total')
+        fmt.set_sobjects(rows)
+        self.assertEqual(fmt.evaluate_summary(rows),sum(float(row.get_value('id')) for row in rows))
+        avg=FormatElementWdg(name='id',format='integer',total_summary='average')
+        self.assertEqual(round(avg.evaluate_summary(rows),4),round(sum(float(row.get_value('id')) for row in rows)/len(rows),4))
+        cnt=FormatElementWdg(name='id',total_summary='count')
+        self.assertEqual(cnt.evaluate_summary(rows),2)
+        expr=ExpressionElementWdg(name='summary',expression='@COUNT(contract/entity)',bottom='@COUNT(contract/entity)',group_bottom='@COUNT(contract/entity)')
+        self.assertEqual(str(expr.evaluate_summary(rows,'bottom')),'2')
+        self.assertEqual(str(expr.evaluate_summary(rows,'group_bottom')),'2')
+        stype_wdg=SearchTypeElementWdg(name='search_type',filename='true')
+        _,tasks=self.configure_tasks()
+        stype_wdg.set_sobject(tasks[0])
+        self.assertIn('(sthpw/task' if 'sthpw/task' in stype_wdg.get_cell_value()['text'] else '(contract/entity',stype_wdg.get_cell_value()['text'])
+        desc=nested_cell(rows[0].get_search_key(),dict(dynamic_class='tactic.ui.panel.FastTableLayoutWdg',search_type='sthpw/task',view='table',show_gear='true'))['nestedTable']
+        self.assertTrue(desc['gear'])
+        desc_off=nested_cell(rows[0].get_search_key(),dict(dynamic_class='tactic.ui.panel.FastTableLayoutWdg',search_type='sthpw/task',view='table',show_gear='false'))['nestedTable']
+        self.assertFalse(desc_off['gear'])
+        cell_meta=describe_cell(dict(name='id',display=dict(handler='tactic.ui.table.FormatElementWdg',options=dict(format='integer',total_summary='total')),action=dict(handler='',options={})),{'id':dict()})
+        self.assertTrue(cell_meta['supported'])
+        self.assertEqual(cell_meta['summary'],'total')
+
+    def test_ordinary_user_acl_guards_table_reads_and_mutations(self):
+        from tactic_stream.server.interface import _require_table_access, read_form
+        from tactic.ui.table.table_edit import TableCellEditCmd
+        from tactic.ui.table.nested_scope import read_nested_scope
+        key=Search.get_by_code('contract/entity','A').get_search_key()
+        def make_security(project_access='view',stype_access='view',elem_access='edit'):
+            def check_access(category,code,access,default='allow',is_match=False,**kwargs):
+                if category=='project':return project_access in ('allow','view','edit')
+                if category=='search_type':return (stype_access==access) if is_match else (True if access=='view' and stype_access in ('view','edit','allow') else stype_access in ('edit','allow'))
+                if category=='element':return (elem_access==access) if is_match else (True if access=='view' and elem_access in ('view','edit','allow') else elem_access in ('edit','allow'))
+                return True
+            return SimpleNamespace(is_admin=lambda:False,is_logged_in=lambda:True,get_user_name=lambda:'artist',check_access=check_access,alter_search=lambda s:None,check_security=lambda:True)
+        with patch('tactic_stream.server.interface.Environment.get_user_name',return_value='artist'),patch('tactic_stream.server.interface.Environment.get_security',return_value=make_security(project_access='deny')):
+            with self.assertRaises(SecurityException):_require_table_access('contract/entity','view')
+        with patch('tactic_stream.server.interface.Environment.get_user_name',return_value='artist'),patch('tactic_stream.server.interface.Environment.get_security',return_value=make_security(project_access='view',stype_access='view',elem_access='view')):
+            self.assertFalse(_require_table_access('contract/entity','view'))
+            with self.assertRaises(SecurityException):_require_table_access('contract/entity','edit')
+            with self.assertRaises(SecurityException):read_form('contract/entity','edit',key)
+        with patch('pyasm.common.Environment.get_user_name',return_value='artist'),patch('pyasm.common.Environment.get_security',return_value=make_security(project_access='view',stype_access='view')):
+            scope=read_nested_scope(key,'sthpw/task','table')
+            self.assertEqual(scope['searchType'],'sthpw/task')
+        with patch('pyasm.common.Environment.get_user_name',return_value='artist'),patch('pyasm.common.Environment.get_security',return_value=make_security(project_access='view',stype_access='edit',elem_access='view')):
+            with self.assertRaisesRegex(ValueError,'read-only|no inline editor'):
+                TableCellEditCmd(search_type='contract/entity',view='table',column='name',search_keys=[key],action='prepare').execute()
+
+    def test_form_revision_retired_guard_and_check_action(self):
+        from pyasm.common import TacticException
+        from tactic.core.edit_commands import EditCmd, EditMultipleCmd
+        from tactic.ui.table.record_actions import TableObjectStatusCmd
+        from tactic_stream.server.interface import read_form
+        obj=Search.get_by_code('contract/entity','A')
+        key=obj.get_search_key()
+        form=read_form('contract/entity','edit',key)
+        rev=form['expected_revision']
+        self.assertTrue(isinstance(rev,str) and len(rev)==64)
+        unchanged=EditCmd(search_key=key,view='edit',input_prefix='edit',action='check',expected_revision=rev,data={'name':'Updated Name'})
+        unchanged.execute()
+        self.assertEqual(unchanged.info['state'],'unchanged')
+        with self.assertRaisesRegex(TacticException,'Record changed'):
+            write(lambda:EditCmd(search_key=key,view='edit',input_prefix='edit',expected_revision='0'*64,data={'name':'Stale'}).execute())
+        write(lambda:EditCmd(search_key=key,view='edit',input_prefix='edit',expected_revision=rev,data={'name':'Updated Name'}).execute())
+        saved_check=EditCmd(search_key=key,view='edit',input_prefix='edit',action='check',expected_revision=rev,data={'name':'Updated Name'})
+        saved_check.execute()
+        self.assertEqual(saved_check.info['state'],'saved')
+        conflict_check=EditCmd(search_key=key,view='edit',input_prefix='edit',action='check',expected_revision=rev,data={'name':'Other Name'})
+        conflict_check.execute()
+        self.assertEqual(conflict_check.info['state'],'conflict')
+        current_rev=read_form('contract/entity','edit',key)['expected_revision']
+        multi_check=EditMultipleCmd(search_keys=[key],view='edit',input_prefix='edit',action='check',plans=[dict(search_key=key,expected_revision=current_rev)],update_data='[{"name":"Updated Name"}]',extra_data='[{}]',extra_action='[{}]')
+        multi_check.execute()
+        self.assertEqual(multi_check.info['state'],'saved')
+        write(lambda:TableObjectStatusCmd(search_key=key,action='retire',expected_revision=current_rev).execute())
+        with self.assertRaisesRegex(ValueError,'Retired records cannot be edited'):
+            read_form('contract/entity','edit',key)
+        with self.assertRaisesRegex(TacticException,'Retired records cannot be edited'):
+            write(lambda:EditCmd(search_key=key,view='edit',input_prefix='edit',data={'name':'Blocked'}).execute())
+        from pyasm.widget.table_element_wdg import UpdateWdg
+        upd=UpdateWdg();upd.set_sobject(Search.get_by_search_key(key))
+        write(lambda:TableObjectStatusCmd(search_key=key,action='reactivate',expected_revision=upd.get_cell_value()['expectedRevision']).execute())
+        write(lambda:EditCmd(search_key=key,view='edit',input_prefix='edit',data={'name':'Alpha'}).execute())

@@ -10,7 +10,7 @@ def read_dependency_node(search_key, offset=0, limit=50, expected_revision='', f
     from pyasm.common import Environment, UserException, Xml
     from pyasm.search import Search, SearchKey
 
-    if not Environment.get_security().is_admin():
+    if not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_admin() and (not __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().is_logged_in() or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().get_user_name() == 'admin' or not (__import__('pyasm.biz', fromlist=['Project']).Project.get_project_code() in ('admin', 'sthpw') or __import__('pyasm.common', fromlist=['Environment']).Environment.get_security().check_access('project', [{'code': '*'}, {'code': __import__('pyasm.biz', fromlist=['Project']).Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     project = Project.get_project_code()
     if not isinstance(search_key, str) or SearchKey.extract_project(search_key) not in (None, '', 'sthpw', 'admin', project):

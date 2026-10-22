@@ -37,6 +37,7 @@ const props = defineProps({
   views: Array,
   closedGroups: Object,
   expandedRows: { type: Object, default: () => ({}) },
+  cells: { type: Object, default: () => ({}) },
   accent: { type: String, default: 'var(--primary)' }
 });
 const emit = defineEmits([
@@ -195,6 +196,40 @@ const entries = computed(() => {
         });
         offset += 320;
       }
+    }
+    if (group.label && group.records?.length) {
+      const groupSummary = Host.summarize(
+        columns.value,
+        group.records,
+        props.cells,
+        'group_bottom'
+      );
+      if (groupSummary.hasSummary) {
+        rows.push({
+          summary: groupSummary.values,
+          key: 'group-summary:' + group.key,
+          top: offset,
+          height: 36
+        });
+        offset += 36;
+      }
+    }
+  }
+  if (records.value.length) {
+    const tableSummary = Host.summarize(
+      columns.value,
+      records.value,
+      props.cells,
+      'bottom'
+    );
+    if (tableSummary.hasSummary) {
+      rows.push({
+        summary: tableSummary.values,
+        key: 'table-summary',
+        top: offset,
+        height: 38
+      });
+      offset += 38;
     }
   }
   return rows;
@@ -617,7 +652,7 @@ defineExpose({ viewport });
         :aria-selected="!!entry.record && selectedKeys?.includes(entry.key)"
         :class="{
           selected: selectedKeys?.includes(entry.key),
-          'group-row': !!entry.group
+          'group-row': !!entry.group || !!entry.summary
         }"
         :style="{ top: entry.top + 'px', height: entry.height + 'px' }"
         :draggable="!!entry.record && !readOnly"
@@ -684,6 +719,19 @@ defineExpose({ viewport });
           }}
           <small>{{ entry.group.records.length }}</small></AppButton
         >
+        <template v-else-if="entry.summary">
+          <div class="handler-table-selection" role="gridcell" />
+          <div
+            v-for="(column, index) in columns"
+            :key="column.name"
+            class="handler-table-cell"
+            role="gridcell"
+            :class="{ 'first-column': index === 0 }"
+          >
+            <strong>{{ entry.summary[column.name] || '' }}</strong>
+          </div>
+          <div class="handler-table-actions" role="gridcell" />
+        </template>
         <template v-else>
           <div class="handler-table-selection" role="gridcell">
             <AppCheckbox

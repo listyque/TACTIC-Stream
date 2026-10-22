@@ -10,7 +10,7 @@ def read_summary_cell(search_key):
     from pyasm.common import Environment
     from pyasm.search import Search, SearchKey
 
-    if not Environment.get_security().is_admin():
+    if not Environment.get_security().is_admin() and (not Environment.get_security().is_logged_in() or Environment.get_security().get_user_name() == 'admin' or not (Project.get_project_code() in ('admin', 'sthpw') or Environment.get_security().check_access('project', [{'code': '*'}, {'code': Project.get_project_code()}], 'allow', default='deny'))):
         raise PermissionError('Administration requires administrator access')
     if SearchKey.extract_project(search_key) not in (None, '', 'sthpw', 'admin', Project.get_project_code()):
         raise ValueError('The configured table target belongs to another project')

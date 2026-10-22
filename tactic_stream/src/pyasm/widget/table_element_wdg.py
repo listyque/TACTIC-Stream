@@ -174,7 +174,7 @@ class SearchTypeElementWdg(BaseTableElementWdg):
             title = SearchType.get(value).get_title()
         except SearchException:
             title = '--'
-        return {'text': str(title)}
+        return {'text': f'{title} ({value})' if self.get_option('filename') in (True, 'true') and title != '--' and value else str(title)}
 
 
 class SimpleTableElementWdg(BaseTableElementWdg):

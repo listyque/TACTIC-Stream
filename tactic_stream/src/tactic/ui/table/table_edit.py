@@ -4,8 +4,7 @@ import json
 
 from pyasm.command import Command
 from pyasm.search import Search, SearchType
-from pyasm.security.security import _require_admin
-from tactic_stream.server.interface import read_interface, read_form
+from tactic_stream.server.interface import _require_table_access, read_interface, read_form
 from tactic_stream.server.object_operations import selected_objects
 from tactic.ui.panel import EditCmd
 from pyasm.web import Web, WebContainer
@@ -13,11 +12,11 @@ from pyasm.web import Web, WebContainer
 
 class TableCellEditCmd(Command):
     def check_security(self):
-        _require_admin()
+        _require_table_access(self.kwargs.get('search_type'), 'edit')
         return True
 
     def execute(self):
-        _require_admin()
+        _require_table_access(self.kwargs.get('search_type'), 'edit')
         search_type = self.kwargs.get('search_type')
         view = self.kwargs.get('view', 'table')
         column = self.kwargs.get('column')

@@ -109,12 +109,14 @@ class NestedTables(unittest.TestCase):
     def test_used_display_flags_and_initial_render_hint_are_validated(self):
         parent = Search.get_by_code('contract/entity', 'A')
         value=nested_cell(parent.get_search_key(),dict(show_select='false',show_shelf='false',
-            show_search='false',show_search_limit='false',init_load_num='500'))['nestedTable']
+            show_search='false',show_search_limit='false',show_gear='false',init_load_num='500'))['nestedTable']
         self.assertFalse(value['selection'])
         self.assertFalse(value['shelf'])
         self.assertFalse(value['search'])
         self.assertFalse(value['searchLimit'])
-        for options in (dict(init_load_num='no'),dict(show_shelf='yes'),dict(show_gear='true')):
+        self.assertFalse(value['gear'])
+        self.assertTrue(nested_cell(parent.get_search_key(),dict(show_gear='true'))['nestedTable']['gear'])
+        for options in (dict(init_load_num='no'),dict(show_shelf='yes'),dict(show_gear='yes')):
             with self.subTest(options=options),self.assertRaises(ValueError):
                 nested_cell(parent.get_search_key(),options)
 

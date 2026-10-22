@@ -248,6 +248,7 @@ export default {
         this.draft = this.batchSource;
       } else if (event.type === 'refresh') this.openAgain();
       else if (event.type === 'cancel') this.cancel();
+      else if (event.type === 'check') this.save(true);
       else if (event.type === 'submit') {
         if (this.createBatch && this.batchIndex < 0) this.previewBatch();
         else this.save();
@@ -558,7 +559,7 @@ export default {
       this.uncertain = false;
       this.$refs.dialog.close();
     },
-    async save() {
+    async save(checkOnly = false) {
       if (this.createBatch) {
         await this.saveCreationBatch();
         return;
@@ -568,7 +569,7 @@ export default {
         !this.contextValid ||
         this.loading ||
         this.saving ||
-        this.uncertain ||
+        (this.uncertain && !checkOnly) ||
         this.blocked ||
         !this.fieldsToSave.length
       )
@@ -637,13 +638,18 @@ export default {
           )
           .map((field) => field.name)
       };
+      if (this.definition.expected_revision)
+        args.expected_revision = this.definition.expected_revision;
+      if (checkOnly) args.action = 'check';
       if (this.definition.parent_key)
         args.parent_key = this.definition.parent_key;
       if (this.definition.connect_key)
         args.connect_key = this.definition.connect_key;
       if (this.batch) {
         delete args.search_key;
+        delete args.expected_revision;
         args.search_keys = this.definition.search_keys;
+        if (this.definition.plans) args.plans = this.definition.plans;
         args.update_data = JSON.stringify(
           args.search_keys.map(() =>
             Object.fromEntries(
@@ -719,7 +725,7 @@ export default {
             instance_parent_key: this.instanceRelation.parent_key,
             path: this.instanceRelation.path
           });
-        await rpc('execute_cmd', [
+        const response = await rpc('execute_cmd', [
           this.context,
           this.instanceRelation
             ? 'tactic.command.sobject_link_cmd.SObjectLinkCmd'
@@ -730,6 +736,24 @@ export default {
           values
         ]);
         if (request !== this.request || !this.contextValid) return;
+        if (checkOnly) {
+          const state = response?.info?.state;
+          if (state === 'saved') {
+            this.definition = null;
+            this.draft = this.baseline = {};
+            this.files = {};
+            this.uncertain = false;
+            this.$refs.dialog.close();
+            this.$emit('saved');
+          } else if (state === 'unchanged') {
+            this.uncertain = false;
+            this.error = 'Changes were not saved. You can save again.';
+          } else {
+            this.error =
+              'Record changed on the server. Close or refresh before saving.';
+          }
+          return;
+        }
         this.definition = null;
         this.draft = this.baseline = {};
         this.files = {};

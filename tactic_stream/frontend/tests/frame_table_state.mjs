@@ -379,3 +379,30 @@ assert.equal(
   Nested.identity({ searchType: 'x', parentKey: 'A' }, 'demo'),
   Nested.identity({ projectCode: 'demo', searchType: 'x', parentKey: 'A' })
 );
+
+const nestedWithGear = Nested.describe(
+  { ...nestedModel, shelf: true, gear: true, administration: true },
+  320,
+  320,
+  'en'
+);
+assert.ok(nestedWithGear.nodes.some((node) => node.id === 'nestedColumns'));
+validateScene(nestedWithGear, { rows: nestedRows }, { filter: '' });
+
+const summaryRow = Host.summarize(
+  [
+    { name: 'id', cell: { summary: 'total' } },
+    { name: 'code', cell: { summary: 'count' } },
+    { name: 'score', cell: { summary: 'average' } }
+  ],
+  [
+    { __search_key__: 'A', id: 10, code: 'A', score: 2 },
+    { __search_key__: 'B', id: 20, code: 'B', score: 4 }
+  ],
+  {},
+  'bottom'
+);
+assert.equal(summaryRow.hasSummary, true);
+assert.equal(summaryRow.values.id, '30');
+assert.equal(summaryRow.values.code, '2');
+assert.equal(summaryRow.values.score, '3');

@@ -674,3 +674,12 @@ the `test_columns_table_view.py` config stubs, registering `FileInput` /
 `AppFileInput` in `element_catalog.json`, and synchronizing programmatic scroll
 events in `checkin.mjs`; `tools/frame_table/report.py` validated current source
 fingerprints cleanly.
+
+
+### Stage 1.5 (`L07b`) & Stage 1 (`B07`) final acceptance (.186/.133)
+
+- **Catalogue options & summaries**: `FormatElementWdg` (`total_summary`: `count`, `total`, `average`), `ExpressionElementWdg` (`bottom`, `group_bottom`, `inline_styles`, `rowcss_background-color`), `SearchTypeElementWdg` (`filename`), `SimpleTableElementWdg` (`css_background`, `css_background-color`, `rowcss_background-color`), and `ThumbWdg` (`redirect`, `redirect_expr`) are supported and projected into group and bottom summary rows in both engines (`features/table/host.ui.mjs`, `TableView.vue`, `ConfiguredView.vue`, `SearchResultTable.qml`).
+- **Nested column authoring (`show_gear`)**: `nested_scope.py`, `tactic_query.py`, `nested.ui.mjs`, `NestedTable.vue`, `ConfiguredView.vue`, and `TH/thlib/ui/table/nested.py` wire `show_gear` (`nestedColumns`) to open the scoped Columns Editor for administrators.
+- **Ordinary-user ACL vs administrator tools**: `_require_table_access` in `interface.py` and the self-contained table procedures (`read_nested_scope`, `read_dependency_node`, `read_connection_cells`, `remove_connection`, `edit_parent_group`, `read_parent_cells`, `append_snapshot_files`, `read_snapshot_files`, `edit_drop_links`, `read_summary_cell`) enforce project, `search_type`, and `element` permissions for authenticated non-admin users while keeping `read_group_summary`, `read_custom_layout`, and `ColumnsEditor` admin-only.
+- **Form revisions, retired record guard, and uncertain save recovery**: `read_form`, `EditCmd`, `EditMultipleCmd`, `RecordForm.vue`, `SObjectFieldEditor.qml`, and `sobject_editor.py` enforce `expected_revision` before writing, reject editing retired records (`Retired records cannot be edited. Reactivate the record first.`), and expose `Check saved changes` (`sobjectEditorCheck` / `action='check'`) when a network error leaves the save outcome unknown.
+- **Explicit remaining unsupported configs**: Only the 4 unresolved legacy `CustomLayout` references (`asset_panel_wdg`, `asset_cost_breakdown`, `inline_add_item`, bare `custom_col`) and `include_submission=true` remain explicitly rejected; the 30 `pyasm.prod`/3D/Maya/Flash classes and 3 unfinished source widgets (`WikiElementWdg`, `PublishElementWdg`, `SnapshotServerElementWdg`) remain excluded. Stage 1 (`B07`) is closed.

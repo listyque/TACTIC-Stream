@@ -8,6 +8,7 @@ from pyasm.biz import Project
 from pyasm.common import SecurityException
 from pyasm.search import Search, SearchKey, SearchType
 from pyasm.security.security import _require_admin
+from tactic_stream.server.interface import _require_table_access
 from pyasm.widget import ArrayTableElementWdg, ThumbWdg, WidgetConfigView, XmlWdg
 from pyasm.widget.discussion_wdg import DiscussionWdg as LegacyDiscussionWdg
 from pyasm.widget.task_wdg import SObjectTaskTableElement, TaskParentSpacingTableElement
@@ -347,9 +348,14 @@ def describe_cell(element, columns, search_type=""):
         height = str(options.get("height", "300")).removesuffix("px")
         supported = supported and height.isdecimal() and 1 <= int(height) <= 600
     elif widget is FormatElementWdg:
-        allowed |= {"type", "format", "fps", "timezone", "justify", "constraint"}
+        allowed |= {"type", "format", "fps", "timezone", "justify", "constraint", "total_summary"}
+        supported = supported and options.get("total_summary") in (None, "", "count", "total", "average")
     elif widget is LinkElementWdg:
         allowed.add("icon")
+    elif widget is SearchTypeElementWdg:
+        allowed.add("filename")
+    elif widget is SimpleTableElementWdg:
+        allowed |= {"css_background", "css_background-color", "rowcss_background-color"}
     elif widget is ExpressionElementWdg:
         allowed |= {
             "expression",
@@ -367,6 +373,10 @@ def describe_cell(element, columns, search_type=""):
             "group_by_time",
             "justify",
             "empty",
+            "bottom",
+            "group_bottom",
+            "inline_styles",
+            "rowcss_background-color",
         }
         supported = supported and options.get("mode", "value") in (
             "",
@@ -387,6 +397,8 @@ def describe_cell(element, columns, search_type=""):
             "original",
             "protocol",
             "image_link_order",
+            "redirect",
+            "redirect_expr",
         }
         # Handler uses its shared circular preview, independent of legacy HTML sizing.
         allowed |= {
@@ -511,6 +523,9 @@ def describe_cell(element, columns, search_type=""):
         supported=bool(supported),
         sort_field=sort_field,
         sortable=bool(sortable),
+        summary=str(options.get("total_summary") or "") if widget is FormatElementWdg else ("total" if widget in (WorkHoursElementWdg, WeekTableElement) else ""),
+        bottom=str(options.get("bottom") or "") if widget is ExpressionElementWdg else "",
+        group_bottom=str(options.get("group_bottom") or "") if widget is ExpressionElementWdg else "",
         server=bool(
             supported
             and (
@@ -557,7 +572,7 @@ def safe_link(value):
 
 
 def read_table_cells(search_type, view, search_keys):
-    _require_admin()
+    _require_table_access(search_type, 'view')
     policy = SearchType.get(search_type).get_record_read_options()
     if policy.get("command"):
         from pyasm.common import Container

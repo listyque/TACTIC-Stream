@@ -1,13 +1,12 @@
 """Native object selections and relationships, using TACTIC's schema and commands."""
 from pyasm.command import Command
 from pyasm.search import Search, SearchKey, SearchType
-from pyasm.security.security import _require_admin
 from tactic.ui.tools import DeleteCmd
-from tactic_stream.server.interface import read_interface
+from tactic_stream.server.interface import _require_table_access, read_interface
 
 
 def selected_objects(search_type, search_keys):
-    _require_admin()
+    _require_table_access(search_type, 'view')
     if isinstance(search_keys, str):
         search_keys = [search_keys]
     if not isinstance(search_keys, list) or not 1 <= len(search_keys) <= 500 or any(not isinstance(key, str) or not key for key in search_keys):

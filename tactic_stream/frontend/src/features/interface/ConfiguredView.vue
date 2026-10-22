@@ -2234,6 +2234,7 @@ export default {
           :views="tableViews"
           :closed-groups="closedGroups"
           :expanded-rows="expandedTables"
+          :cells="displayCells"
           :sort-field="activeSortField"
           :sort-direction="activeSortDirection"
           :group-mode="tableState.table?.groupMode || groupMode"
@@ -2271,6 +2272,7 @@ export default {
               @inspect="$emit('inspect', $event)"
               @action="tableAction"
               @cell-event="nestedCellEvent"
+              @column="$emit('column', $event)"
             />
           </template>
           <template #cell="{ record, column: element, height }">
