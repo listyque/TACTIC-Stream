@@ -30,8 +30,10 @@ and [установка Windows-комплекта](WINDOWS_DELIVERY.ru.md).
 Upgrade 0.112.192 to 0.112.193, independent cold restoration and rollback passed
 on SQLite and PostgreSQL fixtures, including native Handler profiles and repository
 bytes. An offline restoration trial of the existing local data also passed.
-See [recovery acceptance and procedure](RECOVERY_ACCEPTANCE.md). Clean Windows VM,
-legacy project migration and complete GUI acceptance remain L12 requirements.
+The Windows ZIP also passed first installation, login/SDK/restart/shutdown and
+native Handler offline/software-renderer smoke on fresh Windows 11 build 26300.
+See [recovery acceptance and procedure](RECOVERY_ACCEPTANCE.md). Legacy project
+migration and complete GUI acceptance remain L12 requirements.
 
 ## Целевая поставка
 

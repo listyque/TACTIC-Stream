@@ -4,7 +4,8 @@ The x64 package contains `TACTIC Stream.exe` (Electron), Python 3.14.9,
 SQLite, Stream and the native Handler with its pinned PySide6 dependency.
 No system Python, Node.js or checkout is required. Extract the entire ZIP
 to a writable local directory; keep its runtime, resources and licenses together.
-The EXE is not signed. Clean Windows VM acceptance remains pending.
+The EXE is not signed. Fresh Windows 11 Enterprise Evaluation (build 26300) acceptance
+passed; see [L12 evidence and scope](RECOVERY_ACCEPTANCE.md).
 
 Run `TACTIC Stream.exe`. On first launch the native installer opens a console
 and asks for a new administrator password. No default password is shipped.
@@ -38,8 +39,9 @@ bundle and a matching pre-upgrade data backup for restoration.
 Upgrade 0.112.192 to 0.112.193, before/after backups, independent restoration and
 rollback passed on isolated fixtures. An offline copy of the existing local dataset
 also passed content/integrity checks. See [recovery procedure and acceptance](RECOVERY_ACCEPTANCE.md).
-Clean Windows and legacy project migration remain L12 work. The previous Windows
-EXE did not exist; previous-version SQLite acceptance starts from the delivered wheel.
+Clean Windows installation/startup passed; legacy project migration and full GUI
+acceptance remain L12 work. The previous Windows EXE did not exist; previous-version
+SQLite acceptance starts from the delivered wheel.
 
 Build from the development checkout with Python 3.14 on Windows x64:
 

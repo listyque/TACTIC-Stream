@@ -154,8 +154,34 @@ remain in `C:\L12\Work`; closing Sandbox discards guest data. A missing/failed r
 is not a passed clean-machine check. Sandbox configuration follows the
 [Microsoft configuration contract](https://learn.microsoft.com/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-configure-using-wsb-file).
 
-At this checkpoint Sandbox is not installed, the process is not an administrator,
-Hyper-V enumeration was denied by Windows, and the available VMware VM is Ubuntu.
-The connected Desktop Commander device is offline. Enabling Sandbox/UAC and any
-reboot, or access to a clean Windows VM/PC, require the user's response. The prepared
-kit does not enable Windows components or reboot the working machine.
+The published **0.112.193 ZIP passed on a fresh Windows 11 Enterprise Evaluation
+10.0.26300 installation** in an owned VMware Workstation 17.6.3 VM. The official
+[Microsoft evaluation download](https://www.microsoft.com/en-us/evalcenter/download-windows-11-enterprise)
+provided the 26H2 build 26300.9457 image; the extracted Microsoft `setup.exe` signature
+was valid. The downloaded ISO SHA-256 (recorded, not compared with a published
+Microsoft checksum) is `bc3f24086ebadc94489066b5ad78089e2cf5c3491e90e790bb81a2b199c10e38`.
+
+The new 64 GB virtual disk had no project data. UEFI/Secure Boot and a virtual TPM
+were enabled; networking, shared folders, clipboard and 3D acceleration were disabled.
+No Python, Node, VMware Tools, runtime installer or package download was added to
+the guest. Windows exposed its Python Store execution alias; actual checks used only
+bundled Python 3.14.9 and Electron/Node. Inputs arrived on a separate read-only DVD,
+results through the VM serial pipe. The runner test body was byte-identical to the
+versioned Sandbox runner; only its guest identity guard and report kind changed for
+`L12Acceptance` / `TS-L12-CLEAN` / VMware. Their hashes are recorded in
+`L12_RECOVERY_ACCEPTANCE_2026-10-24.json`.
+
+Embedded Python/Qt 6.11.1 isolation, native first-password console, Electron login,
+12 Handler SDK scenarios, persisted session/localStorage, restart and complete owned
+monitor/worker shutdown passed. The final 7113-file program inventory matched the
+manifest exactly. Native Handler passed its offline startup smoke with the software
+renderer; this does not certify GPU rendering or its full interactive GUI.
+The VM shut down and no VM remained running. VMware refused authentication for the
+encrypted-VM snapshot operation, so no pristine snapshot was created; the check ran
+on the newly installed system itself.
+
+Evidence: `.test-tmp/l12-clean-windows-193.json` and `l12-clean-windows-193.png`; the
+aggregate result and provenance are versioned in `L12_RECOVERY_ACCEPTANCE_2026-10-24.json`.
+Sandbox itself was not run. No host Windows component, UAC elevation or reboot was
+needed. Legacy project migration, full installed GUI acceptance and the final release
+gate remain open L12 items.
