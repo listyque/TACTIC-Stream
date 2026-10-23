@@ -9845,7 +9845,11 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 0,
 					"data-frame": node.id,
 					class: normalizeClass(["frame-node frame-box", { "frame-titlebar": node.titlebar }]),
-					style: normalizeStyle(Object.assign(style(node), background(node), { "--frame-titlebar-actions-right": (node.chromeRight || 0) + "px" })),
+					style: normalizeStyle(Object.assign(style(node), background(node), {
+						"--frame-titlebar-actions-right": (node.chromeRight || 0) + "px",
+						"--frame-titlebar-actions-top": node.chromeTop !== void 0 ? node.chromeTop + "px" : void 0,
+						"--frame-titlebar-actions-height": node.chromeHeight !== void 0 ? node.chromeHeight + "px" : void 0
+					})),
 					role: node.role,
 					"aria-label": node.label,
 					onContextmenu: ($event) => context($event, node),

@@ -284,12 +284,29 @@ section.frame-host {
   padding: 0;
   border: 0;
 }
-.frame-titlebar > .frame-view > .app-window-controls {
+.frame-titlebar > .frame-view > .app-window-controls,
+.frame-titlebar > .app-window-controls {
   position: absolute;
   right: var(--frame-titlebar-actions-right);
-  top: 0;
-  height: 100%;
+  top: var(--frame-titlebar-actions-top, 0);
+  height: var(--frame-titlebar-actions-height, 100%);
   margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.frame-titlebar .app-window-controls .app-button {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  --ripple-inset: 0px;
+}
+.frame-titlebar .app-window-controls .app-button > .app-icon {
+  width: var(--frame-button-icon-size, 18px);
+  height: var(--frame-button-icon-size, 18px);
+  font-size: var(--frame-button-icon-size, 18px);
 }
 dialog.frame-dialog,
 dialog.frame-dialog.app-window {

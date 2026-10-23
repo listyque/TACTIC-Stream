@@ -34,7 +34,7 @@
   color: var(--muted);
   font-size: var(--text-caption);
 }
-.notes-panel .note-entry {
+.notes-panel .note-entry:not(.shared-note-entry) {
   position: relative;
   width: min(560px, calc((100% - 20px) * 0.82));
   margin: 0 0 8px 10px;
@@ -43,12 +43,12 @@
   border-radius: 14px;
   background: var(--surface-high);
 }
-.notes-panel .note-entry.own {
+.notes-panel .note-entry:not(.shared-note-entry).own {
   margin-left: auto;
   margin-right: 10px;
   background: var(--hover);
 }
-.notes-panel .note-entry.status-entry {
+.notes-panel .note-entry:not(.shared-note-entry).status-entry {
   margin-left: 34px;
   padding-left: 52px;
   border-radius: 14px;
@@ -59,7 +59,7 @@
     transparent
   );
 }
-.notes-panel .note-entry header {
+.notes-panel .note-entry:not(.shared-note-entry) header {
   flex-wrap: nowrap;
 }
 .notes-panel .note-author {
@@ -318,6 +318,9 @@
   min-height: 80px;
   max-height: none;
   margin: 6px 8px 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
   overscroll-behavior: contain;
   position: relative;
 }
@@ -330,7 +333,7 @@
   margin: 0;
   font-size: var(--text-body);
 }
-.notes-panel .note-entry header {
+.notes-panel .note-entry:not(.shared-note-entry) header {
   margin-bottom: 3px;
   gap: 7px;
 }
@@ -461,7 +464,7 @@
     flex: 1;
     min-height: 0;
   }
-  .notes-panel .note-entry {
+  .notes-panel .note-entry:not(.shared-note-entry) {
     width: calc(100% - 16px);
     max-width: 560px;
     margin-left: 8px;
@@ -472,14 +475,14 @@
   .notes-panel .note-author .user-identity .image-picker-preview {
     display: none;
   }
-  .notes-panel .note-entry.own {
+  .notes-panel .note-entry:not(.shared-note-entry).own {
     margin-right: 8px;
   }
-  .notes-panel .note-entry.status-entry {
+  .notes-panel .note-entry:not(.shared-note-entry).status-entry {
     margin-left: 8px;
     padding-left: 8px;
   }
-  .notes-panel .note-entry header {
+  .notes-panel .note-entry:not(.shared-note-entry) header {
     flex-wrap: wrap;
   }
   .notes-panel .note-body {

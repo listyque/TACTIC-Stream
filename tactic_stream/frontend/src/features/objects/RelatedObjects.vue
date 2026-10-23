@@ -645,7 +645,7 @@ export default {
     },
     display(value) {
       return value == null
-        ? 'вЂ”'
+        ? '–'
         : typeof value === 'object'
           ? JSON.stringify(value)
           : String(value);
@@ -726,7 +726,7 @@ export default {
       @drop="transferLinks"
       @more="loadAvailable(true)"
     />
-    <p v-if="busy && !linking" role="status">{{ t('Loading dataвЂ¦') }}</p>
+    <p v-if="busy && !linking" role="status">{{ t('Loading data…') }}</p>
     <p
       v-else-if="!linking && relation && !relation.available && !definition"
       class="notice"

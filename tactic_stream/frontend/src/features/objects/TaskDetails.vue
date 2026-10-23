@@ -45,6 +45,23 @@ const assigned = computed(
     props.editor.users.find((user) => user.value === values.value.assigned)
       ?.displayName || values.value.assigned
 );
+const processLabel = computed(
+  () =>
+    props.processTitle ||
+    props.editor?.processes?.find(
+      (item) => item.value === (props.editor?.process || props.draft?.process)
+    )?.label ||
+    props.editor?.process ||
+    props.draft?.process ||
+    ''
+);
+const taskTitle = computed(() => {
+  const context = (props.editor?.task_context || '').trim();
+  if (context && context !== props.editor?.process) {
+    return context;
+  }
+  return t('{process} task', { process: processLabel.value });
+});
 const quickModel = computed(() => {
   const field = (name) =>
     props.editor.fields.find((field) => field.name === name);
@@ -52,14 +69,9 @@ const quickModel = computed(() => {
     hasTask: !!props.editor.selected_task,
     canCreate: props.editor.process_available,
     canEdit: !!props.editor.selected_task || props.editor.process_available,
-    title: props.editor.selected_task
-      ? props.editor.task_context &&
-        props.editor.task_context !== props.editor.process
-        ? props.editor.task_context
-        : t('{process} task', { process: props.processTitle })
-      : '',
-    processLabel: props.processTitle,
-    assignedLabel: assigned.value,
+    title: taskTitle.value,
+    processLabel: processLabel.value,
+    assignedLabel: assigned.value || t('Not assigned'),
     dirty: props.dirty,
     busy: props.busy,
     status: values.value.status,
@@ -110,14 +122,8 @@ function event(action) {
     />
     <header v-else>
       <div class="inspector-task-caption">
-        <strong>{{
-          editor.selected_task
-            ? editor.task_context && editor.task_context !== editor.process
-              ? editor.task_context
-              : t('{process} task', { process: processTitle })
-            : t('No task for {process}', { process: processTitle })
-        }}</strong
-        ><small v-if="editor.selected_task && assigned">{{ assigned }}</small>
+        <strong>{{ taskTitle }}</strong
+        ><small>{{ assigned || t('Not assigned') }}</small>
       </div>
       <div class="configuration-actions">
         <AppButton

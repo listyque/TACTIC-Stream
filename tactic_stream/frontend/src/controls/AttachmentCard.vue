@@ -42,15 +42,19 @@ const imageAttachment = computed(() =>
   ].includes((props.extension || '').toUpperCase())
 );
 const imageWidth = computed(() =>
-  props.webPreview
-    ? Math.min(Math.max(0, width.value - 16), pixels.value?.width || Infinity)
-    : Math.max(0, width.value - 16)
+  Math.round(
+    props.webPreview
+      ? Math.min(Math.max(0, width.value - 16), pixels.value?.width || Infinity)
+      : Math.max(0, width.value - 16)
+  )
 );
 const imageHeight = computed(() =>
-  Math.min(
-    360,
-    imageWidth.value *
-      (pixels.value ? pixels.value.height / pixels.value.width : 0.56)
+  Math.round(
+    Math.min(
+      360,
+      imageWidth.value *
+        (pixels.value ? pixels.value.height / pixels.value.width : 0.56)
+    )
   )
 );
 let observer, resizeFrame;
@@ -70,8 +74,8 @@ function loaded(event) {
 }
 onMounted(() => {
   observer = new ResizeObserver((entries) => {
-    const next = entries[0].contentRect.width;
-    if (next > 0 && next !== width.value) {
+    const next = Math.round(entries[0].contentRect.width);
+    if (next > 0 && Math.abs(next - width.value) > 1) {
       cancelAnimationFrame(resizeFrame);
       resizeFrame = requestAnimationFrame(() => {
         width.value = next;

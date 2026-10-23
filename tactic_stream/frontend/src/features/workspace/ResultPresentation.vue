@@ -1464,7 +1464,7 @@ export default {
           {{ t(versionError) }}
           <AppButton label="Retry" @click="loadVersions()" />
         </p>
-        <p v-if="versionBusy" role="status">{{ t('Loading dataвЂ¦') }}</p>
+        <p v-if="versionBusy" role="status">{{ t('Loading data…') }}</p>
         <component
           :is="itemLayout ? 'ConfiguredResultItem' : 'ResultItem'"
           :layout="itemLayout"

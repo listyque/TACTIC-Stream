@@ -184,11 +184,11 @@ export default {
     },
     defaultLoadingMode() { return preferences.checkin.loadingMode },
     activityProgress() {
-      if (this.reloadingCache) return 'Reloading cacheвЂ¦'
-      if (this.busy || this.loadingMore || (!this.administrationOpen && this.activeSearchTab && !this.activeSearchTab.loaded && !this.error)) return this.loadingMore ? 'Loading moreвЂ¦' : 'Loading dataвЂ¦'
+      if (this.reloadingCache) return 'Reloading cache…'
+      if (this.busy || this.loadingMore || (!this.administrationOpen && this.activeSearchTab && !this.activeSearchTab.loaded && !this.error)) return this.loadingMore ? 'Loading more…' : 'Loading data…'
       return this.pingBusy ? 'Pinging TACTIC server' : requestActivity.pending.findLast(row => row.ticket === this.session?.ticket)?.message || ''
     },
-    browserTitle() { return [this.activeSearchTab ? this.searchTabTitle(this.activeSearchTab) : '', this.currentProject?.title || '', t('TACTIC Stream')].filter(Boolean).join(' вЂ” ') },
+    browserTitle() { return [this.activeSearchTab ? this.searchTabTitle(this.activeSearchTab) : '', this.currentProject?.title || '', t('TACTIC Stream')].filter(Boolean).join(' – ') },
     resultViews() { return resultViews },
     resultGroups() { return resultGroups },
     searchGroupMenuModel() {
@@ -252,7 +252,7 @@ export default {
     continuous() { return this.section === 'data' && !this.administrationOpen && this.loadingMode === 'infinite' },
     rowRange() {
       const first = this.continuous ? 0 : this.page * this.pageSize
-      return this.rows.length ? `${first + 1}вЂ“${first + this.rows.length}` : '0'
+      return this.rows.length ? `${first + 1}–${first + this.rows.length}` : '0'
     },
     pageCount() { return this.totalCount === null ? null : Math.max(1, Math.ceil(this.totalCount / this.pageSize)) },
     pageNumbers() {
@@ -1850,7 +1850,7 @@ export default {
       } catch (error) { if (id === this.detailRequest) this.fail(error) }
     },
     display(value) {
-      if (value === null || value === undefined) return 'вЂ”'
+      if (value === null || value === undefined) return '–'
       if (typeof value === 'object') return JSON.stringify(value)
       return String(value)
     },
@@ -1860,7 +1860,7 @@ export default {
 
 <template>
   <main v-if="restoringSession" class="login-page" role="status">
-    <span class="muted">{{ t('Loading dataвЂ¦') }}</span>
+    <span class="muted">{{ t('Loading data…') }}</span>
   </main>
   <main v-else-if="!session" class="login-page">
     <SignIn
@@ -2050,7 +2050,7 @@ export default {
         @wheel.passive="armResultPagination" @touchstart.passive="armResultPagination" @pointerdown="armResultPagination" @keydown="armResultPagination" @scroll.passive="scrollResults"
         :id="!administrationOpen && activeSearchTab ? 'panel-' + activeSearchTab.id : undefined"
         :role="!administrationOpen ? 'tabpanel' : undefined" :aria-labelledby="!administrationOpen && activeSearchTab ? 'tab-' + activeSearchTab.id : undefined">
-        <div v-if="busy" class="table-message" role="status">{{ t('Loading dataвЂ¦') }}</div>
+        <div v-if="busy" class="table-message" role="status">{{ t('Loading data…') }}</div>
         <ConfiguredView v-if="administrationOpen && interfaceConfig" v-show="!busy" ref="adminTaskView" :definition="interfaceConfig" :rows="rows" :configured="configuredView" :read-only="false"
           :ticket="session.ticket" :project="project" :sort-field="sortField" :sort-direction="sortDirection" @sort="sortBy" @inspect="inspect"
           :selected-keys="selectedKeys" @focus="focusDescription" @select="selectRecords" @column="showColumnsEditor(false, $event)"
@@ -2073,7 +2073,7 @@ export default {
             @saved="tableRecordsSaved" @operate="(record, event, node) => $refs.objectOperations.open(record, event, node)" />
         </template>
         <div v-if="continuous && (hasNext || loadingMore || (!activeSearchTab?.loaded && error))" class="workspace-load-more">
-          <span v-if="loadingMore" role="status">{{ t('Loading moreвЂ¦') }}</span>
+          <span v-if="loadingMore" role="status">{{ t('Loading more…') }}</span>
           <AppButton v-else :label="error ? 'Retry' : 'Load more'" :icon="error ? 'refresh' : 'next'" @click="loadMore(true)" />
         </div>
       </div>

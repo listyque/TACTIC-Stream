@@ -391,7 +391,13 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :class="{ 'frame-titlebar': node.titlebar }"
         :style="
           Object.assign(style(node), background(node), {
-            '--frame-titlebar-actions-right': (node.chromeRight || 0) + 'px'
+            '--frame-titlebar-actions-right': (node.chromeRight || 0) + 'px',
+            '--frame-titlebar-actions-top':
+              node.chromeTop !== undefined ? node.chromeTop + 'px' : undefined,
+            '--frame-titlebar-actions-height':
+              node.chromeHeight !== undefined
+                ? node.chromeHeight + 'px'
+                : undefined
           })
         "
         :role="node.role"

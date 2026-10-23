@@ -1907,7 +1907,7 @@ var _hoisted_6$26 = { class: "visually-hidden" };
 var _hoisted_7$26 = ["aria-label", "title"];
 var _hoisted_8$22 = ["aria-label", "title"];
 var _hoisted_9$18 = ["aria-label", "title"];
-var _hoisted_10$16 = ["href", "target"];
+var _hoisted_10$15 = ["href", "target"];
 var _hoisted_11$12 = ["title"];
 function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
@@ -2119,7 +2119,7 @@ function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 		href: $options.href,
 		target: $options.href.startsWith("/") ? void 0 : "_blank",
 		rel: "noopener noreferrer"
-	}, toDisplayString($options.value), 9, _hoisted_10$16)) : (openBlock(), createElementBlock("span", {
+	}, toDisplayString($options.value), 9, _hoisted_10$15)) : (openBlock(), createElementBlock("span", {
 		key: 21,
 		class: normalizeClass(["table-cell-text", { "table-status-cell": $props.cell?.statusColor }]),
 		title: $options.tooltip,
@@ -2555,6 +2555,54 @@ function dropIndex(cells, contentX) {
 	for (let index = 0; index < cells.length; index++) if (contentX < cells[index].x + cells[index].width / 2) return index;
 	return Math.max(0, cells.length - 1);
 }
+function numericCellValue(record, cell, field) {
+	if (cell?.time && typeof cell.time.total === "number") return cell.time.total;
+	const raw = record?.[field] ?? cell?.text;
+	if (raw === void 0 || raw === null || raw === "") return null;
+	const value = Number(String(raw).replace(/[^0-9.+-]/g, ""));
+	return Number.isFinite(value) ? value : null;
+}
+function summarize(columns, records, cells = {}, mode = "bottom") {
+	const values = {};
+	let hasSummary = false;
+	const list = records || [];
+	for (const column of columns || []) {
+		const className = (column.resolvedClass || column.display?.handler || "").split(".").pop();
+		const options = column.displayOptions || column.display?.options || {};
+		const field = column.cell?.field || column.name;
+		const summary = column.cell?.summary || options.total_summary || (["WorkHoursElementWdg", "WeekTableElement"].includes(className) ? "total" : "");
+		const expression = mode === "group_bottom" ? column.cell?.group_bottom || options.group_bottom || "" : column.cell?.bottom || options.bottom || "";
+		const calc = expression ? /^\s*@COUNT\b/i.test(expression) ? "count" : /^\s*@AVG\b/i.test(expression) ? "average" : "total" : summary;
+		if (![
+			"count",
+			"total",
+			"average"
+		].includes(calc)) continue;
+		hasSummary = true;
+		if (calc === "count") {
+			values[column.name] = String(list.length);
+			continue;
+		}
+		let total = 0;
+		let count = 0;
+		for (const record of list) {
+			const key = record?.__search_key__ || record?.key || "";
+			const rowCells = record?.cells || cells[key] || {};
+			const number = numericCellValue(record?.record || record, rowCells[column.name], field);
+			if (number !== null) {
+				total += number;
+				count += 1;
+			}
+		}
+		if (calc === "average") total = count ? total / count : 0;
+		const rounded = Math.round(total * 100) / 100;
+		values[column.name] = String(rounded);
+	}
+	return {
+		hasSummary,
+		values
+	};
+}
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/menus.ui.mjs
 function columnActions(model, language) {
@@ -2732,7 +2780,7 @@ var _hoisted_9$17 = {
 	class: "handler-table-selection",
 	role: "gridcell"
 };
-var _hoisted_10$15 = { class: "visually-hidden" };
+var _hoisted_10$14 = { class: "visually-hidden" };
 var _hoisted_11$11 = ["onDblclick"];
 var _hoisted_12$11 = {
 	class: "handler-table-actions",
@@ -2757,6 +2805,10 @@ var _sfc_main$163 = {
 		views: Array,
 		closedGroups: Object,
 		expandedRows: {
+			type: Object,
+			default: () => ({})
+		},
+		cells: {
 			type: Object,
 			default: () => ({})
 		},
@@ -2877,6 +2929,30 @@ var _sfc_main$163 = {
 						});
 						offset += 320;
 					}
+				}
+				if (group.label && group.records?.length) {
+					const groupSummary = summarize(columns.value, group.records, props.cells, "group_bottom");
+					if (groupSummary.hasSummary) {
+						rows.push({
+							summary: groupSummary.values,
+							key: "group-summary:" + group.key,
+							top: offset,
+							height: 36
+						});
+						offset += 36;
+					}
+				}
+			}
+			if (records.value.length) {
+				const tableSummary = summarize(columns.value, records.value, props.cells, "bottom");
+				if (tableSummary.hasSummary) {
+					rows.push({
+						summary: tableSummary.values,
+						key: "table-summary",
+						top: offset,
+						height: 38
+					});
+					offset += 38;
 				}
 			}
 			return rows;
@@ -3209,7 +3285,7 @@ var _sfc_main$163 = {
 						key: entry.key,
 						class: normalizeClass(["handler-table-row", {
 							selected: __props.selectedKeys?.includes(entry.key),
-							"group-row": !!entry.group
+							"group-row": !!entry.group || !!entry.summary
 						}]),
 						role: "row",
 						"aria-rowindex": entry.index + 2,
@@ -3252,7 +3328,23 @@ var _sfc_main$163 = {
 						"icon",
 						"aria-expanded",
 						"onClick"
-					])) : (openBlock(), createElementBlock(Fragment, { key: 3 }, [
+					])) : entry.summary ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [
+						_cache[12] || (_cache[12] = createBaseVNode("div", {
+							class: "handler-table-selection",
+							role: "gridcell"
+						}, null, -1)),
+						(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column, index) => {
+							return openBlock(), createElementBlock("div", {
+								key: column.name,
+								class: normalizeClass(["handler-table-cell", { "first-column": index === 0 }]),
+								role: "gridcell"
+							}, [createBaseVNode("strong", null, toDisplayString(entry.summary[column.name] || ""), 1)], 2);
+						}), 128)),
+						_cache[13] || (_cache[13] = createBaseVNode("div", {
+							class: "handler-table-actions",
+							role: "gridcell"
+						}, null, -1))
+					], 64)) : (openBlock(), createElementBlock(Fragment, { key: 4 }, [
 						createBaseVNode("div", _hoisted_9$17, [__props.selectable ? (openBlock(), createBlock(_sfc_main$181, {
 							key: 0,
 							label: unref(t)("Select record: {name}", { name: entry.record.name || entry.record.title || entry.record.code || entry.record.id }),
@@ -3260,7 +3352,7 @@ var _sfc_main$163 = {
 							"model-value": __props.selectedKeys?.includes(entry.key),
 							"onUpdate:modelValue": ($event) => emit("select", [entry.record], $event)
 						}, {
-							default: withCtx(() => [createBaseVNode("span", _hoisted_10$15, toDisplayString(unref(t)("Select row")), 1)]),
+							default: withCtx(() => [createBaseVNode("span", _hoisted_10$14, toDisplayString(unref(t)("Select row")), 1)]),
 							_: 1
 						}, 8, [
 							"label",
@@ -4110,12 +4202,13 @@ function describe$43(model, width, extent, language) {
 	const fields = columns$1(model);
 	const contentWidth = Math.max(width - 16, (model.selection === false ? 0 : metrics$10.selection) + fields.reduce((sum, field) => sum + field.width, 0) + 40);
 	const nodes = [
-		node("Field", "nestedFilter", rect$1(0, 0, Math.max(0, width - 120), 36), {
+		node("Field", "nestedFilter", rect$1(0, 0, Math.max(0, width - (model.gear ? 156 : 120)), 36), {
 			text: model.filter || "",
 			placeholder: t("Filter"),
 			action: { type: "filter" }
 		}),
-		button("nestedReload", rect$1(Math.max(0, width - 112), 0, 32, 32), model.busy ? t("Loading data…") : t("Refresh"), model.busy ? "loading" : "refresh", { type: "reload" }, !model.busy, { iconOnly: true }),
+		button("nestedReload", rect$1(Math.max(0, width - (model.gear ? 148 : 112)), 0, 32, 32), model.busy ? t("Loading data…") : t("Refresh"), model.busy ? "loading" : "refresh", { type: "reload" }, !model.busy, { iconOnly: true }),
+		button("nestedColumns", rect$1(Math.max(0, width - 112), 0, 32, 32), t("Columns"), "view-column", { type: "columns" }, !model.busy, { iconOnly: true }),
 		button("nestedCreate", rect$1(Math.max(0, width - 76), 0, 32, 32), t("Create"), "add", { type: "create" }, !model.busy && model.insert !== false, { iconOnly: true }),
 		button("nestedClose", rect$1(Math.max(0, width - 40), 0, 32, 32), t("Close"), "close", { type: "close" }, true, { iconOnly: true }),
 		label("nestedState", rect$1(0, extent - 32, Math.max(0, width - 120), 28), model.error ? t(model.error) : String((model.rows || []).length), { color: model.error ? "error" : "secondaryText" }),
@@ -4166,8 +4259,10 @@ function describe$43(model, width, extent, language) {
 		if ([
 			"nestedFilter",
 			"nestedReload",
+			"nestedColumns",
 			"nestedCreate"
 		].includes(item.id) && model.shelf === false) return false;
+		if (item.id === "nestedColumns" && !model.gear) return false;
 		if (item.id === "nestedFilter" && model.search === false) return false;
 		if (item.id === "nestedCreate" && model.insert === false) return false;
 		if (item.id === "nestedClearSelection" && model.selection === false) return false;
@@ -4231,7 +4326,8 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		"edit",
 		"action",
 		"inspect",
-		"cell-event"
+		"cell-event",
+		"column"
 	],
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
@@ -4260,7 +4356,8 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					onEdit: (...args) => emit("edit", ...args),
 					onAction: (...args) => emit("action", ...args),
 					onInspect: (record) => emit("inspect", record),
-					onCellEvent: (...args) => emit("cell-event", ...args)
+					onCellEvent: (...args) => emit("cell-event", ...args),
+					onColumn: (...args) => emit("column", ...args)
 				}
 			},
 			tableCell: {
@@ -4269,7 +4366,8 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				props: {
 					onAction: forward,
 					onInspect: (record) => emit("inspect", record),
-					onCellEvent: (...args) => emit("cell-event", ...args)
+					onCellEvent: (...args) => emit("cell-event", ...args),
+					onColumn: (...args) => emit("column", ...args)
 				}
 			}
 		}));
@@ -4362,6 +4460,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				for (const record of result.records) if ((state.selected || []).includes(record.__search_key__)) state.selectionRecords[record.__search_key__] = { code: record.code };
 				state.hasNext = result.hasNext;
 				state.insert = scope.insert !== false && !!definition.operations.create;
+				state.gear = scope.gear !== false && !!definition.administration;
 				state.filterField = [
 					"name",
 					"title",
@@ -4391,7 +4490,14 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				if (selected) delete state.selectionRecords[action.key];
 				else state.selectionRecords[action.key] = { code: state.rows.find((row) => row.key === action.key)?.record.code };
 				state.selected = selected ? state.selected.filter((key) => key !== action.key) : [...state.selected || [], action.key];
-			} else if (action.type === "edit" || action.type === "create") emit("edit", state.rows?.find((row) => row.key === action.key)?.record || null, state);
+			} else if (action.type === "columns") emit("column", {
+				project: state.scope.projectCode || props.project,
+				searchType: state.scope.searchType.split("?")[0],
+				view: state.scope.view || "table",
+				column: "",
+				target: "definition"
+			});
+			else if (action.type === "edit" || action.type === "create") emit("edit", state.rows?.find((row) => row.key === action.key)?.record || null, state);
 			else {
 				if (state.busy) return;
 				if (action.type === "page") state.offset = Math.max(0, (state.offset || 0) + action.value * (state.scope.initialLimit || 50));
@@ -4444,7 +4550,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 36);
 		};
 	}
-}, [["__scopeId", "data-v-b11a46bb"]]);
+}, [["__scopeId", "data-v-fd605070"]]);
 //#endregion
 //#region src/features/administration/columnsEditor.js
 var displayWidgets = (/* @__PURE__ */ JSON.parse("[{\"value\":\"\",\"label\":\"Automatic\",\"class\":\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"aliases\":[\"TextWdg\",\"\",\"pyasm.widget.TextWdg\",\"tactic.ui.common.SimpleTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg\",\"SimpleTableElementWdg\",\"pyasm.widget.SimpleTableElementWdg\",\"pyasm.widget.table_element_wdg.SimpleTableElementWdg\",\"pyasm.widget.input_wdg.TextWdg\"],\"adapter\":\"value\"},{\"value\":\"format\",\"label\":\"Format\",\"class\":\"tactic.ui.table.format_element_wdg.FormatElementWdg\",\"aliases\":[\"tactic.ui.table.FormatElementWdg\",\"tactic.ui.table.format_element_wdg.FormatElementWdg\"],\"adapter\":\"formatted\"},{\"value\":\"expression\",\"label\":\"Expression\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"link\",\"label\":\"Link\",\"class\":\"tactic.ui.table.link_element_wdg.LinkElementWdg\",\"aliases\":[\"tactic.ui.table.LinkElementWdg\",\"tactic.ui.table.link_element_wdg.LinkElementWdg\"],\"adapter\":\"link\"},{\"value\":\"pyasm.widget.ThumbWdg\",\"label\":\"Thumbnail\",\"class\":\"pyasm.widget.file_wdg.ThumbWdg\",\"aliases\":[\"ThumbWdg\",\"pyasm.widget.ThumbWdg\",\"pyasm.widget.file_wdg.ThumbWdg\"],\"adapter\":\"preview\"},{\"value\":\"tactic.ui.widget.DiscussionElementWdg\",\"label\":\"Notes\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionElementWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionElementWdg\"],\"adapter\":\"notes\"},{\"value\":\"tactic.ui.table.SObjectDetailElementWdg\",\"label\":\"SObject details\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectDetailElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectDetailElementWdg\"],\"adapter\":\"details\"},{\"value\":\"tactic.ui.table.CheckinButtonElementWdg\",\"label\":\"Check-in\",\"class\":\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\",\"aliases\":[\"tactic.ui.table.CheckinButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckinButtonElementWdg\"],\"adapter\":\"checkin\"},{\"value\":\"tactic.ui.table.TaskElementWdg\",\"label\":\"Tasks\",\"class\":\"tactic.ui.table.task_element_wdg.TaskElementWdg\",\"aliases\":[\"tactic.ui.table.TaskElementWdg\",\"tactic.ui.table.task_element_wdg.TaskElementWdg\"],\"adapter\":\"tasks\"},{\"value\":\"tactic.ui.table.TaskCompletionWdg\",\"label\":\"Task completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.ExploreElementWdg\",\"label\":\"Explorer\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\",\"aliases\":[\"tactic.ui.table.ExploreElementWdg\",\"tactic.ui.table.ExplorerElementWdg\",\"tactic.ui.table.explorer_wdg.ExplorerElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.SObjectFilesElementWdg\",\"label\":\"Files\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectFilesElementWdg\",\"tactic.ui.table.sobject_summary_wdg.SObjectFilesElementWdg\"],\"adapter\":\"files\"},{\"value\":\"tactic.ui.table.MetadataElementWdg\",\"label\":\"Metadata\",\"class\":\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\",\"aliases\":[\"tactic.ui.table.MetadataElementWdg\",\"tactic.ui.table.metadata_element_wdg.MetadataElementWdg\"],\"adapter\":\"metadata\"},{\"value\":\"tactic.ui.table.DeleteElementWdg\",\"label\":\"Delete\",\"class\":\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\",\"aliases\":[\"tactic.ui.table.DeleteElementWdg\",\"tactic.ui.table.delete_element_wdg.DeleteElementWdg\"],\"adapter\":\"delete\"},{\"value\":\"ArrayTableElementWdg\",\"label\":\"Array\",\"class\":\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\",\"aliases\":[\"ArrayTableElementWdg\",\"pyasm.widget.ArrayTableElementWdg\",\"pyasm.widget.table_element_wdg.ArrayTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"XmlWdg\",\"label\":\"XML\",\"class\":\"pyasm.widget.table_element_wdg.XmlWdg\",\"aliases\":[\"XmlWdg\",\"pyasm.widget.XmlWdg\",\"pyasm.widget.table_element_wdg.XmlWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.JsonElementWdg\",\"label\":\"JSON\",\"class\":\"tactic.ui.table.json_element_wdg.JsonElementWdg\",\"aliases\":[\"tactic.ui.table.JsonElementWdg\",\"tactic.ui.table.json_element_wdg.JsonElementWdg\"],\"adapter\":\"structured\"},{\"value\":\"tactic.ui.table.SnapshotVersionElementWdg\",\"label\":\"Snapshot version\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotVersionElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotVersionElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SnapshotLockedElementWdg\",\"label\":\"Snapshot lock\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotLockedElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg\"],\"adapter\":\"lock\"},{\"value\":\"tactic.ui.table.SnapshotFileElementWdg\",\"label\":\"Snapshot file\",\"class\":\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\",\"aliases\":[\"tactic.ui.table.SnapshotFileElementWdg\",\"tactic.ui.table.snapshot_element_wdg.SnapshotFileElementWdg\"],\"adapter\":\"link\"},{\"value\":\"tactic.ui.table.MilestoneCompletionWdg\",\"label\":\"Milestone completion\",\"class\":\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\",\"aliases\":[\"tactic.ui.table.MilestoneCompletionWdg\",\"tactic.ui.table.statistic_wdg.MilestoneCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.table.TaskGroupCompletionWdg\",\"label\":\"Task group completion\",\"class\":\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\",\"aliases\":[\"tactic.ui.table.TaskGroupCompletionWdg\",\"tactic.ui.table.statistic_wdg.TaskGroupCompletionWdg\"],\"adapter\":\"groupCompletion\"},{\"value\":\"tactic.ui.table.TaskDaysDueElementWdg\",\"label\":\"Days until due\",\"class\":\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\",\"aliases\":[\"tactic.ui.table.TaskDaysDueElementWdg\",\"tactic.ui.table.statistic_wdg.TaskDaysDueElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.SubContextElementWdg\",\"label\":\"Subcontext\",\"class\":\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\",\"aliases\":[\"tactic.ui.table.SubContextElementWdg\",\"tactic.ui.table.subcontext_wdg.SubContextElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.TaskSummaryElementWdg\",\"label\":\"Task summary\",\"class\":\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\",\"aliases\":[\"TaskSummaryElementWdg\",\"tactic.ui.table.TaskSummaryElementWdg\",\"tactic.ui.table.task_element_wdg.TaskSummaryElementWdg\"],\"adapter\":\"taskSummary\"},{\"value\":\"pyasm.widget.CheckboxColWdg\",\"label\":\"Row selection\",\"class\":\"pyasm.widget.table_element_wdg.CheckboxColWdg\",\"aliases\":[\"CheckboxColWdg\",\"pyasm.widget.CheckboxColWdg\",\"pyasm.widget.table_element_wdg.CheckboxColWdg\"],\"adapter\":\"selection\"},{\"value\":\"pyasm.widget.SearchTypeElementWdg\",\"label\":\"Search Type title\",\"class\":\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\",\"aliases\":[\"SearchTypeElementWdg\",\"pyasm.widget.SearchTypeElementWdg\",\"pyasm.widget.table_element_wdg.SearchTypeElementWdg\"],\"adapter\":\"value\"},{\"value\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"label\":\"Legacy task completion (integer)\",\"class\":\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"aliases\":[\"pyasm.widget.statistic_wdg.TaskCompletionWdg\",\"pyasm.widget.TaskCompletionWdg\",\"TaskCompletionWdg\"],\"adapter\":\"completion\"},{\"value\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"label\":\"Table availability\",\"class\":\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\",\"aliases\":[\"tactic.ui.app.SearchTypeHasTableElementWdg\",\"tactic.ui.app.search_type_element_wdg.SearchTypeHasTableElementWdg\"],\"adapter\":\"flag\"},{\"value\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"label\":\"Raw value\",\"class\":\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\",\"aliases\":[\"tactic.ui.common.RawTableElementWdg\",\"tactic.ui.common.base_table_element_wdg.RawTableElementWdg\"],\"adapter\":\"raw\"},{\"value\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"label\":\"Folder\",\"class\":\"tactic.ui.table.explorer_wdg.ExplorerTableElementWdg\",\"aliases\":[\"tactic.ui.table.ExplorerTableElementWdg\"],\"adapter\":\"explorer\"},{\"value\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"label\":\"Expression value\",\"class\":\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\",\"aliases\":[\"tactic.ui.table.ExpressionValueElementWdg\",\"tactic.ui.table.expression_element_wdg.ExpressionValueElementWdg\"],\"adapter\":\"expression\"},{\"value\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"label\":\"Preference description\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\",\"aliases\":[\"tactic.ui.table.PreferenceDescriptionWdg\",\"tactic.ui.table.preference_wdg.PreferenceDescriptionWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"label\":\"Project database\",\"class\":\"tactic.ui.table.project_wdg.ProjectWdg\",\"aliases\":[\"tactic.ui.table.ProjectWdg\",\"tactic.ui.table.project_wdg.ProjectWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"label\":\"Related value\",\"class\":\"tactic.ui.table.related_element_wdg.RelatedElementWdg\",\"aliases\":[\"tactic.ui.table.RelatedElementWdg\",\"tactic.ui.table.related_element_wdg.RelatedElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"label\":\"Notification recipients\",\"class\":\"tactic.ui.table.table_element_wdg.RecipientElementWdg\",\"aliases\":[\"tactic.ui.table.RecipientElementWdg\",\"tactic.ui.table.table_element_wdg.RecipientElementWdg\"],\"adapter\":\"fields\"},{\"value\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Discussion\",\"class\":\"tactic.ui.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"tactic.ui.widget.DiscussionWdg\",\"tactic.ui.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"label\":\"Legacy discussion\",\"class\":\"pyasm.widget.discussion_wdg.DiscussionWdg\",\"aliases\":[\"DiscussionWdg\",\"pyasm.widget.DiscussionWdg\",\"pyasm.widget.discussion_wdg.DiscussionWdg\"],\"adapter\":\"notes\"},{\"value\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"label\":\"Object tasks\",\"class\":\"pyasm.widget.task_wdg.SObjectTaskTableElement\",\"aliases\":[\"SObjectTaskTableElement\",\"pyasm.widget.SObjectTaskTableElement\",\"pyasm.widget.task_wdg.SObjectTaskTableElement\"],\"adapter\":\"tasks\"},{\"value\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"label\":\"Task context\",\"class\":\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\",\"aliases\":[\"TaskParentSpacingTableElement\",\"pyasm.widget.TaskParentSpacingTableElement\",\"pyasm.widget.task_wdg.TaskParentSpacingTableElement\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"label\":\"Formatted message\",\"class\":\"tactic.ui.app.message_wdg.MessageTableElementWdg\",\"aliases\":[\"tactic.ui.app.MessageTableElementWdg\",\"tactic.ui.app.message_wdg.MessageTableElementWdg\"],\"adapter\":\"message\"},{\"value\":\"pyasm.widget.MyTacticSummaryWdg\",\"label\":\"My TACTIC summary\",\"class\":\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\",\"aliases\":[\"MyTacticSummaryWdg\",\"pyasm.widget.MyTacticSummaryWdg\",\"pyasm.widget.my_tactic_summary_wdg.MyTacticSummaryWdg\"],\"adapter\":\"fields\"},{\"value\":\"pyasm.widget.UpdateWdg\",\"label\":\"Object actions\",\"class\":\"pyasm.widget.table_element_wdg.UpdateWdg\",\"aliases\":[\"UpdateWdg\",\"pyasm.widget.UpdateWdg\",\"pyasm.widget.table_element_wdg.UpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.input.LoginTableElementWdg\",\"label\":\"Login\",\"class\":\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\",\"aliases\":[\"tactic.ui.input.LoginTableElementWdg\",\"tactic.ui.input.process_group_select_wdg.LoginTableElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.panel.SecurityManagerButtonWdg\",\"label\":\"Global Permissions\",\"class\":\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\",\"aliases\":[\"tactic.ui.panel.SecurityManagerButtonWdg\",\"tactic.ui.panel.security_manager_wdg.SecurityManagerButtonWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.PreferenceEditWdg\",\"label\":\"User preference\",\"class\":\"tactic.ui.table.preference_wdg.PreferenceEditWdg\",\"aliases\":[\"tactic.ui.table.PreferenceEditWdg\",\"tactic.ui.table.preference_wdg.PreferenceEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"label\":\"Update Template\",\"class\":\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\",\"aliases\":[\"tactic.ui.table.ProjectTemplateUpdateWdg\",\"tactic.ui.table.project_wdg.ProjectTemplateUpdateWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.NotificationTriggerElementWdg\",\"label\":\"Email Test\",\"class\":\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\",\"aliases\":[\"tactic.ui.table.NotificationTriggerElementWdg\",\"tactic.ui.table.table_element_wdg.NotificationTriggerElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ButtonElementWdg\",\"label\":\"Configured button\",\"class\":\"tactic.ui.table.button_wdg.ButtonElementWdg\",\"aliases\":[\"tactic.ui.table.ButtonElementWdg\",\"tactic.ui.table.button_wdg.ButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusWdg\",\"label\":\"Parallel task status\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusWdg\",\"aliases\":[\"ParallelStatusWdg\",\"pyasm.widget.ParallelStatusWdg\",\"pyasm.widget.parallel_status.ParallelStatusWdg\"],\"adapter\":\"commands\"},{\"value\":\"ParallelStatusEditWdg\",\"label\":\"Add Task\",\"class\":\"pyasm.widget.parallel_status.ParallelStatusEditWdg\",\"aliases\":[\"ParallelStatusEditWdg\",\"pyasm.widget.ParallelStatusEditWdg\",\"pyasm.widget.parallel_status.ParallelStatusEditWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"label\":\"Open tasks\",\"class\":\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\",\"aliases\":[\"tactic.ui.table.SObjectTaskStatusElementWdg\",\"tactic.ui.table.sobject_detail_wdg.SObjectTaskStatusElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ProcessElementWdg\",\"label\":\"Process\",\"class\":\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\",\"aliases\":[\"tactic.ui.table.ProcessElementWdg\",\"tactic.ui.table.subcontext_wdg.ProcessElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.widget.TaskStatusElementWdg\",\"label\":\"Task status\",\"class\":\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\",\"aliases\":[\"tactic.ui.widget.TaskStatusElementWdg\",\"tactic.ui.widget.misc_input_wdg.TaskStatusElementWdg\"],\"adapter\":\"value\"},{\"value\":\"tactic.ui.table.WorkElementWdg\",\"label\":\"Work on Task\",\"class\":\"tactic.ui.table.task_element_wdg.WorkElementWdg\",\"aliases\":[\"tactic.ui.table.WorkElementWdg\",\"tactic.ui.table.task_element_wdg.WorkElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.DropElementWdg\",\"label\":\"Instance links\",\"class\":\"tactic.ui.table.drop_element_wdg.DropElementWdg\",\"aliases\":[\"tactic.ui.table.DropElementWdg\",\"tactic.ui.table.drop_element_wdg.DropElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CustomLayoutElementWdg\",\"label\":\"Custom Layout\",\"class\":\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\",\"aliases\":[\"tactic.ui.table.CustomLayoutElementWdg\",\"tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"label\":\"Show related table\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.HiddenRowElementWdg\",\"tactic.ui.table.HiddenRowElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"label\":\"Related tasks\",\"class\":\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"aliases\":[\"tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg\",\"tactic.ui.table.RowAddElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"HiddenRowToggleWdg\",\"label\":\"Show related table\",\"class\":\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"aliases\":[\"HiddenRowToggleWdg\",\"pyasm.widget.table_element_wdg.HiddenRowToggleWdg\",\"pyasm.widget.HiddenRowToggleWdg\"],\"adapter\":\"commands\"},{\"value\":\"AuxDataWdg\",\"label\":\"Auxiliary data\",\"class\":\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"aliases\":[\"AuxDataWdg\",\"pyasm.widget.table_element_wdg.AuxDataWdg\",\"pyasm.widget.AuxDataWdg\"],\"adapter\":\"value\"},{\"value\":\"GanttWdg\",\"label\":\"Gantt\",\"class\":\"pyasm.widget.gantt_wdg.GanttWdg\",\"aliases\":[\"GanttWdg\",\"pyasm.widget.gantt_wdg.GanttWdg\",\"pyasm.widget.GanttWdg\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"label\":\"Gantt\",\"class\":\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"aliases\":[\"tactic.ui.table.gantt_element_wdg.GanttElementWdg\",\"tactic.ui.table.GanttElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"TimecardInfoTableElement\",\"label\":\"Timecard\",\"class\":\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"aliases\":[\"TimecardInfoTableElement\",\"pyasm.widget.timecard_wdg.TimecardInfoTableElement\",\"pyasm.widget.TimecardInfoTableElement\"],\"adapter\":\"commands\"},{\"value\":\"WeekTableElement\",\"label\":\"Week\",\"class\":\"pyasm.widget.timecard_wdg.WeekTableElement\",\"aliases\":[\"WeekTableElement\",\"pyasm.widget.timecard_wdg.WeekTableElement\",\"pyasm.widget.WeekTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"label\":\"Work Hours\",\"class\":\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"aliases\":[\"tactic.ui.table.work_hours_element_wdg.WorkHoursElementWdg\",\"tactic.ui.table.WorkHoursElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"FileAppendLinkTableElement\",\"label\":\"Attach files\",\"class\":\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"aliases\":[\"FileAppendLinkTableElement\",\"pyasm.widget.table_element_wdg.FileAppendLinkTableElement\",\"pyasm.widget.FileAppendLinkTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.CheckoutButtonElementWdg\",\"label\":\"Check out\",\"class\":\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\",\"aliases\":[\"CheckoutButtonElementWdg\",\"tactic.ui.table.CheckoutButtonElementWdg\",\"tactic.ui.table.table_element_wdg.CheckoutButtonElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"pyasm.widget.SObjectConnectionElement\",\"label\":\"Connections\",\"class\":\"pyasm.widget.sobject_browser_wdg.SObjectConnectionElement\",\"aliases\":[\"SObjectConnectionElement\",\"pyasm.widget.SObjectConnectionElement\",\"pyasm.widget.sobject_browser_wdg.SObjectConnectionElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"label\":\"Object summary\",\"class\":\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"aliases\":[\"tactic.ui.table.sobject_summary_wdg.SObjectSummaryElementWdg\",\"tactic.ui.table.SObjectSummaryElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"DependencyLink\",\"label\":\"Dependencies\",\"class\":\"pyasm.widget.dependency_wdg.DependencyLink\",\"aliases\":[\"DependencyLink\",\"pyasm.widget.DependencyLink\",\"pyasm.widget.dependency_wdg.DependencyLink\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.ParentGroupTableElementWdg\",\"label\":\"Parent group\",\"class\":\"tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg\",\"aliases\":[\"ParentGroupTableElementWdg\",\"tactic.ui.table.ParentGroupTableElementWdg\",\"tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg\"],\"adapter\":\"commands\"},{\"value\":\"PublishTableElement\",\"label\":\"Publish\",\"class\":\"pyasm.widget.table_element_wdg.PublishTableElement\",\"aliases\":[\"PublishTableElement\",\"pyasm.widget.PublishTableElement\",\"pyasm.widget.table_element_wdg.PublishTableElement\"],\"adapter\":\"commands\"},{\"value\":\"tactic.ui.table.GeneralPublishElementWdg\",\"label\":\"General publish\",\"class\":\"tactic.ui.table.table_element_wdg.GeneralPublishElementWdg\",\"aliases\":[\"GeneralPublishElementWdg\",\"tactic.ui.table.GeneralPublishElementWdg\",\"tactic.ui.table.table_element_wdg.GeneralPublishElementWdg\"],\"adapter\":\"commands\"}]")).map(({ value, label }) => ({
@@ -6799,7 +6905,7 @@ var _sfc_main$148 = {
 			isProgress: selected.value?.type === "progress",
 			busy: props.busy,
 			phone: mobile.value,
-			hasActions: mobile.value || props.editor.process_type !== "progress"
+			hasActions: mobile.value
 		}, width.value, appearance.language));
 		function event(action, source) {
 			const menu = action.type === "process-menu" ? processMenu : action.type === "task-menu" ? taskMenu : action.type === "task-actions" ? actionsMenu : null;
@@ -8279,19 +8385,18 @@ var _sfc_main$142 = {
 var _hoisted_1$85 = ["data-has-task"];
 var _hoisted_2$57 = { key: 1 };
 var _hoisted_3$43 = { class: "inspector-task-caption" };
-var _hoisted_4$34 = { key: 0 };
-var _hoisted_5$27 = { class: "configuration-actions" };
-var _hoisted_6$23 = {
+var _hoisted_4$34 = { class: "configuration-actions" };
+var _hoisted_5$27 = {
 	key: 2,
 	class: "notice"
 };
-var _hoisted_7$23 = { key: 1 };
-var _hoisted_8$20 = { class: "configuration-actions" };
-var _hoisted_9$16 = {
+var _hoisted_6$23 = { key: 1 };
+var _hoisted_7$23 = { class: "configuration-actions" };
+var _hoisted_8$20 = {
 	key: 3,
 	class: "task-detail-fields"
 };
-var _hoisted_10$14 = { key: 0 };
+var _hoisted_9$16 = { key: 0 };
 var _sfc_main$141 = {
 	__name: "TaskDetails",
 	props: {
@@ -8328,15 +8433,21 @@ var _sfc_main$141 = {
 		const progress = computed(() => props.editor.fields.find((field) => ["progress", "completion"].includes(field.name)));
 		const values = computed(() => props.draft);
 		const assigned = computed(() => props.editor.users.find((user) => user.value === values.value.assigned)?.displayName || values.value.assigned);
+		const processLabel = computed(() => props.processTitle || props.editor?.processes?.find((item) => item.value === (props.editor?.process || props.draft?.process))?.label || props.editor?.process || props.draft?.process || "");
+		const taskTitle = computed(() => {
+			const context = (props.editor?.task_context || "").trim();
+			if (context && context !== props.editor?.process) return context;
+			return t("{process} task", { process: processLabel.value });
+		});
 		const quickModel = computed(() => {
 			const field = (name) => props.editor.fields.find((field) => field.name === name);
 			return {
 				hasTask: !!props.editor.selected_task,
 				canCreate: props.editor.process_available,
 				canEdit: !!props.editor.selected_task || props.editor.process_available,
-				title: props.editor.selected_task ? props.editor.task_context && props.editor.task_context !== props.editor.process ? props.editor.task_context : t("{process} task", { process: props.processTitle }) : "",
-				processLabel: props.processTitle,
-				assignedLabel: assigned.value,
+				title: taskTitle.value,
+				processLabel: processLabel.value,
+				assignedLabel: assigned.value || t("Not assigned"),
 				dirty: props.dirty,
 				busy: props.busy,
 				status: values.value.status,
@@ -8376,7 +8487,7 @@ var _sfc_main$141 = {
 					key: 0,
 					model: quickModel.value,
 					onEvent: event
-				}, null, 8, ["model"])) : (openBlock(), createElementBlock("header", _hoisted_2$57, [createBaseVNode("div", _hoisted_3$43, [createBaseVNode("strong", null, toDisplayString(__props.editor.selected_task ? __props.editor.task_context && __props.editor.task_context !== __props.editor.process ? __props.editor.task_context : unref(t)("{process} task", { process: __props.processTitle }) : unref(t)("No task for {process}", { process: __props.processTitle })), 1), __props.editor.selected_task && assigned.value ? (openBlock(), createElementBlock("small", _hoisted_4$34, toDisplayString(assigned.value), 1)) : createCommentVNode("", true)]), createBaseVNode("div", _hoisted_5$27, [
+				}, null, 8, ["model"])) : (openBlock(), createElementBlock("header", _hoisted_2$57, [createBaseVNode("div", _hoisted_3$43, [createBaseVNode("strong", null, toDisplayString(taskTitle.value), 1), createBaseVNode("small", null, toDisplayString(assigned.value || unref(t)("Not assigned")), 1)]), createBaseVNode("div", _hoisted_4$34, [
 					__props.editor.selected_task && !__props.editing ? (openBlock(), createBlock(_sfc_main$177, {
 						key: 0,
 						label: "Edit task",
@@ -8410,7 +8521,7 @@ var _sfc_main$141 = {
 						onClick: _cache[3] || (_cache[3] = ($event) => emit("save"))
 					}, null, 8, ["label", "disabled"])) : createCommentVNode("", true)
 				])])),
-				__props.pendingAction ? (openBlock(), createElementBlock("div", _hoisted_6$23, [__props.pendingAction === "copy" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("p", null, toDisplayString(unref(t)("Create a separate task for another assignee in this process.")), 1), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Assigned to")), 1), createVNode(_sfc_main$185, {
+				__props.pendingAction ? (openBlock(), createElementBlock("div", _hoisted_5$27, [__props.pendingAction === "copy" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("p", null, toDisplayString(unref(t)("Create a separate task for another assignee in this process.")), 1), createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Assigned to")), 1), createVNode(_sfc_main$185, {
 					value: __props.assignee,
 					options: __props.editor.users,
 					"action-field": false,
@@ -8421,7 +8532,7 @@ var _sfc_main$141 = {
 					"value",
 					"options",
 					"disabled"
-				])])], 64)) : (openBlock(), createElementBlock("p", _hoisted_7$23, toDisplayString(unref(t)("Delete the selected task? Its notes and files will not be deleted.")), 1)), createBaseVNode("div", _hoisted_8$20, [createVNode(_sfc_main$177, {
+				])])], 64)) : (openBlock(), createElementBlock("p", _hoisted_6$23, toDisplayString(unref(t)("Delete the selected task? Its notes and files will not be deleted.")), 1)), createBaseVNode("div", _hoisted_7$23, [createVNode(_sfc_main$177, {
 					label: __props.pendingAction === "copy" ? "Create task copy" : "Delete task",
 					icon: __props.pendingAction === "copy" ? "copy" : "delete",
 					destructive: __props.pendingAction === "delete",
@@ -8437,12 +8548,12 @@ var _sfc_main$141 = {
 					disabled: __props.busy,
 					onClick: _cache[6] || (_cache[6] = ($event) => emit("cancel-action"))
 				}, null, 8, ["disabled"])])])) : createCommentVNode("", true),
-				__props.editing ? (openBlock(), createElementBlock("div", _hoisted_9$16, [createVNode(_sfc_main$142, {
+				__props.editing ? (openBlock(), createElementBlock("div", _hoisted_8$20, [createVNode(_sfc_main$142, {
 					immediate: "",
 					editor: fullEditor.value,
 					busy: __props.busy,
 					onChange: _cache[7] || (_cache[7] = (key, value) => emit("change", key, value))
-				}, null, 8, ["editor", "busy"]), __props.editing ? (openBlock(), createElementBlock("footer", _hoisted_10$14, [createVNode(_sfc_main$177, {
+				}, null, 8, ["editor", "busy"]), __props.editing ? (openBlock(), createElementBlock("footer", _hoisted_9$16, [createVNode(_sfc_main$177, {
 					label: "Discard task changes",
 					icon: "close",
 					disabled: __props.busy,
@@ -9878,13 +9989,16 @@ var _sfc_main$134 = {
 		}, geometry.value.contentWidth, appearance.language));
 		onMounted(() => {
 			const measure = () => {
-				width.value = host.value.parentElement.clientWidth;
-				bodyHeight.value = body.value.getBoundingClientRect().height;
+				const parent = host.value?.parentElement;
+				const nextWidth = parent ? parent.clientWidth : 0;
+				const nextBodyHeight = body.value ? Math.round(body.value.getBoundingClientRect().height) : 0;
+				if (nextWidth > 0 && nextWidth !== width.value) width.value = nextWidth;
+				if (nextBodyHeight > 0 && Math.abs(nextBodyHeight - bodyHeight.value) > 1) bodyHeight.value = nextBodyHeight;
 			};
 			measure();
 			observer = observeFrameSizes(measure);
-			observer.observe(host.value.parentElement);
-			observer.observe(body.value);
+			if (host.value?.parentElement) observer.observe(host.value.parentElement);
+			if (body.value) observer.observe(body.value);
 		});
 		onBeforeUnmount(() => observer?.disconnect());
 		return (_ctx, _cache) => {
@@ -10432,8 +10546,10 @@ var _sfc_main$130 = {
 				let resize;
 				onMounted(() => {
 					resize = observeFrameSizes(() => {
-						const part = port.frameNode.view, height = element.value.getBoundingClientRect().height;
-						if (height > 0 && heights.value[part] !== height) heights.value = {
+						const part = port.frameNode.view;
+						if (!element.value) return;
+						const height = Math.round(element.value.getBoundingClientRect().height);
+						if (height > 0 && Math.abs((heights.value[part] || 0) - height) > 1) heights.value = {
 							...heights.value,
 							[part]: height
 						};
@@ -16347,7 +16463,7 @@ var _sfc_main$112 = {
 			this.$refs.form.open(record.__search_key__);
 		},
 		display(value) {
-			return value == null ? "вЂ”" : typeof value === "object" ? JSON.stringify(value) : String(value);
+			return value == null ? "–" : typeof value === "object" ? JSON.stringify(value) : String(value);
 		}
 	}
 };
@@ -16466,7 +16582,7 @@ function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 				"onSelect",
 				"onDrop"
 			])) : createCommentVNode("", true),
-			$data.busy && !$data.linking ? (openBlock(), createElementBlock("p", _hoisted_5$18, toDisplayString($options.t("Loading dataвЂ¦")), 1)) : !$data.linking && $options.relation && !$options.relation.available && !$data.definition ? (openBlock(), createElementBlock("p", _hoisted_6$15, toDisplayString($options.t("This relationship is not available in this browser yet.")), 1)) : createCommentVNode("", true),
+			$data.busy && !$data.linking ? (openBlock(), createElementBlock("p", _hoisted_5$18, toDisplayString($options.t("Loading data…")), 1)) : !$data.linking && $options.relation && !$options.relation.available && !$data.definition ? (openBlock(), createElementBlock("p", _hoisted_6$15, toDisplayString($options.t("This relationship is not available in this browser yet.")), 1)) : createCommentVNode("", true),
 			$data.definition && !$data.linking ? (openBlock(), createElementBlock("div", _hoisted_7$15, [createVNode(_component_ConfiguredView, {
 				ref: "table",
 				definition: $data.definition,
@@ -17804,7 +17920,7 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 				label: "Retry",
 				onClick: _cache[18] || (_cache[18] = ($event) => $options.loadVersions())
 			})])) : createCommentVNode("", true),
-			$data.versionBusy ? (openBlock(), createElementBlock("p", _hoisted_14$5, toDisplayString($options.t("Loading dataвЂ¦")), 1)) : createCommentVNode("", true),
+			$data.versionBusy ? (openBlock(), createElementBlock("p", _hoisted_14$5, toDisplayString($options.t("Loading data…")), 1)) : createCommentVNode("", true),
 			(openBlock(true), createElementBlock(Fragment, null, renderList($data.versions, (node) => {
 				return openBlock(), createBlock(resolveDynamicComponent($props.itemLayout ? "ConfiguredResultItem" : "ResultItem"), {
 					layout: $props.itemLayout,
@@ -19970,33 +20086,34 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					views: $options.tableViews,
 					"closed-groups": $data.closedGroups,
 					"expanded-rows": $data.expandedTables,
+					cells: $options.displayCells,
 					"sort-field": $options.activeSortField,
 					"sort-direction": $options.activeSortDirection,
 					"group-mode": $options.tableState.table?.groupMode || $props.groupMode,
 					onState: $options.tableStateChanged,
 					onSelect: $options.tableSelect,
-					onFocus: _cache[21] || (_cache[21] = (record) => _ctx.$emit("focus", {
+					onFocus: _cache[22] || (_cache[22] = (record) => _ctx.$emit("focus", {
 						kind: "object",
 						record
 					})),
-					onInspect: _cache[22] || (_cache[22] = ($event) => _ctx.$emit("inspect", $event)),
+					onInspect: _cache[23] || (_cache[23] = ($event) => _ctx.$emit("inspect", $event)),
 					onOperate: $options.operate,
-					onScroll: _cache[23] || (_cache[23] = ($event) => _ctx.$emit("result-scroll", $event)),
+					onScroll: _cache[24] || (_cache[24] = ($event) => _ctx.$emit("result-scroll", $event)),
 					onColumn: $options.tableColumn,
 					onSort: $options.sortBy,
-					onGroup: _cache[24] || (_cache[24] = ($event) => $options.tableStateChanged({
+					onGroup: _cache[25] || (_cache[25] = ($event) => $options.tableStateChanged({
 						...$options.tableState,
 						table: {
 							...$options.tableState.table,
 							groupMode: $event
 						}
 					})),
-					onWidth: _cache[25] || (_cache[25] = (name, width) => $options.changeColumns("width", name, width)),
-					onMove: _cache[26] || (_cache[26] = (name, target) => $options.changeColumns("move", name, target)),
-					onHide: _cache[27] || (_cache[27] = ($event) => $options.changeColumns("hide", $event)),
+					onWidth: _cache[26] || (_cache[26] = (name, width) => $options.changeColumns("width", name, width)),
+					onMove: _cache[27] || (_cache[27] = (name, target) => $options.changeColumns("move", name, target)),
+					onHide: _cache[28] || (_cache[28] = ($event) => $options.changeColumns("hide", $event)),
 					onView: $options.selectTableView,
 					onSaveView: $options.saveTableView,
-					onToggleGroup: _cache[28] || (_cache[28] = ($event) => $data.closedGroups[$event] = !$data.closedGroups[$event]),
+					onToggleGroup: _cache[29] || (_cache[29] = ($event) => $data.closedGroups[$event] = !$data.closedGroups[$event]),
 					onEdit: $options.openCellEditor,
 					onHeaderAction: $options.tableHeaderAction,
 					onCreateChild: $options.createParentChild
@@ -20009,7 +20126,8 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 						onEdit: $options.openNestedEditor,
 						onInspect: _cache[20] || (_cache[20] = ($event) => _ctx.$emit("inspect", $event)),
 						onAction: $options.tableAction,
-						onCellEvent: $options.nestedCellEvent
+						onCellEvent: $options.nestedCellEvent,
+						onColumn: _cache[21] || (_cache[21] = ($event) => _ctx.$emit("column", $event))
 					}, null, 8, [
 						"ticket",
 						"project",
@@ -20084,6 +20202,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					"views",
 					"closed-groups",
 					"expanded-rows",
+					"cells",
 					"sort-field",
 					"sort-direction",
 					"group-mode",
@@ -20109,13 +20228,13 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 				icon: "MDI_CHEVRON_LEFT",
 				"icon-only": $options.mobile,
 				disabled: $data.busy || $data.page === 0,
-				onClick: _cache[29] || (_cache[29] = ($event) => $options.changePage(-1))
+				onClick: _cache[30] || (_cache[30] = ($event) => $options.changePage(-1))
 			}, null, 8, ["icon-only", "disabled"]), createVNode(_component_AppButton, {
 				label: "Next →",
 				icon: "MDI_CHEVRON_RIGHT",
 				"icon-only": $options.mobile,
 				disabled: $data.busy || !$data.hasNext,
-				onClick: _cache[30] || (_cache[30] = ($event) => $options.changePage(1))
+				onClick: _cache[31] || (_cache[31] = ($event) => $options.changePage(1))
 			}, null, 8, ["icon-only", "disabled"])])], 8, _hoisted_24$1)) : createCommentVNode("", true)
 		], 64)),
 		createVNode(_component_FilePreview, {
@@ -20173,15 +20292,15 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			"search-type": $data.targetRecord.__search_key__.split("?")[0],
 			operations: $data.targetOperations,
 			selection: $options.records.filter((record) => $options.tableSelection.includes(record.__search_key__)),
-			onInspect: _cache[31] || (_cache[31] = ($event) => _ctx.$emit("inspect", $event)),
+			onInspect: _cache[32] || (_cache[32] = ($event) => _ctx.$emit("inspect", $event)),
 			onEdit: $options.openTableRecordForm,
 			onEditSelected: $options.openTableRecordForm,
-			onCreate: _cache[32] || (_cache[32] = ($event) => $options.openTableRecordForm(null)),
-			onDuplicate: _cache[33] || (_cache[33] = ($event) => $options.openTableRecordForm(null, $event.__search_key__)),
+			onCreate: _cache[33] || (_cache[33] = ($event) => $options.openTableRecordForm(null)),
+			onDuplicate: _cache[34] || (_cache[34] = ($event) => $options.openTableRecordForm(null, $event.__search_key__)),
 			onRelated: $options.openTableRelations,
-			onRetire: _cache[34] || (_cache[34] = ($event) => _ctx.$refs.tableDelete.open($event, "retire")),
-			onReactivate: _cache[35] || (_cache[35] = ($event) => _ctx.$refs.tableDelete.open($event, "reactivate")),
-			onDelete: _cache[36] || (_cache[36] = ($event) => _ctx.$refs.tableDelete.open($event, "delete")),
+			onRetire: _cache[35] || (_cache[35] = ($event) => _ctx.$refs.tableDelete.open($event, "retire")),
+			onReactivate: _cache[36] || (_cache[36] = ($event) => _ctx.$refs.tableDelete.open($event, "reactivate")),
+			onDelete: _cache[37] || (_cache[37] = ($event) => _ctx.$refs.tableDelete.open($event, "delete")),
 			onDuplicated: $options.tableSaved,
 			onFilesAttached: $options.tableSaved
 		}, null, 8, [
@@ -20259,8 +20378,8 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			ref: "tableDocument",
 			model: $data.serviceDocument,
 			onFile: $options.openDependencyFile,
-			onClosed: _cache[37] || (_cache[37] = ($event) => $data.documentRequest++),
-			onAction: _cache[38] || (_cache[38] = (action) => $options.tableAction($data.serviceDocument.record, action.name, {
+			onClosed: _cache[38] || (_cache[38] = ($event) => $data.documentRequest++),
+			onAction: _cache[39] || (_cache[39] = (action) => $options.tableAction($data.serviceDocument.record, action.name, {
 				...$data.serviceDocument,
 				href: action.href,
 				displayOptions: { cbjs_action: action.javascript }
@@ -20284,7 +20403,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			editor: $data.taskEditor,
 			busy: $data.taskBusy,
 			onChange: $options.stageTask,
-			onClosed: _cache[39] || (_cache[39] = ($event) => $data.taskEditor = null)
+			onClosed: _cache[40] || (_cache[40] = ($event) => $data.taskEditor = null)
 		}, null, 8, [
 			"editor",
 			"busy",
@@ -20297,7 +20416,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			error: $data.editError,
 			uncertain: $data.editUncertain,
 			onSave: $options.saveCellEditor,
-			onCheck: _cache[40] || (_cache[40] = ($event) => $options.saveCellEditor($event, true)),
+			onCheck: _cache[41] || (_cache[41] = ($event) => $options.saveCellEditor($event, true)),
 			onCancel: $options.cancelCellEditor
 		}, null, 8, [
 			"editor",
@@ -21339,8 +21458,8 @@ function describe$34(model, ui, width, height, language) {
 		color: ui.error && model.locked ? "error" : "secondaryText"
 	})];
 	head.push(node("View", "administrationToolbar", rect(g.mobile ? 12 : g.body - g.toolbar - 104, g.mobile ? 116 : 19, g.toolbar, 38), { view: "toolbar" }));
-	head.push(button("administrationHelpButton", rect(g.body - 92, 10, 38, 38), "Help", "help", { type: "help" }));
-	head.push(button("administrationCloseButton", rect(g.body - 48, 10, 38, 38), "Close administration", "close", { type: "close" }, !model.busy));
+	head.push(button("administrationHelpButton", rect(g.body - 92, g.mobile ? 10 : 19, 38, 38), "Help", "help", { type: "help" }));
+	head.push(button("administrationCloseButton", rect(g.body - 48, g.mobile ? 10 : 19, 38, 38), "Close administration", "close", { type: "close" }, !model.busy));
 	if (g.mobile) {
 		const half = (g.body - 32) / 2;
 		head.push(node("Choice", "administrationProjectSelector", rect(12, 70, half, 38), {
@@ -34854,7 +34973,9 @@ function describe$18(model, width, height, language) {
 	const headerBox = nodes.find((item) => item.id === "configurationHeader");
 	headerBox.titlebar = true;
 	headerBox.radius = 0;
-	headerBox.chromeRight = 86;
+	headerBox.chromeRight = 94;
+	headerBox.chromeTop = 12;
+	headerBox.chromeHeight = 34;
 	headerBox.children = headerNodes;
 	const contentNodes = nodes.filter((item) => item !== headerBox && !headerNodes.includes(item));
 	for (const item of contentNodes) if (["configurationSurface", "configurationSidebar"].includes(item.id)) item.radius = 0;
@@ -59196,8 +59317,8 @@ var _sfc_main = {
 			return preferences.checkin.loadingMode;
 		},
 		activityProgress() {
-			if (this.reloadingCache) return "Reloading cacheвЂ¦";
-			if (this.busy || this.loadingMore || !this.administrationOpen && this.activeSearchTab && !this.activeSearchTab.loaded && !this.error) return this.loadingMore ? "Loading moreвЂ¦" : "Loading dataвЂ¦";
+			if (this.reloadingCache) return "Reloading cache…";
+			if (this.busy || this.loadingMore || !this.administrationOpen && this.activeSearchTab && !this.activeSearchTab.loaded && !this.error) return this.loadingMore ? "Loading more…" : "Loading data…";
 			return this.pingBusy ? "Pinging TACTIC server" : requestActivity.pending.findLast((row) => row.ticket === this.session?.ticket)?.message || "";
 		},
 		browserTitle() {
@@ -59205,7 +59326,7 @@ var _sfc_main = {
 				this.activeSearchTab ? this.searchTabTitle(this.activeSearchTab) : "",
 				this.currentProject?.title || "",
 				t("TACTIC Stream")
-			].filter(Boolean).join(" вЂ” ");
+			].filter(Boolean).join(" – ");
 		},
 		resultViews() {
 			return views;
@@ -59398,7 +59519,7 @@ var _sfc_main = {
 		},
 		rowRange() {
 			const first = this.continuous ? 0 : this.page * this.pageSize;
-			return this.rows.length ? `${first + 1}вЂ“${first + this.rows.length}` : "0";
+			return this.rows.length ? `${first + 1}–${first + this.rows.length}` : "0";
 		},
 		pageCount() {
 			return this.totalCount === null ? null : Math.max(1, Math.ceil(this.totalCount / this.pageSize));
@@ -61695,7 +61816,7 @@ var _sfc_main = {
 			}
 		},
 		display(value) {
-			if (value === null || value === void 0) return "вЂ”";
+			if (value === null || value === void 0) return "–";
 			if (typeof value === "object") return JSON.stringify(value);
 			return String(value);
 		}
@@ -61897,7 +62018,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_DebugLog = resolveComponent("DebugLog");
 	const _directive_window = resolveDirective("window");
 	return openBlock(), createElementBlock(Fragment, null, [
-		$data.restoringSession ? (openBlock(), createElementBlock("main", _hoisted_1, [createBaseVNode("span", _hoisted_2, toDisplayString($options.t("Loading dataвЂ¦")), 1)])) : !$data.session ? (openBlock(), createElementBlock("main", _hoisted_3, [createVNode(_component_SignIn, {
+		$data.restoringSession ? (openBlock(), createElementBlock("main", _hoisted_1, [createBaseVNode("span", _hoisted_2, toDisplayString($options.t("Loading data…")), 1)])) : !$data.session ? (openBlock(), createElementBlock("main", _hoisted_3, [createVNode(_component_SignIn, {
 			login: $data.login,
 			"onUpdate:login": _cache[1] || (_cache[1] = ($event) => $data.login = $event),
 			password: $data.password,
@@ -63302,7 +63423,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							role: !$data.administrationOpen ? "tabpanel" : void 0,
 							"aria-labelledby": !$data.administrationOpen && $options.activeSearchTab ? "tab-" + $options.activeSearchTab.id : void 0
 						}, [
-							$data.busy ? (openBlock(), createElementBlock("div", _hoisted_35, toDisplayString($options.t("Loading dataвЂ¦")), 1)) : createCommentVNode("", true),
+							$data.busy ? (openBlock(), createElementBlock("div", _hoisted_35, toDisplayString($options.t("Loading data…")), 1)) : createCommentVNode("", true),
 							$data.administrationOpen && $data.interfaceConfig ? withDirectives((openBlock(), createBlock(_component_ConfiguredView, {
 								key: 1,
 								ref: "adminTaskView",
@@ -63392,7 +63513,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"onSaved"
 								])), [[vShow, !$data.administrationOpen && !$data.busy && entry.tab === $options.displayedSearchTab]]) : createCommentVNode("", true)], 64);
 							}), 128)),
-							$options.continuous && ($data.hasNext || $data.loadingMore || !$options.activeSearchTab?.loaded && $data.error) ? (openBlock(), createElementBlock("div", _hoisted_36, [$data.loadingMore ? (openBlock(), createElementBlock("span", _hoisted_37, toDisplayString($options.t("Loading moreвЂ¦")), 1)) : (openBlock(), createBlock(_component_AppButton, {
+							$options.continuous && ($data.hasNext || $data.loadingMore || !$options.activeSearchTab?.loaded && $data.error) ? (openBlock(), createElementBlock("div", _hoisted_36, [$data.loadingMore ? (openBlock(), createElementBlock("span", _hoisted_37, toDisplayString($options.t("Loading more…")), 1)) : (openBlock(), createBlock(_component_AppButton, {
 								key: 1,
 								label: $data.error ? "Retry" : "Load more",
 								icon: $data.error ? "refresh" : "next",

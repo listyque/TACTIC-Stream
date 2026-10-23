@@ -586,21 +586,22 @@ function tools(model, width, language) {
 function footer(model, width, language) {
 	const tr = (text) => translate(text, language), compact = width < 660, margin = compact ? 16 : 22;
 	const submit = model.submitLabel || (model.mode === "publish" ? tr("Publish") : model.mode === "edit" ? tr("Save changes") : model.batchPreview ? translate("Create {count} objects", language, { count: model.batchTotal }) : model.batchEnabled ? translate("Preview {count} objects", language, { count: model.batchCount }) : tr("Create"));
-	const submitWidth = Math.min(width * .52, Math.max(72, submit.length * 6 + 32)), backWidth = model.batchPreview ? 86 : 0, closeWidth = 72, submitX = width - margin - submitWidth;
+	const submitWidth = Math.min(width * .52, Math.max(72, submit.length * 6 + 32)), backWidth = model.batchPreview ? 86 : 0, checkWidth = model.uncertain ? 148 : 0, closeWidth = 72, submitX = width - margin - submitWidth;
 	const nodes = [
 		node("Box", "sobjectEditorFooter", rect(0, 0, width, 58), {
 			background: "surfaceContainer",
 			radius: 0
 		}),
-		button("sobjectEditorCancel", rect(Math.max(margin, submitX - closeWidth - backWidth - 8), 14, closeWidth, 36), tr("Cancel"), "", { type: "cancel" }, !model.busy),
+		button("sobjectEditorCancel", rect(Math.max(margin, submitX - closeWidth - backWidth - checkWidth - 8), 14, closeWidth, 36), tr("Cancel"), "", { type: "cancel" }, !model.busy),
 		button("sobjectEditorSubmit", rect(submitX, 14, submitWidth, 36), model.busy ? tr("Saving…") : submit, "", { type: "submit" }, !model.busy && !model.uncertain && model.valid !== false && model.fieldCount > 0 && model.canSave !== false, { highlighted: true })
 	];
+	if (model.uncertain) nodes.push(button("sobjectEditorCheck", rect(submitX - backWidth - checkWidth - 4, 14, checkWidth - 4, 36), tr("Check saved changes"), "", { type: "check" }, !model.busy));
 	if (model.batchPreview) nodes.push(button("sobjectBatchBack", rect(submitX - backWidth - 4, 14, backWidth - 4, 36), tr("Back"), "", { type: "back" }, !model.busy));
 	nodes.push(node("Icon", "sobjectEditorValidityIcon", rect(margin, 22, 16, 16), {
 		icon: model.valid === false ? "warning" : "check-circle",
 		color: model.valid === false ? "error" : "secondaryText"
 	}));
-	if (!compact) nodes.push(label("sobjectEditorValidity", rect(margin + 24, 16, Math.max(0, submitX - closeWidth - backWidth - margin - 22), 32), tr(model.valid === false ? "Correct the highlighted fields" : "Ready to save"), { color: model.valid === false ? "error" : "secondaryText" }));
+	if (!compact) nodes.push(label("sobjectEditorValidity", rect(margin + 24, 16, Math.max(0, submitX - closeWidth - backWidth - checkWidth - margin - 22), 32), tr(model.valid === false ? "Correct the highlighted fields" : "Ready to save"), { color: model.valid === false ? "error" : "secondaryText" }));
 	return {
 		height: 58,
 		nodes
@@ -886,6 +887,7 @@ var _sfc_main = {
 				this.draft = this.batchSource;
 			} else if (event.type === "refresh") this.openAgain();
 			else if (event.type === "cancel") this.cancel();
+			else if (event.type === "check") this.save(true);
 			else if (event.type === "submit") {
 				if (this.createBatch && this.batchIndex < 0) this.previewBatch();
 				else this.save();
@@ -1103,12 +1105,12 @@ var _sfc_main = {
 			this.uncertain = false;
 			this.$refs.dialog.close();
 		},
-		async save() {
+		async save(checkOnly = false) {
 			if (this.createBatch) {
 				await this.saveCreationBatch();
 				return;
 			}
-			if (!this.contextValid || this.loading || this.saving || this.uncertain || this.blocked || !this.fieldsToSave.length) return;
+			if (!this.contextValid || this.loading || this.saving || this.uncertain && !checkOnly || this.blocked || !this.fieldsToSave.length) return;
 			const request = this.request;
 			this.saving = true;
 			this.error = "";
@@ -1145,11 +1147,15 @@ var _sfc_main = {
 				input_prefix: this.definition.input_prefix,
 				element_names: this.fieldsToSave.filter((field) => this.kind(field) !== "MultiUpload" || Object.values(this.draft[field.name].files).some((files) => files.length)).map((field) => field.name)
 			};
+			if (this.definition.expected_revision) args.expected_revision = this.definition.expected_revision;
+			if (checkOnly) args.action = "check";
 			if (this.definition.parent_key) args.parent_key = this.definition.parent_key;
 			if (this.definition.connect_key) args.connect_key = this.definition.connect_key;
 			if (this.batch) {
 				delete args.search_key;
+				delete args.expected_revision;
 				args.search_keys = this.definition.search_keys;
+				if (this.definition.plans) args.plans = this.definition.plans;
 				args.update_data = JSON.stringify(args.search_keys.map(() => Object.fromEntries(this.fieldsToSave.map((field) => [field.name, values[this.inputName(field)]]))));
 				args.extra_data = JSON.stringify(args.search_keys.map(() => ({})));
 				args.extra_action = JSON.stringify(args.search_keys.map(() => ({})));
@@ -1195,13 +1201,28 @@ var _sfc_main = {
 					instance_parent_key: this.instanceRelation.parent_key,
 					path: this.instanceRelation.path
 				});
-				await rpc("execute_cmd", [
+				const response = await rpc("execute_cmd", [
 					this.context,
 					this.instanceRelation ? "tactic.command.sobject_link_cmd.SObjectLinkCmd" : this.batch ? "tactic.ui.panel.EditMultipleCmd" : "tactic.ui.panel.EditCmd",
 					args,
 					values
 				]);
 				if (request !== this.request || !this.contextValid) return;
+				if (checkOnly) {
+					const state = response?.info?.state;
+					if (state === "saved") {
+						this.definition = null;
+						this.draft = this.baseline = {};
+						this.files = {};
+						this.uncertain = false;
+						this.$refs.dialog.close();
+						this.$emit("saved");
+					} else if (state === "unchanged") {
+						this.uncertain = false;
+						this.error = "Changes were not saved. You can save again.";
+					} else this.error = "Record changed on the server. Close or refresh before saving.";
+					return;
+				}
 				this.definition = null;
 				this.draft = this.baseline = {};
 				this.files = {};

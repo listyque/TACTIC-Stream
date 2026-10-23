@@ -26,13 +26,22 @@ const header = computed(() =>
 );
 onMounted(() => {
   const measure = () => {
-    width.value = host.value.parentElement.clientWidth;
-    bodyHeight.value = body.value.getBoundingClientRect().height;
+    const parent = host.value?.parentElement;
+    const nextWidth = parent ? parent.clientWidth : 0;
+    const nextBodyHeight = body.value
+      ? Math.round(body.value.getBoundingClientRect().height)
+      : 0;
+    if (nextWidth > 0 && nextWidth !== width.value) {
+      width.value = nextWidth;
+    }
+    if (nextBodyHeight > 0 && Math.abs(nextBodyHeight - bodyHeight.value) > 1) {
+      bodyHeight.value = nextBodyHeight;
+    }
   };
   measure();
   observer = observeFrameSizes(measure);
-  observer.observe(host.value.parentElement);
-  observer.observe(body.value);
+  if (host.value?.parentElement) observer.observe(host.value.parentElement);
+  if (body.value) observer.observe(body.value);
 });
 onBeforeUnmount(() => observer?.disconnect());
 </script>
