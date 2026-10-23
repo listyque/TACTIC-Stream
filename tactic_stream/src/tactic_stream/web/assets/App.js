@@ -6905,7 +6905,7 @@ var _sfc_main$148 = {
 			isProgress: selected.value?.type === "progress",
 			busy: props.busy,
 			phone: mobile.value,
-			hasActions: mobile.value
+			hasActions: mobile.value || props.editor.process_type !== "progress"
 		}, width.value, appearance.language));
 		function event(action, source) {
 			const menu = action.type === "process-menu" ? processMenu : action.type === "task-menu" ? taskMenu : action.type === "task-actions" ? actionsMenu : null;

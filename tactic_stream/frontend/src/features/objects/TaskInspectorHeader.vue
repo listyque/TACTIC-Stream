@@ -75,7 +75,7 @@ const scene = computed(() =>
       isProgress: selected.value?.type === 'progress',
       busy: props.busy,
       phone: mobile.value,
-      hasActions: mobile.value
+      hasActions: mobile.value || props.editor.process_type !== 'progress'
     },
     width.value,
     appearance.language

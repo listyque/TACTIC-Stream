@@ -76,7 +76,7 @@ class SObject:
     SEARCH_TYPE = "pyasm.search.SObject"
 
     SECURITY_TYPES = ('sthpw/login', 'sthpw/login_group', 'sthpw/login_in_group', 'sthpw/ticket')
-    BUSINESS_TYPES = ('sthpw/transaction_state', 'sthpw/project', 'sthpw/project_type', 'sthpw/milestone', 'sthpw/task', 'sthpw/note', 'sthpw/work_hour', 'sthpw/status_log', 'sthpw/message', 'sthpw/message_log', 'config/process_state', 'config/custom_script', 'sthpw/custom_script', 'config/process', 'sthpw/snapshot', 'sthpw/file', 'sthpw/pref_setting', 'sthpw/retire_log', 'sthpw/pipeline', 'sthpw/connection', 'sthpw/search_object', 'sthpw/schema', 'config/naming', 'sthpw/sobject_list', 'config/plugin', 'config/plugin_content', 'config/url', 'config/widget_config', 'config/prod_setting', 'config/trigger', 'config/client_trigger', 'sthpw/trigger', 'config/pipeline', 'config/custom_property', 'config/ingest_rule', 'config/ingest_session', 'config/translation', 'sthpw/notification', 'sthpw/subscription', 'sthpw/interaction', 'sthpw/wdg_settings', 'sthpw/queue', 'sthpw/exception_log', 'sthpw/debug_log')
+    BUSINESS_TYPES = ('sthpw/transaction_state', 'sthpw/project', 'sthpw/project_type', 'sthpw/milestone', 'sthpw/task', 'sthpw/note', 'sthpw/work_hour', 'sthpw/status_log', 'sthpw/message', 'sthpw/message_log', 'config/process_state', 'config/custom_script', 'sthpw/custom_script', 'config/process', 'sthpw/snapshot', 'sthpw/file', 'sthpw/pref_setting', 'sthpw/retire_log', 'sthpw/pipeline', 'sthpw/connection', 'sthpw/search_object', 'sthpw/schema', 'config/naming', 'sthpw/sobject_list', 'config/plugin', 'config/plugin_content', 'config/url', 'config/widget_config', 'config/prod_setting', 'config/trigger', 'config/client_trigger', 'sthpw/trigger', 'config/pipeline', 'config/custom_property', 'config/ingest_rule', 'config/ingest_session', 'config/translation', 'sthpw/notification', 'sthpw/notification_log', 'sthpw/notification_login', 'sthpw/subscription', 'sthpw/interaction', 'sthpw/wdg_settings', 'sthpw/queue', 'sthpw/exception_log', 'sthpw/debug_log')
 
     def __init__(self, search_type, columns=None, result=None, remote=False, fast_data=None):
         if remote:
@@ -1230,7 +1230,17 @@ class SObject:
             from pyasm.command.workflow import _check_effect
             _check_effect(self, access)
             return
-        log_scope = {'sthpw/status_log': 'StatusLog:writing', 'sthpw/retire_log': 'RetireLog:writing'}.get(base, 'Diagnostics:writing')
+        log_scope = {'sthpw/status_log': 'StatusLog:writing', 'sthpw/retire_log': 'RetireLog:writing', 'sthpw/notification_log': 'NotificationLog:writing', 'sthpw/notification_login': 'NotificationLog:writing'}.get(base, 'Diagnostics:writing')
+        if base in ('sthpw/notification_log', 'sthpw/notification_login') and Container.get('NotificationLog:writing') is self:
+            from pyasm.common import Environment
+            security = Environment.get_security()
+            inserting = self.get_id() in (-1, '-1', '')
+            if ((access not in (None, 'insert') if inserting else
+                    access not in (None, 'edit') or set(self.update_data) != {'code'}) or
+                    security is None or not security.is_logged_in() or
+                    security.get_user_name() != context.login):
+                raise SecurityException('Notification logs may only be inserted by an authenticated trigger execution')
+            return
         if base in ('sthpw/exception_log', 'sthpw/debug_log', 'sthpw/status_log', 'sthpw/retire_log') and Container.get(log_scope) is self:
             from pyasm.common import Environment
             security = Environment.get_security()
@@ -1622,7 +1632,7 @@ class SObject:
                 self.data = self.data.copy()
                 self.data['code'] = code
             else:
-                log_scope = {'sthpw/status_log': 'StatusLog:writing', 'sthpw/retire_log': 'RetireLog:writing'}.get(self.get_base_search_type(), 'Diagnostics:writing')
+                log_scope = {'sthpw/status_log': 'StatusLog:writing', 'sthpw/retire_log': 'RetireLog:writing', 'sthpw/notification_log': 'NotificationLog:writing', 'sthpw/notification_login': 'NotificationLog:writing'}.get(self.get_base_search_type(), 'Diagnostics:writing')
                 internal_log = Container.get(log_scope) is self
                 workflow = Container.get('Workflow:writing')
                 internal_workflow = workflow and workflow[0] is self
@@ -1647,7 +1657,7 @@ class SObject:
                     ticket.delete(triggers=False)
             from pyasm.security.security import _clear_account_cache
             _clear_account_cache()
-        if (not self.get_base_search_type().startswith(('sthpw/', 'config/')) or self.get_base_search_type() in self.SECURITY_TYPES[:-1] + ('sthpw/task', 'sthpw/note', 'sthpw/milestone', 'sthpw/work_hour', 'config/process_state', 'config/process', 'sthpw/snapshot', 'sthpw/file', 'sthpw/pref_setting', 'sthpw/retire_log', 'sthpw/pipeline', 'sthpw/connection', 'sthpw/search_object', 'sthpw/schema', 'config/naming', 'sthpw/sobject_list', 'config/widget_config', 'config/prod_setting', 'config/trigger', 'config/client_trigger', 'sthpw/trigger', 'config/pipeline', 'config/custom_property', 'config/ingest_rule', 'config/ingest_session', 'config/translation', 'sthpw/notification', 'sthpw/subscription', 'sthpw/interaction', 'sthpw/wdg_settings', 'sthpw/queue', 'sthpw/exception_log', 'sthpw/debug_log')) and triggers != 'none' and Container.get('is_undo') != True:
+        if (not self.get_base_search_type().startswith(('sthpw/', 'config/')) or self.get_base_search_type() in self.SECURITY_TYPES[:-1] + ('sthpw/task', 'sthpw/note', 'sthpw/milestone', 'sthpw/work_hour', 'config/process_state', 'config/process', 'sthpw/snapshot', 'sthpw/file', 'sthpw/pref_setting', 'sthpw/retire_log', 'sthpw/pipeline', 'sthpw/connection', 'sthpw/search_object', 'sthpw/schema', 'config/naming', 'sthpw/sobject_list', 'config/widget_config', 'config/prod_setting', 'config/trigger', 'config/client_trigger', 'sthpw/trigger', 'config/pipeline', 'config/custom_property', 'config/ingest_rule', 'config/ingest_session', 'config/translation', 'sthpw/notification', 'sthpw/notification_log', 'sthpw/notification_login', 'sthpw/subscription', 'sthpw/interaction', 'sthpw/wdg_settings', 'sthpw/queue', 'sthpw/exception_log', 'sthpw/debug_log')) and triggers != 'none' and Container.get('is_undo') != True:
             mode = 'insert' if is_insert else 'update'
             output = {'is_insert': is_insert, 'mode': mode, 'id': self.get_id(),
                       'search_code': self.get_code(), 'search_type': self.get_search_type(),

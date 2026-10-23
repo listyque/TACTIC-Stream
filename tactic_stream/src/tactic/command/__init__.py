@@ -5,15 +5,23 @@ from .js_cmd import JsCmd
 from .create_project_cmd import CreateProjectCmd, CopyProjectFromTemplateCmd, CopyFileToAssetTempCmd
 from .global_search_trigger import GlobalSearchTrigger, FolderTrigger
 from .login_group_trigger import LoginGroupTrigger
-from .pipeline_task_trigger import TaskCreatorTrigger, TaskCompleteTrigger, RelatedTaskUpdateTrigger
+from .pipeline_task_trigger import (
+    PipelineTaskStatusTrigger, PipelineTaskTrigger, PipelineTaskDateTrigger,
+    PipelineTaskCreateTrigger, RelatedTaskUpdateTrigger, TaskCreatorTrigger,
+    TaskCompleteTrigger, PipelineParentStatusTrigger,
+)
 
-__all__ = ['CreateProjectCmd', 'PythonCmd', 'PythonTrigger', 'GlobalSearchTrigger', 'FolderTrigger', 'LoginGroupTrigger', 'TaskCreatorTrigger', 'TaskCompleteTrigger', 'RelatedTaskUpdateTrigger']
+__all__ = [
+    'CreateProjectCmd', 'PythonCmd', 'PythonTrigger', 'GlobalSearchTrigger',
+    'FolderTrigger', 'LoginGroupTrigger', 'PipelineTaskStatusTrigger',
+    'PipelineTaskTrigger', 'PipelineTaskDateTrigger', 'PipelineTaskCreateTrigger',
+    'RelatedTaskUpdateTrigger', 'TaskCreatorTrigger', 'TaskCompleteTrigger',
+    'PipelineParentStatusTrigger',
+]
 __all__.append('CopyProjectFromTemplateCmd')
 __all__.append('JsCmd')
 __all__.append('NotificationTestCmd')
 __all__.append('CopyFileToAssetTempCmd')
-
-
 
 from .plugin import PluginBase, PluginCreator, PluginInstaller, PluginReloader, PluginUninstaller, PluginTools
 __all__ += ["PluginBase", "PluginCreator", "PluginInstaller", "PluginReloader", "PluginUninstaller", "PluginTools"]

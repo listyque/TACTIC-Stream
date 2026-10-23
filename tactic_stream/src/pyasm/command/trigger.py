@@ -1,7 +1,6 @@
 """TACTIC Trigger matching, in-process dispatch and deferred execution.
 
 Adapted from pyasm/command/trigger.py; see LICENSE.TACTIC/source_manifest.json.
-Same-process Python scripts are enabled for administrators; email and subprocess execution are not ported.
 """
 import traceback
 
@@ -106,6 +105,21 @@ class Trigger(Command):
         try:
             return jsondumps(data)
         except (TypeError, ValueError):
+            if isinstance(data, dict):
+                from pyasm.search import SObject
+                from pyasm.biz import Pipeline
+                converted = {}
+                for name, value in data.items():
+                    if isinstance(value, SObject):
+                        converted[name] = value.get_sobject_dict()
+                    elif isinstance(value, Pipeline):
+                        converted[name] = value.get_code()
+                    else:
+                        converted[name] = value
+                try:
+                    return jsondumps(converted)
+                except (TypeError, ValueError):
+                    pass
             raise UnsupportedContract("Non-JSON trigger inputs are not migrated") from None
 
     @classmethod
@@ -119,8 +133,17 @@ class Trigger(Command):
             try:
                 input_json = cls.serialize_data(trigger.get_input())
                 class_name = Common.get_full_class_name(trigger)
+                if class_name == "pyasm.command.subprocess_trigger.SubprocessTrigger":
+                    class_name = trigger.get_class_name()
                 event = trigger.get_event()
-                key = (event, class_name, input_json)
+                target_id = getattr(trigger, "script_path", None)
+                if not target_id and isinstance(trigger, Trigger):
+                    trigger_sobj = trigger.get_trigger_sobj()
+                    if trigger_sobj is not None and trigger_sobj.get_base_search_type() == "sthpw/notification":
+                        target_id = trigger_sobj.get_code() or trigger_sobj.get_id()
+                if not target_id and isinstance(getattr(trigger, "data", None), dict):
+                    target_id = jsondumps(trigger.data)
+                key = (event, class_name, input_json, target_id) if target_id else (event, class_name, input_json)
                 if key in prev_called_triggers:
                     continue
                 prev_called_triggers.append(key)
@@ -128,7 +151,10 @@ class Trigger(Command):
                     handler_cmd = HandlerCmd(trigger)
                     handler_cmd.add_description(trigger.get_description())
                     trigger = handler_cmd
+                trigger.get_transaction().set_sync(False)
                 Trigger.execute_cmd(trigger, call_trigger=False)
+                if Container.get("Trigger:called_triggers"):
+                    cls.call_all_triggers()
             except Exception:
                 # Original deferred errors do not cancel the committed caller or
                 # the other triggers. Tracebacks keep failures visible in the log.
@@ -330,39 +356,127 @@ class Trigger(Command):
 
     @classmethod
     def _handle_trigger_sobjs(cls, triggers_sobjs, caller, event, output, forced_mode='', project_code=None):
+        allowed_modes = (
+            'same process,same transaction',
+            'same process,new transaction',
+            'separate process,queued',
+            'separate process,blocking',
+            'separate process,non-blocking',
+        )
         # Check unsupported branches before any selected handler executes.
         for trigger_sobj in triggers_sobjs:
-            mode = trigger_sobj.get_value('mode', no_exception=True) or 'same process,new transaction'
+            is_notification = trigger_sobj.get_base_search_type() == 'sthpw/notification'
+            trigger_class = (
+                ('pyasm.command.EmailTriggerTest' if forced_mode else 'pyasm.command.EmailTrigger2')
+                if is_notification
+                else trigger_sobj.get_value('class_name', no_exception=True)
+            )
+            is_email_trigger = is_notification or trigger_class in (
+                'pyasm.command.EmailTrigger',
+                'pyasm.command.EmailTrigger2',
+                'pyasm.command.EmailTriggerTest',
+            )
+            mode = (
+                (forced_mode or 'same process,new transaction')
+                if is_email_trigger
+                else (trigger_sobj.get_value('mode', no_exception=True) or 'same process,new transaction')
+            )
+            if mode not in allowed_modes:
+                raise UnsupportedContract('Subprocess trigger execution mode is not supported: %s' % mode)
             from pyasm.search.transaction import Transaction
             transaction = Transaction.get()
             if transaction is not None and transaction.write_resource is not None and mode != 'same process,same transaction':
                 raise UnsupportedContract('Atomic commands require synchronous triggers in the same transaction')
-            trigger_class = trigger_sobj.get_value('class_name', no_exception=True)
-            if trigger_sobj.get_base_search_type() == 'sthpw/notification' or trigger_class in (
-                    'pyasm.command.EmailTrigger2', 'pyasm.command.EmailTriggerTest'):
-                raise UnsupportedContract('Email notification execution is not migrated')
-            if mode not in ('same process,same transaction', 'same process,new transaction'):
-                raise UnsupportedContract('Subprocess trigger execution is not migrated')
-            if not trigger_class or trigger_class in ('tactic.command.PythonTrigger', 'tactic.command.python_cmd.PythonTrigger'):
+            if isinstance(trigger_class, str) and trigger_class:
+                Common.resolve_class(trigger_class)
+            if not is_email_trigger and (
+                not trigger_class
+                or trigger_class in ('tactic.command.PythonTrigger', 'tactic.command.python_cmd.PythonTrigger')
+                or mode in ('separate process,queued', 'separate process,blocking', 'separate process,non-blocking')
+            ):
                 from tactic.command.python_cmd import check_script_execution
                 check_script_execution(python=True)
 
         triggers = []
         for trigger_sobj in triggers_sobjs:
-            mode = trigger_sobj.get_value('mode', no_exception=True) or 'same process,new transaction'
-            trigger_class = trigger_sobj.get_value('class_name')
-            script_path = trigger_sobj.get_value('script_path')
-            if not trigger_class:
-                from tactic.command import PythonTrigger
-                trigger = PythonTrigger(script_path=script_path)
-            elif isinstance(trigger_class, str):
+            is_notification = trigger_sobj.get_base_search_type() == 'sthpw/notification'
+            trigger_class = (
+                ('pyasm.command.EmailTriggerTest' if forced_mode else 'pyasm.command.EmailTrigger2')
+                if is_notification
+                else trigger_sobj.get_value('class_name')
+            )
+            is_email_trigger = is_notification or trigger_class in (
+                'pyasm.command.EmailTrigger',
+                'pyasm.command.EmailTrigger2',
+                'pyasm.command.EmailTriggerTest',
+            )
+            mode = (
+                (forced_mode or 'same process,new transaction')
+                if is_email_trigger
+                else (trigger_sobj.get_value('mode', no_exception=True) or 'same process,new transaction')
+            )
+            script_path = trigger_sobj.get_value('script_path', no_exception=True)
+            if is_email_trigger:
                 try:
                     trigger = Common.create_from_class_path(trigger_class)
                 except ImportError:
                     traceback.print_exc()
                     raise
+                trigger.set_trigger_sobj(trigger_sobj)
+            elif mode in ('same process,same transaction', 'same process,new transaction'):
+                if not trigger_class:
+                    from tactic.command import PythonTrigger
+                    trigger = PythonTrigger(script_path=script_path)
+                elif isinstance(trigger_class, str):
+                    try:
+                        trigger = Common.create_from_class_path(trigger_class)
+                    except ImportError:
+                        traceback.print_exc()
+                        raise
+                else:
+                    trigger = trigger_class()
             else:
-                trigger = trigger_class()
+                if not trigger_class:
+                    target_class = 'tactic.command.PythonTrigger'
+                    kwargs = {'script_path': script_path}
+                elif isinstance(trigger_class, str):
+                    Common.resolve_class(trigger_class)
+                    target_class = trigger_class
+                    kwargs = {}
+                else:
+                    target_class = f'{trigger_class.__module__}.{trigger_class.__qualname__}'
+                    kwargs = {}
+                trigger_data = trigger_sobj.get_value('data', no_exception=True)
+                if trigger_data:
+                    parsed = jsonloads(trigger_data) if isinstance(trigger_data, str) else trigger_data
+                    if isinstance(parsed, dict):
+                        kwargs.update(parsed)
+                from pyasm.command.subprocess_trigger import SubprocessTrigger
+                from pyasm.common import Environment
+                trigger = SubprocessTrigger()
+                trigger.set_mode(mode)
+                resolved_project = project_code
+                if not resolved_project:
+                    from pyasm.biz.project import Project
+                    resolved_project = Project.get_project_code()
+                security = Environment.get_security()
+                ticket = security.get_ticket_key() if security and hasattr(security, 'get_ticket_key') else None
+                trigger_sobj_key = trigger_sobj.get_search_key() if hasattr(trigger_sobj, 'get_search_key') else None
+                data = {
+                    'project': resolved_project,
+                    'ticket': ticket,
+                    'class_name': target_class,
+                    'kwargs': kwargs,
+                    'event': event,
+                }
+                if trigger_sobj_key:
+                    data['trigger_sobj_key'] = trigger_sobj_key
+                if caller is not None and hasattr(caller, 'pipeline') and getattr(caller, 'pipeline', None) is not None:
+                    try:
+                        data['pipeline_code'] = caller.pipeline.get_code()
+                    except Exception:
+                        pass
+                trigger.set_data(data)
             trigger.set_event(event)
             if isinstance(trigger, Trigger):
                 trigger.set_trigger_sobj(trigger_sobj)
@@ -372,7 +486,7 @@ class Trigger(Command):
             input = output.copy() if output or output == {} else caller.get_info()
             trigger.set_input(input)
             trigger.set_output(input)
-            trigger.set_description(trigger_sobj.get_value('description'))
+            trigger.set_description(trigger_sobj.get_value('description', no_exception=True))
             if mode != 'same process,same transaction':
                 Container.append_seq('Trigger:called_triggers', trigger)
                 continue

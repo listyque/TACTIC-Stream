@@ -5,6 +5,10 @@ __all__ = ["Command", "CommandException", "CommandExitException", "HandlerCmd", 
 __all__.append("SnapshotIsLatestTrigger")
 __all__ += ['Workflow', 'WorkflowException', 'BaseWorkflowNodeHandler', 'BaseProcessTrigger',
             'ProcessStatusTrigger', 'CustomProcessConfig', 'WorkflowManualNodeHandler']
+__all__ += ['EmailTrigger', 'EmailTrigger2', 'EmailTriggerThread', 'SendEmail', 'EmailTriggerTest', 'EmailTriggerTestCmd']
+__all__ += ['EmailHandler', 'TaskAssignEmailHandler', 'NoteEmailHandler', 'GeneralNoteEmailHandler',
+            'GeneralPublishEmailHandler', 'TaskStatusEmailHandler', 'TestEmailHandler']
+__all__ += ['SubprocessTrigger', 'QueueTrigger', 'ScriptTrigger']
 
 
 def __getattr__(name):
@@ -22,6 +26,16 @@ def __getattr__(name):
                 'ProcessStatusTrigger', 'CustomProcessConfig', 'WorkflowManualNodeHandler'):
         from . import workflow
         return getattr(workflow, name)
+    if name in ('EmailTrigger', 'EmailTrigger2', 'EmailTriggerThread', 'SendEmail', 'EmailTriggerTest', 'EmailTriggerTestCmd'):
+        from . import email_trigger
+        return getattr(email_trigger, name)
+    if name in ('EmailHandler', 'TaskAssignEmailHandler', 'NoteEmailHandler', 'GeneralNoteEmailHandler',
+                'GeneralPublishEmailHandler', 'TaskStatusEmailHandler', 'TestEmailHandler'):
+        from . import email_handler
+        return getattr(email_handler, name)
+    if name in ('SubprocessTrigger', 'QueueTrigger', 'ScriptTrigger'):
+        from . import subprocess_trigger
+        return getattr(subprocess_trigger, name)
     raise AttributeError(name)
 
 from .file_upload import FileUpload, FileUploadException

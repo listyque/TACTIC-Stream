@@ -197,8 +197,9 @@ class TriggerParity(read_tests.ReadParity):
             self.assertIsInstance(Search.get_by_code('sthpw/notification', 'N_B_ONE'), Notification)
 
     def test_unsupported_handlers_fail_before_any_selected_handler_executes(self):
-        for fields in ({'base_type': 'sthpw/notification'},
-                       {'mode': 'separate process,non-blocking'}, {'class_name': 'pyasm.command.EmailTrigger2'}):
+        for fields in ({'mode': 'unsupported_mode'},
+                       {'class_name': 'Trigger'},
+                       {'class_name': 'tactic.plugins.example.Handler'}):
             with self.subTest(fields=fields), request_context(RequestContext(self.store, 'admin', 'one')):
                 Container.put('TriggerProbe:state', {'events': []})
                 definitions = [Definition({'mode': 'same process,same transaction'}), Definition(fields)]

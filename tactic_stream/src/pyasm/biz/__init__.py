@@ -5,7 +5,7 @@ from pyasm.biz.prod_setting import ProjectSetting, ProdSetting
 from .preference import PrefList, PrefSetting
 from pyasm.biz.pipeline import PipelineException, Process, ProcessConnect, Pipeline, ProjectPipeline
 from pyasm.biz.command_trigger import Trigger, TriggerSObj
-from pyasm.biz.notification import Notification
+from pyasm.biz.notification import Notification, GroupNotification
 from .status import StatusLog
 from .note import Note
 from pyasm.biz.task import Task, TaskGenerator, Timecard, Milestone
@@ -13,7 +13,7 @@ from .file import FileException, File, IconCreator, FileGroup, FileRange
 from pyasm.biz.snapshot import Snapshot, SObjectNotFoundException
 
 __all__ = ["CustomScript", "Project", "ProjectType", "Schema", "ProjectSetting", "ProdSetting", "PrefList", "PrefSetting", "PipelineException",
-           "Process", "ProcessConnect", "Pipeline", "ProjectPipeline", "Trigger", "TriggerSObj", "Notification", "Task", "TaskGenerator", "Snapshot", "Note", "StatusLog", "Timecard", "Milestone"]
+           "Process", "ProcessConnect", "Pipeline", "ProjectPipeline", "Trigger", "TriggerSObj", "Notification", "GroupNotification", "Task", "TaskGenerator", "Snapshot", "Note", "StatusLog", "Timecard", "Milestone"]
 __all__ += ['FileException', 'File', 'IconCreator', 'FileGroup', 'FileRange', 'SObjectNotFoundException']
 
 from .naming import Naming, NamingUtil, NamingException

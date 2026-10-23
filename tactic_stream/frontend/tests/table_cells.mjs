@@ -213,7 +213,7 @@ try {
   await notes
     .getByRole('button', { name: 'Expand Task Inspector', exact: true })
     .click();
-  await notes.getByText('No task for publish', { exact: true }).waitFor();
+  await notes.getByText('publish task', { exact: true }).waitFor();
   await captureInspector(notes, 'empty', 214);
   await notes
     .getByRole('button', { name: 'Collapse Task Inspector', exact: true })
@@ -752,7 +752,7 @@ try {
     .locator('.table-tasks button')
     .filter({ hasText: /^model/ })
     .tap();
-  await inspector.getByText('No task for model', { exact: true }).waitFor();
+  await inspector.getByText('model task', { exact: true }).waitFor();
   await taskAction(inspector, 'Create task');
   const fullForm = page.getByRole('dialog', {
     name: 'Record form',

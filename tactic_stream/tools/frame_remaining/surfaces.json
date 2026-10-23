@@ -51,6 +51,13 @@
     },
     {
       "product": "handler",
+      "file": "thlib/ui/qml/AppearancePopup.qml",
+      "batch": "B05",
+      "role": "domain form/presenter",
+      "disposition": "batch evidence"
+    },
+    {
+      "product": "handler",
       "file": "thlib/ui/qml/AttachmentCard.qml",
       "batch": "B11",
       "role": "domain form/presenter",

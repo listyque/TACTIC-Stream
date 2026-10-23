@@ -505,6 +505,15 @@ def fingerprints(handler):
     checks += [
         ROOT / "src/tactic_stream/server/messages.py",
         ROOT / "tests/test_messages.py",
+        ROOT / "tests/test_triggers.py",
+        ROOT / "tests/test_workflow_triggers_notifications.py",
+        ROOT / "src/pyasm/command/trigger.py",
+        ROOT / "src/pyasm/command/subprocess_trigger.py",
+        ROOT / "src/pyasm/command/email_handler.py",
+        ROOT / "src/pyasm/command/email_trigger.py",
+        ROOT / "src/tactic/command/pipeline_task_trigger.py",
+        ROOT / "src/tactic/core/filter_data.py",
+        ROOT / "src/tactic/core/notification_filters.py",
     ]
     for index, path in enumerate(checks):
         result[f"check/{index}/{path.name}"] = hashlib.sha256(
@@ -676,6 +685,8 @@ def main():
                 "tests.test_script_features",
                 "tests.test_script_editor",
                 "tests.test_script_shelf",
+                "tests.test_triggers",
+                "tests.test_workflow_triggers_notifications",
             ],
             ROOT,
             {"PYTHONPATH": str(ROOT / "tests") + os.pathsep + str(ROOT / "src")},
