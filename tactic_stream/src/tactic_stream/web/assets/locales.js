@@ -1468,7 +1468,14 @@ var en_default = {
 	"CustomLayout output exceeds one MiB": "CustomLayout output exceeds one MiB",
 	"CustomLayout markup exceeds 32 levels": "CustomLayout markup exceeds 32 levels",
 	"CustomLayout supports at most 128 controls": "CustomLayout supports at most 128 controls",
-	"Finish the current confirmation first": "Finish the current confirmation first"
+	"Finish the current confirmation first": "Finish the current confirmation first",
+	"Administrator initialization was cancelled or failed.": "Administrator initialization was cancelled or failed.",
+	"Local server did not start. See server/temp/log/desktop.log.": "Local server did not start. See server/temp/log/desktop.log.",
+	"Local server stopped. See server/temp/log/desktop.log in the data directory.": "Local server stopped. See server/temp/log/desktop.log in the data directory.",
+	"Allow this permission?": "Allow this permission?",
+	"Close with unsaved changes?": "Close with unsaved changes?",
+	"Keep open": "Keep open",
+	Allow: "Allow"
 };
 var ru_default = {
 	"Parent group": "Группа по родителю",
@@ -6466,7 +6473,14 @@ var ru_default = {
 	"No file selected": "Файл не выбран",
 	"This configured publish form contains unsupported fields or actions": "Форма публикации содержит неподдерживаемые поля или действия",
 	"Choose an existing file": "Выберите существующий файл",
-	"The configured publication result could not be verified": "Не удалось проверить результат публикации"
+	"The configured publication result could not be verified": "Не удалось проверить результат публикации",
+	"Administrator initialization was cancelled or failed.": "Первичная установка отменена или завершилась ошибкой.",
+	"Local server did not start. See server/temp/log/desktop.log.": "Локальный сервер не запустился. См. server/temp/log/desktop.log.",
+	"Local server stopped. See server/temp/log/desktop.log in the data directory.": "Локальный сервер остановился. См. server/temp/log/desktop.log в каталоге данных.",
+	"Allow this permission?": "Разрешить этот доступ?",
+	"Close with unsaved changes?": "Закрыть с несохранёнными изменениями?",
+	"Keep open": "Оставить открытым",
+	Allow: "Разрешить"
 };
 //#endregion
 export { en_default as n, ru_default as t };

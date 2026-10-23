@@ -5,7 +5,13 @@ order: 92
 ---
 # Installation, updates and acceptance
 
-> TACTIC Stream runs from the checkout, an installed Python wheel, or the standalone server package. Windows EXE/Electron acceptance remains pending.
+> TACTIC Stream runs from the checkout, an installed Python wheel, or the standalone server package. A portable Windows x64 desktop bundle is available; clean Windows VM acceptance remains pending.
+
+## Portable Windows desktop
+
+Extract the complete bundle and run `TACTIC Stream.exe`. It includes Electron, Python, SQLite and native Handler dependencies. The first launch opens the native password prompt, then starts the local server. Closing the window stops its own backend. Data and browser state live in `%APPDATA%\TACTIC Stream`, outside the program folder; `--data-dir` selects an isolated data root. `Handler.cmd` opens the existing native Handler; set its server preset to the local address shown in Stream and choose a project there. Handler settings use `%APPDATA%\TACTIC Stream\handler` or `TACTIC_HANDLER_SETTINGS_DIR`. Remote Handler connections work independently of the local EXE.
+
+Close both applications and back up the entire data directory before replacing the bundle. Extract updates into a new program folder and reuse the same data directory. Native schema upgrade runs before serving. The EXE is unsigned; clean Windows VM, legacy migration and full restoration acceptance are still pending.
 
 ## What is supported
 

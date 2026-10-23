@@ -4,7 +4,7 @@
 частей отмечена отдельно; описание цели само по себе не означает её реализацию.
 
 <a id="legacy-plan"></a>
-## Действующий план завершения нужного legacy — обновлён 2026-10-23
+## Действующий план завершения нужного legacy — обновлён 2026-10-24
 
 Единственная актуальная очередь до самого конца: **три этапа**. Разделы с более
 ранними датами ниже — история и технические требования, а не дополнительные очереди.
@@ -14,7 +14,7 @@
 
 ### Где остановились
 
-Контрольная точка **Stream 0.112.191 / Handler 0.6.0.138** (2026-10-23):
+Контрольная точка **Stream 0.112.193 / Handler 0.6.0.140** (2026-10-24):
 закрыты этап 1 (1.0–1.5, B07) и этап 2 (2.1–2.4: L10, L09, L08, L11).
 
 - Уже подключены базовые табличные адаптеры, inline-теги, заметки/сообщения/задачи,
@@ -119,6 +119,15 @@ CustomLayouts остаются; произвольный HTML/DOM/Mako не ст
 | 2.4 | L11 — SQLite/PostgreSQL — **закрыт** | Пройдены одинаковые native/API/script сценарии на временном SQLite и Docker PostgreSQL 18.6 во всех 7 наборах (oundation, schema, project, plugin, command, queue, diagnostics): DDL (CreateTable, AlterTable, индексы, ограничения, последовательности), даты/таймзоны, JSON/JSONB и get_json_counter_update, многофильтровый Update (WHERE ... AND ...), межпроектные DbResource, конкурентные записи (ThreadPoolExecutor), транзакции и именованные savepoints (set_savepoint/ollback_savepoint/elease_savepoint), откат частичного сбоя, snapshot_table/estore_table, TableSchemaDumper/TableDataDumper, FileUndoReplay и объединённая матрица L08+L09 (exercise_l08_l09_matrix). MySQL отложен. |
 
 ### Этап 3: поставка и переход с legacy
+
+#### L12 Windows checkpoint: Stream 0.112.193 / Handler 0.6.0.140
+
+- Portable x64 desktop: Electron 44.9.3, isolated embedded Python 3.14.9, SQLite, installed Stream wheel and native Handler/PySide6 6.11.1. Official runtime archives are pinned by SHA-256; the manifest records installed dependencies and file hashes. Program files contain no saved client presets or workstation data.
+- Data, browser state and native Handler settings live outside the program directory. Existing XML is preserved; native CLI owns first initialization, upgrade and monitor shutdown. Both `--data-dir path` and `--data-dir=path` are supported. Shell confirmations reuse the shared EN/RU Frame translator.
+- Actual first EXE launch used the native password console on a new Unicode/space path. Login, 12 existing Handler SDK scenarios, persisted browser session/localStorage after restart and shutdown of the owned monitor/all workers passed. The packaged native Handler opened with the embedded runtime and an external profile while system Python discovery was poisoned. This was a developer-host isolation test, not clean Windows VM acceptance.
+- Verification: 10 delivery unit tests and 8 focused Handler tests passed. The fresh full Frame gate passed all 156 stages with current source fingerprints; `native-remaining-knowledge` passed its recorded serial retry. Native/GUI acceptance is not complete production or leak-free acceptance.
+- Package: `../releases/windows-0.112.193-final.zip`; 7113 inventoried files, per-file SHA-256 and ZIP integrity checked. Instructions: `WINDOWS_DELIVERY.en.md` and `WINDOWS_DELIVERY.ru.md`. Evidence: `.test-tmp/windows-delivery-193.json`, `windows-desktop-193-complete.log`, `windows-first-boot-193-ready.log`, `windows-handler-native-193-ready.log`, `windows-gate-193-final.log`. The unsigned EXE remains a checkpoint; L12 is open.
+- Next: clean Windows VM and installed GUI acceptance; upgrade from a prior delivered version; agreed legacy projects migrated on copies; database/repository/config backup and restoration; final release gate.
 
 #### L12 checkpoint: Stream 0.112.192 / Handler 0.6.0.139
 

@@ -4060,6 +4060,13 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Administrator initialization was cancelled or failed.": "Первичная установка отменена или завершилась ошибкой.",
+	"Local server did not start. See server/temp/log/desktop.log.": "Локальный сервер не запустился. См. server/temp/log/desktop.log.",
+	"Local server stopped. See server/temp/log/desktop.log in the data directory.": "Локальный сервер остановился. См. server/temp/log/desktop.log в каталоге данных.",
+	"Allow this permission?": "Разрешить этот доступ?",
+	"Close with unsaved changes?": "Закрыть с несохранёнными изменениями?",
+	"Keep open": "Оставить открытым",
+	Allow: "Разрешить",
 	"Choose file": "Выбрать файл",
 	"Choose files": "Выбрать файлы",
 	"Clear file": "Убрать файл",

@@ -1468,5 +1468,12 @@
   "CustomLayout output exceeds one MiB": "CustomLayout output exceeds one MiB",
   "CustomLayout markup exceeds 32 levels": "CustomLayout markup exceeds 32 levels",
   "CustomLayout supports at most 128 controls": "CustomLayout supports at most 128 controls",
-  "Finish the current confirmation first": "Finish the current confirmation first"
+  "Finish the current confirmation first": "Finish the current confirmation first",
+  "Administrator initialization was cancelled or failed.": "Administrator initialization was cancelled or failed.",
+  "Local server did not start. See server/temp/log/desktop.log.": "Local server did not start. See server/temp/log/desktop.log.",
+  "Local server stopped. See server/temp/log/desktop.log in the data directory.": "Local server stopped. See server/temp/log/desktop.log in the data directory.",
+  "Allow this permission?": "Allow this permission?",
+  "Close with unsaved changes?": "Close with unsaved changes?",
+  "Keep open": "Keep open",
+  "Allow": "Allow"
 }

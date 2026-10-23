@@ -17,9 +17,18 @@ Existing SQLite data/configuration is never switched to PostgreSQL by initializa
 See [server installation](SERVER_DELIVERY.en.md) and
 [установка серверного комплекта](SERVER_DELIVERY.ru.md).
 
-The working source-mounted Docker environment remains independent. Windows
-EXE/Electron, legacy project migration, backup/restore and complete GUI acceptance
-are still L12 requirements; this checkpoint does not close L12.
+The working source-mounted Docker environment remains independent.
+
+## Windows desktop checkpoint (0.112.193 / Handler 0.6.0.140)
+
+The portable Windows x64 builder includes Electron, isolated embedded Python,
+SQLite and the native Handler with pinned PySide6. User data, browser state and
+Handler settings live outside the program folder. Native CLI commands own
+initialization, upgrade and monitor shutdown. See [Windows installation](WINDOWS_DELIVERY.en.md)
+and [установка Windows-комплекта](WINDOWS_DELIVERY.ru.md).
+
+Clean Windows VM acceptance, legacy project migration, backup/restore and complete
+GUI acceptance remain L12 requirements; this checkpoint does not close L12.
 
 ## Целевая поставка
 
