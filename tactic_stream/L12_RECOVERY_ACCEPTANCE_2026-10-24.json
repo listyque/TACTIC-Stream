@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-24",
+  "runtime_release": {
+    "stream": "0.112.193",
+    "handler": "0.6.0.140"
+  },
+  "base_commits": {
+    "stream": "4d200bfd",
+    "handler": "d10c09fb"
+  },
+  "sqlite_upgrade_and_recovery": {
+    "previous_version": "0.112.192",
+    "current_version": "0.112.193",
+    "previous_client_scenarios": 12,
+    "previous_installed_wheel": true,
+    "previous_package_metadata_verified": true,
+    "upgrade_records_files_config": true,
+    "handler_profile_preserved": true,
+    "before_backup_files": 43,
+    "after_backup_files": 43,
+    "backups_verified": true,
+    "independent_restoration": true,
+    "rollback": true,
+    "restore": true
+  },
+  "postgres_upgrade_and_recovery": {
+    "previous_version": "0.112.192",
+    "current_version": "0.112.193",
+    "previous_client_scenarios": 12,
+    "upgrade_records_files_config": true,
+    "pg_dump_pg_restore": true,
+    "administrator_password_preserved": true,
+    "repository_apache_webmin_and_secrets": true,
+    "separate_restoration_volumes": true,
+    "source_services_unavailable": true,
+    "restored": true,
+    "rollback": true
+  },
+  "existing_local_data_offline": {
+    "source_unchanged": true,
+    "offline_only": true,
+    "source_databases": 4,
+    "tables": 127,
+    "rows": 122327,
+    "files": 21032,
+    "bytes": 7918158004,
+    "content_mtime_readonly_and_empty_directories": true,
+    "integrity_check": true,
+    "restored_from_separate_backup": true,
+    "original_login_hashes_preserved": true,
+    "source_inventory_sha256": "dc4f66e20f85b7f877f31f88718e21cef8364fb20ae9c015a2bae2efdcd68b7d",
+    "application_scripts_started": false,
+    "windows_acl_restore_verified": false
+  },
+  "clean_windows": {
+    "status": "not_run",
+    "verified": false,
+    "reason": "Sandbox is not installed; Hyper-V requires Windows administrative access; available VMware guest is Ubuntu; remote device is offline",
+    "user_environment_choice_pending": true
+  },
+  "standalone_windows_kit": {
+    "status": "host_validated",
+    "clean_guest_test": false,
+    "uses_bundled_python_and_electron_node": true,
+    "first_native_password_console": true,
+    "login_sdk_restart_shutdown": true,
+    "program_files_verified": 7113,
+    "kit": "../releases/clean-windows-0.112.193/Check TACTIC Stream.wsb"
+  },
+  "delivery_unit_tests": 16,
+  "frame_gate": {
+    "status": "previous_full_pass_fingerprints_current",
+    "stages": 156
+  },
+  "artifacts": {
+    "source-0.112.192-ready": {
+      "manifest_sha256": "391b9208c729066056da9d386dff77d9a0ade63ea27c5de83264a028327cb068"
+    },
+    "server-0.112.192-final": {
+      "manifest_sha256": "40a61dac5d703196818d78debcb214260e167d6c7e78a191cde561706c5fe78a"
+    },
+    "windows-0.112.193-final": {
+      "manifest_sha256": "997a207cede377955348b5344c6836ded85c40d03db28da60aedd2b020be238d"
+    },
+    "server-0.112.193-final": {
+      "manifest_sha256": "10aa6577f13b8dda05e30cd8674a2df8b5488b1b1164218cbcd8f626d14c6652"
+    },
+    "windows-0.112.193-final.zip": {
+      "sha256": "24559e192b41e6d4969196f78e3fc918eb0cbea683fb699bd4cc3356ff5c4800",
+      "bytes": 481983618
+    }
+  },
+  "l12_complete": false
+}

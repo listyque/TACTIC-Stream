@@ -27,8 +27,11 @@ Handler settings live outside the program folder. Native CLI commands own
 initialization, upgrade and monitor shutdown. See [Windows installation](WINDOWS_DELIVERY.en.md)
 and [установка Windows-комплекта](WINDOWS_DELIVERY.ru.md).
 
-Clean Windows VM acceptance, legacy project migration, backup/restore and complete
-GUI acceptance remain L12 requirements; this checkpoint does not close L12.
+Upgrade 0.112.192 to 0.112.193, independent cold restoration and rollback passed
+on SQLite and PostgreSQL fixtures, including native Handler profiles and repository
+bytes. An offline restoration trial of the existing local data also passed.
+See [recovery acceptance and procedure](RECOVERY_ACCEPTANCE.md). Clean Windows VM,
+legacy project migration and complete GUI acceptance remain L12 requirements.
 
 ## Целевая поставка
 

@@ -120,6 +120,15 @@ CustomLayouts остаются; произвольный HTML/DOM/Mako не ст
 
 ### Этап 3: поставка и переход с legacy
 
+#### L12 recovery acceptance - 2026-10-24 (Stream 0.112.193 / Handler 0.6.0.140)
+
+- Genuine previous-version acceptance: installed source wheel 0.112.192 / Handler 0.6.0.139 to embedded Windows runtime 0.112.193, and exported server image IDs 0.112.192 to 0.112.193. Native upgrades retained object/task/note/naming data, concrete snapshot/file identity and bytes, XML and native Handler settings. A previous Windows EXE did not exist; this is not a fabricated EXE-to-EXE migration.
+- Before/after cold backups restored into new SQLite directories and separate PostgreSQL Compose projects/volumes. Original fixture services/directories were unavailable during restoration. Prior binaries/images plus pre-upgrade backups also passed rollback. PostgreSQL uses pg_dump/pg_restore plus repository, Apache/Webmin config and original secrets; Apache/assets/authentication/Webmin checks passed after restoration. Owned acceptance containers and volumes were removed.
+- The existing stopped local dataset also passed an offline copy/backup/restore trial: 4 SQLite DBs, 127 tables, 122327 rows, 21032 files, 7918158004 bytes. Hashes, mtime, readonly attributes, empty directories, DB integrity and original login hash bytes matched. The source inventory was unchanged; copied application jobs/scripts were not started, custom NTFS ACL recovery is unverified, and temporary copies were removed.
+- A standalone clean-Windows kit is prepared at ../releases/clean-windows-0.112.193/Check TACTIC Stream.wsb. Its driver was checked on the developer host using only the published ZIP, bundled Electron/Node/Python and copied pinned Playwright. First native password console, login, 12 SDK scenarios, restart, owned-worker shutdown, and the unchanged 7113-file program inventory passed. This is kit validation, not clean-Windows evidence.
+- Clean Windows is blocked on environment access: Sandbox is not installed, Hyper-V enumeration requires Windows administrative access, the available VMware VM is Ubuntu and the connected remote device is offline. A user question about a VM/PC or Sandbox/UAC is pending; no OS feature was enabled and no reboot requested. Clean Windows remains unverified.
+- Procedure and scope: RECOVERY_ACCEPTANCE.md. Evidence: .test-tmp/l12-sqlite-recovery-193.json, l12-postgres-recovery-193.json, l12-existing-data-recovery-193.json and l12-standalone-kit.log. Runtime release versions remain 0.112.193 / 0.6.0.140: this change adds verification/runbooks, not a new application release. Next: clean Windows/installed GUI acceptance, agreed legacy project migration on copies and final release acceptance. L12 stays open.
+
 #### L12 Windows checkpoint: Stream 0.112.193 / Handler 0.6.0.140
 
 - Portable x64 desktop: Electron 44.9.3, isolated embedded Python 3.14.9, SQLite, installed Stream wheel and native Handler/PySide6 6.11.1. Official runtime archives are pinned by SHA-256; the manifest records installed dependencies and file hashes. Program files contain no saved client presets or workstation data.

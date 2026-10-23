@@ -35,7 +35,11 @@ Extract the new bundle into a new folder and launch it with the same data direct
 Do not copy databases or settings into the program folder. Native upgrade runs
 before serving; binary replacement is not a database rollback. Keep the old
 bundle and a matching pre-upgrade data backup for restoration.
-Migration of legacy projects and full backup/restore acceptance are separate L12 work.
+Upgrade 0.112.192 to 0.112.193, before/after backups, independent restoration and
+rollback passed on isolated fixtures. An offline copy of the existing local dataset
+also passed content/integrity checks. See [recovery procedure and acceptance](RECOVERY_ACCEPTANCE.md).
+Clean Windows and legacy project migration remain L12 work. The previous Windows
+EXE did not exist; previous-version SQLite acceptance starts from the delivered wheel.
 
 Build from the development checkout with Python 3.14 on Windows x64:
 

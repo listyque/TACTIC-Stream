@@ -1,4 +1,4 @@
-// Run against an initialized, isolated desktop data root, never a user's profile.
+// Run against an isolated desktop data root, never a user's profile.
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import fs from 'node:fs/promises';
@@ -33,6 +33,14 @@ for (let iteration = 0; iteration < 2; iteration++) {
   let status;
   try {
     assert.equal(await app.evaluate(({ app }) => app.getPath('userData')), path.join(dataRoot, 'browser'));
+    if (iteration === 0 && !await fs.stat(path.join(dataRoot, 'server/db/sthpw.db')).then(() => true, error => {
+      if (error.code !== 'ENOENT') throw error;
+      return false;
+    })) {
+      const pid = await app.evaluate(() => process.pid);
+      await run(path.join(bundle, 'runtime/python.exe'), ['-I', '-B', '-X', 'utf8',
+        path.resolve('../tests/scripts/windows_console_password.py'), bundle, String(pid)], { env: environment, timeout: 75000 });
+    }
     const page = await app.firstWindow({ timeout: 120000 });
     page.on('pageerror', error => errors.push(error.message));
     page.setDefaultTimeout(30000);
@@ -50,7 +58,7 @@ for (let iteration = 0; iteration < 2; iteration++) {
       const check = path.resolve('../tools/handler_deployment_check.py');
       const result = await run(path.join(bundle, 'runtime/python.exe'), ['-I', '-B', '-X', 'utf8', '-c',
         "import json,os,runpy,secrets,sys; from pathlib import Path; ns=runpy.run_path(sys.argv[1]); print(json.dumps(ns['check'](sys.argv[2],Path(sys.argv[3]),os.environ['WINDOWS_CHECK_PASSWORD'],secrets.token_hex(6),Path(sys.argv[4]))))",
-        check, address, path.join(bundle, 'TACTIC-Handler'), dataRoot], { env: environment, timeout: 120000 });
+        check, address, path.join(bundle, 'TACTIC-Handler'), dataRoot], { env: { ...environment, TACTIC_QML_TEST_SETTINGS_DIR: path.join(dataRoot, 'handler') }, timeout: 120000 });
       console.log('Handler SDK:', result.stdout.trim());
       await page.screenshot({ path: path.join(dataRoot, 'desktop.png') });
     } else {

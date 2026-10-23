@@ -94,7 +94,8 @@ def build(handler, output):
     shutil.copyfile(ROOT / 'src/tactic_stream/shared_ui/core/strings.mjs', app / 'strings.mjs')
     for name in ('Handler.cmd',):
         shutil.copyfile(ROOT / 'deploy/windows' / name, output / name)
-    for name in ('WINDOWS_DELIVERY.en.md', 'WINDOWS_DELIVERY.ru.md', 'LICENSE.TACTIC', 'LICENSE.HANDLER', 'LICENSE.QUICKJS-NG'):
+    for name in ('WINDOWS_DELIVERY.en.md', 'WINDOWS_DELIVERY.ru.md', 'RECOVERY_ACCEPTANCE.md',
+                 'LICENSE.TACTIC', 'LICENSE.HANDLER', 'LICENSE.QUICKJS-NG'):
         shutil.copyfile(ROOT / name, output / name)
     python = output / 'runtime/python.exe'
     probe = subprocess.run([str(python), '-I', '-B', '-X', 'utf8', '-c',

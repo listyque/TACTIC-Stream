@@ -70,7 +70,9 @@ stopped. Restoring a database backup is required if a schema change cannot be re
 loading an older image alone is not a database rollback.
 
 This package supports a new PostgreSQL installation and native upgrades. Legacy
-project migration, backup/restore acceptance, clean-machine Windows EXE/Electron,
-and complete GUI acceptance remain separate L12 requirements. Existing SQLite data
+project migration, clean-machine Windows EXE/Electron and complete GUI acceptance
+remain separate L12 requirements. Upgrade 0.112.192 to 0.112.193 and cold restoration/
+rollback into independent PostgreSQL volumes passed; see
+[recovery procedure and acceptance](RECOVERY_ACCEPTANCE.md). Existing SQLite data
 does not become PostgreSQL data by changing a config value. External publication
 requires configuring TLS and trusted proxy settings for the target environment.
