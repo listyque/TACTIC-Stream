@@ -428,6 +428,19 @@ def exercise(store, prefix):
             obj.commit()
             return obj.get_id()
         assert execute(next_row) > 15000
+        from tactic.command import PluginReloader
+        def reload_fail():
+            PluginReloader(code='export/package', base_dir=str(store.data_dir / 'installed'), verbose=False).execute()
+            raise ValueError('reload rollback')
+        with unittest.TestCase().assertRaisesRegex(ValueError, 'reload rollback'):
+            execute(reload_fail)
+        assert Search.get_by_code(project_code + '/asset', 'KEEP').get_id() == 15000
+        assert Search.get_by_code('config/plugin', 'export/package') is not None
+        execute(PluginReloader(code='export/package', base_dir=str(store.data_dir / 'installed'), verbose=False).execute)
+        assert not backup.exists()
+        assert Search.get_by_code('config/plugin', 'export/package') is not None
+        assert Search.get_by_code(project_code + '/asset', 'KEEP').get_id() == 15000
+        assert Search.get_by_code(project_code + '/asset', 'NEXT_AFTER_REINSTALL') is not None
         # Nested packages and real Python undo/file effects share one Command.
         nested = store.data_dir / 'nested_input'
         child = nested / 'child'
@@ -618,6 +631,38 @@ def exercise(store, prefix):
         from tactic.command import ProjectTemplateUpdaterCmd
         with unittest.TestCase().assertRaisesRegex(UnsupportedContract, 'no implementation'):
             execute(ProjectTemplateUpdaterCmd(project_code=source).execute)
+        # Template manager commands: staging from upload, multi-file rollback, export, download, delete.
+        from tactic.ui.app.project_template_wdg import (
+            ProjectTemplateInstallCmd, ProjectTemplateDownloadCmd,
+            ProjectTemplateExportCmd, ProjectTemplateDeleteCmd,
+        )
+        upload_dir = Path(Environment.get_upload_dir())
+        upload_dir.mkdir(parents=True, exist_ok=True)
+        staged_zip = upload_dir / whole_zip.name
+        staged_zip.write_bytes(whole_zip.read_bytes())
+        bad_zip = upload_dir / 'corrupt_template.zip'
+        bad_zip.write_bytes(b'not-a-zip')
+        tpl_base = Path(Environment.get_template_dir())
+        had_extracted = (tpl_base / (source + '-1')).exists()
+        with unittest.TestCase().assertRaises(Exception):
+            execute(ProjectTemplateInstallCmd(paths=[whole_zip.name, 'corrupt_template.zip']).execute)
+        assert not (tpl_base / whole_zip.name).exists()
+        assert (tpl_base / (source + '-1')).exists() == had_extracted
+        execute(ProjectTemplateInstallCmd(paths=[whole_zip.name]).execute)
+        assert (tpl_base / whole_zip.name).is_file()
+        assert (tpl_base / (source + '-1') / 'manifest.xml').is_file()
+        dl_cmd = ProjectTemplateDownloadCmd(template_dir=str(tpl_base / (source + '-1')))
+        execute(dl_cmd.execute)
+        assert dl_cmd.get_info()['filename'] == whole_zip.name
+        cache_dir = Path(Environment.get_asset_dir()) / '_cache' / Environment.get_ticket()
+        assert (cache_dir / whole_zip.name).is_file()
+        execute(ProjectTemplateDeleteCmd(template=source + '-1').execute)
+        assert not (tpl_base / (source + '-1')).exists() and not (tpl_base / whole_zip.name).exists()
+        exp_cmd = ProjectTemplateExportCmd(project_code=source)
+        execute(exp_cmd.execute)
+        exp_zip_name = exp_cmd.get_info()['filename']
+        assert (cache_dir / exp_zip_name).is_file()
+        assert (tpl_base / source / 'manifest.xml').is_file()
         return comparison
 
 

@@ -173,7 +173,66 @@ def exercise(store, prefix):
         resource = Project.get().get_project_db_resource()
         assert 'rolled_column' not in DbContainer.get(resource).get_column_info('project_asset', use_cache=False)
 
+        # Live template project (is_template=True) on-the-fly export + rollback and ProjectArchiveAction lifecycle.
+        from tactic.command import ProjectTemplateInstallerCmd
+        from tactic_stream.server.project_creation import get_project_creation_catalog
+        Project.set_project('admin')
+        first_proj = Search.get_by_code('sthpw/project', code)
+        cmd = Command()
+        def mark_template():
+            cmd.get_transaction().set_sync(False)
+            first_proj.set_value('is_template', True)
+            first_proj.commit()
+        cmd.execute = mark_template
+        Command.execute_cmd(cmd)
+        catalog = get_project_creation_catalog()
+        assert any(row['value'] == code and row['kind'] == 'project' for row in catalog['templates'])
+        tpl_dir = Path(Environment.get_template_dir())
+        dist_dir = Path(Environment.get_dist_dir())
+        live_fail = prefix + '_lf'
+        cmd = Command()
+        def fail_live_clone():
+            cmd.get_transaction().set_sync(False)
+            ProjectTemplateInstallerCmd(project_code=live_fail, template_code=code, verbose=False).execute()
+            raise ValueError('live template clone rollback')
+        cmd.execute = fail_live_clone
+        with unittest.TestCase().assertRaisesRegex(ValueError, 'live template clone rollback'):
+            Command.execute_cmd(cmd)
+        assert Project.get_by_code(live_fail) is None
+        assert not DbResource.get_default(live_fail).get_database_impl().database_exists(DbResource.get_default(live_fail))
+        assert not (tpl_dir / code).exists() and not (dist_dir / (code + '.zip')).exists()
+        live_ok = prefix + '_lo'
+        api.dispatch('execute_cmd', (ticket, 'tactic.command.ProjectTemplateInstallerCmd',
+            dict(project_code=live_ok, template_code=code, verbose=False)))
+        assert Project.get_by_code(live_ok) is not None
+        assert (tpl_dir / code / 'manifest.xml').is_file() and (dist_dir / (code + '.zip')).is_file()
+        # Retire and reactivate through EditCmd + ProjectArchiveAction, and reject built-in projects.
+        from tactic.ui.panel import EditCmd
+        edit_args = dict(search_key='sthpw/project?code=' + second, view='configuration_edit',
+                         element_names=['title', 's_status'])
+        api.dispatch('execute_cmd', (ticket, 'tactic.ui.panel.EditCmd', edit_args,
+            {'edit|title': 'Second Retired', 'edit|s_status': 'retired'}))
+        with request_context(RequestContext(store, 'admin', 'admin')):
+            api.auth.bind_security('admin', token)
+            assert Search.get_by_code('sthpw/project', second, show_retired=True).is_retired()
+        api.dispatch('execute_cmd', (ticket, 'tactic.ui.panel.EditCmd', edit_args,
+            {'edit|title': 'Second Reactivated', 'edit|s_status': ''}))
+        with request_context(RequestContext(store, 'admin', 'admin')):
+            api.auth.bind_security('admin', token)
+            reactivated = Search.get_by_code('sthpw/project', second, show_retired=True)
+            assert not reactivated.is_retired() and reactivated.get_value('title') == 'Second Reactivated'
+        for builtin in ('admin', 'sthpw'):
+            with unittest.TestCase().assertRaises(Exception):
+                api.dispatch('execute_cmd', (ticket, 'tactic.ui.panel.EditCmd',
+                    dict(search_key='sthpw/project?code=' + builtin, view='configuration_edit', element_names=['s_status']),
+                    {'edit|s_status': 'retired'}))
+        # Restore second project's original title and clear outer request cache.
+        api.dispatch('execute_cmd', (ticket, 'tactic.ui.panel.EditCmd', edit_args,
+            {'edit|title': 'Second', 'edit|s_status': ''}))
+        Project.clear_cache()
+
         # A failure after a committed existing DB must never claim full rollback.
+        Project.set_project(code)
         system_sql = DbContainer.get('sthpw')
         cmd = Command()
         source_file = store.data_dir / 'partial-source.txt'
@@ -235,7 +294,7 @@ class ProjectCreation(unittest.TestCase):
                         self.assertEqual(exercise(store, prefix), expected)
                 finally:
                     # All names were generated exclusively for this check.
-                    for name in [database] + [prefix + '_' + suffix for suffix in ('ok', 'late', 'cancel', 'commit', 'bad', 'other')]:
+                    for name in [database] + [prefix + '_' + suffix for suffix in ('ok', 'late', 'cancel', 'commit', 'bad', 'other', 'lf', 'lo')]:
                         maintenance.execute(sql.SQL('DROP DATABASE IF EXISTS {}').format(sql.Identifier(name)))
                     Config.reload_config()
 

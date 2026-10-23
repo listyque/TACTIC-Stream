@@ -348,7 +348,7 @@ class Transaction(Base):
             raise TransactionException('Rollback cleanup failed: %s' % failures[0]) from failures[0]
         if self.file_journal:
             self.file_journal.close(resolved=not partial)
-            if partial:
+            if partial and not self.committed_databases:
                 raise PartialCommitException('File transaction has committed database effects; journal and files retained for recovery')
         self._reset()
 

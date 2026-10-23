@@ -216,8 +216,15 @@ class EditCmd(Command):
                 sudo.exit()
             if not sobject:
                 raise TacticException('This search key [%s] no longer exists.' % self.search_key)
+            self.search_type = sobject.get_search_type()
             if sobject.is_retired():
-                raise TacticException('Retired records cannot be edited. Reactivate the record first.')
+                reactivating = any(
+                    h.__class__.__name__ == 'ProjectArchiveAction'
+                    and h.get_value(h.name) in (None, '')
+                    for h in self._get_action_handlers()
+                )
+                if not reactivating:
+                    raise TacticException('Retired records cannot be edited. Reactivate the record first.')
             if self.expected_revision or self.action == 'check':
                 import hashlib
                 import json

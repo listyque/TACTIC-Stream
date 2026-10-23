@@ -10,7 +10,7 @@
 ранними датами ниже — история и технические требования, а не дополнительные очереди.
 Прежний этап «Базовые UI и адаптеры» закрыт как контрольная точка; его остатки
 (L02/L03/L05/L07a) входят в пункты этапа 1. Прежние этапы 2/3/4 стали 1/2/3,
-пункты 2.x → 1.x, 3.x → 2.x, 4 → 3. **Этап 1/B07 не закрыт.**
+пункты 2.x → 1.x, 3.x → 2.x, 4 → 3. **Этап 1 (B07) и пункт 2.1 (L10) закрыты.**
 
 ### Где остановились
 
@@ -112,7 +112,7 @@ CustomLayouts остаются; произвольный HTML/DOM/Mako не ст
 
 | Пункт | Блок | Остаток и условие готовности |
 | --- | --- | --- |
-| 2.1 | L10 — проекты, plugins, schema/import/export | Сверить используемые install/update/export/import/uninstall, DDL и перенос файлов/данных; проверить повтор и откат частичного сбоя. |
+| 2.1 | L10 — проекты, plugins, schema/import/export — **закрыт** | Сверены и проверены CreateProjectCmd, ProjectTemplateInstallerCmd (включая живое клонирование is_template=True и полный откат БД/файлов), ProjectTemplateCreatorCmd, ProjectTemplate*Cmd, PluginInstaller / PluginCreator / PluginUninstaller / PluginReloader, ProjectArchiveAction, а также паритет серверных schema_cmd / schema_delete_cmd / workflow_cmd / search_types_cmd с ТХ schema_api / schema_delete_api / workflow_api / search_types_api на SQLite и PostgreSQL 18.6. |
 | 2.2 | L09 — Workflow, Triggers, уведомления | Проверить исполнение нужных узлов/handlers/событий, sync/async, расписания, recipients/privacy и доставку без дублирования. Редактор графа не доказывает выполнение. |
 | 2.3 | L08 — API, native Python, TEL/Naming | По подтверждённым callers закрыть оставшиеся контракты, контекст, параметры, ошибки и эффекты; классифицировать UnsupportedContract, не снимать защитные guards. |
 | 2.4 | L11 — SQLite/PostgreSQL | Пройти одинаковые сценарии на двух реальных СУБД (Docker PostgreSQL 18.6 и локальный SQLite): DDL, даты/JSON, конкуренция, транзакции, rollback и восстановление. MySQL отложен. |

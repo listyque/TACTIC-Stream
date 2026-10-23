@@ -11,6 +11,8 @@ class ProjectArchiveAction(DatabaseAction):
             return False
         if self.sobject.get_base_search_type() != "sthpw/project":
             raise UserException("Project lifecycle requires a project")
+        if self.sobject.get_code() in ("admin", "sthpw"):
+            raise UserException("Built-in system projects cannot be archived")
         value = self.get_value(self.name)
         if value not in (None, "", "retired"):
             raise UserException("Invalid project lifecycle value")

@@ -120,12 +120,14 @@ def recover_files(store):
     from pyasm.search import DbResource, FileUndo
     from pyasm.search.transaction import PartialCommitException, TransactionException
     directory = store.data_dir / 'temp' / 'file-transactions'
-    if not directory.exists():
+    if not directory.exists() or not any(directory.glob('*.jsonl')):
         return
     try:
         guard = byte_lock(directory / 'recovery')
         guard.__enter__()
     except (PermissionError, BlockingIOError):
+        if not any(directory.glob('*.jsonl')):
+            return
         raise TransactionException('Another worker is recovering file transactions; retry after recovery') from None
     try:
         for path in directory.glob('*.jsonl'):

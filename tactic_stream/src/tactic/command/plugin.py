@@ -32,7 +32,7 @@ from pyasm.search import Search, SearchType, SearchException, CreateTable, DbCon
 from pyasm.security import Sudo
 from tactic.command.python_cmd import check_script_execution
 
-__all__ = ['PluginBase', 'PluginCreator', 'PluginInstaller', 'PluginUninstaller', 'PluginTools']
+__all__ = ['PluginBase', 'PluginCreator', 'PluginInstaller', 'PluginReloader', 'PluginUninstaller', 'PluginTools']
 
 from pyasm.search import TableDataDumper, TableSchemaDumper
 from pyasm.search.sql_dumper import _open_dump
@@ -973,6 +973,23 @@ class PluginUninstaller(PluginBase):
             from tactic.command import PythonCmd
             cmd = PythonCmd(file_path=path)
             cmd.execute()
+
+
+class PluginReloader(PluginUninstaller):
+
+    def execute(self):
+        check_script_execution()
+        super().execute()
+        installer = PluginInstaller(
+            base_dir=self.base_dir,
+            plugin_dir=self.plugin_dir,
+            manifest=self.manifest,
+            version=self.version,
+            verbose=self.verbose,
+            register=True,
+        )
+        installer.execute()
+
 
 class PluginTools(PluginBase):
     def __init__(self, **kwargs):

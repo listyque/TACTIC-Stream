@@ -15,8 +15,8 @@ __all__.append('CopyFileToAssetTempCmd')
 
 
 
-from .plugin import PluginBase, PluginCreator, PluginInstaller, PluginUninstaller, PluginTools
-__all__ += ["PluginBase", "PluginCreator", "PluginInstaller", "PluginUninstaller", "PluginTools"]
+from .plugin import PluginBase, PluginCreator, PluginInstaller, PluginReloader, PluginUninstaller, PluginTools
+__all__ += ["PluginBase", "PluginCreator", "PluginInstaller", "PluginReloader", "PluginUninstaller", "PluginTools"]
 
 from .project_template_cmd import ProjectTemplateInstallerCmd, ProjectTemplateCheckCmd, ProjectTemplateCreatorCmd, ProjectTemplateUpdaterCmd
 __all__ += ['ProjectTemplateInstallerCmd', 'ProjectTemplateCheckCmd', 'ProjectTemplateCreatorCmd', 'ProjectTemplateUpdaterCmd']
