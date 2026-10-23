@@ -2017,10 +2017,8 @@ class MethodMode(ExpressionParser):
 
             related_type, filters = self.process_search_type(related_type)
             policy = Container.get('Expression:check_record_access')
-            if policy and related_type in ('login', 'state', 'date', 'site'):
+            if policy and related_type in ('login', 'state', 'date', 'site', 'palette'):
                 policy('sthpw/login' if related_type == 'login' else 'sthpw/virtual')
-            if related_type == 'palette':
-                raise UnsupportedContract("Expression %s objects are not migrated" % related_type)
 
             related_expr = related_exprs[i]
 
@@ -2132,6 +2130,13 @@ class MethodMode(ExpressionParser):
             elif related_type == 'site':
                 site = Site.get()
                 related_sobjects = [site]
+            elif related_type == 'palette':
+                from pyasm.web import Palette
+                palette = Palette.get()
+                sobject = SearchType.create("sthpw/virtual")
+                for tmp_key in palette.get_keys():
+                    sobject.set_value(tmp_key, palette.color(tmp_key))
+                related_sobjects = [sobject]
 
             elif related_type.find("/") == -1:
                 sobject = self.get_env_sobject(related_type)

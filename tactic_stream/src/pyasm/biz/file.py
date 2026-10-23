@@ -12,7 +12,7 @@
 
 __all__ = ["FileException", "File", "IconCreator", "FileGroup", "FileRange"]
 
-from pyasm.common import Common, Xml, TacticException, Environment, Config, jsonloads
+from pyasm.common import Common, Xml, TacticException, Environment, Config, System, jsonloads
 from pyasm.search import *
 from pyasm.common.errors import UnsupportedContract
 from .project import Project
@@ -304,7 +304,6 @@ class File(SObject):
 
     def makedirs(dir, mode=None):
         '''wrapper to mkdirs in case it ever needs to be overridden'''
-        raise UnsupportedContract("File.makedirs requires unported check-in/repository dependencies")
         print("DEPRECATED: use System().makedirs()")
         return System().makedirs(dir,mode)
     makedirs = staticmethod(makedirs)

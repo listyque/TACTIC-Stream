@@ -1234,10 +1234,15 @@ class Snapshot(SObject):
         # client api and it doesn't seem to make sense here on server code
         FileUndo._check_access()
         self._lock_versions()
-        if mode not in (None, '', 'move', 'copy', 'inplace', 'preallocate'):
+        if mode not in (None, '', 'move', 'copy', 'inplace', 'preallocate', 'upload', 'uploaded', 'manual', 'create'):
             raise UnsupportedContract('This append mode requires the remaining upload/preallocation migration')
+        if mode in ('upload', 'uploaded', 'manual'):
+            upload_mode = mode
+            mode = 'create'
+        else:
+            upload_mode = None
         if mode:
-            assert mode in ['move', 'copy', 'preallocate', 'upload', 'manual','inplace']
+            assert mode in ['move', 'copy', 'preallocate', 'upload', 'manual', 'inplace', 'create']
 
         # file_path can be an array of files:
         if not isinstance(file_path, list):
@@ -1272,6 +1277,10 @@ class Snapshot(SObject):
             file_path = file_path.replace("\\", "/")
             old_filename = os.path.basename(file_path)
             filename = File.get_filesystem_name(old_filename)
+            if upload_mode == 'upload' and not os.path.exists(file_path):
+                candidate = "%s/%s" % (Environment.get_upload_dir(), filename)
+                if os.path.exists(candidate):
+                    file_path = candidate
 
             sub_file_paths = [file_path]
             sub_file_types = [file_type]

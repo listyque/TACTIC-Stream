@@ -149,20 +149,70 @@ class SnapshotParity(read_tests.ReadParity):
         self.assertEqual(self.store.database_path('sthpw').read_bytes(), before)
 
     def test_palette_expressions_resolve_in_naming(self):
-        from pyasm.biz import NamingUtil, Snapshot
-        from pyasm.common.errors import UnsupportedContract
+        from pyasm.biz import ExpressionParser, NamingUtil, Snapshot
         from pyasm.search import Search
         with request_context(RequestContext(self.store, 'admin', 'admin')):
             self.api.auth.bind_security('admin', self.ticket)
             parent = Search.get_by_code('contract/snapshot_entity', 'A')
             snapshot = Snapshot.create(parent, 'file', 'naming_guard', commit=False)
             util = NamingUtil()
-            for template in ("{@COLOR(color)}",):
+            expected_color = Search.eval('@COLOR(color)', single=True)
+            for template in ("{@COLOR(color)}", "{@GET(palette.color)}"):
                 for operation in (lambda: util.naming_to_file(template, parent, snapshot),
                                   lambda: util.naming_to_dir(template, parent, snapshot),
                                   lambda: util.eval_template(template, parent, snapshot=snapshot)):
                     with self.subTest(template=template):
-                        self.assertEqual(operation(), Search.eval('@COLOR(color)', single=True))
+                        self.assertEqual(operation(), expected_color)
+            xp = ExpressionParser()
+            self.assertEqual(xp.eval('@GET(palette.color)'), [expected_color])
+            self.assertEqual(xp.eval('@GET(palette.color)', parent), [expected_color])
+            palette_objs = xp.eval('@SOBJECT(palette)')
+            self.assertEqual(len(palette_objs), 1)
+            self.assertEqual(palette_objs[0].get_value('color'), expected_color)
+
+    def test_remote_repo_ip_matching_and_file_makedirs(self):
+        import tempfile
+        from pyasm.biz import DirNaming, File
+        from pyasm.common import Common, Container, Environment
+        from pyasm.search import SearchType, Transaction
+        from pyasm.web import Web, WebContainer
+        self.assertTrue(Common.match_ip('192.168.1.42', '192.168.1.0', '255.255.255.0'))
+        self.assertFalse(Common.match_ip('192.168.2.42', '192.168.1.0', '255.255.255.0'))
+        self.assertFalse(Common.match_ip('', '192.168.1.0', '255.255.255.0'))
+        with tempfile.TemporaryDirectory() as folder:
+            nested = Path(folder) / 'a' / 'b' / 'c'
+            File.makedirs(str(nested))
+            self.assertTrue(nested.is_dir())
+        with request_context(RequestContext(self.store, 'admin', 'admin')):
+            self.api.auth.bind_security('admin', self.ticket)
+            with self.store.connection(write=True) as db:
+                db.execute("CREATE TABLE IF NOT EXISTS remote_repo (id integer PRIMARY KEY, code text, login text, ip_address text, ip_mask text, repo_base_dir text, s_status text)")
+                db.execute("INSERT OR IGNORE INTO search_object (code,search_type,namespace,database,table_name,class_name) VALUES ('sthpw/remote_repo','sthpw/remote_repo','sthpw','sthpw','remote_repo','pyasm.biz.RemoteRepo')")
+                db.execute("INSERT OR REPLACE INTO remote_repo (id, code, ip_address, ip_mask, repo_base_dir) VALUES (1, 'REPO_IP', '10.20.30.0', '255.255.255.0', '/mnt/remote_ip')")
+            try:
+                import os
+                Container.put('remote_repos', None)
+                prev_server = os.environ.get('TACTIC_APP_SERVER')
+                os.environ['TACTIC_APP_SERVER'] = 'xmlrpc'
+                try:
+                    Container.put('Api:environ', {'REMOTE_ADDR': '10.20.30.55'})
+                    WebContainer.set_web(Web({}))
+                    self.assertEqual(WebContainer.get_web().get_request_host(), '10.20.30.55')
+                    matched = DirNaming().get_remote_repo()
+                    self.assertIsNotNone(matched)
+                    self.assertEqual(matched.get_code(), 'REPO_IP')
+                    Container.put('Api:environ', {'HTTP_X_FORWARDED_FOR': '10.99.0.1, 10.20.30.55'})
+                    self.assertIsNone(DirNaming().get_remote_repo())
+                finally:
+                    if prev_server is None:
+                        os.environ.pop('TACTIC_APP_SERVER', None)
+                    else:
+                        os.environ['TACTIC_APP_SERVER'] = prev_server
+                    Container.put('remote_repos', None)
+            finally:
+                with self.store.connection(write=True) as db:
+                    db.execute("DROP TABLE IF EXISTS remote_repo")
+                    db.execute("DELETE FROM search_object WHERE search_type='sthpw/remote_repo'")
 
     def test_expression_cache_tracks_writes_and_rollback(self):
         from pyasm.biz import ExpressionParser, Snapshot

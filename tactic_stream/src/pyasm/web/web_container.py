@@ -78,6 +78,12 @@ class Web(WebEnvironment):
     def get_env(self, name):
         return (Container.get('Api:environ') or {}).get(name, '')
 
+    def get_request_host(self):
+        ip = self.get_env('HTTP_X_FORWARDED_FOR')
+        if not ip:
+            ip = self.get_env('REMOTE_ADDR')
+        return ip.split(',')[0].strip() if ip else ''
+
     def get_base_url(self):
         return Environment.get_base_url()
 

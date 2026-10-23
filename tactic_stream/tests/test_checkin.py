@@ -73,6 +73,19 @@ class CheckinParity(read_tests.ReadParity):
                     self.assertEqual(file.get_value('relative_dir'), 'admin/duplicate/' + kind)
                     self.assertEqual(Path(snapshot.get_lib_path_by_type(kind)).read_text(), kind)
                 first = Command.execute_cmd(FileCheckin(parent, [str(source)], context='single', mode='copy', checkin_type='strict'))
+                upload_src = Path(directory) / 'append_upload.txt'
+                upload_src.write_bytes(b'append upload payload')
+                manual_src = Path(directory) / 'append_manual.txt'
+                manual_src.write_bytes(b'append manual payload')
+                append_cmd = Command()
+                def _append_modes():
+                    first.add_file(str(upload_src), file_type='upload_extra', mode='upload')
+                    first.add_file(str(manual_src), file_type='manual_extra', mode='manual')
+                append_cmd.execute = _append_modes
+                Command.execute_cmd(append_cmd)
+                refreshed = Snapshot.get_by_code(first.get_code())
+                self.assertEqual(Path(refreshed.get_lib_path_by_type('upload_extra')).read_bytes(), b'append upload payload')
+                self.assertEqual(Path(refreshed.get_lib_path_by_type('manual_extra')).read_bytes(), b'append manual payload')
                 with self.assertRaises(SingleSnapshotException):
                     Command.execute_cmd(FileCheckin(parent, [str(source)], context='single', mode='copy',
                                                    checkin_type='strict', single_snapshot=True))

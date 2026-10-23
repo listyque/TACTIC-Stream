@@ -454,7 +454,6 @@ class DirNaming(object):
         # remote repo does not make sense in batch mode
         if Environment.get_app_server() == 'batch':
             return
-        raise UnsupportedContract('Remote repository IP matching requires the request environment migration')
 
         remote_repos = Container.get("remote_repos")
         if remote_repos == None:

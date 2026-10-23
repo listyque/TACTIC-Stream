@@ -50,7 +50,7 @@ class PostgreSQL(unittest.TestCase):
                                 patch('getpass.getpass', side_effect=AssertionError('Existing PostgreSQL must not prompt')):
                             main()
                         import sys
-                        sys.path.insert(0, str(Path(__file__).resolve().parent / 'tests/scripts'))
+                        sys.path.insert(0, str(Path(__file__).resolve().parent / 'scripts'))
                         import business_contract
                         import generation_contract
                         import workflow_contract
@@ -235,7 +235,7 @@ class PostgreSQL(unittest.TestCase):
                         expression_key = 'sthpw/note?code=EX_NOTE'
                         updated = ast.literal_eval(api.dispatch('eval', (ticket, "@UPDATE(sobject,note,'rpc changed')", [expression_key])))
                         self.assertEqual(updated[0]['note'], 'rpc changed')
-                        with self.assertRaises(UnsupportedContract):
+                        with self.assertRaises(ValueError):
                             api.dispatch('eval', (ticket, "@UPDATE(sobject,note,'must roll back');@COLOR(color,invalid)", [expression_key]))
                         self.assertEqual(ast.literal_eval(api.dispatch('eval', (ticket, '@GET(.note)', [expression_key]))), ['rpc changed'])
                         self.assertEqual(ast.literal_eval(api.dispatch('eval', (ticket, '@PYTHON(expression/run)', [expression_key]))),
@@ -424,7 +424,7 @@ api.auth.logout(ticket['ticket'])
                 else:
                     self.fail('PG server did not start: ' + output.read_text()[-2000:])
                 state = json.loads(status_path.read_text())
-                self.assertEqual(len(state['workers']), 2)
+                self.assertEqual([w['service'] for w in state['workers']], ['tactic', 'tactic', 'updates'])
                 with urlopen(base + '/health', timeout=5) as response:
                     self.assertTrue(json.load(response)['database_initialized'])
                 with urlopen(base + '/', timeout=5) as response:

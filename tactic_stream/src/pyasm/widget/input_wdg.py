@@ -45,16 +45,50 @@ class BaseInputWdg:
     def add_attr(self, name, value):
         self._attributes[name] = value
 
-    def check_persistent_values(self, values):
-        if self.persistence or self.get_option('persist') == 'true':
-            raise UnsupportedContract('Persistent/filter input state is not migrated')
+    def check_persistent_values(self, cgi_values):
+        web = WebContainer.get_web()
+        if web and self.is_form_submitted() and web.has_form_key(self.get_input_name()):
+            self._set_persistent_values(cgi_values)
+            self.cached_values = cgi_values
+            return cgi_values
         return False
 
-    check_persistent_display = check_persistent_values
+    def check_persistent_display(self, cgi_values):
+        web = WebContainer.get_web()
+        if self.get_option('persist') == 'true':
+            if web and web.has_form_key(self.get_input_name()):
+                return cgi_values
+            from tactic.ui.filter import FilterData
+            filter_data = FilterData.get()
+            values = filter_data.get_values_by_prefix(self.prefix)
+            if values:
+                value = values[0].get(self.get_input_name())
+                if value:
+                    return [value]
+        return False
 
     def _set_persistent_values(self, values):
         if self.persistence:
-            raise UnsupportedContract('Persistent/filter input state is not migrated')
+            from pyasm.search import Transaction
+            if not Transaction.get(create=False):
+                return
+            class_path = Common.get_full_class_name(self.persistence_obj or self)
+            key = '%s|%s' % (class_path, self.name)
+            WidgetSettings.set_key_values(key, values or [])
+
+    def set_persistence(self, object=None):
+        self.persistence = True
+        self.persistence_obj = object if object is not None else self
+        self.set_persist_on_submit()
+
+    def set_persist_on_submit(self, prefix=''):
+        self.set_option('persist', 'true')
+        self.prefix = prefix
+
+    def get_key(self):
+        if not self.persistence_obj:
+            self.persistence_obj = self
+        return '%s|%s' % (Common.get_full_class_name(self.persistence_obj), self.name)
 
     def get_display(self):
         raise UnsupportedContract('Legacy HTML widget rendering is excluded')
@@ -341,18 +375,31 @@ class SelectWdg(BaseInputWdg):
             search_type, value_column, label_column = query.split('|')
             if not value_column or not label_column:
                 raise InputException('Query string for SelectWdg is malformed [%s]' % query)
-            if '()' in value_column or '()' in label_column:
-                raise UnsupportedContract('Method-based select queries are not migrated')
-            search = Search(search_type)
+            for col in (value_column, label_column):
+                if '(' in col or ')' in col:
+                    method = col[:-2] if col.endswith('()') else ''
+                    if not method.isidentifier() or method.startswith('_') or method in (
+                            'commit', 'delete', 'retire', 'reactivate', 'set_value', 'insert', 'update'):
+                        raise UnsupportedContract('Method-based select queries are not migrated')
+            current_sobj = self.get_current_sobject()
+            project_code = current_sobj.get_project_code() if current_sobj else None
+            search = Search(search_type, project_code=project_code)
             if self.get_option('query_filter'):
                 search.add_where(self.get_option('query_filter'))
             if self.get_option('query_limit'):
                 search.add_limit(int(self.get_option('query_limit')))
-            search.add_order_by(label_column)
+            if '()' not in label_column:
+                search.add_order_by(label_column)
+            elif '()' not in value_column:
+                search.add_order_by(value_column)
             self.related_type = search_type
             objects = search.get_sobjects()
-            self.values = [obj.get_value(value_column, no_exception=True) for obj in objects]
-            self.labels = [obj.get_value(label_column, no_exception=True) for obj in objects]
+            def _extract(obj, col):
+                if col.endswith('()'):
+                    return getattr(obj, col[:-2])()
+                return obj.get_value(col, no_exception=True)
+            self.values = [_extract(obj, value_column) for obj in objects]
+            self.labels = [_extract(obj, label_column) for obj in objects]
         values_expr = self.get_option('values_expr') or self.kwargs.get('values_expr')
         labels_expr = self.get_option('labels_expr') or self.kwargs.get('labels_expr')
         if values_expr:

@@ -388,6 +388,22 @@ class Common:
         # FIXME: for now, turn it off
         return filename
 
+    @staticmethod
+    def match_ip(a_ip, b_ip, mask='255.255.255.0'):
+        if not a_ip or not b_ip:
+            return False
+        if not mask:
+            mask = '255.255.255.0'
+        try:
+            a_parts = [int(x) for x in str(a_ip).split(',')[0].strip().split('.')]
+            b_parts = [int(x) for x in str(b_ip).strip().split('.')]
+            m_parts = [int(x) for x in str(mask).strip().split('.')]
+        except ValueError:
+            return False
+        if len(a_parts) != 4 or len(b_parts) != 4 or len(m_parts) != 4:
+            return False
+        return all((a_parts[i] & m_parts[i]) == b_parts[i] for i in range(4))
+
 
     @staticmethod
     def randchoice(obj):

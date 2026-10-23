@@ -62,6 +62,36 @@ class EditForm(read_tests.ReadParity):
                 self.assertEqual(select.get_select_values(), (['Original'], ['A']))
                 select = SelectWdg(values_expr='@GET(contract/edit_entity.code)', labels_expr='@GET(contract/edit_entity.name)')
                 self.assertEqual(select.get_select_values(), (['Original'], ['A']))
+                select = SelectWdg(query=kind + '|get_code()|get_name()')
+                self.assertEqual(select.get_select_values(), (['Original'], ['A']))
+                from pyasm.common.errors import UnsupportedContract
+                for bad_query in (kind + '|code|delete()', kind + '|_private()|name', kind + '|eval(1)|name'):
+                    with self.assertRaises(UnsupportedContract):
+                        SelectWdg(query=bad_query).get_select_values()
+                from tactic.ui.filter import FilterData
+                from pyasm.common import Container
+                from pyasm.widget import TextWdg
+                from pyasm.search import Transaction
+                from pyasm.web import Web, WebContainer, WidgetSettings
+                FilterData.get().set_data([{'prefix': 'main_body', 'status_filter': 'approved'}])
+                persist_input = TextWdg('status_filter')
+                persist_input.set_persist_on_submit('main_body')
+                WebContainer.set_web(Web({}))
+                self.assertEqual(persist_input.get_values(for_display=True), ['approved'])
+                tx = Transaction.get(create=True)
+                try:
+                    db_input = TextWdg('saved_field')
+                    db_input.set_persistence(db_input)
+                    WebContainer.set_web(Web({'saved_field': 'persisted_val', 'is_form_submitted': 'yes'}))
+                    self.assertEqual(db_input.get_values(), ['persisted_val'])
+                    self.assertEqual(WidgetSettings.get_key_values(db_input.get_key()), ['persisted_val'])
+                    db_input2 = TextWdg('saved_field')
+                    db_input2.set_persistence(db_input)
+                    WebContainer.set_web(Web({}))
+                    self.assertEqual(db_input2.get_values(), ['persisted_val'])
+                finally:
+                    tx.rollback()
+                    Container.put('FilterData', None)
                 from pyasm.command import UniqueValueAction
                 unique = UniqueValueAction()
                 unique.set_name('code')
