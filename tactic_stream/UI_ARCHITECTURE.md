@@ -10,12 +10,12 @@
 ранними датами ниже — история и технические требования, а не дополнительные очереди.
 Прежний этап «Базовые UI и адаптеры» закрыт как контрольная точка; его остатки
 (L02/L03/L05/L07a) входят в пункты этапа 1. Прежние этапы 2/3/4 стали 1/2/3,
-пункты 2.x → 1.x, 3.x → 2.x, 4 → 3. **Этап 1 (B07) и пункты 2.1 (L10), 2.2 (L09), 2.3 (L08) закрыты.**
+пункты 2.x → 1.x, 3.x → 2.x, 4 → 3. **Этап 1 (B07) и этап 2 (2.1 L10, 2.2 L09, 2.3 L08, 2.4 L11) закрыты.**
 
 ### Где остановились
 
-Контрольная точка **Stream 0.112.190 / Handler 0.6.0.137** (2026-10-23):
-закрыты этап 1 (1.0–1.5, B07) и пункты 2.1 (L10), 2.2 (L09), 2.3 (L08).
+Контрольная точка **Stream 0.112.191 / Handler 0.6.0.138** (2026-10-23):
+закрыты этап 1 (1.0–1.5, B07) и этап 2 (2.1–2.4: L10, L09, L08, L11).
 
 - Уже подключены базовые табличные адаптеры, inline-теги, заметки/сообщения/задачи,
   служебные ячейки, статусы/назначения, вложенные таблицы, связи, summaries,
@@ -27,6 +27,7 @@
 - Закрыт блок 1.3 (остаток L03): сохранённые layouts (`CustomLayoutElementWdg`, включая вложенную обёртку `columns.thumb_view` → `custom_col` с `icon_size`, а также `HiddenRowElementWdg` → `CustomLayoutElementWdg` `episodes/columns/script` с `show_resize_scroll`), callbacks и script actions (`ButtonElementWdg` с пустым `language` → `'javascript'`, контекст `targetSearchKey` и выбранных записей в `ConfiguredView.vue`), сохранение комментариев и проверка конфликта ревизий при сохранении XML в `ColumnsEditorController`, и сверка ссылок без найденного определения (`asset_panel_wdg`, `cost_breakdown` / `asset_cost_breakdown`, `task_edit` / `inline_add_item`, `custom_col` без `<display>`).
 - Закрыты блоки 1.4 (L06 Gantt/time) и 1.5 (L07b общая приёмка B07), 2.1 (L10 проекты, плагины, schema/import/export) и 2.2 (L09 Workflow, Triggers, уведомления).
 - Закрыт блок 2.3 (L08 API, native Python, TEL/Naming): вычисление `palette` в `ExpressionParser` (`@SOBJECT(palette)`, `@GET(palette.<key>)` с и без корневых `sobjects`), сохранение состояния input-виджетов (`BaseInputWdg.set_persistence`, `set_persist_on_submit`, `check_persistent_values`, `check_persistent_display`) и `SelectWdg` `query` с 0-аргументными методами (`sthpw/login|get_code()|get_name()`), сопоставление IP-масок удалённых репозиториев (`Common.match_ip`, `Web.get_request_host`, `DirNaming.get_remote_repo`), `File.makedirs`, а также режимы `Snapshot.add_file(..., mode='upload'|'uploaded'|'manual')`. Все точки `UnsupportedContract` классифицированы без снятия защитных границ транзакций, Sudo, ACL и контекста запроса.
+- Закрыт блок 2.4 (L11 — SQLite/PostgreSQL) и весь этап 2: все 7 парных наборов (`foundation`, `schema`, `project`, `plugin`, `command`, `queue`, `diagnostics`) проходят бок о бок на временном SQLite и реальном Docker PostgreSQL 18.6 (DDL, даты/JSON/JSONB, межпроектные ресурсы, конкурентные записи, именованные savepoints в `SqliteImpl` и `PostgresImpl`, соединение множественных фильтров `Update.get_statement()` через `AND` на обоих диалектах, матрица `exercise_l08_l09_matrix` для триггеров/уведомлений/выражений/persistence/remote_repo/checkin и восстановление `snapshot_table`/`restore_table` и `FileUndoReplay`). MySQL остаётся отложенным по решению 2026-10-11.
 - Срез **239 XML/CG-записей**: 71 упомянутый класс с адаптером, 0 без адаптера,
   30 исключённых production-зависимостей, 3 явно недописанных. Полный переносимый
   каталог — 74 класса / 180 aliases. **Наличие адаптера не означает готовность всех опций.**
@@ -37,8 +38,8 @@
 | Этап | Статус | Что осталось |
 | --- | --- | --- |
 | 1. Сложные таблицы и закрытие B07 | **Закрыт** | 1.0–1.5 выполнены. |
-| 2. Ядро, интеграции и БД | **Текущий** | 2.1 L10, 2.2 L09, 2.3 L08 закрыты; выполнить 2.4 L11. |
-| 3. Поставка и переход с legacy | Завершающий | L12: независимые комплекты, чистая установка, upgrade, перенос, backup/restore. |
+| 2. Ядро, интеграции и БД | **Закрыт** | 2.1–2.4 (L10, L09, L08, L11) выполнены. |
+| 3. Поставка и переход с legacy | **Текущий (завершающий)** | L12: независимые комплекты, чистая установка, upgrade, перенос, backup/restore. |
 
 ### Этап 1: сложные таблицы и закрытие B07
 
@@ -115,7 +116,7 @@ CustomLayouts остаются; произвольный HTML/DOM/Mako не ст
 | 2.1 | L10 — проекты, plugins, schema/import/export — **закрыт** | Сверены и проверены CreateProjectCmd, ProjectTemplateInstallerCmd (включая живое клонирование is_template=True и полный откат БД/файлов), ProjectTemplateCreatorCmd, ProjectTemplate*Cmd, PluginInstaller / PluginCreator / PluginUninstaller / PluginReloader, ProjectArchiveAction, а также паритет серверных schema_cmd / schema_delete_cmd / workflow_cmd / search_types_cmd с ТХ schema_api / schema_delete_api / workflow_api / search_types_api на SQLite и PostgreSQL 18.6. |
 | 2.2 | L09 — Workflow, Triggers, уведомления — **закрыт** | Проверено исполнение узлов пайплайна/workflow (action, manual, approval, condition, progress, hierarchy, input/output, dependency), триггеров правил задач (`PipelineTaskStatusTrigger`, `PipelineTaskTrigger`, `PipelineParentStatusTrigger`, `PipelineTaskCreateTrigger`, `PipelineTaskDateTrigger`, `RelatedTaskUpdateTrigger`, `TaskCreatorTrigger`, `TaskCompleteTrigger`), sync/async и очередных режимов (`SubprocessTrigger`, `QueueTrigger`, `ScriptTrigger`), расписаний, дедупликации отложенных триггеров, а также email/уведомлений (`GroupNotification`, `EmailHandler`, `EmailTrigger2`, `EmailTriggerTest`, `SendEmail`, `NotificationTestCmd`, `NotificationLogScope`) с проверкой получателей, приватности проекта и защиты от повторной доставки. |
 | 2.3 | L08 — API, native Python, TEL/Naming — **закрыт** | Закрыты подтверждённые caller-контракты: `palette` в `ExpressionParser` (`@SOBJECT(palette)`, `@GET(palette.<key>)`), сохранение состояния input-виджетов (`FilterData` / `WidgetSettings`) и `SelectWdg` `query` с 0-аргументными методами (`get_code()|get_name()`), сопоставление IP-масок удалённых репозиториев (`Common.match_ip`, `Web.get_request_host`, `DirNaming.get_remote_repo`), `File.makedirs` и `Snapshot.add_file(..., mode='upload'|'uploaded'|'manual')`. Все `UnsupportedContract` классифицированы (1 — закрытые функциональные пробелы, 2 — обязательные защитные guards транзакций/ACL/Sudo/контекста/валидации, 3 — согласованные архитектурные исключения). |
-| 2.4 | L11 — SQLite/PostgreSQL | Пройти одинаковые сценарии на двух реальных СУБД (Docker PostgreSQL 18.6 и локальный SQLite): DDL, даты/JSON, конкуренция, транзакции, rollback и восстановление. MySQL отложен. |
+| 2.4 | L11 — SQLite/PostgreSQL — **закрыт** | Пройдены одинаковые native/API/script сценарии на временном SQLite и Docker PostgreSQL 18.6 во всех 7 наборах (oundation, schema, project, plugin, command, queue, diagnostics): DDL (CreateTable, AlterTable, индексы, ограничения, последовательности), даты/таймзоны, JSON/JSONB и get_json_counter_update, многофильтровый Update (WHERE ... AND ...), межпроектные DbResource, конкурентные записи (ThreadPoolExecutor), транзакции и именованные savepoints (set_savepoint/ollback_savepoint/elease_savepoint), откат частичного сбоя, snapshot_table/estore_table, TableSchemaDumper/TableDataDumper, FileUndoReplay и объединённая матрица L08+L09 (exercise_l08_l09_matrix). MySQL отложен. |
 
 ### Этап 3: поставка и переход с legacy
 

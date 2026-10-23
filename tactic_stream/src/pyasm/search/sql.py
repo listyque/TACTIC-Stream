@@ -2408,8 +2408,7 @@ class Update:
         statement = 'UPDATE %s SET %s' % (identifier(self.table), ", ".join(pairs))
         if self.filters:
             self.wheres = self.filters.values()
-            separator = ' AND ' if self.sql.get_vendor() == 'PostgreSQL' else ', '
-            statement += " WHERE %s" % separator.join(self.wheres)
+            statement += " WHERE %s" % " AND ".join(self.wheres)
         return self.impl.postprocess_sql(statement)
 
     def execute(self, sql=None):

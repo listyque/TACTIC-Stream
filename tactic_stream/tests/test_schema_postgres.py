@@ -457,6 +457,8 @@ class SchemaPostgres(unittest.TestCase):
                 for mode in task_status_contract.CASES:
                     with request_context(RequestContext(sqlite, 'admin', 'one')):
                         status_expected[mode] = task_status_contract.run({'operation': mode})
+                from test_workflow_triggers_notifications import exercise_l08_l09_matrix
+                l08_l09_expected = exercise_l08_l09_matrix(sqlite, 'schema-test-password')
             config = Element('config', version='2')
             section = SubElement(config, 'database')
             for key, value in dict(vendor='PostgreSQL', sobject_database=database,
@@ -544,6 +546,7 @@ class SchemaPostgres(unittest.TestCase):
                     for mode in task_status_contract.CASES:
                         with request_context(RequestContext(store, 'admin', 'one')):
                             self.assertEqual(task_status_contract.run({'operation': mode}), status_expected[mode], mode)
+                    self.assertEqual(exercise_l08_l09_matrix(store, 'schema-test-password'), l08_l09_expected)
                     api = Api(store)
                     token = api.get_ticket('admin', 'schema-test-password')
                     ticket = {'ticket': token, 'project': 'one', 'language': 'python'}

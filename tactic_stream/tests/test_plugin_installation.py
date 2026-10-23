@@ -826,6 +826,9 @@ return {'has_note': Project.get().has_table('sthpw/note'),
             levels = snapshot_levels_contract.run({})
             assert levels['hierarchy'] == 1 and levels['alias_fixes'] == [-1, True]
             assert levels['aliases'] == [-1, 0] and levels['ref_errors'] == []
+        import test_user_file_undo
+        undo_replay = test_user_file_undo.exercise(store, prefix + '_undo', password='plugin-test-password')
+        assert undo_replay == dict(files=True, versionless=True, permissions=True, rollback=True, append=True, groups=True)
         return results
     finally:
         sys.path.pop(0)

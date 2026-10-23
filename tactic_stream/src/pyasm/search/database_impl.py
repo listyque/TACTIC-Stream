@@ -619,7 +619,19 @@ class SqliteImpl(DatabaseImpl):
         return False
 
     def has_savepoint(self):
-        return False
+        return True
+
+    def set_savepoint(self, name='save_pt'):
+        from pyasm.search.storage import identifier
+        return 'SAVEPOINT %s' % identifier(name)
+
+    def rollback_savepoint(self, name='save_pt', release=False):
+        from pyasm.search.storage import identifier
+        return 'ROLLBACK TO SAVEPOINT %s' % identifier(name)
+
+    def release_savepoint(self, name='save_pt'):
+        from pyasm.search.storage import identifier
+        return 'RELEASE SAVEPOINT %s' % identifier(name)
 
     def get_timestamp_now(self, offset=None, type=None, op='+'):
         if not offset:

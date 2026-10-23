@@ -597,5 +597,300 @@ class WorkflowTriggersNotificationsTests(unittest.TestCase):
             self.assertTrue(mock_test_send.called)
 
 
+def exercise_l08_l09_matrix(store, password):
+    """Vendor-neutral L08 + L09 scenario matrix for side-by-side SQLite vs PostgreSQL verification."""
+    from pyasm.biz import DirNaming, ExpressionParser, File, Project, Snapshot
+    from pyasm.checkin import FileCheckin
+    from pyasm.common import Common
+    from pyasm.search import DbContainer, Transaction
+    from pyasm.web import Palette, Web, WebContainer, WidgetSettings
+    from pyasm.widget import SelectWdg, TextWdg
+
+    api = Api(store)
+    token = api.get_ticket('admin', password)
+    with request_context(RequestContext(store, login='admin', project='one')):
+        api.auth.bind_security('admin', token)
+        sthpw_sql = DbContainer.get('sthpw')
+        one_sql = DbContainer.get(Project.get().get_project_db_resource())
+        tx = Transaction.get(create=True)
+        tx.set_record(False)
+        for tbl in ('spt_prod_setting', 'prod_setting'):
+            if one_sql.get_database_impl().table_exists(one_sql.get_db_resource(), tbl):
+                one_sql.do_update(f"DELETE FROM {tbl} WHERE key='schedule/mode'")
+        if Search.get_by_code('sthpw/search_object', 'config/prod_setting'):
+            SearchType.create('config/prod_setting').clear_cache()
+        for field in ('search_type', 'data', 'listen_process'):
+            if field not in sthpw_sql.get_column_info('trigger', use_cache=False):
+                sthpw_sql.do_update(f'ALTER TABLE "trigger" ADD COLUMN "{field}" text')
+        if not Search.get_by_code('sthpw/search_object', 'config/trigger'):
+            sthpw_sql.do_update(
+                "INSERT INTO search_object (code,search_type,namespace,database,table_name,class_name) "
+                "VALUES ('config/trigger','config/trigger','config','{project}','spt_trigger','pyasm.biz.TriggerSObj')"
+            )
+        if not Search.get_by_code('sthpw/search_object', 'sthpw/remote_repo'):
+            sthpw_sql.do_update(
+                "INSERT INTO search_object (code,search_type,namespace,database,table_name,class_name) "
+                "VALUES ('sthpw/remote_repo','sthpw/remote_repo','sthpw','sthpw','remote_repo','pyasm.biz.RemoteRepo')"
+            )
+        if not sthpw_sql.get_database_impl().table_exists(sthpw_sql.get_db_resource(), 'remote_repo'):
+            id_def = 'serial PRIMARY KEY' if sthpw_sql.get_vendor() == 'PostgreSQL' else 'integer PRIMARY KEY'
+            sthpw_sql.do_update(
+                f"CREATE TABLE remote_repo (id {id_def}, code text, login text, ip_address text, ip_mask text, repo_base_dir text, s_status text)"
+            )
+        sthpw_sql.do_update("DELETE FROM remote_repo WHERE code='REPO_MATRIX'")
+        sthpw_sql.do_update(
+            "INSERT INTO remote_repo (code, ip_address, ip_mask, repo_base_dir) VALUES ('REPO_MATRIX', '10.42.0.0', '255.255.0.0', '/mnt/matrix_repo')"
+        )
+        if not one_sql.get_database_impl().table_exists(one_sql.get_db_resource(), 'l09_shot'):
+            id_def = 'serial PRIMARY KEY' if one_sql.get_vendor() == 'PostgreSQL' else 'integer PRIMARY KEY'
+            one_sql.do_update(
+                f"CREATE TABLE l09_shot (id {id_def}, code text, name text, status text, pipeline_code text, s_status text)"
+            )
+        if not Search.get_by_code('sthpw/search_object', 'contract/l09_shot'):
+            sthpw_sql.do_update(
+                "INSERT INTO search_object (code,search_type,namespace,database,table_name,class_name) "
+                "VALUES ('contract/l09_shot','contract/l09_shot','contract','{project}','l09_shot','pyasm.search.SObject')"
+            )
+        if not one_sql.get_database_impl().table_exists(one_sql.get_db_resource(), 'spt_trigger'):
+            id_def = 'serial PRIMARY KEY' if one_sql.get_vendor() == 'PostgreSQL' else 'integer PRIMARY KEY'
+            one_sql.do_update(
+                f"CREATE TABLE spt_trigger (id {id_def}, code text, event text, process text, search_type text, "
+                "class_name text, script_path text, mode text, data text, description text, listen_process text, s_status text)"
+            )
+        for u_code, email, status_val in (
+            ('matrix_alice', 'matrix_alice@example.com', None),
+            ('matrix_mallory', 'matrix_mallory@example.com', None),
+            ('matrix_retired', 'matrix_retired@example.com', 'retired'),
+        ):
+            if not Search.get_by_code('sthpw/login', u_code):
+                sthpw_sql.do_update(
+                    f"INSERT INTO login (code, login, email, first_name, last_name, s_status) "
+                    f"VALUES ('{u_code}', '{u_code}', '{email}', '{u_code}', 'User', "
+                    + (f"'{status_val}'" if status_val else "NULL")
+                    + ")"
+                )
+        for g_code, rules in (
+            ('matrix_one_team', '<rules><rule group="project" code="one" access="allow"/></rules>'),
+            ('matrix_two_only', '<rules><rule group="project" default="deny"/><rule group="project" code="two" access="allow"/></rules>'),
+        ):
+            if not Search.get_by_code('sthpw/login_group', g_code):
+                sthpw_sql.do_update(
+                    f"INSERT INTO login_group (code, login_group, access_rules) VALUES ('{g_code}', '{g_code}', '{rules}')"
+                )
+        for u_code, g_code in (
+            ('matrix_alice', 'matrix_one_team'),
+            ('matrix_mallory', 'matrix_two_only'),
+            ('matrix_retired', 'matrix_one_team'),
+        ):
+            sthpw_sql.do_update(
+                f"INSERT INTO login_in_group (login, login_group) VALUES ('{u_code}', '{g_code}')"
+            )
+        tx.commit()
+        Container.clear_dict('DatabaseImpl:column_info')
+        Container.clear_dict('DatabaseImpl:table_info')
+        Container.clear_dict('SearchType:search_object_data')
+        Trigger.clear_db_cache()
+        Notification.clear_cache()
+
+        def setup_all():
+            pipeline = SearchType.create('sthpw/pipeline')
+            pipeline.set_value('code', 'one/matrix_pipe')
+            pipeline.set_value('search_type', 'contract/l09_shot')
+            pipeline.set_value('project_code', 'one')
+            pipeline.set_value(
+                'pipeline',
+                '<pipeline><process name="model"/><process name="rig"/><process name="anim"/>'
+                '<connect from="model" to="rig"/><connect from="rig" to="anim"/></pipeline>',
+            )
+            pipeline.commit()
+
+            shot = SearchType.create('contract/l09_shot')
+            shot.set_value('code', 'MSHOT_1')
+            shot.set_value('name', 'Matrix Hero')
+            shot.set_value('status', 'Pending')
+            shot.set_value('pipeline_code', 'one/matrix_pipe')
+            shot.commit()
+
+            t_model = Task.create(
+                shot, process='model', description='Model', pipeline_code='one/matrix_pipe', status='Pending'
+            )
+            t_rig = Task.create(
+                shot, process='rig', description='Rig', pipeline_code='one/matrix_pipe', status='Waiting'
+            )
+
+            for code, proc, cls_name, payload in (
+                (
+                    'M_RULE_STATUS',
+                    'model',
+                    'tactic.command.PipelineTaskStatusTrigger',
+                    {'pipeline': 'one/matrix_pipe', 'src_process': 'model', 'src_status': 'Complete', 'dst_process': 'rig', 'dst_status': 'Ready'},
+                ),
+                (
+                    'M_RULE_PARENT',
+                    'model',
+                    'tactic.command.PipelineParentStatusTrigger',
+                    {'dst_status': 'Active'},
+                ),
+                (
+                    'M_RULE_CREATE',
+                    'rig',
+                    'tactic.command.PipelineTaskCreateTrigger',
+                    {'src_status': 'Complete', 'output': ['anim']},
+                ),
+                (
+                    'M_RULE_DATE',
+                    'model',
+                    'tactic.command.PipelineTaskDateTrigger',
+                    {'column': 'actual_end_date', 'src_status': 'Complete'},
+                ),
+                (
+                    'M_RULE_FILTER',
+                    'rig',
+                    'tactic.command.PipelineTaskTrigger',
+                    [
+                        {'prefix': 'trigger', 'process': 'rig'},
+                        {'prefix': 'rule', 'name': 'status', 'value': 'Complete'},
+                        {'prefix': 'rule', 'name': 'pipeline', 'value': 'one/matrix_pipe'},
+                        {'prefix': 'action', 'type': 'process', 'process': 'model', 'name': 'status', 'value': 'Approved'},
+                    ],
+                ),
+            ):
+                trig = SearchType.create('config/trigger')
+                trig.set_value('code', code)
+                trig.set_value('event', 'change|sthpw/task|status')
+                trig.set_value('listen_process', proc)
+                trig.set_value('process', proc)
+                trig.set_value('class_name', cls_name)
+                trig.set_value('mode', 'same process,same transaction')
+                trig.set_value('data', json.dumps(payload))
+                trig.commit()
+
+            notif = SearchType.create('sthpw/notification')
+            notif.set_value('code', 'M_NOTIF_1')
+            notif.set_value('event', 'change|sthpw/task|status')
+            notif.set_value('project_code', 'one')
+            notif.set_value('type', 'email')
+            notif.set_value('subject', 'Matrix {@GET(.process)} {@GET(.status)}')
+            notif.set_value('message', 'Done')
+            notif.set_value('mail_to', 'matrix_one_team\nmatrix_alice@example.com\nmatrix_mallory\nmatrix_retired')
+            notif.set_value('mail_cc', 'matrix_alice@example.com\nmatrix_cc@example.com')
+            notif.set_value('rules', '<rules><rule group="sobject" key="status" op="=" value="Complete"/></rules>')
+            notif.commit()
+
+            Trigger.clear_db_cache()
+            Notification.clear_cache()
+            return shot, t_model, t_rig
+
+        shot, t_model, t_rig = _run_cmd(setup_all)
+
+        sent = []
+        with patch.object(EmailTrigger2, 'send') as mock_send:
+            def capture(to_u, cc_u, bcc_u, subj, msg, **kw):
+                from pyasm.command.email_trigger import _bare_email_key, _extract_recipient_email
+                to_s = {_bare_email_key(_extract_recipient_email(u)) for u in (to_u or ()) if _extract_recipient_email(u)}
+                cc_s = {_bare_email_key(_extract_recipient_email(u)) for u in (cc_u or ()) if _extract_recipient_email(u)} - to_s
+                sent.append({'subject': subj, 'to': sorted(to_s), 'cc': sorted(cc_s)})
+
+            mock_send.side_effect = capture
+
+            def finish_tasks():
+                m = Search.get_by_id('sthpw/task', t_model.get_id())
+                m.set_value('status', 'Complete')
+                m.commit()
+                r = Search.get_by_id('sthpw/task', t_rig.get_id())
+                r.set_value('status', 'Complete')
+                r.commit()
+
+            _run_cmd(finish_tasks)
+
+        # L08 checks: palette expression, SelectWdg method query, WidgetSettings persistence, RemoteRepo IP match, Snapshot.add_file upload/manual
+        xp = ExpressionParser()
+        expected_color = Palette.get().color('color')
+        palette_vals = [
+            xp.eval('{@GET(palette.color)}', shot),
+            xp.eval('@GET(palette.color)', single=True),
+            xp.eval('@SOBJECT(palette)')[0].get_value('color'),
+        ]
+        assert palette_vals == [expected_color, expected_color, expected_color], palette_vals
+
+        select = SelectWdg(query='contract/l09_shot|get_code()|get_name()')
+        select_options = select.get_select_values()
+
+        FilterData.get().set_data([{'prefix': 'matrix_filter', 'm_field': 'filtered_v'}])
+        f_input = TextWdg('m_field')
+        f_input.set_persist_on_submit('matrix_filter')
+        WebContainer.set_web(Web({}))
+        persisted_display = f_input.get_values(for_display=True)
+
+        def persist_widget_setting():
+            w_in = TextWdg('m_saved')
+            w_in.set_persistence(w_in)
+            WebContainer.set_web(Web({'m_saved': 'db_persisted', 'is_form_submitted': 'yes'}))
+            val1 = w_in.get_values()
+            w_in2 = TextWdg('m_saved')
+            w_in2.set_persistence(w_in)
+            WebContainer.set_web(Web({}))
+            val2 = w_in2.get_values()
+            return val1, val2, WidgetSettings.get_key_values(w_in.get_key())
+
+        persisted_db = _run_cmd(persist_widget_setting)
+        Container.put('FilterData', None)
+
+        Container.put('remote_repos', None)
+        prev_srv = os.environ.get('TACTIC_APP_SERVER')
+        os.environ['TACTIC_APP_SERVER'] = 'xmlrpc'
+        try:
+            Container.put('Api:environ', {'REMOTE_ADDR': '10.42.9.9'})
+            WebContainer.set_web(Web({}))
+            matched_repo = DirNaming().get_remote_repo()
+            matched_code = matched_repo.get_code() if matched_repo else None
+        finally:
+            if prev_srv is None:
+                os.environ.pop('TACTIC_APP_SERVER', None)
+            else:
+                os.environ['TACTIC_APP_SERVER'] = prev_srv
+            Container.put('remote_repos', None)
+
+        src_dir = store.data_dir / 'l08_append_tmp'
+        File.makedirs(str(src_dir))
+        f_base = src_dir / 'base.txt'
+        f_up = src_dir / 'up.txt'
+        f_man = src_dir / 'man.txt'
+        f_base.write_bytes(b'base')
+        f_up.write_bytes(b'up_bytes')
+        f_man.write_bytes(b'man_bytes')
+
+        def append_modes():
+            snap = FileCheckin(shot, [str(f_base)], context='l08_modes', mode='copy', checkin_type='strict').execute()
+            snap.add_file(str(f_up), file_type='up_t', mode='upload')
+            snap.add_file(str(f_man), file_type='man_t', mode='manual')
+            ref = Snapshot.get_by_code(snap.get_code())
+            return [
+                Path(ref.get_lib_path_by_type('up_t')).read_bytes().decode(),
+                Path(ref.get_lib_path_by_type('man_t')).read_bytes().decode(),
+            ]
+
+        appended_bytes = _run_cmd(append_modes)
+
+        shot_after = Search.get_by_id('contract/l09_shot', shot.get_id())
+        model_after = Search.get_by_id('sthpw/task', t_model.get_id())
+        rig_after = Search.get_by_id('sthpw/task', t_rig.get_id())
+        anim_after = Task.get_by_sobject(shot, process='anim')
+
+        return {
+            'shot_status': shot_after.get_value('status'),
+            'model_status': model_after.get_value('status'),
+            'model_has_end_date': bool(model_after.get_value('actual_end_date')),
+            'rig_status': rig_after.get_value('status'),
+            'anim_count': len(anim_after),
+            'sent_notifications': sent,
+            'select_options': select_options,
+            'persisted_display': persisted_display,
+            'persisted_db': persisted_db,
+            'matched_repo': matched_code and Common.match_ip('10.42.9.9', '10.42.0.0', '255.255.0.0') and matched_code,
+            'appended_bytes': appended_bytes,
+        }
+
+
 if __name__ == '__main__':
     unittest.main()
