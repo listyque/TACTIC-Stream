@@ -32,12 +32,17 @@ def handler_archive(handler, target):
                 archive.write(path, 'TACTIC-Handler/' + path.relative_to(handler).as_posix())
 
 
-def build(handler, output, evidence=None):
+def release_version():
     version = tomllib.loads((ROOT / 'pyproject.toml').read_text())['project']['version']
     frontend = json.loads((ROOT / 'frontend/package.json').read_text())['version']
     lock = json.loads((ROOT / 'frontend/package-lock.json').read_text())
     assert version == frontend == lock['version'] == lock['packages']['']['version']
     assert re.search(r'__version__ = "' + re.escape(version) + r'"', (ROOT / 'src/tactic_stream/__init__.py').read_text())
+    return version
+
+
+def build(handler, output, evidence=None):
+    version = release_version()
     assert (ROOT / 'src/tactic_client_lib/file_transfer.py').read_bytes() == (handler / 'thlib/side/client/tactic_client_lib/file_transfer.py').read_bytes()
     assert (ROOT / 'src/tactic_client_lib/file_workspace.py').read_bytes() == (handler / 'thlib/side/client/tactic_client_lib/file_workspace.py').read_bytes()
     handler_version = '.'.join(json.loads((handler / 'thlib/version.json').read_text())[key] for key in ('major', 'minor', 'build', 'revision'))
@@ -58,7 +63,7 @@ def build(handler, output, evidence=None):
                      'tactic_stream/web/help/project_creation.en.md', 'tactic_stream/web/help/project_creation.ru.md'):
             assert name in names, name
     handler_archive(handler, output / ('tactic-handler-' + handler_version + '-source.zip'))
-    for name in ('FILE_PROJECT_DELIVERY.en.md', 'FILE_PROJECT_DELIVERY.ru.md', 'FILE_WORKSPACE_UI_PLAN.md', 'FILE_WORKSPACE_COMPLETION_2026-10-13.md', 'HANDLER_DEPLOYMENT.md',
+    for name in ('FILE_PROJECT_DELIVERY.en.md', 'FILE_PROJECT_DELIVERY.ru.md', 'FILE_WORKSPACE_UI_PLAN.md', 'FILE_WORKSPACE_COMPLETION_2026-10-13.md', 'HANDLER_DEPLOYMENT.md', 'SERVER_DELIVERY.en.md', 'SERVER_DELIVERY.ru.md',
                  'LICENSE.TACTIC', 'LICENSE.HANDLER', 'LICENSE.QUICKJS-NG'):
         shutil.copyfile(ROOT / name, output / name)
     verification = output / 'verification'

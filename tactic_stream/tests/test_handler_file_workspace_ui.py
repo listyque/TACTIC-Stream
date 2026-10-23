@@ -1355,16 +1355,22 @@ Item {
             if command in groups:
                 group=next(item for item in children(menu.property('contentItem'))
                     if item.objectName()=='actionMenuPrimaryTarget' and item.parentItem().property('modelData').toVariant().get('title')==groups[command])
+                group.forceActiveFocus(Qt.PopupFocusReason)
                 click(group)
-                deadline=monotonic()+2
-                while not menu.property('activeSubmenu') and monotonic()<deadline:QTest.qWait(5)
-                active=menu.property('activeSubmenu')
-                if hasattr(active,'toQObject'):active=active.toQObject()
-                self.assertIsNotNone(active)
-                while not active.property('opened') and monotonic()<deadline:QTest.qWait(5)
-            target = next(item for item in children(active.property('contentItem'))
-                          if item.objectName() == 'actionMenuPrimaryTarget'
-                          and item.parentItem().property('modelData').toVariant().get('command') == command)
+            deadline = monotonic() + 2
+            target = None
+            # Reused submenus publish their new rows after the opening event.
+            while target is None and monotonic() < deadline:
+                active = menu.property('activeSubmenu') if command in groups else menu
+                if hasattr(active, 'toQObject'):
+                    active = active.toQObject()
+                if active is not None and active.property('opened'):
+                    target = next((item for item in children(active.property('contentItem'))
+                                   if item.objectName() == 'actionMenuPrimaryTarget'
+                                   and item.parentItem().property('modelData').toVariant().get('command') == command), None)
+                if target is None:
+                    QTest.qWait(5)
+            self.assertIsNotNone(target, f'{command}: submenu did not expose the requested action; {warnings}')
             self.assertTrue(target.isEnabled())
             triggered=QSignalSpy(menu.triggered)
             if command in groups or command == 'new_tab':

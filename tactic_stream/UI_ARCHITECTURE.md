@@ -120,6 +120,14 @@ CustomLayouts остаются; произвольный HTML/DOM/Mako не ст
 
 ### Этап 3: поставка и переход с legacy
 
+#### L12 checkpoint: Stream 0.112.192 / Handler 0.6.0.139
+
+- Release metadata is synchronized across Python, frontend, npm lock and the editable environment. The source delivery builds and its installed wheel/packaged Handler QML probe passes.
+- The inherited 156-stage gate matched the pre-change source fingerprints. All seven SQLite/PostgreSQL suites and unchanged Handler client checks were rerun successfully. The fresh full gate passed all 156 stages; `native-batch-existing` passed its recorded serial retry. Submenu and mobile reflow acceptance now wait for rendered readiness. Linux delivery unit tests prove the old secret permissions fail and the protected-directory/non-root-readable fix passes. Inherited uncollectable-QObject and deprecated-UTC warnings remain visible; this is not leak-free or full GUI release acceptance.
+- The standalone server package exports all three images, Compose, native bootstrap/upgrade management, licenses and SHA-256 checksums. It runs installed packages without checkout or developer dependency mounts. Fresh PostgreSQL creation, Apache/Webmin checks, all 12 Handler-client scenarios and a same-release update preserving database records, a concrete snapshot and file bytes passed after relocation. Owned acceptance containers and volumes were removed.
+- Installation instructions: `SERVER_DELIVERY.en.md` and `SERVER_DELIVERY.ru.md`. Local evidence: `.test-tmp/installed-server-192.json`, `postgres-matrix-192.json`, `handler-deployment-192.json` and `source-installation-192-final.json`. These are acceptance results, not a claim of complete API/GUI or production readiness.
+- Next: Windows EXE/Electron with bundled runtime/Handler; upgrade from a prior delivered version; agreed legacy projects migrated on copies; database/repository/config backup and restore; installed GUI acceptance and final release gate. L12 stays open.
+
 | Пункт | Блок | Остаток и условие готовности |
 | --- | --- | --- |
 | 3 | L12 — независимая поставка и переход | Чистые Windows и серверное окружение: установка/upgrade, штатный запуск, перенос согласованных проектов, резервная копия и восстановление БД/repository/config на копиях. Проверить браузер, настоящий ТХ и frozen EXE. |

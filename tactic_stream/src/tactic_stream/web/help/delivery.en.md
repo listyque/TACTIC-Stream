@@ -5,13 +5,19 @@ order: 92
 ---
 # Installation, updates and acceptance
 
-> TACTIC Stream runs from the checkout or an installed Python wheel. This guide describes the implemented delivery, not the future Windows EXE/Electron bundle.
+> TACTIC Stream runs from the checkout, an installed Python wheel, or the standalone server package. Windows EXE/Electron acceptance remains pending.
 
 ## What is supported
 
 Python 3.14+ is required. SQLite and PostgreSQL are implemented; the acceptance uses SQLite on Windows and PostgreSQL 18.6 in Linux Docker. MySQL is still a target, not a supported runtime. PostgreSQL requires the package's `postgres` extra and a native XML database resource; credentials can use `password_file`. Changing vendors does not migrate existing data.
 
 The server imports packaged `pyasm` and `tactic`; it needs neither the reference `legacy` directory nor a running Handler. The unmodified Handler XML-RPC client remains an acceptance client. Repository Sync, S3 and the desktop/DCC bridge are excluded.
+
+## Standalone PostgreSQL server
+
+The exported server package includes Stream, Apache/Webmin and PostgreSQL images, Compose, management scripts and SHA-256 checksums. The host needs Docker Compose and Python 3.10+; application code and dependencies run inside the images without a source checkout or Node.js. From the complete package directory, run `python manage.py load`, `python manage.py init`, then `python manage.py check`. Initialization asks for a new administrator password and refuses an existing database.
+
+For updates, back up databases, repository, configuration and `.local` secrets first. Keep the same Compose project name and ports, securely copy the existing `.local` into the new package, then run `load`, `update`, `check`. Do not use initialization to migrate SQLite data. The included `README.en.md` describes installation, persistent volumes, ports and recovery limits. Database/file migration and complete GUI acceptance remain separate requirements.
 
 ## Starting on Windows
 

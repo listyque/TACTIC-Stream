@@ -5,6 +5,22 @@
 Общая цель совместимости API TACTIC сохраняется: Handler задаёт проверяемые
 сценарии, а не ограничивает весь объём переноса.
 
+## Standalone server package — L12 checkpoint, 0.112.192
+
+`python -m tools.server_delivery --output <new-directory>` exports the application,
+Apache/Webmin and PostgreSQL images, an image-only Compose file, management scripts,
+licenses and SHA-256 inventory. The installed package uses named data volumes and
+the Python wheel inside its image; it does not mount checkout sources or a developer
+dependency volume. `manage.py load`, `init`, `update` and `check` work from the exported
+directory. PostgreSQL bootstrap leaves creation of `sthpw` to the native initializer.
+Existing SQLite data/configuration is never switched to PostgreSQL by initialization.
+See [server installation](SERVER_DELIVERY.en.md) and
+[установка серверного комплекта](SERVER_DELIVERY.ru.md).
+
+The working source-mounted Docker environment remains independent. Windows
+EXE/Electron, legacy project migration, backup/restore and complete GUI acceptance
+are still L12 requirements; this checkpoint does not close L12.
+
 ## Целевая поставка
 
 | Режим | Комплект | Подключение Handler | Управление backend |

@@ -3,6 +3,7 @@ WORKDIR /build/frontend
 COPY frontend/package*.json ./
 RUN npm ci
 COPY frontend/ ./
+COPY src/ /build/src/
 RUN npm run build
 
 FROM ubuntu:26.04 AS app

@@ -11,6 +11,9 @@ dist
 frontend/node_modules
 .npm-cache
 .browser-cache
+.tmp
+.test-tmp
+.screenshots
 deploy/docker/.local
 tests
 tools

@@ -96,13 +96,12 @@ try {
       animations: 'disabled'
     });
   };
-  const fits = async (node) =>
-    assert(
-      await node.evaluate(
-        (element) => element.scrollWidth <= element.clientWidth
-      ),
-      'No horizontal overflow'
+  const fits = async (node) => {
+    await page.waitForFunction(
+      (element) => element.scrollWidth <= element.clientWidth,
+      await node.elementHandle()
     );
+  };
   const panel = async (id) => {
     await page.locator('.navigation-toggle').tap();
     await page

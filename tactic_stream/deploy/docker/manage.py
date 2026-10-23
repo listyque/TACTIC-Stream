@@ -1,6 +1,8 @@
 """Docker deployment, from Windows or Linux. Requires Python 3.10+ and Docker Compose."""
 import argparse
+from hashlib import sha256
 from http.cookiejar import CookieJar
+import json
 import os
 from pathlib import Path
 import secrets
@@ -16,9 +18,19 @@ HERE = Path(__file__).resolve().parent
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=('up', 'init', 'update', 'rebuild', 'apache-config', 'stop', 'status', 'logs', 'check', 'check-postgres'), nargs='?', default='up')
+    parser.add_argument('action', choices=('load', 'up', 'init', 'update', 'rebuild', 'apache-config', 'stop', 'status', 'logs', 'check', 'check-postgres'), nargs='?', default='up')
     parser.add_argument('--suite', choices=('foundation', 'schema', 'project', 'plugin', 'command', 'queue', 'diagnostics'), default='foundation', help='PostgreSQL check selection')
+    parser.add_argument('--project-name', help='Separate Compose project and persistent volumes')
     args = parser.parse_args()
+    manifest_path = HERE / 'manifest.json'
+    release = json.loads(manifest_path.read_text(encoding='utf-8')) if manifest_path.is_file() else None
+    if release is not None and release.get('format') != 'tactic-stream-server':
+        parser.error('Unsupported server package manifest')
+    if release and args.action in ('rebuild', 'check-postgres'):
+        parser.error('This action requires the source checkout; installed packages use load/update/check')
+    if not release and args.action == 'load':
+        parser.error('load requires an exported server package')
+    project = args.project_name or ('tactic-stream-server' if release else 'tactic-stream-linux')
     docker = shutil.which('docker')
     if not docker and os.name == 'nt':
         candidate = Path(os.environ.get('ProgramFiles', 'C:/Program Files')) / 'Docker/Docker/resources/bin/docker.exe'
@@ -26,10 +38,24 @@ def main():
             docker = str(candidate)
     if not docker:
         parser.error('Docker is not installed or is missing from PATH')
-    command = [docker, 'compose', '--project-name', 'tactic-stream-linux', '-f', str(HERE / 'compose.yaml')]
+    command = [docker, 'compose', '--project-name', project, '-f', str(HERE / 'compose.yaml')]
 
     def compose(*arguments, **kwargs):
         return subprocess.run(command + list(arguments), check=True, **kwargs)
+
+    if args.action == 'load':
+        for entry in release['files']:
+            path = (HERE / entry['path']).resolve()
+            if not path.is_relative_to(HERE.resolve()):
+                parser.error('Manifest path escapes the server package')
+            digest = sha256()
+            with path.open('rb') as source:
+                for block in iter(lambda: source.read(1024 * 1024), b''):
+                    digest.update(block)
+            if path.stat().st_size != entry['bytes'] or digest.hexdigest() != entry['sha256']:
+                parser.error('Server package checksum mismatch: ' + entry['path'])
+        subprocess.run([docker, 'image', 'load', '-i', str(HERE / 'images.tar')], check=True)
+        return
 
     def apache_config():
         path = '/etc/apache2/sites-available/tactic-stream.conf'
@@ -46,10 +72,12 @@ def main():
     if args.action in ('up', 'init', 'update', 'rebuild'):
         directory = HERE / '.local'
         directory.mkdir(mode=0o700, exist_ok=True)
+        if release:
+            directory.chmod(0o700)
         for name, volume in [('postgres', 'postgres_data'), ('webmin', 'webmin_config')]:
             password = directory / (name + '-password')
             if not password.exists():
-                existing = subprocess.run([docker, 'volume', 'inspect', 'tactic-stream-linux_' + volume],
+                existing = subprocess.run([docker, 'volume', 'inspect', project + '_' + volume],
                                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 if existing.returncode == 0:
                     parser.error('%s data already exists: restore %s; do not generate a new secret' % (name, password))
@@ -60,9 +88,14 @@ def main():
             except FileExistsError:
                 if not password.read_text(encoding='utf-8').strip():
                     parser.error('%s password file is empty; restore it before starting' % name)
-        if args.action in ('init', 'rebuild'):
+            if release:
+                # The private directory protects host files; non-root containers must read the mounted secrets.
+                password.chmod(0o644)
+        if not release and args.action in ('init', 'rebuild'):
             compose('build')
-        if args.action in ('init', 'update', 'rebuild'):
+        if release and args.action in ('init', 'update'):
+            compose('up', '-d', '--no-build', '--wait', '--wait-timeout', '120', 'postgres')
+        if not release and args.action in ('init', 'update', 'rebuild'):
             compose('stop', 'app')
             compose('run', '--rm', '--no-deps', '-T', '--user', 'root',
                     '-v', str(HERE.parents[1] / 'pyproject.toml') + ':/opt/stream-pyproject.toml:ro',
@@ -73,12 +106,16 @@ def main():
             compose('run', '--rm', '--no-deps', 'app', 'tactic-stream', 'upgrade')
         if args.action == 'init':
             compose('stop', 'app')
+            if release:
+                compose('run', '--rm', '--no-deps', '-T', 'app', 'python', '-',
+                        input=(HERE / 'init-postgres.py').read_bytes())
             compose('run', '--rm', '--no-deps', 'app', 'tactic-stream', 'init')
         compose('up', '-d', '--no-build', '--wait', '--wait-timeout', '120')
         apache_config()
         print('Application: http://%s:%s/' % (os.environ.get('STREAM_BIND', '127.0.0.1'), os.environ.get('STREAM_HTTP_PORT', '8082')))
         print('Webmin: https://127.0.0.1:%s/ (root; password in %s)' % (os.environ.get('STREAM_WEBMIN_PORT', '10000'), directory / 'webmin-password'))
-        print('System storage follows tactic-conf.xml (SQLite by default); PostgreSQL supports the migrated kernel.')
+        print('PostgreSQL server package; configuration and data persist in named volumes.' if release else
+              'System storage follows tactic-conf.xml (SQLite by default); PostgreSQL supports the migrated kernel.')
     elif args.action == 'stop':
         compose('down')  # Named data volumes are retained.
     elif args.action == 'apache-config':
