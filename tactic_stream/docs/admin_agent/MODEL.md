@@ -2,6 +2,8 @@
 
 This is the vocabulary needed to design a project. Values in examples are
 illustrative; discover the actual installation's identifiers through OPERATIONS.
+Deeper reference: [source index](SOURCES.md#structures) and
+[current core guide](../../frontend/public/help/core_model.en.md).
 
 ## Project, namespace and database
 
@@ -24,6 +26,9 @@ business projects. `classic` and `file_project` are distinct project modes;
 the latter has a dedicated file workspace/schema, not an arbitrary VFX schema.
 
 ## SearchType, SObject and identity
+
+Field references: [original core tables](../../../../TH/docs/tactic_database/02_CORE_TABLE_CATALOG.md)
+and [project config tables](../../../../TH/docs/tactic_database/03_CONFIG_TABLE_CATALOG.md).
 
 A SearchType is an object definition; an SObject is one record of that type.
 The registry, actual table columns and schema relationships are separate facts.
@@ -48,6 +53,8 @@ is not universal. `s_status='retired'` concerns retirement; it is not the task's
 workflow `status`. Retired rows may be hidden by default queries.
 
 ## Relationships and shared work records
+
+Reference: [relationships and flows](../../../../TH/docs/tactic_database/04_RELATIONSHIPS_AND_FLOWS.md).
 
 `sthpw/schema` stores XML relationships and type nodes. It can inherit another
 schema and system relationships. A code relationship may connect a child field
@@ -76,6 +83,8 @@ itself depending on the configured action. Preserve that configured behavior.
 
 ## Pipelines, task statuses and automation
 
+Guide: [Workflow](../../frontend/public/help/administration.en.md#workflow).
+
 `sthpw/pipeline` stores pipeline XML and scope; business objects can reference
 its code through `pipeline_code`. Processes such as `model`, `light`, `review`
 are work stages. Task statuses such as `In Progress` are a different level of
@@ -96,6 +105,9 @@ managed trigger to resolve a validation error. Distinguish a declarative manual
 workflow from one that executes Python/JavaScript or sends notifications.
 
 ## Definitions, views, layouts and navigation
+
+Reference: [view semantics](../../../../TH/docs/tactic_compatibility/table_views.md)
+and [widget catalogue](../../src/tactic_stream/shared_ui/features/table/widgets.json).
 
 `config/widget_config` contains XML by SearchType/view and optional user/scope.
 Several records and built-in configurations can contribute to the effective

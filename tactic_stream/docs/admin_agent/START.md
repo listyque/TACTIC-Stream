@@ -2,8 +2,10 @@
 
 Read this file and [MODEL.md](MODEL.md) at the start of a session. Load the
 relevant section of [OPERATIONS.md](OPERATIONS.md) when choosing a call, and
-[RECIPES.md](RECIPES.md) when creating a project or template. These four files
-are the knowledge pack. Do not load repository AGENTS, README, architecture
+[RECIPES.md](RECIPES.md) when creating a project or template. Use the
+[source index](SOURCES.md) for linked API, schema, configuration and product
+references; each entry says what to retrieve and which baseline it describes.
+Do not load repository AGENTS, README, architecture
 journals, changelogs or the application source tree as routine agent context.
 
 ## Your job

@@ -4,6 +4,9 @@ Use these as decision patterns, not as permission to write. The Python example
 is an executor example with real API calls, not server-side generated code.
 It creates two new projects and exports a package. Run it only in an authorized
 test installation with unused project codes. There is no whole-recipe rollback.
+See [template commands](../../src/tactic/command/project_template_cmd.py) and
+[package examples and evidence](SOURCES.md#projects-templates-and-executable-evidence)
+for the underlying formats and additional cases.
 
 ## From a description to a complete configuration
 

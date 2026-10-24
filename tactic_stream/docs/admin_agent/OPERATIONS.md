@@ -4,6 +4,10 @@ Read only the sections needed for the current task. This is a reference for the
 agent and its host executor, not a list of new MCP tools. The host must bind
 allowed actions to these exact server operations and keep the ticket private.
 An operation absent from the host's tools cannot be invoked by naming it here.
+References: [API source index](SOURCES.md#api),
+[server methods](../../src/tactic_stream/server/api.py),
+[SDK](../../src/tactic_client_lib/tactic_server_stub.py),
+[transport guide](../../frontend/public/help/api_compatibility.en.md).
 
 ## Transport and discovery
 
@@ -59,6 +63,11 @@ auth and the fixed class; it returns `info`. It is notation, not an API name.
 | Small data sample | RPC `query(auth, search_type, ...)` using discovered parameters | Explicit allowed columns, stable ordering, limit/offset and project scope. Never use all rows as routine context. |
 
 Full fixed command paths:
+
+Owners: [SearchTypes](../../src/tactic/ui/panel/search_types_cmd.py),
+[Schema](../../src/tactic/ui/panel/schema_cmd.py),
+[Workflow](../../src/tactic/ui/panel/workflow_cmd.py),
+[Naming](../../src/tactic/ui/panel/naming_cmd.py).
 
 ```text
 SearchTypesCmd = tactic.ui.panel.search_types_cmd.SearchTypesCmd
