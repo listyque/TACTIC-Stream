@@ -14242,6 +14242,66 @@ var fluent_system_icons_resizable_default = {
 	ic_fluent_table_select_range_20_regular: 63021
 };
 //#endregion
+//#region ../src/tactic_stream/shared_ui/core/legacy_icons.mjs
+var legacyIcons = {
+	ADD: ["add", "add.png"],
+	ARROW_OUT: ["open-in-new", "arrow_out.png"],
+	BW_PHOTO: ["image", "/context/icons/common/bw_photo.png"],
+	CALENDAR: ["calendar", "calendar.png"],
+	CAMERA: ["photo-camera", "camera.png"],
+	CONNECT: ["connection", "connect.png"],
+	CONTENTS: ["view-list", "application_view_list.png"],
+	DATE: ["calendar", "date.png"],
+	DATE_EDIT: ["calendar", "date_edit.png"],
+	DATE_GO: ["schedule", "date_go.png"],
+	DATE_MAGNIFY: ["search", "date_magnify.png"],
+	DELETE: ["delete", "delete.png"],
+	DETAILS: ["description", "page_white_text.png"],
+	DOWNLOAD: ["download", "_spt_download.png"],
+	EDIT: ["edit", "page_white_edit.png"],
+	FILM: ["movie", "film.png"],
+	FILM_SUBMIT: ["publish", "film_go.png"],
+	FOLDER: ["folder", "folder.png"],
+	FOLDER_EDIT: ["folder", "folder_edit.png"],
+	FOLDER_EXPLORE: ["folder-open", "folder_explore.png"],
+	FOLDER_GO: ["folder-open", "folder_go.png"],
+	GROUP_LINK: ["group", "group_link.png"],
+	IMAGE: ["image", "image.png"],
+	JUMP: ["open-in-new", "door_in.png"],
+	LINK: ["link", "link.png"],
+	LOCK: ["lock", "lock.png"],
+	MOVIE_VIEW: ["movie", "/context/icons/common/view_movie.png"],
+	NOTE_GO: ["notes", "note_go.png"],
+	PHOTOS: ["collections", "photos.png"],
+	PICTURE_EDIT: ["image-edit", "picture_edit.png"],
+	PLUGIN: ["extension", "plugin.png"],
+	PLUGIN_ADD: ["extension", "plugin_add.png"],
+	PROCESS: ["grid-view", "application_view_tile.png"],
+	SAVE: ["save", "disk.png"],
+	STAR: ["star", "star.png"],
+	USER: ["person", "user.png"],
+	USER_ADD: ["person-add", "user_add.png"],
+	WORK: ["workspaces", "/context/icons/custom/work.png"]
+};
+var aliases$1 = Object.create(null);
+for (const key of Object.keys(legacyIcons)) {
+	const [name, source] = legacyIcons[key];
+	aliases$1[key] = name;
+	aliases$1[source] = name;
+	const file = source.slice(source.lastIndexOf("/") + 1);
+	aliases$1[file] = name;
+	aliases$1[file.replace(/\.[^.]+$/, "")] = name;
+	if (!source.startsWith("/")) aliases$1["/context/icons/silk/" + source] = name;
+}
+aliases$1.Contents = aliases$1.CONTENTS;
+aliases$1.contents = aliases$1.CONTENTS;
+aliases$1.BS_LIST_ALT = "view-list";
+aliases$1.FAS_TELEVISION = "fontawesome-solid:tv";
+aliases$1.television = "fontawesome-solid:tv";
+function legacyName(source) {
+	return aliases$1[String(source || "").trim()] || "";
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/core/icons.mjs
 var semanticAliases = {
 	WORK: "workspaces",
@@ -14339,6 +14399,7 @@ var aliases = {
 	"drive-file-rename-outline": "edit",
 	"edit-note": "sticky-note",
 	error: "exclamation-circle",
+	extension: "puzzle-piece",
 	"expand-less": "chevron-up",
 	"expand-more": "chevron-down",
 	failed: "exclamation-circle",
@@ -14566,6 +14627,7 @@ var materialAliases = {
 	emoji: "emoticon",
 	envelope: "email",
 	error: "alert-circle",
+	extension: "puzzle",
 	"exclamation-circle": "alert-circle",
 	failed: "alert-circle",
 	"filter-alt": "filter",
@@ -14753,6 +14815,7 @@ var fluentAliases = {
 	"dynamic-feed": "timeline",
 	"edit-note": "note-edit",
 	error: "error-circle",
+	extension: "puzzle-piece",
 	"expand-less": "chevron-up",
 	"expand-more": "chevron-down",
 	failed: "error-circle",
@@ -14915,11 +14978,12 @@ function ownValue(values, name) {
 	return values && Object.prototype.hasOwnProperty.call(values, name) ? values[name] : void 0;
 }
 function semanticName(source) {
-	const name = String(source || "").replace(/_/g, "-");
+	const name = (legacyName(source) || String(source || "")).replace(/_/g, "-");
 	return ownValue(semanticAliases, name) || name;
 }
 function resolve(source, pack, glyph, forceSolid = false) {
 	if (!source) return null;
+	source = legacyName(source) || source;
 	const prefix = /^(FA|FAS|FAR|MDI)_(.+)$/i.exec(source);
 	if (prefix) {
 		let family = "fontawesome-solid";

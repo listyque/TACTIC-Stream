@@ -34,3 +34,8 @@ Common interface messages use the same source-text translations as the current T
 ## Browser preferences and preview
 
 System color mode, standalone notes and icon preview remain visible additions. Palette tiles use the shared 36px control with an 18px accent circle. Theme/animation/language changes preview immediately while Configuration is open; Apply/Save persists them and discarding changes restores the last applied values. Close protects unsaved settings. The reduced-motion system preference takes priority. Graphics backend selection belongs to Qt; browser rendering is managed by the browser.
+
+
+## Legacy template icons
+
+Known icons from legacy templates are mapped to modern symbols in the shared icon catalogue. For example, PICTURE_EDIT uses an image, DETAILS a document, PHOTOS an image collection, FILM/MOVIE_VIEW a film and PLUGIN a puzzle piece. Old built-in PNG filenames and exact /context/icons/... references use the same mappings. The selected icon set still applies; an explicitly qualified font icon keeps its family. Project XML is preserved. This catalogue covers the shipped template references, not every historical IconWdg icon or custom plugin image. Unknown custom names, paths and remote images are not guessed from their labels. Restart Handler after installing the updated UI; reload the browser after updating Stream.

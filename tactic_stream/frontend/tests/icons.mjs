@@ -24,6 +24,54 @@ const code = source
 const { resolveIcon, iconMaps } = await import(
   'data:text/javascript;base64,' + Buffer.from(code).toString('base64')
 );
+const { legacyIcons } = await import(
+  '../../src/tactic_stream/shared_ui/core/legacy_icons.mjs'
+);
+const templateIcons = JSON.parse(
+  readFileSync(
+    new URL('../../tests/fixtures/legacy_template_icons.json', import.meta.url),
+    'utf8'
+  )
+);
+for (const pack of Object.keys(iconMaps)) {
+  for (const name of templateIcons)
+    assert(
+      resolveIcon(name, pack),
+      `Legacy template ${name} must resolve in ${pack}`
+    );
+  for (const [name, [semantic, source]] of Object.entries(legacyIcons)) {
+    const expected = resolveIcon(semantic, pack);
+    assert(expected, `${name} replacement must exist in ${pack}`);
+    const file = source.slice(source.lastIndexOf('/') + 1);
+    const references = [name, source, file, file.replace(/\.[^.]+$/, '')];
+    if (!source.startsWith('/'))
+      references.push('/context/icons/silk/' + source);
+    for (const reference of references)
+      assert.deepEqual(
+        resolveIcon(reference, pack),
+        expected,
+        reference + ':' + pack
+      );
+  }
+  assert.deepEqual(
+    resolveIcon('BS_LIST_ALT', pack),
+    resolveIcon('view-list', pack)
+  );
+  assert.deepEqual(
+    resolveIcon('Contents', pack),
+    resolveIcon('view-list', pack)
+  );
+  assert.deepEqual(
+    resolveIcon('FAS_TELEVISION', pack),
+    resolveIcon('fontawesome-solid:tv', pack)
+  );
+  for (const name of [
+    'https://custom.invalid/film.png',
+    '/custom/film.png',
+    'CUSTOM_PROJECT_ICON'
+  ])
+    assert.equal(resolveIcon(name, pack), undefined);
+}
 if (process.argv[2])
   for (const name of [
     'materialdesignicons-webfont.ttf',

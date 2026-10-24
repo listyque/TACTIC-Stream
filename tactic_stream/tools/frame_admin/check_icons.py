@@ -82,6 +82,12 @@ names = sorted(
         "minus",
     }
 )
+# Prefixed font names already have their own family policy; add legacy raster names.
+import re
+names = sorted(set(names) | {
+    name for name in json.loads((ROOT / "tests/fixtures/legacy_template_icons.json").read_text(encoding="utf-8"))
+    if not re.match(r"^(FA|FAS|FAR|MDI)_", name, re.I)
+})
 missing = {}
 resolved = {}
 selections = [selection]

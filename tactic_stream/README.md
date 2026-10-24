@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.201.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.202.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7745,3 +7745,9 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 ## 0.112.201 — Handler Full Check-in regression
 
 - Pair with Handler 0.6.0.147: restore task/note Check-in (Full) cells after a conditional re import shadowed the query procedure import. Add a real XML-RPC regression comparing parent/self targets and context normalization with Stream, and include it in the standard Frame table transport gate. Stream target selection already matched the expected behavior.
+
+
+## 0.112.202 — Legacy template icons
+
+- Share a legacy IconWdg name/raster-to-semantic catalogue with Handler 0.6.0.148. Restore the packaged template icons and VFX navigation in all five supplied font packs without rewriting project XML or guessing icons from labels.
+- Cover original symbol names, known bare PNG names, exact built-in raster paths, Bootstrap LIST_ALT and the old Font Awesome TELEVISION spelling. Unrecognized custom paths and icon names remain explicit.
