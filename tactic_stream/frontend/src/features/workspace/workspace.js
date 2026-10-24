@@ -13,7 +13,7 @@ export function navigationEntries(items, types) {
     const options = item.display.options
     const target = types.find(type => type.search_type === options.search_type)
     const layout = options.layout === 'default' ? target?.default_layout || 'table' : options.layout || 'table'
-    return { ...item, search_type: options.search_type, view: options.view || 'table', accent: target?.color || '',
+    return { ...item, search_type: options.search_type, view: options.view || 'table', resultMode: options.view_mode || item.default_view_mode || '', accent: target?.color || '',
       children: navigationEntries(item.children || [], types),
       supported: !!target && !item.action.handler && ['LinkWdg', 'pyasm.widget.LinkWdg'].includes(item.display.handler) &&
         (!options.class_name || options.class_name === 'tactic.ui.panel.ViewPanelWdg') &&

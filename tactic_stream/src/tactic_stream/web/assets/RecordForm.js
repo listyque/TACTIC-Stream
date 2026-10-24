@@ -715,7 +715,6 @@ var _sfc_main = {
 		project: String,
 		searchType: String,
 		modal: Boolean,
-		modeless: Boolean,
 		editView: {
 			type: String,
 			default: "edit"
@@ -1067,7 +1066,7 @@ var _sfc_main = {
 			this.error = "";
 			this.discard = this.uncertain = false;
 			this.loading = true;
-			this.modal || this.searchType === "sthpw/task" && !this.modeless ? this.$refs.dialog.showModal() : this.$refs.dialog.show();
+			this.$refs.dialog.showModal();
 			try {
 				const definition = await formDefinition(this.context.ticket, this.context.project, this.searchType, searchKey ? this.editView : this.insertView, searchKey, sourceKey, {
 					...this.instanceRelation ? {} : relation,
@@ -1650,7 +1649,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		], 64)) : createCommentVNode("", true)
 	], 64))], 40, _hoisted_1)), [[_directive_window, {
 		kind: $props.searchType === "sthpw/task" ? "task_editor" : "add_sobject",
-		type: $props.modal || $props.searchType === "sthpw/task" && !$props.modeless ? "dialog" : "window"
+		type: "dialog"
 	}]]);
 }
 var RecordForm_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);

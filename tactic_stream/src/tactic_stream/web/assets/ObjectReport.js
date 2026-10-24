@@ -1177,16 +1177,16 @@ var _sfc_main$1 = {
 //#region src/features/objects/ObjectReport.vue
 var _hoisted_1 = ["aria-busy"];
 var _hoisted_2 = {
-	key: 0,
+	key: 1,
 	class: "error",
 	role: "alert"
 };
 var _hoisted_3 = {
-	key: 1,
+	key: 2,
 	role: "status"
 };
 var _hoisted_4 = {
-	key: 4,
+	key: 5,
 	class: "object-report-activity"
 };
 var _hoisted_5 = {
@@ -1200,9 +1200,10 @@ var _sfc_main = {
 		project: String,
 		record: Object
 	},
-	emits: ["open-link"],
+	emits: ["open-link", "leave"],
 	setup(__props, { emit: __emit }) {
 		const props = __props;
+		const emit = __emit;
 		const openObjectTab = inject("openObjectTab", null), openTaskInspector = inject("openTaskInspector", null), openTaskManager = inject("openTaskManager", null), openUserProfile = inject("openUserProfile", null);
 		const openSnapshotBrowser = inject("openSnapshotBrowser", null);
 		const scroll = ref(null), content = ref(null), tabs$1 = ref(null), preview = ref(null), width = ref(0), data = ref(null), dataPage = ref(""), busy = ref(false), error = ref(""), page = ref("tasks"), activity = ref([]);
@@ -1301,11 +1302,17 @@ var _sfc_main = {
 			pagination.reset();
 		}
 		function open(key) {
-			if (key) openObjectTab?.(key.startsWith("skey://") ? key : "skey://" + key, props.project);
+			if (key) {
+				emit("leave");
+				openObjectTab?.(key.startsWith("skey://") ? key : "skey://" + key, props.project);
+			}
 		}
 		function snapshot(key) {
 			const row = data.value.snapshots.find((row) => row.searchKey === key);
-			if (row) openSnapshotBrowser?.(props.record, row.process, props.project);
+			if (row) {
+				emit("leave");
+				openSnapshotBrowser?.(props.record, row.process, props.project);
+			}
 		}
 		function file(record) {
 			const file = {
@@ -1322,6 +1329,7 @@ var _sfc_main = {
 			});
 		}
 		async function inspector(process, taskKey = "", noteKey = "") {
+			emit("leave");
 			return openTaskInspector?.(props.record, {}, process, taskKey, {
 				ticket: props.ticket,
 				project: props.project,
@@ -1330,6 +1338,7 @@ var _sfc_main = {
 			});
 		}
 		async function activityAction(record) {
+			emit("leave");
 			if (record.taskCode && ([
 				"status",
 				"task",
@@ -1345,15 +1354,22 @@ var _sfc_main = {
 			if (event.type === "page") selectPage(event.value);
 			else if (event.type === "refresh") load(false, true);
 			else if (event.type === "open") open(model.value.summary.searchKey);
-			else if (event.type === "link") openObjectTab?.(event.value, props.project);
-			else if (event.type === "child") open(event.key);
-			else if (event.type === "person") openUserProfile?.(event.key);
-			else if (event.type === "task") {
+			else if (event.type === "link") {
+				emit("leave");
+				openObjectTab?.(event.value, props.project);
+			} else if (event.type === "child") open(event.key);
+			else if (event.type === "person") {
+				emit("leave");
+				openUserProfile?.(event.key);
+			} else if (event.type === "task") {
 				if (await inspector(event.process, event.key) !== false) openTaskManager?.(props.record, "", {}, event.key);
 			} else if (event.type === "note") {
 				const row = data.value.notes[event.index];
 				await inspector(row.process, row.isTaskNote ? "sthpw/task?project=" + encodeURIComponent(props.project) + "&code=" + encodeURIComponent(row.taskCode) : "", row.searchKey);
-			} else if (event.type === "filter") openTaskManager?.(props.record, event.field === "process" ? event.value : "", { [event.field]: event.value });
+			} else if (event.type === "filter") {
+				emit("leave");
+				openTaskManager?.(props.record, event.field === "process" ? event.value : "", { [event.field]: event.value });
+			}
 		}
 		watch(() => [
 			props.ticket,
@@ -1398,10 +1414,11 @@ var _sfc_main = {
 				ref: content,
 				class: "object-report-content"
 			}, [
-				createVNode(_sfc_main$3, {
+				data.value ? (openBlock(), createBlock(_sfc_main$3, {
+					key: 0,
 					model: model.value,
 					onEvent: action
-				}, null, 8, ["model"]),
+				}, null, 8, ["model"])) : createCommentVNode("", true),
 				createBaseVNode("div", {
 					ref_key: "tabs",
 					ref: tabs$1,
@@ -1421,7 +1438,7 @@ var _sfc_main = {
 					"notes",
 					"children"
 				].includes(page.value) ? (openBlock(), createBlock(_sfc_main$3, {
-					key: 2,
+					key: 3,
 					model: model.value,
 					part: "page",
 					onEvent: action

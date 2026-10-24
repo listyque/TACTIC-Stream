@@ -15,7 +15,7 @@ import FilePreview from './FilePreview.vue';
 import { fileBlob } from './previewFiles.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/objects/report.ui.mjs';
 const props = defineProps({ ticket: String, project: String, record: Object });
-const emit = defineEmits(['open-link']);
+const emit = defineEmits(['open-link', 'leave']);
 const openObjectTab = inject('openObjectTab', null),
   openTaskInspector = inject('openTaskInspector', null),
   openTaskManager = inject('openTaskManager', null),
@@ -140,15 +140,20 @@ function selectPage(value) {
   pagination.reset();
 }
 function open(key) {
-  if (key)
+  if (key) {
+    emit('leave');
     openObjectTab?.(
       key.startsWith('skey://') ? key : 'skey://' + key,
       props.project
     );
+  }
 }
 function snapshot(key) {
   const row = data.value.snapshots.find((row) => row.searchKey === key);
-  if (row) openSnapshotBrowser?.(props.record, row.process, props.project);
+  if (row) {
+    emit('leave');
+    openSnapshotBrowser?.(props.record, row.process, props.project);
+  }
 }
 function file(record) {
   const file = { ...record, code: record.token, filename: record.title };
@@ -158,6 +163,7 @@ function file(record) {
   );
 }
 async function inspector(process, taskKey = '', noteKey = '') {
+  emit('leave');
   return openTaskInspector?.(props.record, {}, process, taskKey, {
     ticket: props.ticket,
     project: props.project,
@@ -166,6 +172,7 @@ async function inspector(process, taskKey = '', noteKey = '') {
   });
 }
 async function activityAction(record) {
+  emit('leave');
   if (
     record.taskCode &&
     (['status', 'task', 'work_hour'].includes(record.kind) ||
@@ -197,10 +204,14 @@ async function action(event) {
   if (event.type === 'page') selectPage(event.value);
   else if (event.type === 'refresh') load(false, true);
   else if (event.type === 'open') open(model.value.summary.searchKey);
-  else if (event.type === 'link') openObjectTab?.(event.value, props.project);
-  else if (event.type === 'child') open(event.key);
-  else if (event.type === 'person') openUserProfile?.(event.key);
-  else if (event.type === 'task') {
+  else if (event.type === 'link') {
+    emit('leave');
+    openObjectTab?.(event.value, props.project);
+  } else if (event.type === 'child') open(event.key);
+  else if (event.type === 'person') {
+    emit('leave');
+    openUserProfile?.(event.key);
+  } else if (event.type === 'task') {
     if ((await inspector(event.process, event.key)) !== false)
       openTaskManager?.(props.record, '', {}, event.key);
   } else if (event.type === 'note') {
@@ -215,12 +226,14 @@ async function action(event) {
         : '',
       row.searchKey
     );
-  } else if (event.type === 'filter')
+  } else if (event.type === 'filter') {
+    emit('leave');
     openTaskManager?.(
       props.record,
       event.field === 'process' ? event.value : '',
       { [event.field]: event.value }
     );
+  }
 }
 
 watch(
@@ -261,7 +274,7 @@ onBeforeUnmount(() => {
 <template>
   <div ref="scroll" class="object-report" :aria-busy="busy" tabindex="0">
     <div ref="content" class="object-report-content">
-      <ObjectReportSurface :model="model" @event="action" />
+      <ObjectReportSurface v-if="data" :model="model" @event="action" />
       <div ref="tabs" class="object-report-tabs">
         <FrameView :scene="tabScene" @event="action" />
       </div>
@@ -321,6 +334,18 @@ onBeforeUnmount(() => {
   flex-direction: column;
   overflow: hidden;
   min-height: 320px;
+  width: 76vw;
+  height: 80dvh;
+  padding: 0;
+  background: var(--surface-deep);
+}
+.object-details > header {
+  padding: 6px 12px;
+  margin: 0;
+  flex: none;
+}
+.object-details > header small {
+  display: none;
 }
 .object-details > .object-report {
   flex: 1;
@@ -331,7 +356,7 @@ onBeforeUnmount(() => {
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
   padding: 12px 10px 12px 12px;
-  background: var(--workspace);
+  background: var(--surface-deep);
   min-width: 0;
 }
 .object-report-content {

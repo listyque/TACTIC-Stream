@@ -394,3 +394,8 @@ A single card click selects; double click or its Open action enters its contents
 ## Expanding result branches
 
 The clicked disclosure arrow becomes a small progress indicator while its children are fetched, as in Handler. Loading does not insert text rows or shift the tree. Cached branches and retained search tabs reopen without another metadata request; use Refresh to request current data. After a refresh, available root records appear before saved child expansions finish. The first uncached expansion still waits for the server; a failure keeps its Retry action.
+
+
+## Initial view for legacy projects
+
+Imported `project_view` sidebar searches open as tables when no explicit result mode is configured, matching the legacy ViewPanel default. A direct search for a configured type uses the same initial mode. Explicit sidebar modes and previously saved tab modes remain authoritative; switch the current tab through the result-view menu. Handler-specific sidebar definitions retain their client defaults.

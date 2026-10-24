@@ -110,6 +110,10 @@ try {
     .getByLabel('Password', { exact: true })
     .fill('private-test-password');
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByLabel('Change search results view', { exact: true }).click();
+  await page
+    .getByRole('menuitemradio', { name: 'Continuous tree', exact: true })
+    .click();
   const row = (title) =>
     page
       .locator('.workspace-results .result-item:visible')

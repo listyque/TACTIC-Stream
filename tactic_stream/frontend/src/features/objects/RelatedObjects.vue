@@ -337,7 +337,7 @@ export default {
       this.definition = this.detail = null;
       this.busy = true;
       this.error = '';
-      this.$refs.dialog.show();
+      this.$refs.dialog.showModal();
       try {
         const result = await objectRelations(
           this.ticket,
@@ -637,7 +637,7 @@ export default {
     async inspect(record) {
       this.detail = record;
       await nextTick();
-      this.$refs.details.show();
+      this.$refs.details.showModal();
     },
     edit(record) {
       this.$refs.details?.close();
@@ -656,7 +656,7 @@ export default {
 
 <template>
   <dialog
-    v-window="{ kind: linking ? 'link_sobjects' : undefined, type: 'window' }"
+    v-window="{ kind: linking ? 'link_sobjects' : undefined }"
     ref="dialog"
     class="record-dialog related-objects"
     :class="{ 'link-objects': linking }"
@@ -798,7 +798,7 @@ export default {
     @saved="refresh"
   />
   <dialog
-    v-window="{ type: 'window' }"
+    v-window="{ kind: 'sobject_info' }"
     ref="details"
     class="record-dialog object-details"
     :aria-label="t('Object details')"
@@ -825,7 +825,15 @@ export default {
           />
         </div>
       </header>
-      <ObjectReport :ticket="ticket" :project="project" :record="detail" />
+      <ObjectReport
+        :ticket="ticket"
+        :project="detail.project_code || project"
+        :record="detail"
+        @leave="
+          $refs.details.close();
+          $refs.dialog.close();
+        "
+      />
     </template>
   </dialog>
 </template>

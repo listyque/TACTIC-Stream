@@ -6,6 +6,7 @@ from pathlib import Path
 
 from pyasm.biz import File, Pipeline, Project, ProjectSetting, Task
 from pyasm.common import Environment, SecurityException
+from pyasm.common.errors import UnsupportedContract
 from pyasm.search import Search
 from pyasm.widget import ThumbWdg
 from tactic.ui.table.task_element_wdg import TaskElementWdg
@@ -22,7 +23,7 @@ PAGES = ("tasks", "notes", "children", "snapshots", "activity")
 def readable(search_type):
     try:
         check_type(search_type, Project.get_project_code())
-    except SecurityException:
+    except (SecurityException, UnsupportedContract):
         return False
     return True
 
@@ -121,11 +122,14 @@ def read_report(owner, page="tasks", offset=0, limit=50):
             children[child.get_search_key()] = (child, branch)
 
     task_by_code = {task.get_code(): task for task in tasks}
+    hour_task_codes = list(task_by_code)
+    if base == "sthpw/task":
+        hour_task_codes.append(owner.get_code())
     work_hours = []
-    if task_by_code and readable("sthpw/work_hour"):
+    if hour_task_codes and readable("sthpw/work_hour"):
         search = Search("sthpw/work_hour")
         search.add_filter("project_code", Project.get_project_code())
-        search.add_filters("task_code", list(task_by_code))
+        search.add_filters("task_code", hour_task_codes)
         work_hours = search.get_sobjects()
     can_view_costs = readable(
         "sthpw/login"
@@ -281,8 +285,14 @@ def read_report(owner, page="tasks", offset=0, limit=50):
         thumb.set_current_index(index)
         previews[obj.get_search_key()] = thumb.get_cell_value().get("image", "")
     updated = str(root.get("last_updated") or root.get("timestamp") or "")
+    task_title = ""
+    if base == "sthpw/task":
+        task_title = " · ".join(
+            str(root[name]) for name in ("process", "search_code") if root.get(name)
+        )
     summary = dict(
-        title=root.get("name")
+        title=task_title
+        or root.get("name")
         or root.get("title")
         or root.get("code")
         or str(root.get("id", "")),

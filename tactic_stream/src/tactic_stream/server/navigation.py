@@ -55,7 +55,8 @@ def read_navigation():
             item = dict(key='/'.join((*path, name)), name=name, title=config.get_element_title(name),
                         kind=kind, icon=attributes.get('icon') or options.get('icon') or ('folder' if kind == 'section' else 'link'),
                         display=dict(handler=config.get_display_handler(name), options=options),
-                        action=dict(handler=config.get_action_handler(name), options=config.get_action_options(name)), children=[])
+                        action=dict(handler=config.get_action_handler(name), options=config.get_action_options(name)),
+                        default_view_mode='table' if view == 'project_view' else '', children=[])
             if kind == 'section':
                 child_view = options.get('view') or element.findtext('view')
                 inline = element.findall('element')

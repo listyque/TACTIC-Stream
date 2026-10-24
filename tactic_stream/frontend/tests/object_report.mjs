@@ -22,6 +22,10 @@ try {
     .getByLabel('Password', { exact: true })
     .fill('private-test-password');
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByLabel('Change search results view', { exact: true }).click();
+  await page
+    .getByRole('menuitemradio', { name: 'Continuous tree', exact: true })
+    .click();
   const robot = page
     .locator('.workspace-results .result-item')
     .and(page.getByLabel('Report Robot', { exact: true }));
@@ -64,17 +68,20 @@ try {
     delete window.reportOpenLink;
     delete window.reportOpenedLinks;
   });
+  await page.evaluate(() =>
+    document
+      .querySelector('#app')
+      .__vue_app__._container._vnode.component.subTree.component.subTree.component.proxy.$refs.details.showModal()
+  );
   await report.locator('[data-frame="objectReportRow_task_0"]').waitFor();
   assert.equal(
     await dialog.evaluate((element) => element.matches(':modal')),
-    false
+    true
   );
   await report.locator('[data-frame="objectReportRow_task_0"]').click();
   const inspector = page.locator('[data-dock="notes"] .notes-panel');
   await inspector.getByText('Task note', { exact: true }).waitFor();
-  await dialog
-    .getByRole('button', { name: 'Close details', exact: true })
-    .click();
+  await dialog.waitFor({ state: 'hidden' });
   await page.waitForFunction(() => {
     const app =
       document.querySelector('#app').__vue_app__._container._vnode.component
@@ -100,8 +107,8 @@ try {
   await taskForm.getByLabel('Description', { exact: true }).waitFor();
   assert.equal(
     await taskForm.evaluate((node) => node.matches(':modal')),
-    false,
-    'Full task editor follows the native modeless window'
+    true,
+    'Full task editor is modal, matching the native editor'
   );
   await taskForm.getByRole('button', { name: 'Close', exact: true }).click();
   await inspector
@@ -110,7 +117,7 @@ try {
   await page.evaluate(() =>
     document
       .querySelector('#app')
-      .__vue_app__._container._vnode.component.subTree.component.subTree.component.proxy.$refs.details.show()
+      .__vue_app__._container._vnode.component.subTree.component.subTree.component.proxy.$refs.details.showModal()
   );
   await report.getByRole('radio', { name: 'Notes', exact: true }).click();
   await report.getByText('Object note', { exact: true }).first().waitFor();
@@ -124,6 +131,11 @@ try {
     'Report task retained draft'
   );
 
+  await page.evaluate(() =>
+    document
+      .querySelector('#app')
+      .__vue_app__._container._vnode.component.subTree.component.subTree.component.proxy.$refs.details.showModal()
+  );
   await report.getByRole('radio', { name: 'Children', exact: true }).click();
   await report.getByText('No related children', { exact: true }).waitFor();
   await report.getByRole('radio', { name: 'Snapshots', exact: true }).click();

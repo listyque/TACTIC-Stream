@@ -279,3 +279,48 @@ VFX widget configurations changed; all 24 physical project tables matched the
 restored copy. Existing assets, SQ020 disclosure and its nested table passed the
 browser check after restart. Neither this copy check nor the prior clean-Windows
 0.112.193 run certifies a new clean-Windows 0.112.195 installation.
+
+
+## Main SQLite VFX fixture — Stream 0.112.197 / Handler 0.6.0.143
+
+The normal workspace BAT now serves `vfx_demo` from the existing main SQLite data
+folder. The separate localhost demo is stopped. The project was installed with the
+native template command from the preserved VFX Stream archive. Population used
+native API/commands, fictional accounts and synthetic media; runtime databases,
+credentials and repository files remain outside Git.
+
+`VFX_MAIN_ACCEPTANCE_2026-10-24.json` records 22 populated VFX tables, 24 assets,
+6 sequences, 36 shots, 348 tasks, 236 notes, 116 work-hour entries, 180 snapshots
+and 516 files. The added “VFX — All tables” sidebar group exposes every available
+project table. Legacy ViewPanel searches open as tables by default; explicit modes
+and retained search tabs keep their selected presentation.
+
+Before population, all four databases were copied through SQLite's backup API,
+with config/templates, integrity and SHA verification. This backup does not include
+the existing repository media and must not be described as a full asset backup.
+
+Real Chromium traversed all 22 tables with rows and no top-level query errors.
+Both browser and native Handler opened the VFX and CG task reports, exercised all
+five pages and checked modal ownership. Task reports use readable process/object
+titles, the task's own project and exact task work hours. Handler pins the report
+identity while background workspace selection restores, scopes notes by record
+type and skips child types that the server marks unavailable. Selecting a task,
+note or linked workspace context closes the modal report first. Object report,
+record and relation editor windows are modal in both clients.
+
+This is not complete template acceptance. The populated table/form audit still
+finds TextInputWdg missing in Art Reference and Layer edit forms; Camera edit still
+references excluded `prod/shot`. Asset/Episode/Sequence tables have Submission gaps,
+Layer has excluded Explore/LayerDetail widgets, and Plate has unsupported Wiki,
+file-range and login cells. The earlier 18-view inventory above remains open;
+no excluded prod namespace was restored. Maya/applets and a new clean-Windows run
+remain explicitly skipped by the user. Current source checks do not qualify a new
+installer or replace the independently qualified 0.112.195 delivery checkpoint.
+
+The final current-source Frame gate passed all 156 stages without serial retries.
+Its source fingerprints were verified again after the run. Vue production build,
+task-report API regression and 35 native report/navigation tests also passed.
+
+Native first report opening now starts through the window model, independently
+of QML loader creation. The populated asset report verifies four tasks, four
+notes (both base and qualified legacy Search Types) and 3.5 logged hours.

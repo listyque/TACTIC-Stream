@@ -58,6 +58,10 @@ try {
     .locator('.type-list [data-search-type="library_browser/items"]')
     .last()
     .click();
+  await page.getByLabel('Change search results view', { exact: true }).click();
+  await page
+    .getByRole('menuitemradio', { name: 'Continuous tree', exact: true })
+    .click();
   await open();
   assert.equal(
     await library
@@ -138,6 +142,9 @@ try {
     1
   );
   await page.reload();
+  await page
+    .getByLabel('Change search results view', { exact: true })
+    .waitFor();
   await page
     .locator('.workspace-results .result-item-object:visible')
     .filter({ hasText: 'One object' })

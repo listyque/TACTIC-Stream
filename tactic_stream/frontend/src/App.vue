@@ -189,6 +189,11 @@ export default {
       return this.pingBusy ? 'Pinging TACTIC server' : requestActivity.pending.findLast(row => row.ticket === this.session?.ticket)?.message || ''
     },
     browserTitle() { return [this.activeSearchTab ? this.searchTabTitle(this.activeSearchTab) : '', this.currentProject?.title || '', t('TACTIC Stream')].filter(Boolean).join(' – ') },
+    detailTitle() {
+      const record = this.detail || {}
+      return (record.__search_key__?.split('?')[0] === 'sthpw/task' ? [record.process, record.search_code].filter(Boolean).join(' · ') : '') ||
+        record.name || record.title || record.code || record.id
+    },
     resultViews() { return resultViews },
     resultGroups() { return resultGroups },
     searchGroupMenuModel() {
@@ -241,10 +246,13 @@ export default {
     viewLinks() {
       return navigationEntries(this.navigationByProject[this.workspaceProject]?.entries || [], this.types).filter(item=>this.types.find(type=>type.search_type===item.search_type)?.__record_read__?.available !== false)
     },
+    flatViewLinks() {
+      const flatten = entries => entries.flatMap(entry => [entry, ...flatten(entry.children || [])])
+      return flatten(this.viewLinks)
+    },
     publicTypes() { return this.types.filter(item=>item.__record_read__?.available !== false && (!item.__record_read__?.project_mode || item.__record_read__.project_mode === this.currentProject?.type)) },
     shelfContext() {
-      const flatten = entries => entries.flatMap(entry => [entry, ...flatten(entry.children || [])])
-      const entry = flatten(this.viewLinks).find(item => item.key === this.activeWorkspaceSection?.navigationKey)
+      const entry = this.flatViewLinks.find(item => item.key === this.activeWorkspaceSection?.navigationKey)
       return { entryKey: entry?.search_type && entry.name ? entry.search_type.split('?')[0] + '@' + entry.name : '', preset: entry?.display?.options?.script_shelf || '', title: this.activeWorkspaceSection?.title || '' }
     },
     configuredNavigation() { return this.navigationByProject[this.workspaceProject]?.configured === true && !(!this.viewLinks.length && this.publicTypes.some(item=>item.__record_read__?.command)) },
@@ -879,7 +887,7 @@ export default {
         finally { this.busy = false }
         if (connection.ticket !== this.session?.ticket || connection.project !== this.project) return
         const tab = searchTab(title, { type, view: link?.view || 'table', viewTitle: link?.title || '',
-          resultMode: link?.display?.options?.view_mode || preferences.checkin.defaultViewMode,
+          resultMode: link?.resultMode || link?.display?.options?.view_mode || this.flatViewLinks.find(item => item.supported && item.search_type === type)?.resultMode || preferences.checkin.defaultViewMode,
           configuredView: !!link, filterField, filterValue, scopeKey: scope,
           quickSelections: settings.configuration.defaultSelections, quickLayout: null })
         // Handler NavigationMixin adds each search in this sidebar namespace as a tab.
@@ -1689,9 +1697,11 @@ export default {
       this.closeNavigation()
       return true
     },
-    editRecord(record = this.detail) {
+    async editRecord(record = this.detail) {
       this.$refs.details.close()
-      this.$refs.recordForm.open(record.__search_key__)
+      this.detail = record
+      await nextTick()
+      this.$refs.detailForm.open(record.__search_key__)
     },
     async openActivityObject({ record, target }) {
       const note = !target && record.kind === 'note' && record.targetSearchKey
@@ -1794,11 +1804,16 @@ export default {
           this.navigationLink=value; this.knowledgeTarget=value; this.$refs.docks.show('knowledge'); this.openDock('knowledge'); this.saveSession(); return
         }
         const object = result.parent || result.object, type = result.kind === 'saved-search' ? result.searchType : object.__search_type__.split('?')[0]
-        await this.selectType(type, null, '', '', request)
+        const preset = result.preset
+        let id = !showDetails ? 'object-tab:' + randomId() : preset ? 'preset-link:' + preset.view : 'skey-link:' + result.object.__search_key__ + ':' + result.process
+        const retained = this.activeWorkspace?.sections.find(section => section.type === type && section.tabs.some(tab => tab.id === id ||
+          replace && preset && tab.id === (history.state?.tab || section.current) && tab.state.savedSearch === preset.view))
+        if (retained && !retained.tabs.some(tab => tab.id === id)) id = history.state?.tab || retained.current
+        if (retained) { retained.current = id; await this.activateSection(retained.id, request) }
+        else await this.selectType(type, null, '', '', request)
         if (request !== this.linkRequest || this.type !== type || this.project !== result.project || this.section !== 'data') return
         this.captureSearchTab()
-        const section = this.activeWorkspaceSection, preset = result.preset
-        const id = !showDetails ? 'object-tab:' + randomId() : preset ? 'preset-link:' + preset.view : 'skey-link:' + result.object.__search_key__ + ':' + result.process
+        const section = this.activeWorkspaceSection
         const existing = section.tabs.findIndex(tab => tab.id === id)
         const title = preset?.title || object.name || object.title || object.code || String(object.id)
         const tab = searchTab(title, { type, pageSize: this.pageSize, view: section.view, configuredView: section.configuredView,
@@ -1818,7 +1833,7 @@ export default {
         if (result.kind === 'note' && result.parent) await this.$refs.activityNotes.open(object, {}, result.process.split('/')[0])
         else if (result.kind === 'task' && result.parent) await this.$refs.activityNotes.openTask(object, {}, { process: result.process.split('/')[0], taskSearchKey: result.object.__search_key__ })
         else if (result.preview) this.$refs.linkPreview.open(object, result.preview)
-        else if (result.kind !== 'saved-search' && showDetails) { this.detail = result.object; this.$refs.details.show() }
+        else if (result.kind !== 'saved-search' && showDetails) { this.detail = result.object; this.$refs.details.showModal() }
         this.saveSession()
       } catch (error) { if (request === this.linkRequest) { this.fail(error); this.showWorkspaceNotice(this.error, true) } }
       finally { if (request === this.linkRequest) { this.openingLink = false; this.writeLocation(replace) } }
@@ -1846,7 +1861,7 @@ export default {
           this.persistWorkspace()
         }
         await nextTick()
-        this.$refs.details.show()
+        this.$refs.details.showModal()
       } catch (error) { if (id === this.detailRequest) this.fail(error) }
     },
     display(value) {
@@ -2096,10 +2111,10 @@ export default {
     </dialog>
     <SearchLibrary ref="searchLibrary" :selections="quickSelections" :active="searchEditorActive" @closed="$event && $refs.docks.hide('advanced_search')" :tab-id="activeSearchTab?.id" :tab-title="activeSearchTab ? searchTabTitle(activeSearchTab) : ''" @rename="renameCurrentSearchTab" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
     <QuickFilterEditor ref="quickFilterEditor" :tab-id="activeSearchTab?.id" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :selections="quickSelections" :layout="quickLayout" :can-manage="canAdminister" @apply="applyQuickFilters" @changed="searchConfigurationChanged(); $refs.quickFilters?.load(true)" />
-    <dialog v-window="{kind:'sobject_info', type:'window' }" ref="details" class="record-dialog object-details" :aria-label="t('Object details')">
+    <dialog v-window="{kind:'sobject_info'}" ref="details" class="record-dialog object-details" :aria-label="t('Object details')">
       <template v-if="detail">
-        <header><div><h2>{{ detail.name || detail.title || detail.code || detail.id }}</h2><small class="muted">{{ detail.__search_key__ }}</small></div><div class="configuration-actions"><AppButton v-if="interfaceConfig?.operations?.edit" label="Edit record" icon="edit" :icon-only="compactShortcuts" @click="editRecord()" /><AppButton label="Close details" icon="close" :icon-only="compactShortcuts" @click="$refs.details.close()" /></div></header>
-        <ObjectReport :ticket="session.ticket" :project="workspaceProject" :record="detail" />
+        <header><div><h2>{{ detailTitle }}</h2><small class="muted">{{ detail.__search_key__ }}</small></div><div class="configuration-actions"><AppButton v-if="interfaceConfig?.operations?.edit" label="Edit record" icon="edit" :icon-only="compactShortcuts" @click="editRecord()" /><AppButton label="Close details" icon="close" :icon-only="compactShortcuts" @click="$refs.details.close()" /></div></header>
+        <ObjectReport :ticket="session.ticket" :project="detail.project_code || workspaceProject" :record="detail" @leave="$refs.details.close()" />
       </template>
     </dialog>
     <ObjectOperations ref="objectOperations" :ticket="session.ticket" :project="project" :search-type="type" :operations="interfaceConfig?.operations"
@@ -2112,6 +2127,7 @@ export default {
     <ObjectAction ref="objectAction" :ticket="session.ticket" :project="project" :search-type="type" :view="view" @saved="reloadWorkspace" />
     <RelatedObjects ref="relatedObjects" :ticket="session.ticket" :project="project" :search-type="type" />
     <RecordForm ref="recordForm" :ticket="session.ticket" :project="project" :search-type="type" @saved="reloadWorkspace" />
+    <RecordForm ref="detailForm" :ticket="session.ticket" :project="detail?.project_code || project" :search-type="detail?.__search_key__?.split('?')[0] || type" @saved="reloadWorkspace" />
     <WidgetConfiguration ref="widgetConfiguration" :ticket="session.ticket" :project="project" :search-type="type" :view="view" :rows="rows" :search-types="types" @saved="interfaceSaved" />
     <DescriptionEditor v-if="descriptionMounted" ref="description" :ticket="session.ticket" :project="workspaceProject" :target="descriptionTarget" @saved="reloadWorkspace({ restore:true })" @session-expired="logout" />
     <SnapshotBrowser v-if="snapshotMounted" :ticket="session.ticket" :project="workspaceProject" :target="snapshotTarget" :active="snapshotActive" @changed="reloadWorkspace({ restore:true })" @session-expired="logout" />

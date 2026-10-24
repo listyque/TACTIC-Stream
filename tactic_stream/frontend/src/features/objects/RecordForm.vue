@@ -40,7 +40,6 @@ export default {
     project: String,
     searchType: String,
     modal: Boolean,
-    modeless: Boolean,
     editView: { type: String, default: 'edit' },
     insertView: { type: String, default: 'insert' },
     ignoreFields: { type: Array, default: () => [] }
@@ -491,9 +490,7 @@ export default {
       this.error = '';
       this.discard = this.uncertain = false;
       this.loading = true;
-      this.modal || (this.searchType === 'sthpw/task' && !this.modeless)
-        ? this.$refs.dialog.showModal()
-        : this.$refs.dialog.show();
+      this.$refs.dialog.showModal();
       try {
         const definition = await formDefinition(
           this.context.ticket,
@@ -777,10 +774,7 @@ export default {
   <dialog
     v-window="{
       kind: searchType === 'sthpw/task' ? 'task_editor' : 'add_sobject',
-      type:
-        modal || (searchType === 'sthpw/task' && !modeless)
-          ? 'dialog'
-          : 'window'
+      type: 'dialog'
     }"
     ref="dialog"
     class="record-dialog record-form-dialog"

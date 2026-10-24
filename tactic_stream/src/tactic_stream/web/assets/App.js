@@ -12022,7 +12022,6 @@ function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
 			ticket: $props.ticket,
 			project: $props.project,
 			"search-type": "sthpw/task",
-			modeless: "",
 			onSaved: $options.taskCreated
 		}, null, 8, [
 			"ticket",
@@ -16259,7 +16258,7 @@ var _sfc_main$112 = {
 			this.definition = this.detail = null;
 			this.busy = true;
 			this.error = "";
-			this.$refs.dialog.show();
+			this.$refs.dialog.showModal();
 			try {
 				const result = await objectRelations(this.ticket, this.project, this.searchType, record.__search_key__);
 				if (id !== this.request) return;
@@ -16458,7 +16457,7 @@ var _sfc_main$112 = {
 		async inspect(record) {
 			this.detail = record;
 			await nextTick();
-			this.$refs.details.show();
+			this.$refs.details.showModal();
 		},
 		edit(record) {
 			this.$refs.details?.close();
@@ -16622,10 +16621,7 @@ function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 					onClick: _cache[6] || (_cache[6] = ($event) => $options.close(true))
 				})
 			])) : createCommentVNode("", true)
-		], 42, _hoisted_1$68)), [[_directive_window, {
-			kind: $data.linking ? "link_sobjects" : void 0,
-			type: "window"
-		}]]),
+		], 42, _hoisted_1$68)), [[_directive_window, { kind: $data.linking ? "link_sobjects" : void 0 }]]),
 		createVNode(_component_ObjectOperations, {
 			ref: "operations",
 			ticket: $props.ticket,
@@ -16696,13 +16692,17 @@ function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 			onClick: _cache[13] || (_cache[13] = ($event) => _ctx.$refs.details.close())
 		}, null, 8, ["icon-only"])])]), createVNode(_component_ObjectReport, {
 			ticket: $props.ticket,
-			project: $props.project,
-			record: $data.detail
+			project: $data.detail.project_code || $props.project,
+			record: $data.detail,
+			onLeave: _cache[14] || (_cache[14] = ($event) => {
+				_ctx.$refs.details.close();
+				_ctx.$refs.dialog.close();
+			})
 		}, null, 8, [
 			"ticket",
 			"project",
 			"record"
-		])], 64)) : createCommentVNode("", true)], 8, _hoisted_9$10)), [[_directive_window, { type: "window" }]])
+		])], 64)) : createCommentVNode("", true)], 8, _hoisted_9$10)), [[_directive_window, { kind: "sobject_info" }]])
 	], 64);
 }
 var RelatedObjects_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$112, [["render", _sfc_render$16]]);
@@ -20718,6 +20718,7 @@ function navigationEntries(items, types) {
 			...item,
 			search_type: options.search_type,
 			view: options.view || "table",
+			resultMode: options.view_mode || item.default_view_mode || "",
 			accent: target?.color || "",
 			children: navigationEntries(item.children || [], types),
 			supported: !!target && !item.action.handler && ["LinkWdg", "pyasm.widget.LinkWdg"].includes(item.display.handler) && (!options.class_name || options.class_name === "tactic.ui.panel.ViewPanelWdg") && (!options.view_mode || [
@@ -59330,6 +59331,10 @@ var _sfc_main = {
 				t("TACTIC Stream")
 			].filter(Boolean).join(" – ");
 		},
+		detailTitle() {
+			const record = this.detail || {};
+			return (record.__search_key__?.split("?")[0] === "sthpw/task" ? [record.process, record.search_code].filter(Boolean).join(" · ") : "") || record.name || record.title || record.code || record.id;
+		},
 		resultViews() {
 			return views;
 		},
@@ -59494,12 +59499,15 @@ var _sfc_main = {
 		viewLinks() {
 			return navigationEntries(this.navigationByProject[this.workspaceProject]?.entries || [], this.types).filter((item) => this.types.find((type) => type.search_type === item.search_type)?.__record_read__?.available !== false);
 		},
+		flatViewLinks() {
+			const flatten = (entries) => entries.flatMap((entry) => [entry, ...flatten(entry.children || [])]);
+			return flatten(this.viewLinks);
+		},
 		publicTypes() {
 			return this.types.filter((item) => item.__record_read__?.available !== false && (!item.__record_read__?.project_mode || item.__record_read__.project_mode === this.currentProject?.type));
 		},
 		shelfContext() {
-			const flatten = (entries) => entries.flatMap((entry) => [entry, ...flatten(entry.children || [])]);
-			const entry = flatten(this.viewLinks).find((item) => item.key === this.activeWorkspaceSection?.navigationKey);
+			const entry = this.flatViewLinks.find((item) => item.key === this.activeWorkspaceSection?.navigationKey);
 			return {
 				entryKey: entry?.search_type && entry.name ? entry.search_type.split("?")[0] + "@" + entry.name : "",
 				preset: entry?.display?.options?.script_shelf || "",
@@ -60401,7 +60409,7 @@ var _sfc_main = {
 					type,
 					view: link?.view || "table",
 					viewTitle: link?.title || "",
-					resultMode: link?.display?.options?.view_mode || preferences.checkin.defaultViewMode,
+					resultMode: link?.resultMode || link?.display?.options?.view_mode || this.flatViewLinks.find((item) => item.supported && item.search_type === type)?.resultMode || preferences.checkin.defaultViewMode,
 					configuredView: !!link,
 					filterField,
 					filterValue,
@@ -61581,9 +61589,11 @@ var _sfc_main = {
 			this.closeNavigation();
 			return true;
 		},
-		editRecord(record = this.detail) {
+		async editRecord(record = this.detail) {
 			this.$refs.details.close();
-			this.$refs.recordForm.open(record.__search_key__);
+			this.detail = record;
+			await nextTick();
+			this.$refs.detailForm.open(record.__search_key__);
 		},
 		async openActivityObject({ record, target }) {
 			const note = !target && record.kind === "note" && record.targetSearchKey;
@@ -61719,11 +61729,17 @@ var _sfc_main = {
 					return;
 				}
 				const object = result.parent || result.object, type = result.kind === "saved-search" ? result.searchType : object.__search_type__.split("?")[0];
-				await this.selectType(type, null, "", "", request);
+				const preset = result.preset;
+				let id = !showDetails ? "object-tab:" + randomId() : preset ? "preset-link:" + preset.view : "skey-link:" + result.object.__search_key__ + ":" + result.process;
+				const retained = this.activeWorkspace?.sections.find((section) => section.type === type && section.tabs.some((tab) => tab.id === id || replace && preset && tab.id === (history.state?.tab || section.current) && tab.state.savedSearch === preset.view));
+				if (retained && !retained.tabs.some((tab) => tab.id === id)) id = history.state?.tab || retained.current;
+				if (retained) {
+					retained.current = id;
+					await this.activateSection(retained.id, request);
+				} else await this.selectType(type, null, "", "", request);
 				if (request !== this.linkRequest || this.type !== type || this.project !== result.project || this.section !== "data") return;
 				this.captureSearchTab();
-				const section = this.activeWorkspaceSection, preset = result.preset;
-				const id = !showDetails ? "object-tab:" + randomId() : preset ? "preset-link:" + preset.view : "skey-link:" + result.object.__search_key__ + ":" + result.process;
+				const section = this.activeWorkspaceSection;
 				const existing = section.tabs.findIndex((tab) => tab.id === id);
 				const tab = searchTab(preset?.title || object.name || object.title || object.code || String(object.id), {
 					type,
@@ -61761,7 +61777,7 @@ var _sfc_main = {
 				else if (result.preview) this.$refs.linkPreview.open(object, result.preview);
 				else if (result.kind !== "saved-search" && showDetails) {
 					this.detail = result.object;
-					this.$refs.details.show();
+					this.$refs.details.showModal();
 				}
 				this.saveSession();
 			} catch (error) {
@@ -61812,7 +61828,7 @@ var _sfc_main = {
 					this.persistWorkspace();
 				}
 				await nextTick();
-				this.$refs.details.show();
+				this.$refs.details.showModal();
 			} catch (error) {
 				if (id === this.detailRequest) this.fail(error);
 			}
@@ -62052,8 +62068,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			ref: "workspace",
 			class: "workspace",
 			style: normalizeStyle($options.workspaceStyle),
-			onPointerdown: _cache[163] || (_cache[163] = (...args) => $options.dismissMenus && $options.dismissMenus(...args)),
-			onKeydown: _cache[164] || (_cache[164] = withKeys((...args) => $options.dismissMenus && $options.dismissMenus(...args), ["esc"]))
+			onPointerdown: _cache[164] || (_cache[164] = (...args) => $options.dismissMenus && $options.dismissMenus(...args)),
+			onKeydown: _cache[165] || (_cache[165] = withKeys((...args) => $options.dismissMenus && $options.dismissMenus(...args), ["esc"]))
 		}, [
 			createBaseVNode("header", {
 				ref: "topbar",
@@ -62177,8 +62193,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								onTriggered: $options.invokeMainMenu
 							}, null, 8, ["actions", "onTriggered"]),
 							$data.compactShortcuts ? (openBlock(), createElementBlock("p", _hoisted_6, toDisplayString($options.t("Schema, interface and script editors are available on a desktop screen.")), 1)) : createCommentVNode("", true),
-							_cache[168] || (_cache[168] = createBaseVNode("div", { id: "compact-connection-menu" }, null, -1)),
-							createBaseVNode("div", _hoisted_7, [_cache[167] || (_cache[167] = createBaseVNode("div", { id: "compact-system-activity" }, null, -1)), createVNode(_component_AppButton, {
+							_cache[169] || (_cache[169] = createBaseVNode("div", { id: "compact-connection-menu" }, null, -1)),
+							createBaseVNode("div", _hoisted_7, [_cache[168] || (_cache[168] = createBaseVNode("div", { id: "compact-system-activity" }, null, -1)), createVNode(_component_AppButton, {
 								label: "Activity Feed",
 								icon: "activity-feed",
 								onClick: _cache[6] || (_cache[6] = ($event) => {
@@ -63169,7 +63185,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							}, null, 512)), [[vShow, $data.mobileSearchOpen]]) : createCommentVNode("", true)]),
 							_: 1
 						}, 8, ["model"]),
-						_cache[171] || (_cache[171] = createBaseVNode("div", { id: "workspace-script-shelf" }, null, -1)),
+						_cache[172] || (_cache[172] = createBaseVNode("div", { id: "workspace-script-shelf" }, null, -1)),
 						!$data.administrationOpen ? (openBlock(), createBlock(_component_WorkspaceTabs, {
 							key: 0,
 							mobile: $data.compactShortcuts,
@@ -63247,7 +63263,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										"onClick"
 									]);
 								}), 128)),
-								_cache[169] || (_cache[169] = createBaseVNode("hr", null, null, -1))
+								_cache[170] || (_cache[170] = createBaseVNode("hr", null, null, -1))
 							], 64)) : createCommentVNode("", true)]),
 							actions: withCtx(({ compact }) => [$data.compactShortcuts ? (openBlock(), createBlock(_component_AppButton, {
 								key: 0,
@@ -63276,7 +63292,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 								onToggle: $options.menuToggled
 							}, {
 								default: withCtx(() => [
-									_cache[170] || (_cache[170] = createBaseVNode("div", { id: "workspace-sort-actions" }, null, -1)),
+									_cache[171] || (_cache[171] = createBaseVNode("div", { id: "workspace-sort-actions" }, null, -1)),
 									withDirectives(createBaseVNode("div", _hoisted_31, null, 512), [[vShow, $data.compactShortcuts]]),
 									$data.compactShortcuts ? (openBlock(), createBlock(_component_AppButton, {
 										key: 0,
@@ -63603,7 +63619,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					icon: "close",
 					onClick: $options.closeSidebarSearch
 				}, null, 8, ["onClick"])
-			]), _cache[172] || (_cache[172] = createBaseVNode("div", { id: "sidebar-search-pages" }, null, -1))])], 40, _hoisted_40)), [[_directive_window, { kind: "sidebar_search_preview" }]]),
+			]), _cache[173] || (_cache[173] = createBaseVNode("div", { id: "sidebar-search-pages" }, null, -1))])], 40, _hoisted_40)), [[_directive_window, { kind: "sidebar_search_preview" }]]),
 			createVNode(_component_SearchLibrary, {
 				ref: "searchLibrary",
 				selections: $data.quickSelections,
@@ -63671,7 +63687,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ref: "details",
 				class: "record-dialog object-details",
 				"aria-label": $options.t("Object details")
-			}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($data.detail.name || $data.detail.title || $data.detail.code || $data.detail.id), 1), createBaseVNode("small", _hoisted_44, toDisplayString($data.detail.__search_key__), 1)]), createBaseVNode("div", _hoisted_45, [$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
+			}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($options.detailTitle), 1), createBaseVNode("small", _hoisted_44, toDisplayString($data.detail.__search_key__), 1)]), createBaseVNode("div", _hoisted_45, [$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
 				key: 0,
 				label: "Edit record",
 				icon: "edit",
@@ -63684,16 +63700,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				onClick: _cache[129] || (_cache[129] = ($event) => _ctx.$refs.details.close())
 			}, null, 8, ["icon-only"])])]), createVNode(_component_ObjectReport, {
 				ticket: $data.session.ticket,
-				project: $data.workspaceProject,
-				record: $data.detail
+				project: $data.detail.project_code || $data.workspaceProject,
+				record: $data.detail,
+				onLeave: _cache[130] || (_cache[130] = ($event) => _ctx.$refs.details.close())
 			}, null, 8, [
 				"ticket",
 				"project",
 				"record"
-			])], 64)) : createCommentVNode("", true)], 8, _hoisted_43)), [[_directive_window, {
-				kind: "sobject_info",
-				type: "window"
-			}]]),
+			])], 64)) : createCommentVNode("", true)], 8, _hoisted_43)), [[_directive_window, { kind: "sobject_info" }]]),
 			createVNode(_component_ObjectOperations, {
 				ref: "objectOperations",
 				ticket: $data.session.ticket,
@@ -63701,16 +63715,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"search-type": $data.type,
 				operations: $data.interfaceConfig?.operations,
 				selection: $data.rows.filter((record) => $data.selectedKeys.includes(record.__search_key__)),
-				onEditSelected: _cache[130] || (_cache[130] = (records) => _ctx.$refs.recordForm.open(records.map((record) => record.__search_key__))),
+				onEditSelected: _cache[131] || (_cache[131] = (records) => _ctx.$refs.recordForm.open(records.map((record) => record.__search_key__))),
 				onInspect: $options.inspect,
 				onEdit: $options.editRecord,
 				onCreate: $options.createRecord,
-				onRelated: _cache[131] || (_cache[131] = (record) => _ctx.$refs.relatedObjects.open(record)),
-				onDuplicate: _cache[132] || (_cache[132] = (record) => _ctx.$refs.recordForm.open(null, record.__search_key__)),
-				onDuplicated: _cache[133] || (_cache[133] = ($event) => $options.reloadWorkspace({ restore: true })),
-				onRetire: _cache[134] || (_cache[134] = (record) => _ctx.$refs.objectAction.open(record, "retire")),
-				onReactivate: _cache[135] || (_cache[135] = (record) => _ctx.$refs.objectAction.open(record, "reactivate")),
-				onDelete: _cache[136] || (_cache[136] = (record) => _ctx.$refs.objectAction.open(record, "delete"))
+				onRelated: _cache[132] || (_cache[132] = (record) => _ctx.$refs.relatedObjects.open(record)),
+				onDuplicate: _cache[133] || (_cache[133] = (record) => _ctx.$refs.recordForm.open(null, record.__search_key__)),
+				onDuplicated: _cache[134] || (_cache[134] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onRetire: _cache[135] || (_cache[135] = (record) => _ctx.$refs.objectAction.open(record, "retire")),
+				onReactivate: _cache[136] || (_cache[136] = (record) => _ctx.$refs.objectAction.open(record, "reactivate")),
+				onDelete: _cache[137] || (_cache[137] = (record) => _ctx.$refs.objectAction.open(record, "delete"))
 			}, null, 8, [
 				"ticket",
 				"project",
@@ -63757,6 +63771,18 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"search-type",
 				"onSaved"
 			]),
+			createVNode(_component_RecordForm, {
+				ref: "detailForm",
+				ticket: $data.session.ticket,
+				project: $data.detail?.project_code || $data.project,
+				"search-type": $data.detail?.__search_key__?.split("?")[0] || $data.type,
+				onSaved: $options.reloadWorkspace
+			}, null, 8, [
+				"ticket",
+				"project",
+				"search-type",
+				"onSaved"
+			]),
 			createVNode(_component_WidgetConfiguration, {
 				ref: "widgetConfiguration",
 				ticket: $data.session.ticket,
@@ -63781,7 +63807,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $data.session.ticket,
 				project: $data.workspaceProject,
 				target: $data.descriptionTarget,
-				onSaved: _cache[137] || (_cache[137] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onSaved: _cache[138] || (_cache[138] = ($event) => $options.reloadWorkspace({ restore: true })),
 				onSessionExpired: $options.logout
 			}, null, 8, [
 				"ticket",
@@ -63795,7 +63821,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				project: $data.workspaceProject,
 				target: $data.snapshotTarget,
 				active: $data.snapshotActive,
-				onChanged: _cache[138] || (_cache[138] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onChanged: _cache[139] || (_cache[139] = ($event) => $options.reloadWorkspace({ restore: true })),
 				onSessionExpired: $options.logout
 			}, null, 8, [
 				"ticket",
@@ -63816,8 +63842,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				active: $data.knowledgeActive,
 				target: $data.knowledgeTarget,
 				selection: ($options.workspaceView.rows || []).filter((record) => ($options.workspaceView.selectedKeys || []).includes(record.__search_key__)),
-				onChanged: _cache[139] || (_cache[139] = ($event) => $options.reloadWorkspace({ restore: true })),
-				onLocation: _cache[140] || (_cache[140] = ($event) => {
+				onChanged: _cache[140] || (_cache[140] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onLocation: _cache[141] || (_cache[141] = ($event) => {
 					$data.navigationLink = $event;
 					$options.writeLocation(true);
 				}),
@@ -63843,7 +63869,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					searchKey: $data.snapshotTarget.key,
 					process: $data.snapshotTarget.process
 				} : $data.descriptionTarget),
-				onHelp: _cache[141] || (_cache[141] = ($event) => _ctx.$refs.help.open($event))
+				onHelp: _cache[142] || (_cache[142] = ($event) => _ctx.$refs.help.open($event))
 			}, null, 8, [
 				"ticket",
 				"project",
@@ -63857,15 +63883,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				login: $data.session.login,
 				ticket: $data.session.ticket,
 				project: $data.workspaceProject,
-				onChanged: _cache[142] || (_cache[142] = ($event) => $data.checkins = $event),
-				onCompleted: _cache[143] || (_cache[143] = ($event) => {
+				onChanged: _cache[143] || (_cache[143] = ($event) => $data.checkins = $event),
+				onCompleted: _cache[144] || (_cache[144] = ($event) => {
 					_ctx.$refs.dropPlate.completed($event);
 					$options.reloadWorkspace({ restore: true });
 				}),
-				onOpened: _cache[144] || (_cache[144] = ($event) => _ctx.$refs.docks.show("commit_queue")),
-				onClosed: _cache[145] || (_cache[145] = ($event) => $data.compactShortcuts && _ctx.$refs.docks.hide("commit_queue")),
-				onHelp: _cache[146] || (_cache[146] = ($event) => _ctx.$refs.help.open($event)),
-				onSnapshot: _cache[147] || (_cache[147] = ($event) => {
+				onOpened: _cache[145] || (_cache[145] = ($event) => _ctx.$refs.docks.show("commit_queue")),
+				onClosed: _cache[146] || (_cache[146] = ($event) => $data.compactShortcuts && _ctx.$refs.docks.hide("commit_queue")),
+				onHelp: _cache[147] || (_cache[147] = ($event) => _ctx.$refs.help.open($event)),
+				onSnapshot: _cache[148] || (_cache[148] = ($event) => {
 					$data.snapshotTarget = {
 						project: $event.project,
 						key: $event.snapshot?.__search_key__ || $event.searchKey,
@@ -63888,9 +63914,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $data.session.ticket,
 				project: $data.workHoursProjects.week || $options.workspaceView.project,
 				"current-user": $data.session.login,
-				onOpened: _cache[148] || (_cache[148] = ($event) => _ctx.$refs.docks.show("timesheet")),
-				onClosed: _cache[149] || (_cache[149] = ($event) => _ctx.$refs.docks.hide("timesheet")),
-				onOpenDock: _cache[150] || (_cache[150] = ($event) => $options.openWorkHours($event, _ctx.$refs.timesheet.task, $data.workHoursProjects.week)),
+				onOpened: _cache[149] || (_cache[149] = ($event) => _ctx.$refs.docks.show("timesheet")),
+				onClosed: _cache[150] || (_cache[150] = ($event) => _ctx.$refs.docks.hide("timesheet")),
+				onOpenDock: _cache[151] || (_cache[151] = ($event) => $options.openWorkHours($event, _ctx.$refs.timesheet.task, $data.workHoursProjects.week)),
 				onSaved: $options.reloadWorkspace
 			}, null, 8, [
 				"ticket",
@@ -63905,9 +63931,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $data.session.ticket,
 				project: $data.workHoursProjects.report || $options.workspaceView.project,
 				"current-user": $data.session.login,
-				onOpened: _cache[151] || (_cache[151] = ($event) => _ctx.$refs.docks.show("work_reports")),
-				onClosed: _cache[152] || (_cache[152] = ($event) => _ctx.$refs.docks.hide("work_reports")),
-				onOpenDock: _cache[153] || (_cache[153] = ($event) => $options.openWorkHours($event, _ctx.$refs.workReports.task, $data.workHoursProjects.report)),
+				onOpened: _cache[152] || (_cache[152] = ($event) => _ctx.$refs.docks.show("work_reports")),
+				onClosed: _cache[153] || (_cache[153] = ($event) => _ctx.$refs.docks.hide("work_reports")),
+				onOpenDock: _cache[154] || (_cache[154] = ($event) => $options.openWorkHours($event, _ctx.$refs.workReports.task, $data.workHoursProjects.report)),
 				onSaved: $options.reloadWorkspace
 			}, null, 8, [
 				"ticket",
@@ -63923,9 +63949,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ticket: $data.session.ticket,
 				project: $data.workHoursProjects.cost || $options.workspaceView.project,
 				"current-user": $data.session.login,
-				onOpened: _cache[154] || (_cache[154] = ($event) => _ctx.$refs.docks.show("cost_reports")),
-				onClosed: _cache[155] || (_cache[155] = ($event) => _ctx.$refs.docks.hide("cost_reports")),
-				onOpenDock: _cache[156] || (_cache[156] = ($event) => $options.openWorkHours($event, _ctx.$refs.costReports.task, $data.workHoursProjects.cost)),
+				onOpened: _cache[155] || (_cache[155] = ($event) => _ctx.$refs.docks.show("cost_reports")),
+				onClosed: _cache[156] || (_cache[156] = ($event) => _ctx.$refs.docks.hide("cost_reports")),
+				onOpenDock: _cache[157] || (_cache[157] = ($event) => $options.openWorkHours($event, _ctx.$refs.costReports.task, $data.workHoursProjects.cost)),
 				onSaved: $options.reloadWorkspace
 			}, null, 8, [
 				"ticket",
@@ -63938,7 +63964,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				docked: "",
 				"calendar-target": "#dock-task_calendar",
 				"calendar-active": $data.taskCalendarActive,
-				onCalendar: _cache[157] || (_cache[157] = ($event) => {
+				onCalendar: _cache[158] || (_cache[158] = ($event) => {
 					_ctx.$refs.docks.show("task_calendar");
 					$options.openDock("task_calendar");
 				}),
@@ -63947,18 +63973,18 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"current-user": $data.session.login,
 				"search-type": $options.workspaceView.type,
 				"search-type-title": ($options.workspaceView.types || $data.types).find((item) => item.search_type === $options.workspaceView.type)?.title || "",
-				onOpened: _cache[158] || (_cache[158] = ($event) => {
+				onOpened: _cache[159] || (_cache[159] = ($event) => {
 					$data.updatesTasksOpen = true;
 					_ctx.$refs.docks.show("tasks");
 				}),
-				onClosed: _cache[159] || (_cache[159] = ($event) => {
+				onClosed: _cache[160] || (_cache[160] = ($event) => {
 					$data.updatesTasksOpen = $data.taskCalendarActive;
 					_ctx.$refs.docks.hide("tasks");
 				}),
-				onSnapshotContext: _cache[160] || (_cache[160] = ($event) => $data.snapshotTarget = $event),
-				onTaskContext: _cache[161] || (_cache[161] = ($event) => $options.followInspector($event.parent, $event.process, $event.__search_key__)),
+				onSnapshotContext: _cache[161] || (_cache[161] = ($event) => $data.snapshotTarget = $event),
+				onTaskContext: _cache[162] || (_cache[162] = ($event) => $options.followInspector($event.parent, $event.process, $event.__search_key__)),
 				parents: ($options.workspaceView.rows || []).filter((record) => ($options.workspaceView.selectedKeys || []).includes(record.__search_key__)),
-				onSaved: _cache[162] || (_cache[162] = ($event) => $options.reloadWorkspace({ restore: true })),
+				onSaved: _cache[163] || (_cache[163] = ($event) => $options.reloadWorkspace({ restore: true })),
 				onObject: $options.inspect
 			}, null, 8, [
 				"calendar-active",
@@ -63979,8 +64005,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		createVNode(_component_HelpView, { ref: "help" }, null, 512),
 		createVNode(_component_DebugLog, {
 			ref: "debugLog",
-			onHelp: _cache[165] || (_cache[165] = ($event) => _ctx.$refs.help.open($event)),
-			onClosed: _cache[166] || (_cache[166] = ($event) => _ctx.$refs.settingsMenu?.focusTrigger())
+			onHelp: _cache[166] || (_cache[166] = ($event) => _ctx.$refs.help.open($event)),
+			onClosed: _cache[167] || (_cache[167] = ($event) => _ctx.$refs.settingsMenu?.focusTrigger())
 		}, null, 512)
 	], 64);
 }

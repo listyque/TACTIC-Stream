@@ -1,8 +1,13 @@
 import assert from 'node:assert/strict'
-import { readWorkspace, saveWorkspace, searchTab } from '../src/features/workspace/workspace.js'
+import { readWorkspace, saveWorkspace, searchTab, navigationEntries } from '../src/features/workspace/workspace.js'
 import { preferenceDefaults } from '../src/features/configuration/preferences.js'
 
 const storage = new Map()
+const legacyLink = { key:'project_view/shot', default_view_mode:'table', display:{ handler:'LinkWdg', options:{ search_type:'vfx/shot', widget_key:'view_panel', view:'shot' } }, action:{handler:''}, children:[] }
+const legacyTypes = [{search_type:'vfx/shot'}]
+assert.equal(navigationEntries([legacyLink],legacyTypes)[0].resultMode,'table')
+assert.equal(navigationEntries([{...legacyLink,display:{...legacyLink.display,options:{...legacyLink.display.options,view_mode:'continious'}}}],legacyTypes)[0].resultMode,'continious')
+assert.equal(navigationEntries([{...legacyLink,default_view_mode:''}],legacyTypes)[0].resultMode,'', 'Handler-specific links retain the client preference')
 globalThis.localStorage = { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value) }
 const tab = searchTab('Search', { type: 'demo/assets', page: 2, selectedKeys: ['demo/assets?code=ONE'], focusedKey:'demo/assets?code=ONE', rows: [{ code: 'DO_NOT_CACHE' }] })
 assert.equal(tab.state.resultMode, 'continious')

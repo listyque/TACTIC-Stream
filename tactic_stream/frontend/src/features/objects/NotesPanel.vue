@@ -1459,7 +1459,6 @@ export default {
       :ticket="ticket"
       :project="project"
       search-type="sthpw/task"
-      modeless
       @saved="taskCreated"
     />
     <Timesheet

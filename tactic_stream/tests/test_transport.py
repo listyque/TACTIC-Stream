@@ -207,6 +207,31 @@ class Transport(unittest.TestCase):
         self.assertEqual(api.dispatch('query', (auth, kind, [['code', 'REPORT']])), [])
         self.assertFalse(Path(snapshot_page['files'][0]['path']).exists())
 
+    def test_task_report_ignores_closed_journal_relations_and_has_readable_title(self):
+        from tactic_stream.server.api import Api
+        from tactic_stream.server.result_items import read_result_items
+        from pyasm.search.search import RequestContext, request_context
+        api = Api(self.store)
+        api.protocol = 'json'
+        auth = dict(ticket=api.get_ticket('admin', 'private-test-password'), project='one')
+        owner = api.dispatch('query', (auth, 'contract/entity', [['code', 'A']]))[0]
+        task = api.dispatch('create_task', (auth, owner['__search_key__']), dict(process='model', description='Model the robot'))
+        api.dispatch('create_note', (auth, task['__search_key__'], 'Task report note'))
+        api.dispatch('insert', (auth, 'sthpw/work_hour', dict(
+            project_code='one', task_code=task['code'], login='admin',
+            straight_time=4, over_time=0, category='regular')))
+        with request_context(RequestContext(self.store, 'admin', 'one')):
+            api.auth.bind_security('admin', auth['ticket'])
+            for page in ('tasks', 'notes', 'children', 'snapshots', 'activity'):
+                result = read_result_items('sthpw/task', [task['__search_key__']], dict(kind='object_report', path=page))
+                self.assertEqual(result['summary']['title'], 'model · A')
+                self.assertEqual(result['summary']['description'], 'Model the robot')
+                self.assertEqual(result['metrics']['workHours'], 4)
+                self.assertFalse({row['value'] for row in result['child_types']} & {
+                    'sthpw/sobject_log', 'sthpw/transaction_state', 'sthpw/exception_log', 'sthpw/debug_log'})
+                if page == 'notes':
+                    self.assertEqual([row['body'] for row in result['notes']], ['Task report note'])
+
     def test_naming_editor_commands(self):
         proxy = self.proxy()
         auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one', language='python')
@@ -4561,6 +4586,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
             self.assertTrue(result['configured'])
             self.assertEqual([item['kind'] for item in result['entries']], ['section', 'separator', 'section', 'link'])
             leaf = result['entries'][0]['children'][0]
+            self.assertEqual(leaf['default_view_mode'], 'table')
             self.assertEqual([leaf['title'], leaf['icon'], leaf['display']['options']['search_type']], ['Entity records', 'FAS_DATABASE', 'contract/entity'])
             self.assertEqual(result['entries'][2]['children'][0]['title'], 'Inline records')
             status, loaded = configuration('read')

@@ -81,6 +81,10 @@ try {
     base + '/projects/one/?search_type=contract/quick_task&view=table'
   );
   await signIn();
+  await page.getByLabel('Change search results view', { exact: true }).click();
+  await page
+    .getByRole('menuitemradio', { name: 'Continuous tree', exact: true })
+    .click();
   const firstId = await tabs.first().getAttribute('data-tab-id');
   await root.getByLabel('Workspace panels', { exact: true }).click();
   await root

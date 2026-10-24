@@ -60,7 +60,15 @@ try {
   await page.mouse.down();
   await page.mouse.move(header.x + 24, header.y + 430, { steps: 12 });
   await page.mouse.up();
-  await second.locator('[data-frame="tablePublish"]').last().tap();
+  assert(await form.evaluate((node) => node.matches(':modal')));
+  const otherTarget = await second
+    .locator('[data-frame="tablePublish"]')
+    .last()
+    .boundingBox();
+  await page.touchscreen.tap(
+    otherTarget.x + otherTarget.width / 2,
+    otherTarget.y + otherTarget.height / 2
+  );
   assert.equal(
     await form.getByLabel('Name', { exact: true }).inputValue(),
     'Published in browser'

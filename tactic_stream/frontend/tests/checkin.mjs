@@ -50,6 +50,10 @@ try {
   await page
     .getByRole('button', { name: 'Close details', exact: true })
     .click();
+  await page.getByLabel('Change search results view', { exact: true }).click();
+  await page
+    .getByRole('menuitemradio', { name: 'Continuous tree', exact: true })
+    .click();
   const row = page
     .locator('.workspace-results .result-item:visible')
     .filter({
