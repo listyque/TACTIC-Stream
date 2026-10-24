@@ -8,7 +8,7 @@ client; its Python objects and local execution are not server APIs.
 | --- | --- |
 | Install and run Stream | [Application README](../README.md) |
 | Understand source ownership | [Architecture](architecture.md) |
-| Configure projects through an external administrator agent | [Agent start](admin_agent/START.md), then task-specific [source references](admin_agent/SOURCES.md) |
+| Configure projects through an external administrator agent | [Agent start](admin_agent/START.md), [MCP connection and implemented tools](admin_agent/CONNECTION.md), task-specific [source references](admin_agent/SOURCES.md) |
 | Server API and core structures | [TS API map](admin_agent/SOURCES.md#ts-server-api), [core model](../frontend/public/help/core_model.en.md) |
 | Compatibility with original TACTIC | [Compatibility and verification](compatibility.md) |
 | Shared QML/Vue descriptions and controls | [Frame contracts](frame/index.md) |

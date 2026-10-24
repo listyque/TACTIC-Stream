@@ -72,9 +72,8 @@ conversation summary does not prove the server still has the same state.
 
 ## Current execution boundary
 
-This pack describes source release 0.112.202 and existing editor/API operations.
-Refresh the server method reference and project metadata each session. There
-is no installed AI/MCP contract, common durable draft/apply service or isolated
-generated-code runner in this baseline. If your host only supports proposing
-changes, return a proposal and the exact required operations; do not report it
-as applied. The implementation backlog is deliberately outside this pack.
+This pack describes source release 0.112.203. Refresh server capabilities and
+project metadata each session. The optional [MCP adapter](CONNECTION.md) exposes
+references, metadata and naming preview. It cannot save, execute scripts or
+connect to TH's runtime. There is no durable draft/apply service or isolated
+code runner. Report proposals as proposals, never as applied changes.
