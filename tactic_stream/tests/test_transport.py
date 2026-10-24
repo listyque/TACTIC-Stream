@@ -2692,6 +2692,41 @@ return {'single': single.get_input().get_value(), 'name': single.get_input().get
         finally:
             proxy.delete_sobject(ticket, config['__search_key__'])
 
+    def test_handler_full_checkin_cells_match_stream_for_tasks_and_notes(self):
+        path = ROOT.parent.parent / 'TH/thlib/tactic_query.py'
+        text = path.read_text(encoding='utf-8')
+        function = next(node for node in ast.parse(text).body
+                        if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        source = ast.get_source_segment(text, function)
+        proxy = self.proxy()
+        auth = self.ticket(proxy)
+        parent = 'contract/entity?project=one&code=A'
+        view = 'full_checkin_contract'
+        xml = '''<config><full_checkin_contract>
+<element name="general_checkin"><display class="tactic.ui.table.CheckinButtonElementWdg"><width>800</width></display></element>
+<element name="self_checkin"><display class="tactic.ui.table.CheckinButtonElementWdg"><sobject_mode>self</sobject_mode></display></element>
+</full_checkin_contract></config>'''
+        for kind in ('sthpw/task', 'sthpw/note'):
+            proxy.insert(auth, 'config/widget_config', dict(search_type=kind, view=view, config=xml))
+            records = [proxy.insert(auth, kind, dict(process='model', context=context), {}, parent)
+                       for context in ('model/main', 'model/001', '')]
+            keys = [row['__search_key__'] for row in records]
+            code = source + '''
+import json
+from tactic_stream.server.table_cells import read_table_cells
+return {"native": json.loads(query_table_layout(kwargs["kind"], kwargs["keys"], kwargs["view"], project_code="one")),
+        "stream": read_table_cells(kwargs["kind"], kwargs["view"], kwargs["keys"])}'''
+            result = proxy.execute_python_script(auth, '', dict(code=code, kind=kind, keys=keys, view=view))['info']
+            for index, key in enumerate(keys):
+                for column in ('general_checkin', 'self_checkin'):
+                    native = result['native']['rows'][key][column]
+                    self.assertFalse(native['error'], native)
+                    self.assertEqual({name: value for name, value in native.items() if name != 'error'},
+                                     result['stream'][key][column])
+                    self.assertEqual(native['targetSearchKey'], parent if column == 'general_checkin' else key)
+                    self.assertEqual(native['process'], 'model')
+                    self.assertEqual(native['context'], 'model/main' if index == 0 else 'model')
+
     def test_handler_extended_table_values_through_xmlrpc(self):
         handler = ROOT.parent.parent / 'TH/thlib/tactic_query.py'
         text = handler.read_text(encoding='utf-8')

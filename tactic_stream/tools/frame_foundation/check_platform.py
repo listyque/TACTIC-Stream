@@ -1074,6 +1074,7 @@ def main():
                 "test_transport.Transport.test_handler_extended_table_values_through_xmlrpc",
                 "test_transport.Transport.test_handler_table_metadata_values_through_xmlrpc",
                 "test_transport.Transport.test_handler_native_table_layout_through_xmlrpc",
+                "test_transport.Transport.test_handler_full_checkin_cells_match_stream_for_tasks_and_notes",
                 "test_transport.Transport.test_handler_connection_fallback_and_removal_through_xmlrpc",
                 "test_transport.Transport.test_handler_object_summary_and_project_scope_through_xmlrpc",
                 "test_transport.Transport.test_handler_dependencies_through_xmlrpc",
