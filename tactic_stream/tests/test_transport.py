@@ -1,4 +1,5 @@
 import ast
+import gzip
 import importlib.util
 import json
 from pathlib import Path
@@ -3630,6 +3631,66 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
                             self.assertEqual(response.status,200)
                             self.assertEqual(response.read(),b'next build')
                             self.assertNotEqual(response.headers['ETag'],etag)
+
+    def test_ui_assets_compress_without_stale_cache_or_api_compression(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            assets = root / 'web' / 'assets'
+            assets.mkdir(parents=True)
+            content = b'export const example = "public interface";\n' * 200
+            resource = assets / 'Example.js'
+            resource.write_bytes(content)
+            address = self.url + '/ui/assets/Example.js'
+            with patch('tactic_stream.server.app.files', return_value=root):
+                with urlopen(address) as response:
+                    self.assertEqual(response.read(), content)
+                    plain_etag = response.headers['ETag']
+                for name in ('Example.css', 'Example.js.map', 'Example.ttf'):
+                    (assets / name).write_bytes(content)
+                    with self.subTest(asset=name):
+                        with urlopen(Request(self.url + '/ui/assets/' + name, headers={'Accept-Encoding': 'gzip'})) as response:
+                            self.assertEqual(gzip.decompress(response.read()), content)
+                            self.assertEqual(response.headers['Content-Encoding'], 'gzip')
+                (assets / 'Small.js').write_bytes(b'export const small = true;')
+                with urlopen(Request(self.url + '/ui/assets/Small.js', headers={'Accept-Encoding': 'gzip'})) as response:
+                    self.assertEqual(response.read(), b'export const small = true;')
+                    self.assertIsNone(response.headers.get('Content-Encoding'))
+                for encoding in ('gzip', 'br, gzip;q=0.8', '*', 'GZIP'):
+                    with self.subTest(encoding=encoding):
+                        with urlopen(Request(address, headers={'Accept-Encoding': encoding})) as response:
+                            compressed = response.read()
+                            self.assertEqual(response.headers['Content-Encoding'], 'gzip')
+                            self.assertEqual(response.headers['Vary'], 'Accept-Encoding')
+                            self.assertEqual(gzip.decompress(compressed), content)
+                            self.assertLess(len(compressed), len(content) / 2)
+                            self.assertEqual(int(response.headers['Content-Length']), len(compressed))
+                            gzip_etag = response.headers['ETag']
+                            self.assertNotEqual(gzip_etag, plain_etag)
+                for encoding in ('identity', 'br', 'gzip;q=0', '*;q=1, gzip;q=0', 'gzip;q=invalid'):
+                    with self.subTest(encoding=encoding):
+                        with urlopen(Request(address, headers={'Accept-Encoding': encoding})) as response:
+                            self.assertEqual(response.read(), content)
+                            self.assertIsNone(response.headers.get('Content-Encoding'))
+                            self.assertEqual(response.headers['ETag'], plain_etag)
+                            self.assertEqual(response.headers['Vary'], 'Accept-Encoding')
+                headers = {'Accept-Encoding': 'gzip', 'If-None-Match': gzip_etag}
+                with self.assertRaises(HTTPError) as caught:
+                    urlopen(Request(address, headers=headers))
+                with caught.exception as response:
+                    self.assertEqual(response.code, 304)
+                    self.assertEqual(response.read(), b'')
+                    self.assertEqual(response.headers['Vary'], 'Accept-Encoding')
+                with urlopen(Request(address, headers={'Accept-Encoding': 'gzip', 'If-None-Match': plain_etag})) as response:
+                    self.assertEqual(response.status, 200)
+                    self.assertEqual(gzip.decompress(response.read()), content)
+                resource.write_bytes(content.replace(b'public', b'updated'))
+                with urlopen(Request(address, headers=headers)) as response:
+                    self.assertEqual(response.status, 200)
+                    self.assertEqual(gzip.decompress(response.read()), resource.read_bytes())
+                    self.assertNotEqual(response.headers['ETag'], gzip_etag)
+            with urlopen(Request(self.url + '/health', headers={'Accept-Encoding': 'gzip'})) as response:
+                self.assertIsNone(response.headers.get('Content-Encoding'))
+                self.assertIn('database_initialized', json.load(response))
 
     def test_configuration_is_admin_only_read_only_and_masks_secrets(self):
         proxy = self.proxy()

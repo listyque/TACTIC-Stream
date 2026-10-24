@@ -135,6 +135,18 @@ This connection selector belongs to Handler. The Stream browser connects to its 
 
 ## Sign-in and client capabilities
 
+### First browser opening
+
+The initial **Loading interface…** message means that Stream is downloading and
+starting the web interface. Stream compresses public JavaScript, styles, source
+maps, help text and fonts with gzip when the browser supports it. No server setting
+is required. Subsequent openings reuse cached files; JavaScript and styles are
+revalidated so a server update loads the current build. Reload an already open
+page after updating Stream. Handler loads its native interface locally and does
+not download these browser assets.
+
+### Authentication
+
 Help and Debug Log remain available before sign-in. Enter submits only a complete login/password pair while no authentication is pending. Handler keeps its existing server presets, ticket generation and proxy/site routing; preset edits are applied through the existing Configuration owner. Stream signs in to the current browser origin and does not expose native server-preset routing. Password entry is cleared when its sign-in window closes.
 
 Handler updates keep the existing release controller, changelog, portable-install eligibility, cancellation and install confirmation. Maintainers retain Ctrl-double-click on the current version to open release creation. The browser does not install native client ZIPs. Connection menus and session expiry retain the existing shell owners; a shared layout never grants permissions or retries an unknown mutation.

@@ -1,6 +1,7 @@
 """ASGI transport. Blocking database/RPC work stays outside the event loop."""
 import logging
 import asyncio
+import gzip
 import time
 from hashlib import sha256
 from email import policy
@@ -1017,11 +1018,27 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
         headers = {
             "Cache-Control": "no-store" if help_asset else "public, max-age=31536000, immutable", "X-Content-Type-Options": "nosniff",
         }
+        compress = False
+        if len(content) >= 1024 and content_type in ('text/javascript', 'text/css', 'text/plain', 'application/json', 'font/ttf'):
+            headers['Vary'] = 'Accept-Encoding'
+            encodings = {}
+            for encoding in request.headers.get('accept-encoding', '').lower().split(','):
+                name, _, parameter = encoding.strip().partition(';')
+                try:
+                    quality = float(parameter.strip().removeprefix('q=')) if parameter else 1.0
+                except ValueError:
+                    quality = 0.0
+                encodings[name.strip()] = quality
+            compress = 0 < encodings.get('gzip', encodings.get('*', 0)) <= 1
+            if compress:
+                headers['Content-Encoding'] = 'gzip'
         if path.parts[0] == 'assets' and (path.suffix in ('.js', '.css') or path.name.endswith(('.js.map', '.css.map'))):
             headers['Cache-Control'] = 'public, no-cache'
-            headers['ETag'] = '"' + sha256(content).hexdigest() + '"'
+            headers['ETag'] = '"' + sha256(content).hexdigest() + ('-gzip' if compress else '') + '"'
             if any(tag.strip().removeprefix('W/') in ('*', headers['ETag']) for tag in request.headers.get('if-none-match', '').split(',')):
                 return Response(status_code=304, headers=headers)
+        if compress:
+            content = gzip.compress(content, compresslevel=6, mtime=0)
         return Response(content, media_type=content_type, headers=headers)
 
     def invoke(body, environ=None):

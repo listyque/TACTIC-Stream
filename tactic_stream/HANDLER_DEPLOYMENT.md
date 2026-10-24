@@ -188,3 +188,47 @@ native API; Classic projects remain separate. See
 The source delivery includes a server wheel, Handler sources and SHA-256 manifest.
 EXE/Electron, physical million-file/TB transfer and target-environment/manual
 acceptance remain required before production delivery is declared ready.
+
+## Browser startup transfer — Stream 0.112.196
+
+The initial `Loading interface…` message is the async App module loader, before
+the workspace's health, authentication or project reads. Public `/ui/` resources
+now negotiate gzip, including text assets and TTF fonts of at least 1 KiB. This applies
+to the direct Uvicorn port as well as Apache forwarding. RPC, repository downloads
+and SSE responses retain their existing transports. Readable JavaScript and source
+maps remain shipped. Encoding-specific ETags and `Vary: Accept-Encoding` prevent
+mixing cached gzip/identity representations; a changed build returns fresh bytes.
+
+A real Chromium trial on 2026-10-24 used the source ASGI server on a temporary
+loopback port, a new browser context per network profile, anonymous sign-in and
+browser cache enabled. The limited profile used 10 Mbit/s throughput and 20 ms
+CDP latency. Timings end at the visible sign-in form; byte totals include its
+loaded fonts after `document.fonts.ready`.
+
+| Profile | 0.112.195 | 0.112.196 |
+| --- | --- | --- |
+| First opening, transferred resources | 6,307,952 bytes | 1,782,863 bytes |
+| First sign-in, limited network | 4,776 ms | 1,738 ms |
+| Repeat sign-in, limited network | 441 ms | 440 ms |
+| Repeat opening, transferred resources | 10,578 bytes | 10,578 bytes |
+| First sign-in, unrestricted loopback | 173 ms | 273 ms |
+
+These are individual diagnostic trials, not a latency guarantee. Dynamic
+compression adds CPU work on uncached requests; loopback does not reproduce cold
+Windows disk/antivirus behavior. Browser trials had no JavaScript errors. The
+reported user's port was unavailable during diagnosis, so these measurements do
+not certify that machine's original delay. Handler uses native QML and has no
+corresponding browser asset download to change. No database migration is involved.
+
+Regression: `test_transport.Transport.test_ui_assets_compress_without_stale_cache_or_api_compression`
+checks real HTTP negotiation, unchanged decompressed bytes, encoding-specific
+revalidation, changed assets and unchanged health transport. Existing asset/path
+and JavaScript/source-map cache regressions remain required.
+
+The rebuilt Vue resources and five focused HTTP regressions passed. An independently
+built/extracted `tactic_stream-0.112.196` wheel imported its own server modules and
+passed the same cold/warm Chromium profiles: 1,782,863 / 10,578 bytes, no JavaScript
+errors, 1,234 / 422 ms at the limited network setting. This verifies the wheel's
+browser transport, not an EXE installation or clean Windows acceptance. The existing
+`pyasm/web/web_tools.py` URL-regex SyntaxWarning was also observed on fresh imports;
+it is unrelated to asset transfer and remains outside this fix.
