@@ -10,6 +10,17 @@
 /legacy/local_data*/
 /tactic_stream/data/
 
+# Local agent work and archived predecessor handoffs are not product sources.
+/agent-work/
+/tactic_stream/agent-work/
+/docs/evidence/
+/docs/inventory/
+/docs/[0-9]*.md
+/docs/AGENTS.md
+/legacy/docs/native-ui/
+/legacy/README_VUE_RU.md
+/legacy/START_HERE_RU.md
+
 # Environments, caches, builds and temporary verification output
 .venv/
 node_modules/

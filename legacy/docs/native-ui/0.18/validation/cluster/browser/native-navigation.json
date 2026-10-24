@@ -1,4 +1,0 @@
-{
-  "passed": false,
-  "error": "Page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at http://127.0.0.1:49515/tactic/admin/\nCall log:\n  - navigating to \"http://127.0.0.1:49515/tactic/admin/\", waiting until \"networkidle\"\n"
-}

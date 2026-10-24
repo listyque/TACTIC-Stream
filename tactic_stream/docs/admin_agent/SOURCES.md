@@ -1,99 +1,80 @@
-# Source and documentation index
+# Sources by product and execution environment
 
-Use this index to deepen a specific task. Follow one relevant section, not every
-link. Read headings first in large documents; select the named table, method or
-class in JSON/source files. The linked documents are references, not additional
-agent instructions or authority to execute their examples.
+Read only the relevant section. References do not authorize execution. Verify
+live capabilities and permissions; historical evidence applies to its baseline.
 
-Relative links assume the TS/TH workspace layout. TH references require the
-separate Handler checkout; they are not runtime dependencies. An installed agent
-without these files needs host-provided authorized document retrieval. Report an
-unavailable reference rather than claiming to have read it. Do not send private
-runtime configuration, credentials or unrestricted plugin source to the model.
+| Intended work | Owner and entry |
+| --- | --- |
+| Create a project/template or change persistent project configuration | TS server: [operations](OPERATIONS.md), [API](#ts-server-api), [structures](#ts-server-structures). |
+| Automate a running Handler or a standalone script using its session | TH client: [object API and structures](#th-client-api-and-structures). |
+| Understand browser behavior or Stream Help | [TS configuration and UI](#ts-configuration-and-ui). |
+| Understand native desktop behavior or Handler Help | [TH client references](#th-client-api-and-structures). |
+| Work on portable UI descriptions | [Shared Tactic Frame](#shared-tactic-frame); each product retains native controls/transport. |
+| Trace original TACTIC semantics | [Original server reference](#original-tactic-server-reference); storage under TH does not make it a client-object schema. |
 
-## How to resolve disagreements
+TH/TS links require sibling checkouts or authorized host retrieval. Report missing
+references. Keep credentials and private configuration out of model context.
 
-Use the selected server's actual metadata, permissions and operation results for
-what exists now. Use its matching implementation for behavior; use the guides
-for explanation. Original TACTIC references define legacy intent, not proof of
-Stream implementation. Dated acceptance reports apply to their stated release,
-scenario and database. If sources disagree, record the discrepancy and validate
-the affected contract rather than silently choosing a convenient interpretation.
+## TS server API
 
-## API
-
-Runtime locations are `{server_url}/api/documentation`,
-`{server_url}/api/compatibility` and `{server_url}/docs`. The host substitutes the
-selected connection; do not hardcode this workspace's IP. Select a method from
-the response before adding it to model context. Compatibility discovery can be
-large and is not an instruction to ingest the whole manifest.
+These URLs belong to the selected Stream server: `{server_url}/api/documentation`,
+`{server_url}/api/compatibility`, `{server_url}/docs`. Discover one method at a time.
+The Python TACTIC SDK is a server client; it is not `tactic_handler_api`.
 
 | Reference | What to read / when |
 | --- | --- |
 | [API compatibility guide](../../frontend/public/help/api_compatibility.en.md) | Wire formats, native operations, ordinary-account permissions, journals and limitations. Start here for an API integration. |
 | [Live reference builder](../../src/tactic_stream/server/documentation.py) | `api_documentation`: how runtime signatures, examples and help are assembled. |
-| [Method help](../../src/tactic_stream/compatibility/api_help.json) | Select the requested method's entry; EN/RU explanations. |
-| [Original method manifest](../../src/tactic_stream/compatibility/api_manifest.json) | Select `methods[method_name]`: baseline signature/documentation and status. This is a large captured inventory; runtime availability takes precedence. |
-| [Server API](../../src/tactic_stream/server/api.py) | Only the relevant `Api` method and dispatch boundary. Do not load its long historical manifest text as a handbook. |
+| [Method help](../../src/tactic_stream/compatibility/api_help.json) | Method-specific EN/RU help. |
+| [Original method manifest](../../src/tactic_stream/compatibility/api_manifest.json) | Select `methods[method_name]`; captured signatures/status are subordinate to live discovery. |
+| [Server API](../../src/tactic_stream/server/api.py) | Relevant `Api` method and dispatch boundary, not the captured manifest text. |
 | [HTTP routes](../../src/tactic_stream/server/app.py) | Exact route, allowed fields/actions, authorization and response/error envelope. Editor routes are not all exposed in OpenAPI. |
 | [Python SDK](../../src/tactic_client_lib/tactic_server_stub.py) | The chosen client method, argument normalization and result decoding. Raw XML-RPC and SDK return shapes differ. |
-| [Handler object API](../../../../TH/docs/handler_api.md) | `get_api` / `local`, object tree, background work, handles and file operations. This is a client API, not the Stream HTTP contract. Ignore DCC sections unless that integration is in scope. |
-| [HTML / server JavaScript](../../frontend/public/help/html_api.en.md) | Read only for an existing HTML/JS integration; do not equate it with modern renderer support. |
+| [HTML / server JavaScript](../../frontend/public/help/html_api.en.md) | Existing HTML/JS integration, separate from modern renderer support. |
 
-## Structures
+## TS server structures
+
+Server Search/SObject/Command owns persistent data, permissions and transactions.
+Handler wrappers are client objects with different methods and lifetimes.
 
 | Reference | What to read / when |
 | --- | --- |
-| [Current core model guide](../../frontend/public/help/core_model.en.md) | SearchType/Search/SObject, project resolution, values versus pending writes and transaction ownership. |
-| [Database reference introduction](../../../../TH/docs/tactic_database/README.md) | Scope of the original TACTIC 5.0 schema reference; arbitrary studio types are not enumerated. Its backup commands concern that environment, not an instruction to run them here. |
-| [Database rules](../../../../TH/docs/tactic_database/01_DATABASE_RULES.md) | Logical types, polymorphic parents, project scope and native write paths. |
-| [Core table catalogue](../../../../TH/docs/tactic_database/02_CORE_TABLE_CATALOG.md) | Locate the heading for `task`, `snapshot`, `file`, `pipeline`, `schema`, etc.: fields, owning classes and relationships. Original schema, not live Stream DDL. |
-| [Project config catalogue](../../../../TH/docs/tactic_database/03_CONFIG_TABLE_CATALOG.md) | `spt_widget_config`, `spt_naming`, `spt_process`, scripts, triggers and settings. Includes historical class names. |
-| [Relationships and flows](../../../../TH/docs/tactic_database/04_RELATIONSHIPS_AND_FLOWS.md) | Follow the relevant object/task/check-in/workflow flow before designing another relationship. |
-| [Write policy matrix](../../../../TH/docs/tactic_database/05_WRITE_POLICY_MATRIX.md) | Which subsystem owns a derived/system record; do not manually fabricate its rows. |
-| [Live schema comparison](../../../../TH/docs/tactic_database/06_LIVE_DATABASE_CHECK.md) and [evidence limits](../../../../TH/docs/tactic_database/07_EVIDENCE_AND_LIMITATIONS.md) | Distinguish source DDL, registry and behavior evidence. Diagnostic SQL here is not the agent's normal write path. |
-| [Machine-readable original catalogue](../../../../TH/docs/tactic_database/machine/tactic50_core_tables.json) | Filter the list by `table`; inspect `columns`, `relations`, `preferred_write_path`, `confidence`. Avoid loading all 71 entries. |
-| [Original system DDL](../../../../TH/docs/tactic_database/source_schemas/sthpw_schema.sql) and [config DDL](../../../../TH/docs/tactic_database/source_schemas/config_schema.sql) | Field/constraint provenance for a specific original table. PostgreSQL 5.0 baseline; not a migration to apply. |
+| [Current core model guide](../../frontend/public/help/core_model.en.md) | Server objects, project resolution, pending writes and transactions. |
 | [Stream project schema capture](../../src/tactic_stream/compatibility/project_schema.json) | Select a physical `spt_*` table. Initial schema data, not the final upgraded/live schema. |
 | [Bootstrap registry](../../src/tactic_stream/compatibility/bootstrap_registry.json) and [bootstrap DDL](../../src/tactic_stream/compatibility/bootstrap.sql) | Initial system definitions; compare upgrades and live registry before designing a new type. |
 | [Predefined schema relationships](../../src/tactic_stream/compatibility/predefined_schemas.json) | Select `simple`, `admin`, `config`, etc.; then compare the project's actual resolved schema. |
-| [Business upgrades](../../src/tactic_stream/compatibility/business_upgrade.json) and [schema upgrades](../../src/tactic_stream/compatibility/schema_upgrade.json) | Later changes to the captured definitions. Live column metadata remains authoritative for an installation. |
+| [Business upgrades](../../src/tactic_stream/compatibility/business_upgrade.json) and [schema upgrades](../../src/tactic_stream/compatibility/schema_upgrade.json) | Changes after capture; live metadata remains authoritative. |
 
-The original catalogue includes removed `file_access` / `snapshot_type` tables
-and deprecated `pyasm.prod` paths. Their appearance there does not authorize
-restoring them. Stream uses `pyasm.biz.ProjectSetting` for `config/prod_setting`.
-Use [MODEL](MODEL.md) and current discovery to resolve these differences.
-
-## Configuration and UI
+## TS configuration and UI
 
 | Reference | What to read / when |
 | --- | --- |
 | [Administration guide](../../frontend/public/help/administration.en.md) | Search Types, Project schema, Workflow, groups/rules and naming subsections. Includes source maps and feature boundaries. |
-| [Handler administration contract](../../../../TH/docs/administration.md) | Detailed editor documents, type discovery, schema capabilities, workflow dependencies and concurrency. Read the matching heading, not the whole file by default. |
 | [Table view](../../frontend/public/help/table_view.en.md) and [table contract](../frame_table.md) | Column/view operations, typed cells, nested tables and actual migration scope. |
-| [Legacy view semantics](../../../../TH/docs/tactic_compatibility/table_views.md) | Definitions, layers, display/edit/action options and lossless XML round trips. Original/Handler contract; check Stream support separately. |
-| [Widget reference](../../frontend/public/help/widget_database.en.md), [examples](../../frontend/public/help/table_widget_examples.en.md), [checklist](../../frontend/public/help/table_widget_checklist.en.md) | Find a handler and its configuration/example. Historical status tables are not current execution guarantees. |
+| [Widget reference](../../frontend/public/help/widget_database.en.md), [examples](../../frontend/public/help/table_widget_examples.en.md), [checklist](../../frontend/public/help/table_widget_checklist.en.md) | Handler configuration/examples; historical statuses are not execution guarantees. |
 | [Current shared widget catalogue](../../src/tactic_stream/shared_ui/features/table/widgets.json) | Filter by `class`, `value` or `aliases`; inspect `adapter`. Registration alone does not prove every option works. |
-| [Actual cell support](../../src/tactic_stream/server/table_cells.py) and [interface resolver](../../src/tactic_stream/server/interface.py) | Relevant `describe_cell` / `describe_composition` branch when a proposed option lacks documented support. |
+| [Actual cell support](../../src/tactic_stream/server/table_cells.py) and [interface resolver](../../src/tactic_stream/server/interface.py) | `describe_cell` / `describe_composition` support for the requested option. |
 | [XML configuration operations](../../src/tactic_stream/server/widget_configuration.py) | Source/layer revisions, check/preview/save and conflict handling. |
-| [Default configuration XML](../../src/tactic_stream/config/search_type/widget/DEFAULT-conf.xml) and [blank object layout](../../src/tactic_stream/config/layouts/blank.xml) | Existing table/object-layout syntax. These are defaults/examples, not a replacement for the project's inherited configuration. |
+| [Default configuration XML](../../src/tactic_stream/config/search_type/widget/DEFAULT-conf.xml) and [blank object layout](../../src/tactic_stream/config/layouts/blank.xml) | Default table/object syntax; preserve the project's actual inheritance. |
 | [Object layout contract](../../src/tactic_stream/server/item_layout.py) | Bounded widgets/actions/conditions and `describe_item_layout` validation; use for declarative object layouts only. |
-| [Sidebar editor](../../frontend/public/help/sidebar_editor.en.md) and [search filters](../../frontend/public/help/search_filters.en.md) | Named navigation, default results and nested/saved search behavior. |
-| [Shared UI contract](../shared_ui_contract.md), [control catalogue](../frame_control_catalog.md), [source map](../../src/tactic_stream/shared_ui/README.md) | Only when clarifying a renderer/control boundary. These are implementation references, not a requirement for the admin agent to edit QML/Vue. |
+| [Sidebar editor](../../frontend/public/help/sidebar_editor.en.md) and [search filters](../../frontend/public/help/search_filters.en.md) | Navigation, default results, nested/saved searches. |
 
-## Workflows, files and scripts
+## TS workflows, files and scripts
+
+Stream/server guides; desktop files and DCC require TH capabilities.
 
 | Reference | What to read / when |
 | --- | --- |
-| [Tasks](../../frontend/public/help/tasks.en.md), [task contract](../frame_tasks.md), [schedule contract](../frame_schedule.md) | Parent/process/status distinctions, task workspace, dates and scheduling behavior. |
-| [Object reports](../../frontend/public/help/sobject_info.en.md) and [object contract](../frame_objects.md) | Parent resolution, reports, forms, links, snapshots and selected-object operations. |
+| [Tasks](../../frontend/public/help/tasks.en.md), [task contract](../frame_tasks.md), [schedule contract](../frame_schedule.md) | Parent/process/status, workspace, dates and scheduling. |
+| [Object reports](../../frontend/public/help/sobject_info.en.md) and [object contract](../frame_objects.md) | Parents, reports, forms, links, snapshots and object operations. |
 | [Naming command](../../src/tactic/ui/panel/naming_cmd.py) | `FIELDS`, `naming_request`, `preview_naming`: exact rule/sample fields and execution boundary. |
 | [Workflow command](../../src/tactic/ui/panel/workflow_cmd.py) | `workflow_request`: XML/process settings, current revision and managed bindings. |
 | [Script Editor guide](../../frontend/public/help/script_editor.en.md), [script contract](../frame_scripts.md), [Shelf guide](../../frontend/public/help/script_shelf.en.md) | Languages, context, storage/history and execution differences. |
 | [File contract](../frame_files.md), [Commit Queue](../../frontend/public/help/commit_queue.en.md), [repositories](../../frontend/public/help/repositories.en.md) | Upload/check-in ownership, file groups, previews, naming and repository assumptions. |
-| [Communication contract](../../../../TH/docs/communication_and_feed_contract.md) and [cache policy](../../../../TH/docs/cache_invalidation_policy.md) | Notifications/activity effects and propagation of changes between clients. |
 
 ## Projects, templates and executable evidence
+
+Project/template/plugin operations run on the server, including calls from TH.
 
 | Reference | What to read / when |
 | --- | --- |
@@ -101,37 +82,78 @@ Use [MODEL](MODEL.md) and current discovery to resolve these differences.
 | [Project creation command](../../src/tactic/command/create_project_cmd.py) | `check`, `execute`, `create_search_types`: code/type/database bootstrap and rollback boundaries. |
 | [Template commands](../../src/tactic/command/project_template_cmd.py) | Installer, exporter, remapped references, actual export scope and unsupported updater. |
 | [Plugin commands](../../src/tactic/command/plugin.py) | Manifest/SPT/includes, trusted code, file effects and supported import/export behavior. |
-| [CG manifest](../../../cg/manifest.xml), [schema example](../../../cg/sthpw_schema.spt), [view examples](../../../cg/config_widget_config.spt) | Existing template structures; read selected records as text. SPT is executable input, not passive JSON. |
-| [Original VFX manifest](../../../legacy/src/plugins/TACTIC/vfx/manifest.xml) and [Scrum manifest](../../../legacy/src/plugins/TACTIC/scrum/manifest.xml) | Template composition and include paths. Original examples can retain excluded/unsupported elements; actual installed configuration may differ. |
-| [Transport tests](../../tests/test_transport.py) | Select the `test_*_editor_commands` / `test_schema_editor_command_and_creation_revision` cases for concrete requests, results and denial/conflict behavior. |
-| [Creation lifecycle test](../../tests/test_project_creation.py), [template contract](../../tests/test_schema_template.py), [export contract](../../tests/scripts/template_export_contract.py) | Scope of project rollback, template/schema and export assertions. Tests are evidence, not authorization to run their mutations against a working database. |
+| [CG manifest](../../../cg/manifest.xml), [schema example](../../../cg/sthpw_schema.spt), [view examples](../../../cg/config_widget_config.spt) | Selected template records; SPT is executable input, not passive JSON. |
+| [Original VFX manifest](../../../legacy/src/plugins/TACTIC/vfx/manifest.xml) and [Scrum manifest](../../../legacy/src/plugins/TACTIC/scrum/manifest.xml) | Template composition and include paths. Original examples may contain excluded/unsupported elements; inspect the installed configuration. |
+| [Transport tests](../../tests/test_transport.py) | `test_*_editor_commands` / `test_schema_editor_command_and_creation_revision`: requests, results, denial/conflict. |
+| [Creation lifecycle test](../../tests/test_project_creation.py), [template contract](../../tests/test_schema_template.py), [export contract](../../tests/scripts/template_export_contract.py) | Project rollback, template/schema and export assertions; run only on authorized isolated data. |
 
-## Other guides and historical material
+## TH client API and structures
 
-- [Complete Help topic index](../../frontend/public/help/index.json): topic IDs
-  and available languages. Each ID maps to `<id>.en.md` / `<id>.ru.md` beside
-  the index. Read one language. [Russian administration](../../frontend/public/help/administration.ru.md)
-  and [Russian core model](../../frontend/public/help/core_model.ru.md) are direct entries.
-  Installed UI copies live under `/ui/help/`; source and built copies are not
-  separate manuals to load twice.
-- [Handler documentation index](../../../../TH/docs/index.md): architecture,
-  administration, integration, UI contracts and verification references not
-  enumerated above.
-- [Server delivery](../../SERVER_DELIVERY.en.md), [Windows delivery](../../WINDOWS_DELIVERY.en.md),
-  [file-project delivery](../../FILE_PROJECT_DELIVERY.en.md),
-  [recovery acceptance](../../RECOVERY_ACCEPTANCE.md): deployment/recovery tasks
-  only. Acceptance reports certify their stated versions and scopes.
-- [Legacy migration audit](../../LEGACY_MIGRATION_AUDIT_2026-10-24.md): findings
-  against its pinned .195 baseline. Later fixes require current code/evidence;
-  neither every finding nor every old completion claim is automatically current.
-- [Original compatibility source map](../../../../TH/docs/tactic_compatibility/README.md)
-  and [widget support contract](../../../../TH/docs/tactic_compatibility/widget_support.md):
-  original/Handler responsibilities, not blanket Stream parity.
-- [Old 0.20 handoff](../../../docs/00_START_HERE.md) and
-  [its evidence map](../../../docs/06_SOURCE_AND_EVIDENCE_MAP.md): historical fork
-  architecture. Routes, build instructions and readiness claims there do not
-  describe current Stream. Consult only to trace a specific legacy behavior.
-- [Stream architecture journal](../../UI_ARCHITECTURE.md) and
-  [release/readme journal](../../README.md): search for an exact feature/version
-  and read that section only. These large files contain plans and superseded
-  states; they are not the agent's initial context.
+Use `tactic_handler_api` for Handler automation, its existing controllers for UI,
+and native File/Snapshot methods for desktop files. `get_api()` uses the running
+application; submit blocking data work through its documented executor. `local()`
+uses configured Handler authentication and needs explicit lifetime cleanup.
+Neither a TH handle nor its Python SObject is a server `pyasm.search.SObject`.
+A shared search key does not make their APIs or return shapes interchangeable.
+
+| Reference | What to read / when |
+| --- | --- |
+| [Handler object API](../../../../TH/docs/handler_api.md) | `get_api` / `local`, object tree, background work, handles and files. Client API, not Stream HTTP. |
+| [Handler administration contract](../../../../TH/docs/administration.md) | Native editor documents, discovery, schema capabilities, workflow dependencies and concurrency. |
+| [Legacy view semantics](../../../../TH/docs/tactic_compatibility/table_views.md) | Definitions, layers, display/edit/action options and lossless XML round trips. Original/Handler contract; check Stream support separately. |
+| [Communication contract](../../../../TH/docs/communication_and_feed_contract.md) and [cache policy](../../../../TH/docs/cache_invalidation_policy.md) | Notifications/activity effects and propagation of changes between clients. |
+| [TH application architecture](../../../../TH/docs/application_architecture.md) | Native controllers/models, state ownership, worker boundaries and module map. |
+| [TH API exports](../../../../TH/tactic_handler_api/__init__.py), [runtime](../../../../TH/tactic_handler_api/api.py), [objects](../../../../TH/tactic_handler_api/objects.py) | `get_api` borrows the running API; `local()` owns a headless session. Query results, pending edits and object lifetimes are client contracts. |
+| [TH native objects](../../../../TH/thlib/tactic_classes.py), [queries](../../../../TH/thlib/tactic_query.py), [file API](../../../../TH/tactic_handler_api/files.py) | Native object/path/preview methods and queued transfers; do not reconstruct server paths or call network work on the GUI thread. |
+| [TH built-in Help](../../../../TH/thlib/ui/help_articles/README.md), [administration Help](../../../../TH/thlib/ui/help_articles/administration.en.md) | Native `<topic>.<language>.md`, metadata and English fallback; separate from TS Help. |
+| [TH integration service](../../../../TH/docs/handler_server_architecture.md) | Local/desktop routing, not the Stream server. DCC/Maya is out of scope. |
+| [TH documentation index](../../../../TH/docs/index.md) | Remaining native UI, integration and verification contracts. |
+
+## Shared Tactic Frame
+
+Portable `.mjs` descriptions/state rules have independent copies in TH and TS.
+QML and Vue render with their own native controls. Transport, file capabilities,
+threading and persistent writes stay with their product owners. Paired UI parity
+must be checked; it cannot be inferred from an identical description.
+
+| Reference | What to read / when |
+| --- | --- |
+| [Shared UI contract](../shared_ui_contract.md), [control catalogue](../frame_control_catalog.md), [source map](../../src/tactic_stream/shared_ui/README.md) | Renderer/control boundaries, not instructions to edit QML/Vue. |
+
+## Original TACTIC server reference
+
+These files reside in TH for reference but describe original TACTIC 5.0 server
+schemas, not Handler's in-memory objects or current Stream DDL. Filter catalogues
+by the exact table. Compare live registry, upgrades and permissions before use.
+Removed `file_access` / `snapshot_type` tables and deprecated `pyasm.prod` paths
+are historical. Stream uses `pyasm.biz.ProjectSetting` for `config/prod_setting`.
+
+| Reference | What to read / when |
+| --- | --- |
+| [Database reference introduction](../../../../TH/docs/tactic_database/README.md) | Original 5.0 scope; custom studio types are not enumerated. Backup examples concern that environment. |
+| [Database rules](../../../../TH/docs/tactic_database/01_DATABASE_RULES.md) | Logical types, polymorphic parents, project scope and native write paths. |
+| [Core table catalogue](../../../../TH/docs/tactic_database/02_CORE_TABLE_CATALOG.md) | Fields, owning classes and relations for one original table (`task`, `snapshot`, `file`, etc.). |
+| [Project config catalogue](../../../../TH/docs/tactic_database/03_CONFIG_TABLE_CATALOG.md) | `spt_widget_config`, `spt_naming`, `spt_process`, scripts, triggers and settings. Includes historical class names. |
+| [Relationships and flows](../../../../TH/docs/tactic_database/04_RELATIONSHIPS_AND_FLOWS.md) | Follow the relevant object/task/check-in/workflow flow before designing another relationship. |
+| [Write policy matrix](../../../../TH/docs/tactic_database/05_WRITE_POLICY_MATRIX.md) | Which subsystem owns a derived/system record; do not manually fabricate its rows. |
+| [Live schema comparison](../../../../TH/docs/tactic_database/06_LIVE_DATABASE_CHECK.md) and [evidence limits](../../../../TH/docs/tactic_database/07_EVIDENCE_AND_LIMITATIONS.md) | Source DDL versus registry/behavior evidence; diagnostic SQL is not a normal write path. |
+| [Machine-readable original catalogue](../../../../TH/docs/tactic_database/machine/tactic50_core_tables.json) | Filter by `table`; read `columns`, `relations`, `preferred_write_path`, `confidence`. |
+| [Original system DDL](../../../../TH/docs/tactic_database/source_schemas/sthpw_schema.sql) and [config DDL](../../../../TH/docs/tactic_database/source_schemas/config_schema.sql) | Original PostgreSQL field/constraint provenance; not a migration to apply. |
+
+## TS Help, delivery and evidence
+
+- [TS Help index](../../frontend/public/help/index.json): topic IDs and languages;
+  choose one `<id>.en.md` / `<id>.ru.md`. [Russian administration](../../frontend/public/help/administration.ru.md)
+  and [Russian core model](../../frontend/public/help/core_model.ru.md) are product help.
+  `/ui/help/` contains installed copies, not an additional manual. TH Help has its
+  own source and loader, linked above; do not substitute one product's guide for the other.
+- [Server](../../SERVER_DELIVERY.en.md), [Windows](../../WINDOWS_DELIVERY.en.md),
+  [file-project](../../FILE_PROJECT_DELIVERY.en.md), [recovery](../../RECOVERY_ACCEPTANCE.md):
+  installation/upgrade/recovery procedures and their stated acceptance limits.
+- [Migration audit](../../LEGACY_MIGRATION_AUDIT_2026-10-24.md): pinned .195 findings,
+  not the status of later fixes. [Original compatibility map](../../../../TH/docs/tactic_compatibility/README.md)
+  and [widget contract](../../../../TH/docs/tactic_compatibility/widget_support.md)
+  explain original/TH behavior; verify TS support separately.
+- [TS architecture](../../UI_ARCHITECTURE.md) and [setup](../../README.md) are maintained
+  entry points. Agent backlog, old 0.20 handoffs and work journals are local
+  workspace material outside both repositories; they are not required context.

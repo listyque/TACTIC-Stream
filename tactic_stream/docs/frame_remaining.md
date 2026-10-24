@@ -183,25 +183,9 @@ controls, text/code/image ports and native window/transport owners intentionally
 remain engine implementations. User/plugin/DCC-generated UI and the standalone
 Batch Manager keep their existing execution owners.
 
-Only inventory, source routing and shipped-config checks were rerun here. No new
-runtime or pixel-parity acceptance is claimed. The complete Frame gate and prior
-comparison screenshots were not refreshed for this planning change. The ordered
-queue, from smaller known work to heavier integration, is
-[U01 / L01–L12](../UI_ARCHITECTURE.md#legacy-plan); ID numbers retain their original
-meaning, and dependencies are implemented within the first blocked scenario.
-
-## Delivery grouping — 2026-10-20
-
-The source audit above is unchanged. The canonical plan now groups the first
-13 ordered subblocks into three implementation stages and keeps deployment as
-a separate fourth stage:
-
-1. UI/adapters: U01 → L02 → L07a → L03 → L05.
-2. Complex tables and B07 acceptance: L06 → L01 → L04 → L07b.
-3. Core/integrations/database acceptance: L10 → L09 → L08 → L11.
-4. Independent distribution and legacy transition: L12.
-
-All original IDs, class coverage, dependencies and acceptance criteria remain.
-A request to execute stage 1 covers all five of its subblocks, not only U01.
-This planning edit implements no runtime behavior and does not refresh the
-2026-10-19 inventory or the historical UI acceptance evidence.
+The dated inventory above describes its stated source baseline. It does not
+certify current runtime behavior or pixel parity. Use the maintained
+[table contract](frame_table.md#legacy-checklist) and
+[architecture verification boundaries](../UI_ARCHITECTURE.md#verification-boundaries)
+for acceptance requirements. Development ordering and superseded stage groupings
+are retained in the local agent archive outside the product repositories.

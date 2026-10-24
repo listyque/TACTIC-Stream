@@ -4,8 +4,8 @@ Two independent repositories retain the projects' history:
 
 | Project | Working tree | Branch | Authorized backup remote |
 | --- | --- | --- | --- |
-| TACTIC Stream | `D:/code/TACTIC_VUE` | `main` | `\\ListyNAS\home\codex_backups\tactic-stream.git` |
-| TACTIC Handler | `D:/code/th_codex` | `modern-main` | `\\ListyNAS\home\codex_backups\tactic-handler.git` |
+| TACTIC Stream | `D:/grav/Tactic Stream/TS` | `main` | `\\ListyNAS\home\codex_backups\tactic-stream.git` |
+| TACTIC Handler | `D:/grav/Tactic Stream/TH` | `modern-main` | `\\ListyNAS\home\codex_backups\tactic-handler.git` |
 
 Stream's root includes `tactic_stream/`, shared `docs/`, the `cg/` project
 template, the launcher and legacy reference source. Legacy third-party Python

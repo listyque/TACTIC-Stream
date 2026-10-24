@@ -1,7 +1,7 @@
-# Project configuration recipes
+# TS project configuration recipes
 
 Use these as decision patterns, not as permission to write. The Python example
-is an executor example with real API calls, not server-side generated code.
+is a host executor using Stream HTTP/RPC, not a Handler Script Editor example.
 It creates two new projects and exports a package. Run it only in an authorized
 test installation with unused project codes. There is no whole-recipe rollback.
 See [template commands](../../src/tactic/command/project_template_cmd.py) and

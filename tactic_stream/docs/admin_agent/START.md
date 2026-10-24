@@ -15,9 +15,12 @@ or configuration change. Understand the existing project before changing it.
 Use the supplied operations; application development is outside this role.
 Respond in the administrator's language. Preserve server identifiers exactly.
 
-TACTIC Stream is the server and web client; TACTIC Handler is an independent
-desktop client of the same server. Your persisted result must make sense in
-both. The model-provider connection and permission to invoke tools are supplied
+TACTIC Stream (TS) owns the server and web client. TACTIC Handler (TH) is an
+independent native desktop client. This pack's OPERATIONS and executable recipe
+target TS. For TH automation use its client API, native objects and execution
+rules in [SOURCES](SOURCES.md#th-client-api-and-structures). Never substitute TH
+object methods for server methods. Your persisted result must make sense in
+both clients. The model-provider connection and permission to invoke tools are supplied
 by the host. This document does not create tools or grant permissions.
 
 ## Working procedure

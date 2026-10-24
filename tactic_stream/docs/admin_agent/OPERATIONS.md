@@ -1,10 +1,14 @@
-# Existing operations
+# Existing TS server operations
 
 Read only the sections needed for the current task. This is a reference for the
 agent and its host executor, not a list of new MCP tools. The host must bind
 allowed actions to these exact server operations and keep the ticket private.
 An operation absent from the host's tools cannot be invoked by naming it here.
-References: [API source index](SOURCES.md#api),
+These calls execute on Stream. TH's `get_api()` / `local()` and native object
+methods belong to a different client API: see [TH references](SOURCES.md#th-client-api-and-structures).
+Do not send a Handler object or handle as an HTTP payload, or assume a browser
+endpoint is a method on a TH object.
+References: [TS API source index](SOURCES.md#ts-server-api),
 [server methods](../../src/tactic_stream/server/api.py),
 [SDK](../../src/tactic_client_lib/tactic_server_stub.py),
 [transport guide](../../frontend/public/help/api_compatibility.en.md).

@@ -2,7 +2,8 @@
 
 This is the vocabulary needed to design a project. Values in examples are
 illustrative; discover the actual installation's identifiers through OPERATIONS.
-Deeper reference: [source index](SOURCES.md#structures) and
+This describes server entities; TH wrappers have their own API and lifecycle.
+Deeper reference: [TS structures](SOURCES.md#ts-server-structures) and
 [current core guide](../../frontend/public/help/core_model.en.md).
 
 ## Project, namespace and database

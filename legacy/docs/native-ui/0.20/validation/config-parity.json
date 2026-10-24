@@ -1,9 +1,0 @@
-{
-  "scope": "shipped file views plus same-file definitions; not live DB or rendered widgets",
-  "files": 80,
-  "views": 487,
-  "elements": 2911,
-  "checks": 11370,
-  "differences": [],
-  "errors": []
-}

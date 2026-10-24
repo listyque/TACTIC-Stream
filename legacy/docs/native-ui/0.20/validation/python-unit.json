@@ -1,7 +1,0 @@
-{
-  "passed": true,
-  "tests_run": 1304,
-  "seconds": 23.203,
-  "command": "python -W ignore -m unittest discover -s tests/native_ui -v",
-  "launcher_tests_included": 77
-}

@@ -1,6 +1,0 @@
-{
-  "changed_and_added_python_files_checked": 44,
-  "grammar": "3.9",
-  "errors": [],
-  "note": "Static parse, not proof of full server runtime compatibility"
-}

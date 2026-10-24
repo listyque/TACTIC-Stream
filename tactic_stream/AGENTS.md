@@ -1,411 +1,408 @@
 # TACTIC Stream
 
-- Tactic Frame раскладывать по `core`, `controls`, `shell`, `features/<раздел>`;
-  карта исходников и правила чтения — `src/tactic_stream/shared_ui/README.md`.
-  Общие модули, Vue-рендереры, стили и адаптеры админки форматировать через
-  `tools/format_tactic_frame.py`; перед фиксацией запускать его `--check`.
-  Не сжимать исходники в длинные однострочные блоки. Новые QML-компоненты класть
-  в соответствующие доменные каталоги, сохраняя публичные имена через `qmldir`.
+- Organize Tactic Frame into `core`, `controls`, `shell`, `features/<section>`;
+  the source map and reading rules are in `src/tactic_stream/shared_ui/README.md`.
+  Format shared modules, Vue renderers, styles and administration adapters with
+  `tools/format_tactic_frame.py`; run its `--check` before committing.
+  Do not compress source into long single-line blocks. Put new QML components
+  in their domain directories, preserving public names through `qmldir`.
 
-- Изменения Frame проверять `tools/frame_foundation/check_platform.py --handler-root
-  <checkout-ТХ>`: контракт, формат, копии, ввод/IME, виртуализация, resize,
-  smoke и независимая упаковка. Для выпуска дополнительно нужны связанные
-  пользовательские сценарии и свежие парные сравнения; совпадение деклараций
-  или статическая инвентаризация не означают готовность экрана. Не выдавать
-  отчёт с устаревшими отпечатками исходников за текущую проверку.
+- Check Frame changes with `tools/frame_foundation/check_platform.py --handler-root
+  <handler-checkout>`: contracts, formatting, copies, input/IME, virtualization,
+  resize, smoke tests and independent packaging. Releases also require related
+  user scenarios and fresh paired comparisons; matching declarations or a static
+  inventory do not prove a screen is ready. A report with stale source
+  fingerprints is not evidence for the current implementation.
 
-- Для общего QML/Vue UI соблюдать `docs/shared_ui_contract.md`: один скелет и
-  правила, нативные house controls в каждом движке, проверка настоящим вводом
-  и парными снимками. WebEngine/WebView/HTML внутри QML не использовать без
-  отдельного явного указания пользователя. Не выдавать обёртки двух независимых
-  экранов за общий скелет; ограничения и незавершённый перенос отмечать явно.
+- Follow `docs/shared_ui_contract.md` for shared QML/Vue UI: one skeleton and
+  rules, native house controls in each engine, real input and paired screenshots.
+  Do not use WebEngine/WebView/HTML inside QML without an explicit user request.
+  Wrappers around two independent screens are not a shared skeleton; identify
+  limitations and incomplete migration explicitly.
 
-- Уточнение пользователя 2026-10-13: соответствующие реализации ТХ и ТС делать
-  идентичными по компоновке, размерам, действиям и поведению. Проверять их рядом
-  на одинаковых данных, теме, языке, масштабе и размере окна; найденные различия
-  устранять в той же правке. Не объявлять идентичность по одной реализации.
+- User clarification, 2026-10-13: corresponding TH and TS implementations must
+  match in layout, dimensions, actions and behavior. Compare them side by side
+  with identical data, theme, language, scale and window size; fix differences
+  in the same change. Do not claim parity after checking only one implementation.
 
-- Уточнение пользователя 2026-10-11: найденные и указанные пользователем ошибки
-  проверять и исправлять одновременно в ТХ (`D:/code/th_codex`) и ТС.
-  Синхронизировать поведение соответствующих экранов, проверки и справку;
-  отсутствие соответствующего сценария явно отмечать, не объявлять полную паритетность.
+- User clarification, 2026-10-11: investigate and fix discovered and user-reported
+  bugs in both TH (`D:/grav/Tactic Stream/TH`) and TS. Synchronize equivalent screens,
+  checks and help; explicitly identify missing counterparts instead of claiming
+  complete parity.
 
-- Имя продукта — TACTIC Stream. Каталог и Python namespace — `tactic_stream`,
-  пакет и CLI — `tactic-stream`. Совместимые `pyasm`/`tactic` импорты сохраняются.
+- The product name is TACTIC Stream. The directory and Python namespace are
+  `tactic_stream`; the package and CLI are `tactic-stream`. Preserve compatible
+  `pyasm`/`tactic` imports.
 
-- Писать простой, читаемый сверху вниз код в стиле `tactic_classes.py` и
-  `tactic_query.py` из Handler. Прямые функции и методы; классы для предметных
-  сущностей и состояния. Без фабрик, интерфейсов с одной реализацией, сервисных
-  слоёв и конфигурации «на будущее».
-- Минимум обёрток и промежуточных вызовов, особенно в горячем пути API.
-  Исходные блоки логирования брать из легаси; не писать второй форматтер.
-  При сравнении скорости отдельно измерять метод и полный запрос:
-  исходный get_simple_cmd начинает Duration после ApiXMLRPC.init.
-- При ответах по-русски использовать женские формы от первого лица.
-- Приоритет пользователя 2026-10-10: работать крупными проверяемыми блоками.
-  Сначала завершить все восемь разделов Administration и связанные редакторы,
-  затем весь Configuration, затем рабочие панели. Для каждого блока снимать
-  свежие эталоны текущего QML Handler, сверять операции с исходным TACTIC,
-  документировать внутренние возможности в существующей EN/RU Help.
-  Backend дорабатывать по зависимостям текущего экрана; очередная мелкая правка
-  API сама по себе не означает завершение блока. Текущий план — в начале
-  UI_ARCHITECTURE.md. Дополнительные полезные возможности Stream сохранять.
-- Рабочий UI открывается по `/`, проекты — по `/projects/<код>/`, ресурсы UI —
-  по `/ui/`. Уточнение пользователя 2026-10-09: старые ссылки интерфейса не
-  поддерживать; не добавлять `/admin/` alias/redirect или query-project fallback.
-  Проект адреса берётся из пути, skey и параметры поиска сохраняются в query.
-- Интерфейс мультиязычный и мультитемный с самого начала. Английский —
-  исходный язык и fallback по умолчанию; русский — второй. Видимый текст,
-  сообщения, заголовки и aria-label проходят через общий переводчик, новые
-  строки добавляются во все поставляемые словари. Язык меняется без потери
-  состояния. Серверные данные, имена, коды и скрипты не переводить.
-- При разработке UI и его логики основной ориентир — существующий Tactic Handler
-  `D:\code\th_codex`: его UI/UX, пользовательские сценарии и поведение элементов.
-  Перед изменением соответствующего экрана изучать его реализацию и документацию
-  в Handler, затем адаптировать это поведение к Vue и XML-конфигам TACTIC Stream.
-  Код Handler использовать для изучения; изменения выполнять в TACTIC Stream.
-- Перенос экрана из Handler означает перенос всего его функционала и поведения,
-  а не упрощённую копию или несколько ссылок на общие таблицы. Перед реализацией
-  изучить исходный экран, вложенные компоненты, контроллеры и серверные процедуры;
-  составить перечень вкладок, операций, состояний и зависимостей. Переносить
-  целиком, включая связанные редакторы, preview, статистику, подтверждения,
-  черновики, ошибки и переходы. ПК/тач используют те же операции; жесты адаптируются.
-  Исключения — только явно согласованные пользователем функции/старые подсистемы.
-  Наличие меню, формы или backend метода не означает готовность экрана.
-  Незавершённый перенос прямо отмечать как незавершённый; не заменять недостающую
-  функцию заглушкой и не откладывать её молча ради перехода к следующему экрану.
-  Готовность проверять по пользовательским сценариям исходного экрана и внешнему
-  виду при одинаковых теме, масштабе и размере окна. Простой код и общие controls
-  обязательны, но не являются основанием сокращать запрошенный функционал.
-- Полезные отличия от Handler сохранять как дополнительные возможности с
-  доступным выбором и пояснением в UI/конфигурации; не оставлять только в коде.
-  Перед удалением уже сделанной возможности согласовать это с пользователем.
-- Уточнение пользователя 2026-10-09: сначала завершить подгонку desktop-диалогов,
-  контекстных меню объектов и управления доками, затем продолжать мобильную
-  адаптацию. Грип в строке поиска Results убрать, не превращать его в кнопку.
-  Управление панелями открывается из существующих трёх точек справа от поиска,
-  как SearchWorkspaceView.qml → DockMenu.qml текущего Handler.
-  Hover-автозакрытие навигации с исходным порогом 120px включать только после
-  первого pointerenter панели в текущем открытии: центральная кнопка пустого
-  workspace должна позволять довести курсор до списка без исчезновения панели.
-- Пропорции кнопок и центрирование иконок — общий контракт: у круглой кнопки
-  равны ширина и высота, круг не сжимается flex-контейнером; стили текстовых
-  строк/заголовков не применяются к icon-only. Размер контейнера AppIcon согласован
-  с размером шрифта, оптический масштаб берётся из текущего MaterialIcon.qml.
-  Не компенсировать смещение отдельных кнопок ручными margin/translate. Проверять
-  и контейнер, и рисунок глифа после загрузки всех официальных наборов шрифтов.
-  AppIcon внутри button/link/summary/role=button — декоративная часть действия:
-  pointer-events:none задаётся общим icons.css. Самостоятельная иконка поиска
-  с собственным обработчиком остаётся интерактивной. Проверять реальные клики
-  и тапы по координатам глифа, сохраняя нативный disabled.
-- Заметки объекта/процесса по умолчанию открываются в общем таск-инспекторе,
-  как в Handler. Дополнительное отдельное окно заметок доступно через
-  Appearance → Object notes; не подменять им основной сценарий инспектора.
-- Одно действие/тип контрола — один общий Vue-компонент с одинаковым поведением
-  и оформлением во всех местах. Переключатели — AppSwitch, выбор значения
-  в настройках — AppSelect, строка настройки с названием/пояснением — SettingRow.
-  Не создавать локальные версии этих виджетов или отдельные стили для экранов.
-  Быстрое меню оформления и полный конфиг используют AppearanceSettings.
-  Конфиг как в ТХ: отдельный полноэкранный dialog без проектного sidebar,
-  одна шапка Reset/Apply/Save/Cancel, навигация разделов слева, карточки
-  настроек справа; у каждой настройки есть пояснение. Технические детали
-  раскрываются через Help/Details. На маленьком экране разделы идут перед
-  настройками. Apply оставляет экран открытым; Save сохраняет и закрывает;
-  Cancel/Escape отменяет неприменённый черновик, включая preview оформления.
-- Систему компонентов строить по `D:/code/th_codex/docs/ui_component_policy.md`
-  и `ui_component_map.md`: общие controls → предметные компоненты → экраны →
-  хосты окон. Общие компоненты находятся в `frontend/src/controls`, экраны и их
-  предметные компоненты — рядом в `frontend/src/features/<раздел>`; `App.vue`
-  остаётся хостом приложения. Controls не вызывают API, не знают проектов,
-  SearchTypes и маршрутов. Предметные presenters получают данные/состояние от
-  экрана и испускают события; запросами и черновиками владеет один экран.
-  Серверная бизнес-логика остаётся в TACTIC. При изменении существующего экрана
-  применять общие controls, не копировать их markup/стили/жесты.
-  AppButton объединяет обычные и компактные кнопки: label/icon, iconOnly,
-  highlighted/destructive, нативные disabled/type, события и ARIA-атрибуты.
-  Темы, перевод, semantic icons и motion имеют существующих общих владельцев.
-  Не создавать пустые слои, barrel-алиасы, отдельный controller или фабрику
-  ради соответствия схеме QML; переносить границы ответственности на Vue.
-  Текущая карта и границы готовности — в UI_ARCHITECTURE.md.
-  JS поставляется отдельными чанками: /docs не загружает App.vue; условные
-  редакторы подключаются через общий asyncComponent с loading/error состоянием.
-  Для окна с imperative ref сначала загрузить и смонтировать компонент, затем
-  вызвать open; сохранять экземпляр и черновик при закрытии. Не превращать
-  постоянно используемые refs в асинхронные без проверки вызывающего кода.
-  JS сборка читаемая (minify:false) с source maps: DevTools должен разрешать
-  строку чанка в исходный Vue/JS. Имена модулей и хеш версии сохраняются;
-  `/ui/assets/*.js.map` отдаётся сервером. CSS минификация остаётся включённой.
-  AppMenu может размонтироваться действием собственного пункта до всплытия
-  click/отложенного toggle; эти обработчики не обращаются к уже пустому ref.
-- Уточнение пользователя 2026-10-08: рабочие модальные окна используют общий
-  WindowControls / v-window: перемещение за шапку, разворачивание на весь экран
-  и восстановление прежней геометрии. Подключать его во всех новых редакторах,
-  инспекторах и диалогах; не писать отдельные реализации перемещения/maximize.
-  Существующие native dialog refs и серверные/dirty guards сохранять. На узком
-  экране рабочее окно занимает доступный экран. Меню, sidebar и короткие
-  подтверждения остаются своими controls; docked sections не становятся окнами.
-- Админка, как Configuration, открывается отдельным полноэкранным dialog со
-  своей шапкой, выбором проекта и навигацией. Она не заменяет рабочий sidebar.
-  Закрытие возвращает исходный проект, представление, фильтры, сортировку,
-  страницу и выделение. Несохранённые правки защищены при закрытии и Escape.
-- Лейаут, навигация и взаимодействия — как у современного приложения; ориентир
-  — Tactic Handler. Файловые пути в настройках, API и UI используют `/`, включая
-  Windows. Сохранять UNC-префикс `//`; клиентские пути не resolve на сервере.
-- UI должен работать на маленьких мобильных экранах (320–360 px) и тачскринах:
-  адаптивный лейаут, сворачиваемая навигация, доступные без hover действия,
-  отсутствие горизонтального overflow страницы. По уточнению пользователя
-  размеры контролов брать из текущего QML Handler без увеличения тач-зон:
-  при необходимости пользователь использует масштабирование браузера.
-  Это сквозное требование ко всему проекту, не только конфигу. Нельзя требовать
-  мышь, правую кнопку, hover или drag-and-drop для выполнения операции: действия
-  доступны явными кнопками/меню, контекстное меню имеет обычный touch-вход,
-  перетаскивание — альтернативу выбора/перемещения через controls.
-  Основной жест — обычный тап; для контекстных действий максимум долгое
-  нажатие. Не вводить обязательные сложные жесты для основных операций.
-  Широкие таблицы прокручиваются внутри своего контейнера; формы и конфиг
-  перестраиваются в одну колонку. Проверять также touch-ввод в браузере.
-- Уточнение мобильного режима: это отдельная компоновка всего приложения, включая
-  Messages, задачи, заметки и настройки. На телефоне скрывать боковую полосу
-  быстрых разделов, рамки доков и управление их геометрией. Показывать одну
-  активную панель; открытые разделы выбирать через навигацию, второстепенные
-  действия — через меню. Не переносить всю настольную шапку на маленький экран.
-  Редакторы схем, интерфейсов, скриптов и сложные раскладки доступны с компьютера.
-  Чтение, обычное редактирование объектов, задачи и общение остаются доступными.
-  На телефоне Enter в сообщениях и заметках вставляет строку, отправка — явным
-  тапом. При смене ширины сохранять черновики и настольные предпочтения; скрытие
-  управления не должно терять данные. Мобильное скрытие не является ACL сервера.
-- Текущий порядок UI переноса: сначала базовые операции и их исходные XML
-  настройки (просмотр/add/edit и дальнейшие команды), затем виджеты ячеек и
-  поведение таблицы. ПКМ и явная кнопка меню открывают одни и те же операции.
-- Меню SObject сверять с Handler item_actions.py, операции — item_operations.py
-  и ItemCheckinDialogs.qml. ObjectOperations различает объект, процесс,
-  снапшот и instance-связь. Check-in идёт через общую CommitQueue, штатные
-  simple_checkin/FileCheckin и FileUndo, с захваченными ticket/project,
-  подтверждением ревизии и сохранением файлов при ошибке. Не подменять чекин
-  записью свойств и не перезаписывать чужие пути ради совпавшего naming.
-  Локальные папки/Watch Folder требуют desktop connection; Repository Sync
-  исключён. Relation Add files использует исходный IngestUploadCmd и общий
-  CommitQueue; создание/чекин/точная привязка проходят в одной Command transaction.
-  Правила config/ingest_rule и скрипты сохраняют контракт TH; совпадения ищутся
-  только в выбранной связи. Файлы/проект/ticket захватываются до постановки в очередь.
-  Глубокое Duplicate использует текущие пять шагов Handler и его native процедуры:
-  независимые файловые копии, точные связи/прямые дети, задачи/ветки заметок/вложения,
-  быстрый повтор с профилем по login/project/type без сохранения значений полей.
-  Native проверки и свежие QML/Chromium снимки — в UI_ARCHITECTURE.md.
-  Не объявлять это полным паритетом меню: file clipboard/path menu и Delete Whole Tree
-  ещё не перенесены. Цели Teleport редакторов сохранять в DOM при закрытии
-  админки: иначе повторное открытие направляет содержимое в удалённую панель.
-- Иконки — официальные шрифтовые наборы из ТХ (Material Design Icons,
-  Font Awesome Solid/Outline, Fluent Regular/Filled), выбор в Appearance.
-  Не рисовать собственные SVG для штатных действий. Общий владелец настроек
-  оформления — frontend/src/appearance.js; каталог — appearanceCatalog.js.
-- Основной визуальный язык — MD3; material5 — экспериментальная тема проекта
-  по примеру ТХ. Светлый/тёмный режим независим от темы. Цвета, размеры,
-  скругления, шрифты и motion брать из общих CSS токенов, без локальных палитр
-  в компонентах. Языки и темы расширяются через каталог и общие ресурсы.
-  Базовые значения сверять с thlib/ui/qml/Theme.qml и Typography.js в Handler:
-  Segoe UI, point sizes, смешивание поверхностей/акцентов и читаемый цвет
-  текста. Не подбирать похожие палитры и размеры на глаз. Сверять текущий QML
-  и свежие снимки реально открытого Handler, а не старые картинки документации.
-- Собирать новое ядро из нужных частей `../legacy`, сохраняя исходный смысл.
-  Максимально брать готовые исходные модули и методы целиком. Новую реализацию
-  писать только для необходимой адаптации runtime/драйверов и исправления багов;
-  не заменять готовую логику TACTIC собственными абстракциями.
-  Уточнение пользователя 2026-10-11: полную старую HTML оболочку больше не
-  переносить; уже работающие HTML методы и зависимости сохранять. Пункт 9
-  закрывает нужные контракты данных/команд/SQL и их права/откаты. MySQL (пункт 10)
-  отложен; после 9 следующим идёт 11.
-  Основной интерфейс — Vue. Уже работающие части старого HTML/JS API сохранять в
-  отдельном режиме совместимости для исходных виджетов; не смешивать его
-  runtime с Vue компонентами. get_widget/get_column_widgets сохраняют исходные
-  сигнатуры и форматы результатов. Подробности — UI_ARCHITECTURE.md.
-  По последующему уточнению пользователя HTML renderer можно исключить,
-  если реальным клиентам достаточно метаданных. Для ТХ не найдено рабочих
-  прямых вызовов HTML API, но query_EditWdg зависит от данных исходного EditWdg.
-  Не переносить HTML генерацию лишь ради этой зависимости: сначала сохранить
-  разрешение конфигов и метаданные. Исключение HTML API учитывать явно как
-  изменение объёма совместимости; не подменять HTML ответы JSON незаметно.
-- Интерфейс перестраивается из исходных widget configs во время работы, без
-  пересборки Vue: структура, элементы, параметры и действия определяются TACTIC.
-  WidgetConfig/WidgetConfigView остаются общим источником разрешения конфигов;
-  не создавать вторую систему конфигурации или предметной логики во frontend.
-  Современный UI получает описание, независимое от Vue и его версии; старые
-  API продолжают отдавать HTML. Новые renderers используют то же ядро и конфиги.
-  Исполнение произвольного старого Python/JS виджета учитывать отдельно от
-  поддержки его декларативной конфигурации, не объявлять совместимость заглушкой.
-- При обнаружении разрыва совместимости сначала проследить исходный вызов и
-  перенести его необходимые зависимости, настройки и этапы инициализации.
-  Не компенсировать неперенесённый конфиг или модуль выдуманными fallback
-  значениями в API. Метод возвращает исходный контракт; конфигурация и её
-  обновление живут в конфигурации/установке. Проверять на оригинальном ядре
-  и неизменённом клиентском вызове. Это правило действует для всего переноса.
-- Drupal CMS/session и коммерческая система лицензирования исключены из переноса:
-  не добавлять ключи, лимиты, лицензионные классы и `license_type`. Блокировка
-  аккаунтов использует `s_status = 'retired'`. Хеширование существующих паролей
-  сохранять независимо от названия алгоритма. Уведомления об авторских правах
-  перенесённого кода сохранять.
-- Уточнение пользователя 2026-10-07: Repository Sync из Handler исключён целиком.
-  Не переносить его UI/контроллеры, очередь синхронизации, шаблоны/presets,
-  редактор шаблонов, настройки, автоматический синк и специализированные
-  серверные процедуры. Вызовы из repository_sync*.py в инвентаризации Handler
-  не создают обязательства переносить эту подсистему. Общие файловые операции
-  TACTIC (check-in/check-out, snapshots, upload/download и пути repository)
-  и обычная серверная queue остаются частью ядра и API.
-- Уточнение пользователя 2026-10-09: S3 repository исключён из объёма переноса;
-  его отсутствие не считать незавершённым обязательным контрактом.
-- Внутренние механизмы документировать постепенно в существующей системе
-  справки `src/tactic_stream/web/help`, на русском и английском, с доступной
-  темой в каталоге: назначение, путь вызова, примеры, права и проверенные ограничения.
-- Уточнение пользователя 2026-10-13: Table View widgets переносить по проверяемым
-  примерам, со скриншотами и документацией в общем Widget Database справки.
-  Группировать по назначению, готовности и состоянию исходника. Явно недописанные
-  legacy-виджеты не переносить; фиксировать доказательство в каталоге.
-  TODO или pass у alias не являются доказательством: проверить наследование.
-- Уточнение пользователя 2026-10-13: рабочий чеклист Table View включает любой
-  табличный виджет, упомянутый в любом widget config — в definition, вложенных
-  конфигурациях и динамических/скриптовых ссылках тоже. Фиксировать все места
-  упоминаний и параметры; не ограничиваться основными таблицами CG. Согласованные
-  исключения и явно недописанные исходники сохраняются. Выполненное отображение
-  не закрывает общий inline editor, итоговые строки или действия виджета.
-- `Project`, `SearchType`, `Search`, `SObject`, search keys и реестр
-  `sthpw/search_object` — основа модели. Не заводить параллельные Asset/Task модели.
-- Ядро должно поддерживать разные СУБД через исходные `Sql`/`DbResource`/
-  `DatabaseImpl` и реализации vendors. SQLite — первая рабочая реализация,
-  а не ограничение продукта. SQL диалекты и особенности JSON/дат/DDL держать
-  в слое базы; объекты и пользовательские скрипты не должны знать vendor.
-  Минимум целевых СУБД — PostgreSQL и MySQL; следующая реализация — PostgreSQL.
-  Поддержку каждой СУБД объявлять только после проверок реального подключения,
-  транзакций, метаданных, CRUD и исходных контрактов на этой базе.
-- `Search`/`SObject`, API и неизменённые пользовательские скрипты должны иметь
-  одинаковую предметную логику на всех поддерживаемых СУБД. Первая установка
-  создаёт все необходимые системные базы, таблицы и исходные определения сама;
-  пользователь задаёт подключение и пароль администратора. Создание проектной
-  базы входит в команду создания проекта. Не требовать ручной подготовки SQL.
-- Сохранять названия и устройство ядра TACTIC: `search.py` содержит базовый
-  `SObject`, `Search`, `SearchType`; предметные классы в своих модулях наследуются
-  от этого SObject. Сохранять названия методов и привычные импорты `pyasm`.
-- Полная совместимость API 1:1 — цель. Совпадение сигнатур или успешный импорт
-  клиента не доказывают совпадения поведения.
-- При переносе исправлять найденные баги исходных модулей. Намеренные отличия
-  от ошибочного поведения оригинала явно описывать и проверять отдельными
-  ожиданиями в сравнительных тестах; не маскировать их под полное совпадение.
-- Сквозное требование: существующие кастомные серверные Python скрипты должны
-  запускаться без правок, как в оригинальном TACTIC. Совместимость включает
-  `pyasm`/`tactic` импорты, классы и наследование, объекты, методы, контекст
-  проекта/пользователя, результаты и ошибки, транзакции, триггеры и эффекты в БД.
-  Не менять пользовательские скрипты ради нового ядра. При переносе проверять
-  неизменённое тело скрипта в обоих ядрах на временных данных, сравнивая результат
-  и эффекты. Неперенесённые зависимости учитывать как незавершённую совместимость.
-- Сохранять публичный API оригинального TACTIC для любых существующих клиентов
-  и проектов. Объём переноса определять исходными контрактами TACTIC; Handler
-  использовать как один из интеграционных клиентов для проверки.
-- XML-RPC API, создание проектов и установка плагинов/шаблонов — отдельные
-  этапы. Сообщать пользователю о готовности каждого к проверке на его данных;
-  после этого подключаем ТХ. Способ установки плагинов не привязывать к XML-RPC.
-  Доступный сейчас транспорт чтения не считать готовностью создания проектов
-  или установки плагинов.
-- Инвентаризация 129 XML-RPC методов (128 исходных + исправленный get_ticket_data)
-  — текущий снимок одного транспорта.
-  Остальные публичные API/протоколы учитывать отдельно. Приоритеты переноса
-  определять зависимостями ядра и покрытием контрактов всего API.
-- Проверять перенос по исходному методу и реальному клиенту. Запись должна
-  сохранять транзакции, права и триггеры; простой SQL UPDATE не заменяет Command.
-- Неперенесённое поведение завершать явной ошибкой. Не выдавать заглушки за успех.
-- Сервер не должен импортировать `legacy` или Handler. Они нужны проверкам и
-  извлечению алгоритмов. Перенесённый код должен иметь источник и лицензию.
-- Пользовательские данные `legacy/local_data` не использовать для bootstrap,
-  тестов или экспериментов. Инициализация новой БД — только явной командой.
-- Проверки: `.venv\Scripts\python.exe -B -X utf8 -m unittest discover -s tests -v`.
-  Тест реального Handler требует соседний checkout `D:\code\th_codex`.
+- Write simple, top-down code in the style of Handler's `tactic_classes.py` and
+  `tactic_query.py`. Use direct functions and methods, with classes for domain
+  entities and state. No factories, single-implementation interfaces, service
+  layers or configuration for hypothetical future needs.
+- Minimize wrappers and intermediate calls, especially on the API hot path.
+  Reuse the original legacy logging blocks; do not write a second formatter.
+  Measure method time and total request time separately: the original
+  get_simple_cmd starts Duration after ApiXMLRPC.init.
+- When responding in Russian, use feminine first-person grammatical forms.
+- User priority, 2026-10-10: work in substantial, verifiable blocks. Complete
+  all eight Administration sections and their editors first, then all of
+  Configuration, then work panels. For each block, capture fresh references
+  from current QML Handler, compare operations with original TACTIC and document
+  internals in the existing EN/RU Help. Extend the backend according to the
+  current screen's dependencies; another small API fix does not complete a
+  block. Keep the working plan outside the repositories. Preserve useful
+  additional Stream capabilities.
+- The working UI opens at `/`, projects at `/projects/<code>/`, and UI resources
+  at `/ui/`. User clarification, 2026-10-09: do not support old interface URLs;
+  do not add an `/admin/` alias/redirect or query-project fallback. Resolve the
+  project from the path; retain skey and search parameters in the query string.
+- The UI supports multiple languages and themes from the start. English is the
+  source language and default fallback; Russian is the second language. Route
+  visible text, messages, headings and aria-labels through the shared translator;
+  add new strings to every shipped dictionary. Switching languages preserves
+  state. Do not translate server data, names, codes or scripts.
+- Existing Tactic Handler at `D:\grav\Tactic Stream\TH` is the primary reference for UI/UX,
+  user scenarios and control behavior. Before changing a corresponding screen,
+  inspect its Handler implementation and documentation, then adapt that behavior
+  to Vue and TACTIC Stream XML configurations. Use Handler code as a reference
+  when implementing Stream.
+- Migrating a Handler screen means its complete functionality and behavior,
+  not a simplified copy or a few links to generic tables. Inspect the original
+  screen, nested components, controllers and server procedures; inventory tabs,
+  operations, states and dependencies. Include related editors, preview,
+  statistics, confirmations, drafts, errors and navigation. Desktop and touch
+  use the same operations with adapted gestures. Only explicitly agreed
+  features/old subsystems may be excluded. A menu, form or backend method does
+  not prove a screen is ready. Mark incomplete migration explicitly; do not
+  replace missing functionality with placeholders or silently defer it to move
+  to another screen. Verify original user scenarios and appearance at identical
+  theme, scale and window size. Simple code and shared controls are mandatory
+  but do not justify reducing requested functionality.
+- Preserve useful differences from Handler as additional capabilities, with
+  accessible choices and explanations in the UI/configuration, not only in code.
+  Obtain the user's agreement before removing an implemented capability.
+- User clarification, 2026-10-09: finish desktop dialogs, object context menus
+  and dock controls before continuing mobile adaptation. Remove the Results
+  search-row grip; do not turn it into a button. Open panel controls through
+  the existing three dots to the right of search, as in current Handler's
+  SearchWorkspaceView.qml → DockMenu.qml. Enable navigation hover auto-close
+  with the original 120px threshold only after the first pointerenter during
+  that opening: the empty workspace's central button must allow the pointer
+  to reach the list without dismissing the panel.
+- Button proportions and icon centering are a shared contract: round buttons
+  have equal width/height and do not shrink in flex layouts; text-row/heading
+  styles do not apply to icon-only buttons. Align AppIcon container size with
+  font size; take optical scaling from current MaterialIcon.qml. Do not repair
+  individual offsets with manual margin/translate. Check the container and glyph
+  after all official font sets load. AppIcon inside button/link/summary/
+  role=button is decorative: shared icons.css supplies pointer-events:none.
+  A standalone search icon with its own handler remains interactive. Test real
+  clicks and taps at glyph coordinates while retaining native disabled behavior.
+- Object/process notes open in the shared task inspector by default, as in
+  Handler. The additional standalone notes window is available through
+  Appearance → Object notes; it must not replace the main inspector workflow.
+- One action/control type uses one shared Vue component, with consistent
+  behavior and appearance everywhere. Use AppSwitch for toggles, AppSelect for
+  settings choices, SettingRow for a setting's label/explanation. Do not make
+  local versions or per-screen styles. The quick appearance menu and full
+  configuration use AppearanceSettings. Configuration follows TH: a separate
+  full-screen dialog without the project sidebar, one Reset/Apply/Save/Cancel
+  header, section navigation on the left and settings cards on the right.
+  Every setting has an explanation; Help/Details reveals technical information.
+  On small screens sections precede settings. Apply keeps the screen open;
+  Save persists and closes; Cancel/Escape discards the unapplied draft,
+  including appearance preview.
+- Follow `D:/grav/Tactic Stream/TH/docs/ui_component_policy.md` and `ui_component_map.md`:
+  shared controls → domain components → screens → window hosts. Shared controls
+  live in `frontend/src/controls`; screens and their domain components live
+  together under `frontend/src/features/<section>`; `App.vue` remains the app
+  host. Controls do not call APIs or know projects, SearchTypes or routes.
+  Domain presenters receive data/state from the screen and emit events; one
+  screen owns requests and drafts. Server business logic stays in TACTIC.
+  Apply shared controls to changed screens; do not copy markup/styles/gestures.
+  AppButton handles normal/compact buttons: label/icon, iconOnly,
+  highlighted/destructive, native disabled/type, events and ARIA attributes.
+  Themes, translation, semantic icons and motion already have shared owners.
+  Do not add empty layers, barrel aliases, separate controllers or factories
+  just to match a QML diagram; carry responsibility boundaries over to Vue.
+  The current architecture map is in UI_ARCHITECTURE.md.
+  Ship JS in separate chunks: /docs does not load App.vue; conditional editors
+  use shared asyncComponent with loading/error states. For imperative window
+  refs, load and mount the component before calling open; retain the instance
+  and draft on close. Do not make frequently used refs asynchronous without
+  checking callers. JS builds remain readable (minify:false) with source maps:
+  DevTools must resolve chunk lines to original Vue/JS. Preserve module names
+  and version hashes; serve `/ui/assets/*.js.map`. CSS minification stays enabled.
+  AppMenu can unmount through its own action before click bubbles or a delayed
+  toggle runs; those handlers must not access an already empty ref.
+- User clarification, 2026-10-08: working modal windows use shared WindowControls
+  / v-window for dragging by the header, maximizing and restoring geometry.
+  Use it in every new editor, inspector and dialog; do not implement separate
+  dragging/maximizing. Preserve native dialog refs and server/dirty guards.
+  On narrow screens a working window fills the available screen. Menus,
+  sidebars and short confirmations retain their own controls; docked sections
+  do not become windows.
+- Administration, like Configuration, opens in a separate full-screen dialog
+  with its own header, project selection and navigation. It does not replace
+  the working sidebar. Closing restores the original project, view, filters,
+  sorting, page and selection. Guard unsaved changes on close and Escape.
+- Use modern application layout, navigation and interactions, with Handler as
+  the reference. Settings, APIs and UI use `/` in file paths, including Windows.
+  Preserve the UNC `//` prefix; do not resolve client paths on the server.
+- The UI must work on small mobile screens (320–360 px) and touchscreens:
+  responsive layouts, collapsible navigation, actions accessible without hover,
+  and no page-level horizontal overflow. Per the user's clarification, take
+  control dimensions from current QML Handler without enlarging touch targets;
+  users can zoom the browser if needed. This applies throughout the product,
+  not only Configuration. No operation may require a mouse, right-click, hover
+  or drag-and-drop: provide explicit buttons/menus, a normal touch entry to
+  context menus, and control-based selection/movement alternatives to dragging.
+  A normal tap is the primary gesture; context actions may require at most a
+  long press. Do not require complex gestures for basic operations. Wide tables
+  scroll inside their container; forms/configuration become a single column.
+  Test browser touch input too.
+- Mobile clarification: use a distinct layout for the whole application,
+  including Messages, tasks, notes and settings. Hide quick-section sidebars,
+  dock frames and geometry controls on phones. Show one active panel; select
+  open sections through navigation and secondary actions through menus. Do not
+  squeeze the complete desktop header onto a phone. Schema, interface and script
+  editors and complex layouts are available on desktop. Reading, ordinary
+  object editing, tasks and communication remain accessible. On phones Enter
+  adds a line in messages/notes; sending requires an explicit tap. Preserve
+  drafts and desktop preferences across width changes; hiding controls must
+  not lose data. Mobile visibility is not server ACL enforcement.
+- UI migration order: basic operations and their original XML settings first
+  (view/add/edit and subsequent commands), then cell widgets and table behavior.
+  Right-click and the explicit menu button open the same operations.
+- Compare SObject menus with Handler item_actions.py, operations with
+  item_operations.py and ItemCheckinDialogs.qml. ObjectOperations distinguishes
+  objects, processes, snapshots and instance relationships. Check-in uses shared
+  CommitQueue, native simple_checkin/FileCheckin and FileUndo, captured
+  ticket/project, revision confirmation and file preservation on error. Do not
+  replace check-in with property writes or overwrite another file because naming
+  produced the same path. Local folders/Watch Folder need a desktop connection;
+  Repository Sync is excluded. Relation Add files uses original IngestUploadCmd
+  and shared CommitQueue; creation/check-in/exact linking run in one Command
+  transaction. config/ingest_rule and scripts retain the TH contract; search
+  matches only inside the selected relationship. Capture files/project/ticket
+  before enqueueing. Deep Duplicate uses Handler's five steps and native
+  procedures: independent file copies, exact relationships/direct children,
+  tasks/note threads/attachments, and quick repeat with a login/project/type
+  profile without retaining field values. Keep native checks and fresh paired
+  QML/Chromium evidence. Do not infer complete menu parity: file clipboard/path
+  menus and Delete Whole Tree remain separate migration obligations. Retain
+  editor Teleport targets in the DOM when closing Administration; otherwise
+  reopening sends content into a removed panel.
+- Icons use TH's official font sets (Material Design Icons, Font Awesome
+  Solid/Outline, Fluent Regular/Filled), selected in Appearance. Do not draw
+  custom SVGs for standard actions. `frontend/src/appearance.js` owns appearance
+  settings; appearanceCatalog.js owns the catalogue.
+- MD3 is the main visual language; material5 is an experimental project theme
+  following TH. Light/dark mode is independent of theme. Use shared CSS tokens
+  for colors, dimensions, radii, fonts and motion; no component-local palettes.
+  Extend languages/themes through the catalogue and shared resources. Compare
+  baseline values with Handler thlib/ui/qml/Theme.qml and Typography.js: Segoe UI,
+  point sizes, surface/accent blending and readable text. Do not approximate
+  palettes/dimensions by eye. Compare current QML and fresh running-Handler
+  screenshots, not old documentation images.
+- Build the new core from the required parts of `../legacy`, preserving meaning.
+  Reuse complete original modules/methods wherever possible. New implementations
+  are for necessary runtime/driver adaptation and bug fixes; do not replace
+  working TACTIC logic with new abstractions. User clarification, 2026-10-11:
+  stop porting the complete old HTML shell; preserve working HTML methods and
+  dependencies. Item 9 covers required data/command/SQL contracts, permissions
+  and rollback. MySQL (item 10) is deferred; item 11 follows item 9.
+  Vue is the main interface. Preserve working legacy HTML/JS APIs in a separate
+  compatibility mode for original widgets; do not mix their runtime with Vue
+  components. get_widget/get_column_widgets retain original signatures and
+  result formats. A later user clarification allows excluding the HTML renderer
+  if real clients only require metadata. TH has no identified working direct
+  HTML API calls, but query_EditWdg depends on original EditWdg data. Do not port
+  HTML generation just for this dependency: preserve configuration resolution
+  and metadata first. Record HTML API exclusion as a compatibility scope change;
+  do not silently substitute JSON for HTML responses.
+- Rebuild the UI from original widget configs at runtime without rebuilding Vue:
+  TACTIC defines structure, elements, parameters and actions. WidgetConfig/
+  WidgetConfigView remain the shared configuration resolver; do not create a
+  second frontend configuration or business-logic system. Modern UI descriptions
+  are independent of Vue and its version; old APIs continue returning HTML.
+  New renderers use the same core/configs. Executing arbitrary old Python/JS
+  widgets is distinct from supporting their declarative configuration; a
+  placeholder does not establish compatibility.
+- On a compatibility gap, trace the original call first and port its necessary
+  dependencies, configuration and initialization steps. Do not compensate for
+  missing configs/modules with invented API fallback values. Methods return
+  the original contract; configuration/upgrades belong to configuration and
+  installation. Verify against the original core with an unchanged client call.
+  This applies to the entire migration.
+- Drupal CMS/session and commercial licensing are excluded: do not add keys,
+  limits, licensing classes or `license_type`. Disable accounts through
+  `s_status = 'retired'`. Preserve existing password hashing regardless of the
+  algorithm name. Preserve copyright notices in ported code.
+- User clarification, 2026-10-07: exclude Handler Repository Sync entirely:
+  UI/controllers, synchronization queue, templates/presets, template editor,
+  settings, automatic synchronization and dedicated server procedures.
+  repository_sync*.py calls in the Handler inventory do not create migration
+  obligations. Shared TACTIC file operations (check-in/check-out, snapshots,
+  upload/download and repository paths) and the ordinary server queue remain
+  part of the core/API.
+- User clarification, 2026-10-09: S3 repositories are excluded; their absence
+  is not an incomplete mandatory contract.
+- Document internals incrementally in existing `src/tactic_stream/web/help`,
+  in Russian and English, with an accessible catalogue topic: purpose, call
+  path, examples, permissions and verified limitations.
+- User clarification, 2026-10-13: port Table View widgets through verifiable
+  examples with screenshots and documentation in the shared Help Widget Database.
+  Group by purpose, readiness and original implementation state. Do not port
+  demonstrably unfinished legacy widgets; record evidence in the catalogue.
+  TODO or pass in an alias is not evidence: inspect inheritance.
+- User clarification, 2026-10-13: the Table View checklist covers every table
+  widget mentioned in any widget config, including definitions, nested configs
+  and dynamic/script references. Record all references and parameters; do not
+  restrict coverage to CG's main tables. Preserve agreed exclusions and proven
+  unfinished originals. Rendering alone does not complete a shared inline
+  editor, summary rows or widget actions.
+- `Project`, `SearchType`, `Search`, `SObject`, search keys and the
+  `sthpw/search_object` registry form the model. Do not add parallel Asset/Task
+  models.
+- Support database vendors through original `Sql`/`DbResource`/`DatabaseImpl`
+  and vendor implementations. SQLite is the first working implementation, not
+  a product restriction. Keep SQL dialect and JSON/date/DDL differences in the
+  database layer; objects and user scripts must not know the vendor. The original
+  targets were PostgreSQL and MySQL, with PostgreSQL next; the later MySQL
+  deferral above takes precedence. Claim vendor support only after real
+  connection, transaction, metadata, CRUD and original-contract checks on it.
+- `Search`/`SObject`, APIs and unchanged user scripts must have identical domain
+  semantics on supported databases. First installation creates all required
+  system databases, tables and initial definitions; the user supplies connection
+  details and an administrator password. The project creation command creates
+  its database. Do not require manual SQL preparation.
+- Preserve TACTIC core names and structure: `search.py` contains base `SObject`,
+  `Search`, `SearchType`; domain classes inherit that SObject in their respective
+  modules. Preserve method names and familiar `pyasm` imports.
+- Complete 1:1 API compatibility is the target. Matching signatures or a
+  successful client import do not prove behavioral equivalence.
+- Fix discovered original-module bugs while porting. Document intentional
+  differences from incorrect original behavior and use explicit separate
+  expectations in comparative tests; do not present them as identical behavior.
+- Existing custom server Python scripts must run unchanged, as in original
+  TACTIC: `pyasm`/`tactic` imports, classes/inheritance, objects, methods,
+  project/user context, results/errors, transactions, triggers and database
+  effects. Do not change user scripts to accommodate the new core. Execute
+  unchanged bodies in both cores on temporary data; compare results and effects.
+  Missing dependencies remain incomplete compatibility.
+- Preserve original TACTIC's public API for any existing client/project. Scope
+  migration by original TACTIC contracts; Handler is one integration client
+  used for verification.
+- XML-RPC API, project creation and plugin/template installation are separate
+  stages. Tell the user when each is ready for checks on their data, then connect
+  TH. Do not couple plugin installation to XML-RPC. A working read transport does
+  not prove project creation or plugin installation is ready.
+- The inventory of 129 XML-RPC methods (128 original plus corrected
+  get_ticket_data) is a snapshot of one transport. Track other public APIs and
+  protocols separately. Prioritize core dependencies and whole-API contract
+  coverage.
+- Verify each port against the original method and a real client. Writes preserve
+  transactions, permissions and triggers; plain SQL UPDATE does not replace
+  Command.
+- Unsupported behavior must fail explicitly. Do not return placeholder success.
+- The server must not import `legacy` or Handler; use them only for checks and
+  algorithm extraction. Ported code retains its source attribution and license.
+- Never use user data in `legacy/local_data` for bootstrap, tests or experiments.
+  Initialize a new database only through an explicit command.
+- Checks: `.venv\Scripts\python.exe -B -X utf8 -m unittest discover -s tests -v`.
+  Real Handler tests need its checkout; pass this workspace's path when a tool
+  defaults to the old `D:\code\th_codex` location.
 
-- Реализации ядра живут в исходных разделах `src/pyasm/common`, `search`, `biz`,
-  `security`, `command`; не складывать их плоско в tactic_stream и не заводить
-  вторые forwarding копии предметных модулей. `tactic_stream/server` содержит
-  HTTP/API, запуск и монитор процессов; ресурсы — config/compatibility/web.
-- Запуск проходит через TacticMonitor и собственный tactic-conf.xml. Проверять
-  падения/зависания/остановку только на временных данных и собственных процессах.
-- Любой сервер, запущенный агентом для проверки, останавливать в finally вместе
-  с его монитором, воркерами и launcher-процессом до завершения работы, включая
-  ошибку или таймаут проверки. После остановки проверять отсутствие собственных
-  дочерних процессов. Не оставлять проверочный запуск фоном. Уже запущенный
-  пользователем сервер использовать без создания второго экземпляра и не
-  останавливать ради очистки тестов. Долговременный запуск агентом — только
-  по явному запросу пользователя оставить сервер работающим.
-- Для небольшой правки UI достаточно сборки и относящейся к изменению браузерной
-  проверки. Полный набор ядра не запускать ради локальных изменений интерфейса.
+- Core implementations live in original sections `src/pyasm/common`, `search`,
+  `biz`, `security`, `command`; do not flatten them into tactic_stream or add
+  duplicate forwarding domain modules. `tactic_stream/server` owns HTTP/API,
+  startup and process monitoring; resources live in config/compatibility/web.
+- Start through TacticMonitor with its own tactic-conf.xml. Test crashes, hangs
+  and shutdown only with temporary data and processes owned by the test.
+- Stop every agent-started test server in finally, including its monitor,
+  workers and launcher, before finishing, even after failure/timeout. Verify
+  that its child processes are gone. Do not leave test servers running in the
+  background. Reuse a user-started server without creating another instance;
+  never stop it as test cleanup. Leave an agent-started server running only
+  when the user explicitly requests that.
+- A small UI change needs a build and the relevant browser check. Do not run the
+  complete core suite for a local interface change.
 
-- Старый production-слой исключён по уточнению пользователя: Asset/Shot/Texture,
-  production-схемы, Flash/Maya naming, SessionContents, commit_session/get_md5_info.
-  Проекты создавать через CreateProjectCmd, админку, плагины и шаблоны.
-  Не возвращать этот слой ради заполнения инвентаризации API. Исключения отмечать
-  явно; pyasm.prod.service.ApiXMLRPC и deprecated ProdSetting — действующие
-  пути импорта API/проектных настроек, их namespace не означает production-схему.
+- The user excluded the old production layer: Asset/Shot/Texture, production
+  schemas, Flash/Maya naming, SessionContents, commit_session/get_md5_info.
+  Create projects through CreateProjectCmd, Administration, plugins and templates.
+  Do not restore that layer to fill an API inventory. Record exclusions explicitly.
+  The original exception for pyasm.prod.service.ApiXMLRPC and deprecated
+  ProdSetting imports was superseded by the following clarification.
 
-- Последующее уточнение пользователя: каталог и импорты `pyasm.prod` исключены
-  полностью, без алиасов. Действующий API живёт в `pyasm.web.api_xmlrpc`,
-  настройки проектов — `pyasm.biz.ProjectSetting`; `config/prod_setting` остаётся
-  действующим search type. Deprecated ProdSetting/ProdNodeNaming не возвращать.
-  Это заменяет прежнее требование сохранять namespace `pyasm.prod`.
+- Later user clarification: exclude the `pyasm.prod` directory and imports
+  completely, without aliases. The active API lives in `pyasm.web.api_xmlrpc`;
+  project settings use `pyasm.biz.ProjectSetting`. `config/prod_setting` remains
+  a valid search type. Do not restore deprecated ProdSetting/ProdNodeNaming.
 
-- Неиспользуемый класс SnapshotType и справочник `sthpw/snapshot_type` исключены.
-  Поле snapshot_type у Snapshot/check-in/naming сохраняется. TransactionState
-  используется в start/finish/abort/set_state и остаётся частью ядра.
+- Unused SnapshotType and `sthpw/snapshot_type` are excluded. Retain the
+  snapshot_type field in Snapshot/check-in/naming. TransactionState remains
+  part of the core for start/finish/abort/set_state.
 
-- Неиспользуемый FileAccess и `sthpw/file_access` исключены: рабочего API и
-  вызывающего кода нет. `sthpw/interaction` остаётся для действующих
-  add_interaction/get_interaction_count.
+- Unused FileAccess and `sthpw/file_access` are excluded: they have no working
+  API/callers. Keep `sthpw/interaction` for add_interaction/get_interaction_count.
 
-- Комплекты и критерий готовности зафиксированы в HANDLER_DEPLOYMENT.md:
-  локальный Windows EXE/Vue/Electron + комплектный Python/headless TACTIC/SQLite
-  и серверный Apache/headless TACTIC/PostgreSQL. Готовый Handler включать в
-  локальную поставку, используя его существующий запуск и presets. Его код,
-  подключение и пользовательские настройки не переписывать. Проект выбирается
-  текущим механизмом Handler отдельно от server preset. Launcher управляет
-  локальным сервером; удалённым управляет серверное окружение. Vue и Handler
-  используют один backend, права, БД и repository. XML-RPC/UploadServer маршруты
-  не перехватываются Vue. Инвентаризация вызовов не заменяет проверки поведения;
-  отдельные интеграционные проверки не доказывают готовность GUI/EXE поставки.
+- HANDLER_DEPLOYMENT.md defines bundles and acceptance criteria: local Windows
+  EXE/Vue/Electron + bundled Python/headless TACTIC/SQLite, and server-side
+  Apache/headless TACTIC/PostgreSQL. Bundle existing Handler with the local
+  edition using its existing launcher/presets. Do not rewrite its code,
+  connection or user settings. Handler selects the project separately from the
+  server preset through its current mechanism. The launcher manages the local
+  server; the server environment manages remote servers. Vue and Handler share
+  one backend, permissions, database and repository. Vue must not intercept
+  XML-RPC/UploadServer routes. A call inventory does not replace behavioral
+  checks; isolated integration tests do not prove GUI/EXE bundle readiness.
 
-- Дополнение по AI-помощнику закреплено в UI_ARCHITECTURE.md, раздел
-  «API для AI-помощника». Общие операции headless TACTIC через существующие
-  Search/SObject/Command/Security, одинаковый контракт SQLite/PostgreSQL;
-  XML-RPC Handler не менять. Модель подключается заменяемым внешним адаптером,
-  MCP тонко вызывает те же операции и использует те же схемы.
-  Контекст выборочный и фильтруется по объектам/полям/исходникам и правам.
-  Draft, validate, preview, apply, script test и activation раздельны.
-  Preview использует тот же динамический Vue-renderer. История/ревизии
-  обновляются в общем пути всех записей, включая XML-RPC/native scripts/import;
-  apply атомарно проверяет исходные ревизии/зависимости, повтор устойчиво
-  идемпотентен между workers/рестартами. Naming проверяет штатный движок
-  с динамическим контекстом/TSQL/scripts, без постоянного кэша готовых путей.
-  Mako/subprocess/rollback не считать sandbox: пробное исполнение требует
-  проверенной изоляции ОС и тестовых данных, лимитов и журнала. AI не получает
-  прав сверх выданных пользователю; активация отдельно проверяет execute.
-  Наличие этих требований/схем в документации не объявлять готовностью API.
+- AI assistant requirements: use existing headless TACTIC Search/SObject/
+  Command/Security operations with the same SQLite/PostgreSQL contract; retain
+  Handler XML-RPC. Connect the model through a replaceable external adapter;
+  MCP thinly calls the same operations with the same schemas. Select context
+  by objects/fields/source and permissions. Keep draft, validate, preview,
+  apply, script test and activation separate. Preview uses the normal dynamic
+  Vue renderer. Update history/revisions in the shared write path, including
+  XML-RPC/native scripts/import. Apply atomically checks source revisions and
+  dependencies; retries must be durably idempotent across workers/restarts.
+  Naming uses its native engine with dynamic context/TSQL/scripts, without a
+  persistent cache of resolved paths. Mako/subprocess/rollback are not sandboxes:
+  trial execution requires verified OS isolation, test data, limits and a log.
+  AI receives no more authority than the user; activation separately checks
+  execute permission. Documenting these requirements/schemas does not mean
+  those APIs have been implemented.
 
-- Инструкция для агента-администратора — `docs/admin_agent/START.md`, а не этот
-  AGENTS или UI_ARCHITECTURE. `MODEL.md` объясняет предметную модель;
-  `OPERATIONS.md` и `RECIPES.md` читаются по задаче. В этот комплект не добавлять
-  backlog, историю релизов, журналы работ и будущие методы под видом доступных.
-  При изменении описанного контракта обновлять соответствующий раздел и проверять
-  затронутые примеры. Сохранять компактность: START + MODEL до 16 KiB,
-  четыре основных файла до 40 KiB; отдельный `SOURCES.md` до 16 KiB содержит
-  ссылки и указатели для чтения по задаче, включая baseline/ограничения источника.
-  Подробный перечень методов получать через discovery.
+- The administrator agent starts at `docs/admin_agent/START.md`, not this AGENTS
+  or UI_ARCHITECTURE. `MODEL.md` explains the domain; read `OPERATIONS.md` and
+  `RECIPES.md` as needed. Do not add backlog, release history, work journals or
+  future methods presented as available capabilities. Update the relevant
+  section and verify affected examples when a described contract changes.
+  Keep START + MODEL within 16 KiB, the four core files within 40 KiB; separate
+  `SOURCES.md` stays within 16 KiB and links task-specific references with their
+  baselines/limitations. Retrieve detailed method inventories through discovery.
 
-- Настройки серверного XML-конфига должны быть видны в админке, с понятными
-  названиями, описаниями, ключами, defaults, единицами и необходимостью
-  перезапуска. Новую поддержанную опцию добавлять в server/configuration.py
-  и общий русский словарь; отличать config values от фактически запущенных
-  параметров/CLI overrides. Неизвестные и неперенесённые параметры не выдавать
-  за работающие. Секреты и их файлы не раскрывать. Доступ только admin через
-  существующую авторизацию. Редактируются только поддержанные поля из EDITABLE
-  в server/configuration.py: сервисы, сеть, клиентские пути, безопасность и
-  расписание. Значения проверяются до записи; сервисы и repository web routes
-  используют общий валидатор запуска, требуется исходная ревизия XML.
-  Все штатные записи конфига используют общую межпроцессную блокировку и
-  атомарную публикацию; Config.save_config также сохраняет предыдущий XML.
-  Не перезапускать сервер автоматически при сохранении. Смена БД или
-  repository root не заменяет миграцию данных; они, алиасы корней и plugin root
-  пока read-only в UI. Секреты редактируются без чтения текущего значения;
-  удаление секрета — явное действие. Черновики сохраняются между разделами.
+- Server XML configuration must appear in Administration with understandable
+  names, descriptions, keys, defaults, units and restart requirements. Add new
+  supported options to server/configuration.py and the shared Russian dictionary.
+  Distinguish configured values from running parameters/CLI overrides. Do not
+  imply unknown or unported options work. Never expose secrets or their files.
+  Access is admin-only through existing authorization. Only supported EDITABLE
+  fields in server/configuration.py may be edited: services, networking, client
+  paths, security and scheduling. Validate before writing; services and repository
+  web routes use the shared startup validator and require the original XML
+  revision. All normal config writes use a shared interprocess lock and atomic
+  publication; Config.save_config also keeps the previous XML. Do not restart
+  automatically on save. Changing databases/repository roots is not data
+  migration; they, root aliases and plugin root remain read-only in the UI.
+  Edit secrets without reading their current value; removing one is explicit.
+  Preserve drafts between sections.
+
+- Agent instructions and maintained engineering contracts are written in English.
+  Keep TH client APIs/help/internal objects distinct from TS server APIs/help/core
+  structures; shared Tactic Frame descriptions do not make their runtimes or
+  transport contracts interchangeable. Preserve product EN/RU help and translation
+  dictionaries. Keep agent backlog, handoffs and work journals outside both Git
+  repositories in the workspace's `agent-work/` directory; do not embed them in
+  README files or product documentation. Do not ship that directory in bundles.
