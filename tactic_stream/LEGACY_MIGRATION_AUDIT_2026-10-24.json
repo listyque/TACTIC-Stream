@@ -1,0 +1,3463 @@
+{
+  "format": "legacy-migration-audit",
+  "date": "2026-10-24",
+  "runtime_unchanged": true,
+  "baseline": {
+    "stream_commit": "cd3e9f8e47dee020a71206bc6c03af9c2f308258",
+    "handler_commit": "98bf4c05e3efb15366b64ae79172f1582ba03f03",
+    "stream": "0.112.195",
+    "handler": "0.6.0.142"
+  },
+  "provenance": {
+    "original_runtime": "legacy/.runtime/python/python.exe on an isolated temporary fixture; no legacy/local_data access",
+    "original_handler_archive": "backups/2026-10-15_103116_before_shared_ui_foundation/TH_git_HEAD_reference.zip",
+    "original_handler_archive_sha256": "910e61c6fa96b00bd7c48468fd9b315fe1f08eaeb09aba1a4e2108af90aab057",
+    "native_gui_comparison": "Exact previous and current controller projections; no full fresh native UI acceptance",
+    "browser": "Actual Chromium DOMParser executing the current definition editor functions; no full fresh application acceptance",
+    "rpc": "XML-RPC wire envelopes through current ASGI endpoint; packets reproduce legacy SDK language and trailing-kwargs conventions; no live legacy browser session"
+  },
+  "api_inventory": {
+    "methods": 129,
+    "statuses": {
+      "partial": 127,
+      "excluded": 2
+    },
+    "full_api_parity_verified": false
+  },
+  "structural_methods": {
+    "scope": "Declared public methods only; inherited availability checked in current runtime. Absent methods are structural gaps, not complete behavioral coverage. Deprecated and unreachable source methods require triage.",
+    "classes": [
+      {
+        "original": "legacy/src/pyasm/search/search.py",
+        "current": "pyasm.search.search.Search",
+        "declared_public": 89,
+        "missing": [
+          {
+            "name": "set_search_done",
+            "line": 313
+          },
+          {
+            "name": "get_project",
+            "line": 327
+          },
+          {
+            "name": "set_filter_mode",
+            "line": 347
+          },
+          {
+            "name": "get_code_col",
+            "line": 385
+          },
+          {
+            "name": "set_distinct_col",
+            "line": 412
+          },
+          {
+            "name": "get_column_info",
+            "line": 416
+          },
+          {
+            "name": "remove_where",
+            "line": 433
+          },
+          {
+            "name": "get_regex_filter",
+            "line": 448
+          },
+          {
+            "name": "add_interval_filter",
+            "line": 740
+          },
+          {
+            "name": "add_dates_overlap_filter",
+            "line": 1383
+          },
+          {
+            "name": "add_distinct_filter",
+            "line": 1493
+          },
+          {
+            "name": "add_keyword_filter",
+            "line": 1497
+          },
+          {
+            "name": "add_startswith_keyword_filter",
+            "line": 1540
+          },
+          {
+            "name": "add_text_search_filter",
+            "line": 1604
+          },
+          {
+            "name": "add_text_search_filters",
+            "line": 1610
+          },
+          {
+            "name": "remove_order_bys",
+            "line": 1830
+          },
+          {
+            "name": "get_order_bys",
+            "line": 1837
+          },
+          {
+            "name": "set_show_retired_flag",
+            "line": 1852
+          },
+          {
+            "name": "do_search",
+            "line": 1862
+          },
+          {
+            "name": "get_eval_cache",
+            "line": 2090
+          },
+          {
+            "name": "skip_retired",
+            "line": 2098
+          },
+          {
+            "name": "get_dataframe",
+            "line": 2183
+          },
+          {
+            "name": "get_by_value",
+            "line": 2259
+          },
+          {
+            "name": "get_compound_filter",
+            "line": 2320
+          },
+          {
+            "name": "get_search_by_db_resource",
+            "line": 2533
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/search/search.py",
+        "current": "pyasm.search.search.SObject",
+        "declared_public": 146,
+        "missing": [
+          {
+            "name": "get_base_parent_search_type",
+            "line": 2985
+          },
+          {
+            "name": "get_attr",
+            "line": 3068
+          },
+          {
+            "name": "get_attr_names",
+            "line": 3083
+          },
+          {
+            "name": "get_format_value",
+            "line": 3398
+          },
+          {
+            "name": "set_expr_value",
+            "line": 3682
+          },
+          {
+            "name": "eval_expression",
+            "line": 3708
+          },
+          {
+            "name": "eval",
+            "line": 3714
+          },
+          {
+            "name": "update",
+            "line": 4863
+          },
+          {
+            "name": "get_delete_statement",
+            "line": 5065
+          },
+          {
+            "name": "get_int_values",
+            "line": 5356
+          },
+          {
+            "name": "get_dict",
+            "line": 5369
+          },
+          {
+            "name": "get_by_statement",
+            "line": 5757
+          },
+          {
+            "name": "get_required_columns",
+            "line": 6026
+          },
+          {
+            "name": "has_versionless",
+            "line": 6032
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/search/search.py",
+        "current": "pyasm.search.search.SearchType",
+        "declared_public": 44,
+        "missing": [
+          {
+            "name": "sequence_setval",
+            "line": 6165
+          },
+          {
+            "name": "sequence_nextval",
+            "line": 6170
+          },
+          {
+            "name": "sequence_currval",
+            "line": 6176
+          },
+          {
+            "name": "sequence_util",
+            "line": 6183
+          },
+          {
+            "name": "get_label",
+            "line": 6487
+          },
+          {
+            "name": "get_search_type_code_col",
+            "line": 6514
+          },
+          {
+            "name": "set_global_template",
+            "line": 6728
+          },
+          {
+            "name": "get_global_template",
+            "line": 6736
+          },
+          {
+            "name": "break_up_key",
+            "line": 6749
+          },
+          {
+            "name": "get_schema_config",
+            "line": 6763
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/search/sql.py",
+        "current": "pyasm.search.sql.Select",
+        "declared_public": 37,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/pyasm/search/sql.py",
+        "current": "pyasm.search.sql.Sql",
+        "declared_public": 48,
+        "missing": [
+          {
+            "name": "set_default_vendor",
+            "line": 243
+          },
+          {
+            "name": "default_database_exists",
+            "line": 254
+          },
+          {
+            "name": "get_default_database_version",
+            "line": 261
+          },
+          {
+            "name": "get_default_database_type",
+            "line": 267
+          },
+          {
+            "name": "get_database_version",
+            "line": 286
+          },
+          {
+            "name": "get_columns",
+            "line": 348
+          },
+          {
+            "name": "get_table_info",
+            "line": 387
+          },
+          {
+            "name": "get_column_nullables",
+            "line": 407
+          },
+          {
+            "name": "reset_sequence_for_table",
+            "line": 635
+          },
+          {
+            "name": "modify_column",
+            "line": 647
+          },
+          {
+            "name": "update_single",
+            "line": 901
+          },
+          {
+            "name": "dump",
+            "line": 956
+          },
+          {
+            "name": "get_tables",
+            "line": 1089
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/common/common.py",
+        "current": "pyasm.common.common.Common",
+        "declared_public": 55,
+        "missing": [
+          {
+            "name": "is_python3",
+            "line": 96
+          },
+          {
+            "name": "get_python",
+            "line": 100
+          },
+          {
+            "name": "get_next_sobject_code",
+            "line": 119
+          },
+          {
+            "name": "add_func_to_class",
+            "line": 317
+          },
+          {
+            "name": "get_import_from_class_path",
+            "line": 370
+          },
+          {
+            "name": "relative_dir",
+            "line": 386
+          },
+          {
+            "name": "relative_path",
+            "line": 430
+          },
+          {
+            "name": "pathname2url",
+            "line": 618
+          },
+          {
+            "name": "download",
+            "line": 633
+          },
+          {
+            "name": "get_user_name",
+            "line": 685
+          },
+          {
+            "name": "get_os",
+            "line": 709
+          },
+          {
+            "name": "escape_quote",
+            "line": 713
+          },
+          {
+            "name": "escape_tag",
+            "line": 719
+          },
+          {
+            "name": "sort_dict",
+            "line": 725
+          },
+          {
+            "name": "subset_dict",
+            "line": 745
+          },
+          {
+            "name": "clean_filesystem_name",
+            "line": 904
+          },
+          {
+            "name": "expand_env",
+            "line": 978
+          },
+          {
+            "name": "convert_to_strings",
+            "line": 1035
+          },
+          {
+            "name": "convert_to_json",
+            "line": 1045
+          },
+          {
+            "name": "pretty_print",
+            "line": 1083
+          },
+          {
+            "name": "get_pretty_print",
+            "line": 1092
+          },
+          {
+            "name": "extract_dict",
+            "line": 1176
+          },
+          {
+            "name": "total_size",
+            "line": 1238
+          },
+          {
+            "name": "pluralize",
+            "line": 1340
+          },
+          {
+            "name": "which",
+            "line": 1424
+          },
+          {
+            "name": "kill",
+            "line": 1444
+          },
+          {
+            "name": "restart",
+            "line": 1470
+          },
+          {
+            "name": "run_mako",
+            "line": 1498
+          },
+          {
+            "name": "unencrypt_password",
+            "line": 1561
+          },
+          {
+            "name": "encrypt_password",
+            "line": 1592
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/common/environment.py",
+        "current": "pyasm.common.environment.Environment",
+        "declared_public": 53,
+        "missing": [
+          {
+            "name": "initialize_python_path",
+            "line": 61
+          },
+          {
+            "name": "initialize",
+            "line": 74
+          },
+          {
+            "name": "get_python_exec",
+            "line": 147
+          },
+          {
+            "name": "get_transfer_mode",
+            "line": 155
+          },
+          {
+            "name": "get_context_name",
+            "line": 168
+          },
+          {
+            "name": "get_command_key",
+            "line": 173
+          },
+          {
+            "name": "is_first_run",
+            "line": 185
+          },
+          {
+            "name": "get_sobject_database",
+            "line": 192
+          },
+          {
+            "name": "has_tactic_database",
+            "line": 200
+          },
+          {
+            "name": "get_config_dir",
+            "line": 214
+          },
+          {
+            "name": "get_config_path",
+            "line": 219
+          },
+          {
+            "name": "get_licence_dir",
+            "line": 225
+          },
+          {
+            "name": "get_site_dir",
+            "line": 238
+          },
+          {
+            "name": "set_app_server",
+            "line": 252
+          },
+          {
+            "name": "get_sandbox_dir",
+            "line": 415
+          },
+          {
+            "name": "get_upgrade_dir",
+            "line": 501
+          },
+          {
+            "name": "get_win32_client_repo_dir",
+            "line": 599
+          },
+          {
+            "name": "get_client_repo_dir",
+            "line": 607
+          },
+          {
+            "name": "get_api_mode",
+            "line": 769
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/common/lxml_wrapper.py",
+        "current": "pyasm.common.lxml_wrapper.Xml",
+        "declared_public": 43,
+        "missing": [
+          {
+            "name": "get_xml_library",
+            "line": 54
+          },
+          {
+            "name": "cache_xml",
+            "line": 108
+          },
+          {
+            "name": "create_data_element",
+            "line": 193
+          },
+          {
+            "name": "create_comment",
+            "line": 204
+          },
+          {
+            "name": "rename_node",
+            "line": 211
+          },
+          {
+            "name": "dump",
+            "line": 381
+          },
+          {
+            "name": "get_node_xml",
+            "line": 531
+          },
+          {
+            "name": "to_html",
+            "line": 548
+          },
+          {
+            "name": "parse_html",
+            "line": 568
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/tactic/core/widget_config.py",
+        "current": "pyasm.widget.widget_config.WidgetConfig",
+        "declared_public": 38,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/tactic/core/widget_config.py",
+        "current": "pyasm.widget.widget_config.WidgetConfigView",
+        "declared_public": 39,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/pyasm/biz/snapshot.py",
+        "current": "pyasm.biz.snapshot.Snapshot",
+        "declared_public": 91,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/pyasm/biz/file.py",
+        "current": "pyasm.biz.file.File",
+        "declared_public": 25,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/pyasm/biz/task.py",
+        "current": "pyasm.biz.task.Task",
+        "declared_public": 31,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/pyasm/biz/pipeline.py",
+        "current": "pyasm.biz.pipeline.Pipeline",
+        "declared_public": 47,
+        "missing": [
+          {
+            "name": "on_updateX",
+            "line": 340
+          },
+          {
+            "name": "on_insertX",
+            "line": 379
+          },
+          {
+            "name": "on_deleteX",
+            "line": 409
+          },
+          {
+            "name": "check_circular_dependency",
+            "line": 540
+          },
+          {
+            "name": "get_input_snapshots",
+            "line": 1223
+          },
+          {
+            "name": "get_process_name_dict",
+            "line": 1472
+          },
+          {
+            "name": "get_process_select_data",
+            "line": 1515
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/biz/project.py",
+        "current": "pyasm.biz.project.Project",
+        "declared_public": 51,
+        "missing": [
+          {
+            "name": "is_admin",
+            "line": 41
+          },
+          {
+            "name": "get_resource",
+            "line": 60
+          },
+          {
+            "name": "get_type",
+            "line": 175
+          },
+          {
+            "name": "get_user_projects",
+            "line": 291
+          },
+          {
+            "name": "get_project_filter",
+            "line": 329
+          },
+          {
+            "name": "get_reg_hours",
+            "line": 447
+          },
+          {
+            "name": "set_global_project_code",
+            "line": 498
+          },
+          {
+            "name": "get_global_project_code",
+            "line": 504
+          },
+          {
+            "name": "extract_base_search_type",
+            "line": 556
+          },
+          {
+            "name": "extract_host",
+            "line": 582
+          },
+          {
+            "name": "extract_database",
+            "line": 589
+          },
+          {
+            "name": "get_database_by_search_type",
+            "line": 607
+          },
+          {
+            "name": "get_all",
+            "line": 875
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/biz/schema.py",
+        "current": "pyasm.biz.schema.Schema",
+        "declared_public": 31,
+        "missing": [
+          {
+            "name": "add_dependencies",
+            "line": 454
+          },
+          {
+            "name": "insert_trigger",
+            "line": 1121
+          },
+          {
+            "name": "edit_trigger",
+            "line": 1170
+          },
+          {
+            "name": "update_children_code",
+            "line": 1205
+          },
+          {
+            "name": "get_prod_schema",
+            "line": 1302
+          },
+          {
+            "name": "get_unittest_schema",
+            "line": 1307
+          }
+        ]
+      },
+      {
+        "original": "legacy/src/pyasm/biz/expression.py",
+        "current": "pyasm.biz.expression.ExpressionParser",
+        "declared_public": 17,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/pyasm/command/command.py",
+        "current": "pyasm.command.command.Command",
+        "declared_public": 33,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/pyasm/command/trigger.py",
+        "current": "pyasm.command.trigger.Trigger",
+        "declared_public": 36,
+        "missing": []
+      },
+      {
+        "original": "legacy/src/pyasm/search/database_impl.py",
+        "current": "pyasm.search.database_impl.DatabaseImpl",
+        "declared_public": 39,
+        "missing": [
+          {
+            "name": "get_database_type",
+            "line": 70
+          },
+          {
+            "name": "get_version",
+            "line": 74
+          },
+          {
+            "name": "process_value",
+            "line": 129
+          },
+          {
+            "name": "process_date",
+            "line": 144
+          },
+          {
+            "name": "get_id_col",
+            "line": 151
+          },
+          {
+            "name": "get_code_col",
+            "line": 158
+          },
+          {
+            "name": "get_schema_dir",
+            "line": 182
+          },
+          {
+            "name": "import_sql_file",
+            "line": 192
+          },
+          {
+            "name": "set_autocommit",
+            "line": 260
+          },
+          {
+            "name": "commit_on_schema_change",
+            "line": 264
+          },
+          {
+            "name": "has_sequences",
+            "line": 268
+          },
+          {
+            "name": "get_table_info",
+            "line": 271
+          },
+          {
+            "name": "database_exists",
+            "line": 275
+          },
+          {
+            "name": "clear_table_cache",
+            "line": 314
+          },
+          {
+            "name": "get_column_types",
+            "line": 351
+          },
+          {
+            "name": "has_savepoint",
+            "line": 359
+          },
+          {
+            "name": "set_savepoint",
+            "line": 362
+          },
+          {
+            "name": "rollback_savepoint",
+            "line": 368
+          },
+          {
+            "name": "release_savepoint",
+            "line": 374
+          },
+          {
+            "name": "get_constraints",
+            "line": 385
+          },
+          {
+            "name": "handle_pagination",
+            "line": 391
+          },
+          {
+            "name": "get_id_override_statement",
+            "line": 394
+          },
+          {
+            "name": "get_constraint",
+            "line": 397
+          },
+          {
+            "name": "get_regex_filter",
+            "line": 405
+          },
+          {
+            "name": "get_parent_cte",
+            "line": 420
+          },
+          {
+            "name": "get_child_cte",
+            "line": 452
+          },
+          {
+            "name": "get_columns",
+            "line": 590
+          },
+          {
+            "name": "can_join",
+            "line": 621
+          },
+          {
+            "name": "can_search_types_join",
+            "line": 654
+          }
+        ]
+      }
+    ]
+  },
+  "declaration_inventory": {
+    "scope": "Qualified class references in shipped config/config2/plugins/contrib and template archives. Static references include comments and inactive code. Metadata adapters may support a declaration without a Python class. Unresolved is not automatically a required missing feature.",
+    "files": 262,
+    "classes": 231,
+    "statuses": {
+      "unresolved; triage required": 79,
+      "class resolves; behavior untested": 86,
+      "excluded production namespace": 66
+    },
+    "references": [
+      {
+        "class_name": "pyasm.admin.creator.PipelineCreatorElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/pipeline-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.admin.creator"
+      },
+      {
+        "class_name": "pyasm.alpha.sobject_navigator_wdg.SObjectCodeLinkTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.alpha.sobject_navigator_wdg"
+      },
+      {
+        "class_name": "pyasm.biz.SimpleStatusAttr",
+        "sources": [
+          "legacy/src/config/prod/sobject/sequence-conf.xml",
+          "legacy/src/config/sthpw/sobject/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.biz.StatusAttr2",
+        "sources": [
+          "legacy/src/config/prod/sobject/instance-conf.xml",
+          "legacy/src/config/prod/sobject/template-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.biz.StatusAttr2"
+      },
+      {
+        "class_name": "pyasm.browser.RepoActionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/composite-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.browser"
+      },
+      {
+        "class_name": "pyasm.browser.SnapshotCheckoutFilesWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.browser"
+      },
+      {
+        "class_name": "pyasm.browser.TacticCompCheckinCbk",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/composite-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.browser"
+      },
+      {
+        "class_name": "pyasm.command.DatabaseAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/widget_config-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.command.EmailTrigger",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/trigger-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/trigger-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.command.InitialTaskCreateAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.command.UniqueValueAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.command.UploadAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/search_object-conf.xml",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.command.XmlAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.flash.FlashAssetHistoryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.flash"
+      },
+      {
+        "class_name": "pyasm.flash.widget.FlashAssetHistoryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/template-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.flash.widget"
+      },
+      {
+        "class_name": "pyasm.flash.widget.FlashAssetInfoWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.flash.widget"
+      },
+      {
+        "class_name": "pyasm.flash.widget.RelatedAssetAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.flash.widget"
+      },
+      {
+        "class_name": "pyasm.flash.widget.RelatedAssetDescriptionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.flash.widget"
+      },
+      {
+        "class_name": "pyasm.flash.widget.RelatedAssetInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.flash.widget"
+      },
+      {
+        "class_name": "pyasm.flash.widget.RelatedAssetInsertElement",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: pyasm.flash.widget"
+      },
+      {
+        "class_name": "pyasm.prod.biz.SessionContents",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/prod_session_contents.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/prod_session_contents.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.biz.Texture",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_texture.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_texture.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.command.AssetCodeUpdate",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.command.TemplateCodeUpdate",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/template-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.render.QubeState",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/queue-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.AssetCheckboxWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.AssetDetailWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.AssetHistoryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.AssetInfoWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.AssetLoaderWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.AssetsInShotWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.AssignedShotWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.BinSelectionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.BinTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.CompLayerTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/composite-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.CondensedAssetInfoWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.CondensedShotInfoWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.CurrentCheckboxWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.DailiesLink",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/bin-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.EpisodeCompletionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ExploreTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/layer-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.FrameAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.FrameCompletionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.FrameInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.FrameRangeWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.InstanceHistoryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot_instance-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.LatestVersionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.LayerDetailWdg",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.LayerHistoryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/layer-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.LayerRenderTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/layer-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.LayerTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.NumSObjectInstancesWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.NumSequenceInstanceWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.NumShotInstancesWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.NumTasksWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ProcessSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ProjectSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/access_rule-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/milestone-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/notification-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/timecard-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.RenderLinkTableElement",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/layer-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.RenderSubmitInfoWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/queue-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.RenderTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SObjectCheckboxWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SObjectInstanceListWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SObjectRenderCbk",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/queue-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SObjectSelectionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/storyboard-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SearchTypeSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SequenceInstanceListWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SessionVersionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotCheckboxWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotDetailWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotHistoryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotInfoWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotInstanceListWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotParentDependencyWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotPipelineWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotRenderTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ShotTaskCreatorAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SnapshotInfoWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SnapshotLoaderWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SubmissionDataTableElement",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SubmissionDescriptionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/queue-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.SubmissionOptionsWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.TaskListWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.TasksInSObjectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.ThumbPublishWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.UserSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/custom_property-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/queue-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.prod.web.VersionHistoryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "excluded production namespace"
+      },
+      {
+        "class_name": "pyasm.search.DateAttr",
+        "sources": [
+          "legacy/src/config/sthpw/sobject/ticket-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.search.DateAttr"
+      },
+      {
+        "class_name": "pyasm.search.SObject",
+        "sources": [
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_asset.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_asset_in_asset.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_asset_in_level.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_asset_type.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_game.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_level.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_sound.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_ticket.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/game_week_report.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_art_reference.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_asset.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_asset_category.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_asset_in_episode.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_asset_in_sequence.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_asset_in_shot.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_asset_type.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_camera.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_episode.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_layer.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_leica.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_naming.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_node_data.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_plate.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_render.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_review.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_schedule.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_script.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_sequence.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_shot.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_shot_texture.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_storyboard.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/vfx_submission.spt",
+          "legacy/src/plugins/TACTIC/internal/sample3d/prod_asset.spt",
+          "legacy/src/plugins/TACTIC/internal/sample3d/prod_sequence.spt",
+          "legacy/src/plugins/TACTIC/internal/sample3d/prod_shot.spt",
+          "legacy/src/plugins/TACTIC/internal/unittest/unittest_car.spt",
+          "legacy/src/plugins/TACTIC/internal/unittest/unittest_city.spt",
+          "legacy/src/plugins/TACTIC/internal/unittest/unittest_country.spt",
+          "legacy/src/plugins/TACTIC/internal/unittest/unittest_no_id.spt",
+          "legacy/src/plugins/TACTIC/internal/unittest/unittest_person.spt",
+          "legacy/src/plugins/TACTIC/internal/unittest/unittest_person_in_car.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_feature.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_plan.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_plan_item.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_product.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_product_version.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_release_note.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_sprint.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_ticket.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_ticket_log.spt",
+          "legacy/src/plugins/TACTIC/scrum/stypes/scrum_ticket_status.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_art_reference.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_asset.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_asset_category.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_asset_in_episode.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_asset_in_sequence.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_asset_in_shot.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_asset_type.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_camera.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_episode.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_layer.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_leica.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_naming.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_node_data.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_plate.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_render.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_review.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_schedule.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_script.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_sequence.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_shot.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_shot_texture.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_storyboard.spt",
+          "legacy/src/plugins/TACTIC/vfx/stypes/vfx_submission.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.AuxDataWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.CheckboxColWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/art_reference-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.ClipboardCopyConnectionCmd",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/art_reference-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.ClipboardCopyConnectionCmd"
+      },
+      {
+        "class_name": "pyasm.widget.ClipboardCopyInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/art_reference-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.ClipboardCopyInputWdg"
+      },
+      {
+        "class_name": "pyasm.widget.CreateSelectAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/prod_setting-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/prod_setting-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.CreateSelectAction"
+      },
+      {
+        "class_name": "pyasm.widget.CreateSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/prod_setting-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/prod_setting-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.CreateSelectWdg"
+      },
+      {
+        "class_name": "pyasm.widget.DiscussionWdg",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.MyBoomLayout",
+        "sources": [
+          "legacy/src/config/sthpw/webapp/remko-wdg.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.MyBoomLayout"
+      },
+      {
+        "class_name": "pyasm.widget.MyBoomNavWdg",
+        "sources": [
+          "legacy/src/config/sthpw/webapp/remko-wdg.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.MyBoomNavWdg"
+      },
+      {
+        "class_name": "pyasm.widget.MyBoomPersonWdg",
+        "sources": [
+          "legacy/src/config/sthpw/webapp/remko-wdg.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.MyBoomPersonWdg"
+      },
+      {
+        "class_name": "pyasm.widget.MyBoomSampleContentWdg",
+        "sources": [
+          "legacy/src/config/sthpw/webapp/remko-wdg.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.MyBoomSampleContentWdg"
+      },
+      {
+        "class_name": "pyasm.widget.SObjectAttachTableElement",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.SObjectAttachTableElement"
+      },
+      {
+        "class_name": "pyasm.widget.SObjectBrowserAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/art_reference-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.SObjectBrowserAction"
+      },
+      {
+        "class_name": "pyasm.widget.SObjectBrowserWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/art_reference-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.SObjectBrowserWdg"
+      },
+      {
+        "class_name": "pyasm.widget.SObjectTaskTableElement",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.SearchTypeElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/note-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.TaskParentSpacingTableElement",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.TextAreaWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/config/url-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.TextAreaWithSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.TextAreaWithSelectWdg"
+      },
+      {
+        "class_name": "pyasm.widget.TextWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/timecard-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.ThumbInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/art_reference-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/script-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/storyboard-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/note-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.ThumbWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/sobject_list-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "pyasm.widget.UserMoreInfoWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: pyasm.widget.UserMoreInfoWdg"
+      },
+      {
+        "class_name": "tactic.command.PluginCreator",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/plugin-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/plugin-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.command.PluginSObjectAdderCmd",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/plugin-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/plugin-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.command.PluginSObjectAdderCmd"
+      },
+      {
+        "class_name": "tactic.command.PluginUninstaller",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/plugin-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/plugin-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.app.MessageTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/message_log-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.app.NoteSheetWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.app.NoteSheetWdg"
+      },
+      {
+        "class_name": "tactic.ui.app.SearchTypeHasTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/search_object-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/search_type-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.app.ShelfEditWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/client_trigger-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.app.ShelfEditWdg"
+      },
+      {
+        "class_name": "tactic.ui.cgapp.AppShotPanelWdg",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_sidebar.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.cgapp"
+      },
+      {
+        "class_name": "tactic.ui.cgapp.AssetCheckinWdg",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_sidebar.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.cgapp"
+      },
+      {
+        "class_name": "tactic.ui.cgapp.LoaderElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot_instance-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.cgapp"
+      },
+      {
+        "class_name": "tactic.ui.cgapp.PublishElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot_instance-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.cgapp"
+      },
+      {
+        "class_name": "tactic.ui.cgapp.SessionWdg",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_sidebar.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.cgapp"
+      },
+      {
+        "class_name": "tactic.ui.cgapp.ShotCheckinWdg",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_sidebar.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.cgapp"
+      },
+      {
+        "class_name": "tactic.ui.checkin.SimpleCheckinWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.checkin"
+      },
+      {
+        "class_name": "tactic.ui.checkin.SnapshotFilesWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.checkin"
+      },
+      {
+        "class_name": "tactic.ui.common.SimpleTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.container.TabWdg",
+        "sources": [
+          "legacy/src/plugins/TACTIC/default_theme/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/themes/sample01_theme/config/widget_config.spt",
+          "legacy/src/plugins/TACTIC/themes/sample02_theme/config/widget_config.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.container"
+      },
+      {
+        "class_name": "tactic.ui.filter.ExpressionFilterElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.ExpressionFilterElementWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.GeneralFilterWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/notification_log-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/timecard-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.GeneralFilterWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.KeywordFilterElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/naming-conf.xml",
+          "legacy/src/config2/search_type/widget/config/widget_config-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/note-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/project-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/sobject_list-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.KeywordFilterElementWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.NotificationLogFilterWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/notification_log-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.NotificationLogFilterWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.SObjectSearchFilterWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/notification_log-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.SObjectSearchFilterWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.SelectFilterElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.SelectFilterElementWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.ShotFilterWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.ShotFilterWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.SnapshotFilterWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.SnapshotFilterWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.WorkHourFilterWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/timecard-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.filter.WorkHourFilterWdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.filter_wdg.GeneralFilterWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.filter.filter_wdg"
+      },
+      {
+        "class_name": "tactic.ui.filter.filter_wdg.SubmissionFilterWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.filter.filter_wdg"
+      },
+      {
+        "class_name": "tactic.ui.input.ColorInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/config/process-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/search_object-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/search_type-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.LoginTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.PasswordInputWdg",
+        "sources": [
+          "legacy/src/plugins/TACTIC/default_theme/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.input.PasswordInputWdg"
+      },
+      {
+        "class_name": "tactic.ui.input.PipelineInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.ProcessGroupSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.ProcessInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.SearchTypeInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/naming-conf.xml",
+          "legacy/src/config2/search_type/widget/config/pipeline-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.SearchTypeWithPipelineInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.SubContextAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.SubContextInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.TaskSObjectInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.input.TextInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/process-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/plugins/TACTIC/default_theme/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.input.TextInputWdg"
+      },
+      {
+        "class_name": "tactic.ui.panel.CustomLayoutWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/notification_log-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_custom_script.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/default_theme/config/config_url.spt",
+          "legacy/src/plugins/TACTIC/default_theme/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/empty_theme/config/config_url.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_url.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/themes/sample01_theme/config/config_url.spt",
+          "legacy/src/plugins/TACTIC/themes/sample01_theme/config/widget_config.spt",
+          "legacy/src/plugins/TACTIC/themes/sample02_theme/config/config_url.spt",
+          "legacy/src/plugins/TACTIC/themes/sample02_theme/config/widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_custom_script.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_sidebar.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_url.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.panel.CustomLayoutWdg"
+      },
+      {
+        "class_name": "tactic.ui.panel.EditTitleWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/process-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.panel.EditTitleWdg"
+      },
+      {
+        "class_name": "tactic.ui.panel.EditWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/db_resource-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/project-conf.xml",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.panel.FastTableLayoutWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/trigger-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/transaction_log-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.panel.SecurityManagerButtonWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.panel.SimpleSideBarWdg",
+        "sources": [
+          "legacy/src/plugins/TACTIC/default_theme/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/themes/sample01_theme/config/widget_config.spt",
+          "legacy/src/plugins/TACTIC/themes/sample02_theme/config/widget_config.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.panel.SimpleSideBarWdg"
+      },
+      {
+        "class_name": "tactic.ui.panel.TableLayoutWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/config/plugin-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/db_resource-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/milestone-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/plugin-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/project-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/queue-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/sobject_log-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/sync_server-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.panel.ViewPanelWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_custom_script.spt",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_custom_script.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_url.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_sidebar.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/sequence_planner_wdg.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/shot_planner_wdg.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/single_shot_planner_wdg.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/art_reference/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/asset/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/dashboard/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/episode/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/leica/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/script/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/sequence/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/shot/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/storyboard/main.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.panel.ViewPanelWdg"
+      },
+      {
+        "class_name": "tactic.ui.startup.ExamplesWdg",
+        "sources": [
+          "legacy/src/plugins/TACTIC/default_theme/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/themes/sample01_theme/config/widget_config.spt",
+          "legacy/src/plugins/TACTIC/themes/sample02_theme/config/widget_config.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.startup.ExamplesWdg"
+      },
+      {
+        "class_name": "tactic.ui.startup.GroupAssignWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.startup.GroupAssignWdg"
+      },
+      {
+        "class_name": "tactic.ui.startup.GroupSummaryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.startup.GroupSummaryWdg"
+      },
+      {
+        "class_name": "tactic.ui.startup.SecurityAddGroupToProjectAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.startup.SecurityAddGroupToProjectAction"
+      },
+      {
+        "class_name": "tactic.ui.startup.SecurityAddGroupToProjectInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.startup.SecurityAddGroupToProjectInputWdg"
+      },
+      {
+        "class_name": "tactic.ui.startup.UserAssignWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.startup.UserAssignWdg"
+      },
+      {
+        "class_name": "tactic.ui.sync.SyncServerElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/sync_server-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.sync"
+      },
+      {
+        "class_name": "tactic.ui.sync.SyncServerTicketElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/sync_server-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.sync"
+      },
+      {
+        "class_name": "tactic.ui.sync.SyncTestServerElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/sync_server-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC module is not migrated: tactic.ui.sync"
+      },
+      {
+        "class_name": "tactic.ui.table.ButtonElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/client_trigger-conf.xml",
+          "legacy/src/config2/search_type/widget/config/plugin-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/db_resource-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/plugin-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/schema-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.CheckinButtonElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.CheckoutButtonElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.DeleteElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.DropAssetOnShotCbk",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.table.DropAssetOnShotCbk"
+      },
+      {
+        "class_name": "tactic.ui.table.DropElementAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/notification-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.table.DropElementAction"
+      },
+      {
+        "class_name": "tactic.ui.table.DropElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/plugin-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/notification-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/plugin-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.ExplorerElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.ExpressionElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot_instance-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/notification_log-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/sobject_log-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.GanttCbk",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/project-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.GanttChildrenCbk",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.table.GanttChildrenCbk"
+      },
+      {
+        "class_name": "tactic.ui.table.GanttElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/project-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.GeneralPublishElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/art_reference-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/script-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.HiddenRowElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/db_resource-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login_group-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.JsonElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/config/process-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/sync_job-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.MetadataElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.MilestoneCompletionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/milestone-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.NotificationTriggerElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/notification-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.ParentGroupAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/work_hour-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.ParentGroupTableElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/note-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/work_hour-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.PreferenceDescriptionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/pref_list-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.PreferenceEditWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/pref_list-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.ProcessElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.ProjectTemplateUpdateWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/project-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.ProjectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/project-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.RecipientElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/notification_log-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.RowAddElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.SObjectDetailElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.SObjectFilesElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.SObjectSummaryElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.SObjectTaskStatusElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.SnapshotFileElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.SnapshotServerElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.table.SnapshotServerElementWdg"
+      },
+      {
+        "class_name": "tactic.ui.table.SnapshotVersionElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.SubContextElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.TaskCheckinManageWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.table.TaskCheckinManageWdg"
+      },
+      {
+        "class_name": "tactic.ui.table.TaskCompletionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.TaskDaysDueElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.TaskElementCbk",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.TaskElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.TaskGroupCompletionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.TaskSummaryElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.WorkElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.WorkHoursElementAction",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.WorkHoursElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.table.snapshot_element_wdg.SnapshotLockedElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.tools.PipelineToolWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/pipeline-conf.xml",
+          "legacy/src/plugins/TACTIC/vfx/config/config_sidebar.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.tools.PipelineToolWdg"
+      },
+      {
+        "class_name": "tactic.ui.tools.ReviewWdg",
+        "sources": [
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.tools.ReviewWdg"
+      },
+      {
+        "class_name": "tactic.ui.tools.ScheduleUserToolWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.tools.ScheduleUserToolWdg"
+      },
+      {
+        "class_name": "tactic.ui.tools.SchemaToolWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/schema-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.tools.SchemaToolWdg"
+      },
+      {
+        "class_name": "tactic.ui.widget.CalendarInputWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/bin-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.widget.CheckinWdg",
+        "sources": [
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.widget.CheckinWdg"
+      },
+      {
+        "class_name": "tactic.ui.widget.DiscussionElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.widget.DiscussionWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/timecard-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.widget.NoteCollectionWdg",
+        "sources": [
+          "legacy/src/plugins/TACTIC/vfx/config/config_view/vfx/dashboard/main.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.widget.NoteCollectionWdg"
+      },
+      {
+        "class_name": "tactic.ui.widget.SObjectCheckinHistoryWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.widget.SObjectCheckinHistoryWdg"
+      },
+      {
+        "class_name": "tactic.ui.widget.SearchTypeSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/notification-conf.xml"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.widget.SearchTypeSelectWdg"
+      },
+      {
+        "class_name": "tactic.ui.widget.SimpleUploadWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/plate-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/submission-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/login-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/note-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/search_object-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml",
+          "legacy/src/install/start/templates/game-1.0.0.zip!game/config_widget_config.spt",
+          "legacy/src/install/start/templates/vfx-1.0.0.zip!vfx/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/scrum/config/config_widget_config.spt",
+          "legacy/src/plugins/TACTIC/vfx/config/config_widget.spt"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.widget.TaskStatusElementWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.widget.TaskStatusSelectWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/sthpw/snapshot-conf.xml",
+          "legacy/src/config2/search_type/widget/sthpw/task-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.widget.UploadWdg",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/art_reference-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/asset-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/script-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/sequence-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/shot-conf.xml",
+          "legacy/src/config2/search_type/widget/prod/storyboard-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      },
+      {
+        "class_name": "tactic.ui.widget.VideoWdg",
+        "sources": [
+          "legacy/src/plugins/TACTIC/vfx/config/config_custom_script.spt"
+        ],
+        "status": "unresolved; triage required",
+        "error": "UnsupportedContract",
+        "message": "TACTIC class is not migrated: tactic.ui.widget.VideoWdg"
+      },
+      {
+        "class_name": "tactic.ui.widget.file_browser_wdg.FileIngestCmd",
+        "sources": [
+          "legacy/src/config2/search_type/widget/prod/DEFAULT-conf.xml"
+        ],
+        "status": "class resolves; behavior untested"
+      }
+    ]
+  },
+  "registry_inventory": {
+    "scope": "Original seed only, before all original upgrades; unavailable types need classification, not automatic bootstrap.",
+    "original": 62,
+    "current": 55,
+    "missing": [
+      {
+        "search_type": "sthpw/annotation",
+        "class_name": "pyasm.search.search.SObject",
+        "table_name": "annotation"
+      },
+      {
+        "search_type": "sthpw/file_access",
+        "class_name": "pyasm.biz.FileAccess",
+        "table_name": "file_access"
+      },
+      {
+        "search_type": "sthpw/repo",
+        "class_name": "pyasm.search.SObject",
+        "table_name": "repo"
+      },
+      {
+        "search_type": "sthpw/sobject_config",
+        "class_name": "pyasm.search.SObjectDbConfig",
+        "table_name": "sobject_config"
+      },
+      {
+        "search_type": "sthpw/command",
+        "class_name": "pyasm.biz.CommandSObj",
+        "table_name": "command"
+      },
+      {
+        "search_type": "sthpw/command_log",
+        "class_name": "pyasm.command.CommandLog",
+        "table_name": "command_log"
+      },
+      {
+        "search_type": "sthpw/group_notification",
+        "class_name": "pyasm.biz.GroupNotification",
+        "table_name": "group_notification"
+      },
+      {
+        "search_type": "sthpw/access_rule",
+        "class_name": "pyasm.security.AccessRule",
+        "table_name": "{public}.access_rule"
+      },
+      {
+        "search_type": "sthpw/access_rule_in_group",
+        "class_name": "pyasm.security.AccessRuleInGroup",
+        "table_name": "{public}.access_rule_in_group"
+      },
+      {
+        "search_type": "sthpw/clipboard",
+        "class_name": "pyasm.biz.Clipboard",
+        "table_name": "{public}.clipboard"
+      },
+      {
+        "search_type": "sthpw/translation",
+        "class_name": "pyasm.search.SObject",
+        "table_name": "{public}.translation"
+      },
+      {
+        "search_type": "sthpw/remote_repo",
+        "class_name": "pyasm.biz.RemoteRepo",
+        "table_name": "remote_repo"
+      },
+      {
+        "search_type": "sthpw/widget_extend",
+        "class_name": "pyasm.search.SObject",
+        "table_name": "widget_extend"
+      },
+      {
+        "search_type": "sthpw/snapshot_type",
+        "class_name": "pyasm.biz.SnapshotType",
+        "table_name": "snapshot_type"
+      },
+      {
+        "search_type": "sthpw/widget_config",
+        "class_name": "pyasm.search.WidgetDbConfig",
+        "table_name": "widget_config"
+      },
+      {
+        "search_type": "unittest/person",
+        "class_name": "pyasm.search.SObject",
+        "table_name": "person"
+      },
+      {
+        "search_type": "unittest/city",
+        "class_name": "pyasm.search.SObject",
+        "table_name": "city"
+      },
+      {
+        "search_type": "unittest/country",
+        "class_name": "pyasm.search.SObject",
+        "table_name": "country"
+      },
+      {
+        "search_type": "sthpw/cache",
+        "class_name": "pyasm.search.SObject",
+        "table_name": "{public}.cache"
+      },
+      {
+        "search_type": "prod/session_contents",
+        "class_name": "pyasm.prod.biz.SessionContents",
+        "table_name": "session_contents"
+      }
+    ]
+  },
+  "unsupported_guards": {
+    "total": 377,
+    "by_file": {
+      "src/tactic_stream/server/api.py": 15,
+      "src/tactic_stream/server/interface.py": 1,
+      "src/tactic_stream/server/monitor.py": 2,
+      "src/tactic_stream/server/startup.py": 4,
+      "src/tactic_stream/server/transaction_journal.py": 1,
+      "src/tactic/command/create_project_cmd.py": 2,
+      "src/tactic/command/ingestion_cmd.py": 1,
+      "src/tactic/command/login_group_trigger.py": 1,
+      "src/tactic/command/plugin.py": 9,
+      "src/tactic/command/project_template_cmd.py": 3,
+      "src/tactic/command/python_cmd.py": 1,
+      "src/tactic/command/queue.py": 2,
+      "src/tactic/command/scheduler.py": 3,
+      "src/tactic/core/pipeline_commands.py": 1,
+      "src/tactic/core/schema_commands.py": 4,
+      "src/tactic/core/sidebar_config.py": 1,
+      "src/tactic/ui/app/page_nav_container_wdg.py": 1,
+      "src/tactic/ui/input/pipeline_input_wdg.py": 1,
+      "src/tactic/ui/input/process_context_wdg.py": 1,
+      "src/tactic/ui/input/process_group_select_wdg.py": 1,
+      "src/tactic/ui/input/task_input_wdg.py": 1,
+      "src/tactic/ui/panel/base_table_layout_wdg.py": 1,
+      "src/tactic/ui/panel/edit_wdg.py": 4,
+      "src/tactic/ui/panel/search_type_manager_wdg.py": 2,
+      "src/tactic/ui/panel/table_layout_wdg.py": 2,
+      "src/tactic/ui/table/task_element_wdg.py": 1,
+      "src/tactic/ui/tools/delete_wdg.py": 1,
+      "src/tactic/ui/widget/discussion_wdg.py": 1,
+      "src/tactic/ui/widget/misc_input_wdg.py": 1,
+      "src/tactic/ui/widget/upload_wdg.py": 1,
+      "src/pyasm/biz/file.py": 4,
+      "src/pyasm/biz/note.py": 1,
+      "src/pyasm/biz/pipeline.py": 4,
+      "src/pyasm/biz/project.py": 1,
+      "src/pyasm/biz/schema.py": 3,
+      "src/pyasm/biz/snapshot.py": 3,
+      "src/pyasm/biz/sobject_connection.py": 1,
+      "src/pyasm/biz/task.py": 7,
+      "src/pyasm/checkin/checkin.py": 3,
+      "src/pyasm/checkin/file_checkin.py": 1,
+      "src/pyasm/checkin/repo.py": 1,
+      "src/pyasm/command/trigger.py": 3,
+      "src/pyasm/command/workflow.py": 8,
+      "src/pyasm/common/common.py": 3,
+      "src/pyasm/common/environment.py": 1,
+      "src/pyasm/common/lxml_wrapper.py": 7,
+      "src/pyasm/search/database_impl.py": 39,
+      "src/pyasm/search/exception_log.py": 2,
+      "src/pyasm/search/search.py": 53,
+      "src/pyasm/search/sobject_log.py": 1,
+      "src/pyasm/search/sql.py": 61,
+      "src/pyasm/search/sql_dumper.py": 3,
+      "src/pyasm/search/storage.py": 8,
+      "src/pyasm/search/transaction.py": 17,
+      "src/pyasm/search/transaction_log.py": 20,
+      "src/pyasm/search/widget_db_config.py": 4,
+      "src/pyasm/security/access_manager.py": 4,
+      "src/pyasm/security/authenticator.py": 1,
+      "src/pyasm/security/batch.py": 4,
+      "src/pyasm/security/security.py": 21,
+      "src/pyasm/web/api_xmlrpc.py": 6,
+      "src/pyasm/web/widget.py": 1,
+      "src/pyasm/widget/discussion_wdg.py": 2,
+      "src/pyasm/widget/input_wdg.py": 2,
+      "src/pyasm/widget/table_element_wdg.py": 1,
+      "src/pyasm/widget/widget_config.py": 6
+    },
+    "limits": "Includes required security/transaction/context guards and source-incomplete or excluded code. This total is NOT a count of missing features."
+  },
+  "current_probes": [
+    {
+      "name": "python_sdk_wire_control",
+      "result": {
+        "http_status": 200,
+        "result": [
+          "OK"
+        ]
+      }
+    },
+    {
+      "name": "javascript_sdk_wire_ping",
+      "result": {
+        "http_status": 200,
+        "fault_code": 400,
+        "message": "Invalid XML-RPC arguments or missing object"
+      }
+    },
+    {
+      "name": "javascript_sdk_wire_query",
+      "result": {
+        "http_status": 200,
+        "fault_code": 501,
+        "message": "Only the single-site Python ticket contract is migrated"
+      }
+    },
+    {
+      "name": "server_python_keyword_filter",
+      "error": "AttributeError",
+      "message": "'Search' object has no attribute 'add_keyword_filter'"
+    },
+    {
+      "name": "server_python_sobject_eval",
+      "error": "AttributeError",
+      "message": "'SObject' object has no attribute 'eval'"
+    },
+    {
+      "name": "server_python_break_up_key",
+      "error": "AttributeError",
+      "message": "type object 'SearchType' has no attribute 'break_up_key'"
+    },
+    {
+      "name": "short_class",
+      "error": "UnsupportedContract",
+      "message": "Short class names and TACTIC plugin loading are not migrated"
+    },
+    {
+      "name": "plugin_class",
+      "error": "UnsupportedContract",
+      "message": "Short class names and TACTIC plugin loading are not migrated"
+    },
+    {
+      "name": "xml_xpath_or",
+      "error": "UnsupportedContract",
+      "message": "Only absolute Xml paths with attribute AND predicates are migrated"
+    },
+    {
+      "name": "xml_cdata",
+      "error": "UnsupportedContract",
+      "message": "Preserving CDATA is not migrated"
+    },
+    {
+      "name": "search_sql_coalesce",
+      "result": 3
+    },
+    {
+      "name": "expression_code_prefix",
+      "error": "UnsupportedContract",
+      "message": "Expression-based code prefixes are not migrated"
+    },
+    {
+      "name": "task_generation_cross_pipeline",
+      "error": "UnsupportedContract",
+      "message": "Task generation across pipelines/expressions is not migrated"
+    },
+    {
+      "name": "custom_cell_class_resolves",
+      "result": true
+    },
+    {
+      "name": "custom_cell_descriptor",
+      "result": {
+        "kind": "text",
+        "field": "name",
+        "supported": false,
+        "sort_field": "name",
+        "sortable": false,
+        "summary": "",
+        "bottom": "",
+        "group_bottom": "",
+        "server": false
+      }
+    },
+    {
+      "name": "custom_layout_css_table",
+      "error": "ValueError",
+      "message": "CustomLayout markup is not migrated: table"
+    },
+    {
+      "name": "custom_layout_mako_loop",
+      "error": "ValueError",
+      "message": "CustomLayout supports data-only Mako; use a configured action for code execution"
+    },
+    {
+      "name": "plugin_create_view",
+      "error": "UnsupportedContract",
+      "message": "Plugin SQL views are not migrated"
+    },
+    {
+      "name": "nested_plugin_export",
+      "error": "UnsupportedContract",
+      "message": "Nested plugin export is not migrated"
+    },
+    {
+      "name": "foreign_key_schema_export",
+      "error": "UnsupportedContract",
+      "message": "Foreign key export is not migrated"
+    },
+    {
+      "name": "view_schema_export",
+      "error": "UnsupportedContract",
+      "message": "SQL view export is not migrated"
+    },
+    {
+      "name": "expression_index_schema_export",
+      "error": "UnsupportedContract",
+      "message": "Partial/expression unique indexes are not migrated"
+    },
+    {
+      "name": "insert_with_message_event",
+      "error": "UnsupportedContract",
+      "message": "Message subscriptions and delivery are not migrated"
+    },
+    {
+      "name": "message_event_rollback",
+      "result": 0
+    },
+    {
+      "name": "pre_frame_expression_visual_edit",
+      "result": true
+    },
+    {
+      "name": "current_expression_visual_edit",
+      "result": {
+        "supported": true,
+        "view": "definition",
+        "layout": "",
+        "elements": [
+          {
+            "path": "0/0",
+            "name": "name",
+            "title": "name",
+            "visible": true,
+            "width": 160,
+            "widget": "expression"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pre_frame_arbitrary_view_visual_edit",
+      "result": 6
+    },
+    {
+      "name": "current_arbitrary_view_visual_edit",
+      "result": {
+        "supported": false,
+        "view": "",
+        "layout": "",
+        "elements": []
+      }
+    },
+    {
+      "name": "current_native_qualified_named_view",
+      "result": {
+        "supported": false,
+        "view": "",
+        "layout": "",
+        "elements": []
+      }
+    }
+  ],
+  "original_probes": [
+    {
+      "name": "keyword_filter",
+      "result": 1
+    },
+    {
+      "name": "sobject_eval",
+      "result": [
+        "A"
+      ]
+    },
+    {
+      "name": "break_up_key",
+      "result": [
+        "contract/entity",
+        "contract/entity?project=one"
+      ]
+    },
+    {
+      "name": "short_class",
+      "result": "TextWdg"
+    },
+    {
+      "name": "xml_xpath_or",
+      "result": 2
+    },
+    {
+      "name": "xml_cdata",
+      "result": "<root><![CDATA[hello]]></root>\n"
+    },
+    {
+      "name": "expression_code_prefix",
+      "result": "A"
+    },
+    {
+      "name": "sql_view_create",
+      "result": 4
+    }
+  ],
+  "browser_probes": {
+    "expression": {
+      "supported": true,
+      "view": "definition",
+      "layout": "",
+      "elements": [
+        {
+          "path": "0/0",
+          "name": "name",
+          "title": "name",
+          "visible": true,
+          "width": 160,
+          "widget": "expression"
+        }
+      ]
+    },
+    "expression_edit_error": "This column setting is only available in XML mode.",
+    "qualified_named_view": {
+      "supported": true,
+      "view": "custom_view",
+      "layout": "tactic.ui.panel.TableLayoutWdg",
+      "elements": [
+        {
+          "path": "0/0",
+          "name": "name",
+          "title": "name",
+          "visible": true,
+          "width": 160,
+          "widget": ""
+        }
+      ]
+    }
+  },
+  "not_findings": [
+    {
+      "case": "Search.add_where COALESCE",
+      "reason": "Native administrator script succeeds; raw SQL is not universally absent."
+    },
+    {
+      "case": "Single-argument raw SQL API filters",
+      "reason": "The original add_op_filters also rejects them; do not call the native refusal a regression."
+    },
+    {
+      "case": "Nested plugin export",
+      "reason": "Original PluginCreator.handle_plugin warns and returns before its implementation. Native refusal is not loss of a working source implementation."
+    },
+    {
+      "case": "GanttChildrenCbk unresolved class",
+      "reason": "A source template references it without a source class; native schedule metadata now handles the declaration. Import resolution alone would falsely report a missing workflow."
+    }
+  ],
+  "limits": [
+    "Representative deep audit, not proof of all third-party project/plugin compatibility.",
+    "Structural method inventory includes deprecated methods, abstract vendor methods and separately excluded dependencies; each needs triage before implementation.",
+    "All write probes use generated disposable SQLite data. The message_event probe restores an original upgrade column in the fixture.",
+    "No fresh PostgreSQL, clean Windows, physical input or full Administration GUI/save matrix in this audit.",
+    "Maya/applets and excluded production code are not acceptance targets. Extra database vendors are not proposed."
+  ]
+}

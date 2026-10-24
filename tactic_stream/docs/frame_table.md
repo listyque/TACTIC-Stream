@@ -1,10 +1,13 @@
 # Tactic Frame B07: Table View checkpoint
 
-B07 is **in progress**. The table host and adapted cells use shared Frame rules;
-the current widget-config census contains no classes without typed adapters. The
-combined second stage extends the catalogue with the explicit limits below.
-A registered adapter is not proof that every old
-display option or embedded action works.
+B07 is **reopened for general legacy compatibility** after the
+[2026-10-24 audit](../LEGACY_MIGRATION_AUDIT_2026-10-24.md). Earlier completion
+statements below describe selected scenarios and a bounded configuration census;
+they do not certify all original templates, custom plugins or public Python calls.
+The shared table host and adapted cells remain verified within that scope.
+Definition authoring has a confirmed visual-editor regression, and an importable
+custom cell is not accepted by the built-in adapter registry. A registered adapter
+does not prove every old display option, editor or embedded action works.
 
 | Portable module | Responsibility |
 | --- | --- |

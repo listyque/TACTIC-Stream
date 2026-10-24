@@ -218,6 +218,11 @@ clean-Windows and recovery evidence above applies to 0.112.193; clean Windows fo
 
 ## VFX support inventory correction: 0.112.195 / Handler 0.6.0.142
 
+The subsequent [deep migration audit](LEGACY_MIGRATION_AUDIT_2026-10-24.md) reopens
+general compatibility acceptance beyond these selected delivery scenarios. The 18
+VFX view failures below are a known sample, including production dependencies and
+unfinished originals; they are not the complete non-production migration backlog.
+
 The 0.112.194 result above proves import, root asset rendering and the listed SDK operations only. It did not prove every VFX relationship, table cell, form or action. The previous phrase "22 usable types" meant 22 empty queries succeeded; it must not be read as full support.
 
 The reproducible audit (`python -m tools.vfx_template_audit --output <new-report.json>`) inventories all 25 registered types and 151 saved/default views on an isolated SQLite project. Of these views, 78 are configuration definitions rather than table/form scenarios; 36 calculate cells, 19 load forms without saving, and 18 have known failures. Cell calculation and form loading do not certify GUI actions. All 22 native types can be inserted/read and their trees disclosed after the relationship fixes. `prod/session_contents` and `vfx/texture` still require the excluded production classes. `vfx/node_data` has no DDL. Maya and applet workflows are explicitly excluded by the user on 2026-10-24; a new clean-Windows test was also skipped by the user. Other gaps below are unfinished work, not additional agreed exclusions.
