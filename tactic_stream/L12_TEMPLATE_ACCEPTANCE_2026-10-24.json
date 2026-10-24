@@ -1,0 +1,229 @@
+{
+  "format": "tactic-stream-l12-template-acceptance",
+  "date": "2026-10-24",
+  "stream": "0.112.194",
+  "handler": "0.6.0.141",
+  "status": "selected-template-checkpoint-passed",
+  "l12_complete": false,
+  "packages": {
+    "source": {
+      "directory": "../releases/source-0.112.194-l12",
+      "manifest_sha256": "62c3cfc547719fb824f925eb323fb883345d90280d3514495bbddd9f58dec0a6",
+      "files": 31
+    },
+    "windows": {
+      "directory": "../releases/windows-0.112.194-l12",
+      "manifest_sha256": "bd6193c32bb593c094b85058928a5f090d31205bafecd5062530e008636d1dbc",
+      "files": 7114,
+      "zip_sha256": "2378d1bf44b84602db952ec0e2f14444398e8c48348a85015778aed1db9e38a5",
+      "zip_bytes": 481963823
+    },
+    "server": {
+      "directory": "../releases/server-0.112.194-l12",
+      "manifest_sha256": "ba239cd485c08a727d3cdb19e08dd9582cd10d9d2b19a586105c22d37be95a1e",
+      "files": 12,
+      "images": {
+        "sha256:cb971351fc6ab63d13c39e36c0338bad83b95018c40b83a928f53e04aae2c8d0": [
+          "tactic-stream-server-apache:0.112.194"
+        ],
+        "sha256:94399ae03e33efeb979e55bf440ec239b76082c726e3a6ceaeda54bee8de7982": [
+          "tactic-stream-server-app:0.112.194"
+        ],
+        "sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6": [
+          "postgres:18.6"
+        ]
+      }
+    }
+  },
+  "selected_examples": {
+    "format": "tactic-stream-legacy-example-templates",
+    "source_sha256": {
+      "vfx-1.0.0.zip": "3dcebb7ad9bc1e0a64926b658af81854c27e86aa5dc4d3575e7f9733fbafcfbb",
+      "game-1.0.0.zip": "dba3f97494970b2957adb0f010c3f3668151fccd418188e5e2382cbfeb5c4fcf"
+    },
+    "repairs": {
+      "game-1.0.0-stream.1.zip": {
+        "file": "game/sthpw_pipeline.spt",
+        "references": 6,
+        "before": "game_status_default",
+        "after": "game/status_default"
+      }
+    },
+    "files": {
+      "vfx-1.0.0.zip": "3dcebb7ad9bc1e0a64926b658af81854c27e86aa5dc4d3575e7f9733fbafcfbb",
+      "game-1.0.0-stream.1.zip": "d125c31ba9eee16c08a6afcbb175818cb69bb772037d41455dd1b10b85537241"
+    }
+  },
+  "backends": {
+    "sqlite": {
+      "templates": {
+        "vfx": {
+          "installed": true,
+          "available_types": 22,
+          "unavailable_types": {
+            "prod/session_contents": {
+              "code": 501,
+              "message": "TACTIC module is not migrated: pyasm.prod.biz"
+            },
+            "vfx/node_data": {
+              "code": 400,
+              "message": "Invalid XML-RPC arguments or missing object"
+            },
+            "vfx/texture": {
+              "code": 501,
+              "message": "TACTIC module is not migrated: pyasm.prod.biz"
+            }
+          },
+          "crud": true,
+          "task": true,
+          "note": true,
+          "hierarchy_and_asset_instance": true,
+          "checkin_and_http_bytes": true
+        },
+        "game": {
+          "installed": true,
+          "available_types": 9,
+          "unavailable_types": {},
+          "crud": true,
+          "task": true,
+          "note": true,
+          "hierarchy_and_asset_instance": true,
+          "checkin_and_http_bytes": true
+        }
+      },
+      "browser_role_template_scenarios": 4,
+      "native_role_template_scenarios": 4,
+      "administrator_menu_scoped": true,
+      "ordinary_security_records_denied": true,
+      "ordinary_trusted_python_grant": true,
+      "no_http_400": true
+    },
+    "postgres": {
+      "templates": {
+        "vfx": {
+          "installed": true,
+          "available_types": 22,
+          "unavailable_types": {
+            "prod/session_contents": {
+              "code": 501,
+              "message": "TACTIC module is not migrated: pyasm.prod.biz"
+            },
+            "vfx/node_data": {
+              "code": 400,
+              "message": "Invalid XML-RPC arguments or missing object"
+            },
+            "vfx/texture": {
+              "code": 501,
+              "message": "TACTIC module is not migrated: pyasm.prod.biz"
+            }
+          },
+          "crud": true,
+          "task": true,
+          "note": true,
+          "hierarchy_and_asset_instance": true,
+          "checkin_and_http_bytes": true
+        },
+        "game": {
+          "installed": true,
+          "available_types": 9,
+          "unavailable_types": {},
+          "crud": true,
+          "task": true,
+          "note": true,
+          "hierarchy_and_asset_instance": true,
+          "checkin_and_http_bytes": true
+        }
+      },
+      "browser_role_template_scenarios": 4,
+      "native_role_template_scenarios": 4,
+      "administrator_menu_scoped": true,
+      "ordinary_security_records_denied": true,
+      "ordinary_trusted_python_grant": true,
+      "no_http_400": true
+    }
+  },
+  "windows_desktop": {
+    "before": {
+      "python": "3.14.9",
+      "qt": "6.11.1",
+      "stream": "0.112.194",
+      "inventory_files": 7114,
+      "program_files_unchanged": true
+    },
+    "after": {
+      "python": "3.14.9",
+      "qt": "6.11.1",
+      "stream": "0.112.194",
+      "inventory_files": 7114,
+      "program_files_unchanged": true
+    },
+    "first_native_password": true,
+    "desktop_login": true,
+    "handler_sdk_scenarios": 12,
+    "restart_session_persisted": true,
+    "owned_workers_stopped": true,
+    "clean_windows": false
+  },
+  "sqlite_upgrade_backup_restore": {
+    "previous_version": "0.112.192",
+    "current_version": "0.112.194",
+    "previous_client_scenarios": 12,
+    "previous_installed_wheel": true,
+    "previous_package_metadata_verified": true,
+    "upgrade_records_files_config": true,
+    "handler_profile_preserved": true,
+    "before_backup_files": 43,
+    "after_backup_files": 43,
+    "backups_verified": true,
+    "independent_restoration": true,
+    "rollback": true,
+    "restore": true
+  },
+  "postgres_upgrade_backup_restore": {
+    "previous_version": "0.112.193",
+    "current_version": "0.112.194",
+    "previous_client_scenarios": 12,
+    "upgrade_records_files_config": true,
+    "pg_dump_pg_restore": true,
+    "administrator_password_preserved": true,
+    "repository_apache_webmin_and_secrets": true,
+    "separate_restoration_volumes": true,
+    "source_services_unavailable": true,
+    "restored": true,
+    "rollback": true
+  },
+  "frame_gate": {
+    "status": "passed",
+    "stages": 156,
+    "sources_current": true,
+    "retried": [
+      "browser-result-disclosure",
+      "navigation-drawer"
+    ]
+  },
+  "focused_regressions": {
+    "metadata_and_example_tests": 2,
+    "ordinary_read_boundary_tests": 1,
+    "handler_membership_and_project_metadata_tests": 16
+  },
+  "isolated_fixture_cleanup": true,
+  "evidence": {
+    ".test-tmp/l12-template-accepted-194.json": "7e14d48f39a4d5eda9a751aa3c9bd282b752425b50a3ff6e2b551a5a86d7fb23",
+    ".test-tmp/l12-desktop-accepted-194.json": "146427e5e773ad4555dcf90696dadd39a61f0c45f9cc39bb35e4249767fa42d1",
+    ".test-tmp/l12-accepted-sqlite-recovery-194.json": "114692a4f4c1a5d0eb9fdeed8e404759d4b399fc0263a934f848320dd87fd171",
+    ".test-tmp/l12-accepted-postgres-recovery-194.json": "2a6f312d35d74dfea7ce2cc10d64dbfdbd1b597c5b78475ac908648c2e232205",
+    "tools/frame_foundation/output/platform/gate.json": "30d90f3f9a059822ba742a5ce8fe9568d68444a168edce8f9a347542da855293"
+  },
+  "previous_clean_windows_evidence": "L12_RECOVERY_ACCEPTANCE_2026-10-24.json (0.112.193 only)",
+  "limitations": [
+    "Selected archives contain definitions/configuration, not a production-project database or repository export.",
+    "VFX: prod/session_contents and vfx/texture require excluded pyasm.prod classes; vfx/node_data has no source table DDL.",
+    "Legacy Maya/applet/Python-2 code and executable Mako pages are not certified; importing stored text does not execute it.",
+    "The artist is explicitly trusted to execute PythonCmd and access sthpw bootstrap metadata. Python execution is not sandboxed.",
+    "Native GUI uses real QtTest input, login, navigation and RPC with offscreen/software rendering; no GPU, physical-input or pixel-parity certification.",
+    "Domain writes/check-in were tested through the delivered SDK; complete GUI editing/check-in acceptance remains separate.",
+    "Windows 0.112.194 was checked on the developer host. A new clean-Windows run was skipped by user; 0.112.193 clean-VM evidence remains historical.",
+    "Windows EXE remains unsigned; production_accepted is false in delivery manifests."
+  ],
+  "next_step": "Final release acceptance of supported end-user GUI editing/check-in flows; record remaining visual parity and platform limits explicitly."
+}

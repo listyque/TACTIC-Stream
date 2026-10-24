@@ -117,7 +117,7 @@ The example assumes an existing disposable table. Do not use raw Delete for ordi
 | Raw Select filters / serialized replacement / cross-resource joins | Some forms remain unsupported; replacing a protected Search's resource or escaping ACL/read scope is a security boundary, not a migration task |
 | Domain dependencies, expression relations, workflow events | Unsupported classes/types/events still fail explicitly; an available method is not support for every possible domain |
 | Remote/multi-site resources and distributed commit | Not certified; local SQLite and PostgreSQL do not imply remote replication or atomic commits across databases |
-| Executable Mako widget configurations | Not migrated; declarative XML metadata continues to work |
+| Executable Mako widget configurations | Not migrated; native TEL formats such as `${@GET(...)}` remain XML metadata. Legacy `CustomLayoutWdg` records retain their source and use the existing data-only renderer guard when read |
 | QuickJS vs PyV8 | Native synchronous JS client preserved; async/DOM/DCC/arbitrary Python objects excluded; original PyV8 engine not tested |
 | Full old HTML shell, S3, Repository Sync, deprecated production layer | Explicit exclusions; existing working HTML methods retained |
 | MySQL | Deferred; no driver or acceptance claim |
@@ -125,5 +125,7 @@ The example assumes an existing disposable table. Do not use raw Delete for ordi
 For source-level diagnostics, run `tools/audit_api.py --contracts-output .screenshots/api9-contracts.json`. It records every explicit UnsupportedContract guard's module, function, line and source message. The inventory includes protections and agreed exclusions as well as missing variants; its count is neither a missing-feature count nor runtime coverage. Pair it with this matrix and `tools/verify_api.py` evidence before extending a contract.
 
 ## Browser API console and journal details
+
+Result cards use the existing project, search-type and record read policies for ordinary users. Link visibility does not grant access to the underlying objects or Administration. Legacy native Handler workflows require an explicit trusted Python-command grant; executing server-side Python is not sandboxed.
 
 The API console retains its existing authorization, validation and explicit request execution. Filtering, method rows and parameter fields use Frame controls. Closing it cancels a pending catalogue read and clears its temporary credentials; an already submitted API operation may still finish on the server. Transaction details retain server-filtered XML and hidden-record notices; a late copy completion cannot update another transaction. These are browser capabilities, not additional native Handler windows.

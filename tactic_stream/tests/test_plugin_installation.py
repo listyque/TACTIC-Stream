@@ -118,6 +118,14 @@ def exercise(store, prefix):
         assert WidgetDbConfig.get_by_search_type(project_code + '/asset', 'broken') is None
         with unittest.TestCase().assertRaises(UnsupportedContract):
             execute(lambda: WidgetDbConfig.create(project_code + '/asset', 'mako', '<config><mako>${value}</mako></config>'))
+        expression = '${@GET(.amount)}'
+        execute(lambda: WidgetDbConfig.create(project_code + '/asset', 'tel_format',
+            '<config><tel_format><element name="amount"><display widget="expression"><display_expression>'
+            + expression + '</display_expression></display></element></tel_format></config>'))
+        assert expression in WidgetDbConfig.get_by_search_type(project_code + '/asset', 'tel_format').get_value('config')
+        execute(lambda: WidgetDbConfig.create('CustomLayoutWdg', 'legacy_layout',
+            '<config><legacy_layout><html><![CDATA[${sobject.get("code")}]]></html></legacy_layout></config>'))
+        assert WidgetDbConfig.get_by_search_type('CustomLayoutWdg', 'legacy_layout').has_view()
         # CustomProperty.delete(log=True) drops the actual target column, with
         # schema/row rollback together and authorization before the first DDL.
         from pyasm.command import ColumnAddCmd

@@ -14,7 +14,7 @@
 
 ### Где остановились
 
-Контрольная точка **Stream 0.112.193 / Handler 0.6.0.140** (2026-10-24):
+Контрольная точка **Stream 0.112.194 / Handler 0.6.0.141** (2026-10-24):
 закрыты этап 1 (1.0–1.5, B07) и этап 2 (2.1–2.4: L10, L09, L08, L11).
 
 - Уже подключены базовые табличные адаптеры, inline-теги, заметки/сообщения/задачи,
@@ -119,6 +119,14 @@ CustomLayouts остаются; произвольный HTML/DOM/Mako не ст
 | 2.4 | L11 — SQLite/PostgreSQL — **закрыт** | Пройдены одинаковые native/API/script сценарии на временном SQLite и Docker PostgreSQL 18.6 во всех 7 наборах (oundation, schema, project, plugin, command, queue, diagnostics): DDL (CreateTable, AlterTable, индексы, ограничения, последовательности), даты/таймзоны, JSON/JSONB и get_json_counter_update, многофильтровый Update (WHERE ... AND ...), межпроектные DbResource, конкурентные записи (ThreadPoolExecutor), транзакции и именованные savepoints (set_savepoint/ollback_savepoint/elease_savepoint), откат частичного сбоя, snapshot_table/estore_table, TableSchemaDumper/TableDataDumper, FileUndoReplay и объединённая матрица L08+L09 (exercise_l08_l09_matrix). MySQL отложен. |
 
 ### Этап 3: поставка и переход с legacy
+
+#### L12 selected-template acceptance - 2026-10-24 (Stream 0.112.194 / Handler 0.6.0.141)
+
+- Selected supplied VFX Pipeline 1.0.0 and Game 1.0.0 definitions on independent delivered Windows/SQLite and exported PostgreSQL/Apache packages. VFX ZIP is unchanged; prepared Game stream.1 changes only six references to its already defined status pipeline. No production-project export was supplied.
+- Fixed TEL format metadata and old CustomLayout identities without executing stored code; ordinary result cards use existing read policies. Handler accepts category/global/wildcard link grants with independent project caches; view grants permit navigation. Windows Handler child processes inherit bytecode suppression. Stream Activity Feed waits for a selected project, matching native Handler.
+- Both backends pass asset CRUD, sequence/shot or game/level hierarchy, instance links, task/note, upload check-in and exact HTTP bytes. Actual browser and delivered native Handler login/navigation pass for administrator and explicitly trusted PythonCmd artist on both templates: 16 role/template/backend GUI cases, no browser HTTP 400. Administrator menus and security records remain protected. Qt is offscreen/software; GUI writes and full visual/GPU parity are not certified.
+- Windows EXE passes native first password, login, 12 unchanged SDK scenarios, restart/session retention, owned-worker shutdown and unchanged 7114-file program inventory. SQLite upgrades actual previous wheel 0.112.192 to 0.112.194; exported PostgreSQL upgrades 0.112.193 to 0.112.194. Both verify cold backup, independent restoration with original roots/services unavailable, and rollback. Current Frame gate passes 156 stages with source fingerprints checked.
+- Packages: ../releases/windows-0.112.194-l12.zip, source-0.112.194-l12, server-0.112.194-l12 and examples-0.112.194. Public provenance/results: L12_TEMPLATE_ACCEPTANCE_2026-10-24.json; procedure: RECOVERY_ACCEPTANCE.md. VFX has 22 available types and three explicit gaps (Session Contents, legacy Texture, missing Node Data DDL); Game has nine. Old Maya/applet/Python-2 and executable Mako workflows remain outside acceptance. Fresh Windows evidence still applies only to 0.112.193; user skipped another clean-environment setup. EXE remains unsigned. L12 stays open for final supported GUI editing/check-in and release acceptance.
 
 #### L12 recovery acceptance - 2026-10-24 (Stream 0.112.193 / Handler 0.6.0.140)
 

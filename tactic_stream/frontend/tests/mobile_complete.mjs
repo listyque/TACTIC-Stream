@@ -155,6 +155,7 @@ try {
   await dismiss();
   await capture('desktop-before');
   await page.setViewportSize({ width: 360, height: 780 });
+  await page.locator('.workspace-rail').waitFor({ state: 'detached' });
   assert.equal(await page.locator('.workspace-rail').count(), 0);
   assert.equal(
     await page

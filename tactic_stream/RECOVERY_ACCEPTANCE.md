@@ -185,3 +185,33 @@ aggregate result and provenance are versioned in `L12_RECOVERY_ACCEPTANCE_2026-1
 Sandbox itself was not run. No host Windows component, UAC elevation or reboot was
 needed. Legacy project migration, full installed GUI acceptance and the final release
 gate remain open L12 items.
+
+## Selected legacy examples: 0.112.194 / Handler 0.6.0.141
+
+The selected VFX Pipeline and Game 1.0.0 examples are definitions and configuration,
+not a production-project database or repository export. Prepare them with
+`python -m tools.prepare_legacy_examples --output ../releases/examples-0.112.194`.
+The pinned VFX ZIP remains byte-identical. A separate Game stream.1 ZIP fixes six
+`game_status_default` references to its defined `game/status_default` pipeline;
+all other entries remain unchanged. Original archives are never rewritten.
+
+Run `python -m tools.legacy_template_checks --windows-bundle <new-windows-kit>
+--server-package <new-server-kit> --examples <prepared-examples> --output <new-report>`.
+It initializes disposable installed Windows/SQLite and exported PostgreSQL/Apache
+servers, imports both examples, checks hierarchy/asset instances, CRUD, task/note,
+check-in and HTTP file bytes, then opens both projects through real browser and
+native Handler login/navigation as administrator and artist. Qt runs offscreen
+with software rendering; this does not certify GPU, physical input or pixel parity.
+The artist has explicit trusted PythonCmd and sidebar grants required by the legacy
+Handler contract. PythonCmd executes server-side code; it is not an untrusted role
+or sandbox. Administration and direct security-record access remain denied.
+Activity Feed waits for a selected project before its background requests; the
+installed browser scenario rejects HTTP 400 responses, including startup polling.
+
+VFX has 22 usable types and three explicit gaps: prod/session_contents and vfx/texture
+depend on excluded pyasm.prod classes, while vfx/node_data has no DDL in the source.
+Historical Maya/applet/Python-2 scripts and executable Mako pages are not certified.
+Game has nine queryable types. Importing stored text does not certify executing it.
+Check actual run outcomes in L12_TEMPLATE_ACCEPTANCE_2026-10-24.json. The earlier
+clean-Windows and recovery evidence above applies to 0.112.193; clean Windows for
+0.112.194 is not inferred from it. L12 remains open for final release acceptance.

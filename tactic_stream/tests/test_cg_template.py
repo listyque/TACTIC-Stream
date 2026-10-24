@@ -194,8 +194,7 @@ def exercise(store, prefix):
         with unittest.TestCase().assertRaises(ValueError):
             read_result_items('cg/assets', [key.replace('project=' + code, 'project=admin')])
         with patch('pyasm.security.Security.is_admin', return_value=False):
-            with unittest.TestCase().assertRaises(SecurityException):
-                read_result_items('cg/assets', [key])
+            assert read_result_items('cg/assets', [key])['items'][0]['record']['__search_key__'] == key
     # The real template explicitly asks for symlinks. This unrelated fixture's
     # thumbnails use copies on Windows accounts without Developer Mode.
     if os.name == 'nt':

@@ -333,7 +333,7 @@ def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50)
                 payload={'search_type':search_type,'search_keys':search_keys,'branch':branch,'offset':offset,'limit':limit})
             Command.execute_cmd(command)
             return command.info
-    selected = objects(search_type, search_keys, read_access=isinstance(branch,dict) and branch.get('kind') in ('snapshot_browser','snapshot_members','object_report'))
+    selected = objects(search_type, search_keys, read_access=True)
     if branch is None:
         organization = {}
         return dict(items=describe(selected, organization=organization), organization=organization, has_next=False)

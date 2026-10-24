@@ -47350,7 +47350,7 @@ var _sfc_main$29 = {
 			contextId++;
 			requestId++;
 			calendarId++;
-			stopped = !props.ticket;
+			stopped = !props.ticket || !props.project;
 			if (visible.value) close();
 			records.value = [];
 			users.value = [];

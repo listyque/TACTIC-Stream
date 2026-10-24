@@ -14,6 +14,7 @@ __all__ = ['WidgetDbConfig', 'WidgetDbConfigCache']
 
 from copy import deepcopy
 import json
+import re
 from pyasm.common import Base, Xml, TacticException, Container
 from pyasm.common.common_exception import SetupException
 from pyasm.common.errors import UnsupportedContract
@@ -63,15 +64,16 @@ class WidgetDbConfig(SObject):
             category = self.get_value("category", no_exception=True)
             search_type = self.get_value("search_type", no_exception=True)
             
-            if not category and search_type:
+            if not category and search_type and search_type != 'CustomLayoutWdg':
                 config_xml = self.get_value("config")
                 config_xml = config_xml.replace("&lt;", "<")
                 config_xml = config_xml.replace("&gt;", ">")
-                if '${' in config_xml or '<%' in config_xml:
+                if re.search(r'\$\{(?!@)', config_xml) or '<%' in config_xml:
                     raise UnsupportedContract('Executable Mako widget configurations are not migrated')
                 self.xml = Xml(config_xml)
 
             else:
+                # Legacy layout bodies stay data; read_custom_layout validates them before rendering.
                 self.xml = self.get_xml_value("config")
 
 
