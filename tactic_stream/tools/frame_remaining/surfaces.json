@@ -2,7 +2,7 @@
   "scope": "Every inventoried QML/Vue source, including public aliases and typed renderer adapters. Per-surface classification is not a pixel-parity claim.",
   "dispositions": {
     "batch evidence": "See the corresponding acceptance ledger and current platform gate.",
-    "B07 partial": "Adapted table presenters are delivered; remaining legacy workflows/options stay open. See docs/frame_table.md.",
+    "B07 partial": "Adapted table presenters are delivered; remaining legacy workflows/options stay open. See docs/frame/table.md.",
     "client capability": "No separate corresponding product surface; native or browser capability remains with its existing owner.",
     "retained predecessor": "No incoming reference from current shipped hosts was found, outside its predecessor chain/qmldir registration. Current screens use Frame replacements. External dynamic scripts are not certified; do not count this file as active migration work."
   },

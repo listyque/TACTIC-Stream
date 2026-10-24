@@ -10,8 +10,9 @@ import sqlite3
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'reports/table-view-2026-10-13'
-inventory = json.loads((OUT / 'source_inventory.json').read_text(encoding='utf-8'))
+OUT = ROOT / 'tools/frame_table/output/used_widgets'
+OUT.mkdir(parents=True, exist_ok=True)
+inventory = json.loads((ROOT / 'tools/frame_table/fixtures/legacy_inventory.json').read_text(encoding='utf-8'))
 classes = inventory['classes']
 aliases = {row['alias']: row['handler'] for row in inventory['catalog']}
 sources = []
@@ -161,7 +162,7 @@ for language in ['en','ru']:
             lines.append(('Упоминания: ' if ru else 'References: ')+str(len(row['uses']))+'.')
             lines += ['- `'+u['source']+' → '+u['location']+'`'+(' — '+', '.join(u['options']) if u['options'] else '') for u in row['uses'][:3]]
             if len(row['uses'])>3:
-                lines.append(('Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.' if ru else 'All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.'))
+                lines.append(('Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.' if ru else 'All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.'))
     for folder in [ROOT/'frontend/public/help',ROOT/'src/tactic_stream/web/help']:
         (folder/f'table_widget_checklist.{language}.md').write_text('\n\n'.join(lines)+'\n',encoding='utf-8')
 for folder in [ROOT/'frontend/public/help',ROOT/'src/tactic_stream/web/help']:

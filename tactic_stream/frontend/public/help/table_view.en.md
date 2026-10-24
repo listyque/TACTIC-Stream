@@ -81,7 +81,7 @@ Saved definitions, Search Type filter and search are on the left. Wizard/XML are
 
 ## Action examples
 
-Add each element to an existing table; do not replace the whole config. Value, XML/JSON, expression and completion examples are in the [catalog](table_widget_examples.en.md). All class aliases are listed in reports/table-view-2026-10-14/handler-widget-checklist.json.
+Add each element to an existing table; do not replace the whole config. Value, XML/JSON, expression and completion examples are in the [catalog](table_widget_examples.en.md). All class aliases are listed in src/tactic_stream/shared_ui/features/table/widgets.json.
 
 ### SObjectDetailElementWdg
 

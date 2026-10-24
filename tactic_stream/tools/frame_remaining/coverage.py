@@ -61,7 +61,7 @@ def main():
             product: inventory[product]["hashes"] for product in ("handler", "stream")
         },
         "limits": [
-            "B07 remains incomplete: remaining configured widgets/options need complete workflows; see docs/frame_table.md.",
+            "B07 remains incomplete: remaining configured widgets/options need complete workflows; see docs/frame/table.md.",
             "Source ownership is not proof of full screen parity; typed presenters and client capabilities remain explicit.",
             "User scripts, plugin and DCC-generated UI keep their native execution owner and require their own runtime checks.",
         ],

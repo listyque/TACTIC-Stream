@@ -60,8 +60,8 @@ def build(output):
     for name in ('manage.py', 'apache.conf', 'check.py', 'init-postgres.py'):
         shutil.copyfile(deployment / name, output / name)
     for language in ('en', 'ru'):
-        shutil.copyfile(ROOT / ('SERVER_DELIVERY.' + language + '.md'), output / ('README.' + language + '.md'))
-    shutil.copyfile(ROOT / 'RECOVERY_ACCEPTANCE.md', output / 'RECOVERY_ACCEPTANCE.md')
+        shutil.copyfile(ROOT / 'docs/delivery' / ('SERVER_DELIVERY.' + language + '.md'), output / ('README.' + language + '.md'))
+    shutil.copyfile(ROOT / 'docs/delivery/RECOVERY_ACCEPTANCE.md', output / 'RECOVERY_ACCEPTANCE.md')
     for path in ROOT.glob('LICENSE*'):
         if path.is_file():
             shutil.copyfile(path, output / path.name)

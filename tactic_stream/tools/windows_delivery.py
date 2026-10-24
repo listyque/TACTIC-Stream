@@ -96,7 +96,8 @@ def build(handler, output):
         shutil.copyfile(ROOT / 'deploy/windows' / name, output / name)
     for name in ('WINDOWS_DELIVERY.en.md', 'WINDOWS_DELIVERY.ru.md', 'RECOVERY_ACCEPTANCE.md',
                  'LICENSE.TACTIC', 'LICENSE.HANDLER', 'LICENSE.QUICKJS-NG'):
-        shutil.copyfile(ROOT / name, output / name)
+        source = ROOT / 'docs/delivery' / name if name.endswith('.md') else ROOT / name
+        shutil.copyfile(source, output / name)
     python = output / 'runtime/python.exe'
     probe = subprocess.run([str(python), '-I', '-B', '-X', 'utf8', '-c',
         'import json,sys,tactic_stream,PySide6; from importlib.metadata import distributions; '

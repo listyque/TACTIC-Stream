@@ -50,7 +50,7 @@ Handler wrappers are client objects with different methods and lifetimes.
 | Reference | What to read / when |
 | --- | --- |
 | [Administration guide](../../frontend/public/help/administration.en.md) | Search Types, Project schema, Workflow, groups/rules and naming subsections. Includes source maps and feature boundaries. |
-| [Table view](../../frontend/public/help/table_view.en.md) and [table contract](../frame_table.md) | Column/view operations, typed cells, nested tables and actual migration scope. |
+| [Table view](../../frontend/public/help/table_view.en.md) and [table contract](../frame/table.md) | Column/view operations, typed cells, nested tables and actual migration scope. |
 | [Widget reference](../../frontend/public/help/widget_database.en.md), [examples](../../frontend/public/help/table_widget_examples.en.md), [checklist](../../frontend/public/help/table_widget_checklist.en.md) | Handler configuration/examples; historical statuses are not execution guarantees. |
 | [Current shared widget catalogue](../../src/tactic_stream/shared_ui/features/table/widgets.json) | Filter by `class`, `value` or `aliases`; inspect `adapter`. Registration alone does not prove every option works. |
 | [Actual cell support](../../src/tactic_stream/server/table_cells.py) and [interface resolver](../../src/tactic_stream/server/interface.py) | `describe_cell` / `describe_composition` support for the requested option. |
@@ -65,12 +65,12 @@ Stream/server guides; desktop files and DCC require TH capabilities.
 
 | Reference | What to read / when |
 | --- | --- |
-| [Tasks](../../frontend/public/help/tasks.en.md), [task contract](../frame_tasks.md), [schedule contract](../frame_schedule.md) | Parent/process/status, workspace, dates and scheduling. |
-| [Object reports](../../frontend/public/help/sobject_info.en.md) and [object contract](../frame_objects.md) | Parents, reports, forms, links, snapshots and object operations. |
+| [Tasks](../../frontend/public/help/tasks.en.md), [task contract](../frame/tasks.md), [schedule contract](../frame/schedule.md) | Parent/process/status, workspace, dates and scheduling. |
+| [Object reports](../../frontend/public/help/sobject_info.en.md) and [object contract](../frame/objects.md) | Parents, reports, forms, links, snapshots and object operations. |
 | [Naming command](../../src/tactic/ui/panel/naming_cmd.py) | `FIELDS`, `naming_request`, `preview_naming`: exact rule/sample fields and execution boundary. |
 | [Workflow command](../../src/tactic/ui/panel/workflow_cmd.py) | `workflow_request`: XML/process settings, current revision and managed bindings. |
-| [Script Editor guide](../../frontend/public/help/script_editor.en.md), [script contract](../frame_scripts.md), [Shelf guide](../../frontend/public/help/script_shelf.en.md) | Languages, context, storage/history and execution differences. |
-| [File contract](../frame_files.md), [Commit Queue](../../frontend/public/help/commit_queue.en.md), [repositories](../../frontend/public/help/repositories.en.md) | Upload/check-in ownership, file groups, previews, naming and repository assumptions. |
+| [Script Editor guide](../../frontend/public/help/script_editor.en.md), [script contract](../frame/scripts.md), [Shelf guide](../../frontend/public/help/script_shelf.en.md) | Languages, context, storage/history and execution differences. |
+| [File contract](../frame/files.md), [Commit Queue](../../frontend/public/help/commit_queue.en.md), [repositories](../../frontend/public/help/repositories.en.md) | Upload/check-in ownership, file groups, previews, naming and repository assumptions. |
 
 ## Projects, templates and executable evidence
 
@@ -118,7 +118,7 @@ must be checked; it cannot be inferred from an identical description.
 
 | Reference | What to read / when |
 | --- | --- |
-| [Shared UI contract](../shared_ui_contract.md), [control catalogue](../frame_control_catalog.md), [source map](../../src/tactic_stream/shared_ui/README.md) | Renderer/control boundaries, not instructions to edit QML/Vue. |
+| [Shared UI contract](../frame/contract.md), [control catalogue](../frame/control_catalog.md), [source map](../../src/tactic_stream/shared_ui/README.md) | Renderer/control boundaries, not instructions to edit QML/Vue. |
 
 ## Original TACTIC server reference
 
@@ -147,13 +147,12 @@ are historical. Stream uses `pyasm.biz.ProjectSetting` for `config/prod_setting`
   and [Russian core model](../../frontend/public/help/core_model.ru.md) are product help.
   `/ui/help/` contains installed copies, not an additional manual. TH Help has its
   own source and loader, linked above; do not substitute one product's guide for the other.
-- [Server](../../SERVER_DELIVERY.en.md), [Windows](../../WINDOWS_DELIVERY.en.md),
-  [file-project](../../FILE_PROJECT_DELIVERY.en.md), [recovery](../../RECOVERY_ACCEPTANCE.md):
+- [Server](../delivery/SERVER_DELIVERY.en.md), [Windows](../delivery/WINDOWS_DELIVERY.en.md),
+  [file-project](../delivery/FILE_PROJECT_DELIVERY.en.md), [recovery](../delivery/RECOVERY_ACCEPTANCE.md):
   installation/upgrade/recovery procedures and their stated acceptance limits.
-- [Migration audit](../../LEGACY_MIGRATION_AUDIT_2026-10-24.md): pinned .195 findings,
-  not the status of later fixes. [Original compatibility map](../../../../TH/docs/tactic_compatibility/README.md)
+- [Compatibility](../compatibility.md): scope and behavioral checks. [Original compatibility map](../../../../TH/docs/tactic_compatibility/README.md)
   and [widget contract](../../../../TH/docs/tactic_compatibility/widget_support.md)
   explain original/TH behavior; verify TS support separately.
-- [TS architecture](../../UI_ARCHITECTURE.md) and [setup](../../README.md) are maintained
+- [TS architecture](../architecture.md) and [setup](../../README.md) are maintained
   entry points. Agent backlog, old 0.20 handoffs and work journals are local
   workspace material outside both repositories; they are not required context.

@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from tactic_stream.server.table_cells import WIDGETS
 
 OUT = Path(__file__).parent / "output"
-LEGACY = ROOT / "reports/table-view-2026-10-13/source_inventory.json"
+LEGACY = ROOT / "tools/frame_table/fixtures/legacy_inventory.json"
 
 PRODUCTION_DEPENDENCIES = {
     'pyasm.widget.table_element_wdg.RenderLinkTableElement':

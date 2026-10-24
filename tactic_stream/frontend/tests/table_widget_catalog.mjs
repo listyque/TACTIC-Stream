@@ -9,7 +9,7 @@ import { renderMarkdown } from '../src/controls/markdown.js'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const fixtures = JSON.parse(await readFile(root+'/tests/fixtures/table-widget-catalog.json','utf8'))
-const native = JSON.parse(await readFile(root+'/../reports/table-view-2026-10-13/completion-th-measurements.json','utf8'))
+const native = JSON.parse(await readFile(root+'/../tools/frame_table/fixtures/native_completion_metrics.json','utf8'))
 const helpRoot = root+'/public/help', output = helpRoot+'/media'
 for (const id of ['widget_database','table_widget_examples']) for (const language of ['en','ru']) {
   const article = readArticle(id, await readFile(helpRoot+'/'+id+'.'+language+'.md','utf8'), '')

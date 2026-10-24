@@ -6,11 +6,13 @@ import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
 
 const root = fileURLToPath(new URL('..', import.meta.url)),
-  reference = root + '/../reports/table-view-2026-10-14',
+  reference = root + '/../tools/frame_table/fixtures',
   report = root + '/../tools/frame_table/output/legacy-driver';
-const fixture = JSON.parse(await readFile(reference + '/fixture.json', 'utf8'));
+const fixture = JSON.parse(
+  await readFile(reference + '/comparison_scene.json', 'utf8')
+);
 const native = JSON.parse(
-  await readFile(reference + '/native-measurements.json', 'utf8')
+  await readFile(reference + '/native_table_metrics.json', 'utf8')
 );
 let configuration = structuredClone(fixture.configuration),
   definition = structuredClone(fixture.definition),

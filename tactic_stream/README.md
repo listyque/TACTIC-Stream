@@ -42,17 +42,20 @@ not to serve already bundled web resources.
 
 ## Documentation by product and task
 
+The [documentation index](docs/index.md) separates server APIs, product Help,
+shared UI contracts, delivery and administrator-agent instructions.
+
 | Task | Reference |
 | --- | --- |
-| Stream architecture and ownership | [UI_ARCHITECTURE.md](UI_ARCHITECTURE.md) |
+| Stream architecture and ownership | [docs/architecture.md](docs/architecture.md) |
 | Server API, core structures and guides | [TS source map](docs/admin_agent/SOURCES.md#ts-server-api) |
 | Handler client API, native objects and guides | [TH source map](docs/admin_agent/SOURCES.md#th-client-api-and-structures) |
 | Administrator agent: create projects/templates | [START.md](docs/admin_agent/START.md) |
-| Shared QML/Vue descriptions | [Tactic Frame contract](docs/shared_ui_contract.md) and [source map](src/tactic_stream/shared_ui/README.md) |
-| Windows deployment | [English](WINDOWS_DELIVERY.en.md) / [Russian](WINDOWS_DELIVERY.ru.md) |
-| Server deployment | [English](SERVER_DELIVERY.en.md) / [Russian](SERVER_DELIVERY.ru.md) |
-| Native Handler connection and bundle ownership | [HANDLER_DEPLOYMENT.md](HANDLER_DEPLOYMENT.md) |
-| Backup, restore and acceptance limits | [RECOVERY_ACCEPTANCE.md](RECOVERY_ACCEPTANCE.md) |
+| Shared QML/Vue descriptions | [Tactic Frame contract](docs/frame/contract.md) and [source map](src/tactic_stream/shared_ui/README.md) |
+| Windows deployment | [English](docs/delivery/WINDOWS_DELIVERY.en.md) / [Russian](docs/delivery/WINDOWS_DELIVERY.ru.md) |
+| Server deployment | [English](docs/delivery/SERVER_DELIVERY.en.md) / [Russian](docs/delivery/SERVER_DELIVERY.ru.md) |
+| Native Handler connection and bundle ownership | [HANDLER_DEPLOYMENT.md](docs/delivery/HANDLER_DEPLOYMENT.md) |
+| Backup, restore and acceptance limits | [RECOVERY_ACCEPTANCE.md](docs/delivery/RECOVERY_ACCEPTANCE.md) |
 | Built-in product help | [Topic index](frontend/public/help/index.json), also available in the application |
 
 The web workspace is `/`, project workspaces are `/projects/<code>/`, and bundled

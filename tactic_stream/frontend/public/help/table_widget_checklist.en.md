@@ -50,7 +50,7 @@ References: 8.
 
 - `src\tactic_stream\config\search_type\widget\prod\shot-conf.xml → config/artist/element[discussion]/display`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ## Excluded: pyasm.prod (27)
 
@@ -92,7 +92,7 @@ References: 8.
 
 - `src\tactic_stream\config\search_type\widget\prod\shot-conf.xml → config/supe/element[shot]/display`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `pyasm.prod.web.composite_wdg.CompLayerTableElementWdg`
 
@@ -352,7 +352,7 @@ References: 25.
 
 - `src\tactic_stream\config\search_type\widget\config\trigger-conf.xml → config/definition/element[data_hidden]/display` — dynamic_class, search_type, show_gear, show_insert, show_row_select, show_search_limit, view
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.PublishTableElement`
 
@@ -386,7 +386,7 @@ References: 5.
 
 - `src\tactic_stream\config\search_type\widget\sthpw\search_object-conf.xml → config/definition/element[search_type]/display`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.SubmissionLinkTableElement`
 
@@ -398,7 +398,7 @@ References: 5.
 
 - `src\tactic_stream\config\search_type\widget\prod\sequence-conf.xml → config/table_episode/element[submit]/display`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.UpdateWdg`
 
@@ -410,7 +410,7 @@ References: 6.
 
 - `src\tactic_stream\config\search_type\widget\prod\render-conf.xml → config/definition/element[update]/display` — insert
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.WikiElementWdg`
 
@@ -422,7 +422,7 @@ References: 9.
 
 - `src\tactic_stream\config\search_type\widget\prod\plate-conf.xml → config/table/element[description]/display`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.task_wdg.SObjectTaskTableElement`
 
@@ -434,7 +434,7 @@ References: 8.
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[task]/display` — bid_edit, simple_date, width
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.task_wdg.TaskParentSpacingTableElement`
 
@@ -480,7 +480,7 @@ References: 6.
 
 - `src\tactic_stream\config\search_type\widget\prod\shot-conf.xml → config/definition/element[input]/display` — mode, search_type
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.cgapp.publish_element_wdg.PublishElementWdg`
 
@@ -512,7 +512,7 @@ References: 26.
 
 - `src\tactic_stream\config\search_type\widget\config\plugin-conf.xml → config/definition/element[uninstall]/display` — cbjs_action, icon
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg`
 
@@ -524,7 +524,7 @@ References: 11.
 
 - `cg-template:sthpw/task/definition → config/definition/element[expand]/display/dynamic_class`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.drop_element_wdg.DropElementWdg`
 
@@ -536,7 +536,7 @@ References: 10.
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[drop_item]/display`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.gantt_element_wdg.GanttElementWdg`
 
@@ -548,7 +548,7 @@ References: 11.
 
 - `src\tactic_stream\config\search_type\widget\sthpw\project-conf.xml → config/definition/element[task_schedule]/display` — options
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg`
 
@@ -570,7 +570,7 @@ References: 52.
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[general_checkin_simple]/display` — dynamic_class
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg`
 
@@ -704,7 +704,7 @@ References: 6.
 
 - `cg-template:sthpw/task/definition → config/definition/element[task_status_summary]/display` — mode
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.task_element_wdg.WorkElementWdg`
 
@@ -728,7 +728,7 @@ References: 4.
 
 - `cg-template:sthpw/task/definition → config/definition/element[status]/display` — edit_scope
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ## Current Handler scenario implemented; legacy options remain (18)
 
@@ -752,7 +752,7 @@ References: 52.
 
 - `src\tactic_stream\config\search_type\widget\prod\asset-conf.xml → config/summary_small/element[snapshot]/display` — icon_size
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.ArrayTableElementWdg`
 
@@ -790,7 +790,7 @@ References: 13.
 
 - `src\tactic_stream\config\search_type\widget\config\url-conf.xml → config/definition/element[widget]/display`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg`
 
@@ -812,7 +812,7 @@ References: 26.
 
 - `src\tactic_stream\config\search_type\widget\prod\shot-conf.xml → config/definition/element[scan_status]/display`
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.delete_element_wdg.DeleteElementWdg`
 
@@ -866,7 +866,7 @@ References: 52.
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[pipeline]/display` — expression
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.format_element_wdg.FormatElementWdg`
 
@@ -888,7 +888,7 @@ References: 24.
 
 - `src\tactic_stream\config\search_type\widget\config\naming-conf.xml → config/definition/element[manual_version]/display` — format
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.json_element_wdg.JsonElementWdg`
 
@@ -1030,7 +1030,7 @@ References: 4.
 
 - `cg-template:cg/scenes/definition → config/definition/element[general_checkin]/display` — lock_process, mode, process, show_context, show_links, sobject_mode, subcontext, transfer_mode, width
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.task_element_wdg.TaskElementWdg`
 
@@ -1052,7 +1052,7 @@ References: 14.
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[task_pipeline_report]/display` — bg_color, edit, edit_assigned, edit_status, layout, show_assigned, show_dates
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.widget.discussion_wdg.DiscussionElementWdg`
 
@@ -1074,7 +1074,7 @@ References: 12.
 
 - `src\tactic_stream\config\search_type\widget\prod\submission-conf.xml → config/definition/element[notes]/display` — process
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ## Input widget / compatible table alias; separate form contract (1)
 
@@ -1088,7 +1088,7 @@ References: 66.
 
 - `src\tactic_stream\config\search_type\widget\config\prod_setting-conf.xml → config/edit/element[key]/display` — hint, size
 
-All locations/options are listed in the HTML/CSV/JSON checklist under reports/table-view-2026-10-13.
+All locations/options are listed in the HTML/CSV/JSON checklist under tools/frame_table/output/used_widgets.
 
 ## Excluded: unfinished source (1)
 

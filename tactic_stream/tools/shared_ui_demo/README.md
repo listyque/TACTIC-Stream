@@ -72,4 +72,4 @@ node tests/shared_gantt_report.mjs
 The harness compares paired states, actual geometry, colors/fonts, shared scene
 and operation history. Text rasterization differs between Qt and Chromium.
 Production screens, server persistence, large lists and mobile layouts are outside
-this prototype's qualification. Follow the [shared contract](../../docs/shared_ui_contract.md).
+this prototype's qualification. Follow the [shared contract](../../docs/frame/contract.md).

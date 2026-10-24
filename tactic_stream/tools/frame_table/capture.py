@@ -40,7 +40,7 @@ from thlib.ui.workspace_models.results import WorkspaceItemModel
 from thlib.ui.workspace_models.results_types import WorkspaceNode
 
 DATA = json.loads(
-    (ROOT / "reports/table-view-2026-10-14/fixture.json").read_text(encoding="utf-8")
+    (ROOT / "tools/frame_table/fixtures/comparison_scene.json").read_text(encoding="utf-8")
 )
 VALUES = json.loads(
     (ROOT / "tests/fixtures/frame_table_values.json").read_text(encoding="utf-8")
@@ -613,7 +613,7 @@ def main():
                 "tests/fixtures/frame_table_nested.json",
                 "tests/fixtures/frame_table_dependencies.json",
                 "tests/fixtures/frame_table_parent.json",
-                "reports/table-view-2026-10-14/fixture.json",
+                "tools/frame_table/fixtures/comparison_scene.json",
             )
         },
         data=DATA,

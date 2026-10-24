@@ -81,7 +81,7 @@ Input разрешается через edit/edit_definition и реальную
 
 ## Примеры действий
 
-Добавляйте element в существующий table, не заменяйте весь конфиг. Остальные примеры значений, XML/JSON, вычислений и completion — [в каталоге](table_widget_examples.ru.md). Все class aliases перечислены в reports/table-view-2026-10-14/handler-widget-checklist.json.
+Добавляйте element в существующий table, не заменяйте весь конфиг. Остальные примеры значений, XML/JSON, вычислений и completion — [в каталоге](table_widget_examples.ru.md). Все class aliases перечислены в src/tactic_stream/shared_ui/features/table/widgets.json.
 
 ### SObjectDetailElementWdg
 

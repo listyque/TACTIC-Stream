@@ -49,5 +49,9 @@ htmlcov/
 /tactic_stream/tools/frame_foundation/reference/
 /tactic_stream/tools/frame_foundation/reference-b05/
 /tactic_stream/tests/artifacts/
+/tactic_stream/reports/
+/tactic_stream/*_ACCEPTANCE_20*.json
+/tactic_stream/LEGACY_MIGRATION_AUDIT_20*.*
+/tactic_stream/VFX_SUPPORT_20*.json
 
 # Packaged web resources under src/ remain versioned: wheels ship these files.

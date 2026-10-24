@@ -50,7 +50,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\shot-conf.xml → config/artist/element[discussion]/display`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ## Исключён: pyasm.prod (27)
 
@@ -92,7 +92,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\shot-conf.xml → config/supe/element[shot]/display`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `pyasm.prod.web.composite_wdg.CompLayerTableElementWdg`
 
@@ -352,7 +352,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\config\trigger-conf.xml → config/definition/element[data_hidden]/display` — dynamic_class, search_type, show_gear, show_insert, show_row_select, show_search_limit, view
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.PublishTableElement`
 
@@ -386,7 +386,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\sthpw\search_object-conf.xml → config/definition/element[search_type]/display`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.SubmissionLinkTableElement`
 
@@ -398,7 +398,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\sequence-conf.xml → config/table_episode/element[submit]/display`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.UpdateWdg`
 
@@ -410,7 +410,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\render-conf.xml → config/definition/element[update]/display` — insert
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.WikiElementWdg`
 
@@ -422,7 +422,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\plate-conf.xml → config/table/element[description]/display`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.task_wdg.SObjectTaskTableElement`
 
@@ -434,7 +434,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[task]/display` — bid_edit, simple_date, width
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.task_wdg.TaskParentSpacingTableElement`
 
@@ -480,7 +480,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\shot-conf.xml → config/definition/element[input]/display` — mode, search_type
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.cgapp.publish_element_wdg.PublishElementWdg`
 
@@ -512,7 +512,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\config\plugin-conf.xml → config/definition/element[uninstall]/display` — cbjs_action, icon
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.custom_layout_element_wdg.CustomLayoutElementWdg`
 
@@ -524,7 +524,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `cg-template:sthpw/task/definition → config/definition/element[expand]/display/dynamic_class`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.drop_element_wdg.DropElementWdg`
 
@@ -536,7 +536,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[drop_item]/display`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.gantt_element_wdg.GanttElementWdg`
 
@@ -548,7 +548,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\sthpw\project-conf.xml → config/definition/element[task_schedule]/display` — options
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.group_element_wdg.ParentGroupTableElementWdg`
 
@@ -570,7 +570,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[general_checkin_simple]/display` — dynamic_class
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.hidden_row_element_wdg.RowAddElementWdg`
 
@@ -704,7 +704,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `cg-template:sthpw/task/definition → config/definition/element[task_status_summary]/display` — mode
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.task_element_wdg.WorkElementWdg`
 
@@ -728,7 +728,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `cg-template:sthpw/task/definition → config/definition/element[status]/display` — edit_scope
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ## Текущий сценарий ТХ перенесён; остальные legacy-опции проверяются отдельно (18)
 
@@ -752,7 +752,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\asset-conf.xml → config/summary_small/element[snapshot]/display` — icon_size
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `pyasm.widget.table_element_wdg.ArrayTableElementWdg`
 
@@ -790,7 +790,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\config\url-conf.xml → config/definition/element[widget]/display`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.common.base_table_element_wdg.SimpleTableElementWdg`
 
@@ -812,7 +812,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\shot-conf.xml → config/definition/element[scan_status]/display`
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.delete_element_wdg.DeleteElementWdg`
 
@@ -866,7 +866,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[pipeline]/display` — expression
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.format_element_wdg.FormatElementWdg`
 
@@ -888,7 +888,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\config\naming-conf.xml → config/definition/element[manual_version]/display` — format
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.json_element_wdg.JsonElementWdg`
 
@@ -1030,7 +1030,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `cg-template:cg/scenes/definition → config/definition/element[general_checkin]/display` — lock_process, mode, process, show_context, show_links, sobject_mode, subcontext, transfer_mode, width
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.table.task_element_wdg.TaskElementWdg`
 
@@ -1052,7 +1052,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\DEFAULT-conf.xml → config/default_definition/element[task_pipeline_report]/display` — bg_color, edit, edit_assigned, edit_status, layout, show_assigned, show_dates
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ### `tactic.ui.widget.discussion_wdg.DiscussionElementWdg`
 
@@ -1074,7 +1074,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\prod\submission-conf.xml → config/definition/element[notes]/display` — process
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ## Input / совместимый alias; отдельный контракт формы (1)
 
@@ -1088,7 +1088,7 @@ L02 подключён к готовым панелям; ограничения 
 
 - `src\tactic_stream\config\search_type\widget\config\prod_setting-conf.xml → config/edit/element[key]/display` — hint, size
 
-Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в reports/table-view-2026-10-13.
+Все места и опции перечислены в полном HTML/CSV/JSON чеклисте в tools/frame_table/output/used_widgets.
 
 ## Исключён: недописанный исходник (1)
 

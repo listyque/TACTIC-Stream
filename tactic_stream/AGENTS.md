@@ -14,7 +14,7 @@
   inventory do not prove a screen is ready. A report with stale source
   fingerprints is not evidence for the current implementation.
 
-- Follow `docs/shared_ui_contract.md` for shared QML/Vue UI: one skeleton and
+- Follow `docs/frame/contract.md` for shared QML/Vue UI: one skeleton and
   rules, native house controls in each engine, real input and paired screenshots.
   Do not use WebEngine/WebView/HTML inside QML without an explicit user request.
   Wrappers around two independent screens are not a shared skeleton; identify
@@ -124,7 +124,7 @@
   Themes, translation, semantic icons and motion already have shared owners.
   Do not add empty layers, barrel aliases, separate controllers or factories
   just to match a QML diagram; carry responsibility boundaries over to Vue.
-  The current architecture map is in UI_ARCHITECTURE.md.
+  The current architecture map is in docs/architecture.md.
   Ship JS in separate chunks: /docs does not load App.vue; conditional editors
   use shared asyncComponent with loading/error states. For imperative window
   refs, load and mount the component before calling open; retain the instance

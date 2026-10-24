@@ -137,7 +137,7 @@ try {
   assert.equal(writes[5].rows[0].values.number, '9223372036854775807')
   records[0].values.value = 'old'
   await page.evaluate(() => window.host.$refs.editor.load('load'))
-  const report = root + '/../reports/raw-cell-2026-10-14'
+  const report = root + '/../tools/frame_admin/output/raw-cell'
   await mkdir(report, { recursive: true })
   const measurements = []
   for (const language of ['en', 'ru']) for (const width of [1400, 900]) for (const mode of ['dark', 'light']) {

@@ -7,13 +7,13 @@ For installation without a checkout, build `python -m tools.server_delivery
 --output <new-directory>` from `tactic_stream` and use the exported directory's
 `manage.py load`, `init`, `update`, and `check`. It contains all three Docker images,
 relative Compose secrets and named persistent volumes. Its native bootstrap creates
-a new PostgreSQL system database. See [installation and update](../../SERVER_DELIVERY.en.md)
-and [установка и обновление](../../SERVER_DELIVERY.ru.md).
+a new PostgreSQL system database. See [installation and update](../../docs/delivery/SERVER_DELIVERY.en.md)
+and [установка и обновление](../../docs/delivery/SERVER_DELIVERY.ru.md).
 
 ## Source-mounted development environment
 
 Контракт двух комплектов и подключение неизменённого Handler:
-[HANDLER_DEPLOYMENT.md](../../HANDLER_DEPLOYMENT.md). Отдельная проверка
+[HANDLER_DEPLOYMENT.md](../../docs/delivery/HANDLER_DEPLOYMENT.md). Отдельная проверка
 `tools/handler_deployment_check.py` использует собственные PostgreSQL базы
 и Apache контейнер; рабочую базу стенда не мигрирует.
 

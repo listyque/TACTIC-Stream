@@ -63,9 +63,10 @@ def build(handler, output, evidence=None):
                      'tactic_stream/web/help/project_creation.en.md', 'tactic_stream/web/help/project_creation.ru.md'):
             assert name in names, name
     handler_archive(handler, output / ('tactic-handler-' + handler_version + '-source.zip'))
-    for name in ('FILE_PROJECT_DELIVERY.en.md', 'FILE_PROJECT_DELIVERY.ru.md', 'FILE_WORKSPACE_UI_PLAN.md', 'FILE_WORKSPACE_COMPLETION_2026-10-13.md', 'HANDLER_DEPLOYMENT.md', 'SERVER_DELIVERY.en.md', 'SERVER_DELIVERY.ru.md', 'WINDOWS_DELIVERY.en.md', 'WINDOWS_DELIVERY.ru.md', 'RECOVERY_ACCEPTANCE.md',
+    for name in ('FILE_PROJECT_DELIVERY.en.md', 'FILE_PROJECT_DELIVERY.ru.md', 'FILE_WORKSPACE_SCOPE.md', 'FILE_WORKSPACE_ACCEPTANCE.md', 'HANDLER_DEPLOYMENT.md', 'SERVER_DELIVERY.en.md', 'SERVER_DELIVERY.ru.md', 'WINDOWS_DELIVERY.en.md', 'WINDOWS_DELIVERY.ru.md', 'RECOVERY_ACCEPTANCE.md',
                  'LICENSE.TACTIC', 'LICENSE.HANDLER', 'LICENSE.QUICKJS-NG'):
-        shutil.copyfile(ROOT / name, output / name)
+        source = ROOT / 'docs/delivery' / name if name.endswith('.md') else ROOT / name
+        shutil.copyfile(source, output / name)
     verification = output / 'verification'
     verification.mkdir()
     (verification / 'tools').mkdir()
