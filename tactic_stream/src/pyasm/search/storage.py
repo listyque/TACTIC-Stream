@@ -211,6 +211,7 @@ class Store:
         connections = json.loads((files('tactic_stream') / 'compatibility/connection_upgrade.json').read_text(encoding='utf-8'))
         plugins = json.loads((files('tactic_stream') / 'compatibility/plugin_upgrade.json').read_text(encoding='utf-8'))
         config = json.loads((files('tactic_stream') / 'compatibility/config_upgrade.json').read_text(encoding='utf-8'))
+        upgrade['naming_revision'] = config.get('naming_revision', False)
         upgrade['tables'].update(config['tables'])
         upgrade['registry'].extend(config['registry'])
         upgrade['tables'].update(plugins['tables'])
@@ -270,6 +271,10 @@ class Store:
             if not db.execute("SELECT 1 FROM sqlite_master WHERE name=?", (index['name'],)).fetchone():
                 db.execute(index['sql'])
                 changed = True
+        if upgrade.get('naming_revision'):
+            from pyasm.search.database_impl import naming_revision_statements
+            for statement in naming_revision_statements('Sqlite'):
+                db.execute(statement)
         for row in upgrade["registry"]:
             row.pop("id", None)
             existing = db.execute("SELECT * FROM search_object WHERE search_type=?", (row["search_type"],)).fetchone()

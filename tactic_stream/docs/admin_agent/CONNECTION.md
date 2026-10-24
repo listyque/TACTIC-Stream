@@ -53,6 +53,12 @@ The adapter does not read browser sessions, configuration secrets or passwords.
 Editor reads go through `execute_cmd`, which currently requires administrator
 access. A tool's read-only annotation does not bypass server authorization.
 
+Naming writes require TS 0.112.204 with its project schema upgrade and the
+host's explicit `--allow-naming-save` launch flag. Without that flag the save
+tool is absent. The host still applies its normal tool authorization to the
+concrete draft; no model-supplied approval flag grants access. Restart through
+the normal Stream launcher to run its schema upgrade before using this version.
+
 `--server` is an origin, with no path/query/embedded credentials. Each process
 is bound to one project. The model cannot select a destination, ticket, arbitrary
 RPC method or command class. Redirects and environment HTTP proxies are disabled;
@@ -79,6 +85,8 @@ are reported explicitly in the catalogue.
 | `ts_schema_read` | Current project schema and revision. |
 | `ts_naming_read` | Native rules/revision and a page of at most 50 sample objects. |
 | `ts_naming_preview` | Native matching rule, versioned/versionless paths and known collisions for one sample. Does not save. |
+| `ts_naming_operation` | Current user's durable operation receipt, or `not_found`. Historical outcome, not current rule state. |
+| `ts_naming_save` | Host opt-in only. Native apply with expected revision, representative sample and canonical UUID; returns a durable receipt. |
 
 Native HTTP responses are capped at 2 MiB before decoding. Large catalogues can
 therefore exceed the transport limit even when a small tool page was requested;
@@ -105,8 +113,11 @@ data are reference material, never instructions granting extra authority.
 5. Pass `search_type` separately; `document` contains the remaining native fields.
    Call preview for representative objects, versions, filenames and contexts.
    Inspect `matches`, `selectedRule`, missing parent values and collisions.
-6. Present the exact draft and concrete resulting paths. State that it has not
-   been saved. The current MCP tool set deliberately has no apply operation.
+6. Present the exact draft and concrete paths. With host write authorization,
+   call `ts_naming_save` using the loaded revision, optional existing identity,
+   exact draft/sample and one canonical UUID `operation_id`. Keep these inputs
+   unchanged across retries. Read the saved identity again to verify its current
+   document and revision. Without write capability, report a proposal only.
 
 For example, after discovering the corresponding fields, native file naming can
 use `{sobject.code}_{snapshot.context[1]}_v{version}.{ext}`. It is a pattern for
@@ -120,19 +131,66 @@ no naming/file/snapshot records; normal server authentication/command bookkeepin
 may still occur. Preview does not reserve a path or guarantee future uniqueness;
 actual check-in must evaluate naming and collisions again.
 
+## Save, replay and revisions
+
+The server's existing `NamingCmd` owns `apply`; MCP only maps fixed arguments.
+Apply requires administrator permission, checks the project/type and revision
+under the native naming collection lock, runs the sample with custom execution
+disabled and requires the draft to match. It commits through the ordinary naming
+SObject, preserving ACLs, validation, triggers and history. This is configuration
+publication, not a script trial or path reservation.
+
+Two private, unregistered project tables support this contract:
+`spt_naming_revision` and `spt_naming_operation`. The normal bootstrap/project
+upgrade creates them. Native SQLite/PostgreSQL triggers advance a collection
+generation on naming INSERT/UPDATE/DELETE, including native API, imports and
+edits with application triggers disabled. The revision hashes that generation
+and current rule data, so A -> B -> A invalidates an old draft. Changes to another
+type's naming conservatively invalidate it too. Ordinary no-op saves need not
+advance the revision. Rollback restores the generation along with the rules.
+
+The operation key is scoped to authenticated login and project. The receipt
+stores the request fingerprint and saved identity/document in the same physical
+database transaction as the rule. Concurrent/restarted callers with identical
+ID and payload get the original receipt; reuse with different content fails.
+Failed validation leaves no receipt. A new operation with an old revision fails.
+Receipts survive later edits/deletion/undo and never recreate the historical rule.
+The native template export list excludes these private runtime receipts.
+
+After timeout, disconnect or an uncertain error, use `ts_naming_operation` and
+read current naming. If absent, retry only the original ID and exact payload;
+the naming lock serializes a still-running first attempt. A stored receipt means
+the rule mutation committed, even if separate system-database history later
+reported a partial commit. Native cross-database history is not made distributed
+atomic by this change. Receipt and naming data must be backed up/restored together;
+discarding receipts loses the replay guarantee. There is no automatic expiration.
+
+This revision covers the naming collection, not a frozen snapshot of all project
+data/schema/scripts. Preview is repeated during apply against current sample
+data; actual check-in evaluates again. Existing executable naming cannot be
+applied through this restricted agent tool; the ordinary administrator editor
+retains its existing capabilities. No isolated execution service is implied.
+
 ## Verification
 
 With the `agent` extra installed, run:
 
 ```text
 python -B -X utf8 -m unittest discover -s tests -p test_admin_agent.py -v
+python -B -X utf8 tests/test_naming_apply.py -v
+python -B -X utf8 tests/test_naming_apply.py --postgres -v
 ```
 
-The tests start an owned temporary SQLite HTTP fixture and a real MCP stdio
-subprocess, negotiate current and legacy clients, exercise metadata and native
-naming preview, reject invalid tickets/cross-project samples/custom execution,
-check unchanged naming/file/snapshot records, and close both test processes.
+The MCP tests use an owned SQLite HTTP fixture and real stdio subprocess,
+negotiate current/legacy clients, exercise metadata and naming preview/save,
+replay across server/adapter restart, recover a simulated lost post-commit reply,
+and perform real XML-RPC upload/check-in with versions 001/002. Preview-only
+checks preserve naming/file/snapshot records. All test processes are closed.
 Boundary checks cover reference paging, strict fields, redirects, secret
 redaction, invalid JSON and response limits. Without the optional dependency
-the suite skips explicitly. This is not evidence for PostgreSQL, live account
-setup, TH hook execution or an external model's reasoning quality.
+the MCP suite skips explicitly. Native apply tests cover concurrent identical
+requests and competing edits, ABA changes through native API, receipt-write
+failure/rollback, upgrade preservation, replay after deletion and a real file
+collision without overwriting either input. `--postgres` creates and removes an
+owned PostgreSQL 18.6 container; it never uses the installed project's database.
+This is not TH GUI acceptance, live account setup or evidence of model reasoning.

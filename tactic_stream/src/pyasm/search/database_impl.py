@@ -14,6 +14,25 @@ class DatabaseImplException(TacticException):
     pass
 
 
+def naming_revision_statements(vendor):
+    """Native naming revisions share the rule's transaction, including raw imports."""
+    seed = ("INSERT INTO spt_naming_revision (code,revision) VALUES ('collection',0) "
+            "ON CONFLICT (code) DO NOTHING")
+    update = "UPDATE spt_naming_revision SET revision=revision+1 WHERE code='collection';"
+    if vendor == 'Sqlite':
+        return [seed] + [
+            'CREATE TRIGGER IF NOT EXISTS stream_naming_%s AFTER %s ON spt_naming '
+            'BEGIN %s END' % (event.lower(), event, update)
+            for event in ('INSERT', 'UPDATE', 'DELETE')]
+    if vendor == 'PostgreSQL':
+        return [seed,
+                'CREATE OR REPLACE FUNCTION stream_naming_revision() RETURNS trigger '
+                'LANGUAGE plpgsql AS $$ BEGIN %s RETURN NULL; END $$' % update,
+                'CREATE OR REPLACE TRIGGER stream_naming_revision AFTER INSERT OR UPDATE OR DELETE '
+                'ON spt_naming FOR EACH STATEMENT EXECUTE FUNCTION stream_naming_revision()']
+    raise UnsupportedContract('Naming revisions are not supported for this database')
+
+
 class DatabaseImpl:
     def has_table_triggers(self, sql, table):
         return True
@@ -181,6 +200,9 @@ class DatabaseImpl:
                 info = sql.get_column_info(table, column, use_cache=False)
                 if info and info['data_type'] != 'text':
                     sql.do_update('ALTER TABLE %s ALTER COLUMN %s TYPE text' % (identifier(table), identifier(column)))
+        if upgrade.get('naming_revision'):
+            for statement in naming_revision_statements(resource.get_vendor()):
+                sql.do_update(statement)
         sql.clear_table_cache(resource.get_database())
 
     def ensure_table_sequence(self, sql, table, minimum=0):
@@ -1002,6 +1024,9 @@ class PostgresImpl(DatabaseImpl):
             if not db.execute('SELECT 1 FROM pg_indexes WHERE schemaname=current_schema() AND indexname=%s', (index['name'],)).fetchone():
                 db.execute(index['sql'])
                 changed = True
+        if upgrade.get('naming_revision'):
+            for statement in naming_revision_statements('PostgreSQL'):
+                db.execute(statement)
         return self._insert_registry(db, upgrade['registry']) or changed
 
     def get_parameter(self):

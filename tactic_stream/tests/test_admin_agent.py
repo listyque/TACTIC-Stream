@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import threading
 import unittest
+from uuid import uuid4
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 try:
@@ -139,7 +140,7 @@ class AgentNativeIntegration(unittest.TestCase):
             async with Client(parameters) as client:
                 listed = await client.list_tools()
                 names = {tool.name for tool in listed.tools}
-                self.assertEqual(len(names), 8)
+                self.assertEqual(len(names), 9)
                 self.assertFalse(any('save' in name or 'execute' in name for name in names))
 
                 async def call(name, **arguments):
@@ -194,3 +195,106 @@ class AgentNativeIntegration(unittest.TestCase):
                     self.assertIn('403', str(result.content))
         asyncio.run(run())
         self.assertEqual(records(), before, 'Preview must not save naming, snapshots or files')
+
+    def test_save_replay_restart_and_real_checkin(self):
+        from tactic_client_lib import TacticServerStub
+        from tactic_stream.server.api import Api
+        api = Api(self.transport.store)
+        ticket = api.get_ticket('admin', 'private-test-password')
+        connection = StreamConnection(self.transport.url, 'one', ticket)
+        operation_id = str(uuid4())
+        document = dict(context='agent_save/*', checkin_type='strict',
+                        dir_naming='{project.code}/agent_save/{sobject.code}',
+                        file_naming='{sobject.code}_{snapshot.context[1]}_v{version}.{ext}')
+        sample = dict(key='contract/entity?project=one&code=A', file='source.bin',
+                      process='agent_save', context='agent_save/main')
+        parameters = StdioServerParameters(command=sys.executable, args=[
+            '-B', '-X', 'utf8', '-m', 'tactic_stream.admin_agent', '--server', self.transport.url,
+            '--project', 'one', '--stream-root', str(ROOT), '--allow-naming-save'],
+            env=dict(os.environ, TACTIC_AGENT_TICKET=ticket, PYTHONUTF8='1', PYTHONPATH=str(ROOT/'src')))
+
+        async def save():
+            async with Client(parameters) as client:
+                loaded = await client.call_tool('ts_naming_read', {'search_type': 'contract/entity'})
+                args = dict(search_type='contract/entity', document=document, sample=sample,
+                            expected_revision=loaded.structured_content['revision'], operation_id=operation_id)
+                preview = await client.call_tool('ts_naming_preview', dict(search_type='contract/entity',
+                                                                         document=document, sample=sample))
+                self.assertFalse(preview.is_error, preview.content)
+                result = await client.call_tool('ts_naming_save', args)
+                self.assertFalse(result.is_error, result.content)
+                self.assertEqual(result.structured_content['status'], 'applied')
+                replay = await client.call_tool('ts_naming_save', args)
+                self.assertEqual(replay.structured_content, result.structured_content)
+                stale = await client.call_tool('ts_naming_save', dict(args, operation_id=str(uuid4())))
+                self.assertTrue(stale.is_error)
+                changed = await client.call_tool('ts_naming_save', dict(args, document=dict(document, file_naming='other.bin')))
+                self.assertTrue(changed.is_error)
+                return args, result.structured_content, preview.structured_content['results'][0]
+        args, receipt, preview = asyncio.run(save())
+        # Both the MCP process above and the HTTP server restart; receipts are database-owned.
+        self.transport.stop_server()
+        self.transport.start_server()
+        connection = StreamConnection(self.transport.url, 'one', ticket)
+
+        async def verify():
+            async with Client(create_server(connection, ROOT, allow_naming_save=True)) as client:
+                replay = await client.call_tool('ts_naming_save', args)
+                self.assertFalse(replay.is_error, replay.content)
+                self.assertEqual(replay.structured_content, receipt)
+                status = await client.call_tool('ts_naming_operation', dict(
+                    search_type='contract/entity', operation_id=operation_id))
+                self.assertEqual(status.structured_content, receipt)
+                loaded = await client.call_tool('ts_naming_read', dict(search_type='contract/entity'))
+                self.assertNotEqual(loaded.structured_content['revision'], args['expected_revision'])
+                self.assertEqual(sum(row['identity'] == receipt['identity'] for row in loaded.structured_content['rules']), 1)
+        asyncio.run(verify())
+
+        client = TacticServerStub(setup=False, protocol='xmlrpc')
+        client.set_server(self.transport.url)
+        client.set_project('one')
+        client.set_ticket(ticket)
+        self.addCleanup(client.server.__exit__, None, None, None)
+        source = Path(self.transport.temp.name) / 'source.bin'
+        source.write_bytes(b'agent native check-in one')
+        first = client.simple_checkin(sample['key'], sample['context'], str(source),
+                                      mode='upload', create_icon=False, checkin_type='strict')
+        file = first['__file_sobjects__'][0]
+        destination = Path(file['checkin_dir']) / file['file_name']
+        self.assertEqual(file['file_name'], preview['file'])
+        self.assertEqual(file['relative_dir'], preview['directory'])
+        self.assertEqual(destination.read_bytes(), source.read_bytes())
+        source.write_bytes(b'agent native check-in two')
+        second = client.simple_checkin(sample['key'], sample['context'], str(source),
+                                       mode='upload', create_icon=False, checkin_type='strict')
+        second_file = second['__file_sobjects__'][0]
+        self.assertIn('_v002.bin', second_file['file_name'])
+        self.assertEqual(destination.read_bytes(), b'agent native check-in one')
+        self.assertEqual((Path(second_file['checkin_dir']) / second_file['file_name']).read_bytes(), source.read_bytes())
+
+        class LostReply(StreamConnection):
+            def request(self, path, payload=None):
+                result = super().request(path, payload)
+                if payload and payload.get('method') == 'execute_cmd' and payload['args'][2]['action'] == 'apply':
+                    raise ToolError('Connection lost after server committed')
+                return result
+
+        async def recover_lost_reply():
+            current = connection.command('naming', 'load', search_type='contract/entity')
+            retry = dict(args, operation_id=str(uuid4()), identity=receipt['identity'],
+                         expected_revision=current['revision'], document=dict(document,
+                         file_naming='{sobject.code}_recovered_v{version}.{ext}'))
+            failing = LostReply(self.transport.url, 'one', ticket)
+            async with Client(create_server(failing, ROOT, allow_naming_save=True)) as host:
+                result = await host.call_tool('ts_naming_save', retry)
+                self.assertTrue(result.is_error)
+                self.assertIn('ts_naming_operation', str(result.content))
+            async with Client(create_server(connection, ROOT, allow_naming_save=True)) as host:
+                status = await host.call_tool('ts_naming_operation', dict(
+                    search_type='contract/entity', operation_id=retry['operation_id']))
+                self.assertEqual(status.structured_content['status'], 'applied')
+                replay = await host.call_tool('ts_naming_save', retry)
+                self.assertEqual(replay.structured_content, status.structured_content)
+                current = await host.call_tool('ts_naming_read', {'search_type': 'contract/entity'})
+                self.assertEqual(sum(row['identity'] == receipt['identity'] for row in current.structured_content['rules']), 1)
+        asyncio.run(recover_lost_reply())

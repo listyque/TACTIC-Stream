@@ -228,6 +228,11 @@ An unknown column/handler must be diagnosed, not replaced with a generic cell.
 
 NamingCmd actions are `load`, `preview`, `save`, with `project_code`, base
 `search_type` and optional rule `identity`. `save` uses `expected_revision`.
+Release 0.112.204 adds `apply` (same draft, revision, sample, canonical UUID
+`operation_id`) and `operation` (read that user's durable receipt). Apply
+disallows custom execution. Retry the exact payload/ID; changed payloads fail.
+Receipts record historical success, not current state: read naming again.
+See [connection/apply contract](CONNECTION.md#save-replay-and-revisions).
 Read an existing rule's `document` before editing it; omitted fields default to
 empty/false. Available rule fields:
 

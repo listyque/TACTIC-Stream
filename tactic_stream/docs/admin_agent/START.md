@@ -72,8 +72,9 @@ conversation summary does not prove the server still has the same state.
 
 ## Current execution boundary
 
-This pack describes source release 0.112.203. Refresh server capabilities and
+This pack describes source release 0.112.204. Refresh server capabilities and
 project metadata each session. The optional [MCP adapter](CONNECTION.md) exposes
-references, metadata and naming preview. It cannot save, execute scripts or
-connect to TH's runtime. There is no durable draft/apply service or isolated
-code runner. Report proposals as proposals, never as applied changes.
+references, metadata and naming preview; host opt-in enables revision-checked,
+durably replayable naming save. It cannot execute scripts or connect to TH's
+runtime. Naming receipts are not a general atomic project-apply service or an
+isolated code runner. Report proposals as proposals, never as applied changes.
