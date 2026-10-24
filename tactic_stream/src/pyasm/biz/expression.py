@@ -1826,7 +1826,7 @@ class MethodMode(ExpressionParser):
             result_type = 'datetime'
 
         if not result_type:
-            return results
+            return [format % value if isinstance(value, (int, float)) else value for value in results]
 
         # format the results
         for result in results:

@@ -13,6 +13,7 @@
 """Native expression values from TACTIC; DOM and JavaScript rendering excluded."""
 import ast
 import datetime
+from copy import copy
 
 from pyasm.common import Container, FormatValue, SPTDate
 from pyasm.search import Search, SearchKey
@@ -297,10 +298,16 @@ class ExpressionElementWdg(SimpleTableElementWdg):
                 checked = False
             return {'text': str(result), 'checked': checked}
         results = result if isinstance(result, (list, tuple)) else [result]
+        display_sobject = sobject
+        if self.get_option('display_expression'):
+            # Legacy display expressions can reference the computed column by name.
+            display_sobject = copy(sobject)
+            display_sobject.set_data(dict(sobject.get_data(), **{self.get_name(): result}))
+            display_sobject.set_update_data({})
         values = []
         for value in results:
             if self.get_option('display_expression'):
-                value = Search.eval(self.get_option('display_expression'), sobject,
+                value = Search.eval(self.get_option('display_expression'), display_sobject,
                                     single=self.get_option('return') != 'list',
                                     list=self.get_option('return') == 'list',
                                     vars={'VALUE': str(value)}, show_retired=self.show_retired)

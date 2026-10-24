@@ -77,6 +77,9 @@ class JsonCodecTest(unittest.TestCase):
 
 
 class JsonSdkTransportTest(unittest.TestCase):
+    start_server = classmethod(transport_fixture.Transport.start_server.__func__)
+    stop_server = classmethod(transport_fixture.Transport.stop_server.__func__)
+
     @classmethod
     def setUpClass(cls):
         from tactic_stream.server.app import create_app

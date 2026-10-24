@@ -50,6 +50,10 @@ class FormatValue(object):
             num = float(num)
         except ValueError as e:
             num = 0
+        # Headless launches may keep C, which has no monetary conventions.
+        if locale.localeconv()['frac_digits'] == locale.CHAR_MAX:
+            amount = f'{abs(num):,.2f}' if grouping else f'{abs(num):.2f}'
+            return ('-' if num < 0 else '') + ('USD ' if monetary else '$') + amount
         return locale.currency(num, True, grouping, monetary)
 
 

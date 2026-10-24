@@ -7,9 +7,10 @@ original algorithm. DAYS/SECONDS fix an undefined original local variable.
 """
 import datetime
 from dateutil import parser
+from pyasm.common.format_value import FormatValue
 
 
-class FormatValueMixin:
+class FormatValueMixin(FormatValue):
     def format_checkbox(self, value):
         return {'kind': 'boolean', 'checked': bool(value), 'text': 'True' if value else 'False'}
 
@@ -28,15 +29,6 @@ class FormatValueMixin:
         num = float(num)
         import locale
         return locale.format_string("%.*f", (places, num), True)
-
-    def currency_format(self, num, grouping=False, monetary=False):
-        """Format a currency according to locality and given places"""
-        import locale
-        try:
-            num = float(num)
-        except ValueError as e:
-            num = 0
-        return locale.currency(num, True, grouping, monetary)
 
     def get_format_value(self, value, format):
         # Original DAYS/SECONDS branches referenced an undefined real_value.

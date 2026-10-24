@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.199.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.200.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7733,3 +7733,10 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 
 - Migrate SnapshotInfoWdg owner captions to tactic.ui.table and the independent Handler 0.6.0.145 value catalogue. Keep original name-code labels, batch parent lookups, code-only references and missing-parent n/a without restoring pyasm.prod.
 - Fix the Checkin Log log view instead of certifying only checkin_history. Remove its RenderSubmission action because the production subsystem is excluded. Exercise Code, Files and the original native query projection on the same snapshot.
+
+
+## 0.112.200 — Schedule Bidding
+
+- Preserve configured nested search, edit and insert views in Stream and Handler 0.6.0.146. Keep saved conditions within the parent scope and use the configured bidding form for related tasks.
+- Restore computed-column references in display expressions without changing the record. Add nullable task bid_cost/color extension columns required by the VFX template through the ordinary SQLite/PostgreSQL upgrade.
+- Use a USD fallback for dollar formats when the process locale has no monetary conventions; configured monetary locales retain their original behavior.

@@ -33,7 +33,8 @@ def _require_table_access(search_type=None, access='view'):
 
 
 def read_form(search_type, view='edit', search_key=None, default=None, source_key=None, search_keys=None, parent_key=None, connect_key=None, element_names=None, ignore=None):
-    _require_table_access(search_type, 'insert' if (view == 'insert' or source_key) else 'edit')
+    inserting = not (search_key or search_keys)
+    _require_table_access(search_type, 'insert' if inserting else 'edit')
     if not isinstance(view, str) or not re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}', view):
         raise ValueError('Invalid view name')
     if isinstance(ignore, str):
@@ -45,7 +46,7 @@ def read_form(search_type, view='edit', search_key=None, default=None, source_ke
     for name, key in (('parent_key', parent_key), ('connect_key', connect_key)):
         if key is None:
             continue
-        if not isinstance(key, str) or not key or view != 'insert' or search_key or search_keys is not None:
+        if not isinstance(key, str) or not key or not inserting or search_keys is not None:
             raise ValueError('Related creation requires an insert form and a valid ' + name)
         from tactic_stream.server.object_operations import selected_objects, read_relations
         target = selected_objects(SearchKey.extract_base_search_type(key), [key])[0]

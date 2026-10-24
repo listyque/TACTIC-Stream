@@ -1020,7 +1020,8 @@ export default {
       this.$refs.nestedForm.open(
         record?.__search_key__ || null,
         null,
-        state.scope.searchType === state.scope.parentKey.split('?')[0]
+        record?.__search_key__ ||
+          state.scope.searchType === state.scope.parentKey.split('?')[0]
           ? {}
           : { parent_key: state.scope.parentKey }
       );
@@ -2467,6 +2468,8 @@ export default {
       :ticket="ticket"
       :project="nestedEditor.scope.projectCode || project"
       :search-type="nestedEditor.scope.searchType"
+      :edit-view="nestedEditor.scope.editView || 'edit'"
+      :insert-view="nestedEditor.scope.insertView || 'insert'"
       @saved="tableSaved"
     />
     <TableServiceDialogs ref="tableServiceDialogs" />

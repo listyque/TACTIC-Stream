@@ -195,6 +195,18 @@
       "column": "search_code",
       "sql": "ALTER TABLE work_hour ADD COLUMN search_code varchar(256);",
       "source_method": "upgrade_v4_0_0_a01_027"
+    },
+    {
+      "table": "task",
+      "column": "bid_cost",
+      "sql": "ALTER TABLE task ADD COLUMN bid_cost double precision;",
+      "source_method": "VFX template schedule_task_edit extension"
+    },
+    {
+      "table": "task",
+      "column": "color",
+      "sql": "ALTER TABLE task ADD COLUMN color varchar(256);",
+      "source_method": "VFX template schedule_task_edit extension"
     }
   ]
 }

@@ -14,6 +14,73 @@ from tactic_stream.server.table_cells import describe_cell
 class NestedTables(unittest.TestCase):
     setUp = fixtures.TableServices.setUp
 
+    def test_bidding_currency_works_in_c_locale_for_cells_summaries_and_expressions(self):
+        import locale
+        from unittest.mock import patch
+        from pyasm.common import FormatValue
+        from tactic.ui.table.format_element_wdg import FormatElementWdg
+        parent = Search.get_by_code('contract/entity', 'A')
+        task = write(lambda: Task.create(parent, 'model', triggers=False))
+        for value, expected in [(1250.75, '$1,250'), (0, '$0'), (-1250.75, '-$1,250')]:
+            task.set_value('bid_cost', value)
+            widget = FormatElementWdg(name='bid_cost', type='currency', format='-$1,234', total_summary='total')
+            widget.set_sobject(task)
+            with patch('locale.localeconv', return_value={'frac_digits': locale.CHAR_MAX}):
+                self.assertEqual(widget.get_text_value(), expected)
+                self.assertEqual(widget.evaluate_summary([task]), expected)
+                self.assertEqual(FormatValue().get_format_value(value, '-$1,234'), expected)
+
+    def test_bidding_computed_column_is_visible_to_its_display_expression_without_writes(self):
+        from tactic.ui.table.expression_element_wdg import ExpressionElementWdg
+        parent = Search.get_by_code('contract/entity', 'A')
+        write(lambda: Task.create(parent, 'model', triggers=False))
+        task = Search('sthpw/task').get_sobject()
+        write(lambda: (task.set_value('bid_cost', 1250.50), task.commit()))
+        parent.set_value('description', 'Unsaved draft')
+        before = parent.get_data(), parent.update_data.copy()
+        widget = ExpressionElementWdg(name='total_cost', expression='@SUM(sthpw/task.bid_cost)',
+            display_expression='${@GET(.total_cost, %0.2f)}')
+        widget.set_sobjects([parent]); widget.preprocess(); widget.set_current_index(0)
+        self.assertEqual(widget.get_cell_value()['text'], '$1250.50')
+        self.assertEqual((parent.get_data(), parent.update_data), before)
+        self.assertNotIn('total_cost', parent.get_data())
+
+    def test_bidding_named_views_saved_filter_and_order_stay_scoped(self):
+        import json
+        from tactic_stream.server.interface import read_form
+        parent = Search.get_by_code('contract/entity', 'A')
+        other = Search.get_by_code('contract/entity', 'B')
+        def create():
+            tasks = [Task.create(owner, 'model', context=str(i), triggers=False)
+                     for i, owner in enumerate([parent, parent, other])]
+            for task, cost in zip(tasks, [10, 20, 30]):
+                task.set_value('bid_cost', cost); task.commit()
+            values = [dict(prefix='main_body', main_body_column='bid_cost', main_body_relation='>',
+                           main_body_value=0, main_body_enabled='on'),
+                      dict(prefix='group', order='bid_cost desc')]
+            config = SearchType.create('config/widget_config')
+            config.set_value('search_type', 'sthpw/task')
+            config.set_value('view', 'link_search:bidding')
+            config.set_value('config', '<config><filter><values>' + json.dumps(values) + '</values></filter></config>')
+            config.commit()
+            edit = SearchType.create('config/widget_config')
+            edit.set_value('search_type', 'sthpw/task'); edit.set_value('view', 'bidding_edit')
+            edit.set_value('config', '<config><bidding_edit><element name="description"/><element name="bid_cost"/></bidding_edit></config>')
+            edit.commit()
+        write(create)
+        options = dict(search_type='sthpw/task', view='table', search_view='link_search:bidding',
+                       edit_view='bidding_edit', insert_view='bidding_edit', mode='insert')
+        element = dict(name='tasks', display=dict(handler='HiddenRowToggleWdg', options=options), action=dict(handler='', options={}))
+        self.assertTrue(describe_cell(element, {})['supported'])
+        scope = nested_cell(parent.get_search_key(), options)['nestedTable']
+        self.assertEqual(scope['insertView'], 'bidding_edit')
+        self.assertEqual(scope['editView'], 'bidding_edit')
+        result = read_nested_scope(scope['parentKey'], scope['searchType'], search_view=scope['searchView'])
+        self.assertEqual([row['bid_cost'] for row in result['records']], [20, 10])
+        form = read_form('sthpw/task', 'bidding_edit', parent_key=parent.get_search_key())
+        self.assertEqual(form['mode'], 'insert')
+        self.assertEqual([field['name'] for field in form['fields']], ['description', 'bid_cost'])
+
     def test_checkin_history_uses_the_owned_snapshot_table(self):
         parent = Search.get_by_code('contract/entity', 'A')
         cell = nested_cell(parent.get_search_key(), dict(dynamic_class='tactic.ui.widget.SObjectCheckinHistoryWdg'))

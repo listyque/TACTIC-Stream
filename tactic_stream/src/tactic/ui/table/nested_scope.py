@@ -6,6 +6,7 @@ def nested_cell(search_key, options, column='', layout_reader=None):
 
     allowed = {
         'dynamic_class', 'dynamic', 'search_type', 'view', 'expression',
+        'search_view', 'edit_view', 'insert_view',
         'icon', 'title_icon', 'icon_tip', 'label', 'mode', 'init_load_num',
         'show_search_limit', 'show_insert', 'show_row_select', 'show_select',
         'show_gear', 'show_search', 'show_shelf', 'show_resize_scroll', 'related_types', 'include_mako', 'html',
@@ -54,6 +55,9 @@ def nested_cell(search_key, options, column='', layout_reader=None):
     return dict(text=str(label or ''), targetSearchKey=search_key, columnName=column,
                 nestedTable=dict(searchType=options.get('search_type') or obj.get_base_search_type(),
                     view=view, parentKey=search_key,
+                    searchView=options.get('search_view') or '',
+                    editView=options.get('edit_view') or 'edit',
+                    insertView=options.get('insert_view') or 'insert',
                     selection=options.get('show_row_select', options.get('show_select')) not in (False, 'false'),
                     insert=options.get('show_insert') not in (False, 'false'),
                     shelf=options.get('show_shelf') not in (False, 'false'),
@@ -65,7 +69,7 @@ def nested_cell(search_key, options, column='', layout_reader=None):
 
 
 def read_nested_scope(parent_key, search_type, view='table', expression='', offset=0,
-                      limit=50, filters=None, order_by=None):
+                      limit=50, filters=None, order_by=None, search_view=''):
     """Self-contained original-server procedure; never return an unscoped table."""
     import re
     from pyasm.biz import Project, Snapshot
@@ -121,6 +125,44 @@ def read_nested_scope(parent_key, search_type, view='table', expression='', offs
         else:
             search.add_parent_filter(parent)
     columns = SearchType.get_column_info(base)
+    if search_view:
+        if not isinstance(search_view, str) or not re.fullmatch(r'[A-Za-z_][\w.:@-]{0,255}', search_view):
+            raise ValueError('Invalid search view name')
+        try:
+            from tactic_stream.server.search_configuration import apply_filters, unpack_filters, validate_filters
+        except ImportError:
+            from tactic.ui.app import SearchWdg
+            saved = Search(search_type)
+            SearchWdg(search_type=search_type, view=search_view, display=True).alter_search(saved)
+            saved.add_column('id')
+            search.add_search_filter('id', saved)
+        else:
+            from pyasm.search import WidgetDbConfig
+            from pyasm.common import Container
+            from tactic_stream.server.api import check_record_access
+            from tactic_stream.server.search_configuration import deny_expression_write
+            config = WidgetDbConfig.get_by_search_type(search_type, search_view)
+            if config is None:
+                raise ValueError('Search view is not available')
+            conditions, packed = unpack_filters(config.get_value('config'))
+            conditions = [row for row in conditions if row['column']]
+            validate_filters(conditions, columns)
+            previous_read = Container.get('Expression:check_record_access')
+            previous_write = Container.get('Expression:check_method_access')
+            Container.put('Expression:check_record_access', check_record_access)
+            Container.put('Expression:check_method_access', deny_expression_write)
+            try:
+                # Keep saved OR conditions inside the mandatory parent scope.
+                saved = Search(search_type)
+                apply_filters(saved, conditions)
+                saved.add_column('id')
+                search.add_search_filter('id', saved)
+            finally:
+                Container.put('Expression:check_record_access', previous_read)
+                Container.put('Expression:check_method_access', previous_write)
+            if not order_by:
+                order = next((row.get('order', '') for row in packed if row.get('prefix') == 'group'), '')
+                order_by = [part.strip() for part in order.split(',') if part.strip()]
     if not isinstance(filters or [], list) or len(filters or []) > 20:
         raise ValueError('Invalid nested table filters')
     for item in filters or []:

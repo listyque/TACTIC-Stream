@@ -8,14 +8,13 @@ from tactic_client_lib import TacticServerStub
 
 
 class HtmlApi(unittest.TestCase):
+    start_server = classmethod(test_transport.Transport.start_server.__func__)
+    stop_server = classmethod(test_transport.Transport.stop_server.__func__)
+    tearDownClass = classmethod(test_transport.Transport.tearDownClass.__func__)
+
     @classmethod
     def setUpClass(cls):
-        test_transport.Transport.setUpClass()
-        cls.addClassCleanup(test_transport.Transport.tearDownClass)
-        cls.store = test_transport.Transport.store
-        cls.temp = test_transport.Transport.temp
-        cls.baseline = test_transport.Transport.baseline
-        cls.url = test_transport.Transport.url
+        test_transport.Transport.setUpClass.__func__(cls)
 
     def setUp(self):
         test_transport.Transport.setUp(self)

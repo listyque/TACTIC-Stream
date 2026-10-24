@@ -152,6 +152,7 @@ async function load() {
     parent_key: scope.parentKey,
     search_type: scope.searchType,
     view: scope.view || 'table',
+    search_view: scope.searchView || '',
     expression: scope.expression || '',
     offset: state.offset || 0,
     limit: scope.initialLimit || 50,

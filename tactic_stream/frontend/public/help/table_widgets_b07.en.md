@@ -616,3 +616,16 @@ Native configured publication accepts text, multiline, select, checkbox, thumbna
 - **Ordinary-user ACL vs administrator tools**: Table reads, inline cell edits, forms, and self-contained table procedures (`read_nested_scope`, `read_dependency_node`, `read_connection_cells`, `remove_connection`, `edit_parent_group`, `read_parent_cells`, `append_snapshot_files`, `read_snapshot_files`, `edit_drop_links`, `read_summary_cell`) enforce project, `search_type`, and `element` access rules for authenticated users while keeping `read_group_summary`, `read_custom_layout`, and `ColumnsEditor` strictly admin-only.
 - **Form revisions, retired guard, and uncertain save check**: `read_form` and `EditCmd` / `EditMultipleCmd` enforce `expected_revision` before writing, reject editing retired records (`Retired records cannot be edited. Reactivate the record first.`), and support `action='check'` (`Check saved changes`) when a network error leaves the save outcome uncertain.
 - **Remaining explicit limits**: Only unresolved legacy layout references (`asset_panel_wdg`, `asset_cost_breakdown`, `inline_add_item`, bare `custom_col`) and `include_submission=true` remain explicitly rejected.
+
+
+## Snapshot history files
+
+The Files cell in snapshot history expands a table of files registered in that exact snapshot: file link, repository directory, type, frame range, size and timestamp. Filtering and paging stay within that snapshot; an empty version shows no files. Ordinary file links use the configured repository URL. Sequence rows retain their frame pattern and range; the link does not download an entire sequence. Directory packages remain registered file records; their recursive disk contents are not expanded here. Maya/applet actions are excluded.
+
+
+Checkin Log shows the referenced object name and code in Code, as in legacy TACTIC. A missing or excluded owner displays n/a. Files opens the exact version file list. The old RenderSubmission action is part of the excluded production subsystem and is omitted from the built-in log.
+
+
+### Schedule Bidding
+
+In the VFX template, expand Tasks beside a schedule phase to see its bidding tasks and dates. Add and Edit use the configured bidding form, including cost, hours, start/due dates and color. Saving refreshes the phase total. Tasks stay scoped to their phase; a saved view can supply filters and default ordering. Stream adds missing nullable bidding fields during its normal startup upgrade. Monetary formats use the configured server locale; if it has no currency conventions, dollar formats use USD.
