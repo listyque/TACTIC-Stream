@@ -4,7 +4,7 @@ SObjectLog.create uses the original body and the selected system persistence pat
 RetireLog uses the same native Command and journal path.
 """
 from pyasm.common.errors import UnsupportedContract
-from pyasm.search.search import Search, SObject
+from pyasm.search.search import Search, SearchType, SObject
 
 
 class SObjectLog(SObject):
@@ -14,7 +14,11 @@ class SObjectLog(SObject):
     def create(sobject, transaction, action):
         assert sobject
         log = SObjectLog.create_new()
-        log.set_sobject_value(sobject)
+        # Audit identity must not resolve through a project's wildcard connection.
+        log.set_value('search_type', sobject.get_search_type())
+        log.set_value('search_id', sobject.get_id())
+        if SearchType.column_exists(sobject.get_search_type(), 'code'):
+            log.set_value('search_code', sobject.get_value('code'))
         log.set_user()
         log.set_value('transaction_log_id', transaction.get_id())
         if sobject.get_base_search_type() in ['sthpw/task', 'sthpw/snapshot', 'sthpw/note', 'sthpw/work_hour']:

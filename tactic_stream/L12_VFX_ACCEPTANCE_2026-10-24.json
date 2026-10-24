@@ -1,0 +1,441 @@
+{
+  "date": "2026-10-24",
+  "stream": "0.112.195",
+  "handler": "0.6.0.142",
+  "production_accepted": false,
+  "scope": "Reported Sequence/Shot tree and nested-table failures; selected VFX/Game delivery workflows",
+  "excluded_by_user": [
+    "Maya",
+    "applets"
+  ],
+  "clean_windows": "new run skipped by user; older 0.112.193 evidence is not reused as 0.112.195 acceptance",
+  "frame_gate": {
+    "status": "passed",
+    "stages": 156,
+    "retried": [
+      "native-table"
+    ],
+    "current_sources_verified": true,
+    "source_files": 1968,
+    "report_sha256": "b5d4390ed695208802b2d3717a2ec3eef2153fdfcbc8a218650ab4f1d9c18a67",
+    "sources_sha256": "ebf33e5ad87abed373523c5bdcb0f4c9faebc32510d4045a193d9b403c243faf"
+  },
+  "focused_tests": {
+    "sqlite_vfx": "passed",
+    "real_postgresql_vfx": "passed",
+    "handler_contracts": 78,
+    "focused_server_regressions": 15
+  },
+  "installed_gui": {
+    "combinations": 16,
+    "dimensions": [
+      "SQLite/PostgreSQL18.6",
+      "browser/native Handler",
+      "administrator/artist",
+      "VFX/Game"
+    ],
+    "native_rendering": "Qt offscreen/software with actual login, mouse/keyboard and RPC; GPU and physical input not certified",
+    "pixel_parity": "paired screenshots inspected; full application pixel parity not claimed"
+  },
+  "demo_upgrade": {
+    "from_version": "0.112.194",
+    "to_version": "0.112.195",
+    "cold_backup_files": 90,
+    "restored_copy_verified": true,
+    "unchanged_project_tables": 24,
+    "modified_widget_configs": [
+      [
+        "vfx/shot",
+        "definition"
+      ],
+      [
+        "vfx/shot",
+        "edit_definition"
+      ],
+      [
+        "vfx/shot",
+        "edit"
+      ],
+      [
+        "vfx/asset",
+        "definition"
+      ]
+    ],
+    "assets_preserved": true,
+    "sequence_shots_tree": true,
+    "sequence_shots_table": true,
+    "no_cell_errors": true
+  },
+  "inventory": {
+    "types": 25,
+    "views": 151,
+    "statuses": {
+      "cells passed; GUI actions not exercised": 36,
+      "configuration; not a table/form scenario": 78,
+      "failed": 4,
+      "form loaded; save not exercised": 19,
+      "gaps": 14
+    },
+    "report": "VFX_SUPPORT_2026-10-24.json",
+    "report_sha256": "f4a0a7fe9cbe9864ae2bf7b40b256284d1491aa54ee63ed90ee98718d883544e"
+  },
+  "delivery": {
+    "windows": "windows-0.112.195-qualified",
+    "windows_manifest_sha256": "41465f606f2215ed16186eed2caff32addf4aa9a7465b5ce2ddb970c659e6855",
+    "server": "server-0.112.195-qualified",
+    "server_manifest_sha256": "a3f50019a4ff07f8be576cb41ac1391dc8dddae72396833d45102d5e2ab29da7",
+    "handler_bundle_vs_checkout": "Only newline differences; normalized content verified identical",
+    "handler_newline_differences": [
+      "thlib/ui/qml/features/table/NestedTableView.qml"
+    ],
+    "examples": {
+      "format": "tactic-stream-legacy-example-templates",
+      "source_sha256": {
+        "vfx-1.0.0.zip": "3dcebb7ad9bc1e0a64926b658af81854c27e86aa5dc4d3575e7f9733fbafcfbb",
+        "game-1.0.0.zip": "dba3f97494970b2957adb0f010c3f3668151fccd418188e5e2382cbfeb5c4fcf"
+      },
+      "repairs": {
+        "game-1.0.0-stream.1.zip": {
+          "file": "game/sthpw_pipeline.spt",
+          "references": 6,
+          "before": "game_status_default",
+          "after": "game/status_default"
+        },
+        "vfx-1.0.0-stream.1.zip": {
+          "file": "vfx/config_widget_config.spt",
+          "changes": [
+            "FrameRangeWdg to native expression",
+            "FrameInputWdg/FrameAction to five native fields",
+            "AssetDetailWdg to native object inspector"
+          ]
+        }
+      },
+      "files": {
+        "vfx-1.0.0.zip": "3dcebb7ad9bc1e0a64926b658af81854c27e86aa5dc4d3575e7f9733fbafcfbb",
+        "vfx-1.0.0-stream.1.zip": "d4fba9ad4335fd807d0dfe0cc06e794dea64a91b3f4ed79845605ecf5a4c59cc",
+        "game-1.0.0-stream.1.zip": "d125c31ba9eee16c08a6afcbb175818cb69bb772037d41455dd1b10b85537241"
+      }
+    }
+  },
+  "next_work": "Resolve the 18 known ordinary VFX view failures and exercise remaining form saves/actions; repeat inventory and installed GUI checks.",
+  "sqlite": {
+    "operations": {
+      "vfx": {
+        "project": "l12_vfx_3ebfa00820e1",
+        "installed": true,
+        "available_types": 22,
+        "unavailable_types": {
+          "prod/session_contents": {
+            "code": 501,
+            "message": "TACTIC module is not migrated: pyasm.prod.biz"
+          },
+          "vfx/node_data": {
+            "code": 400,
+            "message": "Invalid XML-RPC arguments or missing object"
+          },
+          "vfx/texture": {
+            "code": 501,
+            "message": "TACTIC module is not migrated: pyasm.prod.biz"
+          }
+        },
+        "crud": true,
+        "task": true,
+        "note": true,
+        "hierarchy_and_asset_instance": true,
+        "checkin_and_http_bytes": true,
+        "asset_key": "vfx/asset?project=l12_vfx_3ebfa00820e1&code=L12_ASSET"
+      },
+      "game": {
+        "project": "l12_game_3ebfa00820e1",
+        "installed": true,
+        "available_types": 9,
+        "unavailable_types": {},
+        "crud": true,
+        "task": true,
+        "note": true,
+        "hierarchy_and_asset_instance": true,
+        "checkin_and_http_bytes": true,
+        "asset_key": "game/asset?project=l12_game_3ebfa00820e1&code=L12_ASSET"
+      }
+    },
+    "browser": {
+      "status": "passed",
+      "checks": [
+        {
+          "role": "admin",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "asset_visible": true
+        },
+        {
+          "role": "admin",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "sequence_shots_tree": true
+        },
+        {
+          "role": "admin",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "sequence_shots_table": true
+        },
+        {
+          "role": "admin",
+          "template": "game",
+          "project": "l12_game_3ebfa00820e1",
+          "asset_visible": true
+        },
+        {
+          "role": "artist",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "asset_visible": true
+        },
+        {
+          "role": "artist",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "sequence_shots_tree": true
+        },
+        {
+          "role": "artist",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "sequence_shots_table": true
+        },
+        {
+          "role": "artist",
+          "template": "game",
+          "project": "l12_game_3ebfa00820e1",
+          "asset_visible": true
+        }
+      ],
+      "real_login_and_navigation": true,
+      "administrator_menu_scoped": true
+    },
+    "native": {
+      "admin-vfx": {
+        "login": "admin",
+        "project": "l12_vfx_3ebfa00820e1",
+        "status": "passed",
+        "rendering": "Qt offscreen/software",
+        "login_and_role": true,
+        "reference_images_tree": true,
+        "sequence_shots_tree": true,
+        "shots_click": {
+          "x": 287.0,
+          "y": 220.0,
+          "width": 28.0,
+          "height": 28.0
+        },
+        "sequence_shots_table": true,
+        "project_selected": true,
+        "asset_visible": true,
+        "can_administer": true,
+        "server_state": "online"
+      },
+      "admin-game": {
+        "login": "admin",
+        "project": "l12_game_3ebfa00820e1",
+        "status": "passed",
+        "rendering": "Qt offscreen/software",
+        "login_and_role": true,
+        "project_selected": true,
+        "asset_visible": true,
+        "can_administer": true,
+        "server_state": "online"
+      },
+      "artist-vfx": {
+        "login": "l12_artist_3ebfa00820e1",
+        "project": "l12_vfx_3ebfa00820e1",
+        "status": "passed",
+        "rendering": "Qt offscreen/software",
+        "login_and_role": true,
+        "reference_images_tree": true,
+        "sequence_shots_tree": true,
+        "shots_click": {
+          "x": 287.0,
+          "y": 220.0,
+          "width": 28.0,
+          "height": 28.0
+        },
+        "sequence_shots_table": true,
+        "project_selected": true,
+        "asset_visible": true,
+        "can_administer": false,
+        "server_state": "online"
+      },
+      "artist-game": {
+        "login": "l12_artist_3ebfa00820e1",
+        "project": "l12_game_3ebfa00820e1",
+        "status": "passed",
+        "rendering": "Qt offscreen/software",
+        "login_and_role": true,
+        "project_selected": true,
+        "asset_visible": true,
+        "can_administer": false,
+        "server_state": "online"
+      }
+    }
+  },
+  "postgres": {
+    "operations": {
+      "vfx": {
+        "project": "l12_vfx_3ebfa00820e1",
+        "installed": true,
+        "available_types": 22,
+        "unavailable_types": {
+          "prod/session_contents": {
+            "code": 501,
+            "message": "TACTIC module is not migrated: pyasm.prod.biz"
+          },
+          "vfx/node_data": {
+            "code": 400,
+            "message": "Invalid XML-RPC arguments or missing object"
+          },
+          "vfx/texture": {
+            "code": 501,
+            "message": "TACTIC module is not migrated: pyasm.prod.biz"
+          }
+        },
+        "crud": true,
+        "task": true,
+        "note": true,
+        "hierarchy_and_asset_instance": true,
+        "checkin_and_http_bytes": true,
+        "asset_key": "vfx/asset?project=l12_vfx_3ebfa00820e1&code=L12_ASSET"
+      },
+      "game": {
+        "project": "l12_game_3ebfa00820e1",
+        "installed": true,
+        "available_types": 9,
+        "unavailable_types": {},
+        "crud": true,
+        "task": true,
+        "note": true,
+        "hierarchy_and_asset_instance": true,
+        "checkin_and_http_bytes": true,
+        "asset_key": "game/asset?project=l12_game_3ebfa00820e1&code=L12_ASSET"
+      }
+    },
+    "browser": {
+      "status": "passed",
+      "checks": [
+        {
+          "role": "admin",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "asset_visible": true
+        },
+        {
+          "role": "admin",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "sequence_shots_tree": true
+        },
+        {
+          "role": "admin",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "sequence_shots_table": true
+        },
+        {
+          "role": "admin",
+          "template": "game",
+          "project": "l12_game_3ebfa00820e1",
+          "asset_visible": true
+        },
+        {
+          "role": "artist",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "asset_visible": true
+        },
+        {
+          "role": "artist",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "sequence_shots_tree": true
+        },
+        {
+          "role": "artist",
+          "template": "vfx",
+          "project": "l12_vfx_3ebfa00820e1",
+          "sequence_shots_table": true
+        },
+        {
+          "role": "artist",
+          "template": "game",
+          "project": "l12_game_3ebfa00820e1",
+          "asset_visible": true
+        }
+      ],
+      "real_login_and_navigation": true,
+      "administrator_menu_scoped": true
+    },
+    "native": {
+      "admin-vfx": {
+        "login": "admin",
+        "project": "l12_vfx_3ebfa00820e1",
+        "status": "passed",
+        "rendering": "Qt offscreen/software",
+        "login_and_role": true,
+        "reference_images_tree": true,
+        "sequence_shots_tree": true,
+        "shots_click": {
+          "x": 287.0,
+          "y": 220.0,
+          "width": 28.0,
+          "height": 28.0
+        },
+        "sequence_shots_table": true,
+        "project_selected": true,
+        "asset_visible": true,
+        "can_administer": true,
+        "server_state": "online"
+      },
+      "admin-game": {
+        "login": "admin",
+        "project": "l12_game_3ebfa00820e1",
+        "status": "passed",
+        "rendering": "Qt offscreen/software",
+        "login_and_role": true,
+        "project_selected": true,
+        "asset_visible": true,
+        "can_administer": true,
+        "server_state": "online"
+      },
+      "artist-vfx": {
+        "login": "l12_artist_3ebfa00820e1",
+        "project": "l12_vfx_3ebfa00820e1",
+        "status": "passed",
+        "rendering": "Qt offscreen/software",
+        "login_and_role": true,
+        "reference_images_tree": true,
+        "sequence_shots_tree": true,
+        "shots_click": {
+          "x": 287.0,
+          "y": 220.0,
+          "width": 28.0,
+          "height": 28.0
+        },
+        "sequence_shots_table": true,
+        "project_selected": true,
+        "asset_visible": true,
+        "can_administer": false,
+        "server_state": "online"
+      },
+      "artist-game": {
+        "login": "l12_artist_3ebfa00820e1",
+        "project": "l12_game_3ebfa00820e1",
+        "status": "passed",
+        "rendering": "Qt offscreen/software",
+        "login_and_role": true,
+        "project_selected": true,
+        "asset_visible": true,
+        "can_administer": false,
+        "server_state": "online"
+      }
+    }
+  }
+}

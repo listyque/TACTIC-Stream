@@ -63,6 +63,7 @@ def get_compare(processes):
 
 class TaskElementWdg(BaseTableElementWdg):
     relationship_type = None
+    LAYOUT_WIDTH = 130
 
     ARGS_KEYS = {
     'layout': {

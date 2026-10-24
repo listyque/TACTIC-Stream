@@ -1517,7 +1517,8 @@ def query_user_recent_activity(
                 parent_type, project_code
             )
         parent_search = Search(parent_query_type)
-        parent_search.add_filters('code', list(codes))
+        parent_column = 'code' if 'code' in parent_search.get_columns() else 'id'
+        parent_search.add_filters(parent_column, list(codes))
         for parent in parent_search.get_sobjects():
             parent_data = parent.get_data()
             parent_code = str(parent.get_code() or '')

@@ -14,6 +14,15 @@ from tactic_stream.server.table_cells import describe_cell
 class NestedTables(unittest.TestCase):
     setUp = fixtures.TableServices.setUp
 
+    def test_checkin_history_uses_the_owned_snapshot_table(self):
+        parent = Search.get_by_code('contract/entity', 'A')
+        cell = nested_cell(parent.get_search_key(), dict(dynamic_class='tactic.ui.widget.SObjectCheckinHistoryWdg'))
+        scope = cell['nestedTable']
+        self.assertEqual(scope['searchType'], 'sthpw/snapshot')
+        self.assertEqual(scope['view'], 'checkin_history')
+        self.assertFalse(scope['insert'])
+        self.assertEqual(read_nested_scope(scope['parentKey'], scope['searchType'])['records'], [])
+
     def test_same_type_scope_selects_current_record_instead_of_every_record(self):
         parent = Search.get_by_code('contract/entity', 'A')
         result = read_nested_scope(parent.get_search_key(), 'contract/entity')

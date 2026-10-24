@@ -63,7 +63,7 @@ def schema_relations(base, schema, direction='child'):
             # Handler only offers registered project SearchTypes, not dangling
             # legacy schema references or the link tables behind instance edges.
             definition = SearchType.get(target, no_exception=True)
-            if definition is None:
+            if definition is None or definition.get_record_read_options().get('available') is False:
                 continue
             attrs = schema.get_relationship_attrs(target, base, path=path or None) if direction == 'child' else schema.get_relationship_attrs(base, target, path=path or None)
             result[identity] = dict(kind='relation' if direction == 'child' else 'parent', search_type=target, path=path,

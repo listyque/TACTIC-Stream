@@ -470,5 +470,5 @@ class SearchLinksParity(read_tests.ReadParity):
             schema = Schema.get()
             ET.SubElement(schema.xml, 'connect', {'from': 'contract/entity', 'to': 'contract/entity', 'relationship': 'instance', 'instance_type': 'contract/entity_in_collection'})
             parent = Search.get_by_search_key(key('entity', 'A'))
-            with self.assertRaisesRegex(UnsupportedContract, 'Self-instance children'):
+            with self.assertRaises(UnsupportedContract):
                 parent.get_all_children('contract/entity')

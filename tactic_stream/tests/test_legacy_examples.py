@@ -4,7 +4,7 @@ import tempfile
 import unittest
 import zipfile
 
-from tools.prepare_legacy_examples import ROOT, prepare
+from tools.prepare_legacy_examples import ROOT, prepare, repair_vfx_config
 
 
 class LegacyExamples(unittest.TestCase):
@@ -24,6 +24,18 @@ class LegacyExamples(unittest.TestCase):
                     else:
                         self.assertEqual(after, before, name)
             self.assertEqual(result['repairs']['game-1.0.0-stream.1.zip']['references'], 6)
+            with zipfile.ZipFile(source / 'vfx-1.0.0.zip') as old, zipfile.ZipFile(output / 'vfx-1.0.0-stream.1.zip') as new:
+                self.assertEqual(old.namelist(), new.namelist())
+                for name in old.namelist():
+                    before, after = old.read(name), new.read(name)
+                    if name == 'vfx/config_widget_config.spt':
+                        self.assertNotEqual(before, after)
+                        self.assertEqual(after.decode('utf-8'), repair_vfx_config(before.decode('utf-8')))
+                        for obsolete in ('FrameRangeWdg', 'FrameInputWdg', 'FrameAction', 'AssetDetailWdg'):
+                            self.assertNotIn(obsolete.encode(), after)
+                        self.assertEqual(repair_vfx_config(after.decode('utf-8')), after.decode('utf-8'))
+                    else:
+                        self.assertEqual(after, before, name)
             with self.assertRaises(FileExistsError):
                 prepare(source, output)
             changed = Path(directory) / 'changed'

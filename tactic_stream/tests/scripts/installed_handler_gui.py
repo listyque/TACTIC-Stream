@@ -130,10 +130,84 @@ def check():
                          for item in items(window.contentItem())), 'Imported asset was not rendered')
         QTest.qWait(250)
         window.grabWindow().save(str(output / 'project.png'))
+        if '_vfx_' in project:
+            entry_key = 'vfx/sequence@sequence'
+            click(window, find(window, 'mainNavigation'))
+            wait(lambda: navigation_entry() is not None, 'Sequence navigation entry missing')
+            click(*navigation_entry())
+
+            def result_row(code):
+                return next((item for item in items(window.contentItem())
+                             if item.isVisible() and item.property('itemCode') == code), None)
+
+            def disclose(code):
+                wait(lambda: result_row(code) is not None, 'Missing tree row: ' + code)
+                row = result_row(code)
+                button = next((item for item in items(row)
+                               if item.isVisible() and item.objectName() == 'workspaceDisclosureArea'), None)
+                click(window, button)
+
+            disclose('L12_SEQ')
+            disclose('vfx/art_reference')
+            wait(lambda: any(item.isVisible() and item.property('text') == 'L12_REFERENCE'
+                             for item in items(window.contentItem())), 'Reference image relation did not load')
+            report['reference_images_tree'] = True
+            disclose('vfx/shot')
+            wait(lambda: result_row('L12_SHOT') is not None, 'Sequence shots did not load')
+            QTest.qWait(250)
+            window.grabWindow().save(str(output / 'sequence-tree.png'))
+            report['sequence_shots_tree'] = True
+            button = next(item for item in items(window.contentItem()) if item.isVisible()
+                          and item.property('toolTip') == 'Change search results view')
+            click(window, button)
+
+            def table_choice():
+                for surface in surfaces(app):
+                    if surface == window:
+                        continue
+                    for item in items(surface.contentItem()):
+                        if item.objectName() != 'actionMenuPrimaryTarget':
+                            continue
+                        data = item.parentItem().property('modelData')
+                        if hasattr(data, 'toVariant'):
+                            data = data.toVariant()
+                        if item.isVisible() and isinstance(data, dict) and data.get('command') == 'table':
+                            return surface, item
+
+            wait(lambda: table_choice() is not None, 'Table view choice missing')
+            popup_window, target = table_choice()
+            retained_windows.append(popup_window)
+            target.forceActiveFocus()
+            QTest.keyClick(popup_window, Qt.Key_Return)
+            wait(lambda: controller.results_view_mode == 'table', 'Table view did not activate')
+
+            def shots_table():
+                for item in items(window.contentItem()):
+                    cell = item.property('cell')
+                    if hasattr(cell, 'toVariant'):
+                        cell = cell.toVariant()
+                    if item.isVisible() and isinstance(cell, dict) and (cell.get('nestedTable') or {}).get('searchType') == 'vfx/shot':
+                        return next((button for button in items(item) if button.isVisible()
+                                     and (button.objectName() == 'tableServiceAction_0'
+                                          or button.property('frameId') == 'tableServiceAction_0')), None)
+
+            wait(lambda: shots_table() is not None, 'Shots table disclosure missing')
+            window.grabWindow().save(str(output / 'before-shots-table.png'))
+            button = shots_table()
+            point = button.mapToScene(QPointF(button.width() / 2, button.height() / 2))
+            report['shots_click'] = dict(x=point.x(), y=point.y(), width=button.width(), height=button.height())
+            click(window, button)
+            wait(lambda: any(item.isVisible() and item.property('text') == '1001 - 1100 (993 - 1108)'
+                             for item in items(window.contentItem())), 'Nested frame values missing')
+            QTest.qWait(250)
+            window.grabWindow().save(str(output / 'sequence-table.png'))
+            report['sequence_shots_table'] = True
         report.update(status='passed', project_selected=True, asset_visible=True,
                       can_administer=controller.can_administer, server_state=controller.server_state)
     except Exception as error:
         report['error'] = type(error).__name__ + ': ' + str(error)
+        if 'window' in locals():
+            window.grabWindow().save(str(output / 'failure.png'))
         if controller is not None:
             report.update(server_state=controller.server_state,
                           authentication_error=controller.authentication_error)
@@ -145,6 +219,7 @@ def check():
 
 
 app = QApplication([])
+retained_windows = []
 QTimer.singleShot(2000, check)
 status = application.main()
 assert report['status'] == 'passed', report

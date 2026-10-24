@@ -250,6 +250,7 @@ def describe_cell(element, columns, search_type=""):
         in (
             'tactic.ui.table.GanttCbk',
             'tactic.ui.table.gantt_element_wdg.GanttCbk',
+            'tactic.ui.table.GanttChildrenCbk',
             'pyasm.widget.GanttCbk',
             'pyasm.widget.gantt_wdg.GanttCbk',
         )

@@ -215,3 +215,62 @@ Game has nine queryable types. Importing stored text does not certify executing 
 Check actual run outcomes in L12_TEMPLATE_ACCEPTANCE_2026-10-24.json. The earlier
 clean-Windows and recovery evidence above applies to 0.112.193; clean Windows for
 0.112.194 is not inferred from it. L12 remains open for final release acceptance.
+
+## VFX support inventory correction: 0.112.195 / Handler 0.6.0.142
+
+The 0.112.194 result above proves import, root asset rendering and the listed SDK operations only. It did not prove every VFX relationship, table cell, form or action. The previous phrase "22 usable types" meant 22 empty queries succeeded; it must not be read as full support.
+
+The reproducible audit (`python -m tools.vfx_template_audit --output <new-report.json>`) inventories all 25 registered types and 151 saved/default views on an isolated SQLite project. Of these views, 78 are configuration definitions rather than table/form scenarios; 36 calculate cells, 19 load forms without saving, and 18 have known failures. Cell calculation and form loading do not certify GUI actions. All 22 native types can be inserted/read and their trees disclosed after the relationship fixes. `prod/session_contents` and `vfx/texture` still require the excluded production classes. `vfx/node_data` has no DDL. Maya and applet workflows are explicitly excluded by the user on 2026-10-24; a new clean-Windows test was also skipped by the user. Other gaps below are unfinished work, not additional agreed exclusions.
+
+The focused VFX regression runs on both SQLite and real PostgreSQL 18.6. It checks actual Sequence → Shots and reference-image relations, native Handler relation counts, batched/reverse/self connection queries, row/type read policies, ID-only records, vertical Task Status, aggregate shot dates, native frame values and the five edit fields. Check-in History uses the scoped snapshot table, showing all versions and its normal filters (the old screen defaulted to latest). Native GUI action acceptance is a separate check.
+
+Use `vfx-1.0.0-stream.1.zip` from `tools.prepare_legacy_examples`, keeping the original ZIP unchanged. Only `vfx/config_widget_config.spt` changes: obsolete frame display/input/action declarations become an expression and five ordinary fields; obsolete AssetDetail becomes the native object inspector. General relations read real `sthpw/connection` objects, a native extension of a path absent from the source Search implementation. No excluded `pyasm.prod` imports or aliases are restored.
+
+Raw inventory: `VFX_SUPPORT_2026-10-24.json`. Loading metadata or calculating a cell does not certify its buttons or full GUI layout. The following 18 views still have known gaps:
+
+| Type | View | Remaining failure |
+| --- | --- | --- |
+| `vfx/art_reference` | `edit` | TACTIC class is not migrated: tactic.ui.input.TextInputWdg |
+| `vfx/asset` | `table` | submit: SubmissionLinkTableElement |
+| `vfx/asset_in_shot` | `load` | type object 'SearchType' has no attribute 'break_up_key' |
+| `vfx/camera` | `edit` | Unregistered SearchType: prod/shot |
+| `vfx/episode` | `table` | submit: SubmissionLinkTableElement |
+| `vfx/layer` | `edit` | TACTIC class is not migrated: tactic.ui.input.TextInputWdg |
+| `vfx/layer` | `layer_list` | checkin_history: ; info: Nested widget is not a migrated table: pyasm.prod.web.LayerDetailWdg |
+| `vfx/layer` | `table` | explore: pyasm.prod.web.ExploreTableElementWdg; info: Nested widget is not a migrated table: pyasm.prod.web.LayerDetailWdg |
+| `vfx/plate` | `plate` | file_range: ; description: WikiElementWdg |
+| `vfx/plate` | `plate_list` | file_range: ; description: WikiElementWdg |
+| `vfx/plate` | `shot_sheet_wdg_plates` | description: WikiElementWdg; file_range:  |
+| `vfx/plate` | `table` | description: WikiElementWdg; file_range: ; login:  |
+| `vfx/review` | `review_tracking` | submission: tactic.ui.table.HiddenRowElementWdg |
+| `vfx/schedule` | `schedule_bidding` | task_edit: HiddenRowToggleWdg; total_cost: Column [total_cost] does not exist in search_object type [vfx/schedule?project=vfx_audit_ok] |
+| `vfx/sequence` | `planner_sequence` | asset_drop: tactic.ui.table.DropElementWdg |
+| `vfx/sequence` | `table` | submit:  |
+| `vfx/shot` | `planner_shot` | asset_drop: tactic.ui.table.DropElementWdg |
+| `vfx/shot` | `shot_tracking` | shot_sheet_wdg:  |
+
+L12 remains open. Resolve these ordinary VFX gaps and exercise their actual actions; repeat the saved-view audit and installed browser/native scenarios before declaring complete VFX support. Old production imports remain excluded; use native replacements where the requested workflow still applies.
+
+### Verified delivery checkpoint
+
+`L12_VFX_ACCEPTANCE_2026-10-24.json` records the independent
+`windows-0.112.195-qualified` and `server-0.112.195-qualified` checks: all 16
+database/client/role/template combinations passed on SQLite and PostgreSQL 18.6,
+including real browser and native Handler login/navigation. VFX additionally opens
+Sequence children (Shots and Reference Images) and the nested Shots table with
+formatted frame values. CRUD, tasks, notes, check-in/HTTP bytes and ordinary-user
+administration denial also passed. This is the named scenario coverage, not acceptance
+of every saved view, editor or action. Qt uses offscreen/software rendering.
+
+The full Frame gate passed all 156 stages with current source fingerprints; its
+`native-table` stage passed the built-in serial retry after failing under parallel
+load. The final checkout normalizes one Handler QML file to LF; the independently
+tested Windows bundle contains identical content with CRLF. No functional source
+difference was found in its Handler runtime.
+
+The persistent demo was upgraded from 0.112.194 to this Windows kit. Its cold backup
+contains 90 files and was restored/verified on a separate copy. Only the four listed
+VFX widget configurations changed; all 24 physical project tables matched the
+restored copy. Existing assets, SQ020 disclosure and its nested table passed the
+browser check after restart. Neither this copy check nor the prior clean-Windows
+0.112.193 run certifies a new clean-Windows 0.112.195 installation.

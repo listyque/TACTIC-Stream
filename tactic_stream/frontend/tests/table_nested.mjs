@@ -3,6 +3,23 @@ import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
+import { columns } from '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
+
+const legacyColumns = columns({
+  columns: [
+    { name: 'code', title: 'Code', width: '36px', cell: { kind: 'text' } },
+    {
+      name: 'history',
+      title: 'History',
+      width: '100px',
+      cell: { kind: 'commands' }
+    }
+  ]
+});
+assert.equal(legacyColumns[0].width, 160);
+assert.equal(legacyColumns[1].width, 100);
+assert.ok(legacyColumns[1].width >= 'History'.length * 8 + 20);
+assert.equal(legacyColumns[1].x, legacyColumns[0].x + legacyColumns[0].width);
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const server = await createServer({

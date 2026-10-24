@@ -72,6 +72,89 @@ try {
           animations: 'disabled'
         });
         checks.push({ role, template: kind, project, asset_visible: true });
+        if (kind === 'vfx') {
+          const sequences = page
+            .locator('.navigation-tree [data-search-type="vfx/sequence"]')
+            .first();
+          if (!(await sequences.isVisible()))
+            await page.locator('.navigation-toggle').click();
+          await sequences.click();
+          const sequence = page
+            .locator('.result-item-object')
+            .filter({ hasText: 'L12_SEQ' })
+            .first();
+          await sequence.locator('.result-expand').click();
+          const shots = page
+            .locator('.result-item-branch')
+            .filter({ hasText: 'Shot' })
+            .first();
+          await shots.locator('.result-expand').click();
+          await page
+            .locator('.result-item-object')
+            .filter({ hasText: 'L12_SHOT' })
+            .first()
+            .waitFor();
+          const references = page
+            .locator('.result-item-branch')
+            .filter({ hasText: 'Reference Images' })
+            .first();
+          await references.locator('.result-expand').click();
+          await page
+            .getByText('L12_REFERENCE', { exact: true })
+            .first()
+            .waitFor();
+          await page.screenshot({
+            path: path.join(output, role + '-vfx-sequence-tree.png'),
+            animations: 'disabled'
+          });
+          checks.push({
+            role,
+            template: kind,
+            project,
+            sequence_shots_tree: true
+          });
+          await page
+            .getByLabel('Change search results view', { exact: true })
+            .click();
+          await page
+            .getByRole('menuitemradio', { name: 'Table', exact: true })
+            .click();
+          const table = page
+            .locator('.handler-table')
+            .filter({ visible: true })
+            .first();
+          await table.getByText('L12_SEQ', { exact: true }).waitFor();
+          await table
+            .getByRole('button', { name: 'Show related table', exact: true })
+            .first()
+            .click();
+          const nested = page
+            .locator('.nested-table')
+            .filter({ visible: true })
+            .first();
+          await nested.getByText('L12_SHOT', { exact: true }).waitFor();
+          await nested
+            .getByText('1001 - 1100 (993 - 1108)', { exact: true })
+            .waitFor();
+          assert.equal(
+            await page.getByText('Widget unavailable', { exact: true }).count(),
+            0
+          );
+          assert.equal(
+            await page.locator('.error-text').filter({ visible: true }).count(),
+            0
+          );
+          await page.screenshot({
+            path: path.join(output, role + '-vfx-sequence-table.png'),
+            animations: 'disabled'
+          });
+          checks.push({
+            role,
+            template: kind,
+            project,
+            sequence_shots_table: true
+          });
+        }
       }
       await page.locator('.settings-menu > summary').click();
       const administration = page

@@ -275,11 +275,13 @@ class Schema(SObject):
     def resolve_relationship_attrs(self, attrs, search_type, search_type2):
         if attrs.get("relationship") not in ("search_type", "search_code", "search_id"):
             return attrs
+        attrs = dict(attrs)
         forward = attrs["from"] == SearchType.get(search_type).get_base_key()
         child = search_type if forward else search_type2
+        parent = search_type2 if forward else search_type
         prefix = attrs.get("prefix", "")
         prefix = prefix + "_" if prefix else ""
-        has_code = SearchType.column_exists(child, prefix + "search_code")
+        has_code = SearchType.column_exists(child, prefix + "search_code") and SearchType.column_exists(parent, "code")
         child_col, parent_col = prefix + ("search_code" if has_code else "search_id"), "code" if has_code else "id"
         attrs["from_col"], attrs["to_col"] = (child_col, parent_col) if forward else (parent_col, child_col)
         attrs["relationship"] = "search_code" if has_code else "search_id"

@@ -23,6 +23,9 @@ def nested_cell(search_key, options, column='', layout_reader=None):
         if str(options['init_load_num']) != '-1' and not str(options['init_load_num']).isdecimal():
             raise ValueError('Invalid initial row rendering limit')
     handler = options.get('dynamic_class') or options.get('dynamic') or 'tactic.ui.panel.TableLayoutWdg'
+    if handler == 'tactic.ui.widget.SObjectCheckinHistoryWdg':
+        options = dict(options, search_type='sthpw/snapshot', view='checkin_history', show_insert=False)
+        handler = 'tactic.ui.panel.TableLayoutWdg'
     if handler in ('tactic.ui.table.CustomLayoutElementWdg', 'tactic.ui.panel.CustomLayoutWdg'):
         if layout_reader is None:
             from tactic.ui.table.custom_layout_element_wdg import read_custom_layout

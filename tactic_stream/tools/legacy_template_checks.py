@@ -17,7 +17,7 @@ import zipfile
 from tools.delivery_recovery_checks import ROOT, free_port, run, server, verify_delivery
 from tools.prepare_legacy_examples import SOURCES, digest
 
-ARCHIVES = {'vfx': 'vfx-1.0.0.zip', 'game': 'game-1.0.0-stream.1.zip'}
+ARCHIVES = {'vfx': 'vfx-1.0.0-stream.1.zip', 'game': 'game-1.0.0-stream.1.zip'}
 
 
 def native_check(address, fixtures, bundle, output, environment):
@@ -94,10 +94,15 @@ def check(address, handler, password, examples, server_examples, directory, nonc
             if kind == 'vfx':
                 sequence = client.insert('vfx/sequence', dict(code='L12_SEQ', description='Sequence'))
                 shot = client.insert('vfx/shot', dict(code='L12_SHOT', sequence_code=sequence['code'],
-                                                    frame_in=1001, frame_out=1100))
+                    tc_frame_start=1001, tc_frame_end=1100, frame_in=993, frame_out=1108))
+                reference = client.insert('vfx/art_reference', dict(name='L12_REFERENCE'))
+                client.connect_sobjects(reference['__search_key__'], sequence['__search_key__'])
+                assert client.eval("@COUNT(vfx/sequence['id', %s].vfx/art_reference)" % sequence['id']) == 1
+                shot_task = client.create_task(shot['__search_key__'], process='animation', assigned='admin')
+                client.update(shot_task['__search_key__'], dict(bid_start_date='2026-10-20', bid_end_date='2026-10-24'))
                 relation_type = 'vfx/asset_in_shot'
                 relation = dict(asset_code=asset['code'], shot_code=shot['code'])
-                assert client.query('vfx/shot', [('sequence_code', sequence['code'])])[0]['frame_in'] == 1001
+                assert client.query('vfx/shot', [('sequence_code', sequence['code'])])[0]['tc_frame_start'] == 1001
             else:
                 game = client.insert('game/game', dict(code='L12_GAME', title='Game'))
                 level = client.insert('game/level', dict(code='L12_LEVEL', game_code=game['code']))

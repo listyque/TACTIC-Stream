@@ -1084,6 +1084,10 @@ defineExpose({ viewport });
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--page);
 }
 .workspace-results > .configured-view[data-result-mode='table'] {
   flex: 1;

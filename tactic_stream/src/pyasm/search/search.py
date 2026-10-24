@@ -764,7 +764,8 @@ class SObject:
         attrs = schema.get_relationship_attrs(search_type, related_type, path=src_path)
         relationship = attrs.get("relationship")
         if relationship == "search_type":
-            relationship = schema.resolve_search_type_relationship(attrs, search_type, related_type)
+            attrs = schema.resolve_relationship_attrs(attrs, search_type, related_type)
+            relationship = attrs['relationship']
         if relationship == "search_code":
             self.set_value("search_type", sobject.get_search_type())
             self.set_value("search_code", sobject.get_code())
@@ -867,7 +868,7 @@ class SObject:
             column = attrs.get("from_col") if relationship == "id" or attrs["from"] in (child_type, "*") else attrs.get("to_col")
             search.add_filter(column or self.get_foreign_key(), self.get_id() if relationship == "id" else self.get_code())
         elif relationship == "general":
-            search.set_null_filter()
+            search.add_relationship_filter(self)
         elif relationship == "instance":
             search.add_relationship_filter(self)
         elif relationship == "many_to_many":
@@ -2144,8 +2145,8 @@ class SearchType(SObject):
         from pyasm.common import Environment
         try:
             record_class = Common.resolve_class(self.get_value('class_name') or 'pyasm.search.SObject')
-        except UnsupportedContract:
-            return {}
+        except UnsupportedContract as error:
+            return dict(available=False, reason=str(error))
         options = dict(getattr(record_class, 'record_read', {}))
         if options:
             options['available'] = not options.get('admin_only') or Environment.get_security().is_admin()
@@ -3272,7 +3273,7 @@ class Search(Base):
                 self.add_filter(prefix + "search_code", parent.get_code())
             else:
                 self.add_filter(prefix + "search_id", parent.get_id())
-        elif relationship == "instance":
+        elif relationship in ("instance", "general"):
             self.add_relationship_filter(parent)
         else:
             raise UnsupportedContract("Unsupported parent relationship: " + str(relationship))
@@ -3341,7 +3342,7 @@ class Search(Base):
         project = sobject.get_project_code() if self.project_code == "sthpw" else self.project_code
         schema = Schema.get(project_code=project)
         attrs = self._get_relationship_attrs(schema, related_type, path)
-        if search_type == related_type and attrs.get('relationship') != 'instance':
+        if search_type == related_type and attrs.get('relationship') not in ('instance', 'general'):
             self.add_id_filter(sobject.get_id())
             return
         if not attrs:
@@ -3352,7 +3353,8 @@ class Search(Base):
         forward = attrs["from"] in (self.get_base_search_type(), "*")
         relationship = attrs.get("relationship")
         if relationship == "search_type":
-            relationship = schema.resolve_search_type_relationship(attrs, search_type, related_type)
+            attrs = schema.resolve_relationship_attrs(attrs, search_type, related_type)
+            relationship = attrs['relationship']
         if relationship in ("id", "code"):
             column, source = (attrs.get("from_col"), attrs.get("to_col")) if forward else (attrs.get("to_col"), attrs.get("from_col"))
             value = sobject.get_value(source)
@@ -3370,6 +3372,8 @@ class Search(Base):
             else:
                 # Original reverse single-object lookup does not use the prefix.
                 self.add_filter("id" if relationship == "search_id" else "code", sobject.get_value(column))
+        elif relationship == "general":
+            self.add_relationship_filters([sobject], path=path)
         elif relationship == "instance":
             if not self._same_database(sobject.get_db_resource()):
                 raise UnsupportedContract("Cross-resource instance relationships are not migrated")
@@ -3449,6 +3453,13 @@ class Search(Base):
                 target = "code" if column.endswith("search_code") else "id"
                 values = [obj.get_value(column) for obj in sobjects if obj.get_value(prefix + "search_type") == self.get_search_type()]
                 self.add_filters(target, list(dict.fromkeys(value for value in values if value)), op=op)
+        elif relationship == "general":
+            from pyasm.biz.sobject_connection import SObjectConnection
+            target = 'src' if forward else 'dst'
+            links = SObjectConnection.get_connections(sobjects, direction=target)
+            ids = [link.get_value(target + '_search_id') for link in links
+                   if link.get_value(target + '_search_type') == self.get_search_type()]
+            self.add_filters(self.get_id_col(), list(dict.fromkeys(ids)), op=op)
         elif relationship == "instance":
             if any(obj.get_search_type() != first.get_search_type()
                    or not self._same_database(obj.get_db_resource()) for obj in sobjects):
@@ -3554,7 +3565,7 @@ class Search(Base):
         project = search.project_code if self.project_code == "sthpw" else self.project_code
         schema = Schema.get(project_code=project)
         attrs = self._get_relationship_attrs(schema, search.get_search_type(), path=path)
-        if not path and search_type == related_type and attrs.get('relationship') != 'instance':
+        if not path and search_type == related_type and attrs.get('relationship') not in ('instance', 'general'):
             search.add_column("id")
             self.add_search_filter("id", search, op, table=self.table)
             return True
@@ -3562,6 +3573,9 @@ class Search(Base):
             raise LookupError("Search types are not related")
         relationship = attrs.get("relationship")
         forward = attrs["from"] == search_type
+        if relationship == 'general':
+            self.add_relationship_filters(search.get_sobjects(), op=op, path=path)
+            return True
         if relationship in ("code", "id"):
             column, source = (attrs["from_col"], attrs["to_col"]) if forward else (attrs["to_col"], attrs["from_col"])
             search.add_column(source)
@@ -4163,7 +4177,22 @@ class Search(Base):
         if related_type == search_type and not attrs:
             return {}
         relationship = attrs.get("relationship")
+        if relationship == 'search_type':
+            attrs = schema.resolve_relationship_attrs(attrs, related_type, search_type)
+            relationship = attrs['relationship']
         forward = related_type == attrs.get("from")
+        if relationship == 'general':
+            from pyasm.biz.sobject_connection import SObjectConnection
+            source, target = ('dst', 'src') if forward else ('src', 'dst')
+            owners = {(obj.get_search_type(), str(obj.get_id())): obj.get_search_key() for obj in sobjects}
+            related = {(obj.get_search_type(), str(obj.get_id())): obj for obj in related_sobjects}
+            result = {obj.get_search_key(): [] for obj in sobjects}
+            for link in SObjectConnection.get_connections(sobjects, direction=target):
+                owner = owners.get((link.get_value(source + '_search_type'), str(link.get_value(source + '_search_id'))))
+                obj = related.get((link.get_value(target + '_search_type'), str(link.get_value(target + '_search_id'))))
+                if owner and obj and obj not in result[owner]:
+                    result[owner].append(obj)
+            return result
         prefix = attrs.get("prefix", "")
         prefix = prefix + "_" if prefix else ""
         grouped = {}

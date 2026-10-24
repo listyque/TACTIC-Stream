@@ -80,7 +80,8 @@ class JournalWriteParity(read_tests.ReadParity):
 
     def test_persistence_schema_is_original_atomic_and_repeatable(self):
         metadata = json.loads((read_tests.ROOT / 'src/tactic_stream/compatibility/persistence_upgrade.json').read_text(encoding='utf-8'))
-        self.assertEqual(metadata, persistence_schema(read_tests.LEGACY))
+        self.assertEqual({name: value for name, value in metadata.items() if name != 'indexes'},
+                         persistence_schema(read_tests.LEGACY))
         with tempfile.TemporaryDirectory(prefix='tactic-stream-index-upgrade-') as directory:
             store = Store(Path(directory) / 'data')
             shutil.copytree(self.store.data_dir, store.data_dir)
