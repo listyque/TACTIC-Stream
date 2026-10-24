@@ -1,10 +1,50 @@
 # Copyright (c) 2005 Southpaw Technology. See LICENSE.TACTIC.
 """Native snapshot version display; legacy HTML is not executed."""
 from pyasm.common import Config
+from pyasm.common.errors import UnsupportedContract
 from tactic.ui.common import BaseTableElementWdg
 from pyasm.biz import File, Snapshot
-from pyasm.search import SearchException
+from pyasm.search import Search, SearchException
 from os.path import basename
+
+
+class SnapshotInfoWdg(BaseTableElementWdg):
+    """Original SnapshotInfoWdg owner caption, independent of pyasm.prod."""
+
+    def preprocess(self):
+        self.parents = {}
+        groups = {}
+        for row in self.sobjects:
+            groups.setdefault(row.get_value('search_type'), []).append(row)
+        for search_type, group in groups.items():
+            ids = [row.get_value('search_id') for row in group
+                   if row.get_value('search_id') not in ('', None, -1)]
+            codes = [row.get_value('search_code') for row in group
+                     if row.get_value('search_id') in ('', None, -1) and row.get_value('search_code')]
+            try:
+                parents = Search.get_by_id(search_type, ids) if ids else []
+                parents += Search.get_by_code(search_type, codes) if codes else []
+            except (SearchException, UnsupportedContract):
+                continue
+            for parent in parents:
+                self.parents[(search_type, 'id', str(parent.get_id()))] = parent
+                self.parents[(search_type, 'code', parent.get_code())] = parent
+
+    def get_cell_value(self):
+        snapshot = self.get_current_sobject()
+        search_type = snapshot.get_value('search_type')
+        parent = self.parents.get(
+            (search_type, 'code', snapshot.get_value('search_code')))
+        if parent is None:
+            parent = self.parents.get((search_type, 'id', str(snapshot.get_value('search_id'))))
+        if parent is None:
+            return {'text': 'n/a'}
+        name = parent.get_value('name', no_exception=True)
+        caption = '%s-%s' % (name, parent.get_code()) if name else parent.get_code()
+        return {'text': caption}
+
+    def get_text_value(self):
+        return self.get_cell_value()['text']
 
 
 class SnapshotVersionElementWdg(BaseTableElementWdg):

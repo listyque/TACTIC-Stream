@@ -16,6 +16,32 @@ from tactic.ui.table.file_actions import append_snapshot_files, read_snapshot_fi
 class TableFileActions(unittest.TestCase):
     setUp = fixtures.TableServices.setUp
 
+    def test_checkin_log_owner_captions_keep_names_codes_and_missing_references(self):
+        from tactic.ui.table.snapshot_element_wdg import SnapshotInfoWdg
+        from tactic_stream.server.table_cells import WIDGETS
+        parent = Search.get_by_code('contract/entity', 'A')
+        parent.set_value('name', 'Robot')
+        write(parent.commit)
+        first = self.snapshot()
+        second = self.snapshot()
+        second.set_value('search_id', -1)
+        write(second.commit)
+        missing = self.snapshot()
+        missing.set_value('search_id', 999999)
+        missing.set_value('search_code', '')
+        write(missing.commit)
+        widget = SnapshotInfoWdg(name='code')
+        widget.set_sobjects([first, second, missing])
+        with patch.object(Search, 'get_by_id', wraps=Search.get_by_id) as read:
+            widget.preprocess()
+        self.assertEqual(read.call_count, 1)
+        values = []
+        for index in range(3):
+            widget.set_current_index(index)
+            values.append(widget.get_text_value())
+        self.assertEqual(values, ['Robot-A', 'Robot-A', 'n/a'])
+        self.assertNotIn('pyasm.prod.web.SnapshotInfoWdg', WIDGETS)
+
     def snapshot(self):
         parent = Search.get_by_code('contract/entity', 'A')
         return write(lambda: Snapshot.create(parent, 'file', 'publish', triggers=False))
@@ -83,10 +109,23 @@ class TableFileActions(unittest.TestCase):
         function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
         namespace = dict(server=__import__('tactic_client_lib').TacticServerStub(setup=False))
         exec(ast.get_source_segment(text, function), namespace)
-        history = namespace['query_table_layout']('sthpw/snapshot', [snapshot.get_search_key()], 'checkin_history')
-        if isinstance(history, str):
-            history = json.loads(history)
-        self.assertEqual(history['rows'][snapshot.get_search_key()]['files']['nestedTable'], scope)
+        from tactic_stream.server.interface import read_interface
+        from tactic_stream.server.table_cells import read_table_cells
+        for view in ('checkin_history', 'log'):
+            definition = read_interface('sthpw/snapshot', view)
+            if view == 'log':
+                self.assertTrue(all(e['cell']['supported'] for e in definition['table']['elements']),
+                    [e['name'] for e in definition['table']['elements'] if not e['cell']['supported']])
+            history = namespace['query_table_layout']('sthpw/snapshot', [snapshot.get_search_key()], view)
+            if isinstance(history, str):
+                history = json.loads(history)
+            self.assertEqual(history['rows'][snapshot.get_search_key()]['files']['nestedTable'], scope)
+            if view == 'log':
+                parent = Search.get_by_code('contract/entity', 'A')
+                expected = parent.get_name() + '-' + parent.get_code() if parent.get_name() else parent.get_code()
+                self.assertEqual(history['rows'][snapshot.get_search_key()]['code']['text'], expected)
+                cells = read_table_cells('sthpw/snapshot', view, [snapshot.get_search_key()])
+                self.assertEqual(cells[snapshot.get_search_key()]['code']['text'], expected)
         # Original TACTIC widgets have no native cell method; exercise that adapter too.
         with patch.object(SnapshotFileElementWdg, 'get_cell_value', None):
             layout = namespace['query_table_layout']('sthpw/file', [key], 'snapshot_files')

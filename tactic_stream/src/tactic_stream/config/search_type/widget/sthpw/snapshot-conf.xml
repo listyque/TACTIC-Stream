@@ -207,7 +207,7 @@
 <!-- used in the Publish Log Tab -->
 <log insert='false' edit='false'>
   <element name="code">
-      <display class="pyasm.prod.web.SnapshotInfoWdg"/>
+      <display class="tactic.ui.table.SnapshotInfoWdg"/>
   </element>
 
   <element name="preview"/>
@@ -224,7 +224,6 @@
   <!--
   <element name="submit"/>
   -->
-  <element name="render"/>
   <element name="is_current"/>
   <element name="is_latest"/>
 </log>

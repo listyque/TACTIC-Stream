@@ -5,7 +5,7 @@ from .task_element_wdg import TaskElementWdg, TaskElementCbk, TaskSummaryElement
 from .statistic_wdg import TaskCompletionWdg
 from .metadata_element_wdg import MetadataElementWdg
 from .json_element_wdg import JsonElementWdg
-from .snapshot_element_wdg import SnapshotVersionElementWdg
+from .snapshot_element_wdg import SnapshotInfoWdg, SnapshotVersionElementWdg
 from .sobject_detail_wdg import SObjectDetailElementWdg
 from .table_element_wdg import CheckinButtonElementWdg, CheckoutButtonElementWdg, GeneralPublishElementWdg
 from .explorer_wdg import ExplorerElementWdg, ExplorerTableElementWdg
@@ -15,6 +15,7 @@ from .delete_element_wdg import DeleteElementWdg
 
 __all__ = ['MetadataElementWdg', 'FormatElementWdg', 'LinkElementWdg', 'ExpressionElementWdg', 'ExpressionValueElementWdg', 'ExpressionRecalculateCmd', 'TaskElementWdg', 'TaskElementCbk', 'TaskSummaryElementWdg', 'TaskCompletionWdg', 'JsonElementWdg', 'SnapshotVersionElementWdg']
 __all__ += ['SObjectDetailElementWdg', 'CheckinButtonElementWdg', 'CheckoutButtonElementWdg', 'ExplorerElementWdg', 'ExplorerTableElementWdg', 'SObjectFilesElementWdg', 'DeleteElementWdg']
+__all__.append('SnapshotInfoWdg')
 __all__.append('GeneralPublishElementWdg')
 __all__ += ['ExploreElementWdg']
 

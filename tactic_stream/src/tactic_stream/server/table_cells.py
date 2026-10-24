@@ -39,6 +39,7 @@ from tactic.ui.table.preference_wdg import PreferenceDescriptionWdg
 from tactic.ui.table.project_wdg import ProjectWdg
 from tactic.ui.table.related_element_wdg import RelatedElementWdg
 from tactic.ui.table.snapshot_element_wdg import (
+    SnapshotInfoWdg,
     SnapshotFileElementWdg,
     SnapshotLockedElementWdg,
 )
@@ -121,6 +122,7 @@ _CLASSES = {
         PreferenceDescriptionWdg,
         ProjectWdg,
         RelatedElementWdg,
+        SnapshotInfoWdg,
         SnapshotFileElementWdg,
         SnapshotLockedElementWdg,
         SnapshotVersionElementWdg,
@@ -165,6 +167,7 @@ VALUE_WIDGETS = (
     TaskParentSpacingTableElement,
     MessageTableElementWdg,
     SnapshotLockedElementWdg,
+    SnapshotInfoWdg,
     SnapshotFileElementWdg,
     MilestoneCompletionWdg,
     TaskGroupCompletionWdg,

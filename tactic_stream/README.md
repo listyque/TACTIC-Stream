@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.198.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.199.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7727,3 +7727,9 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 - Restore ordinary nested-table fields from their record data when no computed cell is returned, retaining zero and false. Search file tables by filename instead of internal file code.
 - Support SnapshotFilesWdg hidden rows through the existing nested table in Stream and Handler 0.6.0.144. File membership comes from the selected snapshot XML; links use native File paths. Preserve file type, directory metadata, frame range and size. Empty snapshots stay empty.
 - Recursive disk contents of directory packages and Maya/applet scenarios are outside this checkpoint; this does not close general legacy compatibility. Restart the BAT server to load Python changes, then reload browser tabs.
+
+
+## 0.112.199 — 2026-10-24
+
+- Migrate SnapshotInfoWdg owner captions to tactic.ui.table and the independent Handler 0.6.0.145 value catalogue. Keep original name-code labels, batch parent lookups, code-only references and missing-parent n/a without restoring pyasm.prod.
+- Fix the Checkin Log log view instead of certifying only checkin_history. Remove its RenderSubmission action because the production subsystem is excluded. Exercise Code, Files and the original native query projection on the same snapshot.
