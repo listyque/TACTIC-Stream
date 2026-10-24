@@ -2,7 +2,7 @@
 """Native snapshot version display; legacy HTML is not executed."""
 from pyasm.common import Config
 from tactic.ui.common import BaseTableElementWdg
-from pyasm.biz import Snapshot
+from pyasm.biz import File, Snapshot
 from pyasm.search import SearchException
 from os.path import basename
 
@@ -49,6 +49,12 @@ class SnapshotFileElementWdg(BaseTableElementWdg):
         snapshot = self.get_current_sobject()
         if not snapshot or snapshot.is_insert():
             return {'text': '', 'href': ''}
+        if isinstance(snapshot, File):
+            path = snapshot.get_web_path()
+            filename = snapshot.get_file_name()
+            if snapshot.get_file_range():
+                filename = '%s (%s)' % (filename, snapshot.get_file_range())
+            return {'text': filename, 'href': path}
         path = snapshot.get_web_path_by_type()
         filename = basename(path)
         if snapshot.get_value('snapshot_type') == 'sequence':

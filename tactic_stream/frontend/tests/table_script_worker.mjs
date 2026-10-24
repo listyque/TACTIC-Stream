@@ -65,6 +65,18 @@ try {
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto(server.resolvedUrls.local[0] + 'table-action-fixture');
   await page.evaluate(async () => {
+    const NativeWorker = window.Worker;
+    window.workerOwners = [];
+    window.Worker = class extends NativeWorker {
+      constructor(url) {
+        super(url);
+        window.workerOwners.push(this);
+      }
+      terminate() {
+        this.disposed = true;
+        super.terminate();
+      }
+    };
     window.runAction = (
       await import('/frontend/src/features/interface/tableScript.js')
     ).runTableScript;
@@ -77,6 +89,13 @@ try {
       column: 'action',
       view: 'table'
     };
+    const { reactive } = await import(
+      '/frontend/node_modules/vue/dist/vue.runtime.esm-bundler.js'
+    );
+    window.context.record = reactive({ metadata: { title: 'Nested asset' } });
+    window.context.records = reactive({
+      [window.context.searchKey]: { code: 'A' }
+    });
   });
   const result = await page.evaluate(() =>
     window.runAction(
@@ -92,6 +111,34 @@ try {
     { ticket: 'fixture-auth', project: 'one', language: 'python' },
     'contract/entity'
   ]);
+  const nested = await page.evaluate(() =>
+    window.runAction(
+      `return {title:spt.dg_table.get_element_value(bvr.src_el,'metadata').title,codes:spt.table.get_selected_codes()};`,
+      window.context,
+      { ticket: 'fixture-auth', confirm: () => true }
+    )
+  );
+  assert.deepEqual(nested.output, { title: 'Nested asset', codes: ['A'] });
+  const invalid = await page.evaluate(async () => {
+    const context = { ...window.context };
+    context.cycle = context;
+    return window
+      .runAction('return 1;', context, {
+        ticket: 'fixture-auth',
+        confirm: () => true
+      })
+      .then(
+        () => '',
+        (error) => error.name
+      );
+  });
+  assert.equal(invalid, 'TypeError');
+  assert(
+    await page.evaluate(() =>
+      window.workerOwners.every((worker) => worker.disposed)
+    ),
+    'A synchronous serialization failure must dispose its Worker'
+  );
   await page.evaluate(() =>
     window.runAction(
       `if(confirm('Proceed?')) TacticServerStub.get().execute_cmd('fixture.Command',{value:1});`,

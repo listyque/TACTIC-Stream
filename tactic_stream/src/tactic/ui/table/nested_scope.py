@@ -26,6 +26,10 @@ def nested_cell(search_key, options, column='', layout_reader=None):
     if handler == 'tactic.ui.widget.SObjectCheckinHistoryWdg':
         options = dict(options, search_type='sthpw/snapshot', view='checkin_history', show_insert=False)
         handler = 'tactic.ui.panel.TableLayoutWdg'
+    if handler == 'tactic.ui.checkin.SnapshotFilesWdg':
+        options = dict(options, search_type='sthpw/file', view='snapshot_files',
+                       show_insert=False, show_select=False, show_gear=False)
+        handler = 'tactic.ui.panel.TableLayoutWdg'
     if handler in ('tactic.ui.table.CustomLayoutElementWdg', 'tactic.ui.panel.CustomLayoutWdg'):
         if layout_reader is None:
             from tactic.ui.table.custom_layout_element_wdg import read_custom_layout
@@ -64,7 +68,7 @@ def read_nested_scope(parent_key, search_type, view='table', expression='', offs
                       limit=50, filters=None, order_by=None):
     """Self-contained original-server procedure; never return an unscoped table."""
     import re
-    from pyasm.biz import Project
+    from pyasm.biz import Project, Snapshot
     from pyasm.common import Environment
     from pyasm.search import Search, SearchKey, SearchType
 
@@ -90,7 +94,12 @@ def read_nested_scope(parent_key, search_type, view='table', expression='', offs
     if parent.get_base_search_type() in ('sthpw/message', 'sthpw/message_log'):
         raise ValueError('Open private messages from Messages')
     search = Search(search_type)
-    if parent.get_base_search_type() == 'sthpw/project' and base in (
+    if base == 'sthpw/file' and view == 'snapshot_files' and not expression:
+        # shortcut: directory packages remain file records; recursive disk browsing stays in File Workspace.
+        snapshots = [parent] if parent.get_base_search_type() == 'sthpw/snapshot' else Snapshot.get_by_sobject(parent, 'publish')
+        files = [file for snapshot in snapshots for file in snapshot.get_all_file_objects()]
+        search.add_filters('id', [file.get_id() for file in files] or [-1])
+    elif parent.get_base_search_type() == 'sthpw/project' and base in (
             'sthpw/task', 'sthpw/snapshot', 'sthpw/note', 'sthpw/work_hour') and not expression:
         search.add_filter('project_code', parent.get_code())
     elif base == parent.get_base_search_type() and not expression:

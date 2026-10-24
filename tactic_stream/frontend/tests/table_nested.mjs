@@ -3,7 +3,22 @@ import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
-import { columns } from '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
+import {
+  columns,
+  row
+} from '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
+
+for (const value of ['reference.txt', 0, false, '']) {
+  const scene = row(
+    { columns: [{ name: 'filename', field: 'file_name' }] },
+    { key: 'F', record: { file_name: value }, cells: {} },
+    'en'
+  );
+  assert.equal(
+    scene.nodes.find((node) => node.id === 'nestedCell_filename').cell.text,
+    value
+  );
+}
 
 const legacyColumns = columns({
   columns: [
@@ -44,6 +59,7 @@ const page = await browser.newPage({ viewport: { width: 500, height: 300 } });
 const errors = [];
 page.on('pageerror', (error) => errors.push(error.message));
 let reads = 0;
+let fileColumns = false;
 const queries = [];
 await page.route('**/admin/rpc', async (route) => {
   const request = route.request().postDataJSON();
@@ -61,7 +77,7 @@ await page.route('**/admin/rpc', async (route) => {
         info: {
           definition: {
             operations: { create: true },
-            columns: { code: {} },
+            columns: fileColumns ? { file_name: {}, code: {} } : { code: {} },
             table: {
               elements: [
                 {
@@ -88,7 +104,6 @@ await page.route('**/admin/rpc', async (route) => {
           hasNext: !secondPage,
           cells: {
             [recordKey]: {
-              code: { text: recordCode },
               expand: {
                 nestedTable: {
                   searchType: 'demo/asset',
@@ -197,6 +212,23 @@ try {
       projectCode: 'demo'
     }
   );
+  fileColumns = true;
+  await child.locator('[data-frame="nestedReload"]').click();
+  await page.waitForFunction(
+    () =>
+      window.nestedFixture.state.children['demo/asset?code=A'].filterField ===
+      'file_name'
+  );
+  await child.locator('[data-frame="nestedFilter"]').fill('reference.txt');
+  const fileReads = reads;
+  await child.locator('[data-frame="nestedReload"]').click();
+  await page.waitForFunction(
+    () => !window.nestedFixture.state.children['demo/asset?code=A'].busy
+  );
+  assert.equal(reads, fileReads + 1);
+  assert.deepEqual(queries.at(-1).filters, [
+    ['file_name', 'like', '%reference.txt%']
+  ]);
   await child.locator('[data-frame="nestedClose"]').click();
   await page.evaluate(() => window.nestedFixture.summary());
   await root.locator('[data-frame="tableSummary_0"]').click();

@@ -148,3 +148,8 @@ Delete opens the native object deletion confirmation; it never deletes on the fi
 Paired captures use current Handler QML and Stream Vue, one temporary CG project, EN, MD3 dark/light, Segoe UI, 1496 × 660, DPI 96/scale 1. Native commands separately validate data and writes. Captures use isolated display controllers and do not prove a user server session. HTTP, XML-RPC, revisions, rollback and admin-only behavior have separate tests. Qt and Chromium font rasterization differs. Physical phones, other DPI and other database engines were not checked in this run.
 
 Browser check-in uploads files to the server. Local DCC/folders and desktop move/link transfers are not available in the browser. XML/JSON remain structured display, as in current Handler. Arbitrary JS/HTML actions and old totals are outside this port.
+
+
+## Snapshot history files
+
+The Files cell in snapshot history expands a table of files registered in that exact snapshot: file link, repository directory, type, frame range, size and timestamp. Filtering and paging stay within that snapshot; an empty version shows no files. Ordinary file links use the configured repository URL. Sequence rows retain their frame pattern and range; the link does not download an entire sequence. Directory packages remain registered file records; their recursive disk contents are not expanded here. Maya/applet actions are excluded.

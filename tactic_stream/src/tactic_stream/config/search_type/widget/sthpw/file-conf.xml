@@ -44,5 +44,16 @@
   <element name="md5"/>
 </table>
 
+<snapshot_files insert="false">
+  <element name="file_name" title="File" edit="false" width="320">
+    <display class="tactic.ui.table.SnapshotFileElementWdg"/>
+  </element>
+  <element name="relative_dir" edit="false" width="320"/>
+  <element name="type" edit="false"/>
+  <element name="file_range" edit="false"/>
+  <element name="st_size" edit="false"/>
+  <element name="timestamp" edit="false"/>
+</snapshot_files>
+
 </config>
 

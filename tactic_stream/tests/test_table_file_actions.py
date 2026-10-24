@@ -42,6 +42,58 @@ class TableFileActions(unittest.TestCase):
         self.assertEqual(files[0].get_value('type'), 'reference')
         self.assertEqual(Path(current.get_lib_path_by_type('reference')).read_bytes(), b'new attachment')
 
+    def test_snapshot_files_hidden_row_reads_exact_file_links_in_both_clients(self):
+        import ast
+        from tactic.ui.table.nested_scope import nested_cell, read_nested_scope
+        from tactic.ui.table.nested_table import NestedTableReadCmd
+        from tactic.ui.table.snapshot_element_wdg import SnapshotFileElementWdg
+
+        snapshot = self.snapshot()
+        prepared = append_snapshot_files(snapshot.get_search_key())
+        self.upload('reference.txt', prepared=prepared)
+        write(lambda: append_snapshot_files(prepared['searchKey'], action='save',
+            upload_directory=prepared['uploadDirectory'], expected_revision=prepared['expectedRevision'],
+            filenames=['reference.txt'], file_type='reference', keep_file_name=True))
+        snapshot = Search.get_by_search_key(prepared['searchKey'])
+        empty = self.snapshot()
+        options = dict(dynamic_class='tactic.ui.checkin.SnapshotFilesWdg')
+        cell = nested_cell(snapshot.get_search_key(), options)
+        scope = cell['nestedTable']
+        self.assertFalse(scope['insert'])
+        self.assertFalse(scope['selection'])
+        self.assertFalse(scope['gear'])
+        arguments = dict(parent_key=scope['parentKey'], search_type=scope['searchType'], view=scope['view'])
+        result = NestedTableReadCmd(**arguments).execute()
+        self.assertEqual(len(result['records']), 1)
+        file = snapshot.get_all_file_objects()[0]
+        key = file.get_search_key()
+        self.assertEqual(result['cells'][key]['file_name']['href'], file.get_web_path())
+        self.assertIn('reference.txt', result['cells'][key]['file_name']['text'])
+        self.assertFalse(any(value.get('error') for value in result['cells'][key].values()))
+        self.assertEqual(read_nested_scope(**dict(arguments, parent_key=empty.get_search_key()))['records'], [])
+        self.assertEqual(read_nested_scope(**dict(arguments, filters=[['file_name', '=', 'missing.txt']]))['records'], [])
+
+        handler = Path(__file__).resolve().parents[3] / 'TH'
+        text = (handler / 'thlib/ui/table/requests.py').read_text(encoding='utf-8-sig')
+        function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'read_nested_scope')
+        namespace = {}
+        exec(ast.get_source_segment(text, function), namespace)
+        self.assertEqual(namespace['read_nested_scope'](**arguments)['records'], result['records'])
+        text = (handler / 'thlib/tactic_query.py').read_text(encoding='utf-8-sig')
+        function = next(node for node in ast.parse(text).body if isinstance(node, ast.FunctionDef) and node.name == 'query_table_layout')
+        namespace = dict(server=__import__('tactic_client_lib').TacticServerStub(setup=False))
+        exec(ast.get_source_segment(text, function), namespace)
+        history = namespace['query_table_layout']('sthpw/snapshot', [snapshot.get_search_key()], 'checkin_history')
+        if isinstance(history, str):
+            history = json.loads(history)
+        self.assertEqual(history['rows'][snapshot.get_search_key()]['files']['nestedTable'], scope)
+        # Original TACTIC widgets have no native cell method; exercise that adapter too.
+        with patch.object(SnapshotFileElementWdg, 'get_cell_value', None):
+            layout = namespace['query_table_layout']('sthpw/file', [key], 'snapshot_files')
+        if isinstance(layout, str):
+            layout = json.loads(layout)
+        self.assertEqual(layout['rows'][key]['file_name']['href'], file.get_web_path())
+
     def test_revision_conflict_prevents_a_second_write_and_preserves_upload(self):
         snapshot = self.snapshot()
         prepared = append_snapshot_files(snapshot.get_search_key())

@@ -2,7 +2,7 @@
 
 Свой тактик. Простой запуск. Рабочее название — **TACTIC Stream**.
 
-Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.181.
+Самостоятельный backend на Python 3.14, FastAPI и Uvicorn с Vue админкой, версия 0.112.198.
 Он сохраняет понятия TACTIC и начинает перенос его API. Это начало новой
 реализации; полная совместимость API 1:1 пока не достигнута.
 
@@ -7719,3 +7719,11 @@ B07's 40 usable legacy widget classes remain open; Batch Manager is unchanged.
 - Deliver the shared inline tags editor and 16 additional typed table adapters. Keep explicit drafts, current-user preferences, captured script/selection context, safe confirmation and transactional link/record revisions in the existing owners.
 - Run original client JavaScript through its existing SDK in a browser worker or an isolated Qt JS process; native windows remain QML. Retain independent product resources and use shared Frame descriptions for service cells, parallel tasks, instance links, portable CustomLayout and confirmations.
 - Preserve all CG layouts. Slash references resolve to dotted names. Keep nested FastTable/HiddenRow, file-ingest DOM callbacks, unrestricted Mako and bottom reports explicitly open in L01/L04/L07b/L11; adapter registration is not full B07 acceptance. See docs/frame_table.md for evidence and the remaining stage-1 dependency.
+
+
+## 0.112.198 — 2026-10-24
+
+- Fix configured table scripts failing with DataCloneError: serialize the API record context at the Worker boundary, including nested Vue proxies; release the Worker and activity on a synchronous send failure.
+- Restore ordinary nested-table fields from their record data when no computed cell is returned, retaining zero and false. Search file tables by filename instead of internal file code.
+- Support SnapshotFilesWdg hidden rows through the existing nested table in Stream and Handler 0.6.0.144. File membership comes from the selected snapshot XML; links use native File paths. Preserve file type, directory metadata, frame range and size. Empty snapshots stay empty.
+- Recursive disk contents of directory packages and Maya/applet scenarios are outside this checkpoint; this does not close general legacy compatibility. Restart the BAT server to load Python changes, then reload browser tabs.

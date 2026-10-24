@@ -203,8 +203,9 @@ async function load() {
     state.insert = scope.insert !== false && !!definition.operations.create;
     state.gear = scope.gear !== false && !!definition.administration;
     state.filterField =
-      ['name', 'title', 'code'].find((name) => definition.columns[name]) ||
-      'id';
+      ['name', 'title', 'file_name', 'code'].find(
+        (name) => definition.columns[name]
+      ) || 'id';
     state.loaded = true;
   } catch (error) {
     if (request === generation) state.error = error.message;

@@ -108,11 +108,16 @@ ${source}
         event.preventDefault();
         finish(new Error(event.message));
       };
-      worker.postMessage({
-        ticket,
-        url: new URL('/admin/rpc', location.href).href,
-        context: { ...context, confirmation }
-      });
+      try {
+        worker.postMessage({
+          ticket,
+          url: new URL('/admin/rpc', location.href).href,
+          // API records may contain nested Vue proxies; the worker owns JSON data.
+          context: JSON.parse(JSON.stringify({ ...context, confirmation }))
+        });
+      } catch (error) {
+        finish(error);
+      }
     });
   try {
     let result = await execute(null);
