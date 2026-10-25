@@ -1,7 +1,5 @@
 ---
 reference: Handler
-The project editor changes the shared definition layer; login-specific definitions are preserved. Root views follow the same source selection as runtime navigation.
-
 group: Administration
 icon: edit
 order: 37
@@ -11,6 +9,8 @@ order: 37
 > Sidebar Editor changes project navigation stored in TACTIC. Simple mode covers normal setup;
 > Advanced XML edits the selected server element directly. Save deliberately—these changes affect
 > users allowed to see the item.
+
+The project editor changes the shared definition layer; login-specific definitions are preserved. Root views follow the same source selection as runtime navigation.
 
 Open it from the **Sidebar Editor** section of Administration. The project selector in
 Administration controls which project's sidebar is edited; the main search tab does not.

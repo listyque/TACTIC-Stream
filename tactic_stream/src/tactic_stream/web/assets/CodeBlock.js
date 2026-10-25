@@ -1,6 +1,6 @@
 import { B as useId, D as nextTick, E as mergeProps, F as renderSlot, I as resolveComponent, J as isRef, K as withCtx, M as onUpdated, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, T as mergeModels, U as watch, V as useModel, Z as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, c as withKeys, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, y as createTextVNode, z as useAttrs } from "./vue.js";
 import { t as iconMaps } from "./icons.js";
-import { A as appearance, B as cssRoles, C as redact, F as readableText, J as textStyles, K as metrics, L as blend, M as effectiveColorMode, N as frameColors, P as languages, R as controls, S as logRequest, at as _plugin_vue_export_helper_default, c as _sfc_main$34, d as ripple, f as _sfc_main$33, it as BusyIndicator_default, j as colorModes, k as t, l as tooltipDirective, m as debugLog, nt as iconSets, q as readableText$1, rt as themes, tt as accentPresets, u as capturePress, z as cssColor } from "./index.js";
+import { A as t, B as cssColor, C as redact, F as languages, I as readableText, J as readableText$1, M as colorModes, N as effectiveColorMode, P as frameColors, R as blend, S as logRequest, V as cssRoles, Y as textStyles, at as BusyIndicator_default, c as _sfc_main$34, d as ripple, f as _sfc_main$33, it as themes, j as appearance, l as tooltipDirective, m as debugLog, nt as accentPresets, ot as _plugin_vue_export_helper_default, q as metrics, rt as iconSets, u as capturePress, z as controls } from "./index.js";
 //#region ../src/tactic_stream/shared_ui/core/frame.mjs
 /** @typedef {{x:number, y:number, width:number, height:number}} Bounds Logical pixels. */
 /** @typedef {{type:string, [key:string]:unknown}} Action UI event or adapter command. */
@@ -4060,6 +4060,32 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Agent request worker is unavailable": "Обработчик обращений к агенту недоступен",
+	"Request queued": "В очереди",
+	"Agent working": "Выполняется",
+	"Request cancelling": "Отменяется",
+	"Request cancelled": "Отменено",
+	"Request completed": "Завершено",
+	"Request failed": "Ошибка",
+	"Request interrupted": "Прервано",
+	"External agent": "Внешний агент",
+	"Agent requests": "Обращения к агенту",
+	"New request": "Новое обращение",
+	"External agent connected": "Внешний агент подключён",
+	"External agent is offline": "Внешний агент не подключён",
+	"Context sent to the agent": "Контекст обращения",
+	"What should the agent do?": "Что должен сделать агент?",
+	"Allow the requested configuration changes": "Разрешить запрошенные изменения конфигурации",
+	"Send to agent": "Отправить агенту",
+	"Cancel request": "Отменить обращение",
+	"Agent progress and answer": "Ход работы и ответ агента",
+	"The answer and operation results will appear here.": "Здесь появятся ответ и результаты операций.",
+	"Script activation remains a separate action in the Script Editor.": "Активация скриптов выполняется отдельно в редакторе скриптов.",
+	"Select a project before contacting the agent": "Перед обращением к агенту выберите проект",
+	"External agent started": "Внешний агент начал работу",
+	"External agent disconnected. Inspect changes before sending a new request.": "Связь с агентом потеряна. Проверьте изменения перед новым обращением.",
+	"Cancelled. Changes already applied are preserved; inspect them before retrying.": "Отменено. Уже применённые изменения сохранены; проверьте их перед повтором.",
+	"Agent request failed": "Не удалось выполнить обращение к агенту",
 	"Stale source": "Исходник изменился",
 	"Historical report": "Исторический отчёт",
 	"Agent drafts": "Черновики агента",

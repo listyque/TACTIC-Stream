@@ -1,4 +1,4 @@
-import { k as t } from "./index.js";
+import { A as t } from "./index.js";
 //#region src/features/objects/previewFiles.js
 async function fileBlob(file, { signal } = {}) {
 	if (!file?.href) throw new Error(t("No web path is configured for this file."));

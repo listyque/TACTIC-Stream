@@ -1305,6 +1305,19 @@ function asyncComponent(loader) {
 function randomId() {
 	return [...crypto.getRandomValues(/* @__PURE__ */ new Uint8Array(16))].map((value) => value.toString(16).padStart(2, "0")).join("");
 }
+function randomUuid() {
+	const bytes = crypto.getRandomValues(/* @__PURE__ */ new Uint8Array(16));
+	bytes[6] = bytes[6] & 15 | 64;
+	bytes[8] = bytes[8] & 63 | 128;
+	const value = [...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+	return [
+		value.slice(0, 8),
+		value.slice(8, 12),
+		value.slice(12, 16),
+		value.slice(16, 20),
+		value.slice(20)
+	].join("-");
+}
 //#endregion
 //#region src/features/debug/debugLog.js
 var levels = [
@@ -2089,6 +2102,7 @@ function windowMinimumWidth(kind) {
 		file_changelist: 520,
 		ingest_files: 760,
 		script_editor: 720,
+		agent_request: 520,
 		script_shelf_editor: 720,
 		script_trigger_editor: 760,
 		help: 760,
@@ -2146,6 +2160,7 @@ function windowMinimumHeight(kind) {
 		file_changelist: 480,
 		ingest_files: 560,
 		script_editor: 500,
+		agent_request: 560,
 		script_shelf_editor: 480,
 		script_trigger_editor: 520,
 		help: 520,
@@ -2769,6 +2784,6 @@ if (documentation) watchEffect(() => {
 var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([6,7,1,2,3,4,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { normalizeColumns as $, appearance as A, cssRoles as B, redact as C, randomId as D, setServerDebugContext as E, readableText as F, lineHeights as G, fontLineHeight as H, saveAppearance as I, textStyles as J, metrics as K, blend as L, effectiveColorMode as M, frameColors as N, asyncComponent as O, languages as P, savePreferencePage as Q, controls as R, logRequest as S, sessionRecords as T, fontMetricHeight as U, fontFamily as V, layout as W, normalizePreferences as X, configurationPreview as Y, preferences as Z, forgetSessions as _, fit as a, _plugin_vue_export_helper_default as at, levels as b, _sfc_main$1 as c, ripple as d, taskColumns as et, _sfc_main$2 as f, exportSession as g, debugSettings as h, dockMinimumWidth as i, BusyIndicator_default as it, colorModes as j, t as k, tooltipDirective as l, debugLog as m, windowDirective as n, iconSets as nt, mobile as o, clearLive as p, readableText$1 as q, dockMinimumHeight as r, themes as rt, mobileLayout as s, __vitePreload as t, accentPresets as tt, capturePress as u, formatEvent as v, savedSessions as w, logEvent as x, importSession as y, cssColor as z };
+export { savePreferencePage as $, t as A, cssColor as B, redact as C, randomId as D, setServerDebugContext as E, languages as F, layout as G, fontFamily as H, readableText as I, readableText$1 as J, lineHeights as K, saveAppearance as L, colorModes as M, effectiveColorMode as N, randomUuid as O, frameColors as P, preferences as Q, blend as R, logRequest as S, sessionRecords as T, fontLineHeight as U, cssRoles as V, fontMetricHeight as W, configurationPreview as X, textStyles as Y, normalizePreferences as Z, forgetSessions as _, fit as a, BusyIndicator_default as at, levels as b, _sfc_main$1 as c, ripple as d, normalizeColumns as et, _sfc_main$2 as f, exportSession as g, debugSettings as h, dockMinimumWidth as i, themes as it, appearance as j, asyncComponent as k, tooltipDirective as l, debugLog as m, windowDirective as n, accentPresets as nt, mobile as o, _plugin_vue_export_helper_default as ot, clearLive as p, metrics as q, dockMinimumHeight as r, iconSets as rt, mobileLayout as s, __vitePreload as t, taskColumns as tt, capturePress as u, formatEvent as v, savedSessions as w, logEvent as x, importSession as y, controls as z };
 
 //# sourceMappingURL=index.js.map

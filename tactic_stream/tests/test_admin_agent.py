@@ -23,6 +23,33 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @unittest.skipIf(Client is None, 'Install tactic-stream[agent] to test the optional MCP adapter')
 class AgentTransport(unittest.TestCase):
+    def test_user_context_tools_are_bound_by_the_host(self):
+        from unittest.mock import patch
+        identity = str(uuid4())
+        connection = StreamConnection('http://example.invalid', 'one', 'private-ticket')
+        document = dict(prompt='Explain this selection', allow_changes=False,
+                        context=dict(client='TH', project='one', page='shots', search_keys=['cg/shot?project=one&code=SH001']))
+
+        def command(owner, action, **values):
+            self.assertEqual(owner, 'request')
+            self.assertEqual(values, dict(request_id=identity))
+            return dict(document=document) if action == 'read' else dict(objects=[dict(code='SH001')])
+
+        async def run():
+            server = create_server(connection, ROOT, request_id=identity)
+            async with Client(server) as client:
+                context = await client.call_tool('agent_context', {})
+                self.assertFalse(context.is_error)
+                self.assertEqual(context.structured_content, dict(request_id=identity, **document))
+                selected = await client.call_tool('agent_selection', {})
+                self.assertEqual(selected.structured_content['objects'][0]['code'], 'SH001')
+                attempted = await client.call_tool('agent_context', dict(request_id=str(uuid4())))
+                # The SDK ignores extra arguments; the server still uses the host-bound UUID.
+                self.assertFalse(attempted.is_error)
+                self.assertEqual(attempted.structured_content['request_id'], identity)
+        with patch.object(connection, 'command', side_effect=command):
+            asyncio.run(run())
+
     def test_page_recipe_uses_complete_native_layout(self):
         from tactic_stream.admin_agent import PageDocument
         from tactic_stream.server.workspace_layout import validate_layout
@@ -152,7 +179,14 @@ class AgentNativeIntegration(unittest.TestCase):
             async with Client(parameters) as client:
                 listed = await client.list_tools()
                 names = {tool.name for tool in listed.tools}
-                self.assertEqual(len(names), 19)
+                self.assertEqual(names, {
+                    'agent_capabilities', 'reference_catalog', 'reference_read', 'ts_types',
+                    'ts_type_read', 'ts_schema_read', 'ts_naming_read', 'ts_naming_preview',
+                    'ts_naming_operation', 'ts_page_read', 'ts_page_preview', 'ts_page_operation',
+                    'ts_project_preview', 'ts_project_read', 'ts_project_operation',
+                    'th_automation_read', 'th_automation_preview', 'th_automation_drafts',
+                    'th_automation_draft', 'th_automation_operation',
+                })
                 self.assertFalse(any('save' in name or 'execute' in name for name in names))
 
                 async def call(name, **arguments):

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tactic-stream"
-version = "0.112.214"
+version = "0.112.215"
 description = "TACTIC Stream: a TACTIC kernel with a Vue admin and a tracked legacy API contract"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -17,6 +17,7 @@ agent = ["mcp==2.3.0"]
 [project.scripts]
 tactic-stream = "tactic_stream.__main__:main"
 tactic-admin-agent = "tactic_stream.admin_agent:main"
+tactic-agent-host = "tactic_stream.agent_host:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

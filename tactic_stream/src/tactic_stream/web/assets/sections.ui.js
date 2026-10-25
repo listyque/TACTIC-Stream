@@ -1,4 +1,4 @@
-import { K as metrics } from "./index.js";
+import { q as metrics } from "./index.js";
 import { Gt as label, Jt as rect, Kt as muted, qt as node, y as translate } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/controls/forms/fields.mjs
 function fieldProperties(field, language, enabled) {

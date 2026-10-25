@@ -7,6 +7,9 @@ describes implemented tools, not a promised future API.
 For a concrete external host use [the Codex setup and real-model acceptance
 recipe](CODEX.md). Provider login remains in the external host.
 
+Use [native TH/TS requests](REQUESTS.md) to submit tasks with captured project, page
+and selected objects to a connected external host.
+
 ## What runs where
 
 The external host runs its chosen model and launches a separate MCP stdio

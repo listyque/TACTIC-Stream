@@ -1,4 +1,4 @@
-import { A as appearance, k as t } from "./index.js";
+import { A as t, j as appearance } from "./index.js";
 import { f as linkifyPlainText, n as browserLink, u as escapeHtml } from "./links.js";
 //#region src/features/activity/activity.js
 function dateKey(date) {

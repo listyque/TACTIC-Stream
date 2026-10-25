@@ -1,5 +1,5 @@
 import { D as nextTick, K as withCtx, N as openBlock, P as renderList, R as resolveDynamicComponent, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as appearance, c as _sfc_main$3, f as _sfc_main$2, k as t } from "./index.js";
+import { A as t, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
 import { Gt as label, I as _sfc_main$5, Jt as rect, R as _sfc_main$6, _ as copyText, i as _sfc_main$4, qt as node, r as observeFrameSizes, st as rpc, t as _sfc_main$7, y as translate } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/features/support/documentation/api.ui.mjs
 function methods(catalog, status, query, language) {

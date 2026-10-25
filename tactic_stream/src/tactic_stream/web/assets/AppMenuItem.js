@@ -1,5 +1,5 @@
 import { E as mergeProps, K as withCtx, N as openBlock, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, m as createBaseVNode, tt as unref } from "./vue.js";
-import { c as _sfc_main$1, f as _sfc_main$2, k as t } from "./index.js";
+import { A as t, c as _sfc_main$1, f as _sfc_main$2 } from "./index.js";
 //#region src/controls/AppMenuItem.vue
 var _hoisted_1 = { class: "app-menu-item" };
 var _hoisted_2 = { class: "app-menu-item-label" };

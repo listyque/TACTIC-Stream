@@ -344,6 +344,7 @@
       "src/features/administration/SecurityUsers.vue",
       "src/features/administration/SecurityGroups.vue",
       "src/features/administration/SecurityRules.vue",
+      "src/features/scripts/AgentRequest.vue",
       "src/features/scripts/ScriptEditor.vue"
     ],
     "css": [
@@ -715,6 +716,21 @@
     ],
     "css": [
       "assets/SnapshotBrowser.css"
+    ]
+  },
+  "src/features/scripts/AgentRequest.vue": {
+    "file": "assets/AgentRequest.js",
+    "name": "AgentRequest",
+    "src": "src/features/scripts/AgentRequest.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_CodeBlock.js",
+      "_AppDialog.js"
+    ],
+    "css": [
+      "assets/AgentRequest.css"
     ]
   },
   "src/features/scripts/ScriptEditor.vue": {

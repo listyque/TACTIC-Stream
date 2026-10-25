@@ -1,5 +1,5 @@
 import { D as nextTick, E as mergeProps, F as renderSlot, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, T as mergeModels, U as watch, V as useModel, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, w as inject } from "./vue.js";
-import { A as appearance, R as controls, c as _sfc_main$5, f as _sfc_main$4, k as t } from "./index.js";
+import { A as t, O as randomUuid, c as _sfc_main$5, f as _sfc_main$4, j as appearance, z as controls } from "./index.js";
 import { Gt as label, Jt as rect, Kt as muted, T as AppSearchField_default, U as endActivity, V as beginActivity, Wt as button, _ as copyText, c as _sfc_main$8, d as completions, f as documentSymbols, i as _sfc_main$6, k as _sfc_main$9, l as toolbar$1, lt as scriptEditor, n as frameContentWidth, qt as node, r as observeFrameSizes, st as rpc, u as _sfc_main$7, y as translate } from "./CodeBlock.js";
 import { C as _sfc_main$10, D as _sfc_main$11, c as buttonId, l as runBrowserScript, u as scriptTree } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/source.ui.mjs
@@ -597,7 +597,7 @@ var _sfc_main$1 = {
 					draft_revision: draft.revision,
 					expected_revision: draft.dependency_revision,
 					trial_ids: draft.trial_ids,
-					operation_id: crypto.randomUUID()
+					operation_id: randomUuid()
 				};
 				request("activate", pending);
 			}

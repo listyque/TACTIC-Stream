@@ -1,0 +1,82 @@
+# Requests from the ordinary TH and TS interfaces
+
+TS 0.112.215 and TH 0.6.0.157 add **External agent** to the shared main options
+menu. This is an administrator entry point. Both clients use the same Frame
+description and native controls; the browser never embeds a desktop window.
+
+## User workflow
+
+Open a project and page, select objects, then choose External agent. The window
+shows the captured client, project, navigation entry, Search Type, table view and
+exact selected search keys. Enter a task. Without **Allow the requested
+configuration changes**, the agent receives only reads/previews. Checking it
+allows native naming/page/project/template writes and inactive TH script drafts,
+limited by the host's own launch permissions and the authenticated account.
+It does not expose script activation.
+
+Send starts one durable request. Progress and the final answer appear in the
+same window; the agent's results are ordinary TACTIC resources. Closing the window
+leaves the request running. Reopen it or select a recent request to inspect its
+captured context and result. Choose New request to capture the current page and
+selection. Changing project/page/selection after sending never retargets the task.
+Requests are independent tasks; this version does not carry a conversational
+history into a new request.
+
+Cancellation stops pending work or asks the external host to stop its current
+process tree. Completed native operations are preserved. Inspect them before a
+new request. A disconnected running request becomes interrupted after 90 seconds;
+it is never automatically executed again. An expired queued host also produces
+an explicit interrupted state. Refresh/reopen does not resubmit anything.
+
+## Connect the existing Codex host
+
+This separate process belongs to the operator. The TS service never starts a
+model, reads provider credentials or imports Handler. Install the optional agent
+extra and sign in to Codex CLI first, following [CODEX](CODEX.md). For this
+checkout-based connection, run in a private operator terminal:
+
+```text
+python -m tactic_stream.agent_host --server http://<server>:8081 --project <code> --stream-root <TS/tactic_stream> --handler-root <TH> --login <TACTIC-login> --allow-changes
+```
+
+The password is entered privately at the prompt. Alternatively omit --login and
+inject a valid TACTIC_AGENT_TICKET into the process environment. Never supply a
+ticket/password as a command argument. Repeat --project for each allowed project;
+newly created projects need explicit host reconnection. The connection is scoped
+to the same TACTIC login as the user submitting requests. An offline connection
+disables sending. Other external hosts may consume the same fixed Command
+contract without changing either UI; this shipped executor specifically uses
+Codex CLI and its existing authentication.
+
+The host disables shell, source edits, web and other apps, uses an empty working
+directory and invocation-only MCP configuration, and does not modify global
+Codex settings. Its tools are the existing [MCP operations](CONNECTION.md).
+Naming/page/project operations retain native revision/receipt checks. Add the
+trusted --trial-image and --trial-directory options from [SCRIPT_TRIALS](SCRIPT_TRIALS.md)
+to expose isolated Linux trials. Activate reviewed drafts separately in the
+ordinary Script Editor; generated Python is never executed by the request UI
+or on the operator's Windows host.
+
+## Native contract and ownership
+
+`tactic.ui.panel.agent_request_cmd.AgentRequestCmd`, through normal execute_cmd,
+owns state, submit, read, selection, cancel, heartbeat, disconnect, claim and update. Normal
+authentication, API command authorization and administrator permission apply.
+Private per-project spt_agent_request/spt_agent_host tables are created by the
+standard config upgrade. They store user-owned metadata and results, never
+tickets or provider credentials. Collection locks serialize submit/claim/update.
+The request UUID plus exact document makes submission idempotent. A claim binds
+one host; another host cannot complete its request. Native receipts prevent
+remote configuration replay; request interruption cannot roll back writes already
+committed through other commands. Host reports are not independent attestation.
+
+The MCP adapter's host-bound --request-id adds agent_context and agent_selection.
+The model cannot choose another request, ticket or origin. Selection reading
+projects only public identity/title/parent fields from the exact captured keys;
+it fails on deleted/unavailable objects. Broader schemas and configuration are
+read through the existing task tools and curated knowledge pack.
+
+TS captures its working workspace selection; TH captures its native section,
+table view and script-shelf selection provider. This is an immutable handoff,
+not a live TH runtime connection: th_runtime_connected remains false. Native TH
+hooks and shelf scripts still belong to TH, not browser uploads or a DCC client.

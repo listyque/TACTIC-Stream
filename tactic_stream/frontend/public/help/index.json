@@ -245,6 +245,13 @@
     ]
   },
   {
+    "id": "external_agent",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
     "id": "file_workspace",
     "languages": [
       "en",
@@ -260,6 +267,13 @@
   },
   {
     "id": "html_api",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "item_layouts",
     "languages": [
       "en",
       "ru"
@@ -385,6 +399,34 @@
     ]
   },
   {
+    "id": "table_view",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "table_widget_checklist",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "table_widget_examples",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
+    "id": "table_widgets_b07",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
     "id": "tasks",
     "languages": [
       "en",
@@ -406,20 +448,6 @@
     ]
   },
   {
-    "id": "windows",
-    "languages": [
-      "en",
-      "ru"
-    ]
-  },
-  {
-    "id": "item_layouts",
-    "languages": [
-      "en",
-      "ru"
-    ]
-  },
-  {
     "id": "widget_database",
     "languages": [
       "en",
@@ -427,28 +455,7 @@
     ]
   },
   {
-    "id": "table_widget_examples",
-    "languages": [
-      "en",
-      "ru"
-    ]
-  },
-  {
-    "id": "table_widget_checklist",
-    "languages": [
-      "en",
-      "ru"
-    ]
-  },
-  {
-    "id": "table_view",
-    "languages": [
-      "en",
-      "ru"
-    ]
-  },
-  {
-    "id": "table_widgets_b07",
+    "id": "windows",
     "languages": [
       "en",
       "ru"

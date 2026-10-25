@@ -102,7 +102,9 @@ defineExpose({
     ref="dialog"
     v-window="
       modal
-        ? false
+        ? windowKind
+          ? { type: 'dialog', kind: windowKind }
+          : false
         : { type: windowKind ? 'window' : 'popup', kind: windowKind || '' }
     "
     class="app-dialog"

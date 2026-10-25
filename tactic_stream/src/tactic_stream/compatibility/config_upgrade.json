@@ -1,6 +1,8 @@
 {
   "naming_revision": true,
   "tables": {
+    "spt_agent_request": "CREATE TABLE spt_agent_request (code varchar(64) PRIMARY KEY, owner varchar(256) NOT NULL, record text NOT NULL)",
+    "spt_agent_host": "CREATE TABLE spt_agent_host (code varchar(64) PRIMARY KEY, owner varchar(256) NOT NULL, record text NOT NULL)",
     "spt_custom_script_revision": "CREATE TABLE spt_custom_script_revision (code varchar(256) PRIMARY KEY, revision bigint NOT NULL DEFAULT 0)",
     "spt_trigger_revision": "CREATE TABLE spt_trigger_revision (code varchar(256) PRIMARY KEY, revision bigint NOT NULL DEFAULT 0)",
     "spt_automation_operation": "CREATE TABLE spt_automation_operation (code varchar(64) PRIMARY KEY, request_hash varchar(64) NOT NULL, result text NOT NULL)",

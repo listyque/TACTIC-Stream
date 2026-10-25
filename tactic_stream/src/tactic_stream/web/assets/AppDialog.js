@@ -1,5 +1,5 @@
 import { D as nextTick, F as renderSlot, N as openBlock, Z as ref, _ as createElementBlock, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, q as withDirectives, tt as unref } from "./vue.js";
-import { a as fit, c as _sfc_main$1, k as t, n as windowDirective } from "./index.js";
+import { A as t, a as fit, c as _sfc_main$1, n as windowDirective } from "./index.js";
 import { r as observeFrameSizes } from "./CodeBlock.js";
 //#region src/controls/AppDialog.vue
 var _hoisted_1 = ["aria-label"];
@@ -128,7 +128,10 @@ var _sfc_main = {
 				icon: "close",
 				"icon-only": "",
 				onClick: reject
-			})) : createCommentVNode("", true)])) : createCommentVNode("", true), createBaseVNode("div", _hoisted_3, [renderSlot(_ctx.$slots, "default")])], 42, _hoisted_1)), [[unref(windowDirective), __props.modal ? false : {
+			})) : createCommentVNode("", true)])) : createCommentVNode("", true), createBaseVNode("div", _hoisted_3, [renderSlot(_ctx.$slots, "default")])], 42, _hoisted_1)), [[unref(windowDirective), __props.modal ? __props.windowKind ? {
+				type: "dialog",
+				kind: __props.windowKind
+			} : false : {
 				type: __props.windowKind ? "window" : "popup",
 				kind: __props.windowKind || ""
 			}]]);

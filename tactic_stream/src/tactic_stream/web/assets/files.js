@@ -1,4 +1,4 @@
-import { Z as preferences } from "./index.js";
+import { Q as preferences } from "./index.js";
 import { st as rpc } from "./CodeBlock.js";
 import "./file_values.js";
 //#region src/features/checkin/files.js

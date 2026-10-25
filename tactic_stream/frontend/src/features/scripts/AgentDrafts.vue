@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { rpc } from '../../api.js';
+import { randomUuid } from '../../controls/identity.js';
 import { appearance } from '../../appearance.js';
 import FrameView from '../../frame/FrameView.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
@@ -113,7 +114,7 @@ function event(action) {
         draft_revision: draft.revision,
         expected_revision: draft.dependency_revision,
         trial_ids: draft.trial_ids,
-        operation_id: crypto.randomUUID()
+        operation_id: randomUuid()
       };
     request('activate', pending);
   }

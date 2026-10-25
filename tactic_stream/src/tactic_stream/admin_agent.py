@@ -31,6 +31,7 @@ COMMANDS = {
     'naming': 'tactic.ui.panel.naming_cmd.NamingCmd',
     'page': 'tactic.ui.panel.page_cmd.PageCmd',
     'automation': 'tactic.ui.panel.handler_automation_cmd.HandlerAutomationCmd',
+    'request': 'tactic.ui.panel.agent_request_cmd.AgentRequestCmd',
 }
 REFERENCES = {
     'ts.start': ('TS', 'docs/admin_agent/START.md'),
@@ -40,6 +41,7 @@ REFERENCES = {
     'ts.sources': ('TS', 'docs/admin_agent/SOURCES.md'),
     'ts.connection': ('TS', 'docs/admin_agent/CONNECTION.md'),
     'ts.codex': ('TS', 'docs/admin_agent/CODEX.md'),
+    'ts.requests': ('TS', 'docs/admin_agent/REQUESTS.md'),
     'th.trials': ('TS', 'docs/admin_agent/SCRIPT_TRIALS.md'),
     'ts.pages': ('TS', 'docs/admin_agent/PAGES.md'),
     'ts.projects': ('TS', 'docs/admin_agent/PROJECTS.md'),
@@ -202,7 +204,8 @@ class StreamConnection:
 def create_server(connection: StreamConnection, stream_root: Path, handler_root: Path | None = None,
                   *, allow_naming_save: bool = False, allow_page_save: bool = False,
                   allow_project_create: bool = False, allow_automation_draft: bool = False,
-                  allow_automation_activate: bool = False, trials: AutomationTrials | None = None) -> MCPServer:
+                  allow_automation_activate: bool = False, trials: AutomationTrials | None = None,
+                  request_id: str | None = None) -> MCPServer:
     """Build the externally callable catalogue without importing TS or TH internals."""
     roots = {'TS': stream_root.resolve(), 'TH': handler_root.resolve() if handler_root else None}
     if allow_automation_activate and trials is None:
@@ -220,6 +223,18 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
     read_only = ToolAnnotations(read_only_hint=True, destructive_hint=False,
                                 idempotent_hint=True, open_world_hint=False)
 
+    if request_id:
+        @mcp.tool(annotations=read_only, structured_output=True)
+        def agent_context() -> dict[str, Any]:
+            """The user's immutable TH/TS project, page and selection captured before sending."""
+            request = connection.command('request', 'read', request_id=request_id)
+            return dict(request_id=request_id, **request['document'])
+
+        @mcp.tool(annotations=read_only, structured_output=True)
+        def agent_selection() -> dict[str, Any]:
+            """Read the captured selected objects' current public identity/title/parent fields."""
+            return connection.command('request', 'selection', request_id=request_id)
+
     @mcp.tool(annotations=read_only, structured_output=True)
     def agent_capabilities() -> dict[str, Any]:
         """Report this adapter's actual scope and the running server version."""
@@ -236,6 +251,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                               + (['handler_automation.activate'] if allow_automation_activate else []),
                 'can_apply': allow_naming_save or allow_page_save or allow_project_create or allow_automation_draft or allow_automation_activate,
                 'can_execute_scripts': trials is not None, 'th_runtime_connected': False,
+                'user_context_available': bool(request_id),
                 'can_save_handler_drafts': allow_automation_draft, 'can_activate_handler_code': allow_automation_activate,
                 'handler_automation_requires': 'TS 0.112.214 with upgraded schema for draft catalogue/trial reports; TH 0.6.0.156 for native UI review. Read th.automation',
                 'isolated_script_trial_available': trials is not None,
@@ -561,6 +577,7 @@ def main() -> None:
     parser.add_argument('--allow-project-create', action='store_true', help='Host-authorized new projects and native template export/install')
     parser.add_argument('--allow-automation-draft', action='store_true', help='Save inactive Handler automation drafts')
     parser.add_argument('--allow-automation-activate', action='store_true', help='Publish reviewed code for execution by native Handler hooks/shelves')
+    parser.add_argument('--request-id', help='Host-bound native user request; exposes its immutable context')
     parser.add_argument('--trial-image', help='Trusted local immutable sha256 image ID for isolated Linux trials')
     parser.add_argument('--trial-directory', type=Path, help='Private host-owned durable trial receipts outside repositories')
     args = parser.parse_args()
@@ -578,7 +595,8 @@ def main() -> None:
     create_server(connection, args.stream_root, args.handler_root,
                   allow_naming_save=args.allow_naming_save, allow_page_save=args.allow_page_save,
                   allow_project_create=args.allow_project_create, allow_automation_draft=args.allow_automation_draft,
-                  allow_automation_activate=args.allow_automation_activate, trials=trials).run(transport='stdio')
+                  allow_automation_activate=args.allow_automation_activate, trials=trials,
+                  request_id=args.request_id).run(transport='stdio')
 
 
 if __name__ == '__main__':

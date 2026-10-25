@@ -121,7 +121,7 @@ export default {
       inspectorSource: null, inspectorTarget: null, inspectorRequest: 0, taskInspectorActive: false, searchEditorActive: false, inspectorReturn: 'results',
       knowledgeMounted:false, knowledgeActive:false, knowledgeTarget:'',
       attachmentLocation: null,
-      scriptEditorComponent: null, scriptEditorLoading: false,
+      scriptEditorComponent: null, scriptEditorLoading: false, agentRequestComponent: null,
       pingBusy: false, activityUnread: 0, messageUnread: 0, shelfOpen: false, layoutsFocus: null, columnsFocus: null, refreshAfterAdministration: false, version: '', ready: false, restoringSession: true, login: '', password: '', session: null,
       navigationLink: '', openingLink: false, linkRequest: 0, routeReady: false, searchStateTab: null,
       projects: [], types: [], userIdentity: null, project: '', type: '',
@@ -341,6 +341,7 @@ export default {
         apply_view_to_all_tabs: () => this.applyViewToAllTabs(),
         reset_workspace_layout: () => this.$refs.docks.reset(),
         open_script_editor: () => this.openScriptEditor(),
+        open_agent_request: () => this.openAgentRequest(),
         show_debug_log: () => this.$refs.debugLog.open(),
         show_ui_performance: () => this.$refs.uiPerformance.open(),
         open_script_shelf: () => this.$refs.scriptShelf.open(),
@@ -479,6 +480,23 @@ export default {
     closeNavigation(restoreFocus = true) {
       this.$refs.navigation?.close(restoreFocus)
       this.navigationOpen = false
+    },
+    agentContext() {
+      const view = this.workspaceView
+      return { client: 'TS', project: this.workspaceProject || '', page: this.activeWorkspaceSection?.navigationKey || '',
+        title: this.activeWorkspaceSection?.title || '', search_type: view.type || '', view: view.view || this.view || '',
+        search_keys: [...(view.selectedKeys || [])] }
+    },
+    async openAgentRequest() {
+      const session = this.session
+      const context = this.agentContext()
+      try {
+        const module = await import('./features/scripts/AgentRequest.vue')
+        if (this.session !== session) return
+        this.agentRequestComponent ||= markRaw(module.default)
+        await nextTick()
+        if (this.session === session) this.$refs.agentRequest.open(context)
+      } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-request') }
     },
     async openScriptEditor(path) {
       if (this.scriptEditorLoading) return
@@ -1948,6 +1966,7 @@ export default {
       :project="inspectorSource?.project || workspaceProject" :search-type="inspectorSource?.searchType || workspaceView.type" :updates="serverBatch"
       @back="$refs.docks.show(inspectorReturn || 'results')" @visibility="$event ? $refs.docks.show('notes') : $refs.docks.hide('notes')" @saved="inspectorSaved" />
     <UiPerformance ref="uiPerformance" @closed="$refs.settingsMenu?.focusTrigger()" />
+    <component v-if="agentRequestComponent" :is="agentRequestComponent" ref="agentRequest" :ticket="session.ticket" :capture="agentContext" />
     <component v-if="scriptEditorComponent" :is="scriptEditorComponent" ref="scriptEditor" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" :search-type="workspaceView.type" :search-keys="workspaceView.selectedKeys" @saved="$refs.scriptShelf.reload()" @executed="loadRows()" @closed="$refs.settingsMenu?.focusTrigger()" />
     <ScriptShelf ref="scriptShelf" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" v-bind="shelfContext" :search-type="workspaceView.type" :search-keys="workspaceView.selectedKeys" :visible="!compactShortcuts && shelfOpen && !!activeSearchTab && !administrationOpen && section === 'data'" @saved="loadNavigation" @executed="loadRows()" @closed="$refs.settingsMenu?.focusTrigger()" />
     <NotificationStack ref="notifications" @activity="$refs.activityFeed.open()" @messages="$refs.messages.open($event)" @reply="$refs.messages.sendQuickReply($event)" />

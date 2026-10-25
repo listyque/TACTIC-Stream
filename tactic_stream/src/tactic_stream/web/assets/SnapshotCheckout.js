@@ -1,5 +1,5 @@
 import { D as nextTick, L as resolveDirective, N as openBlock, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, tt as unref } from "./vue.js";
-import { A as appearance, R as controls, c as _sfc_main$2, k as t } from "./index.js";
+import { A as t, c as _sfc_main$2, j as appearance, z as controls } from "./index.js";
 import { Gt as label, Jt as rect, Wt as button, i as _sfc_main$3, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";

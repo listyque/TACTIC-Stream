@@ -1,5 +1,5 @@
 import { C as h, D as nextTick, G as watchPostEffect, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, p as computed, rt as normalizeStyle, tt as unref, u as Fragment, w as inject, y as createTextVNode } from "./vue.js";
-import { A as appearance, K as metrics, c as _sfc_main$4, k as t } from "./index.js";
+import { A as t, c as _sfc_main$4, j as appearance, q as metrics } from "./index.js";
 import { Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$5, ot as resultItems, qt as node, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { f as linkifyPlainText, l as activateRichLink, n as browserLink, u as escapeHtml } from "./links.js";
 import { d as timestampFullLabel, f as timestampLabel, i as compactText, l as needsExpansion, n as qtLabelTextWidth, r as changeValue, s as eventSentence, u as safeColor } from "./textMetrics.js";

@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/sections.ui.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/previewFiles.js","assets/SnapshotCheckout.css","assets/NamingEditor.js","assets/admin.document.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/tree.ui.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/sections.ui.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/previewFiles.js","assets/SnapshotCheckout.css","assets/NamingEditor.js","assets/admin.document.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/tree.ui.js","assets/LayoutEditor.js","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { t as __exportAll$1 } from "./rolldown-runtime.js";
 import { $ as shallowRef, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, S as getCurrentInstance, T as mergeModels, U as watch, V as useModel, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, t as Transition, tt as unref, u as Fragment, v as createSlots, w as inject, y as createTextVNode } from "./vue.js";
-import { $ as normalizeColumns, A as appearance, B as cssRoles, D as randomId, E as setServerDebugContext, F as readableText, G as lineHeights, H as fontLineHeight, I as saveAppearance, J as textStyles, K as metrics$12, L as blend, N as frameColors, O as asyncComponent, Q as savePreferencePage, R as controls$1, S as logRequest, T as sessionRecords, U as fontMetricHeight, V as fontFamily, W as layout$11, Y as configurationPreview, Z as preferences, _ as forgetSessions, at as _plugin_vue_export_helper_default, b as levels, c as _sfc_main$178, et as taskColumns, f as _sfc_main$179, g as exportSession, h as debugSettings, i as dockMinimumWidth, it as BusyIndicator_default, k as t, m as debugLog, o as mobile, p as clearLive, q as readableText$1, r as dockMinimumHeight, s as mobileLayout, t as __vitePreload, v as formatEvent, w as savedSessions, y as importSession } from "./index.js";
+import { $ as savePreferencePage, A as t, D as randomId, E as setServerDebugContext, G as layout$11, H as fontFamily, I as readableText, J as readableText$1, K as lineHeights, L as saveAppearance, P as frameColors, Q as preferences, R as blend, S as logRequest, T as sessionRecords, U as fontLineHeight, V as cssRoles, W as fontMetricHeight, X as configurationPreview, Y as textStyles, _ as forgetSessions, at as BusyIndicator_default, b as levels, c as _sfc_main$178, et as normalizeColumns, f as _sfc_main$179, g as exportSession, h as debugSettings, i as dockMinimumWidth, j as appearance, k as asyncComponent, m as debugLog, o as mobile, ot as _plugin_vue_export_helper_default, p as clearLive, q as metrics$12, r as dockMinimumHeight, s as mobileLayout, t as __vitePreload, tt as taskColumns, v as formatEvent, w as savedSessions, y as importSession, z as controls$1 } from "./index.js";
 import { $ as objectStatus, A as localDate, At as updateDelay, B as activityFeed, Bt as notify, C as _sfc_main$196, Ct as transactionDetails, D as _sfc_main$187, Dt as widgetConfiguration, E as _sfc_main$182, Et as userProfile, F as _sfc_main$185, Ft as clearNotificationHistory, G as interfaceDefinition, Gt as label, Ht as setNotificationProgress, I as _sfc_main$197, It as dismissNotification, J as messageFileRequest, Jt as rect$1, Kt as muted, Lt as editNotificationReply, M as parse$1, Mt as activeNotifications, Nt as beginNotificationReply, O as _sfc_main$189, Ot as workspaceLayouts, P as _sfc_main$188, Pt as cancelNotificationReply, Q as objectRelations, R as _sfc_main$184, Rt as failNotificationReply, S as matchesUser$1, St as tableParentGroup, T as AppSearchField_default, Tt as userAvatar, U as endActivity, Ut as submitNotificationReply, V as beginActivity, Vt as resetNotifications, Wt as button, X as navigationLink, Xt as virtualRange, Y as messagesRequest, Yt as revealListOffset, Z as objectDeletion, _ as copyText, _t as sessionAction, a as _sfc_main$192, at as resetRequestActivity, b as _sfc_main$194, bt as tableDependencies, c as _sfc_main$193, dt as searchConfiguration, et as projectCatalog, g as copyImage, gt as serverUpdates, h as xmlTokens, i as _sfc_main$180, it as requestActivity, j as monthLabel, jt as updatesAvailable, k as _sfc_main$183, kt as setUpdatesAvailable, m as pythonTokens, n as frameContentWidth, nt as projectNavigation, o as _sfc_main$191, ot as resultItems, p as javascriptTokens, q as linkPreviews, qt as node, r as observeFrameSizes, s as _sfc_main$190, st as rpc, t as _sfc_main$181, tt as projectCreationCatalog, ut as scriptShelf, v as readClipboardImages, w as ItemPreview_default, wt as uploadFormFile, x as _sfc_main$186, xt as tableDependencyFile, y as translate, yt as tableCells, z as _sfc_main$195, zt as notificationHistory } from "./CodeBlock.js";
 import { a as unsupportedField, i as fieldKind, n as _sfc_main$198, r as format$1, t as RecordForm_default } from "./RecordForm.js";
 import { n as sections$1, t as captionHeight } from "./sections.ui.js";
@@ -22176,6 +22176,12 @@ var main_menus_default = {
 		}
 	],
 	configuration: [
+		{
+			"title": "External agent",
+			"icon": "comment",
+			"command": "open_agent_request",
+			"admin": true
+		},
 		{
 			"title": "Configuration",
 			"icon": "settings",
@@ -59524,6 +59530,7 @@ var _sfc_main = {
 			attachmentLocation: null,
 			scriptEditorComponent: null,
 			scriptEditorLoading: false,
+			agentRequestComponent: null,
 			pingBusy: false,
 			activityUnread: 0,
 			messageUnread: 0,
@@ -60055,6 +60062,7 @@ var _sfc_main = {
 				apply_view_to_all_tabs: () => this.applyViewToAllTabs(),
 				reset_workspace_layout: () => this.$refs.docks.reset(),
 				open_script_editor: () => this.openScriptEditor(),
+				open_agent_request: () => this.openAgentRequest(),
 				show_debug_log: () => this.$refs.debugLog.open(),
 				show_ui_performance: () => this.$refs.uiPerformance.open(),
 				open_script_shelf: () => this.$refs.scriptShelf.open(),
@@ -60215,6 +60223,31 @@ var _sfc_main = {
 			this.$refs.navigation?.close(restoreFocus);
 			this.navigationOpen = false;
 		},
+		agentContext() {
+			const view = this.workspaceView;
+			return {
+				client: "TS",
+				project: this.workspaceProject || "",
+				page: this.activeWorkspaceSection?.navigationKey || "",
+				title: this.activeWorkspaceSection?.title || "",
+				search_type: view.type || "",
+				view: view.view || this.view || "",
+				search_keys: [...view.selectedKeys || []]
+			};
+		},
+		async openAgentRequest() {
+			const session = this.session;
+			const context = this.agentContext();
+			try {
+				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([74,1,2,3,4,5,6,7,13,14,75]));
+				if (this.session !== session) return;
+				this.agentRequestComponent ||= markRaw(module.default);
+				await nextTick();
+				if (this.session === session) this.$refs.agentRequest.open(context);
+			} catch (error) {
+				if (this.session === session) notify("error", error.message, "", "agent-request");
+			}
+		},
 		async openScriptEditor(path) {
 			if (this.scriptEditorLoading) return;
 			const session = this.session;
@@ -60222,7 +60255,7 @@ var _sfc_main = {
 			const current = () => this.session === session && this.workspaceProject === project;
 			this.scriptEditorLoading = true;
 			try {
-				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([74,1,2,3,4,5,6,7,75]));
+				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([76,1,2,3,4,5,6,7,77]));
 				if (!current()) return;
 				this.scriptEditorComponent ||= markRaw(module.default);
 				await nextTick();
@@ -62856,8 +62889,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				ref: "uiPerformance",
 				onClosed: _cache[37] || (_cache[37] = ($event) => _ctx.$refs.settingsMenu?.focusTrigger())
 			}, null, 512),
-			$data.scriptEditorComponent ? (openBlock(), createBlock(resolveDynamicComponent($data.scriptEditorComponent), {
+			$data.agentRequestComponent ? (openBlock(), createBlock(resolveDynamicComponent($data.agentRequestComponent), {
 				key: 0,
+				ref: "agentRequest",
+				ticket: $data.session.ticket,
+				capture: $options.agentContext
+			}, null, 8, ["ticket", "capture"])) : createCommentVNode("", true),
+			$data.scriptEditorComponent ? (openBlock(), createBlock(resolveDynamicComponent($data.scriptEditorComponent), {
+				key: 1,
 				ref: "scriptEditor",
 				ticket: $data.session.ticket,
 				project: $data.workspaceProject,
@@ -62962,7 +63001,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"onEdit"
 			]),
 			!$data.compactShortcuts ? (openBlock(), createBlock(_component_SectionTabRail, {
-				key: 1,
+				key: 2,
 				class: "workspace-rail",
 				tabs: $options.openSections,
 				selected: $options.activeWorkspace?.current,
@@ -64222,7 +64261,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"onSaved"
 			]),
 			$data.descriptionMounted ? (openBlock(), createBlock(_component_DescriptionEditor, {
-				key: 2,
+				key: 3,
 				ref: "description",
 				ticket: $data.session.ticket,
 				project: $data.workspaceProject,
@@ -64236,7 +64275,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"onSessionExpired"
 			])) : createCommentVNode("", true),
 			$data.snapshotMounted ? (openBlock(), createBlock(_component_SnapshotBrowser, {
-				key: 3,
+				key: 4,
 				ticket: $data.session.ticket,
 				project: $data.workspaceProject,
 				target: $data.snapshotTarget,

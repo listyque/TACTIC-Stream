@@ -1,5 +1,5 @@
 import { C as h, K as withCtx, N as openBlock, P as renderList, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
-import { A as appearance, c as _sfc_main$2, k as t } from "./index.js";
+import { A as t, c as _sfc_main$2, j as appearance } from "./index.js";
 import { Gt as label, Jt as rect, Wt as button, i as _sfc_main$4, k as _sfc_main$5, n as frameContentWidth, qt as node, r as observeFrameSizes, x as _sfc_main$3, y as translate } from "./CodeBlock.js";
 import { V as _sfc_main$6 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/process.ui.mjs

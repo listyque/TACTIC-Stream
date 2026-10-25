@@ -1,5 +1,5 @@
 import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
-import { A as appearance, at as _plugin_vue_export_helper_default, k as t } from "./index.js";
+import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
 import { Gt as label, H as columnsEditor, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$1, qt as node, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections, t as captionHeight } from "./sections.ui.js";
 import { Q as displayWidgets, X as changeDefinition, Z as definitionWizard } from "./App.js";
