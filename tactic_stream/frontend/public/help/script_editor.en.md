@@ -141,3 +141,15 @@ reusing controls, not another Batch Manager.
 External agents can prepare inactive Local Python drafts for Handler check-in hooks and shared shelf buttons. Saving, syntax validation and activation are separate operations; activation requires explicit host authorization and native server execution permission. Drafts/receipts survive restart. An isolated arbitrary-code trial runner is unavailable.
 
 These bindings execute in TACTIC Handler. The browser does not launch local programs, execute Local Python or open native QML tools. Refresh the saved configuration in Handler after publication. Handler's trigger editor uses one revision-checked command to save its complete hook set. Input paths and operation identity are captured before check-in; After hooks receive the completed snapshot. These client hooks do not enforce uploads from headless APIs or other clients.
+
+## Agent drafts and isolated reports
+
+Open **Agent drafts** in Script Editor to inspect your saved agent drafts, exact
+source and binding, and reports published by the external test host. The review
+panel runs no code. Stale reports stay readable but cannot authorize activation.
+Ask the connected agent for fresh trials, then refresh. Before check-in requires
+passing allow and reject cases; After requires allow; a shelf requires a modal
+case. Review the source and execution owner, check the review box, and confirm
+activation. Scripts targeting Handler run on its desktop after activation; the
+Stream browser does not execute Local Python/QML. Return to the editor without
+losing its open buffers. Reports belong to their author and project.

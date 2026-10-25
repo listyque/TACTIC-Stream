@@ -125,6 +125,73 @@ class NativeAutomation(unittest.TestCase):
                 expected_revision=state['revision'], operation_id=str(uuid4()))
 
 
+    def test_reports_visible_idempotent_private_and_stale_activation_blocked(self):
+        from tactic_stream.automation_trial import digest
+        saved = self.draft(dict(kind='hook', title='Review before activation', source='RESULT = 1', phase='before'))
+        current = self.call('draft', draft_id=saved['draft_id'])
+        self.assertIn(saved['draft_id'], [row['draft_id'] for row in self.call('catalog')['drafts']])
+        identities = []
+        for expected in ('allow', 'reject'):
+            record = dict(trial_id=str(uuid4()), draft_id=saved['draft_id'], draft_revision=current['revision'],
+                document_hash=digest(current['document']), dependency_revision=current['dependency_revision'],
+                image='sha256:'+'a'*64, status='passed', case=dict(expect=expected), result=dict(log='Reported synthetic diagnostics'))
+            self.assertEqual(self.call('record_trial', record=record), self.call('record_trial', record=record))
+            identities.append(record['trial_id'])
+            with self.assertRaisesRegex(ValueError, 'different evidence'):
+                self.call('record_trial', record=dict(record, status='failed'))
+        current = self.call('draft', draft_id=saved['draft_id'])
+        self.assertTrue(current['ready'])
+        self.assertEqual(len(current['trials']), 2)
+        self.assertEqual(set(current['trial_ids']), set(identities))
+        self.api.dispatch('insert', (self.auth, 'config/custom_script', dict(folder='manual', title='change', language='python', script='RESULT = 0')))
+        stale = self.call('draft', draft_id=saved['draft_id'])
+        self.assertFalse(stale['ready'])
+        with self.assertRaisesRegex(ValueError, 'Fresh successful'):
+            self.call('activate', draft_id=saved['draft_id'], draft_revision=current['revision'],
+                expected_revision=stale['dependency_revision'], trial_ids=identities, operation_id=str(uuid4()))
+        for row in current['trials']:
+            self.call('record_trial', record=dict(row, trial_id=str(uuid4()), dependency_revision=stale['dependency_revision']))
+        fresh = self.call('draft', draft_id=saved['draft_id'])
+        args = dict(draft_id=saved['draft_id'], draft_revision=fresh['revision'], expected_revision=fresh['dependency_revision'],
+            trial_ids=fresh['trial_ids'], operation_id=str(uuid4()))
+        self.assertEqual(self.call('activate', **args), self.call('activate', **args))
+        self.assertTrue(self.call('draft', draft_id=saved['draft_id'])['activated'])
+        from pyasm.security.authenticator import hash_password
+        self.api.dispatch('insert', (self.auth, 'sthpw/login', dict(login='another_admin', password=hash_password('private-test-password'))))
+        self.api.dispatch('insert', (self.auth, 'sthpw/login_in_group', dict(login='another_admin', login_group='admin')))
+        self.auth = dict(ticket=self.api.get_ticket('another_admin', 'private-test-password'), project='one')
+        self.assertEqual(self.call('catalog')['drafts'], [])
+        with self.assertRaisesRegex(ValueError, 'unavailable'):
+            self.call('draft', draft_id=saved['draft_id'])
+        with self.assertRaisesRegex(ValueError, 'unavailable'):
+            self.call('record_trial', record=dict(current['trials'][0], trial_id=str(uuid4())))
+
+    def test_inactive_revision_preserves_history_and_invalidates_old_proofs(self):
+        from tactic_stream.automation_trial import digest
+        saved = self.draft(dict(kind='hook', phase='after', title='Revise inactive source', source='RESULT = 1'))
+        original = self.call('draft', draft_id=saved['draft_id'])
+        self.call('record_trial', record=dict(trial_id=str(uuid4()), draft_id=saved['draft_id'],
+            draft_revision=original['revision'], document_hash=digest(original['document']),
+            dependency_revision=original['dependency_revision'], image='sha256:'+'a'*64, status='passed', case=dict(expect='allow')))
+        self.assertTrue(self.call('draft', draft_id=saved['draft_id'])['ready'])
+        document = dict(original['document'], source='RESULT = 2')
+        preview = self.call('preview', document=document)
+        args = dict(document=document, expected_revision=preview['revision'], draft_id=saved['draft_id'],
+            draft_revision=original['revision'], operation_id=str(uuid4()))
+        result = self.call('save_draft', **args)
+        self.assertEqual(result, self.call('save_draft', **args))
+        changed = self.call('draft', draft_id=saved['draft_id'])
+        self.assertFalse(changed['ready'])
+        self.assertEqual(len(changed['trials']), 1)
+        self.assertEqual(changed['document']['source'], 'RESULT = 2')
+        with self.assertRaisesRegex(ValueError, 'revision changed'):
+            self.call('save_draft', **dict(args, operation_id=str(uuid4())))
+        self.call('activate', draft_id=saved['draft_id'], draft_revision=changed['revision'],
+            expected_revision=changed['dependency_revision'], operation_id=str(uuid4()))
+        with self.assertRaisesRegex(ValueError, 'activated draft'):
+            self.call('save_draft', **dict(args, draft_revision=changed['revision'], operation_id=str(uuid4())))
+
+
 @unittest.skipUnless(importlib.util.find_spec('mcp'), 'Optional MCP SDK is not installed')
 class MCPAutomation(unittest.TestCase):
     def test_agent_to_native_handler_checkin_and_modal_shelf(self):
@@ -184,6 +251,50 @@ class MCPAutomation(unittest.TestCase):
             env=dict(os.environ, PYTHONPATH=str(handler)), capture_output=True, text=True, encoding='utf-8', timeout=60)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertTrue(marker.is_file())
+
+
+@unittest.skipUnless(os.environ.get('TACTIC_AGENT_REVIEW_UI') == '1', 'Opt-in actual browser/native review acceptance')
+class AgentReviewUI(unittest.TestCase):
+    def test_normal_browser_and_native_editor_review(self):
+        from test_transport import Transport
+        from tactic_stream.admin_agent import StreamConnection
+        from tactic_stream.automation_trial import digest
+        Transport.setUpClass()
+        self.addCleanup(Transport.tearDownClass)
+        api = Api(Transport.store)
+        ticket = api.get_ticket('admin', 'private-test-password')
+        connection = StreamConnection(Transport.url, 'one', ticket)
+        out = Path(Transport.temp.name)/'ui-review'
+        out.mkdir()
+        def draft(title):
+            preview = connection.command('automation', 'preview', document=dict(kind='hook', phase='after', title=title, source='RESULT = 1'))
+            saved = connection.command('automation', 'save_draft', document=preview['document'], expected_revision=preview['revision'], operation_id=str(uuid4()))
+            current = connection.command('automation', 'draft', draft_id=saved['draft_id'])
+            connection.command('automation', 'record_trial', record=dict(trial_id=str(uuid4()), draft_id=saved['draft_id'],
+                draft_revision=current['revision'], document_hash=digest(current['document']), dependency_revision=current['dependency_revision'],
+                status='passed', image='sha256:'+'a'*64, case=dict(expect='allow'), result=dict(log='Reported test fixture; OS execution covered separately.')))
+            return current
+        draft('Spare native draft')
+        native = draft('Native review')
+        fixture = out/'native.private.json'
+        fixture.write_text(json.dumps(dict(server=Transport.url, ticket=ticket, project='one', draft_id=native['draft_id'],
+            activate=True, screenshot=str(out/'native.png'))), encoding='utf-8')
+        handler = ROOT.parents[1]/'TH'
+        result = subprocess.run([sys.executable, '-B', '-X', 'utf8', str(ROOT/'tests/scripts/agent_review_handler.py'),
+            '--handler-root', str(handler), '--fixture', str(fixture)], capture_output=True, text=True, encoding='utf-8', timeout=60)
+        self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
+        draft('Browser review')
+        environment = dict(os.environ, STREAM_CHECK_PASSWORD='private-test-password', STREAM_CHECK_PROJECT='one',
+            STREAM_CHECK_ACTIVATE='1', PLAYWRIGHT_BROWSERS_PATH=str(ROOT/'.browser-cache'))
+        result = subprocess.run(['node', 'tests/agent_review.mjs', Transport.url, str(out)], cwd=ROOT/'frontend',
+            env=environment, capture_output=True, text=True, encoding='utf-8', timeout=90)
+        self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
+        destination = os.environ.get('TACTIC_AGENT_REVIEW_OUTPUT')
+        if destination:
+            import shutil
+            Path(destination).mkdir(parents=True, exist_ok=True)
+            for path in out.glob('*.png'):
+                shutil.copyfile(path, Path(destination)/path.name)
 
 
 if __name__ == '__main__':

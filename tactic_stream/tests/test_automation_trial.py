@@ -75,15 +75,6 @@ class RealTrials(unittest.TestCase):
     def run_trial(self, document, case):
         return self.runner.run(str(uuid4()), document, case, 'trial')
 
-    @unittest.skipUnless(os.environ.get('TACTIC_TRIAL_RESULT_DIR'), 'Set TACTIC_TRIAL_RESULT_DIR to a completed reviewed model result')
-    def test_user_viewer_replays_real_input_and_hook_cases(self):
-        result = subprocess.run([sys.executable, '-B', '-X', 'utf8',
-            str(Path(__file__).parent/'scripts/automation_trial_viewer.py'),
-            '--result-dir', os.environ['TACTIC_TRIAL_RESULT_DIR'], '--trial-image', self.runner.image,
-            '--output', str(Path(self.temporary.name)/'viewer')], capture_output=True,
-            text=True, encoding='utf-8', timeout=180)
-        self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
-
     def test_before_allow_reject_real_checkin_replay_and_os_probes(self):
         source = """from pathlib import Path
 import os, socket

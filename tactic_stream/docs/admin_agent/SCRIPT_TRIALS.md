@@ -112,17 +112,33 @@ actual allowed/rejected uploads, After output, modal Frame clicks, OS probes,
 runtime failure/timeout and process cleanup. Without the image these integration
 cases skip explicitly; receipt/source/scope gates still have deterministic tests.
 
-## User result viewer
+## Review in the ordinary clients
 
-`tools/try_agent_automation.py --result-dir <completed model acceptance directory>
---trial-image <same immutable ID>` displays PNG output and sends clicks/text back
-as isolated replay cases. It verifies the source-review hash and prior passed
-source/image receipts first. Every input starts a fresh container and replays
-at most sixteen actions; it is not a live connection to the user's desktop.
-Hook buttons rerun the approved allow/reject/After cases on synthetic files.
-Only the fixed viewer and image decoder run on the host; no generated Python
-or QML executes there. Network, credentials, files and processes remain isolated.
-Close after the current bounded run finishes. Reports stay in `user-trials/`.
-`tests/scripts/automation_trial_viewer.py` drives actual viewer clicks, text,
-Preview/Clear and hook buttons. Set `TACTIC_TRIAL_RESULT_DIR` and
-`TACTIC_TRIAL_IMAGE` when running its opt-in unittest in `test_automation_trial.py`.
+TS adapter 0.112.214 publishes completed trial evidence through the same native
+HandlerAutomationCmd into project-local spt_automation_trial. Upgrade the project
+schema first. Evidence is private to the author, limited to 256 KiB per report,
+and excludes screenshots, host scope/secrets and synthetic input file contents.
+A failed publication is an error: retry the same trial UUID to publish its
+historical result without executing again. Receipts remain owned by the external
+host; the server stores reported diagnostics, not an independent attestation.
+
+In TS and TH, open Script Editor and choose **Agent drafts** in its toolbar.
+Select a draft to read its exact source, binding, reports and dependency freshness.
+Review the execution owner, mark source review and explicitly confirm activation.
+Current matching passed proofs are required by this UI; stale reports stay visible.
+Activation retries keep their operation UUID. Ordinary manual script authoring
+retains its native authorization; no reviewer component executes candidate code.
+After activation reports are historical because publication changes dependencies.
+The external agent must rerun trials before activating another draft.
+
+The executor remains outside the server: neither UI gets the Docker socket.
+Request new trials from the connected external agent, then refresh the editor.
+For manual acceptance use the real project page/table/shelf/check-in in its owning
+client. TH Local Python/QML runs on the Handler desktop; TS browser JavaScript and
+server scripts retain their own owners. The browser does not execute TH Python.
+
+`test_agent_automation.AgentReviewUI` (TACTIC_AGENT_REVIEW_UI=1) exercises real
+browser/native controls against an owned HTTP test server; its reported fixtures
+check review and activation, not OS isolation. test_automation_trial.py separately
+checks real container execution and proof publication. TH tests/test_agent_drafts.py
+covers the native review controls, retry identity and stale-session responses.

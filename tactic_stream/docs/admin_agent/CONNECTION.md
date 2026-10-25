@@ -225,7 +225,8 @@ TS 0.112.207 and TH 0.6.0.151 add the fixed `th_automation_read`,
 `--allow-automation-draft` adds `th_automation_save_draft`; the separate
 `--allow-automation-activate` adds `th_automation_activate`. Activation authorizes
 future native code execution on the user's computer; the host must cover the
-exact source and binding. Adapter .210 requires matching isolated trials before
+exact source and binding. Adapter .214 publishes reports for native UI review and
+requires matching isolated trials before
 agent activation; configure [the optional runner](SCRIPT_TRIALS.md) with
 `--trial-image` and `--trial-directory`. It supplies trial/read/image tools;
 it has no connection to the user's running TH desktop. Read [the Handler automation recipe](HANDLER_AUTOMATION.md) for examples,

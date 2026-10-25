@@ -101,7 +101,8 @@ Owned server/runtime data are cleaned on normal completion or exception.
 
 Inactive drafts are tested in separate verified OCI containers before activation.
 Generated Python stays in OCI trials; activation saves the real native bindings
-but does not execute that Python on the host. User result preview also uses OCI.
+but does not execute that Python on the host. Review reports in the ordinary
+Script Editor; manually accept the published result in its owning TH/TS UI.
 No EXE installation or fresh paired TH/TS visual parity is implied. API-only
 check-in can bypass client hooks; those hooks are not server enforcement. Model
 choices vary, so this opt-in live acceptance is not a deterministic CI unit test.

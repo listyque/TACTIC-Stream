@@ -23,9 +23,15 @@ configuration but cannot execute Local Python or open a native desktop tool.
 3. `th_automation_save_draft(document, expected_revision, operation_id)` requires
    the preview's revision and host flag `--allow-automation-draft`. It stores
    private inactive draft metadata; it creates no script, hook or shelf action.
-4. `th_automation_draft(draft_id)` returns that administrator's exact source,
+4. `th_automation_drafts()` lists the author's drafts in this project.
+   `th_automation_draft(draft_id)` returns that administrator's exact source,
    draft revision and current dependency revision. Show the concrete code,
    execution owner, program paths/arguments and binding to the administrator.
+   Completed trials are also published for normal TS/TH Script Editor review.
+   To revise an inactive draft, preview the new document and pass `draft_id`
+   and its original `draft_revision` to `th_automation_save_draft`, retaining
+   the new preview `expected_revision` and a new write UUID. Old reports stay
+   visible but no longer qualify; an activated draft cannot be rewritten here.
 5. `th_automation_activate(draft_id, draft_revision, expected_revision, operation_id, trial_ids)`
    requires the separate host flag `--allow-automation-activate` and authorization
    for this exact code and binding. Server administrator and native script

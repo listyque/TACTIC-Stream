@@ -1,12 +1,12 @@
-import { D as nextTick, E as mergeProps, F as renderSlot, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, T as mergeModels, U as watch, V as useModel, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, tt as unref, u as Fragment, w as inject } from "./vue.js";
-import { A as appearance, R as controls, c as _sfc_main$4, f as _sfc_main$3, k as t } from "./index.js";
-import { Gt as label, Jt as rect, Kt as muted, T as AppSearchField_default, U as endActivity, V as beginActivity, Wt as button, _ as copyText, c as _sfc_main$7, d as completions, f as documentSymbols, i as _sfc_main$5, k as _sfc_main$8, l as toolbar$1, lt as scriptEditor, n as frameContentWidth, qt as node, r as observeFrameSizes, st as rpc, u as _sfc_main$6, y as translate } from "./CodeBlock.js";
-import { C as _sfc_main$9, D as _sfc_main$10, c as buttonId, l as runBrowserScript, u as scriptTree } from "./App.js";
+import { D as nextTick, E as mergeProps, F as renderSlot, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, T as mergeModels, U as watch, V as useModel, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, w as inject } from "./vue.js";
+import { A as appearance, R as controls, c as _sfc_main$5, f as _sfc_main$4, k as t } from "./index.js";
+import { Gt as label, Jt as rect, Kt as muted, T as AppSearchField_default, U as endActivity, V as beginActivity, Wt as button, _ as copyText, c as _sfc_main$8, d as completions, f as documentSymbols, i as _sfc_main$6, k as _sfc_main$9, l as toolbar$1, lt as scriptEditor, n as frameContentWidth, qt as node, r as observeFrameSizes, st as rpc, u as _sfc_main$7, y as translate } from "./CodeBlock.js";
+import { C as _sfc_main$10, D as _sfc_main$11, c as buttonId, l as runBrowserScript, u as scriptTree } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/source.ui.mjs
 function toolbarHeight(width) {
 	return 30 + (width < 530 ? controls.scrollBar.extent : 0);
 }
-function describe(model, width, language, revision) {
+function describe$1(model, width, language, revision) {
 	const baseWidth = Math.max(440, width - 90);
 	const scene = toolbar$1(Object.assign({}, model, { compactToolbar: false }), baseWidth, language, revision);
 	[
@@ -37,7 +37,7 @@ function describe(model, width, language, revision) {
 }
 //#endregion
 //#region src/features/scripts/ScriptSource.vue
-var _sfc_main$2 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
+var _sfc_main$3 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	__name: "ScriptSource",
 	props: /*@__PURE__*/ mergeModels({
 		saved: Boolean,
@@ -69,7 +69,7 @@ var _sfc_main$2 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 			saved: props.saved,
 			busy: props.disabled
 		}));
-		const scene = computed(() => describe(state.value, width.value, appearance.language, revision.value));
+		const scene = computed(() => describe$1(state.value, width.value, appearance.language, revision.value));
 		async function event(action) {
 			revision.value++;
 			if (action.type === "font") fontSize.value = Number(action.value);
@@ -107,14 +107,14 @@ var _sfc_main$2 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 			}, [createBaseVNode("div", {
 				class: "script-source-toolbar",
 				style: normalizeStyle({ height: toolbarHeight(width.value) + "px" })
-			}, [createVNode(_sfc_main$5, {
+			}, [createVNode(_sfc_main$6, {
 				scene: scene.value,
 				style: normalizeStyle({
 					width: scene.value.contentWidth + "px",
 					height: "30px"
 				}),
 				onEvent: event
-			}, null, 8, ["scene", "style"])], 4), createVNode(_sfc_main$6, mergeProps({
+			}, null, 8, ["scene", "style"])], 4), createVNode(_sfc_main$7, mergeProps({
 				ref_key: "source",
 				ref: source
 			}, _ctx.$attrs, {
@@ -182,6 +182,7 @@ function commands(model) {
 		run: idle && model.editable && !!model.source?.trim(),
 		refresh: idle,
 		triggers: idle && model.canEdit && model.native,
+		drafts: idle && model.canEdit,
 		closeAll: idle && model.tabCount > 0
 	};
 }
@@ -190,7 +191,7 @@ function toolbar(model, width, language) {
 	const contentWidth = Math.max(480, width), nodes = [];
 	nodes.push(button("scriptNew", rect(0, 1, 30, 30), tr("New script"), "add", { type: "create" }, allowed.create, { iconOnly: true }));
 	nodes.push(button("scriptSave", rect(34, 1, 30, 30), tr("Save current script to server"), "save", { type: "save" }, allowed.save, { iconOnly: true }));
-	const fieldWidth = (contentWidth - 312) / 2;
+	const fieldWidth = (contentWidth - 340) / 2;
 	nodes.push(node("Field", "scriptFolder", rect(72, 1, fieldWidth, 30), {
 		text: model.folder || "",
 		label: tr("Script folder"),
@@ -221,6 +222,11 @@ function toolbar(model, width, language) {
 			"triggers",
 			"Script triggers",
 			"bolt"
+		],
+		[
+			"drafts",
+			"Agent drafts",
+			"code"
 		],
 		[
 			"refresh",
@@ -298,8 +304,8 @@ function sideTabs(model, width, language) {
 }
 //#endregion
 //#region src/features/scripts/ScriptEditorWorkspace.vue
-var _hoisted_1$1 = { class: "script-editor-side-content" };
-var _sfc_main$1 = {
+var _hoisted_1$2 = { class: "script-editor-side-content" };
+var _sfc_main$2 = {
 	__name: "ScriptEditorWorkspace",
 	props: { model: {
 		type: Object,
@@ -351,7 +357,7 @@ var _sfc_main$1 = {
 					createBaseVNode("div", {
 						class: "script-editor-toolbar",
 						style: normalizeStyle(style(bounds.value.toolbar))
-					}, [createVNode(_sfc_main$5, {
+					}, [createVNode(_sfc_main$6, {
 						style: normalizeStyle({
 							width: toolbar$2.value.contentWidth + "px",
 							height: "32px"
@@ -363,12 +369,12 @@ var _sfc_main$1 = {
 					createBaseVNode("section", {
 						class: normalizeClass(["script-editor-output", { wrapped: __props.model.outputWrap }]),
 						style: normalizeStyle(style(bounds.value.output))
-					}, [createVNode(_sfc_main$5, {
+					}, [createVNode(_sfc_main$6, {
 						class: "script-editor-output-header",
 						scene: output.value,
 						onEvent: _cache[1] || (_cache[1] = ($event) => emit("event", $event))
 					}, null, 8, ["scene"]), renderSlot(_ctx.$slots, "output")], 6),
-					!__props.model.outputHidden ? (openBlock(), createBlock(_sfc_main$7, {
+					!__props.model.outputHidden ? (openBlock(), createBlock(_sfc_main$8, {
 						key: 0,
 						style: normalizeStyle(style(bounds.value.outputSplitter)),
 						horizontal: "",
@@ -385,7 +391,7 @@ var _sfc_main$1 = {
 						class: "script-editor-code",
 						style: normalizeStyle(style(bounds.value.source))
 					}, [renderSlot(_ctx.$slots, "source")], 4),
-					createBaseVNode("div", { style: normalizeStyle(style(bounds.value.footer)) }, [createVNode(_sfc_main$5, {
+					createBaseVNode("div", { style: normalizeStyle(style(bounds.value.footer)) }, [createVNode(_sfc_main$6, {
 						scene: footer$1.value,
 						onEvent: _cache[3] || (_cache[3] = ($event) => emit("event", $event))
 					}, null, 8, ["scene"])], 4),
@@ -394,7 +400,7 @@ var _sfc_main$1 = {
 						style: normalizeStyle(style(bounds.value.notice))
 					}, [renderSlot(_ctx.$slots, "notice")], 4)
 				], 4),
-				bounds.value.treeVisible ? (openBlock(), createBlock(_sfc_main$7, {
+				bounds.value.treeVisible ? (openBlock(), createBlock(_sfc_main$8, {
 					key: 0,
 					style: normalizeStyle(style(bounds.value.treeSplitter)),
 					reverse: "",
@@ -411,12 +417,228 @@ var _sfc_main$1 = {
 					key: 1,
 					class: "script-editor-tree",
 					style: normalizeStyle(style(bounds.value.tree))
-				}, [createVNode(_sfc_main$5, {
+				}, [createVNode(_sfc_main$6, {
 					class: "script-editor-side-tabs",
 					scene: side.value,
 					onEvent: _cache[5] || (_cache[5] = ($event) => emit("event", $event))
-				}, null, 8, ["scene"]), createBaseVNode("div", _hoisted_1$1, [renderSlot(_ctx.$slots, "tree")])], 4)) : createCommentVNode("", true)
+				}, null, 8, ["scene"]), createBaseVNode("div", _hoisted_1$2, [renderSlot(_ctx.$slots, "tree")])], 4)) : createCommentVNode("", true)
 			], 512);
+		};
+	}
+};
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/scripts/drafts.ui.mjs
+function ordered(value) {
+	if (Array.isArray(value)) return value.map(ordered);
+	if (!value || typeof value !== "object") return value;
+	const result = {};
+	for (const key of Object.keys(value).sort()) result[key] = ordered(value[key]);
+	return result;
+}
+function pretty(value) {
+	return JSON.stringify(ordered(value), null, 2);
+}
+function describe(model, width, height, language) {
+	const tr = (text) => translate(text, language);
+	const current = model.draft || {}, document = current.document || {};
+	const inset = 8, gap = 8, inner = Math.max(0, width - 16);
+	const narrow = inner < 760;
+	const bodyTop = 152, bodyHeight = Math.max(160, height - bodyTop - 96);
+	const sourceWidth = narrow ? inner : Math.floor((inner - gap) / 2);
+	const sourceHeight = narrow ? Math.floor((bodyHeight - gap) / 2) : bodyHeight;
+	const source = rect(inset, bodyTop, sourceWidth, sourceHeight);
+	const report = narrow ? rect(inset, bodyTop + sourceHeight + gap, inner, sourceHeight) : rect(inset + sourceWidth + gap, bodyTop, inner - sourceWidth - gap, bodyHeight);
+	const idle = !model.busy;
+	const status = current.activated ? tr("Activated") : current.ready ? tr("Ready for source review") : current.draft_id ? tr("Fresh passing trials are required") : tr("Select an agent draft");
+	const binding = Object.assign({}, document);
+	delete binding.source;
+	const reports = tr("External host reports do not replace source review.") + "\n\n" + (current.draft_id ? pretty(binding) + "\n\n" : "") + (current.trials || []).map((row) => [
+		`${row.case.expect}: ${row.status} · ${row.trial_id}`,
+		row.draft_revision !== current.revision ? tr("Stale source") : current.activated ? tr("Historical report") : row.dependency_revision === current.dependency_revision ? tr("Current dependencies") : tr("Stale dependencies"),
+		row.image,
+		row.error || "",
+		pretty(row.result || {})
+	].join("\n")).join("\n\n");
+	return { nodes: [
+		label("agentDraftHeading", rect(inset, 8, Math.max(0, inner - 160), 32), tr("Agent drafts"), { weight: 600 }),
+		button("agentDraftBack", rect(width - 156, 8, 148, 32), tr("Back to editor"), "arrow-back", { type: "back" }, idle),
+		node("Choice", "agentDraftChoice", rect(inset, 48, Math.max(0, inner - 48), 36), {
+			value: model.selected || "",
+			label: tr("Agent draft"),
+			enabled: idle,
+			options: (model.drafts || []).map((row) => ({
+				value: row.draft_id,
+				label: row.title
+			})),
+			action: { type: "select" }
+		}),
+		button("agentDraftRefresh", rect(width - 48, 48, 40, 36), tr("Refresh agent drafts"), "refresh", { type: "refresh" }, idle, { iconOnly: true }),
+		label("agentDraftStatus", rect(inset, 88, inner, 24), model.error || (model.busy ? tr("Loading…") : status)),
+		label("agentDraftOwner", rect(inset, 116, inner, 28), tr("Runs on the Handler desktop after activation."), muted),
+		node("Area", "agentDraftSource", source, {
+			text: document.source || "",
+			label: tr("Draft source"),
+			readOnly: true,
+			enabled: true,
+			wrap: false
+		}),
+		node("Area", "agentDraftReports", report, {
+			text: reports || tr("No isolated trial reports yet."),
+			label: tr("Isolated trial reports"),
+			readOnly: true,
+			enabled: true
+		}),
+		node("CheckBox", "agentDraftReviewed", rect(inset, height - 80, inner, 32), {
+			text: tr("I reviewed the source, binding and execution owner"),
+			checked: !!model.reviewed,
+			enabled: idle && !model.error && !!current.ready && !current.activated,
+			action: { type: "reviewed" }
+		}),
+		button("agentDraftActivate", rect(inset, height - 40, Math.min(340, inner), 32), tr(model.confirming ? "Confirm activation on the desktop" : "Activate reviewed draft"), "check", { type: "activate" }, idle && !model.error && !!current.ready && !current.activated && !!model.reviewed)
+	] };
+}
+//#endregion
+//#region src/features/scripts/AgentDrafts.vue
+var _hoisted_1$1 = ["aria-busy"];
+var _sfc_main$1 = {
+	__name: "AgentDrafts",
+	props: {
+		ticket: String,
+		project: String
+	},
+	emits: ["back", "activated"],
+	setup(__props, { emit: __emit }) {
+		const props = __props;
+		const emit = __emit;
+		const host = ref(null), size = ref({
+			width: 1e3,
+			height: 680
+		});
+		const model = ref({
+			drafts: [],
+			draft: {},
+			selected: "",
+			busy: false,
+			error: "",
+			reviewed: false,
+			confirming: false
+		});
+		const scene = computed(() => describe(model.value, size.value.width, size.value.height, appearance.language));
+		let generation = 0, observer, pending;
+		async function call(action, values = {}) {
+			const result = await rpc("execute_cmd", [
+				{
+					ticket: props.ticket,
+					project: props.project
+				},
+				"tactic.ui.panel.handler_automation_cmd.HandlerAutomationCmd",
+				{
+					action,
+					project_code: props.project,
+					...values
+				}
+			]);
+			if (result.status !== "OK") throw new Error(result.description || "Automation request failed");
+			return typeof result.info === "string" ? JSON.parse(result.info) : result.info;
+		}
+		async function request(action, values = {}) {
+			if (model.value.busy) return;
+			const id = ++generation;
+			model.value.busy = true;
+			model.value.error = "";
+			try {
+				if (action === "activate") {
+					await call("activate", values);
+					if (id !== generation) return;
+					pending = null;
+					emit("activated");
+				}
+				if (action !== "select") {
+					const catalog = await call("catalog");
+					if (id !== generation) return;
+					model.value.drafts = catalog.drafts;
+					if (!catalog.drafts.some((row) => row.draft_id === model.value.selected)) model.value.selected = catalog.drafts[0]?.draft_id || "";
+				}
+				const draft = model.value.selected ? await call("draft", { draft_id: model.value.selected }) : {};
+				if (id !== generation) return;
+				model.value.draft = draft;
+				model.value.reviewed = false;
+				model.value.confirming = false;
+			} catch (error) {
+				if (id === generation) model.value.error = error.message;
+			} finally {
+				if (id === generation) model.value.busy = false;
+			}
+		}
+		function event(action) {
+			if (model.value.busy) return;
+			if (action.type === "back") emit("back");
+			else if (action.type === "refresh") request("refresh");
+			else if (action.type === "select") {
+				model.value.selected = action.value;
+				Object.assign(model.value, {
+					draft: {},
+					reviewed: false,
+					confirming: false
+				});
+				pending = null;
+				request("select");
+			} else if (action.type === "reviewed") {
+				model.value.reviewed = !!action.value;
+				model.value.confirming = false;
+			} else if (action.type === "activate" && !model.value.error && model.value.draft.ready && model.value.reviewed) {
+				if (!model.value.confirming) {
+					model.value.confirming = true;
+					return;
+				}
+				const draft = model.value.draft;
+				if (!pending || pending.draft_id !== draft.draft_id || pending.draft_revision !== draft.revision || pending.expected_revision !== draft.dependency_revision || JSON.stringify(pending.trial_ids) !== JSON.stringify(draft.trial_ids)) pending = {
+					draft_id: draft.draft_id,
+					draft_revision: draft.revision,
+					expected_revision: draft.dependency_revision,
+					trial_ids: draft.trial_ids,
+					operation_id: crypto.randomUUID()
+				};
+				request("activate", pending);
+			}
+		}
+		watch(() => [props.ticket, props.project], () => {
+			generation++;
+			pending = null;
+			model.value = {
+				drafts: [],
+				draft: {},
+				selected: "",
+				busy: false,
+				error: "",
+				reviewed: false,
+				confirming: false
+			};
+			request("refresh");
+		}, { immediate: true });
+		onMounted(() => {
+			observer = observeFrameSizes(() => {
+				size.value = {
+					width: host.value.clientWidth,
+					height: host.value.clientHeight
+				};
+			});
+			observer.observe(host.value);
+		});
+		onBeforeUnmount(() => {
+			generation++;
+			observer?.disconnect();
+		});
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", {
+				ref_key: "host",
+				ref: host,
+				class: "agent-drafts-review",
+				"aria-busy": model.value.busy
+			}, [createVNode(_sfc_main$6, {
+				scene: scene.value,
+				onEvent: event
+			}, null, 8, ["scene"])], 8, _hoisted_1$1);
 		};
 	}
 };
@@ -478,6 +700,7 @@ var _sfc_main = {
 	],
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const openHelp = inject("openHelp");
+		const reviewingAgent = ref(false);
 		const props = __props;
 		const emit = __emit;
 		const dialog = ref(null), confirmation = ref(null), historyDialog = ref(null), editor = ref(null), actions = ref(null);
@@ -1033,6 +1256,7 @@ var _sfc_main = {
 			else if (action.type === "save") save();
 			else if (action.type === "run") run();
 			else if (action.type === "refresh") load();
+			else if (action.type === "drafts") reviewingAgent.value = true;
 			else if (action.type === "tree") treeHidden.value = !treeHidden.value;
 			else if (action.type === "output") outputHidden.value = !outputHidden.value;
 			else if (action.type === "wrap") outputWrap.value = !outputWrap.value;
@@ -1057,169 +1281,179 @@ var _sfc_main = {
 					onCancel: withModifiers(close, ["prevent"]),
 					onKeydown: key,
 					"aria-busy": busy.value || !!running.value
-				}, [createBaseVNode("header", _hoisted_2, [
-					createVNode(_sfc_main$3, { name: "code" }),
-					createBaseVNode("strong", null, toDisplayString(unref(t)("Script Editor")), 1),
-					createVNode(_sfc_main$4, {
-						"icon-only": "",
-						icon: "help",
-						label: "Script editor help",
-						onClick: _cache[0] || (_cache[0] = ($event) => unref(openHelp)("script_editor"))
-					}),
-					createVNode(_sfc_main$4, {
-						"icon-only": "",
-						icon: "close",
-						label: "Close script editor",
-						disabled: busy.value || !!running.value,
-						onClick: close
-					}, null, 8, ["disabled"])
-				]), createVNode(_sfc_main$1, {
-					model: frameModel.value,
-					onEvent: frameEvent
-				}, {
-					tabs: withCtx(() => [createVNode(_sfc_main$9, {
-						kind: "script",
-						tabs: tabs.value.map((tab) => ({
-							id: tab.id,
-							title: tab.title,
-							dirty: dirty(tab)
-						})),
-						selected: selected.value,
-						disabled: busy.value,
-						onSelect: _cache[3] || (_cache[3] = ($event) => selected.value = $event),
-						onAdd: _cache[4] || (_cache[4] = ($event) => create()),
-						onClose: closeTab,
-						onReorder: _cache[5] || (_cache[5] = (from, to) => tabs.value.splice(to, 0, tabs.value.splice(from, 1)[0]))
-					}, {
-						actions: withCtx(() => [createVNode(_sfc_main$4, {
+				}, [
+					createBaseVNode("header", _hoisted_2, [
+						createVNode(_sfc_main$4, { name: "code" }),
+						createBaseVNode("strong", null, toDisplayString(unref(t)("Script Editor")), 1),
+						createVNode(_sfc_main$5, {
+							"icon-only": "",
+							icon: "help",
+							label: "Script editor help",
+							onClick: _cache[0] || (_cache[0] = ($event) => unref(openHelp)("script_editor"))
+						}),
+						createVNode(_sfc_main$5, {
 							"icon-only": "",
 							icon: "close",
-							label: "Close all script tabs",
+							label: "Close script editor",
 							disabled: busy.value || !!running.value,
-							onClick: closeAll
-						}, null, 8, ["disabled"]), createVNode(_sfc_main$8, {
-							ref_key: "actions",
-							ref: actions,
-							overlay: "",
-							label: "Saved script actions",
-							"close-on-select": true
-						}, {
-							default: withCtx(() => [
-								createVNode(_sfc_main$4, {
-									icon: "refresh",
-									label: "Reload saved source",
-									disabled: !active.value?.code || busy.value,
-									onClick: _cache[1] || (_cache[1] = ($event) => ask("reload", active.value))
-								}, null, 8, ["disabled"]),
-								createVNode(_sfc_main$4, {
-									icon: "copy",
-									label: "Copy Script Runner",
-									disabled: !active.value?.code,
-									onClick: runner
-								}, null, 8, ["disabled"]),
-								createVNode(_sfc_main$4, {
-									destructive: "",
-									icon: "delete",
-									label: "Delete from server",
-									disabled: !editable.value || !active.value?.code || busy.value || uncertain.value,
-									onClick: _cache[2] || (_cache[2] = ($event) => ask("delete", active.value))
-								}, null, 8, ["disabled"])
-							]),
-							_: 1
-						}, 512)]),
-						_: 1
-					}, 8, [
-						"tabs",
-						"selected",
-						"disabled"
-					])]),
-					output: withCtx(() => [!outputHidden.value && active.value ? (openBlock(), createElementBlock("pre", _hoisted_3, toDisplayString(active.value.output), 1)) : createCommentVNode("", true)]),
-					source: withCtx(() => [active.value ? (openBlock(), createBlock(_sfc_main$2, {
-						key: 0,
-						ref_key: "editor",
-						ref: editor,
-						modelValue: active.value.source,
-						"onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => active.value.source = $event),
-						"font-size": fontSize.value,
-						"onUpdate:fontSize": _cache[7] || (_cache[7] = ($event) => fontSize.value = $event),
-						saved: !!active.value.code,
-						analysis: analysis.value,
-						"buffer-key": active.value.id,
-						language: active.value.language === "server_js" ? "javascript" : active.value.language,
-						"read-only": !editable.value,
-						disabled: busy.value || !!running.value,
-						onRun: run,
-						onAnalyse: analyse,
-						onOutline: showOutline,
-						onSaved: history,
-						onHelp: _cache[8] || (_cache[8] = ($event) => unref(openHelp)("script_editor"))
-					}, null, 8, [
-						"modelValue",
-						"font-size",
-						"saved",
-						"analysis",
-						"buffer-key",
-						"language",
-						"read-only",
-						"disabled"
-					])) : (openBlock(), createElementBlock("p", _hoisted_4, toDisplayString(unref(t)("Open a script or create a new one.")), 1))]),
-					tree: withCtx(() => [createVNode(AppSearchField_default, {
-						ref_key: "filter",
-						ref: filter,
-						modelValue: query.value,
-						"onUpdate:modelValue": _cache[9] || (_cache[9] = ($event) => query.value = $event),
-						label: "Search scripts and symbols",
-						onKeydown: _cache[10] || (_cache[10] = withKeys(withModifiers(($event) => side.value === "outline" && symbols.value.length && goToSymbol(symbols.value[0]), ["prevent"]), ["enter"])),
-						placeholder: unref(t)(side.value === "scripts" ? "Search scripts" : "Filter classes and methods")
-					}, null, 8, ["modelValue", "placeholder"]), side.value === "scripts" ? (openBlock(), createBlock(_sfc_main$10, {
-						key: 0,
-						entries: tree.value,
-						query: query.value,
-						selected: active.value ? active.value.folder + "/" + active.value.title : "",
-						onSelect: _cache[11] || (_cache[11] = ($event) => openScript($event.key)),
-						onContextmenu: _cache[12] || (_cache[12] = withModifiers((event) => {
-							const path = event.target.closest("[data-entry-key]")?.dataset.entryKey;
-							if (path && !path.startsWith("folder:")) {
-								openScript(path);
-								nextTick(() => actions.value.open = true);
-							}
-						}, ["prevent"]))
-					}, null, 8, [
-						"entries",
-						"query",
-						"selected"
-					])) : (openBlock(), createElementBlock("nav", {
-						key: 1,
-						class: "script-editor-outline",
-						"aria-label": unref(t)("Outline")
-					}, [(openBlock(true), createElementBlock(Fragment, null, renderList(symbols.value, (row) => {
-						return openBlock(), createBlock(_sfc_main$4, {
-							key: row.qualifiedName || row.position,
-							icon: row.kind === "class" ? "MDI_FORMAT_SIZE" : "code",
-							label: (row.qualifiedName || row.name) + " · " + row.line,
-							title: row.detail,
-							"aria-current": symbolLine.value === row.line,
-							style: normalizeStyle({ paddingLeft: 7 + (row.depth || 0) * 14 + "px" }),
-							onClick: ($event) => goToSymbol(row)
-						}, {
-							default: withCtx(() => [createBaseVNode("span", null, toDisplayString(row.name), 1), createBaseVNode("small", null, toDisplayString(row.line), 1)]),
-							_: 2
-						}, 1032, [
-							"icon",
-							"label",
-							"title",
-							"aria-current",
-							"style",
-							"onClick"
-						]);
-					}), 128)), !allSymbols.value.length ? (openBlock(), createElementBlock("p", _hoisted_6, toDisplayString(unref(t)("No classes or methods")), 1)) : createCommentVNode("", true)], 8, _hoisted_5))]),
-					notice: withCtx(() => [
-						!catalog.value?.canEdit && catalog.value ? (openBlock(), createElementBlock("p", _hoisted_7, toDisplayString(unref(t)("Read-only: script changes and execution require administrator access.")), 1)) : !supported.value && active.value ? (openBlock(), createElementBlock("p", _hoisted_8, toDisplayString(unref(t)("This legacy language is read-only in the web editor")), 1)) : createCommentVNode("", true),
-						active.value?.missing ? (openBlock(), createElementBlock("p", _hoisted_9, toDisplayString(unref(t)("This script was deleted on the server. Its local draft is preserved.")), 1)) : createCommentVNode("", true),
-						error.value || analysisError.value ? (openBlock(), createElementBlock("p", _hoisted_10, toDisplayString(unref(t)(error.value || analysisError.value)), 1)) : createCommentVNode("", true)
+							onClick: close
+						}, null, 8, ["disabled"])
 					]),
-					_: 1
-				}, 8, ["model"])], 44, _hoisted_1)), [[_directive_window, {
+					reviewingAgent.value ? (openBlock(), createBlock(_sfc_main$1, {
+						key: 0,
+						ticket: __props.ticket,
+						project: __props.project,
+						onBack: _cache[1] || (_cache[1] = ($event) => reviewingAgent.value = false),
+						onActivated: load
+					}, null, 8, ["ticket", "project"])) : createCommentVNode("", true),
+					withDirectives(createVNode(_sfc_main$2, {
+						model: frameModel.value,
+						onEvent: frameEvent
+					}, {
+						tabs: withCtx(() => [createVNode(_sfc_main$10, {
+							kind: "script",
+							tabs: tabs.value.map((tab) => ({
+								id: tab.id,
+								title: tab.title,
+								dirty: dirty(tab)
+							})),
+							selected: selected.value,
+							disabled: busy.value,
+							onSelect: _cache[4] || (_cache[4] = ($event) => selected.value = $event),
+							onAdd: _cache[5] || (_cache[5] = ($event) => create()),
+							onClose: closeTab,
+							onReorder: _cache[6] || (_cache[6] = (from, to) => tabs.value.splice(to, 0, tabs.value.splice(from, 1)[0]))
+						}, {
+							actions: withCtx(() => [createVNode(_sfc_main$5, {
+								"icon-only": "",
+								icon: "close",
+								label: "Close all script tabs",
+								disabled: busy.value || !!running.value,
+								onClick: closeAll
+							}, null, 8, ["disabled"]), createVNode(_sfc_main$9, {
+								ref_key: "actions",
+								ref: actions,
+								overlay: "",
+								label: "Saved script actions",
+								"close-on-select": true
+							}, {
+								default: withCtx(() => [
+									createVNode(_sfc_main$5, {
+										icon: "refresh",
+										label: "Reload saved source",
+										disabled: !active.value?.code || busy.value,
+										onClick: _cache[2] || (_cache[2] = ($event) => ask("reload", active.value))
+									}, null, 8, ["disabled"]),
+									createVNode(_sfc_main$5, {
+										icon: "copy",
+										label: "Copy Script Runner",
+										disabled: !active.value?.code,
+										onClick: runner
+									}, null, 8, ["disabled"]),
+									createVNode(_sfc_main$5, {
+										destructive: "",
+										icon: "delete",
+										label: "Delete from server",
+										disabled: !editable.value || !active.value?.code || busy.value || uncertain.value,
+										onClick: _cache[3] || (_cache[3] = ($event) => ask("delete", active.value))
+									}, null, 8, ["disabled"])
+								]),
+								_: 1
+							}, 512)]),
+							_: 1
+						}, 8, [
+							"tabs",
+							"selected",
+							"disabled"
+						])]),
+						output: withCtx(() => [!outputHidden.value && active.value ? (openBlock(), createElementBlock("pre", _hoisted_3, toDisplayString(active.value.output), 1)) : createCommentVNode("", true)]),
+						source: withCtx(() => [active.value ? (openBlock(), createBlock(_sfc_main$3, {
+							key: 0,
+							ref_key: "editor",
+							ref: editor,
+							modelValue: active.value.source,
+							"onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => active.value.source = $event),
+							"font-size": fontSize.value,
+							"onUpdate:fontSize": _cache[8] || (_cache[8] = ($event) => fontSize.value = $event),
+							saved: !!active.value.code,
+							analysis: analysis.value,
+							"buffer-key": active.value.id,
+							language: active.value.language === "server_js" ? "javascript" : active.value.language,
+							"read-only": !editable.value,
+							disabled: busy.value || !!running.value,
+							onRun: run,
+							onAnalyse: analyse,
+							onOutline: showOutline,
+							onSaved: history,
+							onHelp: _cache[9] || (_cache[9] = ($event) => unref(openHelp)("script_editor"))
+						}, null, 8, [
+							"modelValue",
+							"font-size",
+							"saved",
+							"analysis",
+							"buffer-key",
+							"language",
+							"read-only",
+							"disabled"
+						])) : (openBlock(), createElementBlock("p", _hoisted_4, toDisplayString(unref(t)("Open a script or create a new one.")), 1))]),
+						tree: withCtx(() => [createVNode(AppSearchField_default, {
+							ref_key: "filter",
+							ref: filter,
+							modelValue: query.value,
+							"onUpdate:modelValue": _cache[10] || (_cache[10] = ($event) => query.value = $event),
+							label: "Search scripts and symbols",
+							onKeydown: _cache[11] || (_cache[11] = withKeys(withModifiers(($event) => side.value === "outline" && symbols.value.length && goToSymbol(symbols.value[0]), ["prevent"]), ["enter"])),
+							placeholder: unref(t)(side.value === "scripts" ? "Search scripts" : "Filter classes and methods")
+						}, null, 8, ["modelValue", "placeholder"]), side.value === "scripts" ? (openBlock(), createBlock(_sfc_main$11, {
+							key: 0,
+							entries: tree.value,
+							query: query.value,
+							selected: active.value ? active.value.folder + "/" + active.value.title : "",
+							onSelect: _cache[12] || (_cache[12] = ($event) => openScript($event.key)),
+							onContextmenu: _cache[13] || (_cache[13] = withModifiers((event) => {
+								const path = event.target.closest("[data-entry-key]")?.dataset.entryKey;
+								if (path && !path.startsWith("folder:")) {
+									openScript(path);
+									nextTick(() => actions.value.open = true);
+								}
+							}, ["prevent"]))
+						}, null, 8, [
+							"entries",
+							"query",
+							"selected"
+						])) : (openBlock(), createElementBlock("nav", {
+							key: 1,
+							class: "script-editor-outline",
+							"aria-label": unref(t)("Outline")
+						}, [(openBlock(true), createElementBlock(Fragment, null, renderList(symbols.value, (row) => {
+							return openBlock(), createBlock(_sfc_main$5, {
+								key: row.qualifiedName || row.position,
+								icon: row.kind === "class" ? "MDI_FORMAT_SIZE" : "code",
+								label: (row.qualifiedName || row.name) + " · " + row.line,
+								title: row.detail,
+								"aria-current": symbolLine.value === row.line,
+								style: normalizeStyle({ paddingLeft: 7 + (row.depth || 0) * 14 + "px" }),
+								onClick: ($event) => goToSymbol(row)
+							}, {
+								default: withCtx(() => [createBaseVNode("span", null, toDisplayString(row.name), 1), createBaseVNode("small", null, toDisplayString(row.line), 1)]),
+								_: 2
+							}, 1032, [
+								"icon",
+								"label",
+								"title",
+								"aria-current",
+								"style",
+								"onClick"
+							]);
+						}), 128)), !allSymbols.value.length ? (openBlock(), createElementBlock("p", _hoisted_6, toDisplayString(unref(t)("No classes or methods")), 1)) : createCommentVNode("", true)], 8, _hoisted_5))]),
+						notice: withCtx(() => [
+							!catalog.value?.canEdit && catalog.value ? (openBlock(), createElementBlock("p", _hoisted_7, toDisplayString(unref(t)("Read-only: script changes and execution require administrator access.")), 1)) : !supported.value && active.value ? (openBlock(), createElementBlock("p", _hoisted_8, toDisplayString(unref(t)("This legacy language is read-only in the web editor")), 1)) : createCommentVNode("", true),
+							active.value?.missing ? (openBlock(), createElementBlock("p", _hoisted_9, toDisplayString(unref(t)("This script was deleted on the server. Its local draft is preserved.")), 1)) : createCommentVNode("", true),
+							error.value || analysisError.value ? (openBlock(), createElementBlock("p", _hoisted_10, toDisplayString(unref(t)(error.value || analysisError.value)), 1)) : createCommentVNode("", true)
+						]),
+						_: 1
+					}, 8, ["model"]), [[vShow, !reviewingAgent.value]])
+				], 44, _hoisted_1)), [[_directive_window, {
 					kind: "script_editor",
 					type: "window"
 				}]]),
@@ -1228,29 +1462,29 @@ var _sfc_main = {
 					ref: confirmation,
 					class: "record-dialog",
 					"aria-label": confirmTitle.value,
-					onCancel: _cache[16] || (_cache[16] = withModifiers(($event) => !busy.value && confirmation.value.close(), ["prevent"]))
+					onCancel: _cache[17] || (_cache[17] = withModifiers(($event) => !busy.value && confirmation.value.close(), ["prevent"]))
 				}, [
 					createBaseVNode("h2", null, toDisplayString(confirmTitle.value), 1),
 					createBaseVNode("p", null, toDisplayString(confirmAction.value === "delete" ? unref(t)("Deleting the saved script does not remove its shelf buttons; they become unavailable.") : unref(t)("Save, discard the selected drafts, or return to editing.")), 1),
 					error.value ? (openBlock(), createElementBlock("p", _hoisted_12, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
 					createBaseVNode("div", _hoisted_13, [
-						confirmAction.value === "tabs" ? (openBlock(), createBlock(_sfc_main$4, {
+						confirmAction.value === "tabs" ? (openBlock(), createBlock(_sfc_main$5, {
 							key: 0,
 							label: "Save",
 							icon: "save",
 							disabled: busy.value || uncertain.value || !catalog.value?.canEdit,
-							onClick: _cache[13] || (_cache[13] = ($event) => accept(true))
+							onClick: _cache[14] || (_cache[14] = ($event) => accept(true))
 						}, null, 8, ["disabled"])) : createCommentVNode("", true),
-						createVNode(_sfc_main$4, {
+						createVNode(_sfc_main$5, {
 							label: confirmAction.value === "delete" ? "Delete" : "Discard",
 							destructive: "",
 							disabled: busy.value || !!running.value,
-							onClick: _cache[14] || (_cache[14] = ($event) => accept())
+							onClick: _cache[15] || (_cache[15] = ($event) => accept())
 						}, null, 8, ["label", "disabled"]),
-						createVNode(_sfc_main$4, {
+						createVNode(_sfc_main$5, {
 							label: "Cancel",
 							disabled: busy.value,
-							onClick: _cache[15] || (_cache[15] = ($event) => confirmation.value.close())
+							onClick: _cache[16] || (_cache[16] = ($event) => confirmation.value.close())
 						}, null, 8, ["disabled"])
 					])
 				], 40, _hoisted_11)), [[_directive_window, { type: "popup" }]]),
@@ -1260,14 +1494,14 @@ var _sfc_main = {
 					class: "record-dialog script-editor-history",
 					"aria-label": unref(t)("Saved revisions")
 				}, [
-					createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Saved revisions")), 1), createVNode(_sfc_main$4, {
+					createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Saved revisions")), 1), createVNode(_sfc_main$5, {
 						label: "Close",
 						icon: "close",
-						onClick: _cache[17] || (_cache[17] = ($event) => historyDialog.value.close())
+						onClick: _cache[18] || (_cache[18] = ($event) => historyDialog.value.close())
 					})]),
 					createBaseVNode("p", null, toDisplayString(unref(t)("Restoring a revision changes the local draft. Save publishes it as a new revision.")), 1),
 					(openBlock(true), createElementBlock(Fragment, null, renderList(historyRows.value, (row) => {
-						return openBlock(), createBlock(_sfc_main$4, {
+						return openBlock(), createBlock(_sfc_main$5, {
 							key: row.revisionId,
 							label: [
 								row.timestamp,

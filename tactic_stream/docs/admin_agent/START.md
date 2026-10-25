@@ -72,7 +72,7 @@ conversation summary does not prove the server still has the same state.
 
 ## Current execution boundary
 
-0.112.210. Refresh capabilities and project metadata.
+0.112.214. Refresh capabilities and project metadata.
 The [MCP adapter](CONNECTION.md) exposes naming, [pages](PAGES.md),
 [projects/templates](PROJECTS.md) and [TH automation](HANDLER_AUTOMATION.md).
 Writes need host opt-in, revisions and durable receipts. Agent activation needs

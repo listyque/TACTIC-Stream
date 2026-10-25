@@ -15,8 +15,10 @@ import NavigationTree from '../workspace/NavigationTree.vue';
 import { buttonId, runBrowserScript, scriptTree } from './scriptShelf.js';
 import ScriptEditorWorkspace from './ScriptEditorWorkspace.vue';
 import './scriptEditor.css';
+import AgentDrafts from './AgentDrafts.vue';
 
 const openHelp = inject('openHelp');
+const reviewingAgent = ref(false);
 const props = defineProps({
   ticket: String,
   project: String,
@@ -708,6 +710,7 @@ function frameEvent(action) {
   else if (action.type === 'save') save();
   else if (action.type === 'run') run();
   else if (action.type === 'refresh') load();
+  else if (action.type === 'drafts') reviewingAgent.value = true;
   else if (action.type === 'tree') treeHidden.value = !treeHidden.value;
   else if (action.type === 'output') outputHidden.value = !outputHidden.value;
   else if (action.type === 'wrap') outputWrap.value = !outputWrap.value;
@@ -745,7 +748,18 @@ defineExpose({ open, reload: load });
           @click="close"
         />
       </header>
-      <ScriptEditorWorkspace :model="frameModel" @event="frameEvent">
+      <AgentDrafts
+        v-if="reviewingAgent"
+        :ticket="ticket"
+        :project="project"
+        @back="reviewingAgent = false"
+        @activated="load"
+      />
+      <ScriptEditorWorkspace
+        v-show="!reviewingAgent"
+        :model="frameModel"
+        @event="frameEvent"
+      >
         <template #tabs
           ><WorkspaceTabs
             kind="script"

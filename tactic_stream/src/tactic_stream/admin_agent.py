@@ -237,7 +237,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                 'can_apply': allow_naming_save or allow_page_save or allow_project_create or allow_automation_draft or allow_automation_activate,
                 'can_execute_scripts': trials is not None, 'th_runtime_connected': False,
                 'can_save_handler_drafts': allow_automation_draft, 'can_activate_handler_code': allow_automation_activate,
-                'handler_automation_requires': 'TS 0.112.207 with upgraded schema, TH 0.6.0.151; read th.automation',
+                'handler_automation_requires': 'TS 0.112.214 with upgraded schema for draft catalogue/trial reports; TH 0.6.0.156 for native UI review. Read th.automation',
                 'isolated_script_trial_available': trials is not None,
                 'isolated_trial_platform': 'linux' if trials else None,
                 'project_apply_requires': 'TS 0.112.206; new projects only, native template export/install; read ts.projects. Installed extensions remain trusted runtime code.',
@@ -445,6 +445,11 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return connection.command('automation', 'preview', document=document.model_dump())
 
     @mcp.tool(annotations=read_only, structured_output=True)
+    def th_automation_drafts() -> dict[str, Any]:
+        """List this administrator's project drafts for the normal Script Editor review workflow."""
+        return connection.command('automation', 'catalog')
+
+    @mcp.tool(annotations=read_only, structured_output=True)
     def th_automation_draft(draft_id: Identifier) -> dict[str, Any]:
         """Retrieve this administrator's saved draft source, revision and current dependencies."""
         return connection.command('automation', 'draft', draft_id=draft_id)
@@ -478,7 +483,15 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             if draft['revision'] != draft_revision:
                 raise ToolError('Draft revision changed; reload before testing')
             try:
-                return trial_summary(trials.run(trial_id, draft, case.model_dump(), connection.project))
+                record = trials.run(trial_id, draft, case.model_dump(), connection.project)
+                if record['status'] in ('passed', 'failed'):
+                    evidence = {key: record[key] for key in ('trial_id', 'draft_id', 'draft_revision', 'document_hash',
+                        'dependency_revision', 'status', 'image', 'case', 'result', 'error', 'diagnostics',
+                        'isolation', 'exit_code', 'cleanup_error') if key in record}
+                    evidence['result'] = {key: value for key, value in record.get('result', {}).items() if key != 'screenshot'}
+                    evidence['case'] = dict(record['case'], files=[dict(name=item['name']) for item in record['case']['files']])
+                    connection.command('automation', 'record_trial', record=evidence)
+                return trial_summary(record)
             except ValueError as error:
                 raise ToolError(str(error)) from None
 
@@ -503,10 +516,14 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
     if allow_automation_draft:
         @mcp.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=False,
                                              idempotent_hint=True, open_world_hint=False), structured_output=True)
-        def th_automation_save_draft(document: AutomationPlan, expected_revision: Identifier, operation_id: Identifier) -> dict[str, Any]:
+        def th_automation_save_draft(document: AutomationPlan, expected_revision: Identifier, operation_id: Identifier,
+                                     draft_id: Identifier | None = None, draft_revision: Identifier | None = None) -> dict[str, Any]:
             """Save the previewed source as private inactive metadata; no saved script or binding is installed."""
+            if bool(draft_id) != bool(draft_revision):
+                raise ToolError('Provide draft_id and its original draft_revision together to revise an inactive draft')
             return connection.command('automation', 'save_draft', document=document.model_dump(),
-                                      expected_revision=expected_revision, operation_id=operation_id)
+                expected_revision=expected_revision, operation_id=operation_id,
+                **(dict(draft_id=draft_id, draft_revision=draft_revision) if draft_id else {}))
 
     if allow_automation_activate:
         @mcp.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=True,
