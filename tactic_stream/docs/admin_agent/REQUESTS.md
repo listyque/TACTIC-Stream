@@ -1,6 +1,6 @@
 # Requests from the ordinary TH and TS interfaces
 
-TS 0.112.215 and TH 0.6.0.157 add **External agent** to the shared main options
+TS 0.112.217 and TH 0.6.0.159 add **External agent** to the shared main options
 menu. This is an administrator entry point. Both clients use the same Frame
 description and native controls; the browser never embeds a desktop window.
 
@@ -10,17 +10,20 @@ Open a project and page, select objects, then choose External agent. The window
 shows the captured client, project, navigation entry, Search Type, table view and
 exact selected search keys. Enter a task. Without **Allow the requested
 configuration changes**, the agent receives only reads/previews. Checking it
-allows native naming/page/project/template writes and inactive TH script drafts,
+allows native naming/page/project/template writes, existing-project workflow and entity edits, attachment check-ins and inactive TH script drafts,
 limited by the host's own launch permissions and the authenticated account.
 It does not expose script activation.
 
-Send starts one durable request. Progress and the final answer appear in the
+Send starts one durable conversation. The model selector uses the connected host's model/list result; it is fixed during an active turn. Context chips show the frozen project/page/type/selection; Context details reveals exact keys. Files can be chosen, dropped or pasted into the composer (Ctrl+V), where the browser exposes that clipboard format. Each file is limited to 64 MB, at most 20 per message; image model input is limited to 20 MB. Arbitrary binary originals can be checked in, but text/image input is not a universal document/audio/video decoder.
+
+Send starts a turn. Progress and the final answer appear in the
 same window; the agent's results are ordinary TACTIC resources. Closing the window
 leaves the request running. Reopen it or select a recent request to inspect its
-captured context and result. Choose New request to capture the current page and
+captured context and result. Choose New conversation to capture the current page and
 selection. Changing project/page/selection after sending never retargets the task.
-Requests are independent tasks; this version does not carry a conversational
-history into a new request.
+A follow-up retains ordered user/assistant history and the original authorization. While working, Send correction uses turn/steer. Undelivered corrections remain queued if completion races submission; message UUIDs prevent duplicates. A new conversation captures a new scope. A clear outcome distinguishes verified completion, a question and a blocked task.
+
+Undo field change is available only for the latest ordinary field patch, after completion. It refuses changed after-images and never invokes global undo. Workflow/schema/file/page/naming/project/script changes are outside this button; inspect their native editors/history.
 
 Cancellation stops pending work or asks the external host to stop its current
 process tree. Completed native operations are preserved. Inspect them before a
@@ -49,7 +52,7 @@ contract without changing either UI; this shipped executor specifically uses
 Codex CLI and its existing authentication.
 
 The host disables shell, source edits, web and other apps, uses an empty working
-directory and invocation-only MCP configuration, and does not modify global
+directory and invocation-only MCP configuration; user MCP servers, plugins and hooks are disabled, and does not modify global
 Codex settings. Its tools are the existing [MCP operations](CONNECTION.md).
 Naming/page/project operations retain native revision/receipt checks. Add the
 trusted --trial-image and --trial-directory options from [SCRIPT_TRIALS](SCRIPT_TRIALS.md)
@@ -60,7 +63,7 @@ or on the operator's Windows host.
 ## Native contract and ownership
 
 `tactic.ui.panel.agent_request_cmd.AgentRequestCmd`, through normal execute_cmd,
-owns state, submit, read, selection, cancel, heartbeat, disconnect, claim and update. Normal
+owns state, submit, read, selection, cancel, heartbeat, disconnect, claim, update, message, ack and guarded field undo. Normal
 authentication, API command authorization and administrator permission apply.
 Private per-project spt_agent_request/spt_agent_host tables are created by the
 standard config upgrade. They store user-owned metadata and results, never
@@ -80,3 +83,5 @@ TS captures its working workspace selection; TH captures its native section,
 table view and script-shelf selection provider. This is an immutable handoff,
 not a live TH runtime connection: th_runtime_connected remains false. Native TH
 hooks and shelf scripts still belong to TH, not browser uploads or a DCC client.
+
+AgentAttachmentCmd owns retry-safe chunked private uploads under data/agent_inputs, scoped by authenticated owner and project; include this directory with request databases in backups. AgentActionsCmd exposes bounded [existing-project editing](EDITING.md) through the same native owners. Codex app-server protocol: [official reference](https://learn.chatgpt.com/docs/app-server).

@@ -6,6 +6,7 @@ defineProps({
   label: String,
   placeholder: String,
   disabled: Boolean,
+  flat: Boolean,
   errorState: Boolean
 });
 const model = defineModel({ type: String, default: '' });
@@ -21,6 +22,7 @@ defineExpose({
     ref="field"
     v-model="model"
     class="app-text-area"
+    :class="{ 'app-text-area-flat': flat }"
     :aria-invalid="errorState || undefined"
     :aria-label="label || placeholder ? t(label || placeholder) : undefined"
     :placeholder="t(placeholder || '')"
@@ -43,6 +45,15 @@ defineExpose({
 }
 .app-text-area:disabled {
   color: var(--disabled);
+}
+.app-text-area-flat,
+.app-text-area-flat:focus {
+  background: transparent;
+  border-width: 1px;
+  border-color: transparent;
+  padding: calc(var(--field-area-padding) - 1px)
+    calc(var(--field-padding) - 1px);
+  resize: none;
 }
 .app-text-area[aria-invalid='true'],
 .app-text-area[aria-invalid='true']:focus {

@@ -126,9 +126,11 @@ class AgentRequests(unittest.TestCase):
         self.assertNotIn('private-secret', encoded)
         self.assertNotIn('--allow-automation-activate', encoded)
         self.assertIn('--allow-page-save', encoded)
-        self.assertIn('--ignore-user-config', command)
-        self.assertIn('--sandbox', command)
-        self.assertIn('shell_tool', command)
+        self.assertIn('app-server', command)
+        self.assertIn('features.hooks=false', command)
+        self.assertIn('features.plugins=false', command)
+        self.assertIn('read-only', command)
+        self.assertIn('features.shell_tool=false', command)
         self.assertIn(request['request_id'], encoded)
         self.assertIn(self.document['context']['search_keys'][0], task_prompt(request))
 
@@ -165,10 +167,17 @@ class AgentRequests(unittest.TestCase):
                 reports.append(values)
                 return dict(status=values.get('status', 'cancelling'))
 
-        program = 'import sys,time;sys.stdin.read();print(\'{"type":"turn.started"}\',flush=True);time.sleep(60)'
+        program = '''import sys,json
+for line in sys.stdin:
+    message=json.loads(line)
+    if 'id' not in message: continue
+    method=message['method']
+    result={'thread':{'id':'thread'}} if method=='thread/start' else {'turn':{'id':'turn'}} if method=='turn/start' else {}
+    print(json.dumps({'id':message['id'],'result':result}),flush=True)
+'''
         options = SimpleNamespace(stream_root=ROOT, handler_root=None, allow_changes=False, trial_image=None, trial_directory=None)
         with patch('tactic_stream.agent_host.codex_command', return_value=[sys.executable, '-u', '-c', program]), \
-                patch('tactic_stream.agent_host.stop_process', wraps=stop_process) as stopped:
+                patch('tactic_stream.codex_session.stop_process', wraps=stop_process) as stopped:
             run_request(Connection(), request, self.host, options, lambda: None)
         self.assertEqual(reports[-1]['status'], 'cancelled')
         self.assertTrue(stopped.called)

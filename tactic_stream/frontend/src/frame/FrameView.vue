@@ -669,6 +669,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         "
         :role="node.role"
         :class="{ 'frame-notice': node.notice }"
+        :flat="!!node.flat"
         :wrap="node.wrap === false ? 'off' : undefined"
         :error-state="!!node.error"
         :style="style(node)"

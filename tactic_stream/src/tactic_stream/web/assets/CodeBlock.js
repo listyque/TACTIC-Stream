@@ -2517,6 +2517,7 @@ var _sfc_main$20 = {
 		label: String,
 		placeholder: String,
 		disabled: Boolean,
+		flat: Boolean,
 		errorState: Boolean
 	}, {
 		"modelValue": {
@@ -2537,12 +2538,12 @@ var _sfc_main$20 = {
 				ref_key: "field",
 				ref: field,
 				"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event),
-				class: "app-text-area",
+				class: normalizeClass(["app-text-area", { "app-text-area-flat": __props.flat }]),
 				"aria-invalid": __props.errorState || void 0,
 				"aria-label": __props.label || __props.placeholder ? unref(t)(__props.label || __props.placeholder) : void 0,
 				placeholder: unref(t)(__props.placeholder || ""),
 				disabled: __props.disabled
-			}, null, 8, _hoisted_1$18)), [[vModelText, model.value]]);
+			}, null, 10, _hoisted_1$18)), [[vModelText, model.value]]);
 		};
 	}
 };
@@ -4060,6 +4061,34 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Allow requested changes": "Разрешить запрошенные изменения",
+	"New conversation": "Новый чат",
+	Conversation: "Переписка",
+	"Context details": "Подробности контекста",
+	"Selected objects": "Выделенные объекты",
+	You: "Вы",
+	Agent: "Агент",
+	"Attach files": "Прикрепить файлы",
+	"Paste attachment": "Вставить вложение",
+	"Remove attachment": "Убрать вложение",
+	Model: "Модель",
+	"Agent default": "Выбор агента",
+	"What would you like to change?": "Что хочешь изменить?",
+	"Describe the task. Attach files or paste an image.": "Опиши задачу. Прикрепи файлы или вставь картинку.",
+	"Add a correction while the agent works": "Уточни задачу, пока агент работает",
+	"Send correction": "Отправить уточнение",
+	"Correction queued": "Уточнение ожидает доставки",
+	"Waiting for your reply": "Агент ждёт твоего ответа",
+	"Task blocked — see the answer": "Задача не выполнена — смотри ответ",
+	"Task completed": "Задача выполнена",
+	"Agent finished — review the answer": "Агент закончил — проверь ответ",
+	"Working with TACTIC tools…": "Работа с инструментами Тактика…",
+	"Operation details": "Подробности операций",
+	"Undo field change": "Отменить правку",
+	"Each attachment must be at most 64 MB": "Размер одного вложения — не больше 64 МБ",
+	"Attach at most 20 files": "Прикрепи не больше 20 файлов",
+	"Press Ctrl+V in the message to attach clipboard files or images": "Нажми Ctrl+V в поле сообщения, чтобы прикрепить файлы или картинки из буфера",
+	"Last agent field change undone": "Последняя правка полей агентом отменена",
 	"Agent request worker is unavailable": "Обработчик обращений к агенту недоступен",
 	"Request queued": "В очереди",
 	"Agent working": "Выполняется",
@@ -10272,6 +10301,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						inline: "nearest"
 					})),
 					role: node.role,
+					flat: !!node.flat,
 					wrap: node.wrap === false ? "off" : void 0,
 					"error-state": !!node.error,
 					style: normalizeStyle(style(node)),
@@ -10286,6 +10316,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"data-frame",
 					"role",
 					"class",
+					"flat",
 					"wrap",
 					"error-state",
 					"style",

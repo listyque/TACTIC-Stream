@@ -1,5 +1,6 @@
 import { A as t, j as appearance } from "./index.js";
-import { f as linkifyPlainText, n as browserLink, u as escapeHtml } from "./links.js";
+import { i as linkifyPlainText, n as escapeHtml } from "./richText.js";
+import { n as browserLink } from "./links.js";
 //#region src/features/activity/activity.js
 function dateKey(date) {
 	return [

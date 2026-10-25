@@ -120,6 +120,7 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
+      "_richText.js",
       "_links.js",
       "_textMetrics.js",
       "_AttachmentCard.js",
@@ -213,12 +214,23 @@
     "file": "assets/locales.js",
     "name": "locales"
   },
+  "_markdown-it.js": {
+    "file": "assets/markdown-it.js",
+    "name": "markdown-it",
+    "imports": [
+      "_rolldown-runtime.js"
+    ]
+  },
   "_previewFiles.js": {
     "file": "assets/previewFiles.js",
     "name": "previewFiles",
     "imports": [
       "index.html"
     ]
+  },
+  "_richText.js": {
+    "file": "assets/richText.js",
+    "name": "richText"
   },
   "_rolldown-runtime.js": {
     "file": "assets/rolldown-runtime.js",
@@ -244,6 +256,7 @@
     "name": "textMetrics",
     "imports": [
       "index.html",
+      "_richText.js",
       "_links.js"
     ]
   },
@@ -301,6 +314,7 @@
       "_CodeBlock.js",
       "_RecordForm.js",
       "_sections.ui.js",
+      "_richText.js",
       "_links.js",
       "_textMetrics.js",
       "_ObjectReport.js",
@@ -315,7 +329,8 @@
       "_confirmation.ui.js",
       "_AppDialog.js",
       "_AppMenuItem.js",
-      "_tree.ui.js"
+      "_tree.ui.js",
+      "_markdown-it.js"
     ],
     "dynamicImports": [
       "src/features/checkin/ObjectCheckin.vue",
@@ -648,9 +663,11 @@
       "_icons.js",
       "index.html",
       "_CodeBlock.js",
+      "_richText.js",
       "_links.js",
       "_AttachmentCard.js",
       "_AppMenuItem.js",
+      "_markdown-it.js",
       "src/App.vue"
     ],
     "css": [
@@ -666,6 +683,7 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
+      "_richText.js",
       "_links.js",
       "src/App.vue"
     ],
@@ -727,7 +745,8 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
-      "_AppDialog.js"
+      "_AppDialog.js",
+      "src/App.vue"
     ],
     "css": [
       "assets/AgentRequest.css"

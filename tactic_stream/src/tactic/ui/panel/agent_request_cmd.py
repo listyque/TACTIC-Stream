@@ -1,7 +1,7 @@
 """User-owned external-agent requests; this command never runs a model or script."""
 import json
 import time
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from pyasm.biz import Project
 from pyasm.command import Command
@@ -68,7 +68,7 @@ class AgentRequestCmd(Command):
         if not all(self.sql.table_exists(name) for name in ('spt_agent_request', 'spt_agent_host')):
             raise ValueError('Upgrade the project schema before connecting an agent')
         action = self.kwargs.get('action')
-        if action not in ('state', 'submit', 'read', 'selection', 'cancel', 'heartbeat', 'disconnect', 'claim', 'update'):
+        if action not in ('state', 'submit', 'read', 'selection', 'cancel', 'heartbeat', 'disconnect', 'claim', 'update', 'message', 'ack', 'undo'):
             raise ValueError('Unknown agent request action')
         self.owner = Environment.get_user_name()
         self.now = int(time.time())
@@ -89,9 +89,14 @@ class AgentRequestCmd(Command):
         if action == 'heartbeat':
             host_id = identity(self.kwargs.get('host_id'))
             capabilities = self.kwargs.get('capabilities')
-            if (not isinstance(capabilities, dict) or set(capabilities) != {'changes', 'trials'}
-                    or any(type(value) is not bool for value in capabilities.values())):
+            if (not isinstance(capabilities, dict) or set(capabilities) - {'changes', 'trials', 'models', 'steering', 'attachments'}
+                    or any(type(capabilities.get(key)) is not bool for key in ('changes', 'trials'))):
                 raise ValueError('Invalid host capabilities')
+            models = capabilities.get('models', [])
+            if (not isinstance(models, list) or len(models) > 100 or any(
+                    not isinstance(model, dict) or not isinstance(model.get('id'), str)
+                    or not isinstance(model.get('label'), str) for model in models)):
+                raise ValueError('Invalid model catalogue')
             host = dict(host_id=host_id, label=text(self.kwargs.get('label'), 120),
                         capabilities=capabilities, seen=self.now)
             self.save('spt_agent_host', host_id, host)
@@ -108,7 +113,8 @@ class AgentRequestCmd(Command):
         if action == 'submit':
             request_id = identity(self.kwargs.get('request_id'))
             document = self.kwargs.get('document')
-            if not isinstance(document, dict) or set(document) != {'prompt', 'context', 'allow_changes'}:
+            if (not isinstance(document, dict) or set(document) - {'prompt', 'context', 'allow_changes', 'attachments', 'model'}
+                    or not {'prompt', 'context', 'allow_changes'} <= set(document)):
                 raise ValueError('Invalid agent request document')
             text(document['prompt'], 12000)
             if type(document['allow_changes']) is not bool:
@@ -125,10 +131,14 @@ class AgentRequestCmd(Command):
                 raise ValueError('External agent is offline')
             if document['allow_changes'] and not host['capabilities']['changes']:
                 raise ValueError('This host only allows reading and previews')
+            self.check_model(host, document.get('model', ''))
+            attachments = self.check_attachments(document.get('attachments', []))
             if sum(row['status'] in ACTIVE for row in self.records('spt_agent_request')) >= 5:
                 raise ValueError('Wait for an existing agent request to finish')
             row = dict(request_id=request_id, document=document, host_id=host['host_id'],
-                       status='queued', created=self.now, seen=self.now, events=[], answer='', error='')
+                       status='queued', created=self.now, seen=self.now, events=[], answer='', error='',
+                       messages=[dict(id=request_id, role='user', text=document['prompt'], attachments=attachments, delivered=True)],
+                       model=document.get('model', ''), turn=1)
         elif action == 'claim':
             host_id = identity(self.kwargs.get('host_id'))
             host = self.load('spt_agent_host', host_id)
@@ -164,9 +174,77 @@ class AgentRequestCmd(Command):
                     items.append(selected_object(key))
                 self.info = dict(objects=Api._get_sobjects_dict(items, columns=fields))
                 return
-            if action == 'cancel':
+            if action == 'undo':
+                code = identity(self.kwargs.get('operation_id'))
+                receipt = row.get('operations', {}).get(code)
+                if receipt and receipt.get('undone'):
+                    self.info = row
+                    return
+                if row['status'] in ACTIVE or row.get('undo_operation') != code or not receipt or not receipt.get('undo'):
+                    raise ValueError('Only the last reversible field change in a finished request can be undone')
+                undo = receipt['undo']
+                item = selected_object(undo['key'])
+                if any(item.get_data().get(field) != value for field, value in undo['after'].items()):
+                    raise ValueError('The fields changed after the agent operation. Undo refused.')
+                for field, value in undo['before'].items():
+                    item.set_value(field, value, allow_none=True)
+                item.commit()
+                receipt['undone'] = True
+                row['undo_operation'] = ''
+                row.setdefault('events', []).append('Last agent field change undone')
+            elif action == 'message':
+                if row['status'] == 'cancelling':
+                    raise ValueError('Wait until the current turn stops before continuing')
+                message_id = identity(self.kwargs.get('message_id'))
+                message = dict(id=message_id, role='user', text=text(self.kwargs.get('text'), 12000),
+                               attachments=self.check_attachments(self.kwargs.get('attachments', [])), delivered=False)
+                if 'messages' not in row:
+                    row['messages'] = [dict(id=row['request_id'], role='user', text=row['document']['prompt'], attachments=[], delivered=True)]
+                    if row.get('answer'):
+                        row['messages'].append(dict(id=str(uuid4()), role='assistant', text=row['answer'], attachments=[]))
+                messages = row['messages']
+                if row['status'] in ('cancelled', 'interrupted'):
+                    for previous in messages:
+                        if not previous.get('delivered', True):
+                            previous.update(delivered=True, cancelled=True)
+                old = next((item for item in messages if item['id'] == message_id), None)
+                if old:
+                    if any(old[key] != message[key] for key in ('text', 'attachments')):
+                        raise ValueError('Message ID was used with different contents')
+                    self.info = row
+                    return
+                if len(messages) >= 100:
+                    raise ValueError('Start a new conversation after 100 messages')
+                host_id = self.kwargs.get('host_id', row['host_id'])
+                if row['status'] == 'running' and host_id != row['host_id']:
+                    raise ValueError('Cannot change the host while a turn is running')
+                host = self.load('spt_agent_host', identity(host_id))
+                if row['document']['allow_changes'] and not host['capabilities']['changes']:
+                    raise ValueError('This host only allows reading and previews')
+                if self.now - host['seen'] > HOST_TTL:
+                    raise ValueError('External agent is offline')
+                if row['status'] == 'running' and not host['capabilities'].get('steering'):
+                    raise ValueError('This agent does not support corrections while working')
+                model = self.kwargs.get('model', row.get('model', ''))
+                self.check_model(host, model)
+                if row['status'] != 'running':
+                    row.update(status='queued', seen=self.now, created=self.now, host_id=host_id, model=model, turn=row.get('turn', 1) + 1, output='')
+                elif model != row.get('model', ''):
+                    raise ValueError('Change the model after the current turn finishes')
+                messages.append(message)
+            elif action == 'ack':
+                if identity(self.kwargs.get('host_id')) != row['host_id']:
+                    raise ValueError('Request belongs to another external host')
+                codes = self.kwargs.get('message_ids')
+                if not isinstance(codes, list):
+                    raise ValueError('Invalid message acknowledgements')
+                for message in row.get('messages', []):
+                    if message['id'] in codes and message['role'] == 'user':
+                        message['delivered'] = True
+            elif action == 'cancel':
                 if row['status'] == 'queued':
                     row['status'] = 'cancelled'
+                    row['outcome'] = 'cancelled'
                 elif row['status'] == 'running':
                     row['status'] = 'cancelling'
             elif action == 'update':
@@ -181,14 +259,37 @@ class AgentRequestCmd(Command):
                     status = 'cancelled'
                 row['seen'] = self.now
                 if status != 'running':
-                    row.update(status=status, answer=text(self.kwargs.get('answer', ''), 64000, empty=True),
+                    answer = text(self.kwargs.get('answer', ''), 64000, empty=True)
+                    if answer:
+                        row.setdefault('messages', []).append(dict(id=str(uuid4()), role='assistant', text=answer, attachments=[]))
+                    if status == 'completed' and any(not message.get('delivered', True) for message in row.get('messages', [])):
+                        status = 'queued'
+                    row.update(status=status, answer=answer,
                                error=text(self.kwargs.get('error', ''), 4000, empty=True))
+                    outcome = self.kwargs.get('outcome', 'completed') if status in ('completed', 'queued') else status
+                    if outcome not in ('completed', 'needs_input', 'blocked', 'failed', 'cancelled'):
+                        raise ValueError('Invalid task outcome')
+                    row['outcome'] = outcome
+                elif 'output' in self.kwargs:
+                    row['output'] = text(self.kwargs['output'], 64000, empty=True)
                 event = self.kwargs.get('event', '')
                 if event:
                     text(event, 3000)
                     row['events'] = (row['events'] + [event])[-100:]
         self.save('spt_agent_request', row['request_id'], row)
         self.info = row
+
+    def check_model(self, host, model):
+        text(model, 128, empty=True)
+        if model and model not in {item['id'] for item in host['capabilities'].get('models', [])}:
+            raise ValueError('Choose a model offered by the connected agent')
+
+    def check_attachments(self, codes):
+        from .agent_attachment_cmd import attachment
+        if (not isinstance(codes, list) or len(codes) > 20 or any(not isinstance(code, str) for code in codes)
+                or len(set(codes)) != len(codes)):
+            raise ValueError('Attach at most 20 distinct files')
+        return [attachment(code)[0] for code in codes]
 
     def records(self, table):
         return [json.loads(row[0]) for row in self.sql.do_query(

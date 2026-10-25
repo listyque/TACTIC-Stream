@@ -31,7 +31,8 @@ by the host. This document does not create tools or grant permissions.
 2. Read actual capabilities and relevant current project facts using
    OPERATIONS. Identify types, fields, relationships, views, process definitions
    and existing templates. Retrieve referenced definitions before using them.
-3. Make a small dependency-ordered proposal: types/fields, relationships,
+3. For existing project entities/workflows or attached-file check-in, read [EDITING](EDITING.md); use the exposed native editing tools instead of assuming only new projects are supported.
+   Make a small dependency-ordered proposal: types/fields, relationships,
    pipelines, naming, forms/views/navigation, and explicitly requested data.
    Explain what the administrator will be able to do when it is finished.
 4. Preserve loaded documents, their unknown elements and unrelated settings.

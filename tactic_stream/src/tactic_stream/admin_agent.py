@@ -32,6 +32,8 @@ COMMANDS = {
     'page': 'tactic.ui.panel.page_cmd.PageCmd',
     'automation': 'tactic.ui.panel.handler_automation_cmd.HandlerAutomationCmd',
     'request': 'tactic.ui.panel.agent_request_cmd.AgentRequestCmd',
+    'attachment': 'tactic.ui.panel.agent_attachment_cmd.AgentAttachmentCmd',
+    'editing': 'tactic.ui.panel.agent_actions_cmd.AgentActionsCmd',
 }
 REFERENCES = {
     'ts.start': ('TS', 'docs/admin_agent/START.md'),
@@ -42,6 +44,7 @@ REFERENCES = {
     'ts.connection': ('TS', 'docs/admin_agent/CONNECTION.md'),
     'ts.codex': ('TS', 'docs/admin_agent/CODEX.md'),
     'ts.requests': ('TS', 'docs/admin_agent/REQUESTS.md'),
+    'ts.editing': ('TS', 'docs/admin_agent/EDITING.md'),
     'th.trials': ('TS', 'docs/admin_agent/SCRIPT_TRIALS.md'),
     'ts.pages': ('TS', 'docs/admin_agent/PAGES.md'),
     'ts.projects': ('TS', 'docs/admin_agent/PROJECTS.md'),
@@ -173,6 +176,23 @@ class StreamConnection:
         except (ValueError, UnicodeError):
             raise ToolError('TACTIC returned an invalid JSON response') from None
 
+    def attachment_bytes(self, code: str, limit: int = 20 * 1024 * 1024):
+        import hashlib
+        content, offset = bytearray(), 0
+        while True:
+            part = self.command('attachment', 'read', attachment_id=code, offset=offset)
+            if part['size'] > limit:
+                raise ToolError('Image input exceeds the 20 MB model limit; its original remains available for check-in')
+            content.extend(base64.b64decode(part['data'], validate=True))
+            if len(content) > part['size']:
+                raise ToolError('Invalid attachment length')
+            offset = part['next_offset']
+            if offset is None:
+                break
+        if len(content) != part['size'] or hashlib.sha256(content).hexdigest() != part['sha256']:
+            raise ToolError('Attachment integrity check failed')
+        return part, bytes(content)
+
     def command(self, owner: str, action: str, **values) -> dict[str, Any]:
         data = self.request('/admin/rpc', {
             'method': 'execute_cmd',
@@ -205,7 +225,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                   *, allow_naming_save: bool = False, allow_page_save: bool = False,
                   allow_project_create: bool = False, allow_automation_draft: bool = False,
                   allow_automation_activate: bool = False, trials: AutomationTrials | None = None,
-                  request_id: str | None = None) -> MCPServer:
+                  request_id: str | None = None, allow_project_edit: bool = False) -> MCPServer:
     """Build the externally callable catalogue without importing TS or TH internals."""
     roots = {'TS': stream_root.resolve(), 'TH': handler_root.resolve() if handler_root else None}
     if allow_automation_activate and trials is None:
@@ -228,12 +248,83 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         def agent_context() -> dict[str, Any]:
             """The user's immutable TH/TS project, page and selection captured before sending."""
             request = connection.command('request', 'read', request_id=request_id)
-            return dict(request_id=request_id, **request['document'])
+            result = dict(request_id=request_id, **request['document'])
+            if request.get('operations'):
+                result['operations'] = [dict(operation_id=code, result=receipt['result'], undone=receipt.get('undone', False))
+                                        for code, receipt in request['operations'].items()]
+            return result
 
         @mcp.tool(annotations=read_only, structured_output=True)
         def agent_selection() -> dict[str, Any]:
             """Read the captured selected objects' current public identity/title/parent fields."""
             return connection.command('request', 'selection', request_id=request_id)
+
+        @mcp.tool(annotations=read_only, structured_output=True)
+        def agent_attachment_read(attachment_id: Identifier, offset: Offset = 0) -> dict[str, Any]:
+            """Read up to 32 KB of an attached UTF-8 text file. Binary files remain usable for check-in; images also reach the model as images."""
+            request = connection.command('request', 'read', request_id=request_id)
+            allowed = {item['attachment_id'] for message in request.get('messages', []) for item in message.get('attachments', [])}
+            if attachment_id not in allowed:
+                raise ToolError('Choose an attachment from this conversation')
+            result = connection.command('attachment', 'read', attachment_id=attachment_id, offset=offset)
+            raw = base64.b64decode(result.pop('data'))[:32768]
+            try:
+                result['text'] = raw.decode('utf-8')
+            except UnicodeError:
+                result['text'] = None
+                result['note'] = 'Binary input; use for check-in. This model input does not include a document/media decoder.'
+            result['next_offset'] = offset + len(raw) if offset + len(raw) < result['size'] else None
+            return result
+
+        @mcp.tool(annotations=read_only)
+        def agent_attachment_image(attachment_id: Identifier):
+            """View an image attached earlier in this conversation, including after a completed turn."""
+            from mcp.server.mcpserver.utilities.types import Image
+            request = connection.command('request', 'read', request_id=request_id)
+            metadata = next((item for message in request.get('messages', []) for item in message.get('attachments', [])
+                             if item['attachment_id'] == attachment_id), None)
+            if not metadata or metadata['media_type'] not in ('image/png', 'image/jpeg', 'image/webp', 'image/gif'):
+                raise ToolError('Choose an image attached to this conversation')
+            metadata, data = connection.attachment_bytes(attachment_id)
+            return Image(data=data, format=metadata['media_type'].split('/')[1])
+
+        @mcp.tool(annotations=read_only, structured_output=True)
+        def ts_records(search_type: Identifier, filters: dict[str, str | int | float | bool]) -> dict[str, Any]:
+            """Read up to 50 existing project entity records with exact field filters and revisions."""
+            return connection.command('editing', 'records', request_id=request_id, search_type=search_type, filters=filters)
+
+        @mcp.tool(annotations=read_only, structured_output=True)
+        def ts_workflow_read(search_type: Identifier) -> dict[str, Any]:
+            """Read existing entity workflows, selected object assignments, columns and revision before editing."""
+            return connection.command('editing', 'workflow_read', request_id=request_id, search_type=search_type)
+
+        @mcp.tool(annotations=read_only, structured_output=True)
+        def ts_edit_operation(operation_id: Identifier) -> dict[str, Any]:
+            """Inspect a durable workflow/check-in/field-edit receipt after a lost response; preserve its original UUID."""
+            return connection.command('editing', 'operation', request_id=request_id, operation_id=operation_id)
+
+        if allow_project_edit:
+            writes = ToolAnnotations(read_only_hint=False, destructive_hint=False, idempotent_hint=True, open_world_hint=False)
+
+            @mcp.tool(annotations=writes, structured_output=True)
+            def ts_workflow_apply(search_type: Identifier, processes: list[Identifier], expected_revision: Identifier,
+                                  operation_id: Identifier, identity: str = '', name: str = '', search_keys: list[str] | None = None) -> dict[str, Any]:
+                """Create/edit an existing project's sequential native workflow and assign captured selected entities. Adds the ordinary pipeline_code field when absent. Preserve existing nodes/settings by name; native owners reject removing processes in use. Show the intended stages before applying."""
+                return connection.command('editing', 'workflow_apply', request_id=request_id, search_type=search_type,
+                    processes=processes, expected_revision=expected_revision, operation_id=operation_id,
+                    identity=identity, name=name or search_type, search_keys=search_keys or [])
+
+            @mcp.tool(annotations=writes, structured_output=True)
+            def ts_attachment_checkin(search_key: Identifier, process: Identifier, attachments: list[Identifier], operation_id: Identifier) -> dict[str, Any]:
+                """Check attached files into an existing project entity's workflow process through native FileCheckin/naming. No client-local TH hooks are executed by this server operation."""
+                return connection.command('editing', 'checkin', request_id=request_id, search_key=search_key,
+                                          process=process, attachments=attachments, operation_id=operation_id)
+
+            @mcp.tool(annotations=writes, structured_output=True)
+            def ts_record_patch(search_key: Identifier, values: dict[str, str | int | float | bool | None], expected_revision: Identifier, operation_id: Identifier) -> dict[str, Any]:
+                """Change ordinary project entity fields with the exact revision returned by ts_records. Identity, retirement and system fields are not editable here."""
+                return connection.command('editing', 'patch', request_id=request_id, search_key=search_key,
+                                          values=values, expected_revision=expected_revision, operation_id=operation_id)
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def agent_capabilities() -> dict[str, Any]:
@@ -249,7 +340,9 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                               + (['handler_automation.save_draft'] if allow_automation_draft else [])
                               + (['handler_automation.trial', 'handler_automation.trial_read', 'handler_automation.trial_image'] if trials else [])
                               + (['handler_automation.activate'] if allow_automation_activate else []),
-                'can_apply': allow_naming_save or allow_page_save or allow_project_create or allow_automation_draft or allow_automation_activate,
+                'existing_project_editing': allow_project_edit,
+                'existing_project_operations': ['records.read', 'workflow.read'] + (['workflow.apply', 'attachment.checkin', 'record.patch'] if allow_project_edit else []),
+                'can_apply': allow_naming_save or allow_page_save or allow_project_create or allow_automation_draft or allow_automation_activate or allow_project_edit,
                 'can_execute_scripts': trials is not None, 'th_runtime_connected': False,
                 'user_context_available': bool(request_id),
                 'can_save_handler_drafts': allow_automation_draft, 'can_activate_handler_code': allow_automation_activate,
@@ -576,6 +669,7 @@ def main() -> None:
     parser.add_argument('--allow-page-save', action='store_true', help='Host-authorized creation of native search pages')
     parser.add_argument('--allow-project-create', action='store_true', help='Host-authorized new projects and native template export/install')
     parser.add_argument('--allow-automation-draft', action='store_true', help='Save inactive Handler automation drafts')
+    parser.add_argument('--allow-project-edit', action='store_true', help='Edit existing project entities and check in conversation attachments')
     parser.add_argument('--allow-automation-activate', action='store_true', help='Publish reviewed code for execution by native Handler hooks/shelves')
     parser.add_argument('--request-id', help='Host-bound native user request; exposes its immutable context')
     parser.add_argument('--trial-image', help='Trusted local immutable sha256 image ID for isolated Linux trials')
@@ -596,7 +690,7 @@ def main() -> None:
                   allow_naming_save=args.allow_naming_save, allow_page_save=args.allow_page_save,
                   allow_project_create=args.allow_project_create, allow_automation_draft=args.allow_automation_draft,
                   allow_automation_activate=args.allow_automation_activate, trials=trials,
-                  request_id=args.request_id).run(transport='stdio')
+                  request_id=args.request_id, allow_project_edit=args.allow_project_edit).run(transport='stdio')
 
 
 if __name__ == '__main__':

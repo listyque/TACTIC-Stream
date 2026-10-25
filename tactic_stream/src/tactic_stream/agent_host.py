@@ -4,9 +4,9 @@ import getpass
 import json
 import os
 from pathlib import Path
-import queue
+import base64
+import tomllib
 import shutil
-import signal
 import subprocess
 import sys
 import tempfile
@@ -15,6 +15,7 @@ import time
 from uuid import uuid4
 
 from tactic_stream.admin_agent import StreamConnection
+from tactic_stream.codex_session import CodexSession, stop_process
 from mcp.server.mcpserver.exceptions import ToolError
 
 
@@ -29,7 +30,7 @@ def codex_command(connection, request, stream_root, handler_root, workspace, *, 
     if handler_root:
         arguments += ['--handler-root', str(handler_root)]
     if changes and request['document']['allow_changes']:
-        arguments += ['--allow-naming-save', '--allow-page-save', '--allow-project-create', '--allow-automation-draft']
+        arguments += ['--allow-naming-save', '--allow-page-save', '--allow-project-create', '--allow-automation-draft', '--allow-project-edit']
     if trial_image:
         arguments += ['--trial-image', trial_image, '--trial-directory', str(trial_directory)]
     config = {'mcp_servers.tactic.command': Path(sys.executable).as_posix(),
@@ -39,12 +40,19 @@ def codex_command(connection, request, stream_root, handler_root, workspace, *, 
               'mcp_servers.tactic.tool_timeout_sec': 180,
               'mcp_servers.tactic.default_tools_approval_mode': 'approve',
               'web_search': 'disabled', 'project_doc_max_bytes': 0}
-    command = [executable, '-a', 'never', 'exec', '--ignore-user-config', '--ignore-rules', '--ephemeral',
-               '--skip-git-repo-check', '--sandbox', 'read-only', '--disable', 'shell_tool',
-               '--disable', 'apps', '--disable', 'multi_agent', '--json', '--cd', str(workspace)]
+    # Keep account authentication, but disable user tools, hooks and project instructions.
+    path = Path(os.environ.get('CODEX_HOME', Path.home() / '.codex')) / 'config.toml'
+    local = tomllib.loads(path.read_text(encoding='utf-8')) if path.is_file() else {}
+    for name in local.get('mcp_servers', {}):
+        if name != 'tactic':
+            config['mcp_servers.' + name + '.enabled'] = False
+    config.update({'features.shell_tool': False, 'features.apps': False, 'features.multi_agent': False,
+                   'features.plugins': False, 'features.hooks': False, 'developer_instructions': ''})
+    command = [executable, '-a', 'never', '-s', 'read-only', 'app-server']
     for key, value in config.items():
         command += ['-c', key + '=' + json.dumps(value, ensure_ascii=False)]
-    return command + ['-']
+    return command
+
 
 
 def task_prompt(request):
@@ -64,19 +72,44 @@ def task_prompt(request):
         'unavailable, explain the specific limit; do not claim success or invent methods. After two similar '
         'failures reread the full recipe. Answer in the user language, giving concrete result identities '
         'and where to open the result. Ask a concise clarification in your answer when required. '
-        'Do not request credentials or use shell/files/apps/web.\n\n'
-        + json.dumps(request['document'], ensure_ascii=False)
+        'Do not request credentials or use shell/files/apps/web. Use the new existing-project workflow and attachment tools when needed. '
+        'Conversation messages below are ordered user/assistant history. Follow corrections; do not repeat previously applied operations. '
+        'Messages marked cancelled are historical, not pending instructions. After an interrupted or failed turn inspect agent_context operation receipts and actual state before continuing. '
+        'Return outcome completed only if the requested work was actually verified; use needs_input for a question or blocked for missing capabilities.\n\n'
+        + json.dumps(dict(request['document'], messages=request.get('messages', [])), ensure_ascii=False)
     )
 
 
-def stop_process(process):
-    if process.poll() is not None:
-        return
-    if os.name == 'nt':
-        subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'], capture_output=True, timeout=15)
-    else:
-        os.killpg(process.pid, signal.SIGKILL)
-    process.wait(timeout=15)
+def model_catalog(options):
+    connection = StreamConnection(options.server, options.project[0], 'catalog-only')
+    with tempfile.TemporaryDirectory(prefix='tactic-models-') as workspace:
+        request = dict(request_id=str(uuid4()), document=dict(allow_changes=False))
+        client = CodexSession(codex_command(connection, request, options.stream_root, options.handler_root, workspace), dict(os.environ), workspace)
+        try:
+            result, cursor = [], None
+            while True:
+                response = client.call('model/list', dict(limit=100, includeHidden=False, cursor=cursor))
+                result.extend(dict(id=item['model'], label=item['displayName'], modalities=item.get('inputModalities', ['text', 'image'])) for item in response['data'])
+                cursor = response.get('nextCursor')
+                if not cursor:
+                    return result
+        finally:
+            client.close()
+
+
+def message_inputs(connection, messages):
+    inputs = []
+    for message in messages:
+        inputs.append(dict(type='text', text=message['text']))
+        for metadata in message.get('attachments', []):
+            inputs.append(dict(type='text', text='Attached file: ' + json.dumps(metadata, ensure_ascii=False)))
+            if metadata.get('media_type') not in ('image/png', 'image/jpeg', 'image/webp', 'image/gif'):
+                continue
+            if metadata['size'] > 20 * 1024 * 1024:
+                raise RuntimeError('Images sent to this model must be at most 20 MB; the original file remains attached for check-in.')
+            _, content = connection.attachment_bytes(metadata['attachment_id'])
+            inputs.append(dict(type='image', url='data:' + metadata['media_type'] + ';base64,' + base64.b64encode(content).decode()))
+    return inputs
 
 
 def run_request(connection, request, host_id, options, heartbeat):
@@ -85,92 +118,88 @@ def run_request(connection, request, host_id, options, heartbeat):
     def update(**values):
         return connection.command('request', 'update', request_id=request_id, host_id=host_id, **values)
 
-    lines = queue.Queue(maxsize=1000)
-    answer = ''
-    completed = False
-    errors = []
     with tempfile.TemporaryDirectory(prefix='tactic-agent-host-') as workspace:
         command = codex_command(connection, request, options.stream_root, options.handler_root, workspace,
-                                changes=options.allow_changes, trial_image=options.trial_image,
-                                trial_directory=options.trial_directory)
+                                changes=options.allow_changes, trial_image=options.trial_image, trial_directory=options.trial_directory)
         environment = dict(os.environ, TACTIC_AGENT_TICKET=connection._ticket, PYTHONUTF8='1')
         environment.pop('TACTIC_AGENT_PASSWORD', None)
-        with tempfile.TemporaryFile(mode='w+t', encoding='utf-8') as stderr:
-            process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr,
-                text=True, encoding='utf-8', errors='replace', env=environment, start_new_session=os.name != 'nt',
-                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-            reader_stop = threading.Event()
-
-            def enqueue(value):
-                while not reader_stop.is_set():
-                    try:
-                        lines.put(value, timeout=.2)
-                        return
-                    except queue.Full:
-                        pass
-
-            def read_lines():
-                try:
-                    for line in process.stdout:
-                        if reader_stop.is_set():
-                            break
-                        enqueue(line)
-                finally:
-                    enqueue(None)
-
-            reader = threading.Thread(target=read_lines, daemon=True)
-            reader.start()
-            started = last_heartbeat = time.monotonic()
-            try:
-                process.stdin.write(task_prompt(request))
-                process.stdin.close()
-                update(event='External agent started')
-                while True:
-                    if time.monotonic() - started > 1200:
-                        raise RuntimeError('Agent time limit reached. Inspect changes before sending another request.')
-                    if time.monotonic() - last_heartbeat >= 10:
+        client = CodexSession(command, environment, workspace)
+        try:
+            thread = client.call('thread/start', dict(cwd=workspace, ephemeral=True,
+                approvalPolicy='never', sandbox='read-only', model=request.get('model') or None,
+                baseInstructions=task_prompt(request)))['thread']['id']
+            messages = request.get('messages') or [dict(id=request_id, role='user', text=request['document']['prompt'], attachments=[])]
+            pending = [message for message in messages if message['role'] == 'user' and not message.get('delivered', True)]
+            current_input = pending or [messages[0]]
+            schema = dict(type='object', additionalProperties=False, required=['outcome', 'answer'], properties=dict(
+                outcome=dict(type='string', enum=['completed', 'needs_input', 'blocked']), answer=dict(type='string')))
+            turn = client.call('turn/start', dict(threadId=thread, input=message_inputs(connection, current_input), outputSchema=schema))['turn']['id']
+            delivered = {message['id'] for message in messages}
+            if pending:
+                connection.command('request', 'ack', request_id=request_id, host_id=host_id, message_ids=[message['id'] for message in pending])
+            update(event='External agent started', output='')
+            started = last_heartbeat = last_host_heartbeat = last_output = time.monotonic()
+            streams = {}
+            answer = ''
+            while True:
+                if time.monotonic() - started > 1200:
+                    raise RuntimeError('Agent time limit reached. Inspect changes before sending another request.')
+                if time.monotonic() - last_heartbeat >= 2:
+                    if time.monotonic() - last_host_heartbeat >= 10:
                         heartbeat()
-                        current = update()
-                        if current['status'] == 'cancelling':
-                            stop_process(process)
-                            update(status='cancelled', answer=answer,
-                                   error='Cancelled. Changes already applied are preserved; inspect them before retrying.')
-                            return
-                        last_heartbeat = time.monotonic()
-                    try:
-                        line = lines.get(timeout=1)
-                    except queue.Empty:
-                        continue
-                    if line is None:
-                        break
-                    event = json.loads(line)
-                    if event['type'] == 'turn.completed':
-                        completed = True
-                    if event['type'] in ('turn.failed', 'error'):
-                        errors.append(str(event.get('error') or event.get('message') or 'Agent failed'))
-                    item = event.get('item', {})
-                    if item.get('type') in ('command_execution', 'file_change', 'web_search'):
-                        raise RuntimeError('External agent attempted an unavailable tool')
-                    if event['type'] == 'item.completed' and item.get('type') == 'agent_message':
-                        answer = str(item.get('text', ''))
-                        update(event=answer[:3000].replace(connection._ticket, '[REDACTED]'))
-                    elif event['type'] == 'item.completed' and item.get('type') == 'mcp_tool_call':
-                        if item.get('server') != 'tactic':
+                        last_host_heartbeat = time.monotonic()
+                    current = update()
+                    if current['status'] == 'cancelling':
+                        client.call('turn/interrupt', dict(threadId=thread, turnId=turn))
+                        update(status='cancelled', answer=answer, error='Cancelled. Changes already applied are preserved; inspect them before retrying.')
+                        return
+                    corrections = [message for message in current.get('messages', []) if message['role'] == 'user' and message['id'] not in delivered]
+                    if corrections:
+                        try:
+                            client.call('turn/steer', dict(threadId=thread, expectedTurnId=turn, input=message_inputs(connection, corrections)))
+                        except RuntimeError:
+                            # A completed turn may race the correction; leave it queued for the next turn.
+                            if not any(event.get('method') == 'turn/completed' for event in client.notifications):
+                                raise
+                        else:
+                            connection.command('request', 'ack', request_id=request_id, host_id=host_id, message_ids=[message['id'] for message in corrections])
+                            delivered.update(message['id'] for message in corrections)
+                    last_heartbeat = time.monotonic()
+                event = client.notifications.pop(0) if client.notifications else client.receive()
+                method, params = event.get('method'), event.get('params', {})
+                if method == 'item/agentMessage/delta':
+                    code = params['itemId']
+                    streams[code] = streams.get(code, '') + params['delta']
+                    if not streams[code].lstrip().startswith('{') and time.monotonic() - last_output >= .7:
+                        update(output=streams[code][:64000].replace(connection._ticket, '[REDACTED]'))
+                        last_output = time.monotonic()
+                elif method == 'item/completed':
+                    item = params['item']
+                    if item['type'] == 'agentMessage':
+                        answer = item['text'].replace(connection._ticket, '[REDACTED]')
+                        if not answer.lstrip().startswith('{'):
+                            update(event=answer[:3000], output=answer)
+                    elif item['type'] == 'mcpToolCall':
+                        if item['server'] != 'tactic':
                             raise RuntimeError('Unexpected external tool server')
                         update(event=item['tool'] + ': ' + item.get('status', 'completed'))
-                code = process.wait(timeout=15)
-                if code or not completed or errors:
-                    stderr.seek(0)
-                    detail = stderr.read()[-3000:].replace(connection._ticket, '[REDACTED]')
-                    raise RuntimeError('\n'.join(errors) or detail or 'External agent did not complete')
-                if not answer or len(answer) > 64000:
-                    raise RuntimeError('External agent returned an empty or oversized answer')
-                update(status='completed', answer=answer.replace(connection._ticket, '[REDACTED]'))
-            finally:
-                reader_stop.set()
-                stop_process(process)
-                process.stdout.close()
-                reader.join(timeout=2)
+                    elif item['type'] in ('commandExecution', 'fileChange', 'webSearch'):
+                        raise RuntimeError('External agent attempted an unavailable tool')
+                elif method == 'turn/completed':
+                    result = params['turn']
+                    if result['status'] != 'completed':
+                        raise RuntimeError(str(result.get('error') or result['status']))
+                    try:
+                        final = json.loads(answer)
+                        outcome, answer = final['outcome'], final['answer']
+                    except (ValueError, KeyError, TypeError):
+                        raise RuntimeError('Agent did not return a valid outcome and answer') from None
+                    if not isinstance(answer, str) or not answer.strip() or len(answer) > 64000:
+                        raise RuntimeError('Agent returned an empty or oversized answer')
+                    update(status='completed', answer=answer, outcome=outcome, output='')
+                    return
+        finally:
+            client.close()
 
 
 def main():
@@ -200,7 +229,7 @@ def main():
             parser.error('TACTIC sign-in did not return a session')
     connections = [StreamConnection(options.server, project, ticket) for project in options.project]
     host_id = str(uuid4())
-    capabilities = dict(changes=options.allow_changes, trials=bool(options.trial_image))
+    capabilities = dict(changes=options.allow_changes, trials=bool(options.trial_image), models=model_catalog(options), steering=True, attachments=True)
 
     def heartbeat():
         for connection in connections:
