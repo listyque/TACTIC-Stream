@@ -92,6 +92,9 @@ def prepare_page(search_type, document, state):
         element = ET.SubElement(table, 'element', attrs)
         if widget != 'field':
             ET.SubElement(element, 'display', {'class': WIDGETS[widget]})
+        else:
+            # Explicit fields must not inherit an unrelated legacy widget by column name.
+            ET.SubElement(element, 'display', {'class': 'tactic.ui.common.SimpleTableElementWdg'})
     records = document.get('records', [])
     validate_filters(records, state['search']['columns'])
     if any(row['column'] == '_expression' for row in records):

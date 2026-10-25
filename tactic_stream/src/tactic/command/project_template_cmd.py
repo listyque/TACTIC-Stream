@@ -98,7 +98,16 @@ class ProjectTemplateInstallerCmd(Command):
                 use_default_side_bar=False, project_image_path=self.kwargs.get('project_image_path'))
             creator.execute()
         Project.set_project(self.project_code)
+        self.pipeline_codes = {}
+        self.pipeline_reference_objects = []
         installer.execute()
+        # Generated pipeline codes need the complete imported catalogue, including
+        # definitions appearing after config/process and other references in the package.
+        for item in self.pipeline_reference_objects:
+            before = dict(item.get_data())
+            self.remap_pipeline_references(item)
+            if item.get_data() != before:
+                item.commit()
         project = Project.get_by_code(self.project_code)
         if self.kwargs.get('project_title'):
             project.set_value('title', self.kwargs['project_title'])
@@ -128,6 +137,10 @@ class ProjectTemplateInstallerCmd(Command):
         reference_keys = {'pipeline_code', 'task_pipeline', 'subpipeline', 'subpipeline_code',
                           'from_pipeline', 'to_pipeline'}
         def pipeline_reference(value):
+            if isinstance(value, str) and value.startswith(self.project_code + '/'):
+                return value
+            if isinstance(value, str) and value in getattr(self, 'pipeline_codes', {}):
+                return self.pipeline_codes[value]
             if isinstance(value, str) and value.startswith(self.template_project_code + '/'):
                 return self.project_code + value[len(self.template_project_code):]
             if isinstance(value, str) and value.startswith(self.template_project_code + '_'):
@@ -151,8 +164,8 @@ class ProjectTemplateInstallerCmd(Command):
             for column in ('workflow', 'data'):
                 if search_type in ('config/process', 'config/trigger', 'sthpw/pipeline') and SearchType.column_exists(sobject, column):
                     text = sobject.get_value(column)
-                    if text and text.lstrip().startswith(('{', '[')):
-                        original = json.loads(text)
+                    if isinstance(text, (dict, list)) or isinstance(text, str) and text.lstrip().startswith(('{', '[')):
+                        original = text if isinstance(text, (dict, list)) else json.loads(text)
                         remapped = references(original)
                         if remapped != original:
                             sobject.set_json_value(column, remapped)
@@ -169,6 +182,12 @@ class ProjectTemplateInstallerCmd(Command):
                     sobject.set_value('pipeline', ET.tostring(root, encoding='unicode'))
     
     def filter_sobject_handler(self, sobject):
+        if sobject.get_base_search_type() in ('config/process', 'config/trigger', 'sthpw/pipeline'):
+            self.pipeline_reference_objects.append(sobject)
+        if sobject.get_base_search_type() == 'sthpw/pipeline' and self.template_project_code != self.project_code:
+            old = sobject.get_code()
+            self.pipeline_codes[old] = (self.project_code + old[len(self.template_project_code):]
+                if old.startswith(self.template_project_code + '/') else self.project_code + '/' + old)
         self.remap_pipeline_references(sobject)
         search_type = sobject.get_base_search_type()
 

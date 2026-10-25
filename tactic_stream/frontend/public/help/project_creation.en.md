@@ -445,3 +445,9 @@ Ordinary object Search tabs remain available in file projects. Managed file tabl
 ## Draft and template safety
 
 The four shared steps retain their draft when moving Back. A changed draft requires confirmation before closing; busy operations cannot be closed. After an unknown creation result, refresh the catalogue before another attempt. If the code already exists, retry only opening the project. Select a template in the manager before Download archive or Delete; deletion opens a separate blocking confirmation. Installing ZIP archives and choosing images use the client's own file picker.
+
+## External administrator agent
+
+An external agent can compose a new project through native commands: entity fields, code relationships or link entities, manual process graphs and task statuses, declarative naming, and editable table pages. The host must enable `--allow-project-create`; the server still requires administrator permission. Preview the composition, create it, read back the configuration, then export a versioned native template ZIP. Installation accepts that export's identifier and verifies its checksum before creating a new project. It does not import into an existing project or copy operational records/files.
+
+These operations span databases and files. After an error or timeout, inspect the operation UUID and current project state; an incomplete operation is not automatically retried. Receipts under the server data root's `agent_operations/` must be backed up. Naming paths need representative objects and a real preview/check-in after creation. This adds no TH script runner or isolated code execution.

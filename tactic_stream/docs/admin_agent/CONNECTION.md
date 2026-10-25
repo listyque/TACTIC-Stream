@@ -64,8 +64,13 @@ It uses native saved searches, table XML, workspace dock presets and navigation.
 See [the page recipe and recovery contract](PAGES.md). Naming and page write
 permissions are separate host flags; neither grants script execution.
 
-`--server` is an origin, with no path/query/embedded credentials. Each process
-is bound to one project. The model cannot select a destination, ticket, arbitrary
+Project composition/export/install requires TS 0.112.206 and
+`--allow-project-create`. Read [PROJECTS](PROJECTS.md) for the input recipe,
+new-target scope, native owners and non-atomic recovery contract.
+
+`--server` is an origin, with no path/query/embedded credentials. Naming/page tools stay bound to one project. Project provisioning explicitly
+accepts new target codes under its separate host flag. The model cannot select
+another server, ticket, arbitrary
 RPC method or command class. Redirects and environment HTTP proxies are disabled;
 TLS certificate verification uses Python's normal trust configuration. Plain
 HTTP is only appropriate on a trusted local network; use HTTPS across untrusted
@@ -96,6 +101,12 @@ are reported explicitly in the catalogue.
 | `ts_page_operation` | Historical page result for this login/project/UUID. |
 | `ts_page_save` | Host opt-in creation through native editors, checked revision and durable replay. |
 | `ts_naming_save` | Host opt-in only. Native apply with expected revision, representative sample and canonical UUID; returns a durable receipt. |
+| `ts_project_preview` | Validate a declarative new-project plan and namespace; no writes. |
+| `ts_project_read` | Native schema, fields, workflows, naming, navigation and configuration revision. |
+| `ts_project_operation` | Durable stage/result plus current project state after an uncertain response. |
+| `ts_project_create` | Host opt-in: native project, entities, relationships, workflows, naming and table pages. |
+| `ts_project_export` | Host opt-in: native versioned template ZIP with revision check, SHA-256 and template ID. |
+| `ts_project_install` | Host opt-in: verified exported template into a new project, no arbitrary model path. |
 
 Native HTTP responses are capped at 2 MiB before decoding. Large catalogues can
 therefore exceed the transport limit even when a small tool page was requested;
