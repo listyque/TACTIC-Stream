@@ -32,6 +32,15 @@ def repair_vfx_config(text):
                   lambda match: match[0].replace('<element name="frames"/>', fields), text, flags=re.S)
     text = re.sub(r'<display[^>]*>\s*<dynamic_class>pyasm.prod.web.AssetDetailWdg</dynamic_class>\s*</display>',
                   '<display class="tactic.ui.table.SObjectDetailElementWdg"/>', text)
+    # Camera inherits prod's form; its selector must use this template's shot type.
+    text += '''
+#-- Start Entry --#
+insert = SearchType.create('config/widget_config')
+insert.set_value('search_type', 'vfx/camera')
+insert.set_value('view', 'edit')
+insert.set_value('config', '<config><edit><element name="files"><display class="SimpleUploadWdg"><context>publish</context></display><action class="UploadAction"/></element><element name="shot_code"><display class="SelectWdg"><query>vfx/shot|code|code</query></display></element><element name="description"/></edit></config>')
+#-- End Entry --#
+'''
     return text
 
 
@@ -72,13 +81,14 @@ def prepare(source, output):
                         references=6, before='game_status_default', after='game/status_default'),
                         'vfx-1.0.0-stream.1.zip': dict(file='vfx/config_widget_config.spt',
                             changes=['FrameRangeWdg to native expression', 'FrameInputWdg/FrameAction to five native fields',
-                                     'AssetDetailWdg to native object inspector'])},
+                                     'AssetDetailWdg to native object inspector',
+                                     'Camera edit form selects vfx/shot and preserves file upload'])},
                     files={name: digest(output / name) for name in
                            ('vfx-1.0.0.zip', 'vfx-1.0.0-stream.1.zip', 'game-1.0.0-stream.1.zip')})
     (output / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
     (output / 'README.txt').write_text(
         'TACTIC examples for Stream 0.112.195 / Handler 0.6.0.142.\n'
-        'VFX 1.0.0 is preserved. Install VFX stream.1 for native frame fields and object details.\n'
+        'VFX 1.0.0 is preserved. Install VFX stream.1 for native frame fields, object details and camera shot selection.\n'
         'Game stream.1 corrects only six task_pipeline references\n'
         'to the status pipeline actually defined in its archive; no server fallback is installed.\n'
         'Install through Manage templates / the project wizard or ProjectTemplateInstallerCmd.\n'

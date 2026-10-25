@@ -6,6 +6,7 @@ import { n as arrange, t as _sfc_main$13 } from "./ObjectFieldFrame.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js
 function fieldKind(field) {
+	if (field.class_name === "tactic.ui.input.text_input_wdg.TextInputWdg") return "TextWdg";
 	if (field.class_name === "tactic.ui.input.color_input_wdg.ColorInputWdg") return "ColorInputWdg";
 	if (field.class_name === "tactic.ui.input.task_input_wdg.TaskSObjectInputWdg") return "ParentInput";
 	if (field.class_name === "tactic.ui.widget.upload_wdg.SimpleUploadWdg") return "FileInput";

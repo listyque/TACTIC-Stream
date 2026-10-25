@@ -1,4 +1,5 @@
 var en_default = {
+	"Multiline text": "Multiline text",
 	Completion: "Completion",
 	"Open search": "Open search",
 	Done: "Done",
@@ -2117,6 +2118,7 @@ var ru_default = {
 	"This layout is not available yet.": "Этот лейаут пока не поддерживается.",
 	"This view has no elements.": "В этом представлении нет элементов.",
 	"Widget unavailable": "Виджет недоступен",
+	"Multiline text": "Многострочный текст",
 	"Record form": "Форма объекта",
 	"Create record": "Создать объект",
 	"Edit record": "Редактировать объект",

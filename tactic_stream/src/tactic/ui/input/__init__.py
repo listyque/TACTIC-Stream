@@ -6,7 +6,9 @@ from .process_group_select_wdg import ProcessGroupSelectWdg, LoginTableElementWd
 from .task_input_wdg import TaskSObjectInputWdg
 from .project_user_select_wdg import ProjectSelectWdg, UserSelectWdg
 from .color_input_wdg import ColorInputWdg
+from .text_input_wdg import TextInputWdg
 
 __all__ = ['PipelineInputWdg', 'ProcessInputWdg', 'ReviewProcessInputWdg',
            'SubContextInputWdg', 'SubContextAction', 'SearchTypeInputWdg', 'SearchTypeWithPipelineInputWdg', 'ProcessGroupSelectWdg', 'TaskSObjectInputWdg', 'ProjectSelectWdg', 'UserSelectWdg', 'ColorInputWdg']
 __all__.append('LoginTableElementWdg')
+__all__.append('TextInputWdg')

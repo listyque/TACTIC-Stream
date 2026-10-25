@@ -3,6 +3,7 @@
 import ast
 import binascii
 import json
+import re
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -11,6 +12,7 @@ from unittest.mock import patch
 from pyasm.common import Common, Config, Xml, XmlException, jsondumps
 from pyasm.search.search import RequestContext, request_context
 from pyasm.widget import ArrayTableElementWdg, XmlWdg
+from pyasm.widget.table_element_wdg import WikiElementWdg
 from tactic.ui.table import JsonElementWdg, SnapshotVersionElementWdg
 from tactic_stream.server.table_cells import describe_cell
 
@@ -102,6 +104,19 @@ class TableValueWidgets(unittest.TestCase):
         widget.set_sobjects([record])
         widget.top = Div()
         return widget
+
+    def test_wiki_original_escaped_text_and_line_breaks_match_native_plain_text(self):
+        from test_table_embedded_widgets import original_method
+        tree = ast.parse((LEGACY / 'pyasm/web/web_tools.py').read_text(encoding='utf-8'))
+        cls = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == 'WikiUtil')
+        scope = dict(basestring=str, re=re)
+        exec(compile(ast.Module(body=[cls], type_ignores=[]), 'original WikiUtil', 'exec'), scope)
+        original = original_method('pyasm/widget/table_element_wdg.py', 'WikiElementWdg', 'get_display',
+                                   dict(WikiUtil=scope['WikiUtil']))
+        for value in ('', 0, False, '<img src=x onerror=alert(1)>\nSecond line', 'Строка\nДругая строка'):
+            widget = self.widget(WikiElementWdg, value)
+            text = original(widget).replace('&spt_lt;', '<').replace('&spt_gt;', '>').replace('<br/>', '\n')
+            self.assertEqual(widget.get_cell_value(), dict(text=text, multiline=True))
 
     def test_array_original_display(self):
         original = source_display(

@@ -301,3 +301,17 @@ class PublishTableElement(BaseTableElementWdg):
     def get_text_value(self):
         return ''
 
+
+class WikiElementWdg(BaseTableElementWdg):
+    """WikiUtil's escaped text/newlines are native plain text in both clients."""
+
+    def is_editable(self):
+        return True
+
+    def get_cell_value(self):
+        return dict(text=self.get_text_value(), multiline=True)
+
+    def get_text_value(self):
+        value = self.get_value()
+        return '' if value is None else str(value)
+

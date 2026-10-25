@@ -5,7 +5,7 @@ def nested_cell(search_key, options, column='', layout_reader=None):
     from pyasm.search import Search
 
     allowed = {
-        'dynamic_class', 'dynamic', 'search_type', 'view', 'expression',
+        'dynamic_class', 'dynamic', 'search_type', 'view', 'expression', 'width',
         'search_view', 'edit_view', 'insert_view',
         'icon', 'title_icon', 'icon_tip', 'label', 'mode', 'init_load_num',
         'show_search_limit', 'show_insert', 'show_row_select', 'show_select',
@@ -13,6 +13,8 @@ def nested_cell(search_key, options, column='', layout_reader=None):
     }
     if set(options) - allowed:
         raise ValueError('Unsupported nested table options: ' + ', '.join(sorted(set(options) - allowed)))
+    if options.get('width') not in (None, '', '100%'):
+        raise ValueError('Nested table width must fill its native container (100%)')
     for flag in ('show_search_limit', 'show_insert', 'show_row_select', 'show_select',
                  'show_gear', 'show_search', 'show_shelf', 'show_resize_scroll'):
         if options.get(flag, '') not in ('', True, False, 'true', 'false'):

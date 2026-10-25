@@ -314,7 +314,8 @@ class WidgetDbConfig(SObject):
             xpath = "config/%s/element[@name='%s']/display/@widget" % (self.view_xpath, element_name)
             key = self.xml.get_value(xpath)
             if key:
-                raise UnsupportedContract('Legacy display widget key resolution is not migrated')
+                from tactic.ui.common import WidgetClassHandler
+                value = WidgetClassHandler().get_display_handler(key)
 
 
         return value

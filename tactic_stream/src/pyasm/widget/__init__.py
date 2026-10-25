@@ -3,6 +3,7 @@ from .widget_config import WidgetConfigException, WidgetConfig, WidgetConfigView
 from .input_wdg import BaseInputWdg, TextWdg, TextAreaWdg, CheckboxWdg, SelectWdg, MultiSelectWdg, UploadWdg, ThumbInputWdg, HiddenWdg, InputException
 from .table_element_wdg import BaseTableElementWdg, SimpleTableElementWdg, ArrayTableElementWdg, XmlWdg
 from .table_element_wdg import CheckboxColWdg, SearchTypeElementWdg, UpdateWdg
+from .table_element_wdg import WikiElementWdg
 from .my_tactic_summary_wdg import MyTacticSummaryWdg
 from .file_wdg import ThumbWdg
 
@@ -14,6 +15,7 @@ __all__ += ["TaskCompletionWdg", "DiscussionWdg", "SObjectTaskTableElement", "Ta
 __all__.append('SObjectConnectionElement')
 __all__.append('DependencyLink')
 __all__.append('PublishTableElement')
+__all__.append('WikiElementWdg')
 
 
 def __getattr__(name):

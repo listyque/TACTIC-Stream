@@ -14,7 +14,7 @@ from pyasm.widget.discussion_wdg import DiscussionWdg as LegacyDiscussionWdg
 from pyasm.widget.task_wdg import SObjectTaskTableElement, TaskParentSpacingTableElement
 from tactic.ui.app.message_wdg import MessageTableElementWdg
 from pyasm.widget.statistic_wdg import TaskCompletionWdg as FormerTaskCompletionWdg
-from pyasm.widget.table_element_wdg import CheckboxColWdg, SearchTypeElementWdg
+from pyasm.widget.table_element_wdg import CheckboxColWdg, SearchTypeElementWdg, WikiElementWdg
 from tactic.ui.app.search_type_element_wdg import SearchTypeHasTableElementWdg
 from tactic.ui.common import RawTableElementWdg, SimpleTableElementWdg
 from tactic.ui.table import (
@@ -93,6 +93,7 @@ _CLASSES = {
     for cls in (
         *SERVICE_WIDGETS,
         AuxDataWdg,
+        WikiElementWdg,
         LoginTableElementWdg,
         MyTacticSummaryWdg,
         ProcessElementWdg,
@@ -157,6 +158,7 @@ TASK_WIDGETS = (TaskElementWdg, TaskSummaryElementWdg, SObjectTaskTableElement)
 
 VALUE_WIDGETS = (
     *SERVICE_WIDGETS,
+    WikiElementWdg,
     AuxDataWdg,
     LoginTableElementWdg,
     MyTacticSummaryWdg,
@@ -274,6 +276,13 @@ def describe_cell(element, columns, search_type=""):
     native_drop_action = widget is DropElementWdg and action in (
         'FileIngestCmd', 'tactic.ui.widget.FileIngestCmd', 'tactic.ui.widget.file_browser_wdg.FileIngestCmd'
     ) and not element['action']['options']
+    native_drop_action = native_drop_action or (
+        widget is DropElementWdg
+        and action in ('DropElementAction', 'tactic.ui.table.DropElementAction',
+                       'tactic.ui.table.drop_element_wdg.DropElementAction')
+        and not set(element['action']['options']) - {'instance_type', 'path'}
+        and all(value == options.get(name, '') for name, value in element['action']['options'].items())
+    )
     supported = (
         widget is not None
         and isinstance(field, str)
@@ -307,6 +316,7 @@ def describe_cell(element, columns, search_type=""):
         supported = supported and icon_size.isdecimal() and 16 <= int(icon_size) <= 256
     elif widget in NESTED_WIDGETS:
         allowed |= set(HiddenRowElementWdg.ARGS_KEYS)
+        supported = supported and options.get('width') in (None, '', '100%')
     elif widget in (ButtonElementWdg, DropElementWdg, CustomLayoutElementWdg):
         allowed |= set(widget.ARGS_KEYS)
     elif widget in (ParallelStatusWdg, TaskStatusElementWdg, WorkElementWdg):
@@ -417,6 +427,9 @@ def describe_cell(element, columns, search_type=""):
         allowed |= {"process", "context", "setting", "append_setting", "include_submission", "scroll", "sticky"}
     elif widget in NOTE_WIDGETS:
         allowed |= {"process", "context", "use_parent", "mode", "allow_email"}
+        allowed |= {'show_note_expand', 'context_hidden'}
+        supported = supported and options.get('show_note_expand') in (None, '', False, 'false')
+        supported = supported and options.get('context_hidden') in (None, '', True, False, 'true', 'false')
         allowed |= set(DiscussionElementWdg.ARGS_KEYS) | {"sticky"}
         # Handler opens its inspector rather than the old HTML/email popup.
         supported = supported and options.get("mode") in (None, "", "default", "icon")

@@ -323,7 +323,10 @@ export default {
   <span
     v-else
     class="table-cell-text"
-    :class="{ 'table-status-cell': cell?.statusColor }"
+    :class="{
+      'table-status-cell': cell?.statusColor,
+      'table-cell-multiline': cell?.multiline
+    }"
     :title="tooltip"
     :style="{
       color: cell?.statusColor ? '#000' : foreground,
@@ -336,6 +339,11 @@ export default {
 <style>
 .table-cell-text {
   font-size: var(--font-body-size);
+}
+.handler-table-cell .table-cell-multiline {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  max-height: 100%;
 }
 .table-status-cell {
   display: flex;

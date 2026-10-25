@@ -108,7 +108,6 @@ def inventory(databases=()):
     unfinished = {
         "SnapshotServerElementWdg": "The original class is an empty placeholder.",
         "PublishElementWdg": "The original CG application class only returns an unbound text area.",
-        "WikiElementWdg": "The original explicitly describes its wiki implementation as unfinished.",
     }
     rows, issues, count = {}, [], 0
     all_sources = list(sources())

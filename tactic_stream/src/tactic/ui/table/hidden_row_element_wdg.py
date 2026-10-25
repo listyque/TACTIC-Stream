@@ -5,7 +5,7 @@ from .nested_scope import nested_cell
 
 class HiddenRowElementWdg(BaseTableElementWdg):
     ARGS_KEYS = dict.fromkeys((
-        'dynamic_class', 'dynamic', 'search_type', 'view', 'expression',
+        'dynamic_class', 'dynamic', 'search_type', 'view', 'expression', 'width',
         'search_view', 'edit_view', 'insert_view',
         'icon', 'title_icon', 'icon_tip', 'label', 'mode', 'init_load_num',
         'show_search_limit', 'show_insert', 'show_row_select', 'show_select',
