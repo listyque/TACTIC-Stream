@@ -120,9 +120,12 @@ export default {
 </script>
 
 <template>
-  <span v-if="!element.supported" class="table-cell-text muted">{{
-    t('Widget unavailable')
-  }}</span>
+  <span
+    v-if="!element.supported"
+    class="table-cell-text muted"
+    :title="element.display?.handler || ''"
+    >{{ t('Widget unavailable') }}</span
+  >
   <span
     v-else-if="cell?.error"
     class="table-cell-text error-text"

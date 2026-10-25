@@ -142,6 +142,29 @@ try {
       .evaluate((el) => el.getBoundingClientRect().width),
     224
   );
+  await table
+    .getByRole('columnheader', { name: 'Project identifier', exact: true })
+    .click({ button: 'right' });
+  await page
+    .getByRole('button', { name: 'Edit Column Definition', exact: true })
+    .click();
+  await ready();
+  assert.equal(
+    await editor.locator('[data-frame=definitionViewTitle]').textContent(),
+    'definition'
+  );
+  assert.equal(
+    await editor.locator('[data-frame=definitionCatalogName]').textContent(),
+    'code'
+  );
+  assert.equal(
+    await editor
+      .locator('[data-frame=definitionWidgetIdentifier]')
+      .textContent(),
+    'link'
+  );
+  await admin.locator('[data-frame=administrationCloseButton]').tap();
+  await admin.waitFor({ state: 'hidden' });
   await openViewActions(page);
   await page
     .getByRole('button', { name: 'Edit input definitions', exact: true })
@@ -155,7 +178,13 @@ try {
     .getByLabel('Filter saved views', { exact: true })
     .fill('custom_view');
   await editor.getByRole('radio', { name: 'Wizard', exact: true }).tap();
-  await editor.getByRole('button', { name: 'Open XML', exact: true }).tap();
+  assert.equal(
+    await editor
+      .locator('[data-frame=definitionWidgetIdentifier]')
+      .textContent(),
+    'custom.Layout'
+  );
+  await editor.getByRole('radio', { name: 'XML', exact: true }).tap();
   assert.match(await xml.inputValue(), /custom\.Layout/);
   await editor
     .getByLabel('Filter saved views', { exact: true })

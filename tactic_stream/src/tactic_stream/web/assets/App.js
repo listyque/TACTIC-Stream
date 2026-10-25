@@ -2426,10 +2426,7 @@ var _sfc_main$167 = {
 	},
 	methods: { t }
 };
-var _hoisted_1$99 = {
-	key: 0,
-	class: "table-cell-text muted"
-};
+var _hoisted_1$99 = ["title"];
 var _hoisted_2$65 = ["title"];
 var _hoisted_3$48 = {
 	key: 2,
@@ -2459,7 +2456,11 @@ function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_ItemPreview = resolveComponent("ItemPreview");
 	const _component_AppCheckbox = resolveComponent("AppCheckbox");
 	const _component_AppIcon = resolveComponent("AppIcon");
-	return !$props.element.supported ? (openBlock(), createElementBlock("span", _hoisted_1$99, toDisplayString($options.t("Widget unavailable")), 1)) : $props.cell?.error ? (openBlock(), createElementBlock("span", {
+	return !$props.element.supported ? (openBlock(), createElementBlock("span", {
+		key: 0,
+		class: "table-cell-text muted",
+		title: $props.element.display?.handler || ""
+	}, toDisplayString($options.t("Widget unavailable")), 9, _hoisted_1$99)) : $props.cell?.error ? (openBlock(), createElementBlock("span", {
 		key: 1,
 		class: "table-cell-text error-text",
 		title: $props.cell.error,
@@ -2961,6 +2962,8 @@ function columnActions(model, language) {
 			title: "Edit Column Definition",
 			icon: "edit",
 			command: "edit_definition",
+			status: column.widgetClass || column.resolvedClass || (column.display || {}).handler || "",
+			statusTranslate: false,
 			enabled
 		},
 		{
@@ -3182,7 +3185,7 @@ var _sfc_main$164 = {
 			if (!column) return;
 			if (command.startsWith("sort:")) emit("sort", column.sortField, command === "sort:ascending" ? "asc" : "desc");
 			else if (command === "group" || command === "ungroup") emit("group", command === "group" ? "column:" + column.name : "none");
-			else if (command === "edit_definition" || command === "columns") emit("column", command === "columns" ? "" : column.name, command === "columns" ? "definition" : "edit_definition");
+			else if (command === "edit_definition" || command === "columns") emit("column", command === "columns" ? "" : column.name, "definition");
 			else if (command === "remove") emit("hide", column.name);
 			else if (command === "left" || command === "right") {
 				const target = columns.value[contextIndex.value + (command === "left" ? -1 : 1)];
@@ -5177,12 +5180,12 @@ function flag(value) {
 		"on"
 	].includes(String(value).trim().toLowerCase());
 }
-function definitionWizard(source) {
+function definitionWizard(source, viewName = "") {
 	const root = parse(source).documentElement;
 	let view = null, viewPath = "";
 	function find(node, path = "") {
 		if (node.nodeType !== 1 || view) return;
-		if ([
+		if (viewName ? node.tagName === viewName || node.tagName === "view" && node.getAttribute("name") === viewName : [
 			"table",
 			"definition",
 			"edit",

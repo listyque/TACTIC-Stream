@@ -4728,6 +4728,7 @@ return json.dumps({"native": json.loads(query_table_layout(kwargs["kind"], searc
         auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='admin', language='python')
         for view, xml in (
             ('table', '<config><!--keep me--><table><element name="code" title="Code" preserve="yes"><display><parameter>keep</parameter></display></element><element name="title" title="Title" /></table></config>'),
+            ('definition', '<config><definition><element name="code"><display widget="link"/></element></definition></config>'),
             ('edit_definition', '<config><edit_definition><element name="title" title="Title" /></edit_definition></config>'),
             ('custom_view', '<config><custom_view><element name="custom"><display class="custom.Layout" /></element></custom_view></config>')):
             proxy.insert(auth, 'config/widget_config', dict(search_type='sthpw/project', view=view, config=xml, priority=100))

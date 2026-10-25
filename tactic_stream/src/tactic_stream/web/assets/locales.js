@@ -1476,7 +1476,9 @@ var en_default = {
 	"Allow this permission?": "Allow this permission?",
 	"Close with unsaved changes?": "Close with unsaved changes?",
 	"Keep open": "Keep open",
-	Allow: "Allow"
+	Allow: "Allow",
+	"Inherited from definition": "Inherited from definition",
+	"Column definition was not found in saved configurations.": "Column definition was not found in saved configurations."
 };
 var ru_default = {
 	"Parent group": "Группа по родителю",
@@ -2207,7 +2209,7 @@ var ru_default = {
 	"Workspace navigation": "Навигация рабочего пространства",
 	Navigation: "Навигация",
 	"View actions": "Действия представления",
-	"Object actions": "Действия объекта",
+	"Object actions": "Действия с объектом",
 	"Close actions": "Закрыть действия",
 	Actions: "Действия",
 	"Retire record": "Скрыть объект",
@@ -6482,7 +6484,9 @@ var ru_default = {
 	"Allow this permission?": "Разрешить этот доступ?",
 	"Close with unsaved changes?": "Закрыть с несохранёнными изменениями?",
 	"Keep open": "Оставить открытым",
-	Allow: "Разрешить"
+	Allow: "Разрешить",
+	"Inherited from definition": "Наследуется из definition",
+	"Column definition was not found in saved configurations.": "Определение колонки не найдено в сохранённых конфигурациях."
 };
 //#endregion
 export { en_default as n, ru_default as t };

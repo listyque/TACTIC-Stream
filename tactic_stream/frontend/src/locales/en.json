@@ -1476,5 +1476,7 @@
   "Allow this permission?": "Allow this permission?",
   "Close with unsaved changes?": "Close with unsaved changes?",
   "Keep open": "Keep open",
-  "Allow": "Allow"
+  "Allow": "Allow",
+  "Inherited from definition": "Inherited from definition",
+  "Column definition was not found in saved configurations.": "Column definition was not found in saved configurations."
 }

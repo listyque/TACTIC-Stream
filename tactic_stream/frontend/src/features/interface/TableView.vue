@@ -141,11 +141,7 @@ function columnCommand(command) {
   else if (command === 'group' || command === 'ungroup')
     emit('group', command === 'group' ? 'column:' + column.name : 'none');
   else if (command === 'edit_definition' || command === 'columns')
-    emit(
-      'column',
-      command === 'columns' ? '' : column.name,
-      command === 'columns' ? 'definition' : 'edit_definition'
-    );
+    emit('column', command === 'columns' ? '' : column.name, 'definition');
   else if (command === 'remove') emit('hide', column.name);
   else if (command === 'left' || command === 'right') {
     const target =

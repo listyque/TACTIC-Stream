@@ -115,19 +115,22 @@ function flag(value) {
   );
 }
 
-export function definitionWizard(source) {
+export function definitionWizard(source, viewName = '') {
   const root = parse(source).documentElement;
   let view = null,
     viewPath = '';
   function find(node, path = '') {
     if (node.nodeType !== 1 || view) return;
     if (
-      ['table', 'definition', 'edit', 'edit_definition'].includes(
-        node.tagName
-      ) ||
-      ['TableLayoutWdg', 'tactic.ui.panel.TableLayoutWdg'].includes(
-        node.getAttribute('layout')
-      )
+      viewName
+        ? node.tagName === viewName ||
+          (node.tagName === 'view' && node.getAttribute('name') === viewName)
+        : ['table', 'definition', 'edit', 'edit_definition'].includes(
+            node.tagName
+          ) ||
+          ['TableLayoutWdg', 'tactic.ui.panel.TableLayoutWdg'].includes(
+            node.getAttribute('layout')
+          )
     ) {
       view = node;
       viewPath = path;

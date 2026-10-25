@@ -1,7 +1,7 @@
 import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
 import { A as appearance, at as _plugin_vue_export_helper_default, k as t } from "./index.js";
 import { Gt as label, H as columnsEditor, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$1, qt as node, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import { n as sections } from "./sections.ui.js";
+import { n as sections, t as captionHeight } from "./sections.ui.js";
 import { Q as displayWidgets, X as changeDefinition, Z as definitionWizard } from "./App.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
@@ -18,6 +18,20 @@ var initial = () => ({
 	text: {}
 });
 var pending = (ui) => Object.keys(ui.text).length > 0;
+function definitionSource(records, request, elements) {
+	const views = request.view === "edit_definition" ? ["edit_definition"] : [request.view || "table", "definition"];
+	const candidates = records.filter((row) => row.searchType === request.searchType && views.indexOf(row.view) >= 0);
+	candidates.sort((left, right) => views.indexOf(left.view) - views.indexOf(right.view) || Number(right.code === request.code) - Number(left.code === request.code) || Number(!!left.login) - Number(!!right.login));
+	if (!request.column) return candidates[0] || null;
+	let reference = null;
+	for (const row of candidates) {
+		const column = elements(row).find((item) => item.name === request.column);
+		if (!column) continue;
+		if (column.widget) return row;
+		if (!reference) reference = row;
+	}
+	return reference;
+}
 function selected(ui, elements, name) {
 	const column = elements.find((row) => row.name === name) || elements[0];
 	return Object.assign({}, ui, {
@@ -157,7 +171,8 @@ function records(model, ui) {
 		row.code,
 		row.login,
 		row.category,
-		row.widgetType
+		row.widgetType,
+		row.config
 	].join(" ").toLowerCase().indexOf(query) >= 0));
 }
 function describe(model, ui, width, height, language) {
@@ -303,6 +318,16 @@ function editor(nodes, model, ui, bounds, language, edit, back) {
 					id: "definitionColumnHeading",
 					title: "Column",
 					description: "Edit one native TACTIC element at a time. Custom options remain unchanged in XML."
+				},
+				{
+					kind: "Label",
+					id: "definitionWidgetIdentifier",
+					fullWidth: true,
+					height: Math.max(38, captionHeight(element.widget || tr("Inherited from definition"), formWidth - 32)),
+					props: {
+						text: element.widget || tr("Inherited from definition"),
+						wrap: true
+					}
 				},
 				{
 					kind: "Label",
@@ -510,7 +535,7 @@ var _sfc_main = {
 		},
 		wizard() {
 			try {
-				return definitionWizard(this.xml);
+				return definitionWizard(this.xml, this.selected?.view);
 			} catch (error) {
 				return {
 					supported: false,
@@ -642,8 +667,9 @@ var _sfc_main = {
 				searchType: this.initialFocus.searchType,
 				editing: true
 			};
-			const matches = this.records.filter((row) => row.view === this.initialFocus.view);
-			this.select((matches.find((row) => row.code === this.initialFocus.code) || matches.find((row) => !row.login) || matches[0])?.identity || "", true);
+			const source = definitionSource(this.catalog.records, this.initialFocus, (row) => definitionWizard(row.config, row.view).elements);
+			this.select(source?.identity || "", true);
+			if (!source && this.initialFocus.column) this.error = "Column definition was not found in saved configurations.";
 		},
 		beforeUnload(event) {
 			if (this.dirty || this.busy || this.uncertain) {
@@ -697,15 +723,8 @@ var _sfc_main = {
 				if (request !== this.request) return;
 				this.catalog = result;
 				this.uncertain = false;
-				if (first && this.initialFocus?.project === this.project && this.initialFocus?.searchType) {
-					this.ui = {
-						...this.ui,
-						searchType: this.initialFocus.searchType,
-						editing: true
-					};
-					const matches = this.records.filter((row) => row.view === this.initialFocus.view);
-					this.select((matches.find((row) => row.code === this.initialFocus.code) || matches.find((row) => !row.login) || matches[0])?.identity || "", true);
-				} else this.select(this.records.find((row) => row.identity === previous)?.identity || this.records[0]?.identity || "", true);
+				if (first && this.initialFocus?.project === this.project && this.initialFocus?.searchType) this.focusRequestedColumn();
+				else this.select(this.records.find((row) => row.identity === previous)?.identity || this.records[0]?.identity || "", true);
 			} catch (error) {
 				if (request === this.request) this.error = error.message;
 			} finally {

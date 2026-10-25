@@ -204,3 +204,67 @@ assert.equal(
 console.log(
   'Shared Administration state: save/drop identity guards, readonly/default cells, Sidebar buffers and unknown-write lock passed.'
 );
+
+const sources = [
+  {
+    code: 'TABLE',
+    searchType: 'vfx/asset',
+    view: 'table',
+    columns: [{ name: 'submit' }]
+  },
+  {
+    code: 'INPUT',
+    searchType: 'vfx/asset',
+    view: 'edit_definition',
+    columns: [{ name: 'code', widget: 'TextWdg' }]
+  },
+  {
+    code: 'DISPLAY',
+    searchType: 'vfx/asset',
+    view: 'definition',
+    columns: [{ name: 'submit', widget: 'SubmissionLinkTableElement' }]
+  },
+  {
+    code: 'CUSTOM',
+    searchType: 'vfx/asset',
+    view: 'planner',
+    columns: [{ name: 'submit', widget: 'custom.Wdg' }]
+  }
+];
+const focus = { searchType: 'vfx/asset', view: 'table', column: 'submit' };
+assert.equal(
+  Columns.definitionSource(sources, focus, (row) => row.columns).code,
+  'DISPLAY'
+);
+assert.equal(
+  Columns.definitionSource(
+    sources,
+    { ...focus, view: 'planner' },
+    (row) => row.columns
+  ).code,
+  'CUSTOM'
+);
+assert.equal(
+  Columns.definitionSource(
+    sources,
+    { ...focus, column: 'missing' },
+    (row) => row.columns
+  ),
+  null
+);
+assert.equal(
+  Columns.definitionSource(
+    sources,
+    { ...focus, view: 'edit_definition', column: 'code' },
+    (row) => row.columns
+  ).code,
+  'INPUT'
+);
+assert.equal(
+  Columns.definitionSource(
+    sources,
+    { ...focus, column: '' },
+    (row) => row.columns
+  ).code,
+  'TABLE'
+);

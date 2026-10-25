@@ -111,7 +111,7 @@ export default {
     },
     wizard() {
       try {
-        return definitionWizard(this.xml);
+        return definitionWizard(this.xml, this.selected?.view);
       } catch (error) {
         return { supported: false, elements: [], error: error.message };
       }
@@ -259,17 +259,14 @@ export default {
         searchType: this.initialFocus.searchType,
         editing: true
       };
-      const matches = this.records.filter(
-        (row) => row.view === this.initialFocus.view
+      const source = State.definitionSource(
+        this.catalog.records,
+        this.initialFocus,
+        (row) => definitionWizard(row.config, row.view).elements
       );
-      this.select(
-        (
-          matches.find((row) => row.code === this.initialFocus.code) ||
-          matches.find((row) => !row.login) ||
-          matches[0]
-        )?.identity || '',
-        true
-      );
+      this.select(source?.identity || '', true);
+      if (!source && this.initialFocus.column)
+        this.error = 'Column definition was not found in saved configurations.';
     },
     beforeUnload(event) {
       if (this.dirty || this.busy || this.uncertain) {
@@ -341,22 +338,7 @@ export default {
           this.initialFocus?.project === this.project &&
           this.initialFocus?.searchType
         ) {
-          this.ui = {
-            ...this.ui,
-            searchType: this.initialFocus.searchType,
-            editing: true
-          };
-          const matches = this.records.filter(
-            (row) => row.view === this.initialFocus.view
-          );
-          this.select(
-            (
-              matches.find((row) => row.code === this.initialFocus.code) ||
-              matches.find((row) => !row.login) ||
-              matches[0]
-            )?.identity || '',
-            true
-          );
+          this.focusRequestedColumn();
         } else
           this.select(
             this.records.find((row) => row.identity === previous)?.identity ||

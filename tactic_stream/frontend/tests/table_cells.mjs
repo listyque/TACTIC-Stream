@@ -489,7 +489,14 @@ try {
       document.querySelector('.columns-editor')?.getAttribute('aria-busy') ===
       'false'
   );
-  await editor.getByText('Select a definition', { exact: true }).waitFor();
+  assert.equal(
+    await editor.locator('[data-frame=definitionViewTitle]').textContent(),
+    'cells_native'
+  );
+  assert.equal(
+    await editor.locator('[data-frame=definitionCatalogName]').textContent(),
+    'id'
+  );
   await admin.locator('[data-frame=administrationCloseButton]').tap();
   await ready();
   await page.setViewportSize({ width: 320, height: 740 });
