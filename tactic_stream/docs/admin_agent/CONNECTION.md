@@ -4,6 +4,9 @@ Audience: the person configuring an external agent host. For TACTIC domain
 knowledge start with [START](START.md) and [MODEL](MODEL.md). This document
 describes implemented tools, not a promised future API.
 
+For a concrete external host use [the Codex setup and real-model acceptance
+recipe](CODEX.md). Provider login remains in the external host.
+
 ## What runs where
 
 The external host runs its chosen model and launches a separate MCP stdio

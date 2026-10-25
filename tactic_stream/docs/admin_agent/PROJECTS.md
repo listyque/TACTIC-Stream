@@ -66,7 +66,11 @@ native Workflow editor; this composition input does not authorize code.
 Naming uses the existing Naming engine. This input accepts declarative tokens
 for native fields (also `sobject.field`), linked parent fields (`parent.field`),
 project code/title, snapshot version/context/process,
-`version`, `context`, `process`, `ext`, `basefile`, `file_type` and `###` padding.
+`version`, `context`, `process`, `ext`, `basefile`, `file_type` and `{###}` padding.
+Braces are required: `{code}_v{version}.{ext}` resolves to `SH010_v001.exr`;
+bare `###` stays literal and does not increment. Before exporting a populated
+project, preview representative naming paths; after installation check a real
+file in the destination project before describing the template as verified.
 Expressions, custom classes/scripts and conditions are deliberately absent.
 Preview validates structure and namespace availability, **not resolved paths**:
 an empty project has no representative objects. Before production check-in,

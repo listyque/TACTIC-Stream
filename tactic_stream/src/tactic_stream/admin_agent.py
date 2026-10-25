@@ -37,6 +37,7 @@ REFERENCES = {
     'ts.recipes': ('TS', 'docs/admin_agent/RECIPES.md'),
     'ts.sources': ('TS', 'docs/admin_agent/SOURCES.md'),
     'ts.connection': ('TS', 'docs/admin_agent/CONNECTION.md'),
+    'ts.codex': ('TS', 'docs/admin_agent/CODEX.md'),
     'ts.pages': ('TS', 'docs/admin_agent/PAGES.md'),
     'ts.projects': ('TS', 'docs/admin_agent/PROJECTS.md'),
     'th.automation': ('TS', 'docs/admin_agent/HANDLER_AUTOMATION.md'),
@@ -108,7 +109,9 @@ class PageDocument(BaseModel):
     records: Annotated[list[PageFilter], Field(max_length=128)] = Field(default_factory=list)
     task_filters: dict[Literal['assigned', 'process', 'status'], list[str]] = Field(default_factory=dict)
     order_bys: Annotated[list[str], Field(max_length=16)] = Field(default_factory=lambda: ['code'])
-    workspace_layout: dict[str, Any] | None = None
+    workspace_layout: dict[str, Any] | None = Field(default=None, description=(
+        'Native dock configuration with full panel geometry and typed stack/split tree. '
+        'Read ts.pages for a complete example before composing; panel ID strings alone are invalid.'))
 
 
 class NoRedirect(HTTPRedirectHandler):

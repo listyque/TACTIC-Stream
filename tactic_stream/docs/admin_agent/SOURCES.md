@@ -15,6 +15,8 @@ live capabilities and permissions; historical evidence applies to its baseline.
 TH/TS links require sibling checkouts or authorized host retrieval. Report missing
 references. Keep credentials and private configuration out of model context.
 
+External host: [MCP](CONNECTION.md), [Codex setup and acceptance](CODEX.md).
+
 ## TS server API
 
 These URLs belong to the selected Stream server: `{server_url}/api/documentation`,

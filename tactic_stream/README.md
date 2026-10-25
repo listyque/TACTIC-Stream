@@ -51,6 +51,7 @@ shared UI contracts, delivery and administrator-agent instructions.
 | Server API, core structures and guides | [TS source map](docs/admin_agent/SOURCES.md#ts-server-api) |
 | Handler client API, native objects and guides | [TH source map](docs/admin_agent/SOURCES.md#th-client-api-and-structures) |
 | Administrator agent: create projects/templates | [START.md](docs/admin_agent/START.md) |
+| External administrator host and real-model acceptance | [Codex setup](docs/admin_agent/CODEX.md) |
 | Shared QML/Vue descriptions | [Tactic Frame contract](docs/frame/contract.md) and [source map](src/tactic_stream/shared_ui/README.md) |
 | Windows deployment | [English](docs/delivery/WINDOWS_DELIVERY.en.md) / [Russian](docs/delivery/WINDOWS_DELIVERY.ru.md) |
 | Server deployment | [English](docs/delivery/SERVER_DELIVERY.en.md) / [Russian](docs/delivery/SERVER_DELIVERY.ru.md) |

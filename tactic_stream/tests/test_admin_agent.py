@@ -2,6 +2,7 @@
 import asyncio
 import json
 import os
+import re
 from pathlib import Path
 import sys
 import threading
@@ -22,6 +23,17 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @unittest.skipIf(Client is None, 'Install tactic-stream[agent] to test the optional MCP adapter')
 class AgentTransport(unittest.TestCase):
+    def test_page_recipe_uses_complete_native_layout(self):
+        from tactic_stream.admin_agent import PageDocument
+        from tactic_stream.server.workspace_layout import validate_layout
+        recipe = (ROOT / 'docs/admin_agent/PAGES.md').read_text(encoding='utf-8')
+        example = json.loads(re.search(r'```json\n(.*?)\n```', recipe, re.S).group(1))
+        document = PageDocument.model_validate(example)
+        layout = validate_layout(document.workspace_layout)
+        self.assertEqual(layout['layout']['first']['active'], 'results')
+        self.assertEqual(layout['layout']['second']['active'], 'description')
+        self.assertGreater(layout['panels'][1]['x'], layout['panels'][0]['x'])
+
     def test_origin_validation(self):
         for value in ('file:///data', 'http://user:secret@host', 'http://host/api',
                       'http://host/?ticket=secret', 'http://host/#fragment', 'http://host\n'):

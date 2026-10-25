@@ -16,8 +16,11 @@ args = parser.parse_args()
 sys.path.insert(0, str(args.handler_root))
 os.environ.update(QT_QPA_PLATFORM='offscreen', QT_QUICK_BACKEND='software', QSG_RENDER_LOOP='basic', QT_QUICK_CONTROLS_STYLE='Basic')
 data = json.loads(args.fixture.read_text(encoding='utf-8'))
+project = data.get('project', 'one')
+search_key = data.get('search_key', 'contract/entity?project=one&code=A')
 
 from PySide6.QtCore import QCoreApplication, QPointF, Qt, QUrl
+from PySide6.QtGui import QFont, QFontDatabase, QFontMetrics
 from PySide6.QtQml import QQmlComponent, QQmlEngine
 from PySide6.QtQuick import QQuickWindow
 from PySide6.QtTest import QTest
@@ -34,21 +37,26 @@ from thlib.ui.checkin_out import CheckinOutController
 from tactic_handler_api import HandlerAPI
 
 app = gui_test_application()
-server = TacticServerStub(server=data['server'], project='one', ticket=data['ticket'])
+if os.name == 'nt' and 'Segoe UI' not in QFontDatabase.families():
+    # Windows offscreen Qt has no system font catalogue; the normal desktop plugin does.
+    font = Path(os.environ['WINDIR']) / 'Fonts/segoeui.ttf'
+    assert QFontDatabase.addApplicationFont(str(font)) >= 0
+assert QFontMetrics(QFont('Segoe UI')).inFont('A')
+server = TacticServerStub(server=data['server'], project=project, ticket=data['ticket'])
 api = HandlerAPI(SimpleNamespace(server_start=lambda project: server),
-                 SimpleNamespace(projects={'one': tc.Project(dict(code='one', title='One'))}))
+                 SimpleNamespace(projects={project: tc.Project(dict(code=project, title=project))}))
 with ThreadPoolExecutor(max_workers=1) as worker:
-    native_state = worker.submit(lambda: api.project('one').automation.read()).result(30)
+    native_state = worker.submit(lambda: api.project(project).automation.read()).result(30)
     worker.submit(api.close).result(5)
 
 application = _Application()
 editor = ScriptEditorController(None, None)
 rows = server.query('config/custom_script')
 objects = {row['code']: tc.SObject(row) for row in rows}
-editor._done(dict(kind='load', projectCode='one', objects=objects, rows=[dict(row, token=row['code']) for row in rows]))
+editor._done(dict(kind='load', projectCode=project, objects=objects, rows=[dict(row, token=row['code']) for row in rows]))
 hooks = ScriptTriggerController(application, _Users(), editor, None, None)
-hooks._project_code = 'one'
-hooks._refreshed(('one', hooks._generation, native_state['records'], native_state['revision']))
+hooks._project_code = project
+hooks._refreshed((project, hooks._generation, native_state['records'], native_state['revision']))
 # Keep the native execution/exception path. Only worker scheduling is synchronous in this probe.
 def execute(operation, callback):
     try:
@@ -60,7 +68,7 @@ def execute(operation, callback):
 hooks._run_script_worker = execute
 source = args.fixture.parent / 'blocked.bin'
 source.write_bytes(b'owned source')
-payload = dict(projectCode='one', searchKey='contract/entity?project=one&code=A',
+payload = dict(projectCode=project, searchKey=search_key,
                operation_id='native-checkin', process='publish', context='publish', files=[dict(path=str(source))])
 before = len(server.query('sthpw/snapshot'))
 completed = []
@@ -80,11 +88,11 @@ hooks.run_after('snapshot.save', CheckinOutController._trigger_context(SimpleNam
 assert Path(data['marker']).read_text(encoding='utf-8') == snapshot['__search_key__']
 
 # Render the actual shelf, click its Frame action and open the saved script's modal tool.
-application.current_project_code = 'one'
-application.context = dict(entryKey='contract/entity@entities', title='Entities', shelfPreset=data['shelf_view'],
+application.current_project_code = project
+application.context = dict(entryKey=data.get('entry_key', 'contract/entity@entities'), title='Entities', shelfPreset=data['shelf_view'],
                            search_keys=[payload['searchKey']], tab_id='captured-tab')
 shelf = ScriptShelfController(application, _Users(), editor)
-shelf._project_code = 'one'
+shelf._project_code = project
 shelf._active_mode = 'shared'
 shelf._active_mode_selected = True
 shelf._sync_records(server.query('config/widget_config', [('search_type', 'SideBarWdg')]))
@@ -134,6 +142,8 @@ assert _windows, editor.output
 window = _windows[-1][0]
 assert window.modality() == Qt.WindowModal
 assert window.property('records')[0]['id'] == payload['searchKey']
+if data.get('screenshot'):
+    assert window.grabWindow().save(data['screenshot'])
 window.close()
 QTest.qWait(20)
 assert not _windows

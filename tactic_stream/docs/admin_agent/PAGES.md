@@ -32,7 +32,11 @@ description in a table and the inspector on the right”:
    provide the existing `{panels, layout}` dock configuration. Panel IDs come
    from `workspace_panels`; geometry is normalized, not pixels. A tree node is
    a stack (`panels`, `active`) or split (`orientation`, `ratio`, `first`, `second`).
-   Keep `results` present. Use `workspace.presets[].configuration` as examples.
+   Each panel is an object with `panel_id`, `x`, `y`, `width`, `height`, `z`,
+   `visible`, and `dock_area`; panel ID strings alone are invalid. Tree nodes
+   require explicit `type:"stack"` or `type:"split"`. Keep `results` present.
+   Use `workspace.presets[].configuration` as examples when any exist; otherwise
+   use the complete example below. Do not guess shapes after a rejected preview.
    Omitting `workspace_layout` leaves the normal workspace arrangement in use.
 6. Call `ts_page_preview(search_type, document, expected_revision)`. Inspect the
    native table descriptor, generated search records, sample rows/count and
@@ -55,7 +59,18 @@ Example document after discovering the corresponding fields and process values:
   ],
   "records": [],
   "task_filters": {"assigned": ["__current_login__"], "process": ["lighting"], "status": ["In Progress"]},
-  "order_bys": ["code"]
+  "order_bys": ["code"],
+  "workspace_layout": {
+    "panels": [
+      {"panel_id": "results", "title": "Results", "kind": "results", "x": 0, "y": 0, "width": 0.7, "height": 1, "visible": true, "z": 1, "dock_area": "center"},
+      {"panel_id": "description", "title": "Object inspector", "kind": "description", "x": 0.7, "y": 0, "width": 0.3, "height": 1, "visible": true, "z": 2, "dock_area": "right"}
+    ],
+    "layout": {
+      "type": "split", "orientation": "horizontal", "ratio": 0.7,
+      "first": {"type": "stack", "panels": ["results"], "active": "results"},
+      "second": {"type": "stack", "panels": ["description"], "active": "description"}
+    }
+  }
 }
 ```
 
