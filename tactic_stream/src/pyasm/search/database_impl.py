@@ -14,23 +14,29 @@ class DatabaseImplException(TacticException):
     pass
 
 
-def naming_revision_statements(vendor):
-    """Native naming revisions share the rule's transaction, including raw imports."""
-    seed = ("INSERT INTO spt_naming_revision (code,revision) VALUES ('collection',0) "
-            "ON CONFLICT (code) DO NOTHING")
-    update = "UPDATE spt_naming_revision SET revision=revision+1 WHERE code='collection';"
-    if vendor == 'Sqlite':
-        return [seed] + [
-            'CREATE TRIGGER IF NOT EXISTS stream_naming_%s AFTER %s ON spt_naming '
-            'BEGIN %s END' % (event.lower(), event, update)
-            for event in ('INSERT', 'UPDATE', 'DELETE')]
-    if vendor == 'PostgreSQL':
-        return [seed,
-                'CREATE OR REPLACE FUNCTION stream_naming_revision() RETURNS trigger '
-                'LANGUAGE plpgsql AS $$ BEGIN %s RETURN NULL; END $$' % update,
-                'CREATE OR REPLACE TRIGGER stream_naming_revision AFTER INSERT OR UPDATE OR DELETE '
-                'ON spt_naming FOR EACH STATEMENT EXECUTE FUNCTION stream_naming_revision()']
-    raise UnsupportedContract('Naming revisions are not supported for this database')
+def configuration_revision_statements(vendor):
+    """Configuration generations include native writes and roll back with their rows."""
+    statements = []
+    for collection in ('naming', 'widget_config'):
+        table = 'spt_' + collection
+        trigger = 'stream_' + collection + '_revision'
+        statements.append("INSERT INTO %s_revision (code,revision) VALUES ('collection',0) "
+                          "ON CONFLICT (code) DO NOTHING" % table)
+        update = "UPDATE %s_revision SET revision=revision+1 WHERE code='collection';" % table
+        if vendor == 'Sqlite':
+            # Keep the original naming trigger identities during upgrade.
+            prefix = 'stream_naming' if collection == 'naming' else trigger
+            statements.extend('CREATE TRIGGER IF NOT EXISTS %s_%s AFTER %s ON %s BEGIN %s END' %
+                              (prefix, event.lower(), event, table, update)
+                              for event in ('INSERT', 'UPDATE', 'DELETE'))
+        elif vendor == 'PostgreSQL':
+            statements.extend([
+                'CREATE OR REPLACE FUNCTION %s() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN %s RETURN NULL; END $$' % (trigger, update),
+                'CREATE OR REPLACE TRIGGER %s AFTER INSERT OR UPDATE OR DELETE ON %s '
+                'FOR EACH STATEMENT EXECUTE FUNCTION %s()' % (trigger, table, trigger)])
+        else:
+            raise UnsupportedContract('Configuration revisions are not supported for this database')
+    return statements
 
 
 class DatabaseImpl:
@@ -201,7 +207,7 @@ class DatabaseImpl:
                 if info and info['data_type'] != 'text':
                     sql.do_update('ALTER TABLE %s ALTER COLUMN %s TYPE text' % (identifier(table), identifier(column)))
         if upgrade.get('naming_revision'):
-            for statement in naming_revision_statements(resource.get_vendor()):
+            for statement in configuration_revision_statements(resource.get_vendor()):
                 sql.do_update(statement)
         sql.clear_table_cache(resource.get_database())
 
@@ -1025,7 +1031,7 @@ class PostgresImpl(DatabaseImpl):
                 db.execute(index['sql'])
                 changed = True
         if upgrade.get('naming_revision'):
-            for statement in naming_revision_statements('PostgreSQL'):
+            for statement in configuration_revision_statements('PostgreSQL'):
                 db.execute(statement)
         return self._insert_registry(db, upgrade['registry']) or changed
 

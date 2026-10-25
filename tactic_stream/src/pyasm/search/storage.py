@@ -272,8 +272,8 @@ class Store:
                 db.execute(index['sql'])
                 changed = True
         if upgrade.get('naming_revision'):
-            from pyasm.search.database_impl import naming_revision_statements
-            for statement in naming_revision_statements('Sqlite'):
+            from pyasm.search.database_impl import configuration_revision_statements
+            for statement in configuration_revision_statements('Sqlite'):
                 db.execute(statement)
         for row in upgrade["registry"]:
             row.pop("id", None)

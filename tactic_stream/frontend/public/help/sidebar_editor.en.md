@@ -1,5 +1,7 @@
 ---
 reference: Handler
+The project editor changes the shared definition layer; login-specific definitions are preserved. Root views follow the same source selection as runtime navigation.
+
 group: Administration
 icon: edit
 order: 37

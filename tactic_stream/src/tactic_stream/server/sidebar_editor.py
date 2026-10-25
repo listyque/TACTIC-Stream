@@ -736,8 +736,11 @@ def _records():
     search = Search('config/widget_config')
     search.add_filter('search_type', 'SideBarWdg')
     search.add_order_by('priority desc')
-    search.add_order_by('id desc')
-    return [item for item in search.get_sobjects() if item.get_value('category', no_exception=True) not in ('workspace_layout', 'script_shelf')]
+    search.add_order_by('id')
+    # SidebarConfig selects a shared NULL-login definition, but unscoped root views.
+    return [item for item in search.get_sobjects()
+            if item.get_value('category', no_exception=True) not in ('workspace_layout', 'script_shelf')
+            and (item.get_value('view') != 'definition' or item.get_data().get('login') is None)]
 
 
 def _groups():

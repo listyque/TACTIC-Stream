@@ -1,6 +1,8 @@
 {
   "naming_revision": true,
   "tables": {
+    "spt_widget_config_revision": "CREATE TABLE spt_widget_config_revision (code varchar(256) PRIMARY KEY, revision bigint NOT NULL DEFAULT 0)",
+    "spt_page_operation": "CREATE TABLE spt_page_operation (code varchar(64) PRIMARY KEY, request_hash varchar(64) NOT NULL, result text NOT NULL)",
     "spt_naming_revision": "CREATE TABLE \"spt_naming_revision\" (\"code\" varchar(256) PRIMARY KEY, \"revision\" bigint NOT NULL DEFAULT 0)",
     "spt_naming_operation": "CREATE TABLE \"spt_naming_operation\" (\"code\" varchar(64) PRIMARY KEY, \"request_hash\" varchar(64) NOT NULL, \"result\" text NOT NULL)",
 

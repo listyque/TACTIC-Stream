@@ -37,8 +37,8 @@ def fixture(store):
             for name, statement in tables.items():
                 if name != 'spt_process':
                     db.execute(statement)
-            from pyasm.search.database_impl import naming_revision_statements
-            for statement in naming_revision_statements('Sqlite'):
+            from pyasm.search.database_impl import configuration_revision_statements
+            for statement in configuration_revision_statements('Sqlite'):
                 db.execute(statement)
             for migration in Store._get_upgrade()['columns']:
                 if migration['table'] in tables and migration['table'] != 'spt_process':

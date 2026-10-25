@@ -9,7 +9,7 @@ describes implemented tools, not a promised future API.
 The external host runs its chosen model and launches a separate MCP stdio
 process. That process calls the configured TS HTTP API. It never imports
 `pyasm`, opens a database or imports Handler. TS owns authentication, access,
-project context and native naming evaluation. No model/provider dependency
+project context and native configuration operations. No model/provider dependency
 or API key is installed in either TACTIC product.
 
 The adapter uses the official [MCP Python SDK 2.3.0](https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.3.0)
@@ -59,6 +59,11 @@ tool is absent. The host still applies its normal tool authorization to the
 concrete draft; no model-supplied approval flag grants access. Restart through
 the normal Stream launcher to run its schema upgrade before using this version.
 
+Page creation requires TS 0.112.205, its schema upgrade and `--allow-page-save`.
+It uses native saved searches, table XML, workspace dock presets and navigation.
+See [the page recipe and recovery contract](PAGES.md). Naming and page write
+permissions are separate host flags; neither grants script execution.
+
 `--server` is an origin, with no path/query/embedded credentials. Each process
 is bound to one project. The model cannot select a destination, ticket, arbitrary
 RPC method or command class. Redirects and environment HTTP proxies are disabled;
@@ -86,6 +91,10 @@ are reported explicitly in the catalogue.
 | `ts_naming_read` | Native rules/revision and a page of at most 50 sample objects. |
 | `ts_naming_preview` | Native matching rule, versioned/versionless paths and known collisions for one sample. Does not save. |
 | `ts_naming_operation` | Current user's durable operation receipt, or `not_found`. Historical outcome, not current rule state. |
+| `ts_page_read` | Native fields, filter relations, table/navigation/layout sources and dependency revision. |
+| `ts_page_preview` | Native table descriptor, matching rows/count, generated search and sidebar draft; no configuration writes. |
+| `ts_page_operation` | Historical page result for this login/project/UUID. |
+| `ts_page_save` | Host opt-in creation through native editors, checked revision and durable replay. |
 | `ts_naming_save` | Host opt-in only. Native apply with expected revision, representative sample and canonical UUID; returns a durable receipt. |
 
 Native HTTP responses are capped at 2 MiB before decoding. Large catalogues can
