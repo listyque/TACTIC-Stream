@@ -47,7 +47,9 @@ for the requested operation to `args`: `--allow-naming-save`,
 `--allow-page-save`, `--allow-project-create`, `--allow-automation-draft`, or
 `--allow-automation-activate`. Host approval and server ACLs remain separate.
 Review exact automation source/binding before exposing activation; an inactive
-draft does not execute. Read-only filesystem mode does not restrict a tool's
+draft does not execute. Activation also requires [the isolated runner](SCRIPT_TRIALS.md)
+and matching passed trials. Add its `--trial-image` and `--trial-directory` args,
+and set `tool_timeout_sec = 180`. Read-only filesystem mode does not restrict a tool's
 remote writes or the future permissions of an activated native TH script.
 
 With noninteractive `codex -a never exec`, a tool requiring approval fails; a
@@ -71,7 +73,7 @@ From a source checkout, with the `agent` extra, a logged-in `codex.cmd`, the
 adjacent TH dependencies and the installed browser test dependencies/cache:
 
 ```text
-python -B -X utf8 tools/check_external_agent.py --handler-root <TH> --output-dir <new private directory outside both repositories>
+python -B -X utf8 tools/check_external_agent.py --handler-root <TH> --trial-image <trusted immutable image ID> --output-dir <new private directory outside both repositories>
 ```
 
 This runs a real model, not predetermined tool requests. Each phase starts an
@@ -91,13 +93,15 @@ modal Frame with captured selection and correct close cleanup.
 After draft creation, inspect `03-drafts-for-review.json`. The harness prints
 its SHA-256. Only after reviewing the exact source, paths, arguments and bindings,
 write that hash to `review-approved.txt` in the output directory. The harness
-then enables activation for those drafts and runs the independent native probe.
+then enables guarded configuration activation after fresh isolated trials.
 The review wait is bounded to 30 minutes. Failure stops the run; no success is
 inferred from the model's summary. Output contains prompts, actual MCP JSONL,
 read-back, screenshots and consumer logs, and stays outside version control.
 Owned server/runtime data are cleaned on normal completion or exception.
 
-This is trusted, reviewed test execution, **not OS-isolated arbitrary-code trial**.
+Inactive drafts are tested in separate verified OCI containers before activation.
+Generated Python stays in OCI trials; activation saves the real native bindings
+but does not execute that Python on the host. User result preview also uses OCI.
 No EXE installation or fresh paired TH/TS visual parity is implied. API-only
 check-in can bypass client hooks; those hooks are not server enforcement. Model
 choices vary, so this opt-in live acceptance is not a deterministic CI unit test.

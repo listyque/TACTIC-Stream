@@ -72,10 +72,10 @@ conversation summary does not prove the server still has the same state.
 
 ## Current execution boundary
 
-Release 0.112.207. Refresh capabilities and project metadata.
+0.112.210. Refresh capabilities and project metadata.
 The [MCP adapter](CONNECTION.md) exposes naming, [pages](PAGES.md),
 [projects/templates](PROJECTS.md) and [TH automation](HANDLER_AUTOMATION.md).
-Writes use host opt-in, revisions and durable receipts. Script activation is
-separate from saving a draft; isolated script trials and a live TH connection
-are unavailable. Receipts do not make whole-project operations atomic.
-Report proposals as proposals, never as applied changes.
+Writes need host opt-in, revisions and durable receipts. Agent activation needs
+reviewed drafts and passed isolated Linux trials (`th.trials`).
+No user-desktop connection or project-wide atomicity.
+Never report a proposal as an applied change.

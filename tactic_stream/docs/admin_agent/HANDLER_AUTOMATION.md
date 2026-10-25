@@ -26,18 +26,20 @@ configuration but cannot execute Local Python or open a native desktop tool.
 4. `th_automation_draft(draft_id)` returns that administrator's exact source,
    draft revision and current dependency revision. Show the concrete code,
    execution owner, program paths/arguments and binding to the administrator.
-5. `th_automation_activate(draft_id, draft_revision, expected_revision, operation_id)`
+5. `th_automation_activate(draft_id, draft_revision, expected_revision, operation_id, trial_ids)`
    requires the separate host flag `--allow-automation-activate` and authorization
    for this exact code and binding. Server administrator and native script
    execution checks still apply. It creates a normal `local_python` saved script
    and enables the hook or shelf assignment in the same project transaction.
 
-Do not invent a successful test. `isolated_script_trial_available` is false:
-there is no isolated arbitrary-code runner. Activation authorizes future native
-execution with the desktop user's permissions. A subprocess, Python compilation,
-temporary database or transaction rollback is not OS isolation. These tools
-cannot invoke the new script as a “preview”. If the task requires a verified
-isolated trial, report that missing capability before promising such a result.
+The optional external-host [isolated trial runner](SCRIPT_TRIALS.md), retrieved
+as `th.trials`, executes exact inactive drafts in a verified offline Linux
+container with synthetic data and native TH consumers. Agent activation requires
+matching passed trial IDs and a configured host runner. Before needs both allow
+and reject cases; After needs allow; shelf needs a modal UI case. Preview remains
+syntax-only. Native/human activation remains a separate authorized operation.
+Inspect capabilities rather than assuming the runner is configured. Activation
+still authorizes later execution with the desktop user's ordinary permissions.
 
 Use one canonical UUID and identical arguments through each write's retries.
 `th_automation_operation(operation_id)` recovers historical success after a lost
@@ -79,6 +81,13 @@ Supported argument substitutions: `{file}`, `{project_code}`, `{search_key}`,
 `{process}`, `{context}`, `{operation_id}`, `{result_search_key}`. They are data,
 not shell commands. An After hook can pass `{result_search_key}` to its program;
 the completed snapshot descriptor is also in `TACTIC_SCRIPT_KWARGS['snapshot']`.
+The TH payload contains `files` as a list of **descriptors**, not strings:
+`[{"path": "<captured client file path>", ...}]`. There is no singular `file`
+payload key. To derive a sibling output path use
+`Path(TACTIC_SCRIPT_KWARGS["files"][0]["path"]).parent / "after.txt"`.
+`{file}` is the helper's argv substitution, not a payload field. Other captured
+fields include `project_code`, `search_key`, `process`, `context`, `operation_id`;
+`result_search_key` and `snapshot` are populated for After publication.
 File paths are captured before enqueueing; normal queue operation IDs survive
 restart. An exception must escape a Before script: returning False does not veto.
 
@@ -148,4 +157,5 @@ SQLite/PostgreSQL cases cover inactive drafts, revision conflicts, durable repla
 and rollback. TH's focused script/editor/queue/API suites cover errors, cancellation
 and controls. This is not a full installed EXE acceptance run or evidence of an
 external model's reasoning. Test fixtures are trusted test code, not an isolated
-trial service for generated user code.
+trial service for generated user code; [test_automation_trial.py](../../tests/test_automation_trial.py)
+checks the separate OCI runner and its exact-source activation gate.

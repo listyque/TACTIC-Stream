@@ -147,7 +147,7 @@ class MCPAutomation(unittest.TestCase):
                      dict(kind='shelf', title='Selected entities', entry_key='contract/entity@entities',
                          source="from side_tools.frame_tool.showcase import show\nshow([{'id': key, 'title': key} for key in TACTIC_SCRIPT_KWARGS['search_keys']], modal=True)")]
         args = ['-B', '-X', 'utf8', '-m', 'tactic_stream.admin_agent', '--server', Transport.url,
-                '--project', 'one', '--stream-root', str(ROOT), '--allow-automation-draft', '--allow-automation-activate']
+                '--project', 'one', '--stream-root', str(ROOT), '--allow-automation-draft']
         parameters = StdioServerParameters(command=sys.executable, args=args,
             env=dict(os.environ, TACTIC_AGENT_TICKET=ticket, PYTHONPATH=str(ROOT/'src'), PYTHONUTF8='1'))
         async def author():
@@ -162,8 +162,12 @@ class MCPAutomation(unittest.TestCase):
                     saved = await call('th_automation_save_draft', document=document, expected_revision=preview['revision'], operation_id=str(uuid4()))
                     state = await call('th_automation_read')
                     values = dict(draft_id=saved['draft_id'], draft_revision=saved['revision'], expected_revision=state['revision'], operation_id=str(uuid4()))
-                    activated = await call('th_automation_activate', **values)
-                    self.assertEqual(activated, await call('th_automation_activate', **values))
+                    # Trusted Windows fixture uses the normal human/native API, not the agent trial gate.
+                    def activate():
+                        return Api(Transport.store).dispatch('execute_cmd',
+                            (auth, COMMAND, dict(action='activate', project_code='one', **values)))['info']
+                    activated = activate()
+                    self.assertEqual(activated, activate())
                     results.append(activated)
             return results
         results = asyncio.run(author())

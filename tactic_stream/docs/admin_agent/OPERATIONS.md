@@ -255,7 +255,7 @@ Save fields are `code` (empty for create), `folder`, `title`, `language`, `sourc
 `revision`, ticket and project. Current editable languages are `python`,
 `javascript`, `server_js`; these run in different environments. Follow actual
 script input/binding contracts. Do not infer that saving a script has tested or
-activated it. There is no isolated script-test endpoint in this baseline.
+activated it. Optional host MCP trials are in `th.trials`; they are not server execution.
 
 ## Export and verify
 
