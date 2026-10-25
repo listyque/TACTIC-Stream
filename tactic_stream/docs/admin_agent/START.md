@@ -72,9 +72,10 @@ conversation summary does not prove the server still has the same state.
 
 ## Current execution boundary
 
-This pack describes source release 0.112.206. Refresh capabilities and project
-metadata each session. The optional [MCP adapter](CONNECTION.md) exposes references,
-naming, [pages](PAGES.md), [projects/templates](PROJECTS.md). Writes use host
-opt-in, revisions and durable receipts. It cannot execute scripts or connect to TH's
-runtime. Receipts are not a general atomic project-apply service or an isolated
-code runner. Report proposals as proposals, never as applied changes.
+Release 0.112.207. Refresh capabilities and project metadata.
+The [MCP adapter](CONNECTION.md) exposes naming, [pages](PAGES.md),
+[projects/templates](PROJECTS.md) and [TH automation](HANDLER_AUTOMATION.md).
+Writes use host opt-in, revisions and durable receipts. Script activation is
+separate from saving a draft; isolated script trials and a live TH connection
+are unavailable. Receipts do not make whole-project operations atomic.
+Report proposals as proposals, never as applied changes.

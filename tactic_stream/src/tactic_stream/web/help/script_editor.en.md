@@ -135,3 +135,9 @@ render jobs. Close releases the window and its model. The three example files
 separate portable composition, native event adaptation and Python lifetime.
 Batch Manager keeps its existing scheduler and web UI; this is an example of
 reusing controls, not another Batch Manager.
+
+## Native Handler automation
+
+External agents can prepare inactive Local Python drafts for Handler check-in hooks and shared shelf buttons. Saving, syntax validation and activation are separate operations; activation requires explicit host authorization and native server execution permission. Drafts/receipts survive restart. An isolated arbitrary-code trial runner is unavailable.
+
+These bindings execute in TACTIC Handler. The browser does not launch local programs, execute Local Python or open native QML tools. Refresh the saved configuration in Handler after publication. Handler's trigger editor uses one revision-checked command to save its complete hook set. Input paths and operation identity are captured before check-in; After hooks receive the completed snapshot. These client hooks do not enforce uploads from headless APIs or other clients.

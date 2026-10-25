@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def handler_archive(handler, target):
     # Explicit roots exclude saved presets, tickets, user scripts, databases and logs.
-    roots = ('thlib', 'handler_server', 'tactic_handler_api', 'tactic_handler_dcc',
+    roots = ('thlib', 'handler_server', 'tactic_handler_api', 'tactic_handler_dcc', 'side_tools/frame_tool',
              'launch.py', 'launch.pyw', 'execute_after_start.py', 'requirements.txt', 'LICENSE', 'README.md',
              'CHANGELOG.md', 'docs')
     with zipfile.ZipFile(target, 'x', compression=zipfile.ZIP_DEFLATED) as archive:

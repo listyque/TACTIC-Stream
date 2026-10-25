@@ -15,6 +15,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from tactic_stream import __version__
 from tactic_stream.project_plan import ProjectPlan, Code, Label
+from tactic_stream.automation_plan import AutomationPlan
 
 MAX_RESPONSE = 2 * 1024 * 1024
 Offset = Annotated[int, Field(strict=True, ge=0)]
@@ -27,6 +28,7 @@ COMMANDS = {
     'schema': 'tactic.ui.panel.schema_cmd.SchemaCmd',
     'naming': 'tactic.ui.panel.naming_cmd.NamingCmd',
     'page': 'tactic.ui.panel.page_cmd.PageCmd',
+    'automation': 'tactic.ui.panel.handler_automation_cmd.HandlerAutomationCmd',
 }
 REFERENCES = {
     'ts.start': ('TS', 'docs/admin_agent/START.md'),
@@ -37,6 +39,7 @@ REFERENCES = {
     'ts.connection': ('TS', 'docs/admin_agent/CONNECTION.md'),
     'ts.pages': ('TS', 'docs/admin_agent/PAGES.md'),
     'ts.projects': ('TS', 'docs/admin_agent/PROJECTS.md'),
+    'th.automation': ('TS', 'docs/admin_agent/HANDLER_AUTOMATION.md'),
     'ts.administration': ('TS', 'frontend/public/help/administration.en.md'),
     'ts.filters': ('TS', 'frontend/public/help/search_filters.en.md'),
     'ts.navigation': ('TS', 'frontend/public/help/sidebar_editor.en.md'),
@@ -192,7 +195,8 @@ class StreamConnection:
 
 def create_server(connection: StreamConnection, stream_root: Path, handler_root: Path | None = None,
                   *, allow_naming_save: bool = False, allow_page_save: bool = False,
-                  allow_project_create: bool = False) -> MCPServer:
+                  allow_project_create: bool = False, allow_automation_draft: bool = False,
+                  allow_automation_activate: bool = False) -> MCPServer:
     """Build the externally callable catalogue without importing TS or TH internals."""
     roots = {'TS': stream_root.resolve(), 'TH': handler_root.resolve() if handler_root else None}
     mcp = MCPServer('TACTIC administrator', version=__version__, instructions=(
@@ -216,9 +220,16 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                 'operations': ['references', 'types.read', 'schema.read', 'naming.read', 'naming.preview',
                                'naming.operation', 'page.read', 'page.preview', 'page.operation']
                               + ['project.preview', 'project.read', 'project.operation']
+                              + ['handler_automation.read', 'handler_automation.preview', 'handler_automation.draft', 'handler_automation.operation']
                               + (['naming.save'] if allow_naming_save else []) + (['page.save'] if allow_page_save else [])
-                              + (['project.create', 'project.export', 'project.install'] if allow_project_create else []),
-                'can_apply': allow_naming_save or allow_page_save or allow_project_create, 'can_execute_scripts': False, 'th_runtime_connected': False,
+                              + (['project.create', 'project.export', 'project.install'] if allow_project_create else [])
+                              + (['handler_automation.save_draft'] if allow_automation_draft else [])
+                              + (['handler_automation.activate'] if allow_automation_activate else []),
+                'can_apply': allow_naming_save or allow_page_save or allow_project_create or allow_automation_draft or allow_automation_activate,
+                'can_execute_scripts': False, 'th_runtime_connected': False,
+                'can_save_handler_drafts': allow_automation_draft, 'can_activate_handler_code': allow_automation_activate,
+                'handler_automation_requires': 'TS 0.112.207 with upgraded schema, TH 0.6.0.151; read th.automation',
+                'isolated_script_trial_available': False,
                 'project_apply_requires': 'TS 0.112.206; new projects only, native template export/install; read ts.projects. Installed extensions remain trusted runtime code.',
                 'naming_apply_requires': 'TS 0.112.204 and upgraded project schema; verify ts_naming_read.supports_idempotent_apply',
                 'page_apply_requires': 'TS 0.112.205 and upgraded project schema; new pages only; read ts.pages',
@@ -412,6 +423,47 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             return connection.project_operation('install', target=target, title=title,
                 template_id=template_id, operation_id=operation_id)
 
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def th_automation_read() -> dict[str, Any]:
+        """Read native Handler hooks, script paths, shelves/navigation and dependency revision."""
+        return connection.command('automation', 'read')
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def th_automation_preview(document: AutomationPlan) -> dict[str, Any]:
+        """Check a new Handler hook/shelf draft and Python syntax. Does NOT execute or isolate code."""
+        return connection.command('automation', 'preview', document=document.model_dump())
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def th_automation_draft(draft_id: Identifier) -> dict[str, Any]:
+        """Retrieve this administrator's saved draft source, revision and current dependencies."""
+        return connection.command('automation', 'draft', draft_id=draft_id)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def th_automation_operation(operation_id: Identifier) -> dict[str, Any]:
+        """Recover this login/project's historical draft-save or activation receipt."""
+        return connection.command('automation', 'operation', operation_id=operation_id)
+
+    if allow_automation_draft:
+        @mcp.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=False,
+                                             idempotent_hint=True, open_world_hint=False), structured_output=True)
+        def th_automation_save_draft(document: AutomationPlan, expected_revision: Identifier, operation_id: Identifier) -> dict[str, Any]:
+            """Save the previewed source as private inactive metadata; no saved script or binding is installed."""
+            return connection.command('automation', 'save_draft', document=document.model_dump(),
+                                      expected_revision=expected_revision, operation_id=operation_id)
+
+    if allow_automation_activate:
+        @mcp.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=True,
+                                             idempotent_hint=True, open_world_hint=False), structured_output=True)
+        def th_automation_activate(draft_id: Identifier, draft_revision: Identifier, expected_revision: Identifier,
+                                   operation_id: Identifier) -> dict[str, Any]:
+            """Publish reviewed code and enable its native Handler hook/shelf binding atomically.
+
+            This permits future execution on the user's computer. Host authorization must cover
+            this concrete source and binding. No isolated script trial is provided by this adapter.
+            """
+            return connection.command('automation', 'activate', draft_id=draft_id, draft_revision=draft_revision,
+                                      expected_revision=expected_revision, operation_id=operation_id)
+
     return mcp
 
 
@@ -424,6 +476,8 @@ def main() -> None:
     parser.add_argument('--allow-naming-save', action='store_true', help='Host-authorized naming writes; MCP host still governs each call')
     parser.add_argument('--allow-page-save', action='store_true', help='Host-authorized creation of native search pages')
     parser.add_argument('--allow-project-create', action='store_true', help='Host-authorized new projects and native template export/install')
+    parser.add_argument('--allow-automation-draft', action='store_true', help='Save inactive Handler automation drafts')
+    parser.add_argument('--allow-automation-activate', action='store_true', help='Publish reviewed code for execution by native Handler hooks/shelves')
     args = parser.parse_args()
     try:
         connection = StreamConnection(args.server, args.project, os.environ.get('TACTIC_AGENT_TICKET', ''))
@@ -431,7 +485,8 @@ def main() -> None:
         parser.error(str(error))
     create_server(connection, args.stream_root, args.handler_root,
                   allow_naming_save=args.allow_naming_save, allow_page_save=args.allow_page_save,
-                  allow_project_create=args.allow_project_create).run(transport='stdio')
+                  allow_project_create=args.allow_project_create, allow_automation_draft=args.allow_automation_draft,
+                  allow_automation_activate=args.allow_automation_activate).run(transport='stdio')
 
 
 if __name__ == '__main__':

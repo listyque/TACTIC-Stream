@@ -140,7 +140,7 @@ class AgentNativeIntegration(unittest.TestCase):
             async with Client(parameters) as client:
                 listed = await client.list_tools()
                 names = {tool.name for tool in listed.tools}
-                self.assertEqual(len(names), 15)
+                self.assertEqual(len(names), 19)
                 self.assertFalse(any('save' in name or 'execute' in name for name in names))
 
                 async def call(name, **arguments):

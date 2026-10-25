@@ -214,3 +214,14 @@ failure/rollback, upgrade preservation, replay after deletion and a real file
 collision without overwriting either input. `--postgres` creates and removes an
 owned PostgreSQL 18.6 container; it never uses the installed project's database.
 This is not TH GUI acceptance, live account setup or evidence of model reasoning.
+
+## Native Handler automation
+
+TS 0.112.207 and TH 0.6.0.151 add the fixed `th_automation_read`,
+`th_automation_preview`, `th_automation_draft` and `th_automation_operation` tools.
+`--allow-automation-draft` adds `th_automation_save_draft`; the separate
+`--allow-automation-activate` adds `th_automation_activate`. Activation authorizes
+future native code execution on the user's computer; the host must cover the
+exact source and binding. No isolated trial or live TH runtime connection is
+provided. Read [the Handler automation recipe](HANDLER_AUTOMATION.md) for examples,
+native owners, permissions and the save/activation/recovery contract.

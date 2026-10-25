@@ -17,7 +17,7 @@ class DatabaseImplException(TacticException):
 def configuration_revision_statements(vendor):
     """Configuration generations include native writes and roll back with their rows."""
     statements = []
-    for collection in ('naming', 'widget_config'):
+    for collection in ('naming', 'widget_config', 'custom_script', 'trigger'):
         table = 'spt_' + collection
         trigger = 'stream_' + collection + '_revision'
         statements.append("INSERT INTO %s_revision (code,revision) VALUES ('collection',0) "

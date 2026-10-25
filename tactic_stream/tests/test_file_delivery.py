@@ -11,8 +11,8 @@ class FileDeliveryTest(unittest.TestCase):
     def test_runtime_allowlist_keeps_launchers_and_excludes_private_state(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for folder in ('thlib', 'handler_server', 'tactic_handler_api', 'tactic_handler_dcc', 'docs'):
-                (root / folder).mkdir()
+            for folder in ('thlib', 'handler_server', 'tactic_handler_api', 'tactic_handler_dcc', 'docs', 'side_tools/frame_tool'):
+                (root / folder).mkdir(parents=True)
                 (root / folder / 'module.py').write_text('pass')
             (root / 'thlib/__pycache__').mkdir()
             (root / 'thlib/__pycache__/cached.pyc').write_bytes(b'cache')
@@ -27,6 +27,7 @@ class FileDeliveryTest(unittest.TestCase):
                 names = archive.namelist()
                 self.assertIn('TACTIC-Handler/launch.py', names)
                 self.assertIn('TACTIC-Handler/thlib/module.py', names)
+                self.assertIn('TACTIC-Handler/side_tools/frame_tool/module.py', names)
                 self.assertFalse(any('private' in name or '__pycache__' in name for name in names))
             with self.assertRaises(FileExistsError):
                 handler_archive(root, target)
