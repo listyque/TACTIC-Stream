@@ -34,6 +34,9 @@ and the panel's own minimum size applies.
 
 ## Common window behavior
 
+Shared dialogs have a compact title bar, a neutral themed caption and a visible outer frame.
+On phones and when maximized, windows use the available screen without the floating frame.
+
 | Control | Action |
 | --- | --- |
 | Drag the title bar | Move the window inside the viewport. |

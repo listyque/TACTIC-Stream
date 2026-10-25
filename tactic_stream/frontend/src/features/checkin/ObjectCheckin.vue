@@ -627,7 +627,7 @@ export default {
 .object-checkin.snapshot-append > header.app-window-titlebar {
   height: var(--append-header-height);
   min-height: var(--append-header-height);
-  padding: 8px 12px;
+  padding: 2px 12px;
   margin: 0;
   gap: 8px;
 }

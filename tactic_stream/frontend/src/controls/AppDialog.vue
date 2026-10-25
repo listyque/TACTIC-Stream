@@ -132,16 +132,15 @@ defineExpose({
   inset: 0;
   margin: auto;
   padding: 0;
-  border: 0;
+  border: 1px solid var(--outline);
   border-radius: var(--dialog-radius);
   max-width: min(calc(100dvw - 24px), var(--dialog-owner-width, 100dvw));
   max-height: min(calc(100dvh - 24px), var(--dialog-owner-height, 100dvh));
   background: var(--surface-high);
   color: var(--on-surface);
   box-sizing: border-box;
-  box-shadow:
-    0 var(--dialog-shadow-y) var(--dialog-shadow-blur) var(--dialog-shadow),
-    inset 0 0 0 1px var(--outline-variant);
+  box-shadow: 0 var(--dialog-shadow-y) var(--dialog-shadow-blur)
+    var(--dialog-shadow);
   overflow: hidden;
 }
 .app-dialog[open] {
@@ -157,10 +156,10 @@ defineExpose({
   align-items: center;
   min-width: 0;
   height: var(--dialog-header-height);
-  padding: 0 var(--dialog-padding);
+  padding: 0 var(--dialog-header-padding);
   box-sizing: border-box;
-  background: var(--surface-highest);
-  box-shadow: inset 0 0 0 1px var(--outline-variant);
+  background: var(--header);
+  border-bottom: 1px solid var(--outline-variant);
 }
 .app-dialog-titlebar > h2 {
   flex: 1;

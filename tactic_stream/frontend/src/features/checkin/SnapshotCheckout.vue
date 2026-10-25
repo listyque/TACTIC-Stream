@@ -201,7 +201,7 @@ defineExpose({ open, close });
   height: var(--checkout-header-height);
   min-height: var(--checkout-header-height);
   margin: 0;
-  padding: 8px 12px;
+  padding: 2px 12px;
   gap: 8px;
 }
 .snapshot-checkout > header h2 {

@@ -31,6 +31,7 @@ const html=`<!doctype html><html><head><meta name="viewport" content="width=devi
 import {createApp,h,withDirectives,KeepAlive} from 'vue'
 import App from '/src/App.vue'
 import AppButton from '/src/controls/AppButton.vue'
+import AppDialog from '/src/controls/AppDialog.vue'
 import HelpView from '/src/features/help/HelpView.vue'
 import DockWorkspace from '/src/features/workspace/DockWorkspace.vue'
 import Timesheet from '/src/features/objects/Timesheet.vue'
@@ -43,6 +44,7 @@ import {appearance,initializeAppearance} from '/src/appearance.js'
 import '/src/theme.css'
 import '/src/style.css'
 Object.assign(appearance,{language:'en',mode:'dark',fadeAnimations:false,popupAnimations:false,clickAnimations:false});initializeAppearance()
+window.setFrameAppearance=(theme,mode)=>Object.assign(appearance,{theme,mode})
 createApp({provide:App.provide,data(){return {session:{ticket:'fixture',login:'alice'},workspaceView:{project:'cg'},workHoursProjects:{week:'',report:'',cost:''},shelfEntry:'tab_a',main:0,parent:0,guard:false,draft:'Original',configMounted:false}},
 methods:{openWorkHours:App.methods.openWorkHours,openDock(id){if(['timesheet','work_reports','cost_reports'].includes(id))this.openWorkHours(id==='timesheet'?'week':id==='cost_reports'?'cost':'report')}},mounted(){window.host=this},
 render(){const dialog=(ref,type,x,content)=>withDirectives(h('dialog',{ref,id:ref,class:'record-dialog fixture-window',style:'position:fixed;left:'+x+'px;top:60px;margin:0;width:460px;height:300px',onCancel:event=>{if(this.guard)event.preventDefault()}},[
@@ -50,6 +52,7 @@ render(){const dialog=(ref,type,x,content)=>withDirectives(h('dialog',{ref,id:re
 ]),[[windowDirective,{type}]]);
 return h('div',{style:'height:100dvh;display:flex;flex-direction:column'},[
  h('div',{style:'height:45px;display:flex;gap:12px'},[h(AppButton,{label:'Main action',onClick:()=>this.main++}),h('output',{id:'main'},this.main)]),
+ h(AppDialog,{ref:'frameDialog',title:'External agent',windowKind:'agent_request',style:'width:540px;height:340px'},()=>h('p','Window contents')),
  dialog('utility','window',40,[h('input',{id:'draft',value:this.draft,onInput:event=>this.draft=event.target.value})]),
  dialog('second','window',300,[h('p','Second tool')]),
  dialog('blocking','dialog',80,[h(AppButton,{label:'Parent action',onClick:()=>this.parent++}),h(AppButton,{label:'Parent help',onClick:()=>this.$refs.help.open('search')}),h('output',{id:'parent'},this.parent)]),
@@ -101,6 +104,26 @@ try {
   await route.fulfill({json:{result:{presets:[],revision:'fixture'}}})
  })
  await page.goto(server.resolvedUrls.local[0]+'window-types-test');await page.waitForFunction(()=>!!window.host)
+ await page.evaluate(()=>window.host.$refs.frameDialog.show())
+ const frameDialog=page.getByRole('dialog',{name:'External agent',exact:true})
+ for (const theme of ['md3','material5','fluent']) for (const mode of ['dark','light']) {
+ await page.evaluate(({theme,mode})=>window.setFrameAppearance(theme,mode),{theme,mode})
+ const chrome=await frameDialog.evaluate(element=>{
+  const style=getComputedStyle(element),header=element.querySelector('header'),title=header.querySelector('h2'),probe=document.createElement('span')
+  probe.style.cssText='color:var(--outline);background:var(--header)';element.append(probe)
+  const expectedBorder=getComputedStyle(probe).color,expectedHeader=getComputedStyle(probe).backgroundColor;probe.remove()
+  return {headerHeight:header.getBoundingClientRect().height,titleSize:parseFloat(getComputedStyle(title).fontSize),borderWidth:parseFloat(style.borderLeftWidth),borderStyle:style.borderLeftStyle,border:style.borderLeftColor,header:getComputedStyle(header).backgroundColor,expectedBorder,expectedHeader}
+ })
+ assert.equal(chrome.headerHeight,40)
+ assert.equal(chrome.titleSize,13)
+ assert.equal(chrome.borderWidth,1)
+ assert.equal(chrome.borderStyle,'solid')
+ assert.equal(chrome.border,chrome.expectedBorder)
+ assert.equal(chrome.header,chrome.expectedHeader)
+ if(theme==='md3'&&mode==='dark'&&process.env.FRAME_WINDOW_CAPTURE){await mkdir(process.env.FRAME_WINDOW_CAPTURE,{recursive:true});await frameDialog.screenshot({path:process.env.FRAME_WINDOW_CAPTURE+'/browser-dialog.png'});await import('node:fs/promises').then(fs=>fs.writeFile(process.env.FRAME_WINDOW_CAPTURE+'/browser-dialog.json',JSON.stringify(chrome,null,2)))}
+ }
+ await page.evaluate(()=>window.setFrameAppearance('md3','dark'))
+ await frameDialog.getByRole('button',{name:'Close',exact:true}).click()
  await page.evaluate(()=>window.host.$refs.utility.show())
  const utility=page.locator('#utility'),help=page.locator('dialog.help-view')
  assert.equal(await utility.evaluate(el=>el.matches(':modal')),false)
