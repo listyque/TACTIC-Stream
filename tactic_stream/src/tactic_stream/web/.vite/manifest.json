@@ -258,6 +258,13 @@
     "file": "assets/vue.js",
     "name": "vue"
   },
+  "_workspace.ui.js": {
+    "file": "assets/workspace.ui.js",
+    "name": "workspace.ui",
+    "imports": [
+      "_CodeBlock.js"
+    ]
+  },
   "index.html": {
     "file": "assets/index.js",
     "name": "index",
@@ -304,6 +311,7 @@
       "_files2.js",
       "_FilePreview.js",
       "_previewFiles.js",
+      "_workspace.ui.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
       "_AppMenuItem.js",

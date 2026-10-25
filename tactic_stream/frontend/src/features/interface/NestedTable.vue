@@ -39,11 +39,12 @@ const model = computed(
 );
 const component = getCurrentInstance().type;
 const records = computed(() => UI.rows(model.value));
+const extent = computed(() => props.frameNode?.height || UI.height);
 const scene = computed(() =>
   UI.describe(
     { ...model.value.scope, ...model.value },
     width.value,
-    UI.height,
+    extent.value,
     appearance.language
   )
 );
@@ -153,6 +154,9 @@ async function load() {
     search_type: scope.searchType,
     view: scope.view || 'table',
     search_view: scope.searchView || '',
+    project_scope: scope.projectScope === true,
+    simple_view: scope.simpleSearchView || '',
+    simple_values: state.simpleValues || {},
     expression: scope.expression || '',
     offset: state.offset || 0,
     limit: scope.initialLimit || 50,
@@ -201,6 +205,7 @@ async function load() {
       if ((state.selected || []).includes(record.__search_key__))
         state.selectionRecords[record.__search_key__] = { code: record.code };
     state.hasNext = result.hasNext;
+    state.simpleFilters = result.simpleFilters || [];
     state.insert = scope.insert !== false && !!definition.operations.create;
     state.gear = scope.gear !== false && !!definition.administration;
     state.filterField =
@@ -259,6 +264,11 @@ function activate(action, value) {
       );
     else {
       state.offset = 0;
+      if (action.type === 'simple-filter')
+        state.simpleValues = {
+          ...state.simpleValues,
+          [action.field]: action.value
+        };
       if (action.type === 'sort')
         state.order =
           action.value +
@@ -294,7 +304,7 @@ defineExpose({ reload: load });
   <div
     ref="host"
     class="nested-table"
-    :style="{ height: UI.height + 'px' }"
+    :style="{ height: extent + 'px' }"
     @click.stop
     @dblclick.stop
     @contextmenu.stop

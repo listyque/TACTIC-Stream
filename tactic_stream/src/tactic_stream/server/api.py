@@ -1066,7 +1066,7 @@ class ApiXMLRPC:
                 results = self._record(results)
             elif isinstance(results, Search):
                 raise UnsupportedContract('Expression Search objects require a local core call')
-            return results if self.protocol == 'local' else str(results)
+            return results if self.protocol in ('json', 'local') else str(results)
 
     @contextmanager
     def _expression_access(self):

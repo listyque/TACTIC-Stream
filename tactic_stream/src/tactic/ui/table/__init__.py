@@ -74,3 +74,9 @@ __all__.append('TableDependencyReadCmd')
 from .group_element_wdg import ParentGroupTableElementWdg, ParentGroupAction
 from .parent_group import TableParentGroupCmd
 __all__ += ['ParentGroupTableElementWdg', 'ParentGroupAction', 'TableParentGroupCmd']
+
+from .review_submission import ReviewSubmissionCmd
+__all__.append('ReviewSubmissionCmd')
+
+from .custom_report import CustomLayoutReportCmd
+__all__.append('CustomLayoutReportCmd')

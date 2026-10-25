@@ -25,7 +25,7 @@ export async function runTableScript(
 self.onmessage = function(event) {
   const context = event.data.context, ticket = event.data.ticket;
   try {
-    const result = runTableAction(function(bvr,evt,spt,TacticServerStub,alert,console,window,confirm) {
+    const result = runTableAction(function(bvr,evt,spt,TacticServerStub,alert,console,window,confirm,document,Option) {
 ${source}
     }, context, function(method,args,kwargs,project) {
       if (method.startsWith('_') || ['get_ticket','get_ticket_data'].includes(method)) throw new Error('Authentication methods are unavailable in table actions');

@@ -1,38 +1,66 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount, inject } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, inject, watch } from 'vue';
 import AppDialog from '../../controls/AppDialog.vue';
 import FrameView from '../../frame/FrameView.vue';
 import TableDependencies from './TableDependencies.vue';
+import CustomLayoutView from './CustomLayoutView.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import { appearance } from '../../appearance.js';
-import * as Layout from '../../../../src/tactic_stream/shared_ui/features/table/layout.ui.mjs';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/document.ui.mjs';
 const openHelp = inject('openHelp', null);
-const props = defineProps({ model: Object });
-const emit = defineEmits(['action', 'file', 'closed']);
+const props = defineProps({ model: Object, ticket: String, project: String });
+const emit = defineEmits([
+  'action',
+  'file',
+  'closed',
+  'edit',
+  'inspect',
+  'cell-event',
+  'column',
+  'table-action',
+  'saved',
+  'notice',
+  'print'
+]);
 const dialog = ref(null),
+  pages = ref([]),
+  activeKey = ref(''),
   host = ref(null),
   selected = ref(0),
   shown = ref(false),
   size = ref({ width: 1, height: 1 });
 let observer;
+const activeModel = computed(
+  () =>
+    pages.value.find((page) => page.key === activeKey.value)?.model ||
+    props.model
+);
+const tabs = computed(() =>
+  pages.value
+    .filter((page) => page.model.tabKey)
+    .map((page) => ({ key: page.key, title: page.model.title }))
+);
 const scene = computed(() =>
-  props.model?.layoutNodes
-    ? Layout.describe(
-        props.model,
-        size.value.width,
-        size.value.height,
-        appearance.language,
-        true,
-        location.origin
-      )
-    : UI.describe(
-        props.model || {},
-        size.value.width,
-        size.value.height,
-        appearance.language,
-        selected.value
-      )
+  UI.describe(
+    props.model || {},
+    size.value.width,
+    size.value.height,
+    appearance.language,
+    selected.value
+  )
+);
+function closePage(key) {
+  pages.value = pages.value.filter((page) => page.key !== key);
+  if (!pages.value.length) dialog.value.close();
+  else activeKey.value = pages.value.at(-1).key;
+}
+watch(
+  () => [props.ticket, props.project],
+  () => {
+    pages.value = [];
+    if (shown.value) dialog.value.close();
+  },
+  { flush: 'sync' }
 );
 onMounted(() => {
   observer = observeFrameSizes((entries) => {
@@ -46,6 +74,13 @@ onMounted(() => {
 onBeforeUnmount(() => observer?.disconnect());
 defineExpose({
   open: () => {
+    if (props.model?.layoutNodes) {
+      if (!props.model.tabKey) pages.value = [];
+      const key = props.model.tabKey || 'popup';
+      if (!pages.value.some((page) => page.key === key))
+        pages.value.push({ key, model: props.model });
+      activeKey.value = key;
+    } else pages.value = [];
     selected.value = 0;
     shown.value = true;
     dialog.value.show();
@@ -56,7 +91,7 @@ defineExpose({
 <template>
   <AppDialog
     ref="dialog"
-    :title="model?.title || ''"
+    :title="activeModel?.title || ''"
     :modal="false"
     :translate-title="model?.translateTitle !== false"
     window-kind="table_document"
@@ -64,6 +99,7 @@ defineExpose({
     class="table-document"
     @closed="
       shown = false;
+      pages = [];
       emit('closed');
     "
   >
@@ -76,6 +112,30 @@ defineExpose({
         @close="dialog.close()"
         @file="emit('file', $event)"
       />
+      <template v-else-if="shown && pages.length"
+        ><CustomLayoutView
+          v-for="page in pages"
+          :key="page.key"
+          v-show="activeKey === page.key"
+          :model="page.model"
+          :tabs="tabs"
+          :current-key="activeKey"
+          :ticket="ticket"
+          :project="project"
+          :width="size.width"
+          :height="size.height"
+          @action="(...args) => emit('table-action', ...args)"
+          @edit="(...args) => emit('edit', ...args)"
+          @inspect="emit('inspect', $event)"
+          @cell-event="(...args) => emit('cell-event', ...args)"
+          @column="emit('column', $event)"
+          @saved="emit('saved')"
+          @notice="emit('notice', $event)"
+          @close="closePage(page.key)"
+          @tab="activeKey = $event"
+          @close-tab="closePage"
+          @print="(...args) => emit('print', ...args)"
+      /></template>
       <FrameView
         v-else
         :scene="scene"

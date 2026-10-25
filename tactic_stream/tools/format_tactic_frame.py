@@ -112,6 +112,8 @@ def main():
         "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
         "frontend/tests/{frame_table*,handler_table,table_cells,table_append,columns_editor,table_script_*}.mjs",
         "frontend/src/features/interface/tableScript.js",
+        "frontend/src/features/interface/{CustomLayoutView.vue,customReport.js}",
+        "frontend/tests/vfx_composition.mjs",
         "frontend/src/features/interface/TableDependencies.vue",
         "frontend/src/features/interface/TableParentPicker.vue",
         "frontend/tests/frame_parent_state.mjs",

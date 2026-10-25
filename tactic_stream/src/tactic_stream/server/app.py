@@ -242,7 +242,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                 raise ValueError("Invalid JSON request")
             if sdk:
                 args, kwargs = decode(args, True), decode(kwargs, True)
-            transport_api = json_api if method == 'query' else api
+            transport_api = json_api if method in ('query', 'eval') else api
             result = transport_api.dispatch(method, args, kwargs, environ=environ)
             try:
                 response = {'result': encode(result), 'codec': CODEC} if sdk else {'result': result}

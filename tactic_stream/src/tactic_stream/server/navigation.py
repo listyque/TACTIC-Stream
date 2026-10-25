@@ -7,7 +7,7 @@ from xml.etree import ElementTree as ET
 
 from pyasm.biz import Project
 from pyasm.common import Environment, Container
-from pyasm.search import WidgetDbConfig
+from pyasm.search import WidgetDbConfig, Search
 from pyasm.widget import WidgetConfig, WidgetConfigView
 from tactic.core.sidebar_config import SidebarConfig
 
@@ -57,6 +57,16 @@ def read_navigation():
                         display=dict(handler=config.get_display_handler(name), options=options),
                         action=dict(handler=config.get_action_handler(name), options=config.get_action_options(name)),
                         default_view_mode='table' if view == 'project_view' else '', children=[])
+            if handler == 'LinkWdg' and options.get('widget_key') == 'custom_layout':
+                layout_view = options.get('view') or ''
+                search = Search('config/widget_config')
+                search.add_filter('view', layout_view)
+                layouts = [row for row in search.get_sobjects() if
+                    (row.get_value('category', no_exception=True) or row.get_value('search_type')) == 'CustomLayoutWdg']
+                layouts.sort(key=lambda row:float(row.get_value('priority', no_exception=True) or 0),reverse=True)
+                if layouts:
+                    layout = ET.fromstring(layouts[0].get_value('config'))
+                    item.update(layoutView=layout_view, layoutSearchType=layout.findtext('.//display/search_type') or '')
             if kind == 'section':
                 child_view = options.get('view') or element.findtext('view')
                 inline = element.findall('element')

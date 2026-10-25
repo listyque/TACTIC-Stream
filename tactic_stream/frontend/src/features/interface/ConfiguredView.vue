@@ -82,6 +82,7 @@ export default {
     ticket: String,
     project: String,
     workspaceId: String,
+    active: { type: Boolean, default: true },
     rows: { type: Array, default: null },
     configured: { type: Boolean, default: true },
     readOnly: { type: Boolean, default: true },
@@ -455,6 +456,16 @@ export default {
     }
   },
   watch: {
+    active(value) {
+      if (!value) {
+        ++this.actionRequest;
+        ++this.documentRequest;
+        this.scriptAbort?.abort();
+        this.scriptAbort = null;
+        this.serviceBusy = false;
+        this.$refs.tableDocument?.close();
+      }
+    },
     'resultState.closedGroups': {
       deep: true,
       handler(value) {
@@ -1021,6 +1032,7 @@ export default {
         record?.__search_key__ || null,
         null,
         record?.__search_key__ ||
+          state.scope.projectScope ||
           state.scope.searchType === state.scope.parentKey.split('?')[0]
           ? {}
           : { parent_key: state.scope.parentKey }
@@ -1071,6 +1083,18 @@ export default {
       this.$refs.tableForm.open(null, null, {
         parent_key: cell.parent.searchKey
       });
+    },
+    async openCustomLayout(model, title = '', tabKey = '', record = null) {
+      const request = ++this.documentRequest;
+      this.serviceDocument = {
+        ...model,
+        title: title || model.title || 'Custom Layout',
+        translateTitle: !title,
+        tabKey,
+        record: record || model.layoutRecord
+      };
+      await this.$nextTick();
+      if (request === this.documentRequest) this.$refs.tableDocument.open();
     },
     async runConfiguredScript(record, cell, context, request) {
       this.serviceBusy = true;
@@ -1194,15 +1218,12 @@ export default {
             documentRequest !== this.documentRequest
           )
             return;
-          this.serviceDocument = {
-            ...result.info,
-            title: command.title || result.info.title || 'Custom Layout',
-            translateTitle: !command.title,
+          await this.openCustomLayout(
+            result.info,
+            command.title,
+            command.tabKey || '',
             record
-          };
-          await this.$nextTick();
-          if (documentRequest === this.documentRequest)
-            this.$refs.tableDocument.open();
+          );
         } else if (this.openTablePort)
           await this.openTablePort(command, record);
         else throw new Error('Unsupported table window: ' + command.type);
@@ -1344,6 +1365,10 @@ export default {
             ...record,
             __search_key__: cell.targetSearchKey || record.__search_key__
           });
+          return;
+        }
+        if (kind === 'layout-document') {
+          await this.openCustomLayout(cell, cell.layoutView || '', '', record);
           return;
         }
         if (kind === 'nested-table') {
@@ -2482,6 +2507,15 @@ export default {
     <TableDocument
       ref="tableDocument"
       :model="serviceDocument"
+      :ticket="ticket"
+      :project="project"
+      @table-action="tableAction"
+      @edit="openNestedEditor"
+      @inspect="$emit('inspect', $event)"
+      @cell-event="nestedCellEvent"
+      @column="$emit('column', $event)"
+      @saved="tableSaved"
+      @notice="serviceMessage = $event"
       @file="openDependencyFile"
       @closed="documentRequest++"
       @action="

@@ -36,7 +36,18 @@ defineEmits(['action', 'inspect', 'cell-event']);
 </template>
 <style scoped>
 .nested-table-cell {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 100%;
+}
+.nested-table-cell :deep(.table-cell-text) {
+  margin-inline: 10px;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nested-table-cell :deep(.table-cell-text:not(.table-cell-multiline)) {
+  white-space: nowrap;
 }
 </style>

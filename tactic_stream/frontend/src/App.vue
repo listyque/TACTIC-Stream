@@ -902,7 +902,18 @@ export default {
           icon: link?.icon || 'link', accent: this.types.find(item => item.search_type === type)?.color || '',
           tabs, closedTabs: [], current: tabs.at(-1).id })
       }
-      return this.activateSection(id, navigationRequest)
+      await this.activateSection(id, navigationRequest)
+      if (link?.layoutView) {
+        const session=this.session,project=this.project,tab=this.activeSearchTab
+        try {
+          const result=await rpc('execute_cmd',[{ticket:session.ticket,project,language:'python'},'tactic.ui.table.CustomLayoutReadCmd',{view:link.layoutView}])
+          if(this.session!==session || this.project!==project || this.activeSearchTab!==tab)return
+          await nextTick()
+          const owner=this.$refs.taskViews?.find(owner=>owner.workspaceId===tab.id)
+          if(!owner) throw new Error('The configured view is no longer available')
+          await owner.openCustomLayout(result.info,link.title,link.key)
+        } catch(error) {this.fail(error)}
+      }
     },
     searchTabTitle(tab) { return tab.title || (tab.number ? t('New Search {number}', { number: tab.number }) : '') },
     captureSearchTab(captureViewport = true) {
@@ -2072,7 +2083,7 @@ export default {
           @saved="tableRecordsSaved" @operate="(record, event, node) => $refs.objectOperations.open(record, event, node)" />
         <template v-for="entry in retainedSearchTabs" :key="entry.project + entry.tab.id">
           <ConfiguredView v-if="entry.tab === displayedSearchTab ? interfaceConfig : entry.tab.state.interfaceConfig"
-            ref="taskViews" @organization="resultOrganizationChanged(entry, $event)" :workspace-id="entry.tab.id" :data-workspace-current="entry.tab === displayedSearchTab && !administrationOpen"
+            ref="taskViews" @organization="resultOrganizationChanged(entry, $event)" :workspace-id="entry.tab.id" :active="entry.tab === displayedSearchTab" :data-workspace-current="entry.tab === displayedSearchTab && !administrationOpen"
             v-show="!administrationOpen && !busy && entry.tab === displayedSearchTab"
             :definition="entry.tab === displayedSearchTab ? interfaceConfig : entry.tab.state.interfaceConfig"
             :rows="entry.tab === displayedSearchTab ? rows : entry.tab.state.rows"
