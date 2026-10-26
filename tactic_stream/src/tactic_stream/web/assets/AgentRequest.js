@@ -681,11 +681,11 @@ function permissionActions(model) {
 function describeChat(model, width, height, language, sidebarVisible) {
 	const tr = (text) => translate(text, language), current = model.request || {}, context = current.document?.context || model.context || {};
 	const inset = metrics.inset, inner = Math.max(0, width - inset * 2);
-	const providers = host(model)?.capabilities.providers || [], narrow = width < (providers.length ? 820 : 640), providerRow = narrow && providers.length ? 40 : 0;
+	const providers = host(model)?.capabilities.providers || [], narrow = width < (providers.length ? 680 : 640), providerRow = narrow && providers.length ? 40 : 0;
 	const composerWidth = Math.min(880, inner), composerX = (width - composerWidth) / 2;
 	const contextHeight = model.contextExpanded ? 122 : 38;
 	const composerHeight = 128 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0) + providerRow;
-	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? Math.max(80, (composerWidth - 32) / 2) : 200;
+	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? Math.min(200, Math.max(80, (composerWidth - 32) / 2)) : 200;
 	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim() || !!model.attachments.length;
 	const conversation = model.requests.find((row) => row.request_id === model.selected && (!row.project || row.project === model.context.project)) || current.library_summary;
 	const sources = current.related_conversations || [];
@@ -744,7 +744,7 @@ function describeChat(model, width, height, language, sidebarVisible) {
 		highlighted: true
 	}));
 	if (working) nodes.push(button("agentRequestCancel", rect(composerX + composerWidth - 44, height - 52, 32, 32), tr("Cancel request"), "stop", { type: "cancel" }, !model.busy && current.status !== "cancelling", { iconOnly: true }));
-	if (providers.length) nodes.push(node("Choice", "agentRequestProvider", rect(narrow ? composerX + 12 : composerX + 128, height - (narrow ? 132 : 52), narrow ? composerWidth - 24 : Math.min(210, composerWidth - modelWidth - 332 - (working && sendVisible ? 40 : 0)), 32), {
+	if (providers.length) nodes.push(node("Choice", "agentRequestProvider", rect(narrow ? composerX + 12 : composerX + 128, height - (narrow ? 132 : 52), narrow ? Math.min(210, composerWidth - 24) : Math.min(210, composerWidth - modelWidth - 332 - (working && sendVisible ? 40 : 0)), 32), {
 		label: tr("AI connection"),
 		value: provider(model),
 		enabled: !model.busy && !working && !model.pending,
@@ -768,7 +768,7 @@ function describeChat(model, width, height, language, sidebarVisible) {
 		action: { type: "model" }
 	}));
 	const efforts = selectedModel(model)?.efforts || [];
-	if (efforts.length) nodes.push(node("Choice", "agentRequestEffort", rect(narrow ? composerX + 20 + modelWidth : composerX + composerWidth - 188 - (working && sendVisible ? 40 : 0), height - (narrow ? 92 : 52), narrow ? modelWidth : 136, 32), {
+	if (efforts.length) nodes.push(node("Choice", "agentRequestEffort", rect(narrow ? composerX + 20 + modelWidth : composerX + composerWidth - 188 - (working && sendVisible ? 40 : 0), height - (narrow ? 92 : 52), narrow ? Math.min(136, modelWidth) : 136, 32), {
 		label: tr("Reasoning effort"),
 		value: model.effort ?? current.effort ?? "",
 		enabled: !model.busy && !working && !model.pending,
