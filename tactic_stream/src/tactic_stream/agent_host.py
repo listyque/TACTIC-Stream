@@ -19,9 +19,15 @@ from tactic_stream.codex_session import CodexSession, stop_process
 from mcp.server.mcpserver.exceptions import ToolError
 
 
+def codex_executable():
+    if os.name == 'nt':
+        return shutil.which('codex.exe') or shutil.which('codex.cmd')
+    return shutil.which('codex')
+
+
 def codex_command(connection, request, stream_root, handler_root, workspace, *, changes=False,
                   trial_image=None, trial_directory=None):
-    executable = shutil.which('codex.cmd' if os.name == 'nt' else 'codex')
+    executable = codex_executable()
     if not executable:
         raise RuntimeError('Install Codex CLI and sign in before connecting this external host')
     arguments = ['-B', '-X', 'utf8', '-m', 'tactic_stream.admin_agent', '--server', connection.url,
@@ -86,10 +92,13 @@ def model_catalog(options):
         request = dict(request_id=str(uuid4()), document=dict(allow_changes=False))
         client = CodexSession(codex_command(connection, request, options.stream_root, options.handler_root, workspace), dict(os.environ), workspace)
         try:
+            configured_model = client.call('config/read', dict(includeLayers=False))['config'].get('model')
             result, cursor = [], None
             while True:
                 response = client.call('model/list', dict(limit=100, includeHidden=False, cursor=cursor))
-                result.extend(dict(id=item['model'], label=item['displayName'], modalities=item.get('inputModalities', ['text', 'image'])) for item in response['data'])
+                result.extend(dict(id=item['model'], label=item['displayName'], modalities=item.get('inputModalities', ['text', 'image']),
+                    is_default=item['model'] == configured_model if configured_model else item.get('isDefault', False),
+                    efforts=[option['reasoningEffort'] for option in item.get('supportedReasoningEfforts', [])]) for item in response['data'])
                 cursor = response.get('nextCursor')
                 if not cursor:
                     return result
@@ -133,7 +142,8 @@ def run_request(connection, request, host_id, options, heartbeat):
             current_input = pending or [messages[0]]
             schema = dict(type='object', additionalProperties=False, required=['outcome', 'answer'], properties=dict(
                 outcome=dict(type='string', enum=['completed', 'needs_input', 'blocked']), answer=dict(type='string')))
-            turn = client.call('turn/start', dict(threadId=thread, input=message_inputs(connection, current_input), outputSchema=schema))['turn']['id']
+            turn = client.call('turn/start', dict(threadId=thread, input=message_inputs(connection, current_input),
+                effort=request.get('effort') or None, outputSchema=schema))['turn']['id']
             delivered = {message['id'] for message in messages}
             if pending:
                 connection.command('request', 'ack', request_id=request_id, host_id=host_id, message_ids=[message['id'] for message in pending])
@@ -216,7 +226,7 @@ def main():
     options = parser.parse_args()
     if bool(options.trial_image) != bool(options.trial_directory):
         parser.error('Provide the immutable trial image and private receipt directory together')
-    if not shutil.which('codex.cmd' if os.name == 'nt' else 'codex'):
+    if not codex_executable():
         parser.error('Install Codex CLI and sign in first')
     ticket = os.environ.get('TACTIC_AGENT_TICKET', '')
     if options.login:

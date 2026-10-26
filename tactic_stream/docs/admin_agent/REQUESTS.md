@@ -62,6 +62,14 @@ or on the operator's Windows host.
 
 ## Native contract and ownership
 
+The host discovers model-specific `efforts` and the configured default model through
+Codex `model/list` and `config/read`. Both clients offer **Reasoning effort** only
+for a model with advertised options, including the configured **Agent default**.
+The request document and follow-up accept `effort` (empty means provider default).
+The server validates it against the selected host/model and freezes model/effort
+during execution; the host forwards it as `turn/start.effort`. Changing model clears
+the draft effort. Omitted effort remains compatible with older clients/hosts.
+
 `tactic.ui.panel.agent_request_cmd.AgentRequestCmd`, through normal execute_cmd,
 owns state, submit, read, selection, cancel, heartbeat, disconnect, claim, update, message, ack and guarded field undo. Normal
 authentication, API command authorization and administrator permission apply.

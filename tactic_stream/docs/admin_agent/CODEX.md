@@ -9,6 +9,12 @@ describes the host configuration; check `codex --version` and `codex login statu
 on the operator's computer. Existing ChatGPT login can be used by the CLI;
 neither TACTIC product needs an OpenAI API key.
 
+On Windows the host prefers `codex.exe` from PATH and uses `codex.cmd` only
+when no native executable is available. An older npm CLI can return an older
+model catalogue than the desktop application's bundled executable. Use the
+same current executable for discovery and execution; never add model IDs to
+the selector by hand. The catalogue comes from that executable's `model/list`.
+
 ## Dedicated administrator workspace
 
 Use an empty directory separate from both source repositories. Configure its

@@ -49,6 +49,25 @@ class AgentRequests(unittest.TestCase):
         arguments.update(values)
         return self.call('submit', **arguments), arguments
 
+    def test_model_effort_is_validated_retained_and_frozen_during_execution(self):
+        self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False,
+            steering=True, models=[dict(id='fixture', label='Fixture', is_default=True, efforts=['low', 'high'])]))
+        self.document.update(model='fixture', effort='high')
+        row, arguments = self.submit()
+        self.assertEqual(row['effort'], 'high')
+        self.assertEqual(row, self.call('submit', **arguments))
+        self.call('claim', host_id=self.host)
+        with self.assertRaisesRegex(ValueError, 'current turn finishes'):
+            self.call('message', request_id=row['request_id'], message_id=str(uuid4()), text='Correction', effort='low')
+        self.call('update', request_id=row['request_id'], host_id=self.host, status='completed')
+        for model, effort in [('fixture', 'ultra'), ('unknown', 'high')]:
+            with self.assertRaisesRegex(ValueError, 'Choose a'):
+                self.call('message', request_id=row['request_id'], message_id=str(uuid4()), text='Continue', model=model, effort=effort)
+        resumed = self.call('message', request_id=row['request_id'], message_id=str(uuid4()), text='Continue', model='', effort='low')
+        self.assertEqual(resumed['model'], '')
+        self.assertEqual(resumed['effort'], 'low')
+        self.assertEqual(self.call('claim', host_id=self.host)['request']['effort'], 'low')
+
     def test_replay_capture_claim_and_finished_request_are_durable(self):
         saved, arguments = self.submit()
         self.assertEqual(saved, self.call('submit', **arguments))
@@ -133,6 +152,27 @@ class AgentRequests(unittest.TestCase):
         self.assertIn('features.shell_tool=false', command)
         self.assertIn(request['request_id'], encoded)
         self.assertIn(self.document['context']['search_keys'][0], task_prompt(request))
+
+    def test_windows_prefers_native_codex_and_retains_cmd_fallback(self):
+        from tactic_stream.agent_host import codex_executable
+        with patch('tactic_stream.agent_host.os.name', 'nt'), patch('tactic_stream.agent_host.shutil.which') as which:
+            which.side_effect = lambda name: {'codex.exe': 'desktop-codex', 'codex.cmd': 'older-npm-codex'}.get(name)
+            self.assertEqual(codex_executable(), 'desktop-codex')
+            which.assert_called_once_with('codex.exe')
+            which.reset_mock()
+            which.side_effect = lambda name: {'codex.cmd': 'npm-only'}.get(name)
+            self.assertEqual(codex_executable(), 'npm-only')
+        with patch('tactic_stream.agent_host.os.name', 'posix'), patch('tactic_stream.agent_host.shutil.which', return_value='unix-codex') as which:
+            self.assertEqual(codex_executable(), 'unix-codex')
+            which.assert_called_once_with('codex')
+
+    def test_followup_clears_the_previous_provider_error(self):
+        request, _ = self.submit()
+        self.call('claim', host_id=self.host)
+        self.call('update', request_id=request['request_id'], host_id=self.host, status='failed', error='Previous model rejected')
+        current = self.call('message', request_id=request['request_id'], message_id=str(uuid4()), text='Continue', attachments=[])
+        self.assertEqual(current['status'], 'queued')
+        self.assertEqual(current['error'], '')
 
     def test_owner_and_administrator_permission_and_disconnect(self):
         saved, _ = self.submit()

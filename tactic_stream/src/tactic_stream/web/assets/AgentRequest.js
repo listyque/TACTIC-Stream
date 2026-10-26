@@ -24,7 +24,8 @@ function initial(context = {}) {
 		pending: null,
 		attachments: [],
 		uploading: false,
-		model: "",
+		model: null,
+		effort: null,
 		contextExpanded: false
 	};
 }
@@ -42,6 +43,10 @@ function host(model) {
 function canSend(model) {
 	const connected = host(model);
 	return !model.busy && !model.uploading && !!model.context?.project && !!model.prompt.trim() && model.prompt.length <= 12e3 && !!connected && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
+}
+function selectedModel(model) {
+	const id = model.model ?? model.request?.model ?? "";
+	return host(model)?.capabilities.models?.find((item) => id ? item.id === id : item.is_default);
 }
 function messages(model) {
 	const current = model.request || {};
@@ -134,8 +139,8 @@ function describe(model, width, height, language) {
 	const inset = metrics.inset, inner = Math.max(0, width - inset * 2), narrow = width < 640, connected = host(model);
 	const composerWidth = Math.min(880, inner), composerX = (width - composerWidth) / 2;
 	const contextHeight = model.contextExpanded ? 122 : 38;
-	const composerHeight = 158 + contextHeight + (model.attachments.length ? 42 : 0);
-	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? 142 : 200;
+	const composerHeight = 158 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0);
+	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? Math.max(80, (composerWidth - 32) / 2) : 200;
 	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim();
 	const nodes = [
 		node("Choice", "agentRequestHistory", rect(inset, 10, Math.max(70, inner - 88), 32), {
@@ -190,7 +195,7 @@ function describe(model, width, height, language) {
 			enabled: !model.busy,
 			action: { type: "prompt" }
 		}),
-		node("CheckBox", "agentRequestChanges", rect(composerX + 16, height - 84, Math.max(0, composerWidth - 32), 26), {
+		node("CheckBox", "agentRequestChanges", rect(composerX + 16, height - 84 - (narrow ? 40 : 0), Math.max(0, composerWidth - 32), 26), {
 			text: tr("Allow requested changes"),
 			wrapText: true,
 			checked: current.document?.allow_changes ?? model.allowChanges,
@@ -205,10 +210,10 @@ function describe(model, width, height, language) {
 		highlighted: true
 	}));
 	if (working) nodes.push(button("agentRequestCancel", rect(composerX + composerWidth - 44, height - 52, 32, 32), tr("Cancel request"), "stop", { type: "cancel" }, !model.busy && current.status !== "cancelling", { iconOnly: true }));
-	if (connected?.capabilities.models?.length) nodes.push(node("Choice", "agentRequestModel", rect(composerX + composerWidth - modelWidth - 52 - (working && sendVisible ? 40 : 0), height - 52, modelWidth, 32), {
+	if (connected?.capabilities.models?.length) nodes.push(node("Choice", "agentRequestModel", rect(narrow ? composerX + 12 : composerX + composerWidth - modelWidth - 52 - (narrow ? 0 : 144) - (working && sendVisible ? 40 : 0), height - (narrow ? 92 : 52), modelWidth, 32), {
 		label: tr("Model"),
-		value: model.model || current.model || "",
-		enabled: !model.busy && !working,
+		value: model.model ?? current.model ?? "",
+		enabled: !model.busy && !working && !model.pending,
 		options: [{
 			value: "",
 			label: tr("Agent default")
@@ -218,7 +223,30 @@ function describe(model, width, height, language) {
 		}))],
 		action: { type: "model" }
 	}));
-	if (model.attachments.length) nodes.push(node("View", "agentRequestAttachments", rect(composerX + 12, height - 126, composerWidth - 24, 36), {
+	const efforts = selectedModel(model)?.efforts || [];
+	if (efforts.length) nodes.push(node("Choice", "agentRequestEffort", rect(narrow ? composerX + 20 + modelWidth : composerX + composerWidth - 188 - (working && sendVisible ? 40 : 0), height - (narrow ? 92 : 52), narrow ? modelWidth : 136, 32), {
+		label: tr("Reasoning effort"),
+		value: model.effort ?? current.effort ?? "",
+		enabled: !model.busy && !working && !model.pending,
+		options: [{
+			value: "",
+			label: tr("Agent default")
+		}, ...efforts.map((value) => ({
+			value,
+			label: tr({
+				none: "None",
+				minimal: "Minimal",
+				low: "Low",
+				medium: "Medium",
+				high: "High",
+				xhigh: "Extra high",
+				max: "Maximum",
+				ultra: "Ultra"
+			}[value] || value)
+		}))],
+		action: { type: "effort" }
+	}));
+	if (model.attachments.length) nodes.push(node("View", "agentRequestAttachments", rect(composerX + 12, height - 126 - (narrow ? 40 : 0), composerWidth - 24, 36), {
 		view: "attachments",
 		files: model.attachments
 	}));
@@ -436,7 +464,8 @@ var _sfc_main = {
 						message_id: randomUuid(),
 						host_id: host(model.value).host_id,
 						text: model.value.prompt,
-						model: model.value.model || model.value.request.model || "",
+						model: model.value.model ?? model.value.request.model ?? "",
+						effort: model.value.effort ?? model.value.request.effort ?? "",
 						attachments: model.value.attachments.map((file) => file.attachment_id)
 					} : {
 						request_id: randomUuid(),
@@ -445,7 +474,8 @@ var _sfc_main = {
 							prompt: model.value.prompt,
 							context: JSON.parse(JSON.stringify(model.value.context)),
 							allow_changes: model.value.allowChanges,
-							model: model.value.model,
+							model: model.value.model ?? "",
+							effort: model.value.effort ?? "",
 							attachments: model.value.attachments.map((file) => file.attachment_id)
 						}
 					};
@@ -509,14 +539,18 @@ var _sfc_main = {
 					request: {},
 					prompt: "",
 					attachments: [],
-					model: "",
+					model: null,
+					effort: null,
 					pending: null
 				});
 				request();
 			} else if (action.type === "send" && canSend(model.value)) request("send");
 			else if (action.type === "cancel") request("cancel");
 			else if (action.type === "refresh") request();
-			else if (action.type === "model") model.value.model = action.value;
+			else if (action.type === "model") {
+				model.value.model = action.value;
+				model.value.effort = "";
+			} else if (action.type === "effort") model.value.effort = action.value;
 			else if (action.type === "context") model.value.contextExpanded = !model.value.contextExpanded;
 			else if (action.type === "remove" && !model.value.pending) model.value.attachments = model.value.attachments.filter((file) => file.attachment_id !== action.value);
 			else if (action.type === "attach") fileInput.value.click();

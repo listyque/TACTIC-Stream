@@ -46,6 +46,7 @@ try {
   await dialog.waitFor();
   if (!live) {
     await dialog.getByRole('combobox', { name: 'Model', exact: true }).selectOption('fixture');
+    await dialog.getByRole('combobox', { name: 'Reasoning effort', exact: true }).selectOption('high');
     const chooser = page.waitForEvent('filechooser');
     await dialog.getByRole('button', { name: 'Attach files', exact: true }).click();
     await (await chooser).setFiles({ name: 'reference.txt', mimeType: 'text/plain', buffer: Buffer.from('Reference file') });
@@ -91,6 +92,9 @@ try {
     const host_id = process.env.STREAM_FIXTURE_HOST_ID;
     assert.ok(host_id);
     const claimed = (await fixtureCommand('claim', { host_id })).request;
+    assert.equal(claimed.model, 'fixture');
+    assert.equal(claimed.effort, 'high');
+    assert.ok(await dialog.getByRole('combobox', { name: 'Reasoning effort', exact: true }).isDisabled());
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('working'));
     await dialog.getByLabel('Add a correction while the agent works', { exact: true }).fill('Use the reference process');
     await dialog.getByRole('button', { name: 'Send correction', exact: true }).click();
@@ -102,9 +106,15 @@ try {
       answer: '**Completed**\n\n- Workflow saved\n- References checked in\n\n`reference → model → texture → rig`' });
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('Task completed'));
     assert.equal(await dialog.getByRole('log').locator('strong').textContent(), 'Completed');
+    await dialog.getByRole('combobox', { name: 'Model', exact: true }).selectOption('');
+    assert.equal(await dialog.getByRole('combobox', { name: 'Reasoning effort', exact: true }).inputValue(), '');
+    await dialog.getByRole('combobox', { name: 'Reasoning effort', exact: true }).selectOption('low');
     await dialog.getByLabel('What should the agent do?', { exact: true }).fill('Thank you, summarize the result');
     await dialog.getByRole('button', { name: 'Send to agent', exact: true }).click();
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('queued'));
+    const followup = await fixtureCommand('read', { request_id: claimed.request_id });
+    assert.equal(followup.model, '');
+    assert.equal(followup.effort, 'low');
     await dialog.getByRole('button', { name: 'Cancel request', exact: true }).click();
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('cancelled'));
   }

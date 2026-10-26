@@ -95,7 +95,11 @@ class AgentRequestCmd(Command):
             models = capabilities.get('models', [])
             if (not isinstance(models, list) or len(models) > 100 or any(
                     not isinstance(model, dict) or not isinstance(model.get('id'), str)
-                    or not isinstance(model.get('label'), str) for model in models)):
+                    or not isinstance(model.get('label'), str)
+                    or not isinstance(model.get('efforts', []), list)
+                    or len(model.get('efforts', [])) > 20
+                    or any(not isinstance(value, str) or not value or len(value) > 32 for value in model.get('efforts', []))
+                    or type(model.get('is_default', False)) is not bool for model in models)):
                 raise ValueError('Invalid model catalogue')
             host = dict(host_id=host_id, label=text(self.kwargs.get('label'), 120),
                         capabilities=capabilities, seen=self.now)
@@ -113,7 +117,7 @@ class AgentRequestCmd(Command):
         if action == 'submit':
             request_id = identity(self.kwargs.get('request_id'))
             document = self.kwargs.get('document')
-            if (not isinstance(document, dict) or set(document) - {'prompt', 'context', 'allow_changes', 'attachments', 'model'}
+            if (not isinstance(document, dict) or set(document) - {'prompt', 'context', 'allow_changes', 'attachments', 'model', 'effort'}
                     or not {'prompt', 'context', 'allow_changes'} <= set(document)):
                 raise ValueError('Invalid agent request document')
             text(document['prompt'], 12000)
@@ -131,14 +135,14 @@ class AgentRequestCmd(Command):
                 raise ValueError('External agent is offline')
             if document['allow_changes'] and not host['capabilities']['changes']:
                 raise ValueError('This host only allows reading and previews')
-            self.check_model(host, document.get('model', ''))
+            self.check_model(host, document.get('model', ''), document.get('effort', ''))
             attachments = self.check_attachments(document.get('attachments', []))
             if sum(row['status'] in ACTIVE for row in self.records('spt_agent_request')) >= 5:
                 raise ValueError('Wait for an existing agent request to finish')
             row = dict(request_id=request_id, document=document, host_id=host['host_id'],
                        status='queued', created=self.now, seen=self.now, events=[], answer='', error='',
                        messages=[dict(id=request_id, role='user', text=document['prompt'], attachments=attachments, delivered=True)],
-                       model=document.get('model', ''), turn=1)
+                       model=document.get('model', ''), effort=document.get('effort', ''), turn=1)
         elif action == 'claim':
             host_id = identity(self.kwargs.get('host_id'))
             host = self.load('spt_agent_host', host_id)
@@ -226,11 +230,12 @@ class AgentRequestCmd(Command):
                 if row['status'] == 'running' and not host['capabilities'].get('steering'):
                     raise ValueError('This agent does not support corrections while working')
                 model = self.kwargs.get('model', row.get('model', ''))
-                self.check_model(host, model)
+                effort = self.kwargs.get('effort', row.get('effort', ''))
+                self.check_model(host, model, effort)
                 if row['status'] != 'running':
-                    row.update(status='queued', seen=self.now, created=self.now, host_id=host_id, model=model, turn=row.get('turn', 1) + 1, output='')
-                elif model != row.get('model', ''):
-                    raise ValueError('Change the model after the current turn finishes')
+                    row.update(status='queued', seen=self.now, created=self.now, host_id=host_id, model=model, effort=effort, turn=row.get('turn', 1) + 1, output='', error='')
+                elif model != row.get('model', '') or effort != row.get('effort', ''):
+                    raise ValueError('Change the model or reasoning effort after the current turn finishes')
                 messages.append(message)
             elif action == 'ack':
                 if identity(self.kwargs.get('host_id')) != row['host_id']:
@@ -279,10 +284,15 @@ class AgentRequestCmd(Command):
         self.save('spt_agent_request', row['request_id'], row)
         self.info = row
 
-    def check_model(self, host, model):
+    def check_model(self, host, model, effort=''):
         text(model, 128, empty=True)
-        if model and model not in {item['id'] for item in host['capabilities'].get('models', [])}:
+        text(effort, 32, empty=True)
+        selected = next((item for item in host['capabilities'].get('models', [])
+                         if item['id'] == model or (not model and item.get('is_default'))), None)
+        if model and selected is None:
             raise ValueError('Choose a model offered by the connected agent')
+        if effort and (selected is None or effort not in selected.get('efforts', [])):
+            raise ValueError('Choose a reasoning effort offered for this model')
 
     def check_attachments(self, codes):
         from .agent_attachment_cmd import attachment

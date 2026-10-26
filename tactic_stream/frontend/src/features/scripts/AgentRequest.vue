@@ -90,7 +90,8 @@ async function request(action = 'refresh') {
             message_id: randomUuid(),
             host_id: UI.host(model.value).host_id,
             text: model.value.prompt,
-            model: model.value.model || model.value.request.model || '',
+            model: model.value.model ?? model.value.request.model ?? '',
+            effort: model.value.effort ?? model.value.request.effort ?? '',
             attachments: model.value.attachments.map(
               (file) => file.attachment_id
             )
@@ -102,7 +103,8 @@ async function request(action = 'refresh') {
               prompt: model.value.prompt,
               context: JSON.parse(JSON.stringify(model.value.context)),
               allow_changes: model.value.allowChanges,
-              model: model.value.model,
+              model: model.value.model ?? '',
+              effort: model.value.effort ?? '',
               attachments: model.value.attachments.map(
                 (file) => file.attachment_id
               )
@@ -184,14 +186,18 @@ function event(action) {
         request: {},
         prompt: '',
         attachments: [],
-        model: '',
+        model: null,
+        effort: null,
         pending: null
       });
     request();
   } else if (action.type === 'send' && UI.canSend(model.value)) request('send');
   else if (action.type === 'cancel') request('cancel');
   else if (action.type === 'refresh') request();
-  else if (action.type === 'model') model.value.model = action.value;
+  else if (action.type === 'model') {
+    model.value.model = action.value;
+    model.value.effort = '';
+  } else if (action.type === 'effort') model.value.effort = action.value;
   else if (action.type === 'context')
     model.value.contextExpanded = !model.value.contextExpanded;
   else if (action.type === 'remove' && !model.value.pending)
