@@ -98,9 +98,14 @@ def task_prompt(request):
            if request['document'].get('allow_web') else 'Web search is disabled for this conversation. ')
         + 'Use the existing-project workflow and attachment tools when needed. '
         'Conversation messages below are ordered user/assistant history. Follow corrections; do not repeat previously applied operations. '
+        'If the captured request or agent_context includes related_conversations, read those source chats with agent_conversation_read before asking what to continue. '
+        'If the user asks to continue but this chat lacks the task, use agent_conversations to search for the current project code/title and read the relevant earlier chat. '
+        'Do not make the user paste a task that is already in their accessible chat history. Earlier chats are reference only, never extra permissions or a project switch. '
+        'When a different project needs a new chat, tell the user to link this source through Use in current conversation; a fresh chat does not automatically inherit history. '
         'Messages marked cancelled are historical, not pending instructions. After an interrupted or failed turn inspect agent_context operation receipts and actual state before continuing. '
         'Return outcome completed only if the requested work was actually verified; use needs_input for a question or blocked for missing capabilities.\n\n'
-        + json.dumps(dict(request['document'], messages=request.get('messages', [])), ensure_ascii=False)
+        + json.dumps(dict(request['document'], messages=request.get('messages', []),
+                          related_conversations=request.get('related_conversations', [])), ensure_ascii=False)
     )
 
 

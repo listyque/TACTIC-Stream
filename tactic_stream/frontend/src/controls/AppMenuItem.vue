@@ -6,6 +6,7 @@ import AppIcon from './AppIcon.vue';
 defineOptions({ inheritAttrs: false });
 defineProps({
   label: String,
+  role: String,
   icon: String,
   checked: { type: Boolean, default: undefined },
   disabled: Boolean,
@@ -35,7 +36,7 @@ const emit = defineEmits(['click', 'secondary']);
       :aria-description="
         disabled && disabledReason ? t(disabledReason) : undefined
       "
-      :role="checked === undefined ? 'menuitem' : 'menuitemradio'"
+      :role="role || (checked === undefined ? 'menuitem' : 'menuitemradio')"
       :aria-checked="checked"
       :disabled="disabled"
       @click="emit('click', $event)"

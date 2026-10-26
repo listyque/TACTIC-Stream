@@ -64,16 +64,23 @@ class AgentRequestCmd(Command):
         _require_admin()
         if self.kwargs.get('project_code') != Project.get_project_code():
             raise ValueError('Agent request project mismatch')
-        if self.kwargs.get('action') in ('library','host_projects'):
+        if self.kwargs.get('action') in ('library','host_projects','history_search','history_read'):
             from tactic_stream.server.agent_library import library
             self.owner = Environment.get_user_name()
-            self.info = library(self,catalog_only=self.kwargs['action']=='host_projects')
+            if self.kwargs['action']=='history_read':
+                from tactic_stream.server.agent_library import history_read
+                self.info=history_read(self)
+            else:
+                self.info = library(self,catalog_only=self.kwargs['action']=='host_projects',
+                                    page_size=20 if self.kwargs['action']=='history_search' else 100)
+                if self.kwargs['action']=='history_search':
+                    self.info={key:self.info[key] for key in ('requests','total','next_offset')}
             return
         self.sql = Search('config/trigger').get_sql()
         if not all(self.sql.table_exists(name) for name in ('spt_agent_request', 'spt_agent_host')):
             raise ValueError('Upgrade the project schema before connecting an agent')
         action = self.kwargs.get('action')
-        if action not in ('state', 'submit', 'read', 'selection', 'cancel', 'heartbeat', 'disconnect', 'claim', 'update', 'message', 'ack', 'undo', 'download', 'draft', 'organize', 'group_save', 'group_remove'):
+        if action not in ('state', 'submit', 'read', 'selection', 'cancel', 'heartbeat', 'disconnect', 'claim', 'update', 'message', 'ack', 'undo', 'download', 'draft', 'organize', 'group_save', 'group_remove','link_source'):
             raise ValueError('Unknown agent request action')
         self.owner = Environment.get_user_name()
         self.now = int(time.time())
@@ -173,6 +180,8 @@ class AgentRequestCmd(Command):
                        model=document.get('model', ''), effort=document.get('effort', ''), provider=provider, provider_target=target, turn=1)
             if old and 'library' in old:
                 row['library'] = old['library']
+            if old and 'related_conversations' in old:
+                row['related_conversations']=old['related_conversations']
         elif action == 'claim':
             host_id = identity(self.kwargs.get('host_id'))
             host = self.load('spt_agent_host', host_id)
@@ -201,7 +210,10 @@ class AgentRequestCmd(Command):
                 from tactic_stream.server.agent_library import summary
                 self.info = dict(row, library_summary=summary(row))
                 return
-            if action == 'download':
+            if action == 'link_source':
+                from tactic_stream.server.agent_library import link_source
+                link_source(self,row)
+            elif action == 'download':
                 if not row['document'].get('allow_web') or row['status'] != 'running':
                     raise ValueError('Web downloads require an active conversation with internet access')
                 code = identity(self.kwargs.get('operation_id'))

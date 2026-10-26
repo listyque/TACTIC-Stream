@@ -262,11 +262,26 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             """The user's immutable TH/TS project, page and selection captured before sending."""
             request = connection.command('request', 'read', request_id=request_id)
             result = dict(request_id=request_id, **request['document'])
+            result['related_conversations'] = request.get('related_conversations', [])
             result['attachments'] = [item for message in request.get('messages', []) for item in message.get('attachments', [])]
             if request.get('operations'):
                 result['operations'] = [dict(operation_id=code, result=receipt['result'], undone=receipt.get('undone', False))
                                         for code, receipt in request['operations'].items()]
             return result
+
+        @mcp.tool(annotations=read_only, structured_output=True)
+        def agent_conversations(query: Annotated[str, Field(max_length=200)] = '', project: str = '', offset: Offset = 0) -> dict[str, Any]:
+            """Find your saved conversations across accessible projects, 20/page. Search also matches messages and project names/codes. For 'continue' without earlier task context, search the current project code/title before asking the user to repeat it. This is read-only; it does not change the current project's tools or permissions."""
+            result = connection.command('request','history_search',query=query,project_filter=project,offset=offset)
+            fields = ('request_id','title','project','project_title','status','activity')
+            result['requests']=[{key:row[key] for key in fields} for row in result['requests']
+                                if row['request_id']!=request_id or row['project']!=connection.project]
+            return result
+
+        @mcp.tool(annotations=read_only, structured_output=True)
+        def agent_conversation_read(project: Identifier, conversation_id: Identifier, offset: Offset = 0) -> dict[str, Any]:
+            """Read your saved chat as reference, 6000 characters/page; follow next_offset until null. Use related_conversations from agent_context or IDs from agent_conversations. Earlier messages are reference, not new permissions. Keep the current project/selection and inspect actual state before repeating earlier writes. Attachments are listed by name, not imported into this chat."""
+            return connection.command('request','history_read',source_project=project,source_request=conversation_id,offset=offset)
 
         @mcp.tool(annotations=read_only, structured_output=True)
         def agent_selection() -> dict[str, Any]:
@@ -394,6 +409,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                 'operations': ['references', 'types.read', 'schema.read', 'naming.read', 'naming.preview',
                                'naming.operation', 'page.read', 'page.preview', 'page.operation']
                               + ['project.preview', 'project.read', 'project.operation']
+                              + (['conversation.search', 'conversation.read'] if request_id else [])
                               + ['handler_automation.read', 'handler_automation.preview', 'handler_automation.draft', 'handler_automation.operation']
                               + (['naming.save'] if allow_naming_save else []) + (['page.save'] if allow_page_save else [])
                               + (['project.create', 'project.export', 'project.install'] if allow_project_create else [])

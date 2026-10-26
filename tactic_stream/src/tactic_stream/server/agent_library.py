@@ -39,7 +39,7 @@ def summary(row):
         **{key:meta[key] for key in ('group','pinned','archived')}, library_revision=revision(meta))
 
 
-def library(cmd, *, catalog_only=False):
+def library(cmd, *, catalog_only=False, page_size=100):
     """Read only this user's histories; execution remains in each chat's project."""
     from tactic.ui.panel.agent_request_cmd import AgentRequestCmd, text
     selected = text(cmd.kwargs.get('project_filter', ''), 256, empty=True)
@@ -96,9 +96,60 @@ def library(cmd, *, catalog_only=False):
     result['projects'].sort(key=lambda project:project['title'].casefold())
     result['requests'].sort(key=lambda row:(row['pinned'],row['activity'],row['key']),reverse=True)
     total = len(result['requests'])
-    result.update(requests=result['requests'][offset:offset+100],total=total,
-                  next_offset=offset+100 if offset+100<total else None)
+    result.update(requests=result['requests'][offset:offset+page_size],total=total,
+                  next_offset=offset+page_size if offset+page_size<total else None)
     return result
+
+
+def conversation(project, code):
+    from tactic.ui.panel.agent_request_cmd import AgentRequestCmd, identity, text
+    from .navigation_links import check_project
+    project, code = text(project,256), identity(code)
+    previous = Project.get_project_code()
+    try:
+        check_project(project)
+        Project.set_project(project)
+        reader = AgentRequestCmd()
+        reader.owner, reader.sql = Environment.get_user_name(), Search('config/trigger').get_sql()
+        row = reader.load('spt_agent_request',code)
+        reference = dict(project=project, request_id=code, title=summary(row)['title'],
+                         project_title=Project.get().get_value('title',no_exception=True) or project)
+        return row,reference
+    finally:
+        Project.set_project(previous)
+
+
+def history_read(cmd):
+    row,reference = conversation(cmd.kwargs.get('source_project'),cmd.kwargs.get('source_request'))
+    offset = cmd.kwargs.get('offset',0)
+    if type(offset) is not int or not 0<=offset<=2000000:
+        raise ValueError('Invalid conversation offset')
+    parts=[]
+    for message in row.get('messages',[]):
+        files='\n'.join('Attachment: '+file['name'] for file in message.get('attachments',[]))
+        parts.append('['+message['role']+']\n'+message.get('text','')+ ('\n'+files if files else ''))
+    transcript='\n\n'.join(parts)
+    end=min(len(transcript),offset+6000)
+    return dict(reference=reference,context=row['document']['context'],status=row['status'],outcome=row.get('outcome',''),
+                text=transcript[offset:end],next_offset=end if end<len(transcript) else None,total_characters=len(transcript),
+                related_conversations=row.get('related_conversations',[]))
+
+
+def link_source(cmd,row):
+    from tactic.ui.panel.agent_request_cmd import ACTIVE
+    if row['status'] in ACTIVE:
+        raise ValueError('Wait for the current turn before changing conversation context')
+    source,reference=conversation(cmd.kwargs.get('source_project'),cmd.kwargs.get('source_request'))
+    if reference['project']==Project.get_project_code() and reference['request_id']==row['request_id']:
+        raise ValueError('Choose another conversation as context')
+    if not source.get('messages') or source['status'] in ACTIVE:
+        raise ValueError('Choose a finished conversation with saved messages')
+    related=row.setdefault('related_conversations',[])
+    if any(item['project']==reference['project'] and item['request_id']==reference['request_id'] for item in related):
+        return
+    if len(related)>=5:
+        raise ValueError('Use at most five source conversations')
+    related.append(reference)
 
 
 def state(cmd):

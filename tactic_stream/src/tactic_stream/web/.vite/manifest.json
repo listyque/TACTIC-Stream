@@ -764,6 +764,7 @@
       "index.html",
       "_CodeBlock.js",
       "_AppDialog.js",
+      "_AppMenuItem.js",
       "_tree.ui.js",
       "src/App.vue"
     ],

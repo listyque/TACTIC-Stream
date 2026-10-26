@@ -31,7 +31,9 @@ try {
   await editor.getByText('Codex uses the account signed in on the external host. Provider API keys are not required.', { exact: true }).waitFor();
   await editor.getByRole('button', { name: 'Close', exact: true }).click();
   await dialog.getByLabel('What should the agent do?', { exact: true }).fill('Проверка подключения. Вызови agent_context один раз и сообщи название текущего проекта и страницы. Ничего не изменяй.');
-  assert.equal(await dialog.getByRole('checkbox', { name: 'Allow requested changes', exact: true }).isChecked(), false);
+  await dialog.getByLabel('Agent permissions',{exact:true}).click();
+  assert.equal(await page.getByRole('menuitemcheckbox', { name: 'Allow requested changes', exact: true }).getAttribute('aria-checked'),'false');
+  await page.keyboard.press('Escape');
   await dialog.getByRole('button', { name: 'Send to agent', exact: true }).click();
   await page.waitForFunction(() => /Task completed|Task blocked|Request (failed|interrupted)/.test(document.querySelector('[data-frame=agentRequestStatus]')?.textContent || ''), undefined, { timeout: 180000 });
   const status = await dialog.locator('[data-frame=agentRequestStatus]').innerText();

@@ -7,6 +7,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 	__name: "AppMenuItem",
 	props: {
 		label: String,
+		role: String,
 		icon: String,
 		checked: {
 			type: Boolean,
@@ -35,7 +36,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 				"aria-label": __props.translate ? unref(t)(__props.label) : __props.label,
 				title: __props.disabled && __props.disabledReason ? unref(t)(__props.disabledReason) : __props.translate ? unref(t)(__props.label) : __props.label,
 				"aria-description": __props.disabled && __props.disabledReason ? unref(t)(__props.disabledReason) : void 0,
-				role: __props.checked === void 0 ? "menuitem" : "menuitemradio",
+				role: __props.role || (__props.checked === void 0 ? "menuitem" : "menuitemradio"),
 				"aria-checked": __props.checked,
 				disabled: __props.disabled,
 				onClick: _cache[0] || (_cache[0] = ($event) => emit("click", $event))

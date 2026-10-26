@@ -24,7 +24,7 @@ const attachmentCommand =
   'tactic.ui.panel.agent_attachment_cmd.AgentAttachmentCmd';
 const views = computed(() =>
   Object.fromEntries(
-    ['context', 'transcript', 'attachments'].map((name) => [
+    ['context', 'transcript', 'attachments', 'permissions'].map((name) => [
       name,
       {
         component: markRaw(AgentChatPort),
@@ -387,6 +387,20 @@ function event(action) {
             }
           };
     libraryOperation.project = edit.project || model.value.context.project;
+    request('library');
+    return;
+  }
+  if (action.type === 'historyUseContext') {
+    const source = model.value.history.edit;
+    if (!source || !model.value.selected || UI.active(model.value)) return;
+    libraryOperation = {
+      action: 'link_source',
+      values: {
+        request_id: model.value.selected,
+        source_project: source.project,
+        source_request: source.id
+      }
+    };
     request('library');
     return;
   }

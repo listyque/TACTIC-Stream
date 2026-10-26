@@ -2,6 +2,8 @@
 import { computed, nextTick, ref, watch } from 'vue';
 import AppButton from '../../controls/AppButton.vue';
 import AppIcon from '../../controls/AppIcon.vue';
+import AppMenu from '../../controls/AppMenu.vue';
+import AppMenuItem from '../../controls/AppMenuItem.vue';
 import MarkdownText from '../../controls/MarkdownText.vue';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
@@ -35,7 +37,29 @@ const messageStyle = (row) => {
 </script>
 
 <template>
-  <div v-if="frameNode.view === 'context'" class="agent-context">
+  <AppMenu
+    v-if="frameNode.view === 'permissions'"
+    label="Agent permissions"
+    icon="tune"
+    compact-trigger
+    overlay
+    :width="320"
+    :disabled="!frameNode.enabled"
+  >
+    <template v-for="(action, index) in frameNode.actions" :key="index">
+      <hr v-if="action.separator" />
+      <AppMenuItem
+        v-else
+        :label="action.title"
+        :icon="action.icon"
+        :checked="action.checked"
+        :role="action.role"
+        :disabled="action.enabled === false"
+        @click="emit('event', { type: action.command, value: !action.checked })"
+      />
+    </template>
+  </AppMenu>
+  <div v-else-if="frameNode.view === 'context'" class="agent-context">
     <div class="agent-context-row">
       <div class="agent-context-chips">
         <span

@@ -80,8 +80,13 @@ try {
   assert.ok(context.includes('SH'), context);
   await dialog.getByLabel('What should the agent do?').fill(process.env.STREAM_AGENT_PROMPT || 'Explain the selected shots');
   if (!live) await dialog.getByLabel('What should the agent do?').fill('');
-  await dialog.getByRole('checkbox', { name: 'Allow requested changes' }).check();
-  if (!live) await dialog.getByRole('checkbox', { name: 'Allow internet access' }).check();
+  assert.equal(await dialog.getByRole('checkbox', { name: 'Allow requested changes' }).count(),0);
+  await dialog.getByLabel('Agent permissions',{exact:true}).click();
+  await page.getByRole('menuitemcheckbox',{name:'Allow requested changes',exact:true}).click();
+  if (!live) {
+    await dialog.getByLabel('Agent permissions',{exact:true}).click();
+    await page.getByRole('menuitemcheckbox',{name:'Allow internet access',exact:true}).click();
+  }
   await dialog.getByRole('button', { name: 'Send to agent', exact: true }).tap();
   await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('queued') || document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('working') || document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('completed'));
   if (live) {
@@ -103,6 +108,10 @@ try {
     assert.equal(claimed.effort, 'high');
     assert.equal(claimed.document.prompt, '');
     assert.equal(claimed.document.allow_web, true);
+    await dialog.getByLabel('Agent permissions',{exact:true}).click();
+    assert.ok(await page.getByRole('menuitemcheckbox',{name:'Allow requested changes',exact:true}).isDisabled());
+    assert.ok(await page.getByRole('menuitemcheckbox',{name:'Allow internet access',exact:true}).isDisabled());
+    await page.keyboard.press('Escape');
     assert.equal(await dialog.locator('.agent-message-image').count(), 1);
     assert.ok(await dialog.getByRole('combobox', { name: 'Reasoning effort', exact: true }).isDisabled());
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('working'));

@@ -54784,7 +54784,7 @@ var _sfc_main = {
 				context.search_keys = [...new Set(records.map((record) => record.__search_key__))];
 			}
 			try {
-				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([76,1,2,3,4,5,6,7,13,14,62,77]));
+				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([76,1,2,3,4,5,6,7,13,14,38,39,62,77]));
 				if (this.session !== session) return;
 				this.agentRequestComponent ||= markRaw(module.default);
 				await nextTick();

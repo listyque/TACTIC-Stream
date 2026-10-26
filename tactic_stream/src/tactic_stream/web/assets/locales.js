@@ -1607,7 +1607,11 @@ var en_default = {
 	"Updating task statuses": "Updating task statuses",
 	"Conversation project": "Conversation project",
 	"All projects": "All projects",
-	"Some project histories are unavailable": "Some project histories are unavailable"
+	"Some project histories are unavailable": "Some project histories are unavailable",
+	"Agent permissions": "Agent permissions",
+	"Allow internet access": "Allow internet access",
+	"Conversation context": "Conversation context",
+	"Use in current conversation": "Use in current conversation"
 };
 var ru_default = {
 	"Stale source": "Исходник изменился",
@@ -6756,7 +6760,11 @@ var ru_default = {
 	"Updating task statuses": "Изменение статусов задач",
 	"Conversation project": "Проект бесед",
 	"All projects": "Все проекты",
-	"Some project histories are unavailable": "История некоторых проектов недоступна"
+	"Some project histories are unavailable": "История некоторых проектов недоступна",
+	"Agent permissions": "Разрешения агента",
+	"Allow internet access": "Разрешить доступ в интернет",
+	"Conversation context": "Контекст беседы",
+	"Use in current conversation": "Контекст для текущей беседы"
 };
 //#endregion
 export { en_default as n, ru_default as t };

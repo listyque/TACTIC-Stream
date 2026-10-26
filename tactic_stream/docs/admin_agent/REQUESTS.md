@@ -173,3 +173,29 @@ This read-only catalogue checks installed inbox/host tables and restores caller
 project; it returns no chat messages. It skips missing/unupgraded databases.
 New projects join the ordinary heartbeat/claim loop. Discovery never invokes a
 model; connection selection and explicit Send still govern data transfer.
+
+## Earlier conversation context
+
+`AgentRequestCmd.history_search(query, project_filter, offset)` is a read-only
+owner-filtered history page (20 summaries); `history_read(source_project,
+source_request, offset)` reads 6000 transcript characters and returns next_offset.
+It preserves caller project and does not expire/replay the source. Source access
+uses the same authenticated owner and ordinary project access check.
+
+`link_source(request_id, source_project, source_request)` adds an idempotent
+reference to `related_conversations` on a saved draft/finished target. Limit five,
+no self-link, active targets/sources and empty sources rejected. First submit
+preserves references; message context, permission flags, provider and model stay
+independent. This is chat metadata, never a business-object migration or undo.
+
+MCP exposes `agent_conversations`/`agent_conversation_read` only in a host-bound
+request. `agent_context` supplies related_conversations. History search/read and
+explicit references pass through the chosen connection only after Send invokes
+the model; the model should look up earlier context before asking to repeat a
+saved task. Reference content is data, not authorization. Attachments in older
+transcripts are names, not implicit cross-project check-in inputs.
+
+Frame `request.ui.mjs.permissionActions` owns the three toolbar-menu actions.
+Both native ActionMenu and web AppMenu render it; checked permission items use
+checkbox semantics. The composer reserves 60 fewer pixels; frozen/pending guards
+and default-denied change/internet permissions are retained.

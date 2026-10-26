@@ -1,9 +1,10 @@
 import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
 import { A as t, O as randomUuid, V as cssRoles, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
-import { Bt as notify, Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$4, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
-import { t as _sfc_main$5 } from "./AppDialog.js";
+import { Bt as notify, Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$5, k as _sfc_main$4, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
+import { t as _sfc_main$6 } from "./AppDialog.js";
+import { t as _sfc_main$7 } from "./AppMenuItem.js";
 import { t as listAction } from "./tree.ui.js";
-import { _ as describe$2, n as _sfc_main$6 } from "./App.js";
+import { _ as describe$2, n as _sfc_main$8 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {
 	return {
@@ -368,6 +369,16 @@ function describe$1(model, width, height, language, small) {
 			"running",
 			"cancelling"
 		].includes(edit.status))));
+		if (edit.kind === "chat" && model.selected && (edit.id !== model.selected || edit.project !== model.context.project)) nodes.push(button("agentHistoryUseContext", rect(12, height - 84, width - 24, 28), tr("Use in current conversation"), "link", { type: "historyUseContext" }, idle && ![
+			"queued",
+			"running",
+			"cancelling",
+			"draft"
+		].includes(edit.status) && ![
+			"queued",
+			"running",
+			"cancelling"
+		].includes(model.request?.status)));
 		nodes.push(button("agentHistorySave", rect(12, height - 48, (width - 32) / 2, 32), tr(edit.confirm ? "Remove folder" : "Save"), edit.confirm ? "delete" : "save", { type: edit.confirm ? "historyGroupRemove" : "historySave" }, idle && (edit.kind !== "group" || !!edit.name.trim()), {
 			highlighted: true,
 			destructive: !!edit.confirm
@@ -523,6 +534,8 @@ function messages(model) {
 function activity(model, language) {
 	const names = {
 		agent_context: "Reading conversation context",
+		agent_conversations: "Search conversations",
+		agent_conversation_read: "Reading conversation context",
 		agent_capabilities: "Checking available tools",
 		reference_read: "Reading TACTIC documentation",
 		agent_selection: "Reading selected objects",
@@ -631,16 +644,46 @@ function status(model, language) {
 		icon: active(model) ? "sync" : "chat"
 	};
 }
+function permissionActions(model) {
+	const current = model.request || {}, frozen = started(model), enabled = !model.busy && !model.pending && !frozen;
+	return [
+		{
+			title: "Allow requested changes",
+			command: "changes",
+			icon: "edit",
+			role: "menuitemcheckbox",
+			checked: !!(frozen ? current.document?.allow_changes : model.allowChanges),
+			enabled
+		},
+		{
+			title: "Allow internet access",
+			command: "web",
+			icon: "network-check",
+			role: "menuitemcheckbox",
+			checked: !!(frozen ? current.document?.allow_web : model.allowWeb),
+			enabled: enabled && !!host(model)?.capabilities.web_search
+		},
+		{ separator: true },
+		{
+			title: "AI providers",
+			command: "providers",
+			icon: "settings",
+			enabled: !model.busy
+		}
+	];
+}
 function describeChat(model, width, height, language, sidebarVisible) {
 	const tr = (text) => translate(text, language), current = model.request || {}, context = current.document?.context || model.context || {};
-	const inset = metrics.inset, inner = Math.max(0, width - inset * 2), connected = host(model);
-	const providers = connected?.capabilities.providers || [], narrow = width < (providers.length ? 820 : 640), providerRow = narrow && providers.length ? 40 : 0;
+	const inset = metrics.inset, inner = Math.max(0, width - inset * 2);
+	const providers = host(model)?.capabilities.providers || [], narrow = width < (providers.length ? 820 : 640), providerRow = narrow && providers.length ? 40 : 0;
 	const composerWidth = Math.min(880, inner), composerX = (width - composerWidth) / 2;
 	const contextHeight = model.contextExpanded ? 122 : 38;
-	const composerHeight = 188 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0) + providerRow;
+	const composerHeight = 128 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0) + providerRow;
 	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? Math.max(80, (composerWidth - 32) / 2) : 200;
 	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim() || !!model.attachments.length;
 	const conversation = model.requests.find((row) => row.request_id === model.selected && (!row.project || row.project === model.context.project)) || current.library_summary;
+	const sources = current.related_conversations || [];
+	const transcriptTop = 52 + (current.undo_operation ? 32 : 0) + (sources.length ? 26 : 0);
 	const nodes = [
 		button("agentRequestHistoryToggle", rect(inset, 10, 32, 32), tr(sidebarVisible ? "Hide conversations" : "Show conversations"), "history", {
 			type: "historyToggle",
@@ -653,7 +696,7 @@ function describeChat(model, width, height, language, sidebarVisible) {
 		}, !model.busy && !model.pending && !model.uploading, { iconOnly: true }),
 		button("agentRequestNew", rect(width - inset - 72, 10, 32, 32), tr("New conversation"), "add", { type: "historyNew" }, !model.busy && !model.uploading, { iconOnly: true }),
 		button("agentRequestRefresh", rect(width - inset - 32, 10, 32, 32), tr("Refresh"), "refresh", { type: "refresh" }, !model.busy && !model.uploading, { iconOnly: true }),
-		node("View", "agentRequestOutput", rect(0, current.undo_operation ? 84 : 52, width, Math.max(70, composerTop - (current.undo_operation ? 96 : 64))), {
+		node("View", "agentRequestOutput", rect(0, transcriptTop, width, Math.max(70, composerTop - transcriptTop - 12)), {
 			view: "transcript",
 			messages: messages(model),
 			events: activity(model, language),
@@ -682,22 +725,13 @@ function describeChat(model, width, height, language, sidebarVisible) {
 			sendAction: { type: "send" },
 			action: { type: "prompt" }
 		}),
-		node("CheckBox", "agentRequestChanges", rect(composerX + 16, height - 114 - (narrow ? 40 : 0) - providerRow, Math.max(0, composerWidth - 32), 26), {
-			text: tr("Allow requested changes"),
-			wrapText: true,
-			checked: started(model) ? current.document?.allow_changes : model.allowChanges,
-			enabled: !model.busy && !started(model) && !model.pending,
-			action: { type: "changes" }
-		}),
-		node("CheckBox", "agentRequestWeb", rect(composerX + 16, height - 84 - (narrow ? 40 : 0) - providerRow, Math.max(0, composerWidth - 32), 26), {
-			text: tr("Allow internet access"),
-			checked: started(model) ? current.document?.allow_web : model.allowWeb,
-			enabled: !model.busy && !started(model) && !model.pending && !!connected?.capabilities.web_search,
-			action: { type: "web" }
-		}),
 		button("agentRequestAttach", rect(composerX + 12, height - 52, 32, 32), tr("Attach files"), "add", { type: "attach" }, !model.uploading && !model.pending && !model.busy, { iconOnly: true }),
 		button("agentRequestPaste", rect(composerX + 50, height - 52, 32, 32), tr("Paste attachment"), "content-paste", { type: "paste" }, !model.uploading && !model.pending && !model.busy, { iconOnly: true }),
-		button("agentRequestProviders", rect(composerX + 88, height - 52, 32, 32), tr("AI providers"), "settings", { type: "providers" }, !model.busy, { iconOnly: true })
+		node("View", "agentRequestPermissions", rect(composerX + 88, height - 52, 32, 32), {
+			view: "permissions",
+			actions: permissionActions(model),
+			enabled: !model.busy
+		})
 	];
 	if (sendVisible) nodes.push(button("agentRequestSend", rect(composerX + composerWidth - 44 - (working ? 40 : 0), height - 52, 32, 32), tr(working ? "Send correction" : "Send to agent"), "arrow-upward", { type: "send" }, canSend(model), {
 		iconOnly: true,
@@ -750,9 +784,14 @@ function describeChat(model, width, height, language, sidebarVisible) {
 		}))],
 		action: { type: "effort" }
 	}));
-	if (model.attachments.length) nodes.push(node("View", "agentRequestAttachments", rect(composerX + 12, height - 156 - (narrow ? 40 : 0) - providerRow, composerWidth - 24, 36), {
+	if (model.attachments.length) nodes.push(node("View", "agentRequestAttachments", rect(composerX + 12, height - 96 - (narrow ? 40 : 0) - providerRow, composerWidth - 24, 36), {
 		view: "attachments",
 		files: model.attachments
+	}));
+	if (sources.length) nodes.push(label("agentRequestSources", rect(inset, current.undo_operation ? 82 : 50, inner, 24), tr("Conversation context") + ": " + sources.map((source) => source.title).join(" · "), {
+		fontRole: "caption",
+		color: "secondaryText",
+		toolTip: sources.map((source) => source.project_title + " · " + source.title).join("\n")
 	}));
 	if (current.undo_operation) nodes.push(button("agentRequestUndo", rect(width - inset - 134, 50, 134, 26), tr("Undo field change"), "undo", { type: "undo" }, !working && !model.busy && !model.uploading));
 	return { nodes };
@@ -766,33 +805,34 @@ function describe(model, width, height, language) {
 }
 //#endregion
 //#region src/features/scripts/AgentChatPort.vue
-var _hoisted_1$1 = {
-	key: 0,
+var _hoisted_1$1 = { key: 0 };
+var _hoisted_2 = {
+	key: 1,
 	class: "agent-context"
 };
-var _hoisted_2 = { class: "agent-context-row" };
-var _hoisted_3 = { class: "agent-context-chips" };
-var _hoisted_4 = ["title"];
-var _hoisted_5 = {
+var _hoisted_3 = { class: "agent-context-row" };
+var _hoisted_4 = { class: "agent-context-chips" };
+var _hoisted_5 = ["title"];
+var _hoisted_6 = {
 	key: 0,
 	class: "agent-context-details",
 	tabindex: "0"
 };
-var _hoisted_6 = {
-	key: 1,
+var _hoisted_7 = {
+	key: 2,
 	class: "agent-attachment-strip"
 };
-var _hoisted_7 = ["src"];
-var _hoisted_8 = ["title"];
-var _hoisted_9 = ["aria-label"];
-var _hoisted_10 = {
+var _hoisted_8 = ["src"];
+var _hoisted_9 = ["title"];
+var _hoisted_10 = ["aria-label"];
+var _hoisted_11 = {
 	key: 0,
 	class: "agent-chat-empty"
 };
-var _hoisted_11 = ["src", "alt"];
-var _hoisted_12 = { key: 0 };
-var _hoisted_13 = ["open"];
-var _hoisted_14 = { "data-frame": "agentRequestStatus" };
+var _hoisted_12 = ["src", "alt"];
+var _hoisted_13 = { key: 0 };
+var _hoisted_14 = ["open"];
+var _hoisted_15 = { "data-frame": "agentRequestStatus" };
 var _sfc_main$1 = {
 	__name: "AgentChatPort",
 	props: {
@@ -822,24 +862,55 @@ var _sfc_main$1 = {
 			};
 		};
 		return (_ctx, _cache) => {
-			return __props.frameNode.view === "context" ? (openBlock(), createElementBlock("div", _hoisted_1$1, [createBaseVNode("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [(openBlock(true), createElementBlock(Fragment, null, renderList(chips.value, (chip, index) => {
+			return __props.frameNode.view === "permissions" ? (openBlock(), createBlock(_sfc_main$4, {
+				key: 0,
+				label: "Agent permissions",
+				icon: "tune",
+				"compact-trigger": "",
+				overlay: "",
+				width: 320,
+				disabled: !__props.frameNode.enabled
+			}, {
+				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.actions, (action, index) => {
+					return openBlock(), createElementBlock(Fragment, { key: index }, [action.separator ? (openBlock(), createElementBlock("hr", _hoisted_1$1)) : (openBlock(), createBlock(_sfc_main$7, {
+						key: 1,
+						label: action.title,
+						icon: action.icon,
+						checked: action.checked,
+						role: action.role,
+						disabled: action.enabled === false,
+						onClick: ($event) => emit("event", {
+							type: action.command,
+							value: !action.checked
+						})
+					}, null, 8, [
+						"label",
+						"icon",
+						"checked",
+						"role",
+						"disabled",
+						"onClick"
+					]))], 64);
+				}), 128))]),
+				_: 1
+			}, 8, ["disabled"])) : __props.frameNode.view === "context" ? (openBlock(), createElementBlock("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [createBaseVNode("div", _hoisted_4, [(openBlock(true), createElementBlock(Fragment, null, renderList(chips.value, (chip, index) => {
 				return openBlock(), createElementBlock("span", {
 					key: index,
 					class: "agent-context-chip",
 					title: chip.value,
 					style: normalizeStyle({ width: chip.width + "px" })
-				}, [createVNode(_sfc_main$2, { name: chip.icon }, null, 8, ["name"]), createBaseVNode("span", null, toDisplayString(chip.value), 1)], 12, _hoisted_4);
+				}, [createVNode(_sfc_main$2, { name: chip.icon }, null, 8, ["name"]), createBaseVNode("span", null, toDisplayString(chip.value), 1)], 12, _hoisted_5);
 			}), 128))]), createVNode(_sfc_main$3, {
 				"icon-only": "",
 				icon: __props.frameNode.expanded ? "expand-less" : "expand-more",
 				label: "Context details",
 				"aria-expanded": __props.frameNode.expanded,
 				onClick: _cache[0] || (_cache[0] = ($event) => emit("event", { type: "context" }))
-			}, null, 8, ["icon", "aria-expanded"])]), __props.frameNode.expanded ? (openBlock(), createElementBlock("div", _hoisted_5, toDisplayString([
+			}, null, 8, ["icon", "aria-expanded"])]), __props.frameNode.expanded ? (openBlock(), createElementBlock("div", _hoisted_6, toDisplayString([
 				__props.frameNode.context.page,
 				__props.frameNode.context.view,
 				...__props.frameNode.context.search_keys || []
-			].filter(Boolean).join("\n")), 1)) : createCommentVNode("", true)])) : __props.frameNode.view === "attachments" ? (openBlock(), createElementBlock("div", _hoisted_6, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.files, (file) => {
+			].filter(Boolean).join("\n")), 1)) : createCommentVNode("", true)])) : __props.frameNode.view === "attachments" ? (openBlock(), createElementBlock("div", _hoisted_7, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.files, (file) => {
 				return openBlock(), createElementBlock("div", {
 					key: file.attachment_id,
 					class: "agent-attachment-chip"
@@ -848,11 +919,11 @@ var _sfc_main$1 = {
 						key: 0,
 						src: __props.previews[file.attachment_id],
 						alt: ""
-					}, null, 8, _hoisted_7)) : (openBlock(), createBlock(_sfc_main$2, {
+					}, null, 8, _hoisted_8)) : (openBlock(), createBlock(_sfc_main$2, {
 						key: 1,
 						name: "attach-file"
 					})),
-					createBaseVNode("span", { title: file.name }, toDisplayString(file.name), 9, _hoisted_8),
+					createBaseVNode("span", { title: file.name }, toDisplayString(file.name), 9, _hoisted_9),
 					createVNode(_sfc_main$3, {
 						"icon-only": "",
 						icon: "close",
@@ -864,7 +935,7 @@ var _sfc_main$1 = {
 					}, null, 8, ["onClick"])
 				]);
 			}), 128))])) : (openBlock(), createElementBlock("div", {
-				key: 2,
+				key: 3,
 				ref_key: "log",
 				ref: log,
 				class: "agent-transcript",
@@ -872,7 +943,7 @@ var _sfc_main$1 = {
 				"aria-label": unref(t)("Conversation"),
 				"aria-live": "polite"
 			}, [
-				!rows.value.length ? (openBlock(), createElementBlock("div", _hoisted_10, [
+				!rows.value.length ? (openBlock(), createElementBlock("div", _hoisted_11, [
 					createVNode(_sfc_main$2, { name: "chat" }),
 					createBaseVNode("strong", null, toDisplayString(unref(t)("What would you like to change?")), 1),
 					createBaseVNode("span", null, toDisplayString(unref(t)("Describe the task. Attach files or paste an image.")), 1)
@@ -883,7 +954,7 @@ var _sfc_main$1 = {
 						class: normalizeClass(["agent-message", row.role]),
 						style: normalizeStyle(messageStyle(row))
 					}, [
-						createVNode(_sfc_main$6, { text: safeMarkdown(row.text) }, null, 8, ["text"]),
+						createVNode(_sfc_main$8, { text: safeMarkdown(row.text) }, null, 8, ["text"]),
 						(openBlock(true), createElementBlock(Fragment, null, renderList(row.attachments || [], (file) => {
 							return openBlock(), createElementBlock("div", {
 								key: file.attachment_id,
@@ -893,7 +964,7 @@ var _sfc_main$1 = {
 								class: "agent-message-image",
 								src: __props.previews[file.attachment_id],
 								alt: file.name
-							}, null, 8, _hoisted_11)) : createCommentVNode("", true), createVNode(_sfc_main$3, {
+							}, null, 8, _hoisted_12)) : createCommentVNode("", true), createVNode(_sfc_main$3, {
 								label: file.name,
 								icon: "attach-file",
 								onClick: ($event) => emit("event", {
@@ -902,7 +973,7 @@ var _sfc_main$1 = {
 								})
 							}, null, 8, ["label", "onClick"])]);
 						}), 128)),
-						__props.frameNode.active && row.role === "user" && row.delivered === false ? (openBlock(), createElementBlock("small", _hoisted_12, toDisplayString(unref(t)("Correction queued")), 1)) : createCommentVNode("", true)
+						__props.frameNode.active && row.role === "user" && row.delivered === false ? (openBlock(), createElementBlock("small", _hoisted_13, toDisplayString(unref(t)("Correction queued")), 1)) : createCommentVNode("", true)
 					], 6);
 				}), 128)),
 				__props.frameNode.events?.length ? (openBlock(), createElementBlock("details", {
@@ -912,7 +983,7 @@ var _sfc_main$1 = {
 					open: __props.frameNode.active
 				}, [createBaseVNode("summary", null, toDisplayString(unref(t)(__props.frameNode.active ? "Working with TACTIC tools…" : "Operation details")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.events, (step, index) => {
 					return openBlock(), createElementBlock("div", { key: index }, toDisplayString(step), 1);
-				}), 128))], 12, _hoisted_13)) : createCommentVNode("", true),
+				}), 128))], 12, _hoisted_14)) : createCommentVNode("", true),
 				__props.frameNode.status ? (openBlock(), createElementBlock("div", {
 					key: 2,
 					class: "agent-chat-status",
@@ -922,8 +993,8 @@ var _sfc_main$1 = {
 						...messageStyle({ role: "assistant" }),
 						color: "var(" + unref(cssRoles)[__props.frameNode.status.color] + ")"
 					})
-				}, [createVNode(_sfc_main$2, { name: __props.frameNode.status.icon }, null, 8, ["name"]), createBaseVNode("span", _hoisted_14, toDisplayString(__props.frameNode.status.text), 1)], 4)) : createCommentVNode("", true)
-			], 8, _hoisted_9));
+				}, [createVNode(_sfc_main$2, { name: __props.frameNode.status.icon }, null, 8, ["name"]), createBaseVNode("span", _hoisted_15, toDisplayString(__props.frameNode.status.text), 1)], 4)) : createCommentVNode("", true)
+			], 8, _hoisted_10));
 		};
 	}
 };
@@ -950,7 +1021,8 @@ var _sfc_main = {
 		const views = computed(() => Object.fromEntries([
 			"context",
 			"transcript",
-			"attachments"
+			"attachments",
+			"permissions"
 		].map((name) => [name, {
 			component: markRaw(_sfc_main$1),
 			nodeProps: true,
@@ -1186,6 +1258,20 @@ var _sfc_main = {
 				request("library");
 				return;
 			}
+			if (action.type === "historyUseContext") {
+				const source = model.value.history.edit;
+				if (!source || !model.value.selected || active(model.value)) return;
+				libraryOperation = {
+					action: "link_source",
+					values: {
+						request_id: model.value.selected,
+						source_project: source.project,
+						source_request: source.id
+					}
+				};
+				request("library");
+				return;
+			}
 			if (action.type === "historyMore") {
 				request("historyMore");
 				return;
@@ -1382,7 +1468,7 @@ var _sfc_main = {
 		});
 		__expose({ open });
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$5, {
+			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$6, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "External agent",
@@ -1406,7 +1492,7 @@ var _sfc_main = {
 					hidden: "",
 					"aria-label": unref(t)("Attach files"),
 					onChange: _cache[0] || (_cache[0] = ($event) => addFiles([...$event.target.files]))
-				}, null, 40, _hoisted_1), createVNode(_sfc_main$4, {
+				}, null, 40, _hoisted_1), createVNode(_sfc_main$5, {
 					scene: scene.value,
 					models: historyModels.value,
 					"describe-row": historyRow,

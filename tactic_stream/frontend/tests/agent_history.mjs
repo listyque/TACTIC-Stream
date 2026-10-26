@@ -78,6 +78,11 @@ try {
   assert.equal(await main.getByLabel('What should the agent do?', { exact: true }).inputValue(), 'Unsent browser message');
   await main.locator('[data-frame=agentRequestContext]').getByText('empty',{exact:true}).waitFor();
   await projects.selectOption('');
+  await firstRow.hover();
+  await firstRow.locator('.frame-secondary-action').click();
+  await history.getByRole('button',{name:'Use in current conversation',exact:true}).click();
+  await main.locator('[data-frame=agentRequestSources]').getByText(/Previous delivery/).waitFor();
+  assert.equal(await main.getByLabel('What should the agent do?',{exact:true}).inputValue(),'Unsent browser message');
   await main.getByRole('button', { name: 'Conversation settings', exact: true }).click();
   await history.getByRole('button', { name: 'Archive conversation', exact: true }).click();
   await main.getByText('Archived conversation — restore it to continue', { exact: true }).waitFor();

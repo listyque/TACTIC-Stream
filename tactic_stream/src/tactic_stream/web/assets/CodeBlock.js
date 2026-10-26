@@ -4061,6 +4061,9 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Agent permissions": "Разрешения агента",
+	"Conversation context": "Контекст беседы",
+	"Use in current conversation": "Контекст для текущей беседы",
 	"Conversation project": "Проект бесед",
 	"All projects": "Все проекты",
 	"Some project histories are unavailable": "История некоторых проектов недоступна",

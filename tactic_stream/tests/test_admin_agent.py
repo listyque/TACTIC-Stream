@@ -40,7 +40,7 @@ class AgentTransport(unittest.TestCase):
             async with Client(server) as client:
                 context = await client.call_tool('agent_context', {})
                 self.assertFalse(context.is_error)
-                self.assertEqual(context.structured_content, dict(request_id=identity, **document, attachments=[]))
+                self.assertEqual(context.structured_content, dict(request_id=identity, **document, related_conversations=[],attachments=[]))
                 selected = await client.call_tool('agent_selection', {})
                 self.assertEqual(selected.structured_content['objects'][0]['code'], 'SH001')
                 attempted = await client.call_tool('agent_context', dict(request_id=str(uuid4())))

@@ -1607,5 +1607,9 @@
   "Updating task statuses": "Updating task statuses",
   "Conversation project": "Conversation project",
   "All projects": "All projects",
-  "Some project histories are unavailable": "Some project histories are unavailable"
+  "Some project histories are unavailable": "Some project histories are unavailable",
+  "Agent permissions": "Agent permissions",
+  "Allow internet access": "Allow internet access",
+  "Conversation context": "Conversation context",
+  "Use in current conversation": "Use in current conversation"
 }
