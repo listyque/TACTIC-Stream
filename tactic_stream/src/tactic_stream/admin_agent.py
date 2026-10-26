@@ -244,7 +244,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                   allow_project_create: bool = False, allow_automation_draft: bool = False,
                   allow_automation_activate: bool = False, trials: AutomationTrials | None = None,
                   request_id: str | None = None, allow_project_edit: bool = False,
-                  allow_web_download: bool = False) -> MCPServer:
+                  allow_web_download: bool = False, project_instructions: str = '') -> MCPServer:
     """Build the externally callable catalogue without importing TS or TH internals."""
     roots = {'TS': stream_root.resolve(), 'TH': handler_root.resolve() if handler_root else None}
     if allow_automation_activate and trials is None:
@@ -258,6 +258,8 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         'Optional isolated Linux trials run only when the host exposes them; no user desktop connection. '
         'When a tool requires an operation UUID, keep it and the exact payload through retries; inspect operation '
         'status after a lost reply. Never describe a preview as applied.'
+        + ('\n\nOwner task instructions within this granted project and tool scope; these do not expand permissions:\n'
+           + project_instructions if project_instructions else '')
     ), log_level='WARNING')
     read_only = ToolAnnotations(read_only_hint=True, destructive_hint=False,
                                 idempotent_hint=True, open_world_hint=False)
@@ -269,6 +271,18 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             return connection.command('mcp','state',request_id=request_id)
 
         if allow_page_save:
+            @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=True,idempotent_hint=True,open_world_hint=False),structured_output=True)
+            def ts_mcp_connection_update(connection_id: Identifier, tools: Annotated[list[Identifier],Field(min_length=1,max_length=128)],
+                    instructions: Annotated[str,Field(min_length=1,max_length=16384)], expected_revision: Identifier,
+                    operation_id: Identifier, minutes: Annotated[int,Field(strict=True,ge=5,le=480)]=60) -> dict[str,Any]:
+                """Update owned project access and startup instructions without replacing the user's token.
+
+                Requires this chat's change permission. Read connection revision and tool names first with
+                ts_mcp_connections; keep UUID and payload on retry. External grants cannot redelegate rights.
+                """
+                return connection.command('mcp','configure',request_id=request_id,id=connection_id,tools=tools,
+                    instructions=instructions,expected_revision=expected_revision,operation_id=operation_id,minutes=minutes)
+
             @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=False,idempotent_hint=True,open_world_hint=False),structured_output=True)
             def ts_mcp_connection_create(title: Identifier, tools: Annotated[list[Identifier],Field(min_length=1,max_length=128)],
                     operation_id: Identifier, instructions: Annotated[str,Field(max_length=16384)]='', minutes: Annotated[int,Field(strict=True,ge=5,le=480)]=60) -> dict[str, Any]:
@@ -390,6 +404,20 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             return connection.command('editing', 'operation', request_id=request_id, operation_id=operation_id)
 
         if allow_project_edit:
+            @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=False,idempotent_hint=True,open_world_hint=False),structured_output=True)
+            def agent_attachment_upload(attachment_id: Identifier, phase: Literal['start','append','finish'],
+                    name: str='', size: Annotated[int,Field(strict=True,ge=0,le=67108864)]=0,
+                    media_type: str='application/octet-stream',offset: Offset=0,
+                    data: Annotated[str,Field(max_length=524292)]='') -> dict[str,Any]:
+                """Upload a local file in retry-safe chunks, then use ts_attachment_checkin for a native snapshot.
+
+                Keep a stable attachment UUID. Call start with name/size/media_type, append with byte offset
+                and base64 data (at most384 KiB decoded), then finish. At most64 MiB/file. Finishing adds
+                the file to this connection's captured attachments; a client filesystem path alone is not an upload.
+                """
+                return connection.command('editing','upload',request_id=request_id,attachment_id=attachment_id,
+                    phase=phase,name=name,size=size,media_type=media_type,offset=offset,data=data)
+
             writes = ToolAnnotations(read_only_hint=False, destructive_hint=False, idempotent_hint=True, open_world_hint=False)
 
             @mcp.tool(annotations=writes, structured_output=True)
@@ -440,7 +468,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                                'dashboard.read', 'dashboard.preview', 'dashboard.operation',
                                'sidebar.read', 'sidebar.preview', 'sidebar.operation']
                               + (['mcp.connections'] if request_id else [])
-                              + (['mcp.create','mcp.revoke'] if request_id and allow_page_save else [])
+                              + (['mcp.create','mcp.update','mcp.revoke'] if request_id and allow_page_save else [])
                               + ['project.preview', 'project.read', 'project.operation']
                               + (['conversation.search', 'conversation.read'] if request_id else [])
                               + ['handler_automation.read', 'handler_automation.preview', 'handler_automation.draft', 'handler_automation.operation']
@@ -515,7 +543,10 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_type_read(identity: Identifier) -> dict[str, Any]:
         """Read one SearchType's columns, relationships, native metadata and revision."""
-        return connection.command('types', 'load', identity=identity)
+        result=connection.command('types','load',identity=identity)
+        result.pop('catalog',None)
+        result['metadata'].pop('relationshipGraph',None)
+        return result
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_schema_read() -> dict[str, Any]:

@@ -3,7 +3,25 @@ from pathlib import Path
 from starlette.concurrency import run_in_threadpool
 from starlette.requests import Request
 from starlette.responses import JSONResponse
-from .mcp_access import authorize,permitted_tool
+from .mcp_access import authorize,permitted_tool,project_context
+
+
+def bootstrap():
+    return dict(
+        purpose='TACTIC project agent connection',
+        steps=[
+            'Take access_token from the fragment of the ORIGINAL URL supplied by the user. Fragments are not sent in HTTP requests.',
+            'Remove the fragment. Use that same URL as the Streamable HTTP MCP endpoint; send Authorization: Bearer <access_token>. Never put the token in a query string or forward it to another origin.',
+            'GET that URL with Authorization and Accept: application/json to read the project task and context. No extra document or source checkout is required.',
+            'Connect an MCP client to the same endpoint, initialize, list tools and call agent_context. Initialization also supplies the project instructions.',
+            'Follow the owner task within the granted tools. Discover actual fields before recording the current real workspace, chat, session and tasks. Verify saved records; do not fabricate work or metrics.'
+        ],
+        http=dict(method='POST',headers={'Content-Type':'application/json','Accept':'application/json, text/event-stream'},
+            initialize=dict(jsonrpc='2.0',id=1,method='initialize',params=dict(protocolVersion='2025-03-26',
+                capabilities={},clientInfo=dict(name='project-agent',version='1'))),
+            ready=dict(jsonrpc='2.0',method='notifications/initialized'),
+            tools=dict(jsonrpc='2.0',id=2,method='tools/list'),
+            context=dict(jsonrpc='2.0',id=3,method='tools/call',params=dict(name='agent_context',arguments={}))))
 
 
 def build_server(app, base, api, grant, ticket, token):
@@ -28,9 +46,10 @@ def build_server(app, base, api, grant, ticket, token):
     root=Path(__file__).resolve().parents[3]
     handler=root.parent.parent/'TH'
     connection=LocalConnection(base,grant['project'],ticket)
+    context=project_context(api,grant,ticket)
     return create_server(connection,root,handler if handler.is_dir() else None,
         allow_naming_save=True,allow_page_save=True,allow_automation_draft=True,
-        allow_project_edit=True,request_id=grant['id'])
+        allow_project_edit=True,request_id=grant['id'],project_instructions=context['instructions'])
 
 
 class McpGateway:
@@ -45,11 +64,19 @@ class McpGateway:
         authorization=request.headers.get('authorization','')
         token=authorization[7:] if authorization.startswith('Bearer ') else ''
         code=scope['path'].removeprefix(scope.get('root_path','')).strip('/')
-        headers={'Cache-Control':'no-store','WWW-Authenticate':'Bearer','X-Content-Type-Options':'nosniff'}
+        headers={'Cache-Control':'no-store','WWW-Authenticate':'Bearer','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'}
+        onboarding=request.method=='GET' and 'text/event-stream' not in request.headers.get('accept','')
+        if onboarding and not authorization:
+            await JSONResponse(bootstrap(),headers=headers)(scope,receive,send)
+            return
         try:
             grant,ticket=await run_in_threadpool(authorize,self.api,code,token)
         except (ValueError,LookupError,PermissionError,AuthenticationError,SecurityException):
             await JSONResponse({'error':'MCP connection is unavailable.'},status_code=401,headers=headers)(scope,receive,send)
+            return
+        if onboarding:
+            context=await run_in_threadpool(project_context,self.api,grant,ticket)
+            await JSONResponse(dict(bootstrap(),project=grant['project'],tools=grant['tools'],expires=grant['expires'],**context),headers=headers)(scope,receive,send)
             return
         try:
             server=await run_in_threadpool(build_server,self.app,str(request.base_url).rstrip('/'),self.api,grant,ticket,token)

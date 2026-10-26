@@ -33,8 +33,18 @@ def current_grant(row):
 
 
 def public(grant):
+    from tactic.ui.panel.page_cmd import digest
     return dict({key:grant[key] for key in ('id','title','project','created','expires','revoked','tools')},
-                pending=bool(grant.get('pending_token')))
+                pending=bool(grant.get('pending_token')),
+                revision=digest([grant['tools'],grant['expires'],grant['revoked'],grant.get('request_hash')]))
+
+
+def project_context(api, grant, ticket):
+    result=api.dispatch('execute_cmd',(dict(ticket=ticket,project=grant['project']),
+        'tactic.ui.panel.agent_request_cmd.AgentRequestCmd',
+        dict(action='read',project_code=grant['project'],request_id=grant['id'])))
+    document=result['info']['document']
+    return dict(context=document['context'],instructions=document['prompt'])
 
 
 def permitted_tool(name):

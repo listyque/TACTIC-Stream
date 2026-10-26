@@ -105,6 +105,26 @@ class AgentActionsCmd(AgentRequestCmd):
             self.info = dict(objects=[dict(item.get_data(), __search_key__=item.get_search_key(), revision=digest(item.get_data())) for item in query.get_sobjects()])
             return
         payload = {key: value for key, value in self.kwargs.items() if key not in ('operation_id', 'project_code')}
+        if action=='upload':
+            from tactic_stream.server.mcp_access import current_grant
+            if not row['document']['allow_changes'] or row['status']!='running' and not current_grant(row):
+                raise ValueError('This conversation does not authorize active changes')
+            from .agent_attachment_cmd import AgentAttachmentCmd
+            phase=self.kwargs.get('phase')
+            if phase not in ('start','append','finish'):
+                raise ValueError('Choose start, append or finish for an attachment upload')
+            values={key:self.kwargs[key] for key in ('attachment_id','name','size','media_type','offset','data') if key in self.kwargs}
+            command=AgentAttachmentCmd(action=phase,project_code=Project.get_project_code(),**values)
+            Command.execute_cmd(command)
+            if phase=='finish':
+                metadata,_=attachment(values['attachment_id'])
+                if not any(message.get('id')==metadata['attachment_id'] for message in row.get('messages',[])):
+                    row.setdefault('messages',[]).append(dict(id=metadata['attachment_id'],role='user',text='',attachments=[metadata],delivered=True))
+                    self.save('spt_agent_request',row['request_id'],row)
+                self.info=metadata
+            else:
+                self.info=command.info
+            return
         if action not in ('workflow_apply', 'checkin', 'link', 'create', 'patch', 'task_status'):
             raise ValueError('This agent operation is unavailable on the running server')
         operation_id = (str(uuid5(UUID(row['request_id']), json.dumps(payload, sort_keys=True)))

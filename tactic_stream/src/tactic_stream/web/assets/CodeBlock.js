@@ -4069,6 +4069,8 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Agent link — includes access and startup instructions": "Ссылка для агента — доступ и стартовые инструкции",
+	"Copy agent link": "Скопировать ссылку для агента",
 	"Collect connection token": "Получить токен подключения",
 	"MCP connections": "MCP-подключения",
 	"External access is limited to this project and the tools you select. Revoke it at any time.": "Внешний доступ ограничен этим проектом и выбранными инструментами. Его можно отозвать в любой момент.",

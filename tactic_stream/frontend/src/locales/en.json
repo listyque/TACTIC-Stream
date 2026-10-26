@@ -1633,5 +1633,7 @@
   "Navigation color": "Navigation color",
   "Optional #RRGGBB override; leave empty to use the Search Type color.": "Optional #RRGGBB override; leave empty to use the Search Type color.",
   "How this item appears in project navigation. Selection follows your theme.": "How this item appears in project navigation. Selection follows your theme.",
-  "Collect connection token": "Collect connection token"
+  "Collect connection token": "Collect connection token",
+  "Agent link — includes access and startup instructions": "Agent link — includes access and startup instructions",
+  "Copy agent link": "Copy agent link"
 }

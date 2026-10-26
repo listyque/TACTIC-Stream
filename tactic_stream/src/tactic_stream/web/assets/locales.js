@@ -1633,7 +1633,9 @@ var en_default = {
 	"Navigation color": "Navigation color",
 	"Optional #RRGGBB override; leave empty to use the Search Type color.": "Optional #RRGGBB override; leave empty to use the Search Type color.",
 	"How this item appears in project navigation. Selection follows your theme.": "How this item appears in project navigation. Selection follows your theme.",
-	"Collect connection token": "Collect connection token"
+	"Collect connection token": "Collect connection token",
+	"Agent link — includes access and startup instructions": "Agent link — includes access and startup instructions",
+	"Copy agent link": "Copy agent link"
 };
 var ru_default = {
 	"Stale source": "Исходник изменился",
@@ -6808,7 +6810,9 @@ var ru_default = {
 	"Navigation color": "Цвет в навигации",
 	"Optional #RRGGBB override; leave empty to use the Search Type color.": "Необязательный цвет #RRGGBB; оставьте пустым для цвета типа объектов.",
 	"How this item appears in project navigation. Selection follows your theme.": "Оформление пункта в навигации проекта. Выделение соответствует теме.",
-	"Collect connection token": "Получить токен подключения"
+	"Collect connection token": "Получить токен подключения",
+	"Agent link — includes access and startup instructions": "Ссылка для агента — доступ и стартовые инструкции",
+	"Copy agent link": "Скопировать ссылку для агента"
 };
 //#endregion
 export { en_default as n, ru_default as t };

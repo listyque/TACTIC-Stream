@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, onBeforeUnmount } from 'vue';
+import { computed, ref, watch, onBeforeUnmount, nextTick } from 'vue';
 import AppDialog from '../../controls/AppDialog.vue';
 import FrameView from '../../frame/FrameView.vue';
 import { rpc } from '../../api.js';
@@ -21,6 +21,7 @@ const scene = computed(() =>
   )
 );
 let context,
+  focusConnection = '',
   generation = 0,
   observer;
 watch(host, (element) => {
@@ -47,7 +48,7 @@ onBeforeUnmount(() => {
   ++generation;
   observer?.disconnect();
 });
-async function call(action, values = {}) {
+async function call(action, values = {}, copyLink = false) {
   if (!context || model.value.busy) return;
   const id = ++generation,
     owner = context;
@@ -81,15 +82,25 @@ async function call(action, values = {}) {
       );
       model.value.busy = false;
       await call('state');
+      if (copyLink && context === owner)
+        copyText(UI.agentLink(model.value.issued)).catch((error) => {
+          if (context === owner) model.value.error = error.message;
+        });
     } else
       Object.assign(model.value, result, {
         busy: false,
         project: owner.project,
-        connections: result.connections.map((item) => ({
-          ...item,
-          expired: item.expires <= Date.now() / 1000,
-          expiresLabel: new Date(item.expires * 1000).toLocaleString()
-        }))
+        connections: result.connections
+          .map((item) => ({
+            ...item,
+            expired: item.expires <= Date.now() / 1000,
+            expiresLabel: new Date(item.expires * 1000).toLocaleString()
+          }))
+          .sort(
+            (a, b) =>
+              Number(b.id === focusConnection) -
+              Number(a.id === focusConnection)
+          )
       });
   } catch (error) {
     if (id === generation)
@@ -102,8 +113,14 @@ function event(action) {
   if (action.type === 'refresh') call('state');
   else if (action.type === 'revoke' || action.type === 'reveal')
     call(action.type, { id: action.id });
-  else if (action.type === 'copy')
-    copyText(model.value.issued).catch((error) => {
+  else if (action.type === 'reveal_link')
+    call('reveal', { id: action.id }, true);
+  else if (action.type === 'copy' || action.type === 'copy_link')
+    copyText(
+      action.type === 'copy_link'
+        ? UI.agentLink(model.value.issued)
+        : model.value.issued
+    ).catch((error) => {
       model.value.error = error.message;
     });
   else if (action.type === 'create')
@@ -119,12 +136,18 @@ function ownerContext() {
   const { ticket, ...value } = context;
   return value;
 }
-async function open(value) {
+async function open(value, connectionId = '') {
   clear();
   if (!props.ticket || !value?.project) return;
   context = { ...structuredClone(value), ticket: props.ticket };
+  focusConnection = connectionId;
   dialog.value.show();
   await call('state');
+  await nextTick();
+  if (focusConnection && model.value.connections[0]?.id === focusConnection)
+    host.value
+      ?.querySelector('[data-frame=mcpCollect_0]')
+      ?.scrollIntoView({ block: 'center' });
 }
 defineExpose({ open });
 </script>

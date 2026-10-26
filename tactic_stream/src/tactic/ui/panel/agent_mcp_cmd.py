@@ -30,7 +30,7 @@ class AgentMcpCmd(AgentRequestCmd):
         root=mcp_access.directory();root.mkdir(parents=True,exist_ok=True)
         action=self.kwargs.get('action')
         enabled=(Container.get('Api:environ') or {}).get('MCP_ENABLED',Config.get_value('security','agent_mcp_enabled')=='true')
-        if action not in ('state','create','revoke','reveal'):
+        if action not in ('state','create','configure','revoke','reveal'):
             raise ValueError('Unknown MCP connection action')
         request_id=self.kwargs.get('request_id')
         if request_id:
@@ -42,6 +42,37 @@ class AgentMcpCmd(AgentRequestCmd):
             if action=='reveal':
                 raise ValueError('Collect the connection token in the MCP window')
         with config_file_lock(root/'collection.lock'):
+            if action=='configure':
+                grant=mcp_access.read_grant(self.kwargs.get('id'))
+                if not grant or grant['owner']!=self.owner or grant['project']!=Project.get_project_code() or grant['revoked']:
+                    raise ValueError('MCP connection is unavailable')
+                ledger=self.load('spt_agent_request',grant['id'])
+                catalog=mcp_access.tool_catalog()
+                tools=self.kwargs.get('tools')
+                if (not isinstance(tools,list) or not tools or not all(isinstance(tool,str) for tool in tools) or len(set(tools))!=len(tools)
+                        or not all(isinstance(tool,str) and tool in {item['name'] for item in catalog} for tool in tools)):
+                    raise ValueError('Choose tools from this server catalogue')
+                minutes=self.kwargs.get('minutes',60)
+                if type(minutes) is not int or not 5<=minutes<=480:
+                    raise ValueError('MCP access lifetime must be between 5 and 480 minutes')
+                instructions=text(self.kwargs.get('instructions'),16384)
+                operation=identity(self.kwargs.get('operation_id'))
+                fingerprint=digest([tools,minutes,instructions,self.kwargs.get('expected_revision')])
+                previous=grant.get('last_update',{})
+                if previous.get('operation_id')==operation:
+                    if previous['digest']!=fingerprint:
+                        raise ValueError('Operation ID belongs to another MCP update')
+                    return mcp_access.public(grant)
+                if self.kwargs.get('expected_revision')!=mcp_access.public(grant)['revision']:
+                    raise ValueError('MCP connection changed. Reload before updating access.')
+                writable=any(not item['readonly'] for item in catalog if item['name'] in tools)
+                grant.update(tools=tools,expires=int(time.time())+minutes*60,allow_changes=writable,
+                    request_hash=fingerprint,credential=seal(Environment.get_security().get_ticket_key()),
+                    last_update=dict(operation_id=operation,digest=fingerprint))
+                ledger['document'].update(prompt=instructions,allow_changes=writable)
+                self.save('spt_agent_request',grant['id'],ledger)
+                self.write_grant(root,grant)
+                return mcp_access.public(grant)
             if action in ('revoke','reveal'):
                 grant=mcp_access.read_grant(self.kwargs.get('id'))
                 if not grant or grant['owner']!=self.owner or grant['project']!=Project.get_project_code():

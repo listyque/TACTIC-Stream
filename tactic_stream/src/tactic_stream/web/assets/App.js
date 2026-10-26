@@ -54833,14 +54833,14 @@ var _sfc_main = {
 				if (this.session === session) notify("error", error.message, "", "agent-providers");
 			}
 		},
-		async openAgentMcp(context) {
+		async openAgentMcp(context, connectionId = "") {
 			const session = this.session;
 			try {
 				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([80,1,2,3,4,5,6,7,13,14,81]));
 				if (this.session !== session) return;
 				this.agentMcpComponent ||= markRaw(module.default);
 				await nextTick();
-				if (this.session === session) this.$refs.agentMcp.open(context);
+				if (this.session === session) this.$refs.agentMcp.open(context, connectionId);
 			} catch (error) {
 				if (this.session === session) notify("error", error.message, "", "agent-mcp");
 			}
@@ -56708,6 +56708,20 @@ var _sfc_main = {
 				this.workspaceProject = this.project = project;
 				await this.loadNavigation();
 				if (request !== this.linkRequest || ticket !== this.session?.ticket) return;
+				if (params.has("agent_mcp")) {
+					const connectionId = params.get("agent_mcp");
+					if (!/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/.test(connectionId)) throw new Error("Invalid MCP connection identity");
+					await this.openAgentMcp({
+						client: "TS",
+						project,
+						page: "",
+						title: "",
+						search_type: "",
+						view: "",
+						search_keys: []
+					}, connectionId);
+					return;
+				}
 				if (custom) {
 					const target = await resolveCustomUrl(ticket, project, custom.path, custom.parameters);
 					if (request !== this.linkRequest || ticket !== this.session?.ticket) return;

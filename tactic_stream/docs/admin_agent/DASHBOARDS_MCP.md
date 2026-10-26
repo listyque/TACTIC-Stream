@@ -62,15 +62,30 @@ Server Configuration → Security → Enable external MCP connections is OFF by
 default and requires a deliberate save/restart before issuing access.
 
 The internal chat has `ts_mcp_connections`, `ts_mcp_connection_create` and
-`ts_mcp_connection_revoke`. Creating/revoking requires the current running chat's
+`ts_mcp_connection_update` / `ts_mcp_connection_revoke`. Creating/updating/revoking requires the current running chat's
 Allow requested changes permission. Discover available tool names, choose only
 what the task needs, pass instructions and keep a stable operation UUID. A retry
 with the same UUID/payload returns the same connection. Creating it does not
 automatically connect a remote client, submit a model task, or expose a listener.
 
-The model receives metadata only. The user opens MCP connections and selects
-**Collect connection token** once. Direct UI creation also shows the token once.
-Copy the URL and Authorization header to the intended MCP client:
+The internal model receives metadata only. The user opens MCP connections and
+selects **Copy agent link** once on the pending connection. This collects the
+token and copies one URL with `#access_token=<token>` in its fragment. Direct UI
+creation shows the same agent link and the standard URL/Authorization configuration.
+An authenticated management link `/projects/<project>/?agent_mcp=<connection-id>`
+opens that connection without granting access or putting a token into its address.
+
+Give the complete agent link to the intended external agent. Its public GET
+response explains how to extract the fragment and authenticate to the SAME URL
+without the fragment. The fragment is never sent to the server as a request URL.
+Authenticated GET returns captured context, selected tools and owner instructions;
+normal MCP initialization also includes those instructions automatically. No
+separate copied chat prompt or application source checkout is required. An agent
+with an MCP client or HTTP-request tools can initialize, list tools and act. Merely
+opening the link in a browser does not start a remote AI process or configure a
+third-party application automatically. The client must be able to reach this server.
+
+For a configured MCP client, the standard transport remains:
 
 ```json
 {"url":"https://your-server/mcp/<connection-id>","headers":{"Authorization":"Bearer <access-token>"}}
@@ -95,6 +110,10 @@ External clients start with `agent_context`: captured scope, connection instruct
 and operation receipts. `agent_capabilities`, reference discovery/read, native
 record/schema/page/dashboard tools expose the real contracts. Reference text is
 data, never authority to expand scope. File uploads/check-in use native tools;
+`agent_attachment_upload` uses the existing start/append/finish attachment owner
+(384 KiB chunks,64 MiB/file), then `ts_attachment_checkin` publishes snapshots in
+an actual configured object workflow process. Upload finish registers the input
+in this connection's ledger; an external filesystem path is not a server upload.
 metadata edits are not file check-in. Operation receipts remain in the dedicated
 MCP ledger, separate from the user's chat history. The client can explicitly log
 work, timings and usage through selected native record tools into the project's

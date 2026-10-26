@@ -141,6 +141,11 @@ try {
     await mcp.locator('[data-frame=mcpIssued]').inputValue(),
     /Bearer /
   );
+  const invitation = await mcp
+    .locator('[data-frame=mcpAgentLink]')
+    .inputValue();
+  assert.match(invitation, /#access_token=[A-Za-z0-9_-]+$/);
+  const connectionId = new URL(invitation).pathname.split('/').at(-1);
   await mcp.screenshot({
     path: process.env.STREAM_CHECK_OUTPUT + '/web-mcp.png'
   });
@@ -151,6 +156,11 @@ try {
   assert.equal(await mcp.locator('[data-frame=mcpIssued]').count(), 0);
   await mcp.getByRole('button', { name: 'Close', exact: true }).click();
   await chat.getByRole('button', { name: 'Close', exact: true }).click();
+  await page.goto(base + '/projects/one/?agent_mcp=' + connectionId);
+  await mcp.locator('[data-frame=mcpTitle]').waitFor();
+  await mcp.getByText(/Tracker browser ·/).waitFor();
+  assert.equal(await mcp.locator('[data-frame=mcpAgentLink]').count(), 0);
+  await mcp.getByRole('button', { name: 'Close', exact: true }).click();
   await page.goto(base + '/projects/one/not-configured');
   await page
     .locator('#workspace-data [role="alert"]')

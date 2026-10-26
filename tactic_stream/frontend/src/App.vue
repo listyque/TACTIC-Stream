@@ -516,14 +516,14 @@ export default {
         if (this.session === session) this.$refs.agentProviders.open()
       } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-providers') }
     },
-    async openAgentMcp(context) {
+    async openAgentMcp(context, connectionId = '') {
       const session = this.session
       try {
         const module = await import('./features/configuration/AgentMcp.vue')
         if (this.session !== session) return
         this.agentMcpComponent ||= markRaw(module.default)
         await nextTick()
-        if (this.session === session) this.$refs.agentMcp.open(context)
+        if (this.session === session) this.$refs.agentMcp.open(context, connectionId)
       } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-mcp') }
     },
     async openScriptEditor(path) {
@@ -1809,6 +1809,12 @@ export default {
         this.captureSearchTab(); this.workspaceProject = this.project = project
         await this.loadNavigation()
         if (request !== this.linkRequest || ticket !== this.session?.ticket) return
+        if (params.has('agent_mcp')) {
+          const connectionId = params.get('agent_mcp')
+          if (!/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/.test(connectionId)) throw new Error('Invalid MCP connection identity')
+          await this.openAgentMcp({client:'TS', project, page:'', title:'', search_type:'', view:'', search_keys:[]}, connectionId)
+          return
+        }
         if (custom) {
           const target = await resolveCustomUrl(ticket, project, custom.path, custom.parameters)
           if (request !== this.linkRequest || ticket !== this.session?.ticket) return

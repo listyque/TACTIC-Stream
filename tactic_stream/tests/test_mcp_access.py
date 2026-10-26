@@ -84,6 +84,66 @@ class McpAccess(unittest.TestCase):
             state=proxy.execute_cmd(auth,'tactic.ui.panel.agent_request_cmd.AgentRequestCmd',dict(action='state',project_code='one'))['info']
             self.assertFalse(any(row['request_id']==grant['id'] for row in state['requests']))
 
+    def test_single_link_bootstrap_initialization_access_update_upload_and_checkin(self):
+        import base64
+        import httpx2
+        from mcp import Client
+        from mcp.client.streamable_http import streamable_http_client
+        from xmlrpc.client import Fault
+        with test_transport.Transport.proxy(self) as proxy:
+            ticket=proxy.get_ticket('admin','private-test-password')
+            auth=dict(ticket=ticket,project='one')
+            call=lambda action,**values:proxy.execute_cmd(auth,COMMAND,dict(action=action,project_code='one',**values))['info']
+            context=dict(client='TS',project='one',page='',title='Tracker',search_type='contract/entity',view='table',search_keys=[])
+            proxy.add_column_to_search_type(auth,'contract/entity','pipeline_code','varchar(256)')
+            proxy.insert(auth,'sthpw/pipeline',dict(code='one/reference',project_code='one',pipeline='<pipeline><process name="reference"/></pipeline>'))
+            proxy.update(auth,'contract/entity?project=one&code=A',dict(pipeline_code='one/reference'))
+            grant=call('create',title='Tracker',tools=['agent_context'],instructions='Old instructions',minutes=5,context=context)
+            names=['agent_context','ts_type_read','ts_records','ts_records_create','ts_record_patch','agent_attachment_upload','agent_attachment_read','ts_attachment_checkin','ts_snapshots','ts_edit_operation']
+            values=dict(id=grant['id'],tools=names,instructions='Read this project protocol automatically. Log real work and upload files.',
+                minutes=60,expected_revision=grant['revision'],operation_id=str(uuid4()))
+            updated=call('configure',**values)
+            self.assertEqual(call('configure',**values),updated)
+            with self.assertRaises(Fault):call('configure',**dict(values,operation_id=str(uuid4())))
+            self.assertNotIn('token',updated)
+            link=self.url+grant['path']+'#access_token='+grant['token']
+            from urllib.parse import urlsplit,parse_qs,urlunsplit
+            parts=urlsplit(link);token=parse_qs(parts.fragment)['access_token'][0]
+            endpoint=urlunsplit(parts._replace(fragment=''))
+            with urlopen(endpoint) as response:
+                public=json.load(response)
+                self.assertNotIn('project',public)
+                self.assertIn('access_token',' '.join(public['steps']))
+            request=Request(endpoint,headers={'Authorization':'Bearer '+token,'Accept':'application/json'})
+            with urlopen(request) as response:boot=json.load(response)
+            self.assertEqual(boot['project'],'one')
+            self.assertIn('automatically',boot['instructions'])
+            self.assertNotIn(token,json.dumps(boot))
+            async def run():
+                async with httpx2.AsyncClient(headers={'Authorization':'Bearer '+token}) as http:
+                    recipe=public['http']
+                    headers=recipe['headers']
+                    initialized=await http.post(endpoint,json=recipe['initialize'],headers=headers)
+                    self.assertEqual(initialized.status_code,200,initialized.text)
+                    self.assertIn('automatically',initialized.json()['result']['instructions'])
+                    await http.post(endpoint,json=recipe['ready'],headers=headers)
+                    direct=await http.post(endpoint,json=recipe['context'],headers=headers)
+                    self.assertEqual(direct.status_code,200,direct.text)
+                    self.assertEqual(direct.json()['result']['structuredContent']['context']['project'],'one')
+                    async with Client(streamable_http_client(endpoint,http_client=http),mode='legacy') as client:
+                        self.assertIn('automatically',client.instructions)
+                        attachment_id=str(uuid4());content=b'Actual MCP file upload\n'
+                        for args in (dict(phase='start',name='report.txt',size=len(content),media_type='text/plain'),
+                                     dict(phase='append',offset=0,data=base64.b64encode(content).decode()),dict(phase='finish')):
+                            result=await client.call_tool('agent_attachment_upload',dict(attachment_id=attachment_id,**args))
+                            self.assertFalse(result.is_error,str(result))
+                        read=await client.call_tool('agent_attachment_read',dict(attachment_id=attachment_id))
+                        self.assertEqual(read.structured_content['text'],content.decode())
+                        checked=await client.call_tool('ts_attachment_checkin',dict(search_key='contract/entity?project=one&code=A',process='reference',attachments=[attachment_id],operation_id=str(uuid4())))
+                        self.assertFalse(checked.is_error,str(checked))
+                        self.assertEqual(len(checked.structured_content['snapshots']),1)
+            asyncio.run(run())
+
     def test_expired_and_readonly_grants_and_default_off(self):
         from xmlrpc.client import Fault
         from tactic_stream.server.app import create_app

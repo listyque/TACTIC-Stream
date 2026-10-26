@@ -1,4 +1,4 @@
-import { K as withCtx, N as openBlock, U as watch, Z as ref, b as createVNode, h as createBlock, k as onBeforeUnmount, m as createBaseVNode, p as computed } from "./vue.js";
+import { D as nextTick, K as withCtx, N as openBlock, U as watch, Z as ref, b as createVNode, h as createBlock, k as onBeforeUnmount, m as createBaseVNode, p as computed } from "./vue.js";
 import { j as appearance } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Yt as rect, _ as copyText, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
@@ -16,6 +16,10 @@ function initial() {
 		error: "",
 		issued: ""
 	};
+}
+function agentLink(issued) {
+	const connection = JSON.parse(issued);
+	return connection.url + "#access_token=" + encodeURIComponent(connection.headers.Authorization.replace(/^Bearer /, ""));
 }
 function edit(model, action) {
 	if (action.type === "field") return Object.assign({}, model, { [action.field]: action.value });
@@ -104,6 +108,14 @@ function describe(model, width, height, language) {
 	}));
 	y += toolHeight + 12;
 	if (model.issued) {
+		caption("mcpAgentLinkTitle", tr("Agent link — includes access and startup instructions"), 48);
+		content.push(node("Area", "mcpAgentLink", rect(0, y, inner, 72), {
+			text: agentLink(model.issued),
+			readOnly: true
+		}));
+		y += 80;
+		content.push(button("mcpCopyAgentLink", rect(0, y, Math.min(260, inner), 32), tr("Copy agent link"), "link", { type: "copy_link" }, !model.busy));
+		y += 44;
 		caption("mcpIssuedTitle", tr("Copy this connection now. The access token will not be shown again."), 48);
 		content.push(node("Area", "mcpIssued", rect(0, y, inner, 180), {
 			text: model.issued,
@@ -116,8 +128,8 @@ function describe(model, width, height, language) {
 	caption("mcpExistingTitle", tr("Existing connections"));
 	for (const [index, item] of model.connections.entries()) {
 		if (item.pending && !item.revoked && !item.expired) {
-			content.push(button("mcpCollect_" + index, rect(0, y, Math.min(240, inner), 32), tr("Collect connection token"), "key", {
-				type: "reveal",
+			content.push(button("mcpCollect_" + index, rect(0, y, Math.min(240, inner), 32), tr("Copy agent link"), "key", {
+				type: "reveal_link",
 				id: item.id
 			}, !model.busy));
 			y += 40;
@@ -157,7 +169,7 @@ var _sfc_main = {
 			height: 650
 		});
 		const scene = computed(() => describe(model.value, size.value.width, size.value.height, appearance.language));
-		let context, generation = 0, observer;
+		let context, focusConnection = "", generation = 0, observer;
 		watch(host, (element) => {
 			observer?.disconnect();
 			if (element) {
@@ -185,7 +197,7 @@ var _sfc_main = {
 			++generation;
 			observer?.disconnect();
 		});
-		async function call(action, values = {}) {
+		async function call(action, values = {}, copyLink = false) {
 			if (!context || model.value.busy) return;
 			const id = ++generation, owner = context;
 			model.value.busy = true;
@@ -213,6 +225,9 @@ var _sfc_main = {
 					}, null, 2);
 					model.value.busy = false;
 					await call("state");
+					if (copyLink && context === owner) copyText(agentLink(model.value.issued)).catch((error) => {
+						if (context === owner) model.value.error = error.message;
+					});
 				} else Object.assign(model.value, result, {
 					busy: false,
 					project: owner.project,
@@ -220,7 +235,7 @@ var _sfc_main = {
 						...item,
 						expired: item.expires <= Date.now() / 1e3,
 						expiresLabel: (/* @__PURE__ */ new Date(item.expires * 1e3)).toLocaleString()
-					}))
+					})).sort((a, b) => Number(b.id === focusConnection) - Number(a.id === focusConnection))
 				});
 			} catch (error) {
 				if (id === generation) Object.assign(model.value, {
@@ -234,7 +249,8 @@ var _sfc_main = {
 			model.value = edit(model.value, action);
 			if (action.type === "refresh") call("state");
 			else if (action.type === "revoke" || action.type === "reveal") call(action.type, { id: action.id });
-			else if (action.type === "copy") copyText(model.value.issued).catch((error) => {
+			else if (action.type === "reveal_link") call("reveal", { id: action.id }, true);
+			else if (action.type === "copy" || action.type === "copy_link") copyText(action.type === "copy_link" ? agentLink(model.value.issued) : model.value.issued).catch((error) => {
 				model.value.error = error.message;
 			});
 			else if (action.type === "create") call("create", {
@@ -249,15 +265,18 @@ var _sfc_main = {
 			const { ticket, ...value } = context;
 			return value;
 		}
-		async function open(value) {
+		async function open(value, connectionId = "") {
 			clear();
 			if (!props.ticket || !value?.project) return;
 			context = {
 				...structuredClone(value),
 				ticket: props.ticket
 			};
+			focusConnection = connectionId;
 			dialog.value.show();
 			await call("state");
+			await nextTick();
+			if (focusConnection && model.value.connections[0]?.id === focusConnection) host.value?.querySelector("[data-frame=mcpCollect_0]")?.scrollIntoView({ block: "center" });
 		}
 		__expose({ open });
 		return (_ctx, _cache) => {
