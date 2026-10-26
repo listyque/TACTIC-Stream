@@ -1635,7 +1635,9 @@ var en_default = {
 	"How this item appears in project navigation. Selection follows your theme.": "How this item appears in project navigation. Selection follows your theme.",
 	"Collect connection token": "Collect connection token",
 	"Agent link — includes access and startup instructions": "Agent link — includes access and startup instructions",
-	"Copy agent link": "Copy agent link"
+	"Copy agent link": "Copy agent link",
+	"Preparing task changes": "Preparing task changes",
+	"Saving tasks": "Saving tasks"
 };
 var ru_default = {
 	"Stale source": "Исходник изменился",
@@ -6812,7 +6814,9 @@ var ru_default = {
 	"How this item appears in project navigation. Selection follows your theme.": "Оформление пункта в навигации проекта. Выделение соответствует теме.",
 	"Collect connection token": "Получить токен подключения",
 	"Agent link — includes access and startup instructions": "Ссылка для агента — доступ и стартовые инструкции",
-	"Copy agent link": "Скопировать ссылку для агента"
+	"Copy agent link": "Скопировать ссылку для агента",
+	"Preparing task changes": "Подготовка изменений задач",
+	"Saving tasks": "Сохранение задач"
 };
 //#endregion
 export { en_default as n, ru_default as t };

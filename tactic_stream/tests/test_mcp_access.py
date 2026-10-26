@@ -99,7 +99,7 @@ class McpAccess(unittest.TestCase):
             proxy.insert(auth,'sthpw/pipeline',dict(code='one/reference',project_code='one',pipeline='<pipeline><process name="reference"/></pipeline>'))
             proxy.update(auth,'contract/entity?project=one&code=A',dict(pipeline_code='one/reference'))
             grant=call('create',title='Tracker',tools=['agent_context'],instructions='Old instructions',minutes=5,context=context)
-            names=['agent_context','ts_type_read','ts_records','ts_records_create','ts_record_patch','agent_attachment_upload','agent_attachment_read','ts_attachment_checkin','ts_snapshots','ts_edit_operation']
+            names=['agent_context','ts_type_read','ts_records','ts_records_create','ts_record_patch','agent_attachment_upload','agent_attachment_read','ts_attachment_checkin','ts_snapshots','ts_edit_operation','ts_tasks_prepare','ts_tasks_save','ts_tasks_read']
             values=dict(id=grant['id'],tools=names,instructions='Read this project protocol automatically. Log real work and upload files.',
                 minutes=60,expected_revision=grant['revision'],operation_id=str(uuid4()))
             updated=call('configure',**values)
@@ -142,6 +142,16 @@ class McpAccess(unittest.TestCase):
                         checked=await client.call_tool('ts_attachment_checkin',dict(search_key='contract/entity?project=one&code=A',process='reference',attachments=[attachment_id],operation_id=str(uuid4())))
                         self.assertFalse(checked.is_error,str(checked))
                         self.assertEqual(len(checked.structured_content['snapshots']),1)
+                        prepared=await client.call_tool('ts_tasks_prepare',dict(process='reference',search_keys=['contract/entity?project=one&code=A']))
+                        self.assertFalse(prepared.is_error,str(prepared))
+                        plan=prepared.structured_content['plans'][0]
+                        offered=prepared.structured_content['workflows'][plan['workflow']]['statuses']
+                        values={name:plan[name] for name in ('search_key','process','task_key','expected_revision')}
+                        task=await client.call_tool('ts_tasks_save',dict(changes=[dict(values,data=dict(description='Real MCP task',status=offered[0]['value']))]))
+                        self.assertFalse(task.is_error,str(task))
+                        self.assertEqual(task.structured_content['created'],1)
+                        repeated=await client.call_tool('ts_tasks_save',dict(changes=[dict(values,data=dict(description='Real MCP task',status=offered[0]['value']))]))
+                        self.assertEqual(repeated.structured_content,task.structured_content)
             asyncio.run(run())
 
     def test_expired_and_readonly_grants_and_default_off(self):

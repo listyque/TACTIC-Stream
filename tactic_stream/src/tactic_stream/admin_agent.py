@@ -74,6 +74,15 @@ class TaskStatusChange(BaseModel):
     expected_revision: Identifier
 
 
+class TaskEdit(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    search_key: Identifier
+    process: Identifier
+    expected_revision: Identifier
+    task_key: str = ''
+    data: Annotated[dict[str, str | int | float | bool | None], Field(min_length=1, max_length=16)]
+
+
 class NamingDocument(BaseModel):
     """Native NamingCmd fields; search_type is injected from the selected type."""
     model_config = ConfigDict(extra='forbid', strict=True)
@@ -384,6 +393,11 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                 related_type=related_type, path=path, offset=offset)
 
         @mcp.tool(annotations=read_only, structured_output=True)
+        def ts_tasks_prepare(process: str = '', search_keys: Annotated[list[Identifier], Field(min_length=1, max_length=200)] | None = None) -> dict[str, Any]:
+            """Prepare native task creation or editing, using explicit project object/task keys or captured selection. For objects choose an actual workflow process (or one explicitly requested by the user); existing task keys infer their process. Returns plans with search_key/process/task_key/expected_revision, current values, editable fields, users and actual status graphs. Empty task_key means a new task. Send only requested field changes as data to ts_tasks_save; keep existing task keys to avoid duplicates. No documentation scan or UUID is needed."""
+            return connection.command('editing', 'tasks_prepare', request_id=request_id, process=process, search_keys=search_keys)
+
+        @mcp.tool(annotations=read_only, structured_output=True)
         def ts_workflow_read(search_type: Identifier) -> dict[str, Any]:
             """Read existing entity workflows, selected object assignments, columns and revision before editing."""
             return connection.command('editing', 'workflow_read', request_id=request_id, search_type=search_type)
@@ -419,6 +433,12 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                     phase=phase,name=name,size=size,media_type=media_type,offset=offset,data=data)
 
             writes = ToolAnnotations(read_only_hint=False, destructive_hint=False, idempotent_hint=True, open_world_hint=False)
+
+            @mcp.tool(annotations=writes, structured_output=True)
+            def ts_tasks_save(changes: Annotated[list[TaskEdit], Field(min_length=1, max_length=200)]) -> dict[str, Any]:
+                """Create missing native tasks or edit existing ones in one checked transaction. Use plans/revisions from ts_tasks_prepare and add data containing only requested editable fields: description, status, assignee, supervisor, planned dates/hours or progress as offered by the native editor. Native ACLs, workflows, status journals and triggers apply. Returns persisted tasks and fresh revisions; retry is automatic and refuses later conflicts. No operation UUID or verification reread is needed."""
+                return connection.command('editing', 'tasks_save', request_id=request_id,
+                    changes=[change.model_dump() for change in changes])
 
             @mcp.tool(annotations=writes, structured_output=True)
             def ts_task_status_set(changes: Annotated[list[TaskStatusChange], Field(min_length=1, max_length=200)]) -> dict[str, Any]:
@@ -478,7 +498,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                               + (['handler_automation.trial', 'handler_automation.trial_read', 'handler_automation.trial_image'] if trials else [])
                               + (['handler_automation.activate'] if allow_automation_activate else []),
                 'existing_project_editing': allow_project_edit,
-                'existing_project_operations': ['records.read', 'workflow.read', 'snapshots.read', 'relations.read', 'tasks.read'] + (['records.create', 'instance.link', 'workflow.apply', 'attachment.checkin', 'record.patch', 'tasks.status'] if allow_project_edit else []),
+                'existing_project_operations': ['records.read', 'workflow.read', 'snapshots.read', 'relations.read', 'tasks.read', 'tasks.prepare'] + (['records.create', 'instance.link', 'workflow.apply', 'attachment.checkin', 'record.patch', 'tasks.status', 'tasks.save'] if allow_project_edit else []),
                 'web_download': bool(request_id and allow_web_download),
                 'can_apply': allow_naming_save or allow_page_save or allow_project_create or allow_automation_draft or allow_automation_activate or allow_project_edit,
                 'can_execute_scripts': trials is not None, 'th_runtime_connected': False,

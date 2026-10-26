@@ -30,7 +30,7 @@ class AgentTasks(unittest.TestCase):
         self.record('insert', 'sthpw/pipeline', dict(code='one/task_statuses', project_code='one',
             pipeline='<pipeline><process name="Start" completion="0"/><process name="Ready" completion="100"/><connect from="Start" to="Ready"/></pipeline>'))
         self.record('insert', 'sthpw/pipeline', dict(code='one/asset_work', project_code='one',
-            pipeline='<pipeline><process name="model" task_pipeline="one/task_statuses"/></pipeline>'))
+            pipeline='<pipeline><process name="model" task_pipeline="one/task_statuses"/><process name="review" task_pipeline="one/task_statuses"/></pipeline>'))
         self.assets = [self.record('insert','cg/assets',dict(code='TASK_ASSET_'+str(index),name='Asset '+str(index),
             pipeline_code='one/asset_work'),triggers=False) for index in range(3)]
         self.tasks = [self.record('create_task',asset['__search_key__'],process='model') for asset in self.assets]
@@ -53,6 +53,58 @@ class AgentTasks(unittest.TestCase):
     def changes(self, read=None):
         return [dict(task_key=row['task_key'],status='Ready',expected_revision=row['expected_revision'])
                 for row in (read or self.read())['tasks']]
+
+    def edit_changes(self, data=None):
+        prepared=self.command('editing','tasks_prepare',process='review',
+            search_keys=[asset['__search_key__'] for asset in self.assets],**self.common)
+        return [dict(**{name:plan[name] for name in ('search_key','process','task_key','expected_revision')},
+            data=data or dict(status='Start',assigned='admin',description='Real native task',bid_duration=2))
+            for plan in prepared['plans']]
+
+    def test_create_edit_and_retry_real_tasks_without_public_uuid(self):
+        changes=self.edit_changes()
+        self.assertTrue(all(not plan['task_key'] for plan in changes))
+        result=self.command('editing','tasks_save',changes=changes,**self.common)
+        self.assertEqual((result['count'],result['created']),(3,3))
+        self.assertTrue(all(row['values']['description']=='Real native task' for row in result['tasks']))
+        self.assertTrue(all(self.record('query','sthpw/task',[('code',row['task_key'].split('code=')[-1])]) for row in result['tasks']))
+        self.assertEqual(self.command('editing','tasks_save',changes=changes,**self.common),result)
+        self.assertEqual(len(self.record('query','sthpw/task',[('process','review')])),3)
+        prepared=self.command('editing','tasks_prepare',search_keys=[row['task_key'] for row in result['tasks']],**self.common)
+        self.assertEqual(len(prepared['workflows']),1)
+        self.assertIn('description',{field['name'] for field in prepared['fields'] if field['editable']})
+        edits=[dict(**{name:plan[name] for name in ('search_key','process','task_key','expected_revision')},
+            data=dict(description='Edited through native inspector',supervisor='admin',bid_start_date='2026-10-26',bid_end_date='2026-10-27'))
+            for plan in prepared['plans']]
+        saved=self.command('editing','tasks_save',changes=edits,**self.common)
+        self.assertEqual(saved['created'],0)
+        self.assertTrue(all(row['values']['supervisor']=='admin' for row in saved['tasks']))
+        with self.assertRaisesRegex(ValueError,'changed after'):
+            self.command('editing','tasks_save',changes=changes,**self.common)
+
+    def test_task_save_preflight_permissions_conflicts_and_rollback(self):
+        changes=self.edit_changes()
+        invalid=deepcopy(changes);invalid[-1]['data']['status']='invented'
+        with self.assertRaisesRegex(ValueError,'status is not accessible'):
+            self.command('editing','tasks_save',changes=invalid,**self.common)
+        self.assertFalse(self.record('query','sthpw/task',[('process','review')]))
+        with patch('tactic.ui.table.task_inspector.task_fields',return_value=[dict(name='description',editable=False)]):
+            with self.assertRaises(ValueError):self.command('editing','tasks_save',changes=changes,**self.common)
+        from tactic.ui.table.task_inspector import TaskInspectorCmd
+        original=TaskInspectorCmd.execute
+        calls=[]
+        def fail_second(command):
+            calls.append(command)
+            if len(calls)==2:raise ValueError('Injected native write failure')
+            return original(command)
+        with patch.object(TaskInspectorCmd,'execute',fail_second):
+            with self.assertRaisesRegex(ValueError,'Injected native write failure'):
+                self.command('editing','tasks_save',changes=changes,**self.common)
+        self.assertFalse(self.record('query','sthpw/task',[('process','review')]))
+        self.record('update',self.assets[-1]['__search_key__'],dict(description='Concurrent edit'))
+        with self.assertRaisesRegex(ValueError,'Tasks changed'):
+            self.command('editing','tasks_save',changes=changes,**self.common)
+        self.assertFalse(self.record('query','sthpw/task',[('process','review')]))
 
     def test_linked_asset_tasks_native_status_journal_and_replay(self):
         state=self.read()
@@ -91,6 +143,8 @@ class AgentTasks(unittest.TestCase):
     def test_project_type_selection_and_conversation_authorization(self):
         for values in (dict(search_keys=[self.assets[0]['__search_key__'].replace('project=one','project=foreign')]),dict(offset=-1)):
             with self.assertRaises((ValueError, LookupError)):self.read(**values)
+        with self.assertRaises((ValueError,LookupError)):
+            self.command('editing','tasks_prepare',process='review',search_keys=[self.assets[0]['__search_key__'].replace('project=one','project=foreign')],**self.common)
         with self.assertRaisesRegex(ValueError,'existing task'):
             self.command('editing','task_status',changes=[dict(task_key=self.assets[0]['__search_key__'],status='Ready',expected_revision='x')],**self.common)
         readonly,_=self.submit(document=dict(self.document,allow_changes=False))
@@ -98,6 +152,8 @@ class AgentTasks(unittest.TestCase):
         self.call('claim',host_id=self.host)
         with self.assertRaisesRegex(ValueError,'authorize active changes'):
             self.command('editing','task_status',request_id=readonly['request_id'],changes=self.changes())
+        with self.assertRaisesRegex(ValueError,'authorize active changes'):
+            self.command('editing','tasks_save',request_id=readonly['request_id'],changes=self.edit_changes())
 
     def test_mcp_catalog_and_native_batch_without_operation_uuid(self):
         from mcp import Client
@@ -110,6 +166,12 @@ class AgentTasks(unittest.TestCase):
                 async with Client(server) as client:
                     names={tool.name for tool in (await client.list_tools()).tools}
                     self.assertIn('ts_tasks_read',names)
+                    self.assertIn('ts_tasks_prepare',names)
+                    self.assertEqual('ts_tasks_save' in names,allowed)
+                    with patch.object(connection,'request',return_value=dict(version='fixture')):
+                        capabilities=await client.call_tool('agent_capabilities',{})
+                    self.assertIn('tasks.prepare',capabilities.structured_content['existing_project_operations'])
+                    self.assertEqual('tasks.save' in capabilities.structured_content['existing_project_operations'],allowed)
                     self.assertEqual('ts_task_status_set' in names,allowed)
                     if allowed:
                         read=await client.call_tool('ts_tasks_read',dict(related_type='cg/assets'))
@@ -117,6 +179,13 @@ class AgentTasks(unittest.TestCase):
                         result=await client.call_tool('ts_task_status_set',dict(changes=self.changes(read.structured_content)))
                         self.assertFalse(result.is_error,result.content)
                         self.assertEqual(result.structured_content['count'],3)
+                        prepared=await client.call_tool('ts_tasks_prepare',dict(process='review',search_keys=[self.assets[0]['__search_key__']]))
+                        self.assertFalse(prepared.is_error,prepared.content)
+                        plan=prepared.structured_content['plans'][0]
+                        values={name:plan[name] for name in ('search_key','process','task_key','expected_revision')}
+                        result=await client.call_tool('ts_tasks_save',dict(changes=[dict(values,data=dict(status='Start',description='MCP-created task'))]))
+                        self.assertFalse(result.is_error,result.content)
+                        self.assertEqual(result.structured_content['created'],1)
         with patch.object(connection,'command',side_effect=self.command):asyncio.run(run())
 
     def test_imported_native_task_callbacks_keep_the_bound_project(self):

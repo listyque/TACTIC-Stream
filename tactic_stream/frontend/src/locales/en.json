@@ -1635,5 +1635,7 @@
   "How this item appears in project navigation. Selection follows your theme.": "How this item appears in project navigation. Selection follows your theme.",
   "Collect connection token": "Collect connection token",
   "Agent link — includes access and startup instructions": "Agent link — includes access and startup instructions",
-  "Copy agent link": "Copy agent link"
+  "Copy agent link": "Copy agent link",
+  "Preparing task changes": "Preparing task changes",
+  "Saving tasks": "Saving tasks"
 }

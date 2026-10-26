@@ -5,6 +5,29 @@ visible in TH. They do not execute TH desktop hooks or scripts.
 Available only in a host-bound user conversation; writes require its original
 allow_changes authorization and the host's --allow-project-edit capability.
 
+## Native task creation and full inspector fields
+
+Use `ts_tasks_prepare(process, search_keys)` then `ts_tasks_save(changes)` to
+create or edit ordinary `sthpw/task` records without changing source code.
+The selection is used when search_keys is omitted. Explicit task keys infer the
+process; for project objects choose a process from their actual workflow or an
+explicit user request. The prepare result contains plans with search_key,
+process, task_key, expected_revision, current values, accessible fields/users
+and deduplicated native status graphs. Empty task_key means a new task; preserve
+nonempty keys for edits. Never use ordinary entity tools on sthpw/task.
+
+Copy those four identity/revision fields into each change and add `data` with
+only requested editable fields. The native inspector owns description, status,
+assigned, supervisor, planned dates/hours and progress/completion validation.
+One save accepts up to200 plans, preflights all before writing and executes
+TaskInspectorCmd in the same transaction. Native permissions, status journals,
+workflow triggers and rollback apply. Invalid fields/statuses, stale revisions,
+duplicate changes or a failed write roll back the whole packet. Retry protection
+is internal: no public UUID, redundant reread or documentation scan is required.
+The response contains persisted tasks and fresh revisions; replay refuses later
+conflicting edits. These operations do not extend the separate field-only Undo
+button. Existing scoped MCP links need these tools selected before calling them.
+
 ## Ordinary task status changes
 
 `sthpw/task` has dedicated tools; it is not an ordinary project entity type.

@@ -3,7 +3,117 @@ from pyasm.biz import Task
 from pyasm.command import Command
 from xml.etree import ElementTree as ET
 from tactic.ui.panel.agent_request_cmd import selected_object, text
-from tactic.ui.table.task_inspector import TaskTableEditCmd, task_fields, task_status_names
+from tactic.ui.table.task_inspector import (
+    TaskTableEditCmd, TaskInspectorCmd, task_fields, task_status_names,
+    task_scope, task_edit_options, prepare_task_data,
+)
+
+
+def workflow(task, statuses):
+    pipeline = task.get_pipeline()
+    choices = []
+    for name in statuses:
+        process = pipeline.get_process(name)
+        definition = pipeline.get_process_sobject(name)
+        settings = definition.get_json_value('workflow', {}) if definition else {}
+        choices.append(dict(value=name, label=process.get_label() or name,
+            completion=process.get_attribute('completion') or None,
+            mapping=settings.get('mapping') or None, type=process.get_type()))
+    allowed = set(statuses)
+    root = ET.fromstring(pipeline.get_value('pipeline'))
+    return dict(statuses=choices, connections=[dict(source=edge.get('from'), target=edge.get('to'))
+        for edge in root.findall('connect') if edge.get('from') in allowed and edge.get('to') in allowed])
+
+
+def edit_scope(plan):
+    from tactic.ui.panel.agent_actions_cmd import local_type
+    parent = selected_object(plan['search_key'])
+    local_type(parent.get_base_search_type())
+    scope = task_scope(parent.get_search_key(), plan['process'], plan.get('task_key', ''))
+    node = scope[-1].get_process(scope[1]) if scope[-1] else None
+    if node and node.get_type() == 'progress':
+        raise ValueError('This process has no editable task')
+    return scope
+
+
+def prepare_edits(values, request):
+    keys = values.get('search_keys')
+    if keys is None:
+        keys = request['document']['context']['search_keys']
+    if not isinstance(keys, list) or not 1 <= len(keys) <= 200 or not all(isinstance(key, str) for key in keys):
+        raise ValueError('Choose between 1 and 200 task objects')
+    result = dict(plans=[], workflows={}, fields=[], users=[])
+    for key in dict.fromkeys(keys):
+        item = selected_object(key)
+        task = item if isinstance(item, Task) else None
+        if task and task.get_parent() is None:
+            raise ValueError('Task parent no longer exists')
+        plan = dict(search_key=task.get_parent().get_search_key() if task else item.get_search_key(),
+            process=task.get_value('process') if task else values.get('process', ''),
+            task_key=task.get_search_key() if task else '')
+        parent, process, tasks, selected, defaults, revision, pipeline = edit_scope(plan)
+        virtual, fields, statuses, users = task_edit_options(parent, selected, defaults)
+        code = virtual.get_pipeline().get_code()
+        if code not in result['workflows']:
+            result['workflows'][code] = workflow(virtual, statuses)
+        result['fields'], result['users'] = fields, users
+        result['plans'].append(dict(search_key=parent.get_search_key(), process=process,
+            parent_title=parent.get_value('name', no_exception=True) or parent.get_value('title', no_exception=True) or parent.get_code(),
+            task_key=selected.get_search_key() if selected else '', expected_revision=revision, workflow=code,
+            values={field['name']:virtual.get_value(field['name'], no_exception=True) for field in fields}))
+    return result
+
+
+def verified_edits(result):
+    for item in result['tasks']:
+        task, parent, plan = task_plan(item['task_key'])
+        if plan['expected_revision'] != item['expected_revision']:
+            raise ValueError('Tasks changed after this operation. Read again before applying.')
+    return result
+
+
+def save_edits(changes):
+    if not isinstance(changes, list) or not 1 <= len(changes) <= 200:
+        raise ValueError('Choose between 1 and 200 task changes')
+    from pyasm.search import Search, SearchType
+    sql = Search('sthpw/task').get_sql()
+    sql.get_database_impl().lock_collection_table(sql, SearchType.get('sthpw/task').get_table())
+    prepared, seen = [], set()
+    for plan in changes:
+        if (not isinstance(plan, dict) or set(plan) != {'search_key','process','task_key','expected_revision','data'}
+                or not all(isinstance(plan[name], str) for name in ('search_key','process','task_key','expected_revision'))):
+            raise ValueError('Use a native task plan with data from tasks_prepare')
+        for name in ('search_key','process','task_key','expected_revision'):
+            text(plan[name], 2048, empty=name=='task_key')
+        data = plan['data']
+        if (not isinstance(data, dict) or not data or len(data)>16 or any(
+                value is not None and (type(value) not in (str,int,float,bool)
+                    or isinstance(value,str) and len(value)>12000) for value in data.values())):
+            raise ValueError('Task fields must be bounded scalar values')
+        parent, process, tasks, selected, defaults, revision, pipeline = edit_scope(plan)
+        identity = (parent.get_search_key(), process, selected.get_search_key() if selected else '')
+        if identity in seen:
+            raise ValueError('Duplicate task changes')
+        seen.add(identity)
+        if revision != plan['expected_revision']:
+            raise ValueError('Tasks changed. Reload before saving.')
+        task, fields, statuses, users = task_edit_options(parent, selected, defaults)
+        prepare_task_data(task, selected, defaults, fields, statuses, users, data)
+        prepared.append((plan, selected is None))
+    saved = []
+    for plan, created in prepared:
+        command = TaskInspectorCmd(action='save', **plan)
+        Command.execute_cmd(command)
+        saved.append((command.info['task_key'], created))
+    result = dict(tasks=[], count=len(saved), created=sum(created for key,created in saved))
+    for key, created in saved:
+        task, parent, plan = task_plan(key)
+        fields = task_fields()
+        result['tasks'].append(dict(task_key=key, search_key=parent.get_search_key(), process=plan['process'],
+            parent_title=parent.get_value('name', no_exception=True) or parent.get_value('title', no_exception=True) or parent.get_code(),
+            created=created, expected_revision=plan['expected_revision'],
+            values={field['name']:task.get_value(field['name'], no_exception=True) for field in fields}))
+    return result
 
 
 def task_plan(key):
@@ -69,19 +179,7 @@ def read_tasks(values, request):
         pipeline = task.get_pipeline()
         code = pipeline.get_code()
         if code not in result['workflows']:
-            choices = []
-            for name in task_status_names(task):
-                process = pipeline.get_process(name)
-                definition = pipeline.get_process_sobject(name)
-                workflow = definition.get_json_value('workflow', {}) if definition else {}
-                choices.append(dict(value=name, label=process.get_label() or name,
-                    completion=process.get_attribute('completion') or None,
-                    mapping=workflow.get('mapping') or None, type=process.get_type()))
-            allowed = {choice['value'] for choice in choices}
-            root = ET.fromstring(pipeline.get_value('pipeline'))
-            result['workflows'][code] = dict(statuses=choices, connections=[
-                dict(source=edge.get('from'), target=edge.get('to')) for edge in root.findall('connect')
-                if edge.get('from') in allowed and edge.get('to') in allowed])
+            result['workflows'][code] = workflow(task, task_status_names(task))
         result['tasks'].append(dict(task_key=key, parent_key=parent.get_search_key(),
             parent_title=parent.get_value('name', no_exception=True) or parent.get_value('title', no_exception=True) or parent.get_code(),
             process=plan['process'], context=plan['context'], status=task.get_value('status'),
