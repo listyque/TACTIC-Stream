@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import NestedTable from './NestedTable.vue';
+import LayoutDocument from './LayoutDocument.vue';
 import { appearance } from '../../appearance.js';
 import { runTableScript } from './tableScript.js';
 import { printCustomReport } from './customReport.js';
@@ -53,6 +54,10 @@ const scene = computed(() =>
   )
 );
 const views = computed(() => ({
+  layoutMarkdown: {
+    component: LayoutDocument,
+    nodeProps: true
+  },
   layoutTable: {
     component: NestedTable,
     nodeProps: true,

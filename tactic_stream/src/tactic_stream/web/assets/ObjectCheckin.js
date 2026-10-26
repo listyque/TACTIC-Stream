@@ -1,12 +1,12 @@
 import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, u as Fragment, y as createTextVNode } from "./vue.js";
 import { A as t, Q as preferences, c as _sfc_main$3, j as appearance, o as mobile, ot as _plugin_vue_export_helper_default, z as controls } from "./index.js";
-import { Gt as label, Jt as rect, Wt as button, X as navigationLink, i as _sfc_main$4, ot as resultItems, qt as node, r as observeFrameSizes, st as rpc, wt as uploadFormFile, y as translate } from "./CodeBlock.js";
+import { Gt as button, Jt as node, Kt as label, Tt as uploadFormFile, X as navigationLink, Yt as rect, ct as rpc, i as _sfc_main$4, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { a as sourcePath } from "./files.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { t as _sfc_main$5 } from "./AppDialog.js";
-import { w as captionedSwitch } from "./App.js";
+import { C as captionedSwitch } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/object_checkin.ui.mjs
 function modeChoice(model, width, language) {
 	const tr = (text, values) => translate(text, language, values), compact = width < 360, headingHeight = model.inline ? 26 : 64, columns = compact || model.inline ? 2 : 3, gap = 8, cell = (width - gap * (columns - 1)) / columns, children = [label("multiFileCheckinQuestion", rect(0, 0, width, headingHeight), model.inline ? tr("Check in multiple files?") : tr("{count} files selected. Check in one group or separately in sequence?", { count: model.count }), { wrap: true })], choices = [[

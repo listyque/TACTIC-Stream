@@ -17,6 +17,10 @@ references. Keep credentials and private configuration out of model context.
 
 Existing-project workflows, entity fields and attached files: [EDITING](EDITING.md).
 
+Project page URLs: [TS config/url contract](../custom_urls.md). These are page
+addresses, not anonymous API access or agent credentials. Use existing table/layout
+definitions; configured REST/Python URL handlers remain unavailable.
+
 External host: [MCP](CONNECTION.md), [Codex setup and acceptance](CODEX.md).
 
 ## TS server API
@@ -149,6 +153,9 @@ are historical. Stream uses `pyasm.biz.ProjectSetting` for `config/prod_setting`
 | [Original system DDL](../../../../TH/docs/tactic_database/source_schemas/sthpw_schema.sql) and [config DDL](../../../../TH/docs/tactic_database/source_schemas/config_schema.sql) | Original PostgreSQL field/constraint provenance; not a migration to apply. |
 
 ## TS Help, delivery and evidence
+
+- [Native dashboards, sidebar editing and MCP](DASHBOARDS_MCP.md): shared bricks,
+  read/preview/save receipts, one-project expiring access and its actual limits.
 
 - [TS Help index](../../frontend/public/help/index.json): topic IDs and languages;
   choose one `<id>.en.md` / `<id>.ru.md`. [Russian administration](../../frontend/public/help/administration.ru.md)

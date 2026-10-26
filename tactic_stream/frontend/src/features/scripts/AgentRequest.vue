@@ -13,7 +13,7 @@ import * as UI from '../../../../src/tactic_stream/shared_ui/features/scripts/re
 import * as History from '../../../../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs';
 
 const props = defineProps({ ticket: String, capture: Function });
-const emit = defineEmits(['providers']);
+const emit = defineEmits(['providers', 'mcp']);
 const dialog = ref(null),
   body = ref(null),
   size = ref({ width: 900, height: 650 });
@@ -295,6 +295,17 @@ function schedule() {
     timer = setTimeout(() => request('poll'), 2500);
 }
 function event(action) {
+  if (action.type === 'mcp') {
+    emit(
+      'mcp',
+      JSON.parse(
+        JSON.stringify(
+          model.value.request?.document?.context || model.value.context
+        )
+      )
+    );
+    return;
+  }
   if (action.type === 'providers') {
     emit('providers');
     return;

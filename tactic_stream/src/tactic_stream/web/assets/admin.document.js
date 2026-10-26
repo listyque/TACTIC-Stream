@@ -1,4 +1,4 @@
-import { Gt as label, Jt as rect, Kt as muted, qt as node, y as translate } from "./CodeBlock.js";
+import { Jt as node, Kt as label, Yt as rect, qt as muted, y as translate } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/admin.document.mjs
 function policy(model) {
 	const editable = !!model.ready && !!model.canWrite && !model.busy && !model.uncertain;

@@ -1,12 +1,12 @@
 import { D as nextTick, L as resolveDirective, N as openBlock, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, tt as unref } from "./vue.js";
 import { A as t, c as _sfc_main$2, j as appearance, z as controls } from "./index.js";
-import { Gt as label, Jt as rect, Wt as button, i as _sfc_main$3, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
+import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$3, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { t as downloadBlob } from "./files2.js";
 import { t as fileBlob } from "./previewFiles.js";
 import { t as describe$1 } from "./confirmation.ui.js";
-import { E as _sfc_main$4 } from "./App.js";
+import { T as _sfc_main$4 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/snapshot_checkout.ui.mjs
 function describe(model, width, height, language) {
 	const tr = (text) => translate(text, language), margin = 10, inner = Math.max(0, width - 20), stacked = width < 370, footerHeight = stacked ? 100 : 60, closeWidth = stacked ? inner : 120;

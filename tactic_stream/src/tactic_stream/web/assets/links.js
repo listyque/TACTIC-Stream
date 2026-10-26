@@ -3,13 +3,30 @@ function projectPath(project) {
 	return project ? "/projects/" + encodeURIComponent(project) + "/" : "/";
 }
 function addressProject(address) {
-	const match = /^\/projects\/([^/]+)\/?$/.exec(address.pathname);
+	const match = /^\/projects\/([^/]+)(?:\/.*)?$/.exec(address.pathname) || /^\/tactic\/([^/]+)\/.+$/.exec(address.pathname);
 	if (match) try {
 		return decodeURIComponent(match[1]);
 	} catch {
 		return "";
 	}
 	return "";
+}
+function customUrlLocation(address) {
+	const match = /^\/(?:projects|tactic)\/[^/]+(\/.+)$/.exec(address.pathname);
+	const hash = address.hash?.startsWith("#/") ? address.hash.slice(1) : "";
+	if (!match && !hash) return null;
+	const [hashPath, hashQuery = ""] = hash.split("?");
+	const parameters = new URLSearchParams(address.search);
+	for (const [key, value] of new URLSearchParams(hashQuery)) parameters.set(key, value);
+	let path = hash ? hashPath : match[1];
+	try {
+		path = decodeURIComponent(path);
+	} catch {}
+	return {
+		path,
+		parameters: Object.fromEntries(parameters),
+		address: address.pathname + address.search + (address.hash || "")
+	};
 }
 function browserLink(value, project = "") {
 	if (!/^(skey|tactic-search):\/\//i.test(value)) return value;
@@ -58,6 +75,6 @@ function sameSearchKey(left, right, project = "") {
 	}
 }
 //#endregion
-export { sameSearchKey as a, workspaceAddress as c, projectPath as i, browserLink as n, savedSearchLink as o, linkProject as r, searchLink as s, addressProject as t };
+export { projectPath as a, searchLink as c, linkProject as i, workspaceAddress as l, browserLink as n, sameSearchKey as o, customUrlLocation as r, savedSearchLink as s, addressProject as t };
 
 //# sourceMappingURL=links.js.map

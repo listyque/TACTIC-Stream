@@ -1,6 +1,6 @@
 import { D as nextTick } from "./vue.js";
 import { j as appearance } from "./index.js";
-import { Gt as label, Jt as rect, Kt as muted, Wt as button, qt as node, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { Gt as button, Jt as node, Kt as label, Yt as rect, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { t as listAction } from "./tree.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";

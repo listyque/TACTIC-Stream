@@ -37,6 +37,10 @@ export function navigationLink(ticket, project, link) {
   return post('/admin/navigation-link', { ticket, project, link })
 }
 
+export function resolveCustomUrl(ticket, project, path, parameters) {
+  return post('/admin/custom-url', { ticket, project, path, parameters })
+}
+
 export function tableDependencies(context, values, signal) {
   return post('/admin/rpc', { method: 'execute_cmd', args: [context, 'tactic.ui.table.TableDependencyReadCmd', values], kwargs: {} }, signal, true)
 }

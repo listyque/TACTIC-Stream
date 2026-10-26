@@ -1,10 +1,10 @@
 import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
 import { A as t, O as randomUuid, V as cssRoles, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
-import { Bt as notify, Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$5, k as _sfc_main$4, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
+import { Gt as button, Jt as node, Kt as label, Vt as notify, Yt as rect, ct as rpc, i as _sfc_main$5, k as _sfc_main$4, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$6 } from "./AppDialog.js";
 import { t as _sfc_main$7 } from "./AppMenuItem.js";
 import { t as listAction } from "./tree.ui.js";
-import { _ as describe$2, n as _sfc_main$8 } from "./App.js";
+import { Q as _sfc_main$8, g as describe$2 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {
 	return {
@@ -665,6 +665,12 @@ function permissionActions(model) {
 		},
 		{ separator: true },
 		{
+			title: "MCP connections",
+			command: "mcp",
+			icon: "link",
+			enabled: !model.busy
+		},
+		{
 			title: "AI providers",
 			command: "providers",
 			icon: "settings",
@@ -1008,7 +1014,7 @@ var _sfc_main = {
 		ticket: String,
 		capture: Function
 	},
-	emits: ["providers"],
+	emits: ["providers", "mcp"],
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
@@ -1194,6 +1200,10 @@ var _sfc_main = {
 			if (dialog.value?.open || active(model.value)) timer = setTimeout(() => request("poll"), 2500);
 		}
 		function event(action) {
+			if (action.type === "mcp") {
+				emit("mcp", JSON.parse(JSON.stringify(model.value.request?.document?.context || model.value.context)));
+				return;
+			}
 			if (action.type === "providers") {
 				emit("providers");
 				return;

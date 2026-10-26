@@ -63,6 +63,7 @@ SETTINGS = (
     ('security', 'api_cmd_restricted', 'Restrict command classes', 'Apply native api_cmd access rules to supported command and script execution paths.', 'false', False),
     ('security', 'api_widget_restricted', 'Restrict HTML widget classes', 'Apply native builtin widget rules and bound widget-key arguments. HTML execution still requires administrator access.', 'false', False),
     ('security', 'enable_fast_query', 'Enable fast query', 'Opt-in native fast_query for administrators. It does not bypass Security or allow reader access.', 'false', False),
+    ('security', 'agent_mcp_enabled', 'Enable external MCP connections', 'Expose project-scoped MCP on this server listener. Disabled by default. Each connection requires its own expiring bearer token and selected tools; native account permissions still apply.', 'false', True),
     ('security', 'authenticate_class', 'Authentication class', 'Native authentication handler class. Unsupported custom handlers must be migrated before use.', 'pyasm.security.TacticAuthenticate', False),
     ('install', 'tmp_dir', 'Temporary files and logs', 'Server temporary directory. Worker and queue logs live in its log subdirectory.', 'temp', True),
     ('install', 'log_type', 'Legacy log type', 'Worker and queue logs currently use rotating files regardless of this legacy setting.', None, False),
@@ -96,6 +97,7 @@ EDITABLE = {
     'security/invalid_login_attempts': 'integer', 'security/password_expiry': 'integer',
     'security/api_method_restricted': 'boolean', 'security/api_cmd_restricted': 'boolean', 'security/api_widget_restricted': 'boolean',
     'security/enable_fast_query': 'boolean',
+    'security/agent_mcp_enabled': 'boolean',
 }
 EDITABLE.update(('checkin/' + platform + '_' + key, 'paths' if key in ('sandbox_dir', 'client_repo_dir') else 'path')
                 for platform in ('win32', 'linux')

@@ -1,10 +1,10 @@
 import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, Y as markRaw, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, tt as unref } from "./vue.js";
 import { A as t, D as randomId, c as _sfc_main$2, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$3, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
+import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$3, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { t as _sfc_main$4 } from "./AppDialog.js";
-import { U as _sfc_main$5 } from "./App.js";
+import { H as _sfc_main$5 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/ingest.ui.mjs
 function optionValue(field, value) {
 	return field === "updateMode" ? value ? "update" : "insert" : value;

@@ -4,7 +4,9 @@ export function projectPath(project) {
 }
 
 export function addressProject(address) {
-  const match = /^\/projects\/([^/]+)\/?$/.exec(address.pathname);
+  const match =
+    /^\/projects\/([^/]+)(?:\/.*)?$/.exec(address.pathname) ||
+    /^\/tactic\/([^/]+)\/.+$/.exec(address.pathname);
   if (match) {
     try {
       return decodeURIComponent(match[1]);
@@ -13,6 +15,27 @@ export function addressProject(address) {
     }
   }
   return '';
+}
+
+export function customUrlLocation(address) {
+  const match = /^\/(?:projects|tactic)\/[^/]+(\/.+)$/.exec(address.pathname);
+  const hash = address.hash?.startsWith('#/') ? address.hash.slice(1) : '';
+  if (!match && !hash) return null;
+  const [hashPath, hashQuery = ''] = hash.split('?');
+  const parameters = new URLSearchParams(address.search);
+  for (const [key, value] of new URLSearchParams(hashQuery))
+    parameters.set(key, value);
+  let path = hash ? hashPath : match[1];
+  try {
+    path = decodeURIComponent(path);
+  } catch {
+    /* Keep malformed escapes as literal data for the server's route error. */
+  }
+  return {
+    path,
+    parameters: Object.fromEntries(parameters),
+    address: address.pathname + address.search + (address.hash || '')
+  };
 }
 
 export function browserLink(value, project = '') {

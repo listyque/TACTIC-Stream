@@ -390,8 +390,9 @@ class AgentRequestCmd(Command):
         return [attachment(code)[0] for code in codes]
 
     def records(self, table):
-        return [json.loads(row[0]) for row in self.sql.do_query(
+        records = [json.loads(row[0]) for row in self.sql.do_query(
             'SELECT record FROM ' + table + ' WHERE owner=' + self.sql.quote(self.owner))]
+        return [row for row in records if table != 'spt_agent_request' or row.get('transport') != 'mcp']
 
     def load(self, table, code, missing=False):
         rows = self.sql.do_query('SELECT owner,record FROM ' + table + ' WHERE code=' + self.sql.quote(code))

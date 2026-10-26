@@ -67,7 +67,8 @@ import SystemActivity from './features/activity/SystemActivity.vue'
 import { notify, resetNotifications, setNotificationProgress } from './features/activity/notifications.js'
 import NotesPanel from './features/objects/NotesPanel.vue'
 import FilePreview from './features/objects/FilePreview.vue'
-import { addressProject, linkProject, searchLink, workspaceAddress, savedSearchLink } from './features/workspace/links.js'
+import { addressProject, customUrlLocation, linkProject, searchLink, workspaceAddress, savedSearchLink } from './features/workspace/links.js'
+import { resolveCustomUrl } from './api.js'
 import { uiPerformance } from './features/debug/uiPerformance.js'
 import ConnectionMenu from './features/connection/ConnectionMenu.vue'
 import SignIn from './features/connection/SignIn.vue'
@@ -123,7 +124,7 @@ export default {
       inspectorSource: null, inspectorTarget: null, inspectorRequest: 0, taskInspectorActive: false, searchEditorActive: false, inspectorReturn: 'results',
       knowledgeMounted:false, knowledgeActive:false, knowledgeTarget:'',
       attachmentLocation: null,
-      scriptEditorComponent: null, scriptEditorLoading: false, agentRequestComponent: null, agentProvidersComponent: null,
+      scriptEditorComponent: null, scriptEditorLoading: false, agentRequestComponent: null, agentProvidersComponent: null, agentMcpComponent: null,
       pingBusy: false, activityUnread: 0, messageUnread: 0, shelfOpen: false, layoutsFocus: null, columnsFocus: null, refreshAfterAdministration: false, version: '', ready: false, restoringSession: true, login: '', password: '', session: null,
       navigationLink: '', openingLink: false, linkRequest: 0, routeReady: false, searchStateTab: null,
       projects: [], types: [], userIdentity: null, project: '', type: '',
@@ -514,6 +515,16 @@ export default {
         await nextTick()
         if (this.session === session) this.$refs.agentProviders.open()
       } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-providers') }
+    },
+    async openAgentMcp(context) {
+      const session = this.session
+      try {
+        const module = await import('./features/configuration/AgentMcp.vue')
+        if (this.session !== session) return
+        this.agentMcpComponent ||= markRaw(module.default)
+        await nextTick()
+        if (this.session === session) this.$refs.agentMcp.open(context)
+      } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-mcp') }
     },
     async openScriptEditor(path) {
       if (this.scriptEditorLoading) return
@@ -941,7 +952,7 @@ export default {
       if (link?.layoutView) {
         const session=this.session,project=this.project,tab=this.activeSearchTab
         try {
-          const result=await rpc('execute_cmd',[{ticket:session.ticket,project,language:'python'},'tactic.ui.table.CustomLayoutReadCmd',{view:link.layoutView}])
+          const result=await rpc('execute_cmd',[{ticket:session.ticket,project,language:'python'},'tactic.ui.table.CustomLayoutReadCmd',{view:link.layoutView,search_key:link.display.options.search_key || ''}])
           if(this.session!==session || this.project!==project || this.activeSearchTab!==tab)return
           await nextTick()
           const owner=this.$refs.taskViews?.find(owner=>owner.workspaceId===tab.id)
@@ -1776,7 +1787,7 @@ export default {
         url = address.pathname + address.search
       }
       const tab = this.activeSearchTab?.id || ''
-      if (location.pathname + location.search !== url || history.state?.tab !== tab) {
+      if (location.pathname + location.search + location.hash !== url || history.state?.tab !== tab) {
         history[replace ? 'replaceState' : 'pushState']({ tab }, '', url)
       }
     },
@@ -1788,8 +1799,8 @@ export default {
       this.$refs.linkPreview?.close()
       if (document.querySelector('dialog:modal')) { this.error = 'Close the current window before opening a link'; this.writeLocation(true); return }
       const params = new URLSearchParams(location.search)
-      const project = addressProject(location), type = params.get('search_type')
-      if (params.has('link')) { await this.openRichLink(params.get('link'), true, project || this.workspaceProject); return }
+      const project = addressProject(location), type = params.get('search_type'), custom = customUrlLocation(location)
+      if (params.has('link') && !custom) { await this.openRichLink(params.get('link'), true, project || this.workspaceProject); return }
       if (!project) return
       const request = ++this.linkRequest, ticket = this.session.ticket
       this.openingLink = true
@@ -1798,6 +1809,18 @@ export default {
         this.captureSearchTab(); this.workspaceProject = this.project = project
         await this.loadNavigation()
         if (request !== this.linkRequest || ticket !== this.session?.ticket) return
+        if (custom) {
+          const target = await resolveCustomUrl(ticket, project, custom.path, custom.parameters)
+          if (request !== this.linkRequest || ticket !== this.session?.ticket) return
+          const link = { key: 'custom-url:' + custom.address, title: target.title, view: target.view, resultMode: target.options.view_mode || 'table',
+            layoutView: target.layoutView, search_type: target.search_type,
+            display: { handler: 'LinkWdg', options: target.options } }
+          await this.selectType(target.search_type, link, target.filterField, target.filterValue, request)
+          if (request !== this.linkRequest || ticket !== this.session?.ticket) return
+          this.navigationLink = custom.address
+          this.saveSession()
+          return
+        }
         if (!params.has('search_type') && !params.has('chat')) {
           this.workspaceProjects[project] ||= { current: '', sections: [] }
           await this.restoreSearchTab()
@@ -1823,7 +1846,7 @@ export default {
           await this.activateSection(section.id, request)
         } else await this.selectType(type, view === 'table' ? null : { view }, '', '', request)
       } catch (error) { if (request === this.linkRequest) this.fail(error) }
-      finally { if (request === this.linkRequest) { this.openingLink = false; this.writeLocation(true) } }
+      finally { if (request === this.linkRequest) { this.openingLink = false; if (!custom || this.navigationLink === custom.address) this.writeLocation(true) } }
     },
     async openRichLink(value, replace = false, projectContext = this.workspaceProject, showDetails = true) {
       const request = ++this.linkRequest, ticket = this.session?.ticket, originProject = this.workspaceProject, originTab = this.activeSearchTab
@@ -1983,7 +2006,8 @@ export default {
       :project="inspectorSource?.project || workspaceProject" :search-type="inspectorSource?.searchType || workspaceView.type" :updates="serverBatch"
       @back="$refs.docks.show(inspectorReturn || 'results')" @visibility="$event ? $refs.docks.show('notes') : $refs.docks.hide('notes')" @saved="inspectorSaved" />
     <UiPerformance ref="uiPerformance" @closed="$refs.settingsMenu?.focusTrigger()" />
-    <component v-if="agentRequestComponent" :is="agentRequestComponent" ref="agentRequest" :ticket="session.ticket" :capture="agentContext" @providers="openAgentProviders" />
+    <component v-if="agentRequestComponent" :is="agentRequestComponent" ref="agentRequest" :ticket="session.ticket" :capture="agentContext" @providers="openAgentProviders" @mcp="openAgentMcp" />
+    <component v-if="agentMcpComponent" :is="agentMcpComponent" ref="agentMcp" :ticket="session.ticket" :project="workspaceProject" />
     <component v-if="agentProvidersComponent" :is="agentProvidersComponent" ref="agentProviders" :ticket="session.ticket" :project="workspaceProject" />
     <component v-if="scriptEditorComponent" :is="scriptEditorComponent" ref="scriptEditor" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" :search-type="workspaceView.type" :search-keys="workspaceView.selectedKeys" @saved="$refs.scriptShelf.reload()" @executed="loadRows()" @closed="$refs.settingsMenu?.focusTrigger()" />
     <ScriptShelf ref="scriptShelf" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" v-bind="shelfContext" :search-type="workspaceView.type" :search-keys="workspaceView.selectedKeys" :visible="!compactShortcuts && shelfOpen && !!activeSearchTab && !administrationOpen && section === 'data'" @saved="loadNavigation" @executed="loadRows()" @closed="$refs.settingsMenu?.focusTrigger()" />

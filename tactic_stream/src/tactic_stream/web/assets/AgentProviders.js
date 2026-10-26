@@ -1,8 +1,8 @@
 import { K as withCtx, N as openBlock, U as watch, Z as ref, b as createVNode, h as createBlock, k as onBeforeUnmount, m as createBaseVNode, p as computed } from "./vue.js";
 import { j as appearance } from "./index.js";
-import { Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$1, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
+import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
-import { _ as describe$1 } from "./App.js";
+import { g as describe$1 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/configuration/providers.ui.mjs
 function initial() {
 	return {

@@ -10,6 +10,7 @@ results, authorization, revisions, transaction effects and failure paths.
 | --- | --- |
 | Supported and excluded server contracts | [API compatibility Help](../frontend/public/help/api_compatibility.en.md) |
 | Native object/query semantics | [Core model](../frontend/public/help/core_model.en.md) |
+| Original project page URLs | [Custom URL contract and limits](custom_urls.md) |
 | Original table configurations | [Table contract](frame/table.md), [widget catalogue](../frontend/public/help/widget_database.en.md) |
 | TS APIs and original server references | [Source index](admin_agent/SOURCES.md) |
 | TH client interpretation of TACTIC | [Handler compatibility map](../../../TH/docs/tactic_compatibility/README.md) |

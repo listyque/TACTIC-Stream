@@ -11,6 +11,19 @@ class AgentLibrary(unittest.TestCase):
     call=fixture.AgentRequests.call
     submit=fixture.AgentRequests.submit
 
+    def test_project_without_config_tables_does_not_break_history(self):
+        from pyasm.search.search import RequestContext,request_context
+        with request_context(RequestContext(self.store,'admin','one')):
+            self.api.auth.bind_security('admin',self.auth['ticket'])
+            # A physical project DB may exist before configuration upgrades finish.
+            self.api.dispatch('insert',(self.auth,'sthpw/project',dict(code='unupgraded',title='Unupgraded')))
+        import sqlite3
+        from contextlib import closing
+        with closing(sqlite3.connect(self.store.database_path('unupgraded'))) as db, db:
+            db.execute('CREATE TABLE unrelated (id integer)')
+        result=self.call('library')
+        self.assertFalse(next(item for item in result['projects'] if item['code']=='unupgraded')['agent_available'])
+
     def create(self):
         return self.call('draft',request_id=str(uuid4()),context=deepcopy(self.document['context']))
 

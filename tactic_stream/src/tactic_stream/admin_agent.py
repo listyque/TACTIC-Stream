@@ -17,6 +17,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from tactic_stream import __version__
 from tactic_stream.project_plan import ProjectPlan, Code, Label
 from tactic_stream.automation_plan import AutomationPlan
+from tactic_stream.dashboard_plan import DashboardDocument
+from tactic_stream.sidebar_plan import SidebarDocument
 from tactic_stream.automation_trial import AutomationTrials, TrialCase
 
 MAX_RESPONSE = 2 * 1024 * 1024
@@ -30,6 +32,9 @@ COMMANDS = {
     'schema': 'tactic.ui.panel.schema_cmd.SchemaCmd',
     'naming': 'tactic.ui.panel.naming_cmd.NamingCmd',
     'page': 'tactic.ui.panel.page_cmd.PageCmd',
+    'dashboard': 'tactic.ui.panel.dashboard_cmd.DashboardCmd',
+    'sidebar': 'tactic.ui.panel.sidebar_agent_cmd.SidebarAgentCmd',
+    'mcp': 'tactic.ui.panel.agent_mcp_cmd.AgentMcpCmd',
     'automation': 'tactic.ui.panel.handler_automation_cmd.HandlerAutomationCmd',
     'request': 'tactic.ui.panel.agent_request_cmd.AgentRequestCmd',
     'attachment': 'tactic.ui.panel.agent_attachment_cmd.AgentAttachmentCmd',
@@ -48,6 +53,7 @@ REFERENCES = {
     'ts.editing': ('TS', 'docs/admin_agent/EDITING.md'),
     'th.trials': ('TS', 'docs/admin_agent/SCRIPT_TRIALS.md'),
     'ts.pages': ('TS', 'docs/admin_agent/PAGES.md'),
+    'ts.dashboards_mcp': ('TS', 'docs/admin_agent/DASHBOARDS_MCP.md'),
     'ts.projects': ('TS', 'docs/admin_agent/PROJECTS.md'),
     'th.automation': ('TS', 'docs/admin_agent/HANDLER_AUTOMATION.md'),
     'ts.administration': ('TS', 'frontend/public/help/administration.en.md'),
@@ -258,6 +264,29 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
 
     if request_id:
         @mcp.tool(annotations=read_only, structured_output=True)
+        def ts_mcp_connections() -> dict[str, Any]:
+            """Read owned project MCP connections and selectable tools. Tokens are never returned to the model."""
+            return connection.command('mcp','state',request_id=request_id)
+
+        if allow_page_save:
+            @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=False,idempotent_hint=True,open_world_hint=False),structured_output=True)
+            def ts_mcp_connection_create(title: Identifier, tools: Annotated[list[Identifier],Field(min_length=1,max_length=128)],
+                    operation_id: Identifier, instructions: Annotated[str,Field(max_length=16384)]='', minutes: Annotated[int,Field(strict=True,ge=5,le=480)]=60) -> dict[str, Any]:
+                """Issue limited MCP access to this captured project, only with this chat's change permission.
+
+                Choose tool names from ts_mcp_connections. Keep operation UUID and exact payload on retries.
+                The user collects the token once in the MCP connections window; never invent a token or
+                claim the page URL grants access. Server MCP listener must be explicitly enabled first.
+                """
+                return connection.command('mcp','create',request_id=request_id,title=title,tools=tools,
+                    operation_id=operation_id,instructions=instructions,minutes=minutes)
+
+            @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=True,idempotent_hint=True,open_world_hint=False),structured_output=True)
+            def ts_mcp_connection_revoke(connection_id: Identifier) -> dict[str, Any]:
+                """Revoke an owned project MCP connection. Requires the chat's change permission."""
+                return connection.command('mcp','revoke',request_id=request_id,id=connection_id)
+
+        @mcp.tool(annotations=read_only, structured_output=True)
         def agent_context() -> dict[str, Any]:
             """The user's immutable TH/TS project, page and selection captured before sending."""
             request = connection.command('request', 'read', request_id=request_id)
@@ -407,11 +436,15 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         health = connection.request('/health')
         return {'adapter_version': __version__, 'server': health, 'project': connection.project,
                 'operations': ['references', 'types.read', 'schema.read', 'naming.read', 'naming.preview',
-                               'naming.operation', 'page.read', 'page.preview', 'page.operation']
+                               'naming.operation', 'page.read', 'page.preview', 'page.operation',
+                               'dashboard.read', 'dashboard.preview', 'dashboard.operation',
+                               'sidebar.read', 'sidebar.preview', 'sidebar.operation']
+                              + (['mcp.connections'] if request_id else [])
+                              + (['mcp.create','mcp.revoke'] if request_id and allow_page_save else [])
                               + ['project.preview', 'project.read', 'project.operation']
                               + (['conversation.search', 'conversation.read'] if request_id else [])
                               + ['handler_automation.read', 'handler_automation.preview', 'handler_automation.draft', 'handler_automation.operation']
-                              + (['naming.save'] if allow_naming_save else []) + (['page.save'] if allow_page_save else [])
+                              + (['naming.save'] if allow_naming_save else []) + (['page.save', 'dashboard.save', 'sidebar.save'] if allow_page_save else [])
                               + (['project.create', 'project.export', 'project.install'] if allow_project_create else [])
                               + (['handler_automation.save_draft'] if allow_automation_draft else [])
                               + (['handler_automation.trial', 'handler_automation.trial_read', 'handler_automation.trial_image'] if trials else [])
@@ -532,7 +565,64 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         """Recover this user's historical page-save result after an uncertain response."""
         return connection.command('page', 'operation', search_type=search_type, operation_id=operation_id)
 
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_dashboard_read() -> dict[str, Any]:
+        """Read current dashboard dependencies/revision and portable brick catalogue for TH and TS."""
+        return connection.command('dashboard','read')
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_sidebar_read(source: Literal['handler','tactic']='handler') -> dict[str, Any]:
+        """Read project navigation keys, visibility, colors/icons and revision.
+
+        handler is shared TH/TS navigation when configured; tactic is the original project_view.
+        Use this before claiming an existing sidebar cannot be edited.
+        """
+        return connection.command('sidebar','read',source=source)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_sidebar_preview(document: SidebarDocument, expected_revision: Identifier) -> dict[str, Any]:
+        """Preview grouping links, hiding duplicates and changing titles/icons/colors.
+
+        Use keys/names from read. Links move without deletion or duplication; the native editor
+        preserves table/filter definitions, unknown XML and existing access rules.
+        """
+        return connection.command('sidebar','preview',document=document.model_dump(exclude_none=True),expected_revision=expected_revision)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_sidebar_operation(operation_id: Identifier) -> dict[str, Any]:
+        """Recover a historical sidebar receipt without repeating changes."""
+        return connection.command('sidebar','operation',operation_id=operation_id)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier) -> dict[str, Any]:
+        """Compose a shared native dashboard from row/column/text/markdown/count/table/link bricks.
+
+        Tables reference existing TACTIC views; use ts_page_* for a new column layout.
+        Filters are ANDed native column conditions. Metrics are current row counts.
+        Same CustomLayout/Frame in TH and TS; no application source or generated code.
+        """
+        return connection.command('dashboard','preview',document=document.model_dump(mode='json'),expected_revision=expected_revision)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_dashboard_operation(operation_id: Identifier) -> dict[str, Any]:
+        """Recover a saved dashboard receipt after an uncertain response without reapplying."""
+        return connection.command('dashboard','operation',operation_id=operation_id)
+
     if allow_page_save:
+        @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=True,idempotent_hint=True,open_world_hint=False),structured_output=True)
+        def ts_sidebar_save(document: SidebarDocument, expected_revision: Identifier, operation_id: Identifier) -> dict[str, Any]:
+            """Apply a previewed native sidebar edit with revision checks and durable idempotence."""
+            return connection.command('sidebar','apply',document=document.model_dump(exclude_none=True),expected_revision=expected_revision,operation_id=operation_id)
+
+        @mcp.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=True,idempotent_hint=True,open_world_hint=False),structured_output=True)
+        def ts_dashboard_save(document: DashboardDocument, expected_revision: Identifier, operation_id: Identifier) -> dict[str, Any]:
+            """Save a previewed shared dashboard into native config/widget_config, sidebar and config/url.
+
+            Check revisions; keep UUID/payload on retries. Reload read state and the saved layout
+            to verify. Existing unrelated configuration is never overwritten by this tool.
+            """
+            return connection.command('dashboard','apply',document=document.model_dump(mode='json'),expected_revision=expected_revision,operation_id=operation_id)
+
         @mcp.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=True,
                                              idempotent_hint=True, open_world_hint=False), structured_output=True)
         def ts_page_save(search_type: Identifier, document: PageDocument, expected_revision: Identifier,

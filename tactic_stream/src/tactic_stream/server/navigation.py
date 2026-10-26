@@ -53,6 +53,7 @@ def read_navigation():
             handler = config.get_display_handler(name).split('.')[-1]
             kind = 'section' if handler == 'SideBarSectionLinkWdg' else 'separator' if handler == 'SeparatorWdg' else 'link'
             item = dict(key='/'.join((*path, name)), name=name, title=config.get_element_title(name),
+                        color=attributes.get('color') or '',
                         kind=kind, icon=attributes.get('icon') or options.get('icon') or ('folder' if kind == 'section' else 'link'),
                         display=dict(handler=config.get_display_handler(name), options=options),
                         action=dict(handler=config.get_action_handler(name), options=config.get_action_options(name)),

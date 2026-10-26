@@ -161,12 +161,14 @@ async function load() {
     offset: state.offset || 0,
     limit: scope.initialLimit || 50,
     order_by: state.order ? [state.order] : [],
-    filters: []
+    filters: [...(scope.filters || [])]
   };
   if (state.filter)
-    query.filters = [
-      [state.filterField || 'code', 'like', '%' + state.filter + '%']
-    ];
+    query.filters.push([
+      state.filterField || 'code',
+      'like',
+      '%' + state.filter + '%'
+    ]);
   try {
     const response = await rpc('execute_cmd', [
       {

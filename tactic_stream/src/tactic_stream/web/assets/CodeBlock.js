@@ -455,6 +455,14 @@ function navigationLink(ticket, project, link) {
 		link
 	});
 }
+function resolveCustomUrl(ticket, project, path, parameters) {
+	return post("/admin/custom-url", {
+		ticket,
+		project,
+		path,
+		parameters
+	});
+}
 function tableDependencies(context, values, signal) {
 	return post("/admin/rpc", {
 		method: "execute_cmd",
@@ -4061,6 +4069,27 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Collect connection token": "Получить токен подключения",
+	"MCP connections": "MCP-подключения",
+	"External access is limited to this project and the tools you select. Revoke it at any time.": "Внешний доступ ограничен этим проектом и выбранными инструментами. Его можно отозвать в любой момент.",
+	"Enable external MCP connections in Server configuration and restart first.": "Включите внешние MCP-подключения в настройках сервера и перезапустите его.",
+	"Instructions for this connection": "Инструкции для этого подключения",
+	"5 minutes": "5 минут",
+	"1 hour": "1 час",
+	"8 hours": "8 часов",
+	"Allowed tools": "Разрешённые инструменты",
+	"Select read tools": "Выбрать инструменты чтения",
+	"Copy this connection now. The access token will not be shown again.": "Скопируйте подключение сейчас. Токен доступа больше не будет показан.",
+	"Copy connection": "Скопировать подключение",
+	"Existing connections": "Созданные подключения",
+	Revoked: "Доступ отозван",
+	Expired: "Срок истёк",
+	"Revoke access": "Отозвать доступ",
+	"Create connection": "Создать подключение",
+	"MCP connections could not be loaded": "Не удалось загрузить MCP-подключения",
+	"Navigation color": "Цвет в навигации",
+	"Optional #RRGGBB override; leave empty to use the Search Type color.": "Необязательный цвет #RRGGBB; оставьте пустым для цвета типа объектов.",
+	"How this item appears in project navigation. Selection follows your theme.": "Оформление пункта в навигации проекта. Выделение соответствует теме.",
 	"Agent permissions": "Разрешения агента",
 	"Conversation context": "Контекст беседы",
 	"Use in current conversation": "Контекст для текущей беседы",
@@ -10855,6 +10884,6 @@ var _sfc_main = {
 	}
 };
 //#endregion
-export { objectStatus as $, localDate as A, updateDelay as At, activityFeed as B, notify as Bt, _sfc_main$15 as C, transactionDetails as Ct, _sfc_main$20 as D, widgetConfiguration as Dt, _sfc_main$18 as E, userProfile as Et, _sfc_main$26 as F, clearNotificationHistory as Ft, interfaceDefinition as G, label as Gt, columnsEditor as H, setNotificationProgress as Ht, _sfc_main$27 as I, dismissNotification as It, messageFileRequest as J, rect as Jt, knowledgeRequest as K, muted as Kt, _sfc_main$29 as L, editNotificationReply as Lt, parse as M, activeNotifications as Mt, _sfc_main$23 as N, beginNotificationReply as Nt, _sfc_main$21 as O, workspaceLayouts as Ot, _sfc_main$25 as P, cancelNotificationReply as Pt, objectRelations as Q, _sfc_main$31 as R, failNotificationReply as Rt, matchesUser as S, tableParentGroup as St, AppSearchField_default as T, userAvatar as Tt, endActivity as U, submitNotificationReply as Ut, beginActivity as V, resetNotifications as Vt, formDefinition as W, button as Wt, navigationLink as X, virtualRange as Xt, messagesRequest as Y, revealListOffset as Yt, objectDeletion as Z, copyText as _, sessionAction as _t, _sfc_main$2 as a, resetRequestActivity as at, _sfc_main$13 as b, tableDependencies as bt, _sfc_main$6 as c, saveServerConfiguration as ct, completions as d, searchConfiguration as dt, projectCatalog as et, documentSymbols as f, securityGroups as ft, copyImage as g, serverUpdates as gt, xmlTokens as h, serverConfiguration as ht, _sfc_main$1 as i, requestActivity as it, monthLabel as j, updatesAvailable as jt, _sfc_main$22 as k, setUpdatesAvailable as kt, toolbar as l, scriptEditor as lt, pythonTokens as m, securityUsers as mt, frameContentWidth as n, projectNavigation as nt, _sfc_main$3 as o, resultItems as ot, javascriptTokens as p, securityRules as pt, linkPreviews as q, node as qt, observeFrameSizes as r, rawDatabase as rt, _sfc_main$5 as s, rpc as st, _sfc_main as t, projectCreationCatalog as tt, _sfc_main$9 as u, scriptShelf as ut, readClipboardImages as v, sidebarRequest as vt, ItemPreview_default as w, uploadFormFile as wt, _sfc_main$14 as x, tableDependencyFile as xt, translate as y, tableCells as yt, _sfc_main$32 as z, notificationHistory as zt };
+export { objectStatus as $, localDate as A, setUpdatesAvailable as At, activityFeed as B, notificationHistory as Bt, _sfc_main$15 as C, tableParentGroup as Ct, _sfc_main$20 as D, userProfile as Dt, _sfc_main$18 as E, userAvatar as Et, _sfc_main$26 as F, cancelNotificationReply as Ft, interfaceDefinition as G, button as Gt, columnsEditor as H, resetNotifications as Ht, _sfc_main$27 as I, clearNotificationHistory as It, messageFileRequest as J, node as Jt, knowledgeRequest as K, label as Kt, _sfc_main$29 as L, dismissNotification as Lt, parse as M, updatesAvailable as Mt, _sfc_main$23 as N, activeNotifications as Nt, _sfc_main$21 as O, widgetConfiguration as Ot, _sfc_main$25 as P, beginNotificationReply as Pt, objectRelations as Q, _sfc_main$31 as R, editNotificationReply as Rt, matchesUser as S, tableDependencyFile as St, AppSearchField_default as T, uploadFormFile as Tt, endActivity as U, setNotificationProgress as Ut, beginActivity as V, notify as Vt, formDefinition as W, submitNotificationReply as Wt, navigationLink as X, revealListOffset as Xt, messagesRequest as Y, rect as Yt, objectDeletion as Z, virtualRange as Zt, copyText as _, serverUpdates as _t, _sfc_main$2 as a, resetRequestActivity as at, _sfc_main$13 as b, tableCells as bt, _sfc_main$6 as c, rpc as ct, completions as d, scriptShelf as dt, projectCatalog as et, documentSymbols as f, searchConfiguration as ft, copyImage as g, serverConfiguration as gt, xmlTokens as h, securityUsers as ht, _sfc_main$1 as i, requestActivity as it, monthLabel as j, updateDelay as jt, _sfc_main$22 as k, workspaceLayouts as kt, toolbar as l, saveServerConfiguration as lt, pythonTokens as m, securityRules as mt, frameContentWidth as n, projectNavigation as nt, _sfc_main$3 as o, resolveCustomUrl as ot, javascriptTokens as p, securityGroups as pt, linkPreviews as q, muted as qt, observeFrameSizes as r, rawDatabase as rt, _sfc_main$5 as s, resultItems as st, _sfc_main as t, projectCreationCatalog as tt, _sfc_main$9 as u, scriptEditor as ut, readClipboardImages as v, sessionAction as vt, ItemPreview_default as w, transactionDetails as wt, _sfc_main$14 as x, tableDependencies as xt, translate as y, sidebarRequest as yt, _sfc_main$32 as z, failNotificationReply as zt };
 
 //# sourceMappingURL=CodeBlock.js.map

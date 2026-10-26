@@ -64,9 +64,9 @@ def library(cmd, *, catalog_only=False, page_size=100):
             if not available:
                 result['unavailable_projects'].append(code)
                 continue
-            sql = Search('config/trigger').get_sql()
+            sql = resource.get_sql()
             result['projects'][-1]['agent_available'] = all(sql.table_exists(table) for table in ('spt_agent_request','spt_agent_host'))
-            if catalog_only:
+            if catalog_only or not result['projects'][-1]['agent_available']:
                 continue
             folders = groups()
             result['groups'].extend(dict(group,project=code,project_title=title) for group in folders['groups'])

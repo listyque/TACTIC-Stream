@@ -1,8 +1,8 @@
 import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow, w as inject } from "./vue.js";
 import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Dt as widgetConfiguration, Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$1, ot as resultItems, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
+import { Gt as button, Jt as node, Kt as label, Ot as widgetConfiguration, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
-import { A as binding, F as template, I as variants, L as widgets, M as edit, N as roles, P as serialize, j as describe$2, k as actions } from "./App.js";
+import { A as describe$2, F as variants, I as widgets, M as roles, N as serialize, O as actions, P as template, j as edit, k as binding } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {

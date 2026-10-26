@@ -365,13 +365,15 @@ class SidebarDraft:
         _view, selector, element = self._flat_refs[self._selected_row]
         field = str(field or "")
         text = str(value or "")
-        if field in {"name", "title", "icon"}:
+        if field in {"name", "title", "icon", "color"}:
             if field == "name":
                 previous = str(element.get("name") or "")
                 text = _slug(text)
                 self.check_name(text, element)
             elif field == "icon":
                 text = icon_name_for_tactic(text)
+            elif field == "color" and text and not re.fullmatch(r'#[0-9A-Fa-f]{6}',text):
+                raise ValueError('Use a six-digit hexadecimal navigation color')
             if text:
                 element.set(field, text)
             else:
@@ -613,6 +615,7 @@ class SidebarDraft:
                     "icon": str(element.get("icon") or (
                         "folder" if entry_type == "section" else "link"
                     )),
+                    "color": str(element.get('color') or ''),
                     "searchType": _direct_text(element, "search_type"),
                     "searchView": _direct_text(element, "search_view"),
                     "targetView": target,
@@ -621,7 +624,7 @@ class SidebarDraft:
                     "displayDepth": depth,
                     "selected": is_selected,
                     "glyph": icon_name_from_tactic(str(element.get("icon") or "link")),
-                    "accent": self._accent_for_search_type(
+                    "accent": element.get('color') or self._accent_for_search_type(
                         _direct_text(element, "search_type")
                     ),
                     "included": True,
@@ -801,7 +804,7 @@ def sidebar_request(action, payload):
     operation = payload.get('operation')
     if operation == 'field':
         field, value = payload.get('field'), payload.get('value')
-        if field not in {'name', 'title', 'icon', 'entryType', 'searchType', 'searchView', 'targetView', 'isVisible', 'widgetType', 'displayView', 'displayClassName', 'resultViewMode', 'layoutPreset', 'scriptShelf'}:
+        if field not in {'name', 'title', 'icon', 'color', 'entryType', 'searchType', 'searchView', 'targetView', 'isVisible', 'widgetType', 'displayView', 'displayClassName', 'resultViewMode', 'layoutPreset', 'scriptShelf'}:
             raise ValueError('Invalid sidebar field')
         if field == 'isVisible' and type(value) is not bool or field != 'isVisible' and (not isinstance(value, str) or len(value) > 4096):
             raise ValueError('Invalid sidebar field value')

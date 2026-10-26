@@ -185,6 +185,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
         roots = Environment.get_asset_dirs()
         roots.setdefault('default', Environment.get_asset_dir())
         web_dirs = Config.get_dict_value('checkin', 'web_base_dir')
+        mcp_enabled = Config.get_value('security','agent_mcp_enabled') == 'true'
     from tactic_stream.server.file_project import FileProjectStaticFiles
     for path, alias in repository_web_paths(roots, web_dirs):
         app.mount(path, FileProjectStaticFiles(directory=roots[alias], check_dir=False,
@@ -220,7 +221,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
         return JSONResponse(api_documentation(), headers={'Cache-Control': 'no-store'})
 
     def request_environ(request):
-        return dict(SERVER_PORT=str(request.scope['server'][1]) if request.scope.get('server') else None,
+        return dict(MCP_ENABLED=mcp_enabled, SERVER_PORT=str(request.scope['server'][1]) if request.scope.get('server') else None,
                     REMOTE_ADDR=request.client.host if request.client else None,
                     REQUEST_METHOD=request.method, PATH_INFO=request.url.path, BASE_URL=str(request.base_url).rstrip('/'))
 
@@ -280,6 +281,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             if sdk or (method == 'execute_cmd' and isinstance(args, list) and len(args) > 1 and args[1] in (
                     'tactic.ui.panel.agent_actions_cmd.AgentActionsCmd',
                     'tactic.ui.panel.agent_request_cmd.AgentRequestCmd',
+                    'tactic.ui.panel.custom_url_cmd.CustomUrlCmd',
                     'tactic.ui.panel.agent_attachment_cmd.AgentAttachmentCmd')):
                 message = str(error)
             script_error = error
@@ -319,13 +321,15 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             return body
         return await run_in_threadpool(invoke_json, body, request_environ(request))
 
-    def interface_request(body, form=False, configuration=None, deletion=None, status=False, relations=False, navigation=False, project_creation=False, sidebar=None, search_configuration=None, groups=None, rules=None, project_catalog=False, users=None, columns=None, cells=False, workspace_layout=None, result_items=False, script_shelf=None, script_editor=None, activity=False, navigation_link=False, journal=False, server_updates=False, messages=None, uploads=None, user_profile=None, knowledge=None, checkin_queue=None, invalidations=(), raw_database=None, project_agent=None):
+    def interface_request(body, form=False, configuration=None, deletion=None, status=False, relations=False, navigation=False, project_creation=False, sidebar=None, search_configuration=None, groups=None, rules=None, project_catalog=False, users=None, columns=None, cells=False, workspace_layout=None, result_items=False, script_shelf=None, script_editor=None, activity=False, navigation_link=False, journal=False, server_updates=False, messages=None, uploads=None, user_profile=None, knowledge=None, checkin_queue=None, invalidations=(), raw_database=None, project_agent=None, custom_url=False):
         from tactic_stream.server.widget_configuration import WidgetConfigConflict
         from pyasm.common.config import ConfigConflict
         object_status = status
         try:
             payload = json.loads(body.decode('utf-8'), parse_constant=reject_json_constant)
             fields = {'ticket', 'project', 'search_type', 'view'}
+            if custom_url:
+                fields = {'ticket', 'project', 'path', 'parameters'}
             if project_agent:
                 fields = {'ticket', 'project', 'target', 'document', 'expected_revision', 'operation_id', 'template_id', 'title'}
             if raw_database:
@@ -390,13 +394,16 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             # Global communication/profile reads do not require a selected project.
             if (messages or server_updates or user_profile or navigation_link) and payload.get('project') == '':
                 payload = dict(payload, project='sthpw')
-            if not all(isinstance(payload.get(name), str) and payload[name] for name in (('ticket', 'project') if project_agent or raw_database or navigation or project_creation or sidebar or groups or rules or project_catalog or users or user_profile or columns or workspace_layout or script_shelf or script_editor or activity or navigation_link or journal or server_updates or messages or knowledge or checkin_queue else ('ticket', 'project', 'search_type'))):
+            if not all(isinstance(payload.get(name), str) and payload[name] for name in (('ticket', 'project') if custom_url or project_agent or raw_database or navigation or project_creation or sidebar or groups or rules or project_catalog or users or user_profile or columns or workspace_layout or script_shelf or script_editor or activity or navigation_link or journal or server_updates or messages or knowledge or checkin_queue else ('ticket', 'project', 'search_type'))):
                 raise ValueError('Invalid interface request')
             login = api.auth.validate(payload['ticket'])
             with request_context(RequestContext(api.store, login, payload['project'])):
                 api.auth.bind_security(login, payload['ticket'])
                 from tactic_stream.server.interface import read_interface, read_form
-                if project_agent:
+                if custom_url:
+                    from tactic_stream.server.custom_urls import resolve_custom_url
+                    result = resolve_custom_url(payload.get('path'), payload.get('parameters'))
+                elif project_agent:
                     from tactic_stream.server.project_agent import project_agent_request
                     result = project_agent_request(project_agent, payload)
                 elif raw_database:
@@ -538,7 +545,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                 message = 'You do not have permission for this script operation.'
         except UnsupportedContract as error:
             status, code, message = 501, 'unsupported_operation', 'This operation or object type is not available yet.'
-            if script_shelf or script_editor:
+            if custom_url or script_shelf or script_editor:
                 message = str(error)
         except ConfigConflict:
             status, code, message = 409, 'writer_busy', 'Another configuration writer is busy. Inspect the operation UUID before retrying.'
@@ -551,7 +558,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             status, code, message = 500, 'partial_commit', str(error)
         except (ValueError, TypeError, LookupError, TacticException) as error:
             status, code, message = 400, 'invalid_request', 'Check the project, object type and search parameters.'
-            if project_agent or raw_database or search_configuration or groups or rules or users or user_profile or columns or cells or workspace_layout or result_items or script_shelf or script_editor or navigation_link or journal or messages or knowledge or checkin_queue:
+            if custom_url or project_agent or raw_database or search_configuration or groups or rules or users or user_profile or columns or cells or workspace_layout or result_items or script_shelf or script_editor or navigation_link or journal or messages or knowledge or checkin_queue:
                 message = str(error)
             if configuration:
                 message = str(error)
@@ -1181,4 +1188,19 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
 
     from tactic_stream.server.file_project import install_routes
     install_routes(app, api)
+
+    @app.post('/admin/custom-url', include_in_schema=False)
+    async def custom_url(request: Request):
+        body = await admin_body(request)
+        if isinstance(body, Response):
+            return body
+        return await run_in_threadpool(interface_request, body, custom_url=True)
+
+    from tactic_stream.server.custom_urls import install_rest_routes
+    install_rest_routes(app, invoke_json, workspace_index, request_environ)
+
+    if mcp_enabled:
+        from tactic_stream.server.mcp_gateway import McpGateway
+        app.mount('/mcp',McpGateway(app,api),name='project-mcp')
+
     return app

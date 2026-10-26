@@ -1,4 +1,4 @@
-import { Gt as label, Jt as rect, qt as node } from "./CodeBlock.js";
+import { Jt as node, Kt as label, Yt as rect } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/controls/tabs/workspace.ui.mjs
 var dimensions = {
 	railWidth: 48,

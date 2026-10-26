@@ -9,6 +9,14 @@ order: 25
 
 ## Help and unfinished gestures
 
+**Check out** prepares a snapshot download and its destination. **Attach files**
+adds files to the prepared snapshot through native check-in commands.
+**Security Summary** shows the selected object's access information.
+
+**External agent** opens the project-aware chat. **AI providers** manages model
+connections. **MCP connections** creates and revokes restricted project access;
+collect chat-issued access tokens there once, outside the model conversation.
+
 Help keeps the selected article, search and each article's scroll position when closed and reopened.
 A contextual Help button selects its article in the same window. Search includes article contents.
 Reload rereads the files and preserves the current position; changing the interface language while

@@ -120,7 +120,8 @@ class AgentActionsCmd(AgentRequestCmd):
             else:
                 self.info = old['result']
             return
-        if not row['document']['allow_changes'] or row['status'] != 'running':
+        from tactic_stream.server.mcp_access import current_grant
+        if not row['document']['allow_changes'] or row['status'] != 'running' and not current_grant(row):
             raise ValueError('This conversation does not authorize active changes')
         undo = None
         if action == 'task_status':

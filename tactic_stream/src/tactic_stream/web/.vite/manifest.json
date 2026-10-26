@@ -329,9 +329,9 @@
       "_workspace.ui.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
+      "_markdown-it.js",
       "_AppMenuItem.js",
-      "_tree.ui.js",
-      "_markdown-it.js"
+      "_tree.ui.js"
     ],
     "dynamicImports": [
       "src/features/checkin/ObjectCheckin.vue",
@@ -362,6 +362,7 @@
       "src/features/administration/SecurityRules.vue",
       "src/features/scripts/AgentRequest.vue",
       "src/features/configuration/AgentProviders.vue",
+      "src/features/configuration/AgentMcp.vue",
       "src/features/scripts/ScriptEditor.vue"
     ],
     "css": [
@@ -603,6 +604,21 @@
       "assets/SnapshotCheckout.css"
     ]
   },
+  "src/features/configuration/AgentMcp.vue": {
+    "file": "assets/AgentMcp.js",
+    "name": "AgentMcp",
+    "src": "src/features/configuration/AgentMcp.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_CodeBlock.js",
+      "_AppDialog.js"
+    ],
+    "css": [
+      "assets/AgentMcp.css"
+    ]
+  },
   "src/features/configuration/AgentProviders.vue": {
     "file": "assets/AgentProviders.js",
     "name": "AgentProviders",
@@ -684,8 +700,8 @@
       "_richText.js",
       "_links.js",
       "_AttachmentCard.js",
-      "_AppMenuItem.js",
       "_markdown-it.js",
+      "_AppMenuItem.js",
       "src/App.vue"
     ],
     "css": [
