@@ -64,6 +64,11 @@ class AgentRequestCmd(Command):
         _require_admin()
         if self.kwargs.get('project_code') != Project.get_project_code():
             raise ValueError('Agent request project mismatch')
+        if self.kwargs.get('action') == 'library':
+            from tactic_stream.server.agent_library import library
+            self.owner = Environment.get_user_name()
+            self.info = library(self)
+            return
         self.sql = Search('config/trigger').get_sql()
         if not all(self.sql.table_exists(name) for name in ('spt_agent_request', 'spt_agent_host')):
             raise ValueError('Upgrade the project schema before connecting an agent')

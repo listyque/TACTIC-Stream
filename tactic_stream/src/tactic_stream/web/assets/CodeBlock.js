@@ -4061,6 +4061,9 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Conversation project": "Проект бесед",
+	"All projects": "Все проекты",
+	"Some project histories are unavailable": "История некоторых проектов недоступна",
 	"Reading tasks": "Чтение задач",
 	"Updating task statuses": "Изменение статусов задач",
 	"Conversation view": "Вид бесед",

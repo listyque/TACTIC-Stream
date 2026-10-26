@@ -4,6 +4,7 @@ import json
 from uuid import uuid4
 
 from pyasm.common import Environment
+from pyasm.biz import Project
 from pyasm.search import Search, SearchType
 from pyasm.web import WidgetSettings
 
@@ -29,11 +30,72 @@ def summary(row):
     meta = metadata(row)
     prompt = row['document']['prompt'] or 'Attachments'
     return dict(request_id=row['request_id'], prompt=prompt[:120],
+        project=row['document']['context']['project'],
+        key=row['document']['context']['project']+':'+row['request_id'],
         title=meta['title'] or ('New conversation' if row['status']=='draft' else prompt[:120]),
         default_title=not meta['title'] and (row['status']=='draft' or not row['document']['prompt']),
         status=row['status'], outcome=row.get('outcome', ''),
         activity=row.get('activity', row['created']), search_type=row['document']['context']['search_type'],
         **{key:meta[key] for key in ('group','pinned','archived')}, library_revision=revision(meta))
+
+
+def library(cmd):
+    """Read only this user's histories; execution remains in each chat's project."""
+    from tactic.ui.panel.agent_request_cmd import AgentRequestCmd, text
+    selected = text(cmd.kwargs.get('project_filter', ''), 256, empty=True)
+    query = text(cmd.kwargs.get('query', ''), 200, empty=True).casefold()
+    archived, offset = cmd.kwargs.get('archived', False), cmd.kwargs.get('offset', 0)
+    if type(archived) is not bool or type(offset) is not int or not 0<=offset<=100000:
+        raise ValueError('Invalid conversation history filter')
+    security = Environment.get_security()
+    original = Project.get_project_code()
+    result = dict(requests=[], projects=[], groups=[], group_revisions={}, unavailable_projects=[])
+    try:
+        for project in Search('sthpw/project').get_sobjects():
+            code = project.get_code()
+            if not security.is_admin() and not security.check_access(
+                    'project', [{'code':'*'},{'code':code}], 'allow', default='deny'):
+                continue
+            title = project.get_value('title', no_exception=True) or code
+            Project.set_project(code)
+            resource = project.get_project_db_resource()
+            available = resource.get_database_impl().database_exists(resource)
+            result['projects'].append(dict(code=code,title=title,available=available))
+            if not available:
+                result['unavailable_projects'].append(code)
+                continue
+            folders = groups()
+            result['groups'].extend(dict(group,project=code,project_title=title) for group in folders['groups'])
+            result['group_revisions'][code] = revision(folders)
+            if selected and selected!=code:
+                continue
+            sql = Search('config/trigger').get_sql()
+            if not sql.table_exists('spt_agent_request'):
+                continue
+            reader = AgentRequestCmd()
+            reader.owner, reader.sql = cmd.owner, sql
+            titles = {}
+            for row in reader.records('spt_agent_request'):
+                item = summary(row)
+                if item['archived']!=archived or query and query not in ' '.join([
+                        item['title'], item['prompt'], item['search_type'], code, title,
+                        *(message.get('text','') for message in row.get('messages',[]))]).casefold():
+                    continue
+                name = item['search_type']
+                if name not in titles:
+                    kind = SearchType.get(name,no_exception=True) if name else None
+                    titles[name] = (kind.get_value('title',no_exception=True) if kind else '') or name
+                result['requests'].append(dict(item,project=code,project_title=title,type_title=titles[name]))
+    finally:
+        Project.set_project(original)
+    if selected and not any(project['code']==selected for project in result['projects']):
+        raise ValueError('Conversation project is unavailable')
+    result['projects'].sort(key=lambda project:project['title'].casefold())
+    result['requests'].sort(key=lambda row:(row['pinned'],row['activity'],row['key']),reverse=True)
+    total = len(result['requests'])
+    result.update(requests=result['requests'][offset:offset+100],total=total,
+                  next_offset=offset+100 if offset+100<total else None)
+    return result
 
 
 def state(cmd):

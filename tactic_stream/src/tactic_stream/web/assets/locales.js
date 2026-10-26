@@ -1604,7 +1604,10 @@ var en_default = {
 	"Conversation view": "Conversation view",
 	"Back to conversations": "Back to conversations",
 	"Reading tasks": "Reading tasks",
-	"Updating task statuses": "Updating task statuses"
+	"Updating task statuses": "Updating task statuses",
+	"Conversation project": "Conversation project",
+	"All projects": "All projects",
+	"Some project histories are unavailable": "Some project histories are unavailable"
 };
 var ru_default = {
 	"Stale source": "Исходник изменился",
@@ -6750,7 +6753,10 @@ var ru_default = {
 	"Conversation view": "Вид бесед",
 	"Back to conversations": "Вернуться к беседам",
 	"Reading tasks": "Чтение задач",
-	"Updating task statuses": "Изменение статусов задач"
+	"Updating task statuses": "Изменение статусов задач",
+	"Conversation project": "Проект бесед",
+	"All projects": "Все проекты",
+	"Some project histories are unavailable": "История некоторых проектов недоступна"
 };
 //#endregion
 export { en_default as n, ru_default as t };

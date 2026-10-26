@@ -1604,5 +1604,8 @@
   "Conversation view": "Conversation view",
   "Back to conversations": "Back to conversations",
   "Reading tasks": "Reading tasks",
-  "Updating task statuses": "Updating task statuses"
+  "Updating task statuses": "Updating task statuses",
+  "Conversation project": "Conversation project",
+  "All projects": "All projects",
+  "Some project histories are unavailable": "Some project histories are unavailable"
 }

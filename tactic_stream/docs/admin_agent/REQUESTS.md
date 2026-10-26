@@ -144,3 +144,20 @@ not a live TH runtime connection: th_runtime_connected remains false. Native TH
 hooks and shelf scripts still belong to TH, not browser uploads or a DCC client.
 
 AgentAttachmentCmd owns retry-safe chunked private uploads under data/agent_inputs, scoped by authenticated owner and project; include this directory with request databases in backups. AgentActionsCmd exposes bounded [existing-project editing](EDITING.md) through the same native owners. Codex app-server protocol: [official reference](https://learn.chatgpt.com/docs/app-server).
+
+`library(project_filter, query, archived, offset)` aggregates only the current
+login's summaries across accessible registered project databases, 100/page. It
+returns project-qualified `key`, `project`, `project_title`, all project choices,
+project-qualified folders, `group_revisions` per project and
+`unavailable_projects`. Empty `project_filter` means all projects. This read does
+not expire foreign requests or alter their queues. `state` stays local and keeps
+its independent unfiltered `active_requests`; hosts/idle checks must not use the
+aggregate library. The authenticated caller project is restored after aggregation.
+
+Clients default to all projects. Filtering changes only the library. Reading,
+writing, continuing, attachment transfers and folder changes route to their
+original project with the captured login ticket. Native TH copies its captured
+server stub before changing the ticket's project; it never mutates the original
+stub or retrieves a different account's current ticket. Draft caches use
+`project:request_id`; a new chat in an explicitly filtered foreign project clears
+workspace page/type/selection. With no project filter, new chats use the workspace.

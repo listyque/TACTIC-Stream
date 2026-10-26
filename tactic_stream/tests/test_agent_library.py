@@ -93,7 +93,57 @@ class AgentLibrary(unittest.TestCase):
         self.assertEqual(len(first['requests']),100)
         self.assertEqual(len(second['requests']),5)
         self.assertTrue(set(item['request_id'] for item in first['requests']).isdisjoint(item['request_id'] for item in second['requests']))
+        first=self.call('library');second=self.call('library',offset=first['next_offset'])
+        self.assertEqual(first['total'],105)
+        self.assertEqual(len(first['requests']),100)
+        self.assertEqual(len(second['requests']),5)
+        self.assertTrue({row['key'] for row in first['requests']}.isdisjoint(row['key'] for row in second['requests']))
         with self.assertRaises(ValueError):self.call('state',offset=-1)
         other=dict(self.document['context'],project='foreign')
         with self.assertRaisesRegex(ValueError,'mismatch'):
             self.call('draft',request_id=str(uuid4()),context=other)
+
+    def test_all_projects_library_keeps_owner_context_and_execution_local(self):
+        from pyasm.search.search import RequestContext,request_context
+        from pyasm.biz import Project
+        from tactic.ui.panel.agent_request_cmd import AgentRequestCmd
+        from pyasm.search import Search
+        row=self.create()
+        self.api.dispatch('execute_cmd',(dict(self.auth,project='admin'),'tactic.command.CreateProjectCmd',
+            dict(project_code='empty',project_title='Empty project')))
+        def other(action,**values):
+            return self.api.dispatch('execute_cmd',(dict(self.auth,project='empty'),fixture.COMMAND,
+                dict(action=action,project_code='empty',**values)))['info']
+        # The new project has no agent inbox yet; its library still finds old chats.
+        library=other('library')
+        self.assertEqual([(r['project'],r['request_id']) for r in library['requests']],[('one',row['request_id'])])
+        self.assertTrue(any(p['code']=='empty' for p in library['projects']))
+        self.assertEqual(other('library',project_filter='empty')['requests'],[])
+        duplicate=other('draft',request_id=row['request_id'],context=dict(self.document['context'],project='empty',search_keys=[]))
+        with request_context(RequestContext(self.store,'admin','empty')):
+            self.api.auth.bind_security('admin',self.auth['ticket'])
+            command=AgentRequestCmd();command.owner='another-login';command.sql=Search('config/trigger').get_sql()
+            private=dict(deepcopy(duplicate),request_id=str(uuid4()))
+            command.save('spt_agent_request',private['request_id'],private)
+        library=other('library')
+        self.assertEqual(len(library['requests']),2)
+        self.assertEqual(len({item['key'] for item in library['requests']}),2)
+        self.assertEqual(len(other('state')['requests']),1)
+        self.assertEqual(other('state')['active_requests'],[])
+        self.assertEqual(other('read',request_id=row['request_id'])['document']['context']['project'],'empty')
+        self.assertEqual(self.call('read',request_id=row['request_id'])['document']['context']['project'],'one')
+        self.assertEqual(len(other('library',project_filter='one')['requests']),1)
+        self.assertEqual(len(other('library',query='Empty project')['requests']),1)
+        self.assertEqual(other('library',archived=True)['requests'],[])
+        with self.assertRaisesRegex(ValueError,'unavailable'):other('library',project_filter='not_registered')
+        # Aggregation must restore the caller's authenticated project.
+        with request_context(RequestContext(self.store,'admin','empty')):
+            self.api.auth.bind_security('admin',self.auth['ticket'])
+            command=AgentRequestCmd(action='library',project_code='empty');command.execute()
+            self.assertEqual(Project.get_project_code(),'empty')
+        database=self.store.database_path('empty')
+        database.rename(database.with_suffix('.unavailable'))
+        library=self.call('library')
+        self.assertEqual(library['unavailable_projects'],['empty'])
+        self.assertEqual(len(library['requests']),1)
+        self.assertFalse(database.exists())

@@ -11,6 +11,7 @@ function initial$1() {
 		mobile: false,
 		width: 280,
 		query: "",
+		project: "",
 		searchOpen: false,
 		grouping: "time",
 		archived: false,
@@ -32,6 +33,10 @@ function layout(model, width) {
 }
 function change(model, action, small = false) {
 	const history = model.history;
+	if (action.type === "historyProject") return Object.assign({}, history, {
+		project: action.value,
+		edit: null
+	});
 	if (action.type === "historyOptions") return Object.assign({}, history, { edit: { kind: "options" } });
 	if (action.type === "historySearch") return Object.assign({}, history, {
 		searchOpen: !history.searchOpen,
@@ -52,7 +57,9 @@ function change(model, action, small = false) {
 	if (action.type === "historyCancel") return Object.assign({}, history, { edit: null });
 	if (action.type === "historyRemoveConfirm") return Object.assign({}, history, { edit: Object.assign({}, history.edit, { confirm: true }) });
 	if (action.type === "historyGroupEdit") {
-		const group = (model.groups || []).find((item) => item.id === action.value);
+		const project = action.value?.project || history.project || model.context.project;
+		const identity = typeof action.value === "object" ? action.value.id : action.value;
+		const group = (model.groups || []).find((item) => item.id === identity && (item.project || project) === project);
 		return Object.assign({}, history, {
 			visible: true,
 			mobile: small,
@@ -60,12 +67,13 @@ function change(model, action, small = false) {
 				kind: "group",
 				id: group?.id || "",
 				name: group?.name || "",
-				revision: model.groups_revision
+				project,
+				revision: model.group_revisions?.[project] || model.groups_revision
 			}
 		});
 	}
 	if (action.type === "historyEdit" && action.value) {
-		const row = model.requests.find((item) => item.request_id === action.value) || (model.request?.request_id === action.value ? model.request.library_summary : null);
+		const row = selection(model, action.value);
 		if (!row) return null;
 		return Object.assign({}, history, {
 			visible: true,
@@ -73,6 +81,7 @@ function change(model, action, small = false) {
 			edit: {
 				kind: "chat",
 				id: row.request_id,
+				project: row.project || model.context.project,
 				title: row.default_title ? "" : row.title,
 				group: row.group || "",
 				pinned: !!row.pinned,
@@ -90,6 +99,26 @@ function change(model, action, small = false) {
 	};
 	if (fields[action.type] && history.edit) return Object.assign({}, history, { edit: Object.assign({}, history.edit, { [fields[action.type]]: action.value }) });
 	return null;
+}
+function key(row, project = "") {
+	return row.key || (row.project || project) + ":" + row.request_id;
+}
+function selection(model, value) {
+	const identity = typeof value === "object" ? value.request_id : value;
+	const project = typeof value === "object" ? value.project : null;
+	const candidates = model.requests.concat(model.request?.library_summary ? [model.request.library_summary] : []).filter((row) => row.request_id === identity && (!project || row.project === project));
+	return candidates.find((row) => (row.project || model.context.project) === (project || model.context.project)) || candidates[0];
+}
+function projectContext(context, project) {
+	return context.project === project ? context : {
+		client: context.client,
+		project,
+		page: "",
+		title: "",
+		search_type: "",
+		view: "",
+		search_keys: []
+	};
 }
 function draft(model) {
 	return {
@@ -114,19 +143,20 @@ function restored(value) {
 	}, value || {});
 }
 function merge(previous, current) {
-	const records = new Map(previous.map((row) => [row.request_id, row]));
-	for (const row of current) records.set(row.request_id, row);
+	const records = new Map(previous.map((row) => [key(row), row]));
+	for (const row of current) records.set(key(row), row);
 	return Array.from(records.values());
 }
 function rows(model, language, now = Date.now()) {
 	const tr = (text) => translate(text, language), history = model.history;
-	const folders = new Map((model.groups || []).map((group) => [group.id, group.name]));
+	const folders = new Map((model.groups || []).map((group) => [(group.project || model.context.project) + ":" + group.id, group]));
 	const groups = /* @__PURE__ */ new Map();
-	function add(key, title, row, folder = "") {
+	function add(key, title, row, folder = "", project = "") {
 		if (!groups.has(key)) groups.set(key, {
 			key,
 			title,
 			folder,
+			project,
 			records: []
 		});
 		if (row) groups.get(key).records.push(row);
@@ -137,9 +167,11 @@ function rows(model, language, now = Date.now()) {
 	const sorted = model.requests.slice().sort((a, b) => (b.activity || 0) - (a.activity || 0) || b.request_id.localeCompare(a.request_id));
 	const topPinned = (row) => row.pinned && (history.grouping !== "group" || !row.group);
 	for (const row of sorted.filter(topPinned)) add("pinned", tr("Pinned conversations"), row);
-	if (history.grouping === "group") for (const group of model.groups || []) add("folder:" + group.id, group.name, null, group.id);
+	if (history.grouping === "group") {
+		for (const group of model.groups || []) if (!history.project || !group.project || group.project === history.project) add("folder:" + (group.project || model.context.project) + ":" + group.id, !history.project && group.project_title ? group.project_title + " · " + group.name : group.name, null, group.id, group.project || model.context.project);
+	}
 	for (const row of sorted.filter((row) => !topPinned(row))) if (history.grouping === "type") add("type:" + row.search_type, row.type_title || row.search_type || tr("No Search Type"), row);
-	else if (history.grouping === "group") add("folder:" + (row.group || ""), folders.get(row.group) || tr("Ungrouped"), row, row.group || "");
+	else if (history.grouping === "group") add("folder:" + (row.project || model.context.project) + ":" + (row.group || ""), folders.get((row.project || model.context.project) + ":" + row.group)?.name || tr("Ungrouped"), row, row.group || "", row.project || model.context.project);
 	else {
 		const date = /* @__PURE__ */ new Date((row.activity || 0) * 1e3);
 		date.setHours(0, 0, 0, 0);
@@ -155,7 +187,7 @@ function rows(model, language, now = Date.now()) {
 			count: group.records.length
 		}));
 		if (!group.folder || !history.collapsed[group.key]) for (const record of group.records) result.push(Object.assign({}, record, {
-			key: record.request_id,
+			key: key(record, model.context.project),
 			kind: "chat"
 		}));
 	}
@@ -180,7 +212,10 @@ function row(model, record, width, language) {
 		}))];
 		if (folder) nodes.push(listAction("historyFolderEdit_" + record.folder, rect(width - 36, 2, 28, 28), tr("Edit conversation folder"), "more-horiz", {
 			type: "historyGroupEdit",
-			value: record.folder
+			value: {
+				id: record.folder,
+				project: record.project
+			}
 		}, idle, {
 			iconOnly: true,
 			revealOnRowInteraction: !model.history.mobile
@@ -193,16 +228,30 @@ function row(model, record, width, language) {
 		"cancelling"
 	].includes(record.status);
 	const title = record.default_title ? tr(record.title) : record.title;
-	return { nodes: [listAction("agentHistoryOpen_" + record.request_id, rect(8, 0, width - 16, 32), title, working ? "sync" : "", {
+	const allProjects = !model.history.project;
+	const value = {
+		request_id: record.request_id,
+		project: record.project || model.context.project
+	};
+	const item = listAction("agentHistoryOpen_" + key(record, model.context.project), rect(8, 0, width - 16, allProjects ? 40 : 32), title, working ? "sync" : "", {
 		type: "select",
-		value: record.request_id
+		value
 	}, idle, {
-		selected: model.selected === record.request_id,
+		selected: model.selected === record.request_id && value.project === model.context.project,
 		toolTip: title,
 		endInset: 28
-	}), listAction("agentHistoryEdit_" + record.request_id, rect(width - 36, 2, 28, 28), tr("Conversation settings"), "more-horiz", {
+	});
+	if (allProjects) {
+		const text = item.children.find((child) => child.kind === "Label");
+		text.height = 20;
+		item.children.push(label("agentHistoryProject_" + key(record, model.context.project), rect(12, 20, width - 68, 18), record.project_title || record.project || model.context.project, {
+			fontRole: "caption",
+			color: "secondaryText"
+		}));
+	}
+	return { nodes: [item, listAction("agentHistoryEdit_" + key(record, model.context.project), rect(width - 36, allProjects ? 6 : 2, 28, 28), tr("Conversation settings"), "more-horiz", {
 		type: "historyEdit",
-		value: record.request_id
+		value
 	}, idle, {
 		iconOnly: true,
 		revealOnRowInteraction: !model.history.mobile
@@ -295,7 +344,7 @@ function describe$1(model, width, height, language, small) {
 				options: [{
 					value: "",
 					label: tr("Ungrouped")
-				}].concat((model.groups || []).map((group) => ({
+				}].concat((model.groups || []).filter((group) => !group.project || group.project === edit.project).map((group) => ({
 					value: group.id,
 					label: group.name,
 					dataLabel: true
@@ -326,11 +375,26 @@ function describe$1(model, width, height, language, small) {
 		return { nodes };
 	}
 	const searching = model.history.searchOpen || !!model.history.query;
-	const listTop = searching ? 132 : 88;
+	const warning = (model.unavailable_projects || []).length ? 36 : 0;
+	const listTop = (searching ? 176 : 132) + warning;
 	const footer = model.next_offset == null ? 0 : 40;
-	nodes.push(listAction("agentHistorySearchToggle", rect(width - 112, 8, 32, 32), tr("Search conversations"), "search", { type: "historySearch" }, true, { iconOnly: true }), listAction("agentHistoryOptions", rect(width - 76, 8, 32, 32), tr("Conversation view"), "more-horiz", { type: "historyOptions" }, idle, { iconOnly: true }), listAction("agentHistoryNew", rect(12, 48, width - 24, 32), tr("New conversation"), "add", { type: "historyNew" }, idle), node("List", "agentHistoryList", rect(0, listTop, width, Math.max(36, height - listTop - 12 - footer)), {
+	nodes.push(listAction("agentHistorySearchToggle", rect(width - 112, 8, 32, 32), tr("Search conversations"), "search", { type: "historySearch" }, true, { iconOnly: true }), listAction("agentHistoryOptions", rect(width - 76, 8, 32, 32), tr("Conversation view"), "more-horiz", { type: "historyOptions" }, idle, { iconOnly: true }), listAction("agentHistoryNew", rect(12, 48, width - 24, 32), tr("New conversation"), "add", { type: "historyNew" }, idle), node("Choice", "agentHistoryProject", rect(12, 88, width - 24, 32), {
+		label: tr("Conversation project"),
+		value: model.history.project || "",
+		enabled: idle,
+		options: [{
+			value: "",
+			label: tr("All projects")
+		}].concat((model.projects || []).map((project) => ({
+			value: project.code,
+			label: project.title,
+			dataLabel: true,
+			enabled: project.available !== false
+		}))),
+		action: { type: "historyProject" }
+	}), node("List", "agentHistoryList", rect(0, listTop, width, Math.max(36, height - listTop - 12 - footer)), {
 		source: "agentHistoryRows",
-		rowHeight: 36,
+		rowHeight: model.history.project ? 36 : 44,
 		keyField: "key",
 		fields: [
 			"key",
@@ -340,18 +404,24 @@ function describe$1(model, width, height, language, small) {
 			"folder",
 			"request_id",
 			"status",
-			"pinned"
+			"pinned",
+			"project",
+			"project_title"
 		],
 		role: "list",
 		label: tr("Conversations")
 	}));
-	if (searching) nodes.push(node("Field", "agentHistorySearch", rect(12, 88, width - 24, 32), {
+	if (searching) nodes.push(node("Field", "agentHistorySearch", rect(12, 132, width - 24, 32), {
 		label: tr("Search conversations"),
 		placeholder: tr("Search conversations"),
 		text: model.history.query,
 		maxLength: 200,
 		action: { type: "historyQuery" }
 	}));
+	if (warning) nodes.push(label("agentHistoryUnavailable", rect(12, listTop - warning, width - 24, 32), tr("Some project histories are unavailable"), Object.assign({}, muted, {
+		wrap: true,
+		toolTip: model.unavailable_projects.join(", ")
+	})));
 	if (footer) nodes.push(listAction("agentHistoryMore", rect(12, height - 40, width - 24, 28), tr("Load more conversations"), "expand-more", { type: "historyMore" }, idle));
 	if (!model.requests.length) nodes.push(label("agentHistoryEmpty", rect(16, listTop + 12, width - 32, 52), tr(model.history.query ? "No conversations found" : "No conversations yet"), Object.assign({}, muted, { wrap: true })));
 	if (!small) nodes.push(node("Splitter", "agentHistorySplitter", rect(width - 4, 0, 4, height), {
@@ -393,6 +463,9 @@ function initial(context = {}) {
 		history: initial$1(),
 		groups: [],
 		groups_revision: "",
+		group_revisions: {},
+		projects: [],
+		unavailable_projects: [],
 		total: 0,
 		next_offset: null,
 		drafts: {}
@@ -566,7 +639,7 @@ function describeChat(model, width, height, language, sidebarVisible) {
 	const composerHeight = 188 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0) + providerRow;
 	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? Math.max(80, (composerWidth - 32) / 2) : 200;
 	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim() || !!model.attachments.length;
-	const conversation = model.requests.find((row) => row.request_id === model.selected) || current.library_summary;
+	const conversation = model.requests.find((row) => row.request_id === model.selected && (!row.project || row.project === model.context.project)) || current.library_summary;
 	const nodes = [
 		button("agentRequestHistoryToggle", rect(inset, 10, 32, 32), tr(sidebarVisible ? "Hide conversations" : "Show conversations"), "history", {
 			type: "historyToggle",
@@ -889,8 +962,8 @@ var _sfc_main = {
 		const historyModels = computed(() => ({ agentHistoryRows: rows(model.value, appearance.language) }));
 		const historyRow = (node, row$1) => row(model.value, row$1, node.width - 16, appearance.language);
 		let generation = 0, queuedAction = "", observer, timer, contextTicket = "", inFlight = false, historyTimer, libraryOperation = null;
-		async function call(action, values = {}, command = "tactic.ui.panel.agent_request_cmd.AgentRequestCmd") {
-			const project = action === "draft" ? values.context.project : model.value.context.project;
+		async function call(action, values = {}, command = "tactic.ui.panel.agent_request_cmd.AgentRequestCmd", targetProject) {
+			const project = targetProject || (action === "draft" ? values.context.project : model.value.context.project);
 			const result = await rpc("execute_cmd", [
 				{
 					ticket: contextTicket,
@@ -918,7 +991,8 @@ var _sfc_main = {
 			const id = ++generation;
 			let filter = {
 				query: model.value.history.query,
-				archived: model.value.history.archived
+				archived: model.value.history.archived,
+				project_filter: model.value.history.project || ""
 			};
 			const before = model.value.requests, nextOffset = model.value.next_offset;
 			inFlight = true;
@@ -957,7 +1031,7 @@ var _sfc_main = {
 					model.value.pending = null;
 					model.value.prompt = "";
 					model.value.attachments = [];
-					delete model.value.drafts[saved.request_id];
+					delete model.value.drafts[key({ request_id: saved.request_id }, model.value.context.project)];
 				} else if (action === "cancel") await call("cancel", { request_id: model.value.selected });
 				else if (action === "undo") await call("undo", {
 					request_id: model.value.selected,
@@ -965,12 +1039,13 @@ var _sfc_main = {
 				});
 				else if (action === "library") {
 					const operation = libraryOperation;
-					const saved = await call(operation.action, operation.values);
+					const saved = await call(operation.action, operation.values, void 0, operation.project);
 					if (id !== generation) return;
 					if (operation.action === "draft") {
-						model.value.drafts[model.value.selected] = draft(model.value);
+						model.value.drafts[key({ request_id: model.value.selected }, model.value.context.project)] = draft(model.value);
 						model.value.selected = saved.request_id;
 						model.value.request = saved;
+						if (model.value.context.project !== saved.document.context.project) clearPreviews();
 						model.value.context = saved.document.context;
 						if (!operation.edit) Object.assign(model.value, restored());
 						if (!operation.edit && size.value.width < 940) model.value.history.mobile = false;
@@ -978,16 +1053,18 @@ var _sfc_main = {
 						model.value.history.archived = false;
 						filter = {
 							query: "",
-							archived: false
+							archived: false,
+							project_filter: model.value.history.project || ""
 						};
 					} else model.value.history.edit = null;
 				}
-				const state = await call("state", {
+				const state = await call("state");
+				Object.assign(state, await call("library", {
 					...filter,
 					...action === "historyMore" ? { offset: nextOffset } : {}
-				});
+				}));
 				if (id !== generation) return;
-				if (filter.query !== model.value.history.query || filter.archived !== model.value.history.archived) {
+				if (filter.query !== model.value.history.query || filter.archived !== model.value.history.archived || filter.project_filter !== (model.value.history.project || "")) {
 					queuedAction = "refresh";
 					return;
 				}
@@ -1001,9 +1078,13 @@ var _sfc_main = {
 					if (id !== generation) return;
 					const wasActive = active(model.value) && model.value.request.request_id === current.request_id;
 					model.value.request = current;
+					model.value.context = current.document.context;
 					if (action === "library" && libraryOperation?.edit) model.value.history = change(model.value, {
 						type: "historyEdit",
-						value: model.value.selected
+						value: {
+							request_id: model.value.selected,
+							project: model.value.context.project
+						}
 					}, size.value.width < 940);
 					for (const file of [...model.value.attachments, ...current.messages?.flatMap((message) => message.attachments || []) || []]) {
 						if (!file.media_type.startsWith("image/") || file.attachment_id in previews.value) continue;
@@ -1045,7 +1126,7 @@ var _sfc_main = {
 			const changed = change(model.value, action, size.value.width < 940);
 			if (changed) {
 				model.value.history = changed;
-				if (changed.query !== previousHistory.query || changed.archived !== previousHistory.archived) {
+				if (changed.query !== previousHistory.query || changed.archived !== previousHistory.archived || changed.project !== previousHistory.project) {
 					clearTimeout(historyTimer);
 					historyTimer = setTimeout(() => request(), action.type === "historyQuery" ? 300 : 0);
 				}
@@ -1058,12 +1139,13 @@ var _sfc_main = {
 					model.value.error = "Send or clear the current draft before opening another object";
 					return;
 				}
+				const capture = action.type === "historyEdit" ? model.value.context : props.capture();
 				libraryOperation = {
 					action: "draft",
 					edit: action.type === "historyEdit",
 					values: {
 						request_id: randomUuid(),
-						context: action.type === "historyEdit" ? model.value.context : props.capture()
+						context: action.type === "historyEdit" ? capture : projectContext(capture, model.value.history.project || capture.project)
 					}
 				};
 				request("library");
@@ -1096,6 +1178,7 @@ var _sfc_main = {
 						}
 					}
 				};
+				libraryOperation.project = edit.project || model.value.context.project;
 				request("library");
 				return;
 			}
@@ -1114,14 +1197,18 @@ var _sfc_main = {
 					model.value.error = "Send or clear the current draft before opening another object";
 					return;
 				}
-				model.value.drafts[model.value.selected] = draft(model.value);
+				const selected = selection(model.value, action.value);
+				if (!selected) return;
+				model.value.drafts[key({ request_id: model.value.selected }, model.value.context.project)] = draft(model.value);
+				model.value.context = projectContext(model.value.context, selected.project || model.value.context.project);
+				clearPreviews();
 				generation++;
 				inFlight = false;
 				queuedAction = "";
 				Object.assign(model.value, {
-					selected: action.value,
+					selected: selected.request_id,
 					request: {},
-					...restored(model.value.drafts[action.value]),
+					...restored(model.value.drafts[key(selected, model.value.context.project)]),
 					pending: null
 				});
 				model.value.history.edit = null;

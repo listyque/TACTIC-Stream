@@ -59,10 +59,12 @@ let generation = 0,
 async function call(
   action,
   values = {},
-  command = 'tactic.ui.panel.agent_request_cmd.AgentRequestCmd'
+  command = 'tactic.ui.panel.agent_request_cmd.AgentRequestCmd',
+  targetProject
 ) {
   const project =
-    action === 'draft' ? values.context.project : model.value.context.project;
+    targetProject ||
+    (action === 'draft' ? values.context.project : model.value.context.project);
   const result = await rpc(
     'execute_cmd',
     [
@@ -93,7 +95,8 @@ async function request(action = 'refresh') {
   const id = ++generation;
   let filter = {
     query: model.value.history.query,
-    archived: model.value.history.archived
+    archived: model.value.history.archived,
+    project_filter: model.value.history.project || ''
   };
   const before = model.value.requests,
     nextOffset = model.value.next_offset;
@@ -145,7 +148,12 @@ async function request(action = 'refresh') {
       model.value.pending = null;
       model.value.prompt = '';
       model.value.attachments = [];
-      delete model.value.drafts[saved.request_id];
+      delete model.value.drafts[
+        History.key(
+          { request_id: saved.request_id },
+          model.value.context.project
+        )
+      ];
     } else if (action === 'cancel')
       await call('cancel', { request_id: model.value.selected });
     else if (action === 'undo')
@@ -155,29 +163,50 @@ async function request(action = 'refresh') {
       });
     else if (action === 'library') {
       const operation = libraryOperation;
-      const saved = await call(operation.action, operation.values);
+      const saved = await call(
+        operation.action,
+        operation.values,
+        undefined,
+        operation.project
+      );
       if (id !== generation) return;
       if (operation.action === 'draft') {
-        model.value.drafts[model.value.selected] = History.draft(model.value);
+        model.value.drafts[
+          History.key(
+            { request_id: model.value.selected },
+            model.value.context.project
+          )
+        ] = History.draft(model.value);
         model.value.selected = saved.request_id;
         model.value.request = saved;
+        if (model.value.context.project !== saved.document.context.project)
+          clearPreviews();
         model.value.context = saved.document.context;
         if (!operation.edit) Object.assign(model.value, History.restored());
         if (!operation.edit && size.value.width < 940)
           model.value.history.mobile = false;
         model.value.history.query = '';
         model.value.history.archived = false;
-        filter = { query: '', archived: false };
+        filter = {
+          query: '',
+          archived: false,
+          project_filter: model.value.history.project || ''
+        };
       } else model.value.history.edit = null;
     }
-    const state = await call('state', {
-      ...filter,
-      ...(action === 'historyMore' ? { offset: nextOffset } : {})
-    });
+    const state = await call('state');
+    Object.assign(
+      state,
+      await call('library', {
+        ...filter,
+        ...(action === 'historyMore' ? { offset: nextOffset } : {})
+      })
+    );
     if (id !== generation) return;
     if (
       filter.query !== model.value.history.query ||
-      filter.archived !== model.value.history.archived
+      filter.archived !== model.value.history.archived ||
+      filter.project_filter !== (model.value.history.project || '')
     ) {
       queuedAction = 'refresh';
       return;
@@ -194,12 +223,16 @@ async function request(action = 'refresh') {
         UI.active(model.value) &&
         model.value.request.request_id === current.request_id;
       model.value.request = current;
+      model.value.context = current.document.context;
       if (action === 'library' && libraryOperation?.edit)
         model.value.history = History.change(
           model.value,
           {
             type: 'historyEdit',
-            value: model.value.selected
+            value: {
+              request_id: model.value.selected,
+              project: model.value.context.project
+            }
           },
           size.value.width < 940
         );
@@ -268,7 +301,8 @@ function event(action) {
     model.value.history = changed;
     if (
       changed.query !== previousHistory.query ||
-      changed.archived !== previousHistory.archived
+      changed.archived !== previousHistory.archived ||
+      changed.project !== previousHistory.project
     ) {
       clearTimeout(historyTimer);
       historyTimer = setTimeout(
@@ -293,13 +327,20 @@ function event(action) {
         'Send or clear the current draft before opening another object';
       return;
     }
+    const capture =
+      action.type === 'historyEdit' ? model.value.context : props.capture();
     libraryOperation = {
       action: 'draft',
       edit: action.type === 'historyEdit',
       values: {
         request_id: randomUuid(),
         context:
-          action.type === 'historyEdit' ? model.value.context : props.capture()
+          action.type === 'historyEdit'
+            ? capture
+            : History.projectContext(
+                capture,
+                model.value.history.project || capture.project
+              )
       }
     };
     request('library');
@@ -341,6 +382,7 @@ function event(action) {
               }
             }
           };
+    libraryOperation.project = edit.project || model.value.context.project;
     request('library');
     return;
   }
@@ -368,14 +410,28 @@ function event(action) {
         'Send or clear the current draft before opening another object';
       return;
     }
-    model.value.drafts[model.value.selected] = History.draft(model.value);
+    const selected = History.selection(model.value, action.value);
+    if (!selected) return;
+    model.value.drafts[
+      History.key(
+        { request_id: model.value.selected },
+        model.value.context.project
+      )
+    ] = History.draft(model.value);
+    model.value.context = History.projectContext(
+      model.value.context,
+      selected.project || model.value.context.project
+    );
+    clearPreviews();
     generation++;
     inFlight = false;
     queuedAction = '';
     Object.assign(model.value, {
-      selected: action.value,
+      selected: selected.request_id,
       request: {},
-      ...History.restored(model.value.drafts[action.value]),
+      ...History.restored(
+        model.value.drafts[History.key(selected, model.value.context.project)]
+      ),
       pending: null
     });
     model.value.history.edit = null;
