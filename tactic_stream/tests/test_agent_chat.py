@@ -194,6 +194,20 @@ class AgentChat(unittest.TestCase):
         self.assertFalse(any(Path(file['file_name']).suffix == '.data' for file in checked))
         for file in checked:
             self.assertTrue(Path(file['checkin_dir'], file['file_name']).is_file(), file)
+        buffer = io.BytesIO()
+        Image.new('RGB', (320, 180), 'yellow').save(buffer, 'JPEG')
+        extra = self.attachment(buffer.getvalue(), 'downloaded.jpg')
+        self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False, steering=True))
+        self.call('message', request_id=row['request_id'], message_id=str(uuid4()), text='Add this reference', attachments=[extra['attachment_id']])
+        # This naming rule shares preview paths across extensions: continue its existing series.
+        appended = self.command('editing', 'checkin', **dict(arguments, attachments=[extra['attachment_id']],
+            context='reference/image.png', operation_id=str(uuid4())))
+        self.assertEqual(len(appended['snapshots']), 1)
+        history = self.command('editing', 'snapshots', search_key=arguments['search_key'], process='reference', **common)
+        self.assertTrue(all(file['exists'] for file in history['rows'] if file['rowType'] == 'file'))
+        self.assertTrue(any(snapshot['context'] == 'reference/image.png' and snapshot['version'] == 4 for snapshot in history['snapshots']))
+        with self.assertRaisesRegex(ValueError, 'chosen process'):
+            self.command('editing', 'checkin', **dict(arguments, context='model/other', operation_id=str(uuid4())))
 
     def test_web_search_permission_only_changes_native_search(self):
         from tactic_stream.agent_host import codex_command, task_prompt
@@ -205,6 +219,7 @@ class AgentChat(unittest.TestCase):
         row, _ = self.submit(document=dict(self.document, allow_web=True))
         command = codex_command(connection, row, fixture.ROOT, None, '.')
         self.assertIn('web_search="live"', command)
+        self.assertIn('--allow-web-download', str(command))
         self.assertIn('features.shell_tool=false', command)
         self.assertIn('user allows native web search', task_prompt(row))
         self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False))

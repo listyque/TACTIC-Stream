@@ -75,6 +75,7 @@ function activity(model, language) {
 		reference_read: "Reading TACTIC documentation",
 		agent_selection: "Reading selected objects",
 		ts_records: "Reading project objects",
+		ts_snapshots: "Reading file history",
 		ts_workflow_read: "Reading workflows",
 		ts_workflow_apply: "Saving workflow",
 		ts_attachment_checkin: "Checking in attached files",
@@ -82,6 +83,7 @@ function activity(model, language) {
 		ts_naming_read: "Reading naming rules",
 		ts_naming_preview: "Checking file naming",
 		agent_attachment_image: "Viewing attached image",
+		agent_web_download: "Downloading reference file",
 		webSearch: "Searching the web"
 	};
 	const events = model.request?.events || [];
@@ -236,7 +238,7 @@ function describe(model, width, height, language) {
 			action: { type: "changes" }
 		}),
 		node("CheckBox", "agentRequestWeb", rect(composerX + 16, height - 84 - (narrow ? 40 : 0), Math.max(0, composerWidth - 32), 26), {
-			text: tr("Allow web search"),
+			text: tr("Allow internet access"),
 			checked: current.document?.allow_web ?? model.allowWeb,
 			enabled: !model.busy && !model.selected && !model.pending && !!connected?.capabilities.web_search,
 			action: { type: "web" }

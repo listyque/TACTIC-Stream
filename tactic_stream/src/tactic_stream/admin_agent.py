@@ -165,8 +165,8 @@ class StreamConnection:
             detail = self._decode(raw)
             message = detail.get('error', 'TACTIC request failed') if isinstance(detail, dict) else 'TACTIC request failed'
             raise ToolError(f'TACTIC HTTP {error.code}: {message}') from None
-        except (URLError, TimeoutError, OSError):
-            raise ConnectionUnavailable('TACTIC connection failed or timed out; no automatic retry was made') from None
+        except (URLError, TimeoutError, OSError) as error:
+            raise ConnectionUnavailable('TACTIC connection failed or timed out; no automatic retry was made') from error
         return self._decode(raw)
 
     def _decode(self, raw: bytes):
@@ -229,7 +229,8 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                   *, allow_naming_save: bool = False, allow_page_save: bool = False,
                   allow_project_create: bool = False, allow_automation_draft: bool = False,
                   allow_automation_activate: bool = False, trials: AutomationTrials | None = None,
-                  request_id: str | None = None, allow_project_edit: bool = False) -> MCPServer:
+                  request_id: str | None = None, allow_project_edit: bool = False,
+                  allow_web_download: bool = False) -> MCPServer:
     """Build the externally callable catalogue without importing TS or TH internals."""
     roots = {'TS': stream_root.resolve(), 'TH': handler_root.resolve() if handler_root else None}
     if allow_automation_activate and trials is None:
@@ -263,6 +264,17 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         def agent_selection() -> dict[str, Any]:
             """Read the captured selected objects' current public identity/title/parent fields."""
             return connection.command('request', 'selection', request_id=request_id)
+
+        if allow_web_download:
+            @mcp.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=False, idempotent_hint=True, open_world_hint=True), structured_output=True)
+            def agent_web_download(url: Annotated[str, Field(min_length=1, max_length=4096)], operation_id: Identifier) -> dict[str, Any]:
+                """Download one public HTTPS file into this conversation, at most 64 MB, with source URL/hash and retry receipt. Use a direct file URL found by web search; do not guess links. No login/cookies/private-network access. Reuse the operation UUID on retry. Then ts_attachment_checkin can publish the returned attachment_id."""
+                from tactic_stream.agent_download import download_attachment
+                from http.client import HTTPException
+                try:
+                    return download_attachment(connection, request_id, url, operation_id)
+                except (OSError, ValueError, HTTPException) as error:
+                    raise ToolError(str(error)) from None
 
         @mcp.tool(annotations=read_only, structured_output=True)
         def agent_attachment_read(attachment_id: Identifier, offset: Offset = 0) -> dict[str, Any]:
@@ -304,6 +316,11 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             return connection.command('editing', 'workflow_read', request_id=request_id, search_type=search_type)
 
         @mcp.tool(annotations=read_only, structured_output=True)
+        def ts_snapshots(search_key: Identifier, process: str = '', offset: Offset = 0) -> dict[str, Any]:
+            """Read the entity's native snapshot/file history and contexts, 50 snapshots per page. Use before check-in to choose an existing version series and afterwards to verify persisted files. has_next means read the next page with offset + 50."""
+            return connection.command('editing', 'snapshots', request_id=request_id, search_key=search_key, process=process, offset=offset)
+
+        @mcp.tool(annotations=read_only, structured_output=True)
         def ts_edit_operation(operation_id: Identifier) -> dict[str, Any]:
             """Inspect a durable workflow/check-in/field-edit receipt after a lost response; preserve its original UUID."""
             return connection.command('editing', 'operation', request_id=request_id, operation_id=operation_id)
@@ -320,10 +337,10 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                     identity=identity, name=name or search_type, search_keys=search_keys or [])
 
             @mcp.tool(annotations=writes, structured_output=True)
-            def ts_attachment_checkin(search_key: Identifier, process: Identifier, attachments: list[Identifier], operation_id: Identifier) -> dict[str, Any]:
-                """Check attached files into an existing project entity's workflow process through native FileCheckin/naming. No client-local TH hooks are executed by this server operation."""
+            def ts_attachment_checkin(search_key: Identifier, process: Identifier, attachments: list[Identifier], operation_id: Identifier, context: str = '') -> dict[str, Any]:
+                """Check attached files into an existing entity process through native FileCheckin/naming. Optional context continues an existing version series returned by ts_snapshots; otherwise each original filename defines its series. Context must belong to process. Never overwrite paths to bypass a naming collision. No TH desktop hooks run."""
                 return connection.command('editing', 'checkin', request_id=request_id, search_key=search_key,
-                                          process=process, attachments=attachments, operation_id=operation_id)
+                                          process=process, attachments=attachments, operation_id=operation_id, **({'context': context} if context else {}))
 
             @mcp.tool(annotations=writes, structured_output=True)
             def ts_record_patch(search_key: Identifier, values: dict[str, str | int | float | bool | None], expected_revision: Identifier, operation_id: Identifier) -> dict[str, Any]:
@@ -346,7 +363,8 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                               + (['handler_automation.trial', 'handler_automation.trial_read', 'handler_automation.trial_image'] if trials else [])
                               + (['handler_automation.activate'] if allow_automation_activate else []),
                 'existing_project_editing': allow_project_edit,
-                'existing_project_operations': ['records.read', 'workflow.read'] + (['workflow.apply', 'attachment.checkin', 'record.patch'] if allow_project_edit else []),
+                'existing_project_operations': ['records.read', 'workflow.read', 'snapshots.read'] + (['workflow.apply', 'attachment.checkin', 'record.patch'] if allow_project_edit else []),
+                'web_download': bool(request_id and allow_web_download),
                 'can_apply': allow_naming_save or allow_page_save or allow_project_create or allow_automation_draft or allow_automation_activate or allow_project_edit,
                 'can_execute_scripts': trials is not None, 'th_runtime_connected': False,
                 'user_context_available': bool(request_id),
@@ -675,6 +693,7 @@ def main() -> None:
     parser.add_argument('--allow-project-create', action='store_true', help='Host-authorized new projects and native template export/install')
     parser.add_argument('--allow-automation-draft', action='store_true', help='Save inactive Handler automation drafts')
     parser.add_argument('--allow-project-edit', action='store_true', help='Edit existing project entities and check in conversation attachments')
+    parser.add_argument('--allow-web-download', action='store_true', help='Download public HTTPS files for a host-bound conversation with internet access')
     parser.add_argument('--allow-automation-activate', action='store_true', help='Publish reviewed code for execution by native Handler hooks/shelves')
     parser.add_argument('--request-id', help='Host-bound native user request; exposes its immutable context')
     parser.add_argument('--trial-image', help='Trusted local immutable sha256 image ID for isolated Linux trials')
@@ -695,7 +714,8 @@ def main() -> None:
                   allow_naming_save=args.allow_naming_save, allow_page_save=args.allow_page_save,
                   allow_project_create=args.allow_project_create, allow_automation_draft=args.allow_automation_draft,
                   allow_automation_activate=args.allow_automation_activate, trials=trials,
-                  request_id=args.request_id, allow_project_edit=args.allow_project_edit).run(transport='stdio')
+                  request_id=args.request_id, allow_project_edit=args.allow_project_edit,
+                  allow_web_download=args.allow_web_download).run(transport='stdio')
 
 
 if __name__ == '__main__':

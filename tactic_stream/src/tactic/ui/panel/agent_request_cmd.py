@@ -68,7 +68,7 @@ class AgentRequestCmd(Command):
         if not all(self.sql.table_exists(name) for name in ('spt_agent_request', 'spt_agent_host')):
             raise ValueError('Upgrade the project schema before connecting an agent')
         action = self.kwargs.get('action')
-        if action not in ('state', 'submit', 'read', 'selection', 'cancel', 'heartbeat', 'disconnect', 'claim', 'update', 'message', 'ack', 'undo'):
+        if action not in ('state', 'submit', 'read', 'selection', 'cancel', 'heartbeat', 'disconnect', 'claim', 'update', 'message', 'ack', 'undo', 'download'):
             raise ValueError('Unknown agent request action')
         self.owner = Environment.get_user_name()
         self.now = int(time.time())
@@ -176,6 +176,28 @@ class AgentRequestCmd(Command):
             self.expire(row)
             if action == 'read':
                 self.info = row
+                return
+            if action == 'download':
+                if not row['document'].get('allow_web') or row['status'] != 'running':
+                    raise ValueError('Web downloads require an active conversation with internet access')
+                code = identity(self.kwargs.get('operation_id'))
+                source_url = text(self.kwargs.get('source_url'), 4096)
+                if not source_url.startswith('https://'):
+                    raise ValueError('Use a public HTTPS file URL')
+                files = self.check_attachments([code])
+                old = next((message for message in row.get('messages', []) if message['id'] == code), None)
+                if old:
+                    if old.get('source_url') != source_url:
+                        raise ValueError('Download operation ID already has another URL')
+                    self.info = old['attachments'][0]
+                    return
+                if len(row.get('messages', [])) >= 100 or sum(bool(message.get('source_url')) for message in row.get('messages', [])) >= 20:
+                    raise ValueError('Start a new conversation for more downloads')
+                files[0]['source_url'] = source_url
+                row.setdefault('messages', []).append(dict(id=code, role='assistant',
+                    text='Downloaded reference\n\n' + source_url, source_url=source_url, attachments=files, delivered=True))
+                self.save('spt_agent_request', row['request_id'], row)
+                self.info = files[0]
                 return
             if action == 'selection':
                 from tactic_stream.server.api import Api

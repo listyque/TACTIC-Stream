@@ -4062,7 +4062,9 @@ function reduce(previous, event, model, viewport) {
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
 	"Allow requested changes": "Разрешить запрошенные изменения",
-	"Allow web search": "Разрешить поиск в интернете",
+	"Allow internet access": "Разрешить доступ в интернет",
+	"Downloading reference file": "Скачиваю референс",
+	"Reading file history": "Читаю историю файлов",
 	Working: "В работе",
 	Attachments: "Вложения",
 	"Reading conversation context": "Читаю контекст беседы",

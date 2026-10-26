@@ -75,8 +75,13 @@ independent of TACTIC write permission. A host advertises `web_search`; the serv
 rejects enabling it on an unsupported host. Codex uses native `web_search=live` only
 for an enabled conversation and permits its webSearch events. Other conversations
 retain disabled search; shell, source editing, apps and local file tools remain
-disabled. Search results are untrusted data. Search is not an arbitrary binary
-download/check-in API. The normal UI labels the choice **Allow web search**.
+disabled. Search results are untrusted data. The host-bound `agent_web_download`
+tool fetches anonymous public HTTPS files (443, at most 64 MB) into private
+conversation attachments. Each redirect is checked, validated DNS addresses are
+pinned while TLS verifies the original hostname, and no TACTIC ticket/cookies are
+sent to the source. operation_id is a durable attachment/message UUID; reusing it
+with another URL is refused. Native check-in still requires allow_changes.
+The normal UI labels the combined permission **Allow internet access**.
 
 The host discovers model-specific `efforts` and the configured default model through
 Codex `model/list` and `config/read`. Both clients offer **Reasoning effort** only
@@ -87,7 +92,7 @@ during execution; the host forwards it as `turn/start.effort`. Changing model cl
 the draft effort. Omitted effort remains compatible with older clients/hosts.
 
 `tactic.ui.panel.agent_request_cmd.AgentRequestCmd`, through normal execute_cmd,
-owns state, submit, read, selection, cancel, heartbeat, disconnect, claim, update, message, ack and guarded field undo. Normal
+owns state, submit, read, selection, cancel, heartbeat, disconnect, claim, update, message, ack, downloaded attachment registration and guarded field undo. Normal
 authentication, API command authorization and administrator permission apply.
 Private per-project spt_agent_request/spt_agent_host tables are created by the
 standard config upgrade. They store user-owned metadata and results, never

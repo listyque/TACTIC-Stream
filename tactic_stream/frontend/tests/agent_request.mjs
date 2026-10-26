@@ -81,7 +81,7 @@ try {
   await dialog.getByLabel('What should the agent do?').fill(process.env.STREAM_AGENT_PROMPT || 'Explain the selected shots');
   if (!live) await dialog.getByLabel('What should the agent do?').fill('');
   await dialog.getByRole('checkbox', { name: 'Allow requested changes' }).check();
-  if (!live) await dialog.getByRole('checkbox', { name: 'Allow web search' }).check();
+  if (!live) await dialog.getByRole('checkbox', { name: 'Allow internet access' }).check();
   await dialog.getByRole('button', { name: 'Send to agent', exact: true }).tap();
   await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('queued') || document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('working') || document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('completed'));
   if (live) {

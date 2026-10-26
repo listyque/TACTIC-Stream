@@ -44,6 +44,15 @@ class AgentActionsCmd(AgentRequestCmd):
             receipt = row.get('operations', {}).get(identity(self.kwargs.get('operation_id')))
             self.info = dict(status='applied', result=receipt['result']) if receipt else dict(status='not_found')
             return
+        if action == 'snapshots':
+            from tactic_stream.server.snapshot_browser import read_snapshot_browser
+            item = selected_object(self.kwargs.get('search_key'))
+            local_type(item.get_base_search_type())
+            offset = self.kwargs.get('offset', 0)
+            if type(offset) is not int or offset < 0:
+                raise ValueError('Invalid snapshot offset')
+            self.info = read_snapshot_browser(item, process=self.kwargs.get('process', ''), offset=offset)
+            return
         if action == 'workflow_read':
             search_type = local_type(self.kwargs.get('search_type'))
             catalog = json.loads(workflow_request('list', Project.get_project_code()))['catalog']
@@ -130,6 +139,11 @@ class AgentActionsCmd(AgentRequestCmd):
             item = selected_object(self.kwargs.get('search_key'))
             local_type(item.get_base_search_type())
             process = text(self.kwargs.get('process'), 128)
+            context = self.kwargs.get('context', '')
+            if context:
+                text(context, 256)
+                if context != process and not context.startswith(process + '/'):
+                    raise ValueError('Check-in context must belong to the chosen process')
             pipeline = Pipeline.get_by_code(item.get_value('pipeline_code', no_exception=True))
             if not pipeline or process not in pipeline.get_process_names():
                 raise ValueError('Choose a process from the object workflow')
@@ -155,7 +169,7 @@ class AgentActionsCmd(AgentRequestCmd):
                             if path:
                                 paths.append(path)
                                 types.append(kind)
-                    command = FileCheckin(item, paths, file_types=types, context=process + '/' + metadata['name'],
+                    command = FileCheckin(item, paths, file_types=types, context=context or process + '/' + metadata['name'],
                                           process=process, description='Agent attachment: ' + metadata['name'],
                                           mode='create', source_paths=paths, keep_file_name=False)
                     command.get_transaction().set_sync(False)
