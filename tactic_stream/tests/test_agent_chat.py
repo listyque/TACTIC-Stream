@@ -222,9 +222,103 @@ class AgentChat(unittest.TestCase):
         self.assertIn('--allow-web-download', str(command))
         self.assertIn('features.shell_tool=false', command)
         self.assertIn('user allows native web search', task_prompt(row))
+        self.assertIn('use the shortest native path', task_prompt(row))
+        self.assertNotIn('First read agent_context', task_prompt(row))
         self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False))
         with self.assertRaisesRegex(ValueError, 'does not support web'):
             self.call('message', request_id=row['request_id'], message_id=str(uuid4()), text='Continue')
+
+    def test_native_record_creation_parent_links_atomic_failure_and_replay(self):
+        # The imported CG fixture has unrelated external notification callbacks.
+        triggers = self.api.dispatch('query', (self.auth, 'config/trigger'))
+        triggers = ast.literal_eval(triggers) if isinstance(triggers, str) else triggers
+        for trigger in triggers:
+            if trigger.get('script_path'):
+                self.api.dispatch('update', (self.auth, trigger['__search_key__'], dict(s_status='retired')), {'triggers': False})
+        self.document['allow_changes'] = True
+        row, _ = self.submit()
+        self.call('claim', host_id=self.host)
+        common = dict(request_id=row['request_id'])
+        episode_args = dict(search_type='cg/scenes', records=[dict(name='Episode 03')], operation_id=str(uuid4()), **common)
+        episode = self.command('editing', 'create', **episode_args)
+        self.assertEqual(self.command('editing', 'create', **episode_args), episode)
+        parent = episode['objects'][0]
+        self.assertTrue(parent['code'])
+        arguments = dict(search_type='cg/shot', records=[dict(name=f'SH{index * 10:03d}') for index in range(1, 11)],
+            parent_key=parent['__search_key__'], operation_id=str(uuid4()), **common)
+        result = self.command('editing', 'create', **arguments)
+        self.assertEqual(len(result['objects']), 10)
+        self.assertEqual(self.command('editing', 'create', **arguments), result)
+        linked = self.command('editing', 'records', search_type='cg/shot', filters=dict(scenes_code=parent['code']), **common)['objects']
+        self.assertEqual(len(linked), 10)
+        self.assertEqual({item['name'] for item in linked}, {f'SH{index * 10:03d}' for index in range(1, 11)})
+        self.assertEqual(len({item['code'] for item in linked}), 10)
+        assets = self.command('editing', 'create', search_type='cg/assets', records=[dict(name='Robot'), dict(name='Car')], operation_id=str(uuid4()), **common)['objects']
+        relationships = self.command('editing', 'relations', search_key=parent['__search_key__'], **common)['relations']
+        branch = next(branch for branch in relationships if branch['search_type'] == 'cg/assets')
+        self.assertEqual(branch['relationship'], 'instance')
+        link = dict(search_key=parent['__search_key__'], search_type='cg/assets', path=branch['path'],
+            search_keys=[asset['__search_key__'] for asset in assets], operation_id=str(uuid4()), **common)
+        receipt = self.command('editing', 'link', **link)
+        self.assertEqual(self.command('editing', 'link', **link), receipt)
+        self.command('editing', 'link', **dict(link, operation_id=str(uuid4())))
+        related = self.command('editing', 'relations', search_key=parent['__search_key__'], search_type='cg/assets', path=branch['path'], **common)
+        self.assertEqual({item['name'] for item in related['objects']}, {'Robot', 'Car'})
+        rows = self.api.dispatch('query', (self.auth, 'cg/assets_in_scenes'))
+        rows = ast.literal_eval(rows) if isinstance(rows, str) else rows
+        self.assertEqual(len(rows), 2)
+        for changes, message in [
+            (dict(records=[dict(id=999)]), 'ordinary'),
+            (dict(search_type='sthpw/login'), 'current project'),
+            (dict(records=[dict(name=['nested'])]), 'scalar'),
+            (dict(records=[]), 'between 1 and 50'),
+        ]:
+            with self.assertRaisesRegex(ValueError, message):
+                self.command('editing', 'create', **dict(arguments, operation_id=str(uuid4()), **changes))
+        with self.assertRaisesRegex(ValueError, 'different contents'):
+            self.command('editing', 'create', **dict(arguments, records=[dict(name='Changed')]))
+        failed = str(uuid4())
+        with self.assertRaisesRegex(Exception, 'UNIQUE|already exists|constraint'):
+            self.command('editing', 'create', **dict(arguments, operation_id=failed,
+                records=[dict(code='MUST_ROLL_BACK'), dict(code='SH001')]))
+        self.assertEqual(self.command('editing', 'records', search_type='cg/shot', filters=dict(code='MUST_ROLL_BACK'), **common)['objects'], [])
+        self.assertEqual(self.command('editing', 'operation', operation_id=failed, **common)['status'], 'not_found')
+        self.call('update', host_id=self.host, status='completed', answer='Done', **common)
+        with self.assertRaisesRegex(ValueError, 'active changes'):
+            self.command('editing', 'create', **dict(arguments, operation_id=str(uuid4())))
+        document = dict(self.document, context=dict(self.document['context'], search_type='cg/assets', search_keys=[asset['__search_key__'] for asset in assets]))
+        selected, _ = self.submit(document=document)
+        self.call('claim', host_id=self.host)
+        selected_common = dict(request_id=selected['request_id'])
+        result = self.command('editing', 'link', search_key=parent['__search_key__'], **selected_common)
+        self.assertEqual(result['parent']['title'], 'Episode 03')
+        self.assertEqual({item['title'] for item in result['linked_objects']}, {'Robot', 'Car'})
+        self.assertEqual(self.command('editing', 'link', search_key=parent['__search_key__'], **selected_common), result)
+        rows = self.api.dispatch('query', (self.auth, 'cg/assets_in_scenes'))
+        rows = ast.literal_eval(rows) if isinstance(rows, str) else rows
+        self.api.dispatch('delete_sobject', (self.auth, rows[0]['__search_key__']))
+        self.command('editing', 'link', search_key=parent['__search_key__'], **selected_common)
+        restored = self.api.dispatch('query', (self.auth, 'cg/assets_in_scenes'))
+        restored = ast.literal_eval(restored) if isinstance(restored, str) else restored
+        self.assertEqual(len(restored), 2)
+        with self.assertRaisesRegex(ValueError, 'unavailable on the running server'):
+            self.command('editing', 'unknown_read_action', **selected_common)
+
+        import asyncio
+        from mcp import Client
+        from tactic_stream.admin_agent import StreamConnection, create_server
+        connection = StreamConnection('http://example.invalid', 'one', 'private-fixture')
+        async def call_tool():
+            async with Client(create_server(connection, fixture.ROOT, request_id=selected['request_id'], allow_project_edit=True)) as client:
+                tools = (await client.list_tools()).tools
+                tool = next(tool for tool in tools if tool.name == 'ts_instance_link')
+                self.assertNotIn('operation_id', tool.input_schema['properties'])
+                self.assertEqual(tool.input_schema['required'], ['search_key'])
+                reply = await client.call_tool('ts_instance_link', dict(search_key=parent['__search_key__']))
+                self.assertFalse(reply.is_error, reply.content)
+                self.assertEqual(reply.structured_content['parent']['title'], 'Episode 03')
+        with patch.object(connection, 'command', side_effect=self.command):
+            asyncio.run(call_tool())
 
 
 if __name__ == '__main__':

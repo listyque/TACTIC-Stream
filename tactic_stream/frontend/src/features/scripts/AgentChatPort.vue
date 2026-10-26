@@ -141,6 +141,7 @@ const messageStyle = (row) => {
     <details
       v-if="frameNode.events?.length"
       class="agent-tool-progress"
+      :style="messageStyle({ role: 'assistant' })"
       :open="frameNode.active"
     >
       <summary>
@@ -254,8 +255,8 @@ const messageStyle = (row) => {
   max-width: 100%;
 }
 .agent-tool-progress {
-  width: min(800px, calc(100% - 32px));
-  margin: 4px auto 12px;
+  box-sizing: border-box;
+  margin-top: 4px;
   overflow-wrap: anywhere;
   color: var(--muted);
   font-size: 12px;

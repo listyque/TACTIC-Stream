@@ -146,6 +146,10 @@ try {
   for (const width of [520, 1000]) {
     await dialog.evaluate((element, width) => Object.assign(element.style, { width: width + 'px', height: '700px', maxWidth: 'none', maxHeight: 'none' }), width);
     assert.ok((await dialog.getByRole('log', { name: 'Conversation' }).boundingBox()).height > 0);
+    const answer = await dialog.locator('.agent-message.assistant').first().boundingBox();
+    const details = await dialog.locator('.agent-tool-progress').boundingBox();
+    assert.ok(Math.abs(answer.x - details.x) <= 1, 'Operation details follow the assistant column');
+    assert.ok(Math.abs(answer.width - details.width) <= 1);
   }
   await page.setViewportSize({ width: 360, height: 760 });
   await page.waitForFunction(() => {

@@ -75,6 +75,11 @@ function activity(model, language) {
 		reference_read: "Reading TACTIC documentation",
 		agent_selection: "Reading selected objects",
 		ts_records: "Reading project objects",
+		ts_type_read: "Reading object definition",
+		ts_schema_read: "Reading project relationships",
+		ts_records_create: "Creating project objects",
+		ts_relations: "Reading object relationships",
+		ts_instance_link: "Linking project objects",
 		ts_snapshots: "Reading file history",
 		ts_workflow_read: "Reading workflows",
 		ts_workflow_apply: "Saving workflow",
@@ -437,10 +442,11 @@ var _sfc_main$1 = {
 				__props.frameNode.events?.length ? (openBlock(), createElementBlock("details", {
 					key: 1,
 					class: "agent-tool-progress",
+					style: normalizeStyle(messageStyle({ role: "assistant" })),
 					open: __props.frameNode.active
 				}, [createBaseVNode("summary", null, toDisplayString(unref(t)(__props.frameNode.active ? "Working with TACTIC tools…" : "Operation details")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.events, (step, index) => {
 					return openBlock(), createElementBlock("div", { key: index }, toDisplayString(step), 1);
-				}), 128))], 8, _hoisted_13)) : createCommentVNode("", true)
+				}), 128))], 12, _hoisted_13)) : createCommentVNode("", true)
 			], 8, _hoisted_9));
 		};
 	}

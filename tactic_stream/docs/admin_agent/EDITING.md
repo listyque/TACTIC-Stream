@@ -8,6 +8,26 @@ allow_changes authorization and the host's --allow-project-edit capability.
 1. Read agent_context and agent_selection. Read ts_records(search_type, filters)
    for actual entity fields/identities and revisions. Exact scalar filters,
    at most 50 results, current project's registered entity types only.
+   Refer to records by name/title in user-facing answers; technical codes are
+   secondary verification details, not substitutes for episode or shot names.
+   `ts_records_create(search_type, records, operation_id, parent_key='')` creates
+   1–50 native records in one transaction, preserving defaults, triggers and
+   normal authorization. Read the actual type and schema first. Use parent_key
+   to link children through the existing schema, not an invented foreign key.
+   Omit code unless the user requests a specific code convention; the native
+   generator owns internal codes. File naming rules do not define record names.
+   Return/re-read the created objects, and keep stable UUID/payload on retry.
+   `ts_relations(search_key, search_type='', path='', offset=0)` reads actual
+   relationship branches and up to 50 linked objects; paginate while has_next.
+   `ts_instance_link(search_key)` adds the captured selected objects to that
+   target using ordinary Add related objects. Source type/keys default to the
+   captured selection; optional search_type/search_keys/path are only needed for
+   an explicitly different source or named edge. No UUID is required: retry
+   protection is internal and already linked endpoints are skipped. It returns
+   the confirmed target and linked display names, so another read is unnecessary
+   unless the result is uncertain. A routine task normally needs only target
+   lookup with ts_records followed by one ts_instance_link call. Do not read the
+   documentation catalogue, naming rules or every schema for this simple path.
 2. Read ts_workflow_read(search_type). It returns native workflow documents,
    identities, current selected assignments, columns and an aggregate revision.
 3. Explain the intended workflow, then call ts_workflow_apply with the original

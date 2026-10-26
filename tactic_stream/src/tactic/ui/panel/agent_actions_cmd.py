@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 import tempfile
+from uuid import UUID, uuid5
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -53,6 +54,28 @@ class AgentActionsCmd(AgentRequestCmd):
                 raise ValueError('Invalid snapshot offset')
             self.info = read_snapshot_browser(item, process=self.kwargs.get('process', ''), offset=offset)
             return
+        if action == 'relations':
+            from tactic_stream.server.result_items import relations, relation_search
+            item = selected_object(self.kwargs.get('search_key'))
+            local_type(item.get_base_search_type())
+            branches = relations(item)
+            target = self.kwargs.get('search_type', '')
+            result = dict(relations=branches, objects=[])
+            if target:
+                local_type(target)
+                branch = next((branch for branch in branches if branch['search_type'] == target and branch['path'] == self.kwargs.get('path', '')), None)
+                if not branch:
+                    raise ValueError('Choose a relationship from the project schema')
+                query = relation_search(item, branch)
+                offset = self.kwargs.get('offset', 0)
+                if type(offset) is not int or offset < 0:
+                    raise ValueError('Invalid relationship offset')
+                query.set_offset(offset)
+                query.set_limit(51)
+                objects = query.get_sobjects()
+                result.update(objects=[dict(child.get_data(), __search_key__=child.get_search_key()) for child in objects[:50]], has_next=len(objects) > 50)
+            self.info = result
+            return
         if action == 'workflow_read':
             search_type = local_type(self.kwargs.get('search_type'))
             catalog = json.loads(workflow_request('list', Project.get_project_code()))['catalog']
@@ -77,10 +100,13 @@ class AgentActionsCmd(AgentRequestCmd):
             query.set_limit(50)
             self.info = dict(objects=[dict(item.get_data(), __search_key__=item.get_search_key(), revision=digest(item.get_data())) for item in query.get_sobjects()])
             return
-        operation_id = identity(self.kwargs.get('operation_id'))
         payload = {key: value for key, value in self.kwargs.items() if key not in ('operation_id', 'project_code')}
+        if action not in ('workflow_apply', 'checkin', 'link', 'create', 'patch'):
+            raise ValueError('This agent operation is unavailable on the running server')
+        operation_id = (str(uuid5(UUID(row['request_id']), json.dumps(payload, sort_keys=True)))
+                        if action == 'link' else identity(self.kwargs.get('operation_id')))
         receipts = row.setdefault('operations', {})
-        if operation_id in receipts:
+        if operation_id in receipts and action != 'link':
             old = receipts[operation_id]
             if old['digest'] != digest(payload):
                 raise ValueError('Operation ID already has different contents')
@@ -176,6 +202,44 @@ class AgentActionsCmd(AgentRequestCmd):
                     Command.execute_cmd(command)
                     snapshot = command.get_snapshot()
                     result['snapshots'].append(snapshot.get_search_key())
+        elif action == 'link':
+            item = selected_object(self.kwargs.get('search_key'))
+            local_type(item.get_base_search_type())
+            search_type = local_type(self.kwargs.get('search_type') or row['document']['context']['search_type'])
+            keys = self.kwargs.get('search_keys')
+            if keys is None:
+                keys = row['document']['context']['search_keys']
+            if not isinstance(keys, list) or not 1 <= len(keys) <= 200 or len(set(keys)) != len(keys):
+                raise ValueError('Choose between 1 and 200 distinct related objects')
+            children = [selected_object(key) for key in keys]
+            for child in children:
+                if child.get_base_search_type() != search_type:
+                    raise ValueError('Related object type mismatch')
+            from tactic.command.sobject_link_cmd import SObjectLinkCmd
+            command = SObjectLinkCmd(parent_key=item.get_search_key(), search_type=search_type,
+                path=self.kwargs.get('path', ''), insert_search_keys=keys, exclude_search_keys=[])
+            Command.execute_cmd(command)
+            result = dict(command.info, parent=dict(search_key=item.get_search_key(), title=item.get_value('name', no_exception=True) or item.get_value('title', no_exception=True) or item.get_code()),
+                linked_objects=[dict(search_key=child.get_search_key(), title=child.get_value('name', no_exception=True) or child.get_value('title', no_exception=True) or child.get_code()) for child in children])
+        elif action == 'create':
+            search_type = local_type(self.kwargs.get('search_type'))
+            records = self.kwargs.get('records')
+            columns = set(SearchType.get_column_info(search_type)) - {'id', 'project_code', 'timestamp', 's_status'}
+            if not isinstance(records, list) or not 1 <= len(records) <= 50:
+                raise ValueError('Create between 1 and 50 records')
+            for values in records:
+                if not isinstance(values, dict) or not set(values) <= columns:
+                    raise ValueError('Create using existing ordinary entity fields')
+                if any(value is not None and (type(value) not in (str, int, float, bool)
+                        or isinstance(value, str) and len(value) > 12000) for value in values.values()):
+                    raise ValueError('Record fields must be bounded scalar values')
+            parent_key = self.kwargs.get('parent_key') or None
+            if parent_key:
+                parent = selected_object(parent_key)
+                local_type(parent.get_base_search_type())
+            from tactic_client_lib import TacticServerStub
+            server = TacticServerStub.get(protocol='local')
+            result = dict(objects=server.insert_multiple(search_type, records, parent_key=parent_key))
         elif action == 'patch':
             item = selected_object(self.kwargs.get('search_key'))
             local_type(item.get_base_search_type())

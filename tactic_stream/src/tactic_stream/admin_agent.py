@@ -321,6 +321,11 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             return connection.command('editing', 'snapshots', request_id=request_id, search_key=search_key, process=process, offset=offset)
 
         @mcp.tool(annotations=read_only, structured_output=True)
+        def ts_relations(search_key: Identifier, search_type: str = '', path: str = '', offset: Offset = 0) -> dict[str, Any]:
+            """Read native schema relationships for an existing project object. Optionally read 50 linked records of one returned type/path; paginate while has_next. Names/titles are human labels, codes are internal identities."""
+            return connection.command('editing', 'relations', request_id=request_id, search_key=search_key, search_type=search_type, path=path, offset=offset)
+
+        @mcp.tool(annotations=read_only, structured_output=True)
         def ts_edit_operation(operation_id: Identifier) -> dict[str, Any]:
             """Inspect a durable workflow/check-in/field-edit receipt after a lost response; preserve its original UUID."""
             return connection.command('editing', 'operation', request_id=request_id, operation_id=operation_id)
@@ -343,6 +348,18 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                                           process=process, attachments=attachments, operation_id=operation_id, **({'context': context} if context else {}))
 
             @mcp.tool(annotations=writes, structured_output=True)
+            def ts_instance_link(search_key: Identifier, search_type: str = '', search_keys: Annotated[list[Identifier], Field(min_length=1, max_length=200)] | None = None, path: str = '') -> dict[str, Any]:
+                """Add the captured selected objects to one existing target through its native instance relationship. Usually pass only target search_key: source type/keys default to the selection. For example find Episode 03 with ts_records, then call this once. Returns the confirmed target and linked display names. Existing links are skipped; retry protection is internal, no operation ID required. Specify source type/keys only when the task explicitly identifies other objects; path only for a named schema edge. No asset duplication or schema change."""
+                return connection.command('editing', 'link', request_id=request_id, search_key=search_key, search_type=search_type,
+                    search_keys=search_keys, path=path)
+
+            @mcp.tool(annotations=writes, structured_output=True)
+            def ts_records_create(search_type: Identifier, records: Annotated[list[dict[str, str | int | float | bool | None]], Field(min_length=1, max_length=50)], operation_id: Identifier, parent_key: str = '') -> dict[str, Any]:
+                """Create 1–50 native project records atomically, with triggers/defaults and durable replay protection. Read actual type/schema first. Optional parent_key links through the existing schema. Omit code for native code generation; names are display labels, not file naming rules. Never infer a new code prefix from demo rows or invent unrequested field values. Returns persisted objects/keys. Reuse the exact UUID/payload on retry and inspect ts_edit_operation after a lost reply."""
+                return connection.command('editing', 'create', request_id=request_id, search_type=search_type,
+                    records=records, parent_key=parent_key, operation_id=operation_id)
+
+            @mcp.tool(annotations=writes, structured_output=True)
             def ts_record_patch(search_key: Identifier, values: dict[str, str | int | float | bool | None], expected_revision: Identifier, operation_id: Identifier) -> dict[str, Any]:
                 """Change ordinary project entity fields with the exact revision returned by ts_records. Identity, retirement and system fields are not editable here."""
                 return connection.command('editing', 'patch', request_id=request_id, search_key=search_key,
@@ -363,7 +380,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                               + (['handler_automation.trial', 'handler_automation.trial_read', 'handler_automation.trial_image'] if trials else [])
                               + (['handler_automation.activate'] if allow_automation_activate else []),
                 'existing_project_editing': allow_project_edit,
-                'existing_project_operations': ['records.read', 'workflow.read', 'snapshots.read'] + (['workflow.apply', 'attachment.checkin', 'record.patch'] if allow_project_edit else []),
+                'existing_project_operations': ['records.read', 'workflow.read', 'snapshots.read', 'relations.read'] + (['records.create', 'instance.link', 'workflow.apply', 'attachment.checkin', 'record.patch'] if allow_project_edit else []),
                 'web_download': bool(request_id and allow_web_download),
                 'can_apply': allow_naming_save or allow_page_save or allow_project_create or allow_automation_draft or allow_automation_activate or allow_project_edit,
                 'can_execute_scripts': trials is not None, 'th_runtime_connected': False,
