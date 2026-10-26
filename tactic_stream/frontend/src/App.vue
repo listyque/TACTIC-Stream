@@ -121,7 +121,7 @@ export default {
       inspectorSource: null, inspectorTarget: null, inspectorRequest: 0, taskInspectorActive: false, searchEditorActive: false, inspectorReturn: 'results',
       knowledgeMounted:false, knowledgeActive:false, knowledgeTarget:'',
       attachmentLocation: null,
-      scriptEditorComponent: null, scriptEditorLoading: false, agentRequestComponent: null,
+      scriptEditorComponent: null, scriptEditorLoading: false, agentRequestComponent: null, agentProvidersComponent: null,
       pingBusy: false, activityUnread: 0, messageUnread: 0, shelfOpen: false, layoutsFocus: null, columnsFocus: null, refreshAfterAdministration: false, version: '', ready: false, restoringSession: true, login: '', password: '', session: null,
       navigationLink: '', openingLink: false, linkRequest: 0, routeReady: false, searchStateTab: null,
       projects: [], types: [], userIdentity: null, project: '', type: '',
@@ -497,6 +497,16 @@ export default {
         await nextTick()
         if (this.session === session) this.$refs.agentRequest.open(context)
       } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-request') }
+    },
+    async openAgentProviders() {
+      const session = this.session
+      try {
+        const module = await import('./features/configuration/AgentProviders.vue')
+        if (this.session !== session) return
+        this.agentProvidersComponent ||= markRaw(module.default)
+        await nextTick()
+        if (this.session === session) this.$refs.agentProviders.open()
+      } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-providers') }
     },
     async openScriptEditor(path) {
       if (this.scriptEditorLoading) return
@@ -1966,7 +1976,8 @@ export default {
       :project="inspectorSource?.project || workspaceProject" :search-type="inspectorSource?.searchType || workspaceView.type" :updates="serverBatch"
       @back="$refs.docks.show(inspectorReturn || 'results')" @visibility="$event ? $refs.docks.show('notes') : $refs.docks.hide('notes')" @saved="inspectorSaved" />
     <UiPerformance ref="uiPerformance" @closed="$refs.settingsMenu?.focusTrigger()" />
-    <component v-if="agentRequestComponent" :is="agentRequestComponent" ref="agentRequest" :ticket="session.ticket" :capture="agentContext" />
+    <component v-if="agentRequestComponent" :is="agentRequestComponent" ref="agentRequest" :ticket="session.ticket" :capture="agentContext" @providers="openAgentProviders" />
+    <component v-if="agentProvidersComponent" :is="agentProvidersComponent" ref="agentProviders" :ticket="session.ticket" :project="workspaceProject" />
     <component v-if="scriptEditorComponent" :is="scriptEditorComponent" ref="scriptEditor" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" :search-type="workspaceView.type" :search-keys="workspaceView.selectedKeys" @saved="$refs.scriptShelf.reload()" @executed="loadRows()" @closed="$refs.settingsMenu?.focusTrigger()" />
     <ScriptShelf ref="scriptShelf" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" v-bind="shelfContext" :search-type="workspaceView.type" :search-keys="workspaceView.selectedKeys" :visible="!compactShortcuts && shelfOpen && !!activeSearchTab && !administrationOpen && section === 'data'" @saved="loadNavigation" @executed="loadRows()" @closed="$refs.settingsMenu?.focusTrigger()" />
     <NotificationStack ref="notifications" @activity="$refs.activityFeed.open()" @messages="$refs.messages.open($event)" @reply="$refs.messages.sendQuickReply($event)" />
@@ -2007,7 +2018,7 @@ export default {
       </template>
     </DockWorkspace>
     <dialog v-window="{kind:'configuration', type:'window' }" ref="configurationDialog" class="configuration-dialog" aria-labelledby="configuration-title" @cancel.prevent="$refs.configuration?.cancel()" @close="section = configurationReturnSection">
-      <KeepAlive><Configuration v-if="section === 'configuration'" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
+      <KeepAlive><Configuration v-if="section === 'configuration'" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @providers="openAgentProviders" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
     </dialog>
     <dialog v-window="{kind:'administration'}" ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">
       <header class="administration-window-titlebar"><strong>{{t('Administration')}}</strong><AppButton icon-only icon="close" label="Close administration" @click="leaveAdministration" /></header>

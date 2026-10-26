@@ -1833,7 +1833,8 @@ var _sfc_main = {
 	emits: [
 		"session-expired",
 		"close",
-		"help"
+		"help",
+		"providers"
 	],
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
@@ -2017,6 +2018,7 @@ var _sfc_main = {
 			} else drafts[page.value][field] = value;
 		}
 		function settingsAction(action) {
+			if (action.type === "providers") emit("providers");
 			if (action.type === "clearTabs" || action.type === "clearData") {
 				cacheScope.value = action.type === "clearTabs" ? "tabs" : "server";
 				confirmClear.value.showModal();
@@ -2255,6 +2257,7 @@ var _sfc_main = {
 					error.value ? (openBlock(), createElementBlock("p", _hoisted_3, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
 					notice.value ? (openBlock(), createElementBlock("p", _hoisted_4, toDisplayString(unref(t)(notice.value)), 1)) : createCommentVNode("", true),
 					[
+						"ai",
 						"server",
 						"appearance",
 						"checkin",

@@ -5,7 +5,8 @@ knowledge start with [START](START.md) and [MODEL](MODEL.md). This document
 describes implemented tools, not a promised future API.
 
 For a concrete external host use [the Codex setup and real-model acceptance
-recipe](CODEX.md). Provider login remains in the external host.
+recipe](CODEX.md). See [provider connections](PROVIDERS.md) for API/local models,
+credential storage and explicit per-turn destination authorization.
 
 Use [native TH/TS requests](REQUESTS.md) to submit tasks with captured project, page
 and selected objects to a connected external host.
@@ -13,10 +14,12 @@ and selected objects to a connected external host.
 ## What runs where
 
 The external host runs its chosen model and launches a separate MCP stdio
-process. That process calls the configured TS HTTP API. It never imports
+process for Codex, or uses the same in-process MCP client for API models. That
+adapter calls the configured TS HTTP API. It never imports
 `pyasm`, opens a database or imports Handler. TS owns authentication, access,
-project context and native configuration operations. No model/provider dependency
-or API key is installed in either TACTIC product.
+project context and native configuration operations. No provider SDK is
+installed in either TACTIC product. Optional API keys are encrypted by
+the TS server and delivered only to the owner's registered external host.
 
 The adapter uses the official [MCP Python SDK 2.3.0](https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.3.0)
 for negotiation, schemas and stdio. It supports current and legacy protocol

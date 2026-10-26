@@ -186,6 +186,7 @@ class AgentRequests(unittest.TestCase):
             patch.dict(os.environ, TACTIC_AGENT_TICKET='private-fixture'),
             patch.object(agent_host, 'StreamConnection', return_value=connection),
             patch.object(agent_host, 'model_catalog', return_value=[]),
+            patch('tactic_stream.provider_host.refresh_profiles', return_value=dict(models=[],providers=[],default_provider='codex')),
             patch.object(agent_host, 'codex_executable', return_value='fixture'),
             patch.object(agent_host.time, 'sleep', side_effect=[None, KeyboardInterrupt]),
             patch.object(agent_host, 'run_request') as run,

@@ -12,6 +12,7 @@ import { observeFrameSizes } from '../../frame/resize.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/scripts/request.ui.mjs';
 
 const props = defineProps({ ticket: String, capture: Function });
+const emit = defineEmits(['providers']);
 const dialog = ref(null),
   body = ref(null),
   size = ref({ width: 900, height: 650 });
@@ -92,6 +93,7 @@ async function request(action = 'refresh') {
             text: model.value.prompt,
             model: model.value.model ?? model.value.request.model ?? '',
             effort: model.value.effort ?? model.value.request.effort ?? '',
+            provider: UI.provider(model.value),
             attachments: model.value.attachments.map(
               (file) => file.attachment_id
             )
@@ -106,6 +108,7 @@ async function request(action = 'refresh') {
               allow_web: model.value.allowWeb,
               model: model.value.model ?? '',
               effort: model.value.effort ?? '',
+              provider: UI.provider(model.value),
               attachments: model.value.attachments.map(
                 (file) => file.attachment_id
               )
@@ -190,6 +193,10 @@ function schedule() {
     timer = setTimeout(() => request('poll'), 2500);
 }
 function event(action) {
+  if (action.type === 'providers') {
+    emit('providers');
+    return;
+  }
   if (model.value.busy) return;
   if (
     action.type === 'prompt' ||
@@ -215,6 +222,7 @@ function event(action) {
         prompt: '',
         attachments: [],
         model: null,
+        provider: null,
         effort: null,
         pending: null
       });
@@ -222,7 +230,11 @@ function event(action) {
   } else if (action.type === 'send' && UI.canSend(model.value)) request('send');
   else if (action.type === 'cancel') request('cancel');
   else if (action.type === 'refresh') request();
-  else if (action.type === 'model') {
+  else if (action.type === 'provider') {
+    model.value.provider = action.value;
+    model.value.model = '';
+    model.value.effort = '';
+  } else if (action.type === 'model') {
     model.value.model = action.value;
     model.value.effort = '';
   } else if (action.type === 'effort') model.value.effort = action.value;

@@ -26,6 +26,7 @@ function initial(context = {}) {
 		attachments: [],
 		uploading: false,
 		model: null,
+		provider: null,
 		effort: null,
 		contextExpanded: false
 	};
@@ -43,11 +44,17 @@ function host(model) {
 }
 function canSend(model) {
 	const connected = host(model);
-	return !model.busy && !model.uploading && !!model.context?.project && (!!model.prompt.trim() || !!model.attachments.length) && model.prompt.length <= 12e3 && !!connected && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
+	return !model.busy && !model.uploading && !!model.context?.project && (!!model.prompt.trim() || !!model.attachments.length) && model.prompt.length <= 12e3 && !!connected && (!model.selected || model.request?.request_id === model.selected) && (Array.isArray(connected?.capabilities.providers) ? availableModels(model).length > 0 : provider(model) === "codex" || availableModels(model).length > 0) && (provider(model) === "codex" || !!selectedModel(model)) && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
+}
+function provider(model) {
+	return model.provider ?? (model.request?.request_id ? model.request.provider || "codex" : host(model)?.capabilities.default_provider || "codex");
+}
+function availableModels(model) {
+	return (host(model)?.capabilities.models || []).filter((item) => (item.provider || "codex") === provider(model));
 }
 function selectedModel(model) {
 	const id = model.model ?? model.request?.model ?? "";
-	return host(model)?.capabilities.models?.find((item) => id ? item.id === id : item.is_default);
+	return availableModels(model).find((item) => id ? item.id === id : item.is_default);
 }
 function messages(model) {
 	const current = model.request || {};
@@ -174,10 +181,11 @@ function status(model, language) {
 }
 function describe(model, width, height, language) {
 	const tr = (text) => translate(text, language), current = model.request || {}, context = current.document?.context || model.context || {};
-	const inset = metrics.inset, inner = Math.max(0, width - inset * 2), narrow = width < 640, connected = host(model);
+	const inset = metrics.inset, inner = Math.max(0, width - inset * 2), connected = host(model);
+	const providers = connected?.capabilities.providers || [], narrow = width < (providers.length ? 820 : 640), providerRow = narrow && providers.length ? 40 : 0;
 	const composerWidth = Math.min(880, inner), composerX = (width - composerWidth) / 2;
 	const contextHeight = model.contextExpanded ? 122 : 38;
-	const composerHeight = 188 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0);
+	const composerHeight = 188 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0) + providerRow;
 	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? Math.max(80, (composerWidth - 32) / 2) : 200;
 	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim() || !!model.attachments.length;
 	const nodes = [
@@ -235,35 +243,46 @@ function describe(model, width, height, language) {
 			sendAction: { type: "send" },
 			action: { type: "prompt" }
 		}),
-		node("CheckBox", "agentRequestChanges", rect(composerX + 16, height - 114 - (narrow ? 40 : 0), Math.max(0, composerWidth - 32), 26), {
+		node("CheckBox", "agentRequestChanges", rect(composerX + 16, height - 114 - (narrow ? 40 : 0) - providerRow, Math.max(0, composerWidth - 32), 26), {
 			text: tr("Allow requested changes"),
 			wrapText: true,
 			checked: current.document?.allow_changes ?? model.allowChanges,
 			enabled: !model.busy && !model.selected && !model.pending,
 			action: { type: "changes" }
 		}),
-		node("CheckBox", "agentRequestWeb", rect(composerX + 16, height - 84 - (narrow ? 40 : 0), Math.max(0, composerWidth - 32), 26), {
+		node("CheckBox", "agentRequestWeb", rect(composerX + 16, height - 84 - (narrow ? 40 : 0) - providerRow, Math.max(0, composerWidth - 32), 26), {
 			text: tr("Allow internet access"),
 			checked: current.document?.allow_web ?? model.allowWeb,
 			enabled: !model.busy && !model.selected && !model.pending && !!connected?.capabilities.web_search,
 			action: { type: "web" }
 		}),
 		button("agentRequestAttach", rect(composerX + 12, height - 52, 32, 32), tr("Attach files"), "add", { type: "attach" }, !model.uploading && !model.pending && !model.busy, { iconOnly: true }),
-		button("agentRequestPaste", rect(composerX + 50, height - 52, 32, 32), tr("Paste attachment"), "content-paste", { type: "paste" }, !model.uploading && !model.pending && !model.busy, { iconOnly: true })
+		button("agentRequestPaste", rect(composerX + 50, height - 52, 32, 32), tr("Paste attachment"), "content-paste", { type: "paste" }, !model.uploading && !model.pending && !model.busy, { iconOnly: true }),
+		button("agentRequestProviders", rect(composerX + 88, height - 52, 32, 32), tr("AI providers"), "settings", { type: "providers" }, !model.busy, { iconOnly: true })
 	];
 	if (sendVisible) nodes.push(button("agentRequestSend", rect(composerX + composerWidth - 44 - (working ? 40 : 0), height - 52, 32, 32), tr(working ? "Send correction" : "Send to agent"), "arrow-upward", { type: "send" }, canSend(model), {
 		iconOnly: true,
 		highlighted: true
 	}));
 	if (working) nodes.push(button("agentRequestCancel", rect(composerX + composerWidth - 44, height - 52, 32, 32), tr("Cancel request"), "stop", { type: "cancel" }, !model.busy && current.status !== "cancelling", { iconOnly: true }));
-	if (connected?.capabilities.models?.length) nodes.push(node("Choice", "agentRequestModel", rect(narrow ? composerX + 12 : composerX + composerWidth - modelWidth - 52 - (narrow ? 0 : 144) - (working && sendVisible ? 40 : 0), height - (narrow ? 92 : 52), modelWidth, 32), {
+	if (providers.length) nodes.push(node("Choice", "agentRequestProvider", rect(narrow ? composerX + 12 : composerX + 128, height - (narrow ? 132 : 52), narrow ? composerWidth - 24 : Math.min(210, composerWidth - modelWidth - 332 - (working && sendVisible ? 40 : 0)), 32), {
+		label: tr("AI connection"),
+		value: provider(model),
+		enabled: !model.busy && !working && !model.pending,
+		options: providers.map((item) => ({
+			value: item.id,
+			label: item.name
+		})),
+		action: { type: "provider" }
+	}));
+	if (availableModels(model).length) nodes.push(node("Choice", "agentRequestModel", rect(narrow ? composerX + 12 : composerX + composerWidth - modelWidth - 52 - (narrow ? 0 : 144) - (working && sendVisible ? 40 : 0), height - (narrow ? 92 : 52), modelWidth, 32), {
 		label: tr("Model"),
 		value: model.model ?? current.model ?? "",
 		enabled: !model.busy && !working && !model.pending,
 		options: [{
 			value: "",
 			label: tr("Agent default")
-		}, ...connected.capabilities.models.map((item) => ({
+		}, ...availableModels(model).map((item) => ({
 			value: item.id,
 			label: item.label
 		}))],
@@ -292,7 +311,7 @@ function describe(model, width, height, language) {
 		}))],
 		action: { type: "effort" }
 	}));
-	if (model.attachments.length) nodes.push(node("View", "agentRequestAttachments", rect(composerX + 12, height - 156 - (narrow ? 40 : 0), composerWidth - 24, 36), {
+	if (model.attachments.length) nodes.push(node("View", "agentRequestAttachments", rect(composerX + 12, height - 156 - (narrow ? 40 : 0) - providerRow, composerWidth - 24, 36), {
 		view: "attachments",
 		files: model.attachments
 	}));
@@ -461,8 +480,10 @@ var _sfc_main = {
 		ticket: String,
 		capture: Function
 	},
-	setup(__props, { expose: __expose }) {
+	emits: ["providers"],
+	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
+		const emit = __emit;
 		const dialog = ref(null), body = ref(null), size = ref({
 			width: 900,
 			height: 650
@@ -520,6 +541,7 @@ var _sfc_main = {
 						text: model.value.prompt,
 						model: model.value.model ?? model.value.request.model ?? "",
 						effort: model.value.effort ?? model.value.request.effort ?? "",
+						provider: provider(model.value),
 						attachments: model.value.attachments.map((file) => file.attachment_id)
 					} : {
 						request_id: randomUuid(),
@@ -531,6 +553,7 @@ var _sfc_main = {
 							allow_web: model.value.allowWeb,
 							model: model.value.model ?? "",
 							effort: model.value.effort ?? "",
+							provider: provider(model.value),
 							attachments: model.value.attachments.map((file) => file.attachment_id)
 						}
 					};
@@ -588,6 +611,10 @@ var _sfc_main = {
 			if (dialog.value?.open || active(model.value)) timer = setTimeout(() => request("poll"), 2500);
 		}
 		function event(action) {
+			if (action.type === "providers") {
+				emit("providers");
+				return;
+			}
 			if (model.value.busy) return;
 			if (action.type === "prompt" || action.type === "changes" || action.type === "web") {
 				if (model.value.pending) return;
@@ -607,6 +634,7 @@ var _sfc_main = {
 					prompt: "",
 					attachments: [],
 					model: null,
+					provider: null,
 					effort: null,
 					pending: null
 				});
@@ -614,7 +642,11 @@ var _sfc_main = {
 			} else if (action.type === "send" && canSend(model.value)) request("send");
 			else if (action.type === "cancel") request("cancel");
 			else if (action.type === "refresh") request();
-			else if (action.type === "model") {
+			else if (action.type === "provider") {
+				model.value.provider = action.value;
+				model.value.model = "";
+				model.value.effort = "";
+			} else if (action.type === "model") {
 				model.value.model = action.value;
 				model.value.effort = "";
 			} else if (action.type === "effort") model.value.effort = action.value;

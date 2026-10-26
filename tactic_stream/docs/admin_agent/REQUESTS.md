@@ -34,7 +34,9 @@ an explicit interrupted state. Refresh/reopen does not resubmit anything.
 ## Connect the existing Codex host
 
 This separate process belongs to the operator. The TS service never starts a
-model, reads provider credentials or imports Handler. Install the optional agent
+model or imports Handler. Provider credentials are stored encrypted on TS and
+exported only as host-bound encrypted packages; see [PROVIDERS](PROVIDERS.md).
+Install the optional agent
 extra and sign in to Codex CLI first, following [CODEX](CODEX.md). For this
 checkout-based connection, run in a private operator terminal:
 

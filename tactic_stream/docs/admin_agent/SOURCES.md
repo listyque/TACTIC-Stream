@@ -65,6 +65,10 @@ Handler wrappers are client objects with different methods and lifetimes.
 
 ## TS workflows, files and scripts
 
+External model connections and credentials: [PROVIDERS](PROVIDERS.md). TS owns
+encrypted profile storage and request authorization; TH owns its native settings
+view; the external host owns model inference and tool orchestration.
+
 Stream/server guides; desktop files and DCC require TH capabilities.
 
 | Reference | What to read / when |

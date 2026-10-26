@@ -24,6 +24,9 @@ assert.equal(UI.active(model), true);
 for (const width of [320, 520, 1000]) {
   const scene = UI.describe(model, width, 650, 'ru');
   assert.ok(scene.nodes.every(node => node.x >= 0 && node.x + node.width <= width));
-  assert.ok(scene.nodes.find(node => node.id === 'agentRequestContext').text.includes('SH001'));
+  assert.equal(scene.nodes.find(node => node.id === 'agentRequestContext').context.search_keys.length, 1);
+  model.contextExpanded = true;
+  assert.ok(UI.describe(model, width, 650, 'ru').nodes.find(node => node.id === 'agentRequestContext').context.search_keys[0].includes('SH001'));
+  model.contextExpanded = false;
 }
 console.log('Request permissions, captured context, narrow layout and LAN HTTP UUID generation passed');

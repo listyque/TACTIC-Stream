@@ -89,12 +89,21 @@ class AgentRequestCmd(Command):
         if action == 'heartbeat':
             host_id = identity(self.kwargs.get('host_id'))
             capabilities = self.kwargs.get('capabilities')
-            if (not isinstance(capabilities, dict) or set(capabilities) - {'changes', 'trials', 'models', 'steering', 'attachments', 'web_search'}
+            if (not isinstance(capabilities, dict) or set(capabilities) - {'changes', 'trials', 'models', 'steering', 'attachments', 'web_search', 'credential_key', 'providers', 'default_provider'}
                     or any(type(capabilities.get(key)) is not bool for key in ('changes', 'trials'))
                     or type(capabilities.get('web_search', False)) is not bool):
                 raise ValueError('Invalid host capabilities')
+            if capabilities.get('credential_key'):
+                from tactic_stream.provider_credentials import public_key
+                public_key(capabilities['credential_key'])
+            providers = capabilities.get('providers', [])
+            if (not isinstance(providers, list) or len(providers) > 20 or any(
+                    not isinstance(provider, dict) or set(provider) != {'id', 'name', 'kind'}
+                    or any(not isinstance(value, str) or not value or len(value) > 256 for value in provider.values()) for provider in providers)
+                    or not isinstance(capabilities.get('default_provider', ''), str)):
+                raise ValueError('Invalid provider catalogue')
             models = capabilities.get('models', [])
-            if (not isinstance(models, list) or len(models) > 100 or any(
+            if (not isinstance(models, list) or len(models) > 1000 or any(
                     not isinstance(model, dict) or not isinstance(model.get('id'), str)
                     or not isinstance(model.get('label'), str)
                     or not isinstance(model.get('efforts', []), list)
@@ -118,7 +127,7 @@ class AgentRequestCmd(Command):
         if action == 'submit':
             request_id = identity(self.kwargs.get('request_id'))
             document = self.kwargs.get('document')
-            if (not isinstance(document, dict) or set(document) - {'prompt', 'context', 'allow_changes', 'attachments', 'model', 'effort', 'allow_web'}
+            if (not isinstance(document, dict) or set(document) - {'prompt', 'context', 'allow_changes', 'attachments', 'model', 'effort', 'allow_web', 'provider'}
                     or not {'prompt', 'context', 'allow_changes'} <= set(document)):
                 raise ValueError('Invalid agent request document')
             text(document['prompt'], 12000, empty=True)
@@ -140,7 +149,10 @@ class AgentRequestCmd(Command):
                 raise ValueError('This host only allows reading and previews')
             if document.get('allow_web') and not host['capabilities'].get('web_search'):
                 raise ValueError('This agent does not support web search')
-            self.check_model(host, document.get('model', ''), document.get('effort', ''))
+            provider = document.get('provider') or 'codex'
+            self.check_model(host, document.get('model', ''), document.get('effort', ''), provider)
+            from .agent_provider_cmd import captured_target
+            target = captured_target(provider)
             attachments = self.check_attachments(document.get('attachments', []))
             if not document['prompt'].strip() and not attachments:
                 raise ValueError('Write a message or attach a file')
@@ -149,7 +161,7 @@ class AgentRequestCmd(Command):
             row = dict(request_id=request_id, document=document, host_id=host['host_id'],
                        status='queued', created=self.now, seen=self.now, events=[], answer='', error='',
                        messages=[dict(id=request_id, role='user', text=document['prompt'], attachments=attachments, delivered=True)],
-                       model=document.get('model', ''), effort=document.get('effort', ''), turn=1)
+                       model=document.get('model', ''), effort=document.get('effort', ''), provider=provider, provider_target=target, turn=1)
         elif action == 'claim':
             host_id = identity(self.kwargs.get('host_id'))
             host = self.load('spt_agent_host', host_id)
@@ -264,10 +276,13 @@ class AgentRequestCmd(Command):
                     raise ValueError('This agent does not support corrections while working')
                 model = self.kwargs.get('model', row.get('model', ''))
                 effort = self.kwargs.get('effort', row.get('effort', ''))
-                self.check_model(host, model, effort)
+                provider = self.kwargs.get('provider', row.get('provider', 'codex')) or 'codex'
+                self.check_model(host, model, effort, provider)
                 if row['status'] != 'running':
-                    row.update(status='queued', seen=self.now, created=self.now, host_id=host_id, model=model, effort=effort, turn=row.get('turn', 1) + 1, output='', error='')
-                elif model != row.get('model', '') or effort != row.get('effort', ''):
+                    from .agent_provider_cmd import captured_target
+                    row.update(status='queued', seen=self.now, created=self.now, host_id=host_id, model=model, effort=effort, provider=provider,
+                        provider_target=captured_target(provider), turn=row.get('turn', 1) + 1, output='', error='')
+                elif model != row.get('model', '') or effort != row.get('effort', '') or provider != row.get('provider', 'codex'):
                     raise ValueError('Change the model or reasoning effort after the current turn finishes')
                 messages.append(message)
             elif action == 'ack':
@@ -317,11 +332,22 @@ class AgentRequestCmd(Command):
         self.save('spt_agent_request', row['request_id'], row)
         self.info = row
 
-    def check_model(self, host, model, effort=''):
-        text(model, 128, empty=True)
+    def check_model(self, host, model, effort='', provider='codex'):
+        text(model, 256, empty=True)
         text(effort, 32, empty=True)
-        selected = next((item for item in host['capabilities'].get('models', [])
+        text(provider, 256)
+        profiles = host['capabilities'].get('providers', [])
+        if provider != 'codex' and not any(row['id']==provider for row in profiles):
+            raise ValueError('Choose a provider offered by the connected host')
+        models = [item for item in host['capabilities'].get('models', []) if item.get('provider','codex')==provider]
+        if (provider != 'codex' or 'providers' in host['capabilities']) and not models:
+            raise ValueError('Check the provider connection before sending a request')
+        selected = next((item for item in models
                          if item['id'] == model or (not model and item.get('is_default'))), None)
+        if not model and selected is None and provider == 'codex':
+            selected = next(iter(models),None)
+        if not model and selected is None and provider != 'codex':
+            raise ValueError('Choose a model for this provider')
         if model and selected is None:
             raise ValueError('Choose a model offered by the connected agent')
         if effort and (selected is None or effort not in selected.get('efforts', [])):

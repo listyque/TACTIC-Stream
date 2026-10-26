@@ -57,7 +57,7 @@ const props = defineProps({
   openProject: Function,
   reloadCache: Function
 });
-const emit = defineEmits(['session-expired', 'close', 'help']);
+const emit = defineEmits(['session-expired', 'close', 'help', 'providers']);
 const groups = {
   server: [
     'Services and workers',
@@ -291,6 +291,7 @@ function editField({ field, value }) {
   } else drafts[page.value][field] = value;
 }
 function settingsAction(action) {
+  if (action.type === 'providers') emit('providers');
   if (action.type === 'clearTabs' || action.type === 'clearData') {
     cacheScope.value = action.type === 'clearTabs' ? 'tabs' : 'server';
     confirmClear.value.showModal();
@@ -578,6 +579,7 @@ defineExpose({ cancel, dirty });
       <FrameSettings
         v-if="
           [
+            'ai',
             'server',
             'appearance',
             'checkin',

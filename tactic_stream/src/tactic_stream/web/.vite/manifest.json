@@ -360,6 +360,7 @@
       "src/features/administration/SecurityGroups.vue",
       "src/features/administration/SecurityRules.vue",
       "src/features/scripts/AgentRequest.vue",
+      "src/features/configuration/AgentProviders.vue",
       "src/features/scripts/ScriptEditor.vue"
     ],
     "css": [
@@ -599,6 +600,22 @@
     ],
     "css": [
       "assets/SnapshotCheckout.css"
+    ]
+  },
+  "src/features/configuration/AgentProviders.vue": {
+    "file": "assets/AgentProviders.js",
+    "name": "AgentProviders",
+    "src": "src/features/configuration/AgentProviders.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_CodeBlock.js",
+      "_AppDialog.js",
+      "src/App.vue"
+    ],
+    "css": [
+      "assets/AgentProviders.css"
     ]
   },
   "src/features/configuration/Configuration.vue": {

@@ -1,4 +1,4 @@
-"""External Codex host for native TH/TS requests; never imported by the server."""
+"""External model host for native TH/TS requests; never imported by the server."""
 import argparse
 import getpass
 import json
@@ -241,8 +241,6 @@ def main():
     options = parser.parse_args()
     if bool(options.trial_image) != bool(options.trial_directory):
         parser.error('Provide the immutable trial image and private receipt directory together')
-    if not codex_executable():
-        parser.error('Install Codex CLI and sign in first')
     ticket = os.environ.get('TACTIC_AGENT_TICKET', '')
     if options.login:
         if ticket:
@@ -254,13 +252,20 @@ def main():
             parser.error('TACTIC sign-in did not return a session')
     connections = [StreamConnection(options.server, project, ticket) for project in options.project]
     host_id = str(uuid4())
-    capabilities = dict(changes=options.allow_changes, trials=bool(options.trial_image), models=model_catalog(options), steering=True, attachments=True, web_search=True)
+    from tactic_stream.provider_credentials import new_host_key
+    from tactic_stream.provider_host import refresh_profiles, unlock_profile, run_provider
+    private_key, public_key = new_host_key()
+    profile_cache = {}
+    capabilities = dict(changes=options.allow_changes, trials=bool(options.trial_image), models=[], providers=[],
+                        default_provider='codex', credential_key=public_key, steering=True, attachments=True, web_search=True)
 
     def heartbeat():
         for connection in connections:
-            connection.command('request', 'heartbeat', host_id=host_id, label='Codex', capabilities=capabilities)
+            connection.command('request', 'heartbeat', host_id=host_id, label='External agent', capabilities=capabilities)
 
     try:
+        heartbeat()
+        capabilities.update(refresh_profiles(connections[0],host_id,private_key,profile_cache,lambda:model_catalog(options),heartbeat))
         heartbeat()
         print('External agent connected. Requests are available in the ordinary TH/TS interface.', flush=True)
         last_heartbeat = time.monotonic()
@@ -268,12 +273,23 @@ def main():
             try:
                 if time.monotonic() - last_heartbeat >= 10:
                     heartbeat()
+                    capabilities.update(refresh_profiles(connections[0],host_id,private_key,profile_cache,lambda:model_catalog(options),heartbeat))
+                    heartbeat()
                     last_heartbeat = time.monotonic()
                 for connection in connections:
                     request = connection.command('request', 'claim', host_id=host_id)['request']
                     if request:
                         try:
-                            run_request(connection, request, host_id, options, heartbeat)
+                            profiles = connection.command('providers','host_profiles',host_id=host_id)['profiles']
+                            code = request.get('provider','codex')
+                            selected = next((row for row in profiles if row['id']==code and row['enabled']),None)
+                            if selected is None:
+                                raise ValueError('The selected provider connection is disabled or unavailable')
+                            if selected['kind']=='codex':
+                                run_request(connection, request, host_id, options, heartbeat)
+                            else:
+                                import asyncio
+                                asyncio.run(run_provider(connection,request,unlock_profile(selected,private_key),host_id,options,heartbeat,task_prompt,message_inputs))
                         except (OSError, ValueError, RuntimeError, ToolError, subprocess.SubprocessError) as error:
                             current = connection.command('request', 'read', request_id=request['request_id'])
                             if current['status'] in ('running', 'cancelling'):
