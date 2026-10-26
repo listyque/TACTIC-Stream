@@ -105,7 +105,7 @@ def task_prompt(request):
 
 
 def model_catalog(options):
-    connection = StreamConnection(options.server, options.project[0], 'catalog-only')
+    connection = StreamConnection(options.server, options.project[0] if options.project else 'admin', 'catalog-only')
     with tempfile.TemporaryDirectory(prefix='tactic-models-') as workspace:
         request = dict(request_id=str(uuid4()), document=dict(allow_changes=False))
         client = CodexSession(codex_command(connection, request, options.stream_root, options.handler_root, workspace), dict(os.environ), workspace)
@@ -237,7 +237,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--server', required=True)
     parser.add_argument('--login', help='Create a dedicated TACTIC session using a password prompt instead of an environment ticket')
-    parser.add_argument('--project', action='append', required=True, help='Explicit project scope; repeat for several projects')
+    scope=parser.add_mutually_exclusive_group(required=True)
+    scope.add_argument('--project', action='append', help='Explicit project scope; repeat for several projects')
+    scope.add_argument('--all-projects', action='store_true', help='Connect to accessible upgraded projects, including newly created projects')
     parser.add_argument('--stream-root', type=Path, required=True)
     parser.add_argument('--handler-root', type=Path)
     parser.add_argument('--allow-changes', action='store_true')
@@ -251,12 +253,13 @@ def main():
     if options.login:
         if ticket:
             parser.error('Choose --login or TACTIC_AGENT_TICKET, not both')
-        bootstrap = StreamConnection(options.server, options.project[0], 'pending-session')
+        bootstrap = StreamConnection(options.server, options.project[0] if options.project else 'admin', 'pending-session')
         result = bootstrap.request('/admin/rpc', dict(method='get_ticket', args=[options.login, getpass.getpass('TACTIC password: ')], kwargs={}))
         ticket = result.get('result')
         if not isinstance(ticket, str) or not ticket:
             parser.error('TACTIC sign-in did not return a session')
-    connections = [StreamConnection(options.server, project, ticket) for project in options.project]
+    bootstrap=StreamConnection(options.server,'admin',ticket)
+    connections = [StreamConnection(options.server, project, ticket) for project in (options.project or [])]
     host_id = str(uuid4())
     from tactic_stream.provider_credentials import new_host_key
     from tactic_stream.provider_host import refresh_profiles, unlock_profile, run_provider
@@ -266,6 +269,13 @@ def main():
                         default_provider='codex', credential_key=public_key, steering=True, attachments=True, web_search=True)
 
     def heartbeat():
+        if options.all_projects:
+            projects=bootstrap.command('request','host_projects')['projects']
+            existing={connection.project:connection for connection in connections}
+            connections[:]=[existing.get(project['code']) or StreamConnection(options.server,project['code'],ticket)
+                            for project in projects if project.get('agent_available')]
+            if not connections:
+                raise RuntimeError('No accessible projects have the agent schema installed')
         for connection in connections:
             connection.command('request', 'heartbeat', host_id=host_id, label='External agent', capabilities=capabilities)
 

@@ -166,3 +166,10 @@ Client `refreshError` is distinct from a failed user operation (`error`). A full
 successful state/library/read clears only the former. Read polling never replays
 submit/message/undo/library writes; an uncertain write retains its pending ID for
 explicit reconciliation. Provider/host failures remain the saved request's error.
+
+Host scope: repeat `--project` for an explicit list, or opt into `--all-projects`
+for periodic discovery through owner-authenticated `AgentRequestCmd.host_projects`.
+This read-only catalogue checks installed inbox/host tables and restores caller
+project; it returns no chat messages. It skips missing/unupgraded databases.
+New projects join the ordinary heartbeat/claim loop. Discovery never invokes a
+model; connection selection and explicit Send still govern data transfer.

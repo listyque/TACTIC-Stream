@@ -64,10 +64,10 @@ class AgentRequestCmd(Command):
         _require_admin()
         if self.kwargs.get('project_code') != Project.get_project_code():
             raise ValueError('Agent request project mismatch')
-        if self.kwargs.get('action') == 'library':
+        if self.kwargs.get('action') in ('library','host_projects'):
             from tactic_stream.server.agent_library import library
             self.owner = Environment.get_user_name()
-            self.info = library(self)
+            self.info = library(self,catalog_only=self.kwargs['action']=='host_projects')
             return
         self.sql = Search('config/trigger').get_sql()
         if not all(self.sql.table_exists(name) for name in ('spt_agent_request', 'spt_agent_host')):

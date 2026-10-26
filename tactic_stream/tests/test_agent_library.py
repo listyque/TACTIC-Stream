@@ -119,6 +119,9 @@ class AgentLibrary(unittest.TestCase):
         self.assertEqual([(r['project'],r['request_id']) for r in library['requests']],[('one',row['request_id'])])
         self.assertTrue(any(p['code']=='empty' for p in library['projects']))
         self.assertEqual(other('library',project_filter='empty')['requests'],[])
+        catalog=other('host_projects')
+        self.assertEqual(catalog['requests'],[])
+        self.assertTrue(next(p for p in catalog['projects'] if p['code']=='empty')['agent_available'])
         duplicate=other('draft',request_id=row['request_id'],context=dict(self.document['context'],project='empty',search_keys=[]))
         with request_context(RequestContext(self.store,'admin','empty')):
             self.api.auth.bind_security('admin',self.auth['ticket'])
@@ -145,5 +148,6 @@ class AgentLibrary(unittest.TestCase):
         database.rename(database.with_suffix('.unavailable'))
         library=self.call('library')
         self.assertEqual(library['unavailable_projects'],['empty'])
+        self.assertFalse(next(p for p in self.call('host_projects')['projects'] if p['code']=='empty').get('agent_available',False))
         self.assertEqual(len(library['requests']),1)
         self.assertFalse(database.exists())

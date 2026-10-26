@@ -39,7 +39,7 @@ def summary(row):
         **{key:meta[key] for key in ('group','pinned','archived')}, library_revision=revision(meta))
 
 
-def library(cmd):
+def library(cmd, *, catalog_only=False):
     """Read only this user's histories; execution remains in each chat's project."""
     from tactic.ui.panel.agent_request_cmd import AgentRequestCmd, text
     selected = text(cmd.kwargs.get('project_filter', ''), 256, empty=True)
@@ -64,12 +64,15 @@ def library(cmd):
             if not available:
                 result['unavailable_projects'].append(code)
                 continue
+            sql = Search('config/trigger').get_sql()
+            result['projects'][-1]['agent_available'] = all(sql.table_exists(table) for table in ('spt_agent_request','spt_agent_host'))
+            if catalog_only:
+                continue
             folders = groups()
             result['groups'].extend(dict(group,project=code,project_title=title) for group in folders['groups'])
             result['group_revisions'][code] = revision(folders)
             if selected and selected!=code:
                 continue
-            sql = Search('config/trigger').get_sql()
             if not sql.table_exists('spt_agent_request'):
                 continue
             reader = AgentRequestCmd()

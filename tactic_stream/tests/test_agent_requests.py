@@ -195,6 +195,39 @@ class AgentRequests(unittest.TestCase):
         self.assertEqual(attempts, ['claim', 'claim'])
         run.assert_not_called()
 
+    def test_all_projects_host_discovers_new_projects_without_submitting_work(self):
+        from tactic_stream import agent_host
+        from unittest.mock import Mock
+        from itertools import count
+        clients={};discoveries=[];claims=[]
+        def connect(url,project,ticket):
+            if project in clients:return clients[project]
+            client=Mock(project=project)
+            def command(owner,action,**values):
+                if action=='host_projects':
+                    discoveries.append(action)
+                    projects=['one'] if len(discoveries)<3 else ['one','new_project']
+                    return dict(projects=[dict(code=code,agent_available=True) for code in projects]+[dict(code='unavailable',agent_available=False)])
+                if action=='claim':
+                    claims.append(project);return dict(request=None)
+                return {}
+            client.command.side_effect=command
+            clients[project]=client;return client
+        with (
+            patch.object(sys,'argv',['agent_host','--server','http://example.invalid',
+                '--all-projects','--stream-root',str(ROOT)]),
+            patch.dict(os.environ,TACTIC_AGENT_TICKET='private-fixture'),
+            patch.object(agent_host,'StreamConnection',side_effect=connect),
+            patch('tactic_stream.provider_host.refresh_profiles',return_value=dict(models=[],providers=[],default_provider='codex')),
+            patch.object(agent_host.time,'monotonic',side_effect=count(0,11)),
+            patch.object(agent_host.time,'sleep',side_effect=[None,KeyboardInterrupt]),
+            patch.object(agent_host,'run_request') as run,
+        ):
+            agent_host.main()
+        self.assertIn('new_project',claims)
+        self.assertNotIn('unavailable',clients)
+        run.assert_not_called()
+
     def test_followup_clears_the_previous_provider_error(self):
         request, _ = self.submit()
         self.call('claim', host_id=self.host)
