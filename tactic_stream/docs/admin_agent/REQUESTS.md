@@ -161,3 +161,8 @@ server stub before changing the ticket's project; it never mutates the original
 stub or retrieves a different account's current ticket. Draft caches use
 `project:request_id`; a new chat in an explicitly filtered foreign project clears
 workspace page/type/selection. With no project filter, new chats use the workspace.
+
+Client `refreshError` is distinct from a failed user operation (`error`). A full
+successful state/library/read clears only the former. Read polling never replays
+submit/message/undo/library writes; an uncertain write retains its pending ID for
+explicit reconciliation. Provider/host failures remain the saved request's error.

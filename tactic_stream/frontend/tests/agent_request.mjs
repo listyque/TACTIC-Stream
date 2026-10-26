@@ -117,9 +117,24 @@ try {
     const correction = corrected.messages.find(message => message.text === 'Use the reference process');
     assert.ok(correction);
     await fixtureCommand('ack', { host_id, request_id: claimed.request_id, message_ids: [correction.id] });
+    let offline=true, replayed=0;
+    const disconnect=async route=>{
+      const payload=route.request().postDataJSON();
+      if (payload?.method==='execute_cmd' && payload.args[1].endsWith('.AgentRequestCmd')) {
+        const action=payload.args[2].action;
+        if (['submit','message'].includes(action)) replayed++;
+        if (offline && ['state','library','read'].includes(action)) return route.abort('connectionfailed');
+      }
+      return route.continue();
+    };
+    await page.route('**/admin/rpc',disconnect);
+    await page.waitForFunction(()=>document.querySelector('[data-frame=agentRequestStatus]')?.textContent.includes('Failed to fetch'));
     await fixtureCommand('update', { host_id, request_id: claimed.request_id, status: 'completed', outcome: 'completed',
       answer: '**Completed**\n\n- Workflow saved\n- References checked in\n\n`reference → model → texture → rig`' });
+    offline=false;
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('Task completed'));
+    assert.equal(replayed,0,'Reconnection only reads; it never replays a mutation');
+    await page.unroute('**/admin/rpc',disconnect);
     assert.equal(await dialog.getByRole('log').locator('strong').textContent(), 'Completed');
     await dialog.getByRole('combobox', { name: 'Model', exact: true }).selectOption('');
     assert.equal(await dialog.getByRole('combobox', { name: 'Reasoning effort', exact: true }).inputValue(), '');

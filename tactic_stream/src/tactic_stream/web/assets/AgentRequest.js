@@ -453,6 +453,7 @@ function initial(context = {}) {
 		request: {},
 		busy: false,
 		error: "",
+		refreshError: "",
 		pending: null,
 		attachments: [],
 		uploading: false,
@@ -594,8 +595,8 @@ function contextItems(context, language) {
 }
 function status(model, language) {
 	const tr = (text) => translate(text, language), current = model.request || {};
-	if (model.error || current.error) return {
-		text: tr(model.error || current.error),
+	if (model.refreshError || model.error || current.error) return {
+		text: tr(model.refreshError || model.error || current.error),
 		color: "error",
 		icon: "error"
 	};
@@ -994,6 +995,7 @@ var _sfc_main = {
 				archived: model.value.history.archived,
 				project_filter: model.value.history.project || ""
 			};
+			let reading = false;
 			const before = model.value.requests, nextOffset = model.value.next_offset;
 			inFlight = true;
 			model.value.busy = action !== "poll";
@@ -1058,6 +1060,7 @@ var _sfc_main = {
 						};
 					} else model.value.history.edit = null;
 				}
+				reading = true;
 				const state = await call("state");
 				Object.assign(state, await call("library", {
 					...filter,
@@ -1099,8 +1102,9 @@ var _sfc_main = {
 					}
 					if (wasActive && !active(model.value)) notify(current.status === "completed" && current.outcome === "completed" ? "complete" : "warning", status(model.value, appearance.language).text, model.value.context.title || model.value.context.project, "agent-request", current.request_id + ":" + current.turn);
 				}
+				model.value.refreshError = "";
 			} catch (error) {
-				if (id === generation) model.value.error = error.message;
+				if (id === generation) model.value[reading ? "refreshError" : "error"] = error.message;
 			} finally {
 				if (id === generation) {
 					model.value.busy = false;

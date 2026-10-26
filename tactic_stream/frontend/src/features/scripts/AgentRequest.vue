@@ -98,6 +98,7 @@ async function request(action = 'refresh') {
     archived: model.value.history.archived,
     project_filter: model.value.history.project || ''
   };
+  let reading = false;
   const before = model.value.requests,
     nextOffset = model.value.next_offset;
   inFlight = true;
@@ -194,6 +195,7 @@ async function request(action = 'refresh') {
         };
       } else model.value.history.edit = null;
     }
+    reading = true;
     const state = await call('state');
     Object.assign(
       state,
@@ -270,8 +272,10 @@ async function request(action = 'refresh') {
           current.request_id + ':' + current.turn
         );
     }
+    model.value.refreshError = '';
   } catch (error) {
-    if (id === generation) model.value.error = error.message;
+    if (id === generation)
+      model.value[reading ? 'refreshError' : 'error'] = error.message;
   } finally {
     if (id === generation) {
       model.value.busy = false;
