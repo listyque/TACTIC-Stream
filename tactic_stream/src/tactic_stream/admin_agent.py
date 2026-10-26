@@ -17,7 +17,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from tactic_stream import __version__
 from tactic_stream.project_plan import ProjectPlan, Code, Label
 from tactic_stream.automation_plan import AutomationPlan
-from tactic_stream.dashboard_plan import DashboardDocument
+from tactic_stream.dashboard_plan import DashboardDocument, DashboardTreeNode
 from tactic_stream.sidebar_plan import SidebarDocument
 from tactic_stream.automation_trial import AutomationTrials, TrialCase
 
@@ -485,7 +485,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return {'adapter_version': __version__, 'server': health, 'project': connection.project,
                 'operations': ['references', 'types.read', 'schema.read', 'naming.read', 'naming.preview',
                                'naming.operation', 'page.read', 'page.preview', 'page.operation',
-                               'dashboard.read', 'dashboard.preview', 'dashboard.operation',
+                               'dashboard.read', 'dashboard.preview', 'dashboard.tree_read', 'dashboard.operation',
                                'sidebar.read', 'sidebar.preview', 'sidebar.operation']
                               + (['mcp.connections'] if request_id else [])
                               + (['mcp.create','mcp.update','mcp.revoke'] if request_id and allow_page_save else [])
@@ -622,6 +622,11 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return connection.command('dashboard','read',name=name)
 
     @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_dashboard_tree_read(tree: DashboardTreeNode, branch_path: list[int] | None = None, parent_key: str = '', offset: Offset = 0) -> dict[str, Any]:
+        """Read one lazy tree page through real schema relationships. Supply the root tree definition; [] reads roots, [0] reads its first branch for parent_key, [0,1] the next configured level. Native tasks/snapshots/notes use their ordinary object-parent links. Verify a configured hierarchy here before reporting completion; never replace a requested interactive tree with flat tables."""
+        return connection.command('dashboard','tree',tree=tree.model_dump(mode='json'),branch_path=branch_path,parent_key=parent_key,offset=offset)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
     def ts_sidebar_read(source: Literal['handler','tactic']='handler') -> dict[str, Any]:
         """Read project navigation keys, visibility, colors/icons and revision.
 
@@ -646,7 +651,9 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier) -> dict[str, Any]:
-        """Compose a shared native dashboard from row/column/text/markdown/count/table/link bricks.
+        """Compose a shared native dashboard from row/column/text/markdown/count/table/tree/link bricks.
+        A tree brick uses tree.search_type and recursive tree.branches from real schema relations.
+        Verify lazy roots/children with ts_dashboard_tree_read instead of substituting flat tables.
 
         Tables reference existing TACTIC views; use ts_page_* for a new column layout.
         Filters are ANDed native column conditions. Metrics are current row counts.

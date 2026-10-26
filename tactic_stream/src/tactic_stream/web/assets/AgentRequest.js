@@ -2,8 +2,8 @@ import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watc
 import { A as t, O as randomUuid, V as cssRoles, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Vt as notify, Yt as rect, ct as rpc, i as _sfc_main$5, k as _sfc_main$4, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$6 } from "./AppDialog.js";
-import { t as _sfc_main$7 } from "./AppMenuItem.js";
 import { t as listAction } from "./tree.ui.js";
+import { t as _sfc_main$7 } from "./AppMenuItem.js";
 import { Q as _sfc_main$8, g as describe$2 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {

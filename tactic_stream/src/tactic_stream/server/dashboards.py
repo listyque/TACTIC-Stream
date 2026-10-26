@@ -33,6 +33,14 @@ def dashboard_layout(document, view, search_key=''):
                 continue
             if block.children:
                 raise ValueError('Only row/column bricks may contain children')
+            if block.kind=='tree':
+                from .dashboard_tree import validate_tree
+                if block.tree is None:
+                    raise ValueError('A tree brick requires its hierarchy definition')
+                tree=validate_tree(block.tree)
+                nodes.append(dict(kind='tree',text=block.title or tree.title,weight=block.weight,
+                    height=block.height,tree=tree.model_dump(mode='json')))
+                continue
             if block.kind=='text':
                 nodes.append(dict(kind='text',text=block.text or block.title,weight=block.weight))
                 continue

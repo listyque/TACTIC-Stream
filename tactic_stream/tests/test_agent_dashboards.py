@@ -95,6 +95,44 @@ class Dashboards(unittest.TestCase):
             result=proxy.execute_cmd(auth,'tactic.ui.table.NestedTableReadCmd',dict(parent_key=table['parentKey'],search_type=table['searchType'],project_scope=table['projectScope'],filters=table['filters']))['info']
             self.assertTrue(all(row['project_code']=='one' for row in result['records']))
 
+    def test_lazy_tree_uses_schema_instances_tasks_notes_and_project_scope(self):
+        from xmlrpc.client import Fault
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            def tree_read(tree,**values):
+                return proxy.execute_cmd(auth,COMMAND,dict(action='tree',project_code='one',tree=tree,**values))['info']
+            tree=dict(search_type='contract/entity',filters=[dict(column='code',value='A')],branches=[dict(search_type='sthpw/task',title_field='process',branches=[dict(search_type='sthpw/note')])])
+            roots=tree_read(tree)
+            self.assertEqual([row['title'] for row in roots['items']],['Первый'])
+            key=roots['items'][0]['key']
+            task=proxy.create_task(auth,key,'model')
+            if isinstance(task,str):task=ast.literal_eval(task)
+            proxy.create_note(auth,task['__search_key__'],'Native tree note')
+            tasks=tree_read(tree,branch_path=[0],parent_key=key)
+            self.assertEqual([row['title'] for row in tasks['items']],['model'])
+            notes=tree_read(tree,branch_path=[0,0],parent_key=tasks['items'][0]['key'])
+            self.assertEqual(len(notes['items']),1)
+            instances=dict(search_type='contract/collection',branches=[dict(search_type='contract/entity')])
+            linked=tree_read(instances,branch_path=[0],parent_key='contract/collection?project=one&code=G1')
+            self.assertEqual({row['key'] for row in linked['items']},{key,'contract/entity?project=one&code=B'})
+            self.assertEqual(len(linked['items']),2)
+            first_link=tree_read(instances,branch_path=[0],parent_key='contract/collection?project=one&code=G1',limit=1)
+            second_link=tree_read(instances,branch_path=[0],parent_key='contract/collection?project=one&code=G1',offset=1,limit=1)
+            self.assertTrue(first_link['has_next'])
+            self.assertEqual([first_link['items'][0]['key'],second_link['items'][0]['key']],[key,'contract/entity?project=one&code=B'])
+            page=tree_read(dict(search_type='contract/entity'),limit=1)
+            self.assertTrue(page['has_next'])
+            next_page=tree_read(dict(search_type='contract/entity'),offset=1,limit=1)
+            self.assertNotEqual(page['items'][0]['key'],next_page['items'][0]['key'])
+            state=proxy.execute_cmd(auth,COMMAND,dict(action='read',project_code='one'))['info']
+            draft=dict(name='hierarchy',title='Hierarchy',blocks=[dict(kind='tree',tree=tree,height=600)])
+            preview=proxy.execute_cmd(auth,COMMAND,dict(action='preview',project_code='one',document=draft,expected_revision=state['revision']))['info']
+            self.assertEqual(preview['model']['layoutNodes'][0]['kind'],'tree')
+            for invalid in [dict(branch_path=[99],parent_key=key),dict(branch_path=[-1],parent_key=key),dict(branch_path=[0],parent_key='contract/entity?project=two&code=A'),dict(branch_path=[0],parent_key='contract/collection?project=one&code=G1'),dict(limit=101)]:
+                with self.subTest(invalid=invalid),self.assertRaises(Fault):tree_read(tree,**invalid)
+            for invalid_tree in [dict(search_type='contract/entity',branches=[dict(search_type='sthpw/login')]),dict(search_type='contract/entity',title_field='missing'),dict(search_type='contract/entity?project=two')]:
+                with self.subTest(invalid_tree=invalid_tree),self.assertRaises(Fault):tree_read(invalid_tree)
+
     def test_markdown_literal_record_field_and_project_boundary(self):
         from xmlrpc.client import Fault
         with test_transport.Transport.proxy(self) as proxy:
@@ -142,6 +180,7 @@ class Dashboards(unittest.TestCase):
         from tactic_stream.agent_host import message_inputs, task_prompt
         requests=[];values={};operation=str(uuid4())
         draft=document();draft['name']='chat_dashboard'
+        draft['blocks']=[dict(kind='tree',tree=dict(search_type='contract/entity',filters=[dict(column='code',value='A')],branches=[dict(search_type='sthpw/task')]))]
 
         class Provider(BaseHTTPRequestHandler):
             def do_POST(server):
@@ -155,8 +194,10 @@ class Dashboards(unittest.TestCase):
                     values.update(document=draft,expected_revision=previous['revision'])
                     name,arguments='ts_dashboard_preview',values
                 elif step==3:
-                    name,arguments='ts_dashboard_save',dict(values,operation_id=operation)
+                    name,arguments='ts_dashboard_tree_read',dict(tree=draft['blocks'][0]['tree'])
                 elif step==4:
+                    name,arguments='ts_dashboard_save',dict(values,operation_id=operation)
+                elif step==5:
                     name,arguments='ts_dashboard_read',dict(name='chat_dashboard')
                 else:
                     name,arguments='agent_finish',dict(outcome='completed',answer='Open Review dashboard from project navigation.')
@@ -183,11 +224,14 @@ class Dashboards(unittest.TestCase):
         asyncio.run(run_provider(connection,request,profile,host,options,lambda:None,task_prompt,message_inputs))
         saved=connection.command('request','read',request_id=request_id)
         self.assertEqual((saved['status'],saved['outcome']),('completed','completed'))
-        self.assertEqual(len(requests),5)
+        self.assertEqual(len(requests),6)
+        roots=json.loads(requests[3]['messages'][-1]['content'])
+        self.assertEqual(roots['items'][0]['key'],'contract/entity?project=one&code=A')
         self.assertNotIn(ticket,json.dumps(requests))
         self.assertEqual(connection.command('dashboard','read',name='chat_dashboard')['document']['name'],'chat_dashboard')
         tools={row['function']['name']:row['function']['parameters'] for row in requests[0]['tools']}
         self.assertIn('ts_dashboard_save',tools)
+        self.assertIn('ts_dashboard_tree_read',tools)
         self.assertIn('name',tools['ts_dashboard_read']['properties'])
         # Model writes remain unavailable when the chat's changes permission is off.
         from tactic_stream.admin_agent import create_server

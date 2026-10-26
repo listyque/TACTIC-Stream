@@ -330,8 +330,8 @@
       "_confirmation.ui.js",
       "_AppDialog.js",
       "_markdown-it.js",
-      "_AppMenuItem.js",
-      "_tree.ui.js"
+      "_tree.ui.js",
+      "_AppMenuItem.js"
     ],
     "dynamicImports": [
       "src/features/checkin/ObjectCheckin.vue",
@@ -780,8 +780,8 @@
       "index.html",
       "_CodeBlock.js",
       "_AppDialog.js",
-      "_AppMenuItem.js",
       "_tree.ui.js",
+      "_AppMenuItem.js",
       "src/App.vue"
     ],
     "css": [

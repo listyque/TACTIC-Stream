@@ -4069,6 +4069,8 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"No results": "Нет записей",
+	"Too many results. Narrow the search.": "Слишком много записей. Уточните фильтр.",
 	"Agent link — includes access and startup instructions": "Ссылка для агента — доступ и стартовые инструкции",
 	"Copy agent link": "Скопировать ссылку для агента",
 	"Collect connection token": "Получить токен подключения",
