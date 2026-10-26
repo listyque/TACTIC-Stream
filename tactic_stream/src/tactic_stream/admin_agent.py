@@ -128,6 +128,10 @@ class NoRedirect(HTTPRedirectHandler):
         return None
 
 
+class ConnectionUnavailable(ToolError):
+    """Transport failed without a confirmed response; never replay a model write."""
+
+
 class StreamConnection:
     """One host-selected origin, project and ticket, outside model arguments."""
 
@@ -162,7 +166,7 @@ class StreamConnection:
             message = detail.get('error', 'TACTIC request failed') if isinstance(detail, dict) else 'TACTIC request failed'
             raise ToolError(f'TACTIC HTTP {error.code}: {message}') from None
         except (URLError, TimeoutError, OSError):
-            raise ToolError('TACTIC connection failed or timed out; no automatic retry was made') from None
+            raise ConnectionUnavailable('TACTIC connection failed or timed out; no automatic retry was made') from None
         return self._decode(raw)
 
     def _decode(self, raw: bytes):
@@ -249,6 +253,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             """The user's immutable TH/TS project, page and selection captured before sending."""
             request = connection.command('request', 'read', request_id=request_id)
             result = dict(request_id=request_id, **request['document'])
+            result['attachments'] = [item for message in request.get('messages', []) for item in message.get('attachments', [])]
             if request.get('operations'):
                 result['operations'] = [dict(operation_id=code, result=receipt['result'], undone=receipt.get('undone', False))
                                         for code, receipt in request['operations'].items()]

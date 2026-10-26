@@ -111,7 +111,10 @@ class DirNaming(object):
         # if this is just querying and not sandbox, use relative dir
         if self._file_object and self.protocol != 'sandbox':
             relative_dir = self._file_object.get_value("relative_dir")
-            if relative_dir:
+            checkin_dir = self._file_object.get_value("checkin_dir")
+            recorded_root = (relative_dir == '' and checkin_dir and os.path.normcase(os.path.normpath(checkin_dir)) ==
+                             os.path.normcase(os.path.normpath(Environment.get_asset_dir(self._file_object))))
+            if relative_dir or recorded_root:
                 dir_dict['relative_dir'] = relative_dir
                 return dir_dict
        
@@ -155,7 +158,7 @@ class DirNaming(object):
         dirs.extend( self.get_base_dir(alias=alias, file_object=self._file_object) )
         if not self.create:
            dir_dict = self._get_recorded_dir()
-           if dir_dict.get('relative_dir'):
+           if 'relative_dir' in dir_dict:
                 dirs.append(dir_dict.get('relative_dir'))
                 return '/'.join(dirs)
            elif dir_dict.get('inplace_dir'):

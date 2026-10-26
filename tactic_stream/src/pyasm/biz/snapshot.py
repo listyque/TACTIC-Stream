@@ -2402,6 +2402,10 @@ class Snapshot(SObject):
                 file_naming.set_file_object(file_object)
                 file_naming.set_ext(ext)
                 file_name = file_naming.get_file_name()
+                if naming and file_type in ('web', 'icon'):
+                    # Match the preview suffix used by the numbered DB naming rule.
+                    basename, extension = os.path.splitext(file_name)
+                    file_name = '%s_%s%s' % (basename, file_type, extension)
 
 
                 # this expects the naming expr

@@ -137,6 +137,80 @@ class AgentChat(unittest.TestCase):
             _, data = connection.attachment_bytes(file['attachment_id'])
         self.assertEqual(data, b'original image bytes')
 
+    def test_attachment_only_messages_and_private_thumbnail(self):
+        from PIL import Image
+        buffer = io.BytesIO()
+        Image.new('RGB', (640, 360), 'red').save(buffer, 'PNG')
+        file = self.attachment(buffer.getvalue(), 'image.png')
+        with self.assertRaisesRegex(ValueError, 'message or attach'):
+            self.submit(document=dict(self.document, prompt=''))
+        row, _ = self.submit(document=dict(self.document, prompt='', attachments=[file['attachment_id']]))
+        self.assertEqual(row['messages'][0]['text'], '')
+        self.assertTrue(self.call('state')['requests'][0]['prompt'])
+        preview = self.command('attachment', 'preview', attachment_id=file['attachment_id'])
+        raw = base64.b64decode(preview['url'].split(',', 1)[1])
+        with Image.open(io.BytesIO(raw)) as image:
+            self.assertEqual(image.size, (320, 180))
+        self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False, steering=True))
+        self.call('claim', host_id=self.host)
+        follow = self.call('message', request_id=row['request_id'], message_id=str(uuid4()), text='', attachments=[file['attachment_id']])
+        self.assertEqual(len(follow['messages']), 2)
+        from tactic_stream.agent_host import message_inputs
+        from tactic_stream.admin_agent import StreamConnection
+        connection = StreamConnection('http://example.invalid', 'one', 'private-fixture')
+        with patch.object(connection, 'command', side_effect=self.command):
+            inputs = message_inputs(connection, follow['messages'][-1:])
+        self.assertTrue(any(item['type'] == 'image' for item in inputs))
+        self.assertFalse(any(item['type'] == 'text' and not item['text'] for item in inputs))
+
+    def test_repeated_named_images_keep_original_extensions_and_root_aliases(self):
+        from PIL import Image
+        from pathlib import Path
+        self.document['allow_changes'] = True
+        files = []
+        for color in ('red', 'blue', 'green'):
+            buffer = io.BytesIO()
+            Image.new('RGBA', (320, 180), color).save(buffer, 'PNG')
+            files.append(self.attachment(buffer.getvalue(), 'image.png'))
+        rows = self.api.dispatch('query', (self.auth, 'config/naming'), {'filters': [('search_type', 'cg/shot')]})
+        rows = ast.literal_eval(rows) if isinstance(rows, str) else rows
+        self.assertTrue(rows)
+        for rule in rows:
+            self.api.dispatch('update', (self.auth, rule['__search_key__'], dict(dir_naming='{sobject.relative_dir}',
+                file_naming='{sobject.name}_v{version}.{ext}', checkin_type='auto')))
+        row, _ = self.submit(document=dict(self.document, attachments=[file['attachment_id'] for file in files]))
+        self.call('claim', host_id=self.host)
+        common = dict(request_id=row['request_id'])
+        state = self.command('editing', 'workflow_read', search_type='cg/shot', **common)
+        self.command('editing', 'workflow_apply', search_type='cg/shot', expected_revision=state['revision'],
+            operation_id=str(uuid4()), processes=['reference'], search_keys=self.document['context']['search_keys'], **common)
+        arguments = dict(search_key=self.document['context']['search_keys'][0], process='reference',
+            attachments=[file['attachment_id'] for file in files], operation_id=str(uuid4()), **common)
+        result = self.command('editing', 'checkin', **arguments)
+        self.assertEqual(result, self.command('editing', 'checkin', **arguments))
+        self.assertEqual(len(result['snapshots']), 3)
+        checked = self.api.dispatch('query', (self.auth, 'sthpw/file'))
+        checked = ast.literal_eval(checked) if isinstance(checked, str) else checked
+        self.assertFalse(any(Path(file['file_name']).suffix == '.data' for file in checked))
+        for file in checked:
+            self.assertTrue(Path(file['checkin_dir'], file['file_name']).is_file(), file)
+
+    def test_web_search_permission_only_changes_native_search(self):
+        from tactic_stream.agent_host import codex_command, task_prompt
+        from tactic_stream.admin_agent import StreamConnection
+        connection = StreamConnection('http://example.invalid', 'one', 'private-fixture')
+        with self.assertRaisesRegex(ValueError, 'does not support web'):
+            self.submit(document=dict(self.document, allow_web=True))
+        self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False, web_search=True))
+        row, _ = self.submit(document=dict(self.document, allow_web=True))
+        command = codex_command(connection, row, fixture.ROOT, None, '.')
+        self.assertIn('web_search="live"', command)
+        self.assertIn('features.shell_tool=false', command)
+        self.assertIn('user allows native web search', task_prompt(row))
+        self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False))
+        with self.assertRaisesRegex(ValueError, 'does not support web'):
+            self.call('message', request_id=row['request_id'], message_id=str(uuid4()), text='Continue')
+
 
 if __name__ == '__main__':
     unittest.main()

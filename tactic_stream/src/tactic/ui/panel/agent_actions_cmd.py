@@ -157,7 +157,7 @@ class AgentActionsCmd(AgentRequestCmd):
                                 types.append(kind)
                     command = FileCheckin(item, paths, file_types=types, context=process + '/' + metadata['name'],
                                           process=process, description='Agent attachment: ' + metadata['name'],
-                                          mode='create', source_paths=[str(source), *paths[1:]], keep_file_name=False)
+                                          mode='create', source_paths=paths, keep_file_name=False)
                     command.get_transaction().set_sync(False)
                     Command.execute_cmd(command)
                     snapshot = command.get_snapshot()

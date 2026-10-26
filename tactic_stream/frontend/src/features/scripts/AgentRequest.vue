@@ -103,6 +103,7 @@ async function request(action = 'refresh') {
               prompt: model.value.prompt,
               context: JSON.parse(JSON.stringify(model.value.context)),
               allow_changes: model.value.allowChanges,
+              allow_web: model.value.allowWeb,
               model: model.value.model ?? '',
               effort: model.value.effort ?? '',
               attachments: model.value.attachments.map(
@@ -136,6 +137,27 @@ async function request(action = 'refresh') {
       if (id !== generation) return;
       const wasActive = UI.active(model.value);
       model.value.request = current;
+      for (const file of current.messages?.flatMap(
+        (message) => message.attachments || []
+      ) || []) {
+        if (
+          !file.media_type.startsWith('image/') ||
+          file.attachment_id in previews.value
+        )
+          continue;
+        try {
+          const preview = await call(
+            'preview',
+            { attachment_id: file.attachment_id },
+            attachmentCommand
+          );
+          if (id !== generation) return;
+          previews.value[file.attachment_id] = preview.url;
+        } catch {
+          if (id !== generation) return;
+          previews.value[file.attachment_id] = '';
+        }
+      }
       if (wasActive && !UI.active(model.value))
         notify(
           current.status === 'completed' && current.outcome === 'completed'
@@ -169,10 +191,16 @@ function schedule() {
 }
 function event(action) {
   if (model.value.busy) return;
-  if (action.type === 'prompt' || action.type === 'changes') {
+  if (
+    action.type === 'prompt' ||
+    action.type === 'changes' ||
+    action.type === 'web'
+  ) {
     if (model.value.pending) return;
     if (action.type === 'prompt') model.value.prompt = action.value;
-    else model.value.allowChanges = !!action.value;
+    else if (action.type === 'changes')
+      model.value.allowChanges = !!action.value;
+    else model.value.allowWeb = !!action.value;
   } else if (action.type === 'select') {
     if (model.value.uploading) return;
     if (action.value !== model.value.selected) clearPreviews();

@@ -193,6 +193,23 @@ function drop(event, node) {
     if (!(error instanceof SyntaxError)) throw error;
   }
 }
+function sendArea(event, node) {
+  if (
+    !node.sendOnEnter ||
+    event.key !== 'Enter' ||
+    event.shiftKey ||
+    event.ctrlKey ||
+    event.altKey ||
+    event.metaKey ||
+    event.isComposing ||
+    event.keyCode === 229 ||
+    event.repeat ||
+    matchMedia('(max-width: 640px) and (pointer: coarse)').matches
+  )
+    return;
+  event.preventDefault();
+  send(node.sendAction);
+}
 function key(event, node) {
   if (event.isComposing || event.keyCode === 229) return;
   if (
@@ -679,6 +696,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :readonly="node.readOnly"
         :maxlength="node.maxLength"
         :disabled="!node.enabled"
+        @keydown="sendArea($event, node)"
         @update:model-value="send(node.action, $event)"
       />
       <ItemPreview

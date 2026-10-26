@@ -79,7 +79,9 @@ try {
   assert.ok(context.includes(project), context);
   assert.ok(context.includes('SH'), context);
   await dialog.getByLabel('What should the agent do?').fill(process.env.STREAM_AGENT_PROMPT || 'Explain the selected shots');
+  if (!live) await dialog.getByLabel('What should the agent do?').fill('');
   await dialog.getByRole('checkbox', { name: 'Allow requested changes' }).check();
+  if (!live) await dialog.getByRole('checkbox', { name: 'Allow web search' }).check();
   await dialog.getByRole('button', { name: 'Send to agent', exact: true }).tap();
   await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('queued') || document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('working') || document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('completed'));
   if (live) {
@@ -92,8 +94,16 @@ try {
     const host_id = process.env.STREAM_FIXTURE_HOST_ID;
     assert.ok(host_id);
     const claimed = (await fixtureCommand('claim', { host_id })).request;
+    await fixtureCommand('update', { host_id, request_id: claimed.request_id, event: 'ts_attachment_checkin: inProgress' });
+    await dialog.getByText('Checking in attached files · Working', { exact: true }).waitFor();
+    const activityBox = await dialog.locator('.agent-tool-progress').boundingBox();
+    const transcriptBox = await dialog.getByRole('log').boundingBox();
+    assert.ok(Math.abs((activityBox.x + activityBox.width / 2) - (transcriptBox.x + transcriptBox.width / 2)) < 20);
     assert.equal(claimed.model, 'fixture');
     assert.equal(claimed.effort, 'high');
+    assert.equal(claimed.document.prompt, '');
+    assert.equal(claimed.document.allow_web, true);
+    assert.equal(await dialog.locator('.agent-message-image').count(), 1);
     assert.ok(await dialog.getByRole('combobox', { name: 'Reasoning effort', exact: true }).isDisabled());
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('working'));
     await dialog.getByLabel('Add a correction while the agent works', { exact: true }).fill('Use the reference process');
@@ -115,6 +125,17 @@ try {
     const followup = await fixtureCommand('read', { request_id: claimed.request_id });
     assert.equal(followup.model, '');
     assert.equal(followup.effort, 'low');
+    await dialog.getByRole('button', { name: 'Cancel request', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('cancelled'));
+    const desktop = await page.context().newCDPSession(page);
+    await desktop.send('Emulation.setTouchEmulationEnabled', { enabled: false });
+    const prompt = dialog.getByLabel('What should the agent do?', { exact: true });
+    await prompt.fill('Keep a line');
+    await prompt.press('Shift+Enter');
+    assert.match(await prompt.inputValue(), /\n/);
+    await prompt.fill('Send with Enter');
+    await prompt.press('Enter');
+    await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('queued'));
     await dialog.getByRole('button', { name: 'Cancel request', exact: true }).click();
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('cancelled'));
   }
@@ -141,7 +162,7 @@ try {
   assert.deepEqual(errors, []);
   console.log('Native TS entry, context, touch submit, status, history/reopen and narrow geometry passed' + (live ? '; real external model completed' : ''));
 } catch(error) {
-  if(page) {
+  if(page && await page.locator('.agent-request-dialog').count()) {
     await writeFile(output + '/geometry.json', JSON.stringify(await page.locator('.agent-request-dialog').evaluate(element => [...element.querySelectorAll('.agent-request-body,.frame-view,[data-frame]')].slice(0,24).map(item => ({name:item.dataset.frame || item.className,box:item.getBoundingClientRect().toJSON(),style:item.getAttribute('style')}))),null,2));
     await page.screenshot({ path: output + '/failure.png' });
     await writeFile(output + '/failure.txt', await page.locator('body').innerText());

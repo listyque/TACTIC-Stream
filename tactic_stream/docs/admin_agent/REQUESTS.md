@@ -51,7 +51,8 @@ disables sending. Other external hosts may consume the same fixed Command
 contract without changing either UI; this shipped executor specifically uses
 Codex CLI and its existing authentication.
 
-The host disables shell, source edits, web and other apps, uses an empty working
+The host disables shell, source edits and other apps. Native web search is optional
+per conversation and disabled by default. The host uses an empty working
 directory and invocation-only MCP configuration; user MCP servers, plugins and hooks are disabled, and does not modify global
 Codex settings. Its tools are the existing [MCP operations](CONNECTION.md).
 Naming/page/project operations retain native revision/receipt checks. Add the
@@ -61,6 +62,21 @@ ordinary Script Editor; generated Python is never executed by the request UI
 or on the operator's Windows host.
 
 ## Native contract and ownership
+
+Messages accept empty text only when they contain finished, owner-scoped attachments.
+Image thumbnails use authenticated AgentAttachmentCmd.preview, which decodes a
+bounded JPEG thumbnail; originals remain immutable and available for native check-in.
+Do not embed attachment tickets in URLs. agent_context includes the conversation's
+attachment metadata, including files from follow-ups. Tool start/completion events
+and model commentary describe the current turn in the shared transcript column.
+
+The optional boolean `document.allow_web` is fixed before submitting a conversation,
+independent of TACTIC write permission. A host advertises `web_search`; the server
+rejects enabling it on an unsupported host. Codex uses native `web_search=live` only
+for an enabled conversation and permits its webSearch events. Other conversations
+retain disabled search; shell, source editing, apps and local file tools remain
+disabled. Search results are untrusted data. Search is not an arbitrary binary
+download/check-in API. The normal UI labels the choice **Allow web search**.
 
 The host discovers model-specific `efforts` and the configured default model through
 Codex `model/list` and `config/read`. Both clients offer **Reasoning effort** only

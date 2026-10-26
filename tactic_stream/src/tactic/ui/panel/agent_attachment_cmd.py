@@ -89,6 +89,24 @@ class AgentAttachmentCmd(Command):
                         raise ValueError('Attachment upload is incomplete')
                     with content.open('rb') as source:
                         metadata.update(ready=True, sha256=hashlib.file_digest(source, 'sha256').hexdigest())
+                elif action == 'preview':
+                    import io
+                    from PIL import Image, ImageOps
+                    attachment(code)
+                    if metadata['media_type'] not in ('image/png', 'image/jpeg', 'image/webp', 'image/gif'):
+                        raise ValueError('Choose an image attachment')
+                    try:
+                        with Image.open(content) as source:
+                            if source.width * source.height > 32_000_000:
+                                raise ValueError('Image exceeds the thumbnail pixel limit')
+                            source.thumbnail((320, 180))
+                            preview = ImageOps.exif_transpose(source).convert('RGB')
+                            output = io.BytesIO()
+                            preview.save(output, 'JPEG', quality=80)
+                    except (OSError, ValueError, Image.DecompressionBombError):
+                        raise ValueError('Image preview is unavailable') from None
+                    self.info = dict(url='data:image/jpeg;base64,' + base64.b64encode(output.getvalue()).decode())
+                    return
                 elif action == 'read':
                     attachment(code)
                     offset = self.kwargs.get('offset', 0)

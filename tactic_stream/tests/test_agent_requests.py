@@ -166,6 +166,34 @@ class AgentRequests(unittest.TestCase):
             self.assertEqual(codex_executable(), 'unix-codex')
             which.assert_called_once_with('codex')
 
+    def test_idle_host_survives_a_connection_interruption_without_replaying_work(self):
+        from tactic_stream import agent_host
+        from tactic_stream.admin_agent import ConnectionUnavailable
+        from unittest.mock import Mock
+        connection = Mock()
+        attempts = []
+        def command(owner, action, **values):
+            if action == 'claim':
+                attempts.append(action)
+                if len(attempts) == 1:
+                    raise ConnectionUnavailable('offline')
+                return dict(request=None)
+            return {}
+        connection.command.side_effect = command
+        with (
+            patch.object(sys, 'argv', ['agent_host', '--server', 'http://example.invalid',
+                '--project', 'one', '--stream-root', str(ROOT)]),
+            patch.dict(os.environ, TACTIC_AGENT_TICKET='private-fixture'),
+            patch.object(agent_host, 'StreamConnection', return_value=connection),
+            patch.object(agent_host, 'model_catalog', return_value=[]),
+            patch.object(agent_host, 'codex_executable', return_value='fixture'),
+            patch.object(agent_host.time, 'sleep', side_effect=[None, KeyboardInterrupt]),
+            patch.object(agent_host, 'run_request') as run,
+        ):
+            agent_host.main()
+        self.assertEqual(attempts, ['claim', 'claim'])
+        run.assert_not_called()
+
     def test_followup_clears_the_previous_provider_error(self):
         request, _ = self.submit()
         self.call('claim', host_id=self.host)

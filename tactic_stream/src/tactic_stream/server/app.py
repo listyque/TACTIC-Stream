@@ -277,7 +277,10 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             script_error = error
         except (ValueError, TypeError, LookupError, TacticException) as error:
             status, code, message = 400, "invalid_request", "Check the project, object type and search parameters."
-            if sdk:
+            if sdk or (method == 'execute_cmd' and isinstance(args, list) and len(args) > 1 and args[1] in (
+                    'tactic.ui.panel.agent_actions_cmd.AgentActionsCmd',
+                    'tactic.ui.panel.agent_request_cmd.AgentRequestCmd',
+                    'tactic.ui.panel.agent_attachment_cmd.AgentAttachmentCmd')):
                 message = str(error)
             script_error = error
         except sqlite3.OperationalError:

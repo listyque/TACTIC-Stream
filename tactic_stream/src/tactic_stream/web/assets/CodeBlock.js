@@ -4062,6 +4062,22 @@ function reduce(previous, event, model, viewport) {
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
 	"Allow requested changes": "Разрешить запрошенные изменения",
+	"Allow web search": "Разрешить поиск в интернете",
+	Working: "В работе",
+	Attachments: "Вложения",
+	"Reading conversation context": "Читаю контекст беседы",
+	"Checking available tools": "Проверяю доступные инструменты",
+	"Reading TACTIC documentation": "Читаю документацию Тактика",
+	"Reading selected objects": "Читаю выделенные объекты",
+	"Reading project objects": "Читаю объекты проекта",
+	"Reading workflows": "Читаю пайплайны",
+	"Saving workflow": "Сохраняю пайплайн",
+	"Checking in attached files": "Регистрирую приложенные файлы",
+	"Checking saved changes": "Проверяю сохранённые изменения",
+	"Reading naming rules": "Читаю правила нейминга",
+	"Checking file naming": "Проверяю имена файлов",
+	"Viewing attached image": "Просматриваю приложенное изображение",
+	"Searching the web": "Ищу в интернете",
 	"New conversation": "Новый чат",
 	Conversation: "Переписка",
 	"Context details": "Подробности контекста",
@@ -9810,6 +9826,11 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				if (!(error instanceof SyntaxError)) throw error;
 			}
 		}
+		function sendArea(event, node) {
+			if (!node.sendOnEnter || event.key !== "Enter" || event.shiftKey || event.ctrlKey || event.altKey || event.metaKey || event.isComposing || event.keyCode === 229 || event.repeat || matchMedia("(max-width: 640px) and (pointer: coarse)").matches) return;
+			event.preventDefault();
+			send(node.sendAction);
+		}
 		function key(event, node) {
 			if (event.isComposing || event.keyCode === 229) return;
 			if (node.tableCell && (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)) return;
@@ -10316,6 +10337,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					readonly: node.readOnly,
 					maxlength: node.maxLength,
 					disabled: !node.enabled,
+					onKeydown: ($event) => sendArea($event, node),
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, null, 8, [
 					"data-frame",
@@ -10331,6 +10353,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"readonly",
 					"maxlength",
 					"disabled",
+					"onKeydown",
 					"onUpdate:modelValue"
 				])) : node.kind === "Preview" ? (openBlock(), createBlock(ItemPreview_default, {
 					key: 10,

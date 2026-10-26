@@ -117,6 +117,12 @@ const messageStyle = (row) => {
         :key="file.attachment_id"
         class="agent-message-file"
       >
+        <img
+          v-if="previews?.[file.attachment_id]"
+          class="agent-message-image"
+          :src="previews[file.attachment_id]"
+          :alt="file.name"
+        />
         <AppButton
           :label="file.name"
           icon="attach-file"
@@ -132,7 +138,11 @@ const messageStyle = (row) => {
         >{{ t('Correction queued') }}</small
       >
     </article>
-    <details v-if="frameNode.events?.length" class="agent-tool-progress">
+    <details
+      v-if="frameNode.events?.length"
+      class="agent-tool-progress"
+      :open="frameNode.active"
+    >
       <summary>
         {{
           t(
@@ -228,16 +238,25 @@ const messageStyle = (row) => {
   line-height: 20px;
 }
 .agent-message-file {
-  height: 28px;
+  min-height: 28px;
   font-size: 12px;
   overflow: hidden;
+}
+.agent-message-image {
+  display: block;
+  width: min(320px, 100%);
+  height: 144px;
+  object-fit: contain;
+  object-position: left center;
 }
 .agent-message-file button {
   height: 26px;
   max-width: 100%;
 }
 .agent-tool-progress {
-  margin: 4px 16px 12px;
+  width: min(800px, calc(100% - 32px));
+  margin: 4px auto 12px;
+  overflow-wrap: anywhere;
   color: var(--muted);
   font-size: 12px;
 }

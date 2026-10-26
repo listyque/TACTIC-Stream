@@ -15,6 +15,7 @@ function initial(context = {}) {
 		context,
 		prompt: "",
 		allowChanges: false,
+		allowWeb: false,
 		hosts: [],
 		requests: [],
 		selected: "",
@@ -42,7 +43,7 @@ function host(model) {
 }
 function canSend(model) {
 	const connected = host(model);
-	return !model.busy && !model.uploading && !!model.context?.project && !!model.prompt.trim() && model.prompt.length <= 12e3 && !!connected && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
+	return !model.busy && !model.uploading && !!model.context?.project && (!!model.prompt.trim() || !!model.attachments.length) && model.prompt.length <= 12e3 && !!connected && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
 }
 function selectedModel(model) {
 	const id = model.model ?? model.request?.model ?? "";
@@ -67,6 +68,33 @@ function messages(model) {
 		attachments: []
 	}] : []);
 }
+function activity(model, language) {
+	const names = {
+		agent_context: "Reading conversation context",
+		agent_capabilities: "Checking available tools",
+		reference_read: "Reading TACTIC documentation",
+		agent_selection: "Reading selected objects",
+		ts_records: "Reading project objects",
+		ts_workflow_read: "Reading workflows",
+		ts_workflow_apply: "Saving workflow",
+		ts_attachment_checkin: "Checking in attached files",
+		ts_edit_operation: "Checking saved changes",
+		ts_naming_read: "Reading naming rules",
+		ts_naming_preview: "Checking file naming",
+		agent_attachment_image: "Viewing attached image",
+		webSearch: "Searching the web"
+	};
+	const events = model.request?.events || [];
+	return events.slice(events.lastIndexOf("External agent started") + 1).map((event) => {
+		const match = event.match(/^([a-zA-Z_]+): (inProgress|completed|failed)$/);
+		if (!match) return event;
+		return translate(names[match[1]] || match[1], language) + " · " + translate({
+			inProgress: "Working",
+			completed: "Done",
+			failed: "Failed"
+		}[match[2]], language);
+	});
+}
 function safeMarkdown(text) {
 	return String(text || "").replace(/<[^>]*>/g, (value) => value.replace(/</g, "&lt;").replace(/>/g, "&gt;")).replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/!\[/g, "[");
 }
@@ -77,8 +105,11 @@ function messageGeometry(width, role, bodyHeight, attachments) {
 		x: (width - inner) / 2 + (role === "user" ? inner - bubbleWidth : 0),
 		width: bubbleWidth,
 		padding,
-		height: padding * 2 + Math.max(20, bodyHeight) + attachments * metrics.attachmentHeight
+		height: padding * 2 + Math.max(20, bodyHeight) + (Array.isArray(attachments) ? attachments.reduce((height, file) => height + attachmentHeight(file), 0) : attachments * metrics.attachmentHeight)
 	};
+}
+function attachmentHeight(file) {
+	return /^image\/(png|jpeg|webp|gif)$/.test(file.media_type || "") ? 172 : metrics.attachmentHeight;
 }
 function contextItems(context, language) {
 	const tr = (text) => translate(text, language);
@@ -139,9 +170,9 @@ function describe(model, width, height, language) {
 	const inset = metrics.inset, inner = Math.max(0, width - inset * 2), narrow = width < 640, connected = host(model);
 	const composerWidth = Math.min(880, inner), composerX = (width - composerWidth) / 2;
 	const contextHeight = model.contextExpanded ? 122 : 38;
-	const composerHeight = 158 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0);
+	const composerHeight = 188 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0);
 	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? Math.max(80, (composerWidth - 32) / 2) : 200;
-	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim();
+	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim() || !!model.attachments.length;
 	const nodes = [
 		node("Choice", "agentRequestHistory", rect(inset, 10, Math.max(70, inner - 88), 32), {
 			label: tr("Agent requests"),
@@ -152,7 +183,7 @@ function describe(model, width, height, language) {
 				label: tr("New conversation")
 			}, ...(model.requests || []).map((row) => ({
 				value: row.request_id,
-				label: row.prompt
+				label: row.prompt === "Attachments" ? tr("Attachments") : row.prompt
 			}))],
 			action: { type: "select" }
 		}),
@@ -172,7 +203,7 @@ function describe(model, width, height, language) {
 		node("View", "agentRequestOutput", rect(0, 84, width, Math.max(70, composerTop - 96)), {
 			view: "transcript",
 			messages: messages(model),
-			events: (current.events || []).filter((text) => /^[a-z_]+:/.test(text)).slice(-4),
+			events: activity(model, language),
 			active: working
 		}),
 		node("Box", "agentComposerSurface", rect(composerX, composerTop, composerWidth, height - composerTop - 12), {
@@ -193,14 +224,22 @@ function describe(model, width, height, language) {
 			flat: true,
 			readOnly: !!model.pending,
 			enabled: !model.busy,
+			sendOnEnter: true,
+			sendAction: { type: "send" },
 			action: { type: "prompt" }
 		}),
-		node("CheckBox", "agentRequestChanges", rect(composerX + 16, height - 84 - (narrow ? 40 : 0), Math.max(0, composerWidth - 32), 26), {
+		node("CheckBox", "agentRequestChanges", rect(composerX + 16, height - 114 - (narrow ? 40 : 0), Math.max(0, composerWidth - 32), 26), {
 			text: tr("Allow requested changes"),
 			wrapText: true,
 			checked: current.document?.allow_changes ?? model.allowChanges,
 			enabled: !model.busy && !model.selected && !model.pending,
 			action: { type: "changes" }
+		}),
+		node("CheckBox", "agentRequestWeb", rect(composerX + 16, height - 84 - (narrow ? 40 : 0), Math.max(0, composerWidth - 32), 26), {
+			text: tr("Allow web search"),
+			checked: current.document?.allow_web ?? model.allowWeb,
+			enabled: !model.busy && !model.selected && !model.pending && !!connected?.capabilities.web_search,
+			action: { type: "web" }
 		}),
 		button("agentRequestAttach", rect(composerX + 12, height - 52, 32, 32), tr("Attach files"), "add", { type: "attach" }, !model.uploading && !model.pending && !model.busy, { iconOnly: true }),
 		button("agentRequestPaste", rect(composerX + 50, height - 52, 32, 32), tr("Paste attachment"), "content-paste", { type: "paste" }, !model.uploading && !model.pending && !model.busy, { iconOnly: true })
@@ -246,7 +285,7 @@ function describe(model, width, height, language) {
 		}))],
 		action: { type: "effort" }
 	}));
-	if (model.attachments.length) nodes.push(node("View", "agentRequestAttachments", rect(composerX + 12, height - 126 - (narrow ? 40 : 0), composerWidth - 24, 36), {
+	if (model.attachments.length) nodes.push(node("View", "agentRequestAttachments", rect(composerX + 12, height - 156 - (narrow ? 40 : 0), composerWidth - 24, 36), {
 		view: "attachments",
 		files: model.attachments
 	}));
@@ -278,11 +317,9 @@ var _hoisted_10 = {
 	key: 0,
 	class: "agent-chat-empty"
 };
-var _hoisted_11 = { key: 0 };
-var _hoisted_12 = {
-	key: 1,
-	class: "agent-tool-progress"
-};
+var _hoisted_11 = ["src", "alt"];
+var _hoisted_12 = { key: 0 };
+var _hoisted_13 = ["open"];
 var _sfc_main$1 = {
 	__name: "AgentChatPort",
 	props: {
@@ -378,7 +415,12 @@ var _sfc_main$1 = {
 							return openBlock(), createElementBlock("div", {
 								key: file.attachment_id,
 								class: "agent-message-file"
-							}, [createVNode(_sfc_main$3, {
+							}, [__props.previews?.[file.attachment_id] ? (openBlock(), createElementBlock("img", {
+								key: 0,
+								class: "agent-message-image",
+								src: __props.previews[file.attachment_id],
+								alt: file.name
+							}, null, 8, _hoisted_11)) : createCommentVNode("", true), createVNode(_sfc_main$3, {
 								label: file.name,
 								icon: "attach-file",
 								onClick: ($event) => emit("event", {
@@ -387,12 +429,16 @@ var _sfc_main$1 = {
 								})
 							}, null, 8, ["label", "onClick"])]);
 						}), 128)),
-						__props.frameNode.active && row.role === "user" && row.delivered === false ? (openBlock(), createElementBlock("small", _hoisted_11, toDisplayString(unref(t)("Correction queued")), 1)) : createCommentVNode("", true)
+						__props.frameNode.active && row.role === "user" && row.delivered === false ? (openBlock(), createElementBlock("small", _hoisted_12, toDisplayString(unref(t)("Correction queued")), 1)) : createCommentVNode("", true)
 					], 6);
 				}), 128)),
-				__props.frameNode.events?.length ? (openBlock(), createElementBlock("details", _hoisted_12, [createBaseVNode("summary", null, toDisplayString(unref(t)(__props.frameNode.active ? "Working with TACTIC tools…" : "Operation details")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.events, (step, index) => {
+				__props.frameNode.events?.length ? (openBlock(), createElementBlock("details", {
+					key: 1,
+					class: "agent-tool-progress",
+					open: __props.frameNode.active
+				}, [createBaseVNode("summary", null, toDisplayString(unref(t)(__props.frameNode.active ? "Working with TACTIC tools…" : "Operation details")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.events, (step, index) => {
 					return openBlock(), createElementBlock("div", { key: index }, toDisplayString(step), 1);
-				}), 128))])) : createCommentVNode("", true)
+				}), 128))], 8, _hoisted_13)) : createCommentVNode("", true)
 			], 8, _hoisted_9));
 		};
 	}
@@ -474,6 +520,7 @@ var _sfc_main = {
 							prompt: model.value.prompt,
 							context: JSON.parse(JSON.stringify(model.value.context)),
 							allow_changes: model.value.allowChanges,
+							allow_web: model.value.allowWeb,
 							model: model.value.model ?? "",
 							effort: model.value.effort ?? "",
 							attachments: model.value.attachments.map((file) => file.attachment_id)
@@ -501,6 +548,17 @@ var _sfc_main = {
 					if (id !== generation) return;
 					const wasActive = active(model.value);
 					model.value.request = current;
+					for (const file of current.messages?.flatMap((message) => message.attachments || []) || []) {
+						if (!file.media_type.startsWith("image/") || file.attachment_id in previews.value) continue;
+						try {
+							const preview = await call("preview", { attachment_id: file.attachment_id }, attachmentCommand);
+							if (id !== generation) return;
+							previews.value[file.attachment_id] = preview.url;
+						} catch {
+							if (id !== generation) return;
+							previews.value[file.attachment_id] = "";
+						}
+					}
 					if (wasActive && !active(model.value)) notify(current.status === "completed" && current.outcome === "completed" ? "complete" : "warning", status(model.value, appearance.language).text, model.value.context.title || model.value.context.project, "agent-request", current.request_id + ":" + current.turn);
 				}
 			} catch (error) {
@@ -523,10 +581,11 @@ var _sfc_main = {
 		}
 		function event(action) {
 			if (model.value.busy) return;
-			if (action.type === "prompt" || action.type === "changes") {
+			if (action.type === "prompt" || action.type === "changes" || action.type === "web") {
 				if (model.value.pending) return;
 				if (action.type === "prompt") model.value.prompt = action.value;
-				else model.value.allowChanges = !!action.value;
+				else if (action.type === "changes") model.value.allowChanges = !!action.value;
+				else model.value.allowWeb = !!action.value;
 			} else if (action.type === "select") {
 				if (model.value.uploading) return;
 				if (action.value !== model.value.selected) clearPreviews();

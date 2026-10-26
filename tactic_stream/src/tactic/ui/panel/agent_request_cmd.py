@@ -89,8 +89,9 @@ class AgentRequestCmd(Command):
         if action == 'heartbeat':
             host_id = identity(self.kwargs.get('host_id'))
             capabilities = self.kwargs.get('capabilities')
-            if (not isinstance(capabilities, dict) or set(capabilities) - {'changes', 'trials', 'models', 'steering', 'attachments'}
-                    or any(type(capabilities.get(key)) is not bool for key in ('changes', 'trials'))):
+            if (not isinstance(capabilities, dict) or set(capabilities) - {'changes', 'trials', 'models', 'steering', 'attachments', 'web_search'}
+                    or any(type(capabilities.get(key)) is not bool for key in ('changes', 'trials'))
+                    or type(capabilities.get('web_search', False)) is not bool):
                 raise ValueError('Invalid host capabilities')
             models = capabilities.get('models', [])
             if (not isinstance(models, list) or len(models) > 100 or any(
@@ -112,15 +113,17 @@ class AgentRequestCmd(Command):
             for row in requests:
                 self.expire(row)
             self.info = dict(hosts=hosts, requests=[dict(request_id=row['request_id'],
-                prompt=row['document']['prompt'][:120], status=row['status']) for row in requests[:30]])
+                prompt=(row['document']['prompt'] or 'Attachments')[:120], status=row['status']) for row in requests[:30]])
             return
         if action == 'submit':
             request_id = identity(self.kwargs.get('request_id'))
             document = self.kwargs.get('document')
-            if (not isinstance(document, dict) or set(document) - {'prompt', 'context', 'allow_changes', 'attachments', 'model', 'effort'}
+            if (not isinstance(document, dict) or set(document) - {'prompt', 'context', 'allow_changes', 'attachments', 'model', 'effort', 'allow_web'}
                     or not {'prompt', 'context', 'allow_changes'} <= set(document)):
                 raise ValueError('Invalid agent request document')
-            text(document['prompt'], 12000)
+            text(document['prompt'], 12000, empty=True)
+            if type(document.get('allow_web', False)) is not bool:
+                raise ValueError('Invalid web search permission')
             if type(document['allow_changes']) is not bool:
                 raise ValueError('Invalid change permission')
             old = self.load('spt_agent_request', request_id, missing=True)
@@ -135,8 +138,12 @@ class AgentRequestCmd(Command):
                 raise ValueError('External agent is offline')
             if document['allow_changes'] and not host['capabilities']['changes']:
                 raise ValueError('This host only allows reading and previews')
+            if document.get('allow_web') and not host['capabilities'].get('web_search'):
+                raise ValueError('This agent does not support web search')
             self.check_model(host, document.get('model', ''), document.get('effort', ''))
             attachments = self.check_attachments(document.get('attachments', []))
+            if not document['prompt'].strip() and not attachments:
+                raise ValueError('Write a message or attach a file')
             if sum(row['status'] in ACTIVE for row in self.records('spt_agent_request')) >= 5:
                 raise ValueError('Wait for an existing agent request to finish')
             row = dict(request_id=request_id, document=document, host_id=host['host_id'],
@@ -200,8 +207,10 @@ class AgentRequestCmd(Command):
                 if row['status'] == 'cancelling':
                     raise ValueError('Wait until the current turn stops before continuing')
                 message_id = identity(self.kwargs.get('message_id'))
-                message = dict(id=message_id, role='user', text=text(self.kwargs.get('text'), 12000),
+                message = dict(id=message_id, role='user', text=text(self.kwargs.get('text'), 12000, empty=True),
                                attachments=self.check_attachments(self.kwargs.get('attachments', [])), delivered=False)
+                if not message['text'].strip() and not message['attachments']:
+                    raise ValueError('Write a message or attach a file')
                 if 'messages' not in row:
                     row['messages'] = [dict(id=row['request_id'], role='user', text=row['document']['prompt'], attachments=[], delivered=True)]
                     if row.get('answer'):
@@ -225,6 +234,8 @@ class AgentRequestCmd(Command):
                 host = self.load('spt_agent_host', identity(host_id))
                 if row['document']['allow_changes'] and not host['capabilities']['changes']:
                     raise ValueError('This host only allows reading and previews')
+                if row['document'].get('allow_web') and not host['capabilities'].get('web_search'):
+                    raise ValueError('This agent does not support web search')
                 if self.now - host['seen'] > HOST_TTL:
                     raise ValueError('External agent is offline')
                 if row['status'] == 'running' and not host['capabilities'].get('steering'):
