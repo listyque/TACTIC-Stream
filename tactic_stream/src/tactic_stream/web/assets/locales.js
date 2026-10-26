@@ -1602,7 +1602,9 @@ var en_default = {
 	"Conversation folder is unavailable": "Conversation folder is unavailable",
 	"Use at most 100 conversation folders": "Use at most 100 conversation folders",
 	"Conversation view": "Conversation view",
-	"Back to conversations": "Back to conversations"
+	"Back to conversations": "Back to conversations",
+	"Reading tasks": "Reading tasks",
+	"Updating task statuses": "Updating task statuses"
 };
 var ru_default = {
 	"Stale source": "Исходник изменился",
@@ -6746,7 +6748,9 @@ var ru_default = {
 	"Conversation folder is unavailable": "Папка бесед недоступна",
 	"Use at most 100 conversation folders": "Можно создать не более 100 папок бесед",
 	"Conversation view": "Вид бесед",
-	"Back to conversations": "Вернуться к беседам"
+	"Back to conversations": "Вернуться к беседам",
+	"Reading tasks": "Чтение задач",
+	"Updating task statuses": "Изменение статусов задач"
 };
 //#endregion
 export { en_default as n, ru_default as t };

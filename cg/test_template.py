@@ -63,6 +63,11 @@ def check():
         assert all(edge.get(key) in expected for key in ('from', 'to')), edge.attrib
         assert edge.get('instance_type', 'cg/assets') in expected, edge.attrib
     project = next(records((root / 'sthpw_project.spt').read_text(encoding='utf-8')))
+    pipeline = next(row for row in records((root / 'sthpw_pipeline.spt').read_text(encoding='utf-8'))
+                    if row.get('code') == 'niki_friends/assets')
+    graph = ET.fromstring(pipeline['pipeline'])
+    processes = {node.get('name') for node in graph.findall('process')}
+    assert all(edge.get(key) in processes for edge in graph.findall('connect') for key in ('from','to'))
     project_type = next(records((root / 'sthpw_project_type.spt').read_text(encoding='utf-8')))
     assert project['type'] == project_type['code'] == 'cg'
     print('OK: 8 cg types, filenames, namespace metadata, schema links and script references')

@@ -41,6 +41,10 @@ class AgentActionsCmd(AgentRequestCmd):
         self.sql.get_database_impl().lock_collection_table(self.sql, 'spt_agent_request')
         row = self.load('spt_agent_request', identity(self.kwargs.get('request_id')))
         action = self.kwargs.get('action')
+        if action == 'tasks_read':
+            from tactic_stream.server.agent_tasks import read_tasks
+            self.info = read_tasks(self.kwargs, row)
+            return
         if action == 'operation':
             receipt = row.get('operations', {}).get(identity(self.kwargs.get('operation_id')))
             self.info = dict(status='applied', result=receipt['result']) if receipt else dict(status='not_found')
@@ -101,21 +105,28 @@ class AgentActionsCmd(AgentRequestCmd):
             self.info = dict(objects=[dict(item.get_data(), __search_key__=item.get_search_key(), revision=digest(item.get_data())) for item in query.get_sobjects()])
             return
         payload = {key: value for key, value in self.kwargs.items() if key not in ('operation_id', 'project_code')}
-        if action not in ('workflow_apply', 'checkin', 'link', 'create', 'patch'):
+        if action not in ('workflow_apply', 'checkin', 'link', 'create', 'patch', 'task_status'):
             raise ValueError('This agent operation is unavailable on the running server')
         operation_id = (str(uuid5(UUID(row['request_id']), json.dumps(payload, sort_keys=True)))
-                        if action == 'link' else identity(self.kwargs.get('operation_id')))
+                        if action in ('link', 'task_status') else identity(self.kwargs.get('operation_id')))
         receipts = row.setdefault('operations', {})
         if operation_id in receipts and action != 'link':
             old = receipts[operation_id]
             if old['digest'] != digest(payload):
                 raise ValueError('Operation ID already has different contents')
-            self.info = old['result']
+            if action == 'task_status':
+                from tactic_stream.server.agent_tasks import verified_statuses
+                self.info = verified_statuses(self.kwargs.get('changes'))
+            else:
+                self.info = old['result']
             return
         if not row['document']['allow_changes'] or row['status'] != 'running':
             raise ValueError('This conversation does not authorize active changes')
         undo = None
-        if action == 'workflow_apply':
+        if action == 'task_status':
+            from tactic_stream.server.agent_tasks import save_statuses
+            result = save_statuses(self.kwargs.get('changes'))
+        elif action == 'workflow_apply':
             reader = AgentActionsCmd(**dict(self.kwargs, action='workflow_read'))
             reader.execute()
             state = reader.info

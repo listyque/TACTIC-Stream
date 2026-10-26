@@ -6523,7 +6523,7 @@ insert.set_value('script', """from pyasm.search import Search, SearchKey
 
 # adding initial task for added Episode
 
-server.set_project('dolly3d')
+server.set_project(server.get_project())
 
 search_code = input['sobject'].get('search_code')
 search_type = input['sobject'].get('search_type')
@@ -6540,7 +6540,7 @@ def get_uncomplete_assets(search_code):
     else:
         return 'none'
 
-if search_key and search_type == 'cg/scenes?project=dolly3d':
+if search_key and search_type == 'cg/scenes?project={}'.format(server.get_project()):
     
     related_sobject = SearchKey.get_by_search_key(search_key)
     current_pipeline = related_sobject.get_value('pipeline_code')
@@ -6580,14 +6580,14 @@ insert.set_value('script', """from pyasm.search import Search, SearchKey
 from pyasm.biz import Task
 # adding initial task for added Episode
 
-server.set_project('dolly3d')
+server.set_project(server.get_project())
 
 search_code = input['sobject'].get('search_code')
 search_type = input['sobject'].get('search_type')
 
 search_key = server.build_search_key(search_type, search_code)
 
-if search_key and search_type == 'cg/scenes?project=dolly3d':
+if search_key and search_type == 'cg/scenes?project={}'.format(server.get_project()):
     
     assigned_user = input['sobject'].get('assigned')
     
@@ -6723,7 +6723,7 @@ insert.set_value('script', """from pyasm.search import Search, SearchKey
 
 # adding initial task for added Episode
 
-server.set_project('dolly3d')
+server.set_project(server.get_project())
 
 search_code = input['sobject'].get('search_code')
 search_type = input['sobject'].get('search_type')
@@ -6741,7 +6741,7 @@ def get_uncomplete_assets(search_code):
         return 'none'
 
 
-if search_key and search_type == 'cg/scenes?project=dolly3d':
+if search_key and search_type == 'cg/scenes?project={}'.format(server.get_project()):
     
     related_sobject = SearchKey.get_by_search_key(search_key)
     current_pipeline = related_sobject.get_value('pipeline_code')
@@ -6814,14 +6814,14 @@ from pyasm.biz import Task
 from pyasm.common import SPTDate
 # setting up start date for the tasks if it is not set
 
-server.set_project('dolly3d')
+server.set_project(server.get_project())
 
 search_code = input['sobject'].get('search_code')
 search_type = input['sobject'].get('search_type')
 
 search_key = server.build_search_key(search_type, search_code)
 
-if search_key and search_type == 'cg/scenes?project=dolly3d':
+if search_key and search_type == 'cg/scenes?project={}'.format(server.get_project()):
 
     assigned_user = input['sobject'].get('assigned')    
     

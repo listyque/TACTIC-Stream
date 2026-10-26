@@ -21,7 +21,6 @@ insert.set_value('pipeline', """<pipeline>
   <process name="publish" type="manual" xpos="708" ypos="106" task_pipeline="niki_friends/publish" completion="100" assigned_login_group="rigger" supervisor_login_group="supervisor" process_code="SPT_PROCESS00166" color="#44d8fd"/>
   <process name="cache" type="manual" xpos="714" ypos="190" process_code="SPT_PROCESS00238" color="#4d3e2e"/>
   <connect from="rig" to="publish"/>
-  <connect from="model" to="texture"/>
 </pipeline>
 """)
 insert.set_value('project_code', """niki_friends""")

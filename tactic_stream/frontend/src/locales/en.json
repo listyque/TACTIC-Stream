@@ -1602,5 +1602,7 @@
   "Conversation folder is unavailable": "Conversation folder is unavailable",
   "Use at most 100 conversation folders": "Use at most 100 conversation folders",
   "Conversation view": "Conversation view",
-  "Back to conversations": "Back to conversations"
+  "Back to conversations": "Back to conversations",
+  "Reading tasks": "Reading tasks",
+  "Updating task statuses": "Updating task statuses"
 }

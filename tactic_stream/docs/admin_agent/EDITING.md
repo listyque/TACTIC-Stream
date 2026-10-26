@@ -1,9 +1,33 @@
-# Existing project entities, workflows and attached files
+# Existing project entities, tasks, workflows and attached files
 
 Owner: TS server. These operations use native TACTIC Commands and are also
 visible in TH. They do not execute TH desktop hooks or scripts.
 Available only in a host-bound user conversation; writes require its original
 allow_changes authorization and the host's --allow-project-edit capability.
+
+## Ordinary task status changes
+
+`sthpw/task` has dedicated tools; it is not an ordinary project entity type.
+`ts_tasks_read()` reads tasks of the captured selected objects. For tasks of an
+episode's linked assets, pass `related_type` with the actual asset Search Type;
+the server resolves the native schema relationship. Optional `search_keys` reads
+explicit project objects or task keys. Read 50 tasks per page; advance `offset`
+while `has_next`. The response contains parent display names, process/context,
+current status, exact revisions and deduplicated native status workflows with
+labels, completion/mapping and graph connections. Derive a final status from
+these definitions and terminal nodes; do not ask the user to inspect an
+unambiguous graph. Choose the offered status matching the user's intent rather
+than inventing a "done" status or confusing task status with asset status.
+
+Call `ts_task_status_set(changes)` once for up to 200 existing tasks, each with
+`task_key`, `status`, `expected_revision` from the read. No public UUID is needed.
+This uses the same `TaskTableEditCmd` as TH/TS tables: the whole packet is checked
+before writing; native ACLs, revisions, status journals, completion and workflow
+triggers remain in force. It does not create missing tasks. Returns verified
+persisted statuses; no redundant read/manual scan is needed after success.
+Exact retry is a no-op; a later conflicting user edit refuses replay. This
+operation is outside the field-only Undo button. Server owner:
+`src/tactic_stream/server/agent_tasks.py`; TH displays the resulting ordinary tasks.
 
 1. Read agent_context and agent_selection. Read ts_records(search_type, filters)
    for actual entity fields/identities and revisions. Exact scalar filters,
