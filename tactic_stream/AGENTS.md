@@ -1,5 +1,10 @@
 # TACTIC Stream
 
+- Catalogs, navigation and conversation history use plain compact rows and quiet
+  group captions. Do not give every row a filled rounded background or render
+  headings as pills. Emphasize selection, hover and keyboard focus; secondary
+  row actions appear on hover/focus and remain explicit on touch devices.
+
 - Organize Tactic Frame into `core`, `controls`, `shell`, `features/<section>`;
   the source map and reading rules are in `src/tactic_stream/shared_ui/README.md`.
   Format shared modules, Vue renderers, styles and administration adapters with

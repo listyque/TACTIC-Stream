@@ -595,7 +595,7 @@ function row(listNode, record, model, ui, language) {
 			text: record.label,
 			selected: model.identity === record.identity,
 			enabled: !model.busy && (model.identity === record.identity || !model.dirty && !model.uncertain && !model.namingLocked),
-			normalColor: "surfaceContainerHigh",
+			normalColor: "transparent",
 			selectedColor: "contentSelection",
 			children: [
 				node("Icon", "typeIcon_" + record.identity, rect(10, 12, 22, 22), {

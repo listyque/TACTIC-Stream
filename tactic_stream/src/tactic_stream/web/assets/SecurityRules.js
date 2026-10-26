@@ -547,7 +547,7 @@ function row(listNode, record, model, ui, language) {
 		text: title(record, model, language),
 		selected: model.selected === index,
 		rail: true,
-		normalColor: "surfaceContainerLow",
+		normalColor: "transparent",
 		selectedColor: "selected",
 		enabled: navigate,
 		action: {

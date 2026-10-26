@@ -18,6 +18,18 @@
 .frame-box {
   overflow: hidden;
 }
+.frame-row > .frame-secondary-action {
+  opacity: 0;
+}
+.frame-row:hover > .frame-secondary-action,
+.frame-row:focus-within > .frame-secondary-action {
+  opacity: 1;
+}
+@media (hover: none) {
+  .frame-row > .frame-secondary-action {
+    opacity: 1;
+  }
+}
 .frame-label {
   display: block;
   white-space: nowrap;

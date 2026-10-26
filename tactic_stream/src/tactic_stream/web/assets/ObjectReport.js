@@ -370,7 +370,7 @@ function row(kind, record, width, index, language) {
 		height,
 		nodes: [node("Action", "objectReportRow_" + kind + "_" + index, rect(0, 0, width, height), {
 			text: title || subtitle || "",
-			normalColor: "surfaceContainerHigh",
+			normalColor: "transparent",
 			radius: 0,
 			action: {
 				type: kind,
@@ -966,7 +966,7 @@ function describe(model, width, language) {
 		const inner = Math.max(0, width - 16), expanded = !!(model.expanded || {})[group.value], children = [];
 		children.push(node("Action", "objectSnapshotProcess_" + index, rect(8, 8, inner, 62), {
 			text: group.label,
-			normalColor: "surfaceContainerHigh",
+			normalColor: "transparent",
 			radius: 12,
 			action: {
 				type: "expand",
@@ -1010,7 +1010,7 @@ function describe(model, width, language) {
 			(group.snapshots || []).forEach((snapshot, row) => {
 				children.push(node("Action", "objectReportSnapshot_" + index + "_" + row, rect(8, top, inner, 72), {
 					text: snapshot.title,
-					normalColor: "surfaceContainerHigh",
+					normalColor: "transparent",
 					radius: 12,
 					action: {
 						type: "snapshot",

@@ -204,6 +204,8 @@ class AgentRequests(unittest.TestCase):
         self.assertEqual(current['error'], '')
 
     def test_owner_and_administrator_permission_and_disconnect(self):
+        state=self.call('state')
+        self.call('group_save',group='',name='Private folder',expected_revision=state['groups_revision'])
         saved, _ = self.submit()
         from pyasm.security.authenticator import hash_password
         self.api.dispatch('insert', (self.auth, 'sthpw/login', dict(login='agent_reader', password=hash_password('private-reader-password'))))
@@ -216,7 +218,10 @@ class AgentRequests(unittest.TestCase):
         with patch('tactic.ui.panel.agent_request_cmd._require_admin'), patch.object(Api, 'check_method_access'):
             with self.assertRaisesRegex(ValueError, 'unavailable'):
                 self.call('read', request_id=saved['request_id'])
-            self.assertEqual(self.call('state'), dict(hosts=[], requests=[]))
+            private_state=self.call('state')
+            self.assertEqual(private_state['hosts'],[])
+            self.assertEqual(private_state['requests'],[])
+            self.assertEqual(private_state['groups'],[])
         self.auth = original
         self.call('disconnect', host_id=self.host)
         self.assertEqual(self.call('state')['hosts'], [])

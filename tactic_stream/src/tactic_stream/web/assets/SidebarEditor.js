@@ -2,7 +2,7 @@ import { D as nextTick, E as mergeProps, I as resolveComponent, N as openBlock, 
 import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
 import { Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$1, qt as node, r as observeFrameSizes, vt as sidebarRequest, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
-import { r as row$1, t as navigate } from "./tree.ui.js";
+import { i as row$1, n as navigate } from "./tree.ui.js";
 import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.ui.mjs
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {

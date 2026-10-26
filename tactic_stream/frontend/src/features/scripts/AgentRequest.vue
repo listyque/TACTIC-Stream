@@ -10,6 +10,7 @@ import { notify } from '../activity/notifications.js';
 import FrameView from '../../frame/FrameView.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/scripts/request.ui.mjs';
+import * as History from '../../../../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs';
 
 const props = defineProps({ ticket: String, capture: Function });
 const emit = defineEmits(['providers']);
@@ -41,24 +42,33 @@ const scene = computed(() =>
     appearance.language
   )
 );
+const historyModels = computed(() => ({
+  agentHistoryRows: History.rows(model.value, appearance.language)
+}));
+const historyRow = (node, row) =>
+  History.row(model.value, row, node.width - 16, appearance.language);
 let generation = 0,
   queuedAction = '',
   observer,
   timer,
   contextTicket = '',
-  inFlight = false;
+  inFlight = false,
+  historyTimer,
+  libraryOperation = null;
 
 async function call(
   action,
   values = {},
   command = 'tactic.ui.panel.agent_request_cmd.AgentRequestCmd'
 ) {
+  const project =
+    action === 'draft' ? values.context.project : model.value.context.project;
   const result = await rpc(
     'execute_cmd',
     [
-      { ticket: contextTicket, project: model.value.context.project },
+      { ticket: contextTicket, project },
       command,
-      { action, project_code: model.value.context.project, ...values }
+      { action, project_code: project, ...values }
     ],
     {},
     true,
@@ -81,12 +91,18 @@ async function request(action = 'refresh') {
   }
   if (!model.value.context.project) return;
   const id = ++generation;
+  let filter = {
+    query: model.value.history.query,
+    archived: model.value.history.archived
+  };
+  const before = model.value.requests,
+    nextOffset = model.value.next_offset;
   inFlight = true;
   model.value.busy = action !== 'poll';
   if (action !== 'poll') model.value.error = '';
   try {
     if (action === 'send') {
-      model.value.pending ||= model.value.selected
+      model.value.pending ||= UI.started(model.value)
         ? {
             message_id: randomUuid(),
             host_id: UI.host(model.value).host_id,
@@ -99,11 +115,15 @@ async function request(action = 'refresh') {
             )
           }
         : {
-            request_id: randomUuid(),
+            request_id: model.value.selected || randomUuid(),
             host_id: UI.host(model.value).host_id,
             document: {
               prompt: model.value.prompt,
-              context: JSON.parse(JSON.stringify(model.value.context)),
+              context: JSON.parse(
+                JSON.stringify(
+                  model.value.request.document?.context || model.value.context
+                )
+              ),
               allow_changes: model.value.allowChanges,
               allow_web: model.value.allowWeb,
               model: model.value.model ?? '',
@@ -114,7 +134,7 @@ async function request(action = 'refresh') {
               )
             }
           };
-      const saved = model.value.selected
+      const saved = UI.started(model.value)
         ? await call('message', {
             request_id: model.value.selected,
             ...model.value.pending
@@ -125,6 +145,7 @@ async function request(action = 'refresh') {
       model.value.pending = null;
       model.value.prompt = '';
       model.value.attachments = [];
+      delete model.value.drafts[saved.request_id];
     } else if (action === 'cancel')
       await call('cancel', { request_id: model.value.selected });
     else if (action === 'undo')
@@ -132,17 +153,61 @@ async function request(action = 'refresh') {
         request_id: model.value.selected,
         operation_id: model.value.request.undo_operation
       });
-    const state = await call('state');
+    else if (action === 'library') {
+      const operation = libraryOperation;
+      const saved = await call(operation.action, operation.values);
+      if (id !== generation) return;
+      if (operation.action === 'draft') {
+        model.value.drafts[model.value.selected] = History.draft(model.value);
+        model.value.selected = saved.request_id;
+        model.value.request = saved;
+        model.value.context = saved.document.context;
+        if (!operation.edit) Object.assign(model.value, History.restored());
+        if (!operation.edit && size.value.width < 940)
+          model.value.history.mobile = false;
+        model.value.history.query = '';
+        model.value.history.archived = false;
+        filter = { query: '', archived: false };
+      } else model.value.history.edit = null;
+    }
+    const state = await call('state', {
+      ...filter,
+      ...(action === 'historyMore' ? { offset: nextOffset } : {})
+    });
     if (id !== generation) return;
+    if (
+      filter.query !== model.value.history.query ||
+      filter.archived !== model.value.history.archived
+    ) {
+      queuedAction = 'refresh';
+      return;
+    }
+    if (action === 'historyMore' || action === 'poll') {
+      state.requests = History.merge(before, state.requests);
+      if (action === 'poll' && before.length) state.next_offset = nextOffset;
+    }
     Object.assign(model.value, state);
     if (model.value.selected) {
       const current = await call('read', { request_id: model.value.selected });
       if (id !== generation) return;
-      const wasActive = UI.active(model.value);
+      const wasActive =
+        UI.active(model.value) &&
+        model.value.request.request_id === current.request_id;
       model.value.request = current;
-      for (const file of current.messages?.flatMap(
-        (message) => message.attachments || []
-      ) || []) {
+      if (action === 'library' && libraryOperation?.edit)
+        model.value.history = History.change(
+          model.value,
+          {
+            type: 'historyEdit',
+            value: model.value.selected
+          },
+          size.value.width < 940
+        );
+      for (const file of [
+        ...model.value.attachments,
+        ...(current.messages?.flatMap((message) => message.attachments || []) ||
+          [])
+      ]) {
         if (
           !file.media_type.startsWith('image/') ||
           file.attachment_id in previews.value
@@ -197,7 +262,92 @@ function event(action) {
     emit('providers');
     return;
   }
+  const previousHistory = model.value.history;
+  const changed = History.change(model.value, action, size.value.width < 940);
+  if (changed) {
+    model.value.history = changed;
+    if (
+      changed.query !== previousHistory.query ||
+      changed.archived !== previousHistory.archived
+    ) {
+      clearTimeout(historyTimer);
+      historyTimer = setTimeout(
+        () => request(),
+        action.type === 'historyQuery' ? 300 : 0
+      );
+    }
+    return;
+  }
   if (model.value.busy) return;
+  if (
+    action.type === 'historyNew' ||
+    (action.type === 'historyEdit' && !action.value)
+  ) {
+    if (model.value.pending || model.value.uploading) return;
+    if (
+      !model.value.selected &&
+      action.type === 'historyNew' &&
+      (model.value.prompt.trim() || model.value.attachments.length)
+    ) {
+      model.value.error =
+        'Send or clear the current draft before opening another object';
+      return;
+    }
+    libraryOperation = {
+      action: 'draft',
+      edit: action.type === 'historyEdit',
+      values: {
+        request_id: randomUuid(),
+        context:
+          action.type === 'historyEdit' ? model.value.context : props.capture()
+      }
+    };
+    request('library');
+    return;
+  }
+  if (
+    ['historySave', 'historyArchive', 'historyGroupRemove'].includes(
+      action.type
+    )
+  ) {
+    const edit = model.value.history.edit;
+    if (!edit) return;
+    libraryOperation =
+      edit.kind === 'group'
+        ? {
+            action:
+              action.type === 'historyGroupRemove'
+                ? 'group_remove'
+                : 'group_save',
+            values: {
+              group: edit.id,
+              name: edit.name,
+              expected_revision: edit.revision
+            }
+          }
+        : {
+            action: 'organize',
+            values: {
+              request_id: edit.id,
+              expected_revision: edit.revision,
+              document: {
+                title: edit.title,
+                group: edit.group,
+                pinned: edit.pinned,
+                archived:
+                  action.type === 'historyArchive'
+                    ? !edit.archived
+                    : edit.archived
+              }
+            }
+          };
+    request('library');
+    return;
+  }
+  if (action.type === 'historyMore') {
+    request('historyMore');
+    return;
+  }
   if (
     action.type === 'prompt' ||
     action.type === 'changes' ||
@@ -209,23 +359,27 @@ function event(action) {
       model.value.allowChanges = !!action.value;
     else model.value.allowWeb = !!action.value;
   } else if (action.type === 'select') {
-    if (model.value.uploading) return;
-    if (action.value !== model.value.selected) clearPreviews();
+    if (model.value.uploading || model.value.pending) return;
+    if (
+      !model.value.selected &&
+      (model.value.prompt.trim() || model.value.attachments.length)
+    ) {
+      model.value.error =
+        'Send or clear the current draft before opening another object';
+      return;
+    }
+    model.value.drafts[model.value.selected] = History.draft(model.value);
     generation++;
     inFlight = false;
     queuedAction = '';
-    if (!action.value) model.value = UI.initial(props.capture());
-    else
-      Object.assign(model.value, {
-        selected: action.value,
-        request: {},
-        prompt: '',
-        attachments: [],
-        model: null,
-        provider: null,
-        effort: null,
-        pending: null
-      });
+    Object.assign(model.value, {
+      selected: action.value,
+      request: {},
+      ...History.restored(model.value.drafts[action.value]),
+      pending: null
+    });
+    model.value.history.edit = null;
+    if (size.value.width < 940) model.value.history.mobile = false;
     request();
   } else if (action.type === 'send' && UI.canSend(model.value)) request('send');
   else if (action.type === 'cancel') request('cancel');
@@ -382,7 +536,10 @@ async function open(context, fresh = false) {
     queuedAction = '';
     clearTimeout(timer);
     clearPreviews();
-    model.value = UI.initial(context);
+    model.value = Object.assign(UI.initial(context), {
+      drafts: model.value.drafts,
+      history: model.value.history
+    });
   }
   if (
     !model.value.selected &&
@@ -391,7 +548,10 @@ async function open(context, fresh = false) {
     !model.value.pending &&
     !model.value.uploading
   )
-    model.value = UI.initial(context || props.capture());
+    model.value = Object.assign(UI.initial(context || props.capture()), {
+      history: model.value.history,
+      drafts: model.value.drafts
+    });
   contextTicket = props.ticket;
   await nextTick();
   if (!dialog.value.open) dialog.value.show();
@@ -415,6 +575,7 @@ async function open(context, fresh = false) {
 function close() {
   dialog.value?.close();
   clearTimeout(timer);
+  clearTimeout(historyTimer);
 }
 watch(
   () => props.ticket,
@@ -431,6 +592,7 @@ watch(
 onBeforeUnmount(() => {
   generation++;
   clearTimeout(timer);
+  clearTimeout(historyTimer);
   observer?.disconnect();
   clearPreviews();
 });
@@ -462,7 +624,13 @@ defineExpose({ open });
           :aria-label="t('Attach files')"
           @change="addFiles([...$event.target.files])"
         />
-        <FrameView :scene="scene" :views="views" @event="event" />
+        <FrameView
+          :scene="scene"
+          :models="historyModels"
+          :describe-row="historyRow"
+          :views="views"
+          @event="event"
+        />
       </div>
     </AppDialog>
   </Teleport>

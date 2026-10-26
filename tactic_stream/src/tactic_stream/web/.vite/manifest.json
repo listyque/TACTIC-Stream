@@ -192,6 +192,7 @@
       "index.html",
       "_CodeBlock.js",
       "_sections.ui.js",
+      "_tree.ui.js",
       "_admin.document.js"
     ]
   },
@@ -763,6 +764,7 @@
       "index.html",
       "_CodeBlock.js",
       "_AppDialog.js",
+      "_tree.ui.js",
       "src/App.vue"
     ],
     "css": [

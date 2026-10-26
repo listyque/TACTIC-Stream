@@ -1,5 +1,27 @@
 import { Gt as label, Jt as rect, Kt as muted, Wt as button, qt as node } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/controls/lists/tree.ui.mjs
+function listAction(id, bounds, text, icon, action, enabled = true, options = {}) {
+	const iconOnly = !!options.iconOnly;
+	const left = icon ? 34 : 12;
+	const children = icon ? [node("Icon", id + "Icon", rect(iconOnly ? (bounds.width - 16) / 2 : 10, (bounds.height - 16) / 2, 16, 16), {
+		icon,
+		color: enabled ? "secondaryText" : "disabledText"
+	})] : [];
+	if (!iconOnly) children.push(label(id + "Label", rect(left, 0, Math.max(0, bounds.width - left - 12 - (options.endInset || 0)), bounds.height), text, {
+		fontRole: options.fontRole || "body",
+		weight: options.weight || 400,
+		color: options.color || (enabled ? "primaryText" : "disabledText")
+	}));
+	return node("Action", id, bounds, Object.assign({
+		text,
+		action,
+		enabled,
+		radius: 6,
+		normalColor: "transparent",
+		selectedColor: "contentSelection",
+		children
+	}, options));
+}
 function navigationRow(width, record, state = {}) {
 	const section = record.kind === "section", separator = record.kind === "separator";
 	const height = separator ? 16 : section ? 48 : 56;
@@ -114,6 +136,6 @@ function row(id, width, record, options = {}) {
 	return { nodes };
 }
 //#endregion
-export { navigationRow as n, row as r, navigate as t };
+export { row as i, navigate as n, navigationRow as r, listAction as t };
 
 //# sourceMappingURL=tree.ui.js.map

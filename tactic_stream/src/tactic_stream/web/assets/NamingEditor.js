@@ -315,7 +315,7 @@ function row(listNode, record, model, language) {
 		text: title(record, language),
 		selected: model.identity === record.identity,
 		enabled: !model.busy && (!model.uncertain || model.identity === record.identity),
-		normalColor: "surfaceContainerHigh",
+		normalColor: "transparent",
 		selectedColor: "contentSelection",
 		children: [
 			label("namingRuleTitle_" + record.identity, rect(12, 6, width - 24, 24), title(record, language), { weight: 600 }),

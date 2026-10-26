@@ -428,7 +428,7 @@ function row(listNode, record, model, ui) {
 	return { nodes: [node("Action", definition ? "definitionRow_" + record.identity : "definitionColumn_" + record.path, rect(0, 0, width, definition ? 60 : 56), {
 		text: definition ? record.view + " · " + record.searchType + (record.login ? " · " + record.login : "") : record.name,
 		selected,
-		normalColor: "surfaceContainerHigh",
+		normalColor: "transparent",
 		selectedColor: "contentSelection",
 		rail: false,
 		enabled: !model.busy && !ui.confirmation && (!definition || !model.dirty && !model.uncertain),

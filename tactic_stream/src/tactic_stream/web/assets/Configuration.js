@@ -608,7 +608,7 @@ function row$1(model, record, width, language) {
 		text: project.title || project.code,
 		enabled: !model.busy,
 		selected: model.selected?.code === project.code,
-		normalColor: "surfaceContainerHigh",
+		normalColor: "transparent",
 		selectedColor: "contentSelection",
 		action: {
 			type: "select",

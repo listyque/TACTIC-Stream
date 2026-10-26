@@ -26,6 +26,13 @@ this tool is not part of ordinary product builds.
 
 ## Single owners
 
+Catalogs, navigation and chat history use plain compact list rows with muted
+group captions. Resting rows are transparent; selection, hover and keyboard
+focus provide emphasis. Do not turn each row or group heading into a filled
+rounded button. Secondary row actions use `revealOnRowInteraction`: visible
+while their row is hovered or contains keyboard focus, always available when
+the platform has no hover. Use the same shared row description in both engines.
+
 ### Controls, infrastructure and forms
 
 Classify by responsibility, not location, filename, size or nested element count.

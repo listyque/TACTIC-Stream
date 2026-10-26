@@ -564,8 +564,8 @@ function row(list, record, model, ui, language) {
 		checked,
 		enabled: allow.editable,
 		indicatorX: 10,
-		normalColor: "surfaceContainerHigh",
-		selectedColor: "surfaceContainerHigh",
+		normalColor: "transparent",
+		selectedColor: "transparent",
 		children: [
 			label("userGroupTitle_" + record.name, box(39, info ? 3 : 9, width - 49, 22), record.name, { weight: 600 }),
 			label("userGroupDescription_" + record.name, box(39, info ? 24 : 31, width - 49, 18), record.description || "", muted),

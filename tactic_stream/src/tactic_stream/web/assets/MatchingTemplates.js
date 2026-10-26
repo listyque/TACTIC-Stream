@@ -244,7 +244,7 @@ function row(model, record, width, language) {
 	return { nodes: [node("Box", "matchingTemplateDelegate", rect(0, 0, width, 64), { children: [node("Action", "matchingTemplateSelect_" + record.templateId, rect(0, 0, width, 64), {
 		text: record.pattern,
 		selected: !!record.selected,
-		normalColor: "surfaceContainerHigh",
+		normalColor: "transparent",
 		selectedColor: "secondaryContainer",
 		radius: 12,
 		action: {

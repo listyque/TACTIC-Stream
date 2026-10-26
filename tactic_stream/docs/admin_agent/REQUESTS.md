@@ -65,6 +65,34 @@ or on the operator's Windows host.
 
 ## Native contract and ownership
 
+### Conversation library
+
+The shared history panel is `features/scripts/history.ui.mjs`; TH owns native
+transport/draft state in `thlib/ui/agent_request.py`, and TS owns web transport in
+`frontend/src/features/scripts/AgentRequest.vue`. Neither adapter edits storage.
+
+`AgentRequestCmd` actions `draft`, `organize`, `group_save` and `group_remove`
+use `tactic_stream/server/agent_library.py` under the normal authenticated Command
+transaction. Requests remain owner/project scoped in `spt_agent_request`; optional
+`library` metadata contains `title`, `group`, `pinned`, `archived`. Folder definitions
+use native user/project `WidgetSettings`, key `external_agent.library`. No schema
+or model execution is required to name a draft or organize history.
+
+`state(query, archived, offset)` returns summaries (100/page), `next_offset`,
+`total`, `groups`, `groups_revision` and an independent unfiltered
+`active_requests` list. Queue/idle checks must inspect `active_requests`, since
+the selected history page may exclude running requests. Search scans owned saved
+messages, titles and type identifiers; this is not indexed full-text search.
+`read` adds `library_summary`. `organize` requires its `library_revision`;
+folder writes require `groups_revision`. Stale revisions fail without overwriting.
+Removing a folder ungroups its chats and never deletes messages or operations.
+Archive rejects active requests and archived chats require restoration before Send.
+
+A saved draft captures context but has no model host or messages. Its first
+`submit` uses the same request ID and verifies the captured context, preserving
+library metadata. Only Send starts execution or transmits data to a provider.
+Existing records without metadata retain their original prompt-derived title.
+
 Messages accept empty text only when they contain finished, owner-scoped attachments.
 Image thumbnails use authenticated AgentAttachmentCmd.preview, which decodes a
 bounded JPEG thumbnail; originals remain immutable and available for native check-in.

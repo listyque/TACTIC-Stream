@@ -2,7 +2,368 @@ import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watc
 import { A as t, O as randomUuid, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
 import { Bt as notify, Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$4, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$5 } from "./AppDialog.js";
-import { n as _sfc_main$6 } from "./App.js";
+import { t as listAction } from "./tree.ui.js";
+import { _ as describe$2, n as _sfc_main$6 } from "./App.js";
+//#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
+function initial$1() {
+	return {
+		visible: null,
+		mobile: false,
+		width: 280,
+		query: "",
+		searchOpen: false,
+		grouping: "time",
+		archived: false,
+		collapsed: {},
+		edit: null
+	};
+}
+function layout(model, width) {
+	const small = width < 940;
+	const visible = small ? !!model.history.mobile : model.history.visible ?? true;
+	const panel = visible ? small ? width : Math.min(Math.max(220, model.history.width), width - 500) : 0;
+	return {
+		small,
+		visible,
+		panel,
+		mainX: small ? 0 : panel,
+		mainWidth: small ? width : width - panel
+	};
+}
+function change(model, action, small = false) {
+	const history = model.history;
+	if (action.type === "historyOptions") return Object.assign({}, history, { edit: { kind: "options" } });
+	if (action.type === "historySearch") return Object.assign({}, history, {
+		searchOpen: !history.searchOpen,
+		query: history.searchOpen ? "" : history.query
+	});
+	if (action.type === "historyToggle") return Object.assign({}, history, small ? { mobile: !history.mobile } : { visible: !(history.visible ?? action.value) });
+	if (action.type === "historyWidth") return Object.assign({}, history, { width: action.value });
+	if (action.type === "historyQuery") return Object.assign({}, history, { query: action.value });
+	if (action.type === "historyGrouping") return Object.assign({}, history, {
+		grouping: action.value,
+		edit: null
+	});
+	if (action.type === "historyArchived") return Object.assign({}, history, {
+		archived: !!action.value,
+		edit: null
+	});
+	if (action.type === "historyCollapse") return Object.assign({}, history, { collapsed: Object.assign({}, history.collapsed, { [action.value]: !history.collapsed[action.value] }) });
+	if (action.type === "historyCancel") return Object.assign({}, history, { edit: null });
+	if (action.type === "historyRemoveConfirm") return Object.assign({}, history, { edit: Object.assign({}, history.edit, { confirm: true }) });
+	if (action.type === "historyGroupEdit") {
+		const group = (model.groups || []).find((item) => item.id === action.value);
+		return Object.assign({}, history, {
+			visible: true,
+			mobile: small,
+			edit: {
+				kind: "group",
+				id: group?.id || "",
+				name: group?.name || "",
+				revision: model.groups_revision
+			}
+		});
+	}
+	if (action.type === "historyEdit" && action.value) {
+		const row = model.requests.find((item) => item.request_id === action.value) || (model.request?.request_id === action.value ? model.request.library_summary : null);
+		if (!row) return null;
+		return Object.assign({}, history, {
+			visible: true,
+			mobile: small,
+			edit: {
+				kind: "chat",
+				id: row.request_id,
+				title: row.default_title ? "" : row.title,
+				group: row.group || "",
+				pinned: !!row.pinned,
+				archived: !!row.archived,
+				revision: row.library_revision,
+				status: row.status
+			}
+		});
+	}
+	const fields = {
+		historyTitle: "title",
+		historyFolder: "group",
+		historyPinned: "pinned",
+		historyName: "name"
+	};
+	if (fields[action.type] && history.edit) return Object.assign({}, history, { edit: Object.assign({}, history.edit, { [fields[action.type]]: action.value }) });
+	return null;
+}
+function draft(model) {
+	return {
+		prompt: model.prompt,
+		attachments: model.attachments.slice(),
+		model: model.model,
+		provider: model.provider,
+		effort: model.effort,
+		allowChanges: model.allowChanges,
+		allowWeb: model.allowWeb
+	};
+}
+function restored(value) {
+	return Object.assign({
+		prompt: "",
+		attachments: [],
+		model: null,
+		provider: null,
+		effort: null,
+		allowChanges: false,
+		allowWeb: false
+	}, value || {});
+}
+function merge(previous, current) {
+	const records = new Map(previous.map((row) => [row.request_id, row]));
+	for (const row of current) records.set(row.request_id, row);
+	return Array.from(records.values());
+}
+function rows(model, language, now = Date.now()) {
+	const tr = (text) => translate(text, language), history = model.history;
+	const folders = new Map((model.groups || []).map((group) => [group.id, group.name]));
+	const groups = /* @__PURE__ */ new Map();
+	function add(key, title, row, folder = "") {
+		if (!groups.has(key)) groups.set(key, {
+			key,
+			title,
+			folder,
+			records: []
+		});
+		if (row) groups.get(key).records.push(row);
+	}
+	const midnight = new Date(now);
+	midnight.setHours(0, 0, 0, 0);
+	const today = midnight.getTime();
+	const sorted = model.requests.slice().sort((a, b) => (b.activity || 0) - (a.activity || 0) || b.request_id.localeCompare(a.request_id));
+	const topPinned = (row) => row.pinned && (history.grouping !== "group" || !row.group);
+	for (const row of sorted.filter(topPinned)) add("pinned", tr("Pinned conversations"), row);
+	if (history.grouping === "group") for (const group of model.groups || []) add("folder:" + group.id, group.name, null, group.id);
+	for (const row of sorted.filter((row) => !topPinned(row))) if (history.grouping === "type") add("type:" + row.search_type, row.type_title || row.search_type || tr("No Search Type"), row);
+	else if (history.grouping === "group") add("folder:" + (row.group || ""), folders.get(row.group) || tr("Ungrouped"), row, row.group || "");
+	else {
+		const date = /* @__PURE__ */ new Date((row.activity || 0) * 1e3);
+		date.setHours(0, 0, 0, 0);
+		const days = Math.round((today - date.getTime()) / 864e5);
+		const key = days < 1 ? "Today" : days === 1 ? "Yesterday" : days < 7 ? "Previous 7 days" : days < 30 ? "Previous 30 days" : "Older conversations";
+		add("time:" + key, tr(key), row);
+	}
+	const result = [];
+	for (const group of groups.values()) {
+		if (history.grouping === "group") group.records.sort((a, b) => Number(b.pinned) - Number(a.pinned));
+		result.push(Object.assign({}, group, {
+			kind: "heading",
+			count: group.records.length
+		}));
+		if (!group.folder || !history.collapsed[group.key]) for (const record of group.records) result.push(Object.assign({}, record, {
+			key: record.request_id,
+			kind: "chat"
+		}));
+	}
+	return result;
+}
+function row(model, record, width, language) {
+	const tr = (text) => translate(text, language), idle = !model.busy && !model.pending && !model.uploading;
+	if (record.kind === "heading") {
+		const folder = !!record.folder;
+		const nodes = [folder ? listAction("historyGroup_" + record.key, rect(8, 0, width - 16, 32), record.title, model.history.collapsed[record.key] ? "chevron-right" : "chevron-down", {
+			type: "historyCollapse",
+			value: record.key
+		}, true, {
+			fontRole: "secondary",
+			color: "secondaryText",
+			weight: 500,
+			endInset: 28
+		}) : label("historyGroup_" + record.key, rect(12, 4, width - 24, 24), record.title, Object.assign({}, muted, {
+			fontRole: "secondary",
+			role: "heading",
+			level: 2
+		}))];
+		if (folder) nodes.push(listAction("historyFolderEdit_" + record.folder, rect(width - 36, 2, 28, 28), tr("Edit conversation folder"), "more-horiz", {
+			type: "historyGroupEdit",
+			value: record.folder
+		}, idle, {
+			iconOnly: true,
+			revealOnRowInteraction: !model.history.mobile
+		}));
+		return { nodes };
+	}
+	const working = [
+		"queued",
+		"running",
+		"cancelling"
+	].includes(record.status);
+	const title = record.default_title ? tr(record.title) : record.title;
+	return { nodes: [listAction("agentHistoryOpen_" + record.request_id, rect(8, 0, width - 16, 32), title, working ? "sync" : "", {
+		type: "select",
+		value: record.request_id
+	}, idle, {
+		selected: model.selected === record.request_id,
+		toolTip: title,
+		endInset: 28
+	}), listAction("agentHistoryEdit_" + record.request_id, rect(width - 36, 2, 28, 28), tr("Conversation settings"), "more-horiz", {
+		type: "historyEdit",
+		value: record.request_id
+	}, idle, {
+		iconOnly: true,
+		revealOnRowInteraction: !model.history.mobile
+	})] };
+}
+function describe$1(model, width, height, language, small) {
+	const tr = (text) => translate(text, language), edit = model.history.edit;
+	const idle = !model.busy && !model.pending && !model.uploading;
+	const heading = edit ? edit.kind === "options" ? "Conversation view" : edit.kind === "group" ? "Conversation folder" : "Conversation settings" : model.history.archived ? "Archived conversations" : "Conversations";
+	const nodes = [
+		node("Box", "agentHistorySurface", rect(0, 0, width, height), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			borderWidth: 1,
+			radius: 0
+		}),
+		label("agentHistoryHeading", rect(16, 8, Math.max(20, width - (edit ? 96 : 128)), 32), tr(heading), { weight: 600 }),
+		listAction("agentHistoryClose", rect(width - 40, 8, 32, 32), tr("Hide conversations"), "chevron-left", {
+			type: "historyToggle",
+			value: true
+		}, true, { iconOnly: true })
+	];
+	if (edit && edit.kind === "options") {
+		nodes.push(listAction("agentHistoryBack", rect(width - 76, 8, 32, 32), tr("Back to conversations"), "arrow-back", { type: "historyCancel" }, true, { iconOnly: true }));
+		const fields = [
+			{
+				kind: "Choice",
+				field: "grouping",
+				title: "Group conversations",
+				action: { type: "historyGrouping" },
+				options: [
+					{
+						value: "time",
+						label: tr("By time")
+					},
+					{
+						value: "type",
+						label: tr("By Search Type")
+					},
+					{
+						value: "group",
+						label: tr("By folder")
+					}
+				]
+			},
+			{
+				kind: "Switch",
+				field: "archived",
+				title: "Archived conversations",
+				action: { type: "historyArchived" }
+			},
+			{
+				kind: "Button",
+				id: "agentHistoryNewGroup",
+				title: "New conversation folder",
+				icon: "create-new-folder",
+				action: {
+					type: "historyGroupEdit",
+					value: ""
+				}
+			}
+		];
+		nodes.push(node("Box", "agentHistoryOptionsForm", rect(0, 48, width, height - 60), { children: describe$2({
+			fields,
+			values: model.history,
+			busy: !idle
+		}, width, height - 60, language).nodes }));
+		return { nodes };
+	}
+	if (edit) {
+		const fields = edit.kind === "group" ? [{
+			kind: "Field",
+			field: "name",
+			title: "Folder name",
+			action: { type: "historyName" },
+			props: { maxLength: 120 }
+		}] : [
+			{
+				kind: "Field",
+				field: "title",
+				title: "Conversation name",
+				action: { type: "historyTitle" },
+				props: { maxLength: 160 }
+			},
+			{
+				kind: "Choice",
+				field: "group",
+				title: "Conversation folder",
+				action: { type: "historyFolder" },
+				options: [{
+					value: "",
+					label: tr("Ungrouped")
+				}].concat((model.groups || []).map((group) => ({
+					value: group.id,
+					label: group.name,
+					dataLabel: true
+				})))
+			},
+			{
+				kind: "Switch",
+				field: "pinned",
+				title: "Pin conversation",
+				action: { type: "historyPinned" }
+			}
+		];
+		nodes.push(node("Box", "agentHistoryEditor", rect(0, 48, width, Math.max(60, height - 176)), { children: describe$2({
+			fields,
+			values: edit,
+			busy: !idle
+		}, width, Math.max(60, height - 176), language).nodes }));
+		if (edit.confirm) nodes.push(label("agentHistoryRemoveNotice", rect(16, height - 128, width - 32, 64), tr("Remove this folder? Its conversations will move to Ungrouped."), Object.assign({}, muted, { wrap: true })));
+		else if (edit.id) nodes.push(button("agentHistoryArchive", rect(12, height - 120, width - 24, 32), tr(edit.kind === "group" ? "Remove folder" : edit.archived ? "Restore conversation" : "Archive conversation"), edit.kind === "group" ? "delete" : edit.archived ? "undo" : "archive", { type: edit.kind === "group" ? "historyRemoveConfirm" : "historyArchive" }, idle && (edit.kind === "group" || ![
+			"queued",
+			"running",
+			"cancelling"
+		].includes(edit.status))));
+		nodes.push(button("agentHistorySave", rect(12, height - 48, (width - 32) / 2, 32), tr(edit.confirm ? "Remove folder" : "Save"), edit.confirm ? "delete" : "save", { type: edit.confirm ? "historyGroupRemove" : "historySave" }, idle && (edit.kind !== "group" || !!edit.name.trim()), {
+			highlighted: true,
+			destructive: !!edit.confirm
+		}), button("agentHistoryCancel", rect(20 + (width - 32) / 2, height - 48, (width - 32) / 2, 32), tr("Cancel"), "close", { type: "historyCancel" }, idle));
+		return { nodes };
+	}
+	const searching = model.history.searchOpen || !!model.history.query;
+	const listTop = searching ? 132 : 88;
+	const footer = model.next_offset == null ? 0 : 40;
+	nodes.push(listAction("agentHistorySearchToggle", rect(width - 112, 8, 32, 32), tr("Search conversations"), "search", { type: "historySearch" }, true, { iconOnly: true }), listAction("agentHistoryOptions", rect(width - 76, 8, 32, 32), tr("Conversation view"), "more-horiz", { type: "historyOptions" }, idle, { iconOnly: true }), listAction("agentHistoryNew", rect(12, 48, width - 24, 32), tr("New conversation"), "add", { type: "historyNew" }, idle), node("List", "agentHistoryList", rect(0, listTop, width, Math.max(36, height - listTop - 12 - footer)), {
+		source: "agentHistoryRows",
+		rowHeight: 36,
+		keyField: "key",
+		fields: [
+			"key",
+			"kind",
+			"title",
+			"default_title",
+			"folder",
+			"request_id",
+			"status",
+			"pinned"
+		],
+		role: "list",
+		label: tr("Conversations")
+	}));
+	if (searching) nodes.push(node("Field", "agentHistorySearch", rect(12, 88, width - 24, 32), {
+		label: tr("Search conversations"),
+		placeholder: tr("Search conversations"),
+		text: model.history.query,
+		maxLength: 200,
+		action: { type: "historyQuery" }
+	}));
+	if (footer) nodes.push(listAction("agentHistoryMore", rect(12, height - 40, width - 24, 28), tr("Load more conversations"), "expand-more", { type: "historyMore" }, idle));
+	if (!model.requests.length) nodes.push(label("agentHistoryEmpty", rect(16, listTop + 12, width - 32, 52), tr(model.history.query ? "No conversations found" : "No conversations yet"), Object.assign({}, muted, { wrap: true })));
+	if (!small) nodes.push(node("Splitter", "agentHistorySplitter", rect(width - 4, 0, 4, height), {
+		text: tr("Conversations panel width"),
+		value: model.history.width,
+		min: 220,
+		max: 420,
+		action: { type: "historyWidth" }
+	}));
+	return { nodes };
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/scripts/request.ui.mjs
 var metrics = {
 	inset: 12,
@@ -28,7 +389,13 @@ function initial(context = {}) {
 		model: null,
 		provider: null,
 		effort: null,
-		contextExpanded: false
+		contextExpanded: false,
+		history: initial$1(),
+		groups: [],
+		groups_revision: "",
+		total: 0,
+		next_offset: null,
+		drafts: {}
 	};
 }
 function active(model) {
@@ -38,16 +405,19 @@ function active(model) {
 		"cancelling"
 	].includes(model.request?.status);
 }
+function started(model) {
+	return !!model.selected && model.request?.status !== "draft";
+}
 function host(model) {
-	const allowed = model.hosts.filter((item) => !(model.request?.document?.allow_changes ?? model.allowChanges) || item.capabilities.changes);
+	const allowed = model.hosts.filter((item) => !(started(model) ? model.request?.document?.allow_changes : model.allowChanges) || item.capabilities.changes);
 	return allowed.find((item) => item.host_id === model.request?.host_id) || allowed[0];
 }
 function canSend(model) {
 	const connected = host(model);
-	return !model.busy && !model.uploading && !!model.context?.project && (!!model.prompt.trim() || !!model.attachments.length) && model.prompt.length <= 12e3 && !!connected && (!model.selected || model.request?.request_id === model.selected) && (Array.isArray(connected?.capabilities.providers) ? availableModels(model).length > 0 : provider(model) === "codex" || availableModels(model).length > 0) && (provider(model) === "codex" || !!selectedModel(model)) && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
+	return !model.busy && !model.uploading && !model.request?.library?.archived && !!model.context?.project && (!!model.prompt.trim() || !!model.attachments.length) && model.prompt.length <= 12e3 && !!connected && (!model.selected || model.request?.request_id === model.selected) && (Array.isArray(connected?.capabilities.providers) ? availableModels(model).length > 0 : provider(model) === "codex" || availableModels(model).length > 0) && (provider(model) === "codex" || !!selectedModel(model)) && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
 }
 function provider(model) {
-	return model.provider ?? (model.request?.request_id ? model.request.provider || "codex" : host(model)?.capabilities.default_provider || "codex");
+	return model.provider ?? (started(model) ? model.request.provider || "codex" : host(model)?.capabilities.default_provider || "codex");
 }
 function availableModels(model) {
 	return (host(model)?.capabilities.models || []).filter((item) => (item.provider || "codex") === provider(model));
@@ -58,6 +428,7 @@ function selectedModel(model) {
 }
 function messages(model) {
 	const current = model.request || {};
+	if (current.status === "draft") return [];
 	return (current.messages?.length ? current.messages : current.document ? [{
 		id: current.request_id,
 		role: "user",
@@ -153,6 +524,11 @@ function status(model, language) {
 		color: "error",
 		icon: "error"
 	};
+	if (current.library?.archived) return {
+		text: tr("Archived conversation — restore it to continue"),
+		color: "secondaryText",
+		icon: "archive"
+	};
 	if (current.status === "completed") return current.outcome === "needs_input" ? {
 		text: tr("Waiting for your reply"),
 		color: "action",
@@ -179,7 +555,7 @@ function status(model, language) {
 		icon: active(model) ? "sync" : "chat"
 	};
 }
-function describe(model, width, height, language) {
+function describeChat(model, width, height, language, sidebarVisible) {
 	const tr = (text) => translate(text, language), current = model.request || {}, context = current.document?.context || model.context || {};
 	const inset = metrics.inset, inner = Math.max(0, width - inset * 2), connected = host(model);
 	const providers = connected?.capabilities.providers || [], narrow = width < (providers.length ? 820 : 640), providerRow = narrow && providers.length ? 40 : 0;
@@ -188,24 +564,18 @@ function describe(model, width, height, language) {
 	const composerHeight = 188 + contextHeight + (model.attachments.length ? 42 : 0) + (narrow ? 40 : 0) + providerRow;
 	const composerTop = Math.max(180, height - composerHeight - 12), modelWidth = narrow ? Math.max(80, (composerWidth - 32) / 2) : 200;
 	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim() || !!model.attachments.length;
+	const conversation = model.requests.find((row) => row.request_id === model.selected) || current.library_summary;
 	const nodes = [
-		node("Choice", "agentRequestHistory", rect(inset, 10, Math.max(70, inner - 88), 32), {
-			label: tr("Agent requests"),
-			value: model.selected,
-			enabled: !model.busy && !model.uploading,
-			options: [{
-				value: "",
-				label: tr("New conversation")
-			}, ...(model.requests || []).map((row) => ({
-				value: row.request_id,
-				label: row.prompt === "Attachments" ? tr("Attachments") : row.prompt
-			}))],
-			action: { type: "select" }
-		}),
-		button("agentRequestNew", rect(width - inset - 72, 10, 32, 32), tr("New conversation"), "add", {
-			type: "select",
-			value: ""
-		}, !model.busy && !model.uploading, { iconOnly: true }),
+		button("agentRequestHistoryToggle", rect(inset, 10, 32, 32), tr(sidebarVisible ? "Hide conversations" : "Show conversations"), "history", {
+			type: "historyToggle",
+			value: sidebarVisible
+		}, true, { iconOnly: true }),
+		label("agentRequestTitle", rect(56, 10, Math.max(20, width - 200), 32), conversation?.title ? conversation.default_title ? tr(conversation.title) : conversation.title : tr("New conversation"), { weight: 600 }),
+		button("agentRequestRename", rect(width - inset - 112, 10, 32, 32), tr("Conversation settings"), "edit", {
+			type: "historyEdit",
+			value: model.selected
+		}, !model.busy && !model.pending && !model.uploading, { iconOnly: true }),
+		button("agentRequestNew", rect(width - inset - 72, 10, 32, 32), tr("New conversation"), "add", { type: "historyNew" }, !model.busy && !model.uploading, { iconOnly: true }),
 		button("agentRequestRefresh", rect(width - inset - 32, 10, 32, 32), tr("Refresh"), "refresh", { type: "refresh" }, !model.busy && !model.uploading, { iconOnly: true }),
 		node("Icon", "agentRequestStatusIcon", rect(inset, 52, 18, 18), {
 			icon: state.icon,
@@ -246,14 +616,14 @@ function describe(model, width, height, language) {
 		node("CheckBox", "agentRequestChanges", rect(composerX + 16, height - 114 - (narrow ? 40 : 0) - providerRow, Math.max(0, composerWidth - 32), 26), {
 			text: tr("Allow requested changes"),
 			wrapText: true,
-			checked: current.document?.allow_changes ?? model.allowChanges,
-			enabled: !model.busy && !model.selected && !model.pending,
+			checked: started(model) ? current.document?.allow_changes : model.allowChanges,
+			enabled: !model.busy && !started(model) && !model.pending,
 			action: { type: "changes" }
 		}),
 		node("CheckBox", "agentRequestWeb", rect(composerX + 16, height - 84 - (narrow ? 40 : 0) - providerRow, Math.max(0, composerWidth - 32), 26), {
 			text: tr("Allow internet access"),
-			checked: current.document?.allow_web ?? model.allowWeb,
-			enabled: !model.busy && !model.selected && !model.pending && !!connected?.capabilities.web_search,
+			checked: started(model) ? current.document?.allow_web : model.allowWeb,
+			enabled: !model.busy && !started(model) && !model.pending && !!connected?.capabilities.web_search,
 			action: { type: "web" }
 		}),
 		button("agentRequestAttach", rect(composerX + 12, height - 52, 32, 32), tr("Attach files"), "add", { type: "attach" }, !model.uploading && !model.pending && !model.busy, { iconOnly: true }),
@@ -316,6 +686,13 @@ function describe(model, width, height, language) {
 		files: model.attachments
 	}));
 	if (current.undo_operation) nodes.push(button("agentRequestUndo", rect(width - inset - 134, 50, 134, 26), tr("Undo field change"), "undo", { type: "undo" }, !working && !model.busy && !model.uploading));
+	return { nodes };
+}
+function describe(model, width, height, language) {
+	const space = layout(model, width);
+	const nodes = [];
+	if (!space.small || !space.visible) nodes.push(node("Box", "agentChatMain", rect(space.mainX, 0, space.mainWidth, height), { children: describeChat(model, space.mainWidth, height, language, space.visible).nodes }));
+	if (space.visible) nodes.push(node("Box", "agentChatHistory", rect(0, 0, space.panel, height), { children: describe$1(model, space.panel, height, language, space.small).nodes }));
 	return { nodes };
 }
 //#endregion
@@ -503,17 +880,20 @@ var _sfc_main = {
 			}
 		}])));
 		const scene = computed(() => describe(model.value, size.value.width, size.value.height, appearance.language));
-		let generation = 0, queuedAction = "", observer, timer, contextTicket = "", inFlight = false;
+		const historyModels = computed(() => ({ agentHistoryRows: rows(model.value, appearance.language) }));
+		const historyRow = (node, row$1) => row(model.value, row$1, node.width - 16, appearance.language);
+		let generation = 0, queuedAction = "", observer, timer, contextTicket = "", inFlight = false, historyTimer, libraryOperation = null;
 		async function call(action, values = {}, command = "tactic.ui.panel.agent_request_cmd.AgentRequestCmd") {
+			const project = action === "draft" ? values.context.project : model.value.context.project;
 			const result = await rpc("execute_cmd", [
 				{
 					ticket: contextTicket,
-					project: model.value.context.project
+					project
 				},
 				command,
 				{
 					action,
-					project_code: model.value.context.project,
+					project_code: project,
 					...values
 				}
 			], {}, true, true);
@@ -530,12 +910,17 @@ var _sfc_main = {
 			}
 			if (!model.value.context.project) return;
 			const id = ++generation;
+			let filter = {
+				query: model.value.history.query,
+				archived: model.value.history.archived
+			};
+			const before = model.value.requests, nextOffset = model.value.next_offset;
 			inFlight = true;
 			model.value.busy = action !== "poll";
 			if (action !== "poll") model.value.error = "";
 			try {
 				if (action === "send") {
-					model.value.pending ||= model.value.selected ? {
+					model.value.pending ||= started(model.value) ? {
 						message_id: randomUuid(),
 						host_id: host(model.value).host_id,
 						text: model.value.prompt,
@@ -544,11 +929,11 @@ var _sfc_main = {
 						provider: provider(model.value),
 						attachments: model.value.attachments.map((file) => file.attachment_id)
 					} : {
-						request_id: randomUuid(),
+						request_id: model.value.selected || randomUuid(),
 						host_id: host(model.value).host_id,
 						document: {
 							prompt: model.value.prompt,
-							context: JSON.parse(JSON.stringify(model.value.context)),
+							context: JSON.parse(JSON.stringify(model.value.request.document?.context || model.value.context)),
 							allow_changes: model.value.allowChanges,
 							allow_web: model.value.allowWeb,
 							model: model.value.model ?? "",
@@ -557,7 +942,7 @@ var _sfc_main = {
 							attachments: model.value.attachments.map((file) => file.attachment_id)
 						}
 					};
-					const saved = model.value.selected ? await call("message", {
+					const saved = started(model.value) ? await call("message", {
 						request_id: model.value.selected,
 						...model.value.pending
 					}) : await call("submit", model.value.pending);
@@ -566,20 +951,55 @@ var _sfc_main = {
 					model.value.pending = null;
 					model.value.prompt = "";
 					model.value.attachments = [];
+					delete model.value.drafts[saved.request_id];
 				} else if (action === "cancel") await call("cancel", { request_id: model.value.selected });
 				else if (action === "undo") await call("undo", {
 					request_id: model.value.selected,
 					operation_id: model.value.request.undo_operation
 				});
-				const state = await call("state");
+				else if (action === "library") {
+					const operation = libraryOperation;
+					const saved = await call(operation.action, operation.values);
+					if (id !== generation) return;
+					if (operation.action === "draft") {
+						model.value.drafts[model.value.selected] = draft(model.value);
+						model.value.selected = saved.request_id;
+						model.value.request = saved;
+						model.value.context = saved.document.context;
+						if (!operation.edit) Object.assign(model.value, restored());
+						if (!operation.edit && size.value.width < 940) model.value.history.mobile = false;
+						model.value.history.query = "";
+						model.value.history.archived = false;
+						filter = {
+							query: "",
+							archived: false
+						};
+					} else model.value.history.edit = null;
+				}
+				const state = await call("state", {
+					...filter,
+					...action === "historyMore" ? { offset: nextOffset } : {}
+				});
 				if (id !== generation) return;
+				if (filter.query !== model.value.history.query || filter.archived !== model.value.history.archived) {
+					queuedAction = "refresh";
+					return;
+				}
+				if (action === "historyMore" || action === "poll") {
+					state.requests = merge(before, state.requests);
+					if (action === "poll" && before.length) state.next_offset = nextOffset;
+				}
 				Object.assign(model.value, state);
 				if (model.value.selected) {
 					const current = await call("read", { request_id: model.value.selected });
 					if (id !== generation) return;
-					const wasActive = active(model.value);
+					const wasActive = active(model.value) && model.value.request.request_id === current.request_id;
 					model.value.request = current;
-					for (const file of current.messages?.flatMap((message) => message.attachments || []) || []) {
+					if (action === "library" && libraryOperation?.edit) model.value.history = change(model.value, {
+						type: "historyEdit",
+						value: model.value.selected
+					}, size.value.width < 940);
+					for (const file of [...model.value.attachments, ...current.messages?.flatMap((message) => message.attachments || []) || []]) {
 						if (!file.media_type.startsWith("image/") || file.attachment_id in previews.value) continue;
 						try {
 							const preview = await call("preview", { attachment_id: file.attachment_id }, attachmentCommand);
@@ -615,29 +1035,91 @@ var _sfc_main = {
 				emit("providers");
 				return;
 			}
+			const previousHistory = model.value.history;
+			const changed = change(model.value, action, size.value.width < 940);
+			if (changed) {
+				model.value.history = changed;
+				if (changed.query !== previousHistory.query || changed.archived !== previousHistory.archived) {
+					clearTimeout(historyTimer);
+					historyTimer = setTimeout(() => request(), action.type === "historyQuery" ? 300 : 0);
+				}
+				return;
+			}
 			if (model.value.busy) return;
+			if (action.type === "historyNew" || action.type === "historyEdit" && !action.value) {
+				if (model.value.pending || model.value.uploading) return;
+				if (!model.value.selected && action.type === "historyNew" && (model.value.prompt.trim() || model.value.attachments.length)) {
+					model.value.error = "Send or clear the current draft before opening another object";
+					return;
+				}
+				libraryOperation = {
+					action: "draft",
+					edit: action.type === "historyEdit",
+					values: {
+						request_id: randomUuid(),
+						context: action.type === "historyEdit" ? model.value.context : props.capture()
+					}
+				};
+				request("library");
+				return;
+			}
+			if ([
+				"historySave",
+				"historyArchive",
+				"historyGroupRemove"
+			].includes(action.type)) {
+				const edit = model.value.history.edit;
+				if (!edit) return;
+				libraryOperation = edit.kind === "group" ? {
+					action: action.type === "historyGroupRemove" ? "group_remove" : "group_save",
+					values: {
+						group: edit.id,
+						name: edit.name,
+						expected_revision: edit.revision
+					}
+				} : {
+					action: "organize",
+					values: {
+						request_id: edit.id,
+						expected_revision: edit.revision,
+						document: {
+							title: edit.title,
+							group: edit.group,
+							pinned: edit.pinned,
+							archived: action.type === "historyArchive" ? !edit.archived : edit.archived
+						}
+					}
+				};
+				request("library");
+				return;
+			}
+			if (action.type === "historyMore") {
+				request("historyMore");
+				return;
+			}
 			if (action.type === "prompt" || action.type === "changes" || action.type === "web") {
 				if (model.value.pending) return;
 				if (action.type === "prompt") model.value.prompt = action.value;
 				else if (action.type === "changes") model.value.allowChanges = !!action.value;
 				else model.value.allowWeb = !!action.value;
 			} else if (action.type === "select") {
-				if (model.value.uploading) return;
-				if (action.value !== model.value.selected) clearPreviews();
+				if (model.value.uploading || model.value.pending) return;
+				if (!model.value.selected && (model.value.prompt.trim() || model.value.attachments.length)) {
+					model.value.error = "Send or clear the current draft before opening another object";
+					return;
+				}
+				model.value.drafts[model.value.selected] = draft(model.value);
 				generation++;
 				inFlight = false;
 				queuedAction = "";
-				if (!action.value) model.value = initial(props.capture());
-				else Object.assign(model.value, {
+				Object.assign(model.value, {
 					selected: action.value,
 					request: {},
-					prompt: "",
-					attachments: [],
-					model: null,
-					provider: null,
-					effort: null,
+					...restored(model.value.drafts[action.value]),
 					pending: null
 				});
+				model.value.history.edit = null;
+				if (size.value.width < 940) model.value.history.mobile = false;
 				request();
 			} else if (action.type === "send" && canSend(model.value)) request("send");
 			else if (action.type === "cancel") request("cancel");
@@ -754,9 +1236,15 @@ var _sfc_main = {
 				queuedAction = "";
 				clearTimeout(timer);
 				clearPreviews();
-				model.value = initial(context);
+				model.value = Object.assign(initial(context), {
+					drafts: model.value.drafts,
+					history: model.value.history
+				});
 			}
-			if (!model.value.selected && !model.value.prompt && !model.value.attachments.length && !model.value.pending && !model.value.uploading) model.value = initial(context || props.capture());
+			if (!model.value.selected && !model.value.prompt && !model.value.attachments.length && !model.value.pending && !model.value.uploading) model.value = Object.assign(initial(context || props.capture()), {
+				history: model.value.history,
+				drafts: model.value.drafts
+			});
 			contextTicket = props.ticket;
 			await nextTick();
 			if (!dialog.value.open) dialog.value.show();
@@ -777,6 +1265,7 @@ var _sfc_main = {
 		function close() {
 			dialog.value?.close();
 			clearTimeout(timer);
+			clearTimeout(historyTimer);
 		}
 		watch(() => props.ticket, () => {
 			generation++;
@@ -790,6 +1279,7 @@ var _sfc_main = {
 		onBeforeUnmount(() => {
 			generation++;
 			clearTimeout(timer);
+			clearTimeout(historyTimer);
 			observer?.disconnect();
 			clearPreviews();
 		});
@@ -821,9 +1311,15 @@ var _sfc_main = {
 					onChange: _cache[0] || (_cache[0] = ($event) => addFiles([...$event.target.files]))
 				}, null, 40, _hoisted_1), createVNode(_sfc_main$4, {
 					scene: scene.value,
+					models: historyModels.value,
+					"describe-row": historyRow,
 					views: views.value,
 					onEvent: event
-				}, null, 8, ["scene", "views"])], 544)]),
+				}, null, 8, [
+					"scene",
+					"models",
+					"views"
+				])], 544)]),
 				_: 1
 			}, 512)]);
 		};

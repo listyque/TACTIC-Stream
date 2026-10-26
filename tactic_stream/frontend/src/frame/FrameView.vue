@@ -107,7 +107,7 @@ function style(node) {
     paddingLeft:
       node.paddingLeft === undefined ? undefined : node.paddingLeft + 'px',
     color: color(node.color),
-    opacity: node.opacity,
+    opacity: node.revealOnRowInteraction ? undefined : node.opacity,
     transform: node.scale === undefined ? undefined : `scale(${node.scale})`,
     transformOrigin: 'top left',
     textDecoration: node.strike ? 'line-through' : undefined,
@@ -536,6 +536,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :id="node.elementId"
         :data-frame="node.id"
         class="frame-node frame-action"
+        :class="{ 'frame-secondary-action': node.revealOnRowInteraction }"
         :style="
           Object.assign(style(node), {
             borderRadius: (node.radius === undefined ? 10 : node.radius) + 'px'

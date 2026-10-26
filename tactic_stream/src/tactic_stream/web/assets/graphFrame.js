@@ -2,6 +2,7 @@ import { D as nextTick } from "./vue.js";
 import { j as appearance } from "./index.js";
 import { Gt as label, Jt as rect, Kt as muted, Wt as button, qt as node, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
+import { t as listAction } from "./tree.ui.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/workflow.fields.mjs
 var fieldGroups = [
@@ -909,17 +910,27 @@ function records(model, ui, language) {
 function row(list, record, model, ui, language) {
 	const width = list.width - 16, tr = (text) => translate(text, language);
 	if (list.source === "graphPipelines") {
-		if (record.group) return { nodes: [button("workflowGroup_" + record.searchType, rect(0, 0, width - 42, 38), record.label, ui.collapsed.indexOf(record.searchType) >= 0 ? "chevron-right" : "chevron-down", {
+		if (record.group) return { nodes: [listAction("workflowGroup_" + record.searchType, rect(0, 0, width, 34), record.label, ui.collapsed.indexOf(record.searchType) >= 0 ? "chevron-right" : "chevron-down", {
 			type: "collapse",
 			identity: record.searchType
-		}, !model.busy), button("workflowCreate_" + record.searchType, rect(width - 38, 0, 38, 38), tr("Create workflow"), "add", {
+		}, !model.busy, {
+			fontRole: "secondary",
+			color: "secondaryText",
+			weight: 500,
+			endInset: 32
+		}), listAction("workflowCreate_" + record.searchType, rect(width - 34, 2, 30, 30), tr("Create workflow"), "add", {
 			type: "createWorkflow",
 			searchType: record.searchType
-		}, !model.busy && !model.dirty && !model.uncertain && (model.canWrite || model.metadata.canCreate), { iconOnly: true })] };
+		}, !model.busy && !model.dirty && !model.uncertain && (model.canWrite || model.metadata.canCreate), {
+			iconOnly: true,
+			revealOnRowInteraction: true
+		})] };
 		return { nodes: [node("Action", "workflowPipeline_" + record.identity, rect(0, 0, width, 38), {
 			text: record.label || record.identity,
 			selected: model.identity === record.identity,
-			normalColor: "surfaceContainerHigh",
+			normalColor: "transparent",
+			radius: 6,
+			toolTip: (record.label || record.identity) + " · " + record.identity,
 			selectedColor: "contentSelection",
 			enabled: !model.busy && !model.uncertain,
 			children: [label("workflowPipelineTitle_" + record.identity, rect(10, 0, width - 20, 38), record.label || record.identity)],
@@ -932,7 +943,7 @@ function row(list, record, model, ui, language) {
 	if (list.source === "graphTypes") return { nodes: [node("Action", "graphType_" + record.identity, rect(0, 0, width, 62), {
 		text: record.label || record.identity,
 		selected: ui.typeToAdd === record.identity,
-		normalColor: "surfaceContainerHigh",
+		normalColor: "transparent",
 		selectedColor: "contentSelection",
 		enabled: !model.busy,
 		children: [label("graphTypeTitle_" + record.identity, rect(10, 4, width - 20, 26), record.label || record.identity, { weight: 600 }), label("graphTypeIdentity_" + record.identity, rect(10, 32, width - 20, 22), record.identity, muted)],

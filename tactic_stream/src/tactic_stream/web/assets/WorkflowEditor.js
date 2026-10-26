@@ -31,7 +31,7 @@ function row(list, record, model, language) {
 		text: heading,
 		enabled: !model.busy,
 		selected: !!rule && model.selected === record.index,
-		normalColor: "surfaceContainerHigh",
+		normalColor: "transparent",
 		selectedColor: "contentSelection",
 		children: [label("processRuleTitle_" + list.source + "_" + record.identity, rect(12, 4, w - 24, 28), heading, { weight: 600 }), label("processRuleDetail_" + list.source + "_" + record.identity, rect(12, 36, w - 24, 34), description, muted)],
 		action: rule ? {

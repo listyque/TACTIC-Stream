@@ -68,13 +68,17 @@ class AgentRequestCmd(Command):
         if not all(self.sql.table_exists(name) for name in ('spt_agent_request', 'spt_agent_host')):
             raise ValueError('Upgrade the project schema before connecting an agent')
         action = self.kwargs.get('action')
-        if action not in ('state', 'submit', 'read', 'selection', 'cancel', 'heartbeat', 'disconnect', 'claim', 'update', 'message', 'ack', 'undo', 'download'):
+        if action not in ('state', 'submit', 'read', 'selection', 'cancel', 'heartbeat', 'disconnect', 'claim', 'update', 'message', 'ack', 'undo', 'download', 'draft', 'organize', 'group_save', 'group_remove'):
             raise ValueError('Unknown agent request action')
         self.owner = Environment.get_user_name()
         self.now = int(time.time())
         # Consistent lock order also makes claims and repeated submissions atomic.
         for table in ('spt_agent_host', 'spt_agent_request'):
             self.sql.get_database_impl().lock_collection_table(self.sql, table)
+        if action in ('draft', 'organize', 'group_save', 'group_remove'):
+            from tactic_stream.server.agent_library import apply
+            self.info = apply(self, action)
+            return
         if action == 'disconnect':
             host_id = identity(self.kwargs.get('host_id'))
             host = self.load('spt_agent_host', host_id)
@@ -117,12 +121,8 @@ class AgentRequestCmd(Command):
             self.info = host
             return
         if action == 'state':
-            hosts = [row for row in self.records('spt_agent_host') if self.now - row['seen'] <= HOST_TTL]
-            requests = sorted(self.records('spt_agent_request'), key=lambda row: (row['created'], row['request_id']), reverse=True)
-            for row in requests:
-                self.expire(row)
-            self.info = dict(hosts=hosts, requests=[dict(request_id=row['request_id'],
-                prompt=(row['document']['prompt'] or 'Attachments')[:120], status=row['status']) for row in requests[:30]])
+            from tactic_stream.server.agent_library import state
+            self.info = state(self)
             return
         if action == 'submit':
             request_id = identity(self.kwargs.get('request_id'))
@@ -136,12 +136,16 @@ class AgentRequestCmd(Command):
             if type(document['allow_changes']) is not bool:
                 raise ValueError('Invalid change permission')
             old = self.load('spt_agent_request', request_id, missing=True)
-            if old:
+            if old and old['status'] != 'draft':
                 if old['document'] != document:
                     raise ValueError('Request ID was used with a different document')
                 self.info = old
                 return
+            if old and old.get('library', {}).get('archived'):
+                raise ValueError('Restore this conversation before sending a message')
             context_document(document['context'])
+            if old and old['document']['context'] != document['context']:
+                raise ValueError('Conversation context cannot be changed')
             host = self.load('spt_agent_host', identity(self.kwargs.get('host_id')))
             if self.now - host['seen'] > HOST_TTL:
                 raise ValueError('External agent is offline')
@@ -159,9 +163,11 @@ class AgentRequestCmd(Command):
             if sum(row['status'] in ACTIVE for row in self.records('spt_agent_request')) >= 5:
                 raise ValueError('Wait for an existing agent request to finish')
             row = dict(request_id=request_id, document=document, host_id=host['host_id'],
-                       status='queued', created=self.now, seen=self.now, events=[], answer='', error='',
+                       status='queued', created=self.now, seen=self.now, activity=self.now, events=[], answer='', error='',
                        messages=[dict(id=request_id, role='user', text=document['prompt'], attachments=attachments, delivered=True)],
                        model=document.get('model', ''), effort=document.get('effort', ''), provider=provider, provider_target=target, turn=1)
+            if old and 'library' in old:
+                row['library'] = old['library']
         elif action == 'claim':
             host_id = identity(self.kwargs.get('host_id'))
             host = self.load('spt_agent_host', host_id)
@@ -187,7 +193,8 @@ class AgentRequestCmd(Command):
             row = self.load('spt_agent_request', identity(self.kwargs.get('request_id')))
             self.expire(row)
             if action == 'read':
-                self.info = row
+                from tactic_stream.server.agent_library import summary
+                self.info = dict(row, library_summary=summary(row))
                 return
             if action == 'download':
                 if not row['document'].get('allow_web') or row['status'] != 'running':
@@ -238,6 +245,10 @@ class AgentRequestCmd(Command):
                 row['undo_operation'] = ''
                 row.setdefault('events', []).append('Last agent field change undone')
             elif action == 'message':
+                if row.get('library', {}).get('archived'):
+                    raise ValueError('Restore this conversation before sending a message')
+                if row['status'] == 'draft':
+                    raise ValueError('Send the draft as its first conversation request')
                 if row['status'] == 'cancelling':
                     raise ValueError('Wait until the current turn stops before continuing')
                 message_id = identity(self.kwargs.get('message_id'))
@@ -285,6 +296,7 @@ class AgentRequestCmd(Command):
                 elif model != row.get('model', '') or effort != row.get('effort', '') or provider != row.get('provider', 'codex'):
                     raise ValueError('Change the model or reasoning effort after the current turn finishes')
                 messages.append(message)
+                row['activity'] = self.now
             elif action == 'ack':
                 if identity(self.kwargs.get('host_id')) != row['host_id']:
                     raise ValueError('Request belongs to another external host')
