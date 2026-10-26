@@ -3311,6 +3311,7 @@ var _sfc_main$164 = {
 			focusedKey.value = key;
 			emit("focus", record);
 			if (!props.selectable) return;
+			if (event.type === "contextmenu" && props.selectedKeys?.includes(key)) return;
 			if (event.shiftKey && anchorKey.value) {
 				const keys = records.value.map((record) => record.__search_key__), indices = [keys.indexOf(anchorKey.value), keys.indexOf(key)];
 				if (indices.every((index) => index >= 0)) {
@@ -5315,6 +5316,8 @@ var _sfc_main$156 = {
 	},
 	inject: {
 		openObjectTab: { default: null },
+		openExternalAgent: { default: null },
+		canUseAgent: { default: () => () => false },
 		currentLogin: { default: () => () => "" }
 	},
 	emits: [
@@ -5364,6 +5367,9 @@ var _sfc_main$156 = {
 		};
 	},
 	computed: {
+		canAgent() {
+			return !!this.openExternalAgent && this.canUseAgent();
+		},
 		kind() {
 			return this.node?.branch?.kind || (this.record?.__search_key__?.startsWith("sthpw/snapshot?") ? "snapshot" : this.record?.__search_key__?.startsWith("sthpw/file?") ? "file" : "object");
 		},
@@ -5456,6 +5462,11 @@ var _sfc_main$156 = {
 			const record = this.record;
 			this.close();
 			this.$emit(operation, record);
+		},
+		agent() {
+			const records = this.selected.length ? this.selected : [this.record];
+			this.close();
+			this.openExternalAgent(records, this.project);
 		},
 		async copy(web = false) {
 			const value = web ? new URL(browserLink(this.skey, this.project), location.origin).href : this.skey;
@@ -5585,233 +5596,240 @@ function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
 			width: 244,
 			onToggle: _cache[26] || (_cache[26] = ($event) => $data.node && ($data.node.menuVisible = $event.target.open))
 		}, {
-			default: withCtx(() => [$options.selected.length ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-				createVNode(_component_AppButton, {
-					label: "Object details",
-					icon: "info",
-					onClick: _cache[0] || (_cache[0] = ($event) => $options.run("inspect"))
-				}),
-				$props.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
-					key: 0,
-					icon: "MDI_TABLE_EDIT",
-					onClick: _cache[1] || (_cache[1] = ($event) => {
-						$options.close();
-						_ctx.$emit("edit-selected", $options.selected);
-					})
-				}, {
-					default: withCtx(() => [createTextVNode(toDisplayString($options.t("Edit {count} Selected in DB Editor", { count: $options.selected.length })), 1)]),
-					_: 1
-				})) : createCommentVNode("", true),
-				$props.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
-					key: 1,
-					destructive: "",
-					icon: "delete",
-					onClick: _cache[2] || (_cache[2] = ($event) => {
-						$options.close();
-						_ctx.$emit("delete", $options.selected);
-					})
-				}, {
-					default: withCtx(() => [createTextVNode(toDisplayString($options.t("Delete All Selected ({count})", { count: $options.selected.length })), 1)]),
-					_: 1
-				})) : createCommentVNode("", true)
-			], 64)) : $options.kind === "file" ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-				createVNode(_component_AppButton, {
-					label: "Open File",
-					icon: "folder",
-					onClick: $options.openSnapshot
-				}, null, 8, ["onClick"]),
-				createVNode(_component_AppButton, {
-					label: "Show Folder",
-					icon: "folder",
-					disabled: "",
-					title: $options.t("Opening local folders requires a desktop connection. Use Open snapshot to view and download files in the browser.")
-				}, null, 8, ["title"]),
-				_cache[31] || (_cache[31] = createBaseVNode("hr", null, null, -1)),
-				createVNode(_component_AppButton, {
-					label: "Copy File Path",
-					icon: "copy",
-					onClick: _cache[3] || (_cache[3] = ($event) => $options.fileAction("copy_path"))
-				}),
-				createVNode(_component_AppButton, {
-					label: "Copy Web Link",
-					icon: "link",
-					onClick: _cache[4] || (_cache[4] = ($event) => $options.fileAction("copy_web_path"))
-				}),
-				createVNode(_component_AppButton, {
-					label: "Copy To Clipboard",
-					icon: "copy",
-					onClick: _cache[5] || (_cache[5] = ($event) => $options.fileAction("copy_image"))
-				})
-			], 64)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [$options.kind === "relation" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-				$props.operations?.create && $props.operations?.checkin ? (openBlock(), createBlock(_component_AppButton, {
-					key: 0,
-					label: "Add files",
-					icon: "upload",
-					onClick: $options.ingest
-				}, null, 8, ["onClick"])) : createCommentVNode("", true),
-				$props.operations?.create ? (openBlock(), createBlock(_component_AppButton, {
-					key: 1,
-					label: "Add new Related sObject",
-					icon: "add",
-					onClick: _cache[6] || (_cache[6] = ($event) => $options.run("create-related"))
-				})) : createCommentVNode("", true),
-				$data.node.branch.relationship === "instance" ? (openBlock(), createBlock(_component_AppButton, {
-					key: 2,
-					label: "Link sObjects Interface",
-					icon: "link",
-					onClick: _cache[7] || (_cache[7] = ($event) => $options.run("link-related"))
-				})) : createCommentVNode("", true)
-			], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-				$options.hasSnapshot || $options.kind === "file" ? (openBlock(), createBlock(_component_AppButton, {
-					key: 0,
-					label: "Open snapshot",
-					icon: "folder",
-					disabled: $data.busy,
-					onClick: $options.openSnapshot
-				}, null, 8, ["disabled", "onClick"])) : createCommentVNode("", true),
-				$options.canCheckin ? (openBlock(), createBlock(_component_AppButton, {
-					key: 1,
-					label: "Save snapshot",
-					icon: "save",
-					onClick: _cache[8] || (_cache[8] = ($event) => $options.checkin())
-				})) : createCommentVNode("", true),
-				$options.canCheckin ? (openBlock(), createElementBlock("hr", _hoisted_1$94)) : createCommentVNode("", true),
-				$options.kind === "object" && $data.advanced && $props.operations?.create ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [
-					createVNode(_component_AppButton, {
-						label: "Duplicate…",
-						icon: "copy",
-						onClick: _cache[9] || (_cache[9] = ($event) => $options.duplicate())
-					}),
-					$data.hasDuplicateProfile ? (openBlock(), createBlock(_component_AppButton, {
-						key: 0,
-						label: "Quick Duplicate",
-						icon: "copy",
-						onClick: _cache[10] || (_cache[10] = ($event) => $options.duplicate(true))
-					})) : createCommentVNode("", true),
-					createVNode(_component_AppButton, {
-						label: "Duplicate fields only",
-						icon: "copy",
-						onClick: _cache[11] || (_cache[11] = ($event) => $options.run("duplicate"))
-					})
-				], 64)) : createCommentVNode("", true),
-				$options.kind === "object" && $data.advanced && $options.canCheckin ? (openBlock(), createBlock(_component_AppButton, {
-					key: 4,
-					label: "Change Preview",
-					icon: "image",
-					onClick: _cache[12] || (_cache[12] = ($event) => $options.checkin({ preview: true }))
-				})) : createCommentVNode("", true),
-				$options.canCheckin ? (openBlock(), createBlock(_component_AppButton, {
-					key: 5,
-					label: "Save from Clipboard",
-					icon: "MDI_CONTENT_PASTE",
-					onClick: _cache[13] || (_cache[13] = ($event) => $options.checkin({ clipboard: true }))
-				})) : createCommentVNode("", true),
-				$options.hasSnapshot && $options.canCheckin && ($options.kind !== "object" || $data.advanced) ? (openBlock(), createBlock(_component_AppButton, {
-					key: 6,
-					label: "Add revision (override current file)",
-					icon: "history",
-					disabled: $data.busy,
-					onClick: _cache[14] || (_cache[14] = ($event) => $options.checkin({ revision: true }))
-				}, null, 8, ["disabled"])) : createCommentVNode("", true),
-				_cache[33] || (_cache[33] = createBaseVNode("hr", null, null, -1)),
-				createVNode(_component_AppButton, {
-					label: "Show Folder",
-					icon: "folder",
-					disabled: "",
-					title: $options.t("Opening local folders requires a desktop connection. Use Open snapshot to view and download files in the browser.")
-				}, null, 8, ["title"]),
-				$options.kind !== "object" || $data.advanced ? (openBlock(), createBlock(_component_AppButton, {
-					key: 7,
-					label: "Show Folder Versions",
-					icon: "folder",
-					disabled: "",
-					title: $options.t("Opening local folders requires a desktop connection. Use Open snapshot to view and download files in the browser.")
-				}, null, 8, ["title"])) : createCommentVNode("", true),
-				$options.kind === "object" && $data.advanced ? (openBlock(), createBlock(_component_AppButton, {
-					key: 8,
-					label: "Create Watch Folder",
-					icon: "MDI_EYE",
-					disabled: "",
-					title: $options.t($options.watchFolderReason())
-				}, null, 8, ["title"])) : createCommentVNode("", true),
-				_cache[34] || (_cache[34] = createBaseVNode("hr", null, null, -1)),
-				$options.kind !== "object" || $data.advanced ? (openBlock(), createElementBlock(Fragment, { key: 9 }, [
-					createVNode(_component_AppButton, {
-						label: "Copy Search Key",
-						icon: "copy",
-						disabled: !$data.record,
-						onClick: _cache[15] || (_cache[15] = ($event) => $options.copy())
-					}, null, 8, ["disabled"]),
-					createVNode(_component_AppButton, {
-						label: "Copy Web Link",
-						icon: "link",
-						disabled: !$data.record,
-						onClick: _cache[16] || (_cache[16] = ($event) => $options.copy(true))
-					}, null, 8, ["disabled"]),
-					$options.kind === "object" && $options.openObjectTab ? (openBlock(), createBlock(_component_AppButton, {
-						key: 0,
-						label: "Open On New Tab",
-						icon: "MDI_TAB",
-						onClick: $options.newTab
-					}, null, 8, ["onClick"])) : createCommentVNode("", true),
+			default: withCtx(() => [
+				$options.selected.length ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
 					createVNode(_component_AppButton, {
 						label: "Object details",
 						icon: "info",
-						disabled: !$data.record,
-						onClick: _cache[17] || (_cache[17] = ($event) => $options.run("inspect"))
-					}, null, 8, ["disabled"]),
-					$props.showRelated && $options.kind === "object" ? (openBlock(), createBlock(_component_AppButton, {
+						onClick: _cache[0] || (_cache[0] = ($event) => $options.run("inspect"))
+					}),
+					$props.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
+						key: 0,
+						icon: "MDI_TABLE_EDIT",
+						onClick: _cache[1] || (_cache[1] = ($event) => {
+							$options.close();
+							_ctx.$emit("edit-selected", $options.selected);
+						})
+					}, {
+						default: withCtx(() => [createTextVNode(toDisplayString($options.t("Edit {count} Selected in DB Editor", { count: $options.selected.length })), 1)]),
+						_: 1
+					})) : createCommentVNode("", true),
+					$props.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
 						key: 1,
-						label: "Related objects",
-						icon: "link",
-						onClick: _cache[18] || (_cache[18] = ($event) => $options.run("related"))
+						destructive: "",
+						icon: "delete",
+						onClick: _cache[2] || (_cache[2] = ($event) => {
+							$options.close();
+							_ctx.$emit("delete", $options.selected);
+						})
+					}, {
+						default: withCtx(() => [createTextVNode(toDisplayString($options.t("Delete All Selected ({count})", { count: $options.selected.length })), 1)]),
+						_: 1
 					})) : createCommentVNode("", true)
-				], 64)) : createCommentVNode("", true),
-				$options.kind !== "process" && $props.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
-					key: 10,
-					label: "Edit record",
-					icon: "edit",
-					disabled: !$data.record,
-					onClick: _cache[19] || (_cache[19] = ($event) => $options.run("edit"))
-				}, null, 8, ["disabled"])) : createCommentVNode("", true),
-				$options.kind === "object" && $data.advanced && $props.operations?.create ? (openBlock(), createBlock(_component_AppButton, {
-					key: 11,
-					label: "Create record",
-					icon: "add",
-					onClick: _cache[20] || (_cache[20] = ($event) => $options.run("create"))
-				})) : createCommentVNode("", true),
-				$data.node?.relationship === "instance" || $data.node?.branch?.relationship === "instance" ? (openBlock(), createBlock(_component_AppButton, {
-					key: 12,
-					label: "Unlink",
-					icon: "MDI_LINK_OFF",
-					onClick: _cache[21] || (_cache[21] = ($event) => $options.run("unlink"))
-				})) : createCommentVNode("", true),
-				$options.kind !== "process" && $data.record && $props.operations?.retire ? (openBlock(), createBlock(_component_AppButton, {
-					key: 13,
-					label: $data.record[$props.operations.retire_column] === "retired" ? "Reactivate record" : "Retire record",
-					icon: "archive",
-					onClick: _cache[22] || (_cache[22] = ($event) => $options.run($data.record[$props.operations.retire_column] === "retired" ? "reactivate" : "retire"))
-				}, null, 8, ["label"])) : createCommentVNode("", true),
-				$options.kind !== "process" && $data.record && $props.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
-					key: 14,
-					label: "Delete record",
-					icon: "delete",
-					destructive: "",
-					onClick: _cache[23] || (_cache[23] = ($event) => $options.run("delete"))
-				})) : createCommentVNode("", true),
-				$options.kind === "snapshot" && Number($data.record?.version) < 0 && $props.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
-					key: 15,
-					label: "Delete Whole Tree",
-					icon: "MDI_DELETE_FOREVER",
-					destructive: "",
-					onClick: _cache[24] || (_cache[24] = ($event) => $options.run("delete"))
-				})) : createCommentVNode("", true),
-				$options.kind === "object" ? (openBlock(), createElementBlock(Fragment, { key: 16 }, [_cache[32] || (_cache[32] = createBaseVNode("hr", null, null, -1)), createVNode(_component_AppButton, {
+				], 64)) : $options.kind === "file" ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+					createVNode(_component_AppButton, {
+						label: "Open File",
+						icon: "folder",
+						onClick: $options.openSnapshot
+					}, null, 8, ["onClick"]),
+					createVNode(_component_AppButton, {
+						label: "Show Folder",
+						icon: "folder",
+						disabled: "",
+						title: $options.t("Opening local folders requires a desktop connection. Use Open snapshot to view and download files in the browser.")
+					}, null, 8, ["title"]),
+					_cache[31] || (_cache[31] = createBaseVNode("hr", null, null, -1)),
+					createVNode(_component_AppButton, {
+						label: "Copy File Path",
+						icon: "copy",
+						onClick: _cache[3] || (_cache[3] = ($event) => $options.fileAction("copy_path"))
+					}),
+					createVNode(_component_AppButton, {
+						label: "Copy Web Link",
+						icon: "link",
+						onClick: _cache[4] || (_cache[4] = ($event) => $options.fileAction("copy_web_path"))
+					}),
+					createVNode(_component_AppButton, {
+						label: "Copy To Clipboard",
+						icon: "copy",
+						onClick: _cache[5] || (_cache[5] = ($event) => $options.fileAction("copy_image"))
+					})
+				], 64)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [$options.kind === "relation" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+					$props.operations?.create && $props.operations?.checkin ? (openBlock(), createBlock(_component_AppButton, {
+						key: 0,
+						label: "Add files",
+						icon: "upload",
+						onClick: $options.ingest
+					}, null, 8, ["onClick"])) : createCommentVNode("", true),
+					$props.operations?.create ? (openBlock(), createBlock(_component_AppButton, {
+						key: 1,
+						label: "Add new Related sObject",
+						icon: "add",
+						onClick: _cache[6] || (_cache[6] = ($event) => $options.run("create-related"))
+					})) : createCommentVNode("", true),
+					$data.node.branch.relationship === "instance" ? (openBlock(), createBlock(_component_AppButton, {
+						key: 2,
+						label: "Link sObjects Interface",
+						icon: "link",
+						onClick: _cache[7] || (_cache[7] = ($event) => $options.run("link-related"))
+					})) : createCommentVNode("", true)
+				], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+					$options.hasSnapshot || $options.kind === "file" ? (openBlock(), createBlock(_component_AppButton, {
+						key: 0,
+						label: "Open snapshot",
+						icon: "folder",
+						disabled: $data.busy,
+						onClick: $options.openSnapshot
+					}, null, 8, ["disabled", "onClick"])) : createCommentVNode("", true),
+					$options.canCheckin ? (openBlock(), createBlock(_component_AppButton, {
+						key: 1,
+						label: "Save snapshot",
+						icon: "save",
+						onClick: _cache[8] || (_cache[8] = ($event) => $options.checkin())
+					})) : createCommentVNode("", true),
+					$options.canCheckin ? (openBlock(), createElementBlock("hr", _hoisted_1$94)) : createCommentVNode("", true),
+					$options.kind === "object" && $data.advanced && $props.operations?.create ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [
+						createVNode(_component_AppButton, {
+							label: "Duplicate…",
+							icon: "copy",
+							onClick: _cache[9] || (_cache[9] = ($event) => $options.duplicate())
+						}),
+						$data.hasDuplicateProfile ? (openBlock(), createBlock(_component_AppButton, {
+							key: 0,
+							label: "Quick Duplicate",
+							icon: "copy",
+							onClick: _cache[10] || (_cache[10] = ($event) => $options.duplicate(true))
+						})) : createCommentVNode("", true),
+						createVNode(_component_AppButton, {
+							label: "Duplicate fields only",
+							icon: "copy",
+							onClick: _cache[11] || (_cache[11] = ($event) => $options.run("duplicate"))
+						})
+					], 64)) : createCommentVNode("", true),
+					$options.kind === "object" && $data.advanced && $options.canCheckin ? (openBlock(), createBlock(_component_AppButton, {
+						key: 4,
+						label: "Change Preview",
+						icon: "image",
+						onClick: _cache[12] || (_cache[12] = ($event) => $options.checkin({ preview: true }))
+					})) : createCommentVNode("", true),
+					$options.canCheckin ? (openBlock(), createBlock(_component_AppButton, {
+						key: 5,
+						label: "Save from Clipboard",
+						icon: "MDI_CONTENT_PASTE",
+						onClick: _cache[13] || (_cache[13] = ($event) => $options.checkin({ clipboard: true }))
+					})) : createCommentVNode("", true),
+					$options.hasSnapshot && $options.canCheckin && ($options.kind !== "object" || $data.advanced) ? (openBlock(), createBlock(_component_AppButton, {
+						key: 6,
+						label: "Add revision (override current file)",
+						icon: "history",
+						disabled: $data.busy,
+						onClick: _cache[14] || (_cache[14] = ($event) => $options.checkin({ revision: true }))
+					}, null, 8, ["disabled"])) : createCommentVNode("", true),
+					_cache[32] || (_cache[32] = createBaseVNode("hr", null, null, -1)),
+					createVNode(_component_AppButton, {
+						label: "Show Folder",
+						icon: "folder",
+						disabled: "",
+						title: $options.t("Opening local folders requires a desktop connection. Use Open snapshot to view and download files in the browser.")
+					}, null, 8, ["title"]),
+					$options.kind !== "object" || $data.advanced ? (openBlock(), createBlock(_component_AppButton, {
+						key: 7,
+						label: "Show Folder Versions",
+						icon: "folder",
+						disabled: "",
+						title: $options.t("Opening local folders requires a desktop connection. Use Open snapshot to view and download files in the browser.")
+					}, null, 8, ["title"])) : createCommentVNode("", true),
+					$options.kind === "object" && $data.advanced ? (openBlock(), createBlock(_component_AppButton, {
+						key: 8,
+						label: "Create Watch Folder",
+						icon: "MDI_EYE",
+						disabled: "",
+						title: $options.t($options.watchFolderReason())
+					}, null, 8, ["title"])) : createCommentVNode("", true),
+					_cache[33] || (_cache[33] = createBaseVNode("hr", null, null, -1)),
+					$options.kind !== "object" || $data.advanced ? (openBlock(), createElementBlock(Fragment, { key: 9 }, [
+						createVNode(_component_AppButton, {
+							label: "Copy Search Key",
+							icon: "copy",
+							disabled: !$data.record,
+							onClick: _cache[15] || (_cache[15] = ($event) => $options.copy())
+						}, null, 8, ["disabled"]),
+						createVNode(_component_AppButton, {
+							label: "Copy Web Link",
+							icon: "link",
+							disabled: !$data.record,
+							onClick: _cache[16] || (_cache[16] = ($event) => $options.copy(true))
+						}, null, 8, ["disabled"]),
+						$options.kind === "object" && $options.openObjectTab ? (openBlock(), createBlock(_component_AppButton, {
+							key: 0,
+							label: "Open On New Tab",
+							icon: "MDI_TAB",
+							onClick: $options.newTab
+						}, null, 8, ["onClick"])) : createCommentVNode("", true),
+						createVNode(_component_AppButton, {
+							label: "Object details",
+							icon: "info",
+							disabled: !$data.record,
+							onClick: _cache[17] || (_cache[17] = ($event) => $options.run("inspect"))
+						}, null, 8, ["disabled"]),
+						$props.showRelated && $options.kind === "object" ? (openBlock(), createBlock(_component_AppButton, {
+							key: 1,
+							label: "Related objects",
+							icon: "link",
+							onClick: _cache[18] || (_cache[18] = ($event) => $options.run("related"))
+						})) : createCommentVNode("", true)
+					], 64)) : createCommentVNode("", true),
+					$options.kind !== "process" && $props.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
+						key: 10,
+						label: "Edit record",
+						icon: "edit",
+						disabled: !$data.record,
+						onClick: _cache[19] || (_cache[19] = ($event) => $options.run("edit"))
+					}, null, 8, ["disabled"])) : createCommentVNode("", true),
+					$options.kind === "object" && $data.advanced && $props.operations?.create ? (openBlock(), createBlock(_component_AppButton, {
+						key: 11,
+						label: "Create record",
+						icon: "add",
+						onClick: _cache[20] || (_cache[20] = ($event) => $options.run("create"))
+					})) : createCommentVNode("", true),
+					$data.node?.relationship === "instance" || $data.node?.branch?.relationship === "instance" ? (openBlock(), createBlock(_component_AppButton, {
+						key: 12,
+						label: "Unlink",
+						icon: "MDI_LINK_OFF",
+						onClick: _cache[21] || (_cache[21] = ($event) => $options.run("unlink"))
+					})) : createCommentVNode("", true),
+					$options.kind !== "process" && $data.record && $props.operations?.retire ? (openBlock(), createBlock(_component_AppButton, {
+						key: 13,
+						label: $data.record[$props.operations.retire_column] === "retired" ? "Reactivate record" : "Retire record",
+						icon: "archive",
+						onClick: _cache[22] || (_cache[22] = ($event) => $options.run($data.record[$props.operations.retire_column] === "retired" ? "reactivate" : "retire"))
+					}, null, 8, ["label"])) : createCommentVNode("", true),
+					$options.kind !== "process" && $data.record && $props.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
+						key: 14,
+						label: "Delete record",
+						icon: "delete",
+						destructive: "",
+						onClick: _cache[23] || (_cache[23] = ($event) => $options.run("delete"))
+					})) : createCommentVNode("", true),
+					$options.kind === "snapshot" && Number($data.record?.version) < 0 && $props.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
+						key: 15,
+						label: "Delete Whole Tree",
+						icon: "MDI_DELETE_FOREVER",
+						destructive: "",
+						onClick: _cache[24] || (_cache[24] = ($event) => $options.run("delete"))
+					})) : createCommentVNode("", true)
+				], 64))], 64)),
+				$options.canAgent && ["object", "snapshot"].includes($options.kind) ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [_cache[34] || (_cache[34] = createBaseVNode("hr", null, null, -1)), createVNode(_component_AppButton, {
+					label: "External agent",
+					icon: "comment",
+					onClick: $options.agent
+				}, null, 8, ["onClick"])], 64)) : createCommentVNode("", true),
+				$options.kind === "object" && !$options.selected.length ? (openBlock(), createElementBlock(Fragment, { key: 4 }, [_cache[35] || (_cache[35] = createBaseVNode("hr", null, null, -1)), createVNode(_component_AppButton, {
 					label: $data.advanced ? "Basic menu" : "Advanced menu",
 					icon: "MDI_DOTS_HORIZONTAL",
 					onClick: _cache[25] || (_cache[25] = withModifiers(($event) => $data.advanced = !$data.advanced, ["stop"]))
 				}, null, 8, ["label"])], 64)) : createCommentVNode("", true)
-			], 64))], 64))]),
+			]),
 			_: 1
 		}, 512),
 		$data.checkinComponent ? (openBlock(), createBlock(resolveDynamicComponent($data.checkinComponent), {
@@ -54019,7 +54037,9 @@ var _sfc_main = {
 				this.$refs.docks.show("snapshot");
 			},
 			openWorkHours: (mode, task, project) => this.openWorkHours(mode, task, project),
-			currentLogin: () => this.session?.login || ""
+			currentLogin: () => this.session?.login || "",
+			openExternalAgent: (records, project) => this.openAgentRequest(records, project),
+			canUseAgent: () => this.canAdminister
 		};
 	},
 	data() {
@@ -54755,15 +54775,20 @@ var _sfc_main = {
 				search_keys: [...view.selectedKeys || []]
 			};
 		},
-		async openAgentRequest() {
+		async openAgentRequest(records = null, project = this.workspaceProject) {
 			const session = this.session;
 			const context = this.agentContext();
+			if (Array.isArray(records) && records.length) {
+				context.project = project;
+				context.search_type = records[0].__search_key__.split("?")[0];
+				context.search_keys = [...new Set(records.map((record) => record.__search_key__))];
+			}
 			try {
 				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([76,1,2,3,4,5,6,7,13,14,77]));
 				if (this.session !== session) return;
 				this.agentRequestComponent ||= markRaw(module.default);
 				await nextTick();
-				if (this.session === session) this.$refs.agentRequest.open(context);
+				if (this.session === session) await this.$refs.agentRequest.open(context, Array.isArray(records));
 			} catch (error) {
 				if (this.session === session) notify("error", error.message, "", "agent-request");
 			}

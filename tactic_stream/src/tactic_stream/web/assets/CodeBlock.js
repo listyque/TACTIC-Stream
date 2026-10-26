@@ -4061,6 +4061,7 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Send or clear the current draft before opening another object": "Отправьте или очистите текущий черновик, прежде чем открывать другой объект",
 	Provider: "Провайдер",
 	"AI providers": "ИИ-провайдеры",
 	"AI connection": "ИИ-подключение",

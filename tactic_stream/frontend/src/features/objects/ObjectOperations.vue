@@ -16,6 +16,8 @@ export default {
   components: { AppButton, AppMenu, FilePreview },
   inject: {
     openObjectTab: { default: null },
+    openExternalAgent: { default: null },
+    canUseAgent: { default: () => () => false },
     currentLogin: { default: () => () => '' }
   },
   emits: [
@@ -59,6 +61,9 @@ export default {
     };
   },
   computed: {
+    canAgent() {
+      return !!this.openExternalAgent && this.canUseAgent();
+    },
     kind() {
       return (
         this.node?.branch?.kind ||
@@ -194,6 +199,11 @@ export default {
       const record = this.record;
       this.close();
       this.$emit(operation, record);
+    },
+    agent() {
+      const records = this.selected.length ? this.selected : [this.record];
+      this.close();
+      this.openExternalAgent(records, this.project);
     },
     async copy(web = false) {
       const value = web
@@ -587,14 +597,19 @@ export default {
           destructive
           @click="run('delete')"
         />
-        <template v-if="kind === 'object'"
-          ><hr />
-          <AppButton
-            :label="advanced ? 'Basic menu' : 'Advanced menu'"
-            icon="MDI_DOTS_HORIZONTAL"
-            @click.stop="advanced = !advanced"
-        /></template>
       </template>
+    </template>
+    <template v-if="canAgent && ['object', 'snapshot'].includes(kind)">
+      <hr />
+      <AppButton label="External agent" icon="comment" @click="agent" />
+    </template>
+    <template v-if="kind === 'object' && !selected.length">
+      <hr />
+      <AppButton
+        :label="advanced ? 'Basic menu' : 'Advanced menu'"
+        icon="MDI_DOTS_HORIZONTAL"
+        @click.stop="advanced = !advanced"
+      />
     </template>
   </AppMenu>
   <component

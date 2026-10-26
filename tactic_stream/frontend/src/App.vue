@@ -111,6 +111,8 @@ export default {
     },
     openWorkHours: (mode, task, project) => this.openWorkHours(mode, task, project),
     currentLogin: () => this.session?.login || '',
+    openExternalAgent: (records, project) => this.openAgentRequest(records, project),
+    canUseAgent: () => this.canAdminister,
   } },
   data() {
     return {
@@ -487,15 +489,20 @@ export default {
         title: this.activeWorkspaceSection?.title || '', search_type: view.type || '', view: view.view || this.view || '',
         search_keys: [...(view.selectedKeys || [])] }
     },
-    async openAgentRequest() {
+    async openAgentRequest(records = null, project = this.workspaceProject) {
       const session = this.session
       const context = this.agentContext()
+      if (Array.isArray(records) && records.length) {
+        context.project = project
+        context.search_type = records[0].__search_key__.split('?')[0]
+        context.search_keys = [...new Set(records.map(record => record.__search_key__))]
+      }
       try {
         const module = await import('./features/scripts/AgentRequest.vue')
         if (this.session !== session) return
         this.agentRequestComponent ||= markRaw(module.default)
         await nextTick()
-        if (this.session === session) this.$refs.agentRequest.open(context)
+        if (this.session === session) await this.$refs.agentRequest.open(context, Array.isArray(records))
       } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-request') }
     },
     async openAgentProviders() {

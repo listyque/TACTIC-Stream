@@ -1558,7 +1558,8 @@ var en_default = {
 	"Connection has not been checked": "Connection has not been checked",
 	"Waiting for the external host": "Waiting for the external host",
 	"Manage AI connections": "Manage AI connections",
-	"Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini.": "Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini."
+	"Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini.": "Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini.",
+	"Send or clear the current draft before opening another object": "Send or clear the current draft before opening another object"
 };
 var ru_default = {
 	"Stale source": "Исходник изменился",
@@ -6662,7 +6663,8 @@ var ru_default = {
 	"Connection has not been checked": "Подключение не проверено",
 	"Waiting for the external host": "Ожидание внешнего хоста",
 	"Manage AI connections": "Настроить ИИ-подключения",
-	"Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini.": "Настройте подключения своего аккаунта: Codex, OpenAI, совместимые и локальные API, Anthropic и Gemini."
+	"Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini.": "Настройте подключения своего аккаунта: Codex, OpenAI, совместимые и локальные API, Anthropic и Gemini.",
+	"Send or clear the current draft before opening another object": "Отправьте или очистите текущий черновик, прежде чем открывать другой объект"
 };
 //#endregion
 export { en_default as n, ru_default as t };

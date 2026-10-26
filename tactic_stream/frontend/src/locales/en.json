@@ -1558,5 +1558,6 @@
   "Connection has not been checked": "Connection has not been checked",
   "Waiting for the external host": "Waiting for the external host",
   "Manage AI connections": "Manage AI connections",
-  "Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini.": "Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini."
+  "Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini.": "Configure account-owned connections for Codex, OpenAI, compatible and local APIs, Anthropic and Gemini.",
+  "Send or clear the current draft before opening another object": "Send or clear the current draft before opening another object"
 }

@@ -743,8 +743,20 @@ var _sfc_main = {
 				model.value.error = error.message;
 			}
 		}
-		async function open(context) {
-			if (!model.value.selected && !model.value.prompt) model.value = initial(context || props.capture());
+		async function open(context, fresh = false) {
+			if (fresh) {
+				if (model.value.prompt.trim() || model.value.attachments.length || model.value.pending || model.value.uploading) {
+					await open();
+					throw Error("Send or clear the current draft before opening another object");
+				}
+				generation++;
+				inFlight = false;
+				queuedAction = "";
+				clearTimeout(timer);
+				clearPreviews();
+				model.value = initial(context);
+			}
+			if (!model.value.selected && !model.value.prompt && !model.value.attachments.length && !model.value.pending && !model.value.uploading) model.value = initial(context || props.capture());
 			contextTicket = props.ticket;
 			await nextTick();
 			if (!dialog.value.open) dialog.value.show();
