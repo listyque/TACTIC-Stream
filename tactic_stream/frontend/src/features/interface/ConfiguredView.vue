@@ -11,6 +11,7 @@ import { t } from '../../i18n.js';
 import TableCell from './TableCell.vue';
 import TableView from './TableView.vue';
 import TableDocument from './TableDocument.vue';
+import CustomLayoutView from './CustomLayoutView.vue';
 import TableServiceDialogs from './TableServiceDialogs.vue';
 import TableParentPicker from './TableParentPicker.vue';
 import NestedTable from './NestedTable.vue';
@@ -60,6 +61,7 @@ export default {
     TableServiceDialogs,
     TableParentPicker,
     TableDocument,
+    CustomLayoutView,
     RecordForm,
     RelatedObjects,
     TableInlineEditor,
@@ -79,6 +81,9 @@ export default {
   },
   props: {
     definition: Object,
+    layoutModel: Object,
+    layoutWidth: Number,
+    layoutHeight: Number,
     ticket: String,
     project: String,
     workspaceId: String,
@@ -97,6 +102,7 @@ export default {
     accent: String
   },
   emits: [
+    'close',
     'sort',
     'inspect',
     'operate',
@@ -2038,7 +2044,23 @@ export default {
     :data-result-mode="displayedMode"
     :aria-busy="busy || cellsBusy"
   >
-    <template v-if="tabs">
+    <CustomLayoutView
+      v-if="layoutModel"
+      :model="layoutModel"
+      :ticket="ticket"
+      :project="project"
+      :width="layoutWidth"
+      :height="layoutHeight"
+      @action="tableAction"
+      @edit="openNestedEditor"
+      @inspect="$emit('inspect', $event)"
+      @cell-event="nestedCellEvent"
+      @column="$emit('column', $event)"
+      @saved="tableSaved"
+      @notice="serviceMessage = $event"
+      @close="$emit('close')"
+    />
+    <template v-else-if="tabs">
       <div
         ref="tabs"
         class="view-tabs"

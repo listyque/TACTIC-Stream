@@ -22,6 +22,8 @@ class DashboardBlock(BaseModel):
     filters: list[DashboardFilter] = Field(default_factory=list, max_length=32)
     href: str = Field(default='', max_length=2048)
     weight: int = Field(default=1, ge=1, le=12)
+    height: int | None = Field(default=None, ge=120, le=1600)
+    controls: list[Literal['search', 'searchLimit', 'shelf', 'selection', 'gear', 'insert']] | None = Field(default=None, max_length=6)
     children: list['DashboardBlock'] = Field(default_factory=list, max_length=32)
 
 

@@ -34,9 +34,11 @@ class Dashboards(unittest.TestCase):
             state=call('read')
             payload=dict(document=document(),expected_revision=state['revision'])
             preview=call('preview',**payload)
-            self.assertEqual(preview['model']['layoutNodes'][0]['children'][0]['text'],'Chosen entities: 1')
+            metric=preview['model']['layoutNodes'][0]['children'][0]
+            self.assertEqual((metric['kind'],metric['text'],metric['value']),('metric','Chosen entities',1))
             operation=str(uuid4())
             saved=call('apply',operation_id=operation,**payload)
+            self.assertEqual(call('read',name='review')['document'],preview['document'])
             self.assertEqual(call('apply',operation_id=operation,**payload),saved)
             self.assertEqual(call('operation',operation_id=operation),saved)
             compiled=proxy.execute_cmd(auth,'tactic.ui.table.CustomLayoutReadCmd',dict(view=saved['view']))['info']
@@ -65,6 +67,33 @@ class Dashboards(unittest.TestCase):
                 with self.assertRaises(Fault):proxy.execute_cmd(auth,COMMAND,dict(action='apply',project_code='one',document=invalid,
                     expected_revision=state['revision'],operation_id=str(uuid4())))
             self.assertEqual(json.loads(proxy.query(auth,'config/url',[['url','/dashboard/invalid']])),[])
+
+    def test_widget_height_and_native_controls_are_preserved(self):
+        from xmlrpc.client import Fault
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            call=lambda action,**values:proxy.execute_cmd(auth,COMMAND,dict(action=action,project_code='one',**values))['info']
+            state=call('read')
+            draft=document();draft['blocks'][1].update(height=320,controls=['search'])
+            preview=call('preview',document=draft,expected_revision=state['revision'])
+            table=preview['model']['layoutNodes'][1]
+            self.assertEqual(table['height'],320)
+            self.assertTrue(table['table']['search'])
+            self.assertTrue(all(not table['table'][name] for name in ('shelf','selection','gear','insert','searchLimit')))
+            draft['blocks'][1]['controls']=['python']
+            with self.assertRaises(Fault):call('preview',document=draft,expected_revision=state['revision'])
+            with self.assertRaises(Fault):call('read',name='does_not_exist')
+
+    def test_system_task_widget_uses_existing_project_parent_scope(self):
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            state=proxy.execute_cmd(auth,COMMAND,dict(action='read',project_code='one'))['info']
+            draft=dict(name='tasks',title='Tasks',blocks=[dict(kind='table',search_type='sthpw/task',filters=[dict(column='project_code',value='one')])])
+            model=proxy.execute_cmd(auth,COMMAND,dict(action='preview',project_code='one',document=draft,expected_revision=state['revision']))['info']['model']
+            table=model['layoutNodes'][0]['table']
+            self.assertFalse(table['projectScope'])
+            result=proxy.execute_cmd(auth,'tactic.ui.table.NestedTableReadCmd',dict(parent_key=table['parentKey'],search_type=table['searchType'],project_scope=table['projectScope'],filters=table['filters']))['info']
+            self.assertTrue(all(row['project_code']=='one' for row in result['records']))
 
     def test_markdown_literal_record_field_and_project_boundary(self):
         from xmlrpc.client import Fault
@@ -101,3 +130,69 @@ class Dashboards(unittest.TestCase):
                 self.assertFalse(result.is_error)
                 self.assertEqual(result.structured_content['path'],'/dashboard/via_mcp')
         asyncio.run(run())
+
+    def test_internal_chat_provider_can_publish_and_read_back_a_dashboard(self):
+        import asyncio
+        from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+        from pathlib import Path
+        from types import SimpleNamespace
+        import threading
+        from tactic_stream.admin_agent import StreamConnection
+        from tactic_stream.provider_host import run_provider
+        from tactic_stream.agent_host import message_inputs, task_prompt
+        requests=[];values={};operation=str(uuid4())
+        draft=document();draft['name']='chat_dashboard'
+
+        class Provider(BaseHTTPRequestHandler):
+            def do_POST(server):
+                body=json.loads(server.rfile.read(int(server.headers['Content-Length'])))
+                requests.append(body)
+                previous=json.loads(body['messages'][-1]['content']) if body['messages'][-1]['role']=='tool' else None
+                step=len(requests)
+                if step==1:
+                    name,arguments='ts_dashboard_read',{}
+                elif step==2:
+                    values.update(document=draft,expected_revision=previous['revision'])
+                    name,arguments='ts_dashboard_preview',values
+                elif step==3:
+                    name,arguments='ts_dashboard_save',dict(values,operation_id=operation)
+                elif step==4:
+                    name,arguments='ts_dashboard_read',dict(name='chat_dashboard')
+                else:
+                    name,arguments='agent_finish',dict(outcome='completed',answer='Open Review dashboard from project navigation.')
+                response=dict(choices=[dict(message=dict(role='assistant',content='',tool_calls=[dict(id='call-'+str(step),type='function',function=dict(name=name,arguments=json.dumps(arguments)))]))])
+                data=json.dumps(response).encode()
+                server.send_response(200);server.send_header('Content-Type','application/json');server.send_header('Content-Length',str(len(data)));server.end_headers();server.wfile.write(data)
+            def log_message(self,*args):pass
+
+        http=ThreadingHTTPServer(('127.0.0.1',0),Provider)
+        threading.Thread(target=http.serve_forever,daemon=True).start()
+        self.addCleanup(http.server_close);self.addCleanup(http.shutdown)
+        with test_transport.Transport.proxy(self) as proxy:
+            ticket=proxy.get_ticket('admin','private-test-password')
+        connection=StreamConnection(self.url,'one',ticket)
+        profiles=connection.command('providers','state')
+        profiles=connection.command('providers','save',provider='',expected_revision=profiles['revision'],document=dict(name='Dashboard fixture',kind='local',url='http://127.0.0.1:'+str(http.server_port)+'/v1',secret='',secret_env='',clear_secret=False,enabled=True,default_model='fixture-model',default=False))
+        profile=next(row for row in profiles['profiles'] if row['name']=='Dashboard fixture')
+        host=str(uuid4())
+        connection.command('request','heartbeat',host_id=host,label='Fixture',capabilities=dict(changes=True,trials=False,providers=[{key:profile[key] for key in ('id','name','kind')}],models=[dict(id='fixture-model',label='Fixture',provider=profile['id'],is_default=True)]))
+        request_id=str(uuid4())
+        connection.command('request','submit',request_id=request_id,host_id=host,document=dict(prompt='Create a native review dashboard with a count and filtered table.',allow_changes=True,provider=profile['id'],model='fixture-model',context=dict(client='TS',project='one',page='entities',title='Entities',search_type='contract/entity',view='table',search_keys=[])))
+        request=connection.command('request','claim',host_id=host)['request']
+        options=SimpleNamespace(allow_changes=True,stream_root=Path(__file__).resolve().parents[1],handler_root=None,trial_image=None,trial_directory=None)
+        asyncio.run(run_provider(connection,request,profile,host,options,lambda:None,task_prompt,message_inputs))
+        saved=connection.command('request','read',request_id=request_id)
+        self.assertEqual((saved['status'],saved['outcome']),('completed','completed'))
+        self.assertEqual(len(requests),5)
+        self.assertNotIn(ticket,json.dumps(requests))
+        self.assertEqual(connection.command('dashboard','read',name='chat_dashboard')['document']['name'],'chat_dashboard')
+        tools={row['function']['name']:row['function']['parameters'] for row in requests[0]['tools']}
+        self.assertIn('ts_dashboard_save',tools)
+        self.assertIn('name',tools['ts_dashboard_read']['properties'])
+        # Model writes remain unavailable when the chat's changes permission is off.
+        from tactic_stream.admin_agent import create_server
+        from mcp import Client
+        async def check_readonly():
+            async with Client(create_server(connection,options.stream_root,request_id=request_id)) as client:
+                self.assertNotIn('ts_dashboard_save',{tool.name for tool in (await client.list_tools()).tools})
+        asyncio.run(check_readonly())

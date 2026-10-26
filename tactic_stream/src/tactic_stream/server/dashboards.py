@@ -49,7 +49,7 @@ def dashboard_layout(document, view, search_key=''):
                         raise ValueError('Markdown source must be text')
                 if len(value)>65536:
                     raise ValueError('Markdown brick exceeds 64 KiB; open the document file instead')
-                nodes.append(dict(kind='markdown',text=value,weight=block.weight))
+                nodes.append(dict(kind='markdown',text=value,weight=block.weight,height=block.height))
                 continue
             if block.kind=='link':
                 url=urlsplit(block.href)
@@ -71,13 +71,14 @@ def dashboard_layout(document, view, search_key=''):
                 search=Search(block.search_type)
                 for column,relation,value in filters:
                     search.add_filter(column,value,op=relation)
-                nodes.append(dict(kind='text',text=(block.title or block.search_type)+': '+str(search.get_count()),weight=block.weight))
+                nodes.append(dict(kind='metric',text=block.title or block.search_type,value=search.get_count(),weight=block.weight))
             else:
                 read_interface(block.search_type,block.view)
-                nodes.append(dict(kind='table',text=block.title or block.search_type,weight=block.weight,
+                controls=('search','searchLimit','shelf','selection','gear','insert')
+                nodes.append(dict(kind='table',text=block.title or block.search_type,weight=block.weight,height=block.height,
                     table=dict(searchType=block.search_type,parentKey=target.get_search_key(),view=block.view,
-                        projectScope=True,filters=filters,embedded=True,initialLimit=25,
-                        search=True,searchLimit=True,shelf=True,selection=True,gear=True,insert=True)))
+                        projectScope=not block.search_type.startswith(('sthpw/', 'config/')),filters=filters,embedded=True,initialLimit=25,
+                        **{name:block.controls is None or name in block.controls for name in controls})))
         return nodes
 
     return dict(title=document.title,text='',layoutNodes=compile_blocks(document.blocks),

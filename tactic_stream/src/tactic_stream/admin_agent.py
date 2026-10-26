@@ -617,9 +617,9 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return connection.command('page', 'operation', search_type=search_type, operation_id=operation_id)
 
     @mcp.tool(annotations=read_only, structured_output=True)
-    def ts_dashboard_read() -> dict[str, Any]:
-        """Read current dashboard dependencies/revision and portable brick catalogue for TH and TS."""
-        return connection.command('dashboard','read')
+    def ts_dashboard_read(name: str = '') -> dict[str, Any]:
+        """Read dashboard dependencies/revision and portable bricks. Pass an existing dashboard name (without dashboard. prefix) to retrieve its exact document before editing; an empty name returns the compact catalogue. Dashboard navigation opens a workspace page, not a document popup."""
+        return connection.command('dashboard','read',name=name)
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_sidebar_read(source: Literal['handler','tactic']='handler') -> dict[str, Any]:

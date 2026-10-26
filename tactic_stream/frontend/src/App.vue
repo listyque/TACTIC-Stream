@@ -12,6 +12,7 @@ import RecordForm from './features/objects/RecordForm.vue'
 import ObjectReport from './features/objects/ObjectReport.vue'
 import WidgetConfiguration from './features/interface/WidgetConfiguration.vue'
 import ConfiguredView from './features/interface/ConfiguredView.vue'
+import WorkspacePage from './features/workspace/WorkspacePage.vue'
 import ObjectOperations from './features/objects/ObjectOperations.vue'
 import ObjectAction from './features/objects/ObjectAction.vue'
 import RelatedObjects from './features/objects/RelatedObjects.vue'
@@ -93,7 +94,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { ObjectReport, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -133,7 +134,7 @@ export default {
       loadingMode: 'pages', loadingMore: false, paginationArmed: false,
       requestId: 0, detailRequest: 0, detail: null, section: 'data', navigationOpen: false,
       compact: compactLayout.matches, showRetired: false, selectedKeys: [], focusedKey:'',
-      interfaceConfig: null, view: 'table', configuredView: false, viewTitle: '',
+      interfaceConfig: null, view: 'table', configuredView: false, viewTitle: '', layoutView: '', layoutTarget: '',
       connectionOnline: true, compactShortcuts: shortcutLayout.matches, serverBatch: null, updatesError: '', updatesTasksOpen: false, taskCalendarActive: false, updatesNotesOpen: false, updatesActivityOpen: false,
       canAdminister: false, administrationOpen: false, administrationSection: 'types', administrationVisited: [], administrationInstances: {}, administrationPresentation: {mobile:true,library:null}, pendingWorkflow:null, administrationCollapsed: false, workspaceSelection: null, configurationReturnSection: 'data',
       checkins: [],
@@ -487,7 +488,7 @@ export default {
     agentContext() {
       const view = this.workspaceView
       return { client: 'TS', project: this.workspaceProject || '', page: this.activeWorkspaceSection?.navigationKey || '',
-        title: this.activeWorkspaceSection?.title || '', search_type: view.type || '', view: view.view || this.view || '',
+        title: this.activeWorkspaceSection?.title || '', search_type: view.type || '', view: view.layoutView || view.view || this.view || '',
         search_keys: [...(view.selectedKeys || [])] }
     },
     async openAgentRequest(records = null, project = this.workspaceProject) {
@@ -928,17 +929,18 @@ export default {
         const scope = link?.name ? type.split('?')[0] + '@' + link.name : type.split('?')[0]
         let settings
         this.busy = true
-        try { settings = await searchConfiguration('settings', connection.ticket, connection.project, type, { scope }) }
+        try { if (!link?.layoutView) settings = await searchConfiguration('settings', connection.ticket, connection.project, type, { scope }) }
         catch (error) { this.fail(error); return }
         finally { this.busy = false }
         if (connection.ticket !== this.session?.ticket || connection.project !== this.project) return
         const tab = searchTab(title, { type, view: link?.view || 'table', viewTitle: link?.title || '',
           resultMode: link?.resultMode || link?.display?.options?.view_mode || this.flatViewLinks.find(item => item.supported && item.search_type === type)?.resultMode || preferences.checkin.defaultViewMode,
           configuredView: !!link, filterField, filterValue, scopeKey: scope,
-          quickSelections: settings.configuration.defaultSelections, quickLayout: null })
+          layoutView: link?.layoutView || '', layoutTarget: link?.display?.options?.search_key || '',
+          quickSelections: settings?.configuration.defaultSelections || {}, quickLayout: null })
         // Handler NavigationMixin adds each search in this sidebar namespace as a tab.
         const tabs = [tab]
-        if (link?.display?.options?.search_view) for (const saved of settings.presets.filter(row => row.view.endsWith(':' + scope))) {
+        if (link?.display?.options?.search_view) for (const saved of (settings?.presets || []).filter(row => row.view.endsWith(':' + scope))) {
           if (saved.error) { this.error = saved.error; continue }
           tabs.push(searchTab(saved.title, { ...tab.state, savedSearch: saved.view, filterRecords: saved.records,
             searchText: saved.keyword || '', presetOrderBys: saved.order_bys || [] }))
@@ -949,17 +951,6 @@ export default {
           tabs, closedTabs: [], current: tabs.at(-1).id })
       }
       await this.activateSection(id, navigationRequest)
-      if (link?.layoutView) {
-        const session=this.session,project=this.project,tab=this.activeSearchTab
-        try {
-          const result=await rpc('execute_cmd',[{ticket:session.ticket,project,language:'python'},'tactic.ui.table.CustomLayoutReadCmd',{view:link.layoutView,search_key:link.display.options.search_key || ''}])
-          if(this.session!==session || this.project!==project || this.activeSearchTab!==tab)return
-          await nextTick()
-          const owner=this.$refs.taskViews?.find(owner=>owner.workspaceId===tab.id)
-          if(!owner) throw new Error('The configured view is no longer available')
-          await owner.openCustomLayout(result.info,link.title,link.key)
-        } catch(error) {this.fail(error)}
-      }
     },
     searchTabTitle(tab) { return tab.title || (tab.number ? t('New Search {number}', { number: tab.number }) : '') },
     captureSearchTab(captureViewport = true) {
@@ -1135,6 +1126,11 @@ export default {
       const tab = this.activeSearchTab
       this.descriptionTarget = this.snapshotTarget = this.tableCheckinTarget = null
       if (!tab) { this.clearWorkspace(preserveSection); return }
+      const navigation = this.flatViewLinks.find(item => item.key === this.activeWorkspaceSection?.navigationKey)
+      if (navigation?.layoutView) {
+        tab.state.layoutView = navigation.layoutView
+        tab.state.layoutTarget = navigation.display?.options?.search_key || ''
+      }
       const scrollTop = tab.scrollTop, scrollLeft = tab.scrollLeft
       const workspaceLayout = tab.workspaceLayout
       Object.assign(this, tab.state)
@@ -1149,8 +1145,10 @@ export default {
         if (workspaceLayout) { if (!this.$refs.docks.apply(workspaceLayout)) tab.workspaceLayout = null }
         if (!tab.workspaceLayout && this.activeWorkspaceSection?.layoutPreset) await this.$refs.docks.applyAssigned(this.activeWorkspaceSection.layoutPreset, () => this.activeSearchTab === tab)
         if (this.activeSearchTab !== tab) return
+        if (this.layoutView && !workspaceLayout && !this.activeWorkspaceSection?.layoutPreset && this.$refs.docks.capture().presentation?.maximized !== 'results') this.$refs.docks.maximize('results')
         tab.workspaceLayout = this.$refs.docks.capture()
       }
+      if (this.layoutView) { tab.pageVisited = true; tab.loaded = true; this.busy = false; this.saveSession(); return }
       if (!loaded) {
         const selected = this.selectedKeys, request = this.requestId + 1
         const restored = await this.loadRows({ restore: tab.loadingMode === this.loadingMode })
@@ -1342,6 +1340,7 @@ export default {
       }
     },
     async loadRows(options = {}) {
+      if (this.layoutView && !this.administrationOpen) { this.$refs.workspacePages?.find(page => page.workspaceId === this.activeSearchTab?.id)?.reload(); return true }
       if (this.section === 'data' && !this.activeSearchTab) return
       const append = options.append === true && this.continuous
       const measurement = uiPerformance.begin(append ? 'Load more search results' : 'Load search results')
@@ -2073,7 +2072,14 @@ export default {
     <div v-if="administrationOpen && administrationVisited.includes('groups')" v-show="administrationSection === 'groups'" class="administration-page"><SecurityGroups :presentation-visible="administrationSection === 'groups'" @vue:mounted="administrationInstances.groups = $event.component.proxy" ref="groups" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('sidebar')" v-show="administrationSection === 'sidebar'" class="administration-page"><SidebarEditor :presentation-visible="administrationSection === 'sidebar'" @vue:mounted="administrationInstances.sidebar = $event.component.proxy" ref="sidebar" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @manage-groups="selectAdministration('groups')" @saved="sidebarSaved" @configure-search="configureSidebarSearch" /></div>
     <Teleport defer to="#sidebar-search-pages" :disabled="!sidebarSearch">
-    <section v-if="retainedSearchTabs.length || administrationOpen" v-show="section !== 'configuration' && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
+    <template v-for="entry in retainedSearchTabs" :key="'page:' + entry.project + entry.tab.id">
+      <WorkspacePage v-if="entry.tab.pageVisited && entry.tab.state.layoutView" ref="workspacePages"
+        v-show="!administrationOpen && section === 'data' && entry.tab === displayedSearchTab"
+        :ticket="session.ticket" :project="entry.project" :view="entry.tab.state.layoutView" :target="entry.tab.state.layoutTarget"
+        :title="entry.tab.title || entry.section.title" :workspace-id="entry.tab.id"
+        @inspect="inspect" @operate="(record,event,node)=>$refs.objectOperations.open(record,event,node)" @column="showColumnsEditor(false,$event)" @close="closeSection(entry.section.id)" />
+    </template>
+    <section v-if="retainedSearchTabs.length || administrationOpen" v-show="(administrationOpen || !layoutView) && section !== 'configuration' && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
       <SearchHeader :model="{compact:compactShortcuts&&!administrationOpen,collapseSearch:true,searchOpen:mobileSearchOpen,busy,shelf:!administrationOpen,shelfOpen,tags:!administrationOpen,quick:true,panels:true}"
         @event="action=>{if(action.type==='refresh')loadRows();else if(action.type==='shelf')shelfOpen=!shelfOpen;else if(action.type==='help')$refs.help.open('search')}">
         <template #field>

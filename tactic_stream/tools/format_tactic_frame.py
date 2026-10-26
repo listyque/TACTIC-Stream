@@ -71,7 +71,7 @@ def main():
     command[-1] = "tools/frame_controls/*.{vue,js,html,mjs}"
     queued.append(list(command))
     command[-1] = (
-        "frontend/src/features/workspace/{DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue,SearchHeader.vue,SearchFooter.vue,SearchLibrary.vue,SearchPresetBar.vue,SearchEditorPart.vue,SearchResultMenu.vue,ConditionCards.vue,ConditionValue.vue,QuickFilterEditor.vue,ProcessVisibility.vue,ResultBody.vue,ResultItem.vue,ResultPresentation.vue,MobileResults.vue,resultViews.js}"
+        "frontend/src/features/workspace/{WorkspacePage.vue,DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue,SearchHeader.vue,SearchFooter.vue,SearchLibrary.vue,SearchPresetBar.vue,SearchEditorPart.vue,SearchResultMenu.vue,ConditionCards.vue,ConditionValue.vue,QuickFilterEditor.vue,ProcessVisibility.vue,ResultBody.vue,ResultItem.vue,ResultPresentation.vue,MobileResults.vue,resultViews.js}"
     )
     queued.append(list(command))
     command[-1] = "frontend/tests/{frame_control*,frame_icons,frame_variable_rows*,table_nested,table_connections,icons}.mjs"

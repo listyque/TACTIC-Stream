@@ -18,7 +18,7 @@ def dashboard_state():
     state=page_state('sthpw/project')
     urls=[row.get_data() for row in Search('config/url').get_sobjects()]
     state['revision']=digest([state['revision'],urls])
-    state['bricks']=['row','column','text','metric','table','link']
+    state['bricks']=['row','column','text','markdown','metric','table','link']
     state['dashboards']=[dict(view=row.get_value('view'),source_id=row.get_id())
         for row in Search('config/widget_config').get_sobjects()
         if (row.get_value('view') or '').startswith('dashboard.') and '<dashboard>' in (row.get_value('config') or '')]
@@ -52,6 +52,18 @@ class DashboardCmd(Command):
                 return dict(status='not_found',operation_id=operation)
         state=dashboard_state()
         if action=='read':
+            name=self.kwargs.get('name','')
+            if not isinstance(name,str) or len(name)>48:
+                raise ValueError('Choose a dashboard name')
+            if name:
+                query=Search('config/widget_config');query.add_filter('view','dashboard.'+name)
+                rows=query.get_sobjects()
+                if len(rows)!=1:
+                    raise ValueError('Choose an existing dashboard')
+                source=ET.fromstring(rows[0].get_value('config')).findtext('.//dashboard')
+                if not source:
+                    raise ValueError('Choose an existing dashboard')
+                state['document']=DashboardDocument.model_validate_json(source).model_dump(mode='json')
             return state
         if self.kwargs.get('expected_revision')!=state['revision']:
             raise WidgetConfigConflict('Dashboard dependencies changed. Reload before saving.')

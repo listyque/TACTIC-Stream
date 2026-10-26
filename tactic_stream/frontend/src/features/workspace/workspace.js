@@ -2,7 +2,7 @@
 // Persist search settings and selection keys. Records, tickets and server definitions stay in memory.
 import { defaultResultView } from './resultViews.js'
 import { preferences } from '../configuration/preferences.js'
-export const searchFields = ['type', 'view', 'viewTitle', 'configuredView', 'navigationLink', 'resultMode', 'groupMode', 'resultState', 'searchText', 'filterField', 'filterValue',
+export const searchFields = ['type', 'view', 'viewTitle', 'configuredView', 'navigationLink', 'layoutView', 'layoutTarget', 'resultMode', 'groupMode', 'resultState', 'searchText', 'filterField', 'filterValue',
   'searchRelation', 'sortField', 'sortDirection', 'page', 'pageSize', 'showRetired', 'selectedKeys', 'focusedKey', 'columns', 'rows',
   'hasNext', 'totalCount', 'nextOffset', 'loadedQuery', 'interfaceConfig', 'error', 'filterRecords', 'savedSearch', 'quickSelections', 'quickLayout', 'scopeKey', 'presetOrderBys', 'selectedTags', 'tagColumn']
 const savedFields = searchFields.filter(name => !['columns', 'rows', 'hasNext', 'totalCount', 'nextOffset', 'loadedQuery', 'interfaceConfig', 'error'].includes(name))
@@ -25,7 +25,7 @@ export function navigationEntries(items, types) {
 export function searchTab(title, state = {}, number = 0) {
   return { id: 'search-' + Date.now().toString(36) + '-' + ++serial, title, number, loaded: false,
     scrollTop: 0, scrollLeft: 0, workspaceLayout: null, loadedOffsets: [], loadingMode:preferences.checkin.loadingMode,
-    state: { type: '', view: 'table', viewTitle: '', configuredView: false, navigationLink: '', resultMode: preferences.checkin.defaultViewMode, groupMode: 'none', resultState: {}, searchText: '', filterField: '', filterValue: '',
+    state: { type: '', view: 'table', viewTitle: '', configuredView: false, navigationLink: '', layoutView: '', layoutTarget: '', resultMode: preferences.checkin.defaultViewMode, groupMode: 'none', resultState: {}, searchText: '', filterField: '', filterValue: '',
       searchRelation: 'contains', sortField: '', sortDirection: 'asc', page: 0, pageSize: preferences.checkin.displayLimit, showRetired: false, selectedKeys: [], focusedKey:'',
       columns: {}, rows: [], hasNext: false, totalCount: null, nextOffset: 0, loadedQuery: null, interfaceConfig: null, error: '', filterRecords: [], savedSearch: '', quickSelections: {}, quickLayout: null, scopeKey: '', presetOrderBys: [], selectedTags: [], tagColumn: '', ...state } }
 }
