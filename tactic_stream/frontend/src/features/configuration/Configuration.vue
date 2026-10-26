@@ -779,6 +779,7 @@ defineExpose({ cancel, dirty });
 }
 .configuration-native .configuration-pages {
   overflow: auto;
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
 }

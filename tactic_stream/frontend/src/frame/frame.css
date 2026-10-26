@@ -246,8 +246,10 @@
 .frame-scroll {
   overflow-y: auto;
   overflow-x: hidden;
-  overscroll-behavior: contain;
   scrollbar-gutter: stable;
+}
+.frame-list {
+  overscroll-behavior: contain;
 }
 .frame-list::-webkit-scrollbar,
 .frame-scroll::-webkit-scrollbar,

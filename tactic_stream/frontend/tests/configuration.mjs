@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { chromium } from 'playwright'
-const browser = await chromium.launch({ headless:true })
+const browser = await chromium.launch({ headless:true, ignoreDefaultArgs:['--hide-scrollbars'] })
 const page = await browser.newPage({ viewport:{ width:1400,height:940 },colorScheme:'dark' })
 page.setDefaultTimeout(12000)
 const errors = []
@@ -10,7 +10,7 @@ page.on('pageerror',failure => errors.push(failure.message))
 page.on('console',message=>{ if(message.type()==='error' && !message.text().startsWith('Failed to load resource:')) errors.push(message.text()) })
 page.on('request',request => { if(request.url().endsWith('/admin/search-configuration/query')) queries.push(request.postDataJSON()) })
 const cfg = page.locator('dialog.configuration-dialog[aria-labelledby="configuration-title"][open]'), shell = cfg.locator('.configuration-native'), nav = cfg.locator('[data-frame=configurationNavigation]')
-const labels = ['Server','Repositories','Projects','Check-in Options','Global','Appearance','Cache','Tasks']
+const labels = ['AI providers','Server','Repositories','Projects','Check-in Options','Global','Appearance','Cache','Tasks']
 async function section(label) { await nav.getByRole('button',{ name:label,exact:true }).click(); await cfg.locator('[data-frame=configurationPageTitle]').filter({ hasText:label }).waitFor() }
 async function open() { await page.getByLabel('More options',{ exact:true }).click(); await page.locator('.settings-menu').getByRole('button',{ name:'Configuration',exact:true }).click(); await shell.waitFor(); await page.waitForFunction(() => document.querySelector('.configuration-native')?.getAttribute('aria-busy') === 'false') }
 async function snapshot(label,width) { await page.evaluate(() => document.fonts.ready); if(process.argv[3]) await page.screenshot({ path:process.argv[3] + '/stream-config-' + label.toLowerCase().replaceAll(' ','-') + '-' + width + '.png',animations:'disabled' }) }
@@ -19,6 +19,14 @@ try {
   await page.goto(process.argv[2] + '/projects/one/')
   await page.getByLabel('Login',{ exact:true }).fill('admin'); await page.getByLabel('Password',{ exact:true }).fill('private-test-password'); await page.getByRole('button',{ name:'Sign in',exact:true }).click()
   await open()
+  await page.setViewportSize({ width:1400,height:620 })
+  const scrollPage = cfg.locator('.configuration-pages')
+  await cfg.locator('[data-frame=configurationSettings]:visible').first().hover({position:{x:20,y:180}})
+  await page.mouse.wheel(0,300)
+  await page.waitForFunction(() => document.querySelector('.configuration-pages').scrollTop > 0)
+  assert.ok(await scrollPage.evaluate(element => element.offsetWidth - element.clientWidth >= 12), 'Configuration reserves its visible scrollbar gutter')
+  await scrollPage.evaluate(element => { element.scrollTop = 0 })
+  await page.setViewportSize({ width:1400,height:940 })
   const closeButton=cfg.locator('[data-frame=configurationHeader]').locator('..').getByRole('button',{name:'Close',exact:true})
   assert.equal(await closeButton.evaluate(button=>button.classList.contains('icon-button')),true)
   assert.equal(await cfg.locator('[data-frame=configurationClose]').getAttribute('aria-label'),'Close')

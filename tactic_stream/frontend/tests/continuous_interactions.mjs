@@ -6,7 +6,7 @@ import { selectProject } from './project_selection.mjs'
 
 const output = '../.screenshots/continuous-current'
 await mkdir(output, { recursive: true })
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, ignoreDefaultArgs: ['--hide-scrollbars'] })
 const page = await browser.newPage({ viewport: { width: 1454, height: 1000 } })
 page.setDefaultTimeout(10000)
 const project = process.env.STREAM_CHECK_PROJECT || 'cg_test'
@@ -32,6 +32,14 @@ try {
   await episode.waitFor()
   await episode.getByRole('button', { name: 'Expand item', exact: true }).click()
   await branch('Assets').waitFor()
+  await page.setViewportSize({ width:1454,height:540 })
+  const results = page.locator('.workspace-results')
+  await results.hover({ position:{ x:40,y:80 } })
+  await page.mouse.wheel(0,240)
+  await page.waitForFunction(() => document.querySelector('.workspace-results').scrollTop > 0)
+  assert.ok(await results.evaluate(element => element.offsetWidth - element.clientWidth >= 12), 'Expanded results reserve a visible scrollbar gutter')
+  await results.evaluate(element => { element.scrollTop = 0 })
+  await page.setViewportSize({ width:1454,height:1000 })
   await page.mouse.move(0, 0)
   await capture('normal')
   await episode.hover({ position: { x: 700, y: 50 } })
