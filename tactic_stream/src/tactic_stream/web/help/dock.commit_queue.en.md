@@ -10,7 +10,12 @@ The dock and dialog above Administration share one application-owned queue. File
 
 Restoring workspace panels does not open a queue dialog or switch away from the saved active panel.
 On phones, the restored queue stays inside its pane; **Back to search** returns to results.
-Closing an explicitly opened queue window also returns to results. These actions keep the pending operations.
+Closing a separate queue window hides it without opening its dock. These actions keep the pending operations.
+
+The queue has one visible host: dock content without window controls, or a
+separate window while a modal editor remains open. Wait for the preparation
+dialog to close before choosing that host. Reopening Commit Queue preserves all
+prepared jobs and returns to the dock when no modal editor remains open.
 
 ## Review and execution
 

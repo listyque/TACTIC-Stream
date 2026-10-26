@@ -227,6 +227,50 @@ try {
     .getByRole('button', { name: 'Add to queue', exact: true })
     .click();
   const queue = page.locator('.commit-queue:visible');
+  await queue.waitFor();
+  assert.equal(await page.locator('dialog.commit-queue').count(), 0);
+  assert.equal(await queue.locator(':scope > header').count(), 0);
+  const queuedNames = await queue
+    .locator('[data-frame^=commitQueueSelect_]')
+    .allTextContents();
+  await page.evaluate(() => {
+    const parent = document.createElement('dialog');
+    parent.id = 'queue-presentation-parent';
+    const button = document.createElement('button');
+    button.textContent = 'Open queue from editor';
+    button.onclick = () =>
+      document.querySelector('[data-main-control=mainQueue]').click();
+    parent.append(button);
+    document.body.append(parent);
+    parent.showModal();
+  });
+  await page
+    .getByRole('button', { name: 'Open queue from editor', exact: true })
+    .click();
+  const queueWindow = page.locator('dialog.commit-queue[open]');
+  await queueWindow.waitFor();
+  assert.equal(
+    await page.locator('[data-dock=commit_queue]:visible').count(),
+    0,
+    'A separate queue window must hide its dock'
+  );
+  await queueWindow.getByRole('button', { name: 'Close', exact: true }).click();
+  assert.equal(
+    await page.locator('[data-dock=commit_queue]:visible').count(),
+    0,
+    'Closing a queue window must not activate its dock'
+  );
+  await page.evaluate(() => {
+    const parent = document.getElementById('queue-presentation-parent');
+    parent.close();
+    parent.remove();
+  });
+  await page.locator('[data-main-control=mainQueue]').click();
+  await page.locator('#dock-commit_queue > section.commit-queue').waitFor();
+  assert.deepEqual(
+    await queue.locator('[data-frame^=commitQueueSelect_]').allTextContents(),
+    queuedNames
+  );
   async function queuePane(details) {
     const navigation = queue.locator('[data-frame=commitQueueNavigation]');
     if (await navigation.count())
@@ -249,6 +293,7 @@ try {
     .filter({ hasText: 'Ready to send' })
     .first()
     .waitFor();
+  await page.screenshot({ path: output + '/browser-queue-presentation.png' });
   assert.equal(
     publications.length,
     0,

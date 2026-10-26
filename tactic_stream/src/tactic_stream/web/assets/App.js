@@ -24806,11 +24806,13 @@ var _sfc_main$96 = {
 		async open() {
 			if (!this.presentationVisible) return;
 			const epoch = this.sessionEpoch;
+			await nextTick();
+			if (this.disposed || epoch !== this.sessionEpoch) return;
 			this.modal = this.inline && !this.mobile && !!document.querySelector("dialog:modal");
 			await nextTick();
 			if (this.disposed || epoch !== this.sessionEpoch) return;
 			if (!this.docked) this.$refs.dialog?.show();
-			this.$emit("opened");
+			this.$emit("opened", this.docked);
 		},
 		...recovery_default,
 		enqueue(values, force = false) {
@@ -58845,8 +58847,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					_ctx.$refs.dropPlate.completed($event);
 					$options.reloadWorkspace({ restore: true });
 				}),
-				onOpened: _cache[145] || (_cache[145] = ($event) => _ctx.$refs.docks.show("commit_queue")),
-				onClosed: _cache[146] || (_cache[146] = ($event) => $data.compactShortcuts && _ctx.$refs.docks.hide("commit_queue")),
+				onOpened: _cache[145] || (_cache[145] = ($event) => $event ? _ctx.$refs.docks.show("commit_queue") : _ctx.$refs.docks.hide("commit_queue")),
+				onClosed: _cache[146] || (_cache[146] = ($event) => _ctx.$refs.docks.hide("commit_queue")),
 				onHelp: _cache[147] || (_cache[147] = ($event) => _ctx.$refs.help.open($event)),
 				onSnapshot: _cache[148] || (_cache[148] = ($event) => {
 					$data.snapshotTarget = {

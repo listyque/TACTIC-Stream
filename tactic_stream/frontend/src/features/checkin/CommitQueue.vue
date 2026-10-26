@@ -193,12 +193,14 @@ export default {
     async open() {
       if (!this.presentationVisible) return;
       const epoch = this.sessionEpoch;
+      await nextTick();
+      if (this.disposed || epoch !== this.sessionEpoch) return;
       this.modal =
         this.inline && !this.mobile && !!document.querySelector('dialog:modal');
       await nextTick();
       if (this.disposed || epoch !== this.sessionEpoch) return;
       if (!this.docked) this.$refs.dialog?.show();
-      this.$emit('opened');
+      this.$emit('opened', this.docked);
     },
     ...QueueRecovery,
     enqueue(values, force = false) {

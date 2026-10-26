@@ -98,6 +98,77 @@ try {
   await page.evaluate((value) => window.filesFixture.show(value), value);
   const queue = page.locator('.commit-queue-workspace');
   await queue.locator('[data-frame=commitQueueSelect_1]').waitFor();
+  const preparedIds = await page.evaluate(() =>
+    window.filesFixture.queue().jobs.map((job) => job.id)
+  );
+  await page.evaluate(async () => {
+    const owner = window.filesFixture.queue();
+    const parent = document.createElement('dialog');
+    parent.id = 'queue-test-owner';
+    document.body.append(parent);
+    parent.showModal();
+    const opening = owner.open();
+    parent.close();
+    await opening;
+    parent.remove();
+  });
+  assert.equal(
+    await page.locator('dialog.commit-queue').count(),
+    0,
+    'A completed preparation dialog must leave a docked queue'
+  );
+  assert.equal(
+    await page.locator('#dock-commit_queue > section.commit-queue').count(),
+    1
+  );
+  assert.equal(await page.locator('.commit-queue > header').count(), 0);
+  assert.equal(
+    await page.evaluate(
+      () =>
+        window.filesFixture
+          .events()
+          .filter((event) => event.type === 'queueOpened')
+          .at(-1).docked
+    ),
+    true
+  );
+  await page.evaluate(async () => {
+    const parent = document.createElement('dialog');
+    parent.id = 'queue-test-owner';
+    document.body.append(parent);
+    parent.showModal();
+    await window.filesFixture.queue().open();
+  });
+  const queueWindow = page.locator('dialog.commit-queue[open]');
+  await queueWindow.waitFor();
+  assert.equal(
+    await page.locator('#dock-commit_queue .commit-queue').count(),
+    0,
+    'One queue presentation at a time'
+  );
+  assert.equal(
+    await page.evaluate(
+      () =>
+        window.filesFixture
+          .events()
+          .filter((event) => event.type === 'queueOpened')
+          .at(-1).docked
+    ),
+    false
+  );
+  await queueWindow.getByRole('button', { name: 'Close', exact: true }).click();
+  await page.evaluate(() => {
+    const parent = document.getElementById('queue-test-owner');
+    parent.close();
+    parent.remove();
+  });
+  await page.locator('#dock-commit_queue > section.commit-queue').waitFor();
+  assert.deepEqual(
+    await page.evaluate(() =>
+      window.filesFixture.queue().jobs.map((job) => job.id)
+    ),
+    preparedIds
+  );
   const field = (id) => queue.locator('[data-frame=' + id + ']');
   await page.evaluate(async () => {
     const owner = window.filesFixture.queue();
@@ -264,7 +335,7 @@ try {
   await clear.waitFor();
   const bounds = await clear.boundingBox();
   assert.equal(Math.round(bounds.width), 420);
-  for (const [key, expected] of Object.entries({ x: 290, y: 208, height: 284 }))
+  for (const [key, expected] of Object.entries({ x: 290, y: 218, height: 264 }))
     assert(
       Math.abs(bounds[key] - expected) < 0.1,
       'House dialog ' + key + ': ' + bounds[key]
@@ -272,9 +343,9 @@ try {
   const contentBounds = await clear
     .locator('.app-dialog-content > div')
     .boundingBox();
-  assert.equal(contentBounds.y - bounds.y, 94);
-  assert.equal(contentBounds.x - bounds.x, 20);
-  assert.equal(contentBounds.width, 380);
+  assert.equal(contentBounds.y - bounds.y, 73);
+  assert.equal(contentBounds.x - bounds.x, 21);
+  assert.equal(contentBounds.width, 378);
   assert.equal(await clear.evaluate((el) => el.matches(':modal')), true);
   await page.keyboard.press('Escape');
   await page.waitForFunction(

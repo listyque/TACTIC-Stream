@@ -193,6 +193,7 @@ window.filesFixture = {
         project="cg"
         :login="session.login"
         can-administer
+        @opened="events.push({ type: 'queueOpened', docked: $event })"
       />
     </div>
     <div
