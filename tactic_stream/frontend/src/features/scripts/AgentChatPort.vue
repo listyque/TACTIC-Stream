@@ -6,6 +6,7 @@ import MarkdownText from '../../controls/MarkdownText.vue';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/scripts/request.ui.mjs';
+import { colors } from '../../../../src/tactic_stream/shared_ui/core/frame.mjs';
 
 const props = defineProps({ frameNode: Object, previews: Object });
 const emit = defineEmits(['event']);
@@ -14,7 +15,7 @@ const chips = computed(() =>
   UI.contextItems(props.frameNode.context || {}, appearance.language)
 );
 const rows = computed(() => props.frameNode.messages || []);
-watch(rows, async () => {
+watch([rows, () => props.frameNode.status?.text], async () => {
   const element = log.value;
   const follow =
     element &&
@@ -157,6 +158,19 @@ const messageStyle = (row) => {
         {{ step }}
       </div>
     </details>
+    <div
+      v-if="frameNode.status"
+      class="agent-chat-status"
+      data-frame="agentRequestStatusRow"
+      role="status"
+      :style="{
+        ...messageStyle({ role: 'assistant' }),
+        color: 'var(' + colors[frameNode.status.color] + ')'
+      }"
+    >
+      <AppIcon :name="frameNode.status.icon" />
+      <span data-frame="agentRequestStatus">{{ frameNode.status.text }}</span>
+    </div>
   </div>
 </template>
 
@@ -229,6 +243,20 @@ const messageStyle = (row) => {
   border-radius: 12px;
   background: transparent;
   border: 0;
+}
+.agent-chat-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+.agent-chat-status > .app-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }
 .agent-message.user {
   background: var(--surface-high);

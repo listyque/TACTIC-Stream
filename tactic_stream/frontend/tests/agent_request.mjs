@@ -106,6 +106,11 @@ try {
     assert.equal(await dialog.locator('.agent-message-image').count(), 1);
     assert.ok(await dialog.getByRole('combobox', { name: 'Reasoning effort', exact: true }).isDisabled());
     await page.waitForFunction(() => document.querySelector('[data-frame="agentRequestStatus"]')?.textContent.includes('working'));
+    const workingStatus = dialog.getByRole('log').locator('[data-frame=agentRequestStatusRow]');
+    const statusBox = await workingStatus.boundingBox();
+    assert.ok(statusBox.y >= transcriptBox.y && statusBox.y + statusBox.height <= transcriptBox.y + transcriptBox.height);
+    assert.ok(Math.abs(statusBox.x - activityBox.x) < 1);
+    await dialog.getByRole('log').screenshot({ path: output + '/working-browser.png' });
     await dialog.getByLabel('Add a correction while the agent works', { exact: true }).fill('Use the reference process');
     await dialog.getByRole('button', { name: 'Send correction', exact: true }).click();
     const corrected = await fixtureCommand('read', { request_id: claimed.request_id });

@@ -26,6 +26,8 @@ for (const width of [320, 520, 1000]) {
   const scene = UI.describe(model, width, 650, 'ru');
   assert.ok(scene.nodes.every(node => node.x >= 0 && node.x + node.width <= width));
   assert.equal(find(scene.nodes, 'agentRequestContext').context.search_keys.length, 1);
+  assert.equal(find(scene.nodes, 'agentRequestStatus'), undefined);
+  assert.equal(find(scene.nodes, 'agentRequestOutput').status.text, UI.status(model, 'ru').text);
   model.contextExpanded = true;
   assert.ok(find(UI.describe(model, width, 650, 'ru').nodes, 'agentRequestContext').context.search_keys[0].includes('SH001'));
   model.contextExpanded = false;

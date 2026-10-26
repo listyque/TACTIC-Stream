@@ -1,5 +1,5 @@
 import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
-import { A as t, O as randomUuid, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
+import { A as t, O as randomUuid, V as cssRoles, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
 import { Bt as notify, Gt as label, Jt as rect, Kt as muted, Wt as button, i as _sfc_main$4, qt as node, r as observeFrameSizes, st as rpc, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$5 } from "./AppDialog.js";
 import { t as listAction } from "./tree.ui.js";
@@ -577,19 +577,12 @@ function describeChat(model, width, height, language, sidebarVisible) {
 		}, !model.busy && !model.pending && !model.uploading, { iconOnly: true }),
 		button("agentRequestNew", rect(width - inset - 72, 10, 32, 32), tr("New conversation"), "add", { type: "historyNew" }, !model.busy && !model.uploading, { iconOnly: true }),
 		button("agentRequestRefresh", rect(width - inset - 32, 10, 32, 32), tr("Refresh"), "refresh", { type: "refresh" }, !model.busy && !model.uploading, { iconOnly: true }),
-		node("Icon", "agentRequestStatusIcon", rect(inset, 52, 18, 18), {
-			icon: state.icon,
-			color: state.color
-		}),
-		label("agentRequestStatus", rect(inset + 26, 50, Math.max(0, inner - 26 - (current.undo_operation ? 142 : 0)), 24), state.text, Object.assign({}, muted, {
-			color: state.color,
-			role: "alert"
-		})),
-		node("View", "agentRequestOutput", rect(0, 84, width, Math.max(70, composerTop - 96)), {
+		node("View", "agentRequestOutput", rect(0, current.undo_operation ? 84 : 52, width, Math.max(70, composerTop - (current.undo_operation ? 96 : 64))), {
 			view: "transcript",
 			messages: messages(model),
 			events: activity(model, language),
-			active: working
+			active: working,
+			status: state
 		}),
 		node("Box", "agentComposerSurface", rect(composerX, composerTop, composerWidth, height - composerTop - 12), {
 			background: "surfaceContainerHigh",
@@ -723,6 +716,7 @@ var _hoisted_10 = {
 var _hoisted_11 = ["src", "alt"];
 var _hoisted_12 = { key: 0 };
 var _hoisted_13 = ["open"];
+var _hoisted_14 = { "data-frame": "agentRequestStatus" };
 var _sfc_main$1 = {
 	__name: "AgentChatPort",
 	props: {
@@ -736,7 +730,7 @@ var _sfc_main$1 = {
 		const log = ref(null);
 		const chips = computed(() => contextItems(props.frameNode.context || {}, appearance.language));
 		const rows = computed(() => props.frameNode.messages || []);
-		watch(rows, async () => {
+		watch([rows, () => props.frameNode.status?.text], async () => {
 			const element = log.value;
 			const follow = element && element.scrollHeight - element.scrollTop - element.clientHeight < 60;
 			await nextTick();
@@ -842,7 +836,17 @@ var _sfc_main$1 = {
 					open: __props.frameNode.active
 				}, [createBaseVNode("summary", null, toDisplayString(unref(t)(__props.frameNode.active ? "Working with TACTIC tools…" : "Operation details")), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.events, (step, index) => {
 					return openBlock(), createElementBlock("div", { key: index }, toDisplayString(step), 1);
-				}), 128))], 12, _hoisted_13)) : createCommentVNode("", true)
+				}), 128))], 12, _hoisted_13)) : createCommentVNode("", true),
+				__props.frameNode.status ? (openBlock(), createElementBlock("div", {
+					key: 2,
+					class: "agent-chat-status",
+					"data-frame": "agentRequestStatusRow",
+					role: "status",
+					style: normalizeStyle({
+						...messageStyle({ role: "assistant" }),
+						color: "var(" + unref(cssRoles)[__props.frameNode.status.color] + ")"
+					})
+				}, [createVNode(_sfc_main$2, { name: __props.frameNode.status.icon }, null, 8, ["name"]), createBaseVNode("span", _hoisted_14, toDisplayString(__props.frameNode.status.text), 1)], 4)) : createCommentVNode("", true)
 			], 8, _hoisted_9));
 		};
 	}
