@@ -18,7 +18,7 @@ def dashboard_state():
     state=page_state('sthpw/project')
     urls=[row.get_data() for row in Search('config/url').get_sobjects()]
     state['revision']=digest([state['revision'],urls])
-    state['bricks']=['row','column','text','markdown','metric','table','tree','link']
+    state['bricks']=['row','column','text','markdown','metric','table','link']
     state['dashboards']=[dict(view=row.get_value('view'),source_id=row.get_id())
         for row in Search('config/widget_config').get_sobjects()
         if (row.get_value('view') or '').startswith('dashboard.') and '<dashboard>' in (row.get_value('config') or '')]
@@ -31,12 +31,8 @@ class DashboardCmd(Command):
         if self.kwargs.get('project_code')!=Project.get_project_code():
             raise ValueError('Dashboard project mismatch')
         action=self.kwargs.get('action')
-        if action not in ('read','preview','apply','operation','tree'):
+        if action not in ('read','preview','apply','operation'):
             raise ValueError('Unknown dashboard operation')
-        if action=='tree':
-            from tactic_stream.server.dashboard_tree import read_tree
-            return read_tree(self.kwargs.get('tree'),self.kwargs.get('branch_path'),
-                self.kwargs.get('parent_key',''),self.kwargs.get('offset',0),self.kwargs.get('limit',50))
         sql=Search('config/widget_config').get_sql()
         if action=='apply':
             sql.get_database_impl().lock_collection_table(sql,SearchType.get('config/widget_config').get_table())

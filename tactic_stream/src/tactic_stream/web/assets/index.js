@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/CodeBlock.js","assets/icons.js","assets/CodeBlock.css","assets/ApiDocumentation.css","assets/App.js","assets/rolldown-runtime.js","assets/RecordForm.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/richText.js","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/files2.js","assets/FilePreview.css","assets/previewFiles.js","assets/ObjectReport.css","assets/workspace.ui.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/markdown-it.js","assets/tree.ui.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/App.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/CodeBlock.js","assets/icons.js","assets/CodeBlock.css","assets/ApiDocumentation.css","assets/App.js","assets/rolldown-runtime.js","assets/RecordForm.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/richText.js","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/files2.js","assets/FilePreview.css","assets/previewFiles.js","assets/ObjectReport.css","assets/workspace.ui.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/markdown-it.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
 import { C as h, F as renderSlot, K as withCtx, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, U as watch, W as watchEffect, X as reactive, Z as ref, _ as createElementBlock, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeClass, p as computed, q as withDirectives, r as render, rt as normalizeStyle, tt as unref, u as Fragment, x as defineAsyncComponent } from "./vue.js";
 import { n as en_default, t as ru_default } from "./locales.js";
 import { n as resolveIcon } from "./icons.js";
@@ -813,16 +813,16 @@ var controls = {
 };
 var styleMetrics = {
 	md3: {
-		controlHeight: 32,
-		compactControlHeight: 28,
-		fieldRadius: 4,
-		buttonRadius: 4,
-		itemRadius: 4,
+		controlHeight: 36,
+		compactControlHeight: 32,
+		fieldRadius: 10,
+		buttonRadius: 18,
+		itemRadius: 9,
 		snapshotRadius: 5,
-		surfaceRadius: 4,
-		sectionRadius: 6,
-		dialogRadius: 8,
-		menuRadius: 6,
+		surfaceRadius: 12,
+		sectionRadius: 16,
+		dialogRadius: 20,
+		menuRadius: 16,
 		iconButtonRadius: 4,
 		communicationGroupedSpacing: 2,
 		communicationGroupTailSize: 10,
@@ -835,16 +835,16 @@ var styleMetrics = {
 		baseMotionExtended: 104
 	},
 	material5: {
-		controlHeight: 34,
-		compactControlHeight: 30,
-		fieldRadius: 6,
-		buttonRadius: 6,
-		itemRadius: 6,
-		snapshotRadius: 5,
-		surfaceRadius: 6,
-		sectionRadius: 8,
-		dialogRadius: 10,
-		menuRadius: 8,
+		controlHeight: 38,
+		compactControlHeight: 34,
+		fieldRadius: 15,
+		buttonRadius: 16,
+		itemRadius: 13,
+		snapshotRadius: 10,
+		surfaceRadius: 18,
+		sectionRadius: 22,
+		dialogRadius: 28,
+		menuRadius: 20,
 		iconButtonRadius: 9,
 		communicationGroupedSpacing: 3,
 		communicationGroupTailSize: 11,
@@ -857,8 +857,8 @@ var styleMetrics = {
 		baseMotionExtended: 128
 	},
 	fluent: {
-		controlHeight: 32,
-		compactControlHeight: 28,
+		controlHeight: 34,
+		compactControlHeight: 32,
 		fieldRadius: 5,
 		buttonRadius: 5,
 		itemRadius: 5,

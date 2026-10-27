@@ -3,7 +3,6 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import NestedTable from './NestedTable.vue';
 import LayoutDocument from './LayoutDocument.vue';
-import DashboardTree from './DashboardTree.vue';
 import { appearance } from '../../appearance.js';
 import { runTableScript } from './tableScript.js';
 import { printCustomReport } from './customReport.js';
@@ -55,11 +54,6 @@ const scene = computed(() =>
   )
 );
 const views = computed(() => ({
-  layoutTree: {
-    component: DashboardTree,
-    nodeProps: true,
-    props: { ticket: props.ticket, project: props.project, onAction: activate }
-  },
   layoutMarkdown: {
     component: LayoutDocument,
     nodeProps: true
