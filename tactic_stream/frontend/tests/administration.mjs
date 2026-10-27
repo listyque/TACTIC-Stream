@@ -213,6 +213,26 @@ try {
   );
   await control('adminWorkflowSearch').fill('Assets');
   await control('adminToggleNavigation').click();
+  await page.waitForFunction(() => {
+    const sidebar = document.querySelector(
+      '[data-frame="administrationSidebar"]'
+    );
+    return sidebar && sidebar.getBoundingClientRect().width < 100;
+  });
+  const collapsed = await control('adminSection_workflow').boundingBox(),
+    collapsedIcon = await control('adminSectionIcon_workflow').boundingBox(),
+    expand = await control('adminToggleNavigation').boundingBox();
+  assert(collapsed.width >= 40, 'collapsed selection remains usable');
+  assert(collapsedIcon.x >= collapsed.x + 8);
+  assert(
+    collapsedIcon.x + collapsedIcon.width <= collapsed.x + collapsed.width - 8
+  );
+  assert(
+    Math.abs(
+      collapsedIcon.x + collapsedIcon.width / 2 - expand.x - expand.width / 2
+    ) < 1
+  );
+  await shot('frame-workflow-collapsed');
   assert.equal(await control('adminWorkflowSearch').count(), 1);
   await control('adminToggleNavigation').click();
   assert.equal(

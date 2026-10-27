@@ -211,6 +211,40 @@ const Admin = await import(
 const Config = await import(
   '../../src/tactic_stream/shared_ui/features/configuration/configuration.ui.mjs'
 );
+for (const height of [620, 940]) {
+  const model = { section: 'workflow', drafts: ['schema'] },
+    ui = { collapsed: true },
+    scene = Admin.describe(model, ui, 1400, height, 'en'),
+    sidebar = scene.nodes.find((node) => node.id === 'administrationSidebar'),
+    list = sidebar.children.find(
+      (node) => node.id === 'administrationNavigation'
+    ),
+    toggle = scene.nodes
+      .find((node) => node.id === 'administrationHeader')
+      .children.find((node) => node.id === 'adminToggleNavigation');
+  for (const record of Admin.sections) {
+    const action = Admin.row(list, record, model, ui, 'en').nodes[0],
+      icon = action.children.find((node) => node.kind === 'Icon');
+    assert(
+      action.width >= 40,
+      'Collapsed section keeps a usable selection target'
+    );
+    assert(
+      icon.x >= 8 && icon.x + icon.width <= action.width - 8,
+      'Collapsed icons fit with breathing room'
+    );
+    assert.equal(icon.x + icon.width / 2, action.width / 2);
+    assert.equal(
+      toggle.x + toggle.width / 2,
+      list.x + action.width / 2,
+      'Expand and section icons share a center line'
+    );
+    assert(
+      list.x + action.width + 16 <= sidebar.width,
+      'Scrollbar keeps its own gutter'
+    );
+  }
+}
 for (const width of [1100, 1400, 1800]) {
   const admin = Admin.describe(
     { section: 'layouts', project: 'demo', projects: [] },

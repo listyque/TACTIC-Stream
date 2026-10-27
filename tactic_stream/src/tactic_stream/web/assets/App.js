@@ -23702,7 +23702,7 @@ var rect = (x, y, width, height) => ({
 	height: Math.max(0, height)
 });
 function geometry(width, height, collapsed) {
-	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 56 : 250, body = width - nav, pad = mobile ? 12 : 20;
+	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 72 : 250, body = width - nav, pad = mobile ? 12 : 20;
 	const header = mobile ? 166 : 77;
 	return {
 		mobile,
@@ -23735,7 +23735,7 @@ function describe$34(model, ui, width, height, language) {
 			color: "secondaryText"
 		}));
 		if (ui.collapsed) branding.length = 0;
-		branding.push(button("adminToggleNavigation", rect(g.nav - 46, 12, 34, 34), ui.collapsed ? "Expand navigation" : "Collapse navigation", ui.collapsed ? "chevron-right" : "chevron-left", { type: "collapse" }));
+		branding.push(button("adminToggleNavigation", rect(ui.collapsed ? (g.nav - 16 - 34) / 2 : g.nav - 46, 12, 34, 34), ui.collapsed ? "Expand navigation" : "Collapse navigation", ui.collapsed ? "chevron-right" : "chevron-left", { type: "collapse" }));
 		if (!ui.collapsed) {
 			nav.push(label("administrationProjectLabel", rect(12, 88, g.nav - 24, 22), "Project", { color: "secondaryText" }));
 			nav.push(node("Choice", "administrationProjectSelector", rect(12, 114, g.nav - 24, 38), {
@@ -23800,7 +23800,7 @@ function describe$34(model, ui, width, height, language) {
 }
 function row$14(list, record, model, ui, language) {
 	const tr = (text) => translate(text, language), compact = !!ui.collapsed, w = list.width - 16, h = list.rowHeight - 4;
-	const children = [node("Icon", "adminSectionIcon_" + record.id, rect(12, (h - 22) / 2, 22, 22), {
+	const children = [node("Icon", "adminSectionIcon_" + record.id, rect(compact ? (w - 22) / 2 : 12, (h - 22) / 2, 22, 22), {
 		icon: record.icon,
 		color: record.id === model.section ? "action" : "secondaryText"
 	})];
