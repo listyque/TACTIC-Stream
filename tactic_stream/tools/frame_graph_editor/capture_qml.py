@@ -24,7 +24,7 @@ for editor_mode in ('schema','workflow'):
  tag='search_type' if editor_mode=='schema' else 'process';root_tag='schema' if editor_mode=='schema' else 'pipeline'
  xml=f'<{root_tag}><!--custom--><{tag} name="{names[0]}" xpos="40" ypos="40" type="'+('search_type' if editor_mode=='schema' else 'manual')+f'" /><{tag} name="{names[1]}" xpos="340" ypos="40" type="'+('search_type' if editor_mode=='schema' else 'action')+f'" /><connect from="{names[0]}" to="{names[1]}"'+(' relationship="code" from_col="shot_code" to_col="code"' if editor_mode=='schema' else ' from_attr="success"')+f' /><extension value="kept" /></{root_tag}>'
  document={'xml':xml} if editor_mode=='schema' else dict(xml=xml,name='Assets',description='Project pipeline',color='#6688aa',searchType='demo/asset',processSettings={},processDescriptions={})
- metadata=dict(searchTypes=[dict(identity='demo/asset',label='Assets',table='asset'),dict(identity='demo/shot',label='Shots',table='shot')],nodeTypes=['manual','action','condition','approval','hierarchy','dependency','progress','status'],pipelines=[dict(identity='demo/assets',label='Assets',searchType='demo/asset'),dict(identity='demo/tasks',label='Task statuses',searchType='sthpw/task')],groups=[dict(identity='artists',label='Artists')],users=[dict(identity='admin',label='Administrator')],processes=[],canCreate=True)
+ metadata=dict(searchTypes=[dict(identity='demo/asset',label='Assets',table='asset',color='#9bad77'),dict(identity='demo/shot',label='Shots',table='shot',color='#ba94b2')],nodeTypes=['manual','action','condition','approval','hierarchy','dependency','progress','status'],pipelines=[dict(identity='demo/assets',label='Assets',searchType='demo/asset'),dict(identity='demo/tasks',label='Task statuses',searchType='sthpw/task')],groups=[dict(identity='artists',label='Artists')],users=[dict(identity='admin',label='Administrator')],processes=[],canCreate=True)
  identity='demo' if editor_mode=='schema' else 'demo/assets';catalog=[dict(identity=identity,label='Assets',searchType='demo/asset')]
  columns={'demo/asset':dict(columns=[dict(name='code',type='varchar'),dict(name='shot_code',type='varchar')],tableAvailable=True),'demo/shot':dict(columns=[dict(name='code',type='varchar'),dict(name='id',type='integer')],tableAvailable=True)}
  fixture=dict(document=document,metadata=metadata,identity=identity,catalog=catalog,revision='fixture-revision',canWrite=True)
@@ -52,7 +52,7 @@ for editor_mode in ('schema','workflow'):
        if kind=='state':controller._can_write=action['value']!='readonly';controller._write_uncertain=action['value']=='uncertain';controller._worker=SimpleNamespace() if action['value']=='busy' else None;controller.stateChanged.emit()
        elif kind in ('select','edge'):window.send({'type':'selectNodes','identities':[names[action['identity']=='second']],'primary':names[action['identity']=='second']} if kind=='select' else {'type':'selectEdge','index':action['index']})
        elif kind=='phone':
-        if width<800:
+        if width<(1000 if editor_mode=='workflow' else 800):
          items=controls(window);button=items.get('adminGraphPanels_'+action['value']);click(window,button) if button is not None else choose(window,items['adminGraphPanels'],action['value'])
        elif kind=='reveal':
         if editor_mode=='workflow' and action['id']=='adminRemoveGraphSelection':continue

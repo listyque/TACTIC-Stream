@@ -7,15 +7,10 @@ import { graphXmlText } from './graphXml.js';
 
 // Engine adapter: server requests and native XML remain owned by each editor.
 export default {
-  props: {
-    catalogTarget: Object,
-    catalogPlacement: { type: String, default: 'inline' }
-  },
   data() {
     return {
       ui: State.initial(),
       viewport: { width: 1, height: 1 },
-      catalogSize: { width: 1, height: 1 },
       toolbarSize: 620,
       frameObserver: null
     };
@@ -39,7 +34,6 @@ export default {
           };
       return {
         mode: this.frameMode,
-        externalCatalog: this.catalogPlacement === 'sidebar',
         style: appearance.theme,
         ready: !!document.xml,
         canWrite: this.canWrite,
@@ -93,18 +87,6 @@ export default {
         appearance.language
       );
     },
-    catalogScene() {
-      return {
-        nodes: [
-          UI.catalog(
-            this.frameModel,
-            this.ui,
-            { x: 0, y: 0, ...this.catalogSize },
-            appearance.language
-          )
-        ]
-      };
-    },
     toolbarScene() {
       return UI.toolbar(
         this.frameModel,
@@ -128,19 +110,11 @@ export default {
           height: Math.max(1, box.height)
         };
         if (target === this.$refs.body) this.viewport = size;
-        else if (target === this.catalogTarget) this.catalogSize = size;
         else if (target === toolbar) this.toolbarSize = size.width;
       }
     });
     this.frameObserver.observe(this.$refs.body);
     this.frameObserver.observe(toolbar);
-    if (this.catalogTarget) this.frameObserver.observe(this.catalogTarget);
-  },
-  watch: {
-    catalogTarget(target, previous) {
-      if (previous) this.frameObserver?.unobserve(previous);
-      if (target) this.frameObserver?.observe(target);
-    }
   },
   beforeUnmount() {
     this.frameObserver?.disconnect();

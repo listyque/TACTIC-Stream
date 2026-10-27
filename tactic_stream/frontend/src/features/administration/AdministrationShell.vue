@@ -1,20 +1,12 @@
 <script setup>
-import {
-  computed,
-  onMounted,
-  onBeforeUnmount,
-  ref,
-  shallowRef,
-  watch,
-  markRaw
-} from 'vue';
+import { computed, onMounted, onBeforeUnmount, ref, markRaw } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import Port from './AdministrationPort.vue';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/administration.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/administration.state.mjs';
 const props = defineProps({ model: { type: Object, required: true } }),
-  emit = defineEmits(['command', 'presentation']);
+  emit = defineEmits(['command']);
 const host = ref(null),
   size = ref({ width: 1, height: 1 }),
   ui = ref(State.initial());
@@ -27,14 +19,6 @@ const scene = computed(() =>
     appearance.language
   )
 );
-const library = shallowRef(null);
-watch(
-  [() => scene.value.geometry.mobile, () => library.value],
-  ([mobile, library]) => {
-    emit('presentation', { mobile, library });
-  },
-  { immediate: true, flush: 'post' }
-);
 const views = {
   toolbar: {
     component: markRaw(Port),
@@ -43,13 +27,6 @@ const views = {
   content: {
     component: markRaw(Port),
     props: { target: 'administration-pages' }
-  },
-  workflowLibrary: {
-    component: markRaw(Port),
-    props: { target: 'administration-workflow-library' },
-    captureRef: (port) => {
-      library.value = port?.$el || null;
-    }
   }
 };
 function dispatch(event) {
@@ -57,7 +34,7 @@ function dispatch(event) {
   ui.value = result.ui;
   for (const command of result.commands) emit('command', command);
 }
-defineExpose({ dispatch, ui, scene, library });
+defineExpose({ dispatch, ui, scene });
 let observer;
 onMounted(() => {
   observer = new ResizeObserver(([entry]) => {

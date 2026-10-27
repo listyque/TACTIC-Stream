@@ -65,3 +65,22 @@ assert.deepEqual(send({type:'commitInstance'}),[])
 send({type:'buffer',key:'instance',value:'asset_links'})
 assert.deepEqual(send({type:'commitInstance'}),[{type:'renameInstance',value:'asset_links'}])
 assert.equal(State.completed(ui,{type:'renameInstance'}).text.instance,undefined)
+
+const catalogModel={...model,dirty:false,catalog:[{identity:'P1',label:'Assets',searchType:'cg/assets',color:''}],metadata:{...model.metadata,searchTypes:[{identity:'cg/assets',label:'Assets',color:'#9bad77'}]}}
+const catalogUi=State.initial(),flat=nodes=>nodes.flatMap(node=>[node,...flat(node.children||[])])
+const rows=UI.models(catalogModel,catalogUi,'en').graphPipelines
+const group=rows.find(row=>row.group&&row.searchType==='cg/assets'),pipeline=rows.find(row=>row.identity==='P1')
+assert.equal(group.color,'#9bad77');assert.equal(pipeline.typeColor,'#9bad77')
+assert(flat(UI.row({width:230,source:'graphPipelines'},group,catalogModel,catalogUi,'en').nodes).some(node=>node.background==='#9bad77'))
+assert.equal(UI.row({width:230,source:'graphPipelines'},pipeline,catalogModel,catalogUi,'en').nodes[0].accent,'#9bad77')
+assert.equal(UI.row({width:230,source:'graphPipelines'},{...pipeline,color:'#c08080'},catalogModel,catalogUi,'en').nodes[0].accent,'#c08080','Pipeline color remains independent')
+const wideScene=UI.describe(catalogModel,catalogUi,1200,800,'en'),wideNodes=flat(wideScene.nodes)
+assert.equal(wideNodes.find(node=>node.id==='adminWorkflowSearchTypeColor').background,'#9bad77')
+for(const id of ['adminWorkflowCatalogPanel','adminGraphProperties']){
+ const panel=wideNodes.find(node=>node.id===id)
+ for(const button of panel.children.filter(node=>node.kind==='Button')){
+  assert(button.x>=8&&button.y>=12,id+' header inset')
+  assert(button.x+button.width<=panel.width-8,id+' right inset')
+ }
+}
+assert(UI.describe(catalogModel,catalogUi,900,800,'en').nodes.some(node=>node.id==='adminGraphPanels'),'Narrow workflows use labelled panel tabs')

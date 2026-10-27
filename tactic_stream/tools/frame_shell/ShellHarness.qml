@@ -15,5 +15,5 @@ ApplicationWindow {
  function send(event){const result=State.transition(ui,model,event);ui=result.ui;for(const command of result.commands){if(command.type==='section')model=Object.assign({},model,{section:command.value})}}
  TH.Theme{id:theme;dark:true;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}
  Component{id:port;Item{}}
- Frame.FrameView{id:body;anchors.fill:parent;theme:theme;scene:UI.describe(root.model,root.ui,width,height,root.language);models:({sections:UI.sections});describeRow:(list,record)=>UI.row(list,record,root.model,root.ui,root.language);views:({toolbar:port,content:port,workflowLibrary:port});onEvent:action=>root.send(action)}
+ Frame.FrameView{id:body;anchors.fill:parent;theme:theme;scene:UI.describe(root.model,root.ui,width,height,root.language);models:({sections:UI.sections});describeRow:(list,record)=>UI.row(list,record,root.model,root.ui,root.language);views:({toolbar:port,content:port});onEvent:action=>root.send(action)}
 }

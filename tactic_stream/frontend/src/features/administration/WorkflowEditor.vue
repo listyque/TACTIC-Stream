@@ -887,16 +887,6 @@ export default {
         @event="dispatch"
       />
     </div>
-    <Teleport
-      v-if="catalogPlacement === 'sidebar' && catalogTarget"
-      :to="catalogTarget"
-      ><FrameView
-        v-show="presentationVisible"
-        :scene="catalogScene"
-        :models="frameModels"
-        :describe-row="rowScene"
-        @event="dispatch"
-    /></Teleport>
     <ProcessRules
       ref="rules"
       :ticket="ticket"

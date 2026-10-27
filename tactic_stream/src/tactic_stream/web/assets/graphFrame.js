@@ -893,6 +893,7 @@ function records(model, ui, language) {
 			identity: "group:" + key,
 			group: true,
 			searchType: key,
+			color: info.color || "",
 			label: key === "sthpw/task" ? tr("Task status workflows") : info.label || key || tr("No Search Type")
 		});
 		if (ui.collapsed.indexOf(key) < 0 || !model.identity && model.document.searchType === key) {
@@ -900,9 +901,13 @@ function records(model, ui, language) {
 				key: "draft:" + key,
 				identity: "",
 				label: tr("New workflow"),
-				searchType: key
+				searchType: key,
+				typeColor: info.color || ""
 			});
-			out.push.apply(out, groups[key].slice().sort((a, b) => (a.label || a.identity).localeCompare(b.label || b.identity)).map((row) => Object.assign({}, row, { key: "pipeline:" + row.identity })));
+			out.push.apply(out, groups[key].slice().sort((a, b) => (a.label || a.identity).localeCompare(b.label || b.identity)).map((row) => Object.assign({}, row, {
+				key: "pipeline:" + row.identity,
+				typeColor: info.color || ""
+			})));
 		}
 	}
 	return out;
@@ -910,21 +915,28 @@ function records(model, ui, language) {
 function row(list, record, model, ui, language) {
 	const width = list.width - 16, tr = (text) => translate(text, language);
 	if (list.source === "graphPipelines") {
-		if (record.group) return { nodes: [listAction("workflowGroup_" + record.searchType, rect(0, 0, width, 34), record.label, ui.collapsed.indexOf(record.searchType) >= 0 ? "chevron-right" : "chevron-down", {
-			type: "collapse",
-			identity: record.searchType
-		}, !model.busy, {
-			fontRole: "secondary",
-			color: "secondaryText",
-			weight: 500,
-			endInset: 32
-		}), listAction("workflowCreate_" + record.searchType, rect(width - 34, 2, 30, 30), tr("Create workflow"), "add", {
-			type: "createWorkflow",
-			searchType: record.searchType
-		}, !model.busy && !model.dirty && !model.uncertain && (model.canWrite || model.metadata.canCreate), {
-			iconOnly: true,
-			revealOnRowInteraction: true
-		})] };
+		if (record.group) return { nodes: [
+			...record.color ? [node("Box", "workflowGroupColor_" + record.searchType, rect(0, 7, 3, 20), {
+				background: record.color,
+				radius: 1
+			})] : [],
+			listAction("workflowGroup_" + record.searchType, rect(8, 0, width - 8, 34), record.label, ui.collapsed.indexOf(record.searchType) >= 0 ? "chevron-right" : "chevron-down", {
+				type: "collapse",
+				identity: record.searchType
+			}, !model.busy, {
+				fontRole: "secondary",
+				color: "secondaryText",
+				weight: 500,
+				endInset: 32
+			}),
+			listAction("workflowCreate_" + record.searchType, rect(width - 34, 2, 30, 30), tr("Create workflow"), "add", {
+				type: "createWorkflow",
+				searchType: record.searchType
+			}, !model.busy && !model.dirty && !model.uncertain && (model.canWrite || model.metadata.canCreate), {
+				iconOnly: true,
+				revealOnRowInteraction: true
+			})
+		] };
 		return { nodes: [node("Action", "workflowPipeline_" + record.identity, rect(0, 0, width, 38), {
 			text: record.label || record.identity,
 			selected: model.identity === record.identity,
@@ -932,8 +944,10 @@ function row(list, record, model, ui, language) {
 			radius: 6,
 			toolTip: (record.label || record.identity) + " · " + record.identity,
 			selectedColor: "contentSelection",
+			accent: record.color || record.typeColor || void 0,
+			rail: !!(record.color || record.typeColor),
 			enabled: !model.busy && !model.uncertain,
-			children: [label("workflowPipelineTitle_" + record.identity, rect(10, 0, width - 20, 38), record.label || record.identity)],
+			children: [label("workflowPipelineTitle_" + record.identity, rect(14, 0, width - 24, 38), record.label || record.identity)],
 			action: {
 				type: "selectPipeline",
 				identity: record.identity
@@ -945,6 +959,8 @@ function row(list, record, model, ui, language) {
 		selected: ui.typeToAdd === record.identity,
 		normalColor: "transparent",
 		selectedColor: "contentSelection",
+		accent: record.color || void 0,
+		rail: !!record.color,
 		enabled: !model.busy,
 		children: [label("graphTypeTitle_" + record.identity, rect(10, 4, width - 20, 26), record.label || record.identity, { weight: 600 }), label("graphTypeIdentity_" + record.identity, rect(10, 32, width - 20, 22), record.identity, muted)],
 		action: {
@@ -975,18 +991,18 @@ function models(model, ui, language) {
 function panel(model, ui, bounds, language, narrow = false) {
 	const tr = (text) => translate(text, language);
 	const w = bounds.width, h = bounds.height, children = [];
-	if (narrow || ui.catalogVisible) children.push(label("adminWorkflowCatalogTitle", rect(8, 4, w - 56, 30), tr("Workflows"), { weight: 600 }), node("Field", "adminWorkflowSearch", rect(8, 42, w - 16, 38), {
+	if (narrow || ui.catalogVisible) children.push(label("adminWorkflowCatalogTitle", rect(12, 12, w - (narrow ? 24 : 74), 38), tr("Workflows"), { weight: 600 }), node("Field", "adminWorkflowSearch", rect(12, 58, w - 24, 38), {
 		text: ui.query,
 		placeholder: tr("Find a workflow"),
 		label: tr("Find a workflow"),
 		action: { type: "query" }
-	}), node("List", "adminWorkflowCatalog", rect(8, 88, w - 16, h - 96), {
+	}), node("List", "adminWorkflowCatalog", rect(12, 104, w - 24, Math.max(0, h - 116)), {
 		source: "graphPipelines",
 		keyField: "key",
 		rowHeight: 42,
 		scrollbarId: "adminWorkflowCatalogScrollBar"
 	}));
-	if (!narrow) children.push(button("adminToggleWorkflowList", rect(w - 38, 0, 38, 38), tr(ui.catalogVisible ? "Hide workflow list" : "Show workflow list"), ui.catalogVisible ? "chevron-left" : "chevron-right", { type: "catalogVisible" }, true, { iconOnly: true }));
+	if (!narrow) children.push(button("adminToggleWorkflowList", rect(ui.catalogVisible ? w - 50 : (w - 38) / 2, 12, 38, 38), tr(ui.catalogVisible ? "Hide workflow list" : "Show workflow list"), ui.catalogVisible ? "chevron-left" : "chevron-right", { type: "catalogVisible" }, true, { iconOnly: true }));
 	return node("Box", "adminWorkflowCatalogPanel", bounds, {
 		background: "surfaceContainerLow",
 		border: "outlineVariant",
@@ -1007,7 +1023,7 @@ function toolbar(model, ui, width, language) {
 }
 function describe(model, ui, width, height, language) {
 	if (width <= 0 || height <= 0) return { nodes: [] };
-	const tr = (text) => translate(text, language), workflow = model.mode === "workflow", internalCatalog = workflow && !model.externalCatalog, narrow = width < 800, edit = policy(model).editable && !ui.confirmation;
+	const tr = (text) => translate(text, language), workflow = model.mode === "workflow", internalCatalog = workflow, narrow = width < (workflow ? 1e3 : 800), edit = policy(model).editable && !ui.confirmation;
 	const noticeModel = Object.assign({}, model, { error: model.error || ui.error });
 	if (ui.confirmation === "remove") noticeModel.confirmationText = workflow ? "Remove the selection from this workflow draft?" : "Remove the selection from the schema draft? Search Types, tables and data will be kept.";
 	if (ui.confirmation === "selection") noticeModel.confirmationText = "Discard unapplied JSON changes?";
@@ -1034,7 +1050,12 @@ function describe(model, ui, width, height, language) {
 		const context = details && details.label && details.label !== searchType ? details.label + " · " + searchType : searchType;
 		const text = searchType ? tr("Search Type: %1").replace("%1", context) : tr("No Search Type is linked. Create a workflow from the Search Type editor.");
 		const captionHeight = Math.max(18, Math.ceil(text.length * 6 / Math.max(1, width)) * 15);
-		nodes.push(label("adminWorkflowSearchType", rect(0, y, width, captionHeight), text, Object.assign({}, muted, { wrap: true })));
+		const color = details?.color || "";
+		if (color) nodes.push(node("Box", "adminWorkflowSearchTypeColor", rect(0, y, 3, captionHeight), {
+			background: color,
+			radius: 1
+		}));
+		nodes.push(label("adminWorkflowSearchType", rect(color ? 12 : 0, y, width - (color ? 12 : 0), captionHeight), text, Object.assign({}, muted, { wrap: true })));
 		y += captionHeight + 12;
 	}
 	if (!model.ready) nodes.push(label("adminGraphEmpty", rect(12, y, width - 24, 80), tr("Select a workflow or create a new one."), { wrap: true }));
@@ -1070,12 +1091,12 @@ function describe(model, ui, width, height, language) {
 		}]), ui.panel, rect(0, y, width, 38), !model.busy, "panel"));
 		y += 46;
 	}
-	const h = Math.max(1, height - y), catalogWidth = internalCatalog && !narrow ? ui.catalogVisible ? Math.min(ui.catalogWidth, width * .28) : 40 : 0, propertiesWidth = !narrow ? ui.propertiesVisible ? Math.min(ui.propertiesWidth, workflow ? 460 : 420, width * (workflow ? .5 : .45)) : 40 : 0;
+	const h = Math.max(1, height - y), catalogWidth = internalCatalog && !narrow ? ui.catalogVisible ? Math.min(ui.catalogWidth, width * .28) : 56 : 0, propertiesWidth = !narrow ? ui.propertiesVisible ? Math.min(ui.propertiesWidth, workflow ? 460 : 420, width * (workflow ? .5 : .45)) : 56 : 0;
 	if (internalCatalog && (!narrow || ui.panel === "catalog")) {
 		const w = narrow ? width : catalogWidth;
-		nodes.push(Object.assign(panel(model, ui, rect(0, y, w, h), language, narrow), { visible: ui.page === "canvas" }));
+		nodes.push(Object.assign(panel(model, ui, rect(0, y, w, h), language, narrow), { visible: ui.page === "canvas" || !narrow }));
 		if (!narrow && ui.catalogVisible) nodes.push(node("Splitter", "adminCatalogSplit", rect(w, y, 10, h), {
-			visible: ui.page === "canvas",
+			visible: ui.page === "canvas" || !narrow,
 			text: tr("Workflow list width"),
 			value: w,
 			min: 180,
@@ -1106,7 +1127,7 @@ function describe(model, ui, width, height, language) {
 	}));
 	nodes.push(node("Graph", "adminGraphCanvas", rect(x, y, graphWidth, h), {
 		toolbarRightInset: 46,
-		visible: ui.page === "canvas" && (!narrow || ui.panel === "canvas" || model.externalCatalog && ui.panel === "catalog"),
+		visible: ui.page === "canvas" && (!narrow || ui.panel === "canvas"),
 		help: false,
 		label: tr(workflow ? "Workflow" : "Project schema"),
 		nodes: graphNodes,
@@ -1123,24 +1144,24 @@ function describe(model, ui, width, height, language) {
 	if (!narrow || ui.panel === "properties") {
 		const w = narrow ? width : propertiesWidth, px = narrow ? 0 : width - w, children = [];
 		if (narrow || ui.propertiesVisible) {
-			const inner = inspector(model, ui, w - 12, language);
-			children.push(node("Scroll", "adminGraphPropertiesScroll", rect(12, 46, w - 24, h - 58), {
+			const inner = inspector(model, ui, w - 24, language);
+			children.push(node("Scroll", "adminGraphPropertiesScroll", rect(12, 62, w - 24, Math.max(0, h - 74)), {
 				contentHeight: inner.height,
 				resetKey: ui.inspector + ":" + ui.processPage + ":" + model.selectedNode + ":" + model.selectedEdge,
 				scrollbarId: "adminGraphPropertiesScrollBar",
 				children: inner.nodes
 			}));
 		}
-		if (!narrow) children.push(button("adminToggleGraphProperties", rect(workflow && ui.propertiesVisible ? w - 38 : 0, 0, 38, 38), tr(ui.propertiesVisible ? "Hide properties" : "Show properties"), ui.propertiesVisible ? "chevron-right" : "chevron-left", { type: "propertiesVisible" }, true, { iconOnly: true }));
-		if (narrow || ui.propertiesVisible) children.push(button("adminGraphAddNode", rect(workflow ? w - 82 : 44, 0, workflow ? 38 : w - 52, 38), tr(ui.inspector === "add_node" ? "Selection" : "Add node"), ui.inspector === "add_node" ? "tune" : "add", {
+		if (!narrow) children.push(button("adminToggleGraphProperties", rect(ui.propertiesVisible ? workflow ? w - 50 : 12 : (w - 38) / 2, 12, 38, 38), tr(ui.propertiesVisible ? "Hide properties" : "Show properties"), ui.propertiesVisible ? "chevron-right" : "chevron-left", { type: "propertiesVisible" }, true, { iconOnly: true }));
+		if (narrow || ui.propertiesVisible) children.push(button("adminGraphAddNode", rect(workflow ? w - (narrow ? 50 : 94) : narrow ? 12 : 58, 12, workflow ? 38 : w - (narrow ? 24 : 70), 38), tr(ui.inspector === "add_node" ? "Selection" : "Add node"), ui.inspector === "add_node" ? "tune" : "add", {
 			type: "inspector",
 			value: ui.inspector === "add_node" ? "selection" : "add_node"
 		}, !model.busy, { iconOnly: workflow }));
 		if (workflow && (narrow || ui.propertiesVisible)) {
-			children.push(label("adminGraphInspectorTitle", rect(12, 0, Math.max(0, w - 144), 38), tr("Inspector"), { weight: 600 }));
+			children.push(label("adminGraphInspectorTitle", rect(12, 12, Math.max(0, w - (narrow ? 112 : 156)), 38), tr("Inspector"), { weight: 600 }));
 			if (model.selectedNode || model.selectedEdge >= 0) {
 				const selectedNode = (model.nodes || []).find((record) => record.identity === model.selectedNode);
-				children.push(button("adminRemoveGraphSelection", rect(w - 126, 0, 38, 38), tr("Remove from canvas"), "delete", { type: "remove" }, edit && !(selectedNode && selectedNode.referenceOnly), {
+				children.push(button("adminRemoveGraphSelection", rect(w - (narrow ? 94 : 138), 12, 38, 38), tr("Remove from canvas"), "delete", { type: "remove" }, edit && !(selectedNode && selectedNode.referenceOnly), {
 					iconOnly: true,
 					destructive: true
 				}));
@@ -1162,7 +1183,7 @@ function describe(model, ui, width, height, language) {
 			action: { type: "propertiesSplit" }
 		}));
 	}
-	if (ui.page === "technical") nodes.push(node("Area", "adminGraphXmlEditor", rect(0, y, width, Math.max(1, h - 46)), {
+	if (ui.page === "technical") nodes.push(node("Area", "adminGraphXmlEditor", rect(narrow ? 0 : x, y, width - (narrow ? 0 : x), Math.max(1, h - 46)), {
 		label: tr("Native XML"),
 		text: own(ui.text, "xml") ? ui.text.xml : model.xml || "",
 		monospace: true,
@@ -1171,11 +1192,11 @@ function describe(model, ui, width, height, language) {
 			type: "buffer",
 			key: "xml"
 		}
-	}), button("adminGraphApplyXml", rect(0, height - 38, Math.min(240, width), 38), tr("Apply XML"), "check", {
+	}), button("adminGraphApplyXml", rect(narrow ? 0 : x, height - 38, Math.min(240, width - (narrow ? 0 : x)), 38), tr("Apply XML"), "check", {
 		type: "apply",
 		key: "xml"
 	}, edit && own(ui.text, "xml")));
-	if (ui.page === "canvas" && (!narrow || ui.panel === "canvas" || model.externalCatalog && ui.panel === "catalog")) {
+	if (ui.page === "canvas" && (!narrow || ui.panel === "canvas")) {
 		const toolbarX = x + 230, available = graphWidth - 230;
 		if (available > 130) nodes.push(node("Choice", "adminGraphLayoutStyle", rect(toolbarX, y, Math.max(80, available - 46), 38), {
 			label: tr("Automatic layout"),
@@ -1554,21 +1575,10 @@ function graphXmlText(xml) {
 //#endregion
 //#region src/features/administration/graphFrame.js
 var graphFrame_default = {
-	props: {
-		catalogTarget: Object,
-		catalogPlacement: {
-			type: String,
-			default: "inline"
-		}
-	},
 	data() {
 		return {
 			ui: initial(),
 			viewport: {
-				width: 1,
-				height: 1
-			},
-			catalogSize: {
 				width: 1,
 				height: 1
 			},
@@ -1586,7 +1596,6 @@ var graphFrame_default = {
 			})) };
 			return {
 				mode: this.frameMode,
-				externalCatalog: this.catalogPlacement === "sidebar",
 				style: appearance.theme,
 				ready: !!document.xml,
 				canWrite: this.canWrite,
@@ -1628,13 +1637,6 @@ var graphFrame_default = {
 		frameScene() {
 			return describe(this.frameModel, this.ui, this.viewport.width, this.viewport.height, appearance.language);
 		},
-		catalogScene() {
-			return { nodes: [panel(this.frameModel, this.ui, {
-				x: 0,
-				y: 0,
-				...this.catalogSize
-			}, appearance.language)] };
-		},
 		toolbarScene() {
 			return toolbar(this.frameModel, this.ui, this.toolbarSize, appearance.language);
 		},
@@ -1651,18 +1653,12 @@ var graphFrame_default = {
 					height: Math.max(1, box.height)
 				};
 				if (target === this.$refs.body) this.viewport = size;
-				else if (target === this.catalogTarget) this.catalogSize = size;
 				else if (target === toolbar) this.toolbarSize = size.width;
 			}
 		});
 		this.frameObserver.observe(this.$refs.body);
 		this.frameObserver.observe(toolbar);
-		if (this.catalogTarget) this.frameObserver.observe(this.catalogTarget);
 	},
-	watch: { catalogTarget(target, previous) {
-		if (previous) this.frameObserver?.unobserve(previous);
-		if (target) this.frameObserver?.observe(target);
-	} },
 	beforeUnmount() {
 		this.frameObserver?.disconnect();
 	},

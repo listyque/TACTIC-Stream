@@ -42,14 +42,12 @@ const selectors = {
 async function select(id) {
   await page.waitForFunction(() => {
     const shell = document.querySelector('.administration-frame-shell'),
-      header = shell?.querySelector('[data-frame="administrationHeader"]'),
-      nav = shell?.querySelector('[data-frame="administrationSidebar"]');
+      header = shell?.querySelector('[data-frame="administrationHeader"]');
     return (
       header &&
       Math.abs(
         header.getBoundingClientRect().width -
-          (shell.getBoundingClientRect().width -
-            (nav?.getBoundingClientRect().width || 0))
+          shell.getBoundingClientRect().width
       ) < 0.5
     );
   });
@@ -201,25 +199,21 @@ try {
     1,
     'opening a linked workflow reads that identity once'
   );
-  await admin
-    .locator(
-      '#administration-workflow-library [data-frame="adminWorkflowSearch"]'
-    )
-    .waitFor();
+  await admin.locator('[data-frame="adminWorkflowSearch"]:visible').waitFor();
   const library = await control('adminWorkflowCatalogPanel').boundingBox(),
     sidebar = await control('administrationSidebar').boundingBox(),
     graph = await control('adminGraphCanvas').boundingBox();
   assert(
-    library.x + library.width <= sidebar.x + sidebar.width,
-    'workflow library belongs to the Administration sidebar'
+    library.x >= sidebar.x + sidebar.width + 12,
+    'workflow library belongs inside the editor'
   );
   assert(
     library.x + library.width < graph.x,
-    'no second library column in the graph body'
+    'library and graph remain separate panels'
   );
   await control('adminWorkflowSearch').fill('Assets');
   await control('adminToggleNavigation').click();
-  assert.equal(await control('adminWorkflowSearch').count(), 0);
+  assert.equal(await control('adminWorkflowSearch').count(), 1);
   await control('adminToggleNavigation').click();
   assert.equal(
     await control('adminWorkflowSearch').inputValue(),
@@ -227,7 +221,7 @@ try {
     'catalog state survives collapsing its host'
   );
   await control('adminWorkflowSearch').fill('');
-  const split = await control('administrationNavigationSplit').boundingBox();
+  const split = await control('adminCatalogSplit').boundingBox();
   await page.mouse.move(split.x + split.width / 2, split.y + split.height / 2);
   await page.mouse.down();
   await page.mouse.move(
@@ -238,10 +232,10 @@ try {
   await page.waitForFunction(
     (width) =>
       document
-        .querySelector('[data-frame="administrationSidebar"]')
+        .querySelector('[data-frame="adminWorkflowCatalogPanel"]')
         .getBoundingClientRect().width >
       width + 30,
-    sidebar.width
+    library.width
   );
   await page.setViewportSize({ width: 720, height: 740 });
   await admin
@@ -258,11 +252,7 @@ try {
     'phone/tablet catalog stays inside the editor'
   );
   await page.setViewportSize({ width: 1400, height: 940 });
-  await admin
-    .locator(
-      '#administration-workflow-library [data-frame="adminWorkflowSearch"]'
-    )
-    .waitFor();
+  await admin.locator('[data-frame="adminWorkflowSearch"]:visible').waitFor();
   await control('adminGraphCanvas').waitFor();
   assert.equal(
     await control('adminPipelineName').inputValue(),

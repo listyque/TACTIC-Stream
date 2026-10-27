@@ -160,7 +160,8 @@ try {
             action.index
           );
         else if (action.type === 'phone') {
-          if (width < 800) await section('adminGraphPanels', action.value);
+          if (width < (editor === 'workflow' ? 1000 : 800))
+            await section('adminGraphPanels', action.value);
         } else if (action.type === 'page' || action.type === 'workflowPage') {
           if (action.type !== 'workflowPage' || editor === 'workflow')
             await section(action.selector, action.value);

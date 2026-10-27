@@ -1540,20 +1540,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 				"describe-row",
 				"onEvent"
 			])], 512),
-			_ctx.catalogPlacement === "sidebar" && _ctx.catalogTarget ? (openBlock(), createBlock(Teleport, {
-				key: 1,
-				to: _ctx.catalogTarget
-			}, [withDirectives(createVNode(_component_FrameView, {
-				scene: _ctx.catalogScene,
-				models: _ctx.frameModels,
-				"describe-row": _ctx.rowScene,
-				onEvent: _ctx.dispatch
-			}, null, 8, [
-				"scene",
-				"models",
-				"describe-row",
-				"onEvent"
-			]), [[vShow, $props.presentationVisible]])], 8, ["to"])) : createCommentVNode("", true),
 			createVNode(_component_ProcessRules, {
 				ref: "rules",
 				ticket: $props.ticket,
