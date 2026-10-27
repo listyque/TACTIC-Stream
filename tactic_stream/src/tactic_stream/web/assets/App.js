@@ -2297,7 +2297,7 @@ function describe$54(definitions, draft, width, language, enabled = true) {
 		}));
 	});
 	const y = Math.ceil(definitions.length / columns) * 76;
-	const applyWidth = Math.min(width, buttonWidth(tr("Apply filters").length * 7, true)), resetWidth = Math.min(width, buttonWidth(tr("Reset filters").length * 7, true)), stacked = applyWidth + resetWidth + 8 > width;
+	const applyWidth = Math.min(width, buttonWidth(tr("Apply filters").length * 9, true)), resetWidth = Math.min(width, buttonWidth(tr("Reset filters").length * 9, true)), stacked = applyWidth + resetWidth + 8 > width;
 	nodes.push(button("pageRuntimeApply", rect$1(0, y, applyWidth, 32), tr("Apply filters"), "filter", { type: "page-filter-apply" }, enabled));
 	nodes.push(button("pageRuntimeReset", rect$1(stacked ? 0 : applyWidth + 8, y + (stacked ? 40 : 0), resetWidth, 32), tr("Reset filters"), "restore", { type: "page-filter-reset" }, enabled));
 	return {
