@@ -673,7 +673,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return connection.command('sidebar','operation',operation_id=operation_id)
 
     @mcp.tool(annotations=read_only, structured_output=True)
-    def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier) -> dict[str, Any]:
+    def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier, detail_key: Identifier | None = None) -> dict[str, Any]:
         """Compose a shared native dashboard from row/column/text/markdown/count/table/items/details/link bricks.
         Use one items brick for the existing native item-card tree, with its actual relationship/process
         branches, counts and actions. Only supply search_type, view and root filters; do not invent another tree.
@@ -686,7 +686,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         Filters are ANDed native column conditions. Metrics are current row counts.
         Same CustomLayout/Frame in TH and TS; no application source or generated code.
         """
-        return connection.command('dashboard','preview',document=document.model_dump(mode='json'),expected_revision=expected_revision)
+        return connection.command('dashboard','preview',document=document.model_dump(mode='json'),expected_revision=expected_revision,detail_key=detail_key or '')
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_dashboard_operation(operation_id: Identifier) -> dict[str, Any]:

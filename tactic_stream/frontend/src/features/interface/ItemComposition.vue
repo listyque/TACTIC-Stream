@@ -4,6 +4,8 @@ import FrameView from '../../frame/FrameView.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import { appearance } from '../../appearance.js';
 import { layoutUrl } from './itemLayout.js';
+import CanvasSelection from '../administration/CanvasSelection.vue';
+import * as Canvas from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/canvas.mjs';
 import * as Composition from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs';
 const props = defineProps({
   layout: Object,
@@ -12,11 +14,11 @@ const props = defineProps({
   readOnly: Boolean,
   selectedElement: String
 });
-const emit = defineEmits(['action', 'element']);
+const emit = defineEmits(['action', 'element', 'geometry']);
 const host = ref(null),
   width = ref(1);
 let observer;
-const scene = computed(() =>
+const baseScene = computed(() =>
   Composition.describe(
     props.layout,
     props.node,
@@ -30,6 +32,22 @@ const scene = computed(() =>
     props.editing || props.readOnly
   )
 );
+const scene = computed(() =>
+  props.editing
+    ? Canvas.itemScene(baseScene.value, props.layout)
+    : baseScene.value
+);
+const views = computed(() => ({
+  canvasOverlay: {
+    component: CanvasSelection,
+    props: {
+      boxes: scene.value.canvasBoxes || [],
+      selected: props.selectedElement,
+      onSelect: (name) => emit('element', name),
+      onCommit: (value) => emit('geometry', value)
+    }
+  }
+}));
 function dispatch(event, source) {
   if (event.type === 'select') {
     if (props.editing) emit('element', event.name);
@@ -77,7 +95,7 @@ onBeforeUnmount(() => observer?.disconnect());
       }
     "
   >
-    <FrameView :scene="scene" @event="dispatch" />
+    <FrameView :scene="scene" :views="views" @event="dispatch" />
   </div>
 </template>
 <style>

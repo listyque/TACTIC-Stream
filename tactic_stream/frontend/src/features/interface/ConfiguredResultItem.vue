@@ -24,6 +24,7 @@ const props = defineProps({
   navigable: { type: Boolean, default: true }
 });
 const emit = defineEmits([
+  'geometry',
   'element',
   'back',
   'upload',
@@ -206,6 +207,7 @@ function activate(event) {
       :read-only="readOnly"
       :editing="editing"
       :selected-element="selectedElement"
+      @geometry="emit('geometry', $event)"
       @element="emit('element', $event)"
       @action="(action, ...args) => emit(action, ...args)"
       @completion="(...args) => emit('completion', ...args)"

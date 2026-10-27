@@ -15,6 +15,7 @@ const props = defineProps({
   target: String,
   workspaceId: String,
   selectedKeys: Array,
+  canAdminister: Boolean,
   active: { type: Boolean, default: true }
 });
 const emit = defineEmits([
@@ -24,7 +25,8 @@ const emit = defineEmits([
   'close',
   'select',
   'focus',
-  'loaded'
+  'loaded',
+  'edit'
 ]);
 const host = ref(null),
   size = ref({ width: 800, height: 600 }),
@@ -33,7 +35,12 @@ const host = ref(null),
   error = ref('');
 const scene = computed(() =>
   Page.describe(
-    { title: props.title, busy: busy.value, error: error.value },
+    {
+      title: props.title,
+      busy: busy.value,
+      error: error.value,
+      canEdit: props.canAdminister && props.view?.startsWith('dashboard.')
+    },
     size.value.width,
     size.value.height,
     appearance.language
@@ -87,7 +94,13 @@ defineExpose({ reload, workspaceId: computed(() => props.workspaceId) });
 </script>
 <template>
   <section ref="host" class="workspace-page" :aria-busy="busy">
-    <FrameView :scene="scene" @event="reload" />
+    <FrameView
+      :scene="scene"
+      @event="
+        (event) =>
+          event.type === 'edit' ? emit('edit', view.slice(10)) : reload()
+      "
+    />
     <ConfiguredView
       v-if="model"
       class="workspace-page-layout"

@@ -11,7 +11,8 @@ const props = defineProps({
   project: String,
   selectedKeys: Array,
   workspaceId: String,
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  editing: Boolean
 });
 const emit = defineEmits(['inspect', 'operate', 'select', 'focus', 'loaded']);
 const records = ref([]),
@@ -37,12 +38,16 @@ const views = computed(() => ({
       ticket: props.ticket,
       project: props.project,
       searchType: props.frameNode.items.searchType,
-      mode: 'continious',
+      mode:
+        props.editing &&
+        definition.value?.table.item_layout?.collection === 'grid'
+          ? 'tiles'
+          : 'continious',
       itemLayout: definition.value?.table.item_layout || null,
       groupMode: 'none',
       active: props.active,
       workspaceId: props.workspaceId,
-      readOnly: false,
+      readOnly: props.editing,
       state: state.value,
       selectedKeys: props.selectedKeys || [],
       onState: (value) => (state.value = value),
@@ -72,7 +77,7 @@ async function load(append = false) {
         filters: scope.filters,
         project_scope: true,
         offset: append ? records.value.length : 0,
-        limit: scope.initialLimit,
+        limit: props.editing ? 3 : scope.initialLimit,
         order_by: [scope.orderBy]
       }
     ]);
@@ -81,7 +86,7 @@ async function load(append = false) {
     records.value = append
       ? [...records.value, ...response.info.records]
       : response.info.records;
-    hasMore.value = response.info.hasNext;
+    hasMore.value = !props.editing && response.info.hasNext;
     emit('loaded', { definition: definition.value, records: records.value });
   } catch (failure) {
     if (current === generation) error.value = failure.message;

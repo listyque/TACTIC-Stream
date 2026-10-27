@@ -9,8 +9,11 @@ import { runTableScript } from './tableScript.js';
 import { printCustomReport } from './customReport.js';
 import { rpc } from '../../api.js';
 import * as Layout from '../../../../src/tactic_stream/shared_ui/features/table/layout.ui.mjs';
+import * as Canvas from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/canvas.mjs';
+import CanvasSelection from '../administration/CanvasSelection.vue';
 const props = defineProps({
   model: Object,
+  frameNode: Object,
   ticket: String,
   project: String,
   width: Number,
@@ -19,7 +22,9 @@ const props = defineProps({
   currentKey: String,
   selectedKeys: Array,
   workspaceId: String,
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  editing: Boolean,
+  selectedBlock: String
 });
 const emit = defineEmits([
   'action',
@@ -36,7 +41,9 @@ const emit = defineEmits([
   'select',
   'focus',
   'operate',
-  'loaded'
+  'loaded',
+  'block',
+  'geometry'
 ]);
 const state = ref({}),
   tables = ref({}),
@@ -46,30 +53,49 @@ const state = ref({}),
 let generation = 0,
   abort;
 let detailGeneration = 0;
-const scene = computed(() =>
+const baseScene = computed(() =>
   Layout.describe(
     {
       ...props.model,
       layoutTables: tables.value,
-      layoutDetail: detail.value,
+      layoutDetail: props.editing
+        ? props.model.layoutDetail || {}
+        : detail.value,
       layoutTabs: props.tabs || props.model.layoutTabs,
       layoutTabKey: props.currentKey || props.model.layoutTabKey,
       layoutState: state.value,
       layoutBusy: busy.value,
       layoutError: error.value
     },
-    props.width,
-    props.height,
+    props.frameNode?.width ?? props.width,
+    props.frameNode?.height ?? props.height,
     appearance.language,
     true,
     location.origin
   )
 );
+const scene = computed(() =>
+  props.editing
+    ? Canvas.decorate(baseScene.value, 'editorPath')
+    : baseScene.value
+);
 const views = computed(() => ({
+  canvasOverlay: {
+    component: CanvasSelection,
+    props: {
+      boxes: scene.value.canvasBoxes || [],
+      selected: props.selectedBlock,
+      onSelect: (key) => emit('block', key),
+      onCommit: (value) =>
+        emit('geometry', value, scene.value.canvasBoxes || [])
+    }
+  },
   layoutItems: {
     component: DashboardItems,
     nodeProps: true,
     props: {
+      editing: props.editing,
+      inert: props.editing ? true : undefined,
       ticket: props.ticket,
       project: props.project,
       selectedKeys: props.selectedKeys,
@@ -84,12 +110,14 @@ const views = computed(() => ({
   },
   layoutMarkdown: {
     component: LayoutDocument,
-    nodeProps: true
+    nodeProps: true,
+    props: { inert: props.editing ? true : undefined }
   },
   layoutTable: {
     component: NestedTable,
     nodeProps: true,
     props: {
+      inert: props.editing ? true : undefined,
       ticket: props.ticket,
       project: props.project,
       parentState: { children: tables.value },
@@ -102,6 +130,7 @@ const views = computed(() => ({
   }
 }));
 async function focusItem(value) {
+  if (props.editing) return;
   emit('focus', value);
   if (!props.model.layoutItems || !Layout.hasDetails(props.model.layoutNodes))
     return;
@@ -193,6 +222,7 @@ async function run(source, selector = '') {
   }
 }
 function activate(action) {
+  if (props.editing) return;
   if (action.type === 'layout-tab') emit('tab', action.key);
   else if (action.type === 'layout-close-tab') emit('close-tab', action.key);
   else if (action.type === 'layout-change')
@@ -215,17 +245,26 @@ watch(
     error.value = '';
     state.value = Layout.initial(props.model);
     tables.value = Object.fromEntries(
-      Layout.tables(props.model.layoutNodes).map((item) => [
-        item.key,
-        {
-          scope: item.scope,
-          selected: [],
-          rows: [],
-          columns: [],
-          offset: 0,
-          selection: item.scope.selection
-        }
-      ])
+      Layout.tables(props.model.layoutNodes)
+        .concat(
+          props.editing
+            ? Layout.tables(
+                props.model.layoutDetail?.layoutNodes,
+                'customLayoutDetails'
+              )
+            : []
+        )
+        .map((item) => [
+          item.key,
+          {
+            scope: item.scope,
+            selected: [],
+            rows: [],
+            columns: [],
+            offset: 0,
+            selection: item.scope.selection
+          }
+        ])
     );
     run(
       (props.model.layoutLoad || []).map((item) => item.javascript).join('\n')

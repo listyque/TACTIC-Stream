@@ -13,7 +13,7 @@ defineProps({
   selectedElement: String,
   error: String
 });
-defineEmits(['element']);
+defineEmits(['element', 'geometry']);
 </script>
 <template>
   <div class="layout-live-preview table-container">
@@ -34,6 +34,7 @@ defineEmits(['element']);
       read-only
       editing
       :selected-element="selectedElement"
+      @geometry="$emit('geometry', $event)"
       @element="$emit('element', $event)"
     />
     <p v-else class="muted">{{ t('Loading interface...') }}</p>

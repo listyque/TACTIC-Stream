@@ -1,5 +1,5 @@
 """Portable dashboard bricks shared by agent schemas and native server commands."""
-from typing import Literal
+from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -22,7 +22,11 @@ class DashboardBlock(BaseModel):
     filters: list[DashboardFilter] = Field(default_factory=list, max_length=32)
     href: str = Field(default='', max_length=2048)
     weight: int = Field(default=1, ge=1, le=12)
-    height: int | None = Field(default=None, ge=120, le=1600)
+    width: int | None = Field(default=None, ge=40, le=2400)
+    height: int | None = Field(default=None, ge=24, le=1600)
+    padding: list[Annotated[int, Field(ge=0, le=256)]] = Field(default_factory=lambda: [0, 0, 0, 0], min_length=4, max_length=4)
+    margin: list[Annotated[int, Field(ge=0, le=256)]] = Field(default_factory=lambda: [0, 0, 0, 0], min_length=4, max_length=4)
+    gap: int = Field(default=8, ge=0, le=128)
     controls: list[Literal['search', 'searchLimit', 'shelf', 'selection', 'gear', 'insert']] | None = Field(default=None, max_length=6)
     children: list['DashboardBlock'] = Field(default_factory=list, max_length=32)
 
@@ -31,4 +35,4 @@ class DashboardDocument(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     name: str = Field(pattern=r'^[a-z][a-z0-9_]{0,47}$')
     title: str = Field(min_length=1, max_length=256)
-    blocks: list[DashboardBlock] = Field(min_length=1, max_length=32)
+    blocks: list[DashboardBlock] = Field(min_length=0, max_length=32)

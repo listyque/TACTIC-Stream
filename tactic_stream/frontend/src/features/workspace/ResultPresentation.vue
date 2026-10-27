@@ -76,6 +76,7 @@ export default {
     openTaskManager: { default: null }
   },
   emits: [
+    'geometry',
     'element',
     'select',
     'inspect',
@@ -1380,6 +1381,7 @@ export default {
                 :read-only="readOnly"
                 :editing="editing"
                 :selected-element="selectedElement"
+                @geometry="$emit('geometry', $event)"
                 @element="$emit('element', $event)"
                 :node="node"
                 :compact="compact"

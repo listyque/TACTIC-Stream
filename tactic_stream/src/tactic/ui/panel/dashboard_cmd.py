@@ -18,7 +18,7 @@ def dashboard_state():
     state=page_state('sthpw/project')
     urls=[row.get_data() for row in Search('config/url').get_sobjects()]
     state['revision']=digest([state['revision'],urls])
-    state['bricks']=['row','column','text','markdown','metric','table','items','link']
+    state['bricks']=['row','column','text','markdown','metric','table','items','details','link']
     state['dashboards']=[dict(view=row.get_value('view'),source_id=row.get_id())
         for row in Search('config/widget_config').get_sobjects()
         if (row.get_value('view') or '').startswith('dashboard.') and '<dashboard>' in (row.get_value('config') or '')]
@@ -81,6 +81,11 @@ class DashboardCmd(Command):
         if len(urls)>1 or urls and '<view>'+view+'</view>' not in (urls[0].get_value('widget') or ''):
             raise ValueError('Dashboard URL belongs to another configuration')
         if action=='preview':
+            detail_key=self.kwargs.get('detail_key','')
+            if not isinstance(detail_key,str) or len(detail_key)>2048:
+                raise ValueError('Choose a preview record')
+            if detail_key and model['layoutHasDetails']:
+                model['layoutDetail']=dashboard_layout(document,view,detail_key=detail_key)
             return dict(kind='dashboard',document=document,model=model,view=view,path=path,revision=state['revision'],applied=False)
         root=ET.Element('config');definition=ET.SubElement(root,'view',name=view)
         ET.SubElement(definition,'dashboard').text=json.dumps(document,ensure_ascii=False)

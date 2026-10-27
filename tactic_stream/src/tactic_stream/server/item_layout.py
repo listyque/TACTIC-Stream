@@ -58,6 +58,22 @@ def describe_item_layout(description):
             raise ValueError('Invalid layout size')
         return int(value)
 
+    def spacing(attrs):
+        values = {}
+        for key in ('padding', 'margin'):
+            if key not in attrs:
+                continue
+            text = str(attrs[key]).split()
+            if len(text) != 4 or any(not value.isdecimal() or int(value)>256 for value in text):
+                raise ValueError('Layout spacing requires four integers from 0 to 256')
+            values[key] = [int(value) for value in text]
+        if 'gap' in attrs:
+            gap = str(attrs['gap'])
+            if not gap.isdecimal() or int(gap)>128:
+                raise ValueError('Layout gap must be from 0 to 128')
+            values['gap'] = int(gap)
+        return values
+
     collection = attributes.get('collection', 'grid')
     if collection not in ('grid', 'list', 'tree', 'table'):
         raise ValueError('Invalid layout collection')
@@ -68,7 +84,7 @@ def describe_item_layout(description):
     if flow not in ('grid', 'contents'):
         raise ValueError('Invalid layout flow')
     result = dict(collection=collection, flow=flow, tracks=tracks, columns=number(attributes.get('columns'), 12, 12),
-                  card_width=number(attributes.get('card_width'), 280, 1200), elements=[])
+                  card_width=number(attributes.get('card_width'), 280, 1200), elements=[], **spacing(attributes))
     if len(description['elements']) > 128:
         raise ValueError('Layout supports at most 128 elements')
     if tracks and len(tracks.split()) != result['columns']:
@@ -115,7 +131,7 @@ def describe_item_layout(description):
             raise ValueError('Invalid image fit')
         result['elements'].append(dict(name=name, title=element['title'], kind=kind, options=options,
             parent=attrs.get('parent', ''), variant=variant, search_type=search_type, align=align, tone=tone, layer=int(layer),
-            role=role, tag=tag, flow=flow, when=when,
+            role=role, tag=tag, flow=flow, when=when, **spacing(attrs),
             hidden=str(attrs.get('hidden', '')).lower() in ('true', '1', 'yes', 'on'),
             row=number(attrs.get('row'), 1, 100), column=number(attrs.get('column'), 1, 12),
             span=number(attrs.get('span'), 12, 12), rows=number(attrs.get('rows'), 1, 100),
@@ -134,4 +150,8 @@ def describe_item_layout(description):
         columns = by_name[element['parent']]['columns'] if element['parent'] else result['columns']
         if element['column'] + element['span'] - 1 > columns:
             raise ValueError('Layout element exceeds its container columns')
+    if (result['flow']=='contents' or result['collection']=='table') and (
+            any(key in attributes for key in ('padding','margin','gap')) or
+            any(any(key in element['attributes'] for key in ('padding','margin','gap')) for element in description['elements'])):
+        raise ValueError('Pixel spacing requires a grid card or tree layout')
     return result

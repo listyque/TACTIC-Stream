@@ -3,6 +3,7 @@ import * as State from '../../src/tactic_stream/shared_ui/features/administratio
 import * as UI from '../../src/tactic_stream/shared_ui/features/administration/layouts/layout.ui.mjs'
 import * as Document from '../../src/tactic_stream/shared_ui/features/administration/layouts/layout.document.mjs'
 import * as Preview from '../../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs'
+import * as Geometry from '../../src/tactic_stream/shared_ui/features/administration/layouts/item.geometry.mjs'
 const element=(name,attrs=[],children=[])=>({type:1,name,attributes:attrs,children})
 const tree={type:9,children:[element('config',[],[element('cards_example',[['layout','sobject-layout'],['columns','12']],[element('element',[['name','title'],['row','1'],['span','12']],[element('display',[['class','title']])])])])]}
 const raw={project:'demo',searchType:'demo/asset',view:'cards_example',source:'',tree,xml:Document.serialize(tree),configuration:{revision:'R1',sources:[],views:['cards_example'],layout_templates:[],resolved:{configured:true}},templates:[{name:'blank',tree}],canWrite:true,canLoad:true,dirty:false,busy:false,uncertain:false,sampleItems:[{kind:'object',title:'Asset',record:{name:'Asset',count:0}}]}
@@ -53,3 +54,17 @@ const blankScene=UI.describe(UI.model({...raw,tree:blankTree},State.initial()),S
 const blankNodes=nodes=>nodes.flatMap(n=>[n,...blankNodes(n.children||[])]);
 assert(blankNodes(blankScene.nodes).some(n=>n.id==='layoutBlankCanvas'));
 assert(!blankNodes(blankScene.nodes).some(n=>n.id==='layoutPreviewResults'),'Blank authoring must not fall back to an existing item layout');
+const canvasTree=Document.edit(tree,'cards_example','title','span',4);
+const canvasModel=UI.model({...raw,tree:canvasTree},State.initial());
+let selected=State.initial();selected.selected='title';
+let result=State.transition(selected,canvasModel,{type:'geometry',value:{key:'title',handle:'move',before:{x:0,y:0,width:100,height:40},after:{x:53,y:46,width:100,height:40}}});
+assert.equal(result.commands.length,1);
+assert.match(result.commands[0].value,/column="3"/);
+assert.match(result.commands[0].value,/row="2"/);
+assert.equal(State.transition(selected,{...canvasModel,uncertain:true},{type:'geometry',value:{}}).commands.length,0);
+selected.text={'layoutpadding:0':'12'};
+result=State.transition(selected,canvasModel,{type:'spacing',field:'padding',side:0,key:'layoutpadding:0'});
+assert.match(result.commands[0].value,/padding="12 0 0 0"/);
+const fixed={...canvasModel,layout:{...canvasModel.layout,columns:3,elements:[{...canvasModel.layout.elements[0],span:1}]}};
+const resized=Geometry.apply(fixed,{key:'title',handle:'e',before:{width:60,height:40,grid:{columns:[0,66,272],ends:[60,266,400],rows:[0]}},after:{width:260,height:40}});
+assert.match(resized,/span="2"/,'Unequal pixel tracks use their actual boundaries');

@@ -102,6 +102,28 @@ const image = nodes(
 ).find((node) => node.kind === 'Preview');
 assert.equal(image.source, 'file:///D:/project%20files/preview.png');
 assert.equal(maximumHeight(layout, [record, record], 600, 'en', 1000), 70);
+const aligned = {
+  flow: 'grid',
+  collection: 'tree',
+  columns: 12,
+  elements: [
+    { ...layout.elements[0], span: 6, height: 24, align: 'start' },
+    {
+      ...layout.elements[1],
+      name: 'tall',
+      row: 1,
+      column: 7,
+      span: 6,
+      height: 100
+    }
+  ]
+};
+assert.equal(
+  describe(aligned, record, 600, '', 'en', 1000, '', '', 0, false).nodes.find(
+    (n) => n.layoutElement === 'title'
+  ).height,
+  24
+);
 console.log(
   'PASS actual-type targeting, branch fallback, native actions, editor selection, grid size and trusted local preview'
 );

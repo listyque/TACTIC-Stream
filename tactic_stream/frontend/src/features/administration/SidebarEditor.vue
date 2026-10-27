@@ -18,7 +18,7 @@ export default {
     toolbarTarget: String,
     presentationVisible: { type: Boolean, default: true }
   },
-  emits: ['saved', 'configure-search', 'manage-groups'],
+  emits: ['saved', 'configure-search', 'manage-groups', 'page-layout'],
   data() {
     return {
       ui: State.initial(),
@@ -317,6 +317,9 @@ export default {
               break;
             case 'delete':
               await this.operate('delete');
+              break;
+            case 'pageLayout':
+              this.$emit('page-layout', this.entry.displayView.slice(10));
               break;
             case 'search':
               this.$emit('configure-search', this.entry);

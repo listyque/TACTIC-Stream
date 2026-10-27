@@ -17,6 +17,54 @@ def document():
 
 
 class Dashboards(unittest.TestCase):
+    def test_native_page_editor_transport_reads_real_types_and_saves(self):
+        from pathlib import Path
+        source=(Path(__file__).resolve().parents[3]/'TH/thlib/ui/admin/dashboard_api.py').read_text(encoding='utf-8')
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            def native(**arguments):
+                code=source+'\nreturn dashboard_editor_request(**'+repr(arguments)+')'
+                value=proxy.execute_python_script(auth,None,dict(code=code))['info']
+                return json.loads(value)
+            state=native(action='list',project_code='one')
+            self.assertTrue(state['canWrite'])
+            self.assertTrue(all('/' in row['value'] for row in state['metadata']['searchTypes']))
+            saved=native(action='save',project_code='one',document=dict(name='native_canvas',title='Native',blocks=[]),
+                         expected_revision=state['metadata']['revision'],operation_id=str(uuid4()))
+            self.assertEqual(saved['identity'],'native_canvas')
+            self.assertEqual(saved['document']['blocks'],[])
+            self.assertEqual(saved['metadata']['compiled']['layoutNodes'],[])
+            state=native(action='list',project_code='one')
+            detail_document=dict(name='native_details',title='Native details',blocks=[
+                dict(kind='items',search_type='contract/entity',view='continuous_example',filters=[dict(column='code',value='A')]),
+                dict(kind='details',children=[dict(kind='column',search_type='contract/entity',children=[dict(kind='text',title='Code',field='code')])])])
+            preview=native(action='preview',project_code='one',document=detail_document,
+                expected_revision=state['metadata']['revision'],detail_key='contract/entity?project=one&code=A')
+            self.assertEqual(preview['model']['layoutDetail']['layoutNodes'][0]['children'][0]['text'],'Code: A')
+    def test_canvas_spacing_blank_drafts_and_revisioned_save(self):
+        from xmlrpc.client import Fault
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            call=lambda action,**values:proxy.execute_cmd(auth,COMMAND,dict(action=action,project_code='one',**values))['info']
+            state=call('read')
+            draft=dict(name='canvas',title='Canvas',blocks=[])
+            self.assertEqual(call('preview',document=draft,expected_revision=state['revision'])['model']['layoutNodes'],[])
+            draft['blocks']=[dict(kind='column',height=320,gap=12,padding=[4,8,12,16],margin=[1,2,3,4],
+                children=[dict(kind='text',text='Status',width=240,height=48)])]
+            payload=dict(document=draft,expected_revision=state['revision'])
+            preview=call('preview',**payload)
+            group=preview['model']['layoutNodes'][0]
+            self.assertEqual((group['height'],group['gap'],group['padding']),(320,12,[4,8,12,16]))
+            self.assertEqual(group['children'][0]['editorPath'],[0,0])
+            self.assertEqual(group['children'][0]['width'],'240px')
+            operation=str(uuid4())
+            saved=call('apply',operation_id=operation,**payload)
+            self.assertEqual(call('apply',operation_id=operation,**payload),saved)
+            self.assertEqual(call('read',name='canvas')['document'],preview['document'])
+            for field,value in [('padding',[-1,0,0,0]),('margin',[0,0,0]),('gap',129),('width',True)]:
+                invalid=dict(name='bad_canvas',title='Bad',blocks=[dict(kind='text',text='Bad',**{field:value})])
+                with self.assertRaises(Fault):
+                    call('preview',document=invalid,expected_revision=call('read')['revision'])
     @classmethod
     def setUpClass(cls):
         test_transport.Transport.setUpClass()
@@ -148,12 +196,22 @@ class Dashboards(unittest.TestCase):
             preview=call('preview',document=draft,expected_revision=state['revision'])
             self.assertEqual(preview['model']['layoutItems']['searchType'],'contract/entity')
             self.assertNotIn('layoutDetail',preview['model'])
+            from copy import deepcopy
+            edited=deepcopy(draft)
+            edited['blocks'][0]['children'][1]['children'][0]['children'][0]['title']='Draft code'
+            resolved=call('preview',document=edited,expected_revision=state['revision'],detail_key='contract/entity?project=one&code=A')
+            self.assertTrue(resolved['model']['layoutHasDetails'])
+            self.assertEqual(resolved['model']['layoutDetail']['layoutNodes'][0]['children'][0]['text'],'Draft code: A')
+            with self.assertRaises(Fault):
+                call('preview',document=edited,expected_revision=state['revision'],detail_key='contract/entity?project=two&code=A')
             saved=call('apply',document=draft,expected_revision=state['revision'],operation_id=str(uuid4()))
             read=lambda key:proxy.execute_cmd(auth,'tactic.ui.table.CustomLayoutReadCmd',dict(view=saved['view'],detail_key=key))['info']
             details=read('contract/entity?project=one&code=A')
             self.assertEqual(details['layoutNodes'][0]['children'][0]['text'],'Code: A')
-            self.assertEqual(details['layoutNodes'][0]['children'][1]['text'],'## Goal\n\nFirst section\n\n## Result\n\nSecond section')
-            self.assertEqual(details['layoutNodes'][0]['children'][2]['table']['parentKey'],details['targetSearchKey'])
+            self.assertEqual(details['layoutNodes'][0]['children'][1]['text'],'## Goal\n\nFirst section')
+            self.assertEqual(details['layoutNodes'][0]['children'][2]['text'],'## Result\n\nSecond section')
+            self.assertEqual(details['layoutNodes'][0]['children'][3]['table']['parentKey'],details['targetSearchKey'])
+            self.assertEqual(details['layoutNodes'][0]['children'][2]['editorPath'],[0,1,0,2])
             self.assertNotIn('layoutItems',details,'detail refresh cannot replace the tree')
             with self.assertRaises(Fault):read('contract/entity?project=two&code=A')
             for invalid in (dict(kind='text',field='missing'),dict(kind='details',children=[dict(kind='text',text='nested')])):

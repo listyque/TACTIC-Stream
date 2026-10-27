@@ -11,7 +11,6 @@ import { t } from '../../i18n.js';
 import TableCell from './TableCell.vue';
 import TableView from './TableView.vue';
 import TableDocument from './TableDocument.vue';
-import CustomLayoutView from './CustomLayoutView.vue';
 import TableServiceDialogs from './TableServiceDialogs.vue';
 import TableParentPicker from './TableParentPicker.vue';
 import NestedTable from './NestedTable.vue';
@@ -26,6 +25,7 @@ import TableInlineEditor from './TableInlineEditor.vue';
 import { fieldKind, unsupportedField } from '../objects/recordFields.js';
 import RecordForm from '../objects/RecordForm.vue';
 import { asyncComponent } from '../../controls/asyncComponent.js';
+const CustomLayoutView = asyncComponent(() => import('./CustomLayoutView.vue'));
 const RelatedObjects = asyncComponent(
   () => import('../objects/RelatedObjects.vue')
 );

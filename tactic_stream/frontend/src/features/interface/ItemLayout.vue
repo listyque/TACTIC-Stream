@@ -15,7 +15,7 @@ import { bindingValue, layoutUrl, layoutElements } from './itemLayout.js'
 import ItemComposition from './ItemComposition.vue'
 
 const props = defineProps({ layout: Object, node: Object, parent: {type:String,default:''}, only: String, readOnly: Boolean, editing: Boolean, selectedElement: String, presentation: {type:Object,default:()=>({})} })
-const emit = defineEmits(['action', 'completion', 'element', 'controls'])
+const emit = defineEmits(['action', 'completion', 'element', 'controls', 'geometry'])
 const openObjectTab = inject('openObjectTab', null)
 // Fragment needs an array of children, rather than a dynamic component's slots object.
 const LayoutContainer=(props,{attrs,slots})=>h(props.tag,attrs,slots.default?.())
@@ -78,13 +78,13 @@ function act(action, event) { if (!props.readOnly && !props.editing && available
 </script>
 
 <template>
-  <ItemComposition v-if="!parent && !nativeFlow && !only" :layout="layout" :node="node" :read-only="readOnly" :editing="editing" :selected-element="selectedElement" @action="(...args)=>emit('action',...args)" @element="emit('element',$event)" />
+  <ItemComposition v-if="!parent && !nativeFlow && !only" :layout="layout" :node="node" :read-only="readOnly" :editing="editing" :selected-element="selectedElement" @action="(...args)=>emit('action',...args)" @geometry="emit('geometry',$event)" @element="emit('element',$event)" />
   <LayoutContainer v-else :tag="nativeFlow ? Fragment : 'div'" class="item-layout" :class="{'item-layout-editing':editing}" :style="{gridTemplateColumns:tracks,'--item-mobile-tracks':mobileTracks}">
     <LayoutContainer :tag="tag(item)" v-for="item in elements" :key="item.name" class="item-layout-element" :class="[...classes(item),'item-widget-' + item.kind, 'item-tone-' + item.tone, {'item-element-selected':editing && selectedElement === item.name}]"
       :data-layout-element="item.name" :style="nativeFlow ? (item.layer ? {zIndex:item.layer} : undefined) : {zIndex:item.layer || 0,...(only ? {} : {gridColumn:`${item.column} / span ${item.span}`,gridRow:`${item.row} / span ${item.rows}`,alignSelf:item.align})}"
       @pointerenter="item.role==='actions'?emit('controls',true):item.role==='title-line'&&fitTitleActions($event)" @pointerleave="item.role==='actions'&&emit('controls',false)" @focusin="item.role==='title-line'&&fitTitleActions($event)" @click="editing ? (emit('element',item.name), $event.stopPropagation()) : item.role==='actions'&&$event.stopPropagation()">
-      <ItemLayout v-if="item.kind === 'group'" :presentation="childPresentation" :layout="layout" :node="node" :parent="item.name" :read-only="readOnly" :editing="editing" :selected-element="selectedElement" @action="(...args)=>emit('action',...args)" @completion="(...args)=>emit('completion',...args)" @element="emit('element',$event)" @controls="emit('controls',$event)" />
-      <ItemLayout v-else-if="item.kind === 'view' && item.widget_layout" :layout="item.widget_layout" :node="node" :presentation="childPresentation" :read-only="readOnly" :editing="editing" @action="(...args)=>emit('action',...args)" @completion="(...args)=>emit('completion',...args)" @controls="emit('controls',$event)" />
+      <ItemLayout v-if="item.kind === 'group'" :presentation="childPresentation" :layout="layout" :node="node" :parent="item.name" :read-only="readOnly" :editing="editing" :selected-element="selectedElement" @action="(...args)=>emit('action',...args)" @completion="(...args)=>emit('completion',...args)" @geometry="emit('geometry',$event)" @element="emit('element',$event)" @controls="emit('controls',$event)" />
+      <ItemLayout v-else-if="item.kind === 'view' && item.widget_layout" :layout="item.widget_layout" :node="node" :presentation="childPresentation" :read-only="readOnly || editing" @action="(...args)=>emit('action',...args)" @completion="(...args)=>emit('completion',...args)" @controls="emit('controls',$event)" />
       <span v-else-if="item.kind === 'view'">{{ item.options.view || t('Choose a reusable view') }}</span>
       <template v-else-if="item.kind === 'image'">
         <AppIcon v-if="node.kind === 'branch'" :name="process ? (node.branch.process_type==='hierarchy'?'FAS_CODE_BRANCH':'FAS_CIRCLE') : 'stream'" />

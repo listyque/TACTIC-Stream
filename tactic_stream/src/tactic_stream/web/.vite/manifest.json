@@ -331,6 +331,7 @@
       "src/features/checkin/ObjectCheckin.vue",
       "src/features/checkin/IngestFiles.vue",
       "src/features/objects/DuplicateSObject.vue",
+      "src/features/interface/CustomLayoutView.vue",
       "src/features/objects/RelatedObjects.vue",
       "src/features/checkin/SnapshotCheckout.vue",
       "src/features/workspace/ResultPresentation.vue",
@@ -348,6 +349,7 @@
       "src/features/administration/SchemaEditor.vue",
       "src/features/administration/WorkflowEditor.vue",
       "src/features/administration/SidebarEditor.vue",
+      "src/features/administration/PageLayoutEditor.vue",
       "src/features/administration/LayoutEditor.vue",
       "src/features/administration/ColumnsEditor.vue",
       "src/features/administration/RawDatabase.vue",
@@ -416,6 +418,20 @@
     ],
     "css": [
       "assets/LayoutEditor.css"
+    ]
+  },
+  "src/features/administration/PageLayoutEditor.vue": {
+    "file": "assets/PageLayoutEditor.js",
+    "name": "PageLayoutEditor",
+    "src": "src/features/administration/PageLayoutEditor.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "index.html",
+      "_CodeBlock.js",
+      "_sections.ui.js",
+      "_links.js",
+      "src/App.vue"
     ]
   },
   "src/features/administration/RawDatabase.vue": {
@@ -683,6 +699,15 @@
     ],
     "css": [
       "assets/FileWorkspaceInspection.css"
+    ]
+  },
+  "src/features/interface/CustomLayoutView.vue": {
+    "file": "assets/CustomLayoutView.js",
+    "name": "CustomLayoutView",
+    "src": "src/features/interface/CustomLayoutView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "src/App.vue"
     ]
   },
   "src/features/knowledge/KnowledgeBase.vue": {

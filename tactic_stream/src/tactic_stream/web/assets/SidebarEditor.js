@@ -3,7 +3,7 @@ import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from
 import { Gt as button, Jt as node, Kt as label, Yt as rect, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate, yt as sidebarRequest } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { i as row$1, n as navigate } from "./tree.ui.js";
-import { Q as policy, X as documentEvent, Z as notices, et as tabs, tt as toolbar } from "./App.js";
+import { $ as notices, Q as documentEvent, et as policy, nt as tabs, rt as toolbar } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.ui.mjs
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {
 	source,
@@ -328,6 +328,7 @@ function fields(model, ui, language) {
 			heading("sidebarSearchHeading", "Search and quick filters", "The saved search defines the starting query. Quick filters refine it in the same search tab and use this item's own defaults."),
 			choice("sidebarSearchType", "searchType", "Search Type", "Which project objects this item opens.", model.typeOptions),
 			choice("sidebarSearchPreset", "searchView", "Predefined search", "Choose a saved query or leave the list unfiltered.", optionsWithEmpty(model.presetOptions, "No predefined search")),
+			...entry.widgetType === "custom_layout" && entry.displayView?.startsWith("dashboard.") ? [action("sidebarEditPage", "Edit page layout", "pageLayout", !model.dirty)] : [],
 			action("sidebarSearchSetupButton", "Configure search", "search", !model.dirty && !!entry.searchType && !!entry.isVisible),
 			choice("sidebarResultView", "resultViewMode", "Default item view", "The initial presentation when this search tab is opened.", model.resultOptions),
 			choice("sidebarLayoutPreset", "layoutPreset", "Workspace layout", "Apply a saved dock arrangement when this sidebar item opens.", optionsWithEmpty(model.layoutOptions, "Do not change workspace layout")),
@@ -562,6 +563,7 @@ function transition(ui, model, event) {
 		case "apply":
 			if (allow.editable) commands.push({ type: "apply" });
 			break;
+		case "pageLayout":
 		case "groups":
 		case "search":
 			if (allow.editable && !model.dirty) commands.push({ type: event.type });
@@ -594,7 +596,8 @@ var _sfc_main = {
 	emits: [
 		"saved",
 		"configure-search",
-		"manage-groups"
+		"manage-groups",
+		"page-layout"
 	],
 	data() {
 		return {
@@ -842,6 +845,9 @@ var _sfc_main = {
 							break;
 						case "delete":
 							await this.operate("delete");
+							break;
+						case "pageLayout":
+							this.$emit("page-layout", this.entry.displayView.slice(10));
 							break;
 						case "search":
 							this.$emit("configure-search", this.entry);

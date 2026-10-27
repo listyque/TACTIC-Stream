@@ -40,7 +40,10 @@ DashboardDocument has name, title and blocks. Bricks:
 | link | Safe HTTP(S), skey or tactic-search link. |
 
 Filters use column, relation (=, !=, <, <=, >, >=, like) and a scalar value.
-Table/Markdown/items bricks accept numeric `height` (120..1600px). A table may
+All bricks accept numeric `height` (24..1600px) and optional `width` (40..2400px).
+`padding` and `margin` are four integers (top/right/bottom/left, 0..256px);
+row/column `gap` is 0..128px. Empty page/group drafts are supported.
+These values are compiled by the same renderer used in the page editor. A table may
 select `controls` from `search`, `searchLimit`, `shelf`, `selection`, `gear`,
 `insert`; omitted retains all ordinary controls, `[]` hides them. The native
 `shelf` owns the toolbar: use `["shelf", "search"]` for only filter/refresh,
@@ -233,3 +236,25 @@ Sources: [custom URLs](../custom_urls.md), [pages](PAGES.md),
 [gateway](../../src/tactic_stream/server/mcp_gateway.py),
 [dashboard command](../../src/tactic/ui/panel/dashboard_cmd.py),
 [sidebar command](../../src/tactic/ui/panel/sidebar_agent_cmd.py).
+
+## Human canvas authoring uses the same documents
+
+Administration has **Page layouts** for DashboardDocument and **Item layouts** for
+the existing XML card descriptions. A saved dashboard link opens its page editor;
+the selected Items block opens its referenced card view. The agent still uses
+ts_dashboard_* and ts_item_layout_* with their existing rights, revisions and
+durable operation receipts. Canvas authoring introduces no additional execution
+permission or second data format. Preserve existing filters, sources and fields
+when changing geometry. Page drag reorders responsive row/column children; item
+drag edits grid cells. XML element `padding`/`margin` use four space-separated
+integers (0..256); grid `gap` is 0..128. Automatic shared item flow is preserved.
+
+Item blocks in the authoring preview use up to three actual records in both clients;
+the published workspace keeps normal paging and expansion. Custom config/url aliases
+can still point to the same saved layout view; a URL is an address, not another layout.
+
+The page editor resolves its details pane against the first accessible sample
+record using the unsaved document, without changing workspace selection. Tools
+can pass `detail_key` to `ts_dashboard_preview` for the same read-only resolution;
+cross-project records are rejected. This preview context is never persisted in
+the dashboard document. Business controls are inactive while editing the canvas.

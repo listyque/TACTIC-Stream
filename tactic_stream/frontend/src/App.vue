@@ -83,6 +83,7 @@ const SearchTypes = asyncComponent(() => import('./features/administration/Searc
 const SchemaEditor = asyncComponent(() => import('./features/administration/SchemaEditor.vue'))
 const WorkflowEditor = asyncComponent(() => import('./features/administration/WorkflowEditor.vue'))
 const SidebarEditor = asyncComponent(() => import('./features/administration/SidebarEditor.vue'))
+const PageLayoutEditor = asyncComponent(() => import('./features/administration/PageLayoutEditor.vue'))
 const LayoutEditor = asyncComponent(() => import('./features/administration/LayoutEditor.vue'))
 const ColumnsEditor = asyncComponent(() => import('./features/administration/ColumnsEditor.vue'))
 const RawDatabase = asyncComponent(() => import('./features/administration/RawDatabase.vue'))
@@ -94,7 +95,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, PageLayoutEditor, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -126,7 +127,7 @@ export default {
       knowledgeMounted:false, knowledgeActive:false, knowledgeTarget:'',
       attachmentLocation: null,
       scriptEditorComponent: null, scriptEditorLoading: false, agentRequestComponent: null, agentProvidersComponent: null, agentMcpComponent: null,
-      pingBusy: false, activityUnread: 0, messageUnread: 0, shelfOpen: false, layoutsFocus: null, columnsFocus: null, refreshAfterAdministration: false, version: '', ready: false, restoringSession: true, login: '', password: '', session: null,
+      pingBusy: false, activityUnread: 0, messageUnread: 0, shelfOpen: false, layoutsFocus: null, pagesFocus: '', columnsFocus: null, refreshAfterAdministration: false, version: '', ready: false, restoringSession: true, login: '', password: '', session: null,
       navigationLink: '', openingLink: false, linkRequest: 0, routeReady: false, searchStateTab: null,
       projects: [], types: [], userIdentity: null, project: '', type: '',
       columns: {}, rows: [], searchText: '', filterField: '', filterValue: '', sortField: '', sortDirection: 'asc',
@@ -711,7 +712,7 @@ export default {
       this.selectedTags = []; this.tagColumn = ''
       this.searchRelation = 'contains'
       this.filterRecords = []; this.savedSearch = ''; this.quickSelections = {}; this.quickLayout = null; this.scopeKey = ''; this.presetOrderBys = []
-      if (['types', 'schema', 'workflow', 'columns', 'layouts', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(id)) {
+      if (['types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(id)) {
         this.requestId++
         this.busy = false
       } else this.loadRows()
@@ -1551,7 +1552,25 @@ export default {
       this.busy = false
       this.$refs.sidebarSearchDialog.close()
     },
+    openPageLayout(name) {
+      const editor=this.administrationInstances.dashboards
+      if(editor&&!editor.canLeave())return
+      this.pagesFocus=name
+      this.selectAdministration('dashboards')
+    },
+    openPageCard(value) {
+      const editor = this.administrationInstances.layouts
+      if (editor && !editor.canLeave()) return
+      this.layoutsFocus = {searchType:value.searchType,view:value.view}
+      this.selectAdministration('layouts')
+    },
     async showLayoutEditor() {
+      if(this.layoutView?.startsWith('dashboard.')){
+        this.pagesFocus=this.layoutView.slice(10)
+        this.$refs.viewMenu.open=false
+        await this.showAdministration('dashboards')
+        return
+      }
       this.layoutsFocus = {searchType:this.type.split('?')[0],view:this.interfaceConfig?.table?.item_layout ? this.view : 'continuous_example'}
       this.$refs.viewMenu.open = false
       await this.showAdministration('layouts')
@@ -2059,24 +2078,25 @@ export default {
     <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('rules')" v-show="administrationSection === 'rules'" class="administration-page"><SecurityRules :presentation-visible="administrationSection === 'rules'" @vue:mounted="administrationInstances.rules = $event.component.proxy" ref="rules" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('raw')" v-show="administrationSection === 'raw'" class="administration-page"><RawDatabase :presentation-visible="administrationSection === 'raw'" @vue:mounted="administrationInstances.raw = $event.component.proxy" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshAfterAdministration = true" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('dashboards')" v-show="administrationSection === 'dashboards'" class="administration-page"><PageLayoutEditor :presentation-visible="administrationSection === 'dashboards'" @vue:mounted="administrationInstances.dashboards = $event.component.proxy" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="pagesFocus" toolbar-target="#administration-actions" @saved="layoutSaved" @card="openPageCard" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('layouts')" v-show="administrationSection === 'layouts'" class="administration-page"><LayoutEditor :presentation-visible="administrationSection === 'layouts'" @vue:mounted="administrationInstances.layouts = $event.component.proxy" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="layoutsFocus" toolbar-target="#administration-actions" @saved="layoutSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('columns')" v-show="administrationSection === 'columns'" class="administration-page"><ColumnsEditor :presentation-visible="administrationSection === 'columns'" @vue:mounted="administrationInstances.columns = $event.component.proxy" ref="columnsEditor" :ticket="session.ticket" :project="project" :initial-focus="columnsFocus" toolbar-target="#administration-actions" @saved="columnsSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('users')" v-show="administrationSection === 'users'" class="administration-page"><SecurityUsers :presentation-visible="administrationSection === 'users'" @vue:mounted="administrationInstances.users = $event.component.proxy" ref="users" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('groups')" v-show="administrationSection === 'groups'" class="administration-page"><SecurityGroups :presentation-visible="administrationSection === 'groups'" @vue:mounted="administrationInstances.groups = $event.component.proxy" ref="groups" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('sidebar')" v-show="administrationSection === 'sidebar'" class="administration-page"><SidebarEditor :presentation-visible="administrationSection === 'sidebar'" @vue:mounted="administrationInstances.sidebar = $event.component.proxy" ref="sidebar" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @manage-groups="selectAdministration('groups')" @saved="sidebarSaved" @configure-search="configureSidebarSearch" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('sidebar')" v-show="administrationSection === 'sidebar'" class="administration-page"><SidebarEditor :presentation-visible="administrationSection === 'sidebar'" @vue:mounted="administrationInstances.sidebar = $event.component.proxy" ref="sidebar" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @manage-groups="selectAdministration('groups')" @saved="sidebarSaved" @configure-search="configureSidebarSearch" @page-layout="openPageLayout" /></div>
     <Teleport defer to="#sidebar-search-pages" :disabled="!sidebarSearch">
     <template v-for="entry in retainedSearchTabs" :key="'page:' + entry.project + entry.tab.id">
       <WorkspacePage v-if="entry.tab.pageVisited && entry.tab.state.layoutView" ref="workspacePages"
         v-show="!administrationOpen && section === 'data' && entry.tab === displayedSearchTab"
         :ticket="session.ticket" :project="entry.project" :view="entry.tab.state.layoutView" :target="entry.tab.state.layoutTarget"
-        :title="entry.tab.title || entry.section.title" :workspace-id="entry.tab.id"
+        :title="entry.tab.title || entry.section.title" :workspace-id="entry.tab.id" :can-administer="canAdminister" @edit="name=>{pagesFocus=name;showAdministration('dashboards')}"
         :active="!administrationOpen && section === 'data' && entry.tab === displayedSearchTab"
         :selected-keys="entry.tab === displayedSearchTab ? selectedKeys : entry.tab.state.selectedKeys"
         @select="selectRecords" @focus="focusDescription"
         @loaded="publishDashboardResults(entry.tab, $event)"
         @inspect="inspect" @operate="(record,event,node)=>$refs.objectOperations.open(record,event,node)" @column="showColumnsEditor(false,$event)" @close="closeSection(entry.section.id)" />
     </template>
-    <section v-if="retainedSearchTabs.length || administrationOpen" v-show="(administrationOpen || !layoutView) && section !== 'configuration' && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
+    <section v-if="retainedSearchTabs.length || administrationOpen" v-show="(administrationOpen || !layoutView) && section !== 'configuration' && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
       <SearchHeader :model="{compact:compactShortcuts&&!administrationOpen,collapseSearch:true,searchOpen:mobileSearchOpen,busy,shelf:!administrationOpen,shelfOpen,tags:!administrationOpen,quick:true,panels:true}"
         @event="action=>{if(action.type==='refresh')loadRows();else if(action.type==='shelf')shelfOpen=!shelfOpen;else if(action.type==='help')$refs.help.open('search')}">
         <template #field>
@@ -2225,4 +2245,3 @@ export default {
   <HelpView ref="help" />
   <DebugLog ref="debugLog" @help="$refs.help.open($event)" @closed="$refs.settingsMenu?.focusTrigger()" />
 </template>
-

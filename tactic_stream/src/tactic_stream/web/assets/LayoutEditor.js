@@ -4,7 +4,7 @@ import { A as t, j as appearance, k as asyncComponent, ot as _plugin_vue_export_
 import { Gt as button, Jt as node, Kt as label, Ot as widgetConfiguration, Yt as rect, ct as rpc, i as _sfc_main$2, qt as muted, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { l as workspaceAddress } from "./links.js";
-import { $ as sectionSelector, G as roles, H as actions, J as variants, K as serialize, Q as policy, U as describe$1, W as edit, X as documentEvent, Y as widgets, Z as notices, q as template, tt as toolbar$1 } from "./App.js";
+import { $ as notices, G as describe$1, J as serialize, K as edit, Q as documentEvent, U as spacingField, W as actions, X as variants, Y as template, Z as widgets, et as policy, q as roles, rt as toolbar$1, tt as sectionSelector } from "./App.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
@@ -35,6 +35,49 @@ function layoutTree(source) {
 		throw Error("Unsupported XML node");
 	}
 	return convert(document);
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/item.geometry.mjs
+function apply(model, change) {
+	const item = model.layout.elements.find((row) => row.name === change.key);
+	if (!item) throw Error("The selected element no longer exists");
+	const parent = model.layout.elements.find((row) => row.name === item.parent);
+	if ((parent ? parent.flow : model.layout.flow) !== "grid") throw Error("Choose Grid in the parent container to position elements");
+	const columns = parent ? parent.columns : model.layout.columns;
+	const gap = (parent ? parent.gap : model.layout.gap) ?? 6;
+	const margin = item.margin || [
+		0,
+		0,
+		0,
+		0
+	], pitch = (change.before.width + margin[1] + margin[3] + gap) / item.span;
+	const grid = change.before.grid;
+	const nearest = (values, target) => values.reduce((best, value, index) => Math.abs(value - target) < Math.abs(values[best] - target) ? index : best, 0);
+	const values = {};
+	if (change.handle === "move") {
+		values.column = Math.max(1, Math.min(columns - item.span + 1, item.column + Math.round((change.after.x - change.before.x) / pitch)));
+		values.row = Math.max(1, Math.min(100, item.row + Math.round((change.after.y - change.before.y) / ((change.before.height + gap) / item.rows))));
+		if (grid) {
+			const start = grid.columns[item.column - 1] + change.after.x - change.before.x;
+			values.column = Math.min(columns - item.span + 1, nearest(grid.columns, start) + 1);
+			const y = grid.rows[item.row - 1] + change.after.y - change.before.y;
+			if (y <= grid.rows[grid.rows.length - 1]) values.row = nearest(grid.rows, y) + 1;
+		}
+	} else {
+		if (change.handle.includes("e")) values.span = Math.max(1, Math.min(columns - item.column + 1, Math.round((change.after.width + gap) / pitch)));
+		if (grid && change.handle.includes("e")) values.span = nearest(grid.ends.slice(item.column - 1), grid.columns[item.column - 1] + change.after.width + margin[1] + margin[3]) + 1;
+		if (change.handle.includes("s")) {
+			values.align = "start";
+			values.height = Math.max(1, Math.min(1200, Math.round(item.height + change.after.height - change.before.height)));
+		}
+	}
+	if (change.keyboard && change.handle === "move") {
+		values.column = Math.max(1, Math.min(columns - item.span + 1, item.column + change.after.x - change.before.x));
+		values.row = Math.max(1, Math.min(100, item.row + change.after.y - change.before.y));
+	}
+	let tree = model.tree;
+	for (const field of Object.keys(values)) tree = edit(tree, model.view, item.name, field, values[field]);
+	return serialize(tree);
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.state.mjs
@@ -241,6 +284,43 @@ function transition(ui, model, event) {
 		case "remove":
 			if (edit$1 && next.selected && !pending(ui)) next.confirmation = "remove";
 			break;
+		case "geometry":
+			if (edit$1 && !model.layoutError && !pending(ui)) try {
+				commands.push({
+					type: "xml",
+					value: apply(model, event.value)
+				});
+				next.selected = event.value.key;
+				next.error = "";
+			} catch (error) {
+				next.error = String(error.message || error);
+			}
+			break;
+		case "spacing": {
+			if (!edit$1 || model.layoutError || !Object.prototype.hasOwnProperty.call(ui.text, event.key)) break;
+			const value = ui.text[event.key];
+			if (!/^\d+$/.test(String(value)) || Number(value) > 256) {
+				next.error = "Enter spacing from 0 to 256";
+				break;
+			}
+			const item = model.layout.elements.find((row) => row.name === next.selected);
+			if (!item || !["padding", "margin"].includes(event.field) || !Number.isInteger(event.side) || event.side < 0 || event.side > 3) break;
+			const values = (item[event.field] || [
+				0,
+				0,
+				0,
+				0
+			]).slice();
+			values[event.side] = Number(value);
+			if (change(next, model, {
+				field: event.field,
+				value: values.join(" ")
+			}, commands)) {
+				next.text = Object.assign({}, next.text);
+				delete next.text[event.key];
+			}
+			break;
+		}
 		case "move":
 		case "drop": if (edit$1 && !model.layoutError && !pending(ui)) {
 			const name = event.type === "drop" ? event.value : next.selected, item = model.layout.elements.find((row) => row.name === name);
@@ -616,7 +696,7 @@ function row(list, record, model, ui, language) {
 		}
 	})] };
 }
-function propertyFields(model, ui, language) {
+function propertyFields(model, ui, language, width) {
 	const tr = (text) => translate(text, language), item = model.layout.elements.find((row) => row.name === ui.selected);
 	if (!item) return [];
 	const edit = policy(model).editable, enabled = edit && !pending(ui), fields = [];
@@ -744,6 +824,15 @@ function propertyFields(model, ui, language) {
 		id: "layoutPositionHeading",
 		title: "Position"
 	}, choice("parent", "Container", item.parent, parentOptions));
+	if (grid && model.layout.flow !== "contents" && model.layout.collection !== "table") for (const name of ["padding", "margin"]) fields.push(spacingField("layout" + name, tr(name === "padding" ? "Padding" : "Margin"), item[name] || [
+		0,
+		0,
+		0,
+		0
+	], ui.text, {
+		type: "spacing",
+		field: name
+	}, language, edit, width - 48));
 	if (grid) for (const key of [
 		"row",
 		"column",
@@ -1095,7 +1184,7 @@ function describe(model, ui, width, height, language) {
 		}));
 	}
 	if (wide || ui.panel === "settings") {
-		const w = properties, x = wide ? width - w : 0, fields = propertyFields(model, ui, language), body = sections(fields, w - 40, language, edit && !pending(ui));
+		const w = properties, x = wide ? width - w : 0, fields = propertyFields(model, ui, language, w), body = sections(fields, w - 40, language, edit && !pending(ui));
 		if (selected) {
 			body.nodes.push(button("layoutRemoveElement", rect(0, body.height, w - 40, 38), tr("Remove element"), "delete", { type: "remove" }, edit && !pending(ui)));
 			body.height += 46;
@@ -1155,7 +1244,7 @@ var _sfc_main$1 = {
 		selectedElement: String,
 		error: String
 	},
-	emits: ["element"],
+	emits: ["element", "geometry"],
 	setup(__props) {
 		const ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ResultPresentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])));
 		return (_ctx, _cache) => {
@@ -1175,7 +1264,8 @@ var _sfc_main$1 = {
 				"read-only": "",
 				editing: "",
 				"selected-element": __props.selectedElement,
-				onElement: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("element", $event))
+				onGeometry: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("geometry", $event)),
+				onElement: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("element", $event))
 			}, null, 8, [
 				"rows",
 				"ticket",
@@ -1328,6 +1418,10 @@ var _sfc_main = {
 					layout: this.liveInterface?.table?.item_layout,
 					error: this.previewError || this.sampleError,
 					selectedElement: this.ui.selected,
+					onGeometry: (value) => this.dispatch({
+						type: "geometry",
+						value
+					}),
 					onElement: (name) => this.dispatch({
 						type: "select",
 						name
