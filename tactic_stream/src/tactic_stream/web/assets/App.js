@@ -1391,7 +1391,10 @@ function describe$51(model, width, extent, language) {
 			value: 1
 		}, !model.busy && !!model.hasNext, { iconOnly: true })
 	];
-	const children = [node("Box", "nestedHeaderSurface", rect$1(0, 0, contentWidth, metrics$10.header), { background: paint.header })];
+	const children = [node("Box", "nestedHeaderSurface", rect$1(0, 0, contentWidth, metrics$10.header), {
+		background: paint.header,
+		radius: 0
+	})];
 	for (const field of fields) children.push(field.sortable ? node("Action", "nestedHeader_" + field.name, rect$1(field.x, 0, field.width, metrics$10.header), {
 		text: field.title || field.name,
 		action: {
@@ -1460,7 +1463,10 @@ function row$21(model, record, language, viewportWidth = 0) {
 	const fields = columns$1(model), nodes = [];
 	const width = Math.max(viewportWidth, (model.selection === false ? 0 : metrics$10.selection + 36) + fields.reduce((sum, field) => sum + field.width, 0) + 40);
 	const selected = (model.selected || []).includes(record.key);
-	nodes.push(node("Box", "nestedRowSurface", rect$1(0, 0, width, 67), { background: selected ? paint.selected : paint.row }));
+	nodes.push(node("Box", "nestedRowSurface", rect$1(0, 0, width, 67), {
+		background: selected ? paint.selected : paint.row,
+		radius: 0
+	}));
 	if (model.selection !== false) nodes.push(node("CheckBox", "nestedSelect", rect$1(6, 20, 28, 28), {
 		checked: selected,
 		label: translate("Select row", language),
