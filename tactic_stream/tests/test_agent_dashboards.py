@@ -95,6 +95,27 @@ class Dashboards(unittest.TestCase):
             result=proxy.execute_cmd(auth,'tactic.ui.table.NestedTableReadCmd',dict(parent_key=table['parentKey'],search_type=table['searchType'],project_scope=table['projectScope'],filters=table['filters']))['info']
             self.assertTrue(all(row['project_code']=='one' for row in result['records']))
 
+    def test_items_brick_reuses_project_records_and_native_navigation(self):
+        from xmlrpc.client import Fault
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            def call(action,**values):return proxy.execute_cmd(auth,COMMAND,dict(action=action,project_code='one',**values))['info']
+            state=call('read')
+            draft=dict(name='native_items',title='Project work',blocks=[dict(kind='items',search_type='contract/entity',height=600,filters=[dict(column='code',value='A')])])
+            preview=call('preview',document=draft,expected_revision=state['revision'])
+            scope=preview['model']['layoutItems']
+            self.assertEqual(scope,preview['model']['layoutNodes'][0]['items'])
+            self.assertEqual(scope['searchType'],'contract/entity')
+            page=proxy.execute_cmd(auth,'tactic.ui.table.NestedTableReadCmd',dict(search_type=scope['searchType'],view=scope['view'],parent_key=scope['parentKey'],project_scope=True,filters=scope['filters']))['info']
+            self.assertEqual([row['code'] for row in page['records']],['A'])
+            saved=call('apply',document=draft,expected_revision=state['revision'],operation_id=str(uuid4()))
+            compiled=proxy.execute_cmd(auth,'tactic.ui.table.CustomLayoutReadCmd',dict(view=saved['view']))['info']
+            self.assertEqual(compiled['layoutItems'],scope)
+            target=proxy.execute_cmd(auth,'tactic.ui.panel.custom_url_cmd.CustomUrlCmd',dict(action='resolve',path=saved['path'],parameters={}))['info']
+            self.assertEqual(target['search_type'],'contract/entity')
+            state=call('read');draft['blocks'].append(dict(draft['blocks'][0]))
+            with self.assertRaises(Fault):call('preview',document=draft,expected_revision=state['revision'])
+
     def test_markdown_literal_record_field_and_project_boundary(self):
         from xmlrpc.client import Fault
         with test_transport.Transport.proxy(self) as proxy:
@@ -142,6 +163,7 @@ class Dashboards(unittest.TestCase):
         from tactic_stream.agent_host import message_inputs, task_prompt
         requests=[];values={};operation=str(uuid4())
         draft=document();draft['name']='chat_dashboard'
+        draft['blocks'][1]['kind']='items'
 
         class Provider(BaseHTTPRequestHandler):
             def do_POST(server):
@@ -177,7 +199,7 @@ class Dashboards(unittest.TestCase):
         host=str(uuid4())
         connection.command('request','heartbeat',host_id=host,label='Fixture',capabilities=dict(changes=True,trials=False,providers=[{key:profile[key] for key in ('id','name','kind')}],models=[dict(id='fixture-model',label='Fixture',provider=profile['id'],is_default=True)]))
         request_id=str(uuid4())
-        connection.command('request','submit',request_id=request_id,host_id=host,document=dict(prompt='Create a native review dashboard with a count and filtered table.',allow_changes=True,provider=profile['id'],model='fixture-model',context=dict(client='TS',project='one',page='entities',title='Entities',search_type='contract/entity',view='table',search_keys=[])))
+        connection.command('request','submit',request_id=request_id,host_id=host,document=dict(prompt='Create a dashboard with a count and our existing expandable item view.',allow_changes=True,provider=profile['id'],model='fixture-model',context=dict(client='TS',project='one',page='entities',title='Entities',search_type='contract/entity',view='table',search_keys=[])))
         request=connection.command('request','claim',host_id=host)['request']
         options=SimpleNamespace(allow_changes=True,stream_root=Path(__file__).resolve().parents[1],handler_root=None,trial_image=None,trial_directory=None)
         asyncio.run(run_provider(connection,request,profile,host,options,lambda:None,task_prompt,message_inputs))
@@ -186,6 +208,9 @@ class Dashboards(unittest.TestCase):
         self.assertEqual(len(requests),5)
         self.assertNotIn(ticket,json.dumps(requests))
         self.assertEqual(connection.command('dashboard','read',name='chat_dashboard')['document']['name'],'chat_dashboard')
+        compiled=connection.request('/admin/rpc',dict(method='execute_cmd',args=[dict(ticket=ticket,project='one'),'tactic.ui.table.CustomLayoutReadCmd',dict(view='dashboard.chat_dashboard')],kwargs={}))['result']['info']
+        self.assertEqual(compiled['layoutItems']['searchType'],'contract/entity')
+        self.assertEqual(compiled['layoutNodes'][1]['kind'],'items')
         tools={row['function']['name']:row['function']['parameters'] for row in requests[0]['tools']}
         self.assertIn('ts_dashboard_save',tools)
         self.assertIn('name',tools['ts_dashboard_read']['properties'])

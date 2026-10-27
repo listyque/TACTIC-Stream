@@ -2,7 +2,7 @@ import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as cr
 import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Ot as widgetConfiguration, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
-import { A as describe$2, F as variants, I as widgets, M as roles, N as serialize, O as actions, P as template, j as edit, k as binding } from "./App.js";
+import { G as roles, H as binding, J as variants, K as serialize, U as describe$2, V as actions, W as edit, Y as widgets, q as template } from "./App.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {

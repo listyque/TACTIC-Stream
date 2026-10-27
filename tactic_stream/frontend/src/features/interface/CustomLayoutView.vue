@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import NestedTable from './NestedTable.vue';
 import LayoutDocument from './LayoutDocument.vue';
+import DashboardItems from './DashboardItems.vue';
 import { appearance } from '../../appearance.js';
 import { runTableScript } from './tableScript.js';
 import { printCustomReport } from './customReport.js';
@@ -14,7 +15,10 @@ const props = defineProps({
   width: Number,
   height: Number,
   tabs: Array,
-  currentKey: String
+  currentKey: String,
+  selectedKeys: Array,
+  workspaceId: String,
+  active: { type: Boolean, default: true }
 });
 const emit = defineEmits([
   'action',
@@ -27,7 +31,11 @@ const emit = defineEmits([
   'notice',
   'print',
   'tab',
-  'close-tab'
+  'close-tab',
+  'select',
+  'focus',
+  'operate',
+  'loaded'
 ]);
 const state = ref({}),
   tables = ref({}),
@@ -54,6 +62,22 @@ const scene = computed(() =>
   )
 );
 const views = computed(() => ({
+  layoutItems: {
+    component: DashboardItems,
+    nodeProps: true,
+    props: {
+      ticket: props.ticket,
+      project: props.project,
+      selectedKeys: props.selectedKeys,
+      workspaceId: props.workspaceId,
+      active: props.active,
+      onLoaded: (value) => emit('loaded', value),
+      onInspect: (record) => emit('inspect', record),
+      onOperate: (...args) => emit('operate', ...args),
+      onSelect: (...args) => emit('select', ...args),
+      onFocus: (value) => emit('focus', value)
+    }
+  },
   layoutMarkdown: {
     component: LayoutDocument,
     nodeProps: true

@@ -18,7 +18,7 @@ def dashboard_state():
     state=page_state('sthpw/project')
     urls=[row.get_data() for row in Search('config/url').get_sobjects()]
     state['revision']=digest([state['revision'],urls])
-    state['bricks']=['row','column','text','markdown','metric','table','link']
+    state['bricks']=['row','column','text','markdown','metric','table','items','link']
     state['dashboards']=[dict(view=row.get_value('view'),source_id=row.get_id())
         for row in Search('config/widget_config').get_sobjects()
         if (row.get_value('view') or '').startswith('dashboard.') and '<dashboard>' in (row.get_value('config') or '')]
@@ -71,6 +71,7 @@ class DashboardCmd(Command):
         view='dashboard.'+document['name']
         path='/dashboard/'+document['name']
         model=dashboard_layout(document,view)
+        root_type=(model.get('layoutItems') or {}).get('searchType') or 'sthpw/project'
         search=Search('config/widget_config');search.add_filter('view',view)
         sources=search.get_sobjects()
         if len(sources)>1 or sources and '<dashboard>' not in (sources[0].get_value('config') or ''):
@@ -90,7 +91,10 @@ class DashboardCmd(Command):
         record.commit()
         url=urls[0] if urls else SearchType.create('config/url')
         url.set_value('url',path);url.set_value('description',document['title'])
-        url.set_value('widget',"<element><display class='tactic.ui.panel.CustomLayoutWdg'><view>"+view+'</view></display></element>')
+        widget=ET.Element('element');display=ET.SubElement(widget,'display',{'class':'tactic.ui.panel.CustomLayoutWdg'})
+        ET.SubElement(display,'view').text=view
+        ET.SubElement(display,'search_type').text=root_type
+        url.set_value('widget',ET.tostring(widget,encoding='unicode'))
         url.commit()
         sidebar=read_sidebar()
         groups=[row.get_data() for row in Search('sthpw/login_group').get_sobjects()]
@@ -101,7 +105,7 @@ class DashboardCmd(Command):
             draft._selected_row=-1
             draft.add_entry('link')
             for name,value in dict(name='dashboard_'+document['name'],title=document['title'],
-                searchType='sthpw/project',widgetType='custom_layout',displayView=view,resultViewMode='table').items():
+                searchType=root_type,widgetType='custom_layout',displayView=view,resultViewMode='table').items():
                 draft.update_selected(name,value)
         else:
             rows=[index for index,row in enumerate(draft.entries) if row.get('name')=='dashboard_'+document['name']]
@@ -109,6 +113,7 @@ class DashboardCmd(Command):
                 raise ValueError('Dashboard navigation changed; inspect it in Sidebar Editor')
             draft._selected_row=rows[0]
             draft.update_selected('title',document['title'])
+            draft.update_selected('searchType',root_type)
         save_sidebar(draft,sidebar['revision'])
         result=dict(kind='dashboard',status='applied',operation_id=operation,view=view,path=path,
             project=Project.get_project_code(),title=document['title'],model=model,base_revision=state['revision'])

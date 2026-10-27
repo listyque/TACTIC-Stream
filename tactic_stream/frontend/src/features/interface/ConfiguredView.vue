@@ -102,6 +102,7 @@ export default {
     accent: String
   },
   emits: [
+    'loaded',
     'close',
     'sort',
     'inspect',
@@ -2051,9 +2052,16 @@ export default {
       :project="project"
       :width="layoutWidth"
       :height="layoutHeight"
+      :selected-keys="selectedKeys"
+      :workspace-id="workspaceId"
+      :active="active"
+      @loaded="$emit('loaded', $event)"
       @action="tableAction"
       @edit="openNestedEditor"
       @inspect="$emit('inspect', $event)"
+      @operate="(...args) => $emit('operate', ...args)"
+      @select="(...args) => $emit('select', ...args)"
+      @focus="$emit('focus', $event)"
       @cell-event="nestedCellEvent"
       @column="$emit('column', $event)"
       @saved="tableSaved"

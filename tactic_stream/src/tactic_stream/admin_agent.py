@@ -646,7 +646,9 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier) -> dict[str, Any]:
-        """Compose a shared native dashboard from row/column/text/markdown/count/table/link bricks.
+        """Compose a shared native dashboard from row/column/text/markdown/count/table/items/link bricks.
+        Use one items brick for the existing native item-card tree, with its actual relationship/process
+        branches, counts and actions. Only supply search_type, view and root filters; do not invent another tree.
 
         Tables reference existing TACTIC views; use ts_page_* for a new column layout.
         Filters are ANDed native column conditions. Metrics are current row counts.

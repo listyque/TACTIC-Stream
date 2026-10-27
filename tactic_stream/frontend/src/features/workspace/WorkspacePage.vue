@@ -13,9 +13,19 @@ const props = defineProps({
   view: String,
   title: String,
   target: String,
-  workspaceId: String
+  workspaceId: String,
+  selectedKeys: Array,
+  active: { type: Boolean, default: true }
 });
-const emit = defineEmits(['inspect', 'operate', 'column', 'close']);
+const emit = defineEmits([
+  'inspect',
+  'operate',
+  'column',
+  'close',
+  'select',
+  'focus',
+  'loaded'
+]);
 const host = ref(null),
   size = ref({ width: 800, height: 600 }),
   model = ref(null),
@@ -88,8 +98,13 @@ defineExpose({ reload, workspaceId: computed(() => props.workspaceId) });
       :ticket="ticket"
       :project="project"
       :workspace-id="workspaceId"
+      :active="active"
+      @loaded="emit('loaded', $event)"
+      :selected-keys="selectedKeys"
       :read-only="false"
       @inspect="emit('inspect', $event)"
+      @select="(...args) => emit('select', ...args)"
+      @focus="emit('focus', $event)"
       @operate="(...args) => emit('operate', ...args)"
       @column="emit('column', $event)"
       @close="emit('close')"

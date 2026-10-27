@@ -16,6 +16,7 @@ def dashboard_layout(document, view, search_key=''):
     if target is None:
         raise ValueError('Dashboard target is unavailable')
     budget = [128]
+    items_scope = []
 
     def compile_blocks(blocks, depth=0):
         if depth > 6:
@@ -58,7 +59,7 @@ def dashboard_layout(document, view, search_key=''):
                 nodes.append(dict(kind='link',text=block.title or block.href,href=block.href,weight=block.weight))
                 continue
             if not block.search_type or '?' in block.search_type:
-                raise ValueError('Metric/table bricks require a base Search Type')
+                raise ValueError('Metric/table/items bricks require a base Search Type')
             info=SearchType.get(block.search_type)
             if info.get_database() not in ('sthpw',Project.get_project_code()):
                 raise ValueError('Dashboard Search Type belongs to another project')
@@ -72,6 +73,18 @@ def dashboard_layout(document, view, search_key=''):
                 for column,relation,value in filters:
                     search.add_filter(column,value,op=relation)
                 nodes.append(dict(kind='metric',text=block.title or block.search_type,value=search.get_count(),weight=block.weight))
+            elif block.kind=='items':
+                if items_scope:
+                    raise ValueError('A dashboard supports one native item workspace')
+                if block.search_type.startswith(('sthpw/','config/')):
+                    raise ValueError('Select a project-owned Search Type for the item workspace')
+                read_interface(block.search_type,block.view)
+                scope=dict(searchType=block.search_type,view=block.view,filters=filters,
+                    parentKey=project.get_search_key(),initialLimit=25,
+                    orderBy=next((name for name in ('name','code','id') if name in columns),'id'))
+                items_scope.append(scope)
+                nodes.append(dict(kind='items',text=block.title or info.get_title(),weight=block.weight,
+                    height=block.height,items=scope))
             else:
                 read_interface(block.search_type,block.view)
                 controls=('search','searchLimit','shelf','selection','gear','insert')
@@ -81,7 +94,8 @@ def dashboard_layout(document, view, search_key=''):
                         **{name:block.controls is None or name in block.controls for name in controls})))
         return nodes
 
-    return dict(title=document.title,text='',layoutNodes=compile_blocks(document.blocks),
+    nodes=compile_blocks(document.blocks)
+    return dict(title=document.title,text='',layoutNodes=nodes,layoutItems=items_scope[0] if items_scope else None,
         targetSearchKey=target.get_search_key(),layoutView=view,layoutControls=[],layoutLoad=[],layoutForm='',
         layoutUser=Environment.get_user_name(),
         layoutRecord=dict(__search_key__=target.get_search_key(),code=target.get_code(),

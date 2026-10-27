@@ -35,16 +35,27 @@ DashboardDocument has name, title and blocks. Bricks:
 | markdown | Literal text, or source_key + field from an accessible current-project record. Without source_key, field reads the contextual target record. Maximum 64 KiB; larger files use normal document/file tools. |
 | metric | A labelled count card, using a native count of search_type and ANDed scalar filters. |
 | table | Existing search_type/view, fixed native filters retained alongside interactive search. Use ts_page_* for new columns. |
+| items | The existing expandable item workspace: supply root search_type, view and scalar filters. Native schema/process branches, previews, counts, files and object actions remain owned by the current results components. |
 | link | Safe HTTP(S), skey or tactic-search link. |
 
 Filters use column, relation (=, !=, <, <=, >, >=, like) and a scalar value.
-Table/Markdown bricks accept numeric `height` (120..1600px). A table may
+Table/Markdown/items bricks accept numeric `height` (120..1600px). A table may
 select `controls` from `search`, `searchLimit`, `shelf`, `selection`, `gear`,
 `insert`; omitted retains all ordinary controls, `[]` hides them. The native
 `shelf` owns the toolbar: use `["shelf", "search"]` for only filter/refresh,
 without create/column tools or selection. Use a short
 height and only useful controls for dashboard widgets. System task metrics and
 tables must explicitly filter `project_code` to the intended project.
+
+Use one `items` brick per dashboard, rooted in a project-owned Search Type.
+Do not describe branches or manufacture a second hierarchy. The current item
+workspace discovers relationships and processes using its ordinary readers.
+Place a short row of metrics above a full-width `items` brick for an overview
+with drill-down. It opens as a workspace page, not an object/cell popup.
+TS web hosts its existing `ResultPresentation`; TH hosts its existing
+`SearchResultsPane` and current search-tab query/model. Dashboard saving sets
+the navigation/URL root Search Type so selection and agent context stay native.
+Example block: `{"kind":"items","title":"Projects","search_type":"tracker/project","view":"table","height":720}`.
 
 Groups have at most six nesting levels; total bricks at most128. Existing
 CustomLayout admin restrictions apply. Literal Markdown is data, not model

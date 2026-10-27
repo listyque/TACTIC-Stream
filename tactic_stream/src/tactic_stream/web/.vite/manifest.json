@@ -334,10 +334,10 @@
       "_tree.ui.js"
     ],
     "dynamicImports": [
+      "src/assets/emoji.json",
       "src/features/checkin/ObjectCheckin.vue",
       "src/features/checkin/IngestFiles.vue",
       "src/features/objects/DuplicateSObject.vue",
-      "src/assets/emoji.json",
       "src/features/objects/RelatedObjects.vue",
       "src/features/checkin/SnapshotCheckout.vue",
       "_NamingEditor.js",

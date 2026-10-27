@@ -1622,6 +1622,13 @@ export default {
       for (const record of records) { if (checked) keys.add(record.__search_key__); else keys.delete(record.__search_key__) }
       this.selectedKeys = [...keys]
     },
+    publishDashboardResults(tab, result) {
+      tab.state.interfaceConfig = result.definition
+      tab.state.rows = result.records
+      if (tab !== this.displayedSearchTab) return
+      this.interfaceConfig = result.definition
+      this.rows = result.records
+    },
     applyFilter() { this.navigationLink = ''; this.selectedTags = []; this.tagColumn = ''; this.page = 0; this.loadRows() },
     submitSearch() {
       if (this.compactShortcuts) this.mobileSearchOpen = false
@@ -2077,6 +2084,10 @@ export default {
         v-show="!administrationOpen && section === 'data' && entry.tab === displayedSearchTab"
         :ticket="session.ticket" :project="entry.project" :view="entry.tab.state.layoutView" :target="entry.tab.state.layoutTarget"
         :title="entry.tab.title || entry.section.title" :workspace-id="entry.tab.id"
+        :active="!administrationOpen && section === 'data' && entry.tab === displayedSearchTab"
+        :selected-keys="entry.tab === displayedSearchTab ? selectedKeys : entry.tab.state.selectedKeys"
+        @select="selectRecords" @focus="focusDescription"
+        @loaded="publishDashboardResults(entry.tab, $event)"
         @inspect="inspect" @operate="(record,event,node)=>$refs.objectOperations.open(record,event,node)" @column="showColumnsEditor(false,$event)" @close="closeSection(entry.section.id)" />
     </template>
     <section v-if="retainedSearchTabs.length || administrationOpen" v-show="(administrationOpen || !layoutView) && section !== 'configuration' && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
