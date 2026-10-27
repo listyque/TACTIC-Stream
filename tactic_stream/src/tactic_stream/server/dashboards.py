@@ -8,7 +8,7 @@ from .navigation_links import check_project
 from tactic_stream.dashboard_plan import DashboardDocument
 
 
-def dashboard_layout(document, view, search_key=''):
+def dashboard_layout(document, view, search_key='', *, detail_key=''):
     document = DashboardDocument.model_validate(document)
     project = Project.get()
     check_project(project.get_code())
@@ -17,8 +17,58 @@ def dashboard_layout(document, view, search_key=''):
         raise ValueError('Dashboard target is unavailable')
     budget = [128]
     items_scope = []
+    detail_scope = []
+    from tactic.ui.panel.agent_request_cmd import selected_object
+    detail = selected_object(detail_key) if detail_key else None
+    if detail is not None:
+        _require_table_access(detail.get_base_search_type())
 
-    def compile_blocks(blocks, depth=0):
+    def validate_details(blocks, search_type='', depth=0):
+        if depth > 6:
+            raise ValueError('Dashboard nesting exceeds six levels')
+        for block in blocks:
+            budget[0] -= 1
+            if budget[0] < 0:
+                raise ValueError('Dashboard exceeds 128 bricks')
+            if block.kind in ('details','items'):
+                raise ValueError('Details reuse the existing item workspace; nesting another is unsupported')
+            if block.kind in ('row','column'):
+                if not block.children:
+                    raise ValueError('Dashboard groups need child bricks')
+                scoped_type = block.search_type or search_type
+                if scoped_type:
+                    info = SearchType.get(scoped_type)
+                    if info.get_database() not in ('sthpw',project.get_code()):
+                        raise ValueError('Details Search Type belongs to another project')
+                    _require_table_access(scoped_type)
+                validate_details(block.children,scoped_type,depth+1)
+            elif block.children:
+                raise ValueError('Only row/column bricks may contain children')
+            if block.kind in ('metric','table'):
+                info = SearchType.get(block.search_type)
+                if info.get_database() not in ('sthpw',project.get_code()):
+                    raise ValueError('Dashboard Search Type belongs to another project')
+                _require_table_access(block.search_type)
+                columns = SearchType.get_column_info(block.search_type)
+                if any(condition.column not in columns for condition in block.filters):
+                    raise ValueError('Dashboard filters require existing columns')
+                if block.kind == 'table':
+                    read_interface(block.search_type,block.view)
+            if block.source_key:
+                source = selected_object(block.source_key)
+                _require_table_access(source.get_base_search_type())
+                if block.field not in SearchType.get_column_info(source.get_base_search_type()):
+                    raise ValueError('Detail source requires an existing field')
+            if block.kind == 'link':
+                url = urlsplit(block.href)
+                if url.scheme not in ('http','https','skey','tactic-search') or not url.netloc or url.username or url.password:
+                    raise ValueError('Dashboard links require a safe HTTP or TACTIC address')
+            if block.field and not block.source_key:
+                if not search_type or block.field not in SearchType.get_column_info(search_type):
+                    raise ValueError('Bind detail fields inside a group with an existing Search Type')
+
+    def compile_blocks(blocks, depth=0, context=None, in_details=False):
+        context = context if context is not None else target
         if depth > 6:
             raise ValueError('Dashboard nesting exceeds six levels')
         nodes=[]
@@ -26,22 +76,47 @@ def dashboard_layout(document, view, search_key=''):
             budget[0]-=1
             if budget[0]<0:
                 raise ValueError('Dashboard exceeds 128 bricks')
+            if detail_key and not in_details and block.kind not in ('row','column','details'):
+                continue
             if block.kind in ('row','column'):
                 if not block.children:
                     raise ValueError('Dashboard groups need child bricks')
+                if block.search_type and not in_details:
+                    raise ValueError('Search Type conditions are only supported inside details')
+                if block.search_type and block.search_type != context.get_base_search_type():
+                    continue
                 nodes.append(dict(kind='row' if block.kind=='row' else 'group',
-                    children=compile_blocks(block.children,depth+1),weight=block.weight))
+                    children=compile_blocks(block.children,depth+1,context,in_details),weight=block.weight))
+                continue
+            if block.kind=='details':
+                if in_details or detail_scope or not block.children:
+                    raise ValueError('A dashboard supports one details pane with child bricks')
+                validate_details(block.children,depth=depth+1)
+                detail_scope.append(block)
+                nodes.append(dict(kind='details',text=block.title,weight=block.weight,height=block.height))
                 continue
             if block.children:
                 raise ValueError('Only row/column bricks may contain children')
             if block.kind=='text':
-                nodes.append(dict(kind='text',text=block.text or block.title,weight=block.weight))
+                value = block.text or block.title
+                if block.field:
+                    _require_table_access(context.get_base_search_type())
+                    if block.field not in SearchType.get_column_info(context.get_base_search_type()):
+                        raise ValueError('Text requires an existing field')
+                    value = context.get_value(block.field)
+                    if not isinstance(value,(str,int,float,bool,type(None))):
+                        raise ValueError('Text source must be a scalar')
+                    value = str(value) if value is not None else ''
+                    if block.title and value:
+                        value = block.title + ': ' + value
+                if len(value)>65536:
+                    raise ValueError('Text brick exceeds 64 KiB')
+                nodes.append(dict(kind='text',text=value,weight=block.weight))
                 continue
             if block.kind=='markdown':
                 value=block.text
                 if block.source_key or block.field:
-                    from tactic.ui.panel.agent_request_cmd import selected_object
-                    source=selected_object(block.source_key) if block.source_key else target
+                    source=selected_object(block.source_key) if block.source_key else context
                     _require_table_access(source.get_base_search_type())
                     if not block.field or block.field not in SearchType.get_column_info(source.get_base_search_type()):
                         raise ValueError('Markdown requires an existing text field')
@@ -50,7 +125,16 @@ def dashboard_layout(document, view, search_key=''):
                         raise ValueError('Markdown source must be text')
                 if len(value)>65536:
                     raise ValueError('Markdown brick exceeds 64 KiB; open the document file instead')
-                nodes.append(dict(kind='markdown',text=value,weight=block.weight,height=block.height))
+                if value:
+                    if block.title:
+                        if in_details:
+                            value = '## ' + block.title + '\n\n' + value
+                        else:
+                            nodes.append(dict(kind='text',text=block.title,weight=block.weight))
+                    if in_details and block.height is None and nodes and nodes[-1]['kind']=='markdown' and nodes[-1].get('height') is None and nodes[-1]['weight']==block.weight:
+                        nodes[-1]['text'] += '\n\n' + value
+                    else:
+                        nodes.append(dict(kind='markdown',text=value,weight=block.weight,height=block.height))
                 continue
             if block.kind=='link':
                 url=urlsplit(block.href)
@@ -74,6 +158,8 @@ def dashboard_layout(document, view, search_key=''):
                     search.add_filter(column,value,op=relation)
                 nodes.append(dict(kind='metric',text=block.title or block.search_type,value=search.get_count(),weight=block.weight))
             elif block.kind=='items':
+                if in_details:
+                    raise ValueError('Use the existing item workspace outside the details pane')
                 if items_scope:
                     raise ValueError('A dashboard supports one native item workspace')
                 if block.search_type.startswith(('sthpw/','config/')):
@@ -89,12 +175,21 @@ def dashboard_layout(document, view, search_key=''):
                 read_interface(block.search_type,block.view)
                 controls=('search','searchLimit','shelf','selection','gear','insert')
                 nodes.append(dict(kind='table',text=block.title or block.search_type,weight=block.weight,height=block.height,
-                    table=dict(searchType=block.search_type,parentKey=target.get_search_key(),view=block.view,
+                    table=dict(searchType=block.search_type,parentKey=context.get_search_key(),view=block.view,
                         projectScope=not block.search_type.startswith(('sthpw/', 'config/')),filters=filters,embedded=True,initialLimit=25,
                         **{name:block.controls is None or name in block.controls for name in controls})))
         return nodes
 
     nodes=compile_blocks(document.blocks)
+    if detail_key:
+        if not detail_scope:
+            raise ValueError('This dashboard has no details pane')
+        budget[0] = 128
+        details=compile_blocks(detail_scope[0].children,1,detail,True)
+        return dict(layoutNodes=details,targetSearchKey=detail.get_search_key(),
+            title=detail.get_value('name',no_exception=True) or detail.get_value('title',no_exception=True) or detail.get_code())
+    if detail_scope and not items_scope:
+        raise ValueError('A details pane requires the existing item workspace')
     return dict(title=document.title,text='',layoutNodes=nodes,layoutItems=items_scope[0] if items_scope else None,
         targetSearchKey=target.get_search_key(),layoutView=view,layoutControls=[],layoutLoad=[],layoutForm='',
         layoutUser=Environment.get_user_name(),

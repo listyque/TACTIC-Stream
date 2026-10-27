@@ -79,6 +79,7 @@ def main():
     command[-1] = "frontend/tests/{administration,frame_admin_state,frame_types}.mjs"
     queued.append(list(command))
     for pattern in [
+        "frontend/tests/item_composition.mjs",
         "frontend/src/features/knowledge/*.{vue,js}",
         "frontend/src/features/collaboration/*.vue",
         "frontend/src/features/documentation/*.vue",
@@ -112,7 +113,7 @@ def main():
         "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
         "frontend/tests/{frame_table*,handler_table,table_cells,table_append,columns_editor,table_script_*}.mjs",
         "frontend/src/features/interface/tableScript.js",
-        "frontend/src/features/interface/{CustomLayoutView.vue,DashboardItems.vue,LayoutDocument.vue,customReport.js}",
+        "frontend/src/features/interface/{CustomLayoutView.vue,DashboardItems.vue,LayoutDocument.vue,ItemComposition.vue,customReport.js}",
         "frontend/tests/custom_urls.mjs",
         "frontend/tests/vfx_composition.mjs",
         "frontend/src/features/interface/TableDependencies.vue",

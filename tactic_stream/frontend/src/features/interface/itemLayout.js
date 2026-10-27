@@ -17,7 +17,8 @@ export function itemVariant(node) {
 
 export function layoutElements(layout, node, parent = '') {
   const variant = itemVariant(node)
-  return (layout?.elements || []).filter(item => !item.hidden && item.parent === parent && (item.variant === 'all' || item.variant === variant))
+  const searchType = String(node.record?.__search_key__ || node.search_type || '').split('?')[0]
+  return (layout?.elements || []).filter(item => !item.hidden && item.parent === parent && (!item.search_type || node.kind !== 'branch' && item.search_type === searchType) && (item.variant === 'all' || item.variant === variant))
 }
 
 export function draftLayout(source,view){return Layout.describe(layoutTree(source),view)}

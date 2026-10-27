@@ -3,7 +3,7 @@ import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as cr
 import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
-import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
+import { $ as sectionSelector, Q as policy, X as documentEvent, Z as notices, tt as toolbar$1 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/naming/naming.ui.mjs
 function toolbar(model, ui, width, language) {
 	const tr = (text) => translate(text, language), actions = toolbar$1(model, ui, width, language), edit = !model.busy && !model.uncertain && model.canWrite && !ui.confirmation;

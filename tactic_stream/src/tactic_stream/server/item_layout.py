@@ -104,6 +104,9 @@ def describe_item_layout(description):
         if kind == 'view' and not re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}', options.get('view', '')):
             raise ValueError('Layout widget requires a view name')
         variant = attrs.get('variant', 'all')
+        search_type = attrs.get('search_type', '')
+        if search_type and not re.fullmatch(r'[A-Za-z_]\w*/[A-Za-z_]\w*', search_type):
+            raise ValueError('Invalid layout Search Type')
         align = attrs.get('align', 'stretch')
         tone = attrs.get('tone', 'normal')
         if action and action not in ACTIONS or variant not in VARIANTS or align not in ('stretch', 'start', 'center', 'end') or tone not in ('normal', 'muted', 'strong'):
@@ -111,7 +114,7 @@ def describe_item_layout(description):
         if options.get('fit', 'cover') not in ('cover', 'contain'):
             raise ValueError('Invalid image fit')
         result['elements'].append(dict(name=name, title=element['title'], kind=kind, options=options,
-            parent=attrs.get('parent', ''), variant=variant, align=align, tone=tone, layer=int(layer),
+            parent=attrs.get('parent', ''), variant=variant, search_type=search_type, align=align, tone=tone, layer=int(layer),
             role=role, tag=tag, flow=flow, when=when,
             hidden=str(attrs.get('hidden', '')).lower() in ('true', '1', 'yes', 'on'),
             row=number(attrs.get('row'), 1, 100), column=number(attrs.get('column'), 1, 12),

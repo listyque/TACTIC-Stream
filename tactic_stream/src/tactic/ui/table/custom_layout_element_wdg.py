@@ -5,7 +5,7 @@ from pyasm.command import Command
 
 
 def read_custom_layout(
-    search_key='', view='', html='', include_mako=True, _depth=0, _behaviors=None
+    search_key='', view='', html='', include_mako=True, _depth=0, _behaviors=None, detail_key=''
 ):
     import ast
     import json
@@ -64,7 +64,7 @@ def read_custom_layout(
         )
         if definition is not None and definition.find('dashboard') is not None:
             from tactic_stream.server.dashboards import dashboard_layout
-            return dashboard_layout(json.loads(definition.findtext('dashboard')), view, search_key)
+            return dashboard_layout(json.loads(definition.findtext('dashboard')), view, search_key, detail_key=detail_key)
         if definition is None or definition.find('html') is None:
             raise ValueError('CustomLayout has no HTML definition: ' + view)
         mako = definition.findtext('mako') or ''

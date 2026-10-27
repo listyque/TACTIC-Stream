@@ -13,6 +13,7 @@ import { groupRecords } from './resultViews.js';
 import ResultItem from './ResultItem.vue';
 import VirtualCollection from '../../controls/lists/VirtualCollection.vue';
 import * as Card from '../../../../src/tactic_stream/shared_ui/features/search/card.ui.mjs';
+import * as Composition from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs';
 import ProcessVisibility from './ProcessVisibility.vue';
 import * as Visibility from '../../../../src/tactic_stream/shared_ui/features/search/visibility.ui.mjs';
 import ConfiguredResultItem from '../interface/ConfiguredResultItem.vue';
@@ -56,6 +57,8 @@ export default {
   },
   props: {
     itemLayout: Object,
+    editing: Boolean,
+    selectedElement: String,
     readOnly: Boolean,
     rows: Array,
     ticket: String,
@@ -73,6 +76,7 @@ export default {
     openTaskManager: { default: null }
   },
   emits: [
+    'element',
     'select',
     'inspect',
     'operate',
@@ -341,6 +345,9 @@ export default {
           ).height
         })
       );
+    },
+    configured(node) {
+      return Composition.supports(this.itemLayout, node, window.innerWidth);
     },
     async load(force = false) {
       if (!this.active && !force && !this.groupMode.startsWith('task_status:'))
@@ -1368,9 +1375,12 @@ export default {
           <template #default="{ item: node, index }">
             <div class="result-tree-row" :data-sequence="index">
               <component
-                :is="itemLayout ? 'ConfiguredResultItem' : 'ResultItem'"
+                :is="configured(node) ? 'ConfiguredResultItem' : 'ResultItem'"
                 :layout="itemLayout"
                 :read-only="readOnly"
+                :editing="editing"
+                :selected-element="selectedElement"
+                @element="$emit('element', $event)"
                 :node="node"
                 :compact="compact"
                 :card="mode === 'tiles'"

@@ -12,6 +12,7 @@ import MiddleElide from '../../controls/MiddleElide.vue'
 import { prettySize } from '../checkin/files.js'
 import { timestampLabel, timestampFullLabel } from '../activity/activity.js'
 import { bindingValue, layoutUrl, layoutElements } from './itemLayout.js'
+import ItemComposition from './ItemComposition.vue'
 
 const props = defineProps({ layout: Object, node: Object, parent: {type:String,default:''}, only: String, readOnly: Boolean, editing: Boolean, selectedElement: String, presentation: {type:Object,default:()=>({})} })
 const emit = defineEmits(['action', 'completion', 'element', 'controls'])
@@ -77,7 +78,8 @@ function act(action, event) { if (!props.readOnly && !props.editing && available
 </script>
 
 <template>
-  <LayoutContainer :tag="nativeFlow ? Fragment : 'div'" class="item-layout" :class="{'item-layout-editing':editing}" :style="{gridTemplateColumns:tracks,'--item-mobile-tracks':mobileTracks}">
+  <ItemComposition v-if="!parent && !nativeFlow && !only" :layout="layout" :node="node" :read-only="readOnly" :editing="editing" :selected-element="selectedElement" @action="(...args)=>emit('action',...args)" @element="emit('element',$event)" />
+  <LayoutContainer v-else :tag="nativeFlow ? Fragment : 'div'" class="item-layout" :class="{'item-layout-editing':editing}" :style="{gridTemplateColumns:tracks,'--item-mobile-tracks':mobileTracks}">
     <LayoutContainer :tag="tag(item)" v-for="item in elements" :key="item.name" class="item-layout-element" :class="[...classes(item),'item-widget-' + item.kind, 'item-tone-' + item.tone, {'item-element-selected':editing && selectedElement === item.name}]"
       :data-layout-element="item.name" :style="nativeFlow ? (item.layer ? {zIndex:item.layer} : undefined) : {zIndex:item.layer || 0,...(only ? {} : {gridColumn:`${item.column} / span ${item.span}`,gridRow:`${item.row} / span ${item.rows}`,alignSelf:item.align})}"
       @pointerenter="item.role==='actions'?emit('controls',true):item.role==='title-line'&&fitTitleActions($event)" @pointerleave="item.role==='actions'&&emit('controls',false)" @focusin="item.role==='title-line'&&fitTitleActions($event)" @click="editing ? (emit('element',item.name), $event.stopPropagation()) : item.role==='actions'&&$event.stopPropagation()">

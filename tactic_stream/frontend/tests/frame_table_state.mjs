@@ -406,3 +406,80 @@ assert.equal(summaryRow.hasSummary, true);
 assert.equal(summaryRow.values.id, '30');
 assert.equal(summaryRow.values.code, '2');
 assert.equal(summaryRow.values.score, '3');
+
+const Dashboard = await import(
+  '../../src/tactic_stream/shared_ui/features/table/layout.ui.mjs'
+);
+const dashboard = Dashboard.describe(
+  {
+    layoutNodes: [
+      {
+        kind: 'row',
+        children: [
+          {
+            kind: 'items',
+            weight: 4,
+            height: 620,
+            items: { searchType: 'demo/project' }
+          },
+          { kind: 'details', weight: 8, height: 620 }
+        ]
+      }
+    ],
+    layoutDetail: {
+      title: 'Selected task',
+      targetSearchKey: 'demo/task?code=A',
+      layoutNodes: [
+        {
+          kind: 'group',
+          children: [
+            { kind: 'text', text: 'In progress' },
+            {
+              kind: 'markdown',
+              text: '## Result\n\n' + 'Long content '.repeat(400)
+            }
+          ]
+        }
+      ]
+    }
+  },
+  1280,
+  900,
+  'en'
+);
+const flatten = (nodes) =>
+  nodes.flatMap((node) => [node, ...flatten(node.children || [])]);
+const dashboardNodes = flatten(dashboard.nodes);
+const detailsPane = dashboardNodes.find(
+  (node) => node.id === 'customLayout_0_1'
+);
+const documentNode = dashboardNodes.find(
+  (node) => node.view === 'layoutMarkdown'
+);
+assert.equal(
+  detailsPane.contentHeight,
+  detailsPane.height,
+  'The native document reader owns long-content scrolling'
+);
+assert.equal(
+  documentNode.contentInset,
+  0,
+  'Content aligns with the selected item heading'
+);
+assert.equal(documentNode.x, 24);
+assert(
+  Dashboard.hasDetails([{ kind: 'row', children: [{ kind: 'details' }] }])
+);
+assert.equal(Dashboard.hasDetails([{ kind: 'items' }]), false);
+assert.deepEqual(
+  Dashboard.tables(
+    [
+      {
+        kind: 'group',
+        children: [{ kind: 'table', table: { parentKey: 'selected' } }]
+      }
+    ],
+    'customLayoutDetails'
+  ),
+  [{ key: 'customLayoutDetails_0_0', scope: { parentKey: 'selected' } }]
+);

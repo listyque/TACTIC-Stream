@@ -4069,6 +4069,8 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Select an item": "Выберите элемент слева",
+	"Loading...": "Загрузка…",
 	"Search in this branch": "Поиск в этой ветке",
 	"Found: {count}": "Найдено: {count}",
 	"No results found": "Ничего не найдено",
@@ -9820,6 +9822,7 @@ var _sfc_main$2 = {
 var _hoisted_1$1 = ["inert"];
 var _hoisted_2 = [
 	"data-frame",
+	"data-layout-element",
 	"role",
 	"aria-level",
 	"tabindex",
@@ -9830,16 +9833,17 @@ var _hoisted_4 = {
 	key: 1,
 	class: "frame-checkbox-label"
 };
-var _hoisted_5 = ["data-frame"];
+var _hoisted_5 = ["data-frame", "data-layout-element"];
 var _hoisted_6 = [
 	"data-frame",
+	"data-layout-element",
 	"role",
 	"aria-label",
 	"onScroll"
 ];
-var _hoisted_7 = ["data-frame"];
-var _hoisted_8 = ["data-frame"];
-var _hoisted_9 = ["data-frame"];
+var _hoisted_7 = ["data-frame", "data-layout-element"];
+var _hoisted_8 = ["data-frame", "data-layout-element"];
+var _hoisted_9 = ["data-frame", "data-layout-element"];
 var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 	__name: "FrameView",
 	props: {
@@ -9881,6 +9885,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					clickMotionFast: "--motion-click",
 					hoverMotionFast: "--motion-hover"
 				}[token] + ") cubic-bezier(.215,.61,.355,1)").join(", ") : void 0,
+				zIndex: node.layer,
 				left: node.x + "px",
 				top: node.y + "px",
 				width: node.width + "px",
@@ -10078,6 +10083,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				return openBlock(), createElementBlock(Fragment, { key: node.id }, [node.kind === "Box" ? (openBlock(), createBlock(resolveDynamicComponent(node.titlebar ? "header" : "div"), {
 					key: 0,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-box", { "frame-titlebar": node.titlebar }]),
 					style: normalizeStyle(Object.assign(style(node), background(node), {
 						"--frame-titlebar-actions-right": (node.chromeRight || 0) + "px",
@@ -10112,6 +10118,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					_: 2
 				}, 1064, [
 					"data-frame",
+					"data-layout-element",
 					"class",
 					"style",
 					"role",
@@ -10122,6 +10129,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "Label" ? withDirectives((openBlock(), createElementBlock("span", {
 					key: 1,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					role: node.role,
 					"aria-level": node.role === "heading" ? node.level || 2 : void 0,
 					tabindex: node.focusable ? 0 : void 0,
@@ -10143,6 +10151,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				}, null, 8, ["text"])) : (openBlock(), createElementBlock("span", _hoisted_3, toDisplayString(node.text), 1))], 14, _hoisted_2)), [[unref(tooltipDirective), node.toolTip]]) : node.kind === "Icon" ? withDirectives((openBlock(), createBlock(_sfc_main$33, {
 					key: 2,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node",
 					style: normalizeStyle(Object.assign(style(node), { fontSize: node.width + "px" })),
 					name: node.icon,
@@ -10152,6 +10161,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					tabindex: node.focusable ? 0 : void 0
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"name",
 					"aria-hidden",
@@ -10161,6 +10171,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])), [[unref(tooltipDirective), node.toolTip || node.text]]) : node.kind === "Button" ? (openBlock(), createBlock(resolveDynamicComponent(node.tab ? _sfc_main$19 : _sfc_main$34), {
 					key: 3,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node", {
 						"frame-button": !node.iconAction && !node.tab,
 						"frame-icon-action": node.iconAction,
@@ -10199,6 +10210,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onDrop: ($event) => drop($event, node)
 				}, null, 40, [
 					"data-frame",
+					"data-layout-element",
 					"class",
 					"style",
 					"label",
@@ -10230,6 +10242,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 4,
 					id: node.elementId,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-action", { "frame-secondary-action": node.revealOnRowInteraction }]),
 					style: normalizeStyle(Object.assign(style(node), { borderRadius: (node.radius === void 0 ? 10 : node.radius) + "px" })),
 					label: node.text,
@@ -10292,6 +10305,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				}, 1032, [
 					"id",
 					"data-frame",
+					"data-layout-element",
 					"class",
 					"style",
 					"label",
@@ -10315,6 +10329,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "Segmented" ? (openBlock(), createBlock(_sfc_main$13, {
 					key: 5,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node",
 					style: normalizeStyle(style(node)),
 					label: node.label,
@@ -10325,6 +10340,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"label",
 					"options",
@@ -10335,6 +10351,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "CheckBox" ? (openBlock(), createBlock(_sfc_main$18, {
 					key: 6,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-checkbox", { "frame-checkbox-wrap": node.wrapText }]),
 					style: normalizeStyle(Object.assign(style(node), { "--frame-indicator-x": (node.indicatorX || 0) + "px" })),
 					"model-value": node.checked,
@@ -10372,6 +10389,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					_: 2
 				}, 1032, [
 					"data-frame",
+					"data-layout-element",
 					"class",
 					"style",
 					"model-value",
@@ -10385,6 +10403,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "Switch" ? withDirectives((openBlock(), createElementBlock("div", {
 					key: 7,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-switch",
 					style: normalizeStyle(style(node))
 				}, [createVNode(_sfc_main$32, {
@@ -10400,6 +10419,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])], 12, _hoisted_5)), [[unref(tooltipDirective), node.toolTip]]) : node.kind === "Field" ? (openBlock(), createBlock(_sfc_main$25, {
 					key: 8,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-field", { "table-cell": node.tableCell }]),
 					onFocus: ($event) => {
 						$event.target.scrollIntoView({
@@ -10426,6 +10446,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"onFocus",
 					"class",
 					"error-state",
@@ -10447,6 +10468,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "Area" ? (openBlock(), createBlock(_sfc_main$20, {
 					key: 9,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-area", { "frame-notice": node.notice }]),
 					onFocus: _cache[1] || (_cache[1] = ($event) => $event.target.scrollIntoView({
 						block: "nearest",
@@ -10467,6 +10489,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"role",
 					"class",
 					"flat",
@@ -10484,6 +10507,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "Preview" ? (openBlock(), createBlock(ItemPreview_default, {
 					key: 10,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-preview",
 					style: normalizeStyle(Object.assign(previewStyle(node), node.radius !== void 0 ? { borderRadius: node.radius + "px" } : node.round === false ? { borderRadius: "4px" } : {})),
 					source: node.source,
@@ -10498,6 +10522,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"fill-mode": node.fit || "cover"
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"source",
 					"fallback-text",
@@ -10512,6 +10537,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "SummaryChip" ? (openBlock(), createBlock(_sfc_main$4, {
 					key: 11,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-summary-chip",
 					style: normalizeStyle(style(node)),
 					label: node.text,
@@ -10526,6 +10552,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onClick: ($event) => send(node.action)
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"label",
 					"count",
@@ -10540,6 +10567,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "List" ? (openBlock(), createElementBlock("div", {
 					key: 12,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-list",
 					role: node.role,
 					style: normalizeStyle(style(node)),
@@ -10582,6 +10610,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				}), 128))], 4)], 44, _hoisted_6)) : node.kind === "Scroll" ? (openBlock(), createElementBlock("div", {
 					key: node.id + ":" + node.resetKey,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-scroll", { "frame-scroll-horizontal": node.contentWidth > node.width }]),
 					style: normalizeStyle(style(node))
 				}, [createVNode(_component_FrameView, {
@@ -10610,6 +10639,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])], 14, _hoisted_7)) : node.kind === "Choice" ? (openBlock(), createBlock(resolveDynamicComponent(node.editable ? _sfc_main$12 : _sfc_main$31), {
 					key: 14,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-choice",
 					onFocus: _cache[4] || (_cache[4] = ($event) => $event.target.scrollIntoView({
 						block: "nearest",
@@ -10628,6 +10658,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"onUpdate:modelValue": ($event) => send(node.action, $event)
 				}, null, 40, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"label",
 					"display-prefix",
@@ -10641,6 +10672,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "IconChoice" ? (openBlock(), createElementBlock("div", {
 					key: 15,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-icon-choice",
 					style: normalizeStyle(style(node))
 				}, [createVNode(_sfc_main$7, {
@@ -10657,6 +10689,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])], 12, _hoisted_8)) : node.kind === "ColorChoice" ? (openBlock(), createElementBlock("div", {
 					key: 16,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-color-choice",
 					style: normalizeStyle(style(node))
 				}, [createVNode(_sfc_main$23, {
@@ -10672,6 +10705,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])], 12, _hoisted_9)) : node.kind === "Splitter" ? (openBlock(), createBlock(_sfc_main$6, {
 					key: 17,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-splitter",
 					style: normalizeStyle(style(node)),
 					"model-value": node.value,
@@ -10686,6 +10720,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onCancelled: ($event) => node.cancelAction && send(node.cancelAction, $event)
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"model-value",
 					"min",
@@ -10700,6 +10735,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 				])) : node.kind === "StatusChip" ? (openBlock(), createBlock(_sfc_main$2, {
 					key: 18,
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					class: "frame-node",
 					style: normalizeStyle(Object.assign(style(node), {
 						fontSize: void 0,
@@ -10715,6 +10751,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onClick: ($event) => send(node.action)
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"text",
 					"icon",
@@ -10727,6 +10764,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 19,
 					class: "frame-node frame-date-choice",
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					style: normalizeStyle(style(node)),
 					"model-value": node.text,
 					label: node.label,
@@ -10739,6 +10777,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onChange: ($event) => send(node.commitAction, $event)
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"model-value",
 					"label",
@@ -10753,6 +10792,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					key: 20,
 					class: "frame-node frame-user-choice",
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					style: normalizeStyle(style(node)),
 					value: node.value,
 					options: node.options || [],
@@ -10763,6 +10803,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onChange: ($event) => send(node.action, $event)
 				}, null, 8, [
 					"data-frame",
+					"data-layout-element",
 					"style",
 					"value",
 					"options",
@@ -10810,10 +10851,12 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"frame-node": __props.views[node.view]?.nodeProps ? node : void 0,
 					class: "frame-node frame-child-view",
 					"data-frame": node.id,
+					"data-layout-element": node.layoutElement,
 					style: style(node)
 				}), null, 16, [
 					"frame-node",
 					"data-frame",
+					"data-layout-element",
 					"style"
 				])) : createCommentVNode("", true)], 64);
 			}), 128))], 10, _hoisted_1$1);

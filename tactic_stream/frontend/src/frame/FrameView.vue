@@ -92,6 +92,7 @@ function style(node) {
           )
           .join(', ')
       : undefined,
+    zIndex: node.layer,
     left: node.x + 'px',
     top: node.y + 'px',
     width: node.width + 'px',
@@ -404,6 +405,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :is="node.titlebar ? 'header' : 'div'"
         v-if="node.kind === 'Box'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-box"
         :class="{ 'frame-titlebar': node.titlebar }"
         :style="
@@ -435,6 +437,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <span
         v-else-if="node.kind === 'Label'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         :role="node.role"
         :aria-level="node.role === 'heading' ? node.level || 2 : undefined"
         :tabindex="node.focusable ? 0 : undefined"
@@ -467,6 +470,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <AppIcon
         v-else-if="node.kind === 'Icon'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node"
         :style="Object.assign(style(node), { fontSize: node.width + 'px' })"
         :name="node.icon"
@@ -480,6 +484,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :is="node.tab ? AppTabButton : AppButton"
         v-else-if="node.kind === 'Button'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node"
         :class="{
           'frame-button': !node.iconAction && !node.tab,
@@ -535,6 +540,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         v-else-if="node.kind === 'Action'"
         :id="node.elementId"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-action"
         :class="{ 'frame-secondary-action': node.revealOnRowInteraction }"
         :style="
@@ -590,6 +596,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <AppSegmentedButton
         v-else-if="node.kind === 'Segmented'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node"
         :style="style(node)"
         :label="node.label"
@@ -602,6 +609,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <AppCheckbox
         v-else-if="node.kind === 'CheckBox'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-checkbox"
         :class="{ 'frame-checkbox-wrap': node.wrapText }"
         :style="
@@ -639,6 +647,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <div
         v-else-if="node.kind === 'Switch'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-switch"
         :style="style(node)"
         v-tooltip="node.toolTip"
@@ -653,6 +662,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <AppTextField
         v-else-if="node.kind === 'Field'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-field"
         @focus="
           $event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -681,6 +691,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <AppTextArea
         v-else-if="node.kind === 'Area'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-area"
         @focus="
           $event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' })
@@ -703,6 +714,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <ItemPreview
         v-else-if="node.kind === 'Preview'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-preview"
         :style="
           Object.assign(
@@ -728,6 +740,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <SummaryChip
         v-else-if="node.kind === 'SummaryChip'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-summary-chip"
         :style="style(node)"
         :label="node.text"
@@ -744,6 +757,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <div
         v-else-if="node.kind === 'List'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-list"
         :role="node.role"
         :style="style(node)"
@@ -782,6 +796,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         v-else-if="node.kind === 'Scroll'"
         :key="node.id + ':' + node.resetKey"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-scroll"
         :class="{ 'frame-scroll-horizontal': node.contentWidth > node.width }"
         :style="style(node)"
@@ -808,6 +823,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :is="node.editable ? AppEditableSelect : AppSelect"
         v-else-if="node.kind === 'Choice'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-choice"
         @focus="
           $event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' })
@@ -827,6 +843,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <div
         v-else-if="node.kind === 'IconChoice'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-icon-choice"
         :style="style(node)"
       >
@@ -841,6 +858,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <div
         v-else-if="node.kind === 'ColorChoice'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-color-choice"
         :style="style(node)"
       >
@@ -854,6 +872,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <AppSplitter
         v-else-if="node.kind === 'Splitter'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node frame-splitter"
         :style="style(node)"
         :model-value="node.value"
@@ -870,6 +889,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <StatusChip
         v-else-if="node.kind === 'StatusChip'"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         class="frame-node"
         :style="
           Object.assign(style(node), {
@@ -890,6 +910,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         v-else-if="node.kind === 'DateChoice'"
         class="frame-node frame-date-choice"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         :style="style(node)"
         :model-value="node.text"
         :label="node.label"
@@ -905,6 +926,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         v-else-if="node.kind === 'UserChoice'"
         class="frame-node frame-user-choice"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         :style="style(node)"
         :value="node.value"
         :options="node.options || []"
@@ -950,6 +972,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :frame-node="views[node.view]?.nodeProps ? node : undefined"
         class="frame-node frame-child-view"
         :data-frame="node.id"
+        :data-layout-element="node.layoutElement"
         :style="style(node)"
       />
     </template>

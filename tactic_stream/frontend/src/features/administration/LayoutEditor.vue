@@ -9,6 +9,7 @@ import * as State from '../../../../src/tactic_stream/shared_ui/features/adminis
 import * as Document from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/layout.document.mjs';
 import { layoutTree } from '../interface/layoutXml.js';
 import FrameView from '../../frame/FrameView.vue';
+import LayoutPreview from './LayoutPreview.vue';
 
 export default {
   components: { FrameView },
@@ -39,6 +40,7 @@ export default {
       baseline: '',
       sampleItems: [],
       preview: null,
+      liveInterface: null,
       checked: '',
       diff: '',
       error: '',
@@ -46,7 +48,11 @@ export default {
       message: '',
       busy: false,
       uncertain: false,
-      request: 0
+      request: 0,
+      previewRequest: 0,
+      previewTimer: null,
+      previewBusy: false,
+      previewError: ''
     };
   },
   computed: {
@@ -104,7 +110,7 @@ export default {
         preview: this.preview,
         checked: this.checked,
         diff: this.diff,
-        error: this.error,
+        error: this.error || this.previewError,
         message: this.message,
         busy: this.busy,
         dirty: this.xml !== this.baseline || this.uncertain,
@@ -142,6 +148,26 @@ export default {
     },
     models() {
       return UI.models(this.frameModel);
+    },
+    previewRows() {
+      return this.sampleItems.map((item) => item.record);
+    },
+    previewViews() {
+      return {
+        itemResults: {
+          component: LayoutPreview,
+          props: {
+            rows: this.previewRows,
+            ticket: this.ticket,
+            project: this.project,
+            searchType: this.searchType,
+            layout: this.liveInterface?.table?.item_layout,
+            error: this.previewError || this.sampleError,
+            selectedElement: this.ui.selected,
+            onElement: (name) => this.dispatch({ type: 'select', name })
+          }
+        }
+      };
     }
   },
   mounted() {
@@ -170,6 +196,8 @@ export default {
   beforeUnmount() {
     this.observer?.disconnect();
     this.request++;
+    clearTimeout(this.previewTimer);
+    this.previewRequest++;
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
   watch: {
@@ -185,6 +213,7 @@ export default {
       this.preview = null;
       this.diff = '';
       if (this.xml !== this.baseline) this.message = '';
+      this.schedulePreview();
     },
     project() {
       this.contextChanged();
@@ -204,6 +233,37 @@ export default {
   },
   methods: {
     t,
+    schedulePreview() {
+      clearTimeout(this.previewTimer);
+      const generation = ++this.previewRequest;
+      this.previewError = '';
+      this.previewTimer = setTimeout(async () => {
+        if (
+          !this.configuration ||
+          !this.xml ||
+          this.parsed.error ||
+          this.uncertain
+        )
+          return;
+        const request = this.request,
+          xml = this.xml;
+        this.previewBusy = true;
+        try {
+          const result = await this.call('preview', {
+            source_id: this.source === '' ? null : this.source,
+            xml,
+            revision: this.configuration.revision
+          });
+          if (generation === this.previewRequest && request === this.request)
+            this.preview = this.liveInterface = result.interface;
+        } catch (error) {
+          if (generation === this.previewRequest && request === this.request)
+            this.previewError = error.message;
+        } finally {
+          if (generation === this.previewRequest) this.previewBusy = false;
+        }
+      }, 250);
+    },
     rowScene(list, record) {
       return UI.row(
         list,
@@ -228,8 +288,11 @@ export default {
     },
     contextChanged() {
       this.request++;
+      this.previewRequest++;
+      clearTimeout(this.previewTimer);
       this.busy = false;
       this.configuration = null;
+      this.liveInterface = null;
       this.xml = this.baseline = '';
       this.ui = State.initial();
       this.uncertain = false;
@@ -309,6 +372,7 @@ export default {
       };
       this.busy = true;
       this.configuration = null;
+      this.liveInterface = null;
       this.error = this.sampleError = '';
       this.sampleItems = [];
       try {
@@ -388,7 +452,7 @@ export default {
           revision: this.configuration.revision
         });
         if (request === this.request) {
-          this.preview = result.interface;
+          this.preview = this.liveInterface = result.interface;
           this.checked = this.xml;
           this.diff = result.diff;
         }
@@ -459,8 +523,10 @@ export default {
         :scene="frameScene"
         :models="models"
         :describe-row="rowScene"
+        :views="previewViews"
         @event="dispatch"
       />
+      <p v-if="previewError" class="error" role="alert">{{ previewError }}</p>
     </div>
   </section>
 </template>

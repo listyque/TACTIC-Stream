@@ -90,7 +90,7 @@
       "index.html",
       "_CodeBlock.js",
       "_sections.ui.js",
-      "_admin.document.js"
+      "src/App.vue"
     ]
   },
   "_ObjectFieldFrame.css": {
@@ -150,13 +150,6 @@
       "assets/RecordForm.css"
     ]
   },
-  "_admin.document.js": {
-    "file": "assets/admin.document.js",
-    "name": "admin.document",
-    "imports": [
-      "_CodeBlock.js"
-    ]
-  },
   "_confirmation.ui.js": {
     "file": "assets/confirmation.ui.js",
     "name": "confirmation.ui",
@@ -193,7 +186,7 @@
       "_CodeBlock.js",
       "_sections.ui.js",
       "_tree.ui.js",
-      "_admin.document.js"
+      "src/App.vue"
     ]
   },
   "_groups.ui.js": {
@@ -340,6 +333,7 @@
       "src/features/objects/DuplicateSObject.vue",
       "src/features/objects/RelatedObjects.vue",
       "src/features/checkin/SnapshotCheckout.vue",
+      "src/features/workspace/ResultPresentation.vue",
       "_NamingEditor.js",
       "src/features/checkin/MatchingTemplates.vue",
       "src/features/tasks/TaskGanttView.vue",
@@ -401,8 +395,7 @@
       "index.html",
       "_CodeBlock.js",
       "_sections.ui.js",
-      "src/App.vue",
-      "_admin.document.js"
+      "src/App.vue"
     ]
   },
   "src/features/administration/LayoutEditor.vue": {
@@ -415,8 +408,13 @@
       "index.html",
       "_CodeBlock.js",
       "_sections.ui.js",
-      "src/App.vue",
-      "_admin.document.js"
+      "src/App.vue"
+    ],
+    "dynamicImports": [
+      "src/features/workspace/ResultPresentation.vue"
+    ],
+    "css": [
+      "assets/LayoutEditor.css"
     ]
   },
   "src/features/administration/RawDatabase.vue": {
@@ -428,7 +426,7 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
-      "_admin.document.js"
+      "src/App.vue"
     ]
   },
   "src/features/administration/SchemaEditor.vue": {
@@ -440,7 +438,7 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
-      "_admin.document.js",
+      "src/App.vue",
       "src/features/administration/SearchTypes.vue",
       "_graphFrame.js"
     ],
@@ -459,7 +457,6 @@
       "_CodeBlock.js",
       "_sections.ui.js",
       "src/App.vue",
-      "_admin.document.js",
       "_NamingEditor.js"
     ]
   },
@@ -484,7 +481,7 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
-      "_admin.document.js"
+      "src/App.vue"
     ]
   },
   "src/features/administration/SecurityUsers.vue": {
@@ -510,7 +507,7 @@
       "_CodeBlock.js",
       "_sections.ui.js",
       "_tree.ui.js",
-      "_admin.document.js"
+      "src/App.vue"
     ]
   },
   "src/features/administration/WorkflowEditor.vue": {
@@ -524,7 +521,7 @@
       "_CodeBlock.js",
       "_sections.ui.js",
       "_ObjectReport.js",
-      "_admin.document.js",
+      "src/App.vue",
       "_graphFrame.js"
     ],
     "css": [
@@ -844,6 +841,15 @@
     ],
     "css": [
       "assets/TaskProcessPanel.css"
+    ]
+  },
+  "src/features/workspace/ResultPresentation.vue": {
+    "file": "assets/ResultPresentation.js",
+    "name": "ResultPresentation",
+    "src": "src/features/workspace/ResultPresentation.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "src/App.vue"
     ]
   }
 }

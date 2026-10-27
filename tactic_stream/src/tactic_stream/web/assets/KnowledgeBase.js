@@ -7,7 +7,7 @@ import { n as browserLink } from "./links.js";
 import { t as _sfc_main$12 } from "./AttachmentCard.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";
 import { t as _sfc_main$13 } from "./AppMenuItem.js";
-import { R as _sfc_main$15, o as _sfc_main$14, z as messageDate } from "./App.js";
+import { B as messageDate, o as _sfc_main$14, z as _sfc_main$15 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/knowledge/workspace.ui.mjs
 var metrics = Object.freeze({
 	inset: 8,

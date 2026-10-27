@@ -71,6 +71,9 @@ try {
     const page = await browser.newPage({ viewport: { width, height } }),
       errors = [];
     page.on('pageerror', (error) => errors.push(error.message));
+    page.on('console', message => {
+      if(message.type()==='error' && /ReferenceError|TypeError/.test(message.text())) errors.push(message.text());
+    });
     let savedXml = fixture.configuration.sources[0].xml,
       revision = 'R1',
       unknown = false,
@@ -139,6 +142,10 @@ try {
     await page.waitForFunction(
       () => window.frameAdmin.screen.value.viewport.width > 100
     );
+    await page.waitForFunction(() => !!window.frameAdmin.screen.value.liveInterface);
+    if (width < 1000) await page.evaluate(()=>window.frameAdmin.screen.value.dispatch({type:'panel',value:'preview'}));
+    await page.locator('.layout-live-preview .result-presentation').waitFor();
+    if (width < 1000) await page.evaluate(()=>window.frameAdmin.screen.value.dispatch({type:'panel',value:'elements'}));
     const control = (id) => page.locator('[data-frame="' + id + '"]:visible');
     for (const phase of [
       'design',

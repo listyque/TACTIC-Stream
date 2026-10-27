@@ -33,6 +33,7 @@ COMMANDS = {
     'naming': 'tactic.ui.panel.naming_cmd.NamingCmd',
     'page': 'tactic.ui.panel.page_cmd.PageCmd',
     'dashboard': 'tactic.ui.panel.dashboard_cmd.DashboardCmd',
+    'item_layout': 'tactic.ui.panel.item_layout_cmd.ItemLayoutCmd',
     'sidebar': 'tactic.ui.panel.sidebar_agent_cmd.SidebarAgentCmd',
     'mcp': 'tactic.ui.panel.agent_mcp_cmd.AgentMcpCmd',
     'automation': 'tactic.ui.panel.handler_automation_cmd.HandlerAutomationCmd',
@@ -486,13 +487,14 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
                 'operations': ['references', 'types.read', 'schema.read', 'naming.read', 'naming.preview',
                                'naming.operation', 'page.read', 'page.preview', 'page.operation',
                                'dashboard.read', 'dashboard.preview', 'dashboard.operation',
+                               'item_layout.read', 'item_layout.preview', 'item_layout.operation',
                                'sidebar.read', 'sidebar.preview', 'sidebar.operation']
                               + (['mcp.connections'] if request_id else [])
                               + (['mcp.create','mcp.update','mcp.revoke'] if request_id and allow_page_save else [])
                               + ['project.preview', 'project.read', 'project.operation']
                               + (['conversation.search', 'conversation.read'] if request_id else [])
                               + ['handler_automation.read', 'handler_automation.preview', 'handler_automation.draft', 'handler_automation.operation']
-                              + (['naming.save'] if allow_naming_save else []) + (['page.save', 'dashboard.save', 'sidebar.save'] if allow_page_save else [])
+                              + (['naming.save'] if allow_naming_save else []) + (['page.save', 'dashboard.save', 'sidebar.save', 'item_layout.save'] if allow_page_save else [])
                               + (['project.create', 'project.export', 'project.install'] if allow_project_create else [])
                               + (['handler_automation.save_draft'] if allow_automation_draft else [])
                               + (['handler_automation.trial', 'handler_automation.trial_read', 'handler_automation.trial_image'] if trials else [])
@@ -622,6 +624,32 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return connection.command('dashboard','read',name=name)
 
     @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_item_layout_read(search_type: Identifier, view: Identifier) -> dict[str, Any]:
+        """Read a native item/card view, its exact XML sources, resolved elements, catalogue and revision.
+
+        Compose declarative image/text/title/button/group/view elements in a grid; bind record.*
+        or node.* fields. An element search_type targets its actual record type; reusable view
+        references resolve in that type. Use variant to distinguish main/children/process/etc.
+        Embed this view in a dashboard items brick to reuse the existing expandable item tree.
+        """
+        return connection.command('item_layout', 'read', search_type=search_type, view=view)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_item_layout_preview(search_type: Identifier, view: Identifier, xml: str,
+                               expected_revision: Identifier, source_id: int | None = None) -> dict[str, Any]:
+        """Resolve and validate draft item XML without saving. Read each referenced card first.
+        Use source_id from read to edit that source, or null to create a project override.
+        Native actions only; no generated application source or executable handlers.
+        """
+        return connection.command('item_layout', 'preview', search_type=search_type, view=view,
+                                  xml=xml, expected_revision=expected_revision, source_id=source_id)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_item_layout_operation(operation_id: Identifier) -> dict[str, Any]:
+        """Recover an item layout save receipt without replaying changes."""
+        return connection.command('item_layout', 'operation', operation_id=operation_id)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
     def ts_sidebar_read(source: Literal['handler','tactic']='handler') -> dict[str, Any]:
         """Read project navigation keys, visibility, colors/icons and revision.
 
@@ -646,9 +674,13 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier) -> dict[str, Any]:
-        """Compose a shared native dashboard from row/column/text/markdown/count/table/items/link bricks.
+        """Compose a shared native dashboard from row/column/text/markdown/count/table/items/details/link bricks.
         Use one items brick for the existing native item-card tree, with its actual relationship/process
         branches, counts and actions. Only supply search_type, view and root filters; do not invent another tree.
+        For navigation left/content right, put items and details in a weighted row.
+        The details children resolve against the selected item without reloading its tree.
+        Group detail fields in columns with search_type conditions (actual record type);
+        text/markdown field bindings and table parent scope use that selected record.
 
         Tables reference existing TACTIC views; use ts_page_* for a new column layout.
         Filters are ANDed native column conditions. Metrics are current row counts.
@@ -662,6 +694,19 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return connection.command('dashboard','operation',operation_id=operation_id)
 
     if allow_page_save:
+        @mcp.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=True,
+                  idempotent_hint=True, open_world_hint=False), structured_output=True)
+        def ts_item_layout_save(search_type: Identifier, view: Identifier, xml: str,
+                                expected_revision: Identifier, operation_id: Identifier,
+                                source_id: int | None = None) -> dict[str, Any]:
+            """Save a previewed native item/card view with revision checks and durable operation UUID.
+            Keep UUID/payload on retries, read after saving, and recover uncertain replies using operation.
+            This updates project configuration through native Command history, not application source.
+            """
+            return connection.command('item_layout', 'apply', search_type=search_type, view=view,
+                                      xml=xml, expected_revision=expected_revision,
+                                      operation_id=operation_id, source_id=source_id)
+
         @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=True,idempotent_hint=True,open_world_hint=False),structured_output=True)
         def ts_sidebar_save(document: SidebarDocument, expected_revision: Identifier, operation_id: Identifier) -> dict[str, Any]:
             """Apply a previewed native sidebar edit with revision checks and durable idempotence."""

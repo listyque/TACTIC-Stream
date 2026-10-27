@@ -1,9 +1,9 @@
-import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow, w as inject } from "./vue.js";
-import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Gt as button, Jt as node, Kt as label, Ot as widgetConfiguration, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ResultPresentation.js","assets/App.js","assets/rolldown-runtime.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/RecordForm.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/richText.js","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/files2.js","assets/FilePreview.css","assets/previewFiles.js","assets/ObjectReport.css","assets/workspace.ui.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/markdown-it.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
+import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, w as inject } from "./vue.js";
+import { A as t, j as appearance, k as asyncComponent, ot as _plugin_vue_export_helper_default, t as __vitePreload } from "./index.js";
+import { Gt as button, Jt as node, Kt as label, Ot as widgetConfiguration, Yt as rect, ct as rpc, i as _sfc_main$2, qt as muted, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
-import { G as roles, H as binding, J as variants, K as serialize, U as describe$2, V as actions, W as edit, Y as widgets, q as template } from "./App.js";
-import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
+import { $ as sectionSelector, G as roles, H as actions, J as variants, K as serialize, Q as policy, U as describe$1, W as edit, X as documentEvent, Y as widgets, Z as notices, q as template, tt as toolbar$1 } from "./App.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
@@ -36,294 +36,6 @@ function layoutTree(source) {
 	return convert(document);
 }
 //#endregion
-//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs
-var number = (value, fallback, min, max) => Number.isFinite(Number(value)) ? Math.max(min, Math.min(max, Number(value))) : fallback;
-function variant(sample) {
-	return sample.kind === "branch" ? (sample.branch || {}).kind || "versions" : sample.kind === "object" ? sample.depth ? "children" : "main" : sample.kind;
-}
-function visible(item, sample, layout, width) {
-	const branch = sample.branch || {}, snapshot = sample.snapshot_display || {}, conditions = {
-		desktop: width >= 700,
-		mobile: width < 700,
-		tree: layout.collection === "tree",
-		"not-tree": layout.collection !== "tree",
-		object: sample.kind === "object",
-		"object-or-process": sample.kind === "object" || branch.kind === "process",
-		"not-branch": sample.kind !== "branch",
-		description: sample.kind !== "branch" && sample.kind !== "snapshot" && !!(sample.subtitle || (sample.record || {}).description),
-		snapshot: sample.kind === "snapshot",
-		branch: sample.kind === "branch",
-		relation: branch.kind === "relation",
-		"mobile-upload": sample.kind === "object" || branch.kind === "process"
-	};
-	return !item.hidden && (item.variant === "all" || item.variant === variant(sample)) && (item.when || []).every((key) => conditions[key]) && (item.kind !== "knowledge" || (sample.knowledge || []).length > 0) && (item.kind !== "snapshot-size" || snapshot.size !== void 0) && (item.kind !== "file-offline" || !snapshot.exists);
-}
-function tracks(value, count, width) {
-	const tokens = String(value || "").trim().split(/\s+/), sizes = [], weights = [];
-	let fixed = 0, weight = 0;
-	for (let index = 0; index < count; index++) {
-		const token = tokens.length === count ? tokens[index] : "1fr", pixels = /^\d+px$/.test(token) ? Number(token.slice(0, -2)) : 0, flex = /^\d+fr$/.test(token) ? Number(token.slice(0, -2)) : token === "auto" ? 1 : 0;
-		sizes.push(pixels);
-		weights.push(flex);
-		fixed += pixels;
-		weight += flex;
-	}
-	const scale = fixed > width ? width / fixed : 1;
-	return sizes.map((value, index) => value ? value * scale : Math.max(0, width - fixed) * weights[index] / Math.max(1, weight));
-}
-function safeImage(value, base, local) {
-	const text = String(value || "");
-	if (!text || /[\u0000-\u0020\u007f\\]/.test(text) || text.indexOf("//") === 0) return "";
-	if (text.charAt(0) === "/") return (base || "") + text;
-	return /^(https?:|blob:|data:image\/(?:png|jpeg|webp|gif);base64,)/i.test(text) || local && /^file:/i.test(text) ? text : "";
-}
-function sample(model, ui, language) {
-	const tr = (text) => translate(text, language), item = (model.sampleItems || [])[0] || {
-		record: {
-			name: tr("Example object"),
-			description: tr("Example description")
-		},
-		title: tr("Example object"),
-		subtitle: tr("Example description"),
-		task_count: 3,
-		note_count: 2
-	}, kind = [
-		"process",
-		"relation",
-		"versions"
-	].indexOf(ui.sampleVariant) >= 0 ? "branch" : ["snapshot", "file"].indexOf(ui.sampleVariant) >= 0 ? ui.sampleVariant : "object";
-	return Object.assign({}, item, {
-		kind,
-		depth: ui.sampleVariant === "children" ? 1 : 0,
-		branch: kind === "branch" ? {
-			kind: ui.sampleVariant,
-			title: tr(ui.sampleVariant === "process" ? "Process" : "Related and child objects"),
-			count: 3,
-			relationship: "instance"
-		} : void 0
-	});
-}
-function describe$1(layout, sample, width, selected, language, screenWidth, assetBase, prefix, depth) {
-	const tr = (text) => translate(text, language), nodes = [], namePrefix = prefix || "layoutPreview", level = depth || 0;
-	if (level >= 8) return {
-		nodes: [label(namePrefix + "Depth", rect(0, 0, width, 64), tr("Layout container depth exceeds 8"), {
-			wrap: true,
-			color: "error"
-		})],
-		height: 72
-	};
-	const elements = (layout.elements || []).filter((item) => visible(item, sample, layout, screenWidth || width)), snapshot = sample.snapshot_display || {}, record = sample.record || {}, title = sample.title || record.name || record.title || record.code || String(record.id || ""), subtitle = sample.subtitle || record.description || "";
-	function draw(item, box, inner) {
-		const id = namePrefix + "_" + item.name, children = [], options = item.options || {}, value = options.bind ? binding(options.bind, sample) : options.text || "", text = typeof value === "object" ? JSON.stringify(value) : String(value), color = item.tone === "muted" ? "secondaryText" : "primaryText", weight = item.tone === "strong" || item.kind === "title" ? 600 : 400;
-		if (item.kind === "group") children.push(node("Box", id + "Group", rect(4, 4, Math.max(0, box.width - 8), Math.max(0, box.height - 8)), { children: inner ? inner.nodes : [] }));
-		else if (item.kind === "view") {
-			if (inner) {
-				const owned = (nodes) => nodes.map((row) => Object.assign({}, row, {
-					action: row.action && row.action.type === "select" ? {
-						type: "select",
-						name: item.name
-					} : row.action,
-					children: owned(row.children || [])
-				}));
-				children.push(node("Box", id + "View", rect(4, 4, box.width - 8, box.height - 8), { children: owned(inner.nodes) }));
-			} else children.push(label(id + "ViewHelp", rect(4, 4, box.width - 8, box.height - 8), tr("Reusable view") + ": " + (options.view || "") + " · " + tr("Check and preview"), {
-				wrap: true,
-				color: "secondaryText"
-			}));
-		} else if (item.kind === "image") {
-			const initials = title.split(/\s+/).map((part) => part.charAt(0)).slice(0, 2).join("").toUpperCase() || "?";
-			children.push(node("Preview", id + "Image", rect(4, 4, Math.max(0, box.width - 8), Math.max(0, box.height - 8)), {
-				source: safeImage(value, assetBase, options.bind === "node.preview.image" && sample.preview && sample.preview.local === true),
-				initials,
-				icon: "image",
-				round: item.role === "preview",
-				outlined: false,
-				fit: options.fit || "cover"
-			}));
-		} else if (item.kind === "button" || item.kind === "link") {
-			const badge = options.badge ? Number(binding(options.badge, sample)) : 0, caption = text || (item.kind === "button" ? tr({
-				tasks: "Tasks",
-				notes: "Notes",
-				inspect: "Object details",
-				operate: "Object actions",
-				upload: "Add files",
-				create: "Create related object",
-				preview: "File preview",
-				relations: "Relationship actions",
-				link: "Link"
-			}[options.action] || "Button") : options.href || tr("Link"));
-			children.push(node("Button", id + "Button", rect(4, 4, Math.max(0, box.width - 8), Math.max(0, Math.min(38, box.height - 8))), {
-				text: caption + (Number.isFinite(badge) && badge > 0 ? " · " + badge : ""),
-				icon: options.icon || {
-					tasks: "task",
-					notes: "notes",
-					upload: "upload",
-					inspect: "search",
-					relations: "link"
-				}[options.action] || ""
-			}));
-		} else if (item.kind === "item-menu") children.push(node("Button", id + "Menu", rect(Math.max(0, box.width - 38), 0, Math.min(38, box.width), 38), {
-			text: tr("Item actions"),
-			icon: "more-vert",
-			iconOnly: true
-		}));
-		else if (item.kind === "quick-actions" || item.kind === "relations") {
-			const icons = item.kind === "relations" ? ["link", "add"] : [
-				"preview",
-				"download",
-				"upload"
-			], size = Math.min(32, box.width / icons.length);
-			icons.forEach((icon, index) => children.push(node("Button", id + "Action_" + index, rect(index * size, 0, size, 32), {
-				text: tr(item.kind === "relations" ? "Relationship actions" : "Snapshot actions"),
-				icon,
-				iconOnly: true
-			})));
-		} else {
-			let content = text;
-			if (item.kind === "title") content = text || title;
-			else if (item.kind === "description") content = text || subtitle;
-			else if (item.kind === "metadata") content = [
-				sample.search_type_label || record.search_type || "",
-				record.category || "",
-				record.process || ""
-			].filter(Boolean).join(" · ");
-			else if (item.kind === "snapshot-details") content = [
-				snapshot.version === void 0 ? "" : "v" + snapshot.version,
-				snapshot.author || "",
-				snapshot.context || ""
-			].filter(Boolean).join(" · ");
-			else if (item.kind === "snapshot-size") {
-				const bytes = Number(snapshot.size) || 0, unit = bytes >= 1073741824 ? "GB" : bytes >= 1048576 ? "MB" : bytes >= 1024 ? "KB" : "B";
-				content = (bytes / {
-					GB: 1073741824,
-					MB: 1048576,
-					KB: 1024,
-					B: 1
-				}[unit]).toFixed(unit === "B" ? 0 : 1) + " " + unit;
-			} else if (item.kind === "snapshot-summary") content = [
-				snapshot.title || "",
-				snapshot.description || "",
-				snapshot.author || ""
-			].filter(Boolean).join(" · ");
-			else if (item.kind === "branch-summary") content = [(sample.branch || {}).title || "", String((sample.branch || {}).count || 0)].join(" · ");
-			else if (item.kind === "file-offline") content = tr("File Offline");
-			else if (item.kind === "knowledge") content = (sample.knowledge || []).map((row) => row.title || row.name || row.code || "").join(" · ");
-			children.push(label(id + "Text", rect(6, 4, Math.max(0, box.width - 12), Math.max(0, box.height - 8)), content, {
-				wrap: true,
-				color,
-				weight,
-				fontRole: item.kind === "title" ? "section" : "body",
-				align: item.align === "center" ? "center" : item.align === "end" ? "right" : "left"
-			}));
-		}
-		if (item.kind === "group" || item.kind === "view" && inner) return node("Box", id, box, {
-			background: selected === item.name ? "contentSelection" : "transparent",
-			children: [node("Action", id + "Select", rect(0, 0, box.width, box.height), {
-				text: item.title || item.name,
-				normalColor: "transparent",
-				selectedColor: "transparent",
-				action: {
-					type: "select",
-					name: item.name
-				}
-			})].concat(children)
-		});
-		return node("Action", id, box, {
-			text: item.title || item.name,
-			selected: selected === item.name,
-			normalColor: "transparent",
-			selectedColor: "contentSelection",
-			children,
-			action: {
-				type: "select",
-				name: item.name
-			}
-		});
-	}
-	function container(parent, w, nesting) {
-		if (nesting >= 8) return {
-			nodes: [],
-			height: 40
-		};
-		const definition = elements.find((item) => item.name === parent), items = elements.filter((item) => item.parent === parent), flow = definition ? definition.flow : layout.flow, columns = number(definition ? definition.columns : layout.columns, 12, 1, 12), result = [], placements = [];
-		if (flow === "contents") {
-			const copyX = items.some((item) => item.role === "preview") ? Math.min(96, w * .28) : 8;
-			let cursor = 8;
-			for (const item of items) {
-				let box, child = item.kind === "group" && item.role !== "copy" ? container(item.name, Math.max(1, w - 16), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$1(item.widget_layout, sample, Math.max(1, w - 16), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1) : null;
-				if (item.role === "preview") box = rect(8, 8, Math.min(76, w * .24), 76);
-				else if (item.role === "copy") {
-					child = container(item.name, Math.max(1, w - copyX - 16), nesting + 1);
-					box = rect(copyX, 8, Math.max(1, w - copyX - 8), child.height + 8);
-					cursor = Math.max(cursor, box.height + 16);
-				} else {
-					const h = child ? child.height + 8 : item.role === "title-line" ? 36 : item.kind === "image" ? number(item.height, 76, 24, 1200) : item.kind === "description" ? 44 : 38;
-					box = rect(8, cursor, w - 16, h);
-					cursor += h + 4;
-				}
-				placements.push({
-					item,
-					box,
-					child
-				});
-				cursor = Math.max(cursor, box.y + box.height + 8);
-			}
-			placements.sort((a, b) => (a.item.layer || 0) - (b.item.layer || 0)).forEach((row) => result.push(draw(row.item, row.box, row.child)));
-			return {
-				nodes: result,
-				height: Math.max(92, cursor)
-			};
-		}
-		const gap = 6, available = Math.max(1, w - gap * (columns - 1)), sizes = tracks(definition ? "" : layout.tracks, columns, available), rows = [];
-		for (const item of items) {
-			const start = number(item.row, 1, 1, 100) - 1, span = number(item.rows, 1, 1, 100), column = number(item.column, 1, 1, columns) - 1, columnsWide = number(item.span, 1, 1, columns - column), cellWidth = sizes.slice(column, column + columnsWide).reduce((a, b) => a + b, 0) + gap * (columnsWide - 1), child = item.kind === "group" ? container(item.name, Math.max(1, cellWidth - 8), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$1(item.widget_layout, sample, Math.max(1, cellWidth - 8), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1) : null, h = child ? child.height + 8 : item.kind === "image" ? number(item.height, 40, 1, 1200) : 40;
-			for (let index = start; index < start + span; index++) rows[index] = Math.max(rows[index] || 40, (h - gap * (span - 1)) / span);
-			placements.push({
-				item,
-				start,
-				span,
-				column,
-				columnsWide,
-				cellWidth,
-				child
-			});
-		}
-		const sum = (values, start, end) => {
-			let total = 0;
-			for (let index = start; index < end; index++) total += values[index] || 40;
-			return total;
-		};
-		placements.sort((a, b) => (a.item.layer || 0) - (b.item.layer || 0)).forEach((row) => {
-			const x = sizes.slice(0, row.column).reduce((a, b) => a + b, 0) + gap * row.column, y = sum(rows, 0, row.start) + gap * row.start, h = sum(rows, row.start, row.start + row.span) + gap * (row.span - 1);
-			result.push(draw(row.item, rect(x, y, row.cellWidth, h), row.child));
-		});
-		return {
-			nodes: result,
-			height: rows.length ? sum(rows, 0, rows.length) + gap * (rows.length - 1) : 64
-		};
-	}
-	let body;
-	if (layout.collection === "table") {
-		const items = elements.filter((item) => !item.parent), total = items.reduce((sum, item) => sum + number(item.span, 1, 1, 12), 0) || 1;
-		let x = 0;
-		body = {
-			nodes: [],
-			height: 160
-		};
-		for (const item of items) {
-			const w = width * number(item.span, 1, 1, 12) / total, child = item.kind === "group" ? container(item.name, Math.max(1, w - 8), level + 1) : item.kind === "view" && item.widget_layout ? describe$1(item.widget_layout, sample, Math.max(1, w - 8), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, level + 1) : null;
-			body.height = Math.max(body.height, (child ? child.height : 108) + 52);
-			body.nodes.push(label(namePrefix + "Header_" + item.name, rect(x, 0, w, 38), item.title || item.name, { weight: 600 }), draw(item, rect(x, 44, w, Math.max(108, child ? child.height : 0)), child));
-			x += w;
-		}
-	} else body = container("", width, level);
-	nodes.push.apply(nodes, body.nodes);
-	return {
-		nodes,
-		height: body.height
-	};
-}
-//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.state.mjs
 function initial() {
 	return {
@@ -333,7 +45,6 @@ function initial() {
 		context: "",
 		catalogWidth: 220,
 		propertiesWidth: 330,
-		sampleVariant: "main",
 		newName: "custom_view",
 		template: "continuous",
 		text: {},
@@ -368,7 +79,7 @@ function synchronize(ui, model) {
 }
 function change(next, model, event, commands) {
 	try {
-		const tree = edit(model.tree, model.view, event.name === void 0 ? next.selected : event.name, event.field, event.value), description = describe$2(tree, model.view);
+		const tree = edit(model.tree, model.view, event.name === void 0 ? next.selected : event.name, event.field, event.value), description = describe$1(tree, model.view);
 		if (event.field === "add") next.selected = (description.elements[description.elements.length - 1] || {}).name || "";
 		else if (event.field === "remove") next.selected = (description.elements[0] || {}).name || "";
 		commands.push({
@@ -439,9 +150,6 @@ function transition(ui, model, event) {
 			break;
 		case "propertiesSplit":
 			next.propertiesWidth = Math.max(240, Math.min(520, Number(event.value)));
-			break;
-		case "sampleVariant":
-			next.sampleVariant = event.value;
 			break;
 		case "newName":
 		case "template":
@@ -659,7 +367,7 @@ function model(raw, ui) {
 		card_width: 280
 	}, layoutError = raw.parseError ? "Invalid configuration XML" : "";
 	if (!layoutError && raw.tree) try {
-		layout = describe$2(raw.tree, raw.view);
+		layout = describe$1(raw.tree, raw.view);
 	} catch (error) {
 		layoutError = String(error.message || error);
 	}
@@ -914,7 +622,10 @@ function propertyFields(model, ui, language) {
 				invert: true
 			}
 		}
-	}, choice("variant", "Item variant", item.variant, choices(variants, language)), text("option:bind", "Custom data binding", item.options.bind || ""));
+	}, choice("variant", "Item variant", item.variant, choices(variants, language)), choice("search_type", "Search Type", item.search_type || "", [{
+		value: "",
+		label: tr("All")
+	}, ...model.searchTypes]), text("option:bind", "Custom data binding", item.options.bind || ""));
 	fields[fields.length - 1].id = "layoutCustomBinding";
 	if (item.kind === "link" || item.kind === "button") fields.push(choice("option:href_bind", "Link URL binding", item.options.href_bind || "", bindings));
 	fields.push(choice("role", "Style role", item.role, Object.keys(roles).map((value) => ({
@@ -1247,28 +958,11 @@ function describe(model, ui, width, height, language) {
 		return { nodes };
 	}
 	if (ui.page === "resolved") {
-		const resolved = model.preview && (model.preview.item_layout || (model.preview.table || {}).item_layout);
-		if (!resolved) {
+		if (!(model.preview && (model.preview.item_layout || (model.preview.table || {}).item_layout))) {
 			nodes.push(label("layoutResolvedHelp", rect(12, y, width - 24, 96), tr("Check and preview the draft before saving."), Object.assign({ wrap: true }, muted)));
 			return { nodes };
 		}
-		const children = [label("layoutResolvedNotice", rect(0, 0, width - 16, 44), tr("Read-only preview. Changes have not been saved."), Object.assign({ wrap: true }, muted))];
-		let top = 52;
-		(model.sampleItems && model.sampleItems.length ? model.sampleItems : [sample(model, ui, language)]).forEach((sample, index) => {
-			const body = describe$1(resolved, sample, width - 32, "", language, width, model.assetBase, "layoutResolved_" + index);
-			children.push(node("Box", "layoutResolvedItem_" + index, rect(0, top, width - 16, body.height + 16), {
-				background: "surfaceContainerLow",
-				border: "outlineVariant",
-				children: [node("Box", "layoutResolvedContent_" + index, rect(8, 8, width - 32, body.height), { children: body.nodes })]
-			}));
-			top += body.height + 28;
-		});
-		nodes.push(node("Scroll", "layoutResolvedScroll", rect(0, y, width, h), {
-			contentHeight: top,
-			scrollbarId: "layoutResolvedScrollBar",
-			children
-		}));
-		return { nodes };
+		return { nodes: nodes.concat(node("View", "layoutResolvedResults", rect(0, y, width, Math.max(1, height - y)), { view: "itemResults" })) };
 	}
 	if (model.layoutError) {
 		nodes.push(node("Area", "layoutInvalid", rect(0, y, width, h), {
@@ -1371,99 +1065,76 @@ function describe(model, ui, width, height, language) {
 		}));
 	}
 	if (wide || ui.panel === "preview") {
-		const x = wide ? left + 10 : 0, w = wide ? Math.max(1, width - left - properties - 20) : width, children = [label("layoutPreviewHeading", rect(12, 8, w - 24, 28), tr("Item preview"), { weight: 600 }), node("Choice", "layoutSampleVariant", rect(12, 44, w - 24, 38), {
-			label: tr("Preview item type"),
-			value: ui.sampleVariant,
-			options: choices(variants.filter((value) => value !== "all"), language),
-			action: { type: "sampleVariant" }
-		})];
-		const previewWidth = Math.max(1, Math.min(w - 40, layout.collection === "grid" ? numberWidth(layout.card_width) : w - 40)), body = describe$1(layout, sample(model, ui, language), previewWidth, ui.selected, language, width, model.assetBase), previewNodes = [node("Box", "layoutPreviewItem", rect(0, 0, previewWidth, body.height + 16), {
-			background: "surfaceContainerHigh",
-			children: body.nodes
-		})];
-		let top = body.height + 28;
-		if (!layout.elements.length) {
-			previewNodes.push(label("layoutAddHelp", rect(0, top, w - 40, 90), tr("Add an image, text or button to begin."), Object.assign({ wrap: true }, muted)));
-			top += 98;
-		}
-		if (selected) {
-			const parent = layout.elements.find((row) => row.name === selected.parent), grid = (parent ? parent.flow : layout.flow) === "grid", columns = parent ? parent.columns : layout.columns;
-			if (grid) {
-				const count = Math.min(12, Math.max(4, ...layout.elements.filter((row) => row.parent === selected.parent).map((row) => row.row + row.rows))), cell = (w - 40) / Math.max(1, columns);
-				previewNodes.push(label("layoutGridHeading", rect(0, top, w - 40, 28), tr("Place on the grid"), { weight: 600 }));
-				top += 36;
-				for (let row = 1; row <= count; row++) for (let column = 1; column <= columns; column++) previewNodes.push(button("layoutGrid_" + row + "_" + column, rect((column - 1) * cell, top + (row - 1) * 32, Math.max(1, cell - 3), 29), String((row - 1) * columns + column), "", {
-					type: "move",
-					row,
-					column
-				}, edit && !pending(ui), {
-					highlighted: selected.row === row && selected.column === column,
-					dropAction: {
-						type: "drop",
-						row,
-						column
-					}
-				}));
-				top += count * 32 + 8;
-				const moves = [
-					[
-						"up",
-						-1,
-						0,
-						"chevron-up"
-					],
-					[
-						"down",
-						1,
-						0,
-						"chevron-down"
-					],
-					[
-						"left",
-						0,
-						-1,
-						"chevron-left"
-					],
-					[
-						"right",
-						0,
-						1,
-						"chevron-right"
-					]
-				], size = (w - 58) / 4;
-				moves.forEach((move, index) => previewNodes.push(button("layoutMove_" + move[0], rect(index * (size + 6), top, size, 36), tr({
-					up: "Move up",
-					down: "Move down",
-					left: "Move left",
-					right: "Move right"
-				}[move[0]]), move[3], {
-					type: "move",
-					row: selected.row + move[1],
-					column: selected.column + move[2]
-				}, edit && !pending(ui), { iconOnly: true })));
-				top += 44;
-			}
-		}
-		children.push(node("Scroll", "layoutPreviewScroll", rect(12, 90, w - 24, bodyHeight - 102), {
-			contentHeight: top,
-			scrollbarId: "layoutPreviewScrollBar",
-			children: previewNodes
-		}));
+		const x = wide ? left + 10 : 0, w = wide ? Math.max(1, width - left - properties - 20) : width;
 		nodes.push(node("Box", "layoutPreviewPanel", rect(x, y, w, bodyHeight), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
-			children
+			children: [label("layoutPreviewHeading", rect(12, 8, w - 24, 28), tr("Item preview"), { weight: 600 }), node("View", "layoutPreviewResults", rect(12, 44, w - 24, bodyHeight - 56), { view: "itemResults" })]
 		}));
 	}
 	return { nodes };
 }
-function numberWidth(value) {
-	return Number.isFinite(Number(value)) ? Math.max(1, Math.min(1200, Number(value))) : 280;
-}
+//#endregion
+//#region src/features/administration/LayoutPreview.vue
+var _hoisted_1$1 = { class: "layout-live-preview table-container" };
+var _hoisted_2$1 = {
+	key: 0,
+	class: "error",
+	role: "alert"
+};
+var _hoisted_3$1 = {
+	key: 2,
+	class: "muted"
+};
+var _sfc_main$1 = {
+	__name: "LayoutPreview",
+	props: {
+		layout: Object,
+		rows: Array,
+		ticket: String,
+		project: String,
+		searchType: String,
+		selectedElement: String,
+		error: String
+	},
+	emits: ["element"],
+	setup(__props) {
+		const ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ResultPresentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])));
+		return (_ctx, _cache) => {
+			return openBlock(), createElementBlock("div", _hoisted_1$1, [__props.error ? (openBlock(), createElementBlock("p", _hoisted_2$1, toDisplayString(__props.error), 1)) : createCommentVNode("", true), __props.layout ? (openBlock(), createBlock(unref(ResultPresentation), {
+				key: 1,
+				rows: __props.rows,
+				ticket: __props.ticket,
+				project: __props.project,
+				"search-type": __props.searchType,
+				"workspace-id": "layout-preview-" + __props.searchType,
+				"item-layout": __props.layout,
+				mode: __props.layout.collection === "grid" ? "tiles" : "continious",
+				"group-mode": "none",
+				"selected-keys": [],
+				state: {},
+				active: "",
+				"read-only": "",
+				editing: "",
+				"selected-element": __props.selectedElement,
+				onElement: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("element", $event))
+			}, null, 8, [
+				"rows",
+				"ticket",
+				"project",
+				"search-type",
+				"workspace-id",
+				"item-layout",
+				"mode",
+				"selected-element"
+			])) : (openBlock(), createElementBlock("p", _hoisted_3$1, toDisplayString(unref(t)("Loading interface...")), 1))]);
+		};
+	}
+};
 //#endregion
 //#region src/features/administration/LayoutEditor.vue
 var _sfc_main = {
-	components: { FrameView: _sfc_main$1 },
+	components: { FrameView: _sfc_main$2 },
 	props: {
 		ticket: String,
 		project: String,
@@ -1497,6 +1168,7 @@ var _sfc_main = {
 			baseline: "",
 			sampleItems: [],
 			preview: null,
+			liveInterface: null,
 			checked: "",
 			diff: "",
 			error: "",
@@ -1504,7 +1176,11 @@ var _sfc_main = {
 			message: "",
 			busy: false,
 			uncertain: false,
-			request: 0
+			request: 0,
+			previewRequest: 0,
+			previewTimer: null,
+			previewBusy: false,
+			previewError: ""
 		};
 	},
 	computed: {
@@ -1556,7 +1232,7 @@ var _sfc_main = {
 				preview: this.preview,
 				checked: this.checked,
 				diff: this.diff,
-				error: this.error,
+				error: this.error || this.previewError,
 				message: this.message,
 				busy: this.busy,
 				dirty: this.xml !== this.baseline || this.uncertain,
@@ -1578,6 +1254,27 @@ var _sfc_main = {
 		},
 		models() {
 			return models(this.frameModel);
+		},
+		previewRows() {
+			return this.sampleItems.map((item) => item.record);
+		},
+		previewViews() {
+			return { itemResults: {
+				component: _sfc_main$1,
+				props: {
+					rows: this.previewRows,
+					ticket: this.ticket,
+					project: this.project,
+					searchType: this.searchType,
+					layout: this.liveInterface?.table?.item_layout,
+					error: this.previewError || this.sampleError,
+					selectedElement: this.ui.selected,
+					onElement: (name) => this.dispatch({
+						type: "select",
+						name
+					})
+				}
+			} };
 		}
 	},
 	mounted() {
@@ -1598,6 +1295,8 @@ var _sfc_main = {
 	beforeUnmount() {
 		this.observer?.disconnect();
 		this.request++;
+		clearTimeout(this.previewTimer);
+		this.previewRequest++;
 		window.removeEventListener("beforeunload", this.beforeUnload);
 	},
 	watch: {
@@ -1613,6 +1312,7 @@ var _sfc_main = {
 			this.preview = null;
 			this.diff = "";
 			if (this.xml !== this.baseline) this.message = "";
+			this.schedulePreview();
 		},
 		project() {
 			this.contextChanged();
@@ -1632,6 +1332,28 @@ var _sfc_main = {
 	},
 	methods: {
 		t,
+		schedulePreview() {
+			clearTimeout(this.previewTimer);
+			const generation = ++this.previewRequest;
+			this.previewError = "";
+			this.previewTimer = setTimeout(async () => {
+				if (!this.configuration || !this.xml || this.parsed.error || this.uncertain) return;
+				const request = this.request, xml = this.xml;
+				this.previewBusy = true;
+				try {
+					const result = await this.call("preview", {
+						source_id: this.source === "" ? null : this.source,
+						xml,
+						revision: this.configuration.revision
+					});
+					if (generation === this.previewRequest && request === this.request) this.preview = this.liveInterface = result.interface;
+				} catch (error) {
+					if (generation === this.previewRequest && request === this.request) this.previewError = error.message;
+				} finally {
+					if (generation === this.previewRequest) this.previewBusy = false;
+				}
+			}, 250);
+		},
 		rowScene(list, record) {
 			return row(list, record, this.frameModel, this.ui, appearance.language);
 		},
@@ -1650,8 +1372,11 @@ var _sfc_main = {
 		},
 		contextChanged() {
 			this.request++;
+			this.previewRequest++;
+			clearTimeout(this.previewTimer);
 			this.busy = false;
 			this.configuration = null;
+			this.liveInterface = null;
 			this.xml = this.baseline = "";
 			this.ui = initial();
 			this.uncertain = false;
@@ -1721,6 +1446,7 @@ var _sfc_main = {
 			};
 			this.busy = true;
 			this.configuration = null;
+			this.liveInterface = null;
 			this.error = this.sampleError = "";
 			this.sampleItems = [];
 			try {
@@ -1777,7 +1503,7 @@ var _sfc_main = {
 					revision: this.configuration.revision
 				});
 				if (request === this.request) {
-					this.preview = result.interface;
+					this.preview = this.liveInterface = result.interface;
 					this.checked = this.xml;
 					this.diff = result.diff;
 				}
@@ -1825,6 +1551,11 @@ var _hoisted_2 = {
 	ref: "body",
 	class: "frame-host-body"
 };
+var _hoisted_3 = {
+	key: 0,
+	class: "error",
+	role: "alert"
+};
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_FrameView = resolveComponent("FrameView");
 	return openBlock(), createElementBlock("section", {
@@ -1844,13 +1575,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		scene: $options.frameScene,
 		models: $options.models,
 		"describe-row": $options.rowScene,
+		views: $options.previewViews,
 		onEvent: $options.dispatch
 	}, null, 8, [
 		"scene",
 		"models",
 		"describe-row",
+		"views",
 		"onEvent"
-	])], 512)], 8, _hoisted_1);
+	]), $data.previewError ? (openBlock(), createElementBlock("p", _hoisted_3, toDisplayString($data.previewError), 1)) : createCommentVNode("", true)], 512)], 8, _hoisted_1);
 }
 var LayoutEditor_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion

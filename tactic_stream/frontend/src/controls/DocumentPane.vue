@@ -17,7 +17,8 @@ const props = defineProps({
   notice: String,
   error: String,
   scrollOffset: { type: Number, default: 0 },
-  presented: { type: Boolean, default: true }
+  presented: { type: Boolean, default: true },
+  contentInset: { type: Number, default: 14 }
 });
 const emit = defineEmits(['link', 'scroll']);
 const viewport = ref(null),
@@ -59,7 +60,7 @@ defineExpose({ capture, focus, restore, viewport });
   <div
     ref="viewport"
     class="document-pane"
-    :style="documentStyle"
+    :style="{ ...documentStyle, '--document-inset': contentInset + 'px' }"
     @scroll="capture"
   >
     <article ref="article" tabindex="0">
@@ -87,7 +88,7 @@ defineExpose({ capture, focus, restore, viewport });
   scrollbar-gutter: stable;
 }
 .document-pane article {
-  margin: 14px;
+  margin: var(--document-inset, 14px);
   min-width: 0;
 }
 .document-notice {

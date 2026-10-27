@@ -241,10 +241,12 @@ def describe_composition(config, search_type, path=(), budget=None, identity='')
             if element['kind'] != 'view':
                 continue
             view = element['options']['view']
-            child = WidgetConfigView.get_by_search_type(search_type, view)
+            target = element.get('search_type') or search_type
+            _require_table_access(target, 'view')
+            child = WidgetConfigView.get_by_search_type(target, view)
             if not describe_view(child)['configured']:
                 raise LookupError('View is not configured: ' + view)
-            nested = describe_composition(child, search_type, (*path, key), budget)
+            nested = describe_composition(child, target, (*path, key), budget)
             if 'item_layout' not in nested:
                 raise ValueError('Reusable item widget requires a SObject layout')
             element['widget_layout'] = nested['item_layout']

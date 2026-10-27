@@ -217,7 +217,7 @@ function activate(event) {
 <style>
 .result-item.result-item-configured:not(.result-item-native) {
   height: auto;
-  min-height: var(--result-row-height);
+  min-height: 0;
   padding: 8px 14px 8px calc(var(--result-depth) * var(--result-indent) + 44px);
 }
 .result-item-configured:not(.result-item-native).result-item-branch

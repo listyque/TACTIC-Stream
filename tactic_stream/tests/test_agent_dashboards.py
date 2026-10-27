@@ -132,6 +132,34 @@ class Dashboards(unittest.TestCase):
             draft['blocks'][1]['source_key']='contract/entity?project=two&code=A'
             with self.assertRaises(Fault):preview()
 
+    def test_details_follow_selected_record_and_keep_native_tree_scope(self):
+        from xmlrpc.client import Fault
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            call=lambda action,**values:proxy.execute_cmd(auth,COMMAND,dict(action=action,project_code='one',**values))['info']
+            state=call('read')
+            draft=dict(name='selection_details',title='Selected work',blocks=[dict(kind='row',children=[
+                dict(kind='items',search_type='contract/entity',weight=4),
+                dict(kind='details',weight=8,children=[dict(kind='column',search_type='contract/entity',children=[
+                    dict(kind='text',title='Code',field='code'),
+                    dict(kind='markdown',title='Goal',text='First section'),
+                    dict(kind='markdown',title='Result',text='Second section'),
+                    dict(kind='table',search_type='contract/entity',controls=['search'])])])])])
+            preview=call('preview',document=draft,expected_revision=state['revision'])
+            self.assertEqual(preview['model']['layoutItems']['searchType'],'contract/entity')
+            self.assertNotIn('layoutDetail',preview['model'])
+            saved=call('apply',document=draft,expected_revision=state['revision'],operation_id=str(uuid4()))
+            read=lambda key:proxy.execute_cmd(auth,'tactic.ui.table.CustomLayoutReadCmd',dict(view=saved['view'],detail_key=key))['info']
+            details=read('contract/entity?project=one&code=A')
+            self.assertEqual(details['layoutNodes'][0]['children'][0]['text'],'Code: A')
+            self.assertEqual(details['layoutNodes'][0]['children'][1]['text'],'## Goal\n\nFirst section\n\n## Result\n\nSecond section')
+            self.assertEqual(details['layoutNodes'][0]['children'][2]['table']['parentKey'],details['targetSearchKey'])
+            self.assertNotIn('layoutItems',details,'detail refresh cannot replace the tree')
+            with self.assertRaises(Fault):read('contract/entity?project=two&code=A')
+            for invalid in (dict(kind='text',field='missing'),dict(kind='details',children=[dict(kind='text',text='nested')])):
+                draft['blocks'][0]['children'][1]['children'][0]['children']=[invalid]
+                with self.assertRaises(Fault):call('preview',document=draft,expected_revision=call('read')['revision'])
+
     def test_real_agent_tools_compose_and_save_portable_dashboard(self):
         import asyncio
         from pathlib import Path
@@ -164,6 +192,8 @@ class Dashboards(unittest.TestCase):
         requests=[];values={};operation=str(uuid4())
         draft=document();draft['name']='chat_dashboard'
         draft['blocks'][1]['kind']='items'
+        draft['blocks'][1]=dict(kind='row',children=[draft['blocks'][1],dict(kind='details',children=[
+            dict(kind='column',search_type='contract/entity',children=[dict(kind='text',field='code')])])])
 
         class Provider(BaseHTTPRequestHandler):
             def do_POST(server):
@@ -210,7 +240,8 @@ class Dashboards(unittest.TestCase):
         self.assertEqual(connection.command('dashboard','read',name='chat_dashboard')['document']['name'],'chat_dashboard')
         compiled=connection.request('/admin/rpc',dict(method='execute_cmd',args=[dict(ticket=ticket,project='one'),'tactic.ui.table.CustomLayoutReadCmd',dict(view='dashboard.chat_dashboard')],kwargs={}))['result']['info']
         self.assertEqual(compiled['layoutItems']['searchType'],'contract/entity')
-        self.assertEqual(compiled['layoutNodes'][1]['kind'],'items')
+        self.assertEqual(compiled['layoutNodes'][1]['kind'],'row')
+        self.assertEqual(compiled['layoutNodes'][1]['children'][1]['kind'],'details')
         tools={row['function']['name']:row['function']['parameters'] for row in requests[0]['tools']}
         self.assertIn('ts_dashboard_save',tools)
         self.assertIn('name',tools['ts_dashboard_read']['properties'])

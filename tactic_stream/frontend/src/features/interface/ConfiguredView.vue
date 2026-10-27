@@ -42,7 +42,9 @@ import { fileBlob } from '../objects/previewFiles.js';
 import NotesPanel from '../objects/NotesPanel.vue';
 import TaskTableEditor from './TaskTableEditor.vue';
 import JournalDetails from '../journal/JournalDetails.vue';
-import ResultPresentation from '../workspace/ResultPresentation.vue';
+const ResultPresentation = asyncComponent(
+  () => import('../workspace/ResultPresentation.vue')
+);
 import { groupRecords } from '../workspace/resultViews.js';
 import { runTableScript } from './tableScript.js';
 import { route as tableActionRoute } from '../../../../src/tactic_stream/shared_ui/features/table/actions.state.mjs';

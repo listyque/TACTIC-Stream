@@ -36,6 +36,7 @@ DashboardDocument has name, title and blocks. Bricks:
 | metric | A labelled count card, using a native count of search_type and ANDed scalar filters. |
 | table | Existing search_type/view, fixed native filters retained alongside interactive search. Use ts_page_* for new columns. |
 | items | The existing expandable item workspace: supply root search_type, view and scalar filters. Native schema/process branches, previews, counts, files and object actions remain owned by the current results components. |
+| details | Content of the selected item in the existing items workspace. Children use its fields and relationship/table parent scope; selection does not reload the tree. |
 | link | Safe HTTP(S), skey or tactic-search link. |
 
 Filters use column, relation (=, !=, <, <=, >, >=, like) and a scalar value.
@@ -48,6 +49,81 @@ height and only useful controls for dashboard widgets. System task metrics and
 tables must explicitly filter `project_code` to the intended project.
 
 Use one `items` brick per dashboard, rooted in a project-owned Search Type.
+
+For a navigator on the left and content on the right, put `items` (weight 4) and
+`details` (weight 8) in the same row. Inside `details`, use column groups with
+`search_type` equal to an actual record type. Only its matching group renders.
+Use `text` + `field` for scalar values, `markdown` + `field` for rich descriptions,
+and ordinary `table` bricks for related records. All fields are checked against
+the declared type; no generated UI source or additional tree is needed. For example:
+
+```json
+{"kind":"row","children":[
+  {"kind":"items","search_type":"my_project/project","view":"project_items","weight":4},
+  {"kind":"details","weight":8,"children":[
+    {"kind":"column","search_type":"my_project/project","children":[
+      {"kind":"text","title":"State","field":"state"},
+      {"kind":"markdown","title":"Goal","field":"goal_md"}
+    ]}
+  ]}
+]}
+```
+
+Use the project's real fields. Before selection the pane explains what to select.
+On narrow screens the shared row stacks vertically. A stale response from a
+previous selection is discarded. TS fetches through JSON RPC, TH through XML-RPC:
+`tactic.ui.table.CustomLayoutReadCmd(view, search_key=<dashboard target>,
+detail_key=<selected search key>)`. The server returns only that pane's compiled
+nodes; the original root workspace, expansion and pagination remain intact.
+
+### Project-specific item cards
+
+`items.view` can reference a native `sobject-layout` view. Use
+`ts_item_layout_read(search_type, view)` before editing: its compact response has
+the revision, exact editable XML sources, resolved elements, widget/action/variant
+catalogues and reusable view names. For inherited examples read
+`cards_example`, `table_example` or `continuous_example`; do not retrieve the entire
+default configuration. Preview with `ts_item_layout_preview`, save with
+`ts_item_layout_save`, and recover an uncertain save with `ts_item_layout_operation`.
+Keep the same operation UUID and payload on retries. Save reusable child views
+before their parent; read a fresh revision for each dependent edit. These are
+administrator tools under the existing page-configuration write permission.
+
+Use `flow="grid"` for custom cards: image/text/title/description/link/button
+primitives, nested groups and reusable views share Frame geometry in TS/Vue and
+TH/QML. Set row/column/span/rows/height, data bindings such as `record.name`,
+`record.state`, `node.preview.image`, or badge bindings such as `node.task_count`.
+The optional element `search_type` matches the actual record type, without a
+project qualifier. A `view` element resolves its referenced view in that type.
+For example, a tree view may contain:
+
+```xml
+<config><tracker_items layout="sobject-layout" collection="tree" flow="grid">
+  <element name="project" search_type="my_project/project">
+    <display class="view"><view>project_card</view></display>
+  </element>
+  <element name="task" search_type="my_project/task">
+    <display class="view"><view>task_card</view></display>
+  </element>
+</tracker_items></config>
+```
+
+Replace example types with the project's actual schema. This chooses cards for
+records already loaded by the existing tree; it does not declare relationships.
+Unmatched process/relation/file branches retain their ordinary items. Built-in
+`contents` presets retain the original item presentation; use grid primitives for
+portable custom card composition. Buttons use the advertised native actions or
+safe links; this is not arbitrary Python/JavaScript execution. Draft preview uses
+real records and lazy child loading, selects elements for editing, and does not
+run mutation buttons. An invalid draft retains the last valid composition with an
+error; explicit validation is still required before saving.
+
+Owners: [TS configuration validation](../../src/tactic_stream/server/item_layout.py),
+[reference resolution](../../src/tactic_stream/server/interface.py),
+[native save/recovery](../../src/tactic/ui/panel/item_layout_cmd.py),
+[shared XML model](../../src/tactic_stream/shared_ui/features/administration/layouts/layout.document.mjs),
+[shared grid composition](../../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs).
+TH's native tree and SObjects remain client-owned; no server renderer imports TH.
 Do not describe branches or manufacture a second hierarchy. The current item
 workspace discovers relationships and processes using its ordinary readers.
 Place a short row of metrics above a full-width `items` brick for an overview

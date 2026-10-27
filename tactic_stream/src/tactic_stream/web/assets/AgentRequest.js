@@ -4,7 +4,7 @@ import { Gt as button, Jt as node, Kt as label, Vt as notify, Yt as rect, ct as 
 import { t as _sfc_main$6 } from "./AppDialog.js";
 import { t as _sfc_main$7 } from "./AppMenuItem.js";
 import { t as listAction } from "./tree.ui.js";
-import { Q as _sfc_main$8, g as describe$2 } from "./App.js";
+import { g as describe$2, it as _sfc_main$8 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {
 	return {

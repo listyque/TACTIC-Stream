@@ -17,6 +17,13 @@ from thlib import tactic_classes as tc
 from thlib.ui.icon_font import qml_icon_bindings
 from native_capture import controls,click,text,choose,snapshot
 from thlib.ui import layout_editor as module
+from tests.test_workspace_result_item import _WorkspaceAppController
+from thlib.ui.workspace_models.results_types import WorkspaceNode
+
+class LayoutApplication(_WorkspaceAppController):
+ can_manage_tools=True
+ debug_log=None
+ def _current_tab(self):return SimpleNamespace(stype=stype)
 xml='<config><!--custom--><cards_example layout="sobject-layout" columns="12" collection="grid"><element name="title" title="Title" row="1" column="1" span="12" custom="kept"><display class="title"><bind>node.title</bind></display></element><extension value="kept"/></cards_example></config>'
 blank='<config><blank layout="sobject-layout" columns="12" collection="grid"/></config>'
 templates=[dict(name=name,xml=blank) for name in ('blank','continuous','cards','table')]

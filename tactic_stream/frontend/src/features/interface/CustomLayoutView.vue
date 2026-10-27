@@ -7,6 +7,7 @@ import DashboardItems from './DashboardItems.vue';
 import { appearance } from '../../appearance.js';
 import { runTableScript } from './tableScript.js';
 import { printCustomReport } from './customReport.js';
+import { rpc } from '../../api.js';
 import * as Layout from '../../../../src/tactic_stream/shared_ui/features/table/layout.ui.mjs';
 const props = defineProps({
   model: Object,
@@ -39,15 +40,18 @@ const emit = defineEmits([
 ]);
 const state = ref({}),
   tables = ref({}),
+  detail = ref({}),
   busy = ref(false),
   error = ref('');
 let generation = 0,
   abort;
+let detailGeneration = 0;
 const scene = computed(() =>
   Layout.describe(
     {
       ...props.model,
       layoutTables: tables.value,
+      layoutDetail: detail.value,
       layoutTabs: props.tabs || props.model.layoutTabs,
       layoutTabKey: props.currentKey || props.model.layoutTabKey,
       layoutState: state.value,
@@ -75,7 +79,7 @@ const views = computed(() => ({
       onInspect: (record) => emit('inspect', record),
       onOperate: (...args) => emit('operate', ...args),
       onSelect: (...args) => emit('select', ...args),
-      onFocus: (value) => emit('focus', value)
+      onFocus: focusItem
     }
   },
   layoutMarkdown: {
@@ -97,6 +101,46 @@ const views = computed(() => ({
     }
   }
 }));
+async function focusItem(value) {
+  emit('focus', value);
+  if (!props.model.layoutItems || !Layout.hasDetails(props.model.layoutNodes))
+    return;
+  if (value?.kind === 'branch') return;
+  const key = value?.record?.__search_key__;
+  if (key && key === detail.value.targetSearchKey) return;
+  const request = ++detailGeneration;
+  detail.value = { busy: !!key, targetSearchKey: key };
+  for (const name of Object.keys(tables.value))
+    if (name.startsWith('customLayoutDetails_')) delete tables.value[name];
+  if (!key) return;
+  try {
+    const result = await rpc('execute_cmd', [
+      { ticket: props.ticket, project: props.project },
+      'tactic.ui.table.CustomLayoutReadCmd',
+      {
+        view: props.model.layoutView,
+        search_key: props.model.targetSearchKey,
+        detail_key: key
+      }
+    ]);
+    if (request !== detailGeneration) return;
+    for (const item of Layout.tables(
+      result.info.layoutNodes,
+      'customLayoutDetails'
+    ))
+      tables.value[item.key] = {
+        scope: item.scope,
+        selected: [],
+        rows: [],
+        columns: [],
+        offset: 0,
+        selection: item.scope.selection
+      };
+    detail.value = result.info;
+  } catch (failure) {
+    if (request === detailGeneration) detail.value = { error: failure.message };
+  }
+}
 async function run(source, selector = '') {
   if (busy.value || !source) return;
   const request = generation;
@@ -164,6 +208,8 @@ watch(
   () => [props.model, props.ticket, props.project],
   () => {
     ++generation;
+    ++detailGeneration;
+    detail.value = {};
     abort?.abort();
     busy.value = false;
     error.value = '';
@@ -189,6 +235,7 @@ watch(
 );
 onBeforeUnmount(() => {
   ++generation;
+  ++detailGeneration;
   abort?.abort();
 });
 defineExpose({ tables, state });

@@ -12,7 +12,7 @@ class DashboardFilter(BaseModel):
 
 class DashboardBlock(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
-    kind: Literal['row', 'column', 'text', 'markdown', 'metric', 'table', 'items', 'link']
+    kind: Literal['row', 'column', 'text', 'markdown', 'metric', 'table', 'items', 'details', 'link']
     title: str = Field(default='', max_length=256)
     text: str = Field(default='', max_length=65536)
     source_key: str = Field(default='', max_length=2048)
