@@ -1,4 +1,11 @@
 var en_default = {
+	"New view": "New view",
+	"Add a widget to start this view.": "Add a widget to start this view.",
+	Views: "Views",
+	"Open saved view": "Open saved view",
+	"Starting point": "Starting point",
+	"Create draft": "Create draft",
+	"Discard changes to the current view and continue?": "Discard changes to the current view and continue?",
 	"Stale source": "Stale source",
 	"Historical report": "Historical report",
 	"Agent drafts": "Agent drafts",
@@ -1640,6 +1647,13 @@ var en_default = {
 	"Saving tasks": "Saving tasks"
 };
 var ru_default = {
+	"New view": "Новый вид",
+	"Add a widget to start this view.": "Добавьте виджет, чтобы начать этот вид.",
+	Views: "Виды",
+	"Open saved view": "Открыть сохранённый вид",
+	"Starting point": "Основа",
+	"Create draft": "Создать черновик",
+	"Discard changes to the current view and continue?": "Отменить изменения текущего вида и продолжить?",
 	"Stale source": "Исходник изменился",
 	"Historical report": "Исторический отчёт",
 	"Agent drafts": "Черновики агента",

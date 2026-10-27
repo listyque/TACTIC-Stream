@@ -1556,19 +1556,6 @@ export default {
       this.$refs.viewMenu.open = false
       await this.showAdministration('layouts')
     },
-    async openLayoutView(result) {
-      const dialog = this.$refs.administrationDialog, ticket = this.session?.ticket
-      let finish
-      const closed = new Promise(resolve => { finish = resolve })
-      dialog.addEventListener('close', finish, { once:true })
-      this.leaveAdministration()
-      if (dialog.open) { dialog.removeEventListener('close', finish); return }
-      await closed
-      await nextTick()
-      if (this.administrationOpen || ticket !== this.session?.ticket) return
-      if (result.project !== this.project) await this.openCreatedProject(result.project)
-      await this.selectType(result.searchType, {view:result.view,title:result.title})
-    },
     async showColumnsEditor(input = false, column = '') {
       this.columnsFocus = column && typeof column === 'object' ? column : { project: this.project, searchType: this.type.split('?')[0], view: input ? 'edit_definition' : this.view, column: column || this.sortField || '' }
       this.$refs.viewMenu.open = false
@@ -2072,7 +2059,7 @@ export default {
     <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('rules')" v-show="administrationSection === 'rules'" class="administration-page"><SecurityRules :presentation-visible="administrationSection === 'rules'" @vue:mounted="administrationInstances.rules = $event.component.proxy" ref="rules" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('raw')" v-show="administrationSection === 'raw'" class="administration-page"><RawDatabase :presentation-visible="administrationSection === 'raw'" @vue:mounted="administrationInstances.raw = $event.component.proxy" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshAfterAdministration = true" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('layouts')" v-show="administrationSection === 'layouts'" class="administration-page"><LayoutEditor :presentation-visible="administrationSection === 'layouts'" @vue:mounted="administrationInstances.layouts = $event.component.proxy" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="layoutsFocus" toolbar-target="#administration-actions" @saved="layoutSaved" @open-view="openLayoutView" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('layouts')" v-show="administrationSection === 'layouts'" class="administration-page"><LayoutEditor :presentation-visible="administrationSection === 'layouts'" @vue:mounted="administrationInstances.layouts = $event.component.proxy" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="layoutsFocus" toolbar-target="#administration-actions" @saved="layoutSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('columns')" v-show="administrationSection === 'columns'" class="administration-page"><ColumnsEditor :presentation-visible="administrationSection === 'columns'" @vue:mounted="administrationInstances.columns = $event.component.proxy" ref="columnsEditor" :ticket="session.ticket" :project="project" :initial-focus="columnsFocus" toolbar-target="#administration-actions" @saved="columnsSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('users')" v-show="administrationSection === 'users'" class="administration-page"><SecurityUsers :presentation-visible="administrationSection === 'users'" @vue:mounted="administrationInstances.users = $event.component.proxy" ref="users" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('groups')" v-show="administrationSection === 'groups'" class="administration-page"><SecurityGroups :presentation-visible="administrationSection === 'groups'" @vue:mounted="administrationInstances.groups = $event.component.proxy" ref="groups" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>

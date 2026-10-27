@@ -152,7 +152,8 @@ try {
       'configuration',
       'xml',
       'changes',
-      'resolved'
+      'resolved',
+      'new-form'
     ]) {
       await page.evaluate(
         (page) =>
@@ -160,8 +161,9 @@ try {
             type: 'page',
             value: page
           }),
-        phase
+        phase === 'new-form' ? 'design' : phase
       );
+      if (phase === 'new-form') await control('layoutNewView').click();
       if (phase === 'design')
         await page.evaluate(() =>
           window.frameAdmin.screen.value.dispatch({
@@ -192,12 +194,6 @@ try {
             s.width === width &&
             s.phase === phase
         );
-      // Explicit platform capability: native opens configured views in the system browser.
-      reference.scene.toolbar.nodes.find(
-        (n) => n.id === 'layoutOpenView'
-      ).text = actual.scene.toolbar.nodes.find(
-        (n) => n.id === 'layoutOpenView'
-      ).text;
       assert.deepEqual(errors, [], label + ' runtime errors');
       assert.deepEqual(actual.state, reference.state, label + ' state');
       assert.deepEqual(actual.scene, reference.scene, label + ' scene');
@@ -216,6 +212,7 @@ try {
       await page.screenshot({ path: out + image, animations: 'disabled' });
       samples.push({ mode, language, width, height, phase, image });
     }
+    await control('layoutCancelNewView').click();
     // Actual source input and server boundary, including a write applied without acknowledgement.
     await page.evaluate(() =>
       window.frameAdmin.screen.value.dispatch({ type: 'page', value: 'xml' })

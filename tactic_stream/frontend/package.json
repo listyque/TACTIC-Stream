@@ -1,7 +1,7 @@
 {
   "name": "tactic-stream-admin",
   "private": true,
-  "version": "0.112.244",
+  "version": "0.112.245",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",

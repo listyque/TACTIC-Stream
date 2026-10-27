@@ -24,8 +24,9 @@ for mode in ('dark',) if quick else ('dark','light'):
      while controller.model['preview'] is None and time.monotonic()<deadline:QTest.qWait(10)
      assert controller.model['preview'] is not None,controller.model['error']
      frame(window)
-     for page in ('design','configuration','xml','changes','resolved'):
-      window.send({'type':'page','value':page});frame(window)
+     for page in ('design','configuration','xml','changes','resolved','new-form'):
+      window.send({'type':'page','value':'design' if page=='new-form' else page});frame(window)
+      if page=='new-form':click(window,controls(window)['layoutNewView'])
       if page=='design':window.send({'type':'select','name':'title'});frame(window)
       image=f'qml-{mode}-{language}-{width}-{page}.png';assert window.grabWindow().save(str(OUT/image))
       samples.append(dict(mode=mode,language=language,width=width,height=height,phase=page,image=image,scene=json.loads(window.property('sceneJson')),state=json.loads(window.property('stateJson')),**snapshot(window)))

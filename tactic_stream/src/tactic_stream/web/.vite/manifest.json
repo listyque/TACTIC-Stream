@@ -408,6 +408,7 @@
       "index.html",
       "_CodeBlock.js",
       "_sections.ui.js",
+      "_links.js",
       "src/App.vue"
     ],
     "dynamicImports": [

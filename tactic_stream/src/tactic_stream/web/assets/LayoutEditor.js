@@ -3,6 +3,7 @@ import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as cr
 import { A as t, j as appearance, k as asyncComponent, ot as _plugin_vue_export_helper_default, t as __vitePreload } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Ot as widgetConfiguration, Yt as rect, ct as rpc, i as _sfc_main$2, qt as muted, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
+import { l as workspaceAddress } from "./links.js";
 import { $ as sectionSelector, G as roles, H as actions, J as variants, K as serialize, Q as policy, U as describe$1, W as edit, X as documentEvent, Y as widgets, Z as notices, q as template, tt as toolbar$1 } from "./App.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
@@ -45,8 +46,10 @@ function initial() {
 		context: "",
 		catalogWidth: 220,
 		propertiesWidth: 330,
-		newName: "custom_view",
-		template: "continuous",
+		newName: "",
+		template: "blank",
+		creating: false,
+		pendingContext: null,
 		text: {},
 		confirmation: "",
 		checking: false,
@@ -124,7 +127,22 @@ function transition(ui, model, event) {
 			commands
 		};
 	}
-	const document = documentEvent(ui, model, event);
+	if (event.type === "keep") next.pendingContext = null;
+	if (event.type === "confirm" && ui.confirmation === "context") {
+		if (!model.busy && !model.uncertain && ui.pendingContext) {
+			commands.push({ type: "discard" });
+			if (ui.pendingContext.type === "startView") next.creating = true;
+			else commands.push(ui.pendingContext);
+			next.confirmation = "";
+			next.pendingContext = null;
+			next.text = {};
+		}
+		return {
+			ui: next,
+			commands
+		};
+	}
+	const document = documentEvent(next, model, event);
 	if (document) return document;
 	if (model.busy || ui.confirmation) return {
 		ui: next,
@@ -249,6 +267,28 @@ function transition(ui, model, event) {
 			});
 			break;
 		case "context":
+			if (!["view", "searchType"].includes(event.field) || model[event.field] === event.value) break;
+			if (!model.uncertain) {
+				if (model.dirty || pending(ui)) {
+					next.confirmation = "context";
+					next.pendingContext = event;
+				} else {
+					next.creating = false;
+					commands.push(event);
+				}
+			}
+			break;
+		case "startView":
+			if (edit$1 && !model.uncertain) {
+				if (model.dirty || pending(ui)) {
+					next.confirmation = "context";
+					next.pendingContext = event;
+				} else next.creating = true;
+			}
+			break;
+		case "cancelView":
+			next.creating = false;
+			break;
 		case "source":
 			if (!model.dirty && !model.uncertain && !pending(ui)) commands.push(event);
 			break;
@@ -294,6 +334,11 @@ function transition(ui, model, event) {
 	};
 }
 function completed(ui, command) {
+	if (command.type === "newView") return Object.assign({}, ui, {
+		creating: false,
+		page: "design",
+		panel: "elements"
+	});
 	return [
 		"reload",
 		"discard",
@@ -304,6 +349,112 @@ function completed(ui, command) {
 		checking: false,
 		error: ""
 	}) : ui;
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.catalog.mjs
+function views(model, language) {
+	const tr = (text) => translate(text, language);
+	const names = model.configuration?.layout_views || model.knownViews || [];
+	return [...new Set([...names, model.view].filter(Boolean))].map((value) => {
+		const example = {
+			continuous_example: "Tree example",
+			table_example: "Table example",
+			cards_example: "Cards example"
+		}[value];
+		return {
+			value,
+			label: example ? tr(example) + " · " + value : value
+		};
+	});
+}
+function context(model, ui, width, language) {
+	const tr = (text) => translate(text, language), nodes = [];
+	const enabled = !model.busy && !model.uncertain && !ui.confirmation;
+	const stacked = width < 620, gap = 12, buttonWidth = 120;
+	const typeWidth = stacked ? width : Math.min(280, width * .32);
+	const viewX = stacked ? 0 : typeWidth + gap;
+	const viewY = stacked ? 62 : 0;
+	const viewWidth = stacked ? width - buttonWidth - gap : Math.min(360, width - viewX - buttonWidth - gap);
+	nodes.push(label("layoutTypeLabel", rect(0, 0, typeWidth, 18), tr("Search Type"), muted), node("Choice", "layoutSearchType", rect(0, 22, typeWidth, 38), {
+		label: tr("Search Type"),
+		value: model.searchType,
+		options: model.searchTypes || [],
+		enabled,
+		action: {
+			type: "context",
+			field: "searchType"
+		}
+	}), label("layoutViewLabel", rect(viewX, viewY, viewWidth, 18), tr("View") + (model.dirty ? " · " + tr("Unsaved changes") : ""), muted), node("Choice", "layoutView", rect(viewX, viewY + 22, viewWidth, 38), {
+		label: tr("View"),
+		value: model.view,
+		options: views(model, language),
+		enabled,
+		action: {
+			type: "context",
+			field: "view"
+		}
+	}), button("layoutNewView", rect(viewX + viewWidth + gap, viewY + 22, buttonWidth, 38), tr("New view"), "add", { type: "startView" }, enabled && model.ready));
+	let height = viewY + 72;
+	if (ui.creating) {
+		const formWidth = Math.min(width, 760), narrow = formWidth < 620;
+		const nameWidth = narrow ? formWidth : (formWidth - 12) / 2;
+		const templateX = narrow ? 0 : nameWidth + 12, templateY = narrow ? height + 62 : height;
+		nodes.push(label("layoutNewNameLabel", rect(0, height, nameWidth, 18), tr("View name"), muted), node("Field", "layoutNewName", rect(0, height + 22, nameWidth, 38), {
+			label: tr("View name"),
+			text: ui.newName,
+			enabled,
+			placeholder: "my_view",
+			action: { type: "newName" }
+		}), label("layoutTemplateLabel", rect(templateX, templateY, nameWidth, 18), tr("Starting point"), muted), node("Choice", "layoutTemplate", rect(templateX, templateY + 22, nameWidth, 38), {
+			label: tr("Starting point"),
+			value: ui.template,
+			enabled,
+			options: [
+				{
+					value: "blank",
+					label: tr("Blank view")
+				},
+				{
+					value: "copy",
+					label: tr("Copy current view")
+				},
+				{
+					value: "continuous",
+					label: tr("Continuous Tree")
+				},
+				{
+					value: "cards",
+					label: tr("Cards")
+				},
+				{
+					value: "table",
+					label: tr("Table View")
+				}
+			],
+			action: { type: "template" }
+		}), button("layoutCreateView", rect(0, templateY + 72, 164, 38), tr("Create draft"), "add", { type: "newView" }, enabled && !!ui.newName.trim()), button("layoutCancelNewView", rect(176, templateY + 72, 120, 38), tr("Cancel"), "close", { type: "cancelView" }, enabled));
+		height = templateY + 122;
+	}
+	return {
+		nodes,
+		height
+	};
+}
+function row$1(list, record, model) {
+	return { nodes: [node("Action", "layoutSavedView_" + record.value, rect(0, 0, list.width - 16, 34), {
+		text: record.label,
+		selected: model.view === record.value,
+		normalColor: "transparent",
+		selectedColor: "contentSelection",
+		enabled: !model.busy && !model.uncertain,
+		radius: 6,
+		children: [label("layoutSavedViewTitle_" + record.value, rect(10, 0, list.width - 36, 34), record.label)],
+		action: {
+			type: "context",
+			field: "view",
+			value: record.value
+		}
+	})] };
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.ui.mjs
@@ -435,16 +586,20 @@ function model(raw, ui) {
 function toolbar(model, ui, width, language, embedded = false) {
 	const tr = (text) => translate(text, language), result = toolbar$1(model, ui, width, language), edit = policy(model).editable && !ui.confirmation;
 	result.nodes = result.nodes.filter((row) => row.id !== "adminDocumentStatus");
-	result.nodes.push(button("layoutCheck", rect(46, 0, 38, 38), tr("Check and preview"), "check", { type: "check" }, edit && !model.layoutError && !pending(ui), { iconOnly: true }), button("layoutHelp", rect(90, 0, 38, 38), tr("Layout guide"), "help", { type: "help" }, true, { iconOnly: true }), button("layoutOpenView", rect(embedded ? 90 : 134, 0, 38, 38), tr(model.externalView ? "Open view in browser" : "Open view"), "open-in-new", { type: "openView" }, edit && !model.dirty && !!(model.configuration && model.configuration.resolved && model.configuration.resolved.configured), { iconOnly: true }));
+	result.nodes.push(button("layoutCheck", rect(46, 0, 38, 38), tr("Check and preview"), "check", { type: "check" }, edit && !model.layoutError && !pending(ui), { iconOnly: true }), button("layoutHelp", rect(90, 0, 38, 38), tr("Layout guide"), "help", { type: "help" }, true, { iconOnly: true }), button("layoutOpenView", rect(embedded ? 90 : 134, 0, 38, 38), tr("Open saved view"), "open-in-new", { type: "openView" }, edit && !model.dirty && !!(model.configuration && model.configuration.resolved && model.configuration.resolved.configured), { iconOnly: true }));
 	if (embedded) result.nodes = result.nodes.filter((row) => row.id !== "layoutHelp");
 	return result;
 }
-function models(model) {
-	return { layoutElements: model.layout.elements };
+function models(model, language = "en") {
+	return {
+		layoutElements: model.layout.elements,
+		layoutViews: views(model, language)
+	};
 }
 function row(list, record, model, ui, language) {
+	if (list.source === "layoutViews") return row$1(list, record, model);
 	const width = list.width - 16, tr = (text) => translate(text, language), id = "layoutElement_" + record.name;
-	return { nodes: [node("Action", id, rect(0, 0, width, 70), {
+	return { nodes: [node("Action", id, rect(0, 0, width, 46), {
 		text: record.title || record.name,
 		selected: ui.selected === record.name,
 		normalColor: "transparent",
@@ -454,7 +609,7 @@ function row(list, record, model, ui, language) {
 			type: "select",
 			name: record.name
 		},
-		children: [label(id + "Title", rect(record.parent ? 22 : 10, 4, width - (record.parent ? 32 : 20), 28), (record.parent ? "↳ " : "") + (record.title || record.name), { weight: 600 }), label(id + "Kind", rect(10, 36, width - 20, 24), tr(labels[record.kind] || record.kind), muted)],
+		children: [label(id + "Title", rect(record.parent ? 22 : 10, 0, width - (record.parent ? 32 : 20), 26), (record.parent ? "↳ " : "") + (record.title || record.name), { weight: 600 }), label(id + "Kind", rect(10, 26, width - 20, 18), tr(labels[record.kind] || record.kind), muted)],
 		action: {
 			type: "select",
 			name: record.name
@@ -669,13 +824,12 @@ function describe(model, ui, width, height, language) {
 	})] };
 	const tr = (text) => translate(text, language), edit = policy(model).editable && !ui.confirmation, noticeModel = Object.assign({}, model);
 	if (ui.confirmation === "remove") noticeModel.confirmationText = "Remove this element and its children?";
+	if (ui.confirmation === "context") noticeModel.confirmationText = "Discard changes to the current view and continue?";
 	const notice = notices(noticeModel, ui, width, language, void 0, ui.confirmation === "remove" ? "Remove element" : void 0), nodes = notice.nodes;
 	let y = notice.top;
-	nodes.push(label("layoutGuideHeading", rect(0, y, width, 28), tr("Build your own view"), {
-		fontRole: "title",
-		weight: 600
-	}), label("layoutGuideText", rect(0, y + 34, width, width < 520 ? 62 : 36), tr("1. Choose a starting point · 2. Arrange elements · 3. Check and save"), Object.assign({ wrap: true }, muted)));
-	y += width < 520 ? 104 : 78;
+	const context$1 = context(model, ui, width, language);
+	nodes.push(node("Box", "layoutDocumentContext", rect(0, y, width, context$1.height), { children: context$1.nodes }));
+	y += context$1.height;
 	nodes.push(sectionSelector("layoutPages", [
 		{
 			value: "design",
@@ -737,127 +891,23 @@ function describe(model, ui, width, height, language) {
 		return { nodes };
 	}
 	if (ui.page === "configuration") {
-		const clean = !model.busy && !model.dirty && !model.uncertain, configuration = model.configuration || {}, views = configuration.layout_views || [
-			"continuous_example",
-			"table_example",
-			"cards_example"
-		], sourceOptions = (configuration.sources || []).map((row) => ({
-			value: row.id,
-			label: String(row.id) + " · " + tr("Priority") + " " + (row.priority === null ? "" : row.priority)
-		})).concat([{
-			value: "",
-			label: tr("New override")
-		}]);
-		const fields = [
-			{
-				kind: "Heading",
-				id: "layoutContextHeading",
-				title: "Configuration"
-			},
-			{
-				kind: "Choice",
-				id: "layoutSearchType",
-				title: "Search Type",
-				options: model.searchTypes || [],
-				props: {
-					value: model.searchType,
-					enabled: clean,
-					action: {
-						type: "context",
-						field: "searchType"
-					}
-				}
-			},
-			{
-				kind: "Choice",
-				id: "layoutView",
-				title: "Configuration view",
-				options: views.map((value) => ({
-					value,
-					label: tr({
-						continuous_example: "Tree example",
-						table_example: "Table example",
-						cards_example: "Cards example"
-					}[value] || value)
-				})),
-				props: {
-					value: model.view,
-					enabled: clean,
-					action: {
-						type: "context",
-						field: "view"
-					}
-				}
-			},
-			{
-				kind: "Choice",
-				id: "layoutSource",
-				title: "Configuration source",
-				options: sourceOptions,
-				props: {
-					value: model.source,
-					enabled: clean,
-					action: { type: "source" }
-				}
-			},
-			{
-				kind: "Heading",
-				id: "layoutNewViewHeading",
-				title: "Create custom view",
-				description: "Start from a template or copy this view. Give your view a unique name."
-			},
-			{
-				id: "layoutNewName",
-				title: "View name",
-				props: {
-					text: ui.newName,
-					enabled: edit && clean,
-					action: { type: "newName" }
-				}
-			},
-			{
-				kind: "Choice",
-				id: "layoutTemplate",
-				title: "Layout template",
-				options: [
-					{
-						value: "blank",
-						label: tr("Blank view")
-					},
-					{
-						value: "continuous",
-						label: tr("Continuous Tree")
-					},
-					{
-						value: "cards",
-						label: tr("Cards")
-					},
-					{
-						value: "table",
-						label: tr("Table View")
-					},
-					{
-						value: "copy",
-						label: tr("Copy current view")
-					}
-				],
-				props: {
-					value: ui.template,
-					enabled: edit && clean,
-					action: { type: "template" }
-				}
-			},
-			{
-				kind: "Button",
-				id: "layoutCreateView",
-				title: "Create custom view",
-				props: {
-					icon: "add",
-					enabled: edit && clean,
-					action: { type: "newView" }
-				}
+		const fields = [{
+			kind: "Choice",
+			id: "layoutSource",
+			title: "Configuration source",
+			options: (model.configuration?.sources || []).map((row) => ({
+				value: row.id,
+				label: String(row.id) + " · " + tr("Priority") + " " + (row.priority ?? "")
+			})).concat([{
+				value: "",
+				label: tr("New override")
+			}]),
+			props: {
+				value: model.source,
+				enabled: !model.busy && !model.dirty && !model.uncertain,
+				action: { type: "source" }
 			}
-		];
+		}];
 		if (!model.layoutError) {
 			const integer = (key, title) => ({
 				id: "layoutRoot_" + key,
@@ -995,9 +1045,16 @@ function describe(model, ui, width, height, language) {
 	}
 	const bodyHeight = Math.max(1, height - y);
 	if (wide || ui.panel === "elements") {
-		const w = left, children = [
-			label("layoutElementsHeading", rect(12, 8, w - 24, 28), tr("Elements"), { weight: 600 }),
-			node("Choice", "layoutAddWidget", rect(12, 44, w - 24, 38), {
+		const w = left, viewsHeight = Math.min(144, Math.max(68, bodyHeight * .24)), elementsTop = 52 + viewsHeight, children = [
+			label("layoutViewsHeading", rect(12, 12, w - 24, 28), tr("Views"), { weight: 600 }),
+			node("List", "layoutViewsList", rect(12, 46, w - 24, viewsHeight), {
+				source: "layoutViews",
+				keyField: "value",
+				rowHeight: 38,
+				scrollbarId: "layoutViewsScrollBar"
+			}),
+			label("layoutElementsHeading", rect(12, elementsTop + 8, w - 24, 28), tr("Elements"), { weight: 600 }),
+			node("Choice", "layoutAddWidget", rect(12, elementsTop + 44, w - 24, 38), {
 				label: tr("Add widget"),
 				value: "",
 				options: [{
@@ -1007,10 +1064,10 @@ function describe(model, ui, width, height, language) {
 				enabled: edit && !pending(ui),
 				action: { type: "add" }
 			}),
-			node("List", "layoutElementsList", rect(12, 90, w - 24, bodyHeight - 146), {
+			node("List", "layoutElementsList", rect(12, elementsTop + 90, w - 24, Math.max(0, bodyHeight - elementsTop - 146)), {
 				source: "layoutElements",
 				keyField: "name",
-				rowHeight: 74,
+				rowHeight: 50,
 				scrollbarId: "layoutElementsScrollBar"
 			}),
 			button("layoutEarlier", rect(12, bodyHeight - 44, (w - 32) / 2, 36), tr("Move element earlier"), "chevron-up", {
@@ -1070,7 +1127,7 @@ function describe(model, ui, width, height, language) {
 		nodes.push(node("Box", "layoutPreviewPanel", rect(x, y, w, bodyHeight), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
-			children: [label("layoutPreviewHeading", rect(12, 8, w - 24, 28), tr("Item preview"), { weight: 600 }), node("View", "layoutPreviewResults", rect(12, 44, w - 24, bodyHeight - 56), { view: "itemResults" })]
+			children: [label("layoutPreviewHeading", rect(12, 8, w - 24, 28), tr("Item preview"), { weight: 600 }), layout.elements.length ? node("View", "layoutPreviewResults", rect(12, 44, w - 24, bodyHeight - 56), { view: "itemResults" }) : label("layoutBlankCanvas", rect(12, 44, w - 24, 80), tr("Add a widget to start this view."), Object.assign({ wrap: true }, muted))]
 		}));
 	}
 	return { nodes };
@@ -1147,7 +1204,7 @@ var _sfc_main = {
 			default: true
 		}
 	},
-	emits: ["saved", "open-view"],
+	emits: ["saved"],
 	setup() {
 		return { openHelp: inject("openHelp", null) };
 	},
@@ -1163,6 +1220,7 @@ var _sfc_main = {
 			searchType: "",
 			view: "continuous_example",
 			configuration: null,
+			knownViews: [],
 			context: null,
 			source: "",
 			xml: "",
@@ -1223,6 +1281,7 @@ var _sfc_main = {
 				searchType: this.searchType,
 				view: this.view,
 				configuration: this.configuration,
+				knownViews: this.knownViews,
 				source: this.source,
 				xml: this.xml,
 				tree: this.parsed.tree,
@@ -1240,8 +1299,7 @@ var _sfc_main = {
 				uncertain: this.uncertain,
 				canWrite: !!this.configuration && this.context?.ticket === this.ticket && this.context?.project === this.project && this.context?.searchType === this.searchType && this.context?.view === this.view,
 				canLoad: !!this.ticket && !!this.searchType,
-				assetBase: location.origin,
-				externalView: false
+				assetBase: location.origin
 			};
 		},
 		frameModel() {
@@ -1254,7 +1312,7 @@ var _sfc_main = {
 			return toolbar(this.frameModel, this.ui, this.toolbarSize, appearance.language, !!this.toolbarTarget);
 		},
 		models() {
-			return models(this.frameModel);
+			return models(this.frameModel, appearance.language);
 		},
 		previewRows() {
 			return this.sampleItems.map((item) => item.record);
@@ -1377,6 +1435,7 @@ var _sfc_main = {
 			clearTimeout(this.previewTimer);
 			this.busy = false;
 			this.configuration = null;
+			this.knownViews = [];
 			this.liveInterface = null;
 			this.xml = this.baseline = "";
 			this.ui = initial();
@@ -1420,12 +1479,7 @@ var _sfc_main = {
 						await this.discard();
 						break;
 					case "openView":
-						if (this.canLeave()) this.$emit("open-view", {
-							project: this.project,
-							searchType: this.searchType,
-							view: this.view,
-							title: this.view
-						});
+						if (this.canLeave()) window.open(workspaceAddress(this.project, this.searchType, this.view), "_blank", "noopener");
 						break;
 					case "help":
 						this.openHelp?.();
@@ -1439,6 +1493,7 @@ var _sfc_main = {
 			if (!this.ticket || !this.searchType || this.busy) return;
 			if (!/^[A-Za-z_][\w.@-]{0,127}$/.test(this.view)) this.view = "continuous_example";
 			const request = ++this.request;
+			if (this.context?.project !== this.project || this.context?.searchType !== this.searchType) this.knownViews = [];
 			this.context = {
 				ticket: this.ticket,
 				project: this.project,
@@ -1454,6 +1509,7 @@ var _sfc_main = {
 				const result = await this.call("read");
 				if (request !== this.request) return;
 				this.configuration = result;
+				this.knownViews = result.layout_views || [];
 				this.uncertain = false;
 				this.source = result.sources[0]?.id ?? "";
 				this.selectSource();
@@ -1491,6 +1547,7 @@ var _sfc_main = {
 			this.preview = null;
 			this.diff = "";
 			this.message = "";
+			this.schedulePreview();
 		},
 		async check() {
 			if (!this.editable) return;

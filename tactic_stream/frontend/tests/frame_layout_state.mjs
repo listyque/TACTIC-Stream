@@ -30,3 +30,26 @@ console.log('Layout Frame: shared pages, numeric validation, visibility, templat
 const embeddedToolbar=UI.toolbar(UI.model(raw,State.initial()),State.initial(),620,"en",true);
 assert(!embeddedToolbar.nodes.some(node=>node.id==="layoutHelp"));
 assert(UI.toolbar(UI.model(raw,State.initial()),State.initial(),620,"en").nodes.some(node=>node.id==="layoutHelp"));
+
+ui=State.initial();data={...raw,dirty:true};
+const other={type:'context',field:'view',value:'another_view'};
+assert.deepEqual(send(other),[]);assert.equal(ui.confirmation,'context');
+assert.deepEqual(send({type:'keep'}),[]);assert.equal(ui.pendingContext,null);
+send(other);assert.deepEqual(send({type:'confirm'}),[{type:'discard'},other]);
+ui=State.initial();data=raw;send({type:'startView'});
+assert.equal(ui.creating,true);assert.equal(ui.template,'blank');
+send({type:'cancelView'});assert.equal(ui.creating,false);
+assert.deepEqual(send({type:'context',field:'view',value:raw.view}),[],'Selecting the current view cannot reload a draft');
+for(const page of ['design','xml','configuration']){
+ const scene=UI.describe(UI.model(raw,State.initial()),{...State.initial(),page},1100,740,'en');
+ const all=nodes=>nodes.flatMap(n=>[n,...all(n.children||[])]);
+ assert(all(scene.nodes).some(n=>n.id==='layoutView'),'Document selection is always visible');
+ assert(all(scene.nodes).some(n=>n.id==='layoutNewView'),'Creation is always visible');
+}
+const failedRead=UI.model({...raw,configuration:null,knownViews:['cards_example','saved_view']},State.initial());
+assert(UI.models(failedRead).layoutViews.some(row=>row.value==='saved_view'),'A failed read retains document navigation');
+const blankTree={type:9,children:[element('config',[],[element('cards_example',[['layout','sobject-layout'],['columns','12']],[])])]};
+const blankScene=UI.describe(UI.model({...raw,tree:blankTree},State.initial()),State.initial(),1100,740,'en');
+const blankNodes=nodes=>nodes.flatMap(n=>[n,...blankNodes(n.children||[])]);
+assert(blankNodes(blankScene.nodes).some(n=>n.id==='layoutBlankCanvas'));
+assert(!blankNodes(blankScene.nodes).some(n=>n.id==='layoutPreviewResults'),'Blank authoring must not fall back to an existing item layout');

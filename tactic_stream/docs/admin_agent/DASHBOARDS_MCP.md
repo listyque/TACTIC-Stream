@@ -89,6 +89,12 @@ Keep the same operation UUID and payload on retries. Save reusable child views
 before their parent; read a fresh revision for each dependent edit. These are
 administrator tools under the existing page-configuration write permission.
 
+The normal Layout Editor exposes the same saved item views: Search Type/current
+view at the top, a saved-view list above element layers, and New view for a blank,
+template or copy draft. Save is still a separate checked/revisioned operation;
+opening a saved result does not activate an unsaved draft. Agent tools author
+the same XML and do not require a second renderer or a UI-only view format.
+
 Use `flow="grid"` for custom cards: image/text/title/description/link/button
 primitives, nested groups and reusable views share Frame geometry in TS/Vue and
 TH/QML. Set row/column/span/rows/height, data bindings such as `record.name`,

@@ -55143,7 +55143,7 @@ var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes
 var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([59,1,2,3,4,5,6,7,58,8,27,19,60,61,62])));
 var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([63,1,2,3,4,5,6,7,8,64,41,42,56,51,52,47,9,10,11,24,48,25,65,60,61,66])));
 var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([67,1,2,3,4,5,6,7,8,61])));
-var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([68,1,2,3,4,5,6,7,8,69])));
+var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([68,1,2,3,4,5,6,7,8,42,69])));
 var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([70,1,2,3,4,5,6,7,8])));
 var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([71,1,2,3,4,5,6,7])));
 var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([72,1,2,3,4,5,6,7,73])));
@@ -57527,27 +57527,6 @@ var _sfc_main = {
 			this.$refs.viewMenu.open = false;
 			await this.showAdministration("layouts");
 		},
-		async openLayoutView(result) {
-			const dialog = this.$refs.administrationDialog, ticket = this.session?.ticket;
-			let finish;
-			const closed = new Promise((resolve) => {
-				finish = resolve;
-			});
-			dialog.addEventListener("close", finish, { once: true });
-			this.leaveAdministration();
-			if (dialog.open) {
-				dialog.removeEventListener("close", finish);
-				return;
-			}
-			await closed;
-			await nextTick();
-			if (this.administrationOpen || ticket !== this.session?.ticket) return;
-			if (result.project !== this.project) await this.openCreatedProject(result.project);
-			await this.selectType(result.searchType, {
-				view: result.view,
-				title: result.title
-			});
-		},
 		async showColumnsEditor(input = false, column = "") {
 			this.columnsFocus = column && typeof column === "object" ? column : {
 				project: this.project,
@@ -59203,16 +59182,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"search-types": $data.types,
 						"initial-focus": $data.layoutsFocus,
 						"toolbar-target": "#administration-actions",
-						onSaved: $options.layoutSaved,
-						onOpenView: $options.openLayoutView
+						onSaved: $options.layoutSaved
 					}, null, 8, [
 						"presentation-visible",
 						"ticket",
 						"project",
 						"search-types",
 						"initial-focus",
-						"onSaved",
-						"onOpenView"
+						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "layouts"]]) : createCommentVNode("", true),
 					$data.administrationOpen && $data.administrationVisited.includes("columns") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_22, [createVNode(_component_ColumnsEditor, {
 						"presentation-visible": $data.administrationSection === "columns",

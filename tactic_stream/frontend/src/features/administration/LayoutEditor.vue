@@ -10,6 +10,7 @@ import * as Document from '../../../../src/tactic_stream/shared_ui/features/admi
 import { layoutTree } from '../interface/layoutXml.js';
 import FrameView from '../../frame/FrameView.vue';
 import LayoutPreview from './LayoutPreview.vue';
+import { workspaceAddress } from '../workspace/links.js';
 
 export default {
   components: { FrameView },
@@ -21,7 +22,7 @@ export default {
     toolbarTarget: String,
     presentationVisible: { type: Boolean, default: true }
   },
-  emits: ['saved', 'open-view'],
+  emits: ['saved'],
   setup() {
     return { openHelp: inject('openHelp', null) };
   },
@@ -34,6 +35,7 @@ export default {
       searchType: '',
       view: 'continuous_example',
       configuration: null,
+      knownViews: [],
       context: null,
       source: '',
       xml: '',
@@ -100,6 +102,7 @@ export default {
         searchType: this.searchType,
         view: this.view,
         configuration: this.configuration,
+        knownViews: this.knownViews,
         source: this.source,
         xml: this.xml,
         tree: this.parsed.tree,
@@ -122,8 +125,7 @@ export default {
           this.context?.searchType === this.searchType &&
           this.context?.view === this.view,
         canLoad: !!this.ticket && !!this.searchType,
-        assetBase: location.origin,
-        externalView: false
+        assetBase: location.origin
       };
     },
     frameModel() {
@@ -148,7 +150,7 @@ export default {
       );
     },
     models() {
-      return UI.models(this.frameModel);
+      return UI.models(this.frameModel, appearance.language);
     },
     previewRows() {
       return this.sampleItems.map((item) => item.record);
@@ -293,6 +295,7 @@ export default {
       clearTimeout(this.previewTimer);
       this.busy = false;
       this.configuration = null;
+      this.knownViews = [];
       this.liveInterface = null;
       this.xml = this.baseline = '';
       this.ui = State.initial();
@@ -344,12 +347,11 @@ export default {
             break;
           case 'openView':
             if (this.canLeave())
-              this.$emit('open-view', {
-                project: this.project,
-                searchType: this.searchType,
-                view: this.view,
-                title: this.view
-              });
+              window.open(
+                workspaceAddress(this.project, this.searchType, this.view),
+                '_blank',
+                'noopener'
+              );
             break;
           case 'help':
             this.openHelp?.();
@@ -365,6 +367,11 @@ export default {
       if (!/^[A-Za-z_][\w.@-]{0,127}$/.test(this.view))
         this.view = 'continuous_example';
       const request = ++this.request;
+      if (
+        this.context?.project !== this.project ||
+        this.context?.searchType !== this.searchType
+      )
+        this.knownViews = [];
       this.context = {
         ticket: this.ticket,
         project: this.project,
@@ -380,6 +387,7 @@ export default {
         const result = await this.call('read');
         if (request !== this.request) return;
         this.configuration = result;
+        this.knownViews = result.layout_views || [];
         this.uncertain = false;
         this.source = result.sources[0]?.id ?? '';
         this.selectSource();
@@ -440,6 +448,7 @@ export default {
       this.preview = null;
       this.diff = '';
       this.message = '';
+      this.schedulePreview();
     },
     async check() {
       if (!this.editable) return;

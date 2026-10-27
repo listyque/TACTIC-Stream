@@ -13,12 +13,21 @@ const control=id=>admin.locator('[data-frame="'+id+'"]:visible')
 const ready=()=>page.waitForFunction(()=>document.querySelector('.layout-editor')?.getAttribute('aria-busy')==='false')
 async function section(id,value){const button=control(id+'_'+value);if(await button.count())await button.click();else await control(id).selectOption(value)}
 async function field(id,value){await control(id).fill(value);await control(id).blur()}
-async function selectView(view){await section('layoutPages','configuration');await control('layoutView').selectOption(view);await ready();await section('layoutPages','design')}
+async function selectView(view){
+ await control('layoutView').selectOption(view);await ready();await section('layoutPages','design')
+ await editor.locator('.layout-live-preview .result-presentation').waitFor()
+}
 async function openEditor(){await openViewActions(page);await page.getByRole('button',{name:'Edit layouts',exact:true}).click();await ready()}
-async function openView(){await control('layoutOpenView').click();await admin.waitFor({state:'hidden'})}
+async function openView(){
+ const popupPromise=page.waitForEvent('popup');await control('layoutOpenView').click();const popup=await popupPromise
+ await popup.waitForLoadState('domcontentloaded');assert(await admin.isVisible(),'Opening the saved result keeps the editor')
+ await control('layoutView').selectOption(await control('layoutView').inputValue());assert(await admin.isVisible(),'Editor remains interactive')
+ await control('administrationCloseButton').click();await admin.waitFor({state:'hidden'})
+ await page.goto(popup.url());await popup.close()
+}
 async function discard(){await control('adminDiscardDocument').click();await control('adminConfirmSave').click();await ready()}
 async function createView(name,template){
- await section('layoutPages','configuration');await field('layoutNewName',name);await control('layoutTemplate').selectOption(template)
+ await control('layoutNewView').click();await field('layoutNewName',name);await control('layoutTemplate').selectOption(template)
  await control('layoutCreateView').click();await ready();await section('layoutPages','design')
 }
 async function checkAndSave(){
@@ -41,7 +50,7 @@ try{
  assert.deepEqual(await control('layoutView').locator('option').evaluateAll(nodes=>nodes.map(node=>node.value)),['continuous_example','table_example','cards_example'])
  await control('administrationHelpButton').click();await page.locator('dialog.help-view[open] [data-frame="helpTopicList"]').waitFor();await page.locator('dialog.help-view[open]').getByRole('textbox',{name:'Search help',exact:true}).fill('Build your own view');await page.locator('dialog.help-view[open] [data-frame="helpTopic_item_layouts"]').click();await page.locator('dialog.help-view[open] .document-pane').getByRole('heading',{name:'3. Build a card',exact:true}).waitFor()
  await page.locator('dialog.help-view[open]').getByRole('button',{name:'Close help',exact:true}).click()
- await selectView('cards_example');await openView()
+ await control('layoutPages_design').click();await control('layoutSavedView_cards_example').click();await ready();await openView()
  const cards=page.locator('.workspace-results .result-presentation[data-result-view="tiles"]:visible')
  await cards.locator('[data-layout-element="image"]').first().waitFor();await details(cards);await shot('cards-example')
  await openEditor();await selectView('table_example');await openView()
@@ -49,7 +58,9 @@ try{
  assert.deepEqual(await table.locator('thead th').allTextContents(),['Preview','Title','Description','Tasks','Notes','Object details','Actions']);await details(table);await shot('table-example')
  await openEditor();await selectView('continuous_example');await control('layoutElement_title').click();await field('layoutProperty_title','Object heading')
  await control('administrationCloseButton').click();assert.equal(await admin.isVisible(),true,'dirty editor blocks window close');await discard()
- await createView('my_cards','cards');await control('layoutElement_description').click()
+ await createView('my_cards','cards');await control('layoutView').selectOption('continuous_example');await control('adminCancelSave').click()
+ assert.equal(await control('layoutView').inputValue(),'my_cards','Keep editing retains the new draft')
+ await control('layoutElement_description').click()
  await field('layoutProperty_row','4');assert.equal(await control('layoutProperty_row').inputValue(),'4');await field('layoutProperty_row','3');await control('layoutProperty_option_bind').selectOption('record.description')
  await control('layoutElement_title').click();await field('layoutProperty_row','1');await field('layoutProperty_layer','2')
  await control('layoutElement_image').click();await field('layoutProperty_layer','3')
