@@ -291,7 +291,7 @@ function describe(model, ui, width, height, language) {
 		nodes.push(label("pageChooseHelp", rect(0, y, width, 90), tr("Choose a page or create a new page."), Object.assign({}, muted, { wrap: true })));
 		return { nodes };
 	}
-	const narrow = width < 1e3, left = narrow ? width : 220, right = narrow ? width : 310, canvasX = narrow ? 0 : left + 12, canvasWidth = narrow ? width : width - left - right - 24;
+	const narrow = width < 1e3, modeWidth = narrow ? 38 : language === "ru" ? 200 : 176, left = narrow ? width : 220, right = narrow ? width : 310, canvasX = narrow || ui.preview ? 0 : left + 12, canvasWidth = narrow || ui.preview ? width : width - left - right - 24;
 	nodes.push(node("Choice", "pageAddWidget", rect(0, y, Math.min(width, 220), 38), {
 		label: tr("Add widget"),
 		value: "",
@@ -312,15 +312,20 @@ function describe(model, ui, width, height, language) {
 				link: "Link"
 			}[value])
 		}))),
-		enabled: canEdit,
+		enabled: canEdit && !ui.preview,
 		action: { type: "add" }
 	}));
-	if (width >= 700 && model.layers.some((row) => row.kind === "items")) nodes.push(label("pageSampleHint", rect(232, y, width - 232, 38), tr("Items preview shows up to three records."), Object.assign({}, muted, {
+	if (width >= 700 && model.layers.some((row) => row.kind === "items")) nodes.push(label("pageSampleHint", rect(232, y, Math.max(0, width - 244 - modeWidth), 38), tr("Items preview shows up to three records."), Object.assign({}, muted, {
 		fontRole: "caption",
 		wrap: true
 	})));
 	y += 50;
-	if (narrow) {
+	nodes.push(button("pagePreviewMode", rect(width - modeWidth, y - 50, modeWidth, 38), tr(ui.preview ? "Back to editing" : "Clean preview"), ui.preview ? "edit" : "visibility", { type: "preview" }, !model.busy && !ui.creating && !model.pendingText, { iconOnly: narrow }));
+	if (width >= 500) {
+		nodes.push(label("pageSelectionHint", rect(0, y, width, 24), tr(ui.preview ? "Read-only draft preview. Nothing is saved." : "Click to select. Alt-click for underlying layers."), Object.assign({}, muted, { fontRole: "caption" })));
+		y += 32;
+	}
+	if (narrow && !ui.preview) {
 		nodes.push(sectionSelector("pageEditorPanels", [
 			{
 				value: "layers",
@@ -339,7 +344,7 @@ function describe(model, ui, width, height, language) {
 	}
 	const h = Math.max(100, height - y);
 	{
-		if (!narrow || ui.panel === "layers") nodes.push(node("Box", "pageLayersPanel", rect(0, y, left, h), {
+		if (!ui.preview && (!narrow || ui.panel === "layers")) nodes.push(node("Box", "pageLayersPanel", rect(0, y, left, h), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
 			children: [label("pageLayersTitle", rect(12, 12, left - 24, 24), tr("Page blocks"), { weight: 600 }), node("List", "pageBlocks", rect(12, 48, left - 24, Math.max(0, h - 60)), {
@@ -435,7 +440,7 @@ function describe(model, ui, width, height, language) {
 			});
 		}
 		const body = sections(fields, right - 24, language, canEdit);
-		if (!narrow || ui.panel === "properties") nodes.push(node("Box", "pagePropertiesPanel", rect(width - right, y, right, h), {
+		if (!ui.preview && (!narrow || ui.panel === "properties")) nodes.push(node("Box", "pagePropertiesPanel", rect(width - right, y, right, h), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
 			children: [node("Scroll", "pageProperties", rect(12, 12, right - 24, h - 24), {
@@ -445,7 +450,7 @@ function describe(model, ui, width, height, language) {
 			})]
 		}));
 	}
-	if (!narrow || ui.panel === "canvas") nodes.push(node("Box", "pageCanvasPanel", rect(canvasX, y, canvasWidth, h), {
+	if (ui.preview || !narrow || ui.panel === "canvas") nodes.push(node("Box", "pageCanvasPanel", rect(canvasX, y, canvasWidth, h), {
 		background: "workspace",
 		border: "outlineVariant",
 		children: [node("View", "pageCanvas", rect(12, 12, canvasWidth - 24, h - 24), { view: "pagePreview" })]
@@ -458,6 +463,7 @@ function initial() {
 	return {
 		selected: "",
 		panel: "canvas",
+		preview: false,
 		text: {},
 		confirmation: "",
 		pendingPage: "",
@@ -512,7 +518,11 @@ function transition(ui, model, event) {
 		ui: next,
 		commands
 	};
-	if ((!model.canWrite || model.uncertain) && !["select", "panel"].includes(event.type)) return {
+	if ((!model.canWrite || model.uncertain) && ![
+		"select",
+		"panel",
+		"preview"
+	].includes(event.type)) return {
 		ui: next,
 		commands
 	};
@@ -525,6 +535,10 @@ function transition(ui, model, event) {
 			"change"
 		].includes(event.type)) throw Error("Apply or discard the pending text before continuing");
 		switch (event.type) {
+			case "preview":
+				if (Object.keys(ui.text).length) throw Error("Apply or discard the pending text before continuing");
+				next.preview = !ui.preview;
+				break;
 			case "panel":
 				if ([
 					"layers",
@@ -718,7 +732,8 @@ var _sfc_main = {
 					ticket: this.ticket,
 					project: this.project,
 					editing: true,
-					selectedBlock: this.ui.selected,
+					guides: !this.ui.preview,
+					selectedBlock: this.ui.preview ? "" : this.ui.selected,
 					onLoaded: (value) => this.sampleLoaded(value),
 					onBlock: (key) => this.dispatch({
 						type: "select",

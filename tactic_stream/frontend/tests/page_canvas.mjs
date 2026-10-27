@@ -155,3 +155,59 @@ const clipped = Canvas.boxes(
 assert.equal(clipped.length, 1);
 assert.equal(clipped[0].height, 40);
 assert.equal(clipped[0].hit.height, 20);
+const hits = [
+  { key: 'parent', x: 0, y: 0, width: 200, height: 100 },
+  { key: 'child', x: 20, y: 20, width: 100, height: 50 }
+];
+assert.equal(Canvas.pick(hits, 30, 30).key, 'child');
+assert.equal(Canvas.pick(hits, 30, 30, 'child', true).key, 'parent');
+assert.equal(Canvas.pick(hits, 30, 30, 'parent', true).key, 'child');
+assert.equal(Canvas.pick(hits, 250, 30), null);
+const stacked = Canvas.boxes(
+  [
+    {
+      id: 'front',
+      editorPath: [0],
+      layer: 4,
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100
+    },
+    {
+      id: 'back',
+      editorPath: [1],
+      layer: 1,
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100
+    }
+  ],
+  'editorPath'
+);
+assert.equal(
+  Canvas.pick(stacked, 30, 30).key,
+  '0',
+  'Selection follows visual stacking'
+);
+assert.equal(
+  Canvas.pick(clipped, 10, 70),
+  null,
+  'clipped areas cannot be selected'
+);
+const previewUi = State.transition(State.initial(), raw, {
+  type: 'preview'
+}).ui;
+assert(previewUi.preview);
+const clean = UI.describe(UI.model(raw, previewUi), previewUi, 1400, 700, 'en');
+assert(
+  !clean.nodes.some((node) =>
+    ['pageLayersPanel', 'pagePropertiesPanel'].includes(node.id)
+  )
+);
+assert.equal(clean.nodes.find((node) => node.id === 'pageCanvasPanel').x, 0);
+assert.equal(
+  State.transition(previewUi, raw, { type: 'preview' }).commands.length,
+  0
+);

@@ -48,6 +48,24 @@ try {
   await editor.waitFor();
   await editor.locator('[data-canvas-key="0.0"]').waitFor();
   assert.equal(await control('pageLayoutChoice').inputValue(), 'review');
+  const childHit = editor.locator('[data-canvas-key="0.0"]');
+  await childHit.click();
+  await childHit.click({ modifiers: ['Alt'] });
+  await control('pageProperty_gap').waitFor();
+  const editCanvasWidth = (await control('pageCanvasPanel').boundingBox())
+    .width;
+  await control('pagePreviewMode').click();
+  assert.equal(
+    await editor.locator('[data-canvas-key]').count(),
+    0,
+    'Clean preview has no editor overlays'
+  );
+  assert.equal(await control('pageLayersPanel').count(), 0);
+  assert(
+    (await control('pageCanvasPanel').boundingBox()).width > editCanvasWidth
+  );
+  assert.equal(writes.length, 0);
+  await control('pagePreviewMode').click();
   await resize(true);
   assert.equal(await control('pageProperty_height').inputValue(), '60');
   assert.equal(writes.length, 0);

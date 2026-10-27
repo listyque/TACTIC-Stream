@@ -135,7 +135,7 @@ for mode in ["dark", "light"]:
                 (
                     'import QtQuick\nimport QtQuick.Controls\nimport "'
                     + (TH / "thlib/ui/qml").as_uri()
-                    + '" as TH\nApplicationWindow {id:root;visible:true;width:1400;height:740;color:theme.workspace;property string language:"en";property alias dark:theme.dark;function selectPanel(value){editor.dispatch({type:"panel",value});editor.dispatch({type:"select",key:"0.0"})}TH.Theme{id:theme;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}TH.PageLayoutEditorView{id:editor;anchors.fill:parent;theme:theme;controller:fixture;language:root.language}}'
+                    + '" as TH\nApplicationWindow {id:root;visible:true;width:1400;height:740;color:theme.workspace;property string language:"en";property alias dark:theme.dark;function selectPanel(value){if(editor.ui.preview !== (value==="preview"))editor.dispatch({type:"preview"});if(value!=="preview"){editor.dispatch({type:"panel",value});editor.dispatch({type:"select",key:"0.0"})}}TH.Theme{id:theme;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}TH.PageLayoutEditorView{id:editor;anchors.fill:parent;theme:theme;controller:fixture;language:root.language}}'
                 ).encode(),
                 QUrl(),
             )
@@ -145,7 +145,7 @@ for mode in ["dark", "light"]:
             )
             assert window
             try:
-                for panel in ["canvas", "properties"]:
+                for panel in ["canvas", "properties", "preview"]:
                     window.selectPanel(panel)
                     frame(window)
                     name = f"page-{mode}-{language}-{width}-{panel}.png"

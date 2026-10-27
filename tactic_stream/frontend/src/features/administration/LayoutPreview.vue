@@ -11,6 +11,7 @@ defineProps({
   project: String,
   searchType: String,
   selectedElement: String,
+  editing: Boolean,
   error: String
 });
 defineEmits(['element', 'geometry']);
@@ -32,7 +33,7 @@ defineEmits(['element', 'geometry']);
       :state="{}"
       active
       read-only
-      editing
+      :editing="editing"
       :selected-element="selectedElement"
       @geometry="$emit('geometry', $event)"
       @element="$emit('element', $event)"

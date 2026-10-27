@@ -83,8 +83,12 @@ try {
     );
     await page.evaluate((panel) => {
       const screen = window.pageEditorFixture.screen.value;
-      screen.dispatch({ type: 'panel', value: panel });
-      screen.dispatch({ type: 'select', key: '0.0' });
+      if (screen.ui.preview !== (panel === 'preview'))
+        screen.dispatch({ type: 'preview' });
+      if (panel !== 'preview') {
+        screen.dispatch({ type: 'panel', value: panel });
+        screen.dispatch({ type: 'select', key: '0.0' });
+      }
     }, expected.panel);
     await page.waitForTimeout(80);
     const actual = await surface(page, '.page-layout-editor');

@@ -33,6 +33,8 @@ async function createView(name,template){
 async function checkAndSave(){
  const before=writes.length
  await control('layoutCheck').click();await ready();assert.equal(await editor.locator('[role="alert"]').count(),0)
+ await editor.locator('.layout-live-preview .result-item').first().waitFor()
+ assert.equal(await editor.locator('.canvas-selection,.item-layout-editing').count(),0,'Resolved preview removes editor guides')
  await control('adminSaveDocument').click();assert.equal(writes.length,before,'confirmation precedes write')
  await control('adminConfirmSave').click();await ready();assert.equal(writes.length,before+1,'one confirmed write')
  assert.equal(await control('adminDocumentError').inputValue(),'Layout saved')

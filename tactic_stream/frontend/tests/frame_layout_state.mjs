@@ -9,6 +9,7 @@ const tree={type:9,children:[element('config',[],[element('cards_example',[['lay
 const raw={project:'demo',searchType:'demo/asset',view:'cards_example',source:'',tree,xml:Document.serialize(tree),configuration:{revision:'R1',sources:[],views:['cards_example'],layout_templates:[],resolved:{configured:true}},templates:[{name:'blank',tree}],canWrite:true,canLoad:true,dirty:false,busy:false,uncertain:false,sampleItems:[{kind:'object',title:'Asset',record:{name:'Asset',count:0}}]}
 let ui=State.initial(),data=raw;ui=State.synchronize(ui,UI.model(data,ui));assert.equal(ui.selected,'title');assert.equal(State.synchronize(ui,UI.model(data,ui)),ui,'stable synchronization cannot cause render loops')
 const send=(event,override={})=>{const result=State.transition(ui,UI.model({...data,...override},ui),event);ui=result.ui;return result.commands}
+assert.match(send({type:'formatXml'})[0].value,/\n  <cards_example/)
 assert.deepEqual(send({type:'save'}),[]);assert.equal(ui.confirmation,'')
 send({type:'buffer',key:'title:row',value:'0'});assert.deepEqual(send({type:'number',key:'title:row',field:'row'}),[]);assert.equal(ui.error,'Enter a whole number within the allowed range');assert(State.pending(ui));assert.deepEqual(send({type:'check'}),[])
 send({type:'buffer',key:'title:row',value:'2'});let commands=send({type:'number',key:'title:row',field:'row'});assert.equal(commands[0].type,'xml');assert.match(commands[0].value,/row="2"/);assert(!State.pending(ui))

@@ -258,3 +258,19 @@ record using the unsaved document, without changing workspace selection. Tools
 can pass `detail_key` to `ts_dashboard_preview` for the same read-only resolution;
 cross-project records are rejected. This preview context is never persisted in
 the dashboard document. Business controls are inactive while editing the canvas.
+
+Clean preview is a read-only view of the current draft, not publication or script
+activation. Page preview hides authoring panels/guides; card Resolved preview
+disables editing outlines. Alt-click can cycle overlapping canvas layers; flow
+children remain selectable without offering inapplicable grid geometry controls.
+Card visual edits emit indented XML; explicit Format XML changes only the draft,
+preserving mixed text, CDATA/scripts, comments and xml:space content.
+
+The current DashboardDocument supports row/column, text/Markdown, count metrics,
+tables, existing item collections, selected-record details and links. It does not
+yet expose chart datasets/aggregations, page-wide parameters, editable form bricks
+or paginated report layouts. Do not substitute a static text block and claim a
+requested interactive chart/form is implemented. Existing native record forms,
+table services and report paths have separate contracts until explicitly composed
+as supported dashboard blocks. Server ACL, revision and operation rules apply to
+all agent-authored content; geometry does not grant additional execution rights.

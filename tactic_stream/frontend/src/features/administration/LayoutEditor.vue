@@ -166,7 +166,9 @@ export default {
             searchType: this.searchType,
             layout: this.liveInterface?.table?.item_layout,
             error: this.previewError || this.sampleError,
-            selectedElement: this.ui.selected,
+            editing: this.ui.page !== 'resolved',
+            selectedElement:
+              this.ui.page === 'resolved' ? '' : this.ui.selected,
             onGeometry: (value) => this.dispatch({ type: 'geometry', value }),
             onElement: (name) => this.dispatch({ type: 'select', name })
           }

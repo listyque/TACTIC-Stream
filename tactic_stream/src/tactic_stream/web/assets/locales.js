@@ -1682,7 +1682,12 @@ var en_default = {
 	"Add a widget to start this page.": "Add a widget to start this page.",
 	Height: "Height",
 	"Move element": "Move element",
-	"Items preview shows up to three records.": "Items preview shows up to three records."
+	"Items preview shows up to three records.": "Items preview shows up to three records.",
+	"Format XML": "Format XML",
+	"Clean preview": "Clean preview",
+	"Back to editing": "Back to editing",
+	"Read-only draft preview. Nothing is saved.": "Read-only draft preview. Nothing is saved.",
+	"Click to select. Alt-click for underlying layers.": "Click to select. Alt-click for underlying layers."
 };
 var ru_default = {
 	"New view": "Новый вид",
@@ -6905,7 +6910,12 @@ var ru_default = {
 	"Add a widget to start this page.": "Добавьте виджет, чтобы начать эту страницу.",
 	Height: "Высота",
 	"Move element": "Переместить элемент",
-	"Items preview shows up to three records.": "В предпросмотре итемов — до трёх записей."
+	"Items preview shows up to three records.": "В предпросмотре итемов — до трёх записей.",
+	"Format XML": "Форматировать XML",
+	"Clean preview": "Чистое превью",
+	"Back to editing": "К редактированию",
+	"Read-only draft preview. Nothing is saved.": "Просмотр черновика. Изменения не сохраняются.",
+	"Click to select. Alt-click for underlying layers.": "Клик — выбор. Alt + клик — слой под выбранным."
 };
 //#endregion
 export { en_default as n, ru_default as t };

@@ -107,7 +107,8 @@ export default {
             ticket: this.ticket,
             project: this.project,
             editing: true,
-            selectedBlock: this.ui.selected,
+            guides: !this.ui.preview,
+            selectedBlock: this.ui.preview ? '' : this.ui.selected,
             onLoaded: (value) => this.sampleLoaded(value),
             onBlock: (key) => this.dispatch({ type: 'select', key }),
             onGeometry: (value, boxes) =>

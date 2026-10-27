@@ -6602,15 +6602,28 @@ function describe$47(tree, view) {
 		elements
 	};
 }
-function serialize(node) {
+function serialize(node, pretty = false) {
+	if (pretty) {
+		const whitespace = (item) => item.type === 3 && !String(item.text || "").trim();
+		function format(item, depth) {
+			if (item.type === 9) return (item.children || []).filter((child) => !whitespace(child)).map((child) => format(child, 0)).join("\n");
+			if (item.type !== 1) return serialize(item);
+			const children = item.children || [];
+			if ((item.attributes || []).some(([name, value]) => name === "xml:space" && value === "preserve") || children.some((child) => child.type === 4 || child.type === 3 && !whitespace(child))) return serialize(item);
+			const nested = children.filter((child) => !whitespace(child));
+			if (!nested.length) return serialize(item);
+			return serialize(Object.assign({}, item, { children: [] })).slice(0, -2) + ">\n" + nested.map((child) => "  ".repeat(depth + 1) + format(child, depth + 1)).join("\n") + "\n" + "  ".repeat(depth) + "</" + item.name + ">";
+		}
+		return format(node, 0);
+	}
 	const escape = (value, attr) => String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, attr ? "&quot;" : "\"").replace(/\r/g, attr ? "&#13;" : "\r").replace(/\n/g, attr ? "&#10;" : "\n").replace(/\t/g, attr ? "&#9;" : "	");
-	if (node.type === 9) return (node.children || []).map(serialize).join("");
+	if (node.type === 9) return (node.children || []).map((child) => serialize(child)).join("");
 	if (node.type === 3) return escape(node.text || "", false);
 	if (node.type === 4) return "<![CDATA[" + (node.text || "") + "]]>";
 	if (node.type === 8) return "<!--" + (node.text || "") + "-->";
 	if (node.type === 7) return "<?" + node.name + (node.text ? " " + node.text : "") + "?>";
 	if (node.type !== 1) throw Error("Unsupported XML node");
-	const attributes = (node.attributes || []).map((pair) => " " + pair[0] + "=\"" + escape(pair[1], true) + "\"").join(""), body = (node.children || []).map(serialize).join("");
+	const attributes = (node.attributes || []).map((pair) => " " + pair[0] + "=\"" + escape(pair[1], true) + "\"").join(""), body = (node.children || []).map((child) => serialize(child)).join("");
 	return "<" + node.name + attributes + (node.children && node.children.length ? ">" + body + "</" + node.name + ">" : "/>");
 }
 function template(tree, view) {
@@ -7514,6 +7527,14 @@ var handles = [
 	"s",
 	"se"
 ];
+function pick(boxes, x, y, selected = "", cycle = false) {
+	const hits = (boxes || []).filter((box) => {
+		const hit = box.hit || box;
+		return x >= hit.x && x < hit.x + hit.width && y >= hit.y && y < hit.y + hit.height;
+	}).reverse();
+	if (!hits.length) return null;
+	return hits[((cycle ? hits.findIndex((box) => box.key === selected) : -1) + 1) % hits.length];
+}
 function intersect(a, b) {
 	if (!a) return b;
 	const x = Math.max(a.x, b.x), y = Math.max(a.y, b.y);
@@ -7521,7 +7542,7 @@ function intersect(a, b) {
 }
 function boxes(nodes, field, x = 0, y = 0, depth = 0, clip = null) {
 	let result = [];
-	for (const item of nodes || []) {
+	for (const item of Array.from(nodes || []).sort((a, b) => (a.layer || 0) - (b.layer || 0))) {
 		const left = x + item.x, top = y + item.y;
 		const hit = intersect(clip, rect$1(left, top, item.width, item.height));
 		if (item[field] !== void 0 && hit.width > 0 && hit.height > 0) result.push({
@@ -7610,11 +7631,17 @@ function spacingField(id, title, value, text, action, language, enabled, width) 
 }
 function itemScene(scene, layout, prefix = "itemComposition") {
 	if (layout.flow === "contents" || layout.collection === "table") return scene;
-	return decorate(scene, "layoutElement", "canvasOverlay", (box) => {
+	const result = decorate(scene, "layoutElement", "canvasOverlay", (box) => {
 		const item = layout.elements.find((row) => row.name === box.key);
-		const parent = item && layout.elements.find((row) => row.name === item.parent);
-		return !!item && box.id === prefix + "_" + item.name && (parent ? parent.flow : layout.flow) === "grid";
+		return !!item && box.id === prefix + "_" + item.name;
 	});
+	return Object.assign({}, result, { canvasBoxes: (result.canvasBoxes || []).map((box) => {
+		const item = layout.elements.find((row) => row.name === box.key), parent = layout.elements.find((row) => row.name === item.parent);
+		return Object.assign({}, box, {
+			label: item.title || item.name,
+			canTransform: (parent ? parent.flow : layout.flow) === "grid"
+		});
+	}) });
 }
 //#endregion
 //#region src/features/administration/CanvasSelection.vue
@@ -7651,13 +7678,18 @@ var _sfc_main$156 = {
 			width: b.width + "px",
 			height: b.height + "px"
 		});
-		function start(e, box, handle) {
+		function start(e, box, handle, hit = false) {
 			if (e.button !== 0) return;
 			e.preventDefault();
 			e.stopPropagation();
 			e.currentTarget.focus();
 			e.currentTarget.setPointerCapture(e.pointerId);
+			if (hit && e.altKey) {
+				const bounds = e.currentTarget.closest(".canvas-selection").getBoundingClientRect();
+				box = pick(props.boxes, e.clientX - bounds.left, e.clientY - bounds.top, props.selected, true) || box;
+			}
 			emit("select", box.key);
+			if (box.canTransform === false) return;
 			gesture.value = {
 				box: { ...box },
 				handle,
@@ -7700,6 +7732,7 @@ var _sfc_main$156 = {
 				ArrowDown: [0, 1]
 			}[e.key];
 			if (!d) return;
+			if (box.canTransform === false) return;
 			e.preventDefault();
 			e.stopPropagation();
 			const step = e.shiftKey ? 10 : 1, handle = resizeHandle || (e.altKey ? "se" : "move");
@@ -7718,13 +7751,14 @@ var _sfc_main$156 = {
 					class: "canvas-hit",
 					style: normalizeStyle({
 						...css(box.hit || box),
-						zIndex: i
+						zIndex: i,
+						cursor: box.canTransform === false ? "pointer" : "move"
 					}),
 					"data-canvas-key": box.key,
 					tabindex: "0",
 					role: "button",
-					"aria-label": unref(t)("Select element") + " " + box.key,
-					onPointerdown: ($event) => start($event, box, "move"),
+					"aria-label": unref(t)("Select element") + " " + (box.label || box.key),
+					onPointerdown: ($event) => start($event, box, "move", true),
 					onPointermove: move,
 					onPointerup: finish,
 					onPointercancel: cancel,
@@ -7735,7 +7769,8 @@ var _sfc_main$156 = {
 				class: "canvas-outline",
 				style: normalizeStyle(css(chosen.value))
 			}, [
-				createBaseVNode("div", {
+				chosen.value.canTransform !== false ? (openBlock(), createElementBlock("div", {
+					key: 0,
 					class: "canvas-move-edge",
 					tabindex: "0",
 					role: "button",
@@ -7745,9 +7780,9 @@ var _sfc_main$156 = {
 					onPointerup: finish,
 					onPointercancel: cancel,
 					onKeydown: _cache[1] || (_cache[1] = ($event) => key($event, chosen.value))
-				}, null, 40, _hoisted_3$44),
+				}, null, 40, _hoisted_3$44)) : createCommentVNode("", true),
 				createBaseVNode("span", _hoisted_4$35, toDisplayString(Math.round(chosen.value.width)) + " × " + toDisplayString(Math.round(chosen.value.height)), 1),
-				(openBlock(true), createElementBlock(Fragment, null, renderList(handles, (handle) => {
+				(openBlock(true), createElementBlock(Fragment, null, renderList(chosen.value.canTransform === false ? [] : handles, (handle) => {
 					return openBlock(), createElementBlock("div", {
 						key: handle,
 						class: normalizeClass(["canvas-handle", "canvas-handle-" + handle]),
@@ -18954,6 +18989,10 @@ var _sfc_main$116 = {
 			default: true
 		},
 		editing: Boolean,
+		guides: {
+			type: Boolean,
+			default: true
+		},
 		selectedBlock: String
 	},
 	emits: [
@@ -18991,7 +19030,7 @@ var _sfc_main$116 = {
 			layoutBusy: busy.value,
 			layoutError: error.value
 		}, props.frameNode?.width ?? props.width, props.frameNode?.height ?? props.height, appearance.language, true, location.origin));
-		const scene = computed(() => props.editing ? decorate(baseScene.value, "editorPath") : baseScene.value);
+		const scene = computed(() => props.editing && props.guides ? decorate(baseScene.value, "editorPath") : baseScene.value);
 		const views = computed(() => ({
 			canvasOverlay: {
 				component: _sfc_main$156,

@@ -24,6 +24,7 @@ const props = defineProps({
   workspaceId: String,
   active: { type: Boolean, default: true },
   editing: Boolean,
+  guides: { type: Boolean, default: true },
   selectedBlock: String
 });
 const emit = defineEmits([
@@ -75,7 +76,7 @@ const baseScene = computed(() =>
   )
 );
 const scene = computed(() =>
-  props.editing
+  props.editing && props.guides
     ? Canvas.decorate(baseScene.value, 'editorPath')
     : baseScene.value
 );

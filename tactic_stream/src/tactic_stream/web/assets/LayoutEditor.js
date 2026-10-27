@@ -77,7 +77,7 @@ function apply(model, change) {
 	}
 	let tree = model.tree;
 	for (const field of Object.keys(values)) tree = edit(tree, model.view, item.name, field, values[field]);
-	return serialize(tree);
+	return serialize(tree, true);
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.state.mjs
@@ -130,7 +130,7 @@ function change(next, model, event, commands) {
 		else if (event.field === "remove") next.selected = (description.elements[0] || {}).name || "";
 		commands.push({
 			type: "xml",
-			value: serialize(tree)
+			value: serialize(tree, true)
 		});
 		next.error = "";
 		return true;
@@ -332,7 +332,7 @@ function transition(ui, model, event) {
 				next.selected = name;
 				commands.push({
 					type: "xml",
-					value: serialize(tree)
+					value: serialize(tree, true)
 				});
 				next.error = "";
 			} catch (error) {
@@ -344,6 +344,12 @@ function transition(ui, model, event) {
 			if (edit$1) commands.push({
 				type: "xml",
 				value: event.value
+			});
+			break;
+		case "formatXml":
+			if (edit$1 && !model.layoutError && !pending(ui)) commands.push({
+				type: "xml",
+				value: serialize(model.tree, true)
 			});
 			break;
 		case "context":
@@ -389,7 +395,7 @@ function transition(ui, model, event) {
 					commands.push({
 						type: "newView",
 						view: name,
-						xml: serialize(template(tree, name))
+						xml: serialize(template(tree, name), true)
 					});
 					next.error = "";
 				} catch (error) {
@@ -668,6 +674,7 @@ function toolbar(model, ui, width, language, embedded = false) {
 	result.nodes = result.nodes.filter((row) => row.id !== "adminDocumentStatus");
 	result.nodes.push(button("layoutCheck", rect(46, 0, 38, 38), tr("Check and preview"), "check", { type: "check" }, edit && !model.layoutError && !pending(ui), { iconOnly: true }), button("layoutHelp", rect(90, 0, 38, 38), tr("Layout guide"), "help", { type: "help" }, true, { iconOnly: true }), button("layoutOpenView", rect(embedded ? 90 : 134, 0, 38, 38), tr("Open saved view"), "open-in-new", { type: "openView" }, edit && !model.dirty && !!(model.configuration && model.configuration.resolved && model.configuration.resolved.configured), { iconOnly: true }));
 	if (embedded) result.nodes = result.nodes.filter((row) => row.id !== "layoutHelp");
+	if (ui.page === "xml") result.nodes.push(button("layoutFormatXml", rect(embedded ? 134 : 178, 0, 38, 38), tr("Format XML"), "code", { type: "formatXml" }, edit && !model.layoutError && !pending(ui), { iconOnly: true }));
 	return result;
 }
 function models(model, language = "en") {
@@ -942,6 +949,10 @@ function describe(model, ui, width, height, language) {
 		}
 	], ui.page, rect(0, y, width, 38), !model.busy, "page"));
 	y += 46;
+	if (ui.page === "design" && width >= 500) {
+		nodes.push(label("layoutSelectionHint", rect(0, y, width, 24), tr("Click to select. Alt-click for underlying layers."), Object.assign({}, muted, { fontRole: "caption" })));
+		y += 32;
+	}
 	if (model.sampleError) {
 		nodes.push(node("Area", "layoutSampleError", rect(0, y, width, 58), {
 			label: tr("Preview data could not be loaded"),
@@ -1242,6 +1253,7 @@ var _sfc_main$1 = {
 		project: String,
 		searchType: String,
 		selectedElement: String,
+		editing: Boolean,
 		error: String
 	},
 	emits: ["element", "geometry"],
@@ -1262,7 +1274,7 @@ var _sfc_main$1 = {
 				state: {},
 				active: "",
 				"read-only": "",
-				editing: "",
+				editing: __props.editing,
 				"selected-element": __props.selectedElement,
 				onGeometry: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("geometry", $event)),
 				onElement: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("element", $event))
@@ -1274,6 +1286,7 @@ var _sfc_main$1 = {
 				"workspace-id",
 				"item-layout",
 				"mode",
+				"editing",
 				"selected-element"
 			])) : (openBlock(), createElementBlock("p", _hoisted_3$1, toDisplayString(unref(t)("Loading interface...")), 1))]);
 		};
@@ -1417,7 +1430,8 @@ var _sfc_main = {
 					searchType: this.searchType,
 					layout: this.liveInterface?.table?.item_layout,
 					error: this.previewError || this.sampleError,
-					selectedElement: this.ui.selected,
+					editing: this.ui.page !== "resolved",
+					selectedElement: this.ui.page === "resolved" ? "" : this.ui.selected,
 					onGeometry: (value) => this.dispatch({
 						type: "geometry",
 						value

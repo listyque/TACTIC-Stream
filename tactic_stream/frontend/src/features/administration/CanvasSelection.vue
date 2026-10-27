@@ -15,13 +15,27 @@ const css = (b) => ({
   width: b.width + 'px',
   height: b.height + 'px'
 });
-function start(e, box, handle) {
+function start(e, box, handle, hit = false) {
   if (e.button !== 0) return;
   e.preventDefault();
   e.stopPropagation();
   e.currentTarget.focus();
   e.currentTarget.setPointerCapture(e.pointerId);
+  if (hit && e.altKey) {
+    const bounds = e.currentTarget
+      .closest('.canvas-selection')
+      .getBoundingClientRect();
+    box =
+      Canvas.pick(
+        props.boxes,
+        e.clientX - bounds.left,
+        e.clientY - bounds.top,
+        props.selected,
+        true
+      ) || box;
+  }
   emit('select', box.key);
+  if (box.canTransform === false) return;
   gesture.value = { box: { ...box }, handle, x: e.clientX, y: e.clientY };
   ghost.value = { ...box };
 }
@@ -61,6 +75,7 @@ function key(e, box, resizeHandle) {
     ArrowDown: [0, 1]
   }[e.key];
   if (!d) return;
+  if (box.canTransform === false) return;
   e.preventDefault();
   e.stopPropagation();
   const step = e.shiftKey ? 10 : 1,
@@ -80,12 +95,16 @@ function key(e, box, resizeHandle) {
       v-for="(box, i) in boxes"
       :key="box.key"
       class="canvas-hit"
-      :style="{ ...css(box.hit || box), zIndex: i }"
+      :style="{
+        ...css(box.hit || box),
+        zIndex: i,
+        cursor: box.canTransform === false ? 'pointer' : 'move'
+      }"
       :data-canvas-key="box.key"
       tabindex="0"
       role="button"
-      :aria-label="t('Select element') + ' ' + box.key"
-      @pointerdown="start($event, box, 'move')"
+      :aria-label="t('Select element') + ' ' + (box.label || box.key)"
+      @pointerdown="start($event, box, 'move', true)"
       @pointermove="move"
       @pointerup="finish"
       @pointercancel="cancel"
@@ -93,6 +112,7 @@ function key(e, box, resizeHandle) {
     />
     <div v-if="chosen" class="canvas-outline" :style="css(chosen)">
       <div
+        v-if="chosen.canTransform !== false"
         class="canvas-move-edge"
         tabindex="0"
         role="button"
@@ -107,7 +127,7 @@ function key(e, box, resizeHandle) {
         >{{ Math.round(chosen.width) }} × {{ Math.round(chosen.height) }}</span
       >
       <div
-        v-for="handle in Canvas.handles"
+        v-for="handle in chosen.canTransform === false ? [] : Canvas.handles"
         :key="handle"
         class="canvas-handle"
         :class="'canvas-handle-' + handle"

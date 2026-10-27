@@ -4069,6 +4069,11 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Format XML": "Форматировать XML",
+	"Clean preview": "Чистое превью",
+	"Back to editing": "К редактированию",
+	"Read-only draft preview. Nothing is saved.": "Просмотр черновика. Изменения не сохраняются.",
+	"Click to select. Alt-click for underlying layers.": "Клик — выбор. Alt + клик — слой под выбранным.",
 	"Items preview shows up to three records.": "В предпросмотре итемов — до трёх записей.",
 	Height: "Высота",
 	"Move element": "Переместить элемент",

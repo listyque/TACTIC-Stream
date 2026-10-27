@@ -1682,5 +1682,10 @@
   "Add a widget to start this page.": "Add a widget to start this page.",
   "Height": "Height",
   "Move element": "Move element",
-  "Items preview shows up to three records.": "Items preview shows up to three records."
+  "Items preview shows up to three records.": "Items preview shows up to three records.",
+  "Format XML": "Format XML",
+  "Clean preview": "Clean preview",
+  "Back to editing": "Back to editing",
+  "Read-only draft preview. Nothing is saved.": "Read-only draft preview. Nothing is saved.",
+  "Click to select. Alt-click for underlying layers.": "Click to select. Alt-click for underlying layers."
 }
