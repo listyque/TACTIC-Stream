@@ -7,11 +7,14 @@ const page = await browser.newPage({
 });
 page.setDefaultTimeout(15000);
 const errors = [],
-  writes = [];
+  writes = [],
+  itemReads = [];
 page.on('pageerror', (error) => errors.push(error.message));
 page.on('request', (request) => {
   if (request.url().endsWith('/admin/rpc')) {
     const body = request.postDataJSON();
+    if (body?.args?.[1] === 'tactic.ui.table.NestedTableReadCmd')
+      itemReads.push(body.args[2]);
     if (
       body?.method === 'execute_cmd' &&
       body.args[1].endsWith('DashboardCmd') &&
@@ -123,6 +126,58 @@ try {
     .waitFor({ state: 'hidden' });
   await page.goto(process.argv[2] + '/projects/one/dashboard/detail_preview');
   await page.locator('.workspace-page[aria-busy="false"]').waitFor();
+  const treeItem = page.locator('.dashboard-items .result-item').first();
+  await treeItem.waitFor();
+  await page.evaluate(() => {
+    window.originalDashboardItem = document.querySelector(
+      '.dashboard-items .result-item'
+    );
+  });
+  const loadedReads = itemReads.length;
+  await page.setViewportSize({ width: 1500, height: 850 });
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      )
+  );
+  assert.equal(
+    itemReads.length,
+    loadedReads,
+    'Resizing does not reread the tree'
+  );
+  await treeItem.click({ position: { x: 180, y: 30 } });
+  await page
+    .locator('.workspace-page')
+    .getByText('Code: A', { exact: true })
+    .waitFor();
+  assert.equal(
+    itemReads.length,
+    loadedReads,
+    'Selection only loads the details pane'
+  );
+  assert(
+    await page.evaluate(
+      () =>
+        window.originalDashboardItem ===
+        document.querySelector('.dashboard-items .result-item')
+    ),
+    'Existing result item stays mounted'
+  );
+  const refreshed = page.waitForResponse(
+    (response) =>
+      response.url().endsWith('/admin/rpc') &&
+      response.request().postDataJSON()?.args?.[1] ===
+        'tactic.ui.table.NestedTableReadCmd'
+  );
+  await control('workspacePageRefresh').click();
+  await refreshed;
+  await treeItem.waitFor();
+  assert.equal(
+    itemReads.length,
+    loadedReads + 1,
+    'Explicit refresh still reloads the tree once'
+  );
   await control('workspacePageEdit').click();
   await editor.getByText('Code: A', { exact: true }).waitFor();
   await control('pageBlock_0.1.0.0').click();

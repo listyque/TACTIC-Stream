@@ -18748,11 +18748,12 @@ var _sfc_main$117 = {
 				if (current === generation) busy.value = false;
 			}
 		}
-		watch(() => [
+		watch(() => JSON.stringify([
 			props.ticket,
 			props.project,
-			props.frameNode.items
-		], () => load(), { immediate: true });
+			props.frameNode.items,
+			props.editing
+		]), () => load(), { immediate: true });
 		onBeforeUnmount(() => ++generation);
 		watch(() => props.active, (value) => {
 			if (value && !records.value.length && !busy.value) load();

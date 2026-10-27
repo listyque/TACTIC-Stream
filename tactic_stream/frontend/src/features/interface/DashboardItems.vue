@@ -95,7 +95,13 @@ async function load(append = false) {
   }
 }
 watch(
-  () => [props.ticket, props.project, props.frameNode.items],
+  () =>
+    JSON.stringify([
+      props.ticket,
+      props.project,
+      props.frameNode.items,
+      props.editing
+    ]),
   () => load(),
   { immediate: true }
 );
