@@ -1,5 +1,6 @@
 """Real PostgreSQL foundation. STREAM_POSTGRES_HOST/password file opt in; private schemas only."""
 import ast
+from contextlib import closing
 from decimal import Decimal
 import inspect
 import os
@@ -537,7 +538,7 @@ result = {
                         db.executemany('INSERT INTO "schema" (code,project_code,"schema") VALUES (?,?,?)',
                                        [('one', 'one', schema), ('local', 'local', schema)])
                     # The same unmodified script also runs against the SQLite project.
-                    with sqlite3.connect(store.database_path('local_db')) as local:
+                    with closing(sqlite3.connect(store.database_path('local_db'))) as local, local:
                         local.execute('CREATE TABLE entity (id integer PRIMARY KEY, code varchar(256), name text, '
                                       'active boolean, s_status varchar(256), amount integer)')
                         local.execute('CREATE TABLE child (id integer PRIMARY KEY, code text, entity_code text, s_status text)')
@@ -556,6 +557,22 @@ result = {
                     self.assertEqual(results[0]['objects'], [('A', "Юникод O'Reilly 100%", True)])
                     self.assertEqual(results[0]['parent'], 'A')
                     self.assertTrue(results[0]['base'])
+                    # Report buckets and fixed aggregate functions use the same visible scope on both vendors.
+                    with psycopg.connect(dbname=database, **values, autocommit=True) as pg:
+                        pg.execute('ALTER TABLE entity ADD COLUMN report_date timestamptz')
+                        pg.execute("UPDATE entity SET report_date=CASE WHEN code='A' THEN '2026-01-31T23:30:00-02:00'::timestamptz ELSE '2026-02-05 03:00:00 +0300'::timestamptz END")
+                    with closing(sqlite3.connect(store.database_path('local_db'))) as local, local:
+                        local.execute('ALTER TABLE entity ADD COLUMN report_date timestamp')
+                        local.execute("UPDATE entity SET report_date=CASE WHEN code='A' THEN '2026-01-31T23:30:00-02:00' ELSE '2026-02-05 03:00:00 +0300' END")
+                    aggregates = []
+                    for project in ('one', 'local'):
+                        with request_context(RequestContext(store, 'admin', project)):
+                            search = Search('contract/entity')
+                            aggregates.append(search.get_aggregates([('report_date', 'month')],
+                                [(function, '' if function == 'count' else 'amount')
+                                 for function in ('count', 'sum', 'avg', 'min', 'max')]))
+                    self.assertEqual(aggregates[0], aggregates[1])
+                    self.assertEqual(aggregates[0], [('2026-02', 2, 3, Decimal('1.5'), 0, 3)])
                     with request_context(RequestContext(store, 'admin', 'one')):
                         resource = Project.get().get_project_db_resource()
                         self.assertEqual(resource.get_vendor(), 'PostgreSQL')
@@ -609,7 +626,7 @@ result = {
                     self.assertEqual(records[0]['__search_key__'], 'contract/entity?project=one&code=A')
                     self.assertTrue(records[0]['active'])
                     self.assertEqual(api.dispatch('get_table_info', (ticket, 'contract/entity')), {'child': 'child', 'entity': 'entity', 'ref': 'ref'})
-                    self.assertEqual(api.dispatch('get_column_names', (ticket, 'contract/entity')), results[0]['columns'])
+                    self.assertEqual(api.dispatch('get_column_names', (ticket, 'contract/entity')), results[0]['columns'] + ['report_date'])
                     ordinary = {'ticket': api.get_ticket('ordinary', 'private-project-test'), 'project': 'one'}
                     with self.assertRaises(SecurityException):
                         api.dispatch('query', (ordinary, 'sthpw/db_resource'))

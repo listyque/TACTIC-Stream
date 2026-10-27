@@ -17,7 +17,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from tactic_stream import __version__
 from tactic_stream.project_plan import ProjectPlan, Code, Label
 from tactic_stream.automation_plan import AutomationPlan
-from tactic_stream.dashboard_plan import DashboardDocument
+from tactic_stream.dashboard_plan import DashboardDocument, DashboardFilterValue
 from tactic_stream.sidebar_plan import SidebarDocument
 from tactic_stream.automation_trial import AutomationTrials, TrialCase
 
@@ -687,7 +687,8 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return connection.command('sidebar','operation',operation_id=operation_id)
 
     @mcp.tool(annotations=read_only, structured_output=True)
-    def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier, detail_key: Identifier | None = None) -> dict[str, Any]:
+    def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier, detail_key: Identifier | None = None,
+                             filter_values: dict[str, DashboardFilterValue] | None = None) -> dict[str, Any]:
         """Compose a shared native dashboard from row/column/text/markdown/count/table/items/details/link bricks.
         Use one items brick for the existing native item-card tree, with its actual relationship/process
         branches, counts and actions. Only supply search_type, view and root filters; do not invent another tree.
@@ -698,9 +699,18 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
 
         Tables reference existing TACTIC views; use ts_page_* for a new column layout.
         Filters are ANDed native column conditions. Metrics are current row counts.
+        Page filters have stable names, real source/column and typed enabled/value defaults.
+        Widgets inherit filters for the same source; page_filters maps names to other real
+        columns ({} opts out). filter_values tests transient overrides, never saves them.
+        chart/summary widgets group_by column/period (value/year/month/day UTC) and aggregates
+        name/title/function/count|sum|avg|min|max/column; numeric fields for sum/avg/min/max.
+        group_limit bounds displayed groups after aggregation, group_order sorts groups or
+        the first measure. Chart measure picks one aggregate. Metric accepts one ungrouped
+        aggregate. Discover fields with ts_dashboard_sources before composing these blocks.
         Same CustomLayout/Frame in TH and TS; no application source or generated code.
         """
-        return connection.command('dashboard','preview',document=document.model_dump(mode='json'),expected_revision=expected_revision,detail_key=detail_key or '')
+        return connection.command('dashboard','preview',document=document.model_dump(mode='json'),expected_revision=expected_revision,detail_key=detail_key or '',
+                                  filter_values={name:value.model_dump(mode='json') for name,value in filter_values.items()} if filter_values is not None else None)
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_dashboard_operation(operation_id: Identifier) -> dict[str, Any]:

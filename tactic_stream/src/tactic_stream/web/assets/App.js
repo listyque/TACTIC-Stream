@@ -17,7 +17,7 @@ import { t as downloadBlob } from "./files2.js";
 import { n as FilePreviewContent_default, t as FilePreview_default } from "./FilePreview.js";
 import { t as fileBlob } from "./previewFiles.js";
 import { a as viewTabWidth, i as tab, n as key$2, r as sectionWidth, t as dimensions$4 } from "./workspace.ui.js";
-import { t as describe$60 } from "./confirmation.ui.js";
+import { t as describe$62 } from "./confirmation.ui.js";
 import { t as _sfc_main$208 } from "./AppDialog.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";
 import { t as _sfc_main$209 } from "./AppMenuItem.js";
@@ -29,7 +29,7 @@ var dimensions$3 = {
 	projectPreviewExtent: 28,
 	projectPreviewRadius: 6
 };
-function describe$59(model) {
+function describe$61(model) {
 	const width = Math.max(0, model.width);
 	const compact = !!model.compact;
 	const height = layout$11.appBarHeight;
@@ -112,7 +112,7 @@ function positions$1(scene) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/shell/workspace.ui.mjs
-function describe$58(width, height, compact = false) {
+function describe$60(width, height, compact = false) {
 	const toolbar = Math.min(height, layout$11.appBarHeight);
 	const rail = compact ? 0 : Math.min(width, layout$11.sectionRailWidth);
 	const body = Math.max(0, height - toolbar);
@@ -964,7 +964,7 @@ var MessageTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 }, [["__scopeId", "data-v-141aba48"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/parallel.ui.mjs
-function describe$57(cell, width, height, language, expanded = {}) {
+function describe$59(cell, width, height, language, expanded = {}) {
 	const children = [], inner = Math.max(1, width - 24), barHeight = (cell.barHeight || 1) + 1, steps = cell.steps || 6, labelHeight = 20, rowHeight = Math.max(28, steps * barHeight + labelHeight + 4);
 	let index = 0, left = 0;
 	function append(groups, parent) {
@@ -1040,7 +1040,7 @@ function droppedKeys(value, accepted) {
 	if (!value || value.searchType !== accepted || !Array.isArray(value.searchKeys) || value.searchKeys.length > 500 || value.searchKeys.some((key) => typeof key !== "string" || !key)) throw new Error("Dropped objects belong to another Search Type");
 	return [...new Set(value.searchKeys)];
 }
-function describe$56(cell, width, height, language, editable) {
+function describe$58(cell, width, height, language, editable) {
 	const inner = Math.max(0, width - 24), links = cell.links || [], children = [];
 	if (cell.available === false) children.push(label("dropDiagnostic", rect$1(4, 0, inner, 28), translate(cell.diagnostic, language), {
 		color: "secondaryText",
@@ -1247,7 +1247,7 @@ function serviceHeight(columns) {
 		return Math.max(height, Math.max(64, Number(options.icon_size) || 60) + 32);
 	}, 0);
 }
-function describe$55(model, width) {
+function describe$57(model, width) {
 	const available = Math.max(0, width - metrics$10.selection - metrics$10.actions);
 	const columns = visibleColumns(model.columns || [], available, model.overrides);
 	const fitted = model.autoFit ? fittedWidths(columns, available, model.overrides) : {};
@@ -1364,7 +1364,7 @@ function columns$1(model) {
 		return result;
 	});
 }
-function describe$54(model, width, extent, language) {
+function describe$56(model, width, extent, language) {
 	const t = (value) => translate(value, language);
 	const toolOffset = model.embedded ? 36 : 0;
 	const quick = quickLayout(model, width), quickColumns = quick.columns, quickHeight = quick.height;
@@ -1517,6 +1517,795 @@ function row$21(model, record, language, viewportWidth = 0) {
 	return { nodes };
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/table/report.ui.mjs
+function reports(document) {
+	const result = {};
+	function walk(items, prefix) {
+		for (const [index, item] of (items || []).entries()) {
+			const key = prefix + "_" + index;
+			if (item.kind === "summary") result[key] = item.report;
+			walk(item.children, key);
+		}
+	}
+	walk(document.layoutNodes, "customLayout");
+	walk(document.layoutDetail?.layoutNodes, "customLayoutDetails");
+	return result;
+}
+function models$1(document) {
+	const result = {};
+	for (const [key, report] of Object.entries(reports(document))) result[key] = report.rows.map((row) => report.columns.map((column) => ({ value: row[column.key] })));
+	return result;
+}
+function cell$2(grid, value, row, column) {
+	const data = grid.report.rows[row]?.[grid.report.columns[column].key];
+	return { nodes: [label(grid.id + "_cell_" + row + "_" + column, rect$1(8, 0, grid.cellWidth - 16, grid.rowHeight), data == null ? "—" : String(data), { align: grid.report.columns[column].kind === "measure" ? "right" : "left" })] };
+}
+function describe$55(item, id, width, height, language) {
+	const tr = (text) => translate(text, language), report = item.report, nodes = [];
+	const bodyHeight = Math.max(40, height - 38 - (report.truncated ? 28 : 0));
+	nodes.push(label(id + "_title", rect$1(0, 0, width, 28), item.text, { weight: 600 }));
+	if (!report.rows.length) nodes.push(label(id + "_empty", rect$1(0, 38, width, 40), tr("No matching report data"), { color: "secondaryText" }));
+	else if (item.kind === "summary") nodes.push(node("Grid", id + "_grid", rect$1(0, 36, width, bodyHeight), {
+		report,
+		source: id,
+		caption: "",
+		labelWidth: 0,
+		headerHeight: 34,
+		rowHeight: 32,
+		cellWidth: Math.max(140, Math.min(240, (width - 16) / Math.max(1, report.columns.length))),
+		rowHeaders: report.rows.map(() => ""),
+		columnHeaders: report.columns.map((column) => column.title),
+		text: item.text
+	}));
+	else {
+		width = Math.max(0, width - 16);
+		const measure = report.measure, groups = report.columns.filter((column) => column.kind === "group");
+		const values = report.rows.map((row) => Number(row[measure] || 0)), low = Math.min(0, ...values);
+		const range = Math.max(0, ...values) - low || 1, labelWidth = Math.min(210, width * .36), valueWidth = 90, barWidth = Math.max(1, width - labelWidth - valueWidth - 24), zero = -low / range * barWidth;
+		const children = [];
+		report.rows.forEach((row, index) => {
+			const value = row[measure], number = Number(value || 0), position = (number - low) / range * barWidth;
+			const title = groups.length ? groups.map((column) => row[column.key] == null ? tr("No value") : String(row[column.key])).join(" · ") : tr("Total");
+			const y = index * 36;
+			children.push(label(id + "_group_" + index, rect$1(0, y, labelWidth - 12, 32), title, { maxLines: 1 }));
+			children.push(node("Box", id + "_axis_" + index, rect$1(labelWidth + zero, y + 5, 1, 24), { background: "outlineVariant" }));
+			if (number) children.push(node("Box", id + "_bar_" + index, rect$1(labelWidth + Math.min(position, zero), y + 8, Math.max(1, Math.abs(position - zero)), 18), {
+				background: "action",
+				radius: 2
+			}));
+			children.push(label(id + "_number_" + index, rect$1(width - valueWidth, y, valueWidth, 32), value == null ? "—" : String(value), { align: "right" }));
+		});
+		nodes.push(node("Scroll", id + "_bars", rect$1(0, 36, width, bodyHeight), {
+			contentHeight: report.rows.length * 36,
+			scrollbarId: id + "Bar",
+			children
+		}));
+	}
+	if (report.truncated) nodes.push(label(id + "_truncated", rect$1(0, height - 26, width, 26), tr("Group limit reached. Refine filters or increase the limit."), {
+		color: "secondaryText",
+		maxLines: 1
+	}));
+	return { nodes };
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.document.mjs
+var kinds = [
+	"row",
+	"column",
+	"text",
+	"markdown",
+	"metric",
+	"table",
+	"items",
+	"details",
+	"link",
+	"chart",
+	"summary"
+];
+var copy = (value) => JSON.parse(JSON.stringify(value, (_key, item) => item === void 0 ? null : item));
+function path(value) {
+	if (value === "") return [];
+	if (!/^\d+(\.\d+)*$/.test(value)) throw Error("Select a page block");
+	return value.split(".").map(Number);
+}
+function siblings(document, indices) {
+	let rows = document.blocks;
+	for (const index of indices.slice(0, -1)) {
+		if (!rows[index]) throw Error("The selected element no longer exists");
+		rows = rows[index].children || [];
+	}
+	return rows;
+}
+function block(document, key) {
+	const p = path(key);
+	if (!p.length) return null;
+	const item = siblings(document, p)[p[p.length - 1]];
+	if (!item) throw Error("The selected element no longer exists");
+	return item;
+}
+function layers(document, prefix = []) {
+	const rows = prefix.length ? block(document, prefix.join(".")).children || [] : document.blocks || [];
+	let result = [];
+	rows.forEach((item, index) => {
+		const p = prefix.concat(index);
+		result = result.concat([{
+			key: p.join("."),
+			depth: prefix.length,
+			label: item.title || item.kind,
+			kind: item.kind
+		}].concat(layers(document, p)));
+	});
+	return result;
+}
+function change$6(document, key, field, value) {
+	const result = copy(document), item = key === "" ? result : block(result, key);
+	if (!item) throw Error("The selected element no longer exists");
+	const limits = {
+		width: [40, 2400],
+		height: [24, 1600],
+		weight: [1, 12],
+		gap: [0, 128]
+	};
+	if (limits[field]) {
+		if (value === "" && ["width", "height"].includes(field)) value = null;
+		else {
+			const range = limits[field];
+			if (!/^\d+$/.test(String(value)) || Number(value) < range[0] || Number(value) > range[1]) throw Error("Enter a whole number within the allowed range");
+			value = Number(value);
+		}
+	} else if (![
+		"title",
+		"text",
+		"search_type",
+		"view",
+		"href",
+		"field"
+	].includes(field)) throw Error("Unsupported page property");
+	item[field] = value;
+	return result;
+}
+function spacing$1(document, key, field, side, value) {
+	if (!["padding", "margin"].includes(field) || !Number.isInteger(side) || side < 0 || side > 3 || !/^\d+$/.test(String(value)) || Number(value) > 256) throw Error("Enter spacing from 0 to 256");
+	const result = copy(document), item = block(result, key);
+	if (!item) throw Error("Select a page block");
+	item[field] = (item[field] || [
+		0,
+		0,
+		0,
+		0
+	]).slice();
+	item[field][side] = Number(value);
+	return result;
+}
+function add(document, key, kind, searchType) {
+	if (!kinds.includes(kind)) throw Error("Unsupported page widget");
+	const result = copy(document), selected = key ? block(result, key) : null;
+	const parent = selected && [
+		"row",
+		"column",
+		"details"
+	].includes(selected.kind) ? path(key) : key ? path(key).slice(0, -1) : [];
+	const owner = parent.length ? block(result, parent.join(".")) : null;
+	const rows = owner ? owner.children || (owner.children = []) : result.blocks;
+	if (rows.length >= 32 || layers(result).length >= 128) throw Error("Dashboard exceeds 128 bricks");
+	if (parent.length > 6) throw Error("Dashboard nesting exceeds six levels");
+	const item = {
+		kind,
+		title: kind
+	};
+	if ([
+		"row",
+		"column",
+		"details"
+	].includes(kind)) {
+		item.children = [];
+		item.height = 180;
+	}
+	if ([
+		"items",
+		"table",
+		"metric",
+		"chart",
+		"summary"
+	].includes(kind)) Object.assign(item, {
+		search_type: searchType || "",
+		view: kind === "items" ? "continuous_example" : "table"
+	});
+	if (["chart", "summary"].includes(kind)) item.aggregates = [{
+		name: "count",
+		title: "Count",
+		function: "count",
+		column: ""
+	}];
+	if (["text", "markdown"].includes(kind)) item.text = kind;
+	rows.push(item);
+	return {
+		document: result,
+		key: parent.concat(rows.length - 1).join(".")
+	};
+}
+function remove$2(document, key) {
+	const result = copy(document), p = path(key);
+	if (!p.length) throw Error("Select a page block");
+	siblings(result, p).splice(p[p.length - 1], 1);
+	return result;
+}
+function geometry$2(document, change, boxes) {
+	const result = copy(document), p = path(change.key), item = block(result, change.key);
+	if (!item) throw Error("The selected element no longer exists");
+	if (change.handle !== "move") {
+		const margin = item.margin || [
+			0,
+			0,
+			0,
+			0
+		], padding = item.padding || [
+			0,
+			0,
+			0,
+			0
+		];
+		if (change.handle.includes("e")) item.width = Math.max(40, Math.min(2400, Math.round(change.after.width + margin[1] + margin[3])));
+		if (change.handle.includes("s")) {
+			const overhead = ["items", "table"].includes(item.kind) ? 32 : 0;
+			const old = item.height === void 0 || item.height === null ? change.before.height - overhead - padding[0] - padding[2] : item.height;
+			item.height = Math.max(24, Math.min(1600, Math.round(old + change.after.height - change.before.height)));
+		}
+		return {
+			document: result,
+			key: change.key
+		};
+	}
+	if (change.keyboard) {
+		const rows = siblings(result, p), index = p[p.length - 1];
+		const delta = change.after.y - change.before.y || change.after.x - change.before.x;
+		const target = Math.max(0, Math.min(rows.length - 1, index + delta));
+		rows.splice(index, 1);
+		rows.splice(target, 0, item);
+		return {
+			document: result,
+			key: p.slice(0, -1).concat(target).join(".")
+		};
+	}
+	const x = change.after.x + change.after.width / 2, y = change.after.y + change.after.height / 2;
+	const hit = boxes.filter((b) => b.key !== change.key && !b.key.startsWith(change.key + ".") && x >= b.x && x <= b.x + b.width && y >= b.y && y <= b.y + b.height).sort((a, b) => b.depth - a.depth)[0];
+	let parent = hit ? path(hit.key) : [];
+	if (hit && ![
+		"row",
+		"column",
+		"details"
+	].includes(block(result, hit.key)?.kind)) parent = parent.slice(0, -1);
+	if (parent.length > 5) throw Error("Dashboard nesting exceeds six levels");
+	const old = siblings(result, p), index = p[p.length - 1];
+	const owner = parent.length ? block(result, parent.join(".")) : null;
+	const target = owner ? owner.children || (owner.children = []) : result.blocks;
+	const depth = (rows) => rows.reduce((value, row) => Math.max(value, 1 + depth(row.children || [])), 0);
+	if (parent.length + depth([item]) > 7) throw Error("Dashboard nesting exceeds six levels");
+	if (target !== old && target.length >= 32) throw Error("Dashboard supports at most 32 siblings");
+	const axis = (parent.length ? block(result, parent.join(".")).kind : "column") === "row" ? "x" : "y", position = axis === "x" ? x : y;
+	const before = boxes.filter((b) => path(b.key).length === parent.length + 1 && path(b.key).slice(0, -1).join(".") === parent.join(".") && b.key !== change.key).sort((a, b) => a[axis] - b[axis]).find((b) => position < b[axis] + b[axis === "x" ? "width" : "height"] / 2);
+	const targetPath = before ? path(before.key) : [];
+	let insertion = before ? targetPath[targetPath.length - 1] : target.length;
+	if (old === target && index < insertion) insertion--;
+	old.splice(index, 1);
+	target.splice(insertion, 0, item);
+	function location(rows, prefix) {
+		if (rows === target) return prefix;
+		for (let i = 0; i < rows.length; i++) {
+			const found = location(rows[i].children || [], prefix.concat(i));
+			if (found) return found;
+		}
+		return null;
+	}
+	return {
+		document: result,
+		key: location(result.blocks, []).concat(insertion).join(".")
+	};
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.data.mjs
+function inDetails(document, key) {
+	const path$1 = path(key);
+	return path$1.slice(0, -1).some((_, index) => block(document, path$1.slice(0, index + 1).join(".")).kind === "details");
+}
+function mode(document, key) {
+	const item = key ? block(document, key) : null;
+	if (!item || !["text", "markdown"].includes(item.kind)) return "";
+	if (item.binding && item.binding !== "auto") return item.binding;
+	return item.source_key ? "record" : item.field ? inDetails(document, key) ? "selection" : "project" : "static";
+}
+function selectedType(document, key) {
+	const path$2 = path(key);
+	for (let size = path$2.length; size > 0; size--) {
+		const item = block(document, path$2.slice(0, size).join("."));
+		if (item.search_type) return item.search_type;
+	}
+	const row = layers(document).find((layer) => layer.kind === "items");
+	return row ? block(document, row.key).search_type || "" : "";
+}
+function scope(document, key) {
+	if (!document?.blocks || !key || !layers(document).some((row) => row.key === key)) return {
+		searchType: "",
+		recordKey: ""
+	};
+	const item = block(document, key), binding = mode(document, key);
+	return {
+		searchType: binding === "project" ? "sthpw/project" : binding === "selection" ? selectedType(document, key) : binding === "record" ? item.search_type || (item.source_key || "").split("?")[0] : [
+			"table",
+			"items",
+			"metric",
+			"chart",
+			"summary",
+			"row",
+			"column"
+		].includes(item.kind) ? item.search_type || "" : "",
+		recordKey: binding === "record" ? item.source_key || "" : ""
+	};
+}
+function change$5(document, key, field, value) {
+	const result = copy(document), item = block(result, key);
+	if (field === "binding") {
+		if (!["text", "markdown"].includes(item.kind) || ![
+			"static",
+			"project",
+			"selection",
+			"record"
+		].includes(value)) throw Error("Choose a supported field binding");
+		if (value === "selection" && !inDetails(result, key)) throw Error("Place selection-bound widgets inside Details");
+		const type = selectedType(result, key);
+		Object.assign(item, {
+			binding: value,
+			field: "",
+			source_key: "",
+			search_type: value === "selection" ? type : ""
+		});
+	} else if (field === "search_type") {
+		item.search_type = value;
+		if (mode(result, key) === "record") item.source_key = "";
+	} else if ([
+		"field",
+		"source_key",
+		"view"
+	].includes(field)) item[field] = value;
+	else throw Error("Unsupported data property");
+	return result;
+}
+function type(field) {
+	const value = String(field?.dataType || "").toLowerCase();
+	return /bool/.test(value) ? "boolean" : /int|numeric|decimal|real|double|float/.test(value) ? "number" : /date|time/.test(value) ? "date" : /json|array|blob|bytea/.test(value) ? "complex" : "text";
+}
+var defaultValue = (field) => type(field) === "boolean" ? false : type(field) === "number" ? 0 : "";
+function relation(condition) {
+	return condition.value == null && ["=", "!="].includes(condition.relation) ? condition.relation === "=" ? "empty" : "notEmpty" : condition.relation;
+}
+function value(field, raw) {
+	if (type(field) === "boolean") {
+		if (![
+			true,
+			false,
+			"true",
+			"false"
+		].includes(raw)) throw Error("Choose Yes or No");
+		return raw === true || raw === "true";
+	}
+	if (type(field) === "number") {
+		if (String(raw).trim() === "" || !Number.isFinite(Number(raw))) throw Error("Enter a valid number");
+		return Number(raw);
+	}
+	if (type(field) === "date" && raw && !/^\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})?)?$/.test(String(raw))) throw Error("Choose a valid date");
+	return String(raw);
+}
+function filter(document, key, event, metadata) {
+	const result = copy(document), item = block(result, key);
+	if (![
+		"items",
+		"table",
+		"metric",
+		"chart",
+		"summary"
+	].includes(item.kind)) throw Error("Filters belong to a data collection");
+	const fields = (metadata?.fields || []).filter((row) => type(row) !== "complex");
+	item.filters = item.filters || [];
+	if (event.action === "add") {
+		if (item.filters.length >= 32) throw Error("Select at most 32 filter conditions");
+		const field = fields.find((row) => row.value === "code") || fields[0];
+		if (!field) throw Error("Choose a data source first");
+		item.filters.push({
+			column: field.value,
+			relation: "=",
+			value: defaultValue(field)
+		});
+		return result;
+	}
+	if (!Number.isInteger(event.index) || event.index < 0 || event.index >= item.filters.length) throw Error("Choose a filter condition");
+	if (event.action === "remove") {
+		item.filters.splice(event.index, 1);
+		return result;
+	}
+	const row = item.filters[event.index], field = fields.find((field) => field.value === (event.field === "column" ? event.value : row.column));
+	if (!field) throw Error("Choose a field from the current data source");
+	if (event.field === "column") Object.assign(row, {
+		column: event.value,
+		relation: "=",
+		value: defaultValue(field)
+	});
+	else if (event.field === "relation") {
+		const empty = ["empty", "notEmpty"].includes(event.value);
+		if (![
+			"=",
+			"!=",
+			"<",
+			"<=",
+			">",
+			">=",
+			"like",
+			"empty",
+			"notEmpty"
+		].includes(event.value)) throw Error("Choose a supported filter condition");
+		row.relation = empty ? event.value === "empty" ? "=" : "!=" : event.value;
+		row.value = empty ? null : row.value == null ? defaultValue(field) : row.value;
+	} else if (event.field === "value") row.value = value(field, event.value);
+	else throw Error("Unsupported filter property");
+	return result;
+}
+function options$1(rows, current, language) {
+	const result = (rows || []).map((row) => ({
+		value: row.value,
+		label: row.label
+	}));
+	if (current && !result.some((row) => row.value === current)) result.push({
+		value: current,
+		label: current + " · " + translate("Unavailable", language)
+	});
+	return result;
+}
+function fields$2(model, ui, width, language, enabled) {
+	if (!ui.selected) return [];
+	const item = block(model.document, ui.selected), binding = mode(model.document, ui.selected), requested = scope(model.document, ui.selected);
+	const metadata = model.dataSource?.searchType === requested.searchType ? model.dataSource : {}, tr = (text) => translate(text, language);
+	const fields = [], collection = [
+		"table",
+		"items",
+		"metric",
+		"chart",
+		"summary"
+	].includes(item.kind), condition = ["row", "column"].includes(item.kind) && inDetails(model.document, ui.selected);
+	if (!collection && !binding && !condition) return fields;
+	const sourceReady = enabled && !model.dataBusy && !!metadata.searchType;
+	fields.push({
+		kind: "Heading",
+		id: "pageDataHeading",
+		title: "Data",
+		description: "Data settings apply to this widget only."
+	});
+	function choice(id, title, current, rows, field) {
+		fields.push({
+			kind: "Choice",
+			id,
+			title,
+			options: options$1(rows, current, language),
+			props: {
+				value: current,
+				enabled: ["binding", "search_type"].includes(field) ? enabled : sourceReady,
+				action: {
+					type: "data",
+					field
+				}
+			}
+		});
+	}
+	if (binding) choice("pageBinding", "Content source", binding, [
+		["static", "Static text"],
+		["project", "Current project"],
+		...inDetails(model.document, ui.selected) ? [["selection", "Selected object"]] : [],
+		["record", "Specific record"]
+	].map(([value, label]) => ({
+		value,
+		label: tr(label)
+	})), "binding");
+	if (collection || condition || ["selection", "record"].includes(binding)) {
+		const sources = (model.searchTypes || []).filter((row) => item.kind !== "items" || row.projectOwned !== false);
+		choice("pageProperty_search_type", collection ? "Data source" : "Record type", item.search_type || "", [{
+			value: "",
+			label: tr(condition ? "Any record type" : "Choose a data source")
+		}].concat(sources), "search_type");
+	}
+	if (requested.searchType) {
+		if (model.dataBusy || model.dataError || !metadata.searchType) fields.push({
+			kind: "Heading",
+			id: "pageDataStatus",
+			title: model.dataError || "Loading source fields…"
+		});
+		if (model.dataError) fields.push({
+			kind: "Button",
+			id: "pageDataRetry",
+			title: "Retry",
+			props: {
+				icon: "refresh",
+				action: { type: "source" }
+			}
+		});
+	}
+	if (["items", "table"].includes(item.kind)) choice("pageProperty_view", "Saved view", item.view || "table", item.kind === "items" ? metadata.itemViews : metadata.tableViews, "view");
+	if (binding === "record" && requested.searchType) {
+		fields.push({
+			id: "pageRecordQuery",
+			title: "Find record",
+			props: {
+				text: ui.recordQuery || "",
+				action: { type: "recordQuery" }
+			}
+		});
+		fields.push({
+			kind: "Button",
+			id: "pageRecordFind",
+			title: "Find records",
+			props: {
+				icon: "search",
+				enabled: !model.dataBusy,
+				action: {
+					type: "source",
+					query: true
+				}
+			}
+		});
+		choice("pageRecord", "Source record", item.source_key || "", [{
+			value: "",
+			label: tr("Choose a record")
+		}].concat(metadata.records || []), "source_key");
+		if (metadata.more) fields.push({
+			kind: "Heading",
+			id: "pageRecordMore",
+			title: "More matches. Refine your search."
+		});
+	}
+	if (binding && binding !== "static") {
+		const sourceFields = (metadata.fields || []).filter((row) => item.kind === "markdown" ? type(row) === "text" : type(row) !== "complex");
+		choice("pageBindingField", "Source field", item.field || "", [{
+			value: "",
+			label: tr("Choose a source field")
+		}].concat(sourceFields), "field");
+	}
+	if (collection) {
+		fields.push({
+			kind: "Heading",
+			id: "pageFiltersHeading",
+			title: "Filters",
+			description: "All conditions must match (AND)."
+		});
+		(item.filters || []).forEach((row, index) => {
+			const id = "pageFilter_" + index, sourceField = (metadata.fields || []).find((field) => field.value === row.column), empty = row.value == null;
+			const w = width - 32, children = [];
+			children.push(node("Choice", id + "_column", rect$1(0, 0, w - 40, 34), {
+				label: tr("Filter field"),
+				value: row.column,
+				options: options$1((metadata.fields || []).filter((row) => type(row) !== "complex"), row.column, language),
+				enabled: sourceReady,
+				action: {
+					type: "filter",
+					index,
+					field: "column"
+				}
+			}));
+			children.push(node("Button", id + "_remove", rect$1(w - 32, 0, 32, 34), {
+				text: tr("Remove condition"),
+				icon: "delete",
+				iconOnly: true,
+				enabled,
+				action: {
+					type: "filter",
+					index,
+					action: "remove"
+				}
+			}));
+			const operators = [
+				["=", "Is"],
+				["!=", "Is not"],
+				...["number", "date"].includes(type(sourceField)) ? [
+					["<", "Less than"],
+					["<=", "At most"],
+					[">", "Greater than"],
+					[">=", "At least"]
+				] : [],
+				...type(sourceField) === "text" ? [["like", "Matches text pattern"]] : [],
+				["empty", "Is empty"],
+				["notEmpty", "Is not empty"]
+			];
+			children.push(node("Choice", id + "_relation", rect$1(0, 42, w, 34), {
+				label: tr("Filter condition"),
+				value: relation(row),
+				enabled: sourceReady && !!sourceField,
+				options: options$1(operators.map(([value, label]) => ({
+					value,
+					label: tr(label)
+				})), relation(row), language),
+				action: {
+					type: "filter",
+					index,
+					field: "relation"
+				}
+			}));
+			if (!empty) {
+				const key = "filter:" + index, content = Object.prototype.hasOwnProperty.call(ui.text, key) ? ui.text[key] : String(row.value);
+				const props = {
+					label: tr("Filter value"),
+					text: content,
+					enabled: sourceReady && !!sourceField,
+					inputMode: type(sourceField) === "number" ? "decimal" : "text",
+					action: {
+						type: "buffer",
+						key
+					},
+					commitAction: {
+						type: "filterCommit",
+						index,
+						key
+					}
+				};
+				if (type(sourceField) === "boolean") Object.assign(props, {
+					value: String(row.value),
+					options: [{
+						value: "true",
+						label: tr("Yes")
+					}, {
+						value: "false",
+						label: tr("No")
+					}],
+					action: {
+						type: "filter",
+						index,
+						field: "value"
+					}
+				});
+				if (type(sourceField) === "date") Object.assign(props, {
+					includeTime: /time/i.test(sourceField.dataType),
+					action: {
+						type: "filter",
+						index,
+						field: "value"
+					},
+					commitAction: null
+				});
+				children.push(node(type(sourceField) === "boolean" ? "Choice" : type(sourceField) === "date" ? "DateChoice" : "Field", id + "_value", rect$1(0, 84, w, 36), props));
+			}
+			fields.push({
+				kind: "Box",
+				id,
+				fullWidth: true,
+				height: empty ? 84 : 128,
+				props: { children }
+			});
+		});
+		if ((item.filters || []).some((row) => row.relation === "like")) fields.push({
+			kind: "Heading",
+			id: "pagePatternHint",
+			title: "Use % to match any text, for example %robot%."
+		});
+		fields.push({
+			kind: "Button",
+			id: "pageFilterAdd",
+			title: "Add condition",
+			props: {
+				icon: "add",
+				enabled: sourceReady && !!metadata.fields?.length && (item.filters || []).length < 32,
+				action: {
+					type: "filter",
+					action: "add"
+				}
+			}
+		});
+	}
+	return fields;
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/controls/buttons/metrics.mjs
+function buttonWidth(advance, icon = false) {
+	const metrics = controls$1.button;
+	return Math.max(metrics.minimumWidth, Math.ceil(advance) + metrics.padding + (icon ? metrics.iconPadding + metrics.iconSize + metrics.spacing : metrics.padding));
+}
+function actionLayout(actions, width, measuredWidths = []) {
+	const widths = actions.map((action, index) => Math.min(width, measuredWidths[index] || buttonWidth(action.text.length * 7, !!action.icon)));
+	const total = widths.reduce((sum, value) => sum + value, 0) + Math.max(0, widths.length - 1) * 8, stacked = total > width;
+	let x = Math.max(0, width - total);
+	const positions = widths.map((item, index) => {
+		const bounds = {
+			x: stacked ? width - item : x,
+			y: stacked ? index * 44 : 0,
+			width: item,
+			height: 38
+		};
+		x += item + 8;
+		return bounds;
+	});
+	return {
+		widths,
+		total,
+		stacked,
+		height: (stacked ? actions.length : 1) * 44,
+		positions
+	};
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/table/page.filters.mjs
+function initial$3(definitions = []) {
+	const result = {};
+	for (const item of definitions || []) result[item.name] = {
+		enabled: item.enabled,
+		value: item.value ?? null
+	};
+	return result;
+}
+function change$4(draft, event) {
+	const result = Object.assign({}, draft);
+	result[event.name] = Object.assign({}, draft[event.name]);
+	result[event.name][event.field] = event.value;
+	return result;
+}
+function values(definitions, draft) {
+	const result = {};
+	for (const item of definitions) {
+		const row = draft[item.name] || item;
+		const raw = row.enabled && item.value != null ? value({ dataType: item.dataType }, row.value) : row.value;
+		result[item.name] = {
+			enabled: row.enabled,
+			value: raw ?? null
+		};
+	}
+	return result;
+}
+function describe$54(definitions, draft, width, language, enabled = true) {
+	if (!definitions?.length) return {
+		height: 0,
+		nodes: []
+	};
+	const tr = (text) => translate(text, language), nodes = [], gap = 12;
+	const columns = Math.max(1, Math.floor((width + gap) / 240)), size = (width - gap * (columns - 1)) / columns;
+	definitions.forEach((item, index) => {
+		const x = index % columns * (size + gap), y = Math.floor(index / columns) * 76, row = draft[item.name] || item;
+		nodes.push(node("CheckBox", "pageRuntime_" + item.name + "_enabled", rect$1(x, y, 24, 24), {
+			checked: row.enabled,
+			enabled,
+			label: item.title,
+			action: {
+				type: "page-filter",
+				name: item.name,
+				field: "enabled"
+			}
+		}));
+		nodes.push(label("pageRuntime_" + item.name + "_title", rect$1(x + 30, y, size - 30, 24), item.title, { weight: 600 }));
+		const action = {
+			type: "page-filter",
+			name: item.name,
+			field: "value"
+		}, field = type({ dataType: item.dataType });
+		if (item.value == null && ["=", "!="].includes(item.relation)) nodes.push(label("pageRuntime_" + item.name + "_value", rect$1(x + 30, y + 30, size - 30, 34), tr(item.relation === "=" ? "Is empty" : "Is not empty"), { color: "secondaryText" }));
+		else nodes.push(node(field === "boolean" ? "Choice" : field === "date" ? "DateChoice" : "Field", "pageRuntime_" + item.name + "_value", rect$1(x, y + 30, size, 34), {
+			label: item.title,
+			text: String(row.value ?? ""),
+			value: String(row.value),
+			enabled: enabled && row.enabled,
+			inputMode: field === "number" ? "decimal" : "text",
+			includeTime: /time/i.test(item.dataType),
+			action,
+			options: field === "boolean" ? [{
+				value: "true",
+				label: tr("Yes")
+			}, {
+				value: "false",
+				label: tr("No")
+			}] : void 0
+		}));
+	});
+	const y = Math.ceil(definitions.length / columns) * 76;
+	const applyWidth = Math.min(width, buttonWidth(tr("Apply filters").length * 7, true)), resetWidth = Math.min(width, buttonWidth(tr("Reset filters").length * 7, true)), stacked = applyWidth + resetWidth + 8 > width;
+	nodes.push(button("pageRuntimeApply", rect$1(0, y, applyWidth, 32), tr("Apply filters"), "filter", { type: "page-filter-apply" }, enabled));
+	nodes.push(button("pageRuntimeReset", rect$1(stacked ? 0 : applyWidth + 8, y + (stacked ? 40 : 0), resetWidth, 32), tr("Reset filters"), "restore", { type: "page-filter-reset" }, enabled));
+	return {
+		height: y + (stacked ? 84 : 44),
+		nodes
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/layout.ui.mjs
 function hasDetails(items = []) {
 	return items.some((item) => item.kind === "details" || hasDetails(item.children || []));
@@ -1559,6 +2348,7 @@ function describe$53(cell, width, height, language, editable = true, server = ""
 	const tabOffset = cell.layoutTabs?.length ? 56 : 0;
 	const children = [], gap = 8, tableHeight = Math.max(320, height - tabOffset - 48);
 	const controls = cell.layoutState?.controls || cell.layoutControls || [];
+	const pageFilters = describe$54(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), Math.max(0, width - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
 	function draw(items, originX, originY, space, prefix = "customLayout", startIndex = 0, output = children, bottom = Infinity, spacing = 8) {
 		let top = originY;
 		for (const [index, source] of (items || []).entries()) {
@@ -1591,6 +2381,9 @@ function describe$53(cell, width, height, language, editable = true, server = ""
 						left += part + childGap;
 					}
 				} else extent = draw(item.children, x, top, available, id, 0, output, bottom, childGap);
+			} else if (["chart", "summary"].includes(item.kind)) {
+				extent = Number.isFinite(item.height) ? item.height : 320;
+				output.push(node("Box", id, rect$1(x, top, available, extent), { children: describe$55(item, id, available, extent, language).nodes }));
 			} else if (item.kind === "metric") {
 				extent = 104;
 				output.push(node("Box", id, rect$1(x, top, available, extent), {
@@ -1600,7 +2393,7 @@ function describe$53(cell, width, height, language, editable = true, server = ""
 					children: [label(id + "_label", rect$1(16, 12, Math.max(0, available - 32), 36), text, {
 						color: "secondaryText",
 						wrap: true
-					}), label(id + "_value", rect$1(16, 52, Math.max(0, available - 32), 40), String(item.value ?? 0), {
+					}), label(id + "_value", rect$1(16, 52, Math.max(0, available - 32), 40), item.value == null && Object.prototype.hasOwnProperty.call(item, "value") ? "—" : String(item.value ?? 0), {
 						fontRole: "hero",
 						weight: 600
 					})]
@@ -1725,7 +2518,8 @@ function describe$53(cell, width, height, language, editable = true, server = ""
 		}
 		return Math.max(0, top - originY - spacing);
 	}
-	const extent = draw(cell.layoutNodes, 0, 0, Math.max(0, width - 24));
+	children.push(...pageFilters.nodes);
+	const extent = pageFilters.height + draw(cell.layoutNodes, 0, pageFilters.height, Math.max(0, width - 24));
 	if (cell.layoutError) children.push(label("layoutError", rect$1(0, extent + gap, Math.max(0, width - 24), 64), cell.layoutError, {
 		wrap: true,
 		color: "error"
@@ -2121,7 +2915,7 @@ var popupMetrics = {
 };
 function describe$51(model, width, height, language) {
 	const tr = (text) => translate(text, language);
-	if (model.confirmAction) return describe$60({
+	if (model.confirmAction) return describe$62({
 		message: tr(model.uncertain ? "Discard this draft? Some changes may already have been saved." : "Discard this draft?"),
 		accept: "Discard",
 		destructive: true
@@ -2309,8 +3103,8 @@ function describe$49(cell, width, height, language, editable = true, expanded = 
 		name: "layout-document"
 	}, true, { outlined: true })] };
 	if (cell.layoutNodes) return describe$53(cell, width, height, language, editable, server);
-	if (cell.groups && cell.steps) return describe$57(cell, width, height, language, expanded);
-	if (cell.links || cell.ingest) return describe$56(cell, width, height, language, editable);
+	if (cell.groups && cell.steps) return describe$59(cell, width, height, language, expanded);
+	if (cell.links || cell.ingest) return describe$58(cell, width, height, language, editable);
 	if (cell.label && !cell.text) cell = Object.assign({}, cell, { text: translate(cell.label, language) });
 	const actions = cell.actions || [];
 	const size = 28, gap = 4;
@@ -3255,7 +4049,7 @@ var _sfc_main$170 = {
 		let observer, frame;
 		const preferences = computed(() => props.state?.table || {});
 		const autoFit = computed(() => !!preferences.value.autoFit);
-		const layout = computed(() => describe$55({
+		const layout = computed(() => describe$57({
 			columns: props.columns,
 			overrides: overrides.value,
 			autoFit: autoFit.value,
@@ -4255,7 +5049,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		const component = getCurrentInstance().type;
 		const records = computed(() => rows$2(model.value));
 		const extent = computed(() => props.frameNode?.height || 320);
-		const scene = computed(() => describe$54({
+		const scene = computed(() => describe$56({
 			...model.value.scope,
 			...model.value
 		}, width.value, extent.value, appearance.language));
@@ -15691,11 +16485,11 @@ var _sfc_main$123 = {
 					width: 0,
 					height: 0
 				});
-				const models$1 = computed(() => models(props.model, appearance.language));
+				const models$2 = computed(() => models(props.model, appearance.language));
 				const views = computed(() => ({ dependencies: {
 					component: _sfc_main$125,
 					nodeProps: true,
-					props: { models: models$1.value }
+					props: { models: models$2.value }
 				} }));
 				let observer;
 				const scene = computed(() => describe$43(props.model, size.value.width, size.value.height, appearance.language));
@@ -15718,7 +16512,7 @@ var _sfc_main$123 = {
 						class: "object-delete-surface"
 					}, [createVNode(_sfc_main$186, {
 						scene: scene.value,
-						models: models$1.value,
+						models: models$2.value,
 						views: views.value,
 						"describe-row": (list, record) => list.id === "deleteSObjectTargets" ? target(record, list.width - 16) : dependency(record, list.width - 16),
 						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
@@ -18988,6 +19782,7 @@ var _sfc_main$116 = {
 			type: Boolean,
 			default: true
 		},
+		filterBusy: Boolean,
 		editing: Boolean,
 		guides: {
 			type: Boolean,
@@ -19012,12 +19807,14 @@ var _sfc_main$116 = {
 		"operate",
 		"loaded",
 		"block",
-		"geometry"
+		"geometry",
+		"filter-apply"
 	],
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
 		const state = ref({}), tables$1 = ref({}), detail = ref({}), busy = ref(false), error = ref("");
+		const filterDraft = ref({});
 		let generation = 0, abort;
 		let detailGeneration = 0;
 		const baseScene = computed(() => describe$53({
@@ -19028,6 +19825,9 @@ var _sfc_main$116 = {
 			layoutTabKey: props.currentKey || props.model.layoutTabKey,
 			layoutState: state.value,
 			layoutBusy: busy.value,
+			layoutFilterDraft: filterDraft.value,
+			layoutEditing: props.editing,
+			layoutFilterBusy: props.filterBusy,
 			layoutError: error.value
 		}, props.frameNode?.width ?? props.width, props.frameNode?.height ?? props.height, appearance.language, true, location.origin));
 		const scene = computed(() => props.editing && props.guides ? decorate(baseScene.value, "editorPath") : baseScene.value);
@@ -19104,7 +19904,8 @@ var _sfc_main$116 = {
 					{
 						view: props.model.layoutView,
 						search_key: props.model.targetSearchKey,
-						detail_key: key
+						detail_key: key,
+						filter_values: props.model.layoutFilterValues
 					}
 				]);
 				if (request !== detailGeneration) return;
@@ -19163,6 +19964,20 @@ var _sfc_main$116 = {
 		}
 		function activate(action) {
 			if (props.editing) return;
+			if (action.type === "page-filter") {
+				filterDraft.value = change$4(filterDraft.value, action);
+				return;
+			}
+			if (["page-filter-apply", "page-filter-reset"].includes(action.type)) {
+				try {
+					const values$1 = action.type === "page-filter-reset" ? {} : values(props.model.layoutFilters, filterDraft.value);
+					emit("filter-apply", values$1);
+					error.value = "";
+				} catch (failure) {
+					error.value = failure.message;
+				}
+				return;
+			}
 			if (action.type === "layout-tab") emit("tab", action.key);
 			else if (action.type === "layout-close-tab") emit("close-tab", action.key);
 			else if (action.type === "layout-change") state.value = change$3(state.value, action.selector, action.value);
@@ -19177,6 +19992,7 @@ var _sfc_main$116 = {
 			props.ticket,
 			props.project
 		], () => {
+			filterDraft.value = initial$3(props.model.layoutFilters);
 			++generation;
 			++detailGeneration;
 			detail.value = {};
@@ -19207,8 +20023,18 @@ var _sfc_main$116 = {
 			return openBlock(), createBlock(_sfc_main$186, {
 				scene: scene.value,
 				views: views.value,
+				models: models$1({
+					...__props.model,
+					layoutDetail: __props.editing ? __props.model.layoutDetail : detail.value
+				}),
+				"describe-cell": cell$2,
 				onEvent: activate
-			}, null, 8, ["scene", "views"]);
+			}, null, 8, [
+				"scene",
+				"views",
+				"models",
+				"describe-cell"
+			]);
 		};
 	}
 };
@@ -19406,7 +20232,7 @@ var TableServiceDialogs_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			height: 180
 		});
 		let resolve, observer;
-		const scene = computed(() => describe$60(model.value, size.value.width, size.value.height, appearance.language));
+		const scene = computed(() => describe$62(model.value, size.value.width, size.value.height, appearance.language));
 		function finish(accepted = false) {
 			const pending = resolve;
 			resolve = null;
@@ -20431,6 +21257,7 @@ var _sfc_main$109 = {
 		layoutModel: Object,
 		layoutWidth: Number,
 		layoutHeight: Number,
+		layoutBusy: Boolean,
 		ticket: String,
 		project: String,
 		workspaceId: String,
@@ -20484,7 +21311,8 @@ var _sfc_main$109 = {
 		"focus",
 		"result-scroll",
 		"saved",
-		"organization"
+		"organization",
+		"filter-apply"
 	],
 	setup() {
 		return { tabId: useId() };
@@ -21993,6 +22821,8 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 		$props.layoutModel ? (openBlock(), createBlock(_component_CustomLayoutView, {
 			key: 0,
 			model: $props.layoutModel,
+			"filter-busy": $props.layoutBusy,
+			onFilterApply: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("filter-apply", $event)),
 			ticket: $props.ticket,
 			project: $props.project,
 			width: $props.layoutWidth,
@@ -22000,20 +22830,21 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			"selected-keys": $props.selectedKeys,
 			"workspace-id": $props.workspaceId,
 			active: $props.active,
-			onLoaded: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("loaded", $event)),
+			onLoaded: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("loaded", $event)),
 			onAction: $options.tableAction,
 			onEdit: $options.openNestedEditor,
-			onInspect: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("inspect", $event)),
-			onOperate: _cache[2] || (_cache[2] = (...args) => _ctx.$emit("operate", ...args)),
-			onSelect: _cache[3] || (_cache[3] = (...args) => _ctx.$emit("select", ...args)),
-			onFocus: _cache[4] || (_cache[4] = ($event) => _ctx.$emit("focus", $event)),
+			onInspect: _cache[2] || (_cache[2] = ($event) => _ctx.$emit("inspect", $event)),
+			onOperate: _cache[3] || (_cache[3] = (...args) => _ctx.$emit("operate", ...args)),
+			onSelect: _cache[4] || (_cache[4] = (...args) => _ctx.$emit("select", ...args)),
+			onFocus: _cache[5] || (_cache[5] = ($event) => _ctx.$emit("focus", $event)),
 			onCellEvent: $options.nestedCellEvent,
-			onColumn: _cache[5] || (_cache[5] = ($event) => _ctx.$emit("column", $event)),
+			onColumn: _cache[6] || (_cache[6] = ($event) => _ctx.$emit("column", $event)),
 			onSaved: $options.tableSaved,
-			onNotice: _cache[6] || (_cache[6] = ($event) => $data.serviceMessage = $event),
-			onClose: _cache[7] || (_cache[7] = ($event) => _ctx.$emit("close"))
+			onNotice: _cache[7] || (_cache[7] = ($event) => $data.serviceMessage = $event),
+			onClose: _cache[8] || (_cache[8] = ($event) => _ctx.$emit("close"))
 		}, null, 8, [
 			"model",
+			"filter-busy",
 			"ticket",
 			"project",
 			"width",
@@ -22031,7 +22862,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 				class: "view-tabs",
 				role: "tablist",
 				"aria-label": $options.table.view,
-				onKeydown: _cache[8] || (_cache[8] = (...args) => $options.moveTab && $options.moveTab(...args))
+				onKeydown: _cache[9] || (_cache[9] = (...args) => $options.moveTab && $options.moveTab(...args))
 			}, [(openBlock(true), createElementBlock(Fragment, null, renderList($options.table.elements, (item, index) => {
 				return openBlock(), createElementBlock("button", {
 					id: `${$setup.tabId}-tab-${index}`,
@@ -22058,10 +22889,10 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					"parent-key": $props.parentKey,
 					"read-only": $props.readOnly,
 					accent: $props.accent,
-					onInspect: _cache[9] || (_cache[9] = ($event) => _ctx.$emit("inspect", $event)),
-					onOperate: _cache[10] || (_cache[10] = (record, event, node) => _ctx.$emit("operate", record, event, node)),
-					onColumn: _cache[11] || (_cache[11] = ($event) => _ctx.$emit("column", $event)),
-					onSaved: _cache[12] || (_cache[12] = ($event) => _ctx.$emit("saved"))
+					onInspect: _cache[10] || (_cache[10] = ($event) => _ctx.$emit("inspect", $event)),
+					onOperate: _cache[11] || (_cache[11] = (record, event, node) => _ctx.$emit("operate", record, event, node)),
+					onColumn: _cache[12] || (_cache[12] = ($event) => _ctx.$emit("column", $event)),
+					onSaved: _cache[13] || (_cache[13] = ($event) => _ctx.$emit("saved"))
 				}, null, 8, [
 					"definition",
 					"ticket",
@@ -22077,11 +22908,11 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 				key: 0,
 				class: "toolbar panel-toolbar",
 				"aria-label": $options.t("View search"),
-				onSubmit: _cache[17] || (_cache[17] = withModifiers((...args) => $options.applyFilter && $options.applyFilter(...args), ["prevent"]))
+				onSubmit: _cache[18] || (_cache[18] = withModifiers((...args) => $options.applyFilter && $options.applyFilter(...args), ["prevent"]))
 			}, [
 				createVNode(_component_AppSearchField, {
 					modelValue: $data.filterValue,
-					"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => $data.filterValue = $event),
+					"onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => $data.filterValue = $event),
 					label: "Filter value",
 					placeholder: $options.t("Filter value"),
 					disabled: $data.busy
@@ -22107,7 +22938,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					default: withCtx(() => [
 						createVNode(_component_AppSelect, {
 							modelValue: $data.filterField,
-							"onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => $data.filterField = $event),
+							"onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => $data.filterField = $event),
 							label: "Filter field",
 							"translate-labels": false,
 							disabled: $data.busy || !$options.columnNames.length,
@@ -22122,7 +22953,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 						]),
 						$props.definition.panel?.show_search_limit !== false ? (openBlock(), createElementBlock("label", _hoisted_8$12, [createTextVNode(toDisplayString($options.t("Records per page")), 1), createVNode(_component_AppSelect, {
 							modelValue: $data.pageSize,
-							"onUpdate:modelValue": [_cache[15] || (_cache[15] = ($event) => $data.pageSize = $event), $options.changePageSize],
+							"onUpdate:modelValue": [_cache[16] || (_cache[16] = ($event) => $data.pageSize = $event), $options.changePageSize],
 							label: "Records per page",
 							disabled: $data.busy,
 							options: $options.pageSizes.map((size) => ({
@@ -22141,7 +22972,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 							label: "Refresh",
 							icon: "refresh",
 							disabled: $data.busy,
-							onClick: _cache[16] || (_cache[16] = ($event) => $options.load())
+							onClick: _cache[17] || (_cache[17] = ($event) => $options.load())
 						}, null, 8, ["disabled"])) : createCommentVNode("", true)
 					]),
 					_: 1
@@ -22152,7 +22983,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			$data.columnError ? (openBlock(), createElementBlock("p", _hoisted_11$5, [$data.columnUncertain ? (openBlock(), createElementBlock("span", _hoisted_12$5, toDisplayString($options.t("Check the server result before saving again.")), 1)) : createCommentVNode("", true), createVNode(_component_AppButton, {
 				label: "Reload from server",
 				icon: "refresh",
-				onClick: _cache[18] || (_cache[18] = ($event) => {
+				onClick: _cache[19] || (_cache[19] = ($event) => {
 					$data.columnUncertain = false;
 					$data.tableConfig = null;
 					$options.selectTableView($options.table.view || "table");
@@ -22181,7 +23012,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					icon: "refresh",
 					"icon-only": "",
 					disabled: $data.taskBusy,
-					onClick: _cache[19] || (_cache[19] = ($event) => $options.saveTasks(true))
+					onClick: _cache[20] || (_cache[20] = ($event) => $options.saveTasks(true))
 				}, null, 8, ["disabled"])) : createCommentVNode("", true),
 				createVNode(_component_AppButton, {
 					label: "Save task changes",
@@ -22189,13 +23020,13 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					"icon-only": "",
 					highlighted: "",
 					disabled: $data.taskBusy || $data.taskUncertain,
-					onClick: _cache[20] || (_cache[20] = ($event) => $options.saveTasks())
+					onClick: _cache[21] || (_cache[21] = ($event) => $options.saveTasks())
 				}, null, 8, ["disabled"])
 			], 8, _hoisted_16$4)) : createCommentVNode("", true),
 			$data.busy ? (openBlock(), createElementBlock("div", _hoisted_18$3, toDisplayString($options.t("Loading data…")), 1)) : !$options.supportedLayout ? (openBlock(), createElementBlock("div", _hoisted_19$3, toDisplayString($options.t("This layout is not available yet.")), 1)) : createCommentVNode("", true),
 			($props.rows !== null || $options.table.item_layout) && !$options.tabs ? withDirectives((openBlock(), createBlock(_component_ResultPresentation, {
 				key: 10,
-				onOrganization: _cache[21] || (_cache[21] = ($event) => _ctx.$emit("organization", $event)),
+				onOrganization: _cache[22] || (_cache[22] = ($event) => _ctx.$emit("organization", $event)),
 				ref: "presentation",
 				active: $options.displayedMode !== "table",
 				"item-layout": $options.itemLayout,
@@ -22206,15 +23037,15 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 				"search-type": $props.definition.search_type,
 				mode: $options.displayedMode,
 				"workspace-id": $props.workspaceId,
-				onRootScroll: _cache[22] || (_cache[22] = ($event) => _ctx.$emit("result-scroll", $event)),
-				onFocus: _cache[23] || (_cache[23] = ($event) => _ctx.$emit("focus", $event)),
+				onRootScroll: _cache[23] || (_cache[23] = ($event) => _ctx.$emit("result-scroll", $event)),
+				onFocus: _cache[24] || (_cache[24] = ($event) => _ctx.$emit("focus", $event)),
 				"group-mode": $props.groupMode,
 				state: $props.resultState,
-				onState: _cache[24] || (_cache[24] = ($event) => _ctx.$emit("result-state", $event)),
+				onState: _cache[25] || (_cache[25] = ($event) => _ctx.$emit("result-state", $event)),
 				"selected-keys": $props.selectedKeys,
-				onInspect: _cache[25] || (_cache[25] = ($event) => _ctx.$emit("inspect", $event)),
-				onSelect: _cache[26] || (_cache[26] = (rows, selected) => _ctx.$emit("select", rows, selected)),
-				onOperate: _cache[27] || (_cache[27] = (record, event, node) => _ctx.$emit("operate", record, event, node))
+				onInspect: _cache[26] || (_cache[26] = ($event) => _ctx.$emit("inspect", $event)),
+				onSelect: _cache[27] || (_cache[27] = (rows, selected) => _ctx.$emit("select", rows, selected)),
+				onOperate: _cache[28] || (_cache[28] = (record, event, node) => _ctx.$emit("operate", record, event, node))
 			}, null, 8, [
 				"active",
 				"item-layout",
@@ -22252,28 +23083,28 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 					"group-mode": $options.tableState.table?.groupMode || $props.groupMode,
 					onState: $options.tableStateChanged,
 					onSelect: $options.tableSelect,
-					onFocus: _cache[30] || (_cache[30] = (record) => _ctx.$emit("focus", {
+					onFocus: _cache[31] || (_cache[31] = (record) => _ctx.$emit("focus", {
 						kind: "object",
 						record
 					})),
-					onInspect: _cache[31] || (_cache[31] = ($event) => _ctx.$emit("inspect", $event)),
+					onInspect: _cache[32] || (_cache[32] = ($event) => _ctx.$emit("inspect", $event)),
 					onOperate: $options.operate,
-					onScroll: _cache[32] || (_cache[32] = ($event) => _ctx.$emit("result-scroll", $event)),
+					onScroll: _cache[33] || (_cache[33] = ($event) => _ctx.$emit("result-scroll", $event)),
 					onColumn: $options.tableColumn,
 					onSort: $options.sortBy,
-					onGroup: _cache[33] || (_cache[33] = ($event) => $options.tableStateChanged({
+					onGroup: _cache[34] || (_cache[34] = ($event) => $options.tableStateChanged({
 						...$options.tableState,
 						table: {
 							...$options.tableState.table,
 							groupMode: $event
 						}
 					})),
-					onWidth: _cache[34] || (_cache[34] = (name, width) => $options.changeColumns("width", name, width)),
-					onMove: _cache[35] || (_cache[35] = (name, target) => $options.changeColumns("move", name, target)),
-					onHide: _cache[36] || (_cache[36] = ($event) => $options.changeColumns("hide", $event)),
+					onWidth: _cache[35] || (_cache[35] = (name, width) => $options.changeColumns("width", name, width)),
+					onMove: _cache[36] || (_cache[36] = (name, target) => $options.changeColumns("move", name, target)),
+					onHide: _cache[37] || (_cache[37] = ($event) => $options.changeColumns("hide", $event)),
 					onView: $options.selectTableView,
 					onSaveView: $options.saveTableView,
-					onToggleGroup: _cache[37] || (_cache[37] = ($event) => $data.closedGroups[$event] = !$data.closedGroups[$event]),
+					onToggleGroup: _cache[38] || (_cache[38] = ($event) => $data.closedGroups[$event] = !$data.closedGroups[$event]),
 					onEdit: $options.openCellEditor,
 					onHeaderAction: $options.tableHeaderAction,
 					onCreateChild: $options.createParentChild
@@ -22284,10 +23115,10 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 						state: $data.expandedTables[record.__search_key__],
 						onClose: ($event) => $data.expandedTables[record.__search_key__].open = false,
 						onEdit: $options.openNestedEditor,
-						onInspect: _cache[28] || (_cache[28] = ($event) => _ctx.$emit("inspect", $event)),
+						onInspect: _cache[29] || (_cache[29] = ($event) => _ctx.$emit("inspect", $event)),
 						onAction: $options.tableAction,
 						onCellEvent: $options.nestedCellEvent,
-						onColumn: _cache[29] || (_cache[29] = ($event) => _ctx.$emit("column", $event))
+						onColumn: _cache[30] || (_cache[30] = ($event) => _ctx.$emit("column", $event))
 					}, null, 8, [
 						"ticket",
 						"project",
@@ -22388,13 +23219,13 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 				icon: "MDI_CHEVRON_LEFT",
 				"icon-only": $options.mobile,
 				disabled: $data.busy || $data.page === 0,
-				onClick: _cache[38] || (_cache[38] = ($event) => $options.changePage(-1))
+				onClick: _cache[39] || (_cache[39] = ($event) => $options.changePage(-1))
 			}, null, 8, ["icon-only", "disabled"]), createVNode(_component_AppButton, {
 				label: "Next →",
 				icon: "MDI_CHEVRON_RIGHT",
 				"icon-only": $options.mobile,
 				disabled: $data.busy || !$data.hasNext,
-				onClick: _cache[39] || (_cache[39] = ($event) => $options.changePage(1))
+				onClick: _cache[40] || (_cache[40] = ($event) => $options.changePage(1))
 			}, null, 8, ["icon-only", "disabled"])])], 8, _hoisted_24$1)) : createCommentVNode("", true)
 		], 64)),
 		createVNode(_component_FilePreview, {
@@ -22452,15 +23283,15 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			"search-type": $data.targetRecord.__search_key__.split("?")[0],
 			operations: $data.targetOperations,
 			selection: $options.records.filter((record) => $options.tableSelection.includes(record.__search_key__)),
-			onInspect: _cache[40] || (_cache[40] = ($event) => _ctx.$emit("inspect", $event)),
+			onInspect: _cache[41] || (_cache[41] = ($event) => _ctx.$emit("inspect", $event)),
 			onEdit: $options.openTableRecordForm,
 			onEditSelected: $options.openTableRecordForm,
-			onCreate: _cache[41] || (_cache[41] = ($event) => $options.openTableRecordForm(null)),
-			onDuplicate: _cache[42] || (_cache[42] = ($event) => $options.openTableRecordForm(null, $event.__search_key__)),
+			onCreate: _cache[42] || (_cache[42] = ($event) => $options.openTableRecordForm(null)),
+			onDuplicate: _cache[43] || (_cache[43] = ($event) => $options.openTableRecordForm(null, $event.__search_key__)),
 			onRelated: $options.openTableRelations,
-			onRetire: _cache[43] || (_cache[43] = ($event) => _ctx.$refs.tableDelete.open($event, "retire")),
-			onReactivate: _cache[44] || (_cache[44] = ($event) => _ctx.$refs.tableDelete.open($event, "reactivate")),
-			onDelete: _cache[45] || (_cache[45] = ($event) => _ctx.$refs.tableDelete.open($event, "delete")),
+			onRetire: _cache[44] || (_cache[44] = ($event) => _ctx.$refs.tableDelete.open($event, "retire")),
+			onReactivate: _cache[45] || (_cache[45] = ($event) => _ctx.$refs.tableDelete.open($event, "reactivate")),
+			onDelete: _cache[46] || (_cache[46] = ($event) => _ctx.$refs.tableDelete.open($event, "delete")),
 			onDuplicated: $options.tableSaved,
 			onFilesAttached: $options.tableSaved
 		}, null, 8, [
@@ -22545,14 +23376,14 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			project: $props.project,
 			onTableAction: $options.tableAction,
 			onEdit: $options.openNestedEditor,
-			onInspect: _cache[46] || (_cache[46] = ($event) => _ctx.$emit("inspect", $event)),
+			onInspect: _cache[47] || (_cache[47] = ($event) => _ctx.$emit("inspect", $event)),
 			onCellEvent: $options.nestedCellEvent,
-			onColumn: _cache[47] || (_cache[47] = ($event) => _ctx.$emit("column", $event)),
+			onColumn: _cache[48] || (_cache[48] = ($event) => _ctx.$emit("column", $event)),
 			onSaved: $options.tableSaved,
-			onNotice: _cache[48] || (_cache[48] = ($event) => $data.serviceMessage = $event),
+			onNotice: _cache[49] || (_cache[49] = ($event) => $data.serviceMessage = $event),
 			onFile: $options.openDependencyFile,
-			onClosed: _cache[49] || (_cache[49] = ($event) => $data.documentRequest++),
-			onAction: _cache[50] || (_cache[50] = (action) => $options.tableAction($data.serviceDocument.record, action.name, {
+			onClosed: _cache[50] || (_cache[50] = ($event) => $data.documentRequest++),
+			onAction: _cache[51] || (_cache[51] = (action) => $options.tableAction($data.serviceDocument.record, action.name, {
 				...$data.serviceDocument,
 				href: action.href,
 				displayOptions: { cbjs_action: action.javascript }
@@ -22585,7 +23416,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			editor: $data.taskEditor,
 			busy: $data.taskBusy,
 			onChange: $options.stageTask,
-			onClosed: _cache[51] || (_cache[51] = ($event) => $data.taskEditor = null)
+			onClosed: _cache[52] || (_cache[52] = ($event) => $data.taskEditor = null)
 		}, null, 8, [
 			"editor",
 			"busy",
@@ -22598,7 +23429,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			error: $data.editError,
 			uncertain: $data.editUncertain,
 			onSave: $options.saveCellEditor,
-			onCheck: _cache[52] || (_cache[52] = ($event) => $options.saveCellEditor($event, true)),
+			onCheck: _cache[53] || (_cache[53] = ($event) => $options.saveCellEditor($event, true)),
 			onCancel: $options.cancelCellEditor
 		}, null, 8, [
 			"editor",
@@ -23514,7 +24345,7 @@ var _sfc_main$105 = {
 		const host = ref(null), size = ref({
 			width: 800,
 			height: 600
-		}), model = ref(null), busy = ref(false), error = ref("");
+		}), model = ref(null), renderRevision = ref(0), busy = ref(false), error = ref("");
 		const scene = computed(() => describe$36({
 			title: props.title,
 			busy: busy.value,
@@ -23531,11 +24362,11 @@ var _sfc_main$105 = {
 			};
 		});
 		let generation = 0, observer;
-		async function reload() {
+		let appliedFilters = {};
+		async function reload(filterValues = appliedFilters) {
 			const request = ++generation;
 			busy.value = true;
 			error.value = "";
-			model.value = null;
 			try {
 				const result = await rpc("execute_cmd", [
 					{
@@ -23546,13 +24377,18 @@ var _sfc_main$105 = {
 					"tactic.ui.table.CustomLayoutReadCmd",
 					{
 						view: props.view,
-						search_key: props.target || ""
+						search_key: props.target || "",
+						filter_values: filterValues
 					}
 				]);
-				if (request === generation) model.value = {
-					...result.info,
-					record: result.info.layoutRecord
-				};
+				if (request === generation) {
+					appliedFilters = filterValues;
+					model.value = {
+						...result.info,
+						record: result.info.layoutRecord
+					};
+					renderRevision.value++;
+				}
 			} catch (failure) {
 				if (request === generation) error.value = failure.message;
 			} finally {
@@ -23564,7 +24400,11 @@ var _sfc_main$105 = {
 			props.project,
 			props.view,
 			props.target
-		], reload, { immediate: true });
+		], () => {
+			appliedFilters = {};
+			model.value = null;
+			reload();
+		}, { immediate: true });
 		onMounted(() => {
 			observer = observeFrameSizes((entries) => {
 				const box = entries.at(-1).contentRect;
@@ -23593,10 +24433,12 @@ var _sfc_main$105 = {
 				scene: scene.value,
 				onEvent: _cache[0] || (_cache[0] = (event) => event.type === "edit" ? emit("edit", __props.view.slice(10)) : reload())
 			}, null, 8, ["scene"]), model.value ? (openBlock(), createBlock(ConfiguredView_default, {
-				key: 0,
+				key: renderRevision.value,
 				class: "workspace-page-layout",
 				style: normalizeStyle(bodyStyle.value),
 				"layout-model": model.value,
+				"layout-busy": busy.value,
+				onFilterApply: reload,
 				"layout-width": scene.value.bodyBounds.width,
 				"layout-height": scene.value.bodyBounds.height,
 				ticket: __props.ticket,
@@ -23615,6 +24457,7 @@ var _sfc_main$105 = {
 			}, null, 8, [
 				"style",
 				"layout-model",
+				"layout-busy",
 				"layout-width",
 				"layout-height",
 				"ticket",
@@ -25936,7 +26779,7 @@ var _sfc_main$95 = {
 			width: 480,
 			height: 346
 		}), previewsOpen = ref(false);
-		const confirmation = computed(() => describe$60({
+		const confirmation = computed(() => describe$62({
 			message: t("All prepared, failed and completed operations will be removed from the queue."),
 			accept: "Clear queue",
 			destructive: true,
@@ -37022,7 +37865,7 @@ var _sfc_main$62 = {
 //#region ../src/tactic_stream/shared_ui/features/configuration/configuration.ui.mjs
 function confirmation$2(model, width, height, language) {
 	const text = (key) => translate(key, language);
-	if (model.kind === "clear") return describe$60({
+	if (model.kind === "clear") return describe$62({
 		message: text(model.scope === "tabs" ? "Object, process and version branches will collapse. Search tabs, filters and dock layouts remain unchanged." : "Projects, Search Types, search results and navigation will be downloaded again. Saved layouts and preferences remain unchanged."),
 		reject: "Cancel",
 		accept: model.scope === "tabs" ? "Clear tabs cache" : "Clear cache",
@@ -39089,7 +39932,7 @@ function describe$16(model, width, height, language) {
 	return { nodes };
 }
 function confirmation$1(model, width, height, language) {
-	return describe$60({
+	return describe$62({
 		message: translate("Remove template {code}? Existing projects are not removed.", language, { code: model.code }),
 		accept: "Delete",
 		reject: "Cancel",
@@ -42159,7 +43002,7 @@ function describe$12(model, width, viewportHeight, language) {
 		noticeY += 44;
 	}
 	if (model.confirmClose) {
-		const confirmation = describe$60({
+		const confirmation = describe$62({
 			message: text("Discard unsaved user changes?"),
 			accept: "Discard changes",
 			reject: "Keep editing",
@@ -55825,7 +56668,7 @@ var _sfc_main = {
 			return compose(main_menus_default.user, this.mainMenuContext);
 		},
 		mainToolbar() {
-			return describe$59({
+			return describe$61({
 				width: this.toolbarWidth,
 				compact: this.compactShortcuts,
 				progressReveal: this.activityProgress ? 1 : 0,
@@ -55836,7 +56679,7 @@ var _sfc_main = {
 			return positions$1(this.mainToolbar);
 		},
 		workspaceStyle() {
-			const scene = describe$58(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
+			const scene = describe$60(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
 			return {
 				gridTemplateAreas: scene.grid.areas,
 				gridTemplateColumns: scene.grid.columns,
@@ -60783,6 +61626,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { notices as $, _sfc_main$116 as A, _sfc_main$131 as B, captionedSwitch as C, changeDefinition as D, _sfc_main$107 as E, applyDuplicateProfile as F, describe$47 as G, _sfc_main$145 as H, changeContent as I, serialize as J, edit$2 as K, contentChoices as L, RelatedObjects_default as M, ObjectAction_default as N, definitionWizard as O, _sfc_main$126 as P, documentEvent as Q, duplicateProfile as R, _sfc_main$63 as S, _sfc_main$100 as T, spacingField as U, messageDate as V, actions$4 as W, variants as X, template as Y, widgets as Z, editColumn as _, updateModes as a, views as at, describe$18 as b, runBrowserScript as c, ProjectCreation_default as d, App_default as default, policy as et, ImagePicker_default as f, describe$17 as g, contentWidth as h, updateIntervals as i, _sfc_main$158 as it, ResultPresentation_default as j, displayWidgets as k, scriptTree as l, change as m, networkSettings as n, tabs as nt, _sfc_main$26 as o, _sfc_main$166 as ot, readPreviewImage as p, roles as q, updateBatchDelays as r, toolbar$4 as rt, buttonId as s, _sfc_main$171 as st, App_exports as t, sectionSelector as tt, lifecycle as u, fieldsFor as v, _sfc_main$98 as w, pages as x, confirmation$2 as y, saveDuplicateProfile as z };
+export { notices as $, _sfc_main$116 as A, _sfc_main$131 as B, captionedSwitch as C, remove$2 as Ct, changeDefinition as D, _sfc_main$107 as E, applyDuplicateProfile as F, describe$47 as G, _sfc_main$145 as H, changeContent as I, serialize as J, edit$2 as K, contentChoices as L, RelatedObjects_default as M, ObjectAction_default as N, definitionWizard as O, _sfc_main$126 as P, documentEvent as Q, duplicateProfile as R, _sfc_main$63 as S, layers as St, _sfc_main$100 as T, spacingField as U, messageDate as V, actions$4 as W, variants as X, template as Y, widgets as Z, editColumn as _, block as _t, updateModes as a, views as at, describe$18 as b, geometry$2 as bt, runBrowserScript as c, actionLayout as ct, ProjectCreation_default as d, App_default as default, filter as dt, policy as et, ImagePicker_default as f, mode as ft, describe$17 as g, add as gt, contentWidth as h, type as ht, updateIntervals as i, _sfc_main$158 as it, ResultPresentation_default as j, displayWidgets as k, scriptTree as l, change$5 as lt, change as m, scope as mt, networkSettings as n, tabs as nt, _sfc_main$26 as o, _sfc_main$166 as ot, readPreviewImage as p, options$1 as pt, roles as q, updateBatchDelays as r, toolbar$4 as rt, buttonId as s, _sfc_main$171 as st, App_exports as t, sectionSelector as tt, lifecycle as u, fields$2 as ut, fieldsFor as v, change$6 as vt, _sfc_main$98 as w, spacing$1 as wt, pages as x, kinds as xt, confirmation$2 as y, copy as yt, saveDuplicateProfile as z };
 
 //# sourceMappingURL=App.js.map

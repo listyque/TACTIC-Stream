@@ -3,598 +3,401 @@ import { O as randomUuid, j as appearance, ot as _plugin_vue_export_helper_defau
 import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { a as projectPath } from "./links.js";
-import { $ as notices, A as _sfc_main$2, Q as documentEvent, U as spacingField, rt as toolbar$1, tt as sectionSelector } from "./App.js";
-//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.document.mjs
-var kinds = [
-	"row",
-	"column",
-	"text",
-	"markdown",
-	"metric",
-	"table",
+import { $ as notices, A as _sfc_main$2, Ct as remove, Q as documentEvent, St as layers, U as spacingField, _t as block, bt as geometry, dt as filter, ft as mode, gt as add, ht as type, lt as change, mt as scope$1, pt as options, rt as toolbar$1, tt as sectionSelector, ut as fields$1, vt as change$1, wt as spacing, xt as kinds, yt as copy } from "./App.js";
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
+var collections = [
 	"items",
-	"details",
-	"link"
+	"table",
+	"metric",
+	"chart",
+	"summary"
 ];
-var copy = (value) => JSON.parse(JSON.stringify(value, (_key, item) => item === void 0 ? null : item));
-function path(value) {
-	if (value === "") return [];
-	if (!/^\d+(\.\d+)*$/.test(value)) throw Error("Select a page block");
-	return value.split(".").map(Number);
-}
-function siblings(document, indices) {
-	let rows = document.blocks;
-	for (const index of indices.slice(0, -1)) {
-		if (!rows[index]) throw Error("The selected element no longer exists");
-		rows = rows[index].children || [];
-	}
-	return rows;
-}
-function block(document, key) {
-	const p = path(key);
-	if (!p.length) return null;
-	const item = siblings(document, p)[p[p.length - 1]];
-	if (!item) throw Error("The selected element no longer exists");
-	return item;
-}
-function layers(document, prefix = []) {
-	const rows = prefix.length ? block(document, prefix.join(".")).children || [] : document.blocks || [];
-	let result = [];
-	rows.forEach((item, index) => {
-		const p = prefix.concat(index);
-		result = result.concat([{
-			key: p.join("."),
-			depth: prefix.length,
-			label: item.title || item.kind,
-			kind: item.kind
-		}].concat(layers(document, p)));
-	});
-	return result;
-}
-function change$1(document, key, field, value) {
-	const result = copy(document), item = key === "" ? result : block(result, key);
-	if (!item) throw Error("The selected element no longer exists");
-	const limits = {
-		width: [40, 2400],
-		height: [24, 1600],
-		weight: [1, 12],
-		gap: [0, 128]
-	};
-	if (limits[field]) {
-		if (value === "" && ["width", "height"].includes(field)) value = null;
-		else {
-			const range = limits[field];
-			if (!/^\d+$/.test(String(value)) || Number(value) < range[0] || Number(value) > range[1]) throw Error("Enter a whole number within the allowed range");
-			value = Number(value);
-		}
-	} else if (![
-		"title",
-		"text",
-		"search_type",
-		"view",
-		"href",
-		"field"
-	].includes(field)) throw Error("Unsupported page property");
-	item[field] = value;
-	return result;
-}
-function spacing(document, key, field, side, value) {
-	if (!["padding", "margin"].includes(field) || !Number.isInteger(side) || side < 0 || side > 3 || !/^\d+$/.test(String(value)) || Number(value) > 256) throw Error("Enter spacing from 0 to 256");
-	const result = copy(document), item = block(result, key);
-	if (!item) throw Error("Select a page block");
-	item[field] = (item[field] || [
-		0,
-		0,
-		0,
-		0
-	]).slice();
-	item[field][side] = Number(value);
-	return result;
-}
-function add(document, key, kind, searchType) {
-	if (!kinds.includes(kind)) throw Error("Unsupported page widget");
-	const result = copy(document), selected = key ? block(result, key) : null;
-	const parent = selected && [
-		"row",
-		"column",
-		"details"
-	].includes(selected.kind) ? path(key) : key ? path(key).slice(0, -1) : [];
-	const owner = parent.length ? block(result, parent.join(".")) : null;
-	const rows = owner ? owner.children || (owner.children = []) : result.blocks;
-	if (rows.length >= 32 || layers(result).length >= 128) throw Error("Dashboard exceeds 128 bricks");
-	if (parent.length > 6) throw Error("Dashboard nesting exceeds six levels");
-	const item = {
-		kind,
-		title: kind
-	};
-	if ([
-		"row",
-		"column",
-		"details"
-	].includes(kind)) {
-		item.children = [];
-		item.height = 180;
-	}
-	if ([
-		"items",
-		"table",
-		"metric"
-	].includes(kind)) Object.assign(item, {
-		search_type: searchType || "",
-		view: kind === "items" ? "continuous_example" : "table"
-	});
-	if (["text", "markdown"].includes(kind)) item.text = kind;
-	rows.push(item);
+function scope(document, ui) {
+	if (ui.selected) return scope$1(document, ui.selected);
 	return {
-		document: result,
-		key: parent.concat(rows.length - 1).join(".")
-	};
-}
-function remove(document, key) {
-	const result = copy(document), p = path(key);
-	if (!p.length) throw Error("Select a page block");
-	siblings(result, p).splice(p[p.length - 1], 1);
-	return result;
-}
-function geometry(document, change, boxes) {
-	const result = copy(document), p = path(change.key), item = block(result, change.key);
-	if (!item) throw Error("The selected element no longer exists");
-	if (change.handle !== "move") {
-		const margin = item.margin || [
-			0,
-			0,
-			0,
-			0
-		], padding = item.padding || [
-			0,
-			0,
-			0,
-			0
-		];
-		if (change.handle.includes("e")) item.width = Math.max(40, Math.min(2400, Math.round(change.after.width + margin[1] + margin[3])));
-		if (change.handle.includes("s")) {
-			const overhead = ["items", "table"].includes(item.kind) ? 32 : 0;
-			const old = item.height === void 0 || item.height === null ? change.before.height - overhead - padding[0] - padding[2] : item.height;
-			item.height = Math.max(24, Math.min(1600, Math.round(old + change.after.height - change.before.height)));
-		}
-		return {
-			document: result,
-			key: change.key
-		};
-	}
-	if (change.keyboard) {
-		const rows = siblings(result, p), index = p[p.length - 1];
-		const delta = change.after.y - change.before.y || change.after.x - change.before.x;
-		const target = Math.max(0, Math.min(rows.length - 1, index + delta));
-		rows.splice(index, 1);
-		rows.splice(target, 0, item);
-		return {
-			document: result,
-			key: p.slice(0, -1).concat(target).join(".")
-		};
-	}
-	const x = change.after.x + change.after.width / 2, y = change.after.y + change.after.height / 2;
-	const hit = boxes.filter((b) => b.key !== change.key && !b.key.startsWith(change.key + ".") && x >= b.x && x <= b.x + b.width && y >= b.y && y <= b.y + b.height).sort((a, b) => b.depth - a.depth)[0];
-	let parent = hit ? path(hit.key) : [];
-	if (hit && ![
-		"row",
-		"column",
-		"details"
-	].includes(block(result, hit.key)?.kind)) parent = parent.slice(0, -1);
-	if (parent.length > 5) throw Error("Dashboard nesting exceeds six levels");
-	const old = siblings(result, p), index = p[p.length - 1];
-	const owner = parent.length ? block(result, parent.join(".")) : null;
-	const target = owner ? owner.children || (owner.children = []) : result.blocks;
-	const depth = (rows) => rows.reduce((value, row) => Math.max(value, 1 + depth(row.children || [])), 0);
-	if (parent.length + depth([item]) > 7) throw Error("Dashboard nesting exceeds six levels");
-	if (target !== old && target.length >= 32) throw Error("Dashboard supports at most 32 siblings");
-	const axis = (parent.length ? block(result, parent.join(".")).kind : "column") === "row" ? "x" : "y", position = axis === "x" ? x : y;
-	const before = boxes.filter((b) => path(b.key).length === parent.length + 1 && path(b.key).slice(0, -1).join(".") === parent.join(".") && b.key !== change.key).sort((a, b) => a[axis] - b[axis]).find((b) => position < b[axis] + b[axis === "x" ? "width" : "height"] / 2);
-	const targetPath = before ? path(before.key) : [];
-	let insertion = before ? targetPath[targetPath.length - 1] : target.length;
-	if (old === target && index < insertion) insertion--;
-	old.splice(index, 1);
-	target.splice(insertion, 0, item);
-	function location(rows, prefix) {
-		if (rows === target) return prefix;
-		for (let i = 0; i < rows.length; i++) {
-			const found = location(rows[i].children || [], prefix.concat(i));
-			if (found) return found;
-		}
-		return null;
-	}
-	return {
-		document: result,
-		key: location(result.blocks, []).concat(insertion).join(".")
-	};
-}
-//#endregion
-//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.data.mjs
-function inDetails(document, key) {
-	const path$1 = path(key);
-	return path$1.slice(0, -1).some((_, index) => block(document, path$1.slice(0, index + 1).join(".")).kind === "details");
-}
-function mode(document, key) {
-	const item = key ? block(document, key) : null;
-	if (!item || !["text", "markdown"].includes(item.kind)) return "";
-	if (item.binding && item.binding !== "auto") return item.binding;
-	return item.source_key ? "record" : item.field ? inDetails(document, key) ? "selection" : "project" : "static";
-}
-function selectedType(document, key) {
-	const path$2 = path(key);
-	for (let size = path$2.length; size > 0; size--) {
-		const item = block(document, path$2.slice(0, size).join("."));
-		if (item.search_type) return item.search_type;
-	}
-	const row = layers(document).find((layer) => layer.kind === "items");
-	return row ? block(document, row.key).search_type || "" : "";
-}
-function scope(document, key) {
-	if (!document?.blocks || !key || !layers(document).some((row) => row.key === key)) return {
-		searchType: "",
+		searchType: document?.filters?.[ui.pageFilter || 0]?.search_type || "",
 		recordKey: ""
 	};
-	const item = block(document, key), binding = mode(document, key);
+}
+function filterDocument(document, ui) {
+	const item = document.filters[ui.pageFilter || 0];
+	return { blocks: [{
+		kind: "metric",
+		search_type: item.search_type,
+		filters: [{
+			column: item.column,
+			relation: item.relation,
+			value: item.value
+		}]
+	}] };
+}
+var events = [
+	"pageFilterAdd",
+	"pageFilterRemove",
+	"pageFilterSelect",
+	"pageFilterChange",
+	"pageSource",
+	"pageCondition",
+	"pageConditionCommit",
+	"report",
+	"reportCommit"
+];
+function edit(model, ui, event) {
+	const document = copy(model.document), next = Object.assign({}, ui);
+	const filters = document.filters || (document.filters = []);
+	const index = ui.pageFilter || 0;
+	if (event.type === "pageFilterSelect") {
+		next.pageFilter = Number(event.value);
+		return { ui: next };
+	}
+	if (event.type === "pageFilterAdd") {
+		if (filters.length >= 8) throw Error("A page supports at most eight shared filters");
+		let number = 1;
+		while (filters.some((item) => item.name === "filter_" + number)) number++;
+		filters.push({
+			name: "filter_" + number,
+			title: "Filter " + number,
+			search_type: model.searchTypes?.[0]?.value || "",
+			column: "code",
+			relation: "=",
+			value: "",
+			enabled: false
+		});
+		next.pageFilter = filters.length - 1;
+	} else if (event.type === "pageFilterRemove") {
+		filters.splice(index, 1);
+		next.pageFilter = Math.max(0, index - 1);
+	} else if ([
+		"pageSource",
+		"pageCondition",
+		"pageConditionCommit",
+		"pageFilterChange"
+	].includes(event.type)) {
+		const item = filters[index];
+		if (!item) throw Error("Choose a page filter");
+		if (event.type === "pageSource") item.search_type = event.value;
+		else if (event.type === "pageFilterChange") {
+			if (!["title", "enabled"].includes(event.field)) throw Error("Unsupported page filter property");
+			item[event.field] = event.key ? ui.text[event.key] : event.value;
+		} else {
+			if (event.type === "pageConditionCommit" && !Object.prototype.hasOwnProperty.call(ui.text, event.key)) return { ui: next };
+			const result = filter(filterDocument(document, ui), "0", event.type === "pageConditionCommit" ? Object.assign({}, event, {
+				field: "value",
+				value: ui.text[event.key]
+			}) : event, model.dataSource);
+			Object.assign(item, result.blocks[0].filters[0]);
+		}
+		if (event.key) {
+			next.text = Object.assign({}, ui.text);
+			delete next.text[event.key];
+		}
+	} else {
+		const item = block(document, ui.selected);
+		if (!item || !collections.includes(item.kind)) throw Error("Choose a data widget");
+		const value = event.key ? ui.text[event.key] : event.value;
+		if (event.field === "mappingMode") item.page_filters = value === "auto" ? null : {};
+		else if (event.field === "mapping") {
+			item.page_filters = Object.assign({}, item.page_filters);
+			if (value) item.page_filters[event.name] = value;
+			else delete item.page_filters[event.name];
+		} else if ([
+			"group_limit",
+			"group_order",
+			"measure"
+		].includes(event.field)) item[event.field] = value;
+		else {
+			const field = event.section === "group" ? "group_by" : "aggregates";
+			const rows = item[field] || (item[field] = []);
+			if (event.action === "add") {
+				if (rows.length >= (field === "group_by" ? 3 : 8)) throw Error("Report dimension limit reached");
+				if (field === "group_by") rows.push({
+					column: model.dataSource?.fields?.find((f) => type(f) !== "complex")?.value || "code",
+					period: "value"
+				});
+				else {
+					let number = 1;
+					while (rows.some((row) => row.name === "measure_" + number)) number++;
+					rows.push({
+						name: "measure_" + number,
+						title: "Count",
+						function: "count",
+						column: ""
+					});
+				}
+			} else if (event.action === "remove") rows.splice(event.index, 1);
+			else {
+				const row = rows[event.index];
+				if (!row || !(field === "group_by" ? [
+					"column",
+					"period",
+					"title"
+				] : [
+					"column",
+					"function",
+					"title"
+				]).includes(event.field)) throw Error("Choose a report field");
+				if (event.field === "function") {
+					const titles = {
+						count: "Count",
+						sum: "Sum",
+						avg: "Average",
+						min: "Minimum",
+						max: "Maximum"
+					};
+					if (row.title === titles[row.function]) row.title = titles[value];
+				}
+				row[event.field] = value;
+			}
+		}
+		if (event.key) {
+			next.text = Object.assign({}, ui.text);
+			delete next.text[event.key];
+		}
+	}
 	return {
-		searchType: binding === "project" ? "sthpw/project" : binding === "selection" ? selectedType(document, key) : binding === "record" ? item.search_type || (item.source_key || "").split("?")[0] : [
-			"table",
-			"items",
-			"metric",
-			"row",
-			"column"
-		].includes(item.kind) ? item.search_type || "" : "",
-		recordKey: binding === "record" ? item.source_key || "" : ""
+		document,
+		ui: next
 	};
 }
-function change(document, key, field, value) {
-	const result = copy(document), item = block(result, key);
-	if (field === "binding") {
-		if (!["text", "markdown"].includes(item.kind) || ![
-			"static",
-			"project",
-			"selection",
-			"record"
-		].includes(value)) throw Error("Choose a supported field binding");
-		if (value === "selection" && !inDetails(result, key)) throw Error("Place selection-bound widgets inside Details");
-		const type = selectedType(result, key);
-		Object.assign(item, {
-			binding: value,
-			field: "",
-			source_key: "",
-			search_type: value === "selection" ? type : ""
-		});
-	} else if (field === "search_type") {
-		item.search_type = value;
-		if (mode(result, key) === "record") item.source_key = "";
-	} else if ([
-		"field",
-		"source_key",
-		"view"
-	].includes(field)) item[field] = value;
-	else throw Error("Unsupported data property");
-	return result;
-}
-function type(field) {
-	const value = String(field?.dataType || "").toLowerCase();
-	return /bool/.test(value) ? "boolean" : /int|numeric|decimal|real|double|float/.test(value) ? "number" : /date|time/.test(value) ? "date" : /json|array|blob|bytea/.test(value) ? "complex" : "text";
-}
-var defaultValue = (field) => type(field) === "boolean" ? false : type(field) === "number" ? 0 : "";
-function relation(condition) {
-	return condition.value == null && ["=", "!="].includes(condition.relation) ? condition.relation === "=" ? "empty" : "notEmpty" : condition.relation;
-}
-function value(field, raw) {
-	if (type(field) === "boolean") {
-		if (![
-			true,
-			false,
-			"true",
-			"false"
-		].includes(raw)) throw Error("Choose Yes or No");
-		return raw === true || raw === "true";
-	}
-	if (type(field) === "number") {
-		if (String(raw).trim() === "" || !Number.isFinite(Number(raw))) throw Error("Enter a valid number");
-		return Number(raw);
-	}
-	if (type(field) === "date" && raw && !/^\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})?)?$/.test(String(raw))) throw Error("Choose a valid date");
-	return String(raw);
-}
-function filter(document, key, event, metadata) {
-	const result = copy(document), item = block(result, key);
-	if (![
-		"items",
-		"table",
-		"metric"
-	].includes(item.kind)) throw Error("Filters belong to a data collection");
-	const fields = (metadata?.fields || []).filter((row) => type(row) !== "complex");
-	item.filters = item.filters || [];
-	if (event.action === "add") {
-		if (item.filters.length >= 32) throw Error("Select at most 32 filter conditions");
-		const field = fields.find((row) => row.value === "code") || fields[0];
-		if (!field) throw Error("Choose a data source first");
-		item.filters.push({
-			column: field.value,
-			relation: "=",
-			value: defaultValue(field)
-		});
-		return result;
-	}
-	if (!Number.isInteger(event.index) || event.index < 0 || event.index >= item.filters.length) throw Error("Choose a filter condition");
-	if (event.action === "remove") {
-		item.filters.splice(event.index, 1);
-		return result;
-	}
-	const row = item.filters[event.index], field = fields.find((field) => field.value === (event.field === "column" ? event.value : row.column));
-	if (!field) throw Error("Choose a field from the current data source");
-	if (event.field === "column") Object.assign(row, {
-		column: event.value,
-		relation: "=",
-		value: defaultValue(field)
-	});
-	else if (event.field === "relation") {
-		const empty = ["empty", "notEmpty"].includes(event.value);
-		if (![
-			"=",
-			"!=",
-			"<",
-			"<=",
-			">",
-			">=",
-			"like",
-			"empty",
-			"notEmpty"
-		].includes(event.value)) throw Error("Choose a supported filter condition");
-		row.relation = empty ? event.value === "empty" ? "=" : "!=" : event.value;
-		row.value = empty ? null : row.value == null ? defaultValue(field) : row.value;
-	} else if (event.field === "value") row.value = value(field, event.value);
-	else throw Error("Unsupported filter property");
-	return result;
-}
-function options(rows, current, language) {
-	const result = (rows || []).map((row) => ({
-		value: row.value,
-		label: row.label
-	}));
-	if (current && !result.some((row) => row.value === current)) result.push({
-		value: current,
-		label: current + " · " + translate("Unavailable", language)
-	});
+function retag(value) {
+	if (!value || typeof value !== "object") return value;
+	if (Array.isArray(value)) return value.map(retag);
+	const result = {};
+	for (const [key, item] of Object.entries(value)) result[key] = retag(item);
+	if (result.type === "data") result.type = "pageSource";
+	if (result.type === "filter") result.type = "pageCondition";
+	if (result.type === "filterCommit") result.type = "pageConditionCommit";
 	return result;
 }
 function fields(model, ui, width, language, enabled) {
-	if (!ui.selected) return [];
-	const item = block(model.document, ui.selected), binding = mode(model.document, ui.selected), requested = scope(model.document, ui.selected);
-	const metadata = model.dataSource?.searchType === requested.searchType ? model.dataSource : {}, tr = (text) => translate(text, language);
-	const fields = [], collection = [
-		"table",
-		"items",
-		"metric"
-	].includes(item.kind), condition = ["row", "column"].includes(item.kind) && inDetails(model.document, ui.selected);
-	if (!collection && !binding && !condition) return fields;
-	fields.push({
-		kind: "Heading",
-		id: "pageDataHeading",
-		title: "Data",
-		description: "Data settings apply to this widget only."
-	});
-	function choice(id, title, current, rows, field) {
-		fields.push({
+	const result = [], tr = (text) => translate(text, language), document = model.document;
+	function heading(id, title, description = "") {
+		result.push({
+			kind: "Heading",
+			id,
+			title,
+			description
+		});
+	}
+	function choice(id, title, value, rows, action) {
+		result.push({
 			kind: "Choice",
 			id,
 			title,
-			options: options(rows, current, language),
+			options: options(rows, value, language),
 			props: {
-				value: current,
+				value,
 				enabled,
-				action: {
-					type: "data",
-					field
-				}
+				action
 			}
 		});
 	}
-	if (binding) choice("pageBinding", "Content source", binding, [
-		["static", "Static text"],
-		["project", "Current project"],
-		...inDetails(model.document, ui.selected) ? [["selection", "Selected object"]] : [],
-		["record", "Specific record"]
-	].map(([value, label]) => ({
-		value,
-		label: tr(label)
-	})), "binding");
-	if (collection || condition || ["selection", "record"].includes(binding)) {
-		const sources = (model.searchTypes || []).filter((row) => item.kind !== "items" || row.projectOwned !== false);
-		choice("pageProperty_search_type", collection ? "Data source" : "Record type", item.search_type || "", [{
-			value: "",
-			label: tr(condition ? "Any record type" : "Choose a data source")
-		}].concat(sources), "search_type");
-	}
-	if (requested.searchType) {
-		if (model.dataBusy || model.dataError || !metadata.searchType) fields.push({
-			kind: "Heading",
-			id: "pageDataStatus",
-			title: model.dataError || "Loading source fields…"
-		});
-		if (model.dataError) fields.push({
+	function button(id, title, action, icon = "add") {
+		result.push({
 			kind: "Button",
-			id: "pageDataRetry",
-			title: "Retry",
+			id,
+			title,
 			props: {
-				icon: "refresh",
-				action: { type: "source" }
+				enabled,
+				icon,
+				action
 			}
 		});
 	}
-	if (["items", "table"].includes(item.kind)) choice("pageProperty_view", "Saved view", item.view || "table", item.kind === "items" ? metadata.itemViews : metadata.tableViews, "view");
-	if (binding === "record" && requested.searchType) {
-		fields.push({
-			id: "pageRecordQuery",
-			title: "Find record",
+	function text(id, title, value, action) {
+		const key = id;
+		result.push({
+			id,
+			title,
 			props: {
-				text: ui.recordQuery || "",
-				action: { type: "recordQuery" }
+				enabled,
+				text: Object.prototype.hasOwnProperty.call(ui.text, key) ? ui.text[key] : value,
+				action: {
+					type: "buffer",
+					key
+				},
+				commitAction: Object.assign({}, action, { key })
 			}
 		});
-		fields.push({
-			kind: "Button",
-			id: "pageRecordFind",
-			title: "Find records",
+	}
+	if (!ui.selected) {
+		const filters = document.filters || [], index = ui.pageFilter || 0, item = filters[index];
+		heading("pageSharedHeading", "Shared page filters", "Apply the same condition to several widgets. Runtime values do not change the saved page.");
+		choice("pageSharedSelect", "Page filter", String(index), filters.map((item, i) => ({
+			value: String(i),
+			label: item.title
+		})), { type: "pageFilterSelect" });
+		button("pageSharedAdd", "Add page filter", { type: "pageFilterAdd" });
+		if (!item) return result;
+		text("pageSharedTitle", "Filter label", item.title, {
+			type: "pageFilterChange",
+			field: "title"
+		});
+		result.push({
+			kind: "Switch",
+			id: "pageSharedEnabled",
+			title: "Enabled by default",
 			props: {
-				icon: "search",
-				enabled: !model.dataBusy,
+				checked: item.enabled,
+				enabled,
 				action: {
-					type: "source",
-					query: true
+					type: "pageFilterChange",
+					field: "enabled"
 				}
 			}
 		});
-		choice("pageRecord", "Source record", item.source_key || "", [{
+		const data = fields$1(Object.assign({}, model, { document: filterDocument(document, ui) }), Object.assign({}, ui, { selected: "0" }), width, language, enabled).filter((field) => !["pageDataHeading", "pageFilterAdd"].includes(field.id));
+		for (const field of data) if (field.id === "pageFilter_0") field.props.children = field.props.children.filter((node) => !node.id.endsWith("_remove"));
+		result.push(...data.map(retag));
+		button("pageSharedRemove", "Remove page filter", { type: "pageFilterRemove" }, "delete");
+		return result;
+	}
+	const item = block(document, ui.selected);
+	if (!collections.includes(item.kind)) return result;
+	const metadata = model.dataSource?.searchType === item.search_type ? model.dataSource : {};
+	const sourceFields = (metadata.fields || []).filter((field) => type(field) !== "complex");
+	enabled = enabled && !model.dataBusy && !!metadata.searchType;
+	if (document.filters?.length) {
+		heading("pageMappingsHeading", "Shared page filters");
+		choice("pageMappingMode", "Filter binding", item.page_filters == null ? "auto" : "custom", [{
+			value: "auto",
+			label: tr("Match the same data source")
+		}, {
+			value: "custom",
+			label: tr("Choose fields explicitly")
+		}], {
+			type: "report",
+			field: "mappingMode"
+		});
+		if (item.page_filters != null) for (const filter of document.filters) choice("pageMapping_" + filter.name, filter.title, item.page_filters[filter.name] || "", [{
 			value: "",
-			label: tr("Choose a record")
-		}].concat(metadata.records || []), "source_key");
-		if (metadata.more) fields.push({
-			kind: "Heading",
-			id: "pageRecordMore",
-			title: "More matches. Refine your search."
+			label: tr("Not applied")
+		}].concat(sourceFields), {
+			type: "report",
+			field: "mapping",
+			name: filter.name
 		});
 	}
-	if (binding && binding !== "static") {
-		const sourceFields = (metadata.fields || []).filter((row) => item.kind === "markdown" ? type(row) === "text" : type(row) !== "complex");
-		choice("pageBindingField", "Source field", item.field || "", [{
+	if (![
+		"metric",
+		"chart",
+		"summary"
+	].includes(item.kind)) return result;
+	heading("pageReportHeading", "Grouping and aggregates", "Totals use all matching records before the displayed group limit.");
+	if (item.kind !== "metric") {
+		(item.group_by || []).forEach((group, index) => {
+			const action = {
+				type: "report",
+				section: "group",
+				index
+			};
+			text("pageGroup_" + index + "_title", "Group label (optional)", group.title || "", Object.assign({}, action, {
+				type: "reportCommit",
+				field: "title"
+			}));
+			choice("pageGroup_" + index + "_column", "Group field", group.column, sourceFields, Object.assign({}, action, { field: "column" }));
+			choice("pageGroup_" + index + "_period", "Group interval", group.period || "value", (type(sourceFields.find((field) => field.value === group.column)) === "date" ? [
+				"value",
+				"year",
+				"month",
+				"day"
+			] : ["value"]).map((value) => ({
+				value,
+				label: tr({
+					value: "Field value",
+					year: "Year (UTC)",
+					month: "Month (UTC)",
+					day: "Day (UTC)"
+				}[value])
+			})), Object.assign({}, action, { field: "period" }));
+			button("pageGroup_" + index + "_remove", "Remove group", Object.assign({}, action, { action: "remove" }), "delete");
+		});
+		button("pageGroupAdd", "Add grouping", {
+			type: "report",
+			section: "group",
+			action: "add"
+		});
+	}
+	const measures = item.aggregates || [];
+	measures.forEach((measure, index) => {
+		const action = {
+			type: "report",
+			section: "measure",
+			index
+		};
+		text("pageMeasure_" + index + "_title", "Measure label", measure.title, Object.assign({}, action, {
+			type: "reportCommit",
+			field: "title"
+		}));
+		choice("pageMeasure_" + index + "_function", "Aggregate", measure.function, [
+			"count",
+			"sum",
+			"avg",
+			"min",
+			"max"
+		].map((value) => ({
+			value,
+			label: tr({
+				count: "Count",
+				sum: "Sum",
+				avg: "Average",
+				min: "Minimum",
+				max: "Maximum"
+			}[value])
+		})), Object.assign({}, action, { field: "function" }));
+		choice("pageMeasure_" + index + "_column", "Measure field", measure.column || "", [{
 			value: "",
-			label: tr("Choose a source field")
-		}].concat(sourceFields), "field");
-	}
-	if (collection) {
-		fields.push({
-			kind: "Heading",
-			id: "pageFiltersHeading",
-			title: "Filters",
-			description: "All conditions must match (AND)."
-		});
-		(item.filters || []).forEach((row, index) => {
-			const id = "pageFilter_" + index, sourceField = (metadata.fields || []).find((field) => field.value === row.column), empty = row.value == null;
-			const w = width - 32, children = [];
-			children.push(node("Choice", id + "_column", rect(0, 0, w - 40, 34), {
-				label: tr("Filter field"),
-				value: row.column,
-				options: options((metadata.fields || []).filter((row) => type(row) !== "complex"), row.column, language),
-				enabled,
-				action: {
-					type: "filter",
-					index,
-					field: "column"
-				}
-			}));
-			children.push(node("Button", id + "_remove", rect(w - 32, 0, 32, 34), {
-				text: tr("Remove condition"),
-				icon: "delete",
-				iconOnly: true,
-				enabled,
-				action: {
-					type: "filter",
-					index,
-					action: "remove"
-				}
-			}));
-			const operators = [
-				["=", "Is"],
-				["!=", "Is not"],
-				...["number", "date"].includes(type(sourceField)) ? [
-					["<", "Less than"],
-					["<=", "At most"],
-					[">", "Greater than"],
-					[">=", "At least"]
-				] : [],
-				...type(sourceField) === "text" ? [["like", "Matches text pattern"]] : [],
-				["empty", "Is empty"],
-				["notEmpty", "Is not empty"]
-			];
-			children.push(node("Choice", id + "_relation", rect(0, 42, w, 34), {
-				label: tr("Filter condition"),
-				value: relation(row),
-				enabled,
-				options: options(operators.map(([value, label]) => ({
-					value,
-					label: tr(label)
-				})), relation(row), language),
-				action: {
-					type: "filter",
-					index,
-					field: "relation"
-				}
-			}));
-			if (!empty) {
-				const key = "filter:" + index, content = Object.prototype.hasOwnProperty.call(ui.text, key) ? ui.text[key] : String(row.value);
-				const props = {
-					label: tr("Filter value"),
-					text: content,
-					enabled,
-					inputMode: type(sourceField) === "number" ? "decimal" : "text",
-					action: {
-						type: "buffer",
-						key
-					},
-					commitAction: {
-						type: "filterCommit",
-						index,
-						key
-					}
-				};
-				if (type(sourceField) === "boolean") Object.assign(props, {
-					value: String(row.value),
-					options: [{
-						value: "true",
-						label: tr("Yes")
-					}, {
-						value: "false",
-						label: tr("No")
-					}],
-					action: {
-						type: "filter",
-						index,
-						field: "value"
-					}
-				});
-				if (type(sourceField) === "date") Object.assign(props, {
-					includeTime: /time/i.test(sourceField.dataType),
-					action: {
-						type: "filter",
-						index,
-						field: "value"
-					},
-					commitAction: null
-				});
-				children.push(node(type(sourceField) === "boolean" ? "Choice" : type(sourceField) === "date" ? "DateChoice" : "Field", id + "_value", rect(0, 84, w, 36), props));
+			label: tr("All rows (count only)")
+		}].concat(sourceFields.filter((field) => measure.function === "count" || type(field) === "number")), Object.assign({}, action, { field: "column" }));
+		button("pageMeasure_" + index + "_remove", "Remove measure", Object.assign({}, action, { action: "remove" }), "delete");
+	});
+	if (item.kind !== "metric" || !measures.length) button("pageMeasureAdd", "Add measure", {
+		type: "report",
+		section: "measure",
+		action: "add"
+	});
+	if (item.kind !== "metric") {
+		choice("pageGroupOrder", "Group order", item.group_order || "group", [
+			{
+				value: "group",
+				label: tr("By group")
+			},
+			{
+				value: "value_desc",
+				label: tr("Largest first (first measure)")
+			},
+			{
+				value: "value_asc",
+				label: tr("Smallest first (first measure)")
 			}
-			fields.push({
-				kind: "Box",
-				id,
-				fullWidth: true,
-				height: empty ? 84 : 128,
-				props: { children }
-			});
+		], {
+			type: "report",
+			field: "group_order"
 		});
-		if ((item.filters || []).some((row) => row.relation === "like")) fields.push({
-			kind: "Heading",
-			id: "pagePatternHint",
-			title: "Use % to match any text, for example %robot%."
-		});
-		fields.push({
-			kind: "Button",
-			id: "pageFilterAdd",
-			title: "Add condition",
-			props: {
-				icon: "add",
-				enabled: enabled && !!metadata.fields?.length && (item.filters || []).length < 32,
-				action: {
-					type: "filter",
-					action: "add"
-				}
-			}
+		choice("pageGroupLimit", "Maximum groups", item.group_limit || 50, [
+			10,
+			25,
+			50,
+			100
+		].map((value) => ({
+			value,
+			label: String(value)
+		})), {
+			type: "report",
+			field: "group_limit"
 		});
 	}
-	return fields;
+	if (item.kind === "chart") choice("pageChartMeasure", "Chart measure", item.measure || measures[0]?.name || "count", measures.length ? measures.map((row) => ({
+		value: row.name,
+		label: row.title
+	})) : [{
+		value: "count",
+		label: tr("Count")
+	}], {
+		type: "report",
+		field: "measure"
+	});
+	return result;
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs
@@ -697,7 +500,9 @@ function describe(model, ui, width, height, language) {
 				markdown: "Markdown",
 				metric: "Metric",
 				table: "Table",
-				link: "Link"
+				link: "Link",
+				chart: "Bar chart",
+				summary: "Grouped report"
 			}[value])
 		}))),
 		enabled: canEdit && !ui.preview,
@@ -742,7 +547,7 @@ function describe(model, ui, width, height, language) {
 				scrollbarId: "pageBlocksScrollBar"
 			})]
 		}));
-		const item = ui.selected ? block(model.document, ui.selected) : null, fields$1 = [];
+		const item = ui.selected ? block(model.document, ui.selected) : null, fields$2 = [];
 		function field(name, title, value, root = false, kind) {
 			const key = (root ? "page" : ui.selected) + ":" + name;
 			const props = {
@@ -759,7 +564,7 @@ function describe(model, ui, width, height, language) {
 				},
 				enabled: canEdit
 			};
-			fields$1.push({
+			fields$2.push({
 				id: "pageProperty_" + name,
 				title,
 				kind,
@@ -767,11 +572,13 @@ function describe(model, ui, width, height, language) {
 			});
 		}
 		field("title", "Title", item ? item.title : model.document.title, !item);
+		if (!item) fields$2.push(...fields(model, ui, right - 24, language, canEdit));
 		if (item) {
-			fields$1.push(...fields(model, ui, right - 24, language, canEdit));
+			fields$2.push(...fields$1(model, ui, right - 24, language, canEdit));
+			fields$2.push(...fields(model, ui, right - 24, language, canEdit));
 			if (["text", "markdown"].includes(item.kind) && mode(model.document, ui.selected) === "static") field("text", "Text", item.text || "", false, item.kind === "markdown" ? "Area" : void 0);
 			if (item.kind === "link") field("href", "Link URL", item.href || "");
-			fields$1.push({
+			fields$2.push({
 				kind: "Heading",
 				id: "pageLayoutHeading",
 				title: "Layout"
@@ -784,7 +591,7 @@ function describe(model, ui, width, height, language) {
 				"column",
 				"details"
 			].includes(item.kind)) field("gap", "Gap", item.gap ?? 8);
-			for (const name of ["padding", "margin"]) fields$1.push(spacingField("page" + name, tr(name === "padding" ? "Padding" : "Margin"), item[name] || [
+			for (const name of ["padding", "margin"]) fields$2.push(spacingField("page" + name, tr(name === "padding" ? "Padding" : "Margin"), item[name] || [
 				0,
 				0,
 				0,
@@ -793,7 +600,7 @@ function describe(model, ui, width, height, language) {
 				type: "spacing",
 				field: name
 			}, language, canEdit, right - 72));
-			if (item.kind === "items") fields$1.push({
+			if (item.kind === "items") fields$2.push({
 				kind: "Button",
 				id: "pageEditCard",
 				title: "Edit card layout",
@@ -803,7 +610,7 @@ function describe(model, ui, width, height, language) {
 					action: { type: "card" }
 				}
 			});
-			fields$1.push({
+			fields$2.push({
 				kind: "Button",
 				id: "pageRemoveBlock",
 				title: "Remove widget",
@@ -814,7 +621,7 @@ function describe(model, ui, width, height, language) {
 				}
 			});
 		}
-		const body = sections(fields$1, right - 24, language, canEdit);
+		const body = sections(fields$2, right - 24, language, canEdit);
 		if (!ui.preview && (!narrow || ui.panel === "properties")) nodes.push(node("Box", "pagePropertiesPanel", rect(width - right, y, right, h), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
@@ -846,6 +653,7 @@ function initial() {
 		newName: "",
 		newTitle: "",
 		recordQuery: "",
+		pageFilter: 0,
 		error: ""
 	};
 }
@@ -905,6 +713,24 @@ function transition(ui, model, event) {
 		commands
 	};
 	try {
+		if (events.includes(event.type)) {
+			if (event.key && !Object.prototype.hasOwnProperty.call(ui.text, event.key)) return {
+				ui: next,
+				commands
+			};
+			if (Object.keys(ui.text).length && ![
+				"pageConditionCommit",
+				"reportCommit",
+				"pageFilterChange"
+			].includes(event.type)) throw Error("Apply or discard the pending text before continuing");
+			const result = edit(model, ui, event);
+			Object.assign(next, result.ui);
+			if (result.document) replace(result.document);
+			return {
+				ui: next,
+				commands
+			};
+		}
 		const pending = Object.keys(ui.text);
 		if (pending.length && ["data", "filter"].includes(event.type) && !(event.type === "filter" && event.action === "remove" && pending.every((key) => key === "filter:" + event.index))) throw Error("Apply or discard the pending text before continuing");
 		if (Object.keys(ui.text).length && [
@@ -936,7 +762,7 @@ function transition(ui, model, event) {
 				next.recordQuery = event.value;
 				break;
 			case "source": {
-				const source = scope(model.document, ui.selected);
+				const source = scope(model.document, ui);
 				commands.push({
 					type: "source",
 					searchType: source.searchType,
@@ -956,7 +782,7 @@ function transition(ui, model, event) {
 					field: "value",
 					value: ui.text[event.key]
 				}) : event;
-				const source = scope(model.document, ui.selected);
+				const source = scope$1(model.document, ui.selected);
 				replace(filter(model.document, ui.selected, edit, model.dataSource?.searchType === source.searchType ? model.dataSource : {}));
 				next.text = Object.assign({}, next.text);
 				delete next.text[event.key || "filter:" + event.index];
@@ -1113,7 +939,7 @@ var _sfc_main = {
 	},
 	computed: {
 		dataScope() {
-			return scope(this.document, this.ui.selected);
+			return scope(this.document, this.ui);
 		},
 		dataKey() {
 			return JSON.stringify([

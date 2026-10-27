@@ -288,6 +288,12 @@ class Dashboards(unittest.TestCase):
                 preview=await client.call_tool('ts_dashboard_preview',values)
                 self.assertFalse(preview.is_error)
                 self.assertEqual(preview.structured_content['model']['layoutNodes'][-1]['text'],'Project: One')
+                draft['filters']=[dict(name='minimum',title='Minimum amount',search_type='contract/entity',column='amount',relation='>=',value=0,enabled=True)]
+                draft['blocks'].append(dict(kind='chart',title='Amounts',search_type='contract/entity',group_by=[dict(column='amount')],
+                    aggregates=[dict(name='total',title='Total',function='sum',column='amount')]))
+                preview=await client.call_tool('ts_dashboard_preview',dict(values,filter_values={'minimum':dict(enabled=True,value=1)}))
+                self.assertFalse(preview.is_error)
+                self.assertEqual(preview.structured_content['model']['layoutNodes'][-1]['report']['rows'],[dict(group_0=7,total=7)])
                 result=await client.call_tool('ts_dashboard_save',dict(values,operation_id=str(uuid4())))
                 self.assertFalse(result.is_error)
                 self.assertEqual(result.structured_content['path'],'/dashboard/via_mcp')
@@ -307,6 +313,9 @@ class Dashboards(unittest.TestCase):
         draft['blocks'][1]['kind']='items'
         draft['blocks'][1]=dict(kind='row',children=[draft['blocks'][1],dict(kind='details',children=[
             dict(kind='column',search_type='contract/entity',children=[dict(kind='text',field='code')])])])
+        draft['filters']=[dict(name='minimum',title='Minimum amount',search_type='contract/entity',column='amount',relation='>=',value=0,enabled=True)]
+        draft['blocks'].append(dict(kind='summary',title='Amounts',search_type='contract/entity',group_by=[dict(column='amount')],
+            aggregates=[dict(name='total',title='Total',function='sum',column='amount')]))
 
         class Provider(BaseHTTPRequestHandler):
             def do_POST(server):
@@ -355,6 +364,7 @@ class Dashboards(unittest.TestCase):
         self.assertEqual(compiled['layoutItems']['searchType'],'contract/entity')
         self.assertEqual(compiled['layoutNodes'][1]['kind'],'row')
         self.assertEqual(compiled['layoutNodes'][1]['children'][1]['kind'],'details')
+        self.assertEqual(compiled['layoutNodes'][-1]['report']['rows'],[dict(group_0=0,total=0),dict(group_0=7,total=7)])
         tools={row['function']['name']:row['function']['parameters'] for row in requests[0]['tools']}
         self.assertIn('ts_dashboard_save',tools)
         self.assertIn('name',tools['ts_dashboard_read']['properties'])

@@ -86,6 +86,7 @@ export default {
     layoutModel: Object,
     layoutWidth: Number,
     layoutHeight: Number,
+    layoutBusy: Boolean,
     ticket: String,
     project: String,
     workspaceId: String,
@@ -115,7 +116,8 @@ export default {
     'focus',
     'result-scroll',
     'saved',
-    'organization'
+    'organization',
+    'filter-apply'
   ],
   setup() {
     return { tabId: useId() };
@@ -2050,6 +2052,8 @@ export default {
     <CustomLayoutView
       v-if="layoutModel"
       :model="layoutModel"
+      :filter-busy="layoutBusy"
+      @filter-apply="$emit('filter-apply', $event)"
       :ticket="ticket"
       :project="project"
       :width="layoutWidth"

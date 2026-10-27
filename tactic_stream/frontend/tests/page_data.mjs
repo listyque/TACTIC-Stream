@@ -135,6 +135,13 @@ assert.equal(
 );
 const fields = Data.fields(raw, ui, 286, 'en', true),
   rows = fields.filter((row) => row.id?.startsWith('pageFilter_'));
+const loading = Data.fields({ ...raw, dataBusy: true }, ui, 286, 'en', true);
+assert.equal(
+  loading
+    .find((row) => row.id === 'pageFilter_0')
+    .props.children.find((row) => row.id.endsWith('_relation')).enabled,
+  false
+);
 assert.equal(
   rows[1].props.children.find((row) => row.id.endsWith('_value')).kind,
   'Choice'

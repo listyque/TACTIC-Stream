@@ -9,6 +9,8 @@ import { runTableScript } from './tableScript.js';
 import { printCustomReport } from './customReport.js';
 import { rpc } from '../../api.js';
 import * as Layout from '../../../../src/tactic_stream/shared_ui/features/table/layout.ui.mjs';
+import * as Report from '../../../../src/tactic_stream/shared_ui/features/table/report.ui.mjs';
+import * as Filters from '../../../../src/tactic_stream/shared_ui/features/table/page.filters.mjs';
 import * as Canvas from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/canvas.mjs';
 import CanvasSelection from '../administration/CanvasSelection.vue';
 const props = defineProps({
@@ -23,6 +25,7 @@ const props = defineProps({
   selectedKeys: Array,
   workspaceId: String,
   active: { type: Boolean, default: true },
+  filterBusy: Boolean,
   editing: Boolean,
   guides: { type: Boolean, default: true },
   selectedBlock: String
@@ -44,13 +47,15 @@ const emit = defineEmits([
   'operate',
   'loaded',
   'block',
-  'geometry'
+  'geometry',
+  'filter-apply'
 ]);
 const state = ref({}),
   tables = ref({}),
   detail = ref({}),
   busy = ref(false),
   error = ref('');
+const filterDraft = ref({});
 let generation = 0,
   abort;
 let detailGeneration = 0;
@@ -66,6 +71,9 @@ const baseScene = computed(() =>
       layoutTabKey: props.currentKey || props.model.layoutTabKey,
       layoutState: state.value,
       layoutBusy: busy.value,
+      layoutFilterDraft: filterDraft.value,
+      layoutEditing: props.editing,
+      layoutFilterBusy: props.filterBusy,
       layoutError: error.value
     },
     props.frameNode?.width ?? props.width,
@@ -150,7 +158,8 @@ async function focusItem(value) {
       {
         view: props.model.layoutView,
         search_key: props.model.targetSearchKey,
-        detail_key: key
+        detail_key: key,
+        filter_values: props.model.layoutFilterValues
       }
     ]);
     if (request !== detailGeneration) return;
@@ -224,6 +233,23 @@ async function run(source, selector = '') {
 }
 function activate(action) {
   if (props.editing) return;
+  if (action.type === 'page-filter') {
+    filterDraft.value = Filters.change(filterDraft.value, action);
+    return;
+  }
+  if (['page-filter-apply', 'page-filter-reset'].includes(action.type)) {
+    try {
+      const values =
+        action.type === 'page-filter-reset'
+          ? {}
+          : Filters.values(props.model.layoutFilters, filterDraft.value);
+      emit('filter-apply', values);
+      error.value = '';
+    } catch (failure) {
+      error.value = failure.message;
+    }
+    return;
+  }
   if (action.type === 'layout-tab') emit('tab', action.key);
   else if (action.type === 'layout-close-tab') emit('close-tab', action.key);
   else if (action.type === 'layout-change')
@@ -238,6 +264,7 @@ function activate(action) {
 watch(
   () => [props.model, props.ticket, props.project],
   () => {
+    filterDraft.value = Filters.initial(props.model.layoutFilters);
     ++generation;
     ++detailGeneration;
     detail.value = {};
@@ -281,5 +308,16 @@ onBeforeUnmount(() => {
 defineExpose({ tables, state });
 </script>
 <template>
-  <FrameView :scene="scene" :views="views" @event="activate" />
+  <FrameView
+    :scene="scene"
+    :views="views"
+    :models="
+      Report.models({
+        ...model,
+        layoutDetail: editing ? model.layoutDetail : detail
+      })
+    "
+    :describe-cell="Report.cell"
+    @event="activate"
+  />
 </template>

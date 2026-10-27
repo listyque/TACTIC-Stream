@@ -115,7 +115,7 @@ def main():
         "frontend/src/features/interface/tableScript.js",
         "frontend/src/features/interface/{CustomLayoutView.vue,DashboardItems.vue,LayoutDocument.vue,ItemComposition.vue,customReport.js}",
         "frontend/tests/custom_urls.mjs",
-        "frontend/tests/page_{canvas,data,editor_browser,editor_parity}.mjs",
+        "frontend/tests/page_{canvas,data,reports,editor_browser,editor_parity}.mjs",
         "tools/frame_layout/PageHarness.vue",
         "frontend/tests/vfx_composition.mjs",
         "frontend/src/features/interface/TableDependencies.vue",

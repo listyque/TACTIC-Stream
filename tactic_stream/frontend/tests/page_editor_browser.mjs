@@ -260,10 +260,63 @@ try {
     2,
     'Data changes publish only after explicit save'
   );
+  await control('pageBlock_page').click();
+  await control('pageSharedAdd').click();
+  await control('pageProperty_search_type').selectOption('contract/entity');
+  await control('pageFilter_0_column').selectOption('amount');
+  await control('pageFilter_0_relation').selectOption('>=');
+  await control('pageSharedEnabled').click();
+  await control('pageSharedTitle').fill('Minimum amount');
+  await control('pageSharedTitle').blur();
+  for (const kind of ['chart', 'summary']) {
+    await control('pageAddWidget').selectOption(kind);
+    await control('pageProperty_search_type').selectOption('contract/entity');
+    await control('pageGroupAdd').click();
+    await control('pageGroup_0_column').selectOption('amount');
+    await control('pageMeasure_0_function').selectOption('sum');
+    await control('pageMeasure_0_column').selectOption('amount');
+  }
+  await page.waitForFunction(
+    () => !document.querySelector('[data-frame="adminSaveDocument"]').disabled
+  );
+  await control('adminSaveDocument').click();
+  await control('adminConfirmSave').click();
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('.page-layout-editor')
+        .getAttribute('aria-busy') === 'false'
+  );
+  assert.equal(writes.length, 3);
   await control('administrationCloseButton').click();
   await page
     .getByRole('dialog', { name: 'Administration', exact: true })
     .waitFor({ state: 'hidden' });
+  await control('pageRuntime_filter_1_value').fill('1');
+  await control('pageRuntimeApply').click();
+  await page.locator('.workspace-page[aria-busy="false"]').waitFor();
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-frame="customLayout_1_number_0"]')
+        ?.textContent === '7'
+  );
+  assert.equal(
+    await control('customLayout_2_grid_cell_0_1').textContent(),
+    '7'
+  );
+  await page.setViewportSize({ width: 1350, height: 850 });
+  assert.equal(await control('pageRuntime_filter_1_value').inputValue(), '1');
+  await control('pageRuntimeReset').click();
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-frame="customLayout_1_number_0"]')
+        ?.textContent === '0'
+  );
+  assert.equal(writes.length, 3, 'Runtime filters never save configuration');
+  await page.screenshot({
+    path: process.argv[3] + '/page-reports-runtime.png',
+    animations: 'disabled'
+  });
   console.log(
     'Page editor: navigation target, real pointer resize/Escape, spacing, explicit save, dirty switch and independent close pass'
   );

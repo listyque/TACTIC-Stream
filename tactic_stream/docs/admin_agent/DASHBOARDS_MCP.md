@@ -38,6 +38,7 @@ DashboardDocument has name, title and blocks. Bricks:
 | items | The existing expandable item workspace: supply root search_type, view and scalar filters. Native schema/process branches, previews, counts, files and object actions remain owned by the current results components. |
 | details | Content of the selected item in the existing items workspace. Children use its fields and relationship/table parent scope; selection does not reload the tree. |
 | link | Safe HTTP(S), skey or tactic-search link. |
+| chart / summary | Native grouped aggregates as horizontal bars or a read-only virtualized report grid. |
 
 Filters use column, relation (=, !=, <, <=, >, >=, like) and a scalar value.
 Up to 32 conditions are ANDed. Numeric zero and boolean false remain typed values.
@@ -312,11 +313,80 @@ children remain selectable without offering inapplicable grid geometry controls.
 Card visual edits emit indented XML; explicit Format XML changes only the draft,
 preserving mixed text, CDATA/scripts, comments and xml:space content.
 
-The current DashboardDocument supports row/column, text/Markdown, count metrics,
-tables, existing item collections, selected-record details and links. It does not
-yet expose chart datasets/aggregations, page-wide parameters, editable form bricks
-or paginated report layouts. Do not substitute a static text block and claim a
-requested interactive chart/form is implemented. Existing native record forms,
+The current DashboardDocument also supports shared page filters, numeric aggregate
+metrics, grouped report grids and horizontal bar charts. It does not yet expose
+editable form bricks, paginated print/export layouts, arbitrary joins/formulas,
+window functions or other chart types. Do not substitute static text and claim a
+requested interactive form/chart type is implemented. Existing native record forms,
 table services and report paths have separate contracts until explicitly composed
 as supported dashboard blocks. Server ACL, revision and operation rules apply to
 all agent-authored content; geometry does not grant additional execution rights.
+
+## Shared filters and grouped reports
+
+Requires TS 0.112.251 and TH 0.6.0.193. Discover real fields/types with
+`ts_dashboard_sources`; use the ordinary dashboard preview/save/operation tools.
+No XML, generated SQL or extra Python execution permission is involved.
+
+Document `filters` contains up to eight definitions: stable `name`, visible
+`title`, source `search_type`, `column`, `relation`, typed `value`, `enabled`.
+The source provides the field's value type. Every data widget automatically
+inherits enabled filters for its own source. For another source, widget
+`page_filters` explicitly maps a filter name to an actual same-kind column.
+`page_filters: {}` opts out; null keeps same-source inheritance. Mappings are
+validated even when the filter is disabled. The server does not guess joins or
+foreign-key bindings. Local widget conditions and shared filters are ANDed.
+
+`ts_dashboard_preview(..., filter_values={name:{enabled,value}})` tests transient
+overrides. Unknown filter names, extra override keys and incorrect value types
+are rejected. The UI's Apply/Reset sends the same values through
+`CustomLayoutReadCmd(filter_values=...)`; Reset restores saved defaults. Runtime
+changes do not save configuration. Saving a document always compiles its defaults,
+retaining native revision and durable operation receipt rules.
+
+Metric, chart and summary widgets accept `aggregates`: up to eight named measures
+with `name`, `title`, `function` (count/sum/avg/min/max) and `column`. Empty column
+is COUNT(*); count with a field excludes NULLs. Sum/avg/min/max require numeric
+fields. An empty numeric aggregate stays null (displayed as a dash), not zero.
+A metric accepts one measure without grouping. Omitted measures retain count.
+
+Chart/summary `group_by` contains up to three `{column,period,title}` entries;
+title is an optional human-readable report column label. Period is
+`value`, or `year/month/day` on a date/timestamp field. Timezone-aware timestamps
+are grouped in UTC. `measure` chooses a chart's displayed measure; the report grid
+shows all measures. `group_order` is group, value_asc or value_desc (first measure).
+`group_limit` is 1..100, default50. Native Search aggregates the entire visible,
+non-retired, filtered scope before limiting groups. The compiled report has
+columns/rows/measure/truncated. A truncation notice prevents a top-N view from
+claiming to be the complete report. There is no hidden client-side record sample.
+
+Example (replace identifiers with discovered schema):
+
+```json
+{
+  "name":"annual","title":"Annual activity",
+  "filters":[{"name":"from_date","title":"From date","search_type":"my_project/entry",
+    "column":"created","relation":">=","value":"2026-01-01","enabled":true}],
+  "blocks":[{"kind":"chart","title":"Monthly hours","search_type":"my_project/entry",
+    "group_by":[{"column":"created","period":"month"}],
+    "aggregates":[{"name":"hours","title":"Hours","function":"sum","column":"hours"}],
+    "group_order":"group","group_limit":12}]
+}
+```
+
+Human authoring: select **Page → Shared page filters**, then choose each widget's
+**Grouping and aggregates** and optional explicit **Shared page filters** mapping.
+TS web owns async page reads through JSON RPC; TH owns them through its native
+worker and XML-RPC adapter. Edits/resizes do not query until Apply. A real filter
+application may reload affected native tree/table scopes; ordinary tree selection
+still only resolves its details pane. Late page responses cannot replace a newer
+page. Current permissions remain unchanged (configured CustomLayout admin scope).
+
+Owners: [native Search aggregates](../../src/pyasm/search/search.py),
+[vendor date buckets](../../src/pyasm/search/database_impl.py),
+[server page compilation](../../src/tactic_stream/server/dashboards.py),
+[shared editor](../../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs),
+[shared runtime filter controls](../../src/tactic_stream/shared_ui/features/table/page.filters.mjs),
+[native chart/report projection](../../src/tactic_stream/shared_ui/features/table/report.ui.mjs).
+UTC dialect references: [SQLite date functions](https://www.sqlite.org/lang_datefunc.html),
+[PostgreSQL date/time semantics](https://www.postgresql.org/docs/current/functions-datetime.html).

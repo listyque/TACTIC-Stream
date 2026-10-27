@@ -18,7 +18,7 @@ def dashboard_state():
     state=page_state('sthpw/project')
     urls=[row.get_data() for row in Search('config/url').get_sobjects()]
     state['revision']=digest([state['revision'],urls])
-    state['bricks']=['row','column','text','markdown','metric','table','items','details','link']
+    state['bricks']=['row','column','text','markdown','metric','table','items','details','link','chart','summary']
     state['dashboards']=[dict(view=row.get_value('view'),source_id=row.get_id())
         for row in Search('config/widget_config').get_sobjects()
         if (row.get_value('view') or '').startswith('dashboard.') and '<dashboard>' in (row.get_value('config') or '')]
@@ -73,7 +73,8 @@ class DashboardCmd(Command):
         document=DashboardDocument.model_validate(self.kwargs.get('document')).model_dump(mode='json')
         view='dashboard.'+document['name']
         path='/dashboard/'+document['name']
-        model=dashboard_layout(document,view)
+        filter_values = self.kwargs.get('filter_values') if action == 'preview' else None
+        model=dashboard_layout(document,view,filter_values=filter_values)
         root_type=(model.get('layoutItems') or {}).get('searchType') or 'sthpw/project'
         search=Search('config/widget_config');search.add_filter('view',view)
         sources=search.get_sobjects()
@@ -88,7 +89,7 @@ class DashboardCmd(Command):
             if not isinstance(detail_key,str) or len(detail_key)>2048:
                 raise ValueError('Choose a preview record')
             if detail_key and model['layoutHasDetails']:
-                model['layoutDetail']=dashboard_layout(document,view,detail_key=detail_key)
+                model['layoutDetail']=dashboard_layout(document,view,detail_key=detail_key,filter_values=filter_values)
             return dict(kind='dashboard',document=document,model=model,view=view,path=path,revision=state['revision'],applied=False)
         root=ET.Element('config');definition=ET.SubElement(root,'view',name=view)
         ET.SubElement(definition,'dashboard').text=json.dumps(document,ensure_ascii=False)

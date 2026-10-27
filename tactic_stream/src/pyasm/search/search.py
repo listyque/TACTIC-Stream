@@ -3938,6 +3938,56 @@ class Search(Base):
                 return -1
             raise
 
+    def get_aggregates(self, groups: list[tuple[str, str]], measures: list[tuple[str, str]],
+                       *, limit: int = 50, order: str = 'group') -> list[tuple]:
+        """Aggregate the complete visible native scope before limiting result groups."""
+        if not 1 <= limit <= 100 or len(groups) > 3 or not 1 <= len(measures) <= 8:
+            raise ValueError('Invalid report dimensions or limit')
+        if order not in ('group', 'value_asc', 'value_desc'):
+            raise ValueError('Invalid report ordering')
+        columns = SearchType.get_column_info(self.get_base_search_type())
+        expressions, selections = [], []
+        for index, (column, period) in enumerate(groups):
+            expression = self._column(column)
+            if period != 'value':
+                data_type = columns[column]['data_type'].lower()
+                if period not in ('year', 'month', 'day') or not (
+                    data_type == 'date' or 'timestamp' in data_type
+                ):
+                    raise ValueError('Date grouping requires a date or timestamp field')
+                expression = self.get_sql().get_database_impl().get_date_bucket(expression, period, data_type)
+            expressions.append(expression)
+            selections.append(expression + ' AS ' + identifier('group_%d' % index))
+        for index, (function, column) in enumerate(measures):
+            if function not in ('count', 'sum', 'avg', 'min', 'max'):
+                raise ValueError('Choose a supported aggregate')
+            expression = self._column(column) if column else '*'
+            if function != 'count':
+                if not column or not re.search(r'int|numeric|decimal|real|double|float', columns[column]['data_type'], re.I):
+                    raise ValueError('This aggregate requires a numeric field')
+            selections.append(function.upper() + '(' + expression + ') AS ' + identifier('measure_%d' % index))
+        sql, parameters = self._statement(default_order=False, count=True)
+        if self.null_filter:
+            return [] if groups else [tuple(0 if function == 'count' else None for function, _ in measures)]
+        prefix = 'SELECT COUNT(*)'
+        if not sql.startswith(prefix):
+            raise UnsupportedContract('Unexpected native report query shape')
+        sql = 'SELECT ' + ', '.join(selections) + sql[len(prefix):]
+        if expressions:
+            sql += ' GROUP BY ' + ', '.join(expressions)
+        ordering = [identifier('group_%d' % index) + ' ASC NULLS FIRST' for index in range(len(groups))]
+        if order != 'group':
+            ordering.insert(0, '"measure_0" ' + ('ASC' if order == 'value_asc' else 'DESC') + ' NULLS LAST')
+        if ordering:
+            sql += ' ORDER BY ' + ', '.join(ordering)
+        sql += ' LIMIT ' + self._placeholder()
+        parameters = [*parameters, limit + 1]
+        from pyasm.search.sql import Sql
+        sql = Sql._bound_query(sql, parameters, self._placeholder())
+        with self.store.connection(self.db_resource) as db:
+            rows = db.execute(sql, parameters).fetchall()
+        return [tuple(row.values()) if isinstance(row, dict) else tuple(row) for row in rows]
+
     def get_group_counts(self, columns):
         """Count native visible rows per physical column tuple, ignoring paging/order."""
         columns = list(dict.fromkeys(columns))

@@ -98,6 +98,9 @@ class DatabaseImpl:
             return self.get_timestamp_now()
         return None
 
+    def get_date_bucket(self, column, period, data_type):
+        raise UnsupportedContract('Report date grouping is not migrated for this vendor')
+
     def copy_table_schema(self, sql, from_table, to_table):
         raise UnsupportedContract("Template table copying is not migrated for this vendor")
 
@@ -377,6 +380,10 @@ class DatabaseImpl:
        return " ".join(parts)
 
 class SqliteImpl(DatabaseImpl):
+    def get_date_bucket(self, column, period, data_type):
+        pattern = {'year': '%Y', 'month': '%Y-%m', 'day': '%Y-%m-%d'}[period]
+        return "strftime('%s', spt_timestamp(%s))" % (pattern, column)
+
     def has_table_triggers(self, sql, table):
         return bool(sql.do_query("SELECT 1 FROM sqlite_master WHERE type='trigger' AND tbl_name=%s "
                                  "UNION ALL SELECT 1 FROM sqlite_temp_master WHERE type='trigger' AND tbl_name=%s" %
@@ -397,7 +404,8 @@ class SqliteImpl(DatabaseImpl):
         if value is None or value == '':
             return value
         try:
-            parsed = datetime.fromisoformat(str(value))
+            # Native SPT timestamps can put a space before their UTC offset.
+            parsed = datetime.fromisoformat(re.sub(r'\s+([+-]\d{2}:?\d{2})$', r'\1', str(value)))
         except ValueError:
             return value
         if parsed.tzinfo is None:
@@ -729,6 +737,12 @@ class SqliteImpl(DatabaseImpl):
 
 
 class PostgresImpl(DatabaseImpl):
+    def get_date_bucket(self, column, period, data_type):
+        pattern = {'year': 'YYYY', 'month': 'YYYY-MM', 'day': 'YYYY-MM-DD'}[period]
+        if data_type in ('timestamptz', 'timestamp with time zone'):
+            column = "(%s AT TIME ZONE 'UTC')" % column
+        return "to_char(%s, '%s')" % (column, pattern)
+
     def has_table_triggers(self, sql, table):
         from pyasm.search.storage import identifier
         relation = identifier(sql.get_db_resource().get_schema() or 'public') + '.' + identifier(table)

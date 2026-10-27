@@ -106,6 +106,19 @@ fixtures = dict(layout=dict(document=document, compiled=compiled), data=dict(
             dict(kind="metric", text="Assets", value=4, editorPath=[0, 0])])]),
 ))
 app = gui_test_application()
+report = dict(columns=[dict(key='group_0',title='Amount',kind='group'),dict(key='count',title='Count',kind='measure')],
+              rows=[dict(group_0=0,count=2),dict(group_0=5,count=1)],measure='count',truncated=False)
+fixtures['reports'] = dict(
+    document=dict(name='review',title='Annual report',filters=[dict(name='amount',title='Amount',search_type='demo/asset',
+        column='amount',relation='>=',value=0,enabled=False)],blocks=[dict(kind='column',height=470,children=[
+        dict(kind=kind,title=kind,search_type='demo/asset',height=210,group_by=[dict(column='amount',period='value')],
+             aggregates=[dict(name='count',title='Count',function='count',column='')]) for kind in ('chart','summary')])]),
+    compiled=dict(title='Annual report',targetSearchKey='sthpw/project?code=demo',
+        layoutFilters=[dict(name='amount',title='Amount',dataType='integer',relation='>=',value=0,enabled=False)],
+        layoutFilterValues=dict(amount=dict(enabled=False,value=0)),
+        layoutNodes=[dict(kind='group',height=470,editorPath=[0],children=[
+            dict(kind=kind,text=kind,report=copy.deepcopy(report),height=210,editorPath=[0,index]) for index,kind in enumerate(('chart','summary'))])]),
+)
 env_inst.server_pool = Pool()
 icons = qml_icon_bindings(TH, app)
 captures = []
@@ -119,7 +132,7 @@ sources = source_hashes(
     ],
 )
 from itertools import product
-for scenario, mode in product(["layout", "data"], ["dark", "light"]):
+for scenario, mode in product(["layout", "data", "reports"], ["dark", "light"]):
     for language in ["en", "ru"]:
         for width in [1400, 850]:
             host = DashboardEditor(

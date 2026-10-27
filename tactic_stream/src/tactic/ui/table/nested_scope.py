@@ -411,8 +411,8 @@ def read_nested_scope(
                     '',
                 )
                 order_by = [part.strip() for part in order.split(',') if part.strip()]
-    # A dashboard can supply 32 saved conditions plus the table's own quick filter.
-    if not isinstance(filters or [], list) or len(filters or []) > 33:
+    # Dashboard local/page conditions plus the table's own quick filter.
+    if not isinstance(filters or [], list) or len(filters or []) > 41:
         raise ValueError('Invalid nested table filters')
     for item in filters or []:
         if (

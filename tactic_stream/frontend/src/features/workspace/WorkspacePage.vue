@@ -31,6 +31,7 @@ const emit = defineEmits([
 const host = ref(null),
   size = ref({ width: 800, height: 600 }),
   model = ref(null),
+  renderRevision = ref(0),
   busy = ref(false),
   error = ref('');
 const scene = computed(() =>
@@ -57,28 +58,43 @@ const bodyStyle = computed(() => {
 });
 let generation = 0,
   observer;
-async function reload() {
+let appliedFilters = {};
+async function reload(filterValues = appliedFilters) {
   const request = ++generation;
   busy.value = true;
   error.value = '';
-  model.value = null;
   try {
     const result = await rpc('execute_cmd', [
       { ticket: props.ticket, project: props.project, language: 'python' },
       'tactic.ui.table.CustomLayoutReadCmd',
-      { view: props.view, search_key: props.target || '' }
+      {
+        view: props.view,
+        search_key: props.target || '',
+        filter_values: filterValues
+      }
     ]);
-    if (request === generation)
+    if (request === generation) {
+      appliedFilters = filterValues;
       model.value = { ...result.info, record: result.info.layoutRecord };
+      renderRevision.value++;
+    }
   } catch (failure) {
     if (request === generation) error.value = failure.message;
   } finally {
     if (request === generation) busy.value = false;
   }
 }
-watch(() => [props.ticket, props.project, props.view, props.target], reload, {
-  immediate: true
-});
+watch(
+  () => [props.ticket, props.project, props.view, props.target],
+  () => {
+    appliedFilters = {};
+    model.value = null;
+    reload();
+  },
+  {
+    immediate: true
+  }
+);
 onMounted(() => {
   observer = observeFrameSizes((entries) => {
     const box = entries.at(-1).contentRect;
@@ -103,9 +119,12 @@ defineExpose({ reload, workspaceId: computed(() => props.workspaceId) });
     />
     <ConfiguredView
       v-if="model"
+      :key="renderRevision"
       class="workspace-page-layout"
       :style="bodyStyle"
       :layout-model="model"
+      :layout-busy="busy"
+      @filter-apply="reload"
       :layout-width="scene.bodyBounds.width"
       :layout-height="scene.bodyBounds.height"
       :ticket="ticket"

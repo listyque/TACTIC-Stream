@@ -5,7 +5,110 @@ from pyasm.common import Environment
 from pyasm.search import Search, SearchType
 from .interface import _require_table_access, read_interface
 from .navigation_links import check_project
-from tactic_stream.dashboard_plan import DashboardDocument
+from tactic_stream.dashboard_plan import DashboardDocument, DashboardPageFilter
+
+
+def field_kind(column):
+    import re
+    data_type = column.get('data_type', 'text').lower()
+    if 'bool' in data_type:
+        return 'boolean'
+    if re.search(r'int|numeric|decimal|real|double|float', data_type):
+        return 'number'
+    if data_type == 'date' or 'timestamp' in data_type:
+        return 'date'
+    if re.search(r'json|array|blob|bytea', data_type):
+        return 'complex'
+    return 'text'
+
+
+def native_condition(condition):
+    if condition.value is None:
+        if condition.relation not in ('=', '!='):
+            raise ValueError('Empty values require Is empty or Is not empty')
+        return [condition.column, 'is empty' if condition.relation == '=' else 'is not empty', '']
+    if condition.value == '':
+        raise ValueError('Enter a filter value or choose Is empty')
+    if isinstance(condition.value, str) and (
+        condition.value == 'NULL' or Search.is_expr(condition.value)
+        or condition.value.startswith('{') and condition.value.endswith('}')
+    ):
+        raise ValueError('Use literal filter values; native expressions and the NULL keyword are not supported here')
+    return [condition.column, condition.relation, condition.value]
+
+
+def validate_filter_value(condition, column):
+    from datetime import datetime
+    kind, value = field_kind(column), condition.value
+    if value is None:
+        native_condition(condition)
+        return
+    if kind == 'complex':
+        raise ValueError('Filters require a scalar field')
+    if kind == 'number' and (isinstance(value, bool) or not isinstance(value, (int, float))):
+        raise ValueError('Enter a valid number')
+    if kind == 'boolean' and not isinstance(value, bool):
+        raise ValueError('Choose Yes or No')
+    if kind in ('date', 'text') and not isinstance(value, str):
+        raise ValueError('Enter a text value for this field')
+    if kind == 'date':
+        try:
+            datetime.fromisoformat(value)
+        except ValueError:
+            raise ValueError('Choose a valid date') from None
+    if condition.relation == 'like' and kind != 'text':
+        raise ValueError('Text pattern filters require a text field')
+    native_condition(condition)
+
+
+def report_data(block, filters, *, check_only=False):
+    from decimal import Decimal
+    import math
+    from tactic_stream.dashboard_plan import DashboardAggregate
+    columns = SearchType.get_column_info(block.search_type)
+    groups = [(item.column, item.period) for item in block.group_by]
+    if len(set(groups)) != len(groups):
+        raise ValueError('Choose distinct report groups')
+    for column, _ in groups:
+        if column not in columns or field_kind(columns[column]) == 'complex':
+            raise ValueError('Report groups require existing scalar fields')
+    for column, period in groups:
+        if period != 'value' and field_kind(columns[column]) != 'date':
+            raise ValueError('Date grouping requires a date or timestamp field')
+    measures = block.aggregates or [DashboardAggregate(name='count', title='Count')]
+    names = {item.name for item in measures}
+    if len(names) != len(measures) or names & {'group_%d' % index for index in range(len(groups))}:
+        raise ValueError('Report measure names must be unique')
+    if block.measure and block.measure not in {item.name for item in measures}:
+        raise ValueError('Choose an existing report measure')
+    if block.kind == 'metric' and (groups or len(measures) != 1):
+        raise ValueError('A metric requires one aggregate without grouping')
+    for item in measures:
+        if item.column and item.column not in columns:
+            raise ValueError('Choose an existing report field')
+        if item.function != 'count' and (not item.column or field_kind(columns[item.column]) != 'number'):
+            raise ValueError('This aggregate requires a numeric field')
+    if check_only:
+        return
+    search = Search(block.search_type)
+    search.add_op_filters(filters)
+    rows = search.get_aggregates(groups, [(item.function, item.column) for item in measures],
+                                 limit=block.group_limit, order=block.group_order)
+    def scalar(value):
+        if isinstance(value, Decimal):
+            value = float(value)
+        if isinstance(value, float) and not math.isfinite(value):
+            raise ValueError('Report aggregate is not a finite number')
+        return value if isinstance(value, (str, int, float, bool, type(None))) else str(value)
+    return dict(
+        columns=[dict(key='group_%d' % index, title=block.group_by[index].title or columns[column].get('title') or column, kind='group')
+                 for index, (column, _) in enumerate(groups)] + [
+            dict(key=item.name, title=item.title, kind='measure') for item in measures],
+        rows=[{key: scalar(value) for key, value in zip(
+            ['group_%d' % index for index in range(len(groups))] + [item.name for item in measures], row
+        )} for row in rows[:block.group_limit]],
+        measure=block.measure or measures[0].name, truncated=len(rows) > block.group_limit,
+    )
 
 
 def dashboard_sources(
@@ -96,13 +199,38 @@ def dashboard_sources(
     return result
 
 
-def dashboard_layout(document, view, search_key='', *, detail_key=''):
+def dashboard_layout(document, view, search_key='', *, detail_key='', filter_values=None):
     document = DashboardDocument.model_validate(document)
     project = Project.get()
     check_project(project.get_code())
     target = Search.get_by_search_key(search_key) if search_key else project
     if target is None:
         raise ValueError('Dashboard target is unavailable')
+    definitions = {item.name: item for item in document.filters}
+    if len(definitions) != len(document.filters):
+        raise ValueError('Page filter names must be unique')
+    if filter_values is None:
+        filter_values = {}
+    if not isinstance(filter_values, dict) or set(filter_values) - definitions.keys():
+        raise ValueError('Choose configured page filters')
+    page_filters, filter_controls = {}, []
+    for name, definition in definitions.items():
+        value = filter_values.get(name, {})
+        if not isinstance(value, dict) or set(value) - {'enabled', 'value'}:
+            raise ValueError('Invalid page filter values')
+        item = DashboardPageFilter.model_validate(dict(definition.model_dump(), **value))
+        info = SearchType.get(item.search_type)
+        if info.get_database() not in ('sthpw', project.get_code()) or '?' in item.search_type:
+            raise ValueError('Dashboard Search Type belongs to another project')
+        _require_table_access(item.search_type)
+        columns = SearchType.get_column_info(item.search_type)
+        if item.column not in columns or field_kind(columns[item.column]) == 'complex':
+            raise ValueError('Choose an existing source field')
+        if item.enabled:
+            validate_filter_value(item, columns[item.column])
+        page_filters[name] = item
+        filter_controls.append(dict(name=name, title=item.title, relation=item.relation,
+            value=item.value, enabled=item.enabled, dataType=columns[item.column]['data_type']))
     budget = [128]
     items_scope = []
     detail_scope = []
@@ -154,19 +282,22 @@ def dashboard_layout(document, view, search_key='', *, detail_key=''):
         return project if block.binding=='project' else context
 
     def filters_for(block):
-        result=[]
-        for condition in block.filters:
-            if condition.value is None:
-                if condition.relation not in ('=','!='):
-                    raise ValueError('Empty values require Is empty or Is not empty')
-                result.append([condition.column,'is empty' if condition.relation=='=' else 'is not empty',''])
-            else:
-                if condition.value=='':
-                    raise ValueError('Enter a filter value or choose Is empty')
-                if isinstance(condition.value,str) and (condition.value=='NULL' or Search.is_expr(condition.value) or
-                        condition.value.startswith('{') and condition.value.endswith('}')):
-                    raise ValueError('Use literal filter values; native expressions and the NULL keyword are not supported here')
-                result.append([condition.column,condition.relation,condition.value])
+        result = [native_condition(item) for item in block.filters]
+        columns = SearchType.get_column_info(block.search_type)
+        links = block.page_filters if block.page_filters is not None else {
+            name: item.column for name, item in page_filters.items() if item.search_type == block.search_type
+        }
+        for name, column in links.items():
+            if name not in page_filters or column not in columns:
+                raise ValueError('Page filter mapping requires existing filters and fields')
+            item = page_filters[name]
+            original = SearchType.get_column_info(item.search_type)[item.column]
+            if field_kind(columns[column]) != field_kind(original):
+                raise ValueError('Mapped page filter fields must have the same data type')
+            if item.enabled:
+                condition = item.model_copy(update=dict(column=column))
+                validate_filter_value(condition, columns[column])
+                result.append(native_condition(condition))
         return result
 
     def validate_details(blocks, search_type='', depth=0):
@@ -189,7 +320,7 @@ def dashboard_layout(document, view, search_key='', *, detail_key=''):
                 validate_details(block.children,scoped_type,depth+1)
             elif block.children:
                 raise ValueError('Only row/column bricks may contain children')
-            if block.kind in ('metric','table'):
+            if block.kind in ('metric','table','chart','summary'):
                 info = SearchType.get(block.search_type)
                 if info.get_database() not in ('sthpw',project.get_code()):
                     raise ValueError('Dashboard Search Type belongs to another project')
@@ -198,6 +329,8 @@ def dashboard_layout(document, view, search_key='', *, detail_key=''):
                 if any(condition.column not in columns for condition in block.filters):
                     raise ValueError('Dashboard filters require existing columns')
                 filters_for(block)
+                if block.kind in ('chart','summary') or block.aggregates or block.group_by:
+                    report_data(block, filters_for(block), check_only=True)
                 if block.kind == 'table':
                     read_interface(block.search_type,block.view)
             if block.source_key:
@@ -220,6 +353,8 @@ def dashboard_layout(document, view, search_key='', *, detail_key=''):
         nodes=[]
         for index, block in enumerate(blocks):
             block_path = path + (index,)
+            if block.kind not in ('metric','chart','summary') and (block.group_by or block.aggregates or block.measure):
+                raise ValueError('Grouping and aggregates belong to report widgets')
 
             def emit(node):
                 node.update(editorPath=list(block_path), padding=block.padding,
@@ -309,7 +444,15 @@ def dashboard_layout(document, view, search_key='', *, detail_key=''):
             if any(condition.column not in columns for condition in block.filters):
                 raise ValueError('Dashboard filters require existing columns')
             filters=filters_for(block)
-            if block.kind=='metric':
+            if block.kind in ('chart','summary') or block.kind=='metric' and (block.aggregates or block.group_by):
+                report = report_data(block, filters)
+                if block.kind == 'metric':
+                    value = report['rows'][0][report['measure']] if report['rows'] else None
+                    emit(dict(kind='metric', text=block.title or block.search_type, value=value, weight=block.weight))
+                else:
+                    emit(dict(kind=block.kind, text=block.title or info.get_title(), report=report, weight=block.weight,
+                              height=block.height))
+            elif block.kind=='metric':
                 search=Search(block.search_type)
                 for column,relation,value in filters:
                     if relation in ('is empty','is not empty'):
@@ -351,6 +494,7 @@ def dashboard_layout(document, view, search_key='', *, detail_key=''):
     if detail_scope and not items_scope:
         raise ValueError('A details pane requires the existing item workspace')
     return dict(title=document.title,text='',layoutNodes=nodes,layoutItems=items_scope[0] if items_scope else None,layoutHasDetails=bool(detail_scope),
+        layoutFilters=filter_controls, layoutFilterValues={name:dict(enabled=item.enabled,value=item.value) for name,item in page_filters.items()},
         targetSearchKey=target.get_search_key(),layoutView=view,layoutControls=[],layoutLoad=[],layoutForm='',
         layoutUser=Environment.get_user_name(),
         layoutRecord=dict(__search_key__=target.get_search_key(),code=target.get_code(),

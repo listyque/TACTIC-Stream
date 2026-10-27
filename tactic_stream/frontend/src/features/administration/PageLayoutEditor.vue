@@ -8,7 +8,7 @@ import FrameView from '../../frame/FrameView.vue';
 import CustomLayoutView from '../interface/CustomLayoutView.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.state.mjs';
-import * as Data from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.data.mjs';
+import * as Reports from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs';
 export default {
   components: { FrameView },
   props: {
@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     dataScope() {
-      return Data.scope(this.document, this.ui.selected);
+      return Reports.scope(this.document, this.ui);
     },
     dataKey() {
       return JSON.stringify([
