@@ -390,3 +390,15 @@ Owners: [native Search aggregates](../../src/pyasm/search/search.py),
 [native chart/report projection](../../src/tactic_stream/shared_ui/features/table/report.ui.mjs).
 UTC dialect references: [SQLite date functions](https://www.sqlite.org/lang_datefunc.html),
 [PostgreSQL date/time semantics](https://www.postgresql.org/docs/current/functions-datetime.html).
+
+
+## Visual page structure editing
+
+The ordinary TH/TS page editor offers local bounded Undo/Redo, subtree duplicate,
+sibling order, explicit parent-container selection and ancestor breadcrumbs.
+These edit the same DashboardDocument; they are not new MCP mutation tools or
+server transaction undo. An agent reorders/copies/moves ordinary nested `blocks`
+and `children`, preserves bindings/filters/unknown properties and uses the existing
+read/preview/revisioned save. The native preview enforces the 128-brick budget,
+32 children per container, six nested levels and the single items/Details scope.
+The editor's temporary history is never published or sent as page data.

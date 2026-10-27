@@ -1603,6 +1603,19 @@ var kinds = [
 	"summary"
 ];
 var copy = (value) => JSON.parse(JSON.stringify(value, (_key, item) => item === void 0 ? null : item));
+function fingerprint(value) {
+	return JSON.stringify(copy(value), (_key, item) => {
+		if (item === void 0) return null;
+		if (item && typeof item === "object" && !Array.isArray(item)) {
+			const result = {};
+			Object.keys(item).sort().forEach((key) => {
+				result[key] = item[key];
+			});
+			return result;
+		}
+		return item;
+	});
+}
 function path(value) {
 	if (value === "") return [];
 	if (!/^\d+(\.\d+)*$/.test(value)) throw Error("Select a page block");
@@ -1730,6 +1743,69 @@ function remove$2(document, key) {
 	siblings(result, p).splice(p[p.length - 1], 1);
 	return result;
 }
+function checkStructure(document) {
+	const rows = layers(document);
+	if (rows.length > 128 || document.blocks.length > 32) throw Error("Dashboard exceeds 128 bricks");
+	if (rows.some((row) => path(row.key).length > 7)) throw Error("Dashboard nesting exceeds six levels");
+	if (rows.some((row) => (block(document, row.key).children || []).length > 32)) throw Error("A container supports up to 32 widgets");
+	if (rows.filter((row) => row.kind === "items").length > 1) throw Error("A dashboard supports one items workspace");
+	if (rows.filter((row) => row.kind === "details").length > 1) throw Error("A dashboard supports one details pane");
+}
+function duplicate(document, key) {
+	const result = copy(document), p = path(key);
+	const item = block(result, key);
+	if (!item) throw Error("Select a page block");
+	siblings(result, p).splice(p[p.length - 1] + 1, 0, copy(item));
+	checkStructure(result);
+	return {
+		document: result,
+		key: p.slice(0, -1).concat(p[p.length - 1] + 1).join(".")
+	};
+}
+function reorder$1(document, key, delta) {
+	if (!Number.isInteger(delta)) throw Error("Select a page block");
+	const result = copy(document), p = path(key), item = block(result, key);
+	if (!item) throw Error("Select a page block");
+	const rows = siblings(result, p), index = p[p.length - 1];
+	const target = Math.max(0, Math.min(rows.length - 1, index + delta));
+	rows.splice(index, 1);
+	rows.splice(target, 0, item);
+	return {
+		document: result,
+		key: p.slice(0, -1).concat(target).join(".")
+	};
+}
+function location$1(rows, target, prefix = []) {
+	if (rows === target) return prefix;
+	for (let i = 0; i < rows.length; i++) {
+		const found = location$1(rows[i].children || [], target, prefix.concat(i));
+		if (found) return found;
+	}
+	return null;
+}
+function reparent(document, key, parent) {
+	if (parent === key || parent.startsWith(key + ".")) throw Error("A widget cannot contain itself");
+	const result = copy(document), p = path(key), item = block(result, key);
+	if (!item) throw Error("Select a page block");
+	const container = parent ? block(result, parent) : null;
+	if (container && ![
+		"row",
+		"column",
+		"details"
+	].includes(container.kind)) throw Error("Choose a row, column or details container");
+	if (p.slice(0, -1).join(".") === parent) return {
+		document: result,
+		key
+	};
+	const target = container ? container.children || (container.children = []) : result.blocks;
+	siblings(result, p).splice(p[p.length - 1], 1);
+	target.push(item);
+	checkStructure(result);
+	return {
+		document: result,
+		key: location$1(result.blocks, target).concat(target.length - 1).join(".")
+	};
+}
 function geometry$2(document, change, boxes) {
 	const result = copy(document), p = path(change.key), item = block(result, change.key);
 	if (!item) throw Error("The selected element no longer exists");
@@ -1757,15 +1833,8 @@ function geometry$2(document, change, boxes) {
 		};
 	}
 	if (change.keyboard) {
-		const rows = siblings(result, p), index = p[p.length - 1];
 		const delta = change.after.y - change.before.y || change.after.x - change.before.x;
-		const target = Math.max(0, Math.min(rows.length - 1, index + delta));
-		rows.splice(index, 1);
-		rows.splice(target, 0, item);
-		return {
-			document: result,
-			key: p.slice(0, -1).concat(target).join(".")
-		};
+		return reorder$1(document, change.key, delta);
 	}
 	const x = change.after.x + change.after.width / 2, y = change.after.y + change.after.height / 2;
 	const hit = boxes.filter((b) => b.key !== change.key && !b.key.startsWith(change.key + ".") && x >= b.x && x <= b.x + b.width && y >= b.y && y <= b.y + b.height).sort((a, b) => b.depth - a.depth)[0];
@@ -1789,17 +1858,9 @@ function geometry$2(document, change, boxes) {
 	if (old === target && index < insertion) insertion--;
 	old.splice(index, 1);
 	target.splice(insertion, 0, item);
-	function location(rows, prefix) {
-		if (rows === target) return prefix;
-		for (let i = 0; i < rows.length; i++) {
-			const found = location(rows[i].children || [], prefix.concat(i));
-			if (found) return found;
-		}
-		return null;
-	}
 	return {
 		document: result,
-		key: location(result.blocks, []).concat(insertion).join(".")
+		key: location$1(result.blocks, target).concat(insertion).join(".")
 	};
 }
 //#endregion
@@ -56398,7 +56459,7 @@ var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes
 var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([59,1,2,3,4,5,6,7,58,8,27,19,60,61,62])));
 var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([63,1,2,3,4,5,6,7,8,64,41,42,56,51,52,47,9,10,11,24,48,25,65,60,61,66])));
 var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([67,1,2,3,4,5,6,7,8,61])));
-var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([68,1,2,3,4,5,6,7,8,42])));
+var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([68,1,2,3,4,5,6,7,8,42,61])));
 var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([69,1,2,3,4,5,6,7,8,42,70])));
 var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([71,1,2,3,4,5,6,7,8])));
 var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([72,1,2,3,4,5,6,7])));
@@ -61626,6 +61687,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { notices as $, _sfc_main$116 as A, _sfc_main$131 as B, captionedSwitch as C, remove$2 as Ct, changeDefinition as D, _sfc_main$107 as E, applyDuplicateProfile as F, describe$47 as G, _sfc_main$145 as H, changeContent as I, serialize as J, edit$2 as K, contentChoices as L, RelatedObjects_default as M, ObjectAction_default as N, definitionWizard as O, _sfc_main$126 as P, documentEvent as Q, duplicateProfile as R, _sfc_main$63 as S, layers as St, _sfc_main$100 as T, spacingField as U, messageDate as V, actions$4 as W, variants as X, template as Y, widgets as Z, editColumn as _, block as _t, updateModes as a, views as at, describe$18 as b, geometry$2 as bt, runBrowserScript as c, actionLayout as ct, ProjectCreation_default as d, App_default as default, filter as dt, policy as et, ImagePicker_default as f, mode as ft, describe$17 as g, add as gt, contentWidth as h, type as ht, updateIntervals as i, _sfc_main$158 as it, ResultPresentation_default as j, displayWidgets as k, scriptTree as l, change$5 as lt, change as m, scope as mt, networkSettings as n, tabs as nt, _sfc_main$26 as o, _sfc_main$166 as ot, readPreviewImage as p, options$1 as pt, roles as q, updateBatchDelays as r, toolbar$4 as rt, buttonId as s, _sfc_main$171 as st, App_exports as t, sectionSelector as tt, lifecycle as u, fields$2 as ut, fieldsFor as v, change$6 as vt, _sfc_main$98 as w, spacing$1 as wt, pages as x, kinds as xt, confirmation$2 as y, copy as yt, saveDuplicateProfile as z };
+export { notices as $, _sfc_main$116 as A, spacing$1 as At, _sfc_main$131 as B, captionedSwitch as C, kinds as Ct, changeDefinition as D, reorder$1 as Dt, _sfc_main$107 as E, remove$2 as Et, applyDuplicateProfile as F, describe$47 as G, _sfc_main$145 as H, changeContent as I, serialize as J, edit$2 as K, contentChoices as L, RelatedObjects_default as M, ObjectAction_default as N, definitionWizard as O, reparent as Ot, _sfc_main$126 as P, documentEvent as Q, duplicateProfile as R, _sfc_main$63 as S, geometry$2 as St, _sfc_main$100 as T, path as Tt, spacingField as U, messageDate as V, actions$4 as W, variants as X, template as Y, widgets as Z, editColumn as _, block as _t, updateModes as a, views as at, describe$18 as b, duplicate as bt, runBrowserScript as c, actionLayout as ct, ProjectCreation_default as d, App_default as default, filter as dt, policy as et, ImagePicker_default as f, mode as ft, describe$17 as g, add as gt, contentWidth as h, type as ht, updateIntervals as i, _sfc_main$158 as it, ResultPresentation_default as j, displayWidgets as k, siblings as kt, scriptTree as l, change$5 as lt, change as m, scope as mt, networkSettings as n, tabs as nt, _sfc_main$26 as o, _sfc_main$166 as ot, readPreviewImage as p, options$1 as pt, roles as q, updateBatchDelays as r, toolbar$4 as rt, buttonId as s, _sfc_main$171 as st, App_exports as t, sectionSelector as tt, lifecycle as u, fields$2 as ut, fieldsFor as v, change$6 as vt, _sfc_main$98 as w, layers as wt, pages as x, fingerprint as xt, confirmation$2 as y, copy as yt, saveDuplicateProfile as z };
 
 //# sourceMappingURL=App.js.map

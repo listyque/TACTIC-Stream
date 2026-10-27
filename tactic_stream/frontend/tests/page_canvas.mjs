@@ -20,6 +20,123 @@ const document = {
   ]
 };
 const original = JSON.stringify(document);
+{
+  const source = Document.copy(document);
+  source.blocks[0].children[0].filters = [
+    { column: 'amount', relation: '=', value: 0 }
+  ];
+  source.blocks[0].children[0].custom = { active: false, missing: null };
+  const doubled = Document.duplicate(source, '0');
+  assert.equal(doubled.key, '1');
+  doubled.document.blocks[1].children[0].custom.active = true;
+  assert.equal(source.blocks[0].children[0].custom.active, false);
+  assert.equal(doubled.document.blocks[0].children[0].filters[0].value, 0);
+  const moved = Document.reparent(source, '0.0', '1');
+  assert.equal(moved.key, '1.0');
+  const promoted = Document.reparent(source, '0.0', '');
+  assert.equal(promoted.key, '2');
+  assert.throws(() => Document.reparent(source, '0', '0.0'), /itself/);
+  assert.throws(() => Document.reparent(source, '0.0', '0.1'), /container/);
+  const shifted = Document.reparent(
+    {
+      blocks: [
+        { kind: 'text', text: 'A' },
+        { kind: 'column', children: [] }
+      ]
+    },
+    '0',
+    '1'
+  );
+  assert.equal(
+    shifted.key,
+    '0.0',
+    'Selection follows the container after removing an earlier root'
+  );
+  assert.throws(
+    () => Document.duplicate({ blocks: [{ kind: 'items' }] }, '0'),
+    /one items/
+  );
+  assert.throws(
+    () =>
+      Document.duplicate(
+        { blocks: Array.from({ length: 32 }, () => ({ kind: 'text' })) },
+        '0'
+      ),
+    /128/
+  );
+  let state = Object.assign(State.initial(), { selected: '0.0' });
+  let model = { document: source, canWrite: true, ready: true, canLoad: true };
+  function edit(event) {
+    const result = State.transition(state, model, event);
+    state = result.ui;
+    for (const command of result.commands)
+      if (command.type === 'document') model.document = command.document;
+    return result;
+  }
+  edit({ type: 'duplicate' });
+  assert.equal(model.document.blocks[0].children.length, 3);
+  assert.equal(state.selected, '0.1');
+  edit({ type: 'reparent', value: '1' });
+  assert.equal(state.selected, '1.0');
+  edit({ type: 'undo' });
+  assert.equal(state.selected, '0.1');
+  assert.equal(model.document.blocks[0].children.length, 3);
+  edit({ type: 'undo' });
+  assert.equal(state.selected, '0.0');
+  assert.deepEqual(model.document, source);
+  edit({ type: 'redo' });
+  edit({ type: 'undo' });
+  edit({ type: 'change', field: 'title', value: 'New branch' });
+  assert.equal(state.future.length, 0, 'A new edit clears the redo branch');
+  const count = state.past.length;
+  model.document = JSON.parse(Document.fingerprint(model.document));
+  assert.equal(
+    state.historyDocument,
+    Document.fingerprint(model.document),
+    'Native map key order does not clear history'
+  );
+  edit({ type: 'change', field: 'title', value: 'New branch' });
+  assert.equal(state.past.length, count, 'No-op edits do not consume undo');
+  for (const guard of [
+    { busy: true },
+    { canWrite: false },
+    { uncertain: true }
+  ]) {
+    const result = State.transition(state, Object.assign({}, model, guard), {
+      type: 'undo'
+    });
+    assert.equal(result.commands.length, 0);
+  }
+  state.text = { '0.0:title': 'unsent' };
+  assert.equal(edit({ type: 'undo' }).commands.length, 0);
+  state.text = {};
+  edit({ type: 'undo' });
+  for (let i = 0; i < 25; i++)
+    edit({ type: 'change', field: 'title', value: 'Title ' + i });
+  assert.equal(state.past.length, 20, 'History is bounded and local');
+  model.document = Document.copy(document);
+  assert.equal(
+    edit({ type: 'undo' }).commands.length,
+    0,
+    'External reload invalidates old history'
+  );
+  assert.equal(state.past.length, 0);
+  assert.deepEqual(State.shortcut('Z', true, true, false), { type: 'redo' });
+  assert.equal(State.shortcut('z', false, false, false), null);
+  assert.equal(State.shortcut('d', true, false, true), null);
+  assert.doesNotThrow(() =>
+    UI.describe(
+      UI.model(
+        Object.assign({}, model, { catalog: [], searchTypes: [] }),
+        state
+      ),
+      Object.assign({}, state, { selected: '99.1' }),
+      1400,
+      800,
+      'en'
+    )
+  );
+}
 const moved = Document.geometry(
   document,
   {

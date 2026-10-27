@@ -66,6 +66,43 @@ try {
   );
   assert.equal(writes.length, 0);
   await control('pagePreviewMode').click();
+  await control('pageBlock_0.0').click();
+  await page.keyboard.press('Control+d');
+  await control('pageBlock_0.2').waitFor();
+  await page.keyboard.press('Control+z');
+  assert.equal(await control('pageBlock_0.2').count(), 0);
+  await page.keyboard.press('Control+Shift+z');
+  await control('pageBlock_0.2').waitFor();
+  await control('pageParent').selectOption('');
+  await control('pageBlock_1').waitFor();
+  await control('pageParent').selectOption('0');
+  await control('pageBlock_0.2').waitFor();
+  await control('pageAction_reorder-1').click();
+  for (let i = 0; i < 4; i++) await control('pageAction_undo').click();
+  assert.equal(await control('pageBlock_0.2').count(), 0);
+  assert.equal(await control('pageBlock_1').count(), 0);
+  await control('pageAncestor_0').click();
+  await control('pageProperty_gap').waitFor();
+  await control('pageAncestor_page').click();
+  assert.equal(await control('pageParent').count(), 0);
+  await control('pageBlock_0.0').click();
+  await control('pageAction_duplicate').click();
+  await control('pageProperty_title').fill('Typing');
+  await page.keyboard.press('Control+z');
+  assert.equal(
+    await control('pageBlock_0.2').count(),
+    1,
+    'Text Undo does not undo a widget'
+  );
+  await control('adminDiscardDocument').click();
+  await control('adminConfirmSave').click();
+  assert.equal(await control('pageBlock_0.2').count(), 0);
+  assert.ok(await control('pageAction_undo').isDisabled());
+  assert.equal(
+    writes.length,
+    0,
+    'Structure and history only edit the local draft'
+  );
   await resize(true);
   assert.equal(await control('pageProperty_height').inputValue(), '60');
   assert.equal(writes.length, 0);

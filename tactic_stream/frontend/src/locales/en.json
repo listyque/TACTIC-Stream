@@ -1820,5 +1820,13 @@
   "Grouping and aggregates belong to report widgets": "Grouping and aggregates belong to report widgets",
   "Filters require a scalar field": "Filters require a scalar field",
   "Enter a text value for this field": "Enter a text value for this field",
-  "Text pattern filters require a text field": "Text pattern filters require a text field"
+  "Text pattern filters require a text field": "Text pattern filters require a text field",
+  "Duplicate widget": "Duplicate widget",
+  "Parent container": "Parent container",
+  "A widget cannot contain itself": "A widget cannot contain itself",
+  "Choose a row, column or details container": "Choose a row, column or details container",
+  "A container supports up to 32 widgets": "A container supports up to 32 widgets",
+  "A dashboard supports one items workspace": "A dashboard supports one items workspace",
+  "Undo": "Undo",
+  "Redo": "Redo"
 }

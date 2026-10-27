@@ -171,6 +171,25 @@ export default {
     }
   },
   methods: {
+    keydown(event) {
+      if (
+        event.isComposing ||
+        event.repeat ||
+        event.defaultPrevented ||
+        event.target.closest('input, textarea, [contenteditable="true"]')
+      )
+        return;
+      const action = State.shortcut(
+        event.code?.replace('Key', '') || event.key,
+        event.ctrlKey || event.metaKey,
+        event.shiftKey,
+        event.altKey
+      );
+      if (action) {
+        event.preventDefault();
+        this.dispatch(action);
+      }
+    },
     async loadSource(source = null) {
       const request = ++this.dataSerial;
       const values = source || this.dataScope;
@@ -540,7 +559,11 @@ export default {
 };
 </script>
 <template>
-  <section class="page-layout-editor frame-host" :aria-busy="busy">
+  <section
+    class="page-layout-editor frame-host"
+    :aria-busy="busy"
+    @keydown="keydown"
+  >
     <Teleport :to="toolbarTarget || 'body'" :disabled="!toolbarTarget"
       ><div
         v-show="presentationVisible"

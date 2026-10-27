@@ -1820,7 +1820,15 @@ var en_default = {
 	"Grouping and aggregates belong to report widgets": "Grouping and aggregates belong to report widgets",
 	"Filters require a scalar field": "Filters require a scalar field",
 	"Enter a text value for this field": "Enter a text value for this field",
-	"Text pattern filters require a text field": "Text pattern filters require a text field"
+	"Text pattern filters require a text field": "Text pattern filters require a text field",
+	"Duplicate widget": "Duplicate widget",
+	"Parent container": "Parent container",
+	"A widget cannot contain itself": "A widget cannot contain itself",
+	"Choose a row, column or details container": "Choose a row, column or details container",
+	"A container supports up to 32 widgets": "A container supports up to 32 widgets",
+	"A dashboard supports one items workspace": "A dashboard supports one items workspace",
+	Undo: "Undo",
+	Redo: "Redo"
 };
 var ru_default = {
 	"Group label (optional)": "Название группы (необязательно)",
@@ -7175,7 +7183,13 @@ var ru_default = {
 	"Grouping and aggregates belong to report widgets": "Группировки и показатели доступны в виджетах отчётов",
 	"Filters require a scalar field": "Для фильтра нужно простое поле",
 	"Enter a text value for this field": "Введите текстовое значение для этого поля",
-	"Text pattern filters require a text field": "Для текстового шаблона выберите текстовое поле"
+	"Text pattern filters require a text field": "Для текстового шаблона выберите текстовое поле",
+	"Duplicate widget": "Дублировать виджет",
+	"Parent container": "Родительский контейнер",
+	"A widget cannot contain itself": "Виджет не может содержать сам себя",
+	"Choose a row, column or details container": "Выберите строку, колонку или контейнер деталей",
+	"A container supports up to 32 widgets": "Контейнер поддерживает до 32 виджетов",
+	"A dashboard supports one items workspace": "Дашборд поддерживает одно дерево итемов"
 };
 //#endregion
 export { en_default as n, ru_default as t };

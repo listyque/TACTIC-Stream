@@ -3,7 +3,8 @@ import { O as randomUuid, j as appearance, ot as _plugin_vue_export_helper_defau
 import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { a as projectPath } from "./links.js";
-import { $ as notices, A as _sfc_main$2, Ct as remove, Q as documentEvent, St as layers, U as spacingField, _t as block, bt as geometry, dt as filter, ft as mode, gt as add, ht as type, lt as change, mt as scope$1, pt as options, rt as toolbar$1, tt as sectionSelector, ut as fields$1, vt as change$1, wt as spacing, xt as kinds, yt as copy } from "./App.js";
+import { t as listAction } from "./tree.ui.js";
+import { $ as notices, A as _sfc_main$2, At as spacing, Ct as kinds, Dt as reorder, Et as remove, Ot as reparent, Q as documentEvent, St as geometry, Tt as path, U as spacingField, _t as block, bt as duplicate, dt as filter, ft as mode, gt as add, ht as type, kt as siblings, lt as change, mt as scope$1, pt as options, rt as toolbar$1, tt as sectionSelector, ut as fields$1, vt as change$1, wt as layers, xt as fingerprint, yt as copy } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
 var collections = [
 	"items",
@@ -401,6 +402,10 @@ function fields(model, ui, width, language, enabled) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs
+function blockTitle(item, key, language) {
+	if (item.title && item.title !== item.kind) return item.title;
+	return translate(item.kind[0].toUpperCase() + item.kind.slice(1), language) + " " + (Number(key.split(".").pop()) + 1);
+}
 function model(raw, ui) {
 	return Object.assign({}, raw, {
 		ready: raw.canWrite,
@@ -426,7 +431,7 @@ function models(model) {
 }
 function row(list, record, model, ui, language) {
 	const key = record.key === "page" ? "" : record.key;
-	const title = record.label === record.kind ? translate(record.kind[0].toUpperCase() + record.kind.slice(1), language) : record.label;
+	const title = record.label === record.kind ? blockTitle({ kind: record.kind }, record.key, language) : record.label;
 	return { nodes: [node("Action", "pageBlock_" + record.key, rect(0, 0, list.width - 16, 38), {
 		text: title,
 		normalColor: "transparent",
@@ -441,6 +446,7 @@ function row(list, record, model, ui, language) {
 }
 function describe(model, ui, width, height, language) {
 	if (width <= 0 || height <= 0) return { nodes: [] };
+	if (ui.selected && !model.layers.some((row) => row.key === ui.selected)) ui = Object.assign({}, ui, { selected: "" });
 	if (height < 400) return { nodes: [node("Scroll", "pageEditorScroll", rect(0, 0, width, height), {
 		contentHeight: 640,
 		scrollbarId: "pageEditorScrollBar",
@@ -506,17 +512,97 @@ function describe(model, ui, width, height, language) {
 			}[value])
 		}))),
 		enabled: canEdit && !ui.preview,
+		toolTip: model.layers.some((row) => row.kind === "items") ? tr("Items preview shows up to three records.") : "",
 		action: { type: "add" }
 	}));
-	if (width >= 700 && model.layers.some((row) => row.kind === "items")) nodes.push(label("pageSampleHint", rect(232, y, Math.max(0, width - 244 - modeWidth), 38), tr("Items preview shows up to three records."), Object.assign({}, muted, {
-		fontRole: "caption",
-		wrap: true
-	})));
+	if (!ui.preview) {
+		const current = fingerprint(model.document);
+		const historyCurrent = ui.historyDocument === current;
+		const ready = canEdit && !model.pendingText && !ui.confirmation;
+		const p = path(ui.selected), rows = p.length ? siblings(model.document, p) : [];
+		const actions = [
+			[
+				"Undo",
+				"undo",
+				{ type: "undo" },
+				ready && historyCurrent && ui.past?.length
+			],
+			[
+				"Redo",
+				"redo",
+				{ type: "redo" },
+				ready && historyCurrent && ui.future?.length
+			],
+			[
+				"Duplicate widget",
+				"content-copy",
+				{ type: "duplicate" },
+				ready && !!ui.selected
+			],
+			[
+				"Move up",
+				"arrow-upward",
+				{
+					type: "reorder",
+					delta: -1
+				},
+				ready && p.length && p[p.length - 1] > 0
+			],
+			[
+				"Move down",
+				"arrow-downward",
+				{
+					type: "reorder",
+					delta: 1
+				},
+				ready && p.length && p[p.length - 1] < rows.length - 1
+			]
+		];
+		const separate = width < 700;
+		actions.forEach(([title, icon, action, enabled], index) => nodes.push(button("pageAction_" + action.type + (action.delta || ""), rect((separate ? 0 : 232) + index * 40, y + (separate ? 44 : 0), 32, 32), tr(title), icon, action, !!enabled, { iconOnly: true })));
+	}
 	y += 50;
 	nodes.push(button("pagePreviewMode", rect(width - modeWidth, y - 50, modeWidth, 38), tr(ui.preview ? "Back to editing" : "Clean preview"), ui.preview ? "edit" : "visibility", { type: "preview" }, !model.busy && !ui.creating && !model.pendingText, { iconOnly: narrow }));
+	if (!ui.preview && width < 700) y += 44;
 	if (width >= 500) {
-		nodes.push(label("pageSelectionHint", rect(0, y, width, 24), tr(ui.preview ? "Read-only draft preview. Nothing is saved." : "Click to select. Alt-click for underlying layers."), Object.assign({}, muted, { fontRole: "caption" })));
-		y += 32;
+		if (ui.preview) nodes.push(label("pageSelectionHint", rect(0, y, width, 24), tr(ui.preview ? "Read-only draft preview. Nothing is saved." : "Click to select. Alt-click for underlying layers."), Object.assign({}, muted, { fontRole: "caption" })));
+		else {
+			const p = path(ui.selected), crumbs = [{
+				key: "",
+				title: model.document.title || tr("Page")
+			}];
+			p.forEach((_, index) => {
+				const key = p.slice(0, index + 1).join("."), item = block(model.document, key);
+				crumbs.push({
+					key,
+					title: blockTitle(item, key, language)
+				});
+			});
+			let x = 0;
+			const children = [];
+			crumbs.forEach((crumb, index) => {
+				if (index) {
+					children.push(label("pageAncestorSeparator_" + index, rect(x, 0, 20, 30), "›", muted));
+					x += 20;
+				}
+				const w = Math.max(60, Math.min(180, crumb.title.length * 8 + 24));
+				children.push(listAction("pageAncestor_" + (crumb.key || "page"), rect(x, 0, w, 30), crumb.title, "", {
+					type: "select",
+					key: crumb.key
+				}, !model.busy && !model.pendingText, {
+					toolTip: crumb.title,
+					selected: crumb.key === ui.selected
+				}));
+				x += w;
+			});
+			nodes.push(node("Scroll", "pageAncestors", rect(0, y, width, 46), {
+				contentWidth: x,
+				contentHeight: 30,
+				scrollbarId: "pageAncestorsBar",
+				children
+			}));
+		}
+		y += ui.preview ? 32 : 50;
 	}
 	if (narrow && !ui.preview) {
 		nodes.push(sectionSelector("pageEditorPanels", [
@@ -574,6 +660,31 @@ function describe(model, ui, width, height, language) {
 		field("title", "Title", item ? item.title : model.document.title, !item);
 		if (!item) fields$2.push(...fields(model, ui, right - 24, language, canEdit));
 		if (item) {
+			const parent = path(ui.selected).slice(0, -1).join(".");
+			fields$2.push({
+				kind: "Choice",
+				id: "pageParent",
+				title: "Parent container",
+				props: {
+					value: parent,
+					enabled: canEdit && !model.pendingText,
+					action: { type: "reparent" }
+				},
+				options: [{
+					value: "",
+					label: model.document.title || tr("Page")
+				}].concat(model.layers.filter((row) => [
+					"row",
+					"column",
+					"details"
+				].includes(row.kind) && row.key !== ui.selected && !row.key.startsWith(ui.selected + ".")).map((row) => ({
+					value: row.key,
+					label: path(row.key).map((_, index) => {
+						const key = path(row.key).slice(0, index + 1).join(".");
+						return blockTitle(block(model.document, key), key, language);
+					}).join(" / ")
+				})))
+			});
 			fields$2.push(...fields$1(model, ui, right - 24, language, canEdit));
 			fields$2.push(...fields(model, ui, right - 24, language, canEdit));
 			if (["text", "markdown"].includes(item.kind) && mode(model.document, ui.selected) === "static") field("text", "Text", item.text || "", false, item.kind === "markdown" ? "Area" : void 0);
@@ -654,16 +765,41 @@ function initial() {
 		newTitle: "",
 		recordQuery: "",
 		pageFilter: 0,
+		past: [],
+		future: [],
+		historyDocument: "",
 		error: ""
 	};
 }
+function shortcut(key, control, shift, alt) {
+	if (!control || alt) return null;
+	key = key.toLowerCase();
+	if (key === "z") return { type: shift ? "redo" : "undo" };
+	if (key === "y" && !shift) return { type: "redo" };
+	if (key === "d" && !shift) return { type: "duplicate" };
+	return null;
+}
 function transition(ui, model, event) {
 	const next = Object.assign({}, ui), commands = [];
+	const current = fingerprint(model.document);
+	if (ui.historyDocument && ui.historyDocument !== current) {
+		next.past = [];
+		next.future = [];
+		next.historyDocument = "";
+		next.selected = "";
+	}
 	if (event.type === "confirm" && ["page", "remove"].includes(ui.confirmation) && (model.busy || model.uncertain || !model.canWrite)) return {
 		ui: next,
 		commands
 	};
 	function replace(document) {
+		if (fingerprint(document) === current) return;
+		next.past = next.past.concat([{
+			document: copy(model.document),
+			selected: ui.selected
+		}]).slice(-20);
+		next.future = [];
+		next.historyDocument = fingerprint(document);
 		commands.push({
 			type: "document",
 			document
@@ -697,7 +833,16 @@ function transition(ui, model, event) {
 		};
 	}
 	const document = documentEvent(next, model, event);
-	if (document) return document;
+	if (document) {
+		if (document.commands.some((command) => ["discard", "reload"].includes(command.type))) Object.assign(document.ui, {
+			selected: "",
+			text: {},
+			past: [],
+			future: [],
+			historyDocument: ""
+		});
+		return document;
+	}
 	if (model.busy || ui.confirmation) return {
 		ui: next,
 		commands
@@ -723,7 +868,7 @@ function transition(ui, model, event) {
 				"reportCommit",
 				"pageFilterChange"
 			].includes(event.type)) throw Error("Apply or discard the pending text before continuing");
-			const result = edit(model, ui, event);
+			const result = edit(model, next, event);
 			Object.assign(next, result.ui);
 			if (result.document) replace(result.document);
 			return {
@@ -738,9 +883,46 @@ function transition(ui, model, event) {
 			"geometry",
 			"add",
 			"remove",
-			"change"
+			"change",
+			"undo",
+			"redo",
+			"duplicate",
+			"reorder",
+			"reparent"
 		].includes(event.type)) throw Error("Apply or discard the pending text before continuing");
 		switch (event.type) {
+			case "undo":
+			case "redo": {
+				if (ui.preview) break;
+				const from = event.type === "undo" ? "past" : "future";
+				const to = event.type === "undo" ? "future" : "past";
+				if (!next[from].length) break;
+				const snapshot = next[from][next[from].length - 1];
+				next[from] = next[from].slice(0, -1);
+				next[to] = next[to].concat([{
+					document: copy(model.document),
+					selected: ui.selected
+				}]).slice(-20);
+				next.selected = snapshot.selected;
+				next.recordQuery = "";
+				next.pageFilter = 0;
+				next.historyDocument = fingerprint(snapshot.document);
+				next.error = "";
+				commands.push({
+					type: "document",
+					document: copy(snapshot.document)
+				});
+				break;
+			}
+			case "duplicate":
+			case "reorder":
+			case "reparent": {
+				if (ui.preview || !ui.selected) break;
+				const value = event.type === "duplicate" ? duplicate(model.document, ui.selected) : event.type === "reorder" ? reorder(model.document, ui.selected, event.delta) : reparent(model.document, ui.selected, event.value);
+				replace(value.document);
+				next.selected = value.key;
+				break;
+			}
 			case "preview":
 				if (Object.keys(ui.text).length) throw Error("Apply or discard the pending text before continuing");
 				next.preview = !ui.preview;
@@ -1035,6 +1217,14 @@ var _sfc_main = {
 		}
 	},
 	methods: {
+		keydown(event) {
+			if (event.isComposing || event.repeat || event.defaultPrevented || event.target.closest("input, textarea, [contenteditable=\"true\"]")) return;
+			const action = shortcut(event.code?.replace("Key", "") || event.key, event.ctrlKey || event.metaKey, event.shiftKey, event.altKey);
+			if (action) {
+				event.preventDefault();
+				this.dispatch(action);
+			}
+		},
 		async loadSource(source = null) {
 			const request = ++this.dataSerial;
 			const values = source || this.dataScope;
@@ -1368,7 +1558,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_FrameView = resolveComponent("FrameView");
 	return openBlock(), createElementBlock("section", {
 		class: "page-layout-editor frame-host",
-		"aria-busy": $data.busy
+		"aria-busy": $data.busy,
+		onKeydown: _cache[0] || (_cache[0] = (...args) => $options.keydown && $options.keydown(...args))
 	}, [(openBlock(), createBlock(Teleport, {
 		to: $props.toolbarTarget || "body",
 		disabled: !$props.toolbarTarget
@@ -1390,7 +1581,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		"describe-row",
 		"views",
 		"onEvent"
-	])], 512)], 8, _hoisted_1);
+	])], 512)], 40, _hoisted_1);
 }
 var PageLayoutEditor_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion

@@ -4069,6 +4069,14 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Duplicate widget": "Дублировать виджет",
+	"Parent container": "Родительский контейнер",
+	"A widget cannot contain itself": "Виджет не может содержать сам себя",
+	"Choose a row, column or details container": "Выберите строку, колонку или контейнер деталей",
+	"A container supports up to 32 widgets": "Контейнер поддерживает до 32 виджетов",
+	"A dashboard supports one items workspace": "Дашборд поддерживает одно дерево итемов",
+	Undo: "Отменить",
+	Redo: "Повторить",
 	"Group label (optional)": "Название группы (необязательно)",
 	"Shared page filters": "Общие фильтры страницы",
 	"Apply the same condition to several widgets. Runtime values do not change the saved page.": "Одно условие для нескольких виджетов. Текущие значения не изменяют сохранённую страницу.",
