@@ -20,6 +20,8 @@ from PySide6.QtQml import QQmlEngine, QQmlComponent
 from tests.qt_application import gui_test_application
 from tests.profile_ui_responsiveness import frame
 from tests.test_custom_layout import Services
+from tests.test_layout_editor import Pool
+from thlib.environment import env_inst
 from thlib.ui.admin.dashboard import DashboardEditor
 from thlib.ui.icon_font import qml_icon_bindings
 from native_capture import snapshot, source_hashes
@@ -90,7 +92,21 @@ compiled = dict(
     ],
     targetSearchKey="sthpw/project?code=demo",
 )
+source = dict(
+    searchType="demo/asset",
+    fields=[dict(value="amount", label="Amount", dataType="integer")],
+    tableViews=[dict(value="table", label="Table")], itemViews=[], records=[],
+)
+fixtures = dict(layout=dict(document=document, compiled=compiled), data=dict(
+    document=dict(name="review", title="Review", blocks=[dict(kind="column", height=240, children=[
+        dict(kind="metric", title="Assets", search_type="demo/asset", filters=[
+            dict(column="amount", relation="!=", value=None)])])]),
+    compiled=dict(title="Review", targetSearchKey="sthpw/project?code=demo", layoutNodes=[
+        dict(kind="group", height=240, editorPath=[0], children=[
+            dict(kind="metric", text="Assets", value=4, editorPath=[0, 0])])]),
+))
 app = gui_test_application()
+env_inst.server_pool = Pool()
 icons = qml_icon_bindings(TH, app)
 captures = []
 sources = source_hashes(
@@ -102,7 +118,8 @@ sources = source_hashes(
         "thlib/ui/qml/features/table/CustomLayoutView.qml",
     ],
 )
-for mode in ["dark", "light"]:
+from itertools import product
+for scenario, mode in product(["layout", "data"], ["dark", "light"]):
     for language in ["en", "ru"]:
         for width in [1400, 850]:
             host = DashboardEditor(
@@ -112,6 +129,7 @@ for mode in ["dark", "light"]:
             host._can_write = True
             host._identity = "review"
             host._catalog = [dict(identity="review", label="review")]
+            document, compiled = fixtures[scenario]["document"], fixtures[scenario]["compiled"]
             host._document = copy.deepcopy(document)
             host._original = copy.deepcopy(document)
             owner = Services(copy.deepcopy(compiled))
@@ -121,6 +139,8 @@ for mode in ["dark", "light"]:
                 checkedDocument=copy.deepcopy(document),
                 previewOwner=preview,
                 application=application,
+                searchTypes=[dict(value="demo/asset", label="Assets", projectOwned=True)],
+                dataSource=copy.deepcopy(source),
             )
             engine = QQmlEngine()
             warnings = []
@@ -145,10 +165,13 @@ for mode in ["dark", "light"]:
             )
             assert window
             try:
-                for panel in ["canvas", "properties", "preview"]:
+                for panel in (["properties"] if scenario == "data" else ["canvas", "properties", "preview"]):
                     window.selectPanel(panel)
                     frame(window)
-                    name = f"page-{mode}-{language}-{width}-{panel}.png"
+                    if host._source_worker is not None:
+                        host._source_worker.result.emit(copy.deepcopy(source))
+                        frame(window)
+                    name = f"page-{scenario}-{mode}-{language}-{width}-{panel}.png"
                     assert window.grabWindow().save(str(OUT / name))
                     captures.append(
                         dict(
@@ -157,6 +180,7 @@ for mode in ["dark", "light"]:
                             width=width,
                             height=740,
                             panel=panel,
+                            fixture=scenario,
                             image=name,
                             **snapshot(window),
                         )
@@ -171,8 +195,8 @@ for mode in ["dark", "light"]:
 (OUT / "page-native.json").write_text(
     json.dumps(
         dict(
-            document=document,
-            compiled=compiled,
+            fixtures=fixtures,
+            source=source,
             captures=captures,
             sha256=sources[0],
             nativeSources=sources[1],

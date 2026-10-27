@@ -8,7 +8,7 @@ from pyasm.common import Environment
 from pyasm.search import Search, SearchType
 from pyasm.security.security import _require_admin
 from tactic_stream.dashboard_plan import DashboardDocument
-from tactic_stream.server.dashboards import dashboard_layout
+from tactic_stream.server.dashboards import dashboard_layout, dashboard_sources
 from tactic_stream.server.widget_configuration import WidgetConfigConflict
 from tactic_stream.server.sidebar_editor import SidebarDraft, read_sidebar, save_sidebar
 from .page_cmd import digest, page_state
@@ -31,8 +31,10 @@ class DashboardCmd(Command):
         if self.kwargs.get('project_code')!=Project.get_project_code():
             raise ValueError('Dashboard project mismatch')
         action=self.kwargs.get('action')
-        if action not in ('read','preview','apply','operation'):
+        if action not in ('read','preview','apply','operation','sources'):
             raise ValueError('Unknown dashboard operation')
+        if action=='sources':
+            return dashboard_sources(self.kwargs.get('search_type',''),self.kwargs.get('query'),self.kwargs.get('record_key',''))
         sql=Search('config/widget_config').get_sql()
         if action=='apply':
             sql.get_database_impl().lock_collection_table(sql,SearchType.get('config/widget_config').get_table())
@@ -52,6 +54,7 @@ class DashboardCmd(Command):
                 return dict(status='not_found',operation_id=operation)
         state=dashboard_state()
         if action=='read':
+            state['sourceTypes']=dashboard_sources()['searchTypes']
             name=self.kwargs.get('name','')
             if not isinstance(name,str) or len(name)>48:
                 raise ValueError('Choose a dashboard name')

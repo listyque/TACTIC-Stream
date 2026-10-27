@@ -8,6 +8,7 @@ import FrameView from '../../frame/FrameView.vue';
 import CustomLayoutView from '../interface/CustomLayoutView.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.state.mjs';
+import * as Data from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.data.mjs';
 export default {
   components: { FrameView },
   props: {
@@ -33,6 +34,14 @@ export default {
       busy: false,
       uncertain: false,
       canWrite: false,
+      sourceTypes: [],
+      dataSource: {},
+      dataBusy: false,
+      dataError: '',
+      dataSerial: 0,
+      dataEpoch: 0,
+      dataInFlight: false,
+      pendingData: null,
       viewport: { width: 1, height: 1 },
       toolbarSize: 620,
       observer: null,
@@ -47,6 +56,17 @@ export default {
     };
   },
   computed: {
+    dataScope() {
+      return Data.scope(this.document, this.ui.selected);
+    },
+    dataKey() {
+      return JSON.stringify([
+        this.project,
+        this.ticket,
+        this.dataEpoch,
+        this.dataScope
+      ]);
+    },
     dirty() {
       return (
         (!!this.document && JSON.stringify(this.document) !== this.baseline) ||
@@ -69,10 +89,15 @@ export default {
             JSON.stringify(this.document) === this.checkedDocument,
           error: this.error,
           message: this.message,
-          searchTypes: (this.searchTypes || []).map((row) => ({
-            value: row.search_type,
-            label: row.title || row.search_type
-          }))
+          dataSource: this.dataSource,
+          dataBusy: this.dataBusy,
+          dataError: this.dataError,
+          searchTypes: this.sourceTypes.length
+            ? this.sourceTypes
+            : (this.searchTypes || []).map((row) => ({
+                value: row.search_type,
+                label: row.title || row.search_type
+              }))
         },
         this.ui
       );
@@ -124,12 +149,17 @@ export default {
   },
   beforeUnmount() {
     this.closed = true;
+    this.dataSerial++;
+    this.pendingData = null;
     this.observer?.disconnect();
     this.generation++;
     this.previewSerial++;
     clearTimeout(this.previewTimer);
   },
   watch: {
+    dataKey() {
+      this.loadSource();
+    },
     project() {
       this.reset();
     },
@@ -141,6 +171,59 @@ export default {
     }
   },
   methods: {
+    async loadSource(source = null) {
+      const request = ++this.dataSerial;
+      const values = source || this.dataScope;
+      this.dataError = '';
+      if (!values.searchType || this.closed) {
+        this.pendingData = null;
+        this.dataSource = {};
+        this.dataBusy = false;
+        return;
+      }
+      this.dataBusy = true;
+      this.pendingData = {
+        serial: request,
+        generation: this.generation,
+        scope: { ticket: this.ticket, project: this.project },
+        values
+      };
+      if (this.dataInFlight) return;
+      this.dataInFlight = true;
+      try {
+        while (this.pendingData && !this.closed) {
+          const pending = this.pendingData;
+          this.pendingData = null;
+          try {
+            const result = await this.call(
+              'sources',
+              {
+                search_type: pending.values.searchType,
+                record_key: pending.values.recordKey || '',
+                query: pending.values.query ?? null
+              },
+              pending.scope
+            );
+            if (
+              !this.closed &&
+              pending.serial === this.dataSerial &&
+              pending.generation === this.generation
+            )
+              this.dataSource = result;
+          } catch (error) {
+            if (
+              !this.closed &&
+              pending.serial === this.dataSerial &&
+              pending.generation === this.generation
+            )
+              this.dataError = error.message;
+          }
+        }
+      } finally {
+        this.dataInFlight = false;
+        this.dataBusy = false;
+      }
+    },
     rowScene(list, row) {
       return UI.row(list, row, this.frameModel, this.ui, appearance.language);
     },
@@ -224,6 +307,7 @@ export default {
         }));
         this.revision = state.revision;
         this.canWrite = true;
+        this.sourceTypes = state.sourceTypes || [];
         const name =
           this.document?.name || this.initialFocus || this.catalog[0]?.identity;
         this.document = null;
@@ -236,6 +320,7 @@ export default {
           this.baseline = JSON.stringify(value.document);
           this.revision = value.revision;
           this.ui = State.initial();
+          this.dataEpoch++;
         }
       } catch (e) {
         if (generation === this.generation) this.error = e.message;
@@ -258,6 +343,8 @@ export default {
         this.revision = value.revision;
         this.baseline = JSON.stringify(value.document);
         this.ui = State.initial();
+        this.sourceTypes = value.sourceTypes || this.sourceTypes;
+        this.dataEpoch++;
         this.compiled = null;
       } catch (e) {
         if (generation === this.generation) this.error = e.message;
@@ -397,6 +484,9 @@ export default {
       this.ui = result.ui;
       for (const command of result.commands) {
         switch (command.type) {
+          case 'source':
+            await this.loadSource(command);
+            break;
           case 'document':
             this.document = command.document;
             this.error = this.message = '';

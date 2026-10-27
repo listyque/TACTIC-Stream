@@ -17,6 +17,56 @@ def document():
 
 
 class Dashboards(unittest.TestCase):
+    def test_source_catalog_typed_bindings_and_project_boundaries(self):
+        from xmlrpc.client import Fault
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            call=lambda action,**values:proxy.execute_cmd(auth,COMMAND,dict(action=action,project_code='one',**values))['info']
+            catalog=call('sources')['searchTypes']
+            self.assertTrue(any(row['value']=='contract/entity' and row['projectOwned'] for row in catalog))
+            source=call('sources',search_type='contract/entity',query='Перв')
+            self.assertTrue(any(row['value']=='amount' for row in source['fields']))
+            self.assertTrue(source['tableViews']);self.assertTrue(source['itemViews'])
+            self.assertTrue(source['records'])
+            self.assertNotIn('sources',source);self.assertNotIn('layers',source)
+            key=source['records'][0]['value']
+            state=call('read')
+            draft=dict(name='bound_sources',title='Bound',blocks=[
+                dict(kind='text',binding='project',field='title'),
+                dict(kind='text',binding='record',search_type='contract/entity',source_key=key,field='amount'),
+                dict(kind='items',search_type='contract/entity',view='continuous_example'),
+                dict(kind='details',children=[dict(kind='text',binding='selection',search_type='contract/entity',field='name')])])
+            preview=call('preview',document=draft,expected_revision=state['revision'],detail_key=key)
+            self.assertEqual(preview['model']['layoutNodes'][1]['text'],'0')
+            self.assertTrue(preview['model']['layoutDetail']['layoutNodes'][0]['text'])
+            for values in [dict(search_type='contract/entity?project=two'),
+                           dict(search_type='contract/entity',record_key='contract/entity?project=two&code=A'),
+                           dict(search_type='contract/entity',query='x'*257)]:
+                with self.assertRaises(Fault):call('sources',**values)
+            for changed in [dict(kind='text',binding='selection',search_type='contract/entity',field='name'),
+                            dict(kind='text',binding='record',source_key=key,field='missing'),
+                            dict(kind='text',binding='static',field='title')]:
+                with self.assertRaises(Fault):call('preview',document=dict(name='bad_binding',title='Bad',blocks=[changed]),expected_revision=state['revision'])
+
+    def test_zero_false_and_null_filters_match_metric_table_and_native_query(self):
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            call=lambda action,**values:proxy.execute_cmd(auth,COMMAND,dict(action=action,project_code='one',**values))['info']
+            for search_type,column,relation,value in [('contract/entity','amount','=',0),('contract/entity','amount','=',None),
+                    ('contract/entity','amount','!=',None),('sthpw/project','is_template','=',False)]:
+                with self.subTest(value=value,relation=relation):
+                    condition=dict(column=column,relation=relation,value=value)
+                    preview=call('preview',document=dict(name='typed_filters',title='Typed',blocks=[
+                        dict(kind='metric',search_type=search_type,filters=[condition]),dict(kind='table',search_type=search_type,filters=[condition])]),
+                        expected_revision=call('read')['revision'])
+                    metric,table=preview['model']['layoutNodes']
+                    filters=table['table']['filters']
+                    native=ast.literal_eval(proxy.query(auth,search_type,filters))
+                    nested=proxy.execute_cmd(auth,'tactic.ui.table.NestedTableReadCmd',dict(search_type=search_type,
+                        view='table',parent_key='sthpw/project?code=one',project_scope=not search_type.startswith('sthpw/'),filters=filters,limit=50))['info']['records']
+                    self.assertEqual(metric['value'],len(native))
+                    self.assertEqual({row['__search_key__'] for row in native},{row['__search_key__'] for row in nested})
+
     def test_native_page_editor_transport_reads_real_types_and_saves(self):
         from pathlib import Path
         source=(Path(__file__).resolve().parents[3]/'TH/thlib/ui/admin/dashboard_api.py').read_text(encoding='utf-8')
@@ -228,11 +278,16 @@ class Dashboards(unittest.TestCase):
         async def run():
             server=create_server(StreamConnection(self.url,'one',ticket),Path(__file__).resolve().parents[1],allow_page_save=True)
             async with Client(server) as client:
+                source=(await client.call_tool('ts_dashboard_sources',dict(search_type='contract/entity'))).structured_content
+                self.assertTrue(any(row['value']=='amount' for row in source['fields']))
                 state=(await client.call_tool('ts_dashboard_read',{})).structured_content
                 draft=document();draft['name']='via_mcp'
+                draft['blocks'].append(dict(kind='text',title='Project',binding='project',field='title'))
+                draft['blocks'][0]['children'][0]['filters']=[dict(column=next(row['value'] for row in source['fields'] if row['value']=='amount'),relation='=',value=0)]
                 values=dict(document=draft,expected_revision=state['revision'])
                 preview=await client.call_tool('ts_dashboard_preview',values)
                 self.assertFalse(preview.is_error)
+                self.assertEqual(preview.structured_content['model']['layoutNodes'][-1]['text'],'Project: One')
                 result=await client.call_tool('ts_dashboard_save',dict(values,operation_id=str(uuid4())))
                 self.assertFalse(result.is_error)
                 self.assertEqual(result.structured_content['path'],'/dashboard/via_mcp')

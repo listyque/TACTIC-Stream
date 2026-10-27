@@ -486,7 +486,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         return {'adapter_version': __version__, 'server': health, 'project': connection.project,
                 'operations': ['references', 'types.read', 'schema.read', 'naming.read', 'naming.preview',
                                'naming.operation', 'page.read', 'page.preview', 'page.operation',
-                               'dashboard.read', 'dashboard.preview', 'dashboard.operation',
+                               'dashboard.read', 'dashboard.sources', 'dashboard.preview', 'dashboard.operation',
                                'item_layout.read', 'item_layout.preview', 'item_layout.operation',
                                'sidebar.read', 'sidebar.preview', 'sidebar.operation']
                               + (['mcp.connections'] if request_id else [])
@@ -622,6 +622,20 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
     def ts_dashboard_read(name: str = '') -> dict[str, Any]:
         """Read dashboard dependencies/revision and portable bricks. Pass an existing dashboard name (without dashboard. prefix) to retrieve its exact document before editing; an empty name returns the compact catalogue. Dashboard navigation opens a workspace page, not a document popup."""
         return connection.command('dashboard','read',name=name)
+
+    @mcp.tool(annotations=read_only, structured_output=True)
+    def ts_dashboard_sources(search_type: Annotated[str, Field(max_length=256)] = '',
+                             query: Annotated[str, Field(max_length=256)] | None = None,
+                             record_key: Annotated[str, Field(max_length=2048)] = '') -> dict[str, Any]:
+        """Read compact real data sources, fields/types and saved table/item views without XML.
+
+        Empty search_type lists available types; select one to discover fields/views.
+        Optional query finds up to 50 record choices in that source, not arbitrary data.
+        Bind text/Markdown with binding static/project/selection/record and a real field;
+        selection is scoped to Details, record uses a returned native key. Filters use
+        existing comparison/like operators and typed values; null means SQL null.
+        """
+        return connection.command('dashboard','sources',search_type=search_type,query=query,record_key=record_key)
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_item_layout_read(search_type: Identifier, view: Identifier) -> dict[str, Any]:

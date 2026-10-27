@@ -202,13 +202,64 @@ try {
   await control('pageProperty_title').fill('Draft code');
   await control('pageProperty_title').blur();
   await editor.getByText('Draft code: A', { exact: true }).waitFor();
+  await control('pageBinding').selectOption('record');
+  await control('pageProperty_search_type').selectOption('contract/entity');
+  await control('pageRecordQuery').fill('Перв');
+  await control('pageRecordFind').click();
+  await page.waitForFunction(() =>
+    [...document.querySelector('[data-frame="pageRecord"]').options].some(
+      (option) => option.value.includes('contract/entity?')
+    )
+  );
+  const recordKey = await control('pageRecord')
+    .locator('option')
+    .evaluateAll(
+      (options) =>
+        options.find((option) => option.value.includes('contract/entity?'))
+          .value
+    );
+  await control('pageRecord').selectOption(recordKey);
+  await control('pageBindingField').selectOption('name');
+  await editor.getByText('Draft code: Первый', { exact: true }).waitFor();
+  await control('pageBinding').selectOption('project');
+  await control('pageBindingField').selectOption('title');
+  await editor.getByText('Draft code: One', { exact: true }).waitFor();
+  await control('pageBinding').selectOption('selection');
+  await control('pageBindingField').selectOption('amount');
+  await editor.getByText('Draft code: 0', { exact: true }).waitFor();
+  await control('pageBlock_0.0').click();
+  await control('pageFilter_0_remove').click();
+  await control('pageFilterAdd').click();
+  await control('pageFilter_0_column').selectOption('amount');
+  assert.equal(await control('pageFilter_0_value').inputValue(), '0');
+  await page.waitForFunction(
+    () => !document.querySelector('[data-frame="adminSaveDocument"]').disabled
+  );
+  await control('adminSaveDocument').click();
+  await control('adminConfirmSave').click();
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('.page-layout-editor')
+        .getAttribute('aria-busy') === 'false'
+  );
+  assert.equal(writes.length, 2);
+  const dataDraft = writes[1].document;
+  assert.deepEqual(dataDraft.blocks[0].children[0].filters, [
+    { column: 'amount', relation: '=', value: 0 }
+  ]);
+  const bound = dataDraft.blocks[0].children[1].children[0].children[0];
+  assert.equal(bound.binding, 'selection');
+  assert.equal(bound.field, 'amount');
+  await page.screenshot({
+    path: process.argv[3] + '/page-data-editor.png',
+    animations: 'disabled'
+  });
   assert.equal(
     writes.length,
-    1,
-    'Resolving draft detail data must never publish'
+    2,
+    'Data changes publish only after explicit save'
   );
-  await control('adminDiscardDocument').click();
-  await control('adminConfirmSave').click();
   await control('administrationCloseButton').click();
   await page
     .getByRole('dialog', { name: 'Administration', exact: true })

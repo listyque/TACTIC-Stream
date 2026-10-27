@@ -31,8 +31,8 @@ DashboardDocument has name, title and blocks. Bricks:
 | Kind | Contract |
 | --- | --- |
 | row / column | Nested children, weight 1..12; responsive shared layout. |
-| text | Plain text/title. |
-| markdown | Literal text, or source_key + field from an accessible current-project record. Without source_key, field reads the contextual target record. Maximum 64 KiB; larger files use normal document/file tools. |
+| text | Plain text/title, or a scalar field through an explicit binding. |
+| markdown | Literal text, or a text field through an explicit binding. Maximum 64 KiB; larger files use normal document/file tools. |
 | metric | A labelled count card, using a native count of search_type and ANDed scalar filters. |
 | table | Existing search_type/view, fixed native filters retained alongside interactive search. Use ts_page_* for new columns. |
 | items | The existing expandable item workspace: supply root search_type, view and scalar filters. Native schema/process branches, previews, counts, files and object actions remain owned by the current results components. |
@@ -40,6 +40,11 @@ DashboardDocument has name, title and blocks. Bricks:
 | link | Safe HTTP(S), skey or tactic-search link. |
 
 Filters use column, relation (=, !=, <, <=, >, >=, like) and a scalar value.
+Up to 32 conditions are ANDed. Numeric zero and boolean false remain typed values.
+For SQL NULL use value=null with relation `=` / `!=` (Is empty / Is not empty).
+This does not mean an empty string. Blank literals, the native NULL keyword and
+native expression/template values are rejected rather than skipped or evaluated.
+`like` accepts a literal text pattern (`%robot%`); it is not SQL or an expression.
 All bricks accept numeric `height` (24..1600px) and optional `width` (40..2400px).
 `padding` and `margin` are four integers (top/right/bottom/left, 0..256px);
 row/column `gap` is 0..128px. Empty page/group drafts are supported.
@@ -238,6 +243,47 @@ Sources: [custom URLs](../custom_urls.md), [pages](PAGES.md),
 [sidebar command](../../src/tactic/ui/panel/sidebar_agent_cmd.py).
 
 ## Human canvas authoring uses the same documents
+
+### Data sources, filters and bindings
+
+Requires TS 0.112.250 or later; TH is the native client, not a second server.
+Select a page widget and use **Properties → Data**. Collection widgets expose
+the actual Search Type, saved table/item view and typed AND conditions. Text and
+Markdown expose Static text, Current project, Selected object (inside Details)
+or Specific record. Find a specific record by name/code, then select its field.
+Changing a source retains existing views/filters for explicit review; unavailable
+references are labelled rather than silently deleted. Changes remain a draft
+until the ordinary validated, revisioned Save.
+
+`ts_dashboard_sources(search_type="")` returns compact accessible type choices.
+Pass an actual base Search Type to get `fields` (value/label/dataType),
+`tableViews` and `itemViews`. Optional `query` searches name/title/code/login;
+results are bounded to 50 native key/label choices with `more`. Optional
+`record_key` resolves the current fixed choice. No record payloads, tickets or XML
+configuration are returned. Do not guess columns or fetch entire configurations.
+
+For Text/Markdown, set `binding` to `static`, `project`, `selection` or `record`.
+`field` names a discovered column. `selection` requires Details and an actual
+`search_type` (or its parent group's type); it renders only for that type.
+`project` reads the current TACTIC project even inside Details. `record` uses a
+`source_key` returned by discovery, checked against the type and project. Existing
+documents with `auto` retain their contextual binding. For example:
+
+```json
+{"kind":"text","title":"Project","binding":"project","field":"title"}
+```
+
+Use discovery, compose the ordinary DashboardDocument, then preview/save through
+`ts_dashboard_*`. These paths use the same server validation as the human editor;
+read-only discovery grants no write permission. The native UI command is
+`DashboardCmd(action="sources", search_type=..., query=..., record_key=...)`:
+TS web sends JSON RPC; TH's dashboard adapter sends XML-RPC on a worker. Late
+source responses are discarded; moving/resizing widgets does not reload metadata.
+
+Owners: [server discovery and compilation](../../src/tactic_stream/server/dashboards.py),
+[document schema](../../src/tactic_stream/dashboard_plan.py),
+[shared data controls](../../src/tactic_stream/shared_ui/features/administration/layouts/page.data.mjs),
+[TH dashboard adapter](../../../../TH/thlib/ui/admin/dashboard_api.py).
 
 Administration has **Page layouts** for DashboardDocument and **Item layouts** for
 the existing XML card descriptions. A saved dashboard link opens its page editor;

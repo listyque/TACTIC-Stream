@@ -411,17 +411,21 @@ def read_nested_scope(
                     '',
                 )
                 order_by = [part.strip() for part in order.split(',') if part.strip()]
-    if not isinstance(filters or [], list) or len(filters or []) > 20:
+    # A dashboard can supply 32 saved conditions plus the table's own quick filter.
+    if not isinstance(filters or [], list) or len(filters or []) > 33:
         raise ValueError('Invalid nested table filters')
     for item in filters or []:
         if (
             not isinstance(item, (tuple, list))
             or len(item) != 3
             or item[0] not in columns
-            or item[1] not in ('=', '!=', '<', '<=', '>', '>=', 'like')
+            or item[1] not in ('=', '!=', '<', '<=', '>', '>=', 'like', 'is empty', 'is not empty')
         ):
             raise ValueError('Invalid nested table filter')
-        search.add_filter(item[0], item[2], op=item[1])
+        if item[1] in ('is empty', 'is not empty'):
+            search.add_filter(item[0], 'NULL', op='is' if item[1]=='is empty' else 'is not', quoted=False)
+        else:
+            search.add_filter(item[0], item[2], op=item[1])
     if not isinstance(order_by or [], list) or len(order_by or []) > 4:
         raise ValueError('Invalid nested table ordering')
     for item in order_by or []:

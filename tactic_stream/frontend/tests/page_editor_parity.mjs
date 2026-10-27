@@ -49,6 +49,7 @@ const browser = await chromium.launch({ headless: true });
 const counts = [];
 try {
   for (const expected of native.captures) {
+    const fixture = native.fixtures[expected.fixture];
     const page = await browser.newPage({
       viewport: { width: expected.width, height: expected.height },
       deviceScaleFactor: 1
@@ -58,21 +59,26 @@ try {
     await page.route('**/admin/rpc', (route) => {
       const command = route.request().postDataJSON().args?.[2];
       assert(
-        ['read', 'preview'].includes(command?.action),
+        ['read', 'preview', 'sources'].includes(command?.action),
         'Captures must not write'
       );
       const info =
-        command.action === 'preview'
-          ? {
-              model: native.compiled,
-              document: native.document,
-              revision: 'R1'
-            }
-          : {
-              dashboards: [{ view: 'dashboard.review' }],
-              revision: 'R1',
-              ...(command.name ? { document: native.document } : {})
-            };
+        command.action === 'sources'
+          ? native.source
+          : command.action === 'preview'
+            ? {
+                model: fixture.compiled,
+                document: fixture.document,
+                revision: 'R1'
+              }
+            : {
+                dashboards: [{ view: 'dashboard.review' }],
+                revision: 'R1',
+                sourceTypes: [
+                  { value: 'demo/asset', label: 'Assets', projectOwned: true }
+                ],
+                ...(command.name ? { document: fixture.document } : {})
+              };
       return route.fulfill({ json: { result: { info } } });
     });
     await page.goto(

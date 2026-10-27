@@ -3700,7 +3700,12 @@ class Search(Base):
                     self.add_date_range_filter(name, item[2], item[3])
             else:
                 _, op, value = item
-                if name is None or op is None or value in (None, ""):
+                if name is None or op is None:
+                    continue
+                if op in ("is empty", "is not empty"):
+                    self.add_filter(name, "NULL", op="is" if op == "is empty" else "is not", quoted=False)
+                    continue
+                if value in (None, ""):
                     continue
                 op = op.replace("lte", "<=").replace("gte", ">=").replace("lt", "<").replace("gt", ">")
                 if self.is_expr(value):

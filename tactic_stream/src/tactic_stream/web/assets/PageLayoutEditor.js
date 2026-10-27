@@ -16,7 +16,7 @@ var kinds = [
 	"details",
 	"link"
 ];
-var copy = (value) => JSON.parse(JSON.stringify(value));
+var copy = (value) => JSON.parse(JSON.stringify(value, (_key, item) => item === void 0 ? null : item));
 function path(value) {
 	if (value === "") return [];
 	if (!/^\d+(\.\d+)*$/.test(value)) throw Error("Select a page block");
@@ -51,7 +51,7 @@ function layers(document, prefix = []) {
 	});
 	return result;
 }
-function change(document, key, field, value) {
+function change$1(document, key, field, value) {
 	const result = copy(document), item = key === "" ? result : block(result, key);
 	if (!item) throw Error("The selected element no longer exists");
 	const limits = {
@@ -209,6 +209,394 @@ function geometry(document, change, boxes) {
 	};
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.data.mjs
+function inDetails(document, key) {
+	const path$1 = path(key);
+	return path$1.slice(0, -1).some((_, index) => block(document, path$1.slice(0, index + 1).join(".")).kind === "details");
+}
+function mode(document, key) {
+	const item = key ? block(document, key) : null;
+	if (!item || !["text", "markdown"].includes(item.kind)) return "";
+	if (item.binding && item.binding !== "auto") return item.binding;
+	return item.source_key ? "record" : item.field ? inDetails(document, key) ? "selection" : "project" : "static";
+}
+function selectedType(document, key) {
+	const path$2 = path(key);
+	for (let size = path$2.length; size > 0; size--) {
+		const item = block(document, path$2.slice(0, size).join("."));
+		if (item.search_type) return item.search_type;
+	}
+	const row = layers(document).find((layer) => layer.kind === "items");
+	return row ? block(document, row.key).search_type || "" : "";
+}
+function scope(document, key) {
+	if (!document?.blocks || !key || !layers(document).some((row) => row.key === key)) return {
+		searchType: "",
+		recordKey: ""
+	};
+	const item = block(document, key), binding = mode(document, key);
+	return {
+		searchType: binding === "project" ? "sthpw/project" : binding === "selection" ? selectedType(document, key) : binding === "record" ? item.search_type || (item.source_key || "").split("?")[0] : [
+			"table",
+			"items",
+			"metric",
+			"row",
+			"column"
+		].includes(item.kind) ? item.search_type || "" : "",
+		recordKey: binding === "record" ? item.source_key || "" : ""
+	};
+}
+function change(document, key, field, value) {
+	const result = copy(document), item = block(result, key);
+	if (field === "binding") {
+		if (!["text", "markdown"].includes(item.kind) || ![
+			"static",
+			"project",
+			"selection",
+			"record"
+		].includes(value)) throw Error("Choose a supported field binding");
+		if (value === "selection" && !inDetails(result, key)) throw Error("Place selection-bound widgets inside Details");
+		const type = selectedType(result, key);
+		Object.assign(item, {
+			binding: value,
+			field: "",
+			source_key: "",
+			search_type: value === "selection" ? type : ""
+		});
+	} else if (field === "search_type") {
+		item.search_type = value;
+		if (mode(result, key) === "record") item.source_key = "";
+	} else if ([
+		"field",
+		"source_key",
+		"view"
+	].includes(field)) item[field] = value;
+	else throw Error("Unsupported data property");
+	return result;
+}
+function type(field) {
+	const value = String(field?.dataType || "").toLowerCase();
+	return /bool/.test(value) ? "boolean" : /int|numeric|decimal|real|double|float/.test(value) ? "number" : /date|time/.test(value) ? "date" : /json|array|blob|bytea/.test(value) ? "complex" : "text";
+}
+var defaultValue = (field) => type(field) === "boolean" ? false : type(field) === "number" ? 0 : "";
+function relation(condition) {
+	return condition.value == null && ["=", "!="].includes(condition.relation) ? condition.relation === "=" ? "empty" : "notEmpty" : condition.relation;
+}
+function value(field, raw) {
+	if (type(field) === "boolean") {
+		if (![
+			true,
+			false,
+			"true",
+			"false"
+		].includes(raw)) throw Error("Choose Yes or No");
+		return raw === true || raw === "true";
+	}
+	if (type(field) === "number") {
+		if (String(raw).trim() === "" || !Number.isFinite(Number(raw))) throw Error("Enter a valid number");
+		return Number(raw);
+	}
+	if (type(field) === "date" && raw && !/^\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})?)?$/.test(String(raw))) throw Error("Choose a valid date");
+	return String(raw);
+}
+function filter(document, key, event, metadata) {
+	const result = copy(document), item = block(result, key);
+	if (![
+		"items",
+		"table",
+		"metric"
+	].includes(item.kind)) throw Error("Filters belong to a data collection");
+	const fields = (metadata?.fields || []).filter((row) => type(row) !== "complex");
+	item.filters = item.filters || [];
+	if (event.action === "add") {
+		if (item.filters.length >= 32) throw Error("Select at most 32 filter conditions");
+		const field = fields.find((row) => row.value === "code") || fields[0];
+		if (!field) throw Error("Choose a data source first");
+		item.filters.push({
+			column: field.value,
+			relation: "=",
+			value: defaultValue(field)
+		});
+		return result;
+	}
+	if (!Number.isInteger(event.index) || event.index < 0 || event.index >= item.filters.length) throw Error("Choose a filter condition");
+	if (event.action === "remove") {
+		item.filters.splice(event.index, 1);
+		return result;
+	}
+	const row = item.filters[event.index], field = fields.find((field) => field.value === (event.field === "column" ? event.value : row.column));
+	if (!field) throw Error("Choose a field from the current data source");
+	if (event.field === "column") Object.assign(row, {
+		column: event.value,
+		relation: "=",
+		value: defaultValue(field)
+	});
+	else if (event.field === "relation") {
+		const empty = ["empty", "notEmpty"].includes(event.value);
+		if (![
+			"=",
+			"!=",
+			"<",
+			"<=",
+			">",
+			">=",
+			"like",
+			"empty",
+			"notEmpty"
+		].includes(event.value)) throw Error("Choose a supported filter condition");
+		row.relation = empty ? event.value === "empty" ? "=" : "!=" : event.value;
+		row.value = empty ? null : row.value == null ? defaultValue(field) : row.value;
+	} else if (event.field === "value") row.value = value(field, event.value);
+	else throw Error("Unsupported filter property");
+	return result;
+}
+function options(rows, current, language) {
+	const result = (rows || []).map((row) => ({
+		value: row.value,
+		label: row.label
+	}));
+	if (current && !result.some((row) => row.value === current)) result.push({
+		value: current,
+		label: current + " · " + translate("Unavailable", language)
+	});
+	return result;
+}
+function fields(model, ui, width, language, enabled) {
+	if (!ui.selected) return [];
+	const item = block(model.document, ui.selected), binding = mode(model.document, ui.selected), requested = scope(model.document, ui.selected);
+	const metadata = model.dataSource?.searchType === requested.searchType ? model.dataSource : {}, tr = (text) => translate(text, language);
+	const fields = [], collection = [
+		"table",
+		"items",
+		"metric"
+	].includes(item.kind), condition = ["row", "column"].includes(item.kind) && inDetails(model.document, ui.selected);
+	if (!collection && !binding && !condition) return fields;
+	fields.push({
+		kind: "Heading",
+		id: "pageDataHeading",
+		title: "Data",
+		description: "Data settings apply to this widget only."
+	});
+	function choice(id, title, current, rows, field) {
+		fields.push({
+			kind: "Choice",
+			id,
+			title,
+			options: options(rows, current, language),
+			props: {
+				value: current,
+				enabled,
+				action: {
+					type: "data",
+					field
+				}
+			}
+		});
+	}
+	if (binding) choice("pageBinding", "Content source", binding, [
+		["static", "Static text"],
+		["project", "Current project"],
+		...inDetails(model.document, ui.selected) ? [["selection", "Selected object"]] : [],
+		["record", "Specific record"]
+	].map(([value, label]) => ({
+		value,
+		label: tr(label)
+	})), "binding");
+	if (collection || condition || ["selection", "record"].includes(binding)) {
+		const sources = (model.searchTypes || []).filter((row) => item.kind !== "items" || row.projectOwned !== false);
+		choice("pageProperty_search_type", collection ? "Data source" : "Record type", item.search_type || "", [{
+			value: "",
+			label: tr(condition ? "Any record type" : "Choose a data source")
+		}].concat(sources), "search_type");
+	}
+	if (requested.searchType) {
+		if (model.dataBusy || model.dataError || !metadata.searchType) fields.push({
+			kind: "Heading",
+			id: "pageDataStatus",
+			title: model.dataError || "Loading source fields…"
+		});
+		if (model.dataError) fields.push({
+			kind: "Button",
+			id: "pageDataRetry",
+			title: "Retry",
+			props: {
+				icon: "refresh",
+				action: { type: "source" }
+			}
+		});
+	}
+	if (["items", "table"].includes(item.kind)) choice("pageProperty_view", "Saved view", item.view || "table", item.kind === "items" ? metadata.itemViews : metadata.tableViews, "view");
+	if (binding === "record" && requested.searchType) {
+		fields.push({
+			id: "pageRecordQuery",
+			title: "Find record",
+			props: {
+				text: ui.recordQuery || "",
+				action: { type: "recordQuery" }
+			}
+		});
+		fields.push({
+			kind: "Button",
+			id: "pageRecordFind",
+			title: "Find records",
+			props: {
+				icon: "search",
+				enabled: !model.dataBusy,
+				action: {
+					type: "source",
+					query: true
+				}
+			}
+		});
+		choice("pageRecord", "Source record", item.source_key || "", [{
+			value: "",
+			label: tr("Choose a record")
+		}].concat(metadata.records || []), "source_key");
+		if (metadata.more) fields.push({
+			kind: "Heading",
+			id: "pageRecordMore",
+			title: "More matches. Refine your search."
+		});
+	}
+	if (binding && binding !== "static") {
+		const sourceFields = (metadata.fields || []).filter((row) => item.kind === "markdown" ? type(row) === "text" : type(row) !== "complex");
+		choice("pageBindingField", "Source field", item.field || "", [{
+			value: "",
+			label: tr("Choose a source field")
+		}].concat(sourceFields), "field");
+	}
+	if (collection) {
+		fields.push({
+			kind: "Heading",
+			id: "pageFiltersHeading",
+			title: "Filters",
+			description: "All conditions must match (AND)."
+		});
+		(item.filters || []).forEach((row, index) => {
+			const id = "pageFilter_" + index, sourceField = (metadata.fields || []).find((field) => field.value === row.column), empty = row.value == null;
+			const w = width - 32, children = [];
+			children.push(node("Choice", id + "_column", rect(0, 0, w - 40, 34), {
+				label: tr("Filter field"),
+				value: row.column,
+				options: options((metadata.fields || []).filter((row) => type(row) !== "complex"), row.column, language),
+				enabled,
+				action: {
+					type: "filter",
+					index,
+					field: "column"
+				}
+			}));
+			children.push(node("Button", id + "_remove", rect(w - 32, 0, 32, 34), {
+				text: tr("Remove condition"),
+				icon: "delete",
+				iconOnly: true,
+				enabled,
+				action: {
+					type: "filter",
+					index,
+					action: "remove"
+				}
+			}));
+			const operators = [
+				["=", "Is"],
+				["!=", "Is not"],
+				...["number", "date"].includes(type(sourceField)) ? [
+					["<", "Less than"],
+					["<=", "At most"],
+					[">", "Greater than"],
+					[">=", "At least"]
+				] : [],
+				...type(sourceField) === "text" ? [["like", "Matches text pattern"]] : [],
+				["empty", "Is empty"],
+				["notEmpty", "Is not empty"]
+			];
+			children.push(node("Choice", id + "_relation", rect(0, 42, w, 34), {
+				label: tr("Filter condition"),
+				value: relation(row),
+				enabled,
+				options: options(operators.map(([value, label]) => ({
+					value,
+					label: tr(label)
+				})), relation(row), language),
+				action: {
+					type: "filter",
+					index,
+					field: "relation"
+				}
+			}));
+			if (!empty) {
+				const key = "filter:" + index, content = Object.prototype.hasOwnProperty.call(ui.text, key) ? ui.text[key] : String(row.value);
+				const props = {
+					label: tr("Filter value"),
+					text: content,
+					enabled,
+					inputMode: type(sourceField) === "number" ? "decimal" : "text",
+					action: {
+						type: "buffer",
+						key
+					},
+					commitAction: {
+						type: "filterCommit",
+						index,
+						key
+					}
+				};
+				if (type(sourceField) === "boolean") Object.assign(props, {
+					value: String(row.value),
+					options: [{
+						value: "true",
+						label: tr("Yes")
+					}, {
+						value: "false",
+						label: tr("No")
+					}],
+					action: {
+						type: "filter",
+						index,
+						field: "value"
+					}
+				});
+				if (type(sourceField) === "date") Object.assign(props, {
+					includeTime: /time/i.test(sourceField.dataType),
+					action: {
+						type: "filter",
+						index,
+						field: "value"
+					},
+					commitAction: null
+				});
+				children.push(node(type(sourceField) === "boolean" ? "Choice" : type(sourceField) === "date" ? "DateChoice" : "Field", id + "_value", rect(0, 84, w, 36), props));
+			}
+			fields.push({
+				kind: "Box",
+				id,
+				fullWidth: true,
+				height: empty ? 84 : 128,
+				props: { children }
+			});
+		});
+		if ((item.filters || []).some((row) => row.relation === "like")) fields.push({
+			kind: "Heading",
+			id: "pagePatternHint",
+			title: "Use % to match any text, for example %robot%."
+		});
+		fields.push({
+			kind: "Button",
+			id: "pageFilterAdd",
+			title: "Add condition",
+			props: {
+				icon: "add",
+				enabled: enabled && !!metadata.fields?.length && (item.filters || []).length < 32,
+				action: {
+					type: "filter",
+					action: "add"
+				}
+			}
+		});
+	}
+	return fields;
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs
 function model(raw, ui) {
 	return Object.assign({}, raw, {
@@ -354,7 +742,7 @@ function describe(model, ui, width, height, language) {
 				scrollbarId: "pageBlocksScrollBar"
 			})]
 		}));
-		const item = ui.selected ? block(model.document, ui.selected) : null, fields = [];
+		const item = ui.selected ? block(model.document, ui.selected) : null, fields$1 = [];
 		function field(name, title, value, root = false, kind) {
 			const key = (root ? "page" : ui.selected) + ":" + name;
 			const props = {
@@ -371,7 +759,7 @@ function describe(model, ui, width, height, language) {
 				},
 				enabled: canEdit
 			};
-			fields.push({
+			fields$1.push({
 				id: "pageProperty_" + name,
 				title,
 				kind,
@@ -380,27 +768,14 @@ function describe(model, ui, width, height, language) {
 		}
 		field("title", "Title", item ? item.title : model.document.title, !item);
 		if (item) {
-			if (["text", "markdown"].includes(item.kind)) field("text", "Text", item.text || "");
-			if ([
-				"items",
-				"table",
-				"metric"
-			].includes(item.kind)) fields.push({
-				kind: "Choice",
-				id: "pageProperty_search_type",
-				title: "Search Type",
-				options: model.searchTypes || [],
-				props: {
-					value: item.search_type,
-					enabled: canEdit,
-					action: {
-						type: "change",
-						field: "search_type"
-					}
-				}
-			});
-			if (["items", "table"].includes(item.kind)) field("view", "View", item.view || "table");
+			fields$1.push(...fields(model, ui, right - 24, language, canEdit));
+			if (["text", "markdown"].includes(item.kind) && mode(model.document, ui.selected) === "static") field("text", "Text", item.text || "", false, item.kind === "markdown" ? "Area" : void 0);
 			if (item.kind === "link") field("href", "Link URL", item.href || "");
+			fields$1.push({
+				kind: "Heading",
+				id: "pageLayoutHeading",
+				title: "Layout"
+			});
 			field("width", "Width", item.width);
 			field("height", "Height", item.height);
 			field("weight", "Flexible width", item.weight || 1);
@@ -409,7 +784,7 @@ function describe(model, ui, width, height, language) {
 				"column",
 				"details"
 			].includes(item.kind)) field("gap", "Gap", item.gap ?? 8);
-			for (const name of ["padding", "margin"]) fields.push(spacingField("page" + name, tr(name === "padding" ? "Padding" : "Margin"), item[name] || [
+			for (const name of ["padding", "margin"]) fields$1.push(spacingField("page" + name, tr(name === "padding" ? "Padding" : "Margin"), item[name] || [
 				0,
 				0,
 				0,
@@ -418,7 +793,7 @@ function describe(model, ui, width, height, language) {
 				type: "spacing",
 				field: name
 			}, language, canEdit, right - 72));
-			if (item.kind === "items") fields.push({
+			if (item.kind === "items") fields$1.push({
 				kind: "Button",
 				id: "pageEditCard",
 				title: "Edit card layout",
@@ -428,7 +803,7 @@ function describe(model, ui, width, height, language) {
 					action: { type: "card" }
 				}
 			});
-			fields.push({
+			fields$1.push({
 				kind: "Button",
 				id: "pageRemoveBlock",
 				title: "Remove widget",
@@ -439,7 +814,7 @@ function describe(model, ui, width, height, language) {
 				}
 			});
 		}
-		const body = sections(fields, right - 24, language, canEdit);
+		const body = sections(fields$1, right - 24, language, canEdit);
 		if (!ui.preview && (!narrow || ui.panel === "properties")) nodes.push(node("Box", "pagePropertiesPanel", rect(width - right, y, right, h), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
@@ -470,6 +845,7 @@ function initial() {
 		creating: false,
 		newName: "",
 		newTitle: "",
+		recordQuery: "",
 		error: ""
 	};
 }
@@ -521,12 +897,16 @@ function transition(ui, model, event) {
 	if ((!model.canWrite || model.uncertain) && ![
 		"select",
 		"panel",
-		"preview"
+		"preview",
+		"source",
+		"recordQuery"
 	].includes(event.type)) return {
 		ui: next,
 		commands
 	};
 	try {
+		const pending = Object.keys(ui.text);
+		if (pending.length && ["data", "filter"].includes(event.type) && !(event.type === "filter" && event.action === "remove" && pending.every((key) => key === "filter:" + event.index))) throw Error("Apply or discard the pending text before continuing");
 		if (Object.keys(ui.text).length && [
 			"select",
 			"geometry",
@@ -550,7 +930,38 @@ function transition(ui, model, event) {
 				if (event.key) block(model.document, event.key);
 				next.selected = event.key;
 				next.text = {};
+				next.recordQuery = "";
 				break;
+			case "recordQuery":
+				next.recordQuery = event.value;
+				break;
+			case "source": {
+				const source = scope(model.document, ui.selected);
+				commands.push({
+					type: "source",
+					searchType: source.searchType,
+					recordKey: source.recordKey,
+					query: event.query ? ui.recordQuery : null
+				});
+				break;
+			}
+			case "data":
+				replace(change(model.document, ui.selected, event.field, event.value));
+				next.recordQuery = "";
+				break;
+			case "filter":
+			case "filterCommit": {
+				if (event.type === "filterCommit" && !Object.prototype.hasOwnProperty.call(ui.text, event.key)) break;
+				const edit = event.type === "filterCommit" ? Object.assign({}, event, {
+					field: "value",
+					value: ui.text[event.key]
+				}) : event;
+				const source = scope(model.document, ui.selected);
+				replace(filter(model.document, ui.selected, edit, model.dataSource?.searchType === source.searchType ? model.dataSource : {}));
+				next.text = Object.assign({}, next.text);
+				delete next.text[event.key || "filter:" + event.index];
+				break;
+			}
 			case "load":
 				if (model.dirty) {
 					next.confirmation = "page";
@@ -592,12 +1003,12 @@ function transition(ui, model, event) {
 				break;
 			case "commit":
 				if (!Object.prototype.hasOwnProperty.call(ui.text, event.key)) break;
-				replace(change(model.document, event.root ? "" : ui.selected, event.field, ui.text[event.key]));
+				replace(change$1(model.document, event.root ? "" : ui.selected, event.field, ui.text[event.key]));
 				next.text = Object.assign({}, next.text);
 				delete next.text[event.key];
 				break;
 			case "change":
-				replace(change(model.document, event.root ? "" : ui.selected, event.field, event.value));
+				replace(change$1(model.document, event.root ? "" : ui.selected, event.field, event.value));
 				break;
 			case "spacing":
 				if (!Object.prototype.hasOwnProperty.call(ui.text, event.key)) break;
@@ -676,6 +1087,14 @@ var _sfc_main = {
 			busy: false,
 			uncertain: false,
 			canWrite: false,
+			sourceTypes: [],
+			dataSource: {},
+			dataBusy: false,
+			dataError: "",
+			dataSerial: 0,
+			dataEpoch: 0,
+			dataInFlight: false,
+			pendingData: null,
 			viewport: {
 				width: 1,
 				height: 1
@@ -693,6 +1112,17 @@ var _sfc_main = {
 		};
 	},
 	computed: {
+		dataScope() {
+			return scope(this.document, this.ui.selected);
+		},
+		dataKey() {
+			return JSON.stringify([
+				this.project,
+				this.ticket,
+				this.dataEpoch,
+				this.dataScope
+			]);
+		},
 		dirty() {
 			return !!this.document && JSON.stringify(this.document) !== this.baseline || Object.keys(this.ui.text).length > 0 || this.uncertain;
 		},
@@ -708,7 +1138,10 @@ var _sfc_main = {
 				checked: !!this.document && JSON.stringify(this.document) === this.checkedDocument,
 				error: this.error,
 				message: this.message,
-				searchTypes: (this.searchTypes || []).map((row) => ({
+				dataSource: this.dataSource,
+				dataBusy: this.dataBusy,
+				dataError: this.dataError,
+				searchTypes: this.sourceTypes.length ? this.sourceTypes : (this.searchTypes || []).map((row) => ({
 					value: row.search_type,
 					label: row.title || row.search_type
 				}))
@@ -754,12 +1187,17 @@ var _sfc_main = {
 	},
 	beforeUnmount() {
 		this.closed = true;
+		this.dataSerial++;
+		this.pendingData = null;
 		this.observer?.disconnect();
 		this.generation++;
 		this.previewSerial++;
 		clearTimeout(this.previewTimer);
 	},
 	watch: {
+		dataKey() {
+			this.loadSource();
+		},
 		project() {
 			this.reset();
 		},
@@ -771,6 +1209,48 @@ var _sfc_main = {
 		}
 	},
 	methods: {
+		async loadSource(source = null) {
+			const request = ++this.dataSerial;
+			const values = source || this.dataScope;
+			this.dataError = "";
+			if (!values.searchType || this.closed) {
+				this.pendingData = null;
+				this.dataSource = {};
+				this.dataBusy = false;
+				return;
+			}
+			this.dataBusy = true;
+			this.pendingData = {
+				serial: request,
+				generation: this.generation,
+				scope: {
+					ticket: this.ticket,
+					project: this.project
+				},
+				values
+			};
+			if (this.dataInFlight) return;
+			this.dataInFlight = true;
+			try {
+				while (this.pendingData && !this.closed) {
+					const pending = this.pendingData;
+					this.pendingData = null;
+					try {
+						const result = await this.call("sources", {
+							search_type: pending.values.searchType,
+							record_key: pending.values.recordKey || "",
+							query: pending.values.query ?? null
+						}, pending.scope);
+						if (!this.closed && pending.serial === this.dataSerial && pending.generation === this.generation) this.dataSource = result;
+					} catch (error) {
+						if (!this.closed && pending.serial === this.dataSerial && pending.generation === this.generation) this.dataError = error.message;
+					}
+				}
+			} finally {
+				this.dataInFlight = false;
+				this.dataBusy = false;
+			}
+		},
 		rowScene(list, row$1) {
 			return row(list, row$1, this.frameModel, this.ui, appearance.language);
 		},
@@ -855,6 +1335,7 @@ var _sfc_main = {
 				}));
 				this.revision = state.revision;
 				this.canWrite = true;
+				this.sourceTypes = state.sourceTypes || [];
 				const name = this.document?.name || this.initialFocus || this.catalog[0]?.identity;
 				this.document = null;
 				this.baseline = "";
@@ -866,6 +1347,7 @@ var _sfc_main = {
 					this.baseline = JSON.stringify(value.document);
 					this.revision = value.revision;
 					this.ui = initial();
+					this.dataEpoch++;
 				}
 			} catch (e) {
 				if (generation === this.generation) this.error = e.message;
@@ -888,6 +1370,8 @@ var _sfc_main = {
 				this.revision = value.revision;
 				this.baseline = JSON.stringify(value.document);
 				this.ui = initial();
+				this.sourceTypes = value.sourceTypes || this.sourceTypes;
+				this.dataEpoch++;
 				this.compiled = null;
 			} catch (e) {
 				if (generation === this.generation) this.error = e.message;
@@ -1001,6 +1485,9 @@ var _sfc_main = {
 			const result = transition(this.ui, this.frameModel, event);
 			this.ui = result.ui;
 			for (const command of result.commands) switch (command.type) {
+				case "source":
+					await this.loadSource(command);
+					break;
 				case "document":
 					this.document = command.document;
 					this.error = this.message = "";

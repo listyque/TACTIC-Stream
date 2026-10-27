@@ -17,6 +17,7 @@ class DashboardBlock(BaseModel):
     text: str = Field(default='', max_length=65536)
     source_key: str = Field(default='', max_length=2048)
     field: str = Field(default='', max_length=128)
+    binding: Literal['auto', 'static', 'project', 'selection', 'record'] = 'auto'
     search_type: str = Field(default='', max_length=256)
     view: str = Field(default='table', pattern=r'^[A-Za-z_][\w.@-]{0,127}$')
     filters: list[DashboardFilter] = Field(default_factory=list, max_length=32)
