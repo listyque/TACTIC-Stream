@@ -94,6 +94,7 @@ export default {
       selectionAnchor: '',
       cardPath: [],
       closedGroups: { ...this.state?.closedGroups },
+      childFilters: { ...this.state?.childFilters },
       versions: [],
       versionBusy: false,
       versionError: '',
@@ -510,6 +511,7 @@ export default {
         splitRatio: Number(this.splitRatio),
         cardPath: [...this.cardPath],
         closedGroups: { ...this.closedGroups },
+        childFilters: { ...this.childFilters },
         mobilePath: [...this.mobilePath],
         mobileScroll: { ...this.mobileScroll }
       });
@@ -610,6 +612,7 @@ export default {
             branch.kind === 'relation'
               ? branch.count > 0
               : branch.has_children !== false,
+          filterText: this.childFilters[node.id + '/' + branch.key] || '',
           children: [],
           expanded: false,
           busy: false,
@@ -819,8 +822,17 @@ export default {
         this.project
       );
     },
+    filterChildren(node, text) {
+      node.filterText = text;
+      this.childFilters[node.id] = text;
+      node.hasNext = false;
+      this.saveState();
+      this.loadBranch(node);
+    },
     async loadBranch(node, append = false) {
       const request = this.request;
+      const branchRequest = (node.branchRequest =
+        (node.branchRequest || 0) + 1);
       node.busy = true;
       node.error = '';
       try {
@@ -835,24 +847,32 @@ export default {
           this.project,
           node.searchType,
           [node.ownerKey || node.record.__search_key__],
-          { branch, offset }
+          { branch, offset, query: node.filterText || '' }
         );
-        if (request !== this.request) return;
+        if (request !== this.request || branchRequest !== node.branchRequest)
+          return;
+        const retained = (node.retainedChildren ||= new Map());
+        for (const child of node.children) retained.set(child.id, child);
         const children = result.items
           .filter(
             (item) =>
               !node.ancestors.includes(item.record.__search_key__) &&
               item.record.__search_key__ !== node.ownerKey
           )
-          .map((item) => this.makeNode(item, node));
+          .map((item) => {
+            const child = this.makeNode(item, node);
+            if (!retained.has(child.id)) retained.set(child.id, child);
+            return retained.get(child.id);
+          });
         node.children = append ? [...node.children, ...children] : children;
         node.nextOffset = offset + result.items.length;
         node.hasNext = result.has_next;
         node.loaded = true;
       } catch (error) {
-        if (request === this.request) node.error = error.message;
+        if (request === this.request && branchRequest === node.branchRequest)
+          node.error = error.message;
       } finally {
-        node.busy = false;
+        if (branchRequest === node.branchRequest) node.busy = false;
       }
     },
     async activate(node, event = {}) {
@@ -1379,6 +1399,7 @@ export default {
                 @tasks="(node, event) => notes(node, true, event)"
                 @create="createRelated"
                 @link="(node) => showRelated(node, node.branch)"
+                @filter="filterChildren"
                 @completion="
                   (node, item) => showRelated(node, null, item.search_type)
                 "
@@ -1399,7 +1420,7 @@ export default {
                 v-if="node.expanded && node.loaded && !node.children.length"
                 class="result-branch-message"
               >
-                {{ t('No records yet') }}
+                {{ t(node.filterText ? 'No results found' : 'No records yet') }}
               </p>
               <AppButton
                 v-if="node.expanded && node.hasNext"

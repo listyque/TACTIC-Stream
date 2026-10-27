@@ -4069,6 +4069,10 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Search in this branch": "Поиск в этой ветке",
+	"Found: {count}": "Найдено: {count}",
+	"No results found": "Ничего не найдено",
+	"Clear filter": "Очистить фильтр",
 	"Agent link — includes access and startup instructions": "Ссылка для агента — доступ и стартовые инструкции",
 	"Copy agent link": "Скопировать ссылку для агента",
 	"Collect connection token": "Получить токен подключения",

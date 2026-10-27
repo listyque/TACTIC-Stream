@@ -166,7 +166,7 @@ class FileProjectCmd(FileStreamMixin, FileSubmitMixin, FileRevertMixin, FileRead
         if operation == 'result_items':
             from tactic_stream.server.result_items import read_result_items
             return read_result_items(payload['search_type'], payload.get('search_keys'), payload.get('branch'),
-                                     payload.get('offset', 0), payload.get('limit', 50))
+                                     payload.get('offset', 0), payload.get('limit', 50), payload.get('query', ''))
         if operation not in ('query', 'settings', 'read', 'suggestions'):
             raise ValueError('Unknown managed table read operation')
         if operation == 'query' and any(row.get('column') == '_expression' for row in payload.get('records', [])):

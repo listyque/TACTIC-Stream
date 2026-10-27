@@ -364,7 +364,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             if cells:
                 fields.add('search_keys')
             if result_items:
-                fields.update(('search_keys', 'branch', 'offset', 'limit'))
+                fields.update(('search_keys', 'branch', 'offset', 'limit', 'query'))
             if user_profile:
                 fields.update(('login', 'document', 'revision', 'token'))
             if users:
@@ -442,7 +442,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                     result = activity_feed_request(payload)
                 elif result_items:
                     from tactic_stream.server.result_items import read_result_items
-                    result = read_result_items(payload['search_type'], payload.get('search_keys'), payload.get('branch'), payload.get('offset', 0), payload.get('limit', 50))
+                    result = read_result_items(payload['search_type'], payload.get('search_keys'), payload.get('branch'), payload.get('offset', 0), payload.get('limit', 50), payload.get('query', ''))
                 elif script_editor:
                     from tactic_stream.server.script_editor import script_editor_request
                     result = script_editor_request(script_editor, payload)

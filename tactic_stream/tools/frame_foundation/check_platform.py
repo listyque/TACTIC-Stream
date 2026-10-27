@@ -169,6 +169,7 @@ def fingerprints(handler):
             "search_suggestions.mjs",
             "process_visibility.mjs",
             "result_disclosure.mjs",
+            "branch_filter.mjs",
             "profile_activity.mjs",
             "tag_cloud.mjs",
             "workspace_tabs.mjs",
@@ -1150,6 +1151,7 @@ def main():
             ROOT,
             {},
         ),
+        ("branch-filter", ["node", "frontend/tests/branch_filter.mjs"], ROOT, {}),
         (
             "browser-profile-activity",
             ["node", "frontend/tests/profile_activity.mjs"],

@@ -21,6 +21,7 @@ import { mobile } from '../../mobile.js';
 import { prettySize } from '../checkin/files.js';
 import { timestampLabel, timestampFullLabel } from '../activity/activity.js';
 import MiddleElide from '../../controls/MiddleElide.vue';
+import BranchFilter from './BranchFilter.vue';
 
 const props = defineProps({
   node: Object,
@@ -52,7 +53,8 @@ defineEmits([
   'tasks',
   'create',
   'completion',
-  'link'
+  'link',
+  'filter'
 ]);
 const record = computed(() => props.node.record || {});
 const previewSource = computed(() => {
@@ -89,6 +91,14 @@ const initials = computed(() => {
 const branch = computed(() => props.node.kind === 'branch');
 const relation = computed(() => props.node.branch?.kind === 'relation');
 const process = computed(() => props.node.branch?.kind === 'process');
+const filterable = computed(
+  () =>
+    !props.card &&
+    !mobile.value &&
+    props.node.expanded &&
+    props.node.loaded &&
+    (relation.value || process.value)
+);
 const accent = computed(
   () => props.node.accent || record.value.color || 'var(--content-accent)'
 );
@@ -421,6 +431,7 @@ onBeforeUnmount(() => clearTimeout(hoverTimer));
     <span
       v-if="node.kind === 'branch' && !card"
       class="result-branch-icon"
+      v-show="!filterable"
       :style="bounds(geometry.preview)"
       ><AppIcon
         :name="
@@ -453,6 +464,15 @@ onBeforeUnmount(() => clearTimeout(hoverTimer));
           if (action.type === 'open') $emit('opencard', node, $event);
         }
       "
+    />
+    <BranchFilter
+      v-if="filterable"
+      :style="bounds(geometry.preview)"
+      :text="node.filterText || ''"
+      :count="node.children.length"
+      :more="node.hasNext"
+      :busy="node.busy"
+      @filter="(value) => $emit('filter', node, value)"
     />
     <div class="result-item-copy" :style="bounds(geometry.content)">
       <ResultBody

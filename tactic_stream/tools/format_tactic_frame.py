@@ -71,7 +71,7 @@ def main():
     command[-1] = "tools/frame_controls/*.{vue,js,html,mjs}"
     queued.append(list(command))
     command[-1] = (
-        "frontend/src/features/workspace/{WorkspacePage.vue,DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue,SearchHeader.vue,SearchFooter.vue,SearchLibrary.vue,SearchPresetBar.vue,SearchEditorPart.vue,SearchResultMenu.vue,ConditionCards.vue,ConditionValue.vue,QuickFilterEditor.vue,ProcessVisibility.vue,ResultBody.vue,ResultItem.vue,ResultPresentation.vue,MobileResults.vue,resultViews.js}"
+        "frontend/src/features/workspace/{WorkspacePage.vue,DockWorkspace.vue,NavigationDrawer.vue,NavigationTree.vue,docks.js,QuickFilterOptions.vue,SearchQuickFilters.vue,TagCloud.vue,SearchHeader.vue,SearchFooter.vue,SearchLibrary.vue,SearchPresetBar.vue,SearchEditorPart.vue,SearchResultMenu.vue,ConditionCards.vue,ConditionValue.vue,QuickFilterEditor.vue,ProcessVisibility.vue,ResultBody.vue,ResultItem.vue,ResultPresentation.vue,BranchFilter.vue,MobileResults.vue,resultViews.js}"
     )
     queued.append(list(command))
     command[-1] = "frontend/tests/{frame_control*,frame_icons,frame_variable_rows*,table_nested,table_connections,icons}.mjs"
@@ -93,7 +93,7 @@ def main():
         "frontend/src/features/configuration/*.{vue,js}",
         "frontend/src/features/projects/{ProjectCreation,ProjectTemplates,ProjectEditorSurface}.vue",
         "frontend/tests/frame_configuration*.mjs",
-        "frontend/tests/{search_suggestions,search_library,process_visibility,frame_search_state,result_views,delivery_project}.mjs",
+        "frontend/tests/{search_suggestions,search_library,process_visibility,frame_search_state,result_views,branch_filter,delivery_project}.mjs",
         "tools/frame_configuration/*.{vue,js,html,mjs}",
         "tools/frame_search/*.{vue,js,html,mjs}",
         "frontend/tests/frame_search*.mjs",

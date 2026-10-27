@@ -12,6 +12,26 @@ from test_project_writes import install_writer, set_rules, PASSWORD
 class UserResultItems(unittest.TestCase):
     setUp = fixture.TableServices.setUp
 
+    def test_branch_query_is_literal_unicode_and_precedes_paging(self):
+        from tactic_stream.server.result_items import filter_branch_query
+        for text in ('пЕРВ', 'перв'):
+            search = Search('contract/entity')
+            filter_branch_query(search, text)
+            search.set_limit(1)
+            self.assertEqual([row.get_code() for row in search.get_sobjects()], ['A'])
+        for text in ('.*', '%', "' OR 1=1 --"):
+            search = Search('contract/entity')
+            filter_branch_query(search, text)
+            self.assertEqual(search.get_count(), 0)
+        search = Search('contract/entity')
+        filter_branch_query(search, "O'Reilly")
+        search.set_limit(1)
+        self.assertEqual([row.get_code() for row in search.get_sobjects()], ['B'])
+        key = Search.get_by_code('contract/entity', 'A').get_search_key()
+        for query in (None, 'a' * 257, ['x']):
+            with self.assertRaises(ValueError):
+                read_result_items('contract/entity', [key], dict(kind='children'), query=query)
+
     def test_record_cards_use_read_policy_without_opening_other_projects_or_writes(self):
         install_writer(self.store)
         set_rules(self.store, '<rules><rule group="project" code="one" access="allow"/>'

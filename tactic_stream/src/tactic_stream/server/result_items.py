@@ -322,7 +322,24 @@ def describe(items, relation_counts=False, organization=None):
     return output
 
 
-def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50):
+def filter_branch_query(search, query):
+    if not query:
+        return
+    import re
+    columns = SearchType.get_column_info(search.get_base_search_type())
+    search.add_op('begin')
+    for field in ('code', 'name', 'title', 'description', 'context', 'snapshot'):
+        if field in columns:
+            search.add_regex_filter(field, re.escape(query))
+    search.add_op('or')
+
+
+def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50, query=''):
+    if not isinstance(query, str) or len(query) > 256:
+        raise ValueError('Invalid branch search')
+    query = query.strip()
+    if query and (not isinstance(branch, dict) or branch.get('kind') not in ('relation', 'parent', 'process', 'versions')):
+        raise ValueError('Search requires a child branch')
     policy = SearchType.get(search_type).get_record_read_options()
     if policy.get('command'):
         from pyasm.common import Container
@@ -330,7 +347,7 @@ def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50)
             from pyasm.command import Command
             from tactic.command.file_project_cmd import FileProjectCmd
             command = FileProjectCmd(action=policy['action'], operation='result_items',
-                payload={'search_type':search_type,'search_keys':search_keys,'branch':branch,'offset':offset,'limit':limit})
+                payload={'search_type':search_type,'search_keys':search_keys,'branch':branch,'offset':offset,'limit':limit,'query':query})
             Command.execute_cmd(command)
             return command.info
     selected = objects(search_type, search_keys, read_access=True)
@@ -397,6 +414,7 @@ def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50)
         search.add_order_by('id asc')
     else:
         raise ValueError('Invalid result branch')
+    filter_branch_query(search, query)
     search.set_limit(limit + 1)
     search.set_offset(offset)
     rows = search.get_sobjects()
@@ -407,6 +425,7 @@ def read_result_items(search_type, search_keys, branch=None, offset=0, limit=50)
         fallback.add_parent_filter(parent)
         fallback.add_filter('context', process)
         fallback.add_order_by('version desc')
+        filter_branch_query(fallback, query)
         fallback.set_limit(1)
         rows = fallback.get_sobjects()
         items = describe({obj.get_search_key(): obj for obj in rows})

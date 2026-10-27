@@ -115,6 +115,19 @@ class Transport(unittest.TestCase):
         self.addCleanup(proxy.__exit__, None, None, None)
         return proxy
 
+    def test_result_branch_query_http_contract(self):
+        with self.proxy() as proxy:
+            token = proxy.get_ticket('admin', 'private-test-password')
+        payload = dict(ticket=token, project='one', search_type='contract/entity',
+            search_keys=['contract/entity?project=one&code=A'],
+            branch=dict(kind='process', process='publish'), query='Unmatched [literal]')
+        request = Request(self.url + '/admin/result-items', json.dumps(payload).encode(),
+            headers={'Content-Type': 'application/json'})
+        with urlopen(request) as response:
+            result = json.load(response)['result']
+        self.assertEqual(result['items'], [])
+        self.assertFalse(result['has_next'])
+
     def test_object_report_pages_and_acl(self):
         from tactic_stream.server.api import Api
         from tactic_stream.server.result_items import read_result_items
