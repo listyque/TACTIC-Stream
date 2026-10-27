@@ -26,3 +26,7 @@ for(const width of [360,800,1100])for(const page of ['design','configuration','x
 for(const kind of Document.widgets){const layout=Document.describe(tree,raw.view);layout.elements[0]={...layout.elements[0],kind,options:{text:'<script>text</script>'}};const sample={...raw.sampleItems[0],snapshot_display:{size:1024,exists:false},knowledge:[{title:'Guide'}]},scene=Preview.describe(layout,sample,320,'title','en',1100);assert(scene.height>=0);assert(scene.nodes.length,kind)}
 const unsafe=Document.describe(tree,raw.view);unsafe.elements[0]={...unsafe.elements[0],kind:'image',options:{text:'file:///private.png'}};const scene=Preview.describe(unsafe,raw.sampleItems[0],320,'title','en',1100);assert.equal(scene.nodes[0].children[0].source,'')
 console.log('Layout Frame: shared pages, numeric validation, visibility, template copies, check-before-save, confirmations, unknown writes and bounded previews passed')
+
+const embeddedToolbar=UI.toolbar(UI.model(raw,State.initial()),State.initial(),620,"en",true);
+assert(!embeddedToolbar.nodes.some(node=>node.id==="layoutHelp"));
+assert(UI.toolbar(UI.model(raw,State.initial()),State.initial(),620,"en").nodes.some(node=>node.id==="layoutHelp"));

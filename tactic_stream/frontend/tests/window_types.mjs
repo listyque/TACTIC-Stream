@@ -61,8 +61,8 @@ return h('div',{style:'height:100dvh;display:flex;flex-direction:column'},[
  h(ScriptShelf,{ref:'shelf',ticket:'fixture',project:this.workspaceView.project,login:'alice',entryKey:this.shelfEntry,title:'Source tab',visible:false}),
  h(IngestFiles,{ref:'ingest',ticket:'fixture',project:this.workspaceView.project}),
  h(SearchLibrary,{ref:'library',ticket:'fixture',project:'cg',searchType:'cg/assets',scope:'cg/assets',records:[],canManage:true}),
- withDirectives(h('dialog',{ref:'configDialog',id:'configuration-window',class:'configuration-dialog'},[
-  h(KeepAlive,()=>this.configMounted?h(Configuration,{ticket:'fixture',project:'cg',login:'alice',canAdminister:false,onClose:()=>{this.$refs.configDialog.close();this.configMounted=false}}):null)
+ withDirectives(h('dialog',{ref:'configDialog',id:'configuration-window',class:'configuration-dialog',onCancel:event=>{event.preventDefault();this.$refs.configuration.cancel()}},[
+  h(KeepAlive,()=>this.configMounted?h(Configuration,{ref:'configuration',ticket:'fixture',project:'cg',login:'alice',canAdminister:false,onClose:()=>{this.$refs.configDialog.close();this.configMounted=false}}):null)
  ]),[[windowDirective,{type:'window'}]]),
  withDirectives(h('dialog',{ref:'fullEditor',id:'full-editor',class:'configuration-dialog'},[
   h('header',[h('h2','Full editor'),h(AppButton,{label:'Close full editor',onClick:()=>this.$refs.fullEditor.close()})])
@@ -193,11 +193,17 @@ try {
  await config.getByRole('button',{name:'Restore window',exact:true}).waitFor()
  assert(await config.evaluate(el=>parseFloat(getComputedStyle(el).borderRadius)>0),'Configuration opens rounded in its initial maximized state')
  assert.equal(await configHeader.getByRole('button',{name:'Cancel',exact:true}).count(),0)
+ await configHeader.getByRole('button',{name:'Minimize window',exact:true}).click()
+ await config.locator('.app-window-minimized-titlebar:visible').waitFor()
+ assert((await config.boundingBox()).height<50)
+ await config.locator('.app-window-minimized-titlebar').getByRole('button',{name:'Restore window',exact:true}).click()
+ await configHeader.waitFor()
  await configHeader.getByRole('button',{name:'Close',exact:true}).hover()
  await page.getByRole('tooltip').filter({hasText:/^Close$/}).waitFor()
  await config.getByRole('button',{name:'Check-in Options',exact:true}).click()
  await config.getByLabel('Result limit',{exact:true}).fill('37')
- await configHeader.getByRole('button',{name:'Close',exact:true}).click()
+ await configHeader.getByRole('button',{name:'Minimize window',exact:true}).click()
+ await config.locator('.app-window-minimized-titlebar').getByRole('button',{name:'Close',exact:true}).click()
  const unsaved=page.getByRole('dialog',{name:'Unsaved changes',exact:true})
  await unsaved.getByRole('button',{name:'Continue editing',exact:true}).click()
  assert.equal(await config.getByLabel('Result limit',{exact:true}).inputValue(),'37')

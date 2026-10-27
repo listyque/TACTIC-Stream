@@ -39,7 +39,7 @@ try{
  await openEditor();await section('layoutPages','configuration')
  assert.equal(await control('layoutSearchType').inputValue(),'sthpw/project');assert.equal(await control('layoutView').inputValue(),'continuous_example')
  assert.deepEqual(await control('layoutView').locator('option').evaluateAll(nodes=>nodes.map(node=>node.value)),['continuous_example','table_example','cards_example'])
- await control('layoutHelp').click();await page.locator('dialog.help-view[open] [data-frame="helpTopicList"]').waitFor();await page.locator('dialog.help-view[open]').getByRole('textbox',{name:'Search help',exact:true}).fill('Build your own view');await page.locator('dialog.help-view[open] [data-frame="helpTopic_item_layouts"]').click();await page.locator('dialog.help-view[open] .document-pane').getByRole('heading',{name:'3. Build a card',exact:true}).waitFor()
+ await control('administrationHelpButton').click();await page.locator('dialog.help-view[open] [data-frame="helpTopicList"]').waitFor();await page.locator('dialog.help-view[open]').getByRole('textbox',{name:'Search help',exact:true}).fill('Build your own view');await page.locator('dialog.help-view[open] [data-frame="helpTopic_item_layouts"]').click();await page.locator('dialog.help-view[open] .document-pane').getByRole('heading',{name:'3. Build a card',exact:true}).waitFor()
  await page.locator('dialog.help-view[open]').getByRole('button',{name:'Close help',exact:true}).click()
  await selectView('cards_example');await openView()
  const cards=page.locator('.workspace-results .result-presentation[data-result-view="tiles"]:visible')

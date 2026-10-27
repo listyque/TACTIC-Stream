@@ -231,6 +231,7 @@ def capture_confirmation(surface, original, metadata, kind):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--quick", action="store_true")
+    parser.add_argument("--screen", choices=SCREENS)
     args = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     preview = QImage(32, 32, QImage.Format_RGB32)
@@ -281,7 +282,7 @@ def main():
         if path.suffix in (".py", ".vue", ".mjs", ".html")
     }
     captures = []
-    for screen in SCREENS:
+    for screen in ([args.screen] if args.screen else SCREENS):
         for original in (True, False):
             for style in ["md3"] if args.quick else ["md3", "material5", "fluent"]:
                 for dark in [True] if args.quick else [True, False]:

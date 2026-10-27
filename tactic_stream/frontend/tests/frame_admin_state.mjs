@@ -205,6 +205,57 @@ console.log(
   'Shared Administration state: save/drop identity guards, readonly/default cells, Sidebar buffers and unknown-write lock passed.'
 );
 
+const Admin = await import(
+  '../../src/tactic_stream/shared_ui/features/administration/administration.ui.mjs'
+);
+const Config = await import(
+  '../../src/tactic_stream/shared_ui/features/configuration/configuration.ui.mjs'
+);
+for (const width of [1100, 1400, 1800]) {
+  const admin = Admin.describe(
+    { section: 'layouts', project: 'demo', projects: [] },
+    { collapsed: false },
+    width,
+    900,
+    'en'
+  );
+  const config = Config.describe(
+    { page: 'appearance', product: 'TACTIC STREAM' },
+    width,
+    900,
+    'en'
+  );
+  const head = admin.nodes.find((node) => node.id === 'administrationHeader');
+  const reference = config.nodes.find(
+    (node) => node.id === 'configurationHeader'
+  );
+  for (const field of [
+    'x',
+    'y',
+    'width',
+    'height',
+    'background',
+    'radius',
+    'titlebar',
+    'chromeRight',
+    'chromeTop',
+    'chromeHeight'
+  ])
+    assert.equal(head[field], reference[field], field + ' window header');
+  const toolbar = head.children.find(
+    (node) => node.id === 'administrationToolbar'
+  );
+  assert(
+    toolbar.x + toolbar.width <= width - head.chromeRight - 80,
+    'Commands leave window controls their own space'
+  );
+  assert(
+    head.children.find((node) => node.id === 'administrationSectionTitle')
+      .width >= 200,
+    'The section title remains readable'
+  );
+}
+
 const sources = [
   {
     code: 'TABLE',

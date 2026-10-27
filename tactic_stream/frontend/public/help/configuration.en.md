@@ -5,6 +5,10 @@ order: 30
 ---
 # Configuration
 
+The window has one header for the page title, actions and window controls.
+In the browser, minimizing retains a compact title bar; Restore returns to the current page
+without losing drafts. Closing still checks for unsaved changes.
+
 Scroll long pages with the mouse wheel or trackpad over their content, including nested settings cards. A scrollbar with its own gutter remains available at the right edge.
 
 > Configuration has eight pages adapted from the current Handler QML. Each page owns an independent draft; changing pages does not save or discard it.

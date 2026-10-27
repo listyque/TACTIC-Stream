@@ -1,5 +1,5 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/CodeBlock.js","assets/icons.js","assets/CodeBlock.css","assets/ApiDocumentation.css","assets/App.js","assets/rolldown-runtime.js","assets/RecordForm.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/richText.js","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/files2.js","assets/FilePreview.css","assets/previewFiles.js","assets/ObjectReport.css","assets/workspace.ui.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/markdown-it.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
-import { C as h, F as renderSlot, K as withCtx, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, U as watch, W as watchEffect, X as reactive, Z as ref, _ as createElementBlock, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeClass, p as computed, q as withDirectives, r as render, rt as normalizeStyle, tt as unref, u as Fragment, x as defineAsyncComponent } from "./vue.js";
+import { C as h, F as renderSlot, K as withCtx, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, U as watch, W as watchEffect, X as reactive, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeClass, p as computed, q as withDirectives, r as render, rt as normalizeStyle, tt as unref, u as Fragment, x as defineAsyncComponent } from "./vue.js";
 import { n as en_default, t as ru_default } from "./locales.js";
 import { n as resolveIcon } from "./icons.js";
 //#region \0vite/modulepreload-polyfill.js
@@ -1764,7 +1764,7 @@ function buttonVariables(options) {
 //#endregion
 //#region src/controls/AppIcon.vue
 var _hoisted_1$2 = ["data-icon"];
-var _hoisted_2$1 = { class: "icon-glyph" };
+var _hoisted_2$2 = { class: "icon-glyph" };
 var _sfc_main$2 = {
 	__name: "AppIcon",
 	props: { name: String },
@@ -1777,7 +1777,7 @@ var _sfc_main$2 = {
 				class: normalizeClass(["app-icon", "icon-" + icon.value[0]]),
 				"data-icon": __props.name,
 				"aria-hidden": "true"
-			}, [createBaseVNode("span", _hoisted_2$1, toDisplayString(icon.value[1]), 1)], 10, _hoisted_1$2)) : createCommentVNode("", true);
+			}, [createBaseVNode("span", _hoisted_2$2, toDisplayString(icon.value[1]), 1)], 10, _hoisted_1$2)) : createCommentVNode("", true);
 		};
 	}
 };
@@ -1932,7 +1932,7 @@ var tooltipDirective = {
 //#endregion
 //#region src/controls/AppButton.vue
 var _hoisted_1$1 = { key: 0 };
-var _hoisted_2 = {
+var _hoisted_2$1 = {
 	key: 1,
 	class: "app-button-badge",
 	"aria-hidden": "true"
@@ -1998,7 +1998,7 @@ var _sfc_main$1 = {
 						name: __props.icon
 					}, null, 8, ["name"])) : createCommentVNode("", true),
 					renderSlot(_ctx.$slots, "default", {}, () => [!__props.iconOnly && !__props.compact ? (openBlock(), createElementBlock("span", _hoisted_1$1, toDisplayString(__props.translateLabel ? unref(t)(__props.label) : __props.label), 1)) : createCommentVNode("", true)]),
-					__props.badgeCount > 0 || __props.showZeroBadge ? (openBlock(), createElementBlock("span", _hoisted_2, toDisplayString(__props.badgeCount > 99 ? "99+" : __props.badgeCount), 1)) : createCommentVNode("", true)
+					__props.badgeCount > 0 || __props.showZeroBadge ? (openBlock(), createElementBlock("span", _hoisted_2$1, toDisplayString(__props.badgeCount > 99 ? "99+" : __props.badgeCount), 1)) : createCommentVNode("", true)
 				]),
 				_: 3
 			}, 40, [
@@ -2235,7 +2235,8 @@ function dockMinimumHeight(kind) {
 }
 //#endregion
 //#region src/controls/WindowControls.vue
-var _hoisted_1 = ["onPointerdown"];
+var _hoisted_1 = { class: "app-window-titlebar app-window-minimized-titlebar" };
+var _hoisted_2 = ["onPointerdown"];
 var _sfc_main = {
 	__name: "WindowControls",
 	props: {
@@ -2521,6 +2522,27 @@ var _sfc_main = {
 					label: "Back",
 					onClick: back
 				})) : createCommentVNode("", true)], 8, ["to"])),
+				minimized.value && __props.header.parentElement !== __props.element ? (openBlock(), createBlock(Teleport, {
+					key: 2,
+					to: __props.element
+				}, [createBaseVNode("header", _hoisted_1, [
+					createBaseVNode("strong", null, toDisplayString(__props.element.getAttribute("aria-label") || __props.header.querySelector("[role=\"heading\"]")?.textContent || unref(t)("Restore window")), 1),
+					createVNode(_sfc_main$1, {
+						"icon-only": "",
+						icon: "window-restore",
+						label: "Restore window",
+						onClick: minimize
+					}),
+					createVNode(_sfc_main$1, {
+						"icon-only": "",
+						icon: "close",
+						label: "Close",
+						onClick: _cache[0] || (_cache[0] = ($event) => {
+							minimize();
+							back();
+						})
+					})
+				])], 8, ["to"])) : createCommentVNode("", true),
 				(openBlock(), createBlock(Teleport, { to: __props.element }, [!maximized.value && !minimized.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, renderList([
 					"left",
 					"right",
@@ -2537,7 +2559,7 @@ var _sfc_main = {
 						style: normalizeStyle(edges.value),
 						"aria-hidden": "true",
 						onPointerdown: withModifiers(($event) => startResize($event, edge), ["stop"])
-					}, null, 46, _hoisted_1);
+					}, null, 46, _hoisted_2);
 				}), 64)) : createCommentVNode("", true)], 8, ["to"]))
 			], 64);
 		};

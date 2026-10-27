@@ -133,7 +133,13 @@ onBeforeUnmount(() => {
   sizeObserver.disconnect()
 })
 </script>
-<template><AppButton v-if="element.dataset.windowType === 'window'" icon-only :icon="minimized ? 'window-restore' : 'minus'" :label="minimized ? 'Restore window' : 'Minimize window'" :aria-pressed="minimized" @click="minimize" /><AppButton v-if="!minimized" icon-only :icon="maximized ? 'window-restore' : 'open-in-full'" :label="maximized ? 'Restore window' : 'Maximize window'" :aria-pressed="maximized" @click="toggle" /><Teleport :to="header"><AppButton v-if="mobile && !backProvided" class="app-window-back" icon-only icon="MDI_ARROW_LEFT" label="Back" @click="back" /></Teleport><Teleport :to="element"><template v-if="!maximized && !minimized"><span v-for="edge in ['left','right','top','bottom','top-left','top-right','bottom-left','bottom-right']" :key="edge" class="app-window-resize" :class="edge" :style="edges" aria-hidden="true" @pointerdown.stop="startResize($event,edge)" /></template></Teleport></template>
+<template><AppButton v-if="element.dataset.windowType === 'window'" icon-only :icon="minimized ? 'window-restore' : 'minus'" :label="minimized ? 'Restore window' : 'Minimize window'" :aria-pressed="minimized" @click="minimize" /><AppButton v-if="!minimized" icon-only :icon="maximized ? 'window-restore' : 'open-in-full'" :label="maximized ? 'Restore window' : 'Maximize window'" :aria-pressed="maximized" @click="toggle" /><Teleport :to="header"><AppButton v-if="mobile && !backProvided" class="app-window-back" icon-only icon="MDI_ARROW_LEFT" label="Back" @click="back" /></Teleport><Teleport v-if="minimized && header.parentElement !== element" :to="element">
+  <header class="app-window-titlebar app-window-minimized-titlebar">
+    <strong>{{ element.getAttribute('aria-label') || header.querySelector('[role="heading"]')?.textContent || t('Restore window') }}</strong>
+    <AppButton icon-only icon="window-restore" label="Restore window" @click="minimize" />
+    <AppButton icon-only icon="close" label="Close" @click="minimize(); back()" />
+  </header>
+</Teleport><Teleport :to="element"><template v-if="!maximized && !minimized"><span v-for="edge in ['left','right','top','bottom','top-left','top-right','bottom-left','bottom-right']" :key="edge" class="app-window-resize" :class="edge" :style="edges" aria-hidden="true" @pointerdown.stop="startResize($event,edge)" /></template></Teleport></template>
 <style>
 .app-window-titlebar { touch-action:none; cursor:grab; user-select:none; outline:none; }
 .app-window:not(.app-window-maximized) { border:1px solid var(--outline); }
@@ -144,6 +150,20 @@ onBeforeUnmount(() => {
 .app-window-positioned { position:fixed !important; margin:0 !important; inset:var(--window-y) auto auto var(--window-x) !important; width:var(--window-width) !important; height:var(--window-height) !important; min-width:0 !important; min-height:0 !important; max-width:none !important; max-height:none !important; }
 .app-window-maximized { position:fixed !important; margin:0 !important; inset:0 !important; width:100dvw !important; height:100dvh !important; min-width:0 !important; min-height:0 !important; max-width:none !important; max-height:none !important; border-radius:var(--dialog-radius) !important; }
 .app-window.app-window-minimized { width:min(360px,calc(100dvw - 16px)) !important; height:42px !important; min-width:0 !important; min-height:0 !important; max-height:42px !important; overflow:hidden !important; padding:0 !important; }
+.app-window-minimized-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--header);
+}
+.app-window-minimized-titlebar > strong {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--dialog-title-size);
+}
 .app-window-minimized > :not(.app-window-titlebar) { display:none !important; }
 .app-window-minimized > .app-window-titlebar { width:100%; height:40px; min-height:40px; margin:0 !important; padding:2px 6px; flex:none; }
 @media (max-width:700px) { .app-window-controls,.app-window-resize { display:none; } .app-window, .app-window-positioned, .app-window-maximized { position:fixed !important; margin:0 !important; inset:var(--phone-top,0px) 0 auto !important; width:100dvw !important; height:var(--phone-height,100dvh) !important; min-width:0 !important; min-height:0 !important; max-width:none !important; max-height:none !important; border:0 !important; border-radius:0 !important; } .app-window-titlebar { cursor:default; touch-action:auto; } }

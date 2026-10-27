@@ -1740,4 +1740,4 @@ dialog[data-window-type="window"]::backdrop, dialog[data-window-type="popup"]::b
 
 .time-entry-panel-docked { display:flex; flex-direction:column; gap:var(--space-sm); height:100%; min-height:0; min-width:0; padding:10px; background:var(--page); overflow:auto; }
 
-.administration-dialog[open]{display:flex;flex-direction:column}.administration-window-titlebar{display:flex;align-items:center;gap:12px;flex:none;min-height:48px;padding:4px 16px;background:var(--surface);border-bottom:1px solid var(--outline-variant)}.administration-window-titlebar>strong{margin-right:auto;font-size:var(--text-label)}
+.administration-dialog[open]{display:flex;flex-direction:column}

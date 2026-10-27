@@ -2064,7 +2064,6 @@ export default {
       <KeepAlive><Configuration v-if="section === 'configuration'" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @providers="openAgentProviders" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
     </dialog>
     <dialog v-window="{kind:'administration'}" ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">
-      <header class="administration-window-titlebar"><strong>{{t('Administration')}}</strong><AppButton icon-only icon="close" label="Close administration" @click="leaveAdministration" /></header>
       <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" @presentation="administrationPresentation=$event" />
     </dialog>
     <Teleport defer :to="administrationOpen ? '#administration-pages' : '#workspace-data'">

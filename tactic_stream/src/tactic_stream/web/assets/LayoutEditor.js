@@ -432,10 +432,11 @@ function model(raw, ui) {
 		message: raw.message || ""
 	});
 }
-function toolbar(model, ui, width, language) {
+function toolbar(model, ui, width, language, embedded = false) {
 	const tr = (text) => translate(text, language), result = toolbar$1(model, ui, width, language), edit = policy(model).editable && !ui.confirmation;
 	result.nodes = result.nodes.filter((row) => row.id !== "adminDocumentStatus");
-	result.nodes.push(button("layoutCheck", rect(46, 0, 38, 38), tr("Check and preview"), "check", { type: "check" }, edit && !model.layoutError && !pending(ui), { iconOnly: true }), button("layoutHelp", rect(90, 0, 38, 38), tr("Layout guide"), "help", { type: "help" }, true, { iconOnly: true }), button("layoutOpenView", rect(134, 0, 38, 38), tr(model.externalView ? "Open view in browser" : "Open view"), "open-in-new", { type: "openView" }, edit && !model.dirty && !!(model.configuration && model.configuration.resolved && model.configuration.resolved.configured), { iconOnly: true }));
+	result.nodes.push(button("layoutCheck", rect(46, 0, 38, 38), tr("Check and preview"), "check", { type: "check" }, edit && !model.layoutError && !pending(ui), { iconOnly: true }), button("layoutHelp", rect(90, 0, 38, 38), tr("Layout guide"), "help", { type: "help" }, true, { iconOnly: true }), button("layoutOpenView", rect(embedded ? 90 : 134, 0, 38, 38), tr(model.externalView ? "Open view in browser" : "Open view"), "open-in-new", { type: "openView" }, edit && !model.dirty && !!(model.configuration && model.configuration.resolved && model.configuration.resolved.configured), { iconOnly: true }));
+	if (embedded) result.nodes = result.nodes.filter((row) => row.id !== "layoutHelp");
 	return result;
 }
 function models(model) {
@@ -1250,7 +1251,7 @@ var _sfc_main = {
 			return describe(this.frameModel, this.ui, this.viewport.width, this.viewport.height, appearance.language);
 		},
 		toolbarScene() {
-			return toolbar(this.frameModel, this.ui, this.toolbarSize, appearance.language);
+			return toolbar(this.frameModel, this.ui, this.toolbarSize, appearance.language, !!this.toolbarTarget);
 		},
 		models() {
 			return models(this.frameModel);

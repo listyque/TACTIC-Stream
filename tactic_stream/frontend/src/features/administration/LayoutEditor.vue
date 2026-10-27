@@ -143,7 +143,8 @@ export default {
         this.frameModel,
         this.ui,
         this.toolbarSize,
-        appearance.language
+        appearance.language,
+        !!this.toolbarTarget
       );
     },
     models() {

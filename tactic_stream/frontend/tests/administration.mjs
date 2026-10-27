@@ -102,7 +102,7 @@ try {
   await admin.waitFor();
   assert.equal(
     await admin
-      .locator('.administration-window-titlebar .app-window-controls')
+      .locator('[data-frame="administrationHeader"] .app-window-controls')
       .count(),
     1,
     'window controls remain attached'
