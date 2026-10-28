@@ -57925,7 +57925,7 @@ var _sfc_main = {
 			pendingWorkflow: null,
 			administrationCollapsed: false,
 			workspaceSelection: null,
-			configurationReturnSection: "data",
+			configurationOpen: false,
 			checkins: [],
 			workspaceProjects: {},
 			workspaceProject: "",
@@ -58631,8 +58631,7 @@ var _sfc_main = {
 				this.loadingMore = false;
 			}
 			this.captureSearchTab();
-			this.configurationReturnSection = this.section;
-			this.section = "configuration";
+			this.configurationOpen = true;
 			await nextTick();
 			this.$refs.configurationDialog.show();
 		},
@@ -59062,6 +59061,8 @@ var _sfc_main = {
 			forgetSessions();
 			this.persistWorkspace();
 			this.checkins = [];
+			this.$refs.configurationDialog?.close();
+			this.configurationOpen = false;
 			this.$refs.administrationDialog?.close();
 			this.administrationOpen = false;
 			this.closeNavigation();
@@ -61636,8 +61637,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					class: "configuration-dialog",
 					"aria-labelledby": "configuration-title",
 					onCancel: _cache[69] || (_cache[69] = withModifiers(($event) => _ctx.$refs.configuration?.cancel(), ["prevent"])),
-					onClose: _cache[70] || (_cache[70] = ($event) => $data.section = $data.configurationReturnSection)
-				}, [(openBlock(), createBlock(KeepAlive, null, [$data.section === "configuration" ? (openBlock(), createBlock(_component_Configuration, {
+					onClose: _cache[70] || (_cache[70] = ($event) => $data.configurationOpen = false)
+				}, [(openBlock(), createBlock(KeepAlive, null, [$data.configurationOpen ? (openBlock(), createBlock(_component_Configuration, {
 					key: 0,
 					ref: "configuration",
 					ticket: $data.session.ticket,
@@ -62486,7 +62487,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							])]),
 							_: 1
 						})
-					], 512)), [[vShow, ($data.administrationOpen || !$data.layoutView) && $data.section !== "configuration" && ($data.sidebarSearch || ($data.administrationOpen ? ![
+					], 512)), [[vShow, ($data.administrationOpen || !$data.layoutView) && ($data.sidebarSearch || ($data.administrationOpen ? ![
 						"types",
 						"schema",
 						"workflow",

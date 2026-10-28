@@ -138,7 +138,7 @@ export default {
       compact: compactLayout.matches, showRetired: false, selectedKeys: [], focusedKey:'',
       interfaceConfig: null, view: 'table', configuredView: false, viewTitle: '', layoutView: '', layoutTarget: '',
       connectionOnline: true, compactShortcuts: shortcutLayout.matches, serverBatch: null, updatesError: '', updatesTasksOpen: false, taskCalendarActive: false, updatesNotesOpen: false, updatesActivityOpen: false,
-      canAdminister: false, administrationOpen: false, administrationSection: 'types', administrationVisited: [], administrationInstances: {}, pendingWorkflow:null, administrationCollapsed: false, workspaceSelection: null, configurationReturnSection: 'data',
+      canAdminister: false, administrationOpen: false, administrationSection: 'types', administrationVisited: [], administrationInstances: {}, pendingWorkflow:null, administrationCollapsed: false, workspaceSelection: null, configurationOpen: false,
       checkins: [],
       workspaceProjects: {}, workspaceProject: '', dockMenuTarget: null, mobileViewMenuTarget: null, mobileSearchOpen:false,
       navigationByProject: {}, navigationErrors: {}, navigationRequests: {},
@@ -559,8 +559,7 @@ export default {
       this.closeNavigation()
       if (this.loadingMore) { this.requestId++; this.loadingMore = false }
       this.captureSearchTab()
-      this.configurationReturnSection = this.section
-      this.section = 'configuration'
+      this.configurationOpen = true
       await nextTick()
       this.$refs.configurationDialog.show()
     },
@@ -857,6 +856,8 @@ export default {
       forgetSessions()
       this.persistWorkspace()
       this.checkins = []
+      this.$refs.configurationDialog?.close()
+      this.configurationOpen = false
       this.$refs.administrationDialog?.close()
       this.administrationOpen = false
       this.closeNavigation()
@@ -2067,8 +2068,8 @@ export default {
         </AppMenu></Teleport>
       </template>
     </DockWorkspace>
-    <dialog v-window="{kind:'configuration', type:'window' }" ref="configurationDialog" class="configuration-dialog" aria-labelledby="configuration-title" @cancel.prevent="$refs.configuration?.cancel()" @close="section = configurationReturnSection">
-      <KeepAlive><Configuration v-if="section === 'configuration'" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @providers="openAgentProviders" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
+    <dialog v-window="{kind:'configuration', type:'window' }" ref="configurationDialog" class="configuration-dialog" aria-labelledby="configuration-title" @cancel.prevent="$refs.configuration?.cancel()" @close="configurationOpen = false">
+      <KeepAlive><Configuration v-if="configurationOpen" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @providers="openAgentProviders" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
     </dialog>
     <dialog v-window="{kind:'administration'}" ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">
       <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" />
@@ -2097,7 +2098,7 @@ export default {
         @loaded="publishDashboardResults(entry.tab, $event)"
         @inspect="inspect" @operate="(record,event,node)=>$refs.objectOperations.open(record,event,node)" @column="showColumnsEditor(false,$event)" @close="closeSection(entry.section.id)" />
     </template>
-    <section v-if="retainedSearchTabs.length || administrationOpen" v-show="(administrationOpen || !layoutView) && section !== 'configuration' && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
+    <section v-if="retainedSearchTabs.length || administrationOpen" v-show="(administrationOpen || !layoutView) && (sidebarSearch || (administrationOpen ? !['types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(administrationSection) : !!activeSearchTab))" class="content workspace-browser">
       <SearchHeader :model="{compact:compactShortcuts&&!administrationOpen,collapseSearch:true,searchOpen:mobileSearchOpen,busy,shelf:!administrationOpen,shelfOpen,tags:!administrationOpen,quick:true,panels:true}"
         @event="action=>{if(action.type==='refresh')loadRows();else if(action.type==='shelf')shelfOpen=!shelfOpen;else if(action.type==='help')$refs.help.open('search')}">
         <template #field>

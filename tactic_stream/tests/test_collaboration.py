@@ -41,6 +41,9 @@ class Collaboration(unittest.TestCase):
     def test_notification_stack_in_chromium(self):
         self.browser('notification_stack.mjs')
 
+    def test_configuration_background_in_chromium(self):
+        self.browser('configuration_background.mjs')
+
     def test_common_windows_in_chromium(self):
         self.browser('window_controls.mjs')
 

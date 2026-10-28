@@ -52,3 +52,5 @@ Private SQLite/native Command tests and real Chromium verify current-page Apply/
 Configuration now uses the same Tactic Frame navigation and explained settings rows in Handler and Stream. Long pages reserve space for a visible scrollbar; on phones the page selector replaces the sidebar. The current page keeps its own draft. Native preset saves preserve drafts on other pages. Local/DCC/tray/GPU options belong to Handler; browser XML, web paths and browser preferences remain Stream capabilities. No embedded browser is used by Handler.
 
 On narrow repository editors, Reset and Sync use icon buttons with full tooltips; Save remains labelled. Project Save and template installation keep their complete captions in English and Russian.
+
+Configuration is a separate window. Opening, minimizing or closing it preserves the current workspace page and search results underneath.
