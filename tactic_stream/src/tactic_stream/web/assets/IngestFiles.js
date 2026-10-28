@@ -4,7 +4,7 @@ import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_
 import { t as captionHeight } from "./sections.ui.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { t as _sfc_main$4 } from "./AppDialog.js";
-import { dt as _sfc_main$5 } from "./App.js";
+import { gt as _sfc_main$5 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/ingest.ui.mjs
 function optionValue(field, value) {
 	return field === "updateMode" ? value ? "update" : "insert" : value;

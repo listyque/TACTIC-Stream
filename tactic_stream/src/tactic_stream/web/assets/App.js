@@ -1,10 +1,10 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/sections.ui.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/previewFiles.js","assets/SnapshotCheckout.css","assets/NamingEditor.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/richText.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/markdown-it.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentProviders.js","assets/AgentProviders.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/sections.ui.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/ObjectFieldFrame.js","assets/fields.ui.js","assets/ObjectFieldFrame.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/previewFiles.js","assets/SnapshotCheckout.css","assets/NamingEditor.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/metrics.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/richText.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/markdown-it.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentProviders.js","assets/AgentProviders.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { $ as shallowRef, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, S as getCurrentInstance, T as mergeModels, U as watch, V as useModel, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, t as Transition, tt as unref, u as Fragment, v as createSlots, w as inject, y as createTextVNode } from "./vue.js";
 import { $ as savePreferencePage, A as t, D as randomId, E as setServerDebugContext, G as layout$11, H as fontFamily, I as readableText, J as readableText$1, K as lineHeights, L as saveAppearance, P as frameColors, Q as preferences, R as blend, S as logRequest, T as sessionRecords, U as fontLineHeight, V as cssRoles, W as fontMetricHeight, X as configurationPreview, Y as textStyles, _ as forgetSessions, at as BusyIndicator_default, b as levels, c as _sfc_main$184, et as normalizeColumns, f as _sfc_main$185, g as exportSession, h as debugSettings, i as dockMinimumWidth, j as appearance, k as asyncComponent, m as debugLog, o as mobile, ot as _plugin_vue_export_helper_default, p as clearLive, q as metrics$12, r as dockMinimumHeight, s as mobileLayout, t as __vitePreload, tt as taskColumns, v as formatEvent, w as savedSessions, y as importSession, z as controls$2 } from "./index.js";
 import { $ as objectStatus, $t as virtualRange, A as localDate, At as setUpdatesAvailable, B as activityFeed, Bt as notificationHistory, C as _sfc_main$202, Ct as tableParentGroup, D as _sfc_main$195, Dt as userProfile, E as _sfc_main$188, Et as userAvatar, F as _sfc_main$193, Ft as cancelNotificationReply, G as interfaceDefinition, Gt as serverClock, Ht as resetNotifications, I as _sfc_main$203, It as clearNotificationHistory, J as messageFileRequest, Jt as label, Kt as serverTimestamp, Lt as dismissNotification, M as parse$1, Mt as updatesAvailable, Nt as activeNotifications, O as _sfc_main$197, Ot as widgetConfiguration, P as _sfc_main$196, Pt as beginNotificationReply, Q as objectRelations, Qt as revealListOffset, R as _sfc_main$192, Rt as editNotificationReply, S as matchesUser$1, St as tableDependencyFile, T as AppSearchField_default, Tt as uploadFormFile, U as endActivity, Ut as setNotificationProgress, V as beginActivity, Vt as notify, Wt as submitNotificationReply, X as navigationLink, Xt as node, Y as messagesRequest, Yt as muted, Z as objectDeletion, Zt as rect$1, _ as copyText, _t as serverUpdates, a as _sfc_main$191, at as resetRequestActivity, b as _sfc_main$200, bt as tableCells, c as _sfc_main$199, ct as rpc, dt as scriptShelf, et as projectCatalog, ft as searchConfiguration, g as copyImage, h as xmlTokens, i as _sfc_main$186, it as requestActivity, j as monthLabel, jt as updateDelay, k as _sfc_main$189, kt as workspaceLayouts, m as pythonTokens, n as frameContentWidth, nt as projectNavigation, o as _sfc_main$190, ot as resolveCustomUrl, p as javascriptTokens, q as linkPreviews, qt as button, r as observeFrameSizes, s as _sfc_main$198, st as resultItems, t as _sfc_main$187, tt as projectCreationCatalog, v as readClipboardImages, vt as sessionAction, w as ItemPreview_default, wt as transactionDetails, x as _sfc_main$194, xt as tableDependencies, y as translate, z as _sfc_main$201, zt as failNotificationReply } from "./CodeBlock.js";
 import { a as unsupportedField, i as fieldKind, n as _sfc_main$204, r as format, t as RecordForm_default } from "./RecordForm.js";
-import { n as arrange } from "./ObjectFieldFrame.js";
+import { t as arrange } from "./fields.ui.js";
 import { n as sections$1, t as captionHeight } from "./sections.ui.js";
 import { a as withoutSkeys, i as linkifyPlainText, n as escapeHtml, r as extractSkeys, t as activateRichLink } from "./richText.js";
 import { a as linkProject, c as savedSearchLink, i as customUrlLocation, l as searchLink, n as browserLink, o as projectPath, r as customPageLink, s as sameSearchKey, t as addressProject, u as workspaceAddress } from "./links.js";
@@ -17,6 +17,7 @@ import { a as sourcePath, i as repositories, n as droppedFiles, r as prepareFile
 import { t as downloadBlob } from "./files2.js";
 import { n as FilePreviewContent_default, t as FilePreview_default } from "./FilePreview.js";
 import { t as fileBlob } from "./previewFiles.js";
+import { n as buttonWidth } from "./metrics.js";
 import { a as viewTabWidth, i as tab, n as key$3, r as sectionWidth, t as dimensions$5 } from "./workspace.ui.js";
 import { t as describe$64 } from "./confirmation.ui.js";
 import { t as _sfc_main$208 } from "./AppDialog.js";
@@ -2551,34 +2552,6 @@ function fields$2(model, ui, width, language, enabled) {
 		});
 	}
 	return fields;
-}
-//#endregion
-//#region ../src/tactic_stream/shared_ui/controls/buttons/metrics.mjs
-function buttonWidth(advance, icon = false) {
-	const metrics = controls$2.button;
-	return Math.max(metrics.minimumWidth, Math.ceil(advance) + metrics.padding + (icon ? metrics.iconPadding + metrics.iconSize + metrics.spacing : metrics.padding));
-}
-function actionLayout(actions, width, measuredWidths = []) {
-	const widths = actions.map((action, index) => Math.min(width, measuredWidths[index] || buttonWidth(action.text.length * 7, !!action.icon)));
-	const total = widths.reduce((sum, value) => sum + value, 0) + Math.max(0, widths.length - 1) * 8, stacked = total > width;
-	let x = Math.max(0, width - total);
-	const positions = widths.map((item, index) => {
-		const bounds = {
-			x: stacked ? width - item : x,
-			y: stacked ? index * 44 : 0,
-			width: item,
-			height: 38
-		};
-		x += item + 8;
-		return bounds;
-	});
-	return {
-		widths,
-		total,
-		stacked,
-		height: (stacked ? actions.length : 1) * 44,
-		positions
-	};
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/page.filters.mjs
@@ -17229,7 +17202,7 @@ var _sfc_main$126 = {
 				if (!this.duplicateComponent) this.duplicateComponent = markRaw((await __vitePreload(async () => {
 					const { default: __vite_default__ } = await import("./DuplicateSObject.js");
 					return { default: __vite_default__ };
-				}, __vite__mapDeps([18,19,1,2,3,4,5,6,7,20,21,8,22]))).default);
+				}, __vite__mapDeps([18,19,1,2,3,4,5,6,7,20,21,22,8,23]))).default);
 				await nextTick();
 				if (request === this.request) await this.$refs.duplicate.open(record, quick);
 			} catch (error) {
@@ -22795,7 +22768,7 @@ function route(command) {
 //#region src/features/interface/ConfiguredView.vue
 var CustomLayoutView = asyncComponent(() => __vitePreload(() => import("./CustomLayoutView.js"), []));
 var RelatedObjects = asyncComponent(() => __vitePreload(() => import("./RelatedObjects.js"), []));
-var SnapshotCheckout = asyncComponent(() => __vitePreload(() => import("./SnapshotCheckout.js"), __vite__mapDeps([23,1,2,3,4,5,6,7,8,9,10,24,25,12,26])));
+var SnapshotCheckout = asyncComponent(() => __vitePreload(() => import("./SnapshotCheckout.js"), __vite__mapDeps([24,1,2,3,4,5,6,7,8,9,10,25,26,12,27])));
 var ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ResultPresentation.js"), []));
 var _sfc_main$109 = {
 	name: "ConfiguredView",
@@ -28905,7 +28878,7 @@ var recovery_default = {
 };
 //#endregion
 //#region src/features/checkin/CommitQueue.vue
-var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([27,19,1,2,3,4,5,6,7,8])));
+var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([28,19,1,2,3,4,5,6,7,8])));
 var _sfc_main$94 = {
 	components: {
 		AppButton: _sfc_main$184,
@@ -30102,7 +30075,7 @@ var _sfc_main$93 = {
 			ticket: props.ticket,
 			project: props.project
 		}));
-		const MatchingTemplates = asyncComponent(() => __vitePreload(() => import("./MatchingTemplates.js"), __vite__mapDeps([28,1,2,3,4,5,6,7,8,29])));
+		const MatchingTemplates = asyncComponent(() => __vitePreload(() => import("./MatchingTemplates.js"), __vite__mapDeps([29,1,2,3,4,5,6,7,8,30])));
 		const templateItems = ref(structuredClone(matchingDefaults)), editingTemplates = ref(false), paddingDraft = ref(3);
 		try {
 			const saved = JSON.parse(localStorage.getItem("tactic_stream.matching_templates") || "null");
@@ -34939,9 +34912,9 @@ var _sfc_main$68 = {
 };
 //#endregion
 //#region src/features/tasks/TaskManager.vue
-var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([30,1,2,3,4,5,6,7,31])));
-var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([32,1,2,3,4,5,6,7,33])));
-var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([34,1,2,3,4,5,6,7,35])));
+var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([31,1,2,3,4,5,6,7,32])));
+var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([33,1,2,3,4,5,6,7,34])));
+var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([35,1,2,3,4,5,6,7,36])));
 var readCommand = "tactic.ui.table.task_workspace.TaskWorkspaceCmd";
 var editCommand = "tactic.ui.table.task_workspace_edits.TaskWorkspaceEditCmd";
 var scheduleCommand = "tactic.ui.table.task_schedule.TaskScheduleCmd";
@@ -58022,22 +57995,22 @@ var _sfc_main$1 = {
 //#endregion
 //#region src/App.vue
 var App_exports = /* @__PURE__ */ __exportAll({ default: () => App_default });
-var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([36,1,2,3,4,5,6,7,8,9,10,11,12,13,14,37,38,39])));
-var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([40,1,2,3,4,5,6,7,41,42,43])));
-var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([44,1,2,3,4,5,6,7,45,19,20,21,8,46,10,47,9,11,24,48,49])));
-var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([50,1,4,2,3,5,6,7,41,42,51,52,53,19,37,38,54])));
-var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([55,1,2,3,4,5,6,7,45,19,20,21,8,46,56,41,42,57])));
-var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([58,1,2,3,4,5,6,7,8,27,19])));
-var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([59,1,2,3,4,5,6,7,58,8,27,19,60,61,62])));
-var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([63,1,2,3,4,5,6,7,8,64,41,42,56,51,52,47,9,10,11,24,48,25,65,60,61,66])));
-var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([67,1,2,3,4,5,6,7,8,61])));
-var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([68,1,2,3,4,5,6,7,8,42,61])));
-var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([69,1,2,3,4,5,6,7,8,42,70])));
-var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([71,1,2,3,4,5,6,7,8])));
-var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([72,1,2,3,4,5,6,7])));
-var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([73,1,2,3,4,5,6,7,74])));
-var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([75,1,2,3,4,5,6,7,74])));
-var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([76,1,2,3,4,5,6,7])));
+var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([37,1,2,3,4,5,6,7,8,9,10,11,38,12,13,14,39,40,41])));
+var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([42,1,2,3,4,5,6,7,43,44,45])));
+var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([46,1,2,3,4,5,6,7,47,19,21,20,22,8,48,10,49,9,11,25,50,51])));
+var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([52,1,4,2,3,5,6,7,43,44,53,54,55,19,39,40,56])));
+var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([57,1,2,3,4,5,6,7,47,19,21,20,22,8,48,58,43,44,59])));
+var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([60,1,2,3,4,5,6,7,8,28,19])));
+var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([61,1,2,3,4,5,6,7,60,8,28,19,62,63,64])));
+var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([65,1,2,3,4,5,6,7,8,66,43,44,58,53,54,49,9,10,11,25,50,26,67,62,63,68])));
+var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([69,1,2,3,4,5,6,7,8,63])));
+var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([70,1,2,3,4,5,6,7,8,44,63])));
+var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([71,1,2,3,4,5,6,7,8,44,72])));
+var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([73,1,2,3,4,5,6,7,8])));
+var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([74,1,2,3,4,5,6,7])));
+var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([75,1,2,3,4,5,6,7,76])));
+var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([77,1,2,3,4,5,6,7,76])));
+var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([78,1,2,3,4,5,6,7])));
 var compactLayout = window.matchMedia("(max-width: 900px)");
 var shortcutLayout = mobileLayout;
 var _sfc_main = {
@@ -58897,7 +58870,7 @@ var _sfc_main = {
 				context.search_keys = [...new Set(records.map((record) => record.__search_key__))];
 			}
 			try {
-				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([77,1,2,3,4,5,6,7,13,14,37,38,61,78]));
+				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([79,1,2,3,4,5,6,7,13,14,39,40,63,80]));
 				if (this.session !== session) return;
 				this.agentRequestComponent ||= markRaw(module.default);
 				await nextTick();
@@ -58909,7 +58882,7 @@ var _sfc_main = {
 		async openAgentProviders() {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentProviders.js"), __vite__mapDeps([79,1,2,3,4,5,6,7,13,14,80]));
+				const module = await __vitePreload(() => import("./AgentProviders.js"), __vite__mapDeps([81,1,2,3,4,5,6,7,13,14,82]));
 				if (this.session !== session) return;
 				this.agentProvidersComponent ||= markRaw(module.default);
 				await nextTick();
@@ -58921,7 +58894,7 @@ var _sfc_main = {
 		async openAgentMcp(context, connectionId = "") {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([81,1,2,3,4,5,6,7,13,14,82]));
+				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([83,1,2,3,4,5,6,7,13,14,84]));
 				if (this.session !== session) return;
 				this.agentMcpComponent ||= markRaw(module.default);
 				await nextTick();
@@ -58937,7 +58910,7 @@ var _sfc_main = {
 			const current = () => this.session === session && this.workspaceProject === project;
 			this.scriptEditorLoading = true;
 			try {
-				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([83,1,2,3,4,5,6,7,84]));
+				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([85,1,2,3,4,5,6,7,86]));
 				if (!current()) return;
 				this.scriptEditorComponent ||= markRaw(module.default);
 				await nextTick();
@@ -63341,6 +63314,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { edit$2 as $, _sfc_main$116 as A, geometries as At, duplicateProfile as B, spacing$1 as Bt, captionedSwitch as C, add as Ct, changeDefinition as D, copy as Dt, _sfc_main$107 as E, change$7 as Et, ObjectAction_default as F, remove$2 as Ft, alignment as G, _sfc_main$130 as H, _sfc_main$125 as I, reorder$1 as It, toggle as J, roots as K, applyDuplicateProfile as L, reparent as Lt, zooms as M, kinds as Mt, ResultPresentation_default as N, layers as Nt, definitionWizard as O, duplicate as Ot, RelatedObjects_default as P, path as Pt, describe$48 as Q, changeContent as R, siblings as Rt, _sfc_main$63 as S, type as St, _sfc_main$100 as T, block as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$144 as W, actions$4 as X, spacingField as Y, binding as Z, editColumn as _, fields$2 as _t, updateModes as a, documentEvent as at, describe$18 as b, options$1 as bt, runBrowserScript as c, sectionSelector as ct, ProjectCreation_default as d, App_default as default, _sfc_main$157 as dt, roles as et, ImagePicker_default as f, views as ft, describe$17 as g, change$6 as gt, contentWidth as h, actionLayout as ht, updateIntervals as i, widgets as it, controls$1 as j, geometry$2 as jt, displayWidgets as k, fingerprint as kt, scriptTree as l, tabs as lt, change as m, _sfc_main$171 as mt, networkSettings as n, template as nt, _sfc_main$26 as o, notices as ot, readPreviewImage as p, _sfc_main$165 as pt, selected as q, updateBatchDelays as r, variants as rt, buttonId as s, policy as st, App_exports as t, serialize as tt, lifecycle as u, toolbar$4 as ut, fieldsFor as v, filter as vt, _sfc_main$98 as w, appearances as wt, pages as x, scope as xt, confirmation$2 as y, mode as yt, contentChoices as z, sizing as zt };
+export { supports as $, _sfc_main$116 as A, change$7 as At, duplicateProfile as B, reorder$1 as Bt, captionedSwitch as C, mode as Ct, changeDefinition as D, add as Dt, _sfc_main$107 as E, type as Et, ObjectAction_default as F, geometry$2 as Ft, _sfc_main$155 as G, _sfc_main$130 as H, siblings as Ht, _sfc_main$125 as I, kinds as It, selected as J, alignment as K, applyDuplicateProfile as L, layers as Lt, zooms as M, duplicate as Mt, ResultPresentation_default as N, fingerprint as Nt, definitionWizard as O, appearances as Ot, RelatedObjects_default as P, geometries as Pt, describe$47 as Q, changeContent as R, path as Rt, _sfc_main$63 as S, filter as St, _sfc_main$100 as T, scope as Tt, messageDate as U, sizing as Ut, saveDuplicateProfile as V, reparent as Vt, _sfc_main$144 as W, spacing$1 as Wt, itemScene as X, toggle as Y, spacingField as Z, editColumn as _, views as _t, updateModes as a, roles as at, describe$18 as b, change$6 as bt, runBrowserScript as c, variants as ct, ProjectCreation_default as d, App_default as default, notices as dt, visible$1 as et, ImagePicker_default as f, policy as ft, describe$17 as g, _sfc_main$157 as gt, contentWidth as h, toolbar$4 as ht, updateIntervals as i, edit$2 as it, controls$1 as j, copy as jt, displayWidgets as k, block as kt, scriptTree as l, widgets as lt, change as m, tabs as mt, networkSettings as n, binding as nt, _sfc_main$26 as o, serialize as ot, readPreviewImage as p, sectionSelector as pt, roots as q, updateBatchDelays as r, describe$48 as rt, buttonId as s, template as st, App_exports as t, actions$4 as tt, lifecycle as u, documentEvent as ut, fieldsFor as v, _sfc_main$165 as vt, _sfc_main$98 as w, options$1 as wt, pages as x, fields$2 as xt, confirmation$2 as y, _sfc_main$171 as yt, contentChoices as z, remove$2 as zt };
 
 //# sourceMappingURL=App.js.map

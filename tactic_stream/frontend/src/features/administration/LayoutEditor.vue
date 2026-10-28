@@ -113,6 +113,7 @@ export default {
         templates: this.templates,
         sampleItems: this.sampleItems,
         sampleError: this.sampleError,
+        liveInterface: this.liveInterface,
         preview: this.preview,
         checked: this.checked,
         diff: this.diff,
@@ -132,7 +133,12 @@ export default {
       };
     },
     frameModel() {
-      return UI.model(this.rawModel, this.ui);
+      return UI.model(
+        this.rawModel,
+        this.ui,
+        appearance.language,
+        this.viewport.width > 0 ? window.innerWidth : 1000
+      );
     },
     frameScene() {
       return UI.describe(
@@ -162,7 +168,9 @@ export default {
       return {
         itemResults: {
           component: LayoutPreview,
+          nodeProps: true,
           props: {
+            sample: this.frameModel.samplePreview,
             rows: this.previewRows,
             ticket: this.ticket,
             project: this.project,

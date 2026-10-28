@@ -1,10 +1,10 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ResultPresentation.js","assets/App.js","assets/rolldown-runtime.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/RecordForm.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/richText.js","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/files2.js","assets/FilePreview.css","assets/previewFiles.js","assets/ObjectReport.css","assets/workspace.ui.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/markdown-it.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
-import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, w as inject } from "./vue.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ResultPresentation.js","assets/App.js","assets/rolldown-runtime.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/RecordForm.js","assets/fields.ui.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/sections.ui.js","assets/RecordForm.css","assets/richText.js","assets/links.js","assets/textMetrics.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/files2.js","assets/FilePreview.css","assets/previewFiles.js","assets/ObjectReport.css","assets/metrics.js","assets/workspace.ui.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/markdown-it.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
+import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, w as inject } from "./vue.js";
 import { A as t, j as appearance, k as asyncComponent, ot as _plugin_vue_export_helper_default, t as __vitePreload } from "./index.js";
 import { Jt as label, Ot as widgetConfiguration, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$2, qt as button, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { u as workspaceAddress } from "./links.js";
-import { $ as edit, Q as describe$1, X as actions, Y as spacingField, Z as binding, at as documentEvent, ct as sectionSelector, et as roles, it as widgets, nt as template, ot as notices, rt as variants, st as policy, tt as serialize, ut as toolbar$1 } from "./App.js";
+import { $ as supports, G as _sfc_main$3, Q as describe$2, X as itemScene, Z as spacingField, at as roles, ct as variants, dt as notices, et as visible, ft as policy, ht as toolbar$1, it as edit, lt as widgets, nt as binding, ot as serialize, pt as sectionSelector, rt as describe$1, st as template, tt as actions, ut as documentEvent } from "./App.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
@@ -525,6 +525,104 @@ function completed(ui, command) {
 	}) : ui;
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.samples.mjs
+function fallback(layout, records, searchType, selected, language, screenWidth = 1e3) {
+	if (!layout?.elements?.length) return null;
+	const tr = (text) => translate(text, language);
+	const byName = new Map(layout.elements.map((item) => [item.name, item]));
+	const chain = [];
+	for (let item = byName.get(selected); item && chain.length < 8; item = byName.get(item.parent)) chain.push(item);
+	const matches = (sample) => chain.length ? chain.every((item) => visible(item, sample, layout, screenWidth)) : supports(layout, sample, screenWidth);
+	if ((records || []).some(matches)) return null;
+	const target = chain.find((item) => item.search_type)?.search_type || searchType;
+	const conditions = chain.reduce((all, item) => all.concat(item.when || []), []);
+	const variant = chain.find((item) => item.variant && item.variant !== "all")?.variant || (conditions.includes("relation") ? "relation" : conditions.includes("branch") ? "process" : conditions.includes("snapshot") ? "snapshot" : "main");
+	const sample = {
+		kind: [
+			"process",
+			"relation",
+			"versions"
+		].includes(variant) ? "branch" : ["snapshot", "file"].includes(variant) ? variant : "object",
+		depth: variant === "children" ? 1 : 0,
+		search_type: target,
+		title: tr("Example item"),
+		subtitle: tr("Example description"),
+		record: Object.assign(Object.create(null), {
+			name: tr("Example item"),
+			title: tr("Example item"),
+			description: tr("Example description")
+		}),
+		preview: {},
+		note_count: 3,
+		task_count: 2,
+		branch: {
+			kind: variant,
+			count: 3,
+			relationship: "instance",
+			process: tr("Example process")
+		},
+		snapshot_display: {
+			title: "example.jpg",
+			exists: false,
+			version: "v001",
+			author: tr("Example author"),
+			size: 1024
+		},
+		knowledge: [{ title: tr("Example item") }]
+	};
+	function bind(path, value) {
+		const parts = String(path || "").split(".");
+		if (!["record", "node"].includes(parts[0]) || parts.length < 2 || parts.length > 6 || parts.some((part) => [
+			"__proto__",
+			"constructor",
+			"prototype",
+			"__search_key__",
+			"id"
+		].includes(part))) return;
+		let result = parts.shift() === "record" ? sample.record : sample;
+		for (const part of parts.slice(0, -1)) {
+			if (!result[part] || typeof result[part] !== "object") result[part] = Object.create(null);
+			result = result[part];
+		}
+		const key = parts[parts.length - 1];
+		if (result[key] === void 0) result[key] = value;
+	}
+	function values(current, depth) {
+		if (!current || depth >= 8) return;
+		for (const item of current.elements || []) {
+			const options = item.options || {};
+			let value = tr("Example value");
+			if (options.format === "progress" || /(?:count|progress|percent)$/.test(options.bind || "")) value = 42;
+			else if (["date", "datetime"].includes(options.format)) value = "2026-01-15T12:00:00Z";
+			else if (options.format === "badge") {
+				let colors = {};
+				try {
+					colors = JSON.parse(options.colors || "{}");
+				} catch (error) {}
+				value = Object.keys(colors)[0] || tr("Example status");
+			}
+			bind(options.bind, value);
+			bind(options.badge, 3);
+			if (item.widget_layout) values(item.widget_layout, depth + 1);
+		}
+	}
+	values(layout, 0);
+	return matches(sample) ? sample : null;
+}
+function scene(layout, sample, width, height, selected, editing, language, screenWidth, assetBase) {
+	if (!layout || !sample || width <= 0 || height <= 0) return { nodes: [] };
+	const composition = describe$2(layout, sample, Math.max(1, width - 16), selected, language, screenWidth, assetBase, "itemComposition", 0, true);
+	const content = editing ? itemScene(composition, layout) : composition;
+	return {
+		canvasBoxes: content.canvasBoxes || [],
+		nodes: [node("Scroll", "layoutSampleScroll", rect(0, 0, width, height), {
+			contentHeight: composition.height,
+			scrollbarId: "layoutSampleScrollBar",
+			children: content.nodes
+		})]
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.catalog.mjs
 function views(model, language) {
 	const tr = (text) => translate(text, language);
@@ -683,7 +781,7 @@ function choices(values, language) {
 		label: translate(labels[value] || value || "None", language)
 	}));
 }
-function model(raw, ui) {
+function model(raw, ui, language = "en", screenWidth = 1e3) {
 	let layout = {
 		elements: [],
 		columns: 12,
@@ -749,6 +847,7 @@ function model(raw, ui) {
 	]);
 	const types = (raw.searchTypes || []).slice().sort((a, b) => a.label.toLowerCase() < b.label.toLowerCase() ? -1 : a.label.toLowerCase() > b.label.toLowerCase() ? 1 : 0);
 	return Object.assign({}, raw, {
+		samplePreview: !raw.busy && !raw.error && !raw.sampleError && !raw.previewError ? fallback(raw.liveInterface?.table?.item_layout, raw.sampleItems, raw.searchType, ui.selected, language, screenWidth) : null,
 		ready: !!raw.configuration,
 		canLoad: !!raw.canLoad,
 		canWrite: !!raw.canWrite,
@@ -1381,26 +1480,27 @@ function describe(model, ui, width, height, language) {
 		nodes.push(node("Box", "layoutPreviewPanel", rect(x, y, w, bodyHeight), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
-			children: [label("layoutPreviewHeading", rect(12, 8, w - 24, 28), tr("Item preview"), { weight: 600 }), layout.elements.length ? node("View", "layoutPreviewResults", rect(12, 44, w - 24, bodyHeight - 56), { view: "itemResults" }) : label("layoutBlankCanvas", rect(12, 44, w - 24, 80), tr("Add a widget to start this view."), Object.assign({ wrap: true }, muted))]
+			children: [label("layoutPreviewHeading", rect(12, 8, w - 24, 28), tr(model.samplePreview ? "Item preview · Sample data" : "Item preview"), { weight: 600 }), layout.elements.length ? node("View", "layoutPreviewResults", rect(12, 44, w - 24, bodyHeight - 56), { view: "itemResults" }) : label("layoutBlankCanvas", rect(12, 44, w - 24, 80), tr("Add a widget to start this view."), Object.assign({ wrap: true }, muted))]
 		}));
 	}
 	return { nodes };
 }
 //#endregion
 //#region src/features/administration/LayoutPreview.vue
-var _hoisted_1$1 = { class: "layout-live-preview table-container" };
-var _hoisted_2$1 = {
+var _hoisted_1$1 = {
 	key: 0,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_3$1 = {
-	key: 2,
+var _hoisted_2$1 = {
+	key: 3,
 	class: "muted"
 };
 var _sfc_main$1 = {
 	__name: "LayoutPreview",
 	props: {
+		frameNode: Object,
+		sample: Object,
 		layout: Object,
 		rows: Array,
 		ticket: String,
@@ -1411,38 +1511,61 @@ var _sfc_main$1 = {
 		error: String
 	},
 	emits: ["element", "geometry"],
-	setup(__props) {
-		const ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ResultPresentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37])));
+	setup(__props, { emit: __emit }) {
+		const ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ResultPresentation.js"), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39])));
+		const props = __props;
+		const emit = __emit;
+		const sampleScene = computed(() => scene(props.layout, props.sample, props.frameNode?.width || 1, props.frameNode?.height || 1, props.selectedElement, props.editing, appearance.language, window.innerWidth, location.origin));
+		const sampleViews = computed(() => ({ canvasOverlay: {
+			component: _sfc_main$3,
+			props: {
+				boxes: sampleScene.value.canvasBoxes || [],
+				selected: props.selectedElement,
+				onSelect: (name) => emit("element", name),
+				onCommit: (value) => emit("geometry", value)
+			}
+		} }));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$1, [__props.error ? (openBlock(), createElementBlock("p", _hoisted_2$1, toDisplayString(__props.error), 1)) : createCommentVNode("", true), __props.layout ? (openBlock(), createBlock(unref(ResultPresentation), {
-				key: 1,
-				rows: __props.rows,
-				ticket: __props.ticket,
-				project: __props.project,
-				"search-type": __props.searchType,
-				"workspace-id": "layout-preview-" + __props.searchType,
-				"item-layout": __props.layout,
-				mode: __props.layout.collection === "grid" ? "tiles" : "continious",
-				"group-mode": "none",
-				"selected-keys": [],
-				state: {},
-				active: "",
-				"read-only": "",
-				editing: __props.editing,
-				"selected-element": __props.selectedElement,
-				onGeometry: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("geometry", $event)),
-				onElement: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("element", $event))
-			}, null, 8, [
-				"rows",
-				"ticket",
-				"project",
-				"search-type",
-				"workspace-id",
-				"item-layout",
-				"mode",
-				"editing",
-				"selected-element"
-			])) : !__props.error ? (openBlock(), createElementBlock("p", _hoisted_3$1, toDisplayString(unref(t)("Loading interface...")), 1)) : createCommentVNode("", true)]);
+			return openBlock(), createElementBlock("div", { class: normalizeClass(["layout-live-preview", __props.sample ? "layout-sample-preview" : "table-container"]) }, [
+				__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$1, toDisplayString(__props.error), 1)) : createCommentVNode("", true),
+				__props.sample ? (openBlock(), createBlock(_sfc_main$2, {
+					key: 1,
+					scene: sampleScene.value,
+					views: sampleViews.value,
+					onEvent: _cache[0] || (_cache[0] = (event) => {
+						if (event.type === "select") emit("element", event.name);
+					})
+				}, null, 8, ["scene", "views"])) : createCommentVNode("", true),
+				__props.layout ? withDirectives((openBlock(), createBlock(unref(ResultPresentation), {
+					key: 2,
+					rows: __props.rows,
+					ticket: __props.ticket,
+					project: __props.project,
+					"search-type": __props.searchType,
+					"workspace-id": "layout-preview-" + __props.searchType,
+					"item-layout": __props.layout,
+					mode: __props.layout.collection === "grid" ? "tiles" : "continious",
+					"group-mode": "none",
+					"selected-keys": [],
+					state: {},
+					active: "",
+					"read-only": "",
+					editing: __props.editing,
+					"selected-element": __props.selectedElement,
+					onGeometry: _cache[1] || (_cache[1] = ($event) => _ctx.$emit("geometry", $event)),
+					onElement: _cache[2] || (_cache[2] = ($event) => _ctx.$emit("element", $event))
+				}, null, 8, [
+					"rows",
+					"ticket",
+					"project",
+					"search-type",
+					"workspace-id",
+					"item-layout",
+					"mode",
+					"editing",
+					"selected-element"
+				])), [[vShow, !__props.sample]]) : !__props.error ? (openBlock(), createElementBlock("p", _hoisted_2$1, toDisplayString(unref(t)("Loading interface...")), 1)) : createCommentVNode("", true)
+			], 2);
 		};
 	}
 };
@@ -1549,6 +1672,7 @@ var _sfc_main = {
 				templates: this.templates,
 				sampleItems: this.sampleItems,
 				sampleError: this.sampleError,
+				liveInterface: this.liveInterface,
 				preview: this.preview,
 				checked: this.checked,
 				diff: this.diff,
@@ -1563,7 +1687,7 @@ var _sfc_main = {
 			};
 		},
 		frameModel() {
-			return model(this.rawModel, this.ui);
+			return model(this.rawModel, this.ui, appearance.language, this.viewport.width > 0 ? window.innerWidth : 1e3);
 		},
 		frameScene() {
 			return describe(this.frameModel, this.ui, this.viewport.width, this.viewport.height, appearance.language);
@@ -1580,7 +1704,9 @@ var _sfc_main = {
 		previewViews() {
 			return { itemResults: {
 				component: _sfc_main$1,
+				nodeProps: true,
 				props: {
+					sample: this.frameModel.samplePreview,
 					rows: this.previewRows,
 					ticket: this.ticket,
 					project: this.project,

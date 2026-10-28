@@ -103,7 +103,8 @@
     "imports": [
       "_vue.js",
       "index.html",
-      "_CodeBlock.js"
+      "_CodeBlock.js",
+      "_fields.ui.js"
     ],
     "css": [
       "assets/ObjectFieldFrame.css"
@@ -143,6 +144,7 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
+      "_fields.ui.js",
       "_ObjectFieldFrame.js",
       "_sections.ui.js"
     ],
@@ -154,6 +156,14 @@
     "file": "assets/confirmation.ui.js",
     "name": "confirmation.ui",
     "imports": [
+      "_CodeBlock.js"
+    ]
+  },
+  "_fields.ui.js": {
+    "file": "assets/fields.ui.js",
+    "name": "fields.ui",
+    "imports": [
+      "index.html",
       "_CodeBlock.js"
     ]
   },
@@ -213,6 +223,13 @@
     "name": "markdown-it",
     "imports": [
       "_rolldown-runtime.js"
+    ]
+  },
+  "_metrics.js": {
+    "file": "assets/metrics.js",
+    "name": "metrics",
+    "imports": [
+      "index.html"
     ]
   },
   "_previewFiles.js": {
@@ -308,7 +325,7 @@
       "index.html",
       "_CodeBlock.js",
       "_RecordForm.js",
-      "_ObjectFieldFrame.js",
+      "_fields.ui.js",
       "_sections.ui.js",
       "_richText.js",
       "_links.js",
@@ -321,6 +338,7 @@
       "_files2.js",
       "_FilePreview.js",
       "_previewFiles.js",
+      "_metrics.js",
       "_workspace.ui.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
@@ -695,6 +713,7 @@
       "_sections.ui.js",
       "_file_values.js",
       "_files.js",
+      "_metrics.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
       "_AppMenuItem.js",

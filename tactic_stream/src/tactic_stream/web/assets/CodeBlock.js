@@ -4120,6 +4120,13 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Item preview · Sample data": "Предпросмотр · Пример данных",
+	"Example item": "Пример элемента",
+	"Example value": "Пример значения",
+	"Example description": "Пример описания",
+	"Example status": "Пример статуса",
+	"Example process": "Пример процесса",
+	"Example author": "Пример автора",
 	"Back to item layout": "Назад к макету элемента",
 	"Edit nested item layout": "Изменить вложенный макет элемента",
 	"Referenced item layout is unavailable": "Связанный макет элемента недоступен",

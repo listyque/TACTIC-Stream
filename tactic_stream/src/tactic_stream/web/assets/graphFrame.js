@@ -3,7 +3,7 @@ import { j as appearance } from "./index.js";
 import { Jt as label, Xt as node, Yt as muted, Zt as rect, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { t as listAction } from "./tree.ui.js";
-import { at as documentEvent, ct as sectionSelector, ot as notices, st as policy, ut as toolbar$1 } from "./App.js";
+import { dt as notices, ft as policy, ht as toolbar$1, pt as sectionSelector, ut as documentEvent } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/workflow.fields.mjs
 var fieldGroups = [
 	{

@@ -1967,6 +1967,12 @@ var en_default = {
 	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
 };
 var ru_default = {
+	"Item preview · Sample data": "Предпросмотр · Пример данных",
+	"Example item": "Пример элемента",
+	"Example value": "Пример значения",
+	"Example status": "Пример статуса",
+	"Example process": "Пример процесса",
+	"Example author": "Пример автора",
 	"Back to item layout": "Назад к макету элемента",
 	"Edit nested item layout": "Изменить вложенный макет элемента",
 	"Referenced item layout is unavailable": "Связанный макет элемента недоступен",
