@@ -17,6 +17,31 @@ from tactic_stream.server.widget_configuration import (
 
 
 class ItemLayouts(unittest.TestCase):
+    def test_formatted_fields_surfaces_and_bounded_value_colors(self):
+        import json
+
+        xml = '''<config><cards layout="sobject-layout"><element name="state">
+          <display class="field"><bind>record.status</bind><text>Status</text>
+          <format>badge</format><colors>{"Review":"yellow"}</colors></display>
+          </element><element name="panel"><display class="group"><fill>panel</fill>
+          <stroke>outlineVariant</stroke><radius>6</radius></display></element></cards></config>'''
+        with request_context(RequestContext(None, 'admin', 'admin')):
+            config = WidgetConfig.get(view='cards', xml=xml, use_cache=False)
+            descriptor = describe_view(WidgetConfigView('sthpw/note', 'cards', [config]))
+        layout = describe_item_layout(descriptor)
+        self.assertEqual(layout['elements'][0]['options']['format'], 'badge')
+        self.assertEqual(layout['elements'][1]['options']['fill'], 'panel')
+        for key, value in [('format', 'python'), ('color', 'var(--red)'),
+                           ('fill', 'url(https://example.com)'), ('radius', '49'),
+                           ('colors', 'null'), ('colors', '{'),
+                           ('colors', json.dumps({'constructor': 'red'})),
+                           ('colors', json.dumps({'Review': '<script>'})),
+                           ('colors', json.dumps({str(i): 'red' for i in range(33)}))]:
+            invalid = copy.deepcopy(descriptor)
+            invalid['elements'][0]['display']['options'][key] = value
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                describe_item_layout(invalid)
+
     def test_templates_and_validation(self):
         with request_context(RequestContext(None, 'admin', 'admin')):
             self.check_templates()

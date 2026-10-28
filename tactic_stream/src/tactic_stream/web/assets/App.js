@@ -2939,7 +2939,7 @@ function field$2(item, id, width) {
 			radius: 2
 		}));
 		children.push(node("Box", id + "_progress", rect$1(0, y + 30, width * percent / 100, 4), {
-			background: "contentAccent",
+			background: item.progressColor || "contentAccent",
 			radius: 2
 		}));
 		y += 10;
@@ -8228,6 +8228,7 @@ var widgets = [
 	"group",
 	"view",
 	"text",
+	"field",
 	"title",
 	"description",
 	"image",
@@ -8403,6 +8404,18 @@ function edit$2(tree, view, name, field, value) {
 	const next = JSON.parse(JSON.stringify(tree)), root = viewOf(next, view);
 	if (!root) throw Error("Configuration does not contain its view");
 	let item = name ? children$1(root).find((node) => node.name === "element" && get(node, "name") === name) : root;
+	if (field.startsWith("valueColor:")) {
+		const display = children$1(item).find((node) => node.name === "display"), option = display && children$1(display).find((node) => node.name === "colors"), colors = option ? JSON.parse(content(option)) : {}, key = field.slice(11);
+		if ([
+			"__proto__",
+			"constructor",
+			"prototype"
+		].includes(key)) throw Error("Invalid field value colors");
+		if (value) colors[key] = value;
+		else delete colors[key];
+		field = "option:colors";
+		value = Object.keys(colors).length ? JSON.stringify(colors) : "";
+	}
 	if (field === "add") {
 		if (widgets.indexOf(value) < 0) throw Error("Unsupported layout widget");
 		const names = children$1(root).map((node) => get(node, "name"));
@@ -8475,6 +8488,17 @@ function binding(binding, node) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/layout.preview.mjs
+function fieldModel(item, sample) {
+	const options = item.options || {}, value = options.bind ? binding(options.bind, sample) : "", colors = options.colors ? JSON.parse(options.colors) : {}, color = Object.prototype.hasOwnProperty.call(colors, String(value)) ? colors[String(value)] : options.color || (["badge", "progress"].includes(options.format) ? "contentAccent" : "primaryText");
+	return {
+		value,
+		text: options.text || "",
+		format: options.format || "plain",
+		suffix: options.format === "progress" ? "%" : "",
+		textColor: color,
+		progressColor: color
+	};
+}
 var number = (value, fallback, min, max) => Number.isFinite(Number(value)) ? Math.max(min, Math.min(max, Number(value))) : fallback;
 function variant(sample) {
 	return sample.kind === "branch" ? (sample.branch || {}).kind || "versions" : sample.kind === "object" ? sample.depth ? "children" : "main" : sample.kind;
@@ -8542,7 +8566,12 @@ function describe$47(layout, sample, width, selected, language, screenWidth, ass
 	const elements = (layout.elements || []).filter((item) => visible$1(item, sample, layout, screenWidth || width)), snapshot = sample.snapshot_display || {}, record = sample.record || {}, title = sample.title || record.name || record.title || record.code || String(record.id || ""), subtitle = sample.subtitle || record.description || "";
 	function draw(item, box, inner) {
 		const id = namePrefix + "_" + item.name, children = [], options = item.options || {}, value = options.bind ? binding(options.bind, sample) : options.text || "", text = typeof value === "object" ? JSON.stringify(value) : String(value), color = item.tone === "muted" ? "secondaryText" : "primaryText", weight = item.tone === "strong" || item.kind === "title" ? 600 : 400;
-		if (item.kind === "group") children.push(node("Box", id + "Group", rect$1(4, 4, Math.max(0, box.width - 8), Math.max(0, box.height - 8)), { children: inner ? inner.nodes : [] }));
+		if (item.kind === "group") children.push(node("Box", id + "Group", rect$1(4, 4, Math.max(0, box.width - 8), Math.max(0, box.height - 8)), {
+			background: options.fill || "transparent",
+			border: options.stroke,
+			radius: Number(options.radius || 0),
+			children: inner ? inner.nodes : []
+		}));
 		else if (item.kind === "view") {
 			if (inner) {
 				const owned = (nodes) => nodes.map((row) => Object.assign({}, row, {
@@ -8567,6 +8596,13 @@ function describe$47(layout, sample, width, selected, language, screenWidth, ass
 				outlined: false,
 				fit: options.fit || "cover"
 			}));
+		} else if (item.kind === "field") {
+			const rendered = field$2(fieldModel(item, sample), id + "Value", Math.max(0, box.width - 12));
+			for (const child of rendered.children) {
+				child.x += 6;
+				child.y += 4;
+				children.push(child);
+			}
 		} else if (item.kind === "button") {
 			const badge = options.badge ? Number(binding(options.badge, sample)) : 0, caption = text || (item.kind === "button" ? tr({
 				tasks: "Tasks",
@@ -8580,10 +8616,24 @@ function describe$47(layout, sample, width, selected, language, screenWidth, ass
 				link: "Link"
 			}[options.action] || "Button") : options.href || tr("Link"));
 			const iconOnly = !!options.icon && !options.text && !options.bind;
-			children.push(node("Button", id + "Button", rect$1(4, 4, Math.max(0, Math.min(box.width - 8, iconOnly ? box.height - 8 : box.width)), Math.max(0, Math.min(38, box.height - 8))), {
+			const fullCaption = caption + (Number.isFinite(badge) && badge > 0 ? " · " + badge : ""), icon = options.icon || {
+				tasks: "task",
+				notes: "notes",
+				upload: "upload",
+				inspect: "search",
+				relations: "link"
+			}[options.action] || "", counted = !iconOnly && !!icon && !!options.badge && box.width - 8 < buttonWidth(fullCaption.length * 7, true);
+			const buttonHeight = Math.max(0, Math.min(38, box.height - 8)), buttonWidth$1 = Math.max(0, Math.min(box.width - 8, iconOnly ? buttonHeight : box.width));
+			children.push(node("Button", id + "Button", rect$1(4, 4, buttonWidth$1, iconOnly ? buttonWidth$1 : buttonHeight), {
 				iconOnly,
-				badgeCount: Number.isFinite(badge) ? Math.max(0, badge) : 0,
-				text: caption + (Number.isFinite(badge) && badge > 0 ? " · " + badge : ""),
+				iconAction: iconOnly,
+				round: iconOnly,
+				iconColor: badge > 0 ? "contentAccent" : "secondaryText",
+				badgeColor: "contentAccent",
+				badgeCount: iconOnly && Number.isFinite(badge) ? Math.max(0, badge) : 0,
+				text: counted ? String(Number.isFinite(badge) ? Math.max(0, badge) : 0) : fullCaption,
+				label: fullCaption,
+				toolTip: fullCaption,
 				enabled: !editing && (!!(options.href_bind ? binding(options.href_bind, sample) : options.href) || actionAvailable(options.action, sample)),
 				action: {
 					type: "itemAction",
@@ -8591,13 +8641,7 @@ function describe$47(layout, sample, width, selected, language, screenWidth, ass
 					urlOnly: !options.action,
 					href: options.href_bind ? binding(options.href_bind, sample) : options.href
 				},
-				icon: options.icon || {
-					tasks: "task",
-					notes: "notes",
-					upload: "upload",
-					inspect: "search",
-					relations: "link"
-				}[options.action] || ""
+				icon
 			}));
 		} else if (item.kind === "item-menu") children.push(node("Button", id + "Menu", rect$1(Math.max(0, box.width - 38), 0, Math.min(38, box.width), 38), {
 			text: tr("Item actions"),
@@ -8657,7 +8701,7 @@ function describe$47(layout, sample, width, selected, language, screenWidth, ass
 			children.push(label(id + "Text", rect$1(6, 4, Math.max(0, box.width - 12), Math.max(0, box.height - 8)), content, {
 				wrap: maxLines > 1,
 				maxLines,
-				color,
+				color: options.color || color,
 				weight,
 				fontRole: item.kind === "title" ? "section" : "body",
 				align: item.align === "center" ? "center" : item.align === "end" ? "right" : "left"
@@ -8741,7 +8785,7 @@ function describe$47(layout, sample, width, selected, language, screenWidth, ass
 					box = rect$1(copyX, 8, Math.max(1, w - copyX - 8), child.height + 8);
 					cursor = Math.max(cursor, box.height + 16);
 				} else {
-					const h = child ? child.height + 8 : item.role === "title-line" ? 36 : item.kind === "image" ? number(item.height, 76, 24, 1200) : item.kind === "description" ? 44 : 38;
+					const h = child ? child.height + 8 : item.kind === "field" ? field$2(fieldModel(item, sample), "measure", w - 16).height + 8 : item.role === "title-line" ? 36 : item.kind === "image" ? number(item.height, 76, 24, 1200) : item.kind === "description" ? 44 : 38;
 					box = rect$1(8, cursor, w - 16, h);
 					cursor += h + 4;
 				}
@@ -8760,7 +8804,7 @@ function describe$47(layout, sample, width, selected, language, screenWidth, ass
 		}
 		const gap = (definition ? definition.gap : layout.gap) ?? 6, available = Math.max(1, w - gap * (columns - 1)), sizes = tracks(definition ? "" : layout.tracks, columns, available), rows = [];
 		for (const item of items) {
-			const start = number(item.row, 1, 1, 100) - 1, span = number(item.rows, 1, 1, 100), column = number(item.column, 1, 1, columns) - 1, columnsWide = number(item.span, 1, 1, columns - column), cellWidth = sizes.slice(column, column + columnsWide).reduce((a, b) => a + b, 0) + gap * (columnsWide - 1), child = item.kind === "group" ? container(item.name, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$47(item.widget_layout, sample, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null, h = Math.max(child ? child.height + 8 : number(item.height, 40, 1, 1200), number(item.height, 40, 1, 1200)) + (item.padding?.[0] || 0) + (item.padding?.[2] || 0) + (item.margin?.[0] || 0) + (item.margin?.[2] || 0);
+			const start = number(item.row, 1, 1, 100) - 1, span = number(item.rows, 1, 1, 100), column = number(item.column, 1, 1, columns) - 1, columnsWide = number(item.span, 1, 1, columns - column), cellWidth = sizes.slice(column, column + columnsWide).reduce((a, b) => a + b, 0) + gap * (columnsWide - 1), child = item.kind === "group" ? container(item.name, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$47(item.widget_layout, sample, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null, h = Math.max(child ? child.height + 8 : item.kind === "field" ? field$2(fieldModel(item, sample), "measure", cellWidth).height + 8 : item.kind === "button" ? Math.max(40, number(item.height, 40, 1, 1200)) : number(item.height, 40, 1, 1200), number(item.height, 40, 1, 1200)) + (item.padding?.[0] || 0) + (item.padding?.[2] || 0) + (item.margin?.[0] || 0) + (item.margin?.[2] || 0);
 			for (let index = start; index < start + span; index++) rows[index] = Math.max(rows[index] || 0, (h - gap * (span - 1)) / span);
 			placements.push({
 				item,
@@ -63088,6 +63132,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { roles as $, _sfc_main$116 as A, geometry$2 as At, duplicateProfile as B, captionedSwitch as C, appearances as Ct, changeDefinition as D, duplicate as Dt, _sfc_main$107 as E, copy as Et, ObjectAction_default as F, reorder$1 as Ft, alignment as G, _sfc_main$130 as H, _sfc_main$125 as I, reparent as It, toggle as J, roots as K, applyDuplicateProfile as L, siblings as Lt, zooms as M, layers as Mt, ResultPresentation_default as N, path as Nt, definitionWizard as O, fingerprint as Ot, RelatedObjects_default as P, remove$2 as Pt, edit$2 as Q, changeContent as R, sizing as Rt, _sfc_main$63 as S, add as St, _sfc_main$100 as T, change$7 as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$144 as W, actions$4 as X, spacingField as Y, describe$48 as Z, editColumn as _, filter as _t, updateModes as a, notices as at, describe$18 as b, scope as bt, runBrowserScript as c, tabs as ct, ProjectCreation_default as d, App_default as default, views as dt, serialize as et, ImagePicker_default as f, _sfc_main$165 as ft, describe$17 as g, fields$2 as gt, contentWidth as h, change$6 as ht, updateIntervals as i, documentEvent as it, controls$1 as j, kinds as jt, displayWidgets as k, geometries as kt, scriptTree as l, toolbar$4 as lt, change as m, actionLayout as mt, networkSettings as n, variants as nt, _sfc_main$26 as o, policy as ot, readPreviewImage as p, _sfc_main$171 as pt, selected as q, updateBatchDelays as r, widgets as rt, buttonId as s, sectionSelector as st, App_exports as t, template as tt, lifecycle as u, _sfc_main$157 as ut, fieldsFor as v, mode as vt, _sfc_main$98 as w, block as wt, pages as x, type as xt, confirmation$2 as y, options$1 as yt, contentChoices as z, spacing$1 as zt };
+export { edit$2 as $, _sfc_main$116 as A, geometries as At, duplicateProfile as B, spacing$1 as Bt, captionedSwitch as C, add as Ct, changeDefinition as D, copy as Dt, _sfc_main$107 as E, change$7 as Et, ObjectAction_default as F, remove$2 as Ft, alignment as G, _sfc_main$130 as H, _sfc_main$125 as I, reorder$1 as It, toggle as J, roots as K, applyDuplicateProfile as L, reparent as Lt, zooms as M, kinds as Mt, ResultPresentation_default as N, layers as Nt, definitionWizard as O, duplicate as Ot, RelatedObjects_default as P, path as Pt, describe$48 as Q, changeContent as R, siblings as Rt, _sfc_main$63 as S, type as St, _sfc_main$100 as T, block as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$144 as W, actions$4 as X, spacingField as Y, binding as Z, editColumn as _, fields$2 as _t, updateModes as a, documentEvent as at, describe$18 as b, options$1 as bt, runBrowserScript as c, sectionSelector as ct, ProjectCreation_default as d, App_default as default, _sfc_main$157 as dt, roles as et, ImagePicker_default as f, views as ft, describe$17 as g, change$6 as gt, contentWidth as h, actionLayout as ht, updateIntervals as i, widgets as it, controls$1 as j, geometry$2 as jt, displayWidgets as k, fingerprint as kt, scriptTree as l, tabs as lt, change as m, _sfc_main$171 as mt, networkSettings as n, template as nt, _sfc_main$26 as o, notices as ot, readPreviewImage as p, _sfc_main$165 as pt, selected as q, updateBatchDelays as r, variants as rt, buttonId as s, policy as st, App_exports as t, serialize as tt, lifecycle as u, toolbar$4 as ut, fieldsFor as v, filter as vt, _sfc_main$98 as w, appearances as wt, pages as x, scope as xt, confirmation$2 as y, mode as yt, contentChoices as z, sizing as zt };
 
 //# sourceMappingURL=App.js.map

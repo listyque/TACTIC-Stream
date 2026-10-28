@@ -1,4 +1,11 @@
 var en_default = {
+	Secondary: "Secondary",
+	Surface: "Surface",
+	"Value color": "Value color",
+	Yellow: "Yellow",
+	"Invalid field value colors": "Invalid field value colors",
+	"Invalid field display format": "Invalid field display format",
+	"Corner radius must be between 0 and 48": "Corner radius must be between 0 and 48",
 	"Search objects": "Search objects",
 	"Invalid nested search text": "Invalid nested search text",
 	"Invalid suggestion scope": "Invalid suggestion scope",
@@ -1955,6 +1962,13 @@ var en_default = {
 	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
 };
 var ru_default = {
+	Secondary: "Вторичный",
+	Surface: "Поверхность",
+	"Value color": "Цвет значения",
+	Yellow: "Жёлтый",
+	"Invalid field value colors": "Некорректные цвета значений поля",
+	"Invalid field display format": "Некорректный формат поля",
+	"Corner radius must be between 0 and 48": "Радиус углов должен быть от 0 до 48",
 	"Invalid nested search text": "Некорректный текст поиска",
 	"Invalid suggestion scope": "Некорректная область поиска подсказок",
 	"This Search Type has no searchable title": "У этого серч-тайпа нет текстового поля для поиска",

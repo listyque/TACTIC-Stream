@@ -645,10 +645,14 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
     def ts_item_layout_read(search_type: Identifier, view: Identifier) -> dict[str, Any]:
         """Read a native item/card view, its exact XML sources, resolved elements, catalogue and revision.
 
-        Compose declarative image/text/title/button/group/view elements in a grid; bind record.*
+        Compose declarative image/text/field/title/button/group/view elements in a grid; bind record.*
         or node.* fields. An element search_type targets its actual record type; reusable view
         references resolve in that type. Use variant to distinguish main/children/process/etc.
         Embed this view in a dashboard items brick to reuse the existing expandable item tree.
+        A field uses text as caption, format plain/date/datetime/badge/progress, color as a theme
+        role or #RRGGBB and optional colors as a JSON value-to-color map from actual project data.
+        Groups accept fill/stroke theme roles or #RRGGBB and radius 0..48. Use named buttons
+        with badge bindings for clear counted actions; do not squeeze controls into text-height rows.
         """
         return connection.command('item_layout', 'read', search_type=search_type, view=view)
 

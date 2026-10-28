@@ -525,3 +525,17 @@ reassignment/uploads/multiple values/custom handlers use native editors/relation
 A badge color is presentation, not inferred workflow meaning. A native form's
 status choices come from its real EditWdg/pipeline. Local drafts are limited to20,
 record-scoped and memory-only; clean preview disables all editing/actions.
+
+### Formatted object cards
+
+`ts_item_layout_read` now advertises `field`. Its options are `bind`, optional
+`text` caption, `format` (plain/date/datetime/badge/progress), optional `color`
+(theme role or #RRGGBB) and `colors` (a JSON map of actual scalar values to
+colors, at most32 entries). Use the project's real values; presentation colors
+never define terminal workflow states. Groups accept `fill`, `stroke` and
+`radius` 0..48. Named native action buttons with a `badge` binding show the
+count beside the caption, once. Icon-only actions retain square hit areas.
+Read each view, preview with its revision, then save through the ordinary item
+layout tools. Compose these cards inside the existing dashboard items tree;
+do not replace the tree or the application sidebar. No client source editing
+is needed to author a card with these bricks.

@@ -527,6 +527,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :destructive="node.destructive"
         :tonal="node.tonal"
         :badge-count="node.badgeCount || 0"
+        :badge-color="node.badgeColor ? color(node.badgeColor) : undefined"
         :show-zero-badge="node.showZeroBadge"
         :disabled="!node.enabled"
         :role="node.radio ? 'radio' : undefined"

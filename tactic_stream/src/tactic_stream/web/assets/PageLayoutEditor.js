@@ -4,7 +4,7 @@ import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_
 import { n as sections } from "./sections.ui.js";
 import { o as projectPath } from "./links.js";
 import { t as listAction } from "./tree.ui.js";
-import { A as _sfc_main$2, At as geometry, Ct as appearances, Dt as duplicate, Et as copy, Ft as reorder, G as alignment, It as reparent, J as toggle, K as roots, Lt as siblings, M as zooms, Mt as layers, Nt as path, Ot as fingerprint, Pt as remove, Rt as sizing, St as add, Tt as change, Y as spacingField, _t as filter, at as notices, bt as scope$1, gt as fields$1, ht as change$1, it as documentEvent, j as controls, jt as kinds, kt as geometries, lt as toolbar$1, q as selected, st as sectionSelector, vt as mode, wt as block, xt as type, yt as options, zt as spacing } from "./App.js";
+import { A as _sfc_main$2, At as geometries, Bt as spacing, Ct as add, Dt as copy, Et as change, Ft as remove, G as alignment, It as reorder, J as toggle, K as roots, Lt as reparent, M as zooms, Mt as kinds, Nt as layers, Ot as duplicate, Pt as path, Rt as siblings, St as type, Tt as block, Y as spacingField, _t as fields$1, at as documentEvent, bt as options, ct as sectionSelector, gt as change$1, j as controls, jt as geometry, kt as fingerprint, ot as notices, q as selected, ut as toolbar$1, vt as filter, wt as appearances, xt as scope$1, yt as mode, zt as sizing } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
 var collections = [
 	"items",

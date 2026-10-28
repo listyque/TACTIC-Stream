@@ -4120,6 +4120,13 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	Secondary: "Вторичный",
+	Surface: "Поверхность",
+	"Value color": "Цвет значения",
+	Yellow: "Жёлтый",
+	"Invalid field value colors": "Некорректные цвета значений поля",
+	"Invalid field display format": "Некорректный формат поля",
+	"Corner radius must be between 0 and 48": "Радиус углов должен быть от 0 до 48",
 	"Search objects": "Поиск объектов",
 	"Invalid nested search text": "Некорректный текст поиска",
 	"Invalid suggestion scope": "Некорректная область поиска подсказок",
@@ -10562,6 +10569,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					destructive: node.destructive,
 					tonal: node.tonal,
 					"badge-count": node.badgeCount || 0,
+					"badge-color": node.badgeColor ? color(node.badgeColor) : void 0,
 					"show-zero-badge": node.showZeroBadge,
 					disabled: !node.enabled,
 					role: node.radio ? "radio" : void 0,
@@ -10595,6 +10603,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"destructive",
 					"tonal",
 					"badge-count",
+					"badge-color",
 					"show-zero-badge",
 					"disabled",
 					"role",

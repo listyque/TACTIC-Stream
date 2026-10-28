@@ -3,7 +3,7 @@ import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from
 import { Jt as label, Xt as node, Yt as muted, Zt as rect, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate, yt as sidebarRequest } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { i as row$1, n as navigate } from "./tree.ui.js";
-import { at as notices, ct as tabs, it as documentEvent, lt as toolbar, ot as policy } from "./App.js";
+import { at as documentEvent, lt as tabs, ot as notices, st as policy, ut as toolbar } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.ui.mjs
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {
 	source,

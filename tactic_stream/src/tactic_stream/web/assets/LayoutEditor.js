@@ -4,7 +4,7 @@ import { A as t, j as appearance, k as asyncComponent, ot as _plugin_vue_export_
 import { Jt as label, Ot as widgetConfiguration, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$2, qt as button, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { u as workspaceAddress } from "./links.js";
-import { $ as roles, Q as edit, X as actions, Y as spacingField, Z as describe$1, at as notices, et as serialize, it as documentEvent, lt as toolbar$1, nt as variants, ot as policy, rt as widgets, st as sectionSelector, tt as template } from "./App.js";
+import { $ as edit, Q as describe$1, X as actions, Y as spacingField, Z as binding, at as documentEvent, ct as sectionSelector, et as roles, it as widgets, nt as template, ot as notices, rt as variants, st as policy, tt as serialize, ut as toolbar$1 } from "./App.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");
@@ -548,6 +548,7 @@ var labels = {
 	group: "Group",
 	view: "Reusable view",
 	text: "Text",
+	field: "Field",
 	title: "Title",
 	description: "Description",
 	image: "Image",
@@ -628,6 +629,13 @@ function model(raw, ui) {
 		}
 		if (layout.elements.length > 128) layoutError = "Layout supports at most 128 elements";
 		for (const item of layout.elements) {
+			if (item.options.colors) try {
+				const colors = JSON.parse(item.options.colors);
+				if (!colors || typeof colors !== "object" || Array.isArray(colors)) throw Error("Invalid field value colors");
+			} catch {
+				layoutError = "Invalid field value colors";
+				break;
+			}
 			const seen = [item.name];
 			let parent = item.parent;
 			while (parent) {
@@ -796,6 +804,7 @@ function propertyFields(model, ui, language, width) {
 	}, text("title", "Label", item.title), choice("kind", "Widget", item.kind, choices(widgets, language)));
 	if ([
 		"text",
+		"field",
 		"title",
 		"description",
 		"image",
@@ -807,7 +816,7 @@ function propertyFields(model, ui, language, width) {
 			id: "layoutContentHeading",
 			title: "Content"
 		}, choice("option:bind", "Data binding", item.options.bind || "", bindings, "Choose which object value to display"));
-		if (!item.options.bind) fields.push(text("option:text", item.kind === "image" ? "Image URL" : "Text", item.options.text || ""));
+		if (!item.options.bind || item.kind === "field") fields.push(text("option:text", item.kind === "image" ? "Image URL" : item.kind === "field" ? "Label" : "Text", item.options.text || ""));
 		if (item.kind === "image") {
 			if (item.role !== "preview") fields.push(integer("height", "Image height", item.height));
 			fields.push(choice("option:fit", "Image fit", item.options.fit || "cover", choices(["cover", "contain"], language)));
@@ -818,6 +827,54 @@ function propertyFields(model, ui, language, width) {
 			label: tr("No badge")
 		}), "Choose a number to show on the button"), text("option:icon", "Icon", item.options.icon || ""));
 	}
+	const palette = [
+		["", "Auto"],
+		["primaryText", "Text"],
+		["secondaryText", "Secondary"],
+		["contentAccent", "Accent"],
+		["green", "Green"],
+		["yellow", "Yellow"],
+		["red", "Red"],
+		["cyan", "Cyan"],
+		["violet", "Violet"]
+	];
+	const colorOptions = (value, entries = palette) => entries.map(([value, label]) => ({
+		value,
+		label: tr(label)
+	})).concat(value?.startsWith("#") ? [{
+		value,
+		label: value
+	}] : []);
+	if ([
+		"field",
+		"text",
+		"title",
+		"description"
+	].includes(item.kind)) fields.push(choice("option:color", "Text / icon color", item.options.color || "", colorOptions(item.options.color)));
+	if (item.kind === "field") {
+		fields.push(choice("option:format", "Field display", item.options.format || "plain", [
+			["plain", "Plain text"],
+			["date", "Date"],
+			["datetime", "Date and time"],
+			["badge", "Status badge"],
+			["progress", "Progress"]
+		].map(([value, label]) => ({
+			value,
+			label: tr(label)
+		}))));
+		const colors = item.options.colors ? JSON.parse(item.options.colors) : {}, values = [...new Set(Object.keys(colors).concat((model.sampleItems || []).map((sample) => String(binding(item.options.bind, sample))).filter(Boolean)))].slice(0, 32);
+		for (const value of values) fields.push(choice("valueColor:" + value, "Value color", colors[value] || "", colorOptions(colors[value]), "«" + value + "»"));
+	}
+	if (item.kind === "group") fields.push(choice("option:fill", "Fill color", item.options.fill || "", colorOptions(item.options.fill, [
+		["", "None"],
+		["panel", "Panel"],
+		["workspace", "Workspace"],
+		["surfaceContainerLow", "Surface"]
+	])), choice("option:stroke", "Stroke color", item.options.stroke || "", colorOptions(item.options.stroke, [
+		["", "None"],
+		["outlineVariant", "Outline"],
+		["contentAccent", "Accent"]
+	])), text("option:radius", "Corner radius", item.options.radius || "0"));
 	if (item.kind === "view") fields.push(text("option:view", "Reusable view", item.options.view || ""));
 	const parentOptions = [{
 		value: "",

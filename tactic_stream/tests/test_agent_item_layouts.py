@@ -57,11 +57,12 @@ class AgentItemLayouts(unittest.TestCase):
                     return result.structured_content
 
                 state = await call('read', search_type='sthpw/task', view='agent_task_card')
-                xml = '<config><agent_task_card layout="sobject-layout"><element name="task_title"><display class="title"><bind>record.process</bind></display></element></agent_task_card></config>'
+                xml = '<config><agent_task_card layout="sobject-layout"><element name="task_title"><display class="title"><bind>record.process</bind></display></element><element name="state" row="2" height="40"><display class="field"><bind>record.status</bind><format>badge</format><colors>{"Review":"yellow"}</colors></display></element></agent_task_card></config>'
                 payload = dict(search_type='sthpw/task', view='agent_task_card', xml=xml,
                                expected_revision=state['revision'], operation_id=str(uuid4()))
                 preview = await call('preview', **{k: v for k, v in payload.items() if k != 'operation_id'})
                 self.assertEqual(preview['interface']['table']['item_layout']['elements'][0]['kind'], 'title')
+                self.assertEqual(preview['interface']['table']['item_layout']['elements'][1]['options']['format'], 'badge')
                 saved = await call('save', **payload)
                 self.assertEqual(await call('save', **payload), saved)
                 self.assertEqual(await call('operation', operation_id=payload['operation_id']), saved)

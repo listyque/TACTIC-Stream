@@ -1,9 +1,10 @@
 """Bounded, renderer-independent SObject layout metadata over WidgetConfigView."""
+import json
 import re
 from importlib.resources import files
 
 LAYOUT = 'sobject-layout'
-WIDGETS = ('group', 'view', 'text', 'title', 'description', 'image', 'link', 'button',
+WIDGETS = ('group', 'view', 'text', 'field', 'title', 'description', 'image', 'link', 'button',
            'metadata', 'snapshot-details', 'snapshot-size', 'snapshot-summary', 'branch-summary', 'file-offline', 'item-menu', 'knowledge', 'quick-actions', 'relations')
 ACTIONS = ('inspect', 'operate', 'preview', 'tasks', 'notes', 'upload', 'create', 'link', 'relations')
 VARIANTS = ('all', 'main', 'children', 'process', 'relation', 'versions', 'snapshot', 'file')
@@ -12,6 +13,7 @@ ROLES = ('', 'preview', 'copy', 'title-line', 'title-actions', 'description', 'm
          'hover-actions', 'communication', 'task-button', 'note-button', 'mobile-actions', 'file-offline')
 CONDITIONS = ('desktop', 'mobile', 'tree', 'not-tree', 'object', 'object-or-process', 'not-branch',
               'description', 'snapshot', 'branch', 'relation', 'mobile-upload')
+COLORS = r'(?:transparent|primaryText|secondaryText|contentAccent|action|green|yellow|red|cyan|violet|panel|workspace|surfaceContainerLow|outlineVariant|#[0-9a-fA-F]{6})'
 
 
 def layout_view_names(search_type, records):
@@ -107,8 +109,27 @@ def describe_item_layout(description):
         if not re.fullmatch(r'[A-Za-z_]\w{0,63}', name) or name in names:
             raise ValueError('Invalid or duplicate layout element name')
         names.add(name)
-        if set(options) - {'bind', 'text', 'href', 'href_bind', 'badge', 'icon', 'action', 'fit', 'view'}:
+        if set(options) - {'bind', 'text', 'href', 'href_bind', 'badge', 'icon', 'action', 'fit', 'view',
+                           'format', 'color', 'colors', 'fill', 'stroke', 'radius'}:
             raise ValueError('Unsupported layout widget option')
+        if options.get('format', 'plain') not in ('plain', 'date', 'datetime', 'badge', 'progress'):
+            raise ValueError('Invalid field display format')
+        for key in ('color', 'fill', 'stroke'):
+            if options.get(key) and not re.fullmatch(COLORS, options[key]):
+                raise ValueError('Choose a theme color or enter a six-digit hex color')
+        if 'radius' in options and (not str(options['radius']).isdecimal() or int(options['radius']) > 48):
+            raise ValueError('Corner radius must be between 0 and 48')
+        if 'colors' in options:
+            try:
+                colors = json.loads(options['colors'])
+            except (ValueError, TypeError) as error:
+                raise ValueError('Invalid field value colors') from error
+            if (not isinstance(colors, dict) or len(colors) > 32 or
+                    any(not isinstance(key, str) or len(key) > 128 or
+                        key in ('__proto__', 'constructor', 'prototype') or
+                        not isinstance(value, str) or not re.fullmatch(COLORS, value)
+                        for key, value in colors.items())):
+                raise ValueError('Invalid field value colors')
         for key in ('bind', 'href_bind', 'badge'):
             binding = options.get(key, '')
             if binding and (not re.fullmatch(r'(record|node)\.[A-Za-z_]\w*(?:\.[A-Za-z_]\w*){0,4}', binding)
