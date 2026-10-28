@@ -411,7 +411,7 @@ export default {
     statusAccent(note) {
       return (
         this.editor?.status_choices?.find((row) => row.value === note.after)
-          ?.color || 'var(--primary)'
+          ?.color || ''
       );
     },
     refresh() {

@@ -145,15 +145,35 @@ const grid = scene.nodes
   .find((node) => node.id === 'customLayoutScroll')
   .children.find((node) => node.editorPath);
 const children = grid.children.filter((node) => node.editorPath);
-assert.equal(children[0].width, 610);
+assert.equal(children[0].width, 626);
 assert.equal(children[0].height, 210);
-assert.equal(children[1].x, 620);
+assert.equal(children[1].x, 636);
 assert.equal(children[2].y, 110);
 const button = children[2].children[0];
 assert.equal(button.action.name, 'layout-link');
 assert.equal(button.highlighted, true);
 assert.equal(button.enabled, true);
 assert.ok(children[3], 'An empty spacer stays selectable on the canvas');
+assert.equal(
+  grid.width,
+  944,
+  'A fitted page uses the body width without an unused scrollbar gutter'
+);
+const overflowing = Layout.describe(
+  { layoutNodes: [{ ...nodes[0], height: 1000 }] },
+  944,
+  600,
+  'en',
+  true,
+  '',
+  measure
+).nodes.find((node) => node.id === 'customLayoutScroll');
+assert.ok(overflowing.contentHeight > overflowing.height);
+assert.equal(
+  overflowing.children[0].width,
+  928,
+  'Overflowing pages retain room for the scrollbar'
+);
 console.log(
   'Page layout kit: adaptive spans, sizing, measured content, primitives, bindings and atomic history pass'
 );

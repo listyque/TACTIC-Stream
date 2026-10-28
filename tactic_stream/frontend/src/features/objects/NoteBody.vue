@@ -67,7 +67,10 @@ const port = {
           [
             h(AppIcon, {
               name: 'status',
-              style: { fontSize: '22px', color: props.statusColor }
+              style: {
+                fontSize: '22px',
+                color: props.statusColor || 'var(--primary)'
+              }
             }),
             h(
               'span',

@@ -2996,7 +2996,6 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 	const tabOffset = cell.layoutTabs?.length ? 56 : 0;
 	const children = [], gap = 8, tableHeight = Math.max(320, height - tabOffset - 48);
 	const controls = cell.layoutState?.controls || cell.layoutControls || [];
-	const pageFilters = describe$56(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), Math.max(0, width - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
 	function draw(items, originX, originY, space, prefix = "customLayout", startIndex = 0, output = children, bottom = Infinity, spacing = 8, slotHeight = null) {
 		let top = originY;
 		for (const [index, source] of (items || []).entries()) {
@@ -3305,13 +3304,22 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 		}
 		return Math.max(0, top - originY - spacing);
 	}
-	children.push(...pageFilters.nodes);
-	const flowExtent = pageFilters.height + draw(cell.layoutNodes, 0, pageFilters.height, Math.max(0, width - 24));
 	function visualBottom(nodes) {
 		return Math.max(0, ...nodes.map((item) => item.y + Math.max(item.height, item.clip === false ? visualBottom(item.children || []) : 0)));
 	}
-	const extent = Math.max(flowExtent, visualBottom(children));
-	if (cell.layoutError) children.push(label("layoutError", rect$1(0, extent + gap, Math.max(0, width - 24), 64), cell.layoutError, {
+	function render(contentWidth) {
+		const filters = describe$56(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), contentWidth, language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
+		children.length = 0;
+		children.push(...filters.nodes);
+		const flowExtent = filters.height + draw(cell.layoutNodes, 0, filters.height, contentWidth);
+		return Math.max(flowExtent, visualBottom(children));
+	}
+	let contentWidth = Math.max(0, width), extent = render(contentWidth);
+	if (extent + (cell.layoutError ? 80 : 0) > Math.max(0, height - tabOffset)) {
+		contentWidth = Math.max(0, width - controls$2.scrollBar.extent - 4);
+		extent = render(contentWidth);
+	}
+	if (cell.layoutError) children.push(label("layoutError", rect$1(0, extent + gap, contentWidth, 64), cell.layoutError, {
 		wrap: true,
 		color: "error"
 	}));
@@ -12512,9 +12520,9 @@ var _sfc_main$145 = {
 			height: rect.height + "px"
 		});
 		function measure() {
-			if (root.value?.clientWidth > 0) width.value = root.value.clientWidth;
-			if (field.value && !props.modelValue) {
-				fieldHeight.value = metrics$9.minimum;
+			if (root.value?.clientWidth > 0 && width.value !== root.value.clientWidth) {
+				width.value = root.value.clientWidth;
+				nextTick(measure);
 				return;
 			}
 			if (field.value) {
@@ -12531,7 +12539,12 @@ var _sfc_main$145 = {
 			measure();
 		});
 		onBeforeUnmount(() => observer?.disconnect());
-		watch(() => props.modelValue, () => nextTick(measure));
+		watch(() => [
+			props.modelValue,
+			props.label,
+			appearance.language,
+			mobile.value
+		], () => nextTick(measure));
 		const matches = computed(() => props.members.filter((row) => (row.login + " " + (row.displayName || "")).toLowerCase().includes((mention$1.value || "").toLowerCase())));
 		const mentionId = useId();
 		const optionId = (login) => mentionId + "-mention-" + encodeURIComponent(login);
@@ -15312,7 +15325,7 @@ var _sfc_main$129 = {
 						name: "status",
 						style: {
 							fontSize: "22px",
-							color: props.statusColor
+							color: props.statusColor || "var(--primary)"
 						}
 					}), h("span", { style: {
 						minWidth: 0,
@@ -15787,7 +15800,7 @@ var _sfc_main$127 = {
 			};
 		},
 		statusAccent(note) {
-			return this.editor?.status_choices?.find((row) => row.value === note.after)?.color || "var(--primary)";
+			return this.editor?.status_choices?.find((row) => row.value === note.after)?.color || "";
 		},
 		refresh() {
 			if (!this.opened || document.hidden || (this.docked ? !this.active : document.activeElement?.closest("dialog") !== this.$refs.dialog) || this.loading || this.refreshing || this.saving || this.editing || this.deleting || this.taskAction || this.uncertain || this.taskUncertain || !this.validContext) return;

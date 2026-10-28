@@ -12,6 +12,7 @@ import EmojiPicker from '../../controls/EmojiPicker.vue';
 import AppButton from '../../controls/AppButton.vue';
 import { t } from '../../i18n.js';
 import { mobile } from '../../mobile.js';
+import { appearance } from '../../appearance.js';
 import { observeFrameSizes } from '../../frame/resize.js';
 import FrameView from '../../frame/FrameView.vue';
 import * as Panels from '../../../../src/tactic_stream/shared_ui/features/messages/panels.ui.mjs';
@@ -50,9 +51,9 @@ const bounds = (rect) => ({
   height: rect.height + 'px'
 });
 function measure() {
-  if (root.value?.clientWidth > 0) width.value = root.value.clientWidth;
-  if (field.value && !props.modelValue) {
-    fieldHeight.value = UI.metrics.minimum;
+  if (root.value?.clientWidth > 0 && width.value !== root.value.clientWidth) {
+    width.value = root.value.clientWidth;
+    nextTick(measure);
     return;
   }
   if (field.value) {
@@ -73,7 +74,7 @@ onMounted(() => {
 });
 onBeforeUnmount(() => observer?.disconnect());
 watch(
-  () => props.modelValue,
+  () => [props.modelValue, props.label, appearance.language, mobile.value],
   () => nextTick(measure)
 );
 const matches = computed(() =>

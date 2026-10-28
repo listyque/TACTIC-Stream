@@ -388,6 +388,76 @@ try {
   );
   const noteCard = inspector.locator('.shared-note-entry').first();
   await noteCard.getByText('Note for Hero asset', { exact: true }).waitFor();
+  await page.evaluate(() => {
+    const owner = window.host.$refs.taskInspector;
+    owner.notes.push({
+      ...owner.notes[0],
+      id: 99,
+      entry_type: 'status',
+      after: 'Archived status',
+      body: ''
+    });
+  });
+  const statusCard = inspector.locator('[data-note-kind="status"]');
+  await statusCard.waitFor();
+  assert.notEqual(
+    await statusCard
+      .locator('[data-frame="noteBubbleFill"]')
+      .evaluate((element) => getComputedStyle(element).backgroundColor),
+    'rgba(0, 0, 0, 0)'
+  );
+  assert.notEqual(
+    await statusCard
+      .locator('[data-frame="noteBubbleBorder"]')
+      .evaluate((element) => getComputedStyle(element).boxShadow),
+    'none'
+  );
+  await page.evaluate(() => window.host.$refs.taskInspector.notes.pop());
+  const composer = inspector.locator('.note-composer .message-composer');
+  const composerStyle = await composer.getAttribute('style');
+  for (const width of [210, 300, 400]) {
+    await composer.evaluate((element, width) => {
+      element.style.width = width + 'px';
+      element.style.flex = '0 0 ' + width + 'px';
+    }, width);
+    await page.waitForFunction(() => {
+      const field = document.querySelector('.note-composer textarea');
+      return (
+        field && !field.value && field.scrollHeight <= field.clientHeight + 1
+      );
+    });
+  }
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      )
+  );
+  assert.ok(
+    await composer
+      .locator('textarea')
+      .evaluate((field) => field.scrollHeight <= field.clientHeight + 1)
+  );
+  const field = composer.locator('textarea');
+  for (const language of ['ru', 'en']) {
+    await page.evaluate((language) => {
+      window.appearance.language = language;
+    }, language);
+    await page.waitForFunction(() => {
+      const field = document.querySelector('.note-composer textarea');
+      return field.scrollHeight <= field.clientHeight + 1;
+    });
+  }
+  await field.fill('Long note\n'.repeat(30));
+  await page.waitForFunction(() => {
+    const field = document.querySelector('.note-composer textarea');
+    return field.scrollHeight > field.clientHeight && field.clientHeight <= 124;
+  });
+  await field.fill('');
+  await composer.evaluate(
+    (element, style) => element.setAttribute('style', style),
+    composerStyle
+  );
   noteSuffix = ' ' + privateKey;
   const privateRequested = page.waitForRequest('**/admin/messages/file');
   await page.evaluate((key) => {
