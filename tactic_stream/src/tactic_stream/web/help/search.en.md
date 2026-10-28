@@ -405,3 +405,5 @@ In tables, a plain row click highlights the active record without checking it or
 Table headers meet their rows without a dark spacer. Scrollbar space is reserved only when content overflows.
 
 Row context menus and three-dot menus open without dimming the workspace, including on narrow screens.
+
+Result and task table headers show a thin vertical column-boundary grip, highlighted on hover.

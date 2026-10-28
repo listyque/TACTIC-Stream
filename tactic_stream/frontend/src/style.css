@@ -104,8 +104,9 @@ a.app-button:hover { border-color: var(--primary); background: var(--hover); }
 .task-workspace-table .task-group .app-button { height:28px; min-height:28px; gap:6px; font-size:var(--text-caption); text-transform:uppercase; }
 .task-workspace-table .task-group small { display:inline-block; background:var(--surface-high); border-radius:8px; padding:0 5px; }
 .task-workspace-table .task-deleted { color:var(--muted); text-decoration:line-through; }
-.task-column-resizer { position: absolute; right: 0; top: 0; bottom: 0; width: 8px; cursor: col-resize; touch-action: none; }
-.task-column-resizer:hover, .task-column-resizer:focus-visible { background: var(--content-selection); }
+.task-column-resizer { position: absolute; right: 0; top: 0; bottom: 0; width: 12px; cursor: col-resize; touch-action: none; }
+.table-resize::after, .task-column-resizer::after { content: ''; position: absolute; right: 0; top: 25%; height: 50%; width: 1px; background: var(--table-header-text); opacity: 0.6; pointer-events: none; }
+.table-resize:is(:hover, :focus-visible)::after, .task-column-resizer:is(:hover, :focus-visible)::after { background: var(--primary); opacity: 1; }
 .task-workspace-details { position:sticky; left:0; width:100cqw; container-type:inline-size; white-space:normal; background:var(--surface-deep); border:0; padding:0; box-sizing:border-box; }
 .task-column-options section { border-block-end: 1px solid var(--outline-variant); padding-block: var(--space-xs); }
 .task-column-options section > div { display: flex; gap: var(--space-xs); align-items: center; }

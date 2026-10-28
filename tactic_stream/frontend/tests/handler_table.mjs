@@ -377,6 +377,13 @@ try {
     })
   );
   assert.equal(header.height, 37);
+  const grip = await table.locator('.table-resize').first().evaluate(el => {
+    const style = getComputedStyle(el, '::after');
+    return {width:style.width, background:style.backgroundColor, opacity:style.opacity};
+  });
+  assert.equal(grip.width, '1px');
+  assert.notEqual(grip.background, 'rgba(0, 0, 0, 0)');
+  assert(Number(grip.opacity) > 0);
   assert.equal(await table.locator('.handler-table-header').evaluate(el => getComputedStyle(el).borderBottomWidth), '0px');
   assert.equal(await table.evaluate(el => getComputedStyle(el).paddingRight), '0px');
   assert.equal(await table.evaluate(el => getComputedStyle(el).scrollbarGutter), 'auto');
