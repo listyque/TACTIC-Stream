@@ -940,6 +940,7 @@ try {
   await page.evaluate(() => window.host.page = 'header');
   const shelf = page.locator('[data-frame="scriptShelfButton"]');
   await shelf.waitFor();
+  assert.equal(await page.locator('[data-frame="searchRefreshButton"]').evaluate(el => parseFloat(el.style.left)), 8);
   for (const open of [false, true]) {
     await page.evaluate(open => window.host.shelfOpen = open, open);
     const paint = await shelf.evaluate(el => {const s=getComputedStyle(el);return {width:el.offsetWidth,height:el.offsetHeight,background:s.backgroundColor,radius:s.borderTopLeftRadius};});

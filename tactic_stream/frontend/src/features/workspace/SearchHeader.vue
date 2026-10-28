@@ -19,7 +19,7 @@ const views = Object.fromEntries(
   ])
 );
 const scene = computed(() =>
-  UI.describe(props.model, width.value, appearance.language)
+  UI.describe({ ...props.model, reserveGrip: false }, width.value, appearance.language)
 );
 let observer;
 onMounted(() => {

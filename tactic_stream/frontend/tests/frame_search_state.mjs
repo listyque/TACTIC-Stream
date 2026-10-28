@@ -242,3 +242,7 @@ for (const shelfOpen of [false, true]) {
   assert(!shelf.tonal);
   assert.equal(shelf.iconColor, shelfOpen ? 'action' : 'secondaryText');
 }
+
+const noGrip = Header.describe({reserveGrip:false}, 900, 'en');
+assert.equal(noGrip.nodes.find(node => node.id === 'searchRefreshButton').x, 8);
+assert.equal(noGrip.nodes.find(node => node.id === 'searchHeaderField').x, 50);

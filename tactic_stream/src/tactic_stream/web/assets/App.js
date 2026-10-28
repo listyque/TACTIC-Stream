@@ -48435,12 +48435,13 @@ function describe$9(model, width, language) {
 		iconColor: model.shelfOpen ? "action" : "secondaryText"
 	}));
 	if (!compact && model.shelf !== false) right -= 3;
-	const left = compact ? 8 : 80;
+	const refreshLeft = model.reserveGrip === false ? 8 : 38;
+	const left = compact ? 8 : refreshLeft + 42;
 	nodes.push(node("View", "searchHeaderField", rect$1(left, 5, right - left - 8, 38), {
 		view: "field",
 		visible: !compact || !model.collapseSearch || !!model.searchOpen
 	}));
-	nodes.push(button("searchRefreshButton", rect$1(38, 5, 38, 38), text("Refresh"), "refresh", { type: "refresh" }, !model.busy, {
+	nodes.push(button("searchRefreshButton", rect$1(refreshLeft, 5, 38, 38), text("Refresh"), "refresh", { type: "refresh" }, !model.busy, {
 		iconOnly: true,
 		visible: !compact
 	}));
@@ -48462,7 +48463,10 @@ var _sfc_main$39 = {
 			"quick",
 			"tags"
 		].map((name) => [name, { component: () => h("div", { class: "search-header-slot" }, slots[name]?.()) }]));
-		const scene = computed(() => describe$9(props.model, width.value, appearance.language));
+		const scene = computed(() => describe$9({
+			...props.model,
+			reserveGrip: false
+		}, width.value, appearance.language));
 		let observer;
 		onMounted(() => {
 			width.value = host.value.clientWidth;
