@@ -188,14 +188,14 @@ const views = computed(() => ({
     }
   }
 }));
-async function focusItem(value) {
+async function focusItem(value, force = false) {
   if (props.editing) return;
-  emit('focus', value);
+  if (!force) emit('focus', value);
   if (!props.model.layoutItems || !Layout.hasDetails(props.model.layoutNodes))
     return;
   if (value?.kind === 'branch') return;
   const key = value?.record?.__search_key__;
-  if (key && key === detail.value.targetSearchKey) return;
+  if (!force && key && key === detail.value.targetSearchKey) return;
   const request = ++detailGeneration;
   detail.value = { busy: !!key, targetSearchKey: key };
   for (const name of Object.keys(tables.value))
@@ -320,6 +320,10 @@ async function saveForm(action) {
 }
 function activate(action) {
   if (props.editing) return;
+  if (action.type === 'layout-split') {
+    state.value = Layout.resize(state.value, action);
+    return;
+  }
   if (action.type === 'record-form') {
     saveForm(action).catch((failure) => (error.value = failure.message));
     return;
@@ -332,7 +336,9 @@ function activate(action) {
       return;
     }
     if (action.name === 'refresh') {
-      emit('filter-apply', props.model.layoutFilterValues || {});
+      if (props.model.layoutItems && action.targetSearchKey)
+        focusItem({ record: { __search_key__: action.targetSearchKey } }, true);
+      else emit('filter-apply', props.model.layoutFilterValues || {});
       return;
     }
     emit(

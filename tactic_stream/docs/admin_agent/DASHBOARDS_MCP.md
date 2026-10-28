@@ -469,6 +469,20 @@ Native record forms and actions are described below. Arbitrary actions, timeline
 
 ## Record-aware parts in the existing hierarchy
 
+For a navigator/reader page, use a row whose two direct children are Items then
+Details. Both clients automatically fit that pair to the remaining viewport and
+reuse the native splitter; no new schema flag or generated script is needed.
+Weights choose the initial proportion; dragging stores a local open-page ratio.
+Use fill sizing with no fixed/min/max heights. Items may have panel padding;
+Details already supplies its surface/content padding, so keep its outer padding
+zero. Each pane scrolls internally. Narrow pages stack instead of squeezing.
+
+Choose a compact item view for narrow navigators: dominant title and at most one
+short secondary line, with no repeated column headings or row of action buttons.
+Do not add a preview placeholder to records without meaningful images. Keep
+Edit/Notes/Refresh in Details. Refresh preserves the existing tree and selection.
+Single-column groups without explicit tracks use the available width normally.
+
 Retain the existing items/details hierarchy and the application's sidebar. Use
 field/form/action inside type-conditioned Details groups for a selected record.
 No new navigation tree is needed for Project -> parts -> nested parts.

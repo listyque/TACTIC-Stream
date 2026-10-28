@@ -2979,6 +2979,10 @@ function change$3(state, selector, value) {
 		selectedValue: value
 	}) : item) });
 }
+function resize$1(state = {}, action) {
+	if (!Number.isFinite(action.value) || !Number.isFinite(action.extent) || action.extent <= 0) return state;
+	return Object.assign({}, state, { splits: Object.assign({}, state.splits, { [action.key]: Math.max(0, Math.min(1, action.value / action.extent)) }) });
+}
 function plain(value) {
 	return String(value || "").replace(/<[^>]*>/g, "").replace(/&(amp|lt|gt|quot|#39);/g, (_, entity) => ({
 		amp: "&",
@@ -3009,7 +3013,7 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 				0,
 				0,
 				0
-			], outerTop = top, outerWidth = width$1(item, space, measure), x = originX + margin[3] + padding[3], available = Math.max(0, outerWidth - margin[1] - margin[3] - padding[1] - padding[3]), firstOutput = output.length, childGap = item.gap === void 0 ? 8 : item.gap;
+			], outerTop = top, outerWidth = width$1(item, space, measure), x = originX + margin[3] + padding[3], available = Math.max(0, outerWidth - margin[1] - margin[3] - padding[1] - padding[3]), firstOutput = output.length, childGap = item.gap === void 0 ? 8 : item.gap, slotCapacity = slotHeight === null ? null : Math.max(0, slotHeight - margin[0] - margin[2] - padding[0] - padding[2]);
 			top += margin[0] + padding[0];
 			let extent = 0;
 			if (item.children) {
@@ -3019,13 +3023,37 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 					for (const cell of cells.placements) draw([item.children[cell.index]], x + cell.x, top + cell.y, cell.width, id, cell.index, output, bottom, childGap, cell.height);
 					extent = cells.height || item.row_height || 120;
 				} else if (horizontal) {
-					const budget = Math.max(0, available - childGap * (item.children.length - 1));
+					const navigator = item.children.length === 2 && item.children[0].kind === "items" && item.children[1].kind === "details";
+					const seam = navigator ? Math.max(childGap, controls$2.splitter.extent) : childGap;
+					const budget = Math.max(0, available - seam * (item.children.length - 1));
 					const widths = rowWidths(item.children, budget, measure);
+					const paneHeight = navigator ? Math.max(0, Math.min(slotCapacity ?? Infinity, Number.isFinite(item.height) ? item.height : height - tabOffset - top - margin[2] - padding[2])) : null;
+					if (navigator) {
+						const minimum = Math.min(budget / 2, Math.max(160, item.children[0].sizing?.min_width || 0));
+						const maximum = budget - Math.min(budget / 2, Math.max(240, item.children[1].sizing?.min_width || 0));
+						const ratio = cell.layoutState?.splits?.[id];
+						widths[0] = Math.max(minimum, Math.min(maximum, Number.isFinite(ratio) ? ratio * budget : widths[0]));
+						widths[1] = budget - widths[0];
+						const action = {
+							type: "layout-split",
+							key: id,
+							extent: budget
+						};
+						output.push(node("Splitter", id + "_split", rect$1(x + widths[0], top, seam, paneHeight), {
+							text: translate("Elements panel width", language),
+							value: widths[0],
+							min: minimum,
+							max: maximum,
+							enabled: !cell.layoutEditing,
+							action,
+							cancelAction: action
+						}));
+					}
 					let left = x;
 					for (const [column, child] of item.children.entries()) {
 						const part = widths[column];
-						extent = Math.max(extent, draw([child], left, top, part, id, column, output, bottom, childGap));
-						left += part + childGap;
+						extent = Math.max(extent, draw([navigator ? Object.assign({}, child, { sizing: Object.assign({}, child.sizing, { height_mode: "fill" }) }) : child], left, top, part, id, column, output, bottom, childGap, paneHeight));
+						left += part + seam;
 					}
 				} else extent = draw(item.children, x, top, available, id, 0, output, bottom, childGap);
 			} else if (["chart", "summary"].includes(item.kind)) {
@@ -3131,7 +3159,7 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 					enabled: !item.javascript || editable
 				}));
 			} else if (item.kind === "details") {
-				extent = (item.height || tableHeight) + 32;
+				extent = height$1(item, item.height || tableHeight, slotCapacity === null ? null : Math.max(0, slotCapacity - 32)) + 32;
 				const detail = cell.layoutDetail || {}, detailNodes = [];
 				const detailPadding = 24;
 				const title = detail.title || text || translate("Object details", language);
@@ -3160,7 +3188,7 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 					})]
 				}));
 			} else if (item.kind === "items") {
-				const itemsExtent = Number.isFinite(item.height) ? item.height : tableHeight;
+				const itemsExtent = height$1(item, Number.isFinite(item.height) ? item.height : tableHeight, slotCapacity === null ? null : Math.max(0, slotCapacity - 32));
 				extent = itemsExtent + 32;
 				output.push(label(id + "_title", rect$1(x, top, available, 28), text));
 				output.push(node("View", id, rect$1(x, top + 32, available, itemsExtent), {
@@ -8475,7 +8503,7 @@ function visible$1(item, sample, layout, width) {
 	return !item.hidden && (!item.search_type || sample.kind !== "branch" && item.search_type === String((sample.record || {}).__search_key__ || sample.search_type || "").split("?")[0]) && (item.variant === "all" || item.variant === variant(sample)) && (item.when || []).every((key) => conditions[key]) && (item.kind !== "knowledge" || (sample.knowledge || []).length > 0) && (item.kind !== "snapshot-size" || snapshot.size !== void 0) && (item.kind !== "file-offline" || !snapshot.exists);
 }
 function tracks(value, count, width) {
-	const tokens = String(value || "").trim().split(/\s+/), sizes = [], weights = [];
+	const tokens = String(value || "").trim().split(/\s+/).filter(Boolean), sizes = [], weights = [];
 	let fixed = 0, weight = 0;
 	for (let index = 0; index < count; index++) {
 		const token = tokens.length === count ? tokens[index] : "1fr", pixels = /^\d+px$/.test(token) ? Number(token.slice(0, -2)) : 0, flex = /^\d+fr$/.test(token) ? Number(token.slice(0, -2)) : token === "auto" ? 1 : 0;
@@ -21185,13 +21213,13 @@ var _sfc_main$116 = {
 				}
 			}
 		}));
-		async function focusItem(value) {
+		async function focusItem(value, force = false) {
 			if (props.editing) return;
-			emit("focus", value);
+			if (!force) emit("focus", value);
 			if (!props.model.layoutItems || !hasDetails(props.model.layoutNodes)) return;
 			if (value?.kind === "branch") return;
 			const key = value?.record?.__search_key__;
-			if (key && key === detail.value.targetSearchKey) return;
+			if (!force && key && key === detail.value.targetSearchKey) return;
 			const request = ++detailGeneration;
 			detail.value = {
 				busy: !!key,
@@ -21301,6 +21329,10 @@ var _sfc_main$116 = {
 		}
 		function activate(action) {
 			if (props.editing) return;
+			if (action.type === "layout-split") {
+				state.value = resize$1(state.value, action);
+				return;
+			}
 			if (action.type === "record-form") {
 				saveForm(action).catch((failure) => error.value = failure.message);
 				return;
@@ -21311,7 +21343,8 @@ var _sfc_main$116 = {
 					return;
 				}
 				if (action.name === "refresh") {
-					emit("filter-apply", props.model.layoutFilterValues || {});
+					if (props.model.layoutItems && action.targetSearchKey) focusItem({ record: { __search_key__: action.targetSearchKey } }, true);
+					else emit("filter-apply", props.model.layoutFilterValues || {});
 					return;
 				}
 				emit("action", { __search_key__: action.targetSearchKey }, action.name === "details" ? "sobject_detail" : action.name, {
