@@ -105,6 +105,33 @@ try {
   assert.equal(await windowA.evaluate(el => getComputedStyle(el).borderTopLeftRadius), '0px');
   await windowA.getByRole('button', {name:'Restore window', exact:true}).click();
   assert.equal(await windowA.evaluate(el => getComputedStyle(el).borderTopLeftRadius), '8px');
+  const normalRect = await windowA.boundingBox();
+  for (const maximized of [true, false]) {
+    if (maximized) await windowA.getByRole('button', {name:'Maximize window',exact:true}).click();
+    await page.evaluate(() => {window.host.a.close(); window.host.setHeader(false);});
+    await page.waitForFunction(() => !document.querySelector('#a > header'));
+    await page.evaluate(() => window.host.setHeader(true));
+    await windowA.locator('header').waitFor({state:'attached'});
+    await page.evaluate(() => window.host.a.show());
+    await windowA.getByRole('button', {name:maximized?'Restore window':'Maximize window',exact:true}).waitFor();
+    assert.equal(await windowA.evaluate(el => el.classList.contains('app-window-maximized')), maximized);
+    if (maximized) await windowA.getByRole('button', {name:'Restore window',exact:true}).click();
+    const restoredRect = await windowA.boundingBox();
+    for (const key of ['x','y','width','height']) assert(Math.abs(restoredRect[key]-normalRect[key]) < 1, key);
+  }
+  const configuration = page.locator('#configuration');
+  await page.evaluate(() => window.host.configuration.show());
+  await configuration.getByRole('button', {name:'Restore window',exact:true}).waitFor();
+  for (const maximized of [true, false]) {
+    await page.evaluate(() => {window.host.configuration.close(); window.host.setHeader(false);});
+    await page.waitForFunction(() => !document.querySelector('#configuration > header'));
+    await page.evaluate(() => window.host.setHeader(true));
+    await configuration.locator('header').waitFor({state:'attached'});
+    await page.evaluate(() => window.host.configuration.show());
+    await configuration.getByRole('button', {name:maximized?'Restore window':'Maximize window',exact:true}).waitFor();
+    assert.equal(await configuration.evaluate(el => el.classList.contains('app-window-maximized')), maximized);
+    if (maximized) await configuration.getByRole('button', {name:'Restore window',exact:true}).click();
+  }
   assert.deepEqual(errors, []);
   console.log(
     'Window lifecycle: first click/tap, focus return, child owner close and retained draft passed.'

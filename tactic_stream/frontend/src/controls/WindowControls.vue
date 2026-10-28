@@ -52,7 +52,7 @@ function place(rect) {
 function toggle() {
   if (compact()) return
   if (!maximized.value) { saved = rectangle(); maximized.value = true }
-  else { maximized.value = false; place(saved) }
+  else { maximized.value = false; props.element.classList.remove('app-window-maximized'); place(saved); return }
   props.element.classList.toggle('app-window-maximized', maximized.value)
   geometryChanged()
 }
@@ -96,6 +96,7 @@ function opened() {
   const width = Math.min(1100, innerWidth * .8), height = Math.min(760, innerHeight * .8)
   saved = { width, height, x: (innerWidth - width) / 2, y: (innerHeight - height) / 2 }
   maximized.value = true; props.element.classList.add('app-window-maximized')
+  geometryChanged()
 }
 const observer = new MutationObserver(opened)
 const sizeObserver = new ResizeObserver(resizeEdges)

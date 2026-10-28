@@ -26,6 +26,8 @@ this tool is not part of ordinary product builds.
 
 ## Single owners
 
+The browser dialog host retains window geometry, restore bounds and maximized state when its title content is unmounted and recreated during close/reopen.
+
 Browser floating windows use an 8px outer corner radius and the shared theme shadow. Maximized browser windows use square outer corners without a shadow.
 
 Floating dock windows are the visual reference for floating windows: reuse their chrome, title bar, borders and controls. Keep resize grips quiet and integrated into the corner, without a filled circular button.

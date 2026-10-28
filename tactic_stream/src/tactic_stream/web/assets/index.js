@@ -2326,7 +2326,9 @@ var _sfc_main = {
 				maximized.value = true;
 			} else {
 				maximized.value = false;
+				props.element.classList.remove("app-window-maximized");
 				place(saved);
+				return;
 			}
 			props.element.classList.toggle("app-window-maximized", maximized.value);
 			geometryChanged();
@@ -2407,6 +2409,7 @@ var _sfc_main = {
 			};
 			maximized.value = true;
 			props.element.classList.add("app-window-maximized");
+			geometryChanged();
 		}
 		const observer = new MutationObserver(opened);
 		const sizeObserver = new ResizeObserver(resizeEdges);
@@ -2572,7 +2575,7 @@ var windowDirective = {
 	mounted(element, binding) {
 		if (element.tagName !== "DIALOG") return;
 		let configuration = binding.value;
-		let header = null, host = null;
+		let header = null, host = null, retainedGeometry = null;
 		const show = element.show.bind(element), close = element.close.bind(element);
 		const home = document.createComment("window owner");
 		element.before(home);
@@ -2639,6 +2642,21 @@ var windowDirective = {
 			event.stopPropagation();
 			if (element.dispatchEvent(new Event("cancel", { cancelable: true }))) element.close();
 		}
+		function rememberGeometry(event) {
+			if (event.target !== element || !element.open) return;
+			const { x, y, width, height, maximized, restore } = event.detail;
+			retainedGeometry = {
+				rect: {
+					x,
+					y,
+					width,
+					height
+				},
+				maximized,
+				restore
+			};
+		}
+		element.addEventListener("windowgeometrychange", rememberGeometry);
 		element.addEventListener("keydown", escape);
 		element.addEventListener("close", nativeClosed);
 		element.addEventListener("pointerdown", raise);
@@ -2672,7 +2690,7 @@ var windowDirective = {
 			render(h(_sfc_main, {
 				element,
 				header,
-				geometry: configuration?.geometry,
+				geometry: configuration?.geometry || retainedGeometry,
 				backProvided: !!configuration?.backProvided
 			}), host);
 		};
@@ -2688,7 +2706,7 @@ var windowDirective = {
 			if (host) render(h(_sfc_main, {
 				element,
 				header,
-				geometry: configuration?.geometry,
+				geometry: configuration?.geometry || retainedGeometry,
 				backProvided: !!configuration?.backProvided
 			}), host);
 		};
@@ -2697,6 +2715,7 @@ var windowDirective = {
 			home.remove();
 			element.show = show;
 			element.close = close;
+			element.removeEventListener("windowgeometrychange", rememberGeometry);
 			element.removeEventListener("keydown", escape);
 			element.removeEventListener("close", nativeClosed);
 			element.removeEventListener("pointerdown", raise);

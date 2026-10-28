@@ -7,7 +7,7 @@ export const windowDirective = {
   mounted(element, binding) {
     if (element.tagName !== 'DIALOG') return
     let configuration = binding.value
-    let header = null, host = null
+    let header = null, host = null, retainedGeometry = null
     const show = element.show.bind(element), close = element.close.bind(element)
     const home = document.createComment('window owner')
     element.before(home)
@@ -49,6 +49,12 @@ export const windowDirective = {
       event.preventDefault(); event.stopPropagation()
       if (element.dispatchEvent(new Event('cancel', { cancelable:true }))) element.close()
     }
+    function rememberGeometry(event) {
+      if (event.target !== element || !element.open) return
+      const {x,y,width,height,maximized,restore} = event.detail
+      retainedGeometry = {rect:{x,y,width,height},maximized,restore}
+    }
+    element.addEventListener('windowgeometrychange', rememberGeometry)
     element.addEventListener('keydown', escape)
     element.addEventListener('close', nativeClosed)
     element.addEventListener('pointerdown', raise)
@@ -73,16 +79,17 @@ export const windowDirective = {
       if (!header) return
       host = document.createElement('span'); host.className = 'app-window-controls'
       placeControls()
-      render(h(WindowControls, { element, header, geometry:configuration?.geometry,backProvided:!!configuration?.backProvided }), host)
+      render(h(WindowControls, { element, header, geometry:configuration?.geometry || retainedGeometry,backProvided:!!configuration?.backProvided }), host)
     }
     const observer = new MutationObserver(attach)
     observer.observe(element, { childList: true, subtree: true }); attach()
     element.windowConfigure = value => {
       configuration = value; attach()
-      if (host) render(h(WindowControls, { element, header, geometry:configuration?.geometry,backProvided:!!configuration?.backProvided }), host)
+      if (host) render(h(WindowControls, { element, header, geometry:configuration?.geometry || retainedGeometry,backProvided:!!configuration?.backProvided }), host)
     }
     element.windowCleanup = () => {
       closed(); home.remove(); element.show = show; element.close = close
+      element.removeEventListener('windowgeometrychange', rememberGeometry)
       element.removeEventListener('keydown', escape); element.removeEventListener('close', nativeClosed); element.removeEventListener('pointerdown', raise)
       observer.disconnect(); if (host) { render(null, host); host.remove() }
     }
