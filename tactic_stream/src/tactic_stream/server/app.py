@@ -417,7 +417,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             # Global communication/profile reads do not require a selected project.
             if (messages or server_updates or user_profile or navigation_link) and payload.get('project') == '':
                 payload = dict(payload, project='sthpw')
-            if not all(isinstance(payload.get(name), str) and payload[name] for name in (('ticket', 'project') if custom_url or project_agent or raw_database or navigation or project_creation or sidebar or groups or rules or project_catalog or users or user_profile or columns or workspace_layout or script_shelf or script_editor or activity or navigation_link or journal or server_updates or messages or knowledge or checkin_queue else ('ticket', 'project', 'search_type'))):
+            if not all(isinstance(payload.get(name), str) and payload[name] for name in (('ticket', 'project') if configuration == 'catalog' or custom_url or project_agent or raw_database or navigation or project_creation or sidebar or groups or rules or project_catalog or users or user_profile or columns or workspace_layout or script_shelf or script_editor or activity or navigation_link or journal or server_updates or messages or knowledge or checkin_queue else ('ticket', 'project', 'search_type'))):
                 raise ValueError('Invalid interface request')
             login = api.auth.validate(payload['ticket'])
             with request_context(RequestContext(api.store, login, payload['project'])):
@@ -525,8 +525,10 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                     else:
                         result = delete_object(*arguments, payload.get('related_types'), view=payload.get('view', 'table'))
                 elif configuration:
-                    from tactic_stream.server.widget_configuration import read_widget_configuration, check_widget_configuration, preview_widget_configuration, save_widget_configuration
-                    if configuration == 'read':
+                    from tactic_stream.server.widget_configuration import read_layout_catalog, read_widget_configuration, check_widget_configuration, preview_widget_configuration, save_widget_configuration
+                    if configuration == 'catalog':
+                        result = read_layout_catalog()
+                    elif configuration == 'read':
                         result = read_widget_configuration(payload['search_type'], payload.get('view', 'table'))
                     else:
                         operation = {'save': save_widget_configuration, 'check': check_widget_configuration,
@@ -939,7 +941,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
 
     @app.post('/admin/widget-configuration/{action}', include_in_schema=False)
     async def admin_widget_configuration(request: Request, action: str):
-        if action not in ('read', 'check', 'preview', 'save'):
+        if action not in ('catalog', 'read', 'check', 'preview', 'save'):
             return Response(status_code=404)
         body = await admin_body(request)
         if isinstance(body, Response):

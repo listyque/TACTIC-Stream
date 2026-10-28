@@ -62096,7 +62096,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						onVnodeMounted: _cache[83] || (_cache[83] = ($event) => $data.administrationInstances.layouts = $event.component.proxy),
 						ticket: $data.session.ticket,
 						project: $data.project,
-						"search-types": $data.types,
 						"initial-focus": $data.layoutsFocus,
 						"toolbar-target": "#administration-actions",
 						onSaved: $options.layoutSaved
@@ -62104,7 +62103,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"presentation-visible",
 						"ticket",
 						"project",
-						"search-types",
 						"initial-focus",
 						"onSaved"
 					])], 512)), [[vShow, $data.administrationSection === "layouts"]]) : createCommentVNode("", true),

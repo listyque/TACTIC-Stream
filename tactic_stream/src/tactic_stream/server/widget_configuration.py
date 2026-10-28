@@ -19,6 +19,23 @@ class WidgetConfigConflict(TacticException):
     pass
 
 
+def read_layout_catalog() -> dict:
+    _require_admin()
+    project = Project.get()
+    system = Project.get_project_code() in ('admin', 'sthpw')
+    types = project.get_search_types(include_multi_project=True,
+                                    include_sthpw=system, include_config=system)
+    rows = []
+    for item in types:
+        if system and not project.has_table(item):
+            continue
+        options = item.get_record_read_options()
+        if options.get('available') is not False:
+            rows.append(dict(code=item.get_code(), title=item.get_value('title'),
+                             __record_read__=options))
+    return dict(stypes=sorted(rows, key=lambda row: (row['title'] or row['code']).lower()))
+
+
 def read_widget_configuration(search_type, view='table'):
     _require_admin()
     if not isinstance(view, str) or not re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}', view):

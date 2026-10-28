@@ -38,7 +38,7 @@ defineEmits(['element', 'geometry']);
       @geometry="$emit('geometry', $event)"
       @element="$emit('element', $event)"
     />
-    <p v-else class="muted">{{ t('Loading interface...') }}</p>
+    <p v-else-if="!error" class="muted">{{ t('Loading interface...') }}</p>
   </div>
 </template>
 <style>

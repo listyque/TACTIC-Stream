@@ -1345,7 +1345,7 @@ var _sfc_main$1 = {
 				"mode",
 				"editing",
 				"selected-element"
-			])) : (openBlock(), createElementBlock("p", _hoisted_3$1, toDisplayString(unref(t)("Loading interface...")), 1))]);
+			])) : !__props.error ? (openBlock(), createElementBlock("p", _hoisted_3$1, toDisplayString(unref(t)("Loading interface...")), 1)) : createCommentVNode("", true)]);
 		};
 	}
 };
@@ -1356,7 +1356,6 @@ var _sfc_main = {
 	props: {
 		ticket: String,
 		project: String,
-		searchTypes: Array,
 		initialFocus: Object,
 		toolbarTarget: String,
 		presentationVisible: {
@@ -1378,6 +1377,7 @@ var _sfc_main = {
 			toolbarSize: 620,
 			observer: null,
 			searchType: "",
+			catalog: [],
 			view: "continuous_example",
 			configuration: null,
 			knownViews: [],
@@ -1410,9 +1410,9 @@ var _sfc_main = {
 			return !!this.configuration && !this.busy && !this.uncertain && this.context?.ticket === this.ticket && this.context?.project === this.project && this.context?.searchType === this.searchType && this.context?.view === this.view;
 		},
 		typeOptions() {
-			return (this.searchTypes || []).filter((row) => row.__record_read__?.available !== false).map((row) => ({
-				value: row.search_type,
-				label: row.title || row.search_type
+			return this.catalog.filter((row) => row.__record_read__?.available !== false).map((row) => ({
+				value: row.code,
+				label: row.title || row.code
 			}));
 		},
 		parsed() {
@@ -1486,7 +1486,7 @@ var _sfc_main = {
 					project: this.project,
 					searchType: this.searchType,
 					layout: this.liveInterface?.table?.item_layout,
-					error: this.previewError || this.sampleError,
+					error: this.error || this.previewError || this.sampleError,
 					editing: this.ui.page !== "resolved",
 					selectedElement: this.ui.page === "resolved" ? "" : this.ui.selected,
 					onGeometry: (value) => this.dispatch({
@@ -1504,7 +1504,7 @@ var _sfc_main = {
 	mounted() {
 		this.searchType = this.initialFocus?.searchType || this.typeOptions[0]?.value || "";
 		this.view = this.initialFocus?.view || "continuous_example";
-		this.reload();
+		this.loadCatalog();
 		window.addEventListener("beforeunload", this.beforeUnload);
 		this.observer = observeFrameSizes((entries) => {
 			for (const entry of entries) if (entry.target === this.$refs.body) this.viewport = {
@@ -1599,13 +1599,33 @@ var _sfc_main = {
 			this.previewRequest++;
 			clearTimeout(this.previewTimer);
 			this.busy = false;
+			this.catalog = [];
 			this.configuration = null;
 			this.knownViews = [];
 			this.liveInterface = null;
 			this.xml = this.baseline = "";
 			this.ui = initial();
 			this.uncertain = false;
-			this.reload();
+			this.loadCatalog();
+		},
+		async loadCatalog() {
+			if (!this.ticket || !this.project) return;
+			const request = ++this.request;
+			this.catalog = [];
+			this.busy = true;
+			this.error = "";
+			try {
+				const result = await widgetConfiguration("catalog", this.ticket, this.project, "", "");
+				if (request !== this.request) return;
+				if (!Array.isArray(result.stypes) || result.stypes.some((row) => !row || typeof row.code !== "string" || !row.code)) throw Error("Invalid Search Type catalog response");
+				this.catalog = result.stypes;
+				if (!this.typeOptions.some((row) => row.value === this.searchType)) this.searchType = this.typeOptions[0]?.value || "";
+			} catch (error) {
+				if (request === this.request) this.error = error.message;
+			} finally {
+				if (request === this.request) this.busy = false;
+			}
+			if (request === this.request && !this.error) await this.reload();
 		},
 		call(action, values = {}) {
 			const context = this.context;
