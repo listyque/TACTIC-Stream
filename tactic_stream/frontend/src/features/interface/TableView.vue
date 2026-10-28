@@ -946,7 +946,8 @@ defineExpose({ viewport });
   background: var(--row-hover, var(--hover));
 }
 .handler-table-row.selected,
-.handler-table-row.active {
+.handler-table-row.active,
+.handler-table-row:focus-within {
   background: var(--content-selection);
 }
 .handler-table-cell {

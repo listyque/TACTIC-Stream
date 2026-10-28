@@ -26,6 +26,8 @@ this tool is not part of ordinary product builds.
 
 ## Single owners
 
+Table active rows and keyboard focus use the content-selection background across the whole row, without a separate row outline. Checked selection remains independent.
+
 The browser dialog host retains window geometry, restore bounds and maximized state when its title content is unmounted and recreated during close/reopen.
 
 Browser floating windows use an 8px outer corner radius and the shared theme shadow. Maximized browser windows use square outer corners without a shadow.
