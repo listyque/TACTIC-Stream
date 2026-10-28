@@ -26,6 +26,8 @@ this tool is not part of ordinary product builds.
 
 ## Single owners
 
+Floating dock windows are the visual reference for floating windows: reuse their chrome, title bar, borders and controls. Keep resize grips quiet and integrated into the corner, without a filled circular button.
+
 Catalogs, navigation and chat history use plain compact list rows with muted
 group captions. Resting rows are transparent; selection, hover and keyboard
 focus provide emphasis. Do not turn each row or group heading into a filled

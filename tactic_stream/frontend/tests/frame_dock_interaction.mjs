@@ -376,6 +376,13 @@ try {
         edge
       );
   }
+  const corner = page.locator('.dock-floating-resize').first();
+  assert.equal(await corner.count(), 1);
+  {
+    assert.equal(await corner.evaluate(el => getComputedStyle(el).backgroundColor), 'rgba(0, 0, 0, 0)');
+    assert.equal(await corner.locator('.app-icon').count(), 0);
+    assert.equal(await corner.evaluate(el => getComputedStyle(el, '::after').height), '1px');
+  }
   assert.deepEqual(errors, []);
   console.log(
     'Docks: first click/tap, previews, nested minimums, resize/restore, mouse/touch reorder, Escape rollback, hidden slots and eight floating handles passed.'

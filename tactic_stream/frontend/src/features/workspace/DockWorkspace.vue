@@ -1209,9 +1209,7 @@ defineExpose({
         :aria-label="t('Resize panel: {name}', { name: t(panel.title) })"
         @pointerdown="start($event, panel.id, 'resize')"
         @keydown="floatSize($event, panel.id)"
-      >
-        <AppIcon name="MDI_RESIZE_BOTTOM_RIGHT" />
-      </button>
+      ></button>
       <template v-if="state.panels[panel.id].floating && !compact && !maximized"
         ><span
           v-for="edge in [

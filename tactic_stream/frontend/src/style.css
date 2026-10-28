@@ -379,8 +379,12 @@ h2 { font-size: var(--text-heading); }
 .dock-divider { position: absolute; z-index: 5; background: transparent; touch-action: none; }
 .dock-divider.horizontal { cursor: ew-resize; }
 .dock-divider.vertical { cursor: ns-resize; }
-.dock-floating-resize { position: absolute; bottom: 5px; right: 5px; z-index: 2; width: 18px; height: 18px; min-width: 18px; min-height: 18px; padding: 0; border: 0; background: var(--surface); cursor: nwse-resize; touch-action: none; }
-.dock-floating-resize .app-icon { font-size: 16px; }
+.dock-floating-resize { position: absolute; bottom: 5px; right: 5px; z-index: 2; width: 18px; height: 18px; min-width: 18px; min-height: 18px; padding: 0; border: 0; border-radius: 0; background: transparent; cursor: nwse-resize; touch-action: none; }
+.dock-floating-resize:is(:hover, :active, :focus-visible) { background: transparent; }
+.dock-floating-resize::before, .dock-floating-resize::after { content: ''; position: absolute; right: 1px; height: 1px; background: var(--muted); transform: rotate(-45deg); pointer-events: none; }
+.dock-floating-resize::before { width: 10px; bottom: 6px; }
+.dock-floating-resize::after { width: 6px; bottom: 3px; }
+.dock-floating-resize:is(:hover, :active, :focus-visible)::before, .dock-floating-resize:is(:hover, :active, :focus-visible)::after { background: var(--primary); }
 .dock-drop-guide { position: absolute; inset: 40% 20%; z-index: 100; background: var(--content-selection); border: 2px solid var(--primary); display: grid; place-items: center; pointer-events: none; border-radius: var(--surface-radius); }
 .workspace-menu.dock-menu { position:absolute; width:38px; height:38px; right:8px; top:8px; z-index:6; }
 .workspace-menu.dock-menu-toolbar { inset:0; }

@@ -47506,7 +47506,7 @@ var _sfc_main$42 = {
 							"aria-label": unref(t)("Resize panel: {name}", { name: unref(t)(panel.title) }),
 							onPointerdown: ($event) => start($event, panel.id, "resize"),
 							onKeydown: ($event) => floatSize($event, panel.id)
-						}, [createVNode(_sfc_main$185, { name: "MDI_RESIZE_BOTTOM_RIGHT" })], 40, _hoisted_6$3)) : createCommentVNode("", true),
+						}, null, 40, _hoisted_6$3)) : createCommentVNode("", true),
 						state.value.panels[panel.id].floating && !compact.value && !maximized.value ? (openBlock(), createElementBlock(Fragment, { key: 3 }, renderList([
 							"left",
 							"right",
