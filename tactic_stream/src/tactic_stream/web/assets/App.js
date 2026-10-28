@@ -7963,9 +7963,6 @@ var _sfc_main$157 = {
 			}
 			nextTick(schedule);
 		});
-		watch(width, () => {
-			measurements.value = /* @__PURE__ */ new Map();
-		});
 		onMounted(() => {
 			for (let parent = host.value.parentElement; parent; parent = parent.parentElement) if (/(auto|scroll)/.test(getComputedStyle(parent).overflowY)) {
 				scrollParents.push(parent);

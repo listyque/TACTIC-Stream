@@ -128,9 +128,7 @@ watch(
     nextTick(schedule);
   }
 );
-watch(width, () => {
-  measurements.value = new Map();
-});
+// Keep measured heights during pane resize; observed rows report any actual size change.
 onMounted(() => {
   for (
     let parent = host.value.parentElement;
