@@ -1,5 +1,6 @@
 """Handler Activity Feed on the native TACTIC journal; read-only."""
-from datetime import date
+from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pyasm.biz import Project, Schema
 from pyasm.common import Environment
@@ -30,6 +31,13 @@ def activity_feed_request(payload):
     offset, users = payload.get('offset', 0), payload.get('users', [])
     day, counts = payload.get('day', ''), payload.get('counts_only', False)
     exclude = payload.get('exclude_own', False)
+    time_zone = payload.get('time_zone', 'UTC')
+    if not isinstance(time_zone, str) or not time_zone or len(time_zone) > 256:
+        raise ValueError('Invalid activity time zone')
+    try:
+        ZoneInfo(time_zone)
+    except (ZoneInfoNotFoundError, ValueError) as error:
+        raise ValueError('Invalid activity time zone') from error
     if not isinstance(feed, str) or feed not in FILTERS or type(offset) is not int or not 0 <= offset <= 100000:
         raise ValueError('Invalid activity filter or offset')
     if not isinstance(users, list) or len(users) > 100 or any(not isinstance(value, str) or not value or len(value) > 256 for value in users):
@@ -50,17 +58,17 @@ def activity_feed_request(payload):
         raise SecurityException('Activity project is not accessible')
     result = query_user_recent_activity(login=login if feed == 'my_objects' else '', project_code=project,
         kinds=FILTERS[feed], assigned_login=login if feed == 'my_tasks' else '',
-        offset=offset, limit=26, day=day, logins=users, counts_only=counts,
+        offset=offset, limit=26, day=day, logins=users, counts_only=counts, time_zone=time_zone,
         include_day_counts=counts, exclude_login=login if exclude else '', instance_relations=instance_relations())
     records = result.get('records', []) if isinstance(result, dict) else result
     identities = user_identities(Search('sthpw/login').get_sobjects()) if security.check_access('search_type', 'sthpw/login', 'view') else []
     directory = {row['login']: row for row in identities}
-    decorate_activity(records, directory)
+    decorate_activity(records, directory, time_zone)
     return dict(records=records[:25], hasMore=len(records) > 25, nextOffset=offset + min(25, len(records)),
         dayCounts=result.get('dayCounts', []) if isinstance(result, dict) else [], users=identities)
 
 
-def decorate_activity(records, directory):
+def decorate_activity(records, directory, time_zone='UTC'):
     """Apply the same author, type and pipeline presentation in object reports."""
     pipelines = {}
     for record in records:
@@ -88,4 +96,11 @@ def decorate_activity(records, directory):
                 for field in ('statusBefore', 'statusAfter'):
                     status_node = task_pipeline.get_process(record[field]) if task_pipeline and record.get(field) else None
                     record[field + 'Color'] = status_node.get_attribute('color') or '' if status_node else ''
-        record['dayKey'] = str(record.get('timestamp') or '')[:10]
+        timestamp = record.get('timestamp')
+        if timestamp:
+            instant = datetime.fromisoformat(str(timestamp))
+            if instant.tzinfo is None:
+                instant = instant.replace(tzinfo=timezone.utc)
+            record['dayKey'] = instant.astimezone(ZoneInfo(time_zone)).date().isoformat()
+        else:
+            record['dayKey'] = ''

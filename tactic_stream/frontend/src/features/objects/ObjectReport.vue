@@ -1,5 +1,6 @@
 <script setup>
 import { computed, inject, nextTick, ref, watch, onBeforeUnmount } from 'vue';
+import { serverClock } from '../../serverClock.js';
 import { resultItems } from '../../api.js';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
@@ -51,7 +52,7 @@ const snapshotGroups = computed(() =>
 );
 const model = computed(() => {
   const value = data.value || { summary: {}, metrics: {} };
-  const now = new Date();
+  const now = new Date(serverClock.now());
   return {
     ...value,
     page: page.value,

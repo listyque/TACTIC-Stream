@@ -1,6 +1,7 @@
 import { debugLog, logRequest } from './features/debug/debugLog.js'
 import { notify } from './features/activity/notifications.js'
 import { shallowReactive } from 'vue'
+import { serverClock, localTimeZone } from './serverClock.js'
 import { backgroundRequest } from './features/connection/updateRequests.js'
 
 export const requestActivity = shallowReactive({ pending: [] })
@@ -25,7 +26,7 @@ export function scriptEditor(action, ticket, project, values = {}) {
 }
 
 export function activityFeed(ticket, project, values = {}, quiet = false) {
-  const payload = { ticket, project, ...values }
+  const payload = { ticket, project, ...values, time_zone: localTimeZone() }
   return quiet ? backgroundPost('/admin/activity-feed', payload) : post('/admin/activity-feed', payload)
 }
 
@@ -176,6 +177,7 @@ async function post(url, payload, signal, quiet = false) {
       cache: 'no-store',
       signal,
     })
+    serverClock.observeResponse(response, started)
     data = await response.json()
     if (!response.ok) {
       const error = new Error(data.error || 'Request failed.')

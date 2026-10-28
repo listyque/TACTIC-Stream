@@ -1,6 +1,6 @@
 import { D as nextTick, E as mergeProps, I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
 import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Gt as button, Jt as node, Kt as label, Yt as rect, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate, yt as sidebarRequest } from "./CodeBlock.js";
+import { Jt as label, Xt as node, Yt as muted, Zt as rect, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate, yt as sidebarRequest } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { i as row$1, n as navigate } from "./tree.ui.js";
 import { at as notices, ct as tabs, it as documentEvent, lt as toolbar, ot as policy } from "./App.js";

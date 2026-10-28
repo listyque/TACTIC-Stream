@@ -1,4 +1,4 @@
-import { Jt as node } from "./CodeBlock.js";
+import { Xt as node } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/groups/groups.state.mjs
 function initial() {
 	return {

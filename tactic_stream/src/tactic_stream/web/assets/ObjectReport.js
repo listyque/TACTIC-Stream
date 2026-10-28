@@ -1,9 +1,9 @@
 import { C as h, D as nextTick, G as watchPostEffect, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, p as computed, rt as normalizeStyle, tt as unref, u as Fragment, w as inject, y as createTextVNode } from "./vue.js";
 import { A as t, c as _sfc_main$4, j as appearance, q as metrics } from "./index.js";
-import { Gt as button, Jt as node, Kt as label, Yt as rect, i as _sfc_main$5, qt as muted, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
+import { Gt as serverClock, Jt as label, Xt as node, Yt as muted, Zt as rect, i as _sfc_main$5, qt as button, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { i as linkifyPlainText, n as escapeHtml, t as activateRichLink } from "./richText.js";
 import { n as browserLink } from "./links.js";
-import { d as timestampFullLabel, f as timestampLabel, i as compactText, l as needsExpansion, n as qtLabelTextWidth, r as changeValue, s as eventSentence, u as safeColor } from "./textMetrics.js";
+import { c as eventSentence, d as safeColor, f as timestampFullLabel, i as compactText, n as qtLabelTextWidth, p as timestampLabel, r as changeValue, u as needsExpansion } from "./textMetrics.js";
 import { t as _sfc_main$6 } from "./AttachmentCard.js";
 import { t as FilePreview_default } from "./FilePreview.js";
 import { t as fileBlob } from "./previewFiles.js";
@@ -830,7 +830,7 @@ var _sfc_main$2 = {
 		].some(needsExpansion));
 		const time = computed(() => {
 			appearance.language;
-			return timestampLabel(props.record.timestamp, new Date(props.now || Date.now()));
+			return timestampLabel(props.record.timestamp, props.now ? new Date(props.now) : void 0);
 		});
 		function activate(event) {
 			if (activateRichLink(event, (value) => emit("open-link", value))) return;
@@ -853,7 +853,7 @@ var _sfc_main$2 = {
 		const model = computed(() => ({
 			...props.record,
 			time: time.value,
-			fullTime: props.record.timestamp,
+			fullTime: timestampFullLabel(props.record.timestamp),
 			expanded: expanded.value,
 			expandable: expandable.value,
 			hovered: hovered.value,
@@ -1225,7 +1225,7 @@ var _sfc_main = {
 				summary: {},
 				metrics: {}
 			};
-			const now = /* @__PURE__ */ new Date();
+			const now = new Date(serverClock.now());
 			return {
 				...value,
 				page: page.value,

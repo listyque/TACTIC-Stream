@@ -33,7 +33,7 @@ const model = computed(() => ({
   first: props.row.groupFirst,
   time: timestampLabel(
     messageDate(props.row.timestamp).toISOString(),
-    new Date(props.now || Date.now())
+    props.now ? new Date(props.now) : undefined
   ),
   fullTime: timestampFullLabel(props.row.timestamp),
   edited: !!props.row.__edit_history__?.length,

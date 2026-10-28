@@ -1,4 +1,5 @@
 import { A as t, j as appearance } from "./index.js";
+import { Gt as serverClock, Kt as serverTimestamp } from "./CodeBlock.js";
 import { i as linkifyPlainText, n as escapeHtml } from "./richText.js";
 import { n as browserLink } from "./links.js";
 //#region src/features/activity/activity.js
@@ -20,7 +21,7 @@ function dateLabel(value, options = {
 }
 function dayLabel(value) {
 	if (!value) return t("No date");
-	const today = /* @__PURE__ */ new Date(), yesterday = /* @__PURE__ */ new Date();
+	const today = new Date(serverClock.now()), yesterday = new Date(today);
 	yesterday.setDate(today.getDate() - 1);
 	const prefix = value === dateKey(today) ? t("Today") : value === dateKey(yesterday) ? t("Yesterday") : "";
 	const suffix = dateLabel(value, {
@@ -31,8 +32,8 @@ function dayLabel(value) {
 	});
 	return prefix ? prefix + "  ·  " + suffix : suffix;
 }
-function timestampLabel(timestamp, now = /* @__PURE__ */ new Date()) {
-	const value = new Date(String(timestamp || "").replace(" ", "T"));
+function timestampLabel(timestamp, now = new Date(serverClock.now())) {
+	const value = serverTimestamp(timestamp);
 	if (Number.isNaN(value.getTime())) return "";
 	const seconds = (now - value) / 1e3;
 	if (seconds >= 0 && seconds < 60) return t("Just now");
@@ -44,7 +45,7 @@ function timestampLabel(timestamp, now = /* @__PURE__ */ new Date()) {
 	return timestampFullLabel(timestamp);
 }
 function timestampFullLabel(timestamp) {
-	const value = new Date(String(timestamp || "").replace(" ", "T"));
+	const value = serverTimestamp(timestamp);
 	return Number.isNaN(value.getTime()) ? "" : value.toLocaleString(appearance.language, {
 		day: "numeric",
 		month: "long",
@@ -201,6 +202,6 @@ function qtLabelTextWidth(text, font) {
 	}, 0);
 }
 //#endregion
-export { dateLabel as a, matchesSearch as c, timestampFullLabel as d, timestampLabel as f, compactText as i, needsExpansion as l, qtLabelTextWidth as n, dayLabel as o, uniqueRecords as p, changeValue as r, eventSentence as s, layoutTextWidth as t, safeColor as u };
+export { dateKey as a, eventSentence as c, safeColor as d, timestampFullLabel as f, compactText as i, matchesSearch as l, uniqueRecords as m, qtLabelTextWidth as n, dateLabel as o, timestampLabel as p, changeValue as r, dayLabel as s, layoutTextWidth as t, needsExpansion as u };
 
 //# sourceMappingURL=textMetrics.js.map

@@ -1,7 +1,7 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { B as useId, C as h, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, M as onUpdated, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, u as Fragment, y as createTextVNode } from "./vue.js";
 import { A as t, c as _sfc_main$5, j as appearance, o as mobile, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { D as _sfc_main$11, Gt as button, Jt as node, Kt as label, N as _sfc_main$10, O as _sfc_main$8, P as _sfc_main$7, R as _sfc_main$12, Tt as uploadFormFile, W as formDefinition, Yt as rect, ct as rpc, i as _sfc_main$6, r as observeFrameSizes, y as translate, z as _sfc_main$9 } from "./CodeBlock.js";
+import { D as _sfc_main$11, Jt as label, N as _sfc_main$10, O as _sfc_main$8, P as _sfc_main$7, R as _sfc_main$12, Tt as uploadFormFile, W as formDefinition, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$6, qt as button, r as observeFrameSizes, y as translate, z as _sfc_main$9 } from "./CodeBlock.js";
 import { n as arrange, t as _sfc_main$13 } from "./ObjectFieldFrame.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js

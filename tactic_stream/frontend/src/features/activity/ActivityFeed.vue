@@ -21,6 +21,7 @@ import { observeFrameSizes } from '../../frame/resize.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/activity/feed.ui.mjs';
 import ActivityEventCard from './ActivityEventCard.vue';
 import ActivityCalendar from './ActivityCalendar.vue';
+import { serverClock, serverTimestamp } from '../../serverClock.js';
 import { activityFeed } from '../../api.js';
 import { t } from '../../i18n.js';
 import { mobile } from '../../mobile.js';
@@ -29,7 +30,8 @@ import {
   matchesSearch,
   uniqueRecords,
   dateLabel,
-  dayLabel
+  dayLabel,
+  dateKey
 } from './activity.js';
 import './activityFeed.css';
 
@@ -92,7 +94,11 @@ const records = ref([]),
   hasMore = ref(false);
 const notifications = ref(true),
   unread = ref(new Set());
-const now = ref(Date.now());
+const clockTick = ref(0);
+const now = computed(() => {
+  clockTick.value;
+  return serverClock.now();
+});
 let requestId = 0,
   calendarId = 0,
   calendarVersion = 0,
@@ -120,7 +126,9 @@ const shown = computed(() =>
   records.value.filter((row) => matchesSearch(row, search.value))
 );
 const grouped = computed(() => [
-  ...Map.groupBy(shown.value, (row) => row.dayKey || '').entries()
+  ...Map.groupBy(shown.value, (row) =>
+    row.timestamp ? dateKey(serverTimestamp(row.timestamp)) : ''
+  ).entries()
 ]);
 const options = () => ({
   filter: filter.value,
@@ -210,7 +218,7 @@ async function poll() {
   const context = contextId,
     previousCursor = cursor,
     rows = [];
-  now.value = Date.now();
+  clockTick.value++;
   polling = true;
   try {
     let start = 0,

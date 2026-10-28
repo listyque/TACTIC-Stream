@@ -1,6 +1,6 @@
 import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, Y as markRaw, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, tt as unref } from "./vue.js";
 import { A as t, D as randomId, c as _sfc_main$2, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$3, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$3, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { t as _sfc_main$4 } from "./AppDialog.js";

@@ -1,6 +1,6 @@
 import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
 import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Gt as button, H as columnsEditor, Jt as node, Kt as label, Yt as rect, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { H as columnsEditor, Jt as label, Xt as node, Yt as muted, Zt as rect, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections, t as captionHeight } from "./sections.ui.js";
 import { D as changeDefinition, O as definitionWizard, at as notices, ct as tabs, it as documentEvent, k as displayWidgets, lt as toolbar, ot as policy } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs

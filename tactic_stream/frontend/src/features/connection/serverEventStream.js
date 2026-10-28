@@ -1,13 +1,17 @@
 // SSE over POST: tickets and resume cursors stay in the body, never in the URL.
+import { serverClock } from '../../serverClock.js'
+
 export async function serverEventStream(url, payload, onUpdate, signal) {
   const controller = new AbortController()
   let timer, reader
   const arm = () => { clearTimeout(timer); timer = setTimeout(() => controller.abort(new DOMException('Server update stream timed out.', 'TimeoutError')), 45000) }
   timer = setTimeout(() => controller.abort(new DOMException('Server update connection timed out.', 'TimeoutError')), 30000)
   try {
+    const started = performance.now()
     const response = await fetch(url, { method:'POST', body:JSON.stringify(payload),
       headers:{ 'Content-Type':'application/json', Accept:'text/event-stream', 'X-Tactic-Client':'TACTIC Stream' }, cache:'no-store',
       signal:AbortSignal.any([signal, controller.signal]) })
+    serverClock.observeResponse(response, started)
     if (!response.ok) {
       const data = await response.json().catch(() => ({}))
       throw Object.assign(new Error(data.error || 'Request failed.'), { code:data.error_code, status:response.status })

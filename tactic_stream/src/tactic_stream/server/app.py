@@ -7,7 +7,7 @@ from hashlib import sha256
 from email import policy
 from email.parser import BytesParser
 from contextlib import asynccontextmanager
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from importlib.resources import files
 import json
 from pathlib import Path
@@ -34,6 +34,28 @@ LOG = logging.getLogger(__name__)
 MAX_BODY = 1024 * 1024
 MAX_UPLOAD_BODY = 64 * 1024 * 1024
 EVENT_HEARTBEAT = 20
+
+
+class ServerClockHeaders:
+    """Timestamp response headers without buffering or changing stream lifetime."""
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope['type'] != 'http':
+            return await self.app(scope, receive, send)
+        started = datetime.now(timezone.utc).isoformat().encode('ascii')
+
+        async def send_with_clock(message):
+            if message['type'] == 'http.response.start':
+                ended = datetime.now(timezone.utc).isoformat().encode('ascii')
+                message = dict(message, headers=list(message.get('headers', [])) + [
+                    (b'x-tactic-utc-started', started),
+                    (b'x-tactic-utc-ended', ended),
+                ])
+            await send(message)
+
+        await self.app(scope, receive, send_with_clock)
 
 
 def json_date(value):
@@ -172,6 +194,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                         await run_in_threadpool(process.join, 3)
                     process.close()
     app = FastAPI(title="TACTIC Stream", version=__version__, lifespan=lifespan, docs_url=None, redoc_url=None)
+    app.add_middleware(ServerClockHeaders)
     api = Api(Store(data_dir))
     from tactic_stream.server.server_events import ServerEvents, matching_changes, advance_cursors, presence_state, event_frame
     events = ServerEvents(api.store.data_dir)
@@ -352,7 +375,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                 from tactic_stream.server.knowledge import FIELDS
                 fields = {'ticket', 'project'} | FIELDS
             if activity:
-                fields.update(('filter', 'offset', 'users', 'day', 'counts_only', 'exclude_own'))
+                fields.update(('filter', 'offset', 'users', 'day', 'counts_only', 'exclude_own', 'time_zone'))
             if script_editor:
                 fields.update(('code', 'folder', 'title', 'language', 'source', 'revision', 'revision_id', 'cursor', 'manual'))
             if script_shelf:

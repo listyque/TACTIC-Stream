@@ -4,13 +4,14 @@ import FrameView from '../../frame/FrameView.vue';
 import BusyIndicator from '../../controls/BusyIndicator.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import { t } from '../../i18n.js';
+import { serverClock } from '../../serverClock.js';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/activity/calendar.ui.mjs';
 const props = defineProps({ counts: Object, selected: String, busy: Boolean });
 const emit = defineEmits(['accepted', 'closed']);
 const root = ref(null),
   width = ref(320),
-  month = ref(new Date());
+  month = ref(new Date(serverClock.now()));
 let observer;
 const scene = computed(() =>
   UI.describe(
@@ -18,14 +19,19 @@ const scene = computed(() =>
       counts: props.counts,
       selected: props.selected,
       month: month.value,
-      busy: props.busy
+      busy: props.busy,
+      now: new Date(serverClock.now())
     },
     width.value,
     appearance.language
   )
 );
 function reset() {
-  month.value = UI.initialMonth(props.selected, props.counts);
+  month.value = UI.initialMonth(
+    props.selected,
+    props.counts,
+    new Date(serverClock.now())
+  );
 }
 function action(event) {
   if (event.type === 'day') emit('accepted', event.value);

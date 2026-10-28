@@ -28,3 +28,5 @@ source; quick reply retains its text when sending fails. Phone error notices kee
 long diagnostic text in a scrollable area instead of covering the whole screen.
 
 On a phone the search row stays compact. Activity options expands the filters; collapsing it keeps their values and gives space back to the event list.
+
+Event dates and calendar days use your device’s local time zone. “Ago” uses synchronized server time, so a wrong device clock does not add hours to an event’s age. Hover over an event’s time to see its full local date and time. Day filters include daylight-saving changes.

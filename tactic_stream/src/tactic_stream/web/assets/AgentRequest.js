@@ -1,6 +1,6 @@
 import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
 import { A as t, O as randomUuid, V as cssRoles, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
-import { Gt as button, Jt as node, Kt as label, Vt as notify, Yt as rect, ct as rpc, i as _sfc_main$5, k as _sfc_main$4, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { Jt as label, Vt as notify, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$5, k as _sfc_main$4, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$6 } from "./AppDialog.js";
 import { t as _sfc_main$7 } from "./AppMenuItem.js";
 import { t as listAction } from "./tree.ui.js";

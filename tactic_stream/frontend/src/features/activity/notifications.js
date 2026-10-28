@@ -1,4 +1,5 @@
 // Handler NotificationController: session history and at most three active notices.
+import { serverClock } from '../../serverClock.js';
 import { shallowReactive } from 'vue';
 import { redact } from '../debug/debugLog.js';
 
@@ -36,7 +37,7 @@ export function notify(
     group,
     message,
     detail: String(redact(detail || '')),
-    timestamp: new Date(now).toISOString(),
+    timestamp: new Date(serverClock.now()).toISOString(),
     dedupeKey: signature,
     dismissible: true,
     sourceType: source.sourceType || '',

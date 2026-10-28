@@ -1,4 +1,5 @@
 // Handler ActivityFeedController / ActivityEventCard.qml; no transport or state ownership.
+import { serverClock, serverTimestamp } from '../../serverClock.js';
 import { t } from '../../i18n.js';
 import { appearance } from '../../appearance.js';
 import { escapeHtml, linkifyPlainText } from '../../controls/richText.js';
@@ -30,8 +31,8 @@ export function dateLabel(
 }
 export function dayLabel(value) {
   if (!value) return t('No date');
-  const today = new Date(),
-    yesterday = new Date();
+  const today = new Date(serverClock.now()),
+    yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
   const prefix =
     value === dateKey(today)
@@ -47,8 +48,8 @@ export function dayLabel(value) {
   });
   return prefix ? prefix + '  ·  ' + suffix : suffix;
 }
-export function timestampLabel(timestamp, now = new Date()) {
-  const value = new Date(String(timestamp || '').replace(' ', 'T'));
+export function timestampLabel(timestamp, now = new Date(serverClock.now())) {
+  const value = serverTimestamp(timestamp);
   if (Number.isNaN(value.getTime())) return '';
   const seconds = (now - value) / 1000;
   if (seconds >= 0 && seconds < 60) return t('Just now');
@@ -64,7 +65,7 @@ export function timestampLabel(timestamp, now = new Date()) {
   return timestampFullLabel(timestamp);
 }
 export function timestampFullLabel(timestamp) {
-  const value = new Date(String(timestamp || '').replace(' ', 'T'));
+  const value = serverTimestamp(timestamp);
   return Number.isNaN(value.getTime())
     ? ''
     : value.toLocaleString(appearance.language, {

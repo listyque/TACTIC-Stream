@@ -236,6 +236,55 @@ function virtualRange(count, rowHeight, viewport, scroll, overscan) {
 	};
 }
 //#endregion
+//#region src/serverClock.js
+function serverTimestamp(value) {
+	const text = String(value || "").trim().replace(" ", "T");
+	return new Date(/(?:Z|[+-]\d{2}:?\d{2})$/i.test(text) ? text : text + "Z");
+}
+var ServerClock = class {
+	constructor() {
+		this.anchor = {
+			utc: null,
+			received: -Infinity,
+			bestDelay: Infinity
+		};
+		this.revision = 0;
+	}
+	now() {
+		this.revision;
+		const { utc, received } = this.anchor;
+		return utc === null ? Date.now() : utc + performance.now() - received;
+	}
+	observe(sample, started, received) {
+		if (![sample?.utcStarted, sample?.utcEnded].every((value) => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/i.test(value))) return false;
+		const anchor = this.anchor;
+		const begin = Date.parse(sample.utcStarted), end = Date.parse(sample.utcEnded);
+		const delay = received - started - (end - begin);
+		if (![
+			begin,
+			end,
+			started,
+			received
+		].every(Number.isFinite) || end < begin || received < started || delay < -2 || received < anchor.received) return false;
+		if (anchor.utc !== null && delay > anchor.bestDelay * 1.5 + 20 && received - anchor.received < 3e5) return false;
+		const utc = end + Math.max(0, delay) / 2;
+		const changed = anchor.utc === null || Math.abs(utc - anchor.utc - (received - anchor.received)) >= 500;
+		anchor.utc = utc;
+		anchor.received = received;
+		anchor.bestDelay = Math.min(anchor.bestDelay, Math.max(0, delay));
+		if (changed) this.revision++;
+		return true;
+	}
+	observeResponse(response, started, received = performance.now()) {
+		return this.observe({
+			utcStarted: response.headers.get("X-Tactic-UTC-Started"),
+			utcEnded: response.headers.get("X-Tactic-UTC-Ended")
+		}, started, received);
+	}
+};
+var serverClock = shallowReactive(new ServerClock());
+var localTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
+//#endregion
 //#region src/features/activity/notifications.js
 var notificationHistory = shallowReactive({ records: [] });
 var activeNotifications = shallowReactive({ records: [] });
@@ -262,7 +311,7 @@ function notify(kind, message, detail = "", group = "client", key = "", source =
 		group,
 		message,
 		detail: String(redact(detail || "")),
-		timestamp: new Date(now).toISOString(),
+		timestamp: new Date(serverClock.now()).toISOString(),
 		dedupeKey: signature,
 		dismissible: true,
 		sourceType: source.sourceType || "",
@@ -437,7 +486,8 @@ function activityFeed(ticket, project, values = {}, quiet = false) {
 	const payload = {
 		ticket,
 		project,
-		...values
+		...values,
+		time_zone: localTimeZone()
 	};
 	return quiet ? backgroundPost("/admin/activity-feed", payload) : post("/admin/activity-feed", payload);
 }
@@ -723,6 +773,7 @@ async function post(url, payload, signal, quiet = false) {
 			cache: "no-store",
 			signal
 		});
+		serverClock.observeResponse(response, started);
 		data = await response.json();
 		if (!response.ok) {
 			const error = new Error(data.error || "Request failed.");
@@ -11251,6 +11302,6 @@ var _sfc_main = {
 	}
 };
 //#endregion
-export { objectStatus as $, localDate as A, setUpdatesAvailable as At, activityFeed as B, notificationHistory as Bt, _sfc_main$15 as C, tableParentGroup as Ct, _sfc_main$20 as D, userProfile as Dt, _sfc_main$18 as E, userAvatar as Et, _sfc_main$26 as F, cancelNotificationReply as Ft, interfaceDefinition as G, button as Gt, columnsEditor as H, resetNotifications as Ht, _sfc_main$27 as I, clearNotificationHistory as It, messageFileRequest as J, node as Jt, knowledgeRequest as K, label as Kt, _sfc_main$29 as L, dismissNotification as Lt, parse as M, updatesAvailable as Mt, _sfc_main$23 as N, activeNotifications as Nt, _sfc_main$21 as O, widgetConfiguration as Ot, _sfc_main$25 as P, beginNotificationReply as Pt, objectRelations as Q, _sfc_main$31 as R, editNotificationReply as Rt, matchesUser as S, tableDependencyFile as St, AppSearchField_default as T, uploadFormFile as Tt, endActivity as U, setNotificationProgress as Ut, beginActivity as V, notify as Vt, formDefinition as W, submitNotificationReply as Wt, navigationLink as X, revealListOffset as Xt, messagesRequest as Y, rect as Yt, objectDeletion as Z, virtualRange as Zt, copyText as _, serverUpdates as _t, _sfc_main$2 as a, resetRequestActivity as at, _sfc_main$13 as b, tableCells as bt, _sfc_main$6 as c, rpc as ct, completions as d, scriptShelf as dt, projectCatalog as et, documentSymbols as f, searchConfiguration as ft, copyImage as g, serverConfiguration as gt, xmlTokens as h, securityUsers as ht, _sfc_main$1 as i, requestActivity as it, monthLabel as j, updateDelay as jt, _sfc_main$22 as k, workspaceLayouts as kt, toolbar as l, saveServerConfiguration as lt, pythonTokens as m, securityRules as mt, frameContentWidth as n, projectNavigation as nt, _sfc_main$3 as o, resolveCustomUrl as ot, javascriptTokens as p, securityGroups as pt, linkPreviews as q, muted as qt, observeFrameSizes as r, rawDatabase as rt, _sfc_main$5 as s, resultItems as st, _sfc_main as t, projectCreationCatalog as tt, _sfc_main$9 as u, scriptEditor as ut, readClipboardImages as v, sessionAction as vt, ItemPreview_default as w, transactionDetails as wt, _sfc_main$14 as x, tableDependencies as xt, translate as y, sidebarRequest as yt, _sfc_main$32 as z, failNotificationReply as zt };
+export { objectStatus as $, virtualRange as $t, localDate as A, setUpdatesAvailable as At, activityFeed as B, notificationHistory as Bt, _sfc_main$15 as C, tableParentGroup as Ct, _sfc_main$20 as D, userProfile as Dt, _sfc_main$18 as E, userAvatar as Et, _sfc_main$26 as F, cancelNotificationReply as Ft, interfaceDefinition as G, serverClock as Gt, columnsEditor as H, resetNotifications as Ht, _sfc_main$27 as I, clearNotificationHistory as It, messageFileRequest as J, label as Jt, knowledgeRequest as K, serverTimestamp as Kt, _sfc_main$29 as L, dismissNotification as Lt, parse as M, updatesAvailable as Mt, _sfc_main$23 as N, activeNotifications as Nt, _sfc_main$21 as O, widgetConfiguration as Ot, _sfc_main$25 as P, beginNotificationReply as Pt, objectRelations as Q, revealListOffset as Qt, _sfc_main$31 as R, editNotificationReply as Rt, matchesUser as S, tableDependencyFile as St, AppSearchField_default as T, uploadFormFile as Tt, endActivity as U, setNotificationProgress as Ut, beginActivity as V, notify as Vt, formDefinition as W, submitNotificationReply as Wt, navigationLink as X, node as Xt, messagesRequest as Y, muted as Yt, objectDeletion as Z, rect as Zt, copyText as _, serverUpdates as _t, _sfc_main$2 as a, resetRequestActivity as at, _sfc_main$13 as b, tableCells as bt, _sfc_main$6 as c, rpc as ct, completions as d, scriptShelf as dt, projectCatalog as et, documentSymbols as f, searchConfiguration as ft, copyImage as g, serverConfiguration as gt, xmlTokens as h, securityUsers as ht, _sfc_main$1 as i, requestActivity as it, monthLabel as j, updateDelay as jt, _sfc_main$22 as k, workspaceLayouts as kt, toolbar as l, saveServerConfiguration as lt, pythonTokens as m, securityRules as mt, frameContentWidth as n, projectNavigation as nt, _sfc_main$3 as o, resolveCustomUrl as ot, javascriptTokens as p, securityGroups as pt, linkPreviews as q, button as qt, observeFrameSizes as r, rawDatabase as rt, _sfc_main$5 as s, resultItems as st, _sfc_main as t, projectCreationCatalog as tt, _sfc_main$9 as u, scriptEditor as ut, readClipboardImages as v, sessionAction as vt, ItemPreview_default as w, transactionDetails as wt, _sfc_main$14 as x, tableDependencies as xt, translate as y, sidebarRequest as yt, _sfc_main$32 as z, failNotificationReply as zt };
 
 //# sourceMappingURL=CodeBlock.js.map

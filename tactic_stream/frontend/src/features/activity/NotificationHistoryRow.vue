@@ -16,7 +16,7 @@ const root = ref(null),
   hovered = ref(false);
 const model = computed(() => ({
   ...props.record,
-  time: timestampLabel(props.record.timestamp, new Date()),
+  time: timestampLabel(props.record.timestamp),
   hovered: hovered.value
 }));
 const scene = computed(() =>

@@ -19,6 +19,7 @@ import {
   compactText,
   needsExpansion,
   timestampLabel,
+  timestampFullLabel,
   safeColor
 } from './activity.js';
 import {
@@ -61,7 +62,7 @@ const time = computed(() => {
   appearance.language;
   return timestampLabel(
     props.record.timestamp,
-    new Date(props.now || Date.now())
+    props.now ? new Date(props.now) : undefined
   );
 });
 function activate(event) {
@@ -89,7 +90,7 @@ const fieldLabel = (value) =>
 const model = computed(() => ({
   ...props.record,
   time: time.value,
-  fullTime: props.record.timestamp,
+  fullTime: timestampFullLabel(props.record.timestamp),
   expanded: expanded.value,
   expandable: expandable.value,
   hovered: hovered.value,

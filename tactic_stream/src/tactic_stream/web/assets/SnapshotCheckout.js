@@ -1,6 +1,6 @@
 import { D as nextTick, L as resolveDirective, N as openBlock, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, tt as unref } from "./vue.js";
 import { A as t, c as _sfc_main$2, j as appearance, z as controls } from "./index.js";
-import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$3, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { Jt as label, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$3, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { t as downloadBlob } from "./files2.js";

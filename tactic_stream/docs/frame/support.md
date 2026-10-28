@@ -96,3 +96,24 @@ checks. Generated reports belong in the ignored tool `output/` directories.
 Historical release counts and captures are local archive material, not current
 acceptance. Offscreen checks do not establish physical touch/IME, compositor,
 DCC or deployment readiness; exercise those when the feature requires them.
+
+## Event time and local calendar days
+
+All HTTP responses provide explicit UTC `X-Tactic-UTC-Started/Ended` headers,
+including the SSE handshake. `frontend/src/serverClock.js` combines those with
+monotonic request start/receipt times, subtracts server work and estimates receipt
+UTC using half the residual network delay. The best samples update the anchor;
+slow, impossible and out-of-order samples are rejected, with a five-minute refresh.
+Subsequent ages advance with `performance.now()`, independent of OS clock changes.
+Before synchronization, local wall-clock UTC is the fallback. Accuracy follows
+the server system UTC, with residual half-round-trip network uncertainty; this
+does not configure OS NTP.
+
+Naive TACTIC event timestamps mean UTC; explicit offsets retain their instant.
+Absolute labels and feed groups use the user's local zone. The feed sends its
+IANA `time_zone` to the read-only query, which converts each local midnight to UTC
+separately and counts events in that zone, including DST boundaries. Work dates
+remain calendar dates; raw event cursors and pagination ordering are unchanged.
+Handler uses the same query contract and a monotonic `ServerClock` over XML-RPC
+and SSE. Checks: `test_activity_timezones.py` (both query implementations and HTTP)
+and `frontend/tests/server_clock.mjs` (real cards in four browser time zones).

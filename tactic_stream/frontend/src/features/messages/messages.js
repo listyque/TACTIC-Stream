@@ -1,11 +1,7 @@
 // MessagesController's identity, UTC timestamps, five-minute author groups and stable paging.
 export const messageId = (row) => row?.__search_key__ || row?.code || '';
-export const messageDate = (value) =>
-  new Date(
-    /(?:Z|[+-]\d\d:\d\d)$/.test(value || '')
-      ? value
-      : String(value || '').replace(' ', 'T') + 'Z'
-  );
+import { serverClock, serverTimestamp } from '../../serverClock.js';
+export const messageDate = serverTimestamp;
 export function initials(value) {
   return (
     String(value || '')
@@ -49,7 +45,12 @@ export function retainOlderMessages(rows, page) {
       present.has(messageId(row))
   );
 }
-export function canChangeMessage(row, login, privileged, now = Date.now()) {
+export function canChangeMessage(
+  row,
+  login,
+  privileged,
+  now = serverClock.now()
+) {
   if (row.login !== login) return privileged;
   const stamp = messageDate(row.timestamp).getTime();
   return Number.isFinite(stamp) && stamp <= now && now - stamp <= 3600000;

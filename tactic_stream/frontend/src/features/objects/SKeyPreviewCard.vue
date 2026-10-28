@@ -22,7 +22,7 @@ const failed = computed(() => props.preview.status === 'error')
 const ready = computed(() => props.preview.status === 'ready')
 const canOpen = computed(() => ready.value && (props.preview.kind !== 'message' || props.preview.canOpen))
 const icon = computed(() => ({ sobject: 'inventory-2', task: 'task', snapshot: 'snapshot', file: 'description', note: 'notes', message: 'chat', user: 'user', project: 'folder', knowledge: props.preview.articleKind === 'section' ? 'folder-open' : 'book-open' }[props.preview.kind] || 'link'))
-const time = computed(() => { const date = messageDate(props.preview.timestamp); return Number.isNaN(date.getTime()) ? '' : timestampLabel(date.toISOString(), new Date(props.now || Date.now())) })
+const time = computed(() => { const date = messageDate(props.preview.timestamp); return Number.isNaN(date.getTime()) ? '' : timestampLabel(date.toISOString(), props.now ? new Date(props.now) : undefined) })
 const rich = computed(() => ready.value && ['note', 'message'].includes(props.preview.kind) && !props.compact)
 function activate() { if (failed.value) emit('retry', props.preview.searchKey); else if (canOpen.value) emit('open', props.preview.searchKey) }
 function click(event) { if (!event.target.closest('button,a,details') && !window.getSelection()?.toString()) activate() }

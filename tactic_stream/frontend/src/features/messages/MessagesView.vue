@@ -22,6 +22,7 @@ import BusyIndicator from '../../controls/BusyIndicator.vue';
 import ItemPreview from '../../controls/ItemPreview.vue';
 import UserPicker from '../../controls/UserPicker.vue';
 import ItemSurface from '../../controls/ItemSurface.vue';
+import { serverClock } from '../../serverClock.js';
 import { timestampLabel } from '../activity/activity.js';
 import {
   copyText,
@@ -105,7 +106,11 @@ const emit = defineEmits([
 ]);
 const fileActions = ref({});
 const previews = ref({});
-const now = ref(Date.now());
+const clockTick = ref(0);
+const now = computed(() => {
+  clockTick.value;
+  return serverClock.now();
+});
 let previewRequest = 0;
 const quickReplies = new Set();
 const dialog = ref(null),
@@ -398,7 +403,7 @@ function unread() {
   );
 }
 async function loadList() {
-  now.value = Date.now();
+  clockTick.value++;
   if (listLoading) {
     pendingList = true;
     return;

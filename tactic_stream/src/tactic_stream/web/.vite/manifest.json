@@ -250,6 +250,7 @@
     "name": "textMetrics",
     "imports": [
       "index.html",
+      "_CodeBlock.js",
       "_richText.js",
       "_links.js"
     ]
