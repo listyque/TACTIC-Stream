@@ -41,6 +41,15 @@ class Collaboration(unittest.TestCase):
     def test_notification_stack_in_chromium(self):
         self.browser('notification_stack.mjs')
 
+    def test_calendar_layout_in_chromium(self):
+        from tactic_stream.server.api import Api
+        api = Api(test_transport.Transport.store)
+        api.protocol = 'json'
+        context = dict(ticket=api.get_ticket('admin', 'private-test-password'), project='one')
+        task = api.dispatch('create_task', (context, 'contract/entity?project=one&code=A', 'model'))
+        api.dispatch('update', (context, task['__search_key__'], dict(assigned='admin')))
+        self.browser('calendar_layout.mjs')
+
     def test_configuration_background_in_chromium(self):
         self.browser('configuration_background.mjs')
 

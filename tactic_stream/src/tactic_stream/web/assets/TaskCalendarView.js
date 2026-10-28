@@ -334,26 +334,28 @@ var _sfc_main = {
 				__props.error ? (openBlock(), createElementBlock("p", _hoisted_2, toDisplayString(unref(t)(__props.error)), 1)) : createCommentVNode("", true),
 				withDirectives(createBaseVNode("div", {
 					class: "calendar-weekdays",
-					style: normalizeStyle(bounds(layout$1.value.margin, layout$1.value.margin + 34 + layout$1.value.gap, layout$1.value.inner, 22))
+					style: normalizeStyle({
+						...bounds(layout$1.value.margin, layout$1.value.margin + 34 + layout$1.value.gap, layout$1.value.inner, 22),
+						gap: layout$1.value.cellGap + "px"
+					})
 				}, [(openBlock(), createElementBlock(Fragment, null, renderList(7, (index) => {
 					return createVNode(_sfc_main$1, {
 						key: index,
-						style: normalizeStyle(bounds((index - 1) * (layout$1.value.cellWidth + layout$1.value.cellGap), 0, layout$1.value.cellWidth, 22)),
 						scene: weekday(index - 1, layout$1.value.cellWidth, unref(appearance).language)
-					}, null, 8, ["style", "scene"]);
+					}, null, 8, ["scene"]);
 				}), 64))], 4), [[vShow, !agenda.value]]),
 				withDirectives(createBaseVNode("div", {
 					class: "task-calendar-grid",
-					style: normalizeStyle(bounds(layout$1.value.margin, layout$1.value.gridY, layout$1.value.inner, layout$1.value.gridHeight))
+					style: normalizeStyle({
+						...bounds(layout$1.value.margin, layout$1.value.gridY, layout$1.value.inner, layout$1.value.gridHeight),
+						gap: layout$1.value.cellGap + "px"
+					})
 				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(days.value, (day$1, index) => {
 					return openBlock(), createBlock(_sfc_main$1, {
 						key: day$1.date,
 						class: "task-calendar-day",
 						"data-date": day$1.date,
-						style: normalizeStyle({
-							...bounds(index % 7 * (layout$1.value.cellWidth + layout$1.value.cellGap), Math.floor(index / 7) * (layout$1.value.cellHeight + layout$1.value.cellGap), layout$1.value.cellWidth, layout$1.value.cellHeight),
-							opacity: day$1.inMonth ? 1 : .55
-						}),
+						style: normalizeStyle({ opacity: day$1.inMonth ? 1 : .55 }),
 						scene: day(dayModel(day$1, index), layout$1.value.cellWidth, layout$1.value.cellHeight, unref(appearance).language),
 						onPointerenter: ($event) => hovered.value = day$1.date,
 						onPointerleave: _cache[0] || (_cache[0] = ($event) => hovered.value = ""),

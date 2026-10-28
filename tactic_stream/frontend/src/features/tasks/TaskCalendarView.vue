@@ -95,45 +95,36 @@ onBeforeUnmount(() => observer?.disconnect());
     <div
       v-show="!agenda"
       class="calendar-weekdays"
-      :style="
-        bounds(layout.margin, layout.margin + 34 + layout.gap, layout.inner, 22)
-      "
+      :style="{
+        ...bounds(
+          layout.margin,
+          layout.margin + 34 + layout.gap,
+          layout.inner,
+          22
+        ),
+        gap: layout.cellGap + 'px'
+      }"
     >
       <FrameView
         v-for="index in 7"
         :key="index"
-        :style="
-          bounds(
-            (index - 1) * (layout.cellWidth + layout.cellGap),
-            0,
-            layout.cellWidth,
-            22
-          )
-        "
         :scene="UI.weekday(index - 1, layout.cellWidth, appearance.language)"
       />
     </div>
     <div
       v-show="!agenda"
       class="task-calendar-grid"
-      :style="
-        bounds(layout.margin, layout.gridY, layout.inner, layout.gridHeight)
-      "
+      :style="{
+        ...bounds(layout.margin, layout.gridY, layout.inner, layout.gridHeight),
+        gap: layout.cellGap + 'px'
+      }"
     >
       <FrameView
         v-for="(day, index) in days"
         :key="day.date"
         class="task-calendar-day"
         :data-date="day.date"
-        :style="{
-          ...bounds(
-            (index % 7) * (layout.cellWidth + layout.cellGap),
-            Math.floor(index / 7) * (layout.cellHeight + layout.cellGap),
-            layout.cellWidth,
-            layout.cellHeight
-          ),
-          opacity: day.inMonth ? 1 : 0.55
-        }"
+        :style="{ opacity: day.inMonth ? 1 : 0.55 }"
         :scene="
           UI.day(
             dayModel(day, index),
@@ -193,18 +184,18 @@ onBeforeUnmount(() => observer?.disconnect());
 .task-calendar-view > .task-calendar-agenda {
   position: absolute;
 }
-.task-calendar-view .calendar-weekdays > .frame-view,
-.task-calendar-view .task-calendar-day {
-  position: absolute;
-  overflow: hidden;
+.task-calendar-view .calendar-weekdays,
+.task-calendar-view .task-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 .task-calendar-view .task-calendar-grid {
-  display: block;
+  grid-template-rows: repeat(6, minmax(0, 1fr));
   padding: 0;
-  gap: 0;
   border: 0;
 }
 .task-calendar-view .task-calendar-day {
+  overflow: hidden;
   border-radius: var(--item-radius);
 }
 .task-calendar-agenda {
