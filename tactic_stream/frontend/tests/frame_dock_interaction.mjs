@@ -328,6 +328,19 @@ try {
   );
   await client.detach();
 
+  const workspaceMenu = page.locator('.dock-menu').first();
+  await workspaceMenu.locator(':scope > summary').click();
+  const browsing = workspaceMenu.locator('.dock-group-menu').first();
+  await browsing.locator(':scope > summary').click();
+  // The native DockPanelModel order is Results, Snapshot Browser, Description, Knowledge Base.
+  assert.deepEqual(await browsing.locator(':scope > .account-panel .app-menu-item-label').allTextContents().then(items => items.map(text => text.trim())),
+    ['Results', 'Snapshot Browser', 'Description', 'Knowledge Base']);
+  assert.equal(await browsing.locator(':scope > summary [data-icon="chevron-right"]').count(), 1);
+  assert.deepEqual(await browsing.locator(':scope > .account-panel button .app-icon:not(.menu-check)').evaluateAll(items => items.map(item => item.dataset.icon)),
+    ['view-kanban', 'movie', 'description', 'book-open']);
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Escape');
+
   // Every floating edge uses the same per-kind minimum as native DockPanel.
   for (const edge of [
     'left',

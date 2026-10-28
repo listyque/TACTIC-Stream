@@ -47616,26 +47616,26 @@ var _sfc_main$42 = {
 							trigger: withCtx(() => [
 								createVNode(_sfc_main$185, { name: "view-kanban" }),
 								createBaseVNode("span", null, toDisplayString(unref(t)("Browsing")), 1),
-								createVNode(_sfc_main$185, { name: "next" })
+								createVNode(_sfc_main$185, { name: "chevron-right" })
 							]),
 							default: withCtx(() => [
 								createVNode(_sfc_main$209, {
 									label: "Results",
-									icon: "search",
+									icon: "view-kanban",
 									checked: state.value.panels.results.visible,
 									disabled: ""
+								}, null, 8, ["checked"]),
+								createVNode(_sfc_main$209, {
+									label: "Snapshot Browser",
+									icon: "movie",
+									checked: state.value.panels.snapshot.visible,
+									onClick: _cache[5] || (_cache[5] = ($event) => toggle("snapshot"))
 								}, null, 8, ["checked"]),
 								createVNode(_sfc_main$209, {
 									label: "Description",
 									icon: "description",
 									checked: state.value.panels.description.visible,
-									onClick: _cache[5] || (_cache[5] = ($event) => toggle("description"))
-								}, null, 8, ["checked"]),
-								createVNode(_sfc_main$209, {
-									label: "Snapshot Browser",
-									icon: "snapshot",
-									checked: state.value.panels.snapshot.visible,
-									onClick: _cache[6] || (_cache[6] = ($event) => toggle("snapshot"))
+									onClick: _cache[6] || (_cache[6] = ($event) => toggle("description"))
 								}, null, 8, ["checked"]),
 								createVNode(_sfc_main$209, {
 									label: "Knowledge Base",
@@ -47658,13 +47658,13 @@ var _sfc_main$42 = {
 							trigger: withCtx(() => [
 								createVNode(_sfc_main$185, { name: "task-alt" }),
 								createBaseVNode("span", null, toDisplayString(unref(t)("Tasks and reports")), 1),
-								createVNode(_sfc_main$185, { name: "next" })
+								createVNode(_sfc_main$185, { name: "chevron-right" })
 							]),
 							default: withCtx(() => [
 								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$209, {
 									key: 0,
 									label: "Task Manager",
-									icon: "MDI_CLIPBOARD_TEXT_OUTLINE",
+									icon: "task-alt",
 									checked: state.value.panels.tasks.visible,
 									onClick: _cache[8] || (_cache[8] = ($event) => toggle("tasks"))
 								}, null, 8, ["checked"])) : createCommentVNode("", true),
@@ -47677,7 +47677,7 @@ var _sfc_main$42 = {
 								__props.canAdminister ? (openBlock(), createBlock(_sfc_main$209, {
 									key: 1,
 									label: "Task Calendar",
-									icon: "MDI_CALENDAR_MONTH",
+									icon: "calendar-month",
 									checked: state.value.panels.task_calendar.visible,
 									onClick: _cache[10] || (_cache[10] = ($event) => toggle("task_calendar"))
 								}, null, 8, ["checked"])) : createCommentVNode("", true)
@@ -47696,18 +47696,18 @@ var _sfc_main$42 = {
 							trigger: withCtx(() => [
 								createVNode(_sfc_main$185, { name: "settings-suggest" }),
 								createBaseVNode("span", null, toDisplayString(unref(t)("Tools")), 1),
-								createVNode(_sfc_main$185, { name: "next" })
+								createVNode(_sfc_main$185, { name: "chevron-right" })
 							]),
 							default: withCtx(() => [
 								createVNode(_sfc_main$209, {
 									label: "Drop Plate",
-									icon: "upload",
+									icon: "publish",
 									checked: state.value.panels.drop_plate.visible,
 									onClick: _cache[11] || (_cache[11] = ($event) => toggle("drop_plate"))
 								}, null, 8, ["checked"]),
 								createVNode(_sfc_main$209, {
 									label: "Commit Queue",
-									icon: "queue",
+									icon: "publish",
 									checked: state.value.panels.commit_queue.visible,
 									onClick: _cache[12] || (_cache[12] = ($event) => toggle("commit_queue"))
 								}, null, 8, ["checked"]),
@@ -47743,7 +47743,7 @@ var _sfc_main$42 = {
 							trigger: withCtx(() => [
 								createVNode(_sfc_main$185, { name: "dashboard-customize" }),
 								createBaseVNode("span", null, toDisplayString(unref(t)("Layout presets")), 1),
-								createVNode(_sfc_main$185, { name: "next" })
+								createVNode(_sfc_main$185, { name: "chevron-right" })
 							]),
 							default: withCtx(() => [
 								createBaseVNode("header", _hoisted_10$2, [createBaseVNode("strong", null, toDisplayString(unref(t)("Layout presets")), 1), createVNode(_sfc_main$184, {

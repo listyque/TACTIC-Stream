@@ -407,3 +407,5 @@ Table headers meet their rows without a dark spacer. Scrollbar space is reserved
 Row context menus and three-dot menus open without dimming the workspace, including on narrow screens.
 
 Result and task table headers show a thin vertical column-boundary grip, highlighted on hover.
+
+Workspace panel menus use Handler ordering and semantic icons: Browsing lists Results, Snapshot Browser, Description and Knowledge Base. Submenus use a right chevron; Task Manager, Task Calendar, Drop Plate and Commit Queue use the corresponding Handler icons.

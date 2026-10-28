@@ -1326,25 +1326,25 @@ defineExpose({
         >
           <template #trigger
             ><AppIcon name="view-kanban" /><span>{{ t('Browsing') }}</span
-            ><AppIcon name="next"
+            ><AppIcon name="chevron-right"
           /></template>
           <AppMenuItem
             label="Results"
-            icon="search"
+            icon="view-kanban"
             :checked="state.panels.results.visible"
             disabled
+          />
+          <AppMenuItem
+            label="Snapshot Browser"
+            icon="movie"
+            :checked="state.panels.snapshot.visible"
+            @click="toggle('snapshot')"
           />
           <AppMenuItem
             label="Description"
             icon="description"
             :checked="state.panels.description.visible"
             @click="toggle('description')"
-          />
-          <AppMenuItem
-            label="Snapshot Browser"
-            icon="snapshot"
-            :checked="state.panels.snapshot.visible"
-            @click="toggle('snapshot')"
           />
           <AppMenuItem
             label="Knowledge Base"
@@ -1364,12 +1364,12 @@ defineExpose({
         >
           <template #trigger
             ><AppIcon name="task-alt" /><span>{{ t('Tasks and reports') }}</span
-            ><AppIcon name="next"
+            ><AppIcon name="chevron-right"
           /></template>
           <AppMenuItem
             v-if="canAdminister"
             label="Task Manager"
-            icon="MDI_CLIPBOARD_TEXT_OUTLINE"
+            icon="task-alt"
             :checked="state.panels.tasks.visible"
             @click="toggle('tasks')"
           />
@@ -1382,7 +1382,7 @@ defineExpose({
           <AppMenuItem
             v-if="canAdminister"
             label="Task Calendar"
-            icon="MDI_CALENDAR_MONTH"
+            icon="calendar-month"
             :checked="state.panels.task_calendar.visible"
             @click="toggle('task_calendar')"
           />
@@ -1398,17 +1398,17 @@ defineExpose({
         >
           <template #trigger
             ><AppIcon name="settings-suggest" /><span>{{ t('Tools') }}</span
-            ><AppIcon name="next"
+            ><AppIcon name="chevron-right"
           /></template>
           <AppMenuItem
             label="Drop Plate"
-            icon="upload"
+            icon="publish"
             :checked="state.panels.drop_plate.visible"
             @click="toggle('drop_plate')"
           />
           <AppMenuItem
             label="Commit Queue"
-            icon="queue"
+            icon="publish"
             :checked="state.panels.commit_queue.visible"
             @click="toggle('commit_queue')"
           />
@@ -1448,7 +1448,7 @@ defineExpose({
             ><AppIcon name="dashboard-customize" /><span>{{
               t('Layout presets')
             }}</span
-            ><AppIcon name="next"
+            ><AppIcon name="chevron-right"
           /></template>
           <header class="dock-presets-heading">
             <strong>{{ t('Layout presets') }}</strong
