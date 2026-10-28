@@ -10401,7 +10401,8 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					onDragover: ($event) => dragOver($event, node),
 					onDrop: ($event) => drop($event, node)
 				}, {
-					default: withCtx(() => [createVNode(_component_FrameView, {
+					default: withCtx(() => [node.children?.length ? (openBlock(), createBlock(_component_FrameView, {
+						key: 0,
 						ref_for: true,
 						ref_key: "branches",
 						ref: branches,
@@ -10419,7 +10420,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"describe-row",
 						"describe-cell",
 						"interactive"
-					])]),
+					])) : createCommentVNode("", true)]),
 					_: 2
 				}, 1064, [
 					"data-frame",

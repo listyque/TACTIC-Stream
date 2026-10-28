@@ -430,6 +430,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         @dragover="dragOver($event, node)"
         @drop="drop($event, node)"
         ><FrameView
+          v-if="node.children?.length"
           ref="branches"
           :scene="{ nodes: node.children }"
           :models="models"
