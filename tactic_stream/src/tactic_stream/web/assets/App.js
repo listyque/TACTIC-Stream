@@ -5266,11 +5266,12 @@ var _sfc_main$170 = {
 						key: entry.key,
 						class: normalizeClass(["handler-table-row", {
 							selected: __props.selectedKeys?.includes(entry.key),
+							active: !!entry.record && focusedKey.value === entry.key,
 							"group-row": !!entry.group || !!entry.summary
 						}]),
 						role: "row",
 						"aria-rowindex": entry.index + 2,
-						"aria-selected": !!entry.record && __props.selectedKeys?.includes(entry.key),
+						"aria-selected": !!entry.record && (focusedKey.value === entry.key || __props.selectedKeys?.includes(entry.key)),
 						style: normalizeStyle({
 							top: entry.top + "px",
 							height: entry.height + "px"

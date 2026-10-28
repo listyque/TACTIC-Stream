@@ -570,6 +570,9 @@ try {
   await page.evaluate(() => window.host.selected = []);
   await rows.first().locator('.handler-table-cell').nth(1).click();
   assert.deepEqual(await page.evaluate(() => window.host.selected), []);
+  assert(await rows.first().evaluate(el => el.classList.contains('active')));
+  assert.equal(await rows.first().getAttribute('aria-selected'), 'true');
+  assert.equal(await rows.first().locator('input[type=checkbox]').isChecked(), false);
   await rows.nth(1).locator('.handler-table-cell').nth(1).click({modifiers: ['Shift']});
   assert.deepEqual(await page.evaluate(() => window.host.selected), fixture.records.slice(0, 2).map(r => r.__search_key__));
   await rows.nth(2).locator('.handler-table-cell').nth(1).click();

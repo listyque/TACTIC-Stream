@@ -655,9 +655,10 @@ defineExpose({ viewport });
         class="handler-table-row"
         role="row"
         :aria-rowindex="entry.index + 2"
-        :aria-selected="!!entry.record && selectedKeys?.includes(entry.key)"
+        :aria-selected="!!entry.record && (focusedKey === entry.key || selectedKeys?.includes(entry.key))"
         :class="{
           selected: selectedKeys?.includes(entry.key),
+          active: !!entry.record && focusedKey === entry.key,
           'group-row': !!entry.group || !!entry.summary
         }"
         :style="{ top: entry.top + 'px', height: entry.height + 'px' }"
@@ -944,7 +945,8 @@ defineExpose({ viewport });
 .handler-table-row:hover {
   background: var(--row-hover, var(--hover));
 }
-.handler-table-row.selected {
+.handler-table-row.selected,
+.handler-table-row.active {
   background: var(--content-selection);
 }
 .handler-table-cell {
@@ -1045,7 +1047,7 @@ defineExpose({ viewport });
   margin-left: auto;
   margin-right: 4px;
 }
-.handler-table-row:is(:hover, .selected) .handler-table-actions .app-button {
+.handler-table-row:is(:hover, .selected, .active) .handler-table-actions .app-button {
   opacity: 1;
 }
 .handler-table-selection .app-checkbox {
