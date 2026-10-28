@@ -4973,6 +4973,10 @@ var _sfc_main$170 = {
 			focusedKey.value = key;
 			emit("focus", record);
 			if (!props.selectable) return;
+			if (!toggle && !event.shiftKey) {
+				anchorKey.value = key;
+				return;
+			}
 			if (event.type === "contextmenu" && props.selectedKeys?.includes(key)) return;
 			if (event.shiftKey && anchorKey.value) {
 				const keys = records.value.map((record) => record.__search_key__), indices = [keys.indexOf(anchorKey.value), keys.indexOf(key)];
@@ -31668,7 +31672,10 @@ function pending(model, width, language) {
 	const discardX = saveX - 8 - 96;
 	let textRight = discardX - 8;
 	const nodes = [
-		node("Box", "taskPendingSurface", rect$1(0, 0, width, height), { background: "secondaryContainer" }),
+		node("Box", "taskPendingSurface", rect$1(0, 0, width, height), {
+			background: "secondaryContainer",
+			radius: 0
+		}),
 		node("Icon", "taskPendingIcon", rect$1(12, 13, 16, 16), {
 			icon: "edit",
 			color: "action"
@@ -62286,50 +62293,53 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 							role: "group",
 							"aria-label": $options.t("Selected record actions"),
 							onToggleCapture: _cache[115] || (_cache[115] = (...args) => $options.menuToggled && $options.menuToggled(...args))
-						}, [createBaseVNode("strong", null, toDisplayString($options.t("{count} selected records", { count: $options.selectedRecords.length })), 1), createVNode(_component_AppMenu, {
-							ref: "selectionMenu",
-							label: "Selected record actions"
-						}, {
-							default: withCtx(() => [
-								$data.canAdminister ? (openBlock(), createBlock(_component_AppButton, {
-									key: 0,
-									label: "Tasks for selected objects",
-									icon: "MDI_CLIPBOARD_TEXT_OUTLINE",
-									onClick: _cache[109] || (_cache[109] = ($event) => _ctx.$refs.taskManager.open(true))
-								})) : createCommentVNode("", true),
-								$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
-									key: 1,
-									label: "Edit selected",
-									icon: "edit",
-									onClick: _cache[110] || (_cache[110] = ($event) => _ctx.$refs.recordForm.open($data.selectedKeys))
-								})) : createCommentVNode("", true),
-								createVNode(_component_AppButton, {
-									label: "Clear selection",
-									icon: "close",
-									onClick: _cache[111] || (_cache[111] = ($event) => $data.selectedKeys = [])
-								}),
-								$data.interfaceConfig?.operations?.retire && $options.selectedRecords.some((record) => record[$data.interfaceConfig.operations.retire_column] !== "retired") ? (openBlock(), createBlock(_component_AppButton, {
-									key: 2,
-									label: "Retire selected",
-									icon: "archive",
-									onClick: _cache[112] || (_cache[112] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "retire"))
-								})) : createCommentVNode("", true),
-								$data.interfaceConfig?.operations?.retire && $options.selectedRecords.some((record) => record[$data.interfaceConfig.operations.retire_column] === "retired") ? (openBlock(), createBlock(_component_AppButton, {
-									key: 3,
-									label: "Reactivate selected",
-									icon: "refresh",
-									onClick: _cache[113] || (_cache[113] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "reactivate"))
-								})) : createCommentVNode("", true),
-								$data.interfaceConfig?.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
-									key: 4,
-									label: "Delete selected",
-									icon: "delete",
-									destructive: "",
-									onClick: _cache[114] || (_cache[114] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "delete"))
-								})) : createCommentVNode("", true)
-							]),
-							_: 1
-						}, 512)], 40, _hoisted_33)) : createCommentVNode("", true),
+						}, [
+							createBaseVNode("strong", null, toDisplayString($options.t("{count} selected records", { count: $options.selectedRecords.length })), 1),
+							createVNode(_component_AppButton, {
+								label: "Clear selection",
+								icon: "close",
+								onClick: _cache[109] || (_cache[109] = ($event) => $data.selectedKeys = [])
+							}),
+							createVNode(_component_AppMenu, {
+								ref: "selectionMenu",
+								label: "Selected record actions"
+							}, {
+								default: withCtx(() => [
+									$data.canAdminister ? (openBlock(), createBlock(_component_AppButton, {
+										key: 0,
+										label: "Tasks for selected objects",
+										icon: "MDI_CLIPBOARD_TEXT_OUTLINE",
+										onClick: _cache[110] || (_cache[110] = ($event) => _ctx.$refs.taskManager.open(true))
+									})) : createCommentVNode("", true),
+									$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
+										key: 1,
+										label: "Edit selected",
+										icon: "edit",
+										onClick: _cache[111] || (_cache[111] = ($event) => _ctx.$refs.recordForm.open($data.selectedKeys))
+									})) : createCommentVNode("", true),
+									$data.interfaceConfig?.operations?.retire && $options.selectedRecords.some((record) => record[$data.interfaceConfig.operations.retire_column] !== "retired") ? (openBlock(), createBlock(_component_AppButton, {
+										key: 2,
+										label: "Retire selected",
+										icon: "archive",
+										onClick: _cache[112] || (_cache[112] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "retire"))
+									})) : createCommentVNode("", true),
+									$data.interfaceConfig?.operations?.retire && $options.selectedRecords.some((record) => record[$data.interfaceConfig.operations.retire_column] === "retired") ? (openBlock(), createBlock(_component_AppButton, {
+										key: 3,
+										label: "Reactivate selected",
+										icon: "refresh",
+										onClick: _cache[113] || (_cache[113] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "reactivate"))
+									})) : createCommentVNode("", true),
+									$data.interfaceConfig?.operations?.delete ? (openBlock(), createBlock(_component_AppButton, {
+										key: 4,
+										label: "Delete selected",
+										icon: "delete",
+										destructive: "",
+										onClick: _cache[114] || (_cache[114] = ($event) => _ctx.$refs.objectAction.open($options.selectedRecords, "delete"))
+									})) : createCommentVNode("", true)
+								]),
+								_: 1
+							}, 512)
+						], 40, _hoisted_33)) : createCommentVNode("", true),
 						createBaseVNode("div", {
 							ref: "results",
 							class: "table-container workspace-results",
