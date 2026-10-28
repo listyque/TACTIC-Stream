@@ -2153,8 +2153,7 @@ export default {
       </Teleport>
       <p v-if="error" class="error" role="alert">{{ t(error) }}</p>
       <div v-if="selectedRecords.length && (resultMode !== 'continious' || selectedRecords.length > 1 || mobile)" class="selection-actions" role="group" :aria-label="t('Selected record actions')" @toggle.capture="menuToggled">
-        <strong>{{ t('{count} selected records', { count: selectedRecords.length }) }}</strong>
-        <AppButton label="Clear selection" icon="close" @click="selectedKeys = []" />
+        <AppButton :label="t(selectedRecords.length === 1 ? 'Deselect {count} item' : 'Deselect {count} items', { count: selectedRecords.length })" :translate-label="false" @click="selectedKeys = []" />
         <AppMenu ref="selectionMenu" label="Selected record actions">
             <AppButton v-if="canAdminister" label="Tasks for selected objects" icon="MDI_CLIPBOARD_TEXT_OUTLINE" @click="$refs.taskManager.open(true)" />
             <AppButton v-if="interfaceConfig?.operations?.edit" label="Edit selected" icon="edit" @click="$refs.recordForm.open(selectedKeys)" />

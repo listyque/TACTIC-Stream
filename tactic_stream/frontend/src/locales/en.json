@@ -1,4 +1,6 @@
 {
+  "Deselect {count} item": "Deselect {count} item",
+  "Deselect {count} items": "Deselect {count} items",
   "Group label (optional)": "Group label (optional)",
   "New view": "New view",
   "Add a widget to start this view.": "Add a widget to start this view.",

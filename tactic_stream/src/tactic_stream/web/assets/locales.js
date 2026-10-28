@@ -1,4 +1,6 @@
 var en_default = {
+	"Deselect {count} item": "Deselect {count} item",
+	"Deselect {count} items": "Deselect {count} items",
 	"Group label (optional)": "Group label (optional)",
 	"New view": "New view",
 	"Add a widget to start this view.": "Add a widget to start this view.",
@@ -1946,6 +1948,8 @@ var en_default = {
 	"The source tab changed. Reload the page.": "The source tab changed. Reload the page."
 };
 var ru_default = {
+	"Deselect {count} item": "Снять выделение: {count}",
+	"Deselect {count} items": "Снять выделение: {count}",
 	"Group label (optional)": "Название группы (необязательно)",
 	"New view": "Новый вид",
 	"Add a widget to start this view.": "Добавьте виджет, чтобы начать этот вид.",

@@ -819,6 +819,7 @@ button.danger { color: var(--error); border-color: var(--error); }
 .error-text { color: var(--error); }
 .selection-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: var(--content-selection); border-radius: 0; }
 .workspace-browser .selection-actions { flex-shrink: 0; flex-wrap: nowrap; justify-content: space-between; padding: 0 var(--space-sm); }
+.selection-actions > .app-button { --control-height: var(--compact-control-height); font-size: var(--text-caption); }
 .widget-configuration { width: min(960px, 95vw); }
 .widget-configuration label { display: grid; gap: var(--space-sm); margin-bottom: var(--space-md); }
 .widget-configuration textarea, .widget-configuration pre { font-family: monospace; line-height: 1.5; }
