@@ -10483,7 +10483,10 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"frame-radio": node.radio,
 						"frame-radio-selected": node.radio && node.selected
 					}]),
-					style: normalizeStyle(Object.assign(style(node), { color: node.iconAction && node.enabled !== false && (node.iconColor || node.highlighted) ? color(node.iconColor || "selectedText") : void 0 })),
+					style: normalizeStyle(Object.assign(style(node), {
+						borderRadius: node.round ? "50%" : void 0,
+						color: node.iconAction && node.enabled !== false && (node.iconColor || node.highlighted) ? color(node.iconColor || "selectedText") : void 0
+					})),
 					label: node.text,
 					"translate-label": false,
 					"aria-label": node.label || node.text,

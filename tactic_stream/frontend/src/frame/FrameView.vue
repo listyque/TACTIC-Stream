@@ -499,6 +499,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         }"
         :style="
           Object.assign(style(node), {
+            borderRadius: node.round ? '50%' : undefined,
             color:
               node.iconAction &&
               node.enabled !== false &&

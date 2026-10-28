@@ -48430,7 +48430,9 @@ function describe$9(model, width, language) {
 	nodes.push(button("scriptShelfButton", rect$1(right, 5, 38, 38), text("Script shelf"), "code", { type: "shelf" }, true, {
 		iconOnly: true,
 		visible: !compact && model.shelf !== false,
-		tonal: !!model.shelfOpen
+		iconAction: true,
+		round: true,
+		iconColor: model.shelfOpen ? "action" : "secondaryText"
 	}));
 	if (!compact && model.shelf !== false) right -= 3;
 	const left = compact ? 8 : 80;
