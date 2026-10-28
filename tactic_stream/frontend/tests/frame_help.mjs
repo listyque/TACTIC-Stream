@@ -64,6 +64,29 @@ try {
     .waitFor();
   await search.fill('');
   const article = help.locator('.document-pane');
+  const idleMutations = await article.evaluate(async (node) => {
+    await document.fonts.ready;
+    await new Promise(requestAnimationFrame);
+    let changes = 0;
+    const observer = new MutationObserver(
+      (records) => (changes += records.length)
+    );
+    observer.observe(node, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true
+    });
+    for (let frame = 0; frame < 6; frame++)
+      await new Promise(requestAnimationFrame);
+    observer.disconnect();
+    return changes;
+  });
+  assert.equal(
+    idleMutations,
+    0,
+    'A settled document must not rewrite itself while idle'
+  );
   await article.evaluate((node) => {
     node.scrollTop = 300;
   });

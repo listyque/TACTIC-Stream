@@ -54,3 +54,8 @@ records and does not alter application behavior.
 ## Selection and long lists
 
 Resume recording, perform an action, then pause and select its row. Arrow keys and Home/End move selection and reveal virtualized rows. Copy exports the complete measurements; Clear resets selection and details. Selection survives resizing. Signing out clears browser measurements and recording state. Browser frame timings bound a paint opportunity using animation callbacks; they do not confirm GPU presentation. Asynchronous handler duration can include waiting; inspect the recorded phases separately.
+
+To check idle load, open a long report or Help article, wait for loading to finish,
+then leave it untouched. A settled reader should stop formatting and repainting
+until content or layout changes. Measure idle separately from opening, scrolling
+and resizing the view.

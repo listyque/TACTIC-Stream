@@ -632,7 +632,7 @@ function model(raw, ui) {
 			if (item.options.colors) try {
 				const colors = JSON.parse(item.options.colors);
 				if (!colors || typeof colors !== "object" || Array.isArray(colors)) throw Error("Invalid field value colors");
-			} catch {
+			} catch (error) {
 				layoutError = "Invalid field value colors";
 				break;
 			}
