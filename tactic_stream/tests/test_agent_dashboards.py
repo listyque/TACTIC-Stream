@@ -472,6 +472,7 @@ class Dashboards(unittest.TestCase):
             self.assertEqual(details['layoutNodes'][0]['children'][1]['text'],'## Goal\n\nFirst section')
             self.assertEqual(details['layoutNodes'][0]['children'][2]['text'],'## Result\n\nSecond section')
             self.assertEqual(details['layoutNodes'][0]['children'][3]['table']['parentKey'],details['targetSearchKey'])
+            self.assertFalse(details['layoutNodes'][0]['children'][3]['table']['projectScope'], 'Detail tables must use the selected record relationship')
             self.assertEqual(details['layoutNodes'][0]['children'][2]['editorPath'],[0,1,0,2])
             self.assertNotIn('layoutItems',details,'detail refresh cannot replace the tree')
             with self.assertRaises(Fault):read('contract/entity?project=two&code=A')

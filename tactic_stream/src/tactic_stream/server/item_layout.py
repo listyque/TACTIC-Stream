@@ -87,6 +87,18 @@ def describe_item_layout(description):
         raise ValueError('Invalid layout flow')
     result = dict(collection=collection, flow=flow, tracks=tracks, columns=number(attributes.get('columns'), 12, 12),
                   card_width=number(attributes.get('card_width'), 280, 1200), elements=[], **spacing(attributes))
+    if 'navigation' in attributes:
+        try:
+            navigation = json.loads(attributes['navigation'])
+        except (TypeError, ValueError):
+            raise ValueError('Tree navigation requires a Search Type map') from None
+        valid_type = lambda value: isinstance(value, str) and re.fullmatch(r'[A-Za-z_]\w*/[A-Za-z_]\w*', value)
+        if (collection != 'tree' or not isinstance(navigation, dict) or len(navigation) > 32
+                or any(not valid_type(owner) or not isinstance(targets, list) or len(targets) > 32
+                       or any(not valid_type(target) for target in targets)
+                       or len(set(targets)) != len(targets) for owner, targets in navigation.items())):
+            raise ValueError('Tree navigation requires unique child Search Types per parent')
+        result['navigation'] = navigation
     if len(description['elements']) > 128:
         raise ValueError('Layout supports at most 128 elements')
     if tracks and len(tracks.split()) != result['columns']:

@@ -14,6 +14,24 @@ tracker can use native entities for projects, chats, runs, tasks and documents,
 normal snapshots/check-in for files, and native filters for its work queues.
 Do not hardcode the example tracker schema in the server.
 
+For a coherent workflow, keep one primary workspace and use its existing item
+tree as persistent context: project → conversation → native task → outputs.
+Store a real task parent and link outputs to the task; do not relabel a run as a
+task or show unrelated project-wide results as that task's output. Keep runs,
+usage and global record lists as secondary views. Selecting an ancestor returns
+to its details without discarding the expanded tree.
+
+A tree item layout may set the root XML attribute `navigation` to a JSON map,
+for example `{"demo/project":["demo/chat"],"demo/chat":["sthpw/task"],"sthpw/task":["demo/output"],"demo/output":[]}`.
+For mapped types only the listed native child relationships appear; an empty
+list makes a navigation leaf. Unmapped types retain ordinary branches/processes.
+This is a presentation choice, not an ACL or schema change. Keep original
+relationships and use the normal result/context tools to access other data.
+Explicit project-schema edges from `sthpw/task` can use `relationship="search_type"`
+for correct parent type/project filtering. Optional edge `title` labels the
+relationship. The item-layout preview/save tools validate and persist this
+configuration with the usual revisions and replay protection in both clients.
+
 `ts_dashboard_read` returns current revision and a compact native catalogue.
 Use `ts_dashboard_read(name="<existing_name>")` to load the exact saved document
 before editing it. Navigation entries and configured URLs open the layout as a

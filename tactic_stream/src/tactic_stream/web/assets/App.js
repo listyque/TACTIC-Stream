@@ -8456,7 +8456,7 @@ function describe$48(tree, view) {
 		if (get(item, "gap") !== "") result.gap = Number(get(item, "gap"));
 		return result;
 	});
-	return {
+	const result = {
 		collection: get(node, "collection") || "grid",
 		flow: get(node, "flow") || "grid",
 		columns: Number(get(node, "columns") || 12),
@@ -8465,6 +8465,8 @@ function describe$48(tree, view) {
 		card_width: Number(get(node, "card_width") || 280),
 		elements
 	};
+	if (get(node, "navigation")) result.navigation = JSON.parse(get(node, "navigation"));
+	return result;
 }
 function serialize(node, pretty = false) {
 	if (pretty) {
@@ -19569,6 +19571,7 @@ var _sfc_main$118 = {
 		},
 		makeNode(item, parent, previous = /* @__PURE__ */ new Map()) {
 			const searchType = item.record.__search_key__.split("?")[0];
+			const navigation = this.itemLayout?.navigation?.[searchType];
 			const id = (parent?.id || "") + "/" + item.record.__search_key__;
 			const old = previous.get(id);
 			const ancestors = parent ? [...parent.ancestors || [], parent.ownerKey || parent.record?.__search_key__].filter(Boolean) : [];
@@ -19590,7 +19593,7 @@ var _sfc_main$118 = {
 				} : chip) : item.info_items,
 				depth: parent ? parent.depth + 1 : 0,
 				ancestors,
-				hasChildren: item.branches.length > 0 && !ancestors.includes(item.record.__search_key__),
+				hasChildren: (navigation === void 0 ? item.branches.length > 0 : item.branches.some((branch) => branch.kind === "relation" && navigation.includes(branch.search_type))) && !ancestors.includes(item.record.__search_key__),
 				expanded: old?.expanded || false,
 				children: [],
 				loaded: false,
@@ -19678,7 +19681,8 @@ var _sfc_main$118 = {
 					}
 				}
 				const ancestorTypes = node.ancestors.map((key) => key.split("?")[0]);
-				node.children = node.branches.filter((branch) => branch.kind !== "relation" || !ancestorTypes.includes(branch.search_type)).map((branch) => ({
+				const navigation = this.itemLayout?.navigation?.[node.searchType];
+				node.children = node.branches.filter((branch) => (navigation === void 0 || branch.kind === "relation" && navigation.includes(branch.search_type)) && (branch.kind !== "relation" || !ancestorTypes.includes(branch.search_type))).map((branch) => ({
 					kind: "branch",
 					id: node.id + "/" + branch.key,
 					title: branch.title,
@@ -19699,7 +19703,7 @@ var _sfc_main$118 = {
 					error: "",
 					loaded: false
 				}));
-				if (this.mobile || this.mode === "continious") {
+				if (navigation === void 0 && (this.mobile || this.mode === "continious")) {
 					const publishAccent = node.branches.find((branch) => branch.process === "publish")?.accent || node.accent;
 					node.children.unshift(...(node.direct_snapshots || []).map((item) => this.makeNode({
 						...item,

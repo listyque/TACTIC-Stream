@@ -17,6 +17,20 @@ from tactic_stream.server.widget_configuration import (
 
 
 class ItemLayouts(unittest.TestCase):
+    def test_curated_tree_navigation_is_optional_and_bounded(self):
+        import json
+        descriptor = dict(attributes=dict(collection='tree'), elements=[])
+        self.assertNotIn('navigation', describe_item_layout(descriptor))
+        navigation = {'demo/project':['demo/chat'], 'demo/chat':['sthpw/task'], 'sthpw/task':[]}
+        descriptor['attributes']['navigation'] = json.dumps(navigation)
+        self.assertEqual(describe_item_layout(descriptor)['navigation'], navigation)
+        for invalid in ('null', '["demo/chat"]', '{', '{"bad":["demo/chat"]}',
+                        '{"demo/project":["demo/chat","demo/chat"]}', '{"demo/project":[{}]}'):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                describe_item_layout(dict(attributes=dict(collection='tree', navigation=invalid), elements=[]))
+        with self.assertRaises(ValueError):
+            describe_item_layout(dict(attributes=dict(navigation='{}'), elements=[]))
+
     def test_formatted_fields_surfaces_and_bounded_value_colors(self):
         import json
 

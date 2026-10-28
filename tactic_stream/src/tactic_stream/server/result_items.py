@@ -34,7 +34,11 @@ def objects(search_type, keys, *, read_access=False):
 
 
 def relations(obj, direction='child'):
-    return schema_relations(obj.get_base_search_type(), obj.get_schema(), direction)
+    schema = obj.get_schema()
+    if obj.get_base_search_type().startswith('sthpw/') and obj.get_value('project_code', no_exception=True) == Project.get_project_code():
+        from pyasm.biz import Schema
+        schema = Schema.get(project_code=Project.get_project_code())
+    return schema_relations(obj.get_base_search_type(), schema, direction)
 
 
 def schema_relations(base, schema, direction='child'):
@@ -52,7 +56,10 @@ def schema_relations(base, schema, direction='child'):
         for node in current.xml.findall('connect'):
             target = node.get('from' if direction == 'child' else 'to')
             owner = node.get('to' if direction == 'child' else 'from')
-            if owner not in (base, '*') or not target or target in ('*', 'sthpw/task', 'sthpw/note', 'sthpw/snapshot', 'sthpw/file'):
+            if owner not in (base, '*') or not target or target in ('*', 'sthpw/note', 'sthpw/snapshot', 'sthpw/file'):
+                continue
+            # A project may explicitly place native tasks in its navigation hierarchy.
+            if target == 'sthpw/task' and (owner != base or current.get_code() in ('admin', 'sthpw')):
                 continue
             path = node.get('path') or ''
             identity = (target, path)
@@ -67,7 +74,7 @@ def schema_relations(base, schema, direction='child'):
                 continue
             attrs = schema.get_relationship_attrs(target, base, path=path or None) if direction == 'child' else schema.get_relationship_attrs(base, target, path=path or None)
             result[identity] = dict(kind='relation' if direction == 'child' else 'parent', search_type=target, path=path,
-                title=definition.get_title(), key='relation:' + target + ':' + path,
+                title=node.get('title') or definition.get_title(), key='relation:' + target + ':' + path,
                 icon=definition.get_value('icon', no_exception=True) or 'MDI_CUBE_OUTLINE',
                 accent=definition.get_value('color', no_exception=True) or '',
                 relationship=attrs.get('relationship', ''))

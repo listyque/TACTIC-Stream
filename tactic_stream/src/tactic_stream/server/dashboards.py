@@ -575,7 +575,7 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
                 controls=('search','searchLimit','shelf','selection','gear','insert')
                 emit(dict(kind='table',text=block.title or block.search_type,weight=block.weight,height=block.height,
                     table=dict(searchType=block.search_type,parentKey=context.get_search_key(),view=block.view,
-                        projectScope=not block.search_type.startswith(('sthpw/', 'config/')),filters=filters,embedded=True,initialLimit=25,
+                        projectScope=not in_details and not block.search_type.startswith(('sthpw/', 'config/')),filters=filters,embedded=True,initialLimit=25,
                         **{name:block.controls is None or name in block.controls for name in controls})))
         return nodes
 
@@ -586,7 +586,8 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
         budget[0] = 128
         details=compile_blocks(detail_scope[0].children,1,detail,True,tuple(detail_path))
         return dict(layoutNodes=details,targetSearchKey=detail.get_search_key(),
-            title=detail.get_value('name',no_exception=True) or detail.get_value('title',no_exception=True) or detail.get_code())
+            title=detail.get_value('name',no_exception=True) or detail.get_value('title',no_exception=True)
+                  or (detail.get_value('description',no_exception=True) if detail.get_base_search_type() == 'sthpw/task' else '') or detail.get_code())
     if detail_scope and not items_scope:
         raise ValueError('A details pane requires the existing item workspace')
     return dict(title=document.title,text='',layoutNodes=nodes,layoutItems=items_scope[0] if items_scope else None,layoutHasDetails=bool(detail_scope),

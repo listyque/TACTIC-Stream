@@ -439,6 +439,7 @@ export default {
     },
     makeNode(item, parent, previous = new Map()) {
       const searchType = item.record.__search_key__.split('?')[0];
+      const navigation = this.itemLayout?.navigation?.[searchType];
       const id = (parent?.id || '') + '/' + item.record.__search_key__;
       const old = previous.get(id);
       const ancestors = parent
@@ -484,8 +485,13 @@ export default {
         depth: parent ? parent.depth + 1 : 0,
         ancestors,
         hasChildren:
-          item.branches.length > 0 &&
-          !ancestors.includes(item.record.__search_key__),
+          (navigation === undefined
+            ? item.branches.length > 0
+            : item.branches.some(
+                (branch) =>
+                  branch.kind === 'relation' &&
+                  navigation.includes(branch.search_type)
+              )) && !ancestors.includes(item.record.__search_key__),
         expanded: old?.expanded || false,
         children: [],
         loaded: false,
@@ -598,10 +604,14 @@ export default {
           }
         }
         const ancestorTypes = node.ancestors.map((key) => key.split('?')[0]);
+        const navigation = this.itemLayout?.navigation?.[node.searchType];
         const branches = node.branches.filter(
           (branch) =>
-            branch.kind !== 'relation' ||
-            !ancestorTypes.includes(branch.search_type)
+            (navigation === undefined ||
+              (branch.kind === 'relation' &&
+                navigation.includes(branch.search_type))) &&
+            (branch.kind !== 'relation' ||
+              !ancestorTypes.includes(branch.search_type))
         );
         node.children = branches.map((branch) => ({
           kind: 'branch',
@@ -627,7 +637,10 @@ export default {
           error: '',
           loaded: false
         }));
-        if (this.mobile || this.mode === 'continious') {
+        if (
+          navigation === undefined &&
+          (this.mobile || this.mode === 'continious')
+        ) {
           const publishAccent =
             node.branches.find((branch) => branch.process === 'publish')
               ?.accent || node.accent;
