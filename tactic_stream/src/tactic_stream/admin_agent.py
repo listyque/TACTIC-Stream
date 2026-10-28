@@ -626,16 +626,18 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_dashboard_sources(search_type: Annotated[str, Field(max_length=256)] = '',
                              query: Annotated[str, Field(max_length=256)] | None = None,
-                             record_key: Annotated[str, Field(max_length=2048)] = '') -> dict[str, Any]:
+                             record_key: Annotated[str, Field(max_length=2048)] = '',
+                             edit_view: Annotated[str, Field(pattern=r'^[A-Za-z_][\w.@-]{0,127}$')] = 'edit') -> dict[str, Any]:
         """Read compact real data sources, fields/types and saved table/item views without XML.
 
         Empty search_type lists available types; select one to discover fields/views.
+        edit_view selects the native form view; editFields lists its actual element names.
         Optional query finds up to 50 record choices in that source, not arbitrary data.
         Bind text/Markdown with binding static/project/selection/record and a real field;
         selection is scoped to Details, record uses a returned native key. Filters use
         existing comparison/like operators and typed values; null means SQL null.
         """
-        return connection.command('dashboard','sources',search_type=search_type,query=query,record_key=record_key)
+        return connection.command('dashboard','sources',search_type=search_type,query=query,record_key=record_key,edit_view=edit_view)
 
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_item_layout_read(search_type: Identifier, view: Identifier) -> dict[str, Any]:
@@ -692,6 +694,10 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         """Compose a shared native dashboard from the discovered bricks and DashboardBlock schema.
         Grid has columns/min_cell_width/row_height; children have column_span/row_span.
         sizing modes are auto/fixed/fill/content, with preferred min/max constraints.
+        field binds one scalar with plain/badge/progress/date/datetime/number display.
+        form selects fields from a native edit_view (discover editFields); it saves through EditCmd.
+        action uses details/edit/notes/copy_link/refresh for its bound record.
+        Use the existing items/details nesting for project -> parts -> nested parts.
         Heading/Text use native typography; Icon, object Image, safe-link Button, Divider and Spacer
         reuse existing controls. Image binds project/selection/record, not an arbitrary image URL.
         Use one items brick for the existing native item-card tree, with its actual relationship/process

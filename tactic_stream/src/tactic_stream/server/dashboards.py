@@ -112,7 +112,7 @@ def report_data(block, filters, *, check_only=False):
 
 
 def dashboard_sources(
-    search_type: str = '', query: str | None = None, record_key: str = ''
+    search_type: str = '', query: str | None = None, record_key: str = '', edit_view: str = 'edit'
 ) -> dict:
     from .widget_configuration import read_widget_configuration
     from tactic.ui.panel.agent_request_cmd import selected_object
@@ -152,6 +152,14 @@ def dashboard_sources(
         itemViews=[dict(value=name, label=name) for name in configuration['layout_views']],
         records=[], more=False,
     )
+
+    from pyasm.widget import WidgetConfigView
+    import re
+    if not isinstance(edit_view,str) or not re.fullmatch(r'[A-Za-z_][\w.@-]{0,127}',edit_view):
+        raise ValueError('Invalid view name')
+    edit = WidgetConfigView.get_by_search_type(search_type, edit_view, use_cache=False)
+    result['editView'] = edit_view
+    result['editFields'] = [dict(value=name, label=edit.get_element_attributes(name).get('title') or name) for name in edit.get_element_names()]
 
     def choice(row):
         label = next((
@@ -203,7 +211,9 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
     document = DashboardDocument.model_validate(document)
     project = Project.get()
     check_project(project.get_code())
-    target = Search.get_by_search_key(search_key) if search_key else project
+    from tactic.ui.panel.agent_request_cmd import selected_object
+    target = selected_object(search_key) if search_key else project
+    _require_table_access(target.get_base_search_type())
     if target is None:
         raise ValueError('Dashboard target is unavailable')
     definitions = {item.name: item for item in document.filters}
@@ -241,9 +251,9 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
         _require_table_access(detail.get_base_search_type())
 
     def validate_binding(block, search_type='', in_details=False):
-        if block.kind == 'image':
+        if block.kind in ('image','form','action'):
             if block.field or block.binding == 'static':
-                raise ValueError('Images use an object preview, not a field or static text')
+                raise ValueError('Choose an object binding for this widget')
             if block.binding == 'selection' and not in_details:
                 raise ValueError('Place selection-bound widgets inside Details')
             if block.binding == 'record' and not block.source_key:
@@ -256,7 +266,9 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
                     raise ValueError('The record belongs to another data source')
                 _require_table_access(source.get_base_search_type())
             return
-        if block.kind not in ('text','heading','markdown'):
+        if block.kind == 'field' and not block.field:
+            raise ValueError('Choose an existing source field')
+        if block.kind not in ('text','heading','markdown','field'):
             if block.binding!='auto' or block.field or block.source_key:
                 raise ValueError('Field bindings belong to Text or Markdown widgets')
             return
@@ -351,13 +363,13 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             if block.source_key:
                 source = selected_object(block.source_key)
                 _require_table_access(source.get_base_search_type())
-                if block.kind != 'image' and block.field not in SearchType.get_column_info(source.get_base_search_type()):
+                if block.kind not in ('image','form','action') and block.field not in SearchType.get_column_info(source.get_base_search_type()):
                     raise ValueError('Detail source requires an existing field')
             if block.kind in ('link','button') and block.href:
                 url = urlsplit(block.href)
                 if url.scheme not in ('http','https','skey','tactic-search') or not url.netloc or url.username or url.password:
                     raise ValueError('Dashboard links require a safe HTTP or TACTIC address')
-            if block.kind != 'image' and block.field and not block.source_key and block.binding not in ('project','static'):
+            if block.kind not in ('image','form','action') and block.field and not block.source_key and block.binding not in ('project','static'):
                 if not (block.search_type or search_type) or block.field not in SearchType.get_column_info(block.search_type or search_type):
                     raise ValueError('Bind detail fields inside a group with an existing Search Type')
 
@@ -396,7 +408,7 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
                 raise ValueError('Dashboard exceeds 128 bricks')
             if detail_key and not in_details and block.kind not in ('row','column','grid','details'):
                 continue
-            if block.kind not in ('text','heading','markdown'):
+            if block.kind not in ('text','heading','markdown','field'):
                 validate_binding(block,context.get_base_search_type(),in_details)
             if block.kind in ('row','column','grid'):
                 if block.search_type and not in_details:
@@ -417,8 +429,50 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             if block.children:
                 raise ValueError('Only row/column bricks may contain children')
             validate_binding(block,context.get_base_search_type(),in_details)
-            if (in_details and block.kind in ('text','heading','markdown') and block.binding in ('auto','selection')
+            if (in_details and block.kind in ('text','heading','markdown','field') and block.binding in ('auto','selection')
                     and not block.source_key and block.search_type and block.search_type!=context.get_base_search_type()):
+                continue
+            if block.fields and block.kind != 'form':
+                raise ValueError('Field lists belong to native forms')
+            if block.kind in ('field','form','action'):
+                from .dashboard_fields import form
+                source = binding_source(block,context)
+                _require_table_access(source.get_base_search_type())
+                from .api import check_record_access
+                check_record_access(source.get_base_search_type())
+                if block.search_type and source.get_base_search_type() != block.search_type:
+                    raise ValueError('The record belongs to another data source')
+                target_key = source.get_search_key()
+                if block.kind == 'field':
+                    if not block.field or block.field not in SearchType.get_column_info(source.get_base_search_type()):
+                        raise ValueError('Choose an existing source field')
+                    value = source.get_value(block.field,auto_convert=False)
+                    from decimal import Decimal
+                    if isinstance(value,Decimal): value=float(value)
+                    from datetime import date
+                    if isinstance(value,date): value=value.isoformat()
+                    import math
+                    if isinstance(value,float) and not math.isfinite(value):
+                        raise ValueError('Record field must be a finite number')
+                    if not isinstance(value,(str,int,float,bool,type(None))):
+                        raise ValueError('Text source must be a scalar')
+                    if block.format == 'progress' and value is not None and (isinstance(value,bool) or not isinstance(value,(int,float))):
+                        raise ValueError('Progress requires a numeric field')
+                    emit(dict(kind='field',text=block.title,value=value,format=block.format,suffix=block.suffix,weight=block.weight))
+                elif block.kind == 'form':
+                    prepared = form(block,source)
+                    prepared['scope'] = dict(view=view,path=list(block_path),search_key=target.get_search_key(),
+                        detail_key=detail.get_search_key() if in_details and detail else '',filter_values=filter_values)
+                    emit(dict(kind='form',text=block.title,form=prepared,weight=block.weight))
+                else:
+                    available=True
+                    if block.native_action=='edit':
+                        from pyasm.common.errors import SecurityException
+                        try: _require_table_access(source.get_base_search_type(),'edit')
+                        except SecurityException: available=False
+                    emit(dict(kind='action',text=block.title,nativeAction=block.native_action,targetSearchKey=target_key,
+                        available=available,process=source.get_value('process',no_exception=True) or '',
+                        editView=block.edit_view,buttonStyle=block.button_style,weight=block.weight))
                 continue
             if block.kind in ('text','heading'):
                 value = block.text or block.title

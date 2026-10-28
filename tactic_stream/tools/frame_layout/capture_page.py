@@ -139,6 +139,20 @@ kit_nodes=[dict(kind='text',text='Project overview',textRole='heading',textWeigh
     dict(kind='button',text='Open project',href='skey://sthpw/project?code=demo',buttonStyle='primary',sizing=dict(width_mode='content',height_mode='content'),editorPath=[0,2]),
     dict(kind='image',text='Demo',image='',fit='contain',editorPath=[0,3]),dict(kind='divider',editorPath=[0,4]),dict(kind='spacer',editorPath=[0,5])]
 fixtures['kit']=dict(document=kit_document,compiled=dict(title='Layout kit',targetSearchKey='sthpw/project?code=demo',layoutNodes=[dict(kind='grid',columns=3,min_cell_width=200,row_height=120,gap=12,children=kit_nodes,editorPath=[0])]))
+source.update(editView='edit',editFields=[dict(value='name',label='Name'),dict(value='state',label='State')])
+record_form=dict(searchKey='demo/asset?project=demo&code=A',expectedRevision='R1',configRevision='C1',
+    scope=dict(view='dashboard.records',path=[0,0]),fields=[dict(name='name',title='Name',type='text',value='Project Alpha'),
+    dict(name='state',title='State',type='select',value='active',options=[dict(value='active',label='Active'),dict(value='done',label='Done')])])
+fixtures['records']=dict(document=dict(name='records',title='Record workspace',blocks=[dict(kind='column',height=500,children=[
+    dict(kind='form',title='Native fields',binding='record',source_key=record_form['searchKey'],search_type='demo/asset',fields=['name','state'],columns=2),
+    dict(kind='field',title='State',binding='record',source_key=record_form['searchKey'],field='state',format='badge'),
+    dict(kind='field',title='Progress',binding='record',source_key=record_form['searchKey'],field='amount',format='progress',suffix='%'),
+    dict(kind='action',title='Edit record',binding='record',source_key=record_form['searchKey'],native_action='edit')])]),
+    compiled=dict(title='Record workspace',targetSearchKey='sthpw/project?code=demo',layoutNodes=[dict(kind='group',height=500,editorPath=[0],children=[
+        dict(kind='form',text='Native fields',form=record_form,columns=2,editorPath=[0,0]),
+        dict(kind='field',text='State',value='Active',format='badge',editorPath=[0,1]),
+        dict(kind='field',text='Progress',value=37,format='progress',suffix='%',editorPath=[0,2]),
+        dict(kind='action',text='Edit record',nativeAction='edit',targetSearchKey=record_form['searchKey'],editorPath=[0,3])])]))
 captures = []
 sources = source_hashes(
     ROOT,
@@ -150,7 +164,7 @@ sources = source_hashes(
     ],
 )
 from itertools import product
-for scenario, mode in product(["layout", "data", "reports", "viewport", "selection", "kit"], ["dark", "light"]):
+for scenario, mode in product(["layout", "data", "reports", "viewport", "selection", "kit", "records"], ["dark", "light"]):
     for language in ["en", "ru"]:
         for width in [1400, 850]:
             host = DashboardEditor(

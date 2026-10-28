@@ -4,7 +4,7 @@ import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc
 import { n as sections } from "./sections.ui.js";
 import { a as projectPath } from "./links.js";
 import { t as listAction } from "./tree.ui.js";
-import { A as _sfc_main$2, At as geometry, Ct as appearances, Dt as duplicate, Et as copy, Ft as reorder, G as alignment, It as reparent, J as toggle, K as roots, Lt as siblings, M as zooms, Mt as layers, Nt as path, Ot as fingerprint, Pt as remove, Rt as sizing, St as add, Tt as change$1, Y as spacingField, _t as filter, at as notices, bt as scope$1, gt as fields$1, ht as change, it as documentEvent, j as controls, jt as kinds, kt as geometries, lt as toolbar$1, q as selected, st as sectionSelector, vt as mode, wt as block, xt as type, yt as options, zt as spacing } from "./App.js";
+import { A as _sfc_main$2, At as geometry, Ct as appearances, Dt as duplicate, Et as copy, Ft as reorder, G as alignment, It as reparent, J as toggle, K as roots, Lt as siblings, M as zooms, Mt as layers, Nt as path, Ot as fingerprint, Pt as remove, Rt as sizing, St as add, Tt as change, Y as spacingField, _t as filter, at as notices, bt as scope$1, gt as fields$1, ht as change$1, it as documentEvent, j as controls, jt as kinds, kt as geometries, lt as toolbar$1, q as selected, st as sectionSelector, vt as mode, wt as block, xt as type, yt as options, zt as spacing } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
 var collections = [
 	"items",
@@ -423,7 +423,11 @@ function componentFields(fields, item, ui, canEdit, language, field) {
 			}
 		});
 	}
-	if (["icon", "button"].includes(item.kind)) fields.push({
+	if ([
+		"icon",
+		"button",
+		"action"
+	].includes(item.kind)) fields.push({
 		kind: "IconChoice",
 		id: "pageProperty_icon",
 		title: "Icon",
@@ -437,12 +441,16 @@ function componentFields(fields, item, ui, canEdit, language, field) {
 		}
 	});
 	if (item.kind === "icon") field("icon_size", "Icon size", item.icon_size || 32);
-	if (item.kind === "button") choice("button_style", "Button style", item.button_style || "normal", [
+	if (["button", "action"].includes(item.kind)) choice("button_style", "Button style", item.button_style || "normal", [
 		["normal", "Normal"],
 		["primary", "Primary"],
 		["tonal", "Tonal"]
 	]);
-	if (["text", "heading"].includes(item.kind)) {
+	if ([
+		"text",
+		"heading",
+		"field"
+	].includes(item.kind)) {
 		choice("text_role", "Text style", item.text_role || "auto", [
 			["auto", "Auto"],
 			["caption", "Caption"],
@@ -469,7 +477,8 @@ function componentFields(fields, item, ui, canEdit, language, field) {
 		"text",
 		"heading",
 		"icon",
-		"divider"
+		"divider",
+		"field"
 	].includes(item.kind)) {
 		choice("text_color", "Text / icon color", item.text_color || "auto", [
 			["auto", "Auto"],
@@ -492,6 +501,57 @@ function componentFields(fields, item, ui, canEdit, language, field) {
 			}
 		});
 	}
+	if (item.kind === "field") {
+		choice("format", "Field display", item.format || "plain", [
+			["plain", "Text"],
+			["badge", "Status badge"],
+			["progress", "Progress"],
+			["date", "Date"],
+			["datetime", "Date and time"],
+			["number", "Number"]
+		]);
+		fields.push({
+			id: "pageProperty_suffix",
+			title: "Value suffix",
+			props: {
+				text: Object.prototype.hasOwnProperty.call(ui.text, ui.selected + ":suffix") ? ui.text[ui.selected + ":suffix"] : item.suffix || "",
+				enabled: canEdit,
+				action: {
+					type: "buffer",
+					key: ui.selected + ":suffix"
+				},
+				commitAction: {
+					type: "commit",
+					field: "suffix",
+					key: ui.selected + ":suffix"
+				}
+			}
+		});
+	}
+	if (item.kind === "action") choice("native_action", "Native action", item.native_action || "details", [
+		["details", "Open details"],
+		["edit", "Edit record"],
+		["notes", "Notes"],
+		["copy_link", "Copy link"],
+		["refresh", "Refresh"]
+	]);
+	if (["form", "action"].includes(item.kind)) fields.push({
+		id: "pageProperty_edit_view",
+		title: "Native edit view",
+		props: {
+			text: Object.prototype.hasOwnProperty.call(ui.text, ui.selected + ":edit_view") ? ui.text[ui.selected + ":edit_view"] : item.edit_view || "edit",
+			enabled: canEdit,
+			action: {
+				type: "buffer",
+				key: ui.selected + ":edit_view"
+			},
+			commitAction: {
+				type: "commit",
+				field: "edit_view",
+				key: ui.selected + ":edit_view"
+			}
+		}
+	});
 	if (item.kind === "image") choice("image_fit", "Image fit", item.image_fit || "contain", [["contain", "Contain"], ["cover", "Cover"]]);
 }
 function sizingFields(fields, item, ui, document, parent, canEdit, language, field) {
@@ -551,10 +611,10 @@ function sizingFields(fields, item, ui, document, parent, canEdit, language, fie
 			}
 		});
 	}
-	if (item.kind === "grid") {
+	if (["grid", "form"].includes(item.kind)) {
 		field("columns", "Grid columns", item.columns || 3);
 		field("min_cell_width", "Minimum cell width", item.min_cell_width || 200);
-		field("row_height", "Grid row height", item.row_height || 120);
+		if (item.kind === "grid") field("row_height", "Grid row height", item.row_height || 120);
 	}
 	if (item.kind === "row") field("collapse_width", "Stack below width", item.collapse_width ?? 600);
 	if (parent && block(document, parent)?.kind === "grid") {
@@ -677,7 +737,10 @@ function describe(model, ui, width, height, language) {
 				image: "Object image",
 				button: "Button",
 				divider: "Divider",
-				spacer: "Spacer"
+				spacer: "Spacer",
+				field: "Record field",
+				form: "Record form",
+				action: "Record action"
 			}[value])
 		}))),
 		enabled: canEdit && !ui.preview,
@@ -1306,12 +1369,18 @@ function transition(ui, model, event) {
 					type: "source",
 					searchType: source.searchType,
 					recordKey: source.recordKey,
+					editView: source.editView,
 					query: event.query ? ui.recordQuery : null
 				});
 				break;
 			}
+			case "formField": {
+				const selected = block(model.document, ui.selected).fields || [];
+				replace(change(model.document, ui.selected, "fields", event.value ? selected.concat(event.name).filter((name, index, all) => all.indexOf(name) === index) : selected.filter((name) => name !== event.name)));
+				break;
+			}
 			case "data":
-				replace(change(model.document, ui.selected, event.field, event.value));
+				replace(change$1(model.document, ui.selected, event.field, event.value));
 				next.recordQuery = "";
 				break;
 			case "filter":
@@ -1370,12 +1439,12 @@ function transition(ui, model, event) {
 				break;
 			case "commit":
 				if (!Object.prototype.hasOwnProperty.call(ui.text, event.key)) break;
-				replace(change$1(model.document, event.root ? "" : ui.selected, event.field, ui.text[event.key]));
+				replace(change(model.document, event.root ? "" : ui.selected, event.field, ui.text[event.key]));
 				next.text = Object.assign({}, next.text);
 				delete next.text[event.key];
 				break;
 			case "change":
-				replace(change$1(model.document, event.root ? "" : ui.selected, event.field, event.value));
+				replace(change(model.document, event.root ? "" : ui.selected, event.field, event.value));
 				break;
 			case "spacing":
 				if (!Object.prototype.hasOwnProperty.call(ui.text, event.key)) break;
@@ -1629,6 +1698,7 @@ var _sfc_main = {
 						const result = await this.call("sources", {
 							search_type: pending.values.searchType,
 							record_key: pending.values.recordKey || "",
+							edit_view: pending.values.editView || "edit",
 							query: pending.values.query ?? null
 						}, pending.scope);
 						if (!this.closed && pending.serial === this.dataSerial && pending.generation === this.generation) this.dataSource = result;

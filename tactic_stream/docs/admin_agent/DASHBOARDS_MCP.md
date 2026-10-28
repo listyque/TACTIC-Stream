@@ -459,4 +459,38 @@ project, selection (inside Details), record (source_key required), or contextual
 auto. No field/static text binding. Source discovery and project/record ACL are
 the ordinary owners. image_fit is contain/cover. Existing UI controls/renderers
 are reused in TH and TS. The same preview/revisioned/idempotent Save applies.
-Editable forms, arbitrary actions, timelines and richer charts remain separate.
+Native record forms and actions are described below. Arbitrary actions, timelines and richer charts remain separate.
+
+## Record-aware parts in the existing hierarchy
+
+Retain the existing items/details hierarchy and the application's sidebar. Use
+field/form/action inside type-conditioned Details groups for a selected record.
+No new navigation tree is needed for Project -> parts -> nested parts.
+
+- `field`: ordinary binding + field; `format` plain/badge/progress/date/datetime/
+  number and `suffix` (max32). Progress needs numeric data, NULL is a dash.
+- `form`: object binding, `fields` (up to16 distinct native edit element names),
+  `edit_view` (default edit). `ts_dashboard_sources(search_type,edit_view)` returns
+  editFields; discover these instead of assuming columns equal edit elements.
+  Existing columns/min_cell_width/gap arrange form inputs. Empty forms are drafts.
+- `action`: object binding and `native_action` details/edit/notes/copy_link/refresh;
+  edit_view chooses the native full editor. Use actual bound record/process keys.
+  Script text is not an accepted named action.
+
+Client interaction calls `tactic.ui.panel.dashboard_form_cmd.DashboardFormCmd`
+with the compiled form scope (view, integer path, dashboard search_key, selected
+ detail_key, filter_values), action save/check, changed scalar values,
+expected_revision and config_revision. The command reloads the saved form,
+resolves/authorizes its object, verifies allowed fields/configuration and invokes
+native EditCmd. It never trusts a caller's arbitrary type/view/field scope.
+No separate MCP write tool is needed; existing record/task tools remain agent
+mutation owners. Native transaction Undo applies. A failed response is checked,
+not automatically replayed. TH uses XML-RPC workers; TS uses JSON RPC. A successful
+result updates the selected pane without remounting/requerying its item tree.
+
+Supported inline inputs are native database scalar text/multiline/select/bool/
+date/datetime fields. Required, read-only and actual choices are retained. Parent
+reassignment/uploads/multiple values/custom handlers use native editors/relations.
+A badge color is presentation, not inferred workflow meaning. A native form's
+status choices come from its real EditWdg/pipeline. Local drafts are limited to20,
+record-scoped and memory-only; clean preview disables all editing/actions.

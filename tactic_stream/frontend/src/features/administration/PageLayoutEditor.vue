@@ -228,6 +228,7 @@ export default {
               {
                 search_type: pending.values.searchType,
                 record_key: pending.values.recordKey || '',
+                edit_view: pending.values.editView || 'edit',
                 query: pending.values.query ?? null
               },
               pending.scope

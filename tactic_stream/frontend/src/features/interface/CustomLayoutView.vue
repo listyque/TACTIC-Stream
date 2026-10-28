@@ -9,6 +9,8 @@ import { appearance } from '../../appearance.js';
 import { runTableScript } from './tableScript.js';
 import { printCustomReport } from './customReport.js';
 import { rpc } from '../../api.js';
+import { copyText } from '../../controls/clipboard.js';
+import * as Parts from '../../../../src/tactic_stream/shared_ui/features/table/record.parts.mjs';
 import * as Layout from '../../../../src/tactic_stream/shared_ui/features/table/layout.ui.mjs';
 import * as Report from '../../../../src/tactic_stream/shared_ui/features/table/report.ui.mjs';
 import * as Filters from '../../../../src/tactic_stream/shared_ui/features/table/page.filters.mjs';
@@ -63,7 +65,9 @@ const state = ref({}),
   detail = ref({}),
   busy = ref(false),
   error = ref('');
-const filterDraft = ref({});
+const filterDraft = ref({}),
+  forms = ref({}),
+  localNodes = ref(null);
 let generation = 0,
   abort;
 let detailGeneration = 0;
@@ -71,6 +75,8 @@ const baseScene = computed(() =>
   Layout.describe(
     {
       ...props.model,
+      layoutForms: forms.value,
+      layoutNodes: localNodes.value || props.model.layoutNodes,
       layoutTables: tables.value,
       layoutDetail: props.editing
         ? props.model.layoutDetail || {}
@@ -275,8 +281,72 @@ async function run(source, selector = '') {
     if (request === generation) busy.value = false;
   }
 }
+async function saveForm(action) {
+  const request = generation,
+    selected = detailGeneration;
+  const result = Parts.change(
+    forms.value,
+    {
+      ...props.model,
+      layoutNodes: localNodes.value || props.model.layoutNodes,
+      layoutDetail: detail.value
+    },
+    action
+  );
+  forms.value = result.store;
+  if (!result.command) return;
+  try {
+    const response = (
+      await rpc('execute_cmd', [
+        { ticket: props.ticket, project: props.project },
+        'tactic.ui.panel.dashboard_form_cmd.DashboardFormCmd',
+        result.command
+      ])
+    ).info;
+    if (request !== generation) return;
+    forms.value = Parts.settled(forms.value, action.key, response);
+    if (response.model) {
+      if (result.command.detail_key) {
+        if (selected === detailGeneration) detail.value = response.model;
+      } else localNodes.value = response.model.layoutNodes;
+    }
+  } catch (failure) {
+    if (request === generation)
+      forms.value = Parts.settled(forms.value, action.key, null, {
+        message: failure.message,
+        uncertain: !failure.status || failure.status >= 500
+      });
+  }
+}
 function activate(action) {
   if (props.editing) return;
+  if (action.type === 'record-form') {
+    saveForm(action).catch((failure) => (error.value = failure.message));
+    return;
+  }
+  if (action.type === 'record-action') {
+    if (action.name === 'copy_link') {
+      copyText('skey://' + action.targetSearchKey).catch(
+        (failure) => (error.value = failure.message)
+      );
+      return;
+    }
+    if (action.name === 'refresh') {
+      emit('filter-apply', props.model.layoutFilterValues || {});
+      return;
+    }
+    emit(
+      'action',
+      { __search_key__: action.targetSearchKey },
+      action.name === 'details' ? 'sobject_detail' : action.name,
+      {
+        targetSearchKey: action.targetSearchKey,
+        actionView: action.view,
+        process: action.process
+      }
+    );
+    return;
+  }
   if (action.type === 'page-filter') {
     filterDraft.value = Filters.change(filterDraft.value, action);
     return;
@@ -308,6 +378,8 @@ function activate(action) {
 watch(
   () => [props.model, props.ticket, props.project],
   () => {
+    forms.value = Parts.interrupted(forms.value);
+    localNodes.value = null;
     filterDraft.value = Filters.initial(props.model.layoutFilters);
     ++generation;
     ++detailGeneration;
@@ -343,6 +415,18 @@ watch(
     );
   },
   { immediate: true }
+);
+watch(
+  () =>
+    JSON.stringify([
+      props.ticket,
+      props.project,
+      props.model.layoutView,
+      props.model.targetSearchKey
+    ]),
+  () => {
+    forms.value = {};
+  }
 );
 onBeforeUnmount(() => {
   ++generation;

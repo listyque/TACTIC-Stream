@@ -440,6 +440,7 @@ class Dashboards(unittest.TestCase):
             async with Client(server) as client:
                 source=(await client.call_tool('ts_dashboard_sources',dict(search_type='contract/entity'))).structured_content
                 self.assertTrue(any(row['value']=='amount' for row in source['fields']))
+                self.assertTrue(any(row['value']=='name' for row in source['editFields']))
                 state=(await client.call_tool('ts_dashboard_read',{})).structured_content
                 draft=document();draft['name']='via_mcp'
                 draft['blocks'].append(dict(kind='text',title='Project',binding='project',field='title'))
@@ -457,7 +458,10 @@ class Dashboards(unittest.TestCase):
                 draft['blocks'].append(dict(kind='grid',columns=2,min_cell_width=180,children=[
                     dict(kind='heading',text='Agent-built layout',column_span=2,sizing=dict(height_mode='content')),
                     dict(kind='button',title='Project',href='skey://sthpw/project?code=one',button_style='primary'),
-                    dict(kind='image',binding='project')]))
+                    dict(kind='image',binding='project'),
+                    dict(kind='form',binding='record',source_key='contract/entity?project=one&code=A',fields=['name']),
+                    dict(kind='field',binding='record',source_key='contract/entity?project=one&code=A',field='amount',format='progress'),
+                    dict(kind='action',binding='record',source_key='contract/entity?project=one&code=A',native_action='edit')]))
                 preview=await client.call_tool('ts_dashboard_preview',values)
                 self.assertFalse(preview.is_error)
                 self.assertEqual(preview.structured_content['model']['layoutNodes'][-1]['kind'],'grid')

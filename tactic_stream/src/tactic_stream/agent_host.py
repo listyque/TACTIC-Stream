@@ -82,6 +82,8 @@ def task_prompt(request):
         'bricks, page filters, chart/summary grouped aggregates and transient filter_values; discover real fields first. '
         'Use grid tracks/spans, sizing modes and native heading/icon/image/button/divider/spacer from the schema; '
         'images use object preview bindings, buttons use safe native links. '
+        'Use field/form/action for bound scalar displays, native edit-view fields and named record actions. '
+        'Discover editFields; native forms preserve edit permissions and revisions. '
         'Navigation opens these as full workspace pages, not document '
         'popups or ordinary search tables. Keep existing dashboards by reading their exact document first. '
         'For project-specific item cards use ts_item_layout_read/preview/save: native sobject-layout XML, '

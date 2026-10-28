@@ -307,6 +307,7 @@
       "index.html",
       "_CodeBlock.js",
       "_RecordForm.js",
+      "_ObjectFieldFrame.js",
       "_sections.ui.js",
       "_richText.js",
       "_links.js",

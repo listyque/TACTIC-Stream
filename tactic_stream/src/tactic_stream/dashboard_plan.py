@@ -68,7 +68,7 @@ class DashboardSizing(BaseModel):
 
 class DashboardBlock(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
-    kind: Literal['row', 'column', 'text', 'markdown', 'metric', 'table', 'items', 'details', 'link', 'chart', 'summary', 'grid', 'heading', 'icon', 'image', 'button', 'divider', 'spacer']
+    kind: Literal['row', 'column', 'text', 'markdown', 'metric', 'table', 'items', 'details', 'link', 'chart', 'summary', 'grid', 'heading', 'icon', 'image', 'button', 'divider', 'spacer', 'field', 'form', 'action']
     title: str = Field(default='', max_length=256)
     text: str = Field(default='', max_length=65536)
     source_key: str = Field(default='', max_length=2048)
@@ -108,6 +108,11 @@ class DashboardBlock(BaseModel):
     icon_size: int = Field(default=32, ge=16, le=128)
     image_fit: Literal['cover', 'contain'] = 'contain'
     button_style: Literal['normal', 'primary', 'tonal'] = 'normal'
+    fields: list[str] = Field(default_factory=list, max_length=16)
+    edit_view: str = Field(default='edit', pattern=r'^[A-Za-z_][\w.@-]{0,127}$')
+    format: Literal['plain', 'badge', 'progress', 'date', 'datetime', 'number'] = 'plain'
+    suffix: str = Field(default='', max_length=32)
+    native_action: Literal['details', 'edit', 'notes', 'copy_link', 'refresh'] = 'details'
     controls: list[Literal['search', 'searchLimit', 'shelf', 'selection', 'gear', 'insert']] | None = Field(default=None, max_length=6)
     children: list['DashboardBlock'] = Field(default_factory=list, max_length=32)
 

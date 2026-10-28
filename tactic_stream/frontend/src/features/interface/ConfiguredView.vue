@@ -1578,6 +1578,10 @@ export default {
             this.serviceMessage = result.description || '';
           return;
         }
+        if (kind === 'notes') {
+          await this.$refs.notes.open(target, {}, cell.process || 'publish');
+          return;
+        }
         if (['sobject_detail', 'file_list', 'metadata'].includes(kind)) {
           this.$emit('inspect', target);
           return;
@@ -2510,7 +2514,7 @@ export default {
       :search-type="targetRecord.__search_key__.split('?')[0]"
       :view="
         targetRecord.__search_key__.split('?')[0] ===
-        definition.search_type.split('?')[0]
+        (definition?.search_type || '').split('?')[0]
           ? table.view || 'table'
           : 'table'
       "

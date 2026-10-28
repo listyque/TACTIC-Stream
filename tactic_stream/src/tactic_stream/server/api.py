@@ -823,6 +823,8 @@ class ApiXMLRPC:
             'tactic.command.file_project_cmd.FileProjectCmd')
         table_call = method == 'execute_cmd' and command in (
             'tactic.ui.panel.custom_url_cmd.CustomUrlCmd',
+            'tactic.ui.table.CustomLayoutReadCmd',
+            'tactic.ui.panel.dashboard_form_cmd.DashboardFormCmd',
             'tactic.ui.panel.EditCmd', 'tactic.ui.panel.EditMultipleCmd',
             'tactic.ui.table.TableCellEditCmd', 'tactic.ui.table.NestedTableReadCmd',
             'tactic.ui.table.TableDependencyReadCmd', 'tactic.ui.table.TableConnectionRemoveCmd',

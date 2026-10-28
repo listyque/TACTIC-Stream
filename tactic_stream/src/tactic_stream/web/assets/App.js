@@ -4,6 +4,7 @@ import { $ as shallowRef, B as useId, C as h, D as nextTick, E as mergeProps, F 
 import { $ as savePreferencePage, A as t, D as randomId, E as setServerDebugContext, G as layout$11, H as fontFamily, I as readableText, J as readableText$1, K as lineHeights, L as saveAppearance, P as frameColors, Q as preferences, R as blend, S as logRequest, T as sessionRecords, U as fontLineHeight, V as cssRoles, W as fontMetricHeight, X as configurationPreview, Y as textStyles, _ as forgetSessions, at as BusyIndicator_default, b as levels, c as _sfc_main$184, et as normalizeColumns, f as _sfc_main$185, g as exportSession, h as debugSettings, i as dockMinimumWidth, j as appearance, k as asyncComponent, m as debugLog, o as mobile, ot as _plugin_vue_export_helper_default, p as clearLive, q as metrics$12, r as dockMinimumHeight, s as mobileLayout, t as __vitePreload, tt as taskColumns, v as formatEvent, w as savedSessions, y as importSession, z as controls$2 } from "./index.js";
 import { $ as objectStatus, A as localDate, At as setUpdatesAvailable, B as activityFeed, Bt as notificationHistory, C as _sfc_main$202, Ct as tableParentGroup, D as _sfc_main$195, Dt as userProfile, E as _sfc_main$188, Et as userAvatar, F as _sfc_main$193, Ft as cancelNotificationReply, G as interfaceDefinition, Gt as button, Ht as resetNotifications, I as _sfc_main$203, It as clearNotificationHistory, J as messageFileRequest, Jt as node, Kt as label, Lt as dismissNotification, M as parse$1, Mt as updatesAvailable, Nt as activeNotifications, O as _sfc_main$197, Ot as widgetConfiguration, P as _sfc_main$196, Pt as beginNotificationReply, Q as objectRelations, R as _sfc_main$192, Rt as editNotificationReply, S as matchesUser$1, St as tableDependencyFile, T as AppSearchField_default, Tt as uploadFormFile, U as endActivity, Ut as setNotificationProgress, V as beginActivity, Vt as notify, Wt as submitNotificationReply, X as navigationLink, Xt as revealListOffset, Y as messagesRequest, Yt as rect$1, Z as objectDeletion, Zt as virtualRange, _ as copyText, _t as serverUpdates, a as _sfc_main$191, at as resetRequestActivity, b as _sfc_main$200, bt as tableCells, c as _sfc_main$199, ct as rpc, dt as scriptShelf, et as projectCatalog, ft as searchConfiguration, g as copyImage, h as xmlTokens, i as _sfc_main$186, it as requestActivity, j as monthLabel, jt as updateDelay, k as _sfc_main$189, kt as workspaceLayouts, m as pythonTokens, n as frameContentWidth, nt as projectNavigation, o as _sfc_main$190, ot as resolveCustomUrl, p as javascriptTokens, q as linkPreviews, qt as muted, r as observeFrameSizes, s as _sfc_main$198, st as resultItems, t as _sfc_main$187, tt as projectCreationCatalog, v as readClipboardImages, vt as sessionAction, w as ItemPreview_default, wt as transactionDetails, x as _sfc_main$194, xt as tableDependencies, y as translate, z as _sfc_main$201, zt as failNotificationReply } from "./CodeBlock.js";
 import { a as unsupportedField, i as fieldKind, n as _sfc_main$204, r as format, t as RecordForm_default } from "./RecordForm.js";
+import { n as arrange } from "./ObjectFieldFrame.js";
 import { n as sections$1, t as captionHeight } from "./sections.ui.js";
 import { a as withoutSkeys, i as linkifyPlainText, n as escapeHtml, r as extractSkeys, t as activateRichLink } from "./richText.js";
 import { a as projectPath, c as searchLink, i as linkProject, l as workspaceAddress, n as browserLink, o as sameSearchKey, r as customUrlLocation, s as savedSearchLink, t as addressProject } from "./links.js";
@@ -16,8 +17,8 @@ import { a as sourcePath, i as repositories, n as droppedFiles, r as prepareFile
 import { t as downloadBlob } from "./files2.js";
 import { n as FilePreviewContent_default, t as FilePreview_default } from "./FilePreview.js";
 import { t as fileBlob } from "./previewFiles.js";
-import { a as viewTabWidth, i as tab, n as key$2, r as sectionWidth, t as dimensions$5 } from "./workspace.ui.js";
-import { t as describe$63 } from "./confirmation.ui.js";
+import { a as viewTabWidth, i as tab, n as key$3, r as sectionWidth, t as dimensions$5 } from "./workspace.ui.js";
+import { t as describe$64 } from "./confirmation.ui.js";
 import { t as _sfc_main$208 } from "./AppDialog.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";
 import { t as _sfc_main$209 } from "./AppMenuItem.js";
@@ -29,7 +30,7 @@ var dimensions$4 = {
 	projectPreviewExtent: 28,
 	projectPreviewRadius: 6
 };
-function describe$62(model) {
+function describe$63(model) {
 	const width = Math.max(0, model.width);
 	const compact = !!model.compact;
 	const height = layout$11.appBarHeight;
@@ -112,7 +113,7 @@ function positions$1(scene) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/shell/workspace.ui.mjs
-function describe$61(width, height, compact = false) {
+function describe$62(width, height, compact = false) {
 	const toolbar = Math.min(height, layout$11.appBarHeight);
 	const rail = compact ? 0 : Math.min(width, layout$11.sectionRailWidth);
 	const body = Math.max(0, height - toolbar);
@@ -964,7 +965,7 @@ var MessageTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 }, [["__scopeId", "data-v-141aba48"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/parallel.ui.mjs
-function describe$60(cell, width, height, language, expanded = {}) {
+function describe$61(cell, width, height, language, expanded = {}) {
 	const children = [], inner = Math.max(1, width - 24), barHeight = (cell.barHeight || 1) + 1, steps = cell.steps || 6, labelHeight = 20, rowHeight = Math.max(28, steps * barHeight + labelHeight + 4);
 	let index = 0, left = 0;
 	function append(groups, parent) {
@@ -1040,7 +1041,7 @@ function droppedKeys(value, accepted) {
 	if (!value || value.searchType !== accepted || !Array.isArray(value.searchKeys) || value.searchKeys.length > 500 || value.searchKeys.some((key) => typeof key !== "string" || !key)) throw new Error("Dropped objects belong to another Search Type");
 	return [...new Set(value.searchKeys)];
 }
-function describe$59(cell, width, height, language, editable) {
+function describe$60(cell, width, height, language, editable) {
 	const inner = Math.max(0, width - 24), links = cell.links || [], children = [];
 	if (cell.available === false) children.push(label("dropDiagnostic", rect$1(4, 0, inner, 28), translate(cell.diagnostic, language), {
 		color: "secondaryText",
@@ -1247,7 +1248,7 @@ function serviceHeight(columns) {
 		return Math.max(height, Math.max(64, Number(options.icon_size) || 60) + 32);
 	}, 0);
 }
-function describe$58(model, width) {
+function describe$59(model, width) {
 	const available = Math.max(0, width - metrics$10.selection - metrics$10.actions);
 	const columns = visibleColumns(model.columns || [], available, model.overrides);
 	const fitted = model.autoFit ? fittedWidths(columns, available, model.overrides) : {};
@@ -1364,7 +1365,7 @@ function columns$1(model) {
 		return result;
 	});
 }
-function describe$57(model, width, extent, language) {
+function describe$58(model, width, extent, language) {
 	const t = (value) => translate(value, language);
 	const toolOffset = model.embedded ? 36 : 0;
 	const quick = quickLayout(model, width), quickColumns = quick.columns, quickHeight = quick.height;
@@ -1540,7 +1541,7 @@ function cell$2(grid, value, row, column) {
 	const data = grid.report.rows[row]?.[grid.report.columns[column].key];
 	return { nodes: [label(grid.id + "_cell_" + row + "_" + column, rect$1(8, 0, grid.cellWidth - 16, grid.rowHeight), data == null ? "—" : String(data), { align: grid.report.columns[column].kind === "measure" ? "right" : "left" })] };
 }
-function describe$56(item, id, width, height, language) {
+function describe$57(item, id, width, height, language) {
 	const tr = (text) => translate(text, language), report = item.report, nodes = [];
 	const bodyHeight = Math.max(40, height - 38 - (report.truncated ? 28 : 0));
 	nodes.push(label(id + "_title", rect$1(0, 0, width, 28), item.text, { weight: 600 }));
@@ -1607,7 +1608,10 @@ var kinds = [
 	"image",
 	"button",
 	"divider",
-	"spacer"
+	"spacer",
+	"field",
+	"form",
+	"action"
 ];
 var copy = (value) => JSON.parse(JSON.stringify(value, (_key, item) => item === void 0 ? null : item));
 function fingerprint(value) {
@@ -1657,7 +1661,7 @@ function layers(document, prefix = []) {
 	});
 	return result;
 }
-function change$6(document, key, field, value) {
+function change$7(document, key, field, value) {
 	const result = copy(document), item = key === "" ? result : block(result, key);
 	if (!item) throw Error("The selected element no longer exists");
 	const limits = {
@@ -1675,7 +1679,11 @@ function change$6(document, key, field, value) {
 		collapse_width: [0, 2400],
 		icon_size: [16, 128]
 	};
-	if (limits[field]) {
+	if (field === "fields") {
+		if (!Array.isArray(value) || value.length > 16 || new Set(value).size !== value.length || value.some((name) => typeof name !== "string" || !/^[A-Za-z_][\w.-]{0,127}$/.test(name))) throw Error("Choose distinct fields from the native edit view");
+	} else if (field === "edit_view") {
+		if (typeof value !== "string" || !/^[A-Za-z_][\w.@-]{0,127}$/.test(value)) throw Error("Invalid view name");
+	} else if (limits[field]) {
 		if (value === "" && ["width", "height"].includes(field)) value = null;
 		else {
 			const range = limits[field];
@@ -1687,7 +1695,9 @@ function change$6(document, key, field, value) {
 		"text_align",
 		"button_style",
 		"image_fit",
-		"text_weight"
+		"text_weight",
+		"format",
+		"native_action"
 	].includes(field)) {
 		const choices = {
 			text_role: [
@@ -1712,6 +1722,21 @@ function change$6(document, key, field, value) {
 				"tonal"
 			],
 			image_fit: ["cover", "contain"],
+			format: [
+				"plain",
+				"badge",
+				"progress",
+				"date",
+				"datetime",
+				"number"
+			],
+			native_action: [
+				"details",
+				"edit",
+				"notes",
+				"copy_link",
+				"refresh"
+			],
 			text_weight: [
 				400,
 				600,
@@ -1730,7 +1755,8 @@ function change$6(document, key, field, value) {
 		"search_type",
 		"view",
 		"href",
-		"field"
+		"field",
+		"suffix"
 	].includes(field)) throw Error("Unsupported page property");
 	if (["width", "height"].includes(field)) item.sizing = Object.assign({}, item.sizing || {}, { [field + "_mode"]: value === null ? "auto" : "fixed" });
 	item[field] = value;
@@ -1812,6 +1838,15 @@ function add(document, key, kind, searchType) {
 	if (kind === "button") Object.assign(item, {
 		title: "Open project",
 		href: ""
+	});
+	if ([
+		"field",
+		"form",
+		"action"
+	].includes(kind)) Object.assign(item, {
+		binding: "project",
+		fields: [],
+		field: kind === "field" ? "code" : ""
 	});
 	if (kind === "image") Object.assign(item, {
 		binding: "project",
@@ -2046,10 +2081,18 @@ function mode(document, key) {
 		"text",
 		"heading",
 		"markdown",
-		"image"
+		"image",
+		"field",
+		"form",
+		"action"
 	].includes(item.kind)) return "";
 	if (item.binding && item.binding !== "auto") return item.binding;
-	if (item.kind === "image") return item.source_key ? "record" : inDetails(document, key) ? "selection" : "project";
+	if ([
+		"image",
+		"form",
+		"action",
+		"field"
+	].includes(item.kind)) return item.source_key ? "record" : inDetails(document, key) ? "selection" : "project";
 	return item.source_key ? "record" : item.field ? inDetails(document, key) ? "selection" : "project" : "static";
 }
 function selectedType(document, key) {
@@ -2067,7 +2110,7 @@ function scope(document, key) {
 		recordKey: ""
 	};
 	const item = block(document, key), binding = mode(document, key);
-	return {
+	const result = {
 		searchType: binding === "project" ? "sthpw/project" : binding === "selection" ? selectedType(document, key) : binding === "record" ? item.search_type || (item.source_key || "").split("?")[0] : [
 			"table",
 			"items",
@@ -2079,15 +2122,20 @@ function scope(document, key) {
 		].includes(item.kind) ? item.search_type || "" : "",
 		recordKey: binding === "record" ? item.source_key || "" : ""
 	};
+	if (item.kind === "form") result.editView = item.edit_view || "edit";
+	return result;
 }
-function change$5(document, key, field, value) {
+function change$6(document, key, field, value) {
 	const result = copy(document), item = block(result, key);
 	if (field === "binding") {
 		if (![
 			"text",
 			"heading",
 			"markdown",
-			"image"
+			"image",
+			"field",
+			"form",
+			"action"
 		].includes(item.kind) || ![
 			"static",
 			"project",
@@ -2096,6 +2144,7 @@ function change$5(document, key, field, value) {
 		].includes(value)) throw Error("Choose a supported field binding");
 		if (value === "selection" && !inDetails(result, key)) throw Error("Place selection-bound widgets inside Details");
 		const type = selectedType(result, key);
+		if (item.kind === "form") item.fields = [];
 		Object.assign(item, {
 			binding: value,
 			field: "",
@@ -2205,7 +2254,7 @@ function options$1(rows, current, language) {
 function fields$2(model, ui, width, language, enabled) {
 	if (!ui.selected) return [];
 	const item = block(model.document, ui.selected), binding = mode(model.document, ui.selected), requested = scope(model.document, ui.selected);
-	const metadata = model.dataSource?.searchType === requested.searchType ? model.dataSource : {}, tr = (text) => translate(text, language);
+	const metadata = model.dataSource?.searchType === requested.searchType && (!requested.editView || model.dataSource?.editView === requested.editView) ? model.dataSource : {}, tr = (text) => translate(text, language);
 	const fields = [], collection = [
 		"table",
 		"items",
@@ -2242,7 +2291,12 @@ function fields$2(model, ui, width, language, enabled) {
 		});
 	}
 	if (binding) choice("pageBinding", "Content source", binding, [
-		...item.kind === "image" ? [] : [["static", "Static text"]],
+		...[
+			"image",
+			"form",
+			"action",
+			"field"
+		].includes(item.kind) ? [] : [["static", "Static text"]],
 		["project", "Current project"],
 		...inDetails(model.document, ui.selected) ? [["selection", "Selected object"]] : [],
 		["record", "Specific record"]
@@ -2306,7 +2360,36 @@ function fields$2(model, ui, width, language, enabled) {
 			title: "More matches. Refine your search."
 		});
 	}
-	if (binding && binding !== "static" && item.kind !== "image") {
+	if (item.kind === "form") {
+		fields.push({
+			kind: "Heading",
+			id: "pageNativeFields",
+			title: "Form fields",
+			description: "Select fields from the existing native edit view."
+		});
+		for (const row of metadata.editFields || []) {
+			const selected = item.fields || [];
+			fields.push({
+				kind: "CheckBox",
+				id: "pageFormField_" + row.value,
+				title: row.label,
+				dataLabel: true,
+				props: {
+					checked: selected.includes(row.value),
+					enabled: sourceReady,
+					action: {
+						type: "formField",
+						name: row.value
+					}
+				}
+			});
+		}
+	}
+	if (binding && binding !== "static" && ![
+		"image",
+		"form",
+		"action"
+	].includes(item.kind)) {
 		const sourceFields = (metadata.fields || []).filter((row) => item.kind === "markdown" ? type(row) === "text" : type(row) !== "complex");
 		choice("pageBindingField", "Source field", item.field || "", [{
 			value: "",
@@ -2482,13 +2565,13 @@ function initial$3(definitions = []) {
 	};
 	return result;
 }
-function change$4(draft, event) {
+function change$5(draft, event) {
 	const result = Object.assign({}, draft);
 	result[event.name] = Object.assign({}, draft[event.name]);
 	result[event.name][event.field] = event.value;
 	return result;
 }
-function values(definitions, draft) {
+function values$1(definitions, draft) {
 	const result = {};
 	for (const item of definitions) {
 		const row = draft[item.name] || item;
@@ -2500,7 +2583,7 @@ function values(definitions, draft) {
 	}
 	return result;
 }
-function describe$55(definitions, draft, width, language, enabled = true) {
+function describe$56(definitions, draft, width, language, enabled = true) {
 	if (!definitions?.length) return {
 		height: 0,
 		nodes: []
@@ -2668,6 +2751,209 @@ function grid(items, width, settings, gap) {
 	};
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/table/record.parts.mjs
+function key$2(item) {
+	return JSON.stringify([item.editorPath, item.form.searchKey || "readonly"]);
+}
+function values(form) {
+	const result = {};
+	for (const field of form.fields) result[field.name] = field.value;
+	return result;
+}
+function entry$1(store, item) {
+	return store[key$2(item)] || {
+		form: item.form,
+		values: values(item.form),
+		busy: false,
+		uncertain: false,
+		error: ""
+	};
+}
+function dirty$2(state) {
+	return JSON.stringify(state.values) !== JSON.stringify(values(state.form));
+}
+function find(document, identity) {
+	function walk(items) {
+		for (const item of items || []) {
+			if (item.kind === "form" && key$2(item) === identity) return item;
+			const nested = walk(item.children);
+			if (nested) return nested;
+		}
+		return null;
+	}
+	return walk(document.layoutNodes) || walk(document.layoutDetail?.layoutNodes);
+}
+function change$4(store, document, action) {
+	const item = find(document, action.key);
+	if (!item) return { store };
+	const current = entry$1(store, item), next = Object.assign({}, store);
+	if (current.busy || item.form.readOnly) return { store };
+	if (action.intent === "cancel") {
+		if (!current.uncertain) delete next[action.key];
+	} else if (action.intent === "value" && !current.uncertain) {
+		const field = current.form.fields.find((field) => field.name === action.name);
+		if (!field || field.readOnly) return { store };
+		if (!next[action.key] && Object.keys(next).length >= 20) throw Error("Finish or discard another form draft first");
+		next[action.key] = Object.assign({}, current, {
+			values: Object.assign({}, current.values, { [action.name]: action.value }),
+			error: ""
+		});
+	} else if (action.intent === "save" && dirty$2(current) && !current.uncertain && !current.stale || action.intent === "check" && current.uncertain) {
+		const changed = {};
+		for (const field of current.form.fields) if (!field.readOnly && current.values[field.name] !== field.value) changed[field.name] = current.values[field.name];
+		if (!Object.keys(changed).length) return { store };
+		next[action.key] = Object.assign({}, current, {
+			busy: true,
+			error: ""
+		});
+		return {
+			store: next,
+			command: Object.assign({}, item.form.scope, {
+				action: action.intent,
+				values: changed,
+				expected_revision: current.form.expectedRevision,
+				config_revision: current.form.configRevision
+			})
+		};
+	}
+	return { store: next };
+}
+function settled(store, identity, result, failure) {
+	if (!store[identity]) return store;
+	const next = Object.assign({}, store), state = next[identity];
+	if (result?.state === "saved") delete next[identity];
+	else next[identity] = Object.assign({}, state, {
+		busy: false,
+		uncertain: !!failure?.uncertain,
+		stale: result?.state === "conflict",
+		error: failure?.message || (result?.state === "unchanged" ? "Changes were not saved. You can save again." : "Record changed. Reload before saving.")
+	});
+	return next;
+}
+function interrupted(store) {
+	let next = store;
+	for (const identity of Object.keys(store)) if (store[identity].busy) next = settled(next, identity, null, {
+		message: "The page changed while a save was pending. Check saved state.",
+		uncertain: true
+	});
+	return next;
+}
+function describe$55(item, id, width, store, language, enabled) {
+	const state = entry$1(store, item), tr = (text) => translate(text, language), children = [];
+	const event = (intent, extra = {}) => Object.assign({
+		type: "record-form",
+		intent,
+		key: key$2(item)
+	}, extra);
+	let y = 0;
+	if (item.text) {
+		children.push(label(id + "_title", rect$1(0, y, width, 28), item.text, { weight: 600 }));
+		y += 36;
+	}
+	if (state.form.hint) {
+		children.push(label(id + "_hint", rect$1(0, y, width, 48), tr(state.form.hint), {
+			wrap: true,
+			color: "secondaryText"
+		}));
+		y += 56;
+	}
+	const layout = arrange(width, state.form.fields.map((field) => 24 + (field.type === "multiline" ? 88 : 36)), item.min_cell_width || 200, item.columns || 3, item.gap ?? 12);
+	const top = y;
+	for (const [index, field] of state.form.fields.entries()) {
+		const box = layout.cells[index], x = box.x, fieldWidth = box.width;
+		y = top + box.y;
+		const name = id + "_field_" + field.name, active = enabled && !state.busy && !state.uncertain && !state.stale && !field.readOnly;
+		children.push(label(name + "_label", rect$1(x, y, fieldWidth, 20), field.title + (field.required ? " *" : ""), { color: "secondaryText" }));
+		y += 24;
+		const value = state.values[field.name], action = event("value", { name: field.name });
+		if (field.readOnly) children.push(label(name, rect$1(x, y, fieldWidth, 32), value == null ? "—" : String(value)));
+		else if (field.type === "select") children.push(node("Choice", name, rect$1(x, y, fieldWidth, 36), {
+			value: value == null ? "" : String(value),
+			options: field.options.map((option) => ({
+				value: String(option.value),
+				label: option.label
+			})),
+			enabled: active,
+			action
+		}));
+		else if (field.type === "bool") children.push(node("CheckBox", name, rect$1(x, y, fieldWidth, 36), {
+			checked: !!value,
+			text: field.title,
+			enabled: active,
+			action
+		}));
+		else if (["date", "datetime-local"].includes(field.type)) children.push(node("DateChoice", name, rect$1(x, y, fieldWidth, 36), {
+			text: value || "",
+			includeTime: field.type === "datetime-local",
+			label: field.title,
+			enabled: active,
+			action
+		}));
+		else children.push(node(field.type === "multiline" ? "Area" : "Field", name, rect$1(x, y, fieldWidth, field.type === "multiline" ? 88 : 36), {
+			text: value == null ? "" : String(value),
+			inputType: field.type === "date" ? "date" : field.type === "datetime-local" ? "datetime-local" : "text",
+			enabled: active,
+			action
+		}));
+	}
+	y = top + layout.height + 12;
+	if (state.error) {
+		children.push(label(id + "_error", rect$1(0, y, width, 48), tr(state.error), {
+			color: "error",
+			wrap: true
+		}));
+		y += 56;
+	}
+	if (!item.form.readOnly) {
+		const w = Math.min(150, (width - 8) / 2), active = enabled && !state.busy;
+		children.push(button(id + "_save", rect$1(0, y, w, 36), tr(state.uncertain ? "Check saved state" : "Save"), state.uncertain ? "refresh" : "save", event(state.uncertain ? "check" : "save"), active && (state.uncertain || !state.stale && dirty$2(state)), { highlighted: true }));
+		children.push(button(id + "_cancel", rect$1(w + 8, y, w, 36), tr("Cancel"), "close", event("cancel"), active && !state.uncertain && dirty$2(state)));
+		y += 44;
+	}
+	return {
+		children,
+		height: y
+	};
+}
+function field$2(item, id, width) {
+	const children = [], value = item.value, hasValue = value !== null && value !== void 0;
+	let text = hasValue ? String(value) : "—", y = 0;
+	if (item.format === "date" && hasValue) text = text.slice(0, 10);
+	if (item.format === "datetime" && hasValue) text = text.replace("T", " ").slice(0, 19);
+	if (hasValue && item.suffix) text += item.suffix;
+	if (item.text) {
+		children.push(label(id + "_label", rect$1(0, 0, width, 20), item.text, { color: "secondaryText" }));
+		y = 24;
+	}
+	if (item.format === "badge") children.push(node("StatusChip", id, rect$1(0, y, Math.min(width, Math.max(80, text.length * 8 + 24)), 28), {
+		text,
+		accent: item.textColor || "contentAccent",
+		dense: true,
+		enabled: true
+	}));
+	else children.push(label(id, rect$1(0, y, width, 28), text, {
+		fontRole: item.textRole || "body",
+		color: item.textColor || "primaryText",
+		weight: item.textWeight || 400
+	}));
+	if (item.format === "progress") {
+		const percent = hasValue ? Math.max(0, Math.min(100, Number(value))) : 0;
+		children.push(node("Box", id + "_track", rect$1(0, y + 30, width, 4), {
+			background: "outlineVariant",
+			radius: 2
+		}));
+		children.push(node("Box", id + "_progress", rect$1(0, y + 30, width * percent / 100, 4), {
+			background: "contentAccent",
+			radius: 2
+		}));
+		y += 10;
+	}
+	return {
+		children,
+		height: y + 32
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/layout.ui.mjs
 function hasDetails(items = []) {
 	return items.some((item) => item.kind === "details" || hasDetails(item.children || []));
@@ -2710,7 +2996,7 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 	const tabOffset = cell.layoutTabs?.length ? 56 : 0;
 	const children = [], gap = 8, tableHeight = Math.max(320, height - tabOffset - 48);
 	const controls = cell.layoutState?.controls || cell.layoutControls || [];
-	const pageFilters = describe$55(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), Math.max(0, width - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
+	const pageFilters = describe$56(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), Math.max(0, width - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
 	function draw(items, originX, originY, space, prefix = "customLayout", startIndex = 0, output = children, bottom = Infinity, spacing = 8, slotHeight = null) {
 		let top = originY;
 		for (const [index, source] of (items || []).entries()) {
@@ -2748,7 +3034,7 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 				} else extent = draw(item.children, x, top, available, id, 0, output, bottom, childGap);
 			} else if (["chart", "summary"].includes(item.kind)) {
 				extent = Number.isFinite(item.height) ? item.height : 320;
-				output.push(node("Box", id, rect$1(x, top, available, extent), { children: describe$56(item, id, available, extent, language).nodes }));
+				output.push(node("Box", id, rect$1(x, top, available, extent), { children: describe$57(item, id, available, extent, language).nodes }));
 			} else if (item.kind === "metric") {
 				extent = Number.isFinite(item.height) ? item.height : 104;
 				const appearance = item.appearance;
@@ -2765,6 +3051,33 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 						fontRole: "hero",
 						weight: 600
 					})]
+				}));
+			} else if (["field", "form"].includes(item.kind)) {
+				const part = item.kind === "field" ? field$2(item, id, available) : describe$55(item, id, available, cell.layoutForms || {}, language, editable && !cell.layoutEditing && !cell.layoutBusy);
+				output.push(node("Box", id + "_content", rect$1(x, top, available, part.height), {
+					background: "transparent",
+					clip: false,
+					radius: 0,
+					children: part.children
+				}));
+				extent = part.height;
+			} else if (item.kind === "action" && item.nativeAction) {
+				extent = 40;
+				output.push(button(id, rect$1(x, top, available, extent), text, item.icon || {
+					details: "search",
+					edit: "edit",
+					notes: "comment",
+					copy_link: "link",
+					refresh: "refresh"
+				}[item.nativeAction], {
+					type: "record-action",
+					name: item.nativeAction,
+					targetSearchKey: item.targetSearchKey,
+					view: item.editView,
+					process: item.process
+				}, editable && item.available !== false && !cell.layoutEditing && !cell.layoutBusy, {
+					highlighted: item.buttonStyle === "primary",
+					tonal: item.buttonStyle === "tonal"
 				}));
 			} else if (item.kind === "text") {
 				const role = item.textRole || "body", size = textStyles[role];
@@ -2907,6 +3220,9 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 					const surface = output[firstOutput];
 					if (surface && [
 						"metric",
+						"form",
+						"field",
+						"action",
 						"image",
 						"button",
 						"link",
@@ -3366,7 +3682,7 @@ var popupMetrics = {
 };
 function describe$52(model, width, height, language) {
 	const tr = (text) => translate(text, language);
-	if (model.confirmAction) return describe$63({
+	if (model.confirmAction) return describe$64({
 		message: tr(model.uncertain ? "Discard this draft? Some changes may already have been saved." : "Discard this draft?"),
 		accept: "Discard",
 		destructive: true
@@ -3554,8 +3870,8 @@ function describe$50(cell, width, height, language, editable = true, expanded = 
 		name: "layout-document"
 	}, true, { outlined: true })] };
 	if (cell.layoutNodes) return describe$54(cell, width, height, language, editable, server);
-	if (cell.groups && cell.steps) return describe$60(cell, width, height, language, expanded);
-	if (cell.links || cell.ingest) return describe$59(cell, width, height, language, editable);
+	if (cell.groups && cell.steps) return describe$61(cell, width, height, language, expanded);
+	if (cell.links || cell.ingest) return describe$60(cell, width, height, language, editable);
 	if (cell.label && !cell.text) cell = Object.assign({}, cell, { text: translate(cell.label, language) });
 	const actions = cell.actions || [];
 	const size = 28, gap = 4;
@@ -4500,7 +4816,7 @@ var _sfc_main$170 = {
 		let observer, frame;
 		const preferences = computed(() => props.state?.table || {});
 		const autoFit = computed(() => !!preferences.value.autoFit);
-		const layout = computed(() => describe$58({
+		const layout = computed(() => describe$59({
 			columns: props.columns,
 			overrides: overrides.value,
 			autoFit: autoFit.value,
@@ -5500,7 +5816,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		const component = getCurrentInstance().type;
 		const records = computed(() => rows$2(model.value));
 		const extent = computed(() => props.frameNode?.height || 320);
-		const scene = computed(() => describe$57({
+		const scene = computed(() => describe$58({
 			...model.value.scope,
 			...model.value
 		}, width.value, extent.value, appearance.language));
@@ -13546,21 +13862,21 @@ var _sfc_main$136 = {
 			else if (action.type === "clear") emit("clear-selection");
 			else emit("bulk", action.type);
 		}
-		function entryScene(entry$1) {
+		function entryScene(entry$2) {
 			return entry({
-				id: entry$1.search_key,
-				day: entry$1.day,
-				taskTitle: entry$1.task_title || "",
-				process: entry$1.process,
-				loginLabel: entry$1.login,
-				description: entry$1.description,
-				hours: entry$1.hours,
-				overtimeHours: entry$1.category === "overtime" ? entry$1.hours : 0,
-				status: entry$1.status,
-				canEdit: entry$1.can_edit !== false,
+				id: entry$2.search_key,
+				day: entry$2.day,
+				taskTitle: entry$2.task_title || "",
+				process: entry$2.process,
+				loginLabel: entry$2.login,
+				description: entry$2.description,
+				hours: entry$2.hours,
+				overtimeHours: entry$2.category === "overtime" ? entry$2.hours : 0,
+				status: entry$2.status,
+				canEdit: entry$2.can_edit !== false,
 				canApprove: true,
 				selectable: props.mode === "week",
-				selected: props.selected?.includes(entry$1.search_key),
+				selected: props.selected?.includes(entry$2.search_key),
 				disabled: props.busy || props.uncertain || props.editing
 			}, width.value, language.value);
 		}
@@ -20698,11 +21014,13 @@ var _sfc_main$116 = {
 		const props = __props;
 		const emit = __emit;
 		const state = ref({}), tables$1 = ref({}), detail = ref({}), busy = ref(false), error = ref("");
-		const filterDraft = ref({});
+		const filterDraft = ref({}), forms = ref({}), localNodes = ref(null);
 		let generation = 0, abort;
 		let detailGeneration = 0;
 		const baseScene = computed(() => describe$54({
 			...props.model,
+			layoutForms: forms.value,
+			layoutNodes: localNodes.value || props.model.layoutNodes,
 			layoutTables: tables$1.value,
 			layoutDetail: props.editing ? props.model.layoutDetail || {} : detail.value,
 			layoutTabs: props.tabs || props.model.layoutTabs,
@@ -20862,16 +21180,68 @@ var _sfc_main$116 = {
 				if (request === generation) busy.value = false;
 			}
 		}
+		async function saveForm(action) {
+			const request = generation, selected = detailGeneration;
+			const result = change$4(forms.value, {
+				...props.model,
+				layoutNodes: localNodes.value || props.model.layoutNodes,
+				layoutDetail: detail.value
+			}, action);
+			forms.value = result.store;
+			if (!result.command) return;
+			try {
+				const response = (await rpc("execute_cmd", [
+					{
+						ticket: props.ticket,
+						project: props.project
+					},
+					"tactic.ui.panel.dashboard_form_cmd.DashboardFormCmd",
+					result.command
+				])).info;
+				if (request !== generation) return;
+				forms.value = settled(forms.value, action.key, response);
+				if (response.model) {
+					if (result.command.detail_key) {
+						if (selected === detailGeneration) detail.value = response.model;
+					} else localNodes.value = response.model.layoutNodes;
+				}
+			} catch (failure) {
+				if (request === generation) forms.value = settled(forms.value, action.key, null, {
+					message: failure.message,
+					uncertain: !failure.status || failure.status >= 500
+				});
+			}
+		}
 		function activate(action) {
 			if (props.editing) return;
+			if (action.type === "record-form") {
+				saveForm(action).catch((failure) => error.value = failure.message);
+				return;
+			}
+			if (action.type === "record-action") {
+				if (action.name === "copy_link") {
+					copyText("skey://" + action.targetSearchKey).catch((failure) => error.value = failure.message);
+					return;
+				}
+				if (action.name === "refresh") {
+					emit("filter-apply", props.model.layoutFilterValues || {});
+					return;
+				}
+				emit("action", { __search_key__: action.targetSearchKey }, action.name === "details" ? "sobject_detail" : action.name, {
+					targetSearchKey: action.targetSearchKey,
+					actionView: action.view,
+					process: action.process
+				});
+				return;
+			}
 			if (action.type === "page-filter") {
-				filterDraft.value = change$4(filterDraft.value, action);
+				filterDraft.value = change$5(filterDraft.value, action);
 				return;
 			}
 			if (["page-filter-apply", "page-filter-reset"].includes(action.type)) {
 				try {
-					const values$1 = action.type === "page-filter-reset" ? {} : values(props.model.layoutFilters, filterDraft.value);
-					emit("filter-apply", values$1);
+					const values = action.type === "page-filter-reset" ? {} : values$1(props.model.layoutFilters, filterDraft.value);
+					emit("filter-apply", values);
 					error.value = "";
 				} catch (failure) {
 					error.value = failure.message;
@@ -20892,6 +21262,8 @@ var _sfc_main$116 = {
 			props.ticket,
 			props.project
 		], () => {
+			forms.value = interrupted(forms.value);
+			localNodes.value = null;
 			filterDraft.value = initial$3(props.model.layoutFilters);
 			++generation;
 			++detailGeneration;
@@ -20910,6 +21282,14 @@ var _sfc_main$116 = {
 			}]));
 			run((props.model.layoutLoad || []).map((item) => item.javascript).join("\n"));
 		}, { immediate: true });
+		watch(() => JSON.stringify([
+			props.ticket,
+			props.project,
+			props.model.layoutView,
+			props.model.targetSearchKey
+		]), () => {
+			forms.value = {};
+		});
 		onBeforeUnmount(() => {
 			++generation;
 			++detailGeneration;
@@ -21132,7 +21512,7 @@ var TableServiceDialogs_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			height: 180
 		});
 		let resolve, observer;
-		const scene = computed(() => describe$63(model.value, size.value.width, size.value.height, appearance.language));
+		const scene = computed(() => describe$64(model.value, size.value.width, size.value.height, appearance.language));
 		function finish(accepted = false) {
 			const pending = resolve;
 			resolve = null;
@@ -23286,6 +23666,10 @@ var _sfc_main$109 = {
 					if (request === this.actionRequest) this.serviceMessage = result.description || "";
 					return;
 				}
+				if (kind === "notes") {
+					await this.$refs.notes.open(target, {}, cell.process || "publish");
+					return;
+				}
 				if ([
 					"sobject_detail",
 					"file_list",
@@ -24218,7 +24602,7 @@ function _sfc_render$14(_ctx, _cache, $props, $setup, $data, $options) {
 			ticket: $props.ticket,
 			project: $options.targetProject,
 			"search-type": $data.targetRecord.__search_key__.split("?")[0],
-			view: $data.targetRecord.__search_key__.split("?")[0] === $props.definition.search_type.split("?")[0] ? $options.table.view || "table" : "table",
+			view: $data.targetRecord.__search_key__.split("?")[0] === ($props.definition?.search_type || "").split("?")[0] ? $options.table.view || "table" : "table",
 			onSaved: $options.tableSaved
 		}, null, 8, [
 			"ticket",
@@ -27685,7 +28069,7 @@ var _sfc_main$95 = {
 			width: 480,
 			height: 346
 		}), previewsOpen = ref(false);
-		const confirmation = computed(() => describe$63({
+		const confirmation = computed(() => describe$64({
 			message: t("All prepared, failed and completed operations will be removed from the queue."),
 			accept: "Clear queue",
 			destructive: true,
@@ -37393,7 +37777,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 			].includes(event.key)) return;
 			const buttons = [...popup.value.querySelectorAll("button:enabled")];
 			const index = buttons.indexOf(event.target);
-			const command = key$2(buttons.map((_, i) => ({ id: String(i) })), String(Math.max(0, index)), event.key, true);
+			const command = key$3(buttons.map((_, i) => ({ id: String(i) })), String(Math.max(0, index)), event.key, true);
 			if (command) {
 				event.preventDefault();
 				buttons[Number(command.id)]?.focus();
@@ -37435,7 +37819,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 			const buttons = [...rail.value.querySelectorAll("[role=\"tab\"]")];
 			let index = buttons.indexOf(event.target);
 			if (index < 0) return;
-			const action = key$2(props.tabs, props.tabs[index].id, event.key, true, event.ctrlKey && event.shiftKey);
+			const action = key$3(props.tabs, props.tabs[index].id, event.key, true, event.ctrlKey && event.shiftKey);
 			if (!action) return;
 			event.preventDefault();
 			if (action.type === "close") close(action.id);
@@ -38152,7 +38536,7 @@ var _sfc_main$63 = {
 				nextTick(() => root.value?.querySelector(`[data-tab-id="${command.type === "select" ? command.id : props.selected}"]`)?.focus());
 				return;
 			}
-			const command = key$2(props.tabs.map((tab) => ({
+			const command = key$3(props.tabs.map((tab) => ({
 				...tab,
 				closable: closable(tab)
 			})), props.tabs[index].id, event.key, false, event.ctrlKey && event.shiftKey);
@@ -38771,7 +39155,7 @@ var _sfc_main$62 = {
 //#region ../src/tactic_stream/shared_ui/features/configuration/configuration.ui.mjs
 function confirmation$2(model, width, height, language) {
 	const text = (key) => translate(key, language);
-	if (model.kind === "clear") return describe$63({
+	if (model.kind === "clear") return describe$64({
 		message: text(model.scope === "tabs" ? "Object, process and version branches will collapse. Search tabs, filters and dock layouts remain unchanged." : "Projects, Search Types, search results and navigation will be downloaded again. Saved layouts and preferences remain unchanged."),
 		reject: "Cancel",
 		accept: model.scope === "tabs" ? "Clear tabs cache" : "Clear cache",
@@ -40838,7 +41222,7 @@ function describe$16(model, width, height, language) {
 	return { nodes };
 }
 function confirmation$1(model, width, height, language) {
-	return describe$63({
+	return describe$64({
 		message: translate("Remove template {code}? Existing projects are not removed.", language, { code: model.code }),
 		accept: "Delete",
 		reject: "Cancel",
@@ -43908,7 +44292,7 @@ function describe$12(model, width, viewportHeight, language) {
 		noticeY += 44;
 	}
 	if (model.confirmClose) {
-		const confirmation = describe$63({
+		const confirmation = describe$64({
 			message: text("Discard unsaved user changes?"),
 			accept: "Discard changes",
 			reject: "Keep editing",
@@ -44007,7 +44391,7 @@ var _sfc_main$49 = {
 		const permissions = computed(() => result.value?.permissions || {});
 		const presence = (login) => props.updates?.presence?.find((row) => row.login === login) || (login === props.login ? { online: true } : void 0);
 		const filteredUsers = computed(() => (result.value?.users || []).filter((row) => !row.retired && matchesUser(row, query.value)));
-		const dirty$2 = computed(() => dirty(draft.value, original.value, !!avatar.value));
+		const dirty$3 = computed(() => dirty(draft.value, original.value, !!avatar.value));
 		const profileFields$1 = profileFields, accountFields$1 = accountFields;
 		const body = ref(null), editorBody = ref(null), viewport = ref({
 			width: 1e3,
@@ -44227,7 +44611,7 @@ var _sfc_main$49 = {
 		function closeEditor(force = false) {
 			const decision = closeDecision({
 				saving: saving.value,
-				dirty: dirty$2.value,
+				dirty: dirty$3.value,
 				uncertain: uncertain.value
 			}, force);
 			if (decision === "busy") return;
@@ -44304,7 +44688,7 @@ var _sfc_main$49 = {
 			emit(name, value);
 		}
 		function beforeUnload(event) {
-			if (dirty$2.value || saving.value || uncertain.value) {
+			if (dirty$3.value || saving.value || uncertain.value) {
 				event.preventDefault();
 				event.returnValue = "";
 			}
@@ -57575,7 +57959,7 @@ var _sfc_main = {
 			return compose(main_menus_default.user, this.mainMenuContext);
 		},
 		mainToolbar() {
-			return describe$62({
+			return describe$63({
 				width: this.toolbarWidth,
 				compact: this.compactShortcuts,
 				progressReveal: this.activityProgress ? 1 : 0,
@@ -57586,7 +57970,7 @@ var _sfc_main = {
 			return positions$1(this.mainToolbar);
 		},
 		workspaceStyle() {
-			const scene = describe$61(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
+			const scene = describe$62(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
 			return {
 				gridTemplateAreas: scene.grid.areas,
 				gridTemplateColumns: scene.grid.columns,
@@ -62533,6 +62917,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { roles as $, _sfc_main$116 as A, geometry$2 as At, duplicateProfile as B, captionedSwitch as C, appearances as Ct, changeDefinition as D, duplicate as Dt, _sfc_main$107 as E, copy as Et, ObjectAction_default as F, reorder$1 as Ft, alignment as G, _sfc_main$131 as H, _sfc_main$126 as I, reparent as It, toggle as J, roots as K, applyDuplicateProfile as L, siblings as Lt, zooms as M, layers as Mt, ResultPresentation_default as N, path as Nt, definitionWizard as O, fingerprint as Ot, RelatedObjects_default as P, remove$2 as Pt, edit$2 as Q, changeContent as R, sizing as Rt, _sfc_main$63 as S, add as St, _sfc_main$100 as T, change$6 as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$145 as W, actions$4 as X, spacingField as Y, describe$48 as Z, editColumn as _, filter as _t, updateModes as a, notices as at, describe$18 as b, scope as bt, runBrowserScript as c, tabs as ct, ProjectCreation_default as d, App_default as default, views as dt, serialize as et, ImagePicker_default as f, _sfc_main$166 as ft, describe$17 as g, fields$2 as gt, contentWidth as h, change$5 as ht, updateIntervals as i, documentEvent as it, controls$1 as j, kinds as jt, displayWidgets as k, geometries as kt, scriptTree as l, toolbar$4 as lt, change as m, actionLayout as mt, networkSettings as n, variants as nt, _sfc_main$26 as o, policy as ot, readPreviewImage as p, _sfc_main$171 as pt, selected as q, updateBatchDelays as r, widgets as rt, buttonId as s, sectionSelector as st, App_exports as t, template as tt, lifecycle as u, _sfc_main$158 as ut, fieldsFor as v, mode as vt, _sfc_main$98 as w, block as wt, pages as x, type as xt, confirmation$2 as y, options$1 as yt, contentChoices as z, spacing$1 as zt };
+export { roles as $, _sfc_main$116 as A, geometry$2 as At, duplicateProfile as B, captionedSwitch as C, appearances as Ct, changeDefinition as D, duplicate as Dt, _sfc_main$107 as E, copy as Et, ObjectAction_default as F, reorder$1 as Ft, alignment as G, _sfc_main$131 as H, _sfc_main$126 as I, reparent as It, toggle as J, roots as K, applyDuplicateProfile as L, siblings as Lt, zooms as M, layers as Mt, ResultPresentation_default as N, path as Nt, definitionWizard as O, fingerprint as Ot, RelatedObjects_default as P, remove$2 as Pt, edit$2 as Q, changeContent as R, sizing as Rt, _sfc_main$63 as S, add as St, _sfc_main$100 as T, change$7 as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$145 as W, actions$4 as X, spacingField as Y, describe$48 as Z, editColumn as _, filter as _t, updateModes as a, notices as at, describe$18 as b, scope as bt, runBrowserScript as c, tabs as ct, ProjectCreation_default as d, App_default as default, views as dt, serialize as et, ImagePicker_default as f, _sfc_main$166 as ft, describe$17 as g, fields$2 as gt, contentWidth as h, change$6 as ht, updateIntervals as i, documentEvent as it, controls$1 as j, kinds as jt, displayWidgets as k, geometries as kt, scriptTree as l, toolbar$4 as lt, change as m, actionLayout as mt, networkSettings as n, variants as nt, _sfc_main$26 as o, policy as ot, readPreviewImage as p, _sfc_main$171 as pt, selected as q, updateBatchDelays as r, widgets as rt, buttonId as s, sectionSelector as st, App_exports as t, template as tt, lifecycle as u, _sfc_main$158 as ut, fieldsFor as v, mode as vt, _sfc_main$98 as w, block as wt, pages as x, type as xt, confirmation$2 as y, options$1 as yt, contentChoices as z, spacing$1 as zt };
 
 //# sourceMappingURL=App.js.map

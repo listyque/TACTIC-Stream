@@ -19,9 +19,11 @@ def read_custom_layout(
     from mako.exceptions import MakoException
     from pyasm.search import Search
     from pyasm.common import Environment
+    from pyasm.common.errors import SecurityException
 
-    if not Environment.get_security().is_admin():
-        raise PermissionError('Administration requires administrator access')
+    is_admin = Environment.get_security().is_admin()
+    if not is_admin and (html or not view):
+        raise SecurityException('Administration requires administrator access')
     if _depth >= 8:
         raise ValueError('CustomLayout nesting exceeds eight levels')
     if not search_key:
@@ -65,6 +67,8 @@ def read_custom_layout(
         if definition is not None and definition.find('dashboard') is not None:
             from tactic_stream.server.dashboards import dashboard_layout
             return dashboard_layout(json.loads(definition.findtext('dashboard')), view, search_key, detail_key=detail_key, filter_values=filter_values)
+        if not is_admin:
+            raise SecurityException('Administration requires administrator access')
         if definition is None or definition.find('html') is None:
             raise ValueError('CustomLayout has no HTML definition: ' + view)
         mako = definition.findtext('mako') or ''

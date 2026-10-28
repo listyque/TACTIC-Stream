@@ -35,7 +35,7 @@ class DashboardCmd(Command):
         if action not in ('read','preview','apply','operation','sources'):
             raise ValueError('Unknown dashboard operation')
         if action=='sources':
-            return dashboard_sources(self.kwargs.get('search_type',''),self.kwargs.get('query'),self.kwargs.get('record_key',''))
+            return dashboard_sources(self.kwargs.get('search_type',''),self.kwargs.get('query'),self.kwargs.get('record_key',''),self.kwargs.get('edit_view','edit'))
         sql=Search('config/widget_config').get_sql()
         if action=='apply':
             sql.get_database_impl().lock_collection_table(sql,SearchType.get('config/widget_config').get_table())
