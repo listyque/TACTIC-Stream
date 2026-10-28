@@ -26,7 +26,7 @@ this tool is not part of ordinary product builds.
 
 ## Single owners
 
-Maximized browser windows use square outer corners; restoring a window restores its normal corner styling.
+Browser floating windows use an 8px outer corner radius and the shared theme shadow. Maximized browser windows use square outer corners without a shadow.
 
 Floating dock windows are the visual reference for floating windows: reuse their chrome, title bar, borders and controls. Keep resize grips quiet and integrated into the corner, without a filled circular button.
 

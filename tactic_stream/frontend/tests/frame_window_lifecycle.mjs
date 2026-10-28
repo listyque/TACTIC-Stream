@@ -99,10 +99,12 @@ try {
   await page.waitForFunction(() => !window.host.child.open);
   await page.evaluate(() => {window.host.a.show(); window.host.a.style.borderRadius = '20px';});
   const windowA = page.locator('#a');
+  assert.equal(await windowA.evaluate(el => getComputedStyle(el).borderTopLeftRadius), '8px');
+  assert.notEqual(await windowA.evaluate(el => getComputedStyle(el).boxShadow), 'none');
   await windowA.getByRole('button', {name:'Maximize window', exact:true}).click();
   assert.equal(await windowA.evaluate(el => getComputedStyle(el).borderTopLeftRadius), '0px');
   await windowA.getByRole('button', {name:'Restore window', exact:true}).click();
-  assert.equal(await windowA.evaluate(el => getComputedStyle(el).borderTopLeftRadius), '20px');
+  assert.equal(await windowA.evaluate(el => getComputedStyle(el).borderTopLeftRadius), '8px');
   assert.deepEqual(errors, []);
   console.log(
     'Window lifecycle: first click/tap, focus return, child owner close and retained draft passed.'
