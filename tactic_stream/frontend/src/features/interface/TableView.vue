@@ -290,6 +290,10 @@ function choose(record, event, toggle = false) {
   focusedKey.value = key;
   emit('focus', record);
   if (!props.selectable) return;
+  if (!toggle && !event.shiftKey) {
+    anchorKey.value = key;
+    return;
+  }
   if (event.type === 'contextmenu' && props.selectedKeys?.includes(key)) return;
   if (event.shiftKey && anchorKey.value) {
     const keys = records.value.map((record) => record.__search_key__),

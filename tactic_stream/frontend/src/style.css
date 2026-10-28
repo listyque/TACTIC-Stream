@@ -818,7 +818,7 @@ button.danger { color: var(--error); border-color: var(--error); }
 .table-column-heading > .icon-button { flex-shrink: 0; width: var(--touch-target); padding: 0; }
 .table-cell-link { color: var(--primary); text-decoration: underline; display: inline-flex; align-items: center; min-height: var(--touch-target); }
 .error-text { color: var(--error); }
-.selection-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: var(--content-selection); border-radius: var(--surface-radius); }
+.selection-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); padding: var(--space-sm); background: var(--content-selection); border-radius: 0; }
 .workspace-browser .selection-actions { flex-shrink: 0; flex-wrap: nowrap; justify-content: space-between; padding: 0 var(--space-sm); }
 .widget-configuration { width: min(960px, 95vw); }
 .widget-configuration label { display: grid; gap: var(--space-sm); margin-bottom: var(--space-md); }

@@ -2154,10 +2154,10 @@ export default {
       <p v-if="error" class="error" role="alert">{{ t(error) }}</p>
       <div v-if="selectedRecords.length && (resultMode !== 'continious' || selectedRecords.length > 1 || mobile)" class="selection-actions" role="group" :aria-label="t('Selected record actions')" @toggle.capture="menuToggled">
         <strong>{{ t('{count} selected records', { count: selectedRecords.length }) }}</strong>
+        <AppButton label="Clear selection" icon="close" @click="selectedKeys = []" />
         <AppMenu ref="selectionMenu" label="Selected record actions">
             <AppButton v-if="canAdminister" label="Tasks for selected objects" icon="MDI_CLIPBOARD_TEXT_OUTLINE" @click="$refs.taskManager.open(true)" />
             <AppButton v-if="interfaceConfig?.operations?.edit" label="Edit selected" icon="edit" @click="$refs.recordForm.open(selectedKeys)" />
-            <AppButton label="Clear selection" icon="close" @click="selectedKeys = []" />
             <AppButton v-if="interfaceConfig?.operations?.retire && selectedRecords.some(record => record[interfaceConfig.operations.retire_column] !== 'retired')" label="Retire selected" icon="archive" @click="$refs.objectAction.open(selectedRecords, 'retire')" />
             <AppButton v-if="interfaceConfig?.operations?.retire && selectedRecords.some(record => record[interfaceConfig.operations.retire_column] === 'retired')" label="Reactivate selected" icon="refresh" @click="$refs.objectAction.open(selectedRecords, 'reactivate')" />
             <AppButton v-if="interfaceConfig?.operations?.delete" label="Delete selected" icon="delete" destructive @click="$refs.objectAction.open(selectedRecords, 'delete')" />

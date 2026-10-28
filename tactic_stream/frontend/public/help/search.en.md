@@ -399,3 +399,5 @@ The clicked disclosure arrow becomes a small progress indicator while its childr
 ## Initial view for legacy projects
 
 Imported `project_view` sidebar searches open as tables when no explicit result mode is configured, matching the legacy ViewPanel default. A direct search for a configured type uses the same initial mode. Explicit sidebar modes and previously saved tab modes remain authoritative; switch the current tab through the result-view menu. Handler-specific sidebar definitions retain their client defaults.
+
+In tables, a plain row click focuses the record without changing checked selections. Use Shift+click for a range or the row checkboxes to select individual records. Clear selection on the selected-record bar removes all checks.

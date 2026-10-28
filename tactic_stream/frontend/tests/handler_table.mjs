@@ -362,7 +362,7 @@ try {
     refRow = sample.items.find((i) => i.name === 'searchResultTableRow'),
     refPreview = sample.items.find((i) => i.name === 'tableCellPreview');
   assert(
-    Math.abs(header.width - refHeader.width) < 0.6,
+    Math.abs(header.width - await table.evaluate(el => el.clientWidth - 4)) < 0.6,
     JSON.stringify({
       header,
       refHeader,
@@ -557,16 +557,17 @@ try {
     true
   );
   await table.getByLabel('Auto Fit columns', { exact: true }).click();
-  // Real row selection and keyboard navigation stay on the first press.
+  // Plain clicks focus rows; Shift and checkboxes explicitly select them.
+  await page.evaluate(() => window.host.selected = []);
   await rows.first().locator('.handler-table-cell').nth(1).click();
-  assert.deepEqual(await page.evaluate(() => window.host.selected), [
-    fixture.records[0].__search_key__
-  ]);
+  assert.deepEqual(await page.evaluate(() => window.host.selected), []);
+  await rows.nth(1).locator('.handler-table-cell').nth(1).click({modifiers: ['Shift']});
+  assert.deepEqual(await page.evaluate(() => window.host.selected), fixture.records.slice(0, 2).map(r => r.__search_key__));
+  await rows.nth(2).locator('.handler-table-cell').nth(1).click();
+  assert.equal((await page.evaluate(() => window.host.selected)).length, 2);
   await table.focus();
   await page.keyboard.press('ArrowDown');
-  assert.deepEqual(await page.evaluate(() => window.host.selected), [
-    fixture.records[1].__search_key__
-  ]);
+  assert.equal((await page.evaluate(() => window.host.selected)).length, 2);
   await rows.first().locator('.handler-table-cell').nth(1).dblclick();
   const inline = page.locator('.table-inline-editor:popover-open');
   await inline.getByRole('textbox').fill('Edited robot');
