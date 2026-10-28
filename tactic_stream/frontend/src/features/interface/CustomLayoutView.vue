@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
+import { qtLabelTextWidth } from '../../controls/typography/textMetrics.js';
 import NestedTable from './NestedTable.vue';
 import LayoutDocument from './LayoutDocument.vue';
 import DashboardItems from './DashboardItems.vue';
@@ -88,7 +89,9 @@ const baseScene = computed(() =>
     Math.max(1, canvasSize.value.height - (props.canvasViewport ? 24 : 0)),
     appearance.language,
     true,
-    location.origin
+    location.origin,
+    (text, size, weight = 400) =>
+      qtLabelTextWidth(text, `${weight} ${size}px Segoe UI`)
   )
 );
 const canvasSize = computed(() =>

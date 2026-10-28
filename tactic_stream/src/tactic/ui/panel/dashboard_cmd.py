@@ -1,13 +1,14 @@
 """Native, revision-checked dashboard authoring with durable Page operation receipts."""
 import json
 from uuid import UUID
+from typing import get_args
 from xml.etree import ElementTree as ET
 from pyasm.biz import Project
 from pyasm.command import Command
 from pyasm.common import Environment
 from pyasm.search import Search, SearchType
 from pyasm.security.security import _require_admin
-from tactic_stream.dashboard_plan import DashboardDocument
+from tactic_stream.dashboard_plan import DashboardBlock, DashboardDocument
 from tactic_stream.server.dashboards import dashboard_layout, dashboard_sources
 from tactic_stream.server.widget_configuration import WidgetConfigConflict
 from tactic_stream.server.sidebar_editor import SidebarDraft, read_sidebar, save_sidebar
@@ -18,7 +19,7 @@ def dashboard_state():
     state=page_state('sthpw/project')
     urls=[row.get_data() for row in Search('config/url').get_sobjects()]
     state['revision']=digest([state['revision'],urls])
-    state['bricks']=['row','column','text','markdown','metric','table','items','details','link','chart','summary']
+    state['bricks']=list(get_args(DashboardBlock.model_fields['kind'].annotation))
     state['dashboards']=[dict(view=row.get_value('view'),source_id=row.get_id())
         for row in Search('config/widget_config').get_sobjects()
         if (row.get_value('view') or '').startswith('dashboard.') and '<dashboard>' in (row.get_value('config') or '')]

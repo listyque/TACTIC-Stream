@@ -93,6 +93,15 @@ try {
         screen.dispatch({ type: 'canvasSize', value: '800' });
         screen.dispatch({ type: 'canvasZoom', value: '50' });
       });
+    if (expected.fixture === 'kit')
+      await page.evaluate(
+        (width) =>
+          window.pageEditorFixture.screen.value.dispatch({
+            type: 'canvasSize',
+            value: width < 1000 ? '360' : '800'
+          }),
+        expected.width
+      );
     await page.evaluate((panel) => {
       const screen = window.pageEditorFixture.screen.value;
       if (screen.ui.preview !== (panel === 'preview'))

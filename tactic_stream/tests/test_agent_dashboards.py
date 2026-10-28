@@ -17,6 +17,102 @@ def document():
 
 
 class Dashboards(unittest.TestCase):
+    def test_layout_grid_components_sizing_and_image_source_round_trip(self):
+        from xmlrpc.client import Fault
+
+        with test_transport.Transport.proxy(self) as proxy:
+            auth = dict(
+                ticket=proxy.get_ticket("admin", "private-test-password"), project="one"
+            )
+
+            def call(action, **values):
+                return proxy.execute_cmd(
+                    auth, COMMAND, dict(action=action, project_code="one", **values)
+                )["info"]
+
+            document = dict(
+                name="layout_kit",
+                title="Layout kit",
+                blocks=[
+                    dict(
+                        kind="grid",
+                        columns=3,
+                        min_cell_width=180,
+                        row_height=100,
+                        children=[
+                            dict(
+                                kind="heading",
+                                text="Project overview",
+                                column_span=2,
+                                sizing=dict(height_mode="content"),
+                            ),
+                            dict(kind="icon", icon="folder", icon_size=32),
+                            dict(
+                                kind="button",
+                                title="Open project",
+                                href="skey://sthpw/project?code=one",
+                                button_style="primary",
+                            ),
+                            dict(
+                                kind="image",
+                                binding="record",
+                                source_key="contract/entity?project=one&code=A",
+                            ),
+                            dict(kind="divider"),
+                            dict(kind="spacer"),
+                        ],
+                    )
+                ],
+            )
+            state = call("read")
+            self.assertTrue({"grid", "heading", "icon", "image", "button", "divider", "spacer"}.issubset(state["bricks"]))
+            revision = state["revision"]
+            preview = call("preview", document=document, expected_revision=revision)
+            grid = preview["model"]["layoutNodes"][0]
+            self.assertEqual(grid["kind"], "grid")
+            self.assertEqual(grid["children"][0]["textRole"], "heading")
+            self.assertEqual(grid["children"][0]["columnSpan"], 2)
+            self.assertEqual(grid["children"][3]["kind"], "image")
+            self.assertIn("image", grid["children"][3])
+            operation = str(uuid4())
+            saved = call(
+                "apply",
+                document=document,
+                expected_revision=revision,
+                operation_id=operation,
+            )
+            self.assertEqual(
+                call(
+                    "apply",
+                    document=document,
+                    expected_revision=revision,
+                    operation_id=operation,
+                ),
+                saved,
+            )
+            self.assertEqual(
+                call("read", name="layout_kit")["document"], preview["document"]
+            )
+            for block in [
+                dict(kind="grid", columns=13),
+                dict(kind="text", column_span=0),
+                dict(kind="text", sizing=dict(min_width=300, max_width=200)),
+                dict(kind="text", sizing=dict(width_mode="fixed")),
+                dict(kind="icon", icon="<script>"),
+                dict(kind="button", href="javascript:alert(1)"),
+                dict(
+                    kind="image",
+                    binding="record",
+                    source_key="contract/entity?project=two&code=A",
+                ),
+            ]:
+                with self.subTest(block=block), self.assertRaises(Fault):
+                    call(
+                        "preview",
+                        document=dict(name="bad_kit", title="Bad", blocks=[block]),
+                        expected_revision=call("read")["revision"],
+                    )
+
     def test_position_and_appearance_round_trip_and_validation(self):
         from xmlrpc.client import Fault
 
@@ -358,6 +454,13 @@ class Dashboards(unittest.TestCase):
                 preview=await client.call_tool('ts_dashboard_preview',dict(values,filter_values={'minimum':dict(enabled=True,value=1)}))
                 self.assertFalse(preview.is_error)
                 self.assertEqual(preview.structured_content['model']['layoutNodes'][-1]['report']['rows'],[dict(group_0=7,total=7)])
+                draft['blocks'].append(dict(kind='grid',columns=2,min_cell_width=180,children=[
+                    dict(kind='heading',text='Agent-built layout',column_span=2,sizing=dict(height_mode='content')),
+                    dict(kind='button',title='Project',href='skey://sthpw/project?code=one',button_style='primary'),
+                    dict(kind='image',binding='project')]))
+                preview=await client.call_tool('ts_dashboard_preview',values)
+                self.assertFalse(preview.is_error)
+                self.assertEqual(preview.structured_content['model']['layoutNodes'][-1]['kind'],'grid')
                 result=await client.call_tool('ts_dashboard_save',dict(values,operation_id=str(uuid4())))
                 self.assertFalse(result.is_error)
                 self.assertEqual(result.structured_content['path'],'/dashboard/via_mcp')

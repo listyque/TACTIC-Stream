@@ -1600,7 +1600,14 @@ var kinds = [
 	"details",
 	"link",
 	"chart",
-	"summary"
+	"summary",
+	"grid",
+	"heading",
+	"icon",
+	"image",
+	"button",
+	"divider",
+	"spacer"
 ];
 var copy = (value) => JSON.parse(JSON.stringify(value, (_key, item) => item === void 0 ? null : item));
 function fingerprint(value) {
@@ -1659,7 +1666,14 @@ function change$6(document, key, field, value) {
 		weight: [1, 12],
 		gap: [0, 128],
 		offset_x: [-2400, 2400],
-		offset_y: [-1600, 1600]
+		offset_y: [-1600, 1600],
+		columns: [1, 12],
+		min_cell_width: [80, 1200],
+		row_height: [40, 800],
+		column_span: [1, 12],
+		row_span: [1, 12],
+		collapse_width: [0, 2400],
+		icon_size: [16, 128]
 	};
 	if (limits[field]) {
 		if (value === "" && ["width", "height"].includes(field)) value = null;
@@ -1668,6 +1682,48 @@ function change$6(document, key, field, value) {
 			if (!/^-?\d+$/.test(String(value)) || Number(value) < range[0] || Number(value) > range[1]) throw Error("Enter a whole number within the allowed range");
 			value = Number(value);
 		}
+	} else if ([
+		"text_role",
+		"text_align",
+		"button_style",
+		"image_fit",
+		"text_weight"
+	].includes(field)) {
+		const choices = {
+			text_role: [
+				"auto",
+				"caption",
+				"body",
+				"bodyLarge",
+				"title",
+				"heading",
+				"display",
+				"statistic",
+				"hero"
+			],
+			text_align: [
+				"left",
+				"center",
+				"right"
+			],
+			button_style: [
+				"normal",
+				"primary",
+				"tonal"
+			],
+			image_fit: ["cover", "contain"],
+			text_weight: [
+				400,
+				600,
+				700
+			]
+		};
+		if (field === "text_weight") value = Number(value);
+		if (!choices[field].includes(value)) throw Error("Choose a supported component property");
+	} else if (field === "text_color") {
+		if (!/^(auto|primaryText|secondaryText|contentAccent|error|#[0-9a-fA-F]{6})$/.test(value)) throw Error("Choose a theme color or enter a six-digit hex color");
+	} else if (field === "icon") {
+		if (typeof value !== "string" || value.length > 128 || !/^[A-Za-z0-9_./:-]*$/.test(value)) throw Error("Choose a supported icon");
 	} else if (![
 		"title",
 		"text",
@@ -1676,6 +1732,7 @@ function change$6(document, key, field, value) {
 		"href",
 		"field"
 	].includes(field)) throw Error("Unsupported page property");
+	if (["width", "height"].includes(field)) item.sizing = Object.assign({}, item.sizing || {}, { [field + "_mode"]: value === null ? "auto" : "fixed" });
 	item[field] = value;
 	return result;
 }
@@ -1698,6 +1755,7 @@ function add(document, key, kind, searchType) {
 	const parent = selected && [
 		"row",
 		"column",
+		"grid",
 		"details"
 	].includes(selected.kind) ? path(key) : key ? path(key).slice(0, -1) : [];
 	const owner = parent.length ? block(result, parent.join(".")) : null;
@@ -1711,6 +1769,7 @@ function add(document, key, kind, searchType) {
 	if ([
 		"row",
 		"column",
+		"grid",
 		"details"
 	].includes(kind)) {
 		item.children = [];
@@ -1732,7 +1791,33 @@ function add(document, key, kind, searchType) {
 		function: "count",
 		column: ""
 	}];
-	if (["text", "markdown"].includes(kind)) item.text = kind;
+	if ([
+		"text",
+		"heading",
+		"markdown"
+	].includes(kind)) item.text = kind;
+	if (kind === "heading") item.text_weight = 600;
+	if (kind === "grid") Object.assign(item, {
+		height: null,
+		children: [],
+		columns: 3,
+		min_cell_width: 200,
+		row_height: 120
+	});
+	if (kind === "icon") Object.assign(item, {
+		icon: "folder",
+		width: 40,
+		height: 40
+	});
+	if (kind === "button") Object.assign(item, {
+		title: "Open project",
+		href: ""
+	});
+	if (kind === "image") Object.assign(item, {
+		binding: "project",
+		height: 160
+	});
+	if (["divider", "spacer"].includes(kind)) item.height = 24;
 	rows.push(item);
 	return {
 		document: result,
@@ -1793,6 +1878,7 @@ function reparent(document, key, parent) {
 	if (container && ![
 		"row",
 		"column",
+		"grid",
 		"details"
 	].includes(container.kind)) throw Error("Choose a row, column or details container");
 	if (p.slice(0, -1).join(".") === parent) return {
@@ -1829,6 +1915,9 @@ function geometry$2(document, change, boxes) {
 			const old = item.height === void 0 || item.height === null ? change.before.height - overhead - padding[0] - padding[2] : item.height;
 			item.height = Math.max(24, Math.min(1600, Math.round(old + change.after.height - change.before.height)));
 		}
+		item.sizing = Object.assign({}, item.sizing || {});
+		if (change.handle.includes("e")) item.sizing.width_mode = "fixed";
+		if (change.handle.includes("s")) item.sizing.height_mode = "fixed";
 		return {
 			document: result,
 			key: change.key
@@ -1844,6 +1933,7 @@ function geometry$2(document, change, boxes) {
 	if (hit && ![
 		"row",
 		"column",
+		"grid",
 		"details"
 	].includes(block(result, hit.key)?.kind)) parent = parent.slice(0, -1);
 	if (parent.length > 5) throw Error("Dashboard nesting exceeds six levels");
@@ -1906,6 +1996,44 @@ function geometries(document, changes, boxes) {
 		keys
 	};
 }
+function sizing(document, key, field, value) {
+	const result = copy(document), item = block(result, key);
+	const size = Object.assign({
+		width_mode: "auto",
+		height_mode: "auto",
+		min_width: 0,
+		min_height: 0,
+		max_width: null,
+		max_height: null
+	}, item.sizing || {});
+	if (["width_mode", "height_mode"].includes(field)) {
+		if (![
+			"auto",
+			"fixed",
+			"fill",
+			"content"
+		].includes(value)) throw Error("Choose a supported size behavior");
+		const axis = field === "width_mode" ? "width" : "height";
+		if (value === "fixed" && item[axis] == null) item[axis] = axis === "width" ? 240 : 120;
+		if (["fill", "content"].includes(value)) item[axis] = null;
+	} else {
+		if (![
+			"min_width",
+			"max_width",
+			"min_height",
+			"max_height"
+		].includes(field)) throw Error("Unsupported page property");
+		if (value === "" && field.startsWith("max_")) value = null;
+		else {
+			if (!/^\d+$/.test(String(value)) || Number(value) > (field.endsWith("width") ? 2400 : 1600) || field.startsWith("max_") && Number(value) < (field.endsWith("width") ? 40 : 24)) throw Error("Enter a whole number within the allowed range");
+			value = Number(value);
+		}
+	}
+	size[field] = value;
+	for (const axis of ["width", "height"]) if (size["max_" + axis] !== null && size["max_" + axis] < size["min_" + axis]) throw Error("Maximum size must not be smaller than minimum size");
+	item.sizing = size;
+	return result;
+}
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.data.mjs
 function inDetails(document, key) {
@@ -1914,8 +2042,14 @@ function inDetails(document, key) {
 }
 function mode(document, key) {
 	const item = key ? block(document, key) : null;
-	if (!item || !["text", "markdown"].includes(item.kind)) return "";
+	if (!item || ![
+		"text",
+		"heading",
+		"markdown",
+		"image"
+	].includes(item.kind)) return "";
 	if (item.binding && item.binding !== "auto") return item.binding;
+	if (item.kind === "image") return item.source_key ? "record" : inDetails(document, key) ? "selection" : "project";
 	return item.source_key ? "record" : item.field ? inDetails(document, key) ? "selection" : "project" : "static";
 }
 function selectedType(document, key) {
@@ -1949,7 +2083,12 @@ function scope(document, key) {
 function change$5(document, key, field, value) {
 	const result = copy(document), item = block(result, key);
 	if (field === "binding") {
-		if (!["text", "markdown"].includes(item.kind) || ![
+		if (![
+			"text",
+			"heading",
+			"markdown",
+			"image"
+		].includes(item.kind) || ![
 			"static",
 			"project",
 			"selection",
@@ -2073,7 +2212,11 @@ function fields$2(model, ui, width, language, enabled) {
 		"metric",
 		"chart",
 		"summary"
-	].includes(item.kind), condition = ["row", "column"].includes(item.kind) && inDetails(model.document, ui.selected);
+	].includes(item.kind), condition = [
+		"row",
+		"column",
+		"grid"
+	].includes(item.kind) && inDetails(model.document, ui.selected);
 	if (!collection && !binding && !condition) return fields;
 	const sourceReady = enabled && !model.dataBusy && !!metadata.searchType;
 	fields.push({
@@ -2099,7 +2242,7 @@ function fields$2(model, ui, width, language, enabled) {
 		});
 	}
 	if (binding) choice("pageBinding", "Content source", binding, [
-		["static", "Static text"],
+		...item.kind === "image" ? [] : [["static", "Static text"]],
 		["project", "Current project"],
 		...inDetails(model.document, ui.selected) ? [["selection", "Selected object"]] : [],
 		["record", "Specific record"]
@@ -2163,7 +2306,7 @@ function fields$2(model, ui, width, language, enabled) {
 			title: "More matches. Refine your search."
 		});
 	}
-	if (binding && binding !== "static") {
+	if (binding && binding !== "static" && item.kind !== "image") {
 		const sourceFields = (metadata.fields || []).filter((row) => item.kind === "markdown" ? type(row) === "text" : type(row) !== "complex");
 		choice("pageBindingField", "Source field", item.field || "", [{
 			value: "",
@@ -2410,6 +2553,121 @@ function describe$55(definitions, draft, width, language, enabled = true) {
 	};
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/table/page.layout.mjs
+function preferredWidth(item, measure) {
+	const size = textStyles[item.textRole || "body"];
+	const text = String(item.text || "");
+	const padding = item.padding || [
+		0,
+		0,
+		0,
+		0
+	], margin = item.margin || [
+		0,
+		0,
+		0,
+		0
+	];
+	const inset = padding[1] + padding[3] + margin[1] + margin[3];
+	if (item.kind === "icon") return (item.iconSize || 32) + inset;
+	if (item.kind === "image") return 160 + inset;
+	if (item.kind === "button" || item.kind === "link") return buttonWidth(measure(text, 13, 600), true) + inset;
+	if (item.children) {
+		const widths = item.children.map((child) => parseFloat(child.width) || preferredWidth(child, measure));
+		return (item.kind === "row" ? widths.reduce((a, b) => a + b, 0) + (item.gap ?? 8) * Math.max(0, widths.length - 1) : Math.max(40, ...widths)) + inset;
+	}
+	if (item.kind === "text") return Math.max(40, inset + Math.ceil(Math.max(...text.split("\n").map((line) => measure(line, size, item.textWeight || 400)))) + 2);
+	return 240;
+}
+function width$1(item, space, measure) {
+	const sizing = item.sizing || {};
+	const mode = sizing.width_mode || "auto";
+	const fixed = /^\d+(?:px)?$/.test(item.width || "") ? parseFloat(item.width) : null;
+	const requested = mode === "content" ? preferredWidth(item, measure) : mode === "fill" ? space : fixed === null ? space : fixed;
+	return Math.max(0, Math.min(space, Math.max(sizing.min_width || 0, Math.min(sizing.max_width ?? Infinity, requested))));
+}
+function rowWidths(items, budget, measure) {
+	const flexible = [], widths = items.map((item, index) => {
+		const sizing = item.sizing || {}, mode = sizing.width_mode || "auto";
+		const fixed = /%$/.test(item.width || "") ? parseFloat(item.width) / 100 * budget : parseFloat(item.width) || 0;
+		const content = mode === "content" ? preferredWidth(item, measure) : 0;
+		if (mode === "fill" || !content && !fixed) flexible.push(index);
+		return Math.max(sizing.min_width || 0, Math.min(sizing.max_width ?? Infinity, mode === "fill" ? 0 : content || fixed));
+	});
+	const minimum = widths.reduce((sum, value) => sum + value, 0);
+	if (minimum > budget) return widths.map((value) => value * budget / minimum);
+	let remaining = budget - minimum, active = flexible;
+	while (remaining > .01 && active.length) {
+		const weight = active.reduce((sum, index) => sum + (items[index].weight || 1), 0);
+		let used = 0;
+		for (const index of active) {
+			const add = Math.max(0, Math.min(remaining * (items[index].weight || 1) / weight, (items[index].sizing?.max_width ?? Infinity) - widths[index]));
+			widths[index] += add;
+			used += add;
+		}
+		if (used < .01) break;
+		remaining -= used;
+		active = active.filter((index) => widths[index] + .01 < (items[index].sizing?.max_width ?? Infinity));
+	}
+	return widths;
+}
+function height$1(item, natural, slot) {
+	const sizing = item.sizing || {}, mode = sizing.height_mode || "auto";
+	const requested = mode === "content" ? natural : mode === "fill" && slot !== null ? slot : Number.isFinite(item.height) ? item.height : mode === "auto" && slot !== null ? slot : natural;
+	return Math.min(slot ?? Infinity, Math.max(sizing.min_height || 0, Math.min(sizing.max_height ?? Infinity, requested)));
+}
+function textHeight(text, width, size, weight, measure) {
+	const available = Math.max(1, width), space = measure(" ", size, weight);
+	let lines = 0;
+	for (const paragraph of String(text).split("\n")) {
+		lines++;
+		let used = 0;
+		for (const word of paragraph.split(/\s+/).filter(Boolean)) {
+			const advance = measure(word, size, weight);
+			if (used && used + space + advance > available) {
+				lines++;
+				used = 0;
+			}
+			const wraps = Math.max(1, Math.ceil(advance / available));
+			lines += wraps - 1;
+			used = (used ? used + space : 0) + advance - (wraps - 1) * available;
+		}
+	}
+	return Math.max(24, lines * Math.ceil(size * 1.33));
+}
+function grid(items, width, settings, gap) {
+	const count = Math.max(1, Math.min(settings.columns || 3, Math.floor((width + gap) / ((settings.min_cell_width || 200) + gap))));
+	const unit = Math.max(0, (width - gap * (count - 1)) / count), rowHeight = settings.row_height || 120;
+	const occupied = [], placements = [];
+	for (const [index, item] of items.entries()) {
+		const columns = Math.min(count, item.columnSpan || 1), rows = item.rowSpan || 1;
+		let row = 0, column = 0;
+		for (;;) {
+			if (column + columns <= count && Array.from({ length: rows }, (_, dy) => dy).every((dy) => Array.from({ length: columns }, (_, dx) => dx).every((dx) => !occupied[row + dy]?.[column + dx]))) break;
+			if (++column >= count) {
+				column = 0;
+				row++;
+			}
+		}
+		for (let dy = 0; dy < rows; dy++) {
+			if (!occupied[row + dy]) occupied[row + dy] = [];
+			for (let dx = 0; dx < columns; dx++) occupied[row + dy][column + dx] = true;
+		}
+		placements.push({
+			index,
+			x: column * (unit + gap),
+			y: row * (rowHeight + gap),
+			width: unit * columns + gap * (columns - 1),
+			height: rowHeight * rows + gap * (rows - 1)
+		});
+	}
+	return {
+		columns: count,
+		placements,
+		height: occupied.length ? occupied.length * (rowHeight + gap) - gap : 0
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/layout.ui.mjs
 function hasDetails(items = []) {
 	return items.some((item) => item.kind === "details" || hasDetails(item.children || []));
@@ -2448,12 +2706,12 @@ function plain(value) {
 		"#39": "'"
 	})[entity]);
 }
-function describe$54(cell, width, height, language, editable = true, server = "") {
+function describe$54(cell, width, height, language, editable = true, server = "", measure = (text, size) => String(text).length * size) {
 	const tabOffset = cell.layoutTabs?.length ? 56 : 0;
 	const children = [], gap = 8, tableHeight = Math.max(320, height - tabOffset - 48);
 	const controls = cell.layoutState?.controls || cell.layoutControls || [];
 	const pageFilters = describe$55(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), Math.max(0, width - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
-	function draw(items, originX, originY, space, prefix = "customLayout", startIndex = 0, output = children, bottom = Infinity, spacing = 8) {
+	function draw(items, originX, originY, space, prefix = "customLayout", startIndex = 0, output = children, bottom = Infinity, spacing = 8, slotHeight = null) {
 		let top = originY;
 		for (const [index, source] of (items || []).entries()) {
 			const id = prefix + "_" + (index + startIndex);
@@ -2469,18 +2727,21 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 				0,
 				0,
 				0
-			], outerTop = top, outerWidth = Math.min(space, /^\d+(?:px)?$/.test(item.width || "") ? parseFloat(item.width) : space), x = originX + margin[3] + padding[3], available = Math.max(0, outerWidth - margin[1] - margin[3] - padding[1] - padding[3]), firstOutput = output.length, childGap = item.gap === void 0 ? 8 : item.gap;
+			], outerTop = top, outerWidth = width$1(item, space, measure), x = originX + margin[3] + padding[3], available = Math.max(0, outerWidth - margin[1] - margin[3] - padding[1] - padding[3]), firstOutput = output.length, childGap = item.gap === void 0 ? 8 : item.gap;
 			top += margin[0] + padding[0];
 			let extent = 0;
 			if (item.children) {
-				if (item.kind === "row" && available >= 600) {
+				const horizontal = item.kind === "row" && available >= (item.collapseWidth ?? 600);
+				if (item.kind === "grid") {
+					const cells = grid(item.children, available, item, childGap);
+					for (const cell of cells.placements) draw([item.children[cell.index]], x + cell.x, top + cell.y, cell.width, id, cell.index, output, bottom, childGap, cell.height);
+					extent = cells.height || item.row_height || 120;
+				} else if (horizontal) {
 					const budget = Math.max(0, available - childGap * (item.children.length - 1));
-					const requested = item.children.map((child) => /%$/.test(child.width || "") ? parseFloat(child.width) / 100 * budget : /^\d+(?:px)?$/.test(child.width || "") ? parseFloat(child.width) : 0);
-					const fixed = requested.reduce((sum, value) => sum + value, 0);
-					const flex = item.children.reduce((sum, child, index) => sum + (requested[index] ? 0 : Number(child.weight) || 1), 0);
+					const widths = rowWidths(item.children, budget, measure);
 					let left = x;
 					for (const [column, child] of item.children.entries()) {
-						const part = requested[column] ? requested[column] * Math.min(1, budget / Math.max(1, fixed)) : Math.max(0, budget - fixed) * (Number(child.weight) || 1) / Math.max(1, flex);
+						const part = widths[column];
 						extent = Math.max(extent, draw([child], left, top, part, id, column, output, bottom, childGap));
 						left += part + childGap;
 					}
@@ -2506,8 +2767,37 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 					})]
 				}));
 			} else if (item.kind === "text") {
-				extent = text ? Math.max(28, Math.ceil(String(text).length / Math.max(1, Math.floor(available / 8))) * 22) : 0;
-				if (extent) output.push(label(id, rect$1(x, top, available, extent), text, { wrap: true }));
+				const role = item.textRole || "body", size = textStyles[role];
+				extent = text ? item.editorPath ? textHeight(text, available, size, item.textWeight || 400, measure) : Math.max(28, Math.ceil(String(text).length / Math.max(1, Math.floor(available / 8))) * 22) : 0;
+				if (extent) output.push(label(id, rect$1(x, top, available, extent), text, {
+					wrap: true,
+					fontRole: role,
+					weight: item.textWeight || 400,
+					align: item.textAlign || "left",
+					color: item.textColor || "primaryText"
+				}));
+			} else if (item.kind === "icon") {
+				extent = item.iconSize || 32;
+				output.push(node("Icon", id, rect$1(x, top, Math.min(available, extent), extent), {
+					icon: item.icon || "folder",
+					text,
+					color: item.textColor || "primaryText"
+				}));
+			} else if (item.kind === "image") {
+				extent = Number.isFinite(item.height) ? item.height : 160;
+				output.push(node("Preview", id, rect$1(x, top, available, extent), {
+					source: link(item.image, server) || "",
+					initials: String(text).slice(0, 2),
+					round: false,
+					outlined: false,
+					fit: item.fit || "contain"
+				}));
+			} else if (item.kind === "divider" || item.kind === "spacer") {
+				extent = item.height || (item.kind === "divider" ? 24 : 16);
+				if (item.kind === "divider") output.push(node("Box", id, rect$1(x, top + Math.floor(extent / 2), available, 1), {
+					background: item.textColor || "outlineVariant",
+					radius: 0
+				}));
 			} else if (item.kind === "markdown") {
 				extent = Number.isFinite(item.height) ? item.height : prefix.startsWith("customLayoutDetails") ? Math.max(48, Math.min(560, String(text).split("\n").reduce((sum, line) => sum + Math.max(1, Math.ceil(line.length / Math.max(1, Math.floor(available / 8)))), 0) * 22 + 24)) : Math.max(240, Math.min(560, tableHeight));
 				if (prefix.startsWith("customLayoutDetails") && !Number.isFinite(item.height)) extent = Math.min(extent, Math.max(48, bottom - top));
@@ -2594,19 +2884,42 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 				}));
 			} else {
 				extent = 40;
-				output.push(button(id, rect$1(x, top, available, extent), text, item.kind === "link" ? "open-in-new" : "edit", {
+				output.push(button(id, rect$1(x, top, available, extent), text, item.icon || (["link", "button"].includes(item.kind) ? "open-in-new" : "edit"), {
 					type: "service",
-					name: item.kind === "link" ? "layout-link" : "script",
+					name: ["link", "button"].includes(item.kind) ? "layout-link" : "script",
 					href: item.href,
 					javascript: item.javascript,
 					selector: item.selector
-				}, item.kind === "link" || editable && !cell.layoutBusy, { outlined: true }));
+				}, ["link", "button"].includes(item.kind) ? !!item.href : editable && !cell.layoutBusy, {
+					highlighted: item.buttonStyle === "primary",
+					tonal: item.buttonStyle === "tonal"
+				}));
 			}
-			if (item.editorPath && Number.isFinite(item.height) && ![
-				"items",
-				"table",
-				"details"
-			].includes(item.kind)) extent = item.height;
+			if (item.editorPath) {
+				const overhead = [
+					"items",
+					"table",
+					"details"
+				].includes(item.kind) ? 32 : 0;
+				const contentSlot = slotHeight === null ? null : Math.max(0, slotHeight - margin[0] - margin[2] - padding[0] - padding[2] - overhead);
+				const resolved = height$1(item, Math.max(0, extent - overhead), contentSlot) + overhead;
+				if (resolved !== extent) {
+					const surface = output[firstOutput];
+					if (surface && [
+						"metric",
+						"image",
+						"button",
+						"link",
+						"chart",
+						"summary",
+						"markdown"
+					].includes(item.kind)) surface.height = resolved;
+					if (["table", "items"].includes(item.kind)) {
+						for (const surface of output.slice(firstOutput)) if (surface.kind === "View") surface.height = Math.max(0, resolved - 32);
+					}
+				}
+				extent = resolved;
+			}
 			const outerHeight = extent + margin[0] + margin[2] + padding[0] + padding[2];
 			if (item.editorPath) {
 				const content = output.splice(firstOutput);
@@ -2644,7 +2957,7 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 						height: "clickMotionSlow"
 					} : null,
 					editorPath: item.editorPath,
-					clip: Number.isFinite(item.height),
+					clip: Number.isFinite(item.height) || slotHeight !== null || !!item.sizing?.max_height || ["fixed", "fill"].includes(item.sizing?.height_mode),
 					children: content
 				}));
 			}
@@ -20401,7 +20714,7 @@ var _sfc_main$116 = {
 			layoutDesigning: props.editing && props.guides,
 			layoutFilterBusy: props.filterBusy,
 			layoutError: error.value
-		}, canvasSize.value.width - (props.canvasViewport ? 24 : 0), Math.max(1, canvasSize.value.height - (props.canvasViewport ? 24 : 0)), appearance.language, true, location.origin));
+		}, canvasSize.value.width - (props.canvasViewport ? 24 : 0), Math.max(1, canvasSize.value.height - (props.canvasViewport ? 24 : 0)), appearance.language, true, location.origin, (text, size, weight = 400) => qtLabelTextWidth(text, `${weight} ${size}px Segoe UI`)));
 		const canvasSize = computed(() => props.canvasViewport ? dimensions$3(props.canvasViewport, props.frameNode?.width ?? props.width, props.frameNode?.height ?? props.height) : {
 			width: props.frameNode?.width ?? props.width,
 			height: props.frameNode?.height ?? props.height,
@@ -21811,6 +22124,7 @@ var ResultPresentation = asyncComponent(() => __vitePreload(() => import("./Resu
 var _sfc_main$109 = {
 	name: "ConfiguredView",
 	inject: {
+		openLayoutLink: { default: null },
 		openTableCheckin: { default: null },
 		openTableSecurity: { default: null },
 		openTablePort: { default: null }
@@ -22840,6 +23154,11 @@ var _sfc_main$109 = {
 					return;
 				}
 				if (kind === "layout-link") {
+					if (/^(skey|tactic-search):/i.test(cell.href || "")) {
+						if (!this.openLayoutLink) throw new Error("TACTIC link navigation is unavailable");
+						await this.openLayoutLink(cell.href, context.project);
+						return;
+					}
 					const href = link(cell.href, location.origin);
 					if (!href) throw new Error("Unsupported table link");
 					window.open(href, "_blank", "noopener,noreferrer");
@@ -57074,6 +57393,7 @@ var _sfc_main = {
 				this.openCommitQueue();
 			},
 			openObjectTab: (key, project) => this.openRichLink(key, false, project, false),
+			openLayoutLink: (link, project) => this.openRichLink(link, false, project),
 			openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice("Access denied"),
 			openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
 			openTableCheckin: (record, cell, project) => this.openTableCheckin(record, cell, project),
@@ -62213,6 +62533,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { roles as $, _sfc_main$116 as A, geometry$2 as At, duplicateProfile as B, captionedSwitch as C, appearances as Ct, changeDefinition as D, duplicate as Dt, _sfc_main$107 as E, copy as Et, ObjectAction_default as F, reorder$1 as Ft, alignment as G, _sfc_main$131 as H, _sfc_main$126 as I, reparent as It, toggle as J, roots as K, applyDuplicateProfile as L, siblings as Lt, zooms as M, layers as Mt, ResultPresentation_default as N, path as Nt, definitionWizard as O, fingerprint as Ot, RelatedObjects_default as P, remove$2 as Pt, edit$2 as Q, changeContent as R, spacing$1 as Rt, _sfc_main$63 as S, add as St, _sfc_main$100 as T, change$6 as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$145 as W, actions$4 as X, spacingField as Y, describe$48 as Z, editColumn as _, filter as _t, updateModes as a, notices as at, describe$18 as b, scope as bt, runBrowserScript as c, tabs as ct, ProjectCreation_default as d, App_default as default, views as dt, serialize as et, ImagePicker_default as f, _sfc_main$166 as ft, describe$17 as g, fields$2 as gt, contentWidth as h, change$5 as ht, updateIntervals as i, documentEvent as it, controls$1 as j, kinds as jt, displayWidgets as k, geometries as kt, scriptTree as l, toolbar$4 as lt, change as m, actionLayout as mt, networkSettings as n, variants as nt, _sfc_main$26 as o, policy as ot, readPreviewImage as p, _sfc_main$171 as pt, selected as q, updateBatchDelays as r, widgets as rt, buttonId as s, sectionSelector as st, App_exports as t, template as tt, lifecycle as u, _sfc_main$158 as ut, fieldsFor as v, mode as vt, _sfc_main$98 as w, block as wt, pages as x, type as xt, confirmation$2 as y, options$1 as yt, contentChoices as z };
+export { roles as $, _sfc_main$116 as A, geometry$2 as At, duplicateProfile as B, captionedSwitch as C, appearances as Ct, changeDefinition as D, duplicate as Dt, _sfc_main$107 as E, copy as Et, ObjectAction_default as F, reorder$1 as Ft, alignment as G, _sfc_main$131 as H, _sfc_main$126 as I, reparent as It, toggle as J, roots as K, applyDuplicateProfile as L, siblings as Lt, zooms as M, layers as Mt, ResultPresentation_default as N, path as Nt, definitionWizard as O, fingerprint as Ot, RelatedObjects_default as P, remove$2 as Pt, edit$2 as Q, changeContent as R, sizing as Rt, _sfc_main$63 as S, add as St, _sfc_main$100 as T, change$6 as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$145 as W, actions$4 as X, spacingField as Y, describe$48 as Z, editColumn as _, filter as _t, updateModes as a, notices as at, describe$18 as b, scope as bt, runBrowserScript as c, tabs as ct, ProjectCreation_default as d, App_default as default, views as dt, serialize as et, ImagePicker_default as f, _sfc_main$166 as ft, describe$17 as g, fields$2 as gt, contentWidth as h, change$5 as ht, updateIntervals as i, documentEvent as it, controls$1 as j, kinds as jt, displayWidgets as k, geometries as kt, scriptTree as l, toolbar$4 as lt, change as m, actionLayout as mt, networkSettings as n, variants as nt, _sfc_main$26 as o, policy as ot, readPreviewImage as p, _sfc_main$171 as pt, selected as q, updateBatchDelays as r, widgets as rt, buttonId as s, sectionSelector as st, App_exports as t, template as tt, lifecycle as u, _sfc_main$158 as ut, fieldsFor as v, mode as vt, _sfc_main$98 as w, block as wt, pages as x, type as xt, confirmation$2 as y, options$1 as yt, contentChoices as z, spacing$1 as zt };
 
 //# sourceMappingURL=App.js.map

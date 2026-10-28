@@ -129,6 +129,16 @@ fixtures['selection'] = dict(document=selection_document,compiled=dict(title='Se
     layoutNodes=[dict(kind='group',height=340,editorPath=[0],children=[dict(kind='text',text=name,width='120px',height=50,offsetX=index*140,appearance=appearance,editorPath=[0,index])
         for index,name in enumerate(('First','Second','Third'))])]))
 icons = qml_icon_bindings(TH, app)
+kit_document=dict(name='kit',title='Layout kit',blocks=[dict(kind='grid',columns=3,min_cell_width=200,row_height=120,gap=12,children=[
+    dict(kind='heading',text='Project overview',column_span=2,row_span=1,sizing=dict(height_mode='content'),text_role='heading',text_weight=600),
+    dict(kind='icon',icon='folder',icon_size=40),
+    dict(kind='button',title='Open project',href='skey://sthpw/project?code=demo',button_style='primary',sizing=dict(width_mode='content',height_mode='content')),
+    dict(kind='image',binding='project'),dict(kind='divider'),dict(kind='spacer')])])
+kit_nodes=[dict(kind='text',text='Project overview',textRole='heading',textWeight=600,columnSpan=2,editorPath=[0,0],sizing=dict(height_mode='content')),
+    dict(kind='icon',text='Folder',icon='folder',iconSize=40,editorPath=[0,1]),
+    dict(kind='button',text='Open project',href='skey://sthpw/project?code=demo',buttonStyle='primary',sizing=dict(width_mode='content',height_mode='content'),editorPath=[0,2]),
+    dict(kind='image',text='Demo',image='',fit='contain',editorPath=[0,3]),dict(kind='divider',editorPath=[0,4]),dict(kind='spacer',editorPath=[0,5])]
+fixtures['kit']=dict(document=kit_document,compiled=dict(title='Layout kit',targetSearchKey='sthpw/project?code=demo',layoutNodes=[dict(kind='grid',columns=3,min_cell_width=200,row_height=120,gap=12,children=kit_nodes,editorPath=[0])]))
 captures = []
 sources = source_hashes(
     ROOT,
@@ -140,7 +150,7 @@ sources = source_hashes(
     ],
 )
 from itertools import product
-for scenario, mode in product(["layout", "data", "reports", "viewport", "selection"], ["dark", "light"]):
+for scenario, mode in product(["layout", "data", "reports", "viewport", "selection", "kit"], ["dark", "light"]):
     for language in ["en", "ru"]:
         for width in [1400, 850]:
             host = DashboardEditor(
@@ -176,7 +186,7 @@ for scenario, mode in product(["layout", "data", "reports", "viewport", "selecti
                 (
                     'import QtQuick\nimport QtQuick.Controls\nimport "'
                     + (TH / "thlib/ui/qml").as_uri()
-                    + '" as TH\nApplicationWindow {id:root;visible:true;width:1400;height:740;color:theme.workspace;property string language:"en";property alias dark:theme.dark;function configureSelection(){editor.dispatch({type:"selection",keys:["0.0","0.1"]})}function configureViewport(){editor.dispatch({type:"canvasSize",value:"800"});editor.dispatch({type:"canvasZoom",value:"50"})}function selectPanel(value){if(editor.ui.preview !== (value==="preview"))editor.dispatch({type:"preview"});if(value!=="preview"){editor.dispatch({type:"panel",value});editor.dispatch({type:"select",key:"0.0"})}}TH.Theme{id:theme;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}TH.PageLayoutEditorView{id:editor;anchors.fill:parent;theme:theme;controller:fixture;language:root.language}}'
+                    + '" as TH\nApplicationWindow {id:root;visible:true;width:1400;height:740;color:theme.workspace;property string language:"en";property alias dark:theme.dark;function configureKit(phone){editor.dispatch({type:"canvasSize",value:phone?"360":"800"})}function configureSelection(){editor.dispatch({type:"selection",keys:["0.0","0.1"]})}function configureViewport(){editor.dispatch({type:"canvasSize",value:"800"});editor.dispatch({type:"canvasZoom",value:"50"})}function selectPanel(value){if(editor.ui.preview !== (value==="preview"))editor.dispatch({type:"preview"});if(value!=="preview"){editor.dispatch({type:"panel",value});editor.dispatch({type:"select",key:"0.0"})}}TH.Theme{id:theme;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}TH.PageLayoutEditorView{id:editor;anchors.fill:parent;theme:theme;controller:fixture;language:root.language}}'
                 ).encode(),
                 QUrl(),
             )
@@ -187,6 +197,8 @@ for scenario, mode in product(["layout", "data", "reports", "viewport", "selecti
             assert window
             if scenario == 'viewport':
                 window.configureViewport()
+            if scenario == 'kit':
+                window.configureKit(width < 1000)
             try:
                 for panel in (["properties"] if scenario == "data" else ["canvas", "properties", "preview"]):
                     window.selectPanel(panel)

@@ -100,6 +100,7 @@ export default {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
     openObjectTab: (key, project) => this.openRichLink(key, false, project, false),
+    openLayoutLink: (link, project) => this.openRichLink(link, false, project),
     openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice('Access denied'),
     openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
     openTableCheckin: (record,cell,project) => this.openTableCheckin(record,cell,project),

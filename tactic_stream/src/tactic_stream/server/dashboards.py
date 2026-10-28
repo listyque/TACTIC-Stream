@@ -241,7 +241,22 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
         _require_table_access(detail.get_base_search_type())
 
     def validate_binding(block, search_type='', in_details=False):
-        if block.kind not in ('text','markdown'):
+        if block.kind == 'image':
+            if block.field or block.binding == 'static':
+                raise ValueError('Images use an object preview, not a field or static text')
+            if block.binding == 'selection' and not in_details:
+                raise ValueError('Place selection-bound widgets inside Details')
+            if block.binding == 'record' and not block.source_key:
+                raise ValueError('Choose a source record')
+            if block.binding in ('project','selection') and block.source_key:
+                raise ValueError('This binding cannot also reference a fixed record')
+            if block.source_key:
+                source = selected_object(block.source_key)
+                if block.search_type and source.get_base_search_type() != block.search_type:
+                    raise ValueError('The record belongs to another data source')
+                _require_table_access(source.get_base_search_type())
+            return
+        if block.kind not in ('text','heading','markdown'):
             if block.binding!='auto' or block.field or block.source_key:
                 raise ValueError('Field bindings belong to Text or Markdown widgets')
             return
@@ -310,7 +325,7 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             if block.kind in ('details','items'):
                 raise ValueError('Details reuse the existing item workspace; nesting another is unsupported')
             validate_binding(block,search_type,True)
-            if block.kind in ('row','column'):
+            if block.kind in ('row','column','grid'):
                 scoped_type = block.search_type or search_type
                 if scoped_type:
                     info = SearchType.get(scoped_type)
@@ -336,13 +351,13 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             if block.source_key:
                 source = selected_object(block.source_key)
                 _require_table_access(source.get_base_search_type())
-                if block.field not in SearchType.get_column_info(source.get_base_search_type()):
+                if block.kind != 'image' and block.field not in SearchType.get_column_info(source.get_base_search_type()):
                     raise ValueError('Detail source requires an existing field')
-            if block.kind == 'link':
+            if block.kind in ('link','button') and block.href:
                 url = urlsplit(block.href)
                 if url.scheme not in ('http','https','skey','tactic-search') or not url.netloc or url.username or url.password:
                     raise ValueError('Dashboard links require a safe HTTP or TACTIC address')
-            if block.field and not block.source_key and block.binding not in ('project','static'):
+            if block.kind != 'image' and block.field and not block.source_key and block.binding not in ('project','static'):
                 if not (block.search_type or search_type) or block.field not in SearchType.get_column_info(block.search_type or search_type):
                     raise ValueError('Bind detail fields inside a group with an existing Search Type')
 
@@ -360,7 +375,16 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
                 node.update(editorPath=list(block_path), padding=block.padding,
                             margin=block.margin, gap=block.gap,
                             offsetX=block.offset_x, offsetY=block.offset_y,
-                            appearance=block.appearance.model_dump())
+                            appearance=block.appearance.model_dump(), sizing=block.sizing.model_dump(),
+                            columns=block.columns, min_cell_width=block.min_cell_width,
+                            row_height=block.row_height, columnSpan=block.column_span, rowSpan=block.row_span,
+                            collapseWidth=block.collapse_width,
+                            textRole=('heading' if block.kind=='heading' else 'body') if block.text_role=='auto' else block.text_role,
+                            textAlign=block.text_align, textColor=('outlineVariant' if block.kind=='divider' else 'primaryText') if block.text_color=='auto' else block.text_color,
+                            textWeight=block.text_weight,
+                            icon=block.icon, iconSize=block.icon_size)
+                if block.sizing.width_mode == 'fixed' and block.width is None or block.sizing.height_mode == 'fixed' and block.height is None:
+                    raise ValueError('Fixed sizing requires a numeric width or height')
                 if block.height is not None:
                     node['height'] = block.height
                 if block.width is not None:
@@ -370,16 +394,16 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             budget[0]-=1
             if budget[0]<0:
                 raise ValueError('Dashboard exceeds 128 bricks')
-            if detail_key and not in_details and block.kind not in ('row','column','details'):
+            if detail_key and not in_details and block.kind not in ('row','column','grid','details'):
                 continue
-            if block.kind not in ('text','markdown'):
-                validate_binding(block)
-            if block.kind in ('row','column'):
+            if block.kind not in ('text','heading','markdown'):
+                validate_binding(block,context.get_base_search_type(),in_details)
+            if block.kind in ('row','column','grid'):
                 if block.search_type and not in_details:
                     raise ValueError('Search Type conditions are only supported inside details')
                 if block.search_type and block.search_type != context.get_base_search_type():
                     continue
-                emit(dict(kind='row' if block.kind=='row' else 'group',
+                emit(dict(kind='row' if block.kind=='row' else 'grid' if block.kind=='grid' else 'group',
                     children=compile_blocks(block.children,depth+1,context,in_details,block_path),weight=block.weight))
                 continue
             if block.kind=='details':
@@ -393,10 +417,10 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             if block.children:
                 raise ValueError('Only row/column bricks may contain children')
             validate_binding(block,context.get_base_search_type(),in_details)
-            if (in_details and block.kind in ('text','markdown') and block.binding in ('auto','selection')
+            if (in_details and block.kind in ('text','heading','markdown') and block.binding in ('auto','selection')
                     and not block.source_key and block.search_type and block.search_type!=context.get_base_search_type()):
                 continue
-            if block.kind=='text':
+            if block.kind in ('text','heading'):
                 value = block.text or block.title
                 if block.field:
                     source=binding_source(block,context)
@@ -430,11 +454,25 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
                         value = '## ' + block.title + '\n\n' + value
                     emit(dict(kind='markdown',text=value,weight=block.weight,height=block.height))
                 continue
-            if block.kind=='link':
+            if block.kind in ('link','button'):
                 url=urlsplit(block.href)
-                if url.scheme not in ('http','https','skey','tactic-search') or not url.netloc or url.username or url.password:
+                if (block.href or block.kind=='link') and (url.scheme not in ('http','https','skey','tactic-search') or not url.netloc or url.username or url.password):
                     raise ValueError('Dashboard links require a safe HTTP or TACTIC address')
-                emit(dict(kind='link',text=block.title or block.href,href=block.href,weight=block.weight))
+                emit(dict(kind=block.kind,text=block.title or block.href,href=block.href,buttonStyle=block.button_style,weight=block.weight))
+                continue
+            if block.kind in ('icon','divider','spacer'):
+                emit(dict(kind=block.kind,text=block.title,weight=block.weight))
+                continue
+            if block.kind == 'image':
+                from pyasm.widget import ThumbWdg
+                from .table_cells import safe_link
+                source = binding_source(block,context)
+                _require_table_access(source.get_base_search_type())
+                thumb = ThumbWdg(latest_icon='true',protocol='http')
+                thumb.set_sobjects([source]); thumb.preprocess(); thumb.set_current_index(0)
+                preview = thumb.get_cell_value()
+                emit(dict(kind='image',text=block.title or source.get_code(),image=safe_link(preview.get('image') or ''),fit=block.image_fit,
+                          target=source.get_search_key(),weight=block.weight))
                 continue
             if not block.search_type or '?' in block.search_type:
                 raise ValueError('Metric/table/items bricks require a base Search Type')

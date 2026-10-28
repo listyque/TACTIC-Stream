@@ -4,7 +4,7 @@ import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc
 import { n as sections } from "./sections.ui.js";
 import { a as projectPath } from "./links.js";
 import { t as listAction } from "./tree.ui.js";
-import { A as _sfc_main$2, At as geometry, Ct as appearances, Dt as duplicate, Et as copy, Ft as reorder, G as alignment, It as reparent, J as toggle, K as roots, Lt as siblings, M as zooms, Mt as layers, Nt as path, Ot as fingerprint, Pt as remove, Rt as spacing, St as add, Tt as change$1, Y as spacingField, _t as filter, at as notices, bt as scope$1, gt as fields$1, ht as change, it as documentEvent, j as controls, jt as kinds, kt as geometries, lt as toolbar$1, q as selected, st as sectionSelector, vt as mode, wt as block, xt as type, yt as options } from "./App.js";
+import { A as _sfc_main$2, At as geometry, Ct as appearances, Dt as duplicate, Et as copy, Ft as reorder, G as alignment, It as reparent, J as toggle, K as roots, Lt as siblings, M as zooms, Mt as layers, Nt as path, Ot as fingerprint, Pt as remove, Rt as sizing, St as add, Tt as change$1, Y as spacingField, _t as filter, at as notices, bt as scope$1, gt as fields$1, ht as change, it as documentEvent, j as controls, jt as kinds, kt as geometries, lt as toolbar$1, q as selected, st as sectionSelector, vt as mode, wt as block, xt as type, yt as options, zt as spacing } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
 var collections = [
 	"items",
@@ -401,6 +401,168 @@ function fields(model, ui, width, language, enabled) {
 	return result;
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.components.mjs
+function componentFields(fields, item, ui, canEdit, language, field) {
+	const tr = (text) => translate(text, language);
+	function choice(name, title, value, options) {
+		fields.push({
+			kind: "Choice",
+			id: "pageProperty_" + name,
+			title,
+			options: options.map(([value, label]) => ({
+				value: String(value),
+				label: tr(label)
+			})),
+			props: {
+				value: String(value),
+				enabled: canEdit && (ui.selection || []).length < 2,
+				action: {
+					type: "change",
+					field: name
+				}
+			}
+		});
+	}
+	if (["icon", "button"].includes(item.kind)) fields.push({
+		kind: "IconChoice",
+		id: "pageProperty_icon",
+		title: "Icon",
+		props: {
+			value: item.icon || "",
+			enabled: canEdit,
+			action: {
+				type: "change",
+				field: "icon"
+			}
+		}
+	});
+	if (item.kind === "icon") field("icon_size", "Icon size", item.icon_size || 32);
+	if (item.kind === "button") choice("button_style", "Button style", item.button_style || "normal", [
+		["normal", "Normal"],
+		["primary", "Primary"],
+		["tonal", "Tonal"]
+	]);
+	if (["text", "heading"].includes(item.kind)) {
+		choice("text_role", "Text style", item.text_role || "auto", [
+			["auto", "Auto"],
+			["caption", "Caption"],
+			["body", "Body"],
+			["bodyLarge", "Large body"],
+			["title", "Title"],
+			["heading", "Heading"],
+			["display", "Display"],
+			["statistic", "Statistic"],
+			["hero", "Hero"]
+		]);
+		choice("text_weight", "Text weight", item.text_weight || 400, [
+			[400, "Normal"],
+			[600, "Semibold"],
+			[700, "Bold"]
+		]);
+		choice("text_align", "Text alignment", item.text_align || "left", [
+			["left", "Left"],
+			["center", "Center"],
+			["right", "Right"]
+		]);
+	}
+	if ([
+		"text",
+		"heading",
+		"icon",
+		"divider"
+	].includes(item.kind)) {
+		choice("text_color", "Text / icon color", item.text_color || "auto", [
+			["auto", "Auto"],
+			["primaryText", "Primary text"],
+			["secondaryText", "Secondary text"],
+			["contentAccent", "Accent"],
+			["error", "Error"]
+		].concat((item.text_color || "").startsWith("#") ? [[item.text_color, item.text_color]] : []));
+		fields.push({
+			kind: "ColorChoice",
+			id: "pageCustomTextColor",
+			title: "Custom text / icon color",
+			props: {
+				value: (item.text_color || "").startsWith("#") ? item.text_color : "#607D8B",
+				enabled: canEdit,
+				action: {
+					type: "change",
+					field: "text_color"
+				}
+			}
+		});
+	}
+	if (item.kind === "image") choice("image_fit", "Image fit", item.image_fit || "contain", [["contain", "Contain"], ["cover", "Cover"]]);
+}
+function sizingFields(fields, item, ui, document, parent, canEdit, language, field) {
+	const tr = (text) => translate(text, language);
+	const sizing = Object.assign({
+		width_mode: "auto",
+		height_mode: "auto",
+		min_width: 0,
+		min_height: 0,
+		max_width: null,
+		max_height: null
+	}, item.sizing || {});
+	for (const [name, title] of [["width_mode", "Width behavior"], ["height_mode", "Height behavior"]]) fields.push({
+		kind: "Choice",
+		id: "pageSizing_" + name,
+		title,
+		options: [
+			["auto", "Auto"],
+			["fixed", "Fixed"],
+			["fill", "Fill container"],
+			["content", "Fit content"]
+		].map(([value, label]) => ({
+			value,
+			label: tr(label)
+		})),
+		props: {
+			value: sizing[name],
+			enabled: canEdit && (ui.selection || []).length < 2,
+			action: {
+				type: "sizing",
+				field: name
+			}
+		}
+	});
+	for (const [name, title] of [
+		["min_width", "Minimum width"],
+		["max_width", "Maximum width"],
+		["min_height", "Minimum height"],
+		["max_height", "Maximum height"]
+	]) {
+		const key = ui.selected + ":sizing:" + name;
+		fields.push({
+			id: "pageSizing_" + name,
+			title,
+			props: {
+				text: Object.prototype.hasOwnProperty.call(ui.text, key) ? ui.text[key] : String(sizing[name] ?? ""),
+				enabled: canEdit && (ui.selection || []).length < 2,
+				action: {
+					type: "buffer",
+					key
+				},
+				commitAction: {
+					type: "sizingCommit",
+					key,
+					field: name
+				}
+			}
+		});
+	}
+	if (item.kind === "grid") {
+		field("columns", "Grid columns", item.columns || 3);
+		field("min_cell_width", "Minimum cell width", item.min_cell_width || 200);
+		field("row_height", "Grid row height", item.row_height || 120);
+	}
+	if (item.kind === "row") field("collapse_width", "Stack below width", item.collapse_width ?? 600);
+	if (parent && block(document, parent)?.kind === "grid") {
+		field("column_span", "Column span", item.column_span || 1);
+		field("row_span", "Row span", item.row_span || 1);
+	}
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs
 function blockTitle(item, key, language) {
 	if (item.title && item.title !== item.kind) return item.title;
@@ -508,7 +670,14 @@ function describe(model, ui, width, height, language) {
 				table: "Table",
 				link: "Link",
 				chart: "Bar chart",
-				summary: "Grouped report"
+				summary: "Grouped report",
+				grid: "Grid layout",
+				heading: "Heading",
+				icon: "Icon",
+				image: "Object image",
+				button: "Button",
+				divider: "Divider",
+				spacer: "Spacer"
 			}[value])
 		}))),
 		enabled: canEdit && !ui.preview,
@@ -677,6 +846,7 @@ function describe(model, ui, width, height, language) {
 				}].concat(model.layers.filter((row) => [
 					"row",
 					"column",
+					"grid",
 					"details"
 				].includes(row.kind) && row.key !== ui.selected && !row.key.startsWith(ui.selected + ".")).map((row) => ({
 					value: row.key,
@@ -688,8 +858,13 @@ function describe(model, ui, width, height, language) {
 			});
 			fields$2.push(...fields$1(model, ui, right - 24, language, canEdit && (ui.selection || []).length < 2));
 			fields$2.push(...fields(model, ui, right - 24, language, canEdit && (ui.selection || []).length < 2));
-			if (["text", "markdown"].includes(item.kind) && mode(model.document, ui.selected) === "static") field("text", "Text", item.text || "", false, item.kind === "markdown" ? "Area" : void 0);
-			if (item.kind === "link") field("href", "Link URL", item.href || "");
+			if ([
+				"text",
+				"heading",
+				"markdown"
+			].includes(item.kind) && mode(model.document, ui.selected) === "static") field("text", "Text", item.text || "", false, item.kind === "markdown" ? "Area" : void 0);
+			if (["link", "button"].includes(item.kind)) field("href", "Link URL", item.href || "");
+			componentFields(fields$2, item, ui, canEdit, language, field);
 			fields$2.push({
 				kind: "Heading",
 				id: "pageLayoutHeading",
@@ -697,12 +872,14 @@ function describe(model, ui, width, height, language) {
 			});
 			field("offset_x", "Horizontal offset", item.offset_x || 0);
 			field("offset_y", "Vertical offset", item.offset_y || 0);
+			sizingFields(fields$2, item, ui, model.document, parent, canEdit, language, field);
 			field("width", "Width", item.width);
 			field("height", "Height", item.height);
 			field("weight", "Flexible width", item.weight || 1);
 			if ([
 				"row",
 				"column",
+				"grid",
 				"details"
 			].includes(item.kind)) field("gap", "Gap", item.gap ?? 8);
 			for (const name of ["padding", "margin"]) fields$2.push(spacingField("page" + name, tr(name === "padding" ? "Padding" : "Margin"), item[name] || [
@@ -1005,6 +1182,7 @@ function transition(ui, model, event) {
 			"selection",
 			"align",
 			"appearance",
+			"sizing",
 			"add",
 			"remove",
 			"change",
@@ -1103,6 +1281,14 @@ function transition(ui, model, event) {
 				if (changes.length) replace(geometries(model.document, changes, event.boxes).document);
 				break;
 			}
+			case "sizing":
+			case "sizingCommit":
+				if (ui.preview) break;
+				if (event.type === "sizingCommit" && !Object.prototype.hasOwnProperty.call(ui.text, event.key)) break;
+				replace(sizing(model.document, ui.selected, event.field, event.type === "sizingCommit" ? ui.text[event.key] : event.value));
+				next.text = Object.assign({}, next.text);
+				delete next.text[event.key];
+				break;
 			case "appearance":
 			case "appearanceCommit":
 				if (ui.preview) break;

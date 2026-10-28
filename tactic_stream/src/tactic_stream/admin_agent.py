@@ -689,7 +689,11 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
     @mcp.tool(annotations=read_only, structured_output=True)
     def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier, detail_key: Identifier | None = None,
                              filter_values: dict[str, DashboardFilterValue] | None = None) -> dict[str, Any]:
-        """Compose a shared native dashboard from row/column/text/markdown/count/table/items/details/link bricks.
+        """Compose a shared native dashboard from the discovered bricks and DashboardBlock schema.
+        Grid has columns/min_cell_width/row_height; children have column_span/row_span.
+        sizing modes are auto/fixed/fill/content, with preferred min/max constraints.
+        Heading/Text use native typography; Icon, object Image, safe-link Button, Divider and Spacer
+        reuse existing controls. Image binds project/selection/record, not an arbitrary image URL.
         Use one items brick for the existing native item-card tree, with its actual relationship/process
         branches, counts and actions. Only supply search_type, view and root filters; do not invent another tree.
         For navigation left/content right, put items and details in a weighted row.

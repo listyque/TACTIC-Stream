@@ -14,7 +14,8 @@ class HandlerLayouts(unittest.TestCase):
             (['node','tests/page_editor_parity.mjs'],root/'frontend')]):
             log=output/f'frame-{index}.log'
             with log.open('w',encoding='utf-8') as stream:
-                result=subprocess.run(command,cwd=cwd,env=environment,stdout=stream,stderr=subprocess.STDOUT,timeout=120)
+                result=subprocess.run(command,cwd=cwd,env=environment,stdout=stream,# 128 paired states exceed the old 104-state two-minute budget.
+                                      stderr=subprocess.STDOUT,timeout=180)
             self.assertEqual(result.returncode,0,log.read_text(encoding='utf-8'))
 
     def test_native_editor(self):

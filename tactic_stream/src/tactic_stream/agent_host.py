@@ -80,6 +80,8 @@ def task_prompt(request):
         'inside Details; fixed records use returned native keys. Do not guess fields or edit XML for page data. '
         'For dashboards and custom workspace pages use ts_dashboard_read(name), preview and save with native '
         'bricks, page filters, chart/summary grouped aggregates and transient filter_values; discover real fields first. '
+        'Use grid tracks/spans, sizing modes and native heading/icon/image/button/divider/spacer from the schema; '
+        'images use object preview bindings, buttons use safe native links. '
         'Navigation opens these as full workspace pages, not document '
         'popups or ordinary search tables. Keep existing dashboards by reading their exact document first. '
         'For project-specific item cards use ts_item_layout_read/preview/save: native sobject-layout XML, '

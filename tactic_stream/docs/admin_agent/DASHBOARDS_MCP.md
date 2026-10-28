@@ -292,8 +292,8 @@ the selected Items block opens its referenced card view. The agent still uses
 ts_dashboard_* and ts_item_layout_* with their existing rights, revisions and
 durable operation receipts. Canvas authoring introduces no additional execution
 permission or second data format. Preserve existing filters, sources and fields
-when changing geometry. Page drag reorders responsive row/column children; item
-drag edits grid cells. XML element `padding`/`margin` use four space-separated
+when changing geometry. Page drag edits bounded relative offsets; explicit structure actions reparent/reorder
+children. Item drag edits grid cells. XML element `padding`/`margin` use four space-separated
 integers (0..256); grid `gap` is 0..128. Automatic shared item flow is preserved.
 
 Item blocks in the authoring preview use up to three actual records in both clients;
@@ -431,3 +431,32 @@ Use the same discovery schema, preview and revisioned/idempotent dashboard Save;
 both TH and TS render these fields. Human group selection/alignment/guides are
 ephemeral editor operations; their resulting offsets/appearance are ordinary
 document fields. A group edit has one bounded local Undo entry.
+
+## Responsive layout and initial component palette
+
+DashboardBlock supports `grid`, `heading`, `icon`, `image`, `button`, `divider`,
+`spacer`. Grids use `columns` (1..12), `min_cell_width` (80..1200), `row_height`
+(40..800) and existing gap. Children use `column_span`/`row_span` (1..12), packed
+in free cells in row order. Column count/spans adapt to available width. Grids
+grow unless explicitly given a height. Avoid setting height just to create an
+empty container. Row `collapse_width` (0..2400, default600) controls stacking.
+
+Each block's `sizing` has width_mode/height_mode: auto, fixed, fill, content.
+Fixed needs numeric width/height. min_width/min_height default0, max_width/
+max_height default null; ranges follow existing width/height caps. Max>=min.
+Cells/host width bound preferred minimums; height uses content-box semantics.
+Use content for short text/buttons, fill for panels; use spans to enlarge cells.
+
+Heading/Text use `text_role` (auto/caption/body/bodyLarge/title/heading/display/
+statistic/hero), text_weight400/600/700, text_align left/center/right, text_color
+auto/primaryText/secondaryText/contentAccent/error/#RRGGBB. Icon/Button use the
+native `icon` name; icon_size16..128 applies to Icon. Button button_style is
+normal/primary/tonal. Its href uses the same safe HTTP(S)/TACTIC address contract
+as Link; empty new buttons are disabled. No generated script action.
+
+Image uses normal object thumbnails, not arbitrary URL fields. Binding is
+project, selection (inside Details), record (source_key required), or contextual
+auto. No field/static text binding. Source discovery and project/record ACL are
+the ordinary owners. image_fit is contain/cover. Existing UI controls/renderers
+are reused in TH and TS. The same preview/revisioned/idempotent Save applies.
+Editable forms, arbitrary actions, timelines and richer charts remain separate.

@@ -53,6 +53,7 @@ import { link as tableLink } from '../../../../src/tactic_stream/shared_ui/featu
 export default {
   name: 'ConfiguredView',
   inject: {
+    openLayoutLink: { default: null },
     openTableCheckin: { default: null },
     openTableSecurity: { default: null },
     openTablePort: { default: null }
@@ -1405,6 +1406,12 @@ export default {
           return;
         }
         if (kind === 'layout-link') {
+          if (/^(skey|tactic-search):/i.test(cell.href || '')) {
+            if (!this.openLayoutLink)
+              throw new Error('TACTIC link navigation is unavailable');
+            await this.openLayoutLink(cell.href, context.project);
+            return;
+          }
           const href = tableLink(cell.href, location.origin);
           if (!href) throw new Error('Unsupported table link');
           window.open(href, '_blank', 'noopener,noreferrer');
