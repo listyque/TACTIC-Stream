@@ -59287,7 +59287,8 @@ var _sfc_main = {
 			if (!workspace.sections.some((item) => item.id === id)) {
 				const connection = {
 					ticket: this.session.ticket,
-					project: this.project
+					project: this.project,
+					request: this.linkRequest
 				};
 				const title = link?.title || this.types.find((item) => item.search_type === type)?.title || type;
 				const scope = link?.name ? type.split("?")[0] + "@" + link.name : type.split("?")[0];
@@ -59296,12 +59297,17 @@ var _sfc_main = {
 				try {
 					if (!link?.layoutView) settings = await searchConfiguration("settings", connection.ticket, connection.project, type, { scope });
 				} catch (error) {
-					this.fail(error);
+					if (connection.request === this.linkRequest) this.fail(error);
 					return;
 				} finally {
-					this.busy = false;
+					if (connection.request === this.linkRequest) this.busy = false;
 				}
-				if (connection.ticket !== this.session?.ticket || connection.project !== this.project) return;
+				if (connection.ticket !== this.session?.ticket || connection.project !== this.project || connection.request !== this.linkRequest) return;
+				const assigned = settings?.presets.find((row) => row.view === link?.display?.options?.search_view);
+				if (assigned?.error) {
+					this.fail(new Error(assigned.error));
+					return;
+				}
 				const tab = searchTab(title, {
 					type,
 					view: link?.view || "table",
@@ -59314,10 +59320,14 @@ var _sfc_main = {
 					layoutView: link?.layoutView || "",
 					layoutTarget: link?.display?.options?.search_key || "",
 					quickSelections: settings?.configuration.defaultSelections || {},
-					quickLayout: null
+					quickLayout: null,
+					savedSearch: assigned?.view || "",
+					filterRecords: assigned?.records || [],
+					searchText: assigned?.keyword || "",
+					presetOrderBys: assigned?.order_bys || []
 				});
 				const tabs = [tab];
-				if (link?.display?.options?.search_view) for (const saved of (settings?.presets || []).filter((row) => row.view.endsWith(":" + scope))) {
+				if (link?.display?.options?.search_view) for (const saved of (settings?.presets || []).filter((row) => row.view !== assigned?.view && row.view.endsWith(":" + scope))) {
 					if (saved.error) {
 						this.error = saved.error;
 						continue;

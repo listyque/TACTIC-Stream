@@ -927,23 +927,27 @@ export default {
       if (!this.workspaceProjects[this.project]) this.workspaceProjects[this.project] = { current: '', sections: [] }
       const workspace = this.workspaceProjects[this.project]
       if (!workspace.sections.some(item => item.id === id)) {
-        const connection = { ticket: this.session.ticket, project: this.project }
+        const connection = { ticket: this.session.ticket, project: this.project, request: this.linkRequest }
         const title = link?.title || this.types.find(item => item.search_type === type)?.title || type
         const scope = link?.name ? type.split('?')[0] + '@' + link.name : type.split('?')[0]
         let settings
         this.busy = true
         try { if (!link?.layoutView) settings = await searchConfiguration('settings', connection.ticket, connection.project, type, { scope }) }
-        catch (error) { this.fail(error); return }
-        finally { this.busy = false }
-        if (connection.ticket !== this.session?.ticket || connection.project !== this.project) return
+        catch (error) { if (connection.request === this.linkRequest) this.fail(error); return }
+        finally { if (connection.request === this.linkRequest) this.busy = false }
+        if (connection.ticket !== this.session?.ticket || connection.project !== this.project || connection.request !== this.linkRequest) return
+        const assigned = settings?.presets.find(row => row.view === link?.display?.options?.search_view)
+        if (assigned?.error) { this.fail(new Error(assigned.error)); return }
         const tab = searchTab(title, { type, view: link?.view || 'table', viewTitle: link?.title || '',
           resultMode: link?.resultMode || link?.display?.options?.view_mode || this.flatViewLinks.find(item => item.supported && item.search_type === type)?.resultMode || preferences.checkin.defaultViewMode,
           configuredView: !!link, filterField, filterValue, scopeKey: scope,
           layoutView: link?.layoutView || '', layoutTarget: link?.display?.options?.search_key || '',
-          quickSelections: settings?.configuration.defaultSelections || {}, quickLayout: null })
+          quickSelections: settings?.configuration.defaultSelections || {}, quickLayout: null,
+          savedSearch: assigned?.view || '', filterRecords: assigned?.records || [],
+          searchText: assigned?.keyword || '', presetOrderBys: assigned?.order_bys || [] })
         // Handler NavigationMixin adds each search in this sidebar namespace as a tab.
         const tabs = [tab]
-        if (link?.display?.options?.search_view) for (const saved of (settings?.presets || []).filter(row => row.view.endsWith(':' + scope))) {
+        if (link?.display?.options?.search_view) for (const saved of (settings?.presets || []).filter(row => row.view !== assigned?.view && row.view.endsWith(':' + scope))) {
           if (saved.error) { this.error = saved.error; continue }
           tabs.push(searchTab(saved.title, { ...tab.state, savedSearch: saved.view, filterRecords: saved.records,
             searchText: saved.keyword || '', presetOrderBys: saved.order_bys || [] }))
