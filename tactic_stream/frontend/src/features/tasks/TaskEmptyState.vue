@@ -14,7 +14,8 @@ const props = defineProps({
 });
 const host = ref(null),
   width = ref(0),
-  height = ref(0);
+  height = ref(0),
+  target = ref(null);
 const scene = computed(() => {
   const toolbar = Workspace.toolbar(
       {
@@ -28,7 +29,7 @@ const scene = computed(() => {
   return UI.describe(
     {
       ...props,
-      target: {
+      target: target.value || {
         x: bounds.x + bounds.width / 2 - 6,
         y: bounds.y + bounds.height - toolbar.height - 5 + 4
       }
@@ -74,6 +75,17 @@ onMounted(() => {
   const measure = () => {
     width.value = frameContentWidth(host.value);
     height.value = host.value.clientHeight;
+    const button = host.value
+      .closest('.task-manager')
+      ?.querySelector('[data-frame="taskWorkspaceCreateButton"]');
+    if (button) {
+      const bounds = host.value.getBoundingClientRect(),
+        create = button.getBoundingClientRect();
+      target.value = {
+        x: create.x + create.width / 2 - bounds.x,
+        y: create.bottom + 4 - bounds.y
+      };
+    }
   };
   measure();
   observer = observeFrameSizes(measure);
@@ -95,5 +107,11 @@ onBeforeUnmount(() => observer?.disconnect());
 }
 .task-empty-state [data-frame='taskWorkspaceEmptyArrow'] {
   pointer-events: none;
+}
+/* Only empty guidance reaches into the toolbar; populated results keep scrolling. */
+.task-manager > .task-manager-results:has(> .task-empty-state) {
+  overflow: visible;
+  position: relative;
+  z-index: 1;
 }
 </style>

@@ -32502,7 +32502,7 @@ var _sfc_main$84 = {
 	},
 	setup(__props) {
 		const props = __props;
-		const host = ref(null), width = ref(0), height = ref(0);
+		const host = ref(null), width = ref(0), height = ref(0), target = ref(null);
 		const scene = computed(() => {
 			const toolbar = toolbar$1({
 				embedded: true,
@@ -32510,7 +32510,7 @@ var _sfc_main$84 = {
 			}, props.toolbarWidth || width.value + 12, appearance.language), bounds = toolbar.createBounds;
 			return describe$22({
 				...props,
-				target: {
+				target: target.value || {
 					x: bounds.x + bounds.width / 2 - 6,
 					y: bounds.y + bounds.height - toolbar.height - 5 + 4
 				}
@@ -32546,6 +32546,14 @@ var _sfc_main$84 = {
 			const measure = () => {
 				width.value = frameContentWidth(host.value);
 				height.value = host.value.clientHeight;
+				const button = host.value.closest(".task-manager")?.querySelector("[data-frame=\"taskWorkspaceCreateButton\"]");
+				if (button) {
+					const bounds = host.value.getBoundingClientRect(), create = button.getBoundingClientRect();
+					target.value = {
+						x: create.x + create.width / 2 - bounds.x,
+						y: create.bottom + 4 - bounds.y
+					};
+				}
 			};
 			measure();
 			observer = observeFrameSizes(measure);

@@ -39,12 +39,12 @@ const requests = [],
   writes = [];
 let stale = false;
 const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="app"></div><script type="module">
-import {createApp,h} from 'vue';import SearchHeader from '/src/features/workspace/SearchHeader.vue';import ObjectOperations from '/src/features/objects/ObjectOperations.vue';import ConfiguredView from '/src/features/interface/ConfiguredView.vue';import ColumnsEditor from '/src/features/administration/ColumnsEditor.vue';import {windowDirective} from '/src/controls/window.js';import {appearance,initializeAppearance} from '/src/appearance.js';import {tooltipDirective} from '/src/controls/tooltip.js';import '/src/theme.css';import '/src/style.css'
+import {createApp,h} from 'vue';import TaskEmptyState from '/src/features/tasks/TaskEmptyState.vue';import TaskWorkspaceToolbar from '/src/features/tasks/TaskWorkspaceToolbar.vue';import SearchHeader from '/src/features/workspace/SearchHeader.vue';import ObjectOperations from '/src/features/objects/ObjectOperations.vue';import ConfiguredView from '/src/features/interface/ConfiguredView.vue';import ColumnsEditor from '/src/features/administration/ColumnsEditor.vue';import {windowDirective} from '/src/controls/window.js';import {appearance,initializeAppearance} from '/src/appearance.js';import {tooltipDirective} from '/src/controls/tooltip.js';import '/src/theme.css';import '/src/style.css'
 Object.assign(appearance,{language:'en',theme:'md3',mode:'dark',palette:'default',accent:'default',hoverAnimations:false,clickAnimations:false,fadeAnimations:false,popupAnimations:false});initializeAppearance()
 const source=${JSON.stringify(fixture)}
 createApp({data(){return {page:'table',shelfOpen:false,definition:source.definition,rows:source.records,selected:[source.records[2].__search_key__],state:{},events:[],sortField:'name',sortDirection:'asc',ticket:'fixture',focus:null}},mounted(){window.host=this;window.appearance=appearance},methods:{select(rows,value){const set=new Set(this.selected);for(const r of rows)value?set.add(r.__search_key__):set.delete(r.__search_key__);this.selected=[...set]},saved(result){if(result?.records){const map=new Map(result.records.map(r=>[r.__search_key__,r]));this.rows=this.rows.map(r=>map.get(r.__search_key__)||r)}this.events.push({kind:'saved',result})}},render(){return h('main',{id:'frame',class:this.page==='editor'?'administration-shell':''},[
 h(ObjectOperations,{ref:'rowMenu',project:'table_fixture',operations:{edit:true}}),
-this.page==='header'?h(SearchHeader,{model:{shelfOpen:this.shelfOpen}}):this.page==='table'?h(ConfiguredView,{ref:'table',definition:this.definition,rows:this.rows,readOnly:false,ticket:this.ticket,project:'table_fixture',resultMode:'table',selectedKeys:this.selected,resultState:this.state,accent:source.accent,sortField:this.sortField,sortDirection:this.sortDirection,onSelect:this.select,onSaved:this.saved,onOperate:(record,event)=>this.$refs.rowMenu.open(record,event,{branch:{kind:'file'}}),onInspect:r=>this.events.push({kind:'inspect',key:r.__search_key__}),onColumn:scope=>this.events.push({kind:'column',scope}),onSort:(field,direction)=>{this.sortField=field;this.sortDirection=direction;this.events.push({kind:'sort',field,direction})},onResultState:s=>this.state=s}):h(ColumnsEditor,{ref:'editor',ticket:this.ticket,project:'table_fixture',presentationVisible:false,initialFocus:this.focus,onSaved:r=>this.events.push({kind:'definition-saved',result:r})})
+this.page==='empty'?h('section',{class:'task-manager',style:{height:'100%',display:'flex',flexDirection:'column'}},[h(TaskWorkspaceToolbar,{model:{embedded:true,canCreate:true}}),h('div',{class:'task-manager-results'},[h(TaskEmptyState,{canCreate:true})])]):this.page==='header'?h(SearchHeader,{model:{shelfOpen:this.shelfOpen}}):this.page==='table'?h(ConfiguredView,{ref:'table',definition:this.definition,rows:this.rows,readOnly:false,ticket:this.ticket,project:'table_fixture',resultMode:'table',selectedKeys:this.selected,resultState:this.state,accent:source.accent,sortField:this.sortField,sortDirection:this.sortDirection,onSelect:this.select,onSaved:this.saved,onOperate:(record,event)=>this.$refs.rowMenu.open(record,event,{branch:{kind:'file'}}),onInspect:r=>this.events.push({kind:'inspect',key:r.__search_key__}),onColumn:scope=>this.events.push({kind:'column',scope}),onSort:(field,direction)=>{this.sortField=field;this.sortDirection=direction;this.events.push({kind:'sort',field,direction})},onResultState:s=>this.state=s}):h(ColumnsEditor,{ref:'editor',ticket:this.ticket,project:'table_fixture',presentationVisible:false,initialFocus:this.focus,onSaved:r=>this.events.push({kind:'definition-saved',result:r})})
 ])}}).provide('openHelp',()=>{}).provide('openTableCheckin',(record,cell,project)=>window.host.events.push({kind:'drop-plate',key:record.__search_key__,process:cell.process,context:cell.context,project})).provide('openTaskInspector',(record,cell,process,key,scope)=>{window.host.events.push({kind:'inspector',record:record.__search_key__,process,key,scope:{project:scope.project,searchType:scope.searchType}});return true}).directive('window',windowDirective).directive('tooltip',tooltipDirective).mount('#app')
 </script><style>html,body,#app{width:100%;height:100%;overflow:hidden}#frame{width:100%;height:100%;background:var(--page)}#frame>.configured-view{display:flex;flex-direction:column;height:100%;width:100%;overflow:hidden}#frame>.columns-editor{height:100%;padding:0;gap:0}#frame>.columns-editor>.columns-editor-layout{height:100%;margin:0}#frame .administration-save-bar{display:none}</style></body></html>`;
 let server, browser;
@@ -948,6 +948,22 @@ try {
     assert.equal(paint.background, 'rgba(0, 0, 0, 0)');
     assert(['50%', '999px'].includes(paint.radius) || parseFloat(paint.radius) >= paint.width / 2);
   }
+  await page.evaluate(() => window.host.page = 'empty');
+  const arrow = page.locator('svg[data-frame="taskWorkspaceEmptyArrow"]');
+  await arrow.waitFor();
+  assert.equal(await page.locator('.task-manager-results').evaluate(el => getComputedStyle(el).overflowY), 'visible');
+  const arrowTop = (await arrow.boundingBox()).y;
+  const resultsTop = (await page.locator('.task-manager-results').boundingBox()).y;
+  assert(arrowTop < resultsTop, 'Arrow head extends outside the results into the toolbar');
+  const tip = await arrow.evaluate(svg => {
+    const points = [...svg.querySelector('path').getAttribute('d').matchAll(/M ([^ ]+) ([^ ]+)/g)];
+    const bounds = svg.getBoundingClientRect();
+    return {x:bounds.left + Number(points[1][1]), y:bounds.top + Number(points[1][2])};
+  });
+  const createButton = await page.locator('[data-frame="taskWorkspaceCreateButton"]').boundingBox();
+  assert(Math.abs(tip.x - createButton.x - createButton.width / 2) < 1);
+  assert(Math.abs(tip.y - createButton.y - createButton.height - 4) < 1);
+  await page.locator('.task-manager').screenshot({path:report + '/task-empty-fixed.png'});
   console.log(
     'PASS: Handler Table View and Columns Editor; native dimensions, interactions, editing, virtualization, EN/RU, 320px'
   );
