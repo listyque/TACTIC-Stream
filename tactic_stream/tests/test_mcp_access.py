@@ -1,5 +1,6 @@
 """Real MCP HTTP access: scopes, vault, revocation and native dashboard writes."""
 import asyncio
+import ast
 import json
 import unittest
 from unittest.mock import patch
@@ -34,6 +35,59 @@ class McpAccess(unittest.TestCase):
         try:test_transport.Transport.tearDownClass()
         finally:cls.factory.stop()
 
+    def test_no_deadline_access_can_be_limited_again_and_revoked(self):
+        from tactic_stream.server import mcp_access
+        from tactic_stream.server.api import Api
+        from pyasm.common.errors import AuthenticationError
+        from xmlrpc.client import Fault
+        with test_transport.Transport.proxy(self) as proxy:
+            auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            call=lambda action,**values:proxy.execute_cmd(auth,COMMAND,dict(action=action,project_code='one',**values))['info']
+            self.assertTrue(call('state')['unlimited_lifetime'])
+            context=dict(client='TS',project='one',page='',title='',search_type='',view='',search_keys=[])
+            for invalid in (-1, 1, 4, 481, True, '0', None):
+                with self.assertRaises(Fault):
+                    call('create', title='Invalid', tools=['agent_context'], minutes=invalid, context=context)
+            grant=call('create',title='Persistent',tools=['agent_context'],minutes=0,context=context)
+            self.assertIsNone(grant['expires'])
+            with urlopen(Request(self.url+grant['path'],headers={'Authorization':'Bearer '+grant['token'],'Accept':'application/json'})) as response:
+                self.assertIsNone(json.load(response)['expires'])
+            api=Api(test_transport.Transport.store)
+            private,ticket=mcp_access.authorize(api,grant['id'],grant['token'])
+            def query_ticket(key):
+                rows=proxy.query(auth,'sthpw/ticket',[['ticket',key]])
+                return (ast.literal_eval(rows) if isinstance(rows,str) else rows)[0]
+            self.assertNotEqual(ticket,auth['ticket'])
+            self.assertTrue(private['credential_owned'])
+            native=query_ticket(ticket)
+            self.assertIsNone(native['expiry'])
+            self.assertEqual(native['category'],'mcp:'+grant['id'])
+            self.assertNotIn(ticket,json.dumps(grant))
+            self.assertNotIn(ticket,json.dumps(private))
+            gui=query_ticket(auth['ticket'])
+            replacement=proxy.get_ticket('admin','private-test-password')
+            proxy.update(auth,gui['__search_key__'],dict(expiry='2000-01-01 00:00:00'))
+            auth['ticket']=replacement
+            mcp_access.authorize(api,grant['id'],grant['token'])
+            with patch.object(mcp_access.time,'time',return_value=10**12):
+                self.assertFalse(mcp_access.expired(private))
+                self.assertTrue(mcp_access.expired(dict(private,expires=0)))
+            with self.assertRaises(ValueError):mcp_access.authorize(api,grant['id'],'wrong-token')
+            values=dict(id=grant['id'],tools=['agent_context'],instructions='Keep this project scope.',
+                minutes=5,expected_revision=grant['revision'],operation_id=str(uuid4()))
+            limited=call('configure',**values)
+            self.assertIsInstance(limited['expires'],int)
+            with self.assertRaises(AuthenticationError):api.auth.validate(ticket)
+            self.assertEqual(call('configure',**values),limited)
+            with self.assertRaises(Fault):call('configure',**dict(values,operation_id=str(uuid4())))
+            permanent=call('configure',**dict(values,minutes=0,expected_revision=limited['revision'],operation_id=str(uuid4())))
+            self.assertIsNone(permanent['expires'])
+            _,persistent_ticket=mcp_access.authorize(api,grant['id'],grant['token'])
+            call('revoke',id=grant['id'])
+            with self.assertRaises(ValueError):mcp_access.authorize(api,grant['id'],grant['token'])
+            with self.assertRaises(AuthenticationError):api.auth.validate(persistent_ticket)
+            self.assertEqual(api.auth.validate(auth['ticket']),'admin')
+
     def test_real_mcp_scoped_tools_write_and_revocation(self):
         with test_transport.Transport.proxy(self) as proxy:
             ticket=proxy.get_ticket('admin','private-test-password')
@@ -44,7 +98,8 @@ class McpAccess(unittest.TestCase):
             self.assertFalse(any(tool['name'].startswith(('ts_project_','agent_conversation')) for tool in state['tools']))
             context=dict(client='TS',project='one',page='',title='Project',search_type='contract/entity',view='table',search_keys=['contract/entity?project=one&code=A'])
             names=['agent_context','ts_dashboard_read','ts_dashboard_preview','ts_dashboard_save']
-            grant=call('create',title='Fixture access',instructions='Track this project using native records.',tools=names,minutes=60,context=context)
+            grant=call('create',title='Fixture access',instructions='Track this project using native records.',tools=names,minutes=0,context=context)
+            self.assertIsNone(grant['expires'])
             self.assertNotIn(ticket,json.dumps(grant))
             self.assertNotIn('token',call('state')['connections'][0])
             private=json.loads((test_transport.Transport.store.data_dir/'agent_mcp'/(grant['id']+'.json')).read_text())
@@ -199,11 +254,12 @@ class McpAccess(unittest.TestCase):
             async def run():
                 server=create_server(StreamConnection(self.url,'one',ticket),Path(__file__).resolve().parents[1],request_id=request_id,allow_page_save=True)
                 async with Client(server) as client:
-                    values=dict(title='Tracker MCP',tools=['agent_context'],operation_id=operation,minutes=5)
+                    values=dict(title='Tracker MCP',tools=['agent_context'],operation_id=operation,minutes=0)
                     result=await client.call_tool('ts_mcp_connection_create',values)
                     self.assertFalse(result.is_error,str(result))
                     self.assertNotIn('token',result.structured_content)
                     self.assertTrue(result.structured_content['pending'])
+                    self.assertIsNone(result.structured_content['expires'])
                     self.assertEqual(result.structured_content,(await client.call_tool('ts_mcp_connection_create',values)).structured_content)
                     return result.structured_content
             issued=asyncio.run(run())

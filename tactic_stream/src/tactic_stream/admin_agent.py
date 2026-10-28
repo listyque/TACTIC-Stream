@@ -284,23 +284,25 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
             @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=True,idempotent_hint=True,open_world_hint=False),structured_output=True)
             def ts_mcp_connection_update(connection_id: Identifier, tools: Annotated[list[Identifier],Field(min_length=1,max_length=128)],
                     instructions: Annotated[str,Field(min_length=1,max_length=16384)], expected_revision: Identifier,
-                    operation_id: Identifier, minutes: Annotated[int,Field(strict=True,ge=5,le=480)]=60) -> dict[str,Any]:
+                    operation_id: Identifier, minutes: Annotated[int,Field(strict=True,ge=0,le=480)]=60) -> dict[str,Any]:
                 """Update owned project access and startup instructions without replacing the user's token.
 
                 Requires this chat's change permission. Read connection revision and tool names first with
                 ts_mcp_connections; keep UUID and payload on retry. External grants cannot redelegate rights.
+                Use 5..480 minutes, or 0 explicitly for no deadline; access remains revocable.
                 """
                 return connection.command('mcp','configure',request_id=request_id,id=connection_id,tools=tools,
                     instructions=instructions,expected_revision=expected_revision,operation_id=operation_id,minutes=minutes)
 
             @mcp.tool(annotations=ToolAnnotations(read_only_hint=False,destructive_hint=False,idempotent_hint=True,open_world_hint=False),structured_output=True)
             def ts_mcp_connection_create(title: Identifier, tools: Annotated[list[Identifier],Field(min_length=1,max_length=128)],
-                    operation_id: Identifier, instructions: Annotated[str,Field(max_length=16384)]='', minutes: Annotated[int,Field(strict=True,ge=5,le=480)]=60) -> dict[str, Any]:
+                    operation_id: Identifier, instructions: Annotated[str,Field(max_length=16384)]='', minutes: Annotated[int,Field(strict=True,ge=0,le=480)]=60) -> dict[str, Any]:
                 """Issue limited MCP access to this captured project, only with this chat's change permission.
 
                 Choose tool names from ts_mcp_connections. Keep operation UUID and exact payload on retries.
                 The user collects the token once in the MCP connections window; never invent a token or
                 claim the page URL grants access. Server MCP listener must be explicitly enabled first.
+                Use 5..480 minutes, or 0 explicitly for no deadline; access remains revocable.
                 """
                 return connection.command('mcp','create',request_id=request_id,title=title,tools=tools,
                     operation_id=operation_id,instructions=instructions,minutes=minutes)

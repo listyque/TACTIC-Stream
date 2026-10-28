@@ -1,8 +1,9 @@
-"""Expiring project MCP access; native credentials never leave the server vault."""
+"""Revocable project MCP access; native credentials never leave the server vault."""
 import asyncio
 import hashlib
 import hmac
 import json
+import secrets
 from pathlib import Path
 import time
 from uuid import UUID
@@ -22,12 +23,40 @@ def read_grant(code, root=None):
     return json.loads(path.read_text(encoding='utf-8')) if path.is_file() else None
 
 
+def expired(grant):
+    return grant['expires'] is not None and time.time() >= grant['expires']
+
+
+def credential(grant, unlimited):
+    from pyasm.security import Ticket
+    from tactic_stream.provider_credentials import seal
+    if unlimited:
+        if grant.get('credential_owned'):
+            return grant['credential'], True
+        key=secrets.token_urlsafe(32)
+        Ticket.create(key,grant['owner'],expiry=-1,category='mcp:'+grant['id'])
+        return seal(key), True
+    return seal(Environment.get_security().get_ticket_key()), False
+
+
+def retire_credential(grant):
+    if not grant.get('credential_owned'):
+        return
+    from pyasm.security import Ticket
+    from tactic_stream.provider_credentials import unseal
+    ticket=Ticket.get_by_key(unseal(grant['credential']))
+    if ticket:
+        if ticket.get_value('login')!=grant['owner'] or ticket.get_value('category')!='mcp:'+grant['id']:
+            raise ValueError('MCP connection credential ownership mismatch')
+        ticket.delete(triggers=False)
+
+
 def current_grant(row):
     if row.get('transport')!='mcp':
         return None
     grant=read_grant(row['request_id'])
     if (grant and grant['owner']==Environment.get_user_name() and grant['project']==Project.get_project_code()
-            and not grant['revoked'] and time.time()<grant['expires'] and grant['allow_changes']):
+            and not grant['revoked'] and not expired(grant) and grant['allow_changes']):
         return grant
     return None
 
@@ -71,7 +100,7 @@ def authorize(api, code, token):
     from tactic.ui.panel.agent_request_cmd import AgentRequestCmd
     from .navigation_links import check_project
     grant=read_grant(code,api.store.data_dir/'agent_mcp')
-    if (not grant or grant['revoked'] or time.time()>=grant['expires'] or not token or len(token)>512
+    if (not grant or grant['revoked'] or expired(grant) or not token or len(token)>512
             or not hmac.compare_digest(grant['token_hash'],hashlib.sha256(token.encode()).hexdigest())):
         raise ValueError('MCP connection is unavailable')
     ticket=unseal(grant['credential'])

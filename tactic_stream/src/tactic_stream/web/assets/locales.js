@@ -1949,7 +1949,10 @@ var en_default = {
 	"Choose Save or Check for this form": "Choose Save or Check for this form",
 	"The page changed while a save was pending. Check saved state.": "The page changed while a save was pending. Check saved state.",
 	"Record field must be a finite number": "Record field must be a finite number",
-	"The source tab changed. Reload the page.": "The source tab changed. Reload the page."
+	"The source tab changed. Reload the page.": "The source tab changed. Reload the page.",
+	"Select all tools": "Select all tools",
+	"No expiration": "No expiration",
+	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
 };
 var ru_default = {
 	"Invalid nested search text": "Некорректный текст поиска",
@@ -7427,7 +7430,10 @@ var ru_default = {
 	"Choose Save or Check for this form": "Выберите сохранение или проверку состояния формы",
 	"The page changed while a save was pending. Check saved state.": "Страница изменилась во время сохранения. Проверьте сохранённое состояние.",
 	"Record field must be a finite number": "Поле объекта должно содержать конечное число",
-	"The source tab changed. Reload the page.": "Исходная вкладка изменилась. Обновите страницу."
+	"The source tab changed. Reload the page.": "Исходная вкладка изменилась. Обновите страницу.",
+	"Select all tools": "Выбрать все инструменты",
+	"No expiration": "Без срока",
+	"MCP access lifetime must be zero or between 5 and 480 minutes": "Срок MCP-доступа должен быть равен нулю или составлять от 5 до 480 минут"
 };
 //#endregion
 export { en_default as n, ru_default as t };

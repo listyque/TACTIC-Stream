@@ -53,8 +53,8 @@ class AgentMcpCmd(AgentRequestCmd):
                         or not all(isinstance(tool,str) and tool in {item['name'] for item in catalog} for tool in tools)):
                     raise ValueError('Choose tools from this server catalogue')
                 minutes=self.kwargs.get('minutes',60)
-                if type(minutes) is not int or not 5<=minutes<=480:
-                    raise ValueError('MCP access lifetime must be between 5 and 480 minutes')
+                if type(minutes) is not int or (minutes != 0 and not 5<=minutes<=480):
+                    raise ValueError('MCP access lifetime must be zero or between 5 and 480 minutes')
                 instructions=text(self.kwargs.get('instructions'),16384)
                 operation=identity(self.kwargs.get('operation_id'))
                 fingerprint=digest([tools,minutes,instructions,self.kwargs.get('expected_revision')])
@@ -66,12 +66,16 @@ class AgentMcpCmd(AgentRequestCmd):
                 if self.kwargs.get('expected_revision')!=mcp_access.public(grant)['revision']:
                     raise ValueError('MCP connection changed. Reload before updating access.')
                 writable=any(not item['readonly'] for item in catalog if item['name'] in tools)
-                grant.update(tools=tools,expires=int(time.time())+minutes*60,allow_changes=writable,
-                    request_hash=fingerprint,credential=seal(Environment.get_security().get_ticket_key()),
+                previous_grant=dict(grant)
+                credential,owned=mcp_access.credential(grant,minutes==0)
+                grant.update(tools=tools,expires=None if minutes == 0 else int(time.time())+minutes*60,allow_changes=writable,
+                    request_hash=fingerprint,credential=credential,credential_owned=owned,
                     last_update=dict(operation_id=operation,digest=fingerprint))
                 ledger['document'].update(prompt=instructions,allow_changes=writable)
                 self.save('spt_agent_request',grant['id'],ledger)
                 self.write_grant(root,grant)
+                if not owned:
+                    mcp_access.retire_credential(previous_grant)
                 return mcp_access.public(grant)
             if action in ('revoke','reveal'):
                 grant=mcp_access.read_grant(self.kwargs.get('id'))
@@ -79,7 +83,7 @@ class AgentMcpCmd(AgentRequestCmd):
                     raise ValueError('MCP connection is unavailable')
                 if action=='reveal':
                     self.load('spt_agent_request',grant['id'])
-                    if grant['revoked'] or grant['expires']<=time.time() or not grant.get('pending_token'):
+                    if grant['revoked'] or mcp_access.expired(grant) or not grant.get('pending_token'):
                         raise ValueError('This connection token is no longer available')
                     token=unseal(grant.pop('pending_token'))
                     self.write_grant(root,grant)
@@ -87,6 +91,7 @@ class AgentMcpCmd(AgentRequestCmd):
                 grant['revoked']=True
                 grant.pop('pending_token',None)
                 self.write_grant(root,grant)
+                mcp_access.retire_credential(grant)
             if action=='create':
                 if not enabled:
                     raise ValueError('Enable external MCP connections in Server configuration and restart first')
@@ -96,8 +101,8 @@ class AgentMcpCmd(AgentRequestCmd):
                         or len(set(tools))!=len(tools) or not set(tools)<={tool['name'] for tool in catalog}):
                     raise ValueError('Choose tools from this server catalogue')
                 minutes=self.kwargs.get('minutes',60)
-                if type(minutes) is not int or not 5<=minutes<=480:
-                    raise ValueError('MCP access lifetime must be between 5 and 480 minutes')
+                if type(minutes) is not int or (minutes != 0 and not 5<=minutes<=480):
+                    raise ValueError('MCP access lifetime must be zero or between 5 and 480 minutes')
                 title=text(self.kwargs.get('title'),256)
                 instructions=text(self.kwargs.get('instructions',''),16384,empty=True)
                 context=context_document(row['document']['context'] if request_id else self.kwargs.get('context'))
@@ -115,9 +120,10 @@ class AgentMcpCmd(AgentRequestCmd):
                 now=int(time.time())
                 writable=any(not tool['readonly'] for tool in catalog if tool['name'] in tools)
                 grant=dict(id=code,title=title,project=Project.get_project_code(),owner=self.owner,
-                    created=now,expires=now+minutes*60,revoked=False,tools=tools,allow_changes=writable,
+                    created=now,expires=None if minutes == 0 else now+minutes*60,revoked=False,tools=tools,allow_changes=writable,
                     token_hash=hashlib.sha256(token.encode()).hexdigest(),
-                    credential=seal(Environment.get_security().get_ticket_key()),request_hash=fingerprint)
+                    request_hash=fingerprint)
+                grant['credential'],grant['credential_owned']=mcp_access.credential(grant,minutes==0)
                 if deferred:
                     grant['pending_token']=seal(token)
                 row=dict(request_id=code,transport='mcp',created=now,seen=now,status='completed',outcome='completed',
@@ -137,7 +143,7 @@ class AgentMcpCmd(AgentRequestCmd):
                 grant=json.loads(path.read_text(encoding='utf-8'))
                 if grant['owner']==self.owner and grant['project']==Project.get_project_code():
                     grants.append(mcp_access.public(grant))
-            self.info=dict(connections=grants,tools=mcp_access.tool_catalog(),enabled=enabled)
+            self.info=dict(connections=grants,tools=mcp_access.tool_catalog(),enabled=enabled,unlimited_lifetime=True)
             return self.info
 
     @staticmethod

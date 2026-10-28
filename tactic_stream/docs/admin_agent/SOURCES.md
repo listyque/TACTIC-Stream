@@ -155,7 +155,7 @@ are historical. Stream uses `pyasm.biz.ProjectSetting` for `config/prod_setting`
 ## TS Help, delivery and evidence
 
 - [Native dashboards, project item cards, sidebar editing and MCP](DASHBOARDS_MCP.md): shared bricks,
-  read/preview/save receipts, one-project expiring access and its actual limits.
+  read/preview/save receipts, revocable one-project MCP access and its actual limits.
 
 - [TS Help index](../../frontend/public/help/index.json): topic IDs and languages;
   choose one `<id>.en.md` / `<id>.ru.md`. [Russian administration](../../frontend/public/help/administration.ru.md)

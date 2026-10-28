@@ -93,8 +93,11 @@ async function call(action, values = {}, copyLink = false) {
         connections: result.connections
           .map((item) => ({
             ...item,
-            expired: item.expires <= Date.now() / 1000,
-            expiresLabel: new Date(item.expires * 1000).toLocaleString()
+            expired: item.expires !== null && item.expires <= Date.now() / 1000,
+            expiresLabel:
+              item.expires === null
+                ? ''
+                : new Date(item.expires * 1000).toLocaleString()
           }))
           .sort(
             (a, b) =>

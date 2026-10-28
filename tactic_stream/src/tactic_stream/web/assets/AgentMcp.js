@@ -1,5 +1,5 @@
 import { D as nextTick, K as withCtx, N as openBlock, U as watch, Z as ref, b as createVNode, h as createBlock, k as onBeforeUnmount, m as createBaseVNode, p as computed } from "./vue.js";
-import { j as appearance } from "./index.js";
+import { j as appearance, z as controls } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Yt as rect, _ as copyText, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
 //#region ../src/tactic_stream/shared_ui/features/configuration/mcp.ui.mjs
@@ -9,6 +9,7 @@ function initial() {
 		tools: [],
 		selected: [],
 		enabled: false,
+		unlimited_lifetime: false,
 		title: "",
 		instructions: "",
 		minutes: "60",
@@ -25,11 +26,12 @@ function edit(model, action) {
 	if (action.type === "field") return Object.assign({}, model, { [action.field]: action.value });
 	if (action.type === "tool") return Object.assign({}, model, { selected: action.value ? model.selected.concat(action.name) : model.selected.filter((name) => name !== action.name) });
 	if (action.type === "readonly") return Object.assign({}, model, { selected: model.tools.filter((tool) => tool.readonly).map((tool) => tool.name) });
+	if (action.type === "all") return Object.assign({}, model, { selected: model.tools.map((tool) => tool.name) });
 	if (action.type === "clear") return Object.assign({}, model, { selected: [] });
 	return model;
 }
 function describe(model, width, height, language) {
-	const tr = (value) => translate(value, language), inner = Math.max(0, width - 24), lifetimeWidth = inner >= 560 ? 152 : inner, fieldWidth = inner >= 560 ? inner - lifetimeWidth - 12 : inner, clearWidth = Math.min(120, (inner - 8) / 3), readWidth = Math.min(200, inner - clearWidth - 8);
+	const tr = (value) => translate(value, language), inner = Math.max(0, width - 24 - controls.scrollBar.extent - 8), lifetimeWidth = inner >= 560 ? 152 : inner, fieldWidth = inner >= 560 ? inner - lifetimeWidth - 12 : inner;
 	const nodes = [], content = [];
 	let y = 0;
 	function caption(id, text, extent = 28) {
@@ -65,7 +67,10 @@ function describe(model, width, height, language) {
 				value: "480",
 				label: tr("8 hours")
 			}
-		],
+		].concat(model.unlimited_lifetime ? [{
+			value: "0",
+			label: tr("No expiration")
+		}] : []),
 		action: {
 			type: "field",
 			field: "minutes"
@@ -83,12 +88,42 @@ function describe(model, width, height, language) {
 	}));
 	y += 84;
 	caption("mcpToolsTitle", tr("Allowed tools") + " · " + model.selected.length + "/" + model.tools.length);
-	content.push(button("mcpReadTools", rect(0, y, readWidth, 32), tr("Select read tools"), "check", { type: "readonly" }, !model.busy));
-	content.push(button("mcpClearTools", rect(readWidth + 8, y, clearWidth, 32), tr("Clear"), "close", { type: "clear" }, !model.busy));
+	let left = 0;
+	for (const [id, text, type, icon, preferred] of [
+		[
+			"mcpAllTools",
+			"Select all tools",
+			"all",
+			"check",
+			164
+		],
+		[
+			"mcpReadTools",
+			"Select read tools",
+			"readonly",
+			"check",
+			200
+		],
+		[
+			"mcpClearTools",
+			"Clear",
+			"clear",
+			"close",
+			96
+		]
+	]) {
+		const extent = Math.min(preferred, inner);
+		if (left && left + extent > inner) {
+			left = 0;
+			y += 40;
+		}
+		content.push(button(id, rect(left, y, extent, 32), tr(text), icon, { type }, !model.busy));
+		left += extent + 8;
+	}
 	y += 40;
 	const toolRows = [], rowHeight = inner < 480 ? 88 : 68;
 	for (const [index, tool] of model.tools.entries()) {
-		const toolY = index * rowHeight, rowWidth = inner - 16, nameWidth = Math.max(0, rowWidth - (inner < 480 ? 56 : 164));
+		const toolY = index * rowHeight, rowWidth = inner - 8 - controls.scrollBar.extent - 4, nameWidth = Math.max(0, rowWidth - (inner < 480 ? 56 : 164));
 		if (index) toolRows.push(node("Box", "mcpToolDivider_" + index, rect(12, toolY, rowWidth - 24, 1), { background: "outline" }));
 		toolRows.push(node("CheckBox", "mcpTool_" + index, rect(0, toolY, rowWidth, rowHeight), {
 			label: (tool.title || tool.name) + " · " + tr(tool.readonly ? "Read only" : "Write"),
@@ -154,7 +189,7 @@ function describe(model, width, height, language) {
 			}, !model.busy));
 			y += 40;
 		}
-		caption("mcpExisting_" + index, item.title + " · " + (item.revoked ? tr("Revoked") : item.expired ? tr("Expired") : item.expiresLabel));
+		caption("mcpExisting_" + index, item.title + " · " + (item.revoked ? tr("Revoked") : item.expired ? tr("Expired") : item.expires == null ? tr("No expiration") : item.expiresLabel));
 		content.push(button("mcpRevoke_" + index, rect(0, y, Math.min(160, inner), 32), tr("Revoke access"), "block", {
 			type: "revoke",
 			id: item.id
@@ -254,8 +289,8 @@ var _sfc_main = {
 					project: owner.project,
 					connections: result.connections.map((item) => ({
 						...item,
-						expired: item.expires <= Date.now() / 1e3,
-						expiresLabel: (/* @__PURE__ */ new Date(item.expires * 1e3)).toLocaleString()
+						expired: item.expires !== null && item.expires <= Date.now() / 1e3,
+						expiresLabel: item.expires === null ? "" : (/* @__PURE__ */ new Date(item.expires * 1e3)).toLocaleString()
 					})).sort((a, b) => Number(b.id === focusConnection) - Number(a.id === focusConnection))
 				});
 			} catch (error) {

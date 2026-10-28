@@ -178,7 +178,18 @@ Inspect the preview before publishing; hiding an item is not a security rule.
 
 Normal UI in **TH or TS → External agent → Agent permissions → MCP connections**
 captures the chat's actual project/page/selection. Administrators can select tools,
-instructions and a lifetime (5..480 minutes), create a connection or revoke it.
+instructions and a lifetime (5..480 minutes, or explicitly **No expiration**),
+create a connection or revoke it. **Select all tools** selects the entire returned
+catalogue; it does not bypass excluded tools, project scope or the Create step.
+The API uses `minutes=0` / `expires=null` for no deadline. Numeric `expires=0`
+still means expired. `state.unlimited_lifetime` advertises support; clients must
+not offer the new option against an older server. Existing finite grants are not
+changed automatically. No-deadline access uses a separate native Ticket created
+with `expiry=-1`, scoped by category to this grant and sealed in the server vault.
+It does not extend the browser's ticket. Revoking or converting the grant to a
+finite lifetime deletes only that grant-owned ticket after checking owner/category.
+Account disabling/password changes and current administrator/project checks still
+apply. The native ticket never appears in public grant metadata or model results.
 Server Configuration → Security → Enable external MCP connections is OFF by
 default and requires a deliberate save/restart before issuing access.
 
@@ -213,8 +224,8 @@ For a configured MCP client, the standard transport remains:
 ```
 
 This is Streamable HTTP MCP, not a project-page link or a ticket query string.
-Client support for custom authorization headers is required. An expired native
-session may end access earlier than the selected lifetime. Prefer HTTPS outside
+Client support for custom authorization headers is required. For finite grants,
+an expired native session may end access earlier than the selected lifetime. Prefer HTTPS outside
 a trusted local connection. Closing the window clears its displayed token.
 
 Server stores the token hash and encrypted native session. Chat-issued tokens

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { validateScene } from '../../src/tactic_stream/shared_ui/core/frame.mjs';
 import * as MCP from '../../src/tactic_stream/shared_ui/features/configuration/mcp.ui.mjs';
+import { controls } from '../../src/tactic_stream/shared_ui/core/foundation.mjs';
 
 const tools = [
   {
@@ -27,6 +28,16 @@ for (const width of [320, 600, 800])
       const all = flatten(scene.nodes),
         get = (id) => all.find((node) => node.id === id);
       assert.ok(get('mcpToolSurface').border);
+      for (const child of get('mcpScroll').children)
+        assert.ok(
+          child.x + child.width <=
+            get('mcpScroll').width - controls.scrollBar.extent - 8
+        );
+      for (const row of get('mcpToolList').children)
+        assert.ok(
+          row.x + row.width <=
+            get('mcpToolList').width - controls.scrollBar.extent - 4
+        );
       for (const [index, tool] of tools.entries()) {
         const row = get('mcpTool_' + index);
         assert.equal(row.text, tool.title);
@@ -60,13 +71,53 @@ assert.equal(
 );
 model = MCP.edit(model, { type: 'clear' });
 assert.deepEqual(model.selected, []);
+model = MCP.edit(model, { type: 'all' });
+assert.deepEqual(
+  model.selected,
+  tools.map((tool) => tool.name)
+);
+model = MCP.edit(model, { type: 'all' });
+assert.equal(model.selected.length, tools.length);
+const limited = flatten(MCP.describe(model, 800, 650, 'en').nodes).find(
+  (n) => n.id === 'mcpLifetime'
+);
+assert.ok(
+  !limited.options.some((o) => o.value === '0'),
+  'Old servers do not advertise an unsupported option'
+);
+const unlimited = flatten(
+  MCP.describe(
+    {
+      ...model,
+      unlimited_lifetime: true,
+      connections: [{ title: 'Persistent', expires: null, revoked: false }]
+    },
+    800,
+    650,
+    'ru'
+  ).nodes
+);
+assert.ok(
+  unlimited
+    .find((n) => n.id === 'mcpLifetime')
+    .options.some((o) => o.value === '0' && o.label === 'Без срока')
+);
+assert.ok(
+  unlimited.find((n) => n.id === 'mcpExisting_0').text.includes('Без срока')
+);
 const busy = flatten(
   MCP.describe({ ...model, busy: true }, 800, 650, 'en').nodes
 );
 assert.ok(
   busy
     .filter((n) =>
-      ['mcpReadTools', 'mcpClearTools', 'mcpTool_0', 'mcpCreate'].includes(n.id)
+      [
+        'mcpAllTools',
+        'mcpReadTools',
+        'mcpClearTools',
+        'mcpTool_0',
+        'mcpCreate'
+      ].includes(n.id)
     )
     .every((n) => !n.enabled)
 );
