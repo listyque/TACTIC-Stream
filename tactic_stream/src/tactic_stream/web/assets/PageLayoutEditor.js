@@ -1,10 +1,37 @@
-import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
+import { I as resolveComponent, K as withCtx, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
 import { O as randomUuid, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { Jt as label, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$3, k as _sfc_main$2, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { o as projectPath } from "./links.js";
 import { t as listAction } from "./tree.ui.js";
-import { A as _sfc_main$2, At as geometries, Bt as spacing, Ct as add, Dt as copy, Et as change, Ft as remove, G as alignment, It as reorder, J as toggle, K as roots, Lt as reparent, M as zooms, Mt as kinds, Nt as layers, Ot as duplicate, Pt as path, Rt as siblings, St as type, Tt as block, Y as spacingField, _t as fields$1, at as documentEvent, bt as options, ct as sectionSelector, gt as change$1, j as controls, jt as geometry, kt as fingerprint, ot as notices, q as selected, ut as toolbar$1, vt as filter, wt as appearances, xt as scope$1, yt as mode, zt as sizing } from "./App.js";
+import { A as _sfc_main$5, At as geometries, Bt as spacing, Ct as add, Dt as copy, Et as change, Ft as remove, G as alignment, It as reorder, J as toggle, K as roots, Lt as reparent, M as zooms, Mt as kinds, Nt as layers, Ot as duplicate, Pt as path, Rt as siblings, St as type, Tt as block, Y as spacingField, _t as fields$1, at as documentEvent, bt as options, ct as sectionSelector, gt as change$1, j as controls, jt as geometry$1, kt as fingerprint, mt as _sfc_main$4, ot as notices, q as selected, ut as toolbar$1, vt as filter, wt as appearances, xt as scope$1, yt as mode, zt as sizing } from "./App.js";
+//#region src/features/administration/PageEditorTools.vue
+var _sfc_main$1 = {
+	__name: "PageEditorTools",
+	props: { frameNode: {
+		type: Object,
+		required: true
+	} },
+	emits: ["command"],
+	setup(__props) {
+		return (_ctx, _cache) => {
+			return openBlock(), createBlock(_sfc_main$2, {
+				label: __props.frameNode.label,
+				icon: "more",
+				"compact-trigger": "",
+				overlay: "",
+				style: { "--touch-target": "32px" }
+			}, {
+				default: withCtx(() => [createVNode(_sfc_main$4, {
+					actions: __props.frameNode.actions,
+					onTriggered: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("command", $event))
+				}, null, 8, ["actions"])]),
+				_: 1
+			}, 8, ["label"]);
+		};
+	}
+};
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
 var collections = [
 	"items",
@@ -623,6 +650,280 @@ function sizingFields(fields, item, ui, document, parent, canEdit, language, fie
 	}
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.chrome.mjs
+var icons = {
+	page: "dashboard",
+	row: "view-agenda",
+	column: "view-column",
+	grid: "grid-view",
+	text: "notes",
+	markdown: "description",
+	metric: "speed",
+	table: "table-chart",
+	items: "view-list",
+	details: "info",
+	link: "link",
+	chart: "bar-chart",
+	summary: "summarize",
+	heading: "title",
+	icon: "star",
+	image: "image",
+	button: "smart-button",
+	divider: "horizontal-rule",
+	spacer: "space-bar",
+	field: "input",
+	form: "edit-note",
+	action: "bolt"
+};
+var titles = {
+	items: "Items",
+	details: "Details",
+	row: "Row",
+	column: "Column",
+	text: "Text",
+	markdown: "Markdown",
+	metric: "Metric",
+	table: "Table",
+	link: "Link",
+	chart: "Bar chart",
+	summary: "Grouped report",
+	grid: "Grid layout",
+	heading: "Heading",
+	icon: "Icon",
+	image: "Object image",
+	button: "Button",
+	divider: "Divider",
+	spacer: "Spacer",
+	field: "Record field",
+	form: "Record form",
+	action: "Record action"
+};
+function geometry(width, ui) {
+	const narrow = width < 1e3;
+	if (narrow || ui.preview || ui.source) return {
+		narrow,
+		left: width,
+		right: width,
+		canvasX: 0,
+		canvasWidth: width
+	};
+	const left = ui.layersHidden ? 32 : Math.max(140, Math.min(ui.layersWidth, 320));
+	const right = ui.propertiesHidden ? 32 : Math.max(240, Math.min(ui.propertiesWidth, 420, width - left - 380));
+	return {
+		narrow,
+		left,
+		right,
+		canvasX: left + 10,
+		canvasWidth: width - left - right - 20
+	};
+}
+function treeRow(list, record, model, ui, language, blockTitle) {
+	const key = record.key === "page" ? "" : record.key;
+	const title = record.label === record.kind ? blockTitle({ kind: record.kind }, record.key, language) : record.label;
+	const children = record.hasChildren;
+	const indent = 4 + record.depth * 6;
+	const row = listAction("pageBlock_" + record.key, rect(0, 0, list.width - 16, 32), title, icons[record.kind], {
+		type: "select",
+		key
+	}, true, {
+		selected: (ui.selection || []).includes(key) || ui.selected === key,
+		toolTip: title
+	});
+	row.children.forEach((child) => {
+		child.x = indent + (child.kind === "Label" ? 52 : 32);
+		if (child.kind === "Label") child.width = Math.max(0, row.width - child.x - 4);
+	});
+	row.keys = {
+		ArrowLeft: {
+			type: "treeCollapse",
+			key: record.key
+		},
+		ArrowRight: {
+			type: "treeExpand",
+			key: record.key
+		}
+	};
+	return { nodes: [row].concat(children ? [listAction("pageTreeToggle_" + record.key, rect(indent, 0, 32, 32), translate("Expand or collapse", language), ui.collapsed.includes(record.key) ? "chevron-right" : "chevron-down", {
+		type: "treeToggle",
+		key: record.key
+	}, true, { iconOnly: true })] : []) };
+}
+function treePanel(model, ui, bounds, language, enabled, narrow) {
+	const tr = (text) => translate(text, language), width = bounds.width;
+	const children = [button("pageLayersToggle", rect(width - 32, 0, 32, 32), tr("Page blocks"), ui.layersHidden ? "chevron-right" : "chevron-left", {
+		type: "togglePanel",
+		panel: "layers"
+	}, true, { iconOnly: true })];
+	if (!ui.layersHidden || narrow) children.push(label("pageLayersTitle", rect(8, 0, width - 44, 32), tr("Page blocks"), { weight: 600 }), node("Choice", "pageAddWidget", rect(8, 34, width - 16, 32), {
+		label: tr("Add widget"),
+		value: "",
+		enabled,
+		options: [{
+			value: "",
+			label: tr(width < 210 ? "Add" : "Add widget"),
+			icon: "add"
+		}].concat(kinds.map((value) => ({
+			value,
+			label: tr(titles[value]),
+			icon: icons[value]
+		}))),
+		action: { type: "add" }
+	}), node("List", "pageBlocks", rect(4, 72, width - 8, Math.max(0, bounds.height - 76)), {
+		source: "pageBlocks",
+		keyField: "key",
+		rowHeight: 34,
+		scrollbarId: "pageBlocksScrollBar"
+	}));
+	if (narrow) children.shift();
+	return node("Box", "pageLayersPanel", bounds, {
+		background: "surfaceContainerLow",
+		border: "outlineVariant",
+		children
+	});
+}
+function propertiesHeader(ui, width, language, narrow) {
+	const children = [button("pagePropertiesToggle", rect(0, 0, 32, 32), translate("Properties", language), ui.propertiesHidden ? "chevron-left" : "chevron-right", {
+		type: "togglePanel",
+		panel: "properties"
+	}, true, { iconOnly: true })];
+	if (!ui.propertiesHidden || narrow) children.push(label("pagePropertiesTitle", rect(narrow ? 8 : 36, 0, width - 44, 32), translate("Properties", language), { weight: 600 }));
+	return narrow ? children.slice(1) : children;
+}
+function splitters(g, y, height, language) {
+	return [node("Splitter", "pageLayersSplitter", rect(g.left, y, 10, height), {
+		text: translate("Page blocks", language),
+		value: g.left,
+		min: 140,
+		max: Math.min(320, g.left + g.canvasWidth - 360),
+		enabled: g.left > 32,
+		action: {
+			type: "panelSize",
+			panel: "layers"
+		}
+	}), node("Splitter", "pagePropertiesSplitter", rect(g.canvasX + g.canvasWidth, y, 10, height), {
+		text: translate("Properties", language),
+		value: g.right,
+		min: 240,
+		max: Math.min(420, g.right + g.canvasWidth - 360),
+		reverse: true,
+		enabled: g.right > 32,
+		action: {
+			type: "panelSize",
+			panel: "properties"
+		}
+	})];
+}
+function actions(model, ui, language) {
+	const ready = model.canWrite && !model.busy && !model.uncertain && !model.pendingText && !ui.confirmation;
+	const p = path(ui.selected), rows = p.length ? siblings(model.document, p) : [];
+	return [
+		[
+			"new",
+			"New page",
+			"add",
+			ready
+		],
+		[
+			"open",
+			"Open saved view",
+			"open-in-new",
+			!model.dirty && !!model.document.name && !model.busy
+		],
+		[
+			"duplicate",
+			"Duplicate widget",
+			"content-copy",
+			ready && !ui.preview && !!ui.selected && ui.selection.length < 2
+		],
+		[
+			"moveUp",
+			"Move up",
+			"arrow-upward",
+			ready && !ui.preview && p.length && p[p.length - 1] > 0
+		],
+		[
+			"moveDown",
+			"Move down",
+			"arrow-downward",
+			ready && !ui.preview && p.length && p[p.length - 1] < rows.length - 1
+		],
+		[
+			"canvasSettings",
+			"Canvas settings",
+			"tune",
+			true
+		],
+		[
+			"preview",
+			ui.preview ? "Back to editing" : "Clean preview",
+			ui.preview ? "edit" : "visibility",
+			!model.busy && !ui.creating && !model.pendingText
+		]
+	].map(([command, title, icon, enabled]) => ({
+		command,
+		title: translate(title, language),
+		icon,
+		enabled: !!enabled,
+		translate: false
+	}));
+}
+function toolEvent(command) {
+	return command === "moveUp" || command === "moveDown" ? {
+		type: "reorder",
+		delta: command === "moveUp" ? -1 : 1
+	} : { type: command };
+}
+function canvasTools(model, ui, width, language, canEdit) {
+	const tr = (text) => translate(text, language), nodes = [];
+	const sourceWidth = ui.source ? language === "ru" ? 148 : 104 : 80;
+	const pickerWidth = Math.max(80, Math.min(260, width - sourceWidth - (!ui.source && !ui.preview ? 126 : 48)));
+	nodes.push(node("Choice", "pageLayoutChoice", rect(0, 0, pickerWidth, 32), {
+		label: tr("Page layout"),
+		value: model.document.name || "",
+		options: model.catalog.map((row) => ({
+			value: row.identity,
+			label: row.label
+		})),
+		enabled: !model.busy && !model.uncertain,
+		action: { type: "load" }
+	}), button("pageSourceXml", rect(width - sourceWidth - 42, 0, sourceWidth, 32), ui.source ? tr("Design") : "XML", ui.source ? "dashboard" : "code", { type: "sourceXml" }, !!model.document.name, {
+		highlighted: ui.source,
+		toolTip: tr("Source XML")
+	}), node("View", "pageToolsMenu", rect(width - 32, 0, 32, 32), {
+		view: "pageTools",
+		actions: actions(model, ui, language),
+		label: tr("Editor tools")
+	}));
+	let y = 40;
+	if (ui.creating) {
+		const w = Math.max(80, (width - 8) / 2);
+		nodes.push(node("Field", "pageLayoutName", rect(0, y, w, 32), {
+			label: tr("Page name"),
+			placeholder: "my_dashboard",
+			text: ui.newName,
+			action: { type: "newName" }
+		}), node("Field", "pageLayoutTitle", rect(w + 8, y, w, 32), {
+			label: tr("Title"),
+			text: ui.newTitle,
+			action: { type: "newTitle" }
+		}), button("pageLayoutCreate", rect(0, y + 40, 160, 32), tr("Create draft"), "add", { type: "create" }, canEdit), button("pageLayoutCancelNew", rect(168, y + 40, 120, 32), tr("Cancel"), "close", { type: "cancelNew" }, true));
+		y += 80;
+	}
+	if (!ui.source) {
+		const tools = controls(ui, width, language, !model.busy);
+		nodes.push(node("Box", "pageViewportTools", rect(0, y, width, tools.height), { children: tools.nodes }));
+		y += tools.height + 6;
+		if (!ui.preview) {
+			const current = fingerprint(model.document), ready = canEdit && !model.pendingText && !ui.confirmation && ui.historyDocument === current;
+			for (const [index, type] of ["undo", "redo"].entries()) nodes.push(button("pageAction_" + type, rect(width - sourceWidth - 120 + index * 38, 0, 32, 32), tr(type === "undo" ? "Undo" : "Redo"), type, { type }, !!(ready && ui[type === "undo" ? "past" : "future"]?.length), { iconOnly: true }));
+		}
+	}
+	return {
+		nodes,
+		height: y
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs
 function blockTitle(item, key, language) {
 	if (item.title && item.title !== item.kind) return item.title;
@@ -641,30 +942,22 @@ function model(raw, ui) {
 			key: "page",
 			depth: 0,
 			label: raw.document?.title || "Page",
-			kind: "page"
-		}].concat(layers(raw.document || { blocks: [] }))
+			kind: "page",
+			hasChildren: !!raw.document?.blocks?.length
+		}].concat(layers(raw.document || { blocks: [] }).map((row, index, rows) => Object.assign({}, row, {
+			depth: row.depth + 1,
+			hasChildren: rows[index + 1]?.depth > row.depth
+		})))
 	});
 }
 function toolbar(model, ui, width, language) {
 	return toolbar$1(model, ui, width, language);
 }
-function models(model) {
-	return { pageBlocks: model.layers };
+function models(model, ui) {
+	return { pageBlocks: model.layers.filter((row) => !(ui.collapsed || []).some((key) => row.key !== key && (key === "page" || row.key.startsWith(key + ".")))) };
 }
 function row(list, record, model, ui, language) {
-	const key = record.key === "page" ? "" : record.key;
-	const title = record.label === record.kind ? blockTitle({ kind: record.kind }, record.key, language) : record.label;
-	return { nodes: [node("Action", "pageBlock_" + record.key, rect(0, 0, list.width - 16, 38), {
-		text: title,
-		normalColor: "transparent",
-		selectedColor: "contentSelection",
-		selected: (ui.selection || []).includes(key) || ui.selected === key,
-		children: [label("pageBlockLabel_" + record.key, rect(8 + record.depth * 12, 0, list.width - 32 - record.depth * 12, 38), title)],
-		action: {
-			type: "select",
-			key
-		}
-	})] };
+	return treeRow(list, record, model, ui, language, blockTitle);
 }
 function describe(model, ui, width, height, language) {
 	if (width <= 0 || height <= 0) return { nodes: [] };
@@ -678,166 +971,12 @@ function describe(model, ui, width, height, language) {
 	const noticesModel = Object.assign({}, model, { confirmationText: ui.confirmation === "page" ? "Discard changes to the current view and continue?" : ui.confirmation === "remove" ? "Remove this widget from the page?" : void 0 });
 	const notice = notices(noticesModel, ui, width, language), nodes = notice.nodes;
 	let y = notice.top;
-	const newWidth = language === "ru" ? 170 : 120;
-	const pickerWidth = Math.min(360, Math.max(100, width - newWidth - 70));
-	nodes.push(node("Choice", "pageLayoutChoice", rect(0, y, pickerWidth, 38), {
-		label: tr("Page layout"),
-		value: model.document.name || "",
-		options: model.catalog.map((r) => ({
-			value: r.identity,
-			label: r.label
-		})),
-		enabled: !model.busy && !model.uncertain,
-		action: { type: "load" }
-	}), button("pageLayoutNew", rect(pickerWidth + 12, y, newWidth, 38), tr("New page"), "add", { type: "new" }, canEdit), button("pageLayoutOpen", rect(pickerWidth + newWidth + 24, y, 38, 38), tr("Open saved view"), "open-in-new", { type: "open" }, !model.dirty && !!model.document.name && !model.busy));
-	y += 50;
-	if (ui.creating) {
-		const w = Math.min(300, Math.max(100, (width - 12) / 2));
-		nodes.push(node("Field", "pageLayoutName", rect(0, y, w, 38), {
-			label: tr("Page name"),
-			placeholder: "my_dashboard",
-			text: ui.newName,
-			action: { type: "newName" }
-		}), node("Field", "pageLayoutTitle", rect(w + 12, y, w, 38), {
-			label: tr("Title"),
-			placeholder: tr("Title"),
-			text: ui.newTitle,
-			action: { type: "newTitle" }
-		}), button("pageLayoutCreate", rect(0, y + 48, 164, 38), tr("Create draft"), "add", { type: "create" }, canEdit), button("pageLayoutCancelNew", rect(176, y + 48, 120, 38), tr("Cancel"), "close", { type: "cancelNew" }, true));
-		y += 98;
-	}
+	const geometry$2 = geometry(width, ui), { narrow, left, right, canvasX, canvasWidth } = geometry$2;
 	if (!model.document.name) {
-		nodes.push(label("pageChooseHelp", rect(0, y, width, 90), tr("Choose a page or create a new page."), Object.assign({}, muted, { wrap: true })));
-		return { nodes };
+		const tools = canvasTools(model, ui, width, language, canEdit);
+		return { nodes: nodes.concat(node("Box", "pageEmptyTools", rect(0, y, width, tools.height), { children: tools.nodes })) };
 	}
-	const narrow = width < 1e3, modeWidth = narrow ? 38 : language === "ru" ? 200 : 176, left = narrow ? width : 220, right = narrow ? width : 310, canvasX = narrow || ui.preview ? 0 : left + 12, canvasWidth = narrow || ui.preview ? width : width - left - right - 24;
-	nodes.push(node("Choice", "pageAddWidget", rect(0, y, Math.min(width, 220), 38), {
-		label: tr("Add widget"),
-		value: "",
-		options: [{
-			value: "",
-			label: tr("Add widget")
-		}].concat(kinds.map((value) => ({
-			value,
-			label: tr({
-				items: "Items",
-				details: "Details",
-				row: "Row",
-				column: "Column",
-				text: "Text",
-				markdown: "Markdown",
-				metric: "Metric",
-				table: "Table",
-				link: "Link",
-				chart: "Bar chart",
-				summary: "Grouped report",
-				grid: "Grid layout",
-				heading: "Heading",
-				icon: "Icon",
-				image: "Object image",
-				button: "Button",
-				divider: "Divider",
-				spacer: "Spacer",
-				field: "Record field",
-				form: "Record form",
-				action: "Record action"
-			}[value])
-		}))),
-		enabled: canEdit && !ui.preview,
-		toolTip: model.layers.some((row) => row.kind === "items") ? tr("Items preview shows up to three records.") : "",
-		action: { type: "add" }
-	}));
-	if (!ui.preview) {
-		const current = fingerprint(model.document);
-		const historyCurrent = ui.historyDocument === current;
-		const ready = canEdit && !model.pendingText && !ui.confirmation;
-		const single = (ui.selection || []).length < 2;
-		const p = path(ui.selected), rows = p.length ? siblings(model.document, p) : [];
-		const actions = [
-			[
-				"Undo",
-				"undo",
-				{ type: "undo" },
-				ready && historyCurrent && ui.past?.length
-			],
-			[
-				"Redo",
-				"redo",
-				{ type: "redo" },
-				ready && historyCurrent && ui.future?.length
-			],
-			[
-				"Duplicate widget",
-				"content-copy",
-				{ type: "duplicate" },
-				ready && single && !!ui.selected
-			],
-			[
-				"Move up",
-				"arrow-upward",
-				{
-					type: "reorder",
-					delta: -1
-				},
-				ready && single && p.length && p[p.length - 1] > 0
-			],
-			[
-				"Move down",
-				"arrow-downward",
-				{
-					type: "reorder",
-					delta: 1
-				},
-				ready && single && p.length && p[p.length - 1] < rows.length - 1
-			]
-		];
-		const separate = width < 700;
-		actions.forEach(([title, icon, action, enabled], index) => nodes.push(button("pageAction_" + action.type + (action.delta || ""), rect((separate ? 0 : 232) + index * 40, y + (separate ? 44 : 0), 32, 32), tr(title), icon, action, !!enabled, { iconOnly: true })));
-	}
-	y += 50;
-	nodes.push(button("pagePreviewMode", rect(width - modeWidth, y - 50, modeWidth, 38), tr(ui.preview ? "Back to editing" : "Clean preview"), ui.preview ? "edit" : "visibility", { type: "preview" }, !model.busy && !ui.creating && !model.pendingText, { iconOnly: narrow }));
-	if (!ui.preview && width < 700) y += 44;
-	if (width >= 500) {
-		if (ui.preview) nodes.push(label("pageSelectionHint", rect(0, y, width, 24), tr(ui.preview ? "Read-only draft preview. Nothing is saved." : "Click to select. Alt-click for underlying layers."), Object.assign({}, muted, { fontRole: "caption" })));
-		else {
-			const p = path(ui.selected), crumbs = [{
-				key: "",
-				title: model.document.title || tr("Page")
-			}];
-			p.forEach((_, index) => {
-				const key = p.slice(0, index + 1).join("."), item = block(model.document, key);
-				crumbs.push({
-					key,
-					title: blockTitle(item, key, language)
-				});
-			});
-			let x = 0;
-			const children = [];
-			crumbs.forEach((crumb, index) => {
-				if (index) {
-					children.push(label("pageAncestorSeparator_" + index, rect(x, 0, 20, 30), "›", muted));
-					x += 20;
-				}
-				const w = Math.max(60, Math.min(180, crumb.title.length * 8 + 24));
-				children.push(listAction("pageAncestor_" + (crumb.key || "page"), rect(x, 0, w, 30), crumb.title, "", {
-					type: "select",
-					key: crumb.key
-				}, !model.busy && !model.pendingText, {
-					toolTip: crumb.title,
-					selected: crumb.key === ui.selected
-				}));
-				x += w;
-			});
-			nodes.push(node("Scroll", "pageAncestors", rect(0, y, width, 46), {
-				contentWidth: x,
-				contentHeight: 30,
-				scrollbarId: "pageAncestorsBar",
-				children
-			}));
-		}
-		y += ui.preview ? 32 : 50;
-	}
-	if (narrow && !ui.preview) {
+	if (narrow && !ui.preview && !ui.source) {
 		nodes.push(sectionSelector("pageEditorPanels", [
 			{
 				value: "layers",
@@ -851,21 +990,13 @@ function describe(model, ui, width, height, language) {
 				value: "properties",
 				label: tr("Properties")
 			}
-		], ui.panel, rect(0, y, width, 38), !model.busy, "panel"));
-		y += 50;
+		], ui.panel, rect(0, y, width, 38), true, "panel"));
+		y += 42;
 	}
 	const h = Math.max(100, height - y);
 	{
-		if (!ui.preview && (!narrow || ui.panel === "layers")) nodes.push(node("Box", "pageLayersPanel", rect(0, y, left, h), {
-			background: "surfaceContainerLow",
-			border: "outlineVariant",
-			children: [label("pageLayersTitle", rect(12, 12, left - 24, 24), tr("Page blocks"), { weight: 600 }), node("List", "pageBlocks", rect(12, 48, left - 24, Math.max(0, h - 60)), {
-				source: "pageBlocks",
-				keyField: "key",
-				rowHeight: 42,
-				scrollbarId: "pageBlocksScrollBar"
-			})]
-		}));
+		if (!ui.preview && !ui.source && (!narrow || ui.panel === "layers")) nodes.push(treePanel(model, ui, rect(0, y, left, h), language, canEdit, narrow));
+		if (!narrow && !ui.preview && !ui.source) nodes.push(...splitters(geometry$2, y, h, language));
 		const item = ui.selected ? block(model.document, ui.selected) : null, fields$2 = [];
 		function field(name, title, value, root = false, kind) {
 			const key = (root ? "page" : ui.selected) + ":" + name;
@@ -1093,22 +1224,30 @@ function describe(model, ui, width, height, language) {
 		}
 		const properties = (ui.selection || []).length > 1 ? fields$2.filter((field) => field.id === "pageAppearanceHeading" || field.id.startsWith("pageAppearance_") || field.id.startsWith("pageColor_")) : fields$2;
 		const body = sections(properties, right - 24, language, canEdit);
-		if (!ui.preview && (!narrow || ui.panel === "properties")) nodes.push(node("Box", "pagePropertiesPanel", rect(width - right, y, right, h), {
+		if (!ui.preview && !ui.source && (!narrow || ui.panel === "properties")) nodes.push(node("Box", "pagePropertiesPanel", rect(width - right, y, right, h), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
-			children: [node("Scroll", "pageProperties", rect(12, 12, right - 24, h - 24), {
+			children: propertiesHeader(ui, right, language, narrow).concat(ui.propertiesHidden && !narrow ? [] : [node("Scroll", "pageProperties", rect(8, 36, right - 16, h - 44), {
 				contentHeight: body.height,
 				scrollbarId: "pagePropertiesBar",
 				children: body.nodes
-			})]
+			})])
 		}));
 	}
-	if (ui.preview || !narrow || ui.panel === "canvas") {
-		const tools = controls(ui, canvasWidth - 24, language, !model.busy);
+	if (ui.preview || ui.source || !narrow || ui.panel === "canvas") {
+		const tools = canvasTools(model, ui, canvasWidth - 16, language, canEdit);
 		nodes.push(node("Box", "pageCanvasPanel", rect(canvasX, y, canvasWidth, h), {
 			background: "workspace",
 			border: "outlineVariant",
-			children: [node("Box", "pageCanvasTools", rect(12, 12, canvasWidth - 24, tools.height), { children: tools.nodes }), node("View", "pageCanvas", rect(12, 20 + tools.height, canvasWidth - 24, Math.max(1, h - tools.height - 32)), { view: "pagePreview" })]
+			children: [node("Box", "pageCanvasTools", rect(8, 8, canvasWidth - 16, tools.height), { children: tools.nodes }), ui.source ? node("Code", "pageXmlSource", rect(8, tools.height + 16, canvasWidth - 16, Math.max(1, h - tools.height - 24)), {
+				text: model.checked ? model.sourceXml || "" : "",
+				syntax: "xml",
+				language,
+				readOnly: true,
+				service: "sourceEditor",
+				label: tr("Source XML"),
+				bufferKey: "page:" + model.document.name
+			}) : node("View", "pageCanvas", rect(8, tools.height + 16, canvasWidth - 16, Math.max(1, h - tools.height - 24)), { view: "pagePreview" })]
 		}));
 	}
 	return { nodes };
@@ -1139,6 +1278,13 @@ function initial() {
 			zoom: "fit"
 		},
 		canvasWidthText: "",
+		layersWidth: 180,
+		propertiesWidth: 280,
+		layersHidden: false,
+		propertiesHidden: false,
+		collapsed: [],
+		source: false,
+		canvasSettings: false,
 		error: ""
 	};
 }
@@ -1217,6 +1363,43 @@ function transition(ui, model, event) {
 			historyDocument: ""
 		});
 		return document;
+	}
+	if (event.type === "panelSize") {
+		if (["layers", "properties"].includes(event.panel) && Number.isFinite(event.value)) next[event.panel + "Width"] = Math.max(event.panel === "layers" ? 140 : 240, Math.min(event.panel === "layers" ? 320 : 420, event.value));
+		return {
+			ui: next,
+			commands
+		};
+	}
+	if (event.type === "togglePanel") {
+		if (["layers", "properties"].includes(event.panel)) next[event.panel + "Hidden"] = !ui[event.panel + "Hidden"];
+		return {
+			ui: next,
+			commands
+		};
+	}
+	if ([
+		"treeToggle",
+		"treeExpand",
+		"treeCollapse"
+	].includes(event.type)) {
+		if (event.key !== "page" && !layers(model.document).some((row) => row.key === event.key)) return {
+			ui: next,
+			commands
+		};
+		const collapsed = ui.collapsed.includes(event.key);
+		next.collapsed = event.type === "treeExpand" || event.type === "treeToggle" && collapsed ? ui.collapsed.filter((key) => key !== event.key) : collapsed ? ui.collapsed : ui.collapsed.concat(event.key);
+		return {
+			ui: next,
+			commands
+		};
+	}
+	if (event.type === "sourceXml" || event.type === "canvasSettings") {
+		next[event.type === "sourceXml" ? "source" : "canvasSettings"] = event.type === "sourceXml" ? !ui.source : !ui.canvasSettings;
+		return {
+			ui: next,
+			commands
+		};
 	}
 	if (model.busy || ui.confirmation) return {
 		ui: next,
@@ -1332,6 +1515,7 @@ function transition(ui, model, event) {
 			case "preview":
 				if (Object.keys(ui.text).length) throw Error("Apply or discard the pending text before continuing");
 				next.preview = !ui.preview;
+				next.source = false;
 				break;
 			case "panel":
 				if ([
@@ -1341,6 +1525,7 @@ function transition(ui, model, event) {
 				].includes(event.value)) next.panel = event.value;
 				break;
 			case "select":
+				next.collapsed = ui.collapsed.filter((key) => key !== "page" && key !== event.key && !event.key.startsWith(key + "."));
 				next.selection = event.key ? ui.multiSelect ? toggle(ui.selection || [], event.key) : [event.key] : [];
 				if (event.key) block(model.document, event.key);
 				next.selected = next.selection.includes(event.key) ? event.key : next.selection[next.selection.length - 1] || "";
@@ -1486,7 +1671,7 @@ function transition(ui, model, event) {
 				break;
 			case "geometry": {
 				if (ui.preview) break;
-				const value = event.value.changes ? geometries(model.document, event.value.changes, event.boxes) : geometry(model.document, event.value, event.boxes);
+				const value = event.value.changes ? geometries(model.document, event.value.changes, event.boxes) : geometry$1(model.document, event.value, event.boxes);
 				replace(value.document);
 				next.selection = value.keys || [value.key];
 				next.selected = next.selection.includes(ui.selected) ? ui.selected : next.selection[next.selection.length - 1];
@@ -1520,7 +1705,7 @@ function transition(ui, model, event) {
 //#endregion
 //#region src/features/administration/PageLayoutEditor.vue
 var _sfc_main = {
-	components: { FrameView: _sfc_main$1 },
+	components: { FrameView: _sfc_main$3 },
 	props: {
 		ticket: String,
 		project: String,
@@ -1541,6 +1726,7 @@ var _sfc_main = {
 			baseline: "",
 			revision: "",
 			compiled: null,
+			sourceXml: "",
 			canvasBoxes: [],
 			checkedDocument: "",
 			error: "",
@@ -1597,6 +1783,7 @@ var _sfc_main = {
 				canWrite: this.canWrite,
 				canLoad: !!this.ticket,
 				checked: !!this.document && JSON.stringify(this.document) === this.checkedDocument,
+				sourceXml: this.sourceXml,
 				error: this.error,
 				message: this.message,
 				dataSource: this.dataSource,
@@ -1615,42 +1802,49 @@ var _sfc_main = {
 			return toolbar(this.frameModel, this.ui, this.toolbarSize, appearance.language);
 		},
 		models() {
-			return models(this.frameModel);
+			return models(this.frameModel, this.ui);
 		},
 		views() {
-			return { pagePreview: {
-				component: _sfc_main$2,
-				nodeProps: true,
-				props: {
-					model: this.compiled || { layoutNodes: [] },
-					ticket: this.ticket,
-					project: this.project,
-					editing: true,
-					guides: !this.ui.preview,
-					selectedBlock: this.ui.preview ? "" : this.ui.selected,
-					canvasViewport: this.ui.canvas,
-					selectedBlocks: this.ui.selection,
-					multiSelect: this.ui.multiSelect,
-					snap: this.ui.snap,
-					onSelection: (keys) => this.dispatch({
-						type: "selection",
-						keys
-					}),
-					onCanvasBoxes: (boxes) => {
-						this.canvasBoxes = boxes;
-					},
-					onLoaded: (value) => this.sampleLoaded(value),
-					onBlock: (key) => this.dispatch({
-						type: "select",
-						key
-					}),
-					onGeometry: (value, boxes) => this.dispatch({
-						type: "geometry",
-						value,
-						boxes
-					})
+			return {
+				pageTools: {
+					component: _sfc_main$1,
+					nodeProps: true,
+					props: { onCommand: (command) => this.dispatch(toolEvent(command)) }
+				},
+				pagePreview: {
+					component: _sfc_main$5,
+					nodeProps: true,
+					props: {
+						model: this.compiled || { layoutNodes: [] },
+						ticket: this.ticket,
+						project: this.project,
+						editing: true,
+						guides: !this.ui.preview,
+						selectedBlock: this.ui.preview ? "" : this.ui.selected,
+						canvasViewport: this.ui.canvas,
+						selectedBlocks: this.ui.selection,
+						multiSelect: this.ui.multiSelect,
+						snap: this.ui.snap,
+						onSelection: (keys) => this.dispatch({
+							type: "selection",
+							keys
+						}),
+						onCanvasBoxes: (boxes) => {
+							this.canvasBoxes = boxes;
+						},
+						onLoaded: (value) => this.sampleLoaded(value),
+						onBlock: (key) => this.dispatch({
+							type: "select",
+							key
+						}),
+						onGeometry: (value, boxes) => this.dispatch({
+							type: "geometry",
+							value,
+							boxes
+						})
+					}
 				}
-			} };
+			};
 		}
 	},
 	mounted() {
@@ -1888,6 +2082,7 @@ var _sfc_main = {
 				}, scope);
 				if (generation === this.generation && serial === this.previewSerial) {
 					this.compiled = value.model;
+					this.sourceXml = value.xml;
 					this.checkedDocument = document;
 					this.error = "";
 				}

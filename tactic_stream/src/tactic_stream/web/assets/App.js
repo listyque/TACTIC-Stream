@@ -21099,67 +21099,56 @@ function describe$41(scene, settings, width, height) {
 	})] });
 }
 function controls$1(ui, width, language, enabled) {
-	const tr = (text) => translate(text, language);
-	const settings = ui.canvas;
-	const narrow = width < 520;
-	const nodes = [
-		node("Choice", "pageCanvasSize", rect$1(0, 0, Math.min(182, width), 32), {
-			label: tr("Preview size"),
-			value: String(settings.width || "auto"),
-			enabled,
-			options: [
-				{
-					value: "auto",
-					label: tr("Auto")
-				},
-				{
-					value: "360",
-					label: tr("Phone") + " · 360"
-				},
-				{
-					value: "768",
-					label: tr("Tablet") + " · 768"
-				},
-				{
-					value: "1280",
-					label: tr("Desktop") + " · 1280"
-				},
-				{
-					value: "1920",
-					label: tr("Wide") + " · 1920"
-				}
-			].concat(settings.width && ![
-				360,
-				768,
-				1280,
-				1920
-			].includes(settings.width) ? [{
-				value: String(settings.width),
-				label: tr("Custom") + " · " + settings.width
-			}] : []),
-			action: { type: "canvasSize" }
-		}),
-		node("Field", "pageCanvasPixels", rect$1(190, 0, 76, 32), {
-			label: tr("Preview width in pixels"),
-			placeholder: tr("Auto"),
-			text: ui.canvasWidthText,
-			enabled,
-			inputMode: "numeric",
-			action: { type: "canvasWidthBuffer" },
-			commitAction: { type: "canvasWidthCommit" }
-		}),
-		label("pageCanvasPixelsUnit", rect$1(272, 0, 22, 32), "px", muted)
-	];
-	const left = narrow ? 0 : 304, top = narrow ? 40 : 0;
+	const tr = (text) => translate(text, language), settings = ui.canvas, nodes = [];
+	let x = 0, y = 0;
+	function place(kind, id, w, props) {
+		w = Math.min(w, width);
+		if (x && x + w > width) {
+			x = 0;
+			y += 38;
+		}
+		nodes.push(node(kind, id, rect$1(x, y, w, 32), props));
+		x += w + 6;
+	}
+	place("Choice", "pageCanvasSize", 132, {
+		label: tr("Preview size"),
+		value: String(settings.width || "auto"),
+		enabled,
+		options: [
+			["auto", "Auto"],
+			["360", "Phone"],
+			["768", "Tablet"],
+			["1280", "Desktop"],
+			["1920", "Wide"]
+		].map(([value, title]) => ({
+			value,
+			label: tr(title) + (value === "auto" ? "" : " · " + value)
+		})).concat(settings.width && ![
+			360,
+			768,
+			1280,
+			1920
+		].includes(settings.width) ? [{
+			value: String(settings.width),
+			label: tr("Custom") + " · " + settings.width
+		}] : []),
+		action: { type: "canvasSize" }
+	});
 	const actual = dimensions$3(settings, width, 1).scale * 100;
-	nodes.push(button("pageCanvasZoomOut", rect$1(left, top, 32, 32), tr("Zoom out"), "zoom-out", {
-		type: "canvasZoom",
-		value: String(step(settings, width, -1))
-	}, enabled && actual > 25, { iconOnly: true }), node("Choice", "pageCanvasZoom", rect$1(left + 38, top, 122, 32), {
+	place("Button", "pageCanvasZoomOut", 32, {
+		text: tr("Zoom out"),
+		icon: "zoom-out",
+		iconOnly: true,
+		enabled: enabled && actual > 25,
+		action: {
+			type: "canvasZoom",
+			value: String(step(settings, width, -1))
+		}
+	});
+	place("Choice", "pageCanvasZoom", 88, {
 		label: tr("Canvas zoom"),
 		value: String(settings.zoom),
 		enabled,
-		toolTip: settings.zoom === "fit" ? tr("Fit width") : "",
 		options: [{
 			value: "fit",
 			label: tr("Fit")
@@ -21168,60 +21157,83 @@ function controls$1(ui, width, language, enabled) {
 			label: value + "%"
 		}))),
 		action: { type: "canvasZoom" }
-	}), button("pageCanvasZoomIn", rect$1(left + 166, top, 32, 32), tr("Zoom in"), "zoom-in", {
-		type: "canvasZoom",
-		value: String(step(settings, width, 1))
-	}, enabled && actual < 200, { iconOnly: true }));
-	let height = narrow ? 72 : 32;
+	});
+	place("Button", "pageCanvasZoomIn", 32, {
+		text: tr("Zoom in"),
+		icon: "zoom-in",
+		iconOnly: true,
+		enabled: enabled && actual < 200,
+		action: {
+			type: "canvasZoom",
+			value: String(step(settings, width, 1))
+		}
+	});
 	if (!ui.preview) {
-		const y = height + 8;
-		nodes.push(button("pageMultiSelect", rect$1(0, y, 32, 32), tr("Multiple selection"), "select-all", { type: "multiSelect" }, enabled, {
+		place("Button", "pageMultiSelect", 32, {
+			text: tr("Multiple selection"),
+			icon: "select-all",
 			iconOnly: true,
-			highlighted: ui.multiSelect
-		}), label("pageSelectionCount", rect$1(40, y, 72, 32), String((ui.selection || []).length) + " " + tr("selected"), muted), node("Choice", "pageAlign", rect$1(120, y, Math.min(178, Math.max(1, width - 166)), 32), {
-			label: tr("Align selected elements"),
-			value: "",
-			enabled: enabled && (ui.selection || []).length > 1,
-			options: [
-				{
-					value: "",
-					label: tr("Align")
-				},
-				{
-					value: "left",
-					label: tr("Left edges")
-				},
-				{
-					value: "centerX",
-					label: tr("Horizontal centers")
-				},
-				{
-					value: "right",
-					label: tr("Right edges")
-				},
-				{
-					value: "top",
-					label: tr("Top edges")
-				},
-				{
-					value: "centerY",
-					label: tr("Vertical centers")
-				},
-				{
-					value: "bottom",
-					label: tr("Bottom edges")
-				}
-			],
-			action: { type: "align" }
-		}), button("pageSnap", rect$1(Math.min(306, width - 32), y, 32, 32), tr("Snap to guides"), "grid-view", { type: "snap" }, enabled, {
+			highlighted: ui.multiSelect,
+			enabled,
+			action: { type: "multiSelect" }
+		});
+		place("Button", "pageSnap", 32, {
+			text: tr("Snap to guides"),
+			icon: "grid-view",
 			iconOnly: true,
-			highlighted: ui.snap
-		}));
-		height += 40;
+			highlighted: ui.snap,
+			enabled,
+			action: { type: "snap" }
+		});
+		if (ui.selection.length > 1) {
+			place("Label", "pageSelectionCount", 64, {
+				text: ui.selection.length + " " + tr("selected"),
+				color: "secondaryText"
+			});
+			place("Choice", "pageAlign", 140, {
+				label: tr("Align selected elements"),
+				value: "",
+				enabled,
+				options: [
+					["", "Align"],
+					["left", "Left edges"],
+					["centerX", "Horizontal centers"],
+					["right", "Right edges"],
+					["top", "Top edges"],
+					["centerY", "Vertical centers"],
+					["bottom", "Bottom edges"]
+				].map(([value, title]) => ({
+					value,
+					label: tr(title)
+				})),
+				action: { type: "align" }
+			});
+		}
+	}
+	if (ui.canvasSettings) {
+		x = 0;
+		y += 38;
+		place("Label", "pageCanvasWidthLabel", Math.min(190, width - 106), {
+			text: tr("Preview width in pixels"),
+			color: "secondaryText"
+		});
+		place("Field", "pageCanvasPixels", 76, {
+			label: tr("Preview width in pixels"),
+			placeholder: tr("Auto"),
+			text: ui.canvasWidthText,
+			enabled,
+			inputMode: "numeric",
+			action: { type: "canvasWidthBuffer" },
+			commitAction: { type: "canvasWidthCommit" }
+		});
+		place("Label", "pageCanvasPixelsUnit", 22, {
+			text: "px",
+			color: "secondaryText"
+		});
 	}
 	return {
 		nodes,
-		height
+		height: y + 32
 	};
 }
 //#endregion
@@ -26155,7 +26167,7 @@ var rect = (x, y, width, height) => ({
 	height: Math.max(0, height)
 });
 function geometry(width, height, collapsed) {
-	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 72 : 250, body = width - nav, pad = mobile ? 12 : 20;
+	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 56 : 250, body = width - nav, pad = mobile ? 12 : 20;
 	const header = mobile ? 166 : 77;
 	return {
 		mobile,
@@ -26200,7 +26212,7 @@ function describe$34(model, ui, width, height, language) {
 			}));
 		}
 		const top = ui.collapsed ? 88 : 170;
-		nav.push(node("List", "administrationNavigation", rect(8, top, g.nav - 16, height - top - 12), {
+		nav.push(node("List", "administrationNavigation", rect(ui.collapsed ? 0 : 8, top, g.nav - (ui.collapsed ? 0 : 16), height - top - 12), {
 			source: "sections",
 			keyField: "id",
 			rowHeight: ui.collapsed ? 48 : 76,

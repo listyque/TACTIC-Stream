@@ -27,6 +27,14 @@ def dashboard_state():
     return state
 
 
+def configuration_xml(document):
+    root = ET.Element('config')
+    definition = ET.SubElement(root, 'view', name='dashboard.' + document['name'])
+    ET.SubElement(definition, 'dashboard').text = json.dumps(document, ensure_ascii=False, indent=2)
+    ET.indent(root, space='  ')
+    return ET.tostring(root, encoding='unicode')
+
+
 class DashboardCmd(Command):
     def execute(self):
         _require_admin()
@@ -92,12 +100,10 @@ class DashboardCmd(Command):
                 raise ValueError('Choose a preview record')
             if detail_key and model['layoutHasDetails']:
                 model['layoutDetail']=dashboard_layout(document,view,detail_key=detail_key,filter_values=filter_values)
-            return dict(kind='dashboard',document=document,model=model,view=view,path=path,revision=state['revision'],applied=False)
-        root=ET.Element('config');definition=ET.SubElement(root,'view',name=view)
-        ET.SubElement(definition,'dashboard').text=json.dumps(document,ensure_ascii=False)
+            return dict(kind='dashboard',document=document,model=model,view=view,path=path,revision=state['revision'],applied=False,xml=configuration_xml(document))
         record=sources[0] if sources else SearchType.create('config/widget_config')
         for name,value in dict(search_type='CustomLayoutWdg',category='CustomLayoutWdg',view=view,
-            config=ET.tostring(root,encoding='unicode')).items():
+            config=configuration_xml(document)).items():
             record.set_value(name,value)
         record.commit()
         url=urls[0] if urls else SearchType.create('config/url')

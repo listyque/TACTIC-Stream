@@ -36,6 +36,12 @@ async function resize(cancel) {
   if (cancel) await page.keyboard.press('Escape');
   await page.mouse.up();
 }
+async function editorMenu(command) {
+  await control('pageToolsMenu').locator('summary').click();
+  await page
+    .locator('[data-menu-command="' + command + '"]:visible button')
+    .click();
+}
 try {
   await page.goto(process.argv[2] + '/projects/admin/dashboard/review');
   await page.getByLabel('Login', { exact: true }).fill('admin');
@@ -47,6 +53,55 @@ try {
   await control('workspacePageEdit').click();
   await editor.waitFor();
   await editor.locator('[data-canvas-key="0.0"]').waitFor();
+  assert.equal((await control('pageLayersPanel').boundingBox()).width, 180);
+  assert.equal(await control('pageBlock_0Icon').count(), 1);
+  await control('pageTreeToggle_0').click();
+  assert.equal(await control('pageBlock_0.0').count(), 0);
+  await control('pageBlock_0').focus();
+  await page.keyboard.press('ArrowRight');
+  await control('pageBlock_0.0').waitFor();
+  for (const [name, dx] of [
+    ['pageLayersSplitter', 60],
+    ['pagePropertiesSplitter', -40]
+  ]) {
+    const box = await control(name).boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + 40);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 + dx, box.y + 40, { steps: 5 });
+    await page.mouse.up();
+  }
+  for (const [prefix, size] of [
+    ['Layers', 240],
+    ['Properties', 320]
+  ]) {
+    assert.equal(
+      (await control('page' + prefix + 'Panel').boundingBox()).width,
+      size
+    );
+    await control('page' + prefix + 'Toggle').click();
+    assert.equal(
+      (await control('page' + prefix + 'Panel').boundingBox()).width,
+      32
+    );
+    await control('page' + prefix + 'Toggle').click();
+    assert.equal(
+      (await control('page' + prefix + 'Panel').boundingBox()).width,
+      size
+    );
+  }
+  await control('pageSourceXml').click();
+  const source = control('pageXmlSource').locator('textarea');
+  await source.waitFor();
+  await page.waitForFunction(() =>
+    document
+      .querySelector('[data-frame="pageXmlSource"] textarea')
+      ?.value.includes('dashboard.review')
+  );
+  assert(await source.evaluate((node) => node.readOnly));
+  assert.equal(await control('pageLayersPanel').count(), 0);
+  assert.equal(writes.length, 0, 'Editor framing and XML never save');
+  await control('pageSourceXml').click();
+  await control('pageLayersPanel').waitFor();
   await control('pageSnap').click();
   assert.equal(await control('pageLayoutChoice').inputValue(), 'review');
   const childHit = editor.locator('[data-canvas-key="0.0"]');
@@ -55,7 +110,7 @@ try {
   await control('pageProperty_gap').waitFor();
   const editCanvasWidth = (await control('pageCanvasPanel').boundingBox())
     .width;
-  await control('pagePreviewMode').click();
+  await editorMenu('preview');
   assert.equal(
     await editor.locator('[data-canvas-key]').count(),
     0,
@@ -66,7 +121,7 @@ try {
     (await control('pageCanvasPanel').boundingBox()).width > editCanvasWidth
   );
   assert.equal(writes.length, 0);
-  await control('pagePreviewMode').click();
+  await editorMenu('preview');
   await control('pageBlock_0.0').click();
   await page.keyboard.press('Control+d');
   await control('pageBlock_0.2').waitFor();
@@ -78,16 +133,16 @@ try {
   await control('pageBlock_1').waitFor();
   await control('pageParent').selectOption('0');
   await control('pageBlock_0.2').waitFor();
-  await control('pageAction_reorder-1').click();
+  await editorMenu('moveUp');
   for (let i = 0; i < 4; i++) await control('pageAction_undo').click();
   assert.equal(await control('pageBlock_0.2').count(), 0);
   assert.equal(await control('pageBlock_1').count(), 0);
-  await control('pageAncestor_0').click();
+  await control('pageBlock_0').click();
   await control('pageProperty_gap').waitFor();
-  await control('pageAncestor_page').click();
+  await control('pageBlock_page').click();
   assert.equal(await control('pageParent').count(), 0);
   await control('pageBlock_0.0').click();
-  await control('pageAction_duplicate').click();
+  await editorMenu('duplicate');
   await control('pageProperty_title').fill('Typing');
   await page.keyboard.press('Control+z');
   assert.equal(
@@ -109,7 +164,7 @@ try {
     await property('0.0', 'width', 120);
     await property('0.1', 'width', 120);
     await property('0.1', 'offset_x', 140);
-    await control('pageAction_duplicate').click();
+    await editorMenu('duplicate');
     await property('0.2', 'offset_x', 280);
     await page.waitForFunction(() => {
       const box = document.querySelector('[data-canvas-key="0.2"]');
@@ -185,6 +240,7 @@ try {
     for (let i = 0; i < 5; i++) await control('pageAction_undo').click();
     assert.ok(await control('pageAction_undo').isDisabled());
   }
+  await editorMenu('canvasSettings');
   await control('pageCanvasPixels').fill('800');
   await control('pageCanvasPixels').blur();
   await control('pageCanvasZoom').selectOption('50');
@@ -209,15 +265,15 @@ try {
   );
   await control('pageAction_undo').click();
   assert.equal(await control('pageProperty_height').inputValue(), '60');
-  await control('pageAncestor_0').click();
+  await control('pageBlock_0').click();
   const tallPreview = page.waitForResponse((response) => {
     if (!response.url().endsWith('/admin/rpc')) return false;
     const values = response.request().postDataJSON()?.args?.[2];
     return (
-      values?.action === 'preview' && values.document?.blocks?.length === 5
+      values?.action === 'preview' && values.document?.blocks?.length === 7
     );
   });
-  for (let i = 0; i < 4; i++) await control('pageAction_duplicate').click();
+  for (let i = 0; i < 6; i++) await editorMenu('duplicate');
   await tallPreview;
   await page.waitForFunction(() => {
     const scroll = document.querySelector('[data-frame="pageViewportScroll"]');
@@ -234,7 +290,7 @@ try {
     'Scaled pages must not create phantom scroll space: ' +
       JSON.stringify(scrollRange)
   );
-  for (let i = 0; i < 4; i++) await control('pageAction_undo').click();
+  for (let i = 0; i < 6; i++) await control('pageAction_undo').click();
   await control('pageCanvasSize').selectOption('1280');
   await control('pageCanvasZoom').selectOption('200');
   await control('pageViewportScroll').hover();

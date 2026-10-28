@@ -6,6 +6,7 @@ import { randomUuid } from '../../controls/identity.js';
 import { projectPath } from '../workspace/links.js';
 import FrameView from '../../frame/FrameView.vue';
 import CustomLayoutView from '../interface/CustomLayoutView.vue';
+import PageEditorTools from './PageEditorTools.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.state.mjs';
 import * as Reports from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs';
@@ -28,6 +29,7 @@ export default {
       baseline: '',
       revision: '',
       compiled: null,
+      sourceXml: '',
       canvasBoxes: [],
       checkedDocument: '',
       error: '',
@@ -88,6 +90,7 @@ export default {
           checked:
             !!this.document &&
             JSON.stringify(this.document) === this.checkedDocument,
+          sourceXml: this.sourceXml,
           error: this.error,
           message: this.message,
           dataSource: this.dataSource,
@@ -121,10 +124,17 @@ export default {
       );
     },
     models() {
-      return UI.models(this.frameModel);
+      return UI.models(this.frameModel, this.ui);
     },
     views() {
       return {
+        pageTools: {
+          component: PageEditorTools,
+          nodeProps: true,
+          props: {
+            onCommand: (command) => this.dispatch(UI.toolEvent(command))
+          }
+        },
         pagePreview: {
           component: CustomLayoutView,
           nodeProps: true,
@@ -413,6 +423,7 @@ export default {
         );
         if (generation === this.generation && serial === this.previewSerial) {
           this.compiled = value.model;
+          this.sourceXml = value.xml;
           this.checkedDocument = document;
           this.error = '';
         }

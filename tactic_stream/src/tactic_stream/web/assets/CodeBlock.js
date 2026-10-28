@@ -8205,6 +8205,8 @@ var russian = {
 	"Choose Save or Check for this form": "Выберите сохранение или проверку состояния формы",
 	"The page changed while a save was pending. Check saved state.": "Страница изменилась во время сохранения. Проверьте сохранённое состояние.",
 	"Record field must be a finite number": "Поле объекта должно содержать конечное число",
+	"Canvas settings": "Настройки холста",
+	"Editor tools": "Инструменты редактора",
 	"The source tab changed. Reload the page.": "Исходная вкладка изменилась. Обновите страницу."
 };
 function translate(text, language, values) {

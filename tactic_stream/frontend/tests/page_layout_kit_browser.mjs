@@ -39,6 +39,12 @@ async function property(name, value) {
   await control('pageProperty_' + name).fill(String(value));
   await control('pageProperty_' + name).blur();
 }
+async function editorMenu(command) {
+  await control('pageToolsMenu').locator('summary').click();
+  await page
+    .locator('[data-menu-command="' + command + '"]:visible button')
+    .click();
+}
 try {
   await page.goto(process.argv[2] + '/projects/admin/dashboard/kit_test');
   await page.getByLabel('Login', { exact: true }).fill('admin');
@@ -75,14 +81,14 @@ try {
   await box('0.5').waitFor();
   await control('pageBlock_0.0').click();
   await control('pageProperty_text_align').selectOption('center');
-  await control('pagePreviewMode').click();
+  await editorMenu('preview');
   assert.equal(await page.locator('[data-canvas-key]').count(), 0);
   await control('customLayout_0_0')
     .getByText('Project dashboard', { exact: true })
     .waitFor();
   assert.equal(writes.length, 0);
   await page.screenshot({ path: process.argv[3] + '/clean-preview.png' });
-  await control('pagePreviewMode').click();
+  await editorMenu('preview');
   await page.waitForFunction(
     () => !document.querySelector('[data-frame="adminSaveDocument"]')?.disabled
   );
@@ -120,11 +126,13 @@ try {
   });
   await page.screenshot({ path: process.argv[3] + '/phone.png' });
   await page.setViewportSize({ width: 1800, height: 1100 });
-  const opening = context.waitForEvent('page');
   await control('customLayout_0_2').click();
-  const target = await opening;
-  await target.waitForURL('**/dashboard/kit_target');
-  await target.close();
+  await page.waitForURL('**/dashboard/kit_target');
+  assert.equal(
+    context.pages().length,
+    1,
+    'Internal dashboard links use the existing workspace'
+  );
   assert.deepEqual(errors, []);
   assert.equal(writes.length, 1);
   console.log(
