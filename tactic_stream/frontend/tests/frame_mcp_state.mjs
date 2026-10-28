@@ -30,8 +30,8 @@ for (const width of [320, 600, 800])
       for (const [index, tool] of tools.entries()) {
         const row = get('mcpTool_' + index);
         assert.equal(row.text, tool.title);
-      assert.ok(row.label.includes(tool.title));
-      assert.ok(row.label.includes(get('mcpToolAccess_' + index).text));
+        assert.ok(row.label.includes(tool.title));
+        assert.ok(row.label.includes(get('mcpToolAccess_' + index).text));
         assert.equal(get('mcpToolName_' + index).text, tool.title);
         assert.equal(get('mcpToolDescription_' + index).text, tool.description);
         assert.ok(get('mcpToolAccess_' + index).text);
