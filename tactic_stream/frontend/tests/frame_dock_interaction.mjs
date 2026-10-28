@@ -328,6 +328,14 @@ try {
   );
   await client.detach();
 
+  assert.equal(await page.locator('#workspace-data').evaluate(host => {
+    const content = document.createElement('section');
+    content.className = 'content workspace-browser';
+    host.append(content);
+    const border = getComputedStyle(content).borderTopWidth;
+    content.remove();
+    return border;
+  }), '0px');
   const workspaceMenu = page.locator('.dock-menu').first();
   await workspaceMenu.locator(':scope > summary').click();
   const browsing = workspaceMenu.locator('.dock-group-menu').first();

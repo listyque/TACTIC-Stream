@@ -334,7 +334,7 @@ h2 { font-size: var(--text-heading); }
 .dock-panel.floating { padding:calc(var(--dock-floating-surface-inset) + var(--dock-surface-border)); filter: drop-shadow(0 4px 8px var(--shadow-color)); }
 .dock-panel.floating::before { inset:var(--dock-floating-surface-inset); }
 .dock-content { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; overflow: hidden; border-radius: var(--surface-radius); container-type: size; }
-.dock-content > .content.workspace-browser { margin: 0; flex: 1; }
+.dock-content > .content.workspace-browser { margin: 0; flex: 1; border: 0; }
 .dock-titlebar { position:relative; height:var(--dock-title-height); flex:0 0 var(--dock-title-height); padding:0; background:var(--surface); border:0; border-radius:var(--surface-radius) var(--surface-radius) 0 0; }
 .dock-titlebar > strong { display:flex; align-items:center; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: var(--text-label); font-weight:600; letter-spacing:.55px; text-transform: uppercase; }
 .dock-titlebar > .app-icon { color: var(--primary); font-size: 16px; }
