@@ -96,7 +96,7 @@ function event(action) {
   min-height: 48px;
   display: block;
   padding: 0;
-  background: var(--surface-high);
+  background: var(--surface);
 }
 .script-shelf-buttons {
   display: flex;
