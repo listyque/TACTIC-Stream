@@ -2,7 +2,7 @@ import { I as resolveComponent, N as openBlock, Y as markRaw, _ as createElement
 import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
-import { $ as notices, Q as documentEvent, et as policy, p as readPreviewImage, rt as toolbar$1, tt as sectionSelector } from "./App.js";
+import { at as toolbar$1, et as documentEvent, nt as policy, p as readPreviewImage, rt as sectionSelector, tt as notices } from "./App.js";
 import { t as NamingEditor_default } from "./NamingEditor.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/search_types/search_types.fields.mjs
 var automaticFields = [

@@ -4,7 +4,7 @@ import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc
 import { n as sections } from "./sections.ui.js";
 import { a as projectPath } from "./links.js";
 import { t as listAction } from "./tree.ui.js";
-import { $ as notices, A as _sfc_main$2, At as spacing, Ct as kinds, Dt as reorder, Et as remove, Ot as reparent, Q as documentEvent, St as geometry, Tt as path, U as spacingField, _t as block, bt as duplicate, dt as filter, ft as mode, gt as add, ht as type, kt as siblings, lt as change, mt as scope$1, pt as options, rt as toolbar$1, tt as sectionSelector, ut as fields$1, vt as change$1, wt as layers, xt as fingerprint, yt as copy } from "./App.js";
+import { A as _sfc_main$2, At as reparent, Ct as fingerprint, Dt as path, Et as layers, G as spacingField, M as zooms, Mt as spacing, Ot as remove, St as duplicate, Tt as kinds, _t as type, at as toolbar$1, bt as change$1, dt as change, et as documentEvent, ft as fields$1, gt as scope$1, ht as options, j as controls, jt as siblings, kt as reorder, mt as mode, pt as filter, rt as sectionSelector, tt as notices, vt as add, wt as geometry, xt as copy, yt as block } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
 var collections = [
 	"items",
@@ -743,11 +743,14 @@ function describe(model, ui, width, height, language) {
 			})]
 		}));
 	}
-	if (ui.preview || !narrow || ui.panel === "canvas") nodes.push(node("Box", "pageCanvasPanel", rect(canvasX, y, canvasWidth, h), {
-		background: "workspace",
-		border: "outlineVariant",
-		children: [node("View", "pageCanvas", rect(12, 12, canvasWidth - 24, h - 24), { view: "pagePreview" })]
-	}));
+	if (ui.preview || !narrow || ui.panel === "canvas") {
+		const tools = controls(ui, canvasWidth - 24, language, !model.busy);
+		nodes.push(node("Box", "pageCanvasPanel", rect(canvasX, y, canvasWidth, h), {
+			background: "workspace",
+			border: "outlineVariant",
+			children: [node("Box", "pageCanvasTools", rect(12, 12, canvasWidth - 24, tools.height), { children: tools.nodes }), node("View", "pageCanvas", rect(12, 20 + tools.height, canvasWidth - 24, Math.max(1, h - tools.height - 32)), { view: "pagePreview" })]
+		}));
+	}
 	return { nodes };
 }
 //#endregion
@@ -768,6 +771,11 @@ function initial() {
 		past: [],
 		future: [],
 		historyDocument: "",
+		canvas: {
+			width: 0,
+			zoom: "fit"
+		},
+		canvasWidthText: "",
 		error: ""
 	};
 }
@@ -852,7 +860,11 @@ function transition(ui, model, event) {
 		"panel",
 		"preview",
 		"source",
-		"recordQuery"
+		"recordQuery",
+		"canvasSize",
+		"canvasWidthBuffer",
+		"canvasWidthCommit",
+		"canvasZoom"
 	].includes(event.type)) return {
 		ui: next,
 		commands
@@ -891,6 +903,23 @@ function transition(ui, model, event) {
 			"reparent"
 		].includes(event.type)) throw Error("Apply or discard the pending text before continuing");
 		switch (event.type) {
+			case "canvasSize":
+			case "canvasWidthCommit": {
+				const text = event.type === "canvasSize" ? String(event.value === "auto" ? "" : event.value) : ui.canvasWidthText.trim();
+				if (text && (!/^\d+$/.test(text) || Number(text) < 320 || Number(text) > 3840)) throw Error("Enter a preview width from 320 to 3840 pixels, or leave it empty for Auto.");
+				next.canvas = Object.assign({}, ui.canvas, { width: text ? Number(text) : 0 });
+				next.canvasWidthText = text;
+				next.error = "";
+				break;
+			}
+			case "canvasWidthBuffer":
+				next.canvasWidthText = String(event.value);
+				break;
+			case "canvasZoom":
+				if (event.value !== "fit" && !zooms.includes(Number(event.value))) throw Error("Choose an available canvas zoom");
+				next.canvas = Object.assign({}, ui.canvas, { zoom: String(event.value) });
+				next.error = "";
+				break;
 			case "undo":
 			case "redo": {
 				if (ui.preview) break;
@@ -1175,6 +1204,7 @@ var _sfc_main = {
 					editing: true,
 					guides: !this.ui.preview,
 					selectedBlock: this.ui.preview ? "" : this.ui.selected,
+					canvasViewport: this.ui.canvas,
 					onLoaded: (value) => this.sampleLoaded(value),
 					onBlock: (key) => this.dispatch({
 						type: "select",

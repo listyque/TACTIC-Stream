@@ -1,7 +1,7 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/sections.ui.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/previewFiles.js","assets/SnapshotCheckout.css","assets/NamingEditor.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/richText.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/markdown-it.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentProviders.js","assets/AgentProviders.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { $ as shallowRef, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, S as getCurrentInstance, T as mergeModels, U as watch, V as useModel, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, t as Transition, tt as unref, u as Fragment, v as createSlots, w as inject, y as createTextVNode } from "./vue.js";
-import { $ as savePreferencePage, A as t, D as randomId, E as setServerDebugContext, G as layout$11, H as fontFamily, I as readableText, J as readableText$1, K as lineHeights, L as saveAppearance, P as frameColors, Q as preferences, R as blend, S as logRequest, T as sessionRecords, U as fontLineHeight, V as cssRoles, W as fontMetricHeight, X as configurationPreview, Y as textStyles, _ as forgetSessions, at as BusyIndicator_default, b as levels, c as _sfc_main$184, et as normalizeColumns, f as _sfc_main$185, g as exportSession, h as debugSettings, i as dockMinimumWidth, j as appearance, k as asyncComponent, m as debugLog, o as mobile, ot as _plugin_vue_export_helper_default, p as clearLive, q as metrics$12, r as dockMinimumHeight, s as mobileLayout, t as __vitePreload, tt as taskColumns, v as formatEvent, w as savedSessions, y as importSession, z as controls$1 } from "./index.js";
+import { $ as savePreferencePage, A as t, D as randomId, E as setServerDebugContext, G as layout$11, H as fontFamily, I as readableText, J as readableText$1, K as lineHeights, L as saveAppearance, P as frameColors, Q as preferences, R as blend, S as logRequest, T as sessionRecords, U as fontLineHeight, V as cssRoles, W as fontMetricHeight, X as configurationPreview, Y as textStyles, _ as forgetSessions, at as BusyIndicator_default, b as levels, c as _sfc_main$184, et as normalizeColumns, f as _sfc_main$185, g as exportSession, h as debugSettings, i as dockMinimumWidth, j as appearance, k as asyncComponent, m as debugLog, o as mobile, ot as _plugin_vue_export_helper_default, p as clearLive, q as metrics$12, r as dockMinimumHeight, s as mobileLayout, t as __vitePreload, tt as taskColumns, v as formatEvent, w as savedSessions, y as importSession, z as controls$2 } from "./index.js";
 import { $ as objectStatus, A as localDate, At as setUpdatesAvailable, B as activityFeed, Bt as notificationHistory, C as _sfc_main$202, Ct as tableParentGroup, D as _sfc_main$195, Dt as userProfile, E as _sfc_main$188, Et as userAvatar, F as _sfc_main$193, Ft as cancelNotificationReply, G as interfaceDefinition, Gt as button, Ht as resetNotifications, I as _sfc_main$203, It as clearNotificationHistory, J as messageFileRequest, Jt as node, Kt as label, Lt as dismissNotification, M as parse$1, Mt as updatesAvailable, Nt as activeNotifications, O as _sfc_main$197, Ot as widgetConfiguration, P as _sfc_main$196, Pt as beginNotificationReply, Q as objectRelations, R as _sfc_main$192, Rt as editNotificationReply, S as matchesUser$1, St as tableDependencyFile, T as AppSearchField_default, Tt as uploadFormFile, U as endActivity, Ut as setNotificationProgress, V as beginActivity, Vt as notify, Wt as submitNotificationReply, X as navigationLink, Xt as revealListOffset, Y as messagesRequest, Yt as rect$1, Z as objectDeletion, Zt as virtualRange, _ as copyText, _t as serverUpdates, a as _sfc_main$191, at as resetRequestActivity, b as _sfc_main$200, bt as tableCells, c as _sfc_main$199, ct as rpc, dt as scriptShelf, et as projectCatalog, ft as searchConfiguration, g as copyImage, h as xmlTokens, i as _sfc_main$186, it as requestActivity, j as monthLabel, jt as updateDelay, k as _sfc_main$189, kt as workspaceLayouts, m as pythonTokens, n as frameContentWidth, nt as projectNavigation, o as _sfc_main$190, ot as resolveCustomUrl, p as javascriptTokens, q as linkPreviews, qt as muted, r as observeFrameSizes, s as _sfc_main$198, st as resultItems, t as _sfc_main$187, tt as projectCreationCatalog, v as readClipboardImages, vt as sessionAction, w as ItemPreview_default, wt as transactionDetails, x as _sfc_main$194, xt as tableDependencies, y as translate, z as _sfc_main$201, zt as failNotificationReply } from "./CodeBlock.js";
 import { a as unsupportedField, i as fieldKind, n as _sfc_main$204, r as format, t as RecordForm_default } from "./RecordForm.js";
 import { n as sections$1, t as captionHeight } from "./sections.ui.js";
@@ -16,24 +16,24 @@ import { a as sourcePath, i as repositories, n as droppedFiles, r as prepareFile
 import { t as downloadBlob } from "./files2.js";
 import { n as FilePreviewContent_default, t as FilePreview_default } from "./FilePreview.js";
 import { t as fileBlob } from "./previewFiles.js";
-import { a as viewTabWidth, i as tab, n as key$2, r as sectionWidth, t as dimensions$4 } from "./workspace.ui.js";
-import { t as describe$62 } from "./confirmation.ui.js";
+import { a as viewTabWidth, i as tab, n as key$2, r as sectionWidth, t as dimensions$5 } from "./workspace.ui.js";
+import { t as describe$63 } from "./confirmation.ui.js";
 import { t as _sfc_main$208 } from "./AppDialog.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";
 import { t as _sfc_main$209 } from "./AppMenuItem.js";
 import { n as navigate, r as navigationRow } from "./tree.ui.js";
 //#region ../src/tactic_stream/shared_ui/shell/main_toolbar.ui.mjs
-var dimensions$3 = {
+var dimensions$4 = {
 	controlExtent: 36,
 	surfaceExtent: 32,
 	projectPreviewExtent: 28,
 	projectPreviewRadius: 6
 };
-function describe$61(model) {
+function describe$62(model) {
 	const width = Math.max(0, model.width);
 	const compact = !!model.compact;
 	const height = layout$11.appBarHeight;
-	const extent = dimensions$3.controlExtent;
+	const extent = dimensions$4.controlExtent;
 	const gap = 2;
 	const left = compact ? 4 : 8;
 	const right = compact ? 4 : 12;
@@ -99,7 +99,7 @@ function describe$61(model) {
 		width,
 		height,
 		nodes,
-		dimensions: dimensions$3,
+		dimensions: dimensions$4,
 		connectionExpanded,
 		dccExpanded,
 		compactProgress
@@ -112,7 +112,7 @@ function positions$1(scene) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/shell/workspace.ui.mjs
-function describe$60(width, height, compact = false) {
+function describe$61(width, height, compact = false) {
 	const toolbar = Math.min(height, layout$11.appBarHeight);
 	const rail = compact ? 0 : Math.min(width, layout$11.sectionRailWidth);
 	const body = Math.max(0, height - toolbar);
@@ -964,7 +964,7 @@ var MessageTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 }, [["__scopeId", "data-v-141aba48"]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/parallel.ui.mjs
-function describe$59(cell, width, height, language, expanded = {}) {
+function describe$60(cell, width, height, language, expanded = {}) {
 	const children = [], inner = Math.max(1, width - 24), barHeight = (cell.barHeight || 1) + 1, steps = cell.steps || 6, labelHeight = 20, rowHeight = Math.max(28, steps * barHeight + labelHeight + 4);
 	let index = 0, left = 0;
 	function append(groups, parent) {
@@ -1040,7 +1040,7 @@ function droppedKeys(value, accepted) {
 	if (!value || value.searchType !== accepted || !Array.isArray(value.searchKeys) || value.searchKeys.length > 500 || value.searchKeys.some((key) => typeof key !== "string" || !key)) throw new Error("Dropped objects belong to another Search Type");
 	return [...new Set(value.searchKeys)];
 }
-function describe$58(cell, width, height, language, editable) {
+function describe$59(cell, width, height, language, editable) {
 	const inner = Math.max(0, width - 24), links = cell.links || [], children = [];
 	if (cell.available === false) children.push(label("dropDiagnostic", rect$1(4, 0, inner, 28), translate(cell.diagnostic, language), {
 		color: "secondaryText",
@@ -1247,7 +1247,7 @@ function serviceHeight(columns) {
 		return Math.max(height, Math.max(64, Number(options.icon_size) || 60) + 32);
 	}, 0);
 }
-function describe$57(model, width) {
+function describe$58(model, width) {
 	const available = Math.max(0, width - metrics$10.selection - metrics$10.actions);
 	const columns = visibleColumns(model.columns || [], available, model.overrides);
 	const fitted = model.autoFit ? fittedWidths(columns, available, model.overrides) : {};
@@ -1364,7 +1364,7 @@ function columns$1(model) {
 		return result;
 	});
 }
-function describe$56(model, width, extent, language) {
+function describe$57(model, width, extent, language) {
 	const t = (value) => translate(value, language);
 	const toolOffset = model.embedded ? 36 : 0;
 	const quick = quickLayout(model, width), quickColumns = quick.columns, quickHeight = quick.height;
@@ -1540,7 +1540,7 @@ function cell$2(grid, value, row, column) {
 	const data = grid.report.rows[row]?.[grid.report.columns[column].key];
 	return { nodes: [label(grid.id + "_cell_" + row + "_" + column, rect$1(8, 0, grid.cellWidth - 16, grid.rowHeight), data == null ? "—" : String(data), { align: grid.report.columns[column].kind === "measure" ? "right" : "left" })] };
 }
-function describe$55(item, id, width, height, language) {
+function describe$56(item, id, width, height, language) {
 	const tr = (text) => translate(text, language), report = item.report, nodes = [];
 	const bodyHeight = Math.max(40, height - 38 - (report.truncated ? 28 : 0));
 	nodes.push(label(id + "_title", rect$1(0, 0, width, 28), item.text, { weight: 600 }));
@@ -2261,7 +2261,7 @@ function fields$2(model, ui, width, language, enabled) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/buttons/metrics.mjs
 function buttonWidth(advance, icon = false) {
-	const metrics = controls$1.button;
+	const metrics = controls$2.button;
 	return Math.max(metrics.minimumWidth, Math.ceil(advance) + metrics.padding + (icon ? metrics.iconPadding + metrics.iconSize + metrics.spacing : metrics.padding));
 }
 function actionLayout(actions, width, measuredWidths = []) {
@@ -2314,7 +2314,7 @@ function values(definitions, draft) {
 	}
 	return result;
 }
-function describe$54(definitions, draft, width, language, enabled = true) {
+function describe$55(definitions, draft, width, language, enabled = true) {
 	if (!definitions?.length) return {
 		height: 0,
 		nodes: []
@@ -2405,11 +2405,11 @@ function plain(value) {
 		"#39": "'"
 	})[entity]);
 }
-function describe$53(cell, width, height, language, editable = true, server = "") {
+function describe$54(cell, width, height, language, editable = true, server = "") {
 	const tabOffset = cell.layoutTabs?.length ? 56 : 0;
 	const children = [], gap = 8, tableHeight = Math.max(320, height - tabOffset - 48);
 	const controls = cell.layoutState?.controls || cell.layoutControls || [];
-	const pageFilters = describe$54(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), Math.max(0, width - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
+	const pageFilters = describe$55(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), Math.max(0, width - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
 	function draw(items, originX, originY, space, prefix = "customLayout", startIndex = 0, output = children, bottom = Infinity, spacing = 8) {
 		let top = originY;
 		for (const [index, source] of (items || []).entries()) {
@@ -2444,7 +2444,7 @@ function describe$53(cell, width, height, language, editable = true, server = ""
 				} else extent = draw(item.children, x, top, available, id, 0, output, bottom, childGap);
 			} else if (["chart", "summary"].includes(item.kind)) {
 				extent = Number.isFinite(item.height) ? item.height : 320;
-				output.push(node("Box", id, rect$1(x, top, available, extent), { children: describe$55(item, id, available, extent, language).nodes }));
+				output.push(node("Box", id, rect$1(x, top, available, extent), { children: describe$56(item, id, available, extent, language).nodes }));
 			} else if (item.kind === "metric") {
 				extent = 104;
 				output.push(node("Box", id, rect$1(x, top, available, extent), {
@@ -2719,7 +2719,7 @@ function hours(cell, width, height, language, editable = true) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/connections.ui.mjs
-function describe$52(cell, width, height, language) {
+function describe$53(cell, width, height, language) {
 	if (!cell.connectionRows?.length) return { nodes: [label("tableConnectionsEmpty", rect$1(8, 0, Math.max(0, width - 16), height), translate("No connections", language), { color: "secondaryText" })] };
 	return { nodes: [node("List", "tableConnections", rect$1(0, 0, width, height), {
 		source: "connectionRows",
@@ -2974,9 +2974,9 @@ var popupMetrics = {
 	padding: 10,
 	minimumBody: 308
 };
-function describe$51(model, width, height, language) {
+function describe$52(model, width, height, language) {
 	const tr = (text) => translate(text, language);
-	if (model.confirmAction) return describe$62({
+	if (model.confirmAction) return describe$63({
 		message: tr(model.uncertain ? "Discard this draft? Some changes may already have been saved." : "Discard this draft?"),
 		accept: "Discard",
 		destructive: true
@@ -3131,7 +3131,7 @@ function group$3(model, width, language, editable, server) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/publish.ui.mjs
-function describe$50(cell, width, height, language, editable, server) {
+function describe$51(cell, width, height, language, editable, server) {
 	const size = Math.min(60, Math.max(0, height - 38), Math.max(0, width - 8)), nodes = [];
 	if (cell.preview && size > 0) nodes.push(node("Preview", "publishPreview", rect$1((width - size) / 2, 2, size, size), {
 		source: link(cell.preview.image || "", server) || "",
@@ -3152,20 +3152,20 @@ function describe$50(cell, width, height, language, editable, server) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/services.ui.mjs
-function describe$49(cell, width, height, language, editable = true, expanded = {}, server = "") {
-	if (cell.publish) return describe$50(cell, width, height, language, editable, server);
+function describe$50(cell, width, height, language, editable = true, expanded = {}, server = "") {
+	if (cell.publish) return describe$51(cell, width, height, language, editable, server);
 	if (cell.parentGrouping !== void 0) return cell$1(cell, width, height, language, editable);
 	if (cell.summary) return summary$2(cell, width, height, language);
-	if (cell.connectionRows) return describe$52(cell, width, height, language);
+	if (cell.connectionRows) return describe$53(cell, width, height, language);
 	if (cell.timeline) return timeline(cell, width, height, language, editable);
 	if (cell.timeDays) return hours(cell, width, height, language, editable);
 	if (cell.layoutNodes && (tables(cell.layoutNodes).length || cell.layoutLoad?.length)) return { nodes: [button("tableLayoutDocument", rect$1(4, 0, Math.max(0, width - 24), 36), translate("Open details", language), "description", {
 		type: "service",
 		name: "layout-document"
 	}, true, { outlined: true })] };
-	if (cell.layoutNodes) return describe$53(cell, width, height, language, editable, server);
-	if (cell.groups && cell.steps) return describe$59(cell, width, height, language, expanded);
-	if (cell.links || cell.ingest) return describe$58(cell, width, height, language, editable);
+	if (cell.layoutNodes) return describe$54(cell, width, height, language, editable, server);
+	if (cell.groups && cell.steps) return describe$60(cell, width, height, language, expanded);
+	if (cell.links || cell.ingest) return describe$59(cell, width, height, language, editable);
 	if (cell.label && !cell.text) cell = Object.assign({}, cell, { text: translate(cell.label, language) });
 	const actions = cell.actions || [];
 	const size = 28, gap = 4;
@@ -3253,7 +3253,7 @@ var _sfc_main$173 = {
 				function connectionRow(_node, record) {
 					return row$20(record, props.cell, Math.max(0, _node.width - 16), appearance.language, props.editable, location.origin);
 				}
-				const scene = computed(() => describe$49(props.cell || {}, width.value, props.height, appearance.language, props.editable, {
+				const scene = computed(() => describe$50(props.cell || {}, width.value, props.height, appearance.language, props.editable, {
 					...expanded.value,
 					__nested: props.nestedState
 				}, location.origin));
@@ -3390,11 +3390,11 @@ var _hoisted_3$49 = {
 	key: 2,
 	class: "table-cell-text muted"
 };
-var _hoisted_4$39 = {
+var _hoisted_4$38 = {
 	key: 13,
 	class: "table-notes"
 };
-var _hoisted_5$31 = { class: "visually-hidden" };
+var _hoisted_5$30 = { class: "visually-hidden" };
 var _hoisted_6$26 = { class: "visually-hidden" };
 var _hoisted_7$26 = ["aria-label", "title"];
 var _hoisted_8$22 = ["aria-label", "title"];
@@ -3513,7 +3513,7 @@ function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 		key: 12,
 		cell: $props.cell,
 		height: Number(String($props.element.display?.options?.height || "").replace("px", "")) || void 0
-	}, null, 8, ["cell", "height"])) : $props.element.cell?.kind === "notes" ? (openBlock(), createElementBlock("span", _hoisted_4$39, [(openBlock(true), createElementBlock(Fragment, null, renderList($props.cell?.processes || [], (item) => {
+	}, null, 8, ["cell", "height"])) : $props.element.cell?.kind === "notes" ? (openBlock(), createElementBlock("span", _hoisted_4$38, [(openBlock(true), createElementBlock(Fragment, null, renderList($props.cell?.processes || [], (item) => {
 		return openBlock(), createBlock(_component_AppButton, {
 			key: item.process,
 			class: "table-note-chip",
@@ -3567,7 +3567,7 @@ function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 		"translate-label": false,
 		disabled: ""
 	}, {
-		default: withCtx(() => [createBaseVNode("span", _hoisted_5$31, toDisplayString($props.element.title), 1)]),
+		default: withCtx(() => [createBaseVNode("span", _hoisted_5$30, toDisplayString($props.element.title), 1)]),
 		_: 1
 	}, 8, ["model-value", "label"])) : $props.element.cell?.kind === "selection" ? (openBlock(), createBlock(_component_AppCheckbox, {
 		key: 16,
@@ -4013,7 +4013,7 @@ var _hoisted_2$65 = {
 	role: "columnheader"
 };
 var _hoisted_3$48 = { class: "visually-hidden" };
-var _hoisted_4$38 = [
+var _hoisted_4$37 = [
 	"aria-sort",
 	"title",
 	"aria-label",
@@ -4021,7 +4021,7 @@ var _hoisted_4$38 = [
 	"onPointerdown",
 	"onKeydown"
 ];
-var _hoisted_5$30 = { key: 1 };
+var _hoisted_5$29 = { key: 1 };
 var _hoisted_6$25 = [
 	"aria-label",
 	"aria-valuenow",
@@ -4110,7 +4110,7 @@ var _sfc_main$170 = {
 		let observer, frame;
 		const preferences = computed(() => props.state?.table || {});
 		const autoFit = computed(() => !!preferences.value.autoFit);
-		const layout = computed(() => describe$57({
+		const layout = computed(() => describe$58({
 			columns: props.columns,
 			overrides: overrides.value,
 			autoFit: autoFit.value,
@@ -4497,7 +4497,7 @@ var _sfc_main$170 = {
 								"icon",
 								"disabled",
 								"onClick"
-							])) : (openBlock(), createElementBlock("span", _hoisted_5$30, toDisplayString(column.title), 1)),
+							])) : (openBlock(), createElementBlock("span", _hoisted_5$29, toDisplayString(column.title), 1)),
 							__props.groupMode === "column:" + column.name ? (openBlock(), createBlock(_sfc_main$185, {
 								key: 2,
 								name: "group-items",
@@ -4514,7 +4514,7 @@ var _sfc_main$170 = {
 								onPointerdown: ($event) => resize(column, $event),
 								onKeydown: withModifiers(($event) => resizeKey(column, $event), ["stop"])
 							}, null, 40, _hoisted_6$25)
-						], 42, _hoisted_4$38);
+						], 42, _hoisted_4$37);
 					}), 128)),
 					createBaseVNode("div", _hoisted_7$25, [
 						__props.busy ? (openBlock(), createBlock(BusyIndicator_default, { key: 0 })) : createCommentVNode("", true),
@@ -4823,7 +4823,7 @@ function rows(state) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/dependencies.ui.mjs
-function describe$48(state, width, height, language) {
+function describe$49(state, width, height, language) {
 	const root = state.pages.root, tr = (text) => translate(text, language), identity = [
 		root.identity,
 		root.context,
@@ -5031,7 +5031,7 @@ var _sfc_main$169 = {
 		onBeforeUnmount(cancel);
 		return (_ctx, _cache) => {
 			return openBlock(), createBlock(_sfc_main$186, {
-				scene: describe$48(state.value, __props.width, __props.height, unref(appearance).language),
+				scene: describe$49(state.value, __props.width, __props.height, unref(appearance).language),
 				models: { dependencyRows: records.value },
 				"describe-row": (list, row) => row$17(row, Math.max(0, list.width - 16), unref(appearance).language),
 				onEvent: activate
@@ -5110,7 +5110,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		const component = getCurrentInstance().type;
 		const records = computed(() => rows$2(model.value));
 		const extent = computed(() => props.frameNode?.height || 320);
-		const scene = computed(() => describe$56({
+		const scene = computed(() => describe$57({
 			...model.value.scope,
 			...model.value
 		}, width.value, extent.value, appearance.language));
@@ -5450,7 +5450,7 @@ var _sfc_main$165 = {
 	},
 	emits: ["link", "scroll"],
 	setup(__props, { expose: __expose, emit: __emit }) {
-		const documentStyle = Object.fromEntries(Object.entries(controls$1.document).map(([key, value]) => ["--document-" + key, value + "px"]));
+		const documentStyle = Object.fromEntries(Object.entries(controls$2.document).map(([key, value]) => ["--document-" + key, value + "px"]));
 		const props = __props;
 		const emit = __emit;
 		const viewport = ref(null), article = ref(null);
@@ -6267,11 +6267,11 @@ var _hoisted_3$46 = {
 	key: 2,
 	class: "result-file-offline"
 };
-var _hoisted_4$37 = {
+var _hoisted_4$36 = {
 	key: 0,
 	class: "result-metadata"
 };
-var _hoisted_5$29 = {
+var _hoisted_5$28 = {
 	key: 0,
 	class: "muted"
 };
@@ -6687,7 +6687,7 @@ var _sfc_main$159 = {
 						})) : createCommentVNode("", true)], 2)) : createCommentVNode("", true),
 						__props.tree && __props.node.kind === "snapshot" && title.value && !__props.node.snapshot_display?.exists ? (openBlock(), createElementBlock("span", _hoisted_3$46, "(" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)
 					], 32)]),
-					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_4$37, [
+					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_4$36, [
 						(openBlock(true), createElementBlock(Fragment, null, renderList(__props.compact ? __props.node.progress_items?.slice(0, 1) : __props.node.progress_items, (item) => {
 							return openBlock(), createBlock(_sfc_main$191, {
 								key: item.name,
@@ -6709,7 +6709,7 @@ var _sfc_main$159 = {
 								"onClick"
 							]);
 						}), 128)),
-						__props.node.progress_items?.length && __props.node.info_items?.length ? (openBlock(), createElementBlock("span", _hoisted_5$29, "|")) : createCommentVNode("", true),
+						__props.node.progress_items?.length && __props.node.info_items?.length ? (openBlock(), createElementBlock("span", _hoisted_5$28, "|")) : createCommentVNode("", true),
 						createVNode(_sfc_main$162, {
 							items: __props.node.info_items || [],
 							selected: __props.selected,
@@ -7400,7 +7400,7 @@ function viewOf(tree, view) {
 function content(node) {
 	return [3, 4].indexOf(node.type) >= 0 ? node.text || "" : (node.children || []).map(content).join("");
 }
-function describe$47(tree, view) {
+function describe$48(tree, view) {
 	const node = viewOf(tree, view);
 	if (!node || get(node, "layout") !== "sobject-layout") throw Error("Select a SObject layout configuration");
 	const elements = children$1(node).filter((child) => child.name === "element").map((item) => {
@@ -7620,7 +7620,7 @@ function safeImage(value, base, local) {
 	if (text.charAt(0) === "/") return (base || "") + text;
 	return /^(https?:|blob:|data:image\/(?:png|jpeg|webp|gif);base64,)/i.test(text) || local && /^file:/i.test(text) ? text : "";
 }
-function describe$46(layout, sample, width, selected, language, screenWidth, assetBase, prefix, depth, editing = true) {
+function describe$47(layout, sample, width, selected, language, screenWidth, assetBase, prefix, depth, editing = true) {
 	const tr = (text) => translate(text, language), nodes = [], namePrefix = prefix || "layoutPreview", level = depth || 0;
 	if (level >= 8) return {
 		nodes: [label(namePrefix + "Depth", rect$1(0, 0, width, 64), tr("Layout container depth exceeds 8"), {
@@ -7824,7 +7824,7 @@ function describe$46(layout, sample, width, selected, language, screenWidth, ass
 			const copyX = items.some((item) => item.role === "preview") ? Math.min(96, w * .28) : 8;
 			let cursor = 8;
 			for (const item of items) {
-				let box, child = item.kind === "group" && item.role !== "copy" ? container(item.name, Math.max(1, w - 16), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$46(item.widget_layout, sample, Math.max(1, w - 16), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null;
+				let box, child = item.kind === "group" && item.role !== "copy" ? container(item.name, Math.max(1, w - 16), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$47(item.widget_layout, sample, Math.max(1, w - 16), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null;
 				if (item.role === "preview") box = rect$1(8, 8, Math.min(76, w * .24), 76);
 				else if (item.role === "copy") {
 					child = container(item.name, Math.max(1, w - copyX - 16), nesting + 1);
@@ -7850,7 +7850,7 @@ function describe$46(layout, sample, width, selected, language, screenWidth, ass
 		}
 		const gap = (definition ? definition.gap : layout.gap) ?? 6, available = Math.max(1, w - gap * (columns - 1)), sizes = tracks(definition ? "" : layout.tracks, columns, available), rows = [];
 		for (const item of items) {
-			const start = number(item.row, 1, 1, 100) - 1, span = number(item.rows, 1, 1, 100), column = number(item.column, 1, 1, columns) - 1, columnsWide = number(item.span, 1, 1, columns - column), cellWidth = sizes.slice(column, column + columnsWide).reduce((a, b) => a + b, 0) + gap * (columnsWide - 1), child = item.kind === "group" ? container(item.name, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$46(item.widget_layout, sample, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null, h = Math.max(child ? child.height + 8 : number(item.height, 40, 1, 1200), number(item.height, 40, 1, 1200)) + (item.padding?.[0] || 0) + (item.padding?.[2] || 0) + (item.margin?.[0] || 0) + (item.margin?.[2] || 0);
+			const start = number(item.row, 1, 1, 100) - 1, span = number(item.rows, 1, 1, 100), column = number(item.column, 1, 1, columns) - 1, columnsWide = number(item.span, 1, 1, columns - column), cellWidth = sizes.slice(column, column + columnsWide).reduce((a, b) => a + b, 0) + gap * (columnsWide - 1), child = item.kind === "group" ? container(item.name, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), nesting + 1) : item.kind === "view" && item.widget_layout ? describe$47(item.widget_layout, sample, Math.max(1, cellWidth - 8 - (item.margin?.[1] || 0) - (item.margin?.[3] || 0) - (item.padding?.[1] || 0) - (item.padding?.[3] || 0)), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, nesting + 1, editing) : null, h = Math.max(child ? child.height + 8 : number(item.height, 40, 1, 1200), number(item.height, 40, 1, 1200)) + (item.padding?.[0] || 0) + (item.padding?.[2] || 0) + (item.margin?.[0] || 0) + (item.margin?.[2] || 0);
 			for (let index = start; index < start + span; index++) rows[index] = Math.max(rows[index] || 0, (h - gap * (span - 1)) / span);
 			placements.push({
 				item,
@@ -7895,7 +7895,7 @@ function describe$46(layout, sample, width, selected, language, screenWidth, ass
 			height: 160
 		};
 		for (const item of items) {
-			const w = width * number(item.span, 1, 1, 12) / total, child = item.kind === "group" ? container(item.name, Math.max(1, w - 8), level + 1) : item.kind === "view" && item.widget_layout ? describe$46(item.widget_layout, sample, Math.max(1, w - 8), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, level + 1, editing) : null;
+			const w = width * number(item.span, 1, 1, 12) / total, child = item.kind === "group" ? container(item.name, Math.max(1, w - 8), level + 1) : item.kind === "view" && item.widget_layout ? describe$47(item.widget_layout, sample, Math.max(1, w - 8), selected, language, screenWidth, assetBase, namePrefix + "_" + item.name, level + 1, editing) : null;
 			body.height = Math.max(body.height, (child ? child.height : 108) + 52);
 			body.nodes.push(label(namePrefix + "Header_" + item.name, rect$1(x, 0, w, 38), item.title || item.name, { weight: 600 }), draw(item, rect$1(x, 44, w, Math.max(108, child ? child.height : 0)), child));
 			x += w;
@@ -8138,12 +8138,12 @@ var _hoisted_3$45 = {
 	key: 0,
 	role: "status"
 };
-var _hoisted_4$36 = {
+var _hoisted_4$35 = {
 	key: 1,
 	class: "error",
 	role: "alert"
 };
-var _hoisted_5$28 = { class: "process-visibility-tree" };
+var _hoisted_5$27 = { class: "process-visibility-tree" };
 var _hoisted_6$23 = ["aria-label"];
 var _hoisted_7$23 = ["data-process-id"];
 var _sfc_main$157 = {
@@ -8291,11 +8291,11 @@ var _sfc_main$157 = {
 					}
 				}, null, 8, ["scene"]),
 				busy.value ? (openBlock(), createElementBlock("p", _hoisted_3$45, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
-				error.value ? (openBlock(), createElementBlock("p", _hoisted_4$36, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$184, {
+				error.value ? (openBlock(), createElementBlock("p", _hoisted_4$35, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$184, {
 					label: "Retry",
 					onClick: load
 				})])) : createCommentVNode("", true),
-				createBaseVNode("div", _hoisted_5$28, [createBaseVNode("div", {
+				createBaseVNode("div", _hoisted_5$27, [createBaseVNode("div", {
 					ref_key: "viewport",
 					ref: viewport,
 					class: "process-visibility-viewport",
@@ -8500,16 +8500,14 @@ function itemScene(scene, layout, prefix = "itemComposition") {
 }
 //#endregion
 //#region src/features/administration/CanvasSelection.vue
-var _hoisted_1$91 = { class: "canvas-selection" };
-var _hoisted_2$59 = [
+var _hoisted_1$91 = [
 	"data-canvas-key",
 	"aria-label",
 	"onPointerdown",
 	"onKeydown"
 ];
-var _hoisted_3$44 = ["aria-label"];
-var _hoisted_4$35 = { class: "canvas-size" };
-var _hoisted_5$27 = [
+var _hoisted_2$59 = ["aria-label"];
+var _hoisted_3$44 = [
 	"data-canvas-handle",
 	"aria-label",
 	"onPointerdown",
@@ -8519,7 +8517,11 @@ var _sfc_main$156 = {
 	__name: "CanvasSelection",
 	props: {
 		boxes: Array,
-		selected: String
+		selected: String,
+		scale: {
+			type: Number,
+			default: 1
+		}
 	},
 	emits: ["select", "commit"],
 	setup(__props, { emit: __emit }) {
@@ -8541,7 +8543,7 @@ var _sfc_main$156 = {
 			e.currentTarget.setPointerCapture(e.pointerId);
 			if (hit && e.altKey) {
 				const bounds = e.currentTarget.closest(".canvas-selection").getBoundingClientRect();
-				box = pick(props.boxes, e.clientX - bounds.left, e.clientY - bounds.top, props.selected, true) || box;
+				box = pick(props.boxes, (e.clientX - bounds.left) / props.scale, (e.clientY - bounds.top) / props.scale, props.selected, true) || box;
 			}
 			emit("select", box.key);
 			if (box.canTransform === false) return;
@@ -8549,13 +8551,14 @@ var _sfc_main$156 = {
 				box: { ...box },
 				handle,
 				x: e.clientX,
-				y: e.clientY
+				y: e.clientY,
+				scale: props.scale
 			};
 			ghost.value = { ...box };
 		}
 		function move(e) {
 			const g = gesture.value;
-			if (g) ghost.value = transform(g.box, g.handle, e.clientX - g.x, e.clientY - g.y);
+			if (g) ghost.value = transform(g.box, g.handle, (e.clientX - g.x) / g.scale, (e.clientY - g.y) / g.scale);
 		}
 		function finish(e) {
 			const g = gesture.value;
@@ -8600,7 +8603,10 @@ var _sfc_main$156 = {
 			});
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$91, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.boxes, (box, i) => {
+			return openBlock(), createElementBlock("div", {
+				class: "canvas-selection",
+				style: normalizeStyle({ "--canvas-inverse-scale": 1 / __props.scale })
+			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.boxes, (box, i) => {
 				return openBlock(), createElementBlock("div", {
 					key: box.key,
 					class: "canvas-hit",
@@ -8618,7 +8624,7 @@ var _sfc_main$156 = {
 					onPointerup: finish,
 					onPointercancel: cancel,
 					onKeydown: ($event) => key($event, box)
-				}, null, 44, _hoisted_2$59);
+				}, null, 44, _hoisted_1$91);
 			}), 128)), chosen.value ? (openBlock(), createElementBlock("div", {
 				key: 0,
 				class: "canvas-outline",
@@ -8635,8 +8641,11 @@ var _sfc_main$156 = {
 					onPointerup: finish,
 					onPointercancel: cancel,
 					onKeydown: _cache[1] || (_cache[1] = ($event) => key($event, chosen.value))
-				}, null, 40, _hoisted_3$44)) : createCommentVNode("", true),
-				createBaseVNode("span", _hoisted_4$35, toDisplayString(Math.round(chosen.value.width)) + " × " + toDisplayString(Math.round(chosen.value.height)), 1),
+				}, null, 40, _hoisted_2$59)) : createCommentVNode("", true),
+				createBaseVNode("span", {
+					class: "canvas-size",
+					style: normalizeStyle({ fontSize: Math.round(11 / __props.scale) + "px" })
+				}, toDisplayString(Math.round(chosen.value.width)) + " × " + toDisplayString(Math.round(chosen.value.height)), 5),
 				(openBlock(true), createElementBlock(Fragment, null, renderList(chosen.value.canTransform === false ? [] : handles, (handle) => {
 					return openBlock(), createElementBlock("div", {
 						key: handle,
@@ -8650,9 +8659,9 @@ var _sfc_main$156 = {
 						onPointerup: finish,
 						onPointercancel: cancel,
 						onKeydown: ($event) => key($event, chosen.value, handle)
-					}, null, 42, _hoisted_5$27);
+					}, null, 42, _hoisted_3$44);
 				}), 128))
-			], 4)) : createCommentVNode("", true)]);
+			], 4)) : createCommentVNode("", true)], 4);
 		};
 	}
 };
@@ -8677,7 +8686,7 @@ var _sfc_main$155 = {
 		const emit = __emit;
 		const host = ref(null), width = ref(1);
 		let observer;
-		const baseScene = computed(() => describe$46(props.layout, props.node, width.value, props.selectedElement, appearance.language, window.innerWidth, location.origin, "itemComposition", 0, props.editing || props.readOnly));
+		const baseScene = computed(() => describe$47(props.layout, props.node, width.value, props.selectedElement, appearance.language, window.innerWidth, location.origin, "itemComposition", 0, props.editing || props.readOnly));
 		const scene = computed(() => props.editing ? itemScene(baseScene.value, props.layout) : baseScene.value);
 		const views = computed(() => ({ canvasOverlay: {
 			component: _sfc_main$156,
@@ -11797,7 +11806,7 @@ var titles$3 = {
 	priority: "Priority",
 	milestone_code: "Milestone"
 };
-function describe$45(model, width, language) {
+function describe$46(model, width, language) {
 	const tr = (text) => translate(text, language), nodes = [], gap = 12, columns = width >= (model.live ? 420 : 520) ? 2 : 1, cell = (width - gap * (columns - 1)) / columns;
 	let y = 0, slot = 0;
 	if (model.inline) {
@@ -11896,7 +11905,7 @@ var _sfc_main$142 = {
 		const scene = computed(() => !props.editor ? {
 			nodes: [],
 			height: 0
-		} : describe$45({
+		} : describe$46({
 			inline: props.inline,
 			title: props.title,
 			fields: props.editor.fields,
@@ -12287,7 +12296,7 @@ var descriptions = {
 function allowed(record, model) {
 	return !record.permission || record.permission === "user" || record.permission === "supervisor" && !!model.canManage || record.permission === "finance" && !!model.canViewCosts;
 }
-function describe$44(model, width, height, language) {
+function describe$45(model, width, height, language) {
 	const tr = (text) => translate(text, language), compact = width < 640;
 	const nav = compact ? 0 : Math.min(230, Math.max(170, width * .28));
 	const x = compact ? 8 : nav + 9, y = compact ? 50 : 9, main = Math.max(0, width - x - 9);
@@ -12431,7 +12440,7 @@ var _sfc_main$138 = {
 			weekEnd: props.data?.week_end,
 			message: props.data?.message
 		}));
-		const scene = computed(() => describe$44(model.value, width.value, height.value, appearance.language));
+		const scene = computed(() => describe$45(model.value, width.value, height.value, appearance.language));
 		function row(list, record) {
 			return list.source === "reports" ? descriptor(record, model.value, Math.max(0, list.width - 16), appearance.language) : valueRow(record, Math.max(0, list.width - 16), appearance.language);
 		}
@@ -16360,7 +16369,7 @@ function dependency(record, width) {
 		]
 	};
 }
-function describe$43(model, width, height, language) {
+function describe$44(model, width, height, language) {
 	const tr = (text) => translate(text, language), margin = 16, w = Math.max(0, width - 32), groups = model.groups || [];
 	const selected = groups.reduce((sum, row) => sum + (row.checked ? row.count : 0), 0), total = groups.reduce((sum, row) => sum + row.count, 0);
 	const targets = model.targets || [], targetHeight = Math.min(132, Math.max(56, targets.length * 30 + 20));
@@ -16553,7 +16562,7 @@ var _sfc_main$123 = {
 					props: { models: models$2.value }
 				} }));
 				let observer;
-				const scene = computed(() => describe$43(props.model, size.value.width, size.value.height, appearance.language));
+				const scene = computed(() => describe$44(props.model, size.value.width, size.value.height, appearance.language));
 				onMounted(() => {
 					const measure = () => {
 						size.value = {
@@ -16972,7 +16981,7 @@ function _sfc_render$17(_ctx, _cache, $props, $setup, $data, $options) {
 var WorkspaceSearch_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$122, [["render", _sfc_render$17]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/objects/links.ui.mjs
-function describe$42(model, width, height, language) {
+function describe$43(model, width, height, language) {
 	const tr = (text) => translate(text, language), narrow = width < 650, footerHeight = narrow ? 92 : 64;
 	const errorHeight = model.error ? Math.max(44, captionHeight(tr(model.error), Math.max(1, width - 50)) + 20) : 0;
 	const bodyHeight = Math.max(0, height - 68 - footerHeight - errorHeight - 28), paneWidth = narrow ? width - 28 : (width - 80) / 2;
@@ -17289,7 +17298,7 @@ var _sfc_main$119 = {
 					height: 0
 				});
 				let observer;
-				const scene = computed(() => describe$42(props.model, size.value.width, size.value.height, appearance.language));
+				const scene = computed(() => describe$43(props.model, size.value.width, size.value.height, appearance.language));
 				const views = {};
 				for (const scope of ["available", "linked"]) {
 					views[scope + "Search"] = { component: (_, context) => h(scope === "available" ? WorkspaceSearch_default : AppSearchField_default, {
@@ -19534,7 +19543,7 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 var ResultPresentation_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$118, [["render", _sfc_render$15]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/items.ui.mjs
-function describe$41(model, width, height, language) {
+function describe$42(model, width, height, language) {
 	const tr = (text) => translate(text, language), status = model.error || (model.busy ? tr("Loading data…") : ""), top = status ? 36 : 0, footer = model.hasMore ? 40 : 0;
 	const nodes = [node("View", "dashboardItemResults", rect$1(0, top, width, Math.max(0, height - top - footer)), { view: "itemResults" })];
 	if (status) nodes.push(label("dashboardItemStatus", rect$1(0, 0, Math.max(0, width - 40), 32), status, { color: model.error ? "error" : "secondaryText" }));
@@ -19570,7 +19579,7 @@ var _sfc_main$117 = {
 		const emit = __emit;
 		const records = ref([]), busy = ref(false), error = ref(""), hasMore = ref(false), state = ref({}), definition = ref(null);
 		let generation = 0;
-		const scene = computed(() => describe$41({
+		const scene = computed(() => describe$42({
 			busy: busy.value,
 			error: error.value,
 			hasMore: hasMore.value
@@ -19825,6 +19834,125 @@ async function printCustomReport(model, ticket, project) {
 	}
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.viewport.mjs
+var zooms = [
+	25,
+	50,
+	75,
+	100,
+	125,
+	150,
+	200
+];
+function dimensions$3(settings, width, height) {
+	const pageWidth = settings.width || Math.max(320, Math.round(width - 32));
+	return {
+		width: pageWidth,
+		height: Math.max(1, height - 32),
+		scale: settings.zoom === "fit" ? Math.min(1, Math.max(1, width - 32) / pageWidth) : Number(settings.zoom) / 100
+	};
+}
+function step(settings, width, direction) {
+	const percent = dimensions$3(settings, width, 1).scale * 100;
+	return direction > 0 ? zooms.find((value) => value > percent + .01) || 200 : zooms.slice().reverse().find((value) => value < percent - .01) || 25;
+}
+function describe$41(scene, settings, width, height) {
+	const size = dimensions$3(settings, width, height);
+	const scroll = scene.nodes.find((item) => item.id === "customLayoutScroll");
+	const children = scroll ? scroll.children : scene.nodes;
+	const pageHeight = Math.max(size.height, (scroll?.contentHeight || 0) + 24);
+	return Object.assign({}, scene, { nodes: [node("Scroll", "pageViewportScroll", rect$1(0, 0, width, height), {
+		contentWidth: Math.max(width, size.width * size.scale + 32),
+		contentHeight: Math.max(height, pageHeight * size.scale + 32),
+		scrollbarId: "pageViewportBar",
+		children: [node("Box", "pageViewportPaper", rect$1(Math.max(16, (width - size.width * size.scale) / 2), 16, size.width, pageHeight), {
+			scale: size.scale,
+			background: "workspace",
+			border: "outlineVariant",
+			children: [node("Box", "pageViewportContent", rect$1(12, 12, size.width - 24, pageHeight - 24), { children })]
+		})]
+	})] });
+}
+function controls$1(ui, width, language, enabled) {
+	const tr = (text) => translate(text, language);
+	const settings = ui.canvas;
+	const narrow = width < 520;
+	const nodes = [
+		node("Choice", "pageCanvasSize", rect$1(0, 0, Math.min(182, width), 32), {
+			label: tr("Preview size"),
+			value: String(settings.width || "auto"),
+			enabled,
+			options: [
+				{
+					value: "auto",
+					label: tr("Auto")
+				},
+				{
+					value: "360",
+					label: tr("Phone") + " · 360"
+				},
+				{
+					value: "768",
+					label: tr("Tablet") + " · 768"
+				},
+				{
+					value: "1280",
+					label: tr("Desktop") + " · 1280"
+				},
+				{
+					value: "1920",
+					label: tr("Wide") + " · 1920"
+				}
+			].concat(settings.width && ![
+				360,
+				768,
+				1280,
+				1920
+			].includes(settings.width) ? [{
+				value: String(settings.width),
+				label: tr("Custom") + " · " + settings.width
+			}] : []),
+			action: { type: "canvasSize" }
+		}),
+		node("Field", "pageCanvasPixels", rect$1(190, 0, 76, 32), {
+			label: tr("Preview width in pixels"),
+			placeholder: tr("Auto"),
+			text: ui.canvasWidthText,
+			enabled,
+			inputMode: "numeric",
+			action: { type: "canvasWidthBuffer" },
+			commitAction: { type: "canvasWidthCommit" }
+		}),
+		label("pageCanvasPixelsUnit", rect$1(272, 0, 22, 32), "px", muted)
+	];
+	const left = narrow ? 0 : 304, top = narrow ? 40 : 0;
+	const actual = dimensions$3(settings, width, 1).scale * 100;
+	nodes.push(button("pageCanvasZoomOut", rect$1(left, top, 32, 32), tr("Zoom out"), "zoom-out", {
+		type: "canvasZoom",
+		value: String(step(settings, width, -1))
+	}, enabled && actual > 25, { iconOnly: true }), node("Choice", "pageCanvasZoom", rect$1(left + 38, top, 122, 32), {
+		label: tr("Canvas zoom"),
+		value: String(settings.zoom),
+		enabled,
+		toolTip: settings.zoom === "fit" ? tr("Fit width") : "",
+		options: [{
+			value: "fit",
+			label: tr("Fit")
+		}].concat(zooms.map((value) => ({
+			value: String(value),
+			label: value + "%"
+		}))),
+		action: { type: "canvasZoom" }
+	}), button("pageCanvasZoomIn", rect$1(left + 166, top, 32, 32), tr("Zoom in"), "zoom-in", {
+		type: "canvasZoom",
+		value: String(step(settings, width, 1))
+	}, enabled && actual < 200, { iconOnly: true }));
+	return {
+		nodes,
+		height: narrow ? 72 : 32
+	};
+}
+//#endregion
 //#region src/features/interface/CustomLayoutView.vue
 var _sfc_main$116 = {
 	__name: "CustomLayoutView",
@@ -19849,7 +19977,8 @@ var _sfc_main$116 = {
 			type: Boolean,
 			default: true
 		},
-		selectedBlock: String
+		selectedBlock: String,
+		canvasViewport: Object
 	},
 	emits: [
 		"action",
@@ -19878,7 +20007,7 @@ var _sfc_main$116 = {
 		const filterDraft = ref({});
 		let generation = 0, abort;
 		let detailGeneration = 0;
-		const baseScene = computed(() => describe$53({
+		const baseScene = computed(() => describe$54({
 			...props.model,
 			layoutTables: tables$1.value,
 			layoutDetail: props.editing ? props.model.layoutDetail || {} : detail.value,
@@ -19890,14 +20019,23 @@ var _sfc_main$116 = {
 			layoutEditing: props.editing,
 			layoutFilterBusy: props.filterBusy,
 			layoutError: error.value
-		}, props.frameNode?.width ?? props.width, props.frameNode?.height ?? props.height, appearance.language, true, location.origin));
-		const scene = computed(() => props.editing && props.guides ? decorate(baseScene.value, "editorPath") : baseScene.value);
+		}, canvasSize.value.width - (props.canvasViewport ? 24 : 0), Math.max(1, canvasSize.value.height - (props.canvasViewport ? 24 : 0)), appearance.language, true, location.origin));
+		const canvasSize = computed(() => props.canvasViewport ? dimensions$3(props.canvasViewport, props.frameNode?.width ?? props.width, props.frameNode?.height ?? props.height) : {
+			width: props.frameNode?.width ?? props.width,
+			height: props.frameNode?.height ?? props.height,
+			scale: 1
+		});
+		const scene = computed(() => {
+			const document = props.editing && props.guides ? decorate(baseScene.value, "editorPath") : baseScene.value;
+			return props.canvasViewport ? describe$41(document, props.canvasViewport, props.frameNode?.width ?? props.width, props.frameNode?.height ?? props.height) : document;
+		});
 		const views = computed(() => ({
 			canvasOverlay: {
 				component: _sfc_main$156,
 				props: {
 					boxes: scene.value.canvasBoxes || [],
 					selected: props.selectedBlock,
+					scale: canvasSize.value.scale,
 					onSelect: (key) => emit("block", key),
 					onCommit: (value) => emit("geometry", value, scene.value.canvasBoxes || [])
 				}
@@ -20293,7 +20431,7 @@ var TableServiceDialogs_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			height: 180
 		});
 		let resolve, observer;
-		const scene = computed(() => describe$62(model.value, size.value.width, size.value.height, appearance.language));
+		const scene = computed(() => describe$63(model.value, size.value.width, size.value.height, appearance.language));
 		function finish(accepted = false) {
 			const pending = resolve;
 			resolve = null;
@@ -20509,7 +20647,7 @@ var TableParentPicker_default = /*#__PURE__*/ _plugin_vue_export_helper_default(
 				key: 0,
 				ref_key: "frame",
 				ref: frame,
-				scene: describe$51(state.value, size.value.width, size.value.height, unref(appearance).language),
+				scene: describe$52(state.value, size.value.width, size.value.height, unref(appearance).language),
 				models: { parentRows: records.value },
 				"describe-row": (list, row) => row$19(row, Math.max(0, list.width - 16), unref(appearance).language),
 				onEvent: activate
@@ -25586,7 +25724,7 @@ function describe$32(progress, width, language) {
 	text("queueProgressStage", tr(progress.uploadInterrupted ? "Upload interrupted. Use Retry to resume the existing batch." : progress.error ? "Progress unavailable. Check-in results are not confirmed; retrying status requests." : phase === "hooks" ? "Running before check-in hooks" : phase === "preparing" ? "Preparing files and checksums" : phase === "uploading" ? "Uploading files" : phase === "committing" ? "Checking in on server" : "Finished"), progress.error ? "error" : "primaryText", "secondary");
 	if (progress.filename) text("queueProgressFile", progress.filename);
 	function bar(id, title, value, maximum, indeterminate) {
-		nodes.push(node("View", id, rect$1(0, y, width, controls$1.feedback.progressHeight), {
+		nodes.push(node("View", id, rect$1(0, y, width, controls$2.feedback.progressHeight), {
 			view: "progress",
 			label: tr(title),
 			value,
@@ -25594,7 +25732,7 @@ function describe$32(progress, width, language) {
 			max: Math.max(1, maximum || 0),
 			indeterminate: !!indeterminate
 		}));
-		y += controls$1.feedback.progressHeight + 4;
+		y += controls$2.feedback.progressHeight + 4;
 	}
 	if (phase !== "hooks") bar("queueUploadProgress", "Upload progress", progress.totalBytes > 0 ? progress.bytesDone : progress.filesDone, progress.totalBytes > 0 ? progress.totalBytes : progress.totalFiles, progress.busy && !progress.totalsKnown);
 	if (progress.totalFiles > 0) {
@@ -25623,7 +25761,7 @@ function describe$32(progress, width, language) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/forms/toggle.ui.mjs
 function captionedSwitch(id, bounds, properties) {
-	const enabled = properties.enabled !== false, textX = controls$1.switch.width + controls$1.switch.spacing;
+	const enabled = properties.enabled !== false, textX = controls$2.switch.width + controls$2.switch.spacing;
 	return node("Box", id + "Row", bounds, { children: [node("Switch", id, rect$1(0, 0, bounds.width, bounds.height), properties), label(id + "Text", rect$1(textX, 0, Math.max(0, bounds.width - textX), bounds.height), properties.text, {
 		pointerTransparent: true,
 		color: enabled ? "primaryText" : "disabledText"
@@ -26840,7 +26978,7 @@ var _sfc_main$95 = {
 			width: 480,
 			height: 346
 		}), previewsOpen = ref(false);
-		const confirmation = computed(() => describe$62({
+		const confirmation = computed(() => describe$63({
 			message: t("All prepared, failed and completed operations will be removed from the queue."),
 			accept: "Clear queue",
 			destructive: true,
@@ -30517,7 +30655,7 @@ function toolbar$1(model, width, language) {
 	const directSort = !phone && width >= 1180, directGroup = !phone && width >= 720;
 	const scopeSegments = !phone && width >= 1360;
 	const scopeButton = !phone && width >= 380 && !scopeSegments;
-	const scopeWidth = Math.max(controls$1.button.minimumWidth, Math.ceil((model.scopeTextWidth === void 0 ? String(model.scopeLabel || "").length * 7 : model.scopeTextWidth) + controls$1.button.iconPadding + controls$1.button.padding + controls$1.button.spacing + controls$1.button.iconSize + 1));
+	const scopeWidth = Math.max(controls$2.button.minimumWidth, Math.ceil((model.scopeTextWidth === void 0 ? String(model.scopeLabel || "").length * 7 : model.scopeTextWidth) + controls$2.button.iconPadding + controls$2.button.padding + controls$2.button.spacing + controls$2.button.iconSize + 1));
 	const nodes = [node("Box", "taskToolbarSurface", rect$1(0, 0, width, height), {
 		background: "toolBar",
 		radius: 0
@@ -31901,7 +32039,7 @@ var _sfc_main$76 = {
 function filterGeometry(emphasis = 0) {
 	const value = Number(emphasis);
 	const amount = isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
-	const metrics = controls$1.filterChip;
+	const metrics = controls$2.filterChip;
 	const fontSize = textStyles.body + Math.round(amount * metrics.emphasisFontSize);
 	return {
 		height: metrics.height + Math.round(amount * metrics.emphasisHeight),
@@ -36214,7 +36352,7 @@ var TaskManager_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_m
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/tabs/section.ui.mjs
 var hexColor = (channels) => "#" + channels.map((value) => ("0" + Math.round(value).toString(16)).slice(-2)).join("");
-var metrics$5 = Object.assign({}, dimensions$4, {
+var metrics$5 = Object.assign({}, dimensions$5, {
 	top: 7,
 	bottom: 7,
 	panelBottom: 5,
@@ -36496,7 +36634,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 				if (actions.value || drag$1.value || rail.value?.contains(document.activeElement) || popup.value?.contains(document.activeElement)) return;
 				popup.value?.hidePopover();
 				revealed.value = null;
-			}, dimensions$4.revealDelay);
+			}, dimensions$5.revealDelay);
 		}
 		async function reveal(tab, event) {
 			if (pressed) return;
@@ -37926,7 +38064,7 @@ var _sfc_main$62 = {
 //#region ../src/tactic_stream/shared_ui/features/configuration/configuration.ui.mjs
 function confirmation$2(model, width, height, language) {
 	const text = (key) => translate(key, language);
-	if (model.kind === "clear") return describe$62({
+	if (model.kind === "clear") return describe$63({
 		message: text(model.scope === "tabs" ? "Object, process and version branches will collapse. Search tabs, filters and dock layouts remain unchanged." : "Projects, Search Types, search results and navigation will be downloaded again. Saved layouts and preferences remain unchanged."),
 		reject: "Cancel",
 		accept: model.scope === "tabs" ? "Clear tabs cache" : "Clear cache",
@@ -39353,7 +39491,7 @@ function field(definition, values, options, language, busy) {
 	return result;
 }
 function contentWidth(width) {
-	return Math.max(1, width - Math.min(22, width / 12) * 2 - controls$1.scrollBar.extent);
+	return Math.max(1, width - Math.min(22, width / 12) * 2 - controls$2.scrollBar.extent);
 }
 function describe$17(model, width, height, language) {
 	const margin = Math.min(22, width / 12), viewportWidth = Math.max(1, width - margin * 2), inner = contentWidth(width);
@@ -39673,9 +39811,9 @@ function wizard(model, width, height, language) {
 		props: { icon: "refresh" },
 		action: { type: "refresh" }
 	}];
-	if (contentWidth(bounds.width) - 32 < 160 + controls$1.imagePicker.minimumActionsWidth) {
+	if (contentWidth(bounds.width) - 32 < 160 + controls$2.imagePicker.minimumActionsWidth) {
 		const buttonHeight = metrics$12(model.style).controlHeight;
-		for (const field of fields) if (field.props?.view === "image") field.height = Math.max(210, 160 + controls$1.imagePicker.rowSpacing + buttonHeight + (model.image ? buttonHeight + 5 : 0));
+		for (const field of fields) if (field.props?.view === "image") field.height = Math.max(210, 160 + controls$2.imagePicker.rowSpacing + buttonHeight + (model.image ? buttonHeight + 5 : 0));
 	}
 	const body = describe$17({
 		fields,
@@ -39740,7 +39878,7 @@ var _sfc_main$61 = {
 		accent: String,
 		previewSize: {
 			type: Number,
-			default: controls$1.imagePicker.previewSize
+			default: controls$2.imagePicker.previewSize
 		},
 		statusText: String,
 		description: String,
@@ -39787,17 +39925,17 @@ var _sfc_main$61 = {
 	computed: {
 		previewRowHeight() {
 			if (!this.compact) return this.pickerHeight;
-			const room = this.pickerHeight - controls$1.imagePicker.rowSpacing;
+			const room = this.pickerHeight - controls$2.imagePicker.rowSpacing;
 			return Math.max(this.previewSize, Math.round(room * this.previewSize / (this.previewSize + this.actionsHeight)));
 		},
 		actionsRowHeight() {
-			return this.compact ? Math.max(this.actionsHeight, this.pickerHeight - controls$1.imagePicker.rowSpacing - this.previewRowHeight) : this.pickerHeight;
+			return this.compact ? Math.max(this.actionsHeight, this.pickerHeight - controls$2.imagePicker.rowSpacing - this.previewRowHeight) : this.pickerHeight;
 		},
 		columns() {
 			if (this.compact) return "minmax(0,1fr)";
 			if (this.statusText || this.description || this.$slots.default) return `${this.previewSize}px minmax(0,1fr)`;
 			const actions = Math.max(this.actionWidth("Choose image"), this.modelValue ? this.actionWidth("Undo image selection") : 0);
-			const room = this.pickerWidth - controls$1.imagePicker.columnSpacing;
+			const room = this.pickerWidth - controls$2.imagePicker.columnSpacing;
 			return `${Math.max(this.previewSize, Math.round(room * this.previewSize / (this.previewSize + actions)))}px minmax(${actions}px,1fr)`;
 		},
 		rows() {
@@ -39805,7 +39943,7 @@ var _sfc_main$61 = {
 			return `${this.previewRowHeight}px minmax(min-content,1fr)`;
 		},
 		compact() {
-			return this.pickerWidth < this.previewSize + controls$1.imagePicker.minimumActionsWidth;
+			return this.pickerWidth < this.previewSize + controls$2.imagePicker.minimumActionsWidth;
 		}
 	},
 	methods: {
@@ -39815,7 +39953,7 @@ var _sfc_main$61 = {
 			return { transform: `translateY(${Math.round(offset) - offset}px)` };
 		},
 		actionWidth(label) {
-			const sizing = controls$1.button;
+			const sizing = controls$2.button;
 			const family = getComputedStyle(document.documentElement).fontFamily;
 			const text = qtLabelTextWidth(t(label), `600 ${textStyles.body}px ${family}`);
 			return Math.max(sizing.minimumWidth, Math.ceil(text) + sizing.iconSize + sizing.spacing + sizing.iconPadding + sizing.padding);
@@ -39993,7 +40131,7 @@ function describe$16(model, width, height, language) {
 	return { nodes };
 }
 function confirmation$1(model, width, height, language) {
-	return describe$62({
+	return describe$63({
 		message: translate("Remove template {code}? Existing projects are not removed.", language, { code: model.code }),
 		accept: "Delete",
 		reject: "Cancel",
@@ -42602,7 +42740,7 @@ function userRow(model, record, width, language) {
 }
 function chips(id, records, width, language, action) {
 	const columns = Math.max(1, Math.floor((width + 6) / 160)), cell = (width - (columns - 1) * 6) / columns;
-	const height = controls$1.summaryChip.height, step = height + 6;
+	const height = controls$2.summaryChip.height, step = height + 6;
 	return {
 		nodes: records.map((record, index) => node("SummaryChip", id + "_" + index, rect$1(index % columns * (cell + 6), Math.floor(index / columns) * step, cell, height), {
 			text: record.label || record.code || record.value || translate("Unspecified", language),
@@ -43063,7 +43201,7 @@ function describe$12(model, width, viewportHeight, language) {
 		noticeY += 44;
 	}
 	if (model.confirmClose) {
-		const confirmation = describe$62({
+		const confirmation = describe$63({
 			message: text("Discard unsaved user changes?"),
 			accept: "Discard changes",
 			reject: "Keep editing",
@@ -52751,7 +52889,7 @@ var _sfc_main$11 = {
 		watch(() => props.records.length, (count) => {
 			if (!count) menu.value?.close();
 		});
-		const controls$2 = computed(() => controls({
+		const controls$3 = computed(() => controls({
 			count: props.records.length,
 			busy: props.busy,
 			upload: props.upload,
@@ -52787,9 +52925,9 @@ var _sfc_main$11 = {
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock("div", {
 				class: "message-attachment-controls",
-				style: normalizeStyle({ width: controls$2.value.width + "px" })
+				style: normalizeStyle({ width: controls$3.value.width + "px" })
 			}, [createVNode(_sfc_main$186, {
-				scene: controls$2.value,
+				scene: controls$3.value,
 				onEvent: action
 			}, null, 8, ["scene"]), createVNode(_sfc_main$189, {
 				ref_key: "menu",
@@ -56729,7 +56867,7 @@ var _sfc_main = {
 			return compose(main_menus_default.user, this.mainMenuContext);
 		},
 		mainToolbar() {
-			return describe$61({
+			return describe$62({
 				width: this.toolbarWidth,
 				compact: this.compactShortcuts,
 				progressReveal: this.activityProgress ? 1 : 0,
@@ -56740,7 +56878,7 @@ var _sfc_main = {
 			return positions$1(this.mainToolbar);
 		},
 		workspaceStyle() {
-			const scene = describe$60(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
+			const scene = describe$61(this.toolbarWidth, window.innerHeight, this.compactShortcuts);
 			return {
 				gridTemplateAreas: scene.grid.areas,
 				gridTemplateColumns: scene.grid.columns,
@@ -61687,6 +61825,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { notices as $, _sfc_main$116 as A, spacing$1 as At, _sfc_main$131 as B, captionedSwitch as C, kinds as Ct, changeDefinition as D, reorder$1 as Dt, _sfc_main$107 as E, remove$2 as Et, applyDuplicateProfile as F, describe$47 as G, _sfc_main$145 as H, changeContent as I, serialize as J, edit$2 as K, contentChoices as L, RelatedObjects_default as M, ObjectAction_default as N, definitionWizard as O, reparent as Ot, _sfc_main$126 as P, documentEvent as Q, duplicateProfile as R, _sfc_main$63 as S, geometry$2 as St, _sfc_main$100 as T, path as Tt, spacingField as U, messageDate as V, actions$4 as W, variants as X, template as Y, widgets as Z, editColumn as _, block as _t, updateModes as a, views as at, describe$18 as b, duplicate as bt, runBrowserScript as c, actionLayout as ct, ProjectCreation_default as d, App_default as default, filter as dt, policy as et, ImagePicker_default as f, mode as ft, describe$17 as g, add as gt, contentWidth as h, type as ht, updateIntervals as i, _sfc_main$158 as it, ResultPresentation_default as j, displayWidgets as k, siblings as kt, scriptTree as l, change$5 as lt, change as m, scope as mt, networkSettings as n, tabs as nt, _sfc_main$26 as o, _sfc_main$166 as ot, readPreviewImage as p, options$1 as pt, roles as q, updateBatchDelays as r, toolbar$4 as rt, buttonId as s, _sfc_main$171 as st, App_exports as t, sectionSelector as tt, lifecycle as u, fields$2 as ut, fieldsFor as v, change$6 as vt, _sfc_main$98 as w, layers as wt, pages as x, fingerprint as xt, confirmation$2 as y, copy as yt, saveDuplicateProfile as z };
+export { widgets as $, _sfc_main$116 as A, reparent as At, duplicateProfile as B, captionedSwitch as C, fingerprint as Ct, changeDefinition as D, path as Dt, _sfc_main$107 as E, layers as Et, ObjectAction_default as F, spacingField as G, _sfc_main$131 as H, _sfc_main$126 as I, edit$2 as J, actions$4 as K, applyDuplicateProfile as L, zooms as M, spacing$1 as Mt, ResultPresentation_default as N, definitionWizard as O, remove$2 as Ot, RelatedObjects_default as P, variants as Q, changeContent as R, _sfc_main$63 as S, duplicate as St, _sfc_main$100 as T, kinds as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$145 as W, serialize as X, roles as Y, template as Z, editColumn as _, type as _t, updateModes as a, toolbar$4 as at, describe$18 as b, change$6 as bt, runBrowserScript as c, _sfc_main$166 as ct, ProjectCreation_default as d, App_default as default, change$5 as dt, documentEvent as et, ImagePicker_default as f, fields$2 as ft, describe$17 as g, scope as gt, contentWidth as h, options$1 as ht, updateIntervals as i, tabs as it, controls$1 as j, siblings as jt, displayWidgets as k, reorder$1 as kt, scriptTree as l, _sfc_main$171 as lt, change as m, mode as mt, networkSettings as n, policy as nt, _sfc_main$26 as o, _sfc_main$158 as ot, readPreviewImage as p, filter as pt, describe$48 as q, updateBatchDelays as r, sectionSelector as rt, buttonId as s, views as st, App_exports as t, notices as tt, lifecycle as u, actionLayout as ut, fieldsFor as v, add as vt, _sfc_main$98 as w, geometry$2 as wt, pages as x, copy as xt, confirmation$2 as y, block as yt, contentChoices as z };
 
 //# sourceMappingURL=App.js.map

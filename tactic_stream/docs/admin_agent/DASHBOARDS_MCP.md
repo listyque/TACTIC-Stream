@@ -402,3 +402,14 @@ and `children`, preserves bindings/filters/unknown properties and uses the exist
 read/preview/revisioned save. The native preview enforces the 128-brick budget,
 32 children per container, six nested levels and the single items/Details scope.
 The editor's temporary history is never published or sent as page data.
+
+
+## Editor viewport versus published geometry
+
+The TH/TS visual page editor can inspect Auto/preset/custom 320..3840px preview
+widths and 25..200%/Fit display scale. Those are ephemeral presentation settings,
+not DashboardDocument fields or tools. Do not write preview dimensions/zoom into
+page blocks to imitate them. Fixed preview width reflows the same native renderer;
+zoom preserves logical dimensions, bindings and query scope. Published pages
+still use their actual workspace viewport. Human resize at a scaled preview is
+converted back to logical block pixels before the ordinary validated save.

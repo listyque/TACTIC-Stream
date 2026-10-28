@@ -1828,5 +1828,16 @@
   "A container supports up to 32 widgets": "A container supports up to 32 widgets",
   "A dashboard supports one items workspace": "A dashboard supports one items workspace",
   "Undo": "Undo",
-  "Redo": "Redo"
+  "Redo": "Redo",
+  "Preview size": "Preview size",
+  "Automatic width": "Automatic width",
+  "Preview width in pixels": "Preview width in pixels",
+  "Canvas zoom": "Canvas zoom",
+  "Fit width": "Fit width",
+  "Phone": "Phone",
+  "Tablet": "Tablet",
+  "Desktop": "Desktop",
+  "Wide": "Wide",
+  "Enter a preview width from 320 to 3840 pixels, or leave it empty for Auto.": "Enter a preview width from 320 to 3840 pixels, or leave it empty for Auto.",
+  "Choose an available canvas zoom": "Choose an available canvas zoom"
 }

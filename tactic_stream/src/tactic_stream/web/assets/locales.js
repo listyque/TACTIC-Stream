@@ -1828,7 +1828,18 @@ var en_default = {
 	"A container supports up to 32 widgets": "A container supports up to 32 widgets",
 	"A dashboard supports one items workspace": "A dashboard supports one items workspace",
 	Undo: "Undo",
-	Redo: "Redo"
+	Redo: "Redo",
+	"Preview size": "Preview size",
+	"Automatic width": "Automatic width",
+	"Preview width in pixels": "Preview width in pixels",
+	"Canvas zoom": "Canvas zoom",
+	"Fit width": "Fit width",
+	Phone: "Phone",
+	Tablet: "Tablet",
+	Desktop: "Desktop",
+	Wide: "Wide",
+	"Enter a preview width from 320 to 3840 pixels, or leave it empty for Auto.": "Enter a preview width from 320 to 3840 pixels, or leave it empty for Auto.",
+	"Choose an available canvas zoom": "Choose an available canvas zoom"
 };
 var ru_default = {
 	"Group label (optional)": "Название группы (необязательно)",
@@ -7189,7 +7200,18 @@ var ru_default = {
 	"A widget cannot contain itself": "Виджет не может содержать сам себя",
 	"Choose a row, column or details container": "Выберите строку, колонку или контейнер деталей",
 	"A container supports up to 32 widgets": "Контейнер поддерживает до 32 виджетов",
-	"A dashboard supports one items workspace": "Дашборд поддерживает одно дерево итемов"
+	"A dashboard supports one items workspace": "Дашборд поддерживает одно дерево итемов",
+	"Preview size": "Размер предпросмотра",
+	"Automatic width": "Автоматическая ширина",
+	"Preview width in pixels": "Ширина предпросмотра в пикселях",
+	"Canvas zoom": "Масштаб холста",
+	"Fit width": "Вписать по ширине",
+	Phone: "Телефон",
+	Tablet: "Планшет",
+	Desktop: "Десктоп",
+	Wide: "Широкий экран",
+	"Enter a preview width from 320 to 3840 pixels, or leave it empty for Auto.": "Укажите ширину от 320 до 3840 пикселей или оставьте поле пустым для автоширины.",
+	"Choose an available canvas zoom": "Выберите доступный масштаб холста"
 };
 //#endregion
 export { en_default as n, ru_default as t };

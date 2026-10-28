@@ -4,6 +4,7 @@ import * as State from '../../src/tactic_stream/shared_ui/features/administratio
 import * as UI from '../../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs';
 import * as Canvas from '../../src/tactic_stream/shared_ui/features/administration/layouts/canvas.mjs';
 import * as Layout from '../../src/tactic_stream/shared_ui/features/table/layout.ui.mjs';
+import * as Viewport from '../../src/tactic_stream/shared_ui/features/administration/layouts/page.viewport.mjs';
 
 const document = {
   name: 'review',
@@ -20,6 +21,62 @@ const document = {
   ]
 };
 const original = JSON.stringify(document);
+{
+  let ui = State.initial();
+  const model = { document, canWrite: false, ready: false };
+  for (const event of [
+    { type: 'canvasSize', value: '1280' },
+    { type: 'canvasZoom', value: '50' }
+  ]) {
+    const result = State.transition(ui, model, event);
+    ui = result.ui;
+    assert.deepEqual(
+      result.commands,
+      [],
+      'Viewport controls never request or write documents'
+    );
+  }
+  assert.equal(ui.past.length, 0);
+  assert.equal(Viewport.dimensions(ui.canvas, 800, 500).width, 1280);
+  assert.equal(
+    Viewport.dimensions(ui.canvas, 400, 500).width,
+    1280,
+    'A fixed page width survives editor resizing'
+  );
+  assert.equal(Viewport.dimensions(ui.canvas, 800, 500).scale, 0.5);
+  assert.equal(
+    Viewport.dimensions({ width: 1280, zoom: 'fit' }, 672, 500).scale,
+    0.5
+  );
+  const scene = {
+    nodes: [
+      {
+        id: 'customLayoutScroll',
+        contentHeight: 1200,
+        children: [{ id: 'content' }]
+      }
+    ],
+    canvasBoxes: [{ key: '0' }]
+  };
+  const scaled = Viewport.describe(scene, { width: 800, zoom: '50' }, 600, 500);
+  const paper = scaled.nodes[0].children[0];
+  assert.equal(paper.width, 800);
+  assert.equal(paper.scale, 0.5);
+  assert.equal(paper.x, 100);
+  assert.equal(scaled.nodes[0].contentHeight, 644);
+  assert.equal(scaled.canvasBoxes, scene.canvasBoxes);
+  assert.equal(
+    paper.children[0].children[0].id,
+    'content',
+    'Only the viewport owns scrolling'
+  );
+  ui.canvasWidthText = '12';
+  const invalid = State.transition(ui, model, { type: 'canvasWidthCommit' });
+  assert.ok(invalid.ui.error);
+  assert.deepEqual(invalid.ui.canvas, ui.canvas);
+  assert.equal(JSON.stringify(document), original);
+  assert.ok(Viewport.controls(ui, 350, 'ru', true).height > 32);
+}
 {
   const source = Document.copy(document);
   source.blocks[0].children[0].filters = [

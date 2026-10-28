@@ -13,6 +13,7 @@ import * as Report from '../../../../src/tactic_stream/shared_ui/features/table/
 import * as Filters from '../../../../src/tactic_stream/shared_ui/features/table/page.filters.mjs';
 import * as Canvas from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/canvas.mjs';
 import CanvasSelection from '../administration/CanvasSelection.vue';
+import * as Viewport from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.viewport.mjs';
 const props = defineProps({
   model: Object,
   frameNode: Object,
@@ -28,7 +29,8 @@ const props = defineProps({
   filterBusy: Boolean,
   editing: Boolean,
   guides: { type: Boolean, default: true },
-  selectedBlock: String
+  selectedBlock: String,
+  canvasViewport: Object
 });
 const emit = defineEmits([
   'action',
@@ -76,24 +78,47 @@ const baseScene = computed(() =>
       layoutFilterBusy: props.filterBusy,
       layoutError: error.value
     },
-    props.frameNode?.width ?? props.width,
-    props.frameNode?.height ?? props.height,
+    canvasSize.value.width - (props.canvasViewport ? 24 : 0),
+    Math.max(1, canvasSize.value.height - (props.canvasViewport ? 24 : 0)),
     appearance.language,
     true,
     location.origin
   )
 );
-const scene = computed(() =>
-  props.editing && props.guides
-    ? Canvas.decorate(baseScene.value, 'editorPath')
-    : baseScene.value
+const canvasSize = computed(() =>
+  props.canvasViewport
+    ? Viewport.dimensions(
+        props.canvasViewport,
+        props.frameNode?.width ?? props.width,
+        props.frameNode?.height ?? props.height
+      )
+    : {
+        width: props.frameNode?.width ?? props.width,
+        height: props.frameNode?.height ?? props.height,
+        scale: 1
+      }
 );
+const scene = computed(() => {
+  const document =
+    props.editing && props.guides
+      ? Canvas.decorate(baseScene.value, 'editorPath')
+      : baseScene.value;
+  return props.canvasViewport
+    ? Viewport.describe(
+        document,
+        props.canvasViewport,
+        props.frameNode?.width ?? props.width,
+        props.frameNode?.height ?? props.height
+      )
+    : document;
+});
 const views = computed(() => ({
   canvasOverlay: {
     component: CanvasSelection,
     props: {
       boxes: scene.value.canvasBoxes || [],
       selected: props.selectedBlock,
+      scale: canvasSize.value.scale,
       onSelect: (key) => emit('block', key),
       onCommit: (value) =>
         emit('geometry', value, scene.value.canvasBoxes || [])

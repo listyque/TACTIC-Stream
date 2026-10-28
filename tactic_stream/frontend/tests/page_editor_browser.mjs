@@ -98,6 +98,74 @@ try {
   await control('adminConfirmSave').click();
   assert.equal(await control('pageBlock_0.2').count(), 0);
   assert.ok(await control('pageAction_undo').isDisabled());
+  await control('pageCanvasPixels').fill('800');
+  await control('pageCanvasPixels').blur();
+  await control('pageCanvasZoom').selectOption('50');
+  assert.ok(
+    Math.abs((await control('pageViewportPaper').boundingBox()).width - 400) < 1
+  );
+  assert.ok(
+    await control('adminSaveDocument').isDisabled(),
+    'Viewport settings are not document edits'
+  );
+  await resize(false);
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-frame="pageProperty_height"]')?.value ===
+      '120'
+  );
+  assert.ok(
+    Math.abs(
+      (await editor.locator('[data-canvas-handle="se"]').boundingBox()).width -
+        14
+    ) < 1
+  );
+  await control('pageAction_undo').click();
+  assert.equal(await control('pageProperty_height').inputValue(), '60');
+  await control('pageAncestor_0').click();
+  const tallPreview = page.waitForResponse((response) => {
+    if (!response.url().endsWith('/admin/rpc')) return false;
+    const values = response.request().postDataJSON()?.args?.[2];
+    return (
+      values?.action === 'preview' && values.document?.blocks?.length === 5
+    );
+  });
+  for (let i = 0; i < 4; i++) await control('pageAction_duplicate').click();
+  await tallPreview;
+  await page.waitForFunction(() => {
+    const scroll = document.querySelector('[data-frame="pageViewportScroll"]');
+    return (
+      parseFloat(scroll.firstElementChild.style.height) > scroll.clientHeight
+    );
+  });
+  const scrollRange = await control('pageViewportScroll').evaluate((e) => ({
+    actual: e.scrollHeight,
+    declared: parseFloat(e.firstElementChild.style.height)
+  }));
+  assert.ok(
+    scrollRange.actual <= scrollRange.declared + 1,
+    'Scaled pages must not create phantom scroll space: ' +
+      JSON.stringify(scrollRange)
+  );
+  for (let i = 0; i < 4; i++) await control('pageAction_undo').click();
+  await control('pageCanvasSize').selectOption('1280');
+  await control('pageCanvasZoom').selectOption('200');
+  await control('pageViewportScroll').hover();
+  await page.mouse.wheel(0, 300);
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-frame="pageViewportScroll"]').scrollTop > 0
+  );
+  await page.keyboard.down('Shift');
+  await page.mouse.wheel(0, 300);
+  await page.keyboard.up('Shift');
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-frame="pageViewportScroll"]').scrollLeft > 0
+  );
+  await control('pageCanvasSize').selectOption('auto');
+  await control('pageCanvasZoom').selectOption('fit');
+  assert.ok(await control('pageAction_undo').isDisabled());
   assert.equal(
     writes.length,
     0,
@@ -235,6 +303,24 @@ try {
   );
   await control('workspacePageEdit').click();
   await editor.getByText('Code: A', { exact: true }).waitFor();
+  const previewReads = itemReads.length;
+  const previewItem = await editor
+    .locator('.dashboard-items .result-item')
+    .first()
+    .elementHandle();
+  for (const zoom of ['50', '150', 'fit'])
+    await control('pageCanvasZoom').selectOption(zoom);
+  await control('pageCanvasSize').selectOption('768');
+  await control('pageCanvasSize').selectOption('auto');
+  assert.equal(
+    itemReads.length,
+    previewReads,
+    'Viewport changes do not reread the item tree'
+  );
+  assert.ok(
+    await previewItem.evaluate((e) => e.isConnected),
+    'The existing tree stays mounted'
+  );
   await control('pageBlock_0.1.0.0').click();
   await control('pageProperty_title').fill('Draft code');
   await control('pageProperty_title').blur();

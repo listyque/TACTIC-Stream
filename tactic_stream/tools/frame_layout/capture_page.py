@@ -120,6 +120,7 @@ fixtures['reports'] = dict(
             dict(kind=kind,text=kind,report=copy.deepcopy(report),height=210,editorPath=[0,index]) for index,kind in enumerate(('chart','summary'))])]),
 )
 env_inst.server_pool = Pool()
+fixtures['viewport'] = copy.deepcopy(fixtures['layout'])
 icons = qml_icon_bindings(TH, app)
 captures = []
 sources = source_hashes(
@@ -132,7 +133,7 @@ sources = source_hashes(
     ],
 )
 from itertools import product
-for scenario, mode in product(["layout", "data", "reports"], ["dark", "light"]):
+for scenario, mode in product(["layout", "data", "reports", "viewport"], ["dark", "light"]):
     for language in ["en", "ru"]:
         for width in [1400, 850]:
             host = DashboardEditor(
@@ -168,7 +169,7 @@ for scenario, mode in product(["layout", "data", "reports"], ["dark", "light"]):
                 (
                     'import QtQuick\nimport QtQuick.Controls\nimport "'
                     + (TH / "thlib/ui/qml").as_uri()
-                    + '" as TH\nApplicationWindow {id:root;visible:true;width:1400;height:740;color:theme.workspace;property string language:"en";property alias dark:theme.dark;function selectPanel(value){if(editor.ui.preview !== (value==="preview"))editor.dispatch({type:"preview"});if(value!=="preview"){editor.dispatch({type:"panel",value});editor.dispatch({type:"select",key:"0.0"})}}TH.Theme{id:theme;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}TH.PageLayoutEditorView{id:editor;anchors.fill:parent;theme:theme;controller:fixture;language:root.language}}'
+                    + '" as TH\nApplicationWindow {id:root;visible:true;width:1400;height:740;color:theme.workspace;property string language:"en";property alias dark:theme.dark;function configureViewport(){editor.dispatch({type:"canvasSize",value:"800"});editor.dispatch({type:"canvasZoom",value:"50"})}function selectPanel(value){if(editor.ui.preview !== (value==="preview"))editor.dispatch({type:"preview"});if(value!=="preview"){editor.dispatch({type:"panel",value});editor.dispatch({type:"select",key:"0.0"})}}TH.Theme{id:theme;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}TH.PageLayoutEditorView{id:editor;anchors.fill:parent;theme:theme;controller:fixture;language:root.language}}'
                 ).encode(),
                 QUrl(),
             )
@@ -177,6 +178,8 @@ for scenario, mode in product(["layout", "data", "reports"], ["dark", "light"]):
                 dict(width=width, height=740, dark=mode == "dark", language=language)
             )
             assert window
+            if scenario == 'viewport':
+                window.configureViewport()
             try:
                 for panel in (["properties"] if scenario == "data" else ["canvas", "properties", "preview"]):
                     window.selectPanel(panel)

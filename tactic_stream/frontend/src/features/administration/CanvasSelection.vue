@@ -2,7 +2,11 @@
 import { ref, computed } from 'vue';
 import * as Canvas from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/canvas.mjs';
 import { t } from '../../i18n.js';
-const props = defineProps({ boxes: Array, selected: String });
+const props = defineProps({
+  boxes: Array,
+  selected: String,
+  scale: { type: Number, default: 1 }
+});
 const emit = defineEmits(['select', 'commit']);
 const gesture = ref(null),
   ghost = ref(null);
@@ -28,15 +32,21 @@ function start(e, box, handle, hit = false) {
     box =
       Canvas.pick(
         props.boxes,
-        e.clientX - bounds.left,
-        e.clientY - bounds.top,
+        (e.clientX - bounds.left) / props.scale,
+        (e.clientY - bounds.top) / props.scale,
         props.selected,
         true
       ) || box;
   }
   emit('select', box.key);
   if (box.canTransform === false) return;
-  gesture.value = { box: { ...box }, handle, x: e.clientX, y: e.clientY };
+  gesture.value = {
+    box: { ...box },
+    handle,
+    x: e.clientX,
+    y: e.clientY,
+    scale: props.scale
+  };
   ghost.value = { ...box };
 }
 function move(e) {
@@ -45,8 +55,8 @@ function move(e) {
     ghost.value = Canvas.transform(
       g.box,
       g.handle,
-      e.clientX - g.x,
-      e.clientY - g.y
+      (e.clientX - g.x) / g.scale,
+      (e.clientY - g.y) / g.scale
     );
 }
 function finish(e) {
@@ -90,7 +100,10 @@ function key(e, box, resizeHandle) {
 }
 </script>
 <template>
-  <div class="canvas-selection">
+  <div
+    class="canvas-selection"
+    :style="{ '--canvas-inverse-scale': 1 / scale }"
+  >
     <div
       v-for="(box, i) in boxes"
       :key="box.key"
@@ -123,7 +136,9 @@ function key(e, box, resizeHandle) {
         @pointercancel="cancel"
         @keydown="key($event, chosen)"
       />
-      <span class="canvas-size"
+      <span
+        class="canvas-size"
+        :style="{ fontSize: Math.round(11 / scale) + 'px' }"
         >{{ Math.round(chosen.width) }} × {{ Math.round(chosen.height) }}</span
       >
       <div
@@ -160,67 +175,72 @@ function key(e, box, resizeHandle) {
   outline: none;
 }
 .canvas-hit:hover {
-  outline: 1px dashed var(--content-accent, var(--primary));
-  outline-offset: -1px;
+  outline: calc(1px * var(--canvas-inverse-scale)) dashed
+    var(--content-accent, var(--primary));
+  outline-offset: calc(-1px * var(--canvas-inverse-scale));
 }
 .canvas-hit:focus-visible {
-  outline: 1px solid var(--content-accent, var(--primary));
-  outline-offset: -1px;
+  outline: calc(1px * var(--canvas-inverse-scale)) solid
+    var(--content-accent, var(--primary));
+  outline-offset: calc(-1px * var(--canvas-inverse-scale));
 }
 .canvas-move-edge {
   position: absolute;
   left: 0;
-  top: -4px;
+  top: calc(-4px * var(--canvas-inverse-scale));
   width: 100%;
-  height: 8px;
+  height: calc(8px * var(--canvas-inverse-scale));
   pointer-events: auto;
   cursor: move;
   touch-action: none;
 }
 .canvas-outline {
   position: absolute;
-  border: 1px solid var(--content-accent, var(--primary));
+  border: calc(1px * var(--canvas-inverse-scale)) solid
+    var(--content-accent, var(--primary));
   pointer-events: none;
   z-index: 200;
   box-sizing: border-box;
 }
 .canvas-size {
   position: absolute;
-  top: -20px;
+  top: calc(-20px * var(--canvas-inverse-scale));
   left: 0;
   white-space: nowrap;
   font-size: 11px;
   color: var(--content-accent, var(--primary));
   background: var(--panel);
-  padding: 1px 4px;
+  padding: calc(1px * var(--canvas-inverse-scale))
+    calc(4px * var(--canvas-inverse-scale));
 }
 .canvas-handle {
   position: absolute;
-  width: 14px;
-  height: 14px;
+  width: calc(14px * var(--canvas-inverse-scale));
+  height: calc(14px * var(--canvas-inverse-scale));
   pointer-events: auto;
   touch-action: none;
 }
 .canvas-handle:after {
   content: '';
   position: absolute;
-  inset: 4px;
+  inset: calc(4px * var(--canvas-inverse-scale));
   background: var(--panel);
-  border: 1px solid var(--content-accent, var(--primary));
+  border: calc(1px * var(--canvas-inverse-scale)) solid
+    var(--content-accent, var(--primary));
 }
 .canvas-handle-e {
-  right: -7px;
-  top: calc(50% - 7px);
+  right: calc(-7px * var(--canvas-inverse-scale));
+  top: calc(50% - 7px * var(--canvas-inverse-scale));
   cursor: ew-resize;
 }
 .canvas-handle-s {
-  bottom: -7px;
-  left: calc(50% - 7px);
+  bottom: calc(-7px * var(--canvas-inverse-scale));
+  left: calc(50% - 7px * var(--canvas-inverse-scale));
   cursor: ns-resize;
 }
 .canvas-handle-se {
-  right: -7px;
-  bottom: -7px;
+  right: calc(-7px * var(--canvas-inverse-scale));
+  bottom: calc(-7px * var(--canvas-inverse-scale));
   cursor: nwse-resize;
 }
 </style>

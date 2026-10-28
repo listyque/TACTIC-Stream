@@ -134,6 +134,7 @@ export default {
             editing: true,
             guides: !this.ui.preview,
             selectedBlock: this.ui.preview ? '' : this.ui.selected,
+            canvasViewport: this.ui.canvas,
             onLoaded: (value) => this.sampleLoaded(value),
             onBlock: (key) => this.dispatch({ type: 'select', key }),
             onGeometry: (value, boxes) =>

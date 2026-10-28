@@ -87,6 +87,12 @@ try {
     await page.waitForFunction(
       () => window.pageEditorFixture?.screen.value?.compiled
     );
+    if (expected.fixture === 'viewport')
+      await page.evaluate(() => {
+        const screen = window.pageEditorFixture.screen.value;
+        screen.dispatch({ type: 'canvasSize', value: '800' });
+        screen.dispatch({ type: 'canvasZoom', value: '50' });
+      });
     await page.evaluate((panel) => {
       const screen = window.pageEditorFixture.screen.value;
       if (screen.ui.preview !== (panel === 'preview'))
