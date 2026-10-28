@@ -538,7 +538,7 @@
   border: 0;
   border-radius: 0;
   overflow: hidden;
-  background: var(--surface-deep);
+  background: var(--surface);
 }
 @media (max-width: 700px) {
   .notes-panel.record-dialog.notes-panel-docked {
@@ -561,4 +561,10 @@
   padding: 0;
   border: 0;
   background: transparent;
+}
+
+/* TaskInspector.qml GridLayout: one inset for the context and work-hours rows. */
+.notes-panel > .inspector-context.inspector-object {
+  width: calc(100% - 16px);
+  margin: 5px 8px;
 }
