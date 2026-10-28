@@ -1,4 +1,7 @@
 {
+  "Invalid nested search text": "Некорректный текст поиска",
+  "Invalid suggestion scope": "Некорректная область поиска подсказок",
+  "This Search Type has no searchable title": "У этого серч-тайпа нет текстового поля для поиска",
   "Deselect {count} item": "Снять выделение: {count}",
   "Deselect {count} items": "Снять выделение: {count}",
   "Group label (optional)": "Название группы (необязательно)",

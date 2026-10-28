@@ -4069,6 +4069,10 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Search objects": "Поиск объектов",
+	"Invalid nested search text": "Некорректный текст поиска",
+	"Invalid suggestion scope": "Некорректная область поиска подсказок",
+	"This Search Type has no searchable title": "У этого серч-тайпа нет текстового поля для поиска",
 	"Preview size": "Размер предпросмотра",
 	"Automatic width": "Автоматическая ширина",
 	"Preview width in pixels": "Ширина предпросмотра в пикселях",

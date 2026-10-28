@@ -1,4 +1,8 @@
 {
+  "Search objects": "Search objects",
+  "Invalid nested search text": "Invalid nested search text",
+  "Invalid suggestion scope": "Invalid suggestion scope",
+  "This Search Type has no searchable title": "This Search Type has no searchable title",
   "Deselect {count} item": "Deselect {count} item",
   "Deselect {count} items": "Deselect {count} items",
   "Group label (optional)": "Group label (optional)",

@@ -1,4 +1,8 @@
 var en_default = {
+	"Search objects": "Search objects",
+	"Invalid nested search text": "Invalid nested search text",
+	"Invalid suggestion scope": "Invalid suggestion scope",
+	"This Search Type has no searchable title": "This Search Type has no searchable title",
 	"Deselect {count} item": "Deselect {count} item",
 	"Deselect {count} items": "Deselect {count} items",
 	"Group label (optional)": "Group label (optional)",
@@ -1948,6 +1952,9 @@ var en_default = {
 	"The source tab changed. Reload the page.": "The source tab changed. Reload the page."
 };
 var ru_default = {
+	"Invalid nested search text": "Некорректный текст поиска",
+	"Invalid suggestion scope": "Некорректная область поиска подсказок",
+	"This Search Type has no searchable title": "У этого серч-тайпа нет текстового поля для поиска",
 	"Deselect {count} item": "Снять выделение: {count}",
 	"Deselect {count} items": "Снять выделение: {count}",
 	"Group label (optional)": "Название группы (необязательно)",
