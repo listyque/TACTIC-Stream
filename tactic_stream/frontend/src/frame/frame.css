@@ -239,6 +239,7 @@
     calc(var(--field-padding) - 2px);
 }
 .frame-area.frame-notice {
+  border-radius: 0;
   background: var(--surface-high);
   border: 0;
 }

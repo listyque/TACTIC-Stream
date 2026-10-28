@@ -210,7 +210,7 @@ h2 { font-size: var(--text-heading); }
 .login-card .brand { margin-bottom: 12px; }
 .login-card h1 { font-size: var(--text-display); }
 .login-card .version { text-align: center; }
-.error, .notice { background: var(--error-container); border: 1px solid var(--error-outline); border-radius: var(--field-radius); color: var(--error); padding: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.error, .notice { background: var(--error-container); border: 1px solid var(--error-outline); border-radius: 0; color: var(--error); padding: 12px; line-height: 1.5; overflow-wrap: anywhere; }
 .notice { background: var(--content-selection); border-color: var(--outline-variant); color: var(--on-surface); }
 .workspace { display: grid; height: 100dvh; overflow: hidden; }
 .workspace-rail { grid-area: rail; min-height: 0; }

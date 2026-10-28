@@ -33,7 +33,7 @@ rounded button. Secondary row actions use `revealOnRowInteraction`: visible
 while their row is hovered or contains keyboard focus, always available when
 the platform has no hover. Use the same shared row description in both engines.
 
-Embedded table headers and data-row backgrounds use square corners. Keep the
+Embedded table headers, data-row backgrounds, inline notices/errors and pending-change bars use square corners. Keep the
 existing theme radii and sizing on controls, dialogs and item cards; a local
 table styling correction must not change those shared defaults.
 

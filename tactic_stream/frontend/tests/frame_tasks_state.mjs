@@ -22,6 +22,7 @@ for (const language of ['en', 'ru']) {
         language
       );
       validateScene(scene);
+      assert.equal(scene.nodes.find(node => node.id === 'taskPendingSurface').radius, 0);
       const save = scene.nodes.find((node) => node.id === 'taskSave');
       const discard = scene.nodes.find((node) => node.id === 'taskDiscard');
       assert.equal(save.enabled, !saving);
