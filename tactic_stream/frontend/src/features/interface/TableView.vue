@@ -73,7 +73,7 @@ const overrides = ref({}),
   anchorKey = ref(''),
   savingView = ref(false),
   viewName = ref('');
-let observer, frame;
+let observer, frame, resizeFrame;
 const preferences = computed(() => props.state?.table || {});
 const autoFit = computed(() => !!preferences.value.autoFit);
 const layout = computed(() =>
@@ -502,12 +502,16 @@ watch(savingView, async (value) => {
 });
 onMounted(() => {
   observer = new ResizeObserver((entries) => {
-    const bounds = entries[0].contentRect,
-      wasHidden = !width.value || !viewportHeight.value;
-    width.value = bounds.width;
-    viewportHeight.value = bounds.height;
-    // A hidden retained table can lose its DOM offset without a scroll event.
-    if (wasHidden && bounds.width && bounds.height) restore();
+    const bounds = entries[0].contentRect;
+    cancelAnimationFrame(resizeFrame);
+    // Column reflow can change automatic scrollbars; finish this observer batch first.
+    resizeFrame = requestAnimationFrame(() => {
+      const wasHidden = !width.value || !viewportHeight.value;
+      width.value = bounds.width;
+      viewportHeight.value = bounds.height;
+      // A hidden retained table can lose its DOM offset without a scroll event.
+      if (wasHidden && bounds.width && bounds.height) restore();
+    });
   });
   observer.observe(viewport.value);
   restore();
@@ -515,6 +519,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   observer?.disconnect();
   cancelAnimationFrame(frame);
+  cancelAnimationFrame(resizeFrame);
 });
 defineExpose({ viewport });
 </script>
@@ -848,10 +853,10 @@ defineExpose({ viewport });
   position: relative;
   flex: 1;
   min-height: 120px;
-  overflow: scroll;
-  scrollbar-gutter: stable;
+  overflow: auto;
+  scrollbar-gutter: auto;
   scroll-padding-top: 37px;
-  padding: 0 4px 4px 0;
+  padding: 0;
   margin: 0;
   outline: 0;
   overscroll-behavior: contain;
@@ -874,7 +879,7 @@ defineExpose({ viewport });
   color: var(--table-header-text);
   background: var(--table-header);
   border-radius: 0;
-  border-bottom: 3px solid var(--workspace-background, var(--page));
+  border-bottom: 0;
   font-size: var(--text-caption);
   font-weight: 600;
 }

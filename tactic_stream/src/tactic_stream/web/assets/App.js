@@ -4813,7 +4813,7 @@ var _sfc_main$170 = {
 		const emit = __emit;
 		const viewport = ref(null), saveDialog = ref(null), contextMenu = ref(null), columnContext = ref(null), width = ref(0), scrollTop = ref(0), viewportHeight = ref(600);
 		const overrides = ref({}), drag = ref(null), focusedKey = ref(""), anchorKey = ref(""), savingView = ref(false), viewName = ref("");
-		let observer, frame;
+		let observer, frame, resizeFrame;
 		const preferences = computed(() => props.state?.table || {});
 		const autoFit = computed(() => !!preferences.value.autoFit);
 		const layout = computed(() => describe$59({
@@ -5123,10 +5123,14 @@ var _sfc_main$170 = {
 		});
 		onMounted(() => {
 			observer = new ResizeObserver((entries) => {
-				const bounds = entries[0].contentRect, wasHidden = !width.value || !viewportHeight.value;
-				width.value = bounds.width;
-				viewportHeight.value = bounds.height;
-				if (wasHidden && bounds.width && bounds.height) restore();
+				const bounds = entries[0].contentRect;
+				cancelAnimationFrame(resizeFrame);
+				resizeFrame = requestAnimationFrame(() => {
+					const wasHidden = !width.value || !viewportHeight.value;
+					width.value = bounds.width;
+					viewportHeight.value = bounds.height;
+					if (wasHidden && bounds.width && bounds.height) restore();
+				});
 			});
 			observer.observe(viewport.value);
 			restore();
@@ -5134,6 +5138,7 @@ var _sfc_main$170 = {
 		onBeforeUnmount(() => {
 			observer?.disconnect();
 			cancelAnimationFrame(frame);
+			cancelAnimationFrame(resizeFrame);
 		});
 		__expose({ viewport });
 		return (_ctx, _cache) => {

@@ -327,7 +327,8 @@ try {
   await server.listen();
   browser = await chromium.launch({
     headless: true,
-    channel: process.env.STREAM_BROWSER_CHANNEL
+    channel: process.env.STREAM_BROWSER_CHANNEL,
+    ignoreDefaultArgs: ['--hide-scrollbars']
   });
   const page = await browser.newPage({
     viewport: { width: 1496, height: 660 }
@@ -362,7 +363,7 @@ try {
     refRow = sample.items.find((i) => i.name === 'searchResultTableRow'),
     refPreview = sample.items.find((i) => i.name === 'tableCellPreview');
   assert(
-    Math.abs(header.width - await table.evaluate(el => el.clientWidth - 4)) < 0.6,
+    Math.abs(header.width - await table.evaluate(el => el.clientWidth)) < 0.6,
     JSON.stringify({
       header,
       refHeader,
@@ -375,6 +376,14 @@ try {
     })
   );
   assert.equal(header.height, 37);
+  assert.equal(await table.locator('.handler-table-header').evaluate(el => getComputedStyle(el).borderBottomWidth), '0px');
+  assert.equal(await table.evaluate(el => getComputedStyle(el).paddingRight), '0px');
+  assert.equal(await table.evaluate(el => getComputedStyle(el).scrollbarGutter), 'auto');
+  assert.equal(await table.evaluate(el => el.offsetWidth - el.clientWidth), 0);
+  await page.setViewportSize({width: 1496, height: 160});
+  await page.waitForFunction(() => {const el = document.querySelector('.handler-table'); return el.offsetWidth > el.clientWidth;});
+  await page.setViewportSize({width: 1496, height: 660});
+  await page.waitForFunction(() => {const el = document.querySelector('.handler-table'); return el.offsetWidth === el.clientWidth;});
   assert.equal(first.height, refRow.height);
   assert.equal(preview.width, refPreview.width);
   const card = await rows.first().locator('.task-card').first().boundingBox();
