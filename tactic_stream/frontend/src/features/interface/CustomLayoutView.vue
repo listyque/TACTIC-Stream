@@ -30,6 +30,9 @@ const props = defineProps({
   editing: Boolean,
   guides: { type: Boolean, default: true },
   selectedBlock: String,
+  selectedBlocks: Array,
+  multiSelect: Boolean,
+  snap: Boolean,
   canvasViewport: Object
 });
 const emit = defineEmits([
@@ -50,6 +53,8 @@ const emit = defineEmits([
   'loaded',
   'block',
   'geometry',
+  'selection',
+  'canvasBoxes',
   'filter-apply'
 ]);
 const state = ref({}),
@@ -75,6 +80,7 @@ const baseScene = computed(() =>
       layoutBusy: busy.value,
       layoutFilterDraft: filterDraft.value,
       layoutEditing: props.editing,
+      layoutDesigning: props.editing && props.guides,
       layoutFilterBusy: props.filterBusy,
       layoutError: error.value
     },
@@ -112,12 +118,22 @@ const scene = computed(() => {
       )
     : document;
 });
+watch(
+  () => scene.value.canvasBoxes,
+  (boxes) => emit('canvasBoxes', boxes || []),
+  { immediate: true }
+);
 const views = computed(() => ({
   canvasOverlay: {
     component: CanvasSelection,
     props: {
       boxes: scene.value.canvasBoxes || [],
       selected: props.selectedBlock,
+      selection: props.selectedBlocks,
+      multiple: !!props.canvasViewport,
+      multiSelect: props.multiSelect,
+      snap: props.snap,
+      onSelection: (keys) => emit('selection', keys),
       scale: canvasSize.value.scale,
       onSelect: (key) => emit('block', key),
       onCommit: (value) =>

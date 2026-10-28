@@ -413,3 +413,21 @@ page blocks to imitate them. Fixed preview width reflows the same native rendere
 zoom preserves logical dimensions, bindings and query scope. Published pages
 still use their actual workspace viewport. Human resize at a scaled preview is
 converted back to logical block pixels before the ordinary validated save.
+
+## Pixel placement and block appearance
+
+DashboardBlock now accepts relative `offset_x` (-2400..2400) and `offset_y`
+(-1600..1600). These translate the block within its existing flow slot/container;
+they do not reparent, reorder or bypass fixed-height clipping. Prefer ordinary
+row/column flow for responsive pages; use offsets for intentional fine placement.
+The optional `appearance` object supports `fill` (transparent/panel/workspace/
+surfaceContainerLow or #RRGGBB), `stroke` (outlineVariant/contentAccent/transparent
+or #RRGGBB), `stroke_width` (0..8), `radius` (0..48), `shadow` and `animate` booleans.
+Defaults preserve the prior presentation. Appearance decorates the wrapper;
+native inner widgets keep their own styling. Motion follows global preferences
+and is disabled during editing. No generated CSS/JS or animation scripts.
+
+Use the same discovery schema, preview and revisioned/idempotent dashboard Save;
+both TH and TS render these fields. Human group selection/alignment/guides are
+ephemeral editor operations; their resulting offsets/appearance are ordinary
+document fields. A group edit has one bounded local Undo entry.

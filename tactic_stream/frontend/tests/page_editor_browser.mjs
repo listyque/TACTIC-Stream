@@ -47,6 +47,7 @@ try {
   await control('workspacePageEdit').click();
   await editor.waitFor();
   await editor.locator('[data-canvas-key="0.0"]').waitFor();
+  await control('pageSnap').click();
   assert.equal(await control('pageLayoutChoice').inputValue(), 'review');
   const childHit = editor.locator('[data-canvas-key="0.0"]');
   await childHit.click();
@@ -98,6 +99,92 @@ try {
   await control('adminConfirmSave').click();
   assert.equal(await control('pageBlock_0.2').count(), 0);
   assert.ok(await control('pageAction_undo').isDisabled());
+  // Build three ordinary blocks through the editor; group operations use no saves.
+  {
+    async function property(key, name, value) {
+      await control('pageBlock_' + key).click();
+      await control('pageProperty_' + name).fill(String(value));
+      await control('pageProperty_' + name).blur();
+    }
+    await property('0.0', 'width', 120);
+    await property('0.1', 'width', 120);
+    await property('0.1', 'offset_x', 140);
+    await control('pageAction_duplicate').click();
+    await property('0.2', 'offset_x', 280);
+    await page.waitForFunction(() => {
+      const box = document.querySelector('[data-canvas-key="0.2"]');
+      return box && Math.abs(box.getBoundingClientRect().width - 120) < 1;
+    });
+    const hit = (key) => editor.locator('[data-canvas-key="' + key + '"]');
+    await hit('0.0').click();
+    await hit('0.1').click({ modifiers: ['Control'] });
+    assert.match(await control('pageSelectionCount').textContent(), /^2 /);
+    async function distance(key, other, axis, value) {
+      await page.waitForFunction(
+        ({ key, other, axis, value }) => {
+          const a = document
+            .querySelector('[data-canvas-key="' + key + '"]')
+            ?.getBoundingClientRect();
+          const b = document
+            .querySelector('[data-canvas-key="' + other + '"]')
+            ?.getBoundingClientRect();
+          return a && b && Math.abs(a[axis] - b[axis] - value) < 1;
+        },
+        { key, other, axis, value }
+      );
+    }
+    await control('pageAlign').selectOption('left');
+    await distance('0.1', '0.0', 'x', 0);
+    await control('pageAction_undo').click();
+    await distance('0.1', '0.0', 'x', 140);
+    const initial = await hit('0.0').boundingBox();
+    await hit('0.0').focus();
+    await page.keyboard.press('Shift+ArrowDown');
+    await distance('0.0', '0', 'y', 10);
+    await control('pageAction_undo').click();
+    await distance('0.0', '0', 'y', 0);
+    await control('pageSnap').click();
+    let target = await hit('0.0').boundingBox();
+    await page.mouse.move(target.x + 40, target.y + 30);
+    await page.mouse.down();
+    await page.mouse.move(target.x + 58, target.y + 31, { steps: 4 });
+    assert.ok(await editor.locator('[data-canvas-guide="x"]').count());
+    await page.keyboard.press('Escape');
+    await page.mouse.up();
+    await page.mouse.move(target.x + 40, target.y + 30);
+    await page.mouse.down();
+    await page.keyboard.down('Alt');
+    await page.mouse.move(target.x + 80, target.y + 50, { steps: 4 });
+    await page.mouse.up();
+    await page.keyboard.up('Alt');
+    await distance('0.0', '0', 'x', 40);
+    await distance('0.1', '0.0', 'x', 140);
+    await control('pageAction_undo').click();
+    await distance('0.0', '0', 'x', 0);
+    const shadow = editor.getByRole('checkbox', {
+      name: 'Shadow',
+      exact: true
+    });
+    await shadow.check();
+    await control('pageAction_undo').click();
+    assert.equal(await shadow.isChecked(), false);
+    const first = await hit('0.0').boundingBox(),
+      second = await hit('0.1').boundingBox();
+    await page.keyboard.down('Shift');
+    await page.mouse.move(first.x - 2, first.y - 2);
+    await page.mouse.down();
+    await page.mouse.move(
+      second.x + second.width + 2,
+      second.y + second.height + 2,
+      { steps: 4 }
+    );
+    await page.mouse.up();
+    await page.keyboard.up('Shift');
+    assert.match(await control('pageSelectionCount').textContent(), /^2 /);
+    await control('pageSnap').click();
+    for (let i = 0; i < 5; i++) await control('pageAction_undo').click();
+    assert.ok(await control('pageAction_undo').isDisabled());
+  }
   await control('pageCanvasPixels').fill('800');
   await control('pageCanvasPixels').blur();
   await control('pageCanvasZoom').selectOption('50');
@@ -218,9 +305,13 @@ try {
   assert.equal(writes.length, 1);
   assert.deepEqual(
     writes[0].document.blocks[0].children.map((row) => row.text),
-    ['Next step', 'Project status']
+    ['Project status', 'Next step']
   );
-  assert.equal(writes[0].document.blocks[0].children[1].height, 90);
+  assert.equal(writes[0].document.blocks[0].children[0].height, 90);
+  assert.ok(
+    writes[0].document.blocks[0].children[1].offset_y < 0,
+    'Mouse placement persists an offset without changing structure'
+  );
   await control('pageProperty_title').fill('Unsaved');
   await control('pageProperty_title').blur();
   await control('pageLayoutChoice').selectOption('review_two');

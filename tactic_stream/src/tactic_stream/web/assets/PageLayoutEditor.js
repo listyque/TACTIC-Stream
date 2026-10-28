@@ -4,7 +4,7 @@ import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc
 import { n as sections } from "./sections.ui.js";
 import { a as projectPath } from "./links.js";
 import { t as listAction } from "./tree.ui.js";
-import { A as _sfc_main$2, At as reparent, Ct as fingerprint, Dt as path, Et as layers, G as spacingField, M as zooms, Mt as spacing, Ot as remove, St as duplicate, Tt as kinds, _t as type, at as toolbar$1, bt as change$1, dt as change, et as documentEvent, ft as fields$1, gt as scope$1, ht as options, j as controls, jt as siblings, kt as reorder, mt as mode, pt as filter, rt as sectionSelector, tt as notices, vt as add, wt as geometry, xt as copy, yt as block } from "./App.js";
+import { A as _sfc_main$2, At as geometry, Ct as appearances, Dt as duplicate, Et as copy, Ft as reorder, G as alignment, It as reparent, J as toggle, K as roots, Lt as siblings, M as zooms, Mt as layers, Nt as path, Ot as fingerprint, Pt as remove, Rt as spacing, St as add, Tt as change$1, Y as spacingField, _t as filter, at as notices, bt as scope$1, gt as fields$1, ht as change, it as documentEvent, j as controls, jt as kinds, kt as geometries, lt as toolbar$1, q as selected, st as sectionSelector, vt as mode, wt as block, xt as type, yt as options } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
 var collections = [
 	"items",
@@ -436,7 +436,7 @@ function row(list, record, model, ui, language) {
 		text: title,
 		normalColor: "transparent",
 		selectedColor: "contentSelection",
-		selected: ui.selected === key,
+		selected: (ui.selection || []).includes(key) || ui.selected === key,
 		children: [label("pageBlockLabel_" + record.key, rect(8 + record.depth * 12, 0, list.width - 32 - record.depth * 12, 38), title)],
 		action: {
 			type: "select",
@@ -519,6 +519,7 @@ function describe(model, ui, width, height, language) {
 		const current = fingerprint(model.document);
 		const historyCurrent = ui.historyDocument === current;
 		const ready = canEdit && !model.pendingText && !ui.confirmation;
+		const single = (ui.selection || []).length < 2;
 		const p = path(ui.selected), rows = p.length ? siblings(model.document, p) : [];
 		const actions = [
 			[
@@ -537,7 +538,7 @@ function describe(model, ui, width, height, language) {
 				"Duplicate widget",
 				"content-copy",
 				{ type: "duplicate" },
-				ready && !!ui.selected
+				ready && single && !!ui.selected
 			],
 			[
 				"Move up",
@@ -546,7 +547,7 @@ function describe(model, ui, width, height, language) {
 					type: "reorder",
 					delta: -1
 				},
-				ready && p.length && p[p.length - 1] > 0
+				ready && single && p.length && p[p.length - 1] > 0
 			],
 			[
 				"Move down",
@@ -555,7 +556,7 @@ function describe(model, ui, width, height, language) {
 					type: "reorder",
 					delta: 1
 				},
-				ready && p.length && p[p.length - 1] < rows.length - 1
+				ready && single && p.length && p[p.length - 1] < rows.length - 1
 			]
 		];
 		const separate = width < 700;
@@ -648,7 +649,7 @@ function describe(model, ui, width, height, language) {
 					field: name,
 					root
 				},
-				enabled: canEdit
+				enabled: canEdit && (ui.selection || []).length < 2
 			};
 			fields$2.push({
 				id: "pageProperty_" + name,
@@ -658,7 +659,7 @@ function describe(model, ui, width, height, language) {
 			});
 		}
 		field("title", "Title", item ? item.title : model.document.title, !item);
-		if (!item) fields$2.push(...fields(model, ui, right - 24, language, canEdit));
+		if (!item) fields$2.push(...fields(model, ui, right - 24, language, canEdit && (ui.selection || []).length < 2));
 		if (item) {
 			const parent = path(ui.selected).slice(0, -1).join(".");
 			fields$2.push({
@@ -667,7 +668,7 @@ function describe(model, ui, width, height, language) {
 				title: "Parent container",
 				props: {
 					value: parent,
-					enabled: canEdit && !model.pendingText,
+					enabled: canEdit && (ui.selection || []).length < 2 && !model.pendingText,
 					action: { type: "reparent" }
 				},
 				options: [{
@@ -685,8 +686,8 @@ function describe(model, ui, width, height, language) {
 					}).join(" / ")
 				})))
 			});
-			fields$2.push(...fields$1(model, ui, right - 24, language, canEdit));
-			fields$2.push(...fields(model, ui, right - 24, language, canEdit));
+			fields$2.push(...fields$1(model, ui, right - 24, language, canEdit && (ui.selection || []).length < 2));
+			fields$2.push(...fields(model, ui, right - 24, language, canEdit && (ui.selection || []).length < 2));
 			if (["text", "markdown"].includes(item.kind) && mode(model.document, ui.selected) === "static") field("text", "Text", item.text || "", false, item.kind === "markdown" ? "Area" : void 0);
 			if (item.kind === "link") field("href", "Link URL", item.href || "");
 			fields$2.push({
@@ -694,6 +695,8 @@ function describe(model, ui, width, height, language) {
 				id: "pageLayoutHeading",
 				title: "Layout"
 			});
+			field("offset_x", "Horizontal offset", item.offset_x || 0);
+			field("offset_y", "Vertical offset", item.offset_y || 0);
 			field("width", "Width", item.width);
 			field("height", "Height", item.height);
 			field("weight", "Flexible width", item.weight || 1);
@@ -710,7 +713,102 @@ function describe(model, ui, width, height, language) {
 			], ui.text, {
 				type: "spacing",
 				field: name
-			}, language, canEdit, right - 72));
+			}, language, canEdit && (ui.selection || []).length < 2, right - 72));
+			fields$2.push({
+				kind: "Heading",
+				id: "pageAppearanceHeading",
+				title: (ui.selection || []).length > 1 ? "Appearance for selection" : "Appearance"
+			});
+			const appearance = Object.assign({
+				fill: "transparent",
+				stroke: "outlineVariant",
+				stroke_width: 0,
+				radius: 0,
+				shadow: false,
+				animate: false
+			}, item.appearance || {});
+			for (const [name, title] of [
+				["fill", "Fill color"],
+				["stroke", "Stroke color"],
+				["stroke_width", "Stroke width"],
+				["radius", "Corner radius"],
+				["shadow", "Shadow"],
+				["animate", "Animate layout changes"]
+			]) {
+				if (["fill", "stroke"].includes(name)) {
+					const roles = name === "fill" ? [
+						["transparent", "Transparent"],
+						["panel", "Panel"],
+						["workspace", "Workspace"],
+						["surfaceContainerLow", "Low surface"]
+					] : [
+						["outlineVariant", "Outline"],
+						["contentAccent", "Accent"],
+						["transparent", "Transparent"]
+					];
+					fields$2.push({
+						kind: "Choice",
+						id: "pageAppearance_" + name,
+						title,
+						props: {
+							value: appearance[name],
+							enabled: canEdit,
+							action: {
+								type: "appearance",
+								field: name
+							}
+						},
+						options: roles.map(([value, label]) => ({
+							value,
+							label: tr(label)
+						})).concat(appearance[name].startsWith("#") ? [{
+							value: appearance[name],
+							label: appearance[name]
+						}] : [])
+					});
+					fields$2.push({
+						kind: "ColorChoice",
+						id: "pageColor_" + name,
+						title: name === "fill" ? "Custom fill color" : "Custom stroke color",
+						props: {
+							value: appearance[name].startsWith("#") ? appearance[name] : "#607D8B",
+							enabled: canEdit,
+							action: {
+								type: "appearance",
+								field: name
+							}
+						}
+					});
+					continue;
+				}
+				const key = ui.selected + ":appearance:" + name, toggle = ["shadow", "animate"].includes(name);
+				fields$2.push({
+					id: "pageAppearance_" + name,
+					title,
+					kind: toggle ? "CheckBox" : "Field",
+					description: name === "animate" ? "Follows appearance motion settings. Disabled while editing." : void 0,
+					props: toggle ? {
+						checked: appearance[name],
+						action: {
+							type: "appearance",
+							field: name
+						},
+						enabled: canEdit
+					} : {
+						text: Object.prototype.hasOwnProperty.call(ui.text, key) ? ui.text[key] : String(appearance[name]),
+						action: {
+							type: "buffer",
+							key
+						},
+						commitAction: {
+							type: "appearanceCommit",
+							field: name,
+							key
+						},
+						enabled: canEdit
+					}
+				});
+			}
 			if (item.kind === "items") fields$2.push({
 				kind: "Button",
 				id: "pageEditCard",
@@ -727,12 +825,13 @@ function describe(model, ui, width, height, language) {
 				title: "Remove widget",
 				props: {
 					icon: "delete",
-					enabled: canEdit,
+					enabled: canEdit && (ui.selection || []).length < 2,
 					action: { type: "remove" }
 				}
 			});
 		}
-		const body = sections(fields$2, right - 24, language, canEdit);
+		const properties = (ui.selection || []).length > 1 ? fields$2.filter((field) => field.id === "pageAppearanceHeading" || field.id.startsWith("pageAppearance_") || field.id.startsWith("pageColor_")) : fields$2;
+		const body = sections(properties, right - 24, language, canEdit);
 		if (!ui.preview && (!narrow || ui.panel === "properties")) nodes.push(node("Box", "pagePropertiesPanel", rect(width - right, y, right, h), {
 			background: "surfaceContainerLow",
 			border: "outlineVariant",
@@ -758,6 +857,9 @@ function describe(model, ui, width, height, language) {
 function initial() {
 	return {
 		selected: "",
+		selection: [],
+		multiSelect: false,
+		snap: true,
 		panel: "canvas",
 		preview: false,
 		text: {},
@@ -795,6 +897,7 @@ function transition(ui, model, event) {
 		next.future = [];
 		next.historyDocument = "";
 		next.selected = "";
+		next.selection = [];
 	}
 	if (event.type === "confirm" && ["page", "remove"].includes(ui.confirmation) && (model.busy || model.uncertain || !model.canWrite)) return {
 		ui: next,
@@ -804,7 +907,8 @@ function transition(ui, model, event) {
 		if (fingerprint(document) === current) return;
 		next.past = next.past.concat([{
 			document: copy(model.document),
-			selected: ui.selected
+			selected: ui.selected,
+			selection: ui.selection
 		}]).slice(-20);
 		next.future = [];
 		next.historyDocument = fingerprint(document);
@@ -831,6 +935,7 @@ function transition(ui, model, event) {
 		try {
 			replace(remove(model.document, ui.selected));
 			next.selected = "";
+			next.selection = [];
 		} catch (e) {
 			next.error = e.message;
 		}
@@ -844,6 +949,7 @@ function transition(ui, model, event) {
 	if (document) {
 		if (document.commands.some((command) => ["discard", "reload"].includes(command.type))) Object.assign(document.ui, {
 			selected: "",
+			selection: [],
 			text: {},
 			past: [],
 			future: [],
@@ -864,7 +970,10 @@ function transition(ui, model, event) {
 		"canvasSize",
 		"canvasWidthBuffer",
 		"canvasWidthCommit",
-		"canvasZoom"
+		"canvasZoom",
+		"multiSelect",
+		"snap",
+		"selection"
 	].includes(event.type)) return {
 		ui: next,
 		commands
@@ -893,6 +1002,9 @@ function transition(ui, model, event) {
 		if (Object.keys(ui.text).length && [
 			"select",
 			"geometry",
+			"selection",
+			"align",
+			"appearance",
 			"add",
 			"remove",
 			"change",
@@ -930,9 +1042,11 @@ function transition(ui, model, event) {
 				next[from] = next[from].slice(0, -1);
 				next[to] = next[to].concat([{
 					document: copy(model.document),
-					selected: ui.selected
+					selected: ui.selected,
+					selection: ui.selection
 				}]).slice(-20);
 				next.selected = snapshot.selected;
+				next.selection = snapshot.selection || [snapshot.selected].filter(Boolean);
 				next.recordQuery = "";
 				next.pageFilter = 0;
 				next.historyDocument = fingerprint(snapshot.document);
@@ -950,6 +1064,7 @@ function transition(ui, model, event) {
 				const value = event.type === "duplicate" ? duplicate(model.document, ui.selected) : event.type === "reorder" ? reorder(model.document, ui.selected, event.delta) : reparent(model.document, ui.selected, event.value);
 				replace(value.document);
 				next.selected = value.key;
+				next.selection = [value.key];
 				break;
 			}
 			case "preview":
@@ -964,10 +1079,37 @@ function transition(ui, model, event) {
 				].includes(event.value)) next.panel = event.value;
 				break;
 			case "select":
+				next.selection = event.key ? ui.multiSelect ? toggle(ui.selection || [], event.key) : [event.key] : [];
 				if (event.key) block(model.document, event.key);
-				next.selected = event.key;
+				next.selected = next.selection.includes(event.key) ? event.key : next.selection[next.selection.length - 1] || "";
 				next.text = {};
 				next.recordQuery = "";
+				break;
+			case "selection":
+				for (const key of event.keys) block(model.document, key);
+				next.selection = roots(event.keys);
+				next.selected = next.selection[next.selection.length - 1] || "";
+				next.recordQuery = "";
+				break;
+			case "multiSelect":
+				next.multiSelect = !ui.multiSelect;
+				break;
+			case "snap":
+				next.snap = !ui.snap;
+				break;
+			case "align": {
+				if (ui.preview) break;
+				const changes = alignment(selected(event.boxes || [], ui.selection), event.value);
+				if (changes.length) replace(geometries(model.document, changes, event.boxes).document);
+				break;
+			}
+			case "appearance":
+			case "appearanceCommit":
+				if (ui.preview) break;
+				if (event.type === "appearanceCommit" && !Object.prototype.hasOwnProperty.call(ui.text, event.key)) break;
+				replace(appearances(model.document, ui.selection.length ? ui.selection : [ui.selected], event.field, event.type === "appearanceCommit" ? ui.text[event.key] : event.value));
+				next.text = Object.assign({}, next.text);
+				delete next.text[event.key];
 				break;
 			case "recordQuery":
 				next.recordQuery = event.value;
@@ -1009,6 +1151,7 @@ function transition(ui, model, event) {
 						name: event.value
 					});
 					next.selected = "";
+					next.selection = [];
 					next.creating = false;
 				}
 				break;
@@ -1034,6 +1177,7 @@ function transition(ui, model, event) {
 				});
 				next.creating = false;
 				next.selected = "";
+				next.selection = [];
 				break;
 			case "buffer":
 				next.text = Object.assign({}, ui.text, { [event.key]: event.value });
@@ -1058,15 +1202,18 @@ function transition(ui, model, event) {
 				const value = add(model.document, ui.selected, event.value, model.searchTypes?.[0]?.value);
 				replace(value.document);
 				next.selected = value.key;
+				next.selection = [value.key];
 				break;
 			}
 			case "remove":
 				if (ui.selected) next.confirmation = "remove";
 				break;
 			case "geometry": {
-				const value = geometry(model.document, event.value, event.boxes);
+				if (ui.preview) break;
+				const value = event.value.changes ? geometries(model.document, event.value.changes, event.boxes) : geometry(model.document, event.value, event.boxes);
 				replace(value.document);
-				next.selected = value.key;
+				next.selection = value.keys || [value.key];
+				next.selected = next.selection.includes(ui.selected) ? ui.selected : next.selection[next.selection.length - 1];
 				break;
 			}
 			case "card": {
@@ -1118,6 +1265,7 @@ var _sfc_main = {
 			baseline: "",
 			revision: "",
 			compiled: null,
+			canvasBoxes: [],
 			checkedDocument: "",
 			error: "",
 			message: "",
@@ -1205,6 +1353,16 @@ var _sfc_main = {
 					guides: !this.ui.preview,
 					selectedBlock: this.ui.preview ? "" : this.ui.selected,
 					canvasViewport: this.ui.canvas,
+					selectedBlocks: this.ui.selection,
+					multiSelect: this.ui.multiSelect,
+					snap: this.ui.snap,
+					onSelection: (keys) => this.dispatch({
+						type: "selection",
+						keys
+					}),
+					onCanvasBoxes: (boxes) => {
+						this.canvasBoxes = boxes;
+					},
 					onLoaded: (value) => this.sampleLoaded(value),
 					onBlock: (key) => this.dispatch({
 						type: "select",
@@ -1528,6 +1686,10 @@ var _sfc_main = {
 			}
 		},
 		async dispatch(event) {
+			if (event.type === "align") event = {
+				...event,
+				boxes: this.canvasBoxes
+			};
 			const result = transition(this.ui, this.frameModel, event);
 			this.ui = result.ui;
 			for (const command of result.commands) switch (command.type) {

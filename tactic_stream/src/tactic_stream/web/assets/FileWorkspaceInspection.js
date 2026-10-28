@@ -7,7 +7,7 @@ import "./files.js";
 import { t as describe$7 } from "./confirmation.ui.js";
 import { t as _sfc_main$22 } from "./AppDialog.js";
 import { t as _sfc_main$23 } from "./AppMenuItem.js";
-import { S as _sfc_main$24, ut as actionLayout } from "./App.js";
+import { S as _sfc_main$24, mt as actionLayout } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/workspace/toolbar.ui.mjs
 function views$1(model, width, height, language) {
 	const tr = (text) => translate(text, language), h = metrics(model.style).controlHeight, nodes = [], y = Math.max(0, (h - 28) / 2);

@@ -128,8 +128,9 @@ class PageEditorBrowser(unittest.TestCase):
             )["info"]
         children = state["document"]["blocks"][0]["children"]
         self.assertEqual(
-            [row["text"] for row in children], ["Next step", "Project status"]
+            [row["text"] for row in children], ["Project status", "Next step"]
         )
-        text = children[1]
+        self.assertLess(children[1]['offset_y'], 0)
+        text = children[0]
         self.assertEqual(text["height"], 90)
         self.assertEqual(text["padding"], [12, 0, 0, 0])

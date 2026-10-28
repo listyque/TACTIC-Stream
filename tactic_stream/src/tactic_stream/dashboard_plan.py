@@ -38,6 +38,16 @@ class DashboardAggregate(BaseModel):
     column: str = Field(default='', max_length=128)
 
 
+class DashboardAppearance(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    fill: str = Field(default='transparent', pattern=r'^(transparent|panel|workspace|surfaceContainerLow|#[0-9a-fA-F]{6})$')
+    stroke: str = Field(default='outlineVariant', pattern=r'^(outlineVariant|contentAccent|transparent|#[0-9a-fA-F]{6})$')
+    stroke_width: int = Field(default=0, ge=0, le=8)
+    radius: int = Field(default=0, ge=0, le=48)
+    shadow: bool = False
+    animate: bool = False
+
+
 class DashboardBlock(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     kind: Literal['row', 'column', 'text', 'markdown', 'metric', 'table', 'items', 'details', 'link', 'chart', 'summary']
@@ -62,6 +72,9 @@ class DashboardBlock(BaseModel):
     padding: list[Annotated[int, Field(ge=0, le=256)]] = Field(default_factory=lambda: [0, 0, 0, 0], min_length=4, max_length=4)
     margin: list[Annotated[int, Field(ge=0, le=256)]] = Field(default_factory=lambda: [0, 0, 0, 0], min_length=4, max_length=4)
     gap: int = Field(default=8, ge=0, le=128)
+    offset_x: int = Field(default=0, ge=-2400, le=2400)
+    offset_y: int = Field(default=0, ge=-1600, le=1600)
+    appearance: DashboardAppearance = Field(default_factory=DashboardAppearance)
     controls: list[Literal['search', 'searchLimit', 'shelf', 'selection', 'gear', 'insert']] | None = Field(default=None, max_length=6)
     children: list['DashboardBlock'] = Field(default_factory=list, max_length=32)
 

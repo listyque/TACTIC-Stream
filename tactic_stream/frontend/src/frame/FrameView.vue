@@ -81,7 +81,11 @@ function style(node) {
       ? Object.entries(node.motion)
           .map(
             ([property, token]) =>
-              (property === 'x' ? 'left' : property) +
+              (property === 'x'
+                ? 'left'
+                : property === 'y'
+                  ? 'top'
+                  : property) +
               ' var(' +
               {
                 clickMotionSlow: '--motion-click-slow',
@@ -410,6 +414,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :class="{ 'frame-titlebar': node.titlebar }"
         :style="
           Object.assign(style(node), background(node), {
+            overflow: node.clip === false ? 'visible' : undefined,
             '--frame-titlebar-actions-right': (node.chromeRight || 0) + 'px',
             '--frame-titlebar-actions-top':
               node.chromeTop !== undefined ? node.chromeTop + 'px' : undefined,

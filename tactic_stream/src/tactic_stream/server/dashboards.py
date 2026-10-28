@@ -358,7 +358,9 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
 
             def emit(node):
                 node.update(editorPath=list(block_path), padding=block.padding,
-                            margin=block.margin, gap=block.gap)
+                            margin=block.margin, gap=block.gap,
+                            offsetX=block.offset_x, offsetY=block.offset_y,
+                            appearance=block.appearance.model_dump())
                 if block.height is not None:
                     node['height'] = block.height
                 if block.width is not None:

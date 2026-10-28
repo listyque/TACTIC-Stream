@@ -28,6 +28,7 @@ export default {
       baseline: '',
       revision: '',
       compiled: null,
+      canvasBoxes: [],
       checkedDocument: '',
       error: '',
       message: '',
@@ -135,6 +136,13 @@ export default {
             guides: !this.ui.preview,
             selectedBlock: this.ui.preview ? '' : this.ui.selected,
             canvasViewport: this.ui.canvas,
+            selectedBlocks: this.ui.selection,
+            multiSelect: this.ui.multiSelect,
+            snap: this.ui.snap,
+            onSelection: (keys) => this.dispatch({ type: 'selection', keys }),
+            onCanvasBoxes: (boxes) => {
+              this.canvasBoxes = boxes;
+            },
             onLoaded: (value) => this.sampleLoaded(value),
             onBlock: (key) => this.dispatch({ type: 'select', key }),
             onGeometry: (value, boxes) =>
@@ -500,6 +508,7 @@ export default {
       }
     },
     async dispatch(event) {
+      if (event.type === 'align') event = { ...event, boxes: this.canvasBoxes };
       const result = State.transition(this.ui, this.frameModel, event);
       this.ui = result.ui;
       for (const command of result.commands) {

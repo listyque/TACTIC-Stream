@@ -102,6 +102,13 @@ try {
         screen.dispatch({ type: 'select', key: '0.0' });
       }
     }, expected.panel);
+    if (expected.fixture === 'selection' && expected.panel !== 'preview')
+      await page.evaluate(() =>
+        window.pageEditorFixture.screen.value.dispatch({
+          type: 'selection',
+          keys: ['0.0', '0.1']
+        })
+      );
     await page.waitForTimeout(80);
     const actual = await surface(page, '.page-layout-editor');
     const count = await compareSurface(

@@ -1657,13 +1657,15 @@ function change$6(document, key, field, value) {
 		width: [40, 2400],
 		height: [24, 1600],
 		weight: [1, 12],
-		gap: [0, 128]
+		gap: [0, 128],
+		offset_x: [-2400, 2400],
+		offset_y: [-1600, 1600]
 	};
 	if (limits[field]) {
 		if (value === "" && ["width", "height"].includes(field)) value = null;
 		else {
 			const range = limits[field];
-			if (!/^\d+$/.test(String(value)) || Number(value) < range[0] || Number(value) > range[1]) throw Error("Enter a whole number within the allowed range");
+			if (!/^-?\d+$/.test(String(value)) || Number(value) < range[0] || Number(value) > range[1]) throw Error("Enter a whole number within the allowed range");
 			value = Number(value);
 		}
 	} else if (![
@@ -1861,6 +1863,47 @@ function geometry$2(document, change, boxes) {
 	return {
 		document: result,
 		key: location$1(result.blocks, target).concat(insertion).join(".")
+	};
+}
+function appearances(document, keys, field, value) {
+	const defaults = {
+		fill: "transparent",
+		stroke: "outlineVariant",
+		stroke_width: 0,
+		radius: 0,
+		shadow: false,
+		animate: false
+	};
+	const result = copy(document);
+	if (!Object.prototype.hasOwnProperty.call(defaults, field)) throw Error("Unsupported page property");
+	if (["shadow", "animate"].includes(field)) {
+		if (typeof value !== "boolean") throw Error("Choose Yes or No");
+	} else if (["radius", "stroke_width"].includes(field)) {
+		if (!/^\d+$/.test(String(value)) || Number(value) > (field === "radius" ? 48 : 8)) throw Error("Enter a whole number within the allowed range");
+		value = Number(value);
+	} else if (!(field === "fill" ? /^(transparent|panel|workspace|surfaceContainerLow|#[0-9a-fA-F]{6})$/ : /^(outlineVariant|contentAccent|transparent|#[0-9a-fA-F]{6})$/).test(value)) throw Error("Choose a theme color or enter a six-digit hex color");
+	for (const key of keys) {
+		const item = block(result, key);
+		item.appearance = Object.assign({}, defaults, item.appearance || {}, { [field]: value });
+	}
+	return result;
+}
+function geometries(document, changes, boxes) {
+	let result = copy(document);
+	const keys = changes.map((change) => change.key);
+	if (new Set(keys).size !== keys.length || keys.some((key) => keys.some((other) => key.startsWith(other + ".")))) throw Error("Select independent page blocks");
+	for (const change of changes) if (change.position && change.handle === "move") {
+		const item = block(result, change.key);
+		for (const axis of ["x", "y"]) {
+			const delta = change.after[axis] - change.before[axis];
+			const value = Math.round((item["offset_" + axis] || 0) + delta);
+			if (!Number.isFinite(value) || Math.abs(value) > (axis === "x" ? 2400 : 1600)) throw Error("Movement exceeds the page offset range");
+			item["offset_" + axis] = value;
+		}
+	} else result = geometry$2(result, change, boxes).document;
+	return {
+		document: result,
+		keys
 	};
 }
 //#endregion
@@ -2446,11 +2489,14 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 				extent = Number.isFinite(item.height) ? item.height : 320;
 				output.push(node("Box", id, rect$1(x, top, available, extent), { children: describe$56(item, id, available, extent, language).nodes }));
 			} else if (item.kind === "metric") {
-				extent = 104;
+				extent = Number.isFinite(item.height) ? item.height : 104;
+				const appearance = item.appearance;
+				const decorated = appearance && (appearance.fill !== "transparent" || appearance.stroke_width || appearance.radius || appearance.shadow);
 				output.push(node("Box", id, rect$1(x, top, available, extent), {
-					background: "panel",
-					border: "outlineVariant",
-					radiusRole: "surfaceRadius",
+					background: decorated ? "transparent" : "panel",
+					border: decorated ? "" : "outlineVariant",
+					radiusRole: decorated ? void 0 : "surfaceRadius",
+					radius: decorated ? 0 : void 0,
 					children: [label(id + "_label", rect$1(16, 12, Math.max(0, available - 32), 36), text, {
 						color: "secondaryText",
 						wrap: true
@@ -2568,8 +2614,35 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 					child.x -= originX + margin[3];
 					child.y -= outerTop + margin[0];
 				}
-				output.push(node("Box", id + "_block", rect$1(originX + margin[3], outerTop + margin[0], Math.max(0, outerWidth - margin[1] - margin[3]), Math.max(0, outerHeight - margin[0] - margin[2])), {
-					background: "transparent",
+				if (item.appearance?.shadow) for (const [index, dx, dy, grow, opacity] of [[
+					0,
+					-1,
+					1,
+					2,
+					.28
+				], [
+					1,
+					1,
+					3,
+					-2,
+					.58
+				]]) output.push(node("Box", id + "_shadow" + index, rect$1(originX + margin[3] + (item.offsetX || 0) + dx, outerTop + margin[0] + (item.offsetY || 0) + dy, Math.max(0, outerWidth - margin[1] - margin[3] + grow), Math.max(0, outerHeight - margin[0] - margin[2]) + (index === 0 ? 2 : 0)), {
+					background: "popupShadow",
+					radius: (item.appearance.radius || 0) + (index === 0 ? 1 : 0),
+					opacity,
+					pointerTransparent: true
+				}));
+				output.push(node("Box", id + "_block", rect$1(originX + margin[3] + (item.offsetX || 0), outerTop + margin[0] + (item.offsetY || 0), Math.max(0, outerWidth - margin[1] - margin[3]), Math.max(0, outerHeight - margin[0] - margin[2])), {
+					background: item.appearance?.fill || "transparent",
+					border: item.appearance?.stroke_width ? item.appearance.stroke : "",
+					borderWidth: item.appearance?.stroke_width || 0,
+					radius: item.appearance?.radius || 0,
+					motion: item.appearance?.animate && !cell.layoutDesigning ? {
+						x: "clickMotionSlow",
+						y: "clickMotionSlow",
+						width: "clickMotionSlow",
+						height: "clickMotionSlow"
+					} : null,
 					editorPath: item.editorPath,
 					clip: Number.isFinite(item.height),
 					children: content
@@ -2580,7 +2653,11 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 		return Math.max(0, top - originY - spacing);
 	}
 	children.push(...pageFilters.nodes);
-	const extent = pageFilters.height + draw(cell.layoutNodes, 0, pageFilters.height, Math.max(0, width - 24));
+	const flowExtent = pageFilters.height + draw(cell.layoutNodes, 0, pageFilters.height, Math.max(0, width - 24));
+	function visualBottom(nodes) {
+		return Math.max(0, ...nodes.map((item) => item.y + Math.max(item.height, item.clip === false ? visualBottom(item.children || []) : 0)));
+	}
+	const extent = Math.max(flowExtent, visualBottom(children));
 	if (cell.layoutError) children.push(label("layoutError", rect$1(0, extent + gap, Math.max(0, width - 24), 64), cell.layoutError, {
 		wrap: true,
 		color: "error"
@@ -3390,7 +3467,7 @@ var _hoisted_3$49 = {
 	key: 2,
 	class: "table-cell-text muted"
 };
-var _hoisted_4$38 = {
+var _hoisted_4$39 = {
 	key: 13,
 	class: "table-notes"
 };
@@ -3513,7 +3590,7 @@ function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
 		key: 12,
 		cell: $props.cell,
 		height: Number(String($props.element.display?.options?.height || "").replace("px", "")) || void 0
-	}, null, 8, ["cell", "height"])) : $props.element.cell?.kind === "notes" ? (openBlock(), createElementBlock("span", _hoisted_4$38, [(openBlock(true), createElementBlock(Fragment, null, renderList($props.cell?.processes || [], (item) => {
+	}, null, 8, ["cell", "height"])) : $props.element.cell?.kind === "notes" ? (openBlock(), createElementBlock("span", _hoisted_4$39, [(openBlock(true), createElementBlock(Fragment, null, renderList($props.cell?.processes || [], (item) => {
 		return openBlock(), createBlock(_component_AppButton, {
 			key: item.process,
 			class: "table-note-chip",
@@ -4013,7 +4090,7 @@ var _hoisted_2$65 = {
 	role: "columnheader"
 };
 var _hoisted_3$48 = { class: "visually-hidden" };
-var _hoisted_4$37 = [
+var _hoisted_4$38 = [
 	"aria-sort",
 	"title",
 	"aria-label",
@@ -4514,7 +4591,7 @@ var _sfc_main$170 = {
 								onPointerdown: ($event) => resize(column, $event),
 								onKeydown: withModifiers(($event) => resizeKey(column, $event), ["stop"])
 							}, null, 40, _hoisted_6$25)
-						], 42, _hoisted_4$37);
+						], 42, _hoisted_4$38);
 					}), 128)),
 					createBaseVNode("div", _hoisted_7$25, [
 						__props.busy ? (openBlock(), createBlock(BusyIndicator_default, { key: 0 })) : createCommentVNode("", true),
@@ -4747,7 +4824,7 @@ function accept(state, path, result, error = "") {
 	});
 	return Object.assign({}, state, { pages: Object.assign({}, state.pages, { [path]: next }) });
 }
-function toggle(state, record) {
+function toggle$1(state, record) {
 	if (!record.expandable) return { state };
 	const path = record.path, old = state.pages[path];
 	const page = old ? Object.assign({}, old, { open: !old.open }) : Object.assign({
@@ -4996,7 +5073,7 @@ var _sfc_main$169 = {
 			else if (action.type === "read") read(begin$1(state.value, action.path, action.more));
 			else if (action.type === "toggle") {
 				const record = records.value.find((row) => row.path === action.path);
-				if (record) read(toggle(state.value, record));
+				if (record) read(toggle$1(state.value, record));
 			} else if (action.type === "file") {
 				const current = generation, abort = new AbortController();
 				requests.add(abort);
@@ -6267,7 +6344,7 @@ var _hoisted_3$46 = {
 	key: 2,
 	class: "result-file-offline"
 };
-var _hoisted_4$36 = {
+var _hoisted_4$37 = {
 	key: 0,
 	class: "result-metadata"
 };
@@ -6687,7 +6764,7 @@ var _sfc_main$159 = {
 						})) : createCommentVNode("", true)], 2)) : createCommentVNode("", true),
 						__props.tree && __props.node.kind === "snapshot" && title.value && !__props.node.snapshot_display?.exists ? (openBlock(), createElementBlock("span", _hoisted_3$46, "(" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)
 					], 32)]),
-					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_4$36, [
+					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_4$37, [
 						(openBlock(true), createElementBlock(Fragment, null, renderList(__props.compact ? __props.node.progress_items?.slice(0, 1) : __props.node.progress_items, (item) => {
 							return openBlock(), createBlock(_sfc_main$191, {
 								key: item.name,
@@ -8138,7 +8215,7 @@ var _hoisted_3$45 = {
 	key: 0,
 	role: "status"
 };
-var _hoisted_4$35 = {
+var _hoisted_4$36 = {
 	key: 1,
 	class: "error",
 	role: "alert"
@@ -8291,7 +8368,7 @@ var _sfc_main$157 = {
 					}
 				}, null, 8, ["scene"]),
 				busy.value ? (openBlock(), createElementBlock("p", _hoisted_3$45, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true),
-				error.value ? (openBlock(), createElementBlock("p", _hoisted_4$35, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$184, {
+				error.value ? (openBlock(), createElementBlock("p", _hoisted_4$36, [createTextVNode(toDisplayString(unref(t)(error.value)) + " ", 1), createVNode(_sfc_main$184, {
 					label: "Retry",
 					onClick: load
 				})])) : createCommentVNode("", true),
@@ -8499,15 +8576,142 @@ function itemScene(scene, layout, prefix = "itemComposition") {
 	}) });
 }
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.selection.mjs
+var alignments = [
+	"left",
+	"centerX",
+	"right",
+	"top",
+	"centerY",
+	"bottom"
+];
+function roots(keys) {
+	const unique = Array.from(new Set(keys));
+	return unique.filter((key) => !unique.some((parent) => key.startsWith(parent + ".")));
+}
+function toggle(keys, key) {
+	if (keys.includes(key)) return keys.filter((value) => value !== key);
+	return roots(keys.filter((value) => !key.startsWith(value + ".")).concat(key));
+}
+function selected(boxes, keys) {
+	const names = roots(keys);
+	return boxes.filter((box) => names.includes(box.key));
+}
+function bounds(boxes) {
+	if (!boxes.length) return null;
+	const x = Math.min(...boxes.map((box) => box.x));
+	const y = Math.min(...boxes.map((box) => box.y));
+	return {
+		x,
+		y,
+		width: Math.max(...boxes.map((box) => box.x + box.width)) - x,
+		height: Math.max(...boxes.map((box) => box.y + box.height)) - y
+	};
+}
+function marquee(boxes, start, end) {
+	const area = bounds([{
+		x: start.x,
+		y: start.y,
+		width: 0,
+		height: 0
+	}, {
+		x: end.x,
+		y: end.y,
+		width: 0,
+		height: 0
+	}]);
+	return roots(boxes.filter((box) => {
+		const hit = box.hit || box;
+		return hit.x >= area.x && hit.y >= area.y && hit.x + hit.width <= area.x + area.width && hit.y + hit.height <= area.y + area.height;
+	}).map((box) => box.key));
+}
+function alignment(boxes, mode) {
+	if (!alignments.includes(mode) || boxes.length < 2) return [];
+	const group = bounds(boxes);
+	return boxes.map((box) => {
+		const after = Object.assign({}, box);
+		if (mode === "left") after.x = group.x;
+		if (mode === "centerX") after.x = group.x + (group.width - box.width) / 2;
+		if (mode === "right") after.x = group.x + group.width - box.width;
+		if (mode === "top") after.y = group.y;
+		if (mode === "centerY") after.y = group.y + (group.height - box.height) / 2;
+		if (mode === "bottom") after.y = group.y + group.height - box.height;
+		after.x = Math.round(after.x);
+		after.y = Math.round(after.y);
+		return {
+			key: box.key,
+			handle: "move",
+			position: true,
+			before: box,
+			after
+		};
+	});
+}
+function drag$1(boxes, handle, dx, dy, candidates, scale, snap) {
+	const group = bounds(boxes);
+	const moving = transform(group, handle, dx, dy);
+	const guides = [];
+	const others = candidates.filter((box) => !boxes.some((chosen) => box.key === chosen.key || box.key.startsWith(chosen.key + ".") || chosen.key.startsWith(box.key + ".")));
+	if (snap) for (const axis of ["x", "y"]) {
+		const size = axis === "x" ? "width" : "height";
+		if (!(handle === "move" || handle.includes(axis === "x" ? "e" : "s"))) continue;
+		const anchors = handle === "move" ? [
+			0,
+			.5,
+			1
+		] : [1];
+		let best = null;
+		for (const other of others) for (const target of [
+			0,
+			.5,
+			1
+		]) for (const anchor of anchors) {
+			const value = other[axis] + other[size] * target;
+			const delta = value - moving[axis] - moving[size] * anchor;
+			if (Math.abs(delta) <= 6 / scale && (!best || Math.abs(delta) < Math.abs(best.delta))) best = {
+				axis,
+				value,
+				delta,
+				other
+			};
+		}
+		if (best) {
+			if (handle === "move") moving[axis] += best.delta;
+			else moving[size] = Math.max(axis === "x" ? 40 : 24, moving[size] + best.delta);
+			const cross = axis === "x" ? "y" : "x", extent = axis === "x" ? "height" : "width";
+			guides.push({
+				axis,
+				value: best.value,
+				start: Math.min(moving[cross], best.other[cross]),
+				end: Math.max(moving[cross] + moving[extent], best.other[cross] + best.other[extent])
+			});
+		}
+	}
+	return {
+		changes: boxes.map((box) => ({
+			key: box.key,
+			handle,
+			position: true,
+			before: box,
+			after: handle === "move" ? transform(box, handle, moving.x - group.x, moving.y - group.y) : Object.assign({}, box, {
+				width: moving.width,
+				height: moving.height
+			})
+		})),
+		guides
+	};
+}
+//#endregion
 //#region src/features/administration/CanvasSelection.vue
-var _hoisted_1$91 = [
+var _hoisted_1$91 = ["data-canvas-guide"];
+var _hoisted_2$59 = [
 	"data-canvas-key",
 	"aria-label",
 	"onPointerdown",
 	"onKeydown"
 ];
-var _hoisted_2$59 = ["aria-label"];
-var _hoisted_3$44 = [
+var _hoisted_3$44 = ["aria-label"];
+var _hoisted_4$35 = [
 	"data-canvas-handle",
 	"aria-label",
 	"onPointerdown",
@@ -8521,29 +8725,78 @@ var _sfc_main$156 = {
 		scale: {
 			type: Number,
 			default: 1
-		}
+		},
+		selection: Array,
+		multiple: Boolean,
+		multiSelect: Boolean,
+		snap: Boolean
 	},
-	emits: ["select", "commit"],
+	emits: [
+		"select",
+		"selection",
+		"commit"
+	],
 	setup(__props, { emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const gesture = ref(null), ghost = ref(null);
-		const chosen = computed(() => ghost.value || (props.boxes || []).find((b) => b.key === props.selected));
+		const gesture = ref(null), ghost = ref(null), preview = ref(null), rubber = ref(null);
+		const group = computed(() => selected(props.boxes || [], props.selection || [props.selected]));
+		const outlines = computed(() => preview.value?.changes.map((change) => change.after) || group.value);
+		const chosen = computed(() => props.multiple && group.value.length > 1 ? Object.assign({}, bounds(outlines.value), { group: true }) : ghost.value || preview.value?.changes[0]?.after || (props.boxes || []).find((box) => box.key === props.selected));
 		const css = (b) => ({
 			left: b.x + "px",
 			top: b.y + "px",
 			width: b.width + "px",
 			height: b.height + "px"
 		});
+		const point = (e) => {
+			const area = e.currentTarget.closest(".canvas-selection").getBoundingClientRect();
+			return {
+				x: (e.clientX - area.left) / props.scale,
+				y: (e.clientY - area.top) / props.scale
+			};
+		};
 		function start(e, box, handle, hit = false) {
 			if (e.button !== 0) return;
 			e.preventDefault();
 			e.stopPropagation();
 			e.currentTarget.focus();
 			e.currentTarget.setPointerCapture(e.pointerId);
-			if (hit && e.altKey) {
-				const bounds = e.currentTarget.closest(".canvas-selection").getBoundingClientRect();
-				box = pick(props.boxes, (e.clientX - bounds.left) / props.scale, (e.clientY - bounds.top) / props.scale, props.selected, true) || box;
+			const p = point(e);
+			if (props.multiple && (!box || e.shiftKey)) {
+				gesture.value = {
+					marquee: true,
+					start: p,
+					base: props.selection || [],
+					box
+				};
+				rubber.value = {
+					x: p.x,
+					y: p.y,
+					width: 0,
+					height: 0
+				};
+				return;
+			}
+			if (hit && e.altKey) box = pick(props.boxes, p.x, p.y, props.selected, true) || box;
+			if (props.multiple) {
+				let keys = props.selection || [];
+				if (!box.group && (e.ctrlKey || e.metaKey || props.multiSelect)) {
+					emit("selection", toggle(keys, box.key));
+					return;
+				}
+				if (!box.group && !keys.includes(box.key)) keys = [box.key];
+				emit("selection", keys);
+				const boxes = selected(props.boxes, keys);
+				if (!boxes.length) return;
+				gesture.value = {
+					boxes,
+					handle,
+					x: e.clientX,
+					y: e.clientY,
+					scale: props.scale
+				};
+				return;
 			}
 			emit("select", box.key);
 			if (box.canTransform === false) return;
@@ -8558,23 +8811,51 @@ var _sfc_main$156 = {
 		}
 		function move(e) {
 			const g = gesture.value;
-			if (g) ghost.value = transform(g.box, g.handle, (e.clientX - g.x) / g.scale, (e.clientY - g.y) / g.scale);
+			if (!g) return;
+			if (g.marquee) {
+				const p = point(e);
+				rubber.value = bounds([{
+					...g.start,
+					width: 0,
+					height: 0
+				}, {
+					...p,
+					width: 0,
+					height: 0
+				}]);
+				return;
+			}
+			const dx = (e.clientX - g.x) / g.scale, dy = (e.clientY - g.y) / g.scale;
+			if (g.boxes) {
+				if (Math.hypot(dx, dy) * g.scale < 3 && !g.moved) return;
+				g.moved = true;
+				preview.value = drag$1(g.boxes, g.handle, dx, dy, props.boxes, g.scale, props.snap && !e.altKey);
+			} else ghost.value = transform(g.box, g.handle, dx, dy);
 		}
 		function finish(e) {
 			const g = gesture.value;
 			if (!g) return;
 			move(e);
-			const after = { ...ghost.value };
-			gesture.value = ghost.value = null;
-			if (JSON.stringify(after) !== JSON.stringify(g.box)) emit("commit", {
-				key: g.box.key,
-				handle: g.handle,
-				before: g.box,
-				after
-			});
+			if (g.marquee) {
+				const p = point(e);
+				const small = Math.hypot(p.x - g.start.x, p.y - g.start.y) * props.scale < 3;
+				emit("selection", small ? g.box ? toggle(g.base, g.box.key) : [] : roots(g.base.concat(marquee(props.boxes, g.start, p))));
+			} else if (g.boxes) {
+				const changes = preview.value?.changes || [];
+				if (changes.some((c) => JSON.stringify(c.before) !== JSON.stringify(c.after))) emit("commit", { changes });
+			} else {
+				const after = { ...ghost.value };
+				if (JSON.stringify(after) !== JSON.stringify(g.box)) emit("commit", {
+					key: g.box.key,
+					handle: g.handle,
+					before: g.box,
+					after
+				});
+			}
+			cancel();
 		}
 		function cancel() {
-			gesture.value = ghost.value = null;
+			gesture.value = ghost.value = preview.value = rubber.value = null;
 		}
 		function key(e, box, resizeHandle) {
 			if (e.key === "Escape") {
@@ -8589,12 +8870,14 @@ var _sfc_main$156 = {
 				ArrowUp: [0, -1],
 				ArrowDown: [0, 1]
 			}[e.key];
-			if (!d) return;
-			if (box.canTransform === false) return;
+			if (!d || box.canTransform === false) return;
 			e.preventDefault();
 			e.stopPropagation();
 			const step = e.shiftKey ? 10 : 1, handle = resizeHandle || (e.altKey ? "se" : "move");
-			emit("commit", {
+			if (props.multiple) {
+				if (group.value.length > 1 && handle !== "move") return;
+				emit("commit", { changes: drag$1(group.value, handle, d[0] * step, d[1] * step, [], props.scale, false).changes });
+			} else emit("commit", {
 				key: box.key,
 				handle,
 				keyboard: true,
@@ -8606,62 +8889,104 @@ var _sfc_main$156 = {
 			return openBlock(), createElementBlock("div", {
 				class: "canvas-selection",
 				style: normalizeStyle({ "--canvas-inverse-scale": 1 / __props.scale })
-			}, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.boxes, (box, i) => {
-				return openBlock(), createElementBlock("div", {
-					key: box.key,
-					class: "canvas-hit",
-					style: normalizeStyle({
-						...css(box.hit || box),
-						zIndex: i,
-						cursor: box.canTransform === false ? "pointer" : "move"
-					}),
-					"data-canvas-key": box.key,
-					tabindex: "0",
-					role: "button",
-					"aria-label": unref(t)("Select element") + " " + (box.label || box.key),
-					onPointerdown: ($event) => start($event, box, "move", true),
-					onPointermove: move,
-					onPointerup: finish,
-					onPointercancel: cancel,
-					onKeydown: ($event) => key($event, box)
-				}, null, 44, _hoisted_1$91);
-			}), 128)), chosen.value ? (openBlock(), createElementBlock("div", {
-				key: 0,
-				class: "canvas-outline",
-				style: normalizeStyle(css(chosen.value))
 			}, [
-				chosen.value.canTransform !== false ? (openBlock(), createElementBlock("div", {
+				__props.multiple ? (openBlock(), createElementBlock("div", {
 					key: 0,
-					class: "canvas-move-edge",
+					class: "canvas-background",
 					tabindex: "0",
-					role: "button",
-					"aria-label": unref(t)("Move element"),
-					onPointerdown: _cache[0] || (_cache[0] = ($event) => start($event, chosen.value, "move")),
+					onPointerdown: _cache[0] || (_cache[0] = ($event) => start($event, null, "move")),
 					onPointermove: move,
 					onPointerup: finish,
-					onPointercancel: cancel,
-					onKeydown: _cache[1] || (_cache[1] = ($event) => key($event, chosen.value))
-				}, null, 40, _hoisted_2$59)) : createCommentVNode("", true),
-				createBaseVNode("span", {
-					class: "canvas-size",
-					style: normalizeStyle({ fontSize: Math.round(11 / __props.scale) + "px" })
-				}, toDisplayString(Math.round(chosen.value.width)) + " × " + toDisplayString(Math.round(chosen.value.height)), 5),
-				(openBlock(true), createElementBlock(Fragment, null, renderList(chosen.value.canTransform === false ? [] : handles, (handle) => {
+					onPointercancel: cancel
+				}, null, 32)) : createCommentVNode("", true),
+				(openBlock(true), createElementBlock(Fragment, null, renderList(__props.multiple ? outlines.value : [], (box) => {
 					return openBlock(), createElementBlock("div", {
-						key: handle,
-						class: normalizeClass(["canvas-handle", "canvas-handle-" + handle]),
-						"data-canvas-handle": handle,
+						key: "outline-" + box.key,
+						class: "canvas-outline",
+						style: normalizeStyle(css(box))
+					}, null, 4);
+				}), 128)),
+				(openBlock(true), createElementBlock(Fragment, null, renderList(preview.value?.guides || [], (guide, index) => {
+					return openBlock(), createElementBlock("div", {
+						key: "guide-" + index,
+						class: "canvas-guide",
+						"data-canvas-guide": guide.axis,
+						style: normalizeStyle(guide.axis === "x" ? {
+							left: guide.value + "px",
+							top: guide.start + "px",
+							height: guide.end - guide.start + "px",
+							width: 0
+						} : {
+							top: guide.value + "px",
+							left: guide.start + "px",
+							width: guide.end - guide.start + "px",
+							height: 0
+						})
+					}, null, 12, _hoisted_1$91);
+				}), 128)),
+				rubber.value ? (openBlock(), createElementBlock("div", {
+					key: 1,
+					class: "canvas-marquee",
+					style: normalizeStyle(css(rubber.value))
+				}, null, 4)) : createCommentVNode("", true),
+				(openBlock(true), createElementBlock(Fragment, null, renderList(__props.boxes, (box, i) => {
+					return openBlock(), createElementBlock("div", {
+						key: box.key,
+						class: "canvas-hit",
+						style: normalizeStyle({
+							...css(box.hit || box),
+							zIndex: i,
+							cursor: box.canTransform === false ? "pointer" : "move"
+						}),
+						"data-canvas-key": box.key,
 						tabindex: "0",
 						role: "button",
-						"aria-label": unref(t)("Resize element") + " " + handle,
-						onPointerdown: ($event) => start($event, chosen.value, handle),
+						"aria-label": unref(t)("Select element") + " " + (box.label || box.key),
+						onPointerdown: ($event) => start($event, box, "move", true),
 						onPointermove: move,
 						onPointerup: finish,
 						onPointercancel: cancel,
-						onKeydown: ($event) => key($event, chosen.value, handle)
-					}, null, 42, _hoisted_3$44);
-				}), 128))
-			], 4)) : createCommentVNode("", true)], 4);
+						onKeydown: ($event) => key($event, box)
+					}, null, 44, _hoisted_2$59);
+				}), 128)),
+				chosen.value ? (openBlock(), createElementBlock("div", {
+					key: 2,
+					class: "canvas-outline",
+					style: normalizeStyle(css(chosen.value))
+				}, [
+					chosen.value.canTransform !== false ? (openBlock(), createElementBlock("div", {
+						key: 0,
+						class: "canvas-move-edge",
+						tabindex: "0",
+						role: "button",
+						"aria-label": unref(t)("Move element"),
+						onPointerdown: _cache[1] || (_cache[1] = ($event) => start($event, chosen.value, "move")),
+						onPointermove: move,
+						onPointerup: finish,
+						onPointercancel: cancel,
+						onKeydown: _cache[2] || (_cache[2] = ($event) => key($event, chosen.value))
+					}, null, 40, _hoisted_3$44)) : createCommentVNode("", true),
+					createBaseVNode("span", {
+						class: "canvas-size",
+						style: normalizeStyle({ fontSize: Math.round(11 / __props.scale) + "px" })
+					}, toDisplayString(Math.round(chosen.value.width)) + " Г— " + toDisplayString(Math.round(chosen.value.height)), 5),
+					(openBlock(true), createElementBlock(Fragment, null, renderList(chosen.value.canTransform === false || chosen.value.group ? [] : handles, (handle) => {
+						return openBlock(), createElementBlock("div", {
+							key: handle,
+							class: normalizeClass(["canvas-handle", "canvas-handle-" + handle]),
+							"data-canvas-handle": handle,
+							tabindex: "0",
+							role: "button",
+							"aria-label": unref(t)("Resize element") + " " + handle,
+							onPointerdown: ($event) => start($event, chosen.value, handle),
+							onPointermove: move,
+							onPointerup: finish,
+							onPointercancel: cancel,
+							onKeydown: ($event) => key($event, chosen.value, handle)
+						}, null, 42, _hoisted_4$35);
+					}), 128))
+				], 4)) : createCommentVNode("", true)
+			], 4);
 		};
 	}
 };
@@ -19859,8 +20184,12 @@ function step(settings, width, direction) {
 function describe$41(scene, settings, width, height) {
 	const size = dimensions$3(settings, width, height);
 	const scroll = scene.nodes.find((item) => item.id === "customLayoutScroll");
-	const children = scroll ? scroll.children : scene.nodes;
+	const sourceChildren = scroll ? scroll.children : scene.nodes;
 	const pageHeight = Math.max(size.height, (scroll?.contentHeight || 0) + 24);
+	const children = sourceChildren.map((child) => child.id === "canvasOverlay" ? Object.assign({}, child, {
+		width: size.width - 24,
+		height: pageHeight - 24
+	}) : child);
 	return Object.assign({}, scene, { nodes: [node("Scroll", "pageViewportScroll", rect$1(0, 0, width, height), {
 		contentWidth: Math.max(width, size.width * size.scale + 32),
 		contentHeight: Math.max(height, pageHeight * size.scale + 32),
@@ -19947,9 +20276,56 @@ function controls$1(ui, width, language, enabled) {
 		type: "canvasZoom",
 		value: String(step(settings, width, 1))
 	}, enabled && actual < 200, { iconOnly: true }));
+	let height = narrow ? 72 : 32;
+	if (!ui.preview) {
+		const y = height + 8;
+		nodes.push(button("pageMultiSelect", rect$1(0, y, 32, 32), tr("Multiple selection"), "select-all", { type: "multiSelect" }, enabled, {
+			iconOnly: true,
+			highlighted: ui.multiSelect
+		}), label("pageSelectionCount", rect$1(40, y, 72, 32), String((ui.selection || []).length) + " " + tr("selected"), muted), node("Choice", "pageAlign", rect$1(120, y, Math.min(178, Math.max(1, width - 166)), 32), {
+			label: tr("Align selected elements"),
+			value: "",
+			enabled: enabled && (ui.selection || []).length > 1,
+			options: [
+				{
+					value: "",
+					label: tr("Align")
+				},
+				{
+					value: "left",
+					label: tr("Left edges")
+				},
+				{
+					value: "centerX",
+					label: tr("Horizontal centers")
+				},
+				{
+					value: "right",
+					label: tr("Right edges")
+				},
+				{
+					value: "top",
+					label: tr("Top edges")
+				},
+				{
+					value: "centerY",
+					label: tr("Vertical centers")
+				},
+				{
+					value: "bottom",
+					label: tr("Bottom edges")
+				}
+			],
+			action: { type: "align" }
+		}), button("pageSnap", rect$1(Math.min(306, width - 32), y, 32, 32), tr("Snap to guides"), "grid-view", { type: "snap" }, enabled, {
+			iconOnly: true,
+			highlighted: ui.snap
+		}));
+		height += 40;
+	}
 	return {
 		nodes,
-		height: narrow ? 72 : 32
+		height
 	};
 }
 //#endregion
@@ -19978,6 +20354,9 @@ var _sfc_main$116 = {
 			default: true
 		},
 		selectedBlock: String,
+		selectedBlocks: Array,
+		multiSelect: Boolean,
+		snap: Boolean,
 		canvasViewport: Object
 	},
 	emits: [
@@ -19998,6 +20377,8 @@ var _sfc_main$116 = {
 		"loaded",
 		"block",
 		"geometry",
+		"selection",
+		"canvasBoxes",
 		"filter-apply"
 	],
 	setup(__props, { expose: __expose, emit: __emit }) {
@@ -20017,6 +20398,7 @@ var _sfc_main$116 = {
 			layoutBusy: busy.value,
 			layoutFilterDraft: filterDraft.value,
 			layoutEditing: props.editing,
+			layoutDesigning: props.editing && props.guides,
 			layoutFilterBusy: props.filterBusy,
 			layoutError: error.value
 		}, canvasSize.value.width - (props.canvasViewport ? 24 : 0), Math.max(1, canvasSize.value.height - (props.canvasViewport ? 24 : 0)), appearance.language, true, location.origin));
@@ -20029,12 +20411,18 @@ var _sfc_main$116 = {
 			const document = props.editing && props.guides ? decorate(baseScene.value, "editorPath") : baseScene.value;
 			return props.canvasViewport ? describe$41(document, props.canvasViewport, props.frameNode?.width ?? props.width, props.frameNode?.height ?? props.height) : document;
 		});
+		watch(() => scene.value.canvasBoxes, (boxes) => emit("canvasBoxes", boxes || []), { immediate: true });
 		const views = computed(() => ({
 			canvasOverlay: {
 				component: _sfc_main$156,
 				props: {
 					boxes: scene.value.canvasBoxes || [],
 					selected: props.selectedBlock,
+					selection: props.selectedBlocks,
+					multiple: !!props.canvasViewport,
+					multiSelect: props.multiSelect,
+					snap: props.snap,
+					onSelection: (keys) => emit("selection", keys),
 					scale: canvasSize.value.scale,
 					onSelect: (key) => emit("block", key),
 					onCommit: (value) => emit("geometry", value, scene.value.canvasBoxes || [])
@@ -36622,7 +37010,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 		let holdTimer;
 		let holdFrame;
 		let held = false;
-		const drag$1 = shallowRef(null);
+		const drag$2 = shallowRef(null);
 		let pressed;
 		let suppressClick = false;
 		function cancelCollapse() {
@@ -36631,7 +37019,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 		function collapse() {
 			cancelCollapse();
 			collapseTimer = setTimeout(() => {
-				if (actions.value || drag$1.value || rail.value?.contains(document.activeElement) || popup.value?.contains(document.activeElement)) return;
+				if (actions.value || drag$2.value || rail.value?.contains(document.activeElement) || popup.value?.contains(document.activeElement)) return;
 				popup.value?.hidePopover();
 				revealed.value = null;
 			}, dimensions$5.revealDelay);
@@ -36769,17 +37157,17 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 			const next = drag(pressed, {
 				x: event.clientX,
 				y: event.clientY
-			}, rail.value.scrollTop, drag$1.value ? 0 : metrics$5.dragThreshold);
+			}, rail.value.scrollTop, drag$2.value ? 0 : metrics$5.dragThreshold);
 			if (!next) return;
-			if (!drag$1.value) pressed.node.setPointerCapture(pressed.pointer);
+			if (!drag$2.value) pressed.node.setPointerCapture(pressed.pointer);
 			event.preventDefault();
-			drag$1.value = next;
+			drag$2.value = next;
 			const dy = event.clientY - pressed.y;
 			popup.value.style.top = pressed.top + dy + "px";
 		}
 		function finishDrag(event) {
 			if (!pressed || event.pointerId !== pressed.pointer) return;
-			const finished = drag$1.value;
+			const finished = drag$2.value;
 			cancelDrag();
 			if (finished && finished.source !== finished.target) emit("reorder", finished.source, finished.target);
 		}
@@ -36794,9 +37182,9 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 		}
 		function cancelDrag() {
 			const previous = pressed;
-			suppressClick ||= !!drag$1.value;
+			suppressClick ||= !!drag$2.value;
 			pressed = null;
-			drag$1.value = null;
+			drag$2.value = null;
 			document.removeEventListener("pointermove", dragSection);
 			document.removeEventListener("pointerup", finishDrag);
 			document.removeEventListener("pointercancel", cancelPointer);
@@ -36809,7 +37197,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 		}
 		let titleMeasure;
 		function positionRevealed() {
-			if (!rail.value || !popup.value || !revealed.value || actions.value || drag$1.value) return;
+			if (!rail.value || !popup.value || !revealed.value || actions.value || drag$2.value) return;
 			const row = [...rail.value.querySelectorAll(".section-tab-row")].find((node) => node.dataset.sectionId === revealed.value.id);
 			if (!row) return;
 			const bounds = row.getBoundingClientRect(), viewport = rail.value.getBoundingClientRect();
@@ -36826,7 +37214,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 			popup.value.style.top = Math.max(0, Math.min(bounds.top, innerHeight - metrics$5.rowHeight)) + "px";
 		}
 		function rowOffset(index) {
-			return !drag$1.value ? 0 : index === drag$1.value.source ? drag$1.value.translation : displacedTabOffset(index, drag$1.value.source, drag$1.value.target, drag$1.value.step);
+			return !drag$2.value ? 0 : index === drag$2.value.source ? drag$2.value.translation : displacedTabOffset(index, drag$2.value.source, drag$2.value.target, drag$2.value.step);
 		}
 		function afterDrag(event) {
 			if (!suppressClick || !event.detail) return;
@@ -36879,7 +37267,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 			}, null, 8, ["scene"]), createBaseVNode("nav", {
 				ref_key: "rail",
 				ref: rail,
-				class: normalizeClass(["section-tab-rail", { reordering: drag$1.value }]),
+				class: normalizeClass(["section-tab-rail", { reordering: drag$2.value }]),
 				role: "tablist",
 				"aria-orientation": "vertical",
 				"aria-label": unref(t)("Open sections"),
@@ -36892,7 +37280,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 					key: tab.id,
 					class: normalizeClass(["section-tab-row", {
 						current: __props.selected === tab.id,
-						dragging: drag$1.value?.source === index
+						dragging: drag$2.value?.source === index
 					}]),
 					"data-section-id": tab.id,
 					style: normalizeStyle({ "--section-drag-y": rowOffset(index) + "px" }),
@@ -36959,7 +37347,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 				class: normalizeClass(["section-tab-reveal", {
 					"section-tab-reveal-actions": actions.value,
 					current: __props.selected === revealed.value?.id,
-					dragging: !!drag$1.value
+					dragging: !!drag$2.value
 				}]),
 				popover: "auto",
 				"aria-label": revealed.value?.title,
@@ -36986,7 +37374,7 @@ var _sfc_main$65 = /*@__PURE__*/ Object.assign({ inheritAttrs: false }, {
 						current: __props.selected === revealed.value.id
 					},
 					revealed: "",
-					pressed: !!drag$1.value || revealedPressed.value
+					pressed: !!drag$2.value || revealedPressed.value
 				}, null, 8, [
 					"width",
 					"record",
@@ -61825,6 +62213,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { widgets as $, _sfc_main$116 as A, reparent as At, duplicateProfile as B, captionedSwitch as C, fingerprint as Ct, changeDefinition as D, path as Dt, _sfc_main$107 as E, layers as Et, ObjectAction_default as F, spacingField as G, _sfc_main$131 as H, _sfc_main$126 as I, edit$2 as J, actions$4 as K, applyDuplicateProfile as L, zooms as M, spacing$1 as Mt, ResultPresentation_default as N, definitionWizard as O, remove$2 as Ot, RelatedObjects_default as P, variants as Q, changeContent as R, _sfc_main$63 as S, duplicate as St, _sfc_main$100 as T, kinds as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$145 as W, serialize as X, roles as Y, template as Z, editColumn as _, type as _t, updateModes as a, toolbar$4 as at, describe$18 as b, change$6 as bt, runBrowserScript as c, _sfc_main$166 as ct, ProjectCreation_default as d, App_default as default, change$5 as dt, documentEvent as et, ImagePicker_default as f, fields$2 as ft, describe$17 as g, scope as gt, contentWidth as h, options$1 as ht, updateIntervals as i, tabs as it, controls$1 as j, siblings as jt, displayWidgets as k, reorder$1 as kt, scriptTree as l, _sfc_main$171 as lt, change as m, mode as mt, networkSettings as n, policy as nt, _sfc_main$26 as o, _sfc_main$158 as ot, readPreviewImage as p, filter as pt, describe$48 as q, updateBatchDelays as r, sectionSelector as rt, buttonId as s, views as st, App_exports as t, notices as tt, lifecycle as u, actionLayout as ut, fieldsFor as v, add as vt, _sfc_main$98 as w, geometry$2 as wt, pages as x, copy as xt, confirmation$2 as y, block as yt, contentChoices as z };
+export { roles as $, _sfc_main$116 as A, geometry$2 as At, duplicateProfile as B, captionedSwitch as C, appearances as Ct, changeDefinition as D, duplicate as Dt, _sfc_main$107 as E, copy as Et, ObjectAction_default as F, reorder$1 as Ft, alignment as G, _sfc_main$131 as H, _sfc_main$126 as I, reparent as It, toggle as J, roots as K, applyDuplicateProfile as L, siblings as Lt, zooms as M, layers as Mt, ResultPresentation_default as N, path as Nt, definitionWizard as O, fingerprint as Ot, RelatedObjects_default as P, remove$2 as Pt, edit$2 as Q, changeContent as R, spacing$1 as Rt, _sfc_main$63 as S, add as St, _sfc_main$100 as T, change$6 as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$145 as W, actions$4 as X, spacingField as Y, describe$48 as Z, editColumn as _, filter as _t, updateModes as a, notices as at, describe$18 as b, scope as bt, runBrowserScript as c, tabs as ct, ProjectCreation_default as d, App_default as default, views as dt, serialize as et, ImagePicker_default as f, _sfc_main$166 as ft, describe$17 as g, fields$2 as gt, contentWidth as h, change$5 as ht, updateIntervals as i, documentEvent as it, controls$1 as j, kinds as jt, displayWidgets as k, geometries as kt, scriptTree as l, toolbar$4 as lt, change as m, actionLayout as mt, networkSettings as n, variants as nt, _sfc_main$26 as o, policy as ot, readPreviewImage as p, _sfc_main$171 as pt, selected as q, updateBatchDelays as r, widgets as rt, buttonId as s, sectionSelector as st, App_exports as t, template as tt, lifecycle as u, _sfc_main$158 as ut, fieldsFor as v, mode as vt, _sfc_main$98 as w, block as wt, pages as x, type as xt, confirmation$2 as y, options$1 as yt, contentChoices as z };
 
 //# sourceMappingURL=App.js.map

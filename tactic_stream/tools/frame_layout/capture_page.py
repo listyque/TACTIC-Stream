@@ -121,6 +121,13 @@ fixtures['reports'] = dict(
 )
 env_inst.server_pool = Pool()
 fixtures['viewport'] = copy.deepcopy(fixtures['layout'])
+appearance = dict(fill='panel',stroke='contentAccent',stroke_width=2,radius=6,shadow=True,animate=False)
+selection_document = dict(name='selection',title='Selection',blocks=[dict(kind='column',height=340,
+    children=[dict(kind='text',text=name,width=120,height=50,offset_x=index*140,appearance=appearance)
+              for index,name in enumerate(('First','Second','Third'))])])
+fixtures['selection'] = dict(document=selection_document,compiled=dict(title='Selection',targetSearchKey='sthpw/project?code=demo',
+    layoutNodes=[dict(kind='group',height=340,editorPath=[0],children=[dict(kind='text',text=name,width='120px',height=50,offsetX=index*140,appearance=appearance,editorPath=[0,index])
+        for index,name in enumerate(('First','Second','Third'))])]))
 icons = qml_icon_bindings(TH, app)
 captures = []
 sources = source_hashes(
@@ -133,7 +140,7 @@ sources = source_hashes(
     ],
 )
 from itertools import product
-for scenario, mode in product(["layout", "data", "reports", "viewport"], ["dark", "light"]):
+for scenario, mode in product(["layout", "data", "reports", "viewport", "selection"], ["dark", "light"]):
     for language in ["en", "ru"]:
         for width in [1400, 850]:
             host = DashboardEditor(
@@ -169,7 +176,7 @@ for scenario, mode in product(["layout", "data", "reports", "viewport"], ["dark"
                 (
                     'import QtQuick\nimport QtQuick.Controls\nimport "'
                     + (TH / "thlib/ui/qml").as_uri()
-                    + '" as TH\nApplicationWindow {id:root;visible:true;width:1400;height:740;color:theme.workspace;property string language:"en";property alias dark:theme.dark;function configureViewport(){editor.dispatch({type:"canvasSize",value:"800"});editor.dispatch({type:"canvasZoom",value:"50"})}function selectPanel(value){if(editor.ui.preview !== (value==="preview"))editor.dispatch({type:"preview"});if(value!=="preview"){editor.dispatch({type:"panel",value});editor.dispatch({type:"select",key:"0.0"})}}TH.Theme{id:theme;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}TH.PageLayoutEditorView{id:editor;anchors.fill:parent;theme:theme;controller:fixture;language:root.language}}'
+                    + '" as TH\nApplicationWindow {id:root;visible:true;width:1400;height:740;color:theme.workspace;property string language:"en";property alias dark:theme.dark;function configureSelection(){editor.dispatch({type:"selection",keys:["0.0","0.1"]})}function configureViewport(){editor.dispatch({type:"canvasSize",value:"800"});editor.dispatch({type:"canvasZoom",value:"50"})}function selectPanel(value){if(editor.ui.preview !== (value==="preview"))editor.dispatch({type:"preview"});if(value!=="preview"){editor.dispatch({type:"panel",value});editor.dispatch({type:"select",key:"0.0"})}}TH.Theme{id:theme;clickAnimationsEnabled:false;hoverAnimationsEnabled:false;fadeAnimationsEnabled:false;popupAnimationsEnabled:false}TH.PageLayoutEditorView{id:editor;anchors.fill:parent;theme:theme;controller:fixture;language:root.language}}'
                 ).encode(),
                 QUrl(),
             )
@@ -183,6 +190,8 @@ for scenario, mode in product(["layout", "data", "reports", "viewport"], ["dark"
             try:
                 for panel in (["properties"] if scenario == "data" else ["canvas", "properties", "preview"]):
                     window.selectPanel(panel)
+                    if scenario == "selection" and panel != "preview":
+                        window.configureSelection()
                     frame(window)
                     if host._source_worker is not None:
                         host._source_worker.result.emit(copy.deepcopy(source))

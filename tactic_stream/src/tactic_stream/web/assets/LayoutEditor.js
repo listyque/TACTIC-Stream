@@ -4,7 +4,7 @@ import { A as t, j as appearance, k as asyncComponent, ot as _plugin_vue_export_
 import { Gt as button, Jt as node, Kt as label, Ot as widgetConfiguration, Yt as rect, ct as rpc, i as _sfc_main$2, qt as muted, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { l as workspaceAddress } from "./links.js";
-import { $ as widgets, G as spacingField, J as edit, K as actions, Q as variants, X as serialize, Y as roles, Z as template, at as toolbar$1, et as documentEvent, nt as policy, q as describe$1, rt as sectionSelector, tt as notices } from "./App.js";
+import { $ as roles, Q as edit, X as actions, Y as spacingField, Z as describe$1, at as notices, et as serialize, it as documentEvent, lt as toolbar$1, nt as variants, ot as policy, rt as widgets, st as sectionSelector, tt as template } from "./App.js";
 //#region src/features/interface/layoutXml.js
 function layoutTree(source) {
 	if (!source.trim()) throw Error("Select a SObject layout configuration");

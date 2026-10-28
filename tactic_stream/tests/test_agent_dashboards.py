@@ -17,6 +17,70 @@ def document():
 
 
 class Dashboards(unittest.TestCase):
+    def test_position_and_appearance_round_trip_and_validation(self):
+        from xmlrpc.client import Fault
+
+        with test_transport.Transport.proxy(self) as proxy:
+            auth = dict(
+                ticket=proxy.get_ticket("admin", "private-test-password"), project="one"
+            )
+            call = lambda action, **values: proxy.execute_cmd(
+                auth, COMMAND, dict(action=action, project_code="one", **values)
+            )["info"]
+            draft = dict(
+                name="styled_selection",
+                title="Styled",
+                blocks=[
+                    dict(
+                        kind="text",
+                        text="Styled",
+                        offset_x=24,
+                        offset_y=-12,
+                        appearance=dict(
+                            fill="panel",
+                            stroke="#729AB2",
+                            stroke_width=2,
+                            radius=6,
+                            shadow=True,
+                            animate=True,
+                        ),
+                    )
+                ],
+            )
+            revision = call("read")["revision"]
+            preview = call("preview", document=draft, expected_revision=revision)
+            node = preview["model"]["layoutNodes"][0]
+            self.assertEqual((node["offsetX"], node["offsetY"]), (24, -12))
+            self.assertEqual(node["appearance"]["stroke_width"], 2)
+            call(
+                "apply",
+                document=draft,
+                expected_revision=revision,
+                operation_id=str(uuid4()),
+            )
+            self.assertEqual(
+                call("read", name="styled_selection")["document"], preview["document"]
+            )
+            for patch in [
+                dict(offset_x=True),
+                dict(offset_y=1601),
+                dict(appearance=dict(stroke="url(x)")),
+                dict(appearance=dict(radius=49)),
+                dict(appearance=dict(shadow="true")),
+            ]:
+                invalid = dict(
+                    name="invalid_style",
+                    title="Invalid",
+                    blocks=[dict(kind="text", text="Test", **patch)],
+                )
+                with self.assertRaises(Fault):
+                    call(
+                        "preview",
+                        document=invalid,
+                        expected_revision=call("read")["revision"],
+                    )
+
+
     def test_source_catalog_typed_bindings_and_project_boundaries(self):
         from xmlrpc.client import Fault
         with test_transport.Transport.proxy(self) as proxy:

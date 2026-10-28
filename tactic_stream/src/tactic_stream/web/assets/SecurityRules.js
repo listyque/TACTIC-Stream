@@ -1,7 +1,7 @@
 import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
 import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Yt as rect, i as _sfc_main$1, mt as securityRules, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import { at as toolbar, et as documentEvent, it as tabs, nt as policy, tt as notices } from "./App.js";
+import { at as notices, ct as tabs, it as documentEvent, lt as toolbar, ot as policy } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/security/security.state.mjs
 var matrixScopes$1 = [
 	"project",
