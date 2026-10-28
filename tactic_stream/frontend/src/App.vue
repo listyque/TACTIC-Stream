@@ -156,6 +156,8 @@ export default {
   },
   computed: {
     layoutParent() {
+      const nested=this.administrationSection==='layouts'&&this.administrationInstances.layouts?.navigationParent
+      if(nested)return nested
       const parent=this.layoutLinks.at(-1)
       return parent?.project===this.project&&parent.target===this.administrationSection&&
         (parent.target!=='dashboards'||parent.targetName===this.administrationInstances.dashboards?.document?.name)?parent:null
@@ -1589,6 +1591,7 @@ export default {
       this.layoutLinks=[...this.layoutLinks,{project:this.project,name:source.name,title:source.title||source.name,target,targetName}].slice(-32)
     },
     async returnToPageLayout() {
+      if(this.layoutParent?.kind==='item'){this.administrationInstances.layouts.dispatch({type:'backLayout'});return}
       const parent=this.layoutParent, editor=this.administrationInstances.dashboards
       if(!parent||!editor)return
       if(editor.document?.name!==parent.name){

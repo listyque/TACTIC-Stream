@@ -96,13 +96,38 @@ function initial() {
 		text: {},
 		confirmation: "",
 		checking: false,
+		navigation: [],
+		navigationScope: "",
+		navigationPending: null,
 		error: ""
 	};
 }
 function pending(ui) {
 	return Object.keys(ui.text).length > 0;
 }
+function reference(model, ui) {
+	const item = model.layout.elements.find((row) => row.name === ui.selected);
+	if (item?.kind !== "view") return null;
+	const view = item.options.view || "", searchType = item.search_type || model.searchType;
+	return /^[A-Za-z_][\w.@-]{0,127}$/.test(view) && model.searchTypes.some((row) => row.value === searchType) && (searchType !== model.searchType || view !== model.view) ? {
+		searchType,
+		view
+	} : null;
+}
+function navigationParent(ui) {
+	const parent = ui.navigation[ui.navigation.length - 1];
+	return parent ? {
+		kind: "item",
+		name: parent.view,
+		title: parent.view
+	} : null;
+}
 function synchronize(ui, model) {
+	if (ui.navigation[0]?.project && ui.navigation[0].project !== model.project) return Object.assign({}, ui, {
+		navigation: [],
+		navigationScope: "",
+		navigationPending: null
+	});
 	if (!model.ready) return ui;
 	const key = [
 		model.project,
@@ -117,6 +142,30 @@ function synchronize(ui, model) {
 		next.error = "";
 		next.confirmation = "";
 	} else if (!model.layoutError && next.selected && !model.layout.elements.some((row) => row.name === next.selected)) next.selected = (model.layout.elements[0] || {}).name || "";
+	const scope = [
+		model.project,
+		model.searchType,
+		model.view
+	].join(":");
+	if (ui.navigationPending?.searchType === model.searchType && ui.navigationPending.view === model.view) {
+		const restore = ui.navigationPending.restore;
+		if (restore) {
+			for (const field of [
+				"page",
+				"panel",
+				"selected",
+				"catalogWidth",
+				"propertiesWidth"
+			]) next[field] = restore[field];
+			if (!model.layout.elements.some((row) => row.name === next.selected)) next.selected = model.layout.elements[0]?.name || "";
+		}
+		next.navigationPending = null;
+		next.navigationScope = scope;
+	} else if ((next.navigationPending || next.navigationScope) && next.navigationScope !== scope) {
+		next.navigation = [];
+		next.navigationPending = null;
+		next.navigationScope = "";
+	}
 	if (next.checking && !model.busy) {
 		if (model.checked && model.checked === model.xml) next.page = "resolved";
 		next.checking = false;
@@ -192,6 +241,45 @@ function transition(ui, model, event) {
 		commands
 	};
 	switch (event.type) {
+		case "openLayout":
+		case "backLayout": {
+			if (model.dirty || model.uncertain || pending(ui)) {
+				next.error = "Save or discard changes before continuing";
+				break;
+			}
+			const target = event.type === "openLayout" ? reference(model, ui) : ui.navigation[ui.navigation.length - 1];
+			if (!target || target.project && target.project !== model.project) break;
+			if (event.type === "openLayout") {
+				if (ui.navigation.length >= 32) {
+					next.error = "Return to a parent layout before opening another nested layout";
+					break;
+				}
+				next.navigation = ui.navigation.concat([{
+					project: model.project,
+					searchType: model.searchType,
+					view: model.view,
+					source: model.source,
+					selected: ui.selected,
+					page: ui.page,
+					panel: ui.panel,
+					catalogWidth: ui.catalogWidth,
+					propertiesWidth: ui.propertiesWidth
+				}]);
+			} else next.navigation = ui.navigation.slice(0, -1);
+			next.navigationPending = {
+				searchType: target.searchType,
+				view: target.view,
+				restore: event.type === "backLayout" ? target : null
+			};
+			next.error = "";
+			commands.push({
+				type: "reference",
+				searchType: target.searchType,
+				view: target.view,
+				source: event.type === "backLayout" ? target.source : null
+			});
+			break;
+		}
 		case "page":
 			next.page = event.value;
 			break;
@@ -875,7 +963,16 @@ function propertyFields(model, ui, language, width) {
 		["outlineVariant", "Outline"],
 		["contentAccent", "Accent"]
 	])), text("option:radius", "Corner radius", item.options.radius || "0"));
-	if (item.kind === "view") fields.push(text("option:view", "Reusable view", item.options.view || ""));
+	if (item.kind === "view") {
+		const field = text("option:view", "Reusable view", item.options.view || "");
+		field.trailingAction = {
+			title: "Edit nested item layout",
+			icon: "open-in-new",
+			enabled: !model.busy && !model.uncertain && !!reference(model, ui),
+			action: { type: "openLayout" }
+		};
+		fields.push(field);
+	}
 	const parentOptions = [{
 		value: "",
 		label: tr("View root")
@@ -1403,6 +1500,9 @@ var _sfc_main = {
 		};
 	},
 	computed: {
+		navigationParent() {
+			return navigationParent(this.ui);
+		},
 		dirty() {
 			return this.xml !== this.baseline || pending(this.ui) || this.uncertain;
 		},
@@ -1528,7 +1628,10 @@ var _sfc_main = {
 			deep: false,
 			handler() {
 				const next = synchronize(this.ui, this.frameModel);
-				if (next !== this.ui) this.ui = next;
+				if (next !== this.ui) {
+					this.ui = next;
+					this.revealSelection();
+				}
 			}
 		},
 		xml() {
@@ -1556,6 +1659,11 @@ var _sfc_main = {
 	},
 	methods: {
 		t,
+		async revealSelection() {
+			await this.$nextTick();
+			const index = this.models.layoutElements.findIndex((row) => row.name === this.ui.selected);
+			this.$refs.frame?.focusListRow("layoutElementsList", index, "");
+		},
 		schedulePreview() {
 			clearTimeout(this.previewTimer);
 			const generation = ++this.previewRequest;
@@ -1634,13 +1742,14 @@ var _sfc_main = {
 		async dispatch(event) {
 			const result = transition(this.ui, this.frameModel, event);
 			this.ui = result.ui;
-			if (event.type === "select") {
-				await this.$nextTick();
-				const index = this.models.layoutElements.findIndex((row) => row.name === this.ui.selected);
-				this.$refs.frame?.focusListRow("layoutElementsList", index, "");
-			}
+			if (event.type === "select") await this.revealSelection();
 			for (const command of result.commands) {
 				switch (command.type) {
+					case "reference":
+						this.searchType = command.searchType;
+						this.view = command.view;
+						await this.reload(void 0, command);
+						break;
 					case "xml":
 						if (this.editable) this.xml = command.value;
 						break;
@@ -1679,7 +1788,7 @@ var _sfc_main = {
 				if (!this.error) this.ui = completed(this.ui, command);
 			}
 		},
-		async reload(newXml) {
+		async reload(newXml, reference = null) {
 			if (!this.ticket || !this.searchType || this.busy) return;
 			if (!/^[A-Za-z_][\w.@-]{0,127}$/.test(this.view)) this.view = "continuous_example";
 			const request = ++this.request;
@@ -1698,10 +1807,12 @@ var _sfc_main = {
 			try {
 				const result = await this.call("read");
 				if (request !== this.request) return;
+				if (reference && !(result.layout_views || []).includes(this.view)) throw Error("Referenced item layout is unavailable");
+				if (reference?.source != null && reference.source !== "" && !result.sources.some((row) => row.id === reference.source)) throw Error("The original configuration source is unavailable");
 				this.configuration = result;
 				this.knownViews = result.layout_views || [];
 				this.uncertain = false;
-				this.source = result.sources[0]?.id ?? "";
+				this.source = reference?.source ?? result.sources[0]?.id ?? "";
 				this.selectSource();
 				if (typeof newXml === "string") {
 					this.source = "";

@@ -26245,7 +26245,7 @@ function describe$34(model, ui, width, height, language) {
 		color: ui.error && model.locked ? "error" : "secondaryText"
 	})];
 	if (linked) head.push(node("Button", "adminReturnToLayout", rect(20, 11, 38, 38), {
-		text: tr("Back to page layout") + ": " + model.layoutParent.title,
+		text: tr(model.layoutParent.kind === "item" ? "Back to item layout" : "Back to page layout") + ": " + model.layoutParent.title,
 		icon: "arrow-back",
 		iconOnly: true,
 		action: { type: "return-layout" },
@@ -58286,6 +58286,8 @@ var _sfc_main = {
 	},
 	computed: {
 		layoutParent() {
+			const nested = this.administrationSection === "layouts" && this.administrationInstances.layouts?.navigationParent;
+			if (nested) return nested;
 			const parent = this.layoutLinks.at(-1);
 			return parent?.project === this.project && parent.target === this.administrationSection && (parent.target !== "dashboards" || parent.targetName === this.administrationInstances.dashboards?.document?.name) ? parent : null;
 		},
@@ -60467,6 +60469,10 @@ var _sfc_main = {
 			}].slice(-32);
 		},
 		async returnToPageLayout() {
+			if (this.layoutParent?.kind === "item") {
+				this.administrationInstances.layouts.dispatch({ type: "backLayout" });
+				return;
+			}
 			const parent = this.layoutParent, editor = this.administrationInstances.dashboards;
 			if (!parent || !editor) return;
 			if (editor.document?.name !== parent.name) {

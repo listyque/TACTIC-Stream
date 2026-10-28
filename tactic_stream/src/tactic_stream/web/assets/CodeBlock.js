@@ -4120,6 +4120,11 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Back to item layout": "Назад к макету элемента",
+	"Edit nested item layout": "Изменить вложенный макет элемента",
+	"Referenced item layout is unavailable": "Связанный макет элемента недоступен",
+	"The original configuration source is unavailable": "Исходное определение конфигурации недоступно",
+	"Return to a parent layout before opening another nested layout": "Вернись к родительскому макету перед открытием следующего вложенного макета",
 	"Back to page layout": "Назад к макету страницы",
 	"Edit linked page layout": "Изменить макет связанной страницы",
 	"Edit table columns": "Изменить колонки таблицы",

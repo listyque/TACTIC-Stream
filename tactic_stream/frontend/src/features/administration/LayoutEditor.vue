@@ -58,6 +58,9 @@ export default {
     };
   },
   computed: {
+    navigationParent() {
+      return State.navigationParent(this.ui);
+    },
     dirty() {
       return (
         this.xml !== this.baseline || State.pending(this.ui) || this.uncertain
@@ -211,7 +214,10 @@ export default {
       deep: false,
       handler() {
         const next = State.synchronize(this.ui, this.frameModel);
-        if (next !== this.ui) this.ui = next;
+        if (next !== this.ui) {
+          this.ui = next;
+          this.revealSelection();
+        }
       }
     },
     xml() {
@@ -239,6 +245,13 @@ export default {
   },
   methods: {
     t,
+    async revealSelection() {
+      await this.$nextTick();
+      const index = this.models.layoutElements.findIndex(
+        (row) => row.name === this.ui.selected
+      );
+      this.$refs.frame?.focusListRow('layoutElementsList', index, '');
+    },
     schedulePreview() {
       clearTimeout(this.previewTimer);
       const generation = ++this.previewRequest;
@@ -353,14 +366,15 @@ export default {
       const result = State.transition(this.ui, this.frameModel, event);
       this.ui = result.ui;
       if (event.type === 'select') {
-        await this.$nextTick();
-        const index = this.models.layoutElements.findIndex(
-          (row) => row.name === this.ui.selected
-        );
-        this.$refs.frame?.focusListRow('layoutElementsList', index, '');
+        await this.revealSelection();
       }
       for (const command of result.commands) {
         switch (command.type) {
+          case 'reference':
+            this.searchType = command.searchType;
+            this.view = command.view;
+            await this.reload(undefined, command);
+            break;
           case 'xml':
             if (this.editable) this.xml = command.value;
             break;
@@ -405,7 +419,7 @@ export default {
         if (!this.error) this.ui = State.completed(this.ui, command);
       }
     },
-    async reload(newXml) {
+    async reload(newXml, reference = null) {
       if (!this.ticket || !this.searchType || this.busy) return;
       if (!/^[A-Za-z_][\w.@-]{0,127}$/.test(this.view))
         this.view = 'continuous_example';
@@ -429,10 +443,18 @@ export default {
       try {
         const result = await this.call('read');
         if (request !== this.request) return;
+        if (reference && !(result.layout_views || []).includes(this.view))
+          throw Error('Referenced item layout is unavailable');
+        if (
+          reference?.source != null &&
+          reference.source !== '' &&
+          !result.sources.some((row) => row.id === reference.source)
+        )
+          throw Error('The original configuration source is unavailable');
         this.configuration = result;
         this.knownViews = result.layout_views || [];
         this.uncertain = false;
-        this.source = result.sources[0]?.id ?? '';
+        this.source = reference?.source ?? result.sources[0]?.id ?? '';
         this.selectSource();
         if (typeof newXml === 'string') {
           this.source = '';
