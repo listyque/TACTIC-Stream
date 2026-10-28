@@ -39,11 +39,12 @@ const requests = [],
   writes = [];
 let stale = false;
 const html = `<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="app"></div><script type="module">
-import {createApp,h} from 'vue';import ConfiguredView from '/src/features/interface/ConfiguredView.vue';import ColumnsEditor from '/src/features/administration/ColumnsEditor.vue';import {windowDirective} from '/src/controls/window.js';import {appearance,initializeAppearance} from '/src/appearance.js';import {tooltipDirective} from '/src/controls/tooltip.js';import '/src/theme.css';import '/src/style.css'
+import {createApp,h} from 'vue';import ObjectOperations from '/src/features/objects/ObjectOperations.vue';import ConfiguredView from '/src/features/interface/ConfiguredView.vue';import ColumnsEditor from '/src/features/administration/ColumnsEditor.vue';import {windowDirective} from '/src/controls/window.js';import {appearance,initializeAppearance} from '/src/appearance.js';import {tooltipDirective} from '/src/controls/tooltip.js';import '/src/theme.css';import '/src/style.css'
 Object.assign(appearance,{language:'en',theme:'md3',mode:'dark',palette:'default',accent:'default',hoverAnimations:false,clickAnimations:false,fadeAnimations:false,popupAnimations:false});initializeAppearance()
 const source=${JSON.stringify(fixture)}
 createApp({data(){return {page:'table',definition:source.definition,rows:source.records,selected:[source.records[2].__search_key__],state:{},events:[],sortField:'name',sortDirection:'asc',ticket:'fixture',focus:null}},mounted(){window.host=this;window.appearance=appearance},methods:{select(rows,value){const set=new Set(this.selected);for(const r of rows)value?set.add(r.__search_key__):set.delete(r.__search_key__);this.selected=[...set]},saved(result){if(result?.records){const map=new Map(result.records.map(r=>[r.__search_key__,r]));this.rows=this.rows.map(r=>map.get(r.__search_key__)||r)}this.events.push({kind:'saved',result})}},render(){return h('main',{id:'frame',class:this.page==='editor'?'administration-shell':''},[
-this.page==='table'?h(ConfiguredView,{ref:'table',definition:this.definition,rows:this.rows,readOnly:false,ticket:this.ticket,project:'table_fixture',resultMode:'table',selectedKeys:this.selected,resultState:this.state,accent:source.accent,sortField:this.sortField,sortDirection:this.sortDirection,onSelect:this.select,onSaved:this.saved,onInspect:r=>this.events.push({kind:'inspect',key:r.__search_key__}),onColumn:scope=>this.events.push({kind:'column',scope}),onSort:(field,direction)=>{this.sortField=field;this.sortDirection=direction;this.events.push({kind:'sort',field,direction})},onResultState:s=>this.state=s}):h(ColumnsEditor,{ref:'editor',ticket:this.ticket,project:'table_fixture',presentationVisible:false,initialFocus:this.focus,onSaved:r=>this.events.push({kind:'definition-saved',result:r})})
+h(ObjectOperations,{ref:'rowMenu',project:'table_fixture',operations:{edit:true}}),
+this.page==='table'?h(ConfiguredView,{ref:'table',definition:this.definition,rows:this.rows,readOnly:false,ticket:this.ticket,project:'table_fixture',resultMode:'table',selectedKeys:this.selected,resultState:this.state,accent:source.accent,sortField:this.sortField,sortDirection:this.sortDirection,onSelect:this.select,onSaved:this.saved,onOperate:(record,event)=>this.$refs.rowMenu.open(record,event,{branch:{kind:'file'}}),onInspect:r=>this.events.push({kind:'inspect',key:r.__search_key__}),onColumn:scope=>this.events.push({kind:'column',scope}),onSort:(field,direction)=>{this.sortField=field;this.sortDirection=direction;this.events.push({kind:'sort',field,direction})},onResultState:s=>this.state=s}):h(ColumnsEditor,{ref:'editor',ticket:this.ticket,project:'table_fixture',presentationVisible:false,initialFocus:this.focus,onSaved:r=>this.events.push({kind:'definition-saved',result:r})})
 ])}}).provide('openHelp',()=>{}).provide('openTableCheckin',(record,cell,project)=>window.host.events.push({kind:'drop-plate',key:record.__search_key__,process:cell.process,context:cell.context,project})).provide('openTaskInspector',(record,cell,process,key,scope)=>{window.host.events.push({kind:'inspector',record:record.__search_key__,process,key,scope:{project:scope.project,searchType:scope.searchType}});return true}).directive('window',windowDirective).directive('tooltip',tooltipDirective).mount('#app')
 </script><style>html,body,#app{width:100%;height:100%;overflow:hidden}#frame{width:100%;height:100%;background:var(--page)}#frame>.configured-view{display:flex;flex-direction:column;height:100%;width:100%;overflow:hidden}#frame>.columns-editor{height:100%;padding:0;gap:0}#frame>.columns-editor>.columns-editor-layout{height:100%;margin:0}#frame .administration-save-bar{display:none}</style></body></html>`;
 let server, browser;
@@ -395,6 +396,20 @@ try {
     measurements.push({ kind: 'table', mode, header, first, preview });
   }
   await page.evaluate(() => (window.appearance.mode = 'dark'));
+  // Context and overflow share the real object menu without a dimmed backdrop.
+  for (const viewport of [{width:1496,height:660}, {width:320,height:660}]) {
+    await page.setViewportSize(viewport);
+    for (const method of ['context', 'overflow']) {
+      if (method === 'context') await rows.first().click({button:'right', position:{x:100,y:20}});
+      else await rows.first().locator('.handler-table-actions button').click();
+      const menu = page.locator('.object-operations > dialog[open]');
+      await menu.waitFor();
+      assert.equal(await menu.evaluate(el => getComputedStyle(el, '::backdrop').backgroundColor), 'rgba(0, 0, 0, 0)');
+      await page.keyboard.press('Escape');
+      await menu.waitFor({state:'hidden'});
+    }
+  }
+  await page.setViewportSize({width:1496,height:660});
   // Hovering any selected task cell previews every selected row, as in Handler.
   await page.evaluate(
     (keys) => (window.host.selected = keys),

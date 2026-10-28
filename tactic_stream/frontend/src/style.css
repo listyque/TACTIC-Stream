@@ -685,7 +685,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .record-dialog { background: var(--surface-high); width: min(760px, calc(100% - 30px)); max-height: 85dvh; border: 1px solid var(--outline-variant); border-radius: var(--dialog-radius); padding: var(--space-lg); color: inherit; }
 .record-dialog::backdrop { background: var(--scrim); }
 .workspace-menu.object-operations > summary { display:none; }
-.object-operations > dialog::backdrop { background:transparent; }
+.object-operations > dialog.account-panel::backdrop { background:transparent; }
 @media(max-width:700px) {
   .object-details > header { position:sticky; top:0; z-index:1; flex-wrap:nowrap; gap:8px; margin:0 0 6px; background:var(--surface); }
   .object-details > header > div:first-child { flex:1; min-width:0; }
@@ -800,7 +800,6 @@ tbody tr:last-child td { border-bottom: 0; }
   .record-dialog dl:not([class]) { grid-template-columns: minmax(0, 1fr); }
   .record-dialog dl:not([class]) > dd { padding-top: 0; }
   .record-form input:not([type="checkbox"]), .record-form select, .record-form textarea { width: 100%; max-width: 100%; }
-  .object-operations > dialog::backdrop { background:var(--scrim); }
 }
 
 /* Shared controls follow the active theme; layout stays identical on language changes. */
