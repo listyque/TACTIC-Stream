@@ -848,7 +848,7 @@ defineExpose({ viewport });
   scrollbar-gutter: stable;
   scroll-padding-top: 37px;
   padding: 0 4px 4px 0;
-  margin: 8px;
+  margin: 0;
   outline: 0;
   overscroll-behavior: contain;
 }
@@ -869,7 +869,7 @@ defineExpose({ viewport });
   z-index: 3;
   color: var(--table-header-text);
   background: var(--table-header);
-  border-radius: var(--item-radius);
+  border-radius: 0;
   border-bottom: 3px solid var(--workspace-background, var(--page));
   font-size: var(--text-caption);
   font-weight: 600;

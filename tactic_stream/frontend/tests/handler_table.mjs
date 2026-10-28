@@ -350,6 +350,8 @@ try {
     await page.getByText('Widget unavailable', { exact: true }).count(),
     0
   );
+  assert.equal(await table.evaluate(el => getComputedStyle(el).margin), '0px');
+  assert.equal(await table.locator('.handler-table-header').evaluate(el => getComputedStyle(el).borderRadius), '0px');
   const header = await table.locator('.handler-table-header').boundingBox(),
     first = await rows.first().boundingBox(),
     preview = await rows.first().locator('.item-preview').first().boundingBox();
