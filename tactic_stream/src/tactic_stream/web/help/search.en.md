@@ -409,3 +409,5 @@ Row context menus and three-dot menus open without dimming the workspace, includ
 Result and task table headers show a thin vertical column-boundary grip, highlighted on hover.
 
 Workspace panel menus use Handler ordering and semantic icons: Browsing lists Results, Snapshot Browser, Description and Knowledge Base. Submenus use a right chevron; Task Manager, Task Calendar, Drop Plate and Commit Queue use the corresponding Handler icons.
+
+Custom-card task and note icons show a count badge. Zero hides the badge; counts above 99 display 99+, while the tooltip keeps the exact count.
