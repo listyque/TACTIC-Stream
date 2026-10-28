@@ -378,7 +378,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
             if search_configuration:
                 fields.update(('scope', 'revision', 'code', 'title', 'records', 'configuration', 'filters', 'selections', 'limit', 'offset', 'order_bys', 'show_retired', 'keyword', 'include_total', 'columns', 'tags', 'tag_column'))
                 if search_configuration == 'suggestions':
-                    fields.add('column')
+                    fields.update(('column', 'nested_scope'))
             if form:
                 fields.update(('search_key', 'default', 'source_key', 'search_keys', 'parent_key', 'connect_key'))
             if relations:

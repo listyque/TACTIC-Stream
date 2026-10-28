@@ -12,6 +12,7 @@ import { observeFrameSizes } from '../../frame/resize.js';
 import { rpc } from '../../api.js';
 import { appearance } from '../../appearance.js';
 import NestedTableCell from './NestedTableCell.vue';
+import WorkspaceSearch from '../workspace/WorkspaceSearch.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
 
 const props = defineProps({
@@ -48,7 +49,41 @@ const scene = computed(() =>
     appearance.language
   )
 );
+const searchScope = computed(() => ({
+  parent_key: model.value.scope.parentKey,
+  view: model.value.scope.view || 'table',
+  project_scope: model.value.scope.projectScope === true,
+  filters: model.value.scope.filters || [],
+  expression: model.value.scope.expression || '',
+  search_view: model.value.scope.searchView || '',
+  simple_view: model.value.scope.simpleSearchView || '',
+  simple_values: model.value.simpleValues || {}
+}));
+function search(text = model.value.filter || '', relation = 'EQI') {
+  model.value.filter = text;
+  model.value.searchQuery = text;
+  model.value.searchRelation = relation;
+  model.value.offset = 0;
+  load();
+}
 const views = computed(() => ({
+  tableSearch: {
+    component: WorkspaceSearch,
+    props: {
+      modelValue: model.value.filter || '',
+      label: 'Search objects',
+      ticket: props.ticket,
+      project: model.value.scope.projectCode || props.project,
+      searchType: model.value.scope.searchType,
+      scope: searchScope.value,
+      'onUpdate:modelValue': (value) => {
+        model.value.filter = value;
+      },
+      onSearch: () => search(),
+      onAccept: (record) => search(record.title, '='),
+      onOpen: (record) => search(record.title, '=')
+    }
+  },
   nestedTable: {
     component,
     nodeProps: true,
@@ -161,14 +196,10 @@ async function load() {
     offset: state.offset || 0,
     limit: scope.initialLimit || 50,
     order_by: state.order ? [state.order] : [],
-    filters: [...(scope.filters || [])]
+    filters: [...(scope.filters || [])],
+    keyword: state.searchQuery || '',
+    keyword_relation: state.searchRelation || 'EQI'
   };
-  if (state.filter)
-    query.filters.push([
-      state.filterField || 'code',
-      'like',
-      '%' + state.filter + '%'
-    ]);
   try {
     const response = await rpc('execute_cmd', [
       {

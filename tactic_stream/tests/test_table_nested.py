@@ -14,6 +14,81 @@ from tactic_stream.server.table_cells import describe_cell
 class NestedTables(unittest.TestCase):
     setUp = fixtures.TableServices.setUp
 
+    def test_keyword_search_and_suggestions_preserve_mandatory_scope(self):
+        import ast
+        import os
+        from pathlib import Path
+        from tactic_stream.server.search_configuration import search_suggestions
+        root = Path(os.environ.get('TACTIC_HANDLER_ROOT', Path(__file__).resolve().parents[3] / 'TH'))
+        source = root / 'thlib/ui/table/requests.py'
+        function = next(node for node in ast.parse(source.read_text(encoding='utf-8')).body
+                        if isinstance(node, ast.FunctionDef) and node.name == 'read_nested_scope')
+        namespace = {}
+        exec(compile(ast.Module(body=[function], type_ignores=[]), str(source), 'exec'), namespace)
+        parent = Search.get_by_code('contract/entity', 'A')
+        other = Search.get_by_code('contract/entity', 'B')
+        def create():
+            tasks = []
+            for index, (owner, description, status) in enumerate([
+                (parent, 'Needle reference', 'In Progress'),
+                (parent, 'Needle hidden by page filter', 'Complete'),
+                (other, 'Needle other parent', 'In Progress'),
+                (parent, 'Something else', 'In Progress'),
+            ]):
+                task = Task.create(owner, 'model', context='model/' + str(index), triggers=False)
+                task.set_value('description', description)
+                task.set_value('status', status)
+                task.commit()
+                tasks.append(task.get_code())
+            return tasks
+        codes = write(create)
+        scope = dict(parent_key=parent.get_search_key(), filters=[['status', '=', 'In Progress']])
+        for read in (read_nested_scope, namespace['read_nested_scope']):
+            with self.subTest(procedure=read.__module__):
+                result = read(search_type='sthpw/task', keyword='needle', **scope)
+                self.assertEqual([row['code'] for row in result['records']], codes[:1])
+                result = read(search_type='sthpw/task', keyword='Needle reference', keyword_relation='=', **scope)
+                self.assertEqual([row['code'] for row in result['records']], codes[:1])
+                self.assertEqual(len(read(search_type='sthpw/task', keyword='', **scope)['records']), 2)
+                for invalid in (dict(keyword='x' * 4097), dict(keyword=['Needle']), dict(keyword_relation='sql')):
+                    with self.assertRaises(ValueError):
+                        read(search_type='sthpw/task', **scope, **invalid)
+        suggestions = search_suggestions('sthpw/task', 'needle', nested_scope=scope)
+        self.assertEqual([row['code'] for row in suggestions['records']], codes[:1])
+        with self.assertRaises(ValueError):
+            search_suggestions('sthpw/task', 'needle', nested_scope=dict(scope, search_type='sthpw/login'))
+
+    def test_handler_presence_filters_match_stream_and_keep_parent_scope(self):
+        import ast
+        import os
+        from pathlib import Path
+        root = Path(os.environ.get('TACTIC_HANDLER_ROOT', Path(__file__).resolve().parents[3] / 'TH'))
+        source = root / 'thlib/ui/table/requests.py'
+        function = next(node for node in ast.parse(source.read_text(encoding='utf-8')).body
+                        if isinstance(node, ast.FunctionDef) and node.name == 'read_nested_scope')
+        namespace = {}
+        exec(compile(ast.Module(body=[function], type_ignores=[]), str(source), 'exec'), namespace)
+        parent = Search.get_by_code('contract/entity', 'A')
+        other = Search.get_by_code('contract/entity', 'B')
+        def create():
+            tasks = []
+            for index, (owner, description) in enumerate([(parent, None), (parent, ''), (parent, 'Blocked'), (other, 'Other parent')]):
+                task = Task.create(owner, 'model', context='model/' + str(index), triggers=False)
+                task.set_value('description', description, allow_none=True)
+                task.commit()
+                tasks.append(task.get_code())
+            return tasks
+        codes = write(create)
+        with self.store.connection(write=True) as database:
+            database.execute("UPDATE task SET description='' WHERE code=?", (codes[1],))
+        for relation, expected in [('is empty', {codes[0]}), ('is not empty', set(codes[1:3]))]:
+            for read in (read_nested_scope, namespace['read_nested_scope']):
+                with self.subTest(relation=relation, procedure=read.__module__):
+                    result = read(parent.get_search_key(), 'sthpw/task', filters=[['description', relation, None]])
+                    self.assertEqual({row['code'] for row in result['records']}, expected)
+        with self.assertRaises(ValueError):
+            namespace['read_nested_scope'](parent.get_search_key(), 'sthpw/task', filters=[['description', 'is not empty;drop', None]])
+
     def test_bidding_currency_works_in_c_locale_for_cells_summaries_and_expressions(self):
         import locale
         from unittest.mock import patch

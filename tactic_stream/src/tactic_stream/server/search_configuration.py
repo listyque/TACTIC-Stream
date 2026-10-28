@@ -413,7 +413,7 @@ def generated_quick_records(selections, columns):
     return records
 
 
-def search_suggestions(search_type, text, column=''):
+def search_suggestions(search_type, text, column='', nested_scope=None):
     # Handler search_suggestion_data.py and search_helpers.get_suggestion_filter.
     if not isinstance(text, str) or len(text) > 4096:
         raise ValueError('Invalid search text')
@@ -421,7 +421,7 @@ def search_suggestions(search_type, text, column=''):
     info = SearchType.get_column_info(search_type)
     if not isinstance(column,str) or column and column not in info:
         raise ValueError('Invalid suggestion column')
-    column = column or ('code' if search_type == 'sthpw/transaction_log' else next((name for name in ('name', 'title', 'code', 'login') if name in info), ''))
+    column = column or ('code' if search_type == 'sthpw/transaction_log' else next((name for name in ('name', 'title', 'file_name', 'code', 'login') if name in info), ''))
     if not text or not column or text.startswith(('skey://', 'tactic-search://')):
         return dict(column=column, records=[])
     columns = [column] + [name for name in ('keywords', 'code', 'description') if name in info and name != column]
@@ -440,7 +440,15 @@ def search_suggestions(search_type, text, column=''):
     search.add_op_filters(filters)
     search.set_limit(50)
     from tactic_stream.server.api import ApiXMLRPC
-    records = ApiXMLRPC._get_sobjects_dict(search.get_sobjects(), check_security=not journal)
+    if nested_scope is None:
+        records = ApiXMLRPC._get_sobjects_dict(search.get_sobjects(), check_security=not journal)
+    else:
+        from tactic.ui.table.nested_scope import read_nested_scope
+        allowed = {'parent_key', 'view', 'expression', 'filters', 'search_view', 'project_scope', 'simple_view', 'simple_values'}
+        if not isinstance(nested_scope, dict) or set(nested_scope) - allowed:
+            raise ValueError('Invalid suggestion scope')
+        result = read_nested_scope(search_type=search_type, keyword=text, limit=50, **nested_scope)
+        records = result['records']
     suggestions, seen = [], set()
     folded_key = text.casefold()
     for record in records:
@@ -579,7 +587,7 @@ def search_configuration_request(action, payload):
     if action == 'visibility':
         return process_visibility_catalog(search_type)
     if action == 'suggestions':
-        return search_suggestions(search_type, payload.get('keyword', ''), payload.get('column', ''))
+        return search_suggestions(search_type, payload.get('keyword', ''), payload.get('column', ''), payload.get('nested_scope'))
     if action == 'tags':
         return tag_catalog(search_type)
     if action == 'query':

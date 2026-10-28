@@ -169,6 +169,8 @@ def read_nested_scope(
     project_scope=False,
     simple_view='',
     simple_values=None,
+    keyword='',
+    keyword_relation='EQI',
 ):
     """Self-contained original-server procedure; never return an unscoped table."""
     import re
@@ -426,6 +428,18 @@ def read_nested_scope(
             search.add_filter(item[0], 'NULL', op='is' if item[1]=='is empty' else 'is not', quoted=False)
         else:
             search.add_filter(item[0], item[2], op=item[1])
+    if not isinstance(keyword, str) or len(keyword) > 4096 or keyword_relation not in ('EQI', '='):
+        raise ValueError('Invalid nested search text')
+    primary = next((name for name in ('name', 'title', 'file_name', 'code', 'login') if name in columns), '')
+    if keyword.strip():
+        fields = [name for name in (primary, 'keywords', 'description') if name and name in columns]
+        if not fields:
+            raise ValueError('This Search Type has no searchable title')
+        # Keep the normal suggestion OR group inside all mandatory scope conditions.
+        matching = Search(search_type)
+        matching.add_op_filters(['begin'] + [(name, keyword_relation, keyword.strip()) for name in fields] + ['or'])
+        matching.add_column('id')
+        search.add_search_filter('id', matching)
     if not isinstance(order_by or [], list) or len(order_by or []) > 4:
         raise ValueError('Invalid nested table ordering')
     for item in order_by or []:
@@ -453,5 +467,6 @@ def read_nested_scope(
         offset=offset,
         hasNext=len(records) > limit,
         simpleFilters=simple_filters,
+        searchColumn=primary,
         records=values,
     )

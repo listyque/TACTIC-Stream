@@ -1372,11 +1372,7 @@ function describe$58(model, width, extent, language) {
 	const fields = columns$1(model);
 	const contentWidth = Math.max(width - 16, (model.selection === false ? 0 : metrics$10.selection + 36) + fields.reduce((sum, field) => sum + field.width, 0) + 40);
 	const nodes = [
-		node("Field", "nestedFilter", rect$1(0, 0, Math.max(0, width - (model.gear ? 156 : 120) + toolOffset), 36), {
-			text: model.filter || "",
-			placeholder: t("Filter"),
-			action: { type: "filter" }
-		}),
+		node("View", "nestedFilter", rect$1(0, 0, Math.max(0, width - (model.gear ? 156 : 120) + toolOffset), 36), { view: "tableSearch" }),
 		button("nestedReload", rect$1(Math.max(0, width - (model.gear ? 148 : 112) + toolOffset), 0, 32, 32), model.busy ? t("Loading data…") : t("Refresh"), model.busy ? "loading" : "refresh", { type: "reload" }, !model.busy, { iconOnly: true }),
 		button("nestedColumns", rect$1(Math.max(0, width - 112 + toolOffset), 0, 32, 32), t("Columns"), "view-column", { type: "columns" }, !model.busy, { iconOnly: true }),
 		button("nestedCreate", rect$1(Math.max(0, width - 76 + toolOffset), 0, 32, 32), t("Create"), "add", { type: "create" }, !model.busy && model.insert !== false, { iconOnly: true }),
@@ -5796,6 +5792,140 @@ var NestedTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		};
 	}
 }, [["__scopeId", "data-v-df91fdb6"]]);
+//#endregion
+//#region src/features/workspace/WorkspaceSearch.vue
+var _sfc_main$167 = {
+	components: { AppSearchField: AppSearchField_default },
+	props: {
+		modelValue: String,
+		placeholder: String,
+		label: {
+			type: String,
+			default: "Search objects"
+		},
+		disabled: Boolean,
+		ticket: String,
+		project: String,
+		searchType: String,
+		tabId: String,
+		scope: Object
+	},
+	emits: [
+		"update:modelValue",
+		"search",
+		"accept",
+		"open",
+		"dismiss"
+	],
+	data() {
+		return {
+			records: [],
+			error: "",
+			request: 0,
+			boundary: null
+		};
+	},
+	computed: { context() {
+		return JSON.stringify([
+			this.ticket,
+			this.project,
+			this.searchType,
+			this.tabId,
+			this.scope
+		]);
+	} },
+	watch: {
+		context() {
+			this.clear();
+		},
+		modelValue(value) {
+			if (value !== this.editedText) this.clear();
+		},
+		disabled(value) {
+			if (value) this.clear();
+		}
+	},
+	mounted() {
+		this.boundary = this.$el.closest(".workspace-browser");
+	},
+	beforeUnmount() {
+		this.clear();
+	},
+	methods: {
+		t,
+		focus() {
+			this.$refs.field.focus();
+		},
+		clear() {
+			clearTimeout(this.timer);
+			this.request++;
+			this.records = [];
+			this.error = "";
+			this.$refs.field?.close();
+		},
+		edit(value) {
+			this.clear();
+			this.editedText = value;
+			this.$emit("update:modelValue", value);
+			if (value.trim()) this.timer = setTimeout(() => this.suggest(value), 180);
+		},
+		async suggest(keyword) {
+			const request = this.request;
+			try {
+				const result = await searchConfiguration("suggestions", this.ticket, this.project, this.searchType, {
+					keyword,
+					...this.scope ? { nested_scope: this.scope } : {}
+				}, true);
+				if (request === this.request) this.records = result.records;
+			} catch (error) {
+				if (request === this.request) {
+					this.records = [];
+					this.error = error.message;
+				}
+			}
+		},
+		choose(record, newTab) {
+			this.clear();
+			this.$emit(newTab ? "open" : "accept", record);
+		},
+		search() {
+			this.clear();
+			this.$emit("search");
+		}
+	}
+};
+function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
+	const _component_AppSearchField = resolveComponent("AppSearchField");
+	return openBlock(), createBlock(_component_AppSearchField, {
+		ref: "field",
+		"model-value": $props.modelValue,
+		placeholder: $props.placeholder || $options.t($props.label),
+		label: $props.label,
+		disabled: $props.disabled,
+		suggestions: $data.records,
+		error: $data.error,
+		boundary: $data.boundary,
+		"onUpdate:modelValue": $options.edit,
+		onSearch: $options.search,
+		onAccept: _cache[0] || (_cache[0] = ($event) => $options.choose($event, false)),
+		onOpen: _cache[1] || (_cache[1] = ($event) => $options.choose($event, true)),
+		onDismiss: _cache[2] || (_cache[2] = ($event) => {
+			$options.clear();
+			_ctx.$emit("dismiss");
+		})
+	}, null, 8, [
+		"model-value",
+		"placeholder",
+		"label",
+		"disabled",
+		"suggestions",
+		"error",
+		"boundary",
+		"onUpdate:modelValue",
+		"onSearch"
+	]);
+}
+var WorkspaceSearch_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$167, [["render", _sfc_render$21]]);
 var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	__name: "NestedTable",
 	props: {
@@ -5830,7 +5960,41 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			...model.value.scope,
 			...model.value
 		}, width.value, extent.value, appearance.language));
+		const searchScope = computed(() => ({
+			parent_key: model.value.scope.parentKey,
+			view: model.value.scope.view || "table",
+			project_scope: model.value.scope.projectScope === true,
+			filters: model.value.scope.filters || [],
+			expression: model.value.scope.expression || "",
+			search_view: model.value.scope.searchView || "",
+			simple_view: model.value.scope.simpleSearchView || "",
+			simple_values: model.value.simpleValues || {}
+		}));
+		function search(text = model.value.filter || "", relation = "EQI") {
+			model.value.filter = text;
+			model.value.searchQuery = text;
+			model.value.searchRelation = relation;
+			model.value.offset = 0;
+			load();
+		}
 		const views = computed(() => ({
+			tableSearch: {
+				component: WorkspaceSearch_default,
+				props: {
+					modelValue: model.value.filter || "",
+					label: "Search objects",
+					ticket: props.ticket,
+					project: model.value.scope.projectCode || props.project,
+					searchType: model.value.scope.searchType,
+					scope: searchScope.value,
+					"onUpdate:modelValue": (value) => {
+						model.value.filter = value;
+					},
+					onSearch: () => search(),
+					onAccept: (record) => search(record.title, "="),
+					onOpen: (record) => search(record.title, "=")
+				}
+			},
 			nestedTable: {
 				component,
 				nodeProps: true,
@@ -5916,13 +6080,10 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				offset: state.offset || 0,
 				limit: scope.initialLimit || 50,
 				order_by: state.order ? [state.order] : [],
-				filters: [...scope.filters || []]
+				filters: [...scope.filters || []],
+				keyword: state.searchQuery || "",
+				keyword_relation: state.searchRelation || "EQI"
 			};
-			if (state.filter) query.filters.push([
-				state.filterField || "code",
-				"like",
-				"%" + state.filter + "%"
-			]);
 			try {
 				const result = (await rpc("execute_cmd", [
 					{
@@ -6049,7 +6210,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 36);
 		};
 	}
-}, [["__scopeId", "data-v-1b44341c"]]);
+}, [["__scopeId", "data-v-b3fd4475"]]);
 //#endregion
 //#region src/controls/markdown.js
 var markdown = new MarkdownItCallable({
@@ -6096,7 +6257,7 @@ function renderMarkdown(text) {
 //#endregion
 //#region src/controls/MarkdownText.vue
 var _hoisted_1$97 = ["innerHTML"];
-var _sfc_main$166 = {
+var _sfc_main$165 = {
 	__name: "MarkdownText",
 	props: { text: {
 		type: String,
@@ -6143,7 +6304,7 @@ var _hoisted_3$47 = {
 	key: 2,
 	class: "document-summary"
 };
-var _sfc_main$165 = {
+var _sfc_main$164 = {
 	__name: "DocumentPane",
 	props: {
 		documentKey: String,
@@ -6227,11 +6388,11 @@ var _sfc_main$165 = {
 			}, [
 				__props.error ? (openBlock(), createElementBlock("p", _hoisted_1$96, toDisplayString(__props.error), 1)) : createCommentVNode("", true),
 				__props.notice ? (openBlock(), createElementBlock("p", _hoisted_2$64, toDisplayString(__props.notice), 1)) : createCommentVNode("", true),
-				__props.summary && !__props.error ? (openBlock(), createElementBlock("div", _hoisted_3$47, [createVNode(_sfc_main$185, { name: "info" }), createVNode(_sfc_main$166, {
+				__props.summary && !__props.error ? (openBlock(), createElementBlock("div", _hoisted_3$47, [createVNode(_sfc_main$185, { name: "info" }), createVNode(_sfc_main$165, {
 					text: __props.summary,
 					onTopic: _cache[0] || (_cache[0] = ($event) => emit("link", $event))
 				}, null, 8, ["text"])])) : createCommentVNode("", true),
-				!__props.error ? (openBlock(), createBlock(_sfc_main$166, {
+				!__props.error ? (openBlock(), createBlock(_sfc_main$165, {
 					key: 3,
 					text: __props.text || "",
 					onTopic: _cache[1] || (_cache[1] = ($event) => emit("link", $event))
@@ -6242,12 +6403,12 @@ var _sfc_main$165 = {
 };
 //#endregion
 //#region src/features/interface/LayoutDocument.vue
-var _sfc_main$164 = {
+var _sfc_main$163 = {
 	__name: "LayoutDocument",
 	props: { frameNode: Object },
 	setup(__props) {
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$165, {
+			return openBlock(), createBlock(_sfc_main$164, {
 				"document-key": __props.frameNode?.key,
 				text: __props.frameNode?.text || "",
 				"content-inset": __props.frameNode?.contentInset ?? 14
@@ -6702,7 +6863,7 @@ function body$2(model, width, height) {
 }
 //#endregion
 //#region src/features/workspace/ResultBody.vue
-var _sfc_main$163 = {
+var _sfc_main$162 = {
 	__name: "ResultBody",
 	props: {
 		model: Object,
@@ -6734,7 +6895,7 @@ var _hoisted_2$63 = {
 	key: 0,
 	class: "info-separator"
 };
-var _sfc_main$162 = {
+var _sfc_main$161 = {
 	__name: "InfoValueStrip",
 	props: {
 		items: {
@@ -6787,7 +6948,7 @@ var _sfc_main$162 = {
 };
 //#endregion
 //#region src/controls/actions/DisclosureButton.vue
-var _sfc_main$161 = {
+var _sfc_main$160 = {
 	__name: "DisclosureButton",
 	props: {
 		identity: {
@@ -6890,7 +7051,7 @@ function panel$2(model, width, language) {
 }
 //#endregion
 //#region src/features/workspace/BranchFilter.vue
-var _sfc_main$160 = {
+var _sfc_main$159 = {
 	__name: "BranchFilter",
 	props: {
 		text: String,
@@ -7037,7 +7198,7 @@ var _hoisted_21$3 = {
 	key: 1,
 	class: "result-relation-count muted"
 };
-var _sfc_main$159 = {
+var _sfc_main$158 = {
 	__name: "ResultItem",
 	props: {
 		node: Object,
@@ -7256,7 +7417,7 @@ var _sfc_main$159 = {
 					icon: "MDI_ARROW_LEFT",
 					"icon-only": "",
 					onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.$emit("back"), ["stop"]))
-				})) : !unref(mobile) && !__props.card && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$161, {
+				})) : !unref(mobile) && !__props.card && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$160, {
 					key: 2,
 					class: "result-expand",
 					style: normalizeStyle(bounds(geometry.value.disclosure)),
@@ -7345,7 +7506,7 @@ var _sfc_main$159 = {
 						if (action.type === "open") _ctx.$emit("opencard", __props.node, _ctx.$event);
 					})
 				}, null, 8, ["scene", "style"])) : createCommentVNode("", true),
-				filterable.value ? (openBlock(), createBlock(_sfc_main$160, {
+				filterable.value ? (openBlock(), createBlock(_sfc_main$159, {
 					key: 10,
 					style: normalizeStyle(bounds(geometry.value.preview)),
 					text: __props.node.filterText || "",
@@ -7363,7 +7524,7 @@ var _sfc_main$159 = {
 				createBaseVNode("div", {
 					class: "result-item-copy",
 					style: normalizeStyle(bounds(geometry.value.content))
-				}, [createVNode(_sfc_main$163, {
+				}, [createVNode(_sfc_main$162, {
 					model: cardModel.value,
 					width: geometry.value.content.width,
 					height: geometry.value.content.height
@@ -7426,7 +7587,7 @@ var _sfc_main$159 = {
 							]);
 						}), 128)),
 						__props.node.progress_items?.length && __props.node.info_items?.length ? (openBlock(), createElementBlock("span", _hoisted_5$28, "|")) : createCommentVNode("", true),
-						createVNode(_sfc_main$162, {
+						createVNode(_sfc_main$161, {
 							items: __props.node.info_items || [],
 							selected: __props.selected,
 							separator: "|",
@@ -7688,7 +7849,7 @@ var _hoisted_2$61 = [
 	"aria-posinset",
 	"data-collection-key"
 ];
-var _sfc_main$158 = {
+var _sfc_main$157 = {
 	__name: "VirtualCollection",
 	props: {
 		items: Array,
@@ -8862,7 +9023,7 @@ var _hoisted_4$36 = {
 var _hoisted_5$27 = { class: "process-visibility-tree" };
 var _hoisted_6$23 = ["aria-label"];
 var _hoisted_7$23 = ["data-process-id"];
-var _sfc_main$157 = {
+var _sfc_main$156 = {
 	__name: "ProcessVisibility",
 	props: {
 		ticket: String,
@@ -9356,7 +9517,7 @@ var _hoisted_4$35 = [
 	"onPointerdown",
 	"onKeydown"
 ];
-var _sfc_main$156 = {
+var _sfc_main$155 = {
 	__name: "CanvasSelection",
 	props: {
 		boxes: Array,
@@ -9631,7 +9792,7 @@ var _sfc_main$156 = {
 };
 //#endregion
 //#region src/features/interface/ItemComposition.vue
-var _sfc_main$155 = {
+var _sfc_main$154 = {
 	__name: "ItemComposition",
 	props: {
 		layout: Object,
@@ -9653,7 +9814,7 @@ var _sfc_main$155 = {
 		const baseScene = computed(() => describe$47(props.layout, props.node, width.value, props.selectedElement, appearance.language, window.innerWidth, location.origin, "itemComposition", 0, props.editing || props.readOnly));
 		const scene = computed(() => props.editing ? itemScene(baseScene.value, props.layout) : baseScene.value);
 		const views = computed(() => ({ canvasOverlay: {
-			component: _sfc_main$156,
+			component: _sfc_main$155,
 			props: {
 				boxes: scene.value.canvasBoxes || [],
 				selected: props.selectedElement,
@@ -9749,7 +9910,7 @@ var _hoisted_20$3 = {
 	key: 1,
 	class: "result-relation-count muted"
 };
-var _sfc_main$154 = {
+var _sfc_main$153 = {
 	__name: "ItemLayout",
 	props: {
 		layout: Object,
@@ -9901,7 +10062,7 @@ var _sfc_main$154 = {
 		}
 		return (_ctx, _cache) => {
 			const _component_ItemLayout = resolveComponent("ItemLayout", true);
-			return !__props.parent && !nativeFlow.value && !__props.only ? (openBlock(), createBlock(_sfc_main$155, {
+			return !__props.parent && !nativeFlow.value && !__props.only ? (openBlock(), createBlock(_sfc_main$154, {
 				key: 0,
 				layout: __props.layout,
 				node: __props.node,
@@ -10289,7 +10450,7 @@ var _hoisted_2$57 = {
 	key: 3,
 	class: "result-expand-spacer"
 };
-var _sfc_main$153 = {
+var _sfc_main$152 = {
 	__name: "ConfiguredResultItem",
 	props: {
 		editing: Boolean,
@@ -10442,7 +10603,7 @@ var _sfc_main$153 = {
 					icon: "MDI_ARROW_LEFT",
 					"icon-only": "",
 					onClick: _cache[0] || (_cache[0] = withModifiers(($event) => emit("back"), ["stop"]))
-				})) : !unref(mobile) && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$161, {
+				})) : !unref(mobile) && __props.node.hasChildren ? (openBlock(), createBlock(_sfc_main$160, {
 					key: 2,
 					class: "result-expand",
 					identity: __props.node.id,
@@ -10469,7 +10630,7 @@ var _sfc_main$153 = {
 					onClick: _cache[2] || (_cache[2] = withModifiers(() => {}, ["stop"])),
 					"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => emit("select", __props.node, $event))
 				}, null, 8, ["model-value"])) : createCommentVNode("", true),
-				createVNode(_sfc_main$154, {
+				createVNode(_sfc_main$153, {
 					presentation: presentation.value,
 					layout: __props.layout,
 					node: __props.node,
@@ -10500,7 +10661,7 @@ var _hoisted_2$56 = { class: "item-layout-table" };
 var _hoisted_3$42 = { key: 0 };
 var _hoisted_4$33 = ["onClick", "onContextmenu"];
 var _hoisted_5$25 = { key: 0 };
-var _sfc_main$152 = {
+var _sfc_main$151 = {
 	__name: "ItemLayoutTable",
 	props: {
 		layout: Object,
@@ -10539,7 +10700,7 @@ var _sfc_main$152 = {
 					onClick: ($event) => emit("activate", node, $event),
 					onContextmenu: withModifiers(($event) => emit("context", node, $event), ["prevent"])
 				}, [(openBlock(true), createElementBlock(Fragment, null, renderList(columns.value, (column) => {
-					return openBlock(), createElementBlock("td", { key: column.name }, [createVNode(_sfc_main$154, {
+					return openBlock(), createElementBlock("td", { key: column.name }, [createVNode(_sfc_main$153, {
 						layout: __props.layout,
 						node,
 						only: column.name,
@@ -10571,7 +10732,7 @@ var _hoisted_2$55 = {
 };
 var _hoisted_3$41 = { class: "mobile-result-stage" };
 var _hoisted_4$32 = ["aria-label", "data-screen-key"];
-var _sfc_main$151 = {
+var _sfc_main$150 = {
 	__name: "MobilePage",
 	props: {
 		screenKey: String,
@@ -10765,7 +10926,7 @@ var _hoisted_7$21 = {
 	key: 3,
 	class: "table-message"
 };
-var _sfc_main$150 = {
+var _sfc_main$149 = {
 	__name: "MobileResults",
 	props: {
 		visibleNode: Function,
@@ -10818,7 +10979,7 @@ var _sfc_main$150 = {
 		const error = computed(() => props.error || props.parent?.error);
 		const snapshotFooter = ref(null);
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$151, {
+			return openBlock(), createBlock(_sfc_main$150, {
 				"aria-label": unref(t)("Mobile item browser"),
 				"screen-key": key.value,
 				title: title.value,
@@ -10832,7 +10993,7 @@ var _sfc_main$150 = {
 				onScrolled: _cache[18] || (_cache[18] = (id, top) => emit("scrolled", id, top)),
 				onRootScroll: _cache[19] || (_cache[19] = ($event) => emit("root-scroll", $event))
 			}, createSlots({
-				header: withCtx(() => [(openBlock(), createBlock(resolveDynamicComponent(__props.itemLayout ? _sfc_main$153 : _sfc_main$159), {
+				header: withCtx(() => [(openBlock(), createBlock(resolveDynamicComponent(__props.itemLayout ? _sfc_main$152 : _sfc_main$158), {
 					layout: __props.itemLayout,
 					"read-only": __props.readOnly,
 					node: __props.parent,
@@ -10910,7 +11071,7 @@ var _sfc_main$150 = {
 						}, {
 							default: withCtx(() => [createTextVNode(toDisplayString(group.translate || !group.key ? unref(t)(group.label) : group.label) + " ", 1), createBaseVNode("small", null, toDisplayString(group.nodes.length), 1)]),
 							_: 2
-						}, 1032, ["aria-expanded", "onClick"])) : createCommentVNode("", true), withDirectives(createVNode(_sfc_main$158, {
+						}, 1032, ["aria-expanded", "onClick"])) : createCommentVNode("", true), withDirectives(createVNode(_sfc_main$157, {
 							class: "mobile-result-list",
 							items: group.nodes.map((node) => ({
 								key: node.id,
@@ -10921,7 +11082,7 @@ var _sfc_main$150 = {
 								}, 320).height
 							}))
 						}, {
-							default: withCtx(({ item: node }) => [(openBlock(), createBlock(resolveDynamicComponent(__props.itemLayout ? _sfc_main$153 : _sfc_main$159), {
+							default: withCtx(({ item: node }) => [(openBlock(), createBlock(resolveDynamicComponent(__props.itemLayout ? _sfc_main$152 : _sfc_main$158), {
 								layout: __props.itemLayout,
 								"read-only": __props.readOnly,
 								node,
@@ -11370,7 +11531,7 @@ var _hoisted_3$39 = {
 	key: 0,
 	class: "muted identity-retired"
 };
-var _sfc_main$149 = {
+var _sfc_main$148 = {
 	__name: "UserIdentity",
 	props: {
 		login: String,
@@ -11420,7 +11581,7 @@ var _hoisted_1$84 = { class: "inspector-menu-heading" };
 var _hoisted_2$52 = { class: "inspector-choice-copy" };
 var _hoisted_3$38 = { class: "inspector-menu-heading" };
 var _hoisted_4$30 = { class: "inspector-choice-copy" };
-var _sfc_main$148 = {
+var _sfc_main$147 = {
 	__name: "TaskInspectorHeader",
 	props: {
 		editor: Object,
@@ -11575,7 +11736,7 @@ var _sfc_main$148 = {
 							onClick: ($event) => emit("task", row.value)
 						}, {
 							default: withCtx(() => [
-								row.identity ? (openBlock(), createBlock(_sfc_main$149, mergeProps({
+								row.identity ? (openBlock(), createBlock(_sfc_main$148, mergeProps({
 									key: 0,
 									ref_for: true
 								}, row.identity), null, 16)) : createCommentVNode("", true),
@@ -11736,7 +11897,7 @@ var _hoisted_1$83 = {
 	role: "alert"
 };
 var _hoisted_2$51 = { key: 1 };
-var _sfc_main$147 = {
+var _sfc_main$146 = {
 	__name: "EmojiPicker",
 	props: {
 		label: {
@@ -12289,7 +12450,7 @@ var _hoisted_1$82 = [
 	"aria-activedescendant"
 ];
 var _hoisted_2$50 = ["id", "aria-label"];
-var _sfc_main$146 = {
+var _sfc_main$145 = {
 	__name: "MessageComposer",
 	props: {
 		modelValue: String,
@@ -12433,7 +12594,7 @@ var _sfc_main$146 = {
 							emit("files", event.clipboardData.files);
 						}
 					})
-				}, null, 40, _hoisted_1$82), !__props.sending ? (openBlock(), createBlock(_sfc_main$147, {
+				}, null, 40, _hoisted_1$82), !__props.sending ? (openBlock(), createBlock(_sfc_main$146, {
 					key: 0,
 					"data-frame": "messageComposerEmojiButton",
 					style: normalizeStyle({ "--composer-emoji-extent": metrics$9.emoji + "px" }),
@@ -12481,7 +12642,7 @@ var _sfc_main$146 = {
 };
 //#endregion
 //#region src/controls/StatusSelect.vue
-var _sfc_main$145 = {
+var _sfc_main$144 = {
 	__name: "StatusSelect",
 	props: {
 		value: String,
@@ -12527,7 +12688,7 @@ var _sfc_main$145 = {
 };
 //#endregion
 //#region src/features/objects/ObjectInspectorQuick.vue
-var _sfc_main$144 = {
+var _sfc_main$143 = {
 	__name: "ObjectInspectorQuick",
 	props: { model: Object },
 	emits: ["event"],
@@ -12543,7 +12704,7 @@ var _sfc_main$144 = {
 				component: {
 					props: { frameNode: Object },
 					setup(port, { attrs }) {
-						return () => h(_sfc_main$145, {
+						return () => h(_sfc_main$144, {
 							...attrs,
 							value: port.frameNode.value,
 							options: port.frameNode.options,
@@ -12604,7 +12765,7 @@ var _sfc_main$144 = {
 };
 //#endregion
 //#region src/features/objects/TaskField.vue
-var _sfc_main$143 = {
+var _sfc_main$142 = {
 	__name: "TaskField",
 	props: {
 		field: Object,
@@ -12842,7 +13003,7 @@ function describe$46(model, width, language) {
 }
 //#endregion
 //#region src/features/tasks/TaskWorkspaceEditor.vue
-var _sfc_main$142 = {
+var _sfc_main$141 = {
 	__name: "TaskWorkspaceEditor",
 	props: {
 		editor: Object,
@@ -12892,7 +13053,7 @@ var _sfc_main$142 = {
 					return () => h("div", {
 						"data-task-field": p.frameNode.field.name,
 						class: "task-editor-field-port"
-					}, [h(_sfc_main$143, {
+					}, [h(_sfc_main$142, {
 						field: p.frameNode.field,
 						value: props.editor.values[p.frameNode.field.name],
 						statuses: props.editor.statuses,
@@ -12956,7 +13117,7 @@ var _hoisted_8$18 = {
 	class: "task-detail-fields"
 };
 var _hoisted_9$14 = { key: 0 };
-var _sfc_main$141 = {
+var _sfc_main$140 = {
 	__name: "TaskDetails",
 	props: {
 		editor: Object,
@@ -13042,7 +13203,7 @@ var _sfc_main$141 = {
 				}]),
 				"data-has-task": !!__props.editor.selected_task
 			}, [
-				!__props.editing && !__props.pendingAction ? (openBlock(), createBlock(_sfc_main$144, {
+				!__props.editing && !__props.pendingAction ? (openBlock(), createBlock(_sfc_main$143, {
 					key: 0,
 					model: quickModel.value,
 					onEvent: event
@@ -13107,7 +13268,7 @@ var _sfc_main$141 = {
 					disabled: __props.busy,
 					onClick: _cache[6] || (_cache[6] = ($event) => emit("cancel-action"))
 				}, null, 8, ["disabled"])])])) : createCommentVNode("", true),
-				__props.editing ? (openBlock(), createElementBlock("div", _hoisted_8$18, [createVNode(_sfc_main$142, {
+				__props.editing ? (openBlock(), createElementBlock("div", _hoisted_8$18, [createVNode(_sfc_main$141, {
 					immediate: "",
 					editor: fullEditor.value,
 					busy: __props.busy,
@@ -13131,7 +13292,7 @@ var _sfc_main$141 = {
 //#endregion
 //#region src/features/objects/RelatedTasks.vue
 var _hoisted_1$80 = ["aria-label"];
-var _sfc_main$140 = {
+var _sfc_main$139 = {
 	__name: "RelatedTasks",
 	props: {
 		related: Object,
@@ -13198,7 +13359,7 @@ var _sfc_main$140 = {
 //#endregion
 //#region src/features/objects/WorkHoursSummary.vue
 var _hoisted_1$79 = ["aria-label"];
-var _sfc_main$139 = {
+var _sfc_main$138 = {
 	__name: "WorkHoursSummary",
 	props: {
 		summary: Object,
@@ -13375,7 +13536,7 @@ function valueRow(record, width, language) {
 }
 //#endregion
 //#region src/features/objects/WorkReportSurface.vue
-var _sfc_main$138 = {
+var _sfc_main$137 = {
 	__name: "WorkReportSurface",
 	props: {
 		data: Object,
@@ -13720,7 +13881,7 @@ function editor$1(model, width, language) {
 }
 //#endregion
 //#region src/features/objects/WorkHourForm.vue
-var _sfc_main$137 = {
+var _sfc_main$136 = {
 	__name: "WorkHourForm",
 	props: {
 		draft: Object,
@@ -13800,7 +13961,7 @@ var _hoisted_9$13 = {
 	key: 0,
 	class: "notice"
 };
-var _sfc_main$136 = {
+var _sfc_main$135 = {
 	__name: "TimeEntryPanel",
 	props: {
 		dockTarget: String,
@@ -14025,7 +14186,7 @@ var _sfc_main$136 = {
 						"options",
 						"disabled"
 					])])) : createCommentVNode("", true),
-					__props.mode === "report" ? (openBlock(), createBlock(_sfc_main$138, {
+					__props.mode === "report" ? (openBlock(), createBlock(_sfc_main$137, {
 						key: 6,
 						data: __props.data,
 						report: __props.report,
@@ -14037,7 +14198,7 @@ var _sfc_main$136 = {
 						"report",
 						"busy"
 					])) : createCommentVNode("", true),
-					__props.editing ? (openBlock(), createBlock(_sfc_main$137, {
+					__props.editing ? (openBlock(), createBlock(_sfc_main$136, {
 						key: 7,
 						draft: __props.draft,
 						users: __props.users,
@@ -14099,8 +14260,8 @@ function today$1() {
 	const date = /* @__PURE__ */ new Date();
 	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
-var _sfc_main$135 = {
-	components: { TimeEntryPanel: _sfc_main$136 },
+var _sfc_main$134 = {
+	components: { TimeEntryPanel: _sfc_main$135 },
 	props: {
 		ticket: String,
 		project: String,
@@ -14308,7 +14469,7 @@ var _sfc_main$135 = {
 		}
 	}
 };
-function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$20(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_TimeEntryPanel = resolveComponent("TimeEntryPanel");
 	return openBlock(), createBlock(_component_TimeEntryPanel, {
 		ref: "panel",
@@ -14369,7 +14530,7 @@ function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
 		"onSelect"
 	]);
 }
-var Timesheet_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$135, [["render", _sfc_render$21]]);
+var Timesheet_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$134, [["render", _sfc_render$20]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/objects/note.ui.mjs
 var note_ui_exports = /* @__PURE__ */ __exportAll({
@@ -14531,7 +14692,7 @@ function remove$1(model, width, language) {
 }
 //#endregion
 //#region src/features/objects/NoteEntry.vue
-var _sfc_main$134 = {
+var _sfc_main$133 = {
 	__name: "NoteEntry",
 	props: { model: Object },
 	emits: ["event"],
@@ -14600,7 +14761,7 @@ var _sfc_main$134 = {
 };
 //#endregion
 //#region src/controls/ResponsiveFlow.vue
-var _sfc_main$133 = {
+var _sfc_main$132 = {
 	__name: "ResponsiveFlow",
 	props: {
 		minimumCellWidth: {
@@ -14652,7 +14813,7 @@ var _sfc_main$133 = {
 };
 //#endregion
 //#region src/features/objects/SnapshotSummary.vue
-var _sfc_main$132 = {
+var _sfc_main$131 = {
 	__name: "SnapshotSummary",
 	props: {
 		snapshot: Object,
@@ -14832,7 +14993,7 @@ var _hoisted_17$5 = {
 	class: "skey-article-kind"
 };
 var _hoisted_18$4 = { key: 0 };
-var _sfc_main$131 = {
+var _sfc_main$130 = {
 	__name: "SKeyPreviewCard",
 	props: {
 		preview: Object,
@@ -14935,7 +15096,7 @@ var _sfc_main$131 = {
 						]);
 					}), 128)),
 					__props.preview.nestedPreviewCount > (__props.preview.nestedPreviews || []).length ? (openBlock(), createElementBlock("small", _hoisted_7$18, toDisplayString(unref(t)("+{count} more linked items", { count: __props.preview.nestedPreviewCount - __props.preview.nestedPreviews.length })), 1)) : createCommentVNode("", true),
-					__props.preview.attachments?.length ? (openBlock(), createBlock(_sfc_main$133, {
+					__props.preview.attachments?.length ? (openBlock(), createBlock(_sfc_main$132, {
 						key: 2,
 						"minimum-cell-width": 210,
 						"maximum-columns": 2
@@ -14977,7 +15138,7 @@ var _sfc_main$131 = {
 						"preview-size",
 						"outlined"
 					])),
-					__props.preview.kind === "snapshot" && ready.value && !__props.compact ? (openBlock(), createBlock(_sfc_main$132, {
+					__props.preview.kind === "snapshot" && ready.value && !__props.compact ? (openBlock(), createBlock(_sfc_main$131, {
 						key: 2,
 						snapshot: __props.preview
 					}, null, 8, ["snapshot"])) : __props.preview.kind === "knowledge" && !__props.compact ? (openBlock(), createElementBlock("div", _hoisted_9$12, [
@@ -15069,7 +15230,7 @@ function skeyPlaceholder(searchKey, status = "loading") {
 }
 //#endregion
 //#region src/features/objects/NoteBody.vue
-var _sfc_main$130 = {
+var _sfc_main$129 = {
 	__name: "NoteBody",
 	props: {
 		note: Object,
@@ -15148,7 +15309,7 @@ var _sfc_main$130 = {
 							innerHTML: linkifyPlainText(text.value),
 							onClick: (event) => activateRichLink(event, (key) => emit("link", key))
 						});
-					} else if (port.frameNode.view === "previews") content = keys.value.map((key) => h(_sfc_main$131, {
+					} else if (port.frameNode.view === "previews") content = keys.value.map((key) => h(_sfc_main$130, {
 						key,
 						preview: props.previews?.[key] || skeyPlaceholder(key),
 						previews: props.previews,
@@ -15156,7 +15317,7 @@ var _sfc_main$130 = {
 						onRetry: (key) => emit("retry", key),
 						onCopy: (key) => emit("copy", key)
 					}));
-					else content = h(_sfc_main$133, {
+					else content = h(_sfc_main$132, {
 						minimumCellWidth: bodyMetrics.minimumCellWidth,
 						maximumColumns: bodyMetrics.maximumColumns,
 						spacing: bodyMetrics.gap
@@ -15227,7 +15388,7 @@ var _sfc_main$130 = {
 var _hoisted_1$76 = ["aria-label", "aria-busy"];
 //#endregion
 //#region src/features/objects/NotesPanel.vue
-var _sfc_main$128 = {
+var _sfc_main$127 = {
 	inject: {
 		openHelp: {},
 		openUserProfile: { default: null },
@@ -15242,13 +15403,13 @@ var _sfc_main$128 = {
 		AppMenu: _sfc_main$189,
 		AttachmentCard: _sfc_main$207,
 		FilePreview: FilePreview_default,
-		TaskDetails: _sfc_main$141,
-		RelatedTasks: _sfc_main$140,
+		TaskDetails: _sfc_main$140,
+		RelatedTasks: _sfc_main$139,
 		RecordForm: RecordForm_default,
-		WorkHoursSummary: _sfc_main$139,
+		WorkHoursSummary: _sfc_main$138,
 		Timesheet: Timesheet_default,
-		NoteEntry: _sfc_main$134,
-		NoteBody: _sfc_main$130,
+		NoteEntry: _sfc_main$133,
+		NoteBody: _sfc_main$129,
 		NoteDialogs: {
 			__name: "NoteDialogs",
 			props: {
@@ -15324,8 +15485,8 @@ var _sfc_main$128 = {
 				};
 			}
 		},
-		TaskInspectorHeader: _sfc_main$148,
-		MessageComposer: _sfc_main$146
+		TaskInspectorHeader: _sfc_main$147,
+		MessageComposer: _sfc_main$145
 	},
 	props: {
 		ticket: String,
@@ -16176,7 +16337,7 @@ var _hoisted_13$6 = {
 	key: 3,
 	class: "inspector-mobile-navigation"
 };
-function _sfc_render$20(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$19(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppIcon = resolveComponent("AppIcon");
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_TaskInspectorHeader = resolveComponent("TaskInspectorHeader");
@@ -16601,7 +16762,7 @@ function _sfc_render$20(_ctx, _cache, $props, $setup, $data, $options) {
 		])
 	]))], 64);
 }
-var NotesPanel_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$128, [["render", _sfc_render$20]]);
+var NotesPanel_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$127, [["render", _sfc_render$19]]);
 //#endregion
 //#region src/features/objects/duplicateProfiles.js
 var contentChoices = [
@@ -16656,7 +16817,7 @@ function applyDuplicateProfile(analysis, profile) {
 var desktopReason = "Watch Folders require a desktop connection, which is not enabled in this web version.";
 //#endregion
 //#region src/features/objects/ObjectOperations.vue
-var _sfc_main$127 = {
+var _sfc_main$126 = {
 	components: {
 		AppButton: _sfc_main$184,
 		AppMenu: _sfc_main$189,
@@ -16930,7 +17091,7 @@ var _sfc_main$127 = {
 	}
 };
 var _hoisted_1$74 = { key: 2 };
-function _sfc_render$19(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_AppMenu = resolveComponent("AppMenu");
 	const _component_FilePreview = resolveComponent("FilePreview");
@@ -17214,10 +17375,10 @@ function _sfc_render$19(_ctx, _cache, $props, $setup, $data, $options) {
 		])
 	], 64);
 }
-var ObjectOperations_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$127, [["render", _sfc_render$19]]);
+var ObjectOperations_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$126, [["render", _sfc_render$18]]);
 //#endregion
 //#region src/controls/display/ContentLoadingOverlay.vue
-var _sfc_main$126 = {
+var _sfc_main$125 = {
 	__name: "ContentLoadingOverlay",
 	props: {
 		message: {
@@ -17479,7 +17640,7 @@ function target(record, width) {
 //#endregion
 //#region src/features/objects/ObjectDependencyList.vue
 var _hoisted_1$73 = { class: "object-dependencies-list" };
-var _sfc_main$125 = {
+var _sfc_main$124 = {
 	__name: "ObjectDependencyList",
 	props: {
 		models: Object,
@@ -17493,7 +17654,7 @@ var _sfc_main$125 = {
 			height: dependencyHeight(row)
 		})));
 		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", _hoisted_1$73, [createVNode(_sfc_main$158, { items: items.value }, {
+			return openBlock(), createElementBlock("div", _hoisted_1$73, [createVNode(_sfc_main$157, { items: items.value }, {
 				default: withCtx(({ item }) => [createVNode(_sfc_main$186, {
 					scene: dependency(item, __props.frameNode.width),
 					style: normalizeStyle({ height: dependencyHeight(item) + "px" })
@@ -17505,7 +17666,7 @@ var _sfc_main$125 = {
 };
 //#endregion
 //#region src/features/objects/ObjectAction.vue
-var _sfc_main$123 = {
+var _sfc_main$122 = {
 	components: {
 		AppButton: _sfc_main$184,
 		ObjectDeleteSurface: {
@@ -17521,7 +17682,7 @@ var _sfc_main$123 = {
 				});
 				const models$2 = computed(() => models(props.model, appearance.language));
 				const views = computed(() => ({ dependencies: {
-					component: _sfc_main$125,
+					component: _sfc_main$124,
 					nodeProps: true,
 					props: { models: models$2.value }
 				} }));
@@ -17555,7 +17716,7 @@ var _sfc_main$123 = {
 						"models",
 						"views",
 						"describe-row"
-					]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$126, {
+					]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$125, {
 						key: 0,
 						message: scene.value.loading.message,
 						cancellable: scene.value.loading.cancellable,
@@ -17775,7 +17936,7 @@ var _hoisted_5$19 = {
 };
 var _hoisted_6$16 = ["disabled"];
 var _hoisted_7$16 = ["disabled"];
-function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$17(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_ObjectDeleteSurface = resolveComponent("ObjectDeleteSurface");
 	const _directive_window = resolveDirective("window");
@@ -17814,135 +17975,7 @@ function _sfc_render$18(_ctx, _cache, $props, $setup, $data, $options) {
 		type: "dialog"
 	}]]);
 }
-var ObjectAction_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$123, [["render", _sfc_render$18]]);
-//#endregion
-//#region src/features/workspace/WorkspaceSearch.vue
-var _sfc_main$122 = {
-	components: { AppSearchField: AppSearchField_default },
-	props: {
-		modelValue: String,
-		placeholder: String,
-		label: {
-			type: String,
-			default: "Search objects"
-		},
-		disabled: Boolean,
-		ticket: String,
-		project: String,
-		searchType: String,
-		tabId: String
-	},
-	emits: [
-		"update:modelValue",
-		"search",
-		"accept",
-		"open",
-		"dismiss"
-	],
-	data() {
-		return {
-			records: [],
-			error: "",
-			request: 0,
-			boundary: null
-		};
-	},
-	computed: { context() {
-		return [
-			this.ticket,
-			this.project,
-			this.searchType,
-			this.tabId
-		];
-	} },
-	watch: {
-		context() {
-			this.clear();
-		},
-		modelValue(value) {
-			if (value !== this.editedText) this.clear();
-		},
-		disabled(value) {
-			if (value) this.clear();
-		}
-	},
-	mounted() {
-		this.boundary = this.$el.closest(".workspace-browser");
-	},
-	beforeUnmount() {
-		this.clear();
-	},
-	methods: {
-		focus() {
-			this.$refs.field.focus();
-		},
-		clear() {
-			clearTimeout(this.timer);
-			this.request++;
-			this.records = [];
-			this.error = "";
-			this.$refs.field?.close();
-		},
-		edit(value) {
-			this.clear();
-			this.editedText = value;
-			this.$emit("update:modelValue", value);
-			if (value.trim()) this.timer = setTimeout(() => this.suggest(value), 180);
-		},
-		async suggest(keyword) {
-			const request = this.request;
-			try {
-				const result = await searchConfiguration("suggestions", this.ticket, this.project, this.searchType, { keyword }, true);
-				if (request === this.request) this.records = result.records;
-			} catch (error) {
-				if (request === this.request) {
-					this.records = [];
-					this.error = error.message;
-				}
-			}
-		},
-		choose(record, newTab) {
-			this.clear();
-			this.$emit(newTab ? "open" : "accept", record);
-		},
-		search() {
-			this.clear();
-			this.$emit("search");
-		}
-	}
-};
-function _sfc_render$17(_ctx, _cache, $props, $setup, $data, $options) {
-	const _component_AppSearchField = resolveComponent("AppSearchField");
-	return openBlock(), createBlock(_component_AppSearchField, {
-		ref: "field",
-		"model-value": $props.modelValue,
-		placeholder: $props.placeholder,
-		label: $props.label,
-		disabled: $props.disabled,
-		suggestions: $data.records,
-		error: $data.error,
-		boundary: $data.boundary,
-		"onUpdate:modelValue": $options.edit,
-		onSearch: $options.search,
-		onAccept: _cache[0] || (_cache[0] = ($event) => $options.choose($event, false)),
-		onOpen: _cache[1] || (_cache[1] = ($event) => $options.choose($event, true)),
-		onDismiss: _cache[2] || (_cache[2] = ($event) => {
-			$options.clear();
-			_ctx.$emit("dismiss");
-		})
-	}, null, 8, [
-		"model-value",
-		"placeholder",
-		"label",
-		"disabled",
-		"suggestions",
-		"error",
-		"boundary",
-		"onUpdate:modelValue",
-		"onSearch"
-	]);
-}
-var WorkspaceSearch_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$122, [["render", _sfc_render$17]]);
+var ObjectAction_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$122, [["render", _sfc_render$17]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/objects/links.ui.mjs
 function describe$43(model, width, height, language) {
@@ -18214,7 +18247,7 @@ var _sfc_main$121 = {
 				"interactive",
 				"models",
 				"describe-row"
-			]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$126, {
+			]), scene.value.loading ? (openBlock(), createBlock(_sfc_main$125, {
 				key: 0,
 				message: "Loading objects...",
 				style: normalizeStyle({
@@ -19013,12 +19046,12 @@ var RelatedObjects_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sf
 var _sfc_main$118 = {
 	components: {
 		ObjectReport: _sfc_main$205,
-		ProcessVisibility: _sfc_main$157,
-		VirtualCollection: _sfc_main$158,
-		ConfiguredResultItem: _sfc_main$153,
-		ItemLayoutTable: _sfc_main$152,
-		MobileResults: _sfc_main$150,
-		ResultItem: _sfc_main$159,
+		ProcessVisibility: _sfc_main$156,
+		VirtualCollection: _sfc_main$157,
+		ConfiguredResultItem: _sfc_main$152,
+		ItemLayoutTable: _sfc_main$151,
+		MobileResults: _sfc_main$149,
+		ResultItem: _sfc_main$158,
 		AppButton: _sfc_main$184,
 		BusyIndicator: BusyIndicator_default,
 		AppSelect: _sfc_main$192,
@@ -20508,10 +20541,10 @@ var ResultPresentation_default = /*#__PURE__*/ _plugin_vue_export_helper_default
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/table/items.ui.mjs
 function describe$42(model, width, height, language) {
-	const tr = (text) => translate(text, language), status = model.error || (model.busy ? tr("Loading data…") : ""), top = status ? 36 : 0, footer = model.hasMore ? 40 : 0;
-	const nodes = [node("View", "dashboardItemResults", rect$1(0, top, width, Math.max(0, height - top - footer)), { view: "itemResults" })];
-	if (status) nodes.push(label("dashboardItemStatus", rect$1(0, 0, Math.max(0, width - 40), 32), status, { color: model.error ? "error" : "secondaryText" }));
-	if (model.error) nodes.push(button("dashboardItemRetry", rect$1(width - 36, 0, 32, 32), tr("Retry"), "refresh", { type: "reload" }, !model.busy, { iconOnly: true }));
+	const tr = (text) => translate(text, language), status = model.error || (model.busy ? tr("Loading data…") : ""), top = 44 + (status ? 36 : 0), footer = model.hasMore ? 40 : 0;
+	const nodes = [node("View", "dashboardItemSearch", rect$1(0, 0, width, 36), { view: "itemSearch" }), node("View", "dashboardItemResults", rect$1(0, top, width, Math.max(0, height - top - footer)), { view: "itemResults" })];
+	if (status) nodes.push(label("dashboardItemStatus", rect$1(0, 44, Math.max(0, width - 40), 32), status, { color: model.error ? "error" : "secondaryText" }));
+	if (model.error) nodes.push(button("dashboardItemRetry", rect$1(width - 36, 44, 32, 32), tr("Retry"), "refresh", { type: "reload" }, !model.busy, { iconOnly: true }));
 	if (model.hasMore) nodes.push(button("dashboardItemMore", rect$1(0, height - 36, 140, 32), tr("Load more"), "chevron-down", { type: "more" }, !model.busy));
 	return { nodes };
 }
@@ -20541,35 +20574,66 @@ var _sfc_main$117 = {
 	setup(__props, { emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const records = ref([]), busy = ref(false), error = ref(""), hasMore = ref(false), state = ref({}), definition = ref(null);
+		const records = ref([]), busy = ref(false), error = ref(""), hasMore = ref(false), state = ref({}), definition = ref(null), searchText = ref(""), keyword = ref(""), searchRelation = ref("EQI");
 		let generation = 0;
 		const scene = computed(() => describe$42({
 			busy: busy.value,
 			error: error.value,
 			hasMore: hasMore.value
 		}, props.frameNode.width, props.frameNode.height, appearance.language));
-		const views = computed(() => ({ itemResults: {
-			component: ResultPresentation_default,
-			props: {
-				rows: records.value,
-				ticket: props.ticket,
-				project: props.project,
-				searchType: props.frameNode.items.searchType,
-				mode: props.editing && definition.value?.table.item_layout?.collection === "grid" ? "tiles" : "continious",
-				itemLayout: definition.value?.table.item_layout || null,
-				groupMode: "none",
-				active: props.active,
-				workspaceId: props.workspaceId,
-				readOnly: props.editing,
-				state: state.value,
-				selectedKeys: props.selectedKeys || [],
-				onState: (value) => state.value = value,
-				onInspect: (record) => emit("inspect", record),
-				onOperate: (...args) => emit("operate", ...args),
-				onSelect: (...args) => emit("select", ...args),
-				onFocus: (value) => emit("focus", value)
+		const views = computed(() => ({
+			itemSearch: {
+				component: WorkspaceSearch_default,
+				props: {
+					modelValue: searchText.value,
+					label: "Search objects",
+					disabled: props.editing,
+					ticket: props.ticket,
+					project: props.project,
+					searchType: props.frameNode.items.searchType,
+					scope: {
+						parent_key: props.frameNode.items.parentKey,
+						view: props.frameNode.items.view,
+						project_scope: true,
+						filters: props.frameNode.items.filters
+					},
+					"onUpdate:modelValue": (value) => {
+						searchText.value = value;
+					},
+					onSearch: () => search(),
+					onAccept: (record) => search(record.title, "="),
+					onOpen: (record) => search(record.title, "=")
+				}
+			},
+			itemResults: {
+				component: ResultPresentation_default,
+				props: {
+					rows: records.value,
+					ticket: props.ticket,
+					project: props.project,
+					searchType: props.frameNode.items.searchType,
+					mode: props.editing && definition.value?.table.item_layout?.collection === "grid" ? "tiles" : "continious",
+					itemLayout: definition.value?.table.item_layout || null,
+					groupMode: "none",
+					active: props.active,
+					workspaceId: props.workspaceId,
+					readOnly: props.editing,
+					state: state.value,
+					selectedKeys: props.selectedKeys || [],
+					onState: (value) => state.value = value,
+					onInspect: (record) => emit("inspect", record),
+					onOperate: (...args) => emit("operate", ...args),
+					onSelect: (...args) => emit("select", ...args),
+					onFocus: (value) => emit("focus", value)
+				}
 			}
-		} }));
+		}));
+		function search(text = searchText.value, relation = "EQI") {
+			searchText.value = keyword.value = text;
+			searchRelation.value = relation;
+			state.value = {};
+			load();
+		}
 		async function load(append = false) {
 			if (!props.active) return;
 			if (append && busy.value) return;
@@ -20591,6 +20655,8 @@ var _sfc_main$117 = {
 						parent_key: scope.parentKey,
 						view: scope.view,
 						filters: scope.filters,
+						keyword: keyword.value,
+						keyword_relation: searchRelation.value,
 						project_scope: true,
 						offset: append ? records.value.length : 0,
 						limit: props.editing ? 3 : scope.initialLimit,
@@ -20611,6 +20677,17 @@ var _sfc_main$117 = {
 				if (current === generation) busy.value = false;
 			}
 		}
+		watch(() => JSON.stringify([
+			props.ticket,
+			props.project,
+			props.frameNode.items.searchType,
+			props.frameNode.items.parentKey,
+			props.frameNode.items.view
+		]), () => {
+			keyword.value = searchText.value = "";
+			searchRelation.value = "EQI";
+			state.value = {};
+		}, { flush: "sync" });
 		watch(() => JSON.stringify([
 			props.ticket,
 			props.project,
@@ -20640,7 +20717,7 @@ var _sfc_main$117 = {
 var client_api_default = "// -----------------------------------------------------------------------------\r\n//\r\n//  Copyright (c) 2008, Southpaw Technology Inc., All Rights Reserved\r\n//\r\n//  PROPRIETARY INFORMATION.  This software is proprietary to\r\n//  Southpaw Technology Inc., and is not to be reproduced, transmitted,\r\n//  or disclosed in any way without written permission.\r\n//\r\n// -----------------------------------------------------------------------------\r\n//\r\n//\r\n\r\n\r\nTacticServerStub = function() {\r\n    this.url = null;\r\n    this.transaction_ticket = null;\r\n    this.login_ticket = null;\r\n    this.server_name = null;\r\n    this.site = null;\r\n    this.project = null;\r\n\r\n    this.get_promise = function() {\r\n        promise = new Promise( function(resolve, reject) {\r\n           resolve();\r\n        })\r\n        return promise;\r\n    }\r\n\r\n    this.set_transaction_ticket = function(ticket) {\r\n        this.transaction_ticket = ticket;\r\n    }\r\n\r\n\r\n    this.set_ticket = function(login_ticket) {\r\n        this.login_ticket = login_ticket;\r\n    }\r\n\r\n    this.get_login_ticket = function() {\r\n        return this.login_ticket;\r\n    }\r\n\r\n\r\n    this.set_url = function(url) {\r\n        this.url = url;\r\n    }\r\n\r\n    this.get_url = function() {\r\n        return this.url;\r\n    }\r\n\r\n\r\n\r\n    this.set_site = function(site) {\r\n        if (site) {\r\n            this.site = site;\r\n        }\r\n    }\r\n    this.get_site = function() {\r\n        return this.site;\r\n    }\r\n\r\n    this.set_api_key = function(api_key) {\r\n        if (api_key) {\r\n            this.api_key = api_key;\r\n        }\r\n    }\r\n    this.get_api_key = function() {\r\n        return this.api_key\r\n    }\r\n    this.clear_api_key = function() {\r\n        this.api_key = null\r\n    }\r\n\r\n\r\n    this.set_project = function(project) {\r\n        this.project = project;\r\n        //this.set_project_state(project);\r\n    }\r\n    this.get_project = function() {\r\n        return this.project;\r\n    }\r\n\r\n\r\n    this.set_palette = function(palette) {\r\n        var env = spt.Environment.get();\r\n        env.set_palette(palette);\r\n    }\r\n    this.get_palette = function() {\r\n        var env = spt.Environment.get();\r\n        return env.get_palette();\r\n    }\r\n\r\n\r\n\r\n    this.set_server = function(server_name) {\r\n        this.server_name = server_name;\r\n        var env = spt.Environment.get();\r\n        this.url = env.get_api_url(this.server_name);\r\n    }\r\n\r\n\r\n    this.get_server = function() {\r\n        return this.server_name;\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_transaction_ticket = function() {\r\n        return this.transaction_ticket;\r\n    }\r\n\r\n\r\n    // a key is an encoded\r\n    this.set_key = function(key) {\r\n\r\n        var str = '';\r\n        if (key.indexOf(\"http\") == 0) {\r\n            str = key;\r\n        }\r\n        else {\r\n            var hex = key.toString();\r\n            for (var i = 0; i < hex.length; i += 2)\r\n                str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));\r\n        }\r\n\r\n        \r\n        // The format of key is as follows\r\n        // https://portal.southpawtech.com/tegna/tank/key/ABCDEFG\r\n        var parts = str.split(\"/\");\r\n        if (parts.length == 7) {\r\n            var login_ticket = parts[6];\r\n            var hash = parts[5];\r\n            var project = parts[4];\r\n            var site = parts[3];\r\n        }\r\n        else {\r\n            var login_ticket = parts[5];\r\n            var hash = parts[4];\r\n            var project = parts[3];\r\n        }\r\n\r\n        if (hash != \"ticket\" && hash != \"login_ticket\") {\r\n            throw(\"Malformed key [http<s>://<server>/<site>/<project>/ticket/<ticket>]\");\r\n        }\r\n\r\n        var server = parts[0] + \"/\" + parts[1] + \"/\" + parts[2];\r\n\r\n        var env = spt.Environment.get();\r\n        var url = env.get_api_url(server);\r\n\r\n\r\n        console.log(str);\r\n        console.log(\"server: \" + server);\r\n        console.log(\"site: \" + site);\r\n        console.log(\"project: \" + project);\r\n        console.log(\"ticket: \" + login_ticket);\r\n\r\n        /*\r\n        env.set_server_url(server);\r\n        env.set_site(site)\r\n        env.set_project(project);\r\n        env.set_ticket(login_ticket);\r\n        */\r\n\r\n        this.set_url(url);\r\n        this.set_ticket(login_ticket);\r\n        if (site)\r\n            this.set_site(site);\r\n        this.set_project(project);\r\n\r\n    }\r\n\r\n    this.get_key = function(key) {\r\n\r\n        var env = spt.Environment.get();\r\n\r\n        var server = env.get_server_url();\r\n        var site = this.get_site();\r\n        var project = this.get_project();\r\n        var ticket = this.get_login_ticket();\r\n        var api_key = this.get_api_key();\r\n\r\n        var str = [];\r\n        str.push(server);\r\n        if (site)\r\n            str.push(site)\r\n        str.push(project)\r\n        str.push(ticket)\r\n        str.push(api_key)\r\n\r\n        str = str.join(\"/\");\r\n\r\n        var hex = '';\r\n        for(var i=0;i<str.length;i++) {\r\n            hex += ''+str.charCodeAt(i).toString(16);\r\n        }\r\n\r\n        return hex;\r\n    }\r\n\r\n\r\n    this.build_search_key = function(search_type, code, project_code, column) {\r\n        if (project_code == null) {\r\n            project_code = this.project;\r\n        }\r\n        if (column == null) {\r\n            column = 'code';\r\n        }\r\n        var temps = search_type.split(\"?project=\");\r\n        search_type = temps[0];\r\n        var search_key;\r\n        if (search_type.test(/^sthpw\\//))\r\n            search_key = search_type +\"?\"+ column +\"=\"+ code;\r\n        else\r\n            search_key = search_type +\"?project=\"+ project_code +\"&\"+ column +\"=\"+ code;\r\n        return search_key;\r\n    }\r\n\r\n    this.split_search_key = function(search_key) {\r\n        \r\n        var list = [];\r\n        if (!search_key)\r\n            return search_key;\r\n\r\n        if (search_key.test(/&/))\r\n            var tmps = search_key.split('&');\r\n        else\r\n            var tmps = search_key.split('?');\r\n        var codes = tmps[1].split('=')\r\n        //assert len(codes) == 2;\r\n        list.push(tmps[0]);\r\n        list.push(codes[1]);\r\n        return list;\r\n    }\r\n\r\n\r\n    this.generate_ticket = function() {\r\n        return this._delegate(\"generate_ticket\");\r\n    }\r\n\r\n\r\n    this.get_ticket = function(login, password, kwargs, on_complete, on_error) {\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n\r\n        let func_name = \"get_ticket\";\r\n        let client = new AjaxService( this.url, '' );\r\n\r\n        let args = [login, password];\r\n        if (kwargs && kwargs.site)\r\n            args.push(kwargs.site);\r\n\r\n    \r\n        // handle asynchronous mode\r\n        if (typeof(on_complete) != 'undefined' && on_complete != null) {\r\n            let self = this;\r\n            client.set_callback( function(request) {\r\n                self.async_callback(client, request, on_error);\r\n            } );\r\n            client.invoke( func_name, args );\r\n\r\n            // Store on the client\r\n            client.func_name = func_name;\r\n            client.ret_type = \"string\";\r\n            client.callback = on_complete;\r\n            return;\r\n        }\r\n\r\n        // just do it synchronously\r\n        else {\r\n     \r\n            let ret_val = client.invoke( func_name, args );\r\n            ret_val = this._handle_ret_val(func_name, ret_val, 'string');\r\n            let ticket = ret_val.replace(/(\\r\\n|\\n|\\r)/gm, '');\r\n\r\n            this.set_ticket(ticket);\r\n\r\n            return ticket;\r\n        }\r\n\r\n    }\r\n\r\n\r\n    this.p_get_ticket = function(login, password, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.get_ticket(login, password, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n    this.get_server_version = function(project) {\r\n        var kwargs = null;\r\n        return this._delegate(\"get_server_version\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_server_api_version = function(project) {\r\n        var kwargs = null;\r\n        return this._delegate(\"get_server_api_version\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    /*\r\n     * Transaction methods\r\n     */\r\n    this.set_project_state = function(project) {\r\n        var kwargs = null;\r\n        return this._delegate(\"set_project\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    this.start = function(kwargs) {\r\n        if (this.project == null) {\r\n            alert(\"Project is null on start()\");\r\n            throw(\"Project is null on start()\");\r\n        }\r\n\r\n\r\n\r\n        var client = new AjaxService( this.url, '' );\r\n        var args = [];\r\n        var ticket = {\r\n            'ticket': this.login_ticket,\r\n            'site': this.site,\r\n            'project': this.project,\r\n            'palette': this.get_palette(),\r\n            'language': 'javascript',\r\n            'api_key': this.get_api_key()\r\n        };\r\n        //args.push(this.login_ticket);\r\n        args.push(ticket);\r\n        args.push(this.project);\r\n        args.push(kwargs);\r\n        var ret_val = client.invoke( \"start\", args );\r\n        this.transaction_ticket = this._parse_result(ret_val, \"start\");\r\n\r\n        // put this transaction on the undo queue\r\n        //var server_cmd = new TacticServerCmd(this);\r\n        //Command.add_to_undo(server_cmd);\r\n\r\n        return this.transaction_ticket;\r\n    }\r\n\r\n    this.finish = function(kwargs) {\r\n        var ret_val = this._delegate(\"finish\", arguments, kwargs);\r\n        this.transaction_ticket = null;\r\n        return ret_val;\r\n    }\r\n\r\n    this.abort = function() {\r\n        return this._delegate(\"abort\", arguments);\r\n    }\r\n\r\n    this.undo = function(kwargs) {\r\n        return this._delegate(\"undo\", arguments, kwargs);\r\n    }\r\n\r\n    this.redo = function(kwargs) {\r\n        return this._delegate(\"redo\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * Simple Ping Test\r\n     */\r\n    this.ping = function() {\r\n        return this._delegate(\"ping\");\r\n    }\r\n\r\n    this.async_ping = function(kwargs) {\r\n\r\n        if (!kwargs) {\r\n            kwargs = {};\r\n        }\r\n    \r\n        var callback = kwargs['cbjs_action'];\r\n        if (!callback) {\r\n            callback = kwargs['callback'];\r\n        }\r\n        var on_error = function(e) {\r\n            callback(e);\r\n        };\r\n\r\n        this._delegate(\"ping\", arguments, kwargs, null, callback, on_error);\r\n        return;\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_connection_info = function() {\r\n        return this._delegate(\"get_connection_info\");\r\n    }\r\n\r\n\r\n\r\n    /*\r\n     * Preferences\r\n     */\r\n    this.get_preference = function(key) {\r\n        return this._delegate(\"get_preference\", arguments);\r\n    }\r\n\r\n\r\n\r\n    this.set_preference = function(key, value) {\r\n        return this._delegate(\"set_preference\", arguments);\r\n    }\r\n\r\n\r\n\r\n    /*\r\n     * Logging facilities\r\n     */\r\n    this.log = function(level, message, kwargs) {\r\n        return this._delegate(\"log\", arguments);\r\n    }\r\n\r\n\r\n    /*\r\n     * Messaging facilities\r\n     */\r\n\r\n    this.get_message = function(key, kwargs, on_complete, on_error) {\r\n        //return this._delegate(\"get_message\", arguments);\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [key, kwargs];\r\n        var ret_val = this._delegate(\"get_message\", passed_args, kwargs, null, on_complete, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        // synchronous\r\n        if (ret_val && ret_val.status == \"ERROR\") {\r\n            throw ret_val;\r\n        }\r\n        return ret_val;\r\n    }\r\n\r\n\r\n\r\n\r\n    this.p_get_message = function(key, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.get_message(key, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_messages = function(keys, kwargs) {\r\n        return this._delegate(\"get_messages\", arguments);\r\n    }\r\n\r\n\r\n    this.log_message = function(key, message, kwargs) {\r\n        return this._delegate(\"log_message\", arguments, kwargs);\r\n    }\r\n\r\n    this.subscribe = function(key, kwargs) {\r\n        return this._delegate(\"subscribe\", arguments, kwargs);\r\n    }\r\n\r\n    this.unsubscribe = function(key, kwargs) {\r\n        return this._delegate(\"unsubscribe\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * interaction logging\r\n     */\r\n    this.add_interaction = function(key, data, kwargs) {\r\n        callback = function() {console.log(\"done\")};\r\n        return this._delegate(\"add_interaction\", arguments, kwargs, null, callback);\r\n    }\r\n\r\n    this.get_interaction_count = function(key, kwargs) {\r\n        return this._delegate(\"get_interaction_count\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * Checkin/checkout methods\r\n     */\r\n    this.upload_file = function(file_path, ticket, subdir) {\r\n        if (typeof(ticket) == 'undefined') {\r\n            ticket = this.login_ticket;\r\n        }\r\n        var applet = spt.Applet.get();\r\n        applet.upload_file(file_path, ticket, subdir);\r\n    }\r\n\r\n\r\n    this.upload_directory = function(dir_path, ticket) {\r\n        if (typeof(ticket) == 'undefined') {\r\n            ticket = this.login_ticket;\r\n        }\r\n        var applet = spt.Applet.get();\r\n        return applet.upload_directory(dir_path, ticket);\r\n    }\r\n\r\n\r\n\r\n    this.get_upload_file_size = function(file_path) {\r\n        return this._delegate(\"get_upload_file_size\", arguments);\r\n    }\r\n\r\n\r\n\r\n   \r\n    this.create_snapshot = function(search_key, context, kwargs) {\r\n        return this._delegate(\"create_snapshot\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this._find_source_path = function(path) {\r\n        var applet = spt.Applet.get();\r\n\r\n        var sandbox_root = null;\r\n        var parts = path.split(\"/\");\r\n        for (var i = parts.length-1; i > 0; i--) {\r\n            var dir = parts.slice(0, i);\r\n            dir = dir.join(\"/\");\r\n            root_dir = dir + \"/.tactic/sandbox_root\";\r\n            if (applet.exists(root_dir) ) {\r\n                sandbox_root = dir;\r\n                break;\r\n            }\r\n        }\r\n\r\n        if (sandbox_root == null) {\r\n            return path;\r\n        }\r\n\r\n        var pattern = sandbox_root + \"/\";\r\n        path = path.replace(pattern, \"\")\r\n        return path;\r\n    }\r\n\r\n\r\n\r\n\r\n    this.simple_checkin = function(search_key, context, file_path, kwargs, on_complete, on_error) {\r\n\r\n        if (typeof(kwargs) == \"undefined\") {\r\n            kwargs = {__empty__:true};\r\n        }\r\n\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [search_key, context, file_path, kwargs];\r\n\r\n        var mode_options = ['upload','uploaded', 'copy', 'move', 'inplace','local'];\r\n\r\n        // mode is no uploaded by default\r\n        var mode = kwargs['mode'];\r\n        if (mode == undefined) mode = \"uploaded\";\r\n        if (typeof(file_path) != 'string') {\r\n            spt.alert(\"file_path should be a string instead of an array.\");\r\n            return;\r\n        }\r\n\r\n\r\n        // already uploaded\r\n        if (mode == 'uploaded') {\r\n            kwargs.use_handoff_dir = false;\r\n            //file_path = spt.path.get_filesystem_path(file_path); \r\n        }\r\n\r\n\r\n\r\n        // NOTE: the modes upload, copy, move and local require local access\r\n        // either by a java applet or some other applet like pyApplet.\r\n        // Otherwise, these modes should not be used\r\n        else {\r\n            var applet = spt.Applet.get();\r\n            if (!applet) {\r\n                spt.alert(\"Mode [\"+mode+\"] requires a valid applet (either Java or Python or equivalent).  None found\")\r\n            }\r\n\r\n\r\n            if (mode == 'upload') {\r\n                var ticket = this.transaction_ticket;\r\n                \r\n                this.upload_file(file_path, ticket);\r\n                kwargs.use_handoff_dir = false;\r\n            }\r\n\r\n            else if (['copy', 'move'].contains(mode)) {\r\n                var handoff_dir = this.get_handoff_dir();\r\n                kwargs.use_handoff_dir = true;\r\n                applet.makedirs(handoff_dir);\r\n                applet.exec(\"chmod 777 \" + handoff_dir);\r\n                var basename = spt.path.get_basename(file_path);\r\n\r\n                if (mode == 'move') {\r\n                    applet.move_file(file_path, handoff_dir + '/' +  basename);\r\n                }\r\n                else if (mode == 'copy') {\r\n                    applet.copy_file(file_path, handoff_dir + '/' +  basename);\r\n                    // it moves from handoff to repo during check-in\r\n                }\r\n                mode = 'create';\r\n            }\r\n\r\n        }\r\n\r\n\r\n\r\n        // do the checkin\r\n        var snapshot = this._delegate(\"simple_checkin\", passed_args, kwargs, null, on_complete, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n\r\n\r\n        var files = snapshot['__file_sobjects__'];\r\n\r\n        if (mode == 'local') {\r\n            var applet = spt.Applet.get();\r\n            var files = this.eval(\"@SOBJECT(sthpw/file)\", {search_keys:snapshot});\r\n            var base_dirs = this.get_base_dirs();\r\n            var client_repo_dir = base_dirs.win32_local_repo_dir;\r\n            if (typeof(client_repo_dir) == 'undefined' || client_repo_dir == '')\r\n            {\r\n                client_repo_dir = base_dirs.win32_local_base_dir + \"/repo\";\r\n            }\r\n\r\n\r\n            // move the files directly to the local repo\r\n            for (var i = 0; i < files.length; i++) {\r\n                var file = files[i];\r\n                var rel_path = file.relative_dir + \"/\" + file.file_name;\r\n                var repo_path = client_repo_dir + \"/\" + rel_path;\r\n                var tmp_path = repo_path + \".temp\";\r\n                applet.copy_file(file_path, tmp_path);\r\n                applet.move_file(tmp_path, repo_path);\r\n                var md5 = applet.get_md5(repo_path);\r\n                this.update(file, {md5: md5});\r\n\r\n            }\r\n        }\r\n\r\n        return snapshot;\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n    this.p_simple_checkin = function(search_key, context, file_path, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {};\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            return this.simple_checkin(search_key, context, file_path, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n    this.group_checkin = function(search_key, context, file_path, file_range, kwargs)\r\n    {\r\n        if (typeof(kwargs) == 'undefined') {\r\n            kwargs = {__empty__:true};\r\n        }\r\n\r\n        var mode = kwargs.mode;\r\n        // default is \"uploaded\"??\r\n        //if (typeof(mode) == 'undefined') mode = 'copy';\r\n\r\n        var mode_options = ['upload', 'copy', 'move'];\r\n        if (typeof(mode) != \"undefined\") {\r\n            //if mode not in mode_options:\r\n            //    raise TacticApiException('Mode must be in %s' % mode_options);\r\n\r\n            // brute force method\r\n            //dir = os.path.dirname(file_path)\r\n            var handoff_dir = this.get_handoff_dir();\r\n\r\n            var expanded_paths;\r\n            if (typeof(file_path) == 'object') {\r\n                expanded_paths = file_path;\r\n            }\r\n            else {\r\n                expanded_paths = spt.file.expand_paths(file_path, file_range);\r\n            }\r\n\r\n            if (mode == 'move') {\r\n                for (var i = 0; i < expanded_paths.length; i++) {\r\n                    var path = expanded_paths[i];\r\n                    var parts = path.split(\"/\");\r\n                    var basename = parts[parts.length-1];\r\n                    applet = spt.Applet.get();\r\n                    applet.move_file(path, handoff_dir+'/'+basename);\r\n                }\r\n                use_handoff_dir = true;\r\n                mode = 'create';\r\n            }\r\n            else if (mode == 'copy') {\r\n                for (var i = 0; i < expanded_paths.length; i++) {\r\n                    var path = expanded_paths[i];\r\n                    var parts = path.split(/[\\/\\\\]/);\r\n                    var basename = parts[parts.length-1];\r\n                    applet = spt.Applet.get();\r\n                    applet.copy_file(path, handoff_dir+'/'+basename);\r\n                }\r\n                use_handoff_dir = true;\r\n                mode = 'create';\r\n            }\r\n            // use a custom protocol\r\n            else if (mode == 'custom') {\r\n\r\n                var command = kwargs.command;\r\n                if (typeof(command) == 'undefined') {\r\n                    return \"No command defined\";\r\n                }\r\n                for (var i = 0; i < expanded_paths.length; i++) {\r\n                    var path = expanded_paths[i];\r\n                    var parts = path.split(/[\\/\\\\]/);\r\n                    var basename = parts[parts.length-1];\r\n                    applet = spt.Applet.get();\r\n                    actual = command;\r\n                    actual = actual.replace(\"%s\", path);\r\n                    actual = actual.replace(\"%s\", handoff_dir+'/'+basename);\r\n                    // convert all of the paths back to windows paths??\r\n                    actual = actual.replace(/\\//g, \"\\\\\");\r\n                    applet.makedirs(handoff_dir);\r\n                    applet.exec(actual);\r\n                }\r\n                use_handoff_dir = true;\r\n\r\n                \r\n            }\r\n            else if (mode == 'upload') {\r\n                applet = spt.Applet.get();\r\n                for (var i = 0; i < expanded_paths.length; i++) {\r\n                    var path = expanded_paths[i];\r\n                    applet.upload_file(path);\r\n                }\r\n                use_handoff_dir = false;\r\n            }\r\n        }\r\n\r\n        delete(kwargs.command);\r\n        return this._delegate(\"group_checkin\", arguments, kwargs);\r\n\r\n    }\r\n\r\n\r\n    this.directory_checkin = function(search_key, context, dir, kwargs)\r\n    {\r\n        if (typeof(kwargs) == 'undefined') {\r\n            kwargs = {__empty__:true};\r\n        }\r\n\r\n        //if mode not in ['copy', 'move', 'inplace']:\r\n        //    raise TacticApiException('mode must be either [move] or [copy]')\r\n\r\n        if (!kwargs.mode) {\r\n            kwargs.mode = 'copy';\r\n        }\r\n        var mode = kwargs.mode;\r\n\r\n        // make sure that handoff dir is empty\r\n        var applet = spt.Applet.get();\r\n\r\n        if (!applet.is_dir(dir)){\r\n            alert('[' + dir + '] is not a directory. Exiting...');\r\n            return;\r\n        }\r\n\r\n        // remove trailing / or \\\r\n        dir = dir.replace(/[\\/\\\\]+$/, '');\r\n        // replace all slashes\r\n        dir = dir.replace(/\\\\/g, \"/\");\r\n\r\n        if (mode == 'move' || mode == 'copy') {\r\n            var handoff_dir = this.get_handoff_dir();\r\n            applet.rmtree(handoff_dir);\r\n            applet.makedirs(handoff_dir);\r\n            applet.exec(\"chmod 777 \" + handoff_dir);\r\n            \r\n            // copy or move the tree\r\n            var parts = dir.split(/[\\/\\\\]/);\r\n            var dirname = parts.splice(0, parts.length-1).join(\"/\");\r\n            var basename = parts[parts.length-1];\r\n\r\n            if (mode == 'move') {\r\n                applet.move(dir, handoff_dir + \"/\" + basename);\r\n                kwargs.use_handoff_dir = true;\r\n            }\r\n            else if (mode == 'copy') {\r\n                applet.copytree(dir, handoff_dir + \"/\" + basename);\r\n                kwargs.use_handoff_dir = true;\r\n            }\r\n            mode = 'create';\r\n        }\r\n        else if (mode == 'upload') {\r\n            var files = applet.upload_directory(dir);\r\n            kwargs.use_handoff_dir = false;\r\n\r\n        }\r\n        else if (mode == 'uploaded') {\r\n            kwargs.use_handoff_dir = false;\r\n        }\r\n            \r\n\r\n        return this._delegate(\"simple_checkin\", arguments, kwargs);\r\n\r\n    }\r\n\r\n\r\n\r\n    this.add_dependency = function(snapshot_code, file_path, kwargs) {\r\n        return this._delegate(\"add_dependency\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.add_dependency_by_code = function(to_snapshot_code, from_snapshot_code, kwargs) {\r\n        return this._delegate(\"add_dependency_by_code\", arguments, kwargs);\r\n    }\r\n\r\n    this.add_directory = function(snapshot_code, dir, kwargs) {\r\n        if (!kwargs) {\r\n            kwargs = {__empty__:true};\r\n        }\r\n        if (!kwargs.mode) {\r\n            kwargs.mode = 'copy';\r\n        }\r\n\r\n        var mode = kwargs.mode;\r\n        if ( !(mode in {'copy':'', 'move':'', 'preallocate':'', 'manual':''}) ) {\r\n            throw(\"Mode must be in [copy, move, preallocate, manual]\");\r\n        }\r\n\r\n        var use_handoff_dir;\r\n        var handoff_dir;\r\n\r\n        if (mode in {'copy':'', 'move':''}) {\r\n            var applet = spt.Applet.get();\r\n\r\n            handoff_dir = this.get_handoff_dir()\r\n\r\n            // make sure that handoff dir is empty\r\n            applet.rmtree(handoff_dir);\r\n            applet.makedirs(handoff_dir);\r\n\r\n            // remove trailing / or \\\r\n            dir = dir.replace(/[\\/\\\\]+$/, '');\r\n\r\n            // copy or move the tree\r\n            var parts = dir.split(/[\\/\\\\]/);\r\n            var basename = parts[parts.length-1];\r\n\r\n            if (mode == 'move') {\r\n                applet.move(dir, handoff_dir + \"/\" + basename);\r\n            }\r\n            else if (mode == 'copy') {\r\n                applet.copytree(dir, handoff_dir + \"/\" + basename);\r\n            }\r\n            use_handoff_dir = true;\r\n            mode = 'create';\r\n        }\r\n        else if (mode in {'manual':''}) {\r\n            // files are already in handoff\r\n            use_handoff_dir = true;\r\n        }\r\n        else {\r\n            use_handoff_dir = false;\r\n        }\r\n\r\n        kwargs.use_handoff_dir = use_handoff_dir;\r\n        return this._delegate(\"add_file\", arguments, kwargs )\r\n    }\r\n\r\n\r\n    this.add_file = function(snapshot_code, file, kwargs) {\r\n        // If no mode is specified, set the default mode to 'copy'.\r\n        if (!kwargs) {\r\n            kwargs = {__empty__:true};\r\n        }\r\n        if (!kwargs.mode) {\r\n            kwargs.mode = 'preallocate';\r\n        }\r\n        var mode = kwargs.mode;\r\n        if ( !(mode in {'copy':'', 'move':'', 'preallocate':'', 'manual': '', 'upload': '', 'uploaded': ''}) ) {\r\n            throw(\"Mode '\" + mode + \"' must be in [copy, move, preallocate, manual, upload, uploaded]\");\r\n        }\r\n        \r\n        //file = spt.path.get_filesystem_path(file); \r\n        var use_handoff_dir;\r\n        var handoff_dir;\r\n\r\n        if (mode in {'copy':'', 'move':''}) {\r\n            var applet = spt.Applet.get();\r\n\r\n            handoff_dir = this.get_handoff_dir()\r\n\r\n            // make sure that handoff dir is empty\r\n            applet.rmtree(handoff_dir);\r\n            applet.makedirs(handoff_dir);\r\n\r\n            // copy or move the file\r\n            var basename = spt.path.get_basename(file);\r\n             \r\n            if (mode == 'move') {\r\n                applet.move(file, handoff_dir + \"/\" + basename);\r\n            }\r\n            else if (mode == 'copy') {\r\n                applet.copy_file(file, handoff_dir + \"/\" + basename);\r\n            }\r\n            use_handoff_dir = true;\r\n            mode = 'create';\r\n        }\r\n        else if (mode in {'manual':''}) {\r\n            // files are already in handoff\r\n            use_handoff_dir = true;\r\n        }\r\n        else if (mode == 'upload') {\r\n            var ticket = this.transaction_ticket;\r\n            this.upload_file(file, ticket);\r\n            use_handoff_dir = false;\r\n        }\r\n        else {\r\n            use_handoff_dir = false;\r\n        }\r\n\r\n        kwargs.use_handoff_dir = use_handoff_dir;\r\n        return this._delegate(\"add_file\", arguments, kwargs )\r\n    }\r\n\r\n\r\n    this.add_sequence = function(snapshot_code, file, file_type, file_range, kwargs) {\r\n        return this.add_group(snapshot_code, file, file_type, file_range, kwargs);\r\n    }\r\n\r\n    this.add_group = function(snapshot_code, file_pattern, file_type, file_range, kwargs) {\r\n        // If no mode is specified, set the default mode to 'copy'.\r\n        if (!kwargs) {\r\n            kwargs = {__empty__:true};\r\n        }\r\n        if (!kwargs.mode) {\r\n            kwargs.mode = 'preallocate';\r\n        }\r\n        var mode = kwargs.mode;\r\n        if ( !(mode in {'copy':'', 'move':'', 'preallocate':'', 'manual': '', 'upload': '', 'uploaded': ''}) ) {\r\n            throw(\"Mode '\" + mode + \"' must be in [copy, move, preallocate, manual, upload, uploaded]\");\r\n        }\r\n        \r\n        //file = spt.path.get_filesystem_path(file); \r\n        var use_handoff_dir;\r\n        var handoff_dir;\r\n\r\n        if (mode in {'copy':'', 'move':''}) {\r\n            /* This is an attempt to move the files to the handoff\r\n             * folder, however, it never worked as it was just copied\r\n             * from add_file.\r\n             * Keeping this around in case the applet is ever useful\r\n             * again.\r\n             */\r\n            throw(\"Mode 'copy' and 'move' not supported in add_group\");\r\n            /*\r\n            var applet = spt.Applet.get();\r\n\r\n            handoff_dir = this.get_handoff_dir()\r\n\r\n            // make sure that handoff dir is empty\r\n            applet.rmtree(handoff_dir);\r\n            applet.makedirs(handoff_dir);\r\n\r\n            // copy or move the file\r\n            var basename = spt.path.get_basename(file);\r\n            if (mode == 'move') {\r\n                applet.move(file, handoff_dir + \"/\" + basename);\r\n            }\r\n            else if (mode == 'copy') {\r\n                applet.copy_file(file, handoff_dir + \"/\" + basename);\r\n            }\r\n\r\n            use_handoff_dir = true;\r\n            mode = 'create';\r\n            */\r\n        }\r\n        else if (mode in {'manual':''}) {\r\n            // files are already in handoff\r\n            use_handoff_dir = true;\r\n        }\r\n        else if (mode == 'upload') {\r\n            var ticket = this.transaction_ticket;\r\n            this.upload_file(file, ticket);\r\n            use_handoff_dir = false;\r\n        }\r\n        else { // preallocate\r\n            use_handoff_dir = false;\r\n        }\r\n\r\n\r\n\r\n        kwargs.use_handoff_dir = use_handoff_dir;\r\n        return this._delegate(\"add_group\", arguments, kwargs )\r\n    }\r\n\r\n\r\n\r\n\r\n    this.checkout_snapshot = function(search_key, sandbox_dir, kwargs) {\r\n        // get the files for this snapshot\r\n        if (!kwargs) {\r\n            kwargs = {};\r\n        }\r\n        if (! kwargs.mode ) {\r\n            transfer_mode = spt.Environment.get().get_transfer_mode();\r\n            kwargs.mode = transfer_mode;\r\n        }\r\n        if (! kwargs.mode ) {\r\n            kwargs.mode = 'web';\r\n        }\r\n\r\n\r\n        if (kwargs.mode in {'client_repo':'', 'web':'', 'browser':''} == false) {\r\n            throw(\"Mode '\" + kwargs.mode + \"' must be in [client_repo, web, browser]\");\r\n        }\r\n\r\n        var file_types;\r\n        if (! kwargs.file_types ) {\r\n            file_types = [];\r\n        }\r\n        else {\r\n            file_types = kwargs.file_types;\r\n        }\r\n\r\n        var expand_paths;\r\n        if (! kwargs.expand_paths ) {\r\n            expand_paths = true;\r\n        }\r\n        else {\r\n            expand_paths = kwargs.expand_paths;\r\n        }\r\n\r\n        // get the server paths and the client paths to copy\r\n        var paths = this.get_all_paths_from_snapshot(search_key, {'mode': kwargs.mode, file_types:file_types, expand_paths: expand_paths});\r\n        var sand_paths = this.get_all_paths_from_snapshot(search_key, {'mode':'sandbox', filename_mode: kwargs.filename_mode, file_types:file_types, expand_paths: expand_paths});\r\n\r\n        var applet;\r\n        var dst_paths = [];\r\n        if (kwargs.mode in {'client_repo':''}) {\r\n            applet = spt.Applet.get();\r\n        } \r\n        var env = spt.Environment.get();\r\n        var server_root = env.get_server_url();\r\n\r\n        var filename_mode;\r\n        if (!kwargs.filename_mode) {\r\n            filename_mode = 'repo';\r\n        }\r\n        else {\r\n            filename_mode = kwargs.filename_mode;\r\n        }\r\n\r\n        try {\r\n        for (var i = 0; i < paths.length; i++ ) {\r\n            var path = paths[i];\r\n            var dst = sand_paths[i];\r\n            var basename;\r\n            if (filename_mode == 'repo') {\r\n                basename = spt.path.get_basename(dst);\r\n            }\r\n            else if (filename_mode == 'versionless') {\r\n               \r\n                basename = spt.path.get_basename(dst);\r\n                var dir_name = spt.path.get_dirname(dst);\r\n                basename = basename.replace(/_v\\d+/i, '');\r\n                dst = dir_name + '/' + basename;\r\n             \r\n            }\r\n            else if (filename_mode == 'source') {\r\n                basename = spt.path.get_basename(dst);\r\n            }\r\n\r\n\r\n            // FIXME: this doesn't work for directory checkins.  It flattens\r\n            // the directories\r\n            // remap sandbox paths if one is explicitly supplied\r\n            if (sandbox_dir){\r\n                dst = sandbox_dir + \"/\" + basename;\r\n            }\r\n\r\n            dst_paths.push(dst);\r\n\r\n            if (kwargs.mode == 'client_repo'){\r\n                applet.copytree(path, dst);\r\n            }\r\n            else if (kwargs.mode =='webX'){\r\n                // NOTE: this is no long supported due to lack of Java support on\r\n                // the browser.  Web mode is now the same as browser mode.\r\n                var url = server_root + path;\r\n                if (spt.url.exists(url)){\r\n                    applet.download_file(url, dst);\r\n                }\r\n                else {\r\n                    alert(url + ' does not exist on the server. It may have been backed up.');\r\n                }\r\n            }\r\n            else if (kwargs.mode == 'browser' || kwargs.mode == 'web'){\r\n                var download_el = document.createElement(\"a\");\r\n                download_el.setAttribute(\"href\",path);\r\n                download_el.setAttribute(\"download\",basename);\r\n                document.body.appendChild(download_el);\r\n                download_el.click();\r\n                document.body.removeChild(download_el);\r\n            }\r\n        }\r\n        }\r\n        catch(e){\r\n           alert(spt.exception.handler(e));\r\n        }\r\n        return dst_paths;\r\n    }\r\n\r\n\r\n\r\n    this.set_current_snapshot = function(snapshot_code) {\r\n        return this._delegate(\"set_current_snapshot\", arguments, null);\r\n    }\r\n\r\n    this.query_snapshots = function(kwargs) {\r\n        return this._delegate(\"query_snapshots\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_snapshot = function(search_key, kwargs) {\r\n        return this._delegate(\"get_snapshot\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_snapshots_by_relative_dir = function(relative_dir, kwargs) {\r\n        return this._delegate(\"get_snapshots_by_relative_dir\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_sobjects_by_relative_dir = function(relative_dir, kwargs) {\r\n        return this._delegate(\"get_sobjects_by_relative_dir\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    this.get_client_dir = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_client_dir\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    this.get_preallocated_path = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_preallocated_path\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_virtual_snapshot_path = function(search_key, context, kwargs) {\r\n        return this._delegate(\"get_virtual_snapshot_path\", arguments, kwargs);\r\n    }\r\n    \r\n    this.get_all_dependencies = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_all_dependencies\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    /* \r\n     * Task methods\r\n     */ \r\n    this.create_task = function(search_key, kwargs) {\r\n        return this._delegate(\"create_task\", arguments, kwargs);\r\n    } \r\n\r\n    this.get_tasks = function(search_key, kwargs) {\r\n        return this._delegate(\"get_tasks\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_task_status_colors = function() {\r\n        return this._delegate(\"get_task_status_colors\", arguments);\r\n    }\r\n\r\n\r\n    this.add_initial_tasks = function(search_key, kwargs) {\r\n        return this._delegate(\"add_initial_tasks\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_input_tasks = function(search_key, kwargs) {\r\n        return this._delegate(\"get_input_tasks\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_output_tasks = function(search_key, kwargs) {\r\n        return this._delegate(\"get_output_tasks\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    \r\n    /*\r\n     * Low Level Database methods\r\n     */\r\n    this.get_related_types = function(search_type) {\r\n        return this._delegate(\"get_related_types\", arguments);\r\n    }\r\n\r\n\r\n\r\n    this.query = function(search_type, kwargs, on_complete, on_error) {\r\n        var newArgs = Array.prototype.slice.call(arguments).slice(0,2);\r\n        if(on_complete){\r\n          if(!on_error){\r\n            on_error = function(err){\r\n                console.log(err);\r\n            };\r\n          }\r\n          return this._delegate(\"query\", newArgs, kwargs, \"string\", on_complete, on_error);\r\n        }\r\n\r\n        var value = this._delegate(\"query\", newArgs, kwargs, \"string\");\r\n        //return this._delegate(\"query\", arguments, kwargs);\r\n        value = JSON.parse(value);\r\n        return value\r\n    }\r\n\r\n\r\n\r\n    /* TEST Promises */\r\n    this.query2 = function(search_type, kwargs, on_complete, on_error) {\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        on_complete2 = function(value) {\r\n            value = JSON.parse(value);\r\n            on_complete(value);\r\n        }\r\n       \r\n        passed_args = [search_type, kwargs];\r\n        var value = this._delegate(\"query\", passed_args, kwargs, \"string\", on_complete2, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        value = JSON.parse(value);\r\n        return value\r\n    }\r\n\r\n\r\n    this.p_query = function(search_type, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {};\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            return this.query2(search_type, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_by_search_key = function(search_key, kwargs, on_complete, on_error) {\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [search_key, kwargs];\r\n        var value = this._delegate(\"get_by_search_key\", passed_args, kwargs, null, on_complete, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        return value\r\n\r\n    }\r\n\r\n    this.p_get_by_search_key = function(search_key, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            return this.get_by_search_key(search_key, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n    this.get_by_code = function(search_type, code, kwargs, on_complete, on_error) {\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n\r\n        passed_args = [search_type, code, kwargs];\r\n        return this._delegate(\"get_by_code\", passed_args, kwargs, null, on_complete, on_error);\r\n    }\r\n\r\n    this.p_get_by_code = function(search_type, code, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.get_by_code(search_type, code);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n    this.insert = function(search_type, data, kwargs) {\r\n        // server.insert(search_type, data, kwargs);\r\n        return this._delegate(\"insert\", arguments, kwargs);\r\n        \r\n    }\r\n\r\n    this.insert_multiple = function(search_type, data, kwargs) {\r\n        // server.insert(search_type, data, kwargs);\r\n        return this._delegate(\"insert_multiple\", arguments, kwargs);\r\n        \r\n    }\r\n\r\n\r\n\r\n    this.update = function(search_key, data, kwargs, on_complete, on_error) {\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n\r\n        passed_args = [search_key, data, kwargs];\r\n        var ret_val = this._delegate(\"update\", passed_args, kwargs, null, on_complete, on_error);\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        if (ret_val && ret_val.status == \"ERROR\") {\r\n            throw ret_val;\r\n        }\r\n        return ret_val;\r\n    }\r\n\r\n\r\n\r\n    /*\r\n    this.update = function(search_key, data, kwargs, on_complete, on_error) {\r\n        var newArgs = Array.prototype.slice.call(arguments).slice(0,3);\r\n        if(on_complete){\r\n          if(!on_error){\r\n            on_error = function(err){\r\n              console.log(err);\r\n            };\r\n          }\r\n          return this._delegate(\"update\", newArgs, kwargs, undefined, on_complete, on_error);\r\n        }\r\n\r\n        return this._delegate(\"update\", newArgs, kwargs);\r\n    }\r\n    */\r\n\r\n\r\n\r\n\r\n\r\n    this.p_update = function(search_type, data, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {};\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            return this.update(search_type, data, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n    this.update_multiple = function(data, kwargs, on_complete, on_error) {\r\n        var newArgs = Array.prototype.slice.call(arguments).slice(0,2);\r\n        data = JSON.stringify(data);\r\n        if(on_complete){\r\n          if(!on_error){\r\n            on_error = function(err){\r\n              console.log(err);\r\n            };\r\n          }\r\n          return this._delegate(\"update_multiple\", arguments, kwargs, undefined, on_complete, on_error);\r\n        }\r\n\r\n        return this._delegate(\"update_multiple\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    //\r\n    // Expression methods\r\n    //\r\n    this.eval = function(expression, kwargs, on_complete, on_error) {\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n       \r\n        passed_args = [expression, kwargs];\r\n        var ret_val = this._delegate(\"eval\", passed_args, kwargs, null, on_complete, on_error);\r\n        // asynchronous\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        // synchronous\r\n        if (ret_val && ret_val.status == \"ERROR\") {\r\n            throw ret_val;\r\n        }\r\n        return ret_val;\r\n    }\r\n\r\n\r\n    /* Test promises */\r\n    this.p_eval = function(expression, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.eval(expression, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n    //\r\n    // SObject methods\r\n    //\r\n\r\n    this.create_search_type = function(search_key, search_type, title, kwargs) {\r\n        return this._delegate(\"create_search_type\", arguments, kwargs);\r\n    }\r\n\r\n    this.add_column_to_search_type = function(search_type, column_name, column_type) {\r\n        return this._delegate(\"add_column_to_search_type\", arguments);\r\n    }\r\n\r\n    this.insert_update = function(search_key, data, kwargs) {\r\n        return this._delegate(\"insert_update\", arguments);\r\n    }\r\n\r\n\r\n    this.get_unique_sobject = function(search_type, data) {\r\n        return this._delegate(\"get_unique_sobject\", arguments);\r\n    }\r\n\r\n\r\n    this.retire_sobject = function(search_key) {\r\n        return this._delegate(\"retire_sobject\", arguments);\r\n    }\r\n\r\n    this.reactivate_sobject = function(search_key) {\r\n        return this._delegate(\"reactivate_sobject\", arguments);\r\n    }\r\n\r\n    this.delete_sobject = function(search_key, kwargs) {\r\n        return this._delegate(\"delete_sobject\", arguments, kwargs);\r\n    }\r\n\r\n    this.clone_sobject = function(search_key, data) {\r\n        return this._delegate(\"clone_sobject\", arguments);\r\n    }\r\n\r\n    this.set_widget_setting = function(key, value) {\r\n        return this._delegate(\"set_widget_setting\", arguments);\r\n    }\r\n\r\n    this.get_widget_setting = function(key) {\r\n        return this._delegate(\"get_widget_setting\", arguments);\r\n    }\r\n\r\n    /*\r\n     * sType Hierarchy Functions\r\n     */\r\n\r\n    this.get_parent = function(search_key, kwargs) {\r\n        return this._delegate(\"get_parent\", arguments)\r\n    }\r\n\r\n\r\n    this.get_all_children = function(search_key, child_type, kwargs) {\r\n        return this._delegate(\"get_all_children\", arguments)\r\n    }\r\n\r\n\r\n    this.get_parent_type = function(search_key) {\r\n        return this._delegate(\"get_parent_type\", arguments);\r\n    }\r\n\r\n\r\n    this.get_child_types = function(search_type) {\r\n        return this._delegate(\"get_child_types\", arguments);\r\n    }\r\n\r\n\r\n    this.connect_sobjects = function(src_sobject, dst_sobject, kwargs) {\r\n        return this._delegate(\"connect_sobjects\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_connected_sobjects = function(src_sobject, kwargs) {\r\n        return this._delegate(\"get_connected_sobjects\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_connected_sobject = function(src_sobject, kwargs) {\r\n        return this._delegate(\"get_connected_sobject\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    /*\r\n     * Instance methods\r\n     */\r\n    this.add_instance = function(search_key1, search_key2) {\r\n        return this._delegate(\"add_instance\", arguments);\r\n    }\r\n \r\n    this.get_instances = function(search_key, search_type) {\r\n        return this._delegate(\"get_instances\", arguments);\r\n    }\r\n \r\n    this.remove_instance = function(search_key1, search_key2) {\r\n        return this._delegate(\"remove_instance\", arguments);\r\n    }\r\n\r\n\r\n\r\n    /* \r\n     * Note methods\r\n     */ \r\n    this.create_note = function(search_key, note, kwargs) {\r\n        return this._delegate(\"create_note\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * Pipeline methods\r\n     */\r\n\r\n    this.create_pipeline = function(name, search_type, kwargs) {\r\n        return this._delegate(\"create_pipeline\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_pipeline_xml = function(search_key, kwargs) {\r\n        return this._delegate(\"get_pipeline_xml\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_pipeline_processes = function(search_key, kwargs) {\r\n        return this._delegate(\"get_pipeline_processes\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_pipeline_xml_info = function(search_key, kwargs) {\r\n        return this._delegate(\"get_pipeline_xml_info\", arguments, kwargs);\r\n    }\r\n\r\n    this.get_pipeline_processes_info = function(search_key, kwargs) {\r\n        return this._delegate(\"get_pipeline_processes_info\", arguments, kwargs);\r\n    }\r\n\r\n    /*\r\n     * Widget methods\r\n     */\r\n    this.get_widget = function(class_name, kwargs, on_complete, on_error) {\r\n        var libraries = spt.Environment.get().get_libraries();\r\n        kwargs.libraries = libraries;\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n\r\n        passed_args = [class_name, kwargs];\r\n        try {\r\n            var ret_val = this._delegate(\"get_widget\", passed_args, kwargs, \"string\", on_complete, on_error);\r\n            return ret_val;\r\n        }\r\n        catch(e) {\r\n            var e_msg = spt.exception.handler(e);\r\n            if (/Cannot login with key/.test(e_msg)) \r\n                this._redirect_login();\r\n            else\r\n                alert(e_msg);\r\n            return;\r\n        }\r\n    }\r\n\r\n\r\n\r\n    // Test load view\r\n    this.load_view = function(el, view, kwargs, on_complete, on_error) {\r\n\r\n        if (!kwargs) kwargs = {};\r\n        kwargs['view'] = view;\r\n\r\n        var class_name = 'tactic.ui.panel.CustomLayoutWdg';\r\n        var wdg_kwargs = {\r\n            args: kwargs,\r\n            cbjs_action: function(widget) {\r\n                var node = document.createElement(\"div\");\r\n\r\n                node.innerHTML = widget;\r\n\r\n                el.appendChild(node);\r\n\r\n                var scripts = node.getElementsByTagName(\"script\");\r\n                for (var i = 0; i < scripts.length; i++) {\r\n                    var func = function() {\r\n                        eval(scripts[i].innerHTML);\r\n\r\n                    };\r\n                    func();\r\n                    scripts[i].remove();\r\n                }\r\n\r\n                if (on_complete)\r\n                    on_complete(node);\r\n            }\r\n\r\n\r\n        };\r\n        this.async_get_widget(class_name, wdg_kwargs);\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n\r\n    this.class_exists = function(class_path) {\r\n        return this._delegate(\"class_exists\", arguments);\r\n    }\r\n\r\n\r\n    this.execute_cmd = function(class_name, args, values, kwargs, on_complete, on_error) {\r\n\r\n        if (typeof(values) == 'undefined') {\r\n            values = {};\r\n        }\r\n        if (typeof(kwargs) == 'undefined') {\r\n            kwargs = {};\r\n        }\r\n\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [class_name, args, values, kwargs];\r\n        var ret_val = this._delegate(\"execute_cmd\", passed_args, kwargs, null, on_complete, on_error);\r\n        if (on_complete) {\r\n            return;\r\n        }\r\n        if (ret_val && ret_val.status == \"ERROR\") {\r\n            throw ret_val;\r\n        }\r\n        return ret_val;\r\n    }\r\n\r\n\r\n    this.p_execute_cmd = function(class_name, args, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.execute_cmd(class_name, args, {}, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n    this.execute_class_method = function(class_name, method, kwargs) {\r\n        return this._delegate(\"execute_class_method\", arguments);\r\n    }\r\n\r\n\r\n    \r\n    this.execute_transaction = function(transaction_xml, kwargs) {\r\n        return this._delegate(\"execute_transaction\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n\r\n    this.execute_python_script = function(script_path, script_kwargs, kwargs) {\r\n        if (kwargs) callback = kwargs.on_complete;\r\n        else callback = null;\r\n        return this._delegate(\"execute_python_script\", arguments, kwargs, null, callback);\r\n    }\r\n\r\n\r\n    this.execute_js_script = function(script_path, script_kwargs, kwargs) {\r\n        if (kwargs) callback = kwargs.on_complete;\r\n        else callback = null;\r\n        return this._delegate(\"execute_js_script\", arguments, kwargs, null, callback);\r\n    }\r\n\r\n\r\n    this.execute_cbk = function(bvr, callback, args, kwargs) {\r\n        var cbk = \"tactic.ui.panel.CustomLayoutCbk\";\r\n        var top = bvr.src_el.getParent(\".spt_custom_top\");\r\n        var view = top.getAttribute(\"spt_view\");\r\n\r\n        var cbk_kwargs = {\r\n            view: view,\r\n            callback: callback,\r\n            kwargs: args,\r\n        }\r\n\r\n        return this.execute_cmd(cbk, cbk_kwargs)\r\n    }\r\n\r\n\r\n    this.p_execute_cbk = function(bvr, callback, args, kwargs) {\r\n        var cbk = \"tactic.ui.panel.CustomLayoutCbk\";\r\n        var top = bvr.src_el.getParent(\".spt_custom_top\");\r\n        var view = top.getAttribute(\"spt_view\");\r\n\r\n        var cbk_kwargs = {\r\n            view: view,\r\n            callback: callback,\r\n            kwargs: args\r\n        }\r\n\r\n        return this.p_execute_cmd(cbk, cbk_kwargs)\r\n    }\r\n \r\n\r\n\r\n    \r\n\r\n    this.execute = function(code) {\r\n        return this._delegate(\"execute\", arguments, null);\r\n    }\r\n\r\n\r\n\r\n    this.check_access = function(access_group, key, access, kwargs) {\r\n        return this._delegate(\"check_access\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    //\r\n    // Queue Manager\r\n    //\r\n    this.add_queue_item = function(class_name, args, kwargs) {\r\n        return this._delegate(\"add_queue_item\", arguments, kwargs);\r\n    }\r\n\r\n\r\n\r\n    this.get_column_names = function(search_type) {\r\n        return this._delegate(\"get_column_names\", arguments, null);\r\n    }\r\n\r\n    this.get_column_info = function(search_type) {\r\n        return this._delegate(\"get_column_info\", arguments, null);\r\n    }\r\n\r\n    this.get_column_widgets = function() {\r\n        var value = ''\r\n        try {\r\n            value = this._delegate(\"get_column_widgets\", arguments, null, \"string\");\r\n            value = JSON.parse(value);\r\n        }\r\n        catch (e) {\r\n            alert(\"Error adding the column: \" + spt.exception.handler(e));\r\n        }\r\n        return value;\r\n    }\r\n\r\n\r\n    this.update_config = function(search_type, view, element_names, kwargs) {\r\n        return this._delegate(\"update_config\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_config_definition = function(search_type, view, element_name, kwargs) {\r\n        return this._delegate(\"get_config_definition\", arguments, kwargs);\r\n    }\r\n\r\n    this.set_config_definition = function(search_type, element_name, kwargs) {\r\n        return this._delegate(\"set_config_definition\", arguments, kwargs);\r\n    }\r\n\r\n    this.add_config_element = function(search_type, view, name, kwargs) {\r\n        return this._delegate(\"add_config_element\", arguments, kwargs);\r\n    }\r\n\r\n    this.set_application_state = function() {\r\n        return this._delegate(\"set_application_state\", arguments, null, null, function() {});\r\n    }\r\n\r\n\r\n    //\r\n    // Trigger methods\r\n    //\r\n    this.call_trigger = function(search_key, event, kwargs, on_complete, on_error) {\r\n        [on_complete, on_error] = this._handle_callbacks(kwargs, on_complete, on_error);\r\n        passed_args = [search_key, event, kwargs];\r\n        var ret_val = this._delegate(\"call_trigger\", passed_args, kwargs, null, on_complete, on_error);\r\n        return ret_val\r\n    }\r\n\r\n    this.p_call_trigger = function(search_key, event, kwargs) {\r\n        return new Promise( function(resolve, reject) {\r\n            if (!kwargs) kwargs = {}\r\n            kwargs.on_complete = function(x) { resolve(x); }\r\n            kwargs.on_error = function(x) { reject(x); }\r\n            this.call_trigger(search_key, event, kwargs);\r\n        }.bind(this) )\r\n    }\r\n\r\n\r\n    this.call_pipeline_event = function(search_key, process, event, data) {\r\n        return this._delegate(\"call_pipeline_event\", arguments)\r\n    }\r\n\r\n    this.get_pipeline_status = function(search_key, process) {\r\n        return this._delegate(\"get_pipeline_status\", argumnets);\r\n    }\r\n\r\n\r\n\r\n\r\n    //\r\n    // Directory methods\r\n    //\r\n    this.get_paths = function(search_key, kwargs) {\r\n        return this._delegate(\"get_paths\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_base_dirs = function() {\r\n        return this._delegate(\"get_base_dirs\", arguments);\r\n    }\r\n    \r\n    this.get_handoff_dir = function() {\r\n        return this._delegate(\"get_handoff_dir\", arguments);\r\n    }\r\n\r\n    this.get_plugin_dir = function() {\r\n        return this._delegate(\"get_plugin_dir\", arguments);\r\n    }\r\n\r\n    this.clear_upload_dir = function() {\r\n        return this._delegate(\"clear_upload_dir\", arguments);\r\n    }\r\n\r\n\r\n\r\n    // Doc methods\r\n    this.get_doc_link = function(alias) {\r\n        return this._delegate(\"get_doc_link\", arguments, null);\r\n    }\r\n\r\n\r\n    // Access to some useful external functions\r\n    this.send_rest_request = function(method, url, kwargs) {\r\n        return this._delegate(\"send_rest_request\", arguments, null);\r\n    }\r\n\r\n\r\n\r\n    // Misc\r\n    this.get_path_from_snapshot = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_path_from_snapshot\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    this.get_all_paths_from_snapshot = function(snapshot_code, kwargs) {\r\n        return this._delegate(\"get_all_paths_from_snapshot\", arguments, kwargs);\r\n    }\r\n\r\n\r\n    // async functions\r\n\r\n    this.async_get_widget = function(class_name, kwargs, on_complete, on_error) {\r\n\r\n        var api = this;\r\n        var api_kwargs = {};\r\n        Object.assign(api_kwargs, kwargs);\r\n\r\n        var libraries = spt.Environment.get().get_libraries();\r\n        kwargs.libraries = libraries;\r\n        \r\n        var callback = kwargs['cbjs_action'];\r\n        if (!callback) {\r\n            callback = kwargs['callback'];\r\n        }\r\n        if (!callback) {\r\n            callback = kwargs['on_complete'];\r\n        }\r\n        if (!callback) {\r\n            callback = on_complete;\r\n        }\r\n\r\n\r\n        var err_callback = function(e) {\r\n            if (e == 0) {\r\n                e = 'Received an error (Error 0)';\r\n                var error = new Error();\r\n                console.log(error.stack);\r\n            }\r\n            else if (e == 502)\r\n                e = 'Timeout Error (Error 502)';\r\n            else if (e == 503)\r\n                e = 'Service is unavailable (Error 503)';\r\n            else if (e == 504)\r\n                e = 'Gateway Timeout error (Error 504)';\r\n\r\n            if (!on_error) {\r\n                on_error = kwargs['on_error'];\r\n            }\r\n\r\n            if (on_error) {\r\n                on_error(e);\r\n            }\r\n            else {\r\n                console.log(e);\r\n                spt.alert(\"async_get_widget: \" + e, { stack: e.stack });\r\n            }\r\n        };\r\n        passed_args = [class_name, kwargs];\r\n        this._delegate(\"get_widget\", passed_args, kwargs, \"string\", callback, err_callback);\r\n        return;\r\n    }\r\n\r\n    //DEPRECATED use eval\r\n    this.async_eval = function(class_name, kwargs) {\r\n        alert(\"Client API function async_eval is deprecated. Use eval\")\r\n        var callback = kwargs['cbjs_action'];\r\n        if (!callback) {\r\n            callback = kwargs['callback'];\r\n        }\r\n        this._delegate(\"eval\", arguments, kwargs, null, callback);\r\n        return;\r\n    }\r\n\r\n\r\n    // methed that handles asynchronous callbacks.\r\n    // It allows for on_complete to be called in the kwargs as well.\r\n    // It also handles a flag \"promise\" which can be used with promises which\r\n    // defines an oncomplete that is passed to the \"then\" function of the\r\n    // promise\r\n    //\r\n    this._handle_callbacks = function(kwargs, on_complete, on_error) {\r\n        if (typeof(kwargs) != 'undefined' && kwargs != null) {\r\n\r\n            if (!on_complete) {\r\n                on_complete = kwargs.on_complete;\r\n            }\r\n            if (!on_error) {\r\n                on_error = kwargs.on_error;\r\n            }\r\n\r\n            delete kwargs.on_error;\r\n            delete kwargs.on_complete;\r\n        }\r\n        else {\r\n            on_complete = null;\r\n            on_error = null;\r\n        }\r\n\r\n        if (on_complete) {\r\n            if (!on_error) {\r\n                on_error = function(err){\r\n                    throw(err);\r\n                };\r\n            }\r\n        }\r\n\r\n        return [on_complete, on_error];\r\n            \r\n    }\r\n\r\n\r\n    // method that delegates which function in xmlrpc to call\r\n    //\r\n    // @params:\r\n    //   func_name: the name of the function to execute\r\n    //   passed_args: the required arguments passed into the function\r\n    //   kwargs: the optional arguments passed into the function\r\n    //   ret_type: the type of value returned by the function.  Functions that\r\n    //      return lots of data will often return strings back\r\n    //   callback: a function that is run after the data has been returned.\r\n    //   on_error: A function that is run when a request throws an error.\r\n    //      This is used be get_async_widget() and others\r\n    this._delegate = function(func_name, passed_args, kwargs, ret_type, callback, on_error) {\r\n\r\n        \r\n        if (spt._delegate) {\r\n            return spt._delegate(func_name, passed_args, kwargs, ret_type);\r\n        }\r\n\r\n\r\n        var client = new AjaxService( this.url, '' );\r\n\r\n        var args = [];\r\n\r\n        // build the transaction bundle\r\n        if (this.transaction_ticket == null) {\r\n            this.transaction_ticket = this.login_ticket;\r\n        }\r\n\r\n\r\n        if (! this.transaction_ticket ) {\r\n            alert(\"Login or transaction ticket is empty. Cannot proceed\");\r\n            return;\r\n        }\r\n\r\n\r\n        var ticket = {\r\n            'ticket': this.transaction_ticket,\r\n            'site': this.site,\r\n            'project': this.project,\r\n            'palette': this.get_palette(),\r\n            'api_key': this.get_api_key() || \"\",\r\n            'language': 'javascript'\r\n        };\r\n        args.push(ticket);\r\n\r\n        // Trims off undefined kwargs\r\n        if (typeof(passed_args) == \"undefined\") {\r\n            passed_args = [];\r\n        } else {\r\n            if (typeof(passed_args) == \"arguments\") {\r\n                passed_args = Array.from(passed_args);\r\n            } \r\n            if (passed_args.length > 0) {\r\n                if (passed_args[passed_args.length-1] == undefined) {\r\n                    passed_args = passed_args.splice(0, passed_args.length-1);\r\n                }\r\n            }\r\n        }\r\n\r\n        // determine if there was a kwargs passed in\r\n        var num_args;\r\n        var has_kwargs;\r\n\r\n        if (typeof(kwargs) == undefined || kwargs == null) {\r\n            num_args = passed_args.length;\r\n            has_kwargs = false;\r\n        }\r\n        else if (kwargs.__empty__) {\r\n            num_args = passed_args.length;\r\n            has_kwargs = true;\r\n        } else {\r\n            num_args = passed_args.length - 1;\r\n            has_kwargs = true;\r\n        }\r\n       \r\n        if (passed_args != undefined) {\r\n            for (var i=0; i < num_args; i++) {\r\n                args.push(passed_args[i]);\r\n            }\r\n        }\r\n\r\n        // Always pass in a kwargs as the last argument.  If kwargs is not\r\n        // present, we send an empty one through\r\n        if (!has_kwargs) {\r\n            args.push({});\r\n        }\r\n        else {\r\n            delete kwargs.__empty__;\r\n            args.push(kwargs);\r\n        }\r\n\r\n\r\n        // handle asynchronous mode\r\n        if (typeof(callback) != 'undefined' && callback != null) {\r\n            var self = this;\r\n            client.set_callback( function(request) {\r\n                self.async_callback(client, request, on_error);\r\n            } );\r\n            client.invoke( func_name, args );\r\n\r\n            // Store on the client\r\n            client.func_name = func_name;\r\n            client.ret_type = ret_type;\r\n            client.callback = callback;\r\n            return;\r\n        }\r\n\r\n        // just do it synchronously\r\n        else {\r\n            ret_val = client.invoke( func_name, args );\r\n            return this._handle_ret_val(func_name, ret_val, ret_type);\r\n        }\r\n\r\n    }\r\n\r\n    this._show_login = function() {\r\n        \r\n        var spinners = document.id(document.body).getElements('.spt_spin');\r\n        spinners.each(function(x) {spt.hide(x)});\r\n        var login_scr = document.getElement('.spt_login_screen');\r\n        login_scr.setStyle('z-index','1100');\r\n        var custom_content = login_scr.getParent('.spt_custom_content');\r\n        if (custom_content) {\r\n            custom_content.setStyle('position','absolute');\r\n            custom_content.setStyle('top','30%');\r\n            custom_content.setStyle('left','50%');\r\n        }\r\n        spt.popup.show_background();\r\n        spt.show(login_scr);\r\n\r\n    }\r\n    this._redirect_login = function() {\r\n       \r\n        var ok = function() {\r\n            window.location.reload();\r\n        };\r\n        spt.info('Your session has expired.', {'click': ok});\r\n    }\r\n    this.async_callback = function(client, request, on_error) {\r\n        if (request.readyState == 4) {\r\n            if (request.status == 200) {\r\n                try {\r\n                    var data = this._handle_ret_val(client.func_name, request, client.ret_type);\r\n                    client.callback(data);\r\n                } catch(e) {\r\n                    var e_msg = spt.exception.handler(e);\r\n                    if (/Cannot login with key/.test(e_msg)) {\r\n                        this._redirect_login();\r\n                    }\r\n                    else if (on_error)\r\n                        on_error(e);\r\n                    else\r\n                        spt.alert(\"async_callback: \" + e_msg);\r\n                }\r\n            } else {\r\n                \r\n                if (on_error)\r\n                    on_error(request.status);\r\n                else\r\n                    throw(\"status is \" + request.status);\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n        \r\n    this._handle_ret_val = function(func_name, ret_val, ret_type) {\r\n        if (ret_val.status != 200) {\r\n            throw(ret_val.status);\r\n        }\r\n\r\n        if (ret_type == \"raw\") {\r\n            return ret_val.responseText;\r\n        }\r\n        if (ret_type == \"string\") {\r\n            // manually extract the value returned\r\n           \r\n            var value = ret_val.responseText;\r\n            value = value.replace(/^<\\?xml version='1.0'\\?>\\n<methodResponse>\\n<params>\\n<param>\\n<value><string>/, '');\r\n            value = value.replace(/<\\/string><\\/value>\\n<\\/param>\\n<\\/params>\\n<\\/methodResponse>/, '');\r\n\r\n            value = value.replace(/&amp;/g, \"&\");\r\n            value = value.replace(/&lt;/g, \"<\");\r\n            value = value.replace(/&gt;/g, \">\");\r\n\r\n            // fix inline < > that are not part of the html structure\r\n            value = value.replace(/&spt_lt;/g, \"&lt;\");\r\n            value = value.replace(/&spt_gt;/g, \"&gt;\");\r\n\r\n            if (value.match(\"<name>faultCode</name>\")) {\r\n                var el = document.createElement(\"div\");\r\n                el.innerHTML = value;\r\n                el = el.getElementsByTagName(\"value\")[2];\r\n                el = el.childNodes[0];\r\n                value = el.innerHTML;\r\n                throw(\"Server Error: \" + value);\r\n            }\r\n\r\n            return value;\r\n        }\r\n        else {\r\n            var value = this._parse_result(ret_val, func_name);\r\n            return value;\r\n        }\r\n    }\r\n\r\n\r\n    // parse the return value from XMLRPC request.  This is assumed to be\r\n    // a single return value in JSON format which can be parsed.  However,\r\n    // if this produces an exception, then return a string\r\n    //\r\n    this._parse_result = function(ret_val, func_name) {\r\n\r\n        var result = ret_val.responseXML;\r\n        if (result == null) {\r\n            ret_val = ret_val.responseText;\r\n            spt.exception.handle_fault_response( ret_val );\r\n            return \"\"\r\n        }\r\n        // join, normalize the data if the browser supports it, mostly for FF\r\n        if (ret_val.responseXML.normalize)\r\n            ret_val.responseXML.normalize();\r\n\r\n        var nodeList = result.getElementsByTagName(\"string\");\r\n        if (nodeList.length == 0) {\r\n            // in IE a fault response has a non-null result, but also has no string nodes, and so goes into this\r\n            // block of code ... so handle it here the same as fault response above\r\n            ret_val = ret_val.responseText;\r\n            var patt = /faultCode/g;\r\n            if (patt.test(ret_val)) {\r\n                spt.exception.handle_fault_response( ret_val );\r\n            }\r\n            return \"\";\r\n        }\r\n\r\n        var child = nodeList[0].firstChild;\r\n        if (child == null) {\r\n            alert(\"Return format not a string or JSON text\");\r\n            alert(ret_val.responseText);\r\n            return {};\r\n        }\r\n\r\n        var jsontext;\r\n        // FIXME: you can just use child.nodeValue (it is supported by all browsers) instead of .text or .textContent\r\n        if (spt.browser.is_IE()) {\r\n            jsontext = child.text;\r\n        }\r\n        else {\r\n            jsontext = child.textContent;\r\n        }\r\n\r\n        if (jsontext == \"OK\") {\r\n            return ret_val;\r\n        }\r\n                \r\n        var value;\r\n        try {\r\n            value = JSON.parse(jsontext);\r\n        } catch(e) {\r\n            // assume it is just a string\r\n            value = jsontext;\r\n            if (func_name != 'start') {\r\n\r\n                ret_val = ret_val.responseText;\r\n                var patt = /faultCode/g;\r\n                if(patt.test(ret_val)) {\r\n                    spt.exception.handle_fault_response( ret_val );\r\n                }\r\n                else{\r\n                    alert(\"Error parsing [\" + value + \"]\");\r\n                }\r\n                return {};\r\n            }\r\n        }\r\n\r\n        if (typeof(value) == \"undefined\") {\r\n            alert(\"Value returned from server is undefined\");\r\n            return {};\r\n        }\r\n        if (value && value.status == \"ERROR\") {\r\n            throw value;\r\n        }\r\n\r\n        return value;\r\n    }\r\n\r\n} \r\n\r\n/*\r\n * Treats the server stub as a singleton and allows you to retrieve the\r\n * same reference from various parts of the code.\r\n */\r\nTacticServerStub.server = null;\r\nTacticServerStub.servers = {};\r\nTacticServerStub.get = function(name) {\r\n    if (!name) {\r\n        name = \"default\";\r\n    }\r\n    this.server = this.servers[name];\r\n\r\n    if (this.server == null) {\r\n        this.server = new TacticServerStub();\r\n        this.servers[name] = this.server;\r\n\r\n        let env = spt.Environment.get();\r\n        let login_ticket = env.get_ticket();\r\n        let url = env.get_api_url();\r\n        let site = env.get_site();\r\n        let project_code = env.get_project();\r\n\r\n        let location = document.location;\r\n        let server = location.protocol + \"//\" + location.host;\r\n        this.server.set_server(server)\r\n\r\n        this.server.set_ticket(login_ticket);\r\n        this.server.set_site(site);\r\n        this.server.set_project(project_code);\r\n    }\r\n    return this.server;\r\n}\r\n\r\nTacticServerStub.get_master = function(name) {\r\n    var env = spt.Environment.get();\r\n    var master_slave_setup = env.get_master_enabled();\r\n\r\n    if (!name) {\r\n        name = \"default\";\r\n    }\r\n\r\n    if (['true', true].indexOf(master_slave_setup) > -1) {\r\n        this.server = new TacticServerStub();\r\n        this.servers[name] = this.server;\r\n\r\n        var master_slave_setup = env.get_master_enabled();\r\n        var url = env.get_master_url();\r\n        var login_ticket = env.get_master_login_ticket();\r\n        var site = env.get_master_site();\r\n        var project_code = env.get_master_project_code();\r\n\r\n        this.server.set_url(url);\r\n        this.server.set_ticket(login_ticket);\r\n        this.server.set_site(site);\r\n        this.server.set_project(project_code);\r\n        this.server.set_transaction_ticket(login_ticket);\r\n    } else {\r\n        this.server = this.get(name); \r\n    }\r\n    return this.server;\r\n}\r\n\r\n\r\nTACTIC = TacticServerStub;\r\n\r\n\r\n\r\n";
 //#endregion
 //#region ../src/tactic_stream/compatibility/table_action_runtime.js?raw
-var table_action_runtime_default = "// A logical table context for the original client API. No DOM or HTML engine.\nfunction runTableAction(execute, context, call, feedback) {\n    // The original SDK's split_search_key uses this MooTools String helper.\n    if (typeof String.prototype.test !== 'function')\n        Object.defineProperty(String.prototype, 'test', {\n            value: function (regex, params) {\n                return (\n                    Object.prototype.toString.call(regex) === '[object RegExp]'\n                        ? regex\n                        : new RegExp(String(regex), params)\n                ).test(String(this));\n            },\n            configurable: true,\n            writable: true\n        });\n    context = Object.assign({}, context);\n    context.searchKeys =\n        (context.searchKeys || []).indexOf(context.searchKey) >= 0\n            ? context.searchKeys.slice()\n            : [context.searchKey];\n    var commands = [],\n        callbacks = [],\n        calls = 0,\n        confirmationUsed = false;\n    var waiting = null;\n    function emit(command) {\n        commands.push(command);\n    }\n    function message(text) {\n        emit({ type: 'message', text: String(text) });\n    }\n    function confirmAction(text) {\n        text = String(text);\n        if (\n            context.confirmation &&\n            !confirmationUsed &&\n            context.confirmation.message === text\n        ) {\n            confirmationUsed = true;\n            return !!context.confirmation.accepted;\n        }\n        // Re-execution is safe only before the first API request. Never replay writes.\n        if (calls || confirmationUsed)\n            throw new Error(\n                'Confirm before making server calls. Only one confirmation per table action is supported.'\n            );\n        waiting = text;\n        throw new Error('Table confirmation required');\n    }\n    var selectors = [\n        '.spt_table_row',\n        '.spt_layout',\n        '.spt_table_top',\n        '.spt_table',\n        '.spt_tab_top',\n        '.spt_table_tbody',\n        '.spt_panel_user_top',\n        'td'\n    ];\n    function logicalRow(searchKey) {\n        var attributes = {\n            search_key: searchKey,\n            spt_search_key: searchKey,\n            spt_search_key_v2: searchKey,\n            spt_search_type: context.searchType,\n            spt_element_name: context.column,\n            spt_view: context.view,\n            spt_version: '2'\n        };\n        var item = {\n            getParent: function (selector) {\n                if (selectors.indexOf(selector) < 0)\n                    throw new Error('Unsupported table selector: ' + selector);\n                return item;\n            },\n            getAttribute: function (name) {\n                if (!Object.prototype.hasOwnProperty.call(attributes, name))\n                    throw new Error('Unsupported table attribute: ' + name);\n                return attributes[name];\n            },\n            hasClass: function (name) {\n                return selectors.indexOf('.' + name) >= 0;\n            },\n            toJSON: function () {\n                return attributes;\n            }\n        };\n        return item;\n    }\n    var row = logicalRow(context.searchKey);\n    var layout = context.layoutState\n        ? JSON.parse(JSON.stringify(context.layoutState))\n        : null;\n    var logicalDocument = {};\n    function option(text, value) {\n        this.text = String(text);\n        this.value = String(value);\n    }\n    if (layout) {\n        layout.controls = layout.controls || [];\n        layout.root = layout.root || {};\n        function control(item) {\n            var value = Object.assign({}, item);\n            value.getParent = function (selector) {\n                if (selector !== '.spt_top')\n                    throw new Error('Unsupported layout selector: ' + selector);\n                return top;\n            };\n            value.getElement = function (selector) {\n                var found = controls.filter(function (entry) {\n                    return '.' + entry.selector === selector;\n                })[0];\n                if (!found)\n                    throw new Error(\n                        'Layout control is unavailable: ' + selector\n                    );\n                return found;\n            };\n            return value;\n        }\n        var top = control(layout.root),\n            controls = layout.controls.map(control);\n        top.getParent = function (selector) {\n            if (selector !== '.spt_top')\n                throw new Error('Unsupported layout selector: ' + selector);\n            return top;\n        };\n        Object.defineProperty(top, 'innerHTML', {\n            get: function () {\n                return '__native_layout__';\n            }\n        });\n        controls.forEach(function (item) {\n            if (item.kind === 'choice') {\n                item.options = item.options || [];\n                Object.defineProperty(item, 'value', {\n                    get: function () {\n                        return (\n                            item.selectedValue ||\n                            (item.options[0] || {}).value ||\n                            ''\n                        );\n                    },\n                    set: function (value) {\n                        item.selectedValue = String(value);\n                    }\n                });\n                if (layout.form) {\n                    logicalDocument[layout.form] =\n                        logicalDocument[layout.form] || {};\n                    logicalDocument[layout.form][item.name] = item;\n                }\n            }\n        });\n        row =\n            controls.filter(function (item) {\n                return item.selector === context.layoutTrigger;\n            })[0] || top;\n    }\n    function busy(title, detail) {\n        if (feedback) feedback(String(title || ''), String(detail || ''));\n    }\n    function open(title, className, options, geometry) {\n        var command = {\n            type: 'open',\n            title: String(title || ''),\n            className: String(className || ''),\n            options: options || {},\n            geometry: geometry || {}\n        };\n        emit(command);\n        var popup = {};\n        Object.defineProperty(popup, 'on_save_cbk', {\n            set: function (callback) {\n                var source = String(callback).replace(/\\s+/g, '');\n                if (\n                    !/^function\\(\\)\\{spt\\.tab\\.set_tab_top\\([\\w$]+\\);spt\\.tab\\.reload_selected\\(\\);?\\}$/.test(\n                        source\n                    )\n                ) {\n                    throw new Error(\n                        'Only a table refresh is supported for a legacy popup save callback'\n                    );\n                }\n                command.refreshOnSave = true;\n            }\n        });\n        return popup;\n    }\n    var spt = {\n        panel: {\n            load_popup: open,\n            refresh: function () {\n                emit({ type: 'refresh' });\n            }\n        },\n        table: {\n            get_selected_search_keys: function () {\n                return context.searchKeys.slice();\n            },\n            get_selected_codes: function () {\n                return context.searchKeys.map(function (key) {\n                    var record =\n                        (context.records || {})[key] ||\n                        (key === context.searchKey ? context.record : null);\n                    if (!record || !record.code)\n                        throw new Error('The selected record has no code');\n                    return record.code;\n                });\n            },\n            get_selected_rows: function () {\n                return context.searchKeys.map(logicalRow);\n            },\n            // The adapter already captures this table/tab; these select the same logical scope.\n            set_layout: function () {},\n            get_layout: function () {\n                return row;\n            }\n        },\n        dg_table: {\n            get_element_value: function (element, name) {\n                return context.record[name];\n            }\n        },\n        tab: {\n            set_tab_top: function () {},\n            set_main_body_tab: function () {},\n            set_main_body_top: function () {},\n            reload_selected: function () {\n                emit({ type: 'refresh' });\n            },\n            add_new: function (key, title, className, options) {\n                open(title, className, options);\n                commands[commands.length - 1].tabKey = String(key);\n            }\n        },\n        api: {\n            app_busy_show: busy,\n            app_busy_hide: function () {\n                busy('');\n            }\n        },\n        app_busy: {\n            show: busy,\n            hide: function () {\n                busy('');\n            }\n        },\n        alert: message,\n        notify: { show_message: message },\n        exception: {\n            handler: function (error) {\n                return String((error && error.message) || error);\n            }\n        },\n        get_event_target: function () {\n            return row;\n        },\n        Environment: {\n            get: function () {\n                return {\n                    get_user: function () {\n                        if (!context.layoutUser)\n                            throw new Error(\n                                'The current layout user is unavailable'\n                            );\n                        return context.layoutUser;\n                    }\n                };\n            }\n        },\n        popup: {\n            get_popup: function () {\n                if (!layout) throw new Error('No layout popup');\n                return top;\n            },\n            close: function (value) {\n                if (value !== top) throw new Error('Unknown layout popup');\n                emit({ type: 'close-layout' });\n            }\n        }\n    };\n    var server = new TacticServerStub();\n    server.set_project(context.project);\n    server._delegate = function (\n        method,\n        passedArgs,\n        kwargs,\n        returnType,\n        callback,\n        failed\n    ) {\n        if (waiting !== null) throw new Error('Table confirmation required');\n        if (\n            method.charAt(0) === '_' ||\n            ['get_ticket', 'get_ticket_data'].indexOf(method) >= 0\n        )\n            throw new Error(\n                'Authentication methods are unavailable in table actions'\n            );\n        var args = Array.prototype.slice.call(passedArgs || []);\n        if (\n            args.length &&\n            (args[args.length - 1] === undefined ||\n                (kwargs && args[args.length - 1] === kwargs))\n        )\n            args.pop();\n        calls++;\n        try {\n            var result = call(method, args, kwargs || {}, server.get_project());\n            if (callback) {\n                callbacks.push(function () {\n                    callback(result);\n                });\n                return;\n            }\n            return returnType === 'string' && typeof result !== 'string'\n                ? JSON.stringify(result)\n                : result;\n        } catch (error) {\n            if (!failed) throw error;\n            callbacks.push(function () {\n                failed(error);\n            });\n        }\n    };\n    var api = {\n        get: function () {\n            return server;\n        }\n    };\n    var bvr = {\n        search_key: context.searchKey,\n        kwargs: { search_key: context.searchKey, view: context.view },\n        src_el: row\n    };\n    var output;\n    try {\n        output = execute(\n            bvr,\n            { target: row },\n            spt,\n            api,\n            message,\n            {\n                log: function () {\n                    emit({\n                        type: 'log',\n                        text: Array.prototype.map\n                            .call(arguments, String)\n                            .join(' ')\n                    });\n                }\n            },\n            {\n                open: function (url) {\n                    var command = { type: 'url', url: String(url) },\n                        report = false;\n                    emit(command);\n                    return {\n                        document: {\n                            writeln: function (value) {\n                                if (!layout || value !== '__native_layout__')\n                                    throw new Error(\n                                        'Only the native layout can be printed'\n                                    );\n                                commands.splice(commands.indexOf(command), 1);\n                                report = true;\n                            },\n                            close: function () {}\n                        },\n                        focus: function () {},\n                        close: function () {},\n                        print: function () {\n                            if (!report)\n                                throw new Error('No native report to print');\n                            emit({ type: 'print-layout' });\n                        }\n                    };\n                }\n            },\n            confirmAction,\n            logicalDocument,\n            option\n        );\n        if (output && typeof output.then === 'function')\n            throw new Error(\n                'Promise results are not supported by legacy table actions'\n            );\n        while (callbacks.length) callbacks.shift()();\n    } catch (error) {\n        if (waiting !== null)\n            return { confirmation: waiting, commands: [], calls: calls };\n        throw error;\n    }\n    if (waiting !== null)\n        return { confirmation: waiting, commands: [], calls: calls };\n    if (layout) {\n        var serial = function (item) {\n            var result = {};\n            Object.keys(item).forEach(function (key) {\n                if (typeof item[key] !== 'function') result[key] = item[key];\n            });\n            return result;\n        };\n        emit({\n            type: 'layout-state',\n            state: {\n                form: layout.form,\n                root: serial(top),\n                controls: controls.map(serial)\n            }\n        });\n    }\n    return JSON.parse(\n        JSON.stringify(\n            {\n                commands: commands,\n                output: output === undefined ? null : output,\n                calls: calls\n            },\n            function (key, value) {\n                if (\n                    typeof value === 'function' ||\n                    (typeof value === 'number' && !isFinite(value))\n                )\n                    throw new Error(\n                        'Table action output must contain JSON values'\n                    );\n                return value;\n            }\n        )\n    );\n}\n";
+var table_action_runtime_default = "// A logical table context for the original client API. No DOM or HTML engine.\r\nfunction runTableAction(execute, context, call, feedback) {\r\n    // The original SDK's split_search_key uses this MooTools String helper.\r\n    if (typeof String.prototype.test !== 'function')\r\n        Object.defineProperty(String.prototype, 'test', {\r\n            value: function (regex, params) {\r\n                return (\r\n                    Object.prototype.toString.call(regex) === '[object RegExp]'\r\n                        ? regex\r\n                        : new RegExp(String(regex), params)\r\n                ).test(String(this));\r\n            },\r\n            configurable: true,\r\n            writable: true\r\n        });\r\n    context = Object.assign({}, context);\r\n    context.searchKeys =\r\n        (context.searchKeys || []).indexOf(context.searchKey) >= 0\r\n            ? context.searchKeys.slice()\r\n            : [context.searchKey];\r\n    var commands = [],\r\n        callbacks = [],\r\n        calls = 0,\r\n        confirmationUsed = false;\r\n    var waiting = null;\r\n    function emit(command) {\r\n        commands.push(command);\r\n    }\r\n    function message(text) {\r\n        emit({ type: 'message', text: String(text) });\r\n    }\r\n    function confirmAction(text) {\r\n        text = String(text);\r\n        if (\r\n            context.confirmation &&\r\n            !confirmationUsed &&\r\n            context.confirmation.message === text\r\n        ) {\r\n            confirmationUsed = true;\r\n            return !!context.confirmation.accepted;\r\n        }\r\n        // Re-execution is safe only before the first API request. Never replay writes.\r\n        if (calls || confirmationUsed)\r\n            throw new Error(\r\n                'Confirm before making server calls. Only one confirmation per table action is supported.'\r\n            );\r\n        waiting = text;\r\n        throw new Error('Table confirmation required');\r\n    }\r\n    var selectors = [\r\n        '.spt_table_row',\r\n        '.spt_layout',\r\n        '.spt_table_top',\r\n        '.spt_table',\r\n        '.spt_tab_top',\r\n        '.spt_table_tbody',\r\n        '.spt_panel_user_top',\r\n        'td'\r\n    ];\r\n    function logicalRow(searchKey) {\r\n        var attributes = {\r\n            search_key: searchKey,\r\n            spt_search_key: searchKey,\r\n            spt_search_key_v2: searchKey,\r\n            spt_search_type: context.searchType,\r\n            spt_element_name: context.column,\r\n            spt_view: context.view,\r\n            spt_version: '2'\r\n        };\r\n        var item = {\r\n            getParent: function (selector) {\r\n                if (selectors.indexOf(selector) < 0)\r\n                    throw new Error('Unsupported table selector: ' + selector);\r\n                return item;\r\n            },\r\n            getAttribute: function (name) {\r\n                if (!Object.prototype.hasOwnProperty.call(attributes, name))\r\n                    throw new Error('Unsupported table attribute: ' + name);\r\n                return attributes[name];\r\n            },\r\n            hasClass: function (name) {\r\n                return selectors.indexOf('.' + name) >= 0;\r\n            },\r\n            toJSON: function () {\r\n                return attributes;\r\n            }\r\n        };\r\n        return item;\r\n    }\r\n    var row = logicalRow(context.searchKey);\r\n    var layout = context.layoutState\r\n        ? JSON.parse(JSON.stringify(context.layoutState))\r\n        : null;\r\n    var logicalDocument = {};\r\n    function option(text, value) {\r\n        this.text = String(text);\r\n        this.value = String(value);\r\n    }\r\n    if (layout) {\r\n        layout.controls = layout.controls || [];\r\n        layout.root = layout.root || {};\r\n        function control(item) {\r\n            var value = Object.assign({}, item);\r\n            value.getParent = function (selector) {\r\n                if (selector !== '.spt_top')\r\n                    throw new Error('Unsupported layout selector: ' + selector);\r\n                return top;\r\n            };\r\n            value.getElement = function (selector) {\r\n                var found = controls.filter(function (entry) {\r\n                    return '.' + entry.selector === selector;\r\n                })[0];\r\n                if (!found)\r\n                    throw new Error(\r\n                        'Layout control is unavailable: ' + selector\r\n                    );\r\n                return found;\r\n            };\r\n            return value;\r\n        }\r\n        var top = control(layout.root),\r\n            controls = layout.controls.map(control);\r\n        top.getParent = function (selector) {\r\n            if (selector !== '.spt_top')\r\n                throw new Error('Unsupported layout selector: ' + selector);\r\n            return top;\r\n        };\r\n        Object.defineProperty(top, 'innerHTML', {\r\n            get: function () {\r\n                return '__native_layout__';\r\n            }\r\n        });\r\n        controls.forEach(function (item) {\r\n            if (item.kind === 'choice') {\r\n                item.options = item.options || [];\r\n                Object.defineProperty(item, 'value', {\r\n                    get: function () {\r\n                        return (\r\n                            item.selectedValue ||\r\n                            (item.options[0] || {}).value ||\r\n                            ''\r\n                        );\r\n                    },\r\n                    set: function (value) {\r\n                        item.selectedValue = String(value);\r\n                    }\r\n                });\r\n                if (layout.form) {\r\n                    logicalDocument[layout.form] =\r\n                        logicalDocument[layout.form] || {};\r\n                    logicalDocument[layout.form][item.name] = item;\r\n                }\r\n            }\r\n        });\r\n        row =\r\n            controls.filter(function (item) {\r\n                return item.selector === context.layoutTrigger;\r\n            })[0] || top;\r\n    }\r\n    function busy(title, detail) {\r\n        if (feedback) feedback(String(title || ''), String(detail || ''));\r\n    }\r\n    function open(title, className, options, geometry) {\r\n        var command = {\r\n            type: 'open',\r\n            title: String(title || ''),\r\n            className: String(className || ''),\r\n            options: options || {},\r\n            geometry: geometry || {}\r\n        };\r\n        emit(command);\r\n        var popup = {};\r\n        Object.defineProperty(popup, 'on_save_cbk', {\r\n            set: function (callback) {\r\n                var source = String(callback).replace(/\\s+/g, '');\r\n                if (\r\n                    !/^function\\(\\)\\{spt\\.tab\\.set_tab_top\\([\\w$]+\\);spt\\.tab\\.reload_selected\\(\\);?\\}$/.test(\r\n                        source\r\n                    )\r\n                ) {\r\n                    throw new Error(\r\n                        'Only a table refresh is supported for a legacy popup save callback'\r\n                    );\r\n                }\r\n                command.refreshOnSave = true;\r\n            }\r\n        });\r\n        return popup;\r\n    }\r\n    var spt = {\r\n        panel: {\r\n            load_popup: open,\r\n            refresh: function () {\r\n                emit({ type: 'refresh' });\r\n            }\r\n        },\r\n        table: {\r\n            get_selected_search_keys: function () {\r\n                return context.searchKeys.slice();\r\n            },\r\n            get_selected_codes: function () {\r\n                return context.searchKeys.map(function (key) {\r\n                    var record =\r\n                        (context.records || {})[key] ||\r\n                        (key === context.searchKey ? context.record : null);\r\n                    if (!record || !record.code)\r\n                        throw new Error('The selected record has no code');\r\n                    return record.code;\r\n                });\r\n            },\r\n            get_selected_rows: function () {\r\n                return context.searchKeys.map(logicalRow);\r\n            },\r\n            // The adapter already captures this table/tab; these select the same logical scope.\r\n            set_layout: function () {},\r\n            get_layout: function () {\r\n                return row;\r\n            }\r\n        },\r\n        dg_table: {\r\n            get_element_value: function (element, name) {\r\n                return context.record[name];\r\n            }\r\n        },\r\n        tab: {\r\n            set_tab_top: function () {},\r\n            set_main_body_tab: function () {},\r\n            set_main_body_top: function () {},\r\n            reload_selected: function () {\r\n                emit({ type: 'refresh' });\r\n            },\r\n            add_new: function (key, title, className, options) {\r\n                open(title, className, options);\r\n                commands[commands.length - 1].tabKey = String(key);\r\n            }\r\n        },\r\n        api: {\r\n            app_busy_show: busy,\r\n            app_busy_hide: function () {\r\n                busy('');\r\n            }\r\n        },\r\n        app_busy: {\r\n            show: busy,\r\n            hide: function () {\r\n                busy('');\r\n            }\r\n        },\r\n        alert: message,\r\n        notify: { show_message: message },\r\n        exception: {\r\n            handler: function (error) {\r\n                return String((error && error.message) || error);\r\n            }\r\n        },\r\n        get_event_target: function () {\r\n            return row;\r\n        },\r\n        Environment: {\r\n            get: function () {\r\n                return {\r\n                    get_user: function () {\r\n                        if (!context.layoutUser)\r\n                            throw new Error(\r\n                                'The current layout user is unavailable'\r\n                            );\r\n                        return context.layoutUser;\r\n                    }\r\n                };\r\n            }\r\n        },\r\n        popup: {\r\n            get_popup: function () {\r\n                if (!layout) throw new Error('No layout popup');\r\n                return top;\r\n            },\r\n            close: function (value) {\r\n                if (value !== top) throw new Error('Unknown layout popup');\r\n                emit({ type: 'close-layout' });\r\n            }\r\n        }\r\n    };\r\n    var server = new TacticServerStub();\r\n    server.set_project(context.project);\r\n    server._delegate = function (\r\n        method,\r\n        passedArgs,\r\n        kwargs,\r\n        returnType,\r\n        callback,\r\n        failed\r\n    ) {\r\n        if (waiting !== null) throw new Error('Table confirmation required');\r\n        if (\r\n            method.charAt(0) === '_' ||\r\n            ['get_ticket', 'get_ticket_data'].indexOf(method) >= 0\r\n        )\r\n            throw new Error(\r\n                'Authentication methods are unavailable in table actions'\r\n            );\r\n        var args = Array.prototype.slice.call(passedArgs || []);\r\n        if (\r\n            args.length &&\r\n            (args[args.length - 1] === undefined ||\r\n                (kwargs && args[args.length - 1] === kwargs))\r\n        )\r\n            args.pop();\r\n        calls++;\r\n        try {\r\n            var result = call(method, args, kwargs || {}, server.get_project());\r\n            if (callback) {\r\n                callbacks.push(function () {\r\n                    callback(result);\r\n                });\r\n                return;\r\n            }\r\n            return returnType === 'string' && typeof result !== 'string'\r\n                ? JSON.stringify(result)\r\n                : result;\r\n        } catch (error) {\r\n            if (!failed) throw error;\r\n            callbacks.push(function () {\r\n                failed(error);\r\n            });\r\n        }\r\n    };\r\n    var api = {\r\n        get: function () {\r\n            return server;\r\n        }\r\n    };\r\n    var bvr = {\r\n        search_key: context.searchKey,\r\n        kwargs: { search_key: context.searchKey, view: context.view },\r\n        src_el: row\r\n    };\r\n    var output;\r\n    try {\r\n        output = execute(\r\n            bvr,\r\n            { target: row },\r\n            spt,\r\n            api,\r\n            message,\r\n            {\r\n                log: function () {\r\n                    emit({\r\n                        type: 'log',\r\n                        text: Array.prototype.map\r\n                            .call(arguments, String)\r\n                            .join(' ')\r\n                    });\r\n                }\r\n            },\r\n            {\r\n                open: function (url) {\r\n                    var command = { type: 'url', url: String(url) },\r\n                        report = false;\r\n                    emit(command);\r\n                    return {\r\n                        document: {\r\n                            writeln: function (value) {\r\n                                if (!layout || value !== '__native_layout__')\r\n                                    throw new Error(\r\n                                        'Only the native layout can be printed'\r\n                                    );\r\n                                commands.splice(commands.indexOf(command), 1);\r\n                                report = true;\r\n                            },\r\n                            close: function () {}\r\n                        },\r\n                        focus: function () {},\r\n                        close: function () {},\r\n                        print: function () {\r\n                            if (!report)\r\n                                throw new Error('No native report to print');\r\n                            emit({ type: 'print-layout' });\r\n                        }\r\n                    };\r\n                }\r\n            },\r\n            confirmAction,\r\n            logicalDocument,\r\n            option\r\n        );\r\n        if (output && typeof output.then === 'function')\r\n            throw new Error(\r\n                'Promise results are not supported by legacy table actions'\r\n            );\r\n        while (callbacks.length) callbacks.shift()();\r\n    } catch (error) {\r\n        if (waiting !== null)\r\n            return { confirmation: waiting, commands: [], calls: calls };\r\n        throw error;\r\n    }\r\n    if (waiting !== null)\r\n        return { confirmation: waiting, commands: [], calls: calls };\r\n    if (layout) {\r\n        var serial = function (item) {\r\n            var result = {};\r\n            Object.keys(item).forEach(function (key) {\r\n                if (typeof item[key] !== 'function') result[key] = item[key];\r\n            });\r\n            return result;\r\n        };\r\n        emit({\r\n            type: 'layout-state',\r\n            state: {\r\n                form: layout.form,\r\n                root: serial(top),\r\n                controls: controls.map(serial)\r\n            }\r\n        });\r\n    }\r\n    return JSON.parse(\r\n        JSON.stringify(\r\n            {\r\n                commands: commands,\r\n                output: output === undefined ? null : output,\r\n                calls: calls\r\n            },\r\n            function (key, value) {\r\n                if (\r\n                    typeof value === 'function' ||\r\n                    (typeof value === 'number' && !isFinite(value))\r\n                )\r\n                    throw new Error(\r\n                        'Table action output must contain JSON values'\r\n                    );\r\n                return value;\r\n            }\r\n        )\r\n    );\r\n}\r\n";
 //#endregion
 //#region src/features/interface/tableScript.js
 async function runTableScript(source, context, { ticket, signal, confirm, progress }) {
@@ -21055,7 +21132,7 @@ var _sfc_main$116 = {
 		watch(() => scene.value.canvasBoxes, (boxes) => emit("canvasBoxes", boxes || []), { immediate: true });
 		const views = computed(() => ({
 			canvasOverlay: {
-				component: _sfc_main$156,
+				component: _sfc_main$155,
 				props: {
 					boxes: scene.value.canvasBoxes || [],
 					selected: props.selectedBlock,
@@ -21088,7 +21165,7 @@ var _sfc_main$116 = {
 				}
 			},
 			layoutMarkdown: {
-				component: _sfc_main$164,
+				component: _sfc_main$163,
 				nodeProps: true,
 				props: { inert: props.editing ? true : void 0 }
 			},
@@ -22320,7 +22397,7 @@ var _sfc_main$111 = {
 				})])) : createCommentVNode("", true),
 				!compact.value && __props.editor.plans.length > 1 ? (openBlock(), createElementBlock("p", _hoisted_3$30, toDisplayString(unref(t)("Apply to {count} rows", { count: __props.editor.plans.length })), 1)) : createCommentVNode("", true),
 				(openBlock(true), createElementBlock(Fragment, null, renderList(__props.editor.fields, (field) => {
-					return openBlock(), createElementBlock("label", { key: field.name }, [!compact.value ? (openBlock(), createElementBlock("span", _hoisted_4$22, toDisplayString(unref(t)(field.name === "status" ? "Status" : field.name === "assigned" ? "Assigned to" : field.name === "bid_start_date" ? "Start date" : "End date")), 1)) : createCommentVNode("", true), createVNode(_sfc_main$143, {
+					return openBlock(), createElementBlock("label", { key: field.name }, [!compact.value ? (openBlock(), createElementBlock("span", _hoisted_4$22, toDisplayString(unref(t)(field.name === "status" ? "Status" : field.name === "assigned" ? "Assigned to" : field.name === "bid_start_date" ? "Start date" : "End date")), 1)) : createCommentVNode("", true), createVNode(_sfc_main$142, {
 						field,
 						compact: compact.value,
 						value: __props.editor.values[field.name],
@@ -30382,7 +30459,7 @@ var _sfc_main$92 = {
 			return openBlock(), createElementBlock("div", {
 				class: "task-detail-value",
 				"data-task-field": __props.field.name
-			}, [__props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$145, {
+			}, [__props.field.name === "status" ? (openBlock(), createBlock(_sfc_main$144, {
 				key: 0,
 				value: __props.editor.values.status || "",
 				options: __props.editor.statusChoices,
@@ -30417,7 +30494,7 @@ var _sfc_main$92 = {
 				"label",
 				"model-value",
 				"disabled"
-			])) : __props.field.name === "milestone_code" ? (openBlock(), createElementBlock("div", _hoisted_2$34, [createVNode(_sfc_main$143, {
+			])) : __props.field.name === "milestone_code" ? (openBlock(), createElementBlock("div", _hoisted_2$34, [createVNode(_sfc_main$142, {
 				field: __props.field,
 				value: __props.editor.values[__props.field.name],
 				catalog: __props.editor.catalog,
@@ -30434,7 +30511,7 @@ var _sfc_main$92 = {
 				"icon-only": "",
 				disabled: __props.busy,
 				onClick: _cache[4] || (_cache[4] = ($event) => emit("milestones"))
-			}, null, 8, ["disabled"])])) : (openBlock(), createBlock(_sfc_main$143, {
+			}, null, 8, ["disabled"])])) : (openBlock(), createBlock(_sfc_main$142, {
 				key: 4,
 				field: __props.field,
 				value: __props.editor.values[__props.field.name],
@@ -32357,7 +32434,7 @@ var _sfc_main$85 = {
 			else emit(action.type);
 		}
 		const status = markRaw({ setup() {
-			return () => h(_sfc_main$145, {
+			return () => h(_sfc_main$144, {
 				value: props.form?.mixed.includes("status") && !props.form.set.includes("status") ? "" : props.form?.values.status,
 				options: props.form?.statusChoices || [],
 				placeholder: props.form?.mixed.includes("status") && !props.form.set.includes("status") ? t("Mixed status") : "",
@@ -32418,7 +32495,7 @@ var _sfc_main$85 = {
 				"close-on-select": false,
 				label: "Edit selected tasks"
 			}, {
-				default: withCtx(() => [moreEditor.value ? (openBlock(), createBlock(_sfc_main$142, {
+				default: withCtx(() => [moreEditor.value ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 0,
 					role: "group",
 					"aria-label": unref(t)("Bulk fields"),
@@ -33022,7 +33099,7 @@ var _sfc_main$76 = {
 			if (task && !task.deleting) emit("enter", task);
 		}
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$151, {
+			return openBlock(), createBlock(_sfc_main$150, {
 				class: "mobile-tasks",
 				"aria-label": unref(t)("Project tasks"),
 				"screen-key": __props.task?.key || "root",
@@ -33062,7 +33139,7 @@ var _sfc_main$76 = {
 						onClick: _cache[1] || (_cache[1] = ($event) => actions(__props.task, $event))
 					}, null, 8, ["disabled"])
 				])) : createCommentVNode("", true)]),
-				default: withCtx(() => [__props.task ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [__props.busy ? (openBlock(), createElementBlock("p", _hoisted_3$24, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true), __props.task.deleting ? (openBlock(), createElementBlock("p", _hoisted_4$17, toDisplayString(unref(t)("Pending task changes")), 1)) : __props.editor ? (openBlock(), createBlock(_sfc_main$142, {
+				default: withCtx(() => [__props.task ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [__props.busy ? (openBlock(), createElementBlock("p", _hoisted_3$24, toDisplayString(unref(t)("Loading data…")), 1)) : createCommentVNode("", true), __props.task.deleting ? (openBlock(), createElementBlock("p", _hoisted_4$17, toDisplayString(unref(t)("Pending task changes")), 1)) : __props.editor ? (openBlock(), createBlock(_sfc_main$141, {
 					key: 2,
 					immediate: "",
 					editor: __props.editor,
@@ -34713,7 +34790,7 @@ var _sfc_main$67 = {
 		Timesheet: Timesheet_default,
 		TaskWorkspaceTable: _sfc_main$87,
 		MobileTasks: _sfc_main$76,
-		TaskWorkspaceEditor: _sfc_main$142,
+		TaskWorkspaceEditor: _sfc_main$141,
 		TaskWorkspaceFilters: _sfc_main$74,
 		TaskWorkspaceScope: _sfc_main$73,
 		TaskGanttView,
@@ -52998,7 +53075,7 @@ var _sfc_main$20 = {
 						forwarded: true,
 						onActivate: () => emit("action", "original", props.row.__forwarded_from__)
 					});
-					else if (part === "previews") content = h("div", { class: "message-skey-previews" }, keys.value.map((key) => h(_sfc_main$131, {
+					else if (part === "previews") content = h("div", { class: "message-skey-previews" }, keys.value.map((key) => h(_sfc_main$130, {
 						key,
 						preview: props.previews?.[key] || skeyPlaceholder(key),
 						previews: props.previews,
@@ -53007,7 +53084,7 @@ var _sfc_main$20 = {
 						onRetry: (value) => emit("preview-retry", value),
 						onCopy: (value) => emit("copy-link", value)
 					})));
-					else if (part === "attachments") content = h(_sfc_main$133, {
+					else if (part === "attachments") content = h(_sfc_main$132, {
 						minimumCellWidth: metrics$2.minimumCellWidth,
 						preferredCellWidth: metrics$2.preferredCellWidth,
 						maximumColumns: metrics$2.maximumColumns
@@ -53274,7 +53351,7 @@ var _sfc_main$19 = {
 					overlay: ""
 				}, {
 					default: withCtx(() => [
-						unref(mobile) && __props.permissions.reaction ? (openBlock(), createBlock(_sfc_main$147, {
+						unref(mobile) && __props.permissions.reaction ? (openBlock(), createBlock(_sfc_main$146, {
 							key: 0,
 							"text-trigger": "",
 							label: "Add reaction",
@@ -53338,7 +53415,7 @@ var _sfc_main$19 = {
 						}, null, 8, ["disabled"])
 					]),
 					_: 1
-				}, 8, ["anchor"]), createVNode(_sfc_main$147, {
+				}, 8, ["anchor"]), createVNode(_sfc_main$146, {
 					ref_key: "reactionPicker",
 					ref: reactionPicker,
 					"external-trigger": "",
@@ -55644,7 +55721,7 @@ var _sfc_main$10 = {
 								"busy",
 								"upload"
 							]),
-							createVNode(_sfc_main$146, {
+							createVNode(_sfc_main$145, {
 								ref_key: "composer",
 								ref: composer,
 								modelValue: draft.value,
@@ -57523,7 +57600,7 @@ var _sfc_main$1 = {
 			topicsVisible: topicsVisible.value
 		}, data.value, viewport.value.width, viewport.value.height, appearance.language));
 		const models = computed(() => ({ helpTopics: scene.value.topicRows }));
-		const documentComponent = markRaw(_sfc_main$165);
+		const documentComponent = markRaw(_sfc_main$164);
 		const busyComponent = markRaw(BusyIndicator_default);
 		const captureDocument = (value) => {
 			documentView.value = value;
@@ -62944,6 +63021,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var App_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { roles as $, _sfc_main$116 as A, geometry$2 as At, duplicateProfile as B, captionedSwitch as C, appearances as Ct, changeDefinition as D, duplicate as Dt, _sfc_main$107 as E, copy as Et, ObjectAction_default as F, reorder$1 as Ft, alignment as G, _sfc_main$131 as H, _sfc_main$126 as I, reparent as It, toggle as J, roots as K, applyDuplicateProfile as L, siblings as Lt, zooms as M, layers as Mt, ResultPresentation_default as N, path as Nt, definitionWizard as O, fingerprint as Ot, RelatedObjects_default as P, remove$2 as Pt, edit$2 as Q, changeContent as R, sizing as Rt, _sfc_main$63 as S, add as St, _sfc_main$100 as T, change$7 as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$145 as W, actions$4 as X, spacingField as Y, describe$48 as Z, editColumn as _, filter as _t, updateModes as a, notices as at, describe$18 as b, scope as bt, runBrowserScript as c, tabs as ct, ProjectCreation_default as d, App_default as default, views as dt, serialize as et, ImagePicker_default as f, _sfc_main$166 as ft, describe$17 as g, fields$2 as gt, contentWidth as h, change$6 as ht, updateIntervals as i, documentEvent as it, controls$1 as j, kinds as jt, displayWidgets as k, geometries as kt, scriptTree as l, toolbar$4 as lt, change as m, actionLayout as mt, networkSettings as n, variants as nt, _sfc_main$26 as o, policy as ot, readPreviewImage as p, _sfc_main$171 as pt, selected as q, updateBatchDelays as r, widgets as rt, buttonId as s, sectionSelector as st, App_exports as t, template as tt, lifecycle as u, _sfc_main$158 as ut, fieldsFor as v, mode as vt, _sfc_main$98 as w, block as wt, pages as x, type as xt, confirmation$2 as y, options$1 as yt, contentChoices as z, spacing$1 as zt };
+export { roles as $, _sfc_main$116 as A, geometry$2 as At, duplicateProfile as B, captionedSwitch as C, appearances as Ct, changeDefinition as D, duplicate as Dt, _sfc_main$107 as E, copy as Et, ObjectAction_default as F, reorder$1 as Ft, alignment as G, _sfc_main$130 as H, _sfc_main$125 as I, reparent as It, toggle as J, roots as K, applyDuplicateProfile as L, siblings as Lt, zooms as M, layers as Mt, ResultPresentation_default as N, path as Nt, definitionWizard as O, fingerprint as Ot, RelatedObjects_default as P, remove$2 as Pt, edit$2 as Q, changeContent as R, sizing as Rt, _sfc_main$63 as S, add as St, _sfc_main$100 as T, change$7 as Tt, messageDate as U, saveDuplicateProfile as V, _sfc_main$144 as W, actions$4 as X, spacingField as Y, describe$48 as Z, editColumn as _, filter as _t, updateModes as a, notices as at, describe$18 as b, scope as bt, runBrowserScript as c, tabs as ct, ProjectCreation_default as d, App_default as default, views as dt, serialize as et, ImagePicker_default as f, _sfc_main$165 as ft, describe$17 as g, fields$2 as gt, contentWidth as h, change$6 as ht, updateIntervals as i, documentEvent as it, controls$1 as j, kinds as jt, displayWidgets as k, geometries as kt, scriptTree as l, toolbar$4 as lt, change as m, actionLayout as mt, networkSettings as n, variants as nt, _sfc_main$26 as o, policy as ot, readPreviewImage as p, _sfc_main$171 as pt, selected as q, updateBatchDelays as r, widgets as rt, buttonId as s, sectionSelector as st, App_exports as t, template as tt, lifecycle as u, _sfc_main$157 as ut, fieldsFor as v, mode as vt, _sfc_main$98 as w, block as wt, pages as x, type as xt, confirmation$2 as y, options$1 as yt, contentChoices as z, spacing$1 as zt };
 
 //# sourceMappingURL=App.js.map

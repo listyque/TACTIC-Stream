@@ -284,6 +284,26 @@ class Dashboards(unittest.TestCase):
     def tearDownClass(cls):
         test_transport.Transport.tearDownClass()
 
+    def test_scoped_suggestions_cross_the_http_boundary(self):
+        from urllib.request import Request, urlopen
+        from urllib.error import HTTPError
+        with test_transport.Transport.proxy(self) as proxy:
+            auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one')
+            rows = proxy.query(auth, 'contract/entity', [['code', '=', 'A']])
+            row = (ast.literal_eval(rows) if isinstance(rows, str) else rows)[0]
+        payload = dict(auth, search_type='contract/entity', keyword=row['name'], nested_scope=dict(
+            parent_key='sthpw/project?code=one', project_scope=True, filters=[['code', '=', 'A']]))
+        def request():
+            return urlopen(Request(self.url + '/admin/search-configuration/suggestions',
+                json.dumps(payload).encode(), headers={'Content-Type': 'application/json'}))
+        with request() as response:
+            self.assertEqual([item['code'] for item in json.load(response)['result']['records']], ['A'])
+        payload['nested_scope']['search_type'] = 'sthpw/login'
+        with self.assertRaises(HTTPError) as denied:
+            request()
+        self.assertEqual(denied.exception.code, 400)
+        denied.exception.close()
+
     def test_revision_idempotent_save_update_and_native_layout(self):
         with test_transport.Transport.proxy(self) as proxy:
             auth=dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')

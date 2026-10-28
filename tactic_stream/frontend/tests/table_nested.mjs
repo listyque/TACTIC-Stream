@@ -61,6 +61,18 @@ page.on('pageerror', (error) => errors.push(error.message));
 let reads = 0;
 let fileColumns = false;
 const queries = [];
+const suggestions = [];
+await page.route('**/admin/search-configuration/suggestions', async (route) => {
+  const payload = route.request().postDataJSON();
+  suggestions.push(payload);
+  await route.fulfill({
+    json: {
+      result: {
+        records: [{ title: 'B', description: 'Robot reference', code: 'B' }]
+      }
+    }
+  });
+});
 await page.route('**/admin/rpc', async (route) => {
   const request = route.request().postDataJSON();
   assert.equal(request.args[1], 'tactic.ui.table.NestedTableReadCmd');
@@ -192,8 +204,16 @@ try {
   assert.equal(queries.at(-1).offset, 0);
   assert.deepEqual(queries.at(-1).order_by, ['code asc']);
   const filterReads = reads;
-  await child.locator('[data-frame="nestedFilter"]').fill('B');
-  await child.locator('[data-frame="nestedReload"]').click();
+  const search = child.locator('[data-frame="nestedFilter"] input');
+  await search.fill('B');
+  await page.locator('.search-suggestions:popover-open').waitFor();
+  assert.equal(suggestions.at(-1).nested_scope.parent_key, 'demo/asset?code=A');
+  await search.press('ArrowDown');
+  assert.ok(
+    await search.getAttribute('aria-activedescendant'),
+    'ArrowDown highlights the native suggestion'
+  );
+  await search.press('Enter');
   await page.waitForFunction(
     ([prev]) =>
       !window.nestedFixture.state.children['demo/asset?code=A'].busy &&
@@ -201,7 +221,9 @@ try {
     [filterReads]
   );
   assert.equal(reads, filterReads + 1);
-  assert.deepEqual(queries.at(-1).filters, [['code', 'like', '%B%']]);
+  assert.deepEqual(queries.at(-1).filters, []);
+  assert.equal(queries.at(-1).keyword, 'B');
+  assert.equal(queries.at(-1).keyword_relation, '=');
   await child.locator('[data-frame="nestedCreate"]').click();
   assert.deepEqual(
     await page.evaluate(() => window.nestedFixture.edits.at(-1)),
@@ -219,16 +241,21 @@ try {
       window.nestedFixture.state.children['demo/asset?code=A'].filterField ===
       'file_name'
   );
-  await child.locator('[data-frame="nestedFilter"]').fill('reference.txt');
+  await search.fill('reference.txt');
   const fileReads = reads;
-  await child.locator('[data-frame="nestedReload"]').click();
+  await search.press('Enter');
   await page.waitForFunction(
     () => !window.nestedFixture.state.children['demo/asset?code=A'].busy
   );
   assert.equal(reads, fileReads + 1);
-  assert.deepEqual(queries.at(-1).filters, [
-    ['file_name', 'like', '%reference.txt%']
-  ]);
+  assert.equal(queries.at(-1).keyword, 'reference.txt');
+  assert.equal(queries.at(-1).keyword_relation, 'EQI');
+  await search.fill('');
+  await search.press('Enter');
+  await page.waitForFunction(
+    () => !window.nestedFixture.state.children['demo/asset?code=A'].busy
+  );
+  assert.equal(queries.at(-1).keyword, '');
   await child.locator('[data-frame="nestedClose"]').click();
   await page.evaluate(() => window.nestedFixture.summary());
   await root.locator('[data-frame="tableSummary_0"]').click();

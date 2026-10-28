@@ -2,6 +2,7 @@
 import { computed, ref, watch, onBeforeUnmount } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import ResultPresentation from '../workspace/ResultPresentation.vue';
+import WorkspaceSearch from '../workspace/WorkspaceSearch.vue';
 import { rpc } from '../../api.js';
 import { appearance } from '../../appearance.js';
 import * as Items from '../../../../src/tactic_stream/shared_ui/features/table/items.ui.mjs';
@@ -20,7 +21,10 @@ const records = ref([]),
   error = ref(''),
   hasMore = ref(false),
   state = ref({}),
-  definition = ref(null);
+  definition = ref(null),
+  searchText = ref(''),
+  keyword = ref(''),
+  searchRelation = ref('EQI');
 let generation = 0;
 const scene = computed(() =>
   Items.describe(
@@ -31,6 +35,29 @@ const scene = computed(() =>
   )
 );
 const views = computed(() => ({
+  itemSearch: {
+    component: WorkspaceSearch,
+    props: {
+      modelValue: searchText.value,
+      label: 'Search objects',
+      disabled: props.editing,
+      ticket: props.ticket,
+      project: props.project,
+      searchType: props.frameNode.items.searchType,
+      scope: {
+        parent_key: props.frameNode.items.parentKey,
+        view: props.frameNode.items.view,
+        project_scope: true,
+        filters: props.frameNode.items.filters
+      },
+      'onUpdate:modelValue': (value) => {
+        searchText.value = value;
+      },
+      onSearch: () => search(),
+      onAccept: (record) => search(record.title, '='),
+      onOpen: (record) => search(record.title, '=')
+    }
+  },
   itemResults: {
     component: ResultPresentation,
     props: {
@@ -58,6 +85,12 @@ const views = computed(() => ({
     }
   }
 }));
+function search(text = searchText.value, relation = 'EQI') {
+  searchText.value = keyword.value = text;
+  searchRelation.value = relation;
+  state.value = {};
+  load();
+}
 async function load(append = false) {
   if (!props.active) return;
   if (append && busy.value) return;
@@ -75,6 +108,8 @@ async function load(append = false) {
         parent_key: scope.parentKey,
         view: scope.view,
         filters: scope.filters,
+        keyword: keyword.value,
+        keyword_relation: searchRelation.value,
         project_scope: true,
         offset: append ? records.value.length : 0,
         limit: props.editing ? 3 : scope.initialLimit,
@@ -94,6 +129,22 @@ async function load(append = false) {
     if (current === generation) busy.value = false;
   }
 }
+watch(
+  () =>
+    JSON.stringify([
+      props.ticket,
+      props.project,
+      props.frameNode.items.searchType,
+      props.frameNode.items.parentKey,
+      props.frameNode.items.view
+    ]),
+  () => {
+    keyword.value = searchText.value = '';
+    searchRelation.value = 'EQI';
+    state.value = {};
+  },
+  { flush: 'sync' }
+);
 watch(
   () =>
     JSON.stringify([

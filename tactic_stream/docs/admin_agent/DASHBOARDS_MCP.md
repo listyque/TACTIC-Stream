@@ -52,12 +52,18 @@ row/column `gap` is 0..128px. Empty page/group drafts are supported.
 These values are compiled by the same renderer used in the page editor. A table may
 select `controls` from `search`, `searchLimit`, `shelf`, `selection`, `gear`,
 `insert`; omitted retains all ordinary controls, `[]` hides them. The native
-`shelf` owns the toolbar: use `["shelf", "search"]` for only filter/refresh,
+`shelf` owns the toolbar: use `["shelf", "search"]` for only native smart search/refresh,
 without create/column tools or selection. Use a short
 height and only useful controls for dashboard widgets. System task metrics and
 tables must explicitly filter `project_code` to the intended project.
 
 Use one `items` brick per dashboard, rooted in a project-owned Search Type.
+
+Items and tables reuse the normal search field and suggestion popup in both
+clients. Suggestions and execution preserve mandatory parent/project/page scope.
+Do not compose another plain-text filter for the same list; hide `search` on short
+summary tables and retain it on full lists. Enter executes the draft, while paging
+uses the last executed query. Common analytical filters remain separate conditions.
 
 For a navigator on the left and content on the right, put `items` (weight 4) and
 `details` (weight 8) in the same row. Inside `details`, use column groups with
