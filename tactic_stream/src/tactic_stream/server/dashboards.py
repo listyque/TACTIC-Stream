@@ -379,12 +379,14 @@ def dashboard_layout(document, view, search_key='', *, detail_key='', filter_val
             raise ValueError('Dashboard nesting exceeds six levels')
         nodes=[]
         for index, block in enumerate(blocks):
+            if depth and block.region != 'content':
+                raise ValueError('Page regions are only available for top-level blocks')
             block_path = path + (index,)
             if block.kind not in ('metric','chart','summary') and (block.group_by or block.aggregates or block.measure):
                 raise ValueError('Grouping and aggregates belong to report widgets')
 
             def emit(node):
-                node.update(editorPath=list(block_path), padding=block.padding,
+                node.update(editorPath=list(block_path), region=block.region, padding=block.padding,
                             margin=block.margin, gap=block.gap,
                             offsetX=block.offset_x, offsetY=block.offset_y,
                             appearance=block.appearance.model_dump(), sizing=block.sizing.model_dump(),

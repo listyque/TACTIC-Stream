@@ -1372,12 +1372,24 @@ function describe$58(model, width, extent, language) {
 	const fields = columns$1(model);
 	const contentWidth = Math.max(width - 16, (model.selection === false ? 0 : metrics$10.selection + 36) + fields.reduce((sum, field) => sum + field.width, 0) + 40);
 	const nodes = [
+		node("Box", "nestedToolbarSurface", rect$1(0, 0, width, 42 + quickHeight), {
+			background: "panel",
+			radius: 0
+		}),
+		node("Box", "nestedFooterSurface", rect$1(0, Math.max(0, extent - 40), width, 40), {
+			background: "panel",
+			radius: 0
+		}),
+		node("Box", "nestedFooterDivider", rect$1(0, Math.max(0, extent - 40), width, 1), {
+			background: "outlineVariant",
+			radius: 0
+		}),
 		node("View", "nestedFilter", rect$1(0, 0, Math.max(0, width - (model.gear ? 156 : 120) + toolOffset), 36), { view: "tableSearch" }),
 		button("nestedReload", rect$1(Math.max(0, width - (model.gear ? 148 : 112) + toolOffset), 0, 32, 32), model.busy ? t("Loading data…") : t("Refresh"), model.busy ? "loading" : "refresh", { type: "reload" }, !model.busy, { iconOnly: true }),
 		button("nestedColumns", rect$1(Math.max(0, width - 112 + toolOffset), 0, 32, 32), t("Columns"), "view-column", { type: "columns" }, !model.busy, { iconOnly: true }),
 		button("nestedCreate", rect$1(Math.max(0, width - 76 + toolOffset), 0, 32, 32), t("Create"), "add", { type: "create" }, !model.busy && model.insert !== false, { iconOnly: true }),
 		button("nestedClose", rect$1(Math.max(0, width - 40), 0, 32, 32), t("Close"), "close", { type: "close" }, true, { iconOnly: true }),
-		label("nestedState", rect$1(0, extent - 32, Math.max(0, width - 120), 28), model.error ? t(model.error) : String((model.rows || []).length), { color: model.error ? "error" : "secondaryText" }),
+		label("nestedState", rect$1(0, extent - 32, Math.max(0, width - 120), 28), model.error ? t(model.error) : t("Results") + ": " + (model.rows || []).length, { color: model.error ? "error" : "secondaryText" }),
 		button("nestedClearSelection", rect$1(Math.max(0, width - 112), extent - 32, 32, 32), t("Clear selection"), "close", { type: "clear-selection" }, !!model.selected?.length, { iconOnly: true }),
 		button("nestedPrevious", rect$1(Math.max(0, width - 76), extent - 32, 32, 32), t("Previous page"), "chevron-left", {
 			type: "page",
@@ -1693,9 +1705,15 @@ function change$7(document, key, field, value) {
 		"image_fit",
 		"text_weight",
 		"format",
-		"native_action"
+		"native_action",
+		"region"
 	].includes(field)) {
 		const choices = {
+			region: [
+				"header",
+				"content",
+				"footer"
+			],
 			text_role: [
 				"auto",
 				"caption",
@@ -1739,6 +1757,7 @@ function change$7(document, key, field, value) {
 				700
 			]
 		};
+		if (field === "region" && path(key).length !== 1 && value !== "content") throw Error("Page regions are only available for top-level blocks");
 		if (field === "text_weight") value = Number(value);
 		if (!choices[field].includes(value)) throw Error("Choose a supported component property");
 	} else if (field === "text_color") {
@@ -1918,6 +1937,7 @@ function reparent(document, key, parent) {
 	};
 	const target = container ? container.children || (container.children = []) : result.blocks;
 	siblings(result, p).splice(p[p.length - 1], 1);
+	if (container && item.region && item.region !== "content") item.region = "content";
 	target.push(item);
 	checkStructure(result);
 	return {
@@ -1980,6 +2000,7 @@ function geometry$2(document, change, boxes) {
 	let insertion = before ? targetPath[targetPath.length - 1] : target.length;
 	if (old === target && index < insertion) insertion--;
 	old.splice(index, 1);
+	if (parent.length && item.region && item.region !== "content") item.region = "content";
 	target.splice(insertion, 0, item);
 	return {
 		document: result,
@@ -2585,7 +2606,7 @@ function describe$56(definitions, draft, width, language, enabled = true) {
 		nodes: []
 	};
 	const tr = (text) => translate(text, language), nodes = [], gap = 12;
-	const columns = Math.max(1, Math.floor((width + gap) / 240)), size = (width - gap * (columns - 1)) / columns;
+	const maximum = Math.max(1, Math.floor((width + gap) / 240)), columns = Math.ceil(definitions.length / Math.ceil(definitions.length / maximum)), size = (width - gap * (columns - 1)) / columns;
 	definitions.forEach((item, index) => {
 		const x = index % columns * (size + gap), y = Math.floor(index / columns) * 76, row = draft[item.name] || item;
 		nodes.push(node("CheckBox", "pageRuntime_" + item.name + "_enabled", rect$1(x, y, 24, 24), {
@@ -2994,7 +3015,8 @@ function plain(value) {
 }
 function describe$54(cell, width, height, language, editable = true, server = "", measure = (text, size) => String(text).length * size) {
 	const tabOffset = cell.layoutTabs?.length ? 56 : 0;
-	const children = [], gap = 8, tableHeight = Math.max(320, height - tabOffset - 48);
+	const children = [], gap = 8;
+	let tableHeight = Math.max(320, height - tabOffset - 48);
 	const controls = cell.layoutState?.controls || cell.layoutControls || [];
 	function draw(items, originX, originY, space, prefix = "customLayout", startIndex = 0, output = children, bottom = Infinity, spacing = 8, slotHeight = null) {
 		let top = originY;
@@ -3307,15 +3329,64 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 	function visualBottom(nodes) {
 		return Math.max(0, ...nodes.map((item) => item.y + Math.max(item.height, item.clip === false ? visualBottom(item.children || []) : 0)));
 	}
+	const viewportHeight = Math.max(0, height - tabOffset);
+	let headerNodes = [], footerNodes = [], headerHeight = 0, footerHeight = 0;
+	function drawRegion(region, space, output, start = 0, capacity = null) {
+		const entries = (cell.layoutNodes || []).map((item, index) => ({
+			item,
+			index
+		})).filter(({ item }) => (item.region || "content") === region);
+		let top = start;
+		for (const [position, { item, index }] of entries.entries()) {
+			const slot = capacity !== null && position === entries.length - 1 && item.sizing?.height_mode === "fill" ? Math.max(0, capacity - top) : null;
+			top += draw([item], 0, top, space, "customLayout", index, output, capacity ?? Infinity, gap, slot) + gap;
+		}
+		return Math.max(start, top - (entries.length ? gap : 0), visualBottom(output));
+	}
+	function header(space) {
+		const filters = describe$56(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), Math.max(0, space - 24), language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
+		const output = [];
+		const contextHeight = drawRegion("header", Math.max(0, space - 24), output);
+		const filterTop = contextHeight + (contextHeight && filters.height ? gap : 0);
+		for (const item of filters.nodes) {
+			item.y += filterTop;
+			output.push(item);
+		}
+		const extent = filterTop + filters.height;
+		for (const item of output) {
+			item.x += 12;
+			item.y += 12;
+		}
+		return {
+			nodes: output,
+			height: output.length ? extent + 24 : 0
+		};
+	}
+	let head = header(width);
+	let foot = [];
+	let footerExtent = drawRegion("footer", Math.max(0, width - 24), foot);
+	footerHeight = foot.length ? Math.min(footerExtent + 24, viewportHeight * .3) : 0;
+	headerHeight = Math.min(head.height, Math.max(0, viewportHeight - footerHeight - Math.min(180, viewportHeight * .45)));
+	if (head.height > headerHeight) head = header(Math.max(0, width - controls$2.scrollBar.extent - 4));
+	headerNodes = head.nodes;
+	if (footerExtent + 24 > footerHeight && footerHeight) {
+		foot = [];
+		footerExtent = drawRegion("footer", Math.max(0, width - 24 - controls$2.scrollBar.extent - 4), foot);
+	}
+	for (const item of foot) {
+		item.x += 12;
+		item.y += 12;
+	}
+	footerNodes = foot;
+	const bodyHeight = Math.max(0, viewportHeight - headerHeight - footerHeight);
+	if (headerHeight || footerHeight) tableHeight = Math.max(160, bodyHeight - 32);
 	function render(contentWidth) {
-		const filters = describe$56(cell.layoutFilters, cell.layoutFilterDraft || initial$3(cell.layoutFilters), contentWidth, language, editable && !cell.layoutBusy && !cell.layoutFilterBusy && !cell.layoutEditing);
 		children.length = 0;
-		children.push(...filters.nodes);
-		const flowExtent = filters.height + draw(cell.layoutNodes, 0, filters.height, contentWidth);
+		const flowExtent = drawRegion("content", contentWidth, children, 0, bodyHeight);
 		return Math.max(flowExtent, visualBottom(children));
 	}
 	let contentWidth = Math.max(0, width), extent = render(contentWidth);
-	if (extent + (cell.layoutError ? 80 : 0) > Math.max(0, height - tabOffset)) {
+	if (extent + (cell.layoutError ? 80 : 0) > bodyHeight) {
 		contentWidth = Math.max(0, width - controls$2.scrollBar.extent - 4);
 		extent = render(contentWidth);
 	}
@@ -3324,6 +3395,33 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 		color: "error"
 	}));
 	const nodes = [node("Box", "layoutBackground", rect$1(0, 0, width, height), { background: "workspace" })];
+	for (const [name, y, extent, content, contentHeight] of [[
+		"Header",
+		tabOffset,
+		headerHeight,
+		headerNodes,
+		head.height
+	], [
+		"Footer",
+		height - footerHeight,
+		footerHeight,
+		footerNodes,
+		footerExtent + 24
+	]]) {
+		if (!extent) continue;
+		nodes.push(node("Box", "customLayout" + name, rect$1(0, y, width, extent), {
+			background: "panel",
+			radius: 0,
+			children: [node("Scroll", "customLayout" + name + "Scroll", rect$1(0, 0, width, extent), {
+				contentHeight,
+				scrollbarId: "customLayout" + name + "ScrollBar",
+				children: content
+			}), node("Box", "customLayout" + name + "Divider", rect$1(0, name === "Header" ? extent - 1 : 0, width, 1), {
+				background: "outlineVariant",
+				radius: 0
+			})]
+		}));
+	}
 	if (tabOffset) {
 		const tabs = [];
 		let left = 0;
@@ -3359,7 +3457,7 @@ function describe$54(cell, width, height, language, editable = true, server = ""
 			children: tabs
 		}));
 	}
-	nodes.push(node("Scroll", "customLayoutScroll", rect$1(0, tabOffset, width, Math.max(0, height - tabOffset)), {
+	nodes.push(node("Scroll", "customLayoutScroll", rect$1(0, tabOffset + headerHeight, width, bodyHeight), {
 		contentHeight: extent + (cell.layoutError ? 80 : 0),
 		scrollbarId: "customLayoutScrollBar",
 		children
@@ -25756,6 +25854,14 @@ function describe$36(model, width, height, language) {
 	const nodes = [
 		node("Box", "workspacePageBackground", rect$1(0, 0, width, height), {
 			background: "workspace",
+			radius: 0
+		}),
+		node("Box", "workspacePageHeader", rect$1(0, 0, width, 52), {
+			background: "panel",
+			radius: 0
+		}),
+		node("Box", "workspacePageHeaderDivider", rect$1(0, 51, width, 1), {
+			background: "outlineVariant",
 			radius: 0
 		}),
 		label("workspacePageTitle", rect$1(16, 12, Math.max(0, width - (model.canEdit ? 116 : 76)), 28), model.title || "", {

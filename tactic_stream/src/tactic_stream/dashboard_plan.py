@@ -68,6 +68,7 @@ class DashboardSizing(BaseModel):
 
 class DashboardBlock(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
+    region: Literal['header', 'content', 'footer'] = 'content'
     kind: Literal['row', 'column', 'text', 'markdown', 'metric', 'table', 'items', 'details', 'link', 'chart', 'summary', 'grid', 'heading', 'icon', 'image', 'button', 'divider', 'spacer', 'field', 'form', 'action']
     title: str = Field(default='', max_length=256)
     text: str = Field(default='', max_length=65536)

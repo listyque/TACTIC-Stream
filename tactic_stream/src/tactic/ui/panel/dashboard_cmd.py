@@ -20,6 +20,7 @@ def dashboard_state():
     urls=[row.get_data() for row in Search('config/url').get_sobjects()]
     state['revision']=digest([state['revision'],urls])
     state['bricks']=list(get_args(DashboardBlock.model_fields['kind'].annotation))
+    state['regions']=list(get_args(DashboardBlock.model_fields['region'].annotation))
     state['dashboards']=[dict(view=row.get_value('view'),source_id=row.get_id())
         for row in Search('config/widget_config').get_sobjects()
         if (row.get_value('view') or '').startswith('dashboard.') and '<dashboard>' in (row.get_value('config') or '')]

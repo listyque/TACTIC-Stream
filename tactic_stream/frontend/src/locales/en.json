@@ -1,4 +1,9 @@
 {
+  "Results": "Results",
+  "Page region": "Page region",
+  "Header": "Header",
+  "Footer": "Footer",
+  "Page regions are only available for top-level blocks": "Page regions are only available for top-level blocks",
   "Secondary": "Secondary",
   "Surface": "Surface",
   "Value color": "Value color",

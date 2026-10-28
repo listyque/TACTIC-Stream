@@ -698,6 +698,9 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
     def ts_dashboard_preview(document: DashboardDocument, expected_revision: Identifier, detail_key: Identifier | None = None,
                              filter_values: dict[str, DashboardFilterValue] | None = None) -> dict[str, Any]:
         """Compose a shared native dashboard from the discovered bricks and DashboardBlock schema.
+        Top-level region is header/content/footer; nested blocks inherit their area.
+        Page filters belong to the header. Keep data in content and navigation/actions in footer.
+        Give the last content table sizing.height_mode=fill to use the working area.
         Grid has columns/min_cell_width/row_height; children have column_span/row_span.
         sizing modes are auto/fixed/fill/content, with preferred min/max constraints.
         field binds one scalar with plain/badge/progress/date/datetime/number display.

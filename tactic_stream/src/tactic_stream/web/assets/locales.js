@@ -1,4 +1,9 @@
 var en_default = {
+	Results: "Results",
+	"Page region": "Page region",
+	Header: "Header",
+	Footer: "Footer",
+	"Page regions are only available for top-level blocks": "Page regions are only available for top-level blocks",
 	Secondary: "Secondary",
 	Surface: "Surface",
 	"Value color": "Value color",
@@ -1962,6 +1967,10 @@ var en_default = {
 	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
 };
 var ru_default = {
+	"Page region": "Область страницы",
+	Header: "Шапка",
+	Footer: "Футер",
+	"Page regions are only available for top-level blocks": "Область страницы задаётся только для блоков верхнего уровня",
 	Secondary: "Вторичный",
 	Surface: "Поверхность",
 	"Value color": "Цвет значения",

@@ -894,6 +894,27 @@ function describe(model, ui, width, height, language) {
 		if (!item) fields$2.push(...fields(model, ui, right - 24, language, canEdit && (ui.selection || []).length < 2));
 		if (item) {
 			const parent = path(ui.selected).slice(0, -1).join(".");
+			if (!parent) fields$2.push({
+				kind: "Choice",
+				id: "pageProperty_region",
+				title: "Page region",
+				props: {
+					value: item.region || "content",
+					enabled: canEdit && (ui.selection || []).length < 2,
+					action: {
+						type: "change",
+						field: "region"
+					}
+				},
+				options: [
+					["header", "Header"],
+					["content", "Content"],
+					["footer", "Footer"]
+				].map(([value, label]) => ({
+					value,
+					label: tr(label)
+				}))
+			});
 			fields$2.push({
 				kind: "Choice",
 				id: "pageParent",

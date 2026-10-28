@@ -17,6 +17,31 @@ def document():
 
 
 class Dashboards(unittest.TestCase):
+    def test_page_regions_compile_save_and_reject_nested_placement(self):
+        from xmlrpc.client import Fault
+
+        with test_transport.Transport.proxy(self) as proxy:
+            auth = dict(ticket=proxy.get_ticket('admin', 'private-test-password'), project='one')
+            def call(action, **values):
+                return proxy.execute_cmd(auth, COMMAND, dict(action=action, project_code='one', **values))['info']
+            draft = dict(name='regions', title='Task workspace', blocks=[
+                dict(kind='text', region='header', text='Instructions'),
+                dict(kind='table', region='content', title='Tasks', search_type='contract/entity', sizing=dict(height_mode='fill')),
+                dict(kind='button', region='footer', title='Project', href='skey://sthpw/project?code=one')])
+            state = call('read')
+            self.assertEqual(state['regions'], ['header', 'content', 'footer'])
+            values = dict(document=draft, expected_revision=state['revision'])
+            preview = call('preview', **values)
+            self.assertEqual([row['region'] for row in preview['model']['layoutNodes']], ['header', 'content', 'footer'])
+            self.assertEqual(preview['model']['layoutNodes'][1]['editorPath'], [1])
+            operation = str(uuid4())
+            saved = call('apply', operation_id=operation, **values)
+            self.assertEqual(call('apply', operation_id=operation, **values), saved)
+            self.assertEqual(call('read', name='regions')['document']['blocks'][2]['region'], 'footer')
+            invalid = dict(draft, blocks=[dict(kind='column', children=[dict(kind='text', text='Nested footer', region='footer')])])
+            with self.assertRaises(Fault):
+                call('preview', document=invalid, expected_revision=call('read')['revision'])
+
     def test_layout_grid_components_sizing_and_image_source_round_trip(self):
         from xmlrpc.client import Fault
 
@@ -463,12 +488,15 @@ class Dashboards(unittest.TestCase):
                 self.assertTrue(any(row['value']=='name' for row in source['editFields']))
                 state=(await client.call_tool('ts_dashboard_read',{})).structured_content
                 draft=document();draft['name']='via_mcp'
+                draft['blocks'][0]['region']='header'
+                draft['blocks'][2]['region']='footer'
                 draft['blocks'].append(dict(kind='text',title='Project',binding='project',field='title'))
                 draft['blocks'][0]['children'][0]['filters']=[dict(column=next(row['value'] for row in source['fields'] if row['value']=='amount'),relation='=',value=0)]
                 values=dict(document=draft,expected_revision=state['revision'])
                 preview=await client.call_tool('ts_dashboard_preview',values)
                 self.assertFalse(preview.is_error)
                 self.assertEqual(preview.structured_content['model']['layoutNodes'][-1]['text'],'Project: One')
+                self.assertEqual(preview.structured_content['model']['layoutNodes'][0]['region'],'header')
                 draft['filters']=[dict(name='minimum',title='Minimum amount',search_type='contract/entity',column='amount',relation='>=',value=0,enabled=True)]
                 draft['blocks'].append(dict(kind='chart',title='Amounts',search_type='contract/entity',group_by=[dict(column='amount')],
                     aggregates=[dict(name='total',title='Total',function='sum',column='amount')]))

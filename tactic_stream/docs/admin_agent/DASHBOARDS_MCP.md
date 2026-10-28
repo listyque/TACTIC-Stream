@@ -539,3 +539,16 @@ Read each view, preview with its revision, then save through the ordinary item
 layout tools. Compose these cards inside the existing dashboard items tree;
 do not replace the tree or the application sidebar. No client source editing
 is needed to author a card with these bricks.
+
+### Clear page regions
+
+`ts_dashboard_read` advertises `regions`: header, content, footer. Assign a
+top-level block's `region` deliberately. Header holds context/instructions; shared
+page filters already belong there. Content holds the data, reports, native items
+and details; give the last content block `sizing.height_mode="fill"` when it
+should fill the available working area. Footer holds page navigation/actions.
+Nested blocks inherit the container's area and must keep region="content".
+Use existing blocks and native search; do not paint a second application shell.
+Both clients pin these zones with shared surfaces/dividers and give overflowing
+headers/footers visible scrollbars. Omit unused zones. Keep human table titles,
+consistent padding and stable existing references when revising a page.

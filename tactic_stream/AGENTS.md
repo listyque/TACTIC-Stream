@@ -413,3 +413,9 @@
   dictionaries. Keep agent backlog, handoffs and work journals outside both Git
   repositories in the workspace's `agent-work/` directory; do not embed them in
   README files or product documentation. Do not ship that directory in bundles.
+
+- New and touched screens must have a readable header (title/context/tools),
+  bounded scrolling content and a footer for actions/status/navigation when
+  present. Use shared surface/divider/padding rules; preserve the hierarchy on
+  resize. Do not float tools and footer actions among data rows without grouping,
+  or add an empty footer when the surface has no footer content.

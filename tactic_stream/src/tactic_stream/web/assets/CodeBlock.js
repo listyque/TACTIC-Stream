@@ -4120,6 +4120,11 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	Results: "Результаты",
+	"Page region": "Область страницы",
+	Header: "Шапка",
+	Footer: "Футер",
+	"Page regions are only available for top-level blocks": "Область страницы задаётся только для блоков верхнего уровня",
 	Secondary: "Вторичный",
 	Surface: "Поверхность",
 	"Value color": "Цвет значения",
