@@ -167,7 +167,17 @@ function sections(fields, width, language, enabled, style) {
 					})
 				]
 			}));
-			else children.push(node(field.kind || "Field", field.id, rect(controlX, controlY, controlWidth, controlHeight), properties));
+			else {
+				const trailing = field.trailingAction;
+				children.push(node(field.kind || "Field", field.id, rect(controlX, controlY, Math.max(0, controlWidth - (trailing ? controlHeight + 6 : 0)), controlHeight), properties));
+				if (trailing) children.push(node("Button", field.id + "Open", rect(controlX + controlWidth - controlHeight, controlY, controlHeight, controlHeight), {
+					text: translate(trailing.title, language),
+					icon: trailing.icon,
+					iconOnly: true,
+					enabled: trailing.enabled !== false,
+					action: trailing.action
+				}));
+			}
 			rowY += rowHeight;
 			if (index < group.fields.length - 1 && field.showDivider !== false) children.push(node("Box", field.id + "Divider", rect(20, rowY - 1, rowWidth, 1), { background: "outlineVariant" }));
 		}

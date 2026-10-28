@@ -2344,7 +2344,15 @@ function fields$2(model, ui, width, language, enabled) {
 			}
 		});
 	}
-	if (["items", "table"].includes(item.kind)) choice("pageProperty_view", "Saved view", item.view || "table", item.kind === "items" ? metadata.itemViews : metadata.tableViews, "view");
+	if (["items", "table"].includes(item.kind)) {
+		choice("pageProperty_view", "Saved view", item.view || "table", item.kind === "items" ? metadata.itemViews : metadata.tableViews, "view");
+		fields[fields.length - 1].trailingAction = {
+			title: item.kind === "items" ? "Edit card layout" : "Edit table columns",
+			icon: "open-in-new",
+			enabled: !model.busy && !!requested.searchType,
+			action: { type: item.kind === "items" ? "card" : "columns" }
+		};
+	}
 	if (binding === "record" && requested.searchType) {
 		fields.push({
 			id: "pageRecordQuery",
@@ -26228,13 +26236,21 @@ function describe$34(model, ui, width, height, language) {
 			children: nav
 		}));
 	}
-	const head = [label("administrationSectionTitle", rect(20, 11, g.mobile ? g.body - (width > 700 ? 200 : 120) : Math.max(0, g.body - g.toolbar - 218), 28), current.title, {
+	const linked = !!model.layoutParent?.name;
+	const head = [label("administrationSectionTitle", rect(linked ? 66 : 20, 11, g.mobile ? g.body - (width > 700 ? 200 : 120) - (linked ? 46 : 0) : Math.max(0, g.body - g.toolbar - 218 - (linked ? 46 : 0)), 28), current.title, {
 		fontRole: "display",
 		weight: 600
 	}), label("administrationSectionDescription", rect(20, 46, g.mobile ? g.body - 40 : Math.max(0, g.body - 40), 22), ui.error && model.locked ? ui.error : current.description, {
 		fontRole: "secondary",
 		color: ui.error && model.locked ? "error" : "secondaryText"
 	})];
+	if (linked) head.push(node("Button", "adminReturnToLayout", rect(20, 11, 38, 38), {
+		text: tr("Back to page layout") + ": " + model.layoutParent.title,
+		icon: "arrow-back",
+		iconOnly: true,
+		action: { type: "return-layout" },
+		enabled: !model.busy
+	}));
 	head.push(node("View", "administrationToolbar", rect(g.mobile ? 12 : g.body - g.toolbar - 174, g.mobile ? 116 : 10, g.toolbar, 38), { view: "toolbar" }));
 	head.push(button("administrationHelpButton", rect(g.body - 88, g.mobile ? 10 : 12, 34, 34), "Help", "help", { type: "help" }));
 	head.push(button("administrationCloseButton", rect(g.body - 48, g.mobile ? 10 : 12, 34, 34), "Close administration", "close", { type: "close" }, !model.busy));
@@ -26327,6 +26343,9 @@ function transition$1(ui, model, event) {
 				type: "help",
 				topic: ["layouts", "dashboards"].includes(model.section) ? "item_layouts" : model.section === "sidebar" ? "sidebar_editor" : "administration"
 			});
+			break;
+		case "return-layout":
+			if (model.layoutParent?.name && !model.busy) commands.push(event);
 			break;
 		case "close":
 			if (model.locked) {
@@ -58165,6 +58184,7 @@ var _sfc_main = {
 			layoutsFocus: null,
 			pagesFocus: "",
 			columnsFocus: null,
+			layoutLinks: [],
 			refreshAfterAdministration: false,
 			version: "",
 			ready: false,
@@ -58265,6 +58285,10 @@ var _sfc_main = {
 		};
 	},
 	computed: {
+		layoutParent() {
+			const parent = this.layoutLinks.at(-1);
+			return parent?.project === this.project && parent.target === this.administrationSection && (parent.target !== "dashboards" || parent.targetName === this.administrationInstances.dashboards?.document?.name) ? parent : null;
+		},
 		mainMenuContext() {
 			return {
 				platform: "stream",
@@ -58609,6 +58633,7 @@ var _sfc_main = {
 		},
 		project: {
 			handler() {
+				this.layoutLinks = [];
 				resetRequestActivity();
 			},
 			flush: "sync"
@@ -59108,6 +59133,7 @@ var _sfc_main = {
 				this.switchProject();
 			} else if (command.type === "help") this.$refs.help.open(command.topic);
 			else if (command.type === "close") this.closeAdministrationClean();
+			else if (command.type === "return-layout") this.returnToPageLayout();
 		},
 		schemaNodeWorkflows(identity) {
 			const schema = this.administrationInstances.schema;
@@ -59216,6 +59242,7 @@ var _sfc_main = {
 			this.administrationOpen = false;
 			this.administrationVisited = [];
 			this.administrationInstances = {};
+			this.layoutLinks = [];
 			this.pendingWorkflow = null;
 			if (refresh) this.reloadWorkspace();
 			this.refreshAfterAdministration = false;
@@ -60410,17 +60437,68 @@ var _sfc_main = {
 		openPageLayout(name) {
 			const editor = this.administrationInstances.dashboards;
 			if (editor && !editor.canLeave()) return;
+			this.layoutLinks = [];
 			this.pagesFocus = name;
 			this.selectAdministration("dashboards");
 		},
 		openPageCard(value) {
 			const editor = this.administrationInstances.layouts;
-			if (editor && !editor.canLeave()) return;
-			this.layoutsFocus = {
+			const same = editor?.configuration && editor.searchType === value.searchType && editor.view === value.view && !editor.busy;
+			if (!same && editor && !editor.canLeave()) {
+				this.administrationInstances.dashboards.error = editor.error;
+				return;
+			}
+			this.rememberPageLayout("layouts");
+			if (!same) this.layoutsFocus = {
 				searchType: value.searchType,
 				view: value.view
 			};
 			this.selectAdministration("layouts");
+		},
+		rememberPageLayout(target, targetName = "") {
+			const source = this.administrationInstances.dashboards?.document;
+			if (this.administrationSection !== "dashboards" || !source?.name || target === "dashboards" && targetName === source.name) return;
+			this.layoutLinks = [...this.layoutLinks, {
+				project: this.project,
+				name: source.name,
+				title: source.title || source.name,
+				target,
+				targetName
+			}].slice(-32);
+		},
+		async returnToPageLayout() {
+			const parent = this.layoutParent, editor = this.administrationInstances.dashboards;
+			if (!parent || !editor) return;
+			if (editor.document?.name !== parent.name) {
+				if (!editor.canLeave()) return;
+				await editor.load(parent.name);
+				if (editor.document?.name !== parent.name) return;
+			}
+			this.layoutLinks.pop();
+			this.selectAdministration("dashboards");
+			editor.revealSelection();
+		},
+		openLinkedPage(value) {
+			const editor = this.administrationInstances.dashboards;
+			if (!editor?.canLeave() || !editor.catalog.some((row) => row.identity === value.name)) return;
+			this.rememberPageLayout("dashboards", value.name);
+			this.pagesFocus = value.name;
+			if (editor.document?.name !== value.name) editor.load(value.name);
+		},
+		openPageColumns(value) {
+			const editor = this.administrationInstances.columns;
+			const same = editor?.selected?.searchType === value.searchType && editor.selected.view === value.view && !editor.busy;
+			if (!same && editor && !editor.canLeave()) {
+				this.administrationInstances.dashboards.error = editor.error;
+				return;
+			}
+			this.rememberPageLayout("columns");
+			if (!same) this.columnsFocus = {
+				project: this.project,
+				searchType: value.searchType,
+				view: value.view
+			};
+			this.selectAdministration("columns");
 		},
 		async showLayoutEditor() {
 			if (this.layoutView?.startsWith("dashboard.")) {
@@ -61992,6 +62070,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					model: {
 						section: $data.administrationSection,
 						project: $data.project,
+						layoutParent: $options.layoutParent,
 						projects: $options.administrationProjectOptions,
 						locked: $options.administrationLocked,
 						busy: $data.busy,
@@ -62097,7 +62176,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"initial-focus": $data.pagesFocus,
 						"toolbar-target": "#administration-actions",
 						onSaved: $options.layoutSaved,
-						onCard: $options.openPageCard
+						onCard: $options.openPageCard,
+						onColumns: $options.openPageColumns,
+						onLinkedPage: $options.openLinkedPage
 					}, null, 8, [
 						"presentation-visible",
 						"ticket",
@@ -62105,7 +62186,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"search-types",
 						"initial-focus",
 						"onSaved",
-						"onCard"
+						"onCard",
+						"onColumns",
+						"onLinkedPage"
 					])], 512)), [[vShow, $data.administrationSection === "dashboards"]]) : createCommentVNode("", true),
 					$data.administrationOpen && $data.administrationVisited.includes("layouts") ? withDirectives((openBlock(), createElementBlock("div", _hoisted_22, [createVNode(_component_LayoutEditor, {
 						"presentation-visible": $data.administrationSection === "layouts",

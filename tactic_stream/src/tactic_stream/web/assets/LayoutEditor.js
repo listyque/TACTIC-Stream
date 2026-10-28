@@ -1634,6 +1634,11 @@ var _sfc_main = {
 		async dispatch(event) {
 			const result = transition(this.ui, this.frameModel, event);
 			this.ui = result.ui;
+			if (event.type === "select") {
+				await this.$nextTick();
+				const index = this.models.layoutElements.findIndex((row) => row.name === this.ui.selected);
+				this.$refs.frame?.focusListRow("layoutElementsList", index, "");
+			}
 			for (const command of result.commands) {
 				switch (command.type) {
 					case "xml":
@@ -1815,6 +1820,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		scene: $options.toolbarScene,
 		onEvent: $options.dispatch
 	}, null, 8, ["scene", "onEvent"])], 4), [[vShow, $props.presentationVisible]])], 8, ["to", "disabled"])), createBaseVNode("div", _hoisted_2, [createVNode(_component_FrameView, {
+		ref: "frame",
 		scene: $options.frameScene,
 		models: $options.models,
 		"describe-row": $options.rowScene,

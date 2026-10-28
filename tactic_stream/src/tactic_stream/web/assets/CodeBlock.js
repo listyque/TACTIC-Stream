@@ -4120,6 +4120,9 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Back to page layout": "Назад к макету страницы",
+	"Edit linked page layout": "Изменить макет связанной страницы",
+	"Edit table columns": "Изменить колонки таблицы",
 	Results: "Результаты",
 	"Page region": "Область страницы",
 	Header: "Шапка",
@@ -10437,7 +10440,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					[id]: offset
 				};
 				await nextTick();
-				return focusControl(controlId);
+				return controlId ? focusControl(controlId) : true;
 			}
 			for (const branch of branches.value || []) if (await branch?.focusListRow?.(id, index, controlId)) return true;
 			return false;

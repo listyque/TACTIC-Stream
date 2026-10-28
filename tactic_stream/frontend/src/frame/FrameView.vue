@@ -388,7 +388,7 @@ async function focusListRow(id, index, controlId) {
     list.scrollTop = offset;
     scroll.value = { ...scroll.value, [id]: offset };
     await nextTick();
-    return focusControl(controlId);
+    return controlId ? focusControl(controlId) : true;
   }
   for (const branch of branches.value || [])
     if (await branch?.focusListRow?.(id, index, controlId)) return true;

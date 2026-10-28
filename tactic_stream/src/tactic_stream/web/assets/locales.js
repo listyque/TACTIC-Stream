@@ -1967,6 +1967,9 @@ var en_default = {
 	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
 };
 var ru_default = {
+	"Back to page layout": "Назад к макету страницы",
+	"Edit linked page layout": "Изменить макет связанной страницы",
+	"Edit table columns": "Изменить колонки таблицы",
 	"Page region": "Область страницы",
 	Header: "Шапка",
 	Footer: "Футер",

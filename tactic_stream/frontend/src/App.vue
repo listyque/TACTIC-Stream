@@ -131,7 +131,7 @@ export default {
       knowledgeMounted:false, knowledgeActive:false, knowledgeTarget:'',
       attachmentLocation: null,
       scriptEditorComponent: null, scriptEditorLoading: false, agentRequestComponent: null, agentProvidersComponent: null, agentMcpComponent: null,
-      pingBusy: false, activityUnread: 0, messageUnread: 0, shelfOpen: false, layoutsFocus: null, pagesFocus: '', columnsFocus: null, refreshAfterAdministration: false, version: '', ready: false, restoringSession: true, login: '', password: '', session: null,
+      pingBusy: false, activityUnread: 0, messageUnread: 0, shelfOpen: false, layoutsFocus: null, pagesFocus: '', columnsFocus: null, layoutLinks: [], refreshAfterAdministration: false, version: '', ready: false, restoringSession: true, login: '', password: '', session: null,
       navigationLink: '', openingLink: false, linkRequest: 0, routeReady: false, searchStateTab: null,
       projects: [], types: [], userIdentity: null, project: '', type: '',
       columns: {}, rows: [], searchText: '', filterField: '', filterValue: '', sortField: '', sortDirection: 'asc',
@@ -155,6 +155,11 @@ export default {
     }
   },
   computed: {
+    layoutParent() {
+      const parent=this.layoutLinks.at(-1)
+      return parent?.project===this.project&&parent.target===this.administrationSection&&
+        (parent.target!=='dashboards'||parent.targetName===this.administrationInstances.dashboards?.document?.name)?parent:null
+    },
     mainMenuContext() {
       return {
         platform: 'stream',
@@ -289,7 +294,7 @@ export default {
     page(value) { this.pageNumber = value + 1 },
     browserTitle: { handler(value) { document.title = value }, immediate: true },
     session: { handler() { resetNotifications(); resetRequestActivity(); this.inspectorSource = this.inspectorTarget = null; this.inspectorRequest++ }, flush: 'sync' },
-    project: { handler() { resetRequestActivity() }, flush: 'sync' },
+    project: { handler() { this.layoutLinks=[]; resetRequestActivity() }, flush: 'sync' },
     workspaceProject: { handler() { resetRequestActivity(); this.inspectorSource = this.inspectorTarget = null; this.inspectorRequest++ }, flush: 'sync' },
     activityProgress(value) { setNotificationProgress(this.session ? value : '') },
     updatesError(value) { if (value) notify('error', value, '', 'server') },
@@ -660,6 +665,7 @@ export default {
       else if(command.type==='project'&&!this.administrationLocked){this.project=command.value;this.switchProject()}
       else if(command.type==='help')this.$refs.help.open(command.topic)
       else if(command.type==='close')this.closeAdministrationClean()
+      else if(command.type==='return-layout')this.returnToPageLayout()
     },
     schemaNodeWorkflows(identity) {
       const schema=this.administrationInstances.schema
@@ -739,6 +745,7 @@ export default {
       this.administrationOpen = false
       this.administrationVisited = []
       this.administrationInstances = {}
+      this.layoutLinks = []
       this.pendingWorkflow = null
       if (refresh) this.reloadWorkspace()
       this.refreshAfterAdministration = false
@@ -1564,14 +1571,49 @@ export default {
     openPageLayout(name) {
       const editor=this.administrationInstances.dashboards
       if(editor&&!editor.canLeave())return
+      this.layoutLinks=[]
       this.pagesFocus=name
       this.selectAdministration('dashboards')
     },
     openPageCard(value) {
       const editor = this.administrationInstances.layouts
-      if (editor && !editor.canLeave()) return
-      this.layoutsFocus = {searchType:value.searchType,view:value.view}
+      const same=editor?.configuration&&editor.searchType===value.searchType&&editor.view===value.view&&!editor.busy
+      if (!same && editor && !editor.canLeave()) { this.administrationInstances.dashboards.error=editor.error; return }
+      this.rememberPageLayout('layouts')
+      if(!same)this.layoutsFocus = {searchType:value.searchType,view:value.view}
       this.selectAdministration('layouts')
+    },
+    rememberPageLayout(target, targetName='') {
+      const source=this.administrationInstances.dashboards?.document
+      if(this.administrationSection!=='dashboards'||!source?.name||(target==='dashboards'&&targetName===source.name))return
+      this.layoutLinks=[...this.layoutLinks,{project:this.project,name:source.name,title:source.title||source.name,target,targetName}].slice(-32)
+    },
+    async returnToPageLayout() {
+      const parent=this.layoutParent, editor=this.administrationInstances.dashboards
+      if(!parent||!editor)return
+      if(editor.document?.name!==parent.name){
+        if(!editor.canLeave())return
+        await editor.load(parent.name)
+        if(editor.document?.name!==parent.name)return
+      }
+      this.layoutLinks.pop()
+      this.selectAdministration('dashboards')
+      editor.revealSelection()
+    },
+    openLinkedPage(value) {
+      const editor=this.administrationInstances.dashboards
+      if(!editor?.canLeave()||!editor.catalog.some(row=>row.identity===value.name))return
+      this.rememberPageLayout('dashboards',value.name)
+      this.pagesFocus=value.name
+      if(editor.document?.name!==value.name)editor.load(value.name)
+    },
+    openPageColumns(value) {
+      const editor=this.administrationInstances.columns
+      const same=editor?.selected?.searchType===value.searchType&&editor.selected.view===value.view&&!editor.busy
+      if(!same&&editor&&!editor.canLeave()){this.administrationInstances.dashboards.error=editor.error;return}
+      this.rememberPageLayout('columns')
+      if(!same)this.columnsFocus={project:this.project,searchType:value.searchType,view:value.view}
+      this.selectAdministration('columns')
     },
     async showLayoutEditor() {
       if(this.layoutView?.startsWith('dashboard.')){
@@ -2079,7 +2121,7 @@ export default {
       <KeepAlive><Configuration v-if="configurationOpen" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @providers="openAgentProviders" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
     </dialog>
     <dialog v-window="{kind:'administration'}" ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">
-      <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" />
+      <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,layoutParent,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" />
     </dialog>
     <Teleport defer :to="administrationOpen ? '#administration-pages' : '#workspace-data'">
     <div v-if="administrationOpen && administrationVisited.includes('types')" v-show="administrationSection === 'types'" class="administration-page"><SearchTypes :presentation-visible="administrationSection === 'types'" @vue:mounted="administrationInstances.types = $event.component.proxy" ref="searchTypes" @open-workflow="openAdministrationWorkflow" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
@@ -2087,7 +2129,7 @@ export default {
     <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('rules')" v-show="administrationSection === 'rules'" class="administration-page"><SecurityRules :presentation-visible="administrationSection === 'rules'" @vue:mounted="administrationInstances.rules = $event.component.proxy" ref="rules" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('raw')" v-show="administrationSection === 'raw'" class="administration-page"><RawDatabase :presentation-visible="administrationSection === 'raw'" @vue:mounted="administrationInstances.raw = $event.component.proxy" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshAfterAdministration = true" /></div>
-    <div v-if="administrationOpen && administrationVisited.includes('dashboards')" v-show="administrationSection === 'dashboards'" class="administration-page"><PageLayoutEditor :presentation-visible="administrationSection === 'dashboards'" @vue:mounted="administrationInstances.dashboards = $event.component.proxy" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="pagesFocus" toolbar-target="#administration-actions" @saved="layoutSaved" @card="openPageCard" /></div>
+    <div v-if="administrationOpen && administrationVisited.includes('dashboards')" v-show="administrationSection === 'dashboards'" class="administration-page"><PageLayoutEditor :presentation-visible="administrationSection === 'dashboards'" @vue:mounted="administrationInstances.dashboards = $event.component.proxy" :ticket="session.ticket" :project="project" :search-types="types" :initial-focus="pagesFocus" toolbar-target="#administration-actions" @saved="layoutSaved" @card="openPageCard" @columns="openPageColumns" @linked-page="openLinkedPage" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('layouts')" v-show="administrationSection === 'layouts'" class="administration-page"><LayoutEditor :presentation-visible="administrationSection === 'layouts'" @vue:mounted="administrationInstances.layouts = $event.component.proxy" :ticket="session.ticket" :project="project" :initial-focus="layoutsFocus" toolbar-target="#administration-actions" @saved="layoutSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('columns')" v-show="administrationSection === 'columns'" class="administration-page"><ColumnsEditor :presentation-visible="administrationSection === 'columns'" @vue:mounted="administrationInstances.columns = $event.component.proxy" ref="columnsEditor" :ticket="session.ticket" :project="project" :initial-focus="columnsFocus" toolbar-target="#administration-actions" @saved="columnsSaved" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('users')" v-show="administrationSection === 'users'" class="administration-page"><SecurityUsers :presentation-visible="administrationSection === 'users'" @vue:mounted="administrationInstances.users = $event.component.proxy" ref="users" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="loadNavigation" /></div>

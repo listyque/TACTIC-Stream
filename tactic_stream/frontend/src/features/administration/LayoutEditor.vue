@@ -352,6 +352,13 @@ export default {
     async dispatch(event) {
       const result = State.transition(this.ui, this.frameModel, event);
       this.ui = result.ui;
+      if (event.type === 'select') {
+        await this.$nextTick();
+        const index = this.models.layoutElements.findIndex(
+          (row) => row.name === this.ui.selected
+        );
+        this.$refs.frame?.focusListRow('layoutElementsList', index, '');
+      }
       for (const command of result.commands) {
         switch (command.type) {
           case 'xml':
@@ -566,6 +573,7 @@ export default {
     ></Teleport>
     <div ref="body" class="frame-host-body">
       <FrameView
+        ref="frame"
         :scene="frameScene"
         :models="models"
         :describe-row="rowScene"

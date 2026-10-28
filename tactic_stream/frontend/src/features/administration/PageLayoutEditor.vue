@@ -10,6 +10,7 @@ import PageEditorTools from './PageEditorTools.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.state.mjs';
 import * as Reports from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs';
+import * as Links from '../../../../src/tactic_stream/shared_ui/features/administration/layouts/page.links.mjs';
 export default {
   components: { FrameView },
   props: {
@@ -20,10 +21,11 @@ export default {
     toolbarTarget: String,
     presentationVisible: { type: Boolean, default: true }
   },
-  emits: ['saved', 'card'],
+  emits: ['saved', 'card', 'columns', 'linkedPage'],
   data() {
     return {
       ui: State.initial(),
+      contexts: Object.create(null),
       catalog: [],
       document: null,
       baseline: '',
@@ -81,6 +83,8 @@ export default {
       return UI.model(
         {
           document: this.document || {},
+          project: this.project,
+          origin: location.origin,
           catalog: this.catalog,
           dirty: this.dirty,
           busy: this.busy,
@@ -190,6 +194,20 @@ export default {
     }
   },
   methods: {
+    retainContext() {
+      if (!this.document?.name) return;
+      this.contexts[this.document.name] = Links.context(this.ui);
+      const names = Object.keys(this.contexts);
+      if (names.length > 32) delete this.contexts[names[0]];
+    },
+    async revealSelection() {
+      if (this.ui.layersHidden || this.ui.preview || this.ui.source) return;
+      await this.$nextTick();
+      const index = this.models.pageBlocks.findIndex(
+        (row) => row.key === (this.ui.selected || 'page')
+      );
+      this.$refs.frame?.focusListRow('pageBlocks', index, '');
+    },
     keydown(event) {
       if (
         event.isComposing ||
@@ -314,6 +332,7 @@ export default {
       this.catalog = [];
       this.revision = this.error = this.message = '';
       this.ui = State.initial();
+      this.contexts = Object.create(null);
       this.pendingSave = null;
       this.previewKey = '';
       this.canWrite = false;
@@ -372,6 +391,7 @@ export default {
     },
     async load(name) {
       if (this.busy || this.dirty) return;
+      this.retainContext();
       const generation = ++this.generation;
       this.busy = true;
       this.error = '';
@@ -381,7 +401,8 @@ export default {
         this.document = value.document;
         this.revision = value.revision;
         this.baseline = JSON.stringify(value.document);
-        this.ui = State.initial();
+        this.ui = { ...State.initial(), ...this.contexts[name] };
+        this.revealSelection();
         this.sourceTypes = value.sourceTypes || this.sourceTypes;
         this.dataEpoch++;
         this.compiled = null;
@@ -523,6 +544,8 @@ export default {
       if (event.type === 'align') event = { ...event, boxes: this.canvasBoxes };
       const result = State.transition(this.ui, this.frameModel, event);
       this.ui = result.ui;
+      if (['selection', 'select', 'togglePanel'].includes(event.type))
+        this.revealSelection();
       for (const command of result.commands) {
         switch (command.type) {
           case 'source':
@@ -563,7 +586,9 @@ export default {
             await this.preview();
             break;
           case 'card':
-            this.$emit('card', command);
+          case 'columns':
+          case 'linkedPage':
+            this.$emit(command.type, command);
             break;
           case 'open':
             window.open(
@@ -596,6 +621,7 @@ export default {
     ></Teleport>
     <div ref="body" class="frame-host-body">
       <FrameView
+        ref="frame"
         :scene="scene"
         :models="models"
         :describe-row="rowScene"

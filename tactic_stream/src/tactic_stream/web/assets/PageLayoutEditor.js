@@ -32,6 +32,44 @@ var _sfc_main$1 = {
 	}
 };
 //#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.links.mjs
+function target(href, project, origin, catalog) {
+	if (typeof href !== "string" || href.length > 16384 || /[\x00-\x20\\]/.test(href)) return "";
+	let path = href;
+	const absolute = /^(https?:\/\/[^/]+)(\/.*)$/i.exec(path);
+	if (absolute) {
+		if (!origin || absolute[1].toLowerCase() !== origin.replace(/\/$/, "").toLowerCase()) return "";
+		path = absolute[2];
+	}
+	const match = /^\/(?:projects\/([^/]+)\/)?dashboard\/([^/?#]+)(?:[?#].*)?$/.exec(path);
+	if (!match) return "";
+	try {
+		if (match[1] && decodeURIComponent(match[1]) !== project) return "";
+		const name = decodeURIComponent(match[2]);
+		return (catalog || []).some((row) => row.identity === name) ? name : "";
+	} catch (error) {
+		return "";
+	}
+}
+function context(ui) {
+	const result = {};
+	for (const key of [
+		"selected",
+		"selection",
+		"multiSelect",
+		"snap",
+		"panel",
+		"canvas",
+		"canvasWidthText",
+		"layersWidth",
+		"propertiesWidth",
+		"layersHidden",
+		"propertiesHidden",
+		"collapsed"
+	]) result[key] = ui[key];
+	return result;
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs
 var collections = [
 	"items",
@@ -659,7 +697,7 @@ var icons = {
 	text: "notes",
 	markdown: "description",
 	metric: "speed",
-	table: "table-chart",
+	table: "table",
 	items: "view-list",
 	details: "info",
 	link: "link",
@@ -772,6 +810,7 @@ function treePanel(model, ui, bounds, language, enabled, narrow) {
 		source: "pageBlocks",
 		keyField: "key",
 		rowHeight: 34,
+		rowGap: 2,
 		scrollbarId: "pageBlocksScrollBar"
 	}));
 	if (narrow) children.shift();
@@ -1078,7 +1117,15 @@ function describe(model, ui, width, height, language) {
 				"heading",
 				"markdown"
 			].includes(item.kind) && mode(model.document, ui.selected) === "static") field("text", "Text", item.text || "", false, item.kind === "markdown" ? "Area" : void 0);
-			if (["link", "button"].includes(item.kind)) field("href", "Link URL", item.href || "");
+			if (["link", "button"].includes(item.kind)) {
+				field("href", "Link URL", item.href || "");
+				if (target(item.href, model.project, model.origin, model.catalog)) fields$2[fields$2.length - 1].trailingAction = {
+					title: "Edit linked page layout",
+					icon: "open-in-new",
+					enabled: !model.busy && !model.dirty,
+					action: { type: "linkedPage" }
+				};
+			}
 			componentFields(fields$2, item, ui, canEdit, language, field);
 			fields$2.push({
 				kind: "Heading",
@@ -1201,16 +1248,6 @@ function describe(model, ui, width, height, language) {
 					}
 				});
 			}
-			if (item.kind === "items") fields$2.push({
-				kind: "Button",
-				id: "pageEditCard",
-				title: "Edit card layout",
-				props: {
-					icon: "edit",
-					enabled: !model.busy,
-					action: { type: "card" }
-				}
-			});
 			fields$2.push({
 				kind: "Button",
 				id: "pageRemoveBlock",
@@ -1535,6 +1572,7 @@ function transition(ui, model, event) {
 			case "selection":
 				for (const key of event.keys) block(model.document, key);
 				next.selection = roots(event.keys);
+				if (next.selection.length) next.collapsed = ui.collapsed.filter((key) => key !== "page" && !next.selection.some((selected) => selected === key || selected.startsWith(key + ".")));
 				next.selected = next.selection[next.selection.length - 1] || "";
 				next.recordQuery = "";
 				break;
@@ -1677,12 +1715,22 @@ function transition(ui, model, event) {
 				next.selected = next.selection.includes(ui.selected) ? ui.selected : next.selection[next.selection.length - 1];
 				break;
 			}
-			case "card": {
+			case "card":
+			case "columns": {
 				const item = block(model.document, ui.selected);
-				if (item?.kind === "items") commands.push({
-					type: "card",
-					searchType: item.search_type,
-					view: item.view
+				const searchType = scope$1(model.document, ui.selected).searchType;
+				if (item?.kind === (event.type === "card" ? "items" : "table") && searchType && !model.busy) commands.push({
+					type: event.type,
+					searchType,
+					view: item.view || "table"
+				});
+				break;
+			}
+			case "linkedPage": {
+				const name = target(block(model.document, ui.selected)?.href, model.project, model.origin, model.catalog);
+				if (name && !model.dirty && !model.busy) commands.push({
+					type: "linkedPage",
+					name
 				});
 				break;
 			}
@@ -1717,10 +1765,16 @@ var _sfc_main = {
 			default: true
 		}
 	},
-	emits: ["saved", "card"],
+	emits: [
+		"saved",
+		"card",
+		"columns",
+		"linkedPage"
+	],
 	data() {
 		return {
 			ui: initial(),
+			contexts: Object.create(null),
 			catalog: [],
 			document: null,
 			baseline: "",
@@ -1776,6 +1830,8 @@ var _sfc_main = {
 		frameModel() {
 			return model({
 				document: this.document || {},
+				project: this.project,
+				origin: location.origin,
 				catalog: this.catalog,
 				dirty: this.dirty,
 				busy: this.busy,
@@ -1875,6 +1931,18 @@ var _sfc_main = {
 		}
 	},
 	methods: {
+		retainContext() {
+			if (!this.document?.name) return;
+			this.contexts[this.document.name] = context(this.ui);
+			const names = Object.keys(this.contexts);
+			if (names.length > 32) delete this.contexts[names[0]];
+		},
+		async revealSelection() {
+			if (this.ui.layersHidden || this.ui.preview || this.ui.source) return;
+			await this.$nextTick();
+			const index = this.models.pageBlocks.findIndex((row) => row.key === (this.ui.selected || "page"));
+			this.$refs.frame?.focusListRow("pageBlocks", index, "");
+		},
 		keydown(event) {
 			if (event.isComposing || event.repeat || event.defaultPrevented || event.target.closest("input, textarea, [contenteditable=\"true\"]")) return;
 			const action = shortcut(event.code?.replace("Key", "") || event.key, event.ctrlKey || event.metaKey, event.shiftKey, event.altKey);
@@ -1976,6 +2044,7 @@ var _sfc_main = {
 			this.catalog = [];
 			this.revision = this.error = this.message = "";
 			this.ui = initial();
+			this.contexts = Object.create(null);
 			this.pendingSave = null;
 			this.previewKey = "";
 			this.canWrite = false;
@@ -2035,6 +2104,7 @@ var _sfc_main = {
 		},
 		async load(name) {
 			if (this.busy || this.dirty) return;
+			this.retainContext();
 			const generation = ++this.generation;
 			this.busy = true;
 			this.error = "";
@@ -2044,7 +2114,11 @@ var _sfc_main = {
 				this.document = value.document;
 				this.revision = value.revision;
 				this.baseline = JSON.stringify(value.document);
-				this.ui = initial();
+				this.ui = {
+					...initial(),
+					...this.contexts[name]
+				};
+				this.revealSelection();
 				this.sourceTypes = value.sourceTypes || this.sourceTypes;
 				this.dataEpoch++;
 				this.compiled = null;
@@ -2164,6 +2238,11 @@ var _sfc_main = {
 			};
 			const result = transition(this.ui, this.frameModel, event);
 			this.ui = result.ui;
+			if ([
+				"selection",
+				"select",
+				"togglePanel"
+			].includes(event.type)) this.revealSelection();
 			for (const command of result.commands) switch (command.type) {
 				case "source":
 					await this.loadSource(command);
@@ -2203,7 +2282,9 @@ var _sfc_main = {
 					await this.preview();
 					break;
 				case "card":
-					this.$emit("card", command);
+				case "columns":
+				case "linkedPage":
+					this.$emit(command.type, command);
 					break;
 				case "open":
 					window.open(projectPath(this.project) + "dashboard/" + this.document.name, "_blank", "noopener");
@@ -2234,6 +2315,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		scene: $options.toolbar,
 		onEvent: $options.dispatch
 	}, null, 8, ["scene", "onEvent"])], 4), [[vShow, $props.presentationVisible]])], 8, ["to", "disabled"])), createBaseVNode("div", _hoisted_2, [createVNode(_component_FrameView, {
+		ref: "frame",
 		scene: $options.scene,
 		models: $options.models,
 		"describe-row": $options.rowScene,
