@@ -38,6 +38,27 @@ export function customUrlLocation(address) {
   };
 }
 
+export function customPageLink(value, origin) {
+  if (
+    typeof value !== 'string' ||
+    value.length > 16384 ||
+    /[\r\n\0\\]/.test(value)
+  )
+    return null;
+  try {
+    const address = new URL(value, origin);
+    return address.origin === origin &&
+      !address.username &&
+      !address.password &&
+      addressProject(address) &&
+      customUrlLocation(address)
+      ? address
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 export function browserLink(value, project = '') {
   if (!/^(skey|tactic-search):\/\//i.test(value)) return value;
   try {

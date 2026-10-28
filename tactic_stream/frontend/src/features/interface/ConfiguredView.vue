@@ -49,6 +49,7 @@ import { groupRecords } from '../workspace/resultViews.js';
 import { runTableScript } from './tableScript.js';
 import { route as tableActionRoute } from '../../../../src/tactic_stream/shared_ui/features/table/actions.state.mjs';
 import { link as tableLink } from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
+import { customPageLink } from '../workspace/links.js';
 
 export default {
   name: 'ConfiguredView',
@@ -1406,7 +1407,10 @@ export default {
           return;
         }
         if (kind === 'layout-link') {
-          if (/^(skey|tactic-search):/i.test(cell.href || '')) {
+          if (
+            /^(skey|tactic-search):/i.test(cell.href || '') ||
+            customPageLink(cell.href, location.origin)
+          ) {
             if (!this.openLayoutLink)
               throw new Error('TACTIC link navigation is unavailable');
             await this.openLayoutLink(cell.href, context.project);

@@ -28,6 +28,15 @@ function customUrlLocation(address) {
 		address: address.pathname + address.search + (address.hash || "")
 	};
 }
+function customPageLink(value, origin) {
+	if (typeof value !== "string" || value.length > 16384 || /[\r\n\0\\]/.test(value)) return null;
+	try {
+		const address = new URL(value, origin);
+		return address.origin === origin && !address.username && !address.password && addressProject(address) && customUrlLocation(address) ? address : null;
+	} catch {
+		return null;
+	}
+}
 function browserLink(value, project = "") {
 	if (!/^(skey|tactic-search):\/\//i.test(value)) return value;
 	try {
@@ -75,6 +84,6 @@ function sameSearchKey(left, right, project = "") {
 	}
 }
 //#endregion
-export { projectPath as a, searchLink as c, linkProject as i, workspaceAddress as l, browserLink as n, sameSearchKey as o, customUrlLocation as r, savedSearchLink as s, addressProject as t };
+export { linkProject as a, savedSearchLink as c, customUrlLocation as i, searchLink as l, browserLink as n, projectPath as o, customPageLink as r, sameSearchKey as s, addressProject as t, workspaceAddress as u };
 
 //# sourceMappingURL=links.js.map

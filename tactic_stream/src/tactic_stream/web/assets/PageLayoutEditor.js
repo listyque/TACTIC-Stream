@@ -2,7 +2,7 @@ import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as cr
 import { O as randomUuid, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
 import { Gt as button, Jt as node, Kt as label, Yt as rect, ct as rpc, i as _sfc_main$1, qt as muted, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
-import { a as projectPath } from "./links.js";
+import { o as projectPath } from "./links.js";
 import { t as listAction } from "./tree.ui.js";
 import { A as _sfc_main$2, At as geometry, Ct as appearances, Dt as duplicate, Et as copy, Ft as reorder, G as alignment, It as reparent, J as toggle, K as roots, Lt as siblings, M as zooms, Mt as layers, Nt as path, Ot as fingerprint, Pt as remove, Rt as sizing, St as add, Tt as change, Y as spacingField, _t as filter, at as notices, bt as scope$1, gt as fields$1, ht as change$1, it as documentEvent, j as controls, jt as kinds, kt as geometries, lt as toolbar$1, q as selected, st as sectionSelector, vt as mode, wt as block, xt as type, yt as options, zt as spacing } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.reports.mjs

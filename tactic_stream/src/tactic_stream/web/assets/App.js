@@ -7,7 +7,7 @@ import { a as unsupportedField, i as fieldKind, n as _sfc_main$204, r as format,
 import { n as arrange } from "./ObjectFieldFrame.js";
 import { n as sections$1, t as captionHeight } from "./sections.ui.js";
 import { a as withoutSkeys, i as linkifyPlainText, n as escapeHtml, r as extractSkeys, t as activateRichLink } from "./richText.js";
-import { a as projectPath, c as searchLink, i as linkProject, l as workspaceAddress, n as browserLink, o as sameSearchKey, r as customUrlLocation, s as savedSearchLink, t as addressProject } from "./links.js";
+import { a as linkProject, c as savedSearchLink, i as customUrlLocation, l as searchLink, n as browserLink, o as projectPath, r as customPageLink, s as sameSearchKey, t as addressProject, u as workspaceAddress } from "./links.js";
 import { a as dateLabel, c as matchesSearch, d as timestampFullLabel, f as timestampLabel, n as qtLabelTextWidth, o as dayLabel, p as uniqueRecords, t as layoutTextWidth } from "./textMetrics.js";
 import { n as _sfc_main$206, r as usePagination, t as _sfc_main$205 } from "./ObjectReport.js";
 import { t as _sfc_main$207 } from "./AttachmentCard.js";
@@ -23654,7 +23654,7 @@ var _sfc_main$109 = {
 					return;
 				}
 				if (kind === "layout-link") {
-					if (/^(skey|tactic-search):/i.test(cell.href || "")) {
+					if (/^(skey|tactic-search):/i.test(cell.href || "") || customPageLink(cell.href, location.origin)) {
 						if (!this.openLayoutLink) throw new Error("TACTIC link navigation is unavailable");
 						await this.openLayoutLink(cell.href, context.project);
 						return;
@@ -57914,7 +57914,10 @@ var _sfc_main = {
 				this.openCommitQueue();
 			},
 			openObjectTab: (key, project) => this.openRichLink(key, false, project, false),
-			openLayoutLink: (link, project) => this.openRichLink(link, false, project),
+			openLayoutLink: (link, project) => {
+				const address = customPageLink(link, location.origin);
+				return address ? this.openBrowserLocation(null, address, false) : this.openRichLink(link, false, project);
+			},
 			openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice("Access denied"),
 			openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
 			openTableCheckin: (record, cell, project) => this.openTableCheckin(record, cell, project),
@@ -60565,7 +60568,7 @@ var _sfc_main = {
 			const tab = this.activeSearchTab?.id || "";
 			if (location.pathname + location.search + location.hash !== url || history.state?.tab !== tab) history[replace ? "replaceState" : "pushState"]({ tab }, "", url);
 		},
-		async openBrowserLocation(event) {
+		async openBrowserLocation(event, address = location, replace = true) {
 			if (mobile.value && event?.state?.mobileResult?.key === this.workspaceProject + ":" + this.activeSearchTab?.id + ":" + this.type && this.$refs.results?.querySelector(".configured-view[data-workspace-current=\"true\"] .mobile-results")?.getClientRects().length) return;
 			if (!this.session) return;
 			this.$refs.details?.close();
@@ -60575,10 +60578,10 @@ var _sfc_main = {
 				this.writeLocation(true);
 				return;
 			}
-			const params = new URLSearchParams(location.search);
-			const project = addressProject(location), type = params.get("search_type"), custom = customUrlLocation(location);
+			const params = new URLSearchParams(address.search);
+			const project = addressProject(address), type = params.get("search_type"), custom = customUrlLocation(address);
 			if (params.has("link") && !custom) {
-				await this.openRichLink(params.get("link"), true, project || this.workspaceProject);
+				await this.openRichLink(params.get("link"), replace, project || this.workspaceProject);
 				return;
 			}
 			if (!project) return;
@@ -60658,7 +60661,7 @@ var _sfc_main = {
 			} finally {
 				if (request === this.linkRequest) {
 					this.openingLink = false;
-					if (!custom || this.navigationLink === custom.address) this.writeLocation(true);
+					if (!custom || this.navigationLink === custom.address) this.writeLocation(replace);
 				}
 			}
 		},

@@ -68,7 +68,7 @@ import SystemActivity from './features/activity/SystemActivity.vue'
 import { notify, resetNotifications, setNotificationProgress } from './features/activity/notifications.js'
 import NotesPanel from './features/objects/NotesPanel.vue'
 import FilePreview from './features/objects/FilePreview.vue'
-import { addressProject, customUrlLocation, linkProject, searchLink, workspaceAddress, savedSearchLink } from './features/workspace/links.js'
+import { addressProject, customUrlLocation, customPageLink, linkProject, searchLink, workspaceAddress, savedSearchLink } from './features/workspace/links.js'
 import { resolveCustomUrl } from './api.js'
 import { uiPerformance } from './features/debug/uiPerformance.js'
 import ConnectionMenu from './features/connection/ConnectionMenu.vue'
@@ -100,7 +100,10 @@ export default {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
     openObjectTab: (key, project) => this.openRichLink(key, false, project, false),
-    openLayoutLink: (link, project) => this.openRichLink(link, false, project),
+    openLayoutLink: (link, project) => {
+      const address = customPageLink(link, location.origin)
+      return address ? this.openBrowserLocation(null, address, false) : this.openRichLink(link, false, project)
+    },
     openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice('Access denied'),
     openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
     openTableCheckin: (record,cell,project) => this.openTableCheckin(record,cell,project),
@@ -1809,16 +1812,16 @@ export default {
         history[replace ? 'replaceState' : 'pushState']({ tab }, '', url)
       }
     },
-    async openBrowserLocation(event) {
+    async openBrowserLocation(event, address = location, replace = true) {
       if (mobile.value && event?.state?.mobileResult?.key === this.workspaceProject + ':' + this.activeSearchTab?.id + ':' + this.type
         && this.$refs.results?.querySelector('.configured-view[data-workspace-current="true"] .mobile-results')?.getClientRects().length) return
       if (!this.session) return
       this.$refs.details?.close()
       this.$refs.linkPreview?.close()
       if (document.querySelector('dialog:modal')) { this.error = 'Close the current window before opening a link'; this.writeLocation(true); return }
-      const params = new URLSearchParams(location.search)
-      const project = addressProject(location), type = params.get('search_type'), custom = customUrlLocation(location)
-      if (params.has('link') && !custom) { await this.openRichLink(params.get('link'), true, project || this.workspaceProject); return }
+      const params = new URLSearchParams(address.search)
+      const project = addressProject(address), type = params.get('search_type'), custom = customUrlLocation(address)
+      if (params.has('link') && !custom) { await this.openRichLink(params.get('link'), replace, project || this.workspaceProject); return }
       if (!project) return
       const request = ++this.linkRequest, ticket = this.session.ticket
       this.openingLink = true
@@ -1870,7 +1873,7 @@ export default {
           await this.activateSection(section.id, request)
         } else await this.selectType(type, view === 'table' ? null : { view }, '', '', request)
       } catch (error) { if (request === this.linkRequest) this.fail(error) }
-      finally { if (request === this.linkRequest) { this.openingLink = false; if (!custom || this.navigationLink === custom.address) this.writeLocation(true) } }
+      finally { if (request === this.linkRequest) { this.openingLink = false; if (!custom || this.navigationLink === custom.address) this.writeLocation(replace) } }
     },
     async openRichLink(value, replace = false, projectContext = this.workspaceProject, showDetails = true) {
       const request = ++this.linkRequest, ticket = this.session?.ticket, originProject = this.workspaceProject, originTab = this.activeSearchTab
