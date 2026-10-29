@@ -48726,14 +48726,14 @@ function describe$9(model, width, language) {
 	}));
 	if (!compact && model.shelf !== false) right -= 3;
 	const refreshLeft = model.reserveGrip === false ? 8 : 38;
-	const left = compact ? 8 : refreshLeft + 42;
+	const left = refreshLeft + 42;
 	nodes.push(node("View", "searchHeaderField", rect$1(left, 5, right - left - 8, 38), {
 		view: "field",
 		visible: !compact || !model.collapseSearch || !!model.searchOpen
 	}));
 	nodes.push(button("searchRefreshButton", rect$1(refreshLeft, 5, 38, 38), text("Refresh"), "refresh", { type: "refresh" }, !model.busy, {
 		iconOnly: true,
-		visible: !compact
+		visible: !compact || !model.collapseSearch || !!model.searchOpen
 	}));
 	return { nodes };
 }
