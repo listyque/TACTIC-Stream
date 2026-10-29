@@ -21,7 +21,7 @@ from tests.security_matrix_fixture import seed_security
 from tests.test_sidebar_editor_qml import SidebarEditorQmlTests
 from tests.profile_ui_responsiveness import frame
 
-from native_capture import assert_icons, source_hashes
+from native_capture import assert_icons, source_hashes, click as click_visible
 native_names = ['thlib/ui/qml/features/administration/security/AdminSecurityView.qml', 'thlib/ui/admin/security.py', 'thlib/ui/admin/editor.py', 'thlib/ui/admin/security_matrix.py']
 initial_sources = source_hashes(REPO, TH, native_names)
 AdminSecurityUiTests.setUpClass()
@@ -69,8 +69,7 @@ for mode in ('dark',) if quick else ('dark', 'light'):
                     return result
 
                 def click(item):
-                    QTest.mouseClick(window, Qt.LeftButton, pos=item.mapToScene(QPointF(item.width() / 2, item.height() / 2)).toPoint())
-                    frame(window)
+                    click_visible(window, item)
 
                 def choose(item, value):
                     options = item.property('model')
@@ -104,6 +103,7 @@ for mode in ('dark',) if quick else ('dark', 'light'):
                             editor._worker = object() if action['value'] == 'busy' else None
                             editor.stateChanged.emit()
                         else:
+                            assert action['id'] in controls(), (mode, language, width, case['phase'], action['id'])
                             item = controls()[action['id']]
                             click(item)
                             if kind == 'text':

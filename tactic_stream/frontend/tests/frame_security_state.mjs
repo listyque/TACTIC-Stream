@@ -28,9 +28,10 @@ assert.equal(State.transition(initial,{...model,busy:true},{type:'scope',value:'
 assert.deepEqual(State.transition(initial,model,{type:'navigateCell',row:0,column:0,dx:1,dy:0}).commands,[])
 assert.deepEqual(State.transition(initial,model,{type:'navigateCell',row:0,column:0,dx:0,dy:0}).commands,[{type:'focusGrid',grid:'adminSecurityMatrix',row:0,column:0,id:'adminSecurityCell_0_0'}])
 function inspect(nodes,ids=new Set()){
- for(const n of nodes){assert(!ids.has(n.id),n.id+' unique');ids.add(n.id);assert(n.width>=0&&n.height>=0,n.id);assert(Number.isFinite(n.x+n.y+n.width+n.height),n.id);inspect(n.children||[],ids)}
+ for(const n of nodes){assert(!ids.has(n.id),n.id+' unique');ids.add(n.id);assert(n.width>=0&&n.height>=0,n.id);assert(Number.isFinite(n.x+n.y+n.width+n.height),n.id);if(n.kind==='Button')assert(n.icon,n.id+' has an action icon');inspect(n.children||[],ids)}
  return ids
 }
+function find(nodes,id){for(const n of nodes){if(n.id===id)return n;const child=find(n.children||[],id);if(child)return child}}
 for(const language of ['en','ru'])for(const width of [360,800,1100])for(const [scope] of UI.scopes)for(const page of ['group','xml','rule','inherited']){
  const ui=State.synchronize({...initial,scope,page,editing:true},model,true)
  inspect(UI.describe(model,ui,width,694,language).nodes)
@@ -38,8 +39,17 @@ for(const language of ['en','ru'])for(const width of [360,800,1100])for(const [s
  const grid={cellWidth:136,rowHeight:46}
  assert.equal(UI.cell(grid,{checked:true,locked:true},0,0,model,ui,language).nodes[0].enabled,false)
  const scene=UI.describe(pendingModel,{...draft,scope:'technical'},width,694,language)
- assert.equal(scene.nodes.find(n=>n.id==='adminSecuritySource').readOnly,false,'editing a text draft remains possible')
+ assert.equal(find(scene.nodes,'adminSecuritySource').readOnly,false,'editing a text draft remains possible')
 }
+const wideScene=UI.describe(model,initial,1100,740,'en')
+assert(find(wideScene.nodes,'adminSecurityNavigation'))
+for(const [scope] of UI.scopes)assert(find(wideScene.nodes,'adminSecurityTabIcon_'+scope)?.icon)
+assert(find(wideScene.nodes,'adminSecurityContextDescription').text)
+assert(find(UI.describe(model,initial,800,740,'en').nodes,'adminSecurityScope'))
+inspect(UI.describe({...model,dirty:true},{...initial,confirmation:'save'},360,740,'ru').nodes)
+const squareCell=UI.cell({cellWidth:156,rowHeight:46},{checked:true},0,0,model,initial,'en').nodes[0]
+assert.equal(squareCell.radius,0)
+assert.equal(find(squareCell.children,'adminSecurityAccess_0_0').text,'Allowed')
 console.log('Access rules shared state, guards and all scope/page layouts passed')
 
 const hierarchy = {...model,

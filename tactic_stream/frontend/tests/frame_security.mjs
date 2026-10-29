@@ -107,9 +107,44 @@ try {
                 : 'adminSecurityTechnicalPages'
             ).selectOption(event.value);
         } else if (event.type === 'click') {
-          const box = await control(event.id).boundingBox();
-          assert(box, 'visible ' + event.id);
-          await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+          const point = await control(event.id).evaluate((element) => {
+            const bounds = element.getBoundingClientRect();
+            let left = Math.max(0, bounds.left),
+              right = Math.min(innerWidth, bounds.right),
+              top = Math.max(0, bounds.top),
+              bottom = Math.min(innerHeight, bounds.bottom);
+            for (
+              let parent = element.parentElement;
+              parent;
+              parent = parent.parentElement
+            ) {
+              const style = getComputedStyle(parent),
+                box = parent.getBoundingClientRect();
+              if (
+                ['auto', 'scroll', 'hidden', 'clip'].includes(style.overflowX)
+              ) {
+                left = Math.max(left, box.left + parent.clientLeft);
+                right = Math.min(
+                  right,
+                  box.left + parent.clientLeft + parent.clientWidth
+                );
+              }
+              if (
+                ['auto', 'scroll', 'hidden', 'clip'].includes(style.overflowY)
+              ) {
+                top = Math.max(top, box.top + parent.clientTop);
+                bottom = Math.min(
+                  bottom,
+                  box.top + parent.clientTop + parent.clientHeight
+                );
+              }
+            }
+            return right > left && bottom > top
+              ? { x: (left + right) / 2, y: (top + bottom) / 2 }
+              : null;
+          });
+          assert(point, 'visible ' + event.id);
+          await page.mouse.click(point.x, point.y);
         } else if (event.type === 'text')
           await control(event.id).fill(event.value);
         else

@@ -637,6 +637,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       >
         <ItemSurface
           :selected="node.checked"
+          :corner-radius="node.radius"
           :normal-color="color(node.normalColor) || 'transparent'"
           :selected-color="color(node.selectedColor) || 'transparent'"
           :rail-visible="false"
