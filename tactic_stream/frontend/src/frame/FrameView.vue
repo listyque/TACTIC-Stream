@@ -490,6 +490,9 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
       <component
         :is="node.tab ? AppTabButton : AppButton"
         v-else-if="node.kind === 'Button'"
+        @focus="
+          $event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+        "
         :data-frame="node.id"
         :data-layout-element="node.layoutElement"
         class="frame-node"

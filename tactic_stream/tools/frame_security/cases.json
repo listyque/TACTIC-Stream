@@ -30,5 +30,9 @@
  {"phase":"agent-tools-read","actions":[{"type":"click","id":"adminToolsRead"}]},
  {"phase":"mcp-tools","actions":[{"type":"scope","value":"mcp_tool"}]},
  {"phase":"mcp-tools-none","actions":[{"type":"click","id":"adminToolsNone"}]},
- {"phase":"effective-draft-guard","actions":[{"type":"scope","value":"effective"}]}
+ {"phase":"effective-draft-guard","actions":[{"type":"scope","value":"effective"}]},
+ {"phase":"builtin-legacy","actions":[{"type":"scope","value":"builtin"},{"type":"click","id":"adminAddAccessRule"}]},
+ {"phase":"builtin-server","actions":[{"type":"feature","value":"view_private_notes"}]},
+ {"phase":"builtin-allowed","actions":[{"type":"click","id":"adminAccessLevel_allow"}]},
+ {"phase":"builtin-inherited","actions":[{"type":"focus","id":"adminRemoveAccessRule"},{"type":"click","id":"adminRemoveAccessRule"}]}
 ]

@@ -79,3 +79,20 @@ assert.deepEqual(State.transition({...initial,scope:'agent_tool'},{...toolsModel
 assert.deepEqual(State.transition({...draft,scope:'agent_tool'},toolsModel,{type:'toolRead'}).commands,[])
 assert.deepEqual(State.transition({...initial,scope:'mcp_tool'},toolsModel,{type:'toolToggle',name:'ts_tasks_save'}).commands,[])
 console.log('Effective-user requests and tool policies obey saved-state, catalogue and ACL guards')
+
+const featuresModel={...model,attributes:{group:'builtin',key:'view_side_bar',access:'view'},
+ metadata:{...model.metadata,builtinPermissions:[{key:'view_side_bar',title:'View Side Bar'}]}}
+const featuresUi={...initial,scope:'builtin',editing:true}
+assert.deepEqual(State.transition(featuresUi,featuresModel,{type:'builtinTarget',value:'view_side_bar'}).commands,
+ [{type:'target',attributes:{key:'view_side_bar'}}])
+for(const blocked of [{...featuresModel,canWrite:false},{...featuresModel,busy:true}])
+ assert.deepEqual(State.transition(featuresUi,blocked,{type:'builtinTarget',value:'view_side_bar'}).commands,[])
+assert.deepEqual(State.transition(featuresUi,featuresModel,{type:'builtinTarget',value:'unknown'}).commands,[])
+assert.deepEqual(State.transition({...featuresUi,text:'pending'},featuresModel,{type:'builtinTarget',value:'view_side_bar'}).commands,[])
+const featureScene=UI.describe(featuresModel,featuresUi,1100,694,'en').nodes
+assert.equal(find(featureScene,'adminBuiltinFeature').value,'view_side_bar')
+assert(!find(featureScene,'adminAccessLevel_delete'))
+assert(!find(featureScene,'adminAccessField_key'))
+assert.equal(featuresModel.attributes.access,'view','viewing legacy access does not convert it')
+assert(!find(UI.describe(model,featuresUi,1100,694,'en').nodes,'adminAccessLevel_allow'),'a rule from another section cannot be edited as a feature')
+console.log('Feature choices, explanations, native-level preservation and draft/ACL guards passed')

@@ -93,7 +93,13 @@ try {
     const control = (id) => page.locator('[data-frame="' + id + '"]');
     for (const c of cases) {
       for (const event of c.actions) {
-        if (event.type === 'report') {
+        if (event.type === 'focus') {
+          await control(event.id).evaluate((element) =>
+            element.focus({ preventScroll: true })
+          );
+        } else if (event.type === 'feature') {
+          await control('adminBuiltinFeature').selectOption(event.value);
+        } else if (event.type === 'report') {
           await control('adminEffectiveView').selectOption(event.value);
         } else if (event.type === 'scope' || event.type === 'page') {
           const prefix =

@@ -84,7 +84,12 @@ for mode in ('dark',) if quick else ('dark', 'light'):
                 for case in cases:
                     for action in case['actions']:
                         kind = action['type']
-                        if kind == 'report':
+                        if kind == 'focus':
+                            item = next(item for item in SidebarEditorQmlTests.descendants(window.contentItem()) if item.objectName() == action['id'] and item.isVisible())
+                            item.forceActiveFocus()
+                        elif kind == 'feature':
+                            choose(controls()['adminBuiltinFeature'], action['value'])
+                        elif kind == 'report':
                             choose(controls()['adminEffectiveView'], action['value'])
                         elif kind in ('scope', 'page'):
                             prefix = 'adminSecurityTab_' if kind == 'scope' else 'adminSecurityTechnicalPages_'
