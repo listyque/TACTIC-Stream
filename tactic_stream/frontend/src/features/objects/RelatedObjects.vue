@@ -14,16 +14,16 @@ import ObjectOperations from './ObjectOperations.vue';
 import ObjectAction from './ObjectAction.vue';
 import ObjectReport from './ObjectReport.vue';
 import ObjectLinkSurface from './ObjectLinkSurface.vue';
+import RelatedObjectsToolbar from './RelatedObjectsToolbar.vue';
 import * as LinkUI from '../../../../src/tactic_stream/shared_ui/features/objects/links.ui.mjs';
 import AppButton from '../../controls/AppButton.vue';
-import AppSelect from '../../controls/AppSelect.vue';
 import AppMenu from '../../controls/AppMenu.vue';
-import { mobile } from '../../mobile.js';
 
 export default {
   // Resolve the ConfiguredView / RelatedObjects module cycle lazily.
   components: {
     ObjectLinkSurface,
+    RelatedObjectsToolbar,
     ObjectReport,
     get ConfiguredView() {
       return ConfiguredView;
@@ -32,7 +32,6 @@ export default {
     ObjectOperations,
     ObjectAction,
     AppButton,
-    AppSelect,
     AppMenu
   },
   props: { ticket: String, project: String, searchType: String },
@@ -84,6 +83,21 @@ export default {
     };
   },
   computed: {
+    relatedModel() {
+      return {
+        parentTitle:
+          this.parent?.name || this.parent?.title || this.parent?.code || '',
+        selectedType: this.selectedType,
+        relations: this.relations.map((item) => ({
+          value: item.search_type,
+          label: item.title + ' · ' + item.search_type
+        })),
+        busy: this.busy,
+        locked: !!this.readBranch,
+        canCreate:
+          !!this.relation?.can_create && !!this.definition?.operations?.create
+      };
+    },
     linkValid() {
       return (
         this.scope?.ticket === this.ticket &&
@@ -135,9 +149,6 @@ export default {
         )
         .map(this.linkRow);
     },
-    mobile() {
-      return mobile.value;
-    },
     relation() {
       return this.relations.find(
         (item) => item.search_type === this.selectedType
@@ -167,6 +178,12 @@ export default {
     this.availableRequest++;
   },
   methods: {
+    relatedAction(action, value) {
+      if (action.type === 'relation') {
+        this.selectedType = action.value;
+        this.load();
+      } else if (action.type === 'create') this.create();
+    },
     t,
     linkRecord(item) {
       return {
@@ -564,6 +581,10 @@ export default {
       this.$refs.dialog?.close();
     },
     invalidate() {
+      if (!this.linking) {
+        this.close(true);
+        return;
+      }
       this.request++;
       this.availableRequest++;
       this.busy = this.availableBusy = false;
@@ -656,20 +677,18 @@ export default {
 
 <template>
   <dialog
-    v-window="{ kind: linking ? 'link_sobjects' : undefined }"
+    v-window="{
+      kind: linking ? 'link_sobjects' : 'related_objects',
+      type: linking ? undefined : 'window'
+    }"
     ref="dialog"
-    class="record-dialog related-objects"
+    class="app-dialog related-objects"
     :class="{ 'link-objects': linking }"
     :aria-label="t(linking ? 'Link existing objects' : 'Related objects')"
     @cancel.prevent="close()"
   >
-    <header>
-      <div>
-        <h2>{{ t(linking ? 'Link existing objects' : 'Related objects') }}</h2>
-        <small>{{
-          parent?.name || parent?.title || parent?.code || parent?.id
-        }}</small>
-      </div>
+    <header class="app-dialog-titlebar">
+      <h2>{{ t(linking ? 'Link existing objects' : 'Related objects') }}</h2>
       <AppButton
         label="Close related objects"
         icon="close"
@@ -679,33 +698,11 @@ export default {
       />
     </header>
     <p v-if="error && !linking" class="error" role="alert">{{ t(error) }}</p>
-    <div v-if="!linking" class="toolbar">
-      <label
-        ><span v-if="!mobile">{{ t('Related type') }}</span
-        ><AppSelect
-          v-model="selectedType"
-          label="Related type"
-          :translate-labels="false"
-          :options="
-            relations.map((item) => ({
-              value: item.search_type,
-              label: mobile
-                ? item.title
-                : item.title + ' В· ' + item.search_type
-            }))
-          "
-          :disabled="busy || !relations.length || !!readBranch"
-          @update:model-value="load"
-      /></label>
-      <AppButton
-        v-if="relation?.can_create && definition?.operations?.create"
-        label="Create related object"
-        icon="add"
-        highlighted
-        :icon-only="mobile"
-        @click="create()"
-      />
-    </div>
+    <RelatedObjectsToolbar
+      v-if="!linking"
+      :model="relatedModel"
+      @event="relatedAction"
+    />
     <ObjectLinkSurface
       v-if="linking"
       :model="linkModel"
@@ -833,6 +830,24 @@ export default {
   </dialog>
 </template>
 <style>
+.related-objects {
+  width: min(1120px, calc(100vw - 32px));
+  height: min(780px, calc(100dvh - 32px));
+  background: var(--surface);
+}
+.related-objects > .table-container {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--surface);
+}
+.related-objects > p {
+  flex: none;
+  margin: 8px 12px;
+}
 .link-objects {
   width: min(1120px, calc(100vw - 32px));
   height: min(780px, calc(100dvh - 32px));
@@ -849,48 +864,5 @@ export default {
   margin: 0;
   padding: 2px 12px;
   min-height: 40px;
-}
-
-@media (max-width: 700px) {
-  .related-objects[open] {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    gap: 6px;
-  }
-  .related-objects > header {
-    margin: 0;
-    flex-wrap: nowrap;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-  .related-objects > header h2 {
-    font-size: var(--text-body-large);
-    margin: 0;
-  }
-  .related-objects > .toolbar {
-    flex-shrink: 0;
-    margin: 0;
-    flex-wrap: nowrap;
-  }
-  .related-objects > p {
-    margin: 4px 0;
-    flex-shrink: 0;
-  }
-  .related-objects > .table-container {
-    flex: 1;
-    min-height: 0;
-    max-height: none;
-    border: 0;
-    border-radius: 0;
-    background: var(--surface);
-  }
-  .related-objects > footer {
-    display: flex;
-    flex-shrink: 0;
-    justify-content: flex-end;
-    gap: 6px;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
 }
 </style>

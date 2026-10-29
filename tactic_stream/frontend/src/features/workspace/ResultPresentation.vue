@@ -32,9 +32,11 @@ import RecordForm from '../objects/RecordForm.vue';
 import ObjectAction from '../objects/ObjectAction.vue';
 import ObjectReport from '../objects/ObjectReport.vue';
 import RelatedObjects from '../objects/RelatedObjects.vue';
+import RelatedObjectsMenu from '../objects/RelatedObjectsMenu.vue';
 
 export default {
   components: {
+    RelatedObjectsMenu,
     ObjectReport,
     ProcessVisibility,
     VirtualCollection,
@@ -1560,47 +1562,18 @@ export default {
         @secondary="chooseTask(choice, $event)"
       />
     </AppMenu>
-    <AppMenu
+    <RelatedObjectsMenu
       ref="relationMenu"
-      class="result-relation-menu"
-      label="Related and child objects"
-      modal
-      overlay
-      :width="260"
-      @toggle="relationNode && (relationNode.menuVisible = $event.target.open)"
-    >
-      <AppMenuItem
-        v-for="branch in relationNode?.related_parents || []"
-        :key="branch.key"
-        :label="branch.title"
-        :translate="false"
-        :icon="branch.icon"
-        :style="{ '--relation-accent': branch.accent }"
-        @click="showRelated(relationNode, branch)"
-      />
-      <hr
-        v-if="
-          relationNode?.related_parents?.length &&
-          relationNode?.branches.some((branch) => branch.kind === 'relation')
-        "
-      />
-      <AppMenuItem
-        v-for="branch in relationNode?.branches.filter(
-          (branch) => branch.kind === 'relation'
-        ) || []"
-        :key="branch.key"
-        :label="branch.title"
-        :translate="false"
-        :icon="branch.icon"
-        :style="{ '--relation-accent': branch.accent }"
-        @click="showRelated(relationNode, null, branch.search_type)"
-      />
-      <AppMenuItem
-        label="Related objects"
-        icon="link"
-        @click="showRelated(relationNode)"
-      />
-    </AppMenu>
+      :node="relationNode"
+      @choose="
+        (branch) =>
+          showRelated(
+            relationNode,
+            branch?.kind === 'parent' ? branch : null,
+            branch?.kind === 'relation' ? branch.search_type : ''
+          )
+      "
+    />
     <ProcessVisibility
       ref="processVisibility"
       :ticket="ticket"

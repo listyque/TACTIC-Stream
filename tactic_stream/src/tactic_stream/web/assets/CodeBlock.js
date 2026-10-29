@@ -6055,6 +6055,7 @@ var russian = {
 	"Registered Search Types": "Зарегистрированные типы объектов",
 	"Related object expression": "Выражение поиска связанных объектов",
 	"Related objects": "Связанные объекты",
+	"Related type": "Тип связанных объектов",
 	"Related pipeline": "Связанный пайплайн",
 	"Related process": "Связанный процесс",
 	"Related workflow": "Связанный воркфлоу",

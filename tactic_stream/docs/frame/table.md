@@ -49,6 +49,21 @@ explicit; catalogue data cannot authorize importing arbitrary plugin code.
 
 ## Owners
 
+Related-object browsing uses `features/objects/related.ui.mjs` for the type/create
+toolbar. Both clients use their standard window
+host and menu rows. Stream retains ConfiguredView's database-field presentation;
+Handler uses its existing configured nested-table renderer. This does not certify
+identical table controls or complete legacy-widget compatibility.
+
+Handler's RelatedObjectsController owns the parent and selected relation. Its
+portable schema reader adds general related types asynchronously; the existing
+NestedTableController owns scoped records, filters, pages and native operations.
+Window-owned scopes are excluded from inline expansion. Closing or changing the
+context cancels catalogue/table workers and releases descendant scopes. Such
+windows restore geometry but never reopen from persisted visibility without a
+prepared object. Tests cover the portable catalogue, late replies and real QML
+toolbar input, and shared toolbar geometry in English/Russian.
+
 Qt ListView and browser virtualization retain delegates, scrolling and actual
 input. Application search sessions/ConfiguredView retain queries/selection.
 ColumnsEditorController and server widget-configuration operations retain
