@@ -74,6 +74,38 @@ const state = reactive({
   ]
 });
 const edits = [];
+const disclosureMode = new URLSearchParams(location.search).has('disclosures');
+if (disclosureMode) {
+  const names = ['history', 'tasks', 'history_copy'];
+  state.columns = names.map((name) => ({
+    name,
+    title: name,
+    width: 100,
+    supported: true,
+    cell: { kind: 'commands' }
+  }));
+  state.rows[0].cells = Object.fromEntries(
+    names.map((name) => [
+      name,
+      {
+        columnName: name,
+        nestedTable: { ...child, view: name === 'tasks' ? 'tasks' : 'history' },
+        actions: [
+          {
+            name: 'nested-table',
+            label: 'Show related table',
+            icon: 'chevron-right'
+          }
+        ]
+      }
+    ])
+  );
+  state.rows.push({
+    key: 'demo/asset?code=B',
+    record: { code: 'B', __search_key__: 'demo/asset?code=B' },
+    cells: state.rows[0].cells
+  });
+}
 const actions = [];
 const width = ref(0);
 window.nestedFixture = {
@@ -113,6 +145,7 @@ window.nestedFixture = {
 </script>
 <template>
   <NestedTable
+    :frame-node="disclosureMode ? { height: 800 } : null"
     ticket="test-fixture"
     project="demo"
     :state="state"

@@ -4064,6 +4064,8 @@ function describe$50(cell, width, height, language, editable = true, expanded = 
 	if (cell.links || cell.ingest) return describe$60(cell, width, height, language, editable);
 	if (cell.label && !cell.text) cell = Object.assign({}, cell, { text: translate(cell.label, language) });
 	const actions = cell.actions || [];
+	const nested = expanded.__nested;
+	const nestedOpen = !!nested?.open && String(nested.column || "") === String(cell.columnName || "") && identity(nested.scope) === identity(cell.nestedTable);
 	const size = 28, gap = 4;
 	const inner = Math.max(0, width - 24);
 	const textWidth = cell.text ? Math.max(0, inner - size - 8) : 0;
@@ -4074,7 +4076,7 @@ function describe$50(cell, width, height, language, editable = true, expanded = 
 	actions.forEach((action, index) => {
 		const left = cell.align === "center" && !cell.text && actions.length === 1 ? (width - size) / 2 : cell.text ? inner - size : 4 + index % capacity * 32;
 		const top = cell.text ? 0 : Math.floor(index / capacity) * 32;
-		children.push(button("tableServiceAction_" + index, rect$1(Math.max(0, left), top, size, size), action.translateLabel === false ? action.label : translate(action.label, language), action.name === "nested-table" ? expanded.__nested?.busy ? "loading" : expanded.__nested?.open ? "expand-more" : action.icon || "chevron-right" : action.icon, {
+		children.push(button("tableServiceAction_" + index, rect$1(Math.max(0, left), top, size, size), action.translateLabel === false ? action.label : translate(action.label, language), action.name === "nested-table" ? nestedOpen && nested.busy ? "loading" : nestedOpen ? "expand-more" : action.icon || "chevron-right" : action.icon, {
 			type: "service",
 			name: action.name,
 			view: action.view || ""

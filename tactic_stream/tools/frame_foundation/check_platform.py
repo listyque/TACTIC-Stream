@@ -1021,6 +1021,7 @@ def main():
         ("browser-variable-rows", ["node", "frontend/tests/frame_variable_rows.mjs"], ROOT, {}),
         ("browser-nested-table", ["node", "frontend/tests/table_nested.mjs"], ROOT, {}),
         ("browser-table-checkin-toggle", ["node", "frontend/tests/table_checkin_toggle.mjs"], ROOT, {}),
+        ("browser-table-disclosure-state", ["node", "frontend/tests/table_disclosure_state.mjs"], ROOT, {}),
         ("browser-search-filter-menu", ["node", "frontend/tests/search_result_menu.mjs"], ROOT, {}),
         ("browser-table-header-color", ["node", "frontend/tests/table_header_color.mjs"], ROOT, {}),
         ("native-table-header-color", python + ["-m", "unittest", "-q", "tests.test_table_header_color"], handler, {}),
