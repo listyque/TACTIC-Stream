@@ -407,7 +407,9 @@ h2 { font-size: var(--text-heading); }
 @container (max-width: 620px) {
   .task-manager-docked .task-manager-toolbar { gap: 4px; padding-inline: 7px; }
 }
-.project-picker { width: clamp(176px, 21vw, 260px); min-width: 0; height: 36px; min-height: 36px; justify-content: flex-start; gap: 9px; border-radius: var(--surface-radius); padding: 3px 10px 3px 7px; background: var(--surface); }
+.frame-main-toolbar .project-picker.app-button:not(.icon-button) { width: clamp(176px, 21vw, 260px); min-width: 0; height: 36px; min-height: 36px; justify-content: flex-start; gap: 9px; border: 1px solid var(--outline); border-radius: 12px; padding: 3px 9px 3px 6px; background: var(--surface); color: var(--on-surface); }
+.frame-main-toolbar .project-picker.app-button:not(.icon-button):is(:hover, :focus-visible) { background: var(--hover); border-color: var(--outline); color: var(--on-surface); }
+.frame-main-toolbar .project-picker.app-button:not(.icon-button):active { background: var(--selected); }
 .project-picker .image-picker-preview { width: 28px; height: 28px; flex-basis: 28px; border-radius: var(--preview-radius); font-size: var(--text-caption); }
 .project-picker > strong { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; text-align: left; white-space: nowrap; font-size: var(--text-setting-title); }
 .project-picker > .app-icon { color: var(--muted); font-size: 18px; width: 18px; height: 18px; }

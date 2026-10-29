@@ -107,6 +107,19 @@ try {
         () => !document.querySelector('#topbar-system-activity .busy')
       );
       await page.evaluate(() => document.fonts.ready);
+      assert.deepEqual(
+        await page.locator('.project-picker').evaluate((button) => {
+          const style = getComputedStyle(button);
+          return [
+            style.borderRadius,
+            style.borderTopWidth,
+            style.paddingLeft,
+            style.paddingRight
+          ];
+        }),
+        ['12px', '1px', '6px', '9px'],
+        'Project picker keeps Handler chrome and content insets'
+      );
       const scene = describe({
         width,
         compact: width <= 700,
