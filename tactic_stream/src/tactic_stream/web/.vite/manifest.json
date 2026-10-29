@@ -551,6 +551,9 @@
       "index.html",
       "_resize.js",
       "_admin.document.js"
+    ],
+    "css": [
+      "assets/RawDatabase.css"
     ]
   },
   "src/features/administration/SchemaEditor.vue": {

@@ -1,7 +1,7 @@
-import { D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, h as createBlock, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref } from "./vue.js";
-import { L as _plugin_vue_export_helper_default, o as t, s as appearance } from "./AppButton.js";
+import { D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref } from "./vue.js";
+import { L as _plugin_vue_export_helper_default, o as t, s as appearance, t as _sfc_main$2 } from "./AppButton.js";
 import { w as rawDatabase } from "./index.js";
-import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$2, v as translate, z as muted } from "./resize.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$3, v as translate, z as muted } from "./resize.js";
 import { n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/database/raw.state.mjs
 function initial() {
@@ -325,16 +325,9 @@ function cell(grid, record, row, column, model, ui, language) {
 function cellDescribe(model, ui, width, height, language) {
 	if (!model.name) return { nodes: [] };
 	const tr = (text) => translate(text, language), pad = 14, inner = Math.max(1, width - 28), footer = height - 52, errorHeight = model.error ? 48 : 0, helpY = footer - 44;
-	const narrow = width < 600;
-	const header = [label("rawCellTitle", rect(narrow ? 42 : 0, 0, inner - (narrow ? 42 : 100), 38), tr("Cell editor"), { fontRole: "heading" }), button(narrow ? "rawCellBack" : "rawCellClose", rect(narrow ? 0 : inner - 38, 0, 38, 38), tr(narrow ? "Back" : "Close"), narrow ? "chevron-left" : "close", { type: "cancel" }, true, { iconOnly: true })];
 	const nodes = [
-		node("Box", "rawCellHeader", rect(pad, pad, inner, 38), {
-			titlebar: true,
-			chromeRight: 46,
-			children: header
-		}),
-		label("rawCellDescription", rect(pad, 64, inner, 34), (model.name || "") + " · " + (model.type || "") + " · " + tr("Row") + " " + (model.rowNumber || ""), { wrap: true }),
-		node("Choice", "rawCellMode", rect(pad, 110, inner, 38), {
+		label("rawCellDescription", rect(pad, 14, inner, 34), (model.name || "") + " · " + (model.type || "") + " · " + tr("Row") + " " + (model.rowNumber || ""), { wrap: true }),
+		node("Choice", "rawCellMode", rect(pad, 60, inner, 38), {
 			value: ui.mode,
 			label: tr("Value mode"),
 			enabled: !model.readonly && !model.busy,
@@ -344,7 +337,7 @@ function cellDescribe(model, ui, width, height, language) {
 			})),
 			action: { type: "mode" }
 		}),
-		node("Area", "rawCellValue", rect(pad, 160, inner, Math.max(1, helpY - errorHeight - 172)), {
+		node("Area", "rawCellValue", rect(pad, 110, inner, Math.max(1, helpY - errorHeight - 122)), {
 			text: ui.text,
 			label: tr("Cell value"),
 			enabled: ui.mode === "value" && !model.busy,
@@ -407,18 +400,19 @@ function cellValue(text, type, mode = "value") {
 //#endregion
 //#region src/features/administration/RawCellEditor.vue
 var _hoisted_1$1 = ["aria-label"];
+var _hoisted_2$1 = { class: "app-dialog-titlebar" };
 //#endregion
 //#region src/features/administration/RawDatabase.vue
 var _sfc_main = {
 	components: {
-		FrameView: _sfc_main$2,
+		FrameView: _sfc_main$3,
 		RawCellEditor: {
 			__name: "RawCellEditor",
 			props: { busy: Boolean },
 			emits: ["applied"],
 			setup(__props, { expose: __expose, emit: __emit }) {
 				const props = __props, emit = __emit;
-				const dialog = ref(null), frame = ref(null), cell = ref(null), ui = ref(cellInitial({})), error = ref(""), viewport = ref({
+				const dialog = ref(null), frame = ref(null), body = ref(null), cell = ref(null), ui = ref(cellInitial({})), error = ref(""), viewport = ref({
 					width: 640,
 					height: 440
 				});
@@ -444,8 +438,8 @@ var _sfc_main = {
 					await nextTick();
 					dialog.value.showModal();
 					viewport.value = {
-						width: dialog.value.clientWidth,
-						height: dialog.value.clientHeight
+						width: body.value.clientWidth,
+						height: body.value.clientHeight
 					};
 					await nextTick();
 					frame.value.focusControl("rawCellValue");
@@ -474,13 +468,13 @@ var _sfc_main = {
 					}
 				}
 				onMounted(() => {
-					observer = new ResizeObserver((entries) => {
+					observer = observeFrameSizes((entries) => {
 						for (const entry of entries) if (entry.contentRect.width && entry.contentRect.height) viewport.value = {
 							width: entry.contentRect.width,
 							height: entry.contentRect.height
 						};
 					});
-					observer.observe(dialog.value);
+					observer.observe(body.value);
 				});
 				onBeforeUnmount(() => {
 					observer?.disconnect();
@@ -500,17 +494,23 @@ var _sfc_main = {
 						ref: dialog,
 						class: "record-dialog raw-cell-editor frame-dialog",
 						"aria-label": unref(t)("Cell editor"),
-						onCancel: _cache[0] || (_cache[0] = withModifiers(($event) => dispatch({ type: "cancel" }), ["prevent"])),
-						onKeydown: _cache[1] || (_cache[1] = withKeys(withModifiers(($event) => dispatch({ type: "apply" }), ["ctrl", "prevent"]), ["enter"]))
-					}, [createVNode(_sfc_main$2, {
+						onCancel: _cache[1] || (_cache[1] = withModifiers(($event) => dispatch({ type: "cancel" }), ["prevent"])),
+						onKeydown: _cache[2] || (_cache[2] = withKeys(withModifiers(($event) => dispatch({ type: "apply" }), ["ctrl", "prevent"]), ["enter"]))
+					}, [createBaseVNode("header", _hoisted_2$1, [createBaseVNode("h2", null, toDisplayString(unref(t)("Cell editor")), 1), createVNode(_sfc_main$2, {
+						label: "Close",
+						icon: "close",
+						"icon-only": "",
+						onClick: _cache[0] || (_cache[0] = ($event) => dispatch({ type: "cancel" }))
+					})]), createBaseVNode("div", {
+						ref_key: "body",
+						ref: body,
+						class: "frame-host-body"
+					}, [createVNode(_sfc_main$3, {
 						ref_key: "frame",
 						ref: frame,
 						scene: scene.value,
 						onEvent: dispatch
-					}, null, 8, ["scene"])], 40, _hoisted_1$1)), [[_directive_window, {
-						kind: "raw_cell",
-						backProvided: true
-					}]]);
+					}, null, 8, ["scene"])], 512)], 40, _hoisted_1$1)), [[_directive_window, { kind: "raw_cell" }]]);
 				};
 			}
 		}

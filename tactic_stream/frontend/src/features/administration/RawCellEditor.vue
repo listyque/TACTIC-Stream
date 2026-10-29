@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
+import AppButton from '../../controls/AppButton.vue';
+import { observeFrameSizes } from '../../frame/resize.js';
 import { appearance } from '../../appearance.js';
 import { t } from '../../i18n.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/database/raw.ui.mjs';
@@ -11,6 +13,7 @@ const props = defineProps({ busy: Boolean }),
   emit = defineEmits(['applied']);
 const dialog = ref(null),
   frame = ref(null),
+  body = ref(null),
   cell = ref(null),
   ui = ref(State.cellInitial({})),
   error = ref(''),
@@ -43,8 +46,8 @@ async function open(scope) {
   await nextTick();
   dialog.value.showModal();
   viewport.value = {
-    width: dialog.value.clientWidth,
-    height: dialog.value.clientHeight
+    width: body.value.clientWidth,
+    height: body.value.clientHeight
   };
   await nextTick();
   frame.value.focusControl('rawCellValue');
@@ -75,7 +78,7 @@ function dispatch(event) {
   }
 }
 onMounted(() => {
-  observer = new ResizeObserver((entries) => {
+  observer = observeFrameSizes((entries) => {
     for (const entry of entries)
       if (entry.contentRect.width && entry.contentRect.height)
         viewport.value = {
@@ -83,7 +86,7 @@ onMounted(() => {
           height: entry.contentRect.height
         };
   });
-  observer.observe(dialog.value);
+  observer.observe(body.value);
 });
 onBeforeUnmount(() => {
   observer?.disconnect();
@@ -94,12 +97,37 @@ defineExpose({ open, close, ui, scene, model });
 <template>
   <dialog
     ref="dialog"
-    v-window="{ kind: 'raw_cell', backProvided: true }"
+    v-window="{ kind: 'raw_cell' }"
     class="record-dialog raw-cell-editor frame-dialog"
     :aria-label="t('Cell editor')"
     @cancel.prevent="dispatch({ type: 'cancel' })"
     @keydown.ctrl.enter.prevent="dispatch({ type: 'apply' })"
   >
-    <FrameView ref="frame" :scene="scene" @event="dispatch" />
+    <header class="app-dialog-titlebar">
+      <h2>{{ t('Cell editor') }}</h2>
+      <AppButton
+        label="Close"
+        icon="close"
+        icon-only
+        @click="dispatch({ type: 'cancel' })"
+      />
+    </header>
+    <div ref="body" class="frame-host-body">
+      <FrameView ref="frame" :scene="scene" @event="dispatch" />
+    </div>
   </dialog>
 </template>
+
+<style>
+.raw-cell-editor.frame-dialog.app-window[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.raw-cell-editor.frame-dialog.app-window > header.app-dialog-titlebar {
+  margin-bottom: 0 !important;
+}
+.raw-cell-editor > .frame-host-body {
+  overflow: hidden;
+}
+</style>
