@@ -98,6 +98,14 @@ try {
     );
   await open();
   await source.waitFor();
+  const headerBounds = await dialog.locator('> header').boundingBox();
+  const toolbarBounds = await dialog
+    .locator('.script-editor-toolbar')
+    .boundingBox();
+  assert(
+    Math.abs(toolbarBounds.y - headerBounds.y - headerBounds.height - 8) < 1,
+    'The script workspace owns its 8 px top inset without a second title-bar gap'
+  );
   const original =
     'def hello(name):\n    # Demo server script\n    return {"greeting": name}\n\nreturn hello("World")\n';
   await dialog.getByLabel('Script folder', { exact: true }).fill('editor_demo');

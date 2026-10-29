@@ -153,3 +153,5 @@ case. Review the source and execution owner, check the review box, and confirm
 activation. Scripts targeting Handler run on its desktop after activation; the
 Stream browser does not execute Local Python/QML. Return to the editor without
 losing its open buffers. Reports belong to their author and project.
+
+The editor toolbar starts 8 px below the window title bar, using the workspace inset without an additional title-bar gap.
