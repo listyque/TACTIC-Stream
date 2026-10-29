@@ -62,4 +62,71 @@ for(const [style,height] of [['md3',72],['material5',76],['fluent',68]]) {
   assert.equal(State.curvePoint(edge,0).y,height/2,'Connection follows the actual themed port')
   assert.equal(State.hit(State.initial(),themed,{x:200,y:height/2}).kind,'port')
 }
-console.log('Frame Graph: shared geometry, selection, release-only moves, ports, camera, keys, read-only and pinch passed')
+// Native edge surfaces cover the painted world, not the empty viewport.
+assert.deepEqual(
+  UI.paintBounds({ ...model, edges: [] }, State.initial(), viewport, null),
+  { x: 0, y: 0, width: 0, height: 0 }
+);
+for (const zoom of [0.4, 1, 2])
+  for (const x of [-100, 0, 150, 3000]) {
+    const camera = { ...State.initial(), zoom, x, y: 0 };
+    const area = UI.paintBounds(model, camera, viewport, null);
+    assert.ok(
+      area.x >= 0 &&
+        area.y >= 0 &&
+        area.x + area.width <= viewport.width &&
+        area.y + area.height <= viewport.height
+    );
+    for (const edge of State.curves(camera, model))
+      for (const t of [0, 0.25, 0.5, 0.6, 0.75, 1]) {
+        const point = State.curvePoint(edge, t),
+          px = (point.x - x) * zoom,
+          py = point.y * zoom;
+        if (
+          px >= 0 &&
+          px <= viewport.width &&
+          py >= 0 &&
+          py <= viewport.height
+        ) {
+          assert.ok(
+            px >= area.x &&
+              px <= area.x + area.width &&
+              py >= area.y &&
+              py <= area.y + area.height
+          );
+        }
+      }
+  }
+const selection = { x: 20, y: 30, width: 550, height: 200 };
+const selectedArea = UI.paintBounds(
+  { ...model, edges: [] },
+  { ...State.initial(), x: 0, y: 0 },
+  viewport,
+  selection
+);
+assert.ok(
+  selectedArea.x <= 20 &&
+    selectedArea.y <= 30 &&
+    selectedArea.x + selectedArea.width >= 570 &&
+    selectedArea.y + selectedArea.height >= 230
+);
+const pending = {
+  ...State.initial(),
+  x: 0,
+  y: 0,
+  pending: { identity: 'a', input: false },
+  cursor: { x: 720, y: 360 }
+};
+const pendingArea = UI.paintBounds(
+  { ...model, edges: [] },
+  pending,
+  viewport,
+  null
+);
+assert.ok(
+  pendingArea.x + pendingArea.width >= 720 &&
+    pendingArea.y + pendingArea.height >= 360
+);
+console.log(
+  'Frame Graph: shared geometry, selection, release-only moves, ports, camera, keys, read-only, pinch and bounded paint surfaces passed'
+);
