@@ -208,7 +208,12 @@ for (const language of ['en', 'ru']) {
           {
             mode,
             title: 'Field',
-            value: mode === 'multi' ? ['a'] : '',
+            value:
+              mode === 'multi'
+                ? ['a']
+                : mode === 'tags'
+                  ? 'arm, рука, WWW'
+                  : '',
             options: [
               { value: 'a', label: 'A' },
               { value: 'b', label: 'B' }
@@ -217,7 +222,8 @@ for (const language of ['en', 'ru']) {
             uncertain
           },
           width,
-          language
+          language,
+          (text) => text.length * 7
         );
         validateScene(scene);
         assert(scene.height >= 36);

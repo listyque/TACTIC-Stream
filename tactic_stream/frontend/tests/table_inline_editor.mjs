@@ -145,6 +145,40 @@ try {
   assert.deepEqual(await page.evaluate(() => window.host.saved), [
     text + '\nПроверено'
   ]);
+  const tagNames = [
+    'robot',
+    'arm',
+    'manipulator',
+    'mechanical',
+    'prop',
+    'робот',
+    'рука',
+    'манипулятор',
+    'WWWWWW'
+  ];
+  await open('tags', tagNames.join(', '));
+  await checkBounds();
+  for (const tag of tagNames) {
+    const paint = await popup
+      .getByRole('button', { name: tag, exact: true })
+      .evaluate((button) => {
+        const label = button.querySelector(
+          ':scope > span:not(.app-icon):not(.control-ripple-clip):not(.app-button-badge)'
+        );
+        const text = document.createRange();
+        text.selectNodeContents(label);
+        return {
+          available: label.clientWidth,
+          text: text.getBoundingClientRect().width
+        };
+      });
+    assert.ok(
+      paint.text <= paint.available + 1,
+      tag + ': ' + JSON.stringify(paint)
+    );
+  }
+  await popup.screenshot({ path: output + 'tags.png' });
+  await popup.press('Escape');
   await open(
     'tags',
     Array.from({ length: 60 }, (_, i) => 'tag_' + i).join(', ')

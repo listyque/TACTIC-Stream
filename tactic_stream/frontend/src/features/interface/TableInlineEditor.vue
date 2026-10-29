@@ -6,6 +6,11 @@ import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/inli
 import { fieldKind } from '../objects/recordFields.js';
 import { t } from '../../i18n.js';
 import { frameContentWidth, observeFrameSizes } from '../../frame/resize.js';
+import { layoutTextWidth } from '../../controls/typography/textMetrics.js';
+import {
+  fontFamily,
+  textStyles
+} from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 
 const props = defineProps({
   editor: Object,
@@ -69,7 +74,12 @@ const scene = computed(() =>
       error: props.error ? t(props.error) : ''
     },
     contentWidth.value,
-    appearance.language
+    appearance.language,
+    (text) =>
+      layoutTextWidth(
+        text,
+        `600 ${textStyles.body}px "${fontFamily}", system-ui, sans-serif`
+      )
   )
 );
 function dispatch(action) {

@@ -29,6 +29,10 @@ this tool is not part of ordinary product builds.
 Workspace tab backgrounds have square corners. Keep the selection underline and
 close-button feedback rounded; tab styling must not change general panel radii.
 
+Tag editors measure labels in the rendered font and include the existing button
+icon, spacing and padding. Pack whole chips onto the next row; only labels wider
+than the popup's available label area may elide.
+
 The main project picker matches Handler's outlined 12px surface, panel fill,
 hover/pressed colors and content insets; generic button paint must not override it.
 

@@ -22299,7 +22299,7 @@ function explicitSave(mode) {
 		"tags"
 	].indexOf(mode) >= 0;
 }
-function describe$39(model, width, language) {
+function describe$39(model, width, language, measureTag) {
 	const tr = (text) => translate(text, language);
 	const enabled = !model.busy && !model.uncertain;
 	const mode = model.mode || "text", nodes = [];
@@ -22315,8 +22315,10 @@ function describe$39(model, width, language) {
 	};
 	if (mode === "tags") {
 		let left = 0;
+		const chip = controls$2.button;
+		const chrome = chip.iconPadding + chip.padding + chip.iconSize + chip.spacing;
 		for (const [index, tag] of tags(model.value).entries()) {
-			const chipWidth = Math.min(width, Math.max(72, Array.from(tag).length * 8 + 44));
+			const chipWidth = Math.min(width, Math.max(chip.minimumWidth, Math.ceil(measureTag(tag)) + chrome));
 			if (left && left + chipWidth > width) {
 				left = 0;
 				top += 42;
@@ -22496,7 +22498,7 @@ var _sfc_main$112 = {
 			busy: props.busy,
 			uncertain: props.uncertain,
 			error: props.error ? t(props.error) : ""
-		}, contentWidth.value, appearance.language));
+		}, contentWidth.value, appearance.language, (text) => layoutTextWidth(text, `600 ${textStyles.body}px "${fontFamily}", system-ui, sans-serif`)));
 		function dispatch(action) {
 			if ([
 				"tagDraft",
