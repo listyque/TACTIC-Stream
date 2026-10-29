@@ -44077,6 +44077,8 @@ var _sfc_main$51 = {
 			return openBlock(), createElementBlock(Fragment, null, [createVNode(_sfc_main$189, {
 				ref_key: "menu",
 				ref: menu,
+				overlay: __props.kind === "filters",
+				"align-start": __props.kind === "filters",
 				label: __props.label,
 				icon: __props.icon,
 				boundary: __props.boundary,
@@ -44090,6 +44092,8 @@ var _sfc_main$51 = {
 				}, null, 8, ["actions"])]),
 				_: 1
 			}, 8, [
+				"overlay",
+				"align-start",
 				"label",
 				"icon",
 				"boundary",

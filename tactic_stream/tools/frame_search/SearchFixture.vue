@@ -10,6 +10,8 @@ import ConditionCards from '../../frontend/src/features/workspace/ConditionCards
 import SearchPresetBar from '../../frontend/src/features/workspace/SearchPresetBar.vue';
 import SearchEditorPart from '../../frontend/src/features/workspace/SearchEditorPart.vue';
 import SearchFooter from '../../frontend/src/features/workspace/SearchFooter.vue';
+import SearchResultMenu from '../../frontend/src/features/workspace/SearchResultMenu.vue';
+import WorkspaceTabs from '../../frontend/src/controls/WorkspaceTabs.vue';
 import VirtualCollection from '../../frontend/src/controls/lists/VirtualCollection.vue';
 import FrameView from '../../frontend/src/frame/FrameView.vue';
 import * as Popups from '../../src/tactic_stream/shared_ui/features/search/popups.ui.mjs';
@@ -85,7 +87,30 @@ function send(action) {
       background: 'var(--surface)'
     }"
   >
-    <div v-if="fixture.screen === 'advanced'" class="search-fixture-advanced">
+    <div v-if="fixture.screen === 'result-menu'">
+      <aside class="search-fixture-rail">Navigation</aside>
+      <section class="search-fixture-dock">
+        <WorkspaceTabs
+          :tabs="[{ id: 'assets', title: 'Assets' }]"
+          selected="assets"
+        >
+          <template #before-tabs>
+            <SearchResultMenu
+              :kind="fixture.kind || 'filters'"
+              icon="advanced-search"
+              label="Search filters and presets"
+              icon-only
+              :model="fixture.model"
+              @command="(value) => events.push(value)"
+            />
+          </template>
+        </WorkspaceTabs>
+      </section>
+    </div>
+    <div
+      v-else-if="fixture.screen === 'advanced'"
+      class="search-fixture-advanced"
+    >
       <SearchPresetBar
         :model="{
           presets: fixture.presets,
@@ -196,5 +221,24 @@ body,
 .search-fixture-scroll {
   height: 100%;
   overflow: auto;
+}
+.search-fixture-rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 64px;
+  height: 100%;
+  z-index: 40;
+  background: var(--surface-high);
+  overflow: hidden;
+}
+.search-fixture-dock {
+  position: absolute;
+  left: 72px;
+  right: 8px;
+  top: 30px;
+  height: 100px;
+  overflow: hidden;
+  transform: translateZ(0);
 }
 </style>

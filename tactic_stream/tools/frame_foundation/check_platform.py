@@ -1018,6 +1018,7 @@ def main():
         ("variable-rows-state", ["node", "frontend/tests/frame_variable_rows_state.mjs"], ROOT, {}),
         ("browser-variable-rows", ["node", "frontend/tests/frame_variable_rows.mjs"], ROOT, {}),
         ("browser-nested-table", ["node", "frontend/tests/table_nested.mjs"], ROOT, {}),
+        ("browser-search-filter-menu", ["node", "frontend/tests/search_result_menu.mjs"], ROOT, {}),
         ("browser-snapshot-gallery", ["node", "frontend/tests/table_snapshot_gallery.mjs"], ROOT, {}),
         ("browser-table", ["node", "frontend/tests/handler_table.mjs"], ROOT, {}),
         (

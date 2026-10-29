@@ -82,6 +82,8 @@ defineExpose({ close });
 <template>
   <AppMenu
     ref="menu"
+    :overlay="kind === 'filters'"
+    :align-start="kind === 'filters'"
     :label="label"
     :icon="icon"
     :boundary="boundary"

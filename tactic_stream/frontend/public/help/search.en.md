@@ -411,3 +411,8 @@ Result and task table headers show a thin vertical column-boundary grip, highlig
 Workspace panel menus use Handler ordering and semantic icons: Browsing lists Results, Snapshot Browser, Description and Knowledge Base. Submenus use a right chevron; Task Manager, Task Calendar, Drop Plate and Commit Queue use the corresponding Handler icons.
 
 Custom-card task and note icons show a count badge. Zero hides the badge; counts above 99 display 99+, while the tooltip keeps the exact count.
+
+The filter menu beside the search tabs opens above dock content and the
+left navigation rail, aligned to the start of its button. It stays inside the
+viewport on narrow windows. Escape closes the menu and returns focus to its
+button; selecting a command and clicking outside also close it.
