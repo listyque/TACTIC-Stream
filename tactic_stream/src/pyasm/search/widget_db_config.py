@@ -15,6 +15,7 @@ __all__ = ['WidgetDbConfig', 'WidgetDbConfigCache']
 from copy import deepcopy
 import json
 import re
+from xml.etree import ElementTree
 from pyasm.common import Base, Xml, TacticException, Container
 from pyasm.common.common_exception import SetupException
 from pyasm.common.errors import UnsupportedContract
@@ -24,6 +25,46 @@ from .search import SObject, Search, SearchType, SearchKey, SearchException, SOb
 class WidgetDbConfig(SObject):
     '''represents an sobject configuration in the database'''
     SEARCH_TYPE = "config/widget_config"
+
+    def commit(self, triggers=True, log_transaction=True, cache=True, return_sql=False):
+        # Column geometry is persistent UI state, not an Undo/history operation.
+        return super().commit(triggers=triggers,
+            log_transaction=log_transaction and not self._only_column_widths_changed(),
+            cache=cache, return_sql=return_sql)
+
+    def _only_column_widths_changed(self):
+        view = self.data.get('view')
+        if (self.get_id() in (-1, '-1', '') or self.force_insert or self.new_id != -1 or
+                set(self.update_data) != {'config'} or
+                not view or view in ('definition', 'edit_definition') or
+                self.data.get('search_type') == 'SideBarWdg'):
+            return False
+        normalized = []
+        for value in (self.data.get('config'), self.update_data['config']):
+            if not isinstance(value, str):
+                return False
+            try:
+                root = ElementTree.fromstring(value, parser=ElementTree.XMLParser(
+                    target=ElementTree.TreeBuilder(insert_comments=True, insert_pis=True)))
+            except ElementTree.ParseError:
+                return False
+            nodes = [node for node in root if node.tag == view or
+                     node.tag == 'view' and node.get('name') == view]
+            if len(nodes) != 1 or (nodes[0].get('layout') or 'TableLayoutWdg').rsplit('.', 1)[-1] not in (
+                    'TableWdg', 'TableLayoutWdg', 'FastTableLayoutWdg'):
+                return False
+            for element in nodes[0].findall('element'):
+                element.attrib.pop('width', None)
+            for node in root.iter():
+                if node.tag in ('config', view, 'view', 'element'):
+                    if node.text is not None and not node.text.strip():
+                        node.text = None
+                    for child in node:
+                        if child.tail is not None and not child.tail.strip():
+                            child.tail = None
+            normalized.append(ElementTree.canonicalize(
+                ElementTree.tostring(root, encoding='unicode'), with_comments=True))
+        return normalized[0] == normalized[1]
 
     # NOTE: search_type is not used here!!! Fix
     def __init__(self, search_type=None, columns=None, result=None, **kwargs):

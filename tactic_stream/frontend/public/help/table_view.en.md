@@ -22,6 +22,8 @@ Rounded header, 58px rows, 50px previews, 107 × 50px task cards, process note c
 
 Header menu: sorting, grouping/ungrouping, display/input definition, hide, order and row height. Drag column boundaries or use arrows in 8/16px steps. Auto Fit fits widths. The columns button selects saved views or saves a new one. All use config/widget_config, without another store. Long results are virtualized; server cells are read in batches of at most 500 objects.
 
+Changing widths in an existing table definition saves the sizes in place without adding Undo or activity-history entries. Creating a view or changing its columns, titles, widgets or other settings is still recorded.
+
 ## Edits and tasks
 
 Inputs resolve through edit/edit_definition and the real action.column. Assets Category therefore edits assets_category_code. Batch edits validate every revision before the first EditCmd; failure rolls back the entire batch. ID/code/project/timestamp/login and read_only are protected. Conflicts retain drafts; unknown save outcomes are checked before retrying. A ticket/project change blocks writes from the old draft.
