@@ -62,7 +62,7 @@ return h('div',{style:'height:100dvh;display:flex;flex-direction:column'},[
  h(IngestFiles,{ref:'ingest',ticket:'fixture',project:this.workspaceView.project}),
  h(SearchLibrary,{ref:'library',ticket:'fixture',project:'cg',searchType:'cg/assets',scope:'cg/assets',records:[],canManage:true}),
  withDirectives(h('dialog',{ref:'configDialog',id:'configuration-window',class:'configuration-dialog',onCancel:event=>{event.preventDefault();this.$refs.configuration.cancel()}},[
-  h(KeepAlive,()=>this.configMounted?h(Configuration,{ref:'configuration',ticket:'fixture',project:'cg',login:'alice',canAdminister:false,onClose:()=>{this.$refs.configDialog.close();this.configMounted=false}}):null)
+  h(KeepAlive,()=>this.configMounted?h(Configuration,{ref:'configuration',ticket:'fixture',project:'cg',login:'alice',canAdminister:false,onHelp:topic=>this.helpTopic=topic,onClose:()=>{this.$refs.configDialog.close();this.configMounted=false}}):null)
  ]),[[windowDirective,{type:'window'}]]),
  withDirectives(h('dialog',{ref:'fullEditor',id:'full-editor',class:'configuration-dialog'},[
   h('header',[h('h2','Full editor'),h(AppButton,{label:'Close full editor',onClick:()=>this.$refs.fullEditor.close()})])
@@ -191,6 +191,18 @@ try {
  await page.evaluate(async()=>{window.host.configMounted=true;await window.host.$nextTick();window.host.$refs.configDialog.show()})
  const config=page.locator('#configuration-window'),configHeader=config.locator('> .app-window-titlebar')
  await config.getByRole('button',{name:'Restore window',exact:true}).waitFor()
+ const headerHelp=configHeader.getByRole('button',{name:'Configuration help',exact:true})
+ await headerHelp.waitFor()
+ assert.equal(await config.getByRole('button',{name:'Configuration help',exact:true}).count(),1,'One visible Help action belongs to the window title bar')
+ assert.equal(await config.locator('.frame-titlebar [data-frame=configurationHelp]').isVisible(),false)
+ await headerHelp.click()
+ const firstHelp=await page.evaluate(()=>window.host.helpTopic)
+ assert(firstHelp)
+ await page.setViewportSize({width:360,height:900})
+ await headerHelp.waitFor();await headerHelp.press('Enter')
+ assert.equal(await page.evaluate(()=>window.host.helpTopic),firstHelp)
+ assert.equal(await configHeader.getByRole('button',{name:'Maximize window',exact:true}).isVisible(),false)
+ await page.setViewportSize({width:1280,height:900})
  assert.equal(await config.evaluate(el=>parseFloat(getComputedStyle(el).borderRadius)),0,'Configuration opens with square maximized corners')
  assert.equal(await configHeader.getByRole('button',{name:'Cancel',exact:true}).count(),0)
  await configHeader.getByRole('button',{name:'Minimize window',exact:true}).click()
@@ -201,6 +213,8 @@ try {
  await configHeader.getByRole('button',{name:'Close',exact:true}).hover()
  await page.getByRole('tooltip').filter({hasText:/^Close$/}).waitFor()
  await config.getByRole('button',{name:'Check-in Options',exact:true}).click()
+ await headerHelp.click()
+ assert.notEqual(await page.evaluate(()=>window.host.helpTopic),firstHelp,'Title-bar Help follows the current page')
  await config.getByLabel('Result limit',{exact:true}).fill('37')
  await configHeader.getByRole('button',{name:'Minimize window',exact:true}).click()
  await configHeader.getByRole('button',{name:'Close',exact:true}).click()

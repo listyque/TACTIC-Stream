@@ -58,3 +58,5 @@ Configuration is a separate window. Opening, minimizing or closing it preserves 
 The Projects page separates the catalogue and project actions into bordered surfaces. Filters stay in the catalogue header, the project count stays in its footer, and only the list scrolls. On narrow windows the actions appear above the catalogue.
 
 AI providers opens the connection editor directly inside Configuration. Select or create a connection, edit its settings and use its own Save or Check connection actions. Switching configuration pages preserves the connection draft; hidden editors stop connection polling. Account changes clear the draft. The agent chat can still open the same editor as a separate window.
+
+In Stream windows, page Help appears in the top window title bar beside the window controls. It follows the current editor or configuration page; the duplicate content-header button is hidden. Help remains available on narrow screens.

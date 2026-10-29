@@ -14,7 +14,8 @@ export const windowDirective = {
       hostedGeometry = null;
     let chrome = null,
       frameContent = null,
-      contentClose = null;
+      contentClose = null,
+      contentHelp = null;
     const show = element.show.bind(element),
       close = element.close.bind(element);
     const home = document.createComment('window owner');
@@ -188,6 +189,21 @@ export const windowDirective = {
         contentClose = hiddenClose;
         contentClose?.classList.add('app-window-content-close');
       }
+      const helpButton =
+        frameHeader && featureHeader
+          ? [...featureHeader.querySelectorAll('button')].find(
+              (button) =>
+                !button.closest('.app-window-controls') &&
+                button.querySelector(
+                  '[data-icon="help"], [data-icon="MDI_HELP_CIRCLE"]'
+                )
+            )
+          : null;
+      if (contentHelp !== helpButton) {
+        contentHelp?.classList.remove('app-window-content-help');
+        contentHelp = helpButton;
+        contentHelp?.classList.add('app-window-content-help');
+      }
       const next = chrome || featureHeader;
       const properties = () => ({
         element,
@@ -199,7 +215,10 @@ export const windowDirective = {
           : '',
         closeButton: contentClose,
         closeRequired: !!chrome || !closeButton,
-        closeDisabled: !!contentClose?.disabled
+        closeDisabled: !!contentClose?.disabled,
+        helpButton: contentHelp,
+        helpLabel: contentHelp?.getAttribute('aria-label') || '',
+        helpDisabled: !!contentHelp?.disabled
       });
       if (next === header) {
         if (host && !header.contains(host)) placeControls();
@@ -249,6 +268,7 @@ export const windowDirective = {
       chrome?.remove();
       frameContent?.classList.remove('app-window-frame-content');
       contentClose?.classList.remove('app-window-content-close');
+      contentHelp?.classList.remove('app-window-content-help');
       element.classList.remove('app-window-frame-host');
     };
   },

@@ -22,7 +22,10 @@ const props = defineProps({
   title: String,
   closeButton: Object,
   closeRequired: Boolean,
-  closeDisabled: Boolean
+  closeDisabled: Boolean,
+  helpButton: Object,
+  helpLabel: String,
+  helpDisabled: Boolean
 });
 const previousTitle = props.header.getAttribute('title'),
   previousTabIndex = props.header.getAttribute('tabindex');
@@ -353,6 +356,15 @@ onBeforeUnmount(() => {
   <Teleport v-if="title" :to="header"
     ><strong class="app-window-caption">{{ title }}</strong></Teleport
   ><AppButton
+    v-if="helpButton && !minimized"
+    class="app-window-help"
+    icon-only
+    icon="help"
+    :label="helpLabel"
+    :translate="false"
+    :disabled="helpDisabled"
+    @click="helpButton.click()"
+  /><AppButton
     v-if="element.dataset.windowType === 'window'"
     icon-only
     :icon="minimized ? 'window-restore' : 'minus'"
@@ -451,6 +463,9 @@ onBeforeUnmount(() => {
   align-items: center;
   flex-shrink: 0;
   margin-left: auto;
+}
+.app-window-content-help {
+  display: none !important;
 }
 .app-window-resize {
   position: fixed;
@@ -573,6 +588,12 @@ onBeforeUnmount(() => {
 @media (max-width: 700px) {
   .app-window-controls,
   .app-window-resize {
+    display: none;
+  }
+  .app-window-controls:has(> .app-window-help) {
+    display: inline-flex;
+  }
+  .app-window-controls > :not(.app-window-help) {
     display: none;
   }
   .app-window,

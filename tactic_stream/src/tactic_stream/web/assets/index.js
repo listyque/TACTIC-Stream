@@ -2252,7 +2252,10 @@ var _sfc_main = {
 		title: String,
 		closeButton: Object,
 		closeRequired: Boolean,
-		closeDisabled: Boolean
+		closeDisabled: Boolean,
+		helpButton: Object,
+		helpLabel: String,
+		helpDisabled: Boolean
 	},
 	setup(__props) {
 		const props = __props;
@@ -2523,8 +2526,18 @@ var _sfc_main = {
 					key: 0,
 					to: __props.header
 				}, [createBaseVNode("strong", _hoisted_1, toDisplayString(__props.title), 1)], 8, ["to"])) : createCommentVNode("", true),
-				__props.element.dataset.windowType === "window" ? (openBlock(), createBlock(_sfc_main$1, {
+				__props.helpButton && !minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 1,
+					class: "app-window-help",
+					"icon-only": "",
+					icon: "help",
+					label: __props.helpLabel,
+					translate: false,
+					disabled: __props.helpDisabled,
+					onClick: _cache[0] || (_cache[0] = ($event) => __props.helpButton.click())
+				}, null, 8, ["label", "disabled"])) : createCommentVNode("", true),
+				__props.element.dataset.windowType === "window" ? (openBlock(), createBlock(_sfc_main$1, {
+					key: 2,
 					"icon-only": "",
 					icon: minimized.value ? "window-restore" : "minus",
 					label: minimized.value ? "Restore window" : "Minimize window",
@@ -2536,7 +2549,7 @@ var _sfc_main = {
 					"aria-pressed"
 				])) : createCommentVNode("", true),
 				!minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
-					key: 2,
+					key: 3,
 					"icon-only": "",
 					icon: maximized.value ? "window-restore" : "open-in-full",
 					label: maximized.value ? "Restore window" : "Maximize window",
@@ -2548,12 +2561,12 @@ var _sfc_main = {
 					"aria-pressed"
 				])) : createCommentVNode("", true),
 				__props.closeRequired ? (openBlock(), createBlock(_sfc_main$1, {
-					key: 3,
+					key: 4,
 					"icon-only": "",
 					icon: "close",
 					label: "Close",
 					disabled: __props.closeDisabled,
-					onClick: _cache[0] || (_cache[0] = ($event) => __props.closeButton ? __props.closeButton.click() : back())
+					onClick: _cache[1] || (_cache[1] = ($event) => __props.closeButton ? __props.closeButton.click() : back())
 				}, null, 8, ["disabled"])) : createCommentVNode("", true),
 				(openBlock(), createBlock(Teleport, { to: __props.header }, [unref(mobile) && !__props.backProvided ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 0,
@@ -2564,7 +2577,7 @@ var _sfc_main = {
 					onClick: back
 				})) : createCommentVNode("", true)], 8, ["to"])),
 				minimized.value && __props.header.parentElement !== __props.element ? (openBlock(), createBlock(Teleport, {
-					key: 4,
+					key: 5,
 					to: __props.element
 				}, [createBaseVNode("header", _hoisted_2, [
 					createBaseVNode("strong", null, toDisplayString(__props.element.getAttribute("aria-label") || __props.header.querySelector("[role=\"heading\"]")?.textContent || unref(t)("Restore window")), 1),
@@ -2578,7 +2591,7 @@ var _sfc_main = {
 						"icon-only": "",
 						icon: "close",
 						label: "Close",
-						onClick: _cache[1] || (_cache[1] = ($event) => {
+						onClick: _cache[2] || (_cache[2] = ($event) => {
 							minimize();
 							back();
 						})
@@ -2614,7 +2627,7 @@ var windowDirective = {
 		if (element.tagName !== "DIALOG") return;
 		let configuration = binding.value;
 		let header = null, host = null, retainedGeometry = null, hostedGeometry = null;
-		let chrome = null, frameContent = null, contentClose = null;
+		let chrome = null, frameContent = null, contentClose = null, contentHelp = null;
 		const show = element.show.bind(element), close = element.close.bind(element);
 		const home = document.createComment("window owner");
 		element.before(home);
@@ -2744,6 +2757,12 @@ var windowDirective = {
 				contentClose = hiddenClose;
 				contentClose?.classList.add("app-window-content-close");
 			}
+			const helpButton = frameHeader && featureHeader ? [...featureHeader.querySelectorAll("button")].find((button) => !button.closest(".app-window-controls") && button.querySelector("[data-icon=\"help\"], [data-icon=\"MDI_HELP_CIRCLE\"]")) : null;
+			if (contentHelp !== helpButton) {
+				contentHelp?.classList.remove("app-window-content-help");
+				contentHelp = helpButton;
+				contentHelp?.classList.add("app-window-content-help");
+			}
 			const next = chrome || featureHeader;
 			const properties = () => ({
 				element,
@@ -2753,7 +2772,10 @@ var windowDirective = {
 				title: chrome ? element.getAttribute("aria-label") || element.dataset.windowKind : "",
 				closeButton: contentClose,
 				closeRequired: !!chrome || !closeButton,
-				closeDisabled: !!contentClose?.disabled
+				closeDisabled: !!contentClose?.disabled,
+				helpButton: contentHelp,
+				helpLabel: contentHelp?.getAttribute("aria-label") || "",
+				helpDisabled: !!contentHelp?.disabled
 			});
 			if (next === header) {
 				if (host && !header.contains(host)) placeControls();
@@ -2803,6 +2825,7 @@ var windowDirective = {
 			chrome?.remove();
 			frameContent?.classList.remove("app-window-frame-content");
 			contentClose?.classList.remove("app-window-content-close");
+			contentHelp?.classList.remove("app-window-content-help");
 			element.classList.remove("app-window-frame-host");
 		};
 	},
