@@ -162,6 +162,48 @@ try {
     }
     await page.close();
   }
+  const inputPage = await browser.newPage({
+    viewport: { width: 1400, height: 940 },
+    hasTouch: true
+  });
+  await inputPage.goto(
+    'http://127.0.0.1:' +
+      server.httpServer.address().port +
+      '/tools/frame_shell/index.html?mode=dark&language=en'
+  );
+  const control = (id) => inputPage.locator('[data-frame="' + id + '"]');
+  await control('adminToggleNavigation').click();
+  await control('adminSection_rules').click();
+  const bounds = await control('administrationSidebar').boundingBox();
+  const action = await control('adminSection_rules').boundingBox();
+  assert(
+    Math.abs(action.x + action.width / 2 - bounds.x - bounds.width / 2) < 0.5
+  );
+  assert.equal(action.width, action.height);
+  await inputPage.setViewportSize({ width: 1400, height: 500 });
+  await inputPage.waitForFunction(() => {
+    const el = document.querySelector(
+      '[data-frame="administrationNavigation"]'
+    );
+    return el && el.scrollHeight > el.clientHeight;
+  });
+  assert(
+    await control('administrationNavigation').evaluate(
+      (el) => el.scrollHeight > el.clientHeight
+    )
+  );
+  await control('adminSection_types').tap();
+  await control('adminSection_rules').tap();
+  assert.equal(
+    await inputPage.evaluate(() => window.frameAdmin.model.value.section),
+    'rules'
+  );
+  await control('adminToggleNavigation').click();
+  await control('administrationNavigation').evaluate((el) => {
+    el.scrollTop = el.scrollHeight;
+  });
+  await control('adminSectionTitle_rules').waitFor();
+  await inputPage.close();
   await writeFile(
     out + 'vue.json',
     JSON.stringify(

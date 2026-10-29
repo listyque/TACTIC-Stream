@@ -211,7 +211,7 @@ const Admin = await import(
 const Config = await import(
   '../../src/tactic_stream/shared_ui/features/configuration/configuration.ui.mjs'
 );
-for (const height of [620, 940]) {
+for (const height of [500, 620, 940]) {
   const model = { section: 'workflow', drafts: ['schema'] },
     ui = { collapsed: true },
     scene = Admin.describe(model, ui, 1400, height, 'en'),
@@ -223,7 +223,9 @@ for (const height of [620, 940]) {
       .find((node) => node.id === 'administrationHeader')
       .children.find((node) => node.id === 'adminToggleNavigation');
   for (const record of Admin.sections) {
-    const action = Admin.row(list, record, model, ui, 'en').nodes[0],
+    const action = list.children.find(
+        (node) => node.id === 'adminSection_' + record.id
+      ),
       icon = action.children.find((node) => node.kind === 'Icon');
     assert(
       action.width >= 40,
@@ -234,14 +236,22 @@ for (const height of [620, 940]) {
       'Collapsed icons fit with breathing room'
     );
     assert.equal(icon.x + icon.width / 2, action.width / 2);
+    assert.equal(action.width, action.height);
+    assert.equal(action.rail, false);
+    if (list.contentHeight <= list.height)
+      assert.equal(action.x + action.width / 2, sidebar.width / 2);
     assert.equal(
       toggle.x + toggle.width / 2,
-      list.x + action.width / 2,
+      list.x + action.x + action.width / 2,
       'Expand and section icons share a center line'
     );
     assert(
-      list.x + action.width + 16 <= sidebar.width,
-      'Scrollbar keeps its own gutter'
+      list.x +
+        action.x +
+        action.width +
+        (list.contentHeight > list.height ? 16 : 0) <=
+        sidebar.width,
+      'Scrollbar gutter is reserved only when the rail overflows'
     );
   }
 }

@@ -342,34 +342,47 @@ function initials$2(label) {
 	const words = String(label || "").trim().split(/\s+/).filter(Boolean);
 	return words.length ? (words[0][0] + (words[1]?.[0] || "")).toUpperCase() : "?";
 }
-function choice(model, width, height) {
-	const nodes = [node("Box", "taskTableCellSurface", rect$1(0, 0, width, height), {
+function choiceStyle(model) {
+	return {
 		background: model.enabled && model.hovered ? "surfaceContainerHigh" : "surfaceContainerLow",
 		border: model.actionField === false ? "outlineVariant" : void 0,
-		radiusRole: model.actionField === false ? "fieldRadius" : "itemRadius"
-	})];
+		radiusRole: model.actionField === false ? "fieldRadius" : "itemRadius",
+		textColor: model.enabled ? "primaryText" : "disabledText",
+		indicatorColor: model.enabled ? "secondaryText" : "disabledText",
+		indicatorIcon: "expand-more"
+	};
+}
+function choiceLayout(model, width, height) {
 	let left = 11;
-	if (model.avatar) {
-		const size = Math.max(0, Math.min(22, height - 4));
-		nodes.push(node("View", "taskTableCellAvatar", rect$1(left, (height - size) / 2, size, size), { view: "avatar" }));
-		left += size + 7;
-	}
-	if (model.showAccent && model.accent) {
-		nodes.push(node("Box", "taskTableCellAccent", rect$1(left, (height - 9) / 2, 9, 9), {
-			background: model.accent,
-			radius: 4.5
-		}));
-		left += 16;
-	}
-	const right = model.indicator ? 33 : 12;
+	const avatarSize = Math.max(0, Math.min(22, height - 4));
+	const avatar = model.avatar ? rect$1(left, (height - avatarSize) / 2, avatarSize, avatarSize) : null;
+	if (avatar) left += avatar.width + 7;
+	const accent = model.showAccent && model.accent ? Object.assign(rect$1(left, (height - 9) / 2, 9, 9), { radius: 4.5 }) : null;
+	if (accent) left += 16;
 	const textHeight = Math.min(height, model.textHeight || fontMetricHeight(textStyles[model.fontRole || "body"]));
-	nodes.push(label("taskTableCellDisplayLabel", rect$1(left, Math.round((height - textHeight) / 2), width - left - right, textHeight), model.text || "", {
-		fontRole: model.fontRole || "body",
-		color: model.enabled ? "primaryText" : "disabledText"
+	return {
+		avatar,
+		accent,
+		label: label("taskTableCellDisplayLabel", rect$1(left, Math.round((height - textHeight) / 2), width - left - (model.indicator ? 33 : 12), textHeight), model.text || "", { fontRole: model.fontRole || "body" }),
+		indicator: model.indicator ? rect$1(width - 26, (height - 17) / 2, 17, 17) : null
+	};
+}
+function choice(model, width, height) {
+	const layout = choiceLayout(model, width, height), style = choiceStyle(model);
+	const nodes = [node("Box", "taskTableCellSurface", rect$1(0, 0, width, height), {
+		background: style.background,
+		border: style.border,
+		radiusRole: style.radiusRole
+	})];
+	if (layout.avatar) nodes.push(node("View", "taskTableCellAvatar", layout.avatar, { view: "avatar" }));
+	if (layout.accent) nodes.push(node("Box", "taskTableCellAccent", rect$1(layout.accent.x, layout.accent.y, layout.accent.width, layout.accent.height), {
+		background: model.accent,
+		radius: layout.accent.radius
 	}));
-	if (model.indicator) nodes.push(node("Icon", "taskTableCellIndicator", rect$1(width - 26, (height - 17) / 2, 17, 17), {
-		icon: "expand-more",
-		color: model.enabled ? "secondaryText" : "disabledText"
+	nodes.push(Object.assign(layout.label, { color: style.textColor }));
+	if (layout.indicator) nodes.push(node("Icon", "taskTableCellIndicator", layout.indicator, {
+		icon: style.indicatorIcon,
+		color: style.indicatorColor
 	}));
 	return {
 		nodes,
@@ -26642,6 +26655,8 @@ function geometry(width, height, collapsed) {
 		pad,
 		header,
 		toolbar: Math.max(0, Math.min(body - (mobile ? 24 : 434), 620)),
+		compactHeight: sections.length * 48 - 8,
+		compactWidth: nav - (height - 88 - 12 < sections.length * 48 - 8 ? 16 : 0),
 		content: rect(nav + pad, header + pad, body - pad * 2, height - header - pad * 2)
 	};
 }
@@ -26666,13 +26681,30 @@ function describe$34(model, ui, width, height, language) {
 			color: "secondaryText"
 		}));
 		if (ui.collapsed) branding.length = 0;
-		branding.push(button("adminToggleNavigation", rect(ui.collapsed ? (g.nav - 16 - 34) / 2 : g.nav - 46, 12, 34, 34), ui.collapsed ? "Expand navigation" : "Collapse navigation", ui.collapsed ? "chevron-right" : "chevron-left", { type: "collapse" }));
+		branding.push(button("adminToggleNavigation", rect(ui.collapsed ? (g.compactWidth - 34) / 2 : g.nav - 46, 12, 34, 34), ui.collapsed ? "Expand navigation" : "Collapse navigation", ui.collapsed ? "chevron-right" : "chevron-left", { type: "collapse" }));
 		if (!ui.collapsed) {
 			nav.push(label("administrationProjectLabel", rect(12, 88, g.nav - 24, 22), "Project", { color: "secondaryText" }));
 			nav.push(node("View", "administrationProjectPicker", rect(12, 114, g.nav - 24, 38), { view: "projectPicker" }));
 		}
 		const top = ui.collapsed ? 88 : 170;
-		nav.push(node("List", "administrationNavigation", rect(ui.collapsed ? 0 : 8, top, g.nav - (ui.collapsed ? 0 : 16), height - top - 12), {
+		if (ui.collapsed) {
+			const children = [];
+			sections.forEach((record, index) => {
+				row$14({
+					width: g.nav,
+					contentWidth: g.compactWidth,
+					rowHeight: 48
+				}, record, model, ui, language).nodes.forEach((item) => {
+					item.y += index * 48;
+					children.push(item);
+				});
+			});
+			nav.push(node("Scroll", "administrationNavigation", rect(0, top, g.nav, height - top - 12), {
+				contentHeight: g.compactHeight,
+				children,
+				scrollbarId: "administrationNavigationScrollBar"
+			}));
+		} else nav.push(node("List", "administrationNavigation", rect(ui.collapsed ? 0 : 8, top, g.nav - (ui.collapsed ? 0 : 16), height - top - 12), {
 			source: "sections",
 			keyField: "id",
 			rowHeight: ui.collapsed ? 48 : 76,
@@ -26726,7 +26758,7 @@ function describe$34(model, ui, width, height, language) {
 	};
 }
 function row$14(list, record, model, ui, language) {
-	const tr = (text) => translate(text, language), compact = !!ui.collapsed, w = list.width - 16, h = list.rowHeight - 4;
+	const tr = (text) => translate(text, language), compact = !!ui.collapsed, available = compact && list.contentWidth !== void 0 ? list.contentWidth : list.width - 16, w = compact ? 40 : available, h = list.rowHeight - (compact ? 8 : 4);
 	const children = [node("Icon", "adminSectionIcon_" + record.id, rect(compact ? (w - 22) / 2 : 12, (h - 22) / 2, 22, 22), {
 		icon: record.icon,
 		color: record.id === model.section ? "action" : "secondaryText"
@@ -26746,13 +26778,14 @@ function row$14(list, record, model, ui, language) {
 		icon: "circle",
 		color: "action"
 	}));
-	return { nodes: [node("Action", "adminSection_" + record.id, rect(0, 0, w, h), {
+	return { nodes: [node("Action", "adminSection_" + record.id, rect(compact ? (available - w) / 2 : 0, 0, w, h), {
 		text: tr(record.title),
 		description: tr(record.description),
 		selected: model.section === record.id,
 		normalColor: "transparent",
 		selectedColor: "selected",
-		rail: true,
+		rail: !compact && model.section === record.id,
+		toolTip: compact ? tr(record.title) : "",
 		action: {
 			type: "section",
 			value: record.id
@@ -26854,7 +26887,7 @@ var AdministrationShell_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 		});
 		let observer;
 		onMounted(() => {
-			observer = new ResizeObserver(([entry]) => {
+			observer = observeFrameSizes(([entry]) => {
 				size.value = {
 					width: Math.max(1, entry.contentRect.width),
 					height: Math.max(1, entry.contentRect.height)
@@ -26882,7 +26915,7 @@ var AdministrationShell_default = /*#__PURE__*/ _plugin_vue_export_helper_defaul
 			])], 512);
 		};
 	}
-}, [["__scopeId", "data-v-6ae144c3"]]);
+}, [["__scopeId", "data-v-6f05cb69"]]);
 var main_menus_default = {
 	user: [
 		{

@@ -4,6 +4,7 @@ import FrameView from '../../frame/FrameView.vue';
 import Port from './AdministrationPort.vue';
 import AdminProjectPicker from './AdminProjectPicker.vue';
 import { appearance } from '../../appearance.js';
+import { observeFrameSizes } from '../../frame/resize.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/administration.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/administration.state.mjs';
 const props = defineProps({ model: { type: Object, required: true } }),
@@ -45,7 +46,7 @@ function dispatch(event) {
 defineExpose({ dispatch, ui, scene });
 let observer;
 onMounted(() => {
-  observer = new ResizeObserver(([entry]) => {
+  observer = observeFrameSizes(([entry]) => {
     size.value = {
       width: Math.max(1, entry.contentRect.width),
       height: Math.max(1, entry.contentRect.height)
