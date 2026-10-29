@@ -229,7 +229,7 @@ export default {
     administrationLocked() {
       return this.administrationEditors.some(editor => editor.dirty || editor.busy || editor.uncertain || editor.previewValidating || editor.$refs.naming?.dirty || editor.$refs.naming?.busy || editor.$refs.naming?.uncertain || editor.$refs.rules?.active || editor.creating || editor.$refs.deletion?.active)
     },
-    administrationProjectOptions() { return this.projects.map(item => ({ value: item.code, label: item.title || item.code })) },
+    administrationProjectOptions() { return this.projects.map(item => ({ value: item.code, label: item.title || item.code, preview: item.preview || '', category: item.category || '', kind: item.__builtin__ ? 'Built-in' : [true, 1, 'true', 't', '1'].includes(item.is_template) ? 'Templates' : item.s_status === 'retired' ? 'Retired' : '' })) },
     administrationSectionOptions() { return administrationSections.map(item => ({ value: item.id, label: item.title })) },
     administrationColumns() {
       if (this.section !== 'administration' || this.sidebarSearch) return null

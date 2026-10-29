@@ -2,6 +2,7 @@
 import { computed, onMounted, onBeforeUnmount, ref, markRaw } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import Port from './AdministrationPort.vue';
+import AdminProjectPicker from './AdminProjectPicker.vue';
 import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/administration/administration.ui.mjs';
 import * as State from '../../../../src/tactic_stream/shared_ui/features/administration/administration.state.mjs';
@@ -19,7 +20,14 @@ const scene = computed(() =>
     appearance.language
   )
 );
-const views = {
+const views = computed(() => ({
+  projectPicker: {
+    component: markRaw(AdminProjectPicker),
+    props: {
+      model: props.model,
+      onSelected: (value) => dispatch({ type: 'project', value })
+    }
+  },
   toolbar: {
     component: markRaw(Port),
     props: { target: 'administration-actions' }
@@ -28,7 +36,7 @@ const views = {
     component: markRaw(Port),
     props: { target: 'administration-pages' }
   }
-};
+}));
 function dispatch(event) {
   const result = State.transition(ui.value, props.model, event);
   ui.value = result.ui;

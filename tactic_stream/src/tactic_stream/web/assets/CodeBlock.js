@@ -4120,6 +4120,7 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Find a project by name or code": "Найти проект по названию или коду",
 	"Custom rule: its effect depends on the plugin or script that checks it.": "Кастомное правило: его действие зависит от плагина или скрипта, который его проверяет.",
 	"Application features": "Функции приложения",
 	"Choose access to individual application features. Legacy rules are marked explicitly.": "Доступ к отдельным функциям приложения. Старые правила отмечены явно.",

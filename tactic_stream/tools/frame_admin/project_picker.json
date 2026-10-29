@@ -1,0 +1,81 @@
+{
+  "project": "admin",
+  "locked": false,
+  "projects": [
+    {
+      "value": "admin",
+      "label": "Administration",
+      "kind": "Built-in"
+    },
+    {
+      "value": "ai_tracker",
+      "label": "Трекер работы ИИ"
+    },
+    {
+      "value": "city_demo",
+      "label": "Night City"
+    },
+    {
+      "value": "city_template",
+      "label": "Night City — Agent demo template",
+      "kind": "Templates"
+    },
+    {
+      "value": "cg_test",
+      "label": "CG Test"
+    },
+    {
+      "value": "sthpw",
+      "label": "System",
+      "kind": "Built-in"
+    },
+    {
+      "value": "project_0",
+      "label": "Production project 0"
+    },
+    {
+      "value": "project_1",
+      "label": "Production project 1"
+    },
+    {
+      "value": "project_2",
+      "label": "Production project 2"
+    },
+    {
+      "value": "project_3",
+      "label": "Production project 3"
+    },
+    {
+      "value": "project_4",
+      "label": "Production project 4"
+    },
+    {
+      "value": "project_5",
+      "label": "Production project 5"
+    },
+    {
+      "value": "project_6",
+      "label": "Production project 6"
+    },
+    {
+      "value": "project_7",
+      "label": "Production project 7"
+    },
+    {
+      "value": "project_8",
+      "label": "Production project 8"
+    },
+    {
+      "value": "project_9",
+      "label": "Production project 9"
+    },
+    {
+      "value": "project_10",
+      "label": "Production project 10"
+    },
+    {
+      "value": "project_11",
+      "label": "Production project 11"
+    }
+  ]
+}
