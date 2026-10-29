@@ -910,7 +910,7 @@ defineExpose({ viewport });
   box-shadow: inset 3px 0 var(--primary);
 }
 .handler-table-heading.grouped {
-  color: var(--primary);
+  color: var(--table-header-text);
 }
 .handler-table-heading.grouped {
   padding-right: 30px;

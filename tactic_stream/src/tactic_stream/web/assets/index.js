@@ -966,6 +966,7 @@ function palette(style, dark, base, accent) {
 	colors.selected = blend(accent, colors.panelRaised, dark ? .28 : .3);
 	colors.contentSelection = blend(accent, colors.workspace, dark ? .68 : .72);
 	colors.primaryText = readableText$1(colors.workspace);
+	colors.tableHeader = blend(colors.toolBar, colors.primaryText, .14);
 	colors.contentAccent = blend(accent, colors.primaryText, dark ? .12 : .08);
 	colors.selectedText = readableText$1(colors.selected);
 	colors.contentSelectionText = readableText$1(colors.contentSelection);
@@ -1036,6 +1037,7 @@ var cssRoles = {
 	workspace: "--page",
 	topBar: "--header",
 	toolBar: "--surface-container",
+	tableHeader: "--table-header-surface",
 	panel: "--surface",
 	panelRaised: "--surface-high",
 	panelDeep: "--surface-deep",

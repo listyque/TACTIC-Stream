@@ -1208,8 +1208,8 @@ var metrics$10 = {
 	]
 };
 var paint = {
-	header: "surfaceContainer",
-	headerText: "secondaryText",
+	header: "tableHeader",
+	headerText: "primaryText",
 	row: "surfaceContainerLow",
 	selected: "contentSelection",
 	group: "surfaceContainerHigh"
