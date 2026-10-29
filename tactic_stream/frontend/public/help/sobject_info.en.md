@@ -11,6 +11,8 @@ order: 13
 
 ## Main controls
 
+Object Details uses the standard window title bar: compact Edit, Maximize/Restore and Close icons. Drag the title bar to move the window. Scrolling the report keeps its title bar visible; maximized windows have square corners.
+
 The profile-style object card combines the preview, identity, description, object details, and key
 metrics. The complete card, icon-labelled section switcher, and selected task, note, child,
 snapshot, or activity section share one continuous scrollbar.

@@ -1,8 +1,4 @@
 {
-  "_AppDialog.css": {
-    "file": "assets/AppDialog.css",
-    "src": "_AppDialog.css"
-  },
   "_AppDialog.js": {
     "file": "assets/AppDialog.js",
     "name": "AppDialog",
@@ -10,9 +6,6 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js"
-    ],
-    "css": [
-      "assets/AppDialog.css"
     ]
   },
   "_AppMenuItem.css": {

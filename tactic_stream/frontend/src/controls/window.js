@@ -1,5 +1,6 @@
 import { h, render } from 'vue'
 import WindowControls from './WindowControls.vue'
+import './dialog.css'
 let activeWindow = null
 
 // Dialogs block their owner; utility windows keep the workspace available.

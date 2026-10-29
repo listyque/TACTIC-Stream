@@ -45,6 +45,116 @@ try {
     .locator('[data-frame="objectReportTitle"]')
     .filter({ hasText: 'Report Robot' })
     .waitFor();
+  const titlebar = dialog.locator(':scope > .app-dialog-titlebar');
+  const chrome = await titlebar.evaluate((header) => ({
+    height: header.getBoundingClientRect().height,
+    expectedHeight: parseFloat(
+      getComputedStyle(header).getPropertyValue('--dialog-header-height')
+    ),
+    title: header.querySelector('h2').textContent,
+    buttons: [...header.querySelectorAll('button')].map((button) => ({
+      label: button.getAttribute('aria-label'),
+      width: button.getBoundingClientRect().width,
+      height: button.getBoundingClientRect().height,
+      round: getComputedStyle(button).borderRadius,
+      iconOnly: button.classList.contains('icon-button')
+    }))
+  }));
+  assert.equal(chrome.title, 'Report Robot');
+  assert.equal(chrome.height, chrome.expectedHeight);
+  assert.deepEqual(
+    chrome.buttons.map((button) => button.label),
+    ['Edit record', 'Maximize window', 'Close details']
+  );
+  for (const button of chrome.buttons) {
+    assert.equal(button.width, 34);
+    assert.equal(button.height, 34);
+    assert.equal(button.round, '50%');
+    assert.equal(button.iconOnly, true);
+  }
+  const normalBounds = await dialog.boundingBox();
+  await dialog
+    .getByRole('button', { name: 'Maximize window', exact: true })
+    .click();
+  assert.equal((await dialog.boundingBox()).width, 1360);
+  assert.equal(
+    await dialog.evaluate((element) => getComputedStyle(element).borderRadius),
+    '0px'
+  );
+  await dialog
+    .getByRole('button', { name: 'Restore window', exact: true })
+    .click();
+  assert(Math.abs((await dialog.boundingBox()).width - normalBounds.width) < 1);
+  const headerTop = (await titlebar.boundingBox()).y;
+  await report.evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+  });
+  assert.equal(
+    (await titlebar.boundingBox()).y,
+    headerTop,
+    'Report scroll keeps the common window titlebar in place'
+  );
+  await report.evaluate((element) => {
+    element.scrollTop = 0;
+  });
+  if (process.env.STREAM_REPORT_CAPTURE)
+    await page.screenshot({
+      path: process.env.STREAM_REPORT_CAPTURE + '-desktop.png'
+    });
+  await dialog
+    .getByRole('button', { name: 'Edit record', exact: true })
+    .click();
+  const detailEditor = page.getByRole('dialog', {
+    name: 'Record form',
+    exact: true
+  });
+  await detailEditor
+    .getByRole('button', { name: 'Close', exact: true })
+    .click();
+  for (const source of ['related', 'presentation']) {
+    await page.evaluate(async (source) => {
+      const app =
+        document.querySelector('#app').__vue_app__._container._vnode.component
+          .subTree.component.subTree.component.proxy;
+      if (source === 'related')
+        await app.$refs.relatedObjects.inspect(app.detail);
+      else {
+        function findPresentation(node) {
+          if (node?.component?.type?.components?.ResultItem)
+            return node.component.proxy;
+          if (node?.component) return findPresentation(node.component.subTree);
+          for (const child of Array.isArray(node?.children)
+            ? node.children
+            : []) {
+            const result = findPresentation(child);
+            if (result) return result;
+          }
+        }
+        findPresentation(app.$.subTree).inspect({
+          searchType: 'nested-report',
+          record: app.detail
+        });
+      }
+    }, source);
+    await titlebar
+      .getByRole('heading', { name: 'Report Robot', exact: true })
+      .waitFor();
+    assert.equal(await titlebar.locator('.app-window-controls').count(), 1);
+    assert.equal(
+      await titlebar.evaluate(
+        (element) => element.getBoundingClientRect().height
+      ),
+      chrome.expectedHeight
+    );
+    await dialog
+      .getByRole('button', { name: 'Close details', exact: true })
+      .click();
+  }
+  await page.evaluate(() =>
+    document
+      .querySelector('#app')
+      .__vue_app__._container._vnode.component.subTree.component.subTree.component.proxy.$refs.details.showModal()
+  );
   const searchLink =
     'tactic-search://open?project=one&search_type=one/report_assets';
   await page.evaluate(() => {
@@ -181,6 +291,10 @@ try {
   await page.setViewportSize({ width: 390, height: 800 });
   await report.getByRole('radio', { name: 'Tasks', exact: true }).click();
   await report.locator('[data-frame="objectReportRow_task_0"]').waitFor();
+  if (process.env.STREAM_REPORT_CAPTURE)
+    await page.screenshot({
+      path: process.env.STREAM_REPORT_CAPTURE + '-narrow.png'
+    });
   assert.equal(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth

@@ -214,6 +214,7 @@ def main():
         "tooltip.js",
         "tooltip.css",
         "panelChrome.css",
+        "dialog.css",
     ]
     command[-1:] = ["frontend/src/controls/" + name for name in controls]
     queued.append(list(command))

@@ -800,30 +800,25 @@ export default {
   <dialog
     v-window="{ kind: 'sobject_info' }"
     ref="details"
-    class="record-dialog object-details"
+    class="app-dialog object-details"
     :aria-label="t('Object details')"
   >
     <template v-if="detail">
-      <header>
-        <div>
-          <h2>{{ detail.name || detail.title || detail.code || detail.id }}</h2>
-          <small>{{ detail.__search_key__ }}</small>
-        </div>
-        <div class="configuration-actions">
-          <AppButton
-            v-if="definition?.operations?.edit"
-            label="Edit record"
-            icon="edit"
-            :icon-only="mobile"
-            @click="edit(detail)"
-          />
-          <AppButton
-            label="Close details"
-            icon="close"
-            :icon-only="mobile"
-            @click="$refs.details.close()"
-          />
-        </div>
+      <header class="app-dialog-titlebar">
+        <h2>{{ detail.name || detail.title || detail.code || detail.id }}</h2>
+        <AppButton
+          v-if="definition?.operations?.edit"
+          label="Edit record"
+          icon="edit"
+          icon-only
+          @click="edit(detail)"
+        />
+        <AppButton
+          label="Close details"
+          icon="close"
+          icon-only
+          @click="$refs.details.close()"
+        />
       </header>
       <ObjectReport
         :ticket="ticket"

@@ -340,14 +340,6 @@ onBeforeUnmount(() => {
   padding: 0;
   background: var(--surface-deep);
 }
-.object-details > header {
-  padding: 6px 12px;
-  margin: 0;
-  flex: none;
-}
-.object-details > header small {
-  display: none;
-}
 .object-details > .object-report {
   flex: 1;
   min-height: 0;

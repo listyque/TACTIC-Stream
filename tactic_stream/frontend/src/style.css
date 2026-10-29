@@ -693,13 +693,6 @@ tbody tr:last-child td { border-bottom: 0; }
 .record-dialog::backdrop { background: var(--scrim); }
 .workspace-menu.object-operations > summary { display:none; }
 .object-operations > dialog.account-panel::backdrop { background:transparent; }
-@media(max-width:700px) {
-  .object-details > header { position:sticky; top:0; z-index:1; flex-wrap:nowrap; gap:8px; margin:0 0 6px; background:var(--surface); }
-  .object-details > header > div:first-child { flex:1; min-width:0; }
-  .object-details > header h2 { margin:0; font-size:var(--text-body-large); }
-  .object-details > header small { max-height:36px; overflow:auto; margin-top:2px; }
-  .object-details > header .configuration-actions { flex-wrap:nowrap; gap:2px; }
-}
 .row-actions { position: sticky; right: 0; background: var(--surface-high); text-align: center; width: var(--control-height); padding: var(--space-xs); }
 .row-actions button { min-width: var(--control-height); }
 @media (max-width:700px) { .row-actions { position:static; } }

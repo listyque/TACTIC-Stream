@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/sections.ui.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/AppDialog.css","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/ObjectFieldFrame.js","assets/fields.ui.js","assets/ObjectFieldFrame.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/previewFiles.js","assets/SnapshotCheckout.css","assets/NamingEditor.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/metrics.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/richText.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/markdown-it.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentProviders.js","assets/AgentProviders.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/index.js","assets/locales.js","assets/icons.js","assets/index.css","assets/CodeBlock.js","assets/CodeBlock.css","assets/sections.ui.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/rolldown-runtime.js","assets/ObjectFieldFrame.js","assets/fields.ui.js","assets/ObjectFieldFrame.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/previewFiles.js","assets/SnapshotCheckout.css","assets/NamingEditor.js","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/metrics.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/richText.js","assets/links.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/RecordForm.js","assets/RecordForm.css","assets/FilePreview.js","assets/FilePreview.css","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/markdown-it.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/textMetrics.js","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ObjectReport.js","assets/ObjectReport.css","assets/WorkflowEditor.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentProviders.js","assets/AgentProviders.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { $ as shallowRef, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, S as getCurrentInstance, T as mergeModels, U as watch, V as useModel, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, t as Transition, tt as unref, u as Fragment, v as createSlots, w as inject, y as createTextVNode } from "./vue.js";
 import { $ as savePreferencePage, A as t, D as randomId, E as setServerDebugContext, G as layout$11, H as fontFamily, I as readableText, J as readableText$1, K as lineHeights, L as saveAppearance, P as frameColors, Q as preferences, R as blend, S as logRequest, T as sessionRecords, U as fontLineHeight, V as cssRoles, W as fontMetricHeight, X as configurationPreview, Y as textStyles, _ as forgetSessions, at as BusyIndicator_default, b as levels, c as _sfc_main$184, et as normalizeColumns, f as _sfc_main$185, g as exportSession, h as debugSettings, i as dockMinimumWidth, j as appearance, k as asyncComponent, m as debugLog, o as mobile, ot as _plugin_vue_export_helper_default, p as clearLive, q as metrics$12, r as dockMinimumHeight, s as mobileLayout, t as __vitePreload, tt as taskColumns, v as formatEvent, w as savedSessions, y as importSession, z as controls$2 } from "./index.js";
@@ -7414,7 +7414,7 @@ var _hoisted_16$8 = {
 	key: 0,
 	class: "result-mobile-actions"
 };
-var _hoisted_17$7 = {
+var _hoisted_17$8 = {
 	key: 1,
 	class: "result-snapshot-size"
 };
@@ -7898,7 +7898,7 @@ var _sfc_main$158 = {
 						"icon-only": "",
 						onClick: _cache[13] || (_cache[13] = ($event) => _ctx.$emit("upload", __props.node))
 					})])) : createCommentVNode("", true),
-					__props.tree && __props.node.kind === "snapshot" && __props.node.snapshot_display?.size != null ? (openBlock(), createElementBlock("span", _hoisted_17$7, toDisplayString(unref(prettySize)(__props.node.snapshot_display.size)), 1)) : createCommentVNode("", true),
+					__props.tree && __props.node.kind === "snapshot" && __props.node.snapshot_display?.size != null ? (openBlock(), createElementBlock("span", _hoisted_17$8, toDisplayString(unref(prettySize)(__props.node.snapshot_display.size)), 1)) : createCommentVNode("", true),
 					unref(mobile) ? (openBlock(), createBlock(_sfc_main$189, {
 						key: 2,
 						label: "Item actions",
@@ -10181,7 +10181,7 @@ var _hoisted_14$7 = {
 };
 var _hoisted_15$7 = ["datetime", "title"];
 var _hoisted_16$7 = { class: "result-snapshot-description" };
-var _hoisted_17$6 = { key: 0 };
+var _hoisted_17$7 = { key: 0 };
 var _hoisted_18$5 = ["title"];
 var _hoisted_19$4 = {
 	key: 13,
@@ -10543,7 +10543,7 @@ var _sfc_main$153 = {
 								title: unref(timestampFullLabel)(__props.node.record?.timestamp)
 							}, [createBaseVNode("span", null, toDisplayString(unref(timestampLabel)(__props.node.record?.timestamp)), 1), createBaseVNode("span", null, toDisplayString(unref(timestampFullLabel)(__props.node.record?.timestamp)), 1)], 8, _hoisted_15$7)
 						]), createBaseVNode("div", _hoisted_16$7, [
-							snapshot.value.author ? (openBlock(), createElementBlock("em", _hoisted_17$6, toDisplayString(snapshot.value.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
+							snapshot.value.author ? (openBlock(), createElementBlock("em", _hoisted_17$7, toDisplayString(snapshot.value.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
 							createBaseVNode("span", null, toDisplayString(subtitle.value), 1),
 							createBaseVNode("small", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(snapshot.value.infoChips || [], (chip, index) => {
 								return openBlock(), createElementBlock(Fragment, { key: chip.label }, [index ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | ")], 64)) : createCommentVNode("", true), createBaseVNode("span", { title: chip.label + ": " + chip.value }, toDisplayString(chip.value), 9, _hoisted_18$5)], 64);
@@ -15274,7 +15274,7 @@ var _hoisted_15$6 = {
 	class: "skey-kind"
 };
 var _hoisted_16$6 = ["title"];
-var _hoisted_17$5 = {
+var _hoisted_17$6 = {
 	key: 1,
 	class: "skey-article-kind"
 };
@@ -15435,7 +15435,7 @@ var _sfc_main$130 = {
 						createBaseVNode("div", null, [
 							!__props.compact ? (openBlock(), createElementBlock("small", _hoisted_15$6, toDisplayString(unref(t)(__props.preview.kind === "knowledge" ? "Knowledge Base" : __props.preview.kind === "sobject" ? "SObject" : __props.preview.kind === "user" ? "User" : __props.preview.kind === "project" ? "Project" : __props.preview.kind === "task" ? "Task" : __props.preview.kind === "file" ? "File" : __props.preview.kind === "note" ? "Note" : __props.preview.kind === "message" ? "Message" : "Snapshot")), 1)) : createCommentVNode("", true),
 							createBaseVNode("strong", { title: __props.preview.title }, toDisplayString(__props.preview.kind === "knowledge" && !ready.value && !failed.value ? unref(t)("Loading article") : __props.preview.title || unref(t)("TACTIC item")), 9, _hoisted_16$6),
-							__props.preview.kind === "knowledge" ? (openBlock(), createElementBlock("small", _hoisted_17$5, toDisplayString(unref(t)(__props.preview.articleKind === "section" ? "Section" : "Article")), 1)) : createCommentVNode("", true)
+							__props.preview.kind === "knowledge" ? (openBlock(), createElementBlock("small", _hoisted_17$6, toDisplayString(unref(t)(__props.preview.articleKind === "section" ? "Section" : "Article")), 1)) : createCommentVNode("", true)
 						]),
 						!__props.compact && __props.preview.subtitle && __props.preview.kind !== "knowledge" ? (openBlock(), createElementBlock("span", _hoisted_18$4, toDisplayString(__props.preview.subtitle), 1)) : createCommentVNode("", true),
 						createBaseVNode("small", null, toDisplayString(failed.value ? unref(t)(__props.preview.error || "Link preview is unavailable") : !ready.value ? unref(t)("Resolving link") : __props.preview.kind === "knowledge" ? __props.preview.description || __props.preview.excerpt : __props.preview.detail || (__props.compact ? __props.preview.subtitle : "")), 1)
@@ -17291,7 +17291,7 @@ var _sfc_main$126 = {
 				if (!this.checkinComponent) this.checkinComponent = markRaw((await __vitePreload(async () => {
 					const { default: __vite_default__ } = await import("./ObjectCheckin.js");
 					return { default: __vite_default__ };
-				}, __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]))).default);
+				}, __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]))).default);
 				await nextTick();
 				if (request === this.request) await this.$refs.checkin.open(record, {
 					process,
@@ -17310,7 +17310,7 @@ var _sfc_main$126 = {
 				if (!this.ingestComponent) this.ingestComponent = markRaw((await __vitePreload(async () => {
 					const { default: __vite_default__ } = await import("./IngestFiles.js");
 					return { default: __vite_default__ };
-				}, __vite__mapDeps([16,1,2,3,4,5,6,7,8,12,13,14,17]))).default);
+				}, __vite__mapDeps([15,1,2,3,4,5,6,7,8,12,13,16]))).default);
 				await nextTick();
 				if (request === this.request) await this.$refs.ingest.open(parent, branch);
 			} catch (error) {
@@ -17325,7 +17325,7 @@ var _sfc_main$126 = {
 				if (!this.duplicateComponent) this.duplicateComponent = markRaw((await __vitePreload(async () => {
 					const { default: __vite_default__ } = await import("./DuplicateSObject.js");
 					return { default: __vite_default__ };
-				}, __vite__mapDeps([18,19,1,2,3,4,5,6,7,20,21,22,8,23]))).default);
+				}, __vite__mapDeps([17,18,1,2,3,4,5,6,7,19,20,21,8,22]))).default);
 				await nextTick();
 				if (request === this.request) await this.$refs.duplicate.open(record, quick);
 			} catch (error) {
@@ -19118,7 +19118,7 @@ var _hoisted_8$14 = {
 	role: "alert"
 };
 var _hoisted_9$10 = ["aria-label"];
-var _hoisted_10$9 = { class: "configuration-actions" };
+var _hoisted_10$9 = { class: "app-dialog-titlebar" };
 function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_AppSelect = resolveComponent("AppSelect");
@@ -19298,20 +19298,24 @@ function _sfc_render$16(_ctx, _cache, $props, $setup, $data, $options) {
 		]),
 		withDirectives((openBlock(), createElementBlock("dialog", {
 			ref: "details",
-			class: "record-dialog object-details",
+			class: "app-dialog object-details",
 			"aria-label": $options.t("Object details")
-		}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($data.detail.name || $data.detail.title || $data.detail.code || $data.detail.id), 1), createBaseVNode("small", null, toDisplayString($data.detail.__search_key__), 1)]), createBaseVNode("div", _hoisted_10$9, [$data.definition?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
-			key: 0,
-			label: "Edit record",
-			icon: "edit",
-			"icon-only": $options.mobile,
-			onClick: _cache[12] || (_cache[12] = ($event) => $options.edit($data.detail))
-		}, null, 8, ["icon-only"])) : createCommentVNode("", true), createVNode(_component_AppButton, {
-			label: "Close details",
-			icon: "close",
-			"icon-only": $options.mobile,
-			onClick: _cache[13] || (_cache[13] = ($event) => _ctx.$refs.details.close())
-		}, null, 8, ["icon-only"])])]), createVNode(_component_ObjectReport, {
+		}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", _hoisted_10$9, [
+			createBaseVNode("h2", null, toDisplayString($data.detail.name || $data.detail.title || $data.detail.code || $data.detail.id), 1),
+			$data.definition?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
+				key: 0,
+				label: "Edit record",
+				icon: "edit",
+				"icon-only": "",
+				onClick: _cache[12] || (_cache[12] = ($event) => $options.edit($data.detail))
+			})) : createCommentVNode("", true),
+			createVNode(_component_AppButton, {
+				label: "Close details",
+				icon: "close",
+				"icon-only": "",
+				onClick: _cache[13] || (_cache[13] = ($event) => _ctx.$refs.details.close())
+			})
+		]), createVNode(_component_ObjectReport, {
 			ticket: $props.ticket,
 			project: $data.detail.project_code || $props.project,
 			record: $data.detail,
@@ -20283,6 +20287,7 @@ var _hoisted_14$5 = {
 };
 var _hoisted_15$5 = { key: 0 };
 var _hoisted_16$5 = ["aria-label"];
+var _hoisted_17$5 = { class: "app-dialog-titlebar" };
 function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_MobileResults = resolveComponent("MobileResults");
 	const _component_AppButton = resolveComponent("AppButton");
@@ -20806,9 +20811,9 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 		]),
 		withDirectives((openBlock(), createElementBlock("dialog", {
 			ref: "details",
-			class: "record-dialog object-details",
+			class: "app-dialog object-details",
 			"aria-label": $options.t("Object details")
-		}, [createBaseVNode("header", null, [createBaseVNode("strong", null, toDisplayString($data.detail?.name || $data.detail?.code), 1), createVNode(_component_AppButton, {
+		}, [createBaseVNode("header", _hoisted_17$5, [createBaseVNode("h2", null, toDisplayString($data.detail?.name || $data.detail?.title || $data.detail?.code || $data.detail?.id), 1), createVNode(_component_AppButton, {
 			label: "Close details",
 			icon: "close",
 			"icon-only": "",
@@ -20822,7 +20827,10 @@ function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
 			"ticket",
 			"project",
 			"record"
-		])) : createCommentVNode("", true)], 8, _hoisted_16$5)), [[_directive_window, { type: "window" }]])
+		])) : createCommentVNode("", true)], 8, _hoisted_16$5)), [[_directive_window, {
+			type: "window",
+			kind: "sobject_info"
+		}]])
 	], 14, _hoisted_1$70);
 }
 var ResultPresentation_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$118, [["render", _sfc_render$15]]);
@@ -22906,7 +22914,7 @@ function route(command) {
 //#region src/features/interface/ConfiguredView.vue
 var CustomLayoutView = asyncComponent(() => __vitePreload(() => import("./CustomLayoutView.js"), []));
 var RelatedObjects = asyncComponent(() => __vitePreload(() => import("./RelatedObjects.js"), []));
-var SnapshotCheckout = asyncComponent(() => __vitePreload(() => import("./SnapshotCheckout.js"), __vite__mapDeps([24,1,2,3,4,5,6,7,8,9,10,25,26,12,27])));
+var SnapshotCheckout = asyncComponent(() => __vitePreload(() => import("./SnapshotCheckout.js"), __vite__mapDeps([23,1,2,3,4,5,6,7,8,9,10,24,25,12,26])));
 var ResultPresentation = asyncComponent(() => __vitePreload(() => import("./ResultPresentation.js"), []));
 var _sfc_main$109 = {
 	name: "ConfiguredView",
@@ -29016,7 +29024,7 @@ var recovery_default = {
 };
 //#endregion
 //#region src/features/checkin/CommitQueue.vue
-var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([28,19,1,2,3,4,5,6,7,8])));
+var NamingEditor = asyncComponent(() => __vitePreload(() => import("./NamingEditor.js").then((n) => n.n), __vite__mapDeps([27,18,1,2,3,4,5,6,7,8])));
 var _sfc_main$94 = {
 	components: {
 		AppButton: _sfc_main$184,
@@ -30213,7 +30221,7 @@ var _sfc_main$93 = {
 			ticket: props.ticket,
 			project: props.project
 		}));
-		const MatchingTemplates = asyncComponent(() => __vitePreload(() => import("./MatchingTemplates.js"), __vite__mapDeps([29,1,2,3,4,5,6,7,8,30])));
+		const MatchingTemplates = asyncComponent(() => __vitePreload(() => import("./MatchingTemplates.js"), __vite__mapDeps([28,1,2,3,4,5,6,7,8,29])));
 		const templateItems = ref(structuredClone(matchingDefaults)), editingTemplates = ref(false), paddingDraft = ref(3);
 		try {
 			const saved = JSON.parse(localStorage.getItem("tactic_stream.matching_templates") || "null");
@@ -35050,9 +35058,9 @@ var _sfc_main$68 = {
 };
 //#endregion
 //#region src/features/tasks/TaskManager.vue
-var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([31,1,2,3,4,5,6,7,32])));
-var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([33,1,2,3,4,5,6,7,34])));
-var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([35,1,2,3,4,5,6,7,36])));
+var TaskGanttView = asyncComponent(() => __vitePreload(() => import("./TaskGanttView.js"), __vite__mapDeps([30,1,2,3,4,5,6,7,31])));
+var TaskCalendarView = asyncComponent(() => __vitePreload(() => import("./TaskCalendarView.js"), __vite__mapDeps([32,1,2,3,4,5,6,7,33])));
+var TaskProcessPanel = asyncComponent(() => __vitePreload(() => import("./TaskProcessPanel.js"), __vite__mapDeps([34,1,2,3,4,5,6,7,35])));
 var readCommand = "tactic.ui.table.task_workspace.TaskWorkspaceCmd";
 var editCommand = "tactic.ui.table.task_workspace_edits.TaskWorkspaceEditCmd";
 var scheduleCommand = "tactic.ui.table.task_schedule.TaskScheduleCmd";
@@ -58137,22 +58145,22 @@ var _sfc_main$1 = {
 //#endregion
 //#region src/App.vue
 var App_exports = /* @__PURE__ */ __exportAll({ default: () => App_default });
-var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([37,1,2,3,4,5,6,7,8,9,10,11,38,12,13,14,39,40,41])));
-var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([42,1,2,3,4,5,6,7,43,44,45])));
-var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([46,1,2,3,4,5,6,7,47,19,21,20,22,8,48,10,49,9,11,25,50,51])));
-var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([52,1,4,2,3,5,6,7,43,44,53,54,55,19,39,40,56])));
-var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([57,1,2,3,4,5,6,7,47,19,21,20,22,8,48,58,43,44,59])));
-var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([60,1,2,3,4,5,6,7,8,28,19])));
-var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([61,1,2,3,4,5,6,7,60,8,28,19,62,63,64])));
-var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([65,1,2,3,4,5,6,7,8,66,43,44,58,53,54,49,9,10,11,25,50,26,67,62,63,68])));
-var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([69,1,2,3,4,5,6,7,8,63])));
-var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([70,1,2,3,4,5,6,7,8,44,38,63])));
-var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([71,1,2,3,4,5,6,7,8,44,72])));
-var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([73,1,2,3,4,5,6,7,8])));
-var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([74,1,2,3,4,5,6,7])));
-var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([75,1,2,3,4,5,6,7,76])));
-var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([77,1,2,3,4,5,6,7,76])));
-var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([78,1,2,3,4,5,6,7])));
+var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorkspaceInspection.js"), __vite__mapDeps([36,1,2,3,4,5,6,7,8,9,10,11,37,12,13,38,39,40])));
+var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([41,1,2,3,4,5,6,7,42,43,44])));
+var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([45,1,2,3,4,5,6,7,46,18,20,19,21,8,47,10,48,9,11,24,49,50])));
+var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([51,1,4,2,3,5,6,7,42,43,52,53,54,18,38,39,55])));
+var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([56,1,2,3,4,5,6,7,46,18,20,19,21,8,47,57,42,43,58])));
+var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([59,1,2,3,4,5,6,7,8,27,18])));
+var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([60,1,2,3,4,5,6,7,59,8,27,18,61,62,63])));
+var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([64,1,2,3,4,5,6,7,8,65,42,43,57,52,53,48,9,10,11,24,49,25,66,61,62,67])));
+var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([68,1,2,3,4,5,6,7,8,62])));
+var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([69,1,2,3,4,5,6,7,8,43,37,62])));
+var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([70,1,2,3,4,5,6,7,8,43,71])));
+var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([72,1,2,3,4,5,6,7,8])));
+var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([73,1,2,3,4,5,6,7])));
+var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([74,1,2,3,4,5,6,7,75])));
+var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([76,1,2,3,4,5,6,7,75])));
+var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([77,1,2,3,4,5,6,7])));
 var compactLayout = window.matchMedia("(max-width: 900px)");
 var shortcutLayout = mobileLayout;
 var _sfc_main = {
@@ -59012,7 +59020,7 @@ var _sfc_main = {
 				context.search_keys = [...new Set(records.map((record) => record.__search_key__))];
 			}
 			try {
-				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([79,1,2,3,4,5,6,7,13,14,39,40,63,80]));
+				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([78,1,2,3,4,5,6,7,13,38,39,62,79]));
 				if (this.session !== session) return;
 				this.agentRequestComponent ||= markRaw(module.default);
 				await nextTick();
@@ -59024,7 +59032,7 @@ var _sfc_main = {
 		async openAgentProviders() {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentProviders.js"), __vite__mapDeps([81,1,2,3,4,5,6,7,13,14,82]));
+				const module = await __vitePreload(() => import("./AgentProviders.js"), __vite__mapDeps([80,1,2,3,4,5,6,7,13,81]));
 				if (this.session !== session) return;
 				this.agentProvidersComponent ||= markRaw(module.default);
 				await nextTick();
@@ -59036,7 +59044,7 @@ var _sfc_main = {
 		async openAgentMcp(context, connectionId = "") {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([83,1,2,3,4,5,6,7,13,14,84]));
+				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([82,1,2,3,4,5,6,7,13,83]));
 				if (this.session !== session) return;
 				this.agentMcpComponent ||= markRaw(module.default);
 				await nextTick();
@@ -59052,7 +59060,7 @@ var _sfc_main = {
 			const current = () => this.session === session && this.workspaceProject === project;
 			this.scriptEditorLoading = true;
 			try {
-				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([85,1,2,3,4,5,6,7,86]));
+				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([84,1,2,3,4,5,6,7,85]));
 				if (!current()) return;
 				this.scriptEditorComponent ||= markRaw(module.default);
 				await nextTick();
@@ -61340,8 +61348,7 @@ var _hoisted_42 = {
 	class: "configuration-actions"
 };
 var _hoisted_43 = ["aria-label"];
-var _hoisted_44 = { class: "muted" };
-var _hoisted_45 = { class: "configuration-actions" };
+var _hoisted_44 = { class: "app-dialog-titlebar" };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_AppearanceControls = resolveComponent("AppearanceControls");
@@ -63144,20 +63151,24 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			]),
 			withDirectives((openBlock(), createElementBlock("dialog", {
 				ref: "details",
-				class: "record-dialog object-details",
+				class: "app-dialog object-details",
 				"aria-label": $options.t("Object details")
-			}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", null, [createBaseVNode("div", null, [createBaseVNode("h2", null, toDisplayString($options.detailTitle), 1), createBaseVNode("small", _hoisted_44, toDisplayString($data.detail.__search_key__), 1)]), createBaseVNode("div", _hoisted_45, [$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
-				key: 0,
-				label: "Edit record",
-				icon: "edit",
-				"icon-only": $data.compactShortcuts,
-				onClick: _cache[131] || (_cache[131] = ($event) => $options.editRecord())
-			}, null, 8, ["icon-only"])) : createCommentVNode("", true), createVNode(_component_AppButton, {
-				label: "Close details",
-				icon: "close",
-				"icon-only": $data.compactShortcuts,
-				onClick: _cache[132] || (_cache[132] = ($event) => _ctx.$refs.details.close())
-			}, null, 8, ["icon-only"])])]), createVNode(_component_ObjectReport, {
+			}, [$data.detail ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createBaseVNode("header", _hoisted_44, [
+				createBaseVNode("h2", null, toDisplayString($options.detailTitle), 1),
+				$data.interfaceConfig?.operations?.edit ? (openBlock(), createBlock(_component_AppButton, {
+					key: 0,
+					label: "Edit record",
+					icon: "edit",
+					"icon-only": "",
+					onClick: _cache[131] || (_cache[131] = ($event) => $options.editRecord())
+				})) : createCommentVNode("", true),
+				createVNode(_component_AppButton, {
+					label: "Close details",
+					icon: "close",
+					"icon-only": "",
+					onClick: _cache[132] || (_cache[132] = ($event) => _ctx.$refs.details.close())
+				})
+			]), createVNode(_component_ObjectReport, {
 				ticket: $data.session.ticket,
 				project: $data.detail.project_code || $data.workspaceProject,
 				record: $data.detail,

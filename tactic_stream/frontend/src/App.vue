@@ -2275,9 +2275,9 @@ export default {
     </dialog>
     <SearchLibrary ref="searchLibrary" :selections="quickSelections" :active="searchEditorActive" @closed="$event && $refs.docks.hide('advanced_search')" :tab-id="activeSearchTab?.id" :tab-title="activeSearchTab ? searchTabTitle(activeSearchTab) : ''" @rename="renameCurrentSearchTab" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
     <QuickFilterEditor ref="quickFilterEditor" :tab-id="activeSearchTab?.id" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :selections="quickSelections" :layout="quickLayout" :can-manage="canAdminister" @apply="applyQuickFilters" @changed="searchConfigurationChanged(); $refs.quickFilters?.load(true)" />
-    <dialog v-window="{kind:'sobject_info'}" ref="details" class="record-dialog object-details" :aria-label="t('Object details')">
+    <dialog v-window="{kind:'sobject_info'}" ref="details" class="app-dialog object-details" :aria-label="t('Object details')">
       <template v-if="detail">
-        <header><div><h2>{{ detailTitle }}</h2><small class="muted">{{ detail.__search_key__ }}</small></div><div class="configuration-actions"><AppButton v-if="interfaceConfig?.operations?.edit" label="Edit record" icon="edit" :icon-only="compactShortcuts" @click="editRecord()" /><AppButton label="Close details" icon="close" :icon-only="compactShortcuts" @click="$refs.details.close()" /></div></header>
+        <header class="app-dialog-titlebar"><h2>{{ detailTitle }}</h2><AppButton v-if="interfaceConfig?.operations?.edit" label="Edit record" icon="edit" icon-only @click="editRecord()" /><AppButton label="Close details" icon="close" icon-only @click="$refs.details.close()" /></header>
         <ObjectReport :ticket="session.ticket" :project="detail.project_code || workspaceProject" :record="detail" @leave="$refs.details.close()" />
       </template>
     </dialog>

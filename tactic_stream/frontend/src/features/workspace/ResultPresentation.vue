@@ -1676,14 +1676,16 @@ export default {
       @saved="load"
     />
     <dialog
-      v-window="{ type: 'window' }"
+      v-window="{ type: 'window', kind: 'sobject_info' }"
       ref="details"
-      class="record-dialog object-details"
+      class="app-dialog object-details"
       :aria-label="t('Object details')"
     >
-      <header>
-        <strong>{{ detail?.name || detail?.code }}</strong
-        ><AppButton
+      <header class="app-dialog-titlebar">
+        <h2>
+          {{ detail?.name || detail?.title || detail?.code || detail?.id }}
+        </h2>
+        <AppButton
           label="Close details"
           icon="close"
           icon-only
