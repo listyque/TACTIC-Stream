@@ -615,7 +615,7 @@ var list = (id, bounds, source, rowHeight, keyField) => node("List", id, bounds,
 	scrollbarId: id + "ScrollBar"
 });
 function describe(model, ui, width, height, language) {
-	const tr = (text) => translate(text, language), navigate = !model.busy && !pending(ui), notice = notices(model, ui, width, language, "Discard unsaved access changes?"), nodes = notice.nodes, rail = width >= 900, railWidth = rail ? language === "ru" ? 232 : 212 : 0, offset = rail ? railWidth + 12 : 0, contentWidth = width - offset, details = scopeDetails[ui.scope] || scopeDetails.project, selected = scopes.find((entry) => entry[0] === ui.scope) || scopes[1];
+	const tr = (text) => translate(text, language), navigate = !model.busy && !pending(ui), notice = notices(model, ui, width, language, "Discard unsaved access changes?"), nodes = notice.nodes, rail = width >= 900, railWidth = rail ? language === "ru" ? 232 : 212 : 0, offset = rail ? railWidth + 8 : 0, contentWidth = width - offset, details = scopeDetails[ui.scope] || scopeDetails.project, selected = scopes.find((entry) => entry[0] === ui.scope) || scopes[1];
 	const confirmation = nodes.find((item) => item.id === "adminDocumentConfirmation");
 	if (confirmation) confirmation.children.forEach((item) => {
 		if (item.id === "adminCancelSave") item.icon = "close";
@@ -642,16 +642,16 @@ function describe(model, ui, width, height, language) {
 			]],
 			["Advanced", ["technical"]]
 		];
-		let y = 8;
+		let y = 4;
 		groups.forEach(([caption, values]) => {
-			entries.push(label("adminSecurityCategory_" + values[0], rect(12, y, railWidth - 40, 24), tr(caption), muted));
-			y += 28;
+			entries.push(label("adminSecurityCategory_" + values[0], rect(8, y, railWidth - 32, 20), tr(caption), muted));
+			y += 22;
 			values.forEach((value) => {
 				const entry = scopes.find((item) => item[0] === value), current = scopes.findIndex((item) => item[0] === ui.scope), action = (index) => ({
 					type: "scope",
 					value: scopes[(index + scopes.length) % scopes.length][0]
 				});
-				entries.push(node("Action", "adminSecurityTab_" + value, rect(8, y, railWidth - 32, 38), {
+				entries.push(node("Action", "adminSecurityTab_" + value, rect(4, y, railWidth - 24, 30), {
 					text: tr(entry[1]),
 					description: tr(scopeDetails[value][1]),
 					selected: ui.scope === value,
@@ -670,14 +670,14 @@ function describe(model, ui, width, height, language) {
 						type: "scope",
 						value
 					},
-					children: [node("Icon", "adminSecurityTabIcon_" + value, rect(12, 9, 20, 20), {
+					children: [node("Icon", "adminSecurityTabIcon_" + value, rect(8, 6, 18, 18), {
 						icon: scopeDetails[value][0],
 						color: ui.scope === value ? "action" : "secondaryText"
-					}), label("adminSecurityTabTitle_" + value, rect(42, 0, railWidth - 86, 38), tr(entry[1]), { fontRole: "secondary" })]
+					}), label("adminSecurityTabTitle_" + value, rect(34, 0, railWidth - 66, 30), tr(entry[1]), { fontRole: "secondary" })]
 				}));
-				y += 40;
+				y += 32;
 			});
-			y += 8;
+			y += 6;
 		});
 		nodes.push(node("Box", "adminSecurityNavigationPanel", rect(0, top, railWidth, height - top), {
 			background: "surfaceContainerLow",

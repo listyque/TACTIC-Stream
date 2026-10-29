@@ -26646,7 +26646,7 @@ var rect = (x, y, width, height) => ({
 	height: Math.max(0, height)
 });
 function geometry(width, height, collapsed) {
-	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 56 : 250, body = width - nav, pad = mobile ? 12 : 20;
+	const mobile = width < 1e3, nav = mobile ? 0 : collapsed ? 56 : 250, body = width - nav, pad = 12;
 	const header = mobile ? 166 : 77;
 	return {
 		mobile,
@@ -26657,7 +26657,7 @@ function geometry(width, height, collapsed) {
 		toolbar: Math.max(0, Math.min(body - (mobile ? 24 : 434), 620)),
 		compactHeight: sections.length * 48 - 8,
 		compactWidth: nav - (height - 88 - 12 < sections.length * 48 - 8 ? 16 : 0),
-		content: rect(nav + pad, header + pad, body - pad * 2, height - header - pad * 2)
+		content: rect(nav + pad, header + pad, body - 24, height - header - 24)
 	};
 }
 function describe$34(model, ui, width, height, language) {
@@ -26717,14 +26717,14 @@ function describe$34(model, ui, width, height, language) {
 		}));
 	}
 	const linked = !!model.layoutParent?.name;
-	const head = [label("administrationSectionTitle", rect(linked ? 66 : 20, 11, g.mobile ? g.body - (width > 700 ? 200 : 120) - (linked ? 46 : 0) : Math.max(0, g.body - g.toolbar - 218 - (linked ? 46 : 0)), 28), current.title, {
+	const head = [label("administrationSectionTitle", rect(linked ? 58 : 12, 11, g.mobile ? g.body - (width > 700 ? 200 : 120) - (linked ? 46 : 0) : Math.max(0, g.body - g.toolbar - 218 - (linked ? 46 : 0)), 28), current.title, {
 		fontRole: "display",
 		weight: 600
-	}), label("administrationSectionDescription", rect(20, 46, g.mobile ? g.body - 40 : Math.max(0, g.body - 40), 22), ui.error && model.locked ? ui.error : current.description, {
+	}), label("administrationSectionDescription", rect(12, 46, Math.max(0, g.body - 24), 22), ui.error && model.locked ? ui.error : current.description, {
 		fontRole: "secondary",
 		color: ui.error && model.locked ? "error" : "secondaryText"
 	})];
-	if (linked) head.push(node("Button", "adminReturnToLayout", rect(20, 11, 38, 38), {
+	if (linked) head.push(node("Button", "adminReturnToLayout", rect(12, 11, 38, 38), {
 		text: tr(model.layoutParent.kind === "item" ? "Back to item layout" : "Back to page layout") + ": " + model.layoutParent.title,
 		icon: "arrow-back",
 		iconOnly: true,
