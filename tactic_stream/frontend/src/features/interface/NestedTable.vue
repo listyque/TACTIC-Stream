@@ -39,7 +39,9 @@ const model = computed(
   () => props.state || props.parentState.children[props.frameNode.key]
 );
 const component = getCurrentInstance().type;
-const records = computed(() => UI.rows(model.value));
+const records = computed(() =>
+  UI.rows({ ...model.value.scope, ...model.value }, width.value)
+);
 const extent = computed(() => props.frameNode?.height || UI.height);
 const scene = computed(() =>
   UI.describe(
@@ -176,7 +178,12 @@ function forward(record, kind, cell, anchor) {
     );
 }
 function row(list, record) {
-  return UI.row(model.value, record, appearance.language, list.width - 16);
+  return UI.row(
+    { ...model.value.scope, ...model.value },
+    record,
+    appearance.language,
+    list.width - 16
+  );
 }
 async function load() {
   const request = ++generation,
@@ -255,7 +262,15 @@ async function load() {
 function activate(action, value) {
   const state = model.value;
   if (action.type === 'close') emit('close', props.frameNode?.key);
-  else if (action.type === 'filter') state.filter = String(action.value ?? '');
+  else if (action.type === 'gallery-open') {
+    const record = state.rows.find((row) => row.key === action.key)?.record;
+    if (record)
+      forward(record, 'file-checkout', {
+        targetSearchKey: action.key,
+        projectCode: state.scope.projectCode || props.project
+      });
+  } else if (action.type === 'filter')
+    state.filter = String(action.value ?? '');
   else if (action.type === 'clear-selection') {
     state.selected = [];
     state.selectionRecords = {};

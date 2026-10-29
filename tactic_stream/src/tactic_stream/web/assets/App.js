@@ -1342,10 +1342,21 @@ function identity(scope = {}, project = "") {
 		scope.searchType,
 		scope.view || "table",
 		scope.parentKey,
-		scope.expression || ""
+		scope.expression || "",
+		scope.filters || []
 	]);
 }
-function rows$2(model) {
+function rows$2(model, width = 0) {
+	if (model.gallery) {
+		const count = Math.max(1, Math.floor(Math.max(0, width - 16) / (model.gallery.scale + 12)));
+		const result = [];
+		for (let index = 0; index < (model.rows || []).length; index += count) result.push({
+			key: model.rows[index].key,
+			items: model.rows.slice(index, index + count),
+			extent: model.gallery.scale + 64
+		});
+		return result;
+	}
 	return (model.rows || []).map((record) => Object.assign({}, record, {
 		detailOpen: !!model.children?.[record.key]?.open,
 		extent: 68 + (model.children?.[record.key]?.open ? 320 : 0)
@@ -1401,6 +1412,37 @@ function describe$58(model, width, extent, language) {
 			value: 1
 		}, !model.busy && !!model.hasNext, { iconOnly: true })
 	];
+	if (model.gallery) {
+		const toolbar = model.search !== false || model.refresh !== false || model.gear || model.insert !== false || !model.embedded;
+		const top = toolbar ? 42 : 0;
+		nodes.push(node("List", "nestedGallery", rect$1(0, top, width, Math.max(0, extent - top - 40)), {
+			source: "rows",
+			scrollbarId: "nestedGalleryScrollBar",
+			keyField: "key",
+			fields: [
+				"key",
+				"items",
+				"extent"
+			],
+			rowHeightField: "extent",
+			rowHeight: model.gallery.scale + 64,
+			rowGap: 0,
+			label: t("Snapshots"),
+			role: "list"
+		}));
+		if (!(model.rows || []).length && !model.busy && !model.error) nodes.push(label("nestedGalleryEmpty", rect$1(8, top + 12, Math.max(0, width - 16), 30), t("No snapshots found"), { color: "secondaryText" }));
+		return { nodes: nodes.filter((item) => {
+			if (item.id === "nestedToolbarSurface") return toolbar;
+			if (item.id === "nestedFilter") return model.shelf !== false && model.search !== false;
+			if (item.id === "nestedReload") return model.shelf !== false && model.refresh !== false;
+			if (item.id === "nestedColumns") return model.shelf !== false && !!model.gear;
+			if (item.id === "nestedCreate") return model.shelf !== false && model.insert !== false;
+			if (item.id === "nestedClose") return !model.embedded;
+			if (item.id === "nestedClearSelection") return false;
+			if (["nestedPrevious", "nestedNext"].includes(item.id)) return !!model.hasNext || model.offset > 0;
+			return true;
+		}) };
+	}
 	const children = [node("Box", "nestedHeaderSurface", rect$1(0, 0, contentWidth, metrics$10.header), {
 		background: paint.header,
 		radius: 0
@@ -1470,6 +1512,34 @@ function describe$58(model, width, extent, language) {
 	}) };
 }
 function row$21(model, record, language, viewportWidth = 0) {
+	if (model.gallery) {
+		const size = Math.min(model.gallery.scale, Math.max(0, viewportWidth - 12));
+		return { nodes: (record.items || []).map((item, index) => {
+			const values = item.record;
+			const title = values.context || values.code || "";
+			const image = Object.values(item.cells || {}).find((cell) => cell.image)?.image || "";
+			return node("Action", "nestedSnapshot_" + item.key, rect$1(index * (model.gallery.scale + 12) + 6, 6, size, size + 50), {
+				text: translate("Check out", language) + ": " + title,
+				normalColor: "transparent",
+				radius: 0,
+				action: {
+					type: "gallery-open",
+					key: item.key
+				},
+				children: [
+					node("Preview", "nestedSnapshotPreview_" + item.key, rect$1(0, 0, size, size), {
+						source: image,
+						icon: "snapshot",
+						round: false,
+						fit: "contain",
+						outlined: model.gallery.border
+					}),
+					label("nestedSnapshotContext_" + item.key, rect$1(0, size + 4, size, 22), title),
+					label("nestedSnapshotVersion_" + item.key, rect$1(0, size + 26, size, 20), String(item.cells.version?.text ?? values.version ?? ""), { color: "secondaryText" })
+				]
+			});
+		}) };
+	}
 	const fields = columns$1(model), nodes = [];
 	const width = Math.max(viewportWidth, (model.selection === false ? 0 : metrics$10.selection + 36) + fields.reduce((sum, field) => sum + field.width, 0) + 40);
 	const selected = (model.selected || []).includes(record.key);
@@ -3995,7 +4065,7 @@ function describe$50(cell, width, height, language, editable = true, expanded = 
 	actions.forEach((action, index) => {
 		const left = cell.align === "center" && !cell.text && actions.length === 1 ? (width - size) / 2 : cell.text ? inner - size : 4 + index % capacity * 32;
 		const top = cell.text ? 0 : Math.floor(index / capacity) * 32;
-		children.push(button("tableServiceAction_" + index, rect$1(Math.max(0, left), top, size, size), action.translateLabel === false ? action.label : translate(action.label, language), action.name === "nested-table" ? expanded.__nested?.busy ? "loading" : expanded.__nested?.open ? "expand-more" : "chevron-right" : action.icon, {
+		children.push(button("tableServiceAction_" + index, rect$1(Math.max(0, left), top, size, size), action.translateLabel === false ? action.label : translate(action.label, language), action.name === "nested-table" ? expanded.__nested?.busy ? "loading" : expanded.__nested?.open ? "expand-more" : action.icon || "chevron-right" : action.icon, {
 			type: "service",
 			name: action.name,
 			view: action.view || ""
@@ -6069,7 +6139,10 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		let observer, generation = 0;
 		const model = computed(() => props.state || props.parentState.children[props.frameNode.key]);
 		const component = getCurrentInstance().type;
-		const records = computed(() => rows$2(model.value));
+		const records = computed(() => rows$2({
+			...model.value.scope,
+			...model.value
+		}, width.value));
 		const extent = computed(() => props.frameNode?.height || 320);
 		const scene = computed(() => describe$58({
 			...model.value.scope,
@@ -6177,7 +6250,10 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			}, anchor);
 		}
 		function row(list, record) {
-			return row$21(model.value, record, appearance.language, list.width - 16);
+			return row$21({
+				...model.value.scope,
+				...model.value
+			}, record, appearance.language, list.width - 16);
 		}
 		async function load() {
 			const request = ++generation, state = model.value, scope = state.scope;
@@ -6247,7 +6323,13 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		function activate(action, value) {
 			const state = model.value;
 			if (action.type === "close") emit("close", props.frameNode?.key);
-			else if (action.type === "filter") state.filter = String(action.value ?? "");
+			else if (action.type === "gallery-open") {
+				const record = state.rows.find((row) => row.key === action.key)?.record;
+				if (record) forward(record, "file-checkout", {
+					targetSearchKey: action.key,
+					projectCode: state.scope.projectCode || props.project
+				});
+			} else if (action.type === "filter") state.filter = String(action.value ?? "");
 			else if (action.type === "clear-selection") {
 				state.selected = [];
 				state.selectionRecords = {};
@@ -6325,7 +6407,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 36);
 		};
 	}
-}, [["__scopeId", "data-v-b3fd4475"]]);
+}, [["__scopeId", "data-v-f03347cb"]]);
 //#endregion
 //#region src/controls/markdown.js
 var markdown = new MarkdownItCallable({

@@ -4,6 +4,16 @@
 def nested_cell(search_key, options, column='', layout_reader=None):
     from pyasm.search import Search
 
+    handler = (
+        options.get('dynamic_class')
+        or options.get('dynamic')
+        or 'tactic.ui.panel.TableLayoutWdg'
+    )
+    gallery = (
+        handler == 'tactic.ui.panel.ViewPanelWdg'
+        and options.get('search_type') == 'sthpw/snapshot'
+        and options.get('layout') == 'tile'
+    )
     allowed = {
         'dynamic_class',
         'dynamic',
@@ -32,6 +42,77 @@ def nested_cell(search_key, options, column='', layout_reader=None):
         'include_mako',
         'html',
     }
+    if gallery:
+        allowed.update(
+            (
+                'process',
+                'context',
+                'checkin_type',
+                'hide_checkbox',
+                'show_context_menu',
+                'allow_drag',
+                'scale',
+                'layout',
+                'checkin_context',
+                'search_key',
+                'show_column_manager',
+                'expand_mode',
+                'show_help',
+                'show_refresh',
+                'show_expand',
+                'show_keyword_search',
+                'show_layout_switcher',
+                'show_border',
+                'show_drop_shadow',
+                'no_results_mode',
+                'gallery_align',
+            )
+        )
+        for flag in (
+            'hide_checkbox',
+            'show_context_menu',
+            'allow_drag',
+            'show_column_manager',
+            'show_help',
+            'show_refresh',
+            'show_expand',
+            'show_keyword_search',
+            'show_layout_switcher',
+            'show_border',
+            'show_drop_shadow',
+        ):
+            if options.get(flag, '') not in ('', True, False, 'true', 'false'):
+                raise ValueError('Invalid snapshot gallery flag: ' + flag)
+        if options.get('search_key') not in (
+            None,
+            '',
+            search_key,
+            '@GET(.__search_key__)',
+        ):
+            raise ValueError('A snapshot gallery must keep its owning object')
+        if (
+            options.get('expand_mode') not in (None, '', 'gallery')
+            or options.get('gallery_align') not in (None, '', 'top')
+            or options.get('no_results_mode') not in (None, '', 'compact')
+        ):
+            raise ValueError('Unsupported snapshot gallery presentation')
+        if options.get('checkin_type') not in (None, '', 'strict') or any(
+            options.get(flag) not in (None, '', False, 'false')
+            for flag in ('allow_drag', 'show_context_menu')
+        ):
+            raise ValueError(
+                'Snapshot gallery drag and context commands are not enabled'
+            )
+        process = options.get('process') or ''
+        context = options.get('context') or ''
+        if any(
+            not isinstance(value, str) or len(value) > 256
+            for value in (process, context)
+        ) or options.get('checkin_context') not in (None, '', process):
+            raise ValueError('Invalid snapshot gallery process or context')
+        scale = str(options.get('scale') or '150')
+        if not scale.isdecimal() or not 64 <= int(scale) <= 512:
+            raise ValueError('Snapshot gallery scale must be between 64 and 512')
     if set(options) - allowed:
         raise ValueError(
             'Unsupported nested table options: '
@@ -60,11 +141,6 @@ def nested_cell(search_key, options, column='', layout_reader=None):
             and not str(options['init_load_num']).isdecimal()
         ):
             raise ValueError('Invalid initial row rendering limit')
-    handler = (
-        options.get('dynamic_class')
-        or options.get('dynamic')
-        or 'tactic.ui.panel.TableLayoutWdg'
-    )
     if handler == 'tactic.ui.widget.SObjectCheckinHistoryWdg':
         options = dict(
             options,
@@ -149,9 +225,27 @@ def nested_cell(search_key, options, column='', layout_reader=None):
             search=options.get('show_search') not in (False, 'false'),
             searchLimit=options.get('show_search_limit') not in (False, 'false'),
             expression=options.get('expression') or '',
+            **(
+                dict(
+                    gallery=dict(
+                        scale=int(scale),
+                        border=options.get('show_border') not in (False, 'false'),
+                    ),
+                    filters=([['process', '=', process]] if process else [])
+                    + ([['context', '=', context]] if context else []),
+                    refresh=options.get('show_refresh') not in (False, 'false'),
+                    initialLimit=50,
+                )
+                if gallery
+                else {}
+            ),
         ),
         actions=[
-            dict(name='nested-table', label='Show related table', icon='chevron-right')
+            dict(
+                name='nested-table',
+                label='Show related table',
+                icon='image' if gallery else 'chevron-right',
+            )
         ],
     )
 

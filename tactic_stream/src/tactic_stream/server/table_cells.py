@@ -316,6 +316,35 @@ def describe_cell(element, columns, search_type=""):
         supported = supported and icon_size.isdecimal() and 16 <= int(icon_size) <= 256
     elif widget in NESTED_WIDGETS:
         allowed |= set(HiddenRowElementWdg.ARGS_KEYS)
+        if (
+            options.get('dynamic_class', options.get('dynamic'))
+            == 'tactic.ui.panel.ViewPanelWdg'
+            and options.get('search_type') == 'sthpw/snapshot'
+            and options.get('layout') == 'tile'
+        ):
+            allowed |= {
+                'process',
+                'context',
+                'checkin_type',
+                'hide_checkbox',
+                'show_context_menu',
+                'allow_drag',
+                'scale',
+                'layout',
+                'checkin_context',
+                'search_key',
+                'show_column_manager',
+                'expand_mode',
+                'show_help',
+                'show_refresh',
+                'show_expand',
+                'show_keyword_search',
+                'show_layout_switcher',
+                'show_border',
+                'show_drop_shadow',
+                'no_results_mode',
+                'gallery_align',
+            }
         supported = supported and options.get('width') in (None, '', '100%')
     elif widget in (ButtonElementWdg, DropElementWdg, CustomLayoutElementWdg):
         allowed |= set(widget.ARGS_KEYS)

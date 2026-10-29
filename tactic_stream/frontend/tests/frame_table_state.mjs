@@ -387,7 +387,7 @@ const nestedWithGear = Nested.describe(
   'en'
 );
 assert.ok(nestedWithGear.nodes.some((node) => node.id === 'nestedColumns'));
-validateScene(nestedWithGear, { rows: nestedRows }, { filter: '' });
+validateScene(nestedWithGear, { rows: nestedRows }, { tableSearch: {} });
 
 const summaryRow = Host.summarize(
   [
