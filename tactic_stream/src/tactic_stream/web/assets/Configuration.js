@@ -622,22 +622,37 @@ function row$1(model, record, width, language) {
 	})] };
 }
 function describe$1(model, width, height, language) {
-	const text = (key) => translate(key, language), compact = width < 900, margin = 20;
-	const selected = model.selected || {}, actionsWidth = compact ? width - 40 : 280;
-	const catalogWidth = compact ? width - 40 : width - actionsWidth - 40 - 14;
-	const nodes = [label("configurationProjectsTitle", rect(margin, 14, width - 40, 24), text("Available projects"), {
-		fontRole: "bodyLarge",
-		weight: 600,
-		role: "heading"
-	})];
-	let x = margin;
+	const text = (key) => translate(key, language), compact = width < 900, margin = 12;
+	const selected = model.selected || {}, actionsWidth = compact ? width - 24 - 24 : 280;
+	const catalogWidth = compact ? width - 24 - 24 : width - actionsWidth - 24 - 14 - 48;
+	const catalogX = 24, catalogTop = compact ? 148 : margin, bottom = height - margin - (model.error ? 54 : 0), actionsX = compact ? 24 : width - actionsWidth - margin - 12, actionsY = 24;
+	const nodes = [
+		node("Box", "configurationProjectsPanel", rect(margin, catalogTop, catalogWidth + 24, bottom - catalogTop), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			radius: 8
+		}),
+		node("Box", "configurationProjectDetailsPanel", rect(actionsX - 12, margin, actionsWidth + 24, compact ? 124 : bottom - margin), {
+			background: "surfaceContainerLow",
+			border: "outlineVariant",
+			radius: 8
+		}),
+		node("Box", "configurationProjectsHeaderDivider", rect(catalogX, catalogTop + 80, catalogWidth, 1), { background: "outlineVariant" }),
+		node("Box", "configurationProjectsFooterDivider", rect(catalogX, bottom - 40, catalogWidth, 1), { background: "outlineVariant" }),
+		label("configurationProjectsTitle", rect(catalogX, catalogTop + 12, catalogWidth, 24), text("Available projects"), {
+			fontRole: "bodyLarge",
+			weight: 600,
+			role: "heading"
+		})
+	];
+	let x = catalogX;
 	for (const [key, title] of [
 		["retired", "Retired"],
 		["templates", "Templates"],
 		["builtins", "Built-in"]
 	]) {
 		const fieldWidth = Math.max(85, Math.min(126, catalogWidth / 3));
-		nodes.push(node("CheckBox", "projectFilter_" + key, rect(x, 46, fieldWidth, 32), {
+		nodes.push(node("CheckBox", "projectFilter_" + key, rect(x, catalogTop + 42, fieldWidth, 32), {
 			text: text(title) + (model.counts ? " · " + model.counts[key] : ""),
 			checked: !!model.filters?.[key],
 			enabled: !model.busy,
@@ -648,8 +663,6 @@ function describe$1(model, width, height, language) {
 		}));
 		x += fieldWidth;
 	}
-	const actionsX = compact ? margin : width - actionsWidth - margin;
-	const actionsY = compact ? 104 : 46;
 	const controls = [
 		[
 			"Activate selected project",
@@ -688,31 +701,31 @@ function describe$1(model, width, height, language) {
 			true
 		]
 	];
-	for (const [index, [title, icon, type, enabled]] of controls.entries()) nodes.push(button("configurationProjectAction_" + type, rect(compact ? actionsX + index * 42 : actionsX, compact ? actionsY : actionsY + 112 + index * 44, compact ? 34 : actionsWidth, 36), text(title), icon, {
+	for (const [index, [title, icon, type, enabled]] of controls.entries()) nodes.push(button("configurationProjectAction_" + type, rect(compact ? actionsX + index * 42 : actionsX, compact ? 70 : 136 + index * 44, compact ? 34 : actionsWidth, 36), text(title), icon, {
 		type,
 		code: selected.code
 	}, enabled && !model.busy, { iconOnly: compact }));
-	nodes.push(label("configurationCurrentProject", rect(actionsX, compact ? 146 : actionsY, actionsWidth, 28), model.currentTitle || text("No active project"), {
+	nodes.push(label("configurationCurrentProject", rect(actionsX, actionsY, actionsWidth, 28), model.currentTitle || text("No active project"), {
 		weight: 600,
 		role: "heading"
 	}));
 	if (!compact) {
-		nodes.push(label("configurationSelectedProject", rect(actionsX, actionsY + 42, actionsWidth, 28), selected.title || text("Select a project"), { weight: 600 }));
-		nodes.push(label("configurationSelectedCode", rect(actionsX, actionsY + 74, actionsWidth, 22), selected.code || "", muted));
+		nodes.push(label("configurationSelectedProject", rect(actionsX, 66, actionsWidth, 28), selected.title || text("Select a project"), { weight: 600 }));
+		nodes.push(label("configurationSelectedCode", rect(actionsX, 98, actionsWidth, 22), selected.code || "", muted));
 	}
-	nodes.push(label("configurationProjectsCount", rect(margin, 80, catalogWidth, 20), translate("{visible} of {total} projects shown", language, {
+	nodes.push(label("configurationProjectsCount", rect(catalogX, bottom - 30, catalogWidth, 20), translate("{visible} of {total} projects shown", language, {
 		visible: model.visibleCount || 0,
 		total: model.totalCount || 0
 	}), muted));
-	const top = compact ? 184 : 110, bottom = model.error ? 70 : 16;
-	nodes.push(node("List", "configurationProjects", rect(margin, top, catalogWidth, Math.max(0, height - top - bottom)), {
+	const top = catalogTop + 88;
+	nodes.push(node("List", "configurationProjects", rect(catalogX, top, catalogWidth, Math.max(0, bottom - 48 - top)), {
 		source: "projects",
 		fields: fields$2,
 		keyField: "projectCode",
 		rowHeight: 120,
 		rowGap: 4
 	}));
-	if (model.error) nodes.push(label("configurationProjectsError", rect(margin, height - 60, width - 40, 48), model.error, {
+	if (model.error) nodes.push(label("configurationProjectsError", rect(margin, height - 60, width - 24, 48), model.error, {
 		color: "error",
 		wrap: true
 	}));

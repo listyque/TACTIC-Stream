@@ -54,3 +54,5 @@ Configuration now uses the same Tactic Frame navigation and explained settings r
 On narrow repository editors, Reset and Sync use icon buttons with full tooltips; Save remains labelled. Project Save and template installation keep their complete captions in English and Russian.
 
 Configuration is a separate window. Opening, minimizing or closing it preserves the current workspace page and search results underneath.
+
+The Projects page separates the catalogue and project actions into bordered surfaces. Filters stay in the catalogue header, the project count stays in its footer, and only the list scrolls. On narrow windows the actions appear above the catalogue.
