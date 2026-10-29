@@ -1,8 +1,9 @@
-import { I as resolveComponent, K as withCtx, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
+import { I as resolveComponent, K as withCtx, N as openBlock, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
 import { O as randomUuid, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Jt as label, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$3, k as _sfc_main$2, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { Jt as label, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$2, k as _sfc_main$3, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { o as projectPath } from "./links.js";
+import { n as buttonWidth } from "./metrics.js";
 import { t as listAction } from "./tree.ui.js";
 import { A as _sfc_main$5, At as change, Bt as reorder, Ct as mode, Dt as add, Et as type, Ft as geometry$1, Ht as siblings, It as kinds, J as selected, K as alignment, Lt as layers, M as zooms, Mt as duplicate, Nt as fingerprint, Ot as appearances, Pt as geometries, Rt as path, St as filter, Tt as scope$1, Ut as sizing, Vt as reparent, Wt as spacing, Y as toggle, Z as spacingField, bt as change$1, dt as notices, ht as toolbar$1, j as controls, jt as copy, kt as block, pt as sectionSelector, q as roots, ut as documentEvent, wt as options, xt as fields$1, yt as _sfc_main$4, zt as remove } from "./App.js";
 //#region src/features/administration/PageEditorTools.vue
@@ -14,20 +15,39 @@ var _sfc_main$1 = {
 	} },
 	emits: ["command"],
 	setup(__props) {
+		const props = __props;
+		const menu = ref(null), anchor = ref(null);
+		const trigger = computed(() => ({ nodes: [button("pageEditorToolsButton", rect(0, 0, props.frameNode.width, props.frameNode.height), props.frameNode.label, "more", { type: "menu" }, true)] }));
+		function toggle(_action, source) {
+			anchor.value = source;
+			if (menu.value.open) menu.value.close(true);
+			else {
+				const bounds = source.getBoundingClientRect();
+				menu.value.openAt({
+					clientX: bounds.left,
+					clientY: bounds.bottom,
+					target: source
+				});
+			}
+		}
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$2, {
+			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$2, {
+				scene: trigger.value,
+				onEvent: toggle
+			}, null, 8, ["scene"]), createVNode(_sfc_main$3, {
+				ref_key: "menu",
+				ref: menu,
+				anchor: anchor.value,
 				label: __props.frameNode.label,
-				icon: "more",
-				"compact-trigger": "",
-				overlay: "",
-				style: { "--touch-target": "32px" }
+				"external-trigger": "",
+				overlay: ""
 			}, {
 				default: withCtx(() => [createVNode(_sfc_main$4, {
 					actions: __props.frameNode.actions,
 					onTriggered: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("command", $event))
 				}, null, 8, ["actions"])]),
 				_: 1
-			}, 8, ["label"]);
+			}, 8, ["anchor", "label"])]);
 		};
 	}
 };
@@ -857,12 +877,6 @@ function actions(model, ui, language) {
 	const p = path(ui.selected), rows = p.length ? siblings(model.document, p) : [];
 	return [
 		[
-			"new",
-			"New page",
-			"add",
-			ready
-		],
-		[
 			"open",
 			"Open saved view",
 			"open-in-new",
@@ -891,12 +905,6 @@ function actions(model, ui, language) {
 			"Canvas settings",
 			"tune",
 			true
-		],
-		[
-			"preview",
-			ui.preview ? "Back to editing" : "Clean preview",
-			ui.preview ? "edit" : "visibility",
-			!model.busy && !ui.creating && !model.pendingText
 		]
 	].map(([command, title, icon, enabled]) => ({
 		command,
@@ -914,28 +922,57 @@ function toolEvent(command) {
 }
 function canvasTools(model, ui, width, language, canEdit) {
 	const tr = (text) => translate(text, language), nodes = [];
-	const sourceWidth = ui.source ? language === "ru" ? 148 : 104 : 80;
-	const pickerWidth = Math.max(80, Math.min(260, width - sourceWidth - (!ui.source && !ui.preview ? 126 : 48)));
-	nodes.push(node("Choice", "pageLayoutChoice", rect(0, 0, pickerWidth, 32), {
+	const named = !!model.document.name, ready = canEdit && !model.pendingText && !ui.confirmation;
+	const pages = model.catalog.map((row) => ({
+		value: row.identity,
+		label: row.label
+	}));
+	if (named && !pages.some((page) => page.value === model.document.name)) pages.unshift({
+		value: model.document.name,
+		label: model.document.title || model.document.name
+	});
+	let x = 0, y = 0;
+	function place(item) {
+		item.width = Math.min(item.width, width);
+		if (x && x + item.width > width) {
+			x = 0;
+			y += 38;
+		}
+		item.x = x;
+		item.y = y;
+		nodes.push(item);
+		x += item.width + 8;
+	}
+	function action(id, title, icon, event, enabled, extra) {
+		const text = tr(title);
+		place(button(id, rect(0, 0, Math.max(80, buttonWidth(text.length * 8, true)), 32), text, icon, event, enabled, extra));
+	}
+	place(node("Choice", "pageLayoutChoice", rect(0, 0, 260, 32), {
 		label: tr("Page layout"),
 		value: model.document.name || "",
-		options: model.catalog.map((row) => ({
-			value: row.identity,
-			label: row.label
-		})),
+		options: (named ? [] : [{
+			value: "",
+			label: tr("Page layout")
+		}]).concat(pages),
 		enabled: !model.busy && !model.uncertain,
 		action: { type: "load" }
-	}), button("pageSourceXml", rect(width - sourceWidth - 42, 0, sourceWidth, 32), ui.source ? tr("Design") : "XML", ui.source ? "dashboard" : "code", { type: "sourceXml" }, !!model.document.name, {
-		highlighted: ui.source,
-		toolTip: tr("Source XML")
-	}), node("View", "pageToolsMenu", rect(width - 32, 0, 32, 32), {
-		view: "pageTools",
-		actions: actions(model, ui, language),
-		label: tr("Editor tools")
 	}));
-	let y = 40;
+	action("pageNew", "New page", "add", { type: "new" }, ready && !ui.creating, { highlighted: !named });
+	if (named) {
+		action("pagePreviewToggle", ui.preview ? "Back to editing" : "Clean preview", ui.preview ? "edit" : "visibility", { type: "preview" }, !model.busy && !ui.creating && !model.pendingText, { highlighted: ui.preview });
+		action("pageSourceXml", ui.source ? "Design" : "XML", ui.source ? "dashboard" : "code", { type: "sourceXml" }, true, {
+			highlighted: ui.source,
+			toolTip: tr("Source XML")
+		});
+		place(node("View", "pageToolsMenu", rect(0, 0, buttonWidth(tr("Actions").length * 8, true), 32), {
+			view: "pageTools",
+			actions: actions(model, ui, language),
+			label: tr("Actions")
+		}));
+	}
+	y += 40;
 	if (ui.creating) {
-		const w = Math.max(80, (width - 8) / 2);
+		const inline = width >= 760, createWidth = buttonWidth(tr("Create draft").length * 8, true), w = inline ? Math.min(240, (width - createWidth - 144) / 2) : (width - 8) / 2;
 		nodes.push(node("Field", "pageLayoutName", rect(0, y, w, 32), {
 			label: tr("Page name"),
 			placeholder: "my_dashboard",
@@ -943,19 +980,22 @@ function canvasTools(model, ui, width, language, canEdit) {
 			action: { type: "newName" }
 		}), node("Field", "pageLayoutTitle", rect(w + 8, y, w, 32), {
 			label: tr("Title"),
+			placeholder: tr("Title"),
 			text: ui.newTitle,
 			action: { type: "newTitle" }
-		}), button("pageLayoutCreate", rect(0, y + 40, 160, 32), tr("Create draft"), "add", { type: "create" }, canEdit), button("pageLayoutCancelNew", rect(168, y + 40, 120, 32), tr("Cancel"), "close", { type: "cancelNew" }, true));
-		y += 80;
+		}), button("pageLayoutCreate", rect(inline ? 2 * w + 16 : 0, inline ? y : y + 40, createWidth, 32), tr("Create draft"), "add", { type: "create" }, canEdit), button("pageLayoutCancelNew", rect(inline ? 2 * w + createWidth + 24 : createWidth + 8, inline ? y : y + 40, 120, 32), tr("Cancel"), "close", { type: "cancelNew" }, true));
+		y += inline ? 40 : 80;
 	}
-	if (!ui.source) {
-		const tools = controls(ui, width, language, !model.busy);
-		nodes.push(node("Box", "pageViewportTools", rect(0, y, width, tools.height), { children: tools.nodes }));
-		y += tools.height + 6;
+	if (named && !ui.source) {
+		let offset = 0;
 		if (!ui.preview) {
 			const current = fingerprint(model.document), ready = canEdit && !model.pendingText && !ui.confirmation && ui.historyDocument === current;
-			for (const [index, type] of ["undo", "redo"].entries()) nodes.push(button("pageAction_" + type, rect(width - sourceWidth - 120 + index * 38, 0, 32, 32), tr(type === "undo" ? "Undo" : "Redo"), type, { type }, !!(ready && ui[type === "undo" ? "past" : "future"]?.length), { iconOnly: true }));
+			for (const [index, type] of ["undo", "redo"].entries()) nodes.push(button("pageAction_" + type, rect(index * 38, y, 32, 32), tr(type === "undo" ? "Undo" : "Redo"), type, { type }, !!(ready && ui[type === "undo" ? "past" : "future"]?.length), { iconOnly: true }));
+			offset = 84;
 		}
+		const tools = controls(ui, width - offset, language, !model.busy);
+		nodes.push(node("Box", "pageViewportTools", rect(offset, y, width - offset, tools.height), { children: tools.nodes }));
+		y += tools.height + 6;
 	}
 	return {
 		nodes,
@@ -1011,9 +1051,21 @@ function describe(model, ui, width, height, language) {
 	const notice = notices(noticesModel, ui, width, language), nodes = notice.nodes;
 	let y = notice.top;
 	const geometry$2 = geometry(width, ui), { narrow, left, right, canvasX, canvasWidth } = geometry$2;
+	const tools = canvasTools(model, ui, width - 16, language, canEdit);
+	nodes.push(node("Box", model.document.name ? "pageCanvasTools" : "pageEmptyTools", rect(0, y, width, tools.height + 16), {
+		background: "surfaceContainerLow",
+		children: tools.nodes.map((item) => Object.assign({}, item, {
+			x: item.x + 8,
+			y: item.y + 8
+		}))
+	}));
+	y += tools.height + 24;
 	if (!model.document.name) {
-		const tools = canvasTools(model, ui, width, language, canEdit);
-		return { nodes: nodes.concat(node("Box", "pageEmptyTools", rect(0, y, width, tools.height), { children: tools.nodes })) };
+		if (!ui.creating) nodes.push(node("Label", "pageEmptyHint", rect(12, y, width - 24, 32), {
+			text: tr("Choose a page or create a new page."),
+			color: "secondaryText"
+		}));
+		return { nodes };
 	}
 	if (narrow && !ui.preview && !ui.source) {
 		nodes.push(sectionSelector("pageEditorPanels", [
@@ -1271,22 +1323,19 @@ function describe(model, ui, width, height, language) {
 			})])
 		}));
 	}
-	if (ui.preview || ui.source || !narrow || ui.panel === "canvas") {
-		const tools = canvasTools(model, ui, canvasWidth - 16, language, canEdit);
-		nodes.push(node("Box", "pageCanvasPanel", rect(canvasX, y, canvasWidth, h), {
-			background: "workspace",
-			border: "outlineVariant",
-			children: [node("Box", "pageCanvasTools", rect(8, 8, canvasWidth - 16, tools.height), { children: tools.nodes }), ui.source ? node("Code", "pageXmlSource", rect(8, tools.height + 16, canvasWidth - 16, Math.max(1, h - tools.height - 24)), {
-				text: model.checked ? model.sourceXml || "" : "",
-				syntax: "xml",
-				language,
-				readOnly: true,
-				service: "sourceEditor",
-				label: tr("Source XML"),
-				bufferKey: "page:" + model.document.name
-			}) : node("View", "pageCanvas", rect(8, tools.height + 16, canvasWidth - 16, Math.max(1, h - tools.height - 24)), { view: "pagePreview" })]
-		}));
-	}
+	if (ui.preview || ui.source || !narrow || ui.panel === "canvas") nodes.push(node("Box", "pageCanvasPanel", rect(canvasX, y, canvasWidth, h), {
+		background: "workspace",
+		border: "outlineVariant",
+		children: [ui.source ? node("Code", "pageXmlSource", rect(8, 8, canvasWidth - 16, Math.max(1, h - 16)), {
+			text: model.checked ? model.sourceXml || "" : "",
+			syntax: "xml",
+			language,
+			readOnly: true,
+			service: "sourceEditor",
+			label: tr("Source XML"),
+			bufferKey: "page:" + model.document.name
+		}) : node("View", "pageCanvas", rect(8, 8, canvasWidth - 16, Math.max(1, h - 16)), { view: "pagePreview" })]
+	}));
 	return { nodes };
 }
 //#endregion
@@ -1753,7 +1802,7 @@ function transition(ui, model, event) {
 //#endregion
 //#region src/features/administration/PageLayoutEditor.vue
 var _sfc_main = {
-	components: { FrameView: _sfc_main$3 },
+	components: { FrameView: _sfc_main$2 },
 	props: {
 		ticket: String,
 		project: String,

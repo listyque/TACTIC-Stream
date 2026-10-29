@@ -40,7 +40,7 @@ async function property(name, value) {
   await control('pageProperty_' + name).blur();
 }
 async function editorMenu(command) {
-  await control('pageToolsMenu').locator('summary').click();
+  await control('pageEditorToolsButton').click();
   await page
     .locator('[data-menu-command="' + command + '"]:visible button')
     .click();
@@ -81,14 +81,14 @@ try {
   await box('0.5').waitFor();
   await control('pageBlock_0.0').click();
   await control('pageProperty_text_align').selectOption('center');
-  await editorMenu('preview');
+  await control('pagePreviewToggle').click();
   assert.equal(await page.locator('[data-canvas-key]').count(), 0);
   await control('customLayout_0_0')
     .getByText('Project dashboard', { exact: true })
     .waitFor();
   assert.equal(writes.length, 0);
   await page.screenshot({ path: process.argv[3] + '/clean-preview.png' });
-  await editorMenu('preview');
+  await control('pagePreviewToggle').click();
   await page.waitForFunction(
     () => !document.querySelector('[data-frame="adminSaveDocument"]')?.disabled
   );

@@ -451,6 +451,7 @@
       "_CodeBlock.js",
       "_sections.ui.js",
       "_links.js",
+      "_metrics.js",
       "_tree.ui.js",
       "src/App.vue"
     ]

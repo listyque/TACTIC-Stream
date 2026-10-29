@@ -21077,9 +21077,13 @@ function describe$41(scene, settings, width, height) {
 		scrollbarId: "pageViewportBar",
 		children: [node("Box", "pageViewportPaper", rect$1(Math.max(16, (width - size.width * size.scale) / 2), 16, size.width, pageHeight), {
 			scale: size.scale,
+			clip: false,
 			background: "workspace",
 			border: "outlineVariant",
-			children: [node("Box", "pageViewportContent", rect$1(12, 12, size.width - 24, pageHeight - 24), { children })]
+			children: [node("Box", "pageViewportContent", rect$1(12, 12, size.width - 24, pageHeight - 24), {
+				children,
+				clip: false
+			})]
 		})]
 	})] });
 }
@@ -58004,7 +58008,7 @@ var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes
 var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([61,1,2,3,4,5,6,7,60,8,28,19,62,63,64])));
 var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([65,1,2,3,4,5,6,7,8,66,43,44,58,53,54,49,9,10,11,25,50,26,67,62,63,68])));
 var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([69,1,2,3,4,5,6,7,8,63])));
-var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([70,1,2,3,4,5,6,7,8,44,63])));
+var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([70,1,2,3,4,5,6,7,8,44,38,63])));
 var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([71,1,2,3,4,5,6,7,8,44,72])));
 var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([73,1,2,3,4,5,6,7,8])));
 var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([74,1,2,3,4,5,6,7])));

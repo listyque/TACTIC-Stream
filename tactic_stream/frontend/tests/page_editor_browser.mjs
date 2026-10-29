@@ -30,6 +30,16 @@ async function resize(cancel) {
   await hit.click();
   const handle = editor.locator('[data-canvas-handle="se"]');
   const box = await handle.boundingBox();
+  assert.equal(
+    await page.evaluate(
+      ({ x, y }) =>
+        document.elementFromPoint(x, y)?.closest('[data-canvas-handle]')
+          ?.dataset.canvasHandle,
+      { x: box.x + 7, y: box.y + 7 }
+    ),
+    'se',
+    'Resize handle is not clipped by the paper'
+  );
   await page.mouse.move(box.x + 7, box.y + 7);
   await page.mouse.down();
   await page.mouse.move(box.x + 47, box.y + 37, { steps: 4 });
@@ -37,7 +47,7 @@ async function resize(cancel) {
   await page.mouse.up();
 }
 async function editorMenu(command) {
-  await control('pageToolsMenu').locator('summary').click();
+  await control('pageEditorToolsButton').click();
   await page
     .locator('[data-menu-command="' + command + '"]:visible button')
     .click();
@@ -53,6 +63,23 @@ try {
   await control('workspacePageEdit').click();
   await editor.waitFor();
   await editor.locator('[data-canvas-key="0.0"]').waitFor();
+  assert.equal(
+    await control('pageEditorToolsButton')
+      .locator(':scope > span:not(.app-icon)')
+      .innerText(),
+    'Actions'
+  );
+  const selectedPage = await control('pageLayoutChoice').inputValue();
+  await control('pageNew').click();
+  await control('pageLayoutName').fill('scratch_page');
+  await control('pageLayoutTitle').fill('Scratch page');
+  await control('pageLayoutCancelNew').click();
+  assert.equal(await control('pageLayoutChoice').inputValue(), selectedPage);
+  assert.equal(
+    writes.length,
+    0,
+    'Opening/cancelling direct page creation never saves'
+  );
   assert.equal((await control('pageLayersPanel').boundingBox()).width, 180);
   assert.equal(await control('pageBlock_0Icon').count(), 1);
   await control('pageTreeToggle_0').click();
@@ -110,7 +137,7 @@ try {
   await control('pageProperty_gap').waitFor();
   const editCanvasWidth = (await control('pageCanvasPanel').boundingBox())
     .width;
-  await editorMenu('preview');
+  await control('pagePreviewToggle').click();
   assert.equal(
     await editor.locator('[data-canvas-key]').count(),
     0,
@@ -121,7 +148,7 @@ try {
     (await control('pageCanvasPanel').boundingBox()).width > editCanvasWidth
   );
   assert.equal(writes.length, 0);
-  await editorMenu('preview');
+  await control('pagePreviewToggle').click();
   await control('pageBlock_0.0').click();
   await page.keyboard.press('Control+d');
   await control('pageBlock_0.2').waitFor();

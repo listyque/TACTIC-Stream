@@ -62,6 +62,12 @@ const original = JSON.stringify(document);
   const paper = scaled.nodes[0].children[0];
   assert.equal(paper.width, 800);
   assert.equal(paper.scale, 0.5);
+  assert.equal(paper.clip, false);
+  assert.equal(
+    paper.children[0].clip,
+    false,
+    'Paper content must not clip edge resize handles'
+  );
   assert.equal(paper.x, 100);
   assert.equal(scaled.nodes[0].contentHeight, 644);
   assert.equal(scaled.canvasBoxes, scene.canvasBoxes);

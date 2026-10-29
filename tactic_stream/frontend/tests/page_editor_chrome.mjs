@@ -60,15 +60,74 @@ for (const language of ['en', 'ru'])
       const tree = nodes.find((node) => node.id === 'pageLayersPanel'),
         add = nodes.find((node) => node.id === 'pageAddWidget');
       assert.equal(tree.width, 180);
-      assert.equal(tree.y, 0);
+      const toolbar = nodes.find((node) => node.id === 'pageCanvasTools');
+      assert.equal(tree.y, toolbar.height + 8);
       assert(add && add.y < 72);
       assert.equal(nodes.filter((node) => node.kind === 'Splitter').length, 2);
-      assert(nodes.find((node) => node.id === 'pageCanvasTools').height <= 82);
+      assert(toolbar.height <= 100);
       assert.equal(
         nodes.some((node) => node.id === 'pageAction_duplicate'),
         false
       );
     }
+  }
+for (const language of ['en', 'ru'])
+  for (const width of [320, 360, 760, 850, 1100, 2000]) {
+    for (const creating of [false, true]) {
+      const empty = UI.model({ ...raw, document: null, catalog: [] }, ui);
+      const state = { ...State.initial(), creating };
+      const scene = UI.describe(empty, state, width, 800, language);
+      const nodes = flatten(scene),
+        toolbar = nodes.find((node) => node.id === 'pageEmptyTools');
+      const primary = nodes.find((node) => node.id === 'pageNew');
+      assert(primary && primary.highlighted && primary.text.length > 0);
+      assert.equal(
+        nodes.some((node) => node.id === 'pageCanvasSize'),
+        false
+      );
+      for (const item of toolbar.children) {
+        assert(
+          item.x >= 0 && item.x + item.width <= width,
+          language + ' ' + width + ' ' + item.id
+        );
+        assert(item.y + item.height <= toolbar.height);
+      }
+      for (let i = 0; i < toolbar.children.length; i++)
+        for (const next of toolbar.children.slice(i + 1)) {
+          const item = toolbar.children[i];
+          assert(
+            item.x + item.width <= next.x ||
+              next.x + next.width <= item.x ||
+              item.y + item.height <= next.y ||
+              next.y + next.height <= item.y,
+            item.id + ' overlaps ' + next.id
+          );
+        }
+      assert.equal(
+        nodes.some((node) => node.id === 'pageLayoutCreate'),
+        creating
+      );
+      assert.equal(
+        nodes.some((node) => node.id === 'pageEmptyHint'),
+        !creating
+      );
+    }
+    const tools = Chrome.canvasTools(
+      model(),
+      State.initial(),
+      width,
+      language,
+      true
+    );
+    assert(tools.nodes.find((node) => node.id === 'pagePreviewToggle'));
+    assert(
+      tools.nodes.find((node) => node.id === 'pageToolsMenu').label.length > 0
+    );
+    assert(
+      !Chrome.actions(model(), ui, language).some((action) =>
+        ['new', 'preview'].includes(action.command)
+      )
+    );
   }
 event({ type: 'panelSize', panel: 'layers', value: 245 });
 event({ type: 'panelSize', panel: 'properties', value: 350 });
