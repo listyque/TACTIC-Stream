@@ -63,3 +63,125 @@
 .app-dialog-untitled > .app-dialog-content {
   padding-top: var(--dialog-padding);
 }
+
+/* Window chrome owns the title bar; feature headers remain content toolbars. */
+.app-window.app-window-frame-host[open] {
+  display: flex;
+  flex-direction: column;
+}
+.app-window > .app-window-frame-content {
+  flex: 1;
+  min-height: 0;
+  height: auto !important;
+  position: relative;
+}
+.app-window .app-window-content-close {
+  display: none !important;
+}
+.app-window .app-window-titlebar:not(.frame-titlebar) {
+  display: flex !important;
+  flex: none;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  box-sizing: border-box;
+  height: var(--dialog-header-height) !important;
+  min-height: var(--dialog-header-height) !important;
+  width: calc(
+    100% + var(--window-padding-left, 0px) + var(--window-padding-right, 0px)
+  );
+  margin: calc(-1 * var(--window-padding-top, 0px))
+    calc(-1 * var(--window-padding-right, 0px)) var(--dialog-spacing)
+    calc(-1 * var(--window-padding-left, 0px)) !important;
+  padding: 0 var(--dialog-header-padding) !important;
+  background: var(--header) !important;
+  border-bottom: 1px solid var(--outline-variant);
+  border-radius: 0;
+}
+.app-window .app-window-titlebar:not(.frame-titlebar) :is(h1, h2, h3, strong) {
+  margin: 0;
+  font-size: var(--dialog-title-size) !important;
+  font-weight: 600;
+  line-height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.app-window
+  .app-window-titlebar:not(.frame-titlebar)
+  > :is(div, strong, h1, h2, h3) {
+  min-width: 0;
+}
+.app-window .app-window-titlebar:not(.frame-titlebar) :is(small, p) {
+  display: block;
+  margin: 0 !important;
+  font-size: var(--text-caption);
+  line-height: 14px;
+  max-height: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.app-window
+  .app-window-titlebar:not(.frame-titlebar)
+  .app-button:has(> [data-icon='close']),
+.app-window .app-window-titlebar:not(.frame-titlebar) .app-button.icon-button,
+.app-window
+  .app-window-titlebar:not(.frame-titlebar)
+  .app-window-controls
+  .app-button {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-high);
+}
+.app-window
+  .app-window-titlebar:not(.frame-titlebar)
+  .app-button:has(> [data-icon='close'])
+  > span:not(.app-icon) {
+  display: none;
+}
+.app-window .app-window-caption {
+  order: -1;
+  flex: 1;
+}
+.app-window[data-window-type] > .app-dialog-titlebar {
+  margin-bottom: 0 !important;
+}
+
+dialog.record-dialog:not(.app-window) {
+  border: 1px solid var(--outline);
+  box-shadow: 0 var(--dialog-shadow-y) var(--dialog-shadow-blur)
+    var(--dialog-shadow);
+}
+dialog.record-dialog:not(.app-window) > :is(header, h1, h2, h3),
+dialog.record-dialog:not(.app-window) > form > :is(header, h1, h2, h3) {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  height: var(--dialog-header-height) !important;
+  min-height: var(--dialog-header-height) !important;
+  margin: calc(-1 * var(--dialog-content-top, var(--space-lg)))
+    calc(-1 * var(--dialog-content-side, var(--space-lg))) var(--dialog-spacing) !important;
+  padding: 0 var(--dialog-header-padding) !important;
+  background: var(--header) !important;
+  border-bottom: 1px solid var(--outline-variant);
+  font-size: var(--dialog-title-size);
+  font-weight: 600;
+}
+dialog.record-dialog:not(.app-window) > header :is(h1, h2, h3),
+dialog.record-dialog:not(.app-window) > form > header :is(h1, h2, h3) {
+  margin: 0;
+  font-size: var(--dialog-title-size);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

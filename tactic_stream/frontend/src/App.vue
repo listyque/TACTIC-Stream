@@ -2130,7 +2130,7 @@ export default {
         </AppMenu></Teleport>
       </template>
     </DockWorkspace>
-    <dialog v-window="{kind:'configuration', type:'window' }" ref="configurationDialog" class="configuration-dialog" aria-labelledby="configuration-title" @cancel.prevent="$refs.configuration?.cancel()" @close="configurationOpen = false">
+    <dialog v-window="{kind:'configuration', type:'window' }" ref="configurationDialog" class="configuration-dialog" :aria-label="t('Configuration')" @cancel.prevent="$refs.configuration?.cancel()" @close="configurationOpen = false">
       <KeepAlive><Configuration v-if="configurationOpen" ref="configuration" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" :open-project="configureProject" :reload-cache="reloadCache" @help="$refs.help.open($event)" @providers="openAgentProviders" @close="$refs.configurationDialog.close()" @session-expired="logout('Session ended. Sign in again.')" /></KeepAlive>
     </dialog>
     <dialog v-window="{kind:'administration'}" ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">

@@ -562,7 +562,7 @@ export default {
         <AppButton icon-only label="Move column left" icon="previous" @click="moveColumn(index,-1)" /><AppButton icon-only label="Move column right" icon="next" @click="moveColumn(index,1)" />
       </div><AppButton label="Close" @click="captureView();$refs.columnsDialog.close()" />
     </dialog>
-    <dialog ref="tabEditor" class="configuration-dialog file-workspace-editor" :aria-label="t('Edit view tab')">
+    <dialog v-window="{type:'dialog'}" ref="tabEditor" class="configuration-dialog file-workspace-editor" :aria-label="t('Edit view tab')">
       <header><h2>{{ t('Edit view tab') }}</h2><AppButton icon-only label="Close" icon="close" @click="$refs.tabEditor.close()" /></header>
       <AppTextField v-model="tabDraft.title" label="Tab title" /><AppSelect v-model="tabDraft.preset" :options="viewPresets.map(tab=>({value:tab.id,label:tab.title}))" label="View" />
       <AppCheckBox v-if="tabDraft.preset==='history'" v-model="tabDraft.pinned" label="Pin file history" />

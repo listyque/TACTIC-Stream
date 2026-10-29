@@ -48,6 +48,16 @@ Browser floating windows use an 8px outer corner radius and the shared theme sha
 
 Floating dock windows are the visual reference for floating windows: reuse their chrome, title bar, borders and controls. Keep resize grips quiet and integrated into the corner, without a filled circular button.
 
+Window/dialog outer corners use an 8-DIP radius across themes. Browser legacy
+headers are normalized by the window host; Frame page headers remain content
+toolbars beneath a common outer title bar. The host forwards Close to the
+feature's existing close action (including its disabled state), or dispatches
+its cancellable cancel event. Compact confirmations retain their existing
+buttons and modality. Native functional windows and sign-in use the same
+operating-system frame as detached docks; embedded dialogs use Controls.Dialog.
+Menus, navigation drawers, toast notifications and OS file pickers keep their
+separate roles. Window hosts never rewrite a draft or authorize a save.
+
 Catalogs, navigation and chat history use plain compact list rows with muted
 group captions. Resting rows are transparent; selection, hover and keyboard
 focus provide emphasis. Do not turn each row or group heading into a filled

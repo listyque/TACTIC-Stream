@@ -140,7 +140,7 @@ def main():
         "frontend/tests/{frame_messages*,frame_communication_reference,messages*,notification*,activity*,mobile_activity_profile}.mjs",
         "frontend/src/features/help/**/*.{vue,js}",
         "tools/frame_help/*.{vue,js,html,mjs}",
-        "frontend/tests/frame_{help*,window_lifecycle,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs",
+        "frontend/tests/frame_{help*,window_lifecycle,window_chrome,dock_placement,dock_layout,dock_capture,dock_interaction,navigation*}.mjs",
     ]:
         command[-1] = pattern
         queued.append(list(command))
@@ -179,6 +179,8 @@ def main():
         "AppSelect.vue",
         "AppEditableSelect.vue",
         "AppDialog.vue",
+        "WindowControls.vue",
+        "window.js",
         "AppSplitter.vue",
         "AppTextArea.vue",
         "AppTextField.vue",

@@ -821,7 +821,7 @@ var styleMetrics = {
 		snapshotRadius: 5,
 		surfaceRadius: 12,
 		sectionRadius: 16,
-		dialogRadius: 20,
+		dialogRadius: 8,
 		menuRadius: 16,
 		iconButtonRadius: 4,
 		communicationGroupedSpacing: 2,
@@ -843,7 +843,7 @@ var styleMetrics = {
 		snapshotRadius: 10,
 		surfaceRadius: 18,
 		sectionRadius: 22,
-		dialogRadius: 28,
+		dialogRadius: 8,
 		menuRadius: 20,
 		iconButtonRadius: 9,
 		communicationGroupedSpacing: 3,
@@ -2239,15 +2239,20 @@ function dockMinimumHeight(kind) {
 }
 //#endregion
 //#region src/controls/WindowControls.vue
-var _hoisted_1 = { class: "app-window-titlebar app-window-minimized-titlebar" };
-var _hoisted_2 = ["onPointerdown"];
+var _hoisted_1 = { class: "app-window-caption" };
+var _hoisted_2 = { class: "app-window-titlebar app-window-minimized-titlebar" };
+var _hoisted_3 = ["onPointerdown"];
 var _sfc_main = {
 	__name: "WindowControls",
 	props: {
 		element: Object,
 		header: Object,
 		geometry: Object,
-		backProvided: Boolean
+		backProvided: Boolean,
+		title: String,
+		closeButton: Object,
+		closeRequired: Boolean,
+		closeDisabled: Boolean
 	},
 	setup(__props) {
 		const props = __props;
@@ -2302,6 +2307,14 @@ var _sfc_main = {
 				"--edge-bottom": innerHeight - box.y - box.height + "px"
 			};
 		}
+		function syncHeaderPadding() {
+			const style = getComputedStyle(props.element);
+			for (const side of [
+				"top",
+				"left",
+				"right"
+			]) props.header.style.setProperty("--window-padding-" + side, props.header.parentElement === props.element ? style.getPropertyValue("padding-" + side) : "0px");
+		}
 		function clamp(rect) {
 			return fit(rect, {
 				x: 0,
@@ -2343,7 +2356,11 @@ var _sfc_main = {
 			geometryChanged();
 		}
 		function shown() {
+			syncHeaderPadding();
 			if (minimized.value) minimize();
+		}
+		function restoreBeforeClose(event) {
+			if (minimized.value && event.target.closest("button")?.querySelector("[data-icon=\"close\"], [data-icon=\"MDI_CLOSE\"]")) minimize();
 		}
 		function start(event) {
 			if (gesture || event.isPrimary === false || compact() || maximized.value || event.button !== 0 || event.target.closest("button, a, input, select, textarea, summary, label, [role=\"button\"], [role=\"tab\"]")) return;
@@ -2392,6 +2409,7 @@ var _sfc_main = {
 			if (!event.target.closest("button, a, input, select, textarea, summary, label")) toggle();
 		}
 		function resize() {
+			syncHeaderPadding();
 			if (placed && !maximized.value && !compact()) place(placed);
 			resizeEdges();
 		}
@@ -2402,6 +2420,7 @@ var _sfc_main = {
 			});
 		}
 		function opened() {
+			if (props.element.open) syncHeaderPadding();
 			if (!props.element.open || saved || placed || compact()) return;
 			if (props.element.offsetWidth < innerWidth - 16 || props.element.offsetHeight < innerHeight - 16) return;
 			const width = Math.min(1100, innerWidth * .8), height = Math.min(760, innerHeight * .8);
@@ -2445,6 +2464,8 @@ var _sfc_main = {
 			});
 		}
 		onMounted(() => {
+			syncHeaderPadding();
+			props.header.addEventListener("click", restoreBeforeClose, true);
 			props.header.classList.add("app-window-titlebar");
 			props.header.tabIndex = 0;
 			for (const [name, fn] of Object.entries({
@@ -2468,6 +2489,7 @@ var _sfc_main = {
 			sizeObserver.observe(props.element);
 		});
 		onBeforeUnmount(() => {
+			props.header.removeEventListener("click", restoreBeforeClose, true);
 			cancelGesture();
 			for (const [name, fn] of Object.entries({
 				pointerdown: start,
@@ -2497,8 +2519,12 @@ var _sfc_main = {
 		});
 		return (_ctx, _cache) => {
 			return openBlock(), createElementBlock(Fragment, null, [
-				__props.element.dataset.windowType === "window" ? (openBlock(), createBlock(_sfc_main$1, {
+				__props.title ? (openBlock(), createBlock(Teleport, {
 					key: 0,
+					to: __props.header
+				}, [createBaseVNode("strong", _hoisted_1, toDisplayString(__props.title), 1)], 8, ["to"])) : createCommentVNode("", true),
+				__props.element.dataset.windowType === "window" ? (openBlock(), createBlock(_sfc_main$1, {
+					key: 1,
 					"icon-only": "",
 					icon: minimized.value ? "window-restore" : "minus",
 					label: minimized.value ? "Restore window" : "Minimize window",
@@ -2510,7 +2536,7 @@ var _sfc_main = {
 					"aria-pressed"
 				])) : createCommentVNode("", true),
 				!minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
-					key: 1,
+					key: 2,
 					"icon-only": "",
 					icon: maximized.value ? "window-restore" : "open-in-full",
 					label: maximized.value ? "Restore window" : "Maximize window",
@@ -2521,6 +2547,14 @@ var _sfc_main = {
 					"label",
 					"aria-pressed"
 				])) : createCommentVNode("", true),
+				__props.closeRequired ? (openBlock(), createBlock(_sfc_main$1, {
+					key: 3,
+					"icon-only": "",
+					icon: "close",
+					label: "Close",
+					disabled: __props.closeDisabled,
+					onClick: _cache[0] || (_cache[0] = ($event) => __props.closeButton ? __props.closeButton.click() : back())
+				}, null, 8, ["disabled"])) : createCommentVNode("", true),
 				(openBlock(), createBlock(Teleport, { to: __props.header }, [unref(mobile) && !__props.backProvided ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 0,
 					class: "app-window-back",
@@ -2530,9 +2564,9 @@ var _sfc_main = {
 					onClick: back
 				})) : createCommentVNode("", true)], 8, ["to"])),
 				minimized.value && __props.header.parentElement !== __props.element ? (openBlock(), createBlock(Teleport, {
-					key: 2,
+					key: 4,
 					to: __props.element
-				}, [createBaseVNode("header", _hoisted_1, [
+				}, [createBaseVNode("header", _hoisted_2, [
 					createBaseVNode("strong", null, toDisplayString(__props.element.getAttribute("aria-label") || __props.header.querySelector("[role=\"heading\"]")?.textContent || unref(t)("Restore window")), 1),
 					createVNode(_sfc_main$1, {
 						"icon-only": "",
@@ -2544,7 +2578,7 @@ var _sfc_main = {
 						"icon-only": "",
 						icon: "close",
 						label: "Close",
-						onClick: _cache[0] || (_cache[0] = ($event) => {
+						onClick: _cache[1] || (_cache[1] = ($event) => {
 							minimize();
 							back();
 						})
@@ -2566,7 +2600,7 @@ var _sfc_main = {
 						style: normalizeStyle(edges.value),
 						"aria-hidden": "true",
 						onPointerdown: withModifiers(($event) => startResize($event, edge), ["stop"])
-					}, null, 46, _hoisted_2);
+					}, null, 46, _hoisted_3);
 				}), 64)) : createCommentVNode("", true)], 8, ["to"]))
 			], 64);
 		};
@@ -2579,7 +2613,8 @@ var windowDirective = {
 	mounted(element, binding) {
 		if (element.tagName !== "DIALOG") return;
 		let configuration = binding.value;
-		let header = null, host = null, retainedGeometry = null;
+		let header = null, host = null, retainedGeometry = null, hostedGeometry = null;
+		let chrome = null, frameContent = null, contentClose = null;
 		const show = element.show.bind(element), close = element.close.bind(element);
 		const home = document.createComment("window owner");
 		element.before(home);
@@ -2671,14 +2706,58 @@ var windowDirective = {
 			else header.append(host);
 		}
 		const attach = () => {
-			element.classList.toggle("app-window", configuration !== false && configuration?.type !== "popup");
+			const windowed = configuration !== false && configuration?.type !== "popup";
+			element.classList.toggle("app-window", windowed);
 			element.dataset.windowType = configuration?.type || "dialog";
 			element.dataset.windowKind = configuration?.kind || "";
 			if (nonmodal()) element.setAttribute("aria-modal", "false");
 			else element.removeAttribute("aria-modal");
-			const next = configuration === false ? null : [...element.querySelectorAll("header")].find((header) => header.closest(".app-window") === element) || null;
+			const featureHeader = !windowed ? null : [...element.querySelectorAll("header:not([data-window-chrome])")].find((header) => header.closest("dialog") === element) || null;
+			const frameView = [...element.querySelectorAll(".frame-view")].find((view) => view.closest("dialog") === element);
+			const frameHeader = windowed && (featureHeader?.classList.contains("frame-titlebar") || !featureHeader && !!frameView && (frameView.parentElement === element || frameView.parentElement?.parentElement === element && frameView.parentElement.matches(".frame-host, .frame-host-body")));
+			if (frameHeader && !chrome) {
+				chrome = document.createElement("header");
+				chrome.dataset.windowChrome = "";
+				chrome.className = "app-dialog-titlebar";
+				element.prepend(chrome);
+				element.classList.add("app-window-frame-host");
+			} else if (!frameHeader && chrome) {
+				chrome.remove();
+				chrome = null;
+				frameContent?.classList.remove("app-window-frame-content");
+				frameContent = null;
+				element.classList.remove("app-window-frame-host");
+			}
+			if (frameHeader) {
+				let content = featureHeader || frameView;
+				while (content.parentElement !== element) content = content.parentElement;
+				if (frameContent !== content) {
+					frameContent?.classList.remove("app-window-frame-content");
+					frameContent = content;
+					frameContent.classList.add("app-window-frame-content");
+				}
+			}
+			const closeButton = featureHeader ? [...featureHeader.querySelectorAll("button")].find((button) => !button.closest(".app-window-controls") && button.querySelector("[data-icon=\"close\"], [data-icon=\"MDI_CLOSE\"]")) : null;
+			const hiddenClose = frameHeader ? closeButton : null;
+			if (contentClose !== hiddenClose) {
+				contentClose?.classList.remove("app-window-content-close");
+				contentClose = hiddenClose;
+				contentClose?.classList.add("app-window-content-close");
+			}
+			const next = chrome || featureHeader;
+			const properties = () => ({
+				element,
+				header,
+				geometry: hostedGeometry,
+				backProvided: !!configuration?.backProvided,
+				title: chrome ? element.getAttribute("aria-label") || element.dataset.windowKind : "",
+				closeButton: contentClose,
+				closeRequired: !!chrome || !closeButton,
+				closeDisabled: !!contentClose?.disabled
+			});
 			if (next === header) {
 				if (host && !header.contains(host)) placeControls();
+				if (host) render(h(_sfc_main, properties()), host);
 				return;
 			}
 			if (host) {
@@ -2688,31 +2767,24 @@ var windowDirective = {
 			header = next;
 			host = null;
 			if (!header) return;
+			hostedGeometry = configuration?.geometry || retainedGeometry;
 			host = document.createElement("span");
 			host.className = "app-window-controls";
 			placeControls();
-			render(h(_sfc_main, {
-				element,
-				header,
-				geometry: configuration?.geometry || retainedGeometry,
-				backProvided: !!configuration?.backProvided
-			}), host);
+			render(h(_sfc_main, properties()), host);
 		};
 		const observer = new MutationObserver(attach);
 		observer.observe(element, {
 			childList: true,
-			subtree: true
+			subtree: true,
+			attributes: true,
+			attributeFilter: ["aria-label", "disabled"]
 		});
 		attach();
 		element.windowConfigure = (value) => {
+			if (value?.geometry) hostedGeometry = value.geometry;
 			configuration = value;
 			attach();
-			if (host) render(h(_sfc_main, {
-				element,
-				header,
-				geometry: configuration?.geometry || retainedGeometry,
-				backProvided: !!configuration?.backProvided
-			}), host);
 		};
 		element.windowCleanup = () => {
 			closed();
@@ -2728,6 +2800,10 @@ var windowDirective = {
 				render(null, host);
 				host.remove();
 			}
+			chrome?.remove();
+			frameContent?.classList.remove("app-window-frame-content");
+			contentClose?.classList.remove("app-window-content-close");
+			element.classList.remove("app-window-frame-host");
 		};
 	},
 	updated(element, binding) {

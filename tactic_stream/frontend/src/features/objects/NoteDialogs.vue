@@ -87,6 +87,8 @@ onBeforeUnmount(() => observer?.disconnect());
 </template>
 <style>
 .note-child-dialog {
+  --dialog-content-top: 0px;
+  --dialog-content-side: 20px;
   width: min(380px, calc(100vw - 32px));
   padding: 0 20px 20px;
   overflow: hidden;

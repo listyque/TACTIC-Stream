@@ -720,6 +720,8 @@ defineExpose({ cancel, dirty });
 </template>
 <style>
 .configuration-confirmation {
+  --dialog-content-top: 0px;
+  --dialog-content-side: 0px;
   padding: 0;
   border: 0;
   overflow: hidden;

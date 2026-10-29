@@ -191,6 +191,7 @@ def fingerprints(handler):
             "frame_dock_layout.mjs",
             "frame_dock_interaction.mjs",
             "frame_window_lifecycle.mjs",
+            "frame_window_chrome.mjs",
             "window_types.mjs",
             "shared_help.mjs",
             "frame_main_browser.mjs",
@@ -1310,6 +1311,7 @@ def main():
                 ("menus-input", "frame_menus"),
                 ("dock-input", "frame_dock_interaction"),
                 ("window-input", "frame_window_lifecycle"),
+                ("window-chrome", "frame_window_chrome"),
                 ("window-kinds", "window_types"),
             ]
         ],

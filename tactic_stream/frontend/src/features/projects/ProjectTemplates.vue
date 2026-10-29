@@ -228,6 +228,8 @@ export default {
 
 <style>
 .frame-template-confirmation {
+  --dialog-content-top: 0px;
+  --dialog-content-side: 0px;
   padding: 0;
   overflow: hidden;
 }
