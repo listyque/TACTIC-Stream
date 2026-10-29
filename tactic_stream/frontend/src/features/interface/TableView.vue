@@ -18,6 +18,7 @@ import ActionRows from '../../controls/ActionRows.vue';
 import { appearance } from '../../appearance.js';
 import { cssRoles } from '../../../../src/tactic_stream/shared_ui/core/foundation.mjs';
 import * as Host from '../../../../src/tactic_stream/shared_ui/features/table/host.ui.mjs';
+import { acknowledgedWidths } from '../../../../src/tactic_stream/shared_ui/features/table/columns.mjs';
 import * as Menus from '../../../../src/tactic_stream/shared_ui/features/table/menus.ui.mjs';
 import FrameView from '../../frame/FrameView.vue';
 import * as ParentUI from '../../../../src/tactic_stream/shared_ui/features/table/parent.ui.mjs';
@@ -489,7 +490,7 @@ async function restore() {
 watch(
   () => props.columns,
   () => {
-    overrides.value = {};
+    overrides.value = acknowledgedWidths(props.columns, overrides.value);
     restore();
   }
 );
@@ -540,6 +541,7 @@ defineExpose({ viewport });
     :style="{
       '--table-columns': grid,
       '--table-row-height': rowHeight + 'px',
+      '--table-resize-hit': Host.metrics.resizeHandle + 'px',
       '--table-accent': accent,
       '--table-header': 'var(' + cssRoles[Host.paint.header] + ')',
       '--table-header-text': 'var(' + cssRoles[Host.paint.headerText] + ')'
@@ -922,12 +924,24 @@ defineExpose({ viewport });
 }
 .table-resize {
   position: absolute;
-  right: 0;
+  z-index: 1;
+  right: calc(var(--table-resize-hit) / -2);
   top: 0;
   bottom: 0;
-  width: 12px;
+  width: var(--table-resize-hit);
   cursor: col-resize;
   touch-action: none;
+}
+.handler-table .table-resize::after {
+  right: 50%;
+}
+.handler-table-header .handler-table-actions {
+  justify-content: flex-end;
+  gap: 0;
+  pointer-events: none;
+}
+.handler-table-header .handler-table-actions > * {
+  pointer-events: auto;
 }
 .handler-table-body {
   position: relative;

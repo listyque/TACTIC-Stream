@@ -1108,6 +1108,15 @@ function widthForKind(columns, kind, overrides, fittedWidths) {
 	for (let index = 0; index < columns.length; ++index) if (String(columns[index].kind || "") === kind) return resolvedWidth(columns[index], overrides, fittedWidths);
 	return 0;
 }
+function acknowledgedWidths(columns, overrides) {
+	const result = {};
+	for (const column of columns || []) {
+		const name = String(column.name || "");
+		const width = overrides?.[name];
+		if (width !== void 0 && width === baseWidth(column, {})) result[name] = width;
+	}
+	return result;
+}
 function hideOrder(column, index, count) {
 	if (column.hideOrder !== void 0 && column.hideOrder !== null) return Math.max(0, Number(column.hideOrder) || 0);
 	const name = String(column.name || "");
@@ -1124,7 +1133,7 @@ function visibleColumns(columns, availableWidth, overrides) {
 	for (let index = 0; index < source.length; ++index) {
 		total += baseWidth(source[index], overrides);
 		const order = hideOrder(source[index], index, source.length);
-		if (order > 0) candidates.push({
+		if (order > 0 && overrides?.[String(source[index].name || "")] === void 0) candidates.push({
 			index,
 			order
 		});
@@ -5303,7 +5312,7 @@ var _sfc_main$170 = {
 			}
 		}
 		watch(() => props.columns, () => {
-			overrides.value = {};
+			overrides.value = acknowledgedWidths(props.columns, overrides.value);
 			restore();
 		});
 		watch(savingView, async (value) => {
@@ -5351,6 +5360,7 @@ var _sfc_main$170 = {
 					style: normalizeStyle({
 						"--table-columns": grid.value,
 						"--table-row-height": rowHeight.value + "px",
+						"--table-resize-hit": metrics$10.resizeHandle + "px",
 						"--table-accent": __props.accent,
 						"--table-header": "var(" + unref(cssRoles)[paint.header] + ")",
 						"--table-header-text": "var(" + unref(cssRoles)[paint.headerText] + ")"
