@@ -213,6 +213,12 @@ const scene = Settings.describe(
 function flatten(nodes) {
   return nodes.flatMap((node) => [node, ...flatten(node.children || [])]);
 }
+const providerHeader = flatten(
+  Configuration.describe({ page: 'ai' }, 1100, 740, 'en').nodes
+);
+for (const action of ['Reset', 'Apply', 'Save'])
+  assert(!providerHeader.some((node) => node.id === 'configuration' + action));
+assert(providerHeader.some((node) => node.id === 'configurationHelp'));
 for (const id of ['setting_lockedIncrease', 'setting_lockedDecrease'])
   assert.equal(
     flatten(scene.nodes).find((node) => node.id === id).enabled,

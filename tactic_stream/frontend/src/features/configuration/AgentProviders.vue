@@ -1,5 +1,13 @@
 <script setup>
-import { computed, ref, watch, onBeforeUnmount } from 'vue';
+import {
+  computed,
+  ref,
+  watch,
+  onMounted,
+  onActivated,
+  onDeactivated,
+  onBeforeUnmount
+} from 'vue';
 import AppDialog from '../../controls/AppDialog.vue';
 import FrameView from '../../frame/FrameView.vue';
 import { rpc } from '../../api.js';
@@ -7,7 +15,12 @@ import { appearance } from '../../appearance.js';
 import { observeFrameSizes } from '../../frame/resize.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/configuration/providers.ui.mjs';
 
-const props = defineProps({ ticket: String, project: String });
+const props = defineProps({
+  ticket: String,
+  project: String,
+  embedded: Boolean,
+  active: { type: Boolean, default: true }
+});
 const dialog = ref(null),
   host = ref(null),
   model = ref(UI.initial()),
@@ -41,8 +54,27 @@ watch(
     generation++;
     context = null;
     model.value = UI.initial();
-    dialog.value?.close();
+    if (!props.embedded) dialog.value?.close();
     clearTimeout(timer);
+    if (props.embedded && props.active) open();
+  }
+);
+onMounted(() => {
+  if (props.embedded && props.active) open();
+});
+onActivated(() => {
+  if (props.embedded && props.active) open();
+});
+onDeactivated(() => {
+  if (props.embedded) closed();
+});
+watch(
+  () => props.active,
+  (active) => {
+    if (props.embedded) {
+      if (active) open();
+      else closed();
+    }
   }
 );
 onBeforeUnmount(() => {
@@ -127,8 +159,9 @@ async function open() {
   if (!props.ticket || !props.project) return;
   context ||= { ticket: props.ticket, project: props.project };
   opened = true;
-  dialog.value.show();
-  if (!UI.dirty(model.value) || !model.value.revision) await call('state');
+  if (!props.embedded) dialog.value.show();
+  if (!model.value.busy && (!UI.dirty(model.value) || !model.value.revision))
+    await call('state');
 }
 function closed() {
   opened = false;
@@ -137,20 +170,27 @@ function closed() {
 defineExpose({ open });
 </script>
 <template>
-  <AppDialog
+  <component
+    :is="embedded ? 'section' : AppDialog"
     ref="dialog"
-    title="AI providers"
+    :title="embedded ? undefined : 'AI providers'"
     window-kind="agent_providers"
-    class="agent-providers-dialog"
+    :class="embedded ? 'agent-providers-embedded' : 'agent-providers-dialog'"
     :close-on-outside="false"
     @closed="closed"
   >
     <div ref="host" class="agent-providers-body">
       <FrameView :scene="scene" @event="event" />
     </div>
-  </AppDialog>
+  </component>
 </template>
 <style>
+.agent-providers-embedded {
+  display: flex;
+  position: relative;
+  height: 100%;
+  min-height: 0;
+}
 .agent-providers-dialog {
   width: min(980px, var(--dialog-owner-width, 96vw));
   height: min(760px, var(--dialog-owner-height, 94dvh));

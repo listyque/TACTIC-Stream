@@ -4,6 +4,7 @@ import { Jt as label, L as _sfc_main$9, R as _sfc_main$11, T as AppSearchField_d
 import { a as fieldKind, i as ImagePicker_default, o as unsupportedField, t as RecordForm_default } from "./RecordForm.js";
 import { u as timestampFullLabel } from "./activity.js";
 import { _ as confirmation, a as updateModes, d as ProjectCreation_default, f as change, g as fieldsFor, h as editColumn, ht as views, i as updateIntervals, m as describe$2, n as networkSettings, p as contentWidth, r as updateBatchDelays, u as lifecycle, v as describe$3, y as pages } from "./App.js";
+import _sfc_main$12 from "./AgentProviders.js";
 //#region src/features/configuration/FrameSettings.vue
 var _sfc_main$6 = {
 	__name: "FrameSettings",
@@ -2270,7 +2271,6 @@ var _sfc_main = {
 					error.value ? (openBlock(), createElementBlock("p", _hoisted_3, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
 					notice.value ? (openBlock(), createElementBlock("p", _hoisted_4, toDisplayString(unref(t)(notice.value)), 1)) : createCommentVNode("", true),
 					[
-						"ai",
 						"server",
 						"appearance",
 						"checkin",
@@ -2294,6 +2294,16 @@ var _sfc_main = {
 						"busy",
 						"natural"
 					])) : createCommentVNode("", true),
+					withDirectives(createVNode(_sfc_main$12, {
+						embedded: "",
+						active: page.value === "ai",
+						ticket: __props.ticket,
+						project: __props.project
+					}, null, 8, [
+						"active",
+						"ticket",
+						"project"
+					]), [[vShow, page.value === "ai"]]),
 					page.value === "project" ? (openBlock(), createBlock(_sfc_main$3, {
 						key: 3,
 						ticket: __props.ticket,

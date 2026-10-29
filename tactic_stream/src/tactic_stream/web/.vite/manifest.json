@@ -688,7 +688,8 @@
       "_CodeBlock.js",
       "_RecordForm.js",
       "_activity.js",
-      "src/App.vue"
+      "src/App.vue",
+      "src/features/configuration/AgentProviders.vue"
     ],
     "css": [
       "assets/Configuration.css"

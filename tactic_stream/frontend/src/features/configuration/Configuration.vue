@@ -48,6 +48,7 @@ import ProjectSettings from './ProjectSettings.vue';
 import RepositorySettings from './RepositorySettings.vue';
 import RepositoryEditor from './RepositoryEditor.vue';
 import FrameSettings from './FrameSettings.vue';
+import AgentProviders from './AgentProviders.vue';
 import { resultViews } from '../workspace/resultViews.js';
 const props = defineProps({
   ticket: String,
@@ -579,7 +580,6 @@ defineExpose({ cancel, dirty });
       <FrameSettings
         v-if="
           [
-            'ai',
             'server',
             'appearance',
             'checkin',
@@ -596,6 +596,13 @@ defineExpose({ cancel, dirty });
         @field="editField"
         @columns="drafts.tasks.columns = $event"
         @action="settingsAction"
+      />
+      <AgentProviders
+        v-show="page === 'ai'"
+        embedded
+        :active="page === 'ai'"
+        :ticket="ticket"
+        :project="project"
       />
       <ProjectSettings
         v-if="page === 'project'"

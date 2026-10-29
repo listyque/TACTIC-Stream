@@ -1,4 +1,4 @@
-import { K as withCtx, N as openBlock, U as watch, Z as ref, b as createVNode, h as createBlock, k as onBeforeUnmount, m as createBaseVNode, p as computed } from "./vue.js";
+import { A as onDeactivated, K as withCtx, N as openBlock, O as onActivated, R as resolveDynamicComponent, U as watch, Z as ref, b as createVNode, h as createBlock, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed } from "./vue.js";
 import { j as appearance } from "./index.js";
 import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
@@ -199,7 +199,12 @@ var _sfc_main = {
 	__name: "AgentProviders",
 	props: {
 		ticket: String,
-		project: String
+		project: String,
+		embedded: Boolean,
+		active: {
+			type: Boolean,
+			default: true
+		}
 	},
 	setup(__props, { expose: __expose }) {
 		const props = __props;
@@ -226,8 +231,24 @@ var _sfc_main = {
 			generation++;
 			context = null;
 			model.value = initial();
-			dialog.value?.close();
+			if (!props.embedded) dialog.value?.close();
 			clearTimeout(timer);
+			if (props.embedded && props.active) open();
+		});
+		onMounted(() => {
+			if (props.embedded && props.active) open();
+		});
+		onActivated(() => {
+			if (props.embedded && props.active) open();
+		});
+		onDeactivated(() => {
+			if (props.embedded) closed();
+		});
+		watch(() => props.active, (active) => {
+			if (props.embedded) {
+				if (active) open();
+				else closed();
+			}
 		});
 		onBeforeUnmount(() => {
 			generation++;
@@ -298,8 +319,8 @@ var _sfc_main = {
 				project: props.project
 			};
 			opened = true;
-			dialog.value.show();
-			if (!dirty(model.value) || !model.value.revision) await call("state");
+			if (!props.embedded) dialog.value.show();
+			if (!model.value.busy && (!dirty(model.value) || !model.value.revision)) await call("state");
 		}
 		function closed() {
 			opened = false;
@@ -307,12 +328,12 @@ var _sfc_main = {
 		}
 		__expose({ open });
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(_sfc_main$2, {
+			return openBlock(), createBlock(resolveDynamicComponent(__props.embedded ? "section" : _sfc_main$2), {
 				ref_key: "dialog",
 				ref: dialog,
-				title: "AI providers",
+				title: __props.embedded ? void 0 : "AI providers",
 				"window-kind": "agent_providers",
-				class: "agent-providers-dialog",
+				class: normalizeClass(__props.embedded ? "agent-providers-embedded" : "agent-providers-dialog"),
 				"close-on-outside": false,
 				onClosed: closed
 			}, {
@@ -325,7 +346,7 @@ var _sfc_main = {
 					onEvent: event
 				}, null, 8, ["scene"])], 512)]),
 				_: 1
-			}, 512);
+			}, 40, ["title", "class"]);
 		};
 	}
 };
