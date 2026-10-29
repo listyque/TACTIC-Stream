@@ -84,14 +84,24 @@ for mode in ('dark',) if quick else ('dark', 'light'):
                 for case in cases:
                     for action in case['actions']:
                         kind = action['type']
-                        if kind in ('scope', 'page'):
+                        if kind == 'report':
+                            choose(controls()['adminEffectiveView'], action['value'])
+                        elif kind in ('scope', 'page'):
                             prefix = 'adminSecurityTab_' if kind == 'scope' else 'adminSecurityTechnicalPages_'
+                            target = next((item for item in SidebarEditorQmlTests.descendants(window.contentItem())
+                                           if item.objectName() == prefix + action['value'] and item.isVisible()), None)
+                            if target is not None:
+                                target.forceActiveFocus()
+                                frame(window)
                             items = controls()
                             if prefix + action['value'] in items:
                                 click(items[prefix + action['value']])
                             else:
                                 choose(items['adminSecurityScope' if kind == 'scope' else 'adminSecurityTechnicalPages'], action['value'])
                         elif kind == 'state':
+                            if action['value'] == 'clean':
+                                import copy
+                                editor._original = copy.deepcopy(editor.document)
                             if action['value'] == 'saved':
                                 editor._message = 'Access rules saved on server'
                                 editor.stateChanged.emit()

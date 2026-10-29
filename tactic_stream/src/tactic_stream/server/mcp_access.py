@@ -1,5 +1,4 @@
 """Revocable project MCP access; native credentials never leave the server vault."""
-import asyncio
 import hashlib
 import hmac
 import json
@@ -81,16 +80,25 @@ def permitted_tool(name):
     return not name.startswith(('ts_project_','ts_mcp_','agent_conversation','agent_provider'))
 
 
-def tool_catalog():
-    from tactic_stream.admin_agent import StreamConnection,create_server
+def tool_catalog(transport='mcp'):
+    try:
+        from tactic_stream.admin_agent import StreamConnection,create_server
+    except ModuleNotFoundError as error:
+        if error.name and error.name.split('.')[0] in ('mcp', 'mcp_types'):
+            return []
+        raise
     root=Path(__file__).resolve().parents[3]
     server=create_server(StreamConnection('http://tactic.internal',Project.get_project_code(),'private-server-credential'),root,
         allow_naming_save=True,allow_page_save=True,allow_automation_draft=True,
-        allow_project_edit=True,request_id='00000000-0000-4000-8000-000000000000')
-    tools=asyncio.run(server.list_tools())
+        allow_project_edit=True,allow_project_create=True,allow_web_download=True,
+        allow_automation_activate=True,catalog_only=True,
+        request_id='00000000-0000-4000-8000-000000000000')
+    # Catalogue construction is local: do not create a Windows IO event loop
+    # (and sockets) merely to inspect the SDK's already registered tools.
+    tools=server._tool_manager.list_tools()
     return [dict(name=tool.name,title=tool.title or tool.name.replace('_',' '),
         description=(tool.description or '').split('\n')[0],readonly=bool(tool.annotations and tool.annotations.read_only_hint))
-        for tool in tools if permitted_tool(tool.name)]
+        for tool in tools if transport == 'chat' or permitted_tool(tool.name)]
 
 
 def authorize(api, code, token):
@@ -116,4 +124,6 @@ def authorize(api, code, token):
         row=reader.load('spt_agent_request',code)
         if row.get('transport')!='mcp' or row['document']['context']['project']!=grant['project']:
             raise ValueError('MCP connection is unavailable')
+        from .agent_security import permissions
+        grant = dict(grant, tools=permissions(Environment.get_security(), grant['tools'], 'mcp'))
     return grant,ticket

@@ -93,14 +93,20 @@ try {
     const control = (id) => page.locator('[data-frame="' + id + '"]');
     for (const c of cases) {
       for (const event of c.actions) {
-        if (event.type === 'scope' || event.type === 'page') {
+        if (event.type === 'report') {
+          await control('adminEffectiveView').selectOption(event.value);
+        } else if (event.type === 'scope' || event.type === 'page') {
           const prefix =
               event.type === 'scope'
                 ? 'adminSecurityTab_'
                 : 'adminSecurityTechnicalPages_',
             button = control(prefix + event.value);
-          if (await button.count()) await button.click();
-          else
+          if (await button.count()) {
+            await button.evaluate((element) =>
+              element.focus({ preventScroll: true })
+            );
+            await button.click();
+          } else
             await control(
               event.type === 'scope'
                 ? 'adminSecurityScope'
@@ -150,6 +156,7 @@ try {
         else
           await page.evaluate((value) => {
             const s = window.frameAdmin.screen.value;
+            if (value === 'clean') s.baseline = JSON.stringify(s.document);
             if (value === 'saved') {
               s.message = 'Access rules saved on server';
               return;

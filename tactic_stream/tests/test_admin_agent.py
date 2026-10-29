@@ -183,7 +183,7 @@ class AgentNativeIntegration(unittest.TestCase):
                     'agent_capabilities', 'reference_catalog', 'reference_read', 'ts_types',
                     'ts_type_read', 'ts_schema_read', 'ts_naming_read', 'ts_naming_preview',
                     'ts_naming_operation', 'ts_page_read', 'ts_page_preview', 'ts_page_operation',
-                    'ts_dashboard_read','ts_dashboard_preview','ts_dashboard_operation',
+                    'ts_dashboard_read','ts_dashboard_sources','ts_dashboard_preview','ts_dashboard_operation',
                     'ts_item_layout_read','ts_item_layout_preview','ts_item_layout_operation',
                     'ts_sidebar_read','ts_sidebar_preview','ts_sidebar_operation',
                     'ts_project_preview', 'ts_project_read', 'ts_project_operation',

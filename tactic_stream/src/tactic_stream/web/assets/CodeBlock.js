@@ -4120,6 +4120,34 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Select a user": "Выберите пользователя",
+	"Select a user to inspect saved permissions.": "Выберите пользователя, чтобы посмотреть его действующие права.",
+	"Permission summary": "Сводка разрешений",
+	"Groups and inheritance": "Группы и наследование",
+	"Rule sources": "Источники правил",
+	"AI and MCP tools": "Инструменты ИИ и MCP",
+	"Effective permissions": "Итоговые права",
+	"Inspect saved user permissions and their source groups.": "Просмотр действующих прав пользователя и групп, от которых они получены.",
+	"AI tools": "Инструменты ИИ",
+	"MCP tools": "Инструменты MCP",
+	"Agent access": "Доступ агента",
+	"Choose which tools this group can use through the agent chat.": "Выберите доступные группе инструменты чата с агентом.",
+	"Choose which tools this group can expose through MCP.": "Выберите доступные группе инструменты MCP.",
+	"System defaults": "Системные правила",
+	"Direct group": "Прямая группа",
+	"Inherited group": "Унаследованная группа",
+	"Combined native access level": "Общий штатный уровень доступа",
+	"Administrator access required": "Требуются права администратора",
+	"Save or discard changes to inspect saved user permissions.": "Сохраните или отмените изменения, чтобы проверить действующие права пользователя.",
+	"Native administrator: full application rights. Explicit AI and MCP restrictions still apply.": "Администратор: полные штатные права. Явные ограничения ИИ и MCP продолжают действовать.",
+	"Saved native rules from all groups. Record filters, field rules and operation checks still apply.": "Действующие штатные правила всех групп. Дополнительно действуют ограничения записей, полей и проверки конкретных операций.",
+	"Group tool policy": "Инструменты группы",
+	"Selected tools": "Выбранные инструменты",
+	"All tools": "Все инструменты",
+	"Read tools": "Для чтения",
+	"Tool access combines all inherited groups. A local deny does not cancel another group grant. Native operation rights and the connection scope still apply.": "Учитываются все унаследованные группы. Локальный запрет не отменяет разрешение другой группы. Права на операции и ограничения подключения продолжают действовать.",
+	"This server does not expose the agent tool catalogue.": "Этот сервер не предоставляет каталог инструментов агента.",
+	"Changes data": "Изменяет данные",
 	Interface: "Интерфейс",
 	Advanced: "Дополнительно",
 	"Other rule": "Другое правило",
@@ -10447,7 +10475,11 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 			if (!el) return false;
 			const focusable = "input,textarea,select,button,summary,[tabindex]";
 			const target = el.matches(focusable) ? el : el.querySelector(focusable);
-			target?.focus();
+			target?.focus({ preventScroll: true });
+			target?.scrollIntoView({
+				block: "nearest",
+				inline: "nearest"
+			});
 			return document.activeElement === target;
 		}
 		async function focusGrid(id, row, column, name) {
@@ -10688,6 +10720,10 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"aria-selected": ["treeitem", "option"].includes(node.role) ? !!node.selected : void 0,
 					"aria-checked": node.role === "checkbox" ? node.checked : void 0,
 					onPointerdown: ($event) => send(node.pressAction, void 0, $event.currentTarget),
+					onFocus: _cache[1] || (_cache[1] = ($event) => $event.target.scrollIntoView({
+						block: "nearest",
+						inline: "nearest"
+					})),
 					onKeydown: ($event) => key($event, node),
 					onClick: ($event) => send(node.action, void 0, $event.currentTarget),
 					onDblclick: ($event) => send(node.doubleAction),
@@ -10903,7 +10939,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: normalizeClass(["frame-node frame-area", { "frame-notice": node.notice }]),
-					onFocus: _cache[1] || (_cache[1] = ($event) => $event.target.scrollIntoView({
+					onFocus: _cache[2] || (_cache[2] = ($event) => $event.target.scrollIntoView({
 						block: "nearest",
 						inline: "nearest"
 					})),
@@ -11028,7 +11064,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 						"describe-row": __props.describeRow,
 						"describe-cell": __props.describeCell,
 						interactive: __props.interactive,
-						onEvent: _cache[2] || (_cache[2] = (action, source) => emit("event", action, source))
+						onEvent: _cache[3] || (_cache[3] = (action, source) => emit("event", action, source))
 					}, null, 8, [
 						"data-frame-row",
 						"class",
@@ -11060,7 +11096,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"describe-row": __props.describeRow,
 					"describe-cell": __props.describeCell,
 					interactive: __props.interactive,
-					onEvent: _cache[3] || (_cache[3] = (action, source) => emit("event", action, source))
+					onEvent: _cache[4] || (_cache[4] = (action, source) => emit("event", action, source))
 				}, null, 8, [
 					"style",
 					"scene",
@@ -11074,7 +11110,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"data-frame": node.id,
 					"data-layout-element": node.layoutElement,
 					class: "frame-node frame-choice",
-					onFocus: _cache[4] || (_cache[4] = ($event) => $event.target.scrollIntoView({
+					onFocus: _cache[5] || (_cache[5] = ($event) => $event.target.scrollIntoView({
 						block: "nearest",
 						inline: "nearest"
 					})),
@@ -11255,7 +11291,7 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					node,
 					source: __props.models[node.source],
 					"describe-cell": __props.describeCell,
-					onEvent: _cache[5] || (_cache[5] = (action, source) => emit("event", action, source))
+					onEvent: _cache[6] || (_cache[6] = (action, source) => emit("event", action, source))
 				}, null, 8, [
 					"style",
 					"node",
@@ -11269,13 +11305,13 @@ var _sfc_main$1 = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					class: "frame-node",
 					style: normalizeStyle(style(node)),
 					node,
-					onEvent: _cache[6] || (_cache[6] = (action, source) => emit("event", action, source))
+					onEvent: _cache[7] || (_cache[7] = (action, source) => emit("event", action, source))
 				}, null, 8, ["style", "node"])) : node.kind === "Code" ? (openBlock(), createBlock(FrameCode_default, {
 					key: 23,
 					class: "frame-node",
 					style: normalizeStyle(style(node)),
 					node,
-					onEvent: _cache[7] || (_cache[7] = (action, source) => emit("event", action, source))
+					onEvent: _cache[8] || (_cache[8] = (action, source) => emit("event", action, source))
 				}, null, 8, ["style", "node"])) : node.kind === "View" ? (openBlock(), createBlock(resolveDynamicComponent(__props.views[node.view]?.component), mergeProps({
 					key: 24,
 					ref_for: true,

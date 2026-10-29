@@ -7,6 +7,10 @@ export async function exerciseSecurity(browser,url,catalog){
   page.on('pageerror',error=>errors.push(error.message))
   let stored=structuredClone(catalog),reads=0,reply='success'
   await page.route('**/admin/security-rules/*',async route=>{
+   if(route.request().url().endsWith('/effective')){
+    const payload=route.request().postDataJSON();stored.metadata.effective.login=payload.login
+    await route.fulfill({json:{result:stored}});return
+   }
    if(route.request().url().endsWith('/read')){reads++;await route.fulfill({json:{result:stored}});return}
    const payload=route.request().postDataJSON();writes.push(payload)
    if(reply==='unknown'){await route.abort('failed');return}
@@ -18,6 +22,19 @@ export async function exerciseSecurity(browser,url,catalog){
   const control=id=>page.locator('[data-frame="'+id+'"]'),state=fn=>page.evaluate(fn)
   const ready=()=>page.waitForFunction(()=>window.frameAdmin.screen.value.document&&!window.frameAdmin.screen.value.busy)
   await ready()
+  await control('adminSecurityTab_effective').tap()
+  await control('adminEffectiveUser').selectOption('lead');await ready()
+  assert.equal(await state(()=>window.frameAdmin.screen.value.metadata.effective.login),'lead')
+  await control('adminEffectiveView').selectOption('groups')
+  assert(await control('adminAccessRowTitle_group:Artists 0').count())
+  await control('adminSecurityTab_agent_tool').tap()
+  await control('adminToolsRead').tap()
+  assert.equal(writes.length,0,'tool policy remains a draft before Save')
+  assert((await state(()=>window.frameAdmin.screen.value.groupDocument.xml)).includes('agent_context'))
+  await control('adminSecurityTab_effective').tap()
+  assert(await control('adminEffectiveUser').isDisabled(),'effective report cannot discard an unsaved policy')
+  await control('adminDiscardDocument').tap();await control('adminConfirmSave').tap()
+  await control('adminSecurityTab_project').tap()
   assert.equal(await control('adminSecurityCell_0_0').locator(':scope > .item-surface').evaluate(el=>getComputedStyle(el).borderRadius),'0px')
   assert.equal(await control('adminSecurityAccess_0_0').textContent(),'Allowed')
   await control('adminSecurityTab_defaults').tap()
@@ -82,6 +99,15 @@ export async function exerciseSecurity(browser,url,catalog){
   await control('adminAddAccessRule').tap()
   await control('adminAccessField_value').fill('mobile')
   assert.equal(await state(()=>window.frameAdmin.screen.value.attributes.value),'mobile')
+  await state(()=>{
+   const s=window.frameAdmin.screen.value
+   s.accept({...s.context,canWrite:true,revision:'empty-groups',document:{groups:{}},metadata:{...s.metadata,groups:[]}})
+  })
+  await control('adminSecurityScope').selectOption('agent_tool')
+  assert(await control('adminToolsRead').isDisabled())
+  assert(await control('adminToolMode').isDisabled())
+  await control('adminSecurityScope').selectOption('effective')
+  assert(await control('adminEffectiveUser').isEnabled())
   assert.deepEqual(errors,[])
  }finally{await context.close()}
  console.log('Access rules real mouse/keyboard/touch, XML, draft/save/rollback, conflict and unknown-write guards passed')

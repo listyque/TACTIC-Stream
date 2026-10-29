@@ -49,7 +49,7 @@ def build_server(app, base, api, grant, ticket, token):
     context=project_context(api,grant,ticket)
     return create_server(connection,root,handler if handler.is_dir() else None,
         allow_naming_save=True,allow_page_save=True,allow_automation_draft=True,
-        allow_project_edit=True,request_id=grant['id'],project_instructions=context['instructions'])
+        allow_project_edit=True,request_id=grant['id'],project_instructions=context['instructions'],enforce_permissions=True)
 
 
 class McpGateway:

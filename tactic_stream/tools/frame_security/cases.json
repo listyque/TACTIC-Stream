@@ -21,5 +21,14 @@
  {"phase":"saved","actions":[{"type":"state","value":"saved"}]},
  {"phase":"readonly","actions":[{"type":"state","value":"readonly"}]},
  {"phase":"uncertain","actions":[{"type":"state","value":"uncertain"}]},
- {"phase":"busy","actions":[{"type":"state","value":"busy"}]}
+ {"phase":"busy","actions":[{"type":"state","value":"busy"}]},
+ {"phase":"effective-user","actions":[{"type":"state","value":"clean"},{"type":"scope","value":"effective"}]},
+ {"phase":"effective-groups","actions":[{"type":"report","value":"groups"}]},
+ {"phase":"effective-sources","actions":[{"type":"report","value":"rules"}]},
+ {"phase":"effective-tools","actions":[{"type":"report","value":"tools"}]},
+ {"phase":"agent-tools","actions":[{"type":"scope","value":"agent_tool"}]},
+ {"phase":"agent-tools-read","actions":[{"type":"click","id":"adminToolsRead"}]},
+ {"phase":"mcp-tools","actions":[{"type":"scope","value":"mcp_tool"}]},
+ {"phase":"mcp-tools-none","actions":[{"type":"click","id":"adminToolsNone"}]},
+ {"phase":"effective-draft-guard","actions":[{"type":"scope","value":"effective"}]}
 ]

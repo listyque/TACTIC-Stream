@@ -75,7 +75,8 @@ async def run_provider(connection, request, profile, host_id, options, heartbeat
     trials = AutomationTrials(options.trial_image,options.trial_directory,[connection.url,connection.project,connection._ticket]) if options.trial_image else None
     server = create_server(connection,options.stream_root,options.handler_root,request_id=identity,
         allow_naming_save=changes,allow_page_save=changes,allow_project_create=changes,allow_automation_draft=changes,
-        allow_project_edit=changes,allow_web_download=bool(request['document'].get('allow_web')),trials=trials)
+        allow_project_edit=changes,allow_web_download=bool(request['document'].get('allow_web')),trials=trials,
+        enforce_permissions=True)
     def update(**values):
         return connection.command('request','update',request_id=identity,host_id=host_id,**values)
     messages = request.get('messages',[])

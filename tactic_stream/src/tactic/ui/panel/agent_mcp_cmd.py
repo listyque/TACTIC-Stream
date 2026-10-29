@@ -12,6 +12,7 @@ from pyasm.search import Search
 from pyasm.security.security import _require_admin
 from tactic_stream.provider_credentials import seal,unseal
 from tactic_stream.server import mcp_access
+from tactic_stream.server.agent_security import allowed_catalog
 from .agent_request_cmd import AgentRequestCmd,context_document,text,identity
 from .page_cmd import digest
 
@@ -47,7 +48,7 @@ class AgentMcpCmd(AgentRequestCmd):
                 if not grant or grant['owner']!=self.owner or grant['project']!=Project.get_project_code() or grant['revoked']:
                     raise ValueError('MCP connection is unavailable')
                 ledger=self.load('spt_agent_request',grant['id'])
-                catalog=mcp_access.tool_catalog()
+                catalog=allowed_catalog('mcp')
                 tools=self.kwargs.get('tools')
                 if (not isinstance(tools,list) or not tools or not all(isinstance(tool,str) for tool in tools) or len(set(tools))!=len(tools)
                         or not all(isinstance(tool,str) and tool in {item['name'] for item in catalog} for tool in tools)):
@@ -95,7 +96,7 @@ class AgentMcpCmd(AgentRequestCmd):
             if action=='create':
                 if not enabled:
                     raise ValueError('Enable external MCP connections in Server configuration and restart first')
-                catalog=mcp_access.tool_catalog()
+                catalog=allowed_catalog('mcp')
                 tools=self.kwargs.get('tools')
                 if (not isinstance(tools,list) or not tools or any(not isinstance(tool,str) for tool in tools)
                         or len(set(tools))!=len(tools) or not set(tools)<={tool['name'] for tool in catalog}):
@@ -143,7 +144,7 @@ class AgentMcpCmd(AgentRequestCmd):
                 grant=json.loads(path.read_text(encoding='utf-8'))
                 if grant['owner']==self.owner and grant['project']==Project.get_project_code():
                     grants.append(mcp_access.public(grant))
-            self.info=dict(connections=grants,tools=mcp_access.tool_catalog(),enabled=enabled,unlimited_lifetime=True)
+            self.info=dict(connections=grants,tools=allowed_catalog('mcp'),enabled=enabled,unlimited_lifetime=True)
             return self.info
 
     @staticmethod

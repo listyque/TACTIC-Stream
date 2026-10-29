@@ -2,7 +2,7 @@
 
 
 def security_request(action: str, project_code: str, identity: str = '',
-                     document: dict = None, expected_revision: str = '') -> str:
+                     document: dict = None, expected_revision: str = '', login: str = '') -> str:
     import hashlib
     import json
     import xml.etree.ElementTree as ET
@@ -18,7 +18,7 @@ def security_request(action: str, project_code: str, identity: str = '',
     security = Environment.get_security()
     if not project_code or Project.get_project_code() != project_code:
         raise ValueError('Select a project before editing access rules')
-    if action not in ('load', 'save'):
+    if action not in ('load', 'save', 'effective'):
         raise ValueError('Unknown security operation')
     if action == 'save':
         sql = Search('sthpw/login_group').get_sql()
@@ -30,6 +30,13 @@ def security_request(action: str, project_code: str, identity: str = '',
     metadata = {'groups': group_catalog,
                 'builtinPermissions': [row for row in permission_list if 'key' in row],
                 'accessLevels': list(LoginGroup.ACCESS_DICT)}
+    metadata['users'] = [dict(value=row.get_login(), label=row.get_full_name() or row.get_login())
+                         for row in Search('sthpw/login').get_sobjects() if not row.is_retired()]
+    from tactic_stream.server.mcp_access import tool_catalog
+    from tactic_stream.server.agent_security import permissions
+    metadata['agentTools'] = tool_catalog('chat')
+    metadata['mcpTools'] = tool_catalog('mcp')
+    metadata['agentAdministratorRequired'] = True
     types = Project.get().get_search_types(include_multi_project=True)
     type_targets = [{'label': row.get_value('title') or row.get_code(),
                      'attributes': {'search_type': row.get_code()}} for row in types]
@@ -199,6 +206,11 @@ def security_request(action: str, project_code: str, identity: str = '',
                  'tasks': {'process': '*', 'pipeline': '*'}}
     for scope, attrs in wildcards.items():
         targets[scope].insert(0, {'label': '', 'all': True, 'attributes': attrs})
+    if action == 'effective':
+        from pyasm.security.effective import effective_security
+        metadata['effective'] = effective_security(login, lambda subject: {
+            'chat': permissions(subject, [tool['name'] for tool in metadata['agentTools']], 'chat'),
+            'mcp': permissions(subject, [tool['name'] for tool in metadata['mcpTools']], 'mcp')}, metadata['targets'], metadata['builtinPermissions'])
     return json.dumps({'identity': identity, 'revision': revision(), 'catalog': catalog,
                        'metadata': metadata, 'canWrite': True, 'document': current})
 
@@ -210,6 +222,8 @@ def security_rules_request(action, payload):
     from pyasm.security.security import _require_admin
     _require_admin()
     project = payload['project']
+    if action == 'effective':
+        return json.loads(security_request('effective', project, project, login=payload.get('login', '')))
     if action == 'read':
         return json.loads(security_request('load', project, project))
     if not isinstance(payload.get('expected_revision'), str):

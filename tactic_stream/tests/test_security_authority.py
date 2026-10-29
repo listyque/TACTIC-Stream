@@ -8,6 +8,7 @@ from unittest.mock import patch
 import os
 
 from pyasm.common import Config, Environment
+from pyasm.common.errors import SecurityException
 from pyasm.search import Search, SearchType
 from pyasm.search.search import RequestContext, request_context
 from pyasm.search.storage import Store
@@ -96,6 +97,107 @@ class SecurityAuthority(unittest.TestCase):
                 with self.subTest(procedure=name), self.assertRaises(PermissionError):
                     namespace[name](*args)
                 self.assertFalse(Environment.get_security().is_admin())
+
+    def test_effective_report_uses_native_groups_and_preserves_caller_and_tickets(self):
+        from pyasm.security.effective import effective_security
+        with self.session('admin', self.admin_ticket) as caller:
+            self.group('reviewers', '<rules><rule group="builtin" key="edit" access="view"/></rules>')
+            self.group('production', '<rules><rule group="builtin" key="edit" access="deny"/></rules>', 'reviewers')
+            Login.get_by_login('operator').add_to_group('production')
+            tickets = len(Search('sthpw/ticket').get_sobjects())
+            report = effective_security('operator')
+            self.assertIs(Environment.get_security(), caller)
+            self.assertTrue(caller.is_admin())
+            self.assertEqual(len(Search('sthpw/ticket').get_sobjects()), tickets)
+            self.assertFalse(report['administrator'])
+            groups = {group['name']: group for group in report['groups']}
+            self.assertTrue(groups['production']['direct'])
+            self.assertEqual(groups['reviewers']['paths'], [['production', 'reviewers']])
+            rule = next(row for row in report['rules'] if row['scope'] == 'builtin' and row['attributes'].get('key') == 'edit')
+            self.assertEqual(rule['access'], 'view')
+            self.assertEqual({row['group'] for row in rule['sources']}, {'production', 'reviewers'})
+            with self.assertRaises(ValueError):
+                effective_security('not-a-user')
+            self.assertIs(Environment.get_security(), caller)
+        with self.session('operator', self.ticket):
+            with self.assertRaises(PermissionError):
+                effective_security('admin')
+
+    def test_group_tool_policy_inherits_and_live_calls_recheck_without_new_ticket(self):
+        from tactic.ui.panel.agent_request_cmd import AgentRequestCmd
+        from tactic_stream.server.agent_security import tool_access
+        with self.session('admin', self.admin_ticket):
+            child = self.group('agent_readers', '<rules><rule group="agent_tool" key="agent_context" access="allow"/></rules>')
+            self.group('limited_admin', '<rules><rule group="agent_tool" key="*" access="deny"/><rule group="mcp_tool" key="*" access="deny"/></rules>', 'admin|agent_readers')
+            Login.get_by_login('operator').add_to_group('limited_admin')
+        with self.session('operator', self.ticket) as security:
+            self.assertTrue(security.is_admin())
+            from pyasm.security.effective import effective_security
+            report=effective_security('operator')
+            source=next(rule for rule in report['rules'] if rule['scope']=='agent_tool' and rule['attributes'].get('key')=='agent_context')
+            self.assertEqual(source['access'],'allow')
+            self.assertEqual(source['sources'][0]['group'],'agent_readers')
+            self.assertTrue(tool_access(security, 'agent_context'))
+            self.assertFalse(tool_access(security, 'agent_context', 'mcp'))
+            self.assertFalse(tool_access(security, 'ts_project_create'))
+            check = AgentRequestCmd(project_code='admin', action='tool_check', tool='agent_context')
+            check.execute()
+            self.assertTrue(check.info['allowed'])
+            with self.assertRaises(SecurityException):
+                AgentRequestCmd(project_code='admin', action='tool_check', tool='ts_project_create').execute()
+        with self.session('admin', self.admin_ticket):
+            child.set_value('access_rules', '<rules/>')
+            child.commit()
+        with self.session('operator', self.ticket):
+            with self.assertRaises(SecurityException):
+                AgentRequestCmd(project_code='admin', action='tool_check', tool='agent_context').execute()
+
+    def test_effective_endpoint_summarizes_native_access_and_handler_matches_stream(self):
+        import ast
+        import json
+        with self.session('admin', self.admin_ticket) as caller:
+            self.group('task_readers', '<rules><rule group="search_type" code="sthpw/task" project="admin" access="view"/></rules>')
+            Login.get_by_login('operator').add_to_group('task_readers')
+            result = security_rules_request('effective', dict(project='admin',login='operator'))
+            report = result['metadata']['effective']
+            self.assertEqual(report['login'],'operator')
+            self.assertTrue(report['groups'])
+            self.assertIs(Environment.get_security(),caller)
+            source = Path(__file__).resolve().parents[3] / 'TH/thlib/ui/admin/security_api.py'
+            function = next(node for node in ast.parse(source.read_text(encoding='utf-8')).body if isinstance(node,ast.FunctionDef) and node.name=='security_request')
+            namespace = {}
+            exec(compile(ast.Module(body=[function],type_ignores=[]),str(source),'exec'),namespace)
+            handler = json.loads(namespace['security_request']('effective','admin','admin',login='operator'))
+            self.assertEqual(handler['metadata']['effective'],report)
+            from pyasm.security.effective import effective_security
+            checks = effective_security('operator',targets={'search_type':[dict(label='Tasks',attributes=dict(code='sthpw/task'))]})['checks']
+            self.assertEqual({row['required']:row['allowed'] for row in checks},{'view':True,'edit':False,'insert':False,'retire':False,'delete':False})
+
+    def test_native_security_remains_available_without_optional_mcp_installation(self):
+        import builtins
+        original = builtins.__import__
+        def missing(name, *args, **kwargs):
+            if name == 'tactic_stream.admin_agent':
+                raise ModuleNotFoundError('Optional MCP dependency is not installed', name='mcp')
+            return original(name, *args, **kwargs)
+        with self.session('admin', self.admin_ticket), patch('builtins.__import__', side_effect=missing):
+            state = security_rules_request('effective', dict(project='admin',login='operator'))
+            self.assertEqual(state['metadata']['agentTools'], [])
+            self.assertEqual(state['metadata']['mcpTools'], [])
+            self.assertEqual(state['metadata']['effective']['login'], 'operator')
+
+    def test_project_bound_tool_policy_does_not_restrict_another_project(self):
+        from tactic_stream.server.agent_security import tool_access
+        with self.session('admin', self.admin_ticket):
+            group = self.group('project_agent_policy', '<rules><rule group="agent_tool" key="*" access="deny"/></rules>')
+            group.set_value('project_code','admin')
+            group.commit()
+            Login.get_by_login('admin').add_to_group('project_agent_policy')
+        with self.session('admin', self.admin_ticket) as security:
+            self.assertFalse(tool_access(security,'agent_context'))
+        with request_context(RequestContext(self.store,'admin','sthpw')):
+            security=self.api.auth.bind_security('admin',self.admin_ticket)
+            self.assertTrue(tool_access(security,'agent_context'))
 
 
 if __name__ == '__main__':

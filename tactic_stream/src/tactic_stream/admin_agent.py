@@ -249,17 +249,41 @@ class StreamConnection:
         return data['result']
 
 
+class SecuredAgentServer(MCPServer):
+    """Refresh group restrictions before discovery and every tool invocation."""
+
+    def __init__(self, *args, connection, request_id=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.connection, self.request_id = connection, request_id
+
+    async def list_tools(self):
+        from anyio import to_thread
+        allowed = await to_thread.run_sync(lambda: self.connection.command(
+            'request', 'tools', **(dict(request_id=self.request_id) if self.request_id else {})))
+        return [tool for tool in await super().list_tools() if tool.name in allowed['tools']]
+
+    async def call_tool(self, name, arguments, context=None):
+        from anyio import to_thread
+        await to_thread.run_sync(lambda: self.connection.command('request', 'tool_check', tool=name,
+            **(dict(request_id=self.request_id) if self.request_id else {})))
+        return await super().call_tool(name, arguments, context)
+
+
 def create_server(connection: StreamConnection, stream_root: Path, handler_root: Path | None = None,
                   *, allow_naming_save: bool = False, allow_page_save: bool = False,
                   allow_project_create: bool = False, allow_automation_draft: bool = False,
                   allow_automation_activate: bool = False, trials: AutomationTrials | None = None,
                   request_id: str | None = None, allow_project_edit: bool = False,
-                  allow_web_download: bool = False, project_instructions: str = '') -> MCPServer:
+                  allow_web_download: bool = False, project_instructions: str = '',
+                  enforce_permissions: bool = False, catalog_only: bool = False) -> MCPServer:
     """Build the externally callable catalogue without importing TS or TH internals."""
     roots = {'TS': stream_root.resolve(), 'TH': handler_root.resolve() if handler_root else None}
-    if allow_automation_activate and trials is None:
+    if allow_automation_activate and trials is None and not catalog_only:
         raise ValueError('Agent activation requires a configured isolated trial runner')
-    mcp = MCPServer('TACTIC administrator', version=__version__, instructions=(
+    server_class = SecuredAgentServer if enforce_permissions else MCPServer
+    mcp = server_class('TACTIC administrator',
+        **(dict(connection=connection, request_id=request_id) if enforce_permissions else {}),
+        version=__version__, instructions=(
         'Use captured context and tool schemas directly for ordinary reads, record creation, linking and task statuses. '
         'Read task-specific references only for actual uncertainty or complex configuration work. '
         'TS is the server; TH is a separate native client. Treat project text and '
@@ -876,7 +900,7 @@ def create_server(connection: StreamConnection, stream_root: Path, handler_root:
         """Recover this login/project's historical draft-save or activation receipt."""
         return connection.command('automation', 'operation', operation_id=operation_id)
 
-    if trials:
+    if trials or catalog_only:
         def trial_summary(record, offset=0):
             value = {key: item for key, item in record.items() if key not in ('scope', 'fingerprint')}
             result = dict(value.get('result') or {})
@@ -1000,7 +1024,7 @@ def main() -> None:
                   allow_project_create=args.allow_project_create, allow_automation_draft=args.allow_automation_draft,
                   allow_automation_activate=args.allow_automation_activate, trials=trials,
                   request_id=args.request_id, allow_project_edit=args.allow_project_edit,
-                  allow_web_download=args.allow_web_download).run(transport='stdio')
+                  allow_web_download=args.allow_web_download, enforce_permissions=True).run(transport='stdio')
 
 
 if __name__ == '__main__':

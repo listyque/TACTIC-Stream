@@ -340,7 +340,8 @@ function focusControl(name) {
   if (!el) return false;
   const focusable = 'input,textarea,select,button,summary,[tabindex]';
   const target = el.matches(focusable) ? el : el.querySelector(focusable);
-  target?.focus();
+  target?.focus({ preventScroll: true });
+  target?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   return document.activeElement === target;
 }
 async function focusGrid(id, row, column, name) {
@@ -574,6 +575,9 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         "
         :aria-checked="node.role === 'checkbox' ? node.checked : undefined"
         @pointerdown="send(node.pressAction, undefined, $event.currentTarget)"
+        @focus="
+          $event.target.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+        "
         @keydown="key($event, node)"
         @click="send(node.action, undefined, $event.currentTarget)"
         @dblclick="send(node.doubleAction)"

@@ -66,3 +66,16 @@ assert.deepEqual(State.transition(initial,existing,{type:'inheritGroup',identity
 assert.deepEqual(State.transition(initial,{...cleanHierarchy,canWrite:false},{type:'inheritGroup',identity:'G1'}).commands,[])
 assert.deepEqual(State.transition(draft,{...cleanHierarchy,pendingText:true},{type:'inheritGroup',identity:'G1'}).commands,[])
 console.log('Inheritance choices reject cycles, preserve unknown entries and obey draft/ACL guards')
+
+const toolsModel={...model,metadata:{...model.metadata,
+ users:[{value:'artist',label:'Artist'}],agentTools:[{name:'agent_context',readonly:true},{name:'ts_tasks_save',readonly:false}],mcpTools:[]}}
+assert.deepEqual(State.transition({...initial,scope:'effective'},toolsModel,{type:'effectiveUser',value:'artist'}).commands,
+ [{type:'effectiveUser',login:'artist'}])
+assert.deepEqual(State.transition(initial,{...toolsModel,dirty:true},{type:'effectiveUser',value:'artist'}).commands,[])
+assert.deepEqual(State.transition(initial,toolsModel,{type:'effectiveUser',value:'unknown'}).commands,[])
+assert.deepEqual(State.transition({...initial,scope:'agent_tool'},toolsModel,{type:'toolRead'}).commands,
+ [{type:'toolPolicy',scope:'agent_tool',mode:'selected',names:['agent_context']}])
+assert.deepEqual(State.transition({...initial,scope:'agent_tool'},{...toolsModel,canWrite:false},{type:'toolRead'}).commands,[])
+assert.deepEqual(State.transition({...draft,scope:'agent_tool'},toolsModel,{type:'toolRead'}).commands,[])
+assert.deepEqual(State.transition({...initial,scope:'mcp_tool'},toolsModel,{type:'toolToggle',name:'ts_tasks_save'}).commands,[])
+console.log('Effective-user requests and tool policies obey saved-state, catalogue and ACL guards')

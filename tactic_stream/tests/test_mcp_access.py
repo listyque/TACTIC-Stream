@@ -16,6 +16,58 @@ COMMAND='tactic.ui.panel.agent_mcp_cmd.AgentMcpCmd'
 
 
 class McpAccess(unittest.TestCase):
+    def test_effective_user_http_contract_keeps_login_a_diagnostic_parameter(self):
+        with test_transport.Transport.proxy(self) as proxy:
+            ticket=proxy.get_ticket('admin','private-test-password')
+            payload=dict(ticket=ticket,project='one',login='admin')
+            def request(action, body):
+                return urlopen(Request(self.url+'/admin/security-rules/'+action,
+                    data=json.dumps(body).encode(),headers={'Content-Type':'application/json'}))
+            with request('effective',payload) as response:
+                result=json.load(response)['result']
+                self.assertEqual(result['metadata']['effective']['login'],'admin')
+                self.assertTrue(result['metadata']['effective']['administrator'])
+            for action,body in [('read',payload),('effective',dict(payload,login={})),('effective',dict(payload,extra=True))]:
+                with self.assertRaises(HTTPError) as raised:
+                    request(action,body)
+                self.assertEqual(raised.exception.code,400)
+                raised.exception.close()
+
+    def test_group_tool_restrictions_refresh_existing_chat_and_mcp_connections(self):
+        from pathlib import Path
+        from mcp import Client
+        from mcp.client.streamable_http import streamable_http_client
+        import httpx2
+        from tactic_stream.admin_agent import StreamConnection, create_server
+        with test_transport.Transport.proxy(self) as proxy:
+            auth = dict(ticket=proxy.get_ticket('admin','private-test-password'),project='one')
+            context = dict(client='TS',project='one',page='',title='',search_type='',view='',search_keys=[])
+            grant = proxy.execute_cmd(auth,COMMAND,dict(action='create',project_code='one',
+                title='Group policy test',tools=['agent_context','ts_types'],context=context,minutes=5))['info']
+            xml = '<rules><rule group="agent_tool" key="*" access="deny"/><rule group="agent_tool" key="ts_types" access="allow"/><rule group="mcp_tool" key="*" access="deny"/><rule group="mcp_tool" key="agent_context" access="allow"/></rules>'
+            group = proxy.insert(auth,'sthpw/login_group',dict(login_group='policy_'+uuid4().hex,access_level='none',access_rules=xml))
+            membership = proxy.insert(auth,'sthpw/login_in_group',dict(login='admin',login_group=group['login_group']))
+            try:
+                async def run():
+                    server = create_server(StreamConnection(self.url,'one',auth['ticket']),Path(__file__).resolve().parents[1],enforce_permissions=True)
+                    async with Client(server) as chat:
+                        self.assertEqual({tool.name for tool in (await chat.list_tools()).tools},{'ts_types'})
+                        self.assertFalse((await chat.call_tool('ts_types',{})).is_error)
+                        self.assertTrue((await chat.call_tool('ts_schema_read',{})).is_error)
+                        async with httpx2.AsyncClient(headers={'Authorization':'Bearer '+grant['token']}) as http:
+                            async with Client(streamable_http_client(self.url+grant['path'],http_client=http),mode='legacy') as mcp:
+                                self.assertEqual({tool.name for tool in (await mcp.list_tools()).tools},{'agent_context'})
+                                self.assertFalse((await mcp.call_tool('agent_context',{})).is_error)
+                                proxy.update(auth,group['__search_key__'],dict(access_rules='<rules><rule group="agent_tool" key="*" access="deny"/><rule group="mcp_tool" key="*" access="deny"/></rules>'))
+                                self.assertTrue((await mcp.call_tool('agent_context',{})).is_error)
+                                self.assertTrue((await chat.call_tool('ts_types',{})).is_error)
+                                self.assertEqual((await chat.list_tools()).tools,[])
+                asyncio.run(run())
+            finally:
+                proxy.delete_sobject(auth,membership['__search_key__'])
+                proxy.delete_sobject(auth,group['__search_key__'])
+                proxy.execute_cmd(auth,COMMAND,dict(action='revoke',project_code='one',id=grant['id']))
+
     @classmethod
     def setUpClass(cls):
         create=test_transport.create_app

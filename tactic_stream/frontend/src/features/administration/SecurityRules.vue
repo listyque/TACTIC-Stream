@@ -164,7 +164,7 @@ export default {
           !!this.document &&
           this.context?.ticket === this.ticket &&
           this.context?.project === this.project,
-        canWrite: this.canWrite,
+        canWrite: this.canWrite && !!this.groupDocument,
         canLoad: !!this.ticket && !!this.project,
         busy: this.busy,
         dirty: this.dirty,
@@ -256,6 +256,72 @@ export default {
   },
   methods: {
     t,
+    async inspectUser(login) {
+      if (this.dirty || this.busy || this.uncertain || !this.context) return;
+      const request = ++this.request,
+        context = { ...this.context };
+      this.busy = true;
+      this.error = '';
+      try {
+        const result = await securityRules(
+          'effective',
+          context.ticket,
+          context.project,
+          { login }
+        );
+        if (
+          request !== this.request ||
+          this.ticket !== context.ticket ||
+          this.project !== context.project
+        )
+          return;
+        this.accept(result);
+      } catch (error) {
+        if (request === this.request) this.error = error.message;
+      } finally {
+        if (request === this.request) this.busy = false;
+      }
+    },
+    setToolPolicy({ scope, mode, names }) {
+      if (
+        !this.editable ||
+        !this.groupDocument ||
+        !['agent_tool', 'mcp_tool'].includes(scope) ||
+        !['inherit', 'selected', 'all'].includes(mode)
+      )
+        return;
+      const catalog =
+        this.metadata[scope === 'mcp_tool' ? 'mcpTools' : 'agentTools'] || [];
+      if (names.some((name) => !catalog.some((tool) => tool.name === name)))
+        return;
+      const root = parseRules(this.groupDocument.xml);
+      for (const rule of [...root.children])
+        if (
+          (rule.getAttribute('group') ||
+            rule.getAttribute('category') ||
+            rule.getAttribute('type')) === scope
+        )
+          rule.remove();
+      let xml = new XMLSerializer().serializeToString(root);
+      if (mode !== 'inherit') {
+        xml = changeRule(xml, -1, {
+          group: scope,
+          key: '*',
+          access: mode === 'all' ? 'allow' : 'deny'
+        });
+        if (mode === 'selected')
+          for (const name of new Set(names))
+            xml = changeRule(xml, -1, {
+              group: scope,
+              key: name,
+              access: 'allow'
+            });
+      }
+      this.groupDocument.xml = xml;
+      this.selected = -1;
+      this.syncText();
+      this.error = this.message = '';
+    },
     rowScene(node, record) {
       return UI.row(
         node,
@@ -281,6 +347,12 @@ export default {
       this.ui = result.ui;
       for (const command of result.commands) {
         switch (command.type) {
+          case 'effectiveUser':
+            await this.inspectUser(command.login);
+            break;
+          case 'toolPolicy':
+            this.setToolPolicy(command);
+            break;
           case 'filterMatrix':
             break;
           case 'group':

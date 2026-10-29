@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 from pyasm.biz import Project
 from pyasm.command import Command
 from pyasm.common import Environment
+from pyasm.common.errors import SecurityException
 from pyasm.search import Search, SearchType
 from pyasm.security.security import _require_admin
 
@@ -77,6 +78,28 @@ class AgentRequestCmd(Command):
                     self.info={key:self.info[key] for key in ('requests','total','next_offset')}
             return
         self.sql = Search('config/trigger').get_sql()
+        if self.kwargs.get('action') in ('tools', 'tool_check'):
+            from tactic_stream.server.agent_security import permissions, require_tool
+            from tactic_stream.server.mcp_access import tool_catalog
+            self.owner = Environment.get_user_name()
+            row = self.load('spt_agent_request', identity(self.kwargs['request_id'])) if self.kwargs.get('request_id') else {}
+            transport = 'mcp' if row.get('transport') == 'mcp' else 'chat'
+            names = [tool['name'] for tool in tool_catalog(transport)]
+            if transport == 'mcp':
+                from tactic_stream.server.mcp_access import read_grant, expired
+                grant = read_grant(row['request_id'])
+                if not grant or grant['revoked'] or expired(grant):
+                    raise SecurityException('MCP connection is unavailable')
+                names = [name for name in names if name in grant['tools']]
+            if self.kwargs['action'] == 'tool_check':
+                name = self.kwargs.get('tool')
+                if name not in names:
+                    raise SecurityException('This tool is unavailable for this connection')
+                require_tool(name, transport)
+                self.info = dict(allowed=True)
+            else:
+                self.info = dict(tools=permissions(Environment.get_security(), names, transport))
+            return
         if not all(self.sql.table_exists(name) for name in ('spt_agent_request', 'spt_agent_host')):
             raise ValueError('Upgrade the project schema before connecting an agent')
         action = self.kwargs.get('action')

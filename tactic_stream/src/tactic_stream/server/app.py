@@ -394,6 +394,8 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
                 fields.update(('identity', 'document', 'expected_revision'))
             if rules:
                 fields.update(('document', 'expected_revision'))
+                if rules == 'effective':
+                    fields.add('login')
             if groups:
                 fields.update(('group_code', 'login_group', 'description', 'add_members', 'remove_members', 'expected_revision'))
             if sidebar:
@@ -905,7 +907,7 @@ def create_app(data_dir: Path, thread_count=None, *, event_collector=True) -> Fa
 
     @app.post('/admin/security-rules/{action}', include_in_schema=False)
     async def admin_security_rules(request: Request, action: str):
-        if action not in ('read', 'save'):
+        if action not in ('read', 'save', 'effective'):
             return Response(status_code=404)
         body = await admin_body(request)
         if isinstance(body, Response):

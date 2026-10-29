@@ -237,3 +237,29 @@ agent activation; configure [the optional runner](SCRIPT_TRIALS.md) with
 `--trial-image` and `--trial-directory`. It supplies trial/read/image tools;
 it has no connection to the user's running TH desktop. Read [the Handler automation recipe](HANDLER_AUTOMATION.md) for examples,
 native owners, permissions and the save/activation/recovery contract.
+
+## Group tool restrictions
+
+The Security editor stores separate native `agent_tool` (chat) and `mcp_tool`
+(external MCP) rule scopes in each login group's `access_rules`. Keys are registered
+tool names or `*`, with native `allow`/`deny` access. Native subgroup traversal,
+project binding and highest-grant merging apply; exact tool keys precede wildcard
+fallback. Absence of applicable rules for the current project preserves administrator-only compatibility. A scope
+with `key="*" access="deny"` and explicit allowed keys is an allowlist.
+
+These rules restrict existing authority; they do not turn a non-administrator into
+an agent host or grant native CRUD/configuration permissions. The persisted native
+administrator checks remain required for agent requests and MCP issuance. The
+Security effective-user report explicitly distinguishes that prerequisite from tool
+policy. Handler's original-server procedure computes native user rules independently;
+Stream owns agent policy and gateway enforcement.
+
+Production Codex stdio adapters, configured provider sessions and the MCP HTTP gateway
+construct `create_server(..., enforce_permissions=True)`. Discovery calls the owner's
+`AgentRequestCmd.tools`; every invocation calls `tool_check` before executing its
+registered callback. The server derives chat/MCP transport from the owned request,
+not a model-supplied transport. MCP checks additionally intersect the persisted grant,
+expiry, revocation and current group policy. Native command checks, write consent,
+revision/idempotency checks and the project's grant scope continue independently.
+Offline catalogue construction uses `catalog_only=True`; it has no trial executor
+and does not run tools or make network requests.
