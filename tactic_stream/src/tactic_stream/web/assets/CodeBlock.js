@@ -4120,6 +4120,11 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"TACTIC Handler only": "Только в ТХ",
+	"TACTIC Handler with a connected DCC": "ТХ с подключённым DCC",
+	"Server Python": "Серверный Python",
+	"Server JavaScript": "Серверный JavaScript",
+	"Browser JavaScript": "JavaScript в браузере",
 	"Item preview · Sample data": "Предпросмотр · Пример данных",
 	"Example item": "Пример элемента",
 	"Example value": "Пример значения",

@@ -8,6 +8,8 @@ import AppIcon from '../../controls/AppIcon.vue';
 import ScriptShelfEditor from './ScriptShelfEditor.vue';
 import ScriptShelfBar from './ScriptShelfBar.vue';
 import { permissions } from '../../../../src/tactic_stream/shared_ui/features/scripts/shelf.ui.mjs';
+import { scriptRuntime } from '../../../../src/tactic_stream/shared_ui/features/scripts/bar.ui.mjs';
+import { appearance } from '../../appearance.js';
 import {
   effectiveShelf,
   globalShelf,
@@ -38,7 +40,11 @@ const catalog = ref(null),
   error = ref(''),
   uncertain = ref(false),
   running = ref(''),
-  output = ref('');
+  output = ref(''),
+  outputLanguage = ref('');
+const outputRuntime = computed(
+  () => scriptRuntime(outputLanguage.value, appearance.language).label
+);
 const mode = ref('shared'),
   modeSelected = ref(false),
   owner = ref('personal'),
@@ -133,15 +139,6 @@ function script(path) {
 }
 function runnable(button) {
   return !!script(button.script)?.executable;
-}
-function tooltip(button) {
-  return runnable(button)
-    ? button.description || button.title
-    : t(
-        'This script is unavailable. Browser JavaScript, server Python and server JavaScript with execution permission are supported.'
-      ) +
-        '\n' +
-        button.script;
 }
 async function load() {
   reloadPending = false;
@@ -411,6 +408,7 @@ async function write(action) {
 async function run(button) {
   if (running.value || busy.value || !runnable(button)) return;
   running.value = button.id;
+  outputLanguage.value = script(button.script).language;
   error.value = '';
   const id = generation;
   const context = {
@@ -476,6 +474,7 @@ const barButtons = computed(() =>
     ...button,
     buttonId: button.id,
     iconName: button.icon,
+    language: script(button.script)?.language || '',
     available: runnable(button),
     running: running.value === button.id
   }))
@@ -688,7 +687,10 @@ defineExpose({ open, reload: load, canLeave });
       :aria-label="t('Script result')"
     >
       <header>
-        <h2>{{ t('Script result') }}</h2>
+        <h2>
+          {{ t('Script result')
+          }}<small v-if="outputRuntime"> · {{ outputRuntime }}</small>
+        </h2>
         <AppButton label="Close" icon="close" @click="outputDialog.close()" />
       </header>
       <pre tabindex="0">{{ output }}</pre>

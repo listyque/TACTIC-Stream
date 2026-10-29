@@ -95,3 +95,15 @@ removed button or a different shelf. A native tab draft cannot be saved into a
 different tab after the editing context changes. Discard or reopen the editor
 before saving in the new context. Confirmed browser assignments immediately
 show Used on this tab. Help opens the general Help window at this article.
+
+## Where a script runs
+
+Shelf actions marked **TH** require TACTIC Handler. Their tooltip says whether
+they use local Python or a connected DCC. They stay disabled in TACTIC Stream.
+Server Python, Server JavaScript and browser JavaScript identify their runtime
+in the tooltip; the Stream result window repeats it, including on errors.
+
+The saved script language determines its runtime, not its folder or title.
+Server Python is not a Handler script. A server trigger that expects event
+`input` must run from its configured event; clicking a shelf button does not
+provide a trigger payload.

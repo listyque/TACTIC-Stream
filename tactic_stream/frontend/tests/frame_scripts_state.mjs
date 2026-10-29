@@ -75,6 +75,44 @@ assert.equal(
 );
 assert.equal(Bar.actionHeight(10, 200), 36);
 assert.equal(Bar.actionHeight(2, 200), 40);
+for (const language of [
+  'local_python',
+  'dcc_python',
+  'python',
+  'server_js',
+  'javascript'
+]) {
+  const runtime = Bar.scriptRuntime(language, 'en');
+  const action = Bar.action(
+    {
+      buttonId: language,
+      title: 'Run',
+      script: 'tools/run',
+      language,
+      available: language !== 'local_python'
+    },
+    false,
+    'en'
+  ).nodes[0];
+  const marker = action.children.find(
+    (child) => child.id === 'scriptShelfRuntime'
+  );
+  assert.equal(
+    marker.visible,
+    language === 'local_python' || language === 'dcc_python'
+  );
+  assert(action.toolTip.startsWith(runtime.label + '\n'));
+  const icon = action.children.find(
+    (child) => child.id === 'scriptShelfActionIcon'
+  );
+  if (marker.visible) assert(icon.x + icon.width <= marker.x);
+}
+assert.equal(Bar.scriptRuntime('local_python', 'ru').label, 'Только в ТХ');
+assert.equal(Bar.scriptRuntime('python', 'ru').label, 'Серверный Python');
+assert.deepEqual(Bar.scriptRuntime(undefined, 'en'), {
+  label: '',
+  handlerOnly: false
+});
 const absent = Bar.describe({ dcc: false, count: 0 }, 500, 48, 'en').nodes.find(
   (node) => node.id === 'exportDccShelfButton'
 );

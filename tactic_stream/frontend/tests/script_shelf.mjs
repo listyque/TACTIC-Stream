@@ -202,16 +202,53 @@ try {
   assert(
     await bar.getByRole('button', { name: 'Local', exact: true }).isDisabled()
   );
+  const local = bar.getByRole('button', { name: 'Local', exact: true });
+  assert.equal(
+    await local.locator('[data-frame="scriptShelfRuntime"]').innerText(),
+    'TH'
+  );
+  assert(
+    (await local.getAttribute('aria-description')).includes(
+      'TACTIC Handler only'
+    )
+  );
+  assert(
+    (
+      await bar
+        .getByRole('button', { name: 'Hello', exact: true })
+        .getAttribute('aria-description')
+    ).includes('Server Python')
+  );
   await bar.getByRole('button', { name: 'Hello', exact: true }).click();
   const output = page.getByRole('dialog', {
     name: 'Script result',
     exact: true
   });
   await output.waitFor();
+  assert((await output.locator('h2').innerText()).includes('Server Python'));
   assert(
     (await output.locator('pre').innerText()).includes('"runtime": "server"')
   );
   await output.getByRole('button', { name: 'Close', exact: true }).click();
+  const [hello] = await api('query', [
+    'config/custom_script',
+    [
+      ['folder', 'demo'],
+      ['title', 'hello']
+    ]
+  ]);
+  await api('update', [
+    hello.__search_key__,
+    { script: "return input['sobject']['name']" }
+  ]);
+  await bar.getByRole('button', { name: 'Hello', exact: true }).click();
+  await output.waitFor();
+  assert((await output.locator('h2').innerText()).includes('Server Python'));
+  assert(
+    (await output.locator('pre').innerText()).includes('not subscriptable')
+  );
+  await output.getByRole('button', { name: 'Close', exact: true }).click();
+  await api('update', [hello.__search_key__, { script: hello.script }]);
   await bar.getByRole('button', { name: 'Server JS', exact: true }).click();
   await output.waitFor();
   assert(
