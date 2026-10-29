@@ -416,3 +416,8 @@ The filter menu beside the search tabs opens above dock content and the
 left navigation rail, aligned to the start of its button. It stays inside the
 viewport on narrow windows. Escape closes the menu and returns focus to its
 button; selecting a command and clicking outside also close it.
+
+Object cards shade the preview behind their title and description, including
+light images. Text uses the theme foreground instead of muted caption color.
+Selected cards keep their selection tint; light themes use a light overlay with
+dark text. The image, preview actions and card layout remain available.

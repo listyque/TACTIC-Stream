@@ -6860,6 +6860,24 @@ function groupRecords(records, mode, nodes = [], organization = {}) {
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/search/card.ui.mjs
+var tileShade = [
+	{
+		position: 0,
+		opacity: .82
+	},
+	{
+		position: .58,
+		opacity: .82
+	},
+	{
+		position: .78,
+		opacity: .86
+	},
+	{
+		position: 1,
+		opacity: 1
+	}
+];
 function tileHeader(model, width, language) {
 	const open = !!model.hasChildren || model.kind === "snapshot" || model.kind === "file", left = open ? 26 : 0, badgeWidth = Math.min(width - left, 30 + Math.ceil(model.typeWidth || 0));
 	return { nodes: [node("Action", "resultTileOpen", rect$1(0, 0, 22, 22), {
@@ -6975,6 +6993,7 @@ function layout$10(model, width) {
 function body$2(model, width, height) {
 	const geometry = layout$10(model, width), nodes = [], object = model.kind === "object", snapshot = model.kind === "snapshot", compact = !!model.compact, reserve = model.reserve == null ? geometry.reserve : model.reserve, available = Math.min(width, Math.max(48, width - reserve)), color = model.selected ? "contentSelectionText" : "secondaryText";
 	if (model.tile) {
+		const tileText = object ? model.selected ? "contentSelectionText" : "primaryText" : "secondaryText";
 		let top = 0;
 		nodes.push(node("View", "resultTitle", rect$1(0, top, width, 18), {
 			view: "title",
@@ -6990,13 +7009,13 @@ function body$2(model, width, height) {
 		if (model.hasMetadata) top += 28;
 		nodes.push(label("resultTileTechnical", rect$1(0, top, width, 16), model.technical || "", {
 			fontRole: "secondary",
-			color: "secondaryText",
+			color: tileText,
 			visible: !!model.technical
 		}));
 		if (model.technical) top += 20;
 		nodes.push(label("resultTileDescription", rect$1(4, top, width - 12, model.kind === "object" && !compact ? 30 : 15), model.subtitle || "", {
 			fontRole: "caption",
-			color: "secondaryText",
+			color: tileText,
 			visible: !!model.subtitle,
 			wrap: true
 		}));
@@ -7333,65 +7352,60 @@ var _hoisted_1$94 = [
 	"aria-label"
 ];
 var _hoisted_2$62 = {
-	key: 8,
-	class: "result-tile-shade",
-	"aria-hidden": "true"
-};
-var _hoisted_3$46 = {
 	key: 2,
 	class: "result-file-offline"
 };
-var _hoisted_4$37 = {
+var _hoisted_3$46 = {
 	key: 0,
 	class: "result-metadata"
+};
+var _hoisted_4$37 = {
+	key: 0,
+	class: "muted"
 };
 var _hoisted_5$28 = {
 	key: 0,
 	class: "muted"
 };
 var _hoisted_6$24 = {
-	key: 0,
-	class: "muted"
-};
-var _hoisted_7$24 = {
 	key: 1,
 	class: "result-snapshot-technical"
 };
-var _hoisted_8$20 = { class: "result-snapshot-version" };
-var _hoisted_9$16 = { key: 0 };
-var _hoisted_10$13 = {
+var _hoisted_7$24 = { class: "result-snapshot-version" };
+var _hoisted_8$20 = { key: 0 };
+var _hoisted_9$16 = {
 	key: 2,
 	class: "result-snapshot-latest"
 };
-var _hoisted_11$10 = ["datetime", "title"];
-var _hoisted_12$10 = {
+var _hoisted_10$13 = ["datetime", "title"];
+var _hoisted_11$10 = {
 	key: 0,
 	class: "muted"
 };
-var _hoisted_13$9 = {
+var _hoisted_12$10 = {
 	key: 1,
 	class: "result-branch-summary muted"
 };
-var _hoisted_14$8 = { class: "result-snapshot-description" };
-var _hoisted_15$8 = { key: 0 };
-var _hoisted_16$8 = ["title"];
-var _hoisted_17$7 = {
+var _hoisted_13$9 = { class: "result-snapshot-description" };
+var _hoisted_14$8 = { key: 0 };
+var _hoisted_15$8 = ["title"];
+var _hoisted_16$8 = {
 	key: 0,
 	class: "result-mobile-actions"
 };
-var _hoisted_18$6 = {
+var _hoisted_17$7 = {
 	key: 1,
 	class: "result-snapshot-size"
 };
-var _hoisted_19$5 = {
+var _hoisted_18$6 = {
 	key: 0,
 	class: "result-hover-actions"
 };
-var _hoisted_20$4 = {
+var _hoisted_19$5 = {
 	key: 1,
 	class: "result-hover-actions"
 };
-var _hoisted_21$3 = {
+var _hoisted_20$4 = {
 	key: 1,
 	class: "result-relation-count muted"
 };
@@ -7440,6 +7454,7 @@ var _sfc_main$158 = {
 			const preview = props.node.preview;
 			return mobile.value && props.node.kind === "object" ? preview?.files?.find((file) => file.type === "web" && file.href)?.href || preview?.image : preview?.image;
 		});
+		const tileShadeStyle = computed(() => ({ background: `linear-gradient(to bottom, ${tileShade.map((stop) => `color-mix(in srgb, var(${props.selected ? "--content-selection" : "--surface-high"}) ${stop.opacity * 100}%, transparent) ${stop.position * 100}%`).join(", ")})` }));
 		const title = computed(() => props.node.kind === "snapshot" && props.node.snapshot_display ? props.node.snapshot_display.multiple ? t("Multiple files | {count}", { count: props.node.snapshot_display.multiple }) : props.node.snapshot_display.title : props.node.title || record.value.name || record.value.title || record.value.code || String(record.value.id || ""));
 		const initials = computed(() => {
 			const text = title.value[0]?.toUpperCase() + title.value.slice(1);
@@ -7692,7 +7707,12 @@ var _sfc_main$158 = {
 					style: normalizeStyle(bounds(geometry.value.header)),
 					interactive: false
 				}, null, 8, ["scene", "style"])) : createCommentVNode("", true),
-				__props.card && __props.node.kind === "object" ? (openBlock(), createElementBlock("span", _hoisted_2$62)) : createCommentVNode("", true),
+				__props.card && __props.node.kind === "object" ? (openBlock(), createElementBlock("span", {
+					key: 8,
+					class: "result-tile-shade",
+					style: normalizeStyle(tileShadeStyle.value),
+					"aria-hidden": "true"
+				}, null, 4)) : createCommentVNode("", true),
 				__props.card ? (openBlock(), createBlock(_sfc_main$186, {
 					key: 9,
 					scene: headerScene.value,
@@ -7759,9 +7779,9 @@ var _sfc_main$158 = {
 							"icon-only": "",
 							onClick: _cache[7] || (_cache[7] = ($event) => _ctx.$emit("quickaction", __props.node, "open"))
 						})) : createCommentVNode("", true)], 2)) : createCommentVNode("", true),
-						__props.tree && __props.node.kind === "snapshot" && title.value && !__props.node.snapshot_display?.exists ? (openBlock(), createElementBlock("span", _hoisted_3$46, "(" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)
+						__props.tree && __props.node.kind === "snapshot" && title.value && !__props.node.snapshot_display?.exists ? (openBlock(), createElementBlock("span", _hoisted_2$62, "(" + toDisplayString(unref(t)("File Offline")) + ")", 1)) : createCommentVNode("", true)
 					], 32)]),
-					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_4$37, [
+					metadata: withCtx(() => [__props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_3$46, [
 						(openBlock(true), createElementBlock(Fragment, null, renderList(__props.compact ? __props.node.progress_items?.slice(0, 1) : __props.node.progress_items, (item) => {
 							return openBlock(), createBlock(_sfc_main$191, {
 								key: item.name,
@@ -7783,7 +7803,7 @@ var _sfc_main$158 = {
 								"onClick"
 							]);
 						}), 128)),
-						__props.node.progress_items?.length && __props.node.info_items?.length ? (openBlock(), createElementBlock("span", _hoisted_5$28, "|")) : createCommentVNode("", true),
+						__props.node.progress_items?.length && __props.node.info_items?.length ? (openBlock(), createElementBlock("span", _hoisted_4$37, "|")) : createCommentVNode("", true),
 						createVNode(_sfc_main$161, {
 							items: __props.node.info_items || [],
 							selected: __props.selected,
@@ -7791,29 +7811,29 @@ var _sfc_main$158 = {
 							onClick: _cache[9] || (_cache[9] = withModifiers(() => {}, ["stop"]))
 						}, null, 8, ["items", "selected"])
 					])) : createCommentVNode("", true)]),
-					technical: withCtx(() => [__props.node.kind === "file" ? (openBlock(), createElementBlock("span", _hoisted_6$24, toDisplayString([record.value.relative_dir, record.value.file_name].filter(Boolean).join("/") || __props.node.subtitle), 1)) : __props.tree && !unref(mobile) && __props.node.kind === "snapshot" ? (openBlock(), createElementBlock("div", _hoisted_7$24, [
-						createBaseVNode("span", _hoisted_8$20, toDisplayString(__props.node.snapshot_display?.version), 1),
-						__props.node.snapshot_display?.revision ? (openBlock(), createElementBlock("span", _hoisted_9$16, toDisplayString(__props.node.snapshot_display.revision), 1)) : createCommentVNode("", true),
+					technical: withCtx(() => [__props.node.kind === "file" ? (openBlock(), createElementBlock("span", _hoisted_5$28, toDisplayString([record.value.relative_dir, record.value.file_name].filter(Boolean).join("/") || __props.node.subtitle), 1)) : __props.tree && !unref(mobile) && __props.node.kind === "snapshot" ? (openBlock(), createElementBlock("div", _hoisted_6$24, [
+						createBaseVNode("span", _hoisted_7$24, toDisplayString(__props.node.snapshot_display?.version), 1),
+						__props.node.snapshot_display?.revision ? (openBlock(), createElementBlock("span", _hoisted_8$20, toDisplayString(__props.node.snapshot_display.revision), 1)) : createCommentVNode("", true),
 						record.value.repo ? (openBlock(), createElementBlock("span", {
 							key: 1,
 							style: normalizeStyle({ color: __props.node.snapshot_display?.repositoryColor })
 						}, toDisplayString(__props.node.snapshot_display?.repository || record.value.repo), 5)) : createCommentVNode("", true),
-						__props.node.snapshot_display?.latest ? (openBlock(), createElementBlock("small", _hoisted_10$13, toDisplayString(unref(t)("Latest")), 1)) : createCommentVNode("", true),
+						__props.node.snapshot_display?.latest ? (openBlock(), createElementBlock("small", _hoisted_9$16, toDisplayString(unref(t)("Latest")), 1)) : createCommentVNode("", true),
 						createBaseVNode("time", {
 							class: "result-snapshot-date",
 							datetime: record.value.timestamp,
 							title: unref(timestampFullLabel)(record.value.timestamp)
-						}, [createBaseVNode("span", null, toDisplayString(unref(timestampLabel)(record.value.timestamp)), 1), createBaseVNode("span", null, toDisplayString(unref(timestampFullLabel)(record.value.timestamp)), 1)], 8, _hoisted_11$10)
-					])) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [__props.node.kind === "snapshot" ? (openBlock(), createElementBlock("small", _hoisted_12$10, [createTextVNode(toDisplayString(record.value.context) + " · ", 1), record.value.version < 0 ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(toDisplayString(unref(t)("Versionless")), 1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(unref(t)("Version")) + " " + toDisplayString(record.value.version), 1)], 64))])) : unref(mobile) && branch.value ? (openBlock(), createElementBlock("small", _hoisted_13$9, [
+						}, [createBaseVNode("span", null, toDisplayString(unref(timestampLabel)(record.value.timestamp)), 1), createBaseVNode("span", null, toDisplayString(unref(timestampFullLabel)(record.value.timestamp)), 1)], 8, _hoisted_10$13)
+					])) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [__props.node.kind === "snapshot" ? (openBlock(), createElementBlock("small", _hoisted_11$10, [createTextVNode(toDisplayString(record.value.context) + " · ", 1), record.value.version < 0 ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(toDisplayString(unref(t)("Versionless")), 1)], 64)) : (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(toDisplayString(unref(t)("Version")) + " " + toDisplayString(record.value.version), 1)], 64))])) : unref(mobile) && branch.value ? (openBlock(), createElementBlock("small", _hoisted_12$10, [
 						createTextVNode(toDisplayString(unref(t)(relation.value ? "Objects" : "Versions")) + ": " + toDisplayString(__props.node.branch.count ?? __props.node.children?.length ?? 0), 1),
 						__props.node.hasNext ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode("+")], 64)) : createCommentVNode("", true),
 						process.value && !__props.node.branch.count && __props.node.hasChildren ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createTextVNode(" · " + toDisplayString(unref(t)("Versionless")), 1)], 64)) : createCommentVNode("", true)
 					])) : createCommentVNode("", true)], 64))]),
-					description: withCtx(() => [createBaseVNode("div", _hoisted_14$8, [
-						__props.node.snapshot_display?.author ? (openBlock(), createElementBlock("em", _hoisted_15$8, toDisplayString(__props.node.snapshot_display.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
+					description: withCtx(() => [createBaseVNode("div", _hoisted_13$9, [
+						__props.node.snapshot_display?.author ? (openBlock(), createElementBlock("em", _hoisted_14$8, toDisplayString(__props.node.snapshot_display.author) + toDisplayString(subtitle.value ? ":" : ""), 1)) : createCommentVNode("", true),
 						createBaseVNode("span", null, toDisplayString(subtitle.value), 1),
 						createBaseVNode("small", null, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.node.snapshot_display?.infoChips, (chip, index) => {
-							return openBlock(), createElementBlock(Fragment, { key: chip.label }, [index ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | ")], 64)) : createCommentVNode("", true), createBaseVNode("span", { title: chip.label + ": " + chip.value }, toDisplayString(chip.value), 9, _hoisted_16$8)], 64);
+							return openBlock(), createElementBlock(Fragment, { key: chip.label }, [index ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createTextVNode(" | ")], 64)) : createCommentVNode("", true), createBaseVNode("span", { title: chip.label + ": " + chip.value }, toDisplayString(chip.value), 9, _hoisted_15$8)], 64);
 						}), 128))])
 					])]),
 					_: 1
@@ -7839,7 +7859,7 @@ var _sfc_main$158 = {
 					onPointerenter: holdControls,
 					onPointerleave: releaseControls
 				}, [
-					unref(mobile) && (__props.node.kind === "object" || process.value || __props.back && __props.node.kind === "snapshot") ? (openBlock(), createElementBlock("div", _hoisted_17$7, [__props.node.kind === "object" || process.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createVNode(_sfc_main$184, {
+					unref(mobile) && (__props.node.kind === "object" || process.value || __props.back && __props.node.kind === "snapshot") ? (openBlock(), createElementBlock("div", _hoisted_16$8, [__props.node.kind === "object" || process.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [createVNode(_sfc_main$184, {
 						label: "Tasks",
 						icon: "FAR_CALENDAR_CHECK",
 						"icon-only": "",
@@ -7857,7 +7877,7 @@ var _sfc_main$158 = {
 						"icon-only": "",
 						onClick: _cache[13] || (_cache[13] = ($event) => _ctx.$emit("upload", __props.node))
 					})])) : createCommentVNode("", true),
-					__props.tree && __props.node.kind === "snapshot" && __props.node.snapshot_display?.size != null ? (openBlock(), createElementBlock("span", _hoisted_18$6, toDisplayString(unref(prettySize)(__props.node.snapshot_display.size)), 1)) : createCommentVNode("", true),
+					__props.tree && __props.node.kind === "snapshot" && __props.node.snapshot_display?.size != null ? (openBlock(), createElementBlock("span", _hoisted_17$7, toDisplayString(unref(prettySize)(__props.node.snapshot_display.size)), 1)) : createCommentVNode("", true),
 					unref(mobile) ? (openBlock(), createBlock(_sfc_main$189, {
 						key: 2,
 						label: "Item actions",
@@ -7918,12 +7938,12 @@ var _sfc_main$158 = {
 						]),
 						_: 1
 					})) : (openBlock(), createElementBlock(Fragment, { key: 3 }, [
-						__props.tree && __props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_19$5, [createVNode(_sfc_main$184, {
+						__props.tree && __props.node.kind === "object" ? (openBlock(), createElementBlock("div", _hoisted_18$6, [createVNode(_sfc_main$184, {
 							label: "Related and child objects",
 							icon: "FAS_SITEMAP",
 							"icon-only": "",
 							onClick: _cache[22] || (_cache[22] = ($event) => _ctx.$emit("relations", __props.node, $event))
-						})])) : !__props.tree ? (openBlock(), createElementBlock("div", _hoisted_20$4, [!branch.value ? (openBlock(), createBlock(_sfc_main$184, {
+						})])) : !__props.tree ? (openBlock(), createElementBlock("div", _hoisted_19$5, [!branch.value ? (openBlock(), createBlock(_sfc_main$184, {
 							key: 0,
 							class: "result-details",
 							label: "Object details",
@@ -7950,7 +7970,7 @@ var _sfc_main$158 = {
 								"icon-only": "",
 								onClick: _cache[26] || (_cache[26] = ($event) => _ctx.$emit("create", __props.node))
 							}),
-							__props.node.branch.count > 0 ? (openBlock(), createElementBlock("small", _hoisted_21$3, "| \xA0" + toDisplayString(__props.node.branch.count), 1)) : createCommentVNode("", true)
+							__props.node.branch.count > 0 ? (openBlock(), createElementBlock("small", _hoisted_20$4, "| \xA0" + toDisplayString(__props.node.branch.count), 1)) : createCommentVNode("", true)
 						], 64)) : createCommentVNode("", true),
 						__props.node.knowledge?.length === 1 ? (openBlock(), createBlock(_sfc_main$184, {
 							key: 3,

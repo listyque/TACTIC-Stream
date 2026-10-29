@@ -1019,6 +1019,8 @@ def main():
         ("browser-variable-rows", ["node", "frontend/tests/frame_variable_rows.mjs"], ROOT, {}),
         ("browser-nested-table", ["node", "frontend/tests/table_nested.mjs"], ROOT, {}),
         ("browser-search-filter-menu", ["node", "frontend/tests/search_result_menu.mjs"], ROOT, {}),
+        ("browser-card-image-contrast", ["node", "frontend/tests/card_image_contrast.mjs"], ROOT, {}),
+        ("native-card-image-contrast", python + ["-m", "unittest", "-q", "tests.test_card_image_contrast"], handler, {}),
         ("browser-snapshot-gallery", ["node", "frontend/tests/table_snapshot_gallery.mjs"], ROOT, {}),
         ("browser-table", ["node", "frontend/tests/handler_table.mjs"], ROOT, {}),
         (

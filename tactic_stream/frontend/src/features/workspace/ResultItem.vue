@@ -64,6 +64,14 @@ const previewSource = computed(() => {
         preview?.image
     : preview?.image;
 });
+const tileShadeStyle = computed(() => ({
+  background: `linear-gradient(to bottom, ${Card.tileShade
+    .map(
+      (stop) =>
+        `color-mix(in srgb, var(${props.selected ? '--content-selection' : '--surface-high'}) ${stop.opacity * 100}%, transparent) ${stop.position * 100}%`
+    )
+    .join(', ')})`
+}));
 const title = computed(() =>
   props.node.kind === 'snapshot' && props.node.snapshot_display
     ? props.node.snapshot_display.multiple
@@ -451,6 +459,7 @@ onBeforeUnmount(() => clearTimeout(hoverTimer));
     <span
       v-if="card && node.kind === 'object'"
       class="result-tile-shade"
+      :style="tileShadeStyle"
       aria-hidden="true"
     ></span>
     <FrameView
@@ -871,22 +880,6 @@ onBeforeUnmount(() => clearTimeout(hoverTimer));
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    transparent 32%,
-    color-mix(in srgb, var(--surface-high) 34%, transparent) 58%,
-    color-mix(in srgb, var(--surface-high) 86%, transparent) 78%,
-    var(--surface-high) 100%
-  );
-}
-.result-item-card.selected .result-tile-shade {
-  background: linear-gradient(
-    to bottom,
-    transparent 32%,
-    color-mix(in srgb, var(--content-selection) 34%, transparent) 58%,
-    color-mix(in srgb, var(--content-selection) 86%, transparent) 78%,
-    var(--content-selection) 100%
-  );
 }
 .result-item-card .result-tile-header,
 .result-item-card .result-item-copy {
