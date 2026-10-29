@@ -24,6 +24,8 @@ Header menu: sorting, grouping/ungrouping, display/input definition, hide, order
 
 Changing widths in an existing table definition saves the sizes in place without adding Undo or activity-history entries. Creating a view or changing its columns, titles, widgets or other settings is still recorded.
 
+You can resize a table generated from object fields immediately. The first change remembers its displayed columns and their order; the width remains after reopening the table. Errors while preparing a change do not block the next resize. If a save response is lost, reload the server result before saving again.
+
 ## Edits and tasks
 
 Inputs resolve through edit/edit_definition and the real action.column. Assets Category therefore edits assets_category_code. Batch edits validate every revision before the first EditCmd; failure rolls back the entire batch. ID/code/project/timestamp/login and read_only are protected. Conflicts retain drafts; unknown save outcomes are checked before retrying. A ticket/project change blocks writes from the old draft.

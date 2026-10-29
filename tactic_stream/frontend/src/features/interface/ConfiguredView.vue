@@ -906,6 +906,7 @@ export default {
     },
     async changeColumns(action, name, value) {
       if (!this.columnEditable) return;
+      let writeAttempted = false;
       const request = ++this.columnRequest,
         context = {
           ticket: this.ticket,
@@ -926,7 +927,7 @@ export default {
             context.view
           ));
         const xml = changeTable(
-          tableDefinition(configuration),
+          tableDefinition(configuration, this.elements),
           context.view,
           action,
           name,
@@ -948,6 +949,7 @@ export default {
             throw new Error('A table view with this name already exists.');
           if (request !== this.columnRequest) return;
         }
+        writeAttempted = true;
         const saved = await widgetConfiguration(
           'save',
           context.ticket,
@@ -978,7 +980,8 @@ export default {
       } catch (error) {
         if (request === this.columnRequest) {
           this.columnError = error.message;
-          this.columnUncertain = !error.status || error.status >= 500;
+          this.columnUncertain =
+            writeAttempted && (!error.status || error.status >= 500);
         }
       } finally {
         if (request === this.columnRequest) this.columnBusy = false;

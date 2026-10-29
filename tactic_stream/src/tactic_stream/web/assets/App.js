@@ -22156,27 +22156,34 @@ function parse(source) {
 	if (document.querySelector("parsererror")) throw new Error("Invalid configuration XML");
 	return document;
 }
-function tableDefinition(configuration) {
+function tableView(root, name) {
+	return [root, ...root.children].find((node) => node.tagName === name || node.tagName === "view" && node.getAttribute("name") === name);
+}
+function tableDefinition(configuration, elements = configuration.resolved.elements) {
 	const source = configuration.sources[0]?.xml || configuration.layers.find((layer) => layer.view === configuration.view)?.xml;
 	const document = source ? parse(source) : parse("<config/>");
 	const root = document.documentElement;
-	let view = root.tagName === configuration.view ? root : [...root.children].find((node) => node.tagName === configuration.view);
+	let view = tableView(root, configuration.view);
 	if (!view) {
-		view = document.createElement(configuration.view);
+		view = document.createElement(configuration.view.includes("@") ? "view" : configuration.view);
+		if (view.tagName === "view") view.setAttribute("name", configuration.view);
 		view.setAttribute("layout", "TableLayoutWdg");
 		root.appendChild(view);
 	}
-	if (![...view.children].some((node) => node.tagName === "element")) for (const element of configuration.resolved.elements) {
+	const nodes = new Map([...view.children].filter((node) => node.tagName === "element").map((node) => [node.getAttribute("name"), node]));
+	for (const [index, element] of elements.entries()) if (!nodes.has(element.name)) {
 		const node = document.createElement("element");
 		node.setAttribute("name", element.name);
 		for (const [key, value] of Object.entries(element.attributes || {})) node.setAttribute(key, String(value));
-		view.appendChild(node);
+		const next = elements.slice(index + 1).map((element) => nodes.get(element.name)).find(Boolean);
+		view.insertBefore(node, next || null);
+		nodes.set(element.name, node);
 	}
 	return new XMLSerializer().serializeToString(document);
 }
 function changeTable(source, viewName, action, name, value) {
 	const document = parse(source), root = document.documentElement;
-	const view = root.tagName === viewName ? root : [...root.children].find((node) => node.tagName === viewName);
+	const view = tableView(root, viewName);
 	if (!view) throw new Error("The current table view is missing.");
 	const elements = [...view.children].filter((node) => node.tagName === "element");
 	const node = elements.find((node) => node.getAttribute("name") === name);
@@ -23610,6 +23617,7 @@ var _sfc_main$109 = {
 		},
 		async changeColumns(action, name, value) {
 			if (!this.columnEditable) return;
+			let writeAttempted = false;
 			const request = ++this.columnRequest, context = {
 				ticket: this.ticket,
 				project: this.project,
@@ -23620,7 +23628,7 @@ var _sfc_main$109 = {
 			this.columnError = "";
 			try {
 				const configuration = this.tableConfig || await widgetConfiguration("read", context.ticket, context.project, context.type, context.view);
-				const xml = changeTable(tableDefinition(configuration), context.view, action, name, value);
+				const xml = changeTable(tableDefinition(configuration, this.elements), context.view, action, name, value);
 				if (request !== this.columnRequest) return;
 				let destination = configuration, target = context.view;
 				if (action === "copy") {
@@ -23629,6 +23637,7 @@ var _sfc_main$109 = {
 					if (destination.sources.length) throw new Error("A table view with this name already exists.");
 					if (request !== this.columnRequest) return;
 				}
+				writeAttempted = true;
 				const saved = await widgetConfiguration("save", context.ticket, context.project, context.type, target, {
 					source_id: action === "copy" ? null : destination.sources[0]?.id ?? null,
 					xml,
@@ -23649,7 +23658,7 @@ var _sfc_main$109 = {
 			} catch (error) {
 				if (request === this.columnRequest) {
 					this.columnError = error.message;
-					this.columnUncertain = !error.status || error.status >= 500;
+					this.columnUncertain = writeAttempted && (!error.status || error.status >= 500);
 				}
 			} finally {
 				if (request === this.columnRequest) this.columnBusy = false;

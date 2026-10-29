@@ -17,41 +17,60 @@ function parse(source) {
   return document;
 }
 
-export function tableDefinition(configuration) {
+function tableView(root, name) {
+  return [root, ...root.children].find(
+    (node) =>
+      node.tagName === name ||
+      (node.tagName === 'view' && node.getAttribute('name') === name)
+  );
+}
+
+export function tableDefinition(
+  configuration,
+  elements = configuration.resolved.elements
+) {
   const source =
     configuration.sources[0]?.xml ||
     configuration.layers.find((layer) => layer.view === configuration.view)
       ?.xml;
   const document = source ? parse(source) : parse('<config/>');
   const root = document.documentElement;
-  let view =
-    root.tagName === configuration.view
-      ? root
-      : [...root.children].find((node) => node.tagName === configuration.view);
+  let view = tableView(root, configuration.view);
   if (!view) {
-    view = document.createElement(configuration.view);
+    view = document.createElement(
+      configuration.view.includes('@') ? 'view' : configuration.view
+    );
+    if (view.tagName === 'view') view.setAttribute('name', configuration.view);
     view.setAttribute('layout', 'TableLayoutWdg');
     root.appendChild(view);
   }
-  // A generated table may inherit its entire list; materialize references only.
-  if (![...view.children].some((node) => node.tagName === 'element'))
-    for (const element of configuration.resolved.elements) {
+  // Visible columns may come from the schema before a table definition exists.
+  const nodes = new Map(
+    [...view.children]
+      .filter((node) => node.tagName === 'element')
+      .map((node) => [node.getAttribute('name'), node])
+  );
+  for (const [index, element] of elements.entries()) {
+    if (!nodes.has(element.name)) {
       const node = document.createElement('element');
       node.setAttribute('name', element.name);
       for (const [key, value] of Object.entries(element.attributes || {}))
         node.setAttribute(key, String(value));
-      view.appendChild(node);
+      const next = elements
+        .slice(index + 1)
+        .map((element) => nodes.get(element.name))
+        .find(Boolean);
+      view.insertBefore(node, next || null);
+      nodes.set(element.name, node);
     }
+  }
   return new XMLSerializer().serializeToString(document);
 }
 
 export function changeTable(source, viewName, action, name, value) {
   const document = parse(source),
     root = document.documentElement;
-  const view =
-    root.tagName === viewName
-      ? root
-      : [...root.children].find((node) => node.tagName === viewName);
+  const view = tableView(root, viewName);
   if (!view) throw new Error('The current table view is missing.');
   const elements = [...view.children].filter(
     (node) => node.tagName === 'element'
