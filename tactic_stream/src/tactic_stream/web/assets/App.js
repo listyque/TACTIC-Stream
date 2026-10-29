@@ -1378,6 +1378,15 @@ function columns$1(model) {
 	});
 }
 function describe$58(model, width, extent, language) {
+	const margin = metrics$10.margin;
+	const scene = content$1(model, Math.max(0, width - margin * 2), Math.max(0, extent - margin * 2), language);
+	for (const item of scene.nodes) {
+		item.x += margin;
+		item.y += margin;
+	}
+	return scene;
+}
+function content$1(model, width, extent, language) {
 	const t = (value) => translate(value, language);
 	const toolOffset = model.embedded ? 36 : 0;
 	const quick = quickLayout(model, width), quickColumns = quick.columns, quickHeight = quick.height;

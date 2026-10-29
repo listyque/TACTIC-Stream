@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import NestedTable from '../../frontend/src/features/interface/NestedTable.vue';
 import '../../frontend/src/style.css';
 import gallery from '../../tests/fixtures/frame_table_gallery.json';
@@ -15,6 +15,7 @@ hostedPalette.value = {
   lightBase: '#d4dce1'
 };
 Object.assign(appearance, {
+  mode: 'dark',
   clickAnimations: false,
   hoverAnimations: false,
   fadeAnimations: false,
@@ -74,7 +75,11 @@ const state = reactive({
 });
 const edits = [];
 const actions = [];
+const width = ref(0);
 window.nestedFixture = {
+  resize: (value) => {
+    width.value = value;
+  },
   state,
   original,
   edits,
@@ -111,7 +116,10 @@ window.nestedFixture = {
     ticket="test-fixture"
     project="demo"
     :state="state"
-    style="width: 100%; max-width: 800px"
+    :style="{
+      width: width ? width + 'px' : '100%',
+      maxWidth: width ? 'none' : '800px'
+    }"
     @action="(record, kind, cell) => actions.push({ record, kind, cell })"
     @edit="
       (record, target) =>

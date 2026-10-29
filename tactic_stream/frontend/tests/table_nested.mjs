@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
@@ -55,7 +56,10 @@ const browser = await chromium.launch({
   headless: true,
   channel: process.env.STREAM_BROWSER_CHANNEL
 });
-const page = await browser.newPage({ viewport: { width: 500, height: 300 } });
+const page = await browser.newPage({
+  viewport: { width: 500, height: 300 },
+  deviceScaleFactor: 1.5
+});
 const errors = [];
 page.on('pageerror', (error) => errors.push(error.message));
 let reads = 0;
@@ -144,6 +148,61 @@ try {
       '/tools/frame_table/nested_recursive.html'
   );
   const root = page.locator('#app > .nested-table');
+  const captures = [];
+  for (const width of [320, 1000]) {
+    await page.setViewportSize({ width: width + 32, height: 400 });
+    await page.evaluate((width) => window.nestedFixture.resize(width), width);
+    await page.waitForFunction((width) => {
+      const header = document.querySelector(
+        '#app > .nested-table [data-frame="nestedToolbarSurface"]'
+      );
+      return Math.abs(header.getBoundingClientRect().width - (width - 16)) < 1;
+    }, width);
+    const bounds = await root.evaluate((element) => {
+      const outer = element.getBoundingClientRect();
+      return Object.fromEntries(
+        [
+          'nestedFilter',
+          'nestedReload',
+          'nestedClose',
+          'nestedHorizontal',
+          'nestedFooterSurface'
+        ].map((name) => {
+          const rectangle = element
+            .querySelector('[data-frame="' + name + '"]')
+            .getBoundingClientRect();
+          return [
+            name,
+            {
+              x: rectangle.x - outer.x,
+              y: rectangle.y - outer.y,
+              width: rectangle.width,
+              height: rectangle.height
+            }
+          ];
+        })
+      );
+    });
+    for (const [name, rectangle] of Object.entries(bounds)) {
+      assert.ok(rectangle.x >= 8 && rectangle.y >= 8, name);
+      assert.ok(rectangle.x + rectangle.width <= width - 8, name);
+      assert.ok(rectangle.y + rectangle.height <= 312, name);
+    }
+    captures.push({ width, bounds });
+    if (process.env.TABLE_NESTED_OUTPUT) {
+      mkdirSync(process.env.TABLE_NESTED_OUTPUT, { recursive: true });
+      await root.screenshot({
+        path: process.env.TABLE_NESTED_OUTPUT + '/browser-' + width + '.png'
+      });
+    }
+  }
+  if (process.env.TABLE_NESTED_OUTPUT)
+    writeFileSync(
+      process.env.TABLE_NESTED_OUTPUT + '/browser.json',
+      JSON.stringify(captures, null, 2)
+    );
+  await page.evaluate(() => window.nestedFixture.resize(0));
+  await page.setViewportSize({ width: 500, height: 300 });
 
   await root.locator('[data-frame="tableServiceAction_0"]').click();
   const child = root.locator('.nested-table');
