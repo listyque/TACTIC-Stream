@@ -15,6 +15,7 @@ function tab(width, height, record, state = {}) {
 	const textWidth = Math.max(0, width - (record.closable ? 58 : 24) - (record.icon ? 24 : 0));
 	const nodes = [
 		node("Box", "workspaceTabOverlay", rect(0, 0, width, height), {
+			radius: 0,
 			background: selected ? "action" : "primaryText",
 			opacity: state.pressed ? .12 : state.hovered || state.focused ? .08 : 0
 		}),

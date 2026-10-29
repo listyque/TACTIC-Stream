@@ -307,6 +307,14 @@ try {
     window.projectsHarness.configure('input', 'md3', 'en')
   );
   const tabs = page.getByRole('tablist', { name: 'Search tabs' });
+  assert.deepEqual(
+    await tabs
+      .locator('[data-frame="workspaceTabOverlay"]')
+      .evaluateAll((items) =>
+        items.map((item) => getComputedStyle(item).borderRadius)
+      ),
+    ['0px', '0px', '0px']
+  );
   await tabs.getByRole('tab', { name: 'Assets', exact: true }).focus();
   await page.keyboard.press('ArrowRight');
   assert.equal(await page.evaluate(() => window.projectsHarness.current), 'b');
