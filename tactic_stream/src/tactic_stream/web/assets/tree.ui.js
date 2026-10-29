@@ -128,8 +128,8 @@ function row(id, width, record, options = {}) {
 				accent: record.accent || "",
 				outlined: false
 			}),
-			label(ids.title || id + "_title", rect(x + 32, record.subtitle ? 8 : 18, Math.max(1, width - x - 88), 24), record.title, { weight: 600 }),
-			...record.subtitle ? [label(ids.detail || id + "_detail", rect(x + 32, 32, Math.max(1, width - x - 88), 20), record.subtitle, muted)] : []
+			label(ids.title || id + "_title", rect(x + 44, record.subtitle ? 8 : 18, Math.max(1, width - x - 100), 24), record.title, { weight: 600 }),
+			...record.subtitle ? [label(ids.detail || id + "_detail", rect(x + 44, 32, Math.max(1, width - x - 100), 20), record.subtitle, muted)] : []
 		]
 	})];
 	if (record.hasChildren) nodes.push(button(ids.toggle || id + "_toggle", rect(width - 42, 11, 38, 38), options.toggleLabel || "", record.expanded ? "chevron-down" : "chevron-right", options.toggle, options.toggleEnabled === void 0 ? options.enabled !== false : options.toggleEnabled, { iconOnly: true }));

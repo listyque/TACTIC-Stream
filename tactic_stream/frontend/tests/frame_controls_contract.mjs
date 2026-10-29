@@ -81,8 +81,32 @@ import {
 } from '../../src/tactic_stream/shared_ui/core/interaction.mjs';
 import {
   visibleRows,
-  navigate
+  navigate,
+  row as treeRow
 } from '../../src/tactic_stream/shared_ui/controls/lists/tree.ui.mjs';
+
+for (const width of [240, 320, 480])
+  for (const depth of [0, 1, 5])
+    for (const subtitle of ['', 'cg/scenes']) {
+      const scene = treeRow('entry', width, {
+        title: 'Ready to Sound',
+        subtitle,
+        depth,
+        hasChildren: true
+      });
+      const [icon, ...labels] = scene.nodes[0].children;
+      const toggle = scene.nodes[1];
+      for (const label of labels) {
+        assert(
+          label.x - (icon.x + icon.width) >= 12,
+          'Tree text needs an icon gap'
+        );
+        assert(
+          label.x + label.width <= toggle.x - 8,
+          'Tree text must leave the folder toggle clear'
+        );
+      }
+    }
 
 for (const value of [
   '2024-02-29',
