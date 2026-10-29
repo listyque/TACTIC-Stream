@@ -5,6 +5,21 @@ registered adapter must still preserve applicable original options, editor/actio
 behavior, permissions and errors. Discover current support from the installed
 server and catalogue; do not reuse historical class counts as a completion claim.
 
+## CG Episode configuration
+
+`cg/config_widget_config.spt` defines Episode previews with native ThumbWdg
+options, expression-backed names with ExpressionElementWdg, and explicit task
+status/assignee edit flags. Legacy HTML popup parameters must not be attached to
+these native cells: unknown options deliberately reject the entire descriptor.
+The asset relation retains its expression and episode scope; legacy toolbar
+flags use `show_gear` and `show_search`. Assets use the existing flat
+`episode_related_assets` table with a category column. The ordered shot subset
+is stored as `cg/shot` view `episode_shots`, rather than an unsupported wrapper
+`element_names` override. Both nested tables keep their owning episode.
+`test_cg_episode_widgets.py` checks the supplied configuration, native values and
+nested descriptors; the Script and snapshot-gallery tests cover their separate
+contracts. This normalization does not add general legacy HTML grouping support.
+
 ## Portable descriptions
 
 | Module | Responsibility |

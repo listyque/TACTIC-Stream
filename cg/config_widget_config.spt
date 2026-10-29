@@ -5337,10 +5337,8 @@ insert.set_value('config', """<config>
         <show_resize_scroll>true</show_resize_scroll>
         <icon_context>publish</icon_context>
         <detail>true</detail>
-        <include_mako>true</include_mako>
         <latest_icon>false</latest_icon>
         <icon_size>100</icon_size>
-        <view>custom_col</view>
       </display>
     </element>
     <element name="sequence_code"/>
@@ -5353,11 +5351,10 @@ insert.set_value('config', """<config>
     <element name="shot" width="96px" edit="false">
       <display widget="hidden_row">
         <show_gear>true</show_gear>
-        <element_names>rendered,preview,name,start_frame,end_frame,description,notes</element_names>
         <label>{@COUNT(cg/shot)} shots</label>
         <search_type>cg/shot</search_type>
         <dynamic_class>tactic.ui.panel.FastTableLayoutWdg</dynamic_class>
-        <view>table</view>
+        <view>episode_shots</view>
         <show_shelf>true</show_shelf>
         <icon>FAS_FILM</icon>
       </display>
@@ -5368,7 +5365,7 @@ insert.set_value('config', """<config>
       </display>
     </element>
     <element name="name" width="50px" edit="true">
-      <display class="tactic.ui.common.SimpleTableElementWdg">
+      <display class="tactic.ui.table.ExpressionElementWdg">
         <expression>@GET(cg/scenes.name)</expression>
         <use_cache>true</use_cache>
         <return>single</return>
@@ -5393,17 +5390,11 @@ insert.set_value('config', """<config>
     <element name="assets_drop" title="Assets" edit="true"/>
     <element name="assets_in_episode" width="123px" edit="false">
       <display widget="hidden_row">
-        <show_layout_switcher>false</show_layout_switcher>
-        <show_column_manager>false</show_column_manager>
-        <show_keyword_search>false</show_keyword_search>
-        <show_header>true</show_header>
+        <show_gear>false</show_gear>
+        <show_search>false</show_search>
         <show_search_limit>false</show_search_limit>
         <search_type>cg/assets</search_type>
-        <group_elements>assets_category</group_elements>
-        <no_results_msg>Empty</no_results_msg>
         <dynamic_class>tactic.ui.panel.TableLayoutWdg</dynamic_class>
-        <min_height>16px</min_height>
-        <show_border>false</show_border>
         <mode>widget</mode>
         <label> {@COUNT(cg/assets_in_scenes)} assets</label>
         <show_select>true</show_select>
@@ -5588,7 +5579,6 @@ insert.set_value('config', """<config>
         <show_filler_tasks>true</show_filler_tasks>
         <edit_status>true</edit_status>
         <edit_assigned>true</edit_assigned>
-        <edit>true</edit>
       </display>
     </element>
     <element name="approve_assets" title="Approve Assets" width="120px" edit="false" color="false">
@@ -6192,3 +6182,21 @@ insert.set_value('title', """Новый шелф три""")
 insert.set_value('view', """script_shelf@cb05bd2f351a49b8b31fd4b53d271d55""")
 #-- End Entry --#
 
+#-- Start Entry --#
+insert = SearchType.create('config/widget_config')
+insert.set_value('code', """WIDGET_CONFIG_EPISODE_SHOTS""")
+insert.set_value('config', """<config>
+  <episode_shots layout="TableLayoutWdg">
+    <element name="rendered"/>
+    <element name="preview"/>
+    <element name="name"/>
+    <element name="start_frame"/>
+    <element name="end_frame"/>
+    <element name="description"/>
+    <element name="notes"/>
+  </episode_shots>
+</config>""")
+insert.set_value('login', """admin""")
+insert.set_value('search_type', """cg/shot""")
+insert.set_value('view', """episode_shots""")
+#-- End Entry --#
