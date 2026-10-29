@@ -3,7 +3,7 @@ import { A as t, c as _sfc_main$2, f as _sfc_main$3, j as appearance, ot as _plu
 import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$4, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
 import { n as sections } from "./sections.ui.js";
 import { t as _sfc_main$5 } from "./ObjectReport.js";
-import { dt as notices, ft as policy, ht as toolbar$1, pt as sectionSelector, ut as documentEvent } from "./App.js";
+import { ct as documentEvent, dt as sectionSelector, lt as notices, pt as toolbar$1, ut as policy } from "./App.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/workflow/process_rules.ui.mjs
 function toolbar(model, ui, width, language) {

@@ -6,7 +6,7 @@ import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { t as downloadBlob } from "./files2.js";
 import { t as fileBlob } from "./previewFiles.js";
 import { t as describe$1 } from "./confirmation.ui.js";
-import { T as _sfc_main$4 } from "./App.js";
+import { C as _sfc_main$4 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/snapshot_checkout.ui.mjs
 function describe(model, width, height, language) {
 	const tr = (text) => translate(text, language), margin = 10, inner = Math.max(0, width - 20), stacked = width < 370, footerHeight = stacked ? 100 : 60, closeWidth = stacked ? inner : 120;

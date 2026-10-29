@@ -1,9 +1,10 @@
 import { C as h, D as nextTick, G as watchPostEffect, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, p as computed, rt as normalizeStyle, tt as unref, u as Fragment, w as inject, y as createTextVNode } from "./vue.js";
 import { A as t, c as _sfc_main$4, j as appearance, q as metrics } from "./index.js";
 import { Gt as serverClock, Jt as label, Xt as node, Yt as muted, Zt as rect, i as _sfc_main$5, qt as button, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
+import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { i as linkifyPlainText, n as escapeHtml, t as activateRichLink } from "./richText.js";
 import { n as browserLink } from "./links.js";
-import { c as eventSentence, d as safeColor, f as timestampFullLabel, i as compactText, n as qtLabelTextWidth, p as timestampLabel, r as changeValue, u as needsExpansion } from "./textMetrics.js";
+import { c as needsExpansion, d as timestampLabel, l as safeColor, n as compactText, o as eventSentence, t as changeValue, u as timestampFullLabel } from "./activity.js";
 import { t as _sfc_main$6 } from "./AttachmentCard.js";
 import { t as FilePreview_default } from "./FilePreview.js";
 import { t as fileBlob } from "./previewFiles.js";

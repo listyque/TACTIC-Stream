@@ -13,6 +13,7 @@ import AppSelect from '../../controls/AppSelect.vue';
 import ObjectFieldFrame from './ObjectFieldFrame.vue';
 import ObjectFieldGrid from './ObjectFieldGrid.vue';
 import AppFileInput from '../../controls/forms/AppFileInput.vue';
+import ImagePicker from '../../controls/ImagePicker.vue';
 import ObjectEditorSurface from './ObjectEditorSurface.vue';
 import * as EditorUI from '../../../../src/tactic_stream/shared_ui/features/objects/editor.ui.mjs';
 import fieldCatalog from '../../../../src/tactic_stream/shared_ui/features/objects/fields.json';
@@ -33,6 +34,7 @@ export default {
     ObjectFieldFrame,
     ObjectFieldGrid,
     AppFileInput,
+    ImagePicker,
     ObjectEditorSurface
   },
   props: {
@@ -64,6 +66,7 @@ export default {
       uncertain: false,
       request: 0,
       files: {},
+      validatingFiles: {},
       selectedFields: [],
       instanceRelation: null,
       operation: '',
@@ -123,6 +126,7 @@ export default {
         uncertain: this.uncertain,
         valid: !this.blocked && this.contextValid,
         canSave:
+          !this.fileValidating &&
           this.fieldsToSave.length > 0 &&
           (this.definition?.mode !== 'edit' || this.dirty),
         dirty: this.dirty,
@@ -203,6 +207,9 @@ export default {
     },
     unsupported() {
       return (this.definition?.fields || []).filter(unsupportedField);
+    },
+    fileValidating() {
+      return Object.values(this.validatingFiles).some(Boolean);
     }
   },
   watch: {
@@ -430,7 +437,7 @@ export default {
       const file = event.target.files[0];
       if (file) this.files[field.name] = file;
       else delete this.files[field.name];
-      this.draft[field.name] = file?.name || '';
+      this.draft[field.name] = file?.name ?? this.baseline[field.name];
     },
     selectUploads(field, slot, event) {
       const files = Array.from(event.target.files);
@@ -486,6 +493,7 @@ export default {
       this.definition = null;
       this.draft = this.baseline = {};
       this.files = {};
+      this.validatingFiles = {};
       this.selectedFields = [];
       this.error = '';
       this.discard = this.uncertain = false;
@@ -553,6 +561,7 @@ export default {
       this.definition = null;
       this.draft = this.baseline = {};
       this.files = {};
+      this.validatingFiles = {};
       this.uncertain = false;
       this.$refs.dialog.close();
     },
@@ -565,6 +574,7 @@ export default {
       if (
         !this.contextValid ||
         this.loading ||
+        this.fileValidating ||
         this.saving ||
         (this.uncertain && !checkOnly) ||
         this.blocked ||
@@ -960,6 +970,25 @@ export default {
                   :disabled="batch && disabled(field)"
                   :required="required(field)"
                 />
+                <ImagePicker
+                  v-else-if="
+                    kind(field) === 'FileInput' &&
+                    field.input.context === 'icon'
+                  "
+                  class="record-preview-input"
+                  role="group"
+                  :aria-label="field.title"
+                  :model-value="files[field.name] || null"
+                  :status-text="files[field.name]?.name || ''"
+                  :disabled="disabled(field)"
+                  :required="required(field)"
+                  @validating="validatingFiles[field.name] = $event"
+                  @update:model-value="
+                    selectFile(field, {
+                      target: { files: $event ? [$event] : [] }
+                    })
+                  "
+                />
                 <AppFileInput
                   v-else-if="kind(field) === 'FileInput'"
                   :id="`record-field-${formId}-${index}`"
@@ -1171,6 +1200,9 @@ export default {
   </dialog>
 </template>
 <style>
+.record-preview-input {
+  min-height: var(--image-picker-preview-size);
+}
 .record-form-dialog[open] {
   display: flex;
   flex-direction: column;

@@ -32,7 +32,7 @@ export function unsupportedField(field) {
         if (field.class_name === 'tactic.ui.input.process_context_wdg.ProcessInputWdg') allowed.push('context')
         if (field.class_name === 'tactic.ui.input.process_context_wdg.ReviewProcessInputWdg') allowed.push('context', 'pipeline_code')
         if (field.class_name === 'tactic.ui.input.process_group_select_wdg.ProcessGroupSelectWdg') allowed.push('label_attr')
-        if (fieldKind(field) === 'FileInput') allowed.push('context', 'client_action')
+        if (fieldKind(field) === 'FileInput') allowed.push('context', 'client_action', 'icon_size')
         if (fieldKind(field) === 'MultiUpload') allowed.push('names', 'upload_type', 'context', 'pipeline', 'context_option', 'subcontext')
         if (field.class_name === 'tactic.ui.widget.upload_wdg.UploadWdg') allowed.push('context_expr', 'client_action')
         const multiActions = ['MultiUploadAction', 'pyasm.command.MultiUploadAction', 'pyasm.command.edit_wdg_action.MultiUploadAction',

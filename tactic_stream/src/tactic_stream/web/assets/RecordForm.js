@@ -1,9 +1,11 @@
 import { t as __exportAll } from "./rolldown-runtime.js";
 import { B as useId, C as h, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, M as onUpdated, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as t, c as _sfc_main$5, j as appearance, o as mobile, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { D as _sfc_main$11, Jt as label, N as _sfc_main$10, O as _sfc_main$8, P as _sfc_main$7, R as _sfc_main$12, Tt as uploadFormFile, W as formDefinition, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$6, qt as button, r as observeFrameSizes, y as translate, z as _sfc_main$9 } from "./CodeBlock.js";
+import { A as t, Y as textStyles, c as _sfc_main$6, j as appearance, o as mobile, ot as _plugin_vue_export_helper_default, z as controls } from "./index.js";
+import { D as _sfc_main$12, Jt as label, N as _sfc_main$11, O as _sfc_main$9, P as _sfc_main$8, R as _sfc_main$13, Tt as uploadFormFile, W as formDefinition, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$7, qt as button, r as observeFrameSizes, w as ItemPreview_default, y as translate, z as _sfc_main$10 } from "./CodeBlock.js";
 import { t as arrange } from "./fields.ui.js";
-import { t as _sfc_main$13 } from "./ObjectFieldFrame.js";
+import { t as _sfc_main$14 } from "./ObjectFieldFrame.js";
+import { t as readPreviewImage } from "./previewImage.js";
+import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js
 function fieldKind(field) {
@@ -72,7 +74,7 @@ function unsupportedField(field) {
 	if (field.class_name === "tactic.ui.input.process_context_wdg.ProcessInputWdg") allowed.push("context");
 	if (field.class_name === "tactic.ui.input.process_context_wdg.ReviewProcessInputWdg") allowed.push("context", "pipeline_code");
 	if (field.class_name === "tactic.ui.input.process_group_select_wdg.ProcessGroupSelectWdg") allowed.push("label_attr");
-	if (fieldKind(field) === "FileInput") allowed.push("context", "client_action");
+	if (fieldKind(field) === "FileInput") allowed.push("context", "client_action", "icon_size");
 	if (fieldKind(field) === "MultiUpload") allowed.push("names", "upload_type", "context", "pipeline", "context_option", "subcontext");
 	if (field.class_name === "tactic.ui.widget.upload_wdg.UploadWdg") allowed.push("context_expr", "client_action");
 	const multiActions = [
@@ -117,7 +119,7 @@ function unsupportedField(field) {
 }
 //#endregion
 //#region src/features/objects/ObjectFieldGrid.vue
-var _sfc_main$4 = {
+var _sfc_main$5 = {
 	__name: "ObjectFieldGrid",
 	setup(__props) {
 		const host = ref(null), height = ref(0);
@@ -196,12 +198,12 @@ function describe(value, width, language, enabled = true) {
 }
 //#endregion
 //#region src/controls/forms/AppFileInput.vue
-var _hoisted_1$1 = [
+var _hoisted_1$2 = [
 	"aria-label",
 	"disabled",
 	"required"
 ];
-var _sfc_main$3 = {
+var _sfc_main$4 = {
 	__name: "AppFileInput",
 	props: {
 		value: String,
@@ -244,7 +246,7 @@ var _sfc_main$3 = {
 					"height": "44px",
 					"width": "100%"
 				}
-			}, [createVNode(_sfc_main$6, {
+			}, [createVNode(_sfc_main$7, {
 				scene: scene.value,
 				onEvent: action
 			}, null, 8, ["scene"]), createBaseVNode("input", {
@@ -256,10 +258,226 @@ var _sfc_main$3 = {
 				disabled: __props.disabled,
 				required: __props.required,
 				onChange: _cache[0] || (_cache[0] = ($event) => emit("change", $event))
-			}, null, 40, _hoisted_1$1)], 512);
+			}, null, 40, _hoisted_1$2)], 512);
 		};
 	}
 };
+//#endregion
+//#region src/controls/ImagePicker.vue
+var _sfc_main$3 = {
+	components: {
+		AppButton: _sfc_main$6,
+		ItemPreview: ItemPreview_default
+	},
+	props: {
+		modelValue: File,
+		displayFile: File,
+		previewUrl: String,
+		fallbackText: String,
+		accent: String,
+		previewSize: {
+			type: Number,
+			default: controls.imagePicker.previewSize
+		},
+		statusText: String,
+		description: String,
+		inlineErrors: {
+			type: Boolean,
+			default: true
+		},
+		required: Boolean,
+		disabled: Boolean
+	},
+	emits: [
+		"update:modelValue",
+		"validating",
+		"error"
+	],
+	watch: { error(value) {
+		this.$emit("error", value);
+	} },
+	data() {
+		return {
+			loading: false,
+			error: "",
+			selection: 0,
+			actionsHeight: 36,
+			pickerWidth: 0,
+			pickerHeight: 0
+		};
+	},
+	mounted() {
+		this.resize = new ResizeObserver((entries) => {
+			this.actionsHeight = this.$refs.actions.offsetHeight;
+			const root = entries.find((entry) => entry.target === this.$el);
+			if (root) {
+				this.pickerWidth = root.contentRect.width;
+				this.pickerHeight = root.contentRect.height;
+			}
+		});
+		this.resize.observe(this.$refs.actions);
+		this.resize.observe(this.$el);
+	},
+	beforeUnmount() {
+		this.selection++;
+		this.resize?.disconnect();
+	},
+	computed: {
+		previewRowHeight() {
+			if (!this.compact) return this.pickerHeight;
+			const room = this.pickerHeight - controls.imagePicker.rowSpacing;
+			return Math.max(this.previewSize, Math.round(room * this.previewSize / (this.previewSize + this.actionsHeight)));
+		},
+		actionsRowHeight() {
+			return this.compact ? Math.max(this.actionsHeight, this.pickerHeight - controls.imagePicker.rowSpacing - this.previewRowHeight) : this.pickerHeight;
+		},
+		columns() {
+			if (this.compact) return "minmax(0,1fr)";
+			if (this.statusText || this.description || this.$slots.default) return `${this.previewSize}px minmax(0,1fr)`;
+			const actions = Math.max(this.actionWidth("Choose image"), this.modelValue ? this.actionWidth("Undo image selection") : 0);
+			const room = this.pickerWidth - controls.imagePicker.columnSpacing;
+			return `${Math.max(this.previewSize, Math.round(room * this.previewSize / (this.previewSize + actions)))}px minmax(${actions}px,1fr)`;
+		},
+		rows() {
+			if (!this.compact) return "1fr";
+			return `${this.previewRowHeight}px minmax(min-content,1fr)`;
+		},
+		compact() {
+			return this.pickerWidth < this.previewSize + controls.imagePicker.minimumActionsWidth;
+		}
+	},
+	methods: {
+		t,
+		pixelCentre(rowHeight, contentHeight) {
+			const offset = (rowHeight - contentHeight) / 2;
+			return { transform: `translateY(${Math.round(offset) - offset}px)` };
+		},
+		actionWidth(label) {
+			const sizing = controls.button;
+			const family = getComputedStyle(document.documentElement).fontFamily;
+			const text = qtLabelTextWidth(t(label), `600 ${textStyles.body}px ${family}`);
+			return Math.max(sizing.minimumWidth, Math.ceil(text) + sizing.iconSize + sizing.spacing + sizing.iconPadding + sizing.padding);
+		},
+		actionStyle(label) {
+			return { width: this.actionWidth(label) + "px" };
+		},
+		async choose(event) {
+			const file = event.target.files[0];
+			event.target.value = "";
+			if (!file) return;
+			const selection = ++this.selection;
+			this.loading = true;
+			this.$emit("validating", true);
+			this.error = "";
+			try {
+				await readPreviewImage(file);
+				if (selection === this.selection) {
+					this.loading = false;
+					this.$emit("validating", false);
+					if (!this.disabled) this.$emit("update:modelValue", file);
+				}
+			} catch {
+				if (selection === this.selection) this.error = "The selected preview is not a readable image";
+			} finally {
+				if (selection === this.selection) {
+					this.loading = false;
+					this.$emit("validating", false);
+				}
+			}
+		}
+	}
+};
+var _hoisted_1$1 = ["aria-busy"];
+var _hoisted_2$1 = {
+	key: 0,
+	class: "image-picker-status"
+};
+var _hoisted_3$1 = {
+	key: 1,
+	class: "image-picker-description"
+};
+var _hoisted_4$1 = [
+	"disabled",
+	"required",
+	"aria-label"
+];
+var _hoisted_5$1 = {
+	key: 3,
+	class: "error",
+	role: "alert"
+};
+function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
+	const _component_ItemPreview = resolveComponent("ItemPreview");
+	const _component_AppButton = resolveComponent("AppButton");
+	return openBlock(), createElementBlock("div", {
+		class: normalizeClass(["image-picker", { "image-picker-compact": $options.compact }]),
+		"aria-busy": $data.loading,
+		style: normalizeStyle({ "--image-picker-preview-size": $props.previewSize + "px" })
+	}, [createBaseVNode("div", {
+		class: "image-picker-layout",
+		style: normalizeStyle({
+			gridTemplateColumns: $options.columns,
+			gridTemplateRows: $options.rows
+		})
+	}, [createVNode(_component_ItemPreview, {
+		"data-image-picker-part": "Preview",
+		style: normalizeStyle($options.pixelCentre($options.previewRowHeight, $props.previewSize)),
+		file: $props.modelValue || $props.displayFile,
+		source: $props.previewUrl,
+		"fallback-text": $props.fallbackText,
+		accent: $props.accent || "var(--primary)",
+		"preview-size": $props.previewSize,
+		outlined: "",
+		"fill-mode": "cover"
+	}, null, 8, [
+		"style",
+		"file",
+		"source",
+		"fallback-text",
+		"accent",
+		"preview-size"
+	]), createBaseVNode("div", {
+		ref: "actions",
+		class: "image-picker-actions",
+		style: normalizeStyle($options.pixelCentre($options.actionsRowHeight, $data.actionsHeight))
+	}, [
+		$props.statusText ? (openBlock(), createElementBlock("p", _hoisted_2$1, toDisplayString($options.t($props.statusText)), 1)) : createCommentVNode("", true),
+		$props.description ? (openBlock(), createElementBlock("p", _hoisted_3$1, toDisplayString($options.t($props.description)), 1)) : createCommentVNode("", true),
+		renderSlot(_ctx.$slots, "default"),
+		createBaseVNode("input", {
+			ref: "file",
+			type: "file",
+			accept: "image/png,image/jpeg,image/webp,image/gif,image/bmp",
+			hidden: "",
+			disabled: $props.disabled || $data.loading,
+			required: $props.required && !$props.modelValue,
+			"aria-label": $options.t("Choose preview image"),
+			onChange: _cache[0] || (_cache[0] = (...args) => $options.choose && $options.choose(...args))
+		}, null, 40, _hoisted_4$1),
+		createVNode(_component_AppButton, {
+			"data-image-picker-part": "ChoosePreview",
+			label: "Choose image",
+			style: normalizeStyle($options.actionStyle("Choose image")),
+			icon: "add-photo-alternate",
+			disabled: $props.disabled || $data.loading,
+			onClick: _cache[1] || (_cache[1] = ($event) => _ctx.$refs.file.click())
+		}, null, 8, ["style", "disabled"]),
+		$props.modelValue ? (openBlock(), createBlock(_component_AppButton, {
+			key: 2,
+			"data-image-picker-part": "CancelPreview",
+			label: "Undo image selection",
+			style: normalizeStyle($options.actionStyle("Undo image selection")),
+			icon: "undo",
+			disabled: $props.disabled || $data.loading,
+			onClick: _cache[2] || (_cache[2] = ($event) => {
+				$data.error = "";
+				_ctx.$emit("update:modelValue", null);
+			})
+		}, null, 8, ["style", "disabled"])) : createCommentVNode("", true),
+		$data.error && $props.inlineErrors ? (openBlock(), createElementBlock("p", _hoisted_5$1, toDisplayString($options.t($data.error)), 1)) : createCommentVNode("", true)
+	], 4)], 4)], 14, _hoisted_1$1);
+}
+var ImagePicker_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main$3, [["render", _sfc_render$1]]);
 //#endregion
 //#region ../src/tactic_stream/shared_ui/controls/forms/number.mjs
 function clamp(value, minimum, maximum, decimals = 0) {
@@ -370,14 +588,14 @@ var _sfc_main$2 = {
 				class: normalizeClass(["app-spin-box", { disabled: __props.disabled }]),
 				onKeydown: key
 			}, [
-				createVNode(_sfc_main$5, {
+				createVNode(_sfc_main$6, {
 					"icon-only": "",
 					icon: "chevron-down",
 					label: "Decrease value",
 					disabled: __props.disabled || __props.readonly || __props.modelValue <= __props.min,
 					onClick: _cache[0] || (_cache[0] = ($event) => increment(-1))
 				}, null, 8, ["disabled"]),
-				createVNode(_sfc_main$7, {
+				createVNode(_sfc_main$8, {
 					modelValue: text.value,
 					"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => text.value = $event),
 					inputmode: "decimal",
@@ -406,7 +624,7 @@ var _sfc_main$2 = {
 					"aria-valuenow",
 					"error-state"
 				]),
-				createVNode(_sfc_main$5, {
+				createVNode(_sfc_main$6, {
 					"icon-only": "",
 					icon: "chevron-up",
 					label: "Increase value",
@@ -665,7 +883,7 @@ var _sfc_main$1 = {
 				ref: host,
 				class: "object-editor-surface",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$6, {
+			}, [createVNode(_sfc_main$7, {
 				scene: scene.value,
 				views,
 				onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
@@ -700,16 +918,17 @@ var _sfc_main = {
 		return { formId: useId() };
 	},
 	components: {
-		AppDateField: _sfc_main$8,
-		AppSwitch: _sfc_main$9,
-		AppColorInput: _sfc_main$10,
-		AppButton: _sfc_main$5,
-		AppTextField: _sfc_main$7,
-		AppTextArea: _sfc_main$11,
-		AppSelect: _sfc_main$12,
-		ObjectFieldFrame: _sfc_main$13,
-		ObjectFieldGrid: _sfc_main$4,
-		AppFileInput: _sfc_main$3,
+		AppDateField: _sfc_main$9,
+		AppSwitch: _sfc_main$10,
+		AppColorInput: _sfc_main$11,
+		AppButton: _sfc_main$6,
+		AppTextField: _sfc_main$8,
+		AppTextArea: _sfc_main$12,
+		AppSelect: _sfc_main$13,
+		ObjectFieldFrame: _sfc_main$14,
+		ObjectFieldGrid: _sfc_main$5,
+		AppFileInput: _sfc_main$4,
+		ImagePicker: ImagePicker_default,
 		ObjectEditorSurface: _sfc_main$1
 	},
 	props: {
@@ -750,6 +969,7 @@ var _sfc_main = {
 			uncertain: false,
 			request: 0,
 			files: {},
+			validatingFiles: {},
 			selectedFields: [],
 			instanceRelation: null,
 			operation: "",
@@ -785,7 +1005,7 @@ var _sfc_main = {
 				error: "",
 				uncertain: this.uncertain,
 				valid: !this.blocked && this.contextValid,
-				canSave: this.fieldsToSave.length > 0 && (this.definition?.mode !== "edit" || this.dirty),
+				canSave: !this.fileValidating && this.fieldsToSave.length > 0 && (this.definition?.mode !== "edit" || this.dirty),
 				dirty: this.dirty,
 				batchEnabled: this.createBatch,
 				batchAllowed: this.batchCreationAllowed,
@@ -844,6 +1064,9 @@ var _sfc_main = {
 		},
 		unsupported() {
 			return (this.definition?.fields || []).filter(unsupportedField);
+		},
+		fileValidating() {
+			return Object.values(this.validatingFiles).some(Boolean);
 		}
 	},
 	watch: {
@@ -1020,7 +1243,7 @@ var _sfc_main = {
 			const file = event.target.files[0];
 			if (file) this.files[field.name] = file;
 			else delete this.files[field.name];
-			this.draft[field.name] = file?.name || "";
+			this.draft[field.name] = file?.name ?? this.baseline[field.name];
 		},
 		selectUploads(field, slot, event) {
 			const files = Array.from(event.target.files);
@@ -1064,6 +1287,7 @@ var _sfc_main = {
 			this.definition = null;
 			this.draft = this.baseline = {};
 			this.files = {};
+			this.validatingFiles = {};
 			this.selectedFields = [];
 			this.error = "";
 			this.discard = this.uncertain = false;
@@ -1103,6 +1327,7 @@ var _sfc_main = {
 			this.definition = null;
 			this.draft = this.baseline = {};
 			this.files = {};
+			this.validatingFiles = {};
 			this.uncertain = false;
 			this.$refs.dialog.close();
 		},
@@ -1111,7 +1336,7 @@ var _sfc_main = {
 				await this.saveCreationBatch();
 				return;
 			}
-			if (!this.contextValid || this.loading || this.saving || this.uncertain && !checkOnly || this.blocked || !this.fieldsToSave.length) return;
+			if (!this.contextValid || this.loading || this.fileValidating || this.saving || this.uncertain && !checkOnly || this.blocked || !this.fieldsToSave.length) return;
 			const request = this.request;
 			this.saving = true;
 			this.error = "";
@@ -1315,15 +1540,15 @@ var _hoisted_29 = [
 	"required"
 ];
 var _hoisted_30 = {
-	key: 16,
-	class: "muted"
-};
-var _hoisted_31 = {
 	key: 17,
 	class: "muted"
 };
-var _hoisted_32 = {
+var _hoisted_31 = {
 	key: 18,
+	class: "muted"
+};
+var _hoisted_32 = {
+	key: 19,
 	class: "muted"
 };
 var _hoisted_33 = {
@@ -1336,6 +1561,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 	const _component_AppButton = resolveComponent("AppButton");
 	const _component_ObjectEditorSurface = resolveComponent("ObjectEditorSurface");
 	const _component_AppColorInput = resolveComponent("AppColorInput");
+	const _component_ImagePicker = resolveComponent("ImagePicker");
 	const _component_AppFileInput = resolveComponent("AppFileInput");
 	const _component_AppSwitch = resolveComponent("AppSwitch");
 	const _component_AppDateField = resolveComponent("AppDateField");
@@ -1446,8 +1672,27 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"readonly",
 									"disabled",
 									"required"
-								])) : $options.kind(field) === "FileInput" ? (openBlock(), createBlock(_component_AppFileInput, {
+								])) : $options.kind(field) === "FileInput" && field.input.context === "icon" ? (openBlock(), createBlock(_component_ImagePicker, {
 									key: 7,
+									class: "record-preview-input",
+									role: "group",
+									"aria-label": field.title,
+									"model-value": $data.files[field.name] || null,
+									"status-text": $data.files[field.name]?.name || "",
+									disabled: $options.disabled(field),
+									required: $options.required(field),
+									onValidating: ($event) => $data.validatingFiles[field.name] = $event,
+									"onUpdate:modelValue": ($event) => $options.selectFile(field, { target: { files: $event ? [$event] : [] } })
+								}, null, 8, [
+									"aria-label",
+									"model-value",
+									"status-text",
+									"disabled",
+									"required",
+									"onValidating",
+									"onUpdate:modelValue"
+								])) : $options.kind(field) === "FileInput" ? (openBlock(), createBlock(_component_AppFileInput, {
+									key: 8,
 									id: `record-field-${$setup.formId}-${index}`,
 									label: field.title,
 									value: $data.files[field.name]?.name || "",
@@ -1462,7 +1707,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"required",
 									"onChange"
 								])) : $options.kind(field) === "MultiUpload" ? (openBlock(), createElementBlock("fieldset", {
-									key: 8,
+									key: 9,
 									id: `record-field-${$setup.formId}-${index}`,
 									disabled: $options.disabled(field),
 									class: "compound-upload"
@@ -1500,7 +1745,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										label: "Is revision"
 									}, null, 8, ["modelValue", "onUpdate:modelValue"])])
 								], 8, _hoisted_18)) : $options.kind(field) === "CheckboxWdg" ? (openBlock(), createBlock(_component_AppSwitch, {
-									key: 9,
+									key: 10,
 									id: `record-field-${$setup.formId}-${index}`,
 									name: $options.inputName(field),
 									"model-value": $options.checked($data.draft[field.name]),
@@ -1515,7 +1760,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"required",
 									"onUpdate:modelValue"
 								])) : $options.kind(field) === "TimeInputWdg" ? withDirectives((openBlock(), createElementBlock("input", {
-									key: 10,
+									key: 11,
 									id: `record-field-${$setup.formId}-${index}`,
 									type: "time",
 									step: "60",
@@ -1525,7 +1770,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									disabled: $options.batch && $options.disabled(field),
 									required: $options.required(field)
 								}, null, 8, _hoisted_27)), [[vModelText, $data.draft[field.name]]]) : $options.kind(field) === "CalendarInputWdg" ? (openBlock(), createBlock(_component_AppDateField, {
-									key: 11,
+									key: 12,
 									id: `record-field-${$setup.formId}-${index}`,
 									"include-time": field.input.type !== "date",
 									label: field.title,
@@ -1546,7 +1791,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"required",
 									"onUpdate:modelValue"
 								])) : $options.kind(field) === "SelectWdg" ? (openBlock(), createBlock(_component_AppSelect, {
-									key: 12,
+									key: 13,
 									id: `record-field-${$setup.formId}-${index}`,
 									modelValue: $data.draft[field.name],
 									"onUpdate:modelValue": ($event) => $data.draft[field.name] = $event,
@@ -1564,7 +1809,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"required",
 									"options"
 								])) : $options.kind(field) === "MultiSelectWdg" ? (openBlock(), createElementBlock("fieldset", {
-									key: 13,
+									key: 14,
 									id: `record-field-${$setup.formId}-${index}`,
 									disabled: $options.disabled(field)
 								}, [createBaseVNode("legend", null, toDisplayString(field.title), 1), (openBlock(true), createElementBlock(Fragment, null, renderList(field.choices, (value, option) => {
@@ -1579,7 +1824,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 										required: $options.required(field) && !$data.draft[field.name].length && option === 0
 									}, null, 8, _hoisted_29), [[vModelCheckbox, $data.draft[field.name]]])]);
 								}), 128))], 8, _hoisted_28)) : $options.kind(field) === "TextAreaWdg" ? (openBlock(), createBlock(_component_AppTextArea, {
-									key: 14,
+									key: 15,
 									label: field.title,
 									id: `record-field-${$setup.formId}-${index}`,
 									modelValue: $data.draft[field.name],
@@ -1602,7 +1847,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 									"rows",
 									"cols"
 								])) : $options.kind(field) === "TextWdg" ? (openBlock(), createBlock(_component_AppTextField, {
-									key: 15,
+									key: 16,
 									label: field.title,
 									id: `record-field-${$setup.formId}-${index}`,
 									modelValue: $data.draft[field.name],
@@ -1656,6 +1901,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 var RecordForm_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { unsupportedField as a, fieldKind as i, _sfc_main$2 as n, format as r, RecordForm_default as t };
+export { fieldKind as a, ImagePicker_default as i, _sfc_main$2 as n, unsupportedField as o, format as r, RecordForm_default as t };
 
 //# sourceMappingURL=RecordForm.js.map

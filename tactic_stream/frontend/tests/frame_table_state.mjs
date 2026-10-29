@@ -82,6 +82,20 @@ assert(
     action: { handler: 'pyasm.command.UploadAction', options: {} }
   })
 );
+const previewUpload = {
+  ...upload,
+  options: { icon_size: '100%' },
+  action: { handler: 'pyasm.command.UploadAction', options: {} }
+};
+assert(
+  !unsupportedField(previewUpload),
+  'Stock preview display size is supported'
+);
+for (const options of [
+  { ...previewUpload.options, client_action: 'custom' },
+  { ...previewUpload.options, unknown_option: 'custom' }
+])
+  assert(unsupportedField({ ...previewUpload, options }));
 
 const columns = [
   { name: 'name', title: 'Name', width: 160, hideOrder: 0, sortable: true },

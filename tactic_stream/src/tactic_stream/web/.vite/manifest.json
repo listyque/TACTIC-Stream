@@ -114,9 +114,10 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
+      "_textMetrics.js",
       "_richText.js",
       "_links.js",
-      "_textMetrics.js",
+      "_activity.js",
       "_AttachmentCard.js",
       "_FilePreview.js",
       "_previewFiles.js"
@@ -139,10 +140,22 @@
       "_CodeBlock.js",
       "_fields.ui.js",
       "_ObjectFieldFrame.js",
+      "_previewImage.js",
+      "_textMetrics.js",
       "_sections.ui.js"
     ],
     "css": [
       "assets/RecordForm.css"
+    ]
+  },
+  "_activity.js": {
+    "file": "assets/activity.js",
+    "name": "activity",
+    "imports": [
+      "index.html",
+      "_CodeBlock.js",
+      "_richText.js",
+      "_links.js"
     ]
   },
   "_confirmation.ui.js": {
@@ -232,6 +245,10 @@
       "index.html"
     ]
   },
+  "_previewImage.js": {
+    "file": "assets/previewImage.js",
+    "name": "previewImage"
+  },
   "_richText.js": {
     "file": "assets/richText.js",
     "name": "richText"
@@ -257,13 +274,7 @@
   },
   "_textMetrics.js": {
     "file": "assets/textMetrics.js",
-    "name": "textMetrics",
-    "imports": [
-      "index.html",
-      "_CodeBlock.js",
-      "_richText.js",
-      "_links.js"
-    ]
+    "name": "textMetrics"
   },
   "_tree.ui.js": {
     "file": "assets/tree.ui.js",
@@ -319,10 +330,11 @@
       "_CodeBlock.js",
       "_RecordForm.js",
       "_fields.ui.js",
+      "_textMetrics.js",
       "_sections.ui.js",
       "_richText.js",
       "_links.js",
-      "_textMetrics.js",
+      "_activity.js",
       "_ObjectReport.js",
       "_AttachmentCard.js",
       "_snapshot.ui.js",
@@ -487,6 +499,7 @@
       "_vue.js",
       "index.html",
       "_CodeBlock.js",
+      "_previewImage.js",
       "_sections.ui.js",
       "src/App.vue",
       "_NamingEditor.js"
@@ -674,7 +687,7 @@
       "index.html",
       "_CodeBlock.js",
       "_RecordForm.js",
-      "_textMetrics.js",
+      "_activity.js",
       "src/App.vue"
     ],
     "css": [

@@ -80,6 +80,7 @@ def main():
     queued.append(list(command))
     for pattern in [
         "frontend/tests/item_composition.mjs",
+        "frontend/tests/record_preview.mjs",
         "frontend/src/features/knowledge/*.{vue,js}",
         "frontend/src/features/collaboration/*.vue",
         "frontend/src/features/documentation/*.vue",

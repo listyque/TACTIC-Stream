@@ -6,7 +6,7 @@ import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { a as sourcePath } from "./files.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { t as _sfc_main$5 } from "./AppDialog.js";
-import { C as captionedSwitch } from "./App.js";
+import { x as captionedSwitch } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/object_checkin.ui.mjs
 function modeChoice(model, width, language) {
 	const tr = (text, values) => translate(text, language, values), compact = width < 360, headingHeight = model.inline ? 26 : 64, columns = compact || model.inline ? 2 : 3, gap = 8, cell = (width - gap * (columns - 1)) / columns, children = [label("multiFileCheckinQuestion", rect(0, 0, width, headingHeight), model.inline ? tr("Check in multiple files?") : tr("{count} files selected. Check in one group or separately in sequence?", { count: model.count }), { wrap: true })], choices = [[

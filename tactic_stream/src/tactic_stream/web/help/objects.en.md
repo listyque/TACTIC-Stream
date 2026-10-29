@@ -137,3 +137,7 @@ journal rejection. Existing source Undo/FileUndo/SchemaReplay/TransactionState c
 Independent database commits retain the native partial-commit boundary; this is not a distributed
 transaction. Full API parity remains false. The remaining ordinary-user file/system replay is
 the next compatibility block; Repository Sync and S3 are excluded.
+
+## Choosing a record preview
+
+In Create/Edit record, use Preview → Choose image. The selected PNG, JPEG, WebP, GIF or BMP appears in the form after validation. Undo image selection removes the staged choice; Cancel leaves the stored preview unchanged. Save changes uploads the image through the configured UploadAction and creates its repository preview. Display options such as `icon_size="100%"` do not disable this field. Other upload contexts keep their file selector.

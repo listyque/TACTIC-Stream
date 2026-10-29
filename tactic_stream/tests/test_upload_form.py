@@ -14,6 +14,66 @@ from pyasm.search.storage import Store
 class UploadForm(read_tests.ReadParity):
     test_expressions_and_sql_remain_explicitly_unsupported = None
 
+    def test_stock_preview_metadata_and_image_checkin(self):
+        from PIL import Image
+        from pyasm.command import Command
+        from pyasm.common import Environment
+        from pyasm.search import Search, SearchType, WidgetDbConfig
+        from pyasm.web import WebContainer
+        from tactic.ui.panel import EditCmd
+        from tactic_stream.server.interface import read_form
+        import upload_form_contract
+
+        with tempfile.TemporaryDirectory() as directory:
+            store = Store(Path(directory) / 'data')
+            shutil.copytree(self.store.data_dir, store.data_dir)
+            with request_context(RequestContext(store, 'admin', 'one')):
+                self.api.auth.bind_security('admin', self.ticket)
+                def configure():
+                    config = SearchType.create('config/widget_config')
+                    config.set_value('search_type', 'contract/work_item')
+                    config.set_value('view', 'preview_test')
+                    config.set_value('config', '''<config><preview_test>
+                      <element name="preview"><display class="tactic.ui.widget.SimpleUploadWdg">
+                        <icon_size>100%</icon_size>
+                      </display><action class="pyasm.command.UploadAction"/></element>
+                    </preview_test></config>''')
+                    config.commit()
+                command = Command()
+                command.execute = configure
+                command.get_transaction().set_sync(False)
+                Command.execute_cmd(command)
+                WidgetDbConfig.clear_cache()
+                form = read_form('contract/work_item', 'preview_test', upload_form_contract.PARENT)
+                field = form['fields'][0]
+                self.assertEqual(field['options']['icon_size'], '100%')
+                self.assertEqual(field['input'], dict(type='file', context='icon', column='preview'))
+                self.assertEqual(field['action']['handler'], 'pyasm.command.UploadAction')
+                path = Path(Environment.get_upload_dir()) / 'selected.png'
+                path.parent.mkdir(parents=True, exist_ok=True)
+                Image.new('RGB', (80, 60), 'blue').save(path)
+                original = path.read_bytes()
+                web = WebContainer.get_web()
+                web.params.clear()
+                for suffix, value in dict(path=path.name, ticket=Environment.get_ticket(), context='icon', column='preview').items():
+                    web.set_form_value('edit|preview|' + suffix, value)
+                command = EditCmd(search_key=upload_form_contract.PARENT, view='preview_test',
+                    input_prefix='edit', element_names=['preview'], expected_revision=form['expected_revision'])
+                command.get_transaction().set_sync(False)
+                Command.execute_cmd(command)
+                snapshots = Search('sthpw/snapshot')
+                snapshots.add_sobject_filter(Search.get_by_search_key(upload_form_contract.PARENT))
+                snapshots.add_filter('context', 'icon')
+                snapshot = snapshots.get_sobject()
+                self.assertIsNotNone(snapshot)
+                files = {file.get_type(): Path(file.get_lib_path()) for file in snapshot.get_all_file_objects()}
+                self.assertTrue({'main', 'web', 'icon'} <= files.keys())
+                self.assertEqual(files['main'].read_bytes(), original)
+                for kind in ('web', 'icon'):
+                    with Image.open(files[kind]) as image:
+                        image.verify()
+                self.assertEqual(Search.get_by_search_key(upload_form_contract.PARENT).get_value('name'), 'Parent')
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

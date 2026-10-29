@@ -5,7 +5,7 @@ import { n as sections } from "./sections.ui.js";
 import { o as projectPath } from "./links.js";
 import { n as buttonWidth } from "./metrics.js";
 import { t as listAction } from "./tree.ui.js";
-import { A as _sfc_main$5, At as change, Bt as reorder, Ct as mode, Dt as add, Et as type, Ft as geometry$1, Ht as siblings, It as kinds, J as selected, K as alignment, Lt as layers, M as zooms, Mt as duplicate, Nt as fingerprint, Ot as appearances, Pt as geometries, Rt as path, St as filter, Tt as scope$1, Ut as sizing, Vt as reparent, Wt as spacing, Y as toggle, Z as spacingField, bt as change$1, dt as notices, ht as toolbar$1, j as controls, jt as copy, kt as block, pt as sectionSelector, q as roots, ut as documentEvent, wt as options, xt as fields$1, yt as _sfc_main$4, zt as remove } from "./App.js";
+import { A as zooms, At as duplicate, Bt as siblings, Ct as scope$1, Dt as block, Et as appearances, Ft as layers, G as roots, Ht as spacing, It as path, K as selected, Lt as remove, Mt as geometries, Nt as geometry$1, O as _sfc_main$5, Ot as change, Pt as kinds, Rt as reorder, St as options, Tt as add, Vt as sizing, W as alignment, Y as spacingField, _t as _sfc_main$4, bt as filter, ct as documentEvent, dt as sectionSelector, jt as fingerprint, k as controls, kt as copy, lt as notices, pt as toolbar$1, q as toggle, vt as change$1, wt as type, xt as mode, yt as fields$1, zt as reparent } from "./App.js";
 //#region src/features/administration/PageEditorTools.vue
 var _sfc_main$1 = {
 	__name: "PageEditorTools",

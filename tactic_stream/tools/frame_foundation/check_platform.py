@@ -162,6 +162,7 @@ def fingerprints(handler):
             "frame_configuration_state.mjs",
             "frame_search_state.mjs",
             "frame_table_state.mjs",
+            "record_preview.mjs",
             "frame_dependencies_state.mjs",
             "frame_parent_state.mjs",
             "frame_variable_rows_state.mjs",
@@ -1313,6 +1314,7 @@ def main():
                 ("window-input", "frame_window_lifecycle"),
                 ("window-chrome", "frame_window_chrome"),
                 ("window-kinds", "window_types"),
+                ("record-preview", "record_preview"),
             ]
         ],
         (

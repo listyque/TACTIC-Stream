@@ -1,9 +1,9 @@
 import { A as onDeactivated, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, O as onActivated, P as renderList, U as watch, X as reactive, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, y as createTextVNode } from "./vue.js";
 import { $ as savePreferencePage, A as t, F as languages, L as saveAppearance, M as colorModes, N as effectiveColorMode, Q as preferences, X as configurationPreview, Z as normalizePreferences, c as _sfc_main$8, f as _sfc_main$7, h as debugSettings, it as themes, j as appearance, nt as accentPresets, ot as _plugin_vue_export_helper_default, rt as iconSets, z as controls } from "./index.js";
 import { Jt as label, L as _sfc_main$9, R as _sfc_main$11, T as AppSearchField_default, Xt as node, Yt as muted, Zt as rect, ct as rpc, et as projectCatalog, gt as serverConfiguration, i as _sfc_main$10, lt as saveServerConfiguration, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import { a as unsupportedField, i as fieldKind, t as RecordForm_default } from "./RecordForm.js";
-import { f as timestampFullLabel } from "./textMetrics.js";
-import { _ as editColumn, _t as views, a as updateModes, b as describe$3, d as ProjectCreation_default, f as ImagePicker_default, g as describe$2, h as contentWidth, i as updateIntervals, m as change, n as networkSettings, r as updateBatchDelays, u as lifecycle, v as fieldsFor, x as pages, y as confirmation } from "./App.js";
+import { a as fieldKind, i as ImagePicker_default, o as unsupportedField, t as RecordForm_default } from "./RecordForm.js";
+import { u as timestampFullLabel } from "./activity.js";
+import { _ as confirmation, a as updateModes, d as ProjectCreation_default, f as change, g as fieldsFor, h as editColumn, ht as views, i as updateIntervals, m as describe$2, n as networkSettings, p as contentWidth, r as updateBatchDelays, u as lifecycle, v as describe$3, y as pages } from "./App.js";
 //#region src/features/configuration/FrameSettings.vue
 var _sfc_main$6 = {
 	__name: "FrameSettings",

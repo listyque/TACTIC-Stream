@@ -3,7 +3,7 @@ import { A as t, ot as _plugin_vue_export_helper_default } from "./index.js";
 import { ct as rpc } from "./CodeBlock.js";
 import { i as linkifyPlainText } from "./richText.js";
 import { n as browserLink } from "./links.js";
-import { w as _sfc_main$1 } from "./App.js";
+import { S as _sfc_main$1 } from "./App.js";
 //#region src/features/objects/DescriptionEditor.vue
 var _hoisted_1 = ["aria-label"];
 var DescriptionEditor_default = /*#__PURE__*/ _plugin_vue_export_helper_default({

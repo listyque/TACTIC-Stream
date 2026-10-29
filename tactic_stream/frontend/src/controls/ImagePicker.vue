@@ -21,6 +21,7 @@ export default {
     statusText: String,
     description: String,
     inlineErrors: { type: Boolean, default: true },
+    required: Boolean,
     disabled: Boolean
   },
   emits: ['update:modelValue', 'validating', 'error'],
@@ -195,6 +196,7 @@ export default {
           accept="image/png,image/jpeg,image/webp,image/gif,image/bmp"
           hidden
           :disabled="disabled || loading"
+          :required="required && !modelValue"
           :aria-label="t('Choose preview image')"
           @change="choose"
         />
