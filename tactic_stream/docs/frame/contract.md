@@ -32,6 +32,10 @@ close-button feedback rounded; tab styling must not change general panel radii.
 The main project picker matches Handler's outlined 12px surface, panel fill,
 hover/pressed colors and content insets; generic button paint must not override it.
 
+Table inline popups describe their content using the measured inner width,
+including scrollbar changes. Their outer width includes padding and borders;
+description/tag surfaces prefer Handler's 620px width and keep actions inside.
+
 Table active rows and keyboard focus use the content-selection background across the whole row, without a separate row outline. Checked selection remains independent.
 
 The browser dialog host retains window geometry, restore bounds and maximized state when its title content is unmounted and recreated during close/reopen.

@@ -22460,7 +22460,7 @@ var _sfc_main$112 = {
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const panel = ref(null), frame = ref(null), value = ref(""), panelWidth = ref(300), inputHeight = ref(36);
+		const panel = ref(null), frame = ref(null), value = ref(""), contentWidth = ref(300), inputHeight = ref(36);
 		const initialValue = ref("");
 		const tagDraft = ref("");
 		const requiresSave = computed(() => props.editor?.explicitSave || explicitSave(mode.value));
@@ -22486,7 +22486,7 @@ var _sfc_main$112 = {
 			busy: props.busy,
 			uncertain: props.uncertain,
 			error: props.error ? t(props.error) : ""
-		}, panelWidth.value, appearance.language));
+		}, contentWidth.value, appearance.language));
 		function dispatch(action) {
 			if ([
 				"tagDraft",
@@ -22534,11 +22534,13 @@ var _sfc_main$112 = {
 			].includes(value.value);
 			initialValue.value = JSON.stringify(value.value);
 			await nextTick();
-			panelWidth.value = Math.max(1, Math.min(innerWidth - 36, props.editor?.preferredWidth || (multiline.value || mode.value === "tags" ? 600 : requiresSave.value ? Math.max(280, bounds.width - 8) : bounds.width - 8)));
+			const outerWidth = Math.max(1, Math.min(innerWidth - 36, props.editor?.preferredWidth || (multiline.value || mode.value === "tags" ? 620 : requiresSave.value ? Math.max(280, bounds.width - 8) : bounds.width - 8)));
 			inputHeight.value = props.editor?.explicitSave ? 36 : Math.max(36, bounds.height - 8);
-			panel.value.style.width = panelWidth.value + "px";
+			panel.value.style.width = outerWidth + "px";
 			panel.value.style.setProperty("--inline-height", bounds.height - 8 + "px");
 			panel.value.showPopover();
+			contentWidth.value = frameContentWidth(panel.value);
+			await nextTick();
 			panel.value.style.left = Math.max(8, Math.min(bounds.left + (requiresSave.value ? 0 : 4), innerWidth - panel.value.offsetWidth - 8)) + "px";
 			panel.value.style.top = Math.max(8, Math.min(requiresSave.value ? bounds.bottom + 4 : bounds.top + 4, innerHeight - panel.value.offsetHeight - 8)) + "px";
 			await nextTick();
@@ -22569,12 +22571,19 @@ var _sfc_main$112 = {
 		function moved(event) {
 			if (props.editor && (!(event.target instanceof Node) || !panel.value?.contains(event.target)) && !props.busy && !props.uncertain) cancel();
 		}
+		let observer;
 		onMounted(() => {
+			observer = observeFrameSizes((entries) => {
+				const width = entries.at(-1).contentRect.width;
+				if (width > 0) contentWidth.value = width;
+			});
+			observer.observe(panel.value);
 			window.addEventListener("pointerdown", outside, true);
 			window.addEventListener("scroll", moved, true);
 			window.addEventListener("resize", moved);
 		});
 		onBeforeUnmount(() => {
+			observer?.disconnect();
 			close();
 			window.removeEventListener("pointerdown", outside, true);
 			window.removeEventListener("scroll", moved, true);

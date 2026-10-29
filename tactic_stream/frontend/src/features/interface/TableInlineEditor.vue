@@ -5,6 +5,7 @@ import { appearance } from '../../appearance.js';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/inline.ui.mjs';
 import { fieldKind } from '../objects/recordFields.js';
 import { t } from '../../i18n.js';
+import { frameContentWidth, observeFrameSizes } from '../../frame/resize.js';
 
 const props = defineProps({
   editor: Object,
@@ -16,7 +17,7 @@ const emit = defineEmits(['save', 'cancel', 'check']);
 const panel = ref(null),
   frame = ref(null),
   value = ref(''),
-  panelWidth = ref(300),
+  contentWidth = ref(300),
   inputHeight = ref(36);
 const initialValue = ref('');
 const tagDraft = ref('');
@@ -67,7 +68,7 @@ const scene = computed(() =>
       uncertain: props.uncertain,
       error: props.error ? t(props.error) : ''
     },
-    panelWidth.value,
+    contentWidth.value,
     appearance.language
   )
 );
@@ -113,13 +114,13 @@ async function open(bounds) {
     value.value = [true, 1, '1', 'true', 'on'].includes(value.value);
   initialValue.value = JSON.stringify(value.value);
   await nextTick();
-  panelWidth.value = Math.max(
+  const outerWidth = Math.max(
     1,
     Math.min(
       innerWidth - 36,
       props.editor?.preferredWidth ||
         (multiline.value || mode.value === 'tags'
-          ? 600
+          ? 620
           : requiresSave.value
             ? Math.max(280, bounds.width - 8)
             : bounds.width - 8)
@@ -128,9 +129,11 @@ async function open(bounds) {
   inputHeight.value = props.editor?.explicitSave
     ? 36
     : Math.max(36, bounds.height - 8);
-  panel.value.style.width = panelWidth.value + 'px';
+  panel.value.style.width = outerWidth + 'px';
   panel.value.style.setProperty('--inline-height', bounds.height - 8 + 'px');
   panel.value.showPopover();
+  contentWidth.value = frameContentWidth(panel.value);
+  await nextTick();
   panel.value.style.left =
     Math.max(
       8,
@@ -195,12 +198,19 @@ function moved(event) {
   )
     cancel();
 }
+let observer;
 onMounted(() => {
+  observer = observeFrameSizes((entries) => {
+    const width = entries.at(-1).contentRect.width;
+    if (width > 0) contentWidth.value = width;
+  });
+  observer.observe(panel.value);
   window.addEventListener('pointerdown', outside, true);
   window.addEventListener('scroll', moved, true);
   window.addEventListener('resize', moved);
 });
 onBeforeUnmount(() => {
+  observer?.disconnect();
   close();
   window.removeEventListener('pointerdown', outside, true);
   window.removeEventListener('scroll', moved, true);
@@ -236,7 +246,8 @@ defineExpose({ open, close });
   position: fixed;
   inset: auto;
   margin: 0;
-  padding: 10px;
+  /* Handler's 12px content inset includes the CSS border here. */
+  padding: 11px;
   max-height: min(520px, calc(100dvh - 16px));
   overflow: auto;
   background: var(--surface-high);
