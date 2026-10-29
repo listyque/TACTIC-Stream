@@ -1107,6 +1107,7 @@ defineExpose({ viewport });
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  scrollbar-gutter: auto;
   margin: 0;
   border: 0;
   border-radius: 0;

@@ -28,6 +28,8 @@ You can resize a table generated from object fields immediately. The first chang
 
 In the CG project, Script shows the saved URL as a link. An empty Script field shows Not script as plain text.
 
+Table headers and rows fill the available width. Space for a scrollbar is reserved only while that scrollbar is needed.
+
 ## Edits and tasks
 
 Inputs resolve through edit/edit_definition and the real action.column. Assets Category therefore edits assets_category_code. Batch edits validate every revision before the first EditCmd; failure rolls back the entire batch. ID/code/project/timestamp/login and read_only are protected. Conflicts retain drafts; unknown save outcomes are checked before retrying. A ticket/project change blocks writes from the old draft.

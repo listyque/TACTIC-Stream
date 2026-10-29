@@ -1027,6 +1027,8 @@ def main():
         ("browser-table-disclosure-state", ["node", "frontend/tests/table_disclosure_state.mjs"], ROOT, {}),
         ("browser-table-last-column-resize", ["node", "frontend/tests/table_last_column_resize.mjs"], ROOT, {}),
         ("browser-table-definition-resize", ["node", "frontend/tests/table_definition_resize.mjs"], ROOT, {}),
+        ("browser-table-workspace-width", ["node", "frontend/tests/table_workspace_width.mjs"], ROOT, {}),
+        ("native-table-workspace-width", python + ["-m", "unittest", "-q", "tests.test_columns_table_view.ColumnsTableViewTests.test_result_table_instantiates_real_qml_with_both_scrollbars"], handler, {}),
         ("native-table-definition-resize", python + ["-m", "unittest", "-q", "tests.test_table_definition_resize"], handler, {}),
         ("browser-search-filter-menu", ["node", "frontend/tests/search_result_menu.mjs"], ROOT, {}),
         ("browser-table-header-color", ["node", "frontend/tests/table_header_color.mjs"], ROOT, {}),

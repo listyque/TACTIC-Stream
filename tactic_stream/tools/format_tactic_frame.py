@@ -111,7 +111,7 @@ def main():
         "frontend/src/features/objects/inspector.css",
         "frontend/src/features/workspace/links.js",
         "frontend/tests/{frame_objects*,description,snapshot_browser,object_report,record_create,object_links,object_batch,duplicate_sobject,mobile_objects,inspector_dock}.mjs",
-        "frontend/tests/{frame_table*,handler_table,table_cells,table_append,columns_editor,table_definition_resize,table_script_*}.mjs",
+        "frontend/tests/{frame_table*,handler_table,table_cells,table_append,columns_editor,table_definition_resize,table_workspace_width,table_script_*}.mjs",
         "frontend/src/features/interface/tableScript.js",
         "frontend/src/features/interface/{CustomLayoutView.vue,DashboardItems.vue,LayoutDocument.vue,ItemComposition.vue,customReport.js}",
         "frontend/tests/custom_urls.mjs",
