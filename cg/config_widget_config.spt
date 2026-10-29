@@ -2257,14 +2257,10 @@ insert.set_value('config', """<config>
     <element name="description"/>
     <element name="notes"/>
     <element name="texture_type" title="Texture Type" edit="true" color="false">
-      <display widget="default">
-        <type>string</type>
-      </display>
+      <display widget="default"/>
     </element>
     <element name="sub_type" title="Sub Type" edit="true" color="false">
-      <display widget="default">
-        <type>string</type>
-      </display>
+      <display widget="default"/>
     </element>
   </definition>
 </config>

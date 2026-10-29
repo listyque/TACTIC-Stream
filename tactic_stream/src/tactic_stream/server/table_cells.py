@@ -240,6 +240,16 @@ def describe_cell(element, columns, search_type=""):
         )
     )
     action = element["action"]["handler"]
+    native_database_action = (
+        widget is ExpressionElementWdg
+        and action in (
+            "DatabaseAction",
+            "pyasm.command.DatabaseAction",
+            "pyasm.command.edit_wdg_action.DatabaseAction",
+        )
+        and not set(element['action']['options']) - {'column'}
+        and (element['action']['options'].get('column') or field) in columns
+    )
     native_task_action = (
         widget in TASK_WIDGETS
         and action
@@ -287,7 +297,7 @@ def describe_cell(element, columns, search_type=""):
         widget is not None
         and isinstance(field, str)
         and (field in columns or computed)
-        and (not action or native_task_action or native_time_action or native_parent_action or native_drop_action)
+        and (not action or native_database_action or native_task_action or native_time_action or native_parent_action or native_drop_action)
     )
     allowed = {"column"}
     if widget in TIME_WIDGETS:
@@ -476,7 +486,9 @@ def describe_cell(element, columns, search_type=""):
         }
         # Native task selection, with Handler's fixed compact card presentation.
         allowed |= set(widget.ARGS_KEYS) - {"cbjs_action", "script_path"}
-        allowed |= {"collate_columns", "status_color", "font_size"}
+        # Legacy edit is redundant; native status/assignee editors retain their own ACL.
+        allowed |= {"collate_columns", "status_color", "font_size", "edit"}
+        supported = supported and options.get('edit') in (None, '', True, False, 'true', 'false')
         if widget is TaskSummaryElementWdg:
             supported = supported and options.get("mode") in (
                 None,

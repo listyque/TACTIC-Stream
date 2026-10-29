@@ -20,6 +20,15 @@ is stored as `cg/shot` view `episode_shots`, rather than an unsupported wrapper
 nested descriptors; the Script and snapshot-gallery tests cover their separate
 contracts. This normalization does not add general legacy HTML grouping support.
 
+Task cells also accept the original boolean `edit` display flag. It does not
+grant editing: the native status/assignee operations retain their own permission
+checks. An ExpressionElementWdg may declare the standard DatabaseAction only
+with its optional `column` pointing to an existing field. This keeps ordinary
+pipeline labels readable without admitting custom callbacks or changing writes.
+Unknown options, invalid booleans and unknown/missing action targets remain
+unsupported. `test_table_services.py` exercises stock XML task definitions,
+real task values and rejected callback/target variants.
+
 ## Portable descriptions
 
 | Module | Responsibility |

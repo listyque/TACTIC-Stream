@@ -53,6 +53,54 @@ class TableServices(unittest.TestCase):
                 element['display']['options']['not_a_real_option']='true'
                 self.assertFalse(describe_cell(element,{})['supported'])
 
+    def test_stock_task_edit_flag_does_not_disable_real_task_cells(self):
+        from pathlib import Path
+        from xml.etree import ElementTree as ET
+        from tactic_stream.server.interface import describe_view
+        from pyasm.widget import WidgetConfig, WidgetConfigView
+        source = Path(__file__).resolve().parents[1] / 'src/tactic_stream/config/search_type/widget/prod/DEFAULT-conf.xml'
+        definition = ET.fromstring(source.read_text(encoding='utf-8')).find('default_definition')
+        names = ('task_pipeline_panels', 'task_pipeline_vertical', 'task_pipeline_report', 'task_status_edit')
+        root = ET.Element('config')
+        node = ET.SubElement(root, 'definition')
+        for name in names:
+            node.append(definition.find("element[@name='%s']" % name))
+        xml = ET.tostring(root, encoding='unicode')
+        config = WidgetConfig.get(view='definition', xml=xml, use_cache=False)
+        elements = describe_view(WidgetConfigView('contract/entity', 'definition', [config]))['elements']
+        for element in elements:
+            self.assertTrue(describe_cell(element, {})['supported'], element['name'])
+            invalid = dict(element, display=dict(element['display'], options=dict(element['display']['options'], edit='arbitrary')))
+            self.assertFalse(describe_cell(invalid, {})['supported'])
+            unknown = dict(element, display=dict(element['display'], options=dict(element['display']['options'], unknown_task_option='true')))
+            self.assertFalse(describe_cell(unknown, {})['supported'])
+        def configure():
+            for view, content in [('definition', xml), ('table', '<config><table>' + ''.join('<element name="%s"/>' % name for name in names) + '</table></config>')]:
+                row = SearchType.create('config/widget_config')
+                row.set_value('search_type', 'contract/entity')
+                row.set_value('view', view)
+                row.set_value('config', content)
+                row.commit()
+            return Task.create(Search.get_by_code('contract/entity', 'A'), 'model', triggers=False)
+        from pyasm.biz import Task
+        task = write(configure)
+        parent = Search.get_by_code('contract/entity', 'A')
+        cells = read_table_cells('contract/entity', 'table', [parent.get_search_key()])[parent.get_search_key()]
+        for name in names:
+            self.assertNotIn('error', cells[name])
+            self.assertEqual(cells[name]['tasks'][0]['taskCode'], task.get_code())
+
+    def test_standard_database_action_keeps_expression_readable_and_checks_target(self):
+        element = dict(name='alias', display=dict(handler='tactic.ui.table.ExpressionElementWdg',
+            options=dict(expression='@GET(contract/entity.name)')),
+            action=dict(handler='pyasm.command.DatabaseAction', options=dict(column='name')))
+        columns = SearchType.get_column_info('contract/entity')
+        self.assertTrue(describe_cell(element, columns)['supported'])
+        for action in (dict(handler='untrusted.CustomAction', options=dict(column='name')),
+                       dict(handler='pyasm.command.DatabaseAction', options=dict(column='missing')),
+                       dict(handler='pyasm.command.DatabaseAction', options=dict(column='name', script='anything'))):
+            self.assertFalse(describe_cell(dict(element, action=action), columns)['supported'])
+
     def test_summary_counts_current_login_and_project_using_actual_timestamp_storage(self):
         from pyasm.widget.my_tactic_summary_wdg import MyTacticSummaryWdg
         with self.store.connection(write=True) as db:

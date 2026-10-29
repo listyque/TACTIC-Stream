@@ -18,7 +18,7 @@ def configurations():
         row = {ast.literal_eval(node.args[0]): ast.literal_eval(node.args[1])
                for node in ast.walk(ast.parse(block)) if isinstance(node, ast.Call)
                and isinstance(node.func, ast.Attribute) and node.func.attr == 'set_value'}
-        if row.get('search_type') in ('cg/scenes', 'cg/shot', 'cg/assets'):
+        if row.get('search_type') in ('cg/scenes', 'cg/shot', 'cg/assets', 'cg/texture'):
             yield row
 
 
@@ -30,16 +30,19 @@ class EpisodeWidgets(unittest.TestCase):
             api = Api(store)
             token = api.get_ticket('admin', 'episode-widgets-test')
             auth = dict(ticket=token, project='admin')
-            for stype in ('cg/scenes', 'cg/shot', 'cg/assets'):
+            for stype in ('cg/scenes', 'cg/shot', 'cg/assets', 'cg/texture'):
                 api.dispatch('create_search_type', (auth, stype, stype))
             for name in ('name', 'description', 'script', 'duration'):
                 api.dispatch('add_column_to_search_type', (auth, 'cg/scenes', name, 'text'))
+            for name in ('texture_type', 'sub_type', 'assets_category_code'):
+                api.dispatch('add_column_to_search_type', (auth, 'cg/texture', name, 'text'))
             for row in configurations():
                 if row['view'] in ('definition', 'table', 'episode_shots', 'episode_related_assets'):
                     api.dispatch('insert', (auth, 'config/widget_config',
                         {key: row[key] for key in ('search_type', 'view', 'config')}))
             records = [api.dispatch('insert', (auth, 'cg/scenes', dict(name=name)))
                        for name in ('Episode 01', 'Episode 02')]
+            texture = api.dispatch('insert', (auth, 'cg/texture', dict(texture_type='diffuse', sub_type='paint')))
             with request_context(RequestContext(store, 'admin', 'admin')):
                 api.auth.bind_security('admin', token)
                 interface = read_interface('cg/scenes')
@@ -68,6 +71,14 @@ class EpisodeWidgets(unittest.TestCase):
                 shots = read_interface('cg/shot', view='episode_shots')['table']['elements']
                 self.assertEqual([e['name'] for e in shots],
                     ['rendered', 'preview', 'name', 'start_frame', 'end_frame', 'description', 'notes'])
+                texture_interface = read_interface('cg/texture')
+                self.assertEqual([e['name'] for e in texture_interface['table']['elements'] if not e['cell']['supported']], [])
+                from pyasm.search import Search
+                stored_texture = Search.get_by_search_key(texture['__search_key__'])
+                for name, expected in [('texture_type', 'diffuse'), ('sub_type', 'paint')]:
+                    cell = next(e['cell'] for e in texture_interface['table']['elements'] if e['name'] == name)
+                    self.assertEqual(cell['kind'], 'text')
+                    self.assertEqual(stored_texture.get_value(cell['field']), expected)
 
 
 if __name__ == '__main__':
