@@ -1,9 +1,10 @@
 import { D as nextTick, E as mergeProps, I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
-import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Jt as label, Xt as node, Yt as muted, Zt as rect, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate, yt as sidebarRequest } from "./CodeBlock.js";
+import { L as _plugin_vue_export_helper_default, o as t, s as appearance } from "./AppButton.js";
+import { B as sidebarRequest } from "./index.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
+import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
 import { i as row$1, n as navigate } from "./tree.ui.js";
-import { ct as documentEvent, ft as tabs, lt as notices, pt as toolbar, ut as policy } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/sidebar/sidebar.ui.mjs
 var list = (id, bounds, source, rowHeight) => node("List", id, bounds, {
 	source,

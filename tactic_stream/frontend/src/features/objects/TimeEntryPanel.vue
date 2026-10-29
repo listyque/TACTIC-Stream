@@ -11,6 +11,7 @@ import AppButton from '../../controls/AppButton.vue';
 import AppSelect from '../../controls/AppSelect.vue';
 import { t } from '../../i18n.js';
 const props = defineProps({
+  pageContext: Function,
   dockTarget: String,
   dockReport: String,
   data: Object,
@@ -131,7 +132,11 @@ defineExpose({
     ><component
       :is="dockTarget ? 'section' : 'dialog'"
       v-show="!dockTarget || opened"
-      v-window="dockTarget ? false : { type: 'window' }"
+      v-window="
+        dockTarget
+          ? false
+          : { type: 'window', kind: 'work_hours', page: pageContext }
+      "
       ref="dialog"
       class="time-entry-panel"
       :class="{

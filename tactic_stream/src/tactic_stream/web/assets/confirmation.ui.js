@@ -1,4 +1,4 @@
-import { Jt as label, Zt as rect, qt as button, y as translate } from "./CodeBlock.js";
+import { L as button, R as label, V as rect, v as translate } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/controls/feedback/confirmation.ui.mjs
 function describe(model, width, height, language) {
 	const text = (key) => translate(key, language), compact = width < 380, margin = 16, inner = width - 32;

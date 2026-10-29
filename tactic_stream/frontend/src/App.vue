@@ -91,6 +91,8 @@ const SecurityUsers = asyncComponent(() => import('./features/administration/Sec
 const SecurityGroups = asyncComponent(() => import('./features/administration/SecurityGroups.vue'))
 const SecurityRules = asyncComponent(() => import('./features/administration/SecurityRules.vue'))
 
+import { readWindowPage, installWindowPages, bootstrapWindowPage } from './features/windows/windowPages.js'
+
 const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
@@ -104,7 +106,7 @@ export default {
       const address = customPageLink(link, location.origin)
       return address ? this.openBrowserLocation(null, address, false) : this.openRichLink(link, false, project)
     },
-    openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice('Access denied'),
+    openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.windowPage ? this.openWindowTaskManager(null, record, process, filters, taskKey) : this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice('Access denied'),
     openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
     openTableCheckin: (record,cell,project) => this.openTableCheckin(record,cell,project,true),
     openTableSecurity: code => this.openTableSecurity(code),
@@ -114,7 +116,7 @@ export default {
     openUserProfile: login => this.$refs.userProfile.open(login),
     openSnapshotBrowser: (record, process, project = this.workspaceProject) => {
       this.snapshotTarget = { project, key:record.__search_key__, process }
-      this.openDock('snapshot'); this.$refs.docks.show('snapshot')
+      this.openDock('snapshot'); this.$refs.docks?.show('snapshot')
     },
     openWorkHours: (mode, task, project) => this.openWorkHours(mode, task, project),
     currentLogin: () => this.session?.login || '',
@@ -123,6 +125,7 @@ export default {
   } },
   data() {
     return {
+      windowPage: readWindowPage(), windowPageClosed: false, windowPageContext: null, windowPageTool: null, windowPagePackages: [], windowPageToolProps: {},
       toolbarWidth: window.innerWidth,
       sessionRequest: 0,
       workHoursProjects: { week:'', report:'', cost:'' },
@@ -268,6 +271,7 @@ export default {
     },
     publicTypes() { return this.types.filter(item=>item.__record_read__?.available !== false && (!item.__record_read__?.project_mode || item.__record_read__.project_mode === this.currentProject?.type)) },
     shelfContext() {
+      if (this.windowPage?.kind === 'script_shelf_editor') return this.windowPageContext?.route?.shelf || {}
       const entry = this.flatViewLinks.find(item => item.key === this.activeWorkspaceSection?.navigationKey)
       return { entryKey: entry?.search_type && entry.name ? entry.search_type.split('?')[0] + '@' + entry.name : '', preset: entry?.display?.options?.script_shelf || '', title: this.activeWorkspaceSection?.title || '' }
     },
@@ -323,6 +327,7 @@ export default {
     finally { this.restoringSession = false }
   },
   mounted() {
+    this.windowPagesCleanup = installWindowPages(this)
     window.addEventListener('resize', this.updateToolbarSize)
     compactLayout.addEventListener('change', this.resizeLayout)
     shortcutLayout.addEventListener('change', this.resizeLayout)
@@ -331,6 +336,7 @@ export default {
     window.addEventListener('popstate', this.openBrowserLocation)
   },
   beforeUnmount() {
+    this.windowPagesCleanup?.()
     window.removeEventListener('resize', this.updateToolbarSize)
     resetNotifications()
     resetRequestActivity()
@@ -498,6 +504,7 @@ export default {
       this.navigationOpen = false
     },
     agentContext() {
+      if (this.windowPage && this.windowPageContext?.workspace) return {...this.windowPageContext.workspace,project:this.workspaceProject,search_keys:[...this.selectedKeys]}
       const view = this.workspaceView
       return { client: 'TS', project: this.workspaceProject || '', page: this.activeWorkspaceSection?.navigationKey || '',
         title: this.activeWorkspaceSection?.title || '', search_type: view.type || '', view: view.layoutView || view.view || this.view || '',
@@ -526,7 +533,7 @@ export default {
         if (this.session !== session) return
         this.agentProvidersComponent ||= markRaw(module.default)
         await nextTick()
-        if (this.session === session) this.$refs.agentProviders.open()
+        if (this.session === session) await this.$refs.agentProviders.open()
       } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-providers') }
     },
     async openAgentMcp(context, connectionId = '') {
@@ -536,7 +543,7 @@ export default {
         if (this.session !== session) return
         this.agentMcpComponent ||= markRaw(module.default)
         await nextTick()
-        if (this.session === session) this.$refs.agentMcp.open(context, connectionId)
+        if (this.session === session) await this.$refs.agentMcp.open(context, connectionId)
       } catch (error) { if (this.session === session) notify('error', error.message, '', 'agent-mcp') }
     },
     async openScriptEditor(path) {
@@ -786,6 +793,13 @@ export default {
     },
     saveSession() {
       if (!this.session) return
+      if (this.windowPage) {
+        try {
+          const saved = JSON.parse(localStorage.getItem('tactic_stream.session') || '{}')
+          localStorage.setItem('tactic_stream.session', JSON.stringify({...saved,...this.session}))
+        } catch { /* Keep the active session when storage is unavailable. */ }
+        return
+      }
       try {
         const selection = this.section === 'administration' ? this.workspaceSelection : this
         const state = { project: selection?.project ?? this.project, type: selection?.type ?? this.type, view: selection?.view ?? this.view, configuredView: selection?.configuredView ?? this.configuredView }
@@ -834,6 +848,7 @@ export default {
       this.types = types
       this.userIdentity = identity
       this.canAdminister = identity.administration === true
+      if (this.windowPage) { await bootstrapWindowPage(this); this.saveSession(); return }
       if (!projects.some(item => item.code === this.project)) this.project = ''
       if (!types.some(item => item.search_type === this.type)) this.type = ''
       this.workspaceProjects = readWorkspace(this.session.login, projects, types)
@@ -983,6 +998,7 @@ export default {
       }
     },
     persistWorkspace(event) {
+      if (this.windowPage) return
       if (!this.session) return
       // Chromium can shrink rows after beforeunload, before pagehide deactivates the document.
       this.captureSearchTab(event?.type !== 'pagehide')
@@ -1005,6 +1021,10 @@ export default {
       }
     },
     openDock(id, restoring = false) {
+      if (this.windowPage && id==='snapshot') {
+        window.dispatchEvent(new CustomEvent('tactic-window-page',{detail:{kind:'snapshot_browser',context:{project:this.snapshotTarget.project,route:{target:{key:this.snapshotTarget.key,process:this.snapshotTarget.process}}}}}))
+        return
+      }
       if (id === 'advanced_search') this.$refs.searchLibrary.open(true)
       if (['timesheet','work_reports','cost_reports'].includes(id)) this.openWorkHours(id === 'timesheet' ? 'week' : id === 'cost_reports' ? 'cost' : 'report')
       if (id === 'notes') {
@@ -1021,18 +1041,24 @@ export default {
       if (id === 'commit_queue' && !this.fileProject && !restoring) this.openCommitQueue()
     },
     async openWorkHours(mode = 'week', task = null, project = this.workspaceView.project, day = '') {
+      if (this.windowPage) {
+        const target = task ? {scope:{task_key:task.scope?.task_key, search_key:task.scope?.search_key,process:task.scope?.process}} : null
+        window.dispatchEvent(new CustomEvent('tactic-window-page',{detail:{kind:'work_hours',context:{project,route:{mode:mode==='week'?'week':'report',args:[target,false,true,day]}}}}))
+        return
+      }
       const id = mode === 'cost' ? 'cost_reports' : mode === 'report' ? 'work_reports' : 'timesheet'
       const panel = this.$refs[mode === 'cost' ? 'costReports' : mode === 'report' ? 'workReports' : 'timesheet']
       if (panel.context && panel.context.project !== project && (panel.draft || panel.busy || panel.uncertain)) {
         panel.error = 'Save or discard time-entry changes before switching projects.'
-        this.$refs.docks.show(id); return
+        this.$refs.docks?.show(id); return
       }
       this.workHoursProjects[mode] = project || this.workspaceView.project
       await nextTick()
-      this.$refs.docks.show(id)
+      this.$refs.docks?.show(id)
       await panel.open(task, false, true, day)
     },
     async openTaskInspector(record, cell = {}, process = '', taskKey = '', source = {}) {
+      if (this.windowPage) return this.$refs.activityNotes.open(record, cell, process, true, taskKey)
       const inspector = this.$refs.taskInspector
       if (!this.session || source.ticket && source.ticket !== this.session.ticket || !inspector?.canSwitchTarget()) return false
       if (this.administrationOpen) {
@@ -1066,11 +1092,11 @@ export default {
       if (this.$refs.taskManager?.opened && !this.$refs.taskManager.busy) this.$refs.taskManager.load(true)
     },
     openFileWorkspace() {
-      this.$refs.docks.show('commit_queue')
+      this.$refs.docks?.show('commit_queue')
       this.$refs.docks.move('commit_queue','center','results')
     },
     openCommitQueue() {
-      if(this.fileProject)this.openFileWorkspace()
+      if(!this.windowPage && this.fileProject)this.openFileWorkspace()
       else this.$refs.commitQueue.open()
     },
     savePreferences() {
@@ -1359,6 +1385,7 @@ export default {
       }
     },
     async loadRows(options = {}) {
+      if (this.windowPage) return
       if (this.layoutView && !this.administrationOpen) { this.$refs.workspacePages?.find(page => page.workspaceId === this.activeSearchTab?.id)?.reload(); return true }
       if (this.section === 'data' && !this.activeSearchTab) return
       const append = options.append === true && this.continuous
@@ -1491,6 +1518,7 @@ export default {
       catch (error) { this.fail(error) }
     },
     async loadNavigation() {
+      if (this.windowPage) return
       if (!this.session || !this.workspaceProject) return
       const project = this.workspaceProject, ticket = this.session.ticket
       const id = (this.navigationRequests[project] || 0) + 1
@@ -1549,7 +1577,7 @@ export default {
     openAdvancedSearch() {
       if (this.administrationOpen || this.sidebarSearch) this.$refs.searchLibrary.open()
       else {
-        this.$refs.docks.show('advanced_search')
+        this.$refs.docks?.show('advanced_search')
         this.openDock('advanced_search')
       }
     },
@@ -1655,6 +1683,7 @@ export default {
       else this.reloadWorkspace()
     },
     async reloadWorkspace(options = {}) {
+      if (this.windowPage) return
       for (const entry of this.retainedSearchTabs) {
         if (entry.tab.state.type === this.type) entry.tab.loaded = false
       }
@@ -1794,6 +1823,7 @@ export default {
       this.$refs.projectCreation.open()
     },
     async openCreatedProject(code, preserveSection = false) {
+      if (this.windowPage) { window.open('/projects/'+encodeURIComponent(code)+'/', '_blank', 'noopener'); return }
       const ticket = { ticket: this.session.ticket, project: 'admin', language: 'python' }
       const [projects, types] = await Promise.all([
         projectCatalog(this.session.ticket),
@@ -1821,6 +1851,10 @@ export default {
       return true
     },
     async editRecord(record = this.detail) {
+      if (this.windowPage) {
+        window.dispatchEvent(new CustomEvent('tactic-window-page',{detail:{kind:record.__search_key__.startsWith('sthpw/task?')?'task_editor':'add_sobject',context:{route:{searchType:record.__search_key__.split('?')[0],args:[record.__search_key__]}}}}))
+        return
+      }
       this.$refs.details.close()
       this.detail = record
       await nextTick()
@@ -1831,8 +1865,7 @@ export default {
       const key = record.taskCode || note ? record.targetSearchKey : target ? record.targetSearchKey : record.searchKey
       if (!key) return
       const base = key.split('?')[0]
-      await this.selectType(base)
-      if (this.type !== base || this.section !== 'data') return
+      if (!this.windowPage) { await this.selectType(base); if (this.type !== base || this.section !== 'data') return }
       const ticket = this.session.ticket, project = this.project
       try {
         const object = await rpc('get_by_search_key', [{ ticket, project }, key])
@@ -1844,6 +1877,7 @@ export default {
       } catch (error) { this.fail(error) }
     },
     writeLocation(replace = false) {
+      if (this.windowPage) return
       if (!this.routeReady || this.openingLink || !this.session || this.section !== 'data' || this.administrationOpen) return
       let url = workspaceAddress(this.workspaceProject, this.activeSearchTab ? this.type : '', this.view, this.navigationLink)
       if (this.attachmentLocation) {
@@ -1858,6 +1892,10 @@ export default {
       }
     },
     async openBrowserLocation(event, address = location, replace = true) {
+      if (this.windowPage) {
+        if (event?.type !== 'popstate' && address !== location) window.open(address.href || String(address),'_blank','noopener')
+        return
+      }
       if (mobile.value && event?.state?.mobileResult?.key === this.workspaceProject + ':' + this.activeSearchTab?.id + ':' + this.type
         && this.$refs.results?.querySelector('.configured-view[data-workspace-current="true"] .mobile-results')?.getClientRects().length) return
       if (!this.session) return
@@ -1921,6 +1959,12 @@ export default {
       finally { if (request === this.linkRequest) { this.openingLink = false; if (!custom || this.navigationLink === custom.address) this.writeLocation(replace) } }
     },
     async openRichLink(value, replace = false, projectContext = this.workspaceProject, showDetails = true) {
+      if (this.windowPage) {
+        const url = new URL(projectContext ? '/projects/'+encodeURIComponent(projectContext)+'/' : '/', location.origin)
+        url.searchParams.set('link',value)
+        window.open(url.href,'_blank','noopener')
+        return
+      }
       const request = ++this.linkRequest, ticket = this.session?.ticket, originProject = this.workspaceProject, originTab = this.activeSearchTab
       this.openingLink = true
       try {
@@ -1942,7 +1986,7 @@ export default {
           return
         }
         if (result.searchType?.endsWith('/th_knowledge_article')) {
-          this.navigationLink=value; this.knowledgeTarget=value; this.$refs.docks.show('knowledge'); this.openDock('knowledge'); this.saveSession(); return
+          this.navigationLink=value; this.knowledgeTarget=value; this.$refs.docks?.show('knowledge'); this.openDock('knowledge'); this.saveSession(); return
         }
         const object = result.parent || result.object, type = result.kind === 'saved-search' ? result.searchType : object.__search_type__.split('?')[0]
         const preset = result.preset
@@ -1982,20 +2026,24 @@ export default {
     async openTableCheckin(record,cell,project,toggle=false) {
       if (!this.canAdminister) return
       if (toggle && this.$refs.docks.presented('drop_plate')) {
-        await this.$refs.docks.hide('drop_plate')
+        await this.$refs.docks?.hide('drop_plate')
         return
       }
       if (['copy','move','local','inplace'].includes(cell.transferMode)) throw new Error('This configured check-in mode requires a desktop connection.')
       const target = {project,searchKey:record.__search_key__,title:record.name || record.title || record.code,record,
         process:cell.process || 'publish',context:cell.context || cell.process || 'publish'}
       if (toggle && ['project','searchKey','process','context'].every(key => this.tableCheckinTarget?.[key] === target[key])) {
-        this.$refs.docks.show('drop_plate')
+        this.$refs.docks?.show('drop_plate')
         return
       }
       if (!this.$refs.dropPlate.canLeave()) return
       this.$refs.dropPlate.clear()
       this.tableCheckinTarget = target
-      this.$refs.docks.show('drop_plate')
+      this.$refs.docks?.show('drop_plate')
+    },
+    openWindowTaskManager(user, record, process = '', filters = {}, taskKey = '') {
+      const args = user ? [false, user.login || '', user.key ? {[user.key]:user.value} : {}] : [true, '', {...filters,...(process?{process}:{})}, false, Array.isArray(record)?record:[record]]
+      window.dispatchEvent(new CustomEvent('tactic-window-page',{detail:{kind:'task_manager',context:{route:{args}}}}))
     },
     async inspect(record) {
       this.focusDescription({ record,kind:'object' })
@@ -2043,8 +2091,13 @@ export default {
       <AppearanceControls />
     </SignIn>
   </main>
-  <div v-else ref="workspace" class="workspace" :style="workspaceStyle" @pointerdown="dismissMenus" @keydown.esc="dismissMenus">
-    <header ref="topbar" class="topbar frame-main-toolbar" :style="{height:mainToolbar.height+'px','--project-preview-radius':mainToolbar.dimensions.projectPreviewRadius+'px'}" @toggle.capture="menuToggled">
+  <div v-else ref="workspace" class="workspace" :class="{'window-page': !!windowPage}" :style="workspaceStyle" @pointerdown="dismissMenus" @keydown.esc="dismissMenus">
+    <section v-if="windowPage && (windowPageClosed || error)" class="window-page-status">
+      <p>{{ error || t('Window closed') }}</p>
+      <AppButton label="Reopen window" icon="refresh" @click="error='';bootstrap()" />
+      <a :href="windowPage.project ? '/projects/'+encodeURIComponent(windowPage.project)+'/' : '/'">{{ t('Open workspace') }}</a>
+    </section>
+    <header v-show="!windowPage" ref="topbar" class="topbar frame-main-toolbar" :style="{height:mainToolbar.height+'px','--project-preview-radius':mainToolbar.dimensions.projectPreviewRadius+'px'}" @toggle.capture="menuToggled">
       <AppButton class="navigation-toggle frame-main-control" data-main-control="mainNavigation" :style="mainToolbarStyle('mainNavigation')" icon-only :label="navigationVisible ? 'Close navigation' : 'Open navigation'" :icon="navigationVisible ? 'close' : 'menu'"
         aria-controls="workspace-sidebar" :aria-expanded="navigationVisible" @click="toggleNavigation" />
       <AppButton class="project-picker frame-main-control" data-main-control="mainProject" :style="mainToolbarStyle('mainProject')" label="Project" :title="currentProject?.title || workspaceView.project" :data-project="workspaceView.project" popovertarget="project-chooser" @click="projectChooserOpening">
@@ -2076,17 +2129,23 @@ export default {
     </header>
     <Teleport defer :to="compactShortcuts ? '#compact-system-activity' : '#topbar-system-activity'"><SystemActivityButton :busy="!!activityProgress" :message="activityProgress" :compact="compactShortcuts" @open="$refs.systemActivity.open(); $refs.settingsMenu.open = false" /></Teleport>
     <Teleport defer :to="compactShortcuts ? '#compact-connection-menu' : '#topbar-connection-menu'"><ConnectionMenu :ticket="session.ticket" :project="workspaceProject" :online="connectionOnline" :compact="compactShortcuts" :updates-error="updatesError" :messages-initialized="serverBatch?.messagesInitialized" @busy="pingBusy = $event" @connection="connectionOnline = $event" @session-expired="logout('Session ended. Sign in again.')" /></Teleport>
-    <ProjectChooser :projects="projects" :selected="workspaceView.project" @selected="projectSelected" />
+    <ProjectChooser v-if="!windowPage" :projects="projects" :selected="workspaceView.project" @selected="projectSelected" />
     <ServerUpdates ref="serverUpdates" :ticket="session.ticket" :project="workspaceProject" :subscription="updateSubscription" @reset="serverBatch = null" @batch="serverBatch = $event; $refs.taskManager?.applyServerBatch($event)" @connection="connectionOnline = $event" @error="updatesError = $event" @session-expired="logout('Session ended. Sign in again.')" />
     <SystemActivity ref="systemActivity" @open-link="openRichLink" />
-    <UserProfile ref="userProfile" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" @message="$refs.messages.openDirect($event)" @tasks="$refs.messages.close(); $refs.taskManager.openForUser($event)" @activity="$refs.activityFeed.open($event)" @open-object="$refs.messages.close(); openActivityObject($event)" @open-link="$refs.messages.close(); openRichLink($event)" @logout="signOut" @saved="identity => { if(identity.login === session.login) userIdentity = identity; $refs.messages.refreshPeople() }" @session-expired="logout('Session ended. Sign in again.')" />
+    <UserProfile ref="userProfile" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" @message="$refs.messages.openDirect($event)" @tasks="!windowPage && $refs.messages.close(); windowPage ? openWindowTaskManager($event) : $refs.taskManager.openForUser($event)" @activity="$refs.activityFeed.open($event)" @open-object="!windowPage && $refs.messages.close(); openActivityObject($event)" @open-link="!windowPage && $refs.messages.close(); openRichLink($event)" @logout="signOut" @saved="identity => { if(identity.login === session.login) userIdentity = identity; $refs.messages.refreshPeople() }" @session-expired="logout('Session ended. Sign in again.')" />
     <MessagesView ref="messages" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" :updates-error="updatesError" @notification="messageNotification" @unread="messageUnread = $event" @open-link="openRichLink" @session-expired="logout('Session ended. Sign in again.')" @open-profile="$refs.userProfile.open($event)" @attachment-location="attachmentLocation = $event; writeLocation(true)" @quick-reply-sent="$refs.notifications.replySent($event)" @quick-reply-failed="$refs.notifications.replyFailed($event)" />
     <ActivityFeed @visibility="updatesActivityOpen = $event" ref="activityFeed" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :updates="serverBatch" :updates-error="updatesError" @notification="activityNotification" @unread="activityUnread = $event" @retry="$refs.serverUpdates.refresh()" @session-expired="logout('Session ended. Sign in again.')" @open-object="openActivityObject" @open-link="openRichLink" />
     <FilePreview ref="linkPreview" :ticket="session.ticket" :project="workspaceProject" :search-type="workspaceView.type" />
     <NotesPanel @visibility="updatesNotesOpen = $event" ref="activityNotes" :ticket="session.ticket" :project="project" :search-type="type" :updates="serverBatch" />
-    <NotesPanel ref="taskInspector" dock-target="#dock-notes" :active="taskInspectorActive" :ticket="session.ticket"
+    <NotesPanel v-if="!windowPage" ref="taskInspector" dock-target="#dock-notes" :active="taskInspectorActive" :ticket="session.ticket"
       :project="inspectorSource?.project || workspaceProject" :search-type="inspectorSource?.searchType || workspaceView.type" :updates="serverBatch"
-      @back="$refs.docks.show(inspectorReturn || 'results')" @visibility="$event ? $refs.docks.show('notes') : $refs.docks.hide('notes')" @saved="inspectorSaved" />
+      @back="$refs.docks?.show(inspectorReturn || 'results')" @visibility="$event ? $refs.docks?.show('notes') : $refs.docks?.hide('notes')" @saved="inspectorSaved" />
+    <component v-if="windowPageTool" :is="windowPageTool" ref="windowPageTool" v-bind="windowPageToolProps"
+      @changed="windowPage.kind==='project_templates' && bootstrap()" />
+    <dialog v-if="windowPage" v-window="{kind:'snapshot_browser',type:'window'}" ref="snapshotPage" class="configuration-dialog snapshot-page" :aria-label="t('Snapshot Browser')">
+      <header><h2>{{ t('Snapshot Browser') }}</h2><AppButton icon="close" label="Close" icon-only @click="$refs.snapshotPage.close()" /></header>
+      <div id="dock-snapshot" class="snapshot-page-content"></div>
+    </dialog>
     <UiPerformance ref="uiPerformance" @closed="$refs.settingsMenu?.focusTrigger()" />
     <component v-if="agentRequestComponent" :is="agentRequestComponent" ref="agentRequest" :ticket="session.ticket" :capture="agentContext" @providers="openAgentProviders" @mcp="openAgentMcp" />
     <component v-if="agentMcpComponent" :is="agentMcpComponent" ref="agentMcp" :ticket="session.ticket" :project="workspaceProject" />
@@ -2106,11 +2165,11 @@ export default {
       <NavigationTree v-else :entries="fallbackNavigation" :project="workspaceProject" :selected="workspaceView.type"
         @select="item => selectType(item.search_type)" />
     </NavigationDrawer>
-    <SectionTabRail v-if="!compactShortcuts" class="workspace-rail" :tabs="openSections" :selected="activeWorkspace?.current"
+    <SectionTabRail v-if="!windowPage && !compactShortcuts" class="workspace-rail" :tabs="openSections" :selected="activeWorkspace?.current"
       @select="activateSection" @close="closeSection" @reorder="(source, target) => reorderTabs(source, target, true)" />
-    <main class="workspace-main">
-    <Teleport v-if="fileProject" defer to="#dock-commit_queue"><FileWorkspace ref="fileWorkspace" :key="workspaceProject" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" @ready="openFileWorkspace" @help="$refs.help.open($event)" @debug="$refs.debugLog.open()" /></Teleport>
-    <DockWorkspace ref="docks" :mobile="compactShortcuts" :login="session.login" :ticket="session.ticket" :project="workspaceProject" :can-administer="canAdminister" :menu-target="dockMenuTarget" :results-active="section === 'data' && !!activeSearchTab" @open="openDock" @help="$refs.help.open($event)" @changing="captureSearchTab" @changed="dockLayoutChanged" @error="showWorkspaceNotice($event, true)">
+    <main :class="windowPage ? 'window-page-host' : 'workspace-main'">
+    <Teleport v-if="fileProject && !windowPage" defer to="#dock-commit_queue"><FileWorkspace ref="fileWorkspace" :key="workspaceProject" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :can-administer="canAdminister" @ready="openFileWorkspace" @help="$refs.help.open($event)" @debug="$refs.debugLog.open()" /></Teleport>
+    <DockWorkspace v-if="!windowPage" ref="docks" :mobile="compactShortcuts" :login="session.login" :ticket="session.ticket" :project="workspaceProject" :can-administer="canAdminister" :menu-target="dockMenuTarget" :results-active="section === 'data' && !!activeSearchTab" @open="openDock" @help="$refs.help.open($event)" @changing="captureSearchTab" @changed="dockLayoutChanged" @error="showWorkspaceNotice($event, true)">
       <template #view-actions>
         <Teleport v-if="!administrationOpen" :to="mobileViewMenuTarget || 'body'" :disabled="!compactShortcuts || !mobileViewMenuTarget"><AppMenu ref="viewMenu" v-show="!compactShortcuts || !!mobileViewMenuTarget" :class="{ 'dock-group-menu':!compactShortcuts }" :inline="compactShortcuts && !!mobileViewMenuTarget" :submenu="!compactShortcuts" :overlay="!compactShortcuts" label="View actions" @click="compactShortcuts && $refs.resultActions?.close()" @toggle="menuToggled">
             <template v-if="!administrationOpen && !compactShortcuts" #trigger><AppIcon name="edit" /><span>{{ t('View actions') }}</span><AppIcon name="next" /></template>
@@ -2136,7 +2195,7 @@ export default {
     <dialog v-window="{kind:'administration'}" ref="administrationDialog" class="configuration-dialog administration-dialog" :aria-label="t('Administration')" @cancel.prevent="leaveAdministration" @close="administrationClosed">
       <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,layoutParent,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" />
     </dialog>
-    <Teleport defer :to="administrationOpen ? '#administration-pages' : '#workspace-data'">
+    <Teleport defer :disabled="!!windowPage && !administrationOpen" :to="administrationOpen ? '#administration-pages' : '#workspace-data'">
     <div v-if="administrationOpen && administrationVisited.includes('types')" v-show="administrationSection === 'types'" class="administration-page"><SearchTypes :presentation-visible="administrationSection === 'types'" @vue:mounted="administrationInstances.types = $event.component.proxy" ref="searchTypes" @open-workflow="openAdministrationWorkflow" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('schema')" v-show="administrationSection === 'schema'" class="administration-page"><SchemaEditor :presentation-visible="administrationSection === 'schema'" @vue:mounted="administrationInstances.schema = $event.component.proxy" ref="schema" @node-workflows="schemaNodeWorkflows" @type-workflow="values=>openAdministrationWorkflow(values,'schema')" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>
@@ -2262,7 +2321,7 @@ export default {
       </DockWorkspaceFooter>
     </section>
     </Teleport>
-    <section v-if="section === 'data' && !activeSearchTab" class="workspace-empty">
+    <section v-if="!windowPage && section === 'data' && !activeSearchTab" class="workspace-empty">
       <AppIcon name="search" /><h1>{{ t('No Search Type open') }}</h1>
       <p v-if="workspaceProject" class="muted">{{ t('Open navigation and choose a Search Type to start searching.') }}</p>
       <AppButton v-if="workspaceProject" icon="menu" label="Open navigation" @click="openNavigation" />
@@ -2273,7 +2332,7 @@ export default {
     <dialog v-window="{kind:'sidebar_search_preview'}" ref="sidebarSearchDialog" class="configuration-dialog sidebar-search-dialog" :aria-label="t('Configure search')" @cancel.prevent="closeSidebarSearch">
       <div class="sidebar-search-shell"><header><div><h2>{{ t('Configure search') }}</h2><p>{{ sidebarSearch?.entry.title }} В· {{ sidebarSearch?.entry.searchType }}</p></div><div id="sidebar-search-actions" class="configuration-actions"><AppButton icon-only label="Quick filters" icon="filter" :disabled="busy" @click="$refs.quickFilterEditor.open()" /><AppButton label="Saved searches" icon="save" :disabled="busy" @click="$refs.searchLibrary.open()" /></div><AppButton label="Close" icon="close" @click="closeSidebarSearch" /></header><div id="sidebar-search-pages"></div></div>
     </dialog>
-    <SearchLibrary ref="searchLibrary" :selections="quickSelections" :active="searchEditorActive" @closed="$event && $refs.docks.hide('advanced_search')" :tab-id="activeSearchTab?.id" :tab-title="activeSearchTab ? searchTabTitle(activeSearchTab) : ''" @rename="renameCurrentSearchTab" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
+    <SearchLibrary ref="searchLibrary" :selections="quickSelections" :active="searchEditorActive" @closed="$event && $refs.docks?.hide('advanced_search')" :tab-id="activeSearchTab?.id" :tab-title="activeSearchTab ? searchTabTitle(activeSearchTab) : ''" @rename="renameCurrentSearchTab" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :records="filterRecords" :preset="savedSearch" :keyword="searchText" :order-bys="sortField ? [`${sortField} ${sortDirection}`] : presetOrderBys" :can-manage="canAdminister" @apply="applySearchLibrary" @changed="searchConfigurationChanged" />
     <QuickFilterEditor ref="quickFilterEditor" :tab-id="activeSearchTab?.id" :ticket="session.ticket" :project="project" :search-type="type" :scope="scopeKey || type.split('?')[0]" :selections="quickSelections" :layout="quickLayout" :can-manage="canAdminister" @apply="applyQuickFilters" @changed="searchConfigurationChanged(); $refs.quickFilters?.load(true)" />
     <dialog v-window="{kind:'sobject_info'}" ref="details" class="app-dialog object-details" :aria-label="t('Object details')">
       <template v-if="detail">
@@ -2297,11 +2356,11 @@ export default {
     <SnapshotBrowser v-if="snapshotMounted" :ticket="session.ticket" :project="workspaceProject" :target="snapshotTarget" :active="snapshotActive" @changed="reloadWorkspace({ restore:true })" @session-expired="logout" />
     <Teleport defer to="#dock-knowledge"><KnowledgeBase v-if="knowledgeMounted" ref="knowledge" :ticket="session.ticket" :project="workspaceProject" :login="session.login" :active="knowledgeActive" :target="knowledgeTarget" :selection="(workspaceView.rows||[]).filter(record=>(workspaceView.selectedKeys||[]).includes(record.__search_key__))" @changed="reloadWorkspace({restore:true})" @location="navigationLink=$event; writeLocation(true)" @session-expired="logout" @open-link="openRichLink" /></Teleport>
     <DropPlate ref="dropPlate" :ticket="session.ticket" :project="tableCheckinTarget?.project || workspaceProject" :target="tableCheckinTarget || (snapshotTarget ? { ...descriptionTarget, project:snapshotTarget.project, searchKey:snapshotTarget.key, process:snapshotTarget.process } : descriptionTarget)" @help="$refs.help.open($event)" />
-    <CommitQueue :presentation-visible="!fileProject" ref="commitQueue" inline :can-administer="canAdminister" :login="session.login" :ticket="session.ticket" :project="workspaceProject" @changed="checkins = $event" @completed="$refs.dropPlate.completed($event); reloadWorkspace({ restore: true })" @opened="$event ? $refs.docks.show('commit_queue') : $refs.docks.hide('commit_queue')" @closed="$refs.docks.hide('commit_queue')" @help="$refs.help.open($event)" @snapshot="snapshotTarget = { project:$event.project, key:$event.snapshot?.__search_key__ || $event.searchKey, process:$event.process }; openDock('snapshot'); $refs.docks.show('snapshot')" />
-    <Timesheet ref="timesheet" dock-target="#dock-timesheet" dock-mode="week" :ticket="session.ticket" :project="workHoursProjects.week || workspaceView.project" :current-user="session.login" @opened="$refs.docks.show('timesheet')" @closed="$refs.docks.hide('timesheet')" @open-dock="openWorkHours($event,$refs.timesheet.task,workHoursProjects.week)" @saved="reloadWorkspace" />
-    <Timesheet ref="workReports" dock-target="#dock-work_reports" dock-mode="report" :ticket="session.ticket" :project="workHoursProjects.report || workspaceView.project" :current-user="session.login" @opened="$refs.docks.show('work_reports')" @closed="$refs.docks.hide('work_reports')" @open-dock="openWorkHours($event,$refs.workReports.task,workHoursProjects.report)" @saved="reloadWorkspace" />
-    <Timesheet ref="costReports" dock-target="#dock-cost_reports" dock-mode="report" dock-report="labor_cost" :ticket="session.ticket" :project="workHoursProjects.cost || workspaceView.project" :current-user="session.login" @opened="$refs.docks.show('cost_reports')" @closed="$refs.docks.hide('cost_reports')" @open-dock="openWorkHours($event,$refs.costReports.task,workHoursProjects.cost)" @saved="reloadWorkspace" />
-    <TaskManager ref="taskManager" docked calendar-target="#dock-task_calendar" :calendar-active="taskCalendarActive" @calendar="$refs.docks.show('task_calendar'); openDock('task_calendar')" :ticket="session.ticket" :project="workspaceView.project" :current-user="session.login" :search-type="workspaceView.type" :search-type-title="(workspaceView.types || types).find(item => item.search_type === workspaceView.type)?.title || ''" @opened="updatesTasksOpen = true; $refs.docks.show('tasks')" @closed="updatesTasksOpen = taskCalendarActive; $refs.docks.hide('tasks')"
+    <CommitQueue :presentation-visible="!fileProject" ref="commitQueue" :inline="!windowPage" :can-administer="canAdminister" :login="session.login" :ticket="session.ticket" :project="workspaceProject" @changed="checkins = $event" @completed="$refs.dropPlate.completed($event); reloadWorkspace({ restore: true })" @opened="$event ? $refs.docks?.show('commit_queue') : $refs.docks?.hide('commit_queue')" @closed="$refs.docks?.hide('commit_queue')" @help="$refs.help.open($event)" @snapshot="snapshotTarget = { project:$event.project, key:$event.snapshot?.__search_key__ || $event.searchKey, process:$event.process }; openDock('snapshot'); $refs.docks?.show('snapshot')" />
+    <Timesheet v-if="!windowPage" ref="timesheet" dock-target="#dock-timesheet" dock-mode="week" :ticket="session.ticket" :project="workHoursProjects.week || workspaceView.project" :current-user="session.login" @opened="$refs.docks?.show('timesheet')" @closed="$refs.docks?.hide('timesheet')" @open-dock="openWorkHours($event,$refs.timesheet.task,workHoursProjects.week)" @saved="reloadWorkspace" />
+    <Timesheet v-if="!windowPage" ref="workReports" dock-target="#dock-work_reports" dock-mode="report" :ticket="session.ticket" :project="workHoursProjects.report || workspaceView.project" :current-user="session.login" @opened="$refs.docks?.show('work_reports')" @closed="$refs.docks?.hide('work_reports')" @open-dock="openWorkHours($event,$refs.workReports.task,workHoursProjects.report)" @saved="reloadWorkspace" />
+    <Timesheet v-if="!windowPage" ref="costReports" dock-target="#dock-cost_reports" dock-mode="report" dock-report="labor_cost" :ticket="session.ticket" :project="workHoursProjects.cost || workspaceView.project" :current-user="session.login" @opened="$refs.docks?.show('cost_reports')" @closed="$refs.docks?.hide('cost_reports')" @open-dock="openWorkHours($event,$refs.costReports.task,workHoursProjects.cost)" @saved="reloadWorkspace" />
+    <TaskManager v-if="!windowPage || windowPage.kind==='task_manager'" ref="taskManager" :docked="!windowPage" :calendar-target="windowPage ? undefined : '#dock-task_calendar'" :calendar-active="taskCalendarActive" @calendar="$refs.docks?.show('task_calendar'); openDock('task_calendar')" :ticket="session.ticket" :project="workspaceView.project" :current-user="session.login" :search-type="workspaceView.type" :search-type-title="(workspaceView.types || types).find(item => item.search_type === workspaceView.type)?.title || ''" @opened="updatesTasksOpen = true; $refs.docks?.show('tasks')" @closed="updatesTasksOpen = taskCalendarActive; $refs.docks?.hide('tasks')"
       @snapshot-context="snapshotTarget = $event" @task-context="followInspector($event.parent, $event.process, $event.__search_key__)" :parents="(workspaceView.rows || []).filter(record => (workspaceView.selectedKeys || []).includes(record.__search_key__))" @saved="reloadWorkspace({ restore: true })" @object="inspect" />
     <ProjectCreation ref="projectCreation" :ticket="session.ticket" :open-project="openCreatedProject" />
   </div>

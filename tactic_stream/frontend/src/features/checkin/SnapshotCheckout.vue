@@ -19,7 +19,8 @@ const loading = ref(false),
   progress = ref(0),
   error = ref(''),
   message = ref('');
-let generation = 0,
+let recordKey = '',
+  generation = 0,
   download,
   scope;
 const rows = computed(() =>
@@ -65,6 +66,7 @@ function close() {
 }
 async function open(record) {
   close();
+  recordKey = record.__search_key__;
   const request = generation;
   scope = { ticket: props.ticket, project: props.project };
   loading.value = true;
@@ -161,13 +163,25 @@ watch(
   () => close()
 );
 onBeforeUnmount(() => close());
-defineExpose({ open, close });
+function windowContext() {
+  if (busy.value || loading.value)
+    throw Error('Please wait for the current operation to finish');
+  return {
+    project: props.project,
+    route: { args: [{ __search_key__: recordKey }] }
+  };
+}
+defineExpose({ open, close, windowContext });
 </script>
 <template>
   <Teleport to="body">
     <dialog
       ref="dialog"
-      v-window="{ type: 'dialog', kind: 'snapshot_checkout' }"
+      v-window="{
+        type: 'dialog',
+        kind: 'snapshot_checkout',
+        page: windowContext
+      }"
       class="record-dialog snapshot-checkout"
       :style="style"
       :aria-label="t('Check out')"

@@ -1,7 +1,6 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ApiDocumentation.js","assets/vue.js","assets/CodeBlock.js","assets/icons.js","assets/CodeBlock.css","assets/ApiDocumentation.css","assets/App.js","assets/rolldown-runtime.js","assets/RecordForm.js","assets/fields.ui.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/previewImage.js","assets/textMetrics.js","assets/sections.ui.js","assets/RecordForm.css","assets/richText.js","assets/links.js","assets/activity.js","assets/ObjectReport.js","assets/AttachmentCard.js","assets/AttachmentCard.css","assets/FilePreview.js","assets/file_values.js","assets/snapshot.ui.js","assets/files.js","assets/files2.js","assets/FilePreview.css","assets/previewFiles.js","assets/ObjectReport.css","assets/metrics.js","assets/workspace.ui.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/markdown-it.js","assets/AppMenuItem.js","assets/AppMenuItem.css","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
-import { C as h, F as renderSlot, K as withCtx, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, U as watch, W as watchEffect, X as reactive, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeClass, p as computed, q as withDirectives, r as render, rt as normalizeStyle, tt as unref, u as Fragment, x as defineAsyncComponent } from "./vue.js";
-import { n as en_default, t as ru_default } from "./locales.js";
-import { n as resolveIcon } from "./icons.js";
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Timesheet.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/resize.js","assets/resize.css","assets/ObjectFieldFrame.css","assets/Timesheet.css","assets/ConfiguredView.js","assets/textMetrics.js","assets/sections.ui.js","assets/RecordForm.js","assets/RecordForm.css","assets/admin.document.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/markdown-it.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/ProcessRules.js","assets/ProcessRules.css","assets/DuplicateSObject.js","assets/DuplicateSObject.css","assets/IngestFiles.js","assets/IngestFiles.css","assets/ObjectCheckin.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/ProjectTemplates.js","assets/ProjectTemplates.css","assets/MilestoneManager.js","assets/MilestoneManager.css","assets/SnapshotCheckout.js","assets/FrameProgress.js","assets/FrameProgress.css","assets/SnapshotCheckout.css","assets/ApiDocumentation.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/ApiDocumentation.css","assets/App.js","assets/tree.ui.js","assets/App.css"])))=>i.map(i=>d[i]);
+import { C as h, D as nextTick, N as openBlock, P as renderList, Q as shallowReactive, U as watch, W as watchEffect, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, n as createApp, nt as normalizeClass, r as render, rt as normalizeStyle, tt as unref, u as Fragment, x as defineAsyncComponent } from "./vue.js";
+import { D as configurationPreview, I as BusyIndicator_default, S as layout, d as initializeAppearance, o as t, t as _sfc_main$1 } from "./AppButton.js";
 //#region \0vite/modulepreload-polyfill.js
 (function polyfill() {
 	const relList = document.createElement("link").relList;
@@ -32,1262 +31,6 @@ import { n as resolveIcon } from "./icons.js";
 		fetch(link.href, fetchOpts);
 	}
 })();
-//#endregion
-//#region \0plugin-vue:export-helper
-var _plugin_vue_export_helper_default = (sfc, props) => {
-	const target = sfc.__vccOpts || sfc;
-	for (const [key, val] of props) target[key] = val;
-	return target;
-};
-var BusyIndicator_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
-	__name: "BusyIndicator",
-	props: { running: Boolean },
-	setup(__props) {
-		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("span", {
-				class: normalizeClass(["busy-indicator", { running: __props.running }]),
-				"aria-hidden": "true"
-			}, null, 2);
-		};
-	}
-}, [["__scopeId", "data-v-bc754be8"]]);
-//#endregion
-//#region src/appearanceCatalog.js
-var themes = [
-	{
-		"value": "md3",
-		"label": "Material Design 3",
-		"description": "Current TACTIC-Handler appearance"
-	},
-	{
-		"value": "material5",
-		"label": "Material Design 5 (preview)",
-		"description": "Experimental project theme, not an official specification"
-	},
-	{
-		"value": "fluent",
-		"label": "Fluent Design",
-		"description": "Compact Windows-oriented surfaces and motion"
-	}
-];
-var iconSets = [
-	{
-		"value": "automatic",
-		"label": "Automatic",
-		"description": "Material-first icons with safe fallbacks"
-	},
-	{
-		"value": "fontawesome-solid",
-		"label": "Font Awesome Solid",
-		"description": "Bold, filled application icons"
-	},
-	{
-		"value": "fontawesome-outline",
-		"label": "Font Awesome Outline",
-		"description": "Lighter outlined icons where available"
-	},
-	{
-		"value": "material-design",
-		"label": "Material Design Icons",
-		"description": "Material Design icon vocabulary"
-	},
-	{
-		"value": "fluent-regular",
-		"label": "Fluent Regular",
-		"description": "Modern outlined Fluent System icons"
-	},
-	{
-		"value": "fluent-filled",
-		"label": "Fluent Filled",
-		"description": "Modern filled Fluent System icons"
-	}
-];
-var accentPresets = [
-	{
-		"value": "steel",
-		"label": "Steel",
-		"light": "#3d7599",
-		"dark": "#78a6c4",
-		"lightBase": "#d4dce1",
-		"darkBase": "#292d30"
-	},
-	{
-		"value": "silver",
-		"label": "Silver",
-		"light": "#67717a",
-		"dark": "#b4bec6",
-		"lightBase": "#d9dde0",
-		"darkBase": "#303336"
-	},
-	{
-		"value": "ash",
-		"label": "Ash",
-		"light": "#656662",
-		"dark": "#adafaa",
-		"lightBase": "#d8d8d6",
-		"darkBase": "#2e2e2c"
-	},
-	{
-		"value": "graphite",
-		"label": "Graphite",
-		"light": "#535a60",
-		"dark": "#9da5ab",
-		"lightBase": "#d2d4d5",
-		"darkBase": "#27292b"
-	},
-	{
-		"value": "charcoal",
-		"label": "Charcoal",
-		"light": "#41494f",
-		"dark": "#89939a",
-		"lightBase": "#ccd0d2",
-		"darkBase": "#202326"
-	},
-	{
-		"value": "blue",
-		"label": "Blue",
-		"light": "#2563a6",
-		"dark": "#6ea8e6",
-		"lightBase": "#d6dce8",
-		"darkBase": "#272d36"
-	},
-	{
-		"value": "azure",
-		"label": "Azure",
-		"light": "#0078b8",
-		"dark": "#62b3dc",
-		"lightBase": "#d2dfe5",
-		"darkBase": "#253037"
-	},
-	{
-		"value": "cyan",
-		"label": "Cyan",
-		"light": "#007c91",
-		"dark": "#5bc0d1",
-		"lightBase": "#d0dfe1",
-		"darkBase": "#253234"
-	},
-	{
-		"value": "teal",
-		"label": "Teal",
-		"light": "#087f6a",
-		"dark": "#5abfa9",
-		"lightBase": "#d2dfdc",
-		"darkBase": "#263330"
-	},
-	{
-		"value": "emerald",
-		"label": "Emerald",
-		"light": "#27824c",
-		"dark": "#65b982",
-		"lightBase": "#d5dfd8",
-		"darkBase": "#29332c"
-	},
-	{
-		"value": "green",
-		"label": "Green",
-		"light": "#4c7d28",
-		"dark": "#86b85a",
-		"lightBase": "#d9dfd3",
-		"darkBase": "#2d3328"
-	},
-	{
-		"value": "lime",
-		"label": "Lime",
-		"light": "#637a1b",
-		"dark": "#a5bd4f",
-		"lightBase": "#dde0d2",
-		"darkBase": "#303326"
-	},
-	{
-		"value": "amber",
-		"label": "Amber",
-		"light": "#946500",
-		"dark": "#d5ad48",
-		"lightBase": "#e3dccb",
-		"darkBase": "#373126"
-	},
-	{
-		"value": "orange",
-		"label": "Orange",
-		"light": "#a65316",
-		"dark": "#e08b4e",
-		"lightBase": "#e2d7cf",
-		"darkBase": "#372d27"
-	},
-	{
-		"value": "coral",
-		"label": "Coral",
-		"light": "#a4483c",
-		"dark": "#de786b",
-		"lightBase": "#e2d5d2",
-		"darkBase": "#372b2a"
-	},
-	{
-		"value": "red",
-		"label": "Red",
-		"light": "#a93f4d",
-		"dark": "#de7180",
-		"lightBase": "#e1d3d5",
-		"darkBase": "#36292c"
-	},
-	{
-		"value": "rose",
-		"label": "Rose",
-		"light": "#a83e78",
-		"dark": "#dd75a9",
-		"lightBase": "#e2d3db",
-		"darkBase": "#362a31"
-	},
-	{
-		"value": "violet",
-		"label": "Violet",
-		"light": "#76558d",
-		"dark": "#b49ac8",
-		"lightBase": "#ddd5e1",
-		"darkBase": "#322d36"
-	},
-	{
-		"value": "indigo",
-		"label": "Indigo",
-		"light": "#4f5ea8",
-		"dark": "#8b99e0",
-		"lightBase": "#d8d8e4",
-		"darkBase": "#2d2e38"
-	}
-];
-var defaultThemeAccents = {
-	"md3": {
-		"light": "steel",
-		"dark": "steel"
-	},
-	"material5": {
-		"light": "violet",
-		"dark": "violet"
-	},
-	"fluent": {
-		"light": "azure",
-		"dark": "azure"
-	}
-};
-//#endregion
-//#region src/features/tasks/taskColumns.js
-var taskColumns = [
-	[
-		"object",
-		"Object",
-		"object"
-	],
-	[
-		"process",
-		"Task / Process",
-		"process"
-	],
-	[
-		"status",
-		"Status",
-		"status"
-	],
-	[
-		"assigned",
-		"Assignee",
-		"user"
-	],
-	[
-		"dates",
-		"Start / Deadline",
-		"due"
-	],
-	[
-		"progress",
-		"Progress",
-		""
-	],
-	[
-		"bid_duration",
-		"Hours",
-		""
-	],
-	[
-		"notes",
-		"Notes",
-		""
-	],
-	[
-		"priority",
-		"Priority",
-		"priority"
-	],
-	[
-		"milestone_code",
-		"Milestone",
-		"milestone"
-	],
-	[
-		"supervisor",
-		"Supervisor",
-		"supervisor"
-	]
-].map(([key, label, sort], index) => ({
-	key,
-	label,
-	sort,
-	width: [
-		210,
-		126,
-		138,
-		154,
-		112,
-		94,
-		86,
-		48,
-		96,
-		132,
-		154
-	][index],
-	visible: index < 8,
-	group: {
-		object: "object",
-		process: "process",
-		status: "status",
-		assigned: "user"
-	}[key] || ""
-}));
-function normalizeColumns(saved) {
-	const ordered = [], seen = /* @__PURE__ */ new Set();
-	for (const item of Array.isArray(saved) ? saved : []) {
-		const original = taskColumns.find((column) => column.key === item?.key);
-		if (!original || seen.has(item.key)) continue;
-		const width = Number(item.width);
-		ordered.push({
-			...original,
-			width: Number.isFinite(width) ? Math.max(40, Math.min(480, Math.trunc(width))) : original.width,
-			visible: item.key === "object" || (typeof item.visible === "boolean" ? item.visible : original.visible)
-		});
-		seen.add(item.key);
-	}
-	return [...ordered, ...taskColumns.filter((column) => !seen.has(column.key)).map((column) => ({ ...column }))];
-}
-//#endregion
-//#region src/features/configuration/preferences.js
-var configurationPreview = ref(false);
-var preferenceDefaults = {
-	checkin: {
-		displayLimit: 20,
-		defaultViewMode: "continious",
-		loadingMode: "pages",
-		keepFilename: false,
-		groupCheckin: true,
-		includeSubfolders: false,
-		generatePreviews: true,
-		confirmRevision: true,
-		commitQueueAutoClean: true
-	},
-	tasks: {
-		workspaceSurface: "browser",
-		quickViewMode: "cards",
-		viewMode: "table",
-		sortMode: "due",
-		groupMode: "process",
-		inspectorExpanded: false,
-		columns: []
-	},
-	global: {
-		activityNotifications: true,
-		messageNotifications: true
-	},
-	cache: { cacheProcessTabs: true },
-	repository: {
-		enabledAliases: null,
-		defaultAlias: "default"
-	}
-};
-function normalizePreferences(value = {}) {
-	const result = structuredClone(preferenceDefaults);
-	for (const [page, fields] of Object.entries(result)) for (const [key, fallback] of Object.entries(fields)) {
-		const saved = value?.[page]?.[key];
-		if (typeof fallback === "boolean" && typeof saved === "boolean") fields[key] = saved;
-	}
-	for (const [page, fields] of Object.entries({
-		checkin: {
-			defaultViewMode: [
-				"continious",
-				"tiles",
-				"table",
-				"compact",
-				"splitted_vertical",
-				"splitted_horizontal"
-			],
-			loadingMode: ["pages", "infinite"]
-		},
-		tasks: {
-			workspaceSurface: ["browser", "quick"],
-			quickViewMode: ["cards", "compact"],
-			viewMode: ["table", "gantt"],
-			sortMode: [
-				"due",
-				"recent",
-				"user",
-				"process",
-				"status",
-				"object",
-				"search_type",
-				"project",
-				"priority",
-				"milestone",
-				"supervisor"
-			],
-			groupMode: [
-				"none",
-				"user",
-				"process",
-				"status",
-				"object"
-			]
-		}
-	})) for (const [key, allowed] of Object.entries(fields)) if (allowed.includes(value?.[page]?.[key])) result[page][key] = value[page][key];
-	const limit = Number(value?.checkin?.displayLimit);
-	if (Number.isFinite(limit) && limit > 0) result.checkin.displayLimit = Math.max(1, Math.min(500, Math.trunc(limit)));
-	result.tasks.columns = normalizeColumns(value?.tasks?.columns);
-	const alias = (value) => typeof value === "string" && /^[A-Za-z0-9_.-]+$/.test(value) && value !== "plugins";
-	if (Array.isArray(value?.repository?.enabledAliases)) result.repository.enabledAliases = [...new Set(value.repository.enabledAliases.filter(alias))];
-	if (alias(value?.repository?.defaultAlias)) result.repository.defaultAlias = value.repository.defaultAlias;
-	return result;
-}
-var saved$1;
-try {
-	saved$1 = JSON.parse(localStorage.getItem("tactic_stream.preferences") || "null");
-} catch {}
-var preferences = reactive(normalizePreferences(saved$1));
-function savePreferencePage(page, value) {
-	const next = normalizePreferences({
-		...preferences,
-		[page]: value
-	});
-	localStorage.setItem("tactic_stream.preferences", JSON.stringify(next));
-	Object.assign(preferences[page], next[page]);
-}
-//#endregion
-//#region ../src/tactic_stream/shared_ui/core/interaction.mjs
-function buttonVisual(state = {}) {
-	const enabled = state.enabled !== false && !state.loading;
-	const active = state.hovered || state.focused;
-	let background = "surfaceContainerHigh";
-	let content = "primaryText";
-	if (state.segmented) {
-		background = !enabled ? "transparent" : state.pressed ? "surfaceContainerHighest" : state.checked ? "selected" : active ? "rowHover" : "transparent";
-		content = state.checked ? "selectedText" : "secondaryText";
-	} else if (enabled) {
-		if (state.pressed) background = state.destructive && state.highlighted ? "error" : "selected";
-		else if (state.highlighted) background = state.destructive ? "error" : "action";
-		else if (active) background = "rowHover";
-		else if (state.tonal) background = "secondaryContainer";
-		content = state.destructive ? state.highlighted ? "onError" : "error" : state.highlighted ? "selectedText" : "primaryText";
-	}
-	return {
-		background,
-		content: enabled ? content : "disabledText",
-		border: state.destructive ? "error" : "outlineVariant",
-		borderWidth: state.segmented || state.highlighted || state.flat ? 0 : 1,
-		pressedMix: enabled && state.pressed && state.destructive && state.highlighted
-	};
-}
-function fieldVisual(state = {}) {
-	return {
-		background: state.tableCell && !state.focused ? "transparent" : "surfaceContainerHigh",
-		content: state.enabled === false ? "disabledText" : "primaryText",
-		border: state.error ? "error" : state.focused ? "action" : "outline",
-		borderWidth: state.focused ? 2 : state.tableCell ? 0 : 1
-	};
-}
-function checkVisual(state = {}) {
-	const selected = state.checked || state.mixed;
-	const disabled = state.enabled === false;
-	return {
-		background: selected ? disabled ? "surfaceContainerHigh" : "action" : state.prominent ? "surfaceContainerHighest" : "transparent",
-		content: disabled ? "disabledText" : "primaryText",
-		mark: disabled ? "disabledText" : "selectedText",
-		border: disabled ? "disabledText" : selected || state.focused ? "action" : state.prominent ? "secondaryText" : "outline",
-		borderWidth: state.focused || state.prominent ? 2 : 1
-	};
-}
-function switchVisual(state = {}) {
-	const disabled = state.enabled === false;
-	return {
-		background: disabled ? "surfaceContainerHigh" : state.checked ? "action" : "surfaceContainerHighest",
-		border: disabled ? "disabledText" : state.checked || state.focused ? "action" : "outline",
-		thumb: disabled ? "disabledText" : state.checked ? "selectedText" : "secondaryText",
-		borderWidth: state.focused ? 2 : 1
-	};
-}
-//#endregion
-//#region ../src/tactic_stream/shared_ui/core/foundation.mjs
-var typography = {
-	micro: 8,
-	caption: 8.25,
-	label: 8.75,
-	body: 9.25,
-	bodyLarge: 10,
-	title: 12
-};
-var fontFamily = "Segoe UI";
-function fontMetricHeight(pixelSize) {
-	return pixelSize * 1.328125;
-}
-function fontLineHeight(pixelSize) {
-	return Math.ceil(fontMetricHeight(pixelSize));
-}
-var lineHeights = Object.freeze({
-	timelineTick: 10,
-	timelineMajorTick: 11,
-	menuHeading: 14,
-	caption: 15,
-	secondary: 16,
-	body: 18,
-	bodyLarge: 19,
-	section: 20,
-	title: 22,
-	heading: 23,
-	display: 24,
-	statistic: 28,
-	hero: 32
-});
-var textStyles = Object.freeze({
-	timelineTick: 7,
-	timelineMajorTick: 8,
-	menuHeading: 10,
-	caption: 11,
-	secondary: 12,
-	body: 13,
-	bodyLarge: 14,
-	section: 15,
-	title: 16,
-	heading: 17,
-	display: 18,
-	statistic: 21,
-	hero: 24
-});
-var controls = {
-	dialog: {
-		padding: 20,
-		spacing: 12,
-		headerHeight: 40,
-		headerPadding: 12,
-		titleSize: 13,
-		shadowY: 6,
-		shadowBlur: 14
-	},
-	document: {
-		bodySize: 12,
-		lineHeight: 17,
-		headingSize: 18,
-		headingLineHeight: 22.5,
-		paragraphGap: 8,
-		headingGap: 14,
-		cellPadding: 4
-	},
-	field: {
-		padding: 12,
-		areaPadding: 10
-	},
-	choice: {
-		rowHeight: 34,
-		visibleRows: 8,
-		popupPadding: 4,
-		popupGap: 4,
-		paddingLeft: 11,
-		paddingRight: 32,
-		indicatorSize: 17,
-		indicatorRight: 9,
-		indicatorHit: 40
-	},
-	tooltip: {
-		delay: 500,
-		timeout: 5e3,
-		margin: 8,
-		paddingX: 12,
-		paddingY: 7,
-		radius: 6
-	},
-	userPicker: {
-		popupWidth: 294,
-		popupHeight: 286,
-		rowHeight: 48,
-		avatarSize: 32
-	},
-	calendar: {
-		popupWidth: 304,
-		padding: 10,
-		rowHeight: 30,
-		daySize: 28
-	},
-	colorPicker: {
-		popupWidth: 380,
-		planeHeight: 190,
-		padding: 20
-	},
-	iconPicker: {
-		popupWidth: 560,
-		popupHeight: 440
-	},
-	button: {
-		minimumWidth: 72,
-		padding: 16,
-		iconPadding: 12,
-		spacing: 7,
-		segmentedSpacing: 6,
-		segmentedPaddingStart: 3,
-		segmentedPaddingEnd: 7,
-		iconSize: 16,
-		compactIconSize: 18,
-		segmentedIconSize: 15
-	},
-	iconButton: {
-		extent: 28,
-		iconSize: 17,
-		surfaceInset: 2,
-		hoveredOpacity: .08,
-		pressedOpacity: .12
-	},
-	checkBox: {
-		height: 36,
-		compactHeight: 30,
-		spacing: 9,
-		compactSpacing: 6,
-		indicator: 19,
-		compactIndicator: 17,
-		prominentIndicator: 22,
-		iconSize: 15,
-		compactIconSize: 13,
-		prominentIconSize: 17,
-		radius: 5
-	},
-	switch: {
-		width: 42,
-		height: 24,
-		thumb: 18,
-		inset: 3,
-		spacing: 10
-	},
-	search: {
-		padding: 38,
-		iconInset: 12,
-		iconSize: 18,
-		clearInset: 4,
-		clearExtent: 30,
-		clearIconSize: 17,
-		popupMinimumWidth: 240,
-		popupPadding: 4,
-		popupGap: 6,
-		rowHeight: 34
-	},
-	number: {
-		indicatorWidth: 34,
-		iconSize: 14
-	},
-	feedback: {
-		progressHeight: 4,
-		busyExtent: 24
-	},
-	slider: {
-		height: 26,
-		track: 4,
-		thumb: 16,
-		thumbBorder: 2,
-		padding: 6
-	},
-	identity: {
-		avatarSize: 40,
-		spacing: 12,
-		textSpacing: 3
-	},
-	summaryChip: {
-		height: 30,
-		compactHeight: 24,
-		spacing: 7,
-		padding: 10,
-		compactPadding: 8,
-		dot: 8
-	},
-	filterChip: {
-		height: 32,
-		emphasisHeight: 12,
-		iconSize: 11,
-		emphasisIconSize: 4,
-		emphasisFontSize: 11
-	},
-	loadingOverlay: {
-		spacing: 10,
-		surfaceOpacity: .88,
-		minimumWidth: 180,
-		maximumWidth: 420,
-		horizontalMargin: 40
-	},
-	statusChip: {
-		height: 24,
-		denseHeight: 20,
-		spacing: 5,
-		padding: 8,
-		densePadding: 5,
-		iconSize: 13,
-		denseIconSize: 11
-	},
-	reactionChip: {
-		height: 28,
-		padding: 8,
-		spacing: 5,
-		emojiSize: 18,
-		tintOpacity: .18,
-		checkedTintOpacity: .34
-	},
-	editorPanel: {
-		padding: 14,
-		spacing: 12,
-		contentSpacing: 10,
-		headerSpacing: 10,
-		textSpacing: 3,
-		actionsSpacing: 6,
-		iconSize: 20
-	},
-	formField: {
-		padding: 14,
-		labelWidth: 220,
-		columnSpacing: 20,
-		rowSpacing: 12,
-		iconExtent: 34,
-		iconSize: 17,
-		labelSpacing: 11,
-		textSpacing: 2,
-		editorSpacing: 5,
-		compactBreakpoint: 700
-	},
-	editorListItem: {
-		padding: 12,
-		spacing: 10,
-		iconSize: 19,
-		textSpacing: 4,
-		minimumExtraHeight: 12
-	},
-	emptyState: {
-		height: 140,
-		iconSize: 30,
-		spacing: 8,
-		maximumWidth: 440,
-		horizontalMargin: 24
-	},
-	dropTarget: {
-		margin: 6,
-		borderWidth: 2,
-		iconSize: 30,
-		spacing: 8,
-		textSize: 12,
-		surfaceOpacity: .94
-	},
-	imagePicker: {
-		previewSize: 112,
-		minimumActionsWidth: 290,
-		columnSpacing: 16,
-		rowSpacing: 12
-	},
-	splitter: {
-		extent: 10,
-		thickness: 3,
-		length: 40,
-		restingOpacity: .28,
-		hoveredOpacity: .85,
-		pressedOpacity: 1
-	},
-	scrollBar: {
-		extent: 12,
-		restingTrack: 6,
-		expandedTrack: 11,
-		restingThumb: 5,
-		expandedThumb: 8,
-		restingTrackOpacity: .055,
-		expandedTrackOpacity: .15,
-		restingThumbOpacity: .42,
-		hoveredThumbOpacity: .72,
-		pressedThumbOpacity: .9,
-		disabledThumbOpacity: .18
-	}
-};
-var styleMetrics = {
-	md3: {
-		controlHeight: 36,
-		compactControlHeight: 32,
-		fieldRadius: 10,
-		buttonRadius: 18,
-		itemRadius: 9,
-		snapshotRadius: 5,
-		surfaceRadius: 12,
-		sectionRadius: 16,
-		dialogRadius: 8,
-		menuRadius: 16,
-		iconButtonRadius: 4,
-		communicationGroupedSpacing: 2,
-		communicationGroupTailSize: 10,
-		communicationBubbleRadius: 14,
-		communicationGroupedBubbleRadius: 8,
-		baseMotionInstant: 28,
-		baseMotionFast: 48,
-		baseMotionMedium: 56,
-		baseMotionSlow: 72,
-		baseMotionExtended: 104
-	},
-	material5: {
-		controlHeight: 38,
-		compactControlHeight: 34,
-		fieldRadius: 15,
-		buttonRadius: 16,
-		itemRadius: 13,
-		snapshotRadius: 10,
-		surfaceRadius: 18,
-		sectionRadius: 22,
-		dialogRadius: 8,
-		menuRadius: 20,
-		iconButtonRadius: 9,
-		communicationGroupedSpacing: 3,
-		communicationGroupTailSize: 11,
-		communicationBubbleRadius: 16,
-		communicationGroupedBubbleRadius: 10,
-		baseMotionInstant: 36,
-		baseMotionFast: 60,
-		baseMotionMedium: 76,
-		baseMotionSlow: 96,
-		baseMotionExtended: 128
-	},
-	fluent: {
-		controlHeight: 34,
-		compactControlHeight: 32,
-		fieldRadius: 5,
-		buttonRadius: 5,
-		itemRadius: 5,
-		snapshotRadius: 3,
-		surfaceRadius: 7,
-		sectionRadius: 8,
-		dialogRadius: 8,
-		menuRadius: 8,
-		iconButtonRadius: 4,
-		communicationGroupedSpacing: 2,
-		communicationGroupTailSize: 10,
-		communicationBubbleRadius: 7,
-		communicationGroupedBubbleRadius: 4,
-		baseMotionInstant: 24,
-		baseMotionFast: 36,
-		baseMotionMedium: 48,
-		baseMotionSlow: 64,
-		baseMotionExtended: 88
-	}
-};
-var layout = {
-	appBarHeight: 44,
-	sectionRailWidth: 48,
-	dockTitleHeight: 38,
-	dockWorkspaceHeaderHeight: 96,
-	dockWorkspaceFooterHeight: 58,
-	communicationListSpacing: 10,
-	communicationBubblePadding: 10,
-	communicationContentSpacing: 6,
-	communicationAvatarSpacing: 8,
-	scrollbarExtent: 12,
-	splitterExtent: 10,
-	windowMargin: 16,
-	dragThreshold: 5
-};
-function metrics(style) {
-	return Object.assign({}, layout, styleMetrics[style] || styleMetrics.md3);
-}
-function motion(style, preferences) {
-	const values = metrics(style), flags = preferences || {}, result = {};
-	for (const duration of [
-		"Instant",
-		"Fast",
-		"Medium",
-		"Slow",
-		"Extended"
-	]) {
-		const value = values["baseMotion" + duration];
-		result["motion" + duration] = flags.fade === false || flags.reduced ? 0 : value;
-		result["clickMotion" + duration] = flags.click === false || flags.reduced ? 0 : value;
-		result["hoverMotion" + duration] = flags.hover === false || flags.reduced ? 0 : value;
-		result["popupMotion" + duration] = flags.popup === false || flags.reduced ? 0 : value;
-	}
-	result.scrollMotion = result.motionInstant;
-	return result;
-}
-function blend(first, second, weight) {
-	const amount = Math.max(0, Math.min(1, weight));
-	return first.map((channel, index) => channel * (1 - amount) + second[index] * amount);
-}
-function readableText$1(color) {
-	return (color[0] * .2126 + color[1] * .7152 + color[2] * .0722) / 255 > .56 ? [
-		23,
-		32,
-		39
-	] : [
-		246,
-		248,
-		250
-	];
-}
-function rgb(hex) {
-	return [
-		1,
-		3,
-		5
-	].map((offset) => parseInt(hex.slice(offset, offset + 2), 16));
-}
-function palette(style, dark, base, accent) {
-	const black = [
-		0,
-		0,
-		0
-	], white = [
-		255,
-		255,
-		255
-	];
-	const material = style === "material5", fluent = style === "fluent";
-	const colors = {
-		action: accent,
-		blackMix: black,
-		whiteMix: white
-	};
-	colors.paletteBase = material ? blend(base, accent, dark ? .07 : .05) : base;
-	const surface = colors.paletteBase;
-	colors.workspace = blend(surface, dark ? black : white, dark ? fluent ? .23 : .34 : fluent ? .12 : .08);
-	colors.topBar = blend(surface, dark ? white : black, dark ? material ? .05 : .03 : .03);
-	colors.toolBar = blend(surface, dark ? white : black, dark ? material ? .11 : .08 : .07);
-	colors.panel = blend(surface, dark ? black : white, dark ? .04 : .22);
-	colors.panelRaised = blend(surface, white, dark ? .08 : .38);
-	colors.panelDeep = blend(surface, black, dark ? .19 : .08);
-	colors.row = blend(surface, white, dark ? .07 : .32);
-	colors.rowHover = blend(colors.row, accent, dark ? .1 : .08);
-	colors.selected = blend(accent, colors.panelRaised, dark ? .28 : .3);
-	colors.contentSelection = blend(accent, colors.workspace, dark ? .68 : .72);
-	colors.primaryText = readableText$1(colors.workspace);
-	colors.tableHeader = blend(colors.toolBar, colors.primaryText, .14);
-	colors.contentAccent = blend(accent, colors.primaryText, dark ? .12 : .08);
-	colors.selectedText = readableText$1(colors.selected);
-	colors.contentSelectionText = readableText$1(colors.contentSelection);
-	colors.secondaryText = blend(colors.primaryText, surface, dark ? .35 : .42);
-	colors.disabledText = blend(colors.secondaryText, surface, .42);
-	colors.separator = blend(surface, colors.primaryText, dark ? .11 : .18);
-	colors.border = blend(surface, colors.primaryText, dark ? .24 : .3);
-	const fixed = {
-		green: "#52a86e",
-		yellow: "#d5bd51",
-		red: "#d65b67",
-		missingFile: "#d45b5b",
-		violet: "#a06bb4",
-		cyan: "#56a7b3"
-	};
-	for (const name of Object.keys(fixed)) colors[name] = rgb(fixed[name]);
-	const syntax = {
-		Keyword: ["#d5bd51", "#808000"],
-		String: ["#69b77d", "#008000"],
-		Comment: ["#70a87a", "#008000"],
-		Number: ["#66b8c4", "#000080"],
-		Type: ["#bc84cf", "#800080"],
-		Function: ["#66b8c4", "#00677c"],
-		Definition: ["#d39562", "#7c4800"],
-		Self: ["#88aac4", "#092e64"],
-		Occurrence: ["#55545a", "#b4b4b4"],
-		Search: ["#75651f", "#ffef0b"]
-	};
-	for (const name of Object.keys(syntax)) colors["syntax" + name] = rgb(syntax[name][dark ? 0 : 1]);
-	colors.titleGreen = rgb(dark ? "#4c8700" : "#5f970d");
-	colors.ripple = (dark ? white : black).concat((dark ? 52 : 34) / 255);
-	colors.rippleStrong = (dark ? white : black).concat((dark ? 56 : 36) / 255);
-	colors.popupShadow = black.concat((dark ? 74 : 40) / 255);
-	colors.dialogShadow = black.concat((dark ? 82 : 48) / 255);
-	colors.scrim = black.concat((dark ? 153 : 115) / 255);
-	const aliases = {
-		tooltipSurface: "panelRaised",
-		tooltipText: "primaryText",
-		background: "workspace",
-		surface: "panel",
-		surfaceContainerLow: "panel",
-		surfaceContainer: "toolBar",
-		surfaceContainerHigh: "panelRaised",
-		surfaceContainerHighest: "rowHover",
-		surfaceVariant: "toolBar",
-		outline: "border",
-		outlineVariant: "separator",
-		primary: "action",
-		primaryContainer: "selected",
-		secondary: "secondaryText",
-		secondaryContainer: "rowHover",
-		tertiary: "violet",
-		tertiaryContainer: "rowHover",
-		error: "red",
-		errorContainer: "rowHover",
-		text: "primaryText",
-		muted: "secondaryText",
-		accent: "action",
-		accentContainer: "selected"
-	};
-	for (const name of Object.keys(aliases)) colors[name] = colors[aliases[name]];
-	colors.onError = readableText$1(colors.error);
-	colors.inverseSurface = rgb("#eeeeee");
-	colors.inverseOnSurface = rgb("#202020");
-	return colors;
-}
-var cssRoles = {
-	workspace: "--page",
-	topBar: "--header",
-	toolBar: "--surface-container",
-	tableHeader: "--table-header-surface",
-	panel: "--surface",
-	panelRaised: "--surface-high",
-	panelDeep: "--surface-deep",
-	row: "--row",
-	rowHover: "--hover",
-	selected: "--selected",
-	selectedText: "--on-selected",
-	contentSelection: "--content-selection",
-	contentSelectionText: "--on-content-selection",
-	contentAccent: "--content-accent",
-	primaryText: "--on-surface",
-	secondaryText: "--muted",
-	disabledText: "--disabled",
-	border: "--outline",
-	separator: "--outline-variant",
-	action: "--primary",
-	red: "--error",
-	green: "--success",
-	yellow: "--yellow",
-	cyan: "--cyan",
-	violet: "--violet",
-	tertiary: "--tertiary",
-	tertiaryContainer: "--tertiary-container",
-	surfaceContainerLow: "--surface",
-	surfaceContainer: "--surface-container",
-	surfaceContainerHigh: "--surface-high",
-	surfaceContainerHighest: "--surface-highest",
-	secondaryContainer: "--secondary-container",
-	outline: "--outline",
-	outlineVariant: "--outline-variant",
-	error: "--error",
-	errorContainer: "--error-container",
-	onError: "--on-error",
-	ripple: "--ripple-color",
-	popupShadow: "--shadow-color",
-	scrim: "--scrim",
-	dialogShadow: "--dialog-shadow"
-};
-function cssColor(channels) {
-	return "rgba(" + channels.slice(0, 3).join(",") + "," + (channels.length === 4 ? channels[3] : 1) + ")";
-}
-function cssVariables(style, dark, base, accent, preferences) {
-	const colors = palette(style, dark, base, accent), values = metrics(style), result = {};
-	for (const role of Object.keys(cssRoles)) result[cssRoles[role]] = cssColor(colors[role]);
-	for (const name of Object.keys(values)) {
-		const cssName = "--" + name.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
-		result[cssName] = values[name] + (name.indexOf("baseMotion") === 0 ? "ms" : "px");
-	}
-	for (const name of Object.keys(typography)) {
-		const cssName = "--text-" + name.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
-		result[cssName] = typography[name] + "pt";
-	}
-	result["--control-text-size"] = textStyles.body + "px";
-	result["--control-compact-text-size"] = textStyles.secondary + "px";
-	for (const role of Object.keys(textStyles)) {
-		const name = role.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
-		result["--font-" + name + "-size"] = textStyles[role] + "px";
-		result["--font-" + name + "-line-height"] = lineHeights[role] + "px";
-	}
-	const states = {
-		field: {
-			idle: fieldVisual(),
-			focus: fieldVisual({ focused: true }),
-			error: fieldVisual({ error: true }),
-			disabled: fieldVisual({ enabled: false })
-		},
-		check: {
-			idle: checkVisual(),
-			checked: checkVisual({ checked: true }),
-			focus: checkVisual({ focused: true }),
-			disabled: checkVisual({ enabled: false }),
-			disabledChecked: checkVisual({
-				checked: true,
-				enabled: false
-			})
-		},
-		switch: {
-			idle: switchVisual(),
-			checked: switchVisual({ checked: true }),
-			focus: switchVisual({ focused: true }),
-			disabled: switchVisual({ enabled: false })
-		}
-	};
-	for (const [kind, variants] of Object.entries(states)) for (const [state, paint] of Object.entries(variants)) for (const [part, value] of Object.entries(paint)) {
-		const name = ("--" + kind + "-" + state + "-" + part).replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
-		result[name] = typeof value === "number" ? value + "px" : value === "transparent" ? value : cssColor(colors[value]);
-	}
-	for (const kind of Object.keys(controls)) for (const name of Object.keys(controls[kind])) {
-		const cssName = "--" + (kind + name[0].toUpperCase() + name.slice(1)).replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase());
-		result[cssName] = controls[kind][name] + (name.endsWith("Opacity") || name === "visibleRows" ? "" : name === "delay" || name === "timeout" ? "ms" : "px");
-	}
-	const timings = motion(style, preferences);
-	for (const name of [
-		"Instant",
-		"Fast",
-		"Medium",
-		"Slow",
-		"Extended"
-	]) result["--motion-" + name.toLowerCase()] = timings["motion" + name] + "ms";
-	const feedback = {
-		"--motion-click": "clickMotionFast",
-		"--motion-click-expansion": "clickMotionMedium",
-		"--motion-click-slow": "clickMotionSlow",
-		"--motion-click-extended": "clickMotionExtended",
-		"--motion-hover": "hoverMotionFast",
-		"--motion-hover-medium": "hoverMotionMedium",
-		"--motion-fade": "motionMedium",
-		"--motion-fade-slow": "motionSlow",
-		"--motion-fade-extended": "motionExtended",
-		"--motion-popup": "popupMotionMedium",
-		"--motion-popup-fast": "popupMotionFast",
-		"--motion-popup-slow": "popupMotionSlow"
-	};
-	for (const name of Object.keys(feedback)) result[name] = timings[feedback[name]] + "ms";
-	for (const name of Object.keys(colors)) if (name.indexOf("syntax") === 0) result["--syntax-" + name.slice(6).toLowerCase()] = cssColor(colors[name]);
-	result["--on-primary"] = cssColor(readableText$1(accent));
-	result["--font-family"] = "\"Segoe UI\", system-ui, sans-serif";
-	result["--communication-bubble-radius"] = values.communicationBubbleRadius + "px";
-	result["--workspace-footer-height"] = values.dockWorkspaceFooterHeight + "px";
-	result["--preview-radius"] = values.snapshotRadius + "px";
-	return result;
-}
-//#endregion
-//#region src/appearance.js
-var languages = [{
-	value: "en",
-	label: "English"
-}, {
-	value: "ru",
-	label: "Russian"
-}];
-var colorModes = [
-	{
-		value: "system",
-		label: "System"
-	},
-	{
-		value: "light",
-		label: "Light"
-	},
-	{
-		value: "dark",
-		label: "Dark"
-	}
-];
-var storageKey = "tactic_stream.appearance";
-for (const [area, suffix] of [["localStorage", "appearance"], ["sessionStorage", "session"]]) try {
-	const storage = window[area];
-	const previousKey = `tactic_flow.${suffix}`;
-	const nextKey = `tactic_stream.${suffix}`;
-	const previous = storage.getItem(previousKey);
-	if (previous && storage.getItem(nextKey) === null) storage.setItem(nextKey, previous);
-	storage.removeItem(previousKey);
-} catch {}
-function readAppearance() {
-	let saved;
-	try {
-		saved = JSON.parse(localStorage.getItem(storageKey) || "null");
-	} catch {}
-	const language = typeof saved?.language === "string" ? saved.language.toLowerCase().replace("_", "-").split("-")[0] : "en";
-	const themeAccents = {};
-	for (const theme of themes) {
-		themeAccents[theme.value] = {};
-		for (const mode of ["light", "dark"]) {
-			const preset = saved?.themeAccents?.[theme.value]?.[mode];
-			themeAccents[theme.value][mode] = accentPresets.some((item) => item.value === preset) ? preset : defaultThemeAccents[theme.value][mode];
-		}
-	}
-	return {
-		language: languages.some((item) => item.value === language) ? language : "en",
-		theme: themes.some((item) => item.value === saved?.theme) ? saved.theme : "md3",
-		mode: colorModes.some((item) => item.value === saved?.mode) ? saved.mode : "system",
-		iconSet: iconSets.some((item) => item.value === saved?.iconSet) ? saved.iconSet : "material-design",
-		discussionView: saved?.discussionView === "notes" ? "notes" : "inspector",
-		themeAccents,
-		clickAnimations: saved?.clickAnimations !== false,
-		hoverAnimations: saved?.hoverAnimations !== false,
-		fadeAnimations: saved?.fadeAnimations !== false,
-		popupAnimations: saved?.popupAnimations !== false
-	};
-}
-var appearance = reactive(readAppearance());
-var hostedPalette = ref(null);
-function readableText(color) {
-	return "#" + readableText$1(color).map((channel) => channel.toString(16).padStart(2, "0")).join("");
-}
-function saveAppearance() {
-	localStorage.setItem(storageKey, JSON.stringify(appearance));
-}
-var systemDark = ref(typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-var effectiveColorMode = computed(() => appearance.mode === "system" ? systemDark.value ? "dark" : "light" : appearance.mode);
-var colorPreset = computed(() => hostedPalette.value || accentPresets.find((item) => item.value === appearance.themeAccents[appearance.theme][effectiveColorMode.value]));
-var channels = (hex) => hex.match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
-var frameColors = computed(() => {
-	const mode = effectiveColorMode.value, preset = colorPreset.value;
-	return palette(appearance.theme, mode === "dark", channels(preset[mode + "Base"]), channels(preset[mode]));
-});
-function initializeAppearance() {
-	const media = window.matchMedia("(prefers-color-scheme: dark)");
-	const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-	const reducedMotion = ref(motion.matches);
-	systemDark.value = media.matches;
-	media.addEventListener("change", (event) => {
-		systemDark.value = event.matches;
-	});
-	motion.addEventListener("change", (event) => {
-		reducedMotion.value = event.matches;
-	});
-	watchEffect(() => {
-		const root = document.documentElement;
-		root.lang = appearance.language;
-		root.dataset.theme = appearance.theme;
-		const mode = effectiveColorMode.value;
-		root.dataset.mode = mode;
-		root.dataset.iconSet = appearance.iconSet;
-		const palette = colorPreset.value;
-		root.style.setProperty("--base", palette[mode + "Base"]);
-		root.style.setProperty("--primary", palette[mode]);
-		const accent = palette[mode].match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
-		const base = palette[mode + "Base"].match(/[a-f\d]{2}/gi).map((value) => parseInt(value, 16));
-		const dark = mode === "dark";
-		const variables = cssVariables(appearance.theme, dark, base, accent, {
-			click: appearance.clickAnimations,
-			hover: appearance.hoverAnimations,
-			fade: appearance.fadeAnimations,
-			popup: appearance.popupAnimations,
-			reduced: reducedMotion.value
-		});
-		for (const [name, value] of Object.entries(variables)) root.style.setProperty(name, value);
-		for (const motion of [
-			"click",
-			"hover",
-			"fade",
-			"popup"
-		]) root.dataset[motion + "Animations"] = String(appearance[motion + "Animations"]);
-		try {
-			if (!configurationPreview.value) saveAppearance();
-		} catch {}
-	});
-}
-//#endregion
-//#region src/i18n.js
-var catalogs = /* #__PURE__ */ Object.assign({
-	"./locales/en.json": en_default,
-	"./locales/ru.json": ru_default
-});
-function t(source, values = {}) {
-	const translated = catalogs[`./locales/${appearance.language}.json`]?.[source];
-	return (typeof translated === "string" && translated.trim() ? translated : source).replace(/\{(\w+)\}/g, (placeholder, name) => values[name] ?? placeholder);
-}
 //#endregion
 //#region src/controls/asyncComponent.js
 function asyncComponent(loader) {
@@ -1740,280 +483,6 @@ function installDebugLogging() {
 	}));
 }
 //#endregion
-//#region src/controls/controlAppearance.js
-function buttonVariables(options) {
-	const result = {};
-	for (const [name, flags] of Object.entries({
-		idle: {},
-		hover: { hovered: true },
-		focus: { focused: true },
-		pressed: { pressed: true },
-		disabled: { enabled: false }
-	})) {
-		const paint = buttonVisual({
-			...options,
-			...flags
-		});
-		let background = paint.background === "transparent" ? "transparent" : `var(${cssRoles[paint.background]})`;
-		if (paint.pressedMix) background = `color-mix(in srgb, ${background} 82%, var(--page))`;
-		result[`--button-${name}-background`] = background;
-		result[`--button-${name}-color`] = `var(${cssRoles[paint.content]})`;
-		result[`--button-${name}-border`] = `var(${cssRoles[paint.border]})`;
-		result[`--button-${name}-border-width`] = paint.borderWidth + "px";
-	}
-	return result;
-}
-//#endregion
-//#region src/controls/AppIcon.vue
-var _hoisted_1$2 = ["data-icon"];
-var _hoisted_2$2 = { class: "icon-glyph" };
-var _sfc_main$2 = {
-	__name: "AppIcon",
-	props: { name: String },
-	setup(__props) {
-		const props = __props;
-		const icon = computed(() => resolveIcon(props.name, appearance.iconSet) || (props.name ? resolveIcon("fontawesome-solid:exclamation-triangle", appearance.iconSet) : null));
-		return (_ctx, _cache) => {
-			return icon.value ? (openBlock(), createElementBlock("span", {
-				key: 0,
-				class: normalizeClass(["app-icon", "icon-" + icon.value[0]]),
-				"data-icon": __props.name,
-				"aria-hidden": "true"
-			}, [createBaseVNode("span", _hoisted_2$2, toDisplayString(icon.value[1]), 1)], 10, _hoisted_1$2)) : createCommentVNode("", true);
-		};
-	}
-};
-//#endregion
-//#region src/controls/ripple.js
-function ripple(event) {
-	const button = event.currentTarget;
-	if (button.disabled || event.button !== 0) return;
-	const style = getComputedStyle(button);
-	const fast = parseFloat(style.getPropertyValue("--motion-click")) || 0;
-	const extended = parseFloat(style.getPropertyValue("--motion-click-extended")) || 0;
-	if (!extended) return;
-	button.querySelectorAll(":scope > .control-ripple-clip").forEach((node) => node.remove());
-	const inset = parseFloat(style.getPropertyValue("--ripple-inset")) || 0;
-	const bounds = button.getBoundingClientRect(), diameter = Math.max(bounds.width - inset * 2, bounds.height - inset * 2) * 2.2;
-	const circle = document.createElement("span");
-	circle.className = "control-ripple";
-	circle.setAttribute("aria-hidden", "true");
-	Object.assign(circle.style, {
-		width: diameter + "px",
-		height: diameter + "px",
-		left: event.clientX - bounds.left - inset - diameter / 2 + "px",
-		top: event.clientY - bounds.top - inset - diameter / 2 + "px"
-	});
-	const clip = document.createElement("span");
-	clip.className = "control-ripple-clip";
-	clip.setAttribute("aria-hidden", "true");
-	clip.style.inset = inset + "px";
-	clip.append(circle);
-	button.append(clip);
-	circle.animate([{ transform: "scale(.05)" }, { transform: "scale(1)" }], {
-		duration: extended + fast,
-		easing: "cubic-bezier(.215,.61,.355,1)",
-		fill: "forwards"
-	});
-	circle.animate([{ opacity: .42 }, { opacity: 0 }], {
-		duration: extended,
-		delay: 24,
-		easing: "ease-out",
-		fill: "forwards"
-	}).finished.then(() => clip.remove(), () => clip.remove());
-}
-//#endregion
-//#region src/controls/activation.js
-function capturePress(event) {
-	const control = event.currentTarget;
-	if (event.button !== 0 || event.pointerType === "touch" || control.disabled || control.getAttribute("aria-disabled") === "true") return;
-	control.setPointerCapture(event.pointerId);
-	const listeners = new AbortController(), x = event.clientX, y = event.clientY;
-	control.addEventListener("pointermove", (move) => {
-		if (move.pointerId === event.pointerId && Math.hypot(move.clientX - x, move.clientY - y) >= 10) {
-			if (control.hasPointerCapture(event.pointerId)) control.releasePointerCapture(event.pointerId);
-			listeners.abort();
-		}
-	}, { signal: listeners.signal });
-	for (const name of [
-		"pointerup",
-		"pointercancel",
-		"lostpointercapture"
-	]) control.addEventListener(name, (end) => {
-		if (end.pointerId === event.pointerId) listeners.abort();
-	}, { signal: listeners.signal });
-}
-//#endregion
-//#region src/controls/tooltip.js
-var active;
-var sequence = 0;
-var tooltipDirective = {
-	mounted(element, binding) {
-		let text = binding.value, timer, timeout, popup, describedBy;
-		function close(event) {
-			if (popup && event?.type === "keydown" && event.key === "Escape") {
-				event.preventDefault();
-				event.stopPropagation();
-			}
-			clearTimeout(timer);
-			clearTimeout(timeout);
-			if (popup) {
-				const dismissed = popup;
-				dismissed.hidePopover();
-				setTimeout(() => dismissed.remove(), parseFloat(getComputedStyle(dismissed).transitionDuration) * 1e3 + 10);
-				popup = null;
-				if (describedBy === null) element.removeAttribute("aria-describedby");
-				else element.setAttribute("aria-describedby", describedBy);
-			}
-			for (const name of [
-				"scroll",
-				"resize",
-				"pointerdown",
-				"keydown",
-				"close"
-			]) window.removeEventListener(name, close, true);
-			if (active === close) active = null;
-		}
-		function start(event) {
-			if (!text || element.disabled || element.getAttribute("aria-disabled") === "true" || event.pointerType === "touch") return;
-			active?.();
-			active = close;
-			for (const name of [
-				"scroll",
-				"resize",
-				"pointerdown",
-				"keydown",
-				"close"
-			]) window.addEventListener(name, close, true);
-			timer = setTimeout(() => {
-				if (!element.isConnected || element.disabled || element.getAttribute("aria-disabled") === "true" || !element.getClientRects().length) {
-					close();
-					return;
-				}
-				popup = document.createElement("div");
-				popup.className = "app-tooltip";
-				popup.popover = "manual";
-				popup.id = "app-tooltip-" + ++sequence;
-				popup.role = "tooltip";
-				popup.textContent = text;
-				(element.closest("dialog") || document.body).append(popup);
-				popup.showPopover();
-				const anchor = element.getBoundingClientRect(), box = popup.getBoundingClientRect(), margin = controls.tooltip.margin;
-				popup.style.left = Math.max(margin, Math.min(innerWidth - box.width - margin, anchor.left + (anchor.width - box.width) / 2)) + "px";
-				popup.style.top = Math.max(margin, Math.min(innerHeight - box.height - margin, anchor.bottom + box.height + 2 * margin > innerHeight ? anchor.top - box.height - margin : anchor.bottom + margin)) + "px";
-				describedBy = element.getAttribute("aria-describedby");
-				element.setAttribute("aria-describedby", [describedBy, popup.id].filter(Boolean).join(" "));
-				timeout = setTimeout(close, controls.tooltip.timeout);
-			}, controls.tooltip.delay);
-		}
-		element.addEventListener("pointerenter", start);
-		element.addEventListener("focusin", start);
-		element.addEventListener("pointerleave", close);
-		element.addEventListener("focusout", close);
-		element.tooltipUpdate = (value) => {
-			text = value;
-			close();
-		};
-		element.tooltipCleanup = () => {
-			close();
-			element.removeEventListener("pointerenter", start);
-			element.removeEventListener("focusin", start);
-			element.removeEventListener("pointerleave", close);
-			element.removeEventListener("focusout", close);
-		};
-	},
-	updated(element, binding) {
-		if (binding.value !== binding.oldValue) element.tooltipUpdate?.(binding.value);
-	},
-	beforeUnmount(element) {
-		element.tooltipCleanup?.();
-		delete element.tooltipUpdate;
-		delete element.tooltipCleanup;
-	}
-};
-//#endregion
-//#region src/controls/AppButton.vue
-var _hoisted_1$1 = { key: 0 };
-var _hoisted_2$1 = {
-	key: 1,
-	class: "app-button-badge",
-	"aria-hidden": "true"
-};
-var _sfc_main$1 = {
-	__name: "AppButton",
-	props: {
-		label: {
-			type: String,
-			default: ""
-		},
-		translateLabel: {
-			type: Boolean,
-			default: true
-		},
-		tooltip: String,
-		icon: String,
-		iconOnly: Boolean,
-		compact: Boolean,
-		highlighted: Boolean,
-		filledAction: Boolean,
-		destructive: Boolean,
-		tonal: Boolean,
-		segmented: Boolean,
-		checked: Boolean,
-		badgeCount: {
-			type: Number,
-			default: 0
-		},
-		badgeColor: String,
-		showZeroBadge: Boolean,
-		type: {
-			type: String,
-			default: "button"
-		},
-		href: String
-	},
-	setup(__props) {
-		const props = __props;
-		const paint = computed(() => buttonVariables(props));
-		return (_ctx, _cache) => {
-			return withDirectives((openBlock(), createBlock(resolveDynamicComponent(__props.href ? "a" : "button"), {
-				class: normalizeClass(["app-button", {
-					"icon-button": __props.iconOnly || __props.compact,
-					"compact-button": __props.compact,
-					primary: __props.highlighted,
-					"filled-action": __props.filledAction,
-					danger: __props.destructive,
-					tonal: __props.tonal
-				}]),
-				style: normalizeStyle([paint.value, __props.badgeColor ? { "--badge-color": __props.badgeColor } : null]),
-				href: __props.href,
-				type: __props.href ? void 0 : __props.type,
-				"aria-label": __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : void 0,
-				onPointerdown: _cache[0] || (_cache[0] = ($event) => {
-					unref(capturePress)($event);
-					unref(ripple)($event);
-				})
-			}, {
-				default: withCtx(() => [
-					__props.icon ? (openBlock(), createBlock(_sfc_main$2, {
-						key: 0,
-						name: __props.icon
-					}, null, 8, ["name"])) : createCommentVNode("", true),
-					renderSlot(_ctx.$slots, "default", {}, () => [!__props.iconOnly && !__props.compact ? (openBlock(), createElementBlock("span", _hoisted_1$1, toDisplayString(__props.translateLabel ? unref(t)(__props.label) : __props.label), 1)) : createCommentVNode("", true)]),
-					__props.badgeCount > 0 || __props.showZeroBadge ? (openBlock(), createElementBlock("span", _hoisted_2$1, toDisplayString(__props.badgeCount > 99 ? "99+" : __props.badgeCount), 1)) : createCommentVNode("", true)
-				]),
-				_: 3
-			}, 40, [
-				"style",
-				"href",
-				"type",
-				"class",
-				"aria-label"
-			])), [[unref(tooltipDirective), __props.tooltip ? unref(t)(__props.tooltip) : (__props.iconOnly || __props.compact) && __props.label ? __props.translateLabel ? unref(t)(__props.label) : __props.label : ""]]);
-		};
-	}
-};
-//#endregion
 //#region src/mobile.js
 var mobileLayout = window.matchMedia("(max-width: 700px)");
 var mobile = ref(mobileLayout.matches);
@@ -2255,7 +724,9 @@ var _sfc_main = {
 		closeDisabled: Boolean,
 		helpButton: Object,
 		helpLabel: String,
-		helpDisabled: Boolean
+		helpDisabled: Boolean,
+		pageRoot: Boolean,
+		openSeparate: Function
 	},
 	setup(__props) {
 		const props = __props;
@@ -2366,6 +837,7 @@ var _sfc_main = {
 			if (minimized.value && event.target.closest("button")?.querySelector("[data-icon=\"close\"], [data-icon=\"MDI_CLOSE\"]")) minimize();
 		}
 		function start(event) {
+			if (props.pageRoot) return;
 			if (gesture || event.isPrimary === false || compact() || maximized.value || event.button !== 0 || event.target.closest("button, a, input, select, textarea, summary, label, [role=\"button\"], [role=\"tab\"]")) return;
 			event.preventDefault();
 			props.header.setPointerCapture(event.pointerId);
@@ -2390,6 +862,7 @@ var _sfc_main = {
 			}, minimum()) : moved(gesture.before, delta));
 		}
 		function startResize(event, edge) {
+			if (props.pageRoot) return;
 			if (gesture || event.isPrimary === false || compact() || maximized.value || event.button !== 0) return;
 			event.preventDefault();
 			props.header.setPointerCapture(event.pointerId);
@@ -2409,6 +882,7 @@ var _sfc_main = {
 			if (props.header.hasPointerCapture(current.pointer)) props.header.releasePointerCapture(current.pointer);
 		}
 		function doubleClick(event) {
+			if (props.pageRoot) return;
 			if (!event.target.closest("button, a, input, select, textarea, summary, label")) toggle();
 		}
 		function resize() {
@@ -2440,6 +914,7 @@ var _sfc_main = {
 		const observer = new MutationObserver(opened);
 		const sizeObserver = new ResizeObserver(resizeEdges);
 		function key(event) {
+			if (props.pageRoot) return;
 			if (event.target.closest(".app-window") !== props.element || event.target.closest("dialog") !== props.element) return;
 			if (event.key === "Escape" && gesture) {
 				event.preventDefault();
@@ -2526,8 +1001,16 @@ var _sfc_main = {
 					key: 0,
 					to: __props.header
 				}, [createBaseVNode("strong", _hoisted_1, toDisplayString(__props.title), 1)], 8, ["to"])) : createCommentVNode("", true),
-				__props.helpButton && !minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
+				__props.openSeparate && !minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
 					key: 1,
+					class: "app-window-separate",
+					"icon-only": "",
+					icon: "open-in-new",
+					label: "Open in separate page",
+					onClick: __props.openSeparate
+				}, null, 8, ["onClick"])) : createCommentVNode("", true),
+				__props.helpButton && !minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
+					key: 2,
 					class: "app-window-help",
 					"icon-only": "",
 					icon: "help",
@@ -2536,8 +1019,8 @@ var _sfc_main = {
 					disabled: __props.helpDisabled,
 					onClick: _cache[0] || (_cache[0] = ($event) => __props.helpButton.click())
 				}, null, 8, ["label", "disabled"])) : createCommentVNode("", true),
-				__props.element.dataset.windowType === "window" ? (openBlock(), createBlock(_sfc_main$1, {
-					key: 2,
+				__props.element.dataset.windowType === "window" && !__props.pageRoot ? (openBlock(), createBlock(_sfc_main$1, {
+					key: 3,
 					"icon-only": "",
 					icon: minimized.value ? "window-restore" : "minus",
 					label: minimized.value ? "Restore window" : "Minimize window",
@@ -2548,8 +1031,8 @@ var _sfc_main = {
 					"label",
 					"aria-pressed"
 				])) : createCommentVNode("", true),
-				!minimized.value ? (openBlock(), createBlock(_sfc_main$1, {
-					key: 3,
+				!minimized.value && !__props.pageRoot ? (openBlock(), createBlock(_sfc_main$1, {
+					key: 4,
 					"icon-only": "",
 					icon: maximized.value ? "window-restore" : "open-in-full",
 					label: maximized.value ? "Restore window" : "Maximize window",
@@ -2561,7 +1044,7 @@ var _sfc_main = {
 					"aria-pressed"
 				])) : createCommentVNode("", true),
 				__props.closeRequired ? (openBlock(), createBlock(_sfc_main$1, {
-					key: 4,
+					key: 5,
 					"icon-only": "",
 					icon: "close",
 					label: "Close",
@@ -2577,7 +1060,7 @@ var _sfc_main = {
 					onClick: back
 				})) : createCommentVNode("", true)], 8, ["to"])),
 				minimized.value && __props.header.parentElement !== __props.element ? (openBlock(), createBlock(Teleport, {
-					key: 5,
+					key: 6,
 					to: __props.element
 				}, [createBaseVNode("header", _hoisted_2, [
 					createBaseVNode("strong", null, toDisplayString(__props.element.getAttribute("aria-label") || __props.header.querySelector("[role=\"heading\"]")?.textContent || unref(t)("Restore window")), 1),
@@ -2597,7 +1080,7 @@ var _sfc_main = {
 						})
 					})
 				])], 8, ["to"])) : createCommentVNode("", true),
-				(openBlock(), createBlock(Teleport, { to: __props.element }, [!maximized.value && !minimized.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, renderList([
+				(openBlock(), createBlock(Teleport, { to: __props.element }, [!__props.pageRoot && !maximized.value && !minimized.value ? (openBlock(), createElementBlock(Fragment, { key: 0 }, renderList([
 					"left",
 					"right",
 					"top",
@@ -2620,225 +1103,717 @@ var _sfc_main = {
 	}
 };
 //#endregion
-//#region src/controls/window.js
-var activeWindow = null;
-var windowDirective = {
-	mounted(element, binding) {
-		if (element.tagName !== "DIALOG") return;
-		let configuration = binding.value;
-		let header = null, host = null, retainedGeometry = null, hostedGeometry = null;
-		let chrome = null, frameContent = null, contentClose = null, contentHelp = null;
-		const show = element.show.bind(element), close = element.close.bind(element);
-		const home = document.createComment("window owner");
-		element.before(home);
-		let owner = null, returnFocus = null;
-		const nonmodal = () => ["window", "popup"].includes(configuration?.type);
-		function closed() {
-			if (element.matches(":popover-open")) element.hidePopover();
-			owner?.removeEventListener("close", closeChild);
-			owner = null;
-			if (home.parentNode && (element.parentNode !== home.parentNode || element.previousSibling !== home)) home.after(element);
-			if (activeWindow === element) activeWindow = null;
-		}
-		function nativeClosed() {
-			if (element.open) return;
-			closed();
-			if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
-			returnFocus = null;
-		}
-		function closeChild(event) {
-			if (event.target === owner) element.close();
-		}
-		function raise(event) {
-			if (!element.open || !element.matches(":popover-open") || activeWindow === element || element.querySelector("dialog:modal")) return;
-			if (event && event.target.closest("[popover]") !== element) return;
-			const focused = element.contains(document.activeElement) ? document.activeElement : null;
-			element.hidePopover();
-			element.showPopover();
-			focused?.focus({ preventScroll: true });
-			activeWindow = element;
-		}
-		element.show = () => {
-			if (!nonmodal()) {
-				if (element.matches(":modal")) element.focus();
-				else show();
-				return;
-			}
-			if (element.open) {
-				element.dispatchEvent(new Event("windowshow"));
-				raise();
-				return;
-			}
-			returnFocus = document.activeElement;
-			owner = returnFocus?.closest(configuration.type === "popup" ? "dialog[open]" : "dialog:modal") || [...document.querySelectorAll("dialog:modal")].at(-1) || null;
-			if (owner === element || element.contains(owner)) owner = null;
-			if (owner) {
-				owner.append(element);
-				owner.addEventListener("close", closeChild);
-			}
-			element.popover = "manual";
-			show();
-			element.showPopover();
-			activeWindow = element;
-			element.dispatchEvent(new Event("windowshow"));
+//#region src/serverClock.js
+function serverTimestamp(value) {
+	const text = String(value || "").trim().replace(" ", "T");
+	return new Date(/(?:Z|[+-]\d{2}:?\d{2})$/i.test(text) ? text : text + "Z");
+}
+var ServerClock = class {
+	constructor() {
+		this.anchor = {
+			utc: null,
+			received: -Infinity,
+			bestDelay: Infinity
 		};
-		element.close = (...args) => {
-			closed();
-			close(...args);
-			if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
-			returnFocus = null;
-		};
-		function escape(event) {
-			if (event.key !== "Escape" || event.defaultPrevented || !nonmodal() || event.target.closest("dialog") !== element) return;
-			event.preventDefault();
-			event.stopPropagation();
-			if (element.dispatchEvent(new Event("cancel", { cancelable: true }))) element.close();
-		}
-		function rememberGeometry(event) {
-			if (event.target !== element || !element.open) return;
-			const { x, y, width, height, maximized, restore } = event.detail;
-			retainedGeometry = {
-				rect: {
-					x,
-					y,
-					width,
-					height
-				},
-				maximized,
-				restore
-			};
-		}
-		element.addEventListener("windowgeometrychange", rememberGeometry);
-		element.addEventListener("keydown", escape);
-		element.addEventListener("close", nativeClosed);
-		element.addEventListener("pointerdown", raise);
-		function placeControls() {
-			const last = [...header.querySelectorAll("button")].at(-1);
-			const anchor = last?.parentElement.tagName === "FORM" ? last.parentElement : last;
-			if (anchor) anchor.before(host);
-			else header.append(host);
-		}
-		const attach = () => {
-			const windowed = configuration !== false && configuration?.type !== "popup";
-			element.classList.toggle("app-window", windowed);
-			element.dataset.windowType = configuration?.type || "dialog";
-			element.dataset.windowKind = configuration?.kind || "";
-			if (nonmodal()) element.setAttribute("aria-modal", "false");
-			else element.removeAttribute("aria-modal");
-			const featureHeader = !windowed ? null : [...element.querySelectorAll("header:not([data-window-chrome])")].find((header) => header.closest("dialog") === element) || null;
-			const frameView = [...element.querySelectorAll(".frame-view")].find((view) => view.closest("dialog") === element);
-			const frameHeader = windowed && (featureHeader?.classList.contains("frame-titlebar") || !featureHeader && !!frameView && (frameView.parentElement === element || frameView.parentElement?.parentElement === element && frameView.parentElement.matches(".frame-host, .frame-host-body")));
-			if (frameHeader && !chrome) {
-				chrome = document.createElement("header");
-				chrome.dataset.windowChrome = "";
-				chrome.className = "app-dialog-titlebar";
-				element.prepend(chrome);
-				element.classList.add("app-window-frame-host");
-			} else if (!frameHeader && chrome) {
-				chrome.remove();
-				chrome = null;
-				frameContent?.classList.remove("app-window-frame-content");
-				frameContent = null;
-				element.classList.remove("app-window-frame-host");
-			}
-			if (frameHeader) {
-				let content = featureHeader || frameView;
-				while (content.parentElement !== element) content = content.parentElement;
-				if (frameContent !== content) {
-					frameContent?.classList.remove("app-window-frame-content");
-					frameContent = content;
-					frameContent.classList.add("app-window-frame-content");
-				}
-			}
-			const closeButton = featureHeader ? [...featureHeader.querySelectorAll("button")].find((button) => !button.closest(".app-window-controls") && button.querySelector("[data-icon=\"close\"], [data-icon=\"MDI_CLOSE\"]")) : null;
-			const hiddenClose = frameHeader ? closeButton : null;
-			if (contentClose !== hiddenClose) {
-				contentClose?.classList.remove("app-window-content-close");
-				contentClose = hiddenClose;
-				contentClose?.classList.add("app-window-content-close");
-			}
-			const helpButton = frameHeader && featureHeader ? [...featureHeader.querySelectorAll("button")].find((button) => !button.closest(".app-window-controls") && button.querySelector("[data-icon=\"help\"], [data-icon=\"MDI_HELP_CIRCLE\"]")) : null;
-			if (contentHelp !== helpButton) {
-				contentHelp?.classList.remove("app-window-content-help");
-				contentHelp = helpButton;
-				contentHelp?.classList.add("app-window-content-help");
-			}
-			const next = chrome || featureHeader;
-			const properties = () => ({
-				element,
-				header,
-				geometry: hostedGeometry,
-				backProvided: !!configuration?.backProvided,
-				title: chrome ? element.getAttribute("aria-label") || element.dataset.windowKind : "",
-				closeButton: contentClose,
-				closeRequired: !!chrome || !closeButton,
-				closeDisabled: !!contentClose?.disabled,
-				helpButton: contentHelp,
-				helpLabel: contentHelp?.getAttribute("aria-label") || "",
-				helpDisabled: !!contentHelp?.disabled
-			});
-			if (next === header) {
-				if (host && !header.contains(host)) placeControls();
-				if (host) render(h(_sfc_main, properties()), host);
-				return;
-			}
-			if (host) {
-				render(null, host);
-				host.remove();
-			}
-			header = next;
-			host = null;
-			if (!header) return;
-			hostedGeometry = configuration?.geometry || retainedGeometry;
-			host = document.createElement("span");
-			host.className = "app-window-controls";
-			placeControls();
-			render(h(_sfc_main, properties()), host);
-		};
-		const observer = new MutationObserver(attach);
-		observer.observe(element, {
-			childList: true,
-			subtree: true,
-			attributes: true,
-			attributeFilter: ["aria-label", "disabled"]
-		});
-		attach();
-		element.windowConfigure = (value) => {
-			if (value?.geometry) hostedGeometry = value.geometry;
-			configuration = value;
-			attach();
-		};
-		element.windowCleanup = () => {
-			closed();
-			home.remove();
-			element.show = show;
-			element.close = close;
-			element.removeEventListener("windowgeometrychange", rememberGeometry);
-			element.removeEventListener("keydown", escape);
-			element.removeEventListener("close", nativeClosed);
-			element.removeEventListener("pointerdown", raise);
-			observer.disconnect();
-			if (host) {
-				render(null, host);
-				host.remove();
-			}
-			chrome?.remove();
-			frameContent?.classList.remove("app-window-frame-content");
-			contentClose?.classList.remove("app-window-content-close");
-			contentHelp?.classList.remove("app-window-content-help");
-			element.classList.remove("app-window-frame-host");
-		};
-	},
-	updated(element, binding) {
-		element.windowConfigure?.(binding.value);
-	},
-	beforeUnmount(element) {
-		element.windowCleanup?.();
-		element.classList.remove("app-window");
-		delete element.windowCleanup;
-		delete element.windowConfigure;
+		this.revision = 0;
+	}
+	now() {
+		this.revision;
+		const { utc, received } = this.anchor;
+		return utc === null ? Date.now() : utc + performance.now() - received;
+	}
+	observe(sample, started, received) {
+		if (![sample?.utcStarted, sample?.utcEnded].every((value) => typeof value === "string" && /(?:Z|[+-]\d{2}:\d{2})$/i.test(value))) return false;
+		const anchor = this.anchor;
+		const begin = Date.parse(sample.utcStarted), end = Date.parse(sample.utcEnded);
+		const delay = received - started - (end - begin);
+		if (![
+			begin,
+			end,
+			started,
+			received
+		].every(Number.isFinite) || end < begin || received < started || delay < -2 || received < anchor.received) return false;
+		if (anchor.utc !== null && delay > anchor.bestDelay * 1.5 + 20 && received - anchor.received < 3e5) return false;
+		const utc = end + Math.max(0, delay) / 2;
+		const changed = anchor.utc === null || Math.abs(utc - anchor.utc - (received - anchor.received)) >= 500;
+		anchor.utc = utc;
+		anchor.received = received;
+		anchor.bestDelay = Math.min(anchor.bestDelay, Math.max(0, delay));
+		if (changed) this.revision++;
+		return true;
+	}
+	observeResponse(response, started, received = performance.now()) {
+		return this.observe({
+			utcStarted: response.headers.get("X-Tactic-UTC-Started"),
+			utcEnded: response.headers.get("X-Tactic-UTC-Ended")
+		}, started, received);
 	}
 };
+var serverClock = shallowReactive(new ServerClock());
+var localTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
+//#endregion
+//#region src/features/activity/notifications.js
+var notificationHistory = shallowReactive({ records: [] });
+var activeNotifications = shallowReactive({ records: [] });
+var recent = /* @__PURE__ */ new Map();
+var timers = /* @__PURE__ */ new Map();
+var sequence = 0;
+function notify(kind, message, detail = "", group = "client", key = "", source = {}) {
+	if (![
+		"info",
+		"warning",
+		"error",
+		"progress",
+		"complete"
+	].includes(kind)) kind = "info";
+	message = String(redact(message || "")).trim();
+	if (!message) return;
+	const now = Date.now(), signature = key || `${kind}:${message}`;
+	if (activeNotifications.records.some((row) => row.dedupeKey === signature) || recent.has(signature) && now - recent.get(signature) < 5e3) return;
+	recent.set(signature, now);
+	for (const [value, stamp] of recent) if (now - stamp >= 3e4) recent.delete(value);
+	const row = {
+		notificationId: ++sequence,
+		kind,
+		group,
+		message,
+		detail: String(redact(detail || "")),
+		timestamp: new Date(serverClock.now()).toISOString(),
+		dedupeKey: signature,
+		dismissible: true,
+		sourceType: source.sourceType || "",
+		sourceTitle: source.sourceTitle || "",
+		previewUrl: source.previewUrl || "",
+		avatarText: source.avatarText || "",
+		avatarColor: source.avatarColor || "",
+		sourceIcon: source.sourceIcon || "",
+		action: source.action || "",
+		actionData: source.actionData || "",
+		canReply: source.canReply !== false,
+		replyOpen: false,
+		replySending: false,
+		replyError: "",
+		replyText: ""
+	};
+	notificationHistory.records = [row, ...notificationHistory.records].slice(0, 200);
+	activeNotifications.records = [...activeNotifications.records, row];
+	limitActive();
+	startTimer(row.notificationId, row.sourceType === "messages" ? 15e3 : row.sourceType === "activity" ? 8e3 : ["error", "warning"].includes(kind) ? 5e3 : 3200);
+	return row.notificationId;
+}
+function startTimer(id, duration) {
+	clearTimeout(timers.get(id));
+	const timer = setTimeout(() => dismissNotification(id), duration);
+	timer.unref?.();
+	timers.set(id, timer);
+}
+function limitActive() {
+	while (activeNotifications.records.length > 3) dismissNotification((activeNotifications.records.find((row) => !row.replyOpen) || activeNotifications.records.at(-1)).notificationId);
+}
+function updateReply(id, values) {
+	activeNotifications.records = activeNotifications.records.map((row) => row.notificationId === id ? {
+		...row,
+		...values
+	} : row);
+}
+function beginNotificationReply(id) {
+	const row = activeNotifications.records.find((row) => row.notificationId === id);
+	if (!row || row.sourceType !== "messages" || !row.actionData || !row.canReply) return false;
+	clearTimeout(timers.get(id));
+	timers.delete(id);
+	updateReply(id, { replyOpen: true });
+	return true;
+}
+function cancelNotificationReply(id) {
+	const row = activeNotifications.records.find((row) => row.notificationId === id);
+	if (!row?.replyOpen || row.replySending) return;
+	updateReply(id, {
+		replyOpen: false,
+		replyError: ""
+	});
+	startTimer(id, 15e3);
+}
+function editNotificationReply(id, text) {
+	updateReply(id, { replyText: text });
+}
+function submitNotificationReply(id) {
+	const row = activeNotifications.records.find((row) => row.notificationId === id);
+	if (!row?.replyOpen || !row.canReply || row.replySending || !row.replyText.trim()) return false;
+	updateReply(id, {
+		replySending: true,
+		replyError: ""
+	});
+	return true;
+}
+function failNotificationReply(id, error) {
+	updateReply(id, {
+		replySending: false,
+		replyError: error || "Unable to send message"
+	});
+}
+function dismissNotification(id) {
+	clearTimeout(timers.get(id));
+	timers.delete(id);
+	activeNotifications.records = activeNotifications.records.filter((row) => row.notificationId !== id);
+}
+function setNotificationProgress(message) {
+	const id = "application-progress";
+	if (!message) {
+		dismissNotification(id);
+		return;
+	}
+	const row = {
+		notificationId: id,
+		kind: "progress",
+		message,
+		detail: "",
+		dismissible: false
+	};
+	if (activeNotifications.records.findIndex((row) => row.notificationId === id) >= 0) activeNotifications.records = activeNotifications.records.map((item) => item.notificationId === id ? row : item);
+	else {
+		activeNotifications.records = [...activeNotifications.records, row];
+		limitActive();
+	}
+}
+function clearNotificationHistory() {
+	notificationHistory.records = [];
+}
+function resetNotifications() {
+	for (const timer of timers.values()) clearTimeout(timer);
+	timers.clear();
+	recent.clear();
+	activeNotifications.records = [];
+	clearNotificationHistory();
+}
+//#endregion
+//#region src/features/connection/updateRequests.js
+var available = true;
+var pending = /* @__PURE__ */ new Map();
+var unavailable = () => Object.assign(/* @__PURE__ */ new Error("Unable to reach the server."), { code: "updates_unavailable" });
+function setUpdatesAvailable(value) {
+	available = value;
+	if (!value) for (const { controller } of pending.values()) controller.abort(unavailable());
+}
+function updatesAvailable() {
+	return available;
+}
+function backgroundRequest(key, request) {
+	if (!available) return Promise.reject(unavailable());
+	if (pending.has(key)) return pending.get(key).promise;
+	const controller = new AbortController();
+	const entry = { controller };
+	pending.set(key, entry);
+	entry.promise = Promise.resolve().then(() => {
+		if (controller.signal.aborted) throw controller.signal.reason;
+		return request(AbortSignal.any([controller.signal, AbortSignal.timeout(3e4)]));
+	}).finally(() => {
+		if (pending.get(key) === entry) pending.delete(key);
+	});
+	return entry.promise;
+}
+function updateDelay(interval, failures = 0, random = Math.random) {
+	if (!failures) return Math.round(interval * 1e3 * (.85 + random() * .3));
+	const base = failures < 5 ? 2e3 * 2 ** (failures - 1) : failures === 5 ? 3e4 : 6e4;
+	return Math.round(base * (1 + random() * .25));
+}
+//#endregion
+//#region src/api.js
+var requestActivity = shallowReactive({ pending: [] });
+function resetRequestActivity() {
+	requestActivity.pending = [];
+}
+function beginActivity(ticket, message = "Working…") {
+	if (!ticket) return;
+	const entry = {
+		ticket,
+		message
+	};
+	requestActivity.pending = [...requestActivity.pending, entry];
+	return entry;
+}
+function endActivity(entry) {
+	if (entry) requestActivity.pending = requestActivity.pending.filter((item) => item !== entry);
+}
+async function rpc(method, args = [], kwargs = {}, quiet = false, background = false) {
+	const payload = {
+		method,
+		args,
+		kwargs
+	};
+	return background ? backgroundPost("/admin/rpc", payload) : post("/admin/rpc", payload, void 0, quiet);
+}
+function scriptEditor(action, ticket, project, values = {}) {
+	return post(`/admin/script-editor/${action}`, {
+		ticket,
+		project,
+		...values
+	}, void 0, action === "analyse");
+}
+function activityFeed(ticket, project, values = {}, quiet = false) {
+	const payload = {
+		ticket,
+		project,
+		...values,
+		time_zone: localTimeZone()
+	};
+	return quiet ? backgroundPost("/admin/activity-feed", payload) : post("/admin/activity-feed", payload);
+}
+function serverUpdates(ticket, project, values = {}, signal) {
+	return post("/admin/server-updates", {
+		ticket,
+		project,
+		...values
+	}, AbortSignal.any([AbortSignal.timeout(3e4), ...signal ? [signal] : []]), true);
+}
+function navigationLink(ticket, project, link) {
+	return post("/admin/navigation-link", {
+		ticket,
+		project,
+		link
+	});
+}
+function resolveCustomUrl(ticket, project, path, parameters) {
+	return post("/admin/custom-url", {
+		ticket,
+		project,
+		path,
+		parameters
+	});
+}
+function tableDependencies(context, values, signal) {
+	return post("/admin/rpc", {
+		method: "execute_cmd",
+		args: [
+			context,
+			"tactic.ui.table.TableDependencyReadCmd",
+			values
+		],
+		kwargs: {}
+	}, signal, true);
+}
+function tableDependencyFile(context, values, signal) {
+	return post("/admin/rpc", {
+		method: "execute_cmd",
+		args: [
+			context,
+			"tactic.ui.table.TableSnapshotFilesCmd",
+			values
+		],
+		kwargs: {}
+	}, signal, true);
+}
+function tableParentGroup(context, values, signal) {
+	const timeout = AbortSignal.any([AbortSignal.timeout(3e4), ...signal ? [signal] : []]);
+	return post("/admin/rpc", {
+		method: "execute_cmd",
+		args: [
+			context,
+			"tactic.ui.table.TableParentGroupCmd",
+			values
+		],
+		kwargs: {}
+	}, timeout, true);
+}
+function linkPreviews(ticket, project, keys) {
+	return backgroundPost("/admin/navigation-link", {
+		ticket,
+		project,
+		keys
+	});
+}
+async function sessionAction(action, ticket) {
+	return post(`/admin/session/${action}`, { ticket });
+}
+async function serverConfiguration(ticket) {
+	return post("/admin/configuration", { ticket });
+}
+function rawDatabase(action, ticket, project, values = {}) {
+	return post("/admin/raw-database/" + action, {
+		ticket,
+		project,
+		...values
+	});
+}
+async function interfaceDefinition(ticket, project, search_type, view = "table") {
+	return post("/admin/interface", {
+		ticket,
+		project,
+		search_type,
+		view
+	});
+}
+function tableCells(ticket, project, search_type, view, search_keys) {
+	return post("/admin/table-cells", {
+		ticket,
+		project,
+		search_type,
+		view,
+		search_keys
+	});
+}
+function resultItems(ticket, project, search_type, search_keys, values = {}) {
+	return post("/admin/result-items", {
+		ticket,
+		project,
+		search_type,
+		search_keys,
+		...values
+	});
+}
+async function projectNavigation(ticket, project) {
+	return post("/admin/navigation", {
+		ticket,
+		project
+	});
+}
+async function projectCatalog(ticket) {
+	return post("/admin/project-catalog", {
+		ticket,
+		project: "admin"
+	});
+}
+async function projectCreationCatalog(ticket) {
+	return post("/admin/project-creation", {
+		ticket,
+		project: "admin"
+	});
+}
+async function formDefinition(ticket, project, search_type, view, search_key, source_key, relation = {}) {
+	return post("/admin/form", {
+		ticket,
+		project,
+		search_type,
+		view,
+		...Array.isArray(search_key) ? { search_keys: search_key } : { search_key },
+		source_key,
+		...relation
+	});
+}
+async function objectRelations(ticket, project, search_type, search_key) {
+	return post("/admin/object-relations", {
+		ticket,
+		project,
+		search_type,
+		search_key
+	});
+}
+async function objectDeletion(action, ticket, project, search_type, view, search_key, related_types) {
+	const selection = Array.isArray(search_key) ? { search_keys: search_key } : { search_key };
+	return post(`/admin/object-deletion/${action}`, {
+		ticket,
+		project,
+		search_type,
+		view,
+		...selection,
+		related_types
+	});
+}
+async function objectStatus(ticket, project, search_type, view, search_keys, operation) {
+	return post("/admin/object-status", {
+		ticket,
+		project,
+		search_type,
+		view,
+		search_keys,
+		operation
+	});
+}
+async function widgetConfiguration(action, ticket, project, search_type, view, values = {}) {
+	return post(`/admin/widget-configuration/${action}`, {
+		ticket,
+		project,
+		search_type,
+		view,
+		...values
+	});
+}
+async function uploadFormFile(ticket, project, file, { signal, filename, subdir } = {}) {
+	const body = new FormData();
+	body.append("login_ticket", ticket);
+	body.append("file", file, filename || file.name);
+	if (subdir) body.append("subdir", subdir);
+	const url = `/tactic/${encodeURIComponent(project)}/UploadServer/`;
+	const started = performance.now(), session = debugLog.sessionId;
+	const activity = beginActivity(ticket, "Uploading");
+	let data, failure;
+	try {
+		const response = await fetch(url, {
+			method: "POST",
+			body,
+			cache: "no-store",
+			signal
+		});
+		data = await response.json().catch(() => null);
+		if (!response.ok || !Array.isArray(data) || data.length !== 1 || typeof data[0] !== "string") {
+			const error = new Error(data?.error || "File upload failed.");
+			error.status = response.ok ? 502 : response.status;
+			throw error;
+		}
+		return data[0].replaceAll("\\", "/").split("/").pop();
+	} catch (error) {
+		failure = error;
+		throw error;
+	} finally {
+		endActivity(activity);
+		recordRequest(url, {
+			ticket,
+			project,
+			file: {
+				name: file.name,
+				type: file.type,
+				size: file.size
+			}
+		}, data, failure, started, session);
+	}
+}
+async function messageFileRequest(ticket, project, values, file, channel = "messages") {
+	const upload = !!file, url = "/admin/" + channel + "/" + (upload ? "upload" : "file");
+	const payload = {
+		ticket,
+		project,
+		...values
+	}, started = performance.now(), session = debugLog.sessionId;
+	const activity = beginActivity(ticket, upload ? "Uploading" : "Downloading");
+	let data, failure;
+	try {
+		const body = upload ? new FormData() : JSON.stringify(payload);
+		if (upload) {
+			for (const [key, value] of Object.entries(payload)) body.append(key, value);
+			body.append("file", file);
+		}
+		const response = await fetch(url, {
+			method: "POST",
+			body,
+			headers: upload ? void 0 : { "Content-Type": "application/json" },
+			cache: "no-store"
+		});
+		if (!response.ok) {
+			data = await response.json();
+			const error = new Error(data.error || "File request failed.");
+			error.code = data.error_code;
+			error.status = response.status;
+			throw error;
+		}
+		if (upload) {
+			data = await response.json();
+			return data.result;
+		}
+		const blob = await response.blob();
+		data = {
+			size: blob.size,
+			type: blob.type
+		};
+		return blob;
+	} catch (error) {
+		failure = error;
+		throw error;
+	} finally {
+		endActivity(activity);
+		recordRequest(url, {
+			...payload,
+			...upload ? { file: {
+				name: file.name,
+				size: file.size
+			} } : {}
+		}, data, failure, started, session, true);
+	}
+}
+async function saveServerConfiguration(ticket, changes, revision) {
+	return post("/admin/configuration/save", {
+		ticket,
+		changes,
+		revision
+	});
+}
+function backgroundPost(url, payload) {
+	return backgroundRequest(JSON.stringify([url, payload]), (signal) => post(url, payload, signal, true));
+}
+async function post(url, payload, signal, quiet = false) {
+	const started = performance.now(), session = debugLog.sessionId;
+	const activity = quiet ? void 0 : beginActivity(payload.ticket || payload.args?.[0]?.ticket);
+	let data, failure;
+	try {
+		const response = await fetch(url, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(payload),
+			cache: "no-store",
+			signal
+		});
+		serverClock.observeResponse(response, started);
+		data = await response.json();
+		if (!response.ok) {
+			const error = new Error(data.error || "Request failed.");
+			error.status = response.status;
+			error.code = data.error_code;
+			error.field = data.error_field;
+			throw error;
+		}
+		return data.result;
+	} catch (error) {
+		failure = error;
+		throw error;
+	} finally {
+		endActivity(activity);
+		recordRequest(url, payload, data, failure, started, session, quiet);
+	}
+}
+function recordRequest(url, payload, data, failure, started, session, quiet = false) {
+	if (session === debugLog.sessionId) {
+		try {
+			logRequest(url, payload, data, failure, (performance.now() - started) / 1e3);
+		} catch {
+			debugLog.storageError = "A request could not be recorded in Debug Log.";
+		}
+		if (url === "/admin/server-updates" || url.includes("/UploadServer/") || payload.method === "simple_checkin") return;
+		if (quiet && failure && (failure instanceof TypeError || ["TimeoutError", "AbortError"].includes(failure.name) || failure.code === "updates_unavailable")) return;
+		if (failure) notify("error", failure instanceof TypeError ? "Unable to reach the server." : failure.message, "", "server");
+		else if (!quiet && ([
+			"execute_cmd",
+			"execute_python_script",
+			"insert",
+			"update",
+			"delete_sobject",
+			"retire_sobject",
+			"reactivate_sobject"
+		].includes(payload.method) || /\/(save|apply|create|delete|commit|activate|run|execute)$/.test(url))) notify("complete", "Server operation completed", payload.method || url, "server");
+	}
+}
+function sidebarRequest(action, ticket, project, values = {}) {
+	return post("/admin/sidebar/" + action, {
+		ticket,
+		project,
+		...values
+	});
+}
+function workspaceLayouts(action, ticket, project, values = {}) {
+	return post("/admin/workspace-layout/" + action, {
+		ticket,
+		project,
+		...values
+	});
+}
+function scriptShelf(action, ticket, project, values = {}) {
+	return post("/admin/script-shelf/" + action, {
+		ticket,
+		project,
+		...values
+	});
+}
+function searchConfiguration(action, ticket, project, search_type, values = {}, quiet = false) {
+	return post("/admin/search-configuration/" + action, {
+		ticket,
+		project,
+		search_type,
+		...values
+	}, void 0, quiet);
+}
+function securityGroups(action, ticket, values = {}) {
+	return post("/admin/security-groups/" + action, {
+		ticket,
+		project: "sthpw",
+		...values
+	});
+}
+function securityRules(action, ticket, project, values = {}) {
+	return post("/admin/security-rules/" + action, {
+		ticket,
+		project,
+		...values
+	});
+}
+function securityUsers(action, ticket, values = {}) {
+	return post("/admin/security-users/" + action, {
+		ticket,
+		project: "sthpw",
+		...values
+	});
+}
+function columnsEditor(action, ticket, project, values = {}) {
+	return post("/admin/columns-editor/" + action, {
+		ticket,
+		project,
+		...values
+	});
+}
+function transactionDetails(ticket, project, searchKey) {
+	return post("/admin/transaction-log/details", {
+		ticket,
+		project,
+		search_key: searchKey
+	});
+}
+function messagesRequest(action, ticket, project, values = {}) {
+	const url = "/admin/messages/" + action, payload = {
+		ticket,
+		project,
+		...values
+	};
+	return ["list", "history"].includes(action) ? backgroundPost(url, payload) : post(url, payload, void 0, true);
+}
+function knowledgeRequest(action, ticket, project, values = {}) {
+	return post("/admin/knowledge/" + action, {
+		ticket,
+		project,
+		...values
+	}, void 0, true);
+}
+function userProfile(action, ticket, project, values = {}) {
+	return post("/admin/user-profile/" + action, {
+		ticket,
+		project,
+		...values
+	});
+}
+async function userAvatar(ticket, project, login, revision, token, file) {
+	const url = "/admin/user-profile/avatar", payload = {
+		ticket,
+		project,
+		login,
+		revision,
+		token
+	};
+	const activity = beginActivity(ticket, "Uploading"), started = performance.now(), session = debugLog.sessionId;
+	let data, failure;
+	try {
+		const body = new FormData();
+		for (const [key, value] of Object.entries(payload)) body.append(key, value);
+		body.append("file", file);
+		const response = await fetch(url, {
+			method: "POST",
+			body,
+			cache: "no-store"
+		});
+		data = await response.json();
+		if (!response.ok) {
+			const error = new Error(data.error?.message || data.error || "Unable to upload avatar");
+			error.status = response.status;
+			error.code = data.error_code;
+			throw error;
+		}
+		return data.result;
+	} catch (error) {
+		failure = error;
+		throw error;
+	} finally {
+		endActivity(activity);
+		recordRequest(url, {
+			...payload,
+			file: {
+				name: file.name,
+				size: file.size
+			}
+		}, data, failure, started, session);
+	}
+}
+//#endregion
+//#region src/features/objects/previewFiles.js
+async function fileBlob(file, { signal } = {}) {
+	if (!file?.href) throw new Error(t("No web path is configured for this file."));
+	const response = await fetch(file.href, { signal });
+	if (!response.ok) throw new Error(t("File Offline"));
+	return response.blob();
+}
 //#endregion
 //#region \0vite/preload-helper.js
 var scriptRel = "modulepreload";
@@ -2919,6 +1894,533 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 	});
 };
 //#endregion
+//#region src/features/windows/windowPages.js
+var windowPages = {
+	messages: { ref: "messages" },
+	work_hours: { load: () => __vitePreload(() => import("./Timesheet.js").then((n) => n.n), __vite__mapDeps([0,1,2,3,4,5,6,7,8,9,10])) },
+	snapshot_browser: { open: async (app, context) => {
+		app.snapshotTarget = {
+			project: context.project,
+			...context.route.target
+		};
+		app.snapshotMounted = app.snapshotActive = true;
+		await nextTick();
+		app.$refs.snapshotPage.show();
+	} },
+	sobject_info: { open: (app, context) => app.inspect({ __search_key__: context.route.key }) },
+	file_preview: { open: async (app, context) => {
+		if (context.state) {
+			const { record, cell, download } = context.state;
+			app.$refs.linkPreview.open(record, {
+				...cell,
+				...download ? { loadFile: fileBlob } : {}
+			});
+		} else {
+			const result = await navigationLink(app.session.ticket, context.project, "skey://" + context.route.key);
+			if (!result.preview) throw Error("No preview available");
+			app.$refs.linkPreview.open(result.object, {
+				...result.preview,
+				fileCode: context.route.fileCode,
+				loadFile: fileBlob
+			});
+		}
+	} },
+	related_objects: { load: () => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.u), __vite__mapDeps([11,1,2,3,4,5,6,7,8,9,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,0,10,28,29,30])) },
+	link_sobjects: { load: () => __vitePreload(() => import("./ConfiguredView.js").then((n) => n.u), __vite__mapDeps([11,1,2,3,4,5,6,7,8,9,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,0,10,28,29,30])) },
+	add_sobject: { load: () => __vitePreload(() => import("./RecordForm.js"), __vite__mapDeps([14,1,2,3,4,5,6,7,8,9,12,13,15])) },
+	task_editor: { load: () => __vitePreload(() => import("./RecordForm.js"), __vite__mapDeps([14,1,2,3,4,5,6,7,8,9,12,13,15])) },
+	process_dependencies: { load: () => __vitePreload(() => import("./ProcessRules.js"), __vite__mapDeps([31,2,3,4,5,6,7,8,13,16,12,17,18,19,20,32])) },
+	duplicate_sobject: {
+		load: () => __vitePreload(() => import("./DuplicateSObject.js"), __vite__mapDeps([33,1,2,3,4,5,6,7,8,9,13,28,29,34])),
+		args: (context) => [{ __search_key__: context.route.key }, false]
+	},
+	ingest_files: { load: () => __vitePreload(() => import("./IngestFiles.js"), __vite__mapDeps([35,2,3,4,5,6,7,8,13,23,24,26,27,36])) },
+	snapshot_append: {
+		load: () => __vitePreload(() => import("./ObjectCheckin.js"), __vite__mapDeps([37,2,3,4,5,6,7,8,13,17,18,23,24,38,39])),
+		args: (context) => [{ __search_key__: context.route.key }, { append: true }]
+	},
+	project_templates: { load: () => __vitePreload(() => import("./ProjectTemplates.js").then((n) => n.n), __vite__mapDeps([40,1,2,3,4,5,6,7,8,9,23,41])) },
+	milestone_manager: { load: () => __vitePreload(() => import("./MilestoneManager.js").then((n) => n.n), __vite__mapDeps([42,1,2,3,4,5,6,7,8,9,43])) },
+	snapshot_checkout: { load: () => __vitePreload(() => import("./SnapshotCheckout.js"), __vite__mapDeps([44,2,3,4,5,6,7,8,13,17,19,23,45,46,47])) },
+	task_manager: {
+		ref: "taskManager",
+		open: (app, context) => app.$refs.taskManager.open(...context.args || context.route.args || [])
+	},
+	user_profile: { ref: "userProfile" },
+	activity_feed: { ref: "activityFeed" },
+	notifications: { ref: "systemActivity" },
+	debug_log: { ref: "debugLog" },
+	ui_performance: { ref: "uiPerformance" },
+	help: { ref: "help" },
+	script_shelf_editor: { ref: "scriptShelf" },
+	project_wizard: { ref: "projectCreation" },
+	configuration: {
+		open: async (app) => {
+			await app.$options.components.Configuration.__asyncLoader();
+			await app.showConfiguration();
+		},
+		ref: "configuration"
+	},
+	administration: { open: (app, context) => app.showAdministration(context.route?.section || null) },
+	script_editor: {
+		open: (app, context) => app.openScriptEditor(context.route?.path || ""),
+		ref: "scriptEditor"
+	},
+	agent_request: {
+		open: (app, context) => app.openAgentRequest(null, context.project),
+		ref: "agentRequest"
+	},
+	agent_providers: {
+		open: (app) => app.openAgentProviders(),
+		ref: "agentProviders"
+	},
+	agent_mcp: {
+		open: (app, context) => app.openAgentMcp(context.args?.[0] || context.route.args?.[0] || app.agentContext(), context.args?.[1] || context.route.args?.[1] || ""),
+		ref: "agentMcp"
+	}
+};
+function windowPageAddress(kind, project = "", route = {}) {
+	if (!Object.hasOwn(windowPages, kind)) throw Error("This window cannot be opened separately.");
+	const encoded = JSON.stringify(route);
+	if (!route || typeof route !== "object" || Array.isArray(route) || encoded.length > 8192) throw Error("This window cannot be opened separately.");
+	const url = new URL(project ? "/projects/" + encodeURIComponent(project) + "/" : "/", location.origin);
+	url.searchParams.set("window", kind);
+	if (Object.keys(route).length) url.searchParams.set("context", encoded);
+	return url;
+}
+function readWindowPage(address = location) {
+	const params = new URLSearchParams(address.search);
+	if (!params.has("window")) return null;
+	const kind = params.get("window"), encoded = params.get("context") || "{}";
+	const match = address.pathname.match(/^\/projects\/([^/]+)\/$/);
+	let route, project = "";
+	try {
+		project = match ? decodeURIComponent(match[1]) : "";
+		route = encoded.length <= 8192 ? JSON.parse(encoded) : null;
+	} catch {
+		route = null;
+	}
+	return {
+		kind,
+		project,
+		route,
+		launch: params.get("launch") || ""
+	};
+}
+function snapshot(value) {
+	const raw = toRaw(value);
+	if (raw instanceof Blob) return raw;
+	if (Array.isArray(raw)) return raw.map(snapshot);
+	if (raw && typeof raw === "object") return Object.fromEntries(Object.entries(raw).map(([key, item]) => [key, snapshot(item)]));
+	if (typeof raw === "function") throw Error("Window context must contain data only.");
+	return raw;
+}
+function receiveContext(page, login) {
+	if (!page.launch) return Promise.resolve(page);
+	return new Promise((resolve, reject) => {
+		const channel = new BroadcastChannel("tactic-window:" + page.launch);
+		const done = (value, error) => {
+			clearInterval(retry);
+			clearTimeout(deadline);
+			channel.close();
+			if (error) reject(Error(error));
+			else resolve(value);
+		};
+		channel.onmessage = (event) => {
+			if (event.data?.type === "context") {
+				const value = event.data.value;
+				if (value.user !== login || value.kind !== page.kind || value.project !== page.project) return done(null, "The window session or project changed. Reopen it from the original window.");
+				channel.postMessage({ type: "accepted" });
+				done(value);
+			} else if (event.data?.type === "error") done(null, event.data.message);
+		};
+		const ready = () => channel.postMessage({
+			type: "ready",
+			login
+		});
+		const retry = setInterval(ready, 500);
+		const deadline = setTimeout(() => done(null, "The original window is unavailable. Reopen this page from the application."), 15e3);
+		ready();
+	});
+}
+async function openWindowPageTarget(app, context) {
+	const spec = windowPages[context.kind];
+	if (!spec || !context.route || typeof context.route !== "object" || Array.isArray(context.route)) throw Error("This window cannot be opened separately.");
+	if (spec.load) {
+		const session = app.session;
+		const module = await spec.load();
+		if (app.session !== session) return;
+		if (context.kind === "project_templates") app.windowPagePackages = (await projectCreationCatalog(session.ticket)).installedTemplates;
+		if (app.session !== session) return;
+		app.windowPageTool = markRaw(module.default);
+		const values = {
+			ticket: session.ticket,
+			project: app.workspaceProject,
+			currentUser: session.login,
+			searchType: context.route.searchType || app.type,
+			editView: context.route.editView || "edit",
+			insertView: context.route.insertView || "insert",
+			packages: app.windowPagePackages,
+			dockMode: context.kind === "work_hours" ? context.route.mode || "week" : void 0
+		};
+		app.windowPageToolProps = Object.fromEntries(Object.entries(values).filter(([key]) => Object.hasOwn(module.default.props || {}, key)));
+		await nextTick();
+		await app.$refs.windowPageTool.open(...spec.args ? spec.args(context) : context.args || context.route.args || []);
+		if (context.state) await app.$refs.windowPageTool.restoreWindowContext?.(context.state);
+	} else if (spec.open) await spec.open(app, context);
+	else await app.$refs[spec.ref].open(...context.args || context.route.args || []);
+	await nextTick();
+	if (context.kind === "configuration" && context.route.page) await app.$refs.configuration.restoreWindowContext({ page: context.route.page });
+	if (context.kind === "agent_request" && context.route.request && !context.state) context.state = { selected: context.route.request };
+	if (spec.ref && context.state) await app.$refs[spec.ref]?.restoreWindowContext?.(context.state);
+}
+async function bootstrapWindowPage(app) {
+	const page = app.windowPage;
+	if (!Object.hasOwn(windowPages, page.kind) || !page.route || typeof page.route !== "object" || Array.isArray(page.route)) throw Error("This window cannot be opened separately.");
+	if (page.project && !app.projects.some((project) => project.code === page.project)) throw Error("Project is not available");
+	const session = app.session;
+	const context = await receiveContext(page, session.login);
+	if (app.session !== session) return;
+	app.windowPageContext = context;
+	app.project = app.workspaceProject = page.project;
+	app.type = context.workspace?.search_type || context.route.searchType || "";
+	app.selectedKeys = [...context.workspace?.search_keys || []];
+	app.view = context.workspace?.view || "table";
+	app.busy = false;
+	app.restoringSession = false;
+	app.routeReady = true;
+	history.replaceState(null, "", windowPageAddress(page.kind, page.project, context.route));
+	app.windowPage = {
+		...page,
+		route: context.route,
+		launch: ""
+	};
+	await nextTick();
+	await openWindowPageTarget(app, context);
+	app.windowPageClosed = false;
+}
+function installWindowPages(app) {
+	const channels = /* @__PURE__ */ new Set();
+	let alive = true;
+	const launch = (event) => {
+		const { kind } = event.detail;
+		if (!Object.hasOwn(windowPages, kind) || !app.session) return;
+		try {
+			const spec = windowPages[kind];
+			const view = spec.ref ? app.$refs[spec.ref] : null;
+			const supplied = event.detail.context;
+			const values = (typeof supplied === "function" ? supplied() : supplied) || view?.windowContext?.() || {};
+			if (kind === "sobject_info" && !values.route) values.route = { key: app.detail?.__search_key__ };
+			if (kind === "administration") {
+				if (app.administrationLocked) throw Error("Apply or discard unsaved changes first");
+				values.route = { section: app.administrationSection };
+			}
+			const context = snapshot({
+				...values,
+				kind,
+				project: values.project ?? app.workspaceProject ?? app.project ?? "",
+				user: app.session.login,
+				route: values.route || {},
+				workspace: app.agentContext()
+			});
+			structuredClone(context);
+			const ownerSession = app.session;
+			const id = randomUuid(), channel = new BroadcastChannel("tactic-window:" + id);
+			const close = () => {
+				clearTimeout(timer);
+				channel.close();
+				channels.delete(close);
+			};
+			const timer = setTimeout(close, 12e4);
+			channels.add(close);
+			channel.onmessage = (message) => {
+				if (message.data?.type === "ready") {
+					if (!alive || app.session !== ownerSession || message.data.login !== context.user) {
+						channel.postMessage({
+							type: "error",
+							message: "The window session or project changed. Reopen it from the original window."
+						});
+						close();
+					} else channel.postMessage({
+						type: "context",
+						value: context
+					});
+				} else if (message.data?.type === "accepted") close();
+			};
+			const url = windowPageAddress(kind, context.project, context.route);
+			url.searchParams.set("launch", id);
+			window.open(url.href, "_blank", "noopener");
+		} catch (error) {
+			notify("error", error.message);
+		}
+	};
+	const closed = (event) => {
+		if (app.windowPage?.kind !== event.detail.kind) return;
+		app.windowPageClosed = true;
+		window.close();
+	};
+	const sessionChanged = (event) => {
+		if (!app.windowPage || event.key !== "tactic_stream.session") return;
+		let saved;
+		try {
+			saved = JSON.parse(event.newValue);
+		} catch {
+			saved = null;
+		}
+		if (saved?.ticket === app.session?.ticket && saved?.login === app.session?.login) return;
+		app.sessionRequest++;
+		app.session = null;
+		app.windowPageTool = null;
+		app.error = "Session ended. Sign in again.";
+	};
+	window.addEventListener("storage", sessionChanged);
+	window.addEventListener("tactic-window-page", launch);
+	window.addEventListener("tactic-window-page-closed", closed);
+	return () => {
+		alive = false;
+		window.removeEventListener("tactic-window-page", launch);
+		window.removeEventListener("tactic-window-page-closed", closed);
+		for (const close of [...channels]) close();
+		window.removeEventListener("storage", sessionChanged);
+	};
+}
+//#endregion
+//#region src/controls/window.js
+var activeWindow = null;
+var windowDirective = {
+	mounted(element, binding) {
+		if (element.tagName !== "DIALOG") return;
+		let configuration = binding.value;
+		const pageKind = readWindowPage()?.kind;
+		let rootOwner = false;
+		let header = null, host = null, retainedGeometry = null, hostedGeometry = null;
+		let chrome = null, frameContent = null, contentClose = null, contentHelp = null;
+		const show = element.show.bind(element), close = element.close.bind(element);
+		const home = document.createComment("window owner");
+		element.before(home);
+		let owner = null, returnFocus = null;
+		const nonmodal = () => ["window", "popup"].includes(configuration?.type);
+		function closed() {
+			if (element.matches(":popover-open")) element.hidePopover();
+			owner?.removeEventListener("close", closeChild);
+			owner = null;
+			if (home.parentNode && (element.parentNode !== home.parentNode || element.previousSibling !== home)) home.after(element);
+			if (activeWindow === element) activeWindow = null;
+		}
+		function nativeClosed() {
+			if (element.open) return;
+			closed();
+			if (element.classList.contains("window-page-root")) window.dispatchEvent(new CustomEvent("tactic-window-page-closed", { detail: { kind: configuration?.kind } }));
+			if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+			returnFocus = null;
+		}
+		function closeChild(event) {
+			if (event.target === owner) element.close();
+		}
+		function raise(event) {
+			if (!element.open || !element.matches(":popover-open") || activeWindow === element || element.querySelector("dialog:modal")) return;
+			if (event && event.target.closest("[popover]") !== element) return;
+			const focused = element.contains(document.activeElement) ? document.activeElement : null;
+			element.hidePopover();
+			element.showPopover();
+			focused?.focus({ preventScroll: true });
+			activeWindow = element;
+		}
+		element.show = () => {
+			if (!nonmodal()) {
+				if (element.matches(":modal")) element.focus();
+				else show();
+				return;
+			}
+			if (element.open) {
+				element.dispatchEvent(new Event("windowshow"));
+				raise();
+				return;
+			}
+			returnFocus = document.activeElement;
+			owner = returnFocus?.closest(configuration.type === "popup" ? "dialog[open]" : "dialog:modal") || [...document.querySelectorAll("dialog:modal")].at(-1) || null;
+			if (owner === element || element.contains(owner)) owner = null;
+			if (owner) {
+				owner.append(element);
+				owner.addEventListener("close", closeChild);
+			}
+			element.popover = "manual";
+			show();
+			element.showPopover();
+			activeWindow = element;
+			element.dispatchEvent(new Event("windowshow"));
+		};
+		element.close = (...args) => {
+			closed();
+			close(...args);
+			if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+			returnFocus = null;
+		};
+		function escape(event) {
+			if (event.key !== "Escape" || event.defaultPrevented || !nonmodal() || event.target.closest("dialog") !== element) return;
+			event.preventDefault();
+			event.stopPropagation();
+			if (element.dispatchEvent(new Event("cancel", { cancelable: true }))) element.close();
+		}
+		function rememberGeometry(event) {
+			if (event.target !== element || !element.open) return;
+			const { x, y, width, height, maximized, restore } = event.detail;
+			retainedGeometry = {
+				rect: {
+					x,
+					y,
+					width,
+					height
+				},
+				maximized,
+				restore
+			};
+		}
+		element.addEventListener("windowgeometrychange", rememberGeometry);
+		element.addEventListener("keydown", escape);
+		element.addEventListener("close", nativeClosed);
+		element.addEventListener("pointerdown", raise);
+		function placeControls() {
+			const last = [...header.querySelectorAll("button")].at(-1);
+			const anchor = last?.parentElement.tagName === "FORM" ? last.parentElement : last;
+			if (anchor) anchor.before(host);
+			else header.append(host);
+		}
+		const attach = () => {
+			const windowed = configuration !== false && configuration?.type !== "popup";
+			element.classList.toggle("app-window", windowed);
+			element.dataset.windowType = configuration?.type || "dialog";
+			element.dataset.windowKind = configuration?.kind || "";
+			if (element.open && !!pageKind && !rootOwner && configuration?.kind === pageKind && !document.querySelector(".window-page-root")) rootOwner = true;
+			const pageRoot = rootOwner;
+			element.classList.toggle("window-page-root", pageRoot);
+			if (pageRoot) document.title = (element.getAttribute("aria-label") || configuration.kind) + " — TACTIC Stream";
+			if (nonmodal()) element.setAttribute("aria-modal", "false");
+			else element.removeAttribute("aria-modal");
+			const featureHeader = !windowed ? null : [...element.querySelectorAll("header:not([data-window-chrome])")].find((header) => header.closest("dialog") === element) || null;
+			const frameView = [...element.querySelectorAll(".frame-view")].find((view) => view.closest("dialog") === element);
+			const frameHeader = windowed && (featureHeader?.classList.contains("frame-titlebar") || !featureHeader && !!frameView && (frameView.parentElement === element || frameView.parentElement?.parentElement === element && frameView.parentElement.matches(".frame-host, .frame-host-body")));
+			if (frameHeader && !chrome) {
+				chrome = document.createElement("header");
+				chrome.dataset.windowChrome = "";
+				chrome.className = "app-dialog-titlebar";
+				element.prepend(chrome);
+				element.classList.add("app-window-frame-host");
+			} else if (!frameHeader && chrome) {
+				chrome.remove();
+				chrome = null;
+				frameContent?.classList.remove("app-window-frame-content");
+				frameContent = null;
+				element.classList.remove("app-window-frame-host");
+			}
+			if (frameHeader) {
+				let content = featureHeader || frameView;
+				while (content.parentElement !== element) content = content.parentElement;
+				if (frameContent !== content) {
+					frameContent?.classList.remove("app-window-frame-content");
+					frameContent = content;
+					frameContent.classList.add("app-window-frame-content");
+				}
+			}
+			const closeButton = featureHeader ? [...featureHeader.querySelectorAll("button")].find((button) => !button.closest(".app-window-controls") && button.querySelector("[data-icon=\"close\"], [data-icon=\"MDI_CLOSE\"]")) : null;
+			const hiddenClose = frameHeader ? closeButton : null;
+			if (contentClose !== hiddenClose) {
+				contentClose?.classList.remove("app-window-content-close");
+				contentClose = hiddenClose;
+				contentClose?.classList.add("app-window-content-close");
+			}
+			const helpButton = frameHeader && featureHeader ? [...featureHeader.querySelectorAll("button")].find((button) => !button.closest(".app-window-controls") && button.querySelector("[data-icon=\"help\"], [data-icon=\"MDI_HELP_CIRCLE\"]")) : null;
+			if (contentHelp !== helpButton) {
+				contentHelp?.classList.remove("app-window-content-help");
+				contentHelp = helpButton;
+				contentHelp?.classList.add("app-window-content-help");
+			}
+			const next = chrome || featureHeader;
+			const properties = () => ({
+				element,
+				header,
+				geometry: hostedGeometry,
+				backProvided: !!configuration?.backProvided,
+				title: chrome ? element.getAttribute("aria-label") || element.dataset.windowKind : "",
+				closeButton: contentClose,
+				closeRequired: !!chrome || !closeButton,
+				closeDisabled: !!contentClose?.disabled,
+				helpButton: contentHelp,
+				helpLabel: contentHelp?.getAttribute("aria-label") || "",
+				helpDisabled: !!contentHelp?.disabled,
+				pageRoot,
+				openSeparate: !pageRoot && Object.hasOwn(windowPages, configuration?.kind || "") ? () => window.dispatchEvent(new CustomEvent("tactic-window-page", { detail: {
+					kind: configuration.kind,
+					context: configuration.page
+				} })) : null
+			});
+			if (next === header) {
+				if (host && !header.contains(host)) placeControls();
+				if (host) render(h(_sfc_main, properties()), host);
+				return;
+			}
+			if (host) {
+				render(null, host);
+				host.remove();
+			}
+			header = next;
+			host = null;
+			if (!header) return;
+			hostedGeometry = configuration?.geometry || retainedGeometry;
+			host = document.createElement("span");
+			host.className = "app-window-controls";
+			placeControls();
+			render(h(_sfc_main, properties()), host);
+		};
+		const observer = new MutationObserver(attach);
+		observer.observe(element, {
+			childList: true,
+			subtree: true,
+			attributes: true,
+			attributeFilter: [
+				"aria-label",
+				"disabled",
+				"open"
+			]
+		});
+		attach();
+		element.windowConfigure = (value) => {
+			if (value?.geometry) hostedGeometry = value.geometry;
+			configuration = value;
+			attach();
+		};
+		element.windowCleanup = () => {
+			closed();
+			home.remove();
+			element.show = show;
+			element.close = close;
+			element.removeEventListener("windowgeometrychange", rememberGeometry);
+			element.removeEventListener("keydown", escape);
+			element.removeEventListener("close", nativeClosed);
+			element.removeEventListener("pointerdown", raise);
+			observer.disconnect();
+			if (host) {
+				render(null, host);
+				host.remove();
+			}
+			chrome?.remove();
+			frameContent?.classList.remove("app-window-frame-content");
+			contentClose?.classList.remove("app-window-content-close");
+			contentHelp?.classList.remove("app-window-content-help");
+			element.classList.remove("app-window-frame-host");
+		};
+	},
+	updated(element, binding) {
+		element.windowConfigure?.(binding.value);
+	},
+	beforeUnmount(element) {
+		element.windowCleanup?.();
+		element.classList.remove("app-window");
+		delete element.windowCleanup;
+		delete element.windowConfigure;
+	}
+};
+//#endregion
 //#region src/main.js
 initializeAppearance();
 installDebugLogging();
@@ -2926,9 +2428,9 @@ var documentation = location.pathname === "/docs" || location.pathname === "/doc
 if (documentation) watchEffect(() => {
 	document.title = t("TACTIC Stream — API reference");
 });
-var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([0,1,2,3,4,5])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([6,7,1,2,3,4,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38])));
+var screen = asyncComponent(documentation ? () => __vitePreload(() => import("./ApiDocumentation.js"), __vite__mapDeps([48,2,3,4,5,6,7,8,49,50,21,51])) : () => __vitePreload(() => import("./App.js").then((n) => n.t), __vite__mapDeps([52,1,2,3,4,5,6,7,8,9,49,50,12,13,14,15,16,17,18,19,20,11,21,22,23,24,25,26,27,0,10,28,29,30,53,45,46,38,42,43,40,41,54])));
 createApp({ render: () => h(screen) }).directive("window", windowDirective).mount("#app");
 //#endregion
-export { savePreferencePage as $, t as A, cssColor as B, redact as C, randomId as D, setServerDebugContext as E, languages as F, layout as G, fontFamily as H, readableText as I, readableText$1 as J, lineHeights as K, saveAppearance as L, colorModes as M, effectiveColorMode as N, randomUuid as O, frameColors as P, preferences as Q, blend as R, logRequest as S, sessionRecords as T, fontLineHeight as U, cssRoles as V, fontMetricHeight as W, configurationPreview as X, textStyles as Y, normalizePreferences as Z, forgetSessions as _, fit as a, BusyIndicator_default as at, levels as b, _sfc_main$1 as c, ripple as d, normalizeColumns as et, _sfc_main$2 as f, exportSession as g, debugSettings as h, dockMinimumWidth as i, themes as it, appearance as j, asyncComponent as k, tooltipDirective as l, debugLog as m, windowDirective as n, accentPresets as nt, mobile as o, _plugin_vue_export_helper_default as ot, clearLive as p, metrics as q, dockMinimumHeight as r, iconSets as rt, mobileLayout as s, __vitePreload as t, taskColumns as tt, capturePress as u, formatEvent as v, savedSessions as w, logEvent as x, importSession as y, controls as z };
+export { updatesAvailable as $, saveServerConfiguration as A, savedSessions as At, sidebarRequest as B, projectNavigation as C, forgetSessions as Ct, resolveCustomUrl as D, logEvent as Dt, resetRequestActivity as E, levels as Et, securityRules as F, asyncComponent as Ft, transactionDetails as G, tableDependencies as H, securityUsers as I, userProfile as J, uploadFormFile as K, serverConfiguration as L, scriptShelf as M, setServerDebugContext as Mt, searchConfiguration as N, randomId as Nt, resultItems as O, logRequest as Ot, securityGroups as P, randomUuid as Pt, updateDelay as Q, serverUpdates as R, projectCreationCatalog as S, exportSession as St, requestActivity as T, importSession as Tt, tableDependencyFile as U, tableCells as V, tableParentGroup as W, workspaceLayouts as X, widgetConfiguration as Y, setUpdatesAvailable as Z, navigationLink as _, mobile as _t, __vitePreload as a, editNotificationReply as at, objectStatus as b, debugLog as bt, beginActivity as c, notify as ct, formDefinition as d, submitNotificationReply as dt, activeNotifications as et, interfaceDefinition as f, serverClock as ft, messagesRequest as g, fit as gt, messageFileRequest as h, dockMinimumWidth as ht, readWindowPage as i, dismissNotification as it, scriptEditor as j, sessionRecords as jt, rpc as k, redact as kt, columnsEditor as l, resetNotifications as lt, linkPreviews as m, dockMinimumHeight as mt, bootstrapWindowPage as n, cancelNotificationReply as nt, fileBlob as o, failNotificationReply as ot, knowledgeRequest as p, serverTimestamp as pt, userAvatar as q, installWindowPages as r, clearNotificationHistory as rt, activityFeed as s, notificationHistory as st, windowDirective as t, beginNotificationReply as tt, endActivity as u, setNotificationProgress as ut, objectDeletion as v, mobileLayout as vt, rawDatabase as w, formatEvent as wt, projectCatalog as x, debugSettings as xt, objectRelations as y, clearLive as yt, sessionAction as z };
 
 //# sourceMappingURL=index.js.map

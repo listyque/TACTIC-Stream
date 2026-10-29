@@ -1665,6 +1665,10 @@ async function openDirect(login) {
   }
 }
 defineExpose({
+  windowContext: () => {
+    saveDraft();
+    return { route: { args: [current.value] }, args: [current.value] };
+  },
   open,
   close,
   openMessage,

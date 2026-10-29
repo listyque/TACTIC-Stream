@@ -597,7 +597,24 @@ function frameEvent(action) {
       move(index, action.type === 'up' ? -1 : 1);
   }
 }
-defineExpose({ open, reload: load, canLeave });
+defineExpose({
+  open,
+  reload: load,
+  canLeave,
+  windowContext: () => {
+    if (dirty.value || busy.value)
+      throw Error('Apply or discard unsaved changes first');
+    return {
+      route: {
+        shelf: {
+          entryKey: props.entryKey,
+          preset: props.preset,
+          title: props.title
+        }
+      }
+    };
+  }
+});
 </script>
 
 <template>

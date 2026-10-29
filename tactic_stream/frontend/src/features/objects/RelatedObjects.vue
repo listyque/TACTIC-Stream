@@ -326,6 +326,27 @@ export default {
         if (request === this.availableRequest) this.availableBusy = false;
       }
     },
+    windowContext() {
+      if (
+        this.busy ||
+        this.availableBusy ||
+        this.saving ||
+        this.uncertain ||
+        this.dirty
+      )
+        throw Error('Apply or discard unsaved changes first');
+      return {
+        project: this.project,
+        route: {
+          args: [
+            { __search_key__: this.parent.__search_key__ },
+            this.selectedType,
+            this.linkBranch,
+            this.readBranch
+          ]
+        }
+      };
+    },
     async open(record, searchType = '', linkBranch = null, readBranch = null) {
       if (this.$refs.dialog.open) return;
       const id = ++this.request;
@@ -679,7 +700,8 @@ export default {
   <dialog
     v-window="{
       kind: linking ? 'link_sobjects' : 'related_objects',
-      type: linking ? undefined : 'window'
+      type: linking ? undefined : 'window',
+      page: windowContext
     }"
     ref="dialog"
     class="app-dialog related-objects"
@@ -795,7 +817,10 @@ export default {
     @saved="refresh"
   />
   <dialog
-    v-window="{ kind: 'sobject_info' }"
+    v-window="{
+      kind: 'sobject_info',
+      page: () => ({ project, route: { key: detail.__search_key__ } })
+    }"
     ref="details"
     class="app-dialog object-details"
     :aria-label="t('Object details')"

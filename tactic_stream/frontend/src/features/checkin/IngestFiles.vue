@@ -267,6 +267,17 @@ export default {
       }
       this.reset();
     },
+    windowContext() {
+      if (this.busy || this.files.length || this.conflicts)
+        throw Error('Apply or discard unsaved changes first');
+      return {
+        project: this.project,
+        route: {
+          searchType: this.parent.__search_key__.split('?')[0],
+          args: [this.parent, this.branch]
+        }
+      };
+    },
     async open(parent, branch) {
       if (this.$refs.dialog.open) {
         this.$refs.dialog.show();
@@ -500,7 +511,7 @@ export default {
 <template>
   <Teleport to="body">
     <dialog
-      v-window="{ kind: 'ingest_files', type: 'window' }"
+      v-window="{ kind: 'ingest_files', type: 'window', page: windowContext }"
       ref="dialog"
       class="record-dialog ingest-files"
       :aria-label="t('Add files')"

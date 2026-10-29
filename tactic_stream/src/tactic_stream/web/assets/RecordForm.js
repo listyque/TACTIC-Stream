@@ -1,10 +1,8 @@
-import { t as __exportAll } from "./rolldown-runtime.js";
+import { n as arrange, r as __exportAll, t as _sfc_main$6 } from "./ObjectFieldFrame.js";
 import { B as useId, C as h, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, M as onUpdated, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, a as vModelSelect, b as createVNode, g as createCommentVNode, h as createBlock, i as vModelCheckbox, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as t, Y as textStyles, c as _sfc_main$6, j as appearance, o as mobile, ot as _plugin_vue_export_helper_default, z as controls } from "./index.js";
-import { D as _sfc_main$12, Jt as label, N as _sfc_main$11, O as _sfc_main$9, P as _sfc_main$8, R as _sfc_main$13, Tt as uploadFormFile, W as formDefinition, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$7, qt as button, r as observeFrameSizes, w as ItemPreview_default, y as translate, z as _sfc_main$10 } from "./CodeBlock.js";
-import { t as arrange } from "./fields.ui.js";
-import { t as _sfc_main$14 } from "./ObjectFieldFrame.js";
-import { t as readPreviewImage } from "./previewImage.js";
+import { E as textStyles, L as _plugin_vue_export_helper_default, g as controls, o as t, s as appearance, t as _sfc_main$7 } from "./AppButton.js";
+import { K as uploadFormFile, _t as mobile, d as formDefinition, k as rpc } from "./index.js";
+import { B as node, C as ItemPreview_default, D as _sfc_main$10, E as _sfc_main$13, F as _sfc_main$14, I as _sfc_main$11, L as button, M as _sfc_main$12, N as _sfc_main$9, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$8, v as translate } from "./resize.js";
 import { n as qtLabelTextWidth } from "./textMetrics.js";
 import { t as captionHeight } from "./sections.ui.js";
 //#region src/features/objects/recordFields.js
@@ -246,7 +244,7 @@ var _sfc_main$4 = {
 					"height": "44px",
 					"width": "100%"
 				}
-			}, [createVNode(_sfc_main$7, {
+			}, [createVNode(_sfc_main$8, {
 				scene: scene.value,
 				onEvent: action
 			}, null, 8, ["scene"]), createBaseVNode("input", {
@@ -263,10 +261,27 @@ var _sfc_main$4 = {
 	}
 };
 //#endregion
+//#region src/controls/previewImage.js
+async function readPreviewImage(file) {
+	const url = await new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onerror = reject;
+		reader.onload = () => resolve(reader.result);
+		reader.readAsDataURL(file);
+	});
+	await new Promise((resolve, reject) => {
+		const image = new Image();
+		image.onload = resolve;
+		image.onerror = reject;
+		image.src = url;
+	});
+	return url;
+}
+//#endregion
 //#region src/controls/ImagePicker.vue
 var _sfc_main$3 = {
 	components: {
-		AppButton: _sfc_main$6,
+		AppButton: _sfc_main$7,
 		ItemPreview: ItemPreview_default
 	},
 	props: {
@@ -588,14 +603,14 @@ var _sfc_main$2 = {
 				class: normalizeClass(["app-spin-box", { disabled: __props.disabled }]),
 				onKeydown: key
 			}, [
-				createVNode(_sfc_main$6, {
+				createVNode(_sfc_main$7, {
 					"icon-only": "",
 					icon: "chevron-down",
 					label: "Decrease value",
 					disabled: __props.disabled || __props.readonly || __props.modelValue <= __props.min,
 					onClick: _cache[0] || (_cache[0] = ($event) => increment(-1))
 				}, null, 8, ["disabled"]),
-				createVNode(_sfc_main$8, {
+				createVNode(_sfc_main$9, {
 					modelValue: text.value,
 					"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => text.value = $event),
 					inputmode: "decimal",
@@ -624,7 +639,7 @@ var _sfc_main$2 = {
 					"aria-valuenow",
 					"error-state"
 				]),
-				createVNode(_sfc_main$6, {
+				createVNode(_sfc_main$7, {
 					"icon-only": "",
 					icon: "chevron-up",
 					label: "Increase value",
@@ -883,7 +898,7 @@ var _sfc_main$1 = {
 				ref: host,
 				class: "object-editor-surface",
 				style: normalizeStyle({ height: scene.value.height + "px" })
-			}, [createVNode(_sfc_main$7, {
+			}, [createVNode(_sfc_main$8, {
 				scene: scene.value,
 				views,
 				onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
@@ -918,14 +933,14 @@ var _sfc_main = {
 		return { formId: useId() };
 	},
 	components: {
-		AppDateField: _sfc_main$9,
-		AppSwitch: _sfc_main$10,
-		AppColorInput: _sfc_main$11,
-		AppButton: _sfc_main$6,
-		AppTextField: _sfc_main$8,
-		AppTextArea: _sfc_main$12,
-		AppSelect: _sfc_main$13,
-		ObjectFieldFrame: _sfc_main$14,
+		AppDateField: _sfc_main$10,
+		AppSwitch: _sfc_main$11,
+		AppColorInput: _sfc_main$12,
+		AppButton: _sfc_main$7,
+		AppTextField: _sfc_main$9,
+		AppTextArea: _sfc_main$13,
+		AppSelect: _sfc_main$14,
+		ObjectFieldFrame: _sfc_main$6,
 		ObjectFieldGrid: _sfc_main$5,
 		AppFileInput: _sfc_main$4,
 		ImagePicker: ImagePicker_default,
@@ -973,7 +988,8 @@ var _sfc_main = {
 			selectedFields: [],
 			instanceRelation: null,
 			operation: "",
-			formSearchKey: ""
+			formSearchKey: "",
+			windowOpenArgs: []
 		};
 	},
 	computed: {
@@ -1089,6 +1105,18 @@ var _sfc_main = {
 	},
 	methods: {
 		t,
+		windowContext() {
+			if (this.loading || this.saving || this.uncertain || this.dirty || this.createBatch || Object.keys(this.files).length) throw Error("Apply or discard unsaved changes first");
+			return {
+				project: this.project,
+				route: {
+					searchType: this.searchType,
+					editView: this.editView,
+					insertView: this.insertView,
+					args: this.windowOpenArgs
+				}
+			};
+		},
 		editorAction(event) {
 			if (event.type === "mode") {
 				if (event.value === "batch" && !this.batchCreationAllowed) return;
@@ -1267,6 +1295,11 @@ var _sfc_main = {
 				this.$refs.dialog.show();
 				return;
 			}
+			this.windowOpenArgs = [
+				searchKey,
+				sourceKey,
+				relation
+			];
 			const { operation = "", ...relations } = relation;
 			if (!["", "publish"].includes(operation)) throw new Error("Unsupported form operation");
 			this.operation = operation;
@@ -1896,11 +1929,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		], 64)) : createCommentVNode("", true)
 	], 64))], 40, _hoisted_1)), [[_directive_window, {
 		kind: $props.searchType === "sthpw/task" ? "task_editor" : "add_sobject",
-		type: "dialog"
+		type: "dialog",
+		page: $options.windowContext
 	}]]);
 }
 var RecordForm_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);
 //#endregion
-export { fieldKind as a, ImagePicker_default as i, _sfc_main$2 as n, unsupportedField as o, format as r, RecordForm_default as t };
+export { fieldKind as a, RecordForm_default as default, readPreviewImage as i, format as n, unsupportedField as o, ImagePicker_default as r, _sfc_main$2 as t };
 
 //# sourceMappingURL=RecordForm.js.map

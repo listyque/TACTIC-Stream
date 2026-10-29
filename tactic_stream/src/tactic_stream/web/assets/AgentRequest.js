@@ -1,10 +1,11 @@
 import { D as nextTick, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
-import { A as t, O as randomUuid, V as cssRoles, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
-import { Jt as label, Vt as notify, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$5, k as _sfc_main$4, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import { t as _sfc_main$6 } from "./AppDialog.js";
-import { t as _sfc_main$7 } from "./AppMenuItem.js";
+import { a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3, v as cssRoles } from "./AppButton.js";
+import { Pt as randomUuid, ct as notify, k as rpc } from "./index.js";
+import { B as node, L as button, O as _sfc_main$4, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$5, v as translate, z as muted } from "./resize.js";
+import { ut as _sfc_main$6, xt as _sfc_main$7 } from "./ConfiguredView.js";
+import { t as _sfc_main$8 } from "./AppDialog.js";
 import { t as listAction } from "./tree.ui.js";
-import { gt as _sfc_main$8, m as describe$2 } from "./App.js";
+import { m as describe$2 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {
 	return {
@@ -880,7 +881,7 @@ var _sfc_main$1 = {
 				disabled: !__props.frameNode.enabled
 			}, {
 				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.frameNode.actions, (action, index) => {
-					return openBlock(), createElementBlock(Fragment, { key: index }, [action.separator ? (openBlock(), createElementBlock("hr", _hoisted_1$1)) : (openBlock(), createBlock(_sfc_main$7, {
+					return openBlock(), createElementBlock(Fragment, { key: index }, [action.separator ? (openBlock(), createElementBlock("hr", _hoisted_1$1)) : (openBlock(), createBlock(_sfc_main$6, {
 						key: 1,
 						label: action.title,
 						icon: action.icon,
@@ -962,7 +963,7 @@ var _sfc_main$1 = {
 						class: normalizeClass(["agent-message", row.role]),
 						style: normalizeStyle(messageStyle(row))
 					}, [
-						createVNode(_sfc_main$8, { text: safeMarkdown(row.text) }, null, 8, ["text"]),
+						createVNode(_sfc_main$7, { text: safeMarkdown(row.text) }, null, 8, ["text"]),
 						(openBlock(true), createElementBlock(Fragment, null, renderList(row.attachments || [], (file) => {
 							return openBlock(), createElementBlock("div", {
 								key: file.attachment_id,
@@ -1478,9 +1479,26 @@ var _sfc_main = {
 			observer?.disconnect();
 			clearPreviews();
 		});
-		__expose({ open });
+		__expose({
+			open,
+			windowContext: () => ({
+				project: model.value.context?.project,
+				route: { request: model.value.selected },
+				state: {
+					context: model.value.context,
+					selected: model.value.selected,
+					draft: draft(model.value)
+				}
+			}),
+			restoreWindowContext: async (state) => {
+				if (state.context) model.value.context = state.context;
+				model.value.selected = state.selected || "";
+				await request();
+				Object.assign(model.value, restored(state.draft || {}));
+			}
+		});
 		return (_ctx, _cache) => {
-			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$6, {
+			return openBlock(), createBlock(Teleport, { to: "body" }, [createVNode(_sfc_main$8, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "External agent",

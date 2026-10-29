@@ -1,13 +1,12 @@
 import { D as nextTick, F as renderSlot, J as isRef, K as withCtx, N as openBlock, P as renderList, U as watch, X as reactive, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, w as inject, y as createTextVNode } from "./vue.js";
+import { a as _sfc_main$4, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
 import { i as semanticName, r as aliases } from "./icons.js";
-import { A as t, D as randomId, c as _sfc_main$3, f as _sfc_main$4, j as appearance } from "./index.js";
-import { D as _sfc_main$10, E as _sfc_main$11, F as _sfc_main$7, J as messageFileRequest, Jt as label, K as knowledgeRequest, P as _sfc_main$8, R as _sfc_main$9, T as AppSearchField_default, Xt as node, Zt as rect, _ as copyText, h as xmlTokens, i as _sfc_main$5, k as _sfc_main$6, m as pythonTokens, p as javascriptTokens, q as linkPreviews, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import { n as escapeHtml, r as extractSkeys } from "./richText.js";
-import { n as browserLink } from "./links.js";
-import { t as _sfc_main$12 } from "./AttachmentCard.js";
+import { Nt as randomId, h as messageFileRequest, m as linkPreviews, p as knowledgeRequest } from "./index.js";
+import { B as node, E as _sfc_main$10, F as _sfc_main$9, L as button, N as _sfc_main$8, O as _sfc_main$6, P as _sfc_main$7, R as label, T as _sfc_main$11, V as rect, f as javascriptTokens, g as copyText, m as xmlTokens, n as observeFrameSizes, p as pythonTokens, r as _sfc_main$5, v as translate, w as AppSearchField_default } from "./resize.js";
+import { M as extractSkeys, j as escapeHtml, u as _sfc_main$12, x as browserLink } from "./admin.document.js";
+import { C as messageDate, h as _sfc_main$14, ut as _sfc_main$13 } from "./ConfiguredView.js";
 import { t as MarkdownItCallable } from "./markdown-it.js";
-import { t as _sfc_main$13 } from "./AppMenuItem.js";
-import { B as _sfc_main$15, V as messageDate, o as _sfc_main$14 } from "./App.js";
+import { o as _sfc_main$15 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/knowledge/workspace.ui.mjs
 var metrics = Object.freeze({
 	inset: 8,
@@ -2408,7 +2407,7 @@ var _sfc_main = {
 					scene: { nodes: scene.value.nodes.filter((node) => node.kind !== "View") },
 					onEvent: workspaceAction
 				}, null, 8, ["scene"]),
-				!initialized.value ? (openBlock(), createBlock(_sfc_main$14, {
+				!initialized.value ? (openBlock(), createBlock(_sfc_main$15, {
 					key: 0,
 					style: normalizeStyle(style(bounds.value.body)),
 					title: "Knowledge Base is not initialized",
@@ -2562,7 +2561,7 @@ var _sfc_main = {
 								label: "Previous linked object",
 								onClick: _cache[9] || (_cache[9] = ($event) => linkedIndex.value = (linkedIndex.value + linked.value.length - 1) % linked.value.length)
 							})) : createCommentVNode("", true),
-							createVNode(_sfc_main$15, {
+							createVNode(_sfc_main$14, {
 								preview: linkedObject.value,
 								compact: "",
 								onOpen: openLink
@@ -2786,7 +2785,7 @@ var _sfc_main = {
 								label: "Previous linked object",
 								onClick: _cache[20] || (_cache[20] = ($event) => linkedIndex.value = (linkedIndex.value + linked.value.length - 1) % linked.value.length)
 							})) : createCommentVNode("", true),
-							createVNode(_sfc_main$15, {
+							createVNode(_sfc_main$14, {
 								preview: linkedObject.value,
 								compact: "",
 								onOpen: openLink
@@ -2816,7 +2815,7 @@ var _sfc_main = {
 						resourcesVisible.value && !historyPreview.value ? (openBlock(), createElementBlock("section", _hoisted_23, [
 							createBaseVNode("h4", null, toDisplayString(unref(t)("Linked objects and files")), 1),
 							(openBlock(true), createElementBlock(Fragment, null, renderList(resourceKeys.value, (key) => {
-								return openBlock(), createBlock(_sfc_main$15, {
+								return openBlock(), createBlock(_sfc_main$14, {
 									key,
 									preview: references.value[key] || {
 										searchKey: key,

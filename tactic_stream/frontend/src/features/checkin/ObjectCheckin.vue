@@ -185,6 +185,14 @@ export default {
       }
       this.reset();
     },
+    windowContext() {
+      if (this.busy || this.files.length || this.appendUncertain)
+        throw Error('Apply or discard unsaved changes first');
+      return {
+        project: this.project,
+        route: { key: this.owner.__search_key__ }
+      };
+    },
     async open(record, options = {}) {
       const request = ++this.request;
       this.pickerRequest = request;
@@ -548,7 +556,9 @@ export default {
     <dialog
       ref="dialog"
       v-window="
-        appendSnapshot ? { type: 'dialog', kind: 'snapshot_append' } : false
+        appendSnapshot
+          ? { type: 'dialog', kind: 'snapshot_append', page: windowContext }
+          : false
       "
       class="record-dialog object-checkin"
       :class="{ 'snapshot-append': appendSnapshot }"

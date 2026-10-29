@@ -1,12 +1,13 @@
 import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as t, Q as preferences, c as _sfc_main$3, j as appearance, o as mobile, ot as _plugin_vue_export_helper_default, z as controls } from "./index.js";
-import { Jt as label, Tt as uploadFormFile, X as navigationLink, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$4, qt as button, r as observeFrameSizes, st as resultItems, y as translate } from "./CodeBlock.js";
+import { L as _plugin_vue_export_helper_default, g as controls, k as preferences, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
+import { K as uploadFormFile, O as resultItems, _ as navigationLink, _t as mobile, k as rpc } from "./index.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$4, v as translate } from "./resize.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { a as sourcePath } from "./files.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { t as _sfc_main$5 } from "./AppDialog.js";
-import { x as captionedSwitch } from "./App.js";
+import { t as captionedSwitch } from "./toggle.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/files/object_checkin.ui.mjs
 function modeChoice(model, width, language) {
 	const tr = (text, values) => translate(text, language, values), compact = width < 360, headingHeight = model.inline ? 26 : 64, columns = compact || model.inline ? 2 : 3, gap = 8, cell = (width - gap * (columns - 1)) / columns, children = [label("multiFileCheckinQuestion", rect(0, 0, width, headingHeight), model.inline ? tr("Check in multiple files?") : tr("{count} files selected. Check in one group or separately in sequence?", { count: model.count }), { wrap: true })], choices = [[
@@ -490,6 +491,13 @@ var _sfc_main = {
 			}
 			this.reset();
 		},
+		windowContext() {
+			if (this.busy || this.files.length || this.appendUncertain) throw Error("Apply or discard unsaved changes first");
+			return {
+				project: this.project,
+				route: { key: this.owner.__search_key__ }
+			};
+		},
 		async open(record, options = {}) {
 			const request = ++this.request;
 			this.pickerRequest = request;
@@ -809,7 +817,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		}, null, 40, _hoisted_3)
 	], 46, _hoisted_1)), [[_directive_window, $data.appendSnapshot ? {
 		type: "dialog",
-		kind: "snapshot_append"
+		kind: "snapshot_append",
+		page: $options.windowContext
 	} : false]]), createVNode(_component_ObjectRevisionConfirmation, {
 		ref: "revisionDialog",
 		busy: $data.busy,

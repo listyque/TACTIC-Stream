@@ -152,7 +152,25 @@ async function open(value, connectionId = '') {
       ?.querySelector('[data-frame=mcpCollect_0]')
       ?.scrollIntoView({ block: 'center' });
 }
-defineExpose({ open });
+defineExpose({
+  open,
+  restoreWindowContext: (state) => Object.assign(model.value, state),
+  windowContext: () => {
+    const { ticket: ignored, ...value } = context || {};
+    if (model.value.busy)
+      throw Error('Please wait for the current operation to finish');
+    return {
+      project: value.project,
+      route: { args: [value, focusConnection] },
+      args: [value, focusConnection],
+      state: Object.fromEntries(
+        ['title', 'instructions', 'minutes', 'selected', 'issued'].map(
+          (key) => [key, model.value[key]]
+        )
+      )
+    };
+  }
+});
 </script>
 <template>
   <AppDialog

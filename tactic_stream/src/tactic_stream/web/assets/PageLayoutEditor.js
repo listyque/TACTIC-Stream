@@ -1,11 +1,12 @@
 import { I as resolveComponent, K as withCtx, N as openBlock, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
-import { O as randomUuid, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Jt as label, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$2, k as _sfc_main$3, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { L as _plugin_vue_export_helper_default, s as appearance } from "./AppButton.js";
+import { Pt as randomUuid, k as rpc } from "./index.js";
+import { B as node, L as button, O as _sfc_main$3, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$2, v as translate } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
-import { o as projectPath } from "./links.js";
+import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";
+import { $t as sizing, At as change$1, Bt as change, Ct as _sfc_main$4, Ft as scope$1, Gt as geometry$1, Ht as duplicate, It as type, J as selected, Jt as path, K as alignment, Kt as kinds, Lt as add, Mt as filter, Nt as mode, Pt as options, Qt as siblings, Rt as appearances, Ut as fingerprint, Vt as copy, Wt as geometries, Xt as reorder, Y as toggle, Yt as remove, Z as spacingField, Zt as reparent, a as _sfc_main$5, en as spacing, jt as fields$1, o as controls, q as roots, qt as layers, s as zooms, zt as block } from "./ConfiguredView.js";
 import { n as buttonWidth } from "./metrics.js";
 import { t as listAction } from "./tree.ui.js";
-import { A as zooms, At as duplicate, Bt as siblings, Ct as scope$1, Dt as block, Et as appearances, Ft as layers, G as roots, Ht as spacing, It as path, K as selected, Lt as remove, Mt as geometries, Nt as geometry$1, O as _sfc_main$5, Ot as change, Pt as kinds, Rt as reorder, St as options, Tt as add, Vt as sizing, W as alignment, Y as spacingField, _t as _sfc_main$4, bt as filter, ct as documentEvent, dt as sectionSelector, jt as fingerprint, k as controls, kt as copy, lt as notices, pt as toolbar$1, q as toggle, vt as change$1, wt as type, xt as mode, yt as fields$1, zt as reparent } from "./App.js";
 //#region src/features/administration/PageEditorTools.vue
 var _sfc_main$1 = {
 	__name: "PageEditorTools",

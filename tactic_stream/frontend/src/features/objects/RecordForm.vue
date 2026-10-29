@@ -70,7 +70,8 @@ export default {
       selectedFields: [],
       instanceRelation: null,
       operation: '',
-      formSearchKey: ''
+      formSearchKey: '',
+      windowOpenArgs: []
     };
   },
   computed: {
@@ -232,6 +233,26 @@ export default {
   },
   methods: {
     t,
+    windowContext() {
+      if (
+        this.loading ||
+        this.saving ||
+        this.uncertain ||
+        this.dirty ||
+        this.createBatch ||
+        Object.keys(this.files).length
+      )
+        throw Error('Apply or discard unsaved changes first');
+      return {
+        project: this.project,
+        route: {
+          searchType: this.searchType,
+          editView: this.editView,
+          insertView: this.insertView,
+          args: this.windowOpenArgs
+        }
+      };
+    },
     editorAction(event) {
       if (event.type === 'mode') {
         if (event.value === 'batch' && !this.batchCreationAllowed) return;
@@ -472,6 +493,7 @@ export default {
         this.$refs.dialog.show();
         return;
       }
+      this.windowOpenArgs = [searchKey, sourceKey, relation];
       const { operation = '', ...relations } = relation;
       if (!['', 'publish'].includes(operation))
         throw new Error('Unsupported form operation');
@@ -784,7 +806,8 @@ export default {
   <dialog
     v-window="{
       kind: searchType === 'sthpw/task' ? 'task_editor' : 'add_sobject',
-      type: 'dialog'
+      type: 'dialog',
+      page: windowContext
     }"
     ref="dialog"
     class="record-dialog record-form-dialog"

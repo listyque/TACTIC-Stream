@@ -50,6 +50,10 @@ def main():
     command[-1] = "frontend/src/frame/**/*.{vue,css,js}"
     command[command.index("--tab-width") + 1] = "2"
     queued.append(list(command))
+    command[-1] = "frontend/src/features/windows/*.js"
+    queued.append(list(command))
+    command[-1] = "frontend/tests/window_pages.mjs"
+    queued.append(list(command))
     command[-1] = "frontend/src/features/administration/**/*.{vue,js}"
     queued.append(list(command))
     command[-1] = (

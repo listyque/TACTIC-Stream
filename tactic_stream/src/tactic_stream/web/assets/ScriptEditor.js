@@ -1,7 +1,8 @@
 import { D as nextTick, E as mergeProps, F as renderSlot, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, T as mergeModels, U as watch, V as useModel, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, w as inject } from "./vue.js";
-import { A as t, O as randomUuid, c as _sfc_main$5, f as _sfc_main$4, j as appearance, z as controls } from "./index.js";
-import { Jt as label, T as AppSearchField_default, U as endActivity, V as beginActivity, Xt as node, Yt as muted, Zt as rect, _ as copyText, c as _sfc_main$8, ct as rpc, d as completions, f as documentSymbols, i as _sfc_main$6, k as _sfc_main$9, l as toolbar$1, n as frameContentWidth, qt as button, r as observeFrameSizes, u as _sfc_main$7, ut as scriptEditor, y as translate } from "./CodeBlock.js";
-import { b as _sfc_main$10, c as runBrowserScript, l as scriptTree, s as buttonId, w as _sfc_main$11 } from "./App.js";
+import { a as _sfc_main$4, g as controls, o as t, s as appearance, t as _sfc_main$5 } from "./AppButton.js";
+import { Pt as randomUuid, c as beginActivity, j as scriptEditor, k as rpc, u as endActivity } from "./index.js";
+import { B as node, L as button, O as _sfc_main$9, R as label, V as rect, c as toolbar$1, d as documentSymbols, g as copyText, l as _sfc_main$7, n as observeFrameSizes, r as _sfc_main$6, s as _sfc_main$8, t as frameContentWidth, u as completions, v as translate, w as AppSearchField_default, z as muted } from "./resize.js";
+import { S as _sfc_main$11, b as _sfc_main$10, c as runBrowserScript, l as scriptTree, s as buttonId } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/source.ui.mjs
 function toolbarHeight(width) {
 	return 30 + (width < 530 ? controls.scrollBar.extent : 0);
@@ -1267,7 +1268,11 @@ var _sfc_main = {
 		}
 		__expose({
 			open,
-			reload: load
+			reload: load,
+			windowContext: () => {
+				persist();
+				return { route: { path: [active.value?.folder, active.value?.title].filter(Boolean).join("/") } };
+			}
 		});
 		return (_ctx, _cache) => {
 			const _directive_window = resolveDirective("window");

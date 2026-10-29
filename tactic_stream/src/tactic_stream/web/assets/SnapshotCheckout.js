@@ -1,12 +1,12 @@
 import { D as nextTick, L as resolveDirective, N as openBlock, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, tt as unref } from "./vue.js";
-import { A as t, c as _sfc_main$2, j as appearance, z as controls } from "./index.js";
-import { Jt as label, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$3, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { g as controls, o as t, s as appearance, t as _sfc_main$2 } from "./AppButton.js";
+import { k as rpc, o as fileBlob } from "./index.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$3, v as translate } from "./resize.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { i as sourceIcon, r as prettySize } from "./file_values.js";
 import { t as downloadBlob } from "./files2.js";
-import { t as fileBlob } from "./previewFiles.js";
 import { t as describe$1 } from "./confirmation.ui.js";
-import { C as _sfc_main$4 } from "./App.js";
+import { t as _sfc_main$4 } from "./FrameProgress.js";
 //#region ../src/tactic_stream/shared_ui/features/files/snapshot_checkout.ui.mjs
 function describe(model, width, height, language) {
 	const tr = (text) => translate(text, language), margin = 10, inner = Math.max(0, width - 20), stacked = width < 370, footerHeight = stacked ? 100 : 60, closeWidth = stacked ? inner : 120;
@@ -171,7 +171,7 @@ var _sfc_main = {
 		const props = __props;
 		const dialog = ref(null), snapshot = ref(null), files = ref([]), selected = ref("");
 		const loading = ref(false), ready = ref(false), busy = ref(false), progress = ref(0), error = ref(""), message = ref("");
-		let generation = 0, download, scope;
+		let recordKey = "", generation = 0, download, scope;
 		const rows = computed(() => files.value.map((file, index) => ({
 			token: String(file.code || index),
 			title: file.filename,
@@ -204,6 +204,7 @@ var _sfc_main = {
 		}
 		async function open(record) {
 			close();
+			recordKey = record.__search_key__;
 			const request = generation;
 			scope = {
 				ticket: props.ticket,
@@ -292,9 +293,17 @@ var _sfc_main = {
 		}
 		watch(() => [props.ticket, props.project], () => close());
 		onBeforeUnmount(() => close());
+		function windowContext() {
+			if (busy.value || loading.value) throw Error("Please wait for the current operation to finish");
+			return {
+				project: props.project,
+				route: { args: [{ __search_key__: recordKey }] }
+			};
+		}
 		__expose({
 			open,
-			close
+			close,
+			windowContext
 		});
 		return (_ctx, _cache) => {
 			const _directive_window = resolveDirective("window");
@@ -316,7 +325,8 @@ var _sfc_main = {
 				onEvent: activate
 			}, null, 8, ["model", "files"])], 40, _hoisted_1)), [[_directive_window, {
 				type: "dialog",
-				kind: "snapshot_checkout"
+				kind: "snapshot_checkout",
+				page: windowContext
 			}]])]);
 		};
 	}

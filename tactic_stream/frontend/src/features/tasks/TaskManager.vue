@@ -2679,7 +2679,7 @@ export default {
 <template>
   <Teleport defer :to="docked ? '#dock-tasks' : 'body'">
     <component
-      v-window="docked ? false : { type: 'window' }"
+      v-window="docked ? false : { type: 'window', kind: 'task_manager' }"
       :is="docked ? 'section' : 'dialog'"
       ref="dialog"
       class="configuration-dialog task-manager"

@@ -216,7 +216,11 @@ onBeforeUnmount(() => {
   observer?.disconnect();
   dialog.value?.close();
 });
-defineExpose({ open, close });
+defineExpose({
+  open,
+  close,
+  windowContext: () => ({ route: { args: [selected.value] } })
+});
 </script>
 <template>
   <Teleport to="body">

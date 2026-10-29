@@ -1,7 +1,8 @@
 import { B as useId, D as nextTick, I as resolveComponent, L as resolveDirective, N as openBlock, _ as createElementBlock, b as createVNode, c as withKeys, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, l as withModifiers, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow, u as Fragment } from "./vue.js";
-import { A as t, c as _sfc_main$2, f as _sfc_main$3, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Jt as label, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$4, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import "./App.js";
+import { L as _plugin_vue_export_helper_default, a as _sfc_main$3, o as t, s as appearance, t as _sfc_main$2 } from "./AppButton.js";
+import { k as rpc } from "./index.js";
+import { B as node, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$4, v as translate } from "./resize.js";
+import "./admin.document.js";
 import SearchTypes_default from "./SearchTypes.js";
 import { n as pending, t as graphFrame_default } from "./graphFrame.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/schema/schema_delete.ui.mjs

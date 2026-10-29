@@ -1,6 +1,7 @@
 import { D as nextTick, K as withCtx, N as openBlock, U as watch, Z as ref, b as createVNode, h as createBlock, k as onBeforeUnmount, m as createBaseVNode, p as computed } from "./vue.js";
-import { j as appearance, z as controls } from "./index.js";
-import { Jt as label, Xt as node, Yt as muted, Zt as rect, _ as copyText, ct as rpc, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { g as controls, s as appearance } from "./AppButton.js";
+import { k as rpc } from "./index.js";
+import { B as node, L as button, R as label, V as rect, g as copyText, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
 //#region ../src/tactic_stream/shared_ui/features/configuration/mcp.ui.mjs
 function initial() {
@@ -334,7 +335,26 @@ var _sfc_main = {
 			await nextTick();
 			if (focusConnection && model.value.connections[0]?.id === focusConnection) host.value?.querySelector("[data-frame=mcpCollect_0]")?.scrollIntoView({ block: "center" });
 		}
-		__expose({ open });
+		__expose({
+			open,
+			restoreWindowContext: (state) => Object.assign(model.value, state),
+			windowContext: () => {
+				const { ticket: ignored, ...value } = context || {};
+				if (model.value.busy) throw Error("Please wait for the current operation to finish");
+				return {
+					project: value.project,
+					route: { args: [value, focusConnection] },
+					args: [value, focusConnection],
+					state: Object.fromEntries([
+						"title",
+						"instructions",
+						"minutes",
+						"selected",
+						"issued"
+					].map((key) => [key, model.value[key]]))
+				};
+			}
+		});
 		return (_ctx, _cache) => {
 			return openBlock(), createBlock(_sfc_main$2, {
 				ref_key: "dialog",

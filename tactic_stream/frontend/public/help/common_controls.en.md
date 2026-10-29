@@ -180,3 +180,22 @@ focus to its trigger. Connection offers periodic polling or server push; the
 interval choices appear in polling mode. Disabled rows cannot execute actions.
 Desktop-only commands stay with their client; browser API documentation opens
 in a separate browser tab. Menu availability does not grant server privileges.
+
+## Open a window as a separate browser page
+
+Use **Open in separate page** in a working window's title bar, beside Help and
+the window controls. Messages, Configuration, Administration, scripts, agent
+chat, profiles and supported object editors open in a new tab with their own
+address. The page contains only that window: no project sidebar, search tabs or
+workspace underneath it. Allow pop-ups for this server if the browser blocks it.
+
+The original window stays open. Messages retains the selected conversation and
+its existing saved draft; the new page continues to work after the original tab
+is closed. Reload restores the addressable window and saved state, not an
+unsaved copy of every editor. An editor with changes that cannot be transferred
+asks you to apply or discard them first; an active operation is not duplicated.
+Ordinary server permissions and revision checks still apply.
+
+Short confirmations and value pickers remain inside their owning editor. A
+separate page requires your normal sign-in; its address is not an access token.
+Signing out in another tab invalidates the separate page too.

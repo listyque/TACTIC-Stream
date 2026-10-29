@@ -25,7 +25,9 @@ const props = defineProps({
   closeDisabled: Boolean,
   helpButton: Object,
   helpLabel: String,
-  helpDisabled: Boolean
+  helpDisabled: Boolean,
+  pageRoot: Boolean,
+  openSeparate: Function
 });
 const previousTitle = props.header.getAttribute('title'),
   previousTabIndex = props.header.getAttribute('tabindex');
@@ -152,6 +154,7 @@ function restoreBeforeClose(event) {
     minimize();
 }
 function start(event) {
+  if (props.pageRoot) return;
   if (
     gesture ||
     event.isPrimary === false ||
@@ -187,6 +190,7 @@ function move(event) {
   place(rect);
 }
 function startResize(event, edge) {
+  if (props.pageRoot) return;
   if (
     gesture ||
     event.isPrimary === false ||
@@ -215,6 +219,7 @@ function stop(event) {
     props.header.releasePointerCapture(current.pointer);
 }
 function doubleClick(event) {
+  if (props.pageRoot) return;
   if (
     !event.target.closest('button, a, input, select, textarea, summary, label')
   )
@@ -251,6 +256,7 @@ function opened() {
 const observer = new MutationObserver(opened);
 const sizeObserver = new ResizeObserver(resizeEdges);
 function key(event) {
+  if (props.pageRoot) return;
   if (
     event.target.closest('.app-window') !== props.element ||
     event.target.closest('dialog') !== props.element
@@ -356,6 +362,13 @@ onBeforeUnmount(() => {
   <Teleport v-if="title" :to="header"
     ><strong class="app-window-caption">{{ title }}</strong></Teleport
   ><AppButton
+    v-if="openSeparate && !minimized"
+    class="app-window-separate"
+    icon-only
+    icon="open-in-new"
+    label="Open in separate page"
+    @click="openSeparate"
+  /><AppButton
     v-if="helpButton && !minimized"
     class="app-window-help"
     icon-only
@@ -365,14 +378,14 @@ onBeforeUnmount(() => {
     :disabled="helpDisabled"
     @click="helpButton.click()"
   /><AppButton
-    v-if="element.dataset.windowType === 'window'"
+    v-if="element.dataset.windowType === 'window' && !pageRoot"
     icon-only
     :icon="minimized ? 'window-restore' : 'minus'"
     :label="minimized ? 'Restore window' : 'Minimize window'"
     :aria-pressed="minimized"
     @click="minimize"
   /><AppButton
-    v-if="!minimized"
+    v-if="!minimized && !pageRoot"
     icon-only
     :icon="maximized ? 'window-restore' : 'open-in-full'"
     :label="maximized ? 'Restore window' : 'Maximize window'"
@@ -417,7 +430,7 @@ onBeforeUnmount(() => {
       />
     </header> </Teleport
   ><Teleport :to="element"
-    ><template v-if="!maximized && !minimized"
+    ><template v-if="!pageRoot && !maximized && !minimized"
       ><span
         v-for="edge in [
           'left',
@@ -590,10 +603,10 @@ onBeforeUnmount(() => {
   .app-window-resize {
     display: none;
   }
-  .app-window-controls:has(> .app-window-help) {
+  .app-window-controls:has(> .app-window-help, > .app-window-separate) {
     display: inline-flex;
   }
-  .app-window-controls > :not(.app-window-help) {
+  .app-window-controls > :not(.app-window-help, .app-window-separate) {
     display: none;
   }
   .app-window,

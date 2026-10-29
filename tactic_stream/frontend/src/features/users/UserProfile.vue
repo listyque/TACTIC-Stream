@@ -452,7 +452,12 @@ onBeforeUnmount(() => {
   window.removeEventListener('beforeunload', beforeUnload);
   if (draft.value) draft.value.password = '';
 });
-defineExpose({ open });
+defineExpose({
+  open,
+  windowContext: () => ({
+    route: { args: [selected.value || props.login, directory.value] }
+  })
+});
 </script>
 <template>
   <Teleport to="body">

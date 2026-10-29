@@ -1,6 +1,9 @@
 import { D as nextTick, K as withCtx, N as openBlock, P as renderList, R as resolveDynamicComponent, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, y as createTextVNode } from "./vue.js";
-import { A as t, c as _sfc_main$3, f as _sfc_main$2, j as appearance } from "./index.js";
-import { I as _sfc_main$5, Jt as label, R as _sfc_main$6, Xt as node, Zt as rect, _ as copyText, ct as rpc, i as _sfc_main$4, r as observeFrameSizes, t as _sfc_main$7, y as translate } from "./CodeBlock.js";
+import { a as _sfc_main$2, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
+import { k as rpc } from "./index.js";
+import { B as node, F as _sfc_main$5, R as label, V as rect, g as copyText, n as observeFrameSizes, r as _sfc_main$4, v as translate } from "./resize.js";
+import { t as _sfc_main$6 } from "./AppearanceControls.js";
+import { t as _sfc_main$7 } from "./CodeBlock.js";
 //#region ../src/tactic_stream/shared_ui/features/support/documentation/api.ui.mjs
 function methods(catalog, status, query, language) {
 	query = String(query || "").toLowerCase();
@@ -490,7 +493,7 @@ var _sfc_main = {
 				createBaseVNode("header", _hoisted_2, [
 					createBaseVNode("strong", null, [createVNode(_sfc_main$2, { name: "code" }), createBaseVNode("span", null, toDisplayString(unref(t)("TACTIC API reference")), 1)]),
 					createBaseVNode("a", _hoisted_3, toDisplayString(unref(t)("Workspace")), 1),
-					createVNode(_sfc_main$5, { compact: "" })
+					createVNode(_sfc_main$6, { compact: "" })
 				]),
 				error.value ? (openBlock(), createElementBlock("p", _hoisted_4, toDisplayString(unref(t)(error.value)), 1)) : createCommentVNode("", true),
 				catalog.value ? (openBlock(), createElementBlock("div", _hoisted_5, [createBaseVNode("aside", _hoisted_6, [
@@ -499,14 +502,14 @@ var _sfc_main = {
 						type: "search",
 						"aria-label": unref(t)("Find a method")
 					}, null, 8, _hoisted_7), [[vModelText, search.value]])]),
-					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Method status")), 1), createVNode(_sfc_main$6, {
+					createBaseVNode("label", null, [createTextVNode(toDisplayString(unref(t)("Method status")), 1), createVNode(_sfc_main$5, {
 						modelValue: status.value,
 						"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => status.value = $event),
 						options: statuses,
 						label: "Method status"
 					}, null, 8, ["modelValue"])]),
 					createBaseVNode("small", _hoisted_8, toDisplayString(unref(t)("{count} methods", { count: methods$1.value.length })), 1),
-					createVNode(_sfc_main$6, {
+					createVNode(_sfc_main$5, {
 						class: "api-docs-mobile-picker",
 						"model-value": selected.value,
 						options: methodOptions.value,
@@ -583,7 +586,7 @@ var _sfc_main = {
 					createBaseVNode("section", _hoisted_26, [
 						createBaseVNode("h2", null, toDisplayString(unref(t)("Try the method")), 1),
 						createBaseVNode("p", _hoisted_27, toDisplayString(unref(t)("Choose an example, adjust the fields and run the request.")), 1),
-						exampleOptions.value.length ? (openBlock(), createElementBlock("label", _hoisted_28, [createTextVNode(toDisplayString(unref(t)("Ready example")), 1), createVNode(_sfc_main$6, {
+						exampleOptions.value.length ? (openBlock(), createElementBlock("label", _hoisted_28, [createTextVNode(toDisplayString(unref(t)("Ready example")), 1), createVNode(_sfc_main$5, {
 							"model-value": String(exampleIndex.value),
 							options: exampleOptions.value,
 							disabled: busy.value,

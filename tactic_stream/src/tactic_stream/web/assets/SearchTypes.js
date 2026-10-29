@@ -1,9 +1,10 @@
 import { I as resolveComponent, N as openBlock, Y as markRaw, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
-import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import { t as readPreviewImage } from "./previewImage.js";
+import { L as _plugin_vue_export_helper_default, o as t, s as appearance } from "./AppButton.js";
+import { k as rpc } from "./index.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
-import { ct as documentEvent, dt as sectionSelector, lt as notices, pt as toolbar$1, ut as policy } from "./App.js";
+import { i as readPreviewImage } from "./RecordForm.js";
+import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { t as NamingEditor_default } from "./NamingEditor.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/search_types/search_types.fields.mjs
 var automaticFields = [

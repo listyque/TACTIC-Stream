@@ -1,10 +1,11 @@
 import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, Y as markRaw, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, tt as unref } from "./vue.js";
-import { A as t, D as randomId, c as _sfc_main$2, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$3, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { L as _plugin_vue_export_helper_default, o as t, s as appearance, t as _sfc_main$2 } from "./AppButton.js";
+import { Nt as randomId, k as rpc } from "./index.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$3, v as translate, z as muted } from "./resize.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 import { t as _sfc_main$4 } from "./AppDialog.js";
-import { mt as _sfc_main$5 } from "./App.js";
+import { t as _sfc_main$5 } from "./VirtualCollection.js";
 //#region ../src/tactic_stream/shared_ui/features/files/ingest.ui.mjs
 function optionValue(field, value) {
 	return field === "updateMode" ? value ? "update" : "insert" : value;
@@ -636,6 +637,16 @@ var _sfc_main = {
 			}
 			this.reset();
 		},
+		windowContext() {
+			if (this.busy || this.files.length || this.conflicts) throw Error("Apply or discard unsaved changes first");
+			return {
+				project: this.project,
+				route: {
+					searchType: this.parent.__search_key__.split("?")[0],
+					args: [this.parent, this.branch]
+				}
+			};
+		},
 		async open(parent, branch) {
 			if (this.$refs.dialog.open) {
 				this.$refs.dialog.show();
@@ -929,7 +940,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 			}, null, 544)
 		], 40, _hoisted_1)), [[_directive_window, {
 			kind: "ingest_files",
-			type: "window"
+			type: "window",
+			page: $options.windowContext
 		}]]),
 		createVNode(_component_AppDialog, {
 			ref: "conflictDialog",

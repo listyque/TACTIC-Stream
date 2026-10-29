@@ -167,7 +167,27 @@ function closed() {
   opened = false;
   clearTimeout(timer);
 }
-defineExpose({ open });
+defineExpose({
+  open,
+  dirty: computed(() => UI.dirty(model.value)),
+  windowContext: () => ({
+    route: { provider: model.value.selected },
+    state: {
+      selected: model.value.selected,
+      draft: model.value.draft,
+      baseline: model.value.baseline,
+      revision: model.value.revision
+    }
+  }),
+  restoreWindowContext: (state) => {
+    model.value = UI.select(model.value, state.selected);
+    Object.assign(model.value, {
+      draft: { ...state.draft },
+      baseline: { ...state.baseline },
+      revision: state.revision
+    });
+  }
+});
 </script>
 <template>
   <component

@@ -67,6 +67,40 @@ request lifecycle; asynchronous results must not overwrite a newer selection.
 Use shared themes, translations, icons, modal-window behavior and scrollbars.
 Product help and localization remain EN/RU; server-defined labels remain data.
 
+## Standalone browser window pages (TS only)
+
+`frontend/src/features/windows/windowPages.js` maps supported window kinds to
+existing screen owners. The common window host supplies Open in separate page;
+it does not clone DOM, embed the workspace in an iframe or reimplement commands.
+`App.vue` authenticates and reads accessible projects before opening the owner,
+skipping workspace restoration, search queries and workspace persistence.
+Handler already uses native top-level windows; this browser host is TS-specific.
+
+Addresses use `/projects/<code>/?window=<kind>&context=<public JSON>` (or `/` for
+system context). The public descriptor contains only data for reopening the
+owner; keep tickets, provider credentials, uploaded blobs and unsaved drafts out
+of it. A random, short-lived `launch` identifier establishes a BroadcastChannel
+handoff of ephemeral data, without `window.opener`. It is removed after handoff.
+The receiver checks account, project and window kind, then uses its own current
+credentials. Project access and administrative authority come from fresh server
+responses. Session storage changes invalidate detached owners after logout or
+account replacement. A page address never grants authorization.
+
+To add a working window, register its existing `open` owner, supply `windowContext`
+(or a `page` callback in `v-window`) and keep its native close/dirty/revision guards.
+Public `route` values must be JSON data below 8 KiB and reopening must not execute
+a write. `state` is ephemeral; use the owner's `restoreWindowContext` only for
+supported drafts. Do not replay quick duplicate, check-in, script execution or
+other actions when restoring a URL. Owner-dependent confirmations and cell/value
+pickers do not detach. Unsupported dirty or busy state must reject detaching,
+leaving the original intact. Existing persisted Messages and Script Editor drafts
+remain owned by those features. No Electron process or privileges are introduced.
+
+`frontend/tests/window_pages.mjs` runs against an isolated authenticated server
+and compiled bundle: Messages handoff/draft/reload, existing utility/editor pages,
+no workspace queries/storage changes, invalid routes/projects, and session exit.
+`window_types.mjs` checks ordinary window controls and owner lifecycle.
+
 ## API and administrator agents
 
 [OPERATIONS.md](admin_agent/OPERATIONS.md) describes Stream server calls.

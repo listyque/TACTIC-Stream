@@ -1,6 +1,10 @@
 import { h, render } from 'vue';
 import WindowControls from './WindowControls.vue';
 import './dialog.css';
+import {
+  windowPages,
+  readWindowPage
+} from '../features/windows/windowPages.js';
 let activeWindow = null;
 
 // Dialogs block their owner; utility windows keep the workspace available.
@@ -8,6 +12,8 @@ export const windowDirective = {
   mounted(element, binding) {
     if (element.tagName !== 'DIALOG') return;
     let configuration = binding.value;
+    const pageKind = readWindowPage()?.kind;
+    let rootOwner = false;
     let header = null,
       host = null,
       retainedGeometry = null,
@@ -38,6 +44,12 @@ export const windowDirective = {
     function nativeClosed() {
       if (element.open) return;
       closed();
+      if (element.classList.contains('window-page-root'))
+        window.dispatchEvent(
+          new CustomEvent('tactic-window-page-closed', {
+            detail: { kind: configuration?.kind }
+          })
+        );
       if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
       returnFocus = null;
     }
@@ -131,6 +143,20 @@ export const windowDirective = {
       element.classList.toggle('app-window', windowed);
       element.dataset.windowType = configuration?.type || 'dialog';
       element.dataset.windowKind = configuration?.kind || '';
+      if (
+        element.open &&
+        !!pageKind &&
+        !rootOwner &&
+        configuration?.kind === pageKind &&
+        !document.querySelector('.window-page-root')
+      )
+        rootOwner = true;
+      const pageRoot = rootOwner;
+      element.classList.toggle('window-page-root', pageRoot);
+      if (pageRoot)
+        document.title =
+          (element.getAttribute('aria-label') || configuration.kind) +
+          ' — TACTIC Stream';
       if (nonmodal()) element.setAttribute('aria-modal', 'false');
       else element.removeAttribute('aria-modal');
       const featureHeader = !windowed
@@ -218,7 +244,20 @@ export const windowDirective = {
         closeDisabled: !!contentClose?.disabled,
         helpButton: contentHelp,
         helpLabel: contentHelp?.getAttribute('aria-label') || '',
-        helpDisabled: !!contentHelp?.disabled
+        helpDisabled: !!contentHelp?.disabled,
+        pageRoot,
+        openSeparate:
+          !pageRoot && Object.hasOwn(windowPages, configuration?.kind || '')
+            ? () =>
+                window.dispatchEvent(
+                  new CustomEvent('tactic-window-page', {
+                    detail: {
+                      kind: configuration.kind,
+                      context: configuration.page
+                    }
+                  })
+                )
+            : null
       });
       if (next === header) {
         if (host && !header.contains(host)) placeControls();
@@ -243,7 +282,7 @@ export const windowDirective = {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['aria-label', 'disabled']
+      attributeFilter: ['aria-label', 'disabled', 'open']
     });
     attach();
     element.windowConfigure = (value) => {

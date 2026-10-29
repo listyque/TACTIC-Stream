@@ -6,6 +6,7 @@ import AppButton from '../../controls/AppButton.vue';
 import MilestoneContent from './MilestoneContent.vue';
 const props = defineProps({
   project: String,
+  pageContext: Function,
   result: Object,
   rows: Array,
   query: String,
@@ -58,7 +59,11 @@ defineExpose({
 <template>
   <Teleport to="body">
     <dialog
-      v-window="{ kind: 'milestone_manager', type: 'window' }"
+      v-window="{
+        kind: 'milestone_manager',
+        type: 'window',
+        page: pageContext
+      }"
       ref="dialog"
       class="configuration-dialog milestone-manager"
       :aria-label="t('Project milestones')"

@@ -1,6 +1,7 @@
 import { A as onDeactivated, K as withCtx, N as openBlock, O as onActivated, R as resolveDynamicComponent, U as watch, Z as ref, b as createVNode, h as createBlock, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed } from "./vue.js";
-import { j as appearance } from "./index.js";
-import { Jt as label, Xt as node, Yt as muted, Zt as rect, ct as rpc, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { s as appearance } from "./AppButton.js";
+import { k as rpc } from "./index.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
 import { m as describe$1 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/configuration/providers.ui.mjs
@@ -326,7 +327,27 @@ var _sfc_main = {
 			opened = false;
 			clearTimeout(timer);
 		}
-		__expose({ open });
+		__expose({
+			open,
+			dirty: computed(() => dirty(model.value)),
+			windowContext: () => ({
+				route: { provider: model.value.selected },
+				state: {
+					selected: model.value.selected,
+					draft: model.value.draft,
+					baseline: model.value.baseline,
+					revision: model.value.revision
+				}
+			}),
+			restoreWindowContext: (state) => {
+				model.value = select(model.value, state.selected);
+				Object.assign(model.value, {
+					draft: { ...state.draft },
+					baseline: { ...state.baseline },
+					revision: state.revision
+				});
+			}
+		});
 		return (_ctx, _cache) => {
 			return openBlock(), createBlock(resolveDynamicComponent(__props.embedded ? "section" : _sfc_main$2), {
 				ref_key: "dialog",

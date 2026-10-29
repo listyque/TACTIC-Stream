@@ -1,4 +1,4 @@
-import { Jt as label, Xt as node, Yt as muted, Zt as rect, qt as button } from "./CodeBlock.js";
+import { B as node, L as button, R as label, V as rect, z as muted } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/controls/lists/tree.ui.mjs
 function listAction(id, bounds, text, icon, action, enabled = true, options = {}) {
 	const iconOnly = !!options.iconOnly;

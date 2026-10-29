@@ -223,6 +223,11 @@ export default {
       ]);
       return result.info;
     },
+    windowContext() {
+      if (this.busy || this.uncertain || this.dirty)
+        throw Error('Apply or discard unsaved changes first');
+      return { project: this.project, route: { args: [this.identity] } };
+    },
     async open(identity) {
       this.context = { ticket: this.ticket, project: this.project };
       this.identity = identity;
@@ -384,7 +389,7 @@ export default {
 
 <template>
   <dialog
-    v-window="{ kind: 'process_dependencies' }"
+    v-window="{ kind: 'process_dependencies', page: windowContext }"
     ref="dialog"
     class="configuration-dialog process-rules-editor frame-process-dialog"
     :aria-label="t('Process dependencies')"

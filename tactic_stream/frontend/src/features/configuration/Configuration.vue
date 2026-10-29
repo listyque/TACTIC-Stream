@@ -58,6 +58,7 @@ const props = defineProps({
   openProject: Function,
   reloadCache: Function
 });
+const providerEditor = ref(null);
 const emit = defineEmits(['session-expired', 'close', 'help', 'providers']);
 const groups = {
   server: [
@@ -560,7 +561,16 @@ onBeforeUnmount(() => {
   configurationPreview.value = false;
   window.removeEventListener('beforeunload', beforeUnload);
 });
-defineExpose({ cancel, dirty });
+defineExpose({
+  cancel,
+  dirty,
+  windowContext: () => {
+    if (dirty.value || providerEditor.value?.dirty)
+      throw Error(t('Apply or discard unsaved changes first'));
+    return { route: { page: page.value } };
+  },
+  restoreWindowContext: (state) => selectPage(state.page)
+});
 </script>
 <template>
   <div
@@ -598,6 +608,7 @@ defineExpose({ cancel, dirty });
         @action="settingsAction"
       />
       <AgentProviders
+        ref="providerEditor"
         v-show="page === 'ai'"
         embedded
         :active="page === 'ai'"

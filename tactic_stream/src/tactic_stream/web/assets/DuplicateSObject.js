@@ -1,10 +1,10 @@
-import { t as __exportAll } from "./rolldown-runtime.js";
+import { r as __exportAll, t as _sfc_main$2 } from "./ObjectFieldFrame.js";
 import { D as nextTick, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment } from "./vue.js";
-import { A as t, c as _sfc_main$2, j as appearance, ot as _plugin_vue_export_helper_default, z as controls } from "./index.js";
-import { D as _sfc_main$4, E as _sfc_main$6, Jt as label, N as _sfc_main$9, O as _sfc_main$5, P as _sfc_main$8, R as _sfc_main$7, Vt as notify, Xt as node, Zt as rect, ct as rpc, i as _sfc_main$3, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import { t as _sfc_main$10 } from "./ObjectFieldFrame.js";
+import { L as _plugin_vue_export_helper_default, g as controls, o as t, s as appearance, t as _sfc_main$3 } from "./AppButton.js";
+import { ct as notify, k as rpc } from "./index.js";
+import { B as node, D as _sfc_main$6, E as _sfc_main$5, F as _sfc_main$8, L as button, M as _sfc_main$10, N as _sfc_main$9, R as label, T as _sfc_main$7, V as rect, n as observeFrameSizes, r as _sfc_main$4, v as translate } from "./resize.js";
 import { t as captionHeight } from "./sections.ui.js";
-import { F as applyDuplicateProfile, I as changeContent, L as contentChoices, P as _sfc_main$11, R as duplicateProfile, z as saveDuplicateProfile } from "./App.js";
+import { a as duplicateProfile, i as contentChoices, n as applyDuplicateProfile, o as saveDuplicateProfile, r as changeContent, t as _sfc_main$11 } from "./ContentLoadingOverlay.js";
 //#region ../src/tactic_stream/shared_ui/features/objects/duplicate.ui.mjs
 var duplicate_ui_exports = /* @__PURE__ */ __exportAll({
 	body: () => body,
@@ -397,21 +397,21 @@ var _sfc_main = {
 						role: __props.part === "tabs" ? "radiogroup" : void 0,
 						"aria-label": __props.part === "tabs" ? unref(t)("Duplicate steps") : void 0,
 						style: normalizeStyle({ height: scene.value.height + "px" })
-					}, [createVNode(_sfc_main$3, {
+					}, [createVNode(_sfc_main$4, {
 						scene: scene.value,
 						onEvent: _cache[0] || (_cache[0] = ($event) => emit("event", $event))
 					}, null, 8, ["scene"])], 12, _hoisted_1$1);
 				};
 			}
 		},
-		ObjectFieldFrame: _sfc_main$10,
-		AppTextArea: _sfc_main$4,
-		AppDateField: _sfc_main$5,
-		AppButton: _sfc_main$2,
-		AppCheckbox: _sfc_main$6,
-		AppSelect: _sfc_main$7,
-		AppTextField: _sfc_main$8,
-		AppColorInput: _sfc_main$9
+		ObjectFieldFrame: _sfc_main$2,
+		AppTextArea: _sfc_main$5,
+		AppDateField: _sfc_main$6,
+		AppButton: _sfc_main$3,
+		AppCheckbox: _sfc_main$7,
+		AppSelect: _sfc_main$8,
+		AppTextField: _sfc_main$9,
+		AppColorInput: _sfc_main$10
 	},
 	inject: {
 		openHelp: {},
@@ -529,6 +529,13 @@ var _sfc_main = {
 			this.request++;
 			this.busy = this.saving = false;
 			if (this.$refs.dialog?.open) this.error = "Connection context changed. Close this form and reopen it before saving.";
+		},
+		windowContext() {
+			if (this.busy || this.saving || this.uncertain || this.dirty) throw Error("Apply or discard unsaved changes first");
+			return {
+				project: this.project,
+				route: { key: this.sourceKey }
+			};
 		},
 		async open(record, quick = false) {
 			if (this.$refs.dialog.open) {
@@ -855,7 +862,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 		])) : createCommentVNode("", true)
 	], 40, _hoisted_1)), [[_directive_window, {
 		kind: "duplicate_sobject",
-		type: "window"
+		type: "window",
+		page: $options.windowContext
 	}]])]);
 }
 var DuplicateSObject_default = /*#__PURE__*/ _plugin_vue_export_helper_default(_sfc_main, [["render", _sfc_render]]);

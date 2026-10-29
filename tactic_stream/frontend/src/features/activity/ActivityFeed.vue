@@ -532,7 +532,14 @@ onBeforeUnmount(() => {
   requestId++;
   calendarId++;
 });
-defineExpose({ open });
+defineExpose({
+  open,
+  windowContext: () => ({
+    route: {
+      args: [selectedUsers.value.length === 1 ? selectedUsers.value[0] : '']
+    }
+  })
+});
 </script>
 <template>
   <Teleport to="body">

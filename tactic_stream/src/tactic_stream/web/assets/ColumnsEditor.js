@@ -1,8 +1,10 @@
 import { I as resolveComponent, N as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
-import { A as t, j as appearance, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { H as columnsEditor, Jt as label, Xt as node, Yt as muted, Zt as rect, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { L as _plugin_vue_export_helper_default, o as t, s as appearance } from "./AppButton.js";
+import { l as columnsEditor } from "./index.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
 import { n as sections, t as captionHeight } from "./sections.ui.js";
-import { D as displayWidgets, E as definitionWizard, T as changeDefinition, ct as documentEvent, ft as tabs, lt as notices, pt as toolbar, ut as policy } from "./App.js";
+import { a as tabs, n as notices, o as toolbar, r as policy, t as documentEvent } from "./admin.document.js";
+import { i as displayWidgets, n as changeDefinition, r as definitionWizard } from "./ConfiguredView.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/columns/columns.state.mjs
 var initial = () => ({
 	query: "",

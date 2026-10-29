@@ -719,7 +719,20 @@ function frameEvent(action) {
   else if (action.type === 'treeWidth') treeWidth.value = action.value;
   else if (action.type === 'outputHeight') outputHeight.value = action.value;
 }
-defineExpose({ open, reload: load });
+defineExpose({
+  open,
+  reload: load,
+  windowContext: () => {
+    persist();
+    return {
+      route: {
+        path: [active.value?.folder, active.value?.title]
+          .filter(Boolean)
+          .join('/')
+      }
+    };
+  }
+});
 </script>
 <template>
   <Teleport to="body">

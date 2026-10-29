@@ -1,9 +1,12 @@
 import { A as onDeactivated, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, L as resolveDirective, N as openBlock, O as onActivated, P as renderList, U as watch, X as reactive, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment, y as createTextVNode } from "./vue.js";
-import { $ as savePreferencePage, A as t, F as languages, L as saveAppearance, M as colorModes, N as effectiveColorMode, Q as preferences, X as configurationPreview, Z as normalizePreferences, c as _sfc_main$8, f as _sfc_main$7, h as debugSettings, it as themes, j as appearance, nt as accentPresets, ot as _plugin_vue_export_helper_default, rt as iconSets, z as controls } from "./index.js";
-import { Jt as label, L as _sfc_main$9, R as _sfc_main$11, T as AppSearchField_default, Xt as node, Yt as muted, Zt as rect, ct as rpc, et as projectCatalog, gt as serverConfiguration, i as _sfc_main$10, lt as saveServerConfiguration, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
-import { a as fieldKind, i as ImagePicker_default, o as unsupportedField, t as RecordForm_default } from "./RecordForm.js";
-import { u as timestampFullLabel } from "./activity.js";
-import { _ as confirmation, a as updateModes, d as ProjectCreation_default, f as change, g as fieldsFor, h as editColumn, ht as views, i as updateIntervals, m as describe$2, n as networkSettings, p as contentWidth, r as updateBatchDelays, u as lifecycle, v as describe$3, y as pages } from "./App.js";
+import { A as savePreferencePage, D as configurationPreview, F as themes, L as _plugin_vue_export_helper_default, N as accentPresets, O as normalizePreferences, P as iconSets, a as _sfc_main$7, c as colorModes, f as languages, g as controls, k as preferences, l as effectiveColorMode, m as saveAppearance, o as t, s as appearance, t as _sfc_main$8 } from "./AppButton.js";
+import { A as saveServerConfiguration, L as serverConfiguration, k as rpc, x as projectCatalog, xt as debugSettings } from "./index.js";
+import { B as node, F as _sfc_main$10, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$9, v as translate, w as AppSearchField_default, z as muted } from "./resize.js";
+import { n as _sfc_main$11 } from "./AppearanceControls.js";
+import RecordForm_default, { a as fieldKind, o as unsupportedField, r as ImagePicker_default } from "./RecordForm.js";
+import { _ as timestampFullLabel } from "./admin.document.js";
+import { yt as views } from "./ConfiguredView.js";
+import { _ as confirmation, a as updateModes, d as ProjectCreation_default, f as change, g as fieldsFor, h as editColumn, i as updateIntervals, m as describe$2, n as networkSettings, p as contentWidth, r as updateBatchDelays, u as lifecycle, v as describe$3, y as pages } from "./App.js";
 import _sfc_main$12 from "./AgentProviders.js";
 //#region src/features/configuration/FrameSettings.vue
 var _sfc_main$6 = {
@@ -47,7 +50,7 @@ var _sfc_main$6 = {
 		});
 		const height = computed(() => props.natural ? scene.value.nodes[0].contentHeight + "px" : "100%");
 		const views = computed(() => Object.fromEntries(["light", "dark"].map((mode) => [mode + "Accent", {
-			component: _sfc_main$9,
+			component: _sfc_main$11,
 			props: {
 				options: accentPresets,
 				mode,
@@ -88,7 +91,7 @@ var _sfc_main$6 = {
 				ref: host,
 				class: normalizeClass(["frame-settings", { "frame-settings-natural": __props.natural }]),
 				style: normalizeStyle({ height: height.value })
-			}, [createVNode(_sfc_main$10, {
+			}, [createVNode(_sfc_main$9, {
 				scene: scene.value,
 				views: views.value,
 				onEvent: dispatch
@@ -1003,7 +1006,7 @@ var _sfc_main$4 = {
 				ref_key: "host",
 				ref: host,
 				class: "project-editor-frame"
-			}, [createVNode(_sfc_main$10, {
+			}, [createVNode(_sfc_main$9, {
 				scene: scene.value,
 				views: views.value,
 				onEvent: dispatch
@@ -1181,7 +1184,7 @@ var _sfc_main$3 = {
 				class: "configuration-projects-frame",
 				"aria-busy": busy.value
 			}, [
-				createVNode(_sfc_main$10, {
+				createVNode(_sfc_main$9, {
 					scene: scene.value,
 					models: { projects: visible.value },
 					"describe-row": row,
@@ -1578,7 +1581,7 @@ var _sfc_main$2 = {
 				ref: host,
 				class: "repository-settings repository-summary-frame",
 				"aria-busy": checking.value
-			}, [createVNode(_sfc_main$10, {
+			}, [createVNode(_sfc_main$9, {
 				scene: scene.value,
 				onEvent: dispatch
 			}, null, 8, ["scene"])], 8, _hoisted_1$2);
@@ -1797,7 +1800,7 @@ var _sfc_main$1 = {
 				ref_key: "host",
 				ref: host,
 				class: "repository-editor-frame"
-			}, [createVNode(_sfc_main$10, {
+			}, [createVNode(_sfc_main$9, {
 				scene: scene.value,
 				models: { repositories: canonical.value },
 				"describe-row": row$2,
@@ -1852,6 +1855,7 @@ var _sfc_main = {
 	],
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
+		const providerEditor = ref(null);
 		const emit = __emit;
 		const groups = {
 			server: [
@@ -2249,7 +2253,12 @@ var _sfc_main = {
 		});
 		__expose({
 			cancel,
-			dirty
+			dirty,
+			windowContext: () => {
+				if (dirty.value || providerEditor.value?.dirty) throw Error(t("Apply or discard unsaved changes first"));
+				return { route: { page: page.value } };
+			},
+			restoreWindowContext: (state) => selectPage(state.page)
 		});
 		return (_ctx, _cache) => {
 			const _directive_window = resolveDirective("window");
@@ -2260,7 +2269,7 @@ var _sfc_main = {
 				"aria-busy": busy.value
 			}, [
 				createBaseVNode("span", _hoisted_2, toDisplayString(unref(t)("Configuration")), 1),
-				createVNode(_sfc_main$10, {
+				createVNode(_sfc_main$9, {
 					scene: scene.value,
 					onEvent: dispatch
 				}, null, 8, ["scene"]),
@@ -2295,6 +2304,8 @@ var _sfc_main = {
 						"natural"
 					])) : createCommentVNode("", true),
 					withDirectives(createVNode(_sfc_main$12, {
+						ref_key: "providerEditor",
+						ref: providerEditor,
 						embedded: "",
 						active: page.value === "ai",
 						ticket: __props.ticket,
@@ -2326,7 +2337,7 @@ var _sfc_main = {
 						onEdit: _cache[2] || (_cache[2] = ($event) => repositoryEditor.value.show()),
 						onSessionExpired: _cache[3] || (_cache[3] = ($event) => emit("session-expired"))
 					}, null, 8, ["ticket", "busy"])) : createCommentVNode("", true),
-					__props.canAdminister && ["server", "tasks"].includes(page.value) && server.value?.configuration ? (openBlock(), createElementBlock("section", _hoisted_5, [createVNode(_sfc_main$11, {
+					__props.canAdminister && ["server", "tasks"].includes(page.value) && server.value?.configuration ? (openBlock(), createElementBlock("section", _hoisted_5, [createVNode(_sfc_main$10, {
 						modelValue: server.value.activeGroup,
 						"onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => server.value.activeGroup = $event),
 						options: currentGroups.value.map((title) => ({
@@ -2386,7 +2397,7 @@ var _sfc_main = {
 					class: "record-dialog configuration-confirmation",
 					style: normalizeStyle({ width: confirmationWidth.value + "px" }),
 					"aria-label": unref(t)("Unsaved changes")
-				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Unsaved changes")), 1)]), createVNode(_sfc_main$10, {
+				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)("Unsaved changes")), 1)]), createVNode(_sfc_main$9, {
 					scene: closeScene.value,
 					style: { "height": "248px" },
 					onEvent: confirmationAction
@@ -2397,7 +2408,7 @@ var _sfc_main = {
 					class: "record-dialog configuration-confirmation",
 					style: normalizeStyle({ width: confirmationWidth.value + "px" }),
 					"aria-label": unref(t)(cacheScope.value === "tabs" ? "Clear saved branch expansion?" : "Clear cached server data?")
-				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)(cacheScope.value === "tabs" ? "Clear saved branch expansion?" : "Clear cached server data?")), 1)]), createVNode(_sfc_main$10, {
+				}, [createBaseVNode("header", null, [createBaseVNode("h2", null, toDisplayString(unref(t)(cacheScope.value === "tabs" ? "Clear saved branch expansion?" : "Clear cached server data?")), 1)]), createVNode(_sfc_main$9, {
 					scene: clearScene.value,
 					style: { "height": "220px" },
 					onEvent: _cache[9] || (_cache[9] = ($event) => $event.type === "accept" ? clearCache() : confirmClear.value.close())

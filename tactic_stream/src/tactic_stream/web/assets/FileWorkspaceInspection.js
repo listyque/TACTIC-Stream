@@ -1,13 +1,14 @@
 import { $ as shallowRef, D as nextTick, F as renderSlot, I as resolveComponent, K as withCtx, N as openBlock, P as renderList, U as watch, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, p as computed, rt as normalizeStyle, tt as unref, u as Fragment } from "./vue.js";
-import { A as t, C as redact, P as frameColors, V as cssRoles, c as _sfc_main$16, j as appearance, ot as _plugin_vue_export_helper_default, q as metrics, x as logEvent } from "./index.js";
-import { Jt as label, P as _sfc_main$20, R as _sfc_main$19, Xt as node, Zt as rect, _ as copyText, c as _sfc_main$21, i as _sfc_main$17, k as _sfc_main$18, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { L as _plugin_vue_export_helper_default, o as t, s as appearance, t as _sfc_main$16, u as frameColors, v as cssRoles, w as metrics } from "./AppButton.js";
+import { Dt as logEvent, kt as redact } from "./index.js";
+import { B as node, F as _sfc_main$19, L as button, N as _sfc_main$20, O as _sfc_main$18, R as label, V as rect, g as copyText, n as observeFrameSizes, r as _sfc_main$17, s as _sfc_main$21, v as translate } from "./resize.js";
 import { t as captionHeight } from "./sections.ui.js";
 import { r as prettySize } from "./file_values.js";
 import "./files.js";
+import { ut as _sfc_main$22 } from "./ConfiguredView.js";
 import { t as actionLayout } from "./metrics.js";
 import { t as describe$7 } from "./confirmation.ui.js";
-import { t as _sfc_main$22 } from "./AppDialog.js";
-import { t as _sfc_main$23 } from "./AppMenuItem.js";
+import { t as _sfc_main$23 } from "./AppDialog.js";
 import { b as _sfc_main$24 } from "./App.js";
 //#region ../src/tactic_stream/shared_ui/features/files/workspace/toolbar.ui.mjs
 function views$1(model, width, height, language) {
@@ -125,7 +126,7 @@ var WorkspaceToolbar_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				"align-start": ""
 			}, {
 				default: withCtx(() => [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.presets, (view) => {
-					return openBlock(), createBlock(_sfc_main$23, {
+					return openBlock(), createBlock(_sfc_main$22, {
 						key: view.id,
 						label: view.title,
 						icon: view.icon,
@@ -2186,7 +2187,7 @@ var _sfc_main$2 = {
 			}, [createVNode(_sfc_main$17, {
 				scene: scene.value,
 				onEvent: event
-			}, null, 8, ["scene"])], 8, _hoisted_1$1), createVNode(_sfc_main$22, {
+			}, null, 8, ["scene"])], 8, _hoisted_1$1), createVNode(_sfc_main$23, {
 				ref_key: "dialog",
 				ref: dialog,
 				title: "Run safe GC",

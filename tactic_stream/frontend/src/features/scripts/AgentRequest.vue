@@ -681,7 +681,24 @@ onBeforeUnmount(() => {
   observer?.disconnect();
   clearPreviews();
 });
-defineExpose({ open });
+defineExpose({
+  open,
+  windowContext: () => ({
+    project: model.value.context?.project,
+    route: { request: model.value.selected },
+    state: {
+      context: model.value.context,
+      selected: model.value.selected,
+      draft: History.draft(model.value)
+    }
+  }),
+  restoreWindowContext: async (state) => {
+    if (state.context) model.value.context = state.context;
+    model.value.selected = state.selected || '';
+    await request();
+    Object.assign(model.value, History.restored(state.draft || {}));
+  }
+});
 </script>
 
 <template>

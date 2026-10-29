@@ -1,6 +1,6 @@
 import { N as openBlock, P as renderList, Z as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, tt as unref, u as Fragment } from "./vue.js";
-import { A as t, j as appearance, q as metrics } from "./index.js";
-import { Jt as label, Xt as node, Zt as rect, i as _sfc_main$1, qt as button, r as observeFrameSizes, y as translate } from "./CodeBlock.js";
+import { o as t, s as appearance, w as metrics } from "./AppButton.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/calendar.ui.mjs
 function layout(width, height) {
 	const compact = width < 500 || height < 430;

@@ -14,6 +14,34 @@
     var(--dialog-shadow);
   overflow: hidden;
 }
+.window-page {
+  background: var(--page);
+}
+.window-page-root[open] {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100dvw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.window-page-root > .app-window-resize {
+  display: none;
+}
+.snapshot-page-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+.window-page-status {
+  margin: auto;
+  padding: 16px;
+}
 .app-dialog[open] {
   display: flex;
   flex-direction: column;

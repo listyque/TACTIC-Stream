@@ -1,89 +1,159 @@
 {
+  "_AppButton.css": {
+    "file": "assets/AppButton.css",
+    "src": "_AppButton.css"
+  },
+  "_AppButton.js": {
+    "file": "assets/AppButton.js",
+    "name": "AppButton",
+    "imports": [
+      "_vue.js",
+      "_locales.js",
+      "_icons.js"
+    ],
+    "css": [
+      "assets/AppButton.css"
+    ],
+    "assets": [
+      "assets/materialdesignicons-webfont-B7mPwVP_.ttf",
+      "assets/fontawesome5-solid-webfont-DRjTsAeK.ttf",
+      "assets/fontawesome5-regular-webfont-BD7gsmZB.ttf",
+      "assets/fluent-system-icons-resizable-CEFcTBOz.ttf"
+    ]
+  },
   "_AppDialog.js": {
     "file": "assets/AppDialog.js",
     "name": "AppDialog",
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js"
+      "_resize.js"
     ]
   },
-  "_AppMenuItem.css": {
-    "file": "assets/AppMenuItem.css",
-    "src": "_AppMenuItem.css"
+  "_AppearanceControls.css": {
+    "file": "assets/AppearanceControls.css",
+    "src": "_AppearanceControls.css"
   },
-  "_AppMenuItem.js": {
-    "file": "assets/AppMenuItem.js",
-    "name": "AppMenuItem",
+  "_AppearanceControls.js": {
+    "file": "assets/AppearanceControls.js",
+    "name": "AppearanceControls",
     "imports": [
       "_vue.js",
-      "index.html"
+      "_AppButton.js",
+      "_resize.js"
     ],
     "css": [
-      "assets/AppMenuItem.css"
+      "assets/AppearanceControls.css"
     ]
-  },
-  "_AttachmentCard.css": {
-    "file": "assets/AttachmentCard.css",
-    "src": "_AttachmentCard.css"
-  },
-  "_AttachmentCard.js": {
-    "file": "assets/AttachmentCard.js",
-    "name": "AttachmentCard",
-    "imports": [
-      "_vue.js",
-      "index.html",
-      "_CodeBlock.js"
-    ],
-    "css": [
-      "assets/AttachmentCard.css"
-    ]
-  },
-  "_CodeBlock.css": {
-    "file": "assets/CodeBlock.css",
-    "src": "_CodeBlock.css"
   },
   "_CodeBlock.js": {
     "file": "assets/CodeBlock.js",
     "name": "CodeBlock",
     "imports": [
       "_vue.js",
-      "_icons.js",
-      "index.html"
-    ],
-    "css": [
-      "assets/CodeBlock.css"
+      "_resize.js"
     ]
   },
-  "_FilePreview.css": {
-    "file": "assets/FilePreview.css",
-    "src": "_FilePreview.css"
+  "_ConfiguredView.css": {
+    "file": "assets/ConfiguredView.css",
+    "src": "_ConfiguredView.css"
   },
-  "_FilePreview.js": {
-    "file": "assets/FilePreview.js",
-    "name": "FilePreview",
+  "_ConfiguredView.js": {
+    "file": "assets/ConfiguredView.js",
+    "name": "ConfiguredView",
     "imports": [
+      "_ObjectFieldFrame.js",
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
+      "_textMetrics.js",
+      "_sections.ui.js",
+      "src/features/objects/RecordForm.vue",
+      "_admin.document.js",
       "_file_values.js",
       "_files.js",
-      "_files2.js"
+      "_CodeBlock.js",
+      "_metrics.js",
+      "_confirmation.ui.js",
+      "_AppDialog.js",
+      "_markdown-it.js",
+      "_VirtualCollection.js",
+      "_Timesheet.js",
+      "_ContentLoadingOverlay.js"
+    ],
+    "dynamicImports": [
+      "src/assets/emoji.json",
+      "src/features/checkin/ObjectCheckin.vue",
+      "src/features/checkin/IngestFiles.vue",
+      "src/features/objects/DuplicateSObject.vue",
+      "_ConfiguredView.js",
+      "src/features/checkin/SnapshotCheckout.vue"
     ],
     "css": [
-      "assets/FilePreview.css"
+      "assets/ConfiguredView.css"
+    ]
+  },
+  "_ContentLoadingOverlay.css": {
+    "file": "assets/ContentLoadingOverlay.css",
+    "src": "_ContentLoadingOverlay.css"
+  },
+  "_ContentLoadingOverlay.js": {
+    "file": "assets/ContentLoadingOverlay.js",
+    "name": "ContentLoadingOverlay",
+    "imports": [
+      "_vue.js",
+      "_AppButton.js"
+    ],
+    "css": [
+      "assets/ContentLoadingOverlay.css"
+    ]
+  },
+  "_FrameProgress.css": {
+    "file": "assets/FrameProgress.css",
+    "src": "_FrameProgress.css"
+  },
+  "_FrameProgress.js": {
+    "file": "assets/FrameProgress.js",
+    "name": "FrameProgress",
+    "imports": [
+      "_vue.js",
+      "_AppButton.js"
+    ],
+    "css": [
+      "assets/FrameProgress.css"
+    ]
+  },
+  "_MilestoneManager.css": {
+    "file": "assets/MilestoneManager.css",
+    "src": "_MilestoneManager.css"
+  },
+  "_MilestoneManager.js": {
+    "file": "assets/MilestoneManager.js",
+    "name": "MilestoneManager",
+    "imports": [
+      "_ObjectFieldFrame.js",
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_resize.js"
+    ],
+    "css": [
+      "assets/MilestoneManager.css"
     ]
   },
   "_NamingEditor.js": {
     "file": "assets/NamingEditor.js",
     "name": "NamingEditor",
     "imports": [
-      "_rolldown-runtime.js",
+      "_ObjectFieldFrame.js",
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
-      "src/App.vue"
+      "_admin.document.js"
     ]
   },
   "_ObjectFieldFrame.css": {
@@ -95,97 +165,106 @@
     "name": "ObjectFieldFrame",
     "imports": [
       "_vue.js",
-      "index.html",
-      "_CodeBlock.js",
-      "_fields.ui.js"
+      "_AppButton.js",
+      "_resize.js"
     ],
     "css": [
       "assets/ObjectFieldFrame.css"
     ]
   },
-  "_ObjectReport.css": {
-    "file": "assets/ObjectReport.css",
-    "src": "_ObjectReport.css"
+  "_ProjectTemplates.css": {
+    "file": "assets/ProjectTemplates.css",
+    "src": "_ProjectTemplates.css"
   },
-  "_ObjectReport.js": {
-    "file": "assets/ObjectReport.js",
-    "name": "ObjectReport",
+  "_ProjectTemplates.js": {
+    "file": "assets/ProjectTemplates.js",
+    "name": "ProjectTemplates",
     "imports": [
-      "_vue.js",
-      "index.html",
-      "_CodeBlock.js",
-      "_textMetrics.js",
-      "_richText.js",
-      "_links.js",
-      "_activity.js",
-      "_AttachmentCard.js",
-      "_FilePreview.js",
-      "_previewFiles.js"
-    ],
-    "css": [
-      "assets/ObjectReport.css"
-    ]
-  },
-  "_RecordForm.css": {
-    "file": "assets/RecordForm.css",
-    "src": "_RecordForm.css"
-  },
-  "_RecordForm.js": {
-    "file": "assets/RecordForm.js",
-    "name": "RecordForm",
-    "imports": [
-      "_rolldown-runtime.js",
-      "_vue.js",
-      "index.html",
-      "_CodeBlock.js",
-      "_fields.ui.js",
       "_ObjectFieldFrame.js",
-      "_previewImage.js",
-      "_textMetrics.js",
-      "_sections.ui.js"
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_resize.js",
+      "_confirmation.ui.js"
     ],
     "css": [
-      "assets/RecordForm.css"
+      "assets/ProjectTemplates.css"
     ]
   },
-  "_activity.js": {
-    "file": "assets/activity.js",
-    "name": "activity",
+  "_Timesheet.css": {
+    "file": "assets/Timesheet.css",
+    "src": "_Timesheet.css"
+  },
+  "_Timesheet.js": {
+    "file": "assets/Timesheet.js",
+    "name": "Timesheet",
     "imports": [
+      "_ObjectFieldFrame.js",
+      "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "_richText.js",
-      "_links.js"
+      "_resize.js"
+    ],
+    "css": [
+      "assets/Timesheet.css"
+    ]
+  },
+  "_VirtualCollection.css": {
+    "file": "assets/VirtualCollection.css",
+    "src": "_VirtualCollection.css"
+  },
+  "_VirtualCollection.js": {
+    "file": "assets/VirtualCollection.js",
+    "name": "VirtualCollection",
+    "imports": [
+      "_vue.js",
+      "_resize.js"
+    ],
+    "css": [
+      "assets/VirtualCollection.css"
+    ]
+  },
+  "_admin.css": {
+    "file": "assets/admin.css",
+    "src": "_admin.css"
+  },
+  "_admin.document.js": {
+    "file": "assets/admin.document.js",
+    "name": "admin.document",
+    "imports": [
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_resize.js",
+      "_textMetrics.js",
+      "_file_values.js",
+      "_files.js",
+      "_files2.js"
+    ],
+    "css": [
+      "assets/admin.css"
     ]
   },
   "_confirmation.ui.js": {
     "file": "assets/confirmation.ui.js",
     "name": "confirmation.ui",
     "imports": [
-      "_CodeBlock.js"
-    ]
-  },
-  "_fields.ui.js": {
-    "file": "assets/fields.ui.js",
-    "name": "fields.ui",
-    "imports": [
-      "index.html",
-      "_CodeBlock.js"
+      "_resize.js"
     ]
   },
   "_file_values.js": {
     "file": "assets/file_values.js",
     "name": "file_values",
     "imports": [
-      "_snapshot.ui.js"
+      "_resize.js"
     ]
   },
   "_files.js": {
     "file": "assets/files.js",
     "name": "files",
     "imports": [
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
       "_file_values.js"
     ]
   },
@@ -198,27 +277,23 @@
     "name": "graphFrame",
     "imports": [
       "_vue.js",
-      "index.html",
-      "_CodeBlock.js",
+      "_AppButton.js",
+      "_resize.js",
       "_sections.ui.js",
-      "_tree.ui.js",
-      "src/App.vue"
+      "_admin.document.js",
+      "_tree.ui.js"
     ]
   },
   "_groups.ui.js": {
     "file": "assets/groups.ui.js",
     "name": "groups.ui",
     "imports": [
-      "_CodeBlock.js"
+      "_resize.js"
     ]
   },
   "_icons.js": {
     "file": "assets/icons.js",
     "name": "icons"
-  },
-  "_links.js": {
-    "file": "assets/links.js",
-    "name": "links"
   },
   "_locales.js": {
     "file": "assets/locales.js",
@@ -228,71 +303,62 @@
     "file": "assets/markdown-it.js",
     "name": "markdown-it",
     "imports": [
-      "_rolldown-runtime.js"
+      "_ObjectFieldFrame.js"
     ]
   },
   "_metrics.js": {
     "file": "assets/metrics.js",
     "name": "metrics",
     "imports": [
-      "index.html"
+      "_AppButton.js"
     ]
   },
-  "_previewFiles.js": {
-    "file": "assets/previewFiles.js",
-    "name": "previewFiles",
+  "_resize.css": {
+    "file": "assets/resize.css",
+    "src": "_resize.css"
+  },
+  "_resize.js": {
+    "file": "assets/resize.js",
+    "name": "resize",
     "imports": [
-      "index.html"
+      "_vue.js",
+      "_AppButton.js",
+      "_icons.js"
+    ],
+    "css": [
+      "assets/resize.css"
     ]
-  },
-  "_previewImage.js": {
-    "file": "assets/previewImage.js",
-    "name": "previewImage"
-  },
-  "_richText.js": {
-    "file": "assets/richText.js",
-    "name": "richText"
-  },
-  "_rolldown-runtime.js": {
-    "file": "assets/rolldown-runtime.js",
-    "name": "rolldown-runtime"
   },
   "_sections.ui.js": {
     "file": "assets/sections.ui.js",
     "name": "sections.ui",
     "imports": [
-      "index.html",
-      "_CodeBlock.js"
-    ]
-  },
-  "_snapshot.ui.js": {
-    "file": "assets/snapshot.ui.js",
-    "name": "snapshot.ui",
-    "imports": [
-      "_CodeBlock.js"
+      "_AppButton.js",
+      "_resize.js"
     ]
   },
   "_textMetrics.js": {
     "file": "assets/textMetrics.js",
     "name": "textMetrics"
   },
+  "_toggle.ui.js": {
+    "file": "assets/toggle.ui.js",
+    "name": "toggle.ui",
+    "imports": [
+      "_AppButton.js",
+      "_resize.js"
+    ]
+  },
   "_tree.ui.js": {
     "file": "assets/tree.ui.js",
     "name": "tree.ui",
     "imports": [
-      "_CodeBlock.js"
+      "_resize.js"
     ]
   },
   "_vue.js": {
     "file": "assets/vue.js",
     "name": "vue"
-  },
-  "_workspace.ui.js": {
-    "file": "assets/workspace.ui.js",
-    "name": "workspace.ui",
-    "imports": [
-      "_CodeBlock.js"
-    ]
   },
   "index.html": {
     "file": "assets/index.js",
@@ -301,21 +367,24 @@
     "isEntry": true,
     "imports": [
       "_vue.js",
-      "_locales.js",
-      "_icons.js"
+      "_AppButton.js"
     ],
     "dynamicImports": [
+      "_Timesheet.js",
+      "_ConfiguredView.js",
+      "src/features/objects/RecordForm.vue",
+      "src/features/administration/ProcessRules.vue",
+      "src/features/objects/DuplicateSObject.vue",
+      "src/features/checkin/IngestFiles.vue",
+      "src/features/checkin/ObjectCheckin.vue",
+      "_ProjectTemplates.js",
+      "_MilestoneManager.js",
+      "src/features/checkin/SnapshotCheckout.vue",
       "src/features/documentation/ApiDocumentation.vue",
       "src/App.vue"
     ],
     "css": [
       "assets/index.css"
-    ],
-    "assets": [
-      "assets/materialdesignicons-webfont-B7mPwVP_.ttf",
-      "assets/fontawesome5-solid-webfont-DRjTsAeK.ttf",
-      "assets/fontawesome5-regular-webfont-BD7gsmZB.ttf",
-      "assets/fluent-system-icons-resizable-CEFcTBOz.ttf"
     ]
   },
   "src/App.vue": {
@@ -324,42 +393,31 @@
     "src": "src/App.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_rolldown-runtime.js",
+      "_ObjectFieldFrame.js",
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "_RecordForm.js",
-      "_fields.ui.js",
+      "_resize.js",
+      "_AppearanceControls.js",
       "_textMetrics.js",
       "_sections.ui.js",
-      "_richText.js",
-      "_links.js",
-      "_activity.js",
-      "_ObjectReport.js",
-      "_AttachmentCard.js",
-      "_snapshot.ui.js",
+      "src/features/objects/RecordForm.vue",
+      "_admin.document.js",
       "_file_values.js",
       "_files.js",
       "_files2.js",
-      "_FilePreview.js",
-      "_previewFiles.js",
-      "_metrics.js",
-      "_workspace.ui.js",
+      "_ConfiguredView.js",
+      "_CodeBlock.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
-      "_markdown-it.js",
-      "_AppMenuItem.js",
-      "_tree.ui.js"
+      "_Timesheet.js",
+      "_tree.ui.js",
+      "_FrameProgress.js",
+      "_toggle.ui.js",
+      "_MilestoneManager.js",
+      "_ProjectTemplates.js"
     ],
     "dynamicImports": [
-      "src/assets/emoji.json",
-      "src/features/checkin/ObjectCheckin.vue",
-      "src/features/checkin/IngestFiles.vue",
-      "src/features/objects/DuplicateSObject.vue",
-      "src/features/interface/CustomLayoutView.vue",
-      "src/features/objects/RelatedObjects.vue",
-      "src/features/checkin/SnapshotCheckout.vue",
-      "src/features/workspace/ResultPresentation.vue",
       "_NamingEditor.js",
       "src/features/checkin/MatchingTemplates.vue",
       "src/features/tasks/TaskGanttView.vue",
@@ -419,10 +477,12 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
-      "src/App.vue"
+      "_admin.document.js",
+      "_ConfiguredView.js"
     ]
   },
   "src/features/administration/LayoutEditor.vue": {
@@ -432,14 +492,15 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
-      "_links.js",
-      "src/App.vue"
+      "_admin.document.js",
+      "_ConfiguredView.js"
     ],
     "dynamicImports": [
-      "src/features/workspace/ResultPresentation.vue"
+      "_ConfiguredView.js"
     ],
     "css": [
       "assets/LayoutEditor.css"
@@ -452,13 +513,31 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
-      "_links.js",
+      "_admin.document.js",
+      "_ConfiguredView.js",
       "_metrics.js",
-      "_tree.ui.js",
-      "src/App.vue"
+      "_tree.ui.js"
+    ]
+  },
+  "src/features/administration/ProcessRules.vue": {
+    "file": "assets/ProcessRules.js",
+    "name": "ProcessRules",
+    "src": "src/features/administration/ProcessRules.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_resize.js",
+      "_sections.ui.js",
+      "_admin.document.js"
+    ],
+    "css": [
+      "assets/ProcessRules.css"
     ]
   },
   "src/features/administration/RawDatabase.vue": {
@@ -468,9 +547,10 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "src/App.vue"
+      "_resize.js",
+      "_admin.document.js"
     ]
   },
   "src/features/administration/SchemaEditor.vue": {
@@ -480,9 +560,10 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "src/App.vue",
+      "_resize.js",
+      "_admin.document.js",
       "src/features/administration/SearchTypes.vue",
       "_graphFrame.js"
     ],
@@ -497,11 +578,12 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "_previewImage.js",
+      "_resize.js",
       "_sections.ui.js",
-      "src/App.vue",
+      "src/features/objects/RecordForm.vue",
+      "_admin.document.js",
       "_NamingEditor.js"
     ]
   },
@@ -512,8 +594,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_groups.ui.js"
     ]
   },
@@ -524,9 +607,10 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "src/App.vue"
+      "_resize.js",
+      "_admin.document.js"
     ]
   },
   "src/features/administration/SecurityUsers.vue": {
@@ -536,8 +620,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_groups.ui.js"
     ]
   },
@@ -548,11 +633,12 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
-      "_tree.ui.js",
-      "src/App.vue"
+      "_admin.document.js",
+      "_tree.ui.js"
     ]
   },
   "src/features/administration/WorkflowEditor.vue": {
@@ -562,15 +648,11 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "_sections.ui.js",
-      "_ObjectReport.js",
-      "src/App.vue",
+      "_resize.js",
+      "src/features/administration/ProcessRules.vue",
       "_graphFrame.js"
-    ],
-    "css": [
-      "assets/WorkflowEditor.css"
     ]
   },
   "src/features/checkin/IngestFiles.vue": {
@@ -580,12 +662,13 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
-      "src/App.vue"
+      "_VirtualCollection.js"
     ],
     "css": [
       "assets/IngestFiles.css"
@@ -598,8 +681,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js"
     ],
     "css": [
@@ -613,14 +697,15 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
       "_file_values.js",
       "_files.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
-      "src/App.vue"
+      "_toggle.ui.js"
     ],
     "css": [
       "assets/ObjectCheckin.css"
@@ -633,14 +718,14 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
       "_file_values.js",
       "_files2.js",
-      "_previewFiles.js",
       "_confirmation.ui.js",
-      "src/App.vue"
+      "_FrameProgress.js"
     ],
     "css": [
       "assets/SnapshotCheckout.css"
@@ -653,8 +738,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_AppDialog.js"
     ],
     "css": [
@@ -668,8 +754,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_AppDialog.js",
       "src/App.vue"
     ],
@@ -684,10 +771,13 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "_RecordForm.js",
-      "_activity.js",
+      "_resize.js",
+      "_AppearanceControls.js",
+      "src/features/objects/RecordForm.vue",
+      "_admin.document.js",
+      "_ConfiguredView.js",
       "src/App.vue",
       "src/features/configuration/AgentProviders.vue"
     ],
@@ -702,7 +792,10 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
+      "_resize.js",
+      "_AppearanceControls.js",
       "_CodeBlock.js"
     ],
     "css": [
@@ -716,28 +809,20 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "_sections.ui.js",
       "_file_values.js",
       "_files.js",
+      "_ConfiguredView.js",
       "_metrics.js",
       "_confirmation.ui.js",
       "_AppDialog.js",
-      "_AppMenuItem.js",
       "src/App.vue"
     ],
     "css": [
       "assets/FileWorkspaceInspection.css"
-    ]
-  },
-  "src/features/interface/CustomLayoutView.vue": {
-    "file": "assets/CustomLayoutView.js",
-    "name": "CustomLayoutView",
-    "src": "src/features/interface/CustomLayoutView.vue",
-    "isDynamicEntry": true,
-    "imports": [
-      "src/App.vue"
     ]
   },
   "src/features/knowledge/KnowledgeBase.vue": {
@@ -747,14 +832,13 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "_icons.js",
       "index.html",
-      "_CodeBlock.js",
-      "_richText.js",
-      "_links.js",
-      "_AttachmentCard.js",
+      "_resize.js",
+      "_admin.document.js",
+      "_ConfiguredView.js",
       "_markdown-it.js",
-      "_AppMenuItem.js",
       "src/App.vue"
     ],
     "css": [
@@ -768,10 +852,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "_richText.js",
-      "_links.js",
+      "_admin.document.js",
       "src/App.vue"
     ],
     "css": [
@@ -784,25 +867,34 @@
     "src": "src/features/objects/DuplicateSObject.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_rolldown-runtime.js",
-      "_vue.js",
-      "index.html",
-      "_CodeBlock.js",
       "_ObjectFieldFrame.js",
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_resize.js",
       "_sections.ui.js",
-      "src/App.vue"
+      "_ContentLoadingOverlay.js"
     ],
     "css": [
       "assets/DuplicateSObject.css"
     ]
   },
-  "src/features/objects/RelatedObjects.vue": {
-    "file": "assets/RelatedObjects.js",
-    "name": "RelatedObjects",
-    "src": "src/features/objects/RelatedObjects.vue",
+  "src/features/objects/RecordForm.vue": {
+    "file": "assets/RecordForm.js",
+    "name": "RecordForm",
+    "src": "src/features/objects/RecordForm.vue",
     "isDynamicEntry": true,
     "imports": [
-      "src/App.vue"
+      "_ObjectFieldFrame.js",
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_resize.js",
+      "_textMetrics.js",
+      "_sections.ui.js"
+    ],
+    "css": [
+      "assets/RecordForm.css"
     ]
   },
   "src/features/objects/SnapshotBrowser.vue": {
@@ -812,12 +904,13 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
-      "_RecordForm.js",
-      "_snapshot.ui.js",
-      "_FilePreview.js",
-      "src/App.vue"
+      "_resize.js",
+      "src/features/objects/RecordForm.vue",
+      "_admin.document.js",
+      "_file_values.js",
+      "_ConfiguredView.js"
     ],
     "css": [
       "assets/SnapshotBrowser.css"
@@ -830,10 +923,11 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
+      "_ConfiguredView.js",
       "_AppDialog.js",
-      "_AppMenuItem.js",
       "_tree.ui.js",
       "src/App.vue"
     ],
@@ -848,8 +942,9 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
+      "_AppButton.js",
       "index.html",
-      "_CodeBlock.js",
+      "_resize.js",
       "src/App.vue"
     ],
     "css": [
@@ -863,8 +958,8 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
-      "index.html",
-      "_CodeBlock.js"
+      "_AppButton.js",
+      "_resize.js"
     ],
     "css": [
       "assets/TaskCalendarView.css"
@@ -877,8 +972,8 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
-      "index.html",
-      "_CodeBlock.js"
+      "_AppButton.js",
+      "_resize.js"
     ],
     "css": [
       "assets/TaskGanttView.css"
@@ -891,21 +986,12 @@
     "isDynamicEntry": true,
     "imports": [
       "_vue.js",
-      "index.html",
-      "_CodeBlock.js",
-      "src/App.vue"
+      "_AppButton.js",
+      "_resize.js",
+      "_ConfiguredView.js"
     ],
     "css": [
       "assets/TaskProcessPanel.css"
-    ]
-  },
-  "src/features/workspace/ResultPresentation.vue": {
-    "file": "assets/ResultPresentation.js",
-    "name": "ResultPresentation",
-    "src": "src/features/workspace/ResultPresentation.vue",
-    "isDynamicEntry": true,
-    "imports": [
-      "src/App.vue"
     ]
   }
 }

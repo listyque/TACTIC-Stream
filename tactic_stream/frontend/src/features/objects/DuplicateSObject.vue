@@ -167,6 +167,11 @@ export default {
         this.error =
           'Connection context changed. Close this form and reopen it before saving.';
     },
+    windowContext() {
+      if (this.busy || this.saving || this.uncertain || this.dirty)
+        throw Error('Apply or discard unsaved changes first');
+      return { project: this.project, route: { key: this.sourceKey } };
+    },
     async open(record, quick = false) {
       if (this.$refs.dialog.open) {
         this.$refs.dialog.show();
@@ -380,7 +385,11 @@ export default {
 <template>
   <Teleport to="body">
     <dialog
-      v-window="{ kind: 'duplicate_sobject', type: 'window' }"
+      v-window="{
+        kind: 'duplicate_sobject',
+        type: 'window',
+        page: windowContext
+      }"
       ref="dialog"
       class="record-dialog duplicate-sobject"
       :aria-label="t('Duplicate object')"

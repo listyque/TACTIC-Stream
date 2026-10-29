@@ -174,6 +174,23 @@ export default {
         event.returnValue = '';
       }
     },
+    windowContext() {
+      if (
+        this.busy ||
+        this.uncertain ||
+        this.createdCode ||
+        this.imageValidating
+      )
+        throw Error('Please wait for the current operation to finish');
+      return {
+        state: { draft: this.draft, step: this.step, image: this.image }
+      };
+    },
+    restoreWindowContext(state) {
+      this.draft = state.draft;
+      this.step = state.step;
+      this.image = state.image;
+    },
     async open() {
       if (this.$refs.dialog.open || this.busy) return;
       this.generation++;

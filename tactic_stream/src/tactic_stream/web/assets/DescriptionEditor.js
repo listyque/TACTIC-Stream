@@ -1,9 +1,8 @@
 import { D as nextTick, N as openBlock, U as watch, X as reactive, Z as ref, b as createVNode, c as withKeys, f as Teleport, h as createBlock, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, p as computed, tt as unref, w as inject } from "./vue.js";
-import { A as t, ot as _plugin_vue_export_helper_default } from "./index.js";
-import { ct as rpc } from "./CodeBlock.js";
-import { i as linkifyPlainText } from "./richText.js";
-import { n as browserLink } from "./links.js";
-import { S as _sfc_main$1 } from "./App.js";
+import { L as _plugin_vue_export_helper_default, o as t } from "./AppButton.js";
+import { k as rpc } from "./index.js";
+import { N as linkifyPlainText, x as browserLink } from "./admin.document.js";
+import { x as _sfc_main$1 } from "./App.js";
 //#region src/features/objects/DescriptionEditor.vue
 var _hoisted_1 = ["aria-label"];
 var DescriptionEditor_default = /*#__PURE__*/ _plugin_vue_export_helper_default({

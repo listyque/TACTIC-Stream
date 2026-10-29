@@ -7524,7 +7524,15 @@ var ru_default = {
 	"The source tab changed. Reload the page.": "Исходная вкладка изменилась. Обновите страницу.",
 	"Select all tools": "Выбрать все инструменты",
 	"No expiration": "Без срока",
-	"MCP access lifetime must be zero or between 5 and 480 minutes": "Срок MCP-доступа должен быть равен нулю или составлять от 5 до 480 минут"
+	"MCP access lifetime must be zero or between 5 and 480 minutes": "Срок MCP-доступа должен быть равен нулю или составлять от 5 до 480 минут",
+	"Open in separate page": "Открыть на отдельной странице",
+	"Reopen window": "Открыть окно снова",
+	"Open workspace": "Открыть рабочее пространство",
+	"This window cannot be opened separately.": "Это окно нельзя открыть отдельно.",
+	"The window session or project changed. Reopen it from the original window.": "Сеанс или проект окна изменился. Откройте его заново из исходного окна.",
+	"The original window is unavailable. Reopen this page from the application.": "Исходное окно недоступно. Откройте эту страницу заново из приложения.",
+	"Please wait for the current operation to finish": "Дождитесь завершения текущей операции",
+	"Window context must contain data only.": "Контекст окна должен содержать только данные."
 };
 //#endregion
 export { en_default as n, ru_default as t };

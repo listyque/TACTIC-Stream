@@ -77,6 +77,11 @@ export default {
   },
   methods: {
     t,
+    windowContext() {
+      if (this.busy || this.deletion)
+        throw Error('Please wait for the current operation to finish');
+      return {};
+    },
     dispatch(action) {
       const row = this.packages.find((row) => row.code === this.selected);
       if (action.type === 'select') this.selected = action.code;
@@ -166,7 +171,7 @@ export default {
 
 <template>
   <dialog
-    v-window="{ kind: 'project_templates' }"
+    v-window="{ kind: 'project_templates', page: windowContext }"
     ref="dialog"
     class="record-dialog project-templates"
     :aria-label="t('Manage templates')"
