@@ -1,4 +1,11 @@
 var en_default = {
+	"Group inheritance": "Group inheritance",
+	"Inherit permissions from": "Inherit permissions from",
+	"This inheritance would create a cycle.": "This inheritance would create a cycle.",
+	"This group inherits permissions from the selected groups. For the same rule key, the highest access wins; a deny does not cancel another grant.": "This group inherits permissions from the selected groups. For the same rule key, the highest access wins; a deny does not cancel another grant.",
+	"Other inherited groups: {groups}": "Other inherited groups: {groups}",
+	"TACTIC administrator access is required": "TACTIC administrator access is required",
+	"Only a TACTIC administrator can create users": "Only a TACTIC administrator can create users",
 	Results: "Results",
 	"Page region": "Page region",
 	Header: "Header",
@@ -1967,6 +1974,13 @@ var en_default = {
 	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
 };
 var ru_default = {
+	"Group inheritance": "Наследование прав",
+	"Inherit permissions from": "Наследовать права от групп",
+	"This inheritance would create a cycle.": "Это наследование создаст циклическую связь.",
+	"This group inherits permissions from the selected groups. For the same rule key, the highest access wins; a deny does not cancel another grant.": "Группа наследует права выбранных групп. Для одинакового ключа действует наивысший уровень доступа: запрет не отменяет разрешение из другого правила.",
+	"Other inherited groups: {groups}": "Другие наследуемые группы: {groups}",
+	"TACTIC administrator access is required": "Необходимы права администратора TACTIC",
+	"Only a TACTIC administrator can create users": "Создавать пользователей может только администратор TACTIC",
 	"Item preview · Sample data": "Предпросмотр · Пример данных",
 	"Example item": "Пример элемента",
 	"Example value": "Пример значения",

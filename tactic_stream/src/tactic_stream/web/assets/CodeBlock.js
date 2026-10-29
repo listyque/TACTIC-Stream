@@ -4120,6 +4120,13 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	"Group inheritance": "Наследование прав",
+	"Inherit permissions from": "Наследовать права от групп",
+	"This inheritance would create a cycle.": "Это наследование создаст циклическую связь.",
+	"This group inherits permissions from the selected groups. For the same rule key, the highest access wins; a deny does not cancel another grant.": "Группа наследует права выбранных групп. Для одинакового ключа действует наивысший уровень доступа: запрет не отменяет разрешение из другого правила.",
+	"Other inherited groups: {groups}": "Другие наследуемые группы: {groups}",
+	"TACTIC administrator access is required": "Необходимы права администратора TACTIC",
+	"Only a TACTIC administrator can create users": "Создавать пользователей может только администратор TACTIC",
 	"TACTIC Handler only": "Только в ТХ",
 	"TACTIC Handler with a connected DCC": "ТХ с подключённым DCC",
 	"Server Python": "Серверный Python",

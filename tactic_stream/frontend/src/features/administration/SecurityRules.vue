@@ -175,6 +175,7 @@ export default {
         group: this.group,
         groups: this.groups,
         groupDocument: this.groupDocument || {},
+        groupDocuments: this.document?.groups || {},
         records: this.records,
         attributes: this.attributes,
         selected: this.selected,

@@ -1,4 +1,11 @@
 {
+  "Group inheritance": "Group inheritance",
+  "Inherit permissions from": "Inherit permissions from",
+  "This inheritance would create a cycle.": "This inheritance would create a cycle.",
+  "This group inherits permissions from the selected groups. For the same rule key, the highest access wins; a deny does not cancel another grant.": "This group inherits permissions from the selected groups. For the same rule key, the highest access wins; a deny does not cancel another grant.",
+  "Other inherited groups: {groups}": "Other inherited groups: {groups}",
+  "TACTIC administrator access is required": "TACTIC administrator access is required",
+  "Only a TACTIC administrator can create users": "Only a TACTIC administrator can create users",
   "Results": "Results",
   "Page region": "Page region",
   "Header": "Header",

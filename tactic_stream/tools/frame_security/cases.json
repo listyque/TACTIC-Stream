@@ -9,6 +9,7 @@
  {"phase":"search-type","actions":[{"type":"scope","value":"search_type"}]},
  {"phase":"process","actions":[{"type":"scope","value":"process"}]},
  {"phase":"tasks","actions":[{"type":"scope","value":"tasks"}]},
+ {"phase":"group-inheritance","actions":[{"type":"scope","value":"defaults"}]},
  {"phase":"search-filter","actions":[{"type":"scope","value":"search_filter"}]},
  {"phase":"rule-editor","actions":[{"type":"click","id":"adminAccessRule_4"}]},
  {"phase":"technical","actions":[{"type":"scope","value":"technical"}]},

@@ -41,3 +41,18 @@ for(const language of ['en','ru'])for(const width of [360,800,1100])for(const [s
  assert.equal(scene.nodes.find(n=>n.id==='adminSecuritySource').readOnly,false,'editing a text draft remains possible')
 }
 console.log('Access rules shared state, guards and all scope/page layouts passed')
+
+const hierarchy = {...model,
+ groups: [{identity:'G0',label:'Artists'}, {identity:'G1',label:'Reviewers'}, {identity:'G2',label:'Leads'}],
+ groupDocuments: {G0: {subGroups:''}, G1: {subGroups:'Leads'}, G2: {subGroups:'Artists'}}}
+assert.equal(State.inheritanceChoices(hierarchy).find(g=>g.identity==='G1').cycle, true)
+assert.deepEqual(State.transition(initial,hierarchy,{type:'inheritGroup',identity:'G1'}).commands,[])
+const cleanHierarchy = {...hierarchy, groupDocuments:{G0:{subGroups:''},G1:{subGroups:''},G2:{subGroups:''}}}
+assert.deepEqual(State.transition(initial,cleanHierarchy,{type:'inheritGroup',identity:'G1'}).commands,
+ [{type:'groupField',field:'subGroups',value:'Reviewers'}])
+const existing = {...hierarchy,groupDocument:{...model.groupDocument,subGroups:'Reviewers|admin'}}
+assert.deepEqual(State.transition(initial,existing,{type:'inheritGroup',identity:'G1'}).commands,
+ [{type:'groupField',field:'subGroups',value:'admin'}], 'removing a cyclic source preserves other entries')
+assert.deepEqual(State.transition(initial,{...cleanHierarchy,canWrite:false},{type:'inheritGroup',identity:'G1'}).commands,[])
+assert.deepEqual(State.transition(draft,{...cleanHierarchy,pendingText:true},{type:'inheritGroup',identity:'G1'}).commands,[])
+console.log('Inheritance choices reject cycles, preserve unknown entries and obey draft/ACL guards')
