@@ -106,7 +106,7 @@ export default {
     },
     openTaskManager: (record, process, filters, taskKey) => this.canAdminister ? this.$refs.taskManager.openForObjects(record, process, filters, taskKey) : this.showWorkspaceNotice('Access denied'),
     openTaskInspector: (record, cell, process, taskKey, source) => this.openTaskInspector(record, cell, process, taskKey, source),
-    openTableCheckin: (record,cell,project) => this.openTableCheckin(record,cell,project),
+    openTableCheckin: (record,cell,project) => this.openTableCheckin(record,cell,project,true),
     openTableSecurity: code => this.openTableSecurity(code),
     openTablePort: (command,record) => this.openTablePort(command,record),
     openScriptEditor: path => this.openScriptEditor(path),
@@ -1979,12 +1979,22 @@ export default {
       } catch (error) { if (request === this.linkRequest) { this.fail(error); this.showWorkspaceNotice(this.error, true) } }
       finally { if (request === this.linkRequest) { this.openingLink = false; this.writeLocation(replace) } }
     },
-    async openTableCheckin(record,cell,project) {
-      if (!this.canAdminister || !this.$refs.dropPlate.canLeave()) return
+    async openTableCheckin(record,cell,project,toggle=false) {
+      if (!this.canAdminister) return
+      if (toggle && this.$refs.docks.presented('drop_plate')) {
+        await this.$refs.docks.hide('drop_plate')
+        return
+      }
       if (['copy','move','local','inplace'].includes(cell.transferMode)) throw new Error('This configured check-in mode requires a desktop connection.')
-      this.$refs.dropPlate.clear()
-      this.tableCheckinTarget = {project,searchKey:record.__search_key__,title:record.name || record.title || record.code,record,
+      const target = {project,searchKey:record.__search_key__,title:record.name || record.title || record.code,record,
         process:cell.process || 'publish',context:cell.context || cell.process || 'publish'}
+      if (toggle && ['project','searchKey','process','context'].every(key => this.tableCheckinTarget?.[key] === target[key])) {
+        this.$refs.docks.show('drop_plate')
+        return
+      }
+      if (!this.$refs.dropPlate.canLeave()) return
+      this.$refs.dropPlate.clear()
+      this.tableCheckinTarget = target
       this.$refs.docks.show('drop_plate')
     },
     async inspect(record) {
