@@ -394,7 +394,7 @@ def describe_cell(element, columns, search_type=""):
         allowed |= {"type", "format", "fps", "timezone", "justify", "constraint", "total_summary"}
         supported = supported and options.get("total_summary") in (None, "", "count", "total", "average")
     elif widget is LinkElementWdg:
-        allowed.add("icon")
+        allowed |= set(widget.ARGS_KEYS)
     elif widget is SearchTypeElementWdg:
         allowed.add("filename")
     elif widget is SimpleTableElementWdg:

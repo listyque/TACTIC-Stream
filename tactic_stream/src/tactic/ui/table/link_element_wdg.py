@@ -5,7 +5,12 @@ from tactic.ui.common import SimpleTableElementWdg
 
 
 class LinkElementWdg(SimpleTableElementWdg):
-    ARGS_KEYS = {'icon': 'Icon to display'}
+    ARGS_KEYS = {'icon': 'Icon to display', 'empty': 'Text for an empty link'}
+
+    def get_text_value(self):
+        value = super().get_text_value()
+        text = '' if value is None else str(value).strip()
+        return text or self.get_option('empty') or ''
 
     def is_sortable(self):
         return False

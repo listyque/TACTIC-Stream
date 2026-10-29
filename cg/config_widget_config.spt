@@ -5363,12 +5363,8 @@ insert.set_value('config', """<config>
       </display>
     </element>
     <element name="script" title="Script" width="53px" edit="false" color="false">
-      <display widget="hidden_row">
-        <dynamic_class>tactic.ui.table.CustomLayoutElementWdg</dynamic_class>
-        <show_resize_scroll>true</show_resize_scroll>
-        <include_mako>true</include_mako>
-        <icon>FAS_SCROLL</icon>
-        <view>episodes/columns/script</view>
+      <display class="tactic.ui.table.LinkElementWdg">
+        <empty>Not script</empty>
       </display>
     </element>
     <element name="name" width="50px" edit="true">
