@@ -1,6 +1,6 @@
 import { A as onMounted, M as openBlock, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, g as createCommentVNode, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString } from "./vue.js";
 import { T as metrics, _ as controls, s as appearance } from "./AppButton.js";
-import { B as node, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate } from "./resize.js";
+import { H as rect, R as label, V as node, n as observeFrameSizes, r as _sfc_main$1, v as translate } from "./resize.js";
 //#region \0rolldown/runtime.js
 var __defProp = Object.defineProperty;
 var __exportAll = (all, no_symbols) => {

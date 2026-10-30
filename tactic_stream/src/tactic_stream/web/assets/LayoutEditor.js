@@ -2,7 +2,7 @@ const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ConfiguredView.
 import { C as inject, F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, et as unref, f as Teleport, g as createCommentVNode, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, s as vShow, tt as normalizeClass } from "./vue.js";
 import { R as _plugin_vue_export_helper_default, o as t, s as appearance } from "./AppButton.js";
 import { Ft as asyncComponent, O as resultItems, Y as widgetConfiguration, a as __vitePreload, k as rpc } from "./index.js";
-import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$2, v as translate, z as muted } from "./resize.js";
+import { B as muted, H as rect, L as button, R as label, V as node, n as observeFrameSizes, r as _sfc_main$2, v as translate } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
 import { i as sectionSelector, k as workspaceAddress, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";
 import { At as edit, Dt as actions, Et as visible, Ft as widgets, G as _sfc_main$3, Mt as serialize, Nt as template, Ot as binding, Pt as variants, Tt as supports, X as itemScene, Z as spacingField, jt as roles, kt as describe$1, wt as describe$2 } from "./ConfiguredView.js";

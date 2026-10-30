@@ -2,7 +2,7 @@ import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { E as nextTick, F as resolveComponent, I as resolveDirective, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, rt as toDisplayString } from "./vue.js";
 import { R as _plugin_vue_export_helper_default, o as t, s as appearance } from "./AppButton.js";
 import { K as uploadFormFile, k as rpc } from "./index.js";
-import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
+import { B as muted, H as rect, L as button, R as label, V as node, n as observeFrameSizes, r as _sfc_main$1, v as translate } from "./resize.js";
 import { t as describe$1 } from "./confirmation.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/projects/templates.ui.mjs
 function describe(model, width, height, language) {

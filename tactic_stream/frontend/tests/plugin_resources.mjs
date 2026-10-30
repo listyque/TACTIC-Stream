@@ -8,8 +8,35 @@ import { chromium } from 'playwright';
 import * as Resources from '../../src/tactic_stream/shared_ui/features/administration/plugins/plugins.resources.mjs';
 import { validateScene } from '../../src/tactic_stream/shared_ui/core/frame.mjs';
 import * as Layout from '../../src/tactic_stream/shared_ui/features/table/layout.ui.mjs';
+import * as UI from '../../src/tactic_stream/shared_ui/features/administration/plugins/plugins.ui.mjs';
+import { listRowHeight } from '../../src/tactic_stream/shared_ui/core/frame.mjs';
 
 const endpoint = process.env.PLUGIN_FIXTURE_URL;
+for (const [id, rowHeight, record] of [
+  [
+    'pluginResources',
+    48,
+    { key: 'a', title: 'Widget', kind: 'widget', field: 'config' }
+  ],
+  [
+    'pluginCatalogue',
+    76,
+    { identity: 'plugins:a', title: 'Package', path: 'a' }
+  ],
+  [
+    'pluginFiles',
+    40,
+    { name: 'README.md', path: 'README.md', directory: false }
+  ]
+]) {
+  const list = { id, width: 250, rowHeight },
+    model = { document: { resource: { key: 'a' } }, identity: 'plugins:a' };
+  for (const node of UI.row(list, record, model, 'en').nodes)
+    assert.ok(
+      node.y + node.height <= listRowHeight(list),
+      `${id}/${node.id} exceeds its row`
+    );
+}
 const widget = JSON.parse(
   await readFile(new URL('./fixtures/plugin_widget.json', import.meta.url))
 );

@@ -1,7 +1,7 @@
 import { F as resolveComponent, J as markRaw, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { R as _plugin_vue_export_helper_default, o as t, s as appearance } from "./AppButton.js";
 import { k as rpc } from "./index.js";
-import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
+import { B as muted, H as rect, L as button, R as label, V as node, n as observeFrameSizes, r as _sfc_main$1, v as translate } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
 import { i as readPreviewImage } from "./RecordForm.js";
 import { i as sectionSelector, n as notices, o as toolbar$1, r as policy, t as documentEvent } from "./admin.document.js";

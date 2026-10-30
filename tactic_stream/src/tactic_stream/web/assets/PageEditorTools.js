@@ -1,5 +1,5 @@
 import { G as withCtx, M as openBlock, X as ref, _ as createElementBlock, b as createVNode, p as computed } from "./vue.js";
-import { L as button, O as _sfc_main$2, V as rect, r as _sfc_main$1 } from "./resize.js";
+import { H as rect, L as button, O as _sfc_main$2, r as _sfc_main$1 } from "./resize.js";
 import { _t as _sfc_main$3 } from "./ConfiguredView.js";
 //#region src/features/administration/PageEditorTools.vue
 var _sfc_main = {

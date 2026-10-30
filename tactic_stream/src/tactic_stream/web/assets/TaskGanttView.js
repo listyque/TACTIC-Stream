@@ -1,6 +1,6 @@
 import { A as onMounted, D as onActivated, E as nextTick, G as withCtx, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, b as createVNode, c as withKeys, et as unref, g as createCommentVNode, h as createBlock, k as onDeactivated, l as withModifiers, m as createBaseVNode, nt as normalizeStyle, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { C as layout$1, T as metrics$1, o as t, s as appearance, t as _sfc_main$1 } from "./AppButton.js";
-import { B as node, L as button, O as _sfc_main$3, R as label, V as rect, r as _sfc_main$2, v as translate } from "./resize.js";
+import { H as rect, L as button, O as _sfc_main$3, R as label, V as node, r as _sfc_main$2, v as translate } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/features/tasks/gantt.state.mjs
 var clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 var metrics = {

@@ -1,7 +1,7 @@
 import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as onBeforeUnmount, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
 import { K as uploadFormFile, k as rpc } from "./index.js";
-import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate$1 } from "./resize.js";
+import { H as rect, L as button, R as label, V as node, n as observeFrameSizes, r as _sfc_main$1, v as translate$1, z as listRowHeight } from "./resize.js";
 import { wt as describe$2 } from "./ConfiguredView.js";
 import { t as _sfc_main$2 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.resources.mjs
@@ -62,22 +62,22 @@ var icons = {
 	plugin: "extension"
 };
 function row$1(list, entry, model, tr) {
-	const w = Math.max(0, list.width - 16);
+	const w = Math.max(0, list.width - 16), h = listRowHeight(list);
 	return { nodes: [
-		node("Box", "pluginResourceBackground", rect(0, 0, w, 48), {
+		node("Box", "pluginResourceBackground", rect(0, 0, w, h), {
 			background: model.document?.resource?.key === entry.key ? "contentSelection" : "transparent",
 			radius: 0
 		}),
 		node("Icon", "pluginResourceIcon", rect(8, 10, 24, 24), { icon: icons[entry.kind] || "settings" }),
 		label("pluginResourceTitle", rect(44, 0, w - 48, 24), entry.title, { weight: 600 }),
-		label("pluginResourceKind", rect(44, 24, w - 48, 22), tr(names[entry.kind] || {
+		label("pluginResourceKind", rect(44, 24, w - 48, Math.min(22, h - 24)), tr(names[entry.kind] || {
 			search_type: "Schema",
 			configuration: "Configuration"
 		}[entry.kind] || entry.kind) + (entry.searchType ? " · " + entry.searchType : "") + (entry.count === void 0 ? "" : " · " + entry.count), {
 			color: "secondaryText",
 			fontRole: "secondary"
 		}),
-		node("Action", "pluginResourceSelect", rect(0, 0, w, 48), {
+		node("Action", "pluginResourceSelect", rect(0, 0, w, h), {
 			text: entry.title,
 			selected: model.document?.resource?.key === entry.key,
 			enabled: !model.busy && !!(entry.field || entry.path),
@@ -1454,9 +1454,9 @@ function describe(model, ui, width, height, language) {
 	return { nodes };
 }
 function row(list, record, model, language) {
-	const tr = (text) => translate(text, language), w = Math.max(0, list.width - 16);
+	const tr = (text) => translate(text, language), w = Math.max(0, list.width - 16), h = listRowHeight(list);
 	if (list.id === "pluginResources") return row$1(list, record, model, tr);
-	if (list.id === "pluginFiles") return { nodes: [button("pluginFile_" + record.path, rect(0, 0, w, 40), record.name, record.directory ? "folder" : "file", {
+	if (list.id === "pluginFiles") return { nodes: [button("pluginFile_" + record.path, rect(0, 0, w, h), record.name, record.directory ? "folder" : "file", {
 		type: "file",
 		path: record.path,
 		directory: record.directory
@@ -1465,7 +1465,7 @@ function row(list, record, model, language) {
 		alignment: "left"
 	})] };
 	return { nodes: [
-		node("Box", "pluginRowBackground", rect(0, 0, w, 76), {
+		node("Box", "pluginRowBackground", rect(0, 0, w, h), {
 			background: model.identity === record.identity ? "contentSelection" : "transparent",
 			radius: 0
 		}),
@@ -1476,11 +1476,11 @@ function row(list, record, model, language) {
 			record.builtin ? tr("Built-in") : "",
 			tr(record.active ? "Active" : "Inactive")
 		].filter(Boolean).join(" · "), { color: "secondaryText" }),
-		label("pluginRowPath", rect(36, 52, w - 44, 22), record.path, {
+		label("pluginRowPath", rect(36, 52, w - 44, Math.min(22, h - 52)), record.path, {
 			color: "secondaryText",
 			fontRole: "secondary"
 		}),
-		node("Action", "pluginSelect", rect(0, 0, w, 76), {
+		node("Action", "pluginSelect", rect(0, 0, w, h), {
 			text: record.title || record.code,
 			action: {
 				type: "select",
