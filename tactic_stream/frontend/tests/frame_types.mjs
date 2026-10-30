@@ -224,8 +224,17 @@ try {
             .locator('[data-frame="adminSearchTypeRelationshipGraph"]')
             .boundingBox();
         assert.ok(band && graph, label + ' grouped statistics and map');
+        assert.equal(
+          await page
+            .locator(
+              '[data-frame=typeSummaryHelp], [data-frame=typeGraphHeadingDescription]'
+            )
+            .count(),
+          0,
+          label + ' explanations belong in Help'
+        );
         assert.ok(
-          graph.y - band.y - band.height <= (width < 600 ? 280 : 180),
+          graph.y - band.y - band.height <= 44,
           label + ' map stays close to statistics'
         );
         assert.equal(
