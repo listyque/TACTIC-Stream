@@ -342,6 +342,11 @@ export default {
 <style>
 .table-cell-text {
   font-size: var(--font-body-size);
+  min-width: 0;
+  max-width: 100%;
+  max-height: 100%;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
 }
 .handler-table-cell .table-cell-multiline {
   white-space: pre-line;

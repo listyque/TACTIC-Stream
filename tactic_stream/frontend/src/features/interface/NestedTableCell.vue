@@ -47,7 +47,4 @@ defineEmits(['action', 'inspect', 'cell-event']);
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.nested-table-cell :deep(.table-cell-text:not(.table-cell-multiline)) {
-  white-space: nowrap;
-}
 </style>

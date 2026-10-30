@@ -6064,7 +6064,7 @@ var NestedTableCell_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 2);
 		};
 	}
-}, [["__scopeId", "data-v-df91fdb6"]]);
+}, [["__scopeId", "data-v-3725befc"]]);
 //#endregion
 //#region src/features/workspace/WorkspaceSearch.vue
 var _sfc_main$55 = {
