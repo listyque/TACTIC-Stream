@@ -1153,8 +1153,8 @@ function serviceHeight(columns) {
 }
 function describe$20(model, width) {
 	const available = Math.max(0, width - metrics$1.selection - metrics$1.actions);
-	const columns = visibleColumns(model.columns || [], available, model.overrides);
-	const fitted = model.autoFit ? fittedWidths(columns, available, model.overrides) : {};
+	const columns = model.scrollColumns ? model.columns || [] : visibleColumns(model.columns || [], available, model.overrides);
+	const fitted = model.autoFit && !model.scrollColumns ? fittedWidths(columns, available, model.overrides) : {};
 	const cells = [];
 	let left = metrics$1.selection;
 	for (let index = 0; index < columns.length; index++) {
@@ -1335,7 +1335,7 @@ function columnActions(model, language) {
 		}))
 	]);
 }
-function viewActions$1(views, enabled, language) {
+function viewActions$1(views, enabled, language, scrollColumns = false) {
 	const actions = [{
 		title: "Table views",
 		header: true
@@ -1351,6 +1351,14 @@ function viewActions$1(views, enabled, language) {
 		});
 	}
 	return actions.concat([
+		{ separator: true },
+		{
+			title: "Horizontal scrolling",
+			icon: "fit-width",
+			command: "scroll_columns",
+			role: "menuitemcheckbox",
+			checked: scrollColumns
+		},
 		{ separator: true },
 		{
 			title: "Configure columns",
@@ -5060,10 +5068,12 @@ var _sfc_main$58 = {
 		let observer, frame, resizeFrame;
 		const preferences = computed(() => props.state?.table || {});
 		const autoFit = computed(() => !!preferences.value.autoFit);
+		const scrollColumns = computed(() => !!preferences.value.scrollColumns);
 		const layout = computed(() => describe$20({
 			columns: props.columns,
 			overrides: overrides.value,
 			autoFit: autoFit.value,
+			scrollColumns: scrollColumns.value,
 			rowHeight: preferences.value.rowHeight,
 			automaticRowHeight: preferences.value.automaticRowHeight
 		}, width.value));
@@ -5081,7 +5091,7 @@ var _sfc_main$58 = {
 			rowHeight: rowHeight.value,
 			automaticRowHeight: preferences.value.automaticRowHeight
 		}, appearance.language));
-		const viewActions = computed(() => viewActions$1(props.views || [], props.editable && !props.busy, appearance.language));
+		const viewActions = computed(() => viewActions$1(props.views || [], props.editable && !props.busy, appearance.language, scrollColumns.value));
 		function columnWidth(column) {
 			return layout.value.cells.find((cell) => cell.name === column.name)?.width || 48;
 		}
@@ -5107,7 +5117,11 @@ var _sfc_main$58 = {
 			}
 		}
 		function viewCommand(command) {
-			if (command === "configure") emit("column", "", "definition");
+			if (command === "scroll_columns") preference({
+				scrollColumns: !scrollColumns.value,
+				autoFit: false
+			});
+			else if (command === "configure") emit("column", "", "definition");
 			else if (command === "save_as") savingView.value = true;
 			else if (command.startsWith("select:")) emit("view", props.views[Number(command.split(":")[1])].view);
 		}
@@ -5485,7 +5499,10 @@ var _sfc_main$58 = {
 							"icon-only": "",
 							"aria-pressed": autoFit.value,
 							highlighted: autoFit.value,
-							onClick: _cache[2] || (_cache[2] = ($event) => preference({ autoFit: !autoFit.value }))
+							onClick: _cache[2] || (_cache[2] = ($event) => preference({
+								autoFit: !autoFit.value,
+								scrollColumns: false
+							}))
 						}, null, 8, ["aria-pressed", "highlighted"]), [[vShow, !__props.busy]]),
 						withDirectives(createVNode(_sfc_main$76, {
 							label: "Table views and columns",

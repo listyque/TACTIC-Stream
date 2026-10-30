@@ -5157,6 +5157,7 @@ var russian = {
 	"TH sidebar": "Сайдбар TH",
 	Table: "Таблица",
 	"Table %1.%2 is missing. This Search Type is still referenced by the schema. Check the table on the server or correct the connection, then reload columns. No table is created automatically.": "Таблица %1.%2 отсутствует, но схема всё ещё ссылается на этот серч-тайп. Проверьте таблицу на сервере или исправьте связь, затем обновите столбцы. Таблица не создаётся автоматически.",
+	"Horizontal scrolling": "Горизонтальная прокрутка",
 	"Table views and columns": "Варианты таблицы и колонки",
 	Target: "Объект",
 	"Target status": "Целевой статус",

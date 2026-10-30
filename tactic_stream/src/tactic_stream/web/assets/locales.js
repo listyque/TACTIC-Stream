@@ -1,4 +1,5 @@
 var en_default = {
+	"Horizontal scrolling": "Horizontal scrolling",
 	Interface: "Interface",
 	Advanced: "Advanced",
 	"Other rule": "Other rule",
@@ -1995,6 +1996,7 @@ var en_default = {
 	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
 };
 var ru_default = {
+	"Horizontal scrolling": "Горизонтальная прокрутка",
 	Advanced: "Дополнительно",
 	"Other rule": "Другое правило",
 	"Choose the groups whose permissions are inherited.": "Выберите группы, от которых наследуются права.",

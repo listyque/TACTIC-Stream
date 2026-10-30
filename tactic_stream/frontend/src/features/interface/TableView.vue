@@ -78,12 +78,14 @@ const overrides = ref({}),
 let observer, frame, resizeFrame;
 const preferences = computed(() => props.state?.table || {});
 const autoFit = computed(() => !!preferences.value.autoFit);
+const scrollColumns = computed(() => !!preferences.value.scrollColumns);
 const layout = computed(() =>
   Host.describe(
     {
       columns: props.columns,
       overrides: overrides.value,
       autoFit: autoFit.value,
+      scrollColumns: scrollColumns.value,
       rowHeight: preferences.value.rowHeight,
       automaticRowHeight: preferences.value.automaticRowHeight
     },
@@ -117,7 +119,8 @@ const viewActions = computed(() =>
   Menus.viewActions(
     props.views || [],
     props.editable && !props.busy,
-    appearance.language
+    appearance.language,
+    scrollColumns.value
   )
 );
 function columnWidth(column) {
@@ -159,7 +162,9 @@ function columnCommand(command) {
   }
 }
 function viewCommand(command) {
-  if (command === 'configure') emit('column', '', 'definition');
+  if (command === 'scroll_columns')
+    preference({ scrollColumns: !scrollColumns.value, autoFit: false });
+  else if (command === 'configure') emit('column', '', 'definition');
   else if (command === 'save_as') savingView.value = true;
   else if (command.startsWith('select:'))
     emit('view', props.views[Number(command.split(':')[1])].view);
@@ -639,7 +644,7 @@ defineExpose({ viewport });
           icon-only
           :aria-pressed="autoFit"
           :highlighted="autoFit"
-          @click="preference({ autoFit: !autoFit })"
+          @click="preference({ autoFit: !autoFit, scrollColumns: false })"
         />
         <AppMenu
           v-show="!busy"
