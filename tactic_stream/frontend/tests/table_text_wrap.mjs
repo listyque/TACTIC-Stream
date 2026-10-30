@@ -7,10 +7,24 @@ import { chromium } from 'playwright';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const html = `<!doctype html><html><head><link rel="icon" href="data:,"></head><body><div id="app"></div><script type="module">
 import {createApp,h} from 'vue';import TableView from '/src/features/interface/TableView.vue';import TableCell from '/src/features/interface/TableCell.vue';
-import NestedTableCell from '/src/features/interface/NestedTableCell.vue';
+import NestedTable from '/src/features/interface/NestedTable.vue';
 import {appearance,initializeAppearance} from '/src/appearance.js';import {windowDirective} from '/src/controls/window.js';
 import '/src/theme.css';import '/src/style.css';Object.assign(appearance,{language:'en',theme:'md3',mode:'dark'});initializeAppearance();
-createApp({data(){return {nested:false,width:160,kind:'text',text:'robot, hero, character, rig, animation',state:{}}},mounted(){window.host=this},render(){const record={__search_key__:'asset',keywords:this.text};return h(TableView,{columns:[{name:'keywords',title:'Keywords',width:this.width,hideOrder:0}],groups:[{key:'all',records:[record]}],state:{table:{rowHeight:120}},closedGroups:{},selectedKeys:[],readOnly:true},{cell:({record,column})=>this.nested?h(NestedTableCell,{frameNode:{column:{...column,supported:true,field:'keywords',cell:{kind:this.kind}},record,cell:{text:this.text,href:'/docs'},height:120}}):h(TableCell,{element:{...column,supported:true,field:'keywords',cell:{kind:this.kind}},record,cell:{text:this.text,href:'/docs'},height:120})})}}).directive('window',windowDirective).mount('#app');
+createApp({
+ data(){return {nested:false,width:160,kind:'text',text:'robot, hero, character, rig, animation',state:{}}},
+ mounted(){window.host=this},
+ render(){
+  const record={__search_key__:'asset',keywords:this.text};
+  const column={name:'keywords',title:'Keywords',width:this.width,hideOrder:0,supported:true,field:'keywords',cell:{kind:this.kind,field:'keywords',supported:true}};
+  const cell={text:this.text,href:'/docs'};
+  if(this.nested)return h(NestedTable,{ticket:'fixture',project:'demo',frameNode:{height:240},state:{
+   scope:{searchType:'demo/asset',parentKey:'root',view:'table'},loaded:true,columns:[column],selected:[],
+   resultState:{table:{rowHeight:120}},definition:{search_type:'demo/asset',operations:{},columns:{keywords:{data_type:'varchar'}},table:{layout:'TableLayoutWdg',configured:true,view:'table',elements:[{...column,attributes:{width:this.width}}]}},
+   rows:[{key:'asset',record,cells:{keywords:cell}}]}});
+  return h(TableView,{columns:[column],groups:[{key:'all',records:[record]}],state:{table:{rowHeight:120}},closedGroups:{},selectedKeys:[],readOnly:true},
+   {cell:({record,column})=>h(TableCell,{element:column,record,cell,height:120})});
+ }
+}).provide('openHelp',()=>{}).directive('window',windowDirective).mount('#app');
 </script><style>html,body,#app{width:100%;height:100%;overflow:hidden}#app{display:flex}</style></body></html>`;
 let server, browser;
 const errors = [];
@@ -120,7 +134,7 @@ try {
     window.host.width = 160;
     window.host.text = 'robot, hero, character, rig, animation';
   });
-  await page.locator('.nested-table-cell').waitFor();
+  await page.locator('.nested-table .handler-table-cell').waitFor();
   assert(
     await value.evaluate((el) => {
       const range = document.createRange();

@@ -1,4 +1,4 @@
-import { N as openBlock, P as renderList, _ as createElementBlock, it as toDisplayString, m as createBaseVNode, nt as normalizeClass, p as computed, u as Fragment } from "./vue.js";
+import { M as openBlock, N as renderList, _ as createElementBlock, m as createBaseVNode, p as computed, rt as toDisplayString, tt as normalizeClass, u as Fragment } from "./vue.js";
 import { f as javascriptTokens, m as xmlTokens, p as pythonTokens } from "./resize.js";
 //#region src/controls/CodeBlock.vue
 var _hoisted_1 = {

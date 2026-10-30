@@ -1,20 +1,11 @@
 <script setup>
-import {
-  computed,
-  getCurrentInstance,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch
-} from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
 import { observeFrameSizes } from '../../frame/resize.js';
 import { rpc } from '../../api.js';
 import { appearance } from '../../appearance.js';
-import NestedTableCell from './NestedTableCell.vue';
 import WorkspaceSearch from '../workspace/WorkspaceSearch.vue';
-import AppMenu from '../../controls/AppMenu.vue';
-import ActionRows from '../../controls/ActionRows.vue';
+import ConfiguredTable from './ConfiguredView.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
 
 const props = defineProps({
@@ -34,31 +25,20 @@ const emit = defineEmits([
   'column'
 ]);
 const host = ref(null),
-  width = ref(1),
-  columnMenu = ref(null),
-  headerColumn = ref('');
+  width = ref(1);
 let observer,
   generation = 0;
 const model = computed(
   () => props.state || props.parentState.children[props.frameNode.key]
 );
-const component = getCurrentInstance().type;
-const headerActions = computed(() =>
-  UI.headerActions(model.value, headerColumn.value, appearance.language)
+const tableRecords = computed(() =>
+  (model.value.rows || []).map((row) => row.record)
 );
-function headerCommand(command) {
-  if (command === 'edit_definition' || command === 'columns')
-    activate({
-      type: 'columns',
-      column: command === 'columns' ? '' : headerColumn.value
-    });
-  else if (command.startsWith('sort:'))
-    activate({
-      type: 'sort',
-      value: headerColumn.value,
-      direction: command === 'sort:descending' ? 'desc' : 'asc'
-    });
-}
+const tableCells = computed(() =>
+  Object.fromEntries(
+    (model.value.rows || []).map((row) => [row.key, row.cells])
+  )
+);
 const records = computed(() =>
   UI.rows({ ...model.value.scope, ...model.value }, width.value, extent.value)
 );
@@ -108,97 +88,70 @@ const views = computed(() => ({
       onOpen: (record) => search(record.title, '=')
     }
   },
-  nestedTable: {
-    component,
-    nodeProps: true,
+  tableBody: {
+    component: ConfiguredTable,
     props: {
       ticket: props.ticket,
-      project: props.project,
-      parentState: model.value,
-      ancestors: [
+      project: model.value.scope.projectCode || props.project,
+      definition: model.value.definition,
+      rows: tableRecords.value,
+      preparedCells: tableCells.value,
+      readOnly: false,
+      embedded: true,
+      nestedAncestors: [
         ...props.ancestors,
         UI.identity(model.value.scope, props.project)
       ],
-      onClose: (key) => {
-        model.value.children[key].open = false;
+      nestedTables: (model.value.children ||= {}),
+      parentKey: model.value.scope.parentKey,
+      selectionEnabled: model.value.scope.selection !== false,
+      selectedKeys: model.value.selected || [],
+      resultState: model.value.resultState || {},
+      sortField: (model.value.order || '').split(' ')[0],
+      sortDirection: (model.value.order || '').split(' ')[1] || 'asc',
+      onSelect: (records, selected) => {
+        if (!records.length && !selected) {
+          model.value.selected = [];
+          model.value.selectionRecords = {};
+          return;
+        }
+        const keys = new Set(model.value.selected || []);
+        model.value.selectionRecords ||= {};
+        for (const record of records) {
+          if (selected) {
+            keys.add(record.__search_key__);
+            model.value.selectionRecords[record.__search_key__] = {
+              code: record.code
+            };
+          } else {
+            keys.delete(record.__search_key__);
+            delete model.value.selectionRecords[record.__search_key__];
+          }
+        }
+        if (keys.size > 500) {
+          model.value.error = 'Choose at most 500 table records';
+          return;
+        }
+        model.value.selected = [...keys];
       },
-      onEdit: (...args) => emit('edit', ...args),
-      onAction: (...args) => emit('action', ...args),
+      onSort: (value, direction) =>
+        activate({ type: 'sort', value, direction }),
+      onResultState: (value) => {
+        model.value.resultState = value;
+        if (value.table?.view && value.table.view !== model.value.scope.view) {
+          model.value.scope.view = value.table.view;
+          load();
+        }
+      },
       onInspect: (record) => emit('inspect', record),
-      onCellEvent: (...args) => emit('cell-event', ...args),
-      onColumn: (...args) => emit('column', ...args)
-    }
-  },
-  tableCell: {
-    component: NestedTableCell,
-    nodeProps: true,
-    props: {
-      onAction: forward,
-      onInspect: (record) => emit('inspect', record),
-      onCellEvent: (...args) => emit('cell-event', ...args),
-      onColumn: (...args) => emit('column', ...args)
+      onColumn: (request) => {
+        model.value.loaded = false;
+        emit('column', request);
+      },
+      onSaved: load
     }
   }
 }));
-function forward(record, kind, cell, anchor) {
-  if (kind === 'nested-table') {
-    const scope = cell.nestedTable;
-    if (
-      [
-        ...props.ancestors,
-        UI.identity(model.value.scope, props.project)
-      ].includes(UI.identity(scope, props.project))
-    ) {
-      model.value.error = 'This nested table would repeat an ancestor scope';
-      return;
-    }
-    model.value.children ||= {};
-    const key = record.__search_key__,
-      previous = model.value.children[key];
-    if (
-      previous &&
-      previous.column === cell.columnName &&
-      JSON.stringify(previous.scope) === JSON.stringify(scope)
-    )
-      previous.open = !previous.open;
-    else
-      model.value.children[key] = {
-        scope,
-        column: cell.columnName,
-        open: true,
-        selected: [],
-        offset: 0,
-        rows: [],
-        columns: [],
-        selection: scope.selection
-      };
-  } else if (kind === 'nested-select')
-    activate({ type: 'select', key: record.__search_key__ });
-  else
-    emit(
-      'action',
-      record,
-      kind,
-      {
-        ...cell,
-        tableScope: {
-          view: model.value.scope.view || 'table',
-          projectCode: model.value.scope.projectCode || props.project,
-          searchKeys: [...(model.value.selected || [])],
-          records: {
-            ...model.value.selectionRecords,
-            ...Object.fromEntries(
-              (model.value.rows || []).map((row) => [
-                row.key,
-                { code: row.record.code }
-              ])
-            )
-          }
-        }
-      },
-      anchor
-    );
-}
 function row(list, record) {
   return UI.row(
     { ...model.value.scope, ...model.value },
@@ -241,7 +194,11 @@ async function load() {
     ]);
     const result = response.info;
     if (request !== generation || state !== model.value) return;
-    const definition = result.definition;
+    const definition = {
+      ...result.definition,
+      search_type: scope.searchType,
+      table: { ...result.definition.table, view: scope.view || 'table' }
+    };
     state.definition = definition;
     state.columns = definition.table.elements
       .filter((element) => !element.hidden)
@@ -283,20 +240,11 @@ async function load() {
 }
 function activate(action, source) {
   const state = model.value;
-  if (action.type === 'header-menu') {
-    headerColumn.value = action.column;
-    const bounds = source.getBoundingClientRect();
-    const value = action.value;
-    columnMenu.value.openAt({
-      clientX: bounds.left + (value?.x ?? bounds.width - 8),
-      clientY: bounds.top + (value?.y ?? bounds.height),
-      target: source
-    });
-  } else if (action.type === 'close') emit('close', props.frameNode?.key);
+  if (action.type === 'close') emit('close', props.frameNode?.key);
   else if (action.type === 'gallery-open') {
     const record = state.rows.find((row) => row.key === action.key)?.record;
     if (record)
-      forward(record, 'file-checkout', {
+      emit('action', record, 'file-checkout', {
         targetSearchKey: action.key,
         projectCode: state.scope.projectCode || props.project
       });
@@ -412,9 +360,6 @@ defineExpose({ reload: load });
       :describe-row="row"
       @event="activate"
     />
-    <AppMenu ref="columnMenu" label="Column actions" overlay :width="280">
-      <ActionRows :actions="headerActions" @triggered="headerCommand" />
-    </AppMenu>
   </div>
 </template>
 

@@ -74,6 +74,31 @@ const state = reactive({
     }
   ]
 });
+function definition() {
+  state.definition = {
+    search_type: 'demo/asset',
+    administration: true,
+    operations: { create: true, edit: true },
+    columns: Object.fromEntries(
+      state.columns.map((column) => [column.name, { data_type: 'varchar' }])
+    ),
+    table: {
+      view: state.scope.view,
+      layout: 'TableLayoutWdg',
+      configured: true,
+      elements: state.columns.map((column) => ({
+        ...column,
+        attributes: { width: column.width },
+        cell: {
+          ...column.cell,
+          field: column.name,
+          sortable: column.name === 'code'
+        }
+      }))
+    }
+  };
+}
+definition();
 const parentMode = new URLSearchParams(location.search).has('parent');
 if (parentMode) state.open = true;
 const edits = [];
@@ -110,6 +135,7 @@ if (disclosureMode) {
     cells: state.rows[0].cells
   });
 }
+if (disclosureMode) definition();
 const actions = [];
 const width = ref(0);
 window.nestedFixture = {

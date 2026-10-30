@@ -1,4 +1,4 @@
-import { D as nextTick, F as renderSlot, N as openBlock, P as renderList, U as watch, Z as ref, _ as createElementBlock, j as onMounted, k as onBeforeUnmount, p as computed, rt as normalizeStyle, u as Fragment } from "./vue.js";
+import { A as onMounted, E as nextTick, H as watch, M as openBlock, N as renderList, O as onBeforeUnmount, P as renderSlot, X as ref, _ as createElementBlock, nt as normalizeStyle, p as computed, u as Fragment } from "./vue.js";
 import { n as observeFrameSizes } from "./resize.js";
 //#region ../src/tactic_stream/shared_ui/controls/lists/collection.mjs
 function layout(items, width, options = {}) {

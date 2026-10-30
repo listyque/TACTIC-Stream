@@ -5,120 +5,35 @@ import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
 import {
-  columns,
   extent,
-  rows,
-  describe,
-  row
+  describe
 } from '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
-
-for (const value of ['reference.txt', 0, false, '']) {
-  const scene = row(
-    { columns: [{ name: 'filename', field: 'file_name' }] },
-    { key: 'F', record: { file_name: value }, cells: {} },
-    'en'
-  );
-  assert.equal(
-    scene.nodes.find((node) => node.id === 'nestedCell_filename').cell.text,
-    value
-  );
-}
-
-const legacyColumns = columns({
-  columns: [
-    { name: 'code', title: 'Code', width: '36px', cell: { kind: 'text' } },
-    {
-      name: 'history',
-      title: 'History',
-      width: '100px',
-      cell: { kind: 'commands' }
-    }
-  ]
-});
-assert.equal(legacyColumns[0].width, 160);
-assert.equal(legacyColumns[1].width, 100);
-assert.ok(legacyColumns[1].width >= 'History'.length * 8 + 20);
-assert.equal(legacyColumns[1].x, legacyColumns[0].x + legacyColumns[0].width);
 
 const short = {
   loaded: true,
-  columns: [{ name: 'name', title: 'Name', cell: { kind: 'text' } }],
+  columns: [{ name: 'name' }],
   rows: [{ key: 'A', record: {}, cells: {} }]
 };
-assert.equal(extent(short, 600), 206);
-const fourRows = {
-  ...short,
-  rows: Array.from({ length: 4 }, (_, i) => ({ key: String(i) }))
-};
-assert.equal(extent(fourRows, 600, 600), 410);
-assert.equal(extent(fourRows, 600, 280), 280);
+assert.equal(extent(short, 600), 177);
 assert.equal(
   extent(
     {
       ...short,
-      rows: Array.from({ length: 50 }, (_, i) => ({ key: String(i) }))
+      rows: Array.from({ length: 4 }, (_, i) => ({ key: String(i) }))
     },
     600,
     600
   ),
-  600
+  351
 );
+const scene = describe(short, 600, 177, 'en');
+const body = scene.nodes.find((node) => node.id === 'nestedTableBody');
+assert.deepEqual([body.x, body.y, body.width, body.height], [0, 42, 600, 95]);
 assert.equal(
-  rows(
-    { ...short, children: { A: { open: true, model: fourRows } } },
-    600,
-    600
-  )[0].extent,
-  68 + 410
+  scene.nodes.find((node) => node.id === 'nestedFooterSurface').y,
+  137
 );
-assert.equal(
-  extent({ ...short, rows: [{ key: 'A' }, { key: 'B' }] }, 600),
-  274
-);
-assert.equal(
-  extent(
-    {
-      ...short,
-      rows: Array.from({ length: 50 }, (_, i) => ({ key: String(i) }))
-    },
-    600
-  ),
-  320
-);
-const nested = { ...short, children: { A: { open: true, model: short } } };
-const expanded = rows(nested, 600)[0];
-assert.equal(expanded.extent, 68 + extent(short, 600));
-assert.equal(
-  row(nested, expanded, 'en', 600).nodes.find((n) => n.id === 'nestedDetail')
-    .height,
-  extent(short, 600)
-);
-const compact = columns({
-  columns: [
-    { name: 'rendered', title: 'Rendered', cell: { kind: 'boolean' } },
-    { name: 'preview', title: 'Preview', cell: { kind: 'thumbnail' } }
-  ]
-});
-assert.deepEqual(
-  compact.map((c) => c.width),
-  [84, 84]
-);
-assert.equal(
-  columns({
-    columns: [{ name: 'preview', width: 200, cell: { kind: 'thumbnail' } }]
-  })[0].width,
-  200
-);
-const fitted = describe(
-  { ...short, rows: [{ key: 'A' }, { key: 'B' }] },
-  600,
-  274,
-  'en'
-);
-const viewportNode = fitted.nodes.find((n) => n.id === 'nestedHorizontal');
-const list = viewportNode.children.find((n) => n.id === 'nestedRows');
-const footer = fitted.nodes.find((n) => n.id === 'nestedFooterSurface');
-assert.equal(viewportNode.y + list.y + list.height, footer.y);
+assert(!JSON.stringify(scene).includes('nestedDrag'));
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const server = await createServer({
@@ -138,7 +53,7 @@ await server.listen();
 const browser = await chromium.launch({
   headless: true,
   ignoreDefaultArgs: ['--hide-scrollbars'],
-  channel: process.env.STREAM_BROWSER_CHANNEL
+  channel: process.env.STREAM_BROWSER_CHANNEL || 'msedge'
 });
 const page = await browser.newPage({
   viewport: { width: 500, height: 300 },
@@ -146,6 +61,34 @@ const page = await browser.newPage({
 });
 const errors = [];
 page.on('pageerror', (error) => errors.push(error.message));
+await page.route('**/admin/widget-configuration/read', (route) =>
+  route.fulfill({
+    json: {
+      result: {
+        views: [{ view: 'parent', title: 'Parent', current: true }],
+        revision: 'fixture'
+      }
+    }
+  })
+);
+await page.route('**/admin/result-items', (route) =>
+  route.fulfill({ json: { result: { items: [] } } })
+);
+const forms = [];
+await page.route('**/admin/form', async (route) => {
+  const payload = route.request().postDataJSON();
+  forms.push(payload);
+  await route.fulfill({
+    json: {
+      result: {
+        mode: 'insert',
+        search_type: payload.search_type,
+        view: payload.view,
+        fields: []
+      }
+    }
+  });
+});
 let reads = 0;
 let fileColumns = false;
 const queries = [];
@@ -163,6 +106,11 @@ await page.route('**/admin/search-configuration/suggestions', async (route) => {
 });
 await page.route('**/admin/rpc', async (route) => {
   const request = route.request().postDataJSON();
+  if (request.args?.[1] === 'error') {
+    assert.fail('Unexpected logged browser error: ' + request.args[2]);
+    await route.fulfill({ json: { result: null } });
+    return;
+  }
   assert.equal(request.args[1], 'tactic.ui.table.NestedTableReadCmd');
   assert.ok(['child', 'table'].includes(request.args[2].view));
   reads++;
@@ -176,9 +124,13 @@ await page.route('**/admin/rpc', async (route) => {
       result: {
         info: {
           definition: {
-            operations: { create: true },
+            search_type: 'demo/asset',
+            administration: true,
+            operations: { create: true, edit: true },
             columns: fileColumns ? { file_name: {}, code: {} } : { code: {} },
             table: {
+              layout: 'TableLayoutWdg',
+              configured: true,
               elements: [
                 {
                   name: 'code',
@@ -236,6 +188,7 @@ try {
     (await root.boundingBox()).height < 240,
     'A one-row table must fit its content'
   );
+  await root.locator('.handler-table-header').waitFor();
   const captures = [];
   for (const width of [320, 1000]) {
     await page.setViewportSize({ width: width + 32, height: 400 });
@@ -244,7 +197,7 @@ try {
       const header = document.querySelector(
         '#app > .nested-table [data-frame="nestedToolbarSurface"]'
       );
-      return Math.abs(header.getBoundingClientRect().width - (width - 16)) < 1;
+      return Math.abs(header.getBoundingClientRect().width - width) < 1;
     }, width);
     const bounds = await root.evaluate((element) => {
       const outer = element.getBoundingClientRect();
@@ -253,7 +206,7 @@ try {
           'nestedFilter',
           'nestedReload',
           'nestedClose',
-          'nestedHorizontal',
+          'nestedTableBody',
           'nestedFooterSurface'
         ].map((name) => {
           const rectangle = element
@@ -272,9 +225,9 @@ try {
       );
     });
     for (const [name, rectangle] of Object.entries(bounds)) {
-      assert.ok(rectangle.x >= 8 && rectangle.y >= 8, name);
-      assert.ok(rectangle.x + rectangle.width <= width - 8, name);
-      assert.ok(rectangle.y + rectangle.height <= 312, name);
+      assert.ok(rectangle.x >= 0 && rectangle.y >= 0, name);
+      assert.ok(rectangle.x + rectangle.width <= width, name);
+      assert.ok(rectangle.y + rectangle.height <= 320, name);
     }
     captures.push({ width, bounds });
     if (process.env.TABLE_NESTED_OUTPUT) {
@@ -294,11 +247,11 @@ try {
 
   await page.evaluate(() => {
     window.nestedFixture.state.gear = true;
-    window.nestedFixture.state.columns[0].sortable = true;
+    window.nestedFixture.state.definition.administration = true;
   });
   const headerReads = reads;
   await root
-    .locator('[data-frame=nestedHeader_expand]')
+    .locator('.handler-table-heading[aria-label=Details]')
     .click({ button: 'right' });
   await page
     .getByRole('button', { name: 'Edit Column Definition', exact: true })
@@ -314,8 +267,9 @@ try {
     }
   );
   assert.equal(reads, headerReads);
-  await root.locator('[data-frame=nestedHeaderMenu_expand]').focus();
-  await page.keyboard.press('Enter');
+  await root
+    .locator('.handler-table-heading[aria-label=Details]')
+    .click({ button: 'right' });
   await page
     .getByRole('button', { name: 'Column Manager', exact: true })
     .click();
@@ -323,26 +277,27 @@ try {
     await page.evaluate(() => window.nestedFixture.columnEdits.at(-1).column),
     ''
   );
-  await page.evaluate(() => {
-    window.nestedFixture.state.gear = false;
-  });
-  assert.equal(
-    await root.locator('[data-frame=nestedHeaderMenu_expand]').count(),
-    0
+  assert.equal(await root.locator('[data-frame=nestedDrag]').count(), 0);
+  await root
+    .locator('.handler-table-row[role=row]')
+    .click({ position: { x: 110, y: 35 } });
+  assert.deepEqual(
+    await page.evaluate(() => window.nestedFixture.state.selected),
+    []
   );
   await root
-    .locator('[data-frame=nestedHeader_code]')
-    .click({ button: 'right' });
-  assert(
-    await page
-      .getByRole('button', { name: 'Edit Column Definition', exact: true })
-      .isDisabled()
-  );
+    .getByRole('button', { name: 'Object actions', exact: true })
+    .click();
+  await page
+    .getByRole('button', { name: 'Edit record', exact: true })
+    .waitFor();
   await page.keyboard.press('Escape');
 
   await root.locator('[data-frame="tableServiceAction_0"]').click();
   const child = root.locator('.nested-table');
-  await child.locator('[data-frame="nestedSelect"]').click();
+  await child
+    .locator('.handler-table-row[role=row] input[type=checkbox]')
+    .click();
   assert.deepEqual(
     await page.evaluate(() => window.nestedFixture.state.selected),
     []
@@ -355,7 +310,7 @@ try {
   );
   await child.locator('[data-frame="tableServiceAction_0"]').click();
   assert.equal(
-    await child.locator('[data-frame="nestedState"]').innerText(),
+    await child.locator('.error').innerText(),
     'This nested table would repeat an ancestor scope'
   );
   await child.locator('[data-frame="nestedClose"]').click();
@@ -363,7 +318,9 @@ try {
     () => !document.querySelector('#app > .nested-table .nested-table')
   );
   await root.locator('[data-frame="tableServiceAction_0"]').click();
-  await child.locator('[data-frame="nestedSelect"]').waitFor();
+  await child
+    .locator('.handler-table-row[role=row] input[type=checkbox]')
+    .waitFor();
   assert.equal(reads, 1, 'Reopening a loaded branch must not fetch again');
   assert.deepEqual(
     await page.evaluate(
@@ -390,7 +347,12 @@ try {
       records: { 'demo/asset?code=B': { code: 'B' } }
     }
   );
-  await child.locator('[data-frame="nestedHeader_code"]').click();
+  await child
+    .locator('.handler-table-heading[aria-label=Code]')
+    .click({ button: 'right' });
+  await page
+    .getByRole('menuitemradio', { name: 'Sort A to Z', exact: true })
+    .click();
   await page.waitForFunction(
     () =>
       window.nestedFixture.state.children['demo/asset?code=A'].order ===
@@ -420,15 +382,21 @@ try {
   assert.equal(queries.at(-1).keyword, 'B');
   assert.equal(queries.at(-1).keyword_relation, '=');
   await child.locator('[data-frame="nestedCreate"]').click();
-  assert.deepEqual(
-    await page.evaluate(() => window.nestedFixture.edits.at(-1)),
-    {
-      record: null,
-      parentKey: 'demo/asset?code=A',
-      searchType: 'demo/asset',
-      projectCode: 'demo'
-    }
+  await page
+    .getByRole('dialog', { name: 'Record form', exact: true })
+    .waitFor();
+  await page.waitForFunction(() =>
+    document
+      .querySelector('dialog[open]')
+      ?.textContent.includes('Create record')
   );
+  assert.equal(forms.at(-1).project, 'demo');
+  assert.equal(forms.at(-1).search_type, 'demo/asset');
+  assert.equal(forms.at(-1).view, 'insert');
+  await page
+    .getByRole('dialog', { name: 'Record form', exact: true })
+    .getByRole('button', { name: 'Close', exact: true })
+    .click();
   fileColumns = true;
   await child.locator('[data-frame="nestedReload"]').click();
   await page.waitForFunction(
@@ -465,7 +433,9 @@ try {
       window.nestedFixture.state.children['demo/asset?code=A'].scope
         .searchType === 'sthpw/snapshot'
   );
-  await child.locator('[data-frame="nestedSelect"]').waitFor();
+  await child
+    .locator('.handler-table-row[role=row] input[type=checkbox]')
+    .waitFor();
   await page.goto(
     'http://127.0.0.1:' +
       server.httpServer.address().port +
@@ -516,13 +486,14 @@ try {
     const state = window.nestedFixture.state;
     state.rows = Array.from({ length: 4 }, (_, i) => ({
       ...state.rows[0],
-      key: 'row-' + i
+      key: 'row-' + i,
+      record: { ...state.rows[0].record, __search_key__: 'row-' + i }
     }));
     state.selected = ['row-1'];
   });
   for (const height of [660, 350, 660]) {
     await page.setViewportSize({ width: 1000, height });
-    const expected = Math.min(410, height - 32 - 37 - 58);
+    const expected = Math.min(387, height - 32 - 37 - 58);
     await page.waitForFunction((expected) => {
       const e = document.querySelector('.nested-table');
       return Math.abs(e.getBoundingClientRect().height - expected) < 1;
@@ -532,11 +503,10 @@ try {
       parent: e
         .closest('.handler-table-detail')
         .parentElement.getBoundingClientRect().height,
-      list: e.querySelector('[data-frame=nestedRows]').getBoundingClientRect()
-        .height
+      list: e.querySelector('.handler-table').getBoundingClientRect().height
     }));
     assert.equal(actual.height, actual.parent);
-    if (height === 660) assert(actual.list >= 4 * 68);
+    if (height === 660) assert(actual.list >= 4 * 58);
     assert.deepEqual(
       await page.evaluate(() => window.nestedFixture.state.selected),
       ['row-1']

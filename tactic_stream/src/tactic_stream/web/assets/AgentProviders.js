@@ -1,4 +1,4 @@
-import { A as onDeactivated, K as withCtx, N as openBlock, O as onActivated, R as resolveDynamicComponent, U as watch, Z as ref, b as createVNode, h as createBlock, j as onMounted, k as onBeforeUnmount, m as createBaseVNode, nt as normalizeClass, p as computed } from "./vue.js";
+import { A as onMounted, D as onActivated, G as withCtx, H as watch, L as resolveDynamicComponent, M as openBlock, O as onBeforeUnmount, X as ref, b as createVNode, h as createBlock, k as onDeactivated, m as createBaseVNode, p as computed, tt as normalizeClass } from "./vue.js";
 import { s as appearance } from "./AppButton.js";
 import { k as rpc } from "./index.js";
 import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";

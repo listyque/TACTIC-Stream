@@ -329,6 +329,7 @@ const Nested = await import(
   '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs'
 );
 const nestedModel = {
+  loaded: true,
   selection: false,
   shelf: false,
   searchLimit: false,
@@ -337,9 +338,16 @@ const nestedModel = {
   children: { A: { open: true } }
 };
 const nestedRows = Nested.rows(nestedModel);
-assert.equal(nestedRows[0].extent, Nested.rowHeight + Nested.height);
-assert.equal(Nested.columns(nestedModel)[0].x, 0);
+assert.equal(nestedRows[0].extent, 235);
 const nestedScene = Nested.describe(nestedModel, 320, 320, 'en');
+assert.equal(
+  nestedScene.nodes.find((node) => node.id === 'nestedTableBody').x,
+  0
+);
+assert.equal(
+  nestedScene.nodes.find((node) => node.id === 'nestedTableBody').width,
+  320
+);
 assert.ok(
   !nestedScene.nodes.some((node) =>
     [
@@ -352,7 +360,7 @@ assert.ok(
     ].includes(node.id)
   )
 );
-validateScene(nestedScene, { rows: nestedRows });
+validateScene(nestedScene, { rows: nestedRows }, { tableBody: {} });
 assert.equal(
   Nested.identity({ searchType: 'x', parentKey: 'A' }),
   Nested.identity({ searchType: 'x', view: 'table', parentKey: 'A' })
@@ -407,7 +415,11 @@ const nestedWithGear = Nested.describe(
   'en'
 );
 assert.ok(nestedWithGear.nodes.some((node) => node.id === 'nestedColumns'));
-validateScene(nestedWithGear, { rows: nestedRows }, { tableSearch: {} });
+validateScene(
+  nestedWithGear,
+  { rows: nestedRows },
+  { tableSearch: {}, tableBody: {} }
+);
 
 const summaryRow = Host.summarize(
   [

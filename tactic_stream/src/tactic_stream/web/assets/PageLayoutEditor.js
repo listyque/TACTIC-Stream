@@ -1,10 +1,10 @@
-import { I as resolveComponent, K as withCtx, N as openBlock, Z as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow } from "./vue.js";
+import { F as resolveComponent, G as withCtx, K as withDirectives, M as openBlock, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
 import { L as _plugin_vue_export_helper_default, s as appearance } from "./AppButton.js";
 import { Pt as randomUuid, k as rpc } from "./index.js";
 import { B as node, L as button, O as _sfc_main$3, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$2, v as translate } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
 import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";
-import { $t as sizing, At as change$1, Bt as change, Ct as _sfc_main$4, Ft as scope$1, Gt as geometry$1, Ht as duplicate, It as type, J as selected, Jt as path, K as alignment, Kt as kinds, Lt as add, Mt as filter, Nt as mode, Pt as options, Qt as siblings, Rt as appearances, Ut as fingerprint, Vt as copy, Wt as geometries, Xt as reorder, Y as toggle, Yt as remove, Z as spacingField, Zt as reparent, a as _sfc_main$5, en as spacing, jt as fields$1, o as controls, q as roots, qt as layers, s as zooms, zt as block } from "./ConfiguredView.js";
+import { $t as layers, Bt as options, Gt as block, Ht as type, It as change$1, J as selected, Jt as duplicate, K as alignment, Kt as change, Lt as fields$1, Qt as kinds, Rt as filter, Ut as add, Vt as scope$1, Wt as appearances, Xt as geometries, Y as toggle, Yt as fingerprint, Z as spacingField, Zt as geometry$1, a as _sfc_main$5, an as sizing, en as path, in as siblings, kt as _sfc_main$4, nn as reorder, o as controls, on as spacing, q as roots, qt as copy, rn as reparent, s as zooms, tn as remove, zt as mode } from "./ConfiguredView.js";
 import { n as buttonWidth } from "./metrics.js";
 import { t as listAction } from "./tree.ui.js";
 //#region src/features/administration/PageEditorTools.vue

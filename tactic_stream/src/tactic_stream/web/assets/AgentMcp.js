@@ -1,4 +1,4 @@
-import { D as nextTick, K as withCtx, N as openBlock, U as watch, Z as ref, b as createVNode, h as createBlock, k as onBeforeUnmount, m as createBaseVNode, p as computed } from "./vue.js";
+import { E as nextTick, G as withCtx, H as watch, M as openBlock, O as onBeforeUnmount, X as ref, b as createVNode, h as createBlock, m as createBaseVNode, p as computed } from "./vue.js";
 import { g as controls, s as appearance } from "./AppButton.js";
 import { k as rpc } from "./index.js";
 import { B as node, L as button, R as label, V as rect, g as copyText, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";

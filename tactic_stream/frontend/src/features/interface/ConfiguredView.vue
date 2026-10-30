@@ -52,6 +52,7 @@ import { groupRecords } from '../workspace/resultViews.js';
 import { runTableScript } from './tableScript.js';
 import { route as tableActionRoute } from '../../../../src/tactic_stream/shared_ui/features/table/actions.state.mjs';
 import { link as tableLink } from '../../../../src/tactic_stream/shared_ui/features/table/cells.ui.mjs';
+import * as NestedUI from '../../../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
 import { customPageLink } from '../workspace/links.js';
 
 export default {
@@ -64,7 +65,10 @@ export default {
   },
   components: {
     SnapshotCheckout,
-    NestedTable,
+    // Resolve the recursive table type after both modules have initialized.
+    get NestedTable() {
+      return NestedTable;
+    },
     TableServiceDialogs,
     TableParentPicker,
     TableDocument,
@@ -98,6 +102,10 @@ export default {
     workspaceId: String,
     active: { type: Boolean, default: true },
     rows: { type: Array, default: null },
+    preparedCells: { type: Object, default: null },
+    embedded: Boolean,
+    nestedAncestors: { type: Array, default: () => [] },
+    nestedTables: { type: Object, default: null },
     configured: { type: Boolean, default: true },
     readOnly: { type: Boolean, default: true },
     sortField: String,
@@ -150,7 +158,7 @@ export default {
       cellError: '',
       cellRequest: 0,
       expandedDetails: {},
-      expandedTables: {},
+      expandedTables: this.nestedTables || {},
       nestedEditor: null,
       taskDrafts: {},
       taskEditor: null,
@@ -339,8 +347,9 @@ export default {
           const rawWidth = String(item.attributes?.width || '')
             .trim()
             .replace(/px$/, '');
-          const hint =
-            this.cells[this.records[0]?.__search_key__]?.[item.name]?.widthHint;
+          const hint = (this.preparedCells || this.cells)[
+            this.records[0]?.__search_key__
+          ]?.[item.name]?.widthHint;
           const width = Math.max(
             48,
             Math.min(
@@ -427,8 +436,9 @@ export default {
       return Object.keys(this.taskDrafts).length;
     },
     displayCells() {
-      if (!this.dirtyTaskCount) return this.cells;
-      const cells = { ...this.cells };
+      const source = this.preparedCells || this.cells;
+      if (!this.dirtyTaskCount) return source;
+      const cells = { ...source };
       for (const draft of Object.values(this.taskDrafts)) {
         const row = (cells[draft.plan.search_key] = {
           ...cells[draft.plan.search_key]
@@ -1414,6 +1424,12 @@ export default {
           return;
         }
         if (kind === 'nested-table') {
+          if (
+            this.nestedAncestors.includes(
+              NestedUI.identity(cell.nestedTable, context.project)
+            )
+          )
+            throw new Error('This nested table would repeat an ancestor scope');
           const key = record.__search_key__,
             previous = this.expandedTables[key];
           if (
@@ -1864,6 +1880,7 @@ export default {
       this.taskUncertain = false;
       this.taskContext = null;
       await this.loadCells();
+      if (this.preparedCells) this.$emit('saved');
     },
     async saveTasks(check = false) {
       if (
@@ -1894,6 +1911,7 @@ export default {
         if (this.taskUncertain)
           this.taskError = 'Tasks changed. Reload before saving.';
         await this.loadCells();
+        if (this.preparedCells) this.$emit('saved');
       } catch (error) {
         if (request === this.taskRequest) {
           this.taskError = error.message;
@@ -1932,6 +1950,7 @@ export default {
       const request = ++this.cellRequest;
       this.cellError = '';
       this.cellsBusy = false;
+      if (this.preparedCells) return;
       if (
         !this.records.length ||
         !this.elements.some((element) => element.cell?.server)
@@ -1968,7 +1987,7 @@ export default {
     async operate(record, event) {
       if (this.readOnly) return;
       event.preventDefault();
-      if (this.ownQuery) {
+      if (this.ownQuery || this.embedded) {
         this.targetRecord = record;
         this.targetOperations = this.definition.operations;
         await this.$nextTick();
@@ -2295,7 +2314,11 @@ export default {
       <ResultPresentation
         @organization="$emit('organization', $event)"
         ref="presentation"
-        v-if="(rows !== null || table.item_layout) && !tabs"
+        v-if="
+          (!embedded || displayedMode !== 'table') &&
+          (rows !== null || table.item_layout) &&
+          !tabs
+        "
         v-show="displayedMode !== 'table'"
         :active="displayedMode !== 'table'"
         :item-layout="itemLayout"
@@ -2319,6 +2342,25 @@ export default {
         "
       />
       <template v-if="!busy && supportedLayout && displayedMode === 'table'">
+        <div
+          v-if="embedded && tableSelection.length"
+          class="selection-actions"
+          role="group"
+          :aria-label="t('Selected record actions')"
+        >
+          <AppButton
+            :label="
+              t(
+                tableSelection.length === 1
+                  ? 'Deselect {count} item'
+                  : 'Deselect {count} items',
+                { count: tableSelection.length }
+              )
+            "
+            :translate-label="false"
+            @click="$emit('select', [], false)"
+          />
+        </div>
         <p v-if="elements.some((item) => !item.supported)" class="notice">
           {{ t('Some widgets in this view are not available yet.') }}
         </p>
@@ -2375,6 +2417,7 @@ export default {
               :project="project"
               :state="expandedTables[record.__search_key__]"
               :frame-node="{ height }"
+              :ancestors="nestedAncestors"
               @close="expandedTables[record.__search_key__].open = false"
               @edit="openNestedEditor"
               @inspect="$emit('inspect', $event)"
