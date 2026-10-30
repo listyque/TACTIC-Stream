@@ -42,7 +42,9 @@ const component = getCurrentInstance().type;
 const records = computed(() =>
   UI.rows({ ...model.value.scope, ...model.value }, width.value)
 );
-const extent = computed(() => props.frameNode?.height || UI.height);
+const extent = computed(
+  () => props.frameNode?.height || UI.extent(model.value, width.value)
+);
 const scene = computed(() =>
   UI.describe(
     { ...model.value.scope, ...model.value },
@@ -231,7 +233,7 @@ async function load() {
           Number.parseFloat(element.attributes?.width) ||
           result.cells[result.records[0]?.__search_key__]?.[element.name]
             ?.widthHint ||
-          160,
+          undefined,
         sortable: !!element.cell?.sortable,
         field: element.cell?.field || element.name
       }));
@@ -334,6 +336,7 @@ watch(
 );
 watch(() => model.value.revision, load);
 onMounted(() => {
+  width.value = host.value.clientWidth;
   observer = observeFrameSizes(
     (entries) => (width.value = entries[0].contentRect.width)
   );

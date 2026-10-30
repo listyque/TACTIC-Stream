@@ -1,7 +1,7 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObjectCheckin.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/index.js","assets/index.css","assets/resize.js","assets/resize.css","assets/sections.ui.js","assets/file_values.js","assets/files.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/toggle.ui.js","assets/ObjectCheckin.css","assets/IngestFiles.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/IngestFiles.css","assets/DuplicateSObject.js","assets/ObjectFieldFrame.js","assets/ObjectFieldFrame.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/DuplicateSObject.css","assets/SnapshotCheckout.js","assets/files2.js","assets/FrameProgress.js","assets/FrameProgress.css","assets/SnapshotCheckout.css"])))=>i.map(i=>d[i]);
 import { n as arrange, r as __exportAll } from "./ObjectFieldFrame.js";
 import { B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, R as resolveDynamicComponent, S as getCurrentInstance, U as watch, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, t as Transition, tt as unref, u as Fragment, v as createSlots, w as inject, y as createTextVNode } from "./vue.js";
-import { E as textStyles, I as BusyIndicator_default, L as _plugin_vue_export_helper_default, a as _sfc_main$73, g as controls$1, k as preferences, o as t, p as readableText, s as appearance, t as _sfc_main$72, u as frameColors, v as cssRoles, w as metrics$3, x as fontMetricHeight, y as fontFamily } from "./AppButton.js";
+import { E as textStyles, I as BusyIndicator_default, L as _plugin_vue_export_helper_default, S as layout$3, a as _sfc_main$73, g as controls$1, k as preferences, o as t, p as readableText, s as appearance, t as _sfc_main$72, u as frameColors, v as cssRoles, w as metrics$3, x as fontMetricHeight, y as fontFamily } from "./AppButton.js";
 import { Ft as asyncComponent, G as transactionDetails, H as tableDependencies, K as uploadFormFile, N as searchConfiguration, O as resultItems, Ot as logRequest, U as tableDependencyFile, V as tableCells, W as tableParentGroup, Y as widgetConfiguration, _ as navigationLink, _t as mobile, a as __vitePreload, b as objectStatus, bt as debugLog, c as beginActivity, ct as notify, f as interfaceDefinition, ft as serverClock, h as messageFileRequest, k as rpc, m as linkPreviews, o as fileBlob, pt as serverTimestamp, u as endActivity, v as objectDeletion, y as objectRelations } from "./index.js";
 import { B as node, C as ItemPreview_default, D as _sfc_main$84, E as _sfc_main$82, F as _sfc_main$79, H as revealListOffset, L as button, N as _sfc_main$83, O as _sfc_main$76, P as _sfc_main$80, R as label, T as _sfc_main$75, U as virtualRange, V as rect, _ as readClipboardImages, a as _sfc_main$77, b as _sfc_main$81, f as javascriptTokens, g as copyText, h as copyImage, i as _sfc_main$78, m as xmlTokens, n as observeFrameSizes, o as _sfc_main$85, p as pythonTokens, r as _sfc_main$74, s as _sfc_main$86, t as frameContentWidth, v as translate, w as AppSearchField_default } from "./resize.js";
 import { n as qtLabelTextWidth, t as layoutTextWidth } from "./textMetrics.js";
@@ -1231,6 +1231,18 @@ function summarize(columns, records, cells = {}, mode = "bottom") {
 		values
 	};
 }
+function extent(state = {}, width = 0) {
+	const model = Object.assign({}, state.scope, state);
+	if (model.busy && !model.loaded && !model.rows?.length) return 320;
+	const inner = Math.max(0, width - metrics$1.margin * 2);
+	const chrome = metrics$1.margin * 2 + 42 + quickLayout(model, inner).height + 40 + (model.gallery ? 0 : metrics$1.header + 3 + (tableWidth(model, inner) > inner ? layout$3.scrollbarExtent : 0));
+	const content = rows$2(model, inner).reduce((sum, row) => sum + row.extent, 0);
+	return Math.max(chrome + 68, Math.min(320, chrome + content));
+}
+function tableWidth(model, width) {
+	const fields = columns(model), last = fields[fields.length - 1];
+	return Math.max(width - 16, (last ? last.x + last.width : 0) + 40);
+}
 function quickLayout(model, width) {
 	const columns = Math.max(1, Math.floor(Math.max(0, width - 16) / 180));
 	return {
@@ -1261,7 +1273,7 @@ function rows$2(model, width = 0) {
 	}
 	return (model.rows || []).map((record) => Object.assign({}, record, {
 		detailOpen: !!model.children?.[record.key]?.open,
-		extent: 68 + (model.children?.[record.key]?.open ? 320 : 0)
+		extent: 68 + (model.children?.[record.key]?.open ? extent(model.children[record.key].model || model.children[record.key], width) : 0)
 	}));
 }
 function columns(model) {
@@ -1269,7 +1281,14 @@ function columns(model) {
 	return (model.columns || []).map((column, index) => {
 		const titleWidth = String(column.title || column.name).length * 8 + 20;
 		const minimum = column.cell?.kind === "text" ? 160 : 48;
-		const width = Math.min(640, Math.max(minimum, titleWidth, Number.parseFloat(column.width) || 160));
+		const width = Math.min(640, Math.max(minimum, titleWidth, Number.parseFloat(column.width) || ([
+			"thumbnail",
+			"boolean",
+			"check",
+			"selection",
+			"locked",
+			"status_flag"
+		].includes(column.cell?.kind) ? 84 : 160)));
 		const result = Object.assign({}, column, {
 			index,
 			x: left,
@@ -1293,7 +1312,8 @@ function content$1(model, width, extent, language) {
 	const toolOffset = model.embedded ? 36 : 0;
 	const quick = quickLayout(model, width), quickColumns = quick.columns, quickHeight = quick.height;
 	const fields = columns(model);
-	const contentWidth = Math.max(width - 16, (model.selection === false ? 0 : metrics$1.selection + 36) + fields.reduce((sum, field) => sum + field.width, 0) + 40);
+	const contentWidth = tableWidth(model, width);
+	const gutter = contentWidth > width ? layout$3.scrollbarExtent : 0;
 	const nodes = [
 		node("Box", "nestedToolbarSurface", rect(0, 0, width, 42 + quickHeight), {
 			background: "panel",
@@ -1312,13 +1332,13 @@ function content$1(model, width, extent, language) {
 		button("nestedColumns", rect(Math.max(0, width - 112 + toolOffset), 0, 32, 32), t("Columns"), "view-column", { type: "columns" }, !model.busy, { iconOnly: true }),
 		button("nestedCreate", rect(Math.max(0, width - 76 + toolOffset), 0, 32, 32), t("Create"), "add", { type: "create" }, !model.busy && model.insert !== false, { iconOnly: true }),
 		button("nestedClose", rect(Math.max(0, width - 40), 0, 32, 32), t("Close"), "close", { type: "close" }, true, { iconOnly: true }),
-		label("nestedState", rect(0, extent - 32, Math.max(0, width - 120), 28), model.error ? t(model.error) : t("Results") + ": " + (model.rows || []).length, { color: model.error ? "error" : "secondaryText" }),
-		button("nestedClearSelection", rect(Math.max(0, width - 112), extent - 32, 32, 32), t("Clear selection"), "close", { type: "clear-selection" }, !!model.selected?.length, { iconOnly: true }),
-		button("nestedPrevious", rect(Math.max(0, width - 76), extent - 32, 32, 32), t("Previous page"), "chevron-left", {
+		label("nestedState", rect(8, extent - 36, Math.max(0, width - 136), 32), model.error ? t(model.error) : t("Results") + ": " + (model.rows || []).length, { color: model.error ? "error" : "secondaryText" }),
+		button("nestedClearSelection", rect(Math.max(0, width - 112), extent - 36, 32, 32), t("Clear selection"), "close", { type: "clear-selection" }, !!model.selected?.length, { iconOnly: true }),
+		button("nestedPrevious", rect(Math.max(0, width - 76), extent - 36, 32, 32), t("Previous page"), "chevron-left", {
 			type: "page",
 			value: -1
 		}, !model.busy && model.offset > 0, { iconOnly: true }),
-		button("nestedNext", rect(Math.max(0, width - 40), extent - 32, 32, 32), t("Next page"), "chevron-right", {
+		button("nestedNext", rect(Math.max(0, width - 40), extent - 36, 32, 32), t("Next page"), "chevron-right", {
 			type: "page",
 			value: 1
 		}, !model.busy && !!model.hasNext, { iconOnly: true })
@@ -1367,7 +1387,7 @@ function content$1(model, width, extent, language) {
 		enabled: !model.busy,
 		children: [label("nestedHeaderText_" + field.name, rect(10, 0, field.width - 20, metrics$1.header), field.title || field.name, { color: paint.headerText })]
 	}) : label("nestedHeader_" + field.name, rect(field.x + 10, 0, field.width - 20, metrics$1.header), field.title || field.name, { color: paint.headerText }));
-	children.push(node("List", "nestedRows", rect(0, metrics$1.header + 3, contentWidth, Math.max(0, extent - metrics$1.header - 86 - quickHeight)), {
+	children.push(node("List", "nestedRows", rect(0, metrics$1.header + 3, contentWidth, Math.max(0, extent - 82 - metrics$1.header - 3 - quickHeight - gutter)), {
 		source: "rows",
 		keyField: "key",
 		fields: [
@@ -1384,9 +1404,9 @@ function content$1(model, width, extent, language) {
 		label: t("Table View"),
 		role: "list"
 	}));
-	nodes.push(node("Scroll", "nestedHorizontal", rect(0, 42 + quickHeight, width, Math.max(0, extent - 80 - quickHeight)), {
+	nodes.push(node("Scroll", "nestedHorizontal", rect(0, 42 + quickHeight, width, Math.max(0, extent - 82 - quickHeight)), {
 		contentWidth,
-		contentHeight: Math.max(0, extent - 96 - quickHeight),
+		contentHeight: Math.max(0, extent - 82 - quickHeight - gutter),
 		scrollbarId: "nestedHorizontalBar",
 		children
 	}));
@@ -1503,7 +1523,7 @@ function row$6(model, record, language, viewportWidth = 0) {
 		iconOnly: true,
 		iconAction: true
 	}));
-	if (record.detailOpen) nodes.push(node("View", "nestedDetail", rect(0, 68, width, 320), {
+	if (record.detailOpen) nodes.push(node("View", "nestedDetail", rect(0, 68, width, record.extent ? record.extent - 68 : extent(model.children?.[record.key]?.model || model.children?.[record.key], width)), {
 		view: "nestedTable",
 		key: record.key,
 		nodeId: record.nodeId
@@ -5086,13 +5106,14 @@ var _sfc_main$58 = {
 					});
 					offset += rowHeight.value;
 					if (props.expandedRows[record.__search_key__]?.open) {
+						const detailHeight = extent(props.expandedRows[record.__search_key__], width.value);
 						rows.push({
 							detail: record,
 							key: "nested:" + record.__search_key__,
 							top: offset,
-							height: 320
+							height: detailHeight
 						});
-						offset += 320;
+						offset += detailHeight;
 					}
 				}
 				if (group.label && group.records?.length) {
@@ -6157,11 +6178,11 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			...model.value.scope,
 			...model.value
 		}, width.value));
-		const extent = computed(() => props.frameNode?.height || 320);
+		const extent$1 = computed(() => props.frameNode?.height || extent(model.value, width.value));
 		const scene = computed(() => describe$19({
 			...model.value.scope,
 			...model.value
-		}, width.value, extent.value, appearance.language));
+		}, width.value, extent$1.value, appearance.language));
 		const searchScope = computed(() => ({
 			parent_key: model.value.scope.parentKey,
 			view: model.value.scope.view || "table",
@@ -6306,7 +6327,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 					...element,
 					supported: element.cell?.supported,
 					title: element.title || element.name,
-					width: Number.parseFloat(element.attributes?.width) || result.cells[result.records[0]?.__search_key__]?.[element.name]?.widthHint || 160,
+					width: Number.parseFloat(element.attributes?.width) || result.cells[result.records[0]?.__search_key__]?.[element.name]?.widthHint || void 0,
 					sortable: !!element.cell?.sortable,
 					field: element.cell?.field || element.name
 				}));
@@ -6389,6 +6410,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		});
 		watch(() => model.value.revision, load);
 		onMounted(() => {
+			width.value = host.value.clientWidth;
 			observer = observeFrameSizes((entries) => width.value = entries[0].contentRect.width);
 			observer.observe(host.value);
 			if (!model.value.loaded) load();
@@ -6404,7 +6426,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				ref_key: "host",
 				ref: host,
 				class: "nested-table",
-				style: normalizeStyle({ height: extent.value + "px" }),
+				style: normalizeStyle({ height: extent$1.value + "px" }),
 				onClick: _cache[0] || (_cache[0] = withModifiers(() => {}, ["stop"])),
 				onDblclick: _cache[1] || (_cache[1] = withModifiers(() => {}, ["stop"])),
 				onContextmenu: _cache[2] || (_cache[2] = withModifiers(() => {}, ["stop"]))
@@ -6421,7 +6443,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 36);
 		};
 	}
-}, [["__scopeId", "data-v-f03347cb"]]);
+}, [["__scopeId", "data-v-9f051179"]]);
 //#endregion
 //#region src/controls/markdown.js
 var markdown = new MarkdownItCallable({

@@ -191,3 +191,5 @@ Expanding an object in Continuous tree shows its direct publish contexts first, 
 A relation does not recurse back into any ancestor object's Search Type, and an object already in the ancestor path is excluded. The first self-type relationship still works; schema links remain available from the object menu. Thus Assets → Texture → Brushed Metal shows **Icon**, **Attachment**, **Publish**, without a reverse Assets branch.
 
 Main-search subtitles resolve category labels (for example, Props) from native SelectWdg/edit_definition options. Relation children follow Handler's shorter description-only subtitle and raw category metadata; literal selects still show their labels, such as Diffuse. Metadata follows record-field order.
+
+Expanded tables fit short results instead of reserving an empty 320 px panel. Long results keep a bounded, scrollable viewport; nested rows reflow without reloading cached data. The block uses one outer inset and reserves space for a horizontal scrollbar only when columns overflow. Checkbox and preview columns use compact defaults; configured widths still apply.

@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue';
+import TableView from '../../frontend/src/features/interface/TableView.vue';
 import NestedTable from '../../frontend/src/features/interface/NestedTable.vue';
 import '../../frontend/src/style.css';
 import gallery from '../../tests/fixtures/frame_table_gallery.json';
@@ -73,6 +74,8 @@ const state = reactive({
     }
   ]
 });
+const parentMode = new URLSearchParams(location.search).has('parent');
+if (parentMode) state.open = true;
 const edits = [];
 const disclosureMode = new URLSearchParams(location.search).has('disclosures');
 if (disclosureMode) {
@@ -144,7 +147,34 @@ window.nestedFixture = {
 };
 </script>
 <template>
+  <div v-if="parentMode" style="height: 500px; width: 100%; display: flex">
+    <TableView
+      :columns="columns"
+      :groups="[
+        {
+          key: 'parents',
+          records: [
+            { __search_key__: 'P', code: 'Parent' },
+            { __search_key__: 'NEXT', code: 'Next parent' }
+          ]
+        }
+      ]"
+      :selected-keys="[]"
+      :expanded-rows="{ P: state }"
+      :cells="{}"
+      :state="{}"
+    >
+      <template #detail
+        ><NestedTable
+          ticket="test-fixture"
+          project="demo"
+          :state="state"
+          @close="state.open = false"
+      /></template>
+    </TableView>
+  </div>
   <NestedTable
+    v-else
     :frame-node="disclosureMode ? { height: 800 } : null"
     ticket="test-fixture"
     project="demo"

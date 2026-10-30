@@ -22,6 +22,7 @@ import { acknowledgedWidths } from '../../../../src/tactic_stream/shared_ui/feat
 import * as Menus from '../../../../src/tactic_stream/shared_ui/features/table/menus.ui.mjs';
 import FrameView from '../../frame/FrameView.vue';
 import * as ParentUI from '../../../../src/tactic_stream/shared_ui/features/table/parent.ui.mjs';
+import * as NestedUI from '../../../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
 
 const props = defineProps({
   columns: Array,
@@ -185,13 +186,17 @@ const entries = computed(() => {
       });
       offset += rowHeight.value;
       if (props.expandedRows[record.__search_key__]?.open) {
+        const detailHeight = NestedUI.extent(
+          props.expandedRows[record.__search_key__],
+          width.value
+        );
         rows.push({
           detail: record,
           key: 'nested:' + record.__search_key__,
           top: offset,
-          height: 320
+          height: detailHeight
         });
-        offset += 320;
+        offset += detailHeight;
       }
     }
     if (group.label && group.records?.length) {
@@ -1129,7 +1134,7 @@ defineExpose({ viewport });
   grid-column: 1 / -1;
   position: sticky;
   left: 0;
-  padding-inline: 8px;
+  padding-inline: 0;
   box-sizing: border-box;
 }
 </style>

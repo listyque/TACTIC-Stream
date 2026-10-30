@@ -6,6 +6,9 @@ import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright';
 import {
   columns,
+  extent,
+  rows,
+  describe,
   row
 } from '../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
 
@@ -37,6 +40,61 @@ assert.equal(legacyColumns[1].width, 100);
 assert.ok(legacyColumns[1].width >= 'History'.length * 8 + 20);
 assert.equal(legacyColumns[1].x, legacyColumns[0].x + legacyColumns[0].width);
 
+const short = {
+  loaded: true,
+  columns: [{ name: 'name', title: 'Name', cell: { kind: 'text' } }],
+  rows: [{ key: 'A', record: {}, cells: {} }]
+};
+assert.equal(extent(short, 600), 206);
+assert.equal(
+  extent({ ...short, rows: [{ key: 'A' }, { key: 'B' }] }, 600),
+  274
+);
+assert.equal(
+  extent(
+    {
+      ...short,
+      rows: Array.from({ length: 50 }, (_, i) => ({ key: String(i) }))
+    },
+    600
+  ),
+  320
+);
+const nested = { ...short, children: { A: { open: true, model: short } } };
+const expanded = rows(nested, 600)[0];
+assert.equal(expanded.extent, 68 + extent(short, 600));
+assert.equal(
+  row(nested, expanded, 'en', 600).nodes.find((n) => n.id === 'nestedDetail')
+    .height,
+  extent(short, 600)
+);
+const compact = columns({
+  columns: [
+    { name: 'rendered', title: 'Rendered', cell: { kind: 'boolean' } },
+    { name: 'preview', title: 'Preview', cell: { kind: 'thumbnail' } }
+  ]
+});
+assert.deepEqual(
+  compact.map((c) => c.width),
+  [84, 84]
+);
+assert.equal(
+  columns({
+    columns: [{ name: 'preview', width: 200, cell: { kind: 'thumbnail' } }]
+  })[0].width,
+  200
+);
+const fitted = describe(
+  { ...short, rows: [{ key: 'A' }, { key: 'B' }] },
+  600,
+  274,
+  'en'
+);
+const viewportNode = fitted.nodes.find((n) => n.id === 'nestedHorizontal');
+const list = viewportNode.children.find((n) => n.id === 'nestedRows');
+const footer = fitted.nodes.find((n) => n.id === 'nestedFooterSurface');
+assert.equal(viewportNode.y + list.y + list.height, footer.y);
+
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const server = await createServer({
   root,
@@ -54,6 +112,7 @@ const server = await createServer({
 await server.listen();
 const browser = await chromium.launch({
   headless: true,
+  ignoreDefaultArgs: ['--hide-scrollbars'],
   channel: process.env.STREAM_BROWSER_CHANNEL
 });
 const page = await browser.newPage({
@@ -148,6 +207,10 @@ try {
       '/tools/frame_table/nested_recursive.html'
   );
   const root = page.locator('#app > .nested-table');
+  assert(
+    (await root.boundingBox()).height < 240,
+    'A one-row table must fit its content'
+  );
   const captures = [];
   for (const width of [320, 1000]) {
     await page.setViewportSize({ width: width + 32, height: 400 });
@@ -330,6 +393,54 @@ try {
         .searchType === 'sthpw/snapshot'
   );
   await child.locator('[data-frame="nestedSelect"]').waitFor();
+  await page.goto(
+    'http://127.0.0.1:' +
+      server.httpServer.address().port +
+      '/tools/frame_table/nested_recursive.html?parent'
+  );
+  const panel = page.locator('.nested-table');
+  await panel.waitFor();
+  await page.waitForFunction(() => {
+    const e = document.querySelector('.nested-table');
+    return (
+      e &&
+      Math.abs(
+        e.getBoundingClientRect().height -
+          e
+            .closest('.handler-table-detail')
+            .parentElement.getBoundingClientRect().height
+      ) < 1
+    );
+  });
+  const readsBeforeResize = reads;
+  for (const width of [800, 500, 1000]) {
+    await page.setViewportSize({ width, height: 660 });
+    await page.evaluate(
+      () =>
+        new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(r))
+        )
+    );
+    const bounds = await panel.boundingBox();
+    assert(bounds.height < 240);
+    assert(
+      Math.abs(
+        (await panel.evaluate(
+          (e) =>
+            e
+              .closest('.handler-table-detail')
+              .parentElement.getBoundingClientRect().height
+        )) - bounds.height
+      ) < 1
+    );
+  }
+  assert.equal(
+    reads,
+    readsBeforeResize,
+    'Resizing must not reload nested data'
+  );
+  await panel.locator('[data-frame=nestedClose]').click();
+  await panel.waitFor({ state: 'detached' });
   assert.deepEqual(errors, []);
   console.log(
     'PASS: nested table actual first-click expansion, independent selection, cycle guard and cached reopening'
