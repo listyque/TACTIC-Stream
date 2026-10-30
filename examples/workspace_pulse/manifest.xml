@@ -1,0 +1,14 @@
+<manifest code="workspace_pulse">
+  <data>
+    <code>workspace_pulse</code>
+    <title>Workspace Pulse</title>
+    <version>1.0.0</version>
+    <description>Two editable native dashboards: task Pulse and schema-aware VFX overview. No sample records or project-specific identifiers.</description>
+  </data>
+  <sobject search_type="config/widget_config" view="dashboard.workspace_pulse" path="empty.spt"/>
+  <sobject search_type="config/widget_config" view="dashboard.workspace_vfx" path="empty.spt"/>
+  <sobject search_type="config/widget_config" view="workspace_pulse_table" path="empty.spt"/>
+  <sobject search_type="config/url" url="/dashboard/workspace_pulse" path="empty.spt"/>
+  <sobject search_type="config/url" url="/dashboard/workspace_vfx" path="empty.spt"/>
+  <python path="install.py" undo_path="uninstall.py"/>
+</manifest>
