@@ -4269,7 +4269,10 @@ function describe$11(cell, width, height, language, editable = true, expanded = 
 	const children = [];
 	if (cell.text) children.push(label("tableServiceValue", rect(6, 0, textWidth, size), String(cell.text)));
 	actions.forEach((action, index) => {
-		const left = cell.align === "center" && !cell.text && actions.length === 1 ? (width - size) / 2 : cell.text ? inner - size : 4 + index % capacity * 32;
+		const rowStart = Math.floor(index / capacity) * capacity;
+		const rowCount = Math.min(capacity, actions.length - rowStart);
+		const rowWidth = rowCount * size + (rowCount - 1) * gap;
+		const left = cell.text ? inner - size : (width - rowWidth) / 2 + index % capacity * 32;
 		const top = cell.text ? 0 : Math.floor(index / capacity) * 32;
 		children.push(button("tableServiceAction_" + index, rect(Math.max(0, left), top, size, size), action.translateLabel === false ? action.label : translate(action.label, language), action.name === "nested-table" ? nestedOpen && nested.busy ? "loading" : nestedOpen ? "expand-more" : action.icon || "chevron-right" : action.icon, {
 			type: "service",
