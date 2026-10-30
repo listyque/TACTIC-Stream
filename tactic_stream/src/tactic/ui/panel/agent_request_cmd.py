@@ -65,6 +65,11 @@ class AgentRequestCmd(Command):
         _require_admin()
         if self.kwargs.get('project_code') != Project.get_project_code():
             raise ValueError('Agent request project mismatch')
+        if self.kwargs.get('action') in ('rules_read', 'rules_save'):
+            from tactic_stream.server import agent_project_rules
+            self.info = (agent_project_rules.save(self.kwargs.get('text'), self.kwargs.get('expected_revision'))
+                         if self.kwargs['action'] == 'rules_save' else agent_project_rules.read())
+            return
         if self.kwargs.get('action') in ('library','host_projects','history_search','history_read'):
             from tactic_stream.server.agent_library import library
             self.owner = Environment.get_user_name()
@@ -128,8 +133,9 @@ class AgentRequestCmd(Command):
         if action == 'heartbeat':
             host_id = identity(self.kwargs.get('host_id'))
             capabilities = self.kwargs.get('capabilities')
-            if (not isinstance(capabilities, dict) or set(capabilities) - {'changes', 'trials', 'models', 'steering', 'attachments', 'web_search', 'credential_key', 'providers', 'default_provider'}
+            if (not isinstance(capabilities, dict) or set(capabilities) - {'changes', 'trials', 'models', 'steering', 'attachments', 'web_search', 'credential_key', 'providers', 'default_provider', 'project_rules'}
                     or any(type(capabilities.get(key)) is not bool for key in ('changes', 'trials'))
+                    or type(capabilities.get('project_rules', False)) is not bool
                     or type(capabilities.get('web_search', False)) is not bool):
                 raise ValueError('Invalid host capabilities')
             if capabilities.get('credential_key'):
@@ -203,6 +209,8 @@ class AgentRequestCmd(Command):
                        status='queued', created=self.now, seen=self.now, activity=self.now, events=[], answer='', error='',
                        messages=[dict(id=request_id, role='user', text=document['prompt'], attachments=attachments, delivered=True)],
                        model=document.get('model', ''), effort=document.get('effort', ''), provider=provider, provider_target=target, turn=1)
+            from tactic_stream.server.agent_project_rules import capture
+            row['project_rules'] = capture(host['capabilities'])
             if old and 'library' in old:
                 row['library'] = old['library']
             if old and 'related_conversations' in old:
@@ -234,6 +242,9 @@ class AgentRequestCmd(Command):
             if action == 'read':
                 from tactic_stream.server.agent_library import summary
                 self.info = dict(row, library_summary=summary(row))
+                if row.get('transport') == 'mcp':
+                    from tactic_stream.server.agent_project_rules import read
+                    self.info['project_rules'] = read()
                 return
             if action == 'link_source':
                 from tactic_stream.server.agent_library import link_source
@@ -333,8 +344,9 @@ class AgentRequestCmd(Command):
                 self.check_model(host, model, effort, provider)
                 if row['status'] != 'running':
                     from .agent_provider_cmd import captured_target
+                    from tactic_stream.server.agent_project_rules import capture
                     row.update(status='queued', seen=self.now, created=self.now, host_id=host_id, model=model, effort=effort, provider=provider,
-                        provider_target=captured_target(provider), turn=row.get('turn', 1) + 1, output='', error='')
+                        provider_target=captured_target(provider), turn=row.get('turn', 1) + 1, output='', error='', project_rules=capture(host['capabilities']))
                 elif model != row.get('model', '') or effort != row.get('effort', '') or provider != row.get('provider', 'codex'):
                     raise ValueError('Change the model or reasoning effort after the current turn finishes')
                 messages.append(message)

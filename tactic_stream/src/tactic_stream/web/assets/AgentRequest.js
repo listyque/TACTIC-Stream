@@ -5,7 +5,7 @@ import { B as node, L as button, O as _sfc_main$4, R as label, V as rect, n as o
 import { ut as _sfc_main$6, xt as _sfc_main$7 } from "./ConfiguredView.js";
 import { t as _sfc_main$8 } from "./AppDialog.js";
 import { t as listAction } from "./tree.ui.js";
-import { m as describe$2 } from "./App.js";
+import { m as describe$3 } from "./App.js";
 import { n as current, r as status$1, t as controls } from "./executor.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {
@@ -260,7 +260,7 @@ function row(model, record, width, language) {
 		revealOnRowInteraction: !model.history.mobile
 	})] };
 }
-function describe$1(model, width, height, language, small) {
+function describe$2(model, width, height, language, small) {
 	const tr = (text) => translate(text, language), edit = model.history.edit;
 	const idle = !model.busy && !model.pending && !model.uploading;
 	const heading = edit ? edit.kind === "options" ? "Conversation view" : edit.kind === "group" ? "Conversation folder" : "Conversation settings" : model.history.archived ? "Archived conversations" : "Conversations";
@@ -317,7 +317,7 @@ function describe$1(model, width, height, language, small) {
 				}
 			}
 		];
-		nodes.push(node("Box", "agentHistoryOptionsForm", rect(0, 48, width, height - 60), { children: describe$2({
+		nodes.push(node("Box", "agentHistoryOptionsForm", rect(0, 48, width, height - 60), { children: describe$3({
 			fields,
 			values: model.history,
 			busy: !idle
@@ -360,7 +360,7 @@ function describe$1(model, width, height, language, small) {
 				action: { type: "historyPinned" }
 			}
 		];
-		nodes.push(node("Box", "agentHistoryEditor", rect(0, 48, width, Math.max(60, height - 176)), { children: describe$2({
+		nodes.push(node("Box", "agentHistoryEditor", rect(0, 48, width, Math.max(60, height - 176)), { children: describe$3({
 			fields,
 			values: edit,
 			busy: !idle
@@ -445,6 +445,37 @@ function describe$1(model, width, height, language, small) {
 		action: { type: "historyWidth" }
 	}));
 	return { nodes };
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/scripts/rules.ui.mjs
+function describe$1(model, width, height, language) {
+	const tr = (text) => translate(text, language), rules = model.projectRules, inner = Math.max(0, width - 24), idle = !model.busy, helpHeight = width < 520 ? 84 : width < 760 ? 64 : 48, contentY = 68 + helpHeight, footer = height - 52;
+	return { nodes: [
+		node("Box", "agentRulesHeader", rect(0, 0, width, 52), { background: "surfaceContainerLow" }),
+		label("agentRulesTitle", rect(12, 6, inner, 22), tr("Project chat rules"), { weight: 600 }),
+		label("agentRulesProject", rect(12, 28, inner, 18), model.context.project, {
+			color: "secondaryText",
+			fontRole: "caption"
+		}),
+		label("agentRulesHelp", rect(12, 62, inner, helpHeight), tr("Shared by all chats in this project. Changes apply on the next send; the current turn keeps its captured rules."), {
+			wrap: true,
+			color: "secondaryText"
+		}),
+		node("Area", "agentRulesText", rect(12, contentY, inner, Math.max(40, footer - contentY - 40)), {
+			text: rules.text,
+			maxLength: 16e3,
+			placeholder: tr("Describe naming, preview destinations and comment preferences."),
+			enabled: idle && !!rules.revision,
+			action: { type: "rulesText" }
+		}),
+		label("agentRulesError", rect(12, footer - 36, inner, 32), tr(model.error || ""), {
+			wrap: true,
+			color: "error"
+		}),
+		node("Box", "agentRulesFooter", rect(0, footer, width, 52), { background: "surfaceContainerLow" }),
+		button("agentRulesCancel", rect(12, footer + 10, Math.min(128, (inner - 8) / 2), 32), tr("Cancel"), "close", { type: "rulesCancel" }, idle),
+		button("agentRulesSave", rect(width - 12 - Math.min(164, (inner - 8) / 2), footer + 10, Math.min(164, (inner - 8) / 2), 32), tr("Save project rules"), "save", { type: "rulesSave" }, idle && !!rules.revision && rules.text !== rules.original && rules.text.length <= 16e3)
+	] };
 }
 //#endregion
 //#region ../src/tactic_stream/shared_ui/features/scripts/request.ui.mjs
@@ -682,6 +713,12 @@ function permissionActions(model) {
 		},
 		{ separator: true },
 		{
+			title: "Project chat rules",
+			command: "rules",
+			icon: "edit",
+			enabled: !model.busy && !model.pending && !!model.context?.project
+		},
+		{
 			title: "MCP connections",
 			command: "mcp",
 			icon: "link",
@@ -821,10 +858,11 @@ function describeChat(model, width, height, language, sidebarVisible) {
 	return { nodes };
 }
 function describe(model, width, height, language) {
+	if (model.projectRules) return describe$1(model, width, height, language);
 	const space = layout(model, width);
 	const nodes = [];
 	if (!space.small || !space.visible) nodes.push(node("Box", "agentChatMain", rect(space.mainX, 0, space.mainWidth, height), { children: describeChat(model, space.mainWidth, height, language, space.visible).nodes }));
-	if (space.visible) nodes.push(node("Box", "agentChatHistory", rect(0, 0, space.panel, height), { children: describe$1(model, space.panel, height, language, space.small).nodes }));
+	if (space.visible) nodes.push(node("Box", "agentChatHistory", rect(0, 0, space.panel, height), { children: describe$2(model, space.panel, height, language, space.small).nodes }));
 	return { nodes };
 }
 //#endregion
@@ -1124,6 +1162,17 @@ var _sfc_main = {
 			model.value.busy = action !== "poll";
 			if (action !== "poll") model.value.error = "";
 			try {
+				if (action === "rules_read" || action === "rules_save") {
+					const rules = await call(action, action === "rules_save" ? {
+						text: model.value.projectRules.text,
+						expected_revision: model.value.projectRules.revision
+					} : {});
+					if (id === generation) model.value.projectRules = action === "rules_save" ? null : {
+						...rules,
+						original: rules.text
+					};
+					return;
+				}
 				if (action.startsWith("executor_")) await call(action.split(":")[0].slice(9), { target: action.split(":")[1] }, "tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd");
 				if (action === "send") {
 					model.value.pending ||= started(model.value) ? {
@@ -1246,6 +1295,22 @@ var _sfc_main = {
 			if (dialog.value?.open || active(model.value)) timer = setTimeout(() => request("poll"), 2500);
 		}
 		function event(action) {
+			if (action.type.startsWith("rules")) {
+				if (model.value.busy || model.value.pending) return;
+				if (action.type === "rules") {
+					model.value.projectRules = {
+						text: "",
+						original: "",
+						revision: ""
+					};
+					request("rules_read");
+				} else if (action.type === "rulesCancel") {
+					model.value.projectRules = null;
+					model.value.error = "";
+				} else if (action.type === "rulesText") model.value.projectRules.text = action.value;
+				else if (action.type === "rulesSave") request("rules_save");
+				return;
+			}
 			if (action.type === "executorTarget") {
 				model.value.executorTarget = action.value;
 				return;
@@ -1509,7 +1574,7 @@ var _sfc_main = {
 					history: model.value.history
 				});
 			}
-			if (!model.value.selected && !model.value.prompt && !model.value.attachments.length && !model.value.pending && !model.value.uploading) model.value = Object.assign(initial$2(context || props.capture()), {
+			if (!model.value.projectRules && !model.value.selected && !model.value.prompt && !model.value.attachments.length && !model.value.pending && !model.value.uploading) model.value = Object.assign(initial$2(context || props.capture()), {
 				history: model.value.history,
 				drafts: model.value.drafts
 			});

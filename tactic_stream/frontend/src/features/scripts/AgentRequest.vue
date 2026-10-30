@@ -149,6 +149,21 @@ async function request(action = 'refresh') {
   model.value.busy = action !== 'poll';
   if (action !== 'poll') model.value.error = '';
   try {
+    if (action === 'rules_read' || action === 'rules_save') {
+      const rules = await call(
+        action,
+        action === 'rules_save'
+          ? {
+              text: model.value.projectRules.text,
+              expected_revision: model.value.projectRules.revision
+            }
+          : {}
+      );
+      if (id === generation)
+        model.value.projectRules =
+          action === 'rules_save' ? null : { ...rules, original: rules.text };
+      return;
+    }
     if (action.startsWith('executor_'))
       await call(
         action.split(':')[0].slice('executor_'.length),
@@ -346,6 +361,19 @@ function schedule() {
     timer = setTimeout(() => request('poll'), 2500);
 }
 function event(action) {
+  if (action.type.startsWith('rules')) {
+    if (model.value.busy || model.value.pending) return;
+    if (action.type === 'rules') {
+      model.value.projectRules = { text: '', original: '', revision: '' };
+      request('rules_read');
+    } else if (action.type === 'rulesCancel') {
+      model.value.projectRules = null;
+      model.value.error = '';
+    } else if (action.type === 'rulesText')
+      model.value.projectRules.text = action.value;
+    else if (action.type === 'rulesSave') request('rules_save');
+    return;
+  }
   if (action.type === 'executorTarget') {
     model.value.executorTarget = action.value;
     return;
@@ -711,6 +739,7 @@ async function open(context, fresh = false) {
     });
   }
   if (
+    !model.value.projectRules &&
     !model.value.selected &&
     !model.value.prompt &&
     !model.value.attachments.length &&

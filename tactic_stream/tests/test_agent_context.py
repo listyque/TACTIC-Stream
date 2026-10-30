@@ -100,6 +100,7 @@ class AgentContext(unittest.TestCase):
                 context=context.structured_content
                 self.assertEqual(context['context']['project'],'other')
                 self.assertFalse(context['allow_changes'])
+                self.assertEqual(context['project_rules'], {})
                 self.assertEqual(context['related_conversations'][0]['request_id'],source['request_id'])
                 found=await client.call_tool('agent_conversations',dict(query='other'))
                 self.assertFalse(found.is_error)

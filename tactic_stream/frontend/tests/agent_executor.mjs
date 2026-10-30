@@ -27,6 +27,7 @@ function snapshot() {
   };
 }
 const drafts = new Map();
+let projectRules = { project, text: '', revision: 'empty' };
 const controls = [],
   errors = [];
 let server, browser;
@@ -188,6 +189,20 @@ try {
                   allow_web: false
                 }
               };
+            }
+            if (
+              command.endsWith('AgentRequestCmd') &&
+              ['rules_read', 'rules_save'].includes(values.action)
+            ) {
+              if (values.action === 'rules_save') {
+                assert.equal(values.expected_revision, projectRules.revision);
+                projectRules = {
+                  project,
+                  text: values.text,
+                  revision: 'saved'
+                };
+              }
+              info = projectRules;
             }
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify({ result: { status: 'OK', info } }));
@@ -426,6 +441,55 @@ try {
         'false'
       );
     assert.equal((await read()).effort, 'high');
+    await page
+      .getByRole('menuitem', { name: 'Project chat rules', exact: true })
+      .click();
+    const rules = 'Use shot naming; previews in icon; keep comments concise.';
+    await chat
+      .getByPlaceholder(
+        'Describe naming, preview destinations and comment preferences.',
+        { exact: true }
+      )
+      .fill(rules);
+    for (const width of [1000, 520, 360]) {
+      await page.setViewportSize({ width, height: 760 });
+      for (const id of [
+        'agentRulesText',
+        'agentRulesSave',
+        'agentRulesCancel'
+      ]) {
+        await page.waitForFunction(
+          ([id, width]) => {
+            const box = document
+              .querySelector('[data-frame="' + id + '"]')
+              ?.getBoundingClientRect();
+            return box && box.x >= 0 && box.right <= width;
+          },
+          [id, width]
+        );
+      }
+    }
+    await page.screenshot({ path: output + '/project-rules.png' });
+    await chat
+      .getByRole('button', { name: 'Save project rules', exact: true })
+      .click();
+    await chat.getByLabel('Agent permissions', { exact: true }).waitFor();
+    assert.equal(projectRules.text, rules);
+    await chat.getByLabel('Agent permissions', { exact: true }).click();
+    await page
+      .getByRole('menuitem', { name: 'Project chat rules', exact: true })
+      .click();
+    await page.waitForFunction((text) => {
+      const input =
+        document.querySelector('[data-frame="agentRulesText"] textarea') ||
+        document.querySelector('textarea[data-frame="agentRulesText"]');
+      return input && !input.disabled && input.value === text;
+    }, rules);
+    await chat.getByRole('button', { name: 'Cancel', exact: true }).click();
+    console.log(
+      'PASS: project rules menu, text editing, save, reopen and narrow layout'
+    );
+
     console.log(
       'PASS: browser composer choices and permissions survive reload and stay account-scoped'
     );

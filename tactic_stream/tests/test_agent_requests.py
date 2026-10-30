@@ -49,6 +49,39 @@ class AgentRequests(unittest.TestCase):
         arguments.update(values)
         return self.call('submit', **arguments), arguments
 
+    def test_project_rules_are_shared_revisioned_and_captured_per_turn(self):
+        empty = self.call('rules_read')
+        rules = 'Use project shot naming. Preview: icon. Keep comments concise.'
+        saved = self.call('rules_save', text=rules, expected_revision=empty['revision'])
+        self.assertEqual(saved['text'], rules)
+        with self.assertRaisesRegex(ValueError, 'Reconnect'):
+            self.submit()
+        self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False, project_rules=True))
+        self.assertEqual(self.call('rules_save', text=rules, expected_revision=empty['revision']), saved)
+        with self.assertRaisesRegex(ValueError, 'changed'):
+            self.call('rules_save', text='Stale edit', expected_revision=empty['revision'])
+        with self.assertRaisesRegex(ValueError, '16000'):
+            self.call('rules_save', text='x' * 16001, expected_revision=saved['revision'])
+        row, arguments = self.submit()
+        self.assertEqual(row['project_rules'], saved)
+        from tactic_stream.agent_host import task_prompt
+        self.assertIn(rules, task_prompt(row))
+        newer = self.call('rules_save', text='New project rules', expected_revision=saved['revision'])
+        self.assertEqual(self.call('submit', **arguments)['project_rules'], saved)
+        self.assertEqual(self.call('claim', host_id=self.host)['request']['project_rules'], saved)
+        self.call('update', request_id=row['request_id'], host_id=self.host, status='completed')
+        resumed = self.call('message', request_id=row['request_id'], message_id=str(uuid4()), text='Continue')
+        self.assertEqual(resumed['project_rules'], newer)
+        records = Api(self.store).dispatch('query', (self.auth, 'config/prod_setting'))
+        records = ast.literal_eval(records) if isinstance(records, str) else records
+        self.assertEqual(next(item['value'] for item in records if item['key'] == 'agent/chat_rules'), newer['text'])
+        Api(self.store).dispatch('execute_cmd', (dict(self.auth, project='admin'),
+            'tactic.command.CreateProjectCmd', dict(project_code='other', project_title='Other')))
+        other = Api(self.store).dispatch('execute_cmd', (dict(self.auth, project='other'), COMMAND,
+            dict(action='rules_read', project_code='other')))['info']
+        self.assertEqual(other['text'], '')
+        self.assertEqual(self.call('rules_read'), newer)
+
     def test_model_effort_is_validated_retained_and_frozen_during_execution(self):
         self.call('heartbeat', host_id=self.host, label='Codex', capabilities=dict(changes=True, trials=False,
             steering=True, models=[dict(id='fixture', label='Fixture', is_default=True, efforts=['low', 'high'])]))
@@ -247,6 +280,8 @@ class AgentRequests(unittest.TestCase):
         from pyasm.common.errors import SecurityException
         with self.assertRaises(SecurityException):
             self.call('read', request_id=saved['request_id'])
+        with self.assertRaises(SecurityException):
+            self.call('rules_save', text='Unauthorized rules', expected_revision='unknown')
         # The administrator gate is independently proven above; exercise owner scoping too.
         with patch('tactic.ui.panel.agent_request_cmd._require_admin'), patch.object(Api, 'check_method_access'):
             with self.assertRaisesRegex(ValueError, 'unavailable'):
