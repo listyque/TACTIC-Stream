@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import FrameView from '../../frame/FrameView.vue';
+import PageEditorTools from './PageEditorTools.vue';
 import { appearance } from '../../appearance.js';
 import { observeFrameSizes } from '../../frame/resize.js';
 import { rpc, uploadFormFile } from '../../api.js';
@@ -58,7 +59,14 @@ const dirty = computed(
   models = computed(() => ({
     plugins: UI.catalog(model.value, ui.value),
     files: metadata.value.files || []
-  }));
+  })),
+  views = {
+    pluginTools: {
+      component: PageEditorTools,
+      nodeProps: true,
+      props: { onCommand: (action) => dispatch({ type: 'operation', action }) }
+    }
+  };
 let generation = 0,
   observer,
   uploadPackage = false,
@@ -154,6 +162,7 @@ async function run(action, values = {}, upload = null) {
       }
       if (write) emit('saved');
     }
+    dispatch({ type: 'completed', action });
   } catch (failure) {
     if (current !== generation) return;
     error.value = failure.message;
@@ -288,6 +297,7 @@ defineExpose({
       <FrameView
         :scene="scene"
         :models="models"
+        :views="views"
         :describe-row="rowScene"
         @event="dispatch"
       />

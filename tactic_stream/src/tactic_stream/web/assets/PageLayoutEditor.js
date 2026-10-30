@@ -1,58 +1,13 @@
-import { F as resolveComponent, G as withCtx, K as withDirectives, M as openBlock, X as ref, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, p as computed, s as vShow } from "./vue.js";
+import { F as resolveComponent, K as withDirectives, M as openBlock, _ as createElementBlock, b as createVNode, f as Teleport, h as createBlock, m as createBaseVNode, nt as normalizeStyle, s as vShow } from "./vue.js";
 import { L as _plugin_vue_export_helper_default, s as appearance } from "./AppButton.js";
 import { Pt as randomUuid, k as rpc } from "./index.js";
-import { B as node, L as button, O as _sfc_main$3, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$2, v as translate } from "./resize.js";
+import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate } from "./resize.js";
 import { n as sections } from "./sections.ui.js";
 import { T as projectPath, i as sectionSelector, n as notices, o as toolbar$1, t as documentEvent } from "./admin.document.js";
-import { $t as layers, Bt as options, Gt as block, Ht as type, It as change$1, J as selected, Jt as duplicate, K as alignment, Kt as change, Lt as fields$1, Qt as kinds, Rt as filter, Ut as add, Vt as scope$1, Wt as appearances, Xt as geometries, Y as toggle, Yt as fingerprint, Z as spacingField, Zt as geometry$1, a as _sfc_main$5, an as sizing, en as path, in as siblings, kt as _sfc_main$4, nn as reorder, o as controls, on as spacing, q as roots, qt as copy, rn as reparent, s as zooms, tn as remove, zt as mode } from "./ConfiguredView.js";
+import { $t as layers, Bt as options, Gt as block, Ht as type, It as change$1, J as selected, Jt as duplicate, K as alignment, Kt as change, Lt as fields$1, Qt as kinds, Rt as filter, Ut as add, Vt as scope$1, Wt as appearances, Xt as geometries, Y as toggle, Yt as fingerprint, Z as spacingField, Zt as geometry$1, a as _sfc_main$2, an as sizing, en as path, in as siblings, nn as reorder, o as controls, on as spacing, q as roots, qt as copy, rn as reparent, s as zooms, tn as remove, zt as mode } from "./ConfiguredView.js";
 import { n as buttonWidth } from "./metrics.js";
 import { t as listAction } from "./tree.ui.js";
-//#region src/features/administration/PageEditorTools.vue
-var _sfc_main$1 = {
-	__name: "PageEditorTools",
-	props: { frameNode: {
-		type: Object,
-		required: true
-	} },
-	emits: ["command"],
-	setup(__props) {
-		const props = __props;
-		const menu = ref(null), anchor = ref(null);
-		const trigger = computed(() => ({ nodes: [button("pageEditorToolsButton", rect(0, 0, props.frameNode.width, props.frameNode.height), props.frameNode.label, "more", { type: "menu" }, true)] }));
-		function toggle(_action, source) {
-			anchor.value = source;
-			if (menu.value.open) menu.value.close(true);
-			else {
-				const bounds = source.getBoundingClientRect();
-				menu.value.openAt({
-					clientX: bounds.left,
-					clientY: bounds.bottom,
-					target: source
-				});
-			}
-		}
-		return (_ctx, _cache) => {
-			return openBlock(), createElementBlock("div", null, [createVNode(_sfc_main$2, {
-				scene: trigger.value,
-				onEvent: toggle
-			}, null, 8, ["scene"]), createVNode(_sfc_main$3, {
-				ref_key: "menu",
-				ref: menu,
-				anchor: anchor.value,
-				label: __props.frameNode.label,
-				"external-trigger": "",
-				overlay: ""
-			}, {
-				default: withCtx(() => [createVNode(_sfc_main$4, {
-					actions: __props.frameNode.actions,
-					onTriggered: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("command", $event))
-				}, null, 8, ["actions"])]),
-				_: 1
-			}, 8, ["anchor", "label"])]);
-		};
-	}
-};
-//#endregion
+import { t as _sfc_main$3 } from "./PageEditorTools.js";
 //#region ../src/tactic_stream/shared_ui/features/administration/layouts/page.links.mjs
 function target(href, project, origin, catalog) {
 	if (typeof href !== "string" || href.length > 16384 || /[\x00-\x20\\]/.test(href)) return "";
@@ -1803,7 +1758,7 @@ function transition(ui, model, event) {
 //#endregion
 //#region src/features/administration/PageLayoutEditor.vue
 var _sfc_main = {
-	components: { FrameView: _sfc_main$2 },
+	components: { FrameView: _sfc_main$1 },
 	props: {
 		ticket: String,
 		project: String,
@@ -1913,12 +1868,12 @@ var _sfc_main = {
 		views() {
 			return {
 				pageTools: {
-					component: _sfc_main$1,
+					component: _sfc_main$3,
 					nodeProps: true,
 					props: { onCommand: (command) => this.dispatch(toolEvent(command)) }
 				},
 				pagePreview: {
-					component: _sfc_main$5,
+					component: _sfc_main$2,
 					nodeProps: true,
 					props: {
 						model: this.compiled || { layoutNodes: [] },

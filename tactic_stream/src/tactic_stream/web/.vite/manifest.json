@@ -173,6 +173,15 @@
       "assets/ObjectFieldFrame.css"
     ]
   },
+  "_PageEditorTools.js": {
+    "file": "assets/PageEditorTools.js",
+    "name": "PageEditorTools",
+    "imports": [
+      "_vue.js",
+      "_resize.js",
+      "_ConfiguredView.js"
+    ]
+  },
   "_ProjectTemplates.css": {
     "file": "assets/ProjectTemplates.css",
     "src": "_ProjectTemplates.css"
@@ -529,7 +538,8 @@
       "_admin.document.js",
       "_ConfiguredView.js",
       "_metrics.js",
-      "_tree.ui.js"
+      "_tree.ui.js",
+      "_PageEditorTools.js"
     ]
   },
   "src/features/administration/Plugins.vue": {
@@ -541,7 +551,8 @@
       "_vue.js",
       "_AppButton.js",
       "index.html",
-      "_resize.js"
+      "_resize.js",
+      "_PageEditorTools.js"
     ]
   },
   "src/features/administration/ProcessRules.vue": {

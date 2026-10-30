@@ -2,8 +2,468 @@ import { A as onMounted, H as watch, K as withDirectives, M as openBlock, O as o
 import { s as appearance } from "./AppButton.js";
 import { K as uploadFormFile, k as rpc } from "./index.js";
 import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate$1 } from "./resize.js";
+import { t as _sfc_main$2 } from "./PageEditorTools.js";
+//#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.state.mjs
+function initial() {
+	return {
+		query: "",
+		activeOnly: false,
+		tab: "info",
+		operation: "",
+		value: "",
+		url: "",
+		checksum: "",
+		collapsed: false,
+		source: "zip",
+		notice: ""
+	};
+}
+var destructive = {
+	activate: "Activate this package in the selected project? Its manifest can create or update project data and run server code.",
+	replace_file: "Replace the selected file with a local upload?",
+	reload_catalog: "Discard unsaved changes and reload the plugin catalogue?",
+	reload: "Reload removes and reinstalls the plugin in this project. Its data may be replaced.",
+	deactivate: "Remove this plugin and its manifest-defined data from the current project?",
+	clean: "Clean all project entries described by this plugin manifest?",
+	delete: "Delete this package from the server? It must be inactive in every project.",
+	delete_file: "Delete the selected plugin file or folder and its contents?",
+	clear_spt: "Delete all generated .spt files in this package?"
+};
+function catalog(model, ui) {
+	const query = ui.query.trim().toLowerCase();
+	return (model.catalog || []).filter((row) => (!ui.activeOnly || row.active) && (!query || [
+		row.code,
+		row.title,
+		row.path
+	].join(" ").toLowerCase().includes(query)));
+}
+var parent$1 = (path) => path.split("/").slice(0, -1).join("/");
+function transition(ui, model, event) {
+	if (event.type === "reset") return {
+		ui: initial(),
+		commands: []
+	};
+	const next = Object.assign({}, ui), commands = [], request = (action, values = {}) => commands.push({
+		type: "request",
+		action,
+		values
+	}), blocked = model.busy || model.uncertain, clean = () => {
+		if (model.dirty || model.uncertain) {
+			commands.push({
+				type: "error",
+				value: "Apply or discard unsaved changes first"
+			});
+			return false;
+		}
+		return !model.busy;
+	};
+	if (event.type === "completed") {
+		next.notice = {
+			install: "Package added. Review its contents, then activate it in this project.",
+			download_url: "Package added. Review its contents, then activate it in this project.",
+			create: model.metadata?.active ? "Plugin created and active in this project. Add files and configure its manifest." : model.identity ? "Package added. Review its contents, then activate it in this project." : "Package exported. Check your downloads.",
+			activate: "Plugin is now active in this project.",
+			deactivate: "Plugin removed from this project. The package remains on the server.",
+			save: model.metadata?.active && !model.document?.file ? "Changes saved. Reload the plugin to apply manifest changes to this project." : "Changes saved.",
+			export: "Package exported. Check your downloads.",
+			publish: "Version published. Review the new release before activating it."
+		}[event.action] || "";
+		if ([
+			"list",
+			"new",
+			"install",
+			"download_url",
+			"create",
+			"publish",
+			"delete"
+		].includes(event.action)) {
+			next.operation = "";
+			next.tab = "info";
+		}
+	} else if (event.type === "help") commands.push({
+		type: "help",
+		topic: "plugins"
+	});
+	else if (event.type === "query") next.query = event.value;
+	else if (event.type === "activeOnly") next.activeOnly = event.value;
+	else if (event.type === "collapse") next.collapsed = !ui.collapsed;
+	else if (event.type === "input") next[event.field] = event.value;
+	else if (event.type === "field" && !blocked && model.canWrite) commands.push(event);
+	else if (event.type === "select" && clean()) {
+		next.operation = "";
+		next.notice = "";
+		next.tab = "info";
+		commands.push(event);
+	} else if (event.type === "tab" && clean()) {
+		next.tab = event.value;
+		next.operation = "";
+		next.notice = "";
+		if (event.value === "docs") {
+			if (model.metadata.docsExist) request("open_file", { file: model.metadata.docs });
+		} else if (model.document?.file) request("load");
+	} else if (event.type === "reload" && !model.busy) {
+		if (model.dirty) next.operation = "reload_catalog";
+		else {
+			commands.push({ type: "discard" });
+			request("list");
+		}
+	} else if (event.type === "discard" && !model.busy) commands.push(event);
+	else if (event.type === "save" && !blocked && (!model.metadata?.new || canCreate(model))) commands.push(event);
+	else if (event.type === "new" && clean()) {
+		next.operation = "";
+		next.notice = "";
+		next.tab = "info";
+		request("new");
+	} else if (event.type === "install" && clean()) {
+		next.operation = "install";
+		next.notice = "";
+		next.source = "zip";
+		next.url = "";
+		next.checksum = "";
+	} else if (event.type === "file" && clean()) {
+		next.tab = "files";
+		next.operation = "";
+		next.notice = "";
+		request(event.directory ? "browse" : "open_file", event.directory ? { folder: event.path } : {
+			file: event.path,
+			folder: model.metadata.folder || ""
+		});
+	} else if (event.type === "docs_create" && clean()) {
+		next.tab = "docs";
+		request("new_file", { path: model.metadata.docs });
+	} else if (event.type === "upload" && clean()) commands.push(event);
+	else if (event.type === "operation" && clean()) {
+		next.operation = event.action;
+		next.notice = "";
+		next.value = event.action === "rename" ? model.document?.file?.path || model.metadata.folder || "" : "";
+	} else if (event.type === "cancel" && !model.busy) {
+		next.operation = "";
+		if (model.metadata?.new) commands.push({ type: "discard" });
+	} else if (event.type === "confirm" && ui.operation === "reload_catalog" && !model.busy) {
+		commands.push({ type: "discard" });
+		request("list");
+		next.operation = "";
+	} else if (event.type === "confirm" && clean()) {
+		const action = ui.operation, values = { confirmation: true };
+		if (action === "replace_file") commands.push({
+			type: "upload",
+			package: false,
+			replace: true
+		});
+		else if (action === "install") {
+			values.url = ui.url;
+			values.checksum = ui.checksum;
+			request("download_url", values);
+		} else {
+			const selected = model.document?.file?.path || model.metadata.folder || "";
+			if (["new_file", "new_folder"].includes(action)) values.path = [model.metadata.folder, ui.value].filter(Boolean).join("/");
+			if (action === "publish") values.version = ui.value;
+			if (action === "rename") {
+				values.path = selected;
+				values.destination = ui.value;
+			}
+			if (action === "delete_file") values.path = selected;
+			if (action === "delete_file" || action === "rename") values.folder = parent$1(selected);
+			request(action, values);
+		}
+		if (action !== "install") next.operation = "";
+	} else if (event.type === "run" && clean()) request(event.action, event.values || {});
+	return {
+		ui: next,
+		commands
+	};
+}
+function canCreate(model) {
+	const doc = model.document || {};
+	return doc.type === "project" || !!(doc.title?.trim() && doc.code?.trim());
+}
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.guide.mjs
+function steps(width, stage, tr) {
+	const narrow = width < 600, row = narrow ? 38 : 0;
+	return {
+		nodes: [
+			"Choose a package",
+			"Review its contents",
+			"Activate in project"
+		].map((text, index) => label("pluginStep_" + index, rect(narrow ? 0 : index * width / 3, index * row, narrow ? width : width / 3 - 8, 30), index + 1 + "  " + tr(text), {
+			weight: index === stage ? 600 : 400,
+			color: index === stage ? "primaryText" : "secondaryText"
+		})),
+		height: narrow ? 118 : 42
+	};
+}
+function start(width, ready, tr) {
+	const nodes = [], w = Math.min(width, 1120), stacked = w < 720;
+	nodes.push(label("pluginWelcomeTitle", rect(0, 0, w, 32), tr("Add capabilities to your project"), {
+		fontRole: "title",
+		weight: 600
+	}));
+	nodes.push(label("pluginWelcomeIntro", rect(0, 40, w, 50), tr("Install a ready-made package or create your own. A package lives on the server; activation applies it to the selected project."), {
+		wrap: true,
+		color: "secondaryText"
+	}));
+	const progress = steps(w, 0, tr);
+	progress.nodes.forEach((item) => {
+		item.y += 100;
+		nodes.push(item);
+	});
+	const y = 100 + progress.height + 12, cardWidth = stacked ? w : (w - 16) / 2, cardHeight = 208;
+	for (const [index, title, description, icon, action, id] of [[
+		0,
+		"Install a package",
+		"Have a plugin ZIP or download link? Upload it, review the manifest and documentation, then activate it in this project.",
+		"upload",
+		"install",
+		"pluginEmptyInstall"
+	], [
+		1,
+		"Create your own plugin",
+		"Start with an empty package or a Widget, Column or Theme template. Add files and project data, then publish a version.",
+		"add",
+		"new",
+		"pluginEmptyNew"
+	]]) {
+		const x = stacked ? 0 : index * (cardWidth + 16), top = y + (stacked ? index * 220 : 0);
+		nodes.push(node("Box", "pluginStartCard_" + index, rect(x, top, cardWidth, cardHeight), {
+			background: "surfaceContainer",
+			border: "outlineVariant",
+			radius: 8,
+			children: [
+				node("Icon", "pluginStartIcon_" + index, rect(16, 16, 24, 24), { icon }),
+				label("pluginStartTitle_" + index, rect(52, 12, cardWidth - 68, 32), tr(title), { weight: 600 }),
+				label("pluginStartDescription_" + index, rect(16, 56, cardWidth - 32, 88), tr(description), {
+					wrap: true,
+					color: "secondaryText"
+				}),
+				button(id, rect(16, 156, cardWidth - 32, 36), tr(title), icon, { type: action }, ready, { highlighted: index === 0 })
+			]
+		}));
+	}
+	const bottom = y + (stacked ? 428 : cardHeight) + 20;
+	nodes.push(button("pluginStartHelp", rect(0, bottom, Math.min(300, w), 36), tr("Plugin guide"), "help", { type: "help" }, true));
+	return {
+		nodes,
+		height: bottom + 48
+	};
+}
+function installation(ui, width, ready, tr) {
+	const nodes = [], progress = steps(width, 0, tr);
+	progress.nodes.forEach((item) => nodes.push(item));
+	let y = progress.height + 8;
+	nodes.push(label("pluginInstallNotice", rect(0, y, width, 58), tr("First add the package to this server. Nothing is activated in your project until you review and confirm the next step."), {
+		wrap: true,
+		color: "secondaryText"
+	}));
+	y += 70;
+	nodes.push(node("Segmented", "pluginInstallSource", rect(0, y, width, 36), {
+		label: tr("Package source"),
+		value: ui.source,
+		options: [{
+			value: "zip",
+			label: tr("ZIP file")
+		}, {
+			value: "url",
+			label: tr("Download link")
+		}],
+		action: {
+			type: "input",
+			field: "source"
+		},
+		enabled: ready
+	}));
+	y += 52;
+	if (ui.source === "zip") {
+		nodes.push(label("pluginZipInstructions", rect(0, y, width, 62), tr("Choose a ZIP containing manifest.xml and the plugin files. The file is uploaded from this computer to the selected server."), { wrap: true }));
+		y += 74;
+		nodes.push(button("pluginBrowseZip", rect(0, y, Math.min(300, width), 40), tr("Choose ZIP and upload"), "folder", {
+			type: "upload",
+			package: true
+		}, ready, { highlighted: true }));
+		y += 52;
+	} else {
+		nodes.push(label("pluginUrlInstructions", rect(0, y, width, 56), tr("The server downloads the ZIP from this address. Add a checksum if the publisher provides one."), { wrap: true }));
+		y += 68;
+		for (const [field, title] of [["url", "Plugin ZIP URL"], ["checksum", "SHA-256 or MD5 (optional)"]]) {
+			nodes.push(label("pluginInstallLabel_" + field, rect(0, y, width, 24), tr(title)));
+			y += 28;
+			nodes.push(node("Field", "pluginInstall_" + field, rect(0, y, width, 40), {
+				label: tr(title),
+				text: ui[field],
+				placeholder: field === "url" ? "https://example.org/plugin.zip" : "",
+				action: {
+					type: "input",
+					field
+				},
+				enabled: ready
+			}));
+			y += 52;
+		}
+		nodes.push(button("pluginConfirm", rect(0, y, Math.min(300, width), 40), tr("Download package"), "download", { type: "confirm" }, ready && !!ui.url.trim(), { highlighted: true }));
+		y += 52;
+	}
+	return {
+		nodes,
+		height: y
+	};
+}
+function project(model, width, tr) {
+	const meta = model.metadata || {}, nodes = [], compact = width < 620;
+	const progress = steps(width, meta.active ? 2 : 1, tr);
+	progress.nodes.forEach((item) => nodes.push(item));
+	let y = progress.height + 8;
+	const lineHeight = compact ? 78 : 54;
+	nodes.push(node("Box", "pluginProjectState", rect(0, y, width, lineHeight + 100), {
+		background: "surfaceContainer",
+		border: "outlineVariant",
+		radius: 8,
+		children: [
+			label("pluginProjectTitle", rect(16, 10, width - 32, 24), tr("Project activation"), { weight: 600 }),
+			label("pluginProjectName", rect(16, 40, width - 32, 28), meta.project || "", { weight: 600 }),
+			label("pluginProjectExplanation", rect(16, 74, width - 32, lineHeight), tr(meta.active ? "Active in this project. Manifest changes are applied only when you reload the plugin." : "Package available on the server. Review its manifest and documentation before activating it here."), {
+				wrap: true,
+				color: "secondaryText"
+			})
+		]
+	}));
+	y += lineHeight + 112;
+	const ready = !model.busy && !model.dirty && !model.uncertain && !["admin", "sthpw"].includes(meta.project);
+	nodes.push(button("pluginAction_" + (meta.active ? "deactivate" : "activate"), rect(0, y, Math.min(width, 320), 40), tr(meta.active ? "Remove from project" : "Review activation"), meta.active ? "remove" : "check", {
+		type: "operation",
+		action: meta.active ? "deactivate" : "activate"
+	}, ready, { highlighted: !meta.active }));
+	y += 54;
+	if (["admin", "sthpw"].includes(meta.project)) {
+		nodes.push(label("pluginBusinessProject", rect(0, y, width, 50), tr("Select a business project to activate or remove a plugin"), {
+			wrap: true,
+			color: "secondaryText"
+		}));
+		y += 62;
+	}
+	nodes.push(label("pluginReviewTitle", rect(0, y, width, 28), tr("Review and develop"), { weight: 600 }));
+	y += 36;
+	for (const [tab, title, description, icon] of [
+		[
+			"manifest",
+			"Manifest XML",
+			"Inspect the project data, dependencies and commands declared by this package.",
+			"code"
+		],
+		[
+			"docs",
+			"Documentation",
+			"Read setup instructions supplied by the package author.",
+			"help"
+		],
+		[
+			"files",
+			"Files",
+			"Browse and edit source files, upload assets or download a local copy.",
+			"folder"
+		]
+	]) {
+		const h = compact ? 112 : 78;
+		nodes.push(node("Box", "pluginReview_" + tab, rect(0, y, width, h), {
+			background: "transparent",
+			border: "outlineVariant",
+			radius: 4,
+			children: [button("pluginOpen_" + tab, rect(8, 8, Math.min(235, width - 16), 32), tr(title), icon, {
+				type: "tab",
+				value: tab
+			}, !model.busy && !model.dirty && !model.uncertain, { alignment: "left" }), label("pluginReviewDescription_" + tab, rect(16, 44, width - 32, h - 48), tr(description), {
+				wrap: true,
+				color: "secondaryText"
+			})]
+		}));
+		y += h + 8;
+	}
+	if (!meta.builtin) {
+		y += 12;
+		nodes.push(label("pluginDistributionTitle", rect(0, y, width, 28), tr("Share a package"), { weight: 600 }));
+		y += 36;
+		nodes.push(label("pluginDistributionHint", rect(0, y, width, 54), tr("Export a ZIP to share the current package. Publish version creates a separate release; it does not activate it."), {
+			wrap: true,
+			color: "secondaryText"
+		}));
+		y += 62;
+		const bw = Math.min(260, (width - 8) / 2), enabled = !model.busy && !model.dirty && !model.uncertain;
+		nodes.push(button("pluginAction_export", rect(0, y, bw, 40), tr("Export ZIP"), "download", {
+			type: "run",
+			action: "export"
+		}, enabled));
+		nodes.push(button("pluginAction_publish", rect(bw + 8, y, bw, 40), tr("Publish version"), "publish", {
+			type: "operation",
+			action: "publish"
+		}, enabled));
+		y += 56;
+	}
+	nodes.push(label("pluginDetailsTitle", rect(0, y, width, 28), tr("Package details"), { weight: 600 }));
+	return {
+		nodes,
+		height: y + 40
+	};
+}
+//#endregion
 //#region ../src/tactic_stream/shared_ui/features/administration/plugins/plugins.ui.mjs
 var russian = {
+	"Package source": "Источник пакета",
+	Overview: "Обзор",
+	"Plugin guide": "Руководство по плагинам",
+	"More actions": "Другие действия",
+	"Add capabilities to your project": "Расширьте возможности проекта",
+	"Install a ready-made package or create your own. A package lives on the server; activation applies it to the selected project.": "Установите готовый пакет или создайте свой. Пакет хранится на сервере, а активация применяет его к выбранному проекту.",
+	"Choose a package": "Выберите пакет",
+	"Review its contents": "Проверьте содержимое",
+	"Activate in project": "Активируйте в проекте",
+	"Install a package": "Установить пакет",
+	"Have a plugin ZIP or download link? Upload it, review the manifest and documentation, then activate it in this project.": "Есть ZIP плагина или ссылка? Загрузите пакет, проверьте манифест и документацию, затем активируйте его в проекте.",
+	"Create your own plugin": "Создать свой плагин",
+	"Start with an empty package or a Widget, Column or Theme template. Add files and project data, then publish a version.": "Начните с пустого пакета или шаблона виджета, колонки, темы. Добавьте файлы и данные проекта, затем опубликуйте версию.",
+	"First add the package to this server. Nothing is activated in your project until you review and confirm the next step.": "Сначала добавьте пакет на сервер. В проекте ничего не активируется, пока вы не проверите и не подтвердите следующий шаг.",
+	"ZIP file": "ZIP-файл",
+	"Download link": "Ссылка для загрузки",
+	"Choose a ZIP containing manifest.xml and the plugin files. The file is uploaded from this computer to the selected server.": "Выберите ZIP с manifest.xml и файлами плагина. Архив будет загружен с этого компьютера на выбранный сервер.",
+	"Choose ZIP and upload": "Выбрать и загрузить ZIP",
+	"The server downloads the ZIP from this address. Add a checksum if the publisher provides one.": "Сервер скачает ZIP по этому адресу. Укажите контрольную сумму, если автор пакета её предоставил.",
+	"Download package": "Скачать пакет",
+	"Project activation": "Активация в проекте",
+	"Active in this project. Manifest changes are applied only when you reload the plugin.": "Активен в этом проекте. Изменения манифеста применяются при перезагрузке плагина.",
+	"Package available on the server. Review its manifest and documentation before activating it here.": "Пакет доступен на сервере. Перед активацией проверьте манифест и документацию.",
+	"Review activation": "Проверить активацию",
+	"Review and develop": "Проверка и разработка",
+	"Inspect the project data, dependencies and commands declared by this package.": "Проверьте данные проекта, зависимости и команды, объявленные в пакете.",
+	"Read setup instructions supplied by the package author.": "Прочитайте инструкции по настройке от автора пакета.",
+	"Browse and edit source files, upload assets or download a local copy.": "Просматривайте и редактируйте исходники, загружайте файлы или скачайте локальную копию.",
+	"Share a package": "Передача пакета",
+	"Export a ZIP to share the current package. Publish version creates a separate release; it does not activate it.": "Экспортируйте ZIP, чтобы передать пакет. Публикация версии создаёт отдельный выпуск без автоматической активации.",
+	"Package details": "Сведения о пакете",
+	"Activate this package in the selected project? Its manifest can create or update project data and run server code.": "Активировать пакет в выбранном проекте? Манифест может создавать и менять данные проекта и выполнять серверный код.",
+	"Package added. Review its contents, then activate it in this project.": "Пакет добавлен. Проверьте содержимое, затем активируйте его в проекте.",
+	"Plugin created and active in this project. Add files and configure its manifest.": "Плагин создан и активен в проекте. Добавьте файлы и настройте манифест.",
+	"Plugin is now active in this project.": "Плагин активирован в этом проекте.",
+	"Plugin removed from this project. The package remains on the server.": "Плагин удалён из проекта. Пакет остаётся на сервере.",
+	"Changes saved. Reload the plugin to apply manifest changes to this project.": "Изменения сохранены. Перезагрузите плагин, чтобы применить изменения манифеста к проекту.",
+	"Changes saved.": "Изменения сохранены.",
+	"Package exported. Check your downloads.": "Пакет экспортирован. Проверьте загрузки.",
+	"Version published. Review the new release before activating it.": "Версия опубликована. Проверьте новый выпуск перед активацией.",
+	"Define the package": "Опишите пакет",
+	"Choose a unique code such as studio_tools. Creation makes a DEV package and registers it in the current project.": "Выберите уникальный код, например studio_tools. Создание добавит пакет DEV и зарегистрирует его в текущем проекте.",
+	"Use letters, digits, underscores or hyphens. The code cannot be changed after creation.": "Используйте буквы, цифры, подчёркивания и дефисы. После создания код менять нельзя.",
+	"Empty package: add your own manifest entries and files.": "Пустой пакет: добавьте свои записи манифеста и файлы.",
+	"Widget template: starts with a modern reusable item layout.": "Шаблон виджета: основа — современный переиспользуемый макет элемента.",
+	"Column template: configure a table column through the existing widget system.": "Шаблон колонки: настройте колонку таблицы через существующую систему виджетов.",
+	"Theme template: package a theme using the native theme configuration.": "Шаблон темы: создайте пакет с настройками темы.",
+	"Project template exports the selected project. No new plugin is activated.": "Шаблон проекта экспортирует выбранный проект. Новый плагин не активируется.",
+	"Save changes the manifest file. Reload plugin applies its project data; review that confirmation first.": "Сохранение меняет файл манифеста. Перезагрузка плагина применяет данные к проекту — сначала прочитайте подтверждение.",
+	"Select a file to edit. Save commits the source; generated .spt files can be cleaned from More actions.": "Выберите файл для редактирования. Сохранение записывает исходник; сгенерированные .spt можно удалить через «Другие действия».",
+	"Read or edit the author’s documentation as source. Legacy HTML is not executed here.": "Читайте и редактируйте документацию автора как исходный текст. Легаси HTML здесь не выполняется.",
+	"No matching plugins. Change the search or the project filter.": "Плагины не найдены. Измените поиск или фильтр проекта.",
+	"Back to overview": "Назад к обзору",
+	Back: "Назад",
+	"Server package": "Пакет на сервере",
+	"No plugins yet": "Плагинов пока нет",
+	Package: "Пакет",
+	Project: "Проект",
 	New: "Создать",
 	Activate: "Активировать",
 	Information: "Информация",
@@ -78,188 +538,118 @@ var russian = {
 function translate(text, language) {
 	return language === "ru" && russian[text] ? russian[text] : translate$1(text, language);
 }
-function initial() {
-	return {
-		query: "",
-		activeOnly: false,
-		tab: "info",
-		operation: "",
-		value: "",
-		url: "",
-		checksum: "",
-		collapsed: false
-	};
-}
-var destructive = {
-	replace_file: "Replace the selected file with a local upload?",
-	reload_catalog: "Discard unsaved changes and reload the plugin catalogue?",
-	reload: "Reload removes and reinstalls the plugin in this project. Its data may be replaced.",
-	deactivate: "Remove this plugin and its manifest-defined data from the current project?",
-	clean: "Clean all project entries described by this plugin manifest?",
-	delete: "Delete this package from the server? It must be inactive in every project.",
-	delete_file: "Delete the selected plugin file or folder and its contents?",
-	clear_spt: "Delete all generated .spt files in this package?"
-};
-function catalog(model, ui) {
-	const query = ui.query.trim().toLowerCase();
-	return (model.catalog || []).filter((row) => (!ui.activeOnly || row.active) && (!query || [
-		row.code,
-		row.title,
-		row.path
-	].join(" ").toLowerCase().includes(query)));
-}
 var parent = (path) => path.split("/").slice(0, -1).join("/");
-function transition(ui, model, event) {
-	const next = Object.assign({}, ui), commands = [], request = (action, values = {}) => commands.push({
-		type: "request",
-		action,
-		values
-	}), blocked = model.busy || model.uncertain, clean = () => {
-		if (model.dirty || model.uncertain) {
-			commands.push({
-				type: "error",
-				value: "Apply or discard unsaved changes first"
-			});
-			return false;
-		}
-		return !model.busy;
-	};
-	if (event.type === "help") commands.push({
-		type: "help",
-		topic: "plugins"
-	});
-	else if (event.type === "query") next.query = event.value;
-	else if (event.type === "activeOnly") next.activeOnly = event.value;
-	else if (event.type === "collapse") next.collapsed = !ui.collapsed;
-	else if (event.type === "input") next[event.field] = event.value;
-	else if (event.type === "field" && !blocked && model.canWrite) commands.push(event);
-	else if (event.type === "select" && clean()) {
-		next.operation = "";
-		next.tab = "info";
-		commands.push(event);
-	} else if (event.type === "tab" && clean()) {
-		next.tab = event.value;
-		next.operation = "";
-		if (event.value === "docs") {
-			if (model.metadata.docsExist) request("open_file", { file: model.metadata.docs });
-		} else if (model.document?.file) request("load");
-	} else if (event.type === "reload" && !model.busy) {
-		if (model.dirty) next.operation = "reload_catalog";
-		else {
-			commands.push({ type: "discard" });
-			request("list");
-		}
-	} else if (event.type === "discard" && !model.busy) commands.push(event);
-	else if (event.type === "save" && !blocked) commands.push(event);
-	else if (event.type === "new" && clean()) {
-		next.operation = "";
-		next.tab = "info";
-		request("new");
-	} else if (event.type === "install" && clean()) {
-		next.operation = "install";
-		next.url = "";
-		next.checksum = "";
-	} else if (event.type === "file" && clean()) {
-		next.tab = "files";
-		next.operation = "";
-		request(event.directory ? "browse" : "open_file", event.directory ? { folder: event.path } : {
-			file: event.path,
-			folder: model.metadata.folder || ""
-		});
-	} else if (event.type === "docs_create" && clean()) {
-		next.tab = "docs";
-		request("new_file", { path: model.metadata.docs });
-	} else if (event.type === "upload" && clean()) commands.push(event);
-	else if (event.type === "operation" && clean()) {
-		next.operation = event.action;
-		next.value = event.action === "rename" ? model.document?.file?.path || model.metadata.folder || "" : "";
-	} else if (event.type === "cancel") next.operation = "";
-	else if (event.type === "confirm" && ui.operation === "reload_catalog" && !model.busy) {
-		commands.push({ type: "discard" });
-		request("list");
-		next.operation = "";
-	} else if (event.type === "confirm" && clean()) {
-		const action = ui.operation, values = { confirmation: true };
-		if (action === "replace_file") commands.push({
-			type: "upload",
-			package: false,
-			replace: true
-		});
-		else if (action === "install") {
-			values.url = ui.url;
-			values.checksum = ui.checksum;
-			request("download_url", values);
-		} else {
-			const selected = model.document?.file?.path || model.metadata.folder || "";
-			if (["new_file", "new_folder"].includes(action)) values.path = [model.metadata.folder, ui.value].filter(Boolean).join("/");
-			if (action === "publish") values.version = ui.value;
-			if (action === "rename") {
-				values.path = selected;
-				values.destination = ui.value;
-			}
-			if (action === "delete_file") values.path = selected;
-			if (action === "delete_file" || action === "rename") values.folder = parent(selected);
-			request(action, values);
-		}
-		next.operation = "";
-	} else if (event.type === "run" && clean()) request(event.action, event.values || {});
-	return {
-		ui: next,
-		commands
-	};
-}
-function toolbar(model, width, language) {
-	const tr = (text) => translate(text, language), nodes = [], busy = model.busy, commands = [
+function actions(model, language) {
+	const meta = model.metadata || {}, ready = !model.busy && !model.dirty && !model.uncertain;
+	return [
 		[
-			"pluginReload",
-			"Refresh",
+			"reload",
+			"Reload plugin",
 			"refresh",
-			{ type: "reload" },
-			!busy
+			meta.active
 		],
 		[
+			"deactivate",
+			"Remove from project",
+			"remove",
+			meta.active
+		],
+		[
+			"clean",
+			"Clean project data",
+			"delete",
+			!meta.active
+		],
+		[
+			"clear_spt",
+			"Clear .spt files",
+			"delete",
+			!meta.builtin
+		],
+		[
+			"delete",
+			"Delete package",
+			"delete",
+			!meta.builtin
+		]
+	].filter((row) => row[3]).map(([command, title, icon]) => ({
+		command,
+		title: translate(title, language),
+		icon,
+		enabled: ready && (command !== "delete" || !meta.active) && (![
+			"reload",
+			"deactivate",
+			"clean"
+		].includes(command) || !["admin", "sthpw"].includes(meta.project)),
+		translate: false
+	}));
+}
+function toolbar(model, width, language) {
+	const tr = (text) => translate(text, language), nodes = [], compact = width < 420;
+	const commands = [[
+		"pluginReload",
+		"Refresh",
+		"refresh",
+		{ type: "reload" },
+		!model.busy,
+		40
+	]];
+	if (model.dirty || model.uncertain) {
+		commands.push([
 			"pluginDiscard",
 			"Discard",
 			"undo",
 			{ type: "discard" },
-			!busy && (model.dirty || model.uncertain)
-		],
-		[
+			!model.busy,
+			compact ? 40 : 120
+		]);
+		if (!model.metadata?.new) commands.push([
 			"pluginSave",
-			model.metadata?.new ? model.document?.type === "project" ? "Export template" : "Create plugin" : "Save",
+			"Save",
 			"save",
 			{ type: "save" },
-			!busy && !model.uncertain && model.canWrite && (model.dirty || model.metadata?.new)
-		]
-	];
-	const compact = width < 420, save = compact ? 140 : 180;
-	let x = Math.max(0, width - save - (compact ? 96 : 192));
-	for (let index = 0; index < commands.length; index++) {
-		const [id, text, icon, action, enabled] = commands[index], w = index === 2 ? save : index === 0 || compact ? 44 : 140;
-		nodes.push(button(id, rect(x, 0, w, 40), tr(text), icon, action, enabled, { iconOnly: index === 0 || compact && index !== 2 }));
+			model.canWrite && !model.busy && !model.uncertain,
+			compact ? 100 : 140
+		]);
+	}
+	commands.push([
+		"pluginHelp",
+		"Plugin guide",
+		"help",
+		{ type: "help" },
+		true,
+		40
+	]);
+	let x = Math.max(0, width - commands.reduce((sum, row) => sum + row[5] + 4, 0));
+	for (const [id, title, icon, event, enabled, w] of commands) {
+		nodes.push(button(id, rect(x, 0, w, 40), tr(title), icon, event, enabled, { iconOnly: w === 40 }));
 		x += w + 4;
 	}
 	return { nodes };
 }
+var metaNew = (model) => !!model.metadata?.new;
 function describe(model, ui, width, height, language) {
-	const tr = (text) => translate(text, language), nodes = [], gap = 12, compact = width < 760, nav = ui.collapsed ? 44 : compact ? 200 : 250, right = nav + gap, bodyWidth = Math.max(0, width - right), editable = !model.busy && !model.uncertain && model.canWrite, clean = !model.busy && !model.dirty && !model.uncertain, doc = model.document || {}, meta = model.metadata || {}, exists = !!model.identity;
+	const tr = (text) => translate(text, language), nodes = [], gap = 12, compact = width < 760, nav = !!!(model.catalog || []).length || metaNew(model) ? 0 : ui.collapsed ? 44 : compact ? 200 : 250, right = nav ? nav + gap : 0, bodyWidth = Math.max(0, width - right), editable = !model.busy && !model.uncertain && model.canWrite, clean = !model.busy && !model.dirty && !model.uncertain, doc = model.document || {}, meta = model.metadata || {}, exists = !!model.identity;
 	const btn = (id, r, text, icon, action, enabled = clean, extra = {}) => button(id, r, tr(text), icon, action, enabled, extra);
-	nodes.push(btn("pluginCollapse", rect(0, 0, 40, 40), "Plugin catalogue", ui.collapsed ? "next" : "previous", { type: "collapse" }, true, { iconOnly: true }));
-	if (!ui.collapsed) {
-		nodes.push(btn("pluginNew", rect(44, 0, nav - 88, 40), "New", "add", { type: "new" }));
-		nodes.push(btn("pluginInstall", rect(nav - 40, 0, 40, 40), "Install plugin", "upload", { type: "install" }, clean, { iconOnly: true }));
-		nodes.push(node("Field", "pluginSearch", rect(0, 48, nav, 40), {
+	if (nav) {
+		if (!ui.collapsed) nodes.push(label("pluginCatalogueCaption", rect(0, 0, nav - 36, 28), tr("Plugin catalogue"), { weight: 600 }));
+		nodes.push(btn("pluginCollapse", rect(ui.collapsed ? 0 : nav - 28, 0, 28, 28), "Plugin catalogue", ui.collapsed ? "next" : "previous", { type: "collapse" }, true, { iconOnly: true }));
+	}
+	if (nav && !ui.collapsed) {
+		nodes.push(btn("pluginNew", rect(0, 36, nav, 36), "New", "add", { type: "new" }));
+		nodes.push(btn("pluginInstall", rect(0, 80, nav, 36), "Install a package", "upload", { type: "install" }, clean, { iconOnly: false }));
+		nodes.push(node("Field", "pluginSearch", rect(0, 128, nav, 36), {
 			text: ui.query,
 			placeholder: tr("Search plugins"),
 			action: { type: "query" },
 			clearable: true
 		}));
-		nodes.push(node("CheckBox", "pluginActiveOnly", rect(0, 96, nav, 36), {
+		nodes.push(node("CheckBox", "pluginActiveOnly", rect(0, 172, nav, 36), {
 			text: tr("Active in this project"),
 			checked: ui.activeOnly,
 			action: { type: "activeOnly" }
 		}));
-		nodes.push(node("List", "pluginCatalogue", rect(0, 140, nav, Math.max(0, height - 140)), {
+		nodes.push(node("List", "pluginCatalogue", rect(0, 216, nav, Math.max(0, height - 216)), {
 			source: "plugins",
 			keyField: "identity",
 			fields: [
@@ -277,6 +667,10 @@ function describe(model, ui, width, height, language) {
 			scrollbarReserved: 16
 		}));
 	}
+	if (nav > 44 && !catalog(model, ui).length) nodes.push(label("pluginNoMatches", rect(8, 224, nav - 24, 80), tr("No matching plugins. Change the search or the project filter."), {
+		wrap: true,
+		color: "secondaryText"
+	}));
 	let y = 0;
 	if (model.error || model.uncertain) {
 		const message = model.error || "The operation result is unknown. Reload before continuing.";
@@ -295,69 +689,109 @@ function describe(model, ui, width, height, language) {
 		y += 40;
 	}
 	if (ui.operation) {
-		const content = [], w = Math.max(0, bodyWidth - 16);
+		const content = [], w = Math.max(0, Math.min(1040, bodyWidth - 48));
 		let oy = 0;
-		const heading = destructive[ui.operation] || {
-			install: "Install plugin",
+		const heading = {
+			install: "Install a package",
+			activate: "Review activation",
+			deactivate: "Remove from project",
+			reload: "Reload plugin",
+			clean: "Clean project data",
+			delete: "Delete package",
+			clear_spt: "Clear .spt files",
+			replace_file: "Replace file",
+			delete_file: "Delete",
+			reload_catalog: "Refresh",
 			new_file: "New file",
 			new_folder: "New folder",
 			rename: "Rename or move",
 			publish: "Publish version"
 		}[ui.operation];
-		content.push(label("pluginOperationTitle", rect(0, oy, w, 72), tr(heading), {
-			wrap: true,
-			weight: 600
+		content.push(label("pluginOperationTitle", rect(0, oy, w, 36), tr(heading), {
+			weight: 600,
+			fontRole: "title"
 		}));
-		oy += 80;
+		oy += 48;
+		if (ui.operation === "activate") {
+			const progress = steps(w, 2, tr);
+			progress.nodes.forEach((item) => {
+				item.y += oy;
+				content.push(item);
+			});
+			oy += progress.height + 8;
+		}
+		if (destructive[ui.operation]) {
+			content.push(label("pluginOperationExplanation", rect(0, oy, w, 96), tr(destructive[ui.operation]), { wrap: true }));
+			oy += 108;
+		}
 		if (ui.operation === "install") {
-			content.push(label("pluginInstallNotice", rect(0, oy, w, 64), tr("ZIP installation adds a package to the server. Activate it separately in the selected project. Plugins can execute trusted server code."), { wrap: true }));
-			oy += 72;
-			content.push(btn("pluginBrowseZip", rect(0, oy, Math.min(w, 270), 40), "Browse ZIP…", "folder", {
-				type: "upload",
-				package: true
+			const guide = installation(ui, w, clean, tr);
+			guide.nodes.forEach((item) => {
+				item.y += oy;
+				content.push(item);
+			});
+			oy += guide.height;
+		} else {
+			content.push(label("pluginOperationContext", rect(0, oy, w, 50), tr("Package") + ": " + (doc.title || doc.code || "") + "\n" + tr("Project") + ": " + (meta.project || ""), {
+				wrap: true,
+				color: "secondaryText"
 			}));
-			oy += 52;
-			for (const [field, title] of [["url", "Plugin ZIP URL"], ["checksum", "SHA-256 or MD5 (optional)"]]) {
-				content.push(label("pluginInstallLabel_" + field, rect(0, oy, w, 24), tr(title)));
-				oy += 28;
-				content.push(node("Field", "pluginInstall_" + field, rect(0, oy, w, 40), {
-					text: ui[field],
+			oy += 62;
+			if (!destructive[ui.operation]) {
+				content.push(node("Field", "pluginOperationValue", rect(0, oy, w, 40), {
+					text: ui.value,
+					placeholder: tr(ui.operation === "publish" ? "Version" : "Relative path"),
 					action: {
 						type: "input",
-						field
+						field: "value"
 					},
 					enabled: clean
 				}));
 				oy += 52;
 			}
-		} else if (!destructive[ui.operation]) {
-			content.push(node("Field", "pluginOperationValue", rect(0, oy, w, 40), {
-				text: ui.value,
-				placeholder: tr(ui.operation === "publish" ? "Version" : "Relative path"),
-				action: {
-					type: "input",
-					field: "value"
-				},
-				enabled: clean
-			}));
-			oy += 52;
 		}
-		content.push(btn("pluginConfirm", rect(0, oy, Math.min(180, w / 2 - 4), 40), ui.operation === "install" ? "Download ZIP" : "Confirm", "check", { type: "confirm" }, clean || ui.operation === "reload_catalog" && !model.busy));
-		content.push(btn("pluginCancel", rect(Math.min(188, w / 2 + 4), oy, Math.min(150, w / 2 - 4), 40), "Cancel", "close", { type: "cancel" }, !model.busy));
+		if (ui.operation !== "install") content.push(btn("pluginConfirm", rect(0, oy, Math.min(180, w / 2 - 4), 40), ui.operation === "activate" ? "Activate" : "Confirm", "check", { type: "confirm" }, clean && (![
+			"publish",
+			"new_file",
+			"new_folder",
+			"rename"
+		].includes(ui.operation) || !!ui.value.trim()) || ui.operation === "reload_catalog" && !model.busy));
+		content.push(btn("pluginCancel", rect(ui.operation === "install" ? 0 : Math.min(188, w / 2 + 4), oy, Math.min(150, w / 2 - 4), 40), ui.operation === "install" ? "Back" : "Cancel", "close", { type: "cancel" }, !model.busy));
 		nodes.push(node("Scroll", "pluginOperationScroll", rect(right, y, bodyWidth, height - y), {
-			contentHeight: oy + 52,
+			contentHeight: oy + 84,
 			scrollbarId: "pluginOperationScrollBar",
 			scrollbarReserved: 16,
-			children: content
+			children: [node("Box", "pluginOperationPanel", rect(0, 0, w + 32, oy + 84), {
+				background: "surfaceContainer",
+				border: "outlineVariant",
+				radius: 8,
+				children: content.map((item) => Object.assign({}, item, {
+					x: item.x + 16,
+					y: item.y + 16
+				}))
+			})]
 		}));
 		return { nodes };
 	}
+	if (ui.notice) {
+		nodes.push(label("pluginResult", rect(right, y, bodyWidth, 60), tr(ui.notice), {
+			wrap: true,
+			weight: 600,
+			role: "status"
+		}));
+		y += 72;
+	}
 	if (!exists && !meta.new) {
-		nodes.push(label("pluginEmpty", rect(right + 12, y + 24, bodyWidth - 24, 64), tr("Select a plugin, create a new package or install a ZIP."), { wrap: true }));
-		nodes.push(btn("pluginEmptyInstall", rect(right + 12, y + 100, Math.min(240, bodyWidth - 24), 40), "Install plugin", "upload", { type: "install" }));
+		const guide = start(Math.max(0, bodyWidth - 16), clean, tr);
+		nodes.push(node("Scroll", "pluginWelcome", rect(right, y, bodyWidth, Math.max(0, height - y)), {
+			children: guide.nodes,
+			contentHeight: guide.height,
+			scrollbarId: "pluginWelcomeScrollBar",
+			scrollbarReserved: 16
+		}));
 		return { nodes };
 	}
-	nodes.push(label("pluginTitle", rect(right, y, bodyWidth, 28), doc.title || doc.code || tr("New plugin"), {
+	nodes.push(label("pluginTitle", rect(right, y, Math.max(0, bodyWidth - (exists ? 190 : 0)), 28), doc.title || doc.code || tr("New plugin"), {
 		fontRole: "title",
 		weight: 600
 	}));
@@ -365,70 +799,20 @@ function describe(model, ui, width, height, language) {
 	nodes.push(label("pluginStatus", rect(right, y, bodyWidth, 24), tr(meta.builtin ? "Built-in plugin · read-only files" : meta.active ? "Active in this project" : meta.new ? "New plugin" : "Not active in this project") + (doc.version ? " · " + doc.version : " · DEV"), { color: "secondaryText" }));
 	y += 32;
 	if (exists) {
-		const operations = [
-			[
-				meta.active ? "deactivate" : "activate",
-				meta.active ? "Remove from project" : "Activate",
-				"check"
-			],
-			[
-				"reload",
-				"Reload plugin",
-				"refresh"
-			],
-			[
-				"export",
-				"Export ZIP",
-				"download"
-			],
-			[
-				"publish",
-				"Publish version",
-				"publish"
-			],
-			[
-				"clean",
-				"Clean project data",
-				"delete"
-			],
-			[
-				"delete",
-				"Delete package",
-				"delete"
-			]
-		];
-		let x = 0;
-		for (const [action, title, icon] of operations) {
-			if (meta.builtin && [
-				"export",
-				"publish",
-				"delete"
-			].includes(action) || action === "reload" && !meta.active || action === "clean" && meta.active) continue;
-			const w = Math.min(bodyWidth, Math.max(compact ? 160 : 185, tr(title).length * 7.5 + 56));
-			if (x && x + w > bodyWidth) {
-				x = 0;
-				y += 44;
-			}
-			const permitted = !["admin", "sthpw"].includes(meta.project) || [
-				"export",
-				"publish",
-				"delete"
-			].includes(action);
-			nodes.push(btn("pluginAction_" + action, rect(right + x, y, w, 40), title, icon, {
-				type: destructive[action] || action === "publish" ? "operation" : "run",
-				action
-			}, clean && permitted));
-			x += w + 6;
-		}
-		y += 52;
+		nodes.push(node("View", "pluginToolsMenu", rect(right + bodyWidth - 180, y - 66, 180, 36), {
+			view: "pluginTools",
+			actions: actions(model, language),
+			label: tr("More actions")
+		}));
 		const tabs = [
-			["info", "Information"],
+			["info", "Overview"],
+			["details", "Package details"],
 			["manifest", "Manifest XML"],
 			["files", "Files"],
 			["docs", "Documentation"]
 		];
 		bodyWidth / tabs.length;
-		nodes.push(node(bodyWidth < 540 ? "Choice" : "Segmented", "pluginTabs", rect(right, y, bodyWidth, 40), {
+		nodes.push(node(bodyWidth < 740 ? "Choice" : "Segmented", "pluginTabs", rect(right, y, bodyWidth, 40), {
 			value: ui.tab,
 			options: tabs.map(([value, text]) => ({
 				value,
@@ -440,12 +824,13 @@ function describe(model, ui, width, height, language) {
 		}));
 		y += 52;
 	}
-	const content = [], w = Math.max(0, bodyWidth - 16);
+	const content = [], w = Math.max(0, Math.min(meta.new || ui.tab === "info" || ui.tab === "details" ? 1040 : Infinity, bodyWidth - 16));
 	let cy = 0;
 	function field(name, title, area = false, readonly = false) {
 		content.push(label("pluginLabel_" + name, rect(0, cy, w, 24), tr(title)));
 		cy += 28;
 		content.push(node(area ? "Area" : "Field", "pluginField_" + name, rect(0, cy, w, area ? 110 : 40), {
+			label: tr(title),
 			text: doc[name] || "",
 			readOnly: readonly || !editable,
 			enabled: !model.busy,
@@ -456,10 +841,42 @@ function describe(model, ui, width, height, language) {
 		}));
 		cy += area ? 122 : 52;
 	}
-	if (meta.new || ui.tab === "info") {
+	if (!meta.new && ui.tab === "info") {
+		const guide = project(model, w, tr);
+		guide.nodes.forEach((item) => content.push(item));
+		cy = guide.height;
+		content.push(label("pluginPackageIdentity", rect(0, cy, w, 28), [doc.code, doc.version || "DEV"].join(" · "), { weight: 600 }));
+		cy += 36;
+		if (doc.description) {
+			content.push(label("pluginPackageDescription", rect(0, cy, w, 80), doc.description, {
+				wrap: true,
+				color: "secondaryText"
+			}));
+			cy += 92;
+		}
+		content.push(btn("pluginEditDetails", rect(0, cy, Math.min(300, w), 36), "Package details", "edit", {
+			type: "tab",
+			value: "details"
+		}));
+		cy += 48;
+	} else if (meta.new || ui.tab === "details") {
+		if (meta.new) {
+			content.push(label("pluginCreateIntro", rect(0, cy, w, 68), tr("Choose a unique code such as studio_tools. Creation makes a DEV package and registers it in the current project."), {
+				wrap: true,
+				color: "secondaryText"
+			}));
+			cy += 80;
+		}
 		if (!meta.new || doc.type !== "project") {
 			field("title", "Title");
 			field("code", "Code", false, !meta.new);
+			if (meta.new) {
+				content.push(label("pluginCodeHint", rect(0, cy, w, 50), tr("Use letters, digits, underscores or hyphens. The code cannot be changed after creation."), {
+					wrap: true,
+					color: "secondaryText"
+				}));
+				cy += 62;
+			}
 			if (!meta.new) field("version", "Version", false, true);
 			field("description", "Description", true);
 		} else {
@@ -489,8 +906,26 @@ function describe(model, ui, width, height, language) {
 			}));
 			cy += 52;
 		}
+		if (meta.new) {
+			const hint = {
+				"": "Empty package: add your own manifest entries and files.",
+				widget: "Widget template: starts with a modern reusable item layout.",
+				column: "Column template: configure a table column through the existing widget system.",
+				theme: "Theme template: package a theme using the native theme configuration.",
+				project: "Project template exports the selected project. No new plugin is activated."
+			}[doc.type || ""];
+			content.push(label("pluginCreateHint", rect(0, cy, w, 56), tr(hint), {
+				wrap: true,
+				color: "secondaryText"
+			}));
+			cy += 68;
+		}
 	} else if (ui.tab === "manifest") {
-		content.push(node("Code", "pluginManifest", rect(0, 0, w, Math.max(260, height - y - 12)), {
+		content.push(label("pluginManifestHint", rect(0, 0, w, 56), tr("Save changes the manifest file. Reload plugin applies its project data; review that confirmation first."), {
+			wrap: true,
+			color: "secondaryText"
+		}));
+		content.push(node("Code", "pluginManifest", rect(0, 68, w, Math.max(260, height - y - 80)), {
 			text: doc.manifest || "",
 			syntax: "xml",
 			language,
@@ -502,9 +937,14 @@ function describe(model, ui, width, height, language) {
 				field: "manifest"
 			}
 		}));
-		cy = Math.max(260, height - y - 12);
+		cy = 68 + Math.max(260, height - y - 80);
 	} else {
 		const files = ui.tab === "files";
+		content.push(label("pluginSourceHint", rect(0, cy, w, 56), tr(files ? "Select a file to edit. Save commits the source; generated .spt files can be cleaned from More actions." : "Read or edit the author’s documentation as source. Legacy HTML is not executed here."), {
+			wrap: true,
+			color: "secondaryText"
+		}));
+		cy += 68;
 		if (files) {
 			const tools = [
 				[
@@ -541,25 +981,25 @@ function describe(model, ui, width, height, language) {
 					"upload",
 					"Upload file",
 					"upload"
-				],
-				[
-					"clear_spt",
-					"Clear .spt files",
-					"delete"
 				]
 			];
 			let x = 0;
 			for (const [action, title, icon, event] of tools) {
-				if (x + 40 > w) {
+				const labelled = [
+					"new_file",
+					"new_folder",
+					"upload"
+				].includes(action), toolWidth = labelled ? Math.min(w, Math.max(140, tr(title).length * 7 + 48)) : 40;
+				if (x && x + toolWidth > w) {
 					x = 0;
 					cy += 44;
 				}
 				const enabled = clean && (action === "parent" ? !!meta.folder : !meta.builtin && (!["rename", "delete_file"].includes(action) || !!doc.file || !!meta.folder));
-				content.push(btn("pluginFileAction_" + action, rect(x, cy, 40, 40), title, icon, event || {
+				content.push(btn("pluginFileAction_" + action, rect(x, cy, toolWidth, 40), title, icon, event || {
 					type: action === "upload" ? "upload" : "operation",
 					action
-				}, enabled, { iconOnly: true }));
-				x += 44;
+				}, enabled, { iconOnly: !labelled }));
+				x += toolWidth + 4;
 			}
 			cy += 48;
 			content.push(label("pluginFolderPath", rect(0, cy, w, 26), meta.folder || "/", { color: "secondaryText" }));
@@ -614,7 +1054,17 @@ function describe(model, ui, width, height, language) {
 			cy += 48;
 		}
 	}
-	nodes.push(node("Scroll", "pluginEditorScroll", rect(right, y, bodyWidth, height - y), {
+	if (meta.new) {
+		const bw = Math.min(260, (bodyWidth - 32) / 2);
+		nodes.push(node("Box", "pluginCreateFooter", rect(right, height - 52, bodyWidth, 52), {
+			background: "surfaceContainer",
+			border: "outlineVariant",
+			radius: 0,
+			children: [btn("pluginCreate", rect(8, 6, bw, 40), doc.type === "project" ? "Export template" : "Create plugin", "add", { type: "save" }, editable && canCreate(model), { highlighted: true }), btn("pluginCancelCreate", rect(bw + 16, 6, bw, 40), "Cancel", "close", { type: "cancel" }, !model.busy)]
+		}));
+	}
+	nodes.push(node("Scroll", "pluginEditorScroll", rect(right, y, bodyWidth, Math.max(0, height - y - (meta.new ? 60 : 0))), {
+		resetKey: model.identity + ":" + !!meta.new + ":" + ui.tab,
 		contentHeight: cy + 12,
 		scrollbarId: "pluginEditorScrollBar",
 		scrollbarReserved: 16,
@@ -691,7 +1141,14 @@ var _sfc_main = {
 		})), scene = computed(() => describe(model.value, ui.value, size.value.width, size.value.height, appearance.language)), toolbar$1 = computed(() => toolbar(model.value, toolbarWidth.value, appearance.language)), models = computed(() => ({
 			plugins: catalog(model.value, ui.value),
 			files: metadata.value.files || []
-		}));
+		})), views = { pluginTools: {
+			component: _sfc_main$2,
+			nodeProps: true,
+			props: { onCommand: (action) => dispatch({
+				type: "operation",
+				action
+			}) }
+		} };
 		let generation = 0, observer, uploadPackage = false, uploadReplace = false;
 		const clone = (value) => JSON.parse(JSON.stringify(value));
 		function rowScene(list, row$1) {
@@ -771,6 +1228,10 @@ var _sfc_main = {
 					}
 					if (write) emit("saved");
 				}
+				dispatch({
+					type: "completed",
+					action
+				});
 			} catch (failure) {
 				if (current !== generation) return;
 				error.value = failure.message;
@@ -890,6 +1351,7 @@ var _sfc_main = {
 				}, [createVNode(_sfc_main$1, {
 					scene: scene.value,
 					models: models.value,
+					views,
 					"describe-row": rowScene,
 					onEvent: dispatch
 				}, null, 8, ["scene", "models"])], 512),
