@@ -147,7 +147,10 @@ window.nestedFixture = {
 };
 </script>
 <template>
-  <div v-if="parentMode" style="height: 500px; width: 100%; display: flex">
+  <div
+    v-if="parentMode"
+    style="height: calc(100vh - 32px); width: 100%; display: flex"
+  >
     <TableView
       :columns="columns"
       :groups="[
@@ -164,11 +167,12 @@ window.nestedFixture = {
       :cells="{}"
       :state="{}"
     >
-      <template #detail
+      <template #detail="{ height }"
         ><NestedTable
           ticket="test-fixture"
           project="demo"
           :state="state"
+          :frame-node="{ height }"
           @close="state.open = false"
       /></template>
     </TableView>

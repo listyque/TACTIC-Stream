@@ -1231,13 +1231,13 @@ function summarize(columns, records, cells = {}, mode = "bottom") {
 		values
 	};
 }
-function extent(state = {}, width = 0) {
+function extent(state = {}, width = 0, availableHeight = 320) {
 	const model = Object.assign({}, state.scope, state);
 	if (model.busy && !model.loaded && !model.rows?.length) return 320;
 	const inner = Math.max(0, width - metrics$1.margin * 2);
 	const chrome = metrics$1.margin * 2 + 42 + quickLayout(model, inner).height + 40 + (model.gallery ? 0 : metrics$1.header + 3 + (tableWidth(model, inner) > inner ? layout$3.scrollbarExtent : 0));
-	const content = rows$2(model, inner).reduce((sum, row) => sum + row.extent, 0);
-	return Math.max(chrome + 68, Math.min(320, chrome + content));
+	const content = rows$2(model, inner, availableHeight).reduce((sum, row) => sum + row.extent, 0);
+	return Math.max(chrome + 68, Math.min(availableHeight, chrome + content));
 }
 function tableWidth(model, width) {
 	const fields = columns(model), last = fields[fields.length - 1];
@@ -1260,7 +1260,7 @@ function identity(scope = {}, project = "") {
 		scope.filters || []
 	]);
 }
-function rows$2(model, width = 0) {
+function rows$2(model, width = 0, availableHeight = 320) {
 	if (model.gallery) {
 		const count = Math.max(1, Math.floor(Math.max(0, width - 16) / (model.gallery.scale + 12)));
 		const result = [];
@@ -1273,7 +1273,7 @@ function rows$2(model, width = 0) {
 	}
 	return (model.rows || []).map((record) => Object.assign({}, record, {
 		detailOpen: !!model.children?.[record.key]?.open,
-		extent: 68 + (model.children?.[record.key]?.open ? extent(model.children[record.key].model || model.children[record.key], width) : 0)
+		extent: 68 + (model.children?.[record.key]?.open ? extent(model.children[record.key].model || model.children[record.key], width, availableHeight) : 0)
 	}));
 }
 function columns(model) {
@@ -5106,7 +5106,7 @@ var _sfc_main$58 = {
 					});
 					offset += rowHeight.value;
 					if (props.expandedRows[record.__search_key__]?.open) {
-						const detailHeight = extent(props.expandedRows[record.__search_key__], width.value);
+						const detailHeight = extent(props.expandedRows[record.__search_key__], width.value, Math.max(0, viewportHeight.value - 37 - rowHeight.value));
 						rows.push({
 							detail: record,
 							key: "nested:" + record.__search_key__,
@@ -5504,7 +5504,10 @@ var _sfc_main$58 = {
 						onClick: _cache[3] || (_cache[3] = withModifiers(() => {}, ["stop"])),
 						onDblclick: _cache[4] || (_cache[4] = withModifiers(() => {}, ["stop"])),
 						onContextmenu: _cache[5] || (_cache[5] = withModifiers(() => {}, ["stop"]))
-					}, [renderSlot(_ctx.$slots, "detail", { record: entry.detail })], 36)) : entry.group?.cell ? (openBlock(), createBlock(_sfc_main$74, {
+					}, [renderSlot(_ctx.$slots, "detail", {
+						record: entry.detail,
+						height: entry.height
+					})], 36)) : entry.group?.cell ? (openBlock(), createBlock(_sfc_main$74, {
 						key: 1,
 						class: "handler-table-group",
 						scene: group$1({
@@ -6177,7 +6180,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 		const records = computed(() => rows$2({
 			...model.value.scope,
 			...model.value
-		}, width.value));
+		}, width.value, extent$1.value));
 		const extent$1 = computed(() => props.frameNode?.height || extent(model.value, width.value));
 		const scene = computed(() => describe$19({
 			...model.value.scope,
@@ -6443,7 +6446,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			])], 36);
 		};
 	}
-}, [["__scopeId", "data-v-9f051179"]]);
+}, [["__scopeId", "data-v-ce014d47"]]);
 //#endregion
 //#region src/controls/markdown.js
 var markdown = new MarkdownItCallable({
@@ -23411,10 +23414,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 					onHeaderAction: $options.tableHeaderAction,
 					onCreateChild: $options.createParentChild
 				}, {
-					detail: withCtx(({ record }) => [createVNode(_component_NestedTable, {
+					detail: withCtx(({ record, height }) => [createVNode(_component_NestedTable, {
 						ticket: $props.ticket,
 						project: $props.project,
 						state: $data.expandedTables[record.__search_key__],
+						"frame-node": { height },
 						onClose: ($event) => $data.expandedTables[record.__search_key__].open = false,
 						onEdit: $options.openNestedEditor,
 						onInspect: _cache[29] || (_cache[29] = ($event) => _ctx.$emit("inspect", $event)),
@@ -23425,6 +23429,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 						"ticket",
 						"project",
 						"state",
+						"frame-node",
 						"onClose",
 						"onEdit",
 						"onAction",

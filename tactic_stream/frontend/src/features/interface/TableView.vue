@@ -188,7 +188,8 @@ const entries = computed(() => {
       if (props.expandedRows[record.__search_key__]?.open) {
         const detailHeight = NestedUI.extent(
           props.expandedRows[record.__search_key__],
-          width.value
+          width.value,
+          Math.max(0, viewportHeight.value - 37 - rowHeight.value)
         );
         rows.push({
           detail: record,
@@ -690,7 +691,7 @@ defineExpose({ viewport });
           @dblclick.stop
           @contextmenu.stop
         >
-          <slot name="detail" :record="entry.detail" />
+          <slot name="detail" :record="entry.detail" :height="entry.height" />
         </div>
         <FrameView
           v-else-if="entry.group?.cell"

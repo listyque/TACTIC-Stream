@@ -46,6 +46,31 @@ const short = {
   rows: [{ key: 'A', record: {}, cells: {} }]
 };
 assert.equal(extent(short, 600), 206);
+const fourRows = {
+  ...short,
+  rows: Array.from({ length: 4 }, (_, i) => ({ key: String(i) }))
+};
+assert.equal(extent(fourRows, 600, 600), 410);
+assert.equal(extent(fourRows, 600, 280), 280);
+assert.equal(
+  extent(
+    {
+      ...short,
+      rows: Array.from({ length: 50 }, (_, i) => ({ key: String(i) }))
+    },
+    600,
+    600
+  ),
+  600
+);
+assert.equal(
+  rows(
+    { ...short, children: { A: { open: true, model: fourRows } } },
+    600,
+    600
+  )[0].extent,
+  68 + 410
+);
 assert.equal(
   extent({ ...short, rows: [{ key: 'A' }, { key: 'B' }] }, 600),
   274
@@ -439,6 +464,37 @@ try {
     readsBeforeResize,
     'Resizing must not reload nested data'
   );
+  await page.evaluate(() => {
+    const state = window.nestedFixture.state;
+    state.rows = Array.from({ length: 4 }, (_, i) => ({
+      ...state.rows[0],
+      key: 'row-' + i
+    }));
+    state.selected = ['row-1'];
+  });
+  for (const height of [660, 350, 660]) {
+    await page.setViewportSize({ width: 1000, height });
+    const expected = Math.min(410, height - 32 - 37 - 58);
+    await page.waitForFunction((expected) => {
+      const e = document.querySelector('.nested-table');
+      return Math.abs(e.getBoundingClientRect().height - expected) < 1;
+    }, expected);
+    const actual = await panel.evaluate((e) => ({
+      height: e.getBoundingClientRect().height,
+      parent: e
+        .closest('.handler-table-detail')
+        .parentElement.getBoundingClientRect().height,
+      list: e.querySelector('[data-frame=nestedRows]').getBoundingClientRect()
+        .height
+    }));
+    assert.equal(actual.height, actual.parent);
+    if (height === 660) assert(actual.list >= 4 * 68);
+    assert.deepEqual(
+      await page.evaluate(() => window.nestedFixture.state.selected),
+      ['row-1']
+    );
+  }
+  assert.equal(reads, readsBeforeResize);
   await panel.locator('[data-frame=nestedClose]').click();
   await panel.waitFor({ state: 'detached' });
   assert.deepEqual(errors, []);

@@ -2342,11 +2342,12 @@ export default {
           @header-action="tableHeaderAction"
           @create-child="createParentChild"
         >
-          <template #detail="{ record }">
+          <template #detail="{ record, height }">
             <NestedTable
               :ticket="ticket"
               :project="project"
               :state="expandedTables[record.__search_key__]"
+              :frame-node="{ height }"
               @close="expandedTables[record.__search_key__].open = false"
               @edit="openNestedEditor"
               @inspect="$emit('inspect', $event)"

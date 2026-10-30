@@ -193,3 +193,5 @@ A relation does not recurse back into any ancestor object's Search Type, and an 
 Main-search subtitles resolve category labels (for example, Props) from native SelectWdg/edit_definition options. Relation children follow Handler's shorter description-only subtitle and raw category metadata; literal selects still show their labels, such as Diffuse. Metadata follows record-field order.
 
 Expanded tables fit short results instead of reserving an empty 320 px panel. Long results keep a bounded, scrollable viewport; nested rows reflow without reloading cached data. The block uses one outer inset and reserves space for a horizontal scrollbar only when columns overflow. Checkbox and preview columns use compact defaults; configured widths still apply.
+
+Expanded tables use the available search viewport height. A short list stays fitted to its rows; a longer list scrolls only after filling that space. Resizing preserves selection and cached data. Explicit dashboard pane sizes still apply.

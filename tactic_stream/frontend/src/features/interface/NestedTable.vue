@@ -40,7 +40,7 @@ const model = computed(
 );
 const component = getCurrentInstance().type;
 const records = computed(() =>
-  UI.rows({ ...model.value.scope, ...model.value }, width.value)
+  UI.rows({ ...model.value.scope, ...model.value }, width.value, extent.value)
 );
 const extent = computed(
   () => props.frameNode?.height || UI.extent(model.value, width.value)
