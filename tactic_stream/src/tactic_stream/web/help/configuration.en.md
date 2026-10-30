@@ -62,3 +62,5 @@ AI providers opens the connection editor directly inside Configuration. Select o
 In Stream windows, page Help appears in the top window title bar beside the window controls. It follows the current editor or configuration page; the duplicate content-header button is hidden. Help remains available on narrow screens.
 
 The new AI connection form remains open while you choose a provider, even before typing a name. Background checks and switching Configuration pages preserve it. Saving a provider profile does not start an external agent host: a waiting check needs a host connected to the same TACTIC account; the chat also requires that host in the current project.
+
+Use **Connect agent** in the chat or **Configuration → AI providers** to start the executor on the TACTIC server for your current account and project. **Disconnect agent** stops it; an active task is interrupted and already committed changes remain. Closing the window does not disconnect it. A host started externally must be stopped where it was launched. Codex sign-in or other provider credentials must be configured on the server machine; this does not launch a process on the browser computer.

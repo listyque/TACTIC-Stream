@@ -1,6 +1,6 @@
 {
   "Table views manager": "Table views manager",
-  "Manage table views\u2026": "Manage table views\u2026",
+  "Manage table views…": "Manage table views…",
   "Find a table view": "Find a table view",
   "The default table is protected. Create a copy to customize it.": "The default table is protected. Create a copy to customize it.",
   "Project view. Renaming changes its label and keeps existing links.": "Project view. Renaming changes its label and keeps existing links.",
@@ -2008,5 +2008,20 @@
   "The source tab changed. Reload the page.": "The source tab changed. Reload the page.",
   "Select all tools": "Select all tools",
   "No expiration": "No expiration",
-  "MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
+  "MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes",
+  "Connecting agent…": "Connecting agent…",
+  "Agent connected": "Agent connected",
+  "Disconnecting agent…": "Disconnecting agent…",
+  "Connected outside this UI. Stop it where it was started.": "Connected outside this UI. Stop it where it was started.",
+  "Connect an agent to send requests.": "Connect an agent to send requests.",
+  "Stop connecting": "Stop connecting",
+  "Disconnect agent": "Disconnect agent",
+  "Disconnecting…": "Disconnecting…",
+  "Connect agent": "Connect agent",
+  "Runs on the TACTIC server for this project.": "Runs on the TACTIC server for this project.",
+  "Connect an agent to check this connection.": "Connect an agent to check this connection.",
+  "The agent executor stopped unexpectedly. Connect again.": "The agent executor stopped unexpectedly. Connect again.",
+  "An external agent is already connected to this project": "An external agent is already connected to this project",
+  "Agent connection failed": "Agent connection failed",
+  "No available models. Check AI providers.": "No available models. Check AI providers."
 }

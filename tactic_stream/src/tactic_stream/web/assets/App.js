@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/resize.js","assets/resize.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/sections.ui.js","assets/admin.document.js","assets/textMetrics.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ConfiguredView.js","assets/RecordForm.js","assets/RecordForm.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/markdown-it.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/AgentProviders.js","assets/AgentProviders.css","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ProcessRules.js","assets/ProcessRules.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/RawDatabase.css","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/NamingEditor.js","assets/ObjectFieldFrame.js","assets/vue.js","assets/AppButton.js","assets/locales.js","assets/icons.js","assets/AppButton.css","assets/resize.js","assets/resize.css","assets/ObjectFieldFrame.css","assets/index.js","assets/index.css","assets/sections.ui.js","assets/admin.document.js","assets/textMetrics.js","assets/file_values.js","assets/files.js","assets/files2.js","assets/admin.css","assets/MatchingTemplates.js","assets/MatchingTemplates.css","assets/TaskGanttView.js","assets/TaskGanttView.css","assets/TaskCalendarView.js","assets/TaskCalendarView.css","assets/TaskProcessPanel.js","assets/ConfiguredView.js","assets/RecordForm.js","assets/RecordForm.css","assets/CodeBlock.js","assets/metrics.js","assets/confirmation.ui.js","assets/AppDialog.js","assets/markdown-it.js","assets/VirtualCollection.js","assets/VirtualCollection.css","assets/Timesheet.js","assets/Timesheet.css","assets/ContentLoadingOverlay.js","assets/ContentLoadingOverlay.css","assets/ConfiguredView.css","assets/TaskProcessPanel.css","assets/FileWorkspaceInspection.js","assets/FileWorkspaceInspection.css","assets/DescriptionEditor.js","assets/DescriptionEditor.css","assets/SnapshotBrowser.js","assets/SnapshotBrowser.css","assets/KnowledgeBase.js","assets/KnowledgeBase.css","assets/Configuration.js","assets/AppearanceControls.js","assets/AppearanceControls.css","assets/AgentProviders.js","assets/executor.ui.js","assets/AgentProviders.css","assets/Configuration.css","assets/SearchTypes.js","assets/SchemaEditor.js","assets/graphFrame.js","assets/tree.ui.js","assets/SchemaEditor.css","assets/WorkflowEditor.js","assets/ProcessRules.js","assets/ProcessRules.css","assets/SidebarEditor.js","assets/PageLayoutEditor.js","assets/LayoutEditor.js","assets/LayoutEditor.css","assets/ColumnsEditor.js","assets/RawDatabase.js","assets/RawDatabase.css","assets/SecurityUsers.js","assets/groups.ui.js","assets/SecurityGroups.js","assets/SecurityRules.js","assets/AgentRequest.js","assets/AgentRequest.css","assets/AgentMcp.js","assets/AgentMcp.css","assets/ScriptEditor.js","assets/ScriptEditor.css"])))=>i.map(i=>d[i]);
 import { r as __exportAll } from "./ObjectFieldFrame.js";
 import { $ as shallowRef, B as useId, C as h, D as nextTick, E as mergeProps, F as renderSlot, H as useSlots, I as resolveComponent, J as isRef, K as withCtx, L as resolveDirective, N as openBlock, P as renderList, Q as shallowReactive, R as resolveDynamicComponent, T as mergeModels, U as watch, V as useModel, X as reactive, Y as markRaw, Z as ref, _ as createElementBlock, b as createVNode, c as withKeys, d as KeepAlive, et as toRaw, f as Teleport, g as createCommentVNode, h as createBlock, it as toDisplayString, j as onMounted, k as onBeforeUnmount, l as withModifiers, m as createBaseVNode, nt as normalizeClass, o as vModelText, p as computed, q as withDirectives, rt as normalizeStyle, s as vShow, t as Transition, tt as unref, u as Fragment, v as createSlots, w as inject, y as createTextVNode } from "./vue.js";
 import { A as savePreferencePage, C as lineHeights, D as configurationPreview, E as textStyles, I as BusyIndicator_default, L as _plugin_vue_export_helper_default, M as taskColumns, S as layout$6, T as readableText, a as _sfc_main$103, b as fontLineHeight, g as controls$1, h as blend, j as normalizeColumns, k as preferences, m as saveAppearance, o as t, s as appearance, t as _sfc_main$102, u as frameColors, w as metrics$9, x as fontMetricHeight, y as fontFamily } from "./AppButton.js";
@@ -31991,18 +31991,18 @@ var FileWorkspace = asyncComponent(() => __vitePreload(() => import("./FileWorks
 var DescriptionEditor = asyncComponent(() => __vitePreload(() => import("./DescriptionEditor.js"), __vite__mapDeps([44,2,3,4,5,6,10,11,13,7,8,14,15,16,17,18,45])));
 var SnapshotBrowser = asyncComponent(() => __vitePreload(() => import("./SnapshotBrowser.js"), __vite__mapDeps([46,2,3,4,5,6,10,11,7,8,27,1,9,14,12,28,13,15,16,17,18,26,29,30,31,32,33,34,35,36,37,38,39,40,47])));
 var KnowledgeBase = asyncComponent(() => __vitePreload(() => import("./KnowledgeBase.js"), __vite__mapDeps([48,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,26,1,9,12,27,28,29,30,31,32,33,34,35,36,37,38,39,40,49])));
-var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([50,2,3,4,5,6,10,11,7,8,51,52,27,1,9,14,12,28,13,15,16,17,18,26,29,30,31,32,33,34,35,36,37,38,39,40,53,54,55])));
-var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([56,2,3,4,5,6,10,11,7,8,12,27,1,9,14,28,13,15,16,17,18,0])));
-var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([57,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,56,12,27,1,9,28,0,58,59,60])));
-var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([61,2,3,4,5,6,10,11,7,8,62,12,13,14,15,16,17,18,63,58,59])));
-var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([64,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,59])));
-var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([65,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,59])));
-var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([66,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,67])));
-var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([68,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40])));
-var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([69,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,70])));
-var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([71,2,3,4,5,6,10,11,7,8,72])));
-var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([73,2,3,4,5,6,10,11,7,8,72])));
-var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([74,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18])));
+var Configuration = asyncComponent(() => __vitePreload(() => import("./Configuration.js"), __vite__mapDeps([50,2,3,4,5,6,10,11,7,8,51,52,27,1,9,14,12,28,13,15,16,17,18,26,29,30,31,32,33,34,35,36,37,38,39,40,53,54,55,56])));
+var SearchTypes = asyncComponent(() => __vitePreload(() => import("./SearchTypes.js"), __vite__mapDeps([57,2,3,4,5,6,10,11,7,8,12,27,1,9,14,28,13,15,16,17,18,0])));
+var SchemaEditor = asyncComponent(() => __vitePreload(() => import("./SchemaEditor.js"), __vite__mapDeps([58,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,57,12,27,1,9,28,0,59,60,61])));
+var WorkflowEditor = asyncComponent(() => __vitePreload(() => import("./WorkflowEditor.js"), __vite__mapDeps([62,2,3,4,5,6,10,11,7,8,63,12,13,14,15,16,17,18,64,59,60])));
+var SidebarEditor = asyncComponent(() => __vitePreload(() => import("./SidebarEditor.js"), __vite__mapDeps([65,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,60])));
+var PageLayoutEditor = asyncComponent(() => __vitePreload(() => import("./PageLayoutEditor.js"), __vite__mapDeps([66,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,60])));
+var LayoutEditor = asyncComponent(() => __vitePreload(() => import("./LayoutEditor.js"), __vite__mapDeps([67,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40,68])));
+var ColumnsEditor = asyncComponent(() => __vitePreload(() => import("./ColumnsEditor.js"), __vite__mapDeps([69,2,3,4,5,6,10,11,7,8,12,13,14,15,16,17,18,26,1,9,27,28,29,30,31,32,33,34,35,36,37,38,39,40])));
+var RawDatabase = asyncComponent(() => __vitePreload(() => import("./RawDatabase.js"), __vite__mapDeps([70,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18,71])));
+var SecurityUsers = asyncComponent(() => __vitePreload(() => import("./SecurityUsers.js"), __vite__mapDeps([72,2,3,4,5,6,10,11,7,8,73])));
+var SecurityGroups = asyncComponent(() => __vitePreload(() => import("./SecurityGroups.js"), __vite__mapDeps([74,2,3,4,5,6,10,11,7,8,73])));
+var SecurityRules = asyncComponent(() => __vitePreload(() => import("./SecurityRules.js"), __vite__mapDeps([75,2,3,4,5,6,10,11,7,8,13,14,15,16,17,18])));
 var compactLayout = window.matchMedia("(max-width: 900px)");
 var shortcutLayout = mobileLayout;
 var _sfc_main = {
@@ -32885,7 +32885,7 @@ var _sfc_main = {
 				context.search_keys = [...new Set(records.map((record) => record.__search_key__))];
 			}
 			try {
-				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([75,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,13,15,16,17,18,29,30,31,32,33,34,35,36,37,38,39,40,59,76]));
+				const module = await __vitePreload(() => import("./AgentRequest.js"), __vite__mapDeps([76,2,3,4,5,6,10,11,7,8,26,1,9,14,12,27,28,13,15,16,17,18,29,30,31,32,33,34,35,36,37,38,39,40,60,54,77]));
 				if (this.session !== session) return;
 				this.agentRequestComponent ||= markRaw(module.default);
 				await nextTick();
@@ -32897,7 +32897,7 @@ var _sfc_main = {
 		async openAgentProviders() {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentProviders.js"), __vite__mapDeps([53,2,3,4,5,6,10,11,7,8,32,54]));
+				const module = await __vitePreload(() => import("./AgentProviders.js"), __vite__mapDeps([53,2,3,4,5,6,10,11,7,8,32,54,55]));
 				if (this.session !== session) return;
 				this.agentProvidersComponent ||= markRaw(module.default);
 				await nextTick();
@@ -32909,7 +32909,7 @@ var _sfc_main = {
 		async openAgentMcp(context, connectionId = "") {
 			const session = this.session;
 			try {
-				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([77,2,3,4,5,6,10,11,7,8,32,78]));
+				const module = await __vitePreload(() => import("./AgentMcp.js"), __vite__mapDeps([78,2,3,4,5,6,10,11,7,8,32,79]));
 				if (this.session !== session) return;
 				this.agentMcpComponent ||= markRaw(module.default);
 				await nextTick();
@@ -32925,7 +32925,7 @@ var _sfc_main = {
 			const current = () => this.session === session && this.workspaceProject === project;
 			this.scriptEditorLoading = true;
 			try {
-				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([79,2,3,4,5,6,10,11,7,8,80]));
+				const module = await __vitePreload(() => import("./ScriptEditor.js"), __vite__mapDeps([80,2,3,4,5,6,10,11,7,8,81]));
 				if (!current()) return;
 				this.scriptEditorComponent ||= markRaw(module.default);
 				await nextTick();

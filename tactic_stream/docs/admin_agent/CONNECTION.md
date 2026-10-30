@@ -10,6 +10,9 @@ credential storage and explicit per-turn destination authorization.
 
 Use [native TH/TS requests](REQUESTS.md) to submit tasks with captured project, page
 and selected objects to a connected external host.
+Both clients can explicitly start and stop an account/project-scoped host on the
+TACTIC server using the chat/provider editor's connection button. This is separate
+from issuing an MCP grant to another application.
 
 ## What runs where
 

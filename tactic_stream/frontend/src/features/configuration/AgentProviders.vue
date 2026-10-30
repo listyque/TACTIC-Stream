@@ -90,6 +90,23 @@ async function call(action, values = {}) {
   model.value.busy = true;
   model.value.error = '';
   try {
+    if (action === 'start' || action === 'stop') {
+      const reply = await rpc(
+        'execute_cmd',
+        [
+          { ticket: owner.ticket, project: owner.project },
+          'tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd',
+          { action, project_code: owner.project }
+        ],
+        {},
+        true,
+        true
+      );
+      if (reply.status !== 'OK')
+        throw Error(reply.description || 'Agent connection failed');
+      if (id !== generation || context !== owner) return;
+      action = 'state';
+    }
     const reply = await rpc(
       'execute_cmd',
       [
@@ -134,7 +151,10 @@ function schedule() {
   if (
     opened &&
     model.value.selected &&
-    model.value.profiles.some((row) => row.status === 'waiting')
+    (model.value.profiles.some((row) => row.status === 'waiting') ||
+      ['starting', 'connected', 'stopping'].includes(
+        model.value.executor?.state
+      ))
   )
     timer = setTimeout(() => {
       if (model.value.selected && !UI.dirty(model.value) && !model.value.busy)
@@ -155,6 +175,13 @@ function event(action) {
   } else if (action.type === 'reset')
     model.value = UI.select(model.value, model.value.selected);
   else if (action.type === 'refresh' && !UI.dirty(model.value)) call('state');
+  else if (
+    action.type === 'executor' &&
+    ['start', 'stop'].includes(action.value) &&
+    !UI.dirty(model.value) &&
+    model.value.selected
+  )
+    call(action.value);
   else if (['save', 'check', 'remove'].includes(action.type))
     call(action.type, {
       provider: model.value.selected,

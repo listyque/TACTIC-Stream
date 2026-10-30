@@ -253,6 +253,13 @@
       "_resize.js"
     ]
   },
+  "_executor.ui.js": {
+    "file": "assets/executor.ui.js",
+    "name": "executor.ui",
+    "imports": [
+      "_resize.js"
+    ]
+  },
   "_file_values.js": {
     "file": "assets/file_values.js",
     "name": "file_values",
@@ -762,7 +769,8 @@
       "index.html",
       "_resize.js",
       "_AppDialog.js",
-      "src/App.vue"
+      "src/App.vue",
+      "_executor.ui.js"
     ],
     "css": [
       "assets/AgentProviders.css"
@@ -950,7 +958,8 @@
       "_ConfiguredView.js",
       "_AppDialog.js",
       "_tree.ui.js",
-      "src/App.vue"
+      "src/App.vue",
+      "_executor.ui.js"
     ],
     "css": [
       "assets/AgentRequest.css"

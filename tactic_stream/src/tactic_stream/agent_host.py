@@ -271,7 +271,7 @@ def run_request(connection, request, host_id, options, heartbeat):
             client.close()
 
 
-def main():
+def main(*, connected=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--server', required=True)
     parser.add_argument('--login', help='Create a dedicated TACTIC session using a password prompt instead of an environment ticket')
@@ -322,6 +322,8 @@ def main():
         capabilities.update(refresh_profiles(connections[0],host_id,private_key,profile_cache,lambda:model_catalog(options),heartbeat))
         heartbeat()
         print('External agent connected. Requests are available in the ordinary TH/TS interface.', flush=True)
+        if connected:
+            connected()
         last_heartbeat = time.monotonic()
         while True:
             try:

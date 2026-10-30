@@ -6,6 +6,7 @@ import { ut as _sfc_main$6, xt as _sfc_main$7 } from "./ConfiguredView.js";
 import { t as _sfc_main$8 } from "./AppDialog.js";
 import { t as listAction } from "./tree.ui.js";
 import { m as describe$2 } from "./App.js";
+import { n as status$1, t as control } from "./executor.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/scripts/history.ui.mjs
 function initial$1() {
 	return {
@@ -460,6 +461,7 @@ function initial(context = {}) {
 		allowChanges: false,
 		allowWeb: false,
 		hosts: [],
+		executor: {},
 		requests: [],
 		selected: "",
 		request: {},
@@ -500,7 +502,11 @@ function host(model) {
 }
 function canSend(model) {
 	const connected = host(model);
-	return !model.busy && !model.uploading && !model.request?.library?.archived && !!model.context?.project && (!!model.prompt.trim() || !!model.attachments.length) && model.prompt.length <= 12e3 && !!connected && (!model.selected || model.request?.request_id === model.selected) && (Array.isArray(connected?.capabilities.providers) ? availableModels(model).length > 0 : provider(model) === "codex" || availableModels(model).length > 0) && (provider(model) === "codex" || !!selectedModel(model)) && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
+	return !model.busy && ![
+		"starting",
+		"stopping",
+		"failed"
+	].includes(model.executor?.state) && !model.uploading && !model.request?.library?.archived && !!model.context?.project && (!!model.prompt.trim() || !!model.attachments.length) && model.prompt.length <= 12e3 && !!connected && (!model.selected || model.request?.request_id === model.selected) && (Array.isArray(connected?.capabilities.providers) ? availableModels(model).length > 0 : provider(model) === "codex" || availableModels(model).length > 0) && (provider(model) === "codex" || !!selectedModel(model)) && (!model.allowChanges || connected.capabilities.changes) && (!model.selected || model.request.status !== "cancelling") && (!active(model) || connected.capabilities.steering === true);
 }
 function provider(model) {
 	return model.provider ?? (started(model) ? model.request.provider || "codex" : host(model)?.capabilities.default_provider || "codex");
@@ -611,8 +617,8 @@ function contextItems(context, language) {
 }
 function status(model, language) {
 	const tr = (text) => translate(text, language), current = model.request || {};
-	if (model.refreshError || model.error || current.error) return {
-		text: tr(model.refreshError || model.error || current.error),
+	if (model.refreshError || model.error || model.executor?.error || current.error) return {
+		text: tr(model.refreshError || model.error || model.executor?.error || current.error),
 		color: "error",
 		icon: "error"
 	};
@@ -634,15 +640,21 @@ function status(model, language) {
 		color: "green",
 		icon: "check"
 	};
+	const texts = {
+		queued: "Request queued",
+		running: "Agent working",
+		cancelling: "Request cancelling",
+		cancelled: "Request cancelled",
+		failed: "Request failed",
+		interrupted: "Request interrupted"
+	};
+	if (!texts[current.status] && model.executor?.state === "connected" && Array.isArray(host(model)?.capabilities.providers) && !availableModels(model).length) return {
+		text: tr("No available models. Check AI providers."),
+		color: "error",
+		icon: "warning"
+	};
 	return {
-		text: tr({
-			queued: "Request queued",
-			running: "Agent working",
-			cancelling: "Request cancelling",
-			cancelled: "Request cancelled",
-			failed: "Request failed",
-			interrupted: "Request interrupted"
-		}[current.status] || (model.hosts.length ? "External agent connected" : "External agent is offline")),
+		text: tr(texts[current.status] || (model.executor?.state || model.executor?.error ? status$1(model.executor, language) : model.hosts.length ? "External agent connected" : "External agent is offline")),
 		color: "secondaryText",
 		icon: active(model) ? "sync" : "chat"
 	};
@@ -692,8 +704,13 @@ function describeChat(model, width, height, language, sidebarVisible) {
 	const state = status(model, language), working = active(model), sendVisible = !working || !!model.prompt.trim() || !!model.attachments.length;
 	const conversation = model.requests.find((row) => row.request_id === model.selected && (!row.project || row.project === model.context.project)) || current.library_summary;
 	const sources = current.related_conversations || [];
-	const transcriptTop = 52 + (current.undo_operation ? 32 : 0) + (sources.length ? 26 : 0);
+	const transcriptTop = 94 + (current.undo_operation ? 32 : 0) + (sources.length ? 26 : 0);
 	const nodes = [
+		control(model.executor, rect(inset, 52, 180, 32), language, !model.busy),
+		label("agentExecutorScope", rect(204, 52, Math.max(0, width - 216), 32), model.executor?.error || ["starting", "stopping"].includes(model.executor?.state) ? status$1(model.executor, language) : tr("Runs on the TACTIC server for this project."), {
+			color: model.executor?.error ? "error" : "secondaryText",
+			visible: width >= 620
+		}),
 		button("agentRequestHistoryToggle", rect(inset, 10, 32, 32), tr(sidebarVisible ? "Hide conversations" : "Show conversations"), "history", {
 			type: "historyToggle",
 			value: sidebarVisible
@@ -797,12 +814,12 @@ function describeChat(model, width, height, language, sidebarVisible) {
 		view: "attachments",
 		files: model.attachments
 	}));
-	if (sources.length) nodes.push(label("agentRequestSources", rect(inset, current.undo_operation ? 82 : 50, inner, 24), tr("Conversation context") + ": " + sources.map((source) => source.title).join(" · "), {
+	if (sources.length) nodes.push(label("agentRequestSources", rect(inset, current.undo_operation ? 124 : 92, inner, 24), tr("Conversation context") + ": " + sources.map((source) => source.title).join(" · "), {
 		fontRole: "caption",
 		color: "secondaryText",
 		toolTip: sources.map((source) => source.project_title + " · " + source.title).join("\n")
 	}));
-	if (current.undo_operation) nodes.push(button("agentRequestUndo", rect(width - inset - 134, 50, 134, 26), tr("Undo field change"), "undo", { type: "undo" }, !working && !model.busy && !model.uploading));
+	if (current.undo_operation) nodes.push(button("agentRequestUndo", rect(width - inset - 134, 92, 134, 26), tr("Undo field change"), "undo", { type: "undo" }, !working && !model.busy && !model.uploading));
 	return { nodes };
 }
 function describe(model, width, height, language) {
@@ -1082,6 +1099,7 @@ var _sfc_main = {
 			model.value.busy = action !== "poll";
 			if (action !== "poll") model.value.error = "";
 			try {
+				if (action === "executor_start" || action === "executor_stop") await call(action.slice(9), {}, "tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd");
 				if (action === "send") {
 					model.value.pending ||= started(model.value) ? {
 						message_id: randomUuid(),
@@ -1203,6 +1221,10 @@ var _sfc_main = {
 			if (dialog.value?.open || active(model.value)) timer = setTimeout(() => request("poll"), 2500);
 		}
 		function event(action) {
+			if (action.type === "executor" && ["start", "stop"].includes(action.value)) {
+				if (!model.value.busy) request("executor_" + action.value);
+				return;
+			}
 			if (action.type === "mcp") {
 				emit("mcp", JSON.parse(JSON.stringify(model.value.request?.document?.context || model.value.context)));
 				return;

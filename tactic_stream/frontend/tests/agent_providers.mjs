@@ -50,7 +50,7 @@ try {
     .getByRole('button', { name: 'Check connection', exact: true })
     .click();
   await editor
-    .getByText('Waiting for the external host', { exact: true })
+    .getByText('Connect an agent to check this connection.', { exact: true })
     .waitFor();
   await editor.getByRole('button', { name: 'New', exact: true }).click();
   await page.waitForTimeout(2500);
@@ -115,7 +115,7 @@ try {
     .getByRole('button', { name: 'Check connection', exact: true })
     .click();
   await editor
-    .getByText('Waiting for the external host', { exact: true })
+    .getByText('Connect an agent to check this connection.', { exact: true })
     .waitFor();
   for (const width of [520, 1000]) {
     await page.setViewportSize({ width: width + 60, height: 850 });

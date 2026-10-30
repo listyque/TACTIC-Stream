@@ -4,6 +4,7 @@ import { k as rpc } from "./index.js";
 import { B as node, L as button, R as label, V as rect, n as observeFrameSizes, r as _sfc_main$1, v as translate, z as muted } from "./resize.js";
 import { t as _sfc_main$2 } from "./AppDialog.js";
 import { m as describe$1 } from "./App.js";
+import { n as status, t as control } from "./executor.ui.js";
 //#region ../src/tactic_stream/shared_ui/features/configuration/providers.ui.mjs
 function initial() {
 	return {
@@ -16,7 +17,8 @@ function initial() {
 		baseline: {},
 		busy: false,
 		error: "",
-		notice: ""
+		notice: "",
+		executor: {}
 	};
 }
 function select(model, id) {
@@ -95,14 +97,18 @@ function describe(model, width, height, language) {
 		iconOnly: true,
 		destructive: type === "remove"
 	})));
-	nodes.push(label("agentProviderNotice", rect(12, rowHeight + 8, width - 24, 44), tr(model.error || model.notice || selected?.error || {
+	nodes.push(label("agentProviderNotice", rect(12, rowHeight + 8, width - 24, 44), tr(model.error || ([
+		"starting",
+		"stopping",
+		"failed"
+	].includes(model.executor?.state) ? status(model.executor, language) : "") || (selected?.status === "waiting" && !["connected", "external"].includes(model.executor?.state) ? "Connect an agent to check this connection." : "") || model.notice || selected?.error || {
 		connected: "Connection checked",
 		failed: "Connection failed",
 		waiting: "Waiting for the external host",
 		unchecked: "Connection has not been checked"
 	}[selected?.status] || "Configure a connection, then check it from the external host."), Object.assign({}, muted, {
 		wrap: true,
-		color: model.error || selected?.status === "failed" ? "error" : "muted"
+		color: model.error || model.executor?.error || selected?.status === "failed" ? "error" : "muted"
 	})));
 	const fields = [
 		{
@@ -181,7 +187,12 @@ function describe(model, width, height, language) {
 		title: "Project data",
 		description: "Chat messages, project context and attachments go only to the selected connection after Send. Connection checks do not send project data."
 	});
-	const contentY = rowHeight + 56;
+	nodes.push(control(model.executor, rect(12, rowHeight + 56, 180, 32), language, !locked && !dirty(model) && !!model.selected));
+	nodes.push(label("agentProviderExecutorScope", rect(204, rowHeight + 56, Math.max(0, width - 216), 32), model.executor?.state === "external" ? status(model.executor, language) : tr("Runs on the TACTIC server for this project."), {
+		color: "secondaryText",
+		visible: !narrow
+	}));
+	const contentY = rowHeight + 96;
 	nodes.push(node("Box", "agentProviderForm", rect(0, contentY, width, Math.max(80, height - contentY - 52)), { children: describe$1({
 		fields,
 		values: model.draft,
@@ -262,6 +273,22 @@ var _sfc_main = {
 			model.value.busy = true;
 			model.value.error = "";
 			try {
+				if (action === "start" || action === "stop") {
+					const reply = await rpc("execute_cmd", [
+						{
+							ticket: owner.ticket,
+							project: owner.project
+						},
+						"tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd",
+						{
+							action,
+							project_code: owner.project
+						}
+					], {}, true, true);
+					if (reply.status !== "OK") throw Error(reply.description || "Agent connection failed");
+					if (id !== generation || context !== owner) return;
+					action = "state";
+				}
 				const reply = await rpc("execute_cmd", [
 					{
 						ticket: owner.ticket,
@@ -291,7 +318,11 @@ var _sfc_main = {
 		}
 		function schedule() {
 			clearTimeout(timer);
-			if (opened && model.value.selected && model.value.profiles.some((row) => row.status === "waiting")) timer = setTimeout(() => {
+			if (opened && model.value.selected && (model.value.profiles.some((row) => row.status === "waiting") || [
+				"starting",
+				"connected",
+				"stopping"
+			].includes(model.value.executor?.state))) timer = setTimeout(() => {
 				if (model.value.selected && !dirty(model.value) && !model.value.busy) call("state");
 				else schedule();
 			}, 2e3);
@@ -307,6 +338,7 @@ var _sfc_main = {
 				schedule();
 			} else if (action.type === "reset") model.value = select(model.value, model.value.selected);
 			else if (action.type === "refresh" && !dirty(model.value)) call("state");
+			else if (action.type === "executor" && ["start", "stop"].includes(action.value) && !dirty(model.value) && model.value.selected) call(action.value);
 			else if ([
 				"save",
 				"check",

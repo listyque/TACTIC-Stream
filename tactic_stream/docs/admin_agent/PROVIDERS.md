@@ -4,6 +4,11 @@ TS owns authenticated, per-login profile settings in `AgentProviderCmd`; TH is a
 native settings/API client and does not store or execute API credentials. The
 external `agent_host` owns Codex account execution, REST inference, model
 discovery and MCP tool execution. No model code runs in the TS service process.
+The chat and provider editor's **Connect agent / Disconnect agent** controls start
+and stop a separate server-side host for the current account/project; see
+[executor lifecycle](REQUESTS.md). They do not submit a model task or grant
+additional TACTIC rights. Provider checks retrieve model catalogues without chat
+data; sending project context still requires Send.
 
 Open Configuration → AI providers, or the settings action in the normal chat.
 Supported profiles: existing Codex account, OpenAI Responses, OpenAI-compatible

@@ -2008,7 +2008,22 @@ var en_default = {
 	"The source tab changed. Reload the page.": "The source tab changed. Reload the page.",
 	"Select all tools": "Select all tools",
 	"No expiration": "No expiration",
-	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes"
+	"MCP access lifetime must be zero or between 5 and 480 minutes": "MCP access lifetime must be zero or between 5 and 480 minutes",
+	"Connecting agent…": "Connecting agent…",
+	"Agent connected": "Agent connected",
+	"Disconnecting agent…": "Disconnecting agent…",
+	"Connected outside this UI. Stop it where it was started.": "Connected outside this UI. Stop it where it was started.",
+	"Connect an agent to send requests.": "Connect an agent to send requests.",
+	"Stop connecting": "Stop connecting",
+	"Disconnect agent": "Disconnect agent",
+	"Disconnecting…": "Disconnecting…",
+	"Connect agent": "Connect agent",
+	"Runs on the TACTIC server for this project.": "Runs on the TACTIC server for this project.",
+	"Connect an agent to check this connection.": "Connect an agent to check this connection.",
+	"The agent executor stopped unexpectedly. Connect again.": "The agent executor stopped unexpectedly. Connect again.",
+	"An external agent is already connected to this project": "An external agent is already connected to this project",
+	"Agent connection failed": "Agent connection failed",
+	"No available models. Check AI providers.": "No available models. Check AI providers."
 };
 var ru_default = {
 	"Table views manager": "Менеджер табличных видов",
@@ -7562,7 +7577,22 @@ var ru_default = {
 	"The window session or project changed. Reopen it from the original window.": "Сеанс или проект окна изменился. Откройте его заново из исходного окна.",
 	"The original window is unavailable. Reopen this page from the application.": "Исходное окно недоступно. Откройте эту страницу заново из приложения.",
 	"Please wait for the current operation to finish": "Дождитесь завершения текущей операции",
-	"Window context must contain data only.": "Контекст окна должен содержать только данные."
+	"Window context must contain data only.": "Контекст окна должен содержать только данные.",
+	"Connecting agent…": "Подключение агента…",
+	"Agent connected": "Агент подключён",
+	"Disconnecting agent…": "Отключение агента…",
+	"Connected outside this UI. Stop it where it was started.": "Подключён вне этого интерфейса. Остановите его там, где запустили.",
+	"Connect an agent to send requests.": "Подключите агента, чтобы отправлять задания.",
+	"Stop connecting": "Прервать подключение",
+	"Disconnect agent": "Отключить агента",
+	"Disconnecting…": "Отключение…",
+	"Connect agent": "Подключить агента",
+	"Runs on the TACTIC server for this project.": "Работает на сервере Тактика в текущем проекте.",
+	"Connect an agent to check this connection.": "Подключите агента для проверки этого подключения.",
+	"The agent executor stopped unexpectedly. Connect again.": "Исполнитель агента неожиданно остановился. Подключитесь снова.",
+	"An external agent is already connected to this project": "К этому проекту уже подключён внешний агент",
+	"Agent connection failed": "Не удалось подключить агента",
+	"No available models. Check AI providers.": "Нет доступных моделей. Проверьте настройки ИИ-провайдеров."
 };
 //#endregion
 export { en_default as n, ru_default as t };

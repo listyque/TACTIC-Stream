@@ -157,7 +157,9 @@ class AgentRequestCmd(Command):
             return
         if action == 'state':
             from tactic_stream.server.agent_library import state
+            from .agent_executor_cmd import AgentExecutorCmd
             self.info = state(self)
+            self.info['executor'] = AgentExecutorCmd.snapshot()
             return
         if action == 'submit':
             request_id = identity(self.kwargs.get('request_id'))

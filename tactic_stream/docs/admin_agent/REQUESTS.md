@@ -33,7 +33,29 @@ an explicit interrupted state. Refresh/reopen does not resubmit anything.
 
 ## Connect the existing Codex host
 
-This separate process belongs to the operator. The TS service never starts a
+Use **Connect agent** in the chat or Configuration → AI providers in either client.
+The authenticated `tactic.ui.panel.agent_executor_cmd.AgentExecutorCmd` accepts
+`state`, `start` and `stop` with the current `project_code`, and requires an
+administrator. It starts one separate process on the TACTIC server under the
+server OS account, scoped to the current TACTIC login and project. This account
+must have the optional agent dependencies and the configured provider/Codex login.
+It never starts automatically or on Send. The browser does not launch a process
+on the browser machine. TH calls the same server command; neither UI runs model code.
+
+**Disconnect agent** stops the managed host and its owned model/MCP children.
+An active turn is interrupted; committed changes remain and are not replayed.
+Closing a chat or client leaves an explicitly connected executor running.
+Externally launched hosts are detected but cannot be stopped by this control.
+The command is not exposed as a model tool.
+
+The managed runner receives the current session only through its private process
+environment. No ticket/password is written to its state files or command line.
+Per-login/project metadata and stop markers live under `data/agent_executors`;
+an OS lease and a cooperative start lock prevent duplicate processes across web
+workers. Errors are redacted and returned in the UI. Session revocation removes
+API access. There is no OS autostart or service installation.
+
+The same host can also be started manually. The web worker never runs a
 model or imports Handler. Provider credentials are stored encrypted on TS and
 exported only as host-bound encrypted packages; see [PROVIDERS](PROVIDERS.md).
 Install the optional agent

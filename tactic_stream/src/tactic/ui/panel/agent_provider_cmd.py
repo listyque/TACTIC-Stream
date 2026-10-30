@@ -77,7 +77,9 @@ class AgentProviderCmd(Command):
         with config_file_lock(path.with_suffix('.lock')):
             document = read_profiles(path)
             if action == 'state':
+                from .agent_executor_cmd import AgentExecutorCmd
                 self.info = public(document)
+                self.info['executor'] = AgentExecutorCmd.snapshot()
                 return
             if action in ('host_profiles', 'report'):
                 request = AgentRequestCmd()
@@ -178,3 +180,5 @@ class AgentProviderCmd(Command):
                     profile.update(check=str(uuid4()), status='waiting', error='')
             write_profiles(path, document)
             self.info = public(document)
+            from .agent_executor_cmd import AgentExecutorCmd
+            self.info['executor'] = AgentExecutorCmd.snapshot()
