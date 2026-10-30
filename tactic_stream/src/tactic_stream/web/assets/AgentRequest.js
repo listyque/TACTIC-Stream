@@ -247,7 +247,7 @@ function row(model, record, width, language) {
 	if (allProjects) {
 		const text = item.children.find((child) => child.kind === "Label");
 		text.height = 20;
-		item.children.push(label("agentHistoryProject_" + key(record, model.context.project), rect(12, 20, width - 68, 18), record.project_title || record.project || model.context.project, {
+		item.children.push(label("agentHistoryProject_" + key(record, model.context.project), rect(text.x, 20, text.width, 18), record.project_title || record.project || model.context.project, {
 			fontRole: "caption",
 			color: "secondaryText"
 		}));

@@ -88,7 +88,16 @@ try {
             } else {
               info = {
                 executor,
-                requests: [],
+                requests: [
+                  {
+                    request_id: 'row-fixture',
+                    project,
+                    project_title: 'CG Test',
+                    title: 'Сдублируй текущую сцену с длинным названием',
+                    status: 'running',
+                    activity: Date.now() / 1000
+                  }
+                ],
                 hosts:
                   values.action === 'library' || executor.state !== 'connected'
                     ? []
@@ -161,6 +170,25 @@ try {
   ]) {
     await page.evaluate((kind) => window.harness.$refs[kind].open(), kind);
     const dialog = page.locator(selector);
+    if (kind === 'chat' && !process.env.AGENT_EXECUTOR_SERVER) {
+      const title = dialog.locator(
+        '[data-frame="agentHistoryOpen_' + project + ':row-fixtureLabel"]'
+      );
+      const subtitle = dialog.locator(
+        '[data-frame="agentHistoryProject_' + project + ':row-fixture"]'
+      );
+      await title.waitFor();
+      const first = await title.boundingBox(),
+        second = await subtitle.boundingBox();
+      assert(
+        Math.abs(first.x - second.x) < 0.6,
+        'Conversation title and project must share the same inset'
+      );
+      assert(
+        Math.abs(first.width - second.width) < 0.6,
+        'Conversation lines must reserve the same action space'
+      );
+    }
     await dialog
       .getByRole('button', { name: 'Connect agent', exact: true })
       .tap();
