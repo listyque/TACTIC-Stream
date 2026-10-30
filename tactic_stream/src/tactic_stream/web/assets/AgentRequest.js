@@ -862,7 +862,10 @@ function describe(model, width, height, language) {
 	const space = layout(model, width);
 	const nodes = [];
 	if (!space.small || !space.visible) nodes.push(node("Box", "agentChatMain", rect(space.mainX, 0, space.mainWidth, height), { children: describeChat(model, space.mainWidth, height, language, space.visible).nodes }));
-	if (space.visible) nodes.push(node("Box", "agentChatHistory", rect(0, 0, space.panel, height), { children: describe$2(model, space.panel, height, language, space.small).nodes }));
+	if (space.visible) nodes.push(node("Box", "agentChatHistory", rect(0, 0, space.panel, height), {
+		radius: 0,
+		children: describe$2(model, space.panel, height, language, space.small).nodes
+	}));
 	return { nodes };
 }
 //#endregion
