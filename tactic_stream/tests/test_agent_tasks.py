@@ -3,6 +3,7 @@ import ast
 import asyncio
 from copy import deepcopy
 import unittest
+from uuid import uuid4
 from unittest.mock import patch
 
 from tests import test_agent_chat as fixture
@@ -12,6 +13,65 @@ class AgentTasks(unittest.TestCase):
     call = fixture.AgentChat.call
     command = fixture.AgentChat.command
     submit = fixture.AgentChat.submit
+
+    def test_native_comments_primary_secondary_replay_and_conflict(self):
+        key = self.tasks[1]['__search_key__']
+        values = dict(search_key=key, note='Ready for work', **self.common)
+        saved = self.command('editing', 'note_add', **values)
+        self.assertEqual(saved['target_key'], self.assets[1]['__search_key__'])
+        self.assertEqual(saved['process'], 'model')
+        self.assertEqual(saved['login'], 'admin')
+        self.assertEqual(saved, self.command('editing', 'note_add', **values))
+        notes = self.command('editing', 'notes_read', search_key=key, **self.common)
+        self.assertEqual([note['body'] for note in notes['notes']], ['Ready for work'])
+        self.assertFalse(notes['has_next'])
+        # A secondary task uses its own native thread rather than its parent's.
+        secondary = self.tasks[-1]['__search_key__']
+        second = self.command('editing', 'note_add', search_key=secondary, note='Variant ready', **self.common)
+        self.assertEqual(second['target_key'], secondary)
+        with self.assertRaisesRegex(ValueError, 'match the selected task'):
+            self.command('editing', 'note_add', **dict(values, process='review'))
+        self.record('update', saved['note_key'], dict(note='Edited by the user'))
+        with self.assertRaisesRegex(ValueError, 'changed after'):
+            self.command('editing', 'note_add', **values)
+        with self.assertRaises((ValueError, LookupError)):
+            self.command('editing', 'notes_read', search_key=self.assets[1]['__search_key__'].replace('project=one','project=foreign'), **self.common)
+
+    def test_comment_authorization_and_intentional_repetition_in_a_new_turn(self):
+        values = dict(search_key=self.assets[1]['__search_key__'], note='Ready', process='model', **self.common)
+        first = self.command('editing', 'note_add', **values)
+        self.call('update', request_id=self.request['request_id'], host_id=self.host, status='completed', answer='Done')
+        with self.assertRaisesRegex(ValueError, 'active changes'):
+            self.command('editing', 'note_add', **dict(values, note='Unapproved new write'))
+        self.call('message', request_id=self.request['request_id'], host_id=self.host,
+                  message_id=str(uuid4()), text='Add Ready again', attachments=[])
+        self.call('claim', host_id=self.host)
+        second = self.command('editing', 'note_add', **values)
+        self.assertNotEqual(first['note_key'], second['note_key'])
+
+    def test_mcp_comment_tool_uses_the_native_task_discussion(self):
+        from mcp import Client
+        from tactic_stream.admin_agent import StreamConnection, create_server
+        from tests.test_agent_requests import ROOT
+        connection = StreamConnection('http://example.invalid', 'one', 'private-test-ticket')
+        async def run():
+            async with Client(create_server(connection, ROOT, request_id=self.request['request_id'])) as client:
+                names = {tool.name for tool in (await client.list_tools()).tools}
+                self.assertIn('ts_notes_read', names)
+                self.assertNotIn('ts_note_add', names)
+            async with Client(create_server(connection, ROOT, request_id=self.request['request_id'], allow_project_edit=True)) as client:
+                tools = {tool.name: tool for tool in (await client.list_tools()).tools}
+                self.assertEqual(tools['ts_note_add'].input_schema['required'], ['search_key', 'note'])
+                values = dict(search_key=self.tasks[1]['__search_key__'], note='Ready from MCP')
+                first = await client.call_tool('ts_note_add', values)
+                self.assertFalse(first.is_error, first.content)
+                repeated = await client.call_tool('ts_note_add', values)
+                self.assertEqual(first.structured_content, repeated.structured_content)
+                read = await client.call_tool('ts_notes_read', dict(search_key=values['search_key']))
+                self.assertFalse(read.is_error, read.content)
+                self.assertEqual(read.structured_content['notes'][0]['body'], values['note'])
+        with patch.object(connection, 'command', side_effect=self.command):
+            asyncio.run(run())
 
     def record(self, method, *args, **kwargs):
         result = self.api.dispatch(method, (self.auth, *args), kwargs)

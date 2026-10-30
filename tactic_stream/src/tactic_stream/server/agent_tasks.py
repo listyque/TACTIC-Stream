@@ -129,6 +129,58 @@ def task_plan(key):
     return selected, parent, dict(plan, expected_revision=revision)
 
 
+def note_scope(values):
+    from tactic.ui.panel.agent_actions_cmd import local_type
+    item = selected_object(values.get('search_key'))
+    process = text(values.get('process', ''), 128, empty=True)
+    if isinstance(item, Task):
+        task, parent, plan = task_plan(item.get_search_key())
+        local_type(parent.get_base_search_type())
+        if process and process != plan['process']:
+            raise ValueError('The comment process must match the selected task')
+    else:
+        local_type(item.get_base_search_type())
+        if not process:
+            return item, 'publish', None
+        plan = dict(search_key=item.get_search_key(), process=process)
+    state = TaskInspectorCmd(action='read', **plan).execute()
+    return selected_object(state['note_target']), state['process'], state['notes']
+
+
+def read_notes(values):
+    from tactic.ui.widget.discussion_wdg import DiscussionReadCmd
+    target, process, notes = note_scope(values)
+    offset = values.get('offset', 0)
+    if type(offset) is not int or offset < 0:
+        raise ValueError('Invalid comment offset')
+    if notes is None:
+        notes = DiscussionReadCmd(search_key=target.get_search_key(), process=process, include_identities=False).execute()['notes']
+    return dict(search_key=values['search_key'], target_key=target.get_search_key(), process=process,
+                notes=notes[offset:offset+50], has_next=len(notes) > offset+50)
+
+
+def add_note(values):
+    from tactic.ui.widget.discussion_wdg import DiscussionAddNoteCmd, note_revision
+    target, process, _notes = note_scope(values)
+    note = values.get('note')
+    if not isinstance(note, str) or not note.strip() or len(note) > 12000:
+        raise ValueError('Use a nonempty comment of at most 12000 characters')
+    command = DiscussionAddNoteCmd(search_key=target.get_search_key(), process=process, context=process, note=note)
+    Command.execute_cmd(command)
+    saved = selected_object(command.info['note']['__search_key__'])
+    return dict(search_key=values['search_key'], target_key=target.get_search_key(), process=process,
+                note_key=saved.get_search_key(), note=saved.get_value('note'), login=saved.get_value('login'),
+                revision=note_revision(saved))
+
+
+def verified_note(result):
+    from tactic.ui.widget.discussion_wdg import note_revision
+    note = selected_object(result['note_key'])
+    if note_revision(note) != result['revision']:
+        raise ValueError('The comment changed after this operation. Read it again before continuing.')
+    return result
+
+
 def read_tasks(values, request):
     from tactic.ui.panel.agent_actions_cmd import local_type
     from tactic_stream.server.result_items import relations, relation_search

@@ -149,7 +149,7 @@ class Note(SObject):
 
         note = Note.create_new()
         note.set_user()
-        project = sobject.get_project_code()
+        project = sobject.get_value('project_code', no_exception=True) or sobject.get_project_code()
         note.set_value("project_code", project)
         if access is not None:
             note.set_value('access', access)

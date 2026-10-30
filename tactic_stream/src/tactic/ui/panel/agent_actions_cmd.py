@@ -49,6 +49,10 @@ class AgentActionsCmd(AgentRequestCmd):
             from tactic_stream.server.agent_tasks import prepare_edits
             self.info = prepare_edits(self.kwargs, row)
             return
+        if action == 'notes_read':
+            from tactic_stream.server.agent_tasks import read_notes
+            self.info = read_notes(self.kwargs)
+            return
         if action == 'operation':
             receipt = row.get('operations', {}).get(identity(self.kwargs.get('operation_id')))
             self.info = dict(status='applied', result=receipt['result']) if receipt else dict(status='not_found')
@@ -129,10 +133,13 @@ class AgentActionsCmd(AgentRequestCmd):
             else:
                 self.info=command.info
             return
-        if action not in ('workflow_apply', 'checkin', 'link', 'create', 'patch', 'task_status', 'tasks_save'):
+        if action not in ('workflow_apply', 'checkin', 'link', 'create', 'patch', 'task_status', 'tasks_save', 'note_add'):
             raise ValueError('This agent operation is unavailable on the running server')
+        if action == 'note_add' and not self.kwargs.get('operation_id'):
+            payload['turn'] = row.get('turn', 1)
         operation_id = (str(uuid5(UUID(row['request_id']), json.dumps(payload, sort_keys=True)))
-                        if action in ('link', 'task_status', 'tasks_save') else identity(self.kwargs.get('operation_id')))
+                        if action in ('link', 'task_status', 'tasks_save') or action == 'note_add' and not self.kwargs.get('operation_id')
+                        else identity(self.kwargs.get('operation_id')))
         receipts = row.setdefault('operations', {})
         if operation_id in receipts and action != 'link':
             old = receipts[operation_id]
@@ -144,6 +151,9 @@ class AgentActionsCmd(AgentRequestCmd):
             elif action == 'tasks_save':
                 from tactic_stream.server.agent_tasks import verified_edits
                 self.info = verified_edits(old['result'])
+            elif action == 'note_add':
+                from tactic_stream.server.agent_tasks import verified_note
+                self.info = verified_note(old['result'])
             else:
                 self.info = old['result']
             return
@@ -157,6 +167,9 @@ class AgentActionsCmd(AgentRequestCmd):
         elif action == 'tasks_save':
             from tactic_stream.server.agent_tasks import save_edits
             result = save_edits(self.kwargs.get('changes'))
+        elif action == 'note_add':
+            from tactic_stream.server.agent_tasks import add_note
+            result = add_note(self.kwargs)
         elif action == 'workflow_apply':
             reader = AgentActionsCmd(**dict(self.kwargs, action='workflow_read'))
             reader.execute()
@@ -213,23 +226,27 @@ class AgentActionsCmd(AgentRequestCmd):
                 if context != process and not context.startswith(process + '/'):
                     raise ValueError('Check-in context must belong to the chosen process')
             pipeline = Pipeline.get_by_code(item.get_value('pipeline_code', no_exception=True))
-            if not pipeline or process not in pipeline.get_process_names():
+            if process != 'icon' and (not pipeline or process not in pipeline.get_process_names()):
                 raise ValueError('Choose a process from the object workflow')
             codes = self.kwargs.get('attachments')
             allowed = {file['attachment_id'] for message in row.get('messages', []) for file in message.get('attachments', [])}
             if not isinstance(codes, list) or not codes or not set(codes) <= allowed:
                 raise ValueError('Choose files attached to this conversation')
+            if process == 'icon' and (len(codes) != 1 or context not in ('', 'icon')):
+                raise ValueError('An object preview requires one image and the native icon context')
             from pyasm.checkin import FileCheckin
             from pyasm.common import Environment
             result = dict(snapshots=[])
             with tempfile.TemporaryDirectory(prefix='agent-checkin-', dir=Environment.get_upload_dir()) as staging:
                 for code in codes:
                     metadata, source = attachment(code)
+                    from pyasm.biz import File, IconCreator
+                    if process == 'icon' and File.get_extension(metadata['name']).lower() not in File.IMAGE_EXT:
+                        raise ValueError('Choose an image for the object preview')
                     target = Path(staging) / metadata['name']
                     import shutil
                     shutil.copyfile(source, target)
                     paths, types = [str(target)], ['main']
-                    from pyasm.biz import File, IconCreator
                     if File.get_extension(metadata['name']).lower() in File.IMAGE_EXT:
                         creator = IconCreator(str(target))
                         creator.execute()
@@ -237,7 +254,7 @@ class AgentActionsCmd(AgentRequestCmd):
                             if path:
                                 paths.append(path)
                                 types.append(kind)
-                    command = FileCheckin(item, paths, file_types=types, context=context or process + '/' + metadata['name'],
+                    command = FileCheckin(item, paths, file_types=types, context='icon' if process == 'icon' else context or process + '/' + metadata['name'],
                                           process=process, description='Agent attachment: ' + metadata['name'],
                                           mode='create', source_paths=paths, keep_file_name=False)
                     command.get_transaction().set_sync(False)

@@ -16,6 +16,26 @@ class AgentChat(unittest.TestCase):
     call = fixture.AgentRequests.call
     submit = fixture.AgentRequests.submit
 
+    def test_object_preview_uses_icon_without_an_artificial_workflow_process(self):
+        from PIL import Image
+        buffer = io.BytesIO()
+        Image.new('RGB', (96, 64), 'blue').save(buffer, 'PNG')
+        image = self.attachment(buffer.getvalue(), 'preview.png')
+        document = dict(self.document, allow_changes=True, attachments=[image['attachment_id']])
+        row, _ = self.submit(document=document)
+        self.call('claim', host_id=self.host)
+        key = document['context']['search_keys'][0]
+        values = dict(request_id=row['request_id'], search_key=key, process='icon',
+                      attachments=[image['attachment_id']], operation_id=str(uuid4()))
+        saved = self.command('editing', 'checkin', **values)
+        self.assertEqual(saved, self.command('editing', 'checkin', **values))
+        snapshot = self.api.dispatch('get_by_search_key', (self.auth, saved['snapshots'][0]))
+        snapshot = ast.literal_eval(snapshot) if isinstance(snapshot, str) else snapshot
+        self.assertEqual(snapshot['context'], 'icon')
+        self.assertEqual(snapshot['process'], 'icon')
+        with self.assertRaisesRegex(ValueError, 'native icon context'):
+            self.command('editing', 'checkin', **dict(values, operation_id=str(uuid4()), context='icon/unused'))
+
     def attachment(self, content=b'agent reference\n', name='reference.txt'):
         code = str(uuid4())
         self.command('attachment', 'start', attachment_id=code, name=name, size=len(content), media_type=mimetypes.guess_type(name)[0] or '')
