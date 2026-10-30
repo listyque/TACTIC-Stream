@@ -429,7 +429,22 @@ function content(model, ui, width, height, language, edit, navigate) {
 			y += Math.max(250, height - y);
 		}
 	} else if (ui.page === "summary") {
-		heading("typeSummaryHeading", doc.title || model.identity, model.identity);
+		const textHeight = (value) => String(value).split("\n").reduce((lines, line) => lines + Math.max(1, Math.ceil(line.length / Math.max(12, Math.floor((width - 24) / 7)))), 0) * 20;
+		const summaryHeading = (id, title, description) => {
+			nodes.push(label(id, rect(0, y, width, 28), title, {
+				role: "heading",
+				level: 2,
+				fontRole: "section",
+				weight: 600
+			}));
+			y += 30;
+			if (description) {
+				const h = textHeight(description);
+				nodes.push(label(id + "Description", rect(0, y, width, h), description, Object.assign({ wrap: true }, muted)));
+				y += h + 8;
+			}
+		};
+		summaryHeading("typeSummaryHeading", doc.title || model.identity, model.identity);
 		const metrics = [
 			["total", "Search Objects"],
 			["active", "Active"],
@@ -437,18 +452,33 @@ function content(model, ui, width, height, language, edit, navigate) {
 			["fields", "Fields"],
 			["pipelines", "Pipelines"],
 			["processes", "Processes"]
-		], columns = width < 420 ? 2 : 3;
+		], columns = width >= 960 ? 6 : width >= 540 ? 3 : 2, rowHeight = 64, metricsHeight = Math.ceil(metrics.length / columns) * rowHeight, metricNodes = [];
 		metrics.forEach((row, index) => {
-			const x = index % columns * width / columns, top = y + Math.floor(index / columns) * 72;
-			nodes.push(label("adminSearchTypeCount_" + row[0], rect(x, top, width / columns - 8, 34), String((meta.summary || {})[row[0]] === void 0 ? "—" : meta.summary[row[0]]), {
-				fontRole: "hero",
+			const x = index % columns * width / columns, top = Math.floor(index / columns) * rowHeight;
+			if (index % columns) metricNodes.push(node("Box", "typeMetricDivider_" + row[0], rect(x, top + 10, 1, 44), {
+				background: "outlineVariant",
+				radius: 0
+			}));
+			if (index && index % columns === 0) metricNodes.push(node("Box", "typeMetricRowDivider_" + row[0], rect(12, top, width - 24, 1), {
+				background: "outlineVariant",
+				radius: 0
+			}));
+			metricNodes.push(label("adminSearchTypeCount_" + row[0], rect(x + 12, top + 6, width / columns - 24, 28), String((meta.summary || {})[row[0]] === void 0 ? "—" : meta.summary[row[0]]), {
+				fontRole: "title",
 				weight: 600
-			}), label("typeMetricLabel_" + row[0], rect(x, top + 38, width / columns - 8, 26), tr(row[1]), muted));
+			}), label("typeMetricLabel_" + row[0], rect(x + 12, top + 36, width / columns - 24, 22), tr(row[1]), muted));
 		});
-		y += Math.ceil(metrics.length / columns) * 72;
-		nodes.push(label("typeSummaryHelp", rect(0, y, width, 76), tr("Totals include retired Search Objects. Shared system types are counted in their own database. Reload to update the summary."), Object.assign({ wrap: true }, muted)));
-		y += 84;
-		heading("typeGraphHeading", tr("Relationship map"), tr("A read-only view of this Search Type and only its direct schema relationships."));
+		nodes.push(node("Box", "typeSummaryMetrics", rect(0, y, width, metricsHeight), {
+			background: "surfaceContainerHigh",
+			border: "outlineVariant",
+			radius: 0,
+			children: metricNodes
+		}));
+		y += metricsHeight + 12;
+		const summaryHelp = tr("Totals include retired Search Objects. Shared system types are counted in their own database. Reload to update the summary."), summaryHelpHeight = textHeight(summaryHelp);
+		nodes.push(label("typeSummaryHelp", rect(0, y, width, summaryHelpHeight), summaryHelp, Object.assign({ wrap: true }, muted)));
+		y += summaryHelpHeight + 16;
+		summaryHeading("typeGraphHeading", tr("Relationship map"), tr("A read-only view of this Search Type and only its direct schema relationships."));
 		nodes.push(node("Graph", "adminSearchTypeRelationshipGraph", rect(0, y, width, 400), Object.assign({}, model.relationshipGraph || {
 			nodes: [],
 			edges: []
@@ -461,27 +491,28 @@ function content(model, ui, width, height, language, edit, navigate) {
 			selectedNodes: model.identity ? [model.identity] : []
 		})));
 		y += 412;
-		heading("typeRelationsHeading", tr("Schema relationships"), tr(meta.linkTable ? "This is a link table for a many-to-many relationship, not a separate object category." : "Relationships come from this project's schema and inherited schemas, not from table names."));
-		nodes.push(node("Area", "typeDataLocation", rect(0, y, width, 92), {
+		summaryHeading("typeRelationsHeading", tr("Schema relationships"), tr(meta.linkTable ? "This is a link table for a many-to-many relationship, not a separate object category." : "Relationships come from this project's schema and inherited schemas, not from table names."));
+		nodes.push(node("Area", "typeDataLocation", rect(0, y, width, 64), {
 			text: tr("Database") + ": " + (meta.database || "—") + " · " + tr("Table") + ": " + (meta.table || "—") + "\n" + tr(meta.projectLocal ? "Stored in the selected project" : "Shared data outside the selected project"),
 			label: tr("Data location"),
 			readOnly: true,
 			notice: true
 		}));
-		y += 100;
+		y += 72;
 		for (let index = 0; index < (meta.relationships || []).length; index++) {
-			const edge = meta.relationships[index], name = (id) => (model.catalog.find((row) => row.identity === id) || {}).label || id;
-			nodes.push(node("Area", "adminSearchTypeRelation_" + index, rect(0, y, width, 164), {
-				text: name(edge.from) + " → " + name(edge.to) + "\n" + relationshipDescription(edge, language),
+			const edge = meta.relationships[index], name = (id) => (model.catalog.find((row) => row.identity === id) || {}).label || id, description = name(edge.from) + " → " + name(edge.to) + "\n" + relationshipDescription(edge, language), relationHeight = Math.max(64, Math.min(224, textHeight(description) + 16));
+			nodes.push(node("Area", "adminSearchTypeRelation_" + index, rect(0, y, width, relationHeight), {
+				text: description,
 				label: tr("Schema relationships"),
 				readOnly: true,
 				notice: true
 			}));
-			y += 172;
+			y += relationHeight + 8;
 		}
 		if (!(meta.relationships || []).length) {
-			nodes.push(label("typeRelationshipsEmpty", rect(0, y, width, 72), tr("No explicit relationships for this type in the loaded schemas."), Object.assign({ wrap: true }, muted)));
-			y += 80;
+			const empty = tr("No explicit relationships for this type in the loaded schemas."), emptyHeight = textHeight(empty);
+			nodes.push(label("typeRelationshipsEmpty", rect(0, y, width, emptyHeight), empty, Object.assign({ wrap: true }, muted)));
+			y += emptyHeight + 8;
 		}
 	} else if (ui.page === "workflow") {
 		heading("typeWorkflowsHeading", tr("Linked workflows"), tr("Pipelines linked to this Search Type, including shared workflows."));

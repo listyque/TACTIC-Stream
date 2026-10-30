@@ -216,6 +216,25 @@ try {
       assert.deepEqual(errors, [], label + ' runtime errors');
       assert.deepEqual(actual.state, reference.state, label + ' state');
       assert.deepEqual(actual.scene, reference.scene, label + ' graph');
+      if (c.phase === 'summary') {
+        const band = await page
+            .locator('[data-frame="typeSummaryMetrics"]')
+            .boundingBox(),
+          graph = await page
+            .locator('[data-frame="adminSearchTypeRelationshipGraph"]')
+            .boundingBox();
+        assert.ok(band && graph, label + ' grouped statistics and map');
+        assert.ok(
+          graph.y - band.y - band.height <= (width < 600 ? 280 : 180),
+          label + ' map stays close to statistics'
+        );
+        assert.equal(
+          await page
+            .locator('[data-frame="adminSearchTypeCount_total"]')
+            .innerText(),
+          '230'
+        );
+      }
       const counts = await compareSurface(
         page,
         'section.search-types-editor',
