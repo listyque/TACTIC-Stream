@@ -751,7 +751,6 @@ export default {
         )
           throw new Error('This table cell has no inline editor');
         this.cellEditor = { ...prepared, scope, context };
-        this.tableSelect([record], true);
         this.$emit('focus', { kind: 'object', record });
         await this.$nextTick();
         await this.$refs.inlineEditor.open(bounds);

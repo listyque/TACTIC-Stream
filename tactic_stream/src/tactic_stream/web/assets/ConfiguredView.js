@@ -22415,7 +22415,6 @@ var _sfc_main = {
 					scope,
 					context
 				};
-				this.tableSelect([record], true);
 				this.$emit("focus", {
 					kind: "object",
 					record
