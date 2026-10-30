@@ -13,6 +13,8 @@ import { rpc } from '../../api.js';
 import { appearance } from '../../appearance.js';
 import NestedTableCell from './NestedTableCell.vue';
 import WorkspaceSearch from '../workspace/WorkspaceSearch.vue';
+import AppMenu from '../../controls/AppMenu.vue';
+import ActionRows from '../../controls/ActionRows.vue';
 import * as UI from '../../../../src/tactic_stream/shared_ui/features/table/nested.ui.mjs';
 
 const props = defineProps({
@@ -32,13 +34,31 @@ const emit = defineEmits([
   'column'
 ]);
 const host = ref(null),
-  width = ref(1);
+  width = ref(1),
+  columnMenu = ref(null),
+  headerColumn = ref('');
 let observer,
   generation = 0;
 const model = computed(
   () => props.state || props.parentState.children[props.frameNode.key]
 );
 const component = getCurrentInstance().type;
+const headerActions = computed(() =>
+  UI.headerActions(model.value, headerColumn.value, appearance.language)
+);
+function headerCommand(command) {
+  if (command === 'edit_definition' || command === 'columns')
+    activate({
+      type: 'columns',
+      column: command === 'columns' ? '' : headerColumn.value
+    });
+  else if (command.startsWith('sort:'))
+    activate({
+      type: 'sort',
+      value: headerColumn.value,
+      direction: command === 'sort:descending' ? 'desc' : 'asc'
+    });
+}
 const records = computed(() =>
   UI.rows({ ...model.value.scope, ...model.value }, width.value, extent.value)
 );
@@ -261,9 +281,18 @@ async function load() {
     if (request === generation) state.busy = false;
   }
 }
-function activate(action, value) {
+function activate(action, source) {
   const state = model.value;
-  if (action.type === 'close') emit('close', props.frameNode?.key);
+  if (action.type === 'header-menu') {
+    headerColumn.value = action.column;
+    const bounds = source.getBoundingClientRect();
+    const value = action.value;
+    columnMenu.value.openAt({
+      clientX: bounds.left + (value?.x ?? bounds.width - 8),
+      clientY: bounds.top + (value?.y ?? bounds.height),
+      target: source
+    });
+  } else if (action.type === 'close') emit('close', props.frameNode?.key);
   else if (action.type === 'gallery-open') {
     const record = state.rows.find((row) => row.key === action.key)?.record;
     if (record)
@@ -291,15 +320,18 @@ function activate(action, value) {
     state.selected = selected
       ? state.selected.filter((key) => key !== action.key)
       : [...(state.selected || []), action.key];
-  } else if (action.type === 'columns')
+  } else if (action.type === 'columns') {
+    if (!state.gear) return;
+    // Administration can unmount the retained table before its save event.
+    state.loaded = false;
     emit('column', {
       project: state.scope.projectCode || props.project,
       searchType: state.scope.searchType.split('?')[0],
       view: state.scope.view || 'table',
-      column: '',
+      column: action.column || '',
       target: 'definition'
     });
-  else if (action.type === 'edit' || action.type === 'create')
+  } else if (action.type === 'edit' || action.type === 'create')
     emit(
       'edit',
       state.rows?.find((row) => row.key === action.key)?.record || null,
@@ -322,7 +354,9 @@ function activate(action, value) {
       if (action.type === 'sort')
         state.order =
           action.value +
-          (state.order === action.value + ' asc' ? ' desc' : ' asc');
+          ' ' +
+          (action.direction ||
+            (state.order === action.value + ' asc' ? 'desc' : 'asc'));
     }
     load();
   }
@@ -335,7 +369,17 @@ watch(
   }
 );
 watch(() => model.value.revision, load);
+function definitionSaved({ detail }) {
+  const scope = model.value.scope;
+  if (
+    detail.project === (scope.projectCode || props.project) &&
+    [scope.searchType.split('?')[0], 'ALL'].includes(detail.searchType) &&
+    [scope.view || 'table', 'definition'].includes(detail.view)
+  )
+    load();
+}
 onMounted(() => {
+  window.addEventListener('tactic-column-definition-saved', definitionSaved);
   width.value = host.value.clientWidth;
   observer = observeFrameSizes(
     (entries) => (width.value = entries[0].contentRect.width)
@@ -344,6 +388,7 @@ onMounted(() => {
   if (!model.value.loaded) load();
 });
 onBeforeUnmount(() => {
+  window.removeEventListener('tactic-column-definition-saved', definitionSaved);
   ++generation;
   model.value.busy = false;
   observer?.disconnect();
@@ -367,6 +412,9 @@ defineExpose({ reload: load });
       :describe-row="row"
       @event="activate"
     />
+    <AppMenu ref="columnMenu" label="Column actions" overlay :width="280">
+      <ActionRows :actions="headerActions" @triggered="headerCommand" />
+    </AppMenu>
   </div>
 </template>
 

@@ -292,6 +292,54 @@ try {
   await page.evaluate(() => window.nestedFixture.resize(0));
   await page.setViewportSize({ width: 500, height: 300 });
 
+  await page.evaluate(() => {
+    window.nestedFixture.state.gear = true;
+    window.nestedFixture.state.columns[0].sortable = true;
+  });
+  const headerReads = reads;
+  await root
+    .locator('[data-frame=nestedHeader_expand]')
+    .click({ button: 'right' });
+  await page
+    .getByRole('button', { name: 'Edit Column Definition', exact: true })
+    .click();
+  assert.deepEqual(
+    await page.evaluate(() => window.nestedFixture.columnEdits.at(-1)),
+    {
+      project: 'demo',
+      searchType: 'demo/asset',
+      view: 'parent',
+      column: 'expand',
+      target: 'definition'
+    }
+  );
+  assert.equal(reads, headerReads);
+  await root.locator('[data-frame=nestedHeaderMenu_expand]').focus();
+  await page.keyboard.press('Enter');
+  await page
+    .getByRole('button', { name: 'Column Manager', exact: true })
+    .click();
+  assert.equal(
+    await page.evaluate(() => window.nestedFixture.columnEdits.at(-1).column),
+    ''
+  );
+  await page.evaluate(() => {
+    window.nestedFixture.state.gear = false;
+  });
+  assert.equal(
+    await root.locator('[data-frame=nestedHeaderMenu_expand]').count(),
+    0
+  );
+  await root
+    .locator('[data-frame=nestedHeader_code]')
+    .click({ button: 'right' });
+  assert(
+    await page
+      .getByRole('button', { name: 'Edit Column Definition', exact: true })
+      .isDisabled()
+  );
+  await page.keyboard.press('Escape');
+
   await root.locator('[data-frame="tableServiceAction_0"]').click();
   const child = root.locator('.nested-table');
   await child.locator('[data-frame="nestedSelect"]').click();

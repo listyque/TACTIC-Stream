@@ -1231,6 +1231,141 @@ function summarize(columns, records, cells = {}, mode = "bottom") {
 		values
 	};
 }
+//#endregion
+//#region ../src/tactic_stream/shared_ui/features/table/menus.ui.mjs
+function columnActions(model, language) {
+	const column = model.column || {};
+	if (!column.name) return [];
+	const date = [
+		"date",
+		"datetime",
+		"time",
+		"timestamp",
+		"timestamptz"
+	].indexOf(column.dataType) >= 0;
+	const enabled = model.editable !== false && !model.busy;
+	const actions = [{
+		title: String(column.label || column.title || column.name) + " · " + translate("Column", language),
+		header: true,
+		translate: false
+	}];
+	if (column.sortable) {
+		actions.push({
+			title: date ? "Sort oldest first" : "Sort A to Z",
+			icon: "sort-ascending",
+			command: "sort:ascending",
+			checked: model.sorted && model.direction === "asc",
+			enabled: !model.busy
+		});
+		actions.push({
+			title: date ? "Sort newest first" : "Sort Z to A",
+			icon: "sort-descending",
+			command: "sort:descending",
+			checked: model.sorted && model.direction === "desc",
+			enabled: !model.busy
+		});
+		actions.push({ separator: true });
+	}
+	return actions.concat([
+		{
+			title: "Group by this column",
+			icon: "group-items",
+			command: "group",
+			checked: model.group === "column:" + column.name,
+			enabled: !model.busy
+		},
+		{
+			title: "Remove grouping",
+			icon: "ungroup-items",
+			command: "ungroup",
+			enabled: !model.busy && model.group !== "none"
+		},
+		{ separator: true },
+		{
+			title: "Edit Column Definition",
+			icon: "edit",
+			command: "edit_definition",
+			status: column.widgetClass || column.resolvedClass || (column.display || {}).handler || "",
+			statusTranslate: false,
+			enabled
+		},
+		{
+			title: "Column Manager",
+			icon: "view-column",
+			command: "columns",
+			enabled
+		},
+		{
+			title: "Remove Column",
+			icon: "visibility-off",
+			command: "remove",
+			enabled: enabled && model.count > 1,
+			status: model.count > 1 ? "" : translate("At least one column must remain visible", language)
+		},
+		{
+			title: "Move column left",
+			icon: "MDI_ARROW_LEFT",
+			command: "left",
+			enabled: enabled && model.index > 0
+		},
+		{
+			title: "Move column right",
+			icon: "MDI_ARROW_RIGHT",
+			command: "right",
+			enabled: enabled && model.index < model.count - 1
+		},
+		{ separator: true },
+		{
+			title: "Row height",
+			header: true
+		},
+		{
+			title: "Fit to Preview",
+			command: "row_height:0",
+			checked: !!model.automaticRowHeight
+		},
+		...metrics$1.heights.map((height, index) => ({
+			title: [
+				"Compact rows",
+				"Comfortable rows",
+				"Large rows"
+			][index],
+			command: "row_height:" + height,
+			checked: !model.automaticRowHeight && model.rowHeight === height
+		}))
+	]);
+}
+function viewActions$1(views, enabled, language) {
+	const actions = [{
+		title: "Table views",
+		header: true
+	}];
+	for (let index = 0; index < views.length; index++) {
+		const view = views[index];
+		actions.push({
+			title: view.view === "table" ? translate("Default table", language) : String(view.title || view.view || ""),
+			icon: "table-view",
+			command: "select:" + index,
+			checked: !!view.current,
+			translate: false
+		});
+	}
+	return actions.concat([
+		{ separator: true },
+		{
+			title: "Configure columns",
+			icon: "view-column",
+			command: "configure",
+			enabled
+		},
+		{
+			title: "Save current as new view…",
+			icon: "add",
+			command: "save_as",
+			enabled
+		}
+	]);
+}
 function extent(state = {}, width = 0, availableHeight = 320) {
 	const model = Object.assign({}, state.scope, state);
 	if (model.busy && !model.loaded && !model.rows?.length) return 320;
@@ -1297,6 +1432,20 @@ function columns(model) {
 		left += width;
 		return result;
 	});
+}
+function headerActions(model, name, language) {
+	return columnActions({
+		column: (model.columns || []).find((field) => field.name === name),
+		editable: !!model.gear,
+		busy: model.busy,
+		sorted: model.order?.startsWith(name + " "),
+		direction: model.order?.endsWith(" desc") ? "desc" : "asc"
+	}, language).filter((action, index) => index === 0 || [
+		"sort:ascending",
+		"sort:descending",
+		"edit_definition",
+		"columns"
+	].includes(action.command));
 }
 function describe$19(model, width, extent, language) {
 	const margin = metrics$1.margin;
@@ -1378,15 +1527,31 @@ function content$1(model, width, extent, language) {
 		background: paint.header,
 		radius: 0
 	})];
-	for (const field of fields) children.push(field.sortable ? node("Action", "nestedHeader_" + field.name, rect(field.x, 0, field.width, metrics$1.header), {
-		text: field.title || field.name,
-		action: {
-			type: "sort",
-			value: field.name
-		},
-		enabled: !model.busy,
-		children: [label("nestedHeaderText_" + field.name, rect(10, 0, field.width - 20, metrics$1.header), field.title || field.name, { color: paint.headerText })]
-	}) : label("nestedHeader_" + field.name, rect(field.x + 10, 0, field.width - 20, metrics$1.header), field.title || field.name, { color: paint.headerText }));
+	for (const field of fields) {
+		const menu = !!model.gear || field.sortable;
+		children.push(node("Box", "nestedHeader_" + field.name, rect(field.x, 0, field.width, metrics$1.header), {
+			contextAction: menu && !model.busy ? {
+				type: "header-menu",
+				column: field.name
+			} : null,
+			children: [node("Action", "nestedHeaderSort_" + field.name, rect(0, 0, field.width - (menu ? 34 : 0), metrics$1.header), {
+				text: field.title || field.name,
+				contextAction: menu && !model.busy ? {
+					type: "header-menu",
+					column: field.name
+				} : null,
+				action: field.sortable ? {
+					type: "sort",
+					value: field.name
+				} : null,
+				enabled: !model.busy,
+				children: [label("nestedHeaderText_" + field.name, rect(8, 0, Math.max(0, field.width - (menu ? 44 : 20)), metrics$1.header), field.title || field.name, { color: paint.headerText })]
+			}), ...menu ? [button("nestedHeaderMenu_" + field.name, rect(field.width - 34, 2, 32, 32), t("Column actions"), "more-vert", {
+				type: "header-menu",
+				column: field.name
+			}, !model.busy)] : []]
+		}));
+	}
 	children.push(node("List", "nestedRows", rect(0, metrics$1.header + 3, contentWidth, Math.max(0, extent - 82 - metrics$1.header - 3 - quickHeight - gutter)), {
 		source: "rows",
 		keyField: "key",
@@ -4787,141 +4952,6 @@ var _sfc_main$59 = {
 	}
 };
 //#endregion
-//#region ../src/tactic_stream/shared_ui/features/table/menus.ui.mjs
-function columnActions(model, language) {
-	const column = model.column || {};
-	if (!column.name) return [];
-	const date = [
-		"date",
-		"datetime",
-		"time",
-		"timestamp",
-		"timestamptz"
-	].indexOf(column.dataType) >= 0;
-	const enabled = model.editable !== false && !model.busy;
-	const actions = [{
-		title: String(column.label || column.title || column.name) + " · " + translate("Column", language),
-		header: true,
-		translate: false
-	}];
-	if (column.sortable) {
-		actions.push({
-			title: date ? "Sort oldest first" : "Sort A to Z",
-			icon: "sort-ascending",
-			command: "sort:ascending",
-			checked: model.sorted && model.direction === "asc",
-			enabled: !model.busy
-		});
-		actions.push({
-			title: date ? "Sort newest first" : "Sort Z to A",
-			icon: "sort-descending",
-			command: "sort:descending",
-			checked: model.sorted && model.direction === "desc",
-			enabled: !model.busy
-		});
-		actions.push({ separator: true });
-	}
-	return actions.concat([
-		{
-			title: "Group by this column",
-			icon: "group-items",
-			command: "group",
-			checked: model.group === "column:" + column.name,
-			enabled: !model.busy
-		},
-		{
-			title: "Remove grouping",
-			icon: "ungroup-items",
-			command: "ungroup",
-			enabled: !model.busy && model.group !== "none"
-		},
-		{ separator: true },
-		{
-			title: "Edit Column Definition",
-			icon: "edit",
-			command: "edit_definition",
-			status: column.widgetClass || column.resolvedClass || (column.display || {}).handler || "",
-			statusTranslate: false,
-			enabled
-		},
-		{
-			title: "Column Manager",
-			icon: "view-column",
-			command: "columns",
-			enabled
-		},
-		{
-			title: "Remove Column",
-			icon: "visibility-off",
-			command: "remove",
-			enabled: enabled && model.count > 1,
-			status: model.count > 1 ? "" : translate("At least one column must remain visible", language)
-		},
-		{
-			title: "Move column left",
-			icon: "MDI_ARROW_LEFT",
-			command: "left",
-			enabled: enabled && model.index > 0
-		},
-		{
-			title: "Move column right",
-			icon: "MDI_ARROW_RIGHT",
-			command: "right",
-			enabled: enabled && model.index < model.count - 1
-		},
-		{ separator: true },
-		{
-			title: "Row height",
-			header: true
-		},
-		{
-			title: "Fit to Preview",
-			command: "row_height:0",
-			checked: !!model.automaticRowHeight
-		},
-		...metrics$1.heights.map((height, index) => ({
-			title: [
-				"Compact rows",
-				"Comfortable rows",
-				"Large rows"
-			][index],
-			command: "row_height:" + height,
-			checked: !model.automaticRowHeight && model.rowHeight === height
-		}))
-	]);
-}
-function viewActions$1(views, enabled, language) {
-	const actions = [{
-		title: "Table views",
-		header: true
-	}];
-	for (let index = 0; index < views.length; index++) {
-		const view = views[index];
-		actions.push({
-			title: view.view === "table" ? translate("Default table", language) : String(view.title || view.view || ""),
-			icon: "table-view",
-			command: "select:" + index,
-			checked: !!view.current,
-			translate: false
-		});
-	}
-	return actions.concat([
-		{ separator: true },
-		{
-			title: "Configure columns",
-			icon: "view-column",
-			command: "configure",
-			enabled
-		},
-		{
-			title: "Save current as new view…",
-			icon: "add",
-			command: "save_as",
-			enabled
-		}
-	]);
-}
-//#endregion
 //#region src/features/interface/TableView.vue
 var _hoisted_1$32 = [
 	"aria-label",
@@ -6173,10 +6203,22 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 	setup(__props, { expose: __expose, emit: __emit }) {
 		const props = __props;
 		const emit = __emit;
-		const host = ref(null), width = ref(1);
+		const host = ref(null), width = ref(1), columnMenu = ref(null), headerColumn = ref("");
 		let observer, generation = 0;
 		const model = computed(() => props.state || props.parentState.children[props.frameNode.key]);
 		const component = getCurrentInstance().type;
+		const headerActions$1 = computed(() => headerActions(model.value, headerColumn.value, appearance.language));
+		function headerCommand(command) {
+			if (command === "edit_definition" || command === "columns") activate({
+				type: "columns",
+				column: command === "columns" ? "" : headerColumn.value
+			});
+			else if (command.startsWith("sort:")) activate({
+				type: "sort",
+				value: headerColumn.value,
+				direction: command === "sort:descending" ? "desc" : "asc"
+			});
+		}
 		const records = computed(() => rows$2({
 			...model.value.scope,
 			...model.value
@@ -6358,9 +6400,18 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				if (request === generation) state.busy = false;
 			}
 		}
-		function activate(action, value) {
+		function activate(action, source) {
 			const state = model.value;
-			if (action.type === "close") emit("close", props.frameNode?.key);
+			if (action.type === "header-menu") {
+				headerColumn.value = action.column;
+				const bounds = source.getBoundingClientRect();
+				const value = action.value;
+				columnMenu.value.openAt({
+					clientX: bounds.left + (value?.x ?? bounds.width - 8),
+					clientY: bounds.top + (value?.y ?? bounds.height),
+					target: source
+				});
+			} else if (action.type === "close") emit("close", props.frameNode?.key);
 			else if (action.type === "gallery-open") {
 				const record = state.rows.find((row) => row.key === action.key)?.record;
 				if (record) forward(record, "file-checkout", {
@@ -6381,14 +6432,17 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				if (selected) delete state.selectionRecords[action.key];
 				else state.selectionRecords[action.key] = { code: state.rows.find((row) => row.key === action.key)?.record.code };
 				state.selected = selected ? state.selected.filter((key) => key !== action.key) : [...state.selected || [], action.key];
-			} else if (action.type === "columns") emit("column", {
-				project: state.scope.projectCode || props.project,
-				searchType: state.scope.searchType.split("?")[0],
-				view: state.scope.view || "table",
-				column: "",
-				target: "definition"
-			});
-			else if (action.type === "edit" || action.type === "create") emit("edit", state.rows?.find((row) => row.key === action.key)?.record || null, state);
+			} else if (action.type === "columns") {
+				if (!state.gear) return;
+				state.loaded = false;
+				emit("column", {
+					project: state.scope.projectCode || props.project,
+					searchType: state.scope.searchType.split("?")[0],
+					view: state.scope.view || "table",
+					column: action.column || "",
+					target: "definition"
+				});
+			} else if (action.type === "edit" || action.type === "create") emit("edit", state.rows?.find((row) => row.key === action.key)?.record || null, state);
 			else {
 				if (state.busy) return;
 				if (action.type === "page") state.offset = Math.max(0, (state.offset || 0) + action.value * (state.scope.initialLimit || 50));
@@ -6398,7 +6452,7 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 						...state.simpleValues,
 						[action.field]: action.value
 					};
-					if (action.type === "sort") state.order = action.value + (state.order === action.value + " asc" ? " desc" : " asc");
+					if (action.type === "sort") state.order = action.value + " " + (action.direction || (state.order === action.value + " asc" ? "desc" : "asc"));
 				}
 				load();
 			}
@@ -6412,13 +6466,19 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 			if (!model.value.loaded) load();
 		});
 		watch(() => model.value.revision, load);
+		function definitionSaved({ detail }) {
+			const scope = model.value.scope;
+			if (detail.project === (scope.projectCode || props.project) && [scope.searchType.split("?")[0], "ALL"].includes(detail.searchType) && [scope.view || "table", "definition"].includes(detail.view)) load();
+		}
 		onMounted(() => {
+			window.addEventListener("tactic-column-definition-saved", definitionSaved);
 			width.value = host.value.clientWidth;
 			observer = observeFrameSizes((entries) => width.value = entries[0].contentRect.width);
 			observer.observe(host.value);
 			if (!model.value.loaded) load();
 		});
 		onBeforeUnmount(() => {
+			window.removeEventListener("tactic-column-definition-saved", definitionSaved);
 			++generation;
 			model.value.busy = false;
 			observer?.disconnect();
@@ -6443,10 +6503,22 @@ var NestedTable_default = /*#__PURE__*/ _plugin_vue_export_helper_default({
 				"scene",
 				"models",
 				"views"
-			])], 36);
+			]), createVNode(_sfc_main$76, {
+				ref_key: "columnMenu",
+				ref: columnMenu,
+				label: "Column actions",
+				overlay: "",
+				width: 280
+			}, {
+				default: withCtx(() => [createVNode(_sfc_main$59, {
+					actions: headerActions$1.value,
+					onTriggered: headerCommand
+				}, null, 8, ["actions"])]),
+				_: 1
+			}, 512)], 36);
 		};
 	}
-}, [["__scopeId", "data-v-ce014d47"]]);
+}, [["__scopeId", "data-v-bba83241"]]);
 //#endregion
 //#region src/controls/markdown.js
 var markdown = new MarkdownItCallable({

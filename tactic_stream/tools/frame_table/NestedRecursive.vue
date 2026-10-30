@@ -77,6 +77,7 @@ const state = reactive({
 const parentMode = new URLSearchParams(location.search).has('parent');
 if (parentMode) state.open = true;
 const edits = [];
+const columnEdits = [];
 const disclosureMode = new URLSearchParams(location.search).has('disclosures');
 if (disclosureMode) {
   const names = ['history', 'tasks', 'history_copy'];
@@ -118,6 +119,7 @@ window.nestedFixture = {
   state,
   original,
   edits,
+  columnEdits,
   actions,
   gallery(language = 'en') {
     appearance.language = language;
@@ -183,6 +185,7 @@ window.nestedFixture = {
     ticket="test-fixture"
     project="demo"
     :state="state"
+    @column="columnEdits.push($event)"
     :style="{
       width: width ? width + 'px' : '100%',
       maxWidth: width ? 'none' : '800px'

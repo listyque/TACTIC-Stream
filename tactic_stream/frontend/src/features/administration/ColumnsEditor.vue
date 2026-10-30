@@ -378,6 +378,19 @@ export default {
         this.select(result.selected, true);
         this.message = 'TACTIC definition saved';
         this.$emit('saved', result);
+        const source = result.records.find(
+          (row) => row.identity === result.selected
+        );
+        if (source)
+          window.dispatchEvent(
+            new CustomEvent('tactic-column-definition-saved', {
+              detail: {
+                project: this.context.project,
+                searchType: source.searchType,
+                view: source.view
+              }
+            })
+          );
       } catch (error) {
         if (request !== this.request) return;
         this.uncertain = !error.status || error.status >= 500;
