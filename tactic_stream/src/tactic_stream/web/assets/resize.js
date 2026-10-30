@@ -1816,6 +1816,7 @@ var _sfc_main$15 = {
 		file: File,
 		fallbackText: String,
 		fallbackIcon: String,
+		foreground: String,
 		accent: String,
 		round: Boolean,
 		outlined: Boolean,
@@ -1862,7 +1863,7 @@ var _sfc_main$15 = {
 			], 1 - 1 / (this.round ? 1.35 : 1.65));
 			return {
 				"--preview-accent": cssAccent,
-				color: cssColor(readableText(shade))
+				color: this.foreground || cssColor(readableText(shade))
 			};
 		}
 	},
@@ -9894,6 +9895,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					source: node.source,
 					"fallback-text": node.initials,
 					"fallback-icon": node.icon || "person",
+					foreground: node.color ? color(node.color) : void 0,
 					accent: node.accent || "action",
 					"preview-size": node.width,
 					round: node.round !== false,
@@ -9908,6 +9910,7 @@ var _sfc_main = /*@__PURE__*/ Object.assign({ name: "FrameView" }, {
 					"source",
 					"fallback-text",
 					"fallback-icon",
+					"foreground",
 					"accent",
 					"preview-size",
 					"round",

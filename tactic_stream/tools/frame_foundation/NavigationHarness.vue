@@ -24,7 +24,7 @@ const entries = [
         title: 'Second asset',
         supported: true,
         icon: 'folder',
-        accent: '#bb4488'
+        accent: '#dddd80'
       },
       {
         key: 'missing',

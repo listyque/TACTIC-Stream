@@ -101,3 +101,5 @@ match. Use **+** to create an additional personal search.
 The footer says whether the draft is current. **Discard** returns all sidebar drafts to the loaded
 server state. **Save** commits them to TACTIC and refreshes project navigation. If a control is
 disabled, select a compatible element first or wait for the current request to finish.
+
+Navigation badge icons follow the theme text color, including on light Search Type accents. This does not change the configured type color.

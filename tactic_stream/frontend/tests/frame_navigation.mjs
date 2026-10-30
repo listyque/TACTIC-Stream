@@ -52,6 +52,17 @@ try {
   assert.equal((await first.boundingBox()).height, 48);
   assert.equal(await first.getAttribute('aria-pressed'), 'true');
   await second.tap();
+  const iconColor = await second
+    .locator('..')
+    .locator('.item-preview .app-icon')
+    .evaluate((icon) => getComputedStyle(icon).color);
+  assert.equal(
+    iconColor,
+    await second
+      .locator('..')
+      .locator('[data-frame="sidebarRowTitle"]')
+      .evaluate((title) => getComputedStyle(title).color)
+  );
   assert.equal(
     await page.evaluate(() => window.navigationHarness.selected),
     'second'
@@ -89,7 +100,7 @@ try {
         kind: 'link',
         title: 'Second asset',
         icon: 'folder',
-        accent: '#bb4488',
+        accent: '#dddd80',
         depth: 1
       },
       { selected: true }

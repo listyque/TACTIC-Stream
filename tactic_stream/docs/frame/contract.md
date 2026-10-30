@@ -312,3 +312,5 @@ added to production rendering.
 The CheckBox primitive accepts an optional `radius` for its row surface; omission
 keeps the existing 10 DIP corner. The access matrix requests zero while retaining
 the ordinary native checkbox indicator, keyboard behavior and accessible name.
+
+Preview nodes accept an optional `color` foreground override through the house ItemPreview in both engines. Navigation glyphs use `primaryText` consistently across Search Type accent colors; other previews retain automatic fallback contrast when omitted.

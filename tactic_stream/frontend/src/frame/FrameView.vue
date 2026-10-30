@@ -745,6 +745,7 @@ defineExpose({ focusControl, focusGrid, graphCommand, focusListRow });
         :source="node.source"
         :fallback-text="node.initials"
         :fallback-icon="node.icon || 'person'"
+        :foreground="node.color ? color(node.color) : undefined"
         :accent="node.accent || 'action'"
         :preview-size="node.width"
         :round="node.round !== false"

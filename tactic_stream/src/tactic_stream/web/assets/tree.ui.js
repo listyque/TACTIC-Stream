@@ -49,6 +49,7 @@ function navigationRow(width, record, state = {}) {
 			color: "secondaryText"
 		}) : node("Preview", "navigationRowIcon", rect(x, (height - 32) / 2, 32, 32), {
 			icon: record.icon || "link",
+			color: "primaryText",
 			accent: record.accent || "action",
 			outlined: false
 		}),

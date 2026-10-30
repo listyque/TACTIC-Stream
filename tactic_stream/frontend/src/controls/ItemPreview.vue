@@ -25,6 +25,7 @@ export default {
     file: File,
     fallbackText: String,
     fallbackIcon: String,
+    foreground: String,
     accent: String,
     round: Boolean,
     outlined: Boolean,
@@ -69,7 +70,7 @@ export default {
       );
       return {
         '--preview-accent': cssAccent,
-        color: cssColor(readableText(shade))
+        color: this.foreground || cssColor(readableText(shade))
       };
     }
   },
