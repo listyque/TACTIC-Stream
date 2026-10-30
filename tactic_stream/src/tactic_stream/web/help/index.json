@@ -1,5 +1,12 @@
 [
   {
+    "id": "plugins",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
     "id": "activity_feed",
     "languages": [
       "en",

@@ -447,6 +447,7 @@
       "src/features/administration/SecurityUsers.vue",
       "src/features/administration/SecurityGroups.vue",
       "src/features/administration/SecurityRules.vue",
+      "src/features/administration/Plugins.vue",
       "src/features/scripts/AgentRequest.vue",
       "src/features/configuration/AgentProviders.vue",
       "src/features/configuration/AgentMcp.vue",
@@ -529,6 +530,18 @@
       "_ConfiguredView.js",
       "_metrics.js",
       "_tree.ui.js"
+    ]
+  },
+  "src/features/administration/Plugins.vue": {
+    "file": "assets/Plugins.js",
+    "name": "Plugins",
+    "src": "src/features/administration/Plugins.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vue.js",
+      "_AppButton.js",
+      "index.html",
+      "_resize.js"
     ]
   },
   "src/features/administration/ProcessRules.vue": {

@@ -6,3 +6,4 @@ from .search_type_element_wdg import SearchTypeHasTableElementWdg
 
 from .message_wdg import MessageTableElementWdg
 from .system_info_wdg import SystemInfoWdg, ClearSideBarCache
+from .plugin_wdg import PluginManagerCmd

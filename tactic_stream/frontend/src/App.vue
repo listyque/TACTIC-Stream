@@ -91,6 +91,7 @@ const RawDatabase = asyncComponent(() => import('./features/administration/RawDa
 const SecurityUsers = asyncComponent(() => import('./features/administration/SecurityUsers.vue'))
 const SecurityGroups = asyncComponent(() => import('./features/administration/SecurityGroups.vue'))
 const SecurityRules = asyncComponent(() => import('./features/administration/SecurityRules.vue'))
+const Plugins = asyncComponent(() => import('./features/administration/Plugins.vue'))
 
 import { readWindowPage, installWindowPages, bootstrapWindowPage } from './features/windows/windowPages.js'
 
@@ -98,7 +99,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, PageLayoutEditor, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, SystemInfo, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { Plugins, ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, PageLayoutEditor, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, SystemInfo, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -732,7 +733,7 @@ export default {
       this.selectedTags = []; this.tagColumn = ''
       this.searchRelation = 'contains'
       this.filterRecords = []; this.savedSearch = ''; this.quickSelections = {}; this.quickLayout = null; this.scopeKey = ''; this.presetOrderBys = []
-      if (['types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules'].includes(id)) {
+      if (['types', 'schema', 'workflow', 'columns', 'layouts', 'dashboards', 'raw', 'sidebar', 'users', 'groups', 'rules', 'plugins'].includes(id)) {
         this.requestId++
         this.busy = false
       } else this.loadRows()
@@ -2207,6 +2208,7 @@ export default {
       <AdministrationShell ref="administrationShell" :model="{section:administrationSection,project,layoutParent,projects:administrationProjectOptions,locked:administrationLocked,busy, drafts:Object.entries(administrationInstances).filter(([,editor])=>editor.dirty||editor.uncertain).map(([id])=>id)}" @command="administrationCommand" />
     </dialog>
     <Teleport defer :disabled="!!windowPage && !administrationOpen" :to="administrationOpen ? '#administration-pages' : '#workspace-data'">
+    <div v-if="administrationOpen && administrationVisited.includes('plugins')" v-show="administrationSection === 'plugins'" class="administration-page"><Plugins :presentation-visible="administrationSection === 'plugins'" @vue:mounted="administrationInstances.plugins = $event.component.proxy" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" @saved="refreshTypes();loadNavigation();refreshAfterAdministration = true" @help="$refs.help.open('plugins')" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('types')" v-show="administrationSection === 'types'" class="administration-page"><SearchTypes :presentation-visible="administrationSection === 'types'" @vue:mounted="administrationInstances.types = $event.component.proxy" ref="searchTypes" @open-workflow="openAdministrationWorkflow" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('schema')" v-show="administrationSection === 'schema'" class="administration-page"><SchemaEditor :presentation-visible="administrationSection === 'schema'" @vue:mounted="administrationInstances.schema = $event.component.proxy" ref="schema" @node-workflows="schemaNodeWorkflows" @type-workflow="values=>openAdministrationWorkflow(values,'schema')" :ticket="session.ticket" :project="project" toolbar-target="#administration-actions" :queue-preview="queuePreview" :checkins="checkins" @saved="refreshTypes" @open-commit-queue="openCommitQueue()" /></div>
     <div v-if="administrationOpen && administrationVisited.includes('workflow')" v-show="administrationSection === 'workflow'" class="administration-page"><WorkflowEditor :presentation-visible="administrationSection === 'workflow'" @vue:mounted="administrationWorkflowMounted($event.component.proxy)" ref="workflow" :ticket="session.ticket" :project="project" inline defer-initial-load toolbar-target="#administration-actions" @saved="workflowAdministrationSaved" /></div>

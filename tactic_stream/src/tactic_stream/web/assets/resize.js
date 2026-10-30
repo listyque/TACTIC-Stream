@@ -2970,6 +2970,12 @@ function reduce(previous, event, model, viewport) {
 //#endregion
 //#region ../src/tactic_stream/shared_ui/core/strings.mjs
 var russian = {
+	Plugins: "Плагины",
+	"Packages, versions and project activation": "Пакеты, версии и активация в проекте",
+	"Install plugin ZIP": "Установить ZIP плагина",
+	"Upload plugin file": "Загрузить файл плагина",
+	"ZIP archives (*.zip)": "Архивы ZIP (*.zip)",
+	"All files (*)": "Все файлы (*)",
 	"System Info": "Информация о системе",
 	"Server and client diagnostics": "Сведения о сервере и клиенте",
 	"Node Name": "Имя узла",
