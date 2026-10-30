@@ -399,6 +399,13 @@
     ]
   },
   {
+    "id": "system_info",
+    "languages": [
+      "en",
+      "ru"
+    ]
+  },
+  {
     "id": "table_view",
     "languages": [
       "en",

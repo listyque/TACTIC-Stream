@@ -61,6 +61,7 @@ import { defaultResultView, resultViews, resultGroups } from './features/workspa
 import DebugLog from './features/debug/DebugLog.vue'
 import { forgetSessions, setServerDebugContext } from './features/debug/debugLog.js'
 import UiPerformance from './features/debug/UiPerformance.vue'
+import SystemInfo from './features/debug/SystemInfo.vue'
 import ScriptShelf from './features/scripts/ScriptShelf.vue'
 import ActivityFeed from './features/activity/ActivityFeed.vue'
 import MessagesView from './features/messages/MessagesView.vue'
@@ -97,7 +98,7 @@ const compactLayout = window.matchMedia('(max-width: 900px)')
 const shortcutLayout = mobileLayout
 
 export default {
-  components: { ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, PageLayoutEditor, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
+  components: { ObjectReport, WorkspacePage, SearchResultMenu, SearchHeader, SearchFooter, SignIn, ActionRows, DockWorkspaceFooter, AdministrationShell, PageLayoutEditor, FileWorkspace, DropPlate, KnowledgeBase, SnapshotBrowser, DescriptionEditor, HelpView, UserProfile, MessagesView, NotificationStack, SystemActivityButton, SystemActivity, ServerUpdates, ConnectionMenu, FilePreview, ActivityFeed, NotesPanel, ScriptShelf, UiPerformance, SystemInfo, DebugLog, WorkspaceSearch, TagCloud, DockWorkspace, AppearanceControls, Configuration, RecordForm, WidgetConfiguration, ConfiguredView, ObjectOperations, ObjectAction, RelatedObjects, AppIcon, AppSwitch, SearchTypes, SchemaEditor, WorkflowEditor, AppSelect, AppButton, AppMenu, CommitQueue, Timesheet, TaskManager, SectionTabRail, WorkspaceTabs, NavigationTree, NavigationDrawer, ProjectCreation, ProjectChooser, ItemPreview, SidebarEditor, SearchLibrary, QuickFilterEditor, SearchQuickFilters, FieldFilter, SecurityGroups, SecurityRules, SecurityUsers, LayoutEditor, ColumnsEditor, RawDatabase },
   provide() { return {
     checkinDescription: () => this.$refs.description?.pinnedValue() || '',
     queueCheckin: values => { this.$refs.commitQueue.enqueue(values); this.openCommitQueue() },
@@ -366,6 +367,7 @@ export default {
         open_agent_request: () => this.openAgentRequest(),
         show_debug_log: () => this.$refs.debugLog.open(),
         show_ui_performance: () => this.$refs.uiPerformance.open(),
+        show_system_info: () => this.canAdminister && this.$refs.systemInfo.open(),
         open_script_shelf: () => this.$refs.scriptShelf.open(),
         show_commit_queue: () => this.openCommitQueue(),
         show_work_hours: () => this.openWorkHours(),
@@ -1913,6 +1915,14 @@ export default {
         this.captureSearchTab(); this.workspaceProject = this.project = project
         await this.loadNavigation()
         if (request !== this.linkRequest || ticket !== this.session?.ticket) return
+        if (params.has('system_link')) {
+          const target = await rpc('execute_class_method', [{ticket,project}, 'tactic.ui.app.system_info_wdg.SystemInfoWdg', 'resolve_link', {name:params.get('system_link')}])
+          if (request !== this.linkRequest || ticket !== this.session?.ticket) return
+          if (target.window === 'system_info') await this.$refs.systemInfo.open()
+          else if (target.window === 'script_editor') await this.openScriptEditor()
+          else await this.selectType(target.search_type, target, '', '', request)
+          return
+        }
         if (params.has('agent_mcp')) {
           const connectionId = params.get('agent_mcp')
           if (!/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/.test(connectionId)) throw new Error('Invalid MCP connection identity')
@@ -2146,6 +2156,7 @@ export default {
       <header><h2>{{ t('Snapshot Browser') }}</h2><AppButton icon="close" label="Close" icon-only @click="$refs.snapshotPage.close()" /></header>
       <div id="dock-snapshot" class="snapshot-page-content"></div>
     </dialog>
+    <SystemInfo ref="systemInfo" :ticket="session.ticket" :project="workspaceProject" @navigation-cleared="loadNavigation" />
     <UiPerformance ref="uiPerformance" @closed="$refs.settingsMenu?.focusTrigger()" />
     <component v-if="agentRequestComponent" :is="agentRequestComponent" ref="agentRequest" :ticket="session.ticket" :capture="agentContext" @providers="openAgentProviders" @mcp="openAgentMcp" />
     <component v-if="agentMcpComponent" :is="agentMcpComponent" ref="agentMcp" :ticket="session.ticket" :project="workspaceProject" />

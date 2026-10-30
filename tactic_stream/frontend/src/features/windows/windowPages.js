@@ -74,6 +74,7 @@ export const windowPages = {
   notifications: { ref: 'systemActivity' },
   debug_log: { ref: 'debugLog' },
   ui_performance: { ref: 'uiPerformance' },
+  system_info: { ref: 'systemInfo' },
   help: { ref: 'help' },
   script_shelf_editor: { ref: 'scriptShelf' },
   project_wizard: { ref: 'projectCreation' },

@@ -645,7 +645,7 @@ class EmailTriggerTestCmd(Command):
         if not self.mailserver:
             return
         try:
-            s = smtplib.SMTP(self.mailserver, self.port)
+            s = smtplib.SMTP(self.mailserver, self.port, timeout=30)
             if self.mail_tls_enabled:
                 s.ehlo()
                 s.starttls()
